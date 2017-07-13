@@ -32,6 +32,7 @@
 // Qt includes
 
 #include <QPixmap>
+#include <QImage>
 #include <QPainter>
 #include <QMouseEvent>
 #include <QtGlobal>
@@ -54,13 +55,14 @@ public:
         pixmap(0),
         pixmapX(0),
         pixmapY(0),
+        color(Qt::red),
         drawRec(true)
     {
     }
 
     AdvPrintPhoto*  photo;
     bool            mouseDown;
-    QPixmap*        pixmap;
+    QImage*         pixmap;
     int             pixmapX;
     int             pixmapY;
 
@@ -121,28 +123,16 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
     // rotate
     QMatrix matrix;
     matrix.rotate(d->photo->m_rotation);
-    scaledImg = scaledImg.transformed(matrix);
+    scaledImg  = scaledImg.transformed(matrix);
+    scaledImg  = scaledImg.scaled(width(), height(), Qt::KeepAspectRatio);
 
-    scaledImg = scaledImg.scaled(width(), height(), Qt::KeepAspectRatio);
-
-    //TODO check for cropping Qt::KeepAspectRatioByExpanding);
-    //d->pixmap = new QPixmap();
-    //QPixmap pix(scaledImg.width(), scaledImg.height());
-
-    QPixmap pix(width(), height());
-    d->pixmap = new QPixmap(pix.fromImage(scaledImg));
-
-    //   d->pixmap = new QPixmap(scaledImg.width(), scaledImg.height());
-    //   d->pixmap->fromImage(scaledImg);
-
+    d->pixmap  = new QImage(scaledImg);
     d->pixmapX = (width()  / 2) - (d->pixmap->width()  / 2);
     d->pixmapY = (height() / 2) - (d->pixmap->height() / 2);
 
-    d->color = Qt::red;
-
     // size the rectangle based on the minimum image dimension
-    int w = d->pixmap->width();
-    int h = d->pixmap->height();
+    int w      = d->pixmap->width();
+    int h      = d->pixmap->height();
 
     if (w < h)
     {
@@ -204,11 +194,14 @@ QRect AdvPrintCropFrame::screenToPhotoRect(const QRect& r) const
     }
 
     if (d->pixmap->width() > 0)
+    {
         xRatio = (double) photoW / (double) d->pixmap->width();
+    }
 
     if (d->pixmap->height() > 0)
+    {
         yRatio = (double) photoH / (double) d->pixmap->height();
-
+    }
 
     int x1 = AdvPrintWizard::normalizedInt((r.left() - d->pixmapX) * xRatio);
     int y1 = AdvPrintWizard::normalizedInt((r.top()  - d->pixmapY) * yRatio);
@@ -245,11 +238,14 @@ QRect AdvPrintCropFrame::photoToScreenRect(const QRect& r) const
     }
 
     if (d->photo->width() > 0)
+    {
         xRatio = (double) d->pixmap->width() / (double) photoW;
+    }
 
     if (d->photo->height() > 0)
+    {
         yRatio = (double)d->pixmap->height() / (double)photoH;
-
+    }
 
     int x1 = AdvPrintWizard::normalizedInt(r.left() * xRatio + d->pixmapX);
     int y1 = AdvPrintWizard::normalizedInt(r.top()  * yRatio + d->pixmapY);
@@ -271,7 +267,7 @@ void AdvPrintCropFrame::paintEvent(QPaintEvent*)
     p.eraseRect(0, 0, this->width(), this->height());
 
     // draw the background pixmap
-    p.drawPixmap(d->pixmapX, d->pixmapY, *d->pixmap);
+    p.drawImage(d->pixmapX, d->pixmapY, *d->pixmap);
 
     if (d->drawRec)
     {
@@ -335,13 +331,17 @@ void AdvPrintCropFrame::keyPressEvent(QKeyEvent* e)
 
     switch (e->key())
     {
-        case Qt::Key_Up    : newY--;
+        case Qt::Key_Up:
+            newY--;
             break;
-        case Qt::Key_Down  : newY++;
+        case Qt::Key_Down:
+            newY++;
             break;
-        case Qt::Key_Left  : newX--;
+        case Qt::Key_Left:
+            newX--;
             break;
-        case Qt::Key_Right : newX++;
+        case Qt::Key_Right:
+            newX++;
             break;
     }
 
