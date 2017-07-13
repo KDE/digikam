@@ -221,25 +221,15 @@ AdvPrintPhotoPage::~AdvPrintPhotoPage()
 void AdvPrintPhotoPage::initializePage()
 {
     d->photoUi->mPrintList->listView()->clear();
-    QList<QUrl> list;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Items: " << d->settings->photos.count();
-
-    for (int i = 0 ; i < d->settings->photos.count() ; ++i)
+    if (d->settings->selMode == AdvPrintSettings::IMAGES)
     {
-        AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
-
-        if (pCurrentPhoto)
-        {
-            list.push_back(pCurrentPhoto->m_url);
-        }
+        d->photoUi->mPrintList->loadImagesFromCurrentSelection();
     }
-
-    d->photoUi->mPrintList->blockSignals(true);
-    d->photoUi->mPrintList->slotAddImages(list);
-    d->photoUi->mPrintList->listView()->setCurrentItem(d->photoUi->mPrintList->listView()->itemAt(0, 0));
-    d->photoUi->mPrintList->blockSignals(false);
-    d->photoUi->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
+    else
+    {
+        d->wizard->setItemsList(d->settings->inputImages);
+    }
 
     initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
 
@@ -284,20 +274,6 @@ void AdvPrintPhotoPage::initializePage()
 
     d->photoUi->ListPhotoSizes->setIconSize(d->settings->iconSize);
     initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
-}
-
-void AdvPrintPhotoPage::cleanupPage()
-{
-    d->photoUi->mPrintList->listView()->clear();
-
-    if (d->settings->selMode == AdvPrintSettings::IMAGES)
-    {
-        d->photoUi->mPrintList->loadImagesFromCurrentSelection();
-    }
-    else
-    {
-        d->wizard->setItemsList(d->settings->inputImages);
-    }
 }
 
 bool AdvPrintPhotoPage::validatePage()
@@ -591,6 +567,7 @@ void AdvPrintPhotoPage::slotAddItems(const QList<QUrl>& list)
     }
 
     d->photoUi->mPrintList->blockSignals(false);
+    d->photoUi->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
 
     if (d->settings->photos.size())
     {
@@ -679,6 +656,7 @@ void AdvPrintPhotoPage::slotRemovingItems(const QList<int>& list)
 
     d->wizard->previewPhotos();
     d->photoUi->mPrintList->blockSignals(false);
+    d->photoUi->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
 
     if (d->settings->photos.empty())
     {

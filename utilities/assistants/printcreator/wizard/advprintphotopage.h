@@ -61,7 +61,6 @@ public:
     int                   getPageCount() const;
     QRect*                getLayout(int) const;
 
-    void cleanupPage();
     void initializePage();
     bool validatePage();
 
