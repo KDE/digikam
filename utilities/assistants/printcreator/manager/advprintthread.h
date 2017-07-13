@@ -43,7 +43,7 @@ public:
     explicit AdvPrintThread(QObject* const parent);
     ~AdvPrintThread();
 
-    void setSettings(AdvPrintSettings* const settings);
+    void print(AdvPrintSettings* const settings);
 
 Q_SIGNALS:
 

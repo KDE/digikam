@@ -159,7 +159,7 @@ void AdvPrintFinalPage::slotProcess()
     connect(d->printThread, SIGNAL(signalDone(bool)),
             this, SLOT(slotDone(bool)));
 
-    d->printThread->setSettings(d->settings);
+    d->printThread->print(d->settings);
     d->printThread->start();
 }
 
