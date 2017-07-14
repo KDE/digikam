@@ -6,7 +6,7 @@ Format  Read  Write  ICC   MetaData  Thumb   8bits    16bits  dependency
 JPG     Done  Done   Done  Done      Done    yes      N.A     libjpeg
 PNG     Done  Done   Done  Done      N.A     yes      yes     libpng
 TIF/EP  Done  Done   Done  Done      Done    yes      yes     libtiff
-RAW     Done  N.A    N.A   Done      Done    yes      yes     libkdcraw
+RAW     Done  N.A    N.A   Done      Done    yes      yes     libraw
 PPM     Done  TODO   N.A   N.A       N.A     yes      yes     none
 PGF     Done  DONE   TODO  DONE      N.A     yes      yes     libpgf
 JPEG2K  Done  Done   Done  Done      N.A     yes      yes     libjasper
