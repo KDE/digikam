@@ -217,4 +217,5 @@ BUGFIXES FROM BUGZILLA:
 202 ==> 117920 - no encoder slide show.
 203 ==> 342607 - digiKam crash at startup with GStream : QtMultimedia relevant.
 204 ==> 235469 - digiKam Segmentation fault after 2 or 3 modifications.
-205 ==> 
+205 ==> 223936 - Moving photos between albums is slow.
+206 ==> 
