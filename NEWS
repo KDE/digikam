@@ -216,4 +216,5 @@ BUGFIXES FROM BUGZILLA:
 201 ==> 348760 - Old and not secure VLC version.
 202 ==> 117920 - no encoder slide show.
 203 ==> 342607 - digiKam crash at startup with GStream : QtMultimedia relevant.
-204 ==> 
+204 ==> 235469 - digiKam Segmentation fault after 2 or 3 modifications.
+205 ==> 
