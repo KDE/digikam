@@ -48,6 +48,7 @@
 #include "digikam_debug.h"
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
+#include "webbrowserdlg.h"
 
 namespace Digikam
 {
@@ -164,13 +165,30 @@ void HTMLFinalPage::slotProcess()
                                   DHistoryView::ProgressEntry);
     }
 
-    if (info->openInBrowser())
+    QUrl url = info->destUrl().adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + QLatin1String("/index.html"));
+
+    switch (info->openInBrowser())
     {
-        QUrl url = info->destUrl().adjusted(QUrl::StripTrailingSlash);
-        url.setPath(url.path() + QLatin1String("/index.html"));
-        QDesktopServices::openUrl(url);
-        d->progressView->addEntry(i18n("Opening gallery in browser..."),
-                                  DHistoryView::ProgressEntry);
+        case GalleryConfig::DESKTOP:
+        {
+            QDesktopServices::openUrl(url);
+            d->progressView->addEntry(i18n("Opening gallery with default desktop browser..."),
+                                      DHistoryView::ProgressEntry);
+            break;
+        }
+
+        case GalleryConfig::INTERNAL:
+        {
+            WebBrowserDlg* const browser = new WebBrowserDlg(url, this);
+            browser->show();
+            d->progressView->addEntry(i18n("Opening gallery with internal browser..."),
+                                      DHistoryView::ProgressEntry);
+            break;
+        }
+
+        default:
+            break;
     }
 
     d->complete = true;

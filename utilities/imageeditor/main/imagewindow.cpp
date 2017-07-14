@@ -125,6 +125,8 @@
 #include "dbinfoiface.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
+#include "mailwizard.h"
+#include "advprintwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -1837,4 +1839,16 @@ void ImageWindow::slotExpoBlending()
     ExpoBlendingManager::instance()->run();
 }
 
-}  // namespace Digikam
+void ImageWindow::slotSendByMail()
+{
+    MailWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+void ImageWindow::slotPrintCreator()
+{
+    AdvPrintWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+} // namespace Digikam

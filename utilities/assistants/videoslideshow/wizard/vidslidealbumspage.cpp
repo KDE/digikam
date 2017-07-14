@@ -62,15 +62,20 @@ VidSlideAlbumsPage::VidSlideAlbumsPage(QWizard* const dialog, const QString& tit
     : DWizardPage(dialog, title),
       d(new Private(dialog))
 {
-    setObjectName(QLatin1String("AlbumsSelectorPage"));
+    if (d->iface)
+    {
+        d->albumSelector = d->iface->albumChooser(this);
 
-    d->albumSelector = d->iface->albumChooser(this);
+        connect(d->iface, SIGNAL(signalAlbumChooserSelectionChanged()),
+                this, SIGNAL(completeChanged()));
+    }
+    else
+    {
+        d->albumSelector = new QWidget(this);
+    }
 
     setPageWidget(d->albumSelector);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-pictures")));
-
-    connect(d->iface, SIGNAL(signalAlbumChooserSelectionChanged()),
-            this, SIGNAL(completeChanged()));
 }
 
 VidSlideAlbumsPage::~VidSlideAlbumsPage()
@@ -80,7 +85,10 @@ VidSlideAlbumsPage::~VidSlideAlbumsPage()
 
 bool VidSlideAlbumsPage::validatePage()
 {
-    if (d->iface->albumChooserItems().empty())
+    if (!d->iface)
+        return false;
+
+    if (d->iface && d->iface->albumChooserItems().empty())
         return false;
 
     d->wizard->settings()->inputImages.clear();
@@ -96,6 +104,9 @@ bool VidSlideAlbumsPage::validatePage()
 
 bool VidSlideAlbumsPage::isComplete() const
 {
+    if (!d->iface)
+        return false;
+
     return (!d->iface->albumChooserItems().empty());
 }
 

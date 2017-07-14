@@ -32,7 +32,6 @@
 // Qt includes
 
 #include <QCursor>
-#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -51,7 +50,6 @@
 #include <QKeySequence>
 #include <QApplication>
 #include <QAction>
-#include <QFileDialog>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMimeDatabase>
@@ -104,8 +102,11 @@
 #include "showfotoinfoiface.h"
 #include "showfoto_p.h"
 #include "dexpanderbox.h"
+#include "dfiledialog.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
+#include "mailwizard.h"
+#include "advprintwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -738,7 +739,7 @@ void ShowFoto::slotOpenFilesInFolder()
         return;
     }
 
-    QUrl url = QUrl::fromLocalFile(QFileDialog::getExistingDirectory(this, i18n("Open Images From Folder"),
+    QUrl url = QUrl::fromLocalFile(DFileDialog::getExistingDirectory(this, i18n("Open Images From Folder"),
                                                                      d->lastOpenedDirectory.toLocalFile()));
     if (!url.isEmpty())
     {
@@ -1433,6 +1434,18 @@ void ShowFoto::slotVideoSlideshow()
 #endif
 }
 
-}   // namespace ShowFoto
+void ShowFoto::slotSendByMail()
+{
+    MailWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+void ShowFoto::slotPrintCreator()
+{
+    AdvPrintWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+} // namespace ShowFoto
 
 #include "moc_showfoto.cpp"

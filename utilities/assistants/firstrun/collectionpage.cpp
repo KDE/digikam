@@ -67,8 +67,8 @@ public:
     DFileSelector* rootAlbumPathRequester;
 };
 
-CollectionPage::CollectionPage(FirstRunDlg* const dlg)
-    : FirstRunDlgPage(dlg, i18n("<b>Configure where you keep your images</b>")),
+CollectionPage::CollectionPage(QWizard* const dlg)
+    : DWizardPage(dlg, i18n("<b>Configure where you keep your images</b>")),
       d(new Private)
 {
     QWidget* const widget      = new QWidget(this);
@@ -101,8 +101,8 @@ CollectionPage::CollectionPage(FirstRunDlg* const dlg)
     textLabel1->setText(message);
 
     d->rootAlbumPathRequester = new DFileSelector(widget);
-    d->rootAlbumPathRequester->setFileDlgMode(QFileDialog::Directory);
-    d->rootAlbumPathRequester->setFileDlgOptions(QFileDialog::ShowDirsOnly);
+    d->rootAlbumPathRequester->setFileDlgMode(DFileDialog::Directory);
+    d->rootAlbumPathRequester->setFileDlgOptions(DFileDialog::ShowDirsOnly);
     d->rootAlbumPathRequester->setFileDlgPath(picturesPath);
 
     vlayout->addWidget(textLabel1);

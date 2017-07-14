@@ -26,18 +26,18 @@
 
 // Local includes
 
-#include "firstrundlgpage.h"
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-class RawPage : public FirstRunDlgPage
+class RawPage : public DWizardPage
 {
     Q_OBJECT
 
 public:
 
-    explicit RawPage(FirstRunDlg* const dlg);
+    explicit RawPage(QWizard* const dlg);
     ~RawPage();
 
     void saveSettings();
@@ -48,6 +48,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* RAW_PAGE_H */
+#endif // RAW_PAGE_H

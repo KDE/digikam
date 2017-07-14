@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-01
- * Description : Google-Maps-backend for GeoIface
+ * Description : Google-Maps-backend for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -29,9 +29,9 @@
 // Local includes
 
 #include "mapbackend.h"
-#include "tracks.h"
+#include "trackmanager.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BackendGoogleMaps : public MapBackend
@@ -113,7 +113,7 @@ private Q_SLOTS:
     void slotMapTypeActionTriggered(QAction* action);
     void slotHTMLEvents(const QStringList& eventStrings);
     void slotFloatSettingsTriggered(QAction* action);
-    void slotSelectionHasBeenMade(const GeoIface::GeoCoordinates::Pair& searchCoordinates);
+    void slotSelectionHasBeenMade(const Digikam::GeoCoordinates::Pair& searchCoordinates);
     void slotTrackManagerChanged();
     void slotTracksChanged(const QList<TrackManager::TrackChanges> trackChanges);
     void slotTrackVisibilityChanged(const bool newState);
@@ -130,6 +130,6 @@ private:
     Private* const d;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // BACKEND_MAP_GOOGLEMAPS_H

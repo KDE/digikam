@@ -172,6 +172,7 @@
 #include "sheartool.h"
 #include "resizetool.h"
 #include "ratiocroptool.h"
+#include "dfiledialog.h"
 
 #ifdef HAVE_LIBLQR_1
 #   include "contentawareresizetool.h"
@@ -837,10 +838,14 @@ void EditorWindow::setupStandardActions()
     createExpoBlendingAction();
     createCalendarAction();
     createVideoSlideshowAction();
+    createSendByMailAction();
+    createPrintCreatorAction();
 
     m_metadataEditAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);
     m_calendarAction->setEnabled(false);
+    m_sendByMailAction->setEnabled(false);
+    m_printCreatorAction->setEnabled(false);
 
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(false);
@@ -1425,6 +1430,8 @@ void EditorWindow::toggleStandardActions(bool val)
     m_presentationAction->setEnabled(val);
     m_calendarAction->setEnabled(val);
     m_expoBlendingAction->setEnabled(val);
+    m_sendByMailAction->setEnabled(val);
+    m_printCreatorAction->setEnabled(val);
 
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(val);
@@ -2238,11 +2245,11 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
 {
     QString all;
     QStringList list                       = supportedImageMimeTypes(QIODevice::WriteOnly, all);
-    QFileDialog* const imageFileSaveDialog = new QFileDialog(this);
+    DFileDialog* const imageFileSaveDialog = new DFileDialog(this);
     imageFileSaveDialog->setWindowTitle(i18n("New Image File Name"));
     imageFileSaveDialog->setDirectoryUrl(initialUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash));
-    imageFileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
-    imageFileSaveDialog->setFileMode(QFileDialog::AnyFile);
+    imageFileSaveDialog->setAcceptMode(DFileDialog::AcceptSave);
+    imageFileSaveDialog->setFileMode(DFileDialog::AnyFile);
     imageFileSaveDialog->setNameFilters(list);
 
     // restore old settings for the dialog
@@ -2292,7 +2299,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
         d->currentWindowModalDialog = 0;
     }
 
-    if (result != QFileDialog::Accepted || !imageFileSaveDialog)
+    if (result != DFileDialog::Accepted || !imageFileSaveDialog)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "File Save Dialog rejected";
         return false;
@@ -3023,6 +3030,8 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_metadataEditAction,          postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);
     actionModel->addAction(m_expoBlendingAction,          postCategory);
+    actionModel->addAction(m_sendByMailAction,            postCategory);
+    actionModel->addAction(m_printCreatorAction,          postCategory);
 
 #ifdef HAVE_HTMLGALLERY
     actionModel->addAction(m_htmlGalleryAction,           postCategory);

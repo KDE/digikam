@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPREVIEWVIEW_H
-#define IMAGEPREVIEWVIEW_H
+#ifndef IMAGE_PREVIEW_VIEW_H
+#define IMAGE_PREVIEW_VIEW_H
 
 // Local includes
 
@@ -131,6 +131,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* IMAGEPREVIEWVIEW_H */
+#endif // IMAGE_PREVIEW_VIEW_H

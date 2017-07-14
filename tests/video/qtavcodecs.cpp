@@ -25,7 +25,6 @@
 
 // QtAv includes
 
-#include <QtAV/QtAV.h>
 #include <QtAV/VideoDecoder.h>
 #include <QtAV/VideoEncoder.h>
 #include <QtAV/AudioDecoder.h>

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESVERSIONSTAB_H
-#define IMAGEPROPERTIESVERSIONSTAB_H
+#ifndef IMAGE_PROPERTIES_VERSIONS_TAB_H
+#define IMAGE_PROPERTIES_VERSIONS_TAB_H
 
 // Qt includes
 
@@ -86,4 +86,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGEPROPERTIESVERSIONSTAB_H
+#endif // IMAGE_PROPERTIES_VERSIONS_TAB_H

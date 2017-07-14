@@ -99,7 +99,7 @@ void DImgHistoryTest::testDImg()
 
     m_im->switchToLastSaved();
 
-    history = m_im->getImg()->getImageHistory();
+    history = m_im->getImg()->getOriginalImageHistory();
     QCOMPARE(history.size(), 3);
     QCOMPARE(history.entries().first().referredImages.size(), 1);
     QCOMPARE(history.entries().first().referredImages.first().m_type, HistoryImageId::Original);

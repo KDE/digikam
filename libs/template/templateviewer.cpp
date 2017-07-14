@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QGridLayout>
-#include <QDesktopServices>
 #include <QUrl>
 #include <QIcon>
 

@@ -42,7 +42,6 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
-#include <QDesktopServices>
 #include <QStandardPaths>
 #include <QIcon>
 #include <QMessageBox>

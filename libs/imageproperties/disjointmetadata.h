@@ -21,20 +21,19 @@
  *
  * ============================================================ */
 
-#ifndef DISJOINTMETADATA_H
-#define DISJOINTMETADATA_H
+#ifndef DISJOINT_METADATA_H
+#define DISJOINT_METADATA_H
 
 // Qt includes
 
 #include <QString>
 #include <QMap>
 #include <QObject>
+#include <QDateTime>
 
 // Local includes
 
 #include "metadatasettings.h"
-
-class QDateTime;
 
 namespace Digikam
 {
@@ -86,7 +85,7 @@ public:
     };
 
     DisjointMetadata(QObject* parent = 0);
-    DisjointMetadata(const DisjointMetadata&other);
+    DisjointMetadata(const DisjointMetadata& other);
     ~DisjointMetadata();
 
     DisjointMetadata& operator=(const DisjointMetadata& other);
@@ -250,12 +249,15 @@ public:
      * @return - metadatahub flags encoded as int
      */
     int changedFlags();
+
 protected:
 
     void load(const QDateTime& dateTime,
-              const CaptionsMap& titles, const CaptionsMap& comment,
+              const CaptionsMap& titles,
+              const CaptionsMap& comment,
               int colorLabel, int pickLabel,
               int rating, const Template& t);
+
     void loadTags( QList<int>& loadedTagIds);
     void notifyTagDeleted(int id);
 
@@ -277,4 +279,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DISJOINTMETADATA_H
+#endif // DISJOINT_METADATA_H

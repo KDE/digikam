@@ -48,6 +48,8 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:digikamlibtransitionmngr_src>
             $<TARGET_OBJECTS:akonadiiface_src>  # NOTE: even if optional this code need to be compiled here.
             $<TARGET_OBJECTS:calendar_src>
+            $<TARGET_OBJECTS:sendbymail_src>
+            $<TARGET_OBJECTS:printcreator_src>
 
             utils/digikam_debug.cpp
 )
@@ -89,7 +91,8 @@ if(ENABLE_MEDIAPLAYER)
     )
 endif()
 
-include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+include_directories($<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
@@ -155,7 +158,7 @@ target_link_libraries(digikamcore
                       ${LCMS2_LIBRARIES} # filters
 
                       ${TIFF_LIBRARIES}
-                      ${PNG_LIBRARIES}
+                      PNG::PNG
                       ${EXIV2_LIBRARIES}
 
                       libdng

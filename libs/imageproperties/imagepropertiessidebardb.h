@@ -23,12 +23,14 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESSIDEBARDB_H
-#define IMAGEPROPERTIESSIDEBARDB_H
+#ifndef IMAGE_PROPERTIES_SIDEBAR_DB_H
+#define IMAGE_PROPERTIES_SIDEBAR_DB_H
 
 // Qt includes
 
 #include <QUrl>
+#include <QWidget>
+#include <QRect>
 
 // Local includes
 
@@ -37,9 +39,6 @@
 #include "imagepropertiessidebar.h"
 #include "digikam_export.h"
 #include "digikam_config.h"
-
-class QWidget;
-class QRect;
 
 namespace Digikam
 {
@@ -59,10 +58,10 @@ class ImagePropertiesSideBarDB : public ImagePropertiesSideBar
 
 public:
 
-    ImagePropertiesSideBarDB(QWidget* const parent, SidebarSplitter* const splitter,
-                             Qt::Edge side=Qt::LeftEdge,
-                             bool mimimizedDefault=false);
-
+    explicit ImagePropertiesSideBarDB(QWidget* const parent,
+                                      SidebarSplitter* const splitter,
+                                      Qt::Edge side=Qt::LeftEdge,
+                                      bool mimimizedDefault=false);
     ~ImagePropertiesSideBarDB();
 
     void populateTags();
@@ -138,6 +137,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // IMAGEPROPERTIESSIDEBARDB_H
+#endif // IMAGE_PROPERTIES_SIDEBAR_DB_H

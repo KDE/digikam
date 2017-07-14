@@ -45,7 +45,6 @@
 #include <QIcon>
 #include <QMessageBox>
 #include <QStatusBar>
-#include <QFileDialog>
 
 // KDE includes
 
@@ -126,6 +125,9 @@
 #include "metadataedit.h"
 #include "expoblendingmanager.h"
 #include "calwizard.h"
+#include "mailwizard.h"
+#include "advprintwizard.h"
+#include "dfiledialog.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -1346,6 +1348,8 @@ void DigikamApp::setupActions()
     createHtmlGalleryAction();
     createCalendarAction();
     createVideoSlideshowAction();
+    createSendByMailAction();
+    createPrintCreatorAction();
 
     // -----------------------------------------------------------
 
@@ -2684,6 +2688,18 @@ void DigikamApp::slotCalendar()
     w.exec();
 }
 
+void DigikamApp::slotSendByMail()
+{
+    MailWizard w(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
+    w.exec();
+}
+
+void DigikamApp::slotPrintCreator()
+{
+    AdvPrintWizard w(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
+    w.exec();
+}
+
 void DigikamApp::slotRecurseAlbums(bool checked)
 {
     d->view->setRecurseAlbums(checked);
@@ -2724,7 +2740,7 @@ void DigikamApp::slotZoomChanged(double zoom)
 void DigikamApp::slotImportAddImages()
 {
     QString startingPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-    QUrl url             = QFileDialog::getExistingDirectoryUrl(this, i18n("Select folder to parse"),
+    QUrl url             = DFileDialog::getExistingDirectoryUrl(this, i18n("Select folder to parse"),
                                                                 QUrl::fromLocalFile(startingPath));
 
     if (url.isEmpty() || !url.isLocalFile())
@@ -2742,9 +2758,9 @@ void DigikamApp::slotImportAddFolders()
     // This work around is inspired from http://www.qtcentre.org/threads/34226-QFileDialog-select-multiple-directories
     // Check Later Qt 5.4 if a new native Qt way have been introduced.
 
-    QPointer<QFileDialog> dlg = new QFileDialog(this);
+    QPointer<DFileDialog> dlg = new DFileDialog(this);
     dlg->setWindowTitle(i18n("Select folders to import into album"));
-    dlg->setFileMode(QFileDialog::DirectoryOnly);
+    dlg->setFileMode(DFileDialog::DirectoryOnly);
 
     QListView* const l = dlg->findChild<QListView*>(QLatin1String("listView"));
 
@@ -3375,6 +3391,8 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(m_calendarAction,              postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);
+    actionModel->addAction(m_sendByMailAction,            postCategory);
+    actionModel->addAction(m_printCreatorAction,          postCategory);
 
 #ifdef HAVE_PANORAMA
     actionModel->addAction(m_panoramaAction,              postCategory);

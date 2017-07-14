@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAPLAYERVIEW_H
-#define MEDIAPLAYERVIEW_H
+#ifndef MEDIA_PLAYER_VIEW_H
+#define MEDIA_PLAYER_VIEW_H
 
 // Qt includes
 
@@ -32,7 +32,8 @@
 
 // QtAV includes
 
-#include <QtAV/QtAV.h>
+#include <QtAV/AVError.h>
+#include <QtAV/AVPlayer.h>
 
 // Local includes
 
@@ -91,6 +92,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif // MEDIAPLAYERVIEW_H
+#endif // MEDIA_PLAYER_VIEW_H

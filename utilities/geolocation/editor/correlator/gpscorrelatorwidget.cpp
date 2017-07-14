@@ -44,7 +44,6 @@
 #include <QComboBox>
 #include <QMenu>
 #include <QStandardPaths>
-#include <QFileDialog>
 #include <QSpinBox>
 #include <QMessageBox>
 #include <QDateEdit>
@@ -64,6 +63,7 @@
 #include "gpsundocommand.h"
 #include "track_listmodel.h"
 #include "dexpanderbox.h"
+#include "dfiledialog.h"
 
 namespace Digikam
 {
@@ -266,7 +266,7 @@ GPSCorrelatorWidget::~GPSCorrelatorWidget()
 
 void GPSCorrelatorWidget::slotLoadTrackFiles()
 {
-    const QStringList gpxFiles = QFileDialog::getOpenFileNames(this,
+    const QStringList gpxFiles = DFileDialog::getOpenFileNames(this,
                                                                i18nc("@title:window", "Select GPX File to Load"),
                                                                d->gpxFileOpenLastDirectory,
                                                                i18n("GPS Exchange Format (*.gpx)"));

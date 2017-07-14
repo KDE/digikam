@@ -34,7 +34,6 @@
 #include "track_correlator.h"
 
 using namespace Digikam;
-using namespace GeoIface;
 
 /**
  * @brief Return the path of the directory containing the test data

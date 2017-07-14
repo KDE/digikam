@@ -245,7 +245,9 @@ void PreviewLoadingTask::execute()
                 }
 
                 loadHalfSizeRaw();
+                break;
             }
+
             case PreviewSettings::HighQualityPreview:
             {
                 switch (m_loadingDescription.previewParameters.previewSettings.rawLoading)

@@ -21,26 +21,23 @@
  *
  * ============================================================ */
 
-#ifndef MIGRATEFROMDIGIKAM4_PAGE_H
-#define MIGRATEFROMDIGIKAM4_PAGE_H
+#ifndef MIGRATE_FROM_DIGIKAM4_PAGE_H
+#define MIGRATE_FROM_DIGIKAM4_PAGE_H
 
 // Local includes
 
-#include "firstrundlgpage.h"
-
-class QRadioButton;
-class QButtonGroup;
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-class MigrateFromDigikam4Page : public FirstRunDlgPage
+class MigrateFromDigikam4Page : public DWizardPage
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    explicit MigrateFromDigikam4Page(FirstRunDlg* const dlg);
+    explicit MigrateFromDigikam4Page(QWizard* const dlg);
     ~MigrateFromDigikam4Page();
 
     /**
@@ -56,11 +53,10 @@ public Q_SLOTS:
 
 private:
 
-    QButtonGroup* m_migrateBehavior;
-    QRadioButton* m_migrate;
-    QRadioButton* m_createnew;
+    class Private;
+    Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* MIGRATEFROMDIGIKAM4_PAGE_H */
+#endif // MIGRATE_FROM_DIGIKAM4_PAGE_H

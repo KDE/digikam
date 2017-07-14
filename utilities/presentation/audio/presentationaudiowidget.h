@@ -27,12 +27,13 @@
 
 // Qt includes
 
-#include <QKeyEvent>
 #include <QUrl>
+#include <QKeyEvent>
 
 // QtAV includes
 
-#include <QtAV/QtAV.h>
+#include <QtAV/AVError.h>
+#include <QtAV/AVPlayer.h>
 
 // Local includes
 

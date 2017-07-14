@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-18
- * Description : Drag-and-drop handler for GeoIface used in the demo
+ * Description : Drag-and-drop handler for geolocation interface used in the demo
  *
  * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MYDRAGDROPHANDLER_H
-#define MYDRAGDROPHANDLER_H
+#ifndef MY_DRAG_DROP_HANDLER_H
+#define MY_DRAG_DROP_HANDLER_H
 
 // Qt includes
 
@@ -30,11 +30,11 @@
 #include <QMimeData>
 #include <QTreeWidgetItem>
 
-// geoiface includes
+// Local includes
 
-#include "dragdrophandler.h"
+#include "geodragdrophandler.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
 class MyDragData : public QMimeData
 {
@@ -51,7 +51,7 @@ public:
     QList<QPersistentModelIndex> draggedIndices;
 };
 
-class MyDragDropHandler : public DragDropHandler
+class MyDragDropHandler : public GeoDragDropHandler
 {
     Q_OBJECT
 
@@ -69,4 +69,4 @@ private:
     QAbstractItemModel* const model;
 };
 
-#endif /* MYDRAGDROPHANDLER_H */
+#endif // MY_DRAG_DROP_HANDLER_H

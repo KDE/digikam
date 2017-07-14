@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef STACKEDVIEW_H
-#define STACKEDVIEW_H
+#ifndef STACKED_VIEW_H
+#define STACKED_VIEW_H
 
 // Qt includes
 
@@ -169,6 +169,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* STACKEDVIEW_H */
+#endif // STACKED_VIEW_H

@@ -43,7 +43,6 @@
 #include <QStringRef>
 #include <QString>
 #include <QStandardPaths>
-#include <QFileDialog>
 #include <QIcon>
 #include <QApplication>
 #include <QStyle>
@@ -60,6 +59,7 @@
 #include "imagedialog.h"
 #include "digikam_debug.h"
 #include "dlayoutbox.h"
+#include "dfiledialog.h"
 #include "thumbnailloadthread.h"
 #include "dworkingpixmap.h"
 
@@ -870,14 +870,12 @@ void DImagesList::slotAddItems()
         grp.writeEntry("Last Image Path", urls.first().adjusted(QUrl::RemoveFilename).toLocalFile());
         config.sync();
     }
-
-//     emit signalImageListChanged();
 }
 
 void DImagesList::slotRemoveItems()
 {
     QList<QTreeWidgetItem*> selectedItemsList = d->listView->selectedItems();
-    QList<QUrl> urls;
+    QList<int> itemsIndex;
 
     for (QList<QTreeWidgetItem*>::const_iterator it = selectedItemsList.constBegin();
          it != selectedItemsList.constEnd(); ++it)
@@ -886,8 +884,7 @@ void DImagesList::slotRemoveItems()
 
         if (item)
         {
-            emit signalRemovingItem(item);
-            urls.append(item->url());
+            itemsIndex.append(d->listView->indexFromItem(item).row());
 
             if (d->processItems.contains(item->url()))
             {
@@ -899,7 +896,7 @@ void DImagesList::slotRemoveItems()
         }
     }
 
-    emit signalRemovedItems(urls);
+    emit signalRemovedItems(itemsIndex);
     emit signalImageListChanged();
 }
 
@@ -976,7 +973,7 @@ void DImagesList::slotLoadItems()
     QUrl lastFileUrl = QUrl::fromLocalFile(grp.readEntry("Last Images List Path",
                                            QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     QUrl loadLevelsFile;
-    loadLevelsFile = QFileDialog::getOpenFileUrl(this, i18n("Select the image file list to load"), lastFileUrl,
+    loadLevelsFile = DFileDialog::getOpenFileUrl(this, i18n("Select the image file list to load"), lastFileUrl,
                                                  i18n("All Files (*)"));
 
     if (loadLevelsFile.isEmpty())
@@ -1048,7 +1045,7 @@ void DImagesList::slotSaveItems()
     QUrl lastFileUrl = QUrl::fromLocalFile(grp.readEntry("Last Images List Path",
                                            QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     QUrl saveLevelsFile;
-    saveLevelsFile = QFileDialog::getSaveFileUrl(this, i18n("Select the image file list to save"), lastFileUrl,
+    saveLevelsFile = DFileDialog::getSaveFileUrl(this, i18n("Select the image file list to save"), lastFileUrl,
                                                  i18n("All Files (*)"));
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "file url " << saveLevelsFile.toDisplayString();
@@ -1087,8 +1084,7 @@ void DImagesList::slotSaveItems()
 
             xmlWriter.writeAttribute(QString::fromLatin1("url"), lvItem->url().toDisplayString());
 
-            // emit xmlWriter, item?
-            emit signalXMLSaveItem(xmlWriter, lvItem);
+            emit signalXMLSaveItem(xmlWriter, listView()->indexFromItem(lvItem).row());
 
             xmlWriter.writeEndElement(); // Image
         }
@@ -1109,6 +1105,7 @@ void DImagesList::slotSaveItems()
 void DImagesList::removeItemByUrl(const QUrl& url)
 {
     bool found;
+    QList<int> itemsIndex;
 
     do
     {
@@ -1121,7 +1118,7 @@ void DImagesList::removeItemByUrl(const QUrl& url)
 
             if (item && item->url() == url)
             {
-                emit signalRemovingItem(item);
+                itemsIndex.append(d->listView->indexFromItem(item).row());
 
                 if (d->processItems.contains(item->url()))
                 {
@@ -1138,6 +1135,7 @@ void DImagesList::removeItemByUrl(const QUrl& url)
     }
     while (found);
 
+    emit signalRemovedItems(itemsIndex);
     emit signalImageListChanged();
 }
 
@@ -1322,4 +1320,4 @@ QUrl DImagesList::getCurrentUrl() const
     return currentItem->url();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

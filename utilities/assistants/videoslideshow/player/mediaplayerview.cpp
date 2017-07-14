@@ -38,8 +38,6 @@
 
 // QtAV includes
 
-#include <QtAV/AVError.h>
-#include <QtAV/AVPlayer.h>
 #include <QtAVWidgets/WidgetRenderer.h>
 
 // KDE includes
@@ -426,4 +424,4 @@ void MediaPlayerView::slotHandlePlayerError(const QtAV::AVError& err)
     qCDebug(DIGIKAM_GENERAL_LOG) << "Error: " << err.string();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

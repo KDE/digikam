@@ -66,7 +66,7 @@
 #include "digikam_config.h"
 #include "mapwidget.h"
 #include "itemmarkertiler.h"
-#include "tracks.h"
+#include "trackmanager.h"
 #include "gpscommon.h"
 #include "gpsimagemodel.h"
 #include "mapdragdrophandler.h"
@@ -90,8 +90,6 @@
 #ifdef GPSSYNC_MODELTEST
 #   include <modeltest.h>
 #endif
-
-using namespace GeoIface;
 
 namespace Digikam
 {
@@ -203,7 +201,7 @@ public:
     QItemSelectionModel*                     selectionModel;
     bool                                     uiEnabled;
     GPSImageListContextMenu*                 listViewContextMenu;
-    TrackManager*                  trackManager;
+    TrackManager*                            trackManager;
 
     // Loading and saving
     QFuture<QPair<QUrl,QString> >            fileIOFuture;

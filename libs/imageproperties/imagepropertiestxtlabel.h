@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESTXTLABEL_H
-#define IMAGEPROPERTIESTXTLABEL_H
+#ifndef IMAGE_PROPERTIES_TXT_LABEL_H
+#define IMAGE_PROPERTIES_TXT_LABEL_H
 
 // Qt includes
 
@@ -146,4 +146,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* IMAGEPROPERTIESTXTLABEL_H */
+#endif // IMAGE_PROPERTIES_TXT_LABEL_H

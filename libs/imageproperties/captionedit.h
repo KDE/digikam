@@ -76,6 +76,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // CAPTION_EDIT_H

@@ -9,27 +9,26 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libgeoiface_SRCS backends/mapbackend.cpp
-                     backends/htmlwidget.cpp
                      backends/backendmarble.cpp
                      backends/backendmarblelayer.cpp
                      backends/backendgooglemaps.cpp
-
-                     abstractmarkertiler.cpp
-                     dragdrophandler.cpp
-                     geocoordinates.cpp
-                     groupstatecomputer.cpp
-                     itemmarkertiler.cpp
-                     geoiface_common.cpp
-                     lookupaltitude.cpp
-                     lookupaltitudegeonames.cpp
-                     lookupfactory.cpp
-                     mapwidget.cpp
-                     modelhelper.cpp
-                     placeholderwidget.cpp
-                     tilegrouper.cpp
-                     tileindex.cpp
-                     trackreader.cpp
-                     tracks.cpp
+                     tracks/trackreader.cpp
+                     tracks/trackmanager.cpp
+                     lookup/lookupaltitude.cpp
+                     lookup/lookupaltitudegeonames.cpp
+                     lookup/lookupfactory.cpp
+                     core/geodragdrophandler.cpp
+                     core/geocoordinates.cpp
+                     core/geoifacecommon.cpp
+                     core/geomodelhelper.cpp
+                     core/groupstatecomputer.cpp
+                     tiles/abstractmarkertiler.cpp
+                     tiles/itemmarkertiler.cpp
+                     tiles/tilegrouper.cpp
+                     tiles/tileindex.cpp
+                     widgets/htmlwidget.cpp
+                     widgets/mapwidget.cpp
+                     widgets/placeholderwidget.cpp
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
@@ -37,6 +36,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Network,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
 
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>

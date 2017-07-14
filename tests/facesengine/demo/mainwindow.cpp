@@ -33,7 +33,6 @@
 #include <QGraphicsPixmapItem>
 #include <QTime>
 #include <QDebug>
-#include <QFileDialog>
 #include <QStandardPaths>
 
 // Local includes
@@ -41,6 +40,7 @@
 #include "recognitiondatabase.h"
 #include "facedetector.h"
 #include "faceitem.h"
+#include "dfiledialog.h"
 
 using namespace std;
 using namespace Digikam;
@@ -158,7 +158,7 @@ void MainWindow::clearScene()
 
 void MainWindow::slotOpenImage()
 {
-    QString file = QFileDialog::getOpenFileName(this, QLatin1String("Select Image to Open"),
+    QString file = DFileDialog::getOpenFileName(this, QLatin1String("Select Image to Open"),
                                                 d->lastFileOpenPath,
                                                 QString::fromLatin1("Image Files (*.png *.jpg *.bmp *.pgm)"));
 

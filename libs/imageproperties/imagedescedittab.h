@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEDESCEDITTAB_H
-#define IMAGEDESCEDITTAB_H
+#ifndef IMAGE_DESC_EDIT_TAB_H
+#define IMAGE_DESC_EDIT_TAB_H
 
 // Qt includes
 
@@ -158,6 +158,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // IMAGEDESCEDITTAB_H
+#endif  // IMAGE_DESC_EDIT_TAB_H

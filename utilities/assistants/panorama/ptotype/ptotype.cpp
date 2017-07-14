@@ -98,10 +98,15 @@ bool PTOType::createFile(const QString& filepath)
             out << "TIFF c:" << project.fileFormat.compressionMethod;
             break;
         case Project::FileFormat::TIFF_m:
-            out << "TIFF_m";
         case Project::FileFormat::TIFF_multilayer:
             if (project.fileFormat.fileType == Project::FileFormat::TIFF_multilayer)
+            {
                 out << "TIFF_multilayer";
+            }
+            else
+            {
+                out << "TIFF_m";
+            }
             out << " c:";
             switch (project.fileFormat.compressionMethod)
             {

@@ -43,8 +43,8 @@ class DIGIKAM_EXPORT DWizardPage : public QWizardPage
 
 public:
 
-    DWizardPage(QWizard* const dlg, const QString& title);
-    virtual ~DWizardPage();
+    explicit DWizardPage(QWizard* const dlg, const QString& title);
+    ~DWizardPage();
 
     void setPageWidget(QWidget* const w);
     void removePageWidget(QWidget* const w);
@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* DWIZARD_PAGE_H */
+#endif // DWIZARD_PAGE_H

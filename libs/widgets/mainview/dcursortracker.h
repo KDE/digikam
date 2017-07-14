@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT DCursorTracker : public QLabel
 
 public:
 
-    DCursorTracker(const QString& txt, QWidget* const parent, Qt::Alignment align = Qt::AlignCenter);
+    explicit DCursorTracker(const QString& txt, QWidget* const parent, Qt::Alignment align = Qt::AlignCenter);
     ~DCursorTracker();
 
     void setText(const QString& txt);

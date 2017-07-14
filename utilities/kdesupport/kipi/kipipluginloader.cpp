@@ -138,6 +138,10 @@ void KipiPluginLoader::Private::loadPlugins()
     ignores.append(QLatin1String("Panorama"));           // Moved to digiKam core
     ignores.append(QLatin1String("Advanced Slideshow")); // Moved to digiKam core
 
+    // These plugins are replaced by tools from core.
+    ignores.append(QLatin1String("SendImages"));
+    ignores.append(QLatin1String("PrintImages"));
+
     // List of obsolete tool actions to not load
 
     QStringList pluginActionsDisabled;
