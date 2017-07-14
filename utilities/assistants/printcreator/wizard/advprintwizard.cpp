@@ -248,10 +248,13 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
 void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 {
     AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
+
     d->cropPage->ui()->cropFrame->init(photo,
                                        d->photoPage->getLayout(photoIndex)->width(),
                                        d->photoPage->getLayout(photoIndex)->height(),
-                                       s->autoRotate);
+                                       s->autoRotate,
+                                       true);
+
     d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
                                              photoIndex + 1,
                                              QString::number(d->settings->photos.count())));
@@ -384,9 +387,10 @@ bool AdvPrintWizard::prepareToPrint()
             if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
             {
                 d->cropPage->ui()->cropFrame->init(photo,
-                                                d->photoPage->getLayout(i)->width(),
-                                                d->photoPage->getLayout(i)->height(),
-                                                d->settings->outputLayouts->autoRotate);
+                                                   d->photoPage->getLayout(i)->width(),
+                                                   d->photoPage->getLayout(i)->height(),
+                                                   d->settings->outputLayouts->autoRotate,
+                                                   true);
             }
 
             i++;

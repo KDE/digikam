@@ -47,7 +47,7 @@ public:
                 int width,
                 int height,
                 bool autoRotate,
-                bool paint = true);
+                bool paint);
 
     void   setColor(const QColor&);
     QColor color() const;

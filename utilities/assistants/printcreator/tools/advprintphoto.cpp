@@ -140,7 +140,7 @@ AdvPrintPhoto::~AdvPrintPhoto()
     delete m_pAdvPrintCaptionInfo;
 }
 
-void AdvPrintPhoto::loadCache()
+void AdvPrintPhoto::loadFromCache()
 {
     // load the thumbnail and size only once.
     delete m_thumbnail;
@@ -161,7 +161,7 @@ QImage& AdvPrintPhoto::thumbnail()
 {
     if (!m_thumbnail)
     {
-        loadCache();
+        loadFromCache();
     }
 
     return *m_thumbnail;
@@ -177,7 +177,7 @@ QSize& AdvPrintPhoto::size()
 {
     if (m_size == 0)
     {
-        loadCache();
+        loadFromCache();
     }
 
     return *m_size;
