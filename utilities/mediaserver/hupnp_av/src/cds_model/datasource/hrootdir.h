@@ -25,6 +25,7 @@
 #include <../../HUpnpAv/HUpnpAv>
 
 #include <QtCore/QDir>
+#include <QDataStream>
 
 namespace Herqq
 {
@@ -220,5 +221,9 @@ inline bool operator!=(const HRootDir& obj1, const HRootDir& obj2)
 }
 }
 }
+
+// Ahmed Fathi , serializing.
+QDataStream &operator<<(QDataStream &out, const Herqq::Upnp::Av::HRootDir &hroot);
+QDataStream &operator>>(QDataStream &in, Herqq::Upnp::Av::HRootDir &hroot);
 
 #endif /* HROOTDIR_H_ */

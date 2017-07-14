@@ -18,7 +18,6 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -33,16 +32,16 @@ public:
     QTableWidget *sharedItemsTable;
     QGridLayout *gridLayout;
     QCheckBox *watchCheckBox;
-    QCheckBox *scanRecursivelyCheckbox;
-    QPushButton *addContentButton;
     QPushButton *addItemButton;
-    QSpacerItem *horizontalSpacer;
+    QCheckBox *scanRecursivelyCheckbox;
+    QPushButton *DeleteDirectoriesButton;
+    QPushButton *addContentButton;
 
     void setupUi(QMainWindow *MediaServerWindow)
     {
         if (MediaServerWindow->objectName().isEmpty())
             MediaServerWindow->setObjectName(QStringLiteral("MediaServerWindow"));
-        MediaServerWindow->resize(657, 213);
+        MediaServerWindow->resize(905, 382);
         MediaServerWindow->setMinimumSize(QSize(360, 170));
         centralwidget = new QWidget(MediaServerWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
@@ -59,7 +58,8 @@ public:
         sharedItemsTable->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         sharedItemsTable->setObjectName(QStringLiteral("sharedItemsTable"));
         sharedItemsTable->setAlternatingRowColors(true);
-        sharedItemsTable->setSelectionMode(QAbstractItemView::NoSelection);
+        sharedItemsTable->setSelectionMode(QAbstractItemView::MultiSelection);
+        sharedItemsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
         sharedItemsTable->setSortingEnabled(true);
         sharedItemsTable->horizontalHeader()->setCascadingSectionResizes(true);
         sharedItemsTable->horizontalHeader()->setMinimumSectionSize(40);
@@ -76,28 +76,29 @@ public:
         watchCheckBox->setEnabled(false);
         watchCheckBox->setLayoutDirection(Qt::RightToLeft);
 
-        gridLayout->addWidget(watchCheckBox, 4, 3, 1, 1);
+        gridLayout->addWidget(watchCheckBox, 9, 3, 1, 1);
+
+        addItemButton = new QPushButton(centralwidget);
+        addItemButton->setObjectName(QStringLiteral("addItemButton"));
+
+        gridLayout->addWidget(addItemButton, 9, 1, 1, 1);
 
         scanRecursivelyCheckbox = new QCheckBox(centralwidget);
         scanRecursivelyCheckbox->setObjectName(QStringLiteral("scanRecursivelyCheckbox"));
         scanRecursivelyCheckbox->setLayoutDirection(Qt::RightToLeft);
         scanRecursivelyCheckbox->setChecked(true);
 
-        gridLayout->addWidget(scanRecursivelyCheckbox, 4, 5, 1, 1);
+        gridLayout->addWidget(scanRecursivelyCheckbox, 9, 4, 1, 1);
+
+        DeleteDirectoriesButton = new QPushButton(centralwidget);
+        DeleteDirectoriesButton->setObjectName(QStringLiteral("DeleteDirectoriesButton"));
+
+        gridLayout->addWidget(DeleteDirectoriesButton, 9, 6, 1, 1);
 
         addContentButton = new QPushButton(centralwidget);
         addContentButton->setObjectName(QStringLiteral("addContentButton"));
 
-        gridLayout->addWidget(addContentButton, 4, 6, 1, 1);
-
-        addItemButton = new QPushButton(centralwidget);
-        addItemButton->setObjectName(QStringLiteral("addItemButton"));
-
-        gridLayout->addWidget(addItemButton, 4, 1, 1, 1);
-
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        gridLayout->addItem(horizontalSpacer, 4, 2, 1, 1);
+        gridLayout->addWidget(addContentButton, 9, 5, 1, 1);
 
 
         verticalLayout->addLayout(gridLayout);
@@ -119,9 +120,10 @@ public:
         QTableWidgetItem *___qtablewidgetitem2 = sharedItemsTable->horizontalHeaderItem(2);
         ___qtablewidgetitem2->setText(QApplication::translate("MediaServerWindow", "Path", Q_NULLPTR));
         watchCheckBox->setText(QApplication::translate("MediaServerWindow", "Watch for changes", Q_NULLPTR));
-        scanRecursivelyCheckbox->setText(QApplication::translate("MediaServerWindow", "Scan recursively", Q_NULLPTR));
-        addContentButton->setText(QApplication::translate("MediaServerWindow", "&Add New Root Directory", Q_NULLPTR));
         addItemButton->setText(QApplication::translate("MediaServerWindow", "Add Items", Q_NULLPTR));
+        scanRecursivelyCheckbox->setText(QApplication::translate("MediaServerWindow", "Scan recursively", Q_NULLPTR));
+        DeleteDirectoriesButton->setText(QApplication::translate("MediaServerWindow", "Delete Selected", Q_NULLPTR));
+        addContentButton->setText(QApplication::translate("MediaServerWindow", "&Add New Root Directory", Q_NULLPTR));
     } // retranslateUi
 
 };

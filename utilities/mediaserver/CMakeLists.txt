@@ -12,6 +12,7 @@ endif (POLICY CMP0063)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOMOC_RELAXED_MODE ON)
+set(CMAKE_AUTOUIC ON)
 
 #qt5_generate_moc(hserverdevicecontroller_p.h moc_hserverdevicecontroller_p.o)
 
@@ -314,7 +315,7 @@ set(libmediaserver_SRCS
 )
 
 
-set ( UIS
+set (UIS
 # apps/simple_avtest-app/invokeactiondialog.ui 
 # apps/simple_avtest-app/mediaserver_introductionwindow.ui 
  apps/simple_avtest-app/mediaserver_window.ui

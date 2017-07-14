@@ -31,9 +31,16 @@
 #include <QtWidgets/QMainWindow>
 #endif
 #include <QtCore/QPointer>
+#include <QMap>
 
 #include <../../HUpnpAv/HUpnpAv>
 #include <../../HUpnpCore/HDeviceHost>
+#include <../../HUpnpAv/HRootDir>
+
+
+
+using namespace Herqq::Upnp;
+using namespace Herqq::Upnp::Av;
 
 namespace Ui {
     class MediaServerWindow;
@@ -57,6 +64,15 @@ private:
     Herqq::Upnp::Av::HFileSystemDataSource* m_datasource;
 
     QPointer<AddContentDialog> m_dlg;
+    QMap<int,HRootDir> rootDirectoriesMap;
+    QMap<int,QString> ItemsMap;
+
+    void addRootDirectoriesToServer(const HRootDir& rd);
+    void addItemsToServer(const QStringList& fullPaths);
+    void saveDirectoriesToDatabase();
+    void loadDirectoriesFromDatabase();
+    void saveItemsToDatabase();
+    void loadItemsFromDatabase();
 
 private Q_SLOTS:
 
@@ -64,6 +80,8 @@ private Q_SLOTS:
     void addContenDlgtFinished();
 
     void on_addItemButton_clicked();
+
+    void on_DeleteDirectoriesButton_clicked();
 
 protected:
 

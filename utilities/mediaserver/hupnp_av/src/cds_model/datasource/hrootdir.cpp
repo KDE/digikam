@@ -93,3 +93,22 @@ bool operator==(const HRootDir& obj1, const HRootDir& obj2)
 }
 }
 }
+
+QDataStream &operator<<(QDataStream &out, const Herqq::Upnp::Av::HRootDir &hroot)
+{
+    out << hroot.dir().absolutePath() << static_cast<int> (hroot.scanMode());
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, Herqq::Upnp::Av::HRootDir &hroot)
+{
+    QString dir;
+    int scanMode_int;
+    in >> dir >> scanMode_int ;
+    Herqq::Upnp::Av::HRootDir::ScanMode scanMode = static_cast<Herqq::Upnp::Av::HRootDir::ScanMode>(scanMode_int);
+    hroot = Herqq::Upnp::Av::HRootDir(dir, scanMode);
+    return in;
+
+}
+
+

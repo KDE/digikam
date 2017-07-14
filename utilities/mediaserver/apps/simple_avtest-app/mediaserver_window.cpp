@@ -38,6 +38,8 @@
 
 #include <QDir>
 #include <QFileDialog>
+#include <QDataStream>
+
 
 using namespace Herqq::Upnp;
 using namespace Herqq::Upnp::Av;
@@ -75,7 +77,7 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
 
     // 5) Setup the HDeviceHost with desired configuration info.
     HDeviceConfiguration config;
-    config.setPathToDeviceDescription(QLatin1String("/home/ahmed/digikam/dk/build/core/utilities/mediaserver/apps/simple_avtest-app/descriptions/herqq_mediaserver_description.xml"));
+    config.setPathToDeviceDescription(QLatin1String("descriptions/herqq_mediaserver_description.xml"));
     config.setCacheControlMaxAge(180);
 
     HDeviceHostConfiguration hostConfiguration;
@@ -88,10 +90,16 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
     {
         Q_ASSERT_X(false, "",  m_deviceHost->errorDescription().toLocal8Bit().constData());
     }
+
+    loadDirectoriesFromDatabase();
+    loadItemsFromDatabase();
+
 }
 
 MediaServerWindow::~MediaServerWindow()
 {
+    saveDirectoriesToDatabase();
+    saveItemsToDatabase();
     delete m_ui;
     delete m_datasource;
 }
@@ -113,6 +121,99 @@ void MediaServerWindow::closeEvent(QCloseEvent*)
     emit closed();
 }
 
+
+void MediaServerWindow::addRootDirectoriesToServer(const HRootDir& rd)
+{
+    HRootDir::ScanMode smode = rd.scanMode();
+
+    if (m_datasource->add(rd) >= 0)
+    {
+        int rc = m_ui->sharedItemsTable->rowCount();
+        rootDirectoriesMap.insert(rc,rd);
+        m_ui->sharedItemsTable->insertRow(rc);
+
+        QTableWidgetItem* newItemScanType =
+            new QTableWidgetItem(
+                smode == HRootDir::RecursiveScan ? QLatin1String("Yes") : QLatin1String("No"));
+
+        newItemScanType->setFlags(Qt::ItemIsEnabled);
+
+        m_ui->sharedItemsTable->setItem(rc, 0, newItemScanType);
+
+        QTableWidgetItem* newItemWatchType = new QTableWidgetItem(QLatin1String("No"));
+        newItemWatchType->setFlags(Qt::ItemIsEnabled);
+
+        m_ui->sharedItemsTable->setItem(rc, 1, newItemWatchType);
+
+        QTableWidgetItem* newItem =
+            new QTableWidgetItem(rd.dir().absolutePath());
+
+        newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        m_ui->sharedItemsTable->setItem(rc, 2, newItem);
+    }
+
+}
+
+void MediaServerWindow::saveDirectoriesToDatabase()
+{
+    QFile file(QLatin1String("serverDirectories.dat"));
+    file.open(QFile::WriteOnly);
+    QDataStream out(&file);
+
+    auto end = rootDirectoriesMap.cend();
+    for (auto it = rootDirectoriesMap.cbegin(); it != end; ++it)
+    {
+        out << it.value();
+    }
+
+}
+
+void MediaServerWindow::loadDirectoriesFromDatabase()
+{
+    QFile file(QLatin1String("serverDirectories.dat"));
+    file.open(QIODevice::ReadOnly);
+    QDataStream in(&file);
+    HRootDir dir ;
+    while(in.atEnd() == false)
+    {
+        in >> dir;
+        addRootDirectoriesToServer(dir);
+    }
+}
+
+
+
+void MediaServerWindow::saveItemsToDatabase()
+{
+    QFile file(QLatin1String("serverItems.dat"));
+    file.open(QFile::WriteOnly);
+    QDataStream out(&file);
+
+    auto end = ItemsMap.cend();
+    for (auto it = ItemsMap.cbegin(); it != end; ++it)
+    {
+        out << it.value();
+    }
+
+}
+
+void MediaServerWindow::loadItemsFromDatabase()
+{
+    QFile file(QLatin1String("serverItems.dat"));
+    file.open(QIODevice::ReadOnly);
+    QDataStream in(&file);
+    QString dir ;
+    QStringList list;
+    while(in.atEnd() == false)
+    {
+        in >> dir;
+        list.append(dir);
+    }
+
+    addItemsToServer(list);
+}
+
+
 void MediaServerWindow::on_addContentButton_clicked()
 {
     QString dirName = QFileDialog::getExistingDirectory(this, QLatin1String("Open Directory"));
@@ -123,30 +224,9 @@ void MediaServerWindow::on_addContentButton_clicked()
                 HRootDir::RecursiveScan : HRootDir::SingleDirectoryScan;
 
         HRootDir rd(dirName, smode);
-        if (m_datasource->add(rd) >= 0)
-        {
-            int rc = m_ui->sharedItemsTable->rowCount();
-            m_ui->sharedItemsTable->insertRow(rc);
 
-            QTableWidgetItem* newItemScanType =
-                new QTableWidgetItem(
-                    smode == HRootDir::RecursiveScan ? QLatin1String("Yes") : QLatin1String("No"));
+        addRootDirectoriesToServer(rd);
 
-            newItemScanType->setFlags(Qt::ItemIsEnabled);
-
-            m_ui->sharedItemsTable->setItem(rc, 0, newItemScanType);
-
-            QTableWidgetItem* newItemWatchType = new QTableWidgetItem(QLatin1String("No"));
-            newItemWatchType->setFlags(Qt::ItemIsEnabled);
-
-            m_ui->sharedItemsTable->setItem(rc, 1, newItemWatchType);
-
-            QTableWidgetItem* newItem =
-                new QTableWidgetItem(rd.dir().absolutePath());
-
-            newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-            m_ui->sharedItemsTable->setItem(rc, 2, newItem);
-        }
     }
 }
 
@@ -155,9 +235,8 @@ void MediaServerWindow::addContenDlgtFinished()
     m_ui->addContentButton->setEnabled(true);
 }
 
-void MediaServerWindow::on_addItemButton_clicked()
+void MediaServerWindow::addItemsToServer(const QStringList& fullPaths)
 {
-    QStringList fullPaths = QFileDialog::getOpenFileNames(this, QLatin1String("Open File(s)"));
     if (!fullPaths.isEmpty())
     {
         foreach(const QString& fullPath, fullPaths)
@@ -189,6 +268,7 @@ void MediaServerWindow::on_addItemButton_clicked()
             }
 
             int rc = m_ui->sharedItemsTable->rowCount();
+            ItemsMap.insert(rc,fullPath);
             m_ui->sharedItemsTable->insertRow(rc);
 
             QTableWidgetItem* newItemScanType = new QTableWidgetItem(QLatin1String("No"));
@@ -207,5 +287,30 @@ void MediaServerWindow::on_addItemButton_clicked()
             newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             m_ui->sharedItemsTable->setItem(rc, 2, newItem);
         }
+    }
+
+}
+
+void MediaServerWindow::on_addItemButton_clicked()
+{
+    QStringList fullPaths = QFileDialog::getOpenFileNames(this, QLatin1String("Open File(s)"));
+    addItemsToServer(fullPaths);
+}
+
+
+
+void MediaServerWindow::on_DeleteDirectoriesButton_clicked()
+{
+    QModelIndexList indexes =  m_ui->sharedItemsTable->selectionModel()->selectedRows();
+    int countRow = indexes.count();
+    for( int i = countRow; i > 0; i--)
+    {
+        if((rootDirectoriesMap).contains(indexes[i-1].row()))
+           rootDirectoriesMap.remove(indexes[i-1].row());
+        else
+            ItemsMap.remove(indexes[i-1].row());
+
+           m_ui->sharedItemsTable->removeRow(indexes[i-1].row());
+
     }
 }
