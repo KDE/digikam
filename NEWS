@@ -220,4 +220,5 @@ BUGFIXES FROM BUGZILLA:
 205 ==> 223936 - Moving photos between albums is slow.
 206 ==> 186640 - Multiseat workstation with mdm and gdm - digiKam crash.
 207 ==> 227902 - digiKam crashes when picture saved after red-eye effect.
-208 ==> 
+208 ==> 091485 - Red eye reduction - user should be told to select a part of the image.
+209 ==> 
