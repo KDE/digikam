@@ -498,20 +498,20 @@ void RecognitionDatabase::setIdentityAttributes(int id, const QMap<QString, QStr
 
 QString RecognitionDatabase::backendIdentifier() const
 {
-    if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::LBP)
+    if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::LBP)
     {
         return QString::fromLatin1("opencvlbph");
     }
-    else if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::EigenFace)
+    else if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::EigenFace)
     {
         return QString::fromLatin1("eigenfaces");
     }
-    else if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::FisherFace)
+    else if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::FisherFace)
     {
         return QString::fromLatin1("fisherfaces");
     }
-    else if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::DNN)
 
+    // d->recognizeAlgorithm == Private::RecognizeAlgorithm::DNN
     return QString::fromLatin1("dnn");
 }
 
@@ -893,7 +893,9 @@ void RecognitionDatabase::Private::clear(OpenCVFISHERFaceRecognizer* const, cons
     }
 }
 
-void RecognitionDatabase::Private::clear(OpenCVDNNFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
+void RecognitionDatabase::Private::clear(OpenCVDNNFaceRecognizer* const,
+                                         const QList<int>& idsToClear,
+                                         const QString& trainingContext)
 {
     // force later reload
     delete opencvdnn;
