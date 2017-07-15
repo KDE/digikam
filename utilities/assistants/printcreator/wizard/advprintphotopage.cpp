@@ -24,6 +24,8 @@
 
 // Qt includes
 
+#include <QFile>
+#include <QDir>
 #include <QIcon>
 #include <QPrinter>
 #include <QPrinterInfo>
@@ -35,10 +37,13 @@
 #include <QPageSetupDialog>
 #include <QXmlStreamWriter>
 #include <QXmlStreamAttributes>
+#include <QDomDocument>
+#include <QDomNode>
 
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <kdesktopfile.h>
 
 // Local includes
 
@@ -49,6 +54,8 @@
 
 namespace Digikam
 {
+
+static const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
 
 class AdvPrintPhotoPage::Private
 {
@@ -107,15 +114,30 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     d->photoUi->BtnPreviewPageDown->setIcon(QIcon::fromTheme(QLatin1String("go-previous"))
                                               .pixmap(16, 16));
 
-    d->printerList = QPrinterInfo::availablePrinters();
+    // ----------------------
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << " printers: " << d->printerList.count();
+    d->photoUi->m_printer_choice->setEditable(false);
+    d->photoUi->m_printer_choice->setWhatsThis(i18n("Select your preferred print output."));
+
+    // Populate hardcoded printers
+
+    QMap<AdvPrintSettings::Output, QString> map2                = AdvPrintSettings::outputNames();
+    QMap<AdvPrintSettings::Output, QString>::const_iterator it2 = map2.constBegin();
+
+    while (it2 != map2.constEnd())
+    {
+        d->photoUi->m_printer_choice->addSqueezedItem(it2.value(), (int)it2.key());
+        ++it2;
+    }
+
+    // Populate real printers
+
+    d->printerList = QPrinterInfo::availablePrinters();
 
     for (QList<QPrinterInfo>::iterator it = d->printerList.begin() ;
          it != d->printerList.end() ; ++it)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << " printer: " << it->printerName();
-        d->photoUi->m_printer_choice->addItem(it->printerName());
+        d->photoUi->m_printer_choice->addSqueezedItem(it->printerName());
     }
 
     connect(d->photoUi->m_printer_choice, SIGNAL(activated(QString)),
@@ -186,7 +208,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     setPageWidget(d->photoUi);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
 
-    slotOutputChanged(d->photoUi->m_printer_choice->currentText());
+    slotOutputChanged(d->photoUi->m_printer_choice->itemHighlighted());
 }
 
 AdvPrintPhotoPage::~AdvPrintPhotoPage()
@@ -199,20 +221,96 @@ AdvPrintPhotoPage::~AdvPrintPhotoPage()
 void AdvPrintPhotoPage::initializePage()
 {
     d->photoUi->mPrintList->listView()->clear();
+    QList<QUrl> list;
 
-    if (d->wizard->settings()->selMode == AdvPrintSettings::IMAGES)
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Items: " << d->settings->photos.count();
+
+    for (int i = 0 ; i < d->settings->photos.count() ; ++i)
+    {
+        AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
+
+        if (pCurrentPhoto)
+        {
+            list.push_back(pCurrentPhoto->m_url);
+        }
+    }
+
+    d->photoUi->mPrintList->blockSignals(true);
+    d->photoUi->mPrintList->slotAddImages(list);
+    d->photoUi->mPrintList->listView()->setCurrentItem(d->photoUi->mPrintList->listView()->itemAt(0, 0));
+    d->photoUi->mPrintList->blockSignals(false);
+    d->photoUi->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
+
+    initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
+
+    // restore photoSize
+
+    if (d->settings->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
+    {
+        d->photoUi->ListPhotoSizes->setCurrentRow(0);
+    }
+    else
+    {
+        QList<QListWidgetItem*> list = d->photoUi->ListPhotoSizes->findItems(d->settings->savedPhotoSize, Qt::MatchExactly);
+
+        if (list.count())
+            d->photoUi->ListPhotoSizes->setCurrentItem(list[0]);
+        else
+            d->photoUi->ListPhotoSizes->setCurrentRow(0);
+    }
+
+    // reset preview page number
+    d->settings->currentPreviewPage = 0;
+
+    // create our photo sizes list
+    d->wizard->previewPhotos();
+
+    int gid = d->photoUi->m_printer_choice->findText(d->settings->outputName(AdvPrintSettings::GIMP));
+
+    if (d->settings->gimpPath.isEmpty())
+    {
+        // Gimp is not available : we disable the option.
+        d->photoUi->m_printer_choice->setItemData(gid, false, Qt::UserRole-1);
+    }
+
+    int index = d->photoUi->m_printer_choice->findText(d->settings->printerName);
+
+    if (index != -1)
+    {
+        d->photoUi->m_printer_choice->setCurrentIndex(index);
+    }
+
+    slotOutputChanged(d->photoUi->m_printer_choice->itemHighlighted());
+
+    d->photoUi->ListPhotoSizes->setIconSize(d->settings->iconSize);
+    initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
+}
+
+void AdvPrintPhotoPage::cleanupPage()
+{
+    d->photoUi->mPrintList->listView()->clear();
+
+    if (d->settings->selMode == AdvPrintSettings::IMAGES)
     {
         d->photoUi->mPrintList->loadImagesFromCurrentSelection();
     }
     else
     {
-        d->wizard->setItemsList(d->wizard->settings()->inputImages);
+        d->wizard->setItemsList(d->settings->inputImages);
     }
 }
 
 bool AdvPrintPhotoPage::validatePage()
 {
     d->settings->inputImages = d->photoUi->mPrintList->imageUrls();
+    d->settings->printerName = d->photoUi->m_printer_choice->itemHighlighted();
+
+    if (d->photoUi->ListPhotoSizes->currentItem())
+    {
+        d->settings->savedPhotoSize = d->photoUi->ListPhotoSizes->currentItem()->text();
+    }
+
+    d->settings->iconSize    = d->photoUi->ListPhotoSizes->iconSize();
 
     return true;
 }
@@ -239,9 +337,7 @@ Ui_AdvPrintPhotoPage* AdvPrintPhotoPage::ui() const
 
 void AdvPrintPhotoPage::slotOutputChanged(const QString& text)
 {
-    if (text == i18n("Print to PDF") ||
-        text == i18n("Print to Image File") ||
-        text == i18n("Print with Gimp"))
+    if (AdvPrintSettings::outputNames().values().contains(text))
     {
         delete d->printer;
 
@@ -374,7 +470,7 @@ void AdvPrintPhotoPage::slotXMLSaveItem(QXmlStreamWriter& xmlWriter, int itemInd
 void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamWriter& xmlWriter)
 {
     xmlWriter.writeStartElement(QLatin1String("pa_layout"));
-    xmlWriter.writeAttribute(QLatin1String("Printer"),   d->photoUi->m_printer_choice->currentText());
+    xmlWriter.writeAttribute(QLatin1String("Printer"),   d->photoUi->m_printer_choice->itemHighlighted());
     xmlWriter.writeAttribute(QLatin1String("PageSize"),  QString::fromUtf8("%1").arg(d->printer->paperSize()));
     xmlWriter.writeAttribute(QLatin1String("PhotoSize"), d->photoUi->ListPhotoSizes->currentItem()->text());
     xmlWriter.writeEndElement(); // pa_layout
@@ -635,7 +731,7 @@ void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamReader& xmlReader)
                     d->photoUi->m_printer_choice->setCurrentIndex(index);
                 }
 
-                slotOutputChanged(d->photoUi->m_printer_choice->currentText());
+                slotOutputChanged(d->photoUi->m_printer_choice->itemHighlighted());
             }
 
             attr = attrs.value(QLatin1String("PageSize"));
@@ -662,7 +758,7 @@ void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamReader& xmlReader)
     // reset preview page number
     d->settings->currentPreviewPage = 0;
 
-    d->wizard->initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
+    initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
 
     QList<QListWidgetItem*> list    = d->photoUi->ListPhotoSizes->findItems(d->settings->savedPhotoSize,
                                                                             Qt::MatchExactly);
@@ -992,7 +1088,7 @@ void AdvPrintPhotoPage::slotPageSetup()
     }
 
     // Fix the page size dialog and preview PhotoPage
-    d->wizard->initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
+    initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
 
     // restore photoSize
     if (d->settings->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
@@ -1037,6 +1133,413 @@ void AdvPrintPhotoPage::manageBtnPreviewPage()
             d->photoUi->BtnPreviewPageUp->setEnabled(false);
         }
     }
+}
+
+void AdvPrintPhotoPage::initPhotoSizes(const QSizeF& pageSize)
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "New page size "
+                                 << pageSize
+                                 << ", old page size "
+                                 << d->settings->pageSize;
+
+    // don't refresh anything if we haven't changed page sizes.
+    if (pageSize == d->settings->pageSize)
+        return;
+
+    d->settings->pageSize = pageSize;
+
+    // cleaning pageSize memory before invoking clear()
+    for (int i = 0 ; i < d->settings->photosizes.count() ; ++i)
+        delete d->settings->photosizes.at(i);
+
+    d->settings->photosizes.clear();
+
+    // get template-files and parse them
+
+    QDir dir(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                    QLatin1String("digikam/templates"),
+                                    QStandardPaths::LocateDirectory));
+    const QStringList list = dir.entryList(QStringList() << QLatin1String("*.xml"));
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Template XML files list: "
+                                 << list;
+
+    foreach(const QString& fn, list)
+    {
+        parseTemplateFile(dir.absolutePath() + QLatin1String("/") + fn, pageSize);
+    }
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "photosizes count() ="
+                                 << d->settings->photosizes.count();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "photosizes isEmpty() ="
+                                 << d->settings->photosizes.isEmpty();
+
+    if (d->settings->photosizes.isEmpty())
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Empty photoSize-list, create default size";
+
+        // There is no valid page size yet.  Create a default page (B10) to prevent crashes.
+        AdvPrintPhotoSize* const p = new AdvPrintPhotoSize;
+        p->dpi                     = 0;
+        p->autoRotate              = false;
+        p->label                   = i18n("Unsupported Paper Size");
+        // page size: B10 (32 x 45 mm)
+        p->layouts.append(new QRect(0, 0, 3200, 4500));
+        p->layouts.append(new QRect(0, 0, 3200, 4500));
+        // add to the list
+        d->settings->photosizes.append(p);
+    }
+
+    // load the photo sizes into the listbox
+    d->photoUi->ListPhotoSizes->blockSignals(true);
+    d->photoUi->ListPhotoSizes->clear();
+    QList<AdvPrintPhotoSize*>::iterator it;
+
+    for (it = d->settings->photosizes.begin() ;
+         it != d->settings->photosizes.end() ; ++it)
+    {
+        AdvPrintPhotoSize* const s = static_cast<AdvPrintPhotoSize*>(*it);
+
+        if (s)
+        {
+            QListWidgetItem* const pWItem = new QListWidgetItem(s->label);
+            pWItem->setIcon(s->icon);
+            d->photoUi->ListPhotoSizes->addItem(pWItem);
+        }
+    }
+
+    // Adding custom choice
+    QListWidgetItem* const pWItem = new QListWidgetItem(i18n(CUSTOM_PAGE_LAYOUT_NAME));
+
+    TemplateIcon ti(80, pageSize.toSize());
+    ti.begin();
+    QPainter& painter             = ti.getPainter();
+    painter.setPen(Qt::color1);
+    painter.drawText(painter.viewport(), Qt::AlignCenter, i18n("Custom layout"));
+    ti.end();
+
+    pWItem->setIcon(ti.getIcon());
+    d->photoUi->ListPhotoSizes->addItem(pWItem);
+    d->photoUi->ListPhotoSizes->blockSignals(false);
+    d->photoUi->ListPhotoSizes->setCurrentRow(0, QItemSelectionModel::Select);
+}
+
+void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageSize)
+{
+    QDomDocument doc(QLatin1String("mydocument"));
+    qCDebug(DIGIKAM_GENERAL_LOG) << " XXX: " <<  fn;
+
+    if (fn.isEmpty())
+    {
+        return;
+    }
+
+    QFile file(fn);
+
+    if (!file.open(QIODevice::ReadOnly))
+        return;
+
+    if (!doc.setContent(&file))
+    {
+        file.close();
+        return;
+    }
+
+    file.close();
+
+    AdvPrintPhotoSize* p = 0;
+
+    // print out the element names of all elements that are direct children
+    // of the outermost element.
+    QDomElement docElem  = doc.documentElement();
+    qCDebug(DIGIKAM_GENERAL_LOG) << docElem.tagName(); // the node really is an element.
+
+    QSizeF size;
+    QString unit;
+    int scaleValue;
+    QDomNode n = docElem.firstChild();
+
+    while (!n.isNull())
+    {
+        size          = QSizeF(0, 0);
+        scaleValue    = 10; // 0.1 mm
+        QDomElement e = n.toElement(); // try to convert the node to an element.
+
+        if (!e.isNull())
+        {
+            if (e.tagName() == QLatin1String("paper"))
+            {
+                size = QSizeF(e.attribute(QLatin1String("width"),
+                                          QLatin1String("0")).toFloat(),
+                              e.attribute(QLatin1String("height"),
+                                          QLatin1String("0")).toFloat());
+                unit = e.attribute(QLatin1String("unit"),
+                                   QLatin1String("mm"));
+
+                qCDebug(DIGIKAM_GENERAL_LOG) << e.tagName()
+                                             << QLatin1String(" name=")
+                                             << e.attribute(QLatin1String("name"),
+                                                            QLatin1String("??"))
+                                             << " size= " << size
+                                             << " unit= " << unit;
+
+                if (size == QSizeF(0.0, 0.0) && size == pageSize)
+                {
+                    // skipping templates without page size since pageSize is not set
+                    n = n.nextSibling();
+                    continue;
+                }
+                else if (unit != QLatin1String("mm") &&
+                         size != QSizeF(0.0, 0.0))      // "cm", "inches" or "inch"
+                {
+                    // convert to mm
+                    if (unit == QLatin1String("inches") ||
+                        unit == QLatin1String("inch"))
+                    {
+                        size      *= 25.4;
+                        scaleValue = 1000;
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "template size "
+                                                     << size
+                                                     << " page size "
+                                                     << pageSize;
+                    }
+                    else if (unit == QLatin1String("cm"))
+                    {
+                        size      *= 10;
+                        scaleValue = 100;
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "template size "
+                                                     << size
+                                                     << " page size "
+                                                     << pageSize;
+                    }
+                    else
+                    {
+                        qCWarning(DIGIKAM_GENERAL_LOG) << "Wrong unit "
+                                                       << unit
+                                                       << " skipping layout";
+                        n = n.nextSibling();
+                        continue;
+                    }
+                }
+
+                static const float round_value = 0.01F;
+
+                if (size == QSizeF(0, 0))
+                {
+                    size = pageSize;
+                    unit = QLatin1String("mm");
+                }
+                else if (pageSize != QSizeF(0, 0) &&
+                         (size.height() > (pageSize.height() + round_value) ||
+                          size.width()  > (pageSize.width()  + round_value)))
+                {
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "skipping size "
+                                                 << size
+                                                 << " page size "
+                                                 << pageSize;
+                    // skipping layout it can't fit
+                    n = n.nextSibling();
+                    continue;
+                }
+
+                // Next templates are good
+                qCDebug(DIGIKAM_GENERAL_LOG) << "layout size "
+                                             << size
+                                             << " page size "
+                                             << pageSize;
+                QDomNode np = e.firstChild();
+
+                while (!np.isNull())
+                {
+                    QDomElement ep = np.toElement(); // try to convert the node to an element.
+
+                    if (!ep.isNull())
+                    {
+                        if (ep.tagName() == QLatin1String("template"))
+                        {
+                            p = new AdvPrintPhotoSize;
+                            QSizeF sizeManaged;
+
+                            // set page size
+                            if (pageSize == QSizeF(0, 0))
+                            {
+                                sizeManaged = size * scaleValue;
+                            }
+                            else if (unit == QLatin1String("inches") ||
+                                     unit == QLatin1String("inch"))
+                            {
+                                sizeManaged = pageSize * scaleValue / 25.4;
+                            }
+                            else
+                            {
+                                sizeManaged = pageSize * 10;
+                            }
+
+                            p->layouts.append(new QRect(0,
+                                                        0,
+                                                        (int)sizeManaged.width(),
+                                                        (int)sizeManaged.height()));
+
+                            // create a small preview of the template
+
+                            TemplateIcon iconpreview(80, sizeManaged.toSize());
+                            iconpreview.begin();
+
+                            QString desktopFileName = ep.attribute(QLatin1String("name"),
+                                                                   QLatin1String("XXX")) +
+                                                                   QLatin1String(".desktop");
+
+                            QDir dir(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                            QLatin1String("digikam/templates"),
+                                                            QStandardPaths::LocateDirectory));
+                            const QStringList list  = dir.entryList(QStringList()
+                                                      << desktopFileName);
+
+                            qCDebug(DIGIKAM_GENERAL_LOG) << "Template desktop files list: "
+                                                         << list;
+
+                            QStringList::ConstIterator it  = list.constBegin();
+                            QStringList::ConstIterator end = list.constEnd();
+
+                            if (it != end)
+                            {
+                                p->label = KDesktopFile(dir.absolutePath() + 
+                                           QLatin1String("/") + *it).readName();
+                            }
+                            else
+                            {
+                                p->label = ep.attribute(QLatin1String("name"), QLatin1String("XXX"));
+                                qCWarning(DIGIKAM_GENERAL_LOG) << "missed template translation "
+                                                               << desktopFileName;
+                            }
+
+                            p->dpi        = ep.attribute(QLatin1String("dpi"),
+                                                         QLatin1String("0")).toInt();
+                            p->autoRotate = (ep.attribute(QLatin1String("autorotate"),
+                                            QLatin1String("false")) == QLatin1String("true")) ?
+                                            true : false;
+                            QDomNode nt   = ep.firstChild();
+
+                            while (!nt.isNull())
+                            {
+                                QDomElement et = nt.toElement(); // try to convert the node to an element.
+
+                                if (!et.isNull())
+                                {
+                                    if (et.tagName() == QLatin1String("photo"))
+                                    {
+                                        float value = et.attribute(QLatin1String("width"),
+                                                                   QLatin1String("0")).toFloat();
+                                        int width   = (int)((value == 0 ? size.width() : value) *
+                                                            scaleValue);
+                                        value       = et.attribute(QLatin1String("height"),
+                                                                   QLatin1String("0")).toFloat();
+                                        int height  = (int)((value == 0 ? size.height() : value) *
+                                                            scaleValue);
+                                        int photoX  = (int)((et.attribute(QLatin1String("x"),
+                                                      QLatin1String("0")).toFloat() * scaleValue));
+                                        int photoY  = (int)((et.attribute(QLatin1String("y"),
+                                                      QLatin1String("0")).toFloat() * scaleValue));
+
+                                        p->layouts.append(new QRect(photoX,
+                                                                    photoY,
+                                                                    width,
+                                                                    height));
+                                        iconpreview.fillRect(photoX,
+                                                             photoY,
+                                                             width,
+                                                             height,
+                                                             Qt::color1);
+                                    }
+                                    else if (et.tagName() == QLatin1String("photogrid"))
+                                    {
+                                        float value    = et.attribute(QLatin1String("pageWidth"),
+                                                                      QLatin1String("0")).toFloat();
+                                        int pageWidth  = (int)((value == 0 ? size.width() : value) *
+                                                               scaleValue);
+                                        value          = et.attribute(QLatin1String("pageHeight"),
+                                                                      QLatin1String("0")).toFloat();
+                                        int pageHeight = (int)((value == 0 ? size.height() : value) *
+                                                                scaleValue);
+                                        int rows       = et.attribute(QLatin1String("rows"),
+                                                                      QLatin1String("0")).toInt();
+                                        int columns    = et.attribute(QLatin1String("columns"),
+                                                                      QLatin1String("0")).toInt();
+
+                                        if (rows > 0 && columns > 0)
+                                        {
+                                            createPhotoGrid(p,
+                                                            pageWidth,
+                                                            pageHeight,
+                                                            rows,
+                                                            columns,
+                                                            &iconpreview);
+                                        }
+                                        else
+                                        {
+                                            qCWarning(DIGIKAM_GENERAL_LOG)
+                                                << " Wrong grid configuration, rows "
+                                                << rows
+                                                << ", columns "
+                                                << columns;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        qCDebug(DIGIKAM_GENERAL_LOG) << "    "
+                                                                     <<  et.tagName();
+                                    }
+                                }
+
+                                nt = nt.nextSibling();
+                            }
+
+                            iconpreview.end();
+                            p->icon = iconpreview.getIcon();
+                            d->settings->photosizes.append(p);
+                        }
+                        else
+                        {
+                            qCDebug(DIGIKAM_GENERAL_LOG) << "? "
+                                                         <<  ep.tagName()
+                                                         << " attr="
+                                                         << ep.attribute(QLatin1String("name"),
+                                                                         QLatin1String("??"));
+                        }
+                    }
+
+                    np = np.nextSibling();
+                }
+            }
+            else
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "??"
+                                             << e.tagName()
+                                             << " name="
+                                             << e.attribute(QLatin1String("name"), QLatin1String("??"));
+            }
+        }
+
+        n = n.nextSibling();
+    }
+}
+
+QRect* AdvPrintPhotoPage::getLayout(int photoIndex) const
+{
+    AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoUi->ListPhotoSizes->currentRow());
+
+    // how many photos would actually be printed, including copies?
+    int photoCount             = (photoIndex + 1);
+
+    // how many pages?  Recall that the first layout item is the paper size
+    int photosPerPage          = s->layouts.count() - 1;
+    int remainder              = photoCount % photosPerPage;
+    int retVal                 = remainder;
+
+    if (remainder == 0)
+        retVal = photosPerPage;
+
+    return s->layouts.at(retVal);
 }
 
 } // namespace Digikam

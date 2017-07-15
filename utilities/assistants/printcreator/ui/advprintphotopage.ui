@@ -170,32 +170,7 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QComboBox" name="m_printer_choice">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="insertPolicy">
-            <enum>QComboBox::InsertAtTop</enum>
-           </property>
-           <item>
-            <property name="text">
-             <string>Print to PDF</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Print to Image File</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Print with Gimp</string>
-            </property>
-           </item>
-          </widget>
+          <widget class="Digikam::SqueezedComboBox" name="m_printer_choice" native="true"/>
          </item>
          <item>
           <widget class="QPushButton" name="m_pagesetup">
@@ -380,6 +355,12 @@
    <class>Digikam::DImagesList</class>
    <extends>QWidget</extends>
    <header>dimageslist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Digikam::SqueezedComboBox</class>
+   <extends>QWidget</extends>
+   <header>squeezedcombobox.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

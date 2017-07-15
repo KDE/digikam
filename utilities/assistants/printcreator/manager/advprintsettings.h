@@ -31,6 +31,9 @@
 #include <QStringList>
 #include <QUrl>
 #include <QMap>
+#include <QColor>
+#include <QPrinter>
+#include <QFont>
 
 // KDE includes
 
@@ -46,14 +49,6 @@ class KConfigGroup;
 namespace Digikam
 {
 
-static const char* const INTRO_PAGE_NAME         = I18N_NOOP("Welcome to Print Creator");
-static const char* const PHOTO_PAGE_NAME         = I18N_NOOP("Select page layout");
-static const char* const CAPTION_PAGE_NAME       = I18N_NOOP("Caption settings");
-static const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop and rotate photos");
-static const char* const OUTPUT_PAGE_NAME        = I18N_NOOP("Images output");
-static const char* const FINAL_PAGE_NAME         = I18N_NOOP("Render printing");
-static const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
-
 class AdvPrintSettings
 {
 
@@ -66,6 +61,15 @@ public:
         ALBUMS
     };
 
+    // Print output destination, outside real printers configured
+    enum Output
+    {
+        PDF = 0,
+        FILES,
+        GIMP
+    };
+
+    // Image format for Output::FILES
     enum ImageFormat
     {
         JPEG = 0,
@@ -78,9 +82,15 @@ public:
     explicit AdvPrintSettings();
     ~AdvPrintSettings();
 
-    QString format() const;
+    // Read and write settings in config file between sessions.
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
+
+    QString format()               const;
+    QString outputName(Output out) const;
 
     // Helper methods to fill combobox from GUI.
+    static QMap<Output,      QString> outputNames();
     static QMap<ImageFormat, QString> imageFormatNames();
 
 public:
@@ -89,26 +99,42 @@ public:
 
     QList<QUrl>                       inputImages;
 
+    QString                           printerName;
+    QSize                             iconSize;
 
     QSizeF                            pageSize;      // Page Size in mm
 
     QList<AdvPrintPhoto*>             photos;
     QList<AdvPrintPhotoSize*>         photosizes;
 
-    QString                           tempPath;
-    QStringList                       gimpFiles;
-    QString                           savedPhotoSize;
+    // Caption management.
+    int                               captions;
+    QColor                            captionColor;
+    QFont                             captionFont;
+    int                               captionSize;
+    QString                           captionTxt;
 
+    // Crop management
     int                               currentPreviewPage;
     int                               currentCropPhoto;
-
     bool                              disableCrop;
 
-    ImageFormat                       imageFormat;
+    // For Print to Gimp only
+    QString                           tempPath;
+    QStringList                       gimpFiles;
+    QString                           gimpPath;
+    QString                           savedPhotoSize;
 
+    // For print to image files only.
+    ImageFormat                       imageFormat;
     FileSaveConflictBox::ConflictRule conflictRule;  // Rule if output image files already exists.
     QUrl                              outputDir;     // Directory where to store output images.
     bool                              openInFileBrowser;
+
+    // Generic data used by printing thread.
+    AdvPrintPhotoSize*                outputLayouts;
+    QPrinter*                         outputPrinter;
+    QString                           outputPath;
 };
 
 } // namespace Digikam

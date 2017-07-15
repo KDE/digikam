@@ -76,7 +76,8 @@ public:
           configRecognizeTask(QLatin1String("Face Recognize Main Task")),
           configRecognizeLBP(QLatin1String("Recognize Using LBP")), 
           configRecognizeEigenFace(QLatin1String("Recognize Using EigenFace")),
-          configRecognizeFisherFace(QLatin1String("Recognize Using FisherFace"))
+          configRecognizeFisherFace(QLatin1String("Recognize Using FisherFace")),
+          configRecognizeDNN(QLatin1String("Recognize Using Deep Learning"))
     {
         buttons                    = 0;
         optionGroupBox             = 0;
@@ -135,6 +136,7 @@ public:
     const QString                configRecognizeLBP;
     const QString                configRecognizeEigenFace;
     const QString                configRecognizeFisherFace;
+    const QString                configRecognizeDNN;
 };
 
 FaceScanDialog::FaceScanDialog(QWidget* const parent)
@@ -216,9 +218,13 @@ void FaceScanDialog::doLoadState()
     {
         recAlgorithm = FaceScanSettings::EigenFace;
     }
-    else
+    else if(recognizeTask==d->configRecognizeFisherFace)
     {
         recAlgorithm = FaceScanSettings::FisherFace;
+    }
+    else
+    {
+        recAlgorithm = FaceScanSettings::DNN;
     }
 
     d->recognizeBox->setCurrentIndex(d->recognizeBox->findData(recAlgorithm));
@@ -290,6 +296,10 @@ void FaceScanDialog::doSaveState()
 
         case FaceScanSettings::FisherFace:
             recognizeTask = d->configRecognizeFisherFace;
+            break;
+
+        case FaceScanSettings::DNN:
+            recognizeTask = d->configRecognizeDNN;
             break;
     }
     /*
@@ -418,6 +428,7 @@ void FaceScanDialog::setupUi()
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using LBP algorithm"),         FaceScanSettings::LBP);
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using EigenFaces algorithm"),  FaceScanSettings::EigenFace);
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"), FaceScanSettings::FisherFace);
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using Deep Learning algorithm"), FaceScanSettings::DNN);
     d->recognizeBox->setCurrentIndex(FaceScanSettings::Skip);
 
     //Recognize algorithm options

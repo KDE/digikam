@@ -29,6 +29,39 @@
 #include <QUrl>
 #include <QDialog>
 
+// Local includes
+
+#include "actionthreadbase.h"
+
+using namespace Digikam;
+
+class ActionThread : public ActionThreadBase
+{
+    Q_OBJECT
+
+public:
+
+    explicit ActionThread(QObject* const parent);
+    ~ActionThread();
+
+    void rotate(const QList<QUrl>& list);
+
+Q_SIGNALS:
+
+    void starting(const QUrl& url);
+    void finished(const QUrl& url);
+    void failed(const QUrl& url, const QString& err);
+    void progress(const QUrl& url, int percent);
+
+private Q_SLOTS:
+
+    void slotJobDone();
+    void slotJobProgress(int);
+    void slotJobStarted();
+};
+
+// -----------------------------------------------------
+
 class DImagesListTest : public QDialog
 {
     Q_OBJECT
