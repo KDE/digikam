@@ -225,4 +225,6 @@ BUGFIXES FROM BUGZILLA:
 210 ==> 102636 - Delete fails: access denied to trash:/xyz.jpg.
 211 ==> 382002 - Lazy synchronization not working.
 212 ==> 170758 - High load when tagging.
-213 ==> 
+213 ==> 111591 - Tag images browser doesn't show any images.
+214 ==> 
+
