@@ -224,4 +224,5 @@ BUGFIXES FROM BUGZILLA:
 209 ==> 382259 - Can't open picture database located at /home/egh/Pictures.
 210 ==> 102636 - Delete fails: access denied to trash:/xyz.jpg.
 211 ==> 382002 - Lazy synchronization not working.
-212 ==> 
+212 ==> 170758 - High load when tagging.
+213 ==> 
