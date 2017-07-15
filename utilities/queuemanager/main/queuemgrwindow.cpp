@@ -107,7 +107,7 @@ QueueMgrWindow::QueueMgrWindow()
     m_instance = this;
     BatchToolsManager::instance();        // Create first instance here
     WorkflowManager::instance();             // Create first instance here
-    d->thread  = new ActionThread(this);
+    //d->thread  = new ActionThread(this);
 
     setWindowFlags(Qt::Window);
     setCaption(i18n("Batch Queue Manager"));
@@ -772,8 +772,8 @@ void QueueMgrWindow::processOneQueue()
         tools4Items.append(one);
     }
 
-    d->thread->setSettings(settings);
-    d->thread->processQueueItems(tools4Items);
+    //d->thread->setSettings(settings);
+    //d->thread->processQueueItems(tools4Items);
 
     if (!d->thread->isRunning())
         d->thread->start();

@@ -13,7 +13,7 @@
  * @section DESCRIPTION
  *
  * @author Copyright (C) 2017 by Yingjie Liu
- *         <a href="mailto:yingjiewudi at gmail dot come">yingjiewudi at gmail dot come</a>
+ *         <a href="mailto:yingjiewudi at gmail dot com">yingjiewudi at gmail dot com</a>
  *
  * @section LICENSE
  *

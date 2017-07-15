@@ -28,8 +28,15 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-eigenfaces
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-fisherfaces
+                    ${CMAKE_CURRENT_SOURCE_DIR}/recognition-dlib-dnn
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment-congealing
                     ${CMAKE_CURRENT_SOURCE_DIR}/shape-predictor
+                    ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/dnn_base
+                    ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/image_processing
+                    ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/image_transforms
+                    ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/matrix
+                    ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/nn
+                    ${CMAKE_CURRENT_SOURCE_DIR}/dnnface
 
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/alignment-flandmark
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
@@ -57,6 +64,34 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
 #                        preprocessing-tantriggs/tantriggspreprocessor.cpp
 )
 
+set(facesengine_database_LIB_SRCS facedb/facedbaccess.cpp
+                                  facedb/facedbbackend.cpp
+                                  facedb/facedboperationgroup.cpp
+                                  facedb/facedbschemaupdater.cpp
+                                  facedb/facedb.cpp
+                                  recognition-opencv-eigenfaces/eigenfacemodel.cpp
+                                  recognition-opencv-eigenfaces/opencveigenfacerecognizer.cpp
+                                  recognition-opencv-eigenfaces/facerec_eigenborrowed.cpp
+                                  recognition-opencv-fisherfaces/fisherfacemodel.cpp
+                                  recognition-opencv-fisherfaces/opencvfisherfacerecognizer.cpp
+                                  recognition-opencv-fisherfaces/facerec_fisherborrowed.cpp
+                                  recognition-dlib-dnn/dnnfacemodel.cpp
+                                  recognition-dlib-dnn/opencvdnnfacerecognizer.cpp
+                                  recognition-dlib-dnn/facerec_dnnborrowed.cpp
+                                  recognition-opencv-lbph/lbphfacemodel.cpp
+                                  recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
+                                  recognition-opencv-lbph/opencvmatdata.cpp
+                                  recognition-opencv-lbph/facerec_borrowed.cpp
+                                  alignment-congealing/funnelreal.cpp
+                                  dnnface/dnn_base/base64_kernel_1.cpp
+                                  dnnface/dnn_base/entropy_decoder_kernel_2.cpp
+                                  dnnface/dnn_base/entropy_encoder_kernel_2.cpp
+                                  dnnface/nn/cpu_dlib.cpp
+                                  dnnface/nn/gpu_data.cpp
+                                  dnnface/nn/tensor_tools.cpp
+                                  recognitiondatabase.cpp
+)
+
 set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
                                   recognition-opencv-eigenfaces/eigenfacemodel.cpp
                                   recognition-opencv-eigenfaces/opencveigenfacerecognizer.cpp
@@ -64,6 +99,9 @@ set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
                                   recognition-opencv-fisherfaces/fisherfacemodel.cpp
                                   recognition-opencv-fisherfaces/opencvfisherfacerecognizer.cpp
                                   recognition-opencv-fisherfaces/facerec_fisherborrowed.cpp
+                                  recognition-dlib-dnn/dnnfacemodel.cpp
+                                  recognition-dlib-dnn/opencvdnnfacerecognizer.cpp
+                                  recognition-dlib-dnn/facerec_dnnborrowed.cpp
                                   recognition-opencv-lbph/lbphfacemodel.cpp
                                   recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
                                   recognition-opencv-lbph/opencvmatdata.cpp
@@ -74,6 +112,12 @@ set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
                                   facedb/facedboperationgroup.cpp
                                   facedb/facedbschemaupdater.cpp
                                   facedb/facedb.cpp
+                                  dnnface/dnn_base/base64_kernel_1.cpp
+                                  dnnface/dnn_base/entropy_decoder_kernel_2.cpp
+                                  dnnface/dnn_base/entropy_encoder_kernel_2.cpp
+                                  dnnface/nn/cpu_dlib.cpp
+                                  dnnface/nn/gpu_data.cpp
+                                  dnnface/nn/tensor_tools.cpp
 )
 
 add_library(digikamfacesengine_src
@@ -88,5 +132,7 @@ add_library(digikamfacesenginedatabase_src
             OBJECT
             ${facesengine_database_LIB_SRCS}
 )
+
+
 
 add_library(digikamfacesenginedatabase STATIC $<TARGET_OBJECTS:digikamfacesenginedatabase_src>)

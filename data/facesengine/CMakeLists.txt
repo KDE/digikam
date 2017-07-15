@@ -23,6 +23,10 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/shape-predictor/shapepredictor.dat
         DESTINATION ${DATA_INSTALL_DIR}/digikam/facesengine
 )
 
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/dnnface/dlib_face_recognition_resnet_model_v1.dat
+        DESTINATION ${DATA_INSTALL_DIR}/digikam/facesengine
+)
+
 # ---------------------------------------------------------------
 
 # add_custom_command(OUTPUT face-funnel.data

@@ -570,7 +570,8 @@
                     type INTEGER,
                     rows INTEGER,
                     cols INTEGER,
-                    data BLOB)
+                    data BLOB,
+                    vecdata BLOB)
                 </statement>
             </dbaction>
 
@@ -1582,7 +1583,8 @@ ORDER BY inf.rating DESC, img.name ASC
                             type INTEGER,
                             rows INTEGER,
                             cols INTEGER,
-                            data BLOB) ENGINE InnoDB;
+                            data BLOB,
+                            vecdata BLOB) ENGINE InnoDB;
                 </statement>
             </dbaction>
 

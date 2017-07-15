@@ -25,6 +25,7 @@
 #include "lbphfacemodel.h"
 #include "eigenfacemodel.h"
 #include "fisherfacemodel.h"
+#include "dnnfacemodel.h"
 
 // Local includes
 
@@ -357,6 +358,93 @@ void FaceDb::clearLBPHTraining(const QList<int>& identities, const QString& cont
     }
 }
 
+void FaceDb::getFaceVector(OpenCVMatData data, std::vector<float>& vecdata)
+{
+    anet_type net;
+    frontal_face_detector detector = get_frontal_face_detector();
+    qCDebug(DIGIKAM_FACEDB_LOG) << "Start reading model file";
+    QString path1 = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                              QLatin1String("digikam/facesengine/dlib_face_recognition_resnet_model_v1.dat")); 
+    deserialize(path1.toStdString()) >> net;
+    qCDebug(DIGIKAM_FACEDB_LOG) << "End reading model file";
+    qCDebug(DIGIKAM_FACEDB_LOG) << "Start reading shape file";
+    redeye::ShapePredictor sp;
+    QString path2 = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                              QLatin1String("digikam/facesengine/shapepredictor.dat"));
+    QFile model(path2);
+    std::cout << "read file\n";
+    if (model.open(QIODevice::ReadOnly))
+    {
+        redeye::ShapePredictor* const temp = new redeye::ShapePredictor();
+        QDataStream dataStream(&model);
+        dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
+        dataStream >> *temp;
+        sp = *temp;
+    }
+    else
+    {
+        qCDebug(DIGIKAM_FACEDB_LOG) << "Error open file shapepredictor.dat";
+        return ;
+    }
+
+    cv::Mat tmp_mat = data.toMat();
+    matrix<rgb_pixel> img;
+    std::vector<matrix<rgb_pixel>> faces;
+    assign_image(img, cv_image<rgb_pixel>(tmp_mat));
+    bool face_flag = false;
+    for (auto face : detector(img))
+    {
+        face_flag = true;
+        cv::Mat gray;
+        
+        int type = tmp_mat.type();
+        if(type == CV_8UC3 || type == CV_16UC3)
+        {
+            cv::cvtColor(tmp_mat, gray, CV_RGB2GRAY);  // 3 channels
+        }
+        else
+        {
+            cv::cvtColor(tmp_mat, gray, CV_RGBA2GRAY);  // 4 channels
+        }
+
+        if (type == CV_16UC3 || type == CV_16UC4)
+        {
+            gray.convertTo(gray, CV_8UC1, 1 / 255.0);
+        }
+
+        cv::Rect new_rect(face.left(), face.top(), face.right()-face.left(), face.bottom()-face.top());
+        FullObjectDetection object = sp(gray,new_rect);
+        matrix<rgb_pixel> face_chip;
+        extract_image_chip(img, get_face_chip_details(object,150,0.25), face_chip);
+        faces.push_back(move(face_chip));
+        break;
+    }
+    if(!face_flag)
+    {
+        cv::resize(tmp_mat, tmp_mat, cv::Size(150, 150));
+        assign_image(img, cv_image<rgb_pixel>(tmp_mat));
+        faces.push_back(img);
+    }
+    std::vector<matrix<float,0,1>> face_descriptors = net(faces);
+    if(face_descriptors.size()!=0)
+    {
+        vecdata.clear();
+        for(int i = 0; i < face_descriptors[0].nr(); i++)
+        {
+            for(int j = 0; j < face_descriptors[0].nc(); j++)
+            {
+                vecdata.push_back(face_descriptors[0](i, j));
+            }
+        }
+    }
+    else
+    {
+        qCDebug(DIGIKAM_FACEDB_LOG) << "Error calculate face vector";
+    }
+
+
+}
+
 void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
 {
     QList<EigenFaceMatMetadata> metadataList = model.matMetadata();
@@ -376,10 +464,23 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
             else
             {
                 QByteArray compressed = qCompress(data.data);
+                std::vector<float> vecdata;
+                this->getFaceVector(data, vecdata);
+                QByteArray vec_byte(vecdata.size()*sizeof(float), 0);
+                float* fp = (float*)vec_byte.data();
+                for(int j = 0; j < vecdata.size(); j++)
+                {
+                    *(fp+j) = vecdata[j];
+                }
+                QByteArray compressed_vecdata = qCompress(vec_byte);
 
                 if (compressed.isEmpty())
                 {
                     qCWarning(DIGIKAM_FACEDB_LOG) << "Cannot compress mat data to commit in database for Identity " << metadata.identity;
+                }
+                else if(compressed_vecdata.isEmpty())
+                {
+                    qCWarning(DIGIKAM_FACEDB_LOG) << "Cannot compress face vec data to commit in database for Identity " << metadata.identity;    
                 }
                 else
                 {
@@ -391,9 +492,10 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
                                     << data.type
                                     << data.rows
                                     << data.cols
-                                    << compressed;
+                                    << compressed
+                                    << compressed_vecdata;
 
-                    d->db->execSql(QString::fromLatin1("INSERT INTO OpenCVEIGENMat (identity, context, type, rows, cols, data) "
+                    d->db->execSql(QString::fromLatin1("INSERT INTO OpenCVEIGENMat (identity, context, type, rows, cols, data, vecdata) "
                                    "VALUES (?,?,?,?,?,?);"),
                                    histogramValues, 0, &insertedId);
 
@@ -409,7 +511,7 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
 EigenFaceModel FaceDb::eigenFaceModel() const
 {
     qCDebug(DIGIKAM_FACEDB_LOG) << "Loading EIGEN model";
-    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data "
+    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data, vecdata "
                                                                       "FROM OpenCVEIGENMat;"));
 
     EigenFaceModel model = EigenFaceModel();
@@ -458,8 +560,10 @@ EigenFaceModel FaceDb::eigenFaceModel() const
     return model;
 }
 
+//we can delete this function later
 void FaceDb::updateFISHERFaceModel(FisherFaceModel& model)
 {
+    qCDebug(DIGIKAM_FACEDB_LOG) << "This function can be invoked now";
     QList<FisherFaceMatMetadata> metadataList = model.matMetadata();
 
     for (int i = 0 ; i < metadataList.size() ; i++)
@@ -510,7 +614,7 @@ void FaceDb::updateFISHERFaceModel(FisherFaceModel& model)
 FisherFaceModel FaceDb::fisherFaceModel() const
 {
     qCDebug(DIGIKAM_FACEDB_LOG) << "Loading FISHER model from OpenCVEIGENMat";
-    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data "
+    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data, vecdata "
                                                                       "FROM OpenCVEIGENMat;"));
 
     FisherFaceModel model = FisherFaceModel();
@@ -546,6 +650,60 @@ FisherFaceModel FaceDb::fisherFaceModel() const
                 qCDebug(DIGIKAM_FACEDB_LOG) << "Checkout compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << cData.size();
 
                 mats        << data;
+                matMetadata << metadata;
+            }
+        }
+        else
+        {
+            qCWarning(DIGIKAM_FACEDB_LOG) << "Mat data to checkout from database are empty for Identity " << metadata.identity;
+        }
+    }
+    model.setMats(mats, matMetadata);
+
+    return model;
+}
+
+DNNFaceModel FaceDb::dnnFaceModel()
+{
+    qCDebug(DIGIKAM_FACEDB_LOG) << "Loading DNN model";
+    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data, vecdata "
+                                                                      "FROM OpenCVEIGENMat;"));
+
+    DNNFaceModel model = DNNFaceModel();
+    QList<std::vector<float>> mats;
+    QList<DNNFaceVecMetadata> matMetadata;
+
+    while(query.next())
+    {
+        DNNFaceVecMetadata metadata;
+        std::vector<float> vecdata;
+
+        metadata.databaseId    = query.value(0).toInt();
+        metadata.identity      = query.value(1).toInt();
+        metadata.context       = query.value(2).toString();
+        metadata.storageStatus = DNNFaceVecMetadata::InDatabase;
+
+        QByteArray cData       = query.value(7).toByteArray();
+
+        if (!cData.isEmpty())
+        {
+            QByteArray new_vec = qUncompress(cData);
+
+
+            if (new_vec.isEmpty())
+            {
+                qCWarning(DIGIKAM_FACEDB_LOG) << "Cannot uncompress mat data to checkout from database for Identity " << metadata.identity;
+            }
+            else
+            {
+                qCDebug(DIGIKAM_FACEDB_LOG) << "Checkout compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << cData.size();
+                float* it = (float *)new_vec.data();
+                for(int i = 0; i < 128; i++)
+                {
+                    vecdata.push_back(*(it+i));
+                }
+
+                mats        << vecdata;
                 matMetadata << metadata;
             }
         }
