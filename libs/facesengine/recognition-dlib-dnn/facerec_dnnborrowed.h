@@ -31,6 +31,9 @@
  *
  * ============================================================ */
 
+#ifndef FACE_REC_DNN_BORROWED_H
+#define FACE_REC_DNN_BORROWED_H
+
 #include "libopencv.h"
 #include "dnn_face.h"
 
@@ -180,3 +183,5 @@ private:
 };
 
 } // namespace Digikam
+
+#endif // FACE_REC_DNN_BORROWED_H
