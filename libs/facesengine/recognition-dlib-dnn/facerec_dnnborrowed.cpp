@@ -82,7 +82,7 @@ void DNNFaceRecognizer::train(std::vector<std::vector<float>> _in_src, InputArra
     std::vector<std::vector<float>> src = _in_src;
 
     // get the label matrix
-    Mat labels = _inm_labels.getMat();
+    cv::Mat labels = _inm_labels.getMat();
 
     // check if data is well- aligned
     if (labels.total() != src.size())
@@ -201,7 +201,7 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int &minClass, double &minD
 {
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image";
 
-    Mat src = _src.getMat();//254*254
+    cv::Mat src = _src.getMat();//254*254
     std::vector<float> vecdata;
     this->getFaceVector(src, vecdata);
 
