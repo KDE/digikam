@@ -259,8 +259,7 @@ Q_SIGNALS:
     void signalAddItems(const QList<QUrl>&);
     void signalMoveUpItem();
     void signalMoveDownItem();
-    void signalRemovedItems(const QList<QUrl>&);
-    void signalRemovingItem(int);
+    void signalRemovedItems(const QList<int>&);
     void signalImageListChanged();
     void signalFoundRAWImages(bool);
     void signalItemClicked(QTreeWidgetItem*);

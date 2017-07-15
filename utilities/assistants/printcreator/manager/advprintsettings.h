@@ -100,7 +100,6 @@ public:
     QList<QUrl>                       inputImages;
 
     QString                           printerName;
-    QSize                             iconSize;
 
     QSizeF                            pageSize;      // Page Size in mm
 
@@ -114,8 +113,9 @@ public:
     int                               captionSize;
     QString                           captionTxt;
 
-    // Crop management
     int                               currentPreviewPage;
+
+    // Crop management
     int                               currentCropPhoto;
     bool                              disableCrop;
 

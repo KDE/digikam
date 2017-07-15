@@ -213,4 +213,12 @@ BUGFIXES FROM BUGZILLA:
 198 ==> 127476 - Printing as very very slow.
 199 ==> 175077 - digiKam does not print.
 200 ==> 177137 - digiKam print assistant problems and ideas.
-201 ==> 
+201 ==> 348760 - Old and not secure VLC version.
+202 ==> 117920 - no encoder slide show.
+203 ==> 342607 - digiKam crash at startup with GStream : QtMultimedia relevant.
+204 ==> 235469 - digiKam Segmentation fault after 2 or 3 modifications.
+205 ==> 223936 - Moving photos between albums is slow.
+206 ==> 186640 - Multiseat workstation with mdm and gdm - digiKam crash.
+207 ==> 227902 - digiKam crashes when picture saved after red-eye effect.
+208 ==> 091485 - Red eye reduction - user should be told to select a part of the image.
+209 ==> 

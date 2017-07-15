@@ -61,7 +61,6 @@ public:
     int                   getPageCount() const;
     QRect*                getLayout(int) const;
 
-    void cleanupPage();
     void initializePage();
     bool validatePage();
 
@@ -110,7 +109,7 @@ private Q_SLOTS:
     void slotIncreaseCopies();
     void slotDecreaseCopies();
     void slotAddItems(const QList<QUrl>&);
-    void slotRemovingItem(int);
+    void slotRemovingItems(const QList<int>&);
     void slotBtnPrintOrderDownClicked();
     void slotBtnPrintOrderUpClicked();
     void slotBtnPreviewPageDownClicked();

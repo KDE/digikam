@@ -147,7 +147,7 @@ public:
 
 private:
 
-    void loadCache();
+    void loadFromCache();
 
 private:
 

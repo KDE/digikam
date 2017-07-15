@@ -39,21 +39,21 @@ public:
 
     Private()
     {
-        icon_margin  = 2;
-        rotate       = false;
-        scale_width  = 0.0;
-        scale_height = 0.0;
-        pixmap       = 0;
-        painter      = 0;
-        icon         = 0;
+        iconMargin  = 2;
+        rotate      = false;
+        scaleWidth  = 0.0;
+        scaleHeight = 0.0;
+        pixmap      = 0;
+        painter     = 0;
+        icon        = 0;
     }
 
-    QSize     paper_size;
-    QSize     icon_size;
-    int       icon_margin;
+    QSize     paperSize;
+    QSize     iconSize;
+    int       iconMargin;
 
-    float     scale_width;
-    float     scale_height;
+    float     scaleWidth;
+    float     scaleHeight;
     bool      rotate;
 
     QPixmap*  pixmap;
@@ -64,15 +64,16 @@ public:
 TemplateIcon::TemplateIcon(int height, const QSize& template_size)
     : d(new Private)
 {
-    d->paper_size         = template_size;
-    d->icon_size          = QSize(height-2*d->icon_margin, height-2*d->icon_margin);
+    d->paperSize         = template_size;
+    d->iconSize          = QSize(height-2 * d->iconMargin,
+                                 height-2 * d->iconMargin);
 
-    // remark: d->icon_size is the real size of the d->icon, in the combo-box there is no space
-    // between the icons, therefore the variable d->icon_margin
-    d->icon_size.rwidth() = (int)(float(d->icon_size.height()) *
-                            float(d->paper_size.width()) / float(d->paper_size.height()));
-    d->scale_width        = float(d->icon_size.width())  / float(d->paper_size.width());
-    d->scale_height       = float(d->icon_size.height()) / float(d->paper_size.height());
+    // remark: d->iconSize is the real size of the d->icon, in the combo-box there is no space
+    // between the icons, therefore the variable d->iconMargin
+    d->iconSize.rwidth() = (int)(float(d->iconSize.height()) *
+                            float(d->paperSize.width()) / float(d->paperSize.height()));
+    d->scaleWidth        = float(d->iconSize.width())   / float(d->paperSize.width());
+    d->scaleHeight       = float(d->iconSize.height())  / float(d->paperSize.height());
 }
 
 TemplateIcon::~TemplateIcon()
@@ -86,22 +87,22 @@ TemplateIcon::~TemplateIcon()
 void TemplateIcon::begin()
  {
     // compute scaling values
-    d->icon_size.rwidth() = (int)(float(d->icon_size.height()) *
-                            float(d->paper_size.width()) / float(d->paper_size.height()));
-    d->scale_width        = float(d->icon_size.width())  / float(d->paper_size.width());
-    d->scale_height       = float(d->icon_size.height()) / float(d->paper_size.height());
+    d->iconSize.rwidth() = (int)(float(d->iconSize.height()) *
+                            float(d->paperSize.width()) / float(d->paperSize.height()));
+    d->scaleWidth        = float(d->iconSize.width())   / float(d->paperSize.width());
+    d->scaleHeight       = float(d->iconSize.height())  / float(d->paperSize.height());
 
 #ifdef DEBUG_OUTPUT
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->paper_size.width =" <<  d->paper_size.width();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->paper_size.height=" <<  d->paper_size.height();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->icon_size.width  =" <<  d->icon_size.width();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->icon_size.height =" <<  d->icon_size.height();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->scale_width      =" <<  d->scale_width;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->scale_height     =" <<  d->scale_height;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->paperSize.width =" <<  d->paperSize.width();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->paperSize.height=" <<  d->paperSize.height();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->iconSize.width  =" <<  d->iconSize.width();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->iconSize.height =" <<  d->iconSize.height();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->scaleWidth      =" <<  d->scaleWidth;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "begin: d->scaleHeight     =" <<  d->scaleHeight;
 #endif
 
     // d->icon back ground
-    d->pixmap  = new QPixmap(d->icon_size);
+    d->pixmap  = new QPixmap(d->iconSize);
     d->pixmap->fill(Qt::color0);
 
     d->painter = new QPainter();
@@ -114,16 +115,16 @@ void TemplateIcon::begin()
 void TemplateIcon::fillRect( int x, int y, int w, int h, const QColor& color )
 {
 #ifdef DEBUG_OUTPUT
-    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: x1=" << x << " => " << x       * d->scale_width;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: y1=" << y << " => " << y       * d->scale_height;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: x2=" << w << " => " << (x + w) * d->scale_width;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: y2=" << h << " => " << (y + h) * d->scale_height;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: x1=" << x << " => " << x       * d->scaleWidth;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: y1=" << y << " => " << y       * d->scaleHeight;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: x2=" << w << " => " << (x + w) * d->scaleWidth;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "fillRect: y2=" << h << " => " << (y + h) * d->scaleHeight;
 #endif
 
-    d->painter->fillRect((int)(d->icon_margin + x * d->scale_width),
-                         (int)(d->icon_margin + y * d->scale_height),
-                         (int)(w * d->scale_width),
-                         (int)(h * d->scale_height),
+    d->painter->fillRect((int)(d->iconMargin + x * d->scaleWidth),
+                         (int)(d->iconMargin + y * d->scaleHeight),
+                         (int)(w * d->scaleWidth),
+                         (int)(h * d->scaleHeight),
                          color);
 }
 
@@ -132,10 +133,10 @@ void TemplateIcon::end()
     // paint boundary of template
     d->painter->setPen(Qt::color1);
 
-    d->painter->drawRect(d->icon_margin,
-                         d->icon_margin,
-                         (int)(d->paper_size.width()  * d->scale_width),
-                         (int)(d->paper_size.height() * d->scale_height));
+    d->painter->drawRect(d->iconMargin,
+                         d->iconMargin,
+                         (int)(d->paperSize.width()  * d->scaleWidth),
+                         (int)(d->paperSize.height() * d->scaleHeight));
 
     d->painter->end();
     d->icon = new QIcon(*d->pixmap);
@@ -148,7 +149,7 @@ QIcon& TemplateIcon::getIcon() const
 
 QSize& TemplateIcon::getSize()
 {
-    return d->icon_size;
+    return d->iconSize;
 }
 
 QPainter& TemplateIcon::getPainter() const

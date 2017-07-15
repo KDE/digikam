@@ -185,8 +185,8 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     connect(d->photoUi->mPrintList, SIGNAL(signalAddItems(QList<QUrl>)),
             this, SLOT(slotAddItems(QList<QUrl>)));
 
-    connect(d->photoUi->mPrintList, SIGNAL(signalRemovingItem(int)),
-            this, SLOT(slotRemovingItem(int)));
+    connect(d->photoUi->mPrintList, SIGNAL(signalRemovedItems(QList<int>)),
+            this, SLOT(slotRemovingItems(QList<int>)));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalContextMenuRequested()),
             this, SLOT(slotContextMenuRequested()));
@@ -221,25 +221,15 @@ AdvPrintPhotoPage::~AdvPrintPhotoPage()
 void AdvPrintPhotoPage::initializePage()
 {
     d->photoUi->mPrintList->listView()->clear();
-    QList<QUrl> list;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Items: " << d->settings->photos.count();
-
-    for (int i = 0 ; i < d->settings->photos.count() ; ++i)
+    if (d->settings->selMode == AdvPrintSettings::IMAGES)
     {
-        AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
-
-        if (pCurrentPhoto)
-        {
-            list.push_back(pCurrentPhoto->m_url);
-        }
+        d->photoUi->mPrintList->loadImagesFromCurrentSelection();
     }
-
-    d->photoUi->mPrintList->blockSignals(true);
-    d->photoUi->mPrintList->slotAddImages(list);
-    d->photoUi->mPrintList->listView()->setCurrentItem(d->photoUi->mPrintList->listView()->itemAt(0, 0));
-    d->photoUi->mPrintList->blockSignals(false);
-    d->photoUi->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
+    else
+    {
+        d->wizard->setItemsList(d->settings->inputImages);
+    }
 
     initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
 
@@ -282,22 +272,8 @@ void AdvPrintPhotoPage::initializePage()
 
     slotOutputChanged(d->photoUi->m_printer_choice->itemHighlighted());
 
-    d->photoUi->ListPhotoSizes->setIconSize(d->settings->iconSize);
+    d->photoUi->ListPhotoSizes->setIconSize(QSize(32, 32));
     initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
-}
-
-void AdvPrintPhotoPage::cleanupPage()
-{
-    d->photoUi->mPrintList->listView()->clear();
-
-    if (d->settings->selMode == AdvPrintSettings::IMAGES)
-    {
-        d->photoUi->mPrintList->loadImagesFromCurrentSelection();
-    }
-    else
-    {
-        d->wizard->setItemsList(d->settings->inputImages);
-    }
 }
 
 bool AdvPrintPhotoPage::validatePage()
@@ -309,8 +285,6 @@ bool AdvPrintPhotoPage::validatePage()
     {
         d->settings->savedPhotoSize = d->photoUi->ListPhotoSizes->currentItem()->text();
     }
-
-    d->settings->iconSize    = d->photoUi->ListPhotoSizes->iconSize();
 
     return true;
 }
@@ -591,6 +565,7 @@ void AdvPrintPhotoPage::slotAddItems(const QList<QUrl>& list)
     }
 
     d->photoUi->mPrintList->blockSignals(false);
+    d->photoUi->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
 
     if (d->settings->photos.size())
     {
@@ -598,78 +573,88 @@ void AdvPrintPhotoPage::slotAddItems(const QList<QUrl>& list)
     }
 }
 
-void AdvPrintPhotoPage::slotRemovingItem(int itemIndex)
+void AdvPrintPhotoPage::slotRemovingItems(const QList<int>& list)
 {
-    if (d->settings->photos.size() && itemIndex >= 0)
+    if (list.count() == 0)
     {
-        /// Debug data: found and copies
-        bool found = false;
-        int copies = 0;
+        return;
+    }
 
-        d->photoUi->mPrintList->blockSignals(true);
-        AdvPrintPhoto* const pPhotoToRemove = d->settings->photos.at(itemIndex);
+    d->photoUi->mPrintList->blockSignals(true);
 
-        // photo to be removed could be:
-        // 1) unique => just remove it
-        // 2) first of n, =>
-        //    search another with the same url
-        //    and set it a first and with a count to n-1 then remove it
-        // 3) one of n, search the first one and set count to n-1 then remove it
-        if (pPhotoToRemove && pPhotoToRemove->m_first)
+    foreach (int itemIndex, list)
+    {
+        if (d->settings->photos.size() && itemIndex >= 0)
         {
-            if (pPhotoToRemove->m_copies > 0)
+            /// Debug data: found and copies
+            bool found = false;
+            int copies = 0;
+
+            AdvPrintPhoto* const pPhotoToRemove = d->settings->photos.at(itemIndex);
+
+            // photo to be removed could be:
+            // 1) unique => just remove it
+            // 2) first of n, =>
+            //    search another with the same url
+            //    and set it a first and with a count to n-1 then remove it
+            // 3) one of n, search the first one and set count to n-1 then remove it
+            if (pPhotoToRemove && pPhotoToRemove->m_first)
+            {
+                if (pPhotoToRemove->m_copies > 0)
+                {
+                    for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
+                    {
+                        AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
+
+                        if (pCurrentPhoto && pCurrentPhoto->m_url == pPhotoToRemove->m_url)
+                        {
+                            pCurrentPhoto->m_copies = pPhotoToRemove->m_copies - 1;
+                            copies                  = pCurrentPhoto->m_copies;
+                            pCurrentPhoto->m_first  = true;
+                            found                   = true;
+                        }
+                    }
+                }
+                // otherwise it's unique
+            }
+            else if (pPhotoToRemove)
             {
                 for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
                 {
                     AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
 
-                    if (pCurrentPhoto && pCurrentPhoto->m_url == pPhotoToRemove->m_url)
+                    if (pCurrentPhoto &&
+                        pCurrentPhoto->m_url == pPhotoToRemove->m_url &&
+                        pCurrentPhoto->m_first)
                     {
-                        pCurrentPhoto->m_copies = pPhotoToRemove->m_copies - 1;
-                        copies                  = pCurrentPhoto->m_copies;
-                        pCurrentPhoto->m_first  = true;
-                        found                   = true;
+                        pCurrentPhoto->m_copies--;
+                        copies = pCurrentPhoto->m_copies;
+                        found  = true;
                     }
                 }
             }
-            // otherwise it's unique
-        }
-        else if (pPhotoToRemove)
-        {
-            for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
+            else
             {
-                AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
-
-                if (pCurrentPhoto &&
-                    pCurrentPhoto->m_url == pPhotoToRemove->m_url &&
-                    pCurrentPhoto->m_first)
-                {
-                    pCurrentPhoto->m_copies--;
-                    copies = pCurrentPhoto->m_copies;
-                    found  = true;
-                }
+                qCDebug(DIGIKAM_GENERAL_LOG) << " NULL AdvPrintPhoto object ";
+                return;
             }
-        }
-        else
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << " NULL AdvPrintPhoto object ";
-            return;
-        }
 
-        if (pPhotoToRemove)
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Removed fileName: "
-                                         << pPhotoToRemove->m_url.fileName()
-                                         << " copy number "
-                                         << copies;
+            if (pPhotoToRemove)
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Removed fileName: "
+                                            << pPhotoToRemove->m_url.fileName()
+                                            << " copy number "
+                                            << copies;
+            }
+
+            d->settings->photos.removeAt(itemIndex);
+            delete pPhotoToRemove;
         }
-
-        d->settings->photos.removeAt(itemIndex);
-        delete pPhotoToRemove;
-
-        d->photoUi->mPrintList->blockSignals(false);
-        d->wizard->previewPhotos();
     }
+
+    d->wizard->previewPhotos();
+    d->photoUi->mPrintList->blockSignals(false);
+    d->photoUi->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
 
     if (d->settings->photos.empty())
     {
@@ -834,11 +819,15 @@ void AdvPrintPhotoPage::createPhotoGrid(AdvPrintPhotoSize* const p,
     int photoHeight = (pageHeight - (MARGIN * 2) - ((rows - 1)    * GAP)) / rows;
     int row         = 0;
 
-    for (int y = MARGIN ; row < rows && y < pageHeight - MARGIN ; y += photoHeight + GAP)
+    for (int y = MARGIN ;
+         (row < rows) && (y < (pageHeight - MARGIN)) ;
+         y += photoHeight + GAP)
     {
         int col = 0;
 
-        for (int x = MARGIN ; col < columns && x < pageWidth - MARGIN ; x += photoWidth + GAP)
+        for (int x = MARGIN ;
+             (col < columns) && (x < (pageWidth - MARGIN)) ;
+             x += photoWidth + GAP)
         {
             p->layouts.append(new QRect(x, y, photoWidth, photoHeight));
             iconpreview->fillRect(x, y, photoWidth, photoHeight, Qt::color1);
@@ -1215,7 +1204,7 @@ void AdvPrintPhotoPage::initPhotoSizes(const QSizeF& pageSize)
     ti.begin();
     QPainter& painter             = ti.getPainter();
     painter.setPen(Qt::color1);
-    painter.drawText(painter.viewport(), Qt::AlignCenter, i18n("Custom layout"));
+    painter.drawText(painter.viewport(), Qt::AlignCenter, i18n("Custom\nlayout"));
     ti.end();
 
     pWItem->setIcon(ti.getIcon());

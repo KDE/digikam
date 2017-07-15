@@ -58,7 +58,7 @@
 
 #include "digikam_globals.h"
 #include "digikam_debug.h"
-#include "advprinttask.h"
+#include "advprintthread.h"
 #include "advprintintropage.h"
 #include "advprintalbumspage.h"
 #include "advprintphotopage.h"
@@ -88,6 +88,7 @@ public:
         outputPage(0),
         finalPage(0),
         settings(0),
+        previewThread(0),
         iface(0)
     {
     }
@@ -100,6 +101,7 @@ public:
     AdvPrintOutputPage*       outputPage;
     AdvPrintFinalPage*        finalPage;
     AdvPrintSettings*         settings;
+    AdvPrintThread*           previewThread;
     DInfoInterface*           iface;
 };
 
@@ -109,8 +111,9 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 {
     setWindowTitle(i18n("Print Creator"));
 
-    d->iface       = iface;
-    d->settings    = new AdvPrintSettings;
+    d->iface         = iface;
+    d->settings      = new AdvPrintSettings;
+    d->previewThread = new AdvPrintThread(this);
 
     KConfig config;
     KConfigGroup group = config.group("PrintCreator");
@@ -131,10 +134,15 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 
     connect(d->photoPage->imagesList(), SIGNAL(signalImageListChanged()),
             d->captionPage, SLOT(slotUpdateImagesList()));
+
+    connect(d->previewThread, SIGNAL(signalPreview(QImage)),
+            this, SLOT(slotPreview(QImage)));
 }
 
 AdvPrintWizard::~AdvPrintWizard()
 {
+    d->previewThread->cancel();
+
     KConfig config;
     KConfigGroup group = config.group("PrintCreator");
     d->settings->writeSettings(group);
@@ -240,10 +248,13 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
 void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 {
     AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
+
     d->cropPage->ui()->cropFrame->init(photo,
                                        d->photoPage->getLayout(photoIndex)->width(),
                                        d->photoPage->getLayout(photoIndex)->height(),
-                                       s->autoRotate);
+                                       s->autoRotate,
+                                       true);
+
     d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
                                              photoIndex + 1,
                                              QString::number(d->settings->photos.count())));
@@ -252,10 +263,12 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 void AdvPrintWizard::previewPhotos()
 {
     if (d->settings->photosizes.isEmpty())
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Photo sizes is null";
         return;
+    }
 
-    //Change cursor to waitCursor during transition
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    d->previewThread->cancel();
 
     // get the selected layout
     int photoCount             = d->settings->photos.count();
@@ -325,36 +338,36 @@ void AdvPrintWizard::previewPhotos()
     // send this photo list to the painter
     if (photoCount > 0)
     {
-        QImage img(d->photoPage->ui()->BmpFirstPagePreview->size(),
-                   QImage::Format_ARGB32_Premultiplied);
-        QPainter p(&img);
-        p.setCompositionMode(QPainter::CompositionMode_Clear);
-        p.fillRect(img.rect(), Qt::color0);
-        p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        AdvPrintTask::paintOnePage(p,
-                                   d->settings->photos,
-                                   s->layouts,
-                                   current,
-                                   d->cropPage->ui()->m_disableCrop->isChecked(),
-                                   true);
-        p.end();
+        AdvPrintSettings* const pwSettings = new AdvPrintSettings;
+        pwSettings->photos                 = d->settings->photos;
+        pwSettings->outputLayouts          = s;
+        pwSettings->currentPreviewPage     = current;
+        pwSettings->disableCrop            = d->cropPage->ui()->m_disableCrop->isChecked();
 
-        d->photoPage->ui()->BmpFirstPagePreview->clear();
-        d->photoPage->ui()->BmpFirstPagePreview->setPixmap(QPixmap::fromImage(img));
-        d->photoPage->ui()->LblPreview->setText(i18n("Page %1 of %2",
-                                                     d->settings->currentPreviewPage + 1,
-                                                     d->photoPage->getPageCount()));
+        d->previewThread->preview(pwSettings, d->photoPage->ui()->BmpFirstPagePreview->size());
+        d->previewThread->start();
     }
     else
     {
         d->photoPage->ui()->BmpFirstPagePreview->clear();
         d->photoPage->ui()->LblPreview->clear();
         d->photoPage->ui()->LblPreview->setText(i18n("Page %1 of %2", 0, 0));
+        d->photoPage->manageBtnPreviewPage();
+        d->photoPage->update();
     }
+}
 
+void AdvPrintWizard::slotPreview(const QImage& img)
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Recieve Preview" << img.size();
+
+    d->photoPage->ui()->BmpFirstPagePreview->clear();
+    d->photoPage->ui()->BmpFirstPagePreview->setPixmap(QPixmap::fromImage(img));
+    d->photoPage->ui()->LblPreview->setText(i18n("Page %1 of %2",
+                                                 d->settings->currentPreviewPage + 1,
+                                                 d->photoPage->getPageCount()));
     d->photoPage->manageBtnPreviewPage();
     d->photoPage->update();
-    QApplication::restoreOverrideCursor();
 }
 
 bool AdvPrintWizard::prepareToPrint()
@@ -374,9 +387,10 @@ bool AdvPrintWizard::prepareToPrint()
             if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
             {
                 d->cropPage->ui()->cropFrame->init(photo,
-                                                d->photoPage->getLayout(i)->width(),
-                                                d->photoPage->getLayout(i)->height(),
-                                                d->settings->outputLayouts->autoRotate);
+                                                   d->photoPage->getLayout(i)->width(),
+                                                   d->photoPage->getLayout(i)->height(),
+                                                   d->settings->outputLayouts->autoRotate,
+                                                   true);
             }
 
             i++;

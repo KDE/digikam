@@ -140,7 +140,7 @@ AdvPrintPhoto::~AdvPrintPhoto()
     delete m_pAdvPrintCaptionInfo;
 }
 
-void AdvPrintPhoto::loadCache()
+void AdvPrintPhoto::loadFromCache()
 {
     // load the thumbnail and size only once.
     delete m_thumbnail;
@@ -161,7 +161,7 @@ QImage& AdvPrintPhoto::thumbnail()
 {
     if (!m_thumbnail)
     {
-        loadCache();
+        loadFromCache();
     }
 
     return *m_thumbnail;
@@ -169,27 +169,15 @@ QImage& AdvPrintPhoto::thumbnail()
 
 QImage AdvPrintPhoto::loadPhoto()
 {
-    QImage photo;
-
-    if (m_iface)
-    {
-        photo = PreviewLoadThread::loadHighQualitySynchronously(m_url.toLocalFile())
-                .copyQImage();
-    }
-
-    if (photo.isNull())
-    {
-        photo.load(m_url.toLocalFile());
-    }
-
-    return photo;
+    return PreviewLoadThread::loadHighQualitySynchronously(m_url.toLocalFile())
+           .copyQImage();
 }
 
 QSize& AdvPrintPhoto::size()
 {
     if (m_size == 0)
     {
-        loadCache();
+        loadFromCache();
     }
 
     return *m_size;
