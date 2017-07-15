@@ -1,3 +1,6 @@
+#ifndef _DLIB_STATISTICS_H_
+#define _DLIB_STATISTICS_H_
+
 #include <limits>
 #include <cmath>
 #include "algs.h"
@@ -223,3 +226,5 @@
         T quaded (const T& val) const {return val*val*val*val; }
     };
 //}
+
+#endif // _DLIB_STATISTICS_H_

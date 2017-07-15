@@ -1,5 +1,5 @@
-#ifndef INTERPOLATION_H
-#define INTERPOLATION_H
+#ifndef _DLIB_INTERPOLATION_H_
+#define _DLIB_INTERPOLATION_H_
 
 #include "dnn_assert.h"
 #include "dnn_vector.h"
@@ -1544,20 +1544,4 @@ void extract_image_chip (
     }
 }
 
-
-#endif // INTERPOLATION_H
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif // _DLIB_INTERPOLATION_H_

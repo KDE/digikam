@@ -1,5 +1,5 @@
-#ifndef ALGS_H
-#define ALGS_H
+#ifndef _DLIB_ALGS_H_
+#define _DLIB_ALGS_H_
 
 #include "platform.h"
 #include "windows_magic.h"
@@ -945,14 +945,4 @@ private:
     void* const data;
 };
 
-
-
-
-
-
-
-
-
-
-
-#endif // ALGS_H
+#endif // _DLIB_ALGS_H_

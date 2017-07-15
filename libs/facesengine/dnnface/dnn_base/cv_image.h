@@ -1,5 +1,5 @@
-#ifndef CV_IMAGE_H
-#define CV_IMAGE_H
+#ifndef _DLIB_CV_IMAGE_H_
+#define _DLIB_CV_IMAGE_H_
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/types_c.h>
@@ -141,4 +141,4 @@ const matrix_op<op_array2d_to_mat<cv_image<T> > > mat (
     return matrix_op<op>(op(m));
 }
 
-#endif // CV_IMAGE_H
+#endif // _DLIB_CV_IMAGE_H_

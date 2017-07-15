@@ -1,3 +1,6 @@
+#ifndef _DNN_FACE_H_
+#define _DNN_FACE_H_
+
 #include "tensor.h"
 #include "input.h"
 #include "layers.h"
@@ -18,3 +21,5 @@
 #include "assign_image.h"
 #include "interpolation.h"
 #include "frontal_face_detector.h"
+
+#endif // _DNN_FACE_H_

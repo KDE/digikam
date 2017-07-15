@@ -1,3 +1,6 @@
+#ifndef _DLIB_FHOG_H_
+#define _DLIB_FHOG_H_
+
 #include "matrix.h"
 #include "matrix_utilities.h"
 #include "matrix_subexp.h"
@@ -1564,3 +1567,5 @@ inline rectangle fhog_to_image (
         extract_fhog_features(img, feats, cell_size, filter_rows_padding, filter_cols_padding);
         return feats;
     }
+
+#endif // _DLIB_FHOG_H_
