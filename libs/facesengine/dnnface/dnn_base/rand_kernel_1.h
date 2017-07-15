@@ -279,7 +279,7 @@
 
 
 
-    void swap_rand (
+    static void swap_rand (
         drand& a, 
         drand& b 
     ) { a.swap(b); }   
