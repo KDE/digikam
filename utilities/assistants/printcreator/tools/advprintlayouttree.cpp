@@ -159,7 +159,7 @@ void AdvPrintLayoutNode::computeRelativeSizes()
     else if (m_type == HorizontalDivision) // one on top of the other
     {
         m_a = (leftProductRoot + rightProductRoot) / maxDivisionRoot;
-        m_e = maxDivisionRoot * (leftProductRoot + rightProductRoot);
+        m_e = maxDivisionRoot  * (leftProductRoot  + rightProductRoot);
     }
 }
 
@@ -176,7 +176,7 @@ void AdvPrintLayoutNode::computeDivisions()
     {
         double leftDivisionRoot  = std::sqrt(m_leftChild->m_e / m_leftChild->m_a);
         double rightDivisionRoot = std::sqrt(m_rightChild->m_e / m_rightChild->m_a);
-
+ 
         m_division               = leftDivisionRoot / (leftDivisionRoot + rightDivisionRoot);
     }
     else if (m_type == HorizontalDivision) // one on top of the other

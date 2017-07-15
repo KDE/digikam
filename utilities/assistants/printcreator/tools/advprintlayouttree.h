@@ -80,9 +80,8 @@ public:
     double aspectRatio()  const;
     double relativeArea() const;
     double division()     const;
-
-    Type type() const;
-    int index() const;
+    Type   type()         const;
+    int    index()        const;
 
     AdvPrintLayoutNode* leftChild()  const;
     AdvPrintLayoutNode* rightChild() const;
@@ -125,7 +124,7 @@ public:
     int addImage(double aspectRatio, double relativeArea);
     QRectF drawingArea(int index, const QRectF& absoluteRectPage);
 
-    int count() const;
+    int    count() const;
     double score(AdvPrintLayoutNode* const root, int nodeCount);
     double G() const;
 
