@@ -219,4 +219,5 @@ BUGFIXES FROM BUGZILLA:
 204 ==> 235469 - digiKam Segmentation fault after 2 or 3 modifications.
 205 ==> 223936 - Moving photos between albums is slow.
 206 ==> 186640 - Multiseat workstation with mdm and gdm - digiKam crash.
-207 ==> 
+207 ==> 227902 - digiKam crashes when picture saved after red-eye effect.
+208 ==> 
