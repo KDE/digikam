@@ -100,7 +100,6 @@ public:
     QList<QUrl>                       inputImages;
 
     QString                           printerName;
-    QSize                             iconSize;
 
     QSizeF                            pageSize;      // Page Size in mm
 

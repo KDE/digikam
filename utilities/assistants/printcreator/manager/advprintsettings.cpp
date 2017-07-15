@@ -38,7 +38,6 @@ AdvPrintSettings::AdvPrintSettings()
     // Select a different page to force a refresh in initPhotoSizes.
     pageSize           = QSizeF(-1, -1);
 
-    iconSize           = QSize(32, 32);
     currentPreviewPage = 0;
     currentCropPhoto   = 0;
     disableCrop        = false;
@@ -72,8 +71,6 @@ void AdvPrintSettings::readSettings(KConfigGroup& group)
                         (int)JPEG);
     savedPhotoSize    = group.readEntry("PhotoSize",
                         QString());
-    iconSize          = group.readEntry("IconSize",
-                        QSize(32, 32));
     printerName       = group.readEntry("Printer",
                         outputName(PDF));
     captions          = group.readEntry(QLatin1String("Captions"),
@@ -102,7 +99,6 @@ void AdvPrintSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("SelMode",           (int)selMode);
     group.writeEntry("ImageFormat",       (int)imageFormat);
     group.writeEntry("PhotoSize",         savedPhotoSize);
-    group.writeEntry("IconSize",          iconSize);
     group.writeEntry("Printer",           printerName);
     group.writeEntry("Captions",          captions);
     group.writeEntry("CaptionColor",      captionColor);
