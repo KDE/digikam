@@ -15,53 +15,53 @@
 
     // -----------------------------------------------------------------------------------
 
-        void multiply (
+        static void multiply (
             bool add_to,
             tensor& dest,
             const tensor& src1,
             const tensor& src2
         );
 
-        void multiply_conv (
+        static void multiply_conv (
             bool add_to,
             tensor& dest,
             const tensor& src1,
             const tensor& src2
         );
 
-        void add(
+        static void add(
             float beta,
             tensor& dest,
             float alpha,
             const tensor& src
         );
 
-        void assign_bias_gradient (
+        static void assign_bias_gradient (
             tensor& grad,
             const tensor& gradient_input
         );
 
-        void add (
+        static void add (
             tensor& dest,
             const tensor& src1,
             const tensor& src2
         );
 
-        void assign_conv_bias_gradient (
+        static void assign_conv_bias_gradient (
             tensor& grad,
             const tensor& gradient_input
         );
 
     // -----------------------------------------------------------------------------------
 
-        void affine_transform(
+        static void affine_transform(
             tensor& dest,
             const tensor& src,
             const float A,
             const float B
         );
 
-        void affine_transform(
+        static void affine_transform(
             tensor& dest,
             const tensor& src1,
             const tensor& src2,
@@ -70,7 +70,7 @@
             const float C
         );
 
-        void affine_transform(
+        static void affine_transform(
             tensor& dest,
             const tensor& src1,
             const tensor& src2,
@@ -81,7 +81,7 @@
             const float D
         );
 
-        void affine_transform_range(
+        static void affine_transform_range(
             size_t begin,
             size_t end,
             tensor& dest,
@@ -95,7 +95,7 @@
 
     // -----------------------------------------------------------------------------------
 
-        void affine_transform(
+        static void affine_transform(
             tensor& dest,
             const tensor& src,
             const tensor& A,
@@ -104,7 +104,7 @@
 
     // -----------------------------------------------------------------------------------
 
-        void affine_transform_conv(
+        static void affine_transform_conv(
             tensor& dest,
             const tensor& src,
             const tensor& A,
@@ -113,7 +113,7 @@
 
     // -----------------------------------------------------------------------------------
 
-        void compute_adam_update (
+        static void compute_adam_update (
             size_t begin,
             size_t end,
             tensor& s,
@@ -130,7 +130,7 @@
 
     // -----------------------------------------------------------------------------------
 
-        void batch_normalize_inference (
+        static void batch_normalize_inference (
             const double eps,
             resizable_tensor& dest,
             const tensor& src,
@@ -140,7 +140,7 @@
             const tensor& running_variances
         );
 
-        void batch_normalize (
+        static void batch_normalize (
             const double eps,
             resizable_tensor& dest,
             resizable_tensor& means,
@@ -153,7 +153,7 @@
             const tensor& beta 
         );
 
-        void batch_normalize_gradient (
+        static void batch_normalize_gradient (
             const double eps,
             const tensor& gradient_input,
             const tensor& means,
@@ -165,7 +165,7 @@
             tensor& beta_grad 
         );
 
-        void batch_normalize_conv_inference (
+        static void batch_normalize_conv_inference (
             const double eps,
             resizable_tensor& dest,
             const tensor& src,
@@ -175,7 +175,7 @@
             const tensor& running_variances
         );
 
-        void batch_normalize_conv (
+        static void batch_normalize_conv (
             const double eps,
             resizable_tensor& dest,
             resizable_tensor& means,
@@ -188,7 +188,7 @@
             const tensor& beta 
         );
 
-        void batch_normalize_conv_gradient (
+        static void batch_normalize_conv_gradient (
             const double eps,
             const tensor& gradient_input,
             const tensor& means,
@@ -202,12 +202,12 @@
 
     // -----------------------------------------------------------------------------------
 
-        void threshold (
+        static void threshold (
             tensor& data,
             float thresh
         );
 
-        void dot (
+        static void dot (
             const tensor& a,
             const tensor& b,
             tensor& result,
@@ -216,12 +216,12 @@
 
     // -----------------------------------------------------------------------------------
 
-        void softmax (
+        static void softmax (
             tensor& dest,
             const tensor& src
         );
 
-        void softmax_gradient (
+        static void softmax_gradient (
             tensor& grad,
             const tensor& dest,
             const tensor& gradient_input
@@ -229,12 +229,12 @@
 
     // ------------------------------------------------------------------------------------
 
-        void sigmoid (
+        static void sigmoid (
             tensor& dest,
             const tensor& src
         );
 
-        void sigmoid_gradient (
+        static void sigmoid_gradient (
             tensor& grad,
             const tensor& dest,
             const tensor& gradient_input
@@ -242,12 +242,12 @@
 
     // ------------------------------------------------------------------------------------
 
-        void relu (
+        static void relu (
             tensor& dest,
             const tensor& src
         );
 
-        void relu_gradient (
+        static void relu_gradient (
             tensor& grad,
             const tensor& dest,
             const tensor& gradient_input
@@ -255,13 +255,13 @@
 
     // ----------------------------------------------------------------------------------------
 
-        void prelu (
+        static void prelu (
             tensor& dest,
             const tensor& src,
             const tensor& param
         );
 
-        void prelu_gradient (
+        static void prelu_gradient (
             tensor& grad,
             const tensor& src,
             const tensor& gradient_input,
@@ -271,12 +271,12 @@
 
     // ------------------------------------------------------------------------------------
 
-        void tanh (
+        static void tanh (
             tensor& dest,
             const tensor& src
         );
 
-        void tanh_gradient (
+        static void tanh_gradient (
             tensor& grad,
             const tensor& dest,
             const tensor& gradient_input
