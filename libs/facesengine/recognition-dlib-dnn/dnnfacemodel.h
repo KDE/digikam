@@ -31,8 +31,8 @@
  *
  * ============================================================ */
 
-#ifndef FACESENGINE_EIGENFACESMODEL_H
-#define FACESENGINE_EIGENFACESMODEL_H
+#ifndef DNN_FACE_MODEL_H
+#define DNN_FACE_MODEL_H
 
 // OpenCV library
 
@@ -114,4 +114,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // FACESENGINE_EIGENFACESMODEL_H
+#endif // DNN_FACE_MODEL_H
