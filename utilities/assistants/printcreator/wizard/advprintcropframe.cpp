@@ -56,7 +56,10 @@ public:
         imageX(0),
         imageY(0),
         color(Qt::red),
-        drawRec(true)
+        drawRec(true),
+        wphoto(0),
+        hphoto(0),
+        autoRotate(false)
     {
     }
 
@@ -70,6 +73,11 @@ public:
 
     QRect          cropRegion;
     bool           drawRec;
+
+    // To repaint while resizeEvent().
+    int            wphoto;
+    int            hphoto;
+    bool           autoRotate;
 };
 
 AdvPrintCropFrame::AdvPrintCropFrame(QWidget* const parent)
@@ -94,6 +102,9 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
                              bool paint)
 {
     d->photo             = photo;
+    d->wphoto            = wphoto;
+    d->hphoto            = hphoto;
+    d->autoRotate        = autoRotate;
     d->image             = d->photo->loadPhoto().copyQImage();
 
     // has the cropRegion been set yet?
@@ -166,6 +177,11 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
     {
         update();
     }
+}
+
+void AdvPrintCropFrame::resizeEvent(QResizeEvent*)
+{
+    init(d->photo, d->wphoto, d->hphoto, d->autoRotate, true);
 }
 
 QRect AdvPrintCropFrame::screenToPhotoRect(const QRect& r) const

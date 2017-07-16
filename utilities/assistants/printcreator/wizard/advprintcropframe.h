@@ -29,6 +29,8 @@
 
 #include <QWidget>
 
+class QResizeEvent;
+
 namespace Digikam
 {
 
@@ -66,6 +68,7 @@ private:
 
     QRect screenToPhotoRect(const QRect& r) const;
     QRect photoToScreenRect(const QRect& r) const;
+    void  resizeEvent(QResizeEvent*);
 
 private:
 
