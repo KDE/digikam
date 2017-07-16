@@ -38,6 +38,7 @@
 // Local includes
 
 #include "dinfointerface.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -117,41 +118,46 @@ public:
     AdvPrintPhoto(const AdvPrintPhoto&);
     ~AdvPrintPhoto();
 
-    QImage& thumbnail();
-    QImage  loadPhoto();
-    int     width();
-    int     height();
-    QSize&  size();
+    DImg&  thumbnail();
+    DImg   loadPhoto();
+    int    width();
+    int    height();
+    QSize& size();
 
     double scaleWidth(double unitToInches);
     double scaleHeight(double unitToInches);
 
 public:
 
+    // Url of original image file.
     QUrl                    m_url;
 
+    // Thumbnail size in pixels.
     int                     m_thumbnailSize;
 
+    // Region to crop while print from original image.
     QRect                   m_cropRegion;
 
-    // to get first copy quickly
+    // To get first copy quickly.
     bool                    m_first;
 
-    // number of copies
+    // Number of copies while printing stage.
     int                     m_copies;
 
+    // Rotation angle in degrees.
     int                     m_rotation;
+
     AdvPrintAdditionalInfo* m_pAddInfo;
     AdvPrintCaptionInfo*    m_pAdvPrintCaptionInfo;
     DInfoInterface*         m_iface;
 
 private:
 
-    void loadFromCache();
+    void loadInCache();
 
 private:
 
-    QImage*                 m_thumbnail;
+    DImg*                   m_thumbnail;
     QSize*                  m_size;
 };
 

@@ -39,8 +39,10 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "advprintphoto.h"
 #include "advprintwizard.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -52,7 +54,6 @@ public:
     Private()
       : photo(0),
         mouseDown(false),
-        image(0),
         imageX(0),
         imageY(0),
         color(Qt::red),
@@ -62,7 +63,7 @@ public:
 
     AdvPrintPhoto* photo;
     bool           mouseDown;
-    QImage         image;
+    DImg           image;
     int            imageX;
     int            imageY;
 
@@ -120,22 +121,36 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
     }
 
     // rotate
-    QMatrix matrix;
-    matrix.rotate(d->photo->m_rotation);
-    d->image  = d->image.transformed(matrix);
-    d->image  = d->image.scaled(width(), height(), Qt::KeepAspectRatio);
+
+    switch (d->photo->m_rotation)
+    {
+        case 90:
+            d->image.rotate(DImg::ROT90);
+            break;
+        case 180:
+            d->image.rotate(DImg::ROT180);
+            break;
+        case 270:
+            d->image.rotate(DImg::ROT270);
+            break;
+        default:
+            // Nothing to do.
+            break;
+    }
+
+    d->image  = d->image.smoothScale(width(), height(), Qt::KeepAspectRatio);
     d->imageX = (width()  / 2) - (d->image.width()  / 2);
     d->imageY = (height() / 2) - (d->image.height() / 2);
 
     // size the rectangle based on the minimum image dimension
-    int w      = d->image.width();
-    int h      = d->image.height();
+    int w     = d->image.width();
+    int h     = d->image.height();
 
     if (w < h)
     {
         h = AdvPrintWizard::normalizedInt((double)w * ((double)hphoto / (double)wphoto));
 
-        if (h > d->image.height())
+        if (h > (int)d->image.height())
         {
             h = d->image.height();
             w = AdvPrintWizard::normalizedInt((double)h * ((double)wphoto / (double)hphoto));
@@ -145,7 +160,7 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
     {
         w = AdvPrintWizard::normalizedInt((double)h * ((double)wphoto / (double)hphoto));
 
-        if (w > d->image.width())
+        if (w > (int)d->image.width())
         {
             w = d->image.width();
             h = AdvPrintWizard::normalizedInt((double)w * ((double)hphoto / (double)wphoto));
@@ -264,7 +279,7 @@ void AdvPrintCropFrame::paintEvent(QPaintEvent*)
     p.eraseRect(0, 0, this->width(), this->height());
 
     // draw the background image
-    p.drawImage(d->imageX, d->imageY, d->image);
+    p.drawImage(d->imageX, d->imageY, d->image.copyQImage());
 
     if (d->drawRec)
     {
@@ -309,11 +324,11 @@ void AdvPrintCropFrame::mouseMoveEvent(QMouseEvent* e)
 
         int newX = e->x() - (newW / 2);
         newX     = qMax(d->imageX, newX);
-        newX     = qMin(d->imageX + d->image.width() - newW, newX);
+        newX     = qMin(d->imageX + (int)d->image.width() - newW, newX);
 
         int newY = e->y() - (newH / 2);
         newY     = qMax(d->imageY, newY);
-        newY     = qMin(d->imageY + d->image.height() - newH, newY);
+        newY     = qMin(d->imageY + (int)d->image.height() - newH, newY);
 
         d->cropRegion.setRect(newX, newY, newW, newH);
         d->photo->m_cropRegion = screenToPhotoRect(d->cropRegion);
@@ -348,10 +363,10 @@ void AdvPrintCropFrame::keyPressEvent(QKeyEvent* e)
     int h = d->cropRegion.height();
 
     newX  = qMax(d->imageX, newX);
-    newX  = qMin(d->imageX + d->image.width() - w,  newX);
+    newX  = qMin(d->imageX + (int)d->image.width() - w,  newX);
 
     newY  = qMax(d->imageY, newY);
-    newY  = qMin(d->imageY + d->image.height() - h, newY);
+    newY  = qMin(d->imageY + (int)d->image.height() - h, newY);
 
     d->cropRegion.setRect(newX, newY, w, h);
     d->photo->m_cropRegion = screenToPhotoRect(d->cropRegion);

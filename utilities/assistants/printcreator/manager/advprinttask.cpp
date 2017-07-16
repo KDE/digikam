@@ -330,11 +330,11 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
 
         if (useThumbnails)
         {
-            img = photo->thumbnail();
+            img = photo->thumbnail().copyQImage();
         }
         else
         {
-            img = photo->loadPhoto();
+            img = photo->loadPhoto().copyQImage();
         }
 
         // next, do we rotate?

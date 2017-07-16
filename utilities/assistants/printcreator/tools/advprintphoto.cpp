@@ -140,44 +140,38 @@ AdvPrintPhoto::~AdvPrintPhoto()
     delete m_pAdvPrintCaptionInfo;
 }
 
-void AdvPrintPhoto::loadFromCache()
+void AdvPrintPhoto::loadInCache()
 {
-    // load the thumbnail and size only once.
-    delete m_thumbnail;
+    // Load the thumbnail and size only once.
 
-    QImage photo = loadPhoto();
-    QImage image = photo.scaled(m_thumbnailSize, m_thumbnailSize, Qt::KeepAspectRatio);
-    m_thumbnail  = new QImage(image.width(), image.height(),
-                              QImage::Format_ARGB32_Premultiplied);
-    QPainter painter(m_thumbnail);
-    painter.drawImage(0, 0, image );
-    painter.end();
+    delete m_thumbnail;
+    DImg photo  = loadPhoto();
+    m_thumbnail = new DImg(photo.smoothScale(m_thumbnailSize, m_thumbnailSize, Qt::KeepAspectRatio));
 
     delete m_size;
-    m_size       = new QSize(photo.width(), photo.height());
+    m_size      = new QSize(photo.width(), photo.height());
 }
 
-QImage& AdvPrintPhoto::thumbnail()
+DImg& AdvPrintPhoto::thumbnail()
 {
     if (!m_thumbnail)
     {
-        loadFromCache();
+        loadInCache();
     }
 
     return *m_thumbnail;
 }
 
-QImage AdvPrintPhoto::loadPhoto()
+DImg AdvPrintPhoto::loadPhoto()
 {
-    return PreviewLoadThread::loadHighQualitySynchronously(m_url.toLocalFile())
-           .copyQImage();
+    return PreviewLoadThread::loadHighQualitySynchronously(m_url.toLocalFile());
 }
 
 QSize& AdvPrintPhoto::size()
 {
     if (m_size == 0)
     {
-        loadFromCache();
+        loadInCache();
     }
 
     return *m_size;
