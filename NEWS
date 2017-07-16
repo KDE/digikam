@@ -235,4 +235,5 @@ BUGFIXES FROM BUGZILLA:
 220 ==> 092624 - Crashes while starting with signal 11 (SIGSEGV).
 221 ==> 292634 - digiKam crash just after moving a people tag square.
 222 ==> 274957 - Crash on copy multiple files.
-223 ==> 
+223 ==> 323964 - digiKam crash while processing tags.
+224 ==> 
