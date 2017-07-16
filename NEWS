@@ -232,4 +232,5 @@ BUGFIXES FROM BUGZILLA:
 217 ==> 233693 - digiKam crash when clicking on .MOV file in album.
 218 ==> 324611 - Deleting picture not possible.
 219 ==> 105303 - Can't move images between folders.
-220 ==> 
+220 ==> 092624 - Crashes while starting with signal 11 (SIGSEGV).
+221 ==> 
