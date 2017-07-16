@@ -218,15 +218,11 @@ QString DTrash::createJsonRecordForFile(const QString& collectionPath, const QSt
 
 QString DTrash::getAvialableJsonFilePathInTrash(const QString& collectionPath, const QString& baseName, int version)
 {
-    QString randomString = QUuid::createUuid().toString();
-    randomString.replace(0, 1, QLatin1Char('-'));
-    randomString.chop(1);
-
     QString pathToCreateJsonFile = collectionPath + QLatin1Char('/') +
                                    TRASH_FOLDER + QLatin1Char('/') +
                                    INFO_FOLDER + QLatin1Char('/') +
-                                   baseName +
-                                   randomString +
+                                   baseName + QLatin1Char('-') +
+                                   QUuid::createUuid().toString().mid(1, 8) +
                                    (version ? QString::number(version) : QLatin1String("")) +
                                    INFO_FILE_EXTENSION;
 

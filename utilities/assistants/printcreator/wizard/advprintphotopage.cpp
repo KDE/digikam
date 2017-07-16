@@ -272,7 +272,7 @@ void AdvPrintPhotoPage::initializePage()
 
     slotOutputChanged(d->photoUi->m_printer_choice->itemHighlighted());
 
-    d->photoUi->ListPhotoSizes->setIconSize(d->settings->iconSize);
+    d->photoUi->ListPhotoSizes->setIconSize(QSize(32, 32));
     initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
 }
 
@@ -285,8 +285,6 @@ bool AdvPrintPhotoPage::validatePage()
     {
         d->settings->savedPhotoSize = d->photoUi->ListPhotoSizes->currentItem()->text();
     }
-
-    d->settings->iconSize    = d->photoUi->ListPhotoSizes->iconSize();
 
     return true;
 }
@@ -371,7 +369,7 @@ void AdvPrintPhotoPage::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionType =
-                        (AdvPrintCaptionInfo::AvailableCaptions)attr.toString().toInt(&ok);
+                        (AdvPrintSettings::CaptionType)attr.toString().toInt(&ok);
                 }
 
                 attr = attrs.value(QLatin1String("font"));
@@ -1206,7 +1204,7 @@ void AdvPrintPhotoPage::initPhotoSizes(const QSizeF& pageSize)
     ti.begin();
     QPainter& painter             = ti.getPainter();
     painter.setPen(Qt::color1);
-    painter.drawText(painter.viewport(), Qt::AlignCenter, i18n("Custom layout"));
+    painter.drawText(painter.viewport(), Qt::AlignCenter, i18n("Custom\nlayout"));
     ti.end();
 
     pWItem->setIcon(ti.getIcon());

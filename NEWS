@@ -219,4 +219,12 @@ BUGFIXES FROM BUGZILLA:
 204 ==> 235469 - digiKam Segmentation fault after 2 or 3 modifications.
 205 ==> 223936 - Moving photos between albums is slow.
 206 ==> 186640 - Multiseat workstation with mdm and gdm - digiKam crash.
-207 ==> 
+207 ==> 227902 - digiKam crashes when picture saved after red-eye effect.
+208 ==> 091485 - Red eye reduction - user should be told to select a part of the image.
+209 ==> 382259 - Can't open picture database located at /home/egh/Pictures.
+210 ==> 102636 - Delete fails: access denied to trash:/xyz.jpg.
+211 ==> 382002 - Lazy synchronization not working.
+212 ==> 170758 - High load when tagging.
+213 ==> 111591 - Tag images browser doesn't show any images.
+214 ==> 
+

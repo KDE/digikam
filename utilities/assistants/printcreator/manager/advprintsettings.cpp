@@ -28,6 +28,10 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
+// Local includes
+
+#include "advprintphoto.h"
+
 namespace Digikam
 {
 
@@ -38,13 +42,12 @@ AdvPrintSettings::AdvPrintSettings()
     // Select a different page to force a refresh in initPhotoSizes.
     pageSize           = QSizeF(-1, -1);
 
-    iconSize           = QSize(32, 32);
     currentPreviewPage = 0;
     currentCropPhoto   = 0;
     disableCrop        = false;
     imageFormat        = JPEG;
     printerName        = outputName(PDF);
-    captions           = 0;
+    captionType        = NONE;
     captionColor       = QColor(Qt::yellow);
     captionFont        = QFont(QLatin1String("Sans Serif"));
     captionSize        = 4;
@@ -72,12 +75,10 @@ void AdvPrintSettings::readSettings(KConfigGroup& group)
                         (int)JPEG);
     savedPhotoSize    = group.readEntry("PhotoSize",
                         QString());
-    iconSize          = group.readEntry("IconSize",
-                        QSize(32, 32));
     printerName       = group.readEntry("Printer",
                         outputName(PDF));
-    captions          = group.readEntry(QLatin1String("Captions"),
-                        0);
+    captionType       = (CaptionType)group.readEntry(QLatin1String("CaptionType"),
+                        (int)NONE);
     captionColor      = group.readEntry(QLatin1String("CaptionColor"),
                         QColor(Qt::yellow));
     captionFont       = group.readEntry(QLatin1String("CaptionFont"),
@@ -102,9 +103,8 @@ void AdvPrintSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("SelMode",           (int)selMode);
     group.writeEntry("ImageFormat",       (int)imageFormat);
     group.writeEntry("PhotoSize",         savedPhotoSize);
-    group.writeEntry("IconSize",          iconSize);
     group.writeEntry("Printer",           printerName);
-    group.writeEntry("Captions",          captions);
+    group.writeEntry("CaptionType",       (int)captionType);
     group.writeEntry("CaptionColor",      captionColor);
     group.writeEntry("CaptionFont",       captionFont);
     group.writeEntry("CaptionSize",       captionSize);
@@ -161,6 +161,19 @@ QMap<AdvPrintSettings::ImageFormat, QString> AdvPrintSettings::imageFormatNames(
     frms[TIFF] = i18nc("Image format: TIFF", "TIFF");
 
     return frms;
+}
+
+QMap<AdvPrintSettings::CaptionType, QString> AdvPrintSettings::captionTypeNames()
+{
+    QMap<CaptionType, QString> types;
+
+    types[NONE]     = i18nc("Caption type: NONE",      "No caption");
+    types[FILENAME] = i18nc("Caption type: FILENAME",  "Image file names");
+    types[DATETIME] = i18nc("Caption type: DATETIME",  "Exif date-time");
+    types[COMMENT]  = i18nc("Caption type: COMMENT",   "Item comments");
+    types[CUSTOM]   = i18nc("Caption type: CUSTOM",    "Custom format");
+
+    return types;
 }
 
 } // namespace Digikam
