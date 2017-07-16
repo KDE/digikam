@@ -37,6 +37,28 @@
 namespace Digikam
 {
 
+AdvPrintPhotoSize::AdvPrintPhotoSize()
+    : m_label(i18n("Unsupported Paper Size")),
+      m_dpi(0),
+      m_autoRotate(false)
+{
+}
+
+AdvPrintPhotoSize::AdvPrintPhotoSize(const AdvPrintPhotoSize& other)
+{
+    m_label      = other.m_label;
+    m_dpi        = other.m_dpi;
+    m_autoRotate = other.m_autoRotate;
+    m_layouts    = other.m_layouts;
+    m_icon       = other.m_icon;
+}
+
+AdvPrintPhotoSize::~AdvPrintPhotoSize()
+{
+}
+
+// -----------------------------
+
 AdvPrintAdditionalInfo::AdvPrintAdditionalInfo()
     : m_unit(0),
       m_printPosition(0),
@@ -49,16 +71,16 @@ AdvPrintAdditionalInfo::AdvPrintAdditionalInfo()
 {
 }
 
-AdvPrintAdditionalInfo::AdvPrintAdditionalInfo(const AdvPrintAdditionalInfo& ai)
+AdvPrintAdditionalInfo::AdvPrintAdditionalInfo(const AdvPrintAdditionalInfo& other)
 {
-    m_unit                 = ai.m_unit;
-    m_printPosition        = ai.m_printPosition;
-    m_scaleMode            = ai.m_scaleMode;
-    m_keepRatio            = ai.m_keepRatio;
-    m_autoRotate           = ai.m_autoRotate;
-    m_printWidth           = ai.m_printWidth;
-    m_printHeight          = ai.m_printHeight;
-    m_enlargeSmallerImages = ai.m_enlargeSmallerImages;
+    m_unit                 = other.m_unit;
+    m_printPosition        = other.m_printPosition;
+    m_scaleMode            = other.m_scaleMode;
+    m_keepRatio            = other.m_keepRatio;
+    m_autoRotate           = other.m_autoRotate;
+    m_printWidth           = other.m_printWidth;
+    m_printHeight          = other.m_printHeight;
+    m_enlargeSmallerImages = other.m_enlargeSmallerImages;
 }
 
 AdvPrintAdditionalInfo::~AdvPrintAdditionalInfo()
@@ -76,13 +98,13 @@ AdvPrintCaptionInfo::AdvPrintCaptionInfo()
 {
 }
 
-AdvPrintCaptionInfo::AdvPrintCaptionInfo(const AdvPrintCaptionInfo& ci)
+AdvPrintCaptionInfo::AdvPrintCaptionInfo(const AdvPrintCaptionInfo& other)
 {
-    m_captionType  = ci.m_captionType;
-    m_captionFont  = ci.m_captionFont;
-    m_captionColor = ci.m_captionColor;
-    m_captionSize  = ci.m_captionSize;
-    m_captionText  = ci.m_captionText;
+    m_captionType  = other.m_captionType;
+    m_captionFont  = other.m_captionFont;
+    m_captionColor = other.m_captionColor;
+    m_captionSize  = other.m_captionSize;
+    m_captionText  = other.m_captionText;
 }
 
 AdvPrintCaptionInfo::~AdvPrintCaptionInfo()
@@ -106,30 +128,30 @@ AdvPrintPhoto::AdvPrintPhoto(int thumbnailSize, DInfoInterface* const iface)
     m_thumbnailSize = thumbnailSize;
 }
 
-AdvPrintPhoto::AdvPrintPhoto(const AdvPrintPhoto& photo)
+AdvPrintPhoto::AdvPrintPhoto(const AdvPrintPhoto& other)
     : m_pAddInfo(0),
       m_pAdvPrintCaptionInfo(0)
 {
-    m_thumbnailSize = photo.m_thumbnailSize;
-    m_cropRegion    = photo.m_cropRegion;
-    m_url           = photo.m_url;
-    m_first         = photo.m_first;
-    m_copies        = photo.m_copies;
-    m_rotation      = photo.m_rotation;
+    m_thumbnailSize = other.m_thumbnailSize;
+    m_cropRegion    = other.m_cropRegion;
+    m_url           = other.m_url;
+    m_first         = other.m_first;
+    m_copies        = other.m_copies;
+    m_rotation      = other.m_rotation;
 
-    if (photo.m_pAddInfo)
+    if (other.m_pAddInfo)
     {
-        m_pAddInfo = new AdvPrintAdditionalInfo(*photo.m_pAddInfo);
+        m_pAddInfo = new AdvPrintAdditionalInfo(*other.m_pAddInfo);
     }
 
-    if (photo.m_pAdvPrintCaptionInfo)
+    if (other.m_pAdvPrintCaptionInfo)
     {
-        m_pAdvPrintCaptionInfo = new AdvPrintCaptionInfo(*photo.m_pAdvPrintCaptionInfo);
+        m_pAdvPrintCaptionInfo = new AdvPrintCaptionInfo(*other.m_pAdvPrintCaptionInfo);
     }
 
     m_size      = 0;
     m_thumbnail = 0;
-    m_iface     = photo.m_iface;
+    m_iface     = other.m_iface;
 }
 
 AdvPrintPhoto::~AdvPrintPhoto()

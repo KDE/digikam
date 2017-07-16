@@ -790,7 +790,7 @@ int AdvPrintPhotoPage::getPageCount() const
         AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoUi->ListPhotoSizes->currentRow());
 
         // how many pages?  Recall that the first layout item is the paper size
-        int photosPerPage   = s->layouts.count() - 1;
+        int photosPerPage   = s->m_layouts.count() - 1;
         int remainder       = photoCount % photosPerPage;
         int emptySlots      = 0;
 
@@ -829,7 +829,7 @@ void AdvPrintPhotoPage::createPhotoGrid(AdvPrintPhotoSize* const p,
              (col < columns) && (x < (pageWidth - MARGIN)) ;
              x += photoWidth + GAP)
         {
-            p->layouts.append(new QRect(x, y, photoWidth, photoHeight));
+            p->m_layouts.append(new QRect(x, y, photoWidth, photoHeight));
             iconpreview->fillRect(x, y, photoWidth, photoHeight, Qt::color1);
             col++;
         }
@@ -891,15 +891,15 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
         if (custDlg.m_photoGridCheck->isChecked())
         {
             // custom photo grid
-            int rows       = custDlg.m_gridRows->value();
-            int columns    = custDlg.m_gridColumns->value();
+            int rows         = custDlg.m_gridRows->value();
+            int columns      = custDlg.m_gridColumns->value();
 
-            s->layouts.append(new QRect(0, 0,
-                                        (int)sizeManaged.width(),
-                                        (int)sizeManaged.height()));
-            s->autoRotate  = custDlg.m_autorotate->isChecked();
-            s->label       = item->text();
-            s->dpi         = 0;
+            s->m_layouts.append(new QRect(0, 0,
+                                          (int)sizeManaged.width(),
+                                          (int)sizeManaged.height()));
+            s->m_autoRotate  = custDlg.m_autorotate->isChecked();
+            s->m_label       = item->text();
+            s->m_dpi         = 0;
 
             int pageWidth  = (int)(size.width())  * scaleValue;
             int pageHeight = (int)(size.height()) * scaleValue;
@@ -927,14 +927,14 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
             else
             {
                 // fit as many photos of given size as possible
-                s->layouts.append(new QRect(0, 0, (int)sizeManaged.width(),
+                s->m_layouts.append(new QRect(0, 0, (int)sizeManaged.width(),
                                             (int)sizeManaged.height()));
-                s->autoRotate  = custDlg.m_autorotate->isChecked();
-                s->label       = item->text();
-                s->dpi         = 0;
-                int nColumns   = int(size.width()  / width);
-                int nRows      = int(size.height() / height);
-                int spareWidth = int(size.width())  % width;
+                s->m_autoRotate  = custDlg.m_autorotate->isChecked();
+                s->m_label       = item->text();
+                s->m_dpi         = 0;
+                int nColumns     = int(size.width()  / width);
+                int nRows        = int(size.height() / height);
+                int spareWidth   = int(size.width()) % width;
 
                 // check if there's no room left to separate photos
                 if (nColumns > 1 &&  spareWidth == 0)
@@ -979,8 +979,8 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
                                                          << ", "
                                                          << height;
 
-                            s->layouts.append(new QRect(photoX, photoY,
-                                                        width, height));
+                            s->m_layouts.append(new QRect(photoX, photoY,
+                                                          width, height));
                             iconpreview.fillRect(photoX, photoY,
                                                  width, height, Qt::color1);
                         }
@@ -1007,7 +1007,7 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
 
         if (s)
         {
-            s->icon = iconpreview.getIcon();
+            s->m_icon = iconpreview.getIcon();
             d->settings->photosizes.append(s);
         }
     }
@@ -1169,12 +1169,9 @@ void AdvPrintPhotoPage::initPhotoSizes(const QSizeF& pageSize)
 
         // There is no valid page size yet.  Create a default page (B10) to prevent crashes.
         AdvPrintPhotoSize* const p = new AdvPrintPhotoSize;
-        p->dpi                     = 0;
-        p->autoRotate              = false;
-        p->label                   = i18n("Unsupported Paper Size");
         // page size: B10 (32 x 45 mm)
-        p->layouts.append(new QRect(0, 0, 3200, 4500));
-        p->layouts.append(new QRect(0, 0, 3200, 4500));
+        p->m_layouts.append(new QRect(0, 0, 3200, 4500));
+        p->m_layouts.append(new QRect(0, 0, 3200, 4500));
         // add to the list
         d->settings->photosizes.append(p);
     }
@@ -1191,8 +1188,8 @@ void AdvPrintPhotoPage::initPhotoSizes(const QSizeF& pageSize)
 
         if (s)
         {
-            QListWidgetItem* const pWItem = new QListWidgetItem(s->label);
-            pWItem->setIcon(s->icon);
+            QListWidgetItem* const pWItem = new QListWidgetItem(s->m_label);
+            pWItem->setIcon(s->m_icon);
             d->photoUi->ListPhotoSizes->addItem(pWItem);
         }
     }
@@ -1364,10 +1361,10 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                                 sizeManaged = pageSize * 10;
                             }
 
-                            p->layouts.append(new QRect(0,
-                                                        0,
-                                                        (int)sizeManaged.width(),
-                                                        (int)sizeManaged.height()));
+                            p->m_layouts.append(new QRect(0,
+                                                          0,
+                                                          (int)sizeManaged.width(),
+                                                          (int)sizeManaged.height()));
 
                             // create a small preview of the template
 
@@ -1392,22 +1389,22 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
 
                             if (it != end)
                             {
-                                p->label = KDesktopFile(dir.absolutePath() + 
-                                           QLatin1String("/") + *it).readName();
+                                p->m_label = KDesktopFile(dir.absolutePath() + 
+                                             QLatin1String("/") + *it).readName();
                             }
                             else
                             {
-                                p->label = ep.attribute(QLatin1String("name"), QLatin1String("XXX"));
+                                p->m_label = ep.attribute(QLatin1String("name"), QLatin1String("XXX"));
                                 qCWarning(DIGIKAM_GENERAL_LOG) << "missed template translation "
                                                                << desktopFileName;
                             }
 
-                            p->dpi        = ep.attribute(QLatin1String("dpi"),
+                            p->m_dpi        = ep.attribute(QLatin1String("dpi"),
                                                          QLatin1String("0")).toInt();
-                            p->autoRotate = (ep.attribute(QLatin1String("autorotate"),
-                                            QLatin1String("false")) == QLatin1String("true")) ?
-                                            true : false;
-                            QDomNode nt   = ep.firstChild();
+                            p->m_autoRotate = (ep.attribute(QLatin1String("autorotate"),
+                                              QLatin1String("false")) == QLatin1String("true")) ?
+                                              true : false;
+                            QDomNode nt     = ep.firstChild();
 
                             while (!nt.isNull())
                             {
@@ -1430,10 +1427,10 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                                         int photoY  = (int)((et.attribute(QLatin1String("y"),
                                                       QLatin1String("0")).toFloat() * scaleValue));
 
-                                        p->layouts.append(new QRect(photoX,
-                                                                    photoY,
-                                                                    width,
-                                                                    height));
+                                        p->m_layouts.append(new QRect(photoX,
+                                                                      photoY,
+                                                                      width,
+                                                                      height));
                                         iconpreview.fillRect(photoX,
                                                              photoY,
                                                              width,
@@ -1484,7 +1481,7 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
                             }
 
                             iconpreview.end();
-                            p->icon = iconpreview.getIcon();
+                            p->m_icon = iconpreview.getIcon();
                             d->settings->photosizes.append(p);
                         }
                         else
@@ -1521,14 +1518,16 @@ QRect* AdvPrintPhotoPage::getLayout(int photoIndex) const
     int photoCount             = (photoIndex + 1);
 
     // how many pages?  Recall that the first layout item is the paper size
-    int photosPerPage          = s->layouts.count() - 1;
+    int photosPerPage          = s->m_layouts.count() - 1;
     int remainder              = photoCount % photosPerPage;
     int retVal                 = remainder;
 
     if (remainder == 0)
+    {
         retVal = photosPerPage;
+    }
 
-    return s->layouts.at(retVal);
+    return s->m_layouts.at(retVal);
 }
 
 } // namespace Digikam

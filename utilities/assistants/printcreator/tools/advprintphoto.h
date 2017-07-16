@@ -48,11 +48,17 @@ class AdvPrintPhotoSize
 {
 public:
 
-    QString       label;
-    int           dpi;
-    bool          autoRotate;
-    QList<QRect*> layouts;     // first element is page size
-    QIcon         icon;
+    explicit AdvPrintPhotoSize();
+    AdvPrintPhotoSize(const AdvPrintPhotoSize& other);
+    ~AdvPrintPhotoSize();
+
+public:
+
+    QString       m_label;
+    int           m_dpi;
+    bool          m_autoRotate;
+    QList<QRect*> m_layouts;     // first element is page size
+    QIcon         m_icon;
 };
 
 // -----------------------------------------------------------
@@ -62,7 +68,7 @@ class AdvPrintAdditionalInfo
 public:
 
     explicit AdvPrintAdditionalInfo();
-    AdvPrintAdditionalInfo(const AdvPrintAdditionalInfo& ai);
+    AdvPrintAdditionalInfo(const AdvPrintAdditionalInfo& other);
     ~AdvPrintAdditionalInfo();
 
 public:
@@ -86,7 +92,7 @@ public:
 
     explicit AdvPrintCaptionInfo();
     /// Copy constructor to get old photo info.
-    AdvPrintCaptionInfo(const AdvPrintCaptionInfo& ci);
+    AdvPrintCaptionInfo(const AdvPrintCaptionInfo& other);
     ~AdvPrintCaptionInfo();
 
 public:
@@ -106,7 +112,7 @@ class AdvPrintPhoto
 public:
 
     explicit AdvPrintPhoto(int thumbnailSize, DInfoInterface* const iface);
-    AdvPrintPhoto(const AdvPrintPhoto&);
+    AdvPrintPhoto(const AdvPrintPhoto& other);
     ~AdvPrintPhoto();
 
     DImg&  thumbnail();

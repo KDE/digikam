@@ -252,7 +252,7 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
     d->cropPage->ui()->cropFrame->init(photo,
                                        d->photoPage->getLayout(photoIndex)->width(),
                                        d->photoPage->getLayout(photoIndex)->height(),
-                                       s->autoRotate,
+                                       s->m_autoRotate,
                                        true);
 
     d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
@@ -281,7 +281,7 @@ void AdvPrintWizard::previewPhotos()
     if (photoCount > 0)
     {
         // how many pages?  Recall that the first layout item is the paper size
-        photosPerPage = s->layouts.count() - 1;
+        photosPerPage = s->m_layouts.count() - 1;
         int remainder = photoCount % photosPerPage;
 
         if (remainder > 0)
@@ -313,12 +313,12 @@ void AdvPrintWizard::previewPhotos()
         {
             photo->m_cropRegion.setRect(-1, -1, -1, -1);
             photo->m_rotation = 0;
-            int w             = s->layouts.at(count + 1)->width();
-            int h             = s->layouts.at(count + 1)->height();
+            int w             = s->m_layouts.at(count + 1)->width();
+            int h             = s->m_layouts.at(count + 1)->height();
             d->cropPage->ui()->cropFrame->init(photo,
                                                w,
                                                h,
-                                               s->autoRotate,
+                                               s->m_autoRotate,
                                                false);
         }
 
@@ -389,7 +389,7 @@ bool AdvPrintWizard::prepareToPrint()
                 d->cropPage->ui()->cropFrame->init(photo,
                                                    d->photoPage->getLayout(i)->width(),
                                                    d->photoPage->getLayout(i)->height(),
-                                                   d->settings->outputLayouts->autoRotate,
+                                                   d->settings->outputLayouts->m_autoRotate,
                                                    true);
             }
 
