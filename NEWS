@@ -227,4 +227,5 @@ BUGFIXES FROM BUGZILLA:
 212 ==> 170758 - High load when tagging.
 213 ==> 111591 - Tag images browser doesn't show any images.
 214 ==> 168267 - digiKam mpeg encoding failure.
-215 ==> 
+215 ==> 115705 - ERROR: [yuvscaler] Could'nt read YUV4MPEG header.
+216 ==> 
