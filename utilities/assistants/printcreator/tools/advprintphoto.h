@@ -39,6 +39,7 @@
 
 #include "dinfointerface.h"
 #include "dimg.h"
+#include "advprintsettings.h"
 
 namespace Digikam
 {
@@ -80,16 +81,6 @@ public:
 
 class AdvPrintCaptionInfo
 {
-public:
-
-    enum AvailableCaptions
-    {
-        NoCaptions = 0,
-        FileNames,
-        ExifDateTime,
-        Comment,
-        Custom
-    };
 
 public:
 
@@ -100,11 +91,11 @@ public:
 
 public:
 
-    AvailableCaptions m_captionType;
-    QFont             m_captionFont;
-    QColor            m_captionColor;
-    int               m_captionSize;
-    QString           m_captionText;
+    AdvPrintSettings::CaptionType m_captionType;
+    QFont                         m_captionFont;
+    QColor                        m_captionColor;
+    int                           m_captionSize;
+    QString                       m_captionText;
 };
 
 // -----------------------------------------------------------

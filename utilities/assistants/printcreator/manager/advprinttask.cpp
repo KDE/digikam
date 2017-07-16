@@ -41,6 +41,7 @@
 // Local includes
 
 #include "advprintwizard.h"
+#include "advprintphoto.h"
 #include "advprintcaptionpage.h"
 #include "dmetadata.h"
 #include "dfileoperations.h"
@@ -416,7 +417,7 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
         p.setBrushOrigin(point);
 
         if (photo->m_pAdvPrintCaptionInfo &&
-            photo->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
+            photo->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintSettings::NONE)
         {
             p.save();
             QString caption = AdvPrintCaptionPage::captionFormatter(photo);

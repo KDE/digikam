@@ -68,7 +68,7 @@ AdvPrintAdditionalInfo::~AdvPrintAdditionalInfo()
 // -----------------------------
 
 AdvPrintCaptionInfo::AdvPrintCaptionInfo()
-    : m_captionType(NoCaptions),
+    : m_captionType(AdvPrintSettings::NONE),
       m_captionFont(QLatin1String("Sans Serif")),
       m_captionColor(Qt::yellow),
       m_captionSize(2),

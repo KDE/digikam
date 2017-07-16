@@ -40,6 +40,7 @@
 
 #include "digikam_debug.h"
 #include "advprintwizard.h"
+#include "advprintphoto.h"
 
 namespace Digikam
 {

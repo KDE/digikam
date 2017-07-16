@@ -369,7 +369,7 @@ void AdvPrintPhotoPage::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionType =
-                        (AdvPrintCaptionInfo::AvailableCaptions)attr.toString().toInt(&ok);
+                        (AdvPrintSettings::CaptionType)attr.toString().toInt(&ok);
                 }
 
                 attr = attrs.value(QLatin1String("font"));
