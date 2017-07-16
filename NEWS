@@ -229,4 +229,5 @@ BUGFIXES FROM BUGZILLA:
 214 ==> 168267 - digiKam mpeg encoding failure.
 215 ==> 115705 - ERROR: [yuvscaler] Could'nt read YUV4MPEG header.
 216 ==> 331989 - digiKam crashes when playing AVI-file.
-217 ==> 
+217 ==> 233693 - digiKam crash when clicking on .MOV file in album.
+218 ==> 
