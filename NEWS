@@ -241,4 +241,5 @@ BUGFIXES FROM BUGZILLA:
 226 ==> 320292 - Crash while entering person names.
 227 ==> 197562 - digiKam crash on deleting and moving a few pictures.
 228 ==> 323993 - Crash while naming multiple people at the same time in one picture.
-229 ==> 
+229 ==> 203146 - digiKam crashed wile moving files in the background.
+230 ==> 
