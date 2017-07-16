@@ -236,4 +236,5 @@ BUGFIXES FROM BUGZILLA:
 221 ==> 292634 - digiKam crash just after moving a people tag square.
 222 ==> 274957 - Crash on copy multiple files.
 223 ==> 323964 - digiKam crash while processing tags.
-224 ==> 
+224 ==> 333352 - Re-appoints tag people.
+225 ==> 
