@@ -237,4 +237,5 @@ BUGFIXES FROM BUGZILLA:
 222 ==> 274957 - Crash on copy multiple files.
 223 ==> 323964 - digiKam crash while processing tags.
 224 ==> 333352 - Re-appoints tag people.
-225 ==> 
+225 ==> 283537 - digiKam crashed.
+226 ==> 
