@@ -238,4 +238,5 @@ BUGFIXES FROM BUGZILLA:
 223 ==> 323964 - digiKam crash while processing tags.
 224 ==> 333352 - Re-appoints tag people.
 225 ==> 283537 - digiKam crashed.
-226 ==> 
+226 ==> 320292 - Crash while entering person names.
+227 ==> 
