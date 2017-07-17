@@ -149,6 +149,7 @@ void AdvPrintFinalPage::slotProcess()
     {
         d->progressView->addEntry(i18n("Printing process aborted..."),
                                   DHistoryView::ErrorEntry);
+        return;
     }
 
     d->printThread = new AdvPrintThread(this);
