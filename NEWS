@@ -242,4 +242,5 @@ BUGFIXES FROM BUGZILLA:
 227 ==> 197562 - digiKam crash on deleting and moving a few pictures.
 228 ==> 323993 - Crash while naming multiple people at the same time in one picture.
 229 ==> 203146 - digiKam crashed wile moving files in the background.
-230 ==> 
+230 ==> 107717 - Add trash to album treeview.
+231 ==> 
