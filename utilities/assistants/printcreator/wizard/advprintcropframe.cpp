@@ -91,7 +91,7 @@ AdvPrintCropFrame::~AdvPrintCropFrame()
     delete d;
 }
 
-// FIXME:  This method is doing way too much. The cropFrame initialization
+// FIXME: This method is doing way too much. The cropFrame initialization
 // should be a AdvPrintPhoto method, and should not require the scaling of
 // pixmaps to get the desired effect, which are too slow.
 
@@ -107,30 +107,33 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
     d->autoRotate        = autoRotate;
     d->image             = d->photo->loadPhoto().copyQImage();
 
-    // has the cropRegion been set yet?
+    // Has the cropRegion been set yet?
+
     bool resetCropRegion = (d->photo->m_cropRegion == QRect(-1, -1, -1, -1));
 
     if (resetCropRegion)
     {
-        // first, let's see if we should rotate
+        // First, let's see if we should rotate
+
         if (autoRotate)
         {
-            if (d->photo->m_rotation == 0 &&
+            if ((d->photo->m_rotation == 0) &&
                 ((wphoto > hphoto && d->photo->thumbnail().height() > d->photo->thumbnail().width()) ||
                  (hphoto > wphoto && d->photo->thumbnail().width()  > d->photo->thumbnail().height())))
             {
-                // rotate
+                // We wil perform a rotation
                 d->photo->m_rotation = 90;
             }
         }
     }
     else
     {
-        // does the crop region need updating (but the image shouldn't be rotated)?
+        // Does the crop region need updating (but the image shouldn't be rotated)?
         resetCropRegion = (d->photo->m_cropRegion == QRect(-2, -2, -2, -2));
     }
 
-    // rotate
+    // Rotate the image
+
     QMatrix matrix;
     matrix.rotate(d->photo->m_rotation);
     d->image  = d->image.transformed(matrix);
@@ -138,7 +141,7 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
     d->imageX = (width()  / 2) - (d->image.width()  / 2);
     d->imageY = (height() / 2) - (d->image.height() / 2);
 
-    // size the rectangle based on the minimum image dimension
+    // Size the rectangle based on the minimum image dimension
     int w      = d->image.width();
     int h      = d->image.height();
 
@@ -165,7 +168,9 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
 
     if (resetCropRegion)
     {
-        d->cropRegion.setRect((width() / 2) - (w / 2), (height() / 2) - (h / 2), w, h);
+        d->cropRegion.setRect((width()  / 2) - (w / 2),
+                              (height() / 2) - (h / 2),
+                              w, h);
         d->photo->m_cropRegion = screenToPhotoRect(d->cropRegion);
     }
     else
@@ -186,12 +191,11 @@ void AdvPrintCropFrame::resizeEvent(QResizeEvent*)
 
 QRect AdvPrintCropFrame::screenToPhotoRect(const QRect& r) const
 {
-    // r is given in screen coordinates, and we want to convert that
-    // to photo coordinates
+    // 'r' is given in screen coordinates, and we want to convert that to photo coordinates.
     double xRatio = 0.0;
     double yRatio = 0.0;
 
-    // flip the photo dimensions if rotated
+    // Flip the photo dimensions if rotated
     int photoW;
     int photoH;
 
@@ -230,12 +234,11 @@ QRect AdvPrintCropFrame::screenToPhotoRect(const QRect& r) const
 
 QRect AdvPrintCropFrame::photoToScreenRect(const QRect& r) const
 {
-    // r is given in photo coordinates, and we want to convert that
-    // to screen coordinates
+    // 'r' is given in photo coordinates, and we want to convert that to screen coordinates
     double xRatio = 0.0;
     double yRatio = 0.0;
 
-    // flip the photo dimensions if rotated
+    // Flip the photo dimensions if rotated
     int photoW;
     int photoH;
 
@@ -279,16 +282,16 @@ void AdvPrintCropFrame::paintEvent(QPaintEvent*)
 
     p.eraseRect(0, 0, this->width(), this->height());
 
-    // draw the background image
+    // Draw the background image
     p.drawImage(d->imageX, d->imageY, d->image);
 
     if (d->drawRec)
     {
-        // draw the rectangle
+        // Draw the rectangle
         p.setPen(QPen(d->color, 2));
         p.drawRect(d->cropRegion);
 
-        // draw the crosshairs
+        // Draw the crosshairs
         int midX = d->cropRegion.left() + d->cropRegion.width()  / 2;
         int midY = d->cropRegion.top()  + d->cropRegion.height() / 2;
         p.drawLine(midX - 10, midY,      midX + 10, midY);
@@ -319,7 +322,7 @@ void AdvPrintCropFrame::mouseMoveEvent(QMouseEvent* e)
 {
     if (d->mouseDown)
     {
-        // don't let the rectangle float off the image.
+        // Don't let the rectangle float off the image.
         int newW = d->cropRegion.width();
         int newH = d->cropRegion.height();
 
@@ -358,7 +361,7 @@ void AdvPrintCropFrame::keyPressEvent(QKeyEvent* e)
             break;
     }
 
-    // keep inside the image
+    // Keep inside the image
 
     int w = d->cropRegion.width();
     int h = d->cropRegion.height();

@@ -46,8 +46,8 @@ public:
     ~AdvPrintCropFrame();
 
     void   init(AdvPrintPhoto* const photo,
-                int width,
-                int height,
+                int  width,
+                int  height,
                 bool autoRotate,
                 bool paint);
 
@@ -66,8 +66,8 @@ protected:
 
 private:
 
-    QRect screenToPhotoRect(const QRect& r) const;
-    QRect photoToScreenRect(const QRect& r) const;
+    QRect screenToPhotoRect(const QRect&) const;
+    QRect photoToScreenRect(const QRect&) const;
     void  resizeEvent(QResizeEvent*);
 
 private:
