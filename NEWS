@@ -248,5 +248,6 @@ BUGFIXES FROM BUGZILLA:
 233 ==> 166712 - Choosing the part which is cut off for printing only works for the first photo.
 234 ==> 133193 - Metadata over the photo to print.
 235 ==> 145569 - There's non print option on the menu.
-236 ==> 
+236 ==> 111454 - Print photo's date into one corner like print assistant.
+237 ==> 
 
