@@ -57,10 +57,7 @@ public:
         imageX(0),
         imageY(0),
         color(Qt::red),
-        drawRec(true),
-        woutlay(0),
-        houtlay(0),
-        autoRotate(false)
+        drawRec(true)
     {
     }
 
@@ -75,10 +72,7 @@ public:
     QRect          cropRegion;
     bool           drawRec;
 
-    // To repaint while resizeEvent().
-    int            woutlay;
-    int            houtlay;
-    bool           autoRotate;
+    QMatrix        matrix;
 };
 
 AdvPrintCropFrame::AdvPrintCropFrame(QWidget* const parent)
@@ -92,103 +86,20 @@ AdvPrintCropFrame::~AdvPrintCropFrame()
     delete d;
 }
 
-// FIXME: This method is doing way too much. The cropFrame initialization
-// should be a AdvPrintPhoto method, and should not require the scaling of
-// pixmaps to get the desired effect, which are too slow.
-
 void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
                              int  woutlay,
                              int  houtlay,
                              bool autoRotate,
                              bool paint)
 {
-    d->photo             = photo;
-    d->woutlay           = woutlay;
-    d->houtlay           = houtlay;
-    d->autoRotate        = autoRotate;
-    d->image             = d->photo->loadPhoto().copyQImage();
-    QSize thumbSize      = d->photo->thumbnail().size();
-
-    // Has the cropRegion been set yet?
-
-    bool resetCropRegion = (d->photo->m_cropRegion == QRect(-1, -1, -1, -1));
-
-    if (resetCropRegion)
-    {
-        // First, let's see if we should rotate
-
-        if (autoRotate)
-        {
-            if ((d->photo->m_rotation == 0) &&
-                ((woutlay > houtlay && thumbSize.height() > thumbSize.width()) ||
-                 (houtlay > woutlay && thumbSize.width()  > thumbSize.height())))
-            {
-                // We will perform a rotation
-                d->photo->m_rotation = 90;
-            }
-        }
-    }
-    else
-    {
-        // Does the crop region need updating (but the image shouldn't be rotated)?
-        resetCropRegion = (d->photo->m_cropRegion == QRect(-2, -2, -2, -2));
-    }
-
-    // Rotate the image
-
-    QMatrix matrix;
-    matrix.rotate(d->photo->m_rotation);
-    d->image  = d->image.transformed(matrix);
-    d->image  = d->image.scaled(width(), height(), Qt::KeepAspectRatio);
-    d->imageX = (width()  / 2) - (d->image.width()  / 2);
-    d->imageY = (height() / 2) - (d->image.height() / 2);
-
-    // Size the rectangle based on the minimum image dimension
-    int w      = d->image.width();
-    int h      = d->image.height();
-
-    if (w < h)
-    {
-        h = AdvPrintWizard::normalizedInt((double)w * ((double)houtlay / (double)woutlay));
-
-        if (h > d->image.height())
-        {
-            h = d->image.height();
-            w = AdvPrintWizard::normalizedInt((double)h * ((double)woutlay / (double)houtlay));
-        }
-    }
-    else
-    {
-        w = AdvPrintWizard::normalizedInt((double)h * ((double)woutlay / (double)houtlay));
-
-        if (w > d->image.width())
-        {
-            w = d->image.width();
-            h = AdvPrintWizard::normalizedInt((double)w * ((double)houtlay / (double)woutlay));
-        }
-    }
-
-    if (resetCropRegion)
-    {
-        d->cropRegion.setRect((width()  / 2) - (w / 2),
-                              (height() / 2) - (h / 2),
-                              w, h);
-        d->photo->m_cropRegion = screenToPhotoRect(d->cropRegion);
-    }
-    else
-    {
-        d->cropRegion = photoToScreenRect(d->photo->m_cropRegion);
-    }
+    d->photo  = photo;
+    d->matrix = d->photo->updateCropRegion(woutlay, houtlay, autoRotate);
 
     if (paint)
     {
+        updateImage();
         update();
     }
-}
-
-void AdvPrintCropFrame::resizeEvent(QResizeEvent*)
-{
-    init(d->photo, d->woutlay, d->houtlay, d->autoRotate, true);
 }
 
 QRect AdvPrintCropFrame::screenToPhotoRect(const QRect& r) const
@@ -276,8 +187,26 @@ QRect AdvPrintCropFrame::photoToScreenRect(const QRect& r) const
     return result;
 }
 
+void AdvPrintCropFrame::updateImage()
+{
+    d->image      = d->photo->loadPhoto().copyQImage();
+    d->image      = d->image.transformed(d->matrix);
+    d->image      = d->image.scaled(width(), height(), Qt::KeepAspectRatio);
+    d->imageX     = (width()  / 2) - (d->image.width()  / 2);
+    d->imageY     = (height() / 2) - (d->image.height() / 2);
+    d->cropRegion = photoToScreenRect(d->photo->m_cropRegion);
+}
+
+void AdvPrintCropFrame::resizeEvent(QResizeEvent*)
+{
+    updateImage();
+    update();
+}
+
 void AdvPrintCropFrame::paintEvent(QPaintEvent*)
 {
+    updateImage();
+
     QPixmap bmp(this->width(), this->height());
     QPainter p;
     p.begin(&bmp);

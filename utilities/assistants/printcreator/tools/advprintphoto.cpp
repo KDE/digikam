@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QMatrix>
 #include <QFileInfo>
 #include <QPolygon>
 
@@ -233,17 +232,10 @@ double AdvPrintPhoto::scaleHeight(double unitToInches)
     return m_pAddInfo->m_printHeight * unitToInches;
 }
 
-QRect AdvPrintPhoto::updateCropRegion(int woutlay, int houtlay, bool autoRotate)
+QMatrix AdvPrintPhoto::updateCropRegion(int woutlay, int houtlay, bool autoRotate)
 {
-    QSize thmSize = thumbnail().size();
-    QRect imgRect = QRect(0, 0, size().width(), size().height());
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::autoRotate (before):" << autoRotate;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::m_rotation (before):" << m_rotation;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::outLaySize (before):" << QSize(woutlay, houtlay);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::imageRect  (before):" << imgRect;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::cropRegion (before):" << m_cropRegion;
-
+    QSize thmSize        = thumbnail().size();
+    QRect imgRect        = QRect(0, 0, size().width(), size().height());
     bool resetCropRegion = (m_cropRegion == QRect(-1, -1, -1, -1));
 
     if (resetCropRegion)
@@ -300,19 +292,14 @@ QRect AdvPrintPhoto::updateCropRegion(int woutlay, int houtlay, bool autoRotate)
         }
     }
 
-    QRect cropRegion;
-
     if (resetCropRegion)
     {
-        cropRegion = QRect((imgRect.width()  / 2) - (w / 2),
-                           (imgRect.height() / 2) - (h / 2),
-                           w, h);
+        m_cropRegion = QRect((imgRect.width()  / 2) - (w / 2),
+                             (imgRect.height() / 2) - (h / 2),
+                             w, h);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::m_rotation (after):" << m_rotation;    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::imageRect  (after):" << imgRect;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::cropRegion (after):" << cropRegion;
-
-    return cropRegion;
+    return matrix;
 }
 
 } // Namespace Digikam

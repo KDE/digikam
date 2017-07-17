@@ -35,6 +35,7 @@
 #include <QIcon>
 #include <QList>
 #include <QSize>
+#include <QMatrix>
 
 // Local includes
 
@@ -122,7 +123,7 @@ public:
     int    height();
     QSize& size();
 
-    QRect updateCropRegion(int woutlay, int houtlay, bool autoRotate);
+    QMatrix updateCropRegion(int woutlay, int houtlay, bool autoRotate);
 
     double scaleWidth(double unitToInches);
     double scaleHeight(double unitToInches);

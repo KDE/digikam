@@ -69,6 +69,7 @@ private:
     QRect screenToPhotoRect(const QRect&) const;
     QRect photoToScreenRect(const QRect&) const;
     void  resizeEvent(QResizeEvent*);
+    void  updateImage();
 
 private:
 
