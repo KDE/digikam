@@ -244,4 +244,6 @@ BUGFIXES FROM BUGZILLA:
 229 ==> 203146 - digiKam crashed wile moving files in the background.
 230 ==> 107717 - Add trash to album treeview.
 231 ==> 093246 - PrintWizard tool is missing.
-232 ==> 
+232 ==> 176367 - Crop stage does not allow rotation or selection.
+233 ==> 166712 - Choosing the part which is cut off for printing only works for the first photo.
+234 ==> 
