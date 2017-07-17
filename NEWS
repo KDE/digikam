@@ -249,5 +249,6 @@ BUGFIXES FROM BUGZILLA:
 234 ==> 133193 - Metadata over the photo to print.
 235 ==> 145569 - There's non print option on the menu.
 236 ==> 111454 - Print photo's date into one corner like print assistant.
-237 ==> 
+237 ==> 141535 - Suggestion for photo layout algorithm.
+238 ==> 
 
