@@ -26,13 +26,15 @@
 
 // Qt includes
 
-#include <QPainter>
+#include <QMatrix>
 #include <QFileInfo>
+#include <QPolygon>
 
 // Local includes
 
 #include "digikam_debug.h"
 #include "previewloadthread.h"
+#include "advprintwizard.h"
 
 namespace Digikam
 {
@@ -229,6 +231,88 @@ double AdvPrintPhoto::scaleHeight(double unitToInches)
                          (int)(m_pAddInfo->m_printHeight * unitToInches));
 
     return m_pAddInfo->m_printHeight * unitToInches;
+}
+
+QRect AdvPrintPhoto::updateCropRegion(int woutlay, int houtlay, bool autoRotate)
+{
+    QSize thmSize = thumbnail().size();
+    QRect imgRect = QRect(0, 0, size().width(), size().height());
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::autoRotate (before):" << autoRotate;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::m_rotation (before):" << m_rotation;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::outLaySize (before):" << QSize(woutlay, houtlay);
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::imageRect  (before):" << imgRect;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::cropRegion (before):" << m_cropRegion;
+
+    bool resetCropRegion = (m_cropRegion == QRect(-1, -1, -1, -1));
+
+    if (resetCropRegion)
+    {
+        // First, let's see if we should rotate
+
+        if (autoRotate)
+        {
+            if ((m_rotation == 0) &&
+                ((woutlay > houtlay && thmSize.height() > thmSize.width()) ||
+                 (houtlay > woutlay && thmSize.width()  > thmSize.height())))
+            {
+                // We will perform a rotation
+                m_rotation = 90;
+            }
+        }
+    }
+    else
+    {
+        // Does the crop region need updating (but the image shouldn't be rotated)?
+        resetCropRegion = (m_cropRegion == QRect(-2, -2, -2, -2));
+    }
+
+    // Rotate the image rectangle.
+
+    QMatrix matrix;
+    matrix.rotate(m_rotation);
+    imgRect = matrix.mapToPolygon(imgRect).boundingRect();
+    imgRect.translate((-1)*imgRect.x(), (-1)*imgRect.y());
+
+    // Size the rectangle based on the minimum image dimension.
+
+    int w   = imgRect.width();
+    int h   = imgRect.height();
+
+    if (w < h)
+    {
+        h = AdvPrintWizard::normalizedInt((double)w * ((double)houtlay / (double)woutlay));
+
+        if (h > imgRect.height())
+        {
+            h = imgRect.height();
+            w = AdvPrintWizard::normalizedInt((double)h * ((double)woutlay / (double)houtlay));
+        }
+    }
+    else
+    {
+        w = AdvPrintWizard::normalizedInt((double)h * ((double)woutlay / (double)houtlay));
+
+        if (w > imgRect.width())
+        {
+            w = imgRect.width();
+            h = AdvPrintWizard::normalizedInt((double)w * ((double)houtlay / (double)woutlay));
+        }
+    }
+
+    QRect cropRegion;
+
+    if (resetCropRegion)
+    {
+        cropRegion = QRect((imgRect.width()  / 2) - (w / 2),
+                           (imgRect.height() / 2) - (h / 2),
+                           w, h);
+    }
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::m_rotation (after):" << m_rotation;    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::imageRect  (after):" << imgRect;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AdvPrintPhoto::cropRegion (after):" << cropRegion;
+
+    return cropRegion;
 }
 
 } // Namespace Digikam

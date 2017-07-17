@@ -34,6 +34,7 @@
 #include <QPointer>
 #include <QIcon>
 #include <QList>
+#include <QSize>
 
 // Local includes
 
@@ -120,6 +121,8 @@ public:
     int    width();
     int    height();
     QSize& size();
+
+    QRect updateCropRegion(int woutlay, int houtlay, bool autoRotate);
 
     double scaleWidth(double unitToInches);
     double scaleHeight(double unitToInches);
