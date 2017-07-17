@@ -155,7 +155,7 @@
       <li xml:lang="tr">Exif, Iptc, Xmp, Makernotes desteği</li>
       <li xml:lang="uk">підтримка Exif, Iptc, Xmp, Makernotes;</li>
       <li xml:lang="x-test">xxSupport for Exif, Iptc, Xmp, Makernotesxx</li>
-      <li>SQLite powered storage for the albums and its metadata</li>
+      <li>SQLite or Mysql powered storage for the album contents and its metadata with advanced search tools</li>
       <li xml:lang="ar">مخزن تدعم «SQLite» للألبومات وبياناتها الوصفيّة</li>
       <li xml:lang="bs">SQLite skladište za albume i njegove metapodatke</li>
       <li xml:lang="ca">Emmagatzematge amb SQLite pels àlbums i les seves metadades</li>
@@ -230,7 +230,7 @@
       <li xml:lang="tr">1100den fazla kamera cihazından içe aktarma</li>
       <li xml:lang="uk">можливість імпортування даних з понад 1100 цифрових фотоапаратів;</li>
       <li xml:lang="x-test">xxImport from more than 1100 digital camera devicesxx</li>
-      <li>Support for 300 RAW format pictures</li>
+      <li>Support for more than 900 RAW format pictures</li>
       <li xml:lang="ar">دعم يصل حتّى 300 نسق للصّور الخامّ</li>
       <li xml:lang="bs">Podrška za fotografije 300 RAW formata</li>
       <li xml:lang="ca">Implementació per a 300 formats d'imatges RAW</li>
@@ -255,7 +255,7 @@
       <li xml:lang="tr">300 RAW resim formatı desteği</li>
       <li xml:lang="uk">підтримка понад 300 форматів цифрових негативів (RAW);</li>
       <li xml:lang="x-test">xxSupport for 300 RAW format picturesxx</li>
-      <li>Light Table feature</li>
+      <li>Light Table to compare photo side by side</li>
       <li xml:lang="ar">ميزة الطّاولة الضّوئيّة</li>
       <li xml:lang="bs">Light Table svojstvo</li>
       <li xml:lang="ca">La característica taula de llum</li>
@@ -280,7 +280,7 @@
       <li xml:lang="tr">İnce Tablo desteği</li>
       <li xml:lang="uk">інструмент стола з підсвічуванням;</li>
       <li xml:lang="x-test">xxLight Table featurexx</li>
-      <li>Plugins architectures: using Kipi-plugins</li>
+      <li>Extended features using extra tools</li>
       <li xml:lang="bs">Arhitekture plugin-a: koristeći Kipi-plugin-e</li>
       <li xml:lang="ca">Arquitectura de connectors: usant els connectors Kipi</li>
       <li xml:lang="ca-valencia">Arquitectura de connectors: usant els connectors Kipi</li>
@@ -304,7 +304,7 @@
       <li xml:lang="tr">Eklenti altyapısı: Kipi eklentileri kullanarak</li>
       <li xml:lang="uk">архітектура на основі додатків, використовуються додатки KIPI;</li>
       <li xml:lang="x-test">xxPlugins architectures: using Kipi-pluginsxx</li>
-      <li>Share your photos using HTML or publishing them to social web sites</li>
+      <li>Share your photos using HTML or publishing them to remote web services</li>
       <li xml:lang="ar">مشاركة الصّور عبر HTML أو نشرها إلى مواقع الوبّ الاجتماعيّة</li>
       <li xml:lang="bs">Podijelite vaše fotografije koristeći HTML ili objavljujući ih na socijalne web stranice</li>
       <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les a llocs web socials</li>
@@ -329,7 +329,7 @@
       <li xml:lang="tr">Resimlerinizi HTML ile paylaşın ya da sosyal web sitelerinde yayımlayın</li>
       <li xml:lang="uk">можливість оприлюднення фотографій за допомогою коду HTML або сайтів соціальних мереж;</li>
       <li xml:lang="x-test">xxShare your photos using HTML or publishing them to social web sitesxx</li>
-      <li>Image editor included with advanced features</li>
+      <li>Image editor included with advanced tools to fix photo quickly</li>
       <li xml:lang="ar">وجود محرّر صور مضمّن بمزايا متقدّمة</li>
       <li xml:lang="bs">Uvršten uređivač slika sa naprednim svojstvima</li>
       <li xml:lang="ca">Inclou un editor d'imatges amb característiques avançades</li>
