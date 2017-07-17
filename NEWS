@@ -247,4 +247,6 @@ BUGFIXES FROM BUGZILLA:
 232 ==> 176367 - Crop stage does not allow rotation or selection.
 233 ==> 166712 - Choosing the part which is cut off for printing only works for the first photo.
 234 ==> 133193 - Metadata over the photo to print.
-235 ==> 
+235 ==> 145569 - There's non print option on the menu.
+236 ==> 
+
