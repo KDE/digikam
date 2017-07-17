@@ -394,6 +394,8 @@ bool AdvPrintWizard::prepareToPrint()
             i++;
         }
 
+        // Real printer to use.
+
         if (d->settings->printerName != d->settings->outputName(AdvPrintSettings::FILES) &&
             d->settings->printerName != d->settings->outputName(AdvPrintSettings::GIMP))
         {

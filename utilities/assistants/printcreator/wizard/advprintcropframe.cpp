@@ -57,8 +57,8 @@ public:
         imageY(0),
         color(Qt::red),
         drawRec(true),
-        wphoto(0),
-        hphoto(0),
+        woutlay(0),
+        houtlay(0),
         autoRotate(false)
     {
     }
@@ -75,8 +75,8 @@ public:
     bool           drawRec;
 
     // To repaint while resizeEvent().
-    int            wphoto;
-    int            hphoto;
+    int            woutlay;
+    int            houtlay;
     bool           autoRotate;
 };
 
@@ -96,14 +96,14 @@ AdvPrintCropFrame::~AdvPrintCropFrame()
 // pixmaps to get the desired effect, which are too slow.
 
 void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
-                             int  wphoto,
-                             int  hphoto,
+                             int  woutlay,
+                             int  houtlay,
                              bool autoRotate,
                              bool paint)
 {
     d->photo             = photo;
-    d->wphoto            = wphoto;
-    d->hphoto            = hphoto;
+    d->woutlay           = woutlay;
+    d->houtlay           = houtlay;
     d->autoRotate        = autoRotate;
     d->image             = d->photo->loadPhoto().copyQImage();
 
@@ -118,8 +118,8 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
         if (autoRotate)
         {
             if ((d->photo->m_rotation == 0) &&
-                ((wphoto > hphoto && d->photo->thumbnail().height() > d->photo->thumbnail().width()) ||
-                 (hphoto > wphoto && d->photo->thumbnail().width()  > d->photo->thumbnail().height())))
+                ((woutlay > houtlay && d->photo->thumbnail().height() > d->photo->thumbnail().width()) ||
+                 (houtlay > woutlay && d->photo->thumbnail().width()  > d->photo->thumbnail().height())))
             {
                 // We wil perform a rotation
                 d->photo->m_rotation = 90;
@@ -147,22 +147,22 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
 
     if (w < h)
     {
-        h = AdvPrintWizard::normalizedInt((double)w * ((double)hphoto / (double)wphoto));
+        h = AdvPrintWizard::normalizedInt((double)w * ((double)houtlay / (double)woutlay));
 
         if (h > d->image.height())
         {
             h = d->image.height();
-            w = AdvPrintWizard::normalizedInt((double)h * ((double)wphoto / (double)hphoto));
+            w = AdvPrintWizard::normalizedInt((double)h * ((double)woutlay / (double)houtlay));
         }
     }
     else
     {
-        w = AdvPrintWizard::normalizedInt((double)h * ((double)wphoto / (double)hphoto));
+        w = AdvPrintWizard::normalizedInt((double)h * ((double)woutlay / (double)houtlay));
 
         if (w > d->image.width())
         {
             w = d->image.width();
-            h = AdvPrintWizard::normalizedInt((double)w * ((double)hphoto / (double)wphoto));
+            h = AdvPrintWizard::normalizedInt((double)w * ((double)houtlay / (double)woutlay));
         }
     }
 
@@ -186,7 +186,7 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
 
 void AdvPrintCropFrame::resizeEvent(QResizeEvent*)
 {
-    init(d->photo, d->wphoto, d->hphoto, d->autoRotate, true);
+    init(d->photo, d->woutlay, d->houtlay, d->autoRotate, true);
 }
 
 QRect AdvPrintCropFrame::screenToPhotoRect(const QRect& r) const

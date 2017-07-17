@@ -46,8 +46,8 @@ public:
     ~AdvPrintCropFrame();
 
     void   init(AdvPrintPhoto* const photo,
-                int  width,
-                int  height,
+                int  woutlay,
+                int  houtlay,
                 bool autoRotate,
                 bool paint);
 
