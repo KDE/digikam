@@ -39,6 +39,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "advprintphoto.h"
 #include "advprintwizard.h"
 
@@ -106,6 +107,7 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
     d->houtlay           = houtlay;
     d->autoRotate        = autoRotate;
     d->image             = d->photo->loadPhoto().copyQImage();
+    QSize thumbSize      = d->photo->thumbnail().size();
 
     // Has the cropRegion been set yet?
 
@@ -118,10 +120,10 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
         if (autoRotate)
         {
             if ((d->photo->m_rotation == 0) &&
-                ((woutlay > houtlay && d->photo->thumbnail().height() > d->photo->thumbnail().width()) ||
-                 (houtlay > woutlay && d->photo->thumbnail().width()  > d->photo->thumbnail().height())))
+                ((woutlay > houtlay && thumbSize.height() > thumbSize.width()) ||
+                 (houtlay > woutlay && thumbSize.width()  > thumbSize.height())))
             {
-                // We wil perform a rotation
+                // We will perform a rotation
                 d->photo->m_rotation = 90;
             }
         }
@@ -340,7 +342,7 @@ void AdvPrintCropFrame::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-void AdvPrintCropFrame::keyPressEvent(QKeyEvent* e)
+void AdvPrintCropFrame::keyReleaseEvent(QKeyEvent* e)
 {
     int newX = d->cropRegion.x();
     int newY = d->cropRegion.y();

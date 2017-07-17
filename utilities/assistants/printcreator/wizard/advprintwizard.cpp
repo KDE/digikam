@@ -47,6 +47,7 @@
 #include <QTemporaryDir>
 #include <QProcess>
 #include <QDesktopServices>
+#include <QKeyEvent>
 
 // KDE includes
 
@@ -137,6 +138,8 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 
     connect(d->previewThread, SIGNAL(signalPreview(QImage)),
             this, SLOT(slotPreview(QImage)));
+
+    installEventFilter(this);
 }
 
 AdvPrintWizard::~AdvPrintWizard()
@@ -520,6 +523,30 @@ bool AdvPrintWizard::AdvPrintCheckTempPath(QWidget* const parent, const QString&
 int AdvPrintWizard::normalizedInt(double n)
 {
     return (int)(n + 0.5);
+}
+
+bool AdvPrintWizard::eventFilter(QObject* o, QEvent* e)
+{
+    if (e && e->type() == QEvent::KeyRelease)
+    {
+        QKeyEvent* const k = (QKeyEvent*)e;
+
+        if ((k->key() == Qt::Key_PageUp)   ||
+            (k->key() == Qt::Key_PageDown) ||
+            (k->key() == Qt::Key_Up)       ||
+            (k->key() == Qt::Key_Down))
+        {
+            if (currentPage() == d->cropPage)
+            {
+                // Pass the key event to move crop frame region.
+                d->cropPage->ui()->cropFrame->setFocus();
+                QApplication::sendEvent(d->cropPage->ui()->cropFrame, e);
+                return true; // eat event
+            }
+        }
+    }
+
+    return QWizard::eventFilter(o, e);
 }
 
 } // namespace Digikam
