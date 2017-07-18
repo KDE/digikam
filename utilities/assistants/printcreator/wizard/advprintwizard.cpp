@@ -288,12 +288,16 @@ void AdvPrintWizard::previewPhotos()
         int remainder = photoCount % photosPerPage;
 
         if (remainder > 0)
+        {
             emptySlots = photosPerPage - remainder;
+        }
 
         pageCount     = photoCount / photosPerPage;
 
         if (emptySlots > 0)
+        {
             pageCount++;
+        }
     }
 
     d->photoPage->ui()->LblPhotoCount->setText(QString::number(photoCount));
