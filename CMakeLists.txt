@@ -57,7 +57,7 @@ set(QT_MIN_VERSION       "5.6.0")
 set(KIPI_MIN_VERSION     "5.0.0")
 set(KSANE_MIN_VERSION    "5.0.0")
 set(LENSFUN_MIN_VERSION  "0.2.6.0")
-set(EXIV2_MIN_VERSION    "0.26")
+set(EXIV2_MIN_VERSION    "0.25")
 set(AKONADI_MIN_VERSION  "4.89.0")        # Akonadi Contact dependency
 set(CALENDAR_MIN_VERSION "4.81.0")        # Calendar Core dependency
 
@@ -113,7 +113,7 @@ option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server ex
 option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                        OFF)
 
 ############## Find Packages ###################
-
+set(Qt5WebKitWidgets_DIR "/home/yjwudi/anaconda2/lib/cmake/Qt5WebKitWidgets")
 find_package(Qt5 ${QT_MIN_VERSION}
              REQUIRED NO_MODULE COMPONENTS
              Core
@@ -220,22 +220,14 @@ set_package_properties("Exiv2"     PROPERTIES
 
 # -- check Media player --------------------------------------------------------------------------
 
-set(QTAV_MIN_VERSION "1.12.0")
 find_package(QtAV)
 
 if(ENABLE_MEDIAPLAYER)
 
-    if(NOT ${QTAV_FOUND} OR ${QTAV_VERSION_STRING} VERSION_LESS ${QTAV_MIN_VERSION})
-
+    if(NOT ${QTAV_FOUND})
         set(ENABLE_MEDIAPLAYER OFF)
-        set(QTAV_FOUND OFF)
-        message(STATUS "ENABLE_MEDIAPLAYER option is enabled but QtAV cannot be found. Media player support is disabled.")
-
     else()
-
         include_directories(${QTAV_INCLUDE_DIRS})
-        message(STATUS "Media player support is enabled.")
-
     endif()
 
 endif()
@@ -473,7 +465,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"         "http://eigen.tuxfamily.org"  
 PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"        "http://www.gphoto.org"                                           "(version >= 2.4.0)"                   "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"           "http://www.doxygen.org"                                          "(version >= 1.8.0)"                   "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("OpenGL"            "http://www.mesa3d.org"                                           "(version >= 11.0.0)"                  "digiKam will be compiled without OpenGL support."                            HAVE_OPENGL)
-PRINT_OPTIONAL_LIBRARY_STATUS("libqtav"           "http://www.qtav.org/"                                            "(version >= ${QTAV_MIN_VERSION})"     "digiKam will be compiled without Media Player support."                      QTAV_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libqtav"           "http://www.qtav.org/"                                            "(version >= 1.11.0)"                  "digiKam will be compiled without Media Player support."                      QTAV_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libxml2"           "http://xmlsoft.org"                                              "(version >= 2.7.0)"                    "digiKam will be compiled without HTMLGallery support."                      LIBXML2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libxslt"           "http://xmlsoft.org/XSLT"                                         "(version >= 1.1.0)"                    "digiKam will be compiled without HTMLGallery support."                      LIBXSLT_FOUND)
 
@@ -542,11 +534,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # Remove Wsuggest-override GCC flag which generate a lots of compile warnings
     while(CMAKE_CXX_FLAGS MATCHES "-Wsuggest-override")
         string(REPLACE "-Wsuggest-override" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
-
-    # Remove Wdate-time GCC flag which generate a lots of compile warnings
-    while(CMAKE_CXX_FLAGS MATCHES "-Wdate-time")
-        string(REPLACE "-Wdate-time" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     endwhile()
 
     # translations catalog

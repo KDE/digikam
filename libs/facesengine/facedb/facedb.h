@@ -39,7 +39,7 @@
 #include "identity.h"
 #include "facedbbackend.h"
 #include "opencvmatdata.h"
-#include "dnn_face.h"
+//#include "dnn_face.h"
 
 
 namespace Digikam
