@@ -316,11 +316,9 @@ void AdvPrintWizard::previewPhotos()
         {
             photo->m_cropRegion.setRect(-1, -1, -1, -1);
             photo->m_rotation = 0;
-            d->cropPage->ui()->cropFrame->init(photo,
-                                               s->m_layouts.at(count + 1)->width(),
-                                               s->m_layouts.at(count + 1)->height(),
-                                               s->m_autoRotate,
-                                               false);
+            photo->updateCropRegion(s->m_layouts.at(count + 1)->width(),
+                                    s->m_layouts.at(count + 1)->height(),
+                                    s->m_autoRotate);
         }
 
         count++;
