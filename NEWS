@@ -250,5 +250,7 @@ BUGFIXES FROM BUGZILLA:
 235 ==> 145569 - There's non print option on the menu.
 236 ==> 111454 - Print photo's date into one corner like print assistant.
 237 ==> 141535 - Suggestion for photo layout algorithm.
-238 ==> 
+238 ==> 121538 - Access denied. Could not write to digikamalbums.
+239 ==> 
+
 
