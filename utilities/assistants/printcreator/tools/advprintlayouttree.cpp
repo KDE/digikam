@@ -34,10 +34,6 @@
 namespace Digikam
 {
 
-/*
-    Some comments refer to the paper mentioned in the header file
-*/
-
 AdvPrintLayoutNode::AdvPrintLayoutNode(double aspectRatio,
                                        double relativeArea,
                                        int    index)
@@ -89,17 +85,19 @@ AdvPrintLayoutNode &AdvPrintLayoutNode::operator=(const AdvPrintLayoutNode& othe
     return *this;
 }
 
-// replace one child with a new one
 void AdvPrintLayoutNode::takeAndSetChild(AdvPrintLayoutNode* const oldChild,
                                          AdvPrintLayoutNode* const newChild)
 {
     if (m_leftChild == oldChild)
+    {
         m_leftChild = newChild;
+    }
     else if (m_rightChild == oldChild)
+    {
         m_rightChild = newChild;
+    }
 }
 
-// retrieve the node which has the given index in the hierarchy of this node
 AdvPrintLayoutNode* AdvPrintLayoutNode::nodeForIndex(int index)
 {
     if (m_index == index)
@@ -116,7 +114,6 @@ AdvPrintLayoutNode* AdvPrintLayoutNode::nodeForIndex(int index)
     return m_rightChild->nodeForIndex(index);
 }
 
-// retrieve the parent node of the given child in the hierarchy of this node
 AdvPrintLayoutNode* AdvPrintLayoutNode::parentOf(AdvPrintLayoutNode* const child)
 {
     if (m_type == TerminalNode)
@@ -133,8 +130,6 @@ AdvPrintLayoutNode* AdvPrintLayoutNode::parentOf(AdvPrintLayoutNode* const child
     return m_rightChild->parentOf(child);
 }
 
-// compute the "aspect ratio" (a) and "relative size" (e) parameters
-// Section 2.2.1, (1)-(4)
 void AdvPrintLayoutNode::computeRelativeSizes()
 {
     if (m_type == TerminalNode)
@@ -151,7 +146,7 @@ void AdvPrintLayoutNode::computeRelativeSizes()
     double rightDivisionRoot = std::sqrt(m_rightChild->m_e / m_rightChild->m_a);
     double maxDivisionRoot   = leftDivisionRoot > rightDivisionRoot ? leftDivisionRoot : rightDivisionRoot;
 
-    if (m_type == VerticalDivision) // side by side
+    if (m_type == VerticalDivision)        // side by side
     {
         m_a = maxProductRoot / (leftDivisionRoot + rightDivisionRoot);
         m_e = maxProductRoot * (leftDivisionRoot + rightDivisionRoot);
@@ -163,7 +158,6 @@ void AdvPrintLayoutNode::computeRelativeSizes()
     }
 }
 
-// Section 2.2.2
 void AdvPrintLayoutNode::computeDivisions()
 {
     if (m_type == TerminalNode)
@@ -172,7 +166,7 @@ void AdvPrintLayoutNode::computeDivisions()
     m_leftChild->computeDivisions();
     m_rightChild->computeDivisions();
 
-    if (m_type == VerticalDivision) // side by side
+    if (m_type == VerticalDivision)        // side by side
     {
         double leftDivisionRoot  = std::sqrt(m_leftChild->m_e / m_leftChild->m_a);
         double rightDivisionRoot = std::sqrt(m_rightChild->m_e / m_rightChild->m_a);
@@ -292,9 +286,15 @@ int AdvPrintLayoutTree::addImage(double aspectRatio, double relativeArea)
 
             // replace in tree
             if (parentNode)
+            {
+                // replace in tree
                 parentNode->takeAndSetChild(candidateSubtree, newInternalNode);
-            else // candidateTree is candidateSubtree is root
+            }
+            else
+            {
+                // candidateTree is candidateSubtree is root
                 candidateTree = newInternalNode;
+            }
 
             // recompute sizes
             candidateTree->computeRelativeSizes();
@@ -305,7 +305,7 @@ int AdvPrintLayoutTree::addImage(double aspectRatio, double relativeArea)
             {
                 highScore = candidateScore;
                 delete bestTree;
-                bestTree = candidateTree;
+                bestTree  = candidateTree;
             }
             else
             {
@@ -432,8 +432,6 @@ QRectF AdvPrintLayoutTree::drawingArea(int index, const QRectF& absoluteRectPage
     return rectInRect(absoluteRect, node->aspectRatio(), absoluteArea(node));
 }
 
-// lays out a rectangle with given aspect ratio and absolute area inside the given larger rectangle
-// (not in the paper)
 QRectF AdvPrintLayoutTree::rectInRect(const QRectF &rect, double aspectRatio, double absoluteArea)
 {
     double width  = std::sqrt(absoluteArea / aspectRatio);

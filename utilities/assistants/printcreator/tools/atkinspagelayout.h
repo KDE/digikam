@@ -51,29 +51,29 @@ class AtkinsPageLayout
 public:
 
     /**
-        Create a page layout object which lays out in the given page rectangle
-    */
+     * Create a page layout object which lays out in the given page rectangle
+     */
     explicit AtkinsPageLayout(const QRectF& pageRect);
     ~AtkinsPageLayout();
 
     /**
-        Add an object of size itemSize to this page.
-        The specified key parameter is used to retrieve the layout
-        rectangle with itemRect().
-    */
+     * Add an object of size itemSize to this page.
+     * The specified key parameter is used to retrieve the layout
+     * rectangle with itemRect().
+     */
     void addLayoutItem(int key, const QSizeF& itemSize);
 
     /**
-        Retrieve the layout rectangle for the item that was added with the given key.
-        Call this method to retrieve the result after you have added all items with
-        the addLayoutItem method.
-        The returned rectangle has the same origin as the page rectangle.
-    */
+     * Retrieve the layout rectangle for the item that was added with the given key.
+     * Call this method to retrieve the result after you have added all items with
+     * the addLayoutItem method.
+     * The returned rectangle has the same origin as the page rectangle.
+     */
     QRectF itemRect(int key);
 
 private:
 
-    void addLayoutItem(int key, double aspectRatio, double relativeArea);
+    void   addLayoutItem(int key, double aspectRatio, double relativeArea);
     double aspectRatio(const QSizeF& size);
     double absoluteArea(const QSizeF& size);
 

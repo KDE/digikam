@@ -86,21 +86,35 @@ public:
     AdvPrintLayoutNode* leftChild()  const;
     AdvPrintLayoutNode* rightChild() const;
 
+    /** Replace one child with a new one.
+     */
     void takeAndSetChild(AdvPrintLayoutNode* const oldChild,
                          AdvPrintLayoutNode* const newChild);
 
+    /** Retrieve the node which has the given index in the hierarchy of this node.
+     */
     AdvPrintLayoutNode* nodeForIndex(int index);
+    
+    /** Retrieve the parent node of the given child in the hierarchy of this node.
+     */
     AdvPrintLayoutNode* parentOf(AdvPrintLayoutNode* const child);
 
+    /** Compute the "aspect ratio" (m_a) and "relative size" (m_e) parameters.
+     *  Section 2.2.1, (1)-(4).
+     */
     void computeRelativeSizes();
+
+    /** Compute the "division" (m_division) parameter.
+     *  Section 2.2.2
+     */
     void computeDivisions();
 
     AdvPrintLayoutNode& operator=(const AdvPrintLayoutNode&);
 
 private:
 
-    double              m_a;
-    double              m_e;
+    double              m_a;        // aspect ration
+    double              m_e;        // relative size
     double              m_division;
 
     Type                m_type;
@@ -121,7 +135,7 @@ public:
     AdvPrintLayoutTree(const AdvPrintLayoutTree&);
     ~AdvPrintLayoutTree();
 
-    int addImage(double aspectRatio, double relativeArea);
+    int    addImage(double aspectRatio, double relativeArea);
     QRectF drawingArea(int index, const QRectF& absoluteRectPage);
 
     int    count() const;
@@ -133,6 +147,10 @@ public:
 private:
 
     double absoluteArea(AdvPrintLayoutNode* const node);
+    
+    /** Lays out a rectangle with given aspect ratio and absolute area inside the given larger rectangle
+     *  (not in the paper).
+     */
     QRectF rectInRect(const QRectF& rect, double aspectRatio, double absoluteArea);
 
 private:
