@@ -114,7 +114,7 @@
 
     };   
    
-
+#include "entropy_decoder_kernel_2.cpp"
 
 
 #endif // DLIB_ENTROPY_DECODER_KERNEl_2_

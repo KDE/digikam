@@ -3,10 +3,10 @@
 
 
 #include "entropy_decoder_kernel_2.h"
-#include "entropy_decoder_kernel_2.cpp"
+//#include "entropy_decoder_kernel_2.cpp"
 #include "entropy_decoder_model_kernel_5.h"
 #include "entropy_encoder_kernel_2.h"
-#include "entropy_encoder_kernel_2.cpp"
+//#include "entropy_encoder_kernel_2.cpp"
 #include "entropy_encoder_model_kernel_5.h"
 
 

@@ -9,7 +9,7 @@
 #include "serialize.h"
 #include <functional>
 #include <iostream>
-#include "../matrix/matrix.h"
+#include "matrix.h"
 #include <limits>
 
 #if defined(_MSC_VER) && _MSC_VER < 1400

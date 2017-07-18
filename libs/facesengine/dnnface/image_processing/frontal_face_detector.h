@@ -5,7 +5,7 @@
 
 //#include "frontal_face_detector_abstract.h"
 #include "base64_kernel_1.h"
-#include "base64_kernel_1.cpp"
+//#include "base64_kernel_1.cpp"
 #include "compress_stream_kernel_1.h"
 #include "object_detector.h"
 #include "scan_fhog_pyramid.h"

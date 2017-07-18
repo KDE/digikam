@@ -44,7 +44,7 @@ namespace tt
 {
 
 // ----------------------------------------------------------------------------------------
-
+/*
     void inverse_norms (
         resizable_tensor& invnorms,
         const tensor& data,
@@ -174,7 +174,7 @@ namespace tt
                 dest = alpha*trans(mat(lhs))*mat(rhs);
             else
                 dest = alpha*mat(lhs)*mat(rhs);
-        }
+        }*/
 
         /*
         if (beta != 0)
@@ -208,12 +208,12 @@ namespace tt
                 dest = op_multi_float(alpha, mat(lhs))*mat(rhs);
         }
         */
-#endif
-    }
+//#endif
+//    }
 
 // ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
-
+/*
     tensor_rand::
     tensor_rand(
         unsigned long long seed
@@ -223,7 +223,7 @@ namespace tt
 #else
     {rnd.set_seed(cast_to_string(seed)); }
 #endif
-
+*/
     void tensor_rand::
     fill_gaussian (
         tensor& data,
@@ -255,7 +255,7 @@ namespace tt
 
 // ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
-
+/*
     void multiply (
         bool add_to,
         tensor& dest,
@@ -824,7 +824,7 @@ namespace tt
             cpu::copy_tensor(dest, dest_k_offset, src, src_k_offset, count_k);
 #endif
         }
-
+*/
 // ----------------------------------------------------------------------------------------
 
 }//}

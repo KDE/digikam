@@ -103,9 +103,9 @@
 
 //}
 
-#ifdef NO_MAKEFILE
+//#ifdef NO_MAKEFILE
 #include "entropy_encoder_kernel_2.cpp"
-#endif
+//#endif
 
 #endif // DLIB_ENTROPY_ENCODER_KERNEl_2_
 

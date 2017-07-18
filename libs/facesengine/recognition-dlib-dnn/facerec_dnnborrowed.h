@@ -35,7 +35,8 @@
 #define FACE_REC_DNN_BORROWED_H
 
 #include "libopencv.h"
-#include "dnn_face.h"
+//#include "dnn_face.h"
+#include "facedb.h"
 
 #if !OPENCV_TEST_VERSION(3,0,0)
 #include "face.hpp"
@@ -47,6 +48,7 @@
 
 namespace Digikam
 {
+/*
 #ifndef DNN_NETWORK
 #define DNN_NETWORK
 template <template <int,template<typename>class,int,typename> class block, int N, template<typename>class BN, typename SUBNET>
@@ -76,6 +78,7 @@ using anet_type = loss_metric<fc_no_bias<128,avg_pool_everything<
                                 input_rgb_image_sized<150>
                                 >>>>>>>>>>>>;
 #endif
+*/
 /*
 #if OPENCV_TEST_VERSION(3,0,0)
 class DNNFaceRecognizer : public cv::FaceRecognizer
@@ -106,7 +109,7 @@ public:
 
     static cv::Ptr<DNNFaceRecognizer> create(double threshold = DBL_MAX);
 
-    void getFaceVector(cv::Mat data, std::vector<float>& vecdata) const;
+    ///void getFaceVector(cv::Mat data, std::vector<float>& vecdata) const;
 
     /**
      * Computes a DNNFace model with images in src and

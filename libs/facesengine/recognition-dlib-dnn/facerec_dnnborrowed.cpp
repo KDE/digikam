@@ -47,9 +47,8 @@
 
 
 // Local includes
-
-#include "digikam_debug.h"
 #include "dnn_face.h"
+#include "digikam_debug.h"
 #include "shapepredictor.h"
 #include "fullobjectdetection.h"
 
@@ -107,7 +106,7 @@ void DNNFaceRecognizer::train(std::vector<std::vector<float>> _in_src, InputArra
 
     return ;
 }
-
+/*
 void DNNFaceRecognizer::getFaceVector(cv::Mat data, std::vector<float>& vecdata) const
 {
     anet_type net;
@@ -192,7 +191,7 @@ void DNNFaceRecognizer::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
         qCDebug(DIGIKAM_FACEDB_LOG) << "Error calculate face vector";
     }
 }
-
+*/
 //#if OPENCV_TEST_VERSION(3,1,0)
 void DNNFaceRecognizer::predict(cv::InputArray _src, int &minClass, double &minDist) const
 //#else
@@ -203,7 +202,8 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int &minClass, double &minD
 
     cv::Mat src = _src.getMat();//254*254
     std::vector<float> vecdata;
-    this->getFaceVector(src, vecdata);
+    DNNFaceKernel dnnface_kernel;
+    dnnface_kernel.getFaceVector(data, vecdata);
 
     minDist      = DBL_MAX;
     minClass     = -1;

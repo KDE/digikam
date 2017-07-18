@@ -262,5 +262,7 @@
 
 //}
 
+#include "gpu_data.cpp"
+
 #endif // DLIB_GPU_DaTA_H_
 

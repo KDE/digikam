@@ -4,19 +4,15 @@
 #define DLIB_TeNSOR_TOOLS_H_
 
 #include "tensor.h"
-//#include "cudnn_dlibapi.h"
-//#include "cublas_dlibapi.h"
-//#include "curand_dlibapi.h"
-#include "cpu_dlib.cpp"
-//#include "cuda_dlib.h"
+#include "cpu_dlib.h"
 #include "rand_kernel_1.h"
 #include <memory>
 
 //namespace dlib
 //{
-    bool dnn_prefer_fastest_algorithms();
-    void set_dnn_prefer_fastest_algorithms();
-    void set_dnn_prefer_smallest_algorithms();
+    static bool dnn_prefer_fastest_algorithms();
+    static void set_dnn_prefer_fastest_algorithms();
+    static void set_dnn_prefer_smallest_algorithms();
 //}
 
 //namespace dlib {
@@ -29,53 +25,68 @@ namespace tt
         resizable_tensor& invnorms,
         const tensor& data,
         const double eps
-    );
-    /*!
-        ensures
-            - #invnorms == reciprocal(sqrt(sum_cols(squared(mat(data))) + eps))
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::inverse_norms(invnorms, data, eps);
+#else
+        invnorms = impl::reciprocal(sqrt(sum_cols(squared(mat(data))) + eps));
+#endif
+    }
 
     void dot_prods (
         resizable_tensor& out,
         const tensor& lhs,
         const tensor& rhs
-    );
-    /*!
-        requires
-            - have_same_dimensions(lhs,rhs) == true
-        ensures
-            - #out.num_samples() == lhs.num_samples()
-            - #out.k() == #out.nr() == #out.nc() == 1
-            - #out == sum_cols(pointwise_multiply(mat(lhs), mat(rhs))); 
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::dot_prods(out, lhs, rhs);
+#else
+        out = sum_cols(pointwise_multiply(mat(lhs), mat(rhs))); 
+#endif
+    }
 
     void scale_columns (
         tensor& out,
         const tensor& m,
         const tensor& v
-    );
-    /*!
-        requires
-            - have_same_dimensions(out,m) == true
-            - is_vector(v) == true
-            - v.size() == mat(m).nc()
-        ensures
-            - performs: out = scale_columns(mat(m),mat(v));
-    !*/
+    )
+    {
+        DLIB_CASSERT(have_same_dimensions(out,m));
+        DLIB_CASSERT(is_vector(v));
+        if (m.size() == 0 && v.size() == 0)
+            return;
+        DLIB_CASSERT(m.size() != 0);
+        DLIB_CASSERT(m.size()/m.num_samples() == v.size());
+
+#ifdef DLIB_USE_CUDA
+        cuda::scale_columns(out, m, v);
+#else
+        DLIB_CASSERT(false, "shouldn't be called right now");
+        out = scale_columns(mat(m), mat(v));
+#endif
+    }
 
     void scale_rows (
         tensor& out,
         const tensor& m,
         const tensor& v
-    );
-    /*!
-        requires
-            - have_same_dimensions(out,m) == true
-            - is_vector(v) == true
-            - v.size() == m.num_samples()
-        ensures
-            - performs: out = scale_rows(mat(m),mat(v));
-    !*/
+    )
+    {
+        DLIB_CASSERT(have_same_dimensions(out,m));
+        DLIB_CASSERT(is_vector(v));
+        if (m.size() == 0 && v.size() == 0)
+            return;
+        DLIB_CASSERT(m.size() != 0);
+        DLIB_CASSERT(m.num_samples() == v.size());
+
+#ifdef DLIB_USE_CUDA
+        cuda::scale_rows(out, m, v);
+#else
+        out = scale_rows(mat(m), mat(v));
+#endif
+    }
 
     void scale_rows2 (
         float beta, 
@@ -84,18 +95,23 @@ namespace tt
         const tensor& m2,
         const tensor& v1,
         const tensor& v2
-    );
-    /*!
-        requires
-            - have_same_dimensions(out,m1) == true
-            - have_same_dimensions(out,m2) == true
-            - have_same_dimensions(v1,v2) == true
-            - is_vector(v1) == true
-            - v1.size() == m1.num_samples()
-        ensures
-            - performs: 
-                out = beta*out + scale_rows(mat(m1) - scale_rows(mat(m2),mat(v1)), mat(v2));
-    !*/
+    )
+    {
+        DLIB_CASSERT(have_same_dimensions(out,m1));
+        DLIB_CASSERT(have_same_dimensions(out,m2));
+        DLIB_CASSERT(have_same_dimensions(v1,v2));
+        DLIB_CASSERT(is_vector(mat(v1))); 
+        DLIB_CASSERT(v1.size() == m1.num_samples());
+
+#ifdef DLIB_USE_CUDA
+        cuda::scale_rows2(beta, out, m1, m2, v1, v2);
+#else
+        if (beta == 0)
+            out = scale_rows(mat(m1) - scale_rows(mat(m2),mat(v1)), mat(v2));
+        else
+            out = beta*mat(out) + scale_rows(mat(m1) - scale_rows(mat(m2),mat(v1)), mat(v2));
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -107,21 +123,69 @@ namespace tt
         bool trans_lhs,
         const tensor& rhs,
         bool trans_rhs
-    );
-    /*!
-        requires
-            - dest does not alias the memory of lhs or rhs
-            - The dimensions of lhs and rhs must be compatible for matrix multiplication.
-              In particular:
-                - Let L == trans_lhs ? trans(mat(lhs)) : mat(lhs)
-                - Let R == trans_rhs ? trans(mat(rhs)) : mat(rhs)
-                - Let D == mat(dest)
-                - D.nr() == L.nr() && D.nc() == R.nc()
-                  (i.e. dest must be preallocated and have the correct output dimensions)
-                - L.nc() == R.nr()
-        ensures
-            - performs: dest = alpha*L*R + beta*mat(dest)
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::gemm(beta, dest, alpha, lhs, trans_lhs, rhs, trans_rhs);
+#else
+
+        if (beta != 0)
+        {
+            if (trans_lhs && trans_rhs)
+                dest = alpha*trans(mat(lhs))*trans(mat(rhs)) + beta*mat(dest);
+            else if (!trans_lhs && trans_rhs)
+                dest = alpha*mat(lhs)*trans(mat(rhs)) + beta*mat(dest);
+            else if (trans_lhs && !trans_rhs)
+                dest = alpha*trans(mat(lhs))*mat(rhs) + beta*mat(dest);
+            else
+                dest = alpha*mat(lhs)*mat(rhs) + beta*mat(dest);
+        }
+        else
+        {
+            if (trans_lhs && trans_rhs)
+                dest = alpha*trans(mat(lhs))*trans(mat(rhs));
+            else if (!trans_lhs && trans_rhs)
+                dest = alpha*mat(lhs)*trans(mat(rhs));
+            else if (trans_lhs && !trans_rhs)
+                dest = alpha*trans(mat(lhs))*mat(rhs);
+            else
+                dest = alpha*mat(lhs)*mat(rhs);
+        }
+
+        /*
+        if (beta != 0)
+        {
+            if (trans_lhs && trans_rhs)
+            {
+                dest = op_multi_float(alpha, trans(mat(lhs)))*trans(mat(rhs)) + op_multi_float(beta, mat(dest));
+            }
+            else if (!trans_lhs && trans_rhs)
+            {
+                dest = op_multi_float(alpha,mat(lhs))*trans(mat(rhs)) + op_multi_float(beta, mat(dest));
+            }
+            else if (trans_lhs && !trans_rhs)
+            {
+                dest = op_multi_float(alpha, trans(mat(lhs)))*mat(rhs) + op_multi_float(beta, mat(dest));
+            }
+            else
+            {
+                dest = op_multi_float(alpha, mat(lhs))*mat(rhs) + op_multi_float(beta, mat(dest));
+            }
+        }
+        else
+        {
+            if (trans_lhs && trans_rhs)
+                dest = op_multi_float(alpha, trans(mat(lhs)))*trans(mat(rhs));
+            else if (!trans_lhs && trans_rhs)
+                dest = op_multi_float(alpha,mat(lhs))*trans(mat(rhs));
+            else if (trans_lhs && !trans_rhs)
+                dest = op_multi_float(alpha, trans(mat(lhs)))*mat(rhs);
+            else
+                dest = op_multi_float(alpha, mat(lhs))*mat(rhs);
+        }
+        */
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -142,9 +206,17 @@ namespace tt
         // not copyable
         tensor_rand(const tensor_rand&) = delete;
         tensor_rand& operator=(const tensor_rand&) = delete;
+        
 
         tensor_rand() : tensor_rand(0) {}
-        tensor_rand(unsigned long long seed);
+        tensor_rand(
+            unsigned long long seed
+        ) 
+    #ifdef DLIB_USE_CUDA
+        :rnd(seed){};
+    #else
+        {rnd.set_seed(cast_to_string(seed)); };
+    #endif
 
         void fill_gaussian (
             tensor& data,
@@ -181,60 +253,36 @@ namespace tt
         tensor& dest,
         const tensor& src1,
         const tensor& src2
-    );
-    /*!
-        requires
-            - dest.k()  == src1.k()  == src2.k()
-            - dest.nr() == src1.nr() == src2.nr()
-            - dest.nc() == src1.nc() == src2.nc()
-            - dest.num_samples(), src1.num_samples(), and src2.num_samples() must each
-              either be 1 or whichever ones aren't equal to 1 must have the same values.
-        ensures
-            - let MD = max(dest.num_samples(), src1.num_samples(), src2.num_samples)
-            - This function pointwise multiplies src1 with src2 and stores the result into
-              #dest.  However, how the multiplication happens depends on the dimensions of
-              the tensors.  First, when src1 and src2 are multiplied together, if either
-              has a num_samples() dimension that is != MD, then it is first replicated to
-              produce a tensor with num_samples()==MD dimensions and then they are
-              pointwise multiplied together.
+    )
+    {
+        DLIB_CASSERT(dest.k() == src1.k() && src1.k() == src2.k() &&
+            dest.nr() == src1.nr() && src1.nr() == src2.nr() &&
+            dest.nc() == src1.nc() && src1.nc() == src2.nc() );
+        const long MD = std::max(std::max(dest.num_samples(),src1.num_samples()),src2.num_samples());
+        DLIB_CASSERT((dest.num_samples()==1 || dest.num_samples()==MD) &&
+                    (src1.num_samples()==1 || src1.num_samples()==MD) &&
+                    (src2.num_samples()==1 || src2.num_samples()==MD) );
+#ifdef DLIB_USE_CUDA
+        cuda::multiply(add_to, dest, src1, src2);
+#else
+        cpu::multiply(add_to, dest, src1, src2);
+#endif
 
-              Second, if dest.num_samples()==1, then after the pointwise multiplication of
-              src1 with src2, the result has its samples summed to produce an output tensor
-              with num_samples()==1 which is then assigned to #dest.
-            - if (add_to) then
-                - Instead of assigning the result to dest, this function adds the result to dest.
-    !*/
+    }
 
     void multiply_conv (
         bool add_to,
         tensor& dest,
         const tensor& src1,
         const tensor& src2
-    );
-    /*!
-        requires
-            - if (have_same_dimensions(dest, src1) == true) then
-                - src2.num_samples() == 1
-                - src2.nr() == 1
-                - src2.nc() == 1
-                - src2.k() == src1.k()
-            - else
-                - have_same_dimensions(src1, src2) == true) 
-                - dest.num_samples() == 1
-                - dest.nr() == 1
-                - dest.nc() == 1
-                - dest.k() == src1.k()
-        ensures
-            - Performs #dest == src1*src2 
-              In particular, if the elements of dest, src1, and src2 were indexed by (n,k,r,c) then
-              we would have:
-                - if (have_same_dimensions(dest,src1)) then
-                    #dest(n,k,r,c) == src1(n,k,r,c)*src2(k)
-                - else
-                    #dest(k) == sum over {n,r,c} of src1(n,k,r,c)*src2(n,k,r,c)
-            - if (add_to) then
-                - Instead of assigning the result to dest, this function adds the result to dest.
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::multiply_conv(add_to, dest, src1, src2);
+#else
+        cpu::multiply_conv(add_to, dest, src1, src2);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -243,25 +291,27 @@ namespace tt
         const tensor& src,
         const float A,
         const float B
-    );
-    /*!
-        requires
-            - dest.size()==src.size()
-        ensures
-            - #dest == A*src + B
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::affine_transform(dest,src,A,B);
+#else
+        cpu::affine_transform(dest,src,A,B);
+#endif
+    }
 
     void affine_transform(
         tensor& dest,
         const tensor& src,
         const float A
-    );
-    /*!
-        requires
-            - dest.size()==src.size()
-        ensures
-            - #dest == A*src 
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::affine_transform(dest,src,A);
+#else
+        cpu::affine_transform(dest,src,A,0);
+#endif
+    }
 
     void affine_transform(
         tensor& dest,
@@ -270,14 +320,14 @@ namespace tt
         const float A,
         const float B,
         const float C
-    );
-    /*!
-        requires
-            - dest.size()==src1.size()
-            - dest.size()==src2.size()
-        ensures
-            - #dest == A*src1 + B*src2 + C
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::affine_transform(dest,src1,src2,A,B,C);
+#else
+        cpu::affine_transform(dest,src1,src2,A,B,C);
+#endif
+    }
 
     void affine_transform(
         tensor& dest,
@@ -285,14 +335,14 @@ namespace tt
         const tensor& src2,
         const float A,
         const float B
-    );
-    /*!
-        requires
-            - dest.size()==src1.size()
-            - dest.size()==src2.size()
-        ensures
-            - #dest == A*src1 + B*src2
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::affine_transform(dest,src1,src2,A,B);
+#else
+        cpu::affine_transform(dest,src1,src2,A,B,0);
+#endif
+    }
 
     void affine_transform(
         tensor& dest,
@@ -303,33 +353,14 @@ namespace tt
         const float B,
         const float C,
         const float D
-    );
-    /*!
-        requires 
-            - dest.size()==src1.size()
-            - dest.size()==src2.size()
-            - dest.size()==src3.size()
-        ensures
-            - #dest == A*src1 + B*src2 + C*src3 + D
-    !*/
-
-    void affine_transform(
-        tensor& dest,
-        const tensor& src1,
-        const tensor& src2,
-        const tensor& src3,
-        const float A,
-        const float B,
-        const float C
-    );
-    /*!
-        requires 
-            - dest.size()==src1.size()
-            - dest.size()==src2.size()
-            - dest.size()==src3.size()
-        ensures
-            - #dest == A*src1 + B*src2 + C*src3
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::affine_transform(dest,src1,src2,src3,A,B,C,D);
+#else
+        cpu::affine_transform(dest,src1,src2,src3,A,B,C,D);
+#endif
+    }
 
     void affine_transform_range(
         size_t begin,
@@ -341,21 +372,31 @@ namespace tt
         const float A,
         const float B,
         const float C
-    );
-    /*!
-        requires 
-            - dest.size()==src1.size()
-            - dest.size()==src2.size()
-            - dest.size()==src3.size()
-            - begin <= end <= dest.size()
-        ensures
-            - This function operates much like
-              affine_transform(dest,src1,src2,src3,A,B,C,0), except that it runs over only
-              the half open range [begin,end) rather than processing the entire tensor.
-              Specifically, it does this:
-                - for i in the range [begin, end):
-                    - #dest.host()[i] == A*src1.host()[i] + B*src2.host()[i] + C*src3.host()[i]
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::affine_transform_range(begin, end, dest,src1,src2,src3,A,B,C);
+#else
+        cpu::affine_transform_range(begin, end, dest,src1,src2,src3,A,B,C);
+#endif
+    }
+
+    void affine_transform(
+        tensor& dest,
+        const tensor& src1,
+        const tensor& src2,
+        const tensor& src3,
+        const float A,
+        const float B,
+        const float C
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::affine_transform_range(0,dest.size(),dest,src1,src2,src3,A,B,C);
+#else
+        cpu::affine_transform_range(0,dest.size(),dest,src1,src2,src3,A,B,C);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -364,26 +405,14 @@ namespace tt
         const tensor& src,
         const tensor& A,
         const tensor& B
-    );
-    /*!
-        requires
-            - have_same_dimensions(dest,src) == true
-            - if (A.num_samples() == 1) then
-                - B.num_samples() == 1
-            - else
-                - A.num_samples() == src.num_samples()
-                - B.num_samples() == src.num_samples()
-            - A.nr() == B.nr() == src.nr()
-            - A.nc() == B.nc() == src.nc()
-            - A.k()  == B.k()  == src.k()
-        ensures
-            - if (A.num_samples() == 1) then
-                - #dest == A*src + B
-                    (done for each sample in src)
-            - else
-                - for all valid i:
-                    - #dest.host()[i] == A.host()[i]*src.host()[i] + B.host()[i]  
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::affine_transform(dest,src,A,B);
+#else
+        cpu::affine_transform(dest,src,A,B);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -392,21 +421,14 @@ namespace tt
         const tensor& src,
         const tensor& A,
         const tensor& B
-    );
-    /*!
-        requires
-            - have_same_dimensions(dest,src) == true
-            - have_same_dimensions(A, B) == true
-            - A.num_samples() == 1
-            - A.nr() == 1
-            - A.nc() == 1
-            - A.k() == src.k()
-        ensures
-            - Performs #dest == A*src + B
-              In particular, if the elements of dest and src were indexed by (n,k,r,c) then
-              we would have:
-                #dest(n,k,r,c) == A(k)*src(n,k,r,c) + B(k).
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::affine_transform_conv(dest,src,A,B);
+#else
+        cpu::affine_transform_conv(dest,src,A,B);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -423,26 +445,16 @@ namespace tt
         const float momentum2,
         const tensor& params,
         const tensor& params_grad
-    );
-    /*!
-        requires
-            - s.size() == m.size() = v.size() == params.size() == params_grad.size()
-            - t > 0
-            - learning_rate > 0
-            - weight_decay >= 0
-            - 0 <= momentum1 < 1
-            - 0 <= momentum2 < 1
-            - begin <= end <= params.size()
-        ensures
-            - This function implements the ADAM parameter update method described in the paper:
-                Kingma, Diederik P., and Jimmy Ba Adam. "A method for stochastic
-                optimization." International Conference on Learning Representation. 2015.
-              Specifically, it implements the method shown as Algorithm 1.
-            - #s is the update vector that should be added to the parameters.
-            - The function only operates in the half open range [begin,end) of the memory
-              blocks of each tensor.  E.g. to make this function run on the entire tensor
-              set begin to 0 and end to params.size().
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::compute_adam_update(begin, end, s, m, v, t, learning_rate, weight_decay, momentum1,
+            momentum2, params, params_grad);
+#else
+        cpu::compute_adam_update(begin, end, s, m, v, t, learning_rate, weight_decay, momentum1,
+            momentum2, params, params_grad);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -454,98 +466,54 @@ namespace tt
         const tensor& beta,
         const tensor& running_means,
         const tensor& running_variances
-    );
-    /*!
-        requires
-            - eps > 0
-            - gamma.num_samples() == 1 
-            - gamma.nr() == src.nr() 
-            - gamma.nc() == src.nc() 
-            - gamma.k()  == src.k()
-            - have_same_dimensions(gamma, beta) 
-            - have_same_dimensions(gamma, running_means) 
-            - have_same_dimensions(gamma, running_variances)
-        ensures
-            - Linearly transforms src as a call to batch_normalize() would if src had means
-              and variances as given by running_means and running_variances.  That is, this
-              function performs: 
-                dest = gamma*(src-running_means)/sqrt(running_variances+eps) + beta
-              Note that it does it in a pointwise fashion over the samples in src.
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::batch_normalize_inference(eps,dest,src,gamma,beta,running_means,running_variances);
+#else
+        cpu::batch_normalize_inference(eps,dest,src,gamma,beta,running_means,running_variances);
+#endif
+    }
 
     void batch_normalize (
         const double eps,
         resizable_tensor& dest,
         resizable_tensor& means,
-        resizable_tensor& invstds,
+        resizable_tensor& vars,
         const double averaging_factor,
         resizable_tensor& running_means,
         resizable_tensor& running_variances,
         const tensor& src,
         const tensor& gamma, 
         const tensor& beta 
-    );
-    /*!
-        requires
-            - eps > 0
-            - src.num_samples() > 1
-            - gamma.num_samples() == 1
-            - beta.num_samples() == 1
-            - gamma.nr() == beta.nr() == src.nr()
-            - gamma.nc() == beta.nc() == src.nc()
-            - gamma.k()  == beta.k()  == src.k()
-            - 0 <= averaging_factor <= 1
-            - if (averaging_factor != 1)
-                - have_same_dimensions(running_means, means) == true
-                - have_same_dimensions(running_variances, invstds) == true
-        ensures
-            - have_same_dimensions(#dest, src) == true
-            - #means.num_samples() == 1
-            - #invstds.num_samples() == 1
-            - means.nr() == invstds.nr() == src.nr()
-            - means.nc() == invstds.nc() == src.nc()
-            - means.k()  == invstds.k()  == src.k()
-            - #src == the batch normalized version of src.
-            - #means == the mean values of the contents of src.
-            - #invstds == 1/(the standard deviation values of the contents of src).
-            - #running_means = (1-averaging_factor)*mat(#running_means) + averaging_factor*mat(#means);
-            - #running_variances = (1-averaging_factor)*mat(#running_variances) + averaging_factor*(variance of contents of src);
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::batch_normalize(eps,dest,means,vars,averaging_factor,running_means,running_variances,src,gamma,beta);
+#else
+        cpu::batch_normalize(eps,dest,means,vars,averaging_factor,running_means,running_variances,src,gamma,beta);
+#endif
+    }
 
     void batch_normalize_gradient (
         const double eps,
-        const tensor& gradient_input,
-        const tensor& means,
-        const tensor& invstds,
-        const tensor& src,
-        const tensor& gamma,
-        tensor& src_grad,
-        tensor& gamma_grad, 
-        tensor& beta_grad 
-    );
-    /*!
-        requires
-            - eps > 0
-            - invstds and means should be the output of a call to
-              batch_normalize(eps,dest,means,invstds,src,gamma,beta)
-            - have_same_dimensions(gradient_input, src) == true
-            - have_same_dimensions(src, src_grad) == true
-            - src.num_samples() > 1
-            - gamma.num_samples() == 1
-            - have_same_dimensions(gamma, gamma_grad) == true
-            - have_same_dimensions(gamma, beta_grad) == true
-            - gamma.nr() == src.nr()
-            - gamma.nc() == src.nc()
-            - gamma.k()  == src.k()
-            - have_same_dimensions(means, gamma) == true
-            - have_same_dimensions(invstds, gamma) == true
-        ensures
-            - Let f(src,gamma,beta) == dot(gradient_input, dest output of
-              batch_normalize(eps,dest,means,invstds,src,gamma,beta))
-            - Adds the gradient of f() with respect to src to #src_grad.
-            - Assigns the gradient of f() with respect to gamma to #gamma_grad.
-            - Assigns the gradient of f() with respect to beta to #beta_grad.
-    !*/
+            const tensor& gradient_input,
+            const tensor& means,
+            const tensor& invstds,
+            const tensor& src,
+            const tensor& gamma,
+            tensor& src_grad,
+            tensor& gamma_grad, 
+            tensor& beta_grad 
+    )
+    {
+             
+#ifdef DLIB_USE_CUDA
+        cuda::batch_normalize_gradient(eps,gradient_input, means, invstds, src, gamma, src_grad, gamma_grad, beta_grad);
+#else
+        cpu::batch_normalize_gradient(eps,gradient_input, means, invstds, src, gamma, src_grad, gamma_grad, beta_grad);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -557,60 +525,34 @@ namespace tt
         const tensor& beta,
         const tensor& running_means,
         const tensor& running_variances
-    );
-    /*!
-        requires
-            - eps > 0
-            - gamma.num_samples() == 1 
-            - gamma.nr() == 1 
-            - gamma.nc() == 1 
-            - gamma.k()  == src.k()
-            - have_same_dimensions(gamma, beta) 
-            - have_same_dimensions(gamma, running_means) 
-            - have_same_dimensions(gamma, running_variances)
-        ensures
-            - Linearly transforms src as a call to batch_normalize_conv() would if src had
-              means and variances as given by running_means and running_variances.  That
-              is, this function performs: 
-                dest = gamma*(src-running_means)/sqrt(running_variances+eps) + beta
-              Note that it does this in a pointwise fashion over the samples, rows, and
-              columns in src.
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::batch_normalize_conv_inference(eps,dest,src,gamma,beta,running_means,running_variances);
+#else
+        cpu::batch_normalize_conv_inference(eps,dest,src,gamma,beta,running_means,running_variances);
+#endif
+    }
 
     void batch_normalize_conv (
         const double eps,
         resizable_tensor& dest,
         resizable_tensor& means,
-        resizable_tensor& invstds,
+        resizable_tensor& vars,
         const double averaging_factor,
         resizable_tensor& running_means,
         resizable_tensor& running_variances,
         const tensor& src,
         const tensor& gamma, 
         const tensor& beta 
-    );
-    /*!
-        requires
-            - eps > 0
-            - src.num_samples() > 1
-            - gamma.num_samples()==gamma.nr()==gamma.nc() == 1
-            - beta.num_samples() ==beta.nr() ==gamma.nc() == 1
-            - gamma.k()  == beta.k()  == src.k()
-            - 0 <= averaging_factor <= 1
-            - if (averaging_factor != 1)
-                - have_same_dimensions(running_means, means) == true
-                - have_same_dimensions(running_variances, invstds) == true
-        ensures
-            - have_same_dimensions(#dest, src) == true
-            - #means.num_samples()==means.nr()==means.nc() == 1
-            - #invstds.num_samples() ==invstds.nr() ==invstds.nc() == 1
-            - means.k()  == invstds.k()  == src.k()
-            - #src == the batch normalized version of src.
-            - #means == the mean values of the contents of src.
-            - #invstds == 1/(the standard deviation values of the contents of src).
-            - #running_means = (1-averaging_factor)*mat(#running_means) + averaging_factor*mat(#means);
-            - #running_variances = (1-averaging_factor)*mat(#running_variances) + averaging_factor*(variance of contents of src);
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::batch_normalize_conv(eps,dest,means,vars,averaging_factor,running_means,running_variances,src,gamma,beta);
+#else
+        cpu::batch_normalize_conv(eps,dest,means,vars,averaging_factor,running_means,running_variances,src,gamma,beta);
+#endif
+    }
 
     void batch_normalize_conv_gradient (
         const double eps,
@@ -622,62 +564,43 @@ namespace tt
         tensor& src_grad,
         tensor& gamma_grad, 
         tensor& beta_grad 
-    );
-    /*!
-        requires
-            - eps > 0
-            - invstds and means should be the output of a call to
-              batch_normalize_conv(eps,dest,means,invstds,src,gamma,beta)
-            - have_same_dimensions(gradient_input, src) == true
-            - have_same_dimensions(src, src_grad) == true
-            - src.num_samples() > 1
-            - gamma.num_samples()==gamma.nr()==gamma.nc() == 1
-            - have_same_dimensions(gamma, gamma_grad) == true
-            - have_same_dimensions(gamma, beta_grad) == true
-            - gamma.k()  == src.k()
-            - have_same_dimensions(means, gamma) == true
-            - have_same_dimensions(invstds, gamma) == true
-        ensures
-            - Let f(src,gamma,beta) == dot(gradient_input, dest output of
-              batch_normalize_conv(eps,dest,means,invstds,src,gamma,beta))
-            - Adds the gradient of f() with respect to src to #src_grad.
-            - Assigns the gradient of f() with respect to gamma to #gamma_grad.
-            - Assigns the gradient of f() with respect to beta to #beta_grad.
-    !*/
+    )
+    {
+             
+#ifdef DLIB_USE_CUDA
+        cuda::batch_normalize_conv_gradient(eps,gradient_input, means, invstds, src, gamma, src_grad, gamma_grad, beta_grad);
+#else
+        cpu::batch_normalize_conv_gradient(eps,gradient_input, means, invstds, src, gamma, src_grad, gamma_grad, beta_grad);
+#endif
+    }
 
-// -----------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 
     void threshold (
         tensor& data,
         float thresh
-    );
-    /*!
-        ensures
-            - Sets all elements of data to 1 or 0 depending on if they are above or below
-              the given threshold.  Specifically, for all valid i:
-                - #data.host()[i] == data.host()[i]>thresh ? 1 : 0
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::threshold(data,thresh);
+#else
+        cpu::threshold(data,thresh);
+#endif
+    }
 
     void dot (
         const tensor& a,
         const tensor& b,
         tensor& result,
         size_t idx
-    );
-    /*!
-        requires
-            - a.size() == b.size()
-            - idx < result.size()
-        ensures
-            - #result.host()[idx] == result.host()[idx] + dot(a,b);
-              I.e. Adds the dot product between a and b into the idx-th element of result.
-              The reason you might want to use this more complex version of dot() is
-              because, when using CUDA, it runs by generating asynchronous kernel launches
-              whereas the version of dot() that returns the result immediately as a scalar
-              must block the host while we wait for the result to be computed and then
-              transfered from the GPU do the host for return by dot().  So this version of
-              dot() might be much faster in some cases.
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::dot(a,b,result,idx);
+#else
+        cpu::dot(a,b,result,idx);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -686,25 +609,14 @@ namespace tt
         tensor& dest,
         float alpha,
         const tensor& src
-    );
-    /*!
-        requires
-            - One of the following is true: 
-                - have_same_dimensions(src, dest)
-                - src.num_samples()==1 && src.k()==dest.k() && src.nr()==1 && src.nc()==1
-                - src.num_samples()==1 && src.k()==dest.k() && src.nr()==dest.nr() && src.nc()==dest.nc()
-                - src.num_samples()==1 && src.k()==1 && src.nr()==dest.nr() && src.nc()==dest.nc()
-                - src.num_samples()==dest.num_samples() && src.k()==1 && src.nr()==1 && src.nc()==1
-            - is_same_object(src,dest) == false
-        ensures
-            - performs: dest = beta*dest + alpha*src
-              However, how the addition happens depends on the dimensions of src.  In
-              particular, this function adds the scaled values of one src tensor to dest.
-              Each dimension of the src tensor must match the corresponding dimension of
-              the dest tensor or must be equal to 1. In the latter case, the same value
-              from the src tensor, for those dimensions, will be used to add into the dest
-              tensor.
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::add(beta,dest,alpha,src);
+#else
+        cpu::add(beta,dest,alpha,src);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -712,58 +624,45 @@ namespace tt
         tensor& dest,
         const tensor& src1,
         const tensor& src2
-    );
-    /*!
-        ensures
-            - performs: dest = src1 + src2
-              The addition happens pointwise according to 4D tensor arithmetic.  If the
-              dimensions don't match then missing elements are presumed to be equal to 0.
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::add(dest, src1, src2);
+#else
+        cpu::add(dest, src1, src2);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
     void assign_conv_bias_gradient (
         tensor& grad,
         const tensor& gradient_input
-    );
-    /*!
-        requires
-            - grad.num_samples() == 1
-            - grad.k()  >= 1
-            - grad.nr() == 1
-            - grad.nc() == 1
-            - gradient_input.k() == grad.k()
-            - gradient_input.size() > 0
-            - is_same_object(grad,gradient_input) == false
-        ensures
-            - let BIAS be a tensor with the same dimensions as grad.
-            - let OUT be the output of add(1,OUT,1,BIAS)
-            - let f(gradient_input,BIAS) == dot(gradient_input,OUT)
-            - Then this function computes the gradient of f() with respect to BIAS and
-              assigns it to grad.
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::assign_conv_bias_gradient(grad,gradient_input);
+#else
+        cpu::assign_conv_bias_gradient(grad,gradient_input);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
     void assign_bias_gradient (
         tensor& grad,
         const tensor& gradient_input
-    );
-    /*!
-        requires
-            - grad.num_samples() == 1
-            - gradient_input.k() == grad.k()
-            - gradient_input.nr() == grad.nr()
-            - gradient_input.nc() == grad.nc()
-            - gradient_input.size() > 0
-            - is_same_object(grad,gradient_input) == false
-        ensures
-            - let BIAS be a tensor with the same dimensions as grad.
-            - let OUT be the output of add(1,OUT,1,BIAS)
-            - let f(gradient_input,BIAS) == dot(gradient_input,OUT)
-            - Then this function computes the gradient of f() with respect to BIAS and
-              assigns it to grad.
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::assign_bias_gradient(grad,gradient_input);
+#else
+        cpu::assign_bias_gradient(grad,gradient_input);
+#endif
+    }
+
+// ----------------------------------------------------------------------------------------
+
 
 // ----------------------------------------------------------------------------------------
 
@@ -981,117 +880,86 @@ namespace tt
 
 // ----------------------------------------------------------------------------------------
 
+    // ----------------------------------------------------------------------------------------
+
     void softmax (
         tensor& dest,
         const tensor& src
-    );
-    /*!
-        requires
-            - have_same_dimensions(dest, src) == true
-        ensures
-            - Note that the softmax function is a vector valued function: 
-                s(x) == exp(x)/sum(exp(x)) 
-            - Computes the softmax function on src and writes the results to dest.  The
-              softmax is computed per spatial location across the different channels at
-              each location.  That is, softmax() outputs a new tensor, #dest, where each of
-              the spatial locations in dest (i.e. image idx, row idx, and column idx)
-              contains the output of s() evaluated over the channel values at each
-              location.
-            - This function supports in-place operation, i.e. having
-              is_same_object(dest, src)==true
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::softmax(dest,src);
+#else
+        cpu::softmax(dest,src);
+#endif
+    }
 
     void softmax_gradient (
         tensor& grad,
         const tensor& dest,
         const tensor& gradient_input
-    );
-    /*!
-        requires
-            - have_same_dimensions(dest,gradient_input) == true 
-            - have_same_dimensions(dest,grad) == true 
-        ensures
-            - We interpret dest as the output of softmax(dest,SRC) for some SRC tensor.
-              Then let f(SRC) == dot(gradient_input,dest).  Then this function computes the
-              gradient of f() with respect to SRC and stores it to grad.  Moreover, if
-              is_same_object(grad,gradient_input)==true then the output is assigned to
-              grad, replacing its previous contents.  Otherwise the output is added to
-              grad.
-            - This function supports in-place operation, i.e. having
-              is_same_object(grad, gradient_input)==true
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::softmax_gradient(grad, dest, gradient_input);
+#else
+        cpu::softmax_gradient(grad, dest, gradient_input);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
     void sigmoid (
         tensor& dest,
         const tensor& src
-    );
-    /*!
-        requires
-            - have_same_dimensions(dest, src) == true
-        ensures
-            - for all valid i:
-                - #dest.host()[i] == 1/(1+std::exp(-src.host()[i])) 
-            - This function supports in-place operation, i.e. having
-              is_same_object(dest, src)==true
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::sigmoid(dest,src);
+#else
+        cpu::sigmoid(dest,src);
+#endif
+    }
 
     void sigmoid_gradient (
         tensor& grad,
         const tensor& dest,
         const tensor& gradient_input
-    );
-    /*!
-        requires
-            - have_same_dimensions(dest,gradient_input) == true 
-            - have_same_dimensions(dest,grad) == true 
-        ensures
-            - Recalling that dest is the output of sigmoid(dest,SRC) for some SRC tensor,
-              let f(SRC) == dot(gradient_input,dest).  Then this function computes the
-              gradient of f() with respect to SRC and stores it to grad.  Moreover, if
-              is_same_object(grad,gradient_input)==true then the output is assigned to
-              grad, replacing its previous contents.  Otherwise the output is added to
-              grad.
-            - This function supports in-place operation, i.e. having
-              is_same_object(grad, gradient_input)==true
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::sigmoid_gradient(grad, dest, gradient_input);
+#else
+        cpu::sigmoid_gradient(grad, dest, gradient_input);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
     void relu (
         tensor& dest,
         const tensor& src
-    );
-    /*!
-        requires
-            - have_same_dimensions(dest, src) == true
-        ensures
-            - for all valid i:
-                - #dest.host()[i] == std::max(0,src.host()[i]) 
-            - This function supports in-place operation, i.e. having
-              is_same_object(dest, src)==true
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::relu(dest,src);
+#else
+        cpu::relu(dest,src);
+#endif
+    }
 
     void relu_gradient (
         tensor& grad,
         const tensor& dest,
         const tensor& gradient_input
-    );
-    /*!
-        requires
-            - have_same_dimensions(dest,gradient_input) == true 
-            - have_same_dimensions(dest,grad) == true 
-        ensures
-            - Recalling that dest is the output of relu(dest,SRC) for some SRC tensor,
-              let f(SRC) == dot(gradient_input,dest).  Then this function computes the
-              gradient of f() with respect to SRC and stores it to grad.  Moreover, if
-              is_same_object(grad,gradient_input)==true then the output is assigned to
-              grad, replacing its previous contents.  Otherwise the output is added to
-              grad.
-            - This function supports in-place operation, i.e. having
-              is_same_object(grad, gradient_input)==true
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::relu_gradient(grad, dest, gradient_input);
+#else
+        cpu::relu_gradient(grad, dest, gradient_input);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -1099,20 +967,14 @@ namespace tt
         tensor& dest,
         const tensor& src,
         const tensor& param
-    );
-    /*!
-        requires
-            - have_same_dimensions(dest, src) == true
-            - param.size() == 1
-        ensures
-            - for all valid i:
-                - if (src.host()[i] > 0) then
-                    - #dest.host()[i] == src.host()[i]
-                - else
-                    - #dest.host()[i] == src.host()[i] * param.host()[0]
-            - This function supports in-place operation, i.e. having
-              is_same_object(dest, src)==true
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::prelu(dest, src, param);
+#else
+        cpu::prelu(dest, src, param);
+#endif
+    }
 
     void prelu_gradient (
         tensor& grad,
@@ -1120,57 +982,42 @@ namespace tt
         const tensor& gradient_input,
         const tensor& param,
         tensor& params_grad 
-    );
-    /*!
-        requires
-            - have_same_dimensions(grad,src) == true 
-            - have_same_dimensions(grad,gradient_input) == true 
-            - param.size() == 1
-            - params_grad.size() == 1
-            - is_same_object(grad, gradient_input) == false
-        ensures
-            - Recalling that dest is the output of prelu(dest,src,param) let 
-              f(src,param) == dot(gradient_input,dest)
-            - Then this function computes the gradient of f() with respect to src and
-              param.  It assigns the gradient with respect to param to #params_grad and
-              adds the gradient with respect to src to #grad.
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::prelu_gradient(grad, src, gradient_input, param, params_grad);
+#else
+        cpu::prelu_gradient(grad, src, gradient_input, param, params_grad);
+#endif
+    }
 
 // ----------------------------------------------------------------------------------------
 
     void tanh (
         tensor& dest,
         const tensor& src
-    );
-    /*!
-        requires
-            - have_same_dimensions(dest, src) == true
-        ensures
-            - for all valid i:
-                - #dest.host()[i] == std::tanh(src.host()[i]) 
-            - This function supports in-place operation, i.e. having
-              is_same_object(dest, src)==true
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::tanh(dest,src);
+#else
+        cpu::tanh(dest,src);
+#endif
+    }
 
     void tanh_gradient (
         tensor& grad,
         const tensor& dest,
         const tensor& gradient_input
-    );
-    /*!
-        requires
-            - have_same_dimensions(dest,gradient_input) == true 
-            - have_same_dimensions(dest,grad) == true 
-        ensures
-            - Recalling that dest is the output of tanh(dest,SRC) for some SRC tensor,
-              let f(SRC) == dot(gradient_input,dest).  Then this function computes the
-              gradient of f() with respect to SRC and stores it to grad.  Moreover, if
-              is_same_object(grad,gradient_input)==true then the output is assigned to
-              grad, replacing its previous contents.  Otherwise the output is added to
-              grad.
-            - This function supports in-place operation, i.e. having
-              is_same_object(grad, gradient_input)==true
-    !*/
+    )
+    {
+#ifdef DLIB_USE_CUDA
+        cuda::tanh_gradient(grad, dest, gradient_input);
+#else
+        cpu::tanh_gradient(grad, dest, gradient_input);
+#endif
+    }
+
 
 // ----------------------------------------------------------------------------------------
 
@@ -1382,7 +1229,14 @@ namespace tt
                 const tensor& src,
                 size_t src_k_offset,
                 size_t count_k
-        );
+        )
+        {
+#ifdef DLIB_USE_CUDA
+            cuda::copy_tensor(dest, dest_k_offset, src, src_k_offset, count_k);
+#else
+            cpu::copy_tensor(dest, dest_k_offset, src, src_k_offset, count_k);
+#endif
+        };
         /*!
             requires
                 - dest.nc() == src.nc()

@@ -28,7 +28,7 @@
 #include "dnnfacemodel.h"
 
 // Local includes
-
+#include "dnn_face.h"
 #include "facedb.h"
 #include "digikam_debug.h"
 
@@ -357,93 +357,11 @@ void FaceDb::clearLBPHTraining(const QList<int>& identities, const QString& cont
         }
     }
 }
-
+/*
 void FaceDb::getFaceVector(OpenCVMatData data, std::vector<float>& vecdata)
 {
-    anet_type net;
-    frontal_face_detector detector = get_frontal_face_detector();
-    qCDebug(DIGIKAM_FACEDB_LOG) << "Start reading model file";
-    QString path1 = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                              QLatin1String("digikam/facesengine/dlib_face_recognition_resnet_model_v1.dat")); 
-    deserialize(path1.toStdString()) >> net;
-    qCDebug(DIGIKAM_FACEDB_LOG) << "End reading model file";
-    qCDebug(DIGIKAM_FACEDB_LOG) << "Start reading shape file";
-    redeye::ShapePredictor sp;
-    QString path2 = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                              QLatin1String("digikam/facesengine/shapepredictor.dat"));
-    QFile model(path2);
-    std::cout << "read file\n";
-    if (model.open(QIODevice::ReadOnly))
-    {
-        redeye::ShapePredictor* const temp = new redeye::ShapePredictor();
-        QDataStream dataStream(&model);
-        dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
-        dataStream >> *temp;
-        sp = *temp;
-    }
-    else
-    {
-        qCDebug(DIGIKAM_FACEDB_LOG) << "Error open file shapepredictor.dat";
-        return ;
-    }
-
-    cv::Mat tmp_mat = data.toMat();
-    matrix<rgb_pixel> img;
-    std::vector<matrix<rgb_pixel>> faces;
-    assign_image(img, cv_image<rgb_pixel>(tmp_mat));
-    bool face_flag = false;
-    for (auto face : detector(img))
-    {
-        face_flag = true;
-        cv::Mat gray;
-        
-        int type = tmp_mat.type();
-        if(type == CV_8UC3 || type == CV_16UC3)
-        {
-            cv::cvtColor(tmp_mat, gray, CV_RGB2GRAY);  // 3 channels
-        }
-        else
-        {
-            cv::cvtColor(tmp_mat, gray, CV_RGBA2GRAY);  // 4 channels
-        }
-
-        if (type == CV_16UC3 || type == CV_16UC4)
-        {
-            gray.convertTo(gray, CV_8UC1, 1 / 255.0);
-        }
-
-        cv::Rect new_rect(face.left(), face.top(), face.right()-face.left(), face.bottom()-face.top());
-        FullObjectDetection object = sp(gray,new_rect);
-        matrix<rgb_pixel> face_chip;
-        extract_image_chip(img, get_face_chip_details(object,150,0.25), face_chip);
-        faces.push_back(move(face_chip));
-        break;
-    }
-    if(!face_flag)
-    {
-        cv::resize(tmp_mat, tmp_mat, cv::Size(150, 150));
-        assign_image(img, cv_image<rgb_pixel>(tmp_mat));
-        faces.push_back(img);
-    }
-    std::vector<matrix<float,0,1>> face_descriptors = net(faces);
-    if(face_descriptors.size()!=0)
-    {
-        vecdata.clear();
-        for(int i = 0; i < face_descriptors[0].nr(); i++)
-        {
-            for(int j = 0; j < face_descriptors[0].nc(); j++)
-            {
-                vecdata.push_back(face_descriptors[0](i, j));
-            }
-        }
-    }
-    else
-    {
-        qCDebug(DIGIKAM_FACEDB_LOG) << "Error calculate face vector";
-    }
-
-
 }
+*/
 
 void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
 {
@@ -465,7 +383,8 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
             {
                 QByteArray compressed = qCompress(data.data);
                 std::vector<float> vecdata;
-                this->getFaceVector(data, vecdata);
+                DNNFaceKernel dnnface_kernel;
+                dnnface_kernel.getFaceVector(data, vecdata);
                 QByteArray vec_byte(vecdata.size()*sizeof(float), 0);
                 float* fp = (float*)vec_byte.data();
                 for(int j = 0; j < vecdata.size(); j++)

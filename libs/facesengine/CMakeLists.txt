@@ -64,13 +64,12 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
 #                        preprocessing-tantriggs/tantriggspreprocessor.cpp
 )
 
-set(dnnfaces_LIB_SRCS dnnface/dnn_base/base64_kernel_1.cpp
-                      dnnface/dnn_base/entropy_decoder_kernel_2.cpp
-                      dnnface/dnn_base/entropy_encoder_kernel_2.cpp
-                      dnnface/nn/cpu_dlib.cpp
-                      dnnface/nn/gpu_data.cpp
-                      dnnface/nn/tensor_tools.cpp
-)
+#set(dnnfaces_LIB_SRCS dnnface/dnn_base/base64_kernel_1.cpp
+#                      dnnface/dnn_base/entropy_decoder_kernel_2.cpp
+#                      dnnface/dnn_base/entropy_encoder_kernel_2.cpp
+#                      dnnface/nn/gpu_data.cpp
+#                      dnnface/nn/tensor_tools.cpp
+#)
 
 set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
                                   recognition-opencv-eigenfaces/eigenfacemodel.cpp
@@ -97,7 +96,7 @@ set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
 add_library(digikamfacesengine_src
             OBJECT
             ${opencv3face_LIB_SRCS}             # Empty with OpenCV2
-            ${dnnfaces_LIB_SRCS}
+#            ${dnnfaces_LIB_SRCS}
             ${facesengine_LIB_SRCS}
 )
 

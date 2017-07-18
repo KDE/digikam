@@ -14,7 +14,7 @@
 #include "pixel.h"
 #include <sstream>
 #include "drectangle.h"
-#include "../image_transforms/image_pyramid.h"
+#include "image_pyramid.h"
 
 
 //namespace dlib

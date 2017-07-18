@@ -6,7 +6,7 @@
 //#include "cv_image_abstract.h"
 #include "algs.h"
 #include "pixel.h"
-#include "../matrix/matrix_mat.h"
+#include "matrix_mat.h"
 //#include "image_processing/generic_image.h"
 
 template <
