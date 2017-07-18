@@ -8,6 +8,7 @@
  *
  * Copyright (C)      2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2017 by Swati  Lodha   <swatilodha27 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,6 +62,7 @@ public:
      * yet, or is outdated because the file is identified as changed since
      * the generation of the fingerprint.
      * Return image ids or item URLs.
+     * @todo Both methods are yet to be modified
      */
     QList<qlonglong> getDirtyOrMissingFingerprints();
     QStringList      getDirtyOrMissingFingerprintURLs();
@@ -69,6 +71,20 @@ public:
      * Copies all similarity-specific information, from image srcId to destId.
      */
     void copySimilarityAttributes(qlonglong srcId, qlonglong destId);
+    
+    /**
+     * Returns the similarity value for two images.
+     */
+    QString getImageSimilarity(qlonglong imageID1, qlonglong imageID2);
+    
+    void setImageSimilarity(qlonglong imageID1, qlonglong imageID2, double value);
+    
+    /**
+     * Returns the algorithm used for finding similarity.
+     * @todo Add more algorithms in future except Haar.
+     */
+    QString getImageSimilarityAlgorithm(qlonglong imageID1, qlonglong imageID2);
+    
 
     // ----------- Database shrinking methods ----------
 

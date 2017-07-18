@@ -8,6 +8,7 @@
  *
  * Copyright (C)      2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2017 by Swati  Lodha   <swatilodha27 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -143,6 +144,50 @@ void SimilarityDb::copySimilarityAttributes(qlonglong srcId, qlonglong dstId)
                                      "SELECT ?, modificationDate, uniqueHash, matrix "
                                      "FROM ImageHaarMatrix WHERE imageid=?;"),
                    dstId, srcId);
+}
+
+QString SimilarityDb::getImageSimilarity(qlonglong imageID1, qlonglong imageID2)
+{
+    QList<QVariant> values;
+
+    d->db->execSql(QString::fromUtf8("SELECT value FROM ImageSimilarity "
+                           "WHERE imageid1=? and imageid2=?;"),
+                   imageID1, imageID2,
+                   &values);
+
+    if (!values.isEmpty())
+    {
+        return values.first().toString();
+    }
+    else
+    {
+        return QString();
+    }
+}
+
+void SimilarityDb::setImageSimilarity(qlonglong imageID1, qlonglong imageID2, double value)
+{
+    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageSimilarity "
+                           "(imageid1, imageid2, value) "
+                           "VALUES(?, ?, ?);"),
+                   imageID1, imageID2, value);
+}
+
+QString SimilarityDb::getImageSimilarityAlgorithm(qlonglong imageID1, qlonglong imageID2)
+{
+    QString algo;
+    
+    d->db->execSql(QString::fromUtf8("SELECT algorithm FROM ImageSimilarity "
+                           "WHERE imageid1=? and imageid2=?;"),
+                   imageID1, imageID2,
+                   &id);
+    
+    if(id.toInt() == 1)
+        algo = "Haar";
+    else
+        algo = "Unknown";
+    
+    return algo;
 }
 
 bool SimilarityDb::integrityCheck()
