@@ -69,7 +69,7 @@ public:
 private:
 
     bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
-    bool AdvPrintCheckTempPath(QWidget* const parent, const QString& tempPath) const;
+    bool checkTempPath(QWidget* const parent, const QString& tempPath) const;
 
 private Q_SLOTS:
 

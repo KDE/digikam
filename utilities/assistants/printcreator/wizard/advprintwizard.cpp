@@ -389,11 +389,9 @@ bool AdvPrintWizard::prepareToPrint()
 
             if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
             {
-                d->cropPage->ui()->cropFrame->init(photo,
-                                                   d->photoPage->getLayout(i)->width(),
-                                                   d->photoPage->getLayout(i)->height(),
-                                                   d->settings->outputLayouts->m_autoRotate,
-                                                   true);
+                photo->updateCropRegion(d->photoPage->getLayout(i)->width(),
+                                        d->photoPage->getLayout(i)->height(),
+                                        d->settings->outputLayouts->m_autoRotate);
             }
 
             i++;
@@ -477,7 +475,7 @@ bool AdvPrintWizard::prepareToPrint()
         {
             d->settings->imageFormat = AdvPrintSettings::JPEG;
 
-            if (!AdvPrintCheckTempPath(this, d->settings->tempPath))
+            if (!checkTempPath(this, d->settings->tempPath))
             {
                 return false;
             }
@@ -502,7 +500,7 @@ bool AdvPrintWizard::prepareToPrint()
     return false;
 }
 
-bool AdvPrintWizard::AdvPrintCheckTempPath(QWidget* const parent, const QString& tempPath) const
+bool AdvPrintWizard::checkTempPath(QWidget* const parent, const QString& tempPath) const
 {
     // does the temp path exist?
     QDir tempDir(tempPath);
