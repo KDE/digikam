@@ -1,0 +1,14 @@
+- add an attribute for desktop file
+- add Atckin's layout to p.a.
+- first assistant page should be a choice between 
+  "one photo per page"   aka p.i.
+  "more photos per page" aka p.a.
+- evaluate if removing p.i. after merging.
+
+Found QT odd behaviors
+- QPageSetupDialog::open does not set QPrinter correctly (Unix?) -> used exec
+- QPrinter Custom page size (HP CUPS settings) is restored as custom 0,0
+- QPrintDialog(Qprinter*) does not care QPrinter margins if OutputFormat
+  is set as PdfFormat or PostScriptFormat
+- QPrinterInfo::availablePrinters() seems to be usefull for PageSizes
+  only for default in case of printers :(
