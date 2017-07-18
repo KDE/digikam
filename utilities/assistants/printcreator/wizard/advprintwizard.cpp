@@ -288,12 +288,16 @@ void AdvPrintWizard::previewPhotos()
         int remainder = photoCount % photosPerPage;
 
         if (remainder > 0)
+        {
             emptySlots = photosPerPage - remainder;
+        }
 
         pageCount     = photoCount / photosPerPage;
 
         if (emptySlots > 0)
+        {
             pageCount++;
+        }
     }
 
     d->photoPage->ui()->LblPhotoCount->setText(QString::number(photoCount));
@@ -316,11 +320,9 @@ void AdvPrintWizard::previewPhotos()
         {
             photo->m_cropRegion.setRect(-1, -1, -1, -1);
             photo->m_rotation = 0;
-            d->cropPage->ui()->cropFrame->init(photo,
-                                               s->m_layouts.at(count + 1)->width(),
-                                               s->m_layouts.at(count + 1)->height(),
-                                               s->m_autoRotate,
-                                               false);
+            photo->updateCropRegion(s->m_layouts.at(count + 1)->width(),
+                                    s->m_layouts.at(count + 1)->height(),
+                                    s->m_autoRotate);
         }
 
         count++;
@@ -387,11 +389,9 @@ bool AdvPrintWizard::prepareToPrint()
 
             if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
             {
-                d->cropPage->ui()->cropFrame->init(photo,
-                                                   d->photoPage->getLayout(i)->width(),
-                                                   d->photoPage->getLayout(i)->height(),
-                                                   d->settings->outputLayouts->m_autoRotate,
-                                                   true);
+                photo->updateCropRegion(d->photoPage->getLayout(i)->width(),
+                                        d->photoPage->getLayout(i)->height(),
+                                        d->settings->outputLayouts->m_autoRotate);
             }
 
             i++;
@@ -475,7 +475,7 @@ bool AdvPrintWizard::prepareToPrint()
         {
             d->settings->imageFormat = AdvPrintSettings::JPEG;
 
-            if (!AdvPrintCheckTempPath(this, d->settings->tempPath))
+            if (!checkTempPath(this, d->settings->tempPath))
             {
                 return false;
             }
@@ -500,7 +500,7 @@ bool AdvPrintWizard::prepareToPrint()
     return false;
 }
 
-bool AdvPrintWizard::AdvPrintCheckTempPath(QWidget* const parent, const QString& tempPath) const
+bool AdvPrintWizard::checkTempPath(QWidget* const parent, const QString& tempPath) const
 {
     // does the temp path exist?
     QDir tempDir(tempPath);
