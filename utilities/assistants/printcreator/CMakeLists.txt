@@ -23,7 +23,7 @@ set(libprintcreator_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/atkinspagelayout.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/templateicon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/advprintlayouttree.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/advprintphoto.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/manager/advprintphoto.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/advprintsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/advprintthread.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/advprinttask.cpp
