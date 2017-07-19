@@ -271,7 +271,10 @@ BUGFIXES FROM BUGZILLA:
 256 ==> 230799 - Crash while editing picture.
 257 ==> 222550 - digiKam crashes when looking at pictures.
 258 ==> 228501 - digiKam crashes after deleting images.
-259 ==> 
-
-
-
+259 ==> 235583 - Manually updating metadata from database while having the option to write metadata automatically enabled.
+260 ==> 259005 - digiKam crashed after external disk was turned off.
+261 ==> 226663 - digiKam crashed after applying captions change.
+262 ==> 225076 - digiKam crash while it was importing photo from NTFS files system.
+263 ==> 256867 - digiKam crashes when deleting album.
+264 ==> 173691 - digiKam doesn't show pictures.
+265 ==> 
