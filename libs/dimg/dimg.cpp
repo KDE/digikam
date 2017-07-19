@@ -1566,7 +1566,9 @@ DImg DImg::copy(int x, int y, int w, int h) const
 {
     if (isNull() || w <= 0 || h <= 0)
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << " : return null image!";
+        qCDebug(DIGIKAM_DIMG_LOG) << " : return null image! ("
+                                  << isNull() << ", " << w
+                                  << ", " << h << ")";
         return DImg();
     }
 

@@ -41,6 +41,7 @@
 // Local includes
 
 #include "advprintwizard.h"
+#include "advprintphoto.h"
 #include "advprintcaptionpage.h"
 #include "dmetadata.h"
 #include "dfileoperations.h"
@@ -117,7 +118,7 @@ void AdvPrintTask::run()
             p.setCompositionMode(QPainter::CompositionMode_SourceOver);
             paintOnePage(p,
                          d->settings->photos,
-                         d->settings->outputLayouts->layouts,
+                         d->settings->outputLayouts->m_layouts,
                          d->settings->currentPreviewPage,
                          d->settings->disableCrop,
                          true);
@@ -139,7 +140,7 @@ void AdvPrintTask::printPhotos()
 
     Q_ASSERT(layouts);
     Q_ASSERT(printer);
-    Q_ASSERT(layouts->layouts.count() > 1);
+    Q_ASSERT(layouts->m_layouts.count() > 1);
 
     QList<AdvPrintPhoto*> photos = d->settings->photos;
     QPainter p;
@@ -155,7 +156,7 @@ void AdvPrintTask::printPhotos()
 
         printing = paintOnePage(p,
                                 photos,
-                                layouts->layouts,
+                                layouts->m_layouts,
                                 current,
                                 d->settings->disableCrop);
 
@@ -185,7 +186,7 @@ QStringList AdvPrintTask::printPhotosToFile()
 
     Q_ASSERT(layouts);
     Q_ASSERT(!dir.isEmpty());
-    Q_ASSERT(layouts->layouts.count() > 1);
+    Q_ASSERT(layouts->m_layouts.count() > 1);
 
     QList<AdvPrintPhoto*> photos = d->settings->photos;
 
@@ -193,17 +194,17 @@ QStringList AdvPrintTask::printPhotosToFile()
     int current          = 0;
     int pageCount        = 1;
     bool printing        = true;
-    QRect* const srcPage = layouts->layouts.at(0);
+    QRect* const srcPage = layouts->m_layouts.at(0);
 
     while (printing && !m_cancel)
     {
         // make a pixmap to save to file.  Make it just big enough to show the
         // highest-dpi image on the page without losing data.
-        double dpi       = layouts->dpi;
+        double dpi       = layouts->m_dpi;
 
         if (dpi == 0.0)
         {
-            dpi = getMaxDPI(photos, layouts->layouts, current) * 1.1;
+            dpi = getMaxDPI(photos, layouts->m_layouts, current) * 1.1;
         }
 
         int w            = AdvPrintWizard::normalizedInt(srcPage->width());
@@ -230,7 +231,7 @@ QStringList AdvPrintTask::printPhotosToFile()
 
         printing = paintOnePage(painter,
                                 photos,
-                                layouts->layouts,
+                                layouts->m_layouts,
                                 current,
                                 d->settings->disableCrop);
         painter.end();
@@ -330,11 +331,11 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
 
         if (useThumbnails)
         {
-            img = photo->thumbnail();
+            img = photo->thumbnail().copyQImage();
         }
         else
         {
-            img = photo->loadPhoto();
+            img = photo->loadPhoto().copyQImage();
         }
 
         // next, do we rotate?
@@ -416,7 +417,7 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
         p.setBrushOrigin(point);
 
         if (photo->m_pAdvPrintCaptionInfo &&
-            photo->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
+            photo->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintSettings::NONE)
         {
             p.save();
             QString caption = AdvPrintCaptionPage::captionFormatter(photo);

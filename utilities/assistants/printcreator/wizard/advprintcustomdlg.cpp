@@ -53,7 +53,7 @@ AdvPrintCustomLayoutDlg::AdvPrintCustomLayoutDlg(QWidget* const parent)
     m_photoWidth->setToolTip(i18n("Photo width"));
     m_photoWidth->setWhatsThis(i18n("Insert photo width"));
 
-    m_autorotate->setToolTip(i18n("Rotate photo automatically on layout accorndigly "
+    m_autorotate->setToolTip(i18n("Rotate photo automatically on layout accordingly "
                                   "with camera orientation information"));
 }
 

@@ -43,7 +43,6 @@
 #include "applicationsettings.h"
 #include "imageattributeswatch.h"
 #include "tagscache.h"
-#include "applicationsettings.h"
 #include "facetagseditor.h"
 #include "metadatahubmngr.h"
 

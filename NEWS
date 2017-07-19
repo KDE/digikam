@@ -221,4 +221,60 @@ BUGFIXES FROM BUGZILLA:
 206 ==> 186640 - Multiseat workstation with mdm and gdm - digiKam crash.
 207 ==> 227902 - digiKam crashes when picture saved after red-eye effect.
 208 ==> 091485 - Red eye reduction - user should be told to select a part of the image.
-209 ==> 
+209 ==> 382259 - Can't open picture database located at /home/egh/Pictures.
+210 ==> 102636 - Delete fails: access denied to trash:/xyz.jpg.
+211 ==> 382002 - Lazy synchronization not working.
+212 ==> 170758 - High load when tagging.
+213 ==> 111591 - Tag images browser doesn't show any images.
+214 ==> 168267 - digiKam mpeg encoding failure.
+215 ==> 115705 - ERROR: [yuvscaler] Could'nt read YUV4MPEG header.
+216 ==> 331989 - digiKam crashes when playing AVI-file.
+217 ==> 233693 - digiKam crash when clicking on .MOV file in album.
+218 ==> 324611 - Deleting picture not possible.
+219 ==> 105303 - Can't move images between folders.
+220 ==> 092624 - Crashes while starting with signal 11 (SIGSEGV).
+221 ==> 292634 - digiKam crash just after moving a people tag square.
+222 ==> 274957 - Crash on copy multiple files.
+223 ==> 323964 - digiKam crash while processing tags.
+224 ==> 333352 - Re-appoints tag people.
+225 ==> 283537 - digiKam crashed.
+226 ==> 320292 - Crash while entering person names.
+227 ==> 197562 - digiKam crash on deleting and moving a few pictures.
+228 ==> 323993 - Crash while naming multiple people at the same time in one picture.
+229 ==> 203146 - digiKam crashed wile moving files in the background.
+230 ==> 107717 - Add trash to album treeview.
+231 ==> 093246 - PrintWizard tool is missing.
+232 ==> 176367 - Crop stage does not allow rotation or selection.
+233 ==> 166712 - Choosing the part which is cut off for printing only works for the first photo.
+234 ==> 133193 - Metadata over the photo to print.
+235 ==> 145569 - There's non print option on the menu.
+236 ==> 111454 - Print photo's date into one corner like print assistant.
+237 ==> 141535 - Suggestion for photo layout algorithm.
+238 ==> 121538 - Access denied. Could not write to digikamalbums.
+239 ==> 273399 - Crash on exit.
+240 ==> 267359 - Crash after unmount hdd drive during process running.
+241 ==> 231866 - Crash when assigning score.
+242 ==> 235249 - I was looking through images one by one in the viewing pane.
+243 ==> 226888 - digiKam crashs after edit a few images.
+244 ==> 228109 - digiKam close when I rate my picture and changing photos with backspace.
+245 ==> 104008 - Name of the album not refreshed when changed.
+246 ==> 269925 - Crash on library creation from usb drive.
+247 ==> 229857 - Crash while browsing pictures.
+248 ==> 266506 - Startup of digikam "by itself".
+249 ==> 230531 - digiKam crashed while moving pictures from one folder to another.
+250 ==> 261228 - Segfault while plugging in usb flash drive.
+251 ==> 223617 - digiKam crash when changing the name of a pict.
+252 ==> 225263 - digiKam crashed while applying black and white effect.
+253 ==> 117845 - Crashes at startup, only in normal user mode.
+254 ==> 252436 - Cierre repentino de digiKam, sin aviso de causa.
+255 ==> 230346 - Crash after browsing through Album.
+256 ==> 230799 - Crash while editing picture.
+257 ==> 222550 - digiKam crashes when looking at pictures.
+258 ==> 228501 - digiKam crashes after deleting images.
+259 ==> 235583 - Manually updating metadata from database while having the option to write metadata automatically enabled.
+260 ==> 259005 - digiKam crashed after external disk was turned off.
+261 ==> 226663 - digiKam crashed after applying captions change.
+262 ==> 225076 - digiKam crash while it was importing photo from NTFS files system.
+263 ==> 256867 - digiKam crashes when deleting album.
+264 ==> 173691 - digiKam doesn't show pictures.
+265 ==> 

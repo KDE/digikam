@@ -499,7 +499,7 @@ public:
     QString              displayTitle() const;
 
     /**
-     * Returns the title of search albums that is used to to mark them as a
+     * Returns the title of search albums that is used to mark them as a
      * temporary search that isn't saved officially yet and is only used for
      * viewing purposes.
      *

@@ -54,6 +54,7 @@ public:
     bool isComplete() const;
     void cleanupPage();
 
+    bool checkTempPath(const QString& tempPath) const;
     void removeGimpFiles();
 
 private Q_SLOTS:
