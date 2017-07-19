@@ -59,6 +59,7 @@ class FaceDb
 {
 public:
 
+    FaceDb();
     FaceDb(FaceDbBackend* const db);
     ~FaceDb();
 
@@ -81,7 +82,7 @@ public:
 
     /// OpenCV EIGEN
 
-    //void getFaceVector(OpenCVMatData data, std::vector<float>& vecdata);
+    void getFaceVector(cv::Mat data, std::vector<float>& vecdata);
     void updateEIGENFaceModel(EigenFaceModel& model);
     EigenFaceModel eigenFaceModel() const;
     void clearEIGENTraining(const QString& context = QString());

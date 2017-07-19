@@ -69,6 +69,12 @@ public:
     FaceDbBackend* db;
 };
 
+/*
+This constructor is only used in facerec_dnnborrowed.cpp.
+Create an object of FaceDb to invoke the method getFaceVector
+*/
+FaceDb::FaceDb(): d(new Private){}
+
 FaceDb::FaceDb(FaceDbBackend* const db)
     : d(new Private)
 {
@@ -379,11 +385,13 @@ void FaceDb::clearLBPHTraining(const QList<int>& identities, const QString& cont
         }
     }
 }
-/*
-void FaceDb::getFaceVector(OpenCVMatData data, std::vector<float>& vecdata)
+
+void FaceDb::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
 {
+    DNNFaceKernel dnnface_kernel;
+    dnnface_kernel.getFaceVector(data, vecdata);
 }
-*/
+
 
 void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
 {
@@ -405,8 +413,8 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
             {
                 QByteArray compressed = qCompress(data.data);
                 std::vector<float> vecdata;
-                DNNFaceKernel dnnface_kernel;
-                dnnface_kernel.getFaceVector(data.toMat(), vecdata);
+                this->getFaceVector(data.toMat(), vecdata);
+                
                 QByteArray vec_byte(vecdata.size()*sizeof(float), 0);
                 float* fp = (float*)vec_byte.data();
                 for(int j = 0; j < vecdata.size(); j++)

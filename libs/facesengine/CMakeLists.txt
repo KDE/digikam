@@ -105,6 +105,7 @@ add_library(digikamfacesengine STATIC $<TARGET_OBJECTS:digikamfacesengine_src>)
 add_library(digikamfacesenginedatabase_src
             OBJECT
             ${facesengine_database_LIB_SRCS}
+            ${facesengine_LIB_SRCS}
 )
 
 add_library(digikamfacesenginedatabase STATIC $<TARGET_OBJECTS:digikamfacesenginedatabase_src>)

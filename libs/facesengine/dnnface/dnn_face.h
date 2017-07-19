@@ -64,6 +64,7 @@ using anet_type = loss_metric<fc_no_bias<128,avg_pool_everything<
                                 input_rgb_image_sized<150>
                                 >>>>>>>>>>>>;
 
+using namespace Digikam::redeye;
 class DNNFaceKernel
 {
 public:
@@ -93,17 +94,19 @@ public:
 	    }
 	    else
 	    {
-	        //qCDebug(DIGIKAM_FACEDB_LOG) << "Error open file shapepredictor.dat";
+	        std::cout << "Error open file shapepredictor.dat\n";
 	        return ;
 	    }
 
 	    //cv::Mat tmp_mat = data.toMat();
 	    matrix<rgb_pixel> img;
 	    std::vector<matrix<rgb_pixel>> faces;
+	    std::cout << "tmp_mat channels: " << tmp_mat.channels() << endl;
 	    assign_image(img, cv_image<rgb_pixel>(tmp_mat));
 	    bool face_flag = false;
 	    for (auto face : detector(img))
 	    {
+	    	std::cout << "detected face\n";
 	        face_flag = true;
 	        cv::Mat gray;
 	        

@@ -367,7 +367,7 @@
             // So rather than writing a bunch of hard to read template magic around call
             // sites we just have this overload that doesn't do anything (and an assert to
             // make sure that's the case).
-            std::cout << "call layer forward 1\n";
+            //std::cout << "call layer forward 1\n";
             DLIB_CASSERT(false, "This should never happen");
         }
 
@@ -378,7 +378,7 @@
             resizable_tensor& data_output
         ) -> decltype(layer.forward(sub,data_output))
         {
-            std::cout << "call layer forward 2\n";
+            //std::cout << "call layer forward 2\n";
             layer.forward(sub,data_output);
         }
 
@@ -389,7 +389,7 @@
             tensor& data_output
         ) -> decltype(layer.forward_inplace(sub.get_output(),data_output))
         {
-            std::cout << "call layer forward 3\n";
+            //std::cout << "call layer forward 3\n";
             layer.forward_inplace(sub.get_output(),data_output);
         }
 
@@ -400,7 +400,7 @@
             resizable_tensor& data_output
         ) -> decltype(layer.forward_inplace(sub.get_output(),data_output))
         {
-            std::cout << "call layer forward 4\n";
+            //std::cout << "call layer forward 4\n";
             if (!have_same_dimensions(data_output, sub.get_output()))
                 data_output.copy_size(sub.get_output());
             layer.forward_inplace(sub.get_output(),static_cast<tensor&>(data_output));
@@ -2243,7 +2243,7 @@
             resizable_tensor& data
         ) const
         {
-            std::cout << "to tensor in add_loss_layer\n";
+            //std::cout << "to tensor in add_loss_layer\n";
             subnetwork.to_tensor(ibegin,iend,data);
         }
 
@@ -2283,16 +2283,16 @@
             size_t batch_size = 128
         )
         {
-            std::cout << "here\n";
+            //std::cout << "here\n";
             std::vector<output_label_type> results(std::distance(data.begin(), data.end()));
-            std::cout << "ddd " << (int)results.size() << "  ";
+            //std::cout << "ddd " << (int)results.size() << "  ";
             auto o = results.begin();
             auto i = data.begin();
             auto num_remaining = results.size();
-            std::cout << (int)num_remaining << "\n";
+            //std::cout << (int)num_remaining << "\n";
             while(num_remaining > 0)
             {
-                std::cout << (int)num_remaining << "\n";
+                //std::cout << (int)num_remaining << "\n";
                 auto inc = std::min(batch_size, num_remaining);
                 (*this)(i, i+inc, o);
                 i += inc;

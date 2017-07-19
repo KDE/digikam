@@ -84,9 +84,9 @@
             - #dest == src
     !*/
     {
-        std::cout << dest.nr() << " " << src.nr() << std::endl;
-        std::cout << dest.nc() << " " << src.nc() << std::endl;
-        std::cout << std::endl;
+        //std::cout << dest.nr() << " " << src.nr() << std::endl;
+        //std::cout << dest.nc() << " " << src.nc() << std::endl;
+        //std::cout << std::endl;
         for (long r = 0; r < src.nr(); ++r)
         {
             for (long c = 0; c < src.nc(); ++c)

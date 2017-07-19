@@ -120,9 +120,9 @@
         template <typename EXP>
         tensor& operator= (const matrix_exp<EXP>& item)
         {
-            std::cout << "tensor equal" << std::endl;
-            std::cout << num_samples() << " " << item.nr() << std::endl;
-            std::cout << nr()*nc()*k() << " " << item.nc() << std::endl;
+            //std::cout << "tensor equal" << std::endl;
+            //std::cout << num_samples() << " " << item.nr() << std::endl;
+           // std::cout << nr()*nc()*k() << " " << item.nc() << std::endl;
             //DLIB_CASSERT(num_samples() == item.nr() &&nr()*nc()*k() == item.nc());
             static_assert((is_same_type<float, typename EXP::type>::value == true),
                 "To assign a matrix to a tensor the matrix must contain float values");

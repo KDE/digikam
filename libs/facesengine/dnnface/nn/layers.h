@@ -151,7 +151,7 @@
         template <typename SUBNET>
         void forward(const SUBNET& sub, resizable_tensor& output)
         {
-            std::cout << "con_\n";
+            //std::cout << "con_\n";
             conv(output,
                 sub.get_output(),
                 filters(params,0),
@@ -398,7 +398,7 @@
         template <typename SUBNET>
         void forward(const SUBNET& sub, resizable_tensor& output)
         {
-            std::cout << "max_pool_\n";
+            //std::cout << "max_pool_\n";
             mp.setup_max_pooling(_nr!=0?_nr:sub.get_output().nr(), 
                                  _nc!=0?_nc:sub.get_output().nc(),
                                  _stride_y, _stride_x, padding_y_, padding_x_);
@@ -596,7 +596,7 @@
         template <typename SUBNET>
         void forward(const SUBNET& sub, resizable_tensor& output)
         {
-            std::cout << "avg_pool_\n";
+            //std::cout << "avg_pool_\n";
             ap.setup_avg_pooling(_nr!=0?_nr:sub.get_output().nr(), 
                                  _nc!=0?_nc:sub.get_output().nc(),
                                  _stride_y, _stride_x, padding_y_, padding_x_);
@@ -792,7 +792,7 @@
 
         template <typename SUBNET>
         void forward(const SUBNET& sub, resizable_tensor& output)
-        {std::cout << "bn_\n";
+        {//std::cout << "bn_\n";
             auto g = gamma(params,0);
             auto b = beta(params,gamma.size());
             if (sub.get_output().num_samples() > 1)
@@ -1067,7 +1067,7 @@
 
         template <typename SUBNET>
         void forward(const SUBNET& sub, resizable_tensor& output)
-        {std::cout << "fc_\n";
+        {//std::cout << "fc_\n";
             output.set_size(sub.get_output().num_samples(), num_outputs);
 
             auto w = weights(params, 0);
@@ -1646,7 +1646,7 @@
 
         template <typename SUBNET>
         void forward(const SUBNET& sub, resizable_tensor& output)
-        {std::cout << "add_prev_\n";
+        {//std::cout << "add_prev_\n";
             auto&& t1 = sub.get_output();
             auto&& t2 = layer<tag>(sub).get_output();
             output.set_size(std::max(t1.num_samples(),t2.num_samples()),
@@ -1817,7 +1817,7 @@
             const SUBNET& sub, 
             resizable_tensor& data_output
         )
-        {std::cout << "prelu_\n";
+        {//std::cout << "prelu_\n";
             data_output.copy_size(sub.get_output());
             tt::prelu(data_output, sub.get_output(), params);
         }
@@ -2160,7 +2160,7 @@
         }
         template <typename SUBNET>
         void forward(const SUBNET& sub, resizable_tensor& output)
-        {std::cout << "concat_\n";
+        {//std::cout << "concat_\n";
             // the total depth of result is the sum of depths from all tags
             impl::concat_helper_impl<TAG_TYPES...>::resize_out(output, sub, 0);
 

@@ -47,6 +47,7 @@
 
 
 // Local includes
+/*
 #include "tensor.h"
 #include "input.h"
 #include "layers.h"
@@ -67,11 +68,11 @@
 #include "assign_image.h"
 #include "interpolation.h"
 #include "frontal_face_detector.h"
-
 #include "dnn_face.h"
+*/
 #include "digikam_debug.h"
-#include "shapepredictor.h"
-#include "fullobjectdetection.h"
+//#include "shapepredictor.h"
+//#include "fullobjectdetection.h"
 
 using namespace cv;
 
@@ -223,8 +224,10 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int &minClass, double &minD
 
     cv::Mat src = _src.getMat();//254*254
     std::vector<float> vecdata;
-    DNNFaceKernel dnnface_kernel;
-    dnnface_kernel.getFaceVector(src, vecdata);
+    FaceDb *tmp_facedb = new FaceDb();
+    tmp_facedb->getFaceVector(src, vecdata);
+    //DNNFaceKernel dnnface_kernel;
+    //dnnface_kernel.getFaceVector(src, vecdata);
 
     minDist      = DBL_MAX;
     minClass     = -1;
