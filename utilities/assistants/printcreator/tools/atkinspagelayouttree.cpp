@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "advprintlayouttree.h"
+#include "atkinspagelayouttree.h"
 
 // C++ includes
 
@@ -34,9 +34,9 @@
 namespace Digikam
 {
 
-AdvPrintLayoutNode::AdvPrintLayoutNode(double aspectRatio,
-                                       double relativeArea,
-                                       int    index)
+AtkinsPageLayoutNode::AtkinsPageLayoutNode(double aspectRatio,
+                                           double relativeArea,
+                                           int    index)
     : m_a(aspectRatio),
       m_e(relativeArea),
       m_division(0),
@@ -47,10 +47,10 @@ AdvPrintLayoutNode::AdvPrintLayoutNode(double aspectRatio,
 {
 }
 
-AdvPrintLayoutNode::AdvPrintLayoutNode(AdvPrintLayoutNode* const subtree,
-                                       AdvPrintLayoutNode* const terminalChild,
-                                       bool horizontal,
-                                       int  index)
+AtkinsPageLayoutNode::AtkinsPageLayoutNode(AtkinsPageLayoutNode* const subtree,
+                                           AtkinsPageLayoutNode* const terminalChild,
+                                           bool horizontal,
+                                           int  index)
     : m_a(0),
       m_e(0),
       m_division(0),
@@ -61,32 +61,32 @@ AdvPrintLayoutNode::AdvPrintLayoutNode(AdvPrintLayoutNode* const subtree,
 {
 }
 
-AdvPrintLayoutNode::AdvPrintLayoutNode(const AdvPrintLayoutNode& other)
+AtkinsPageLayoutNode::AtkinsPageLayoutNode(const AtkinsPageLayoutNode& other)
 {
     (*this) = other;
 }
 
-AdvPrintLayoutNode::~AdvPrintLayoutNode()
+AtkinsPageLayoutNode::~AtkinsPageLayoutNode()
 {
     delete m_leftChild;
     delete m_rightChild;
 }
 
-AdvPrintLayoutNode &AdvPrintLayoutNode::operator=(const AdvPrintLayoutNode& other)
+AtkinsPageLayoutNode &AtkinsPageLayoutNode::operator=(const AtkinsPageLayoutNode& other)
 {
     m_a          = other.m_a;
     m_e          = other.m_e;
     m_division   = other.m_division;
     m_type       = other.m_type;
     m_index      = other.m_index;
-    m_leftChild  = other.m_leftChild  ? new AdvPrintLayoutNode(*other.m_leftChild)  : 0;
-    m_rightChild = other.m_rightChild ? new AdvPrintLayoutNode(*other.m_rightChild) : 0;
+    m_leftChild  = other.m_leftChild  ? new AtkinsPageLayoutNode(*other.m_leftChild)  : 0;
+    m_rightChild = other.m_rightChild ? new AtkinsPageLayoutNode(*other.m_rightChild) : 0;
 
     return *this;
 }
 
-void AdvPrintLayoutNode::takeAndSetChild(AdvPrintLayoutNode* const oldChild,
-                                         AdvPrintLayoutNode* const newChild)
+void AtkinsPageLayoutNode::takeAndSetChild(AtkinsPageLayoutNode* const oldChild,
+                                           AtkinsPageLayoutNode* const newChild)
 {
     if (m_leftChild == oldChild)
     {
@@ -98,7 +98,7 @@ void AdvPrintLayoutNode::takeAndSetChild(AdvPrintLayoutNode* const oldChild,
     }
 }
 
-AdvPrintLayoutNode* AdvPrintLayoutNode::nodeForIndex(int index)
+AtkinsPageLayoutNode* AtkinsPageLayoutNode::nodeForIndex(int index)
 {
     if (m_index == index)
         return this;
@@ -106,7 +106,7 @@ AdvPrintLayoutNode* AdvPrintLayoutNode::nodeForIndex(int index)
     if (m_type == TerminalNode)
         return 0;
 
-    AdvPrintLayoutNode* const fromLeft = m_leftChild->nodeForIndex(index);
+    AtkinsPageLayoutNode* const fromLeft = m_leftChild->nodeForIndex(index);
 
     if (fromLeft)
         return fromLeft;
@@ -114,7 +114,7 @@ AdvPrintLayoutNode* AdvPrintLayoutNode::nodeForIndex(int index)
     return m_rightChild->nodeForIndex(index);
 }
 
-AdvPrintLayoutNode* AdvPrintLayoutNode::parentOf(AdvPrintLayoutNode* const child)
+AtkinsPageLayoutNode* AtkinsPageLayoutNode::parentOf(AtkinsPageLayoutNode* const child)
 {
     if (m_type == TerminalNode)
         return 0;
@@ -122,7 +122,7 @@ AdvPrintLayoutNode* AdvPrintLayoutNode::parentOf(AdvPrintLayoutNode* const child
     if (m_leftChild == child || m_rightChild == child)
         return this;
 
-    AdvPrintLayoutNode* const fromLeft = m_leftChild->parentOf(child);
+    AtkinsPageLayoutNode* const fromLeft = m_leftChild->parentOf(child);
 
     if (fromLeft)
         return fromLeft;
@@ -130,7 +130,7 @@ AdvPrintLayoutNode* AdvPrintLayoutNode::parentOf(AdvPrintLayoutNode* const child
     return m_rightChild->parentOf(child);
 }
 
-void AdvPrintLayoutNode::computeRelativeSizes()
+void AtkinsPageLayoutNode::computeRelativeSizes()
 {
     if (m_type == TerminalNode)
         return;
@@ -138,11 +138,11 @@ void AdvPrintLayoutNode::computeRelativeSizes()
     m_leftChild->computeRelativeSizes();
     m_rightChild->computeRelativeSizes();
 
-    double leftProductRoot   = std::sqrt(m_leftChild->m_a * m_leftChild->m_e);
+    double leftProductRoot   = std::sqrt(m_leftChild->m_a  * m_leftChild->m_e);
     double rightProductRoot  = std::sqrt(m_rightChild->m_a * m_rightChild->m_e);
     double maxProductRoot    = leftProductRoot > rightProductRoot ? leftProductRoot : rightProductRoot;
 
-    double leftDivisionRoot  = std::sqrt(m_leftChild->m_e / m_leftChild->m_a);
+    double leftDivisionRoot  = std::sqrt(m_leftChild->m_e  / m_leftChild->m_a);
     double rightDivisionRoot = std::sqrt(m_rightChild->m_e / m_rightChild->m_a);
     double maxDivisionRoot   = leftDivisionRoot > rightDivisionRoot ? leftDivisionRoot : rightDivisionRoot;
 
@@ -158,7 +158,7 @@ void AdvPrintLayoutNode::computeRelativeSizes()
     }
 }
 
-void AdvPrintLayoutNode::computeDivisions()
+void AtkinsPageLayoutNode::computeDivisions()
 {
     if (m_type == TerminalNode)
         return;
@@ -168,7 +168,7 @@ void AdvPrintLayoutNode::computeDivisions()
 
     if (m_type == VerticalDivision)        // side by side
     {
-        double leftDivisionRoot  = std::sqrt(m_leftChild->m_e / m_leftChild->m_a);
+        double leftDivisionRoot  = std::sqrt(m_leftChild->m_e  / m_leftChild->m_a);
         double rightDivisionRoot = std::sqrt(m_rightChild->m_e / m_rightChild->m_a);
  
         m_division               = leftDivisionRoot / (leftDivisionRoot + rightDivisionRoot);
@@ -176,7 +176,7 @@ void AdvPrintLayoutNode::computeDivisions()
     else if (m_type == HorizontalDivision) // one on top of the other
     {
         // left child is topmost
-        double leftProductRoot  = std::sqrt(m_leftChild->m_a * m_leftChild->m_e);
+        double leftProductRoot  = std::sqrt(m_leftChild->m_a  * m_leftChild->m_e);
         double rightProductRoot = std::sqrt(m_rightChild->m_a * m_rightChild->m_e);
 
         // the term in the paper takes 0 = bottom, we use 0 = top
@@ -184,44 +184,44 @@ void AdvPrintLayoutNode::computeDivisions()
     }
 }
 
-double AdvPrintLayoutNode::aspectRatio() const
+double AtkinsPageLayoutNode::aspectRatio() const
 {
     return m_a;
 }
 
-double AdvPrintLayoutNode::relativeArea() const
+double AtkinsPageLayoutNode::relativeArea() const
 {
     return m_e;
 }
 
-double AdvPrintLayoutNode::division() const
+double AtkinsPageLayoutNode::division() const
 {
     return m_division;
 }
 
-AdvPrintLayoutNode::Type AdvPrintLayoutNode::type() const
+AtkinsPageLayoutNode::Type AtkinsPageLayoutNode::type() const
 {
     return m_type;
 }
 
-int AdvPrintLayoutNode::index() const
+int AtkinsPageLayoutNode::index() const
 {
     return m_index;
 }
 
-AdvPrintLayoutNode* AdvPrintLayoutNode::leftChild() const
+AtkinsPageLayoutNode* AtkinsPageLayoutNode::leftChild() const
 {
     return m_leftChild;
 }
 
-AdvPrintLayoutNode* AdvPrintLayoutNode::rightChild() const
+AtkinsPageLayoutNode* AtkinsPageLayoutNode::rightChild() const
 {
     return m_rightChild;
 }
 
 // ------------------------------------------------------------------------------------
 
-AdvPrintLayoutTree::AdvPrintLayoutTree(double aspectRatioPage, double absoluteAreaPage)
+AtkinsPageLayoutTree::AtkinsPageLayoutTree(double aspectRatioPage, double absoluteAreaPage)
     : m_root(0),
       m_count(0),
       m_aspectRatioPage(aspectRatioPage),
@@ -229,15 +229,15 @@ AdvPrintLayoutTree::AdvPrintLayoutTree(double aspectRatioPage, double absoluteAr
 {
 }
 
-AdvPrintLayoutTree::AdvPrintLayoutTree(const AdvPrintLayoutTree& other)
+AtkinsPageLayoutTree::AtkinsPageLayoutTree(const AtkinsPageLayoutTree& other)
 {
     (*this) = other;
 }
 
-AdvPrintLayoutTree& AdvPrintLayoutTree::operator=(const AdvPrintLayoutTree& other)
+AtkinsPageLayoutTree& AtkinsPageLayoutTree::operator=(const AtkinsPageLayoutTree& other)
 {
     delete m_root;
-    m_root             = new AdvPrintLayoutNode(*(other.m_root));
+    m_root             = new AtkinsPageLayoutNode(*(other.m_root));
     m_count            = other.m_count;
     m_aspectRatioPage  = other.m_aspectRatioPage;
     m_absoluteAreaPage = other.m_absoluteAreaPage;
@@ -245,44 +245,44 @@ AdvPrintLayoutTree& AdvPrintLayoutTree::operator=(const AdvPrintLayoutTree& othe
     return *this;
 }
 
-AdvPrintLayoutTree::~AdvPrintLayoutTree()
+AtkinsPageLayoutTree::~AtkinsPageLayoutTree()
 {
     delete m_root;
 }
 
-int AdvPrintLayoutTree::addImage(double aspectRatio, double relativeArea)
+int AtkinsPageLayoutTree::addImage(double aspectRatio, double relativeArea)
 {
     int index = m_count;
 
     if (!m_root)
     {
-        m_root = new AdvPrintLayoutNode(aspectRatio, relativeArea, index);
+        m_root = new AtkinsPageLayoutNode(aspectRatio, relativeArea, index);
         m_count++;
         return index;
     }
 
     // Section 2.1
-    AdvPrintLayoutNode* bestTree = NULL;
-    double highScore             = 0;
+    AtkinsPageLayoutNode* bestTree = NULL;
+    double highScore               = 0;
 
     for (int i = 0 ; i < m_count ; ++i)
     {
         for (int horizontal = 0 ; horizontal < 2 ; ++horizontal)
         {
             // create temporary tree
-            AdvPrintLayoutNode* candidateTree          = new AdvPrintLayoutNode(*m_root);
+            AtkinsPageLayoutNode* candidateTree          = new AtkinsPageLayoutNode(*m_root);
 
             // select the subtree which will be replace by a new internal node
-            AdvPrintLayoutNode* const candidateSubtree = candidateTree->nodeForIndex(i);
+            AtkinsPageLayoutNode* const candidateSubtree = candidateTree->nodeForIndex(i);
 
             // find parent node
-            AdvPrintLayoutNode* const parentNode       = candidateTree->parentOf(candidateSubtree);
+            AtkinsPageLayoutNode* const parentNode       = candidateTree->parentOf(candidateSubtree);
 
             // create new terminal node
-            AdvPrintLayoutNode* const newTerminalNode  = new AdvPrintLayoutNode(aspectRatio, relativeArea, index);
+            AtkinsPageLayoutNode* const newTerminalNode  = new AtkinsPageLayoutNode(aspectRatio, relativeArea, index);
 
             // create new internal node
-            AdvPrintLayoutNode* const newInternalNode  = new AdvPrintLayoutNode(candidateSubtree, newTerminalNode, horizontal, index+1);
+            AtkinsPageLayoutNode* const newInternalNode  = new AtkinsPageLayoutNode(candidateSubtree, newTerminalNode, horizontal, index+1);
 
             // replace in tree
             if (parentNode)
@@ -325,7 +325,7 @@ int AdvPrintLayoutTree::addImage(double aspectRatio, double relativeArea)
 }
 
 // Section 2.2.1
-double AdvPrintLayoutTree::score(AdvPrintLayoutNode* const root, int nodeCount)
+double AtkinsPageLayoutTree::score(AtkinsPageLayoutNode* const root, int nodeCount)
 {
     if (!root)
         return 0;
@@ -334,9 +334,9 @@ double AdvPrintLayoutTree::score(AdvPrintLayoutNode* const root, int nodeCount)
 
     for (int i = 0 ; i < nodeCount ; ++i)
     {
-        AdvPrintLayoutNode* const node = root->nodeForIndex(i);
+        AtkinsPageLayoutNode* const node = root->nodeForIndex(i);
 
-        if (node->type() == AdvPrintLayoutNode::TerminalNode)
+        if (node->type() == AtkinsPageLayoutNode::TerminalNode)
             areaSum += node->relativeArea();
     }
 
@@ -347,13 +347,13 @@ double AdvPrintLayoutTree::score(AdvPrintLayoutNode* const root, int nodeCount)
 }
 
 // Section 2.2.2
-double AdvPrintLayoutTree::G() const
+double AtkinsPageLayoutTree::G() const
 {
     return 0.95 * 0.95;
 }
 
 // Section 2.2.2
-double AdvPrintLayoutTree::absoluteArea(AdvPrintLayoutNode* const node)
+double AtkinsPageLayoutTree::absoluteArea(AtkinsPageLayoutNode* const node)
 {
     // min(a_pbb, a_page), max(a_pbb, a_page)
     double minRatioPage     = m_root->aspectRatio() < m_aspectRatioPage ? m_root->aspectRatio() : m_aspectRatioPage;
@@ -369,16 +369,16 @@ double AdvPrintLayoutTree::absoluteArea(AdvPrintLayoutNode* const node)
     return G() * node->relativeArea() / m_root->relativeArea() * absoluteAreaRoot;
 }
 
-QRectF AdvPrintLayoutTree::drawingArea(int index, const QRectF& absoluteRectPage)
+QRectF AtkinsPageLayoutTree::drawingArea(int index, const QRectF& absoluteRectPage)
 {
-    AdvPrintLayoutNode* const node = m_root->nodeForIndex(index);
+    AtkinsPageLayoutNode* const node = m_root->nodeForIndex(index);
 
     if (!node)
         return QRectF();
 
     // find out the "line of ancestry" of the node
-    QList<AdvPrintLayoutNode*> treePath;
-    AdvPrintLayoutNode* parent = node;
+    QList<AtkinsPageLayoutNode*> treePath;
+    AtkinsPageLayoutNode* parent = node;
 
     while (parent)
     {
@@ -393,10 +393,10 @@ QRectF AdvPrintLayoutTree::drawingArea(int index, const QRectF& absoluteRectPage
     // as described in section 2.2.2
     for (int i = 0 ; i < treePath.count() - 1 ; ++i)
     {
-        AdvPrintLayoutNode* const parent = treePath[i];
-        AdvPrintLayoutNode* const child  = treePath[i+1]; // only iterating to count-1
+        AtkinsPageLayoutNode* const parent = treePath[i];
+        AtkinsPageLayoutNode* const child  = treePath[i+1]; // only iterating to count-1
 
-        if (parent->type() == AdvPrintLayoutNode::VerticalDivision) // side by side
+        if (parent->type() == AtkinsPageLayoutNode::VerticalDivision) // side by side
         {
             double leftWidth = absoluteRect.width() * parent->division();
 
@@ -432,7 +432,7 @@ QRectF AdvPrintLayoutTree::drawingArea(int index, const QRectF& absoluteRectPage
     return rectInRect(absoluteRect, node->aspectRatio(), absoluteArea(node));
 }
 
-QRectF AdvPrintLayoutTree::rectInRect(const QRectF &rect, double aspectRatio, double absoluteArea)
+QRectF AtkinsPageLayoutTree::rectInRect(const QRectF &rect, double aspectRatio, double absoluteArea)
 {
     double width  = std::sqrt(absoluteArea / aspectRatio);
     double height = std::sqrt(absoluteArea * aspectRatio);
