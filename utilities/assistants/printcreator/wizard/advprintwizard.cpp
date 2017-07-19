@@ -475,7 +475,7 @@ bool AdvPrintWizard::prepareToPrint()
         {
             d->settings->imageFormat = AdvPrintSettings::JPEG;
 
-            if (!checkTempPath(this, d->settings->tempPath))
+            if (!d->finalPage->checkTempPath(d->settings->tempPath))
             {
                 return false;
             }
@@ -498,26 +498,6 @@ bool AdvPrintWizard::prepareToPrint()
     }
 
     return false;
-}
-
-bool AdvPrintWizard::checkTempPath(QWidget* const parent, const QString& tempPath) const
-{
-    // does the temp path exist?
-    QDir tempDir(tempPath);
-
-    if (!tempDir.exists())
-    {
-        if (!tempDir.mkdir(tempDir.path()))
-        {
-            QMessageBox::information(parent, QString(),
-                                     i18n("Unable to create a temporary folder. "
-                                          "Please make sure you have proper permissions "
-                                          "to this folder and try again."));
-            return false;
-        }
-    }
-
-    return true;
 }
 
 int AdvPrintWizard::normalizedInt(double n)

@@ -69,7 +69,6 @@ public:
 private:
 
     bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
-    bool checkTempPath(QWidget* const parent, const QString& tempPath) const;
 
 private Q_SLOTS:
 
