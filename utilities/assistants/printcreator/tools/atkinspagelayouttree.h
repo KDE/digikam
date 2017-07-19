@@ -54,92 +54,25 @@
 namespace Digikam
 {
 
-class AtkinsPageLayoutNode
-{
-public:
-
-    enum Type
-    {
-        TerminalNode,
-        HorizontalDivision, // one image on top of the other
-        VerticalDivision    // images side by side
-    };
-
-public:
-
-    AtkinsPageLayoutNode(double aspectRatio,
-                         double relativeArea,
-                         int index);
-    AtkinsPageLayoutNode(AtkinsPageLayoutNode* const subtree,
-                         AtkinsPageLayoutNode* const terminalChild,
-                         bool horizontal,
-                         int index);
-    AtkinsPageLayoutNode(const AtkinsPageLayoutNode&);
-    ~AtkinsPageLayoutNode();
-
-    double aspectRatio()  const;
-    double relativeArea() const;
-    double division()     const;
-    Type   type()         const;
-    int    index()        const;
-
-    AtkinsPageLayoutNode* leftChild()  const;
-    AtkinsPageLayoutNode* rightChild() const;
-
-    /** Replace one child with a new one.
-     */
-    void takeAndSetChild(AtkinsPageLayoutNode* const oldChild,
-                         AtkinsPageLayoutNode* const newChild);
-
-    /** Retrieve the node which has the given index in the hierarchy of this node.
-     */
-    AtkinsPageLayoutNode* nodeForIndex(int index);
-    
-    /** Retrieve the parent node of the given child in the hierarchy of this node.
-     */
-    AtkinsPageLayoutNode* parentOf(AtkinsPageLayoutNode* const child);
-
-    /** Compute the "aspect ratio" (m_a) and "relative size" (m_e) parameters.
-     *  Section 2.2.1, (1)-(4).
-     */
-    void computeRelativeSizes();
-
-    /** Compute the "division" (m_division) parameter.
-     *  Section 2.2.2
-     */
-    void computeDivisions();
-
-    AtkinsPageLayoutNode& operator=(const AtkinsPageLayoutNode&);
-
-private:
-
-    double                m_a;        // aspect ration
-    double                m_e;        // relative size
-    double                m_division;
-
-    Type                  m_type;
-
-    int                   m_index;
-
-    AtkinsPageLayoutNode* m_leftChild;
-    AtkinsPageLayoutNode* m_rightChild;
-};
-
-// ---------------------------------------------------------------------
+class AtkinsPageLayoutNode;
 
 class AtkinsPageLayoutTree
 {
 public:
 
-    AtkinsPageLayoutTree(double aspectRatioPage, double absoluteAreaPage);
+    AtkinsPageLayoutTree(double aspectRatioPage,
+                         double absoluteAreaPage);
     AtkinsPageLayoutTree(const AtkinsPageLayoutTree&);
     ~AtkinsPageLayoutTree();
 
-    int    addImage(double aspectRatio, double relativeArea);
-    QRectF drawingArea(int index, const QRectF& absoluteRectPage);
+    int    addImage(double aspectRatio,
+                    double relativeArea);
+    QRectF drawingArea(int index,
+                       const QRectF& absoluteRectPage);
 
     int    count() const;
-    double score(AtkinsPageLayoutNode* const root, int nodeCount);
+    double score(AtkinsPageLayoutNode* const root,
+                 int nodeCount);
     double G() const;
 
     AtkinsPageLayoutTree& operator=(const AtkinsPageLayoutTree& other);
@@ -147,11 +80,13 @@ public:
 private:
 
     double absoluteArea(AtkinsPageLayoutNode* const node);
-    
-    /** Lays out a rectangle with given aspect ratio and absolute area inside the given larger rectangle
-     *  (not in the paper).
+
+    /** Lays out a rectangle with given aspect ratio and absolute area inside the given
+     *  larger rectangle (not in the paper).
      */
-    QRectF rectInRect(const QRectF& rect, double aspectRatio, double absoluteArea);
+    QRectF rectInRect(const QRectF& rect,
+                      double aspectRatio,
+                      double absoluteArea);
 
 private:
 
