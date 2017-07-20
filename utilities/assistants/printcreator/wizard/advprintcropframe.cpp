@@ -189,12 +189,15 @@ QRect AdvPrintCropFrame::photoToScreenRect(const QRect& r) const
 
 void AdvPrintCropFrame::updateImage()
 {
-    d->image      = d->photo->loadPhoto().copyQImage();
-    d->image      = d->image.transformed(d->matrix);
-    d->image      = d->image.scaled(width(), height(), Qt::KeepAspectRatio);
-    d->imageX     = (width()  / 2) - (d->image.width()  / 2);
-    d->imageY     = (height() / 2) - (d->image.height() / 2);
-    d->cropRegion = photoToScreenRect(d->photo->m_cropRegion);
+    if (d->photo)
+    {
+        d->image      = d->photo->loadPhoto().copyQImage();
+        d->image      = d->image.transformed(d->matrix);
+        d->image      = d->image.scaled(width(), height(), Qt::KeepAspectRatio);
+        d->imageX     = (width()  / 2) - (d->image.width()  / 2);
+        d->imageY     = (height() / 2) - (d->image.height() / 2);
+        d->cropRegion = photoToScreenRect(d->photo->m_cropRegion);
+    }
 }
 
 void AdvPrintCropFrame::resizeEvent(QResizeEvent*)
