@@ -278,4 +278,5 @@ BUGFIXES FROM BUGZILLA:
 263 ==> 256867 - digiKam crashes when deleting album.
 264 ==> 173691 - digiKam doesn't show pictures.
 265 ==> 193023 - Crash on closing application.
-266 ==> 
+266 ==> 361981 - digiKam dies on start every time.
+267 ==> 
