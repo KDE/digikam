@@ -284,4 +284,5 @@ BUGFIXES FROM BUGZILLA:
 269 ==> 373876 - digiKam crash on start up.
 270 ==> 350487 - digiKam crashes as startup.
 271 ==> 173645 - digiKam crashes after startdialog.
-272 ==> 
+272 ==> 375982 - digiKam launching fail.
+273 ==> 
