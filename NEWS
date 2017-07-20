@@ -279,4 +279,5 @@ BUGFIXES FROM BUGZILLA:
 264 ==> 173691 - digiKam doesn't show pictures.
 265 ==> 193023 - Crash on closing application.
 266 ==> 361981 - digiKam dies on start every time.
-267 ==> 
+267 ==> 350927 - digiKam crash on startup.
+268 ==> 
