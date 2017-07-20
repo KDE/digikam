@@ -280,4 +280,5 @@ BUGFIXES FROM BUGZILLA:
 265 ==> 193023 - Crash on closing application.
 266 ==> 361981 - digiKam dies on start every time.
 267 ==> 350927 - digiKam crash on startup.
-268 ==> 
+268 ==> 354071 - digiKam crash on startup.
+269 ==> 
