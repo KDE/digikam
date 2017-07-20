@@ -304,43 +304,44 @@ void AdvPrintWizard::previewPhotos()
     d->photoPage->ui()->LblSheetsPrinted->setText(QString::number(pageCount));
     d->photoPage->ui()->LblEmptySlots->setText(QString::number(emptySlots));
 
-    // photo previews
-    // preview the first page.
-    // find the first page of photos
-    int count   = 0;
-    int page    = 0;
-    int current = 0;
-
-    for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
-         it != d->settings->photos.end() ; ++it)
-    {
-        AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
-
-        if (page == d->settings->currentPreviewPage)
-        {
-            photo->m_cropRegion.setRect(-1, -1, -1, -1);
-            photo->m_rotation = 0;
-            photo->updateCropRegion(s->m_layouts.at(count + 1)->width(),
-                                    s->m_layouts.at(count + 1)->height(),
-                                    s->m_autoRotate);
-        }
-
-        count++;
-
-        if (count >= photosPerPage)
-        {
-            if (page == d->settings->currentPreviewPage)
-                break;
-
-            page++;
-            current += photosPerPage;
-            count    = 0;
-        }
-    }
-
-    // send this photo list to the painter
     if (photoCount > 0)
     {
+        // photo previews
+        // preview the first page.
+        // find the first page of photos
+        int count   = 0;
+        int page    = 0;
+        int current = 0;
+
+        for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
+            it != d->settings->photos.end() ; ++it)
+        {
+            AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
+
+            if (page == d->settings->currentPreviewPage)
+            {
+                photo->m_cropRegion.setRect(-1, -1, -1, -1);
+                photo->m_rotation = 0;
+                photo->updateCropRegion(s->m_layouts.at(count + 1)->width(),
+                                        s->m_layouts.at(count + 1)->height(),
+                                        s->m_autoRotate);
+            }
+
+            count++;
+
+            if (count >= photosPerPage)
+            {
+                if (page == d->settings->currentPreviewPage)
+                    break;
+
+                page++;
+                current += photosPerPage;
+                count    = 0;
+            }
+        }
+
+        // send this photo list to the painter
+
         AdvPrintSettings* const pwSettings = new AdvPrintSettings;
         pwSettings->photos                 = d->settings->photos;
         pwSettings->outputLayouts          = s;
