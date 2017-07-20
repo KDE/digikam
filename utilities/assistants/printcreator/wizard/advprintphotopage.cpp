@@ -1510,9 +1510,9 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
     }
 }
 
-QRect* AdvPrintPhotoPage::getLayout(int photoIndex) const
+QRect* AdvPrintPhotoPage::getLayout(int photoIndex, int sizeIndex) const
 {
-    AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoUi->ListPhotoSizes->currentRow());
+    AdvPrintPhotoSize* const s = d->settings->photosizes.at(sizeIndex);
 
     // how many photos would actually be printed, including copies?
     int photoCount             = (photoIndex + 1);
@@ -1520,12 +1520,7 @@ QRect* AdvPrintPhotoPage::getLayout(int photoIndex) const
     // how many pages?  Recall that the first layout item is the paper size
     int photosPerPage          = s->m_layouts.count() - 1;
     int remainder              = photoCount % photosPerPage;
-    int retVal                 = remainder;
-
-    if (remainder == 0)
-    {
-        retVal = photosPerPage;
-    }
+    int retVal                 = (remainder == 0) ? photosPerPage : remainder;
 
     return s->m_layouts.at(retVal);
 }
