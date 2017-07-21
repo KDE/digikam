@@ -90,7 +90,7 @@ public:
     int                  edgeThresh;        // threshold above which we say that edges are present at a point
     int                  ratio;             // lower:upper threshold for canny edge detector algorithm
     int                  kernel_size;
-    // kernel size for for the Sobel operations to be performed internally
+    // kernel size for the Sobel operations to be performed internally
     // by the edge detector
 
     double               lowThreshold;

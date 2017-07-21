@@ -41,13 +41,15 @@
 
 // Local includes
 
-#include "advprintphoto.h"
 #include "filesaveconflictbox.h"
 
 class KConfigGroup;
 
 namespace Digikam
 {
+
+class AdvPrintPhoto;
+class AdvPrintPhotoSize;
 
 class AdvPrintSettings
 {
@@ -77,6 +79,16 @@ public:
         TIFF
     };
 
+    // Caption type to print over the images
+    enum CaptionType
+    {
+        NONE = 0,
+        FILENAME,
+        DATETIME,
+        COMMENT,
+        CUSTOM
+    };
+
 public:
 
     explicit AdvPrintSettings();
@@ -92,6 +104,7 @@ public:
     // Helper methods to fill combobox from GUI.
     static QMap<Output,      QString> outputNames();
     static QMap<ImageFormat, QString> imageFormatNames();
+    static QMap<CaptionType, QString> captionTypeNames();
 
 public:
 
@@ -100,7 +113,6 @@ public:
     QList<QUrl>                       inputImages;
 
     QString                           printerName;
-    QSize                             iconSize;
 
     QSizeF                            pageSize;      // Page Size in mm
 
@@ -108,14 +120,15 @@ public:
     QList<AdvPrintPhotoSize*>         photosizes;
 
     // Caption management.
-    int                               captions;
+    CaptionType                       captionType;
     QColor                            captionColor;
     QFont                             captionFont;
     int                               captionSize;
-    QString                           captionTxt;
+    QString                           captionTxt;   // String use to customize caption with CUSTOM mode.
+
+    int                               currentPreviewPage;
 
     // Crop management
-    int                               currentPreviewPage;
     int                               currentCropPhoto;
     bool                              disableCrop;
 

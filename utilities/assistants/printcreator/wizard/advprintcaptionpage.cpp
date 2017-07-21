@@ -91,8 +91,19 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
     : DWizardPage(wizard, title),
       d(new Private(wizard))
 {
-    connect(d->captionUi->m_captions, SIGNAL(activated(QString)),
-            this, SLOT(slotCaptionChanged(QString)));
+    QMap<AdvPrintSettings::CaptionType, QString> map                = AdvPrintSettings::captionTypeNames();
+    QMap<AdvPrintSettings::CaptionType, QString>::const_iterator it = map.constBegin();
+
+    while (it != map.constEnd())
+    {
+        d->captionUi->m_captionType->addItem(it.value(), (int)it.key());
+        ++it;
+    }
+
+    // ----------------------------------------------------------------------
+
+    connect(d->captionUi->m_captionType, SIGNAL(activated(int)),
+            this, SLOT(slotCaptionChanged(int)));
 
     connect(d->captionUi->m_FreeCaptionFormat, SIGNAL(editingFinished()),
             this, SLOT(slotUpdateCaptions()));
@@ -136,20 +147,20 @@ DImagesList* AdvPrintCaptionPage::imagesList() const
 
 void AdvPrintCaptionPage::initializePage()
 {
-    d->captionUi->m_captions->setCurrentIndex(d->settings->captions);
-    enableCaptionGroup(d->captionUi->m_captions->currentText());
+    d->captionUi->m_captionType->setCurrentIndex(d->settings->captionType);
+    enableCaptionGroup(d->captionUi->m_captionType->currentIndex());
     d->captionUi->m_font_color->setColor(d->settings->captionColor);
     d->captionUi->m_font_name->setCurrentFont(d->settings->captionFont.family());
     d->captionUi->m_font_size->setValue(d->settings->captionSize);
     d->captionUi->m_FreeCaptionFormat->setText(d->settings->captionTxt);
-    slotCaptionChanged(d->captionUi->m_captions->currentText());
+    slotCaptionChanged(d->captionUi->m_captionType->currentIndex());
     slotUpdateImagesList();
     slotUpdateCaptions();
 }
 
 bool AdvPrintCaptionPage::validatePage()
 {
-    d->settings->captions     = d->captionUi->m_captions->currentIndex();
+    d->settings->captionType  = (AdvPrintSettings::CaptionType)d->captionUi->m_captionType->currentIndex();
     d->settings->captionColor = d->captionUi->m_font_color->color();
     d->settings->captionFont  = QFont(d->captionUi->m_font_name->currentFont());
     d->settings->captionSize  = d->captionUi->m_font_size->value();
@@ -166,23 +177,23 @@ void AdvPrintCaptionPage::slotUpdateImagesList()
 
 void AdvPrintCaptionPage::blockCaptionButtons(bool block)
 {
-    d->captionUi->m_captions->blockSignals(block);
+    d->captionUi->m_captionType->blockSignals(block);
     d->captionUi->m_free_label->blockSignals(block);
     d->captionUi->m_font_name->blockSignals(block);
     d->captionUi->m_font_size->blockSignals(block);
     d->captionUi->m_font_color->blockSignals(block);
 }
 
-void AdvPrintCaptionPage::enableCaptionGroup(const QString& text)
+void AdvPrintCaptionPage::enableCaptionGroup(int index)
 {
     bool fontSettingsEnabled;
 
-    if (text == i18n("No caption"))
+    if (index == AdvPrintSettings::NONE)
     {
         fontSettingsEnabled = false;
         d->captionUi->m_customCaptionGB->setEnabled(false);
     }
-    else if (text == i18n("Custom format"))
+    else if (index == AdvPrintSettings::CUSTOM)
     {
         fontSettingsEnabled = true;
         d->captionUi->m_customCaptionGB->setEnabled(true);
@@ -198,9 +209,9 @@ void AdvPrintCaptionPage::enableCaptionGroup(const QString& text)
     d->captionUi->m_font_color->setEnabled(fontSettingsEnabled);
 }
 
-void AdvPrintCaptionPage::slotCaptionChanged(const QString& text)
+void AdvPrintCaptionPage::slotCaptionChanged(int index)
 {
-    enableCaptionGroup(text);
+    enableCaptionGroup(index);
     slotUpdateCaptions();
 }
 
@@ -209,12 +220,12 @@ void AdvPrintCaptionPage::updateCaption(AdvPrintPhoto* const pPhoto)
     if (pPhoto)
     {
         if (!pPhoto->m_pAdvPrintCaptionInfo &&
-            d->captionUi->m_captions->currentIndex() != AdvPrintCaptionInfo::NoCaptions)
+            d->captionUi->m_captionType->currentIndex() != AdvPrintSettings::NONE)
         {
             pPhoto->m_pAdvPrintCaptionInfo = new AdvPrintCaptionInfo();
         }
         else if (pPhoto->m_pAdvPrintCaptionInfo &&
-                 d->captionUi->m_captions->currentIndex() == AdvPrintCaptionInfo::NoCaptions)
+                 d->captionUi->m_captionType->currentIndex() == AdvPrintSettings::NONE)
         {
             delete pPhoto->m_pAdvPrintCaptionInfo;
             pPhoto->m_pAdvPrintCaptionInfo = NULL;
@@ -229,7 +240,7 @@ void AdvPrintCaptionPage::updateCaption(AdvPrintPhoto* const pPhoto)
             pPhoto->m_pAdvPrintCaptionInfo->m_captionFont  =
                 d->captionUi->m_font_name->currentFont();
             pPhoto->m_pAdvPrintCaptionInfo->m_captionType  =
-                (AdvPrintCaptionInfo::AvailableCaptions)d->captionUi->m_captions->currentIndex();
+                (AdvPrintSettings::CaptionType)d->captionUi->m_captionType->currentIndex();
             pPhoto->m_pAdvPrintCaptionInfo->m_captionText  =
                 d->captionUi->m_FreeCaptionFormat->text();
 
@@ -256,7 +267,7 @@ void AdvPrintCaptionPage::slotUpdateCaptions()
                     QString cap;
 
                     if (pPhoto->m_pAdvPrintCaptionInfo->m_captionType !=
-                        AdvPrintCaptionInfo::NoCaptions)
+                        AdvPrintSettings::NONE)
                         cap = captionFormatter(pPhoto);
 
                     qCDebug(DIGIKAM_GENERAL_LOG) << cap;
@@ -295,17 +306,17 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo)
 
     switch (photo->m_pAdvPrintCaptionInfo->m_captionType)
     {
-        case AdvPrintCaptionInfo::FileNames:
+        case AdvPrintSettings::FILENAME:
             format = QLatin1String("%f");
             break;
-        case AdvPrintCaptionInfo::ExifDateTime:
+        case AdvPrintSettings::DATETIME:
             format = QLatin1String("%d");
             break;
-        case AdvPrintCaptionInfo::Comment:
+        case AdvPrintSettings::COMMENT:
             format = QLatin1String("%c");
             break;
-        case AdvPrintCaptionInfo::Custom:
-            format =  photo->m_pAdvPrintCaptionInfo->m_captionText;
+        case AdvPrintSettings::CUSTOM:
+            format = photo->m_pAdvPrintCaptionInfo->m_captionText;
             break;
         default:
             qCWarning(DIGIKAM_GENERAL_LOG) << "UNKNOWN caption type "

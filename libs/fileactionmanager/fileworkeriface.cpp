@@ -30,6 +30,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "metadatasettings.h"
 #include "fileactionmngr_p.h"
 #include "imageattributeswatch.h"
 #include "imageinfotasksplitter.h"
@@ -98,8 +99,15 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
         hub.load(info);
         QString filePath = info.filePath();
 
-        ScanController::FileMetadataWrite writeScope(info);
-        writeScope.changed(hub.write(filePath, MetadataHub::WRITE_ALL));
+        if (MetadataSettings::instance()->settings().useLazySync)
+        {
+            hub.write(filePath, MetadataHub::WRITE_ALL);
+        }
+        else
+        {
+            ScanController::FileMetadataWrite writeScope(info);
+            writeScope.changed(hub.write(filePath, MetadataHub::WRITE_ALL));
+        }
         // hub emits fileMetadataChanged
 
         infos.writtenToOne();
@@ -114,12 +122,12 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int 
 {
     d->startingToWrite(infos);
 
-//    ScanController::instance()->suspendCollectionScan();
+    ScanController::instance()->suspendCollectionScan();
 
-    MetadataHub hub;
     foreach(const ImageInfo& info, infos)
     {
-        hub.reset();
+        MetadataHub hub;
+
         if (state() == WorkerObject::Deactivating)
         {
             break;
@@ -127,14 +135,21 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int 
 
         hub.load(info);
         // apply to file metadata
-        ScanController::FileMetadataWrite writeScope(info);
-        writeScope.changed(hub.writeToMetadata(info, (MetadataHub::WriteComponents)flags));
+        if (MetadataSettings::instance()->settings().useLazySync)
+        {
+            hub.writeToMetadata(info, (MetadataHub::WriteComponents)flags);
+        }
+        else
+        {
+            ScanController::FileMetadataWrite writeScope(info);
+            writeScope.changed(hub.writeToMetadata(info, (MetadataHub::WriteComponents)flags));
+        }
         // hub emits fileMetadataChanged
 
         infos.writtenToOne();
     }
 
-//    ScanController::instance()->resumeCollectionScan();
+    ScanController::instance()->resumeCollectionScan();
 
     infos.finishedWriting();
 }
