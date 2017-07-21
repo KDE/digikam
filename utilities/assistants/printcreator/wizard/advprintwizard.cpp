@@ -323,8 +323,9 @@ void AdvPrintWizard::previewPhotos()
             {
                 photo->m_cropRegion.setRect(-1, -1, -1, -1);
                 photo->m_rotation = 0;
-                photo->updateCropRegion(s->m_layouts.at(count + 1)->width(),
-                                        s->m_layouts.at(count + 1)->height(),
+                QRect* const curr = s->m_layouts.at(count + 1);
+                photo->updateCropRegion(curr->width(),
+                                        curr->height(),
                                         s->m_autoRotate);
             }
 
@@ -382,7 +383,8 @@ bool AdvPrintWizard::prepareToPrint()
         // set the default crop regions if not already set
         int sizeIndex              = d->photoPage->ui()->ListPhotoSizes->currentRow();
         d->settings->outputLayouts = d->settings->photosizes.at(sizeIndex);
-        int photoIndex             = 0;
+
+        int photoIndex = 0;
 
         for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
             it != d->settings->photos.end() ; ++it)
@@ -391,8 +393,9 @@ bool AdvPrintWizard::prepareToPrint()
 
             if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
             {
-                photo->updateCropRegion(d->photoPage->getLayout(photoIndex, sizeIndex)->width(),
-                                        d->photoPage->getLayout(photoIndex, sizeIndex)->height(),
+                QRect* const curr = d->photoPage->getLayout(photoIndex, sizeIndex);
+                photo->updateCropRegion(curr->width(),
+                                        curr->height(),
                                         d->settings->outputLayouts->m_autoRotate);
             }
 
