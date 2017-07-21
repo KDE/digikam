@@ -250,11 +250,12 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
 
 void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 {
-    AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
+    int sizeIndex              = d->photoPage->ui()->ListPhotoSizes->currentRow();
+    AdvPrintPhotoSize* const s = d->settings->photosizes.at(sizeIndex);
 
     d->cropPage->ui()->cropFrame->init(photo,
-                                       d->photoPage->getLayout(photoIndex)->width(),
-                                       d->photoPage->getLayout(photoIndex)->height(),
+                                       d->photoPage->getLayout(photoIndex, sizeIndex)->width(),
+                                       d->photoPage->getLayout(photoIndex, sizeIndex)->height(),
                                        s->m_autoRotate,
                                        true);
 
@@ -304,43 +305,44 @@ void AdvPrintWizard::previewPhotos()
     d->photoPage->ui()->LblSheetsPrinted->setText(QString::number(pageCount));
     d->photoPage->ui()->LblEmptySlots->setText(QString::number(emptySlots));
 
-    // photo previews
-    // preview the first page.
-    // find the first page of photos
-    int count   = 0;
-    int page    = 0;
-    int current = 0;
-
-    for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
-         it != d->settings->photos.end() ; ++it)
-    {
-        AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
-
-        if (page == d->settings->currentPreviewPage)
-        {
-            photo->m_cropRegion.setRect(-1, -1, -1, -1);
-            photo->m_rotation = 0;
-            photo->updateCropRegion(s->m_layouts.at(count + 1)->width(),
-                                    s->m_layouts.at(count + 1)->height(),
-                                    s->m_autoRotate);
-        }
-
-        count++;
-
-        if (count >= photosPerPage)
-        {
-            if (page == d->settings->currentPreviewPage)
-                break;
-
-            page++;
-            current += photosPerPage;
-            count    = 0;
-        }
-    }
-
-    // send this photo list to the painter
     if (photoCount > 0)
     {
+        // photo previews
+        // preview the first page.
+        // find the first page of photos
+        int count   = 0;
+        int page    = 0;
+        int current = 0;
+
+        for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
+            it != d->settings->photos.end() ; ++it)
+        {
+            AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
+
+            if (page == d->settings->currentPreviewPage)
+            {
+                photo->m_cropRegion.setRect(-1, -1, -1, -1);
+                photo->m_rotation = 0;
+                photo->updateCropRegion(s->m_layouts.at(count + 1)->width(),
+                                        s->m_layouts.at(count + 1)->height(),
+                                        s->m_autoRotate);
+            }
+
+            count++;
+
+            if (count >= photosPerPage)
+            {
+                if (page == d->settings->currentPreviewPage)
+                    break;
+
+                page++;
+                current += photosPerPage;
+                count    = 0;
+            }
+        }
+
+        // send this photo list to the painter
+
         AdvPrintSettings* const pwSettings = new AdvPrintSettings;
         pwSettings->photos                 = d->settings->photos;
         pwSettings->outputLayouts          = s;
@@ -378,9 +380,9 @@ bool AdvPrintWizard::prepareToPrint()
     if (!d->settings->photos.empty())
     {
         // set the default crop regions if not already set
-        d->settings->outputLayouts = d->settings->photosizes.at(
-                                        d->photoPage->ui()->ListPhotoSizes->currentRow());
-        int i                      = 0;
+        int sizeIndex              = d->photoPage->ui()->ListPhotoSizes->currentRow();
+        d->settings->outputLayouts = d->settings->photosizes.at(sizeIndex);
+        int photoIndex             = 0;
 
         for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
             it != d->settings->photos.end() ; ++it)
@@ -389,12 +391,12 @@ bool AdvPrintWizard::prepareToPrint()
 
             if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
             {
-                photo->updateCropRegion(d->photoPage->getLayout(i)->width(),
-                                        d->photoPage->getLayout(i)->height(),
+                photo->updateCropRegion(d->photoPage->getLayout(photoIndex, sizeIndex)->width(),
+                                        d->photoPage->getLayout(photoIndex, sizeIndex)->height(),
                                         d->settings->outputLayouts->m_autoRotate);
             }
 
-            i++;
+            photoIndex++;
         }
 
         // Real printer to use.

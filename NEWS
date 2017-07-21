@@ -277,4 +277,12 @@ BUGFIXES FROM BUGZILLA:
 262 ==> 225076 - digiKam crash while it was importing photo from NTFS files system.
 263 ==> 256867 - digiKam crashes when deleting album.
 264 ==> 173691 - digiKam doesn't show pictures.
-265 ==> 
+265 ==> 193023 - Crash on closing application.
+266 ==> 361981 - digiKam dies on start every time.
+267 ==> 350927 - digiKam crash on startup.
+268 ==> 354071 - digiKam crash on startup.
+269 ==> 373876 - digiKam crash on start up.
+270 ==> 350487 - digiKam crashes as startup.
+271 ==> 173645 - digiKam crashes after startdialog.
+272 ==> 375982 - digiKam launching fail.
+273 ==> 
