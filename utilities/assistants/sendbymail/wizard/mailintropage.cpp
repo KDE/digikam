@@ -28,6 +28,8 @@
 #include <QPixmap>
 #include <QComboBox>
 #include <QIcon>
+#include <QGroupBox>
+#include <QGridLayout>
 
 // KDE includes
 
@@ -39,6 +41,14 @@
 #include "dlayoutbox.h"
 #include "mailwizard.h"
 #include "mailsettings.h"
+#include "dbinarysearch.h"
+#include "balsabinary.h"
+#include "clawsmailbinary.h"
+#include "kmailbinary.h"
+#include "evolutionbinary.h"
+#include "netscapebinary.h"
+#include "sylpheedbinary.h"
+#include "thunderbirdbinary.h"
 
 namespace Digikam
 {
@@ -51,7 +61,8 @@ public:
       : imageGetOption(0),
         hbox(0),
         wizard(0),
-        iface(0)
+        iface(0),
+        binSearch(0)
     {
         wizard = dynamic_cast<MailWizard*>(dialog);
 
@@ -61,10 +72,18 @@ public:
         }
     }
 
-    QComboBox*      imageGetOption;
-    DHBox*          hbox;
-    MailWizard*     wizard;
-    DInfoInterface* iface;
+    QComboBox*        imageGetOption;
+    DHBox*            hbox;
+    MailWizard*       wizard;
+    DInfoInterface*   iface;
+    DBinarySearch*    binSearch;
+    BalsaBinary       balsaBin;
+    ClawsMailBinary   clawsBin;
+    EvolutionBinary   evoluBin;
+    KmailBinary       kmailBin;
+    NetscapeBinary    netscBin;
+    SylpheedBinary    sylphBin;
+    ThunderbirdBinary thundBin;
 };
 
 MailIntroPage::MailIntroPage(QWizard* const dialog, const QString& title)
@@ -93,8 +112,45 @@ MailIntroPage::MailIntroPage(QWizard* const dialog, const QString& title)
     d->imageGetOption->insertItem(MailSettings::IMAGES, i18n("Images"));
     getImageLabel->setBuddy(d->imageGetOption);
 
+    // --------------------
+
+    QGroupBox* const binaryBox      = new QGroupBox(vbox);
+    QGridLayout* const binaryLayout = new QGridLayout;
+    binaryBox->setLayout(binaryLayout);
+    binaryBox->setTitle(i18nc("@title:group", "Mail client application Binaries"));
+    d->binSearch = new DBinarySearch(binaryBox);
+    d->binSearch->addBinary(d->balsaBin);
+    d->binSearch->addBinary(d->clawsBin);
+    d->binSearch->addBinary(d->kmailBin);
+    d->binSearch->addBinary(d->evoluBin);
+    d->binSearch->addBinary(d->netscBin);
+    d->binSearch->addBinary(d->sylphBin);
+    d->binSearch->addBinary(d->thundBin);
+
+#ifdef Q_OS_OSX
+    // Std Macports install
+    d->binSearch->addDirectory(QLatin1String("/opt/local/bin"));
+
+    // digiKam Bundle PKG install
+    d->binSearch->addDirectory(QLatin1String("/opt/digikam/bin"));
+#endif
+
+#ifdef Q_OS_WIN
+    // FIXME : adjust paths
+    d->binSearch->addDirectory(QLatin1String("C:/Program Files/"));
+
+    d->binSearch->addDirectory(QLatin1String("C:/Program Files (x86)/"));
+#endif
+
+    vbox->setStretchFactor(desc,      2);
+    vbox->setStretchFactor(d->hbox,   1);
+    vbox->setStretchFactor(binaryBox, 3);
+
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("view-presentation")));
+
+    connect(d->binSearch, SIGNAL(signalBinariesFound(bool)),
+            this, SLOT(slotBinariesFound()));
 }
 
 MailIntroPage::~MailIntroPage()
@@ -115,6 +171,9 @@ void MailIntroPage::initializePage()
     {
         d->imageGetOption->setCurrentIndex(d->wizard->settings()->selMode);
     }
+
+    d->binSearch->allBinariesFound();
+    slotBinariesFound();
 }
 
 bool MailIntroPage::validatePage()
@@ -122,6 +181,40 @@ bool MailIntroPage::validatePage()
     d->wizard->settings()->selMode = (MailSettings::Selection)d->imageGetOption->currentIndex();
 
     return true;
+}
+
+void MailIntroPage::slotBinariesFound()
+{
+    d->wizard->settings()->binPaths.insert(MailSettings::BALSA, d->balsaBin.isValid() ?
+                                           d->balsaBin.path() : QString());
+
+    d->wizard->settings()->binPaths.insert(MailSettings::CLAWSMAIL, d->clawsBin.isValid() ?
+                                           d->clawsBin.path() : QString());
+
+    d->wizard->settings()->binPaths.insert(MailSettings::EVOLUTION, d->evoluBin.isValid() ?
+                                           d->evoluBin.path() : QString());
+
+    d->wizard->settings()->binPaths.insert(MailSettings::KMAIL, d->kmailBin.isValid() ?
+                                           d->kmailBin.path() : QString());
+
+    d->wizard->settings()->binPaths.insert(MailSettings::NETSCAPE, d->netscBin.isValid() ?
+                                           d->netscBin.path() : QString());
+
+    d->wizard->settings()->binPaths.insert(MailSettings::SYLPHEED, d->sylphBin.isValid() ?
+                                           d->sylphBin.path() : QString());
+
+    d->wizard->settings()->binPaths.insert(MailSettings::THUNDERBIRD, d->thundBin.isValid() ?
+                                           d->thundBin.path() : QString());
+
+    emit completeChanged();
+}
+
+bool MailIntroPage::isComplete() const
+{
+    QString val = d->wizard->settings()->binPaths.values().join(QString());
+    qCDebug(DIGIKAM_GENERAL_LOG) << val;
+
+    return (!val.isEmpty());
 }
 
 } // namespace Digikam

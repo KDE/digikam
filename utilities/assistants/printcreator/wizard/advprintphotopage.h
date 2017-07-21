@@ -29,17 +29,21 @@
 #include <QPrinter>
 #include <QList>
 #include <QUrl>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 // Local includes
 
 #include "dwizardpage.h"
 #include "dimageslist.h"
+#include "advprintphoto.h"
 #include "ui_advprintphotopage.h"
 
 namespace Digikam
 {
 
 class DImagesList;
+class TemplateIcon;
 
 class AdvPrintPhotoPage : public DWizardPage
 {
@@ -50,16 +54,68 @@ public:
     explicit AdvPrintPhotoPage(QWizard* const wizard, const QString& title);
     ~AdvPrintPhotoPage();
 
-    QPrinter*             printer()    const;
-    DImagesList*          imagesList() const;
-    Ui_AdvPrintPhotoPage* ui()         const;
-    bool                  isComplete() const;
+    QPrinter*             printer()           const;
+    DImagesList*          imagesList()        const;
+    Ui_AdvPrintPhotoPage* ui()                const;
+    bool                  isComplete()        const;
+    int                   getPageCount()      const;
+    QRect*                getLayout(int, int) const;
 
-    void updateUi();
+    void initializePage();
+    bool validatePage();
+
+    /** Create a MxN grid of photos, fitting on the page.
+     */
+    void createPhotoGrid(AdvPrintPhotoSize* const p,
+                         int pageWidth,
+                         int pageHeight,
+                         int rows,
+                         int columns,
+                         TemplateIcon* const iconpreview);
+
+    void manageBtnPreviewPage();
+
+    /** Initialize page layout to the given pageSize in mm.
+     */
+    void initPhotoSizes(const QSizeF& pageSize);
+
+private:
+
+    /** To parse template file with 'fn' as filename, and 'pageSize' in mm.
+     */
+    void parseTemplateFile(const QString& fn,
+                           const QSizeF& pageSize);
 
 public Q_SLOTS:
 
     void slotOutputChanged(const QString&);
+
+private Q_SLOTS:
+
+    void slotXMLLoadElement(QXmlStreamReader&);
+
+    /** Save item list => we catch the signal to add
+     *  our PA attributes and elements Image children
+     */
+    void slotXMLSaveItem(QXmlStreamWriter&, int);
+
+    /** Save item list => we catch the signal to add
+     *  our PA elements (not per image)
+     */
+    void slotXMLCustomElement(QXmlStreamWriter&);
+
+    void slotXMLCustomElement(QXmlStreamReader&);
+    void slotContextMenuRequested();
+    void slotIncreaseCopies();
+    void slotDecreaseCopies();
+    void slotAddItems(const QList<QUrl>&);
+    void slotRemovingItems(const QList<int>&);
+    void slotBtnPrintOrderDownClicked();
+    void slotBtnPrintOrderUpClicked();
+    void slotBtnPreviewPageDownClicked();
+    void slotBtnPreviewPageUpClicked();
+    void slotListPhotoSizesSelected();
+    void slotPageSetup();
 
 private:
 

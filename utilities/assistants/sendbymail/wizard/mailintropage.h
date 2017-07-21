@@ -36,6 +36,7 @@ namespace Digikam
 
 class MailIntroPage : public DWizardPage
 {
+    Q_OBJECT
 
 public:
 
@@ -44,6 +45,11 @@ public:
 
     void initializePage();
     bool validatePage();
+    bool isComplete() const;
+
+private Q_SLOTS:
+
+    void slotBinariesFound();
 
 private:
 

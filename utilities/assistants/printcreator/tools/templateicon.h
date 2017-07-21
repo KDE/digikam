@@ -26,9 +26,7 @@
 
 // Qt incudes
 
-#include <QPrinter>
 #include <QPainter>
-#include <QPixmap>
 #include <QIcon>
 #include <QColor>
 #include <QSize>
@@ -42,10 +40,10 @@ class TemplateIcon
 public:
 
     /**
-     * Constructor: The height of the icon is <icon_height>. The width is computed
+     * Constructor: The height of the icon is <iconHeight>. The width is computed
      * during invocation of method 'begin()' according to the paper-size.
      */
-    explicit TemplateIcon(int icon_height, const QSize& template_size);
+    explicit TemplateIcon(int iconHeight, const QSize& templateSize);
     ~TemplateIcon();
 
     /**

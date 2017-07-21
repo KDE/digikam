@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QString>
+#include <QUrl>
 
 // Local includes
 
@@ -48,11 +49,18 @@ public:
 
     Ui_AdvPrintCropPage* ui() const;
 
-    void updateUi();
+    void setBtnCropEnabled();
+
+    void initializePage();
+    bool validatePage();
 
 private Q_SLOTS:
 
     void slotCropSelection(int);
+    void slotBtnCropPrevClicked();
+    void slotBtnCropNextClicked();
+    void slotBtnCropRotateLeftClicked();
+    void slotBtnCropRotateRightClicked();
 
 private:
 

@@ -45,6 +45,7 @@
 #include "mailwizard.h"
 #include "dfileselector.h"
 #include "filesaveconflictbox.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -123,7 +124,7 @@ MailSettingsPage::MailSettingsPage(QWizard* const dialog, const QString& title)
 
     while (it != map.constEnd())
     {
-        d->mailAgentName->addItem(it.value(), (int)it.key());
+        d->mailAgentName->insertItem((int)it.key(), it.value(), (int)it.key());
         ++it;
     }
 
@@ -275,7 +276,23 @@ void MailSettingsPage::slotImagesFormatChanged(int i)
 
 void MailSettingsPage::initializePage()
 {
-    d->mailAgentName->setCurrentIndex((int)d->settings->mailProgram);
+    QMap<MailSettings::MailClient, QString> map                = d->settings->binPaths;
+    QMap<MailSettings::MailClient, QString>::const_iterator it = map.constBegin();
+
+    while (it != map.constEnd())
+    {
+        if (d->settings->binPaths[it.key()].isEmpty())
+        {
+            d->mailAgentName->setItemData((int)it.key(), false, Qt::UserRole-1);
+        }
+        else if (it.key() == d->settings->mailProgram)
+        {
+            d->mailAgentName->setCurrentIndex((int)d->settings->mailProgram);
+        }
+
+        ++it;
+    }
+
     d->imagesResize->setValue(d->settings->imageSize);
     d->imagesFormat->setCurrentIndex((int)d->settings->imageFormat);
 

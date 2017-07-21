@@ -221,7 +221,7 @@ enum {
     kRDFTerm_nodeID				=  6,
     kRDFTerm_datatype			=  7,	// End of coreSyntaxTerms.
     kRDFTerm_Description		=  8,	// Start of additions for syntaxTerms.
-    kRDFTerm_li					=  9,	// End of of additions for syntaxTerms.
+    kRDFTerm_li					=  9,	// End of additions for syntaxTerms.
     kRDFTerm_aboutEach			= 10,	// Start of oldTerms.
     kRDFTerm_aboutEachPrefix	= 11,
     kRDFTerm_bagID				= 12,	// End of oldTerms.

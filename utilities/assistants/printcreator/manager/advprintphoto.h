@@ -32,22 +32,46 @@
 #include <QColor>
 #include <QUrl>
 #include <QPointer>
+#include <QIcon>
+#include <QList>
+#include <QSize>
+#include <QMatrix>
 
 // Local includes
 
-#include "dmetadata.h"
 #include "dinfointerface.h"
+#include "dimg.h"
+#include "advprintsettings.h"
 
 namespace Digikam
 {
+
+class AdvPrintPhotoSize
+{
+public:
+
+    explicit AdvPrintPhotoSize();
+    AdvPrintPhotoSize(const AdvPrintPhotoSize& other);
+    ~AdvPrintPhotoSize();
+
+public:
+
+    QString       m_label;
+    int           m_dpi;
+    bool          m_autoRotate;
+    QList<QRect*> m_layouts;     // first element is page size
+    QIcon         m_icon;
+};
+
+// -----------------------------------------------------------
 
 class AdvPrintAdditionalInfo
 {
 public:
 
-    AdvPrintAdditionalInfo();
-    AdvPrintAdditionalInfo(const AdvPrintAdditionalInfo& ai);
-    virtual ~AdvPrintAdditionalInfo();
+    explicit AdvPrintAdditionalInfo();
+    AdvPrintAdditionalInfo(const AdvPrintAdditionalInfo& other);
+    ~AdvPrintAdditionalInfo();
 
 public:
 
@@ -65,30 +89,21 @@ public:
 
 class AdvPrintCaptionInfo
 {
-public:
-
-    enum AvailableCaptions
-    {
-        NoCaptions = 0,
-        FileNames,
-        ExifDateTime,
-        Comment,
-        Custom
-    };
 
 public:
 
-    AdvPrintCaptionInfo();
-    AdvPrintCaptionInfo(const AdvPrintCaptionInfo& ci);
-    virtual ~AdvPrintCaptionInfo();
+    explicit AdvPrintCaptionInfo();
+    /// Copy constructor to get old photo info.
+    AdvPrintCaptionInfo(const AdvPrintCaptionInfo& other);
+    ~AdvPrintCaptionInfo();
 
 public:
 
-    AvailableCaptions m_captionType;
-    QFont             m_captionFont;
-    QColor            m_captionColor;
-    int               m_captionSize;
-    QString           m_captionText;
+    AdvPrintSettings::CaptionType m_captionType;
+    QFont                         m_captionFont;
+    QColor                        m_captionColor;
+    int                           m_captionSize;
+    QString                       m_captionText;
 };
 
 // -----------------------------------------------------------
@@ -99,47 +114,52 @@ class AdvPrintPhoto
 public:
 
     explicit AdvPrintPhoto(int thumbnailSize, DInfoInterface* const iface);
-    AdvPrintPhoto(const AdvPrintPhoto&);
+    AdvPrintPhoto(const AdvPrintPhoto& other);
     ~AdvPrintPhoto();
 
-    QPixmap&   thumbnail();
-    QImage     loadPhoto();
-    int        width();
-    int        height();
-    QSize&     size();
-    DMetadata& metaIface();
+    DImg&  thumbnail();
+    DImg   loadPhoto();
+    int    width();
+    int    height();
+    QSize& size();
+
+    QMatrix updateCropRegion(int woutlay, int houtlay, bool autoRotate);
 
     double scaleWidth(double unitToInches);
     double scaleHeight(double unitToInches);
 
 public:
 
+    // Url of original image file.
     QUrl                    m_url;
 
+    // Thumbnail size in pixels.
     int                     m_thumbnailSize;
 
+    // Region to crop while print from original image.
     QRect                   m_cropRegion;
 
-    // to get first copy quickly
+    // To get first copy quickly.
     bool                    m_first;
 
-    // number of copies
+    // Number of copies while printing stage.
     int                     m_copies;
 
+    // Rotation angle in degrees.
     int                     m_rotation;
+
     AdvPrintAdditionalInfo* m_pAddInfo;
     AdvPrintCaptionInfo*    m_pAdvPrintCaptionInfo;
     DInfoInterface*         m_iface;
 
 private:
 
-    void loadCache();
+    void loadInCache();
 
 private:
 
-    QPixmap*                m_thumbnail;
+    DImg*                   m_thumbnail;
     QSize*                  m_size;
-    DMetadata               m_meta;
 };
 
 } // Namespace Digikam

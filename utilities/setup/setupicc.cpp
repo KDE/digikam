@@ -887,7 +887,7 @@ void SetupICC::slotShowDefaultSearchPaths()
     QString text = i18n("On Windows, the default search paths include "
                         "<ul>"
                         "<li>%1/Windows/Spool/Drivers/Color/</li>"   // For Win2K and WinXP
-                        "<li>%2/Windows/Color/</li>"                 // For For Win98 and WinMe
+                        "<li>%2/Windows/Color/</li>"                 // For Win98 and WinMe
                         "</ul>"
                         "On your system, currently these paths exist and are scanned:"
                         "<ul>"
