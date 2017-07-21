@@ -61,7 +61,7 @@ DNNFaceModel::DNNFaceModel()
     : cv::Ptr<DNNFaceRecognizer>(DNNFaceRecognizer::create())/*,
       databaseId(0)*/
 {
-    ptr()->setThreshold(0.8);
+    ptr()->setThreshold(0.6);
 }
 
 DNNFaceModel::~DNNFaceModel()
@@ -167,28 +167,6 @@ void DNNFaceModel::setMats(const QList<std::vector<float>>& mats, const QList<DN
     {
         ptr()->train(currentSrcs, currentLabels);
     }
-}
-
-void DNNFaceModel::update(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context)
-{
-    //this function will be deleted later
-    return ;
-    /*
-    ptr()->update(images, labels);
-
-    // Update local information
-    // We assume new labels are simply appended
-    cv::Mat currentLabels = ptr()->getLabels();
-
-    for (int i = m_vecMetadata.size() ; i < currentLabels.rows ; i++)
-    {
-        DNNFaceVecMetadata metadata;
-        metadata.storageStatus = DNNFaceVecMetadata::Created;
-        metadata.identity      = currentLabels.at<int>(i);
-        metadata.context       = context;
-        m_vecMetadata << metadata;
-    }
-    */
 }
 
 } // namespace Digikam

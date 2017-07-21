@@ -83,7 +83,7 @@ public:
     /// OpenCV EIGEN
 
     void getFaceVector(cv::Mat data, std::vector<float>& vecdata);
-    void updateEIGENFaceModel(EigenFaceModel& model);
+    void updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::Mat>& images_rgb);
     EigenFaceModel eigenFaceModel() const;
     void clearEIGENTraining(const QString& context = QString());
     void clearEIGENTraining(const QList<int>& identities, const QString& context = QString());

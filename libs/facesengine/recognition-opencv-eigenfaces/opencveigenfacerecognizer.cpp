@@ -113,7 +113,7 @@ cv::Mat OpenCVEIGENFaceRecognizer::prepareForRecognition(const QImage& inputImag
         image = inputImage.scaled(TargetInputSize, TargetInputSize, Qt::IgnoreAspectRatio);
     }
 
-    cv::Mat cvImage = cv::Mat(image.height(), image.width(), CV_8UC1);
+    cv::Mat cvImage;// = cv::Mat(image.height(), image.width(), CV_8UC3);
     cv::Mat cvImageWrapper;
 
     switch (image.format())
@@ -123,17 +123,17 @@ cv::Mat OpenCVEIGENFaceRecognizer::prepareForRecognition(const QImage& inputImag
         case QImage::Format_ARGB32_Premultiplied:
             // I think we can ignore premultiplication when converting to grayscale
             cvImageWrapper = cv::Mat(image.height(), image.width(), CV_8UC4, image.scanLine(0), image.bytesPerLine());
-            cvtColor(cvImageWrapper, cvImage, CV_RGBA2GRAY);
+            cvtColor(cvImageWrapper, cvImage, CV_RGBA2RGB);
             break;
         default:
             image          = image.convertToFormat(QImage::Format_RGB888);
-            cvImageWrapper = cv::Mat(image.height(), image.width(), CV_8UC3, image.scanLine(0), image.bytesPerLine());
-            cvtColor(cvImageWrapper, cvImage, CV_RGB2GRAY);
+            cvImage = cv::Mat(image.height(), image.width(), CV_8UC3, image.scanLine(0), image.bytesPerLine());
+            //cvtColor(cvImageWrapper, cvImage, CV_RGB2GRAY);
             break;
     }
 
     //resize(cvImage, cvImage, Size(256, 256), (0, 0), (0, 0), INTER_LINEAR);
-    equalizeHist(cvImage, cvImage);
+    //equalizeHist(cvImage, cvImage);
     return cvImage;
 }
 
@@ -152,7 +152,7 @@ int OpenCVEIGENFaceRecognizer::recognize(const cv::Mat& inputImage)
     return predictedLabel;
 }
 
-void OpenCVEIGENFaceRecognizer::train(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context)
+void OpenCVEIGENFaceRecognizer::train(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context, const std::vector<cv::Mat>& images_rgb)
 {
     if (images.empty() || labels.size() != images.size())
     {
@@ -162,7 +162,7 @@ void OpenCVEIGENFaceRecognizer::train(const std::vector<cv::Mat>& images, const 
     d->eigen().update(images, labels, context);
     qCDebug(DIGIKAM_FACESENGINE_LOG) << "Eigenfaces Train: Adding model to Facedb";
     // add to database waiting
-    FaceDbAccess().db()->updateEIGENFaceModel(d->eigen());
+    FaceDbAccess().db()->updateEIGENFaceModel(d->eigen(), images_rgb);
 }
 
 } // namespace Digikam

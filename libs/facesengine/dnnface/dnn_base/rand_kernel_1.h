@@ -278,12 +278,12 @@
     };
 
 
-
+/*
     static void swap_rand (
         drand& a, 
         drand& b 
     ) { a.swap(b); }   
-
+*/
 
     template <>
     struct is_rand<drand>

@@ -786,9 +786,9 @@
 
         const tensor& forward(const tensor& x)
         {
-            std::cout << "forward...\n";
+            //std::cout << "forward...\n";
             subnetwork->forward(x);
-            std::cout << "forward over\n";
+            //std::cout << "forward over\n";
             const dimpl::subnet_wrapper<subnet_type> wsub(*subnetwork);
             if (!this_layer_setup_called)
             {

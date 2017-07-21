@@ -393,17 +393,26 @@ void FaceDb::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
 }
 
 
-void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
+void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::Mat>& images_rgb)
 {
     QList<EigenFaceMatMetadata> metadataList = model.matMetadata();
 
-    for (int i = 0 ; i < metadataList.size() ; i++)
+    for (size_t i = 0, j = 0 ; i < (size_t)metadataList.size() ; i++)
     {
         const EigenFaceMatMetadata& metadata = metadataList[i];
 
         if (metadata.storageStatus == EigenFaceMatMetadata::Created)
         {
             OpenCVMatData data = model.matData(i);
+            cv::Mat mat_rgb;
+            if(j >= images_rgb.size())
+            {
+                qCWarning(DIGIKAM_FACEDB_LOG) << "updateEIGENFaceModel: the size of images_rgb is wrong";
+            }
+            else
+            {
+                mat_rgb = images_rgb[j++];
+            }
 
             if (data.data.isEmpty())
             {
@@ -413,15 +422,16 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
             {
                 QByteArray compressed = qCompress(data.data);
                 std::vector<float> vecdata;
-                this->getFaceVector(data.toMat(), vecdata);
+                this->getFaceVector(mat_rgb, vecdata);
+                std::cout << "vecdata: " << vecdata[vecdata.size()-2] << " " << vecdata[vecdata.size()-1] << endl;
                 
                 QByteArray vec_byte(vecdata.size()*sizeof(float), 0);
                 float* fp = (float*)vec_byte.data();
-                for(int j = 0; j < vecdata.size(); j++)
+                for(size_t k = 0; k < vecdata.size(); k++)
                 {
-                    *(fp+j) = vecdata[j];
+                    *(fp+k) = vecdata[k];
                 }
-                QByteArray compressed_vecdata = qCompress(vec_byte);
+                QByteArray compressed_vecdata = qUncompress(vec_byte);
 
                 if (compressed.isEmpty())
                 {
@@ -445,7 +455,7 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
                                     << compressed_vecdata;
 
                     d->db->execSql(QString::fromLatin1("INSERT INTO OpenCVEIGENMat (identity, context, type, rows, cols, data, vecdata) "
-                                   "VALUES (?,?,?,?,?,?);"),
+                                   "VALUES (?,?,?,?,?,?,?);"),
                                    histogramValues, 0, &insertedId);
 
                     model.setWrittenToDatabase(i, insertedId.toInt());

@@ -149,6 +149,7 @@ int OpenCVDNNFaceRecognizer::recognize(const cv::Mat& inputImage)
     return predictedLabel;
 }
 //we can delete this function later
+/*
 void OpenCVDNNFaceRecognizer::train(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context)
 {
     if (images.empty() || labels.size() != images.size())
@@ -161,5 +162,5 @@ void OpenCVDNNFaceRecognizer::train(const std::vector<cv::Mat>& images, const st
     // add to database waiting
     //FaceDbAccess().db()->updateDNNFaceModel(d->dnn());
 }
-
+*/
 } // namespace Digikam

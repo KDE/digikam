@@ -33,7 +33,7 @@
             {
                 // put the item into our buffer.
                 vectorstream vstr(buffer);
-                //serialize(item, vstr);
+                serialize(item, vstr);
             }
 
 

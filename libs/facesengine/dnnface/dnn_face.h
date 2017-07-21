@@ -83,10 +83,10 @@ public:
 	    QString path2 = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
 	                                              QLatin1String("digikam/facesengine/shapepredictor.dat"));
 	    QFile model(path2);
+	    redeye::ShapePredictor* const temp = new redeye::ShapePredictor();
 	    std::cout << "read file\n";
 	    if (model.open(QIODevice::ReadOnly))
 	    {
-	        redeye::ShapePredictor* const temp = new redeye::ShapePredictor();
 	        QDataStream dataStream(&model);
 	        dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
 	        dataStream >> *temp;
@@ -97,11 +97,12 @@ public:
 	        std::cout << "Error open file shapepredictor.dat\n";
 	        return ;
 	    }
+	    delete temp;
 
 	    //cv::Mat tmp_mat = data.toMat();
 	    matrix<rgb_pixel> img;
 	    std::vector<matrix<rgb_pixel>> faces;
-	    std::cout << "tmp_mat channels: " << tmp_mat.channels() << endl;
+	    std::cout << "tmp_mat channels: " << tmp_mat.channels() << std::endl;
 	    assign_image(img, cv_image<rgb_pixel>(tmp_mat));
 	    bool face_flag = false;
 	    for (auto face : detector(img))
@@ -111,6 +112,7 @@ public:
 	        cv::Mat gray;
 	        
 	        int type = tmp_mat.type();
+	        std::cout << "type: " << type << std::endl;
 	        if(type == CV_8UC3 || type == CV_16UC3)
 	        {
 	            cv::cvtColor(tmp_mat, gray, CV_RGB2GRAY);  // 3 channels
@@ -127,8 +129,10 @@ public:
 
 	        cv::Rect new_rect(face.left(), face.top(), face.right()-face.left(), face.bottom()-face.top());
 	        FullObjectDetection object = sp(gray,new_rect);
+	        std::cout << "FullObjectDetection finished\n";
 	        matrix<rgb_pixel> face_chip;
 	        extract_image_chip(img, get_face_chip_details(object,150,0.25), face_chip);
+	        std::cout << "extract_image_chip finished\n";
 	        faces.push_back(move(face_chip));
 	        break;
 	    }
@@ -138,7 +142,9 @@ public:
 	        assign_image(img, cv_image<rgb_pixel>(tmp_mat));
 	        faces.push_back(img);
 	    }
+	    std::cout << "start net\n";
 	    std::vector<matrix<float,0,1>> face_descriptors = net(faces);
+	    std::cout << "face_descriptors size: " << face_descriptors.size() << std::endl;
 	    if(face_descriptors.size()!=0)
 	    {
 	        vecdata.clear();

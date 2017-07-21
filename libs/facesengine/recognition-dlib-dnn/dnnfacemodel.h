@@ -100,9 +100,7 @@ public:
 
     void setMats(const QList<std::vector<float>>& mats, const QList<DNNFaceVecMetadata>& matMetadata);
 
-    /// Make sure to call this instead of FaceRecognizer::update directly!
-    void update(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context);
-
+    
 //public:
 
     //int databaseId;

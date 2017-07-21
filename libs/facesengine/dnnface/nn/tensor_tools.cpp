@@ -10,6 +10,7 @@
 
 //namespace dlib
 //{
+/*
     namespace
     {
         std::atomic<bool>& dnn_prefer_fastest_algo (
@@ -37,6 +38,7 @@
     {
         dnn_prefer_fastest_algo() = false;
     }
+*/
 //}
 
 //namespace dlib {

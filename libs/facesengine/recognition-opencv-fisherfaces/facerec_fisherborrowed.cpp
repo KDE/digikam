@@ -234,7 +234,8 @@ void FisherFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predic
     //make sure the size of input image is the same as traing image
     if(m_src.size()>=1 && (src.rows!=m_src[0].rows||src.cols!=m_src[0].cols))
     {
-        resize(src, src, Size(m_src[0].rows, m_src[0].cols), (0, 0), (0, 0), INTER_LINEAR);
+        //resize(src, src, Size(m_src[0].rows, m_src[0].cols), (0, 0), (0, 0), INTER_LINEAR);
+        resize(src, src, Size(m_src[0].rows, m_src[0].cols));
     }
 
 #if OPENCV_TEST_VERSION(3,1,0)

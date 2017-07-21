@@ -867,7 +867,7 @@
                 if (version != "bn_fc2")
                     throw serialization_error("Unexpected version '"+version+"' found while deserializing  bn_.");
             }
-/*
+
             deserialize(item.params, in);
             deserialize(item.gamma, in);
             deserialize(item.beta, in);
@@ -882,7 +882,7 @@
             deserialize(item.bias_learning_rate_multiplier, in);
             deserialize(item.bias_weight_decay_multiplier, in);
             deserialize(item.eps, in);
-*/
+
         }
 
         friend std::ostream& operator<<(std::ostream& out, const bn_& item)
