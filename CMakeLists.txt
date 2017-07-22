@@ -155,7 +155,7 @@ find_package(KF5 ${KF5_MIN_VERSION}
              I18n
 )
 
-find_package(KF5 ${KF5_MIN_VERSION}
+find_package(KF5 ${KF5_MIN_VERSION} QUIET
              OPTIONAL_COMPONENTS
              KIO                    # For Desktop integration (Widgets only).
              IconThemes             # For Desktop integration.
@@ -165,12 +165,12 @@ find_package(KF5 ${KF5_MIN_VERSION}
              Notifications          # KDE desktop notifications integration.
 )
 
-find_package(KF5 ${AKONADI_MIN_VERSION}
+find_package(KF5 ${AKONADI_MIN_VERSION} QUIET
              OPTIONAL_COMPONENTS
              AkonadiContact         # For KDE Mail Contacts support.
 )
 
-find_package(KF5 ${CALENDAR_MIN_VERSION}
+find_package(KF5 ${CALENDAR_MIN_VERSION} QUIET
              OPTIONAL_COMPONENTS
              CalendarCore           # For Calendar tool.
 )
