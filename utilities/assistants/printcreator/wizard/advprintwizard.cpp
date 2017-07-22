@@ -33,8 +33,6 @@
 #include <QPainter>
 #include <QPalette>
 #include <QtGlobal>
-#include <QPrintDialog>
-#include <QProgressDialog>
 #include <QDomDocument>
 #include <QContextMenuEvent>
 #include <QStringRef>
@@ -127,6 +125,7 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
     d->cropPage    = new AdvPrintCropPage(this,    i18n("Crop and Rotate Photos"));
     d->outputPage  = new AdvPrintOutputPage(this,  i18n("Images Output Settings"));
     d->finalPage   = new AdvPrintFinalPage(this,   i18n("Render Printing"));
+    d->finalPage->setPhotoPage(d->photoPage);
 
     // -----------------------------------
 
@@ -254,8 +253,8 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
     AdvPrintPhotoSize* const s = d->settings->photosizes.at(sizeIndex);
 
     d->cropPage->ui()->cropFrame->init(photo,
-                                       d->photoPage->getLayout(photoIndex, sizeIndex)->width(),
-                                       d->photoPage->getLayout(photoIndex, sizeIndex)->height(),
+                                       d->settings->getLayout(photoIndex, sizeIndex)->width(),
+                                       d->settings->getLayout(photoIndex, sizeIndex)->height(),
                                        s->m_autoRotate,
                                        true);
 
@@ -374,135 +373,6 @@ void AdvPrintWizard::slotPreview(const QImage& img)
                                                  d->photoPage->getPageCount()));
     d->photoPage->manageBtnPreviewPage();
     d->photoPage->update();
-}
-
-bool AdvPrintWizard::prepareToPrint()
-{
-    if (!d->settings->photos.empty())
-    {
-        // set the default crop regions if not already set
-        int sizeIndex              = d->photoPage->ui()->ListPhotoSizes->currentRow();
-        d->settings->outputLayouts = d->settings->photosizes.at(sizeIndex);
-
-        int photoIndex = 0;
-
-        for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
-            it != d->settings->photos.end() ; ++it)
-        {
-            AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
-
-            if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
-            {
-                QRect* const curr = d->photoPage->getLayout(photoIndex, sizeIndex);
-                photo->updateCropRegion(curr->width(),
-                                        curr->height(),
-                                        d->settings->outputLayouts->m_autoRotate);
-            }
-
-            photoIndex++;
-        }
-
-        // Real printer to use.
-
-        if (d->settings->printerName != d->settings->outputName(AdvPrintSettings::FILES) &&
-            d->settings->printerName != d->settings->outputName(AdvPrintSettings::GIMP))
-        {
-            // tell him again!
-            d->photoPage->printer()->setFullPage(true);
-
-            qreal left, top, right, bottom;
-            d->photoPage->printer()->getPageMargins(&left,
-                                                    &top,
-                                                    &right,
-                                                    &bottom,
-                                                    QPrinter::Millimeter);
-
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Margins before print dialog: left "
-                                        << left
-                                        << " right "
-                                        << right
-                                        << " top "
-                                        << top
-                                        << " bottom "
-                                        << bottom;
-
-            qCDebug(DIGIKAM_GENERAL_LOG) << "(1) paper page "
-                                        << d->photoPage->printer()->paperSize()
-                                        << " size "
-                                        << d->photoPage->printer()->paperSize(QPrinter::Millimeter);
-
-            QPrinter::PaperSize paperSize = d->photoPage->printer()->paperSize();
-            QPrintDialog* const dialog    = new QPrintDialog(d->photoPage->printer(), this);
-            dialog->setWindowTitle(i18n("Print Creator"));
-
-            qCDebug(DIGIKAM_GENERAL_LOG) << "(2) paper page "
-                                        << dialog->printer()->paperSize()
-                                        << " size "
-                                        << dialog->printer()->paperSize(QPrinter::Millimeter);
-
-            if (dialog->exec() != QDialog::Accepted)
-            {
-                return false;
-            }
-
-            qCDebug(DIGIKAM_GENERAL_LOG) << "(3) paper page "
-                                        << dialog->printer()->paperSize()
-                                        << " size "
-                                        << dialog->printer()->paperSize(QPrinter::Millimeter);
-
-            // Why paperSize changes if printer properties is not pressed?
-            if (paperSize != d->photoPage->printer()->paperSize())
-            {
-                d->photoPage->printer()->setPaperSize(paperSize);
-            }
-
-            qCDebug(DIGIKAM_GENERAL_LOG) << "(4) paper page "
-                                        << dialog->printer()->paperSize()
-                                        << " size "
-                                        << dialog->printer()->paperSize(QPrinter::Millimeter);
-
-            dialog->printer()->getPageMargins(&left, &top, &right, &bottom, QPrinter::Millimeter);
-
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Dialog exit, new margins: left "
-                                        << left
-                                        << " right "
-                                        << right
-                                        << " top "
-                                        << top
-                                        << " bottom "
-                                        << bottom;
-
-            d->settings->outputPrinter = d->photoPage->printer();
-
-            return true;
-        }
-        else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::GIMP))
-        {
-            d->settings->imageFormat = AdvPrintSettings::JPEG;
-
-            if (!d->finalPage->checkTempPath(d->settings->tempPath))
-            {
-                return false;
-            }
-
-            if (d->settings->gimpFiles.count() > 0)
-            {
-                d->finalPage->removeGimpFiles();
-            }
-
-            d->settings->outputPath = d->settings->tempPath;
-
-            return true;
-        }
-        else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::FILES))
-        {
-            d->settings->outputPath = d->settings->outputDir.toLocalFile();
-
-            return true;
-        }
-    }
-
-    return false;
 }
 
 int AdvPrintWizard::normalizedInt(double n)
