@@ -286,4 +286,5 @@ BUGFIXES FROM BUGZILLA:
 271 ==> 173645 - digiKam crashes after startdialog.
 272 ==> 375982 - digiKam launching fail.
 273 ==> 098286 - Print Wizard has wrong default paper size.
-274 ==> 
+274 ==> 177333 - digiKam can't find images in album.
+275 ==> 
