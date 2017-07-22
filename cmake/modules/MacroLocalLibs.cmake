@@ -10,7 +10,7 @@ macro(DETECT_LIBKIPI MIN_VERSION)
     if (NOT DIGIKAMSC_COMPILE_LIBKIPI)
 
         message(STATUS "libkipi : search system based library")
-        find_package(KF5Kipi ${MIN_VERSION})
+        find_package(KF5Kipi ${MIN_VERSION} QUIET)
 
         if(KF5Kipi_FOUND)
             set(KF5Kipi_LIBRARIES KF5::Kipi)
@@ -81,7 +81,7 @@ macro(DETECT_LIBKSANE MIN_VERSION)
     if (NOT DIGIKAMSC_COMPILE_LIBKSANE)
 
         message(STATUS "libksane : search system based library")
-        find_package(KF5Sane ${MIN_VERSION})
+        find_package(KF5Sane ${MIN_VERSION} QUIET)
 
         if(KF5Sane_FOUND)
             set(LIBKSANE_LIBRARIES KF5::Sane)
