@@ -40,6 +40,7 @@ namespace Digikam
 
 class AdvPrintPhoto;
 class AdvPrintPhotoSize;
+class AdvPrintPhotoPage;
 
 class AdvPrintFinalPage : public DWizardPage
 {
@@ -56,12 +57,18 @@ public:
 
     bool checkTempPath(const QString& tempPath) const;
     void removeGimpFiles();
+    void setPhotoPage(AdvPrintPhotoPage* const photoPage);
 
 private Q_SLOTS:
 
     void slotProcess();
+    void slotPrint(bool);
     void slotDone(bool);
     void slotMessage(const QString&, bool);
+
+private:
+
+    bool print();
 
 private:
 

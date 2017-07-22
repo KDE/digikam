@@ -58,7 +58,8 @@ public:
 
     Private()
       : settings(0),
-        mode(AdvPrintTask::PRINT)
+        mode(AdvPrintTask::PRINT),
+        sizeIndex(0)
     {
     }
 
@@ -68,19 +69,23 @@ public:
 
     PrintMode         mode;
     QSize             size;
+
+    int               sizeIndex;
 };
 
 // -------------------------------------------------------
 
 AdvPrintTask::AdvPrintTask(AdvPrintSettings* const settings,
                            PrintMode mode,
-                           const QSize& size)
+                           const QSize& size,
+                           int sizeIndex)
     : ActionJob(),
       d(new Private)
 {
-    d->settings = settings;
-    d->mode     = mode;
-    d->size     = size;
+    d->settings  = settings;
+    d->mode      = mode;
+    d->size      = size;
+    d->sizeIndex = sizeIndex;
 }
 
 AdvPrintTask::~AdvPrintTask()
@@ -93,7 +98,19 @@ void AdvPrintTask::run()
 {
     switch (d->mode)
     {
+        case PREPAREPRINT:
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Start prepare to print";
+            preparePrint();
+            emit signalDone(!m_cancel);
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Prepare to print is done";
+
+            break;
+
         case PRINT:
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Start to print";
+
             if (d->settings->printerName != d->settings->outputName(AdvPrintSettings::FILES) &&
                 d->settings->printerName != d->settings->outputName(AdvPrintSettings::GIMP))
             {
@@ -106,7 +123,10 @@ void AdvPrintTask::run()
                 emit signalDone(!m_cancel && !files.isEmpty());
             }
 
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Print is done";
+
             break;
+
         default:    // PREVIEW
 
             qCDebug(DIGIKAM_GENERAL_LOG) << "Start to compute preview";
@@ -133,6 +153,35 @@ void AdvPrintTask::run()
     }
 }
 
+void AdvPrintTask::preparePrint()
+{
+    int photoIndex = 0;
+
+    for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
+         it != d->settings->photos.end() ; ++it)
+    {
+        AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
+
+        if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
+        {
+            QRect* const curr = d->settings->getLayout(photoIndex, d->sizeIndex);
+
+            photo->updateCropRegion(curr->width(),
+                                    curr->height(),
+                                    d->settings->outputLayouts->m_autoRotate);
+        }
+
+        photoIndex++;
+        emit signalProgress(photoIndex);
+
+        if (m_cancel)
+        {
+            signalMessage(i18n("Printing canceled"), true);
+            return;
+        }
+    }
+}
+
 void AdvPrintTask::printPhotos()
 {
     AdvPrintPhotoSize* const layouts = d->settings->outputLayouts;
@@ -150,7 +199,7 @@ void AdvPrintTask::printPhotos()
     int pageCount = 1;
     bool printing = true;
 
-    while (printing && !m_cancel)
+    while (printing)
     {
         signalMessage(i18n("Processing page %1", pageCount), false);
 
@@ -196,7 +245,7 @@ QStringList AdvPrintTask::printPhotosToFile()
     bool printing        = true;
     QRect* const srcPage = layouts->m_layouts.at(0);
 
-    while (printing && !m_cancel)
+    while (printing)
     {
         // make a pixmap to save to file.  Make it just big enough to show the
         // highest-dpi image on the page without losing data.
@@ -234,6 +283,7 @@ QStringList AdvPrintTask::printPhotosToFile()
                                 layouts->m_layouts,
                                 current,
                                 d->settings->disableCrop);
+
         painter.end();
 
         if (!image.save(filename, 0, 100))
