@@ -322,7 +322,7 @@ BUGFIXES FROM BUGZILLA:
 308 ==> 315376 - digiKam Crash on Startup with active X11 color profile.
 309 ==> 204551 - Error klauncher reports: Error loading 'kio_digikamalbums'.
 310 ==> 180926 - Image thumbnails in albums not showing.
-311 ==> 112766 - can't import photo because digikamalbums:// died.
-312 ==> 
-
+311 ==> 112766 - Can't import photo because digikamalbums:// died.
+312 ==> 144200 - digiKam won't display or import thumbnails.
+313 ==> 
 
