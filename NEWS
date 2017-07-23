@@ -319,5 +319,5 @@ BUGFIXES FROM BUGZILLA:
 305 ==> 318987 - digiKam crashes at startup.
 306 ==> 318762 - digiKam crash.
 307 ==> 324780 - Crash on startup.
-308 ==> 
-
+308 ==> 315376 - digiKam Crash on Startup with active X11 color profile.
+309 ==> 
