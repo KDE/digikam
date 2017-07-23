@@ -309,5 +309,5 @@ BUGFIXES FROM BUGZILLA:
 295 ==> 318744 - digiKam stop immediatly when I try to open it.
 296 ==> 319674 - digiKam crashed.
 297 ==> 318848 - Crash on startup the application.
-298 ==> 
-
+298 ==> 320357 - Crash de digiKam.
+299 ==> 
