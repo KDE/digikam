@@ -311,5 +311,5 @@ BUGFIXES FROM BUGZILLA:
 297 ==> 318848 - Crash on startup the application.
 298 ==> 320357 - Crash de digiKam.
 299 ==> 326347 - Absturz bei Start.
-300 ==> 
-
+300 ==> 318989 - digiKam crash.
+301 ==> 
