@@ -298,4 +298,5 @@ BUGFIXES FROM BUGZILLA:
 283 ==> 235594 - Cannot move files to trash in digiKam.
 284 ==> 098231 - "move to trash" doesn't work.
 285 ==> 225798 - Error when deleting or moving image to trash.
-286 ==> 
+286 ==> 338920 - View/empty trash from within digiKam.
+287 ==> 
