@@ -320,4 +320,6 @@ BUGFIXES FROM BUGZILLA:
 306 ==> 318762 - digiKam crash.
 307 ==> 324780 - Crash on startup.
 308 ==> 315376 - digiKam Crash on Startup with active X11 color profile.
-309 ==> 
+309 ==> 204551 - Error klauncher reports: Error loading 'kio_digikamalbums'.
+310 ==> 
+
