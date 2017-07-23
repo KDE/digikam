@@ -325,4 +325,5 @@ BUGFIXES FROM BUGZILLA:
 311 ==> 112766 - Can't import photo because digikamalbums:// died.
 312 ==> 144200 - digiKam won't display or import thumbnails.
 313 ==> 165885 - Thumbnails and images are NOT displayed in the main view center pane.
-314 ==> 
+314 ==> 159377 - High CPU usage while changing exif data.
+315 ==> 
