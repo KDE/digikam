@@ -317,4 +317,5 @@ BUGFIXES FROM BUGZILLA:
 303 ==> 318842 - digiKam crash in color management.
 304 ==> 318730 - digiKam crashes.
 305 ==> 318987 - digiKam crashes at startup.
-306 ==> 
+306 ==> 318762 - digiKam crash.
+307 ==> 
