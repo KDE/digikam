@@ -305,4 +305,5 @@ BUGFIXES FROM BUGZILLA:
 291 ==> 206381 - Crash of app when closing app.
 292 ==> 318991 - digiKam crash at startup.
 293 ==> 319166 - digiKam crashes on 64bit version.
-294 ==> 
+294 ==> 318861 - digiKam crashes on startup.
+295 ==> 
