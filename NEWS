@@ -288,7 +288,8 @@ BUGFIXES FROM BUGZILLA:
 273 ==> 098286 - Print Wizard has wrong default paper size.
 274 ==> 177333 - digiKam can't find images in album.
 275 ==> 180342 - Crash when migrating from 9.4 on Ubuntu Intrepid Ibex.
-276 ==> 095582 - link failure, -lpng missing in kioslave.
+276 ==> 095582 - Link failure, -lpng missing in kioslave.
 277 ==> 173995 - digiKam crashes on loading main view.
 278 ==> 123120 - Delete (Move to trash) fails if you don't own the directory.
-279 ==> 
+279 ==> 111920 - Crash with signal 11 when sending album to trash.
+280 ==> 
