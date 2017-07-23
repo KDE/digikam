@@ -292,4 +292,6 @@ BUGFIXES FROM BUGZILLA:
 277 ==> 173995 - digiKam crashes on loading main view.
 278 ==> 123120 - Delete (Move to trash) fails if you don't own the directory.
 279 ==> 111920 - Crash with signal 11 when sending album to trash.
-280 ==> 
+280 ==> 111819 - Can not move to trash album which contains sub-album.
+281 ==> 
+
