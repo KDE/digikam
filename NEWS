@@ -287,4 +287,5 @@ BUGFIXES FROM BUGZILLA:
 272 ==> 375982 - digiKam launching fail.
 273 ==> 098286 - Print Wizard has wrong default paper size.
 274 ==> 177333 - digiKam can't find images in album.
-275 ==> 
+275 ==> 180342 - Crash when migrating from 9.4 on Ubuntu Intrepid Ibex.
+276 ==> 
