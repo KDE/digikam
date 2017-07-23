@@ -1,9 +1,5 @@
 - add an attribute for desktop file
 - add Atckin's layout to p.a.
-- first assistant page should be a choice between 
-  "one photo per page"   aka p.i.
-  "more photos per page" aka p.a.
-- evaluate if removing p.i. after merging.
 
 Found QT odd behaviors
 - QPageSetupDialog::open does not set QPrinter correctly (Unix?) -> used exec
