@@ -296,4 +296,5 @@ BUGFIXES FROM BUGZILLA:
 281 ==> 139287 - Gallery images suddenly disappear after moving the second image to the trash.
 282 ==> 145277 - Deleting photo to trash does not send to trash.
 283 ==> 235594 - Cannot move files to trash in digiKam.
-284 ==> 
+284 ==> 098231 - "move to trash" doesn't work.
+285 ==> 
