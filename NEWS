@@ -303,4 +303,5 @@ BUGFIXES FROM BUGZILLA:
 289 ==> 227773 - At least twice in succession, the program did not even get so far as presenting me with a GUI screen -- instead, it crashed.
 290 ==> 254544 - digikam crashed on initial config
 291 ==> 206381 - Crash of app when closing app.
-292 ==> 
+292 ==> 318991 - digiKam crash at startup.
+293 ==> 
