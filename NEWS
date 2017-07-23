@@ -324,5 +324,5 @@ BUGFIXES FROM BUGZILLA:
 310 ==> 180926 - Image thumbnails in albums not showing.
 311 ==> 112766 - Can't import photo because digikamalbums:// died.
 312 ==> 144200 - digiKam won't display or import thumbnails.
-313 ==> 
-
+313 ==> 165885 - Thumbnails and images are NOT displayed in the main view center pane.
+314 ==> 
