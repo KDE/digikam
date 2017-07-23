@@ -18,7 +18,7 @@
 #include "dnuminput.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imageregionwidget.h"
+#include "imageguidewidget.h"
 
 namespace Digikam
 {
@@ -38,7 +38,7 @@ public:
 
     DIntNumInput*        radiusInput;
     DDoubleNumInput*     blurPercent;
-    ImageRegionWidget*   previewWidget;
+    ImageGuideWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
     QPoint               sourcePoint;
     QPoint               destinationPoint;
@@ -63,7 +63,7 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
     setToolHelp(QLatin1String("healingclonetool.anchor"));
 
     d->gboxSettings  = new EditorToolSettings;
-    d->previewWidget = new ImageRegionWidget;
+    d->previewWidget = new ImageGuideWidget;
 
     // --------------------------------------------------------
 
@@ -153,7 +153,7 @@ void HealingCloneTool::slotResetSettings()
 
 void HealingCloneTool::preparePreview()
 {
-    DImg img = d->previewWidget->getOriginalRegionImage();
+    //DImg img = d->previewWidget->ge getOriginalRegionImage();
     //setFilter(new BlurFilter(&img, this, d->radiusInput->value()));
 }
 
