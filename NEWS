@@ -290,4 +290,5 @@ BUGFIXES FROM BUGZILLA:
 275 ==> 180342 - Crash when migrating from 9.4 on Ubuntu Intrepid Ibex.
 276 ==> 095582 - link failure, -lpng missing in kioslave.
 277 ==> 173995 - digiKam crashes on loading main view.
-278 ==> 
+278 ==> 123120 - Delete (Move to trash) fails if you don't own the directory.
+279 ==> 
