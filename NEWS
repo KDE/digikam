@@ -293,5 +293,5 @@ BUGFIXES FROM BUGZILLA:
 278 ==> 123120 - Delete (Move to trash) fails if you don't own the directory.
 279 ==> 111920 - Crash with signal 11 when sending album to trash.
 280 ==> 111819 - Can not move to trash album which contains sub-album.
-281 ==> 
-
+281 ==> 139287 - Gallery images suddenly disappear after moving the second image to the trash.
+282 ==> 
