@@ -289,4 +289,5 @@ BUGFIXES FROM BUGZILLA:
 274 ==> 177333 - digiKam can't find images in album.
 275 ==> 180342 - Crash when migrating from 9.4 on Ubuntu Intrepid Ibex.
 276 ==> 095582 - link failure, -lpng missing in kioslave.
-277 ==> 
+277 ==> 173995 - digiKam crashes on loading main view.
+278 ==> 
