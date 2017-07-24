@@ -3,12 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2003-31-01
+ * Date        : 2017-05-25
  * Description : a tool to print images
  *
- * Copyright (C) 2003      by Todd Shoemaker <todd at theshoemakers dot net>
- * Copyright (C) 2007-2012 by Angelo Naselli <anaselli at linux dot it>
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -17,28 +15,42 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
 
-#ifndef ADV_PRINT_UTILS_H
-#define ADV_PRINT_UTILS_H
+#ifndef ADV_PRINT_OUTPUT_PAGE_H
+#define ADV_PRINT_OUTPUT_PAGE_H
 
 // Qt includes
 
 #include <QString>
 
-class QWidget;
-class QStringList;
+// Local includes
+
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-int  AdvPrintNint(double n);
-bool AdvPrintLaunchExternalApp(const QString& program, const QStringList& args);
-bool AdvPrintCheckTempPath(QWidget* const parent, const QString& tempPath);
+class AdvPrintOutputPage : public DWizardPage
+{
+public:
 
-}  // Namespace Digikam
+    explicit AdvPrintOutputPage(QWizard* const dialog, const QString& title);
+    ~AdvPrintOutputPage();
 
-#endif // ADV_PRINT_UTILS_H
+    void initializePage();
+    bool validatePage();
+    bool isComplete() const;
+
+private:
+
+    class Private;
+    Private* const d;
+};
+
+} // namespace Digikam
+
+#endif // ADV_PRINT_OUTPUT_PAGE_H

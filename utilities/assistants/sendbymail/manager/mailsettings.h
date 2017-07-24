@@ -56,9 +56,8 @@ public:
         CLAWSMAIL,
         EVOLUTION,
         KMAIL,
-        NETSCAPE,
+        NETSCAPE,       // Messenger (https://en.wikipedia.org/wiki/Netscape_Messenger_9)
         SYLPHEED,
-        SYLPHEEDCLAWS,
         THUNDERBIRD
     };
 
@@ -92,28 +91,30 @@ public:
 
 public:
 
-    Selection        selMode;             // Items selection mode
+    Selection                 selMode;             // Items selection mode
 
-    QList<QUrl>      inputImages;         // Selected items to send.
+    QList<QUrl>               inputImages;         // Selected items to send.
 
-    bool             addFileProperties;
-    bool             imagesChangeProp;
+    bool                      addFileProperties;
+    bool                      imagesChangeProp;
 
-    bool             removeMetadata;
+    bool                      removeMetadata;
 
-    int              imageCompression;
+    int                       imageCompression;
 
-    qint64           attLimitInMbytes;
+    qint64                    attLimitInMbytes;
 
-    QString          tempPath;
+    QString                   tempPath;
 
-    MailClient       mailProgram;
+    MailClient                mailProgram;
 
-    int              imageSize;
+    int                       imageSize;
 
-    ImageFormat      imageFormat;
+    ImageFormat               imageFormat;
 
-    QMap<QUrl, QUrl> itemsList;     // Map of original item and attached item (can be resized).
+    QMap<QUrl, QUrl>          itemsList; // Map of original item and attached item (can be resized).
+
+    QMap<MailClient, QString> binPaths;  // Map of paths for all mail clients.
 };
 
 } // namespace Digikam

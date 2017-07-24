@@ -117,6 +117,7 @@ public:
         timelineSideBar(0),
         searchSideBar(0),
         fuzzySearchSideBar(0),
+        msw(0),
 
 #ifdef HAVE_MARBLE
         gpsSearchSideBar(0),
@@ -171,6 +172,8 @@ public:
     TimelineSideBarWidget*        timelineSideBar;
     SearchSideBarWidget*          searchSideBar;
     FuzzySearchSideBarWidget*     fuzzySearchSideBar;
+    // DLNA
+    MediaServerWindow*            msw ;
 
 #ifdef HAVE_MARBLE
     GPSSearchSideBarWidget*       gpsSearchSideBar;
@@ -286,12 +289,6 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->trashView = d->stackedview->trashView();
 
     d->utilities = new ImageViewUtilities(this);
-
-
-
-    MediaServerWindow* msw = new MediaServerWindow(this);
-    connect(msw, SIGNAL(closed()), msw, SLOT(deleteLater()));
-    msw->show();
 
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());
@@ -412,6 +409,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
+
 }
 
 DigikamView::~DigikamView()
@@ -1832,6 +1830,22 @@ void DigikamView::slotQueueMgr()
     }
 
     d->utilities->insertToQueueManager(imageInfoList, singleInfo, true);
+}
+
+void DigikamView::slotMediaServer()
+{
+
+   if(!d->msw || MediaServerWindow::deletedFlag)
+   {
+      d->msw = new MediaServerWindow(this);
+      MediaServerWindow::deletedFlag = false;
+      connect(d->msw, SIGNAL(closed()), d->msw, SLOT(deleteLater()));
+      connect(d->msw, SIGNAL(closed()), d->msw, SLOT(setDeletedFlag()));
+   }
+
+    if(!d->msw->isVisible())
+        d->msw->show();
+
 }
 
 void DigikamView::slotImageEdit()

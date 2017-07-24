@@ -52,28 +52,26 @@ public:
 
     DImagesList* imagesList() const;
 
-    Ui_AdvPrintCaptionPage* ui() const;
-    void updateUi();
-
     void blockCaptionButtons(bool block=true);
-    void readCaptionSettings();
-
-    void setCaptionButtons(AdvPrintPhoto* const pPhoto);
-
-    /// Fix caption group layout according to captions combobox text
-    void enableCaptionGroup(const QString& text);
 
     void initializePage();
     bool validatePage();
 
-Q_SIGNALS:
-
-    void signalInfoPageUpdateCaptions();
+    static QString captionFormatter(AdvPrintPhoto* const photo);
 
 public Q_SLOTS:
 
-    void slotCaptionChanged(const QString&);
+    void slotCaptionChanged(int);
     void slotUpdateImagesList();
+    void slotUpdateCaptions();
+
+private:
+
+    /** Fix caption group layout according to captions combobox text.
+     */
+    void enableCaptionGroup(int);
+
+    void updateCaption(AdvPrintPhoto* const);
 
 private:
 

@@ -88,14 +88,23 @@ ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QW
     d->binariesWidget->addBinary(d->mngr->enfuseBinary());
 
 #ifdef Q_OS_OSX
-    d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/HuginTools"));    // Hugin bundle PKG install
-    d->binariesWidget->addDirectory(QLatin1String("/opt/local/bin"));                    // Std Macports install
-    d->binariesWidget->addDirectory(QLatin1String("/opt/digikam/bin"));                  // digiKam Bundle PKG install
+    // Hugin bundle PKG install
+    d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/HuginTools"));
+    d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/Hugin.app/Contents/MacOS"));
+    d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/tools_mac"));
+
+    // Std Macports install
+    d->binariesWidget->addDirectory(QLatin1String("/opt/local/bin"));
+
+    // digiKam Bundle PKG install
+    d->binariesWidget->addDirectory(QLatin1String("/opt/digikam/bin"));
 #endif
 
 #ifdef Q_OS_WIN
     d->binariesWidget->addDirectory(QLatin1String("C:/Program Files/Hugin/bin"));
     d->binariesWidget->addDirectory(QLatin1String("C:/Program Files (x86)/Hugin/bin"));
+    d->binariesWidget->addDirectory(QLatin1String("C:/Program Files/GnuWin32/bin"));
+    d->binariesWidget->addDirectory(QLatin1String("C:/Program Files (x86)/GnuWin32/bin"));
 #endif
 
     connect(d->binariesWidget, SIGNAL(signalBinariesFound(bool)),

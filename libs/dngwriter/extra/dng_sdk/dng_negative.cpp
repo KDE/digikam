@@ -2626,7 +2626,7 @@ void dng_negative::ReadStage1Image (dng_host &host,
 					  stream,
 					  *fStage1Image.Get ());
 
-	// We are are reading the main image, we should read the opcode lists
+	// We are reading the main image, we should read the opcode lists
 	// also.
 
 	if (rawIFD.fOpcodeList1Count)

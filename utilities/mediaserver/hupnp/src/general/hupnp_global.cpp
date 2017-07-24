@@ -1447,7 +1447,7 @@ QString readElementValue(
     bool* wasDefined)
 {
     QDomElement element =
-        parentElement.firstChildElement(elementTagToSearch);
+            parentElement.firstChildElement(elementTagToSearch);
 
     if (element.isNull())
     {

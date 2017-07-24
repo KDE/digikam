@@ -24,15 +24,13 @@
 #ifndef ADV_PRINT_WIZARD_H
 #define ADV_PRINT_WIZARD_H
 
-// QT incudes
+// Qt incudes
 
-#include <QPainter>
-#include <QIcon>
-#include <QPrinter>
-#include <QDialog>
+#include <QImage>
 
 // Local includes
 
+#include "advprintsettings.h"
 #include "dimageslist.h"
 #include "dinfointerface.h"
 #include "dwizarddlg.h"
@@ -40,20 +38,6 @@
 
 namespace Digikam
 {
-
-class TemplateIcon;
-class AdvPrintPhoto;
-
-typedef struct _AdvPrintPhotoSize
-{
-    QString       label;
-    int           dpi;
-    bool          autoRotate;
-    QList<QRect*> layouts;     // first element is page size
-    QIcon         icon;
-} AdvPrintPhotoSize;
-
-// ---------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT AdvPrintWizard : public DWizardDlg
 {
@@ -67,93 +51,26 @@ public:
     void setItemsList(const QList<QUrl>& fileList = QList<QUrl>());
     QList<QUrl> itemsList() const;
 
-    DInfoInterface* iface() const;
+    DInfoInterface*   iface()    const;
+    AdvPrintSettings* settings() const;
 
-public Q_SLOTS:
+    /** Update the pages to be printed and preview first/last pages.
+     */
+    void previewPhotos();
 
-    void slotBtnPrintOrderUpClicked();
-    void slotBtnPrintOrderDownClicked();
+    void updateCropFrame(AdvPrintPhoto* const, int);
 
-    void slotBtnPreviewPageDownClicked();
-    void slotBtnPreviewPageUpClicked();
-    void slotBtnCropRotateLeftClicked();
-    void slotBtnCropRotateRightClicked();
-    void slotBtnCropNextClicked();
-    void slotBtnCropPrevClicked();
-    void slotBtnSaveAsClicked();
-    void slotListPhotoSizesSelected();
+    int  nextId() const;
 
-    void slotPagesetupclicked();
-    void slotImageSelected(QTreeWidgetItem*);
-    void slotInfoPageUpdateCaptions();
-
-    void slotAddItems(const QList<QUrl>&);
-    void slotRemovingItem(int);
-    void slotContextMenuRequested();
-    void slotXMLSaveItem(QXmlStreamWriter&, int);
-    void slotXMLLoadElement(QXmlStreamReader&);
-    void slotXMLCustomElement(QXmlStreamWriter&);
-    void slotXMLCustomElement(QXmlStreamReader&);
-
-private Q_SLOTS:
-
-    void accept();
-    void reject();
-    void slotPageChanged(int);
-    void slotPageSetupDialogExit();
-    void slotDecreaseCopies();
-    void slotIncreaseCopies();
+    static int normalizedInt(double n);
 
 private:
 
-    /// Initialize page layout to the given pageSize in mm
-    void initPhotoSizes(const QSizeF& pageSize);
-    void previewPhotos();
+    bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
-    void setCaptionButtons();
+private Q_SLOTS:
 
-    /// To parse template file with 'fn' as filename, and 'pageSize' in mm.
-    void parseTemplateFile( const QString& fn, const QSizeF& pageSize );
-
-    void updateCaption(AdvPrintPhoto* const);
-    void updateCropFrame(AdvPrintPhoto* const, int);
-    void setBtnCropEnabled();
-    void removeGimpFiles();
-    void printPhotos(const QList<AdvPrintPhoto*>& photos,
-                     const QList<QRect*>& layouts,
-                     QPrinter& printer);
-    QStringList printPhotosToFile(const QList<AdvPrintPhoto*>& photos,
-                                  const QString& baseFilename,
-                                  AdvPrintPhotoSize* const layouts);
-
-    int     getPageCount()                        const;
-    QRect*  getLayout(int photoIndex)             const;
-    QString captionFormatter(AdvPrintPhoto* const photo) const;
-    void    printCaption(QPainter& p,
-                         AdvPrintPhoto* photo,
-                         int captionW,
-                         int captionH,
-                         const QString& caption);
-
-    bool paintOnePage(QPainter& p, const QList<AdvPrintPhoto*>& photos, const QList<QRect*>& layouts,
-                      int& current, bool cropDisabled, bool useThumbnails = false);
-
-    void manageBtnPreviewPage();
-
-    /// Create a MxN grid of photos, fitting on the page
-    void createPhotoGrid(AdvPrintPhotoSize* const p,
-                         int pageWidth,
-                         int pageHeight,
-                         int rows,
-                         int columns,
-                         TemplateIcon* const iconpreview);
-
-    double getMaxDPI(const QList<AdvPrintPhoto*>& photos,
-                     const QList<QRect*>& layouts,
-                     int current);
-
-    void saveSettings(const QString& pageName);
-    void readSettings(const QString& pageName);
+    void slotPreview(const QImage&);
 
 private:
 

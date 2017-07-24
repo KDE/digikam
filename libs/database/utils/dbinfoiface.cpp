@@ -36,6 +36,7 @@
 #include "digikamview.h"
 #include "imagecopyright.h"
 #include "imageinfo.h"
+#include "infocontainer.h"
 #include "imageposition.h"
 #include "imagesortsettings.h"
 #include "coredbsearchxml.h"
@@ -365,11 +366,12 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
         map.insert(QLatin1String("title"),       info.title());
         map.insert(QLatin1String("comment"),     info.comment());
         map.insert(QLatin1String("orientation"), info.orientation());
-        map.insert(QLatin1String("dateTime"),    info.dateTime());
+        map.insert(QLatin1String("datetime"),    info.dateTime());
         map.insert(QLatin1String("rating"),      info.rating());
         map.insert(QLatin1String("colorlabel"),  info.colorLabel());
         map.insert(QLatin1String("picklabel"),   info.pickLabel());
         map.insert(QLatin1String("filesize"),    info.fileSize());
+        map.insert(QLatin1String("dimensions"),  info.dimensions());
 
         // Get digiKam Tags Path list of picture from database.
         // Ex.: "City/Paris/Monuments/Notre Dame"
@@ -393,11 +395,24 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
         }
 
         // Get Copyright information of picture from database.
-        ImageCopyright rights = info.imageCopyright();
+        ImageCopyright rights        = info.imageCopyright();
         map.insert(QLatin1String("creators"), rights.creator());
         map.insert(QLatin1String("credit"),   rights.credit());
         map.insert(QLatin1String("rights"),   rights.rights());
         map.insert(QLatin1String("source"),   rights.source());
+
+        PhotoInfoContainer photoInfo = info.photoInfoContainer();
+        map.insert(QLatin1String("exposuretime"), photoInfo.exposureTime);
+        map.insert(QLatin1String("sensitivity"),  photoInfo.sensitivity);
+        map.insert(QLatin1String("aperture"),     photoInfo.aperture);
+        map.insert(QLatin1String("focallength"),  photoInfo.focalLength);
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Database Info populated for" << url;
+    }
+    else
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Database Info is NULL for" << url;
+
     }
 
     return map;

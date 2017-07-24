@@ -47,6 +47,8 @@ using namespace Herqq::Upnp::Av;
 /*******************************************************************************
  * MediaServerWindow
  *******************************************************************************/
+
+
 MediaServerWindow::MediaServerWindow(QWidget *parent) :
     QMainWindow(parent),
         m_ui(new Ui::MediaServerWindow), m_deviceHost(0),
@@ -95,6 +97,8 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
     loadItemsFromDatabase();
 
 }
+
+bool MediaServerWindow:: deletedFlag = false ;
 
 MediaServerWindow::~MediaServerWindow()
 {
@@ -234,6 +238,12 @@ void MediaServerWindow::addContenDlgtFinished()
 {
     m_ui->addContentButton->setEnabled(true);
 }
+
+void MediaServerWindow::setDeletedFlag()
+{
+    MediaServerWindow::deletedFlag = true;
+}
+
 
 void MediaServerWindow::addItemsToServer(const QStringList& fullPaths)
 {

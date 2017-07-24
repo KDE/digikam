@@ -52,8 +52,6 @@ class PrintHelper::Private
 
 public:
 
-public:
-
     Private() :
         parent(0)
     {
@@ -63,14 +61,17 @@ public:
 
 public:
 
-    QSize adjustSize(PrintOptionsPage* const optionsPage, const DImg& doc, int printerResolution, const QSize& viewportSize)
+    QSize adjustSize(PrintOptionsPage* const optionsPage,
+                     const DImg& doc,
+                     int printerResolution,
+                     const QSize& viewportSize)
     {
         QSize size                            = doc.size();
         PrintOptionsPage::ScaleMode scaleMode = optionsPage->scaleMode();
 
         if (scaleMode == PrintOptionsPage::ScaleToPage)
         {
-            bool imageBiggerThanPaper = size.width() > viewportSize.width() ||
+            bool imageBiggerThanPaper = size.width()  > viewportSize.width() ||
                                         size.height() > viewportSize.height();
 
             if (imageBiggerThanPaper || optionsPage->enlargeSmallerImages())
@@ -83,7 +84,7 @@ public:
         {
             double wImg = optionsPage->scaleWidth();
             double hImg = optionsPage->scaleHeight();
-            size.setWidth(int (wImg * printerResolution));
+            size.setWidth(int  (wImg * printerResolution));
             size.setHeight(int (hImg * printerResolution));
         }
         else
@@ -106,7 +107,8 @@ public:
         return size;
     }
 
-    QPoint adjustPosition(PrintOptionsPage* const optionsPage, const QSize& imageSize,
+    QPoint adjustPosition(PrintOptionsPage* const optionsPage,
+                          const QSize& imageSize,
                           const QSize& viewportSize)
     {
         Qt::Alignment alignment = optionsPage->alignment();
@@ -141,7 +143,8 @@ public:
         return QPoint(posX, posY);
     }
 
-    void adjustImage(PrintOptionsPage* const optionsPage, DImg& img)
+    void adjustImage(PrintOptionsPage* const optionsPage,
+                     DImg& img)
     {
         if (optionsPage->colorManaged())
         {

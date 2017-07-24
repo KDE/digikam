@@ -281,7 +281,9 @@ QList<QUrl> HDocParser::parseIconList(const QDomElement& iconListElement)
         QUrl iconUrl = QUrl(readElementValue(QLatin1String("url"), iconElement));
 
         QString iconUrlAsStr = iconUrl.toString();
-        retVal.append(QUrl(iconUrlAsStr));
+
+        //QString test = QDir::currentPath().append(iconUrlAsStr);
+        retVal.append(QUrl::fromUserInput(iconUrlAsStr));
 
         iconElement = iconElement.nextSiblingElement(QLatin1String("icon"));
     }

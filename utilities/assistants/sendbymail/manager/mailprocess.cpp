@@ -407,11 +407,20 @@ bool MailProcess::invokeMailAgent()
                 stringFileList << file.toLocalFile();
             }
 
+            QString binPath = d->settings->binPaths[d->settings->mailProgram];
+
+            if (binPath.isEmpty())
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Mail binary path is empty."
+                                             << "Cannot start Mail client program!";
+                return false;
+            }
+
             switch ((int)d->settings->mailProgram)
             {
                 case MailSettings::BALSA:
                 {
-                    QString prog = QLatin1String("balsa");
+                    QString prog = binPath;
                     QStringList args;
 
 #ifdef Q_OS_WIN
@@ -448,10 +457,9 @@ bool MailProcess::invokeMailAgent()
 
                 case MailSettings::CLAWSMAIL:
                 case MailSettings::SYLPHEED:
-                case MailSettings::SYLPHEEDCLAWS:
                 {
                     QStringList args;
-                    QString     prog;
+                    QString     prog = binPath;
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
@@ -463,22 +471,10 @@ bool MailProcess::invokeMailAgent()
                     args.append(QLatin1String("--compose"));
                     args.append(QLatin1String("--attach"));
 
-                    for (QList<QUrl>::ConstIterator it = fileList.constBegin() ; it != fileList.constEnd() ; ++it)
+                    for (QList<QUrl>::ConstIterator it = fileList.constBegin() ;
+                         it != fileList.constEnd() ; ++it)
                     {
                         args.append((*it).toLocalFile());
-                    }
-
-                    if (d->settings->mailProgram == MailSettings::CLAWSMAIL)
-                    {
-                        prog = QLatin1String("claws-mail");
-                    }
-                    else if (d->settings->mailProgram == MailSettings::SYLPHEED)
-                    {
-                        prog = QLatin1String("sylpheed");
-                    }
-                    else
-                    {
-                        prog = QLatin1String("sylpheed-claws");
                     }
 
                     QProcess process;
@@ -499,7 +495,7 @@ bool MailProcess::invokeMailAgent()
 
                 case MailSettings::EVOLUTION:
                 {
-                    QString prog = QLatin1String("evolution");
+                    QString prog = binPath;
                     QStringList args;
 
 #ifdef Q_OS_WIN
@@ -537,7 +533,7 @@ bool MailProcess::invokeMailAgent()
 
                 case MailSettings::KMAIL:
                 {
-                    QString prog = QLatin1String("kmail");
+                    QString prog = binPath;
                     QStringList args;
 
 #ifdef Q_OS_WIN
@@ -575,16 +571,7 @@ bool MailProcess::invokeMailAgent()
                 case MailSettings::NETSCAPE:
                 case MailSettings::THUNDERBIRD:
                 {
-                    QString prog;
-
-                    if (d->settings->mailProgram == MailSettings::NETSCAPE)
-                    {
-                        prog = QLatin1String("netscape");
-                    }
-                    else
-                    {
-                        prog = QLatin1String("thunderbird");
-                    }
+                    QString prog = binPath;
 
                     QStringList args;
 

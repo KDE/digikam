@@ -58,8 +58,6 @@ add_subdirectory(hupnp_av/include/HUpnpAv)
 add_subdirectory(hupnp_av/include/HUpnpAv/public)
 add_subdirectory(apps)
 add_subdirectory(apps/simple_avtest-app)
-add_subdirectory(apps/simple_avtest-app/descriptions)
-
 
 
 include_directories(  

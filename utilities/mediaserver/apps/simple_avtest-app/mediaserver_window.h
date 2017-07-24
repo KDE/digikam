@@ -82,6 +82,7 @@ private Q_SLOTS:
     void on_addItemButton_clicked();
 
     void on_DeleteDirectoriesButton_clicked();
+    void setDeletedFlag();
 
 protected:
 
@@ -91,6 +92,7 @@ protected:
 public:
 
     MediaServerWindow(QWidget* parent = 0);
+    static bool deletedFlag;
     virtual ~MediaServerWindow();
 
 Q_SIGNALS:

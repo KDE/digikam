@@ -254,6 +254,7 @@ public Q_SLOTS:
     void slotLightTable();
     void slotQueueMgr();
     void slotFileWithDefaultApplication();
+    void slotMediaServer();
 
     void slotLeftSideBarActivate(QWidget* widget);
     void slotLeftSideBarActivate(SidebarWidget* widget);

@@ -75,7 +75,7 @@ HMessagingInfo::~HMessagingInfo()
 {
     if (m_sock.second)
     {
-        Q_ASSERT(!m_sock.first.isNull());
+        //Q_ASSERT(!m_sock.first.isNull());
         m_sock.first->deleteLater();
     }
 }
