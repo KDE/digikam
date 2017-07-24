@@ -327,4 +327,5 @@ BUGFIXES FROM BUGZILLA:
 313 ==> 165885 - Thumbnails and images are NOT displayed in the main view center pane.
 314 ==> 159377 - High CPU usage while changing exif data.
 315 ==> 138106 - Rebuild thumbnails should be multithreaded.
-316 ==> 
+316 ==> 118236 - Long delay and 100% cpu when showing tag submenu or dialogue.
+317 ==> 
