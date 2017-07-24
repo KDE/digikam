@@ -328,4 +328,5 @@ BUGFIXES FROM BUGZILLA:
 314 ==> 159377 - High CPU usage while changing exif data.
 315 ==> 138106 - Rebuild thumbnails should be multithreaded.
 316 ==> 118236 - Long delay and 100% cpu when showing tag submenu or dialogue.
-317 ==> 
+317 ==> 106794 - Too many kio_thumbnail processes bring machine to its knees.
+318 ==> 
