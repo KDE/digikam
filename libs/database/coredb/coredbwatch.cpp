@@ -7,6 +7,7 @@
  * Description : Core database image properties synchronizer
  *
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -67,6 +68,7 @@ public:
                            QLatin1String("org.kde.digikam.DatabaseChangesetRelay"),
                            QString::fromUtf8(dbusSignal),
                            obj, slot);
+
         // connect to master signals
         connection.connect(QString(), QLatin1String("/ChangesetRelayForPeers"),
                            QLatin1String("org.kde.digikam.DatabaseChangesetRelay"),
@@ -116,6 +118,7 @@ void DBusSignalListenerThread::run()
     d->connectWithDBus("imageTagChange", q,
                         SLOT(slotImageTagChangeDBus(QString,QString,Digikam::ImageTagChangeset)),
                         threadConnection);
+
     d->connectWithDBus("albumRootChange", q,
                         SLOT(slotAlbumRootChangeDBus(QString,QString,Digikam::AlbumRootChangeset)),
                         threadConnection);
@@ -193,16 +196,22 @@ void CoreDbWatch::initializeRemote(DatabaseMode mode)
         // connect DBus signals from slave or peer to our application
         d->connectWithDBus("imageChange", this,
                            SLOT(slotImageChangeDBus(QString,QString,Digikam::ImageChangeset)));
+
         d->connectWithDBus("imageTagChange", this,
                            SLOT(slotImageTagChangeDBus(QString,QString,Digikam::ImageTagChangeset)));
+
         d->connectWithDBus("collectionImageChange", this,
                            SLOT(slotCollectionImageChangeDBus(QString,QString,Digikam::CollectionImageChangeset)));
+
         d->connectWithDBus("albumChange", this,
                            SLOT(slotAlbumChangeDBus(QString,QString,Digikam::AlbumChangeset)));
+
         d->connectWithDBus("tagChange", this,
                            SLOT(slotTagChangeDBus(QString,QString,Digikam::TagChangeset)));
+
         d->connectWithDBus("albumRootChange", this,
                            SLOT(slotAlbumRootChangeDBus(QString,QString,Digikam::AlbumRootChangeset)));
+
         d->connectWithDBus("searchChange", this,
                            SLOT(slotSearchChangeDBus(QString,QString,Digikam::SearchChangeset)));
 #endif
