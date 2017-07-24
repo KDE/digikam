@@ -23,13 +23,10 @@
 
 #include "coredbwatch.h"
 
-// C Ansi includes
-
-#include <unistd.h>
-
 // Qt includes
 
 #include <QMetaType>
+#include <QApplication>
 
 #ifdef HAVE_DBUS
 #   include <QtDBus>
@@ -111,7 +108,9 @@ DBusSignalListenerThread::~DBusSignalListenerThread()
 void DBusSignalListenerThread::run()
 {
     // We cannot use sessionBus() here but need to connect on our own
-    QDBusConnection threadConnection = QDBusConnection::connectToBus(QDBusConnection::SessionBus, QString::fromUtf8("DigikamDatabaseSlaveConnection-%1").arg(getpid()));
+    QDBusConnection threadConnection = QDBusConnection::connectToBus(QDBusConnection::SessionBus,
+                                                                     QString::fromUtf8("DigikamDatabaseSlaveConnection-%1")
+                                                                     .arg(qApp->applicationPid()));
 
     // DBus signals are received from within this thread and then sent with queued signals to the main thread
     d->connectWithDBus("imageTagChange", q,
