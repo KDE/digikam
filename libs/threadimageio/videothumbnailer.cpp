@@ -31,6 +31,7 @@
 
 // QtAV includes
 
+#include <QtAV/version.h>
 #include <QtAV/AVDemuxer.h>
 #include <QtAV/VideoFrameExtractor.h>
 
@@ -141,8 +142,13 @@ VideoThumbnailer::VideoThumbnailer(QObject* const parent)
     connect(d->extractor, SIGNAL(frameExtracted(QtAV::VideoFrame)),
             this, SLOT(slotFrameExtracted(QtAV::VideoFrame)));
 
+#if QTAV_VERSION > QTAV_VERSION_CHK(1, 12, 0)
+    connect(d->extractor, SIGNAL(error(QString)),
+            this, SLOT(slotFrameError()));
+#else
     connect(d->extractor, SIGNAL(error()),
             this, SLOT(slotFrameError()));
+#endif
 
     d->strip = QImage::fromData(sprocket_large_png, sprocket_large_png_len, "PNG");
 }
