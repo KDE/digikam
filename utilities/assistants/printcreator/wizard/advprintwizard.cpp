@@ -253,8 +253,7 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
                                        s->m_autoRotate,
                                        true);
 
-<<<<<<< HEAD
-    // Adding custom choice
+
 
     QListWidgetItem* const pWItem = new QListWidgetItem(i18n(CUSTOM_PAGE_LAYOUT_NAME));
 
@@ -271,11 +270,11 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
     d->photoPage->ui()->ListPhotoSizes->addItem(pWItem);
     d->photoPage->ui()->ListPhotoSizes->blockSignals(false);
     d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0, QItemSelectionModel::Select);
-=======
+
     d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
                                              photoIndex + 1,
                                              QString::number(d->settings->photos.count())));
->>>>>>> caa2a82f175b2878c921d09ce0715528d95a53f9
+
 }
 
 void AdvPrintWizard::previewPhotos()
