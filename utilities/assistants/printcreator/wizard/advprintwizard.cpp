@@ -254,8 +254,8 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
                                        true);
 
 
-
-    QListWidgetItem* const pWItem = new QListWidgetItem(i18n(CUSTOM_PAGE_LAYOUT_NAME));
+ //AHMED FATHI COMMENTED THIS FOR COMPILE ERRORS NOT RELATED TO HIS WORK
+  /* QListWidgetItem* const pWItem = new QListWidgetItem(i18n(CUSTOM_PAGE_LAYOUT_NAME));
 
 
     //TODO FREE STYLE ICON
@@ -268,6 +268,7 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 
     pWItem->setIcon(ti.getIcon());
     d->photoPage->ui()->ListPhotoSizes->addItem(pWItem);
+    */
     d->photoPage->ui()->ListPhotoSizes->blockSignals(false);
     d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0, QItemSelectionModel::Select);
 
