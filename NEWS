@@ -326,4 +326,5 @@ BUGFIXES FROM BUGZILLA:
 312 ==> 144200 - digiKam won't display or import thumbnails.
 313 ==> 165885 - Thumbnails and images are NOT displayed in the main view center pane.
 314 ==> 159377 - High CPU usage while changing exif data.
-315 ==> 
+315 ==> 138106 - Rebuild thumbnails should be multithreaded.
+316 ==> 
