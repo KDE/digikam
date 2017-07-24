@@ -146,13 +146,14 @@ void SimilarityDb::copySimilarityAttributes(qlonglong srcId, qlonglong dstId)
                    dstId, srcId);
 }
 
-QString SimilarityDb::getImageSimilarity(qlonglong imageID1, qlonglong imageID2)
+QString SimilarityDb::getImageSimilarity(qlonglong imageID1, qlonglong imageID2, Algorithm algorithm)
 {
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT value FROM ImageSimilarity "
-                           "WHERE imageid1=? and imageid2=?;"),
-                   imageID1, imageID2,
+                           "WHERE ((imageid1=? and imageid2=?) or (imageid2=? and imageid1=?)) "
+                           " AND algorithm=?;"),
+                   imageID1, imageID2, imageID1, imageID2, algorithm,
                    &values);
 
     if (!values.isEmpty())
@@ -165,12 +166,19 @@ QString SimilarityDb::getImageSimilarity(qlonglong imageID1, qlonglong imageID2)
     }
 }
 
-void SimilarityDb::setImageSimilarity(qlonglong imageID1, qlonglong imageID2, double value)
+void SimilarityDb::setImageSimilarity(qlonglong imageID1, qlonglong imageID2, double value, Algorithm algorithm)
 {
-    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageSimilarity "
-                           "(imageid1, imageid2, value) "
-                           "VALUES(?, ?, ?);"),
-                   imageID1, imageID2, value);
+    QString res = getImageSimilarity(imageID1, imageID2, algorithm);
+    
+    //Check if entry already exists for above pair of images.(Avoiding duplicate entries)
+     
+    if(res.isEmpty())
+    {
+        d->db->execSql(QString::fromUtf8("REPLACE INTO ImageSimilarity "
+                            "(imageid1, imageid2, value, algorithm) "
+                            "VALUES(?, ?, ?, ?);"),
+                    imageID1, imageID2, value, algorithm);
+    }
 }
 
 QString SimilarityDb::getImageSimilarityAlgorithm(qlonglong imageID1, qlonglong imageID2)

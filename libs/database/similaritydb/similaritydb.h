@@ -49,6 +49,12 @@ namespace Digikam
 class DIGIKAM_EXPORT SimilarityDb
 {
 
+enum class Algorithm{
+    Unknown = 0,
+    Haar = 1,
+    TfIdf = 2
+};
+
 public:
 
     /**
@@ -75,13 +81,12 @@ public:
     /**
      * Returns the similarity value for two images.
      */
-    QString getImageSimilarity(qlonglong imageID1, qlonglong imageID2);
+    QString getImageSimilarity(qlonglong imageID1, qlonglong imageID2, Algorithm algorithm = Algorithm::Haar);
     
-    void setImageSimilarity(qlonglong imageID1, qlonglong imageID2, double value);
+    void setImageSimilarity(qlonglong imageID1, qlonglong imageID2, double value, Algorithm algorithm = Algorithm::Haar);
     
     /**
      * Returns the algorithm used for finding similarity.
-     * @todo Add more algorithms in future except Haar.
      */
     QString getImageSimilarityAlgorithm(qlonglong imageID1, qlonglong imageID2);
     
