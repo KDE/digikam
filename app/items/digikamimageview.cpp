@@ -377,7 +377,7 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
 
 void DigikamImageView::openFile(const ImageInfo& info)
 {
-    d->utilities->openInfos(info, imageInfos(), currentAlbum());
+    d->utilities->openInfos(info, allImageInfos(), currentAlbum());
 }
 
 void DigikamImageView::deleteSelected(const ImageViewUtilities::DeleteMode deleteMode)

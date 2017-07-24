@@ -334,7 +334,7 @@ ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst(
     return d->filterModel->imageInfos(indexes);
 }
 
-QList<ImageInfo> ImageCategorizedView::imageInfos(bool grouping) const
+QList<ImageInfo> ImageCategorizedView::allImageInfos(bool grouping) const
 {
     if (grouping) {
         return resolveGrouping(d->filterModel->imageInfosSorted());
@@ -342,9 +342,9 @@ QList<ImageInfo> ImageCategorizedView::imageInfos(bool grouping) const
     return d->filterModel->imageInfosSorted();
 }
 
-QList<QUrl> ImageCategorizedView::urls(bool grouping) const
+QList<QUrl> ImageCategorizedView::allUrls(bool grouping) const
 {
-    ImageInfoList infos = imageInfos(grouping);
+    ImageInfoList infos = allImageInfos(grouping);
     QList<QUrl>   urls;
 
     foreach(const ImageInfo& info, infos)
@@ -373,7 +373,7 @@ bool ImageCategorizedView::needGroupResolving(ApplicationSettings::OperationType
 
     if (all)
     {
-        infos = d->filterModel->imageInfosSorted();
+        infos = allImageInfos();
     }
     else
     {
