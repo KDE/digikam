@@ -47,6 +47,7 @@
 #include <QTemporaryDir>
 #include <QProcess>
 #include <QDesktopServices>
+#include <QKeyEvent>
 
 // KDE includes
 
@@ -58,7 +59,7 @@
 
 #include "digikam_globals.h"
 #include "digikam_debug.h"
-#include "advprinttask.h"
+#include "advprintthread.h"
 #include "advprintintropage.h"
 #include "advprintalbumspage.h"
 #include "advprintphotopage.h"
@@ -88,6 +89,7 @@ public:
         outputPage(0),
         finalPage(0),
         settings(0),
+        previewThread(0),
         iface(0)
     {
     }
@@ -100,6 +102,7 @@ public:
     AdvPrintOutputPage*       outputPage;
     AdvPrintFinalPage*        finalPage;
     AdvPrintSettings*         settings;
+    AdvPrintThread*           previewThread;
     DInfoInterface*           iface;
 };
 
@@ -109,8 +112,9 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 {
     setWindowTitle(i18n("Print Creator"));
 
-    d->iface       = iface;
-    d->settings    = new AdvPrintSettings;
+    d->iface         = iface;
+    d->settings      = new AdvPrintSettings;
+    d->previewThread = new AdvPrintThread(this);
 
     KConfig config;
     KConfigGroup group = config.group("PrintCreator");
@@ -131,10 +135,17 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 
     connect(d->photoPage->imagesList(), SIGNAL(signalImageListChanged()),
             d->captionPage, SLOT(slotUpdateImagesList()));
+
+    connect(d->previewThread, SIGNAL(signalPreview(QImage)),
+            this, SLOT(slotPreview(QImage)));
+
+    installEventFilter(this);
 }
 
 AdvPrintWizard::~AdvPrintWizard()
 {
+    d->previewThread->cancel();
+
     KConfig config;
     KConfigGroup group = config.group("PrintCreator");
     d->settings->writeSettings(group);
@@ -239,11 +250,15 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
 
 void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 {
-    AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
+    int sizeIndex              = d->photoPage->ui()->ListPhotoSizes->currentRow();
+    AdvPrintPhotoSize* const s = d->settings->photosizes.at(sizeIndex);
+
     d->cropPage->ui()->cropFrame->init(photo,
-                                       d->photoPage->getLayout(photoIndex)->width(),
-                                       d->photoPage->getLayout(photoIndex)->height(),
-                                       s->autoRotate);
+                                       d->photoPage->getLayout(photoIndex, sizeIndex)->width(),
+                                       d->photoPage->getLayout(photoIndex, sizeIndex)->height(),
+                                       s->m_autoRotate,
+                                       true);
+
     d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
                                              photoIndex + 1,
                                              QString::number(d->settings->photos.count())));
@@ -252,10 +267,12 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 void AdvPrintWizard::previewPhotos()
 {
     if (d->settings->photosizes.isEmpty())
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Photo sizes is null";
         return;
+    }
 
-    //Change cursor to waitCursor during transition
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    d->previewThread->cancel();
 
     // get the selected layout
     int photoCount             = d->settings->photos.count();
@@ -268,93 +285,95 @@ void AdvPrintWizard::previewPhotos()
     if (photoCount > 0)
     {
         // how many pages?  Recall that the first layout item is the paper size
-        photosPerPage = s->layouts.count() - 1;
+        photosPerPage = s->m_layouts.count() - 1;
         int remainder = photoCount % photosPerPage;
 
         if (remainder > 0)
+        {
             emptySlots = photosPerPage - remainder;
+        }
 
         pageCount     = photoCount / photosPerPage;
 
         if (emptySlots > 0)
+        {
             pageCount++;
+        }
     }
 
     d->photoPage->ui()->LblPhotoCount->setText(QString::number(photoCount));
     d->photoPage->ui()->LblSheetsPrinted->setText(QString::number(pageCount));
     d->photoPage->ui()->LblEmptySlots->setText(QString::number(emptySlots));
 
-    // photo previews
-    // preview the first page.
-    // find the first page of photos
-    int count   = 0;
-    int page    = 0;
-    int current = 0;
-
-    for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
-         it != d->settings->photos.end() ; ++it)
-    {
-        AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
-
-        if (page == d->settings->currentPreviewPage)
-        {
-            photo->m_cropRegion.setRect(-1, -1, -1, -1);
-            photo->m_rotation = 0;
-            int w             = s->layouts.at(count + 1)->width();
-            int h             = s->layouts.at(count + 1)->height();
-            d->cropPage->ui()->cropFrame->init(photo,
-                                               w,
-                                               h,
-                                               s->autoRotate,
-                                               false);
-        }
-
-        count++;
-
-        if (count >= photosPerPage)
-        {
-            if (page == d->settings->currentPreviewPage)
-                break;
-
-            page++;
-            current += photosPerPage;
-            count    = 0;
-        }
-    }
-
-    // send this photo list to the painter
     if (photoCount > 0)
     {
-        QImage img(d->photoPage->ui()->BmpFirstPagePreview->size(),
-                   QImage::Format_ARGB32_Premultiplied);
-        QPainter p(&img);
-        p.setCompositionMode(QPainter::CompositionMode_Clear);
-        p.fillRect(img.rect(), Qt::color0);
-        p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        AdvPrintTask::paintOnePage(p,
-                                   d->settings->photos,
-                                   s->layouts,
-                                   current,
-                                   d->cropPage->ui()->m_disableCrop->isChecked(),
-                                   true);
-        p.end();
+        // photo previews
+        // preview the first page.
+        // find the first page of photos
+        int count   = 0;
+        int page    = 0;
+        int current = 0;
 
-        d->photoPage->ui()->BmpFirstPagePreview->clear();
-        d->photoPage->ui()->BmpFirstPagePreview->setPixmap(QPixmap::fromImage(img));
-        d->photoPage->ui()->LblPreview->setText(i18n("Page %1 of %2",
-                                                     d->settings->currentPreviewPage + 1,
-                                                     d->photoPage->getPageCount()));
+        for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
+            it != d->settings->photos.end() ; ++it)
+        {
+            AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
+
+            if (page == d->settings->currentPreviewPage)
+            {
+                photo->m_cropRegion.setRect(-1, -1, -1, -1);
+                photo->m_rotation = 0;
+                QRect* const curr = s->m_layouts.at(count + 1);
+                photo->updateCropRegion(curr->width(),
+                                        curr->height(),
+                                        s->m_autoRotate);
+            }
+
+            count++;
+
+            if (count >= photosPerPage)
+            {
+                if (page == d->settings->currentPreviewPage)
+                    break;
+
+                page++;
+                current += photosPerPage;
+                count    = 0;
+            }
+        }
+
+        // send this photo list to the painter
+
+        AdvPrintSettings* const pwSettings = new AdvPrintSettings;
+        pwSettings->photos                 = d->settings->photos;
+        pwSettings->outputLayouts          = s;
+        pwSettings->currentPreviewPage     = current;
+        pwSettings->disableCrop            = d->cropPage->ui()->m_disableCrop->isChecked();
+
+        d->previewThread->preview(pwSettings, d->photoPage->ui()->BmpFirstPagePreview->size());
+        d->previewThread->start();
     }
     else
     {
         d->photoPage->ui()->BmpFirstPagePreview->clear();
         d->photoPage->ui()->LblPreview->clear();
         d->photoPage->ui()->LblPreview->setText(i18n("Page %1 of %2", 0, 0));
+        d->photoPage->manageBtnPreviewPage();
+        d->photoPage->update();
     }
+}
 
+void AdvPrintWizard::slotPreview(const QImage& img)
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Recieve Preview" << img.size();
+
+    d->photoPage->ui()->BmpFirstPagePreview->clear();
+    d->photoPage->ui()->BmpFirstPagePreview->setPixmap(QPixmap::fromImage(img));
+    d->photoPage->ui()->LblPreview->setText(i18n("Page %1 of %2",
+                                                 d->settings->currentPreviewPage + 1,
+                                                 d->photoPage->getPageCount()));
     d->photoPage->manageBtnPreviewPage();
     d->photoPage->update();
-    QApplication::restoreOverrideCursor();
 }
 
 bool AdvPrintWizard::prepareToPrint()
@@ -362,9 +381,10 @@ bool AdvPrintWizard::prepareToPrint()
     if (!d->settings->photos.empty())
     {
         // set the default crop regions if not already set
-        d->settings->outputLayouts = d->settings->photosizes.at(
-                                        d->photoPage->ui()->ListPhotoSizes->currentRow());
-        int i                      = 0;
+        int sizeIndex              = d->photoPage->ui()->ListPhotoSizes->currentRow();
+        d->settings->outputLayouts = d->settings->photosizes.at(sizeIndex);
+
+        int photoIndex = 0;
 
         for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
             it != d->settings->photos.end() ; ++it)
@@ -373,14 +393,16 @@ bool AdvPrintWizard::prepareToPrint()
 
             if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
             {
-                d->cropPage->ui()->cropFrame->init(photo,
-                                                d->photoPage->getLayout(i)->width(),
-                                                d->photoPage->getLayout(i)->height(),
-                                                d->settings->outputLayouts->autoRotate);
+                QRect* const curr = d->photoPage->getLayout(photoIndex, sizeIndex);
+                photo->updateCropRegion(curr->width(),
+                                        curr->height(),
+                                        d->settings->outputLayouts->m_autoRotate);
             }
 
-            i++;
+            photoIndex++;
         }
+
+        // Real printer to use.
 
         if (d->settings->printerName != d->settings->outputName(AdvPrintSettings::FILES) &&
             d->settings->printerName != d->settings->outputName(AdvPrintSettings::GIMP))
@@ -458,7 +480,7 @@ bool AdvPrintWizard::prepareToPrint()
         {
             d->settings->imageFormat = AdvPrintSettings::JPEG;
 
-            if (!AdvPrintCheckTempPath(this, d->settings->tempPath))
+            if (!d->finalPage->checkTempPath(d->settings->tempPath))
             {
                 return false;
             }
@@ -483,29 +505,33 @@ bool AdvPrintWizard::prepareToPrint()
     return false;
 }
 
-bool AdvPrintWizard::AdvPrintCheckTempPath(QWidget* const parent, const QString& tempPath) const
-{
-    // does the temp path exist?
-    QDir tempDir(tempPath);
-
-    if (!tempDir.exists())
-    {
-        if (!tempDir.mkdir(tempDir.path()))
-        {
-            QMessageBox::information(parent, QString(),
-                                     i18n("Unable to create a temporary folder. "
-                                          "Please make sure you have proper permissions "
-                                          "to this folder and try again."));
-            return false;
-        }
-    }
-
-    return true;
-}
-
 int AdvPrintWizard::normalizedInt(double n)
 {
     return (int)(n + 0.5);
+}
+
+bool AdvPrintWizard::eventFilter(QObject* o, QEvent* e)
+{
+    if (e && e->type() == QEvent::KeyRelease)
+    {
+        QKeyEvent* const k = (QKeyEvent*)e;
+
+        if ((k->key() == Qt::Key_PageUp)   ||
+            (k->key() == Qt::Key_PageDown) ||
+            (k->key() == Qt::Key_Up)       ||
+            (k->key() == Qt::Key_Down))
+        {
+            if (currentPage() == d->cropPage)
+            {
+                // Pass the key event to move crop frame region.
+                d->cropPage->ui()->cropFrame->setFocus();
+                QApplication::sendEvent(d->cropPage->ui()->cropFrame, e);
+                return true; // eat event
+            }
+        }
+    }
+
+    return QWizard::eventFilter(o, e);
 }
 
 } // namespace Digikam

@@ -111,6 +111,9 @@ AdvPrintFinalPage::AdvPrintFinalPage(QWizard* const dialog, const QString& title
 
 AdvPrintFinalPage::~AdvPrintFinalPage()
 {
+    if (d->printThread)
+        d->printThread->cancel();
+
     delete d;
 }
 
@@ -146,6 +149,7 @@ void AdvPrintFinalPage::slotProcess()
     {
         d->progressView->addEntry(i18n("Printing process aborted..."),
                                   DHistoryView::ErrorEntry);
+        return;
     }
 
     d->printThread = new AdvPrintThread(this);
@@ -159,7 +163,7 @@ void AdvPrintFinalPage::slotProcess()
     connect(d->printThread, SIGNAL(signalDone(bool)),
             this, SLOT(slotDone(bool)));
 
-    d->printThread->setSettings(d->settings);
+    d->printThread->print(d->settings);
     d->printThread->start();
 }
 
@@ -256,6 +260,27 @@ void AdvPrintFinalPage::removeGimpFiles()
             }
         }
     }
+}
+
+bool AdvPrintFinalPage::checkTempPath(const QString& tempPath) const
+{
+    // does the temp path exist?
+    QDir tempDir(tempPath);
+
+    if (!tempDir.exists())
+    {
+        if (!tempDir.mkdir(tempDir.path()))
+        {
+            d->progressView->addEntry(i18n("Unable to create a temporary folder. "
+                                           "Please make sure you have proper permissions "
+                                           "to this folder and try again."),
+                                      DHistoryView::WarningEntry);
+
+            return false;
+        }
+    }
+
+    return true;
 }
 
 } // namespace Digikam

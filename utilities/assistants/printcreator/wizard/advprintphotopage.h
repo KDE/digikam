@@ -54,14 +54,13 @@ public:
     explicit AdvPrintPhotoPage(QWizard* const wizard, const QString& title);
     ~AdvPrintPhotoPage();
 
-    QPrinter*             printer()      const;
-    DImagesList*          imagesList()   const;
-    Ui_AdvPrintPhotoPage* ui()           const;
-    bool                  isComplete()   const;
-    int                   getPageCount() const;
-    QRect*                getLayout(int) const;
+    QPrinter*             printer()           const;
+    DImagesList*          imagesList()        const;
+    Ui_AdvPrintPhotoPage* ui()                const;
+    bool                  isComplete()        const;
+    int                   getPageCount()      const;
+    QRect*                getLayout(int, int) const;
 
-    void cleanupPage();
     void initializePage();
     bool validatePage();
 
@@ -110,7 +109,7 @@ private Q_SLOTS:
     void slotIncreaseCopies();
     void slotDecreaseCopies();
     void slotAddItems(const QList<QUrl>&);
-    void slotRemovingItem(int);
+    void slotRemovingItems(const QList<int>&);
     void slotBtnPrintOrderDownClicked();
     void slotBtnPrintOrderUpClicked();
     void slotBtnPreviewPageDownClicked();

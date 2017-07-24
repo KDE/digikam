@@ -54,8 +54,7 @@ private:
     enum CustomChoice
     {
         PHOTO_GRID              = 1,
-        FIT_AS_MANY_AS_POSSIBLE = 2,
-        PHOTOS_PER_PAGE         = 3
+        FIT_AS_MANY_AS_POSSIBLE = 2
     };
 };
 

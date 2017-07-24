@@ -61,7 +61,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotCaptionChanged(const QString&);
+    void slotCaptionChanged(int);
     void slotUpdateImagesList();
     void slotUpdateCaptions();
 
@@ -69,7 +69,7 @@ private:
 
     /** Fix caption group layout according to captions combobox text.
      */
-    void enableCaptionGroup(const QString& text);
+    void enableCaptionGroup(int);
 
     void updateCaption(AdvPrintPhoto* const);
 

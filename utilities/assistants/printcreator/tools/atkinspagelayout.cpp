@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "advprintlayouttree.h"
+#include "atkinspagelayouttree.h"
 
 namespace Digikam
 {
@@ -47,16 +47,17 @@ public:
         tree = 0;
     }
 
-    QMap<int, int> indexMap;
-    AdvPrintLayoutTree*    tree;
-    QRectF         pageRect;
+    QMap<int, int>      indexMap;
+    AtkinsPageLayoutTree* tree;
+    QRectF              pageRect;
 };
 
 AtkinsPageLayout::AtkinsPageLayout(const QRectF& pageRect)
     : d(new Private)
 {
     d->pageRect = pageRect;
-    d->tree     = new AdvPrintLayoutTree(aspectRatio(d->pageRect.size()), absoluteArea(d->pageRect.size()));
+    d->tree     = new AtkinsPageLayoutTree(aspectRatio(d->pageRect.size()),
+                                         absoluteArea(d->pageRect.size()));
 }
 
 AtkinsPageLayout::~AtkinsPageLayout()

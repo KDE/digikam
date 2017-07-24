@@ -31,6 +31,7 @@
 #include <QPainter>
 #include <QList>
 #include <QRect>
+#include <QImage>
 
 // Local includes
 
@@ -47,20 +48,24 @@ class AdvPrintTask : public ActionJob
 
 public:
 
-    AdvPrintTask(AdvPrintSettings* const settings);
-    ~AdvPrintTask();
+    enum PrintMode
+    {
+        PRINT = 0,
+        PREVIEW
+    };
 
-    static bool paintOnePage(QPainter& p,
-                             const QList<AdvPrintPhoto*>& photos,
-                             const QList<QRect*>& layouts,
-                             int& current,
-                             bool cropDisabled,
-                             bool useThumbnails = false);
+public:
+
+    explicit AdvPrintTask(AdvPrintSettings* const settings,
+                          PrintMode mode,
+                          const QSize& size = QSize());
+    ~AdvPrintTask();
 
 Q_SIGNALS:
 
     void signalMessage(const QString&, bool);
     void signalDone(bool);
+    void signalPreview(const QImage&);
 
 private:
 
@@ -73,11 +78,19 @@ private:
                      const QList<QRect*>& layouts,
                      int current);
 
-    static void printCaption(QPainter& p,
-                             AdvPrintPhoto* const photo,
-                             int captionW,
-                             int captionH,
-                             const QString& caption);
+    void printCaption(QPainter& p,
+                      AdvPrintPhoto* const photo,
+                      int captionW,
+                      int captionH,
+                      const QString& caption);
+
+    bool paintOnePage(QPainter& p,
+                      const QList<AdvPrintPhoto*>& photos,
+                      const QList<QRect*>& layouts,
+                      int& current,
+                      bool cropDisabled,
+                      bool useThumbnails = false);
+
 
 private:
 

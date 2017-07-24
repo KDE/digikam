@@ -29,6 +29,8 @@
 
 #include <QWidget>
 
+class QResizeEvent;
+
 namespace Digikam
 {
 
@@ -44,10 +46,10 @@ public:
     ~AdvPrintCropFrame();
 
     void   init(AdvPrintPhoto* const photo,
-                int width,
-                int height,
+                int  woutlay,
+                int  houtlay,
                 bool autoRotate,
-                bool paint = true);
+                bool paint);
 
     void   setColor(const QColor&);
     QColor color() const;
@@ -60,12 +62,14 @@ protected:
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseReleaseEvent(QMouseEvent*);
     virtual void mouseMoveEvent(QMouseEvent*);
-    virtual void keyPressEvent(QKeyEvent*);
+    virtual void keyReleaseEvent(QKeyEvent*);
 
 private:
 
-    QRect screenToPhotoRect(const QRect& r) const;
-    QRect photoToScreenRect(const QRect& r) const;
+    QRect screenToPhotoRect(const QRect&) const;
+    QRect photoToScreenRect(const QRect&) const;
+    void  resizeEvent(QResizeEvent*);
+    void  updateImage();
 
 private:
 

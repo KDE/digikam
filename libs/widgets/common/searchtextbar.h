@@ -153,7 +153,7 @@ public:
 
     /**
      * Indicate whether this search text bar can be toggled to between case-
-     * sensitive and -insensitive or or if always case-insensitive shall be
+     * sensitive and -insensitive or if always case-insensitive shall be
      * used.
      *
      * @param b if <code>true</code> the user can decide the toggle between
