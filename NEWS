@@ -329,4 +329,5 @@ BUGFIXES FROM BUGZILLA:
 315 ==> 138106 - Rebuild thumbnails should be multithreaded.
 316 ==> 118236 - Long delay and 100% cpu when showing tag submenu or dialogue.
 317 ==> 106794 - Too many kio_thumbnail processes bring machine to its knees.
-318 ==> 
+318 ==> 277619 - SETUP : Exclude folder/subfolder/image from database.
+319 ==> 
