@@ -351,4 +351,5 @@ BUGFIXES FROM BUGZILLA:
 336 ==> 198868 - pictures are not displayed in the main view i just can see them in the batch menu.
 337 ==> 185494 - No images in digiKam, possibly database problem, however they look fine in showfoto.
 338 ==> 181792 - Folders appear empty on first run after migrating from an old KDE version.
-339 ==> 
+339 ==> 224404 - No images of a album are shown.
+340 ==> 
