@@ -19,6 +19,7 @@
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
+#include "imagebrushguidewidget.h"
 
 namespace Digikam
 {
@@ -38,7 +39,7 @@ public:
 
     DIntNumInput*        radiusInput;
     DDoubleNumInput*     blurPercent;
-    ImageGuideWidget*   previewWidget;
+    ImageBrushGuideWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
     QPoint               sourcePoint;
     QPoint               destinationPoint;
@@ -63,7 +64,7 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
     setToolHelp(QLatin1String("healingclonetool.anchor"));
 
     d->gboxSettings  = new EditorToolSettings;
-    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::PickColorMode);
+    d->previewWidget = new ImageBrushGuideWidget(0, true, ImageGuideWidget::PickColorMode);
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
 
