@@ -330,4 +330,5 @@ BUGFIXES FROM BUGZILLA:
 316 ==> 118236 - Long delay and 100% cpu when showing tag submenu or dialogue.
 317 ==> 106794 - Too many kio_thumbnail processes bring machine to its knees.
 318 ==> 277619 - SETUP : Exclude folder/subfolder/image from database.
-319 ==> 
+319 ==> 151317 - Don't import hidden directories.
+320 ==> 
