@@ -342,4 +342,5 @@ BUGFIXES FROM BUGZILLA:
 327 ==> 266735 - digiKam displays no images: "unable to create io-slave" (OS X).
 328 ==> 327827 - Some pictures not visible in digiKam.
 329 ==> 193763 - digiKam doesn't display any photos.
-330 ==> 
+330 ==> 226235 - digiKam fails after upgrade - no albums - rh tag & captions bar frozen.
+331 ==> 
