@@ -337,4 +337,5 @@ BUGFIXES FROM BUGZILLA:
 322 ==> 127634 - Communication between digikam and its kioslaves broken if size_t != off_t.
 323 ==> 308734 - digikam/kioslave: a lot of "KIO::Slave::timeout: Houston, we lost our slave" and "slave died".
 324 ==> 337810 - Crashed after not install able libkgeomap1 depends.
-325 ==> 
+325 ==> 341451 - Will not find subdirectories with images in main collection directory.
+326 ==> 
