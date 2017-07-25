@@ -9,6 +9,7 @@ General     : New tool to create advance print layout.
 General     : Send by Mail tool can remove all metadata to attached items.
 PrintCreator: Add option to create printing from albums or images selection.
 PrintCreator: Add option to customize output image properties to render printing.
+PrintCreator: Tool is now multi-threaded to process images while preview and printing.
 ImageEditor : Add SendByMail and PrintCreator tools support.
 Showfoto    : Add SendByMail and PrintCreator tools support.
 LightTable  : Add SendByMail and PrintCreator tools support.
@@ -148,7 +149,7 @@ BUGFIXES FROM BUGZILLA:
 133 ==> 232957 - digikam crashes while importing images (about 60000 files).
 134 ==> 316994 - Crash with Red Eyes Correction tool.
 135 ==> 322558 - Crash when i click on Red Eyes tool.
-136 ==> 382133 - processing fails, caused by too long filename.
+136 ==> 382133 - Processing fails, caused by too long filename.
 137 ==> 294062 - digiKam crashes on HTML export.
 138 ==> 210228 - Next button is disabled in html gallery.
 139 ==> 311510 - HTML export crashing.
@@ -214,7 +215,7 @@ BUGFIXES FROM BUGZILLA:
 199 ==> 175077 - digiKam does not print.
 200 ==> 177137 - digiKam print assistant problems and ideas.
 201 ==> 348760 - Old and not secure VLC version.
-202 ==> 117920 - no encoder slide show.
+202 ==> 117920 - No encoder slide show.
 203 ==> 342607 - digiKam crash at startup with GStream : QtMultimedia relevant.
 204 ==> 235469 - digiKam Segmentation fault after 2 or 3 modifications.
 205 ==> 223936 - Moving photos between albums is slow.
@@ -333,7 +334,7 @@ BUGFIXES FROM BUGZILLA:
 319 ==> 151317 - Don't import hidden directories.
 320 ==> 226885 - Not displayed thumbnails failed load kio_digikamalbums.
 321 ==> 290421 - digiKam should inform users when kio-slave fail to load.
-322 ==> 127634 - communication between digikam and its kioslaves broken if size_t != off_t.
+322 ==> 127634 - Communication between digikam and its kioslaves broken if size_t != off_t.
 323 ==> 308734 - digikam/kioslave: a lot of "KIO::Slave::timeout: Houston, we lost our slave" and "slave died".
 324 ==> 
 
