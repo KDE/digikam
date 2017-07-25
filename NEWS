@@ -347,5 +347,6 @@ BUGFIXES FROM BUGZILLA:
 332 ==> 196332 - Copying images leads to an error message.
 333 ==> 227244 - Images on local disk not shown in middle pane.
 334 ==> 227498 - digikam no longer shows any fotos. Showfoto works.
-335 ==> 
+335 ==> 196329 - Renaming album causes problems (until re-opening).
+336 ==> 
 
