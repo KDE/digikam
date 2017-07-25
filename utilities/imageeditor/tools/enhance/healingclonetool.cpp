@@ -63,7 +63,9 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
     setToolHelp(QLatin1String("healingclonetool.anchor"));
 
     d->gboxSettings  = new EditorToolSettings;
-    d->previewWidget = new ImageGuideWidget;
+    d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::PickColorMode);
+    setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::UnSplitPreviewModes);
 
     // --------------------------------------------------------
 
