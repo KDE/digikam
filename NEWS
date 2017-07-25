@@ -333,4 +333,6 @@ BUGFIXES FROM BUGZILLA:
 319 ==> 151317 - Don't import hidden directories.
 320 ==> 226885 - Not displayed thumbnails failed load kio_digikamalbums.
 321 ==> 290421 - digiKam should inform users when kio-slave fail to load.
-322 ==> 
+322 ==> 127634 - communication between digikam and its kioslaves broken if size_t != off_t.
+323 ==> 
+
