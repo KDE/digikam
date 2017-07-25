@@ -356,5 +356,6 @@ BUGFIXES FROM BUGZILLA:
 341 ==> 232720 - All Digikam Albums show zero items even though pictures exist.
 342 ==> 195079 - digiKam albums appear empty.
 343 ==> 203031 - Album list doesn't show pictures even after tons of new pictures were imported.
-344 ==> 
+344 ==> 342557 - No rule to make target /opt/local/lib/libkgeomap.dylib in recent git distribution.
+345 ==> 
 
