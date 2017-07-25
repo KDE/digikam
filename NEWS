@@ -332,5 +332,5 @@ BUGFIXES FROM BUGZILLA:
 318 ==> 277619 - SETUP : Exclude folder/subfolder/image from database.
 319 ==> 151317 - Don't import hidden directories.
 320 ==> 226885 - Not displayed thumbnails failed load kio_digikamalbums.
-321 ==> 
-
+321 ==> 290421 - digiKam should inform users when kio-slave fail to load.
+322 ==> 
