@@ -354,5 +354,5 @@ BUGFIXES FROM BUGZILLA:
 339 ==> 224404 - No images of a album are shown.
 340 ==> 294835 - Albums are listed with (0) photos, but Database Statistics shows correct numbers of photos.
 341 ==> 232720 - All Digikam Albums show zero items even though pictures exist.
-342 ==> 
-
+342 ==> 195079 - digiKam albums appear empty.
+343 ==> 
