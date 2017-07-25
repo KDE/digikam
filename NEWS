@@ -340,5 +340,6 @@ BUGFIXES FROM BUGZILLA:
 325 ==> 341451 - Will not find subdirectories with images in main collection directory.
 326 ==> 284577 - No images shown in albums.
 327 ==> 266735 - digiKam displays no images: "unable to create io-slave" (OS X).
-328 ==> 
+328 ==> 327827 - Some pictures not visible in digiKam.
+329 ==> 
 
