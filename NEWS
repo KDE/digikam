@@ -343,4 +343,5 @@ BUGFIXES FROM BUGZILLA:
 328 ==> 327827 - Some pictures not visible in digiKam.
 329 ==> 193763 - digiKam doesn't display any photos.
 330 ==> 226235 - digiKam fails after upgrade - no albums - rh tag & captions bar frozen.
-331 ==> 
+331 ==> 250610 - Tool or procedure to check digiKam database.
+332 ==> 
