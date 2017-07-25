@@ -349,6 +349,5 @@ BUGFIXES FROM BUGZILLA:
 334 ==> 227498 - digikam no longer shows any fotos. Showfoto works.
 335 ==> 196329 - Renaming album causes problems (until re-opening).
 336 ==> 198868 - pictures are not displayed in the main view i just can see them in the batch menu.
-337 ==> 
-
-
+337 ==> 185494 - No images in digiKam, possibly database problem, however they look fine in showfoto.
+338 ==> 
