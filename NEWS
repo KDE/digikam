@@ -348,5 +348,7 @@ BUGFIXES FROM BUGZILLA:
 333 ==> 227244 - Images on local disk not shown in middle pane.
 334 ==> 227498 - digikam no longer shows any fotos. Showfoto works.
 335 ==> 196329 - Renaming album causes problems (until re-opening).
-336 ==> 
+336 ==> 198868 - pictures are not displayed in the main view i just can see them in the batch menu.
+337 ==> 
+
 
