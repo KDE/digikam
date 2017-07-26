@@ -363,4 +363,6 @@ BUGFIXES FROM BUGZILLA:
 348 ==> 198067 - digiKam does not show any pictures.
 349 ==> 253815 - Allow directories/images to be excluded by default.
 350 ==> 253062 - Database of 80,000+ images wiped out.
-351 ==> 
+351 ==> 289872 - Database will not open.
+352 ==> 
+
