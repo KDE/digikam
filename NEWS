@@ -366,5 +366,5 @@ BUGFIXES FROM BUGZILLA:
 351 ==> 289872 - Database will not open.
 352 ==> 313506 - Erasing files should be an independent process in digiKam.
 353 ==> 255478 - digiKam database tables only grow in size and get never cleaned.
-354 ==> 
-
+354 ==> 269435 - digiKam does not display any picture from any source.
+355 ==> 
