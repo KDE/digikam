@@ -360,4 +360,5 @@ BUGFIXES FROM BUGZILLA:
 345 ==> 267789 - Make face detection (kface) and geo tagging (kmap) optional features.
 346 ==> 171778 - digiKam does not load photos in its database.
 347 ==> 196545 - Images on digikam are not dispayed / visualized.
-348 ==> 
+348 ==> 198067 - digiKam does not show any pictures.
+349 ==> 
