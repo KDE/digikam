@@ -358,5 +358,6 @@ BUGFIXES FROM BUGZILLA:
 343 ==> 203031 - Album list doesn't show pictures even after tons of new pictures were imported.
 344 ==> 342557 - No rule to make target /opt/local/lib/libkgeomap.dylib in recent git distribution.
 345 ==> 267789 - Make face detection (kface) and geo tagging (kmap) optional features.
-346 ==> 
+346 ==> 171778 - digiKam does not load photos in its database.
+347 ==> 
 
