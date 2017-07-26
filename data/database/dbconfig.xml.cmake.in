@@ -120,11 +120,6 @@
                             fileSize INTEGER,
                             uniqueHash TEXT,
                             UNIQUE (album, name))</statement>
-            <statement mode="plain">CREATE TABLE ImageHaarMatrix
-                            (imageid INTEGER PRIMARY KEY,
-                            modificationDate DATETIME,
-                            uniqueHash TEXT,
-                            matrix BLOB)</statement>
             <statement mode="plain">CREATE TABLE ImageInformation
                             (imageid INTEGER PRIMARY KEY,
                             rating INTEGER,
@@ -588,7 +583,27 @@
             <dbaction name="ReplaceFaceSetting">
                 <statement mode="query">REPLACE INTO Settings VALUES (:keyword, :value);</statement>
             </dbaction>
-
+            
+            <!-- SQlite Similarity Database -->
+            
+            <dbaction name="CreateSimilarityDB" mode="transaction">
+                    <statement mode="plain">CREATE TABLE ImageSimilarity
+                            (imageid1 INTEGER NOT NULL,
+                            imageid2 INTEGER NOT NULL,
+                            algorithm INTEGER,
+                            value DOUBLE,
+                            CONSTRAINT Similar UNIQUE(imageid1, imageid2,algorithm)
+                            )</statement>
+                    <statement mode="plain">CREATE TABLE ImageHaarMatrix
+                            (imageid INTEGER PRIMARY KEY,
+                            modificationDate DATETIME,
+                            uniqueHash TEXT,
+                            matrix BLOB)</statement>
+                    
+                </dbaction>
+                
+            <!-- SQlite Similarity Queries -->
+            
             <!-- SQlite Migration Statements -->
 
             <!-- NOTE: Migrate_Cleanup_DB now it's done by the program except for cleanup prepare -->
@@ -892,6 +907,10 @@
             <dbaction name="vacuumRecognitionDB">
                 <statement mode="query">VACUUM;</statement>
             </dbaction>
+            
+            <dbaction name="vacuumSimilarityDB">
+                <statement mode="query">VACUUM;</statement>
+            </dbaction>
 
             <dbaction name="checkCoreDbIntegrity">
                 <statement mode="query">pragma integrity_check;</statement>
@@ -902,6 +921,10 @@
             </dbaction>
 
             <dbaction name="checkRecognitionDbIntegrity">
+                <statement mode="query">pragma integrity_check;</statement>
+            </dbaction>
+            
+            <dbaction name="checkSimilarityDbIntegrity">
                 <statement mode="query">pragma integrity_check;</statement>
             </dbaction>
 
