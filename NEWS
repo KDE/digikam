@@ -359,5 +359,5 @@ BUGFIXES FROM BUGZILLA:
 344 ==> 342557 - No rule to make target /opt/local/lib/libkgeomap.dylib in recent git distribution.
 345 ==> 267789 - Make face detection (kface) and geo tagging (kmap) optional features.
 346 ==> 171778 - digiKam does not load photos in its database.
-347 ==> 
-
+347 ==> 196545 - Images on digikam are not dispayed / visualized.
+348 ==> 
