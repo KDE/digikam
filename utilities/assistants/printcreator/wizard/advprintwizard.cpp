@@ -30,7 +30,6 @@
 // Qt includes
 
 #include <QFileInfo>
-#include <QPainter>
 #include <QPalette>
 #include <QtGlobal>
 #include <QDomDocument>
@@ -40,11 +39,7 @@
 #include <QMenu>
 #include <QIcon>
 #include <QLocale>
-#include <QMessageBox>
-#include <QListWidgetItem>
 #include <QTemporaryDir>
-#include <QProcess>
-#include <QDesktopServices>
 #include <QKeyEvent>
 
 // KDE includes
@@ -92,16 +87,16 @@ public:
     {
     }
 
-    AdvPrintIntroPage*        introPage;
-    AdvPrintAlbumsPage*       albumsPage;
-    AdvPrintPhotoPage*        photoPage;
-    AdvPrintCaptionPage*      captionPage;
-    AdvPrintCropPage*         cropPage;
-    AdvPrintOutputPage*       outputPage;
-    AdvPrintFinalPage*        finalPage;
-    AdvPrintSettings*         settings;
-    AdvPrintThread*           previewThread;
-    DInfoInterface*           iface;
+    AdvPrintIntroPage*   introPage;
+    AdvPrintAlbumsPage*  albumsPage;
+    AdvPrintPhotoPage*   photoPage;
+    AdvPrintCaptionPage* captionPage;
+    AdvPrintCropPage*    cropPage;
+    AdvPrintOutputPage*  outputPage;
+    AdvPrintFinalPage*   finalPage;
+    AdvPrintSettings*    settings;
+    AdvPrintThread*      previewThread;
+    DInfoInterface*      iface;
 };
 
 AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const iface)

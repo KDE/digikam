@@ -9,6 +9,7 @@ General     : New tool to create advance print layout.
 General     : Send by Mail tool can remove all metadata to attached items.
 PrintCreator: Add option to create printing from albums or images selection.
 PrintCreator: Add option to customize output image properties to render printing.
+PrintCreator: Tool is now multi-threaded to process images while preview and printing.
 ImageEditor : Add SendByMail and PrintCreator tools support.
 Showfoto    : Add SendByMail and PrintCreator tools support.
 LightTable  : Add SendByMail and PrintCreator tools support.
@@ -148,7 +149,7 @@ BUGFIXES FROM BUGZILLA:
 133 ==> 232957 - digikam crashes while importing images (about 60000 files).
 134 ==> 316994 - Crash with Red Eyes Correction tool.
 135 ==> 322558 - Crash when i click on Red Eyes tool.
-136 ==> 382133 - processing fails, caused by too long filename.
+136 ==> 382133 - Processing fails, caused by too long filename.
 137 ==> 294062 - digiKam crashes on HTML export.
 138 ==> 210228 - Next button is disabled in html gallery.
 139 ==> 311510 - HTML export crashing.
@@ -214,7 +215,7 @@ BUGFIXES FROM BUGZILLA:
 199 ==> 175077 - digiKam does not print.
 200 ==> 177137 - digiKam print assistant problems and ideas.
 201 ==> 348760 - Old and not secure VLC version.
-202 ==> 117920 - no encoder slide show.
+202 ==> 117920 - No encoder slide show.
 203 ==> 342607 - digiKam crash at startup with GStream : QtMultimedia relevant.
 204 ==> 235469 - digiKam Segmentation fault after 2 or 3 modifications.
 205 ==> 223936 - Moving photos between albums is slow.
@@ -286,4 +287,85 @@ BUGFIXES FROM BUGZILLA:
 271 ==> 173645 - digiKam crashes after startdialog.
 272 ==> 375982 - digiKam launching fail.
 273 ==> 098286 - Print Wizard has wrong default paper size.
-274 ==> 
+274 ==> 177333 - digiKam can't find images in album.
+275 ==> 180342 - Crash when migrating from 9.4 on Ubuntu Intrepid Ibex.
+276 ==> 095582 - Link failure, -lpng missing in kioslave.
+277 ==> 173995 - digiKam crashes on loading main view.
+278 ==> 123120 - Delete (Move to trash) fails if you don't own the directory.
+279 ==> 111920 - Crash with signal 11 when sending album to trash.
+280 ==> 111819 - Can not move to trash album which contains sub-album.
+281 ==> 139287 - Gallery images suddenly disappear after moving the second image to the trash.
+282 ==> 145277 - Deleting photo to trash does not send to trash.
+283 ==> 235594 - Cannot move files to trash in digiKam.
+284 ==> 098231 - "move to trash" doesn't work.
+285 ==> 225798 - Error when deleting or moving image to trash.
+286 ==> 338920 - View/empty trash from within digiKam.
+287 ==> 088923 - Improved verbosity when deleting items and deleting to trashcan.
+289 ==> 227773 - At least twice in succession, the program did not even get so far as presenting me with a GUI screen -- instead, it crashed.
+290 ==> 254544 - digikam crashed on initial config
+291 ==> 206381 - Crash of app when closing app.
+292 ==> 318991 - digiKam crash at startup.
+293 ==> 319166 - digiKam crashes on 64bit version.
+294 ==> 318861 - digiKam crashes on startup.
+295 ==> 318744 - digiKam stop immediatly when I try to open it.
+296 ==> 319674 - digiKam crashed.
+297 ==> 318848 - Crash on startup the application.
+298 ==> 320357 - Crash de digiKam.
+299 ==> 326347 - Absturz bei Start.
+300 ==> 318989 - digiKam crash.
+301 ==> 319144 - digiKam crashes.
+302 ==> 318859 - digiKam crashes on start.
+303 ==> 318842 - digiKam crash in color management.
+304 ==> 318730 - digiKam crashes.
+305 ==> 318987 - digiKam crashes at startup.
+306 ==> 318762 - digiKam crash.
+307 ==> 324780 - Crash on startup.
+308 ==> 315376 - digiKam Crash on Startup with active X11 color profile.
+309 ==> 204551 - Error klauncher reports: Error loading 'kio_digikamalbums'.
+310 ==> 180926 - Image thumbnails in albums not showing.
+311 ==> 112766 - Can't import photo because digikamalbums:// died.
+312 ==> 144200 - digiKam won't display or import thumbnails.
+313 ==> 165885 - Thumbnails and images are NOT displayed in the main view center pane.
+314 ==> 159377 - High CPU usage while changing exif data.
+315 ==> 138106 - Rebuild thumbnails should be multithreaded.
+316 ==> 118236 - Long delay and 100% cpu when showing tag submenu or dialogue.
+317 ==> 106794 - Too many kio_thumbnail processes bring machine to its knees.
+318 ==> 277619 - SETUP : Exclude folder/subfolder/image from database.
+319 ==> 151317 - Don't import hidden directories.
+320 ==> 226885 - Not displayed thumbnails failed load kio_digikamalbums.
+321 ==> 290421 - digiKam should inform users when kio-slave fail to load.
+322 ==> 127634 - Communication between digikam and its kioslaves broken if size_t != off_t.
+323 ==> 308734 - digikam/kioslave: a lot of "KIO::Slave::timeout: Houston, we lost our slave" and "slave died".
+324 ==> 337810 - Crashed after not install able libkgeomap1 depends.
+325 ==> 341451 - Will not find subdirectories with images in main collection directory.
+326 ==> 284577 - No images shown in albums.
+327 ==> 266735 - digiKam displays no images: "unable to create io-slave" (OS X).
+328 ==> 327827 - Some pictures not visible in digiKam.
+329 ==> 193763 - digiKam doesn't display any photos.
+330 ==> 226235 - digiKam fails after upgrade - no albums - rh tag & captions bar frozen.
+331 ==> 250610 - Tool or procedure to check digiKam database.
+332 ==> 196332 - Copying images leads to an error message.
+333 ==> 227244 - Images on local disk not shown in middle pane.
+334 ==> 227498 - digikam no longer shows any fotos. Showfoto works.
+335 ==> 196329 - Renaming album causes problems (until re-opening).
+336 ==> 198868 - pictures are not displayed in the main view i just can see them in the batch menu.
+337 ==> 185494 - No images in digiKam, possibly database problem, however they look fine in showfoto.
+338 ==> 181792 - Folders appear empty on first run after migrating from an old KDE version.
+339 ==> 224404 - No images of a album are shown.
+340 ==> 294835 - Albums are listed with (0) photos, but Database Statistics shows correct numbers of photos.
+341 ==> 232720 - All Digikam Albums show zero items even though pictures exist.
+342 ==> 195079 - digiKam albums appear empty.
+343 ==> 203031 - Album list doesn't show pictures even after tons of new pictures were imported.
+344 ==> 342557 - No rule to make target /opt/local/lib/libkgeomap.dylib in recent git distribution.
+345 ==> 267789 - Make face detection (kface) and geo tagging (kmap) optional features.
+346 ==> 171778 - digiKam does not load photos in its database.
+347 ==> 196545 - Images on digikam are not dispayed / visualized.
+348 ==> 198067 - digiKam does not show any pictures.
+349 ==> 253815 - Allow directories/images to be excluded by default.
+350 ==> 253062 - Database of 80,000+ images wiped out.
+351 ==> 289872 - Database will not open.
+352 ==> 313506 - Erasing files should be an independent process in digiKam.
+353 ==> 255478 - digiKam database tables only grow in size and get never cleaned.
+354 ==> 269435 - digiKam does not display any picture from any source.
+355 ==> 201810 - Segfault moving files to trash.
+356 ==> 
