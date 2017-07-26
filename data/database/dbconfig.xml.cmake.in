@@ -561,9 +561,9 @@
                 </statement>
             </dbaction>
 
-            <dbaction name="CreateFaceDBOpenCVEigen" mode="transaction">
+            <dbaction name="CreateFaceDBFaceMatrices" mode="transaction">
                 <statement mode="plain">
-                    CREATE TABLE OpenCVEIGENMat
+                    CREATE TABLE FaceMatrices
                     (id INTEGER PRIMARY KEY,
                     identity INTEGER,
                     context TEXT,
@@ -1575,8 +1575,8 @@ ORDER BY inf.rating DESC, img.name ASC
                 </statement>
             </dbaction>
 
-            <dbaction name="CreateFaceDBOpenCVEigen" mode="transaction">
-                <statement mode="plain">CREATE TABLE IF NOT EXISTS OpenCVEIGENMat
+            <dbaction name="CreateFaceDBFaceMatrices" mode="transaction">
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS FaceMatrices
                             (id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             identity INTEGER,
                             context TEXT CHARACTER SET utf8 COLLATE utf8_bin,

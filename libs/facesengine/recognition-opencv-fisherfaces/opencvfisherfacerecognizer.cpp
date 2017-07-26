@@ -162,7 +162,6 @@ void OpenCVFISHERFaceRecognizer::train(const std::vector<cv::Mat>& images, const
     d->fisher().update(images, labels, context);
     qCDebug(DIGIKAM_FACESENGINE_LOG) << "Fisherfaces Train: Adding model to Facedb";
     // add to database waiting
-    FaceDbAccess().db()->updateFISHERFaceModel(d->fisher());
 }
 
 } // namespace Digikam

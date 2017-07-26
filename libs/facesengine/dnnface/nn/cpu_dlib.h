@@ -637,7 +637,11 @@
             tensor_conv(const tensor_conv&) = delete;
             tensor_conv& operator=(const tensor_conv&) = delete;
 
-            tensor_conv() {}
+            tensor_conv():
+                last_stride_y(0),
+                last_stride_x(0),
+                last_padding_y(0),
+                last_padding_x(0){}
 
             void clear(
             ) {}
