@@ -361,4 +361,6 @@ BUGFIXES FROM BUGZILLA:
 346 ==> 171778 - digiKam does not load photos in its database.
 347 ==> 196545 - Images on digikam are not dispayed / visualized.
 348 ==> 198067 - digiKam does not show any pictures.
-349 ==> 
+349 ==> 253815 - Allow directories/images to be excluded by default.
+350 ==> 
+
