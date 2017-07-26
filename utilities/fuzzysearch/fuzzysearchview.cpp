@@ -318,7 +318,9 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     // ---------------------------------------------------------------
 
-    d->fuzzySearchAlbumSelectors = new AlbumSelectors(i18nc("@label", "Search in albums:"), QLatin1String("Fuzzy Search View"), 0, AlbumSelectors::AlbumType::PhysAlbum);
+    d->fuzzySearchAlbumSelectors = new AlbumSelectors(i18nc("@label", "Search in albums:"),
+                                                      QLatin1String("Fuzzy Search View"),
+                                                      0, AlbumSelectors::AlbumType::PhysAlbum);
 
     // ---------------------------------------------------------------
 
@@ -350,9 +352,9 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     d->maxLevelImage->setSingleStep(1);
     d->maxLevelImage->setValue(100);
     d->maxLevelImage->setWhatsThis(i18n("Select here the approximate maximum similarity threshold "
-                                     "value, as a percentage. "
-                                     "This value is used by the algorithm to restrict "
-                                     "similar images. The default value is 100."));
+                                        "value, as a percentage. "
+                                        "This value is used by the algorithm to restrict "
+                                        "similar images. The default value is 100."));
 
     // ---------------------------------------------------------------
 
@@ -363,7 +365,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     d->nameEditImage = new QLineEdit(saveBox);
     d->nameEditImage->setClearButtonEnabled(true);
     d->nameEditImage->setWhatsThis(i18n("Enter the name of the current similar image search to save in the "
-                                        "\"Fuzzy Searches\" view."));
+                                        "\"Similarity Searches\" view."));
 
     d->saveBtnImage  = new QToolButton(saveBox);
     d->saveBtnImage->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
@@ -466,7 +468,10 @@ QWidget* FuzzySearchView::setupSketchPanel() const
 
     // ---------------------------------------------------------------
 
-    d->sketchSearchAlbumSelectors = new AlbumSelectors(i18nc("@label", "Search in albums:"), QLatin1String("Sketch Search View"), 0, AlbumSelectors::AlbumType::PhysAlbum);
+    d->sketchSearchAlbumSelectors = new AlbumSelectors(i18nc("@label",
+                                                       "Search in albums:"),
+                                                       QLatin1String("Sketch Search View"),
+                                                       0, AlbumSelectors::AlbumType::PhysAlbum);
 
     // ---------------------------------------------------------------
 
@@ -482,7 +487,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     d->nameEditSketch = new QLineEdit(saveBox);
     d->nameEditSketch->setClearButtonEnabled(true);
     d->nameEditSketch->setWhatsThis(i18n("Enter the name of the current sketch search to save in the "
-                                         "\"Fuzzy Searches\" view."));
+                                         "\"Similarity Searches\" view."));
 
     d->saveBtnSketch = new QToolButton(saveBox);
     d->saveBtnSketch->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
@@ -704,7 +709,7 @@ void FuzzySearchView::setActive(bool val)
         if (!CoreDbAccess().db()->hasHaarFingerprints())
         {
             QString msg = i18n("Image fingerprints have not yet been generated for your collection. "
-                               "The Fuzzy Search Tools will not be operational "
+                               "The Similarity Search Tools will not be operational "
                                "without pre-generated fingerprints.\n"
                                "Do you want to build fingerprints now?\n"
                                "Note: This process can take a while. You can run it "
