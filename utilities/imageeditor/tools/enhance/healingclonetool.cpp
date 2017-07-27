@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QIcon>
+#include <QPoint>
 
 // KDE includes
 
@@ -42,11 +43,10 @@ public:
     ImageBrushGuideWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
     QPoint               sourcePoint;
-    QPoint               destinationPoint;
+    QPoint               destinationStartPoint;
+    QPushButton*         src;
+    QPushButton*         start;
 
-    QPushButton*         autoAdjustBtn;
-    QPushButton*         sourcePointBtn;
-    QPushButton*         destinationPointBtn;
 };
 
 const QString HealingCloneTool::Private::configGroupName(QLatin1String("Healing Clone Tool"));
@@ -88,12 +88,8 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
                                       " the destination color with source."));
     // --------------------------------------------------------
     QLabel* const label_src  = new QLabel(i18n("Source:"));
-    QLabel* const label_dst  = new QLabel(i18n("Destination:    "));
-    QPushButton* src = new QPushButton(i18n("click to set"), d->gboxSettings->plainPage());
-    QPushButton* dst = new QPushButton(i18n("click to set"),d->gboxSettings->plainPage());
-    QPushButton* start = new QPushButton(i18n("start"),d->gboxSettings->plainPage());
-    start->setSizePolicy(QSizePolicy::MinimumExpanding,
-                         QSizePolicy::Expanding);
+    d->src = new QPushButton(i18n("click to set"), d->gboxSettings->plainPage());
+    d->start = new QPushButton(i18n("start"),d->gboxSettings->plainPage());
 
     // --------------------------------------------------------
 
@@ -101,10 +97,8 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
 
     QGridLayout* const grid = new QGridLayout( );
     grid->addWidget(label_src,      1, 0, 1, 2);
-    grid->addWidget(start,          2, 1, 3, 1);
-    grid->addWidget(src,            2, 0, 1, 1);
-    grid->addWidget(label_dst,      3, 0, 1, 2);
-    grid->addWidget(dst,            4, 0, 1, 1);
+    grid->addWidget(d->src,         2, 0, 1, 2);
+    grid->addWidget(d->start,       3, 0, 1, 2);
     grid->addWidget(new DLineWidget(Qt::Horizontal, d->gboxSettings->plainPage()), 5, 0, 1, 2);
     grid->addWidget(label,          6, 0, 1, 2);
     grid->addWidget(d->radiusInput, 7, 0, 1, 2);
@@ -122,9 +116,11 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
     setToolView(d->previewWidget);
 
     // --------------------------------------------------------
-
+    d->previewWidget->setSrcSet(false);
     connect(d->radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
+    connect(d->src, SIGNAL(clicked(bool)),
+            d->previewWidget, SLOT(slotSrcSet()));
 }
 
 HealingCloneTool::~HealingCloneTool()
@@ -153,6 +149,16 @@ void HealingCloneTool::slotResetSettings()
     d->radiusInput->slotReset();
     d->radiusInput->blockSignals(false);
 }
+/*
+void HealingCloneTool::slotSrcSet()
+{
+    bool s = d->previewWidget->isSrcSet();
+    d->src->blockSignals(true);
+    d->previewWidget->setSrcSet(!s);
+    d->previewWidget->updatePreview();
+    d->src->blockSignals(false);
+    //d->previewWidget->updatePreview();
+}*/
 
 void HealingCloneTool::preparePreview()
 {

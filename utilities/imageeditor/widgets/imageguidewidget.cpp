@@ -838,6 +838,13 @@ void ImageGuideWidget::updateMaskCursor()
     d->maskCursor = QCursor(pix);
 }
 
+void ImageGuideWidget::setSpotPosition(int x, int y)
+{
+    d->spot.setX(x);
+    d->spot.setY(y);
+    updatePreview();
+}
+
 void ImageGuideWidget::setMaskCursor()
 {
     if (d->enableDrawMask)

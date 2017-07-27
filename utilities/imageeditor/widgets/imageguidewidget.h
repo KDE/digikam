@@ -111,7 +111,7 @@ Q_SIGNALS:
     void spotPositionChangedFromTarget(const Digikam::DColor& color, const QPoint& position);
     void signalResized();
 
-private:
+protected:
 
     void   paintEvent(QPaintEvent*);
     void   resizeEvent(QResizeEvent*);
@@ -127,11 +127,13 @@ private:
     QPoint translatePointPosition(QPoint& point) const;
     void   drawText(QPainter* const p, const QPoint& corner, const QString& text);
     void   updateMaskCursor();
+    void   setSpotPosition(int x, int y);
 
 private:
-
     class Private;
     Private* const d;
+
+//    Private* accessD();
 };
 
 }  // namespace Digikam

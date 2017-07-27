@@ -43,6 +43,7 @@ public:
 private Q_SLOTS:
 
     void slotResetSettings();
+    //void slotSrcSet();
 
 private:
 
