@@ -370,4 +370,6 @@ BUGFIXES FROM BUGZILLA:
 355 ==> 201810 - Segfault moving files to trash.
 356 ==> 197622 - digiKam crashes on exit.
 357 ==> 327470 - digiKam crashes when exiting, after exporting to html.
-358 ==> 
+358 ==> 330111 - No Thumbnails for video files - ffmpegthumbnailer works perfectly outside of digikam.
+359 ==> 
+
