@@ -1758,7 +1758,7 @@ void ImageWindow::slotImportedImagefromScanner(const QUrl& url)
 void ImageWindow::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    ImageInfoList infos = d->thumbBar->imageInfos();
+    ImageInfoList infos = d->thumbBar->allImageInfos();
 
     if (infos.isEmpty())
     {
@@ -1804,14 +1804,14 @@ void ImageWindow::slotEditMetadata()
 void ImageWindow::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
-    HTMLWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
+    HTMLWizard w(this, new DBInfoIface(this, d->thumbBar->allUrls()));
     w.exec();
 #endif
 }
 
 void ImageWindow::slotCalendar()
 {
-    CalWizard w(d->thumbBar->urls(), this);
+    CalWizard w(d->thumbBar->allUrls(), this);
     w.exec();
 }
 
@@ -1819,7 +1819,7 @@ void ImageWindow::slotPanorama()
 {
 #ifdef HAVE_PANORAMA
     PanoManager::instance()->checkBinaries();
-    PanoManager::instance()->setItemsList(d->thumbBar->urls());
+    PanoManager::instance()->setItemsList(d->thumbBar->allUrls());
     PanoManager::instance()->run();
 #endif
 }
@@ -1827,7 +1827,7 @@ void ImageWindow::slotPanorama()
 void ImageWindow::slotVideoSlideshow()
 {
 #ifdef HAVE_MEDIAPLAYER
-    VidSlideWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
+    VidSlideWizard w(this, new DBInfoIface(this, d->thumbBar->allUrls()));
     w.exec();
 #endif
 }
@@ -1835,19 +1835,19 @@ void ImageWindow::slotVideoSlideshow()
 void ImageWindow::slotExpoBlending()
 {
     ExpoBlendingManager::instance()->checkBinaries();
-    ExpoBlendingManager::instance()->setItemsList(d->thumbBar->urls());
+    ExpoBlendingManager::instance()->setItemsList(d->thumbBar->allUrls());
     ExpoBlendingManager::instance()->run();
 }
 
 void ImageWindow::slotSendByMail()
 {
-    MailWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
+    MailWizard w(this, new DBInfoIface(this, d->thumbBar->allUrls()));
     w.exec();
 }
 
 void ImageWindow::slotPrintCreator()
 {
-    AdvPrintWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
+    AdvPrintWizard w(this, new DBInfoIface(this, d->thumbBar->allUrls()));
     w.exec();
 }
 

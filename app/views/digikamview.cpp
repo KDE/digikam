@@ -815,7 +815,7 @@ QList<QUrl> DigikamView::allUrls(bool grouping) const
             return d->tableView->allUrls(grouping);
 
         default:
-            return d->iconView->urls(grouping);
+            return d->iconView->allUrls(grouping);
     }
 }
 
@@ -2474,7 +2474,7 @@ ImageInfoList DigikamView::allInfo(const bool grouping) const
         case StackedView::MediaPlayerMode:
         case StackedView::IconViewMode:
             // all of these modes use the same selection model and data as the IconViewMode
-            return d->iconView->imageInfos(grouping);
+            return d->iconView->allImageInfos(grouping);
 
         default:
             return QList<ImageInfo>();

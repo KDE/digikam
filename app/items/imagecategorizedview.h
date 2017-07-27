@@ -84,8 +84,8 @@ public:
     QList<QUrl>            selectedUrls(bool grouping = false) const;
     QList<QUrl>            selectedUrls(ApplicationSettings::OperationType type) const;
 
-    QList<ImageInfo>       imageInfos(bool grouping = false) const;
-    QList<QUrl>            urls(bool grouping = false) const;
+    QList<ImageInfo>       allImageInfos(bool grouping = false) const;
+    QList<QUrl>            allUrls(bool grouping = false) const;
 
     bool                   needGroupResolving(ApplicationSettings::OperationType type,
                                               bool all = false) const;

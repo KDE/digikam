@@ -98,6 +98,7 @@ Name[sv]=Stil
 Name[tr]=Stil
 Name[uk]=Стиль
 Name[x-test]=xxStylexx
+Name[zh_CN]=样式
 Type=list
 Default=pink.css
 Value_0=pink.css

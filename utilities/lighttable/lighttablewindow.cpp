@@ -1407,7 +1407,7 @@ void LightTableWindow::slotEditItem()
 void LightTableWindow::slotEditItem(const ImageInfo& info)
 {
     ImageWindow* const im = ImageWindow::imageWindow();
-    ImageInfoList list    = d->thumbView->imageInfos();
+    ImageInfoList list    = d->thumbView->allImageInfos();
 
     im->loadImageInfos(list, info, i18n("Light Table"));
 
@@ -1427,7 +1427,7 @@ void LightTableWindow::slotPresentation()
 {
     PresentationMngr* const mngr = new PresentationMngr(this);
 
-    foreach(const ImageInfo& info, d->thumbView->imageInfos())
+    foreach(const ImageInfo& info, d->thumbView->allImageInfos())
     {
         mngr->addFile(info.fileUrl(), info.comment());
         qApp->processEvents();
@@ -1438,7 +1438,7 @@ void LightTableWindow::slotPresentation()
 
 void LightTableWindow::slotSlideShowAll()
 {
-   SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->imageInfos());
+   SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->allImageInfos());
 
    d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
                                             i18n("Preparing slideshow. Please wait..."));
@@ -1463,7 +1463,7 @@ void LightTableWindow::slotRightSlideShowManualFromCurrent()
 
 void LightTableWindow::slotSlideShowManualFrom(const ImageInfo& info)
 {
-   SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->imageInfos());
+   SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->allImageInfos());
    builder->setOverrideStartFrom(info);
    builder->setAutoPlayEnabled(false);
 
@@ -1777,7 +1777,7 @@ void LightTableWindow::slotColorManagementOptionsChanged()
 void LightTableWindow::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    ImageInfoList infos = d->thumbView->imageInfos();
+    ImageInfoList infos = d->thumbView->allImageInfos();
 
     if (infos.isEmpty())
     {
@@ -1841,14 +1841,14 @@ void LightTableWindow::slotImportedImagefromScanner(const QUrl& url)
 void LightTableWindow::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
-    HTMLWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
+    HTMLWizard w(this, new DBInfoIface(this, d->thumbView->allUrls()));
     w.exec();
 #endif
 }
 
 void LightTableWindow::slotCalendar()
 {
-    CalWizard w(d->thumbView->urls(), this);
+    CalWizard w(d->thumbView->allUrls(), this);
     w.exec();
 }
 
@@ -1856,7 +1856,7 @@ void LightTableWindow::slotPanorama()
 {
 #ifdef HAVE_PANORAMA
     PanoManager::instance()->checkBinaries();
-    PanoManager::instance()->setItemsList(d->thumbView->urls());
+    PanoManager::instance()->setItemsList(d->thumbView->allUrls());
     PanoManager::instance()->run();
 #endif
 }
@@ -1864,27 +1864,27 @@ void LightTableWindow::slotPanorama()
 void LightTableWindow::slotExpoBlending()
 {
     ExpoBlendingManager::instance()->checkBinaries();
-    ExpoBlendingManager::instance()->setItemsList(d->thumbView->urls());
+    ExpoBlendingManager::instance()->setItemsList(d->thumbView->allUrls());
     ExpoBlendingManager::instance()->run();
 }
 
 void LightTableWindow::slotVideoSlideshow()
 {
 #ifdef HAVE_MEDIAPLAYER
-    VidSlideWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
+    VidSlideWizard w(this, new DBInfoIface(this, d->thumbView->allUrls()));
     w.exec();
 #endif
 }
 
 void LightTableWindow::slotSendByMail()
 {
-    MailWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
+    MailWizard w(this, new DBInfoIface(this, d->thumbView->allUrls()));
     w.exec();
 }
 
 void LightTableWindow::slotPrintCreator()
 {
-    AdvPrintWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
+    AdvPrintWizard w(this, new DBInfoIface(this, d->thumbView->allUrls()));
     w.exec();
 }
 
