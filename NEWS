@@ -369,4 +369,5 @@ BUGFIXES FROM BUGZILLA:
 354 ==> 269435 - digiKam does not display any picture from any source.
 355 ==> 201810 - Segfault moving files to trash.
 356 ==> 197622 - digiKam crashes on exit.
-357 ==> 
+357 ==> 327470 - digiKam crashes when exiting, after exporting to html.
+358 ==> 
