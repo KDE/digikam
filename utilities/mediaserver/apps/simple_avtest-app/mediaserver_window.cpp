@@ -79,7 +79,7 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
 
     // 5) Setup the HDeviceHost with desired configuration info.
     HDeviceConfiguration config;
-    config.setPathToDeviceDescription(QLatin1String("descriptions/herqq_mediaserver_description.xml"));
+    config.setPathToDeviceDescription(QLatin1String("../utilities/mediaserver/descriptions/descriptions/herqq_mediaserver_description.xml"));
     config.setCacheControlMaxAge(180);
 
     HDeviceHostConfiguration hostConfiguration;

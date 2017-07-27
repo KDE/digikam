@@ -330,3 +330,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
 
 
 add_library(mediaserver_src OBJECT ${libmediaserver_SRCS})
+
+
+file(COPY descriptions DESTINATION descriptions )
+
