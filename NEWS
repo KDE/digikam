@@ -372,4 +372,5 @@ BUGFIXES FROM BUGZILLA:
 357 ==> 327470 - digiKam crashes when exiting, after exporting to html.
 358 ==> 330111 - No Thumbnails for video files - ffmpegthumbnailer works perfectly outside of digikam.
 359 ==> 382703 - Compile error with cmake 3.9.
-360 ==> 
+360 ==> 382677 - Rating groups by mouse only changes first item [patch]
+361 ==> 
