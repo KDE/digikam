@@ -398,19 +398,10 @@ void DigikamImageView::deleteSelectedDirectly(const ImageViewUtilities::DeleteMo
     awayFromSelection();
 }
 
-void DigikamImageView::assignPickLabel(const QModelIndex& index, int pickId)
-{
-    FileActionMngr::instance()->assignPickLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), pickId);
-}
-
-void DigikamImageView::assignColorLabel(const QModelIndex& index, int colorId)
-{
-    FileActionMngr::instance()->assignColorLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), colorId);
-}
-
 void DigikamImageView::assignRating(const QList<QModelIndex>& indexes, int rating)
 {
-    FileActionMngr::instance()->assignRating(imageFilterModel()->imageInfos(indexes), rating);
+    ImageInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
+    FileActionMngr::instance()->assignRating(infos, rating);
 }
 
 void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
@@ -458,19 +449,19 @@ void DigikamImageView::rename()
 
 void DigikamImageView::slotRotateLeft(const QList<QModelIndex>& indexes)
 {
-    FileActionMngr::instance()->transform(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes),
-                                          MetaEngineRotation::Rotate270);
+    ImageInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
+    FileActionMngr::instance()->transform(infos, MetaEngineRotation::Rotate270);
 }
 
 void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 {
-    FileActionMngr::instance()->transform(QList<ImageInfo>() << imageFilterModel()->imageInfos(indexes),
-                                          MetaEngineRotation::Rotate90);
+    ImageInfoList infos = imageInfos(indexes, ApplicationSettings::Metadata);
+    FileActionMngr::instance()->transform(infos, MetaEngineRotation::Rotate90);
 }
 
 void DigikamImageView::slotFullscreen(const QList<QModelIndex>& indexes)
 {
-   QList<ImageInfo> infos = imageFilterModel()->imageInfos(indexes);
+   QList<ImageInfo> infos = imageInfos(indexes);
 
    if (infos.isEmpty())
    {
