@@ -60,6 +60,7 @@ set(LENSFUN_MIN_VERSION  "0.2.6.0")
 set(EXIV2_MIN_VERSION    "0.26")
 set(AKONADI_MIN_VERSION  "4.89.0")        # Akonadi Contact dependency
 set(CALENDAR_MIN_VERSION "4.81.0")        # Calendar Core dependency
+set(QTAV_MIN_VERSION     "1.12.0")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
@@ -220,10 +221,9 @@ set_package_properties("Exiv2"     PROPERTIES
 
 # -- check Media player --------------------------------------------------------------------------
 
-set(QTAV_MIN_VERSION "1.12.0")
-find_package(QtAV)
-
 if(ENABLE_MEDIAPLAYER)
+
+    find_package(QtAV)
 
     if(NOT ${QTAV_FOUND} OR ${QTAV_VERSION_STRING} VERSION_LESS ${QTAV_MIN_VERSION})
 
