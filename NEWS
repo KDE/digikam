@@ -373,4 +373,6 @@ BUGFIXES FROM BUGZILLA:
 358 ==> 330111 - No Thumbnails for video files - ffmpegthumbnailer works perfectly outside of digikam.
 359 ==> 382703 - Compile error with cmake 3.9.
 360 ==> 382677 - Rating groups by mouse only changes first item [patch]
-361 ==> 
+361 ==> 379126 - digiKam on Wayland Plasma crashes at start.
+362 ==> 
+
