@@ -98,7 +98,7 @@ include(MacroBoolTo01)
 
 # ==================================================================================================
 
-option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 (default=OFF)"                           OFF)
+option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 (default=ON)"                            ON)
 option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KDE files indexer support (default=OFF)"                         OFF)
 option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contacts support (default=OFF)"                         OFF)
 option(ENABLE_MEDIAPLAYER           "Build digiKam with Media Player support (default=OFF)"                              OFF)
@@ -106,8 +106,8 @@ option(ENABLE_DBUS                  "Build digiKam with DBUS support (default=ON
 option(ENABLE_APPSTYLES             "Build digiKam with support for changing the widget application style (default=OFF)" OFF)
 
 # Mysql support options (experimental):
-option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=OFF)"                            OFF)
-option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"                  OFF)
+option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=ON)"                             ON)
+option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=ON)"                   ON)
 
 
 # Debug options:
