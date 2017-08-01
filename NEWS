@@ -374,5 +374,5 @@ BUGFIXES FROM BUGZILLA:
 359 ==> 382703 - Compile error with cmake 3.9.
 360 ==> 382677 - Rating groups by mouse only changes first item [patch]
 361 ==> 379126 - digiKam on Wayland Plasma crashes at start.
-362 ==> 
-
+362 ==> 377517 - digiKam editor crash.
+363 ==> 
