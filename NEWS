@@ -376,5 +376,5 @@ BUGFIXES FROM BUGZILLA:
 361 ==> 379126 - digiKam on Wayland Plasma crashes at start.
 362 ==> 377517 - digiKam editor crash.
 363 ==> 152105 - Add collection view concept based on items to print.
-364 ==> 
-
+364 ==> 383021 - Documentation links in web site broken.
+365 ==> 
