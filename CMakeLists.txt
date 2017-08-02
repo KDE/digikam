@@ -117,7 +117,7 @@ option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debuggi
 ############## Find Packages ###################
 
 find_package(Qt5 ${QT_MIN_VERSION}
-             REQUIRED NO_MODULE COMPONENTS
+             NO_MODULE COMPONENTS
              Core
              Concurrent
              Widgets
@@ -142,12 +142,11 @@ if(ENABLE_DBUS)
 endif()
 
 if(BUILD_TESTING)
-    find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
-                 Test)
+    find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS Test)
 endif()
 
 find_package(KF5 ${KF5_MIN_VERSION}
-             REQUIRED COMPONENTS
+             COMPONENTS
              XmlGui
              CoreAddons
              Config
@@ -205,14 +204,14 @@ endif()
 DETECT_JPEG()
 set(DIGIKAM_LIBJPEG_DIR libjpeg-${JPEG_LIB_VERSION})
 
-find_package(TIFF                       REQUIRED)
-find_package(PNG                        REQUIRED)
-find_package(Boost                      REQUIRED)
-find_package(LCMS2                      REQUIRED)
-find_package(EXPAT                      REQUIRED)  # For DNGWriter: XMP SDK need Expat library to compile.
-find_package(Threads                    REQUIRED)  # For DNGWriter and LibRaw which needs native threads support.
+find_package(TIFF)
+find_package(PNG)
+find_package(Boost)
+find_package(LCMS2)
+find_package(EXPAT)    # For DNGWriter: XMP SDK need Expat library to compile.
+find_package(Threads)  # For DNGWriter and LibRaw which needs native threads support.
 
-find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
+find_package(Exiv2 ${EXIV2_MIN_VERSION})
 
 set_package_properties("Exiv2"     PROPERTIES
                        DESCRIPTION "Required to build digiKam"
@@ -295,9 +294,7 @@ find_package(OpenGL)                               # For Presentation tool.
 find_package(X11)
 
 if(X11_FOUND)
-    find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
-                 X11Extras
-    )
+    find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS X11Extras)
     set(HAVE_X11 TRUE)
 else()
     set(HAVE_X11 FALSE)
@@ -445,6 +442,7 @@ PRINT_COMPONENT_COMPILE_STATUS("App. Style Support"     ENABLE_APPSTYLES)
 # ==============================================================================
 
 PRINT_LIBRARY_STATUS("libboostgraph" "http://www.boost.org/doc/libs"                    "(version >= 1.43.0)"                Boost_FOUND)
+PRINT_LIBRARY_STATUS("libexiv2"      "http://www.exiv2.org"                             "(version >= ${EXIV2_MIN_VERSION}"   EXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libexpat"      "http://expat.sourceforge.net"                     "(version >= 2.0.0)"                 EXPAT_FOUND)
 PRINT_LIBRARY_STATUS("libjpeg"       "http://www.ijg.org"                               "(version >= 6b)"                    JPEG_FOUND)
 PRINT_LIBRARY_STATUS("libkde"        "http://www.kde.org"                               "(version >= ${KF5_MIN_VERSION})"    KF5_FOUND)
@@ -483,16 +481,19 @@ PRINT_OPTIONAL_LIBRARY_STATUS("OpenGL"            "http://www.mesa3d.org"       
 
 # ==============================================================================
 
-if(Qt5_FOUND       AND
-   KF5_FOUND       AND
-   JPEG_FOUND      AND
-   TIFF_FOUND      AND
-   PNG_FOUND       AND
-   LCMS2_FOUND     AND
-   Boost_FOUND     AND
-   EXIV2_FOUND     AND
-   OpenCV_FOUND    AND
-   EXPAT_FOUND     AND
+if(Boost_FOUND                          AND
+   EXIV2_FOUND                          AND
+   EXPAT_FOUND                          AND
+   JPEG_FOUND                           AND
+   KF5_FOUND                            AND
+   LCMS2_FOUND                          AND
+   OpenCV_FOUND                         AND
+   PNG_FOUND                            AND
+   Qt5_FOUND                            AND
+   TIFF_FOUND                           AND
+   Threads_FOUND                        AND
+   (Qt5Test_FOUND OR NOT BUILD_TESTING) AND
+   (Qt5X11Extras_FOUND OR NOT HAVE_X11) AND
    (CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
   )
     message(STATUS " digiKam can be compiled.................. YES")
