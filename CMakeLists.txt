@@ -222,9 +222,9 @@ set_package_properties("Exiv2"     PROPERTIES
 
 # -- check Media player --------------------------------------------------------
 
-if(ENABLE_MEDIAPLAYER)
+find_package(QtAV)
 
-    find_package(QtAV)
+if(ENABLE_MEDIAPLAYER)
 
     if(NOT ${QTAV_FOUND} OR ${QTAV_VERSION_STRING} VERSION_LESS ${QTAV_MIN_VERSION})
 
