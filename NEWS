@@ -379,4 +379,5 @@ BUGFIXES FROM BUGZILLA:
 364 ==> 383021 - Documentation links in web site broken.
 365 ==> 382952 - Don't abort cmake when package is missing.
 366 ==> 382732 - Ignore orphan rows in MySQL migration.
-367 ==> 
+367 ==> 374812 - Panorama stops.
+368 ==> 
