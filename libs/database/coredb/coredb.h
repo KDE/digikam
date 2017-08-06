@@ -1086,21 +1086,6 @@ public:
                                             DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
 
     /**
-     * Returns if there are valid entries in the ImageHaarMatrix table.
-     * Returns false if the table is empty.
-     */
-    bool hasHaarFingerprints() const;
-
-    /**
-     * Returns a list of all images where the Haar fingerprint has either not been generated
-     * yet, or is outdated because the file is identified as changed since
-     * the generation of the fingerprint.
-     * Return image ids or item URLs.
-     */
-    QList<qlonglong> getDirtyOrMissingFingerprints();
-    QStringList getDirtyOrMissingFingerprintURLs();
-
-    /**
      * Returns a list of all images where the Faces have either not been detected
      * yet, or is outdated because the file is identified as changed since
      * the generation of the fingerprint.
