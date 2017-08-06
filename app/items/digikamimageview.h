@@ -59,8 +59,6 @@ public Q_SLOTS:
 
     void rename();
 
-    void assignPickLabel(const QModelIndex& index, int pickId);
-    void assignColorLabel(const QModelIndex& index, int colorId);
     void assignRating(const QList<QModelIndex>& index, int rating);
 
     void setFaceMode(bool on);

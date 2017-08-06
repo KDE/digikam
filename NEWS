@@ -369,4 +369,15 @@ BUGFIXES FROM BUGZILLA:
 354 ==> 269435 - digiKam does not display any picture from any source.
 355 ==> 201810 - Segfault moving files to trash.
 356 ==> 197622 - digiKam crashes on exit.
-357 ==> 
+357 ==> 327470 - digiKam crashes when exiting, after exporting to html.
+358 ==> 330111 - No Thumbnails for video files - ffmpegthumbnailer works perfectly outside of digikam.
+359 ==> 382703 - Compile error with cmake 3.9.
+360 ==> 382677 - Rating groups by mouse only changes first item [patch].
+361 ==> 379126 - digiKam on Wayland Plasma crashes at start.
+362 ==> 377517 - digiKam editor crash.
+363 ==> 152105 - Add collection view concept based on items to print.
+364 ==> 383021 - Documentation links in web site broken.
+365 ==> 382952 - Don't abort cmake when package is missing.
+366 ==> 382732 - Ignore orphan rows in MySQL migration.
+367 ==> 374812 - Panorama stops.
+368 ==> 

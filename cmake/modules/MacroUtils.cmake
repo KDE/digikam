@@ -41,7 +41,7 @@ macro(PRINT_LIBRARY_STATUS NAME WEBSITE VERSIONHINT)
     else()
 
         message(STATUS " ${LIB_MESSAGE} NO")
-        message(SEND_ERROR " ${NAME} is needs. You need to install the ${NAME} ${VERSIONHINT} development package.")
+        message(SEND_ERROR " ${NAME} is needed. You need to install the ${NAME} ${VERSIONHINT} development package.")
         message(STATUS " ${NAME} website is at ${WEBSITE}")
         message(STATUS "")
 
@@ -89,7 +89,7 @@ macro(PRINT_QTMODULE_STATUS NAME)
 
         message(STATUS " ${LIB_MESSAGE} NO")
         message(STATUS "")
-        message(SEND_ERROR " ${NAME} module is needs. You need to install a package containing the ${NAME} module.")
+        message(SEND_ERROR " ${NAME} module is needed. You need to install a package containing the ${NAME} module.")
         message(STATUS "")
 
     endif()
@@ -111,7 +111,7 @@ macro(PRINT_EXECUTABLE_STATUS NAME TECHNICAL_NAME PATH_VARIABLE)
 
         message(STATUS " ${LIB_MESSAGE} NO")
         message(STATUS "")
-        message(STATUS " ${NAME} is needs. You need to install the package containing the \"${TECHNICAL_NAME}\" executable.")
+        message(STATUS " ${NAME} is needed. You need to install the package containing the \"${TECHNICAL_NAME}\" executable.")
         message(STATUS " If you have this executable installed, please specify the folder containing it by ${PATH_VARIABLE}")
         message(SEND_ERROR "")
 

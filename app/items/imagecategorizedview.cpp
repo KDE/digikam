@@ -289,7 +289,7 @@ Album* ImageCategorizedView::currentAlbum() const
 
 ImageInfo ImageCategorizedView::currentInfo() const
 {
-    return d->filterModel->imageInfo(currentIndex());
+    return imageInfo(currentIndex());
 }
 
 QUrl ImageCategorizedView::currentUrl() const
@@ -297,12 +297,28 @@ QUrl ImageCategorizedView::currentUrl() const
     return currentInfo().fileUrl();
 }
 
-ImageInfoList ImageCategorizedView::selectedImageInfos(bool grouping) const
+ImageInfo ImageCategorizedView::imageInfo(const QModelIndex& index) const
+{
+    return d->filterModel->imageInfo(index);
+}
+
+ImageInfoList ImageCategorizedView::imageInfos(const QList<QModelIndex>& indexes,
+                         ApplicationSettings::OperationType type) const
+{
+    return imageInfos(indexes, needGroupResolving(type, indexes));
+}
+
+ImageInfoList ImageCategorizedView::imageInfos(const QList<QModelIndex>& indexes, bool grouping) const
 {
     if (grouping) {
-        return resolveGrouping(selectedIndexes());
+        return resolveGrouping(indexes);
     }
-    return d->filterModel->imageInfos(selectedIndexes());
+    return d->filterModel->imageInfos(indexes);
+}
+
+ImageInfoList ImageCategorizedView::selectedImageInfos(bool grouping) const
+{
+    return imageInfos(selectedIndexes(), grouping);
 }
 
 ImageInfoList ImageCategorizedView::selectedImageInfos(
@@ -311,11 +327,10 @@ ImageInfoList ImageCategorizedView::selectedImageInfos(
     return selectedImageInfos(needGroupResolving(type));
 }
 
-ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst(
-        bool grouping) const
+ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst(bool grouping) const
 {
-    QModelIndexList indexes = selectedIndexes();
-    const QModelIndex current  = currentIndex();
+    QModelIndexList indexes   = selectedIndexes();
+    const QModelIndex current = currentIndex();
 
     if (!indexes.isEmpty())
     {
@@ -331,10 +346,10 @@ ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst(
     if (grouping) {
         return resolveGrouping(indexes);
     }
-    return d->filterModel->imageInfos(indexes);
+    return imageInfos(indexes);
 }
 
-QList<ImageInfo> ImageCategorizedView::allImageInfos(bool grouping) const
+ImageInfoList ImageCategorizedView::allImageInfos(bool grouping) const
 {
     if (grouping) {
         return resolveGrouping(d->filterModel->imageInfosSorted());
@@ -357,39 +372,12 @@ QList<QUrl> ImageCategorizedView::allUrls(bool grouping) const
 
 bool ImageCategorizedView::needGroupResolving(ApplicationSettings::OperationType type, bool all) const
 {
-    ApplicationSettings::ApplyToEntireGroup applyAll =
-            ApplicationSettings::instance()->getGroupingOperateOnAll(type);
-
-    if (applyAll == ApplicationSettings::No)
-    {
-        return false;
-    }
-    else if (applyAll == ApplicationSettings::Yes)
-    {
-        return true;
-    }
-
-    ImageInfoList infos;
-
     if (all)
     {
-        infos = allImageInfos();
-    }
-    else
-    {
-        infos = d->filterModel->imageInfos(selectedIndexes());
+        return needGroupResolving(type, allImageInfos());
     }
 
-    foreach(const ImageInfo& info, infos)
-    {
-        if (info.hasGroupedImages() && !imageFilterModel()->isGroupOpen(info.id()))
-        {
-            // Ask whether should be performed on all and return info if no
-            return ApplicationSettings::instance()->askGroupingOperateOnAll(type);
-        }
-    }
-
-    return false;
+    return needGroupResolving(type, selectedIndexes());
 }
 
 QList<QUrl> ImageCategorizedView::selectedUrls(bool grouping) const
@@ -429,13 +417,13 @@ ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo& startingPoint, int 
         return ImageInfo();
     }
 
-    return d->filterModel->imageInfo(d->filterModel->index(index.row() + nth, 0, QModelIndex()));
+    return imageInfo(d->filterModel->index(index.row() + nth, 0, QModelIndex()));
 }
 
 QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const QItemSelectionRange& removed) const
 {
     QModelIndex hint = ItemViewCategorized::nextIndexHint(anchor, removed);
-    ImageInfo info   = d->filterModel->imageInfo(anchor);
+    ImageInfo info   = imageInfo(anchor);
 
     //qCDebug(DIGIKAM_GENERAL_LOG) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForImageInfo(info);
 
@@ -444,7 +432,7 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
     if (d->model->numberOfIndexesForImageInfo(info) > 1)
     {
         // The hint is for a different info, but we may have a hint for the same info
-        if (info != d->filterModel->imageInfo(hint))
+        if (info != imageInfo(hint))
         {
             int minDiff                            = d->filterModel->rowCount();
             QList<QModelIndex> indexesForImageInfo = d->filterModel->mapListFromSource(d->model->indexesForImageInfo(info));
@@ -715,7 +703,7 @@ void ImageCategorizedView::slotFileChanged(const QString& filePath)
 
 void ImageCategorizedView::indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
 {
-    ImageInfo info = d->filterModel->imageInfo(index);
+    ImageInfo info = imageInfo(index);
 
     if (!info.isNull())
     {
@@ -728,7 +716,7 @@ void ImageCategorizedView::currentChanged(const QModelIndex& index, const QModel
 {
     ItemViewCategorized::currentChanged(index, previous);
 
-    emit currentChanged(d->filterModel->imageInfo(index));
+    emit currentChanged(imageInfo(index));
 }
 
 void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems, const QItemSelection& deselectedItems)
@@ -737,12 +725,12 @@ void ImageCategorizedView::selectionChanged(const QItemSelection& selectedItems,
 
     if (!selectedItems.isEmpty())
     {
-        emit selected(d->filterModel->imageInfos(selectedItems.indexes()));
+        emit selected(imageInfos(selectedItems.indexes()));
     }
 
     if (!deselectedItems.isEmpty())
     {
-        emit deselected(d->filterModel->imageInfos(deselectedItems.indexes()));
+        emit deselected(imageInfos(deselectedItems.indexes()));
     }
 }
 
@@ -769,8 +757,7 @@ void ImageCategorizedView::activated(const ImageInfo&, Qt::KeyboardModifiers)
 
 void ImageCategorizedView::showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index)
 {
-    ImageInfo info = d->filterModel->imageInfo(index);
-    showContextMenuOnInfo(event, info);
+    showContextMenuOnInfo(event, imageInfo(index));
 }
 
 void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const ImageInfo&)
@@ -780,7 +767,7 @@ void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const Image
 
 ImageInfoList ImageCategorizedView::resolveGrouping(const QModelIndexList& indexes) const
 {
-    return resolveGrouping(d->filterModel->imageInfos(indexes));
+    return resolveGrouping(imageInfos(indexes));
 }
 
 ImageInfoList ImageCategorizedView::resolveGrouping(const ImageInfoList& infos) const
@@ -798,6 +785,39 @@ ImageInfoList ImageCategorizedView::resolveGrouping(const ImageInfoList& infos) 
     }
 
     return outInfos;
+}
+
+bool ImageCategorizedView::needGroupResolving(ApplicationSettings::OperationType type,
+                                              const QList<QModelIndex>& indexes) const
+{
+    return needGroupResolving(type, imageInfos(indexes));
+}
+
+bool ImageCategorizedView::needGroupResolving(ApplicationSettings::OperationType type,
+                                              const ImageInfoList& infos) const
+{
+    ApplicationSettings::ApplyToEntireGroup applyAll =
+            ApplicationSettings::instance()->getGroupingOperateOnAll(type);
+
+    if (applyAll == ApplicationSettings::No)
+    {
+        return false;
+    }
+    else if (applyAll == ApplicationSettings::Yes)
+    {
+        return true;
+    }
+
+    foreach(const ImageInfo& info, infos)
+    {
+        if (info.hasGroupedImages() && !imageFilterModel()->isGroupOpen(info.id()))
+        {
+            // Ask whether should be performed on all and return info if no
+            return ApplicationSettings::instance()->askGroupingOperateOnAll(type);
+        }
+    }
+
+    return false;
 }
 
 void ImageCategorizedView::paintEvent(QPaintEvent* e)
