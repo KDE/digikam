@@ -380,4 +380,5 @@ BUGFIXES FROM BUGZILLA:
 365 ==> 382952 - Don't abort cmake when package is missing.
 366 ==> 382732 - Ignore orphan rows in MySQL migration.
 367 ==> 374812 - Panorama stops.
-368 ==> 
+368 ==> 382707 - Order of albums different between tree view and thumbnail view.
+369 ==> 
