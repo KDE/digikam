@@ -59,7 +59,6 @@ public:
     Ui_AdvPrintPhotoPage* ui()                const;
     bool                  isComplete()        const;
     int                   getPageCount()      const;
-    QRect*                getLayout(int, int) const;
 
     void initializePage();
     bool validatePage();
