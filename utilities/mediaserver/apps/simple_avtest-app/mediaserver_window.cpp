@@ -82,7 +82,7 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
     HDeviceConfiguration config;
     QDir dir = qApp->applicationDirPath();
     dir.cdUp();
-    QString deviceDescriptionPath = dir.path().append(QLatin1String("/utilities/mediaserver/descriptions/descriptions/herqq_mediaserver_description.xml"));
+    QString deviceDescriptionPath = dir.path().append(QLatin1String("/utilities/mediaserver/des/descriptions/herqq_mediaserver_description.xml"));
     qDebug() << "APP PATH" << deviceDescriptionPath;
     config.setPathToDeviceDescription(deviceDescriptionPath);
     config.setCacheControlMaxAge(180);
