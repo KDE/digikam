@@ -39,6 +39,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QDataStream>
+#include<QDebug>
 
 
 using namespace Herqq::Upnp;
@@ -79,7 +80,11 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
 
     // 5) Setup the HDeviceHost with desired configuration info.
     HDeviceConfiguration config;
-    config.setPathToDeviceDescription(QLatin1String("../utilities/mediaserver/descriptions/descriptions/herqq_mediaserver_description.xml"));
+    QDir dir = qApp->applicationDirPath();
+    dir.cdUp();
+    QString deviceDescriptionPath = dir.path().append(QLatin1String("/utilities/mediaserver/descriptions/descriptions/herqq_mediaserver_description.xml"));
+    qDebug() << "APP PATH" << deviceDescriptionPath;
+    config.setPathToDeviceDescription(deviceDescriptionPath);
     config.setCacheControlMaxAge(180);
 
     HDeviceHostConfiguration hostConfiguration;
@@ -160,7 +165,7 @@ void MediaServerWindow::addRootDirectoriesToServer(const HRootDir& rd)
 
 void MediaServerWindow::saveDirectoriesToDatabase()
 {
-    QFile file(QLatin1String("serverDirectories.dat"));
+    QFile file(qApp->applicationDirPath().append(QLatin1String("/serverDirectories.dat")));
     file.open(QFile::WriteOnly);
     QDataStream out(&file);
 
@@ -174,7 +179,7 @@ void MediaServerWindow::saveDirectoriesToDatabase()
 
 void MediaServerWindow::loadDirectoriesFromDatabase()
 {
-    QFile file(QLatin1String("serverDirectories.dat"));
+    QFile file(qApp->applicationDirPath().append(QLatin1String("/serverDirectories.dat")));
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
     HRootDir dir ;
@@ -189,7 +194,7 @@ void MediaServerWindow::loadDirectoriesFromDatabase()
 
 void MediaServerWindow::saveItemsToDatabase()
 {
-    QFile file(QLatin1String("serverItems.dat"));
+    QFile file(qApp->applicationDirPath().append(QLatin1String("/serverItems.dat")));
     file.open(QFile::WriteOnly);
     QDataStream out(&file);
 
@@ -203,7 +208,7 @@ void MediaServerWindow::saveItemsToDatabase()
 
 void MediaServerWindow::loadItemsFromDatabase()
 {
-    QFile file(QLatin1String("serverItems.dat"));
+    QFile file(qApp->applicationDirPath().append(QLatin1String("/serverItems.dat")));
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
     QString dir ;
