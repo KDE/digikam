@@ -6,7 +6,7 @@
 
 #include <memory>
 #include <cstring>
-#include "serialize.h"
+#include "../dnn_base/serialize.h"
 
 //namespace dlib
 //{
@@ -149,7 +149,6 @@
             std::swap(data_size, item.data_size);
             std::swap(host_current, item.host_current);
             std::swap(device_current, item.device_current);
-            std::swap(device_in_use, item.device_in_use);
             std::swap(have_active_transfer, item.have_active_transfer);
             std::swap(data_host, item.data_host);
             std::swap(data_device, item.data_device);

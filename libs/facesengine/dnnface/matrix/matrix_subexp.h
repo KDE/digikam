@@ -3,10 +3,10 @@
 #ifndef DLIB_MATRIx_SUBEXP_
 #define DLIB_MATRIx_SUBEXP_
 
-//#include "matrix_subexp_abstract.h"
+#include "matrix_subexp_abstract.h"
 #include "matrix_op.h"
 #include "matrix.h"
-#include "rectangle.h"
+#include "../dnn_base/rectangle.h"
 #include "matrix_expressions.h"
 #include "matrix_mat.h"
 

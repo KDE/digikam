@@ -3,9 +3,9 @@
 #ifndef DLIB_TeNSOR_TOOLS_CPP_
 #define DLIB_TeNSOR_TOOLS_CPP_
 
-#include "matrix_math_functions.h"
+#include "../matrix/matrix_math_functions.h"
 #include "tensor_tools.h"
-#include "dnn_string.h"
+#include "../dnn_base/dnn_string.h"
 #include <atomic>
 
 //namespace dlib

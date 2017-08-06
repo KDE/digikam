@@ -5,14 +5,16 @@
 
 #include "tensor.h"
 #include "cpu_dlib.h"
-#include "rand_kernel_1.h"
+#include "../dnn_base/rand_kernel_1.h"
 #include <memory>
 
 //namespace dlib
 //{
-//    static bool dnn_prefer_fastest_algorithms();
-//    static void set_dnn_prefer_fastest_algorithms();
-//    static void set_dnn_prefer_smallest_algorithms();
+/*
+    static bool dnn_prefer_fastest_algorithms();
+    static void set_dnn_prefer_fastest_algorithms();
+    static void set_dnn_prefer_smallest_algorithms();
+*/
 //}
 
 //namespace dlib {
@@ -79,7 +81,7 @@ namespace tt
         if (m.size() == 0 && v.size() == 0)
             return;
         DLIB_CASSERT(m.size() != 0);
-        DLIB_CASSERT((unsigned int)m.num_samples() == v.size());
+        DLIB_CASSERT(m.num_samples() == (int)v.size());
 
 #ifdef DLIB_USE_CUDA
         cuda::scale_rows(out, m, v);
@@ -101,7 +103,7 @@ namespace tt
         DLIB_CASSERT(have_same_dimensions(out,m2));
         DLIB_CASSERT(have_same_dimensions(v1,v2));
         DLIB_CASSERT(is_vector(mat(v1))); 
-        DLIB_CASSERT(v1.size() == (unsigned int)m1.num_samples());
+        DLIB_CASSERT((int)v1.size() == m1.num_samples());
 
 #ifdef DLIB_USE_CUDA
         cuda::scale_rows2(beta, out, m1, m2, v1, v2);

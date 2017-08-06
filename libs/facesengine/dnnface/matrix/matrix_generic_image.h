@@ -4,7 +4,7 @@
 #define DLIB_MATRIX_GENERIC_iMAGE_Hh_
 
 #include "matrix.h"
-#include "generic_image.h"
+#include "../dnn_base/generic_image.h"
 
 //namespace dlib
 //{

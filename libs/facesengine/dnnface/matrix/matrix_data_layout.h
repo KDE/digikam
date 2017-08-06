@@ -3,8 +3,9 @@
 #ifndef DLIB_MATRIx_DATA_LAYOUT_
 #define DLIB_MATRIx_DATA_LAYOUT_
 
-#include "algs.h"
+#include "../dnn_base/algs.h"
 #include "matrix_fwd.h"
+#include "matrix_data_layout_abstract.h"
 #ifdef MATLAB_MEX_FILE
 #include <mex.h>
 #endif

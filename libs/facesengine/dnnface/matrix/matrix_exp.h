@@ -3,10 +3,10 @@
 #ifndef DLIB_MATRIx_EXP_h_
 #define DLIB_MATRIx_EXP_h_
 
-#include "algs.h"
-#include "is_kind.h"
+#include "../dnn_base/algs.h"
+#include "../dnn_base/is_kind.h"
 #include "matrix_fwd.h"
-//#include "matrix_exp_abstract.h"
+#include "matrix_exp_abstract.h"
 #include <iterator>
 
 //namespace dlib
@@ -142,7 +142,15 @@
             long c
         ) const 
         { 
-
+            DLIB_ASSERT(r < nr() && c < nc() && r >= 0 && c >= 0, 
+                "\tconst type matrix_exp::operator(r,c)"
+                << "\n\tYou must give a valid row and column"
+                << "\n\tr:    " << r 
+                << "\n\tc:    " << c
+                << "\n\tnr(): " << nr()
+                << "\n\tnc(): " << nc() 
+                << "\n\tthis: " << this
+                );
             return ref()(r,c); 
         }
 
@@ -150,7 +158,23 @@
             long i
         ) const 
         {
-
+            COMPILE_TIME_ASSERT(NC == 1 || NC == 0 || NR == 1 || NR == 0);
+            DLIB_ASSERT(nc() == 1 || nr() == 1, 
+                "\tconst type matrix_exp::operator(i)"
+                << "\n\tYou can only use this operator on column or row vectors"
+                << "\n\ti:    " << i
+                << "\n\tnr(): " << nr()
+                << "\n\tnc(): " << nc()
+                << "\n\tthis: " << this
+                );
+            DLIB_ASSERT( ((nc() == 1 && i < nr()) || (nr() == 1 && i < nc())) && i >= 0, 
+                "\tconst type matrix_exp::operator(i)"
+                << "\n\tYou must give a valid row/column number"
+                << "\n\ti:    " << i
+                << "\n\tnr(): " << nr()
+                << "\n\tnc(): " << nc()
+                << "\n\tthis: " << this
+                );
             if (nc() == 1)
                 return ref()(i,0);
             else
@@ -191,6 +215,7 @@
                 << "\n\tnc(): " << nc()
                 << "\n\tthis: " << this
                 );
+
             // Put the expression contained in this matrix_exp into
             // a temporary 1x1 matrix so that the expression will encounter
             // all the overloads of matrix_assign() and have the chance to
@@ -214,13 +239,9 @@
 // ----------------------------------------------------------------------------------------
 
     // something is a matrix if it is convertible to a matrix_exp object
-
-    
     template <typename T>
     struct is_matrix<T, typename enable_if<is_convertible<T, const matrix_exp<typename T::exp_type>& > >::type > 
     { static const bool value = true; }; 
-
-    
     /*
         is_matrix<T>::value == 1 if T is a matrix type else 0
     */

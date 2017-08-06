@@ -10,8 +10,8 @@
 #include <sstream>
 #include <type_traits>
 //#include "../statistics.h"
-#include "rand_kernel_1.h"
-#include "algs.h"
+#include "../dnn_base/rand_kernel_1.h"
+#include "../dnn_base/algs.h"
 #include <utility>
 #include <tuple>
 #include <cmath>
@@ -19,7 +19,7 @@
 #include <vector>
 #include "tensor_tools.h"
 #include <type_traits>
-#include "statistics.h"
+#include "../dnn_base/statistics.h"
 
 
 
@@ -2254,7 +2254,7 @@
             const tensor& x,
             output_iterator obegin
         )
-        {
+        {//std::cout << "op1:\n";
             subnetwork.forward(x);//here problem exists
             const dimpl::subnet_wrapper<subnet_type> wsub(subnetwork);
             loss.to_label(x, wsub, obegin);
@@ -2266,7 +2266,7 @@
             forward_iterator iend,
             output_iterator obegin
         )
-        {
+        {//std::cout << "op2:\n";
             to_tensor(ibegin,iend,temp_tensor);
             (*this)(temp_tensor, obegin);
         }
@@ -3104,7 +3104,8 @@
                         return layer_test_results(sout.str());
                     }
                 }
-                const auto backward_data_error = max(dabs(op_minus_double(mat(data_grad1),9) - mat(data_grad2)));
+                //const auto backward_data_error = max(dabs(op_minus_double(mat(data_grad1),9) - mat(data_grad2)));
+                const auto backward_data_error = max(dabs(mat(data_grad1)-9 - mat(data_grad2)));
                 if (backward_data_error > 0.00001)
                 {
                     using namespace std;

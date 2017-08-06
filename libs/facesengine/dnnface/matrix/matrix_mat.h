@@ -4,14 +4,13 @@
 #define DLIB_MATRIx_MAT_Hh_
 
 //#include "matrix_mat_abstract.h"
-#include "std_vector_c.h"
+#include "../dnn_base/std_vector_c.h"
 #include <vector>
 #include "matrix_op.h"
-#include "array2d_kernel.h"
-#include "serialize_pixel_overloads.h"
-#include "array2d_generic_image.h"
-#include "array_kernel.h"
-#include "generic_image.h"
+#include "../dnn_base/array2d_kernel.h"
+#include "../dnn_base/array2d_generic_image.h"
+#include "../dnn_base/array_kernel.h"
+#include "../dnn_base/generic_image.h"
 
 
 //namespace dlib
@@ -30,7 +29,7 @@
     }
 
 // ----------------------------------------------------------------------------------------
-/*
+
     template <typename image_type, typename pixel_type>
     struct op_image_to_mat : does_not_alias 
     {
@@ -138,7 +137,7 @@
         typedef op_const_image_view_to_mat<image_type> op;
         return matrix_op<op>(op(img));
     }
-*/
+
 // ----------------------------------------------------------------------------------------
 
     template <typename T>
@@ -424,7 +423,7 @@
 // ----------------------------------------------------------------------------------------
 
 //}
-/*
+
 namespace arma
 {
     template <typename T> class Mat;
@@ -464,9 +463,8 @@ namespace arma
         typedef op_arma_Mat_to_mat< ::arma::Mat<T> > op;
         return matrix_op<op>(op(array));
     }
-    */
 //}
-/*
+
 namespace Eigen
 {
     template<typename _Scalar, int _Rows, int _Cols, int _Options, int _MaxRows, int _MaxCols>
@@ -508,7 +506,7 @@ namespace Eigen
         typedef op_eigen_Matrix_to_mat< ::Eigen::Matrix<_Scalar,_Rows,_Cols,_Options,_MaxRows,_MaxCols>,_Rows,_Cols > op;
         return matrix_op<op>(op(m));
     }
-*/
+
 // ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
 //                                  DEPRECATED FUNCTIONS
@@ -541,7 +539,6 @@ namespace Eigen
         This overload catches the case where the argument to this function is
         already a matrix.
     !*/
-
     {
         return vector;
     }

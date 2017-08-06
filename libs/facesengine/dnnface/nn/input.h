@@ -3,18 +3,18 @@
 #ifndef DLIB_DNn_INPUT_H_
 #define DLIB_DNn_INPUT_H_
 
-#include "matrix.h"
-#include "matrix_utilities.h"
-#include "matrix_subexp.h"
-#include "matrix_math_functions.h"
-#include "matrix_generic_image.h"
-#include "array2d_kernel.h"
-#include "serialize_pixel_overloads.h"
-#include "array2d_generic_image.h"
-#include "pixel.h"
+#include "../matrix.h"
+#include "../matrix/matrix_utilities.h"
+#include "../matrix/matrix_subexp.h"
+#include "../matrix/matrix_math_functions.h"
+#include "../matrix/matrix_generic_image.h"
+#include "../dnn_base/array2d_kernel.h"
+#include "../dnn_base/serialize_pixel_overloads.h"
+#include "../dnn_base/array2d_generic_image.h"
+#include "../dnn_base/pixel.h"
 #include <sstream>
-#include "drectangle.h"
-#include "image_pyramid.h"
+#include "../dnn_base/drectangle.h"
+#include "../image_transforms/image_pyramid.h"
 
 
 //namespace dlib

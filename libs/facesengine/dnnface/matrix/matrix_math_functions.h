@@ -3,11 +3,11 @@
 #ifndef DLIB_MATRIx_MATH_FUNCTIONS
 #define DLIB_MATRIx_MATH_FUNCTIONS 
 
-//#include "matrix_math_functions_abstract.h"
+#include "matrix_math_functions_abstract.h"
 #include "matrix_op.h"
 #include "matrix_utilities.h"
 #include "matrix.h"
-#include "algs.h"
+#include "../dnn_base/algs.h"
 #include <cmath>
 #include <complex>
 #include <limits>
@@ -18,7 +18,7 @@
 
 // ----------------------------------------------------------------------------------------
 
-    //DLIB_DEFINE_FUNCTION_M(op_sqrt, dsqrt, std::sqrt ,7);
+    DLIB_DEFINE_FUNCTION_M(op_sqrt, sqrt, std::sqrt ,7);
     DLIB_DEFINE_FUNCTION_M(op_log, log, std::log ,7);
     DLIB_DEFINE_FUNCTION_M(op_log10, log10, std::log10 ,7);
     DLIB_DEFINE_FUNCTION_M(op_exp, exp, std::exp ,7);
@@ -37,46 +37,6 @@
     DLIB_DEFINE_FUNCTION_M(op_asin, asin, std::asin ,7);
     DLIB_DEFINE_FUNCTION_M(op_acos, acos, std::acos ,7);
     DLIB_DEFINE_FUNCTION_M(op_atan, atan, std::atan ,7);
-
-// ----------------------------------------------------------------------------------------
-
-    namespace impl
-    {
-        template <typename M>
-        struct op_sqrt                                                                              
-        {                                                                                           
-            op_sqrt(                                                                                
-                const M& m_                                                                         
-            ) : m(m_){}                                                                             
-                                                                                                    
-            const M& m;                                                                             
-                                                                                                    
-            const static long cost = M::cost+(7);                                          
-            const static long NR = M::NR;                                                           
-            const static long NC = M::NC;                                                           
-            typedef typename M::type type;                                                          
-            typedef const typename M::type const_ret_type;                                          
-            typedef typename M::mem_manager_type mem_manager_type;                                  
-            typedef typename M::layout_type layout_type;                                            
-                                                                                                    
-            const_ret_type apply (long r, long c) const { return std::sqrt(m(r,c)); }                
-                                                                                                    
-            long nr () const { return m.nr(); }                                                     
-            long nc () const { return m.nc(); }                                                     
-                                                                                                    
-            template <typename U> bool aliases               ( const matrix_exp<U>& item) const     
-            { return m.aliases(item); }                                                             
-            template <typename U> bool destructively_aliases ( const matrix_exp<U>& item) const     
-            { return m.destructively_aliases(item); }                                               
-                                                                                                    
-        };
-        template < typename M >                                                                     
-        const matrix_op<op_sqrt<M> > dsqrt ( const matrix_exp<M>& m)                                 
-        {                                                                                           
-            typedef op_sqrt<M> op;                                                                  
-            return matrix_op<op>(op(m.ref()));                                                      
-        }
-    }
 
 // ----------------------------------------------------------------------------------------
 
@@ -160,10 +120,57 @@
             return std::pow(static_cast<type>(s),val);
         }
 
+        inline float reciprocal(const float val)
+        {
+            if (val != static_cast<float>(0))
+                return static_cast<float>((float)1.0/val);
+            else
+                return 0;
+        }
+        inline float reciprocal(const double val)
+        {
+            if (val != static_cast<double>(0))
+                return static_cast<double>((double)1.0/val);
+            else
+                return 0;
+        }
+        inline float reciprocal(const long double val)
+        {
+            if (val != static_cast<long double>(0))
+                return static_cast<long double>((long double)1.0/val);
+            else
+                return 0;
+        }
+        /*
+        inline float reciprocal(const std::complex<float> val)
+        {
+            if (val != static_cast<std::complex<float>>(0))
+                return static_cast<std::complex<float>>((std::complex<float>)1.0/val);
+            else
+                return 0;
+        }
+        inline float reciprocal(const std::complex<double> val)
+        {
+            if (val != static_cast<std::complex<double>>(0))
+                return static_cast<std::complex<double>>((std::complex<double>)1.0/val);
+            else
+                return 0;
+        }
+        inline float reciprocal(const std::complex<long double> val)
+        {
+            if (val != static_cast<std::complex<long double>>(0))
+                return static_cast<std::complex<long double>>((std::complex<long double>)1.0/val);
+            else
+                return 0;
+        }
+
         template <typename type>
         inline type reciprocal (const type& val)
         {
             // you can only compute reciprocal matrices that contain floats, doubles or long doubles.
+            //if(is_same_type<type,float>::value != true)
+              //  return 0;
+            
             COMPILE_TIME_ASSERT((
                     is_same_type<type,float>::value == true || 
                     is_same_type<type,double>::value == true || 
@@ -172,13 +179,14 @@
                     is_same_type<type,std::complex<double> >::value == true || 
                     is_same_type<type,std::complex<long double> >::value == true 
             ));
+            
 
             if (val != static_cast<type>(0))
                 return static_cast<type>((type)1.0/val);
             else
                 return 0;
         }
-
+*/
         template <typename type>
         inline type reciprocal_max (const type& val)
         {
@@ -197,6 +205,41 @@
 
     }
 
+    template <typename M>                                                                       
+    struct op_reciprocal                                                                              
+    {                                                                                           
+        op_reciprocal(                                                                                
+            const M& m_                                                                         
+        ) : m(m_){}                                                                             
+                                                                                                
+        const M& m;                                                                             
+                                                                                                
+        const static long cost = M::cost+(6);                                          
+        const static long NR = M::NR;                                                           
+        const static long NC = M::NC;                                                           
+        typedef typename M::type type;                                                          
+        typedef const typename M::type const_ret_type;                                          
+        typedef typename M::mem_manager_type mem_manager_type;                                  
+        typedef typename M::layout_type layout_type;                                            
+                                                                                                
+        const_ret_type apply (long r, long c) const { return impl::reciprocal(m(r,c)); }                
+                                                                                                
+        long nr () const { return m.nr(); }                                                     
+        long nc () const { return m.nc(); }                                                     
+                                                                                                
+        template <typename U> bool aliases               ( const matrix_exp<U>& item) const     
+        { return m.aliases(item); }                                                             
+        template <typename U> bool destructively_aliases ( const matrix_exp<U>& item) const     
+        { return m.destructively_aliases(item); }                                               
+                                                                                                
+    };
+    template < typename M >                                                                     
+    const matrix_op<op_reciprocal<M> > reciprocal ( const matrix_exp<M>& m)                                 
+    {                                                                                           
+        typedef op_reciprocal<M> op;                                                                  
+        return matrix_op<op>(op(m.ref()));                                                      
+    }
+
     DLIB_DEFINE_FUNCTION_M(op_sigmoid, sigmoid, impl::sigmoid, 7);
     DLIB_DEFINE_FUNCTION_MS(op_round_zeros, round_zeros, impl::round_zeros_eps, 7);
     DLIB_DEFINE_FUNCTION_M(op_round_zeros2, round_zeros, impl::round_zeros, 7);
@@ -205,7 +248,7 @@
     DLIB_DEFINE_FUNCTION_M(op_sign, sign, impl::sign, 6);
     DLIB_DEFINE_FUNCTION_MS(op_pow1, pow, impl::pow1, 7);
     DLIB_DEFINE_FUNCTION_SM(op_pow2, pow, impl::pow2, 7);
-    DLIB_DEFINE_FUNCTION_M(op_reciprocal, reciprocal, impl::reciprocal, 6);
+    //DLIB_DEFINE_FUNCTION_M(op_reciprocal, reciprocal, impl::reciprocal, 6);
     DLIB_DEFINE_FUNCTION_M(op_reciprocal_max, reciprocal_max, impl::reciprocal_max, 6);
 
 // ----------------------------------------------------------------------------------------

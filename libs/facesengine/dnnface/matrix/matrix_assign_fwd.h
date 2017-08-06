@@ -10,9 +10,10 @@
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
 
-#include "enable_if.h"
+#include "../dnn_base/enable_if.h"
 #include "matrix_data_layout.h"
-#include "algs.h"
+#include "../dnn_base/algs.h"
+#include <iostream>
 
 //namespace dlib
 //{
@@ -84,9 +85,6 @@
             - #dest == src
     !*/
     {
-        //std::cout << dest.nr() << " " << src.nr() << std::endl;
-        //std::cout << dest.nc() << " " << src.nc() << std::endl;
-        //std::cout << std::endl;
         for (long r = 0; r < src.nr(); ++r)
         {
             for (long c = 0; c < src.nc(); ++c)
@@ -292,7 +290,7 @@
         matrix_dest_type& dest,
         const matrix_exp<src_exp>& src
     )
-    {
+    {//std::cout << "matrix assign big default\n";
         matrix_assign_default(dest,src);
     }
 
@@ -314,7 +312,7 @@
         ensures
             - #dest == src
     !*/
-    {
+    {//std::cout << "matrix assign big\n";
         // Call src.ref() here so that the derived type of the matrix_exp shows 
         // up so we can overload matrix_assign_big() based on various matrix expression
         // types.

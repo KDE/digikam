@@ -5,15 +5,15 @@
 
 //#include "tensor_abstract.h"
 #include <cstring>
-#include "matrix.h"
-#include "matrix_utilities.h"
-#include "matrix_subexp.h"
-#include "matrix_math_functions.h"
-#include "matrix_generic_image.h"
+#include "../matrix.h"
+#include "../matrix/matrix_utilities.h"
+#include "../matrix/matrix_subexp.h"
+#include "../matrix/matrix_math_functions.h"
+#include "../matrix/matrix_generic_image.h"
 #include "gpu_data.h"
-#include "byte_orderer_kernel_1.h"
+#include "../dnn_base/byte_orderer_kernel_1.h"
 #include <memory>
-#include "any.h"
+#include "../dnn_base/any.h"
 
 //namespace dlib
 //{
@@ -122,7 +122,7 @@
         {
             //std::cout << "tensor equal" << std::endl;
             //std::cout << num_samples() << " " << item.nr() << std::endl;
-           // std::cout << nr()*nc()*k() << " " << item.nc() << std::endl;
+           // //std::cout << nr()*nc()*k() << " " << item.nc() << std::endl;
             //DLIB_CASSERT(num_samples() == item.nr() &&nr()*nc()*k() == item.nc());
             static_assert((is_same_type<float, typename EXP::type>::value == true),
                 "To assign a matrix to a tensor the matrix must contain float values");
@@ -159,11 +159,13 @@
             const matrix_exp<EXP>& item
         )
         {
+            //std::cout << "set sample\n";
             DLIB_CASSERT(idx < (unsigned long)num_samples());
             DLIB_CASSERT(item.size() == nr()*nc()*k());
             static_assert((is_same_type<float, typename EXP::type>::value == true),
                 "To assign a matrix to a tensor the matrix must contain float values");
             set_ptrm(host()+idx*item.size(), item.nr(), item.nc()) = item;
+            //std::cout << "set sample over\n";
         }
 
 
