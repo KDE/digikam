@@ -381,4 +381,6 @@ BUGFIXES FROM BUGZILLA:
 366 ==> 382732 - Ignore orphan rows in MySQL migration.
 367 ==> 374812 - Panorama stops.
 368 ==> 382707 - Order of albums different between tree view and thumbnail view.
-369 ==> 
+369 ==> 147203 - Add ability to Create / Edit GPS information.
+370 ==> 
+
