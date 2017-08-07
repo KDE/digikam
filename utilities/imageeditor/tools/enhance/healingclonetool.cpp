@@ -121,6 +121,9 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
             this, SLOT(slotTimer()));
     connect(d->src, SIGNAL(clicked(bool)),
             d->previewWidget, SLOT(slotSrcSet()));
+    connect(d->previewWidget, SIGNAL(signalClone(QPoint&,QPoint&)),
+            this, SLOT(slotReplace(QPoint&,QPoint&)));
+
 }
 
 HealingCloneTool::~HealingCloneTool()
@@ -149,27 +152,29 @@ void HealingCloneTool::slotResetSettings()
     d->radiusInput->slotReset();
     d->radiusInput->blockSignals(false);
 }
-/*
-void HealingCloneTool::slotSrcSet()
+
+void HealingCloneTool::slotReplace(QPoint &srcPoint, QPoint &dstPoint)
 {
-    bool s = d->previewWidget->isSrcSet();
-    d->src->blockSignals(true);
-    d->previewWidget->setSrcSet(!s);
+    ImageIface* const iface        = d->previewWidget->imageIface();
+    DImg* current                   = iface->original();
+    clone(current, srcPoint, dstPoint, d->radiusInput->value());
     d->previewWidget->updatePreview();
-    d->src->blockSignals(false);
-    //d->previewWidget->updatePreview();
-}*/
+}
 
 void HealingCloneTool::preparePreview()
 {
     //DImg img = d->previewWidget->ge getOriginalRegionImage();
-    //setFilter(new BlurFilter(&img, this, d->radiusInput->value()));
+    //ImageIface* iface        = d->previewWidget->imageIface();
+    //iface->setPreview((*iface->original()).smoothScale(iface->previewSize()));
+    d->previewWidget->updatePreview();
 }
 
 void HealingCloneTool::setPreviewImage()
 {
     //DImg preview = filter()->getTargetImage();
-    //d->previewWidget->setPreviewImage(preview);
+    //ImageIface* iface        = d->previewWidget->imageIface();
+    //iface->setPreview(*iface->original());
+    d->previewWidget->updatePreview();
 }
 
 void HealingCloneTool::prepareFinal()
@@ -182,6 +187,16 @@ void HealingCloneTool::setFinalImage()
 {
     ImageIface iface;
 
+}
+
+void HealingCloneTool::clone(DImg * const img, QPoint &srcPoint, QPoint &dstPoint, int radius)
+{
+    for(int i = -1* radius; i < radius; i++){
+        for(int j = -1* radius; j < radius; j++){
+            DColor c = img->getPixelColor(srcPoint.x()+i, srcPoint.y()+j);
+            img->setPixelColor(dstPoint.x()+i, dstPoint.y()+j, c);
+        }
+    }
 }
 
 } // namespace Digikam

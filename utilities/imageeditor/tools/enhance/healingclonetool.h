@@ -28,6 +28,7 @@
 // Local includes
 
 #include "editortool.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -43,7 +44,9 @@ public:
 private Q_SLOTS:
 
     void slotResetSettings();
-    //void slotSrcSet();
+
+public Q_SLOTS:
+    void slotReplace(QPoint& srcPoint,QPoint& dstPoint);
 
 private:
 
@@ -53,6 +56,8 @@ private:
     void prepareFinal();
     void setPreviewImage();
     void setFinalImage();
+
+    void clone(DImg * const img, QPoint &srcPoint, QPoint &dstPoint, int radius);
 
 private:
 

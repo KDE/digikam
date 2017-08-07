@@ -14,6 +14,9 @@ public:
 
     void setSrcSet(bool s);
     bool isSrcSet();
+Q_SIGNALS:
+
+    void signalClone(QPoint&,QPoint&);
 
 public Q_SLOTS:
     void slotSrcSet();
