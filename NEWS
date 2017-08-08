@@ -422,4 +422,6 @@ BUGFIXES FROM BUGZILLA:
 407 ==> 226457 - digiKam crash on saving edited image.
 408 ==> 196866 - digiKam crashes when saving any file format.
 409 ==> 241575 - digiKam crashes after saving several (>2) pictures.
-410 ==> 
+410 ==> 143838 - Image menu in Menubar is Empty (no options).
+411 ==> 
+
