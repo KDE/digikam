@@ -394,4 +394,6 @@ BUGFIXES FROM BUGZILLA:
 379 ==> 223752 - Crashes when selecting images to download off my CF card.
 380 ==> 214718 - digiKam Crashed when trying to Edit photo.
 381 ==> 196866 - digiKam crashes when saving any file format.
-382 ==> 
+382 ==> 200338 - Segmentation fault while trying to select PNG format for saving.
+383 ==> 
+
