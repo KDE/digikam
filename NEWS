@@ -406,4 +406,5 @@ BUGFIXES FROM BUGZILLA:
 391 ==> 230897 - digiKam core dump when changing stars (notation/cotation) of RAW or not RAW pictures.
 392 ==> 231868 - Crash digikam download replace.
 393 ==> 233195 - Crash when adding tag information.
-394 ==> 
+394 ==> 222213 - digiKam crash when saving photo (by overwriting the original file).
+395 ==> 
