@@ -417,4 +417,9 @@ BUGFIXES FROM BUGZILLA:
 402 ==> 181871 - ShowFoto crashes while trying to save as jpg.
 403 ==> 227001 - digiKam crashes after editor save.
 404 ==> 226998 - digiKam editor crashed while saving edited image (jpeg, rotated and cropped).
-405 ==> 
+405 ==> 229069 - digiKam crashed while saving edited image.
+406 ==> 255817 - digiKam crashed with segmentation fault when saving changed photo.
+407 ==> 226457 - digiKam crash on saving edited image.
+408 ==> 196866 - digiKam crashes when saving any file format.
+409 ==> 241575 - digiKam crashes after saving several (>2) pictures.
+410 ==> 
