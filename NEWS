@@ -386,5 +386,5 @@ BUGFIXES FROM BUGZILLA:
 371 ==> 227903 - digiKam crashes on every second image I edit.
 372 ==> 237625 - digiKam crashed when overwriting, or saving edited photo, or deleting photo.
 373 ==> 225810 - Crash when saving edited image.
-374 ==> 
-
+374 ==> 223614 - digiKam crashes when saving a photo editing.
+375 ==> 
