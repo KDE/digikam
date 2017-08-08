@@ -414,4 +414,6 @@ BUGFIXES FROM BUGZILLA:
 399 ==> 227513 - digiKam crashes when trying to edit (and save) photos.
 400 ==> 182488 - digiKam crashes while changing file extention filter for saving.
 401 ==> 179035 - Crash using save as and selecting JPEG.
-402 ==> 
+402 ==> 181871 - ShowFoto crashes while trying to save as jpg.
+403 ==> 
+
