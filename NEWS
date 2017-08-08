@@ -390,4 +390,5 @@ BUGFIXES FROM BUGZILLA:
 375 ==> 227828 - digiKam is crashing randomly after clicking save icon in picture editor after correcting exposition of picture.
 376 ==> 219356 - When clicking on an image to import, digikam crashed.
 377 ==> 214676 - digiKam crashed on exit.
-378 ==> 
+378 ==> 219612 - Opened dgiKam, selected a photo, clicked Edit.
+379 ==> 
