@@ -33,7 +33,7 @@
 namespace Digikam
 {
 
-class HealingCloneTool : public EditorToolThreaded
+class HealingCloneTool : public EditorTool
 {
     Q_OBJECT
 
@@ -47,15 +47,11 @@ private Q_SLOTS:
 
 public Q_SLOTS:
     void slotReplace(QPoint& srcPoint,QPoint& dstPoint);
+    void slotRadiusChanged(int r);
 
 private:
-
     void readSettings();
     void writeSettings();
-    void preparePreview();
-    void prepareFinal();
-    void setPreviewImage();
-    void setFinalImage();
 
     void clone(DImg * const img, QPoint &srcPoint, QPoint &dstPoint, int radius);
 
