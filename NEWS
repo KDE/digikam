@@ -397,4 +397,7 @@ BUGFIXES FROM BUGZILLA:
 382 ==> 200338 - Segmentation fault while trying to select PNG format for saving.
 383 ==> 196790 - digiKam crashes while typing filename extension in "save as" dialogue.
 384 ==> 189913 - When saving from TIFF (16bit) image to jpeg or png the system crashes.
-385 ==> 228562 - Digikam crashes saving from editor.
+385 ==> 228562 - digiKam crashes saving from editor.
+386 ==> 230755 - digiKam crashes while saving photos.
+387 ==> 
+
