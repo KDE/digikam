@@ -382,5 +382,6 @@ BUGFIXES FROM BUGZILLA:
 367 ==> 374812 - Panorama stops.
 368 ==> 382707 - Order of albums different between tree view and thumbnail view.
 369 ==> 147203 - Add ability to Create / Edit GPS information.
-370 ==> 119315 - digikam crashes when viewing a photo.
-371 ==> 
+370 ==> 119315 - digiKam crashes when viewing a photo.
+371 ==> 227903 - digiKam crashes on every second image I edit.
+372 ==> 
