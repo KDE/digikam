@@ -407,4 +407,6 @@ BUGFIXES FROM BUGZILLA:
 392 ==> 231868 - Crash digikam download replace.
 393 ==> 233195 - Crash when adding tag information.
 394 ==> 222213 - digiKam crash when saving photo (by overwriting the original file).
-395 ==> 
+395 ==> 225987 - Crash selecting another image while the current has unsaved changed properties.
+396 ==> 225849 - Crash saving an updated tiff.
+397 ==> 
