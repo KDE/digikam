@@ -411,5 +411,6 @@ BUGFIXES FROM BUGZILLA:
 396 ==> 225849 - Crash saving an updated tiff.
 397 ==> 225180 - Crash saving Exif on NEF raw file.
 398 ==> 246963 - digiKam crash when saving file.
-399 ==> 
+399 ==> 227513 - digiKam crashes when trying to edit (and save) photos.
+400 ==> 
 
