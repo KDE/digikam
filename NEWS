@@ -393,4 +393,5 @@ BUGFIXES FROM BUGZILLA:
 378 ==> 219612 - Opened dgiKam, selected a photo, clicked Edit.
 379 ==> 223752 - Crashes when selecting images to download off my CF card.
 380 ==> 214718 - digiKam Crashed when trying to Edit photo.
-381 ==> 
+381 ==> 196866 - digiKam crashes when saving any file format.
+382 ==> 
