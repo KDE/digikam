@@ -424,4 +424,6 @@ BUGFIXES FROM BUGZILLA:
 409 ==> 241575 - digiKam crashes after saving several (>2) pictures.
 410 ==> 143838 - Image menu in Menubar is Empty (no options).
 411 ==> 225232 - digiKam exits unexpectedly while saving edited image.
-412 ==> 
+412 ==> 325785 - Most of the tools in editor do not work anymore after upgrading.
+413 ==> 
+
