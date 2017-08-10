@@ -7,6 +7,11 @@ General     : Add online handbook reader not dependant of desktop.
 General     : New tool to export albums by email.
 General     : New tool to create advance print layout.
 General     : Send by Mail tool can remove all metadata to attached items.
+General     : Replaced the minimum and maximum similarity selection boxes in fuzzy
+			  search, duplicates search and maintenance by a new, generic DIntRangeBox
+			  which makes the look, feel and behavious consistent in all places.
+			  Also, this makes redundant code obsolete and reduces the probability of
+			  bugs.
 PrintCreator: Add option to create printing from albums or images selection.
 PrintCreator: Add option to customize output image properties to render printing.
 PrintCreator: Tool is now multi-threaded to process images while preview and printing.
