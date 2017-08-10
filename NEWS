@@ -430,5 +430,6 @@ BUGFIXES FROM BUGZILLA:
 410 ==> 143838 - Image menu in Menubar is Empty (no options).
 411 ==> 225232 - digiKam exits unexpectedly while saving edited image.
 412 ==> 325785 - Most of the tools in editor do not work anymore after upgrading.
-413 ==> 
-
+413 ==> 261740 - Crash when adding album folders using settings dialogue.
+414 ==> 258002 - Crash while attempting to open another directory in my albums.
+415 ==> 
