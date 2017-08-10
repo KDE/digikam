@@ -433,4 +433,5 @@ BUGFIXES FROM BUGZILLA:
 413 ==> 261740 - Crash when adding album folders using settings dialogue.
 414 ==> 258002 - Crash while attempting to open another directory in my albums.
 415 ==> 245261 - digiKam crashes after entering image comments.
-416 ==> 
+416 ==> 263355 - digiKam terminates and crashes sometimes when entering a description for an image.
+417 ==> 
