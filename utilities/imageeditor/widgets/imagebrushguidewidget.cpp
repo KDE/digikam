@@ -12,7 +12,15 @@ void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
     {
         released = false;
         qDebug() << "MOOOOOVE The location is: " << e->x() << ", "<< e->y();
-        setSpotPosition(src.x() + e->x() - dst.x(), src.y() + e->y() - dst.y());
+        QPoint currentDst = QPoint(e->x(),e->y());
+        setSpotPosition(src.x() + currentDst.x() - dst.x(), src.y() + currentDst.y() - dst.y());
+        currentDst = translateImagePosition(currentDst, false);
+        QPoint currentSrc = translateImagePosition(src, true);
+        QPoint orgDst = translateImagePosition(dst, false);
+        currentSrc = QPoint(currentSrc.x() + currentDst.x() - orgDst.x(), currentSrc.y() + currentDst.y() - orgDst.y());
+        //QPoint spotSrc = translateImagePosition(currentSrc, true);
+        //setSpotPosition(spotSrc.x(), spotSrc.y());
+        emit signalClone(currentSrc, currentDst);
     }
 }
 
@@ -36,8 +44,11 @@ void ImageBrushGuideWidget::mousePressEvent(QMouseEvent* e)
         if (e->button() == Qt::LeftButton)
         {
             dst = QPoint(e->x(),e->y());
+            //QPoint edit = translatePointPosition(dst);
         // signal the clone/heal
-            emit signalClone(src, dst);
+            QPoint currentSrc = translateImagePosition(src, true);
+            QPoint currentDst = translateImagePosition(dst, false);
+            emit signalClone(currentSrc, currentDst);
             released = false;
         }
     }
@@ -58,7 +69,7 @@ void ImageBrushGuideWidget::slotSrcSet()
     srcSet = !srcSet;
     if(srcSet)
     {
-        src = getSpotPosition();
+        src =  getSpotPosition();
     }
     released = true;
 }

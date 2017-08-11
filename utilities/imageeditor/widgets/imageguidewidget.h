@@ -128,6 +128,8 @@ protected:
     void   drawText(QPainter* const p, const QPoint& corner, const QString& text);
     void   updateMaskCursor();
     void   setSpotPosition(int x, int y);
+    void   updateSpotPosition(int x, int y);
+    QPoint translateImagePosition(QPoint& point, bool src) const;
 
 private:
     class Private;
