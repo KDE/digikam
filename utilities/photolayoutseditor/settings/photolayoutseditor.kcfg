@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile />
+
+  <signal name="antialiasingChanged">
+    <argument type="bool">antialiasing</argument>
+  </signal>
+  <signal name="showGridChanged">
+    <argument type="bool">showGrid</argument>
+  </signal>
+  <signal name="horizontalGridChanged">
+    <argument type="double">horizontalGrid</argument>
+  </signal>
+  <signal name="verticalGridChanged">
+    <argument type="double">verticalGrid</argument>
+  </signal>
+
+  <group name="General">
+    <entry name="recentFiles" type="UrlList">
+      <label>Recent opened files</label>
+    </entry>
+    <entry name="recentFilesCount" type="UInt">
+      <label>Maximum count of the urls saved on the recent files list</label>
+      <min>2</min>
+      <max>25</max>
+      <default>5</default>
+    </entry>
+  </group>
+  <group name="Saving">
+    <entry name="embedImagesData" type="Bool">
+      <label>Embed full-sized images</label>
+      <default>true</default>
+    </entry>
+  </group>
+  <group name="View">
+    <entry name="antialiasing" type="Bool">
+      <label>Antialiasing</label>
+      <default>false</default>
+      <emit signal="antialiasingChanged" />
+    </entry>
+    <entry name="showGrid" type="Bool">
+      <default>false</default>
+      <emit signal="showGridChanged" />
+    </entry>
+    <entry name="horizontalGrid" type="Double">
+      <label>Horizontal distance</label>
+      <default>25.0</default>
+      <emit signal="horizontalGridChanged" />
+    </entry>
+    <entry name="verticalGrid" type="Double">
+      <label>Vertical distance</label>
+      <default>25.0</default>
+      <emit signal="verticalGridChanged" />
+    </entry>
+  </group>
+
+</kcfg>

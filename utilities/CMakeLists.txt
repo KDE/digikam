@@ -23,3 +23,6 @@ add_subdirectory(facemanagement)
 if(${MARBLE_FOUND})
     add_subdirectory(geolocation)
 endif()
+
+# experimental port of photolayoutseditor to Qt5 in DK core.
+add_subdirectory(photolayoutseditor)

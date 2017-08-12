@@ -1,0 +1,5 @@
+File=photolayoutseditor.kcfg
+ClassName=PLEConfigSkeleton
+NameSpace=PhotoLayoutsEditor
+Singleton=true
+Mutators=true

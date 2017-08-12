@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/">
+        <file>eye.png</file>
+        <file>padlock.png</file>
+        <file>arrow_down.png</file>
+        <file>arrow_top.png</file>
+        <file>tool_border.png</file>
+        <file>tool_effects.png</file>
+        <file>action_add.png</file>
+        <file>action_remove.png</file>
+        <file>action_check.png</file>
+        <file>action_delete.png</file>
+        <file>horizontal_orientation.png</file>
+        <file>vertical_orientation.png</file>
+        <file>tool_text.png</file>
+        <file>pointer.png</file>
+        <file>hand.png</file>
+        <file>tool_rotate.png</file>
+        <file>tool_canvas.png</file>
+        <file>tool_scale4.png</file>
+        <file>tool_cropt.png</file>
+        <file>view.png</file>
+        <file>zoom.png</file>
+        <file>zoom_cursor.png</file>
+    </qresource>
+</RCC>

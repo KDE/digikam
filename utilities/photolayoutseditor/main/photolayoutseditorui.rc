@@ -1,0 +1,49 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!-- NOTE: don't forget to increase version ID when this file is modified -->
+<gui version="1" name="photolayoutseditor" >
+
+    <MenuBar>
+
+        <Menu name="File" >
+         <text>&amp;File</text>
+           <Action name="open_new" />
+           <Action name="open" />
+           <Action name="open_recent" />
+         <Separator/>
+           <Action name="save" />
+           <Action name="save_as" />
+           <Action name="save_as_template" />
+         <Separator/>
+           <Action name="export" />
+         <Separator/>
+           <Action name="print_preview" />
+           <Action name="print" />
+         <Separator/>
+           <Action name="close" />
+           <Action name="quit" />
+        </Menu>
+
+        <Menu name="Edit" >
+         <text>&amp;Edit</text>
+           <Action name="undo" />
+           <Action name="redo" />
+         <Separator/>
+           <Action name="settings" />
+        </Menu>
+
+        <Menu name="Canvas" >
+         <text>&amp;Canvas</text>
+           <Action name="new_image" />
+         <Separator/>
+           <Menu name="grid_lines">
+             <text>&amp;Grid lines</text>
+             <Action name="grid_toggle" />
+             <Action name="grid_config" />
+           </Menu>
+         <Separator/>
+           <Action name="canvas_size" />
+        </Menu>
+
+    </MenuBar>
+
+</gui>
