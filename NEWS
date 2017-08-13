@@ -436,5 +436,5 @@ BUGFIXES FROM BUGZILLA:
 416 ==> 263355 - digiKam terminates and crashes sometimes when entering a description for an image.
 417 ==> 383280 - Panorama tool doesn't find autooptimiser from Hugin 2017.0.
 418 ==> 376470 - Title is not refreshed when read again metadata from file is launched [patch].
-419 ==> 
-
+419 ==> 381743 - cpfind doesn.t work: couldn't parse panos tool script: pano_base.pto.
+420 ==> 
