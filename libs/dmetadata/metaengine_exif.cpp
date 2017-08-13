@@ -186,6 +186,11 @@ MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifK
             {
                 tagValue = QString::number(md->value().size());
             }
+            else if (key == QString::fromLatin1("Exif.CanonCs.LensType") && md->toLong() == 65535)
+            {
+                // FIXME: workaround for a possible crash in Exiv2 pretty-print function for the Exif.CanonCs.LensType.
+                tagValue = QString::fromLocal8Bit(md->toString().c_str());
+            }
             else
             {
                 std::ostringstream os;
@@ -836,9 +841,20 @@ QString MetaEngine::getExifTagString(const char* exifTagName, bool escapeCR) con
 
         if (it != exifData.end())
         {
-            // See BUG #184156 comment #13
-            std::string val  = it->print(&exifData);
-            QString tagValue = QString::fromLocal8Bit(val.c_str());
+            QString tagValue;
+            QString key = QString::fromLatin1(it->key().c_str());
+
+            if (key == QString::fromLatin1("Exif.CanonCs.LensType") && it->toLong() == 65535)
+            {
+                // FIXME: workaround for a possible crash in Exiv2 pretty-print function for the Exif.CanonCs.LensType.
+                tagValue = QString::fromLocal8Bit(it->toString().c_str());
+            }
+            else
+            {
+                // See BUG #184156 comment #13
+                std::string val  = it->print(&exifData);
+                tagValue = QString::fromLocal8Bit(val.c_str());
+            }
 
             if (escapeCR)
                 tagValue.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));

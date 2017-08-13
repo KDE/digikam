@@ -42,7 +42,8 @@ public:
                        1,
                        QLatin1String("Hugin"),
                        QLatin1String("http://hugin.sourceforge.net/download/"),
-                       QLatin1String("Panorama")
+                       QLatin1String("Panorama"),
+                       QStringList(QLatin1String("-h"))
                       )
         {
             setup();

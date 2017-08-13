@@ -677,6 +677,7 @@ void SetupCamera::readSettings()
     {
         new QListWidgetItem(f->name, d->importListView);
     }
+
     d->importListView->sortItems();
 
     d->ignoreNamesEdit->setText(importGroup.readEntry(QLatin1String("IgnoreNames"), FilterComboBox::defaultIgnoreNames));
@@ -952,24 +953,42 @@ void SetupCamera::slotAddFilter()
 
 void SetupCamera::slotRemoveFilter()
 {
-    int i = d->importListView->currentRow();
-    delete d->filters.takeAt(i);
-    delete d->importListView->takeItem(i);
-    slotImportSelectionChanged();
+    QListWidgetItem* const item = d->importListView->currentItem();
+    int current                 = d->importListView->currentRow();
+
+    for (int i = 0 ; i < d->filters.count() ; i++)
+    {
+        if (d->filters.at(i)->name == item->text())
+        {
+            delete d->filters.takeAt(i);
+            delete d->importListView->takeItem(current);
+            slotImportSelectionChanged();
+            break;
+        }
+    }
 }
 
 void SetupCamera::slotEditFilter()
 {
-    int i         = d->importListView->currentRow();
-    Filter filter = *d->filters.at(i);
-    ImportFilters dlg(this);
-    dlg.setData(filter);
+    QListWidgetItem* const item = d->importListView->currentItem();
 
-    if (dlg.exec() == QDialog::Accepted)
+    for (int i = 0 ; i < d->filters.count() ; i++)
     {
-        Filter* const f = d->filters.at(i);
-        dlg.getData(f);
-        d->importListView->currentItem()->setText(f->name);
+        if (d->filters.at(i)->name == item->text())
+        {
+            Filter filter = *d->filters.at(i);
+            ImportFilters dlg(this);
+            dlg.setData(filter);
+
+            if (dlg.exec() == QDialog::Accepted)
+            {
+                Filter* const f = d->filters.at(i);
+                dlg.getData(f);
+                item->setText(f->name);
+            }
+
+            break;
+        }
     }
 }
 
