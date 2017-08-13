@@ -431,7 +431,7 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
                 {
                     *(fp+k) = vecdata[k];
                 }
-                QByteArray compressed_vecdata = qUncompress(vec_byte);
+                QByteArray compressed_vecdata = qCompress(vec_byte);
 
                 if (compressed.isEmpty())
                 {
@@ -454,7 +454,7 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
                                     << compressed
                                     << compressed_vecdata;
 
-                    d->db->execSql(QString::fromLatin1("INSERT INTO OpenCVEIGENMat (identity, context, type, rows, cols, data, vecdata) "
+                    d->db->execSql(QString::fromLatin1("INSERT INTO FaceMatrices (identity, context, type, rows, cols, data, vecdata) "
                                    "VALUES (?,?,?,?,?,?,?);"),
                                    histogramValues, 0, &insertedId);
 
@@ -471,7 +471,7 @@ EigenFaceModel FaceDb::eigenFaceModel() const
 {
     qCDebug(DIGIKAM_FACEDB_LOG) << "Loading EIGEN model";
     DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data, vecdata "
-                                                                      "FROM OpenCVEIGENMat;"));
+                                                                      "FROM FaceMatrices;"));
 
     EigenFaceModel model = EigenFaceModel();
     QList<OpenCVMatData> mats;
@@ -519,62 +519,11 @@ EigenFaceModel FaceDb::eigenFaceModel() const
     return model;
 }
 
-//we can delete this function later
-void FaceDb::updateFISHERFaceModel(FisherFaceModel& model)
-{
-    qCDebug(DIGIKAM_FACEDB_LOG) << "This function can be invoked now";
-    QList<FisherFaceMatMetadata> metadataList = model.matMetadata();
-
-    for (int i = 0 ; i < metadataList.size() ; i++)
-    {
-        const FisherFaceMatMetadata& metadata = metadataList[i];
-
-        if (metadata.storageStatus == FisherFaceMatMetadata::Created)
-        {
-            OpenCVMatData data = model.matData(i);
-
-            if (data.data.isEmpty())
-            {
-                qCWarning(DIGIKAM_FACEDB_LOG) << "Fisherface data to commit in database are empty for Identity " << metadata.identity;
-            }
-            else
-            {
-                QByteArray compressed = qCompress(data.data);
-
-                if (compressed.isEmpty())
-                {
-                    qCWarning(DIGIKAM_FACEDB_LOG) << "Cannot compress mat data to commit in database for Identity " << metadata.identity;
-                }
-                else
-                {
-                    QVariantList histogramValues;
-                    QVariant     insertedId;
-
-                    histogramValues << metadata.identity
-                                    << metadata.context
-                                    << data.type
-                                    << data.rows
-                                    << data.cols
-                                    << compressed;
-
-                    d->db->execSql(QString::fromLatin1("INSERT INTO OpenCVEIGENMat (identity, context, type, rows, cols, data) "
-                                   "VALUES (?,?,?,?,?,?);"),
-                                   histogramValues, 0, &insertedId);
-
-                    model.setWrittenToDatabase(i, insertedId.toInt());
-
-                    qCDebug(DIGIKAM_FACEDB_LOG) << "Commit compressed matData " << insertedId << " for identity " << metadata.identity << " with size " << compressed.size();
-                }
-            }
-        }
-    }
-}
-
 FisherFaceModel FaceDb::fisherFaceModel() const
 {
-    qCDebug(DIGIKAM_FACEDB_LOG) << "Loading FISHER model from OpenCVEIGENMat";
+    qCDebug(DIGIKAM_FACEDB_LOG) << "Loading FISHER model from FaceMatrices";
     DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data, vecdata "
-                                                                      "FROM OpenCVEIGENMat;"));
+                                                                      "FROM FaceMatrices;"));
 
     FisherFaceModel model = FisherFaceModel();
     QList<OpenCVMatData> mats;
@@ -626,7 +575,7 @@ DNNFaceModel FaceDb::dnnFaceModel()
 {
     qCDebug(DIGIKAM_FACEDB_LOG) << "Loading DNN model";
     DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data, vecdata "
-                                                                      "FROM OpenCVEIGENMat;"));
+                                                                      "FROM FaceMatrices;"));
 
     DNNFaceModel model = DNNFaceModel();
     QList<std::vector<float>> mats;
@@ -680,11 +629,11 @@ void FaceDb::clearEIGENTraining(const QString& context)
 {
     if (context.isNull())
     {
-        d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVEIGENMat;"));
+        d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices;"));
     }
     else
     {
-        d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVEIGENMat WHERE context=?;"), context);
+        d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices WHERE context=?;"), context);
     }
 }
 
@@ -694,11 +643,11 @@ void FaceDb::clearEIGENTraining(const QList<int>& identities, const QString& con
     {
         if (context.isNull())
         {
-            d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVEIGENMat WHERE identity=?;"), id);
+            d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices WHERE identity=?;"), id);
         }
         else
         {
-            d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVEIGENMat WHERE identity=? AND context=?;"), id, context);
+            d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices WHERE identity=? AND context=?;"), id, context);
         }
     }
 }

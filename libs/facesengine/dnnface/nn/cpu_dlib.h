@@ -669,11 +669,14 @@
                                 1+(data.nc()+2*padding_x-filters.nc())/stride_x);
 
                 matrix<float> temp;
+                //std::cout << "data.num_samples(): " << data.num_samples() << std::endl;
+                
                 for (long n = 0; n < data.num_samples(); ++n)
                 {
                     img2col(temp, data, n, filters.nr(), filters.nc(), stride_y, stride_x, padding_y, padding_x);
                     output.set_sample(n, mat(filters)*trans(temp));
                 }
+                
 
                 last_stride_y = stride_y;
                 last_stride_x = stride_x;

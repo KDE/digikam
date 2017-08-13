@@ -8,7 +8,7 @@
 #include "matrix.h" 
 #include "matrix_utilities.h"
 #include "matrix_subexp.h"
-//#include "matrix_trsm.h"
+#include "matrix_trsm.h"
 #include <algorithm>
 
 #ifdef DLIB_USE_LAPACK 
@@ -320,10 +320,41 @@
         return prod(diag(LU))*static_cast<type>(pivsign);
     }
 
+// ----------------------------------------------------------------------------------------
+
+    template <typename matrix_exp_type>
+    template <typename EXP>
+    const typename lu_decomposition<matrix_exp_type>::matrix_type lu_decomposition<matrix_exp_type>::
+    solve (
+        const matrix_exp<EXP> &B
+    ) const
+    {
+        COMPILE_TIME_ASSERT((is_same_type<type, typename EXP::type>::value));
+
+        // make sure requires clause is not broken
+        DLIB_ASSERT(is_square() == true && B.nr() == nr(),
+            "\ttype lu_decomposition::solve()"
+            << "\n\tInvalid arguments to this function"
+            << "\n\tis_square():   " << (is_square()? "true":"false" )
+            << "\n\tB.nr():        " << B.nr() 
+            << "\n\tnr():          " << nr() 
+            << "\n\tthis:          " << this
+            );
+
+        // Copy right hand side with pivoting
+        matrix<type,0,0,mem_manager_type,column_major_layout> X(rowm(B, piv));
+
+        using namespace blas_bindings;
+        // Solve L*Y = B(piv,:)
+        triangular_solver(CblasLeft, CblasLower, CblasNoTrans, CblasUnit, LU, X);
+        // Solve U*X = Y;
+        triangular_solver(CblasLeft, CblasUpper, CblasNoTrans, CblasNonUnit, LU, X);
+        return X;
+    }
 
 // ----------------------------------------------------------------------------------------
 
-//}
+//} 
 
 #endif // DLIB_MATRIX_LU_DECOMPOSITION_H 
 

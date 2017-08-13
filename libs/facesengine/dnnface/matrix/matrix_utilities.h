@@ -3,20 +3,20 @@
 #ifndef DLIB_MATRIx_UTILITIES_
 #define DLIB_MATRIx_UTILITIES_
 
-//#include "matrix_utilities_abstract.h"
+#include "matrix_utilities_abstract.h"
 #include "matrix.h"
 #include <cmath>
 #include <complex>
 #include <limits>
-#include "pixel.h"
-#include "std_vector_c.h"
+#include "../dnn_base/pixel.h"
+#include "../dnn_base/std_vector_c.h"
 #include <vector>
 #include <algorithm>
-#include "std_allocator.h"
+#include "../dnn_base/std_allocator.h"
 #include "matrix_expressions.h"
 #include "matrix_math_functions.h"
 #include "matrix_op.h"
-#include "random_hashing.h"
+#include "../dnn_base/random_hashing.h"
 #include "matrix_mat.h"
 
 
@@ -114,9 +114,9 @@
             for (long c = 0; c < m.nc(); ++c)
             {
                 type temp = m(r,c);
-                if ( impl::magnitude(temp) >  impl::magnitude(max_val))
+                if (impl::magnitude(temp) > impl::magnitude(max_val))
                     max_val = temp;
-                if ( impl::magnitude(temp) <  impl::magnitude(min_val))
+                if (impl::magnitude(temp) < impl::magnitude(min_val))
                     min_val = temp;
             }
         }
@@ -147,7 +147,7 @@
             for (long c = 0; c < m.nc(); ++c)
             {
                 type temp = m(r,c);
-                if ( impl::magnitude(temp) >  impl::magnitude(val))
+                if (impl::magnitude(temp) > impl::magnitude(val))
                 {
                     val = temp;
                     best_point = point(c,r);
@@ -182,7 +182,7 @@
             for (long c = 0; c < m.nc(); ++c)
             {
                 type temp = m(r,c);
-                if ( impl::magnitude(temp) <  impl::magnitude(val))
+                if (impl::magnitude(temp) < impl::magnitude(val))
                 {
                     val = temp;
                     best_point = point(c,r);
@@ -215,7 +215,7 @@
         for (long i = 1; i < m.size(); ++i)
         {
             type temp = m(i);
-            if ( impl::magnitude(temp) >  impl::magnitude(val))
+            if (impl::magnitude(temp) > impl::magnitude(val))
             {
                 val = temp;
                 best_idx = i;
@@ -247,7 +247,7 @@
         for (long i = 1; i < m.size(); ++i)
         {
             type temp = m(i);
-            if ( impl::magnitude(temp) <  impl::magnitude(val))
+            if (impl::magnitude(temp) < impl::magnitude(val))
             {
                 val = temp;
                 best_idx = i;
@@ -278,7 +278,7 @@
             for (long c = 0; c < m.nc(); ++c)
             {
                 type temp = m(r,c);
-                if ( impl::magnitude(temp) >  impl::magnitude(val))
+                if (impl::magnitude(temp) > impl::magnitude(val))
                     val = temp;
             }
         }
@@ -307,7 +307,7 @@
             for (long c = 0; c < m.nc(); ++c)
             {
                 type temp = m(r,c);
-                if ( impl::magnitude(temp) <  impl::magnitude(val))
+                if (impl::magnitude(temp) < impl::magnitude(val))
                     val = temp;
             }
         }
@@ -1689,7 +1689,7 @@
     )
     {
         using std::pow;
-        //using  pow;
+        //using dlib::pow;
         const typename matrix_exp<EXP>::type avg = mean(m);
 
         typedef typename matrix_exp<EXP>::type type;
@@ -1727,7 +1727,7 @@
     )
     {
         using std::sqrt;
-        //using  sqrt;
+        //using dlib::sqrt;
         return sqrt(variance(m));
     }
 

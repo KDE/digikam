@@ -3,7 +3,7 @@
 #ifndef DLIB_MATRIx_FWD
 #define DLIB_MATRIx_FWD
 
-#include "algs.h"
+#include "../dnn_base/algs.h"
 
 //namespace dlib
 //{

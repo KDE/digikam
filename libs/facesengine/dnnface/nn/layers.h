@@ -7,15 +7,15 @@
 #include "core.h"
 #include <iostream>
 #include <string>
-#include "rand_kernel_1.h"
-#include "dnn_string.h"
+#include "../dnn_base/rand_kernel_1.h"
+#include "../dnn_base/dnn_string.h"
 #include "tensor_tools.h"
-#include "vectorstream.h"
-#include "serialize.h"
-#include "unserialize.h"
+#include "../dnn_base/vectorstream.h"
+#include "../dnn_base/serialize.h"
+#include "../dnn_base/unserialize.h"
 #include "utilities.h"
 #include <sstream>
-#include "matrix_math_functions.h"
+#include "../matrix/matrix_math_functions.h"
 
 //using namespace dlib;
 
@@ -1483,8 +1483,8 @@
             auto sg = gamma(temp,0);
             auto sb = beta(temp,gamma.size());
 
-            //g = pointwise_multiply(mat(sg), 1.0f/impl::dsqrt(mat(item.running_variances)+item.get_eps()));
-            g = pointwise_multiply(mat(sg), 1.0f/impl::dsqrt(op_plus_double(mat(item.running_variances),item.get_eps())));
+            g = pointwise_multiply(mat(sg), 1.0f/sqrt(mat(item.running_variances)+item.get_eps()));
+            //g = pointwise_multiply(mat(sg), 1.0f/impl::dsqrt(op_plus_double(mat(item.running_variances),item.get_eps())));
             b = mat(sb) - pointwise_multiply(mat(g), mat(item.running_means));
         }
 

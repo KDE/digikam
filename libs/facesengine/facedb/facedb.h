@@ -89,7 +89,6 @@ public:
     void clearEIGENTraining(const QList<int>& identities, const QString& context = QString());
 
     /// OpenCV FISHER
-    void updateFISHERFaceModel(FisherFaceModel& model);
     FisherFaceModel fisherFaceModel() const;
 
     /// DNN

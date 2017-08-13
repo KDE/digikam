@@ -5,14 +5,14 @@
 
 //#include "loss_abstract.h"
 #include "core.h"
-#include "matrix.h"
-#include "matrix_utilities.h"
-#include "matrix_subexp.h"
-#include "matrix_math_functions.h"
-#include "matrix_generic_image.h"
+#include "../matrix.h"
+#include "../matrix/matrix_utilities.h"
+#include "../matrix/matrix_subexp.h"
+#include "../matrix/matrix_math_functions.h"
+#include "../matrix/matrix_generic_image.h"
 #include "tensor_tools.h"
-#include "box_overlap_testing.h"
-#include "full_object_detection.h"
+#include "../image_processing/box_overlap_testing.h"
+#include "../image_processing/full_object_detection.h"
 #include <sstream>
 
 //namespace dlib

@@ -6,7 +6,7 @@
 
 #include <memory>
 #include <cstring>
-#include "serialize.h"
+#include "../dnn_base/serialize.h"
 
 //namespace dlib
 //{

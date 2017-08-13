@@ -4,16 +4,17 @@
 #define DLIB_MATRIx_
 
 #include "matrix_exp.h"
-//#include "matrix_abstract.h"
-#include "algs.h"
-#include "serialize.h"
-#include "enable_if.h"
-#include "is_kind.h"
+#include "matrix_abstract.h"
+#include "../dnn_base/algs.h"
+#include "../dnn_base/serialize.h"
+#include "../dnn_base/enable_if.h"
+#include <sstream>
+#include <algorithm>
+#include "../dnn_base/memory_manager_stateless_kernel_1.h"
+#include "../dnn_base/is_kind.h"
 #include "matrix_data_layout.h"
 #include "matrix_assign_fwd.h"
 #include "matrix_op.h"
-#include <sstream>
-#include <algorithm>
 #include <utility>
 #ifdef DLIB_HAS_INITIALIZER_LISTS
 #include <initializer_list>
@@ -173,7 +174,16 @@
             // You are trying to multiply two incompatible matrices together.  The number of columns 
             // in the matrix on the left must match the number of rows in the matrix on the right.
             COMPILE_TIME_ASSERT(LHS::NC == RHS::NR || LHS::NC*RHS::NR == 0);
-
+            DLIB_ASSERT(lhs.nc() == rhs.nr() && lhs.size() > 0 && rhs.size() > 0, 
+                "\tconst matrix_exp operator*(const matrix_exp& lhs, const matrix_exp& rhs)"
+                << "\n\tYou are trying to multiply two incompatible matrices together"
+                << "\n\tlhs.nr(): " << lhs.nr()
+                << "\n\tlhs.nc(): " << lhs.nc()
+                << "\n\trhs.nr(): " << rhs.nr()
+                << "\n\trhs.nc(): " << rhs.nc()
+                << "\n\t&lhs: " << &lhs 
+                << "\n\t&rhs: " << &rhs 
+                );
 
             // You can't multiply matrices together if they don't both contain the same type of elements.
             COMPILE_TIME_ASSERT((is_same_type<typename LHS::type, typename RHS::type>::value == true));
@@ -216,7 +226,6 @@
         const matrix_exp<EXP2>& m2
     )
     {
-        //std::cout << "operator * 1\n";
         return matrix_multiply_exp<EXP1, EXP2>(m1.ref(), m2.ref());
     }
 
@@ -244,7 +253,6 @@
         const matrix_mul_scal_exp<EXP2>& m2
     )
     {
-        //std::cout << "operator * 2\n";
         typedef matrix_multiply_exp<EXP1, EXP2> exp1;
         typedef matrix_mul_scal_exp<exp1,false> exp2;
         return exp2(exp1(m1.m, m2.m), m1.s*m2.s);
@@ -257,7 +265,6 @@
         const matrix_exp<EXP2>& m2
     )
     {
-        //std::cout << "operator * 3\n";
         typedef matrix_multiply_exp<EXP1, EXP2> exp1;
         typedef matrix_mul_scal_exp<exp1,false> exp2;
         return exp2(exp1(m1.m, m2.ref()), m1.s);
@@ -270,7 +277,6 @@
         const matrix_mul_scal_exp<EXP2>& m2
     )
     {
-        //std::cout << "operator * 4\n";
         typedef matrix_multiply_exp<EXP1, EXP2> exp1;
         typedef matrix_mul_scal_exp<exp1,false> exp2;
         return exp2(exp1(m1.ref(), m2.m), m2.s);
@@ -663,33 +669,6 @@
         M_ref_type m;
         const type s;
     };
-    /*
-    template <
-        typename EXP
-        >
-    inline typename disable_if<is_matrix<float>, const matrix_mul_scal_exp<EXP> >::type op_multi_float (
-        const matrix_exp<EXP>& m,
-        const float& s
-    )
-    {
-        std::cout << "operator * 5\n";
-        typedef typename EXP::type type;
-        return matrix_mul_scal_exp<EXP>(m.ref(),static_cast<type>(s));
-    }
-    template <
-        typename EXP
-        >
-    inline typename disable_if<is_matrix<float>, const matrix_mul_scal_exp<EXP> >::type op_multi_float (
-        const float& s,
-        const matrix_exp<EXP>& m
-    )
-    {
-        std::cout << "operator * 6\n";
-        std::cout << m.nr() << " " << m.nc() << " " << m.size() << std::endl;
-        typedef typename EXP::type type;
-        return matrix_mul_scal_exp<EXP>(m.ref(),static_cast<type>(s));
-    }
-    */
 
     template <
         typename EXP,
@@ -702,6 +681,20 @@
     {
         typedef typename EXP::type type;
         return matrix_mul_scal_exp<EXP>(m.ref(),static_cast<type>(s));
+    }
+
+    template <
+        typename EXP,
+        typename S,
+        bool B
+        >
+    inline typename disable_if<is_matrix<S>, const matrix_mul_scal_exp<EXP> >::type operator* (
+        const matrix_mul_scal_exp<EXP,B>& m,
+        const S& s
+    )
+    {
+        typedef typename EXP::type type;
+        return matrix_mul_scal_exp<EXP>(m.m,static_cast<type>(s)*m.s);
     }
 
     template <
@@ -715,23 +708,6 @@
     {
         typedef typename EXP::type type;
         return matrix_mul_scal_exp<EXP>(m.ref(),static_cast<type>(s));
-    }
-
-
-    template <
-        typename EXP,
-        typename S,
-        bool B
-        >
-    inline typename disable_if<is_matrix<S>, const matrix_mul_scal_exp<EXP> >::type operator* (
-        const matrix_mul_scal_exp<EXP,B>& m,
-        const S& s
-    )
-    {
-        //std::cout << "operator * 7\n";
-        //std::cout << m.nr() << " " << m.nc() << " " << m.size() << std::endl;
-        typedef typename EXP::type type;
-        return matrix_mul_scal_exp<EXP>(m.m,static_cast<type>(s)*m.s);
     }
 
     template <
@@ -744,7 +720,6 @@
         const matrix_mul_scal_exp<EXP,B>& m
     )
     {
-        //std::cout << "operator * 8\n";
         typedef typename EXP::type type;
         return matrix_mul_scal_exp<EXP>(m.m,static_cast<type>(s)*m.s);
     }
@@ -854,20 +829,6 @@
     };
 
     template <
-        typename EXP
-        >
-    const typename disable_if<is_matrix<double>, matrix_op<op_add_scalar<EXP> > >::type op_plus_double(
-        const matrix_exp<EXP>& m,
-        const double& val
-    )
-    {
-        typedef typename EXP::type type;
-
-        typedef op_add_scalar<EXP> op;
-        return matrix_op<op>(op(m.ref(), static_cast<type>(val)));
-    }
-/*
-    template <
         typename EXP,
         typename T
         >
@@ -896,7 +857,7 @@
         typedef op_add_scalar<EXP> op;
         return matrix_op<op>(op(m.ref(), static_cast<type>(val)));
     }
-*/
+
 // ----------------------------------------------------------------------------------------
 
     template <typename M>
@@ -915,7 +876,7 @@
             return s - this->m(r,c) ;
         }
     };
-/*
+
     template <
         typename EXP,
         typename T
@@ -930,7 +891,7 @@
         typedef op_subl_scalar<EXP> op;
         return matrix_op<op>(op(m.ref(), static_cast<type>(val)));
     }
-*/
+
 // ----------------------------------------------------------------------------------------
 
     template <typename M>
@@ -951,20 +912,6 @@
     };
 
     template <
-        typename EXP
-        >
-    const typename disable_if<is_matrix<double>, matrix_op<op_subr_scalar<EXP> > >::type op_minus_double(
-        const matrix_exp<EXP>& m,
-        const double& val
-    )
-    {
-        typedef typename EXP::type type;
-
-        typedef op_subr_scalar<EXP> op;
-        return matrix_op<op>(op(m.ref(), static_cast<type>(val)));
-    }
-/*
-    template <
         typename EXP,
         typename T
         >
@@ -978,7 +925,7 @@
         typedef op_subr_scalar<EXP> op;
         return matrix_op<op>(op(m.ref(), static_cast<type>(val)));
     }
-*/
+
 // ----------------------------------------------------------------------------------------
 
     template <
@@ -1052,7 +999,7 @@
     class matrix : public matrix_exp<matrix<T,num_rows,num_cols, mem_manager,layout> > 
     {
 
-        COMPILE_TIME_ASSERT(num_rows >= 0 && num_cols >= 0);
+        COMPILE_TIME_ASSERT(num_rows >= 0 && num_cols >= 0); 
 
     public:
         typedef typename matrix_traits<matrix>::type type;
@@ -1153,7 +1100,7 @@
                 << "\n\tm.nc(): " << m.nc()
                 << "\n\tthis:   " << this
                 );
-
+            //layout::template layout<T,NR,NC,mem_manager> data;
             data.set_size(m.nr(),m.nc());
 
             matrix_assign(*this, m);
@@ -1897,7 +1844,6 @@
         matrix<T,NR,NC,mm,l>& b
     ) { a.swap(b); }
 
-
     template <
         typename T,
         long NR,
@@ -1928,7 +1874,7 @@
         }
         catch (serialization_error& e)
         {
-            throw serialization_error(e.info + "\n   while serializing  matrix");
+            throw serialization_error(e.info + "\n   while serializing dlib::matrix");
         }
     }
 
@@ -1947,8 +1893,8 @@
         try
         {
             long nr, nc;
-            deserialize(nr,in);
-            deserialize(nc,in);
+            deserialize(nr,in); 
+            deserialize(nc,in); 
 
             // this is the newer serialization format
             if (nr < 0 || nc < 0)
@@ -1958,9 +1904,9 @@
             }
 
             if (NR != 0 && nr != NR)
-                throw serialization_error("Error while deserializing a  matrix.  Invalid rows");
+                throw serialization_error("Error while deserializing a dlib::matrix.  Invalid rows");
             if (NC != 0 && nc != NC)
-                throw serialization_error("Error while deserializing a  matrix.  Invalid columns");
+                throw serialization_error("Error while deserializing a dlib::matrix.  Invalid columns");
 
             item.set_size(nr,nc);
             for (long r = 0; r < nr; ++r)
@@ -1973,10 +1919,9 @@
         }
         catch (serialization_error& e)
         {
-            throw serialization_error(e.info + "\n   while deserializing a  matrix");
+            throw serialization_error(e.info + "\n   while deserializing a dlib::matrix");
         }
     }
-
 
     template <
         typename EXP

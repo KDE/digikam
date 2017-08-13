@@ -3,7 +3,7 @@
 #ifndef DLIB_MATRIx_LA_FUNCTS_
 #define DLIB_MATRIx_LA_FUNCTS_ 
 
-//#include "matrix_la_abstract.h"
+#include "matrix_la_abstract.h"
 #include "matrix_utilities.h"
 //#include "../sparse_vector.h"
 //#include "../optimization/optimization_line_search.h"
@@ -11,10 +11,18 @@
 // The 4 decomposition objects described in the matrix_la_abstract.h file are
 // actually implemented in the following 4 files.  
 #include "matrix_lu.h"
+#include "matrix_qr.h"
+#include "matrix_cholesky.h"
+#include "matrix_eigenvalue.h"
 
-#include <iostream>
+#ifdef DLIB_USE_LAPACK
+#include "lapack/potrf.h"
+#include "lapack/gesdd.h"
+#include "lapack/gesvd.h"
+#endif
 
-
+//namespace dlib
+//{
 
 // ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
@@ -446,6 +454,492 @@ convergence:
 
 // ----------------------------------------------------------------------------------------
 
+    template <
+        typename EXP,
+        long qN, long qX,
+        long uM, 
+        long vN, 
+        typename MM1,
+        typename MM2,
+        typename MM3,
+        typename L1
+        >
+    long svd2 (
+        bool withu, 
+        bool withv, 
+        const matrix_exp<EXP>& a,
+        matrix<typename EXP::type,uM,uM,MM1,L1>& u, 
+        matrix<typename EXP::type,qN,qX,MM2,L1>& q, 
+        matrix<typename EXP::type,vN,vN,MM3,L1>& v
+    )
+    {
+        const long NR = matrix_exp<EXP>::NR;
+        const long NC = matrix_exp<EXP>::NC;
+
+        // make sure the output matrices have valid dimensions if they are statically dimensioned
+        COMPILE_TIME_ASSERT(qX == 0 || qX == 1);
+        COMPILE_TIME_ASSERT(NR == 0 || uM == 0 || NR == uM);
+        COMPILE_TIME_ASSERT(NC == 0 || vN == 0 || NC == vN);
+
+        DLIB_ASSERT(a.nr() >= a.nc(), 
+            "\tconst matrix_exp svd4()"
+            << "\n\tYou have given an invalidly sized matrix"
+            << "\n\ta.nr(): " << a.nr()
+            << "\n\ta.nc(): " << a.nc() 
+            );
+
+        if (withu)
+            return svd4(SVD_FULL_U, withv, a,u,q,v);
+        else
+            return svd4(SVD_NO_U, withv, a,u,q,v);
+    }
+
+// ----------------------------------------------------------------------------------------
+
+    template <
+        typename T,
+        long NR,
+        long NC,
+        typename MM,
+        typename L
+        >
+    void orthogonalize (
+        matrix<T,NR,NC,MM,L>& m
+    )
+    {
+        qr_decomposition<matrix<T,NR,NC,MM,L> >(m).get_q(m);
+    }
+
+// ----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
+
+    template <
+        typename T,
+        long Anr, long Anc,
+        typename MM,
+        typename L
+        >
+    void find_matrix_range (
+        const matrix<T,Anr,Anc,MM,L>& A,
+        unsigned long l,
+        matrix<T,Anr,0,MM,L>& Q,
+        unsigned long q 
+    )
+    /*!
+        requires
+            - A.nr() >= l
+        ensures
+            - #Q.nr() == A.nr() 
+            - #Q.nc() == l
+            - #Q == an orthonormal matrix whose range approximates the range of the
+              matrix A.  
+            - This function implements the randomized subspace iteration defined 
+              in the algorithm 4.4 box of the paper: 
+                Finding Structure with Randomness: Probabilistic Algorithms for
+                Constructing Approximate Matrix Decompositions by Halko et al.
+            - q defines the number of extra subspace iterations this algorithm will
+              perform.  Often q == 0 is fine, but performing more iterations can lead to a
+              more accurate approximation of the range of A if A has slowly decaying
+              singular values.  In these cases, using a q of 1 or 2 is good.
+    !*/
+    {
+        DLIB_ASSERT(A.nr() >= (long)l, "Invalid inputs were given to this function.");
+        Q = A*matrix_cast<T>(gaussian_randm(A.nc(), l));
+
+        orthogonalize(Q);
+
+        // Do some extra iterations of the power method to make sure we get Q into the 
+        // span of the most important singular vectors of A.
+        if (q != 0)
+        {
+            for (unsigned long itr = 0; itr < q; ++itr)
+            {
+                Q = trans(A)*Q;
+                orthogonalize(Q);
+
+                Q = A*Q;
+                orthogonalize(Q);
+            }
+        }
+    }
+
+// ----------------------------------------------------------------------------------------
+
+    template <
+        typename T,
+        long Anr, long Anc,
+        long Unr, long Unc,
+        long Wnr, long Wnc,
+        long Vnr, long Vnc,
+        typename MM,
+        typename L
+        >
+    void svd_fast (
+        const matrix<T,Anr,Anc,MM,L>& A,
+        matrix<T,Unr,Unc,MM,L>& u,
+        matrix<T,Wnr,Wnc,MM,L>& w,
+        matrix<T,Vnr,Vnc,MM,L>& v,
+        unsigned long l,
+        unsigned long q = 1
+    )
+    {
+        const unsigned long k = std::min(l, std::min<unsigned long>(A.nr(),A.nc()));
+
+        DLIB_ASSERT(l > 0 && A.size() > 0, 
+            "\t void svd_fast()"
+            << "\n\t Invalid inputs were given to this function."
+            << "\n\t l: " << l 
+            << "\n\t A.size(): " << A.size() 
+            );
+
+        matrix<T,Anr,0,MM,L> Q;
+        find_matrix_range(A, k, Q, q);
+
+        // Compute trans(B) = trans(Q)*A.   The reason we store B transposed
+        // is so that when we take its SVD later using svd3() it doesn't consume
+        // a whole lot of RAM.  That is, we make sure the square matrix coming out
+        // of svd3() has size lxl rather than the potentially much larger nxn.
+        matrix<T,0,0,MM,L> B = trans(A)*Q;
+        svd3(B, v,w,u);
+        u = Q*u;
+    }
+
+// ----------------------------------------------------------------------------------------
+
+    template <
+        typename sparse_vector_type, 
+        typename T,
+        typename MM,
+        typename L
+        >
+    void find_matrix_range (
+        const std::vector<sparse_vector_type>& A,
+        unsigned long l,
+        matrix<T,0,0,MM,L>& Q,
+        unsigned long q 
+    )
+    /*!
+        requires
+            - A.size() >= l
+        ensures
+            - #Q.nr() == A.size()
+            - #Q.nc() == l
+            - #Q == an orthonormal matrix whose range approximates the range of the
+              matrix A.  In this case, we interpret A as a matrix of A.size() rows,
+              where each row is defined by a sparse vector.
+            - This function implements the randomized subspace iteration defined 
+              in the algorithm 4.4 box of the paper: 
+                Finding Structure with Randomness: Probabilistic Algorithms for
+                Constructing Approximate Matrix Decompositions by Halko et al.
+            - q defines the number of extra subspace iterations this algorithm will
+              perform.  Often q == 0 is fine, but performing more iterations can lead to a
+              more accurate approximation of the range of A if A has slowly decaying
+              singular values.  In these cases, using a q of 1 or 2 is good.
+    !*/
+    {
+        DLIB_ASSERT(A.size() >= l, "Invalid inputs were given to this function.");
+        Q.set_size(A.size(), l);
+
+        // Compute Q = A*gaussian_randm()
+        for (long r = 0; r < Q.nr(); ++r)
+        {
+            for (long c = 0; c < Q.nc(); ++c)
+            {
+                Q(r,c) = dot(A[r], gaussian_randm(std::numeric_limits<long>::max(), 1, c));
+            }
+        }
+
+        orthogonalize(Q);
+
+        // Do some extra iterations of the power method to make sure we get Q into the 
+        // span of the most important singular vectors of A.
+        if (q != 0)
+        {
+            const unsigned long n = max_index_plus_one(A);
+            for (unsigned long itr = 0; itr < q; ++itr)
+            {
+                matrix<T,0,0,MM,L> Z(n, l);
+                // Compute Z = trans(A)*Q
+                Z = 0;
+                for (unsigned long m = 0; m < A.size(); ++m)
+                {
+                    for (unsigned long r = 0; r < l; ++r)
+                    {
+                        typename sparse_vector_type::const_iterator i;
+                        for (i = A[m].begin(); i != A[m].end(); ++i)
+                        {
+                            const unsigned long c = i->first;
+                            const T val = i->second;
+
+                            Z(c,r) += Q(m,r)*val;
+                        }
+                    }
+                }
+
+                Q.set_size(0,0); // free RAM
+                orthogonalize(Z);
+
+                // Compute Q = A*Z
+                Q.set_size(A.size(), l);
+                for (long r = 0; r < Q.nr(); ++r)
+                {
+                    for (long c = 0; c < Q.nc(); ++c)
+                    {
+                        Q(r,c) = dot(A[r], colm(Z,c));
+                    }
+                }
+
+                Z.set_size(0,0); // free RAM
+                orthogonalize(Q);
+            }
+        }
+    }
+
+// ----------------------------------------------------------------------------------------
+
+    template <
+        typename sparse_vector_type, 
+        typename T,
+        long Unr, long Unc,
+        long Wnr, long Wnc,
+        long Vnr, long Vnc,
+        typename MM,
+        typename L
+        >
+    void svd_fast (
+        const std::vector<sparse_vector_type>& A,
+        matrix<T,Unr,Unc,MM,L>& u,
+        matrix<T,Wnr,Wnc,MM,L>& w,
+        matrix<T,Vnr,Vnc,MM,L>& v,
+        unsigned long l,
+        unsigned long q = 1
+    )
+    {
+        const long n = max_index_plus_one(A);
+        const unsigned long k = std::min(l, std::min<unsigned long>(A.size(),n));
+
+        DLIB_ASSERT(l > 0 && A.size() > 0 && n > 0, 
+            "\t void svd_fast()"
+            << "\n\t Invalid inputs were given to this function."
+            << "\n\t l: " << l 
+            << "\n\t n (i.e. max_index_plus_one(A)): " << n 
+            << "\n\t A.size(): " << A.size() 
+            );
+
+        matrix<T,0,0,MM,L> Q;
+        find_matrix_range(A, k, Q, q);
+
+        // Compute trans(B) = trans(Q)*A.   The reason we store B transposed
+        // is so that when we take its SVD later using svd3() it doesn't consume
+        // a whole lot of RAM.  That is, we make sure the square matrix coming out
+        // of svd3() has size lxl rather than the potentially much larger nxn.
+        matrix<T,0,0,MM,L> B(n,k);
+        B = 0;
+        for (unsigned long m = 0; m < A.size(); ++m)
+        {
+            for (unsigned long r = 0; r < k; ++r)
+            {
+                typename sparse_vector_type::const_iterator i;
+                for (i = A[m].begin(); i != A[m].end(); ++i)
+                {
+                    const unsigned long c = i->first;
+                    const T val = i->second;
+
+                    B(c,r) += Q(m,r)*val;
+                }
+            }
+        }
+
+        svd3(B, v,w,u);
+        u = Q*u;
+    }
+
+// ----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
+
+    template <
+        typename EXP,
+        long N
+        >
+    struct inv_helper
+    {
+        static const typename matrix_exp<EXP>::matrix_type inv (
+            const matrix_exp<EXP>& m
+        )
+        {
+            // you can't invert a non-square matrix
+            COMPILE_TIME_ASSERT(matrix_exp<EXP>::NR == matrix_exp<EXP>::NC || 
+                                matrix_exp<EXP>::NR == 0 ||
+                                matrix_exp<EXP>::NC == 0);
+            DLIB_ASSERT(m.nr() == m.nc(), 
+                "\tconst matrix_exp::type inv(const matrix_exp& m)"
+                << "\n\tYou can only apply inv() to a square matrix"
+                << "\n\tm.nr(): " << m.nr()
+                << "\n\tm.nc(): " << m.nc() 
+                );
+            typedef typename matrix_exp<EXP>::type type;
+
+            lu_decomposition<EXP> lu(m);
+            return lu.solve(identity_matrix<type>(m.nr()));
+        }
+    };
+
+    template <
+        typename EXP
+        >
+    struct inv_helper<EXP,1>
+    {
+        static const typename matrix_exp<EXP>::matrix_type inv (
+            const matrix_exp<EXP>& m
+        )
+        {
+            COMPILE_TIME_ASSERT(matrix_exp<EXP>::NR == matrix_exp<EXP>::NC);
+            typedef typename matrix_exp<EXP>::type type;
+
+            matrix<type, 1, 1, typename EXP::mem_manager_type> a;
+            // if m is invertible
+            if (m(0) != 0)
+                a(0) = 1/m(0);
+            else
+                a(0) = 1;
+            return a;
+        }
+    };
+
+    template <
+        typename EXP
+        >
+    struct inv_helper<EXP,2>
+    {
+        static const typename matrix_exp<EXP>::matrix_type inv (
+            const matrix_exp<EXP>& m
+        )
+        {
+            COMPILE_TIME_ASSERT(matrix_exp<EXP>::NR == matrix_exp<EXP>::NC);
+            typedef typename matrix_exp<EXP>::type type;
+
+            matrix<type, 2, 2, typename EXP::mem_manager_type> a;
+            type d = det(m);
+            if (d != 0)
+            {
+                d = static_cast<type>(1.0/d);
+                a(0,0) = m(1,1)*d;
+                a(0,1) = m(0,1)*-d;
+                a(1,0) = m(1,0)*-d;
+                a(1,1) = m(0,0)*d;
+            }
+            else
+            {
+                // Matrix isn't invertible so just return the identity matrix.
+                a = identity_matrix<type,2>();
+            }
+            return a;
+        }
+    };
+
+    template <
+        typename EXP
+        >
+    struct inv_helper<EXP,3>
+    {
+        static const typename matrix_exp<EXP>::matrix_type inv (
+            const matrix_exp<EXP>& m
+        )
+        {
+            COMPILE_TIME_ASSERT(matrix_exp<EXP>::NR == matrix_exp<EXP>::NC);
+            typedef typename matrix_exp<EXP>::type type;
+
+            matrix<type, 3, 3, typename EXP::mem_manager_type> ret;
+            type de = det(m);
+            if (de != 0)
+            {
+                de = static_cast<type>(1.0/de);
+                const type a = m(0,0);
+                const type b = m(0,1);
+                const type c = m(0,2);
+                const type d = m(1,0);
+                const type e = m(1,1);
+                const type f = m(1,2);
+                const type g = m(2,0);
+                const type h = m(2,1);
+                const type i = m(2,2);
+
+                ret(0,0) = (e*i - f*h)*de;
+                ret(1,0) = (f*g - d*i)*de;
+                ret(2,0) = (d*h - e*g)*de;
+
+                ret(0,1) = (c*h - b*i)*de;
+                ret(1,1) = (a*i - c*g)*de;
+                ret(2,1) = (b*g - a*h)*de;
+
+                ret(0,2) = (b*f - c*e)*de;
+                ret(1,2) = (c*d - a*f)*de;
+                ret(2,2) = (a*e - b*d)*de;
+            }
+            else
+            {
+                ret = identity_matrix<type,3>();
+            }
+
+            return ret;
+        }
+    };
+
+    template <
+        typename EXP
+        >
+    struct inv_helper<EXP,4>
+    {
+        static const typename matrix_exp<EXP>::matrix_type inv (
+            const matrix_exp<EXP>& m
+        )
+        {
+            COMPILE_TIME_ASSERT(matrix_exp<EXP>::NR == matrix_exp<EXP>::NC);
+            typedef typename matrix_exp<EXP>::type type;
+
+            matrix<type, 4, 4, typename EXP::mem_manager_type> ret;
+            type de = det(m);
+            if (de != 0)
+            {
+                de = static_cast<type>(1.0/de);
+                ret(0,0) =  det(removerc<0,0>(m));
+                ret(0,1) = -det(removerc<0,1>(m));
+                ret(0,2) =  det(removerc<0,2>(m));
+                ret(0,3) = -det(removerc<0,3>(m));
+
+                ret(1,0) = -det(removerc<1,0>(m));
+                ret(1,1) =  det(removerc<1,1>(m));
+                ret(1,2) = -det(removerc<1,2>(m));
+                ret(1,3) =  det(removerc<1,3>(m));
+
+                ret(2,0) =  det(removerc<2,0>(m));
+                ret(2,1) = -det(removerc<2,1>(m));
+                ret(2,2) =  det(removerc<2,2>(m));
+                ret(2,3) = -det(removerc<2,3>(m));
+
+                ret(3,0) = -det(removerc<3,0>(m));
+                ret(3,1) =  det(removerc<3,1>(m));
+                ret(3,2) = -det(removerc<3,2>(m));
+                ret(3,3) =  det(removerc<3,3>(m));
+
+                return trans(ret)*de;
+            }
+            else
+            {
+                return identity_matrix<type,4>();
+            }
+        }
+    };
+
+    template <
+        typename EXP
+        >
+    inline const typename matrix_exp<EXP>::matrix_type inv (
+        const matrix_exp<EXP>& m
+    ) { return inv_helper<EXP,matrix_exp<EXP>::NR>::inv(m); }
+
+// ----------------------------------------------------------------------------------------
+
     template <typename M>
     struct op_diag_inv
     {
@@ -519,6 +1013,176 @@ convergence:
             );
         typedef op_diag_inv<EXP> op;
         return matrix_diag_op<op>(op(reciprocal(round_zeros(diag(m),tol))));
+    }
+
+// ----------------------------------------------------------------------------------------
+
+    template <typename EXP>
+    const typename matrix_exp<EXP>::matrix_type  inv_lower_triangular (
+        const matrix_exp<EXP>& A 
+    )
+    {
+        DLIB_ASSERT(A.nr() == A.nc(), 
+            "\tconst matrix inv_lower_triangular(const matrix_exp& A)"
+            << "\n\tA must be a square matrix"
+            << "\n\tA.nr(): " << A.nr()
+            << "\n\tA.nc(): " << A.nc() 
+            );
+
+        typedef typename matrix_exp<EXP>::matrix_type matrix_type;
+
+        matrix_type m(A);
+
+        for(long c = 0; c < m.nc(); ++c)
+        {
+            if( m(c,c) == 0 )
+            {
+                // there isn't an inverse so just give up
+                return m;
+            }
+
+            // compute m(c,c)
+            m(c,c) = 1/m(c,c);
+
+            // compute the values in column c that are below m(c,c).
+            // We do this by just doing the same thing we do for upper triangular
+            // matrices because we take the transpose of m which turns m into an
+            // upper triangular matrix.
+            for(long r = 0; r < c; ++r)
+            {
+                const long n = c-r;
+                m(c,r) = -m(c,c)*subm(trans(m),r,r,1,n)*subm(trans(m),r,c,n,1);
+            }
+        }
+
+        return m;
+
+    }
+
+// ----------------------------------------------------------------------------------------
+
+    template <typename EXP>
+    const typename matrix_exp<EXP>::matrix_type  inv_upper_triangular (
+        const matrix_exp<EXP>& A 
+    )
+    {
+        DLIB_ASSERT(A.nr() == A.nc(), 
+            "\tconst matrix inv_upper_triangular(const matrix_exp& A)"
+            << "\n\tA must be a square matrix"
+            << "\n\tA.nr(): " << A.nr()
+            << "\n\tA.nc(): " << A.nc() 
+            );
+
+        typedef typename matrix_exp<EXP>::matrix_type matrix_type;
+
+        matrix_type m(A);
+
+        for(long c = 0; c < m.nc(); ++c)
+        {
+            if( m(c,c) == 0 )
+            {
+                // there isn't an inverse so just give up
+                return m;
+            }
+
+            // compute m(c,c)
+            m(c,c) = 1/m(c,c);
+
+            // compute the values in column c that are above m(c,c)
+            for(long r = 0; r < c; ++r)
+            {
+                const long n = c-r;
+                m(r,c) = -m(c,c)*subm(m,r,r,1,n)*subm(m,r,c,n,1);
+            }
+        }
+
+        return m;
+
+    }
+
+// ----------------------------------------------------------------------------------------
+
+    template <
+        typename EXP
+        >
+    inline const typename matrix_exp<EXP>::matrix_type chol (
+        const matrix_exp<EXP>& A
+    )
+    {
+        DLIB_ASSERT(A.nr() == A.nc(), 
+            "\tconst matrix chol(const matrix_exp& A)"
+            << "\n\tYou can only apply the chol to a square matrix"
+            << "\n\tA.nr(): " << A.nr()
+            << "\n\tA.nc(): " << A.nc() 
+            );
+        typename matrix_exp<EXP>::matrix_type L(A.nr(),A.nc());
+
+#ifdef DLIB_USE_LAPACK
+        // Only call LAPACK if the matrix is big enough.  Otherwise,
+        // our own code is faster, especially for statically dimensioned 
+        // matrices.
+        if (A.nr() > 4)
+        {
+            L = A;
+            lapack::potrf('L', L);
+            // mask out upper triangular area
+            return lowerm(L);
+        }
+#endif
+        typedef typename EXP::type T;
+        set_all_elements(L,0);
+
+        // do nothing if the matrix is empty
+        if (A.size() == 0)
+            return L;
+
+        const T eps = std::numeric_limits<T>::epsilon();
+
+        // compute the upper left corner
+        if (A(0,0) > 0)
+            L(0,0) = std::sqrt(A(0,0));
+
+        // compute the first column
+        for (long r = 1; r < A.nr(); ++r)
+        {
+            // if (L(0,0) > 0)
+            if (L(0,0) > eps*std::abs(A(r,0)))
+                L(r,0) = A(r,0)/L(0,0);
+            else
+                return L;
+        }
+
+        // now compute all the other columns
+        for (long c = 1; c < A.nc(); ++c)
+        {
+            // compute the diagonal element
+            T temp = A(c,c);
+            for (long i = 0; i < c; ++i)
+            {
+                temp -= L(c,i)*L(c,i);
+            }
+            if (temp > 0)
+                L(c,c) = std::sqrt(temp);
+
+            // compute the non diagonal elements
+            for (long r = c+1; r < A.nr(); ++r)
+            {
+                temp = A(r,c);
+                for (long i = 0; i < c; ++i)
+                {
+                    temp -= L(r,i)*L(c,i);
+                }
+
+                // if (L(c,c) > 0)
+                if (L(c,c) > eps*std::abs(temp))
+                    L(r,c) = temp/L(c,c);
+                else
+                    return L;
+            }
+        }
+
+        return L;
+
     }
 
 // ----------------------------------------------------------------------------------------
@@ -805,7 +1469,189 @@ convergence:
         }
     };
 
+// ----------------------------------------------------------------------------------------
 
+    template <typename EXP>
+    const matrix<typename EXP::type, EXP::NR, 1, typename EXP::mem_manager_type, typename EXP::layout_type> real_eigenvalues (
+        const matrix_exp<EXP>& m
+    )
+    {
+        // You can only use this function with matrices that contain float or double values
+        COMPILE_TIME_ASSERT((is_same_type<typename EXP::type, float>::value ||
+                             is_same_type<typename EXP::type, double>::value));
+
+        DLIB_ASSERT(m.nr() == m.nc(), 
+            "\tconst matrix real_eigenvalues()"
+            << "\n\tYou have given an invalidly sized matrix"
+            << "\n\tm.nr(): " << m.nr()
+            << "\n\tm.nc(): " << m.nc() 
+            );
+
+        if (m.nr() == 2)
+        {
+            typedef typename EXP::type T;
+            const T m00 = m(0,0);
+            const T m01 = m(0,1);
+            const T m10 = m(1,0);
+            const T m11 = m(1,1);
+
+            const T b = -(m00 + m11);
+            const T c = m00*m11 - m01*m10;
+            matrix<T,EXP::NR,1, typename EXP::mem_manager_type, typename EXP::layout_type> v(2);
+
+
+            T disc = b*b - 4*c;
+            if (disc >= 0)
+                disc = std::sqrt(disc);
+            else
+                disc = 0;
+
+            v(0) = (-b + disc)/2;
+            v(1) = (-b - disc)/2;
+            return v;
+        }
+        else
+        {
+            // Call .ref() so that the symmetric matrix overload can take effect if m 
+            // has the appropriate type.
+            return eigenvalue_decomposition<EXP>(m.ref()).get_real_eigenvalues();
+        }
+    }
+
+// ----------------------------------------------------------------------------------------
+
+    template <
+        typename EXP 
+        >
+    dvector<double,2> max_point_interpolated (
+        const matrix_exp<EXP>& m
+    )
+    {
+        DLIB_ASSERT(m.size() > 0, 
+            "\tdvector<double,2> point max_point_interpolated(const matrix_exp& m)"
+            << "\n\tm can't be empty"
+            << "\n\tm.size():   " << m.size() 
+            << "\n\tm.nr():     " << m.nr() 
+            << "\n\tm.nc():     " << m.nc() 
+            );
+        const point p = max_point(m);
+
+        // If this is a column vector then just do interpolation along a line.
+        if (m.nc()==1)
+        {
+            const long pos = p.y();
+            if (0 < pos && pos+1 < m.nr())
+            {
+                double v1 = impl::magnitude(m(pos-1));
+                double v2 = impl::magnitude(m(pos));
+                double v3 = impl::magnitude(m(pos+1));
+                double y = 0;//lagrange_poly_min_extrap(pos-1,pos,pos+1, -v1, -v2, -v3);
+                return dvector<double,2>(0,y);
+            }
+        }
+        // If this is a row vector then just do interpolation along a line.
+        if (m.nr()==1)
+        {
+            const long pos = p.x();
+            if (0 < pos && pos+1 < m.nc())
+            {
+                double v1 = impl::magnitude(m(pos-1));
+                double v2 = impl::magnitude(m(pos));
+                double v3 = impl::magnitude(m(pos+1));
+                double x = 0;//lagrange_poly_min_extrap(pos-1,pos,pos+1, -v1, -v2, -v3);
+                return dvector<double,2>(x,0);
+            }
+        }
+
+
+        // If it's on the border then just return the regular max point.
+        if (shrink_rect(get_rect(m),1).contains(p) == false)
+            return p;
+
+        //matrix<double> A(9,6);
+        //matrix<double,0,1> G(9);
+
+        matrix<double,9,1> pix;
+        long i = 0;
+        for (long r = -1; r <= +1; ++r)
+        {
+            for (long c = -1; c <= +1; ++c)
+            {
+                pix(i) = impl::magnitude(m(p.y()+r,p.y()+c));
+                /*
+                A(i,0) = c*c;
+                A(i,1) = c*r;
+                A(i,2) = r*r;
+                A(i,3) = c;
+                A(i,4) = r;
+                A(i,5) = 1;
+                G(i) = std::exp(-1*(r*r+c*c)/2.0); // Use a gaussian windowing function around p.
+                */
+                ++i;
+            }
+        }
+
+        // This bit of code is how we generated the derivative_filters matrix below.  
+        //A = diagm(G)*A; 
+        ////std::cout << std::setprecision(20) << inv(trans(A)*A)*trans(A)*diagm(G) << std::endl; exit(1);
+
+        const double m10 = 0.10597077880854270659;
+        const double m21 = 0.21194155761708535768;
+        const double m28 = 0.28805844238291455905;
+        const double m57 = 0.57611688476582878504;
+        // So this derivative_filters finds the parameters of the quadratic surface that best fits
+        // the 3x3 region around p.  Then we find the maximizer of that surface within that
+        // small region and return that as the maximum location.
+        const double derivative_filters[] = {
+                // xx
+                m10,-m21,m10,
+                m28,-m57,m28,
+                m10,-m21,m10,
+
+                // xy
+                0.25 ,0,-0.25,
+                0    ,0, 0,
+                -0.25,0,0.25,
+
+                // yy
+                m10,  m28, m10,
+                -m21,-m57,-m21,
+                m10,  m28, m10,
+
+                // x
+                -m10,0,m10,
+                -m28,0,m28,
+                -m10,0,m10,
+
+                // y
+                -m10,-m28,-m10,
+                0,   0,   0,
+                m10, m28, m10
+            };
+        const matrix<double,5,9> filt(derivative_filters);
+        // Now w contains the parameters of the quadratic surface
+        const matrix<double,5,1> w = filt*pix;
+
+
+        // Now newton step to the max point on the surface
+        matrix<double,2,2> H;
+        matrix<double,2,1> g;
+        H = 2*w(0), w(1),
+              w(1), 2*w(2);
+        g = w(3), 
+            w(4);
+        const dvector<double,2> delta = -inv(H)*g;
+
+        // if delta isn't in an ascent direction then just use the normal max point.
+        if (dot(delta, g) < 0)
+            return p;
+        else
+            return dvector<double,2>(p)+clamp(delta, -1, 1);
+    }
+
+// ----------------------------------------------------------------------------------------
+
+//}
 
 #endif // DLIB_MATRIx_LA_FUNCTS_
 

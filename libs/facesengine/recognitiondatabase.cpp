@@ -918,7 +918,6 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
     //d->train(d->recognizer(), identitiesToBeTrained, data, trainingContext);
     d->train(d->lbph(), identitiesToBeTrained, data, trainingContext);
     d->train(d->eigen(), identitiesToBeTrained, data, trainingContext);
-    //d->train(d->fisher(), identitiesToBeTrained, data, trainingContext);
 }
 
 

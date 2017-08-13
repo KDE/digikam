@@ -46,7 +46,7 @@
         const static long NC = matrix_traits<matrix_op>::NC;
         const static long cost = matrix_traits<matrix_op>::cost;
 
-    private:
+    //private:
         // This constructor exists simply for the purpose of causing a compile time error if
         // someone tries to create an instance of this object with the wrong kind of object.
         template <typename T1>
