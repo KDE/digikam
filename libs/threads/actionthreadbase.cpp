@@ -174,7 +174,6 @@ void ActionThreadBase::cancel()
     foreach(ActionJob* const job, d->pending.keys())
     {
         job->cancel();
-        d->pool->tryTake(job);
         d->processed.insert(job, 0);
     }
 
