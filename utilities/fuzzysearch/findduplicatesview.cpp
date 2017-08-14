@@ -6,6 +6,7 @@
  * Date        : 2008-05-19
  * Description : Find Duplicates View.
  *
+ * Copyright (C) 2016-2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
@@ -55,6 +56,7 @@
 #include "applicationsettings.h"
 #include "haariface.h"
 #include "squeezedcombobox.h"
+#include "drangebox.h"
 
 namespace Digikam
 {
@@ -72,9 +74,7 @@ public:
         updateFingerPrtBtn      = 0;
         progressItem            = 0;
         similarityLabel         = 0;
-        similarityIntervalLabel = 0;
-        minSimilarity           = 0;
-        maxSimilarity           = 0;
+        similarityRange         = 0;
         restrictResultsLabel    = 0;
         albumTagRelationLabel   = 0;
         searchResultRestriction = 0;
@@ -86,12 +86,10 @@ public:
 
     QLabel*                      includeAlbumsLabel;
     QLabel*                      similarityLabel;
-    QLabel*                      similarityIntervalLabel;
     QLabel*                      restrictResultsLabel;
     QLabel*                      albumTagRelationLabel;
 
-    QSpinBox*                    minSimilarity;
-    QSpinBox*                    maxSimilarity;
+    DIntRangeBox*                similarityRange;
 
     SqueezedComboBox*            searchResultRestriction;
     SqueezedComboBox*            albumTagRelation;
@@ -139,31 +137,23 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->minSimilarity = new QSpinBox();
+    d->similarityRange = new DIntRangeBox();
+    d->similarityRange->setSuffix(QLatin1String("%"));
 
     if (d->settings)
     {
-        d->minSimilarity->setRange(d->settings->getMinimumSimilarityBound(), 100);
+        d->similarityRange->setRange(d->settings->getMinimumSimilarityBound(), 100);
+        d->similarityRange->setInterval(d->settings->getDuplicatesSearchLastMinSimilarity(),
+                                        d->settings->getDuplicatesSearchLastMaxSimilarity());
     }
     else
     {
-        d->minSimilarity->setRange(40, 100);
+        d->similarityRange->setRange(40, 100);
+        d->similarityRange->setInterval(40, 100);
     }
 
-    d->minSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMinSimilarity());
-    d->minSimilarity->setSingleStep(1);
-    d->minSimilarity->setSuffix(QLatin1String("%"));
-
-    d->maxSimilarity = new QSpinBox();
-    d->maxSimilarity->setRange(d->minSimilarity->value(), 100);
-    d->maxSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMaxSimilarity());
-    d->maxSimilarity->setSingleStep(1);
-    d->maxSimilarity->setSuffix(QLatin1String("%"));
-
     d->similarityLabel = new QLabel(i18n("Similarity range:"));
-    d->similarityLabel->setBuddy(d->minSimilarity);
-
-    d->similarityIntervalLabel = new QLabel(QLatin1String("-"));
+    d->similarityLabel->setBuddy(d->similarityRange);
 
     d->restrictResultsLabel    = new QLabel(i18n("Restriction:"));
     d->restrictResultsLabel->setBuddy(d->searchResultRestriction);
@@ -211,9 +201,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     mainLayout->addWidget(d->albumTagRelation,        1, 2, 1, -1);
     mainLayout->addWidget(d->albumSelectors,          2, 0, 1, -1);
     mainLayout->addWidget(d->similarityLabel,         3, 0, 1, 1);
-    mainLayout->addWidget(d->minSimilarity,           3, 2, 1, 1);
-    mainLayout->addWidget(d->similarityIntervalLabel, 3, 3, 1, 1);
-    mainLayout->addWidget(d->maxSimilarity,           3, 4, 1, -1);
+    mainLayout->addWidget(d->similarityRange,         3, 2, 1, 1);
     mainLayout->addWidget(d->restrictResultsLabel,    4, 0, 1, 2);
     mainLayout->addWidget(d->searchResultRestriction, 4, 2, 1, -1);
     mainLayout->addWidget(d->updateFingerPrtBtn,      5, 0, 1, -1);
@@ -243,9 +231,6 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(initAlbumUpdateConnections()));
-
-    connect(d->minSimilarity, SIGNAL(valueChanged(int)),
-            this,SLOT(slotMinimumChanged(int)));
 
     connect(d->settings, SIGNAL(setupChanged()),
             this, SLOT(slotApplicationSettingsChanged()));
@@ -357,8 +342,8 @@ void FindDuplicatesView::slotAlbumAdded(Album* a)
         salbum->setExtraData(this, item);
     }
 
-    d->minSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMinSimilarity());
-    d->maxSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMaxSimilarity());
+    d->similarityRange->setInterval(d->settings->getDuplicatesSearchLastMinSimilarity(),
+                                    d->settings->getDuplicatesSearchLastMaxSimilarity());
 }
 
 void FindDuplicatesView::slotAlbumDeleted(Album* a)
@@ -378,8 +363,8 @@ void FindDuplicatesView::slotAlbumDeleted(Album* a)
         delete item;
     }
 
-    d->minSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMinSimilarity());
-    d->maxSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMaxSimilarity());
+    d->similarityRange->setInterval(d->settings->getDuplicatesSearchLastMinSimilarity(),
+                                    d->settings->getDuplicatesSearchLastMaxSimilarity());
 }
 
 void FindDuplicatesView::slotSearchUpdated(SAlbum* a)
@@ -416,8 +401,7 @@ void FindDuplicatesView::enableControlWidgets(bool val)
     d->updateFingerPrtBtn->setEnabled(val);
     d->albumSelectors->setEnabled(val);
     d->similarityLabel->setEnabled(val);
-    d->minSimilarity->setEnabled(val);
-    d->maxSimilarity->setEnabled(val);
+    d->similarityRange->setEnabled(val);
     d->searchResultRestriction->setEnabled(val);
 }
 
@@ -449,7 +433,7 @@ void FindDuplicatesView::slotFindDuplicates()
 
     DuplicatesFinder* const finder = new DuplicatesFinder(albums, tags,
                                                           d->albumTagRelation->itemData(d->albumTagRelation->currentIndex()).toInt(),
-                                                          d->minSimilarity->value(), d->maxSimilarity->value(),
+                                                          d->similarityRange->minValue(), d->similarityRange->maxValue(),
                                                           d->searchResultRestriction->itemData(d->searchResultRestriction->currentIndex()).toInt());
 
     connect(finder, SIGNAL(signalComplete()),
@@ -463,22 +447,9 @@ void FindDuplicatesView::slotUpdateDuplicates(const QList<SAlbum*>& sAlbumsToReb
     d->listView->updateDuplicatesAlbumItems(sAlbumsToRebuild, deletedImages);
 }
 
-void FindDuplicatesView::slotMinimumChanged(int newValue)
-{
-    // Set the new minimum value of the maximum similarity
-    d->maxSimilarity->setMinimum(newValue);
-
-    // If the new value of the mimimum is now higher than the maximum similarity,
-    // set the maximum similarity to the new value.
-    if (newValue > d->maxSimilarity->value())
-    {
-        d->maxSimilarity->setValue(d->minSimilarity->value());
-    }
-}
-
 void FindDuplicatesView::slotApplicationSettingsChanged()
 {
-    d->minSimilarity->setRange(d->settings->getMinimumSimilarityBound(),100);
+    d->similarityRange->setRange(d->settings->getMinimumSimilarityBound(),100);
 }
 
 void FindDuplicatesView::slotComplete()

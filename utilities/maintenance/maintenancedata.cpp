@@ -6,7 +6,7 @@
  * Date        : 2017-02-20
  * Description : Synchronized container for maintenance data.
  *
- * Copyright (C) 2017 by Mario Frank <mafrank at uni minus potsdam dot de>
+ * Copyright (C) 2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
