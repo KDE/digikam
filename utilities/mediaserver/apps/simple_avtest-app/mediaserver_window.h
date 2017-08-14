@@ -82,7 +82,10 @@ private Q_SLOTS:
     void on_addItemButton_clicked();
 
     void on_DeleteDirectoriesButton_clicked();
+    void on_HideWindowButton_clicked();
     void setDeletedFlag();
+
+
 
 protected:
 

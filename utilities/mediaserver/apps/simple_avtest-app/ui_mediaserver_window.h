@@ -31,14 +31,16 @@ public:
     QVBoxLayout *verticalLayout;
     QTableWidget *sharedItemsTable;
     QGridLayout *gridLayout;
-    QCheckBox *watchCheckBox;
     QPushButton *addItemButton;
     QCheckBox *scanRecursivelyCheckbox;
     QPushButton *DeleteDirectoriesButton;
+    QPushButton *HideWindowButton;
     QPushButton *addContentButton;
 
     void setupUi(QMainWindow *MediaServerWindow)
     {
+
+
         if (MediaServerWindow->objectName().isEmpty())
             MediaServerWindow->setObjectName(QStringLiteral("MediaServerWindow"));
         MediaServerWindow->resize(905, 382);
@@ -71,12 +73,7 @@ public:
         gridLayout = new QGridLayout();
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setSizeConstraint(QLayout::SetMinimumSize);
-        watchCheckBox = new QCheckBox(centralwidget);
-        watchCheckBox->setObjectName(QStringLiteral("watchCheckBox"));
-        watchCheckBox->setEnabled(false);
-        watchCheckBox->setLayoutDirection(Qt::RightToLeft);
 
-        gridLayout->addWidget(watchCheckBox, 9, 3, 1, 1);
 
         addItemButton = new QPushButton(centralwidget);
         addItemButton->setObjectName(QStringLiteral("addItemButton"));
@@ -92,8 +89,11 @@ public:
 
         DeleteDirectoriesButton = new QPushButton(centralwidget);
         DeleteDirectoriesButton->setObjectName(QStringLiteral("DeleteDirectoriesButton"));
+        HideWindowButton = new QPushButton(centralwidget);
+        HideWindowButton->setObjectName(QStringLiteral("HideWindowButton"));
 
         gridLayout->addWidget(DeleteDirectoriesButton, 9, 6, 1, 1);
+        gridLayout->addWidget(HideWindowButton, 9, 8, 1, 1);
 
         addContentButton = new QPushButton(centralwidget);
         addContentButton->setObjectName(QStringLiteral("addContentButton"));
@@ -112,17 +112,18 @@ public:
 
     void retranslateUi(QMainWindow *MediaServerWindow)
     {
-        MediaServerWindow->setWindowTitle(QApplication::translate("MediaServerWindow", "Simple Media Server Test", Q_NULLPTR));
+        MediaServerWindow->setWindowTitle(QApplication::translate("MediaServerWindow", "DLNA Media Server", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem = sharedItemsTable->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("MediaServerWindow", "Recursive", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem1 = sharedItemsTable->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QApplication::translate("MediaServerWindow", "Monitored", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem2 = sharedItemsTable->horizontalHeaderItem(2);
         ___qtablewidgetitem2->setText(QApplication::translate("MediaServerWindow", "Path", Q_NULLPTR));
-        watchCheckBox->setText(QApplication::translate("MediaServerWindow", "Watch for changes", Q_NULLPTR));
         addItemButton->setText(QApplication::translate("MediaServerWindow", "Add Items", Q_NULLPTR));
         scanRecursivelyCheckbox->setText(QApplication::translate("MediaServerWindow", "Scan recursively", Q_NULLPTR));
         DeleteDirectoriesButton->setText(QApplication::translate("MediaServerWindow", "Delete Selected", Q_NULLPTR));
+        HideWindowButton->setText(QApplication::translate("MediaServerWindow", "Hide Window", Q_NULLPTR));
+        HideWindowButton->setWhatsThis(QLatin1String("Hide The Window While Keeping Server In The Background"));
         addContentButton->setText(QApplication::translate("MediaServerWindow", "&Add New Root Directory", Q_NULLPTR));
     } // retranslateUi
 

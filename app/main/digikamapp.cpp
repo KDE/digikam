@@ -175,6 +175,7 @@ DigikamApp::DigikamApp()
     d->config          = KSharedConfig::openConfig();
     KConfigGroup group = d->config->group(configGroupName());
 
+
 #ifdef HAVE_DBUS
     new DigikamAdaptor(this);
     QDBusConnection::sessionBus().registerObject(QLatin1String("/Digikam"), this);

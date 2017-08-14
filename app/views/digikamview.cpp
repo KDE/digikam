@@ -36,6 +36,11 @@
 #include <QApplication>
 #include <QDesktopServices>
 
+// kde includes
+
+
+#include <kconfiggroup.h>
+
 // Local includes
 
 #include "albumhistory.h"
@@ -409,6 +414,19 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
+
+    // load mediaserver on startup
+
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup dlnaConfigGroup   = config->group(QLatin1String("DLNA Settings"));
+    bool StartServerOnStartup =  dlnaConfigGroup.readEntry(QLatin1String("Start Server On Startup"),false);
+    bool StartServerInBackground =  dlnaConfigGroup.readEntry(QLatin1String("Start Server In Background"),false);
+
+     if(StartServerOnStartup)
+     {
+        this->slotMediaServer(true, StartServerInBackground);
+     }
+
 
 }
 
@@ -1832,7 +1850,7 @@ void DigikamView::slotQueueMgr()
     d->utilities->insertToQueueManager(imageInfoList, singleInfo, true);
 }
 
-void DigikamView::slotMediaServer()
+void DigikamView::slotMediaServer(bool onStartup , bool startInBackground )
 {
 
    if(!d->msw || MediaServerWindow::deletedFlag)
@@ -1843,7 +1861,9 @@ void DigikamView::slotMediaServer()
       connect(d->msw, SIGNAL(closed()), d->msw, SLOT(setDeletedFlag()));
    }
 
-    if(!d->msw->isVisible())
+   if(onStartup && startInBackground)
+       return;
+   else if(!d->msw->isVisible())
         d->msw->show();
 
 }

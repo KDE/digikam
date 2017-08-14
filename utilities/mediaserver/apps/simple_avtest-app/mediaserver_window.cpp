@@ -315,6 +315,7 @@ void MediaServerWindow::on_addItemButton_clicked()
 
 
 void MediaServerWindow::on_DeleteDirectoriesButton_clicked()
+
 {
     QModelIndexList indexes =  m_ui->sharedItemsTable->selectionModel()->selectedRows();
     int countRow = indexes.count();
@@ -329,3 +330,9 @@ void MediaServerWindow::on_DeleteDirectoriesButton_clicked()
 
     }
 }
+void MediaServerWindow::on_HideWindowButton_clicked()
+{
+    this->hide();
+}
+
+

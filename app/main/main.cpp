@@ -272,6 +272,8 @@ int main(int argc, char* argv[])
         digikam->autoDetect();
     }
 
+
+
     int ret = app.exec();
 
     CoreDbAccess::cleanUpDatabase();

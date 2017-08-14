@@ -45,6 +45,7 @@
 #include "setupeditor.h"
 #include "setupicc.h"
 #include "setuplighttable.h"
+#include "setupdlnaserver.h"
 #include "setupmetadata.h"
 #include "setupmisc.h"
 #include "setupslideshow.h"
@@ -53,6 +54,7 @@
 #include "setupdatabase.h"
 #include "importsettings.h"
 #include "dxmlguiwindow.h"
+
 
 #ifdef HAVE_KIPI
 
@@ -75,6 +77,7 @@ public:
         page_metadata(0),
         page_template(0),
         page_lighttable(0),
+        page_dlnaserver(0),
         page_editor(0),
         page_slideshow(0),
         page_imagequalitysorter(0),
@@ -93,6 +96,7 @@ public:
         metadataPage(0),
         templatePage(0),
         lighttablePage(0),
+        dlnaserverPage(0),
         editorPage(0),
         slideshowPage(0),
         imageQualitySorterPage(0),
@@ -114,6 +118,7 @@ public:
     DConfigDlgWdgItem*       page_metadata;
     DConfigDlgWdgItem*       page_template;
     DConfigDlgWdgItem*       page_lighttable;
+    DConfigDlgWdgItem*       page_dlnaserver;
     DConfigDlgWdgItem*       page_editor;
     DConfigDlgWdgItem*       page_slideshow;
     DConfigDlgWdgItem*       page_imagequalitysorter;
@@ -132,6 +137,7 @@ public:
     SetupMetadata*           metadataPage;
     SetupTemplate*           templatePage;
     SetupLightTable*         lighttablePage;
+    SetupDlna*               dlnaserverPage;
     SetupEditor*             editorPage;
     SetupSlideShow*          slideshowPage;
     SetupImageQualitySorter* imageQualitySorterPage;
@@ -213,6 +219,15 @@ Setup::Setup(QWidget* const parent)
                                        "<i>Customize tool used to compare images</i></qt>"));
     d->page_lighttable->setIcon(QIcon::fromTheme(QLatin1String("lighttable")));
 
+    //dlna
+    //QIcon::fromTheme(QLatin1String("arrow-right-double"))
+
+    d->dlnaserverPage  = new SetupDlna();
+    d->page_dlnaserver = addPage(d->dlnaserverPage, i18n("DLNA Media Server"));
+    d->page_dlnaserver->setHeader(i18n("<qt>DLNA Media Server Settings<br/>"
+                                       "<i>Upnp server for photos</i></qt>"));
+    d->page_dlnaserver->setIcon(QIcon::fromTheme(QLatin1String("arrow-right-double")));
+
     d->slideshowPage  = new SetupSlideShow();
     d->page_slideshow = addPage(d->slideshowPage, i18n("Slide Show"));
     d->page_slideshow->setHeader(i18n("<qt>Slide Show Settings<br/>"
@@ -223,6 +238,8 @@ Setup::Setup(QWidget* const parent)
     d->page_imagequalitysorter = addPage(d->imageQualitySorterPage, i18n("Image Quality Sorter"));
     d->page_imagequalitysorter->setHeader(i18n("<qt>Image Quality Sorter Settings<br/>"));
     d->page_imagequalitysorter->setIcon(QIcon::fromTheme(QLatin1String("flag-green")));
+
+
 
     d->cameraPage  = new SetupCamera();
     d->page_camera = addPage(d->cameraPage, i18n("Cameras"));
@@ -321,6 +338,7 @@ QSize Setup::sizeHint() const
             page == AlbumViewPage   ||
             page == TemplatePage    ||
             page == LightTablePage  ||
+            page == DlnaServerPage  ||
             page == EditorPage      ||
             page == MiscellaneousPage)
         {
@@ -430,6 +448,7 @@ void Setup::slotOkClicked()
     d->metadataPage->applySettings();
     d->templatePage->applySettings();
     d->lighttablePage->applySettings();
+    d->dlnaserverPage->applySettings();
     d->editorPage->applySettings();
     d->slideshowPage->applySettings();
     d->imageQualitySorterPage->applySettings();
@@ -523,6 +542,11 @@ Setup::Page Setup::activePageIndex() const
     {
         return LightTablePage;
     }
+    if (cur == d->page_dlnaserver)
+    {
+        return DlnaServerPage;
+    }
+
 
     if (cur == d->page_editor)
     {
@@ -588,6 +612,9 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
 
         case Setup::LightTablePage:
             return page_lighttable;
+
+        case Setup::DlnaServerPage:
+        return page_dlnaserver;
 
         case Setup::EditorPage:
             return page_editor;

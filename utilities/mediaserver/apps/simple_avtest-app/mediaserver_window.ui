@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>905</width>
+    <width>1000</width>
     <height>382</height>
    </rect>
   </property>
@@ -69,27 +69,21 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetMinimumSize</enum>
       </property>
-      <item row="9" column="3">
-       <widget class="QCheckBox" name="watchCheckBox">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="layoutDirection">
-         <enum>Qt::RightToLeft</enum>
-        </property>
-        <property name="text">
-         <string>Watch for changes</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="1">
+      <item row="10" column="1">
        <widget class="QPushButton" name="addItemButton">
         <property name="text">
          <string>Add Items</string>
         </property>
        </widget>
       </item>
-      <item row="9" column="4">
+      <item row="10" column="5">
+       <widget class="QPushButton" name="DeleteDirectoriesButton">
+        <property name="text">
+         <string>Delete Selected Directories</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="2">
        <widget class="QCheckBox" name="scanRecursivelyCheckbox">
         <property name="layoutDirection">
          <enum>Qt::RightToLeft</enum>
@@ -102,14 +96,7 @@
         </property>
        </widget>
       </item>
-      <item row="9" column="6">
-       <widget class="QPushButton" name="DeleteDirectoriesButton">
-        <property name="text">
-         <string>Delete Selected Directories</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="5">
+      <item row="10" column="4">
        <widget class="QPushButton" name="addContentButton">
         <property name="text">
          <string>&amp;Add New Root Directory</string>
@@ -117,6 +104,13 @@
        </widget>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QPushButton" name="hide">
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
