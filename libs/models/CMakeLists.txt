@@ -9,18 +9,6 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-set(libdatabasemodels_SRCS
-    imagemodel.cpp
-    imagefiltermodel.cpp
-    imagefiltermodelpriv.cpp
-    imagefiltermodelthreads.cpp
-    imagefiltersettings.cpp
-    imagelistmodel.cpp
-    imagesortsettings.cpp
-    imagethumbnailmodel.cpp
-    imageversionsmodel.cpp
-)
-
 set(libalbummodels_SRCS
     imagealbummodel.cpp
     imagealbumfiltermodel.cpp
@@ -52,5 +40,4 @@ endif()
 #for digikam core lib
 add_library(digikamgenericmodels_src OBJECT ${libgenericmodels_SRCS})
 
-add_library(digikamdatabasemodels_src OBJECT ${libdatabasemodels_SRCS})
-add_library(digikammodels_src OBJECT  ${libalbummodels_SRCS} ${libgenericmodels_SRCS})
+add_library(digikammodels_src OBJECT ${libalbummodels_SRCS} ${libgenericmodels_SRCS})

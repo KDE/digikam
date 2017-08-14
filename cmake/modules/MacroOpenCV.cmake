@@ -24,61 +24,61 @@ macro(DETECT_OPENCV OPENCV_MIN_VERSION)
     set(OPENCV_REQUIRED_COMPONENTS "${ARGN}" )
 
     message(STATUS "First try at finding OpenCV...")
-    find_package(OpenCV REQUIRED COMPONENTS ${OPENCV_REQUIRED_COMPONENTS})
+    find_package(OpenCV COMPONENTS ${OPENCV_REQUIRED_COMPONENTS})
 
-    if(NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
+    if(NOT OpenCV_FOUND)
 
         message(STATUS "Could not find OpenCV normally, trying internal FindOpenCV.cmake")
         set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/modules_opencv)
-        find_package(OpenCV REQUIRED COMPONENTS ${OPENCV_REQUIRED_COMPONENTS})
-
-    else()
-
-        message(STATUS "Great, found OpenCV on the first try.")
+        find_package(OpenCV COMPONENTS ${OPENCV_REQUIRED_COMPONENTS})
 
     endif()
 
-    message(STATUS "OpenCV Root directory is: ${OpenCV_DIR}")
+    if(OpenCV_FOUND)
 
-    # check OpenCV version
+        message(STATUS "OpenCV Root directory is: ${OpenCV_DIR}")
 
-    if(OpenCV_VERSION)
+        # check OpenCV version
 
-        message(STATUS "OpenCV: Found version ${OpenCV_VERSION} (required: ${OPENCV_MIN_VERSION})")
+        if(OpenCV_VERSION)
 
-        if(${OpenCV_VERSION} VERSION_LESS ${OPENCV_MIN_VERSION})
+            message(STATUS "OpenCV: Found version ${OpenCV_VERSION} (required: ${OPENCV_MIN_VERSION})")
 
-            message(WARNING "OpenCV: Version is too old.")
+            if(${OpenCV_VERSION} VERSION_LESS ${OPENCV_MIN_VERSION})
+
+                message(WARNING "OpenCV: Version is too old.")
+                set(OpenCV_FOUND FALSE)
+
+            endif()
+
+        else()
+
+            message(WARNING "OpenCV: Version information not found, your version is probably too old.")
             set(OpenCV_FOUND FALSE)
 
         endif()
 
-    else()
+        # There are two versions of FindOpenCV.cmake in the wild, one defining
+        # OpenCV_LIBRARIES, the other defining OpenCV_LIBS. Make sure we handle
+        # both cases.
 
-        message(WARNING "OpenCV: Version information not found, your version is probably too old.")
-        set(OpenCV_FOUND FALSE)
+        if(NOT OpenCV_LIBRARIES)
 
-    endif()
+            set(OpenCV_LIBRARIES ${OpenCV_LIBS})
 
-    # There are two versions of FindOpenCV.cmake in the wild, one defining
-    # OpenCV_LIBRARIES, the other defining OpenCV_LIBS. Make sure we handle
-    # both cases.
+        endif()
 
-    if(NOT OpenCV_LIBRARIES)
+        # Same story with OpenCV_INCLUDE_DIRS and OpenCV_INCLUDE_DIR:
 
-        set(OpenCV_LIBRARIES ${OpenCV_LIBS})
+        if(NOT OpenCV_INCLUDE_DIRS)
 
-    endif()
+            set(OpenCV_INCLUDE_DIRS ${OpenCV_INCLUDE_DIR})
 
-    # Same story with OpenCV_INCLUDE_DIRS and OpenCV_INCLUDE_DIR:
+        endif()
 
-    if(NOT OpenCV_INCLUDE_DIRS)
-
-        set(OpenCV_INCLUDE_DIRS ${OpenCV_INCLUDE_DIR})
+        message(STATUS "OpenCV headers: ${OpenCV_INCLUDE_DIRS}")
+        message(STATUS "OpenCV libs   : ${OpenCV_LIBRARIES}")
 
     endif()
-
-    message(STATUS "OpenCV headers: ${OpenCV_INCLUDE_DIRS}")
-    message(STATUS "OpenCV libs   : ${OpenCV_LIBRARIES}")
 
 endmacro()

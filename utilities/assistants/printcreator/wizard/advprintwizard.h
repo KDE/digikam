@@ -62,8 +62,6 @@ public:
 
     int  nextId() const;
 
-    bool prepareToPrint();
-
     static int normalizedInt(double n);
 
 private:

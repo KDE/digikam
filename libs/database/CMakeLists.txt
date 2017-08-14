@@ -13,6 +13,18 @@ endif (POLICY CMP0063)
 # Boost uses operator names (and, not, ...)
 string(REPLACE "-fno-operator-names" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
+set(libdatabasemodels_SRCS
+    models/imagemodel.cpp
+    models/imagefiltermodel.cpp
+    models/imagefiltermodelpriv.cpp
+    models/imagefiltermodelthreads.cpp
+    models/imagefiltersettings.cpp
+    models/imagelistmodel.cpp
+    models/imagesortsettings.cpp
+    models/imagethumbnailmodel.cpp
+    models/imageversionsmodel.cpp
+)
+
 set(libdatabasecore_SRCS
     server/databaseserverstarter.cpp
     server/databaseservererror.cpp
@@ -152,10 +164,10 @@ if(ENABLE_DBUS)
     include_directories($<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-add_library(digikamdatabase_src     OBJECT ${digikamdatabase_LIB_SRCS})
+add_library(digikamdatabase_src     OBJECT ${digikamdatabase_LIB_SRCS} ${libdatabasemodels_SRCS})
 add_library(digikamdatabasemain_src OBJECT ${libdatabaseutils_SRCS} ${libimgqsort_SRCS})
 add_library(digikamdatabasecore_src OBJECT ${libdatabasecore_SRCS})
-add_library(digikamdatabase         SHARED $<TARGET_OBJECTS:digikamdatabase_src> $<TARGET_OBJECTS:digikamdatabasemodels_src>)
+add_library(digikamdatabase         $<TARGET_OBJECTS:digikamdatabase_src>)
 
 generate_export_header(digikamdatabase
                        BASE_NAME digikam_database

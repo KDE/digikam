@@ -6,6 +6,7 @@
  * Date        : 2008-05-19
  * Description : Fuzzy search sidebar tab contents.
  *
+ * Copyright (C) 2016-2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
@@ -76,6 +77,7 @@
 #include "dcolorvalueselector.h"
 #include "dexpanderbox.h"
 #include "applicationsettings.h"
+#include "drangebox.h"
 
 namespace Digikam
 {
@@ -105,8 +107,7 @@ public:
         saveBtnImage(0),
         penSize(0),
         resultsSketch(0),
-        levelImage(0),
-        maxLevelImage(0),
+        similarityRange(0),
         imageWidget(0),
         timerSketch(0),
         timerImage(0),
@@ -155,8 +156,8 @@ public:
 
     QSpinBox*                 penSize;
     QSpinBox*                 resultsSketch;
-    QSpinBox*                 levelImage;
-    QSpinBox*                 maxLevelImage;
+
+    DIntRangeBox*             similarityRange;
 
     QLabel*                   imageWidget;
 
@@ -318,41 +319,30 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     // ---------------------------------------------------------------
 
-    d->fuzzySearchAlbumSelectors = new AlbumSelectors(i18nc("@label", "Search in albums:"), QLatin1String("Fuzzy Search View"), 0, AlbumSelectors::AlbumType::PhysAlbum);
+    d->fuzzySearchAlbumSelectors = new AlbumSelectors(i18nc("@label", "Search in albums:"),
+                                                      QLatin1String("Fuzzy Search View"),
+                                                      0, AlbumSelectors::AlbumType::PhysAlbum);
 
     // ---------------------------------------------------------------
 
     QLabel* const resultsLabel = new QLabel(i18n("Similarity range:"));
-    d->levelImage              = new QSpinBox();
-    d->levelImage->setSuffix(QLatin1String("%"));
+    d->similarityRange = new DIntRangeBox();
+    d->similarityRange->setSuffix(QLatin1String("%"));
 
     if (d->settings)
     {
-        d->levelImage->setRange(d->settings->getMinimumSimilarityBound(), 100);
+        d->similarityRange->setRange(d->settings->getMinimumSimilarityBound(), 100);
+        d->similarityRange->setInterval(d->settings->getDuplicatesSearchLastMinSimilarity(),
+                                        d->settings->getDuplicatesSearchLastMaxSimilarity());
     }
     else
     {
-        d->levelImage->setRange(40, 100);
+        d->similarityRange->setRange(40, 100);
+        d->similarityRange->setInterval(90, 100);
     }
 
-    d->levelImage->setSingleStep(1);
-    d->levelImage->setValue(90);
-    d->levelImage->setWhatsThis(i18n("Select here the approximate threshold "
-                                     "value, as a percentage. "
-                                     "This value is used by the algorithm to distinguish two "
-                                     "similar images. The default value is 90."));
-
-    QLabel* const levelIntervalLabel = new QLabel(QLatin1String("-"));
-
-    d->maxLevelImage              = new QSpinBox();
-    d->maxLevelImage->setSuffix(QLatin1String("%"));
-    d->maxLevelImage->setRange(90, 100);
-    d->maxLevelImage->setSingleStep(1);
-    d->maxLevelImage->setValue(100);
-    d->maxLevelImage->setWhatsThis(i18n("Select here the approximate maximum similarity threshold "
-                                     "value, as a percentage. "
-                                     "This value is used by the algorithm to restrict "
-                                     "similar images. The default value is 100."));
+    d->similarityRange->setWhatsThis(i18n("Select here the approximate similarity interval "
+                                     "as a percentage. "));
 
     // ---------------------------------------------------------------
 
@@ -363,7 +353,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     d->nameEditImage = new QLineEdit(saveBox);
     d->nameEditImage->setClearButtonEnabled(true);
     d->nameEditImage->setWhatsThis(i18n("Enter the name of the current similar image search to save in the "
-                                        "\"Fuzzy Searches\" view."));
+                                        "\"Similarity Searches\" view."));
 
     d->saveBtnImage  = new QToolButton(saveBox);
     d->saveBtnImage->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
@@ -385,9 +375,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     mainLayout->addWidget(d->labelFolder,                2, 1, 1, 5);
     mainLayout->addWidget(d->fuzzySearchAlbumSelectors,  3, 0, 1, -1);
     mainLayout->addWidget(resultsLabel,                  4, 0, 1, 1);
-    mainLayout->addWidget(d->levelImage,                 4, 2, 1, 1);
-    mainLayout->addWidget(levelIntervalLabel,            4, 3, 1, 1);
-    mainLayout->addWidget(d->maxLevelImage,              4, 4, 1, 1);
+    mainLayout->addWidget(d->similarityRange,            4, 2, 1, 1);
     mainLayout->addWidget(saveBox,                       5, 0, 1, 6);
     mainLayout->setRowStretch(0, 10);
     mainLayout->setColumnStretch(1, 10);
@@ -466,7 +454,10 @@ QWidget* FuzzySearchView::setupSketchPanel() const
 
     // ---------------------------------------------------------------
 
-    d->sketchSearchAlbumSelectors = new AlbumSelectors(i18nc("@label", "Search in albums:"), QLatin1String("Sketch Search View"), 0, AlbumSelectors::AlbumType::PhysAlbum);
+    d->sketchSearchAlbumSelectors = new AlbumSelectors(i18nc("@label",
+                                                       "Search in albums:"),
+                                                       QLatin1String("Sketch Search View"),
+                                                       0, AlbumSelectors::AlbumType::PhysAlbum);
 
     // ---------------------------------------------------------------
 
@@ -482,7 +473,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     d->nameEditSketch = new QLineEdit(saveBox);
     d->nameEditSketch->setClearButtonEnabled(true);
     d->nameEditSketch->setWhatsThis(i18n("Enter the name of the current sketch search to save in the "
-                                         "\"Fuzzy Searches\" view."));
+                                         "\"Similarity Searches\" view."));
 
     d->saveBtnSketch = new QToolButton(saveBox);
     d->saveBtnSketch->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
@@ -541,10 +532,10 @@ void FuzzySearchView::setupConnections()
     connect(d->fuzzySearchAlbumSelectors, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotFuzzyAlbumsChanged()));
 
-    connect(d->levelImage, SIGNAL(valueChanged(int)),
-            this, SLOT(slotLevelImageChanged(int)));
+    connect(d->similarityRange, SIGNAL(minChanged(int)),
+            this, SLOT(slotMinLevelImageChanged(int)));
 
-    connect(d->maxLevelImage, SIGNAL(valueChanged(int)),
+    connect(d->similarityRange, SIGNAL(maxChanged(int)),
             this, SLOT(slotMaxLevelImageChanged(int)));
 
     connect(d->resetButton, SIGNAL(clicked()),
@@ -654,14 +645,14 @@ void FuzzySearchView::doLoadState()
 {
     KConfigGroup group = getConfigGroup();
 
-    d->tabWidget->setCurrentIndex(group.readEntry(entryName(d->configTabEntry),                (int)Private::DUPLICATES));
-    d->penSize->setValue(group.readEntry(entryName(d->configPenSketchSizeEntry),               10));
-    d->resultsSketch->setValue(group.readEntry(entryName(d->configResultSketchItemsEntry),     10));
-    d->hsSelector->setHue(group.readEntry(entryName(d->configPenSketchHueEntry),               180));
-    d->hsSelector->setSaturation(group.readEntry(entryName(d->configPenSketchSaturationEntry), 128));
-    d->vSelector->setValue(group.readEntry(entryName(d->configPenSkethValueEntry),             255));
-    d->levelImage->setValue(group.readEntry(entryName(d->configSimilarsThresholdEntry),        90));
-    d->maxLevelImage->setValue(group.readEntry(entryName(d->configSimilarsMaxThresholdEntry),  100));
+    d->tabWidget->setCurrentIndex(group.readEntry(entryName(d->configTabEntry),                    (int)Private::DUPLICATES));
+    d->penSize->setValue(group.readEntry(entryName(d->configPenSketchSizeEntry),                   10));
+    d->resultsSketch->setValue(group.readEntry(entryName(d->configResultSketchItemsEntry),         10));
+    d->hsSelector->setHue(group.readEntry(entryName(d->configPenSketchHueEntry),                   180));
+    d->hsSelector->setSaturation(group.readEntry(entryName(d->configPenSketchSaturationEntry),     128));
+    d->vSelector->setValue(group.readEntry(entryName(d->configPenSkethValueEntry),                 255));
+    d->similarityRange->setInterval(group.readEntry(entryName(d->configSimilarsThresholdEntry),    90),
+                                    group.readEntry(entryName(d->configSimilarsMaxThresholdEntry), 100));
     d->hsSelector->updateContents();
 
     QColor col;
@@ -686,8 +677,8 @@ void FuzzySearchView::doSaveState()
     group.writeEntry(entryName(d->configPenSketchHueEntry),         d->hsSelector->hue());
     group.writeEntry(entryName(d->configPenSketchSaturationEntry),  d->hsSelector->saturation());
     group.writeEntry(entryName(d->configPenSkethValueEntry),        d->vSelector->value());
-    group.writeEntry(entryName(d->configSimilarsThresholdEntry),    d->levelImage->value());
-    group.writeEntry(entryName(d->configSimilarsMaxThresholdEntry), d->maxLevelImage->value());
+    group.writeEntry(entryName(d->configSimilarsThresholdEntry),    d->similarityRange->minValue());
+    group.writeEntry(entryName(d->configSimilarsMaxThresholdEntry), d->similarityRange->maxValue());
     d->searchTreeView->saveState();
     group.sync();
     d->fuzzySearchAlbumSelectors->saveState();
@@ -704,7 +695,7 @@ void FuzzySearchView::setActive(bool val)
         if (!CoreDbAccess().db()->hasHaarFingerprints())
         {
             QString msg = i18n("Image fingerprints have not yet been generated for your collection. "
-                               "The Fuzzy Search Tools will not be operational "
+                               "The Similarity Search Tools will not be operational "
                                "without pre-generated fingerprints.\n"
                                "Do you want to build fingerprints now?\n"
                                "Note: This process can take a while. You can run it "
@@ -818,7 +809,7 @@ void FuzzySearchView::slotAlbumSelected(Album* album)
 
 void FuzzySearchView::slotApplicationSettingsChanged()
 {
-    d->levelImage->setRange(d->settings->getMinimumSimilarityBound(),100);
+    d->similarityRange->setRange(d->settings->getMinimumSimilarityBound(),100);
 }
 
 // Sketch Searches methods -----------------------------------------------------------------------
@@ -1023,8 +1014,8 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
                     QList<int> albums = d->fuzzySearchAlbumSelectors->selectedAlbumIds();
 
                     d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle, path,
-                                                                                               d->levelImage->value() / 100.0,
-                                                                                               d->maxLevelImage->value() / 100.0,
+                                                                                               d->similarityRange->minValue() / 100.0,
+                                                                                               d->similarityRange->maxValue() / 100.0,
                                                                                                albums, true);
                     d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
                     d->labelFile->setAdjustedText(urls.first().fileName());
@@ -1045,15 +1036,8 @@ void FuzzySearchView::slotMaxLevelImageChanged(int /*newValue*/)
     }
 }
 
-void FuzzySearchView::slotLevelImageChanged(int newValue)
+void FuzzySearchView::slotMinLevelImageChanged(int /*newValue*/)
 {
-    d->maxLevelImage->setMinimum(newValue);
-
-    if (newValue > d->maxLevelImage->value())
-    {
-        d->maxLevelImage->setValue(newValue);
-    }
-
     if (d->active)
     {
         d->timerImage->start();
@@ -1079,8 +1063,8 @@ void FuzzySearchView::slotTimerImageDone()
 
         d->imageSAlbum    = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle,
                                                                                       d->imageUrl.toLocalFile(),
-                                                                                      d->levelImage->value() / 100.0,
-                                                                                      d->maxLevelImage->value() / 100.0,
+                                                                                      d->similarityRange->minValue() / 100.0,
+                                                                                      d->similarityRange->maxValue() / 100.0,
                                                                                       albums, true);
         d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
         return;
@@ -1128,8 +1112,8 @@ void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name, bo
     QList<int> albums = d->fuzzySearchAlbumSelectors->selectedAlbumIds();
 
     d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(name, d->imageInfo,
-                                                                             d->levelImage->value() / 100.0,
-                                                                             d->maxLevelImage->value() / 100.0,
+                                                                             d->similarityRange->minValue() / 100.0,
+                                                                             d->similarityRange->maxValue() / 100.0,
                                                                              albums, force);
     d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
 }

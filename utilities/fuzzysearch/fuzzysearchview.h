@@ -6,6 +6,7 @@
  * Date        : 2008-05-19
  * Description : Fuzzy search sidebar tab contents.
  *
+ * Copyright (C) 2016-2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -102,7 +103,7 @@ private Q_SLOTS:
     void slotTimerSketchDone();
     void slotUndoRedoStateChanged(bool, bool);
 
-    void slotLevelImageChanged(int);
+    void slotMinLevelImageChanged(int);
     void slotMaxLevelImageChanged(int);
     void slotFuzzyAlbumsChanged();
     void slotTimerImageDone();

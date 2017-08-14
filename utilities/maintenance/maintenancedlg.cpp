@@ -54,6 +54,7 @@
 #include "metadatasynchronizer.h"
 #include "dxmlguiwindow.h"
 #include "applicationsettings.h"
+#include "drangebox.h"
 
 namespace Digikam
 {
@@ -100,8 +101,7 @@ public:
         duplicatesBox(0),
         hbox3(0),
         faceScannedHandling(0),
-        minSimilarity(0),
-        maxSimilarity(0),
+        similarityRange(0),
         searchResultRestriction(0),
         expanderBox(0),
         albumSelectors(0)
@@ -150,9 +150,8 @@ public:
     DVBox*               vbox3;
     DVBox*               duplicatesBox;
     DHBox*               hbox3;
+    DIntRangeBox*        similarityRange;
     QComboBox*           faceScannedHandling;
-    DIntNumInput*        minSimilarity;
-    DIntNumInput*        maxSimilarity;
     QComboBox*           searchResultRestriction;
     DExpanderBox*        expanderBox;
     AlbumSelectors*      albumSelectors;
@@ -254,21 +253,21 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     new QLabel(i18n("Similarity range (in percents): "), d->similarityRangeBox);
     QWidget* const space       = new QWidget(d->similarityRangeBox);
     d->similarityRangeBox->setStretchFactor(space, 10);
-    d->minSimilarity           = new DIntNumInput(d->similarityRangeBox);
+
+    d->similarityRange = new DIntRangeBox(d->similarityRangeBox);
+    d->similarityRange->setSuffix(QLatin1String("%"));
+
     if (settings)
     {
-        d->minSimilarity->setRange(settings->getMinimumSimilarityBound(), 100,1);
+        d->similarityRange->setRange(settings->getMinimumSimilarityBound(), 100);
+        d->similarityRange->setInterval(settings->getDuplicatesSearchLastMinSimilarity(),
+                                        settings->getDuplicatesSearchLastMaxSimilarity());
     }
     else
     {
-        d->minSimilarity->setRange(40, 100,1);
+        d->similarityRange->setRange(40, 100);
+        d->similarityRange->setInterval(90, 100);
     }
-    d->minSimilarity->setDefaultValue(90);
-    new QLabel(QLatin1String("-"), d->similarityRangeBox);
-    // Create the maximum similarity and set the minimum value to the current value of minSimilarity
-    d->maxSimilarity           = new DIntNumInput(d->similarityRangeBox);
-    d->maxSimilarity->setDefaultValue(100);
-    d->maxSimilarity->setRange(d->minSimilarity->value(), 100, 1);
 
     d->dupeRestrictionBox      = new DHBox(d->duplicatesBox);
     new QLabel(i18n("Restriction on duplicates:"), d->dupeRestrictionBox);
@@ -384,9 +383,6 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     connect(d->qualitySetup, SIGNAL(clicked()),
             this, SLOT(slotQualitySetup()));
 
-    connect(d->minSimilarity, SIGNAL(valueChanged(int)),
-            this,SLOT(slotMinSimilarityChanged(int)));
-
     // --------------------------------------------------------------------------------------
 
     readSettings();
@@ -395,18 +391,6 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 MaintenanceDlg::~MaintenanceDlg()
 {
     delete d;
-}
-
-void MaintenanceDlg::slotMinSimilarityChanged(int newValue)
-{
-    // Set the new minimum value of the maximum similarity
-    d->maxSimilarity->setRange(newValue, 100, 1);
-    // If the new value of the mimimum is now higher than the maximum similarity,
-    // set the maximum similarity to the new value.
-    if (newValue > d->maxSimilarity->value())
-    {
-        d->maxSimilarity->setValue(d->minSimilarity->value());
-    }
 }
 
 void MaintenanceDlg::slotOk()
@@ -433,8 +417,8 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.fingerPrints                        = d->expanderBox->isChecked(Private::FingerPrints);
     prm.scanFingerPrints                    = d->scanFingerPrints->isChecked();
     prm.duplicates                          = d->expanderBox->isChecked(Private::Duplicates);
-    prm.minSimilarity                       = d->minSimilarity->value();
-    prm.maxSimilarity                       = d->maxSimilarity->value();
+    prm.minSimilarity                       = d->similarityRange->minValue();
+    prm.maxSimilarity                       = d->similarityRange->maxValue();
     prm.duplicatesRestriction               = (HaarIface::DuplicatesSearchRestrictions)d->searchResultRestriction->itemData(d->searchResultRestriction->currentIndex()).toInt();
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->itemData(d->faceScannedHandling->currentIndex()).toInt();
@@ -473,8 +457,8 @@ void MaintenanceDlg::readSettings()
     d->scanFingerPrints->setChecked(group.readEntry(d->configScanFingerPrints,                              prm.scanFingerPrints));
 
     d->expanderBox->setChecked(Private::Duplicates,         group.readEntry(d->configDuplicates,            prm.duplicates));
-    d->minSimilarity->setValue(group.readEntry(d->configMinSimilarity,                                      prm.minSimilarity));
-    d->maxSimilarity->setValue(group.readEntry(d->configMaxSimilarity,                                      prm.maxSimilarity));
+    d->similarityRange->setInterval(group.readEntry(d->configMinSimilarity,                                 prm.minSimilarity),
+                                    group.readEntry(d->configMaxSimilarity,                                 prm.maxSimilarity));
     int restrictions = d->searchResultRestriction->findData(group.readEntry(d->configDuplicatesRestriction, (int)prm.duplicatesRestriction));
     d->searchResultRestriction->setCurrentIndex(restrictions);
 

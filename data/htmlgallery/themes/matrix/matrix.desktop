@@ -17,6 +17,7 @@ Name[sv]=Matrix
 Name[tr]=Matris
 Name[uk]=Матриця
 Name[x-test]=xxMatrixxx
+Name[zh_CN]=矩阵
 Comment=Show your photos with Matrix style
 Comment[ca]=Visualitza les fotos a l'estil Matrix
 Comment[ca@valencia]=Visualitza les fotos a l'estil Matrix
@@ -55,6 +56,7 @@ Name[sv]=Aurélien Gâteau
 Name[tr]=Aurélien Gâteau
 Name[uk]=Aurélien Gâteau
 Name[x-test]=xxAurélien Gâteauxx
+Name[zh_CN]=Aurélien Gâteau
 Url=mailto:aurelien.gateau@free.fr
 
 [X-HTMLExport Preview]
@@ -76,4 +78,5 @@ Name[sv]=Matrix
 Name[tr]=Matris
 Name[uk]=Матриця
 Name[x-test]=xxMatrixxx
+Name[zh_CN]=矩阵
 Url=preview.png

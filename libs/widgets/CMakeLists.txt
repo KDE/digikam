@@ -14,6 +14,7 @@ set(libcommonwidgets_SRCS
     common/buttonicondisabler.cpp
     common/dsliderspinbox.cpp
     common/dnuminput.cpp
+    common/drangebox.cpp
     common/dexpanderbox.cpp
     common/dactivelabel.cpp
     common/dragdropimplementations.cpp

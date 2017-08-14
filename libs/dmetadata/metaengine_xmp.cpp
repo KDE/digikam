@@ -117,9 +117,7 @@ QByteArray MetaEngine::getXmp() const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-
-
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get Xmp data using Exiv2 "), e);
+            d->printExiv2ExceptionError(QString::fromLatin1("Cannot get Xmp data using Exiv2 "), e);
     }
     catch(...)
     {
