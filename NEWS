@@ -7,12 +7,17 @@ General     : Add online handbook reader not dependant of desktop.
 General     : New tool to export albums by email.
 General     : New tool to create advance print layout.
 General     : Send by Mail tool can remove all metadata to attached items.
+General     : Replaced the minimum and maximum similarity selection boxes in fuzzy
+              search, duplicates search and maintenance by a new, generic DIntRangeBox
+              which makes the look, feel and behavious consistent in all places.
+              Also, this makes redundant code obsolete and reduces the probability of bugs.
 PrintCreator: Add option to create printing from albums or images selection.
 PrintCreator: Add option to customize output image properties to render printing.
 PrintCreator: Tool is now multi-threaded to process images while preview and printing.
 ImageEditor : Add SendByMail and PrintCreator tools support.
 Showfoto    : Add SendByMail and PrintCreator tools support.
 LightTable  : Add SendByMail and PrintCreator tools support.
+Panorama    : Add Hugin 2017.0 support.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -380,4 +385,56 @@ BUGFIXES FROM BUGZILLA:
 365 ==> 382952 - Don't abort cmake when package is missing.
 366 ==> 382732 - Ignore orphan rows in MySQL migration.
 367 ==> 374812 - Panorama stops.
-368 ==> 
+368 ==> 382707 - Order of albums different between tree view and thumbnail view.
+369 ==> 147203 - Add ability to Create / Edit GPS information.
+370 ==> 119315 - digiKam crashes when viewing a photo.
+371 ==> 227903 - digiKam crashes on every second image I edit.
+372 ==> 237625 - digiKam crashed when overwriting, or saving edited photo, or deleting photo.
+373 ==> 225810 - Crash when saving edited image.
+374 ==> 223614 - digiKam crashes when saving a photo editing.
+375 ==> 227828 - digiKam is crashing randomly after clicking save icon in picture editor after correcting exposition of picture.
+376 ==> 219356 - When clicking on an image to import, digikam crashed.
+377 ==> 214676 - digiKam crashed on exit.
+378 ==> 219612 - Opened dgiKam, selected a photo, clicked Edit.
+379 ==> 223752 - Crashes when selecting images to download off my CF card.
+380 ==> 214718 - digiKam Crashed when trying to Edit photo.
+381 ==> 196866 - digiKam crashes when saving any file format.
+382 ==> 200338 - Segmentation fault while trying to select PNG format for saving.
+383 ==> 196790 - digiKam crashes while typing filename extension in "save as" dialogue.
+384 ==> 189913 - When saving from TIFF (16bit) image to jpeg or png the system crashes.
+385 ==> 228562 - digiKam crashes saving from editor.
+386 ==> 230755 - digiKam crashes while saving photos.
+387 ==> 225038 - digiKam crash set tag to photo.
+388 ==> 227220 - Try to aplay Tags to a set of Images.
+389 ==> 227253 - Instability after heavy image transfer/editing.
+390 ==> 228788 - digiKam Crashes after editing a jpeg file.
+391 ==> 230897 - digiKam core dump when changing stars (notation/cotation) of RAW or not RAW pictures.
+392 ==> 231868 - Crash digikam download replace.
+393 ==> 233195 - Crash when adding tag information.
+394 ==> 222213 - digiKam crash when saving photo (by overwriting the original file).
+395 ==> 225987 - Crash selecting another image while the current has unsaved changed properties.
+396 ==> 225849 - Crash saving an updated tiff.
+397 ==> 225180 - Crash saving Exif on NEF raw file.
+398 ==> 246963 - digiKam crash when saving file.
+399 ==> 227513 - digiKam crashes when trying to edit (and save) photos.
+400 ==> 182488 - digiKam crashes while changing file extention filter for saving.
+401 ==> 179035 - Crash using save as and selecting JPEG.
+402 ==> 181871 - ShowFoto crashes while trying to save as jpg.
+403 ==> 227001 - digiKam crashes after editor save.
+404 ==> 226998 - digiKam editor crashed while saving edited image (jpeg, rotated and cropped).
+405 ==> 229069 - digiKam crashed while saving edited image.
+406 ==> 255817 - digiKam crashed with segmentation fault when saving changed photo.
+407 ==> 226457 - digiKam crash on saving edited image.
+408 ==> 196866 - digiKam crashes when saving any file format.
+409 ==> 241575 - digiKam crashes after saving several (>2) pictures.
+410 ==> 143838 - Image menu in Menubar is Empty (no options).
+411 ==> 225232 - digiKam exits unexpectedly while saving edited image.
+412 ==> 325785 - Most of the tools in editor do not work anymore after upgrading.
+413 ==> 261740 - Crash when adding album folders using settings dialogue.
+414 ==> 258002 - Crash while attempting to open another directory in my albums.
+415 ==> 245261 - digiKam crashes after entering image comments.
+416 ==> 263355 - digiKam terminates and crashes sometimes when entering a description for an image.
+417 ==> 383280 - Panorama tool doesn't find autooptimiser from Hugin 2017.0.
+418 ==> 376470 - Title is not refreshed when read again metadata from file is launched [patch].
+419 ==> 
+
