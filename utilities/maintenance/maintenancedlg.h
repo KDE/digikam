@@ -51,7 +51,6 @@ private Q_SLOTS:
 
     void slotItemToggled(int index, bool b);
     void slotMetadataSetup();
-    void slotMinSimilarityChanged(int newValue);
     void slotQualitySetup();
     void slotOk();
     void slotHelp();

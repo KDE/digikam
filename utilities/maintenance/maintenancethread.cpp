@@ -89,7 +89,7 @@ void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchro
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection.insert(t, 0);
+        collection.insert(t, 3);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a metadata task for synchronizing metadata";
     }
@@ -115,7 +115,7 @@ void MaintenanceThread::generateThumbs(const QStringList& paths)
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection.insert(t, 0);
+        collection.insert(t, 3);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a thumbnails task for generating thumbnails";
     }
@@ -141,7 +141,7 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths)
         connect(this, SIGNAL(signalCanceled()),
             t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection.insert(t, 0);
+        collection.insert(t, 3);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a fingerprints task for generating fingerprints";// for items with a chunk size of " << chunk.size();
     }
@@ -167,7 +167,7 @@ void MaintenanceThread::sortByImageQuality(const QStringList& paths, const Image
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection.insert(t, 0);
+        collection.insert(t, 3);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a image quality task for sorting items.";
     }
@@ -195,7 +195,7 @@ void MaintenanceThread::computeDatabaseJunk(bool thumbsDb, bool facesDb)
     connect(this, SIGNAL(signalCanceled()),
             t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-    collection.insert(t, 0);
+    collection.insert(t, 3);
 
     appendJobs(collection);
 }
@@ -219,7 +219,7 @@ void MaintenanceThread::cleanCoreDb(const QList<qlonglong>& imageIds)
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection.insert(t, 0);
+        collection.insert(t, 3);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a database task for removing stale items.";
     }
@@ -246,7 +246,7 @@ void MaintenanceThread::cleanThumbsDb(const QList<int>& thumbnailIds)
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection.insert(t, 0);
+        collection.insert(t, 3);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a database task for removing stale thumbnails.";
     }
@@ -273,7 +273,7 @@ void MaintenanceThread::cleanFacesDb(const QList<Identity>& staleIdentities)
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection.insert(t, 0);
+        collection.insert(t, 3);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a database task for removing stale identities.";
     }
@@ -297,7 +297,7 @@ void MaintenanceThread::shrinkDatabases()
     connect(this, SIGNAL(signalCanceled()),
             t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-    collection.insert(t, 0);
+    collection.insert(t, 3);
 
     appendJobs(collection);
 }

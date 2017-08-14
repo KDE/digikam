@@ -130,7 +130,13 @@ int ActionThreadBase::maximumNumberOfThreads() const
 
 void ActionThreadBase::defaultMaximumNumberOfThreads()
 {
-    const int maximumNumberOfThreads = qMax(QThreadPool::globalInstance()->maxThreadCount(), 1);
+    int maximumNumberOfThreads = qMax(QThread::idealThreadCount(), 1);
+
+    if (d->pool->activeThreadCount())
+    {
+        maximumNumberOfThreads = qMax(d->pool->maxThreadCount(), 1);
+    }
+
     setMaximumNumberOfThreads(maximumNumberOfThreads);
 }
 

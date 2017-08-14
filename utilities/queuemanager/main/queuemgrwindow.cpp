@@ -72,7 +72,6 @@
 #include "thumbnailsize.h"
 #include "sidebar.h"
 #include "dnotificationwrapper.h"
-#include "scancontroller.h"
 
 
 namespace Digikam
@@ -806,8 +805,6 @@ void QueueMgrWindow::busy(bool busy)
     slotItemSelectionChanged();
 
     d->busy ? d->queuePool->setCursor(Qt::WaitCursor) : d->queuePool->unsetCursor();
-    d->busy ? ScanController::instance()->suspendCollectionScan()
-            : ScanController::instance()->resumeCollectionScan();
     d->busy ? m_animLogo->start() : m_animLogo->stop();
 
     emit signalBqmIsBusy(d->busy);
