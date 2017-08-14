@@ -1,5 +1,36 @@
-// Copyright (C) 2007  Davis E. King (davis@dlib.net)
-// License: Boost Software License   See LICENSE.txt for the full license.
+/** ===========================================================
+ * @file
+ *
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ *
+ * @date    2017-08-08
+ * @brief   Base functions for dnn module, can be used for face recognition, 
+ *          all codes are ported from dlib library (http://dlib.net/)
+ *
+ * @section DESCRIPTION
+ *
+ * @author Copyright (C) 2017 by Yingjie Liu
+ *         <a href="mailto:yingjiewudi at gmail dot com">yingjiewudi at gmail dot com</a>
+ *
+ * @section LICENSE
+ *
+ * Released to public domain under terms of the BSD Simplified license.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *   * Neither the name of the organization nor the names of its contributors
+ *     may be used to endorse or promote products derived from this software
+ *     without specific prior written permission.
+ *
+ *   See <http://www.opensource.org/licenses/bsd-license>
+ *
+ * ============================================================ */
 #ifndef DLIB_RAND_KERNEl_1_
 #define DLIB_RAND_KERNEl_1_
 
@@ -11,317 +42,313 @@
 #include "serialize.h"
 #include "dnn_string.h"
 
-//using namespace std;
-
-//namespace dlib
-//{
 
 
-    class drand
-    {
 
-        /*!       
-            INITIAL VALUE
-                - seed == ""
+class drand
+{
 
-            CONVENTION
-                - the random numbers come from the boost mersenne_twister code
-                - get_seed() == seed
-        !*/
-        
-        public:
+    /*!       
+        INITIAL VALUE
+            - seed == ""
 
-            // These typedefs are here for backwards compatibility with older versions of dlib.
-            typedef drand kernel_1a;
-            typedef drand float_1a;
+        CONVENTION
+            - the random numbers come from the boost mersenne_twister code
+            - get_seed() == seed
+    !*/
+    
+    public:
 
-            drand(
-            ) 
+        // These typedefs are here for backwards compatibility with older versions of dlib.
+        typedef drand kernel_1a;
+        typedef drand float_1a;
+
+        drand(
+        ) 
+        {
+            init();
+        }
+
+        drand (
+            time_t seed_value
+        )
+        {
+            init();
+            set_seed(cast_to_string(seed_value));
+        }
+
+        drand (
+            const std::string& seed_value
+        )
+        {
+            init();
+            set_seed(seed_value);
+        }
+
+        virtual ~drand(
+        )
+        {}
+
+        void clear(
+        )
+        {
+            mt.seed();
+            seed.clear();
+
+            has_gaussian = false;
+            next_gaussian = 0;
+
+            // prime the generator a bit
+            for (int i = 0; i < 10000; ++i)
+                mt();
+        }
+
+        const std::string& get_seed (
+        )
+        {
+            return seed;
+        }
+
+        void set_seed (
+            const std::string& value
+        )
+        {
+            seed = value;
+
+            // make sure we do the seeding so that using a seed of "" gives the same
+            // state as calling this->clear()
+            if (value.size() != 0)
             {
-                init();
+                uint32 s = 0;
+                for (std::string::size_type i = 0; i < seed.size(); ++i)
+                {
+                    s = (s*37) + static_cast<uint32>(seed[i]);
+                }
+                mt.seed(s);
             }
-
-            drand (
-                time_t seed_value
-            )
-            {
-                init();
-                set_seed(cast_to_string(seed_value));
-            }
-
-            drand (
-                const std::string& seed_value
-            )
-            {
-                init();
-                set_seed(seed_value);
-            }
-
-            virtual ~drand(
-            )
-            {}
-
-            void clear(
-            )
+            else
             {
                 mt.seed();
-                seed.clear();
+            }
 
+            // prime the generator a bit
+            for (int i = 0; i < 10000; ++i)
+                mt();
+
+
+            has_gaussian = false;
+            next_gaussian = 0;
+        }
+
+        unsigned char get_random_8bit_number (
+        )
+        {
+            return static_cast<unsigned char>(mt());
+        }
+
+        uint16 get_random_16bit_number (
+        )
+        {
+            return static_cast<uint16>(mt());
+        }
+
+        inline uint32 get_random_32bit_number (
+        )
+        {
+            return mt();
+        }
+
+        inline duint64 get_random_64bit_number (
+        )
+        {
+            const duint64 a = get_random_32bit_number();
+            const duint64 b = get_random_32bit_number();
+            return (a<<32)|b;
+        }
+
+        double get_double_in_range (
+            double begin,
+            double end
+        )
+        {
+            DLIB_ASSERT(begin <= end);
+            return begin + get_random_double()*(end-begin);
+        }
+
+        double get_random_double (
+        )
+        {
+            uint32 temp;
+
+            temp = drand::get_random_32bit_number();
+            temp &= 0xFFFFFF;
+
+            double val = static_cast<double>(temp);
+
+            val *= 0x1000000;
+
+            temp = drand::get_random_32bit_number();
+            temp &= 0xFFFFFF;
+
+            val += temp;
+
+            val /= max_val;
+
+            if (val < 1.0)
+            {
+                return val;
+            }
+            else
+            {
+                // return a value slightly less than 1.0
+                return 1.0 - std::numeric_limits<double>::epsilon();
+            }
+        }
+
+        float get_random_float (
+        )
+        {
+            uint32 temp;
+
+            temp = drand::get_random_32bit_number();
+            temp &= 0xFFFFFF;
+
+            const float scale = 1.0/0x1000000;
+
+            const float val = static_cast<float>(temp)*scale;
+            if (val < 1.0f)
+            {
+                return val;
+            }
+            else
+            {
+                // return a value slightly less than 1.0
+                return 1.0f - std::numeric_limits<float>::epsilon();
+            }
+        }
+
+        double get_random_gaussian (
+        )
+        {
+            if (has_gaussian)
+            {
                 has_gaussian = false;
-                next_gaussian = 0;
-
-                // prime the generator a bit
-                for (int i = 0; i < 10000; ++i)
-                    mt();
+                return next_gaussian;
             }
- 
-            const std::string& get_seed (
-            )
+
+            double x1, x2, w;
+
+            const double rndmax = std::numeric_limits<unsigned int>::max();
+
+            // Generate a pair of Gaussian random numbers using the Box-Muller transformation.
+            do 
             {
-                return seed;
-            }
+                const double rnd1 = get_random_32bit_number()/rndmax;
+                const double rnd2 = get_random_32bit_number()/rndmax;
 
-            void set_seed (
-                const std::string& value
-            )
-            {
-                seed = value;
+                x1 = 2.0 * rnd1 - 1.0;
+                x2 = 2.0 * rnd2 - 1.0;
+                w = x1 * x1 + x2 * x2;
+            } while ( w >= 1.0 );
 
-                // make sure we do the seeding so that using a seed of "" gives the same
-                // state as calling this->clear()
-                if (value.size() != 0)
-                {
-                    uint32 s = 0;
-                    for (std::string::size_type i = 0; i < seed.size(); ++i)
-                    {
-                        s = (s*37) + static_cast<uint32>(seed[i]);
-                    }
-                    mt.seed(s);
-                }
-                else
-                {
-                    mt.seed();
-                }
+            w = std::sqrt( (-2.0 * std::log( w ) ) / w );
+            next_gaussian = x2 * w;
+            has_gaussian = true;
+            return x1 * w;
+        }
 
-                // prime the generator a bit
-                for (int i = 0; i < 10000; ++i)
-                    mt();
+        void swap (
+            drand& item
+        )
+        {
+            exchange(mt,item.mt);
+            exchange(seed, item.seed);
+            exchange(has_gaussian, item.has_gaussian);
+            exchange(next_gaussian, item.next_gaussian);
+        }
 
+        friend void serialize(
+            const drand& item, 
+            std::ostream& out
+        );
 
-                has_gaussian = false;
-                next_gaussian = 0;
-            }
+        friend void deserialize(
+            drand& item, 
+            std::istream& in 
+        );
 
-            unsigned char get_random_8bit_number (
-            )
-            {
-                return static_cast<unsigned char>(mt());
-            }
+    private:
 
-            uint16 get_random_16bit_number (
-            )
-            {
-                return static_cast<uint16>(mt());
-            }
+        void init()
+        {
+            // prime the generator a bit
+            for (int i = 0; i < 10000; ++i)
+                mt();
 
-            inline uint32 get_random_32bit_number (
-            )
-            {
-                return mt();
-            }
-
-            inline duint64 get_random_64bit_number (
-            )
-            {
-                const duint64 a = get_random_32bit_number();
-                const duint64 b = get_random_32bit_number();
-                return (a<<32)|b;
-            }
-
-            double get_double_in_range (
-                double begin,
-                double end
-            )
-            {
-                DLIB_ASSERT(begin <= end);
-                return begin + get_random_double()*(end-begin);
-            }
-
-            double get_random_double (
-            )
-            {
-                uint32 temp;
-
-                temp = drand::get_random_32bit_number();
-                temp &= 0xFFFFFF;
-
-                double val = static_cast<double>(temp);
-
-                val *= 0x1000000;
-
-                temp = drand::get_random_32bit_number();
-                temp &= 0xFFFFFF;
-
-                val += temp;
-
-                val /= max_val;
-
-                if (val < 1.0)
-                {
-                    return val;
-                }
-                else
-                {
-                    // return a value slightly less than 1.0
-                    return 1.0 - std::numeric_limits<double>::epsilon();
-                }
-            }
-
-            float get_random_float (
-            )
-            {
-                uint32 temp;
-
-                temp = drand::get_random_32bit_number();
-                temp &= 0xFFFFFF;
-
-                const float scale = 1.0/0x1000000;
-
-                const float val = static_cast<float>(temp)*scale;
-                if (val < 1.0f)
-                {
-                    return val;
-                }
-                else
-                {
-                    // return a value slightly less than 1.0
-                    return 1.0f - std::numeric_limits<float>::epsilon();
-                }
-            }
-
-            double get_random_gaussian (
-            )
-            {
-                if (has_gaussian)
-                {
-                    has_gaussian = false;
-                    return next_gaussian;
-                }
-
-                double x1, x2, w;
-
-                const double rndmax = std::numeric_limits<unsigned int>::max();
-
-                // Generate a pair of Gaussian random numbers using the Box-Muller transformation.
-                do 
-                {
-                    const double rnd1 = get_random_32bit_number()/rndmax;
-                    const double rnd2 = get_random_32bit_number()/rndmax;
-
-                    x1 = 2.0 * rnd1 - 1.0;
-                    x2 = 2.0 * rnd2 - 1.0;
-                    w = x1 * x1 + x2 * x2;
-                } while ( w >= 1.0 );
-
-                w = std::sqrt( (-2.0 * std::log( w ) ) / w );
-                next_gaussian = x2 * w;
-                has_gaussian = true;
-                return x1 * w;
-            }
-
-            void swap (
-                drand& item
-            )
-            {
-                exchange(mt,item.mt);
-                exchange(seed, item.seed);
-                exchange(has_gaussian, item.has_gaussian);
-                exchange(next_gaussian, item.next_gaussian);
-            }
-    
-            friend void serialize(
-                const drand& item, 
-                std::ostream& out
-            );
-
-            friend void deserialize(
-                drand& item, 
-                std::istream& in 
-            );
-
-        private:
-
-            void init()
-            {
-                // prime the generator a bit
-                for (int i = 0; i < 10000; ++i)
-                    mt();
-
-                max_val =  0xFFFFFF;
-                max_val *= 0x1000000;
-                max_val += 0xFFFFFF;
-                max_val += 0.01;
+            max_val =  0xFFFFFF;
+            max_val *= 0x1000000;
+            max_val += 0xFFFFFF;
+            max_val += 0.01;
 
 
-                has_gaussian = false;
-                next_gaussian = 0;
-            }
+            has_gaussian = false;
+            next_gaussian = 0;
+        }
 
-            mt19937 mt;
+        mt19937 mt;
 
-            std::string seed;
+        std::string seed;
 
 
-            double max_val;
-            bool has_gaussian;
-            double next_gaussian;
-    };
+        double max_val;
+        bool has_gaussian;
+        double next_gaussian;
+};
 
 
 /*
-    static void swap_rand (
-        drand& a, 
-        drand& b 
-    ) { a.swap(b); }   
+static void swap_rand (
+    drand& a, 
+    drand& b 
+) { a.swap(b); }   
 */
 
-    template <>
-    struct is_rand<drand>
-    {
-        static const bool value = true; 
-    };
+template <>
+struct is_rand<drand>
+{
+    static const bool value = true; 
+};
 
-    inline void serialize(
-        const drand& item, 
-        std::ostream& out
-    )
-    {
-        int version = 1;
-        serialize(version, out);
+inline void serialize(
+    const drand& item, 
+    std::ostream& out
+)
+{
+    int version = 1;
+    serialize(version, out);
 
-        serialize(item.mt, out);
-        serialize(item.seed, out);
-        serialize(item.has_gaussian, out);
-        serialize(item.next_gaussian, out);
-    }
+    serialize(item.mt, out);
+    serialize(item.seed, out);
+    serialize(item.has_gaussian, out);
+    serialize(item.next_gaussian, out);
+}
 
-    inline void deserialize(
-        drand& item, 
-        std::istream& in 
-    )
-    {
-        int version;
-        deserialize(version, in);
-        if (version != 1)
-            throw serialization_error("Error deserializing object of type drand: unexpected version."); 
+inline void deserialize(
+    drand& item, 
+    std::istream& in 
+)
+{
+    int version;
+    deserialize(version, in);
+    if (version != 1)
+        throw serialization_error("Error deserializing object of type drand: unexpected version."); 
 
-        deserialize(item.mt, in);
-        deserialize(item.seed, in);
-        deserialize(item.has_gaussian, in);
-        deserialize(item.next_gaussian, in);
-    }
+    deserialize(item.mt, in);
+    deserialize(item.seed, in);
+    deserialize(item.has_gaussian, in);
+    deserialize(item.next_gaussian, in);
+}
 
-//}
 
 
 #endif // DLIB_RAND_KERNEl_1_
