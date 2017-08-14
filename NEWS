@@ -437,3 +437,4 @@ BUGFIXES FROM BUGZILLA:
 417 ==> 383280 - Panorama tool doesn't find autooptimiser from Hugin 2017.0.
 418 ==> 376470 - Title is not refreshed when read again metadata from file is launched [patch].
 419 ==> 
+
