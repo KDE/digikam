@@ -444,5 +444,6 @@ BUGFIXES FROM BUGZILLA:
 424 ==> 221495 - The program crashed unexpectedly.
 425 ==> 211298 - Crash after add geolocalisation via googlemap.
 426 ==> 212239 - When leaving the geo-coordinates modify dialog, digikam crashes.
-427 ==> 
+427 ==> 213815 - digiKam crashes when setting geolocation.
+428 ==> 
 
