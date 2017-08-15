@@ -440,4 +440,5 @@ BUGFIXES FROM BUGZILLA:
 420 ==> 210611 - Geolocation tool add gps data crash after write.
 421 ==> 191351 - digiKam crashes in Ubuntu (NOT Kubuntu) 9.04 when Konqueror removed.
 422 ==> 221117 - digiKam crashes when being closed.
-423 ==> 
+423 ==> 220125 - digiKam crash on exit .
+424 ==> 
