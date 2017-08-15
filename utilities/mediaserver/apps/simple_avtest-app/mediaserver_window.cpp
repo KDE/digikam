@@ -165,7 +165,10 @@ void MediaServerWindow::addRootDirectoriesToServer(const HRootDir& rd)
 
 void MediaServerWindow::saveDirectoriesToDatabase()
 {
-    QFile file(qApp->applicationDirPath().append(QLatin1String("/serverDirectories.dat")));
+
+    QDir dire = qApp->applicationDirPath();
+    dire.cdUp();
+    QFile file(dire.path().append(QLatin1String("/utilities/mediaserver/des/MediaServerDatabase/serverDirectories.dat")));
     file.open(QFile::WriteOnly);
     QDataStream out(&file);
 
@@ -179,7 +182,9 @@ void MediaServerWindow::saveDirectoriesToDatabase()
 
 void MediaServerWindow::loadDirectoriesFromDatabase()
 {
-    QFile file(qApp->applicationDirPath().append(QLatin1String("/serverDirectories.dat")));
+    QDir dire = qApp->applicationDirPath();
+    dire.cdUp();
+    QFile file(dire.path().append(QLatin1String("/utilities/mediaserver/des/MediaServerDatabase/serverDirectories.dat")));
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
     HRootDir dir ;
@@ -194,7 +199,9 @@ void MediaServerWindow::loadDirectoriesFromDatabase()
 
 void MediaServerWindow::saveItemsToDatabase()
 {
-    QFile file(qApp->applicationDirPath().append(QLatin1String("/serverItems.dat")));
+    QDir dire = qApp->applicationDirPath();
+    dire.cdUp();
+    QFile file(dire.path().append(QLatin1String("/utilities/mediaserver/des/MediaServerDatabase/serverItems.dat")));
     file.open(QFile::WriteOnly);
     QDataStream out(&file);
 
@@ -208,7 +215,9 @@ void MediaServerWindow::saveItemsToDatabase()
 
 void MediaServerWindow::loadItemsFromDatabase()
 {
-    QFile file(qApp->applicationDirPath().append(QLatin1String("/serverItems.dat")));
+    QDir dire = qApp->applicationDirPath();
+    dire.cdUp();
+    QFile file(dire.path().append(QLatin1String("/utilities/mediaserver/des/MediaServerDatabase/serverItems.dat")));
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
     QString dir ;
