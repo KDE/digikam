@@ -1,2 +1,5 @@
 1- I generated two mocs myself. one called moc_file.cpp , and the other called moc_file2.cpp . I also added them manually in the cmakelists file
 2- the server icon is an internet url. it doesnot work if it is a relative
+3- install directories for serverItems.dat and serverDirectories.dat , permissions problems
+4- mediaserver flag in cmake
+5- documentation , also dont forget to mention permissions in documentations if not resolved.
