@@ -45,7 +45,6 @@ public:
     QPoint                  sourcePoint;
     QPoint                  destinationStartPoint;
     QPushButton*            src;
-    QPushButton*            start;
     DImg                    currentImg;
 
 };
@@ -89,7 +88,6 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
     // --------------------------------------------------------
     QLabel* const label_src  = new QLabel(i18n("Source:"));
     d->src = new QPushButton(i18n("click to set"), d->gboxSettings->plainPage());
-    d->start = new QPushButton(i18n("start"),d->gboxSettings->plainPage());
 
     // --------------------------------------------------------
 
@@ -98,13 +96,12 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
     QGridLayout* const grid = new QGridLayout( );
     grid->addWidget(label_src,      1, 0, 1, 2);
     grid->addWidget(d->src,         2, 0, 1, 2);
-    grid->addWidget(d->start,       3, 0, 1, 2);
-    grid->addWidget(new DLineWidget(Qt::Horizontal, d->gboxSettings->plainPage()), 5, 0, 1, 2);
-    grid->addWidget(label,          6, 0, 1, 2);
-    grid->addWidget(d->radiusInput, 7, 0, 1, 2);
-    grid->addWidget(label2,         8, 0, 1, 2);
-    grid->addWidget(d->blurPercent, 9, 0, 1, 2);
-    grid->setRowStretch(10, 10);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, d->gboxSettings->plainPage()), 3, 0, 1, 2);
+    grid->addWidget(label,          4, 0, 1, 2);
+    grid->addWidget(d->radiusInput, 5, 0, 1, 2);
+    grid->addWidget(label2,         6, 0, 1, 2);
+    grid->addWidget(d->blurPercent, 7, 0, 1, 2);
+    grid->setRowStretch(8, 8);
     grid->setContentsMargins(spacing, spacing, spacing, spacing);
     grid->setSpacing(spacing);
     d->gboxSettings->plainPage()->setLayout(grid);
@@ -179,19 +176,6 @@ void HealingCloneTool::slotRadiusChanged(int r)
 {
     d->previewWidget->setMaskPenSize(r);
 }
-
-
-// the preview idea
-    //DImg img = d->previewWidget->ge getOriginalRegionImage();
-    //ImageIface* iface        = d->previewWidget->imageIface();
-    //iface->setPreview((*iface->original()).smoothScale(iface->previewSize()));
-
-    //
-    //DImg preview = filter()->getTargetImage();
-    //ImageIface* iface        = d->previewWidget->imageIface();
-    //iface->setPreview(*iface->original());
-
-
 
 void HealingCloneTool::clone(DImg * const img, QPoint &srcPoint, QPoint &dstPoint, int radius)
 {
