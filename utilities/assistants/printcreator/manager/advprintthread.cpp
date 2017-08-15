@@ -60,7 +60,7 @@ void AdvPrintThread::preparePrint(AdvPrintSettings* const settings, int sizeInde
     connect(t, SIGNAL(signalMessage(QString, bool)),
             this, SIGNAL(signalMessage(QString, bool)));
 
-    collection.insert(t, 1);
+    collection.insert(t, 0);
 
     appendJobs(collection);
 }
@@ -81,7 +81,7 @@ void AdvPrintThread::print(AdvPrintSettings* const settings)
     connect(t, SIGNAL(signalMessage(QString, bool)),
             this, SIGNAL(signalMessage(QString, bool)));
 
-    collection.insert(t, 1);
+    collection.insert(t, 0);
 
     appendJobs(collection);
 }
@@ -106,7 +106,7 @@ void AdvPrintThread::preview(AdvPrintSettings* const settings, const QSize& size
     connect(t, SIGNAL(signalPreview(QImage)),
             this, SIGNAL(signalPreview(QImage)));
 
-    collection.insert(t, 1);
+    collection.insert(t, 0);
 
     appendJobs(collection);
 }
