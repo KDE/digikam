@@ -108,7 +108,7 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
 
     // --------------------------------------------------------
 
-    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    setPreviewModeMask(PreviewToolBar::PreviewTargetImage);
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
 
