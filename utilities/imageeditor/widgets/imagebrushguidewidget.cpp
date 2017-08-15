@@ -13,14 +13,20 @@ void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
         released = false;
         qDebug() << "MOOOOOVE The location is: " << e->x() << ", "<< e->y();
         QPoint currentDst = QPoint(e->x(),e->y());
-        setSpotPosition(src.x() + currentDst.x() - dst.x(), src.y() + currentDst.y() - dst.y());
+        //updateSpotPosition(src.x() + currentDst.x() - dst.x(), src.y() + currentDst.y() - dst.y());
         currentDst = translateImagePosition(currentDst, false);
         QPoint currentSrc = translateImagePosition(src, true);
         QPoint orgDst = translateImagePosition(dst, false);
         currentSrc = QPoint(currentSrc.x() + currentDst.x() - orgDst.x(), currentSrc.y() + currentDst.y() - orgDst.y());
         //QPoint spotSrc = translateImagePosition(currentSrc, true);
-        //setSpotPosition(spotSrc.x(), spotSrc.y());
+        setSpotPosition(currentSrc);
+        //updateSpotPosition(src.x() + currentDst.x() - orgDst.x(), src.y() + currentDst.y() - orgDst.y());
+
         emit signalClone(currentSrc, currentDst);
+    }
+    if(!srcSet)
+    {
+        ImageGuideWidget::mouseMoveEvent(e);
     }
 }
 
@@ -28,7 +34,8 @@ void ImageBrushGuideWidget::mouseReleaseEvent(QMouseEvent* e)
 {
     if(srcSet)
     {
-        setSpotPosition(src.x(),src.y());
+        QPoint p = translatePointPosition(src);
+        setSpotPosition(p);
     }else{
         ImageGuideWidget::mouseReleaseEvent(e);
     }

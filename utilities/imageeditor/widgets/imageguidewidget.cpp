@@ -837,15 +837,18 @@ void ImageGuideWidget::updateMaskCursor()
     d->maskCursor = QCursor(pix);
 }
 
-void ImageGuideWidget::setSpotPosition(int x, int y)
+void ImageGuideWidget::setSpotPosition(QPoint &point)
 {
-    d->spot.setX((int)(x*(float)d->preview.width() / (float)d->iface->originalSize().width()));
-    d->spot.setY((int)(y*(float)d->preview.height() /(float)d->iface->originalSize().height()));
+    d->spot.setX(point.x());
+    d->spot.setY(point.y());
     updatePreview();
 }
 
 void ImageGuideWidget::updateSpotPosition(int x, int y)
 {
+    QPoint origin = d->rect.topLeft();
+    x -= origin.x();
+    y -= origin.y();
     d->spot.setX(x);
     d->spot.setY(y);
     updatePreview();
