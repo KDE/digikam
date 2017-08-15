@@ -488,4 +488,7 @@ BUGFIXES FROM BUGZILLA:
 468 ==> 216137 - digiKam geolocation editor crash.
 469 ==> 226558 - digiKam crashes when exiting program.
 470 ==> 183582 - Crash when trying to geolocate photographs after canceling empty map window.
-471 ==> 
+471 ==> 376681 - Region Coordinates Are Sometimes inf / Large Numbers.
+472 ==> 326538 - When a picture is in portrait, face thumbnails are not rotated.
+473 ==> 381378 - Face rectangle from XMP sidecar drawn incorrectly for EXIF rotated images.
+474 ==> 
