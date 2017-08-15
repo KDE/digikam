@@ -445,5 +445,47 @@ BUGFIXES FROM BUGZILLA:
 425 ==> 211298 - Crash after add geolocalisation via googlemap.
 426 ==> 212239 - When leaving the geo-coordinates modify dialog, digikam crashes.
 427 ==> 213815 - digiKam crashes when setting geolocation.
-428 ==> 
+428 ==> 212326 - digiKam crashes when closing.
+429 ==> 210536 - digiKam crashes when cannot access camera.
+430 ==> 218127 - digiKam exit crash (amd64).
+431 ==> 212531 - Closing the digiKam application.
+432 ==> 210202 - digiKam crash after writing geolocation info on files.
+433 ==> 210895 - Switching app leaves left 2 vertical lines of the thumbail frame, closing digiKam crashes.
+434 ==> 216760 - digiKam crashed while idle.
+435 ==> 165370 - Crash when saving geocoordinates.
+436 ==> 242400 - digiKam crashes on startup.
+437 ==> 211730 - digiKam crashes when closing the application.
+438 ==> 214102 - digiKam crashes on geo info manipulation.
+439 ==> 211568 - Crash (sig11) when exiting digiKam.
+440 ==> 215708 - digiKam crash while updating sqlite database.
+441 ==> 210361 - digiKam crashes on exit.
+442 ==> 213911 - Crash after trying to modify gps coordinates.
+443 ==> 211138 - Regular crushes when closing digiKam.
+444 ==> 221453 - geotag window resize caused crash.
+445 ==> 216619 - Crash when setting geolocation coordinates.
+446 ==> 214993 - digiKam crash after closing it.
+447 ==> 210378 - When closing digikam by clicking the "x" in the window topbar, digikam crashes.
+448 ==> 207638 - digiKam crashes when i close it.
+449 ==> 211174 - SEGV Crash using Geolocation editor.
+450 ==> 217362 - digiKam create crashreport everytime I close it.
+451 ==> 212294 - digiKam crash on quit.
+452 ==> 211027 - digiKam crash chiusura applicazione.
+453 ==> 217506 - digiKam crash when editing coordinates.
+454 ==> 211350 - closing digiKam causes crash.
+455 ==> 210816 - digiKam crash after normal closing.
+456 ==> 212806 - digiKam crashes at program shutdown.
+457 ==> 213707 - Crash right after quitting digiKam.
+458 ==> 217810 - digiKam crash upon closure.
+459 ==> 213843 - Everytime I close digiKam I get this crash however so far everything is working fine with the program.
+460 ==> 210350 - Crash when editing geolocation.
+461 ==> 211623 - Crash: update gps data.
+462 ==> 210512 - This crash report was generated after normal closing digiKam.
+463 ==> 
+464 ==> 
+465 ==> 
+466 ==> 
+467 ==> 
+468 ==> 
+469 ==> 
+470 ==> 
 
