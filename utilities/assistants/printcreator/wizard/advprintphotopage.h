@@ -54,12 +54,11 @@ public:
     explicit AdvPrintPhotoPage(QWizard* const wizard, const QString& title);
     ~AdvPrintPhotoPage();
 
-    QPrinter*             printer()      const;
-    DImagesList*          imagesList()   const;
-    Ui_AdvPrintPhotoPage* ui()           const;
-    bool                  isComplete()   const;
-    int                   getPageCount() const;
-    QRect*                getLayout(int) const;
+    QPrinter*             printer()           const;
+    DImagesList*          imagesList()        const;
+    Ui_AdvPrintPhotoPage* ui()                const;
+    bool                  isComplete()        const;
+    int                   getPageCount()      const;
 
     void initializePage();
     bool validatePage();

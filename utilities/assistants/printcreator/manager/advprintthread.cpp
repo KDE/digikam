@@ -42,11 +42,14 @@ AdvPrintThread::~AdvPrintThread()
     wait();
 }
 
-void AdvPrintThread::print(AdvPrintSettings* const settings)
+void AdvPrintThread::preparePrint(AdvPrintSettings* const settings, int sizeIndex)
 {
     ActionJobCollection collection;
 
-    AdvPrintTask* const t = new AdvPrintTask(settings, AdvPrintTask::PRINT);
+    AdvPrintTask* const t = new AdvPrintTask(settings,
+                                             AdvPrintTask::PREPAREPRINT,
+                                             QSize(),
+                                             sizeIndex);
 
     connect(t, SIGNAL(signalProgress(int)),
             this, SIGNAL(signalProgress(int)));
@@ -57,7 +60,28 @@ void AdvPrintThread::print(AdvPrintSettings* const settings)
     connect(t, SIGNAL(signalMessage(QString, bool)),
             this, SIGNAL(signalMessage(QString, bool)));
 
-    collection.insert(t, 0);
+    collection.insert(t, 1);
+
+    appendJobs(collection);
+}
+
+void AdvPrintThread::print(AdvPrintSettings* const settings)
+{
+    ActionJobCollection collection;
+
+    AdvPrintTask* const t = new AdvPrintTask(settings,
+                                             AdvPrintTask::PRINT);
+
+    connect(t, SIGNAL(signalProgress(int)),
+            this, SIGNAL(signalProgress(int)));
+
+    connect(t, SIGNAL(signalDone(bool)),
+            this, SIGNAL(signalDone(bool)));
+
+    connect(t, SIGNAL(signalMessage(QString, bool)),
+            this, SIGNAL(signalMessage(QString, bool)));
+
+    collection.insert(t, 1);
 
     appendJobs(collection);
 }
@@ -66,7 +90,9 @@ void AdvPrintThread::preview(AdvPrintSettings* const settings, const QSize& size
 {
     ActionJobCollection collection;
 
-    AdvPrintTask* const t = new AdvPrintTask(settings, AdvPrintTask::PREVIEW, size);
+    AdvPrintTask* const t = new AdvPrintTask(settings,
+                                             AdvPrintTask::PREVIEW,
+                                             size);
 
     connect(t, SIGNAL(signalProgress(int)),
             this, SIGNAL(signalProgress(int)));
@@ -80,7 +106,7 @@ void AdvPrintThread::preview(AdvPrintSettings* const settings, const QSize& size
     connect(t, SIGNAL(signalPreview(QImage)),
             this, SIGNAL(signalPreview(QImage)));
 
-    collection.insert(t, 0);
+    collection.insert(t, 1);
 
     appendJobs(collection);
 }

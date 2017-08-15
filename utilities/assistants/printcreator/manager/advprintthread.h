@@ -43,6 +43,7 @@ public:
     explicit AdvPrintThread(QObject* const parent);
     ~AdvPrintThread();
 
+    void preparePrint(AdvPrintSettings* const settings, int sizeIndex);
     void print(AdvPrintSettings* const settings);
     void preview(AdvPrintSettings* const settings, const QSize& size);
 

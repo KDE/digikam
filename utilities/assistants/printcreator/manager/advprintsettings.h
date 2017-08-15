@@ -98,8 +98,9 @@ public:
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
-    QString format()               const;
-    QString outputName(Output out) const;
+    QString format()                                 const;
+    QString outputName(Output out)                   const;
+    QRect*  getLayout(int photoIndex, int sizeIndex) const;
 
     // Helper methods to fill combobox from GUI.
     static QMap<Output,      QString> outputNames();
