@@ -146,6 +146,20 @@ void HealingCloneTool::writeSettings()
     config->sync();
 }
 
+void HealingCloneTool::finalRendering()
+{
+    //qApp->setOverrideCursor( Qt::WaitCursor );
+
+    ImageIface iface;
+    DImg dest = d->previewWidget->imageIface()->preview();
+
+    FilterAction action(QLatin1String("digikam:healingCloneTool"), 1);
+
+    iface.setOriginal(i18n("healingClone"), action, dest);
+
+    //qApp->restoreOverrideCursor();
+}
+
 void HealingCloneTool::slotResetSettings()
 {
     d->radiusInput->blockSignals(true);
@@ -181,12 +195,19 @@ void HealingCloneTool::slotRadiusChanged(int r)
 
 void HealingCloneTool::clone(DImg * const img, QPoint &srcPoint, QPoint &dstPoint, int radius)
 {
+    double blurPercent = d->blurPercent->value()/100;
     for(int i = -1* radius; i < radius; i++){
         for(int j = -1* radius; j < radius; j++){
-            if ((i*i) + (j*j) < (radius * radius)) // Check for inside the circle
+            int rPercent = (i*i) + (j*j);
+            if (rPercent < (radius * radius)) // Check for inside the circle
             {
-                DColor c = img->getPixelColor(srcPoint.x()+i, srcPoint.y()+j);
-                img->setPixelColor(dstPoint.x()+i, dstPoint.y()+j, c);
+                double rP = blurPercent * rPercent/(radius * radius);
+                DColor cSrc = img->getPixelColor(srcPoint.x()+i, srcPoint.y()+j);
+                DColor cDst = img->getPixelColor(dstPoint.x()+i, dstPoint.y()+j);
+                cSrc.multiply(1 - rP);
+                cDst.multiply(rP);
+                cSrc.blendAdd(cDst);
+                img->setPixelColor(dstPoint.x()+i, dstPoint.y()+j, cSrc);
 
             }
         }

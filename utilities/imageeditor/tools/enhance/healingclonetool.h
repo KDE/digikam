@@ -52,7 +52,7 @@ public Q_SLOTS:
 private:
     void readSettings();
     void writeSettings();
-
+    void finalRendering();
     void clone(DImg * const img, QPoint &srcPoint, QPoint &dstPoint, int radius);
 
 private:

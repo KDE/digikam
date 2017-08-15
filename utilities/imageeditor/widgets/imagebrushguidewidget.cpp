@@ -21,7 +21,6 @@ void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
         //QPoint spotSrc = translateImagePosition(currentSrc, true);
         setSpotPosition(currentSrc);
         //updateSpotPosition(src.x() + currentDst.x() - orgDst.x(), src.y() + currentDst.y() - orgDst.y());
-
         emit signalClone(currentSrc, currentDst);
     }
     if(!srcSet)
