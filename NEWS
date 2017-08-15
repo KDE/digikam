@@ -480,12 +480,12 @@ BUGFIXES FROM BUGZILLA:
 460 ==> 210350 - Crash when editing geolocation.
 461 ==> 211623 - Crash: update gps data.
 462 ==> 210512 - This crash report was generated after normal closing digiKam.
-463 ==> 
-464 ==> 
-465 ==> 
-466 ==> 
-467 ==> 
-468 ==> 
-469 ==> 
-470 ==> 
-
+463 ==> 327377 - SCAN : upgrade to 3.5.0 caused loss of collection, re-adding caused loss of tags.
+464 ==> 223969 - Crash when closing the Track list Editor.
+465 ==> 175316 - digiKam crashes when trying to enter gps data.
+466 ==> 159570 - Gpssync crashes when the google maps URL cannot be rendered.
+467 ==> 210577 - digiKam ever crash when editing GPS Coordinates.
+468 ==> 216137 - digiKam geolocation editor crash.
+469 ==> 226558 - digiKam crashes when exiting program.
+470 ==> 183582 - Crash when trying to geolocate photographs after canceling empty map window.
+471 ==> 
