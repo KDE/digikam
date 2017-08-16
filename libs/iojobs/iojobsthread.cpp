@@ -81,7 +81,7 @@ void IOJobsThread::copy(const QList<QUrl>& srcFiles, const QUrl destAlbum)
 
         connectOneJob(j);
 
-        collection.insert(j, 5);
+        collection.insert(j, 0);
         d->jobsCount++;
     }
 
@@ -98,7 +98,7 @@ void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
 
         connectOneJob(j);
 
-        collection.insert(j, 5);
+        collection.insert(j, 0);
         d->jobsCount++;
     }
 
@@ -115,7 +115,7 @@ void IOJobsThread::deleteFiles(const QList<QUrl>& srcsToDelete, bool useTrash)
 
         connectOneJob(j);
 
-        collection.insert(j, 5);
+        collection.insert(j, 0);
         d->jobsCount++;
     }
 
@@ -134,7 +134,7 @@ void IOJobsThread::listDTrashItems(const QString& collectionPath)
     connect(j, SIGNAL(signalDone()),
             this, SIGNAL(finished()));
 
-    collection.insert(j, 5);
+    collection.insert(j, 0);
     d->jobsCount++;
 
     appendJobs(collection);
@@ -195,7 +195,7 @@ void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
     d->isRenameThread = true;
     d->oldUrl         = srcToRename;
 
-    collection.insert(j, 5);
+    collection.insert(j, 0);
     d->jobsCount++;
 
     appendJobs(collection);

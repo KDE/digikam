@@ -436,5 +436,64 @@ BUGFIXES FROM BUGZILLA:
 416 ==> 263355 - digiKam terminates and crashes sometimes when entering a description for an image.
 417 ==> 383280 - Panorama tool doesn't find autooptimiser from Hugin 2017.0.
 418 ==> 376470 - Title is not refreshed when read again metadata from file is launched [patch].
+<<<<<<< HEAD
 419 ==> 381743 - cpfind doesn.t work: couldn't parse panos tool script: pano_base.pto.
 420 ==> 
+=======
+419 ==> 211831 - digiKam crashes at exit, after first start.
+420 ==> 210611 - Geolocation tool add gps data crash after write.
+421 ==> 191351 - digiKam crashes in Ubuntu (NOT Kubuntu) 9.04 when Konqueror removed.
+422 ==> 221117 - digiKam crashes when being closed.
+423 ==> 220125 - digiKam crash on exit .
+424 ==> 221495 - The program crashed unexpectedly.
+425 ==> 211298 - Crash after add geolocalisation via googlemap.
+426 ==> 212239 - When leaving the geo-coordinates modify dialog, digikam crashes.
+427 ==> 213815 - digiKam crashes when setting geolocation.
+428 ==> 212326 - digiKam crashes when closing.
+429 ==> 210536 - digiKam crashes when cannot access camera.
+430 ==> 218127 - digiKam exit crash (amd64).
+431 ==> 212531 - Closing the digiKam application.
+432 ==> 210202 - digiKam crash after writing geolocation info on files.
+433 ==> 210895 - Switching app leaves left 2 vertical lines of the thumbail frame, closing digiKam crashes.
+434 ==> 216760 - digiKam crashed while idle.
+435 ==> 165370 - Crash when saving geocoordinates.
+436 ==> 242400 - digiKam crashes on startup.
+437 ==> 211730 - digiKam crashes when closing the application.
+438 ==> 214102 - digiKam crashes on geo info manipulation.
+439 ==> 211568 - Crash (sig11) when exiting digiKam.
+440 ==> 215708 - digiKam crash while updating sqlite database.
+441 ==> 210361 - digiKam crashes on exit.
+442 ==> 213911 - Crash after trying to modify gps coordinates.
+443 ==> 211138 - Regular crushes when closing digiKam.
+444 ==> 221453 - geotag window resize caused crash.
+445 ==> 216619 - Crash when setting geolocation coordinates.
+446 ==> 214993 - digiKam crash after closing it.
+447 ==> 210378 - When closing digikam by clicking the "x" in the window topbar, digikam crashes.
+448 ==> 207638 - digiKam crashes when i close it.
+449 ==> 211174 - SEGV Crash using Geolocation editor.
+450 ==> 217362 - digiKam create crashreport everytime I close it.
+451 ==> 212294 - digiKam crash on quit.
+452 ==> 211027 - digiKam crash chiusura applicazione.
+453 ==> 217506 - digiKam crash when editing coordinates.
+454 ==> 211350 - closing digiKam causes crash.
+455 ==> 210816 - digiKam crash after normal closing.
+456 ==> 212806 - digiKam crashes at program shutdown.
+457 ==> 213707 - Crash right after quitting digiKam.
+458 ==> 217810 - digiKam crash upon closure.
+459 ==> 213843 - Everytime I close digiKam I get this crash however so far everything is working fine with the program.
+460 ==> 210350 - Crash when editing geolocation.
+461 ==> 211623 - Crash: update gps data.
+462 ==> 210512 - This crash report was generated after normal closing digiKam.
+463 ==> 327377 - SCAN : upgrade to 3.5.0 caused loss of collection, re-adding caused loss of tags.
+464 ==> 223969 - Crash when closing the Track list Editor.
+465 ==> 175316 - digiKam crashes when trying to enter gps data.
+466 ==> 159570 - Gpssync crashes when the google maps URL cannot be rendered.
+467 ==> 210577 - digiKam ever crash when editing GPS Coordinates.
+468 ==> 216137 - digiKam geolocation editor crash.
+469 ==> 226558 - digiKam crashes when exiting program.
+470 ==> 183582 - Crash when trying to geolocate photographs after canceling empty map window.
+471 ==> 376681 - Region Coordinates Are Sometimes inf / Large Numbers.
+472 ==> 326538 - When a picture is in portrait, face thumbnails are not rotated.
+473 ==> 381378 - Face rectangle from XMP sidecar drawn incorrectly for EXIF rotated images.
+474 ==> 
+>>>>>>> 9b154ceeecb732ecb97d6900ab0841e643639f4e

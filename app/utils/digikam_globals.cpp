@@ -80,7 +80,9 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
 
     bool tiff = false;
     bool jpeg = false;
+#ifdef HAVE_JASPER
     bool jp2k = false;
+#endif // HAVE_JASPER
 
     Q_FOREACH(const QByteArray& frm, supported)
     {
