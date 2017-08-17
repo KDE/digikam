@@ -518,4 +518,5 @@ BUGFIXES FROM BUGZILLA:
 498 ==> 255679 - digiKam add tag auto apply.
 499 ==> 233116 - Crash when saving PNG (from RAW NEF).
 500 ==> 232271 - Crash when adding tag information.
-501 ==> 
+501 ==> 372482 - Empty album view during thumbnails re-creation.
+502 ==> 
