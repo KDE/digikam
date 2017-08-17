@@ -161,6 +161,7 @@
       <li xml:lang="ca-valencia">Emmagatzematge basat en SQLite o Mysql per als continguts dels àlbums i les seues metadades amb eines de busca avançades</li>
       <li xml:lang="cs">Ukládání informace o albech do databáze založené na SQLite nebo MySQL s pokročilými vyhledávacími nástroji</li>
       <li xml:lang="es">Almacenamiento basado en SQLite o Mysql para los álbumes y sus metadatos con herramientas de búsqueda avanzadas</li>
+      <li xml:lang="it">Memorizzazione del contenuto degli album e dei suoi metadati fornita da SQLite o Mysql, con strumenti di ricerca avanzati</li>
       <li xml:lang="nl">Op SQLite of Mysql gebaseerde opslag voor de inhoud van albums en zijn metagegevens met geavanceerde zoekhulpmiddellen</li>
       <li xml:lang="pt">Armazenamento baseado em SQLite ou MySQL para o conteúdo dos álbuns e os seus meta-dados com ferramentas de pesquisa avançadas</li>
       <li xml:lang="sv">Lagring driven av SQLite eller MySQL för album och deras metadata med avancerade sökverktyg</li>
@@ -221,6 +222,7 @@
       <li xml:lang="ca-valencia">Admet més de 900 formats d'imatge RAW</li>
       <li xml:lang="cs">Podpora více než 900 obrázků ve formátu RAW</li>
       <li xml:lang="es">Permite imágenes en más de 900 formatos RAW</li>
+      <li xml:lang="it">Supporto per più di 900 immagini in formato RAW</li>
       <li xml:lang="nl">Ondersteuning voor 900 RAW-format afbeeldingen</li>
       <li xml:lang="pt">Suporte para mais de 900 formatos de imagens RAW</li>
       <li xml:lang="sv">Stöd för 900 obehandlade bildformat</li>
@@ -231,6 +233,7 @@
       <li xml:lang="ca-valencia">Taula de llum per comparar fotos costat a costat</li>
       <li xml:lang="cs">Prohlížecí stolek pro porovnání fotografií vedle sebe</li>
       <li xml:lang="es">Mesa de luz para comparar fotos una junto a otra</li>
+      <li xml:lang="it">Tavolo luminoso per confrontare le foto fianco a fianco</li>
       <li xml:lang="nl">Lichttafel om foto's naast elkaar te vergelijken</li>
       <li xml:lang="pt">Mesa de Luz para comparar as fotografias lado-a-lado</li>
       <li xml:lang="sv">Ljusbord för att jämföra foton sida vid sida</li>
@@ -241,6 +244,7 @@
       <li xml:lang="ca-valencia">Funcionalitats ampliades usant eines extres</li>
       <li xml:lang="cs">Rozšířené vlastnosti pomocí extra nástrojů</li>
       <li xml:lang="es">Funciones extendidas mediante herramientas adicionales</li>
+      <li xml:lang="it">Funzionalità estese tramite strumenti aggiuntivi</li>
       <li xml:lang="nl">Uitgebreide mogelijkheden met extra hulpmiddelen</li>
       <li xml:lang="pt">Funcionalidades estendidas com ferramentas extra</li>
       <li xml:lang="sv">Utökade funktioner med användning av extra verktyg</li>
@@ -251,6 +255,7 @@
       <li xml:lang="ca-valencia">Compartiu les vostres fotografies usant HTML o publicant-les serveis web remots</li>
       <li xml:lang="cs">Sdílení fotografií vytvořením HTML galerie nebo přímým publikováním na vzdálených webových službách</li>
       <li xml:lang="es">Compartir fotos usando HTML o publicándolas en servicios web remotos</li>
+      <li xml:lang="it">Condivisione delle foto tramite HTML o loro pubblicazione nei servizi web remoti</li>
       <li xml:lang="nl">Uw foto's delen met HTML of ze publiceren op websites op afstand</li>
       <li xml:lang="pt">Partilhar as suas fotos por HTML ou publicá-las em serviços Web remotos</li>
       <li xml:lang="sv">Dela foton genom att använda HTML eller publicera dem på webbtjänster</li>
@@ -261,6 +266,7 @@
       <li xml:lang="ca-valencia">Inclou un editor d'imatges amb eines avançades per esmenar ràpidament les fotos</li>
       <li xml:lang="cs">Editor obrázků zahrnutý v pokročilých nástrojích pro rychlé opravy fotek</li>
       <li xml:lang="es">Editor de imágenes incluido con herramientas avanzadas para corregir las fotos de forma rápida</li>
+      <li xml:lang="it">Editor delle immagini con strumenti avanzati inclusi per la correzione rapida delle foto</li>
       <li xml:lang="nl">Bewerker van afbeeldingen met geavanceerde hulpmiddelen om foto's snel te repareren</li>
       <li xml:lang="pt">Editor de imagens que inclui ferramentas avançadas para corrigir rapidamente as fotografias</li>
       <li xml:lang="sv">Bildeditor med avancerade funktioner ingår för att snabbt förbättra foton</li>
