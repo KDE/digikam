@@ -519,4 +519,6 @@ BUGFIXES FROM BUGZILLA:
 499 ==> 233116 - Crash when saving PNG (from RAW NEF).
 500 ==> 232271 - Crash when adding tag information.
 501 ==> 372482 - Empty album view during thumbnails re-creation.
-502 ==> 
+502 ==> 383646 - Store facetag information in the photo file.
+503 ==> 
+
