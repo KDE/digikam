@@ -46,18 +46,19 @@ HuginExecutorTask::~HuginExecutorTask()
 
 void HuginExecutorTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
+    panoUrl = tmpDir;
     QFileInfo fi(ptoUrl.toLocalFile());
 
     switch (fileType)
     {
         case JPEG:
-            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".jpg")));
+            panoUrl.setPath(panoUrl.path() + fi.completeBaseName() + QLatin1String(".jpg"));
             break;
         case TIFF:
-            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".tif")));
+            panoUrl.setPath(panoUrl.path() + fi.completeBaseName() + QLatin1String(".tif"));
             break;
         case HDR:
-            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".hdr")));
+            panoUrl.setPath(panoUrl.path() + fi.completeBaseName() + QLatin1String(".hdr"));
             break;
     }
 

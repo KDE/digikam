@@ -367,6 +367,17 @@ void FaceGroup::aboutToSetInfo(const ImageInfo& info)
     clear();
 }
 
+void FaceGroup::aboutToSetInfoAfterRotate(const ImageInfo& info)
+{
+    if (d->info == info)
+    {
+        return;
+    }
+
+    //applyItemGeometryChanges();
+    clear();
+}
+
 static QPointF closestPointOfRect(const QPointF& p, const QRectF& r)
 {
     QPointF cp = p;

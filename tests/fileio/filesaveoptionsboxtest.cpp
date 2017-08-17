@@ -49,7 +49,9 @@ void FileSaveOptionsBoxTest::testDiscoverFormat_data()
     QTest::newRow("bla.tiff.jpeg") << "bla.tiff.jpeg" << (int) DImg::JPEG;
     QTest::newRow("bla.jpg.tiff") << "bla.jpg.tiff" << (int) DImg::TIFF;
 
+#ifdef HAVE_JASPER
     QTest::newRow("bla.png.jpeg.pgx") << "bla.png.jpeg.pgx" << (int) DImg::JP2K;
+#endif // HAVE_JASPER
 
     QTest::newRow("pgf") << "PGF" << (int) DImg::PGF;
 
