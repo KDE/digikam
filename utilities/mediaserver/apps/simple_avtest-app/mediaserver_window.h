@@ -95,8 +95,13 @@ protected:
 public:
 
     MediaServerWindow(QWidget* parent = 0);
+    void initRequiredDirectories();
     static bool deletedFlag;
     virtual ~MediaServerWindow();
+
+    static const QString serverDatabasePath;
+    static const QString serverDescriptionPath;
+
 
 Q_SIGNALS:
 

@@ -50,6 +50,10 @@ using namespace Herqq::Upnp::Av;
  *******************************************************************************/
 
 
+const QString MediaServerWindow::serverDatabasePath(QDir::homePath() + QLatin1String("/.digikam_dlna/database/"));
+const QString MediaServerWindow::serverDescriptionPath(QDir::homePath() + QLatin1String("/.digikam_dlna/descriptions/"));
+
+
 MediaServerWindow::MediaServerWindow(QWidget *parent) :
     QMainWindow(parent),
         m_ui(new Ui::MediaServerWindow), m_deviceHost(0),
@@ -80,9 +84,8 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
 
     // 5) Setup the HDeviceHost with desired configuration info.
     HDeviceConfiguration config;
-    QDir dir = qApp->applicationDirPath();
-    dir.cdUp();
-    QString deviceDescriptionPath = dir.path().append(QLatin1String("/utilities/mediaserver/des/descriptions/herqq_mediaserver_description.xml"));
+
+    QString deviceDescriptionPath = serverDescriptionPath + QLatin1String("herqq_mediaserver_description.xml");
     qDebug() << "APP PATH" << deviceDescriptionPath;
     config.setPathToDeviceDescription(deviceDescriptionPath);
     config.setCacheControlMaxAge(180);
@@ -98,6 +101,10 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
         Q_ASSERT_X(false, "",  m_deviceHost->errorDescription().toLocal8Bit().constData());
     }
 
+    // init database storage path
+    initRequiredDirectories();
+
+    // load previously saved data
     loadDirectoriesFromDatabase();
     loadItemsFromDatabase();
 
@@ -111,6 +118,28 @@ MediaServerWindow::~MediaServerWindow()
     saveItemsToDatabase();
     delete m_ui;
     delete m_datasource;
+}
+
+void MediaServerWindow::initRequiredDirectories()
+{
+    if (!QDir(serverDatabasePath).exists())
+    {
+        if (QDir().mkpath(serverDatabasePath))
+        {
+            QFile f(serverDatabasePath);
+            f.setPermissions(QFile::ReadUser | QFile::WriteUser | QFile::ExeUser); // 0700
+        }
+    }
+
+    if (!QDir(serverDescriptionPath).exists())
+    {
+        if (QDir().mkpath(serverDescriptionPath))
+        {
+            QFile f(serverDescriptionPath);
+            f.setPermissions(QFile::ReadUser | QFile::WriteUser | QFile::ExeUser); // 0700
+        }
+    }
+
 }
 
 void MediaServerWindow::changeEvent(QEvent* e)
@@ -165,10 +194,7 @@ void MediaServerWindow::addRootDirectoriesToServer(const HRootDir& rd)
 
 void MediaServerWindow::saveDirectoriesToDatabase()
 {
-
-    QDir dire = qApp->applicationDirPath();
-    dire.cdUp();
-    QFile file(dire.path().append(QLatin1String("/utilities/mediaserver/des/MediaServerDatabase/serverDirectories.dat")));
+    QFile file(serverDatabasePath + (QLatin1String("serverDirectories.dat")));
     file.open(QFile::WriteOnly);
     QDataStream out(&file);
 
@@ -182,9 +208,7 @@ void MediaServerWindow::saveDirectoriesToDatabase()
 
 void MediaServerWindow::loadDirectoriesFromDatabase()
 {
-    QDir dire = qApp->applicationDirPath();
-    dire.cdUp();
-    QFile file(dire.path().append(QLatin1String("/utilities/mediaserver/des/MediaServerDatabase/serverDirectories.dat")));
+    QFile file(serverDatabasePath + (QLatin1String("serverDirectories.dat")));
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
     HRootDir dir ;
@@ -199,9 +223,8 @@ void MediaServerWindow::loadDirectoriesFromDatabase()
 
 void MediaServerWindow::saveItemsToDatabase()
 {
-    QDir dire = qApp->applicationDirPath();
-    dire.cdUp();
-    QFile file(dire.path().append(QLatin1String("/utilities/mediaserver/des/MediaServerDatabase/serverItems.dat")));
+
+    QFile file(serverDatabasePath + (QLatin1String("serverItems.dat")));
     file.open(QFile::WriteOnly);
     QDataStream out(&file);
 
@@ -215,9 +238,8 @@ void MediaServerWindow::saveItemsToDatabase()
 
 void MediaServerWindow::loadItemsFromDatabase()
 {
-    QDir dire = qApp->applicationDirPath();
-    dire.cdUp();
-    QFile file(dire.path().append(QLatin1String("/utilities/mediaserver/des/MediaServerDatabase/serverItems.dat")));
+
+    QFile file(serverDatabasePath + (QLatin1String("serverItems.dat")));
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
     QString dir ;

@@ -287,8 +287,5 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
 add_library(mediaserver_src OBJECT ${libmediaserver_SRCS})
 
 
-file(COPY descriptions DESTINATION des)
-file(COPY MediaServerDatabase DESTINATION des)
-
-install(DIRECTORY descriptions DESTINATION ${CMAKE_INSTALL_PREFIX}/utilities/mediaserver/des)
-install(DIRECTORY MediaServerDatabase DESTINATION ${CMAKE_INSTALL_PREFIX}/utilities/mediaserver/des)
+file(COPY descriptions DESTINATION $ENV{HOME}/.digikam_dlna)
+install(DIRECTORY descriptions DESTINATION $ENV{HOME}/.digikam_dlna)
