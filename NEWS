@@ -522,4 +522,5 @@ BUGFIXES FROM BUGZILLA:
 502 ==> 383646 - Store facetag information in the photo file.
 503 ==> 381605 - Importing large image collection slows down to unacceptable speed.
 504 ==> 374313 - Wrong icon usage revisited [patch].
-505 ==> 
+505 ==> 247793 - Add Color Management support to image Viewer.
+506 ==> 
