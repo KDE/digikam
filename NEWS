@@ -525,4 +525,5 @@ BUGFIXES FROM BUGZILLA:
 505 ==> 247793 - Add Color Management support to image Viewer.
 506 ==> 231321 - Allow to rate items with image viewer.
 507 ==> 290931 - Allow to delete items in image viewer.
-508 ==> 
+508 ==> 221458 - Resizing the geotag window causes crash.
+509 ==> 
