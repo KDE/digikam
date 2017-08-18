@@ -523,4 +523,5 @@ BUGFIXES FROM BUGZILLA:
 503 ==> 381605 - Importing large image collection slows down to unacceptable speed.
 504 ==> 374313 - Wrong icon usage revisited [patch].
 505 ==> 247793 - Add Color Management support to image Viewer.
-506 ==> 
+506 ==> 231321 - Allow to rate items with image viewer.
+507 ==> 
