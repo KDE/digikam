@@ -520,5 +520,5 @@ BUGFIXES FROM BUGZILLA:
 500 ==> 232271 - Crash when adding tag information.
 501 ==> 372482 - Empty album view during thumbnails re-creation.
 502 ==> 383646 - Store facetag information in the photo file.
-503 ==> 
-
+503 ==> 381605 - Importing large image collection slows down to unacceptable speed.
+504 ==> 
