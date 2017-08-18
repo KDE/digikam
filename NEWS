@@ -521,4 +521,5 @@ BUGFIXES FROM BUGZILLA:
 501 ==> 372482 - Empty album view during thumbnails re-creation.
 502 ==> 383646 - Store facetag information in the photo file.
 503 ==> 381605 - Importing large image collection slows down to unacceptable speed.
-504 ==> 
+504 ==> 374313 - Wrong icon usage revisited [patch].
+505 ==> 
