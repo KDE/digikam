@@ -27,6 +27,8 @@
 // C++ includes
 
 #include <cstdio>
+#include <vector>
+#include <algorithm>
 
 // Qt includes
 
@@ -115,6 +117,7 @@
 #include "tagsactionmngr.h"
 #include "tagscache.h"
 #include "tagspopupmenu.h"
+#include "tagregion.h"
 #include "thememanager.h"
 #include "thumbbardock.h"
 #include "thumbnailloadthread.h"
@@ -1090,8 +1093,60 @@ void ImageWindow::prepareImageToSave()
         // Write metadata from database to DImg
         MetadataHub hub;
         hub.load(d->currentImageInfo);
+
+        // Get face tags
+        QSize tempS = d->currentImageInfo.dimensions();
+        //QMultiMap< QString, QVariant > faceTags = hub.loadIntegerFaceTags(d->currentImageInfo);
+        d->m_faceTags = hub.loadIntegerFaceTags(d->currentImageInfo);
+        QMultiMap< QString, QVariant > newFaceTags;
+        QMap<QString,QVariant>::const_iterator it;
+        //record the transformation into vector
+        std::vector<EditorWindow::TransformType> transVec;
+        while(!m_transformQue.empty())
+        {
+            transVec.push_back(m_transformQue.front());
+            m_transformQue.pop();
+        }
+        //start transform each face rect
+        int tmpH, tmpW;
+        for(it = d->m_faceTags.begin(); it != d->m_faceTags.end(); it++)
+        {
+            QRect faceRect = it.value().toRect();
+qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect before:" << faceRect.x() << faceRect.y() <<faceRect.width() << faceRect.height();
+            tmpH = tempS.height(), tmpW = tempS.width();
+            for(unsigned int i = 0; i < transVec.size(); i++)
+            {
+                EditorWindow::TransformType type = transVec[i];
+                switch(type)
+                {
+                case EditorWindow::TransformType::RotateLeft:
+                    faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH),1);
+                    std::swap(tmpH, tmpW);
+                    break;
+                case EditorWindow::TransformType::RotateRight:
+                    faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH),0);
+                    std::swap(tmpH, tmpW);
+                    break;
+                case EditorWindow::TransformType::FlipHorizontal:
+                    faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH),0);
+                    break;
+                case EditorWindow::TransformType::FlipVertical:
+                    faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH),1);
+                    break;
+                default:
+                    break;
+                }
+qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect transform: " << faceRect.x() << faceRect.y() <<faceRect.width() << faceRect.height();
+            }
+            newFaceTags.insertMulti(it.key(), QVariant(faceRect));
+        }
+        hub.setFaceTags(newFaceTags, QSize(tmpW, tmpH));
+        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
+
+        MetadataHub hub2;
+        hub2.load(d->currentImageInfo);
         DImg image(m_canvas->currentImage());
-        hub.write(image, MetadataHub::WRITE_ALL);
+        hub2.write(image, MetadataHub::WRITE_ALL);
 
         // Ensure there is a UUID for the source image in the database,
         // even if not in the source image's metadata
@@ -1104,6 +1159,9 @@ void ImageWindow::prepareImageToSave()
         {
             m_canvas->interface()->provideCurrentUuid(d->currentImageInfo.uuid());
         }
+
+        //hub.setFaceTags(faceTags, tempS);
+        //hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
     }
 }
 
@@ -1114,39 +1172,109 @@ VersionManager* ImageWindow::versionManager() const
 
 bool ImageWindow::save()
 {
+    // prepareImageToSave();
+    // startingSave(d->currentUrl());
+    // return true;
     prepareImageToSave();
     startingSave(d->currentUrl());
+    //recover the metadata
+    if (!d->currentImageInfo.isNull())
+    {
+        MetadataHub hub;
+        hub.load(d->currentImageInfo);
+        QSize tempS = d->currentImageInfo.dimensions();
+        hub.setFaceTags(d->m_faceTags, tempS);
+        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
+    }
     return true;
 }
 
 bool ImageWindow::saveAs()
 {
+    // prepareImageToSave();
+    // return startingSaveAs(d->currentUrl());
     prepareImageToSave();
-    return startingSaveAs(d->currentUrl());
+    bool flag = startingSaveAs(d->currentUrl());
+    //recover the metadata
+    if (!d->currentImageInfo.isNull())
+    {
+        MetadataHub hub;
+        hub.load(d->currentImageInfo);
+        QSize tempS = d->currentImageInfo.dimensions();
+        hub.setFaceTags(d->m_faceTags, tempS);
+        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
+    }
+    return flag;
 }
 
 bool ImageWindow::saveNewVersion()
 {
     prepareImageToSave();
-    return startingSaveNewVersion(d->currentUrl());
+    bool flag = startingSaveNewVersion(d->currentUrl());
+    //recover the metadata
+    if (!d->currentImageInfo.isNull())
+    {
+        MetadataHub hub;
+        hub.load(d->currentImageInfo);
+        QSize tempS = d->currentImageInfo.dimensions();
+        hub.setFaceTags(d->m_faceTags, tempS);
+        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
+    }
+    return flag;
 }
 
 bool ImageWindow::saveCurrentVersion()
 {
+    // prepareImageToSave();
+    // return startingSaveCurrentVersion(d->currentUrl());
     prepareImageToSave();
-    return startingSaveCurrentVersion(d->currentUrl());
+    bool flag = startingSaveNewVersion(d->currentUrl());
+    //recover the metadata
+    if (!d->currentImageInfo.isNull())
+    {
+        MetadataHub hub;
+        hub.load(d->currentImageInfo);
+        QSize tempS = d->currentImageInfo.dimensions();
+        hub.setFaceTags(d->m_faceTags, tempS);
+        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
+    }
+    return flag;
 }
 
 bool ImageWindow::saveNewVersionAs()
 {
+    // prepareImageToSave();
+    // return startingSaveNewVersionAs(d->currentUrl());
     prepareImageToSave();
-    return startingSaveNewVersionAs(d->currentUrl());
+    bool flag = startingSaveNewVersionAs(d->currentUrl());
+    //recover the metadata
+    if (!d->currentImageInfo.isNull())
+    {
+        MetadataHub hub;
+        hub.load(d->currentImageInfo);
+        QSize tempS = d->currentImageInfo.dimensions();
+        hub.setFaceTags(d->m_faceTags, tempS);
+        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
+    }
+    return flag;
 }
 
 bool ImageWindow::saveNewVersionInFormat(const QString& format)
 {
+    // prepareImageToSave();
+    // return startingSaveNewVersionInFormat(d->currentUrl(), format);
     prepareImageToSave();
-    return startingSaveNewVersionInFormat(d->currentUrl(), format);
+    bool flag = startingSaveNewVersionInFormat(d->currentUrl(), format);
+    //recover the metadata
+    if (!d->currentImageInfo.isNull())
+    {
+        MetadataHub hub;
+        hub.load(d->currentImageInfo);
+        QSize tempS = d->currentImageInfo.dimensions();
+        hub.setFaceTags(d->m_faceTags, tempS);
+        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
+    }
+    return flag;
 }
 
 QUrl ImageWindow::saveDestinationUrl()

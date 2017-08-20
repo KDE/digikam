@@ -986,12 +986,14 @@ void EditorWindow::setupStandardActions()
 
     d->flipHorizAction = new QAction(QIcon::fromTheme(QLatin1String("object-flip-horizontal")), i18n("Flip Horizontally"), this);
     connect(d->flipHorizAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipHoriz()));
+    connect(d->flipHorizAction, SIGNAL(triggered()), this, SLOT(slotFlipHIntoQue()));
     ac->addAction(QLatin1String("editorwindow_transform_fliphoriz"), d->flipHorizAction);
     ac->setDefaultShortcut(d->flipHorizAction, Qt::CTRL + Qt::Key_Asterisk);
     d->flipHorizAction->setEnabled(false);
 
     d->flipVertAction = new QAction(QIcon::fromTheme(QLatin1String("object-flip-vertical")), i18n("Flip Vertically"), this);
     connect(d->flipVertAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipVert()));
+    connect(d->flipVertAction, SIGNAL(triggered()), this, SLOT(slotFlipVIntoQue()));
     ac->addAction(QLatin1String("editorwindow_transform_flipvert"), d->flipVertAction);
     ac->setDefaultShortcut(d->flipVertAction, Qt::CTRL + Qt::Key_Slash);
     d->flipVertAction->setEnabled(false);
@@ -1000,12 +1002,14 @@ void EditorWindow::setupStandardActions()
 
     d->rotateLeftAction = new QAction(QIcon::fromTheme(QLatin1String("object-rotate-left")), i18n("Rotate Left"), this);
     connect(d->rotateLeftAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate270()));
+    connect(d->rotateLeftAction, SIGNAL(triggered()), this, SLOT(slotRotateLeftIntoQue()));
     ac->addAction(QLatin1String("editorwindow_transform_rotateleft"), d->rotateLeftAction);
     ac->setDefaultShortcut(d->rotateLeftAction, Qt::SHIFT + Qt::CTRL + Qt::Key_Left);
     d->rotateLeftAction->setEnabled(false);
 
     d->rotateRightAction = new QAction(QIcon::fromTheme(QLatin1String("object-rotate-right")), i18n("Rotate Right"), this);
     connect(d->rotateRightAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate90()));
+    connect(d->rotateRightAction, SIGNAL(triggered()), this, SLOT(slotRotateRightIntoQue()));
     ac->addAction(QLatin1String("editorwindow_transform_rotateright"), d->rotateRightAction);
     ac->setDefaultShortcut(d->rotateRightAction, Qt::SHIFT + Qt::CTRL + Qt::Key_Right);
     d->rotateRightAction->setEnabled(false);
@@ -3604,6 +3608,26 @@ void EditorWindow::slotFreeRotation()
             tool, SLOT(slotAutoAdjustClicked()));
 
     loadTool(tool);
+}
+
+void EditorWindow::slotRotateLeftIntoQue()
+{
+    m_transformQue.push(TransformType::RotateLeft);
+}
+
+void EditorWindow::slotRotateRightIntoQue()
+{
+    m_transformQue.push(TransformType::RotateRight);
+}
+
+void EditorWindow::slotFlipHIntoQue()
+{
+    m_transformQue.push(TransformType::FlipHorizontal);
+}
+
+void EditorWindow::slotFlipVIntoQue()
+{
+    m_transformQue.push(TransformType::FlipVertical);
 }
 
 }  // namespace Digikam

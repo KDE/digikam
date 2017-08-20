@@ -224,6 +224,21 @@ public:
      */
     void loadFaceTags(const ImageInfo& info, const QSize& size);
 
+    /**
+        Get face tag names and face tag regions.
+        This is used for metadata synchronization in Image Editor
+     */
+    QMultiMap<QString, QVariant> getFaceTags();
+    /**
+        load the integer face tags.
+        This is used in face tag transformation
+     */
+    QMultiMap<QString, QVariant> loadIntegerFaceTags(const ImageInfo& info);
+    /**
+        Set new face tags
+     */
+    void setFaceTags(QMultiMap<QString, QVariant> newFaceTags, QSize size);
+
 protected:
 
     /**

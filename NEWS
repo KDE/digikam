@@ -495,5 +495,44 @@ BUGFIXES FROM BUGZILLA:
 471 ==> 376681 - Region Coordinates Are Sometimes inf / Large Numbers.
 472 ==> 326538 - When a picture is in portrait, face thumbnails are not rotated.
 473 ==> 381378 - Face rectangle from XMP sidecar drawn incorrectly for EXIF rotated images.
+<<<<<<< HEAD
 474 ==> 
 >>>>>>> 9b154ceeecb732ecb97d6900ab0841e643639f4e
+=======
+474 ==> 245081 - digiKam crash while importing images.
+475 ==> 243454 - Crash while tagging and moving backwards.
+476 ==> 204178 - digiKam crashes while batch processing and album preview in output directory.
+477 ==> 240415 - Application crashed while I was editing a picture metadata.
+478 ==> 234144 - Crash while renaming album.
+479 ==> 234042 - Crash when rating a Image.
+480 ==> 224588 - Applying tags crashes digiKam.
+481 ==> 226418 - digiKam consistantly crashes upon while I add tags and ratings.
+482 ==> 227957 - Crash when deleting picture in lighttable.
+483 ==> 246478 - digiKam crashes when a metadata comment is applied to multiple pictures.
+484 ==> 224994 - Segmentation fault when saving edited photo with ctrl-s shortcut.
+485 ==> 234932 - digiKam crashes on mouse hovering the photo.
+486 ==> 225821 - Writing tags to metadata.
+487 ==> 241696 - digiKam typical crash, processing large-file-size jpeg images.
+488 ==> 235400 - Segmentation fault during view/delete.
+489 ==> 226734 - Crash while browsing picture using preview mode.
+490 ==> 233943 - digiKam crash after adding tags to RAW pictrue (NEF).
+491 ==> 228701 - Crash while moving rapidly through pictures and changing tags.
+492 ==> 231396 - digiKam crash when I assign tags to photos.
+493 ==> 227390 - Crash upon assigning rating to a photo.
+494 ==> 232268 - Editing tags (persons on images), set to be written to image files.
+495 ==> 234181 - digiKam crashes when editing metadata of CR2 files.
+496 ==> 237896 - Tagging Pics causes frequent crashing.
+497 ==> 236880 - Change exif orientation crashes digiKam and alter photograph.
+498 ==> 255679 - digiKam add tag auto apply.
+499 ==> 233116 - Crash when saving PNG (from RAW NEF).
+500 ==> 232271 - Crash when adding tag information.
+501 ==> 372482 - Empty album view during thumbnails re-creation.
+502 ==> 383646 - Store facetag information in the photo file.
+503 ==> 381605 - Importing large image collection slows down to unacceptable speed.
+504 ==> 374313 - Wrong icon usage revisited [patch].
+505 ==> 247793 - Add Color Management support to image Viewer.
+506 ==> 231321 - Allow to rate items with image viewer.
+507 ==> 290931 - Allow to delete items in image viewer.
+508 ==> 221458 - Resizing the geotag window causes crash.
+509 ==> 
+>>>>>>> 65df21fd99d226a3f167b5f8eaac2bc03586c676

@@ -164,6 +164,8 @@ public:
     ImagePropertiesSideBarDB* rightSideBar;
 
     DatabaseVersionManager    versionManager;
+
+    QMultiMap< QString, QVariant > m_faceTags;
 };
 
 const QString ImageWindow::Private::configShowThumbbarEntry(QLatin1String("Show Thumbbar"));
