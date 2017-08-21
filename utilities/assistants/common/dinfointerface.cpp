@@ -24,6 +24,13 @@
  * ============================================================ */
 
 #include "dinfointerface.h"
+
+// Qt includes
+
+#include <QtGlobal>
+
+// Local includes
+
 #include "metaengine.h"
 #include "digikam_globals.h"
 #include "digikam_debug.h"
@@ -184,19 +191,19 @@ int DItemInfo::pickLabel() const
 double DItemInfo::latitude() const
 {
     QVariant val = parseInfoMap(QLatin1String("latitude"));
-    return !val.isNull() ? val.toDouble() : qQNan();
+    return !val.isNull() ? val.toDouble() : qQNaN();
 }
 
 double DItemInfo::longitude() const
 {
     QVariant val = parseInfoMap(QLatin1String("longitude"));
-    return !val.isNull() ? val.toDouble() : qQNan();
+    return !val.isNull() ? val.toDouble() : qQNaN();
 }
 
 double DItemInfo::altitude() const
 {
     QVariant val = parseInfoMap(QLatin1String("altitude"));
-    return !val.isNull() ? val.toDouble() : qQNan();
+    return !val.isNull() ? val.toDouble() : qQNaN();
 }
 
 qlonglong DItemInfo::fileSize() const
@@ -256,7 +263,7 @@ QString DItemInfo::focalLength() const
 bool DItemInfo::hasGeolocationInfo() const
 {
     // NOTE: GPS position without altitude is a valid geolocation.
-    return (!qIsNaN(lattitude()) && !qIsNaN(longitude());
+    return (!qIsNaN(latitude()) && !qIsNaN(longitude()));
 }
 
 // -----------------------------------------------------------------
