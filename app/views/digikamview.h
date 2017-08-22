@@ -135,6 +135,7 @@ public:
     double zoomMax() const;
 
     void presentation();
+
     void toggleTag(int tagID);
     void toggleFullScreen(bool set);
 
