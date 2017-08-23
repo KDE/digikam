@@ -62,7 +62,6 @@ set(libmainview_SRCS
     mainview/dxmlguiwindow.cpp
     mainview/daboutdata.cpp
     mainview/dzoombar.cpp
-    mainview/ditemtooltip.cpp
     mainview/dcursortracker.cpp
     mainview/thumbbardock.cpp
     mainview/thememanager.cpp
@@ -76,6 +75,7 @@ set(libitemview_SRCS
     itemview/dcategorizedview.cpp
     itemview/dcategorizedsortfilterproxymodel.cpp
     itemview/ditemdelegate.cpp
+    itemview/ditemtooltip.cpp
     itemview/dcategorydrawer.cpp
     itemview/imagedelegateoverlay.cpp
     itemview/itemviewhoverbutton.cpp
