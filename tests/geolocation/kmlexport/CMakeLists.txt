@@ -8,12 +8,12 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-add_executable(test_kmlexport_gpxparsing
-               test_kmlexport_gpxparsing.cpp
+add_executable(test_geoparsing
+               test_geoparsing.cpp
 )
 
-target_link_libraries(test_kmlexport_gpxparsing
+target_link_libraries(test_geoparsing
                       Qt5::Test
 )
 
-add_test(test_kmlexport_gpxparsing ${EXECUTABLE_OUTPUT_PATH}/test_kmlexport_gpxparsing)
+add_test(test_geoparsing ${EXECUTABLE_OUTPUT_PATH}/test_geoparsing)

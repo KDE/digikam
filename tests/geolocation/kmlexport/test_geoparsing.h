@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEST_KMLEXPORT_GPXPARSING_H
-#define TEST_KMLEXPORT_GPXPARSING_H
+#ifndef TEST_GEOPARSING_H
+#define TEST_GEOPARSING_H
 
 // Qt includes
 
@@ -38,4 +38,4 @@ private Q_SLOTS:
     void testCustomParsing();
 };
 
-#endif // TEST_KMLEXPORT_GPXPARSING_H
+#endif // TEST_GEOPARSING_H
