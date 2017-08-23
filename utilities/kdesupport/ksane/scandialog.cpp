@@ -295,4 +295,4 @@ void ScanDialog::slotThreadDone(const QUrl& url, bool success)
     }
 }
 
-}  // namespace KIPIAcquireImagesPlugin
+}  // namespace Digikam

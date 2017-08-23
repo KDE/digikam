@@ -773,10 +773,10 @@ void PresentationGL::showEndOfShow()
     p.drawText(20, 50, i18n("Slideshow Completed"));
     p.drawText(20, 100, i18n("Click to Exit..."));
 
-//     QPixmap kipiLogoPixmap = KPSvgPixmapRenderer(width() / 6, width() / 6).getPixmap();
-//     p.drawPixmap(width()-(width()/12)-kipiLogoPixmap.width(),
-//                  height()-(height()/12)-kipiLogoPixmap.height(),
-//                  kipiLogoPixmap);
+//     QPixmap logoPixmap = KPSvgPixmapRenderer(width() / 6, width() / 6).getPixmap();
+//     p.drawPixmap(width()-(width()/12)-logoPixmap.width(),
+//                  height()-(height()/12)-logoPixmap.height(),
+//                  logoPixmap);
 
     p.end();
 
