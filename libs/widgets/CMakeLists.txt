@@ -11,7 +11,6 @@ endif (POLICY CMP0063)
 
 set(libcommonwidgets_SRCS
     common/abstractitemdragdrophandler.cpp
-    common/buttonicondisabler.cpp
     common/dexpanderbox.cpp
     common/dactivelabel.cpp
     common/dragdropimplementations.cpp
