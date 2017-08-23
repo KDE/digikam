@@ -18,6 +18,7 @@ ImageEditor : Add SendByMail and PrintCreator tools support.
 Showfoto    : Add SendByMail and PrintCreator tools support.
 LightTable  : Add SendByMail and PrintCreator tools support.
 Panorama    : Add Hugin 2017.0 support.
+Geolocation : Add new tool to export GPS trace to KML file from geolocation editor.
 
 BUGFIXES FROM BUGZILLA:
 

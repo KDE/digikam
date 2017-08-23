@@ -545,7 +545,7 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
             const QStringList listAddressFormat               = addressFormat.split(QLatin1Char('/'));
             QStringList elements, resultedData;
 
-            for (int i=0; i<listAddressElementsWantedFormat.count(); ++i)
+            for (int i = 0; i < listAddressElementsWantedFormat.count(); ++i)
             {
                 QString currentAddressFormat = listAddressElementsWantedFormat.at(i);
                 int currentIndexFormat       = listAddressFormat.indexOf(currentAddressFormat,0);
@@ -847,7 +847,7 @@ void RGWidget::slotReaddNewTags()
 {
     for (int row = 0; row < d->imageModel->rowCount(); ++row)
     {
-        GPSImageItem* const currentItem     = d->imageModel->itemFromIndex(d->imageModel->index(row,0));
+        GPSImageItem* const currentItem     = d->imageModel->itemFromIndex(d->imageModel->index(row, 0));
         QList<QList<TagData> > tagAddresses = currentItem->getTagList();
 
         if (!tagAddresses.isEmpty())
