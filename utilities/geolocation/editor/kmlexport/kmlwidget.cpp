@@ -53,8 +53,8 @@ KmlWidget::KmlWidget(GeolocationEdit* const dlg,
                      GPSImageModel* const imageModel,
                      DInfoInterface* const iface)
     : QWidget(dlg),
-      m_dlg(dlg),
       m_model(imageModel),
+      m_dlg(dlg),
       m_kmlExport(iface)
 {
     KMLExportConfigLayout = new QGridLayout(this);

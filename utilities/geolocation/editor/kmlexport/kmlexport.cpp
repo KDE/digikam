@@ -429,7 +429,6 @@ void KmlExport::generate()
 
     QList<QUrl> images = m_urls;
     int pos            = 1;
-    int count          = images.count();
 
     QList<QUrl>::ConstIterator imagesEnd (images.constEnd());
 
