@@ -34,7 +34,6 @@ set(libcombotools_SRCS
     combo/squeezedcombobox.cpp
 )
 
-
 set(libcolorstools_SRCS
     colors/dcolorvalueselector.cpp
     colors/dhuesaturationselect.cpp
@@ -63,7 +62,6 @@ set(libmainview_SRCS
     mainview/dxmlguiwindow.cpp
     mainview/daboutdata.cpp
     mainview/dzoombar.cpp
-    mainview/dlogoaction.cpp
     mainview/ditemtooltip.cpp
     mainview/dcursortracker.cpp
     mainview/thumbbardock.cpp
