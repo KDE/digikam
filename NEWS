@@ -527,4 +527,5 @@ BUGFIXES FROM BUGZILLA:
 506 ==> 231321 - Allow to rate items with image viewer.
 507 ==> 290931 - Allow to delete items in image viewer.
 508 ==> 221458 - Resizing the geotag window causes crash.
-509 ==> 
+509 ==> 383707 - BQM renames files (adds «_1») even if renaming is disabled.
+510 ==> 
