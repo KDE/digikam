@@ -459,7 +459,7 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    KActionCollection* const ac = actionCollection();
+    KActionCollection* const ac =   actionCollection();
 
     d->backwardAction = buildStdAction(StdBackAction, this, SLOT(slotBackward()), this);
     ac->addAction(QLatin1String("lighttable_backward"), d->backwardAction);
