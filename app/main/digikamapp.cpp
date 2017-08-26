@@ -970,7 +970,7 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("queue_manager"), d->bqmAction);
     ac->setDefaultShortcut(d->bqmAction, Qt::Key_B);
 
-    //SP_MediaPlay
+    // dlna media server action
 
     d->dlnaMediaServerAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-right-double")),i18n("DLNA Media Server"), this);
     connect(d->dlnaMediaServerAction, SIGNAL(triggered()), d->view, SLOT(slotMediaServer()));
