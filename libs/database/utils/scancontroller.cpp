@@ -271,7 +271,7 @@ ScanController::ScanController()
     // create timer for relaxed scheduling
     d->relaxedTimer = new QTimer(this);
     d->relaxedTimer->setSingleShot(true);
-    d->relaxedTimer->setInterval(250);
+    d->relaxedTimer->setInterval(500);
 
     connect(d->relaxedTimer, &QTimer::timeout,
             this, &ScanController::slotRelaxedScanning);
@@ -475,10 +475,7 @@ void ScanController::scheduleCollectionScan(const QString& path)
 
 void ScanController::scheduleCollectionScanRelaxed(const QString& path)
 {
-    if (!d->relaxedTimer->isActive())
-    {
-        d->relaxedTimer->start();
-    }
+    d->relaxedTimer->start();
 
     QMutexLocker lock(&d->mutex);
 
@@ -490,7 +487,6 @@ void ScanController::scheduleCollectionScanRelaxed(const QString& path)
 
 void ScanController::slotRelaxedScanning()
 {
-    d->relaxedTimer->stop();
     qCDebug(DIGIKAM_DATABASE_LOG) << "Starting scan!";
 
     QMutexLocker lock(&d->mutex);

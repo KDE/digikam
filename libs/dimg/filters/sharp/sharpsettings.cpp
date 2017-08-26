@@ -138,8 +138,8 @@ SharpSettings::SharpSettings(QWidget* const parent)
     const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QGridLayout* const grid = new QGridLayout(parent);
 
-    QLabel* const label1 = new QLabel(i18n("Method:"), parent);
-    d->sharpMethod       = new DComboBox(parent);
+    QLabel* const label1 = new QLabel(i18n("Method:"));
+    d->sharpMethod       = new DComboBox;
     d->sharpMethod->addItem(i18n("Simple sharp"));
     d->sharpMethod->addItem(i18n("Unsharp mask"));
 #ifdef HAVE_EIGEN3
@@ -148,11 +148,11 @@ SharpSettings::SharpSettings(QWidget* const parent)
     d->sharpMethod->setDefaultIndex(SharpContainer::SimpleSharp);
     d->sharpMethod->setWhatsThis(i18n("Select the sharpening method to apply to the image."));
 
-    d->stack = new QStackedWidget(parent);
+    d->stack = new QStackedWidget;
 
     grid->addWidget(label1,                                  0, 0, 1, 1);
     grid->addWidget(d->sharpMethod,                          0, 1, 1, 1);
-    grid->addWidget(new DLineWidget(Qt::Horizontal, parent), 1, 0, 1, 2);
+    grid->addWidget(new DLineWidget(Qt::Horizontal),         1, 0, 1, 2);
     grid->addWidget(d->stack,                                2, 0, 1, 2);
     grid->setRowStretch(3, 10);
     grid->setContentsMargins(spacing, spacing, spacing, spacing);

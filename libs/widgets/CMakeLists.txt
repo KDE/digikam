@@ -11,7 +11,6 @@ endif (POLICY CMP0063)
 
 set(libcommonwidgets_SRCS
     common/abstractitemdragdrophandler.cpp
-    common/buttonicondisabler.cpp
     common/dexpanderbox.cpp
     common/dactivelabel.cpp
     common/dragdropimplementations.cpp
@@ -33,7 +32,6 @@ set(libcombotools_SRCS
     combo/dcombobox.cpp
     combo/squeezedcombobox.cpp
 )
-
 
 set(libcolorstools_SRCS
     colors/dcolorvalueselector.cpp
@@ -63,8 +61,6 @@ set(libmainview_SRCS
     mainview/dxmlguiwindow.cpp
     mainview/daboutdata.cpp
     mainview/dzoombar.cpp
-    mainview/dlogoaction.cpp
-    mainview/ditemtooltip.cpp
     mainview/dcursortracker.cpp
     mainview/thumbbardock.cpp
     mainview/thememanager.cpp
@@ -78,6 +74,7 @@ set(libitemview_SRCS
     itemview/dcategorizedview.cpp
     itemview/dcategorizedsortfilterproxymodel.cpp
     itemview/ditemdelegate.cpp
+    itemview/ditemtooltip.cpp
     itemview/dcategorydrawer.cpp
     itemview/imagedelegateoverlay.cpp
     itemview/itemviewhoverbutton.cpp
