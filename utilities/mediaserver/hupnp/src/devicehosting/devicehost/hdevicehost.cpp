@@ -46,63 +46,6 @@ namespace Upnp
 {
 
 /*******************************************************************************
- * HServerDeviceController
- ******************************************************************************/
-HServerDeviceController::HServerDeviceController(
-    HServerDevice* device, qint32 deviceTimeoutInSecs, QObject* parent) :
-        QObject(parent),
-            m_statusNotifier(new QTimer(this)),
-            m_deviceStatus(new HDeviceStatus()),
-                m_device(device)
-{
-    Q_ASSERT(m_device);
-    //m_device->setParent(this);
-
-    m_statusNotifier->setInterval(deviceTimeoutInSecs * 1000);
-    bool ok = connect(
-        m_statusNotifier.data(), SIGNAL(timeout()), this, SLOT(timeout_()));
-
-    Q_ASSERT(ok); Q_UNUSED(ok)
-}
-
-HServerDeviceController::~HServerDeviceController()
-{
-}
-
-qint32 HServerDeviceController::deviceTimeoutInSecs() const
-{
-    return m_statusNotifier->interval() / 1000;
-}
-
-void HServerDeviceController::timeout_()
-{
-    HLOG(H_AT, H_FUN);
-
-    m_timedout = true;
-    stopStatusNotifier();
-
-    emit statusTimeout(this);
-}
-
-void HServerDeviceController::startStatusNotifier()
-{
-    HLOG(H_AT, H_FUN);
-    m_statusNotifier->start();
-    m_timedout = false;
-}
-
-void HServerDeviceController::stopStatusNotifier()
-{
-    HLOG(H_AT, H_FUN);
-    m_statusNotifier->stop();
-}
-
-bool HServerDeviceController::isTimedout() const
-{
-    return m_timedout;
-}
-
-/*******************************************************************************
  * HDeviceHostPrivate
  ******************************************************************************/
 HDeviceHostPrivate::HDeviceHostPrivate() :

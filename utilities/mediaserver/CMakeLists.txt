@@ -20,6 +20,7 @@ include_directories(
            hupnp_av/src
            hupnp/src/dataelements
            hupnp/src/devicehosting 
+           hupnp/src/devicehosting/devicehost
            hupnp/src/devicemodel
            hupnp/src/general
            hupnp/src/http
@@ -37,7 +38,6 @@ include_directories(
            hupnp/include/HUpnpCore/private
            hupnp/include/HUpnpCore/public
            hupnp/src/devicehosting/controlpoint
-           hupnp/src/devicehosting/devicehost
            hupnp/src/devicehosting/messages
            hupnp/src/devicemodel/client
            hupnp/src/devicemodel/server
@@ -189,6 +189,7 @@ set(libmediaserver_SRCS
            hupnp/src/devicehosting/controlpoint/hevent_subscription_p.cpp 
            hupnp/src/devicehosting/controlpoint/hevent_subscriptionmanager_p.cpp 
            hupnp/src/devicehosting/devicehost/hdevicehost.cpp 
+           hupnp/src/devicehosting/devicehost/hserverdevicecontroller_p.cpp 
            hupnp/src/devicehosting/devicehost/hdevicehost_configuration.cpp 
            hupnp/src/devicehosting/devicehost/hdevicehost_dataretriever_p.cpp 
            hupnp/src/devicehosting/devicehost/hdevicehost_http_server_p.cpp 
@@ -196,8 +197,6 @@ set(libmediaserver_SRCS
            hupnp/src/devicehosting/devicehost/hevent_notifier_p.cpp 
            hupnp/src/devicehosting/devicehost/hevent_subscriber_p.cpp 
            hupnp/src/devicehosting/devicehost/hservermodel_creator_p.cpp 
-           hupnp/src/devicehosting/devicehost/moc_file.cpp
-           hupnp/src/devicemodel/client/moc_file2.cpp
            hupnp/src/devicehosting/messages/hcontrol_messages_p.cpp 
            hupnp/src/devicehosting/messages/hevent_messages_p.cpp 
            hupnp/src/devicehosting/messages/hnt_p.cpp 
@@ -211,6 +210,7 @@ set(libmediaserver_SRCS
            hupnp/src/devicemodel/client/hclientservice.cpp 
            hupnp/src/devicemodel/client/hclientservice_adapter.cpp 
            hupnp/src/devicemodel/client/hclientstatevariable.cpp 
+           hupnp/src/devicemodel/client/hdefault_clientdevice_p.cpp
            hupnp/src/devicemodel/server/hdevicemodelcreator.cpp 
            hupnp/src/devicemodel/server/hserveraction.cpp 
            hupnp/src/devicemodel/server/hserverdevice.cpp 
