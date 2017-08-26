@@ -59,6 +59,7 @@ DIntRangeBox::DIntRangeBox(QWidget* const parent)
     d->minValueBox->setSingleStep(1);
 
     d->intervalLabel = new QLabel(QLatin1String("-"), this);
+    d->intervalLabel->setAlignment(Qt::AlignCenter);
 
     d->maxValueBox   = new QSpinBox(this);
     d->maxValueBox->setRange(d->minValueBox->value(), 100);
@@ -72,17 +73,17 @@ DIntRangeBox::DIntRangeBox(QWidget* const parent)
     mainLayout->addWidget(d->intervalLabel);
     mainLayout->addWidget(d->maxValueBox);
     //mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
-    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(mainLayout);
 
     connect(d->minValueBox, SIGNAL(valueChanged(int)),
-            this,           SLOT(slotMinimumChanged(int)));
+            this, SLOT(slotMinimumChanged(int)));
 
     connect(d->minValueBox, SIGNAL(valueChanged(int)),
-            this,           SIGNAL(minChanged(int)));
+            this, SIGNAL(minChanged(int)));
 
     connect(d->maxValueBox, SIGNAL(valueChanged(int)),
-            this,           SIGNAL(maxChanged(int)));
+            this, SIGNAL(maxChanged(int)));
 }
 
 DIntRangeBox::~DIntRangeBox()

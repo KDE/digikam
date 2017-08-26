@@ -38,7 +38,6 @@ set(dimagelisttest_SRCS
 )
 
 add_executable(dimagelisttest ${dimagelisttest_SRCS})
-add_test(dimagelisttest dimagelisttest)
 
 target_link_libraries(dimagelisttest
                       digikamcore

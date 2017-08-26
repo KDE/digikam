@@ -165,6 +165,7 @@
       <li xml:lang="nl">Op SQLite of Mysql gebaseerde opslag voor de inhoud van albums en zijn metagegevens met geavanceerde zoekhulpmiddellen</li>
       <li xml:lang="pt">Armazenamento baseado em SQLite ou MySQL para o conteúdo dos álbuns e os seus meta-dados com ferramentas de pesquisa avançadas</li>
       <li xml:lang="sv">Lagring driven av SQLite eller MySQL för album och deras metadata med avancerade sökverktyg</li>
+      <li xml:lang="tr">Albüm içeriği ve meta verileri için gelişmiş arama araçlarıyla, SQLite veya Mysql destekli depolama</li>
       <li xml:lang="uk">сховище даних на основі SQLite або MySQL для вмісту альбомів та метаданих із розширеними можливостями пошуку;</li>
       <li xml:lang="x-test">xxSQLite or Mysql powered storage for the album contents and its metadata with advanced search toolsxx</li>
       <li>Support for filtering and sorting albums</li>
@@ -226,6 +227,7 @@
       <li xml:lang="nl">Ondersteuning voor 900 RAW-format afbeeldingen</li>
       <li xml:lang="pt">Suporte para mais de 900 formatos de imagens RAW</li>
       <li xml:lang="sv">Stöd för 900 obehandlade bildformat</li>
+      <li xml:lang="tr">900'den fazla RAW biçimli resim desteği</li>
       <li xml:lang="uk">підтримка понад 900 форматів цифрових негативів (RAW);</li>
       <li xml:lang="x-test">xxSupport for more than 900 RAW format picturesxx</li>
       <li>Light Table to compare photo side by side</li>
@@ -248,6 +250,7 @@
       <li xml:lang="nl">Uitgebreide mogelijkheden met extra hulpmiddelen</li>
       <li xml:lang="pt">Funcionalidades estendidas com ferramentas extra</li>
       <li xml:lang="sv">Utökade funktioner med användning av extra verktyg</li>
+      <li xml:lang="tr">Ekstra araçlar kullanan genişletilmiş özellikler</li>
       <li xml:lang="uk">розширення можливостей за допомогою додаткових інструментів;</li>
       <li xml:lang="x-test">xxExtended features using extra toolsxx</li>
       <li>Share your photos using HTML or publishing them to remote web services</li>
@@ -259,6 +262,7 @@
       <li xml:lang="nl">Uw foto's delen met HTML of ze publiceren op websites op afstand</li>
       <li xml:lang="pt">Partilhar as suas fotos por HTML ou publicá-las em serviços Web remotos</li>
       <li xml:lang="sv">Dela foton genom att använda HTML eller publicera dem på webbtjänster</li>
+      <li xml:lang="tr">Resimlerinizi HTML kullanarak paylaşın veya onları uzak web servislerinde yayımlayın</li>
       <li xml:lang="uk">можливість оприлюднення фотографій на віддалених службах у інтернеті;</li>
       <li xml:lang="x-test">xxShare your photos using HTML or publishing them to remote web servicesxx</li>
       <li>Image editor included with advanced tools to fix photo quickly</li>
@@ -270,6 +274,7 @@
       <li xml:lang="nl">Bewerker van afbeeldingen met geavanceerde hulpmiddelen om foto's snel te repareren</li>
       <li xml:lang="pt">Editor de imagens que inclui ferramentas avançadas para corrigir rapidamente as fotografias</li>
       <li xml:lang="sv">Bildeditor med avancerade funktioner ingår för att snabbt förbättra foton</li>
+      <li xml:lang="tr">Fotoğrafı hızla düzeltmek için gelişmiş araçlar içeren resim editörü</li>
       <li xml:lang="uk">редактор зображень із додатковими можливостями для швидкого виправлення фотографій;</li>
       <li xml:lang="x-test">xxImage editor included with advanced tools to fix photo quicklyxx</li>
     </ul>
