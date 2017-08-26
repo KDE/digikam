@@ -117,6 +117,16 @@ bool ApplicationSettings::getApplySidebarChangesDirectly() const
     return d->sidebarApplyDirectly;
 }
 
+void ApplicationSettings::setDrawFramesToGrouped(bool val)
+{
+    d->drawFramesToGrouped = val;
+}
+
+bool ApplicationSettings::getDrawFramesToGrouped() const
+{
+    return d->drawFramesToGrouped;
+}
+
 void ApplicationSettings::setScrollItemToCenter(bool val)
 {
     d->scrollItemToCenter = val;
