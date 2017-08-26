@@ -411,6 +411,9 @@ public:
     void setApplySidebarChangesDirectly(bool val);
     bool getApplySidebarChangesDirectly() const;
 
+    void setDrawFramesToGrouped(bool val);
+    bool getDrawFramesToGrouped() const;
+
     void setScrollItemToCenter(bool val);
     bool getScrollItemToCenter() const;
 
