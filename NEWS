@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 5.7.0 - Release date: 2017-07-23
+digiKam 5.7.0 - Release date: 2017-08-27
 
 NEW FEATURES:
 
@@ -529,4 +529,5 @@ BUGFIXES FROM BUGZILLA:
 508 ==> 221458 - Resizing the geotag window causes crash.
 509 ==> 383707 - BQM renames files (adds «_1») even if renaming is disabled.
 510 ==> 384049 - Add an option for group icon-view frame.
-511 ==> 
+511 ==> 383989 - Cannot create panoramas.
+
