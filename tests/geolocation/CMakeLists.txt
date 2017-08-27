@@ -7,4 +7,5 @@
 if(MARBLE_FOUND)
     add_subdirectory(editor)
     add_subdirectory(geoiface)
+    add_subdirectory(kmlexport)
 endif()

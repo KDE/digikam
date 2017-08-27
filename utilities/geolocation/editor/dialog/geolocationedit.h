@@ -49,6 +49,7 @@ namespace Digikam
 
 class GPSUndoCommand;
 class MapWidget;
+class DInfoInterface;
 
 class DIGIKAM_EXPORT GeolocationEdit : public QDialog
 {
@@ -56,7 +57,9 @@ class DIGIKAM_EXPORT GeolocationEdit : public QDialog
 
 public:
 
-    explicit GeolocationEdit(QAbstractItemModel* const externTagModel, QWidget* const parent);
+    explicit GeolocationEdit(QAbstractItemModel* const externTagModel,
+                             DInfoInterface* const iface,
+                             QWidget* const parent);
     ~GeolocationEdit();
 
     /* Populate items in dialog list based on url. To be used in case of non database as with Showfoto.

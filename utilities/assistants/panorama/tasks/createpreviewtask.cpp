@@ -78,7 +78,7 @@ void CreatePreviewTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 
     for (auto& image : data.images)
     {
-        QUrl imgUrl = tmpDir.resolved(QUrl::fromLocalFile(image.fileName));
+        QUrl imgUrl = QUrl::fromLocalFile(image.fileName);
 
         PanoramaItemUrlsMap::const_iterator it;
         const PanoramaItemUrlsMap* const ppum = &preProcessedUrlsMap;
@@ -108,7 +108,8 @@ void CreatePreviewTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     data.lastComments << QLatin1String("#hugin_outputImageType jpg");
     data.lastComments << QLatin1String("#hugin_outputJPEGQuality 90");
 
-    previewPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("preview.pto")));
+    previewPtoUrl = tmpDir;
+    previewPtoUrl.setPath(previewPtoUrl.path() + QLatin1String("preview.pto"));
     data.createFile(previewPtoUrl.toLocalFile());
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Preview PTO File created: " << previewPtoUrl.fileName();

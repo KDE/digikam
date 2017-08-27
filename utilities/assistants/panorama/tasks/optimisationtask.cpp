@@ -46,7 +46,8 @@ OptimisationTask::~OptimisationTask()
 
 void OptimisationTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
-    autoOptimiserPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("auto_op_pano.pto")));
+    autoOptimiserPtoUrl = tmpDir;
+    autoOptimiserPtoUrl.setPath(autoOptimiserPtoUrl.path() + QLatin1String("auto_op_pano.pto"));
 
     QStringList args;
     args << QLatin1String("-am");

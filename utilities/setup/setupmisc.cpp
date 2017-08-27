@@ -69,6 +69,7 @@ public:
         showTrashDeleteDialogCheck(0),
         showPermanentDeleteDialogCheck(0),
         sidebarApplyDirectlyCheck(0),
+        drawFramesToGroupedCheck(0),
         scrollItemToCenterCheck(0),
         showOnlyPersonTagsInPeopleSidebarCheck(0),
         scanAtStart(0),
@@ -94,6 +95,7 @@ public:
     QCheckBox*                showTrashDeleteDialogCheck;
     QCheckBox*                showPermanentDeleteDialogCheck;
     QCheckBox*                sidebarApplyDirectlyCheck;
+    QCheckBox*                drawFramesToGroupedCheck;
     QCheckBox*                scrollItemToCenterCheck;
     QCheckBox*                showOnlyPersonTagsInPeopleSidebarCheck;
     QCheckBox*                scanAtStart;
@@ -167,9 +169,10 @@ SetupMisc::SetupMisc(QWidget* const parent)
     QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), behaviourPanel);
     QVBoxLayout* const gLayout5     = new QVBoxLayout();
 
+    d->showSplashCheck                        = new QCheckBox(i18n("&Show splash screen at startup"), abOptionsGroup);
+    d->drawFramesToGroupedCheck               = new QCheckBox(i18n("Draw frames around grouped items"), abOptionsGroup);
     d->scrollItemToCenterCheck                = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
     d->showOnlyPersonTagsInPeopleSidebarCheck = new QCheckBox(i18n("Show only face tags for assigning names in people sidebar"), abOptionsGroup);
-    d->showSplashCheck                        = new QCheckBox(i18n("&Show splash screen at startup"), abOptionsGroup);
 
     DHBox* const minSimilarityBoundHbox       = new DHBox(abOptionsGroup);
     d->minSimilarityBoundLabel                = new QLabel(i18n("Lower bound for minimum similarity:"), minSimilarityBoundHbox);
@@ -239,9 +242,10 @@ SetupMisc::SetupMisc(QWidget* const parent)
         }
     }
 
+    gLayout5->addWidget(d->showSplashCheck);
+    gLayout5->addWidget(d->drawFramesToGroupedCheck);
     gLayout5->addWidget(d->scrollItemToCenterCheck);
     gLayout5->addWidget(d->showOnlyPersonTagsInPeopleSidebarCheck);
-    gLayout5->addWidget(d->showSplashCheck);
     gLayout5->addWidget(minSimilarityBoundHbox);
     gLayout5->addWidget(tabStyleHbox);
     gLayout5->addWidget(appStyleHbox);
@@ -354,6 +358,7 @@ void SetupMisc::applySettings()
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
     settings->setScanAtStart(d->scanAtStart->isChecked());
     settings->setCleanAtStart(d->cleanAtStart->isChecked());
+    settings->setDrawFramesToGrouped(d->drawFramesToGroupedCheck->isChecked());
     settings->setScrollItemToCenter(d->scrollItemToCenterCheck->isChecked());
     settings->setShowOnlyPersonTagsInPeopleSidebar(d->showOnlyPersonTagsInPeopleSidebarCheck->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? DMultiTabBar::ActiveIconText : DMultiTabBar::AllIconsText);
@@ -386,6 +391,7 @@ void SetupMisc::readSettings()
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->scanAtStart->setChecked(settings->getScanAtStart());
     d->cleanAtStart->setChecked(settings->getCleanAtStart());
+    d->drawFramesToGroupedCheck->setChecked(settings->getDrawFramesToGrouped());
     d->scrollItemToCenterCheck->setChecked(settings->getScrollItemToCenter());
     d->showOnlyPersonTagsInPeopleSidebarCheck->setChecked(settings->showOnlyPersonTagsInPeopleSidebar());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == DMultiTabBar::ActiveIconText ? 0 : 1);

@@ -77,7 +77,7 @@ void ImageResizeThread::resize(MailSettings* const settings)
         connect(t, SIGNAL(failedResize(QUrl,QString,int)),
                 this, SIGNAL(failedResize(QUrl,QString,int)));
 
-        collection.insert(t, 1);
+        collection.insert(t, 0);
         i++;
     }
 

@@ -503,7 +503,8 @@ void ImagePreviewView::slotDeleteItem()
 
 void Digikam::ImagePreviewView::slotUpdateFaces()
 {
-    d->faceGroup->aboutToSetInfo(ImageInfo());
+    //d->faceGroup->aboutToSetInfo(ImageInfo());
+    d->faceGroup->aboutToSetInfoAfterRotate(ImageInfo());
     d->item->setAcceptHoverEvents(true);
 
     /**
