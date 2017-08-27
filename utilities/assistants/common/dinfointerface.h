@@ -119,6 +119,8 @@ public:
     QString            sensitivity()  const;
     QString            aperture()     const;
     QString            focalLength()  const;
+    
+    bool hasGeolocationInfo() const;
 
 private:
 

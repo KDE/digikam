@@ -100,8 +100,8 @@ public:
         vbox3(0),
         duplicatesBox(0),
         hbox3(0),
-        faceScannedHandling(0),
         similarityRange(0),
+        faceScannedHandling(0),
         searchResultRestriction(0),
         expanderBox(0),
         albumSelectors(0)

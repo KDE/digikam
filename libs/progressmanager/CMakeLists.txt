@@ -19,6 +19,7 @@ set(libprogressmanager_SRCS
     statusprogressbar.cpp
     workingwidget.cpp
     dworkingpixmap.cpp
+    dlogoaction.cpp
 )
 
 include_directories(

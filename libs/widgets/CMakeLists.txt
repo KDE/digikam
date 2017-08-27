@@ -11,10 +11,6 @@ endif (POLICY CMP0063)
 
 set(libcommonwidgets_SRCS
     common/abstractitemdragdrophandler.cpp
-    common/buttonicondisabler.cpp
-    common/dsliderspinbox.cpp
-    common/dnuminput.cpp
-    common/drangebox.cpp
     common/dexpanderbox.cpp
     common/dactivelabel.cpp
     common/dragdropimplementations.cpp
@@ -29,14 +25,6 @@ set(libcombotools_SRCS
     combo/comboboxutilities.cpp
     combo/dcombobox.cpp
     combo/squeezedcombobox.cpp
-)
-
-set(libimagehistory_SRCS
-    imagehistory/filtershistorywidget.cpp
-    imagehistory/imagefiltershistoryitemdelegate.cpp
-    imagehistory/imagefiltershistorymodel.cpp
-    imagehistory/imagefiltershistorytreeitem.cpp
-    imagehistory/versionswidget.cpp
 )
 
 set(libcolorstools_SRCS
@@ -67,8 +55,6 @@ set(libmainview_SRCS
     mainview/dxmlguiwindow.cpp
     mainview/daboutdata.cpp
     mainview/dzoombar.cpp
-    mainview/dlogoaction.cpp
-    mainview/ditemtooltip.cpp
     mainview/dcursortracker.cpp
     mainview/thumbbardock.cpp
     mainview/thememanager.cpp
@@ -82,6 +68,7 @@ set(libitemview_SRCS
     itemview/dcategorizedview.cpp
     itemview/dcategorizedsortfilterproxymodel.cpp
     itemview/ditemdelegate.cpp
+    itemview/ditemtooltip.cpp
     itemview/dcategorydrawer.cpp
     itemview/imagedelegateoverlay.cpp
     itemview/itemviewhoverbutton.cpp

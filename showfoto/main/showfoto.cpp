@@ -1368,7 +1368,9 @@ void ShowFoto::slotEditGeolocation()
         return;
     }
 
-    QPointer<GeolocationEdit> dialog = new GeolocationEdit(0, QApplication::activeWindow());
+    QPointer<GeolocationEdit> dialog = new GeolocationEdit(0,
+                                                           new ShowfotoInfoIface(this, d->thumbBar->urls()),
+                                                           QApplication::activeWindow());
     dialog->setImages(infos);
     dialog->exec();
 

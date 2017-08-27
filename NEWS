@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 5.7.0 - Release date: 2017-07-23
+digiKam 5.7.0 - Release date: 2017-08-27
 
 NEW FEATURES:
 
@@ -18,6 +18,7 @@ ImageEditor : Add SendByMail and PrintCreator tools support.
 Showfoto    : Add SendByMail and PrintCreator tools support.
 LightTable  : Add SendByMail and PrintCreator tools support.
 Panorama    : Add Hugin 2017.0 support.
+Geolocation : Add new tool to export GPS trace to KML file from geolocation editor.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -534,5 +535,6 @@ BUGFIXES FROM BUGZILLA:
 506 ==> 231321 - Allow to rate items with image viewer.
 507 ==> 290931 - Allow to delete items in image viewer.
 508 ==> 221458 - Resizing the geotag window causes crash.
-509 ==> 
->>>>>>> 65df21fd99d226a3f167b5f8eaac2bc03586c676
+509 ==> 383707 - BQM renames files (adds «_1») even if renaming is disabled.
+510 ==> 384049 - Add an option for group icon-view frame.
+511 ==> 383989 - Cannot create panoramas.

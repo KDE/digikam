@@ -1898,7 +1898,9 @@ void ImageWindow::slotEditGeolocation()
     filterModel->setSourceAlbumModel(tagModel);
     filterModel->sort(0);
 
-    QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel, QApplication::activeWindow());
+    QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
+                                                           new DBInfoIface(this, d->thumbBar->allUrls()),
+                                                           QApplication::activeWindow());
     dialog->setItems(ImageGPS::infosToItems(infos));
     dialog->exec();
 
