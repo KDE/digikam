@@ -52,9 +52,7 @@ include_directories(
 
 
 
-set(libmediaserver_SRCS
-           apps/simple_avtest-app/main.cpp 
-           apps/simple_avtest-app/mediaserver_introductionwindow.cpp 
+set(libmediaserver_SRCS 
            apps/simple_avtest-app/mediaserver_window.cpp 
            hupnp_av/src/hav_devicemodel_creator.cpp 
            hupnp_av/src/hav_devicemodel_infoprovider.cpp 
@@ -265,13 +263,6 @@ set(libmediaserver_SRCS
            hupnp_av/src/cds_model/model_mgmt/hcdsproperty.cpp 
            hupnp_av/src/cds_model/model_mgmt/hcdsproperty_db.cpp 
            hupnp_av/src/cds_model/model_mgmt/hcdspropertyinfo.cpp
-)
-
-
-set (UIS
-# apps/simple_avtest-app/invokeactiondialog.ui 
-# apps/simple_avtest-app/mediaserver_introductionwindow.ui 
- apps/simple_avtest-app/mediaserver_window.ui
 )
 
 
