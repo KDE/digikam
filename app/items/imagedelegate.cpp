@@ -49,6 +49,7 @@
 #include "imagefiltermodel.h"
 #include "imagethumbnailmodel.h"
 #include "thumbnailloadthread.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -259,7 +260,8 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     }
 
     bool groupedAndClosed  = (info.hasGroupedImages() &&
-                              !index.data(ImageFilterModel::GroupIsOpenRole).toBool());
+                              !index.data(ImageFilterModel::GroupIsOpenRole).toBool() &&
+                              ApplicationSettings::instance()->getDrawFramesToGrouped());
 
     QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect,
                                            pix, thumbnailPixmap(index),

@@ -152,7 +152,7 @@ GPSImageItem* GPSImageModel::itemFromIndex(const QModelIndex& index) const
 {
     if (index.isValid())
     {
-        Q_ASSERT(index.model()==this);
+        Q_ASSERT(index.model() == this);
     }
 
     if (!index.isValid())
@@ -170,7 +170,7 @@ int GPSImageModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
     {
-        Q_ASSERT(parent.model()==this);
+        Q_ASSERT(parent.model() == this);
     }
 
     if (parent.isValid())
@@ -213,7 +213,7 @@ Qt::ItemFlags GPSImageModel::flags(const QModelIndex& index) const
 {
     if (index.isValid())
     {
-        Q_ASSERT(index.model()==this);
+        Q_ASSERT(index.model() == this);
     }
 
     if (!index.isValid())

@@ -21,13 +21,13 @@
  *
  * ============================================================ */
 
+#include "drangebox.h"
+
+// Qt includes
+
 #include <QSpinBox>
 #include <QLabel>
 #include <QHBoxLayout>
-//#include <QApplication>
-//#include <QStyle>
-
-#include "drangebox.h"
 
 namespace Digikam
 {
@@ -39,9 +39,9 @@ public:
 
     Private()
     {
-        intervalLabel    = 0;
-        minValueBox      = 0;
-        maxValueBox      = 0;
+        intervalLabel = 0;
+        minValueBox   = 0;
+        maxValueBox   = 0;
     }
 
     QLabel*   intervalLabel;
@@ -53,14 +53,15 @@ DIntRangeBox::DIntRangeBox(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    d->minValueBox = new QSpinBox(this);
+    d->minValueBox   = new QSpinBox(this);
     d->minValueBox->setRange(0, 100);
     d->minValueBox->setValue(0);
     d->minValueBox->setSingleStep(1);
 
     d->intervalLabel = new QLabel(QLatin1String("-"), this);
+    d->intervalLabel->setAlignment(Qt::AlignCenter);
 
-    d->maxValueBox = new QSpinBox(this);
+    d->maxValueBox   = new QSpinBox(this);
     d->maxValueBox->setRange(d->minValueBox->value(), 100);
     d->maxValueBox->setValue(100);
     d->maxValueBox->setSingleStep(1);
@@ -72,17 +73,17 @@ DIntRangeBox::DIntRangeBox(QWidget* const parent)
     mainLayout->addWidget(d->intervalLabel);
     mainLayout->addWidget(d->maxValueBox);
     //mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
-    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(mainLayout);
 
     connect(d->minValueBox, SIGNAL(valueChanged(int)),
-            this,           SLOT(slotMinimumChanged(int)));
+            this, SLOT(slotMinimumChanged(int)));
 
     connect(d->minValueBox, SIGNAL(valueChanged(int)),
-            this,           SIGNAL(minChanged(int)));
+            this, SIGNAL(minChanged(int)));
 
     connect(d->maxValueBox, SIGNAL(valueChanged(int)),
-            this,           SIGNAL(maxChanged(int)));
+            this, SIGNAL(maxChanged(int)));
 }
 
 DIntRangeBox::~DIntRangeBox()

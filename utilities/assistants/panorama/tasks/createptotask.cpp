@@ -54,7 +54,8 @@ CreatePtoTask::~CreatePtoTask()
 
 void CreatePtoTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
-    ptoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("pano_base.pto")));
+    ptoUrl = tmpDir;
+    ptoUrl.setPath(ptoUrl.path() + QLatin1String("pano_base.pto"));
 
     QFile pto(ptoUrl.toLocalFile());
 

@@ -81,12 +81,14 @@ DLogoAction::DLogoAction(QObject* const parent, bool alignOnright)
     if (QApplication::applicationName() == QLatin1String("digikam"))
     {
         setIcon(QIcon::fromTheme(QLatin1String("digikam")));
-        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/banner-digikam.png")));
+        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                    QLatin1String("digikam/data/banner-digikam.png")));
     }
     else
     {
         setIcon(QIcon::fromTheme(QLatin1String("showfoto")));
-        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/banner-showfoto.png")));
+        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                    QLatin1String("showfoto/data/banner-showfoto.png")));
     }
 
     d->alignOnright  = alignOnright;
@@ -115,7 +117,8 @@ void DLogoAction::stop()
 
     if (d->urlLabel)
     {
-        d->urlLabel->updateData(DAboutData::webProjectUrl(), d->progressPixmap.copy(0, 0, 144, 32).toImage());
+        d->urlLabel->updateData(DAboutData::webProjectUrl(),
+                                d->progressPixmap.copy(0, 0, 144, 32).toImage());
     }
 }
 

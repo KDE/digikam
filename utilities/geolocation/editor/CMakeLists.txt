@@ -46,11 +46,16 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
 
                             bookmark/gpsbookmarkowner.cpp
                             bookmark/gpsbookmarkmodelhelper.cpp
-
                             bookmark/bookmarknode.cpp
                             bookmark/bookmarksmenu.cpp
                             bookmark/bookmarksmngr.cpp
                             bookmark/bookmarksdlg.cpp
+
+                            kmlexport/geodataparser.cpp
+                            kmlexport/kmlgpsdataparser.cpp
+                            kmlexport/kmlwidget.cpp
+                            kmlexport/kmlexport.cpp
+
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>

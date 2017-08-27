@@ -3330,7 +3330,9 @@ void DigikamApp::slotEditGeolocation()
     filterModel->setSourceAlbumModel(tagModel);
     filterModel->sort(0);
 
-    QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel, QApplication::activeWindow());
+    QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel,
+                                                           new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools),
+                                                           QApplication::activeWindow());
     dialog->setItems(ImageGPS::infosToItems(infos));
     dialog->exec();
 

@@ -63,8 +63,8 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     QFile     finalPanoFile(finalPanoUrl.toLocalFile());
 
     QFileInfo fi(finalPanoUrl.toLocalFile());
-    QUrl      finalPTOUrl = finalPanoUrl.adjusted(QUrl::RemoveFilename)
-                                        .resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".pto")));
+    QUrl      finalPTOUrl = finalPanoUrl.adjusted(QUrl::RemoveFilename);
+    finalPTOUrl.setPath(finalPTOUrl.path() + fi.completeBaseName() + QLatin1String(".pto"));
 
     QFile     ptoFile(ptoUrl.toLocalFile());
     QFile     finalPTOFile(finalPTOUrl.toLocalFile());
@@ -191,8 +191,8 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         {
             if (DRawDecoder::isRawFile(i.key()))
             {
-                QUrl finalImgUrl = finalPanoUrl.adjusted(QUrl::RemoveFilename)
-                                               .resolved(QUrl::fromLocalFile(i->preprocessedUrl.fileName()));
+                QUrl finalImgUrl = finalPanoUrl.adjusted(QUrl::RemoveFilename);
+                finalImgUrl.setPath(finalImgUrl.path() + i->preprocessedUrl.fileName());
                 QFile finalImgFile(finalImgUrl.toString(QUrl::PreferLocalFile));
                 QFile imgFile(i->preprocessedUrl.toLocalFile());
 

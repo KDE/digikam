@@ -145,7 +145,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     codeLink->setOpenExternalLinks(true);
     codeLink->setWordWrap(false);
 
-    // By default, check box is not visible. (digiKam do not use it, kipi-plugins yes).
+    // By default, check box is not visible.
     m_subjectsCheck->setVisible(false);
     m_subjectsCheck->setEnabled(false);
 
