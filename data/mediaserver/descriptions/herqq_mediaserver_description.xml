@@ -33,16 +33,18 @@
         </serviceList>
        <iconList>
             <icon>
+
                 <mimetype>image/png</mimetype>
                 <width>256</width>
                 <height>256</height>
                 <depth>24</depth>
-                <url>/descriptions/Sign-LogOff-icon.png</url>
+                <url>icon.png</url>
+                
             </icon>
-            <icon<name />
+            <icon>
                 <mimetype>image/png</mimetype>
-                <width>128</width>
-                <height>128</height>
+                <width>256</width>
+                <height>256</height>
                 <depth>24</depth>
                 <url>http://icons.iconarchive.com/icons/kyo-tux/aeon/256/Sign-LogOff-icon.png</url>
             </icon>
