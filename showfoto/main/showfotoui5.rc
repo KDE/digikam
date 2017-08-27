@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="558" name="showfoto" translationDomain="digikam" >
+<gui version="559" name="showfoto" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -83,6 +83,7 @@
     <Menu name="Enhance" ><text>Enh&amp;ance</text>
         <Action name="editorwindow_enhance_restoration" />
         <Action name="editorwindow_enhance_blur" />
+	<Action name="editorwindow_enhance_healingclone" />
         <Action name="editorwindow_enhance_sharpen" />
         <Action name="editorwindow_enhance_noisereduction" />
         <Action name="editorwindow_enhance_localcontrast" />
