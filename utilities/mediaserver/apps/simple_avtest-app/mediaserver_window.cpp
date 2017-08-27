@@ -36,10 +36,12 @@
 #include <../../HUpnpAv/HFileSystemDataSource>
 #include <../../HUpnpAv/HContentDirectoryServiceConfiguration>
 
+// QT includes
 #include <QDir>
 #include <QFileDialog>
 #include <QDataStream>
 #include<QDebug>
+#include <QStandardPaths>
 
 
 using namespace Herqq::Upnp;
@@ -50,8 +52,12 @@ using namespace Herqq::Upnp::Av;
  *******************************************************************************/
 
 
-const QString MediaServerWindow::serverDatabasePath(QDir::homePath() + QLatin1String("/.digikam_dlna/database/"));
-const QString MediaServerWindow::serverDescriptionPath(QDir::homePath() + QLatin1String("/.digikam_dlna/descriptions/"));
+
+const QString MediaServerWindow::serverDescriptionPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                                              QString::fromLatin1("digikam/mediaserver/descriptions/")));
+const QString MediaServerWindow::serverDatabasePath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                                           QString::fromLatin1("digikam/mediaserver/database/")));
+
 
 
 MediaServerWindow::MediaServerWindow(QWidget *parent) :

@@ -17,6 +17,7 @@ add_subdirectory(hotplug)
 add_subdirectory(scripts)
 add_subdirectory(filters)
 add_subdirectory(printcreator)
+add_subdirectory(mediaserver)
 
 if(LIBXML2_FOUND AND LIBXSLT_FOUND)
     add_subdirectory(htmlgallery)
