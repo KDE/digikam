@@ -530,4 +530,4 @@ BUGFIXES FROM BUGZILLA:
 509 ==> 383707 - BQM renames files (adds «_1») even if renaming is disabled.
 510 ==> 384049 - Add an option for group icon-view frame.
 511 ==> 383989 - Cannot create panoramas.
-
+512 ==> 383912 - AppImage crashes when started in terminal with 'debug' option.
