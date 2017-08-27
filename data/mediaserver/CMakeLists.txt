@@ -11,3 +11,5 @@ file(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/icon.png")
 install(FILES ${files} DESTINATION ${DATA_INSTALL_DIR}/digikam/mediaserver/descriptions)
 file(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/database/*.dat")
 install(FILES ${files} DESTINATION ${DATA_INSTALL_DIR}/digikam/mediaserver/database)
+
+#dont forget to copy.
