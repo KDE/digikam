@@ -54,9 +54,8 @@ using namespace Herqq::Upnp::Av;
 
 
 const QString MediaServerWindow::serverDescriptionPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                                              QString::fromLatin1("digikam/mediaserver/descriptions/")));
-const QString MediaServerWindow::serverDatabasePath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                                           QString::fromLatin1("digikam/mediaserver/database/")));
+                                                                              QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediaserver_description.xml")));
+const QString MediaServerWindow::serverDatabasePath(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+ QLatin1String("/digikam/mediaserver/database"));
 
 
 
@@ -91,8 +90,10 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
     // 5) Setup the HDeviceHost with desired configuration info.
     HDeviceConfiguration config;
 
-    QString deviceDescriptionPath = serverDescriptionPath + QLatin1String("herqq_mediaserver_description.xml");
+
+    QString deviceDescriptionPath = serverDescriptionPath;
     qDebug() << "APP PATH" << deviceDescriptionPath;
+    qDebug() << "server database path " << serverDatabasePath ;
     config.setPathToDeviceDescription(deviceDescriptionPath);
     config.setCacheControlMaxAge(180);
 
@@ -200,7 +201,7 @@ void MediaServerWindow::addRootDirectoriesToServer(const HRootDir& rd)
 
 void MediaServerWindow::saveDirectoriesToDatabase()
 {
-    QFile file(serverDatabasePath + (QLatin1String("serverDirectories.dat")));
+    QFile file(serverDatabasePath + (QLatin1String("/serverDirectories.dat")));
     file.open(QFile::WriteOnly);
     QDataStream out(&file);
 
@@ -214,7 +215,7 @@ void MediaServerWindow::saveDirectoriesToDatabase()
 
 void MediaServerWindow::loadDirectoriesFromDatabase()
 {
-    QFile file(serverDatabasePath + (QLatin1String("serverDirectories.dat")));
+    QFile file(serverDatabasePath + (QLatin1String("/serverDirectories.dat")));
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
     HRootDir dir ;
@@ -230,7 +231,7 @@ void MediaServerWindow::loadDirectoriesFromDatabase()
 void MediaServerWindow::saveItemsToDatabase()
 {
 
-    QFile file(serverDatabasePath + (QLatin1String("serverItems.dat")));
+    QFile file(serverDatabasePath + (QLatin1String("/serverItems.dat")));
     file.open(QFile::WriteOnly);
     QDataStream out(&file);
 
@@ -245,7 +246,7 @@ void MediaServerWindow::saveItemsToDatabase()
 void MediaServerWindow::loadItemsFromDatabase()
 {
 
-    QFile file(serverDatabasePath + (QLatin1String("serverItems.dat")));
+    QFile file(serverDatabasePath + (QLatin1String("/serverItems.dat")));
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
     QString dir ;
