@@ -37,6 +37,7 @@ public:
 
     static const QString configGroupName;
     static const QString configRadiusAdjustmentEntry;
+    static const QString configBlurAdjustmentEntry;
 
     DIntNumInput*           radiusInput;
     DDoubleNumInput*        blurPercent;
@@ -51,7 +52,7 @@ public:
 
 const QString HealingCloneTool::Private::configGroupName(QLatin1String("Healing Clone Tool"));
 const QString HealingCloneTool::Private::configRadiusAdjustmentEntry(QLatin1String("RadiusAdjustment"));
-
+const QString HealingCloneTool::Private::configBlurAdjustmentEntry(QLatin1String("BlurAdjustment"));
 // --------------------------------------------------------
 
 HealingCloneTool::HealingCloneTool(QObject * const parent)
@@ -64,7 +65,8 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
     setToolHelp(QLatin1String("healingclonetool.anchor"));
 
     d->gboxSettings  = new EditorToolSettings;
-    d->previewWidget = new ImageBrushGuideWidget(0, true, ImageGuideWidget::PickColorMode);
+    d->previewWidget = new ImageBrushGuideWidget(0, true, ImageGuideWidget::PickColorMode, Qt::red);
+
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::PreviewTargetImage);
     // --------------------------------------------------------
@@ -87,7 +89,7 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
                                       " the destination color with source."));
     // --------------------------------------------------------
     QLabel* const label_src  = new QLabel(i18n("Source:"));
-    d->src = new QPushButton(i18n("click to set"), d->gboxSettings->plainPage());
+    d->src = new QPushButton(i18n("click to set/unset"), d->gboxSettings->plainPage());
 
     // --------------------------------------------------------
 
@@ -120,7 +122,8 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
             d->previewWidget, SLOT(slotSrcSet()));
     connect(d->previewWidget, SIGNAL(signalClone(QPoint&,QPoint&)),
             this, SLOT(slotReplace(QPoint&,QPoint&)));
-
+    connect(d->previewWidget, SIGNAL(signalResized()),
+            this, SLOT(slotResized()));
 }
 
 HealingCloneTool::~HealingCloneTool()
@@ -133,6 +136,8 @@ void HealingCloneTool::readSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->radiusInput->setValue(group.readEntry(d->configRadiusAdjustmentEntry, d->radiusInput->defaultValue()));
+    d->blurPercent->setValue(group.readEntry(d->configBlurAdjustmentEntry, d->blurPercent->defaultValue()));
+
 }
 
 void HealingCloneTool::writeSettings()
@@ -140,21 +145,16 @@ void HealingCloneTool::writeSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configRadiusAdjustmentEntry, d->radiusInput->value());
+    group.writeEntry(d->configBlurAdjustmentEntry, d->blurPercent->value());
     config->sync();
 }
 
 void HealingCloneTool::finalRendering()
 {
-    //qApp->setOverrideCursor( Qt::WaitCursor );
-
     ImageIface iface;
     DImg dest = d->previewWidget->imageIface()->preview();
-
     FilterAction action(QLatin1String("digikam:healingCloneTool"), 1);
-
     iface.setOriginal(i18n("healingClone"), action, dest);
-
-    //qApp->restoreOverrideCursor();
 }
 
 void HealingCloneTool::slotResetSettings()
@@ -162,6 +162,11 @@ void HealingCloneTool::slotResetSettings()
     d->radiusInput->blockSignals(true);
     d->radiusInput->slotReset();
     d->radiusInput->blockSignals(false);
+}
+
+void HealingCloneTool::slotResized()
+{
+    toolView()->update();
 }
 
 void HealingCloneTool::slotReplace(QPoint &srcPoint, QPoint &dstPoint)

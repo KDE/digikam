@@ -44,6 +44,8 @@ public:
 private Q_SLOTS:
 
     void slotResetSettings();
+    void slotResized();
+
 
 public Q_SLOTS:
     void slotReplace(QPoint& srcPoint,QPoint& dstPoint);
