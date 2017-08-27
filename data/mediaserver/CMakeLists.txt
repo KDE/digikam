@@ -13,3 +13,5 @@ file(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/database/*.dat")
 install(FILES ${files} DESTINATION ${DATA_INSTALL_DIR}/digikam/mediaserver/database)
 
 #dont forget to copy.
+#file(COPY descriptions DESTINATION $ENV{HOME}/.digikam_dlna)
+#install(DIRECTORY descriptions DESTINATION $ENV{HOME}/.digikam_dlna)
