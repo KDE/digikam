@@ -69,6 +69,7 @@ public:
     static const QString configTreeViewFontEntry;
     static const QString configThemeEntry;
     static const QString configSidebarTitleStyleEntry;
+    static const QString configDrawFramesToGroupedEntry;
     static const QString configScrollItemToCenterEntry;
     static const QString configShowOnlyPersonTagsInPeopleSidebarEntry;
     static const QString configRatingFilterConditionEntry;
@@ -159,6 +160,8 @@ public:
     bool                                         showPermanentDeleteDialog;
     // metadata setting
     bool                                         sidebarApplyDirectly;
+    // grouped item draw settings
+    bool                                         drawFramesToGrouped;
     // item center settings
     bool                                         scrollItemToCenter;
     // tag filter settings

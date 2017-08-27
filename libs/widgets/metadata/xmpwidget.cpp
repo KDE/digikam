@@ -45,7 +45,7 @@ static const char* StandardXmpEntryList[] =
     "crs",             // Camera Raw schema.
     "dc",              // Dublin Core schema.
     "digiKam",         // Our Xmp schema used to store private information (see DMetadata class for details).
-    "kipi",            // Our 2nd Xmp schema used to store private information from kipi-plugins.
+    "kipi",            // Xmp schema used to store private information from plugins.
     "exif",            // Schema for Exif-specific Properties.
     "iptc",            // IPTC Core schema.
     "iptcExt",         // IPTC Extension schema.

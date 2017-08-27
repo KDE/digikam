@@ -82,10 +82,10 @@ public:
 
     bool              hasThumb;       // True if thumbnails is a real photo thumbs
 
-    int               rating;         // Image Rating from Kipi host.
-    QString           comments;       // Image comments from Kipi host.
-    QStringList       tags;           // List of keywords from Kipi host.
-    QUrl              url;            // Image url provided by Kipi host.
+    int               rating;         // Image Rating from host.
+    QString           comments;       // Image comments from host.
+    QStringList       tags;           // List of keywords from host.
+    QUrl              url;            // Image url provided by host.
     QPixmap           thumb;          // Image thumbnail.
     DImagesListView*  view;
     State             state;

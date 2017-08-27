@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DRANGEBOX_H
-#define DRANGEBOX_H
+#ifndef DRANGE_BOX_H
+#define DRANGE_BOX_H
 
 // Qt includes
 
@@ -37,11 +37,11 @@ namespace Digikam
 
 class DIGIKAM_EXPORT DIntRangeBox : public QWidget
 {
-
     Q_OBJECT
 
 public:
-    DIntRangeBox(QWidget* const parent=0);
+
+    explicit DIntRangeBox(QWidget* const parent=0);
     ~DIntRangeBox();
 
     /**
@@ -83,19 +83,20 @@ public:
     int maxValue();
 
 Q_SIGNALS:
+
     void minChanged(int);
     void maxChanged(int);
 
 private Q_SLOTS:
+
     void slotMinimumChanged(int);
 
 private:
 
     class Private;
     Private* const d;
-
 };
 
 } // namespace Digikam
 
-#endif // DRANGEBOX_H
+#endif // DRANGE_BOX_H

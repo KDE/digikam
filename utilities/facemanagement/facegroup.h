@@ -106,6 +106,8 @@ public Q_SLOTS:
      *  Pass a null info if about to close. */
     void aboutToSetInfo(const ImageInfo& info);
 
+    void aboutToSetInfoAfterRotate(const ImageInfo& info);
+
     /** Enters a special state where by click + drag a new face can be created */
     void addFace();
 

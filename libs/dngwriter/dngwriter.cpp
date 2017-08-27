@@ -1268,7 +1268,7 @@ int DNGWriter::convert()
             }
             else
             {
-                // Don't touch DNG file and create XMP sidecar depending of KIPI host application settings.
+                // Don't touch DNG file and create XMP sidecar depending of host application settings.
                 meta.setWriteRawFiles(false);
             }
 

@@ -78,6 +78,7 @@
 #include "dmessagebox.h"
 #include "gpsundocommand.h"
 #include "rgwidget.h"
+#include "kmlwidget.h"
 #include "statusprogressbar.h"
 #include "searchwidget.h"
 #include "backend-rg.h"
@@ -86,6 +87,7 @@
 #include "dxmlguiwindow.h"
 #include "gpsbookmarkowner.h"
 #include "gpsbookmarkmodelhelper.h"
+#include "dinfointerface.h"
 
 #ifdef GPSSYNC_MODELTEST
 #   include <modeltest.h>
@@ -181,6 +183,7 @@ public:
         correlatorWidget         = 0;
         rgWidget                 = 0;
         searchWidget             = 0;
+        kmlWidget                = 0;
         mapSplitter              = 0;
         mapWidget                = 0;
         mapWidget2               = 0;
@@ -194,6 +197,7 @@ public:
         cbMapLayout              = 0;
         bookmarkOwner            = 0;
         actionBookmarkVisibility = 0;
+        iface                    = 0;
     }
 
     // General things
@@ -232,6 +236,7 @@ public:
     GPSCorrelatorWidget*                     correlatorWidget;
     RGWidget*                                rgWidget;
     SearchWidget*                            searchWidget;
+    KmlWidget*                               kmlWidget;
 
     // map: UI
     MapLayout                                mapLayout;
@@ -252,9 +257,13 @@ public:
 
     GPSBookmarkOwner*                        bookmarkOwner;
     QAction*                                 actionBookmarkVisibility;
+
+    DInfoInterface*                          iface;
 };
 
-GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidget* const parent)
+GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
+                                 DInfoInterface* const iface,
+                                 QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
@@ -263,6 +272,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     setMinimumSize(300, 400);
     resize(800, 600);
 
+    d->iface          = iface;
     d->imageModel     = new GPSImageModel(this);
     d->selectionModel = new QItemSelectionModel(d->imageModel);
     d->trackManager   = new TrackManager(this);
@@ -277,8 +287,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     d->searchWidget  = new SearchWidget(d->bookmarkOwner,
                                         d->imageModel,
                                         d->selectionModel,
-                                        d->stackedWidget
-                                       );
+                                        d->stackedWidget);
 
     GPSImageItem::setHeaderData(d->imageModel);
     d->mapModelHelper      = new GPSGeoIfaceModelHelper(d->imageModel, d->selectionModel, this);
@@ -397,6 +406,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     d->tabBar->addTab(i18n("Undo/Redo"));
     d->tabBar->addTab(i18n("Reverse Geocoding"));
     d->tabBar->addTab(i18n("Search"));
+    d->tabBar->addTab(i18n("KML Export"));
 
     d->tabBar->installEventFilter(this);
 
@@ -411,7 +421,11 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
 
     d->rgWidget         = new RGWidget(d->imageModel, d->selectionModel, externTagModel, d->stackedWidget);
     d->stackedWidget->addWidget(d->rgWidget);
+
     d->stackedWidget->addWidget(d->searchWidget);
+
+    d->kmlWidget        = new KmlWidget(this, d->imageModel, d->iface);
+    d->stackedWidget->addWidget(d->kmlWidget);
 
     // ---------------------------------------------------------------
 
@@ -472,7 +486,8 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     connect(d->tabBar, SIGNAL(currentChanged(int)),
             this, SLOT(slotCurrentTabChanged(int)));
 
-    connect(d->bookmarkOwner->bookmarkModelHelper(), SIGNAL(signalUndoCommand(GPSUndoCommand*)),
+    connect(d->bookmarkOwner->bookmarkModelHelper(),
+            SIGNAL(signalUndoCommand(GPSUndoCommand*)),
             this, SLOT(slotGPSUndoCommand(GPSUndoCommand*)));
 
     connect(d->detailsWidget, SIGNAL(signalUndoCommand(GPSUndoCommand*)),
@@ -556,7 +571,8 @@ void GeolocationEdit::setCurrentTab(int index)
     }
 
     d->HSplitter->setSizes(sizes);
-    d->detailsWidget->slotSetActive( (d->stackedWidget->currentWidget()==d->detailsWidget) && (d->splitterSize==0) );
+    d->detailsWidget->slotSetActive((d->stackedWidget->currentWidget() == d->detailsWidget) &&
+                                    (d->splitterSize == 0));
 }
 
 void GeolocationEdit::setImages(const QList<QUrl>& images)
