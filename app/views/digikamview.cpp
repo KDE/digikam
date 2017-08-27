@@ -97,7 +97,7 @@
 #include "mapwidgetview.h"
 #endif // HAVE_MARBLE
 
-#include<../mediaserver/apps/server/mediaserver_window.h>
+#include<../mediaserver/app/server/mediaserver_window.h>
 
 namespace Digikam
 {

@@ -16,7 +16,7 @@ set(CMAKE_AUTOUIC ON)
 
 
 include_directories(  
-           apps/server
+           app/server
            hupnp_av/src
            hupnp/src/dataelements
            hupnp/src/devicehosting 
@@ -53,7 +53,7 @@ include_directories(
 
 
 set(libmediaserver_SRCS 
-           apps/server/mediaserver_window.cpp 
+           app/server/mediaserver_window.cpp 
            hupnp_av/src/hav_devicemodel_creator.cpp 
            hupnp_av/src/hav_devicemodel_infoprovider.cpp 
            hupnp_av/src/hav_global.cpp 
