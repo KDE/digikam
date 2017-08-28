@@ -185,6 +185,11 @@ ImageIface::PreviewType ImageIface::previewType() const
     return d->previewType;
 }
 
+DImg *ImageIface::previewReference()
+{
+    return &(d->previewImage);
+}
+
 DColor ImageIface::colorInfoFromOriginal(const QPoint& point) const
 {
     if (!original() || original()->isNull())

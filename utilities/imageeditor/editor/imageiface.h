@@ -79,6 +79,11 @@ public:
     bool        previewSixteenBit()         const;
     PreviewType previewType()               const;
 
+    /** Return a pointer to the DImg object representing the preview image.
+     *  This function is a backdoor for preview editing.
+     */
+    DImg * previewReference();
+
     /** Return a DImg object representing the preview image.
      */
     DImg  preview()                         const;

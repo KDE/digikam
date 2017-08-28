@@ -36,6 +36,7 @@ endif()
 
 set(libeditorwidgets_SRCS
     widgets/imageguidewidget.cpp
+    widgets/imagebrushguidewidget.cpp
     widgets/imagepreviewitem.cpp
     widgets/previewtoolbar.cpp
     widgets/previewlist.cpp
@@ -114,6 +115,7 @@ set(libeditortools_SRCS
     tools/enhance/inpaintingtool.cpp
     tools/enhance/antivignettingtool.cpp
     tools/enhance/lensdistortiontool.cpp
+    tools/enhance/healingclonetool.cpp
     tools/enhance/hotpixels/weights.cpp
     tools/enhance/hotpixels/blackframeparser.cpp
     tools/enhance/hotpixels/blackframelistview.cpp

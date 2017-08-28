@@ -123,6 +123,7 @@ public:
         redeyeAction(0),
         restorationAction(0),
         blurAction(0),
+        healCloneAction(0),
         sharpenAction(0),
         noiseReductionAction(0),
         localContrastAction(0),
@@ -242,6 +243,7 @@ public:
     QAction*                     redeyeAction;
     QAction*                     restorationAction;
     QAction*                     blurAction;
+    QAction*                     healCloneAction;
     QAction*                     sharpenAction;
     QAction*                     noiseReductionAction;
     QAction*                     localContrastAction;

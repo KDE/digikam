@@ -350,6 +350,7 @@ private Q_SLOTS:
     void slotUpdateColorSpaceMenu();
     void slotRestoration();
     void slotBlur();
+    void slotHealingClone();
     void slotSharpen();
     void slotNoiseReduction();
     void slotLocalContrast();

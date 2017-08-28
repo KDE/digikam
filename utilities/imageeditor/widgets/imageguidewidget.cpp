@@ -802,8 +802,7 @@ QPoint ImageGuideWidget::translatePointPosition(QPoint& point) const
 {
     int x  = (int)(point.x() * (float)(d->preview.width())  / (float) d->iface->originalSize().width());
     int y  = (int)(point.y() * (float)(d->preview.height()) / (float) d->iface->originalSize().height());
-    x     += d->rect.x() + 1;
-    y     += d->rect.y() + 1;
+
     return (QPoint(x, y));
 }
 
@@ -836,6 +835,45 @@ void ImageGuideWidget::updateMaskCursor()
     p.drawEllipse(1, 1, size - 2, size - 2);
 
     d->maskCursor = QCursor(pix);
+}
+
+void ImageGuideWidget::setSpotPosition(QPoint &point)
+{
+    d->spot.setX(point.x());
+    d->spot.setY(point.y());
+    updatePreview();
+}
+
+void ImageGuideWidget::updateSpotPosition(int x, int y)
+{
+    QPoint origin = d->rect.topLeft();
+    x -= origin.x();
+    y -= origin.y();
+    d->spot.setX(x);
+    d->spot.setY(y);
+    updatePreview();
+}
+
+QPoint ImageGuideWidget::translateImagePosition(QPoint &point, bool src) const
+{
+    //int x  = (int)(point.x() / (float) d->iface->originalSize().width() * (float)(d->preview.width()));
+    //int y  = (int)(point.y() / (float) d->iface->originalSize().height() * (float)(d->preview.height()));
+    int x = (int)(point.x() *(float)(d->preview.width()) / (float) d->iface->originalSize().width());
+    int y = (int)(point.y() *(float)(d->preview.height()) / (float) d->iface->originalSize().height());
+
+    //x     += (int)d->rect.x()/2 + 1;
+    if (src){
+        y += (int)d->rect.y()/2 + 1;
+    }else{
+
+        x = (int)(point.x());
+        y = (int)(point.y());
+        x -= (int) (d->rect.topLeft().x()) +1;
+        y -= (int) (d->rect.topLeft().y()) +1;
+
+    }
+    //d->rect.y() + d->rect.height() / 2 - 1
+    return (QPoint(x, y));
 }
 
 void ImageGuideWidget::setMaskCursor()
