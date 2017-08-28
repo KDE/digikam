@@ -38,7 +38,16 @@ class HealingCloneTool : public EditorTool
     Q_OBJECT
 
 public:
+    /**
+     * Constructor.
+     *
+     * @param parent parent for qt parent child mechanism
+     */
     explicit HealingCloneTool(QObject* const parent);
+
+    /**
+     * Destructor.
+     */
     ~HealingCloneTool();
 
 private Q_SLOTS:
@@ -48,6 +57,11 @@ private Q_SLOTS:
 
 
 public Q_SLOTS:
+    /**
+     * @brief slotReplace called from the brush widget to start clone/heal
+     * @param srcPoint the center point of brush source
+     * @param dstPoint the center point of brush destination
+     */
     void slotReplace(QPoint& srcPoint,QPoint& dstPoint);
     void slotRadiusChanged(int r);
 
@@ -55,6 +69,13 @@ private:
     void readSettings();
     void writeSettings();
     void finalRendering();
+    /**
+     * @brief clone the method resposible for the clone/heal of preview image
+     * @param img the preview image is passed to this method by reference
+     * @param srcPoint center of brush source
+     * @param dstPoint center of brush destination
+     * @param radius radius of cloning brush
+     */
     void clone(DImg * const img, QPoint &srcPoint, QPoint &dstPoint, int radius);
 
 private:
