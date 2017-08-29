@@ -106,7 +106,7 @@ add_definitions(-DUSE_DNGSDK)
 add_definitions(-DDCRAW_VERBOSE)
 
 # Flag used by default into LibRaw to not use dedicated external thread
-add_definitions(-DLIBRAW_NOTHREADS)
+#add_definitions(-DLIBRAW_NOTHREADS)
 
 # Flag to export library symbols
 if(WIN32)
