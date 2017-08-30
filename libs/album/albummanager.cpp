@@ -880,7 +880,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
         if (result != QMessageBox::Yes)
         {
-            exit(0);
+            return false;
         }
 
         CoreDbAccess().db()->setSetting(QLatin1String("Locale"), currLocale);
