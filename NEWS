@@ -5,4 +5,5 @@ NEW FEATURES:
 
 BUGFIXES FROM BUGZILLA:
 
-001 ==> 
+001 ==> 382364 - segfault after saying “no” to locale mismatch warning question.
+002 ==> 

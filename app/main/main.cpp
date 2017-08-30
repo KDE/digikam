@@ -225,7 +225,14 @@ int main(int argc, char* argv[])
     }
 
     // initialize database
-    AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath);
+    if (!AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath))
+    {
+        CoreDbAccess::cleanUpDatabase();
+        ThumbsDbAccess::cleanUpDatabase();
+        FaceDbAccess::cleanUpDatabase();
+        MetaEngine::cleanupExiv2();
+        return 0;
+    }
 
     if (!iconTheme.isEmpty())
     {
