@@ -306,7 +306,7 @@ public:
             QRect rect     = fontMt.boundingRect(0, 0, wWidth, wHeight, 0, string);
             rect.moveRight(wWidth);
             rect.moveBottom(wHeight);
-            p1.drawText(rect, Qt::AlignLeft || Qt::AlignTop, string);
+            p1.drawText(rect, Qt::AlignLeft | Qt::AlignTop, string);
         }
     }
 
