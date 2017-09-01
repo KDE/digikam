@@ -387,7 +387,8 @@ bool DFileOperations::copyFolderRecursively(const QString& srcPath,
 
     foreach (const QFileInfo& fileInfo, srcDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
-        copyFolderRecursively(fileInfo.filePath(), newCopyPath);
+        if (!copyFolderRecursively(fileInfo.filePath(), newCopyPath))
+            return false;
     }
 
     return true;
