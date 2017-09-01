@@ -62,6 +62,11 @@
 #include "metaengine.h"
 #include "dcolorselector.h"
 
+
+
+
+
+
 namespace Digikam
 {
 
@@ -165,6 +170,7 @@ WaterMark::~WaterMark()
 
 void WaterMark::registerSettingsWidget()
 {
+
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     DVBox* const vbox = new DVBox;

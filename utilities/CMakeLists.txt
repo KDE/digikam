@@ -19,6 +19,7 @@ add_subdirectory(searchwindow)
 add_subdirectory(metadataedit)
 add_subdirectory(kdesupport)
 add_subdirectory(facemanagement)
+add_subdirectory(mediaserver)
 
 if(${MARBLE_FOUND})
     add_subdirectory(geolocation)

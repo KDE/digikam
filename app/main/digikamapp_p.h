@@ -168,6 +168,7 @@ public:
         slideShowSelectionAction(0),
         slideShowRecursiveAction(0),
         bqmAction(0),
+        dlnaMediaServerAction(0),
         maintenanceAction(0),
         qualityAction(0),
         advSearchAction(0),
@@ -299,6 +300,7 @@ public:
     QAction*                            maintenanceAction;
     QAction*                            qualityAction;
     QAction*                            advSearchAction;
+    QAction*                            dlnaMediaServerAction;
 
     // Application Actions
     QAction*                            addCameraSeparatorAction;

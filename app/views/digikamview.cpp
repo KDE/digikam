@@ -36,6 +36,11 @@
 #include <QApplication>
 #include <QDesktopServices>
 
+// kde includes
+
+
+#include <kconfiggroup.h>
+
 // Local includes
 
 #include "albumhistory.h"
@@ -92,6 +97,8 @@
 #include "mapwidgetview.h"
 #endif // HAVE_MARBLE
 
+#include<../mediaserver/app/server/mediaserver_window.h>
+
 namespace Digikam
 {
 
@@ -115,6 +122,7 @@ public:
         timelineSideBar(0),
         searchSideBar(0),
         fuzzySearchSideBar(0),
+        msw(0),
 
 #ifdef HAVE_MARBLE
         gpsSearchSideBar(0),
@@ -169,6 +177,8 @@ public:
     TimelineSideBarWidget*        timelineSideBar;
     SearchSideBarWidget*          searchSideBar;
     FuzzySearchSideBarWidget*     fuzzySearchSideBar;
+    // DLNA
+    MediaServerWindow*            msw ;
 
 #ifdef HAVE_MARBLE
     GPSSearchSideBarWidget*       gpsSearchSideBar;
@@ -404,6 +414,20 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
+
+    // load mediaserver on startup
+
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup dlnaConfigGroup   = config->group(QLatin1String("DLNA Settings"));
+    bool StartServerOnStartup =  dlnaConfigGroup.readEntry(QLatin1String("Start Server On Startup"),false);
+    bool StartServerInBackground =  dlnaConfigGroup.readEntry(QLatin1String("Start Server In Background"),false);
+
+     if(StartServerOnStartup)
+     {
+        this->slotMediaServer(true, StartServerInBackground);
+     }
+
+
 }
 
 DigikamView::~DigikamView()
@@ -1824,6 +1848,24 @@ void DigikamView::slotQueueMgr()
     }
 
     d->utilities->insertToQueueManager(imageInfoList, singleInfo, true);
+}
+
+void DigikamView::slotMediaServer(bool onStartup , bool startInBackground )
+{
+
+   if(!d->msw || MediaServerWindow::deletedFlag)
+   {
+      d->msw = new MediaServerWindow(this);
+      MediaServerWindow::deletedFlag = false;
+      connect(d->msw, SIGNAL(closed()), d->msw, SLOT(deleteLater()));
+      connect(d->msw, SIGNAL(closed()), d->msw, SLOT(setDeletedFlag()));
+   }
+
+   if(onStartup && startInBackground)
+       return;
+   else if(!d->msw->isVisible())
+        d->msw->show();
+
 }
 
 void DigikamView::slotImageEdit()

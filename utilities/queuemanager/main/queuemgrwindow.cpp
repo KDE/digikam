@@ -73,6 +73,7 @@
 #include "sidebar.h"
 #include "dnotificationwrapper.h"
 
+
 namespace Digikam
 {
 

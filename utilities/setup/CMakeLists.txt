@@ -25,6 +25,7 @@ set(libsetup_SRCS
     setupslideshow.cpp
     setupmisc.cpp
     setuplighttable.cpp
+    setupdlnaserver.cpp
     setupdatabase.cpp
     setupimagequalitysorter.cpp
     setuputils.cpp
