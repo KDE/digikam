@@ -90,7 +90,7 @@ SetupDlna::SetupDlna(QWidget* const parent)
 
 
     d->startServerOnStartupCheckBox = new QCheckBox(i18n("Automatic Start ?"));
-    d->startServerOnStartupCheckBox->setWhatsThis(i18n("Set this option to start the DLNA server on digikam start"));
+    d->startServerOnStartupCheckBox->setWhatsThis(i18n("Set this option to start the DLNA server on digiKam start"));
     gLayout->addWidget(d->startServerOnStartupCheckBox);
     d->startServerOnStartupCheckBox->setChecked(true);
 

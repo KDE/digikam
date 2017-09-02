@@ -84,8 +84,8 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
     d->blurPercent = new DDoubleNumInput();
     d->blurPercent->setRange(0,100, 0.1);
     d->blurPercent->setDefaultValue(0);
-    d->blurPercent->setWhatsThis(i18n("A percent of 0 has no effect, and the prush just copies "
-                                      "above than 0 represents a ratio mixing"
+    d->blurPercent->setWhatsThis(i18n("A percent of 0 has no effect, values "
+                                      "above represent a ratio of mixing"
                                       " the destination color with source."));
     // --------------------------------------------------------
     QLabel* const label_src  = new QLabel(i18n("Source:"));
