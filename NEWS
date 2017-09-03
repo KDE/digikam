@@ -5,5 +5,6 @@ NEW FEATURES:
 
 BUGFIXES FROM BUGZILLA:
 
-001 ==> 382364 - segfault after saying “no” to locale mismatch warning question.
-002 ==> 
+001 ==> 382364 - Segfault after saying “no” to locale mismatch warning question.
+002 ==> 342352 - Relocate "Show tracks on map" option on GUI.
+003 ==> 
