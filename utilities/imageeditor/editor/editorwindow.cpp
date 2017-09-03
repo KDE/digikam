@@ -3012,7 +3012,7 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->noiseReductionAction,       enhanceCategory);
     actionModel->addAction(d->localContrastAction,        enhanceCategory);
     actionModel->addAction(d->redeyeAction,               enhanceCategory);
-    actionModel->addAction(d->inPaintingAction,           enhanceCategory);
+    //actionModel->addAction(d->inPaintingAction,           enhanceCategory);
     actionModel->addAction(d->lensdistortionAction,       enhanceCategory);
     actionModel->addAction(d->antivignettingAction,       enhanceCategory);
     actionModel->addAction(d->hotpixelsAction,            enhanceCategory);

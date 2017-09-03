@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="559" name="showfoto" translationDomain="digikam" >
+<gui version="560" name="showfoto" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -87,7 +87,6 @@
         <Action name="editorwindow_enhance_sharpen" />
         <Action name="editorwindow_enhance_noisereduction" />
         <Action name="editorwindow_enhance_localcontrast" />
-        <Action name="editorwindow_enhance_inpainting" />
         <Action name="editorwindow_enhance_hotpixels" />
         <Separator />
         <Action name="editorwindow_enhance_redeye" />
