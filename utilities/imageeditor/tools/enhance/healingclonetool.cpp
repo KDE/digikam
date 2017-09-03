@@ -85,8 +85,12 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
     d->blurPercent->setRange(0,100, 0.1);
     d->blurPercent->setDefaultValue(0);
     d->blurPercent->setWhatsThis(i18n("A percent of 0 has no effect, values "
-                                      "above represent a ratio of mixing"
-                                      " the destination color with source."));
+                                      "above 0 represent a factor for mixing "
+                                      "the destination color with source color "
+                                      "this is done radially i.e. the inner part of "
+                                      "the brush radius is totally from source and mixing "
+                                      "with destination is done gradually till the outer part "
+                                      "of the circle."));
     // --------------------------------------------------------
     QLabel* const label_src  = new QLabel(i18n("Source:"));
     d->src = new QPushButton(i18n("click to set/unset"), d->gboxSettings->plainPage());
