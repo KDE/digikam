@@ -7,4 +7,6 @@ BUGFIXES FROM BUGZILLA:
 
 001 ==> 382364 - Segfault after saying “no” to locale mismatch warning question.
 002 ==> 342352 - Relocate "Show tracks on map" option on GUI.
-003 ==> 
+003 ==> 132483 - Add new tool to clone and remove dust spots or other unwanted objects from a photo.
+004 ==> 233718 - wish: add healer tool (from Gimp) to enable the user to remove spots easily.
+005 ==> 
