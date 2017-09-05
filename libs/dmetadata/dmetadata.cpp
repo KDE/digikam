@@ -34,6 +34,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QLocale>
+#include <QUuid>
 
 // Local includes
 
@@ -991,9 +992,18 @@ QString DMetadata::getImageUniqueId() const
         // The Exif ImageUniqueID is 128bit, or 32 hex digits.
         // If the first 20 are zero, it's probably a counter,
         // the left 12 are sufficient for more then 10^14 clicks.
-        if (!exifUid.isEmpty() && !exifUid.startsWith(QLatin1String("00000000000000000000")) &&
-            getExifTagString("Exif.Image.Make").toUpper() != QLatin1String("SAMSUNG"))
+        if (!exifUid.isEmpty() && !exifUid.startsWith(QLatin1String("00000000000000000000")))
         {
+            if (getExifTagString("Exif.Image.Make").toUpper() == QLatin1String("SAMSUNG"))
+            {
+                // Generate for Samsung a new random 32 bit hex unique ID.
+                QString imageUniqueID(QUuid::createUuid().toString());
+                imageUniqueID.replace(QLatin1Char('-'), QString());
+                imageUniqueID.remove(0, 1).chop(1);
+
+                return imageUniqueID;
+            }
+
             return exifUid;
         }
 

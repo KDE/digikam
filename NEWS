@@ -27,4 +27,5 @@ BUGFIXES FROM BUGZILLA:
 018 ==> 154829 - In-painting plugin doesn't use greycstoration threads.
 019 ==> 105632 - CImg plugins crashes digiKam.
 020 ==> 384366 - Configuration of different host port is not saved.
-021 ==> 
+021 ==> 375483 - Wrong history on images taken with Samsung S3 [patch].
+022 ==> 
