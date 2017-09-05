@@ -3,10 +3,26 @@ digiKam 5.8.0 - Release date: 2017-??-??
 
 NEW FEATURES:
 
+Image Editor : New clone tool to replace old CImg in-painting tool.
+
 BUGFIXES FROM BUGZILLA:
 
 001 ==> 382364 - Segfault after saying “no” to locale mismatch warning question.
 002 ==> 342352 - Relocate "Show tracks on map" option on GUI.
 003 ==> 132483 - Add new tool to clone and remove dust spots or other unwanted objects from a photo.
 004 ==> 233718 - wish: add healer tool (from Gimp) to enable the user to remove spots easily.
-005 ==> 
+005 ==> 281892 - in-painting crash.
+006 ==> 304002 - Segfault when using inpainting.
+007 ==> 301528 - In-painting enhance effect crashes digikam image editor.
+008 ==> 179807 - Inpainting tool stuck at 0%.
+009 ==> 277739 - Showfoto crash.
+010 ==> 348344 - Crash when in Image Editor I select an image area and click Enhance->in-painting.
+011 ==> 131446 - Using inpainting plugin crashes digiKam.
+012 ==> 276962 - Inpainting tool crashed.
+013 ==> 184731 - Cannot apply inpainting, it just hangs.
+014 ==> 232926 - In-painting causes digikam to lock up.
+015 ==> 319632 - digiKam crashes when in-painting applied to photo.
+016 ==> 274199 - digiKam crashed when using "inpainting" tool.
+017 ==> 278941 - Crash when trying to perform "In-Painting".
+018 ==> 154829 - In-painting plugin doesn't use greycstoration threads.
+019 ==> 
