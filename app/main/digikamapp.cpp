@@ -1557,8 +1557,8 @@ void DigikamApp::slotAlbumSelected(Album* album)
 
 void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageInfoList& listAll)
 {
-    int numImagesWithGrouped    = listAll.count();
-    int numImagesWithoutGrouped = d->view->allUrls(false).count();
+    int numImagesWithGrouped              = listAll.count();
+    int numImagesWithoutGrouped           = d->view->allUrls(false).count();
     ImageInfoList selectionWithoutGrouped = d->view->selectedInfoList(true, false);
 
     QString statusBarSelectionText;
@@ -1593,6 +1593,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageIn
                                               selection.count(), numImagesWithoutGrouped);
                 break;
             }
+
             if (selectionWithoutGrouped.count() > 1)
             {
                 if (selection.count() == selectionWithoutGrouped.count())
@@ -1616,9 +1617,11 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageIn
                                    selectionWithoutGrouped.count(), numImagesWithoutGrouped,
                                    selection.count(), numImagesWithGrouped);
                 }
+
                 break;
             }
             // no break; is completely intentional, arriving here is equivalent to case 1:
+            [[fallthrough]];
         }
         case 1:
         {
@@ -1644,6 +1647,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageIn
                           + i18n(" (%1 of %2. Total with grouped items: %3)", indexWithoutGrouped,
                                  numImagesWithoutGrouped, numImagesWithGrouped);
             }
+
             break;
         }
     }
