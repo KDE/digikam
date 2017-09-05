@@ -294,6 +294,7 @@ void DatabaseSettingsWidget::setupMainArea()
     d->hostPort                                      = new QSpinBox(phbox);
     d->hostPort->setToolTip(i18n("Set the host computer port.\nUsually, MySQL server use port number 3306 by default"));
     d->hostPort->setMaximum(65535);
+    d->hostPort->setValue(3306);
     QWidget* const space                             = new QWidget(phbox);
     phbox->setStretchFactor(space, 10);
     QPushButton* const checkDBConnectBtn             = new QPushButton(i18n("Check Connection"), phbox);
@@ -563,7 +564,6 @@ void DatabaseSettingsWidget::handleInternalServer(int index)
     d->userName->setDisabled(internal);
     d->password->setDisabled(internal);
     d->connectOpts->setDisabled(internal);
-    d->hostPort->setValue(internal ? -1 : 3306);
 }
 
 void DatabaseSettingsWidget::slotUpdateSqlInit()
@@ -731,7 +731,7 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
         d->dbNameThumbs->setText(d->orgPrms.databaseNameThumbnails);
         d->dbNameFace->setText(d->orgPrms.databaseNameFace);
         d->hostName->setText(d->orgPrms.hostName);
-        d->hostPort->setValue(d->orgPrms.port);
+        d->hostPort->setValue((d->orgPrms.port == -1) ? 3306 : d->orgPrms.port);
         d->connectOpts->setText(d->orgPrms.connectOptions);
         d->userName->setText(d->orgPrms.userName);
         d->password->setText(d->orgPrms.password);
@@ -766,7 +766,7 @@ DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
             prm.databaseNameFace       = d->dbNameFace->text();
             prm.connectOptions         = d->connectOpts->text();
             prm.hostName               = d->hostName->text();
-            prm.port                   = d->hostPort->text().toInt();
+            prm.port                   = d->hostPort->value();
             prm.userName               = d->userName->text();
             prm.password               = d->password->text();
             break;
