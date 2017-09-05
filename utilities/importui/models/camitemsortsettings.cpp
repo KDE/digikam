@@ -279,12 +279,15 @@ bool CamItemSortSettings::lessThan(const QVariant& left, const QVariant& right) 
                 return result < 0;
             }
 
-            QSizeF sizeLeft = rectLeft.size(), sizeRight = rectRight.size();
+            QSizeF sizeLeft  = rectLeft.size();
+            QSizeF sizeRight = rectRight.size();
 
             if ((result = compareByOrder(sizeLeft.width()*sizeLeft.height(), sizeRight.width()*sizeRight.height(), currentSortOrder)) != 0)
             {
                 return result < 0;
             }
+
+            [[fallthrough]];
         }
         default:
             return naturalCompare(left.toString(), right.toString(), currentSortOrder, sortCaseSensitivity, strTypeNatural);
