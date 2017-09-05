@@ -996,7 +996,7 @@ QString DMetadata::getImageUniqueId() const
         {
             if (getExifTagString("Exif.Image.Make").toUpper() == QLatin1String("SAMSUNG"))
             {
-                // Generate for Samsung a new random 32 bit hex unique ID.
+                // Generate for Samsung a new random 32 hex digits unique ID.
                 QString imageUniqueID(QUuid::createUuid().toString());
                 imageUniqueID.replace(QLatin1Char('-'), QString());
                 imageUniqueID.remove(0, 1).chop(1);
