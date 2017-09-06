@@ -2696,6 +2696,7 @@ void ImportUI::slotToggleColorManagedView()
 
     bool cmv = !IccSettings::instance()->settings().useManagedPreviews;
     IccSettings::instance()->setUseManagedPreviews(cmv);
+    d->camThumbsCtrl->clearCache();
 }
 
 void ImportUI::slotColorManagementOptionsChanged()
