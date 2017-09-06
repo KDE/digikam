@@ -30,4 +30,5 @@ BUGFIXES FROM BUGZILLA:
 021 ==> 375483 - Wrong history on images taken with Samsung S3 [patch].
 022 ==> 384399 - Getting dialog asking for "perform also on grouped images?" when no grouped images are selected.
 023 ==> 384424 - Same expression in both branches of ternary operator in DMetadata.
-024 ==> 
+024 ==> 369517 - digiKam from 5.7.0 tarball installs libvkontakte translations even if libvkontakte is disabled.
+025 ==> 
