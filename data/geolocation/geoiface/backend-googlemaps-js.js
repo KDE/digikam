@@ -287,7 +287,7 @@ function kgeomapAddToTrack(tid, coordString)
     var track = trackList[trackIndex].track;
     /// @TODO Does setting and unsetting the map take long? Maybe it is better
     ///       to create, add points, then add map instead.
-    track.setMap(null);
+//    track.setMap(null); // See bug #342427
 
     var trackCoordinates = track.getPath();
 //     for (var i = 0; i < coordString.length; i+=2)
