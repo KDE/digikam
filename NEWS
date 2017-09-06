@@ -29,4 +29,5 @@ BUGFIXES FROM BUGZILLA:
 020 ==> 384366 - Configuration of different host port is not saved.
 021 ==> 375483 - Wrong history on images taken with Samsung S3 [patch].
 022 ==> 384399 - Getting dialog asking for "perform also on grouped images?" when no grouped images are selected.
-023 ==> 
+023 ==> 384424 - Same expression in both branches of ternary operator in DMetadata.
+024 ==> 

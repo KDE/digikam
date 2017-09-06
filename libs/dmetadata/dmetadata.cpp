@@ -2924,7 +2924,7 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
 
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
             QString direction = (QLatin1Char(directionRef) == QLatin1Char('N')) ?
-                                i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate", "North");
+                                i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate", "South");
             return QString::fromLatin1("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
                    .arg(minutes).arg(QChar(0x2032))
                    .arg(seconds, 'f').arg(QChar(0x2033)).arg(direction);
