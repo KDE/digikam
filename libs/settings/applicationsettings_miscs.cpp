@@ -352,26 +352,28 @@ bool ApplicationSettings::askGroupingOperateOnAll(ApplicationSettings::Operation
 
     QMessageBox msgBox(qApp->activeWindow());
     msgBox.setWindowTitle(qApp->applicationName());
-    msgBox.setText(QLatin1String("<p>") + ApplicationSettings::operationTypeTitle(type)
-                   + QLatin1String("</p>") + i18n("Do you want to do this operation on all group items?"));
     msgBox.setStandardButtons(QMessageBox::No | QMessageBox::Yes);
-    QCheckBox *chkBox = new QCheckBox(i18n("Remember choice for this operation"), &msgBox);
+    msgBox.setText(QLatin1String("<p>") + ApplicationSettings::operationTypeTitle(type) +
+                   QLatin1String("</p>") + i18n("Do you want to do this operation on all group items?"));
+
+    QCheckBox* const chkBox = new QCheckBox(i18n("Remember choice for this operation"), &msgBox);
     msgBox.setCheckBox(chkBox);
 
-    int result = msgBox.exec();
-
-    if (result == QMessageBox::No)
+    if (msgBox.exec() == QMessageBox::No)
     {
         if (chkBox->isChecked())
         {
             setGroupingOperateOnAll(type, ApplicationSettings::No);
         }
+
         return false;
     }
+
     if (chkBox->isChecked())
     {
         setGroupingOperateOnAll(type, ApplicationSettings::Yes);
     }
+
     return true;
 }
 
