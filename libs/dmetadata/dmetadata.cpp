@@ -998,7 +998,7 @@ QString DMetadata::getImageUniqueId() const
             {
                 // Generate for Samsung a new random 32 hex digits unique ID.
                 QString imageUniqueID(QUuid::createUuid().toString());
-                imageUniqueID.replace(QLatin1Char('-'), QString());
+                imageUniqueID.remove(QLatin1Char('-'));
                 imageUniqueID.remove(0, 1).chop(1);
 
                 return imageUniqueID;
