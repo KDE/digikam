@@ -1818,9 +1818,15 @@ void DigikamView::slotFileWithDefaultApplication()
 
 void DigikamView::slotLightTable()
 {
-    const bool grouping = needGroupResolving(ApplicationSettings::LightTable, true);
-    const ImageInfoList allInfoList  = allInfo(grouping);
+    bool grouping = needGroupResolving(ApplicationSettings::LightTable);
     const ImageInfoList selectedList = selectedInfoList(false, grouping);
+
+    if (selectedList.isEmpty())
+    {
+        grouping = needGroupResolving(ApplicationSettings::LightTable, true);
+    }
+
+    const ImageInfoList allInfoList  = allInfo(grouping);
     const ImageInfo currentImageInfo = currentInfo();
 
     d->utilities->insertToLightTableAuto(allInfoList, selectedList, currentImageInfo);
@@ -1828,7 +1834,7 @@ void DigikamView::slotLightTable()
 
 void DigikamView::slotQueueMgr()
 {
-    const bool grouping = needGroupResolving(ApplicationSettings::BQM, true);
+    bool grouping = needGroupResolving(ApplicationSettings::BQM);
     ImageInfoList imageInfoList = selectedInfoList(false, grouping);
     ImageInfo     singleInfo    = currentInfo();
 
@@ -1839,6 +1845,7 @@ void DigikamView::slotQueueMgr()
 
     if (singleInfo.isNull())
     {
+        grouping = needGroupResolving(ApplicationSettings::BQM, true);
         const ImageInfoList allItems = allInfo(grouping);
 
         if (!allItems.isEmpty())
