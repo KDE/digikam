@@ -9,10 +9,6 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOMOC_RELAXED_MODE ON)
-set(CMAKE_AUTOUIC ON)
-
 set(libmediaserver_SRCS
     app/server/mediaserver_window.cpp 
     hupnp_av/src/hav_devicemodel_creator.cpp 
