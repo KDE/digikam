@@ -18,13 +18,11 @@ include_directories(
 set(mediaservertest_SRCS
     main.cpp
     mediaserver_introductionwindow.cpp
-    mediaserver_window.cpp
 )
 
 ki18n_wrap_ui(mediaservertest_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/invokeactiondialog.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/mediaserver_introductionwindow.ui
-              ${CMAKE_CURRENT_SOURCE_DIR}/mediaserver_window.ui
 )
 
 add_executable(mediaservertest ${mediaservertest_SRCS})

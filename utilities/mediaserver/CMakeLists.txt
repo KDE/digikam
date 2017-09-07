@@ -10,7 +10,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libmediaserver_SRCS
-#    app/server/mediaserver_window.cpp 
+    widgets/mediaserver_window.cpp
     hupnp_av/src/hav_devicemodel_creator.cpp 
     hupnp_av/src/hav_devicemodel_infoprovider.cpp 
     hupnp_av/src/hav_global.cpp 
@@ -220,6 +220,10 @@ set(libmediaserver_SRCS
     hupnp_av/src/cds_model/model_mgmt/hcdsproperty_db.cpp 
     hupnp_av/src/cds_model/model_mgmt/hcdspropertyinfo.cpp
     qtsoap/qtsoap.cpp
+)
+
+ki18n_wrap_ui(libmediaserver_SRCS
+              ${CMAKE_CURRENT_SOURCE_DIR}/widgets/mediaserver_window.ui
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>

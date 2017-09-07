@@ -36,8 +36,7 @@
 #include <QApplication>
 #include <QDesktopServices>
 
-// kde includes
-
+// KDE includes
 
 #include <kconfiggroup.h>
 
@@ -88,16 +87,15 @@
 #include "trashview.h"
 #include "versionmanagersettings.h"
 #include "contextmenuhelper.h"
+#include "mediaserver_window.h"
 
 #ifdef HAVE_MEDIAPLAYER
-#include "mediaplayerview.h"
+#   include "mediaplayerview.h"
 #endif //HAVE_MEDIAPLAYER
 
 #ifdef HAVE_MARBLE
-#include "mapwidgetview.h"
+#   include "mapwidgetview.h"
 #endif // HAVE_MARBLE
-
-#include<../mediaserver/app/server/mediaserver_window.h>
 
 namespace Digikam
 {
