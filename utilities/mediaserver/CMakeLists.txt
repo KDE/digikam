@@ -10,7 +10,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libmediaserver_SRCS
-    app/server/mediaserver_window.cpp 
+#    app/server/mediaserver_window.cpp 
     hupnp_av/src/hav_devicemodel_creator.cpp 
     hupnp_av/src/hav_devicemodel_infoprovider.cpp 
     hupnp_av/src/hav_global.cpp 

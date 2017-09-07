@@ -20,22 +20,43 @@
  *  along with HUpnpAvSimpleTestApp. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mediaserver_introductionwindow.h"
-#include <../../HUpnpCore/HUpnp>
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-#include <QtTest>
-#include <QtDebug>
-#include <QApplication>
+#include <QtGlobal>
+#include <QMainWindow>
 
-int main(int argc, char* argv[])
-{
-    Herqq::Upnp::SetLoggingLevel(Herqq::Upnp::Debug);
-
-    QApplication app(argc, argv);
-    app.setApplicationName(QLatin1String("HUpnpAvSimpleTestApp"));
-
-    MediaServerIntroductionWindow mw;
-    mw.show();
-
-    return app.exec();
+namespace Ui {
+    class MainWindow;
 }
+
+//
+// Main window for the test application.
+//
+class MediaServerIntroductionWindow :
+    public QMainWindow
+{
+Q_OBJECT
+Q_DISABLE_COPY(MediaServerIntroductionWindow)
+
+public:
+
+    explicit MediaServerIntroductionWindow(QWidget* parent = 0);
+    virtual ~MediaServerIntroductionWindow();
+
+protected:
+
+    virtual void changeEvent(QEvent*);
+
+private:
+
+    Ui::MainWindow* m_ui;
+
+private Q_SLOTS:
+
+
+    void on_startMediaServer_clicked();
+    void serverWindowClosed();
+};
+
+#endif // MAINWINDOW_H
