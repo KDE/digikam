@@ -112,7 +112,6 @@ set(libeditortools_SRCS
     tools/enhance/noisereductiontool.cpp
     tools/enhance/localcontrasttool.cpp
     tools/enhance/redeyetool.cpp
-    tools/enhance/inpaintingtool.cpp
     tools/enhance/antivignettingtool.cpp
     tools/enhance/lensdistortiontool.cpp
     tools/enhance/healingclonetool.cpp

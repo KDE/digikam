@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef EDITORWINDOW_H
-#define EDITORWINDOW_H
+#ifndef EDITOR_WINDOW_H
+#define EDITOR_WINDOW_H
 
 // Qt includes
 
@@ -355,7 +355,6 @@ private Q_SLOTS:
     void slotNoiseReduction();
     void slotLocalContrast();
     void slotRedEye();
-    void slotInPainting();
     void slotLensAutoFix();
     void slotAntiVignetting();
     void slotLensDistortion();
@@ -424,4 +423,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* EDITORWINDOW_H */
+#endif // EDITOR_WINDOW_H

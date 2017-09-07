@@ -162,7 +162,6 @@
 #include "localcontrasttool.h"
 #include "redeyetool.h"
 #include "imageiface.h"
-#include "inpaintingtool.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
 #include "hotpixelstool.h"
@@ -762,8 +761,9 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotBlur()));
     d->blurAction->setEnabled(false);
 
-    d->healCloneAction = new QAction(QIcon::fromTheme(QLatin1String("healimage")), i18n("Healing Clone..."), this);
+    d->healCloneAction = new QAction(QIcon::fromTheme(QLatin1String("edit-clone")), i18n("Healing Clone..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_healingclone"), d->healCloneAction);
+    d->healCloneAction->setWhatsThis( i18n( "This filter can be used to clone a part in a photo to erase unwanted region.") );
     connect(d->healCloneAction, SIGNAL(triggered(bool)),
             this, SLOT(slotHealingClone()));
     d->healCloneAction->setEnabled(false);
@@ -787,15 +787,6 @@ void EditorWindow::setupStandardActions()
     connect(d->redeyeAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRedEye()));
     d->redeyeAction->setEnabled(false);
-
-    d->inPaintingAction = new QAction(QIcon::fromTheme(QLatin1String("select-rectangular")), i18n("In-painting..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_inpainting"), d->inPaintingAction);
-    actionCollection()->setDefaultShortcut(d->inPaintingAction, Qt::CTRL+Qt::Key_E);
-    d->inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
-                                             "To use this option, select a region to in-paint.") );
-    connect(d->inPaintingAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotInPainting()));
-    d->inPaintingAction->setEnabled(false);
 
     d->antivignettingAction = new QAction(QIcon::fromTheme(QLatin1String("antivignetting")), i18n("Vignetting Correction..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_antivignetting"), d->antivignettingAction);
@@ -1503,7 +1494,6 @@ void EditorWindow::toggleStandardActions(bool val)
     d->noiseReductionAction->setEnabled(val);
     d->localContrastAction->setEnabled(val);
     d->redeyeAction->setEnabled(val);
-    d->inPaintingAction->setEnabled(val);
     d->lensdistortionAction->setEnabled(val);
     d->antivignettingAction->setEnabled(val);
     d->hotpixelsAction->setEnabled(val);
@@ -3012,7 +3002,6 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->noiseReductionAction,       enhanceCategory);
     actionModel->addAction(d->localContrastAction,        enhanceCategory);
     actionModel->addAction(d->redeyeAction,               enhanceCategory);
-    //actionModel->addAction(d->inPaintingAction,           enhanceCategory);
     actionModel->addAction(d->lensdistortionAction,       enhanceCategory);
     actionModel->addAction(d->antivignettingAction,       enhanceCategory);
     actionModel->addAction(d->hotpixelsAction,            enhanceCategory);
@@ -3540,25 +3529,6 @@ void EditorWindow::slotLocalContrast()
 void EditorWindow::slotRedEye()
 {
     loadTool(new RedEyeTool(this));
-}
-
-void EditorWindow::slotInPainting()
-{
-    ImageIface iface;
-
-    if (iface.selectionRect().size().isNull())
-    {
-        EditorToolPassivePopup* const popup = new EditorToolPassivePopup(qApp->activeWindow());
-        popup->setView(i18n("In-Painting Photograph Tool"),
-                       i18n("To use this tool, you need to select a region "
-                            "to in-paint."));
-        popup->setAutoDelete(true);
-        popup->setTimeout(2500);
-        popup->show();
-        return;
-    }
-
-    loadTool(new InPaintingTool(this));
 }
 
 void EditorWindow::slotLensAutoFix()
