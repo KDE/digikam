@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPDLNA_H
-#define SETUPDLNA_H
+#ifndef SETUP_DLNA_H
+#define SETUP_DLNA_H
 
 // Qt includes
 
@@ -45,6 +45,7 @@ public:
 private:
 
     void readSettings();
+
 private Q_SLOTS:
 
     void slotSettingsChanged();
@@ -57,4 +58,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SETUPDLNA_H
+#endif // SETUP_DLNA_H
