@@ -13,40 +13,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOMOC_RELAXED_MODE ON)
 set(CMAKE_AUTOUIC ON)
 
-include_directories(app/server
-                    hupnp_av/src
-                    hupnp/src/dataelements
-                    hupnp/src/devicehosting 
-                    hupnp/src/devicehosting/devicehost
-                    hupnp/src/devicemodel
-                    hupnp/src/general
-                    hupnp/src/http
-                    hupnp/src/socket
-                    hupnp/src/ssdp
-                    hupnp/src/utils
-                    hupnp_av/src/cds_model
-                    hupnp_av/src/common
-                    hupnp_av/src/connectionmanager
-                    hupnp_av/src/contentdirectory
-                    hupnp_av/src/mediarenderer
-                    hupnp_av/src/mediaserver
-                    hupnp_av/src/renderingcontrol
-                    hupnp_av/src/transport
-                    hupnp/include/HUpnpCore/private
-                    hupnp/include/HUpnpCore/public
-                    hupnp/src/devicehosting/controlpoint
-                    hupnp/src/devicehosting/messages
-                    hupnp/src/devicemodel/client
-                    hupnp/src/devicemodel/server
-                    hupnp_a/include/HUpnpAv/public
-                    hupnp_av/src/cds_model/cds_objects
-                    hupnp_av/src/cds_model/datasource
-                    hupnp_av/src/cds_model/datasource
-                    hupnp/include/
-                    hupnp_av/include
-                    hupnp/lib/qtsoap-2.7-opensource/src
-)
-
 set(libmediaserver_SRCS
     app/server/mediaserver_window.cpp 
     hupnp_av/src/hav_devicemodel_creator.cpp 
@@ -173,7 +139,6 @@ set(libmediaserver_SRCS
     hupnp_av/src/transport/htransportinfo.cpp 
     hupnp_av/src/transport/htransportsettings.cpp 
     hupnp_av/src/transport/htransportstate.cpp 
-    hupnp/lib/qtsoap-2.7-opensource/src/qtsoap.cpp 
     hupnp/src/devicehosting/controlpoint/hclientmodel_creator_p.cpp 
     hupnp/src/devicehosting/controlpoint/hcontrolpoint.cpp 
     hupnp/src/devicehosting/controlpoint/hcontrolpoint_configuration.cpp 
@@ -258,6 +223,7 @@ set(libmediaserver_SRCS
     hupnp_av/src/cds_model/model_mgmt/hcdsproperty.cpp 
     hupnp_av/src/cds_model/model_mgmt/hcdsproperty_db.cpp 
     hupnp_av/src/cds_model/model_mgmt/hcdspropertyinfo.cpp
+    qtsoap/qtsoap.cpp
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
