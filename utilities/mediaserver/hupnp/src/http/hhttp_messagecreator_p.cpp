@@ -30,7 +30,7 @@
 
 #include "../general/hupnp_global_p.h"
 
-#include <QtSoapMessage>
+#include "qtsoap.h"
 
 namespace Herqq
 {

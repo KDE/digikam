@@ -33,7 +33,7 @@
 #include <QtCore/QUrl>
 #include <QtCore/QString>
 
-#include <QtSoapMessage>
+#include "qtsoap.h"
 
 namespace Herqq
 {

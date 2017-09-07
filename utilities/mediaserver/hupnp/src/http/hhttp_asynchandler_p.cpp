@@ -28,7 +28,7 @@
 
 #include <QtNetwork/QTcpSocket>
 
-#include <QtSoapMessage>
+#include "qtsoap.h"
 
 namespace Herqq
 {

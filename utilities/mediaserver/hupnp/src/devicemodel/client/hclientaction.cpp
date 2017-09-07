@@ -40,7 +40,7 @@
 #include "../../general/hlogger_p.h"
 
 #include <QtCore/QList>
-#include <QtSoapMessage>
+#include "qtsoap.h"
 
 namespace Herqq
 {
