@@ -415,17 +415,15 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     // load mediaserver on startup
 
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup dlnaConfigGroup   = config->group(QLatin1String("DLNA Settings"));
-    bool StartServerOnStartup =  dlnaConfigGroup.readEntry(QLatin1String("Start Server On Startup"),false);
-    bool StartServerInBackground =  dlnaConfigGroup.readEntry(QLatin1String("Start Server In Background"),false);
+    KSharedConfig::Ptr config    = KSharedConfig::openConfig();
+    KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
+    bool StartServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start Server On Startup"),false);
+    bool StartServerInBackground = dlnaConfigGroup.readEntry(QLatin1String("Start Server In Background"),false);
 
-     if(StartServerOnStartup)
-     {
-        this->slotMediaServer(true, StartServerInBackground);
-     }
-
-
+    if(StartServerOnStartup)
+    {
+        slotMediaServer(true, StartServerInBackground);
+    }
 }
 
 DigikamView::~DigikamView()
@@ -1855,22 +1853,24 @@ void DigikamView::slotQueueMgr()
     d->utilities->insertToQueueManager(imageInfoList, singleInfo, true);
 }
 
-void DigikamView::slotMediaServer(bool onStartup , bool startInBackground )
+void DigikamView::slotMediaServer(bool onStartup, bool startInBackground)
 {
-
-   if(!d->msw || MediaServerWindow::deletedFlag)
+   if (!d->msw || MediaServerWindow::deletedFlag)
    {
-      d->msw = new MediaServerWindow(this);
-      MediaServerWindow::deletedFlag = false;
-      connect(d->msw, SIGNAL(closed()), d->msw, SLOT(deleteLater()));
-      connect(d->msw, SIGNAL(closed()), d->msw, SLOT(setDeletedFlag()));
+       d->msw                         = new MediaServerWindow(this);
+       MediaServerWindow::deletedFlag = false;
+
+       connect(d->msw, SIGNAL(closed()),
+               d->msw, SLOT(deleteLater()));
+
+       connect(d->msw, SIGNAL(closed()),
+               d->msw, SLOT(setDeletedFlag()));
    }
 
-   if(onStartup && startInBackground)
+   if (onStartup && startInBackground)
        return;
-   else if(!d->msw->isVisible())
+   else if (!d->msw->isVisible())
         d->msw->show();
-
 }
 
 void DigikamView::slotImageEdit()
