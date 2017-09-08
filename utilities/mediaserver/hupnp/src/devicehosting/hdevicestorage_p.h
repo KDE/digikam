@@ -95,7 +95,7 @@ public:
     inline bool operator()(Service* service) const
     {
         Q_ASSERT(service);
-        return compareUrls(m_url, service->info().scpdUrl());
+        return Upnp::compareUrls(m_url, service->info().scpdUrl());
     }
 };
 
@@ -115,7 +115,7 @@ public:
     {
         Q_ASSERT(service);
         //return service->controlUrl() == m_url;
-        return compareUrls(m_url, service->info().controlUrl());
+        return Upnp::compareUrls(m_url, service->info().controlUrl());
     }
 };
 
@@ -135,7 +135,7 @@ public:
     {
         Q_ASSERT(service);
         //return service->eventSubUrl() == m_url;
-        return compareUrls(m_url, service->info().eventSubUrl());
+        return Upnp::compareUrls(m_url, service->info().eventSubUrl());
     }
 };
 
@@ -544,7 +544,7 @@ public: // instance methods
         QList<QUrl> icons = device->info().icons();
         for (qint32 i = 0; i < icons.size(); ++i)
         {
-            if (compareUrls(icons[i], QUrl(iconUrl)))
+            if (Upnp::compareUrls(icons[i], QUrl(iconUrl)))
             {
                 return icons[i];
             }
