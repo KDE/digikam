@@ -20,8 +20,8 @@ set(mediaservertest_SRCS
     mediaserver_introductionwindow.cpp
 )
 
-ki18n_wrap_ui(mediaservertest_SRCS
-              ${CMAKE_CURRENT_SOURCE_DIR}/mediaserver_introductionwindow.ui
+qt5_wrap_ui(mediaservertest_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/mediaserver_introductionwindow.ui
 )
 
 add_executable(mediaservertest ${mediaservertest_SRCS})
