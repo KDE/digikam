@@ -22,13 +22,11 @@
 
 #include "mediaserver_introductionwindow.h"
 #include "ui_mediaserver_introductionwindow.h"
-
 #include "mediaserver_window.h"
 
-
-MediaServerIntroductionWindow::MediaServerIntroductionWindow(QWidget* parent) :
-    QMainWindow(parent),
-        m_ui(new Ui::MainWindow)
+MediaServerIntroductionWindow::MediaServerIntroductionWindow(QWidget* parent)
+    : QMainWindow(parent),
+      m_ui(new Ui::MainWindow)
 {
     m_ui->setupUi(this);
 }
@@ -41,31 +39,34 @@ MediaServerIntroductionWindow::~MediaServerIntroductionWindow()
 void MediaServerIntroductionWindow::changeEvent(QEvent* e)
 {
     QMainWindow::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        m_ui->retranslateUi(this);
-        break;
-    default:
-        break;
+
+    switch (e->type())
+    {
+        case QEvent::LanguageChange:
+            m_ui->retranslateUi(this);
+            break;
+        default:
+            break;
     }
 }
-
 
 void MediaServerIntroductionWindow::serverWindowClosed()
 {
     m_ui->startMediaServer->setEnabled(true);
 }
 
-
 void MediaServerIntroductionWindow::on_startMediaServer_clicked()
 {
     MediaServerWindow* msw = new MediaServerWindow(this);
 
-    bool ok = connect(msw, SIGNAL(closed()), msw, SLOT(deleteLater()));
+    bool ok = connect(msw, SIGNAL(closed()),
+                      msw, SLOT(deleteLater()));
 
-    Q_ASSERT(ok); Q_UNUSED(ok);
+    Q_ASSERT(ok);
+    Q_UNUSED(ok);
 
-    ok = connect(msw, SIGNAL(closed()), this, SLOT(serverWindowClosed()));
+    ok = connect(msw, SIGNAL(closed()),
+                 this, SLOT(serverWindowClosed()));
 
     Q_ASSERT(ok);
 
@@ -73,4 +74,3 @@ void MediaServerIntroductionWindow::on_startMediaServer_clicked()
 
     m_ui->startMediaServer->setEnabled(false);
 }
-

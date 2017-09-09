@@ -37,29 +37,29 @@
 using namespace Herqq::Upnp;
 using namespace Herqq::Upnp::Av;
 
-namespace Ui {
+namespace Ui
+{
     class MediaServerWindow;
 }
 
 class AddContentDialog;
 
-//
-//
-//
 class DIGIKAM_EXPORT MediaServerWindow : public QMainWindow
 {
     Q_OBJECT
 
 private:
 
-    Ui::MediaServerWindow* m_ui;
-    Herqq::Upnp::HDeviceHost* m_deviceHost;
+    Ui::MediaServerWindow*                  m_ui;
+    Herqq::Upnp::HDeviceHost*               m_deviceHost;
 
     Herqq::Upnp::Av::HFileSystemDataSource* m_datasource;
 
-    QPointer<AddContentDialog> m_dlg;
-    QMap<int,HRootDir> rootDirectoriesMap;
-    QMap<int,QString> ItemsMap;
+    QPointer<AddContentDialog>              m_dlg;
+    QMap<int,HRootDir>                      rootDirectoriesMap;
+    QMap<int,QString>                       ItemsMap;
+
+private:
 
     void addRootDirectoriesToServer(const HRootDir& rd);
     void addItemsToServer(const QStringList& fullPaths);
@@ -86,9 +86,10 @@ protected:
 
 public:
 
-    MediaServerWindow(QWidget* parent = 0);
-    void initRequiredDirectories();
+    explicit MediaServerWindow(QWidget* parent = 0);
     virtual ~MediaServerWindow();
+
+    void initRequiredDirectories();
 
     DIGIKAM_EXPORT static bool deletedFlag;
     static const QString serverDatabasePath;

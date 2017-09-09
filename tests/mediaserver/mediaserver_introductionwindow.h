@@ -26,7 +26,8 @@
 #include <QtGlobal>
 #include <QMainWindow>
 
-namespace Ui {
+namespace Ui
+{
     class MainWindow;
 }
 
@@ -36,8 +37,8 @@ namespace Ui {
 class MediaServerIntroductionWindow :
     public QMainWindow
 {
-Q_OBJECT
-Q_DISABLE_COPY(MediaServerIntroductionWindow)
+    Q_OBJECT
+    Q_DISABLE_COPY(MediaServerIntroductionWindow)
 
 public:
 
@@ -53,7 +54,6 @@ private:
     Ui::MainWindow* m_ui;
 
 private Q_SLOTS:
-
 
     void on_startMediaServer_clicked();
     void serverWindowClosed();
