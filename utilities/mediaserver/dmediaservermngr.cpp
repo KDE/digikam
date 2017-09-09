@@ -78,6 +78,7 @@ DMediaServerMngr::~DMediaServerMngr()
 
 void DMediaServerMngr::cleanUp()
 {
+    slotTurnOff();
 }
 
 void DMediaServerMngr::slotTurnOff()

@@ -28,6 +28,9 @@
 // Qt includes
 
 #include <QObject>
+#include <QMap>
+#include <QList>
+#include <QString>
 
 // Local includes
 
