@@ -21,7 +21,7 @@
  */
 
 #include "mediaserver_introductionwindow.h"
-#include <hupnp_global.h>
+#include "hupnp_global.h"
 
 #include <QtTest>
 #include <QtDebug>
