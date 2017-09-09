@@ -106,7 +106,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QPushButton" name="hide">
+     <widget class="QPushButton" name="HideWindowButton">
       <property name="text">
        <string>Hide</string>
       </property>
