@@ -21,7 +21,6 @@ set(mediaservertest_SRCS
 )
 
 ki18n_wrap_ui(mediaservertest_SRCS
-              ${CMAKE_CURRENT_SOURCE_DIR}/invokeactiondialog.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/mediaserver_introductionwindow.ui
 )
 

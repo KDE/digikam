@@ -47,7 +47,7 @@ namespace Av
  *
  * \remarks This class is thread-safe.
  */
-class H_UPNP_AV_EXPORT HAvTransportInfo
+class DIGIKAM_EXPORT HAvTransportInfo
 {
 H_FORCE_SINGLETON(HAvTransportInfo)
 

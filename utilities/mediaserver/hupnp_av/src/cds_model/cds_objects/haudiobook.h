@@ -48,7 +48,7 @@ class HAudioBookPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HAudioBook :
+class DIGIKAM_EXPORT HAudioBook :
     public HAudioItem
 {
 Q_OBJECT

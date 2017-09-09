@@ -46,7 +46,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HStateVariableData
+class DIGIKAM_EXPORT HStateVariableData
 {
 private:
 
@@ -140,7 +140,7 @@ public:
  *
  * \relates HStateVariableData
  */
-H_UPNP_AV_EXPORT bool operator==(const HStateVariableData& obj1, const HStateVariableData& obj2);
+DIGIKAM_EXPORT bool operator==(const HStateVariableData& obj1, const HStateVariableData& obj2);
 
 /*!
  * Compares the two objects for inequality.
@@ -165,7 +165,7 @@ class HStateVariableCollectionPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HStateVariableCollection
+class DIGIKAM_EXPORT HStateVariableCollection
 {
 private:
 
@@ -320,7 +320,7 @@ public:
  *
  * \relates HStateVariableCollection
  */
-H_UPNP_AV_EXPORT bool operator==(const HStateVariableCollection& obj1, const HStateVariableCollection& obj2);
+DIGIKAM_EXPORT bool operator==(const HStateVariableCollection& obj1, const HStateVariableCollection& obj2);
 
 /*!
  * Compares the two objects for inequality.

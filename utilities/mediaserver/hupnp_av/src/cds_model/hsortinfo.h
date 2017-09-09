@@ -46,7 +46,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HSortModifier
+class DIGIKAM_EXPORT HSortModifier
 {
 
 public:
@@ -186,7 +186,7 @@ public:
  *
  * \relates HSortModifier
  */
-H_UPNP_AV_EXPORT bool operator==(const HSortModifier& obj1, const HSortModifier& obj2);
+DIGIKAM_EXPORT bool operator==(const HSortModifier& obj1, const HSortModifier& obj2);
 
 /*!
  * Compares the two objects for inequality.
@@ -215,7 +215,7 @@ class HSortInfoPrivate;
  * \sa HContentDirectoryService::browse(), HContentDirectoryService::search(),
  * HContentDirectoryAdapter::browse(), HContentDirectoryAdapter::search().
  */
-class H_UPNP_AV_EXPORT HSortInfo
+class DIGIKAM_EXPORT HSortInfo
 {
 private:
 
@@ -316,7 +316,7 @@ public:
  *
  * \relates HSortInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HSortInfo& obj1, const HSortInfo& obj2);
+DIGIKAM_EXPORT bool operator==(const HSortInfo& obj1, const HSortInfo& obj2);
 
 /*!
  * Compares the two objects for inequality.

@@ -24,6 +24,8 @@
 
 #include <QtCore/QtGlobal>
 
+#include "digikam_export.h"
+
 #define H_DISABLE_ASSIGN(Class) \
     Class& operator=(const Class& clazz);
 
@@ -56,45 +58,6 @@ private: \
 #define H_Q(Class) Class * const q = q_func()
 #define H_P(Class) Class * const p = p_func()
 #define H_D_P(Class) Class * const p = h_func()->p_func()
-
-#ifdef H_BUILD_STATIC
-#define H_DECL_EXPORT
-#define H_DECL_IMPORT
-#endif
-
-#ifndef H_DECL_EXPORT
-#  ifdef Q_OS_WIN
-#    define H_DECL_EXPORT __declspec(dllexport)
-#  elif defined(QT_VISIBILITY_AVAILABLE)
-#    define H_DECL_EXPORT __attribute__((visibility("default")))
-#  endif
-#  ifndef H_DECL_EXPORT
-#    define H_DECL_EXPORT
-#  endif
-#endif
-#ifndef H_DECL_IMPORT
-#  if defined(Q_OS_WIN)
-#    define H_DECL_IMPORT __declspec(dllimport)
-#  else
-#    define H_DECL_IMPORT
-#  endif
-#endif
-
-#if defined(H_BUILD_UPNP_CORE_LIB)
-#    define H_UPNP_CORE_EXPORT H_DECL_EXPORT
-#else
-#    define H_UPNP_CORE_EXPORT H_DECL_IMPORT
-#endif
-#if defined(H_BUILD_UPNP_LIGHTING_LIB)
-#    define H_UPNP_LIGHTING_EXPORT H_DECL_EXPORT
-#else
-#    define H_UPNP_LIGHTING_EXPORT H_DECL_IMPORT
-#endif
-#if defined(H_BUILD_UPNP_AV_LIB)
-#    define H_UPNP_AV_EXPORT H_DECL_EXPORT
-#else
-#    define H_UPNP_AV_EXPORT H_DECL_IMPORT
-#endif
 
 // ********************** IMPORTANT *****************************
 // the following asserts are never undefined by the Herqq libraries ==>

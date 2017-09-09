@@ -46,7 +46,7 @@ class HTransportSettingsPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HTransportSettings
+class DIGIKAM_EXPORT HTransportSettings
 {
 
 private:
@@ -137,7 +137,7 @@ public:
  *
  * \relates HTransportSettings
  */
-H_UPNP_AV_EXPORT bool operator==(const HTransportSettings& obj1, const HTransportSettings& obj2);
+DIGIKAM_EXPORT bool operator==(const HTransportSettings& obj1, const HTransportSettings& obj2);
 
 /*!
  * Compares the two objects for inequality.

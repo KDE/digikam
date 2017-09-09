@@ -47,10 +47,10 @@ namespace Upnp
  *
  * \ingroup hupnp_common
  */
-class H_UPNP_CORE_EXPORT HUdn
+class DIGIKAM_EXPORT HUdn
 {
-friend H_UPNP_CORE_EXPORT quint32 qHash(const HUdn&);
-friend H_UPNP_CORE_EXPORT bool operator==(const HUdn&, const HUdn&);
+friend DIGIKAM_EXPORT quint32 qHash(const HUdn&);
+friend DIGIKAM_EXPORT bool operator==(const HUdn&, const HUdn&);
 
 private:
 
@@ -158,7 +158,7 @@ public:
  *
  * \relates HUdn
  */
-H_UPNP_CORE_EXPORT bool operator==(const HUdn&, const HUdn&);
+DIGIKAM_EXPORT bool operator==(const HUdn&, const HUdn&);
 
 /*!
  * Compares the two objects for inequality.
@@ -183,7 +183,7 @@ inline bool operator!=(const HUdn& obj1, const HUdn& obj2)
  *
  * \relates HUdn
  */
-H_UPNP_CORE_EXPORT quint32 qHash(const HUdn& key);
+DIGIKAM_EXPORT quint32 qHash(const HUdn& key);
 
 }
 }

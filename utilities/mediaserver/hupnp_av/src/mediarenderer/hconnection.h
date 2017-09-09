@@ -46,7 +46,7 @@ class HConnectionPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HConnection :
+class DIGIKAM_EXPORT HConnection :
     public QObject
 {
 Q_OBJECT

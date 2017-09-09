@@ -48,7 +48,7 @@ class HChannelGroupPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HChannelGroup :
+class DIGIKAM_EXPORT HChannelGroup :
     public HContainer
 {
 Q_OBJECT

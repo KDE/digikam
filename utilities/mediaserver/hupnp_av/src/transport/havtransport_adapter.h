@@ -67,7 +67,7 @@ class HAvTransportAdapterPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HAvTransportAdapter :
+class DIGIKAM_EXPORT HAvTransportAdapter :
     public HClientServiceAdapter
 {
 Q_OBJECT

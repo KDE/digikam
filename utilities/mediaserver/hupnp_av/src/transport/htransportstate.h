@@ -45,7 +45,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HTransportState
+class DIGIKAM_EXPORT HTransportState
 {
 
 public:
@@ -194,7 +194,7 @@ public:
  *
  * \relates HTransportState
  */
-H_UPNP_AV_EXPORT bool operator==(const HTransportState& obj1, const HTransportState& obj2);
+DIGIKAM_EXPORT bool operator==(const HTransportState& obj1, const HTransportState& obj2);
 
 /*!
  * Compares the two objects for inequality.

@@ -50,9 +50,9 @@ class HCdsClassInfoPrivate;
  *
  * \sa HContainer::searchClassInfos(), HContainer::createClassInfos()
  */
-class H_UPNP_AV_EXPORT HCdsClassInfo
+class DIGIKAM_EXPORT HCdsClassInfo
 {
-friend H_UPNP_AV_EXPORT bool operator==(const HCdsClassInfo&, const HCdsClassInfo&);
+friend DIGIKAM_EXPORT bool operator==(const HCdsClassInfo&, const HCdsClassInfo&);
 
 private: // attributes
 
@@ -180,7 +180,7 @@ public:
  *
  * \relates HCdsClassInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HCdsClassInfo&, const HCdsClassInfo&);
+DIGIKAM_EXPORT bool operator==(const HCdsClassInfo&, const HCdsClassInfo&);
 
 /*!
  * Compares the two objects for inequality.

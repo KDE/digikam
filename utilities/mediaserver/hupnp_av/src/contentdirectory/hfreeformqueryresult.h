@@ -47,7 +47,7 @@ namespace Av
  * \sa HAbstractContentDirectoryService::freeFormQuery()
  * \sa HContentDirectoryAdapter::freeFormQuery()
  */
-class H_UPNP_AV_EXPORT HFreeFormQueryResult
+class DIGIKAM_EXPORT HFreeFormQueryResult
 {
 private:
 
@@ -106,7 +106,7 @@ public:
  *
  * \relates HFreeFormQueryResult
  */
-H_UPNP_AV_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HFreeFormQueryResult& obj1, const HFreeFormQueryResult& obj2);
 
 /*!

@@ -61,7 +61,7 @@ class HSsdpPrivate;
  * \li this class has thread-affinity, which mandates that the instances of this
  * class has to be used in the thread in which they are located at the time.
  */
-class H_UPNP_CORE_EXPORT HSsdp :
+class DIGIKAM_EXPORT HSsdp :
     public QObject
 {
 Q_OBJECT

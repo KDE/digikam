@@ -48,7 +48,7 @@ class HEpgItemPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HEpgItem :
+class DIGIKAM_EXPORT HEpgItem :
     public HItem
 {
 Q_OBJECT

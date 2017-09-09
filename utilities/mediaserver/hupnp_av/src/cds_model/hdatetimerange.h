@@ -49,7 +49,7 @@ class HDateTimeRangePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HDateTimeRange
+class DIGIKAM_EXPORT HDateTimeRange
 {
 private:
 
@@ -177,7 +177,7 @@ public:
  *
  * \relates HDateTimeRange
  */
-H_UPNP_AV_EXPORT bool operator==(const HDateTimeRange& obj1, const HDateTimeRange& obj2);
+DIGIKAM_EXPORT bool operator==(const HDateTimeRange& obj1, const HDateTimeRange& obj2);
 
 /*!
  * Compares the two objects for inequality.

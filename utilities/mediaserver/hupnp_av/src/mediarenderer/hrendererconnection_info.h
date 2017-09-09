@@ -50,7 +50,7 @@ class HRendererConnectionEventInfoPrivate;
  *
  * \sa HRendererConnectionInfo
  */
-class H_UPNP_AV_EXPORT HRendererConnectionEventInfo
+class DIGIKAM_EXPORT HRendererConnectionEventInfo
 {
 private:
 
@@ -183,7 +183,7 @@ public:
  *
  * \relates HRendererConnectionEventInfo
  */
-H_UPNP_AV_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HRendererConnectionEventInfo&, const HRendererConnectionEventInfo&);
 
 /*!
@@ -213,7 +213,7 @@ class HRendererConnectionInfoPrivate;
  *
  * \sa HRendererConnection
  */
-class H_UPNP_AV_EXPORT HRendererConnectionInfo :
+class DIGIKAM_EXPORT HRendererConnectionInfo :
     public QObject
 {
 Q_OBJECT

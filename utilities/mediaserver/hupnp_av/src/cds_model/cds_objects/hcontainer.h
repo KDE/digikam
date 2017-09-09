@@ -46,7 +46,7 @@ class HContainerEventInfoPrivate;
  *
  * \sa HContainer
  */
-class H_UPNP_AV_EXPORT HContainerEventInfo
+class DIGIKAM_EXPORT HContainerEventInfo
 {
 private:
 
@@ -198,7 +198,7 @@ public:
  *
  * \relates HContainerEventInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HContainerEventInfo&, const HContainerEventInfo&);
+DIGIKAM_EXPORT bool operator==(const HContainerEventInfo&, const HContainerEventInfo&);
 
 /*!
  * Compares the two objects for inequality.
@@ -227,7 +227,7 @@ class HContainerPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HContainer :
+class DIGIKAM_EXPORT HContainer :
     public HObject
 {
 Q_OBJECT

@@ -46,7 +46,7 @@ class HCdsDataSourcePrivate;
  *
  * \sa HCdsDataSourceConfiguration
  */
-class H_UPNP_AV_EXPORT HCdsDataSource :
+class DIGIKAM_EXPORT HCdsDataSource :
     public HAbstractCdsDataSource
 {
 Q_OBJECT

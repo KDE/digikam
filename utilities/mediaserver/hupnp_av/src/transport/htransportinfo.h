@@ -47,7 +47,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HTransportStatus
+class DIGIKAM_EXPORT HTransportStatus
 {
 
 public:
@@ -159,7 +159,7 @@ public:
  *
  * \relates HTransportStatus
  */
-H_UPNP_AV_EXPORT bool operator==(const HTransportStatus& obj1, const HTransportStatus& obj2);
+DIGIKAM_EXPORT bool operator==(const HTransportStatus& obj1, const HTransportStatus& obj2);
 
 /*!
  * Compares the two objects for inequality.
@@ -185,7 +185,7 @@ class HTransportInfoPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HTransportInfo
+class DIGIKAM_EXPORT HTransportInfo
 {
 
 private:
@@ -309,7 +309,7 @@ public:
  *
  * \relates HTransportInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HTransportInfo& obj1, const HTransportInfo& obj2);
+DIGIKAM_EXPORT bool operator==(const HTransportInfo& obj1, const HTransportInfo& obj2);
 
 /*!
  * Compares the two objects for inequality.

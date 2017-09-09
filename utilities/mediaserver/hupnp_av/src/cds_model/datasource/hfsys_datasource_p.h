@@ -46,7 +46,7 @@ namespace Av
 //
 //
 //
-class H_UPNP_AV_EXPORT HFileSystemDataSourcePrivate :
+class DIGIKAM_EXPORT HFileSystemDataSourcePrivate :
     public HAbstractCdsDataSourcePrivate
 {
 H_DISABLE_COPY(HFileSystemDataSourcePrivate)

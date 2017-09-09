@@ -46,9 +46,9 @@ namespace Upnp
  *
  * \ingroup hupnp_common
  */
-class H_UPNP_CORE_EXPORT HProductToken
+class DIGIKAM_EXPORT HProductToken
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HProductToken& obj1, const HProductToken& obj2);
 
 private:
@@ -198,7 +198,7 @@ public:
  *
  * \relates HProductToken
  */
-H_UPNP_CORE_EXPORT bool operator==(const HProductToken&, const HProductToken&);
+DIGIKAM_EXPORT bool operator==(const HProductToken&, const HProductToken&);
 
 /*!
  * Compares the two objects for inequality.
@@ -207,7 +207,7 @@ H_UPNP_CORE_EXPORT bool operator==(const HProductToken&, const HProductToken&);
  *
  * \relates HProductToken
  */
-H_UPNP_CORE_EXPORT bool operator!=(const HProductToken&, const HProductToken&);
+DIGIKAM_EXPORT bool operator!=(const HProductToken&, const HProductToken&);
 
 class HProductTokensPrivate;
 
@@ -244,7 +244,7 @@ class HProductTokensPrivate;
  *
  * \ingroup hupnp_common
  */
-class H_UPNP_CORE_EXPORT HProductTokens
+class DIGIKAM_EXPORT HProductTokens
 {
 private:
 
@@ -390,7 +390,7 @@ public:
  *
  * \relates HProductTokens
  */
-H_UPNP_CORE_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HProductTokens&, const HProductTokens&);
 
 /*!

@@ -48,7 +48,7 @@ namespace Av
 //
 //
 //
-class H_UPNP_AV_EXPORT HAbstractCdsDataSourcePrivate
+class DIGIKAM_EXPORT HAbstractCdsDataSourcePrivate
 {
 H_DISABLE_COPY(HAbstractCdsDataSourcePrivate)
 H_DECLARE_PUBLIC(HAbstractCdsDataSource)

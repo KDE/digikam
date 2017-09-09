@@ -75,9 +75,9 @@ class HDiscoveryTypePrivate;
  *
  * \sa Type, type()
  */
-class H_UPNP_CORE_EXPORT HDiscoveryType
+class DIGIKAM_EXPORT HDiscoveryType
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HDiscoveryType&, const HDiscoveryType&);
 
 private:
@@ -403,7 +403,7 @@ public:
  *
  * \relates HDiscoveryType
  */
-H_UPNP_CORE_EXPORT bool operator==(const HDiscoveryType&, const HDiscoveryType&);
+DIGIKAM_EXPORT bool operator==(const HDiscoveryType&, const HDiscoveryType&);
 
 /*!
  * Compares the two objects for inequality.

@@ -53,7 +53,7 @@ class HDeviceConfigurationPrivate;
  *
  * \sa HDeviceHostConfiguration, HDeviceHost, HDeviceHost::init(), HServerDevice
  */
-class H_UPNP_CORE_EXPORT HDeviceConfiguration :
+class DIGIKAM_EXPORT HDeviceConfiguration :
     public HClonable
 {
 H_DISABLE_COPY(HDeviceConfiguration)
@@ -192,7 +192,7 @@ class HDeviceHostConfigurationPrivate;
  *
  * \sa HDeviceConfiguration, HDeviceHost
  */
-class H_UPNP_CORE_EXPORT HDeviceHostConfiguration :
+class DIGIKAM_EXPORT HDeviceHostConfiguration :
     public HClonable
 {
 H_DISABLE_COPY(HDeviceHostConfiguration)

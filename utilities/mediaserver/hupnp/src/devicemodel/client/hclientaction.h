@@ -59,7 +59,7 @@ class HClientActionPrivate;
  * \remarks
  * \li This class has thread-affinity.
  */
-class H_UPNP_CORE_EXPORT HClientAction :
+class DIGIKAM_EXPORT HClientAction :
     public QObject
 {
 Q_OBJECT

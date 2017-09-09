@@ -48,7 +48,7 @@ class HAudioChannelGroupPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HAudioChannelGroup :
+class DIGIKAM_EXPORT HAudioChannelGroup :
     public HChannelGroup
 {
 Q_OBJECT

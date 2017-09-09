@@ -46,9 +46,9 @@ class HDurationPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HDuration
+class DIGIKAM_EXPORT HDuration
 {
-friend H_UPNP_AV_EXPORT bool operator==(const HDuration& obj1, const HDuration& obj2);
+friend DIGIKAM_EXPORT bool operator==(const HDuration& obj1, const HDuration& obj2);
 private:
 
     QSharedDataPointer<HDurationPrivate> h_ptr;
@@ -176,7 +176,7 @@ public:
  *
  * \relates HDuration
  */
-H_UPNP_AV_EXPORT bool operator==(const HDuration& obj1, const HDuration& obj2);
+DIGIKAM_EXPORT bool operator==(const HDuration& obj1, const HDuration& obj2);
 
 /*!
  * Compares the two objects for inequality.

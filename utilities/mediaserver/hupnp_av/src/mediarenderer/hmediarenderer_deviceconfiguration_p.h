@@ -46,7 +46,7 @@ namespace Av
 //
 //
 //
-class H_UPNP_AV_EXPORT HMediaRendererDeviceConfigurationPrivate
+class DIGIKAM_EXPORT HMediaRendererDeviceConfigurationPrivate
 {
 H_DISABLE_COPY(HMediaRendererDeviceConfigurationPrivate)
 

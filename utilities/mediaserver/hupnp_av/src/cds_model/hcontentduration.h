@@ -50,7 +50,7 @@ class HContentDurationPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HContentDuration
+class DIGIKAM_EXPORT HContentDuration
 {
 private:
 
@@ -144,7 +144,7 @@ public:
  *
  * \relates HContentDuration
  */
-H_UPNP_AV_EXPORT bool operator==(const HContentDuration& obj1, const HContentDuration& obj2);
+DIGIKAM_EXPORT bool operator==(const HContentDuration& obj1, const HContentDuration& obj2);
 
 /*!
  * Compares the two objects for inequality.

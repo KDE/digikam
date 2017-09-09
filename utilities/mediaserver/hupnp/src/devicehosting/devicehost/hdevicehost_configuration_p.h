@@ -46,7 +46,7 @@ namespace Upnp
 //
 // Implementation details of HDeviceConfiguration class
 //
-class H_UPNP_CORE_EXPORT HDeviceConfigurationPrivate
+class DIGIKAM_EXPORT HDeviceConfigurationPrivate
 {
 H_DISABLE_COPY(HDeviceConfigurationPrivate)
 
@@ -64,7 +64,7 @@ public: // methods
 //
 //
 //
-class H_UPNP_CORE_EXPORT HDeviceHostConfigurationPrivate
+class DIGIKAM_EXPORT HDeviceHostConfigurationPrivate
 {
 H_DISABLE_COPY(HDeviceHostConfigurationPrivate)
 

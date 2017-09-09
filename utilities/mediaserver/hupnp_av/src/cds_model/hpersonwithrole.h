@@ -44,7 +44,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HPersonWithRole
+class DIGIKAM_EXPORT HPersonWithRole
 {
 private:
 
@@ -106,7 +106,7 @@ public:
  *
  * \relates HPersonWithRole
  */
-H_UPNP_AV_EXPORT bool operator==(const HPersonWithRole& obj1, const HPersonWithRole& obj2);
+DIGIKAM_EXPORT bool operator==(const HPersonWithRole& obj1, const HPersonWithRole& obj2);
 
 /*!
  * Compares the two objects for inequality.

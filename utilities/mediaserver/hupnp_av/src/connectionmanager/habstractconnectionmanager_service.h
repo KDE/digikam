@@ -54,7 +54,7 @@ class HAbstractConnectionManagerServicePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HAbstractConnectionManagerService :
+class DIGIKAM_EXPORT HAbstractConnectionManagerService :
     public HServerService
 {
 Q_OBJECT

@@ -66,7 +66,7 @@ class HDeviceModelInfoProviderPrivate;
  *
  * \sa hupnp_devicehosting, HDeviceHostConfiguration
  */
-class H_UPNP_CORE_EXPORT HDeviceModelInfoProvider :
+class DIGIKAM_EXPORT HDeviceModelInfoProvider :
     public HClonable
 {
 H_DISABLE_COPY(HDeviceModelInfoProvider)

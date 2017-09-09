@@ -113,9 +113,9 @@ class HActionArgumentPrivate;
  *
  * \sa HActionArguments
  */
-class H_UPNP_CORE_EXPORT HActionArgument
+class DIGIKAM_EXPORT HActionArgument
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HActionArgument&, const HActionArgument&);
 
 private:
@@ -291,7 +291,7 @@ public:
  *
  * \relates HActionArgument
  */
-H_UPNP_CORE_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HActionArgument&, const HActionArgument&);
 
 /*!
@@ -301,7 +301,7 @@ H_UPNP_CORE_EXPORT bool operator==(
  *
  * \relates HActionArgument
  */
-H_UPNP_CORE_EXPORT bool operator!=(
+DIGIKAM_EXPORT bool operator!=(
     const HActionArgument&, const HActionArgument&);
 
 class HActionArgumentsPrivate;
@@ -328,9 +328,9 @@ class HActionArgumentsPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HActionArguments
+class DIGIKAM_EXPORT HActionArguments
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HActionArguments&, const HActionArguments&);
 
 private:
@@ -349,7 +349,7 @@ public:
      *
      * \relates HActionArguments
      */
-    friend H_UPNP_CORE_EXPORT void swap(HActionArguments&, HActionArguments&);
+    friend DIGIKAM_EXPORT void swap(HActionArguments&, HActionArguments&);
 
     /*!
      * \brief Creates a new, empty instance.
@@ -612,7 +612,7 @@ public:
  *
  * \relates HActionArguments
  */
-H_UPNP_CORE_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HActionArguments&, const HActionArguments&);
 
 /*!

@@ -50,7 +50,7 @@ class HMediaRendererDeviceConfigurationPrivate;
  *
  * \sa HAvDeviceModelCreator
  */
-class H_UPNP_AV_EXPORT HMediaRendererDeviceConfiguration :
+class DIGIKAM_EXPORT HMediaRendererDeviceConfiguration :
     public HClonable
 {
 H_DISABLE_COPY(HMediaRendererDeviceConfiguration)

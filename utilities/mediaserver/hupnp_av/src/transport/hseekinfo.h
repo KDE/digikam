@@ -46,7 +46,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HSeekMode
+class DIGIKAM_EXPORT HSeekMode
 {
 
 public:
@@ -257,7 +257,7 @@ public:
  *
  * \relates HSeekMode
  */
-H_UPNP_AV_EXPORT bool operator==(const HSeekMode& obj1, const HSeekMode& obj2);
+DIGIKAM_EXPORT bool operator==(const HSeekMode& obj1, const HSeekMode& obj2);
 
 /*!
  * Compares the two objects for inequality.
@@ -285,7 +285,7 @@ class HSeekInfoPrivate;
  *
  * \sa HAbstractTransportService::seek(), HAvTransportAdapter::seek()
  */
-class H_UPNP_AV_EXPORT HSeekInfo
+class DIGIKAM_EXPORT HSeekInfo
 {
 
 private:
@@ -365,7 +365,7 @@ public:
  *
  * \relates HSeekInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HSeekInfo& obj1, const HSeekInfo& obj2);
+DIGIKAM_EXPORT bool operator==(const HSeekInfo& obj1, const HSeekInfo& obj2);
 
 /*!
  * Compares the two objects for inequality.

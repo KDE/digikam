@@ -52,7 +52,7 @@ class HMusicGenrePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HMusicGenre :
+class DIGIKAM_EXPORT HMusicGenre :
     public HGenreContainer
 {
 Q_OBJECT

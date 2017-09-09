@@ -174,7 +174,7 @@ class HControlPointConfiguration;
  *
  * \sa HClientDevice, HClientDevices, hupnp_devicemodel
  */
-class H_UPNP_CORE_EXPORT HControlPoint :
+class DIGIKAM_EXPORT HControlPoint :
     public QObject
 {
 Q_OBJECT

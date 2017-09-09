@@ -48,7 +48,7 @@ class HAudioProgramPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HAudioProgram :
+class DIGIKAM_EXPORT HAudioProgram :
     public HEpgItem
 {
 Q_OBJECT

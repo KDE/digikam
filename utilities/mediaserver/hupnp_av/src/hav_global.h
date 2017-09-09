@@ -118,7 +118,7 @@ enum HDayOfWeekFormat
  *
  * \return a string representation of the specified HDayOfWeek value.
  */
-H_UPNP_AV_EXPORT QString toString(HDayOfWeek type, HDayOfWeekFormat format=Full);
+DIGIKAM_EXPORT QString toString(HDayOfWeek type, HDayOfWeekFormat format=Full);
 
 /*!
  * \brief Returns a HDayOfWeek value corresponding to the specified string, if any.
@@ -127,7 +127,7 @@ H_UPNP_AV_EXPORT QString toString(HDayOfWeek type, HDayOfWeekFormat format=Full)
  *
  * \return a HDayOfWeek value corresponding to the specified string, if any.
  */
-H_UPNP_AV_EXPORT HDayOfWeek dayOfWeekFromString(const QString& arg);
+DIGIKAM_EXPORT HDayOfWeek dayOfWeekFromString(const QString& arg);
 
 /*!
  * \brief This enumeration type defines the episode type of a recording.
@@ -164,7 +164,7 @@ enum HEpisodeType
  *
  * \return a string representation of the specified HEpisodeType value.
  */
-H_UPNP_AV_EXPORT QString toString(HEpisodeType type);
+DIGIKAM_EXPORT QString toString(HEpisodeType type);
 
 /*!
  * \brief Returns a HEpisodeType value corresponding to the specified string, if any.
@@ -173,7 +173,7 @@ H_UPNP_AV_EXPORT QString toString(HEpisodeType type);
  *
  * \return a HEpisodeType value corresponding to the specified string, if any.
  */
-H_UPNP_AV_EXPORT HEpisodeType episodeTypeFromString(const QString& arg);
+DIGIKAM_EXPORT HEpisodeType episodeTypeFromString(const QString& arg);
 
 /*!
  * \brief This enumeration defines the Daylight Saving values used and defined
@@ -219,7 +219,7 @@ enum HDaylightSaving
  *
  * \return a string representation of the specified HDaylightSaving value.
  */
-H_UPNP_AV_EXPORT QString toString(HDaylightSaving type);
+DIGIKAM_EXPORT QString toString(HDaylightSaving type);
 
 /*!
  * \brief Returns a HDaylightSaving value corresponding to the specified string, if any.
@@ -228,7 +228,7 @@ H_UPNP_AV_EXPORT QString toString(HDaylightSaving type);
  *
  * \return a HDaylightSaving value corresponding to the specified string, if any.
  */
-H_UPNP_AV_EXPORT HDaylightSaving daylightSavingFromString(const QString& arg);
+DIGIKAM_EXPORT HDaylightSaving daylightSavingFromString(const QString& arg);
 
 /*!
  * Parses the specified XML and returns an object representing its contents.
@@ -238,7 +238,7 @@ H_UPNP_AV_EXPORT HDaylightSaving daylightSavingFromString(const QString& arg);
  *
  * \return an object representing the XML content.
  */
-H_UPNP_AV_EXPORT HStateVariableCollection parseStateVariableCollection(const QString& arg);
+DIGIKAM_EXPORT HStateVariableCollection parseStateVariableCollection(const QString& arg);
 
 }
 }

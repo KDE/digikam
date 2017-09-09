@@ -44,7 +44,7 @@ namespace Upnp
 //
 // Implementation details of HControlPointConfiguration class
 //
-class H_UPNP_CORE_EXPORT HControlPointConfigurationPrivate
+class DIGIKAM_EXPORT HControlPointConfigurationPrivate
 {
 H_DISABLE_COPY(HControlPointConfigurationPrivate)
 

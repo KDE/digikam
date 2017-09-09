@@ -40,9 +40,9 @@ namespace Upnp
  *
  * \remarks This class is thread-safe.
  */
-class H_UPNP_CORE_EXPORT HExecArgs
+class DIGIKAM_EXPORT HExecArgs
 {
-friend H_UPNP_CORE_EXPORT bool operator==(const HExecArgs&, const HExecArgs&);
+friend DIGIKAM_EXPORT bool operator==(const HExecArgs&, const HExecArgs&);
 
 public:
 
@@ -117,7 +117,7 @@ public:
  *
  * \relates HExecArgs
  */
-H_UPNP_CORE_EXPORT bool operator==(const HExecArgs&, const HExecArgs&);
+DIGIKAM_EXPORT bool operator==(const HExecArgs&, const HExecArgs&);
 
 /*!
  * Compares the two objects for inequality.

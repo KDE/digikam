@@ -57,7 +57,7 @@ class HHttpResponseHeader;
 //
 //
 //
-class H_UPNP_CORE_EXPORT HHttpMessageCreator
+class DIGIKAM_EXPORT HHttpMessageCreator
 {
 H_FORCE_SINGLETON(HHttpMessageCreator)
 

@@ -45,7 +45,7 @@ namespace Av
 //
 // Implementation details of HContentDirectoryAdapter.
 //
-class H_UPNP_AV_EXPORT HContentDirectoryAdapterPrivate :
+class DIGIKAM_EXPORT HContentDirectoryAdapterPrivate :
     public HClientServiceAdapterPrivate
 {
 H_DECLARE_PUBLIC(HContentDirectoryAdapter)

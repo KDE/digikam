@@ -46,7 +46,7 @@ class HDeviceModelCreatorPrivate;
  *
  * \sa hupnp_devicehosting, HServerDevice, HServerService
  */
-class H_UPNP_CORE_EXPORT HDeviceModelCreator :
+class DIGIKAM_EXPORT HDeviceModelCreator :
     public HClonable
 {
 H_DISABLE_COPY(HDeviceModelCreator)

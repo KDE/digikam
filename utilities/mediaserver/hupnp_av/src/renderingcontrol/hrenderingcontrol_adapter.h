@@ -54,7 +54,7 @@ class HRenderingControlAdapterPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HRenderingControlAdapter :
+class DIGIKAM_EXPORT HRenderingControlAdapter :
     public HClientServiceAdapter
 {
 Q_OBJECT

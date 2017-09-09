@@ -48,7 +48,7 @@ class HDeviceUdnPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HDeviceUdn
+class DIGIKAM_EXPORT HDeviceUdn
 {
 private:
 
@@ -145,7 +145,7 @@ public:
  *
  * \relates HDeviceUdn
  */
-H_UPNP_AV_EXPORT bool operator==(const HDeviceUdn& obj1, const HDeviceUdn& obj2);
+DIGIKAM_EXPORT bool operator==(const HDeviceUdn& obj1, const HDeviceUdn& obj2);
 
 /*!
  * Compares the two objects for inequality.

@@ -49,7 +49,7 @@ class HItemPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HItem :
+class DIGIKAM_EXPORT HItem :
     public HObject
 {
 Q_OBJECT

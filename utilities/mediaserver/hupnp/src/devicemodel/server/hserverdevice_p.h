@@ -42,7 +42,7 @@ namespace Upnp
 //
 //
 //
-class H_UPNP_CORE_EXPORT HServerDevicePrivate :
+class DIGIKAM_EXPORT HServerDevicePrivate :
     public HDevicePrivate<HServerDevice, HServerService>
 {
 H_DISABLE_COPY(HServerDevicePrivate)

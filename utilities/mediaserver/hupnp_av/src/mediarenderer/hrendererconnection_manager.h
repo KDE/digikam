@@ -49,7 +49,7 @@ class HRendererConnectionManagerPrivate;
  *
  * \sa HRendererConnection
  */
-class H_UPNP_AV_EXPORT HRendererConnectionManager :
+class DIGIKAM_EXPORT HRendererConnectionManager :
     public QObject
 {
 Q_OBJECT

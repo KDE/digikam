@@ -48,7 +48,7 @@ class HMusicArtistPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HMusicArtist :
+class DIGIKAM_EXPORT HMusicArtist :
     public HPerson
 {
 Q_OBJECT

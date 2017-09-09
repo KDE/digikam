@@ -67,10 +67,10 @@ class HServiceIdPrivate;
  *
  * \ingroup hupnp_common
  */
-class H_UPNP_CORE_EXPORT HServiceId
+class DIGIKAM_EXPORT HServiceId
 {
-friend H_UPNP_CORE_EXPORT bool operator==(const HServiceId&, const HServiceId&);
-friend H_UPNP_CORE_EXPORT quint32 qHash(const HServiceId& key);
+friend DIGIKAM_EXPORT bool operator==(const HServiceId&, const HServiceId&);
+friend DIGIKAM_EXPORT quint32 qHash(const HServiceId& key);
 
 private:
 
@@ -206,7 +206,7 @@ public:
  *
  * \relates HServiceId
  */
-H_UPNP_CORE_EXPORT bool operator==(const HServiceId&, const HServiceId&);
+DIGIKAM_EXPORT bool operator==(const HServiceId&, const HServiceId&);
 
 /*!
  * Compares the two objects for inequality.
@@ -231,7 +231,7 @@ inline bool operator!=(const HServiceId& obj1, const HServiceId& obj2)
  *
  * \relates HServiceId
  */
-H_UPNP_CORE_EXPORT quint32 qHash(const HServiceId& key);
+DIGIKAM_EXPORT quint32 qHash(const HServiceId& key);
 
 }
 }

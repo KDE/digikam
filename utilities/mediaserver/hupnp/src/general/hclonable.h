@@ -39,7 +39,7 @@ namespace Upnp
  *
  * \ingroup hupnp_common
  */
-class H_UPNP_CORE_EXPORT HClonable
+class DIGIKAM_EXPORT HClonable
 {
 H_DISABLE_COPY(HClonable)
 

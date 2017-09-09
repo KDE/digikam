@@ -47,7 +47,7 @@ class HRcsLastChangeInfoPrivate;
  *
  * \sa HConnection
  */
-class H_UPNP_AV_EXPORT HRcsLastChangeInfo
+class DIGIKAM_EXPORT HRcsLastChangeInfo
 {
 
 private:
@@ -164,7 +164,7 @@ public:
  *
  * \relates HRcsLastChangeInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HRcsLastChangeInfo&, const HRcsLastChangeInfo&);
+DIGIKAM_EXPORT bool operator==(const HRcsLastChangeInfo&, const HRcsLastChangeInfo&);
 
 /*!
  * Compares the two objects for inequality.

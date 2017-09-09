@@ -53,9 +53,9 @@ class HResourcePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HResource
+class DIGIKAM_EXPORT HResource
 {
-friend H_UPNP_AV_EXPORT bool operator==(const HResource&, const HResource&);
+friend DIGIKAM_EXPORT bool operator==(const HResource&, const HResource&);
 
 private: // attributes
 
@@ -214,7 +214,7 @@ public:
  *
  * \relates HResource
  */
-H_UPNP_AV_EXPORT bool operator==(const HResource&, const HResource&);
+DIGIKAM_EXPORT bool operator==(const HResource&, const HResource&);
 
 /*!
  * Compares the two objects for inequality.

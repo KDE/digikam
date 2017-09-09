@@ -52,9 +52,9 @@ class HServiceInfoPrivate;
  *
  * \sa HDeviceInfo, HActionInfo and HStateVariableInfo.
  */
-class H_UPNP_CORE_EXPORT HServiceInfo
+class DIGIKAM_EXPORT HServiceInfo
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HServiceInfo& obj1, const HServiceInfo& obj2);
 
 private:
@@ -206,7 +206,7 @@ public:
  *
  * \relates HServiceInfo
  */
-H_UPNP_CORE_EXPORT bool operator==(const HServiceInfo&, const HServiceInfo&);
+DIGIKAM_EXPORT bool operator==(const HServiceInfo&, const HServiceInfo&);
 
 /*!
  * Compares the two objects for inequality.

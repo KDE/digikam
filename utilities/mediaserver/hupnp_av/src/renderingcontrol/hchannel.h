@@ -48,7 +48,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HChannel
+class DIGIKAM_EXPORT HChannel
 {
 public:
 
@@ -226,7 +226,7 @@ public:
  *
  * \relates HChannel
  */
-H_UPNP_AV_EXPORT bool operator==(const HChannel& obj1, const HChannel& obj2);
+DIGIKAM_EXPORT bool operator==(const HChannel& obj1, const HChannel& obj2);
 
 /*!
  * Compares the two objects for inequality.
@@ -249,7 +249,7 @@ inline bool operator!=(const HChannel& obj1, const HChannel& obj2)
  * \return a value that can be used as a unique key in a hash-map identifying
  * the object.
  */
-H_UPNP_AV_EXPORT quint32 qHash(const HChannel& key);
+DIGIKAM_EXPORT quint32 qHash(const HChannel& key);
 
 }
 }

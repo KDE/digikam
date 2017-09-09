@@ -58,7 +58,7 @@ class HStateVariablePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HClientStateVariable :
+class DIGIKAM_EXPORT HClientStateVariable :
     public QObject
 {
 Q_OBJECT

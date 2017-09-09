@@ -53,7 +53,7 @@ class HMediaServerAdapterPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HMediaServerAdapter :
+class DIGIKAM_EXPORT HMediaServerAdapter :
     public HClientDeviceAdapter
 {
 Q_OBJECT

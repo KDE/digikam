@@ -48,7 +48,7 @@ class HCdsPropertyDbPrivate;
  *
  * \remarks This class \b is thread-safe.
  */
-class H_UPNP_AV_EXPORT HCdsPropertyDb
+class DIGIKAM_EXPORT HCdsPropertyDb
 {
 H_DISABLE_COPY(HCdsPropertyDb)
 

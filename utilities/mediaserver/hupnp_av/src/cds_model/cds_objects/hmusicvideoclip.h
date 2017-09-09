@@ -47,7 +47,7 @@ class HMusicVideoClipPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HMusicVideoClip :
+class DIGIKAM_EXPORT HMusicVideoClip :
     public HVideoItem
 {
 Q_OBJECT

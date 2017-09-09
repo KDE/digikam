@@ -50,7 +50,7 @@ namespace Av
  * HConnectionManagerAdapter::prepareForConnection(),
  * HConnectionManagerAdapter::getCurrentConnectionInfo()
  */
-class H_UPNP_AV_EXPORT HConnectionManagerId
+class DIGIKAM_EXPORT HConnectionManagerId
 {
 private:
 
@@ -146,7 +146,7 @@ public:
  *
  * \relates HConnectionManagerId
  */
-H_UPNP_AV_EXPORT bool operator==(const HConnectionManagerId&, const HConnectionManagerId&);
+DIGIKAM_EXPORT bool operator==(const HConnectionManagerId&, const HConnectionManagerId&);
 
 /*!
  * Compares the two objects for inequality.

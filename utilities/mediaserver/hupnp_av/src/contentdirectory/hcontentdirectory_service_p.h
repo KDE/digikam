@@ -120,7 +120,7 @@ public:
 //
 // Implementation details of HContentDirectoryService
 //
-class H_UPNP_AV_EXPORT HContentDirectoryServicePrivate :
+class DIGIKAM_EXPORT HContentDirectoryServicePrivate :
     public HAbstractContentDirectoryServicePrivate
 {
 H_DECLARE_PUBLIC(HContentDirectoryService)

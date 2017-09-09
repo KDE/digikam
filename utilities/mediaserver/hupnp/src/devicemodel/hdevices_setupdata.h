@@ -49,7 +49,7 @@ class HDeviceSetupPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HDeviceSetup
+class DIGIKAM_EXPORT HDeviceSetup
 {
 
 private:
@@ -197,7 +197,7 @@ public:
  *
  * \sa HDeviceSetup
  */
-class H_UPNP_CORE_EXPORT HDevicesSetupData
+class DIGIKAM_EXPORT HDevicesSetupData
 {
 
 private:

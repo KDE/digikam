@@ -35,7 +35,7 @@ class HClientServiceAdapter;
 //
 //
 //
-class H_UPNP_CORE_EXPORT HClientServiceAdapterPrivate :
+class DIGIKAM_EXPORT HClientServiceAdapterPrivate :
     public HAbstractClientAdapterPrivate
 {
 H_DISABLE_COPY(HClientServiceAdapterPrivate)

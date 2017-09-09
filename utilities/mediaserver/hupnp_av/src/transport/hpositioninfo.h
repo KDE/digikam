@@ -53,7 +53,7 @@ class HPositionInfoPrivate;
  * \sa HAbstractTransportService::getPositionInfo(),
  * HAvTransportAdapter::getPositionInfo()
  */
-class H_UPNP_AV_EXPORT HPositionInfo
+class DIGIKAM_EXPORT HPositionInfo
 {
 private:
 
@@ -299,7 +299,7 @@ public:
  *
  * \relates HPositionInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HPositionInfo& obj1, const HPositionInfo& obj2);
+DIGIKAM_EXPORT bool operator==(const HPositionInfo& obj1, const HPositionInfo& obj2);
 
 /*!
  * Compares the two objects for inequality.

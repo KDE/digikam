@@ -48,7 +48,7 @@ class HActionSetupPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HActionSetup
+class DIGIKAM_EXPORT HActionSetup
 {
 private:
 
@@ -238,7 +238,7 @@ public:
  *
  * \sa HActionSetup
  */
-class H_UPNP_CORE_EXPORT HActionsSetupData
+class DIGIKAM_EXPORT HActionsSetupData
 {
 
 private:

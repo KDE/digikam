@@ -47,7 +47,7 @@ class HVideoBroadcastPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HVideoBroadcast :
+class DIGIKAM_EXPORT HVideoBroadcast :
     public HVideoItem
 {
 Q_OBJECT

@@ -50,7 +50,7 @@ class HObject;
 //
 //
 //
-class H_UPNP_AV_EXPORT HCdsDataSourcePrivate
+class DIGIKAM_EXPORT HCdsDataSourcePrivate
 {
 H_DISABLE_COPY(HCdsDataSourcePrivate)
 H_DECLARE_PUBLIC(HCdsDataSource)

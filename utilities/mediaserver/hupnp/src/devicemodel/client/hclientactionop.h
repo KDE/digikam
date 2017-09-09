@@ -54,7 +54,7 @@ class HClientActionOpPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HClientActionOp :
+class DIGIKAM_EXPORT HClientActionOp :
     public HAsyncOp
 {
 H_DECLARE_PRIVATE(HClientActionOp);

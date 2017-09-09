@@ -45,7 +45,7 @@ class HAvDeviceModelCreatorPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HAvDeviceModelCreator :
+class DIGIKAM_EXPORT HAvDeviceModelCreator :
     public HDeviceModelCreator
 {
 H_DISABLE_COPY(HAvDeviceModelCreator)

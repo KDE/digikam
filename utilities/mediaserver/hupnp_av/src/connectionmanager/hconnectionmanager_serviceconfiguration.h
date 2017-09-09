@@ -47,7 +47,7 @@ class HConnectionManagerServiceConfigurationPrivate;
  *
  * \sa HConnectionManagerService
  */
-class H_UPNP_AV_EXPORT HConnectionManagerServiceConfiguration :
+class DIGIKAM_EXPORT HConnectionManagerServiceConfiguration :
     public HClonable
 {
 H_DISABLE_COPY(HConnectionManagerServiceConfiguration)

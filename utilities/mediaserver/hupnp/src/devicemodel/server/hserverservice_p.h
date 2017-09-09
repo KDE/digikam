@@ -45,7 +45,7 @@ namespace Upnp
 //
 // Implementation details of HServerService
 //
-class H_UPNP_CORE_EXPORT HServerServicePrivate :
+class DIGIKAM_EXPORT HServerServicePrivate :
     public HServicePrivate<HServerService, HServerAction, HServerStateVariable>
 {
 H_DECLARE_PUBLIC(HServerService)

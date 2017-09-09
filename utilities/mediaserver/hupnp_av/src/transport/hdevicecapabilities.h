@@ -47,7 +47,7 @@ class HDeviceCapabilitiesPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HDeviceCapabilities
+class DIGIKAM_EXPORT HDeviceCapabilities
 {
 private:
 
@@ -184,7 +184,7 @@ public:
  *
  * \relates HDeviceCapabilities
  */
-H_UPNP_AV_EXPORT bool operator==(const HDeviceCapabilities&, const HDeviceCapabilities&);
+DIGIKAM_EXPORT bool operator==(const HDeviceCapabilities&, const HDeviceCapabilities&);
 
 /*!
  * Compares the two objects for inequality.

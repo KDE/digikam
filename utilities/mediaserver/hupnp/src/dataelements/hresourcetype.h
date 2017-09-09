@@ -63,9 +63,9 @@ class HResourceTypePrivate;
  *
  * \ingroup hupnp_common
  */
-class H_UPNP_CORE_EXPORT HResourceType
+class DIGIKAM_EXPORT HResourceType
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HResourceType&, const HResourceType&);
 
 public:
@@ -345,7 +345,7 @@ public:
  *
  * \relates HResourceType
  */
-H_UPNP_CORE_EXPORT bool operator==(const HResourceType&, const HResourceType&);
+DIGIKAM_EXPORT bool operator==(const HResourceType&, const HResourceType&);
 
 /*!
  * Compares the two objects for inequality.
@@ -370,7 +370,7 @@ inline bool operator!=(const HResourceType& obj1, const HResourceType& obj2)
  *
  * \relates HResourceType
  */
-H_UPNP_CORE_EXPORT quint32 qHash(const HResourceType& key);
+DIGIKAM_EXPORT quint32 qHash(const HResourceType& key);
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(HResourceType::Tokens)
 

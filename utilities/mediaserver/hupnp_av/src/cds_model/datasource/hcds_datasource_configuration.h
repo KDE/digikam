@@ -47,7 +47,7 @@ class HCdsDataSourceConfigurationPrivate;
  *
  * \sa HCdsDataSource
  */
-class H_UPNP_AV_EXPORT HCdsDataSourceConfiguration :
+class DIGIKAM_EXPORT HCdsDataSourceConfiguration :
     public HClonable
 {
 H_DISABLE_COPY(HCdsDataSourceConfiguration)

@@ -48,7 +48,7 @@ class HVideoProgramPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HVideoProgram :
+class DIGIKAM_EXPORT HVideoProgram :
     public HEpgItem
 {
 Q_OBJECT

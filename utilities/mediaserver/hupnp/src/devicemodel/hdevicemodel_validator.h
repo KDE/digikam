@@ -41,7 +41,7 @@ class HDeviceModelValidatorPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HDeviceModelValidator
+class DIGIKAM_EXPORT HDeviceModelValidator
 {
 H_DISABLE_COPY(HDeviceModelValidator)
 

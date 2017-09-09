@@ -47,7 +47,7 @@ namespace Av
  * \sa HAbstractContentDirectoryService::createObject()
  * \sa HContentDirectoryAdapter::createObject()
  */
-class H_UPNP_AV_EXPORT HCreateObjectResult
+class DIGIKAM_EXPORT HCreateObjectResult
 {
 private:
 
@@ -108,7 +108,7 @@ public:
  *
  * \relates HCreateObjectResult
  */
-H_UPNP_AV_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HCreateObjectResult& obj1, const HCreateObjectResult& obj2);
 
 /*!

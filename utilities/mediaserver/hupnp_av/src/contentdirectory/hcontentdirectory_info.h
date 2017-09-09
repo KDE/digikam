@@ -45,7 +45,7 @@ namespace Av
  *
  * \remarks This class is thread-safe.
  */
-class H_UPNP_AV_EXPORT HContentDirectoryInfo
+class DIGIKAM_EXPORT HContentDirectoryInfo
 {
 H_FORCE_SINGLETON(HContentDirectoryInfo)
 

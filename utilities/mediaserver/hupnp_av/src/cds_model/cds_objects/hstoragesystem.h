@@ -47,7 +47,7 @@ class HStorageSystemPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HStorageSystem :
+class DIGIKAM_EXPORT HStorageSystem :
     public HContainer
 {
 Q_OBJECT

@@ -36,7 +36,7 @@ class HClientDeviceAdapter;
 //
 // Implementation details of HClientDeviceAdapter
 //
-class H_UPNP_CORE_EXPORT HClientDeviceAdapterPrivate :
+class DIGIKAM_EXPORT HClientDeviceAdapterPrivate :
     public HAbstractClientAdapterPrivate
 {
 H_DISABLE_COPY(HClientDeviceAdapterPrivate)

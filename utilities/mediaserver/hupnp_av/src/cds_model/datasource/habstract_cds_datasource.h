@@ -50,7 +50,7 @@ class HAbstractCdsDataSourcePrivate;
  *
  * \sa HAbstractCdsDataSourceConfiguration
  */
-class H_UPNP_AV_EXPORT HAbstractCdsDataSource :
+class DIGIKAM_EXPORT HAbstractCdsDataSource :
     public QObject
 {
 Q_OBJECT

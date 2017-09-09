@@ -42,7 +42,7 @@ namespace Upnp
 //
 //
 //
-class H_UPNP_CORE_EXPORT HDeviceHostRuntimeStatusPrivate
+class DIGIKAM_EXPORT HDeviceHostRuntimeStatusPrivate
 {
 H_DISABLE_COPY(HDeviceHostRuntimeStatusPrivate)
 

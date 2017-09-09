@@ -47,7 +47,7 @@ class HConnectionManagerInfoPrivate;
  *
  * \remarks This class is thread-safe.
  */
-class H_UPNP_AV_EXPORT HConnectionManagerInfo
+class DIGIKAM_EXPORT HConnectionManagerInfo
 {
 H_FORCE_SINGLETON(HConnectionManagerInfo)
 

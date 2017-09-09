@@ -47,7 +47,7 @@ class HConnectionInfoPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HConnectionInfo
+class DIGIKAM_EXPORT HConnectionInfo
 {
 private:
 
@@ -297,7 +297,7 @@ public:
  *
  * \relates HConnectionInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HConnectionInfo&, const HConnectionInfo&);
+DIGIKAM_EXPORT bool operator==(const HConnectionInfo&, const HConnectionInfo&);
 
 /*!
  * Compares the two objects for inequality.

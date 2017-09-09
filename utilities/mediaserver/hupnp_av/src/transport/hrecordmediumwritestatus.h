@@ -45,7 +45,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HRecordMediumWriteStatus
+class DIGIKAM_EXPORT HRecordMediumWriteStatus
 {
 
 public:
@@ -167,7 +167,7 @@ public:
  *
  * \relates HRecordMediumWriteStatus
  */
-H_UPNP_AV_EXPORT bool operator==(const HRecordMediumWriteStatus& obj1, const HRecordMediumWriteStatus& obj2);
+DIGIKAM_EXPORT bool operator==(const HRecordMediumWriteStatus& obj1, const HRecordMediumWriteStatus& obj2);
 
 /*!
  * Compares the two objects for inequality.

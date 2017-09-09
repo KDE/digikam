@@ -45,7 +45,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HPlayMode
+class DIGIKAM_EXPORT HPlayMode
 {
 public:
 
@@ -184,7 +184,7 @@ public:
  *
  * \relates HPlayMode
  */
-H_UPNP_AV_EXPORT bool operator==(const HPlayMode& obj1, const HPlayMode& obj2);
+DIGIKAM_EXPORT bool operator==(const HPlayMode& obj1, const HPlayMode& obj2);
 
 /*!
  * Compares the two objects for inequality.

@@ -48,7 +48,7 @@ class HGenreContainerPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HGenreContainer :
+class DIGIKAM_EXPORT HGenreContainer :
     public HContainer
 {
 Q_OBJECT

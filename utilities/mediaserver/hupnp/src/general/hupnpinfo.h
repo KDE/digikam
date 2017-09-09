@@ -93,7 +93,7 @@ namespace Upnp
  * \remarks The returned string is statically allocated. You should never
  * delete or free it manually.
  */
-H_UPNP_CORE_EXPORT const char* hupnpCoreVersion();
+DIGIKAM_EXPORT const char* hupnpCoreVersion();
 
 }
 }

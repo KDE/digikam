@@ -47,7 +47,7 @@ namespace Upnp
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HStateVariablesSetupData
+class DIGIKAM_EXPORT HStateVariablesSetupData
 {
 
 public:

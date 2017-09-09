@@ -47,7 +47,7 @@ class HAvtLastChangeInfoPrivate;
  *
  * \sa HConnection
  */
-class H_UPNP_AV_EXPORT HAvtLastChangeInfo
+class DIGIKAM_EXPORT HAvtLastChangeInfo
 {
 
 private:
@@ -145,7 +145,7 @@ public:
  *
  * \relates HAvtLastChangeInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HAvtLastChangeInfo&, const HAvtLastChangeInfo&);
+DIGIKAM_EXPORT bool operator==(const HAvtLastChangeInfo&, const HAvtLastChangeInfo&);
 
 /*!
  * Compares the two objects for inequality.

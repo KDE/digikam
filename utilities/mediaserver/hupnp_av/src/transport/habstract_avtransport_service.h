@@ -56,7 +56,7 @@ class HAbstractTransportServicePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HAbstractTransportService :
+class DIGIKAM_EXPORT HAbstractTransportService :
     public HServerService
 {
 Q_OBJECT

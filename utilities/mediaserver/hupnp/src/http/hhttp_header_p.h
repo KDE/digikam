@@ -47,7 +47,7 @@ namespace Upnp
 // the Qt's QHttpHeader. The main reason this class exists is that Qt
 // has deprecated QHttpHeader.
 //
-class H_UPNP_CORE_EXPORT HHttpHeader
+class DIGIKAM_EXPORT HHttpHeader
 {
 
 private:
@@ -122,7 +122,7 @@ public:
 // the Qt's QHttpResponseHeader. The main reason this class exists is
 // that Qt has deprecated QHttpResponseHeader.
 //
-class H_UPNP_CORE_EXPORT HHttpResponseHeader :
+class DIGIKAM_EXPORT HHttpResponseHeader :
     public HHttpHeader
 {
 private:
@@ -167,7 +167,7 @@ public:
 // the Qt's QHttpRequestHeader. The main reason this class exists is
 // that Qt has deprecated QHttpRequestHeader.
 //
-class H_UPNP_CORE_EXPORT HHttpRequestHeader :
+class DIGIKAM_EXPORT HHttpRequestHeader :
     public HHttpHeader
 {
 

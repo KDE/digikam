@@ -46,7 +46,7 @@ namespace Av
  * \sa HAbstractConnectionManagerService::getProtocolInfo()
  * \sa HConnectionManagerAdapter::getProtocolInfo()
  */
-class H_UPNP_AV_EXPORT HProtocolInfoResult
+class DIGIKAM_EXPORT HProtocolInfoResult
 {
 private:
 
@@ -141,7 +141,7 @@ public:
  *
  * \relates HProtocolInfoResult
  */
-H_UPNP_AV_EXPORT bool operator==(const HProtocolInfoResult&, const HProtocolInfoResult&);
+DIGIKAM_EXPORT bool operator==(const HProtocolInfoResult&, const HProtocolInfoResult&);
 
 /*!
  * Compares the two objects for inequality.

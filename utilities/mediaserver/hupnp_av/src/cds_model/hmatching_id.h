@@ -49,7 +49,7 @@ class HMatchingIdPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HMatchingId
+class DIGIKAM_EXPORT HMatchingId
 {
 private:
 
@@ -178,7 +178,7 @@ public:
  *
  * \relates HMatchingId
  */
-H_UPNP_AV_EXPORT bool operator==(const HMatchingId& obj1, const HMatchingId& obj2);
+DIGIKAM_EXPORT bool operator==(const HMatchingId& obj1, const HMatchingId& obj2);
 
 /*!
  * Compares the two objects for inequality.

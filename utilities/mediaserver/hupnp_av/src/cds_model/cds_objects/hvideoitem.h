@@ -47,7 +47,7 @@ class HVideoItemPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HVideoItem :
+class DIGIKAM_EXPORT HVideoItem :
     public HItem
 {
 Q_OBJECT

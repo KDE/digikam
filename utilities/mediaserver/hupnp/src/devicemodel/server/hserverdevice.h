@@ -90,7 +90,7 @@ class HServerDevicePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HServerDevice :
+class DIGIKAM_EXPORT HServerDevice :
     public QObject
 {
 Q_OBJECT

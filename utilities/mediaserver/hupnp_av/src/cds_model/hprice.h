@@ -45,7 +45,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HPrice
+class DIGIKAM_EXPORT HPrice
 {
 private:
 
@@ -108,7 +108,7 @@ public:
  *
  * \relates HPrice
  */
-H_UPNP_AV_EXPORT bool operator==(const HPrice& obj1, const HPrice& obj2);
+DIGIKAM_EXPORT bool operator==(const HPrice& obj1, const HPrice& obj2);
 
 /*!
  * Compares the two objects for inequality.

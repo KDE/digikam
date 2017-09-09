@@ -66,9 +66,9 @@ class HActionInfoPrivate;
  *
   \sa HDeviceInfo, HServiceInfo and HStateVariableInfo.
  */
-class H_UPNP_CORE_EXPORT HActionInfo
+class DIGIKAM_EXPORT HActionInfo
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HActionInfo&, const HActionInfo&);
 
 private:
@@ -220,7 +220,7 @@ public:
  *
  * \relates HActionInfo
  */
-H_UPNP_CORE_EXPORT bool operator==(const HActionInfo&, const HActionInfo&);
+DIGIKAM_EXPORT bool operator==(const HActionInfo&, const HActionInfo&);
 
 /*!
  * Compares the two objects for inequality.
@@ -247,7 +247,7 @@ inline bool operator!=(const HActionInfo& obj1, const HActionInfo& obj2)
  *
  * \relates HActionInfo
  */
-H_UPNP_CORE_EXPORT quint32 qHash(const HActionInfo& key);
+DIGIKAM_EXPORT quint32 qHash(const HActionInfo& key);
 
 }
 }

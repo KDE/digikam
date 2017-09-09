@@ -45,7 +45,7 @@ namespace Av
  *
  * \remarks This class is thread-safe.
  */
-class H_UPNP_AV_EXPORT HMediaRendererInfo
+class DIGIKAM_EXPORT HMediaRendererInfo
 {
 H_FORCE_SINGLETON(HMediaRendererInfo)
 

@@ -50,7 +50,7 @@ class HEventNotifier;
 // This is an internal class that provides features HDeviceHost requires
 // in its operations
 //
-class H_UPNP_CORE_EXPORT HServerDeviceController :
+class DIGIKAM_EXPORT HServerDeviceController :
     public QObject
 {
 Q_OBJECT

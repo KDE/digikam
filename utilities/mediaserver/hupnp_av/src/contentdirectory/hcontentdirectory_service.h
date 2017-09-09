@@ -51,7 +51,7 @@ class HContentDirectoryServicePrivate;
  *
  * \sa HAbstractMediaServerDevice, HAbstractContentDirectoryService
  */
-class H_UPNP_AV_EXPORT HContentDirectoryService :
+class DIGIKAM_EXPORT HContentDirectoryService :
     public HAbstractContentDirectoryService
 {
 Q_OBJECT

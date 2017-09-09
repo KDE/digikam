@@ -113,7 +113,7 @@ public:
 //
 // Implementation details of HControlPoint
 //
-class H_UPNP_CORE_EXPORT HControlPointPrivate :
+class DIGIKAM_EXPORT HControlPointPrivate :
     public QObject
 {
 Q_OBJECT

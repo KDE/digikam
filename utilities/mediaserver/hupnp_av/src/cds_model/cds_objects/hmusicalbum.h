@@ -47,7 +47,7 @@ class HMusicAlbumPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HMusicAlbum :
+class DIGIKAM_EXPORT HMusicAlbum :
     public HAlbum
 {
 Q_OBJECT

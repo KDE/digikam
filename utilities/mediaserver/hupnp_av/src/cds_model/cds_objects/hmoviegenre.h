@@ -50,7 +50,7 @@ class HMovieGenrePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HMovieGenre :
+class DIGIKAM_EXPORT HMovieGenre :
     public HGenreContainer
 {
 Q_OBJECT

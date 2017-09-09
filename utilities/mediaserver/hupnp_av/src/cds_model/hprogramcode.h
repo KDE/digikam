@@ -48,7 +48,7 @@ class HProgramCodePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HProgramCode
+class DIGIKAM_EXPORT HProgramCode
 {
 private:
 
@@ -119,7 +119,7 @@ public:
  *
  * \relates HProgramCode
  */
-H_UPNP_AV_EXPORT bool operator==(const HProgramCode& obj1, const HProgramCode& obj2);
+DIGIKAM_EXPORT bool operator==(const HProgramCode& obj1, const HProgramCode& obj2);
 
 /*!
  * Compares the two objects for inequality.

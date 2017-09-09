@@ -55,7 +55,7 @@ class HConnectionManagerAdapterPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HConnectionManagerAdapter :
+class DIGIKAM_EXPORT HConnectionManagerAdapter :
     public HClientServiceAdapter
 {
 Q_OBJECT

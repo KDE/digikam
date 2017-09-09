@@ -51,7 +51,7 @@ typedef QList<QPair<HAbstractClientAdapterOp*, HAsyncOp*> > HClientAdapterOps;
 //
 //
 //
-class H_UPNP_CORE_EXPORT HAbstractClientAdapterPrivate
+class DIGIKAM_EXPORT HAbstractClientAdapterPrivate
 {
 H_DISABLE_COPY(HAbstractClientAdapterPrivate)
 

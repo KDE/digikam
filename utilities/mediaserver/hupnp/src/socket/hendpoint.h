@@ -43,12 +43,12 @@ namespace Upnp
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HEndpoint
+class DIGIKAM_EXPORT HEndpoint
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HEndpoint&, const HEndpoint&);
 
-friend H_UPNP_CORE_EXPORT quint32 qHash(const HEndpoint&);
+friend DIGIKAM_EXPORT quint32 qHash(const HEndpoint&);
 
 private:
 
@@ -159,7 +159,7 @@ public:
  *
  * \relates HEndpoint
  */
-H_UPNP_CORE_EXPORT bool operator==(const HEndpoint&, const HEndpoint&);
+DIGIKAM_EXPORT bool operator==(const HEndpoint&, const HEndpoint&);
 
 /*!
  * Compares the two objects for inequality.
@@ -184,7 +184,7 @@ inline bool operator!=(const HEndpoint& obj1, const HEndpoint& obj2)
  *
  * \relates HEndpoint
  */
-H_UPNP_CORE_EXPORT quint32 qHash(const HEndpoint& key);
+DIGIKAM_EXPORT quint32 qHash(const HEndpoint& key);
 
 }
 }

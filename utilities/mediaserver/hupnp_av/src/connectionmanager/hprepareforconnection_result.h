@@ -45,7 +45,7 @@ namespace Av
  * \sa HAbstractConnectionManagerService::prepareForConnection()
  * \sa HConnectionManagerAdapter::prepareForConnection()
  */
-class H_UPNP_AV_EXPORT HPrepareForConnectionResult
+class DIGIKAM_EXPORT HPrepareForConnectionResult
 {
 private:
 
@@ -159,7 +159,7 @@ public:
  *
  * \relates HPrepareForConnectionResult
  */
-H_UPNP_AV_EXPORT bool operator==(const HPrepareForConnectionResult&, const HPrepareForConnectionResult&);
+DIGIKAM_EXPORT bool operator==(const HPrepareForConnectionResult&, const HPrepareForConnectionResult&);
 
 /*!
  * Compares the two objects for inequality.

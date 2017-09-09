@@ -49,7 +49,7 @@ namespace Upnp
 //
 //
 template<typename Owner, typename Action, typename StateVariable>
-class H_UPNP_CORE_EXPORT HServicePrivate
+class DIGIKAM_EXPORT HServicePrivate
 {
 H_DECLARE_PUBLIC(HServerService)
 H_DISABLE_COPY(HServicePrivate)

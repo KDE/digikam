@@ -46,7 +46,7 @@ class HStateVariableEventPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HStateVariableEvent
+class DIGIKAM_EXPORT HStateVariableEvent
 {
 private:
 

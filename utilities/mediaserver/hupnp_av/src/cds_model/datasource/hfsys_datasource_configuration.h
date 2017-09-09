@@ -46,7 +46,7 @@ class HFileSystemDataSourceConfigurationPrivate;
  *
  * \sa HFileSystemDataSource
  */
-class H_UPNP_AV_EXPORT HFileSystemDataSourceConfiguration :
+class DIGIKAM_EXPORT HFileSystemDataSourceConfiguration :
     public HCdsDataSourceConfiguration
 {
 H_DISABLE_COPY(HFileSystemDataSourceConfiguration)

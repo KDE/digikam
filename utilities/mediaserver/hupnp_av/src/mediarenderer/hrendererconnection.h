@@ -59,7 +59,7 @@ class HRendererConnectionController;
  *
  * \sa HRendererConnectionManager, HAvDeviceModelCreator, HMediaRendererDeviceConfiguration
  */
-class H_UPNP_AV_EXPORT HRendererConnection :
+class DIGIKAM_EXPORT HRendererConnection :
     public QObject
 {
 Q_OBJECT

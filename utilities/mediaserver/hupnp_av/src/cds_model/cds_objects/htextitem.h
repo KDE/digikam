@@ -47,7 +47,7 @@ class HTextItemPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HTextItem :
+class DIGIKAM_EXPORT HTextItem :
     public HItem
 {
 Q_OBJECT

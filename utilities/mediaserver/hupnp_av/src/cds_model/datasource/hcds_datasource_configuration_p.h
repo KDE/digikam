@@ -44,7 +44,7 @@ namespace Av
 //
 // Implementation details of HCdsDataSourceConfiguration
 //
-class H_UPNP_AV_EXPORT HCdsDataSourceConfigurationPrivate
+class DIGIKAM_EXPORT HCdsDataSourceConfigurationPrivate
 {
 H_DISABLE_COPY(HCdsDataSourceConfigurationPrivate)
 

@@ -50,6 +50,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:calendar_src>
             $<TARGET_OBJECTS:sendbymail_src>
             $<TARGET_OBJECTS:printcreator_src>
+            $<TARGET_OBJECTS:mediaserver_src>
 
             utils/digikam_debug.cpp
 )
@@ -397,7 +398,6 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:queuemanager_src>
             $<TARGET_OBJECTS:importui_src>
             $<TARGET_OBJECTS:advancedrename_src>
-            $<TARGET_OBJECTS:mediaserver_src>
 )
 
 if(KF5Kipi_FOUND)

@@ -47,7 +47,7 @@ class HContentDirectoryServiceConfigurationPrivate;
  *
  * \sa HContentDirectoryService
  */
-class H_UPNP_AV_EXPORT HContentDirectoryServiceConfiguration :
+class DIGIKAM_EXPORT HContentDirectoryServiceConfiguration :
     public HClonable
 {
 H_DISABLE_COPY(HContentDirectoryServiceConfiguration)

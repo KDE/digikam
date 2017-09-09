@@ -55,7 +55,7 @@ class HAbstractRenderingControlServicePrivate;
  * \remarks This class is not thread-safe.
  */
 
-class H_UPNP_AV_EXPORT HAbstractRenderingControlService :
+class DIGIKAM_EXPORT HAbstractRenderingControlService :
     public HServerService
 {
 Q_OBJECT

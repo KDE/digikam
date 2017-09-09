@@ -202,7 +202,7 @@ class HDeviceHostPrivate;
  * \sa hupnp_devicehosting, HServerDevice, HDeviceHostConfiguration,
  * HDeviceConfiguration
  */
-class H_UPNP_CORE_EXPORT HDeviceHost :
+class DIGIKAM_EXPORT HDeviceHost :
     public QObject
 {
 Q_OBJECT
@@ -517,7 +517,7 @@ class HDeviceHostRuntimeStatusPrivate;
  *
  * \sa HDeviceHost
  */
-class H_UPNP_CORE_EXPORT HDeviceHostRuntimeStatus
+class DIGIKAM_EXPORT HDeviceHostRuntimeStatus
 {
 H_DISABLE_COPY(HDeviceHostRuntimeStatus)
 friend class HDeviceHost;

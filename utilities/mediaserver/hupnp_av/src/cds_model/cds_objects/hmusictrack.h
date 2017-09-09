@@ -47,7 +47,7 @@ class HMusicTrackPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HMusicTrack :
+class DIGIKAM_EXPORT HMusicTrack :
     public HAudioItem
 {
 Q_OBJECT

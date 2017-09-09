@@ -47,7 +47,7 @@ class HAbstractContentDirectoryService;
 //
 // Implementation details of HAbstractContentDirectoryService
 //
-class H_UPNP_AV_EXPORT HAbstractContentDirectoryServicePrivate :
+class DIGIKAM_EXPORT HAbstractContentDirectoryServicePrivate :
     public HServerServicePrivate
 {
 H_DECLARE_PUBLIC(HAbstractContentDirectoryService)

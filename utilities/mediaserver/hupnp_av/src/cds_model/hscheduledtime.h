@@ -50,7 +50,7 @@ class HScheduledTimePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HScheduledTime
+class DIGIKAM_EXPORT HScheduledTime
 {
 private:
 
@@ -208,7 +208,7 @@ public:
  *
  * \relates HScheduledTime
  */
-H_UPNP_AV_EXPORT bool operator==(const HScheduledTime& obj1, const HScheduledTime& obj2);
+DIGIKAM_EXPORT bool operator==(const HScheduledTime& obj1, const HScheduledTime& obj2);
 
 /*!
  * Compares the two objects for inequality.

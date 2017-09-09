@@ -34,7 +34,7 @@ namespace Upnp
 //
 //
 //
-struct H_UPNP_CORE_EXPORT HNullValue
+struct DIGIKAM_EXPORT HNullValue
 {
 };
 
@@ -67,7 +67,7 @@ class HAbstractClientAdapterOpPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HAbstractClientAdapterOp :
+class DIGIKAM_EXPORT HAbstractClientAdapterOp :
     public HAsyncOp
 {
 protected:

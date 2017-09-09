@@ -48,7 +48,7 @@ class HVideoChannelGroupPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HVideoChannelGroup :
+class DIGIKAM_EXPORT HVideoChannelGroup :
     public HChannelGroup
 {
 Q_OBJECT

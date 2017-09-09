@@ -37,7 +37,7 @@ namespace Upnp
 //
 // Implementation details of HAsyncOp
 //
-class H_UPNP_CORE_EXPORT HAsyncOpPrivate
+class DIGIKAM_EXPORT HAsyncOpPrivate
 {
 H_DISABLE_COPY(HAsyncOpPrivate)
 

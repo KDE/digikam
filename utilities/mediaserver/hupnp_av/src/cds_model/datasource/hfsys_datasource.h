@@ -48,7 +48,7 @@ class HFileSystemDataSourcePrivate;
  *
  * \sa HFileSystemDataSourceConfiguration
  */
-class H_UPNP_AV_EXPORT HFileSystemDataSource :
+class DIGIKAM_EXPORT HFileSystemDataSource :
     public HAbstractCdsDataSource
 {
 Q_OBJECT

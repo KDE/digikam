@@ -48,7 +48,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HTransportAction
+class DIGIKAM_EXPORT HTransportAction
 {
 public:
 
@@ -193,7 +193,7 @@ public:
  *
  * \relates HTransportAction
  */
-H_UPNP_AV_EXPORT bool operator==(const HTransportAction&, const HTransportAction&);
+DIGIKAM_EXPORT bool operator==(const HTransportAction&, const HTransportAction&);
 
 /*!
  * Compares the two objects for inequality.
@@ -216,7 +216,7 @@ inline bool operator!=(const HTransportAction& obj1, const HTransportAction& obj
  * \return a value that can be used as a unique key in a hash-map identifying
  * the object.
  */
-H_UPNP_AV_EXPORT quint32 qHash(const HTransportAction& key);
+DIGIKAM_EXPORT quint32 qHash(const HTransportAction& key);
 
 }
 }

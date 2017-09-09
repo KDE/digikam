@@ -255,7 +255,7 @@ class HCdsPropertyHandlerPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HCdsPropertyHandler
+class DIGIKAM_EXPORT HCdsPropertyHandler
 {
 private:
 
@@ -366,7 +366,7 @@ public:
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HCdsProperty
+class DIGIKAM_EXPORT HCdsProperty
 {
 
 private:

@@ -45,7 +45,7 @@ namespace Av
 //
 //
 //
-class H_UPNP_AV_EXPORT HContentDirectoryServiceConfigurationPrivate
+class DIGIKAM_EXPORT HContentDirectoryServiceConfigurationPrivate
 {
 H_DISABLE_COPY(HContentDirectoryServiceConfigurationPrivate)
 

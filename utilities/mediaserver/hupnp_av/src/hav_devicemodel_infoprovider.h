@@ -44,7 +44,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HAvDeviceModelInfoProvider :
+class DIGIKAM_EXPORT HAvDeviceModelInfoProvider :
     public HDeviceModelInfoProvider
 {
 H_DISABLE_COPY(HAvDeviceModelInfoProvider)

@@ -49,7 +49,7 @@ class HServiceSetupPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HServiceSetup
+class DIGIKAM_EXPORT HServiceSetup
 {
 private:
 
@@ -216,7 +216,7 @@ public:
  *
  * \relates HServiceSetup
  */
-H_UPNP_CORE_EXPORT bool operator==(const HServiceSetup&, const HServiceSetup&);
+DIGIKAM_EXPORT bool operator==(const HServiceSetup&, const HServiceSetup&);
 
 /*!
  * Compares the two objects for inequality.
@@ -240,9 +240,9 @@ inline bool operator!=(const HServiceSetup& obj1, const HServiceSetup& obj2)
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HServicesSetupData
+class DIGIKAM_EXPORT HServicesSetupData
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HServicesSetupData&, const HServicesSetupData&);
 
 private:
@@ -342,7 +342,7 @@ public:
  *
  * \relates HServicesSetupData
  */
-H_UPNP_CORE_EXPORT bool operator==(const HServicesSetupData&, const HServicesSetupData&);
+DIGIKAM_EXPORT bool operator==(const HServicesSetupData&, const HServicesSetupData&);
 
 /*!
  * Compares the two objects for inequality.

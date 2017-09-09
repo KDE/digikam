@@ -48,7 +48,7 @@ class HPlaylistContainerPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HPlaylistContainer :
+class DIGIKAM_EXPORT HPlaylistContainer :
     public HContainer
 {
 Q_OBJECT

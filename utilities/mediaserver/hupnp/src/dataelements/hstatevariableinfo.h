@@ -73,9 +73,9 @@ class HStateVariableInfoPrivate;
  *
  * \sa HDeviceInfo, HServiceInfo and HActionInfo.
  */
-class H_UPNP_CORE_EXPORT HStateVariableInfo
+class DIGIKAM_EXPORT HStateVariableInfo
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HStateVariableInfo&, const HStateVariableInfo&);
 
 public:
@@ -534,7 +534,7 @@ public:
  *
  * \relates HStateVariableInfo
  */
-H_UPNP_CORE_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HStateVariableInfo&, const HStateVariableInfo&);
 
 /*!
@@ -562,7 +562,7 @@ inline bool operator!=(
  *
  * \relates HStateVariableInfo
  */
-H_UPNP_CORE_EXPORT quint32 qHash(const HStateVariableInfo& key);
+DIGIKAM_EXPORT quint32 qHash(const HStateVariableInfo& key);
 
 }
 }

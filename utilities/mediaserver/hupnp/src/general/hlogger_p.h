@@ -40,7 +40,7 @@ namespace Herqq
 //
 //
 //
-class H_UPNP_CORE_EXPORT HLogger
+class DIGIKAM_EXPORT HLogger
 {
 H_DISABLE_COPY(HLogger)
 

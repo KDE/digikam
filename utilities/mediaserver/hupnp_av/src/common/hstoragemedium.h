@@ -46,7 +46,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HStorageMedium
+class DIGIKAM_EXPORT HStorageMedium
 {
 
 public:
@@ -343,7 +343,7 @@ public:
  *
  * \relates HStorageMedium
  */
-H_UPNP_AV_EXPORT bool operator==(const HStorageMedium& obj1, const HStorageMedium& obj2);
+DIGIKAM_EXPORT bool operator==(const HStorageMedium& obj1, const HStorageMedium& obj2);
 
 /*!
  * Compares the two objects for inequality.
@@ -366,7 +366,7 @@ inline bool operator!=(const HStorageMedium& obj1, const HStorageMedium& obj2)
  * \return a value that can be used as a unique key in a hash-map identifying
  * the object.
  */
-H_UPNP_AV_EXPORT quint32 qHash(const HStorageMedium& key);
+DIGIKAM_EXPORT quint32 qHash(const HStorageMedium& key);
 
 }
 }

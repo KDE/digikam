@@ -56,9 +56,9 @@ class HResourceAvailablePrivate;
  *
  * \sa HSsdp
  */
-class H_UPNP_CORE_EXPORT HResourceAvailable
+class DIGIKAM_EXPORT HResourceAvailable
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HResourceAvailable&, const HResourceAvailable&);
 
 private:
@@ -233,7 +233,7 @@ public:
  *
  * \relates HResourceAvailable
  */
-H_UPNP_CORE_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HResourceAvailable&, const HResourceAvailable&);
 
 /*!
@@ -270,9 +270,9 @@ class HResourceUnavailablePrivate;
  *
  * \sa HSsdp
  */
-class H_UPNP_CORE_EXPORT HResourceUnavailable
+class DIGIKAM_EXPORT HResourceUnavailable
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HResourceUnavailable&, const HResourceUnavailable&);
 
 private:
@@ -382,7 +382,7 @@ public:
  *
  * \relates HResourceUnavailable
  */
-H_UPNP_CORE_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HResourceUnavailable&, const HResourceUnavailable&);
 
 /*!
@@ -414,9 +414,9 @@ class HResourceUpdatePrivate;
  *
  * \sa HSsdp
  */
-class H_UPNP_CORE_EXPORT HResourceUpdate
+class DIGIKAM_EXPORT HResourceUpdate
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HResourceUpdate&, const HResourceUpdate&);
 
 private:
@@ -553,7 +553,7 @@ public:
  *
  * \relates HResourceUpdate
  */
-H_UPNP_CORE_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HResourceUpdate&, const HResourceUpdate&);
 
 /*!
@@ -585,9 +585,9 @@ class HDiscoveryRequestPrivate;
  *
  * \sa HSsdp
  */
-class H_UPNP_CORE_EXPORT HDiscoveryRequest
+class DIGIKAM_EXPORT HDiscoveryRequest
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HDiscoveryRequest&, const HDiscoveryRequest&);
 
 private:
@@ -696,7 +696,7 @@ public:
  *
  * \relates HDiscoveryRequest
  */
-H_UPNP_CORE_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HDiscoveryRequest&, const HDiscoveryRequest&);
 
 /*!
@@ -728,9 +728,9 @@ class HDiscoveryResponsePrivate;
  *
  * \sa HSsdp
  */
-class H_UPNP_CORE_EXPORT HDiscoveryResponse
+class DIGIKAM_EXPORT HDiscoveryResponse
 {
-friend H_UPNP_CORE_EXPORT bool operator==(
+friend DIGIKAM_EXPORT bool operator==(
     const HDiscoveryResponse&, const HDiscoveryResponse&);
 
 private:
@@ -913,7 +913,7 @@ public:
  *
  * \relates HDiscoveryResponse
  */
-H_UPNP_CORE_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HDiscoveryResponse&, const HDiscoveryResponse&);
 
 /*!

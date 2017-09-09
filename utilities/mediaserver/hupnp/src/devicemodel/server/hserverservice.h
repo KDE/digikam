@@ -91,7 +91,7 @@ class HServerServicePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HServerService :
+class DIGIKAM_EXPORT HServerService :
     public QObject
 {
 Q_OBJECT

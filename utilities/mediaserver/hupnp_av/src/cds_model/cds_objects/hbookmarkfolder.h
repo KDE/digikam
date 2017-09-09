@@ -50,7 +50,7 @@ class HBookmarkFolderPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HBookmarkFolder :
+class DIGIKAM_EXPORT HBookmarkFolder :
     public HContainer
 {
 Q_OBJECT

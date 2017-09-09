@@ -48,7 +48,7 @@ class HPersonPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HPerson :
+class DIGIKAM_EXPORT HPerson :
     public HContainer
 {
 Q_OBJECT

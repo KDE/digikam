@@ -58,7 +58,7 @@ class HProtocolInfoPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HProtocolInfo
+class DIGIKAM_EXPORT HProtocolInfo
 {
 
 private:
@@ -253,7 +253,7 @@ public:
  *
  * \relates HProtocolInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HProtocolInfo&, const HProtocolInfo&);
+DIGIKAM_EXPORT bool operator==(const HProtocolInfo&, const HProtocolInfo&);
 
 /*!
  * Compares the two objects for inequality.

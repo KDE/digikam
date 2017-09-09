@@ -42,7 +42,7 @@ class HMulticastSocketPrivate;
  * \remark this class has thread-affinity, which mandates that the instances of this
  * class has to be used in the thread in which they are located at the time.
  */
-class H_UPNP_CORE_EXPORT HMulticastSocket :
+class DIGIKAM_EXPORT HMulticastSocket :
     public QUdpSocket
 {
 H_DISABLE_COPY(HMulticastSocket)

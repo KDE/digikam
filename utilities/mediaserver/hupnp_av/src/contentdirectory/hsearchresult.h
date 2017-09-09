@@ -49,7 +49,7 @@ class HSearchResultPrivate;
  * \sa HContentDirectoryService::browse(), HContentDirectoryService::search(),
  * HContentDirectoryAdapter::browse(), HContentDirectoryAdapter::search()
  */
-class H_UPNP_AV_EXPORT HSearchResult
+class DIGIKAM_EXPORT HSearchResult
 {
 private: // attributes
 
@@ -147,7 +147,7 @@ public:
  *
  * \relates HSearchResult
  */
-H_UPNP_AV_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HSearchResult& obj1, const HSearchResult& obj2);
 
 /*!

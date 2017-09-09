@@ -47,7 +47,7 @@ namespace Av
 //
 // Implementation details of HConnectionManagerAdapter
 //
-class H_UPNP_AV_EXPORT HConnectionManagerAdapterPrivate :
+class DIGIKAM_EXPORT HConnectionManagerAdapterPrivate :
     public HClientServiceAdapterPrivate
 {
 H_DECLARE_PUBLIC(HConnectionManagerAdapter)

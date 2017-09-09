@@ -47,7 +47,7 @@ namespace Av
 /*******************************************************************************
  * HConnectionPrivate
  ******************************************************************************/
-class H_UPNP_AV_EXPORT HConnectionPrivate
+class DIGIKAM_EXPORT HConnectionPrivate
 {
 H_DISABLE_COPY(HConnectionPrivate)
 

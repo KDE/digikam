@@ -63,7 +63,7 @@ class HControlPointConfigurationPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HControlPointConfiguration :
+class DIGIKAM_EXPORT HControlPointConfiguration :
     public HClonable
 {
 H_DISABLE_COPY(HControlPointConfiguration)

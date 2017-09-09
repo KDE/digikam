@@ -155,7 +155,7 @@ enum UpnpErrorCode
  *
  * \return a string representation of the specified error code.
  */
-QString H_UPNP_CORE_EXPORT upnpErrorCodeToString(qint32 errCode);
+QString DIGIKAM_EXPORT upnpErrorCodeToString(qint32 errCode);
 
 /*!
  * \brief This enumeration specifies how a device tree should be traversed given a
@@ -382,7 +382,7 @@ enum HLogLevel
  *
  * \ingroup hupnp_common
  */
-void H_UPNP_CORE_EXPORT SetLoggingLevel(HLogLevel level);
+void DIGIKAM_EXPORT SetLoggingLevel(HLogLevel level);
 
 /*!
  * Enables / disables warnings that relate to non-standard behavior discovered
@@ -404,7 +404,7 @@ void H_UPNP_CORE_EXPORT SetLoggingLevel(HLogLevel level);
  *
  * \ingroup hupnp_common
  */
-void H_UPNP_CORE_EXPORT EnableNonStdBehaviourWarnings(bool arg);
+void DIGIKAM_EXPORT EnableNonStdBehaviourWarnings(bool arg);
 
 }
 }

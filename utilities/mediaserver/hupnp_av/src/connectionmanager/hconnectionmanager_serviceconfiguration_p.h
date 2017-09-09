@@ -46,7 +46,7 @@ namespace Av
 //
 //
 //
-class H_UPNP_AV_EXPORT HConnectionManagerServiceConfigurationPrivate
+class DIGIKAM_EXPORT HConnectionManagerServiceConfigurationPrivate
 {
 H_DISABLE_COPY(HConnectionManagerServiceConfigurationPrivate)
 

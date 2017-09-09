@@ -54,7 +54,7 @@ class HInvokeActionRequest;
 //
 // Private class for handling HTTP server duties needed in UPnP messaging
 //
-class H_UPNP_CORE_EXPORT HHttpServer :
+class DIGIKAM_EXPORT HHttpServer :
     public QObject
 {
 Q_OBJECT

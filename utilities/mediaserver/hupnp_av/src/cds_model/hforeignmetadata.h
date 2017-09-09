@@ -42,7 +42,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HForeignMetadata
+class DIGIKAM_EXPORT HForeignMetadata
 {
 public:
 
@@ -73,7 +73,7 @@ public:
  *
  * \relates HForeignMetadata
  */
-H_UPNP_AV_EXPORT bool operator==(const HForeignMetadata&, const HForeignMetadata&);
+DIGIKAM_EXPORT bool operator==(const HForeignMetadata&, const HForeignMetadata&);
 
 /*!
  * Compares the two objects for inequality.

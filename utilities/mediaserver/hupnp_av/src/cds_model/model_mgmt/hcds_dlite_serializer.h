@@ -50,7 +50,7 @@ class HCdsDidlLiteSerializerPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HCdsDidlLiteSerializer
+class DIGIKAM_EXPORT HCdsDidlLiteSerializer
 {
 H_DISABLE_COPY(HCdsDidlLiteSerializer)
 

@@ -48,7 +48,7 @@ class HMediaServerDeviceConfigurationPrivate;
  *
  * \sa HAvDeviceModelCreator
  */
-class H_UPNP_AV_EXPORT HMediaServerDeviceConfiguration :
+class DIGIKAM_EXPORT HMediaServerDeviceConfiguration :
     public HClonable
 {
 H_DISABLE_COPY(HMediaServerDeviceConfiguration)

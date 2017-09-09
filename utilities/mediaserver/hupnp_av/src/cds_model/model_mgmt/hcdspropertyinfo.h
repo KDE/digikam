@@ -48,7 +48,7 @@ class HCdsPropertyInfoPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HCdsPropertyInfo
+class DIGIKAM_EXPORT HCdsPropertyInfo
 {
 friend class HCdsProperties;
 
@@ -198,7 +198,7 @@ public:
  *
  * \relates HCdsPropertyInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HCdsPropertyInfo& obj1, const HCdsPropertyInfo& obj2);
+DIGIKAM_EXPORT bool operator==(const HCdsPropertyInfo& obj1, const HCdsPropertyInfo& obj2);
 
 /*!
  * Compares the two objects for inequality.

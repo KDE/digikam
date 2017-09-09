@@ -48,7 +48,7 @@ class HTransferProgressInfoPrivate;
  * \sa HAbstractContentDirectoryService::getTransferProgress()
  * \sa HContentDirectoryAdapter::getTransferProgress()
  */
-class H_UPNP_AV_EXPORT HTransferProgressInfo
+class DIGIKAM_EXPORT HTransferProgressInfo
 {
 public:
 
@@ -171,7 +171,7 @@ public:
  *
  * \relates HTransferProgressInfo
  */
-H_UPNP_AV_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HTransferProgressInfo& obj1, const HTransferProgressInfo& obj2);
 
 /*!

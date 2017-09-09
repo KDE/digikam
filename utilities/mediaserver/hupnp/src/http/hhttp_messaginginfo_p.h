@@ -49,7 +49,7 @@ namespace Upnp
 //
 //
 //
-class H_UPNP_CORE_EXPORT HChunkedInfo
+class DIGIKAM_EXPORT HChunkedInfo
 {
 private:
 
@@ -84,7 +84,7 @@ public:
 //
 //
 //
-class H_UPNP_CORE_EXPORT HMessagingInfo
+class DIGIKAM_EXPORT HMessagingInfo
 {
 H_DISABLE_COPY(HMessagingInfo)
 

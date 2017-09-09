@@ -84,10 +84,10 @@ class HAsyncOpPrivate;
  *
  * \sa HClientActionOp
  */
-class H_UPNP_CORE_EXPORT HAsyncOp
+class DIGIKAM_EXPORT HAsyncOp
 {
 H_DECLARE_PRIVATE(HAsyncOp)
-friend H_UPNP_CORE_EXPORT bool operator==(const HAsyncOp&, const HAsyncOp&);
+friend DIGIKAM_EXPORT bool operator==(const HAsyncOp&, const HAsyncOp&);
 
 protected:
 

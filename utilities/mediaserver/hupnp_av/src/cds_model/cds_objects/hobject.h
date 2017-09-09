@@ -55,7 +55,7 @@ class HObjectEventInfoPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HObjectEventInfo
+class DIGIKAM_EXPORT HObjectEventInfo
 {
 private:
 
@@ -176,7 +176,7 @@ public:
  *
  * \relates HObjectEventInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HObjectEventInfo& obj1, const HObjectEventInfo& obj2);
+DIGIKAM_EXPORT bool operator==(const HObjectEventInfo& obj1, const HObjectEventInfo& obj2);
 
 /*!
  * Compares the two objects for inequality.
@@ -207,7 +207,7 @@ class HObjectPrivate;
  *
  * \sa HItem, HContainer
  */
-class H_UPNP_AV_EXPORT HObject :
+class DIGIKAM_EXPORT HObject :
     public QObject,
     public HClonable
 {

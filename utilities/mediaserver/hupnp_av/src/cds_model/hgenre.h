@@ -46,7 +46,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HGenre
+class DIGIKAM_EXPORT HGenre
 {
 private:
 
@@ -131,7 +131,7 @@ public:
  *
  * \relates HGenre
  */
-H_UPNP_AV_EXPORT bool operator==(const HGenre& obj1, const HGenre& obj2);
+DIGIKAM_EXPORT bool operator==(const HGenre& obj1, const HGenre& obj2);
 
 /*!
  * Compares the two objects for inequality.

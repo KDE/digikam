@@ -48,7 +48,7 @@ class HRatingPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HRating
+class DIGIKAM_EXPORT HRating
 {
 private:
 
@@ -433,7 +433,7 @@ public:
  *
  * \relates HRating
  */
-H_UPNP_AV_EXPORT bool operator==(const HRating& obj1, const HRating& obj2);
+DIGIKAM_EXPORT bool operator==(const HRating& obj1, const HRating& obj2);
 
 /*!
  * Compares the two objects for inequality.

@@ -47,7 +47,7 @@ class HPhotoAlbumPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HPhotoAlbum :
+class DIGIKAM_EXPORT HPhotoAlbum :
     public HAlbum
 {
 Q_OBJECT

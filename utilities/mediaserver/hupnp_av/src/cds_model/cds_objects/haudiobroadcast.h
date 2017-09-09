@@ -47,7 +47,7 @@ class HAudioBroadcastPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HAudioBroadcast :
+class DIGIKAM_EXPORT HAudioBroadcast :
     public HAudioItem
 {
 Q_OBJECT

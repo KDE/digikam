@@ -42,7 +42,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HVolumeDbRangeResult
+class DIGIKAM_EXPORT HVolumeDbRangeResult
 {
 private:
 
@@ -92,7 +92,7 @@ public:
  *
  * \relates HVolumeDbRangeResult
  */
-H_UPNP_AV_EXPORT bool operator==(
+DIGIKAM_EXPORT bool operator==(
     const HVolumeDbRangeResult& obj1, const HVolumeDbRangeResult& obj2);
 
 /*!

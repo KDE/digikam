@@ -69,7 +69,7 @@ class HClientDevicePrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HClientDevice :
+class DIGIKAM_EXPORT HClientDevice :
     public QObject
 {
 Q_OBJECT

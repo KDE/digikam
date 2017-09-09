@@ -45,7 +45,7 @@ namespace Av
 //
 //
 //
-class H_UPNP_AV_EXPORT HMediaServerDeviceConfigurationPrivate
+class DIGIKAM_EXPORT HMediaServerDeviceConfigurationPrivate
 {
 H_DISABLE_COPY(HMediaServerDeviceConfigurationPrivate)
 

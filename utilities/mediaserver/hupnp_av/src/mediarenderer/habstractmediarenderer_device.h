@@ -50,7 +50,7 @@ namespace Av
  *
  * \sa HDeviceHost, HServerDevice
  */
-class H_UPNP_AV_EXPORT HAbstractMediaRendererDevice :
+class DIGIKAM_EXPORT HAbstractMediaRendererDevice :
     public HServerDevice
 {
 Q_OBJECT

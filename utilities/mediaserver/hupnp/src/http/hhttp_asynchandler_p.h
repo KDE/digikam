@@ -194,7 +194,7 @@ Q_SIGNALS:
 // Performs async messaging utilizing the event loop.
 // This class is not thread-safe.
 //
-class H_UPNP_CORE_EXPORT HHttpAsyncHandler :
+class DIGIKAM_EXPORT HHttpAsyncHandler :
     public QObject
 {
 Q_OBJECT

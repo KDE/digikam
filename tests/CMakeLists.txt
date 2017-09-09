@@ -25,7 +25,7 @@ add_subdirectory(timestampupdate)
 add_subdirectory(widgets)
 add_subdirectory(rawengine)
 add_subdirectory(presentation)
-#add_subdirectory(mediaserver)
+add_subdirectory(mediaserver)
 
 if(ENABLE_MEDIAPLAYER)
     add_subdirectory(video)

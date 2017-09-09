@@ -54,7 +54,7 @@ class HMediaInfoPrivate;
  * HAvTransportAdapter::getMediaInfo(),
  * HAvTransportAdapter::getMediaInfo_ext()
  */
-class H_UPNP_AV_EXPORT HMediaInfo
+class DIGIKAM_EXPORT HMediaInfo
 {
 private:
 
@@ -412,7 +412,7 @@ public:
  *
  * \relates HMediaInfo
  */
-H_UPNP_AV_EXPORT bool operator==(const HMediaInfo& obj1, const HMediaInfo& obj2);
+DIGIKAM_EXPORT bool operator==(const HMediaInfo& obj1, const HMediaInfo& obj2);
 
 /*!
  * Compares the two objects for inequality.

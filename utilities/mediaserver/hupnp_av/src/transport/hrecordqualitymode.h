@@ -45,7 +45,7 @@ namespace Av
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HRecordQualityMode
+class DIGIKAM_EXPORT HRecordQualityMode
 {
 public:
 
@@ -181,7 +181,7 @@ public:
  *
  * \relates HRecordQualityMode
  */
-H_UPNP_AV_EXPORT bool operator==(const HRecordQualityMode& obj1, const HRecordQualityMode& obj2);
+DIGIKAM_EXPORT bool operator==(const HRecordQualityMode& obj1, const HRecordQualityMode& obj2);
 
 /*!
  * Compares the two objects for inequality.
@@ -204,7 +204,7 @@ inline bool operator!=(const HRecordQualityMode& obj1, const HRecordQualityMode&
  * \return a value that can be used as a unique key in a hash-map identifying
  * the object.
  */
-H_UPNP_AV_EXPORT quint32 qHash(const HRecordQualityMode& key);
+DIGIKAM_EXPORT quint32 qHash(const HRecordQualityMode& key);
 
 }
 }

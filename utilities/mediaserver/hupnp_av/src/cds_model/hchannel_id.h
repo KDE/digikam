@@ -49,7 +49,7 @@ class HChannelIdPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_AV_EXPORT HChannelId
+class DIGIKAM_EXPORT HChannelId
 {
 private:
 
@@ -166,7 +166,7 @@ public:
  *
  * \relates HChannelId
  */
-H_UPNP_AV_EXPORT bool operator==(const HChannelId& obj1, const HChannelId& obj2);
+DIGIKAM_EXPORT bool operator==(const HChannelId& obj1, const HChannelId& obj2);
 
 /*!
  * Compares the two objects for inequality.

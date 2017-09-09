@@ -96,7 +96,7 @@ namespace Av
  * \remarks The returned string is statically allocated. You should never
  * delete or free it manually.
  */
-H_UPNP_AV_EXPORT const char* hupnpAvVersion();
+DIGIKAM_EXPORT const char* hupnpAvVersion();
 
 }
 }

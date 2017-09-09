@@ -57,7 +57,7 @@ class HServerActionPrivate;
  *
  * \remarks This class is not thread-safe.
  */
-class H_UPNP_CORE_EXPORT HServerAction :
+class DIGIKAM_EXPORT HServerAction :
     public QObject
 {
 Q_OBJECT

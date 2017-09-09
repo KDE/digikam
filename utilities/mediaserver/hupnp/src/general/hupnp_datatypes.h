@@ -45,7 +45,7 @@ namespace Upnp
  *
  * \headerfile hupnp_datatypes.h HUpnpDataTypes
  */
-class H_UPNP_CORE_EXPORT HUpnpDataTypes
+class DIGIKAM_EXPORT HUpnpDataTypes
 {
 H_DISABLE_COPY(HUpnpDataTypes)
 
