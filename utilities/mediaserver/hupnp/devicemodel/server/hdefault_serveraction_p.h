@@ -31,8 +31,7 @@
 //
 
 #include "hserveraction.h"
-
-#include "../hactioninvoke.h"
+#include "hactioninvoke.h"
 
 namespace Herqq
 {

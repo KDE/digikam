@@ -31,7 +31,7 @@
 //
 
 #include "hupnp_global.h"
-#include "../utils/hfunctor.h"
+#include "hfunctor.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QList>

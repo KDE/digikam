@@ -30,7 +30,7 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../../general/hupnp_defs.h"
+#include "hupnp_defs.h"
 
 #include <QtCore/QByteArray>
 #include <QtCore/QEventLoop>

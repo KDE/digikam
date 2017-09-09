@@ -33,18 +33,14 @@
 #include "hcontrolpoint.h"
 #include "hdevicebuild_p.h"
 #include "hevent_subscriptionmanager_p.h"
-
-#include "../hdevicestorage_p.h"
-
-#include "../../devicemodel/client/hclientdevice.h"
-#include "../../devicemodel/client/hclientservice.h"
-
-#include "../../ssdp/hssdp.h"
-#include "../../ssdp/hssdp_p.h"
-#include "../../http/hhttp_server_p.h"
-#include "../../ssdp/hdiscovery_messages.h"
-
-#include "../../utils/hthreadpool_p.h"
+#include "hdevicestorage_p.h"
+#include "hclientdevice.h"
+#include "hclientservice.h"
+#include "hssdp.h"
+#include "hssdp_p.h"
+#include "hhttp_server_p.h"
+#include "hdiscovery_messages.h"
+#include "hthreadpool_p.h"
 
 #include <QtCore/QUuid>
 #include <QtCore/QScopedPointer>

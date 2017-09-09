@@ -31,11 +31,10 @@
 //
 
 #include "hclientactionop.h"
-
-#include "../hexecargs.h"
-#include "../hactionarguments.h"
-#include "../hactioninvoke_callback.h"
-#include "../../dataelements/hactioninfo.h"
+#include "hexecargs.h"
+#include "hactionarguments.h"
+#include "hactioninvoke_callback.h"
+#include "hactioninfo.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QQueue>

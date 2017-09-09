@@ -22,7 +22,7 @@
 #ifndef HDEVICEHOST_DATARETRIEVER_P_H_
 #define HDEVICEHOST_DATARETRIEVER_P_H_
 
-#include "../../general/hupnp_defs.h"
+#include "hupnp_defs.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QByteArray>

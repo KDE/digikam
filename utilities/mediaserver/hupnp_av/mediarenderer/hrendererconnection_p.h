@@ -31,8 +31,7 @@
 //
 
 #include "hrendererconnection_info.h"
-#include "../connectionmanager/hconnectioninfo.h"
-
+#include "hconnectioninfo.h"
 #include "hfunctor.h"
 
 #include <QtCore/QHash>

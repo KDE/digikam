@@ -31,7 +31,7 @@
 //
 
 #include "hdefault_clientdevice_p.h"
-#include "../hdevice_p.h"
+#include "hdevice_p.h"
 
 namespace Herqq
 {

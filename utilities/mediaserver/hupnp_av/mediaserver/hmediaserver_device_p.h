@@ -32,7 +32,7 @@
 
 #include "habstractmediaserver_device.h"
 #include "hconnectionmanager_sourceservice_p.h"
-#include "../contentdirectory/hcontentdirectory_service.h"
+#include "hcontentdirectory_service.h"
 
 namespace Herqq
 {

@@ -30,8 +30,8 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../../utils/hglobal.h"
-#include "../../general/hupnp_fwd.h"
+#include "hglobal.h"
+#include "hupnp_fwd.h"
 
 namespace Herqq
 {

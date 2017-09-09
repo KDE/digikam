@@ -30,7 +30,7 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../../utils/hglobal.h"
+#include "hglobal.h"
 
 #include <QtCore/QList>
 #include <QtNetwork/QHostAddress>

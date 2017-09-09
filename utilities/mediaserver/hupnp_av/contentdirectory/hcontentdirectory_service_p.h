@@ -31,10 +31,9 @@
 //
 
 #include "habstractcontentdirectory_service_p.h"
-
-#include "../cds_model/cds_objects/hitem.h"
-#include "../cds_model/cds_objects/hcontainer.h"
-#include "../cds_model/datasource/hcds_datasource.h"
+#include "hitem.h"
+#include "hcontainer.h"
+#include "hcds_datasource.h"
 
 #include <QtCore/QTimer>
 #include <QtCore/QPointer>

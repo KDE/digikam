@@ -30,8 +30,8 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../hddoc_parser_p.h"
-#include "../hmodelcreation_p.h"
+#include "hddoc_parser_p.h"
+#include "hmodelcreation_p.h"
 
 #include <QtXml/QDomElement>
 

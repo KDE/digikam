@@ -30,7 +30,7 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../transport/habstract_avtransport_service.h"
+#include "habstract_avtransport_service.h"
 
 namespace Herqq
 {

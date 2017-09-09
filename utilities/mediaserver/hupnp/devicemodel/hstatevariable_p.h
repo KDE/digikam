@@ -30,7 +30,7 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../dataelements/hstatevariableinfo.h"
+#include "hstatevariableinfo.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVariant>

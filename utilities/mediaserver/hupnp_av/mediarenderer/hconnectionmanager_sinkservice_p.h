@@ -30,7 +30,7 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../connectionmanager/hconnectionmanager_service_p.h"
+#include "hconnectionmanager_service_p.h"
 
 namespace Herqq
 {

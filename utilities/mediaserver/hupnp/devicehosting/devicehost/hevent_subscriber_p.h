@@ -30,8 +30,8 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../messages/hevent_messages_p.h"
-#include "../../http/hhttp_asynchandler_p.h"
+#include "hevent_messages_p.h"
+#include "hhttp_asynchandler_p.h"
 
 #include <QtCore/QQueue>
 #include <QtCore/QTimer>

@@ -30,9 +30,8 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../hactioninvoke.h"
-
-#include "../../dataelements/hactioninfo.h"
+#include "hactioninvoke.h"
+#include "hactioninfo.h"
 
 #include <QtCore/QString>
 #include <QtCore/QByteArray>

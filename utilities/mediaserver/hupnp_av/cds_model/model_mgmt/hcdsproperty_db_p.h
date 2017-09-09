@@ -31,12 +31,10 @@
 //
 
 #include "hcdsproperty_db.h"
-#include "../cds_objects/hobject.h"
-#include "../../common/hresource.h"
-#include "../../common/hradioband.h"
-
-#include "../../hav_global.h"
-
+#include "hobject.h"
+#include "hresource.h"
+#include "hradioband.h"
+#include "hav_global.h"
 #include "hmisc_utils_p.h"
 
 #include <QtCore/QUrl>

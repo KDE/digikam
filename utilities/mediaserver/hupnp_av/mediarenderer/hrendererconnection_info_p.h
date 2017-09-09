@@ -31,23 +31,19 @@
 //
 
 #include "hrendererconnection_info.h"
-
-#include "../common/hstoragemedium.h"
-
-#include "../transport/hduration.h"
-#include "../transport/hplaymode.h"
-#include "../transport/hseekinfo.h"
-#include "../transport/hmediainfo.h"
-#include "../transport/hpositioninfo.h"
-#include "../transport/htransportinfo.h"
-#include "../transport/htransportaction.h"
-#include "../transport/havtransport_info.h"
-#include "../transport/htransportsettings.h"
-#include "../transport/hdevicecapabilities.h"
-#include "../transport/hrecordmediumwritestatus.h"
-
-#include "../renderingcontrol/hchannel.h"
-
+#include "hstoragemedium.h"
+#include "hduration.h"
+#include "hplaymode.h"
+#include "hseekinfo.h"
+#include "hmediainfo.h"
+#include "hpositioninfo.h"
+#include "htransportinfo.h"
+#include "htransportaction.h"
+#include "havtransport_info.h"
+#include "htransportsettings.h"
+#include "hdevicecapabilities.h"
+#include "hrecordmediumwritestatus.h"
+#include "hchannel.h"
 #include "hfunctor.h"
 
 #include <QtCore/QSet>

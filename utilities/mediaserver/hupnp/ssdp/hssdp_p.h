@@ -32,11 +32,10 @@
 
 #include "hssdp.h"
 #include "hdiscovery_messages.h"
-
-#include "../socket/hendpoint.h"
+#include "hendpoint.h"
 #include "hupnp_defs.h"
-#include "../http/hhttp_header_p.h"
-#include "../socket/hmulticast_socket.h"
+#include "hhttp_header_p.h"
+#include "hmulticast_socket.h"
 
 #include <QtCore/QByteArray>
 

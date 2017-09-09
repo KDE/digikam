@@ -33,13 +33,12 @@
 #include "hupnp_defs.h"
 #include "hupnp_fwd.h"
 #include "hupnp_global.h"
-#include "../dataelements/hserviceid.h"
-#include "../dataelements/hactioninfo.h"
-#include "../dataelements/hserviceinfo.h"
-#include "../dataelements/hstatevariableinfo.h"
-
-#include "../devicemodel/hactionarguments.h"
-#include "../devicemodel/hactions_setupdata.h"
+#include "hserviceid.h"
+#include "hactioninfo.h"
+#include "hserviceinfo.h"
+#include "hstatevariableinfo.h"
+#include "hactionarguments.h"
+#include "hactions_setupdata.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QSet>

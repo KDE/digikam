@@ -31,8 +31,7 @@
 //
 
 #include "hdevicehost.h"
-
-#include "../hdevicestorage_p.h"
+#include "hdevicestorage_p.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QScopedPointer>

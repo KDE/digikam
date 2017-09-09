@@ -23,8 +23,8 @@
 #define HEVENT_SUBSCRIPTIONMANAGER_P_H_
 
 #include "hevent_subscription_p.h"
-#include "../../general/hupnp_global.h"
-#include "../../devicemodel/client/hclientdevice.h"
+#include "hupnp_global.h"
+#include "hclientdevice.h"
 
 #include <QtCore/QList>
 #include <QtCore/QHash>

@@ -30,13 +30,11 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../hdevicestorage_p.h"
-
-#include "../../ssdp/hssdp.h"
-#include "../../ssdp/hssdp_p.h"
-#include "../../ssdp/hdiscovery_messages.h"
-
-#include "../../socket/hendpoint.h"
+#include "hdevicestorage_p.h"
+#include "hssdp.h"
+#include "hssdp_p.h"
+#include "hdiscovery_messages.h"
+#include "hendpoint.h"
 
 #include <QtCore/QList>
 

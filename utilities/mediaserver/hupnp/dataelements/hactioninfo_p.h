@@ -30,7 +30,7 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../devicemodel/hactionarguments.h"
+#include "hactionarguments.h"
 
 #include <QtCore/QString>
 

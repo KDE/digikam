@@ -30,18 +30,16 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../messages/hsid_p.h"
-#include "../messages/hevent_messages_p.h"
-#include "../../http/hhttp_asynchandler_p.h"
-
-#include "../../general/hupnp_defs.h"
-#include "../../general/hupnp_fwd.h"
+#include "hsid_p.h"
+#include "hevent_messages_p.h"
+#include "hhttp_asynchandler_p.h"
+#include "hupnp_defs.h"
+#include "hupnp_fwd.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QList>
 #include <QtCore/QTimer>
 #include <QtCore/QByteArray>
-
 #include <QtNetwork/QTcpSocket>
 
 namespace Herqq

@@ -30,9 +30,9 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../../general/hupnp_defs.h"
-#include "../../dataelements/hudn.h"
-#include "../../utils/hthreadpool_p.h"
+#include "hupnp_defs.h"
+#include "hudn.h"
+#include "hthreadpool_p.h"
 
 #include <QtCore/QList>
 

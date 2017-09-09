@@ -32,11 +32,9 @@
 
 #include "hevent_notifier_p.h"
 #include "hserverdevicecontroller_p.h"
-
-#include "../hdevicestorage_p.h"
-#include "../messages/hevent_messages_p.h"
-
-#include "../../http/hhttp_server_p.h"
+#include "hdevicestorage_p.h"
+#include "hevent_messages_p.h"
+#include "hhttp_server_p.h"
 
 #include <QtCore/QPointer>
 

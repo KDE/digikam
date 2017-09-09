@@ -30,9 +30,9 @@
 // change or the file may be removed without of notice.
 //
 
-#include "../../http/hhttp_p.h"
-#include "../../general/hupnp_fwd.h"
-#include "../../general/hupnp_defs.h"
+#include "hhttp_p.h"
+#include "hupnp_fwd.h"
+#include "hupnp_defs.h"
 
 #include <QtCore/QList>
 #include <QtCore/QObject>

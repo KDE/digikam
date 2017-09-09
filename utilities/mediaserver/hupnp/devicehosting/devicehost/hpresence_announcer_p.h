@@ -31,20 +31,17 @@
 //
 
 #include "hserverdevicecontroller_p.h"
-
-#include "../../general/hupnp_global_p.h"
-#include "../../devicemodel/hdevicestatus.h"
-#include "../../devicemodel/server/hserverdevice.h"
-#include "../../devicemodel/server/hserverservice.h"
-
-#include "../../ssdp/hssdp.h"
-#include "../../ssdp/hdiscovery_messages.h"
-
-#include "../../dataelements/hudn.h"
-#include "../../dataelements/hdeviceinfo.h"
-#include "../../dataelements/hserviceinfo.h"
-#include "../../dataelements/hdiscoverytype.h"
-#include "../../dataelements/hproduct_tokens.h"
+#include "hupnp_global_p.h"
+#include "hdevicestatus.h"
+#include "hserverdevice.h"
+#include "hserverservice.h"
+#include "hssdp.h"
+#include "hdiscovery_messages.h"
+#include "hudn.h"
+#include "hdeviceinfo.h"
+#include "hserviceinfo.h"
+#include "hdiscoverytype.h"
+#include "hproduct_tokens.h"
 
 #include <QtCore/QUrl>
 
