@@ -98,7 +98,7 @@ DMediaServer::DMediaServer(QObject* const parent)
 
     // Setup the HDeviceHost with desired configuration info.
     HDeviceConfiguration config;
-    
+
     QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                               QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediaserver_description.xml"));
 

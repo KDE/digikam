@@ -12,6 +12,7 @@ endif (POLICY CMP0063)
 set(libmediaserver_SRCS
     widgets/mediaserver_window.cpp
     dmediaserver.cpp
+    dmediaservermngr.cpp
     hupnp/dataelements/hactioninfo.cpp 
     hupnp/dataelements/hdeviceinfo.cpp 
     hupnp/dataelements/hdiscoverytype.cpp 
