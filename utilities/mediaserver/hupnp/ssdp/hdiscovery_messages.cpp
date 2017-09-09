@@ -20,13 +20,11 @@
  */
 
 #include "hdiscovery_messages.h"
-
-#include "../dataelements/hudn.h"
-#include "../dataelements/hresourcetype.h"
-#include "../dataelements/hdiscoverytype.h"
-#include "../dataelements/hproduct_tokens.h"
-
-#include "../socket/hendpoint.h"
+#include "hudn.h"
+#include "hresourcetype.h"
+#include "hdiscoverytype.h"
+#include "hproduct_tokens.h"
+#include "hendpoint.h"
 #include "hlogger_p.h"
 
 #include <QtNetwork/QHostAddress>

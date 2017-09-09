@@ -21,30 +21,30 @@
 
 #include "hservermodel_creator_p.h"
 
-#include "../../dataelements/hudn.h"
-#include "../../dataelements/hserviceid.h"
-#include "../../dataelements/hdeviceinfo.h"
+#include "hudn.h"
+#include "hserviceid.h"
+#include "hdeviceinfo.h"
 
-#include "../../general/hupnp_global_p.h"
-#include "../../general/hupnp_datatypes_p.h"
+#include "hupnp_global_p.h"
+#include "hupnp_datatypes_p.h"
 
-#include "../../devicemodel/hdevicemodel_infoprovider.h"
+#include "hdevicemodel_infoprovider.h"
 
-#include "../../devicemodel/server/hserverservice.h"
-#include "../../devicemodel/server/hserverservice_p.h"
-#include "../../devicemodel/server/hserverdevice_p.h"
-#include "../../devicemodel/server/hdevicemodelcreator.h"
-#include "../../devicemodel/server/hdefault_serverdevice_p.h"
-#include "../../devicemodel/server/hdefault_serveraction_p.h"
-#include "../../devicemodel/server/hdefault_serverstatevariable_p.h"
+#include "server/hserverservice.h"
+#include "server/hserverservice_p.h"
+#include "server/hserverdevice_p.h"
+#include "server/hdevicemodelcreator.h"
+#include "server/hdefault_serverdevice_p.h"
+#include "server/hdefault_serveraction_p.h"
+#include "server/hdefault_serverstatevariable_p.h"
 
-#include "../../devicemodel/hactionarguments.h"
-#include "../../devicemodel/hactions_setupdata.h"
-#include "../../devicemodel/hdevices_setupdata.h"
-#include "../../devicemodel/hservices_setupdata.h"
-#include "../../devicemodel/hstatevariables_setupdata.h"
+#include "hactionarguments.h"
+#include "hactions_setupdata.h"
+#include "hdevices_setupdata.h"
+#include "hservices_setupdata.h"
+#include "hstatevariables_setupdata.h"
 
-#include "../../general/hlogger_p.h"
+#include "hlogger_p.h"
 
 #include <QtXml/QDomElement>
 

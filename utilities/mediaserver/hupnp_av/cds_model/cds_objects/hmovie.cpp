@@ -21,10 +21,10 @@
 
 #include "hmovie.h"
 #include "hmovie_p.h"
-#include "../hscheduledtime.h"
-#include "../hcontentduration.h"
-#include "../../common/hstoragemedium.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hscheduledtime.h"
+#include "hcontentduration.h"
+#include "hstoragemedium.h"
+#include "hcdsproperties.h"
 
 namespace Herqq
 {

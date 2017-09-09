@@ -22,12 +22,12 @@
 #include "hvideoitem.h"
 #include "hvideoitem_p.h"
 
-#include "../hgenre.h"
-#include "../hpersonwithrole.h"
-#include "../hcontentduration.h"
+#include "hgenre.h"
+#include "hpersonwithrole.h"
+#include "hcontentduration.h"
 
-#include "../../common/hrating.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hrating.h"
+#include "hcdsproperties.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QDateTime>

@@ -22,10 +22,10 @@
 #include "hcontrolpoint_configuration.h"
 #include "hcontrolpoint_configuration_p.h"
 
-#include "../../general/hupnp_global_p.h"
-#include "../../devicemodel/client/hclientdevice.h"
-#include "../../devicemodel/client/hclientservice.h"
-#include "../../utils/hmisc_utils_p.h"
+#include "hupnp_global_p.h"
+#include "hclientdevice.h"
+#include "hclientservice.h"
+#include "hmisc_utils_p.h"
 
 namespace Herqq
 {

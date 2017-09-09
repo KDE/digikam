@@ -22,19 +22,15 @@
 #include "hmediarenderer_adapter.h"
 #include "hmediarenderer_adapter_p.h"
 #include "hmediarenderer_info.h"
-
 #include "hconnection.h"
-#include "../hav_devicemodel_infoprovider.h"
-
-#include "../transport/havtransport_adapter.h"
-#include "../connectionmanager/hconnectioninfo.h"
-#include "../renderingcontrol/hrenderingcontrol_info.h"
-#include "../renderingcontrol/hrenderingcontrol_adapter.h"
-#include "../connectionmanager/hconnectionmanager_adapter.h"
-#include "../connectionmanager/hprepareforconnection_result.h"
-
+#include "hav_devicemodel_infoprovider.h"
+#include "havtransport_adapter.h"
+#include "hconnectioninfo.h"
+#include "hrenderingcontrol_info.h"
+#include "hrenderingcontrol_adapter.h"
+#include "hconnectionmanager_adapter.h"
+#include "hprepareforconnection_result.h"
 #include "hlogger_p.h"
-
 #include "hserviceid.h"
 #include "hclientdevice.h"
 

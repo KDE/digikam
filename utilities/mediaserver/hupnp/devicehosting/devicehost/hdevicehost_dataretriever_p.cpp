@@ -21,7 +21,7 @@
 
 #include "hdevicehost_dataretriever_p.h"
 
-#include "../../general/hlogger_p.h"
+#include "hlogger_p.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QString>

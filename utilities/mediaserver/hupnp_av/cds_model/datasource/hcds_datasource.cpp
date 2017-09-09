@@ -22,8 +22,8 @@
 #include "hcds_datasource.h"
 #include "hcds_datasource_p.h"
 #include "hcds_datasource_configuration.h"
-#include "../cds_objects/hitem.h"
-#include "../cds_objects/hcontainer.h"
+#include "hitem.h"
+#include "hcontainer.h"
 
 #include <QtCore/QSet>
 

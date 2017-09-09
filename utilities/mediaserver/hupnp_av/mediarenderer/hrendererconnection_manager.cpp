@@ -26,8 +26,8 @@
 
 #include "hserverstatevariable.h"
 
-#include "../connectionmanager/hconnectioninfo.h"
-#include "../connectionmanager/habstractconnectionmanager_service.h"
+#include "hconnectioninfo.h"
+#include "habstractconnectionmanager_service.h"
 
 namespace Herqq
 {

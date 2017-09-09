@@ -25,7 +25,7 @@
 #include "hvolumedbrange_result.h"
 #include "hchannel.h"
 
-#include "../hav_devicemodel_infoprovider.h"
+#include "hav_devicemodel_infoprovider.h"
 
 #include "hudn.h"
 #include "hserviceid.h"

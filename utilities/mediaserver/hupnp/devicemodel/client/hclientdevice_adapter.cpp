@@ -24,10 +24,10 @@
 #include "hclientservice_adapter.h"
 #include "hclientdevice.h"
 
-#include "../hdevicemodel_validator.h"
-#include "../hdevicemodel_infoprovider.h"
+#include "hdevicemodel_validator.h"
+#include "hdevicemodel_infoprovider.h"
 
-#include "../../dataelements/hdeviceinfo.h"
+#include "hdeviceinfo.h"
 
 namespace Herqq
 {

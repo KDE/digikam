@@ -22,13 +22,13 @@
 #include "hepgcontainer.h"
 #include "hepgcontainer_p.h"
 
-#include "../hprice.h"
-#include "../hchannel_id.h"
-#include "../hmatching_id.h"
-#include "../hdatetimerange.h"
-#include "../hchannelgroupname.h"
-#include "../model_mgmt/hcdsproperties.h"
-#include "../../common/hradioband.h"
+#include "hprice.h"
+#include "hchannel_id.h"
+#include "hmatching_id.h"
+#include "hdatetimerange.h"
+#include "hchannelgroupname.h"
+#include "hcdsproperties.h"
+#include "hradioband.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QStringList>

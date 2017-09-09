@@ -21,8 +21,8 @@
 
 #include "halbum.h"
 #include "halbum_p.h"
-#include "../model_mgmt/hcdsproperties.h"
-#include "../../common/hstoragemedium.h"
+#include "hcdsproperties.h"
+#include "hstoragemedium.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QDateTime>

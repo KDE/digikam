@@ -23,12 +23,10 @@
 #include "hobject_p.h"
 #include "hcontainer.h"
 #include "hitem.h"
-
-#include "../../common/hresource.h"
-#include "../../common/hprotocolinfo.h"
-#include "../model_mgmt/hcdsproperty.h"
-#include "../model_mgmt/hcdsproperty_db.h"
-
+#include "hresource.h"
+#include "hprotocolinfo.h"
+#include "hcdsproperty.h"
+#include "hcdsproperty_db.h"
 #include "hlogger_p.h"
 #include "hmisc_utils_p.h"
 

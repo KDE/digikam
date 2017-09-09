@@ -21,10 +21,8 @@
 
 #include "hupnp_global.h"
 #include "hupnp_global_p.h"
-
-#include "../socket/hendpoint.h"
-#include "../dataelements/hproduct_tokens.h"
-
+#include "hendpoint.h"
+#include "hproduct_tokens.h"
 #include "hupnpinfo.h"
 #include "hlogger_p.h"
 

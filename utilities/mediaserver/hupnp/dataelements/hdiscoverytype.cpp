@@ -20,10 +20,8 @@
  */
 
 #include "hdiscoverytype.h"
-
-#include "../dataelements/hudn.h"
-#include "../dataelements/hresourcetype.h"
-
+#include "hudn.h"
+#include "hresourcetype.h"
 #include "hlogger_p.h"
 
 #include <QtCore/QString>

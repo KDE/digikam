@@ -22,14 +22,10 @@
 #include "hmediaserver_adapter.h"
 #include "hmediaserver_adapter_p.h"
 #include "hmediaserver_info.h"
-
-#include "../hav_devicemodel_infoprovider.h"
-
-#include "../transport/havtransport_adapter.h"
-#include "../contentdirectory/hcontentdirectory_adapter.h"
-#include "../connectionmanager/hconnectionmanager_adapter.h"
-//#include "../scheduledrecording/hscheduledrecording_adapter.h"
-
+#include "hav_devicemodel_infoprovider.h"
+#include "havtransport_adapter.h"
+#include "hcontentdirectory_adapter.h"
+#include "hconnectionmanager_adapter.h"
 #include "hserviceid.h"
 #include "hclientdevice.h"
 

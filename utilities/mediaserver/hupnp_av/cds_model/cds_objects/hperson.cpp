@@ -21,7 +21,7 @@
 
 #include "hperson.h"
 #include "hperson_p.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hcdsproperties.h"
 
 #include <QtCore/QStringList>
 

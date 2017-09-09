@@ -21,8 +21,8 @@
 
 #include "haudiobook.h"
 #include "haudiobook_p.h"
-#include "../model_mgmt/hcdsproperties.h"
-#include "../../common/hstoragemedium.h"
+#include "hcdsproperties.h"
+#include "hstoragemedium.h"
 
 #include <QtCore/QDateTime>
 #include <QtCore/QStringList>

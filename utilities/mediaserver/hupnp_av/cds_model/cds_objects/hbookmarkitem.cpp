@@ -21,9 +21,9 @@
 
 #include "hbookmarkitem.h"
 #include "hbookmarkitem_p.h"
-#include "../hdeviceudn.h"
-#include "../hstatevariablecollection.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hdeviceudn.h"
+#include "hstatevariablecollection.h"
+#include "hcdsproperties.h"
 
 #include <QtCore/QDateTime>
 

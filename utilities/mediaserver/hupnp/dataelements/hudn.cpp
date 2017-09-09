@@ -21,7 +21,7 @@
 
 #include "hudn.h"
 
-#include "../utils/hmisc_utils_p.h"
+#include "hmisc_utils_p.h"
 
 #include <QtCore/QString>
 #include <QtCore/QByteArray>

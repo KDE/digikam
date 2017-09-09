@@ -35,8 +35,8 @@
 #include "hdevicecapabilities.h"
 #include "hrecordmediumwritestatus.h"
 
-#include "../common/hstoragemedium.h"
-#include "../mediarenderer/hrendererconnection_info.h"
+#include "hstoragemedium.h"
+#include "hrendererconnection_info.h"
 
 #include "hlogger_p.h"
 

@@ -22,9 +22,9 @@
 #include "hdevicebuild_p.h"
 #include "hcontrolpoint_p.h"
 
-#include "../../devicemodel/client/hdefault_clientdevice_p.h"
+#include "hdefault_clientdevice_p.h"
 
-#include "../../general/hlogger_p.h"
+#include "hlogger_p.h"
 
 namespace Herqq
 {

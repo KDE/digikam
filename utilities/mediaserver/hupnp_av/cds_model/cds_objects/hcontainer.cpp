@@ -21,8 +21,8 @@
 
 #include "hcontainer.h"
 #include "hcontainer_p.h"
-#include "../hcdsclassinfo.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hcdsclassinfo.h"
+#include "hcdsproperties.h"
 
 namespace Herqq
 {

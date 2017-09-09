@@ -22,11 +22,11 @@
 #include "hdevicehost_configuration.h"
 #include "hdevicehost_configuration_p.h"
 
-#include "../../devicemodel/hdevicemodel_infoprovider.h"
-#include "../../devicemodel/server/hdevicemodelcreator.h"
+#include "hdevicemodel_infoprovider.h"
+#include "server/hdevicemodelcreator.h"
 
-#include "../../general/hupnp_global_p.h"
-#include "../../utils/hmisc_utils_p.h"
+#include "hupnp_global_p.h"
+#include "hmisc_utils_p.h"
 
 namespace Herqq
 {

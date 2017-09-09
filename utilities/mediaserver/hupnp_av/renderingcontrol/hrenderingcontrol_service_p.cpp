@@ -23,17 +23,14 @@
 #include "hrenderingcontrol_info.h"
 #include "hvolumedbrange_result.h"
 #include "hchannel.h"
-
-#include "../mediarenderer/hmediarenderer_info.h"
-#include "../mediarenderer/hmediarenderer_device_p.h"
-#include "../mediarenderer/hrendererconnection.h"
-#include "../mediarenderer/hrendererconnection_info.h"
-
+#include "hmediarenderer_info.h"
+#include "hmediarenderer_device_p.h"
+#include "hrendererconnection.h"
+#include "hrendererconnection_info.h"
 #include "hudn.h"
 #include "hserviceid.h"
 #include "hresourcetype.h"
 #include "hstatevariables_setupdata.h"
-
 #include "hlogger_p.h"
 
 #include <QtCore/QSet>

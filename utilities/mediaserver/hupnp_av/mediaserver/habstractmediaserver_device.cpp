@@ -22,9 +22,9 @@
 #include "habstractmediaserver_device.h"
 #include "hmediaserver_info.h"
 
-#include "../transport/habstract_avtransport_service.h"
-#include "../connectionmanager/habstractconnectionmanager_service.h"
-#include "../contentdirectory/habstractcontentdirectory_service.h"
+#include "habstract_avtransport_service.h"
+#include "habstractconnectionmanager_service.h"
+#include "habstractcontentdirectory_service.h"
 
 namespace Herqq
 {

@@ -25,7 +25,7 @@
 #include "hconnectionmanager_id.h"
 #include "hconnectionmanager_info.h"
 
-#include "../hav_global_p.h"
+#include "hav_global_p.h"
 
 namespace Herqq
 {

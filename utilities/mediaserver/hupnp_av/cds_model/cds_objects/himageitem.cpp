@@ -21,9 +21,9 @@
 
 #include "himageitem.h"
 #include "himageitem_p.h"
-#include "../../common/hrating.h"
-#include "../../common/hstoragemedium.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hrating.h"
+#include "hstoragemedium.h"
+#include "hcdsproperties.h"
 
 #include <QtCore/QDateTime>
 #include <QtCore/QStringList>

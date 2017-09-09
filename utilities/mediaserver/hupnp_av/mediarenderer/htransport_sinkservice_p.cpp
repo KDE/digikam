@@ -25,12 +25,12 @@
 #include "hrendererconnection_info.h"
 #include "hrendererconnection.h"
 
-#include "../transport/hmediainfo.h"
-#include "../transport/hpositioninfo.h"
-#include "../transport/htransportinfo.h"
-#include "../transport/htransportaction.h"
-#include "../transport/htransportsettings.h"
-#include "../transport/hdevicecapabilities.h"
+#include "hmediainfo.h"
+#include "hpositioninfo.h"
+#include "htransportinfo.h"
+#include "htransportaction.h"
+#include "htransportsettings.h"
+#include "hdevicecapabilities.h"
 
 #include "hlogger_p.h"
 

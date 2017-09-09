@@ -21,11 +21,11 @@
 
 #include "hplaylistcontainer.h"
 #include "hplaylistcontainer_p.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hcdsproperties.h"
 
-#include "../hgenre.h"
-#include "../hpersonwithrole.h"
-#include "../../common/hstoragemedium.h"
+#include "hgenre.h"
+#include "hpersonwithrole.h"
+#include "hstoragemedium.h"
 
 #include <QtCore/QDateTime>
 

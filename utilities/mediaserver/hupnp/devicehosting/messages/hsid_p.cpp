@@ -21,7 +21,7 @@
 
 #include "hsid_p.h"
 
-#include "../../utils/hmisc_utils_p.h"
+#include "hmisc_utils_p.h"
 
 namespace Herqq
 {

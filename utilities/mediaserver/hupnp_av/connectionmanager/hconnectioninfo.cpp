@@ -22,8 +22,7 @@
 #include "hconnectioninfo.h"
 #include "hconnectionmanager_id.h"
 #include "hconnectionmanager_info.h"
-
-#include "../common/hprotocolinfo.h"
+#include "hprotocolinfo.h"
 
 namespace Herqq
 {

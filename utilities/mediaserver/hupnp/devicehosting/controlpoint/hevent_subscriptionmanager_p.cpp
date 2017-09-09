@@ -23,16 +23,16 @@
 #include "hcontrolpoint_configuration.h"
 #include "hcontrolpoint_p.h"
 
-#include "../../general/hupnp_global_p.h"
+#include "hupnp_global_p.h"
 
-#include "../../devicemodel/client/hclientdevice.h"
-#include "../../devicemodel/client/hdefault_clientservice_p.h"
+#include "hclientdevice.h"
+#include "hdefault_clientservice_p.h"
 
-#include "../../dataelements/hserviceid.h"
-#include "../../dataelements/hdeviceinfo.h"
-#include "../../dataelements/hserviceinfo.h"
+#include "hserviceid.h"
+#include "hdeviceinfo.h"
+#include "hserviceinfo.h"
 
-#include "../../general/hlogger_p.h"
+#include "hlogger_p.h"
 
 namespace Herqq
 {

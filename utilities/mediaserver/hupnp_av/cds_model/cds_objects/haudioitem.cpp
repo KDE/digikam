@@ -22,8 +22,8 @@
 #include "haudioitem.h"
 #include "haudioitem_p.h"
 
-#include "../hgenre.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hgenre.h"
+#include "hcdsproperties.h"
 
 #include <QtCore/QUrl>
 

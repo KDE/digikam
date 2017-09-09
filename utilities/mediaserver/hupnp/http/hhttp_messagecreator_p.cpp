@@ -24,8 +24,8 @@
 #include "hhttp_header_p.h"
 #include "hhttp_utils_p.h"
 
-#include "../devicehosting/messages/hevent_messages_p.h"
-#include "../dataelements/hactioninfo.h"
+#include "hevent_messages_p.h"
+#include "hactioninfo.h"
 #include "hlogger_p.h"
 
 #include "hupnp_global_p.h"

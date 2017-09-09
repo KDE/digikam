@@ -21,8 +21,8 @@
 
 #include "hstoragevolume.h"
 #include "hstoragevolume_p.h"
-#include "../../common/hstoragemedium.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hstoragemedium.h"
+#include "hcdsproperties.h"
 
 namespace Herqq
 {

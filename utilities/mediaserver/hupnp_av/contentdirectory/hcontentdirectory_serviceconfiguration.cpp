@@ -22,7 +22,7 @@
 #include "hcontentdirectory_serviceconfiguration.h"
 #include "hcontentdirectory_serviceconfiguration_p.h"
 
-#include "../cds_model/datasource/habstract_cds_datasource.h"
+#include "datasource/habstract_cds_datasource.h"
 
 namespace Herqq
 {

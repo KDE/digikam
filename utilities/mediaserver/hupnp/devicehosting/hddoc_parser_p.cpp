@@ -21,9 +21,9 @@
 
 #include "hddoc_parser_p.h"
 
-#include "../dataelements/hudn.h"
-#include "../dataelements/hdeviceinfo.h"
-#include "../dataelements/hresourcetype.h"
+#include "hudn.h"
+#include "hdeviceinfo.h"
+#include "hresourcetype.h"
 
 #include "hupnp_global_p.h"
 #include "hupnp_datatypes_p.h"

@@ -24,11 +24,11 @@
 #include "hserverservice.h"
 #include "hdefault_serverdevice_p.h"
 
-#include "../../dataelements/hserviceid.h"
-#include "../../dataelements/hdeviceinfo.h"
-#include "../../dataelements/hserviceinfo.h"
+#include "hserviceid.h"
+#include "hdeviceinfo.h"
+#include "hserviceinfo.h"
 
-#include "../../general/hupnp_global_p.h"
+#include "hupnp_global_p.h"
 
 #include <QtCore/QString>
 

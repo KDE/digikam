@@ -32,8 +32,8 @@
 
 #include "hservermodel_creator_p.h"
 
-#include "../../general/hlogger_p.h"
-#include "../../utils/hsysutils_p.h"
+#include "hlogger_p.h"
+#include "hsysutils_p.h"
 
 #include <ctime>
 

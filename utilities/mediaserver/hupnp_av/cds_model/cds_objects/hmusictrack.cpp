@@ -21,10 +21,10 @@
 
 #include "hmusictrack.h"
 #include "hmusictrack_p.h"
-#include "../hpersonwithrole.h"
-#include "../../common/hstoragemedium.h"
+#include "hpersonwithrole.h"
+#include "hstoragemedium.h"
 
-#include "../model_mgmt/hcdsproperties.h"
+#include "hcdsproperties.h"
 
 #include <QtCore/QDateTime>
 #include <QtCore/QStringList>

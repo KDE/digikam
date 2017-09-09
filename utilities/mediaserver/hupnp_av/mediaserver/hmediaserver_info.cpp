@@ -21,9 +21,9 @@
 
 #include "hmediaserver_info.h"
 
-#include "../transport/havtransport_info.h"
-#include "../contentdirectory/hcontentdirectory_info.h"
-#include "../connectionmanager/hconnectionmanager_info.h"
+#include "havtransport_info.h"
+#include "hcontentdirectory_info.h"
+#include "hconnectionmanager_info.h"
 
 #include "hserviceid.h"
 #include "hresourcetype.h"

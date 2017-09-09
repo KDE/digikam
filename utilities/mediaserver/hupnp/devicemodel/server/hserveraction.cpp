@@ -23,9 +23,9 @@
 #include "hserveraction_p.h"
 #include "hdefault_serveraction_p.h"
 
-#include "../hactionarguments.h"
+#include "hactionarguments.h"
 
-#include "../../general/hlogger_p.h"
+#include "hlogger_p.h"
 
 namespace Herqq
 {

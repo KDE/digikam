@@ -20,7 +20,7 @@
  */
 
 #include "hclientadapterop.h"
-#include "../hasyncop_p.h"
+#include "hasyncop_p.h"
 
 namespace Herqq
 {

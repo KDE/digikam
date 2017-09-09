@@ -23,8 +23,8 @@
 #include "hdefault_clientservice_p.h"
 #include "hdefault_clientstatevariable_p.h"
 
-#include "../hstatevariable_p.h"
-#include "../hstatevariable_event.h"
+#include "hstatevariable_p.h"
+#include "hstatevariable_event.h"
 
 namespace Herqq
 {

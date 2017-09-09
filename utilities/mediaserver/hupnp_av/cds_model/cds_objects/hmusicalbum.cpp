@@ -21,10 +21,10 @@
 
 #include "hmusicalbum.h"
 #include "hmusicalbum_p.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hcdsproperties.h"
 
-#include "../hgenre.h"
-#include "../hpersonwithrole.h"
+#include "hgenre.h"
+#include "hpersonwithrole.h"
 
 #include <QtCore/QUrl>
 

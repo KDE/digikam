@@ -21,9 +21,9 @@
 
 #include "haudioprogram.h"
 #include "haudioprogram_p.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hcdsproperties.h"
 
-#include "../../common/hradioband.h"
+#include "hradioband.h"
 
 namespace Herqq
 {

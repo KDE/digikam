@@ -22,18 +22,18 @@
 #include "hepgitem.h"
 #include "hepgitem_p.h"
 
-#include "../hprice.h"
-#include "../hgenre.h"
-#include "../hchannel_id.h"
-#include "../hmatching_id.h"
-#include "../hprogramcode.h"
-#include "../hscheduledtime.h"
-#include "../hpersonwithrole.h"
-#include "../hforeignmetadata.h"
-#include "../hchannelgroupname.h"
+#include "hprice.h"
+#include "hgenre.h"
+#include "hchannel_id.h"
+#include "hmatching_id.h"
+#include "hprogramcode.h"
+#include "hscheduledtime.h"
+#include "hpersonwithrole.h"
+#include "hforeignmetadata.h"
+#include "hchannelgroupname.h"
 
-#include "../../common/hrating.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hrating.h"
+#include "hcdsproperties.h"
 
 #include <QtCore/QUrl>
 

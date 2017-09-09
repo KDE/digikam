@@ -21,8 +21,8 @@
 
 #include "haudiobroadcast.h"
 #include "haudiobroadcast_p.h"
-#include "../model_mgmt/hcdsproperties.h"
-#include "../../common/hradioband.h"
+#include "hcdsproperties.h"
+#include "hradioband.h"
 
 namespace Herqq
 {

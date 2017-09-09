@@ -22,10 +22,10 @@
 #include "hplaylistitem.h"
 #include "hplaylistitem_p.h"
 
-#include "../hgenre.h"
-#include "../hpersonwithrole.h"
-#include "../../common/hstoragemedium.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hgenre.h"
+#include "hpersonwithrole.h"
+#include "hstoragemedium.h"
+#include "hcdsproperties.h"
 
 #include <QtCore/QDateTime>
 

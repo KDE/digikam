@@ -22,9 +22,9 @@
 #include "hmediaserver_device_p.h"
 #include "hmediaserver_deviceconfiguration.h"
 
-#include "../cds_model/datasource/hcds_datasource.h"
-#include "../contentdirectory/hcontentdirectory_serviceconfiguration.h"
-#include "../connectionmanager/hconnectionmanager_serviceconfiguration.h"
+#include "datasource/hcds_datasource.h"
+#include "hcontentdirectory_serviceconfiguration.h"
+#include "hconnectionmanager_serviceconfiguration.h"
 
 #include <QtCore/QEvent>
 

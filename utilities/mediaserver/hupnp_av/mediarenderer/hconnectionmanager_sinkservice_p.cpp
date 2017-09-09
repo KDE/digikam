@@ -22,12 +22,12 @@
 #include "hconnectionmanager_sinkservice_p.h"
 #include "hmediarenderer_device_p.h"
 
-#include "../hav_global_p.h"
-#include "../common/hprotocolinfo.h"
+#include "hav_global_p.h"
+#include "hprotocolinfo.h"
 
-#include "../connectionmanager/hconnectioninfo.h"
-#include "../connectionmanager/hprepareforconnection_result.h"
-#include "../connectionmanager/hprotocolinforesult.h"
+#include "hconnectioninfo.h"
+#include "hprepareforconnection_result.h"
+#include "hprotocolinforesult.h"
 
 namespace Herqq
 {

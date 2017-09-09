@@ -21,7 +21,7 @@
 
 #include "hevent_messages_p.h"
 
-#include "../../general/hlogger_p.h"
+#include "hlogger_p.h"
 
 #include <QtXml/QDomDocument>
 

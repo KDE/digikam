@@ -21,15 +21,12 @@
 
 #include "hcontentdirectory_service.h"
 #include "hcontentdirectory_service_p.h"
-
 #include "hsearchresult.h"
 #include "htransferprogressinfo.h"
-
-#include "../cds_model/hsortinfo.h"
-#include "../cds_model/model_mgmt/hcdsproperty.h"
-#include "../cds_model/model_mgmt/hcdsproperty_db.h"
-#include "../cds_model/model_mgmt/hcds_dlite_serializer.h"
-
+#include "hsortinfo.h"
+#include "hcdsproperty.h"
+#include "hcdsproperty_db.h"
+#include "hcds_dlite_serializer.h"
 #include "hlogger_p.h"
 
 #include <QtCore/QSet>

@@ -21,9 +21,9 @@
 
 #include "hgenrecontainer.h"
 #include "hgenrecontainer_p.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hcdsproperties.h"
 
-#include "../hgenre.h"
+#include "hgenre.h"
 
 namespace Herqq
 {

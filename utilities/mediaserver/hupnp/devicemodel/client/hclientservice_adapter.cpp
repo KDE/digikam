@@ -23,12 +23,10 @@
 #include "hclientservice_adapter_p.h"
 #include "hclientservice.h"
 #include "hclientdevice.h"
-
-#include "../hactions_setupdata.h"
-#include "../hdevicemodel_validator.h"
-#include "../hdevicemodel_infoprovider.h"
-
-#include "../../dataelements/hserviceinfo.h"
+#include "hactions_setupdata.h"
+#include "hdevicemodel_validator.h"
+#include "hdevicemodel_infoprovider.h"
+#include "hserviceinfo.h"
 
 namespace Herqq
 {

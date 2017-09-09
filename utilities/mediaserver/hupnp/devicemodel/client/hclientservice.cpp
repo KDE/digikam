@@ -27,7 +27,7 @@
 #include "hdefault_clientservice_p.h"
 #include "hdefault_clientstatevariable_p.h"
 
-#include "../../dataelements/hactioninfo.h"
+#include "hactioninfo.h"
 
 namespace Herqq
 {

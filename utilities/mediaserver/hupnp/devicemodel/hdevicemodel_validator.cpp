@@ -33,10 +33,10 @@
 #include "server/hserverservice.h"
 #include "server/hserverstatevariable.h"
 
-#include "../dataelements/hactioninfo.h"
-#include "../dataelements/hdeviceinfo.h"
-#include "../dataelements/hserviceinfo.h"
-#include "../dataelements/hstatevariableinfo.h"
+#include "hactioninfo.h"
+#include "hdeviceinfo.h"
+#include "hserviceinfo.h"
+#include "hstatevariableinfo.h"
 
 #include "hactionarguments.h"
 #include "hactions_setupdata.h"

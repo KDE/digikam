@@ -22,13 +22,13 @@
 #include "hcds_fsys_reader_p.h"
 #include "hcdsobjectdata_p.h"
 
-#include "../datasource/hrootdir.h"
+#include "datasource/hrootdir.h"
 
-#include "../cds_objects/hphoto.h"
-#include "../cds_objects/htextitem.h"
-#include "../cds_objects/hvideoitem.h"
-#include "../cds_objects/hmusictrack.h"
-#include "../cds_objects/hstoragefolder.h"
+#include "hphoto.h"
+#include "htextitem.h"
+#include "hvideoitem.h"
+#include "hmusictrack.h"
+#include "hstoragefolder.h"
 
 #include "hlogger_p.h"
 

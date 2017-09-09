@@ -22,8 +22,8 @@
 #include "hmediaserver_deviceconfiguration.h"
 #include "hmediaserver_deviceconfiguration_p.h"
 
-#include "../contentdirectory/hcontentdirectory_serviceconfiguration.h"
-#include "../connectionmanager/hconnectionmanager_serviceconfiguration.h"
+#include "hcontentdirectory_serviceconfiguration.h"
+#include "hconnectionmanager_serviceconfiguration.h"
 
 namespace Herqq
 {

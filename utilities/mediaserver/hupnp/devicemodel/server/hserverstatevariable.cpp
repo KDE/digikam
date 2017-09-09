@@ -22,8 +22,8 @@
 #include "hserverstatevariable.h"
 #include "hdefault_serverstatevariable_p.h"
 
-#include "../hstatevariable_p.h"
-#include "../hstatevariable_event.h"
+#include "hstatevariable_p.h"
+#include "hstatevariable_event.h"
 
 namespace Herqq
 {

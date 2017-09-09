@@ -22,11 +22,11 @@
 #include "htextitem.h"
 #include "htextitem_p.h"
 
-#include "../hpersonwithrole.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hpersonwithrole.h"
+#include "hcdsproperties.h"
 
-#include "../../common/hrating.h"
-#include "../../common/hstoragemedium.h"
+#include "hrating.h"
+#include "hstoragemedium.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QDateTime>

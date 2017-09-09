@@ -21,8 +21,8 @@
 
 #include "hcontrolpoint_dataretriever_p.h"
 
-#include "../../general/hlogger_p.h"
-#include "../../general/hupnp_global_p.h"
+#include "hlogger_p.h"
+#include "hupnp_global_p.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QTimerEvent>

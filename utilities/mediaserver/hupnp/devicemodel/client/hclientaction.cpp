@@ -27,17 +27,17 @@
 #include "hdefault_clientaction_p.h"
 #include "hdefault_clientservice_p.h"
 
-#include "../../general/hlogger_p.h"
+#include "hlogger_p.h"
 
-#include "../../general/hupnp_global_p.h"
-#include "../../general/hupnp_datatypes_p.h"
+#include "hupnp_global_p.h"
+#include "hupnp_datatypes_p.h"
 
-#include "../../dataelements/hudn.h"
-#include "../../dataelements/hactioninfo.h"
-#include "../../dataelements/hdeviceinfo.h"
-#include "../../dataelements/hserviceinfo.h"
+#include "hudn.h"
+#include "hactioninfo.h"
+#include "hdeviceinfo.h"
+#include "hserviceinfo.h"
 
-#include "../../general/hlogger_p.h"
+#include "hlogger_p.h"
 
 #include <QtCore/QList>
 #include "qtsoap.h"

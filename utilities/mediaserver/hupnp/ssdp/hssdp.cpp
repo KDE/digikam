@@ -23,14 +23,11 @@
 #include "hssdp_p.h"
 #include "hdiscovery_messages.h"
 #include "hssdp_messagecreator_p.h"
-
-#include "../dataelements/hdiscoverytype.h"
-#include "../dataelements/hproduct_tokens.h"
-
-#include "../socket/hendpoint.h"
-
+#include "hdiscoverytype.h"
+#include "hproduct_tokens.h"
+#include "hendpoint.h"
 #include "hlogger_p.h"
-#include "../utils/hmisc_utils_p.h"
+#include "hmisc_utils_p.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QString>

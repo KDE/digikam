@@ -23,7 +23,7 @@
 #include "hduration.h"
 #include "hrecordmediumwritestatus.h"
 
-#include "../common/hstoragemedium.h"
+#include "hstoragemedium.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QString>

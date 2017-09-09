@@ -21,10 +21,10 @@
 
 #include "hitem.h"
 #include "hitem_p.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hcdsproperties.h"
 
-#include "../../common/hresource.h"
-#include "../../common/hprotocolinfo.h"
+#include "hresource.h"
+#include "hprotocolinfo.h"
 
 #include <QtCore/QStringList>
 

@@ -22,13 +22,13 @@
 #include "hconnection.h"
 #include "hrcs_lastchange_info.h"
 #include "havt_lastchange_info.h"
-#include "../connectionmanager/hconnectioninfo.h"
-#include "../connectionmanager/hconnectionmanager_adapter.h"
+#include "hconnectioninfo.h"
+#include "hconnectionmanager_adapter.h"
 
-#include "../transport/havtransport_adapter.h"
+#include "havtransport_adapter.h"
 
-#include "../renderingcontrol/hchannel.h"
-#include "../renderingcontrol/hrenderingcontrol_adapter.h"
+#include "hchannel.h"
+#include "hrenderingcontrol_adapter.h"
 
 #include "hlogger_p.h"
 

@@ -22,8 +22,8 @@
 #include "hvideobroadcast.h"
 #include "hvideobroadcast_p.h"
 
-#include "../hprice.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hprice.h"
+#include "hcdsproperties.h"
 
 #include <QtCore/QUrl>
 

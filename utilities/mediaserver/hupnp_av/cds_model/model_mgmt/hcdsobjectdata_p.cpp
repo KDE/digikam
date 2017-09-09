@@ -20,7 +20,7 @@
  */
 
 #include "hcdsobjectdata_p.h"
-#include "../cds_objects/hobject.h"
+#include "hobject.h"
 
 namespace Herqq
 {

@@ -23,10 +23,10 @@
 #include "hfsys_datasource_p.h"
 #include "hrootdir.h"
 
-#include "../cds_objects/hitem.h"
-#include "../cds_objects/hstoragefolder.h"
-#include "../model_mgmt/hcdsobjectdata_p.h"
-#include "../model_mgmt/hcds_fsys_reader_p.h"
+#include "hitem.h"
+#include "hstoragefolder.h"
+#include "hcdsobjectdata_p.h"
+#include "hcds_fsys_reader_p.h"
 
 #include "hlogger_p.h"
 

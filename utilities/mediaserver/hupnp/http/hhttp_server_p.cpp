@@ -25,14 +25,12 @@
 #include "hhttp_asynchandler_p.h"
 #include "hhttp_messaginginfo_p.h"
 #include "hhttp_messagecreator_p.h"
-
 #include "hlogger_p.h"
-#include "../utils/hmisc_utils_p.h"
-
-#include "../socket/hendpoint.h"
+#include "hmisc_utils_p.h"
+#include "hendpoint.h"
 #include "hupnp_global_p.h"
-#include "../devicehosting/messages/hcontrol_messages_p.h"
-#include "../devicehosting/messages/hevent_messages_p.h"
+#include "hcontrol_messages_p.h"
+#include "hevent_messages_p.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QTime>

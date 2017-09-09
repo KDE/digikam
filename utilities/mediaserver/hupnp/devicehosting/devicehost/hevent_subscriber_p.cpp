@@ -21,14 +21,14 @@
 
 #include "hevent_subscriber_p.h"
 
-#include "../../devicemodel/server/hserverservice.h"
-#include "../../dataelements/hserviceid.h"
-#include "../../dataelements/hserviceinfo.h"
+#include "server/hserverservice.h"
+#include "hserviceid.h"
+#include "hserviceinfo.h"
 
-#include "../../http/hhttp_messagecreator_p.h"
+#include "hhttp_messagecreator_p.h"
 
-#include "../../general/hlogger_p.h"
-#include "../../utils/hsysutils_p.h"
+#include "hlogger_p.h"
+#include "hsysutils_p.h"
 
 #include <QtNetwork/QTcpSocket>
 

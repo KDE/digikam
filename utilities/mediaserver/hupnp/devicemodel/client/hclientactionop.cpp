@@ -22,9 +22,8 @@
 #include "hclientactionop.h"
 #include "hclientactionop_p.h"
 #include "hclientaction_p.h"
-
-#include "../hasyncop.h"
-#include "../hactionarguments.h"
+#include "hasyncop.h"
+#include "hactionarguments.h"
 
 namespace Herqq
 {

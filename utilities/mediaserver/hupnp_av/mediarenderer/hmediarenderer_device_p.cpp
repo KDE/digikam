@@ -22,8 +22,8 @@
 #include "hmediarenderer_device_p.h"
 #include "hrendererconnection_manager.h"
 
-#include "../renderingcontrol/hchannel.h"
-#include "../connectionmanager/hconnectionmanager_id.h"
+#include "hchannel.h"
+#include "hconnectionmanager_id.h"
 
 #include "hstatevariables_setupdata.h"
 

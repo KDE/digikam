@@ -20,7 +20,7 @@
  */
 
 #include "hendpoint.h"
-#include "../utils/hmisc_utils_p.h"
+#include "hmisc_utils_p.h"
 
 #include <QtCore/QUrl>
 

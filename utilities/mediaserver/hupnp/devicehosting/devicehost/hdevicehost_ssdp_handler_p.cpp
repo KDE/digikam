@@ -22,20 +22,20 @@
 #include "hdevicehost_ssdp_handler_p.h"
 #include "hserverdevicecontroller_p.h"
 
-#include "../../general/hupnp_global_p.h"
+#include "hupnp_global_p.h"
 
-#include "../../dataelements/hudn.h"
-#include "../../dataelements/hdeviceinfo.h"
-#include "../../dataelements/hserviceinfo.h"
-#include "../../dataelements/hdiscoverytype.h"
-#include "../../dataelements/hproduct_tokens.h"
+#include "hudn.h"
+#include "hdeviceinfo.h"
+#include "hserviceinfo.h"
+#include "hdiscoverytype.h"
+#include "hproduct_tokens.h"
 
-#include "../../devicemodel/hdevicestatus.h"
-#include "../../devicemodel/server/hserverdevice.h"
-#include "../../devicemodel/server/hserverservice.h"
+#include "hdevicestatus.h"
+#include "server/hserverdevice.h"
+#include "server/hserverservice.h"
 
-#include "../../general/hlogger_p.h"
-#include "../../utils/hsysutils_p.h"
+#include "hlogger_p.h"
+#include "hsysutils_p.h"
 
 #include <QtCore/QUuid>
 #include <QtCore/QDateTime>

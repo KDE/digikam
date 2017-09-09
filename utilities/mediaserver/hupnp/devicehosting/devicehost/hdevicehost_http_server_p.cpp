@@ -21,24 +21,18 @@
 
 #include "hdevicehost_http_server_p.h"
 #include "hevent_subscriber_p.h"
-
-#include "../messages/hcontrol_messages_p.h"
-
-#include "../../http/hhttp_messagecreator_p.h"
-
-#include "../../general/hupnp_global_p.h"
-#include "../../general/hupnp_datatypes_p.h"
-
-#include "../../devicemodel/hactionarguments.h"
-#include "../../devicemodel/server/hserveraction.h"
-#include "../../devicemodel/server/hserverdevice.h"
-#include "../../devicemodel/server/hserverservice.h"
-
-#include "../../dataelements/hudn.h"
-#include "../../dataelements/hactioninfo.h"
-#include "../../dataelements/hserviceinfo.h"
-
-#include "../../general/hlogger_p.h"
+#include "hcontrol_messages_p.h"
+#include "hhttp_messagecreator_p.h"
+#include "hupnp_global_p.h"
+#include "hupnp_datatypes_p.h"
+#include "hactionarguments.h"
+#include "server/hserveraction.h"
+#include "server/hserverdevice.h"
+#include "server/hserverservice.h"
+#include "hudn.h"
+#include "hactioninfo.h"
+#include "hserviceinfo.h"
+#include "hlogger_p.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QPair>

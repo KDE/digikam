@@ -20,7 +20,7 @@
  */
 
 #include "hrcs_lastchange_info.h"
-#include "../renderingcontrol/hchannel.h"
+#include "hchannel.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVariant>

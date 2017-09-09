@@ -20,8 +20,8 @@
  */
 
 #include "hservices_setupdata.h"
-#include "../dataelements/hserviceid.h"
-#include "../dataelements/hresourcetype.h"
+#include "hserviceid.h"
+#include "hresourcetype.h"
 
 #include <QtCore/QSet>
 

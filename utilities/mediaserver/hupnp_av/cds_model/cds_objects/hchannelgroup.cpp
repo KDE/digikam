@@ -21,9 +21,9 @@
 
 #include "hchannelgroup.h"
 #include "hchannelgroup_p.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hcdsproperties.h"
 
-#include "../hchannelgroupname.h"
+#include "hchannelgroupname.h"
 
 #include <QtCore/QUrl>
 

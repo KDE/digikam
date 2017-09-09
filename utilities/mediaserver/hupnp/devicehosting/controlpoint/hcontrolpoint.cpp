@@ -26,21 +26,16 @@
 #include "hcontrolpoint_configuration.h"
 #include "hcontrolpoint_configuration_p.h"
 #include "hcontrolpoint_dataretriever_p.h"
-
-#include "../../general/hupnp_global_p.h"
-#include "../../general/hupnp_datatypes_p.h"
-
-#include "../../dataelements/hdeviceinfo.h"
-#include "../../dataelements/hdiscoverytype.h"
-#include "../../dataelements/hproduct_tokens.h"
-
-#include "../../devicemodel/client/hdefault_clientdevice_p.h"
-#include "../../devicemodel/client/hdefault_clientservice_p.h"
-
-#include "../../http/hhttp_messagecreator_p.h"
-
-#include "../../general/hlogger_p.h"
-#include "../../utils/hsysutils_p.h"
+#include "hupnp_global_p.h"
+#include "hupnp_datatypes_p.h"
+#include "hdeviceinfo.h"
+#include "hdiscoverytype.h"
+#include "hproduct_tokens.h"
+#include "hdefault_clientdevice_p.h"
+#include "hdefault_clientservice_p.h"
+#include "hhttp_messagecreator_p.h"
+#include "hlogger_p.h"
+#include "hsysutils_p.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QString>

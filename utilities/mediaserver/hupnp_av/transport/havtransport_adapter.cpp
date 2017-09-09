@@ -35,8 +35,8 @@
 #include "hdevicecapabilities.h"
 #include "hrecordmediumwritestatus.h"
 
-#include "../common/hstoragemedium.h"
-#include "../hav_devicemodel_infoprovider.h"
+#include "hstoragemedium.h"
+#include "hav_devicemodel_infoprovider.h"
 
 #include "hlogger_p.h"
 

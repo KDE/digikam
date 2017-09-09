@@ -21,11 +21,11 @@
 
 #include "hmusicvideoclip.h"
 #include "hmusicvideoclip_p.h"
-#include "../hscheduledtime.h"
-#include "../hpersonwithrole.h"
+#include "hscheduledtime.h"
+#include "hpersonwithrole.h"
 
-#include "../../common/hstoragemedium.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hstoragemedium.h"
+#include "hcdsproperties.h"
 
 #include <QtCore/QDateTime>
 #include <QtCore/QStringList>

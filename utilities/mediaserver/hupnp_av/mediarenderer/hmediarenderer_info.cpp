@@ -20,9 +20,9 @@
  */
 
 #include "hmediarenderer_info.h"
-#include "../transport/havtransport_info.h"
-#include "../renderingcontrol/hrenderingcontrol_info.h"
-#include "../connectionmanager/hconnectionmanager_info.h"
+#include "havtransport_info.h"
+#include "hrenderingcontrol_info.h"
+#include "hconnectionmanager_info.h"
 
 #include "hserviceid.h"
 #include "hresourcetype.h"

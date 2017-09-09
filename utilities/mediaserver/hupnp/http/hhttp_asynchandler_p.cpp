@@ -22,9 +22,8 @@
 #include "hhttp_asynchandler_p.h"
 #include "hhttp_messagecreator_p.h"
 #include "hhttp_utils_p.h"
-
 #include "hupnp_global_p.h"
-#include "../devicehosting/messages/hevent_messages_p.h"
+#include "hevent_messages_p.h"
 
 #include <QtNetwork/QTcpSocket>
 

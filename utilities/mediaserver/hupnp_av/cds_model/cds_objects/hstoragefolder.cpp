@@ -21,7 +21,7 @@
 
 #include "hstoragefolder.h"
 #include "hstoragefolder_p.h"
-#include "../model_mgmt/hcdsproperties.h"
+#include "hcdsproperties.h"
 
 namespace Herqq
 {
