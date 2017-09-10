@@ -75,7 +75,7 @@ DMediaServer::DMediaServer(QObject* const parent)
       d(new Private)
 {
     // Set Hupnp debug level on the console
-    Herqq::Upnp::SetLoggingLevel(Herqq::Upnp::Debug);
+    SetLoggingLevel(Herqq::Upnp::Debug);
 
     // Configure a data source
     HFileSystemDataSourceConfiguration datasourceConfig;
@@ -146,61 +146,23 @@ void DMediaServer::addImagesOnServer(const QList<QUrl>& imageUrlList)
 
 void DMediaServer::addImagesOnServer(const QMap<QString, QList<QUrl>>& collectionMap)
 {
-//    int                currentSize = 0;
-//    QList<HContainer*> containerList;
-//    QList<HItem*>      itemList;
-    QList<QString>     keys        = collectionMap.uniqueKeys();
-    QList<QUrl>        imageUrlList;
-    QString album;
+    QList<QString> keys = collectionMap.uniqueKeys();
+    QList<QUrl>    imgUrls;
+    QString        album;
 
     for (int i = 0 ; i < keys.size() ; i++)
     {
         album                       = keys.at(i);
+        imgUrls                     = collectionMap.value(album);
         HContainer* const container = new HContainer(album, QLatin1String("0"));
         d->datasource->add(container);
 
-        imageUrlList.clear();
-        imageUrlList = collectionMap.value(album);
-//        currentSize  = itemList.size();
-
-        for (int j = 0 ; j < imageUrlList.size() ; j++)
+        for (int j = 0 ; j < imgUrls.size() ; j++)
         {
-/*            itemList.append(new HItem(imageUrlList.at(j).fileName(),
-                                      containerList.at(i)->id(),
-                                      QString()));*/
-
-            d->datasource->add(imageUrlList.at(j).toLocalFile(), container->id());
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Add item to mediaserver:" << imageUrlList.at(j).toLocalFile();
+            d->datasource->add(imgUrls.at(j).toLocalFile(), container->id());
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Add item to mediaserver:" << imgUrls.at(j).toLocalFile();
         }
     }
 }
-/*
-void DMediaServer::addImagesOnServer(const QMap<QString, QList<QUrl>>& collectionMap)
-{
-    QList<HContainer*> containerList;
-    QList<HItem*>      itemList;
-    QList<QString>     keys        = collectionMap.uniqueKeys();
-    QList<QUrl>        imageUrlList;
-    int                currentSize = 0;
 
-    for (int i = 0 ; i < keys.size() ; i++)
-    {
-        containerList.append(new HContainer(keys.at(i), QLatin1String("0")));
-        d->datasource->add(containerList.at(i));
-
-        imageUrlList.clear();
-        imageUrlList = collectionMap.value(keys.at(i));
-        currentSize  = itemList.size();
-
-        for (int j = 0 ; j < imageUrlList.size() ; j++)
-        {
-            itemList.append(new HItem(imageUrlList.at(j).fileName(),
-                                      containerList.at(i)->id(),
-                                      QString()));
-            d->datasource->add(itemList.at(j + currentSize), imageUrlList.at(j).toLocalFile());
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Add item to mediaserver:" << imageUrlList.at(j).toLocalFile();
-        }
-    }
-}
-*/
 } // namespace Digikam
