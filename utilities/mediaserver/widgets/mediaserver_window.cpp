@@ -51,7 +51,7 @@ const QString MediaServerWindow::serverDatabasePath(QStandardPaths::writableLoca
 
 bool MediaServerWindow:: deletedFlag = false ;
 
-MediaServerWindow::MediaServerWindow(QWidget* parent)
+MediaServerWindow::MediaServerWindow(QWidget* const parent)
     : QMainWindow(parent),
       m_ui(new Ui::MediaServerWindow),
       m_deviceHost(0),
@@ -151,19 +151,19 @@ void MediaServerWindow::addRootDirectoriesToServer(const HRootDir& rd)
         m_rootDirectoriesMap.insert(rc, rd);
         m_ui->sharedItemsTable->insertRow(rc);
 
-        QTableWidgetItem* newItemScanType = new QTableWidgetItem(
+        QTableWidgetItem* const newItemScanType = new QTableWidgetItem(
             (smode == HRootDir::RecursiveScan) ? QLatin1String("Yes") : QLatin1String("No"));
 
         newItemScanType->setFlags(Qt::ItemIsEnabled);
 
         m_ui->sharedItemsTable->setItem(rc, 0, newItemScanType);
 
-        QTableWidgetItem* newItemWatchType = new QTableWidgetItem(QLatin1String("No"));
+        QTableWidgetItem* const newItemWatchType = new QTableWidgetItem(QLatin1String("No"));
         newItemWatchType->setFlags(Qt::ItemIsEnabled);
 
         m_ui->sharedItemsTable->setItem(rc, 1, newItemWatchType);
 
-        QTableWidgetItem* newItem = new QTableWidgetItem(rd.dir().absolutePath());
+        QTableWidgetItem* const newItem = new QTableWidgetItem(rd.dir().absolutePath());
 
         newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         m_ui->sharedItemsTable->setItem(rc, 2, newItem);
@@ -285,18 +285,18 @@ void MediaServerWindow::addItemsToServer(const QStringList& fullPaths)
             m_itemsMap.insert(rc,fullPath);
             m_ui->sharedItemsTable->insertRow(rc);
 
-            QTableWidgetItem* newItemScanType = new QTableWidgetItem(QLatin1String("No"));
+            QTableWidgetItem* const newItemScanType = new QTableWidgetItem(QLatin1String("No"));
 
             newItemScanType->setFlags(Qt::ItemIsEnabled);
 
             m_ui->sharedItemsTable->setItem(rc, 0, newItemScanType);
 
-            QTableWidgetItem* newItemWatchType = new QTableWidgetItem(QLatin1String("No"));
+            QTableWidgetItem* const newItemWatchType = new QTableWidgetItem(QLatin1String("No"));
             newItemWatchType->setFlags(Qt::ItemIsEnabled);
 
             m_ui->sharedItemsTable->setItem(rc, 1, newItemWatchType);
 
-            QTableWidgetItem* newItem = new QTableWidgetItem(fullPath);
+            QTableWidgetItem* const newItem = new QTableWidgetItem(fullPath);
 
             newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             m_ui->sharedItemsTable->setItem(rc, 2, newItem);

@@ -54,7 +54,7 @@ class DIGIKAM_EXPORT MediaServerWindow : public QMainWindow
 
 public:
 
-    explicit MediaServerWindow(QWidget* parent = 0);
+    explicit MediaServerWindow(QWidget* const parent = 0);
     virtual ~MediaServerWindow();
 
     void initRequiredDirectories();
