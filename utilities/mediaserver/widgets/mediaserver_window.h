@@ -48,16 +48,25 @@ class DIGIKAM_EXPORT MediaServerWindow : public QMainWindow
 {
     Q_OBJECT
 
-private:
+public:
 
-    Ui::MediaServerWindow*                  m_ui;
-    Herqq::Upnp::HDeviceHost*               m_deviceHost;
+    explicit MediaServerWindow(QWidget* parent = 0);
+    virtual ~MediaServerWindow();
 
-    Herqq::Upnp::Av::HFileSystemDataSource* m_datasource;
+    void initRequiredDirectories();
 
-    QPointer<AddContentDialog>              m_dlg;
-    QMap<int,HRootDir>                      rootDirectoriesMap;
-    QMap<int,QString>                       ItemsMap;
+    DIGIKAM_EXPORT static bool deletedFlag;
+    static const QString serverDatabasePath;
+    static const QString serverDescriptionPath;
+
+Q_SIGNALS:
+
+    void closed();
+
+protected:
+
+    virtual void changeEvent(QEvent*);
+    virtual void closeEvent(QCloseEvent*);
 
 private:
 
@@ -79,25 +88,16 @@ private Q_SLOTS:
     void on_HideWindowButton_clicked();
     void setDeletedFlag();
 
-protected:
+private:
 
-    virtual void changeEvent(QEvent*);
-    virtual void closeEvent(QCloseEvent*);
+    Ui::MediaServerWindow*     m_ui;
 
-public:
+    HDeviceHost*               m_deviceHost;
+    HFileSystemDataSource*     m_datasource;
 
-    explicit MediaServerWindow(QWidget* parent = 0);
-    virtual ~MediaServerWindow();
-
-    void initRequiredDirectories();
-
-    DIGIKAM_EXPORT static bool deletedFlag;
-    static const QString serverDatabasePath;
-    static const QString serverDescriptionPath;
-
-Q_SIGNALS:
-
-    void closed();
+    QPointer<AddContentDialog> m_dlg;
+    QMap<int, HRootDir>        m_rootDirectoriesMap;
+    QMap<int, QString>         m_itemsMap;
 };
 
 #endif // MEDIASERVER_WINDOW_H

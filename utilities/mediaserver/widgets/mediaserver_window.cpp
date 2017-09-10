@@ -41,9 +41,6 @@
 #include <QDebug>
 #include <QStandardPaths>
 
-using namespace Herqq::Upnp;
-using namespace Herqq::Upnp::Av;
-
 const QString MediaServerWindow::serverDescriptionPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
               QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediaserver_description.xml")));
 const QString MediaServerWindow::serverDatabasePath(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
@@ -53,7 +50,8 @@ bool MediaServerWindow:: deletedFlag = false ;
 
 MediaServerWindow::MediaServerWindow(QWidget* parent)
     : QMainWindow(parent),
-      m_ui(new Ui::MediaServerWindow), m_deviceHost(0),
+      m_ui(new Ui::MediaServerWindow),
+      m_deviceHost(0),
       m_datasource(0)
 {
     m_ui->setupUi(this);
@@ -112,6 +110,7 @@ MediaServerWindow::~MediaServerWindow()
 {
     saveDirectoriesToDatabase();
     saveItemsToDatabase();
+
     delete m_ui;
     delete m_datasource;
 }
@@ -163,7 +162,7 @@ void MediaServerWindow::addRootDirectoriesToServer(const HRootDir& rd)
     if (m_datasource->add(rd) >= 0)
     {
         int rc = m_ui->sharedItemsTable->rowCount();
-        rootDirectoriesMap.insert(rc,rd);
+        m_rootDirectoriesMap.insert(rc, rd);
         m_ui->sharedItemsTable->insertRow(rc);
 
         QTableWidgetItem* newItemScanType = new QTableWidgetItem(
@@ -191,9 +190,9 @@ void MediaServerWindow::saveDirectoriesToDatabase()
     file.open(QFile::WriteOnly);
     QDataStream out(&file);
 
-    auto end = rootDirectoriesMap.cend();
+    auto end = m_rootDirectoriesMap.cend();
 
-    for (auto it = rootDirectoriesMap.cbegin(); it != end; ++it)
+    for (auto it = m_rootDirectoriesMap.cbegin() ; it != end ; ++it)
     {
         out << it.value();
     }
@@ -219,9 +218,9 @@ void MediaServerWindow::saveItemsToDatabase()
     file.open(QFile::WriteOnly);
     QDataStream out(&file);
 
-    auto end = ItemsMap.cend();
+    auto end = m_itemsMap.cend();
 
-    for (auto it = ItemsMap.cbegin(); it != end; ++it)
+    for (auto it = m_itemsMap.cbegin() ; it != end ; ++it)
     {
         out << it.value();
     }
@@ -232,7 +231,7 @@ void MediaServerWindow::loadItemsFromDatabase()
     QFile file(serverDatabasePath + (QLatin1String("/serverItems.dat")));
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
-    QString dir ;
+    QString     dir;
     QStringList list;
 
     while (in.atEnd() == false)
@@ -273,7 +272,7 @@ void MediaServerWindow::addItemsToServer(const QStringList& fullPaths)
 {
     if (!fullPaths.isEmpty())
     {
-        foreach(const QString& fullPath, fullPaths)
+        foreach (const QString& fullPath, fullPaths)
         {
             QStringList parts = fullPath.split(QDir::separator(), QString::SkipEmptyParts);
 
@@ -285,7 +284,7 @@ void MediaServerWindow::addItemsToServer(const QStringList& fullPaths)
             {
                 QString lastParentContainerId = QLatin1String("0");
 
-                for (int i = 0; i < parts.count() - 1; ++i)
+                for (int i = 0 ; i < parts.count() - 1 ; ++i)
                 {
                     HContainer* container = m_datasource->findContainerWithTitle(parts[i]);
 
@@ -302,7 +301,7 @@ void MediaServerWindow::addItemsToServer(const QStringList& fullPaths)
             }
 
             int rc = m_ui->sharedItemsTable->rowCount();
-            ItemsMap.insert(rc,fullPath);
+            m_itemsMap.insert(rc,fullPath);
             m_ui->sharedItemsTable->insertRow(rc);
 
             QTableWidgetItem* newItemScanType = new QTableWidgetItem(QLatin1String("No"));
@@ -335,12 +334,12 @@ void MediaServerWindow::on_DeleteDirectoriesButton_clicked()
     QModelIndexList indexes = m_ui->sharedItemsTable->selectionModel()->selectedRows();
     int countRow            = indexes.count();
 
-    for(int i = countRow; i > 0; i--)
+    for (int i = countRow ; i > 0 ; i--)
     {
-        if ((rootDirectoriesMap).contains(indexes[i-1].row()))
-            rootDirectoriesMap.remove(indexes[i-1].row());
+        if ((m_rootDirectoriesMap).contains(indexes[i-1].row()))
+            m_rootDirectoriesMap.remove(indexes[i-1].row());
         else
-            ItemsMap.remove(indexes[i-1].row());
+            m_itemsMap.remove(indexes[i-1].row());
 
         m_ui->sharedItemsTable->removeRow(indexes[i-1].row());
     }
