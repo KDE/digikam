@@ -21,7 +21,6 @@
  */
 
 #include "mediaserver_introductionwindow.h"
-#include "hupnp_global.h"
 
 #include <QtTest>
 #include <QtDebug>
@@ -29,8 +28,6 @@
 
 int main(int argc, char* argv[])
 {
-    Herqq::Upnp::SetLoggingLevel(Herqq::Upnp::Debug);
-
     QApplication app(argc, argv);
     app.setApplicationName(QLatin1String("HUpnpAvSimpleTestApp"));
 

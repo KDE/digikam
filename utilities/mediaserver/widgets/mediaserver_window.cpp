@@ -59,6 +59,8 @@ MediaServerWindow::MediaServerWindow(QWidget* parent)
 {
     m_ui->setupUi(this);
 
+    Herqq::Upnp::SetLoggingLevel(Herqq::Upnp::Debug);
+
     // 1) Configure a data source
     HFileSystemDataSourceConfiguration datasourceConfig;
     // Here you could configure the data source in more detail if needed. For example,
