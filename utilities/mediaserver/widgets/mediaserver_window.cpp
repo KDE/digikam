@@ -120,6 +120,11 @@ MediaServerWindow::~MediaServerWindow()
     delete m_datasource;
 }
 
+void MediaServerWindow::setDeletedFlag()
+{
+    MediaServerWindow::deletedFlag = true;
+}
+
 void MediaServerWindow::initRequiredDirectories()
 {
     if (!QDir(serverDatabasePath).exists())
@@ -138,35 +143,6 @@ void MediaServerWindow::initRequiredDirectories()
             QFile f(serverDescriptionPath);
             f.setPermissions(QFile::ReadUser | QFile::WriteUser | QFile::ExeUser); // 0700
         }
-    }
-}
-
-void MediaServerWindow::addRootDirectoriesToServer(const HRootDir& rd)
-{
-    HRootDir::ScanMode smode = rd.scanMode();
-
-    if (m_datasource->add(rd) >= 0)
-    {
-        int rc = m_ui->sharedItemsTable->rowCount();
-        m_rootDirectoriesMap.insert(rc, rd);
-        m_ui->sharedItemsTable->insertRow(rc);
-
-        QTableWidgetItem* const newItemScanType = new QTableWidgetItem(
-            (smode == HRootDir::RecursiveScan) ? QLatin1String("Yes") : QLatin1String("No"));
-
-        newItemScanType->setFlags(Qt::ItemIsEnabled);
-
-        m_ui->sharedItemsTable->setItem(rc, 0, newItemScanType);
-
-        QTableWidgetItem* const newItemWatchType = new QTableWidgetItem(QLatin1String("No"));
-        newItemWatchType->setFlags(Qt::ItemIsEnabled);
-
-        m_ui->sharedItemsTable->setItem(rc, 1, newItemWatchType);
-
-        QTableWidgetItem* const newItem = new QTableWidgetItem(rd.dir().absolutePath());
-
-        newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        m_ui->sharedItemsTable->setItem(rc, 2, newItem);
     }
 }
 
@@ -244,9 +220,33 @@ void MediaServerWindow::on_addContentButton_clicked()
     }
 }
 
-void MediaServerWindow::setDeletedFlag()
+void MediaServerWindow::addRootDirectoriesToServer(const HRootDir& rd)
 {
-    MediaServerWindow::deletedFlag = true;
+    HRootDir::ScanMode smode = rd.scanMode();
+
+    if (m_datasource->add(rd) >= 0)
+    {
+        int rc = m_ui->sharedItemsTable->rowCount();
+        m_rootDirectoriesMap.insert(rc, rd);
+        m_ui->sharedItemsTable->insertRow(rc);
+
+        QTableWidgetItem* const newItemScanType = new QTableWidgetItem(
+            (smode == HRootDir::RecursiveScan) ? QLatin1String("Yes") : QLatin1String("No"));
+
+        newItemScanType->setFlags(Qt::ItemIsEnabled);
+
+        m_ui->sharedItemsTable->setItem(rc, 0, newItemScanType);
+
+        QTableWidgetItem* const newItemWatchType = new QTableWidgetItem(QLatin1String("No"));
+        newItemWatchType->setFlags(Qt::ItemIsEnabled);
+
+        m_ui->sharedItemsTable->setItem(rc, 1, newItemWatchType);
+
+        QTableWidgetItem* const newItem = new QTableWidgetItem(rd.dir().absolutePath());
+
+        newItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        m_ui->sharedItemsTable->setItem(rc, 2, newItem);
+    }
 }
 
 void MediaServerWindow::addItemsToServer(const QStringList& fullPaths)
