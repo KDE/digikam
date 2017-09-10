@@ -22,6 +22,17 @@
 
 #include "mediaserver_window.h"
 #include "ui_mediaserver_window.h"
+
+// Qt includes
+
+#include <QDir>
+#include <QFileDialog>
+#include <QDataStream>
+#include <QDebug>
+#include <QStandardPaths>
+
+// Hupnp includes
+
 #include "hupnp_global.h"
 #include "hdeviceinfo.h"
 #include "hdevicehost_configuration.h"
@@ -32,14 +43,6 @@
 #include "hmediaserver_deviceconfiguration.h"
 #include "hfsys_datasource.h"
 #include "hcontentdirectory_serviceconfiguration.h"
-
-// QT includes
-
-#include <QDir>
-#include <QFileDialog>
-#include <QDataStream>
-#include <QDebug>
-#include <QStandardPaths>
 
 const QString MediaServerWindow::serverDescriptionPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
               QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediaserver_description.xml")));
@@ -134,25 +137,6 @@ void MediaServerWindow::initRequiredDirectories()
             f.setPermissions(QFile::ReadUser | QFile::WriteUser | QFile::ExeUser); // 0700
         }
     }
-}
-
-void MediaServerWindow::changeEvent(QEvent* e)
-{
-    QMainWindow::changeEvent(e);
-
-    switch (e->type())
-    {
-        case QEvent::LanguageChange:
-            m_ui->retranslateUi(this);
-            break;
-        default:
-            break;
-    }
-}
-
-void MediaServerWindow::closeEvent(QCloseEvent*)
-{
-    emit closed();
 }
 
 void MediaServerWindow::addRootDirectoriesToServer(const HRootDir& rd)
@@ -258,11 +242,6 @@ void MediaServerWindow::on_addContentButton_clicked()
     }
 }
 
-void MediaServerWindow::addContenDlgtFinished()
-{
-    m_ui->addContentButton->setEnabled(true);
-}
-
 void MediaServerWindow::setDeletedFlag()
 {
     MediaServerWindow::deletedFlag = true;
@@ -323,12 +302,6 @@ void MediaServerWindow::addItemsToServer(const QStringList& fullPaths)
     }
 }
 
-void MediaServerWindow::on_addItemButton_clicked()
-{
-    QStringList fullPaths = QFileDialog::getOpenFileNames(this, QLatin1String("Open File(s)"));
-    addItemsToServer(fullPaths);
-}
-
 void MediaServerWindow::on_DeleteDirectoriesButton_clicked()
 {
     QModelIndexList indexes = m_ui->sharedItemsTable->selectionModel()->selectedRows();
@@ -345,7 +318,39 @@ void MediaServerWindow::on_DeleteDirectoriesButton_clicked()
     }
 }
 
+// -- Pure GUI implementations ----------------------------------------------------------
+
+void MediaServerWindow::on_addItemButton_clicked()
+{
+    QStringList fullPaths = QFileDialog::getOpenFileNames(this, QLatin1String("Open File(s)"));
+    addItemsToServer(fullPaths);
+}
+
 void MediaServerWindow::on_HideWindowButton_clicked()
 {
     this->hide();
+}
+
+void MediaServerWindow::changeEvent(QEvent* e)
+{
+    QMainWindow::changeEvent(e);
+
+    switch (e->type())
+    {
+        case QEvent::LanguageChange:
+            m_ui->retranslateUi(this);
+            break;
+        default:
+            break;
+    }
+}
+
+void MediaServerWindow::addContenDlgtFinished()
+{
+    m_ui->addContentButton->setEnabled(true);
+}
+
+void MediaServerWindow::closeEvent(QCloseEvent*)
+{
+    emit closed();
 }

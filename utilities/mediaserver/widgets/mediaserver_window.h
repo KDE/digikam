@@ -23,10 +23,14 @@
 #ifndef MEDIASERVER_WINDOW_H
 #define MEDIASERVER_WINDOW_H
 
+// Qt includes
+
 #include <QtGlobal>
 #include <QMainWindow>
 #include <QPointer>
 #include <QMap>
+
+// Hupnp includes
 
 #include "hav_defs.h"
 #include "hav_fwd.h"
@@ -91,11 +95,11 @@ private Q_SLOTS:
 private:
 
     Ui::MediaServerWindow*     m_ui;
+    QPointer<AddContentDialog> m_dlg;
 
     HDeviceHost*               m_deviceHost;
     HFileSystemDataSource*     m_datasource;
 
-    QPointer<AddContentDialog> m_dlg;
     QMap<int, HRootDir>        m_rootDirectoriesMap;
     QMap<int, QString>         m_itemsMap;
 };
