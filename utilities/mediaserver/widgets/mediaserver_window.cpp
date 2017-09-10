@@ -281,6 +281,7 @@ void MediaServerWindow::addItemsToServer(const QStringList& fullPaths)
                 }
 
                 m_datasource->add(parts.last(), lastParentContainerId);
+                qDebug() << "Add item to mediaserver:" << parts.last() << "::" << lastParentContainerId;
             }
 
             int rc = m_ui->sharedItemsTable->rowCount();

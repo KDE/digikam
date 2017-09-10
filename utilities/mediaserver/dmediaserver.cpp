@@ -146,6 +146,37 @@ void DMediaServer::addImagesOnServer(const QList<QUrl>& imageUrlList)
 
 void DMediaServer::addImagesOnServer(const QMap<QString, QList<QUrl>>& collectionMap)
 {
+//    int                currentSize = 0;
+//    QList<HContainer*> containerList;
+//    QList<HItem*>      itemList;
+    QList<QString>     keys        = collectionMap.uniqueKeys();
+    QList<QUrl>        imageUrlList;
+    QString album;
+
+    for (int i = 0 ; i < keys.size() ; i++)
+    {
+        album                       = keys.at(i);
+        HContainer* const container = new HContainer(album, QLatin1String("0"));
+        d->datasource->add(container);
+
+        imageUrlList.clear();
+        imageUrlList = collectionMap.value(album);
+//        currentSize  = itemList.size();
+
+        for (int j = 0 ; j < imageUrlList.size() ; j++)
+        {
+/*            itemList.append(new HItem(imageUrlList.at(j).fileName(),
+                                      containerList.at(i)->id(),
+                                      QString()));*/
+
+            d->datasource->add(imageUrlList.at(j).toLocalFile(), container->id());
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Add item to mediaserver:" << imageUrlList.at(j).toLocalFile();
+        }
+    }
+}
+/*
+void DMediaServer::addImagesOnServer(const QMap<QString, QList<QUrl>>& collectionMap)
+{
     QList<HContainer*> containerList;
     QList<HItem*>      itemList;
     QList<QString>     keys        = collectionMap.uniqueKeys();
@@ -154,8 +185,7 @@ void DMediaServer::addImagesOnServer(const QMap<QString, QList<QUrl>>& collectio
 
     for (int i = 0 ; i < keys.size() ; i++)
     {
-        containerList.append(new HContainer(keys.at(i),
-                                            QLatin1String("0")));
+        containerList.append(new HContainer(keys.at(i), QLatin1String("0")));
         d->datasource->add(containerList.at(i));
 
         imageUrlList.clear();
@@ -168,9 +198,9 @@ void DMediaServer::addImagesOnServer(const QMap<QString, QList<QUrl>>& collectio
                                       containerList.at(i)->id(),
                                       QString()));
             d->datasource->add(itemList.at(j + currentSize), imageUrlList.at(j).toLocalFile());
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Add item to mediaserver : " << imageUrlList.at(j).toLocalFile();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Add item to mediaserver:" << imageUrlList.at(j).toLocalFile();
         }
     }
 }
-
+*/
 } // namespace Digikam
