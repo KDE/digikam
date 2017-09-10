@@ -55,7 +55,7 @@ HProductToken::HProductToken(const QString& token, const QString& productVersion
     }
     else
     {
-        m_token = tokenTmp;
+        m_token          = tokenTmp;
         m_productVersion = productVersionTmp;
     }
 }
@@ -100,10 +100,10 @@ bool HProductToken::isValidUpnpToken() const
     QString vrs = version();
 
     return (m_token.compare(QLatin1String("upnp"), Qt::CaseInsensitive) == 0) &&
-           (vrs.size() == 3    &&
+           (vrs.size() == 3                 &&
            (vrs[0]     == QLatin1Char('1')) &&
             vrs[1]     == QLatin1Char('.')  &&
-           (vrs[2] == QLatin1Char('0') || vrs[2] == QLatin1Char('1')));
+           (vrs[2]     == QLatin1Char('0') || vrs[2] == QLatin1Char('1')));
 }
 
 bool HProductToken::isValidDlnaDocToken() const
@@ -111,7 +111,7 @@ bool HProductToken::isValidDlnaDocToken() const
     QString vrs = version();
 
     bool b = m_token.compare(QLatin1String("DLNADOC"), Qt::CaseInsensitive) == 0 &&
-             vrs.size() >= 3 &&
+             vrs.size() >= 3            &&
              vrs[0] == QLatin1Char('1') &&
              vrs[1] == QLatin1Char('.');
     if (b)
@@ -186,7 +186,7 @@ qint32 HProductToken::majorVersion()
 
 bool operator==(const HProductToken& obj1, const HProductToken& obj2)
 {
-    return obj1.toString() == obj2.toString();
+    return (obj1.toString() == obj2.toString());
 }
 
 bool operator!=(const HProductToken& obj1, const HProductToken& obj2)
@@ -249,7 +249,8 @@ private:
                 }
 
                 token = buf.mid(lastDelim+1);
-                buf.clear(); j = -1;
+                buf.clear();
+                j = -1;
 
                 continue;
             }
@@ -301,21 +302,25 @@ private:
 
 public:
 
-    int m_upnpTokenIndex, m_dlnaTokenIndex;
-    QString m_originalTokenString;
+    int                    m_upnpTokenIndex, m_dlnaTokenIndex;
+    QString                m_originalTokenString;
     QVector<HProductToken> m_productTokens;
 
 public:
 
     HProductTokensPrivate() :
-        m_upnpTokenIndex(-1), m_dlnaTokenIndex(-1),
-        m_originalTokenString(), m_productTokens()
+        m_upnpTokenIndex(-1),
+        m_dlnaTokenIndex(-1),
+        m_originalTokenString(),
+        m_productTokens()
     {
     }
 
     HProductTokensPrivate(const QString& tokens) :
-        m_upnpTokenIndex(-1), m_dlnaTokenIndex(-1),
-        m_originalTokenString(tokens.simplified()), m_productTokens()
+        m_upnpTokenIndex(-1),
+        m_dlnaTokenIndex(-1),
+        m_originalTokenString(tokens.simplified()),
+        m_productTokens()
     {
         HLOG(H_AT, H_FUN);
 
@@ -353,14 +358,12 @@ public:
             if (index >= 0)
             {
                 qint32 matchedLength = rexp.matchedLength();
-                qint32 slash = index + matchedLength;
-                qint32 nextDelim =
-                    m_originalTokenString.indexOf(QRegExp(QLatin1String("\\s|,")), slash);
+                qint32 slash         = index + matchedLength;
+                qint32 nextDelim     = m_originalTokenString.indexOf(QRegExp(QLatin1String("\\s|,")), slash);
 
                 HProductToken token(
                     m_originalTokenString.mid(index, matchedLength-1),
-                    m_originalTokenString.mid(slash,
-                        nextDelim < 0 ? -1 : nextDelim-slash));
+                    m_originalTokenString.mid(slash, nextDelim < 0 ? -1 : nextDelim-slash));
 
                 if (token.isValidUpnpToken())
                 {
@@ -417,12 +420,12 @@ HProductTokens::~HProductTokens()
 
 bool HProductTokens::hasUpnpToken() const
 {
-    return h_ptr->m_upnpTokenIndex >= 0;
+    return (h_ptr->m_upnpTokenIndex >= 0);
 }
 
 bool HProductTokens::hasDlnaDocToken() const
 {
-    return h_ptr->m_dlnaTokenIndex >= 0;
+    return (h_ptr->m_dlnaTokenIndex >= 0);
 }
 
 bool HProductTokens::isEmpty() const
@@ -432,14 +435,14 @@ bool HProductTokens::isEmpty() const
 
 HProductToken HProductTokens::upnpToken() const
 {
-    return h_ptr->m_upnpTokenIndex >= 0 ?
-               h_ptr->m_productTokens[h_ptr->m_upnpTokenIndex] : HProductToken();
+    return (h_ptr->m_upnpTokenIndex >= 0) ?
+           h_ptr->m_productTokens[h_ptr->m_upnpTokenIndex] : HProductToken();
 }
 
 HProductToken HProductTokens::dlnaDocToken() const
 {
-    return h_ptr->m_dlnaTokenIndex >= 0 ?
-               h_ptr->m_productTokens[h_ptr->m_dlnaTokenIndex] : HProductToken();
+    return (h_ptr->m_dlnaTokenIndex >= 0) ?
+           h_ptr->m_productTokens[h_ptr->m_dlnaTokenIndex] : HProductToken();
 }
 
 QVector<HProductToken> HProductTokens::tokens() const
@@ -454,8 +457,9 @@ QString HProductTokens::toString() const
 
 bool operator==(const HProductTokens& ht1, const HProductTokens& ht2)
 {
-    return ht1.toString() == ht2.toString();
+    return (ht1.toString() == ht2.toString());
 }
 
 }
+
 }

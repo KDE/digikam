@@ -74,6 +74,9 @@ DMediaServer::DMediaServer(QObject* const parent)
     : QObject(parent),
       d(new Private)
 {
+    // Set Hupnp debug level on the console
+    Herqq::Upnp::SetLoggingLevel(Herqq::Upnp::Debug);
+
     // Configure a data source
     HFileSystemDataSourceConfiguration datasourceConfig;
 
@@ -164,7 +167,8 @@ void DMediaServer::addImagesOnServer(const QMap<QString, QList<QUrl>>& collectio
             itemList.append(new HItem(imageUrlList.at(j).fileName(),
                                       containerList.at(i)->id(),
                                       QString()));
-            d->datasource->add(itemList.at(j + currentSize), imageUrlList.at(j).path());
+            d->datasource->add(itemList.at(j + currentSize), imageUrlList.at(j).toLocalFile());
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Add item to mediaserver : " << imageUrlList.at(j).toLocalFile();
         }
     }
 }
