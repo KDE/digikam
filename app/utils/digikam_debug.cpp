@@ -54,3 +54,10 @@ Q_LOGGING_CATEGORY(DIGIKAM_DIMG_LOG_PPM,       "digikam.dimg.ppm",    QtWarningM
 Q_LOGGING_CATEGORY(DIGIKAM_DIMG_LOG_TIFF,      "digikam.dimg.tiff",   QtWarningMsg)
 Q_LOGGING_CATEGORY(DIGIKAM_DIMG_LOG_RAW,       "digikam.dimg.raw",    QtWarningMsg)
 Q_LOGGING_CATEGORY(DIGIKAM_DIMG_LOG_QIMAGE,    "digikam.dimg.qimage", QtWarningMsg)
+
+Q_LOGGING_CATEGORY(DIGIKAM_MEDIASRV_LOG,       "digikam.mediaserver")
+Q_LOGGING_CATEGORY(DIGIKAM_MEDIASRV_LOG_INFO,  "digikam.mediaserver.info",  QtInfoMsg)
+Q_LOGGING_CATEGORY(DIGIKAM_MEDIASRV_LOG_DEBUG, "digikam.mediaserver.debug", QtDebugMsg)
+Q_LOGGING_CATEGORY(DIGIKAM_MEDIASRV_LOG_WARN,  "digikam.mediaserver.warn",  QtWarningMsg)
+Q_LOGGING_CATEGORY(DIGIKAM_MEDIASRV_LOG_NOSTD, "digikam.mediaserver.nostd", QtWarningMsg)
+Q_LOGGING_CATEGORY(DIGIKAM_MEDIASRV_LOG_CRIT,  "digikam.mediaserver.crit",  QtCriticalMsg)
