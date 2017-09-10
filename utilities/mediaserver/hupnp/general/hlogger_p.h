@@ -46,29 +46,29 @@ H_DISABLE_COPY(HLogger)
 
 private:
 
-    const char* m_methodName;
-    const char* m_logPrefix;
+    const char*          m_methodName;
+    const char*          m_logPrefix;
 
-    static volatile int s_logLevel;
+    static volatile int  s_logLevel;
     static volatile bool s_nonStdWarningsEnabled;
 
 public:
 
     enum HLogLevel
     {
-        None = 0,
-        Fatal = 1,
-        Critical = 2,
-        Warning = 3,
+        None        = 0,
+        Fatal       = 1,
+        Critical    = 2,
+        Warning     = 3,
         Information = 4,
-        Debug = 5,
-        All = 6
+        Debug       = 5,
+        All         = 6
     };
 
 public:
 
-    HLogger ();
-    HLogger (const char* at, const char* methodName, const char* logPrefix = 0);
+    HLogger();
+    HLogger(const char* at, const char* methodName, const char* logPrefix = 0);
     ~HLogger();
 
     // the instance methods log the method name if it was specified. static

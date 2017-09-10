@@ -25,25 +25,29 @@
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
 
+#include "digikam_debug.h"
+
 namespace Herqq
 {
 
-volatile int HLogger::s_logLevel = static_cast<qint32>(Critical);
+volatile int  HLogger::s_logLevel = static_cast<qint32>(Critical);
 volatile bool HLogger::s_nonStdWarningsEnabled = true;
 
 HLogger::HLogger() :
-    m_methodName(0), m_logPrefix(0)
+    m_methodName(0),
+    m_logPrefix(0)
 {
 }
 
 HLogger::HLogger(const char* at, const char* methodName, const char* logPrefix) :
-    m_methodName(methodName), m_logPrefix(logPrefix)
+    m_methodName(methodName),
+    m_logPrefix(logPrefix)
 {
     if (traceLevel() == All)
     {
         QString stmt = (m_logPrefix ? QString(QLatin1String(m_logPrefix)) : QString()).append(QString(QLatin1String("Entering %1 @ %2")).arg(QLatin1String(m_methodName), QLatin1String(at)));
 
-        qDebug() << stmt;
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << stmt;
     }
 }
 
@@ -53,40 +57,41 @@ HLogger::~HLogger()
     {
         QString stmt = (m_logPrefix ? QString(QLatin1String(m_logPrefix)) : QString()).append(QString(QLatin1String("Exiting %1")).arg(QLatin1String(m_methodName)));
 
-        qDebug() << stmt;
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << stmt;
     }
 }
 
 namespace
 {
+
 inline QString stmt(const char* prefix, const QString& text)
 {
     return (prefix ? QString(QLatin1String(prefix)) : QString()).append(text);
 }
+
 }
 
 void HLogger::logDebug(const QString& text)
 {
-    qDebug() << stmt(m_logPrefix, text);
+    qCDebug(DIGIKAM_MEDIASRV_LOG_DEBUG) << stmt(m_logPrefix, text);
 }
 
 void HLogger::logWarning(const QString& text)
 {
-    qWarning() << stmt(m_logPrefix, text);
+    qCWarning(DIGIKAM_MEDIASRV_LOG_WARN) << stmt(m_logPrefix, text);
 }
 
 void HLogger::logWarningNonStd(const QString& text)
 {
     if (s_nonStdWarningsEnabled)
     {
-        qWarning() << stmt(
-            m_logPrefix, QString(QLatin1String("**NON-STANDARD BEHAVIOR**: %1")).arg(text));
+        qCWarning(DIGIKAM_MEDIASRV_LOG_NOSTD) << stmt(m_logPrefix, QString(QLatin1String("**NON-STANDARD BEHAVIOR**: %1")).arg(text));
     }
 }
 
 void HLogger::logInformation(const QString& text)
 {
-    qDebug() << stmt(m_logPrefix, text);
+    qCDebug(DIGIKAM_MEDIASRV_LOG_INFO) << stmt(m_logPrefix, text);
 }
 
 void HLogger::logFatal(const QString& text)
@@ -96,14 +101,14 @@ void HLogger::logFatal(const QString& text)
 
 void HLogger::logCritical(const QString& text)
 {
-    qCritical() << stmt(m_logPrefix, text);
+    qCCritical(DIGIKAM_MEDIASRV_LOG_CRIT) << stmt(m_logPrefix, text);
 }
 
 void HLogger::logDebug_(const QString& text)
 {
     if (traceLevel() >= Debug)
     {
-        qDebug() << text;
+        qCDebug(DIGIKAM_MEDIASRV_LOG_DEBUG) << text;
     }
 }
 
@@ -111,7 +116,7 @@ void HLogger::logWarning_(const QString& text)
 {
     if (traceLevel() >= Warning)
     {
-        qWarning() << text;
+        qCWarning(DIGIKAM_MEDIASRV_LOG_WARN) << text;
     }
 }
 
@@ -119,7 +124,7 @@ void HLogger::logWarningNonStd_(const QString& text)
 {
     if (traceLevel() && s_nonStdWarningsEnabled)
     {
-        qWarning() << QString(QLatin1String("**NON-STANDARD BEHAVIOR**: %1")).arg(text);
+        qCWarning(DIGIKAM_MEDIASRV_LOG_NOSTD) << QString(QLatin1String("**NON-STANDARD BEHAVIOR**: %1")).arg(text);
     }
 }
 
@@ -127,7 +132,7 @@ void HLogger::logInformation_(const QString& text)
 {
     if (traceLevel() >= Information)
     {
-        qDebug() << text;
+        qCDebug(DIGIKAM_MEDIASRV_LOG_INFO) << text;
     }
 }
 
@@ -135,7 +140,7 @@ void HLogger::logCritical_(const QString& text)
 {
     if (traceLevel() >= Critical)
     {
-        qCritical() << text;
+        qCCritical(DIGIKAM_MEDIASRV_LOG_CRIT) << text;
     }
 }
 
