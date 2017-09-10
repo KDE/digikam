@@ -59,10 +59,12 @@ MediaServerWindow::MediaServerWindow(QWidget* const parent)
 {
     m_ui->setupUi(this);
 
+    // Set Hupnp debug level on the console
     Herqq::Upnp::SetLoggingLevel(Herqq::Upnp::Debug);
 
     // 1) Configure a data source
     HFileSystemDataSourceConfiguration datasourceConfig;
+
     // Here you could configure the data source in more detail if needed. For example,
     // you could add "root directories" to the configuration and the data source
     // would scan those directories for media content upon initialization.
@@ -76,7 +78,7 @@ MediaServerWindow::MediaServerWindow(QWidget* const parent)
     HMediaServerDeviceConfiguration mediaServerConfig;
     mediaServerConfig.setContentDirectoryConfiguration(cdsConfig);
 
-    // 4) Setup the "Device Model Cretor" that HUPnP will use to create
+    // 4) Setup the "Device Model Creator" that HUPnP will use to create
     // appropriate UPnP A/V device and service instances. Here you provide the
     // MediaServer configuration HUPnP will pass to the MediaServer device instance.
     HAvDeviceModelCreator creator;
