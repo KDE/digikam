@@ -83,7 +83,7 @@ DMediaServerMngr::DMediaServerMngr()
 
     if (StartServerOnStartup)
     {
-        slotTurnOn();
+        //slotTurnOn();
     }
 }
 

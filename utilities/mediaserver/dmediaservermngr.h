@@ -48,7 +48,7 @@ public:
     void setCollectionMap(const QMap<QString, QList<QUrl>>&);
     void startMediaServer();
     void cleanUp();
- 
+
 public:
 
     static DMediaServerMngr* instance();
