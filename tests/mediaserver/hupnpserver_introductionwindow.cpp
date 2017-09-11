@@ -20,9 +20,9 @@
  *  along with HUpnpAvSimpleTestApp. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mediaserver_introductionwindow.h"
-#include "ui_mediaserver_introductionwindow.h"
-#include "mediaserver_window.h"
+#include "hupnpserver_introductionwindow.h"
+#include "ui_hupnpserver_introductionwindow.h"
+#include "hupnpserver_window.h"
 
 MediaServerIntroductionWindow::MediaServerIntroductionWindow(QWidget* parent)
     : QMainWindow(parent),
