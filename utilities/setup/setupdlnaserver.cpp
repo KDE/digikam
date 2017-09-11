@@ -82,7 +82,7 @@ SetupDlna::SetupDlna(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    d->iface             = new DBInfoIface(this);
+    d->iface             = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);
     const int spacing    = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
