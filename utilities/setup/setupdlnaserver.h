@@ -49,7 +49,6 @@ private:
 private Q_SLOTS:
 
     void slotSelectionChanged();
-    void slotSettingsChanged();
     void slotStartMediaServer();
 
 private:

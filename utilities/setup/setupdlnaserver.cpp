@@ -156,11 +156,6 @@ void SetupDlna::slotSelectionChanged()
     // TODO
 }
 
-void SetupDlna::slotSettingsChanged()
-{
-    // TODO
-}
-
 void SetupDlna::slotStartMediaServer()
 {
     DInfoInterface::DAlbumIDs albums = d->iface->albumChooserItems();
