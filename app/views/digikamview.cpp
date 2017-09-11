@@ -87,7 +87,6 @@
 #include "trashview.h"
 #include "versionmanagersettings.h"
 #include "contextmenuhelper.h"
-#include "mediaserver_window.h"
 
 #ifdef HAVE_MEDIAPLAYER
 #   include "mediaplayerview.h"
@@ -412,18 +411,6 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
-
-    // load mediaserver on startup
-
-    KSharedConfig::Ptr config    = KSharedConfig::openConfig();
-    KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
-    bool StartServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start Server On Startup"),false);
-    bool StartServerInBackground = dlnaConfigGroup.readEntry(QLatin1String("Start Server In Background"),false);
-
-    if(StartServerOnStartup)
-    {
-        slotMediaServer(true, StartServerInBackground);
-    }
 }
 
 DigikamView::~DigikamView()

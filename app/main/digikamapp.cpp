@@ -128,6 +128,7 @@
 #include "mailwizard.h"
 #include "advprintwizard.h"
 #include "dfiledialog.h"
+#include "dmediaservermngr.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -215,6 +216,7 @@ DigikamApp::DigikamApp()
     ProgressManager::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
     DIO::instance();
+    DMediaServerMngr::instance();
 
     // creation of the engine on first use - when drawing -
     // can take considerable time and cause a noticeable hang in the UI thread.
