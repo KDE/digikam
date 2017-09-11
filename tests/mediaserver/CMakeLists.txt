@@ -16,9 +16,9 @@ include_directories(
 )
 
 set(hupnpav_servertest_SRCS
-    hupnpserver_main.cpp
-    hupnpserver_window.cpp
-    hupnpserver_introductionwindow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/hupnpserver_main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/hupnpserver_window.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/hupnpserver_introductionwindow.cpp
 )
 
 qt5_wrap_ui(hupnpav_servertest_SRCS
@@ -40,3 +40,18 @@ target_link_libraries(hupnpav_servertest
 
 ########################################################################
 
+set(dmediaservertest_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/dmediaserver_test.cpp
+)
+
+add_executable(dmediaservertest ${dmediaservertest_SRCS})
+
+target_link_libraries(dmediaservertest
+                      digikamcore
+                      libdng
+
+                      Qt5::Widgets
+                      Qt5::Gui
+                      Qt5::Core
+                      Qt5::Test
+)

@@ -57,7 +57,7 @@ public Q_SLOTS:
 
     void slotTurnOff();
     void slotTurnOn();
-    
+
 private:
 
     explicit DMediaServerMngr();
