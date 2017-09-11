@@ -116,7 +116,11 @@ void DMediaServerMngr::setCollectionMap(const QMap<QString, QList<QUrl>>& collec
 
 void DMediaServerMngr::startMediaServer()
 {
-    d->server = new DMediaServer();
+    if (!d->server)
+    {
+        d->server = new DMediaServer();
+    }
+
     d->server->addImagesOnServer(d->collectionMap);
 }
 
