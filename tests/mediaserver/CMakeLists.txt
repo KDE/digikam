@@ -15,18 +15,20 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-set(mediaservertest_SRCS
+set(hupnpav_servertest_SRCS
     main.cpp
+    mediaserver_window.cpp
     mediaserver_introductionwindow.cpp
 )
 
-qt5_wrap_ui(mediaservertest_SRCS
+qt5_wrap_ui(hupnpav_servertest_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/mediaserver_window.ui
             ${CMAKE_CURRENT_SOURCE_DIR}/mediaserver_introductionwindow.ui
 )
 
-add_executable(mediaservertest ${mediaservertest_SRCS})
+add_executable(hupnpav_servertest ${hupnpav_servertest_SRCS})
 
-target_link_libraries(mediaservertest
+target_link_libraries(hupnpav_servertest
                       digikamcore
                       libdng
 

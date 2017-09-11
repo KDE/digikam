@@ -10,7 +10,6 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libmediaserver_SRCS
-    widgets/mediaserver_window.cpp
     dmediaserver.cpp
     dmediaservermngr.cpp
     hupnp/dataelements/hactioninfo.cpp 
@@ -222,10 +221,6 @@ set(libmediaserver_SRCS
     hupnp_av/cds_model/model_mgmt/hcdsproperty_db.cpp 
     hupnp_av/cds_model/model_mgmt/hcdspropertyinfo.cpp
     qtsoap/qtsoap.cpp
-)
-
-ki18n_wrap_ui(libmediaserver_SRCS
-              ${CMAKE_CURRENT_SOURCE_DIR}/widgets/mediaserver_window.ui
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
