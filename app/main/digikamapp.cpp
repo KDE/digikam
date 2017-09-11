@@ -375,6 +375,7 @@ DigikamApp::~DigikamApp()
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
     DIO::cleanUp();
+    DMediaServerMngr::instance()->cleanUp();
 
     // close database server
     if (ApplicationSettings::instance()->getDbEngineParameters().internalServer)
