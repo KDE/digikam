@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-05-11
- * Description : setup Light Table tab.
+ * Description : setup Media Server tab.
  *
  * Copyright (C) 2007-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_DLNA_H
-#define SETUP_DLNA_H
+#ifndef SETUP_MEDIA_SERVER_H
+#define SETUP_MEDIA_SERVER_H
 
 // Qt includes
 
@@ -48,7 +48,9 @@ private:
 
 private Q_SLOTS:
 
+    void slotSelectionChanged();
     void slotSettingsChanged();
+    void slotStartMediaServer();
 
 private:
 
@@ -58,4 +60,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SETUP_DLNA_H
+#endif // SETUP_MEDIA_SERVER_H

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-05-11
- * Description : setup DLNA Server tab.
+ * Description : setup Media Server tab.
  *
  * Copyright (C) 2007-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2017      by Ahmed Fathy <ahmed dot fathi dot abdelmageed at gmail dot com>
@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QPushButton>
 #include <QCheckBox>
 #include <QColor>
 #include <QGroupBox>
@@ -41,8 +42,10 @@
 
 // Local includes
 
-#include "fullscreensettings.h"
-#include "dxmlguiwindow.h"
+#include "dlayoutbox.h"
+#include "dbinfoiface.h"
+#include "dmediaservermngr.h"
+#include "albumselecttabs.h"
 
 namespace Digikam
 {
@@ -52,30 +55,35 @@ class SetupDlna::Private
 public:
 
     Private() :
+        mngr(DMediaServerMngr::instance()),
+        iface(0),
         startServerOnStartupCheckBox(0),
-        startInBackgroundCheckBox(0)
+        startButton(0),
+        stopButton(0)
     {
     }
 
-    QCheckBox*  startServerOnStartupCheckBox;
-    QCheckBox*  startInBackgroundCheckBox;
+    DMediaServerMngr*    mngr;
+    DBInfoIface*         iface;
+    QCheckBox*           startServerOnStartupCheckBox;
+    QPushButton*         startButton;
+    QPushButton*         stopButton;
+
     static const QString configGroupName;
     static const QString configstartServerOnStartupCheckBoxEntry;
-    static const QString configstartInBackgroundCheckBoxEntry;
 };
 
 // --------------------------------------------------------
 
 const QString SetupDlna::Private::configGroupName(QLatin1String("DLNA Settings"));
 const QString SetupDlna::Private::configstartServerOnStartupCheckBoxEntry(QLatin1String("Start Server On Startup"));
-const QString SetupDlna::Private::configstartInBackgroundCheckBoxEntry(QLatin1String("Start Server In Background"));
 
 SetupDlna::SetupDlna(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    d->iface             = new DBInfoIface(this);
+    const int spacing    = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
@@ -90,29 +98,36 @@ SetupDlna::SetupDlna(QWidget* const parent)
 
     d->startServerOnStartupCheckBox = new QCheckBox(i18n("Automatic Start Server at Startup"));
     d->startServerOnStartupCheckBox->setWhatsThis(i18n("Set this option to start the DLNA server on digiKam start"));
-    gLayout->addWidget(d->startServerOnStartupCheckBox);
     d->startServerOnStartupCheckBox->setChecked(true);
 
-    d->startInBackgroundCheckBox = new QCheckBox(i18n("Start Server In Background"));
-    d->startInBackgroundCheckBox->setWhatsThis(i18n("Set this option to start the DLNA server "
-                                                    "In Background without showing the server window"));
-    gLayout->addWidget(d->startInBackgroundCheckBox);
+    DHBox* const btnBox   = new DHBox(panel);
+    d->startButton        = new QPushButton(i18n("Start"), btnBox);
+    QWidget* const spacer = new QWidget(btnBox);
+    d->stopButton         = new QPushButton(i18n("Stop"),  btnBox);
+    btnBox->setStretchFactor(spacer, 10);
+
+    gLayout->addWidget(d->startServerOnStartupCheckBox);
+    gLayout->addWidget(d->iface->albumChooser(this));
+    gLayout->addWidget(btnBox);
     gLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     gLayout->setSpacing(0);
 
     layout->addWidget(dlnaServerSettingsGroup);
     layout->setContentsMargins(QMargins());
     layout->setSpacing(spacing);
-    layout->addStretch();
 
     // --------------------------------------------------------
 
-    connect(d->startServerOnStartupCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotSettingsChanged()));
+    connect(d->iface, SIGNAL(signalAlbumChooserSelectionChanged()),
+            this, SLOT(slotSelectionChanged()));
+
+    connect(d->stopButton, SIGNAL(clicked()),
+            d->mngr, SLOT(slotTurnOff()));
+
+    connect(d->startButton, SIGNAL(clicked()),
+            this, SLOT(slotStartMediaServer()));
 
     readSettings();
-
-    d->startInBackgroundCheckBox->setEnabled(d->startServerOnStartupCheckBox->isChecked());
 }
 
 SetupDlna::~SetupDlna()
@@ -126,7 +141,6 @@ void SetupDlna::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->startServerOnStartupCheckBox->setChecked(group.readEntry(d->configstartServerOnStartupCheckBoxEntry,  false));
-    d->startInBackgroundCheckBox->setChecked(group.readEntry(d->configstartInBackgroundCheckBoxEntry,        false));
 }
 
 void SetupDlna::applySettings()
@@ -134,13 +148,27 @@ void SetupDlna::applySettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configstartServerOnStartupCheckBoxEntry, d->startServerOnStartupCheckBox->isChecked());
-    group.writeEntry(d->configstartInBackgroundCheckBoxEntry, d->startInBackgroundCheckBox->isChecked());
     config->sync();
 }
 
-void SetupDlna::slotSettingsChanged()
+void SetupDlna::slotSelectionChanged()
 {
-    d->startInBackgroundCheckBox->setEnabled(d->startServerOnStartupCheckBox->isChecked());
+    // TODO
+}
+
+void SetupDlna::slotStartMediaServer()
+{
+    DInfoInterface::DAlbumIDs albums = d->iface->albumChooserItems();
+    QMap<QString, QList<QUrl>> map;
+
+    foreach(int id, albums)
+    {
+        DAlbumInfo anf(d->iface->albumInfo(id));
+        map.insert(anf.title(), d->iface->albumItems(id));
+    }
+
+    d->mngr->setCollectionMap(map);
+    d->mngr->slotTurnOn();
 }
 
 }  // namespace Digikam
