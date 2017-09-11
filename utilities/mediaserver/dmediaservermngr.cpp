@@ -75,16 +75,6 @@ DMediaServerMngr* DMediaServerMngr::instance()
 DMediaServerMngr::DMediaServerMngr()
     : d(new Private)
 {
-    // Load mediaserver at startup ?
-
-    KSharedConfig::Ptr config    = KSharedConfig::openConfig();
-    KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
-    bool StartServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start Server On Startup"),false);
-
-    if (StartServerOnStartup)
-    {
-        //slotTurnOn();
-    }
 }
 
 DMediaServerMngr::~DMediaServerMngr()
@@ -102,6 +92,21 @@ void DMediaServerMngr::slotTurnOff()
 {
     delete d->server;
     d->server = 0;
+}
+
+void DMediaServerMngr::checkLoadAtStartup()
+{
+    // Load mediaserver at startup ?
+
+    KSharedConfig::Ptr config    = KSharedConfig::openConfig();
+    KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
+    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start Server On Startup"), false);
+
+    if (startServerOnStartup)
+    {
+        // TODO: restore old configuration.
+        slotTurnOn();
+    }
 }
 
 void DMediaServerMngr::slotTurnOn()

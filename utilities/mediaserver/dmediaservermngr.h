@@ -45,6 +45,7 @@ class DIGIKAM_EXPORT DMediaServerMngr : public QObject
 
 public:
 
+    void checkLoadAtStartup();
     void setCollectionMap(const QMap<QString, QList<QUrl>>&);
     void startMediaServer();
     void cleanUp();
