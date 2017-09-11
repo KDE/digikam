@@ -89,7 +89,6 @@ DMediaServerMngr::DMediaServerMngr()
 
 DMediaServerMngr::~DMediaServerMngr()
 {
-    cleanUp();
     delete d;
 }
 
