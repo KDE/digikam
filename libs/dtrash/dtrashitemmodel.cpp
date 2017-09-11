@@ -114,6 +114,7 @@ QVariant DTrashItemModel::data(const QModelIndex& index, int role) const
     if (role == Qt::DecorationRole && index.column() == 0)
     {
         QPixmap pix;
+
         if (pixmapForItem(item.trashPath, pix))
         {
             return pix;
@@ -181,8 +182,11 @@ bool DTrashItemModel::pixmapForItem(const QString& path, QPixmap& pix) const
 
 QVariant DTrashItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation != Qt::Horizontal) return QVariant();
-    if (role != Qt::DisplayRole) return QVariant();
+    if (orientation != Qt::Horizontal)
+        return QVariant();
+
+    if (role != Qt::DisplayRole)
+        return QVariant();
 
     switch (section)
     {
