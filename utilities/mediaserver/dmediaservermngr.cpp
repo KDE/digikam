@@ -60,6 +60,7 @@ public:
 
     Private()
     {
+        server = 0;
     }
 
     DMediaServer*              server;
@@ -88,6 +89,7 @@ DMediaServerMngr::DMediaServerMngr()
 
 DMediaServerMngr::~DMediaServerMngr()
 {
+    cleanUp();
     delete d;
 }
 
