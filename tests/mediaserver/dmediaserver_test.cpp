@@ -35,6 +35,7 @@
 
 #include "dmediaservermngr.h"
 #include "dfiledialog.h"
+#include "dbusydlg.h"
 
 using namespace Digikam;
 
@@ -47,7 +48,7 @@ int main(int argc, char* argv[])
     {
         QStringList files = DFileDialog::getOpenFileNames(0, QString::fromLatin1("Select Files to Share With Media Server"),
                                                           QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first(),
-                                                          QLatin1String("*.jpg"));
+                                                          QLatin1String("Image Files (*.png *.jpg *.tif *.nef *.cr2)"));
 
         foreach(const QString& f, files)
             list.append(QUrl::fromLocalFile(f));
@@ -64,7 +65,9 @@ int main(int argc, char* argv[])
         map.insert(QLatin1String("Test Collection"), list);
         DMediaServerMngr::instance()->setCollectionMap(map);
         DMediaServerMngr::instance()->slotTurnOn();
-        app.exec();
+        DBusyDlg* const pdlg = new DBusyDlg(QLatin1String("Sharing files on the network"));
+        pdlg->exec();
+        DMediaServerMngr::instance()->cleanUp();
     }
 
     return 0;
