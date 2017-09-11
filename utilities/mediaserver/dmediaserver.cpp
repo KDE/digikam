@@ -107,7 +107,7 @@ DMediaServer::DMediaServer(QObject* const parent)
 
     config.setPathToDeviceDescription(filePath);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "filepath properly set : " << filePath;
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << "Using MediaServer description:" << filePath;
 
     config.setCacheControlMaxAge(180);
 
@@ -120,8 +120,8 @@ DMediaServer::DMediaServer(QObject* const parent)
 
     if (!d->deviceHost->init(hostConfiguration))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Initialization failed. Description : "
-                                     << d->deviceHost->errorDescription().toLocal8Bit();
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "MediaServer initialization failed:"
+                                      << d->deviceHost->errorDescription().toLocal8Bit();
     }
 }
 
@@ -160,7 +160,7 @@ void DMediaServer::addImagesOnServer(const QMap<QString, QList<QUrl>>& collectio
         for (int j = 0 ; j < imgUrls.size() ; j++)
         {
             d->datasource->add(imgUrls.at(j).toLocalFile(), container->id());
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Add item to mediaserver:" << imgUrls.at(j).toLocalFile();
+            qCDebug(DIGIKAM_MEDIASRV_LOG) << "Add item to mediaserver:" << imgUrls.at(j).toLocalFile();
         }
     }
 }
