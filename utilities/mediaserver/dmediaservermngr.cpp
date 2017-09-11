@@ -31,6 +31,11 @@
 #include <QStringList>
 #include <QUrl>
 
+// KDE includes
+
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 // Local includes
 
 #include "dmediaserver.h"
