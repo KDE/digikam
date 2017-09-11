@@ -255,7 +255,6 @@ public Q_SLOTS:
     void slotLightTable();
     void slotQueueMgr();
     void slotFileWithDefaultApplication();
-    void slotMediaServer(bool onStartup = false, bool startInBackground = false);
 
     void slotLeftSideBarActivate(QWidget* widget);
     void slotLeftSideBarActivate(SidebarWidget* widget);

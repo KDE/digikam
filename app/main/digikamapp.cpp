@@ -972,13 +972,6 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("queue_manager"), d->bqmAction);
     ac->setDefaultShortcut(d->bqmAction, Qt::Key_B);
 
-    // dlna media server action
-
-    d->dlnaMediaServerAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-right-double")),i18n("DLNA Media Server"), this);
-    connect(d->dlnaMediaServerAction, SIGNAL(triggered()), d->view, SLOT(slotMediaServer()));
-    ac->addAction(QLatin1String("media_server"), d->dlnaMediaServerAction);
-    ac->setDefaultShortcut(d->dlnaMediaServerAction, Qt::Key_D);
-
     d->imageAddCurrentQueueAction = new QAction(QIcon::fromTheme(QLatin1String("go-up")), i18n("Add to Current Queue"), this);
     d->imageAddCurrentQueueAction->setWhatsThis(i18n("Add selected items to current queue from batch manager."));
     connect(d->imageAddCurrentQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToCurrentQueue()));
@@ -3401,7 +3394,6 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(d->maintenanceAction,          mainCategory);
     actionModel->addAction(d->ltAction,                   mainCategory);
     actionModel->addAction(d->advSearchAction,            mainCategory);
-    actionModel->addAction(d->dlnaMediaServerAction,      mainCategory);
 
     QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
     actionModel->addAction(m_expoBlendingAction,          postCategory);

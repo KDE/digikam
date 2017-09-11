@@ -171,7 +171,6 @@ public:
         maintenanceAction(0),
         qualityAction(0),
         advSearchAction(0),
-        dlnaMediaServerAction(0),
         addCameraSeparatorAction(0),
         quitAction(0),
         tipAction(0),
@@ -300,7 +299,6 @@ public:
     QAction*                            maintenanceAction;
     QAction*                            qualityAction;
     QAction*                            advSearchAction;
-    QAction*                            dlnaMediaServerAction;
 
     // Application Actions
     QAction*                            addCameraSeparatorAction;
