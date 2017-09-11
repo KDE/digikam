@@ -63,6 +63,7 @@ int main(int argc, char* argv[])
         QMap<QString, QList<QUrl> > map;
         map.insert(QLatin1String("Test Collection"), list);
         DMediaServerMngr::instance()->setCollectionMap(map);
+        DMediaServerMngr::instance()->slotTurnOn();
         app.exec();
     }
 
