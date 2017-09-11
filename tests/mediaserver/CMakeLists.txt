@@ -16,14 +16,14 @@ include_directories(
 )
 
 set(hupnpav_servertest_SRCS
-    main.cpp
-    mediaserver_window.cpp
-    mediaserver_introductionwindow.cpp
+    hupnpserver_main.cpp
+    hupnpserver_window.cpp
+    hupnpserver_introductionwindow.cpp
 )
 
 qt5_wrap_ui(hupnpav_servertest_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/mediaserver_window.ui
-            ${CMAKE_CURRENT_SOURCE_DIR}/mediaserver_introductionwindow.ui
+            ${CMAKE_CURRENT_SOURCE_DIR}/hupnpserver_window.ui
+            ${CMAKE_CURRENT_SOURCE_DIR}/hupnpserver_introductionwindow.ui
 )
 
 add_executable(hupnpav_servertest ${hupnpav_servertest_SRCS})
@@ -37,3 +37,6 @@ target_link_libraries(hupnpav_servertest
                       Qt5::Core
                       Qt5::Test
 )
+
+########################################################################
+
