@@ -73,7 +73,7 @@ DTrashItemModel::DTrashItemModel(QObject* parent)
     : QAbstractTableModel(parent), d(new Private)
 {
     qRegisterMetaType<DTrashItemInfo>("DTrashItemInfo");
-    d->thumbnailThread = new ThumbnailLoadThread(this);
+    d->thumbnailThread = ThumbnailLoadThread::defaultThread();
 
     d->timer = new QTimer();
     d->timer->setInterval(100);
@@ -85,8 +85,7 @@ DTrashItemModel::DTrashItemModel(QObject* parent)
 
 DTrashItemModel::~DTrashItemModel()
 {
-    d->thumbnailThread->cleanUp();
-    delete d->thumbnailThread;
+    delete d;
 }
 
 int DTrashItemModel::rowCount(const QModelIndex&) const
