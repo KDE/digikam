@@ -42,7 +42,8 @@ using namespace Digikam;
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    QList<QUrl> list;
+    QList<QUrl>  list;
+    QMap<QString, QList<QUrl> > map;
 
     if (argc <= 1)
     {
@@ -61,22 +62,28 @@ int main(int argc, char* argv[])
 
     if (!list.isEmpty())
     {
-        QMap<QString, QList<QUrl> > map;
         map.insert(QLatin1String("Test Collection"), list);
         DMediaServerMngr::instance()->setCollectionMap(map);
-        DMediaServerMngr::instance()->slotTurnOn();
-
-        QProgressDialog* const pdlg = new QProgressDialog(0);
-        pdlg->setLabelText(QLatin1String("Sharing files on the network"));
-        pdlg->setMinimumDuration(0);
-        pdlg->setCancelButtonText(QLatin1String("Close"));
-        pdlg->setMaximum(0);
-        pdlg->setMinimum(0);
-        pdlg->setValue(0);
-        pdlg->exec();
-
-        DMediaServerMngr::instance()->cleanUp();
     }
+    else
+    {
+        if (!DMediaServerMngr::instance()->load())
+            return -1;
+    }
+ 
+    DMediaServerMngr::instance()->slotTurnOn();
+
+    QProgressDialog* const pdlg = new QProgressDialog(0);
+    pdlg->setLabelText(QLatin1String("Sharing files on the network"));
+    pdlg->setMinimumDuration(0);
+    pdlg->setCancelButtonText(QLatin1String("Close"));
+    pdlg->setMaximum(0);
+    pdlg->setMinimum(0);
+    pdlg->setValue(0);
+    pdlg->exec();
+
+    DMediaServerMngr::instance()->save();
+    DMediaServerMngr::instance()->cleanUp();
 
     return 0;
 }

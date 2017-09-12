@@ -49,6 +49,10 @@ public:
     void setCollectionMap(const QMap<QString, QList<QUrl>>&);
     void startMediaServer();
     void cleanUp();
+    
+    // To save and load from xml data file.
+    bool save();
+    bool load();
 
 public:
 

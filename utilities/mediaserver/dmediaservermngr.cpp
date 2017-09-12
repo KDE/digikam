@@ -30,6 +30,12 @@
 #include <QMap>
 #include <QStringList>
 #include <QUrl>
+#include <QFile>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QTextStream>
+#include <QTextCodec>
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -39,6 +45,7 @@
 // Local includes
 
 #include "dmediaserver.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -63,6 +70,7 @@ public:
         server = 0;
     }
 
+    QString                    file;
     DMediaServer*              server;
     QMap<QString, QList<QUrl>> collectionMap;
 };
@@ -75,6 +83,8 @@ DMediaServerMngr* DMediaServerMngr::instance()
 DMediaServerMngr::DMediaServerMngr()
     : d(new Private)
 {
+    d->file = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
+              QLatin1String("/digikam/mediaserver.xml");
 }
 
 DMediaServerMngr::~DMediaServerMngr()
@@ -126,6 +136,132 @@ void DMediaServerMngr::startMediaServer()
     }
 
     d->server->addImagesOnServer(d->collectionMap);
+}
+
+bool DMediaServerMngr::save()
+{
+    // If not modified don't save the file
+/*    if (!d->modified)
+    {
+        return true;
+    }
+*/
+    QDomDocument doc(QString::fromLatin1("mediaserverlist"));
+    doc.setContent(QString::fromUtf8("<!DOCTYPE XMLQueueList><mediaserverlist version=\"1.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
+    QDomElement docElem = doc.documentElement();
+
+    auto end = d->collectionMap.cend();
+
+    for (auto it = d->collectionMap.cbegin() ; it != end ; ++it)
+    {
+        QDomElement elm = doc.createElement(QString::fromLatin1("album"));
+        elm.setAttribute(QString::fromLatin1("title"), it.key());
+
+        // ----------------------
+
+        QDomElement data;
+
+        foreach(const QUrl& url, it.value())
+        {
+            data = doc.createElement(QString::fromLatin1("path"));
+            data.setAttribute(QString::fromLatin1("value"), url.toLocalFile());
+            elm.appendChild(data);
+        }
+
+        docElem.appendChild(elm);
+    }
+   
+    QFile file(d->file);
+
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "Cannot open XML file to store MediaServer list";
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << file.fileName();
+        return false;
+    }
+
+    QTextStream stream(&file);
+    stream.setCodec(QTextCodec::codecForName("UTF-8"));
+    stream.setAutoDetectUnicode(true);
+    stream << doc.toString(4);
+    file.close();
+
+    return true;
+}
+
+bool DMediaServerMngr::load()
+{
+    //d->modified = false;
+
+    QFile file(d->file);
+
+    if (file.exists())
+    {
+        if (!file.open(QIODevice::ReadOnly))
+        {
+            qCDebug(DIGIKAM_MEDIASRV_LOG) << "Cannot open XML file to load MediaServer list";
+            return false;
+        }
+
+        QDomDocument doc(QString::fromLatin1("mediaserverlist"));
+
+        if (!doc.setContent(&file))
+        {
+            qCDebug(DIGIKAM_MEDIASRV_LOG) << "Cannot load MediaServer list XML file";
+            return false;
+        }
+
+        QDomElement                docElem = doc.documentElement();
+        QMap<QString, QList<QUrl>> map;
+        QList<QUrl>                urls;
+        QString                    album;
+
+        for (QDomNode n = docElem.firstChild() ; !n.isNull() ; n = n.nextSibling())
+        {
+            QDomElement e = n.toElement();
+
+            if (e.isNull())
+            {
+                continue;
+            }
+
+            if (e.tagName() != QString::fromLatin1("album"))
+            {
+                continue;
+            }
+
+            album = e.attribute(QString::fromLatin1("title"));
+            urls.clear();
+
+            for (QDomNode n2 = e.firstChild() ; !n2.isNull() ; n2 = n2.nextSibling())
+            {
+                QDomElement e2 = n2.toElement();
+
+                if (e2.isNull())
+                {
+                    continue;
+                }
+
+                QString name2 = e2.tagName();
+                QString val2  = e2.attribute(QString::fromLatin1("value"));
+
+                if (name2 == QString::fromLatin1("path"))
+                {
+                    urls << QUrl::fromLocalFile(val2);
+                }
+            }
+
+            map.insert(album, urls);
+        }
+
+        setCollectionMap(map);
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 } // namespace Digikam
