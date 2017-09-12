@@ -67,8 +67,12 @@ int main(int argc, char* argv[])
     }
     else
     {
-        if (!DMediaServerMngr::instance()->load())
+        QMap<QString, QList<QUrl> > map;
+
+        if (!DMediaServerMngr::instance()->load(map))
             return -1;
+        
+        DMediaServerMngr::instance()->setCollectionMap(map);
     }
  
     DMediaServerMngr::instance()->slotTurnOn();

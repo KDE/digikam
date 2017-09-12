@@ -45,13 +45,13 @@ class DIGIKAM_EXPORT DMediaServerMngr : public QObject
 
 public:
 
-    void setCollectionMap(const QMap<QString, QList<QUrl>>&);
+    void setCollectionMap(const QMap<QString, QList<QUrl> >&);
     void startMediaServer();
     void cleanUp();
 
     // Low level methods to save and load from xml data file.
     bool save();
-    bool load();
+    bool load(QMap<QString, QList<QUrl> >& colMap);
 
     // Wrapper to check if server configuration must be saved and restored between sessions.
     void loadAtStartup();

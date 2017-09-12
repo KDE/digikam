@@ -112,7 +112,9 @@ void DMediaServerMngr::loadAtStartup()
     if (startServerOnStartup)
     {
         // Restore the old sharing configuration and start the server.
-        load();
+        QMap<QString, QList<QUrl> > map;
+        load(map);
+        setCollectionMap(map);
         slotTurnOn();
     }
 }
@@ -197,7 +199,7 @@ bool DMediaServerMngr::save()
     return true;
 }
 
-bool DMediaServerMngr::load()
+bool DMediaServerMngr::load(QMap<QString, QList<QUrl> >& colMap)
 {
     QFile file(d->file);
 
@@ -217,10 +219,10 @@ bool DMediaServerMngr::load()
             return false;
         }
 
-        QDomElement                docElem = doc.documentElement();
-        QMap<QString, QList<QUrl>> map;
-        QList<QUrl>                urls;
-        QString                    album;
+        QDomElement                 docElem = doc.documentElement();
+        QMap<QString, QList<QUrl> > map;
+        QList<QUrl>                 urls;
+        QString                     album;
 
         for (QDomNode n = docElem.firstChild() ; !n.isNull() ; n = n.nextSibling())
         {
@@ -260,7 +262,7 @@ bool DMediaServerMngr::load()
             map.insert(album, urls);
         }
 
-        setCollectionMap(map);
+        colMap = map;
 
         return true;
     }
