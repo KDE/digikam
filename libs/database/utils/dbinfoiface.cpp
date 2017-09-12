@@ -263,6 +263,7 @@ DBInfoIface::DBInfoIface(QObject* const parent, const QList<QUrl>& lst,
     : DInfoInterface(parent),
       d(new Private)
 {
+    setObjectName(QLatin1String("DBInfoIface"));
     d->itemUrls      = lst;
     d->operationType = type;
 }
@@ -496,7 +497,7 @@ QWidget* DBInfoIface::albumChooser(QWidget* const parent) const
 {
     if (!d->albumChooser)
     {
-        d->albumChooser = new AlbumSelectTabs(parent);
+        d->albumChooser = new AlbumSelectTabs(objectName(), parent);
     }
 
     connect(d->albumChooser, SIGNAL(signalAlbumSelectionChanged()),

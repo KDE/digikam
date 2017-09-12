@@ -95,7 +95,8 @@ const QString AlbumLabelsTreeView::Private::configColorSelectionEntry(QLatin1Str
 const QString AlbumLabelsTreeView::Private::configExpansionEntry(QLatin1String("Expansion"));
 
 AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckable) :
-    QTreeWidget(parent), StateSavingObject(this),
+    QTreeWidget(parent),
+    StateSavingObject(this),
     d(new Private)
 {
     d->regularFont         = ApplicationSettings::instance()->getTreeViewFont();
@@ -118,6 +119,7 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckabl
                 (*it)->setFlags((*it)->flags()|Qt::ItemIsUserCheckable);
                 (*it)->setCheckState(0, Qt::Unchecked);
             }
+
             ++it;
         }
     }
@@ -261,17 +263,26 @@ void AlbumLabelsTreeView::doLoadState()
 
     foreach (int rating, selectedRatings)
     {
-        d->ratings->child(rating)->setSelected(true);
+        if (d->isCheckableTreeView)
+            d->ratings->child(rating)->setCheckState(0, Qt::Checked);
+        else
+            d->ratings->child(rating)->setSelected(true);
     }
 
     foreach (int pick, selectedPicks)
     {
-        d->picks->child(pick)->setSelected(true);
+        if (d->isCheckableTreeView)
+            d->picks->child(pick)->setCheckState(0, Qt::Checked);
+        else
+            d->picks->child(pick)->setSelected(true);
     }
 
     foreach (int color, selectedColors)
     {
-        d->colors->child(color)->setSelected(true);
+        if (d->isCheckableTreeView)
+            d->colors->child(color)->setCheckState(0, Qt::Checked);
+        else
+            d->colors->child(color)->setSelected(true);
     }
 
     d->isLoadingState = false;
@@ -653,7 +664,7 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString& xml) const
     {
         album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
 
-        if(album)
+        if (album)
         {
             id = album->id();
             CoreDbAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
@@ -919,7 +930,7 @@ void AlbumLabelsSearchHandler::slotCheckStateChanged()
         emit checkStateChanged(album, Qt::Checked);
     }
 
-    d->oldXml   = currentXml;
+    d->oldXml = currentXml;
 }
 
 void AlbumLabelsSearchHandler::slotSetCurrentAlbum()

@@ -105,7 +105,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
       d(new Private)
 {
     d->iface                = iface;
-    d->tab                  = new AlbumSelectTabs(this);
+    d->tab                  = new AlbumSelectTabs(QLatin1String("KipiImageCollectionSelector"), this);
     QHBoxLayout* const hlay = new QHBoxLayout(this);
     hlay->addWidget(d->tab);
     hlay->setContentsMargins(QMargins());

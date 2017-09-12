@@ -80,6 +80,7 @@ public:
         treeView->setExpandOnSingleClick(false);
         treeView->setEnableContextMenu(false);
         treeView->setDragEnabled(false);
+        treeView->setRestoreCheckState(true);
     }
 
 public:
@@ -101,12 +102,13 @@ public:
     AlbumLabelsSearchHandler* labelsSearchHandler;
 };
 
-AlbumSelectTabs::AlbumSelectTabs(QWidget* const parent)
+AlbumSelectTabs::AlbumSelectTabs(const QString& name, QWidget* const parent)
     : QTabWidget(parent),
       d(new Private)
 {
     KSharedConfigPtr config  = KSharedConfig::openConfig();
-    KConfigGroup configGroup = config->group(QLatin1String("AlbumSelectTabs"));
+    KConfigGroup configGroup = config->group(QLatin1String("AlbumSelectTabs") +
+                               QString::fromLatin1("_%1").arg(name));
 
     DVBox* const albumBox = new DVBox(this);
     d->albumModel         = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
@@ -174,7 +176,9 @@ AlbumSelectTabs::AlbumSelectTabs(QWidget* const parent)
     // -------------------------------------------------------------------------------
 
     DVBox* const labelsBox = new DVBox(this);
-    d->labelsTree          = new AlbumLabelsTreeView(labelsBox,true);
+    d->labelsTree          = new AlbumLabelsTreeView(labelsBox, true);
+    d->labelsTree->setEntryPrefix(QLatin1String("LabelsTreeView"));
+    d->labelsTree->setConfigGroup(configGroup);
     d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsTree);
 
     labelsBox->setContentsMargins(QMargins());
@@ -210,6 +214,7 @@ AlbumSelectTabs::AlbumSelectTabs(QWidget* const parent)
     d->tagSearchBar->loadState();
     d->searchTreeView->loadState();
     d->searchSearchBar->loadState();
+    d->labelsTree->doLoadState();
 }
 
 AlbumSelectTabs::~AlbumSelectTabs()
@@ -220,6 +225,7 @@ AlbumSelectTabs::~AlbumSelectTabs()
     d->tagSearchBar->saveState();
     d->searchTreeView->saveState();
     d->searchSearchBar->saveState();
+    d->labelsTree->doSaveState();
 
     delete d;
 }

@@ -83,6 +83,10 @@ SetupDlna::SetupDlna(QWidget* const parent)
       d(new Private)
 {
     d->iface             = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);
+    // NOTE: We overwrite the default albums chooser object name for load save check items state between sessions.
+    // The goal is not mix these settings with other export tools.
+    d->iface->setObjectName(QLatin1String("SetupDlnaIface"));
+
     const int spacing    = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
@@ -92,7 +96,7 @@ SetupDlna::SetupDlna(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* const dlnaServerSettingsGroup = new QGroupBox(i18n("Server Options"), panel);
+    QGroupBox* const dlnaServerSettingsGroup = new QGroupBox(i18n("Share on the Network Options"), panel);
     QVBoxLayout* const gLayout               = new QVBoxLayout(dlnaServerSettingsGroup);
 
 
