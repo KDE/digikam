@@ -209,6 +209,16 @@ public:
     void addStandardActionThumbnail(const imageIds& ids, Album* album);
 
     /**
+     * Add section for main views for opening and moving/going to albums.
+     *
+     * This is a convenience function to ensure consistent menues and reduce
+     * code duplication.
+     *
+     * @param imageIds the list of selected items
+     */
+    void addOpenAndNavigateActions(const imageIds &ids);
+
+    /**
      * Add the services menu to the menu.
      *
      * The services menu is used to open the selected items in a different application.
@@ -230,7 +240,7 @@ public:
      * are not emitted and you will not be able to react on triggered actions from this menu.
      * Make sure to connect the signals to the appropriate slots in the context menu handling method.
      *
-     * @param ids the selected items
+     * @param imageIds the list of selected items
      * @see exec()
      * @see signalGotoAlbum() signalGotoDate() signalGotoTag()
      */

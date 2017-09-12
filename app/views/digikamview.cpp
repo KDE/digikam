@@ -2592,46 +2592,46 @@ void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const Imag
 
     cmHelper.addAction(QLatin1String("full_screen"));
     cmHelper.addAction(QLatin1String("options_show_menubar"));
-
     cmHelper.addSeparator();
 
-    cmHelper.addAction(QLatin1String("move_selection_to_album"));
+    // --------------------------------------------------------
+
     QAction* const viewAction = new QAction(i18nc("View the selected image", "Preview"), this);
     viewAction->setIcon(QIcon::fromTheme(QLatin1String("view-preview")));
     viewAction->setEnabled(selectedImageIds.count() == 1);
     cmHelper.addAction(viewAction);
 
-    cmHelper.addAction(QLatin1String("image_edit"));
-    cmHelper.addServicesMenu(selectedUrls());
-    cmHelper.addGotoMenu(selectedImageIds);
-    cmHelper.addAction(QLatin1String("image_rotate"));
-
+    cmHelper.addOpenAndNavigateActions(selectedImageIds);
     cmHelper.addSeparator();
+
+    // --------------------------------------------------------
 
     cmHelper.addAction(QLatin1String("image_find_similar"));
     cmHelper.addStandardActionLightTable();
     cmHelper.addQueueManagerMenu();
-
     cmHelper.addSeparator();
 
-    cmHelper.addAction(QLatin1String("image_rename"));
+    // --------------------------------------------------------
+
+    cmHelper.addAction(QLatin1String("image_rotate"));
     cmHelper.addAction(QLatin1String("cut_album_selection"));
     cmHelper.addAction(QLatin1String("copy_album_selection"));
     cmHelper.addAction(QLatin1String("paste_album_selection"));
+    cmHelper.addAction(QLatin1String("image_rename"));
     cmHelper.addStandardActionItemDelete(this, SLOT(slotImageDelete()), selectedImageIds.count());
-
     cmHelper.addSeparator();
+
+    // --------------------------------------------------------
 
     cmHelper.addStandardActionThumbnail(selectedImageIds, currentAlbum());
     cmHelper.addAssignTagsMenu(selectedImageIds);
     cmHelper.addRemoveTagsMenu(selectedImageIds);
-
-    cmHelper.addSeparator();
-
     cmHelper.addLabelsAction();
 
     if (d->leftSideBar->getActiveTab() != d->peopleSideBar)
     {
+        cmHelper.addSeparator();
+
         cmHelper.addGroupMenu(selectedImageIds, extraGroupingActions);
     }
 
