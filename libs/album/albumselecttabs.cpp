@@ -230,7 +230,7 @@ AlbumList AlbumSelectTabs::selectedAlbums() const
 
     list << d->albumModel->checkedAlbums();
     list << d->tagModel->checkedAlbums();
-    list << d->searchModel->checkedAlbums();
+    list << d->searchTreeView->albumModel()->checkedAlbums();
     list << d->labelsSearchHandler->albumForSelectedItems();
 
     // Remove all null albums.
