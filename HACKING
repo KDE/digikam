@@ -455,4 +455,4 @@ If you don't get any debug logging even though you run a debug build, check whet
 [Rules]
 *.debug=false
 
-You need to either remove this file entirely or set it to true and debugging will work again.
+You need to remove (or rename) this file. If you set it to true, it will also activate debug logging for all the dependencies (qt, kdexmlgui, ...)
