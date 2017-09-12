@@ -103,19 +103,33 @@ void DMediaServerMngr::slotTurnOff()
     d->server = 0;
 }
 
-void DMediaServerMngr::checkLoadAtStartup()
+void DMediaServerMngr::loadAtStartup()
 {
-    // Load mediaserver at startup ?
-
     KSharedConfig::Ptr config    = KSharedConfig::openConfig();
     KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
     bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start Server On Startup"), false);
 
     if (startServerOnStartup)
     {
-        // TODO: restore old configuration.
+        // Restore the old sharing configuration and start the server.
+        load();
         slotTurnOn();
     }
+}
+
+void DMediaServerMngr::saveAtShutdown()
+{
+    KSharedConfig::Ptr config    = KSharedConfig::openConfig();
+    KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
+    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start Server On Startup"), false);
+
+    if (startServerOnStartup)
+    {
+        // Save the current sharing configuration for the next session.
+        save();
+    }
+    
+    cleanUp();
 }
 
 void DMediaServerMngr::slotTurnOn()
@@ -140,12 +154,6 @@ void DMediaServerMngr::startMediaServer()
 
 bool DMediaServerMngr::save()
 {
-    // If not modified don't save the file
-/*    if (!d->modified)
-    {
-        return true;
-    }
-*/
     QDomDocument doc(QString::fromLatin1("mediaserverlist"));
     doc.setContent(QString::fromUtf8("<!DOCTYPE XMLQueueList><mediaserverlist version=\"1.0\" client=\"digikam\" encoding=\"UTF-8\"/>"));
     QDomElement docElem = doc.documentElement();
@@ -191,8 +199,6 @@ bool DMediaServerMngr::save()
 
 bool DMediaServerMngr::load()
 {
-    //d->modified = false;
-
     QFile file(d->file);
 
     if (file.exists())

@@ -216,7 +216,7 @@ DigikamApp::DigikamApp()
     ProgressManager::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
     DIO::instance();
-    DMediaServerMngr::instance()->checkLoadAtStartup();
+    DMediaServerMngr::instance()->loadAtStartup();
 
     // creation of the engine on first use - when drawing -
     // can take considerable time and cause a noticeable hang in the UI thread.
@@ -375,7 +375,7 @@ DigikamApp::~DigikamApp()
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
     DIO::cleanUp();
-    DMediaServerMngr::instance()->cleanUp();
+    DMediaServerMngr::instance()->saveAtShutdown();
 
     // close database server
     if (ApplicationSettings::instance()->getDbEngineParameters().internalServer)
