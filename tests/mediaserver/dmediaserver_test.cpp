@@ -30,12 +30,12 @@
 #include <QUrl>
 #include <QMap>
 #include <QDebug>
+#include <QProgressDialog>
 
 // Local includes
 
 #include "dmediaservermngr.h"
 #include "dfiledialog.h"
-#include "dbusydlg.h"
 
 using namespace Digikam;
 
@@ -65,8 +65,16 @@ int main(int argc, char* argv[])
         map.insert(QLatin1String("Test Collection"), list);
         DMediaServerMngr::instance()->setCollectionMap(map);
         DMediaServerMngr::instance()->slotTurnOn();
-        DBusyDlg* const pdlg = new DBusyDlg(QLatin1String("Sharing files on the network"));
+
+        QProgressDialog* const pdlg = new QProgressDialog(0);
+        pdlg->setLabelText(QLatin1String("Sharing files on the network"));
+        pdlg->setMinimumDuration(0);
+        pdlg->setCancelButtonText(QLatin1String("Close"));
+        pdlg->setMaximum(0);
+        pdlg->setMinimum(0);
+        pdlg->setValue(0);
         pdlg->exec();
+
         DMediaServerMngr::instance()->cleanUp();
     }
 
