@@ -156,8 +156,8 @@ public:
         zoomTo100percents(0),
         imageSortAction(0),
         imageSortOrderAction(0),
-        imageGroupAction(0),
-        imageGroupSortOrderAction(0),
+        imageSeparationAction(0),
+        imageSeparationSortOrderAction(0),
         albumSortAction(0),
         recurseAlbumsAction(0),
         recurseTagsAction(0),
@@ -282,8 +282,8 @@ public:
     QAction*                            zoomTo100percents;
     KSelectAction*                      imageSortAction;
     KSelectAction*                      imageSortOrderAction;
-    KSelectAction*                      imageGroupAction;
-    KSelectAction*                      imageGroupSortOrderAction;
+    KSelectAction*                      imageSeparationAction;
+    KSelectAction*                      imageSeparationSortOrderAction;
     KSelectAction*                      albumSortAction;
     QAction*                            recurseAlbumsAction;
     QAction*                            recurseTagsAction;

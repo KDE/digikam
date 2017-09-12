@@ -59,7 +59,7 @@ public:
         thumbnailSize(0),
         imageSortOrder(0),
         imageSortBy(0),
-        imageGroupMode(0),
+        imageSeparationMode(0),
         itemLeftClickAction(ImportSettings::ShowPreview),
         showToolTips(false),
         tooltipShowFileName(false),
@@ -86,7 +86,7 @@ public:
     static const QString                configGroupDefault;
     static const QString                configImageSortOrderEntry;
     static const QString                configImageSortByEntry;
-    static const QString                configImageGroupModeEntry;
+    static const QString                configImageSeparationModeEntry;
     static const QString                configItemLeftClickActionEntry;
     static const QString                configDefaultIconSizeEntry;
     static const QString                configIconShowNameEntry;
@@ -138,7 +138,7 @@ public:
     int                                 thumbnailSize;
     int                                 imageSortOrder;
     int                                 imageSortBy;
-    int                                 imageGroupMode;
+    int                                 imageSeparationMode;
     ImportSettings::ItemLeftClickAction itemLeftClickAction;
 
     // Import icon-view tooltip settings
@@ -171,7 +171,7 @@ public:
 const QString ImportSettings::Private::configGroupDefault(QLatin1String("Import Settings"));
 const QString ImportSettings::Private::configImageSortOrderEntry(QLatin1String("Image Sort Order"));
 const QString ImportSettings::Private::configImageSortByEntry(QLatin1String("Image Sorting")); // TODO not changed due to backwards compatibility
-const QString ImportSettings::Private::configImageGroupModeEntry(QLatin1String("Image Group Mode"));
+const QString ImportSettings::Private::configImageSeparationModeEntry(QLatin1String("Image Separation Mode"));
 const QString ImportSettings::Private::configItemLeftClickActionEntry(QLatin1String("Item Left Click Action"));
 const QString ImportSettings::Private::configDefaultIconSizeEntry(QLatin1String("Default Icon Size"));
 //const QString ImportSettings::Private::configRatingFilterConditionEntry(QLatin1String("Rating Filter Condition"));
@@ -243,7 +243,7 @@ void ImportSettings::init()
 {
     d->imageSortBy                  = CamItemSortSettings::SortByFileName;
     d->imageSortOrder               = CamItemSortSettings::AscendingOrder;
-    d->imageGroupMode               = CamItemSortSettings::CategoryByFolder;
+    d->imageSeparationMode          = CamItemSortSettings::CategoryByFolder;
     d->itemLeftClickAction          = ImportSettings::ShowPreview;
 
     d->thumbnailSize                = ThumbnailSize::Medium;
@@ -287,7 +287,7 @@ void ImportSettings::readSettings()
 
     d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)CamItemSortSettings::AscendingOrder);
     d->imageSortBy                  = group.readEntry(d->configImageSortByEntry,    (int)CamItemSortSettings::SortByFileName);
-    d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)CamItemSortSettings::CategoryByFolder);
+    d->imageSeparationMode          = group.readEntry(d->configImageSeparationModeEntry, (int)CamItemSortSettings::CategoryByFolder);
 
     d->itemLeftClickAction          = ImportSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
                                                                          (int)ImportSettings::ShowPreview));
@@ -343,7 +343,7 @@ void ImportSettings::saveSettings()
 
     group.writeEntry(d->configImageSortOrderEntry,               (int)d->imageSortOrder);
     group.writeEntry(d->configImageSortByEntry,                  (int)d->imageSortBy);
-    group.writeEntry(d->configImageGroupModeEntry,               (int)d->imageGroupMode);
+    group.writeEntry(d->configImageSeparationModeEntry,          (int)d->imageSeparationMode);
     group.writeEntry(d->configItemLeftClickActionEntry,          (int)d->itemLeftClickAction);
     group.writeEntry(d->configDefaultIconSizeEntry,              QString::number(d->thumbnailSize));
 
@@ -407,14 +407,14 @@ int ImportSettings::getImageSortBy() const
     return d->imageSortBy;
 }
 
-void ImportSettings::setImageGroupMode(int mode)
+void ImportSettings::setImageSeparationMode(int mode)
 {
-    d->imageGroupMode = mode;
+    d->imageSeparationMode = mode;
 }
 
-int ImportSettings::getImageGroupMode() const
+int ImportSettings::getImageSeparationMode() const
 {
-    return d->imageGroupMode;
+    return d->imageSeparationMode;
 }
 
 void ImportSettings::setItemLeftClickAction(const ItemLeftClickAction action)

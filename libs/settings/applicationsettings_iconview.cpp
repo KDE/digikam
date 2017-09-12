@@ -53,24 +53,24 @@ int ApplicationSettings::getImageSorting() const
     return d->imageSorting;
 }
 
-void ApplicationSettings::setImageGroupMode(int mode)
+void ApplicationSettings::setImageSeparationMode(int mode)
 {
-    d->imageGroupMode = mode;
+    d->imageSeparationMode = mode;
 }
 
-int ApplicationSettings::getImageGroupMode() const
+int ApplicationSettings::getImageSeparationMode() const
 {
-    return d->imageGroupMode;
+    return d->imageSeparationMode;
 }
 
-void ApplicationSettings::setImageGroupSortOrder(int order)
+void ApplicationSettings::setImageSeparationSortOrder(int order)
 {
-    d->imageGroupSortOrder = order;
+    d->imageSeparationSortOrder = order;
 }
 
-int ApplicationSettings::getImageGroupSortOrder() const
+int ApplicationSettings::getImageSeparationSortOrder() const
 {
-    return d->imageGroupSortOrder;
+    return d->imageSeparationSortOrder;
 }
 
 void ApplicationSettings::setItemLeftClickAction(const ItemLeftClickAction action)

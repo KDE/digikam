@@ -2023,7 +2023,7 @@ void DigikamView::slotSortImagesOrder(int order)
     settings->emitSetupChanged();
 }
 
-void DigikamView::slotGroupImages(int categoryMode)
+void DigikamView::slotSeparateImages(int categoryMode)
 {
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
@@ -2032,11 +2032,11 @@ void DigikamView::slotGroupImages(int categoryMode)
         return;
     }
 
-    settings->setImageGroupMode(categoryMode);
+    settings->setImageSeparationMode(categoryMode);
     d->iconView->imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode) categoryMode);
 }
 
-void DigikamView::slotSortImageGroupOrder(int order)
+void DigikamView::slotImageSeparationSortOrder(int order)
 {
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
@@ -2045,7 +2045,7 @@ void DigikamView::slotSortImageGroupOrder(int order)
         return;
     }
 
-    settings->setImageGroupSortOrder(order);
+    settings->setImageSeparationSortOrder(order);
     d->iconView->imageFilterModel()->setCategorizationSortOrder((ImageSortSettings::SortOrder) order);
 }
 

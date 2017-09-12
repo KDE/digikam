@@ -532,8 +532,8 @@ void ImportUI::setupActions()
 
     d->itemsGroupAction                  = new KSelectAction(i18nc("@title:menu", "&Group Items"), this);
     d->itemsGroupAction->setWhatsThis(i18nc("@info:whatsthis", "The categories in which the items in the thumbnail view are displayed"));
-    QSignalMapper* const itemGroupMapper = new QSignalMapper(this);
-    connect(itemGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
+    QSignalMapper* const itemSeparationMapper = new QSignalMapper(this);
+    connect(itemSeparationMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSeparateImages(int)));
     ac->addAction(QLatin1String("item_group"), d->itemsGroupAction);
 
     // map to CamItemSortSettings enum
@@ -542,17 +542,17 @@ void ImportUI::setupActions()
     QAction* const groupByFormatAction = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Format"));
     QAction* const groupByDateAction =   d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Date"));
 
-    connect(noCategoriesAction,  SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(groupByFolderAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(groupByFormatAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(groupByDateAction,   SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(noCategoriesAction,  SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
+    connect(groupByFolderAction, SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
+    connect(groupByFormatAction, SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
+    connect(groupByDateAction,   SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
 
-    itemGroupMapper->setMapping(noCategoriesAction,  (int)CamItemSortSettings::NoCategories);
-    itemGroupMapper->setMapping(groupByFolderAction, (int)CamItemSortSettings::CategoryByFolder);
-    itemGroupMapper->setMapping(groupByFormatAction, (int)CamItemSortSettings::CategoryByFormat);
-    itemGroupMapper->setMapping(groupByDateAction,   (int)CamItemSortSettings::CategoryByDate);
+    itemSeparationMapper->setMapping(noCategoriesAction,  (int)CamItemSortSettings::NoCategories);
+    itemSeparationMapper->setMapping(groupByFolderAction, (int)CamItemSortSettings::CategoryByFolder);
+    itemSeparationMapper->setMapping(groupByFormatAction, (int)CamItemSortSettings::CategoryByFormat);
+    itemSeparationMapper->setMapping(groupByDateAction,   (int)CamItemSortSettings::CategoryByDate);
 
-    d->itemsGroupAction->setCurrentItem(ImportSettings::instance()->getImageGroupMode());
+    d->itemsGroupAction->setCurrentItem(ImportSettings::instance()->getImageSeparationMode());
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
@@ -942,7 +942,7 @@ DownloadSettings ImportUI::downloadSettings() const
 
 void ImportUI::setInitialSorting()
 {
-    d->view->slotGroupImages(ImportSettings::instance()->getImageGroupMode());
+    d->view->slotSeparateImages(ImportSettings::instance()->getImageSeparationMode());
     d->view->slotSortImagesBy(ImportSettings::instance()->getImageSortBy());
     d->view->slotSortImagesOrder(ImportSettings::instance()->getImageSortOrder());
 }

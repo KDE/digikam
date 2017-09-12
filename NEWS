@@ -33,4 +33,5 @@ BUGFIXES FROM BUGZILLA:
 024 ==> 369517 - digiKam from 5.7.0 tarball installs libvkontakte translations even if libvkontakte is disabled.
 025 ==> 384079 - High CPU usage on Import when color management is enabled.
 026 ==> 384425 - Suspicious condition in dcraw_emu CLI tool source code.
-027 ==> 
+027 ==> 380333 - Right click - Group and Menu - View - Group do not match
+028 ==>
