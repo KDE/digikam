@@ -59,7 +59,10 @@ public:
         iface(0),
         startServerOnStartupCheckBox(0),
         startButton(0),
-        stopButton(0)
+        stopButton(0),
+        srvStatus(0),
+        aStats(0),
+        iStats(0)
     {
     }
 
@@ -68,6 +71,9 @@ public:
     QCheckBox*           startServerOnStartupCheckBox;
     QPushButton*         startButton;
     QPushButton*         stopButton;
+    QLabel*              srvStatus;
+    QLabel*              aStats;
+    QLabel*              iStats;
 
     static const QString configGroupName;
     static const QString configstartServerOnStartupCheckBoxEntry;
@@ -104,15 +110,24 @@ SetupDlna::SetupDlna(QWidget* const parent)
     d->startServerOnStartupCheckBox->setWhatsThis(i18n("Set this option to start the DLNA server on digiKam start"));
     d->startServerOnStartupCheckBox->setChecked(true);
 
-    DHBox* const btnBox   = new DHBox(panel);
-    d->startButton        = new QPushButton(i18n("Start"), btnBox);
-    QWidget* const spacer = new QWidget(btnBox);
-    d->stopButton         = new QPushButton(i18n("Stop"),  btnBox);
-    btnBox->setStretchFactor(spacer, 10);
+    DHBox* const btnBox = new DHBox(panel);
+    d->startButton      = new QPushButton(i18n("Start"), btnBox);
+    d->srvStatus        = new QLabel(btnBox);
+    d->stopButton       = new QPushButton(i18n("Stop"),  btnBox);
+    btnBox->setStretchFactor(d->srvStatus, 10);
+    d->srvStatus->setAlignment(Qt::AlignCenter);
+    
+    DHBox* const staBox   = new DHBox(panel);
+    d->aStats             = new QLabel(staBox);
+    QWidget* const spacer = new QLabel(staBox);
+    d->iStats             = new QLabel(staBox);
+    d->iStats->setAlignment(Qt::AlignRight);
+    staBox->setStretchFactor(spacer, 10);
 
     gLayout->addWidget(d->startServerOnStartupCheckBox);
     gLayout->addWidget(d->iface->albumChooser(this));
     gLayout->addWidget(btnBox);
+    gLayout->addWidget(staBox);
     gLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     gLayout->setSpacing(0);
 
@@ -126,7 +141,7 @@ SetupDlna::SetupDlna(QWidget* const parent)
             this, SLOT(slotSelectionChanged()));
 
     connect(d->stopButton, SIGNAL(clicked()),
-            d->mngr, SLOT(slotTurnOff()));
+            this, SLOT(slotStopMediaServer()));
 
     connect(d->startButton, SIGNAL(clicked()),
             this, SLOT(slotStartMediaServer()));
@@ -160,6 +175,26 @@ void SetupDlna::slotSelectionChanged()
     // TODO
 }
 
+void SetupDlna::updateServerStatus()
+{
+    QString txt;
+    
+    if (d->mngr->isRunning())
+    {
+        txt = i18n("Media server is running");
+        d->aStats->setText(i18np("1 album shared", "%1 albums shared", d->mngr->albumsShared()));
+        d->iStats->setText(i18np("1 item shared",  "%1 items shared",  d->mngr->albumsShared()));
+    }
+    else
+    {
+        txt = i18n("Media server is not running");
+        d->aStats->clear();
+        d->iStats->clear();
+    }
+
+    d->srvStatus->setText(txt);
+}
+
 void SetupDlna::slotStartMediaServer()
 {
     DInfoInterface::DAlbumIDs albums = d->iface->albumChooserItems();
@@ -173,6 +208,13 @@ void SetupDlna::slotStartMediaServer()
 
     d->mngr->setCollectionMap(map);
     d->mngr->slotTurnOn();
+    updateServerStatus();
+}
+
+void SetupDlna::slotStopMediaServer()
+{
+    d->mngr->slotTurnOff();
+    updateServerStatus();
 }
 
 }  // namespace Digikam

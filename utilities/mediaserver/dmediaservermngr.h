@@ -49,13 +49,20 @@ public:
     void startMediaServer();
     void cleanUp();
 
-    // Low level methods to save and load from xml data file.
+    /// Low level methods to save and load from xml data file.
     bool save();
     bool load();
 
-    // Wrapper to check if server configuration must be saved and restored between sessions.
+    /// Wrapper to check if server configuration must be saved and restored between sessions.
     void loadAtStartup();
     void saveAtShutdown();
+    
+    /// Return true if server is running in background.
+    bool isRunning()    const;
+    
+    /// Return some stats about total albums and total items shared on the network.
+    int  albumsShared() const;
+    int  itemsShared()  const;
     
 public:
 

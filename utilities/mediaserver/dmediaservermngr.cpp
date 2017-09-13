@@ -67,7 +67,7 @@ public:
 
     Private()
     {
-        server = 0;
+        server    = 0;
     }
 
     QString                    file;
@@ -150,6 +150,27 @@ void DMediaServerMngr::startMediaServer()
     }
 
     d->server->addImagesOnServer(d->collectionMap);
+}
+
+bool DMediaServerMngr::isRunning() const
+{
+    return d->server ? true : false;
+}
+
+int DMediaServerMngr::albumsShared() const
+{
+    if (d->collectionMap.isEmpty())
+        return 0;
+
+    return d->collectionMap.keys().count();
+}
+
+int DMediaServerMngr::itemsShared() const
+{
+    if (d->collectionMap.isEmpty())
+        return 0;
+
+    return d->collectionMap.values().count();
 }
 
 bool DMediaServerMngr::save()

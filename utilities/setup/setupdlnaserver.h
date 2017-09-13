@@ -45,11 +45,13 @@ public:
 private:
 
     void readSettings();
+    void updateServerStatus();
 
 private Q_SLOTS:
 
     void slotSelectionChanged();
     void slotStartMediaServer();
+    void slotStopMediaServer();
 
 private:
 
