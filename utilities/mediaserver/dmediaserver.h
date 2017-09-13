@@ -29,10 +29,14 @@
 #include <QObject>
 #include <QString>
 #include <QUrl>
+#include <QMap>
+#include <QList>
 
 namespace Digikam
 {
 
+typedef QMap<QString, QList<QUrl> > MediaServerMap;
+    
 class DMediaServer : public QObject
 {
     Q_OBJECT
@@ -43,7 +47,7 @@ public:
     virtual ~DMediaServer();
 
     void addImagesOnServer(const QList<QUrl>&);
-    void addImagesOnServer(const QMap<QString, QList<QUrl> >&);
+    void addAlbumsOnServer(const MediaServerMap&);
 
 private:
 

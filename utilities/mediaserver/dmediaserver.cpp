@@ -106,9 +106,6 @@ DMediaServer::DMediaServer(QObject* const parent)
                                               QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediaserver_description.xml"));
 
     config.setPathToDeviceDescription(filePath);
-
-    qCDebug(DIGIKAM_MEDIASRV_LOG) << "Using MediaServer description:" << filePath;
-
     config.setCacheControlMaxAge(180);
 
     HDeviceHostConfiguration hostConfiguration;
@@ -122,6 +119,10 @@ DMediaServer::DMediaServer(QObject* const parent)
     {
         qCDebug(DIGIKAM_MEDIASRV_LOG) << "MediaServer initialization failed:"
                                       << d->deviceHost->errorDescription().toLocal8Bit();
+    }
+    else
+    {
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "MediaServer initialized with DLNA description:" << filePath;
     }
 }
 
@@ -144,16 +145,16 @@ void DMediaServer::addImagesOnServer(const QList<QUrl>& imageUrlList)
     }
 }
 
-void DMediaServer::addImagesOnServer(const QMap<QString, QList<QUrl> >& collectionMap)
+void DMediaServer::addAlbumsOnServer(const MediaServerMap& map)
 {
-    QList<QString> keys = collectionMap.uniqueKeys();
+    QList<QString> keys = map.uniqueKeys();
     QList<QUrl>    imgUrls;
     QString        album;
 
     for (int i = 0 ; i < keys.size() ; i++)
     {
         album                       = keys.at(i);
-        imgUrls                     = collectionMap.value(album);
+        imgUrls                     = map.value(album);
         HContainer* const container = new HContainer(album, QLatin1String("0"));
         d->datasource->add(container);
 

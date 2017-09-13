@@ -129,7 +129,7 @@ SetupDlna::SetupDlna(QWidget* const parent)
     gLayout->addWidget(btnBox);
     gLayout->addWidget(staBox);
     gLayout->setContentsMargins(spacing, spacing, spacing, spacing);
-    gLayout->setSpacing(0);
+    gLayout->setSpacing(spacing);
 
     layout->addWidget(dlnaServerSettingsGroup);
     layout->setContentsMargins(QMargins());
@@ -184,7 +184,7 @@ void SetupDlna::updateServerStatus()
     {
         txt = i18n("Media server is running");
         d->aStats->setText(i18np("1 album shared", "%1 albums shared", d->mngr->albumsShared()));
-        d->iStats->setText(i18np("1 item shared",  "%1 items shared",  d->mngr->albumsShared()));
+        d->iStats->setText(i18np("1 item shared",  "%1 items shared",  d->mngr->itemsShared()));
         d->startButton->setEnabled(false);
         d->stopButton->setEnabled(true);
     }
@@ -203,7 +203,7 @@ void SetupDlna::updateServerStatus()
 void SetupDlna::slotStartMediaServer()
 {
     DInfoInterface::DAlbumIDs albums = d->iface->albumChooserItems();
-    QMap<QString, QList<QUrl> > map;
+    MediaServerMap map;
 
     foreach(int id, albums)
     {

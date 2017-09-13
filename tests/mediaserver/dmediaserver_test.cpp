@@ -42,14 +42,14 @@ using namespace Digikam;
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    QList<QUrl>  list;
-    QMap<QString, QList<QUrl> > map;
+    QList<QUrl>    list;
+    MediaServerMap map;
 
     if (argc <= 1)
     {
         QStringList files = DFileDialog::getOpenFileNames(0, QString::fromLatin1("Select Files to Share With Media Server"),
                                                           QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first(),
-                                                          QLatin1String("Image Files (*.png *.jpg *.tif *.nef *.cr2)"));
+                                                          QLatin1String("Image Files (*.png *.jpg *.tif *.bmp *.gif)"));
 
         foreach(const QString& f, files)
             list.append(QUrl::fromLocalFile(f));

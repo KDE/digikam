@@ -35,6 +35,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dmediaserver.h"
 
 namespace Digikam
 {
@@ -45,7 +46,7 @@ class DIGIKAM_EXPORT DMediaServerMngr : public QObject
 
 public:
 
-    void setCollectionMap(const QMap<QString, QList<QUrl> >&);
+    void setCollectionMap(const MediaServerMap&);
     void startMediaServer();
     void cleanUp();
 

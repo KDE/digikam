@@ -44,7 +44,6 @@
 
 // Local includes
 
-#include "dmediaserver.h"
 #include "digikam_debug.h"
 
 namespace Digikam
@@ -67,12 +66,12 @@ public:
 
     Private()
     {
-        server    = 0;
+        server = 0;
     }
 
-    QString                     file;
-    DMediaServer*               server;
-    QMap<QString, QList<QUrl> > collectionMap;
+    QString        file;
+    DMediaServer*  server;
+    MediaServerMap collectionMap;
 };
 
 DMediaServerMngr* DMediaServerMngr::instance()
@@ -137,9 +136,9 @@ void DMediaServerMngr::slotTurnOn()
     startMediaServer();
 }
 
-void DMediaServerMngr::setCollectionMap(const QMap<QString, QList<QUrl> >& collectionMap)
+void DMediaServerMngr::setCollectionMap(const MediaServerMap& map)
 {
-    d->collectionMap = collectionMap;
+    d->collectionMap = map;
 }
 
 void DMediaServerMngr::startMediaServer()
@@ -149,7 +148,7 @@ void DMediaServerMngr::startMediaServer()
         d->server = new DMediaServer();
     }
 
-    d->server->addImagesOnServer(d->collectionMap);
+    d->server->addAlbumsOnServer(d->collectionMap);
 }
 
 bool DMediaServerMngr::isRunning() const
@@ -162,7 +161,7 @@ int DMediaServerMngr::albumsShared() const
     if (d->collectionMap.isEmpty())
         return 0;
 
-    return d->collectionMap.keys().count();
+    return d->collectionMap.uniqueKeys().count();
 }
 
 int DMediaServerMngr::itemsShared() const
@@ -170,7 +169,16 @@ int DMediaServerMngr::itemsShared() const
     if (d->collectionMap.isEmpty())
         return 0;
 
-    return d->collectionMap.values().count();
+    int i = 0;
+
+    QList<QList<QUrl> > ulst = d->collectionMap.values();
+    
+    foreach(QList<QUrl> urls, ulst)
+    {
+        i += urls.count();
+    }
+    
+    return i;
 }
 
 bool DMediaServerMngr::save()
@@ -238,10 +246,10 @@ bool DMediaServerMngr::load()
             return false;
         }
 
-        QDomElement                 docElem = doc.documentElement();
-        QMap<QString, QList<QUrl> > map;
-        QList<QUrl>                 urls;
-        QString                     album;
+        QDomElement    docElem = doc.documentElement();
+        MediaServerMap map;
+        QList<QUrl>    urls;
+        QString        album;
 
         for (QDomNode n = docElem.firstChild() ; !n.isNull() ; n = n.nextSibling())
         {
