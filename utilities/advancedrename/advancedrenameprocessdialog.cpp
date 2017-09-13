@@ -119,6 +119,7 @@ void AdvancedRenameProcessDialog::processOne()
         return;
     }
 
+    d->currentUrl.clear();
     d->thumbLoadThread->find(ThumbnailIdentifier(d->newNameList.first().first.toLocalFile()));
 }
 
