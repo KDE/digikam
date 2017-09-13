@@ -112,9 +112,7 @@ void DMediaServerMngr::loadAtStartup()
     if (startServerOnStartup)
     {
         // Restore the old sharing configuration and start the server.
-        QMap<QString, QList<QUrl> > map;
-        load(map);
-        setCollectionMap(map);
+        load();
         slotTurnOn();
     }
 }
@@ -199,7 +197,7 @@ bool DMediaServerMngr::save()
     return true;
 }
 
-bool DMediaServerMngr::load(QMap<QString, QList<QUrl> >& colMap)
+bool DMediaServerMngr::load()
 {
     QFile file(d->file);
 
@@ -262,7 +260,7 @@ bool DMediaServerMngr::load(QMap<QString, QList<QUrl> >& colMap)
             map.insert(album, urls);
         }
 
-        colMap = map;
+        setCollectionMap(map);
 
         return true;
     }

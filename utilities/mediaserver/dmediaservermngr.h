@@ -51,7 +51,7 @@ public:
 
     // Low level methods to save and load from xml data file.
     bool save();
-    bool load(QMap<QString, QList<QUrl> >& colMap);
+    bool load();
 
     // Wrapper to check if server configuration must be saved and restored between sessions.
     void loadAtStartup();
