@@ -1506,45 +1506,45 @@ HSysInfo& HSysInfo::instance()
 void HSysInfo::createProductTokens()
 {
 #if defined(Q_OS_WIN)
-    QString server = "MicrosoftWindows/";
+    QString server = QLatin1String("MicrosoftWindows/");
     switch(QSysInfo::WindowsVersion)
     {
     case QSysInfo::WV_2000:
-        server.append("5.0");
+        server.append(QLatin1String("5.0"));
         break;
     case QSysInfo::WV_XP:
-        server.append("5.1");
+        server.append(QLatin1String("5.1"));
         break;
     case QSysInfo::WV_2003:
-        server.append("5.2");
+        server.append(QLatin1String("5.2"));
         break;
     case QSysInfo::WV_VISTA:
-        server.append("6.0");
+        server.append(QLatin1String("6.0"));
         break;
     case QSysInfo::WV_WINDOWS7:
-        server.append("6.1");
+        server.append(QLatin1String("6.1"));
         break;
     default:
-        server.append("-1");
+        server.append(QLatin1String("-1"));
     }
 #elif defined(Q_OS_DARWIN)
-    QString server = "AppleMacOSX/";
+    QString server = QLatin1String("AppleMacOSX/");
     switch(QSysInfo::MacintoshVersion)
     {
     case QSysInfo::MV_10_3:
-        server.append("10.3");
+        server.append(QLatin1String("10.3"));
         break;
     case QSysInfo::MV_10_4:
-        server.append("10.4");
+        server.append(QLatin1String("10.4"));
         break;
     case QSysInfo::MV_10_5:
-        server.append("10.5");
+        server.append(QLatin1String("10.5"));
         break;
     case QSysInfo::MV_10_6:
-        server.append("10.6");
+        server.append(QLatin1String("10.6"));
         break;
     default:
-        server.append("-1");
+        server.append(QLatin1String("-1"));
     }
 #elif defined(Q_OS_LINUX)
     QString server;
