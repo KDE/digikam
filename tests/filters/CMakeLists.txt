@@ -38,7 +38,7 @@ target_link_libraries(testautocrop
 
 #------------------------------------------------------------------------
 
-if(LENSFUN_FOUND)
+if(LensFun_FOUND)
 
     set(testlensfuniface_SRCS testlensfuniface.cpp)
     add_executable(testlensfuniface ${testlensfuniface_SRCS})

@@ -32,7 +32,7 @@ set(libdeletedialog_SRCS
     deletedialog.cpp
 )
 
-if(LENSFUN_FOUND)
+if(LensFun_FOUND)
     include_directories(${LENSFUN_INCLUDE_DIRS})
 endif()
 

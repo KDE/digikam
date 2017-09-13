@@ -144,7 +144,7 @@ if(KF5NotifyConfig_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::NotifyConfig,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-if(GPHOTO2_FOUND)
+if(Gphoto2_FOUND)
     include_directories(${GPHOTO2_INCLUDE_DIRS})
 endif()
 

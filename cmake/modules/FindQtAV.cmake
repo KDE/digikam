@@ -2,7 +2,7 @@
 #
 # Once done this will define
 #
-#  QTAV_FOUND          - The system has libqtav
+#  QtAV_FOUND          - The system has libqtav
 #  QTAV_INCLUDE_DIRS   - The libqtav include directory
 #  QTAV_LIBRARIES      - Link these to use libqtav
 #  QTAV_MAJOR_VERSION  - The major value of QtAV version ID defined in QtAV/version.h as "1".
@@ -93,7 +93,7 @@ endif()
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(QtAV REQUIRED_VARS QTAV_LIBRARIES QTAV_INCLUDE_DIRS)
 
-if(QTAV_FOUND)
+if(QtAV_FOUND)
 
     if (NOT APPLE)
         file(READ ${QTAV_CORE_INCLUDE_DIR}/version.h QTAV_VERSION_CONTENT)
@@ -131,7 +131,7 @@ endif()
 mark_as_advanced(QTAV_INCLUDE_DIRS QTAV_LIBRARIES QTAV_VERSION_STRING
                  QTAV_MAJOR_VERSION QTAV_MINOR_VERSION QTAV_PATCH_VERSION)
 
-message(STATUS "QtAV_FOUND       = ${QTAV_FOUND}")
+message(STATUS "QtAV_FOUND       = ${QtAV_FOUND}")
 message(STATUS "QtAV_INCLUDE_DIR = ${QTAV_INCLUDE_DIRS}")
 message(STATUS "QtAV_LIBRARIES   = ${QTAV_LIBRARIES}")
 message(STATUS "QtAV_VERSION     = ${QTAV_VERSION_STRING}")

@@ -54,7 +54,7 @@ endif()
 
 # Flag to use libjasper with LibRaw RedCine codec
 
-if(JASPER_FOUND)
+if(Jasper_FOUND)
     add_definitions(-DUSE_JASPER)
     include_directories(${JASPER_INCLUDE_DIR})
     message(STATUS "RawEngine will be compiled with RedCine codec")
@@ -154,7 +154,7 @@ if(JPEG_FOUND)
     target_link_libraries(libraw ${JPEG_LIBRARY})
 endif()
 
-if(JASPER_FOUND)
+if(Jasper_FOUND)
     target_link_libraries(libraw ${JASPER_LIBRARIES})
 endif()
 
@@ -162,6 +162,6 @@ endif()
 
 MACRO_BOOL_TO_01(JPEG8_FOUND                      LIBRAW_USE_DNGLOSSYCODEC)
 MACRO_BOOL_TO_01(OPENMP_FOUND                     LIBRAW_USE_OPENMP)
-MACRO_BOOL_TO_01(JASPER_FOUND                     LIBRAW_USE_REDCINECODEC)
+MACRO_BOOL_TO_01(Jasper_FOUND                     LIBRAW_USE_REDCINECODEC)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libraw_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw/libraw_config.h)
