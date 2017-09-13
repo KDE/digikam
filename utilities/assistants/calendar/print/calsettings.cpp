@@ -295,7 +295,7 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
         return;
     }
 
-#if HAVE_KCALENDAR_QDATETIME
+#ifdef HAVE_KCALENDAR_QDATETIME
     KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QTimeZone::utc()));
     using DateTime = QDateTime;
 #else
