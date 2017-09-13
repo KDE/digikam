@@ -4649,7 +4649,7 @@ void CoreDB::setTagName(int tagID, const QString& name)
 }
 
 void CoreDB::moveItem(int srcAlbumID, const QString& srcName,
-                       int dstAlbumID, const QString& dstName)
+                      int dstAlbumID, const QString& dstName)
 {
     // find id of src image
     qlonglong imageId = getImageId(srcAlbumID, srcName);
@@ -4663,7 +4663,7 @@ void CoreDB::moveItem(int srcAlbumID, const QString& srcName,
     deleteItem(dstAlbumID, dstName);
 
     d->db->execSql(QString::fromUtf8("UPDATE Images SET album=?, name=? "
-                           "WHERE id=?;"),
+                                     "WHERE id=?;"),
                    dstAlbumID, dstName, imageId);
     d->db->recordChangeset(CollectionImageChangeset(imageId, srcAlbumID, CollectionImageChangeset::Moved));
     d->db->recordChangeset(CollectionImageChangeset(imageId, srcAlbumID, CollectionImageChangeset::Removed));
