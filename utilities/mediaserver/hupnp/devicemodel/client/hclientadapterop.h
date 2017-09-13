@@ -243,7 +243,7 @@ public:
      *
      * \param errDescr specifies a human-readable error description.
      */
-    static HClientAdapterOp createInvalid(int returnCode, const QString& errDescr = "")
+    static HClientAdapterOp createInvalid(int returnCode, const QString& errDescr = QString())
     {
         return HClientAdapterOp<Value>(returnCode, errDescr);
     }
