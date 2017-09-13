@@ -71,7 +71,7 @@ target_link_libraries(cameranamehelpertest
                       ${OpenCV_LIBRARIES}
 )
 
-if(GPHOTO2_FOUND)
+if(Gphoto2_FOUND)
     target_link_libraries(cameranamehelpertest ${GPHOTO2_LIBRARIES})
 endif()
 

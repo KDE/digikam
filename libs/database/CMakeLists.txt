@@ -118,7 +118,7 @@ if(ENABLE_DBUS)
        )
 endif()
 
-if(MARBLE_FOUND)
+if(Marble_FOUND)
     set(libdatabase_SRCS
         ${libdatabase_SRCS}
         item/imagegps.cpp

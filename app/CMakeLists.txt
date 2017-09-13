@@ -55,7 +55,7 @@ set(DIGIKAMCORE_OBJECTS
             utils/digikam_debug.cpp
 )
 
-if(MARBLE_FOUND)
+if(Marble_FOUND)
     set(DIGIKAMCORE_OBJECTS
         ${DIGIKAMCORE_OBJECTS}
         $<TARGET_OBJECTS:geoiface_src>
@@ -78,7 +78,7 @@ if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     )
 endif()
 
-if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+if(LibXml2_FOUND AND LibXslt_FOUND)
     set(DIGIKAMCORE_OBJECTS
         ${DIGIKAMCORE_OBJECTS}
         $<TARGET_OBJECTS:htmlgallery_src>
@@ -119,7 +119,7 @@ if(KF5Kipi_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-if(GPHOTO2_FOUND)
+if(Gphoto2_FOUND)
     include_directories(${GPHOTO2_INCLUDE_DIRS})
 endif()
 
@@ -190,7 +190,7 @@ if(KF5NotifyConfig_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::NotifyConfig)
 endif()
 
-if(MARBLE_FOUND)
+if(Marble_FOUND)
     target_link_libraries(digikamcore PUBLIC ${MARBLE_LIBRARIES})
 endif()
 
@@ -198,16 +198,16 @@ if(X11_FOUND)
     target_link_libraries(digikamcore PUBLIC Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
-if(JASPER_FOUND)
+if(Jasper_FOUND)
     target_link_libraries(digikamcore PUBLIC ${JASPER_LIBRARIES})
 endif()
 
 # LibLqr-1 library rules for content-aware filter
-if(LQR-1_FOUND)
+if(Lqr-1_FOUND)
     target_link_libraries(digikamcore PRIVATE ${LQR-1_LIBRARIES})
 endif()
 
-if(LENSFUN_FOUND)
+if(LensFun_FOUND)
     target_include_directories(digikamcore PUBLIC ${LENSFUN_INCLUDE_DIRS})
     target_link_libraries(digikamcore PUBLIC ${LENSFUN_LIBRARIES})
 endif()
@@ -245,7 +245,7 @@ if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::ThreadWeaver)
 endif()
 
-if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+if(LibXml2_FOUND AND LibXslt_FOUND)
     target_link_libraries(digikamcore PUBLIC ${LIBXSLT_EXSLT_LIBRARIES}
                                              ${LIBXSLT_LIBRARIES}
                                              ${LIBXML2_LIBRARIES})
@@ -353,7 +353,7 @@ set(libdigikamgui_SRCS
     ${digikamadaptor_SRCS}
 )
 
-if(${MARBLE_FOUND})
+if(${Marble_FOUND})
     set(libdigikamgui_SRCS
         ${libdigikamgui_SRCS}
         views/mapwidgetview.cpp
@@ -407,7 +407,7 @@ if(KF5Kipi_FOUND)
     )
 endif()
 
-if(${MARBLE_FOUND})
+if(${Marble_FOUND})
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
             $<TARGET_OBJECTS:geomapwrapper_src>
@@ -459,7 +459,7 @@ if(KF5Kipi_FOUND)
     target_link_libraries(digikamgui PUBLIC KF5::Kipi)
 endif()
 
-if(${MARBLE_FOUND})
+if(${Marble_FOUND})
      target_link_libraries(digikamgui PUBLIC ${MARBLE_LIBRARIES})
 endif()
 
@@ -488,7 +488,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     target_link_libraries(digikamgui PRIVATE ${KVM_LIBRARY})
 endif()
 
-if(GPHOTO2_FOUND)
+if(Gphoto2_FOUND)
     # See bug #258931: libgphoto2 library must be the last arg for linker.
     # See bug #268267 : digiKam need to be linked to libusb to prevent crash 
     # at gphoto2 init if opencv is linked with libdc1394. Libusb linking rules are 

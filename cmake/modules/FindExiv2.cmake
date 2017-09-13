@@ -5,7 +5,7 @@
 #
 # Once done this will define
 #
-#  EXIV2_FOUND       - system has libexiv2
+#  Exiv2_FOUND       - system has libexiv2
 #  EXIV2_INCLUDE_DIR - the libexiv2 include directory
 #  EXIV2_LIBRARIES   - Link these to use libexiv2
 #  EXIV2_DEFINITIONS - Compiler switches required for using libexiv2

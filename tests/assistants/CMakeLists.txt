@@ -130,7 +130,7 @@ endif()
 # =======================================================
 # Stand alone version of HTML Gallery tool
 
-if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+if(LibXml2_FOUND AND LibXslt_FOUND)
 
     set(htmlgallery_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/htmlgallery.cpp)
 

@@ -11,7 +11,7 @@ add_subdirectory(calendar)
 add_subdirectory(sendbymail)
 add_subdirectory(printcreator)
 
-if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+if(LibXml2_FOUND AND LibXslt_FOUND)
     add_subdirectory(htmlgallery)
 endif()
 

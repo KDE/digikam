@@ -19,6 +19,6 @@ add_subdirectory(filters)
 add_subdirectory(printcreator)
 add_subdirectory(mediaserver)
 
-if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+if(LibXml2_FOUND AND LibXslt_FOUND)
     add_subdirectory(htmlgallery)
 endif()

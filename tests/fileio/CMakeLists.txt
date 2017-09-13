@@ -119,7 +119,7 @@ target_link_libraries(statesavingobjecttest
                       ${OpenCV_LIBRARIES}
 )
 
-if(GPHOTO2_FOUND)
+if(Gphoto2_FOUND)
     target_link_libraries(statesavingobjecttest ${GPHOTO2_LIBRARIES})
 endif()
 

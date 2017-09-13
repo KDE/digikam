@@ -21,6 +21,6 @@ add_subdirectory(kdesupport)
 add_subdirectory(facemanagement)
 add_subdirectory(mediaserver)
 
-if(${MARBLE_FOUND})
+if(${Marble_FOUND})
     add_subdirectory(geolocation)
 endif()

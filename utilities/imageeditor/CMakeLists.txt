@@ -30,7 +30,7 @@ if(KF5Kipi_FOUND)
      include_directories($<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-if(GPHOTO2_FOUND)
+if(Gphoto2_FOUND)
     include_directories(${GPHOTO2_INCLUDE_DIRS})
 endif()
 
@@ -131,13 +131,13 @@ set(libeditortools_SRCS
     tools/transform/ratiocroptool.cpp
 )
 
-if(LQR-1_FOUND)
+if(Lqr-1_FOUND)
     set(libeditortools_SRCS ${libeditortools_SRCS}
         tools/transform/contentawareresizetool.cpp
        )
 endif()
 
-if(LENSFUN_FOUND)
+if(LensFun_FOUND)
     set(libeditortools_SRCS ${libeditortools_SRCS}
         tools/enhance/lensautofixtool.cpp
        )

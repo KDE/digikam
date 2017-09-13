@@ -134,7 +134,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 
-if(LQR-1_FOUND)
+if(Lqr-1_FOUND)
     set(libdimgfilters_SRCS
         ${libdimgfilters_SRCS}
         filters/transform/contentawarefilter.cpp
@@ -142,7 +142,7 @@ if(LQR-1_FOUND)
     include_directories(${LQR-1_INCLUDE_DIRS})
 endif()
 
-if(LENSFUN_FOUND)
+if(LensFun_FOUND)
     set(libdimgfilters_SRCS
         ${libdimgfilters_SRCS}
         filters/lens/lensfunfilter.cpp
@@ -153,7 +153,7 @@ if(LENSFUN_FOUND)
     include_directories(${LENSFUN_INCLUDE_DIRS})
 endif()
 
-if(EIGEN3_FOUND)
+if(Eigen3_FOUND)
     set(libdimgfilters_SRCS
         ${libdimgfilters_SRCS}
         filters/sharp/refocusfilter.cpp
@@ -179,7 +179,7 @@ set(libdimgloaders_SRCS
 
 # JPEG2000 support
 
-if(JASPER_FOUND)
+if(Jasper_FOUND)
     # this should be compiled separately to the lib, cleans if checks
     set(libdimgloaders_SRCS
         ${libdimgloaders_SRCS}

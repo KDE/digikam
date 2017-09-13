@@ -23,7 +23,7 @@ set(libimageversionssidebar_SRCS
     versionsdelegate.cpp
 )
 
-if(${MARBLE_FOUND})
+if(${Marble_FOUND})
     set(libimageproperties_SRCS
         ${libimageproperties_SRCS}
         imagepropertiesgpstab.cpp

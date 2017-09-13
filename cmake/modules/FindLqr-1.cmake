@@ -1,7 +1,7 @@
 #  Try to find the lqr-1 library
 #  Once done this will define
 #
-#  LQR-1_FOUND        - system has the lqr-1 library
+#  Lqr-1_FOUND        - system has the lqr-1 library
 #  LQR-1_INCLUDE_DIRS - the lqr-1 library include directory
 #  LQR-1_LIBRARIES    - Link these to use the lqr-1 library
 #
@@ -14,7 +14,7 @@
 
 IF (LQR-1_LIBRARIES AND LQR-1_INCLUDE_DIRS)
     # in cache already
-    SET(LQR-1_FOUND TRUE)
+    SET(Lqr-1_FOUND TRUE)
 ELSE (LQR-1_LIBRARIES AND LQR-1_INCLUDE_DIRS)
     IF (NOT WIN32)
         INCLUDE(FindPkgConfig)
@@ -40,7 +40,7 @@ ELSE (LQR-1_LIBRARIES AND LQR-1_INCLUDE_DIRS)
 
             IF (HAVE_LQR_0_4)
                 INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR})
-                SET(LQR-1_FOUND TRUE)
+                SET(Lqr-1_FOUND TRUE)
             ENDIF (HAVE_LQR_0_4)
 
         ENDIF (GLIB2_FOUND)
