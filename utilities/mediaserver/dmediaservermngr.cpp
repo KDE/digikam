@@ -68,13 +68,13 @@ public:
     {
         server = 0;
     }
-    
+
     // Configuration XML file to store albums map to share in case of restoring between sessions.
     QString        mapsConf;
 
     // Server instance pointer.
     DMediaServer*  server;
-    
+
     // The current albums collection to share.
     MediaServerMap collectionMap;
 };
@@ -98,11 +98,6 @@ DMediaServerMngr::~DMediaServerMngr()
 
 void DMediaServerMngr::cleanUp()
 {
-    slotTurnOff();
-}
-
-void DMediaServerMngr::slotTurnOff()
-{
     delete d->server;
     d->server = 0;
 }
@@ -111,13 +106,13 @@ void DMediaServerMngr::loadAtStartup()
 {
     KSharedConfig::Ptr config    = KSharedConfig::openConfig();
     KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
-    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start MediaServer On Startup"), false);
+    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start MediaServer At Startup"), false);
 
     if (startServerOnStartup)
     {
         // Restore the old sharing configuration and start the server.
         load();
-        slotTurnOn();
+        startMediaServer();
     }
 }
 
@@ -125,21 +120,17 @@ void DMediaServerMngr::saveAtShutdown()
 {
     KSharedConfig::Ptr config    = KSharedConfig::openConfig();
     KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
-    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start MediaServer On Startup"), false);
+    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start MediaServer At Startup"), false);
 
     if (startServerOnStartup)
     {
         // Save the current sharing configuration for the next session.
         save();
     }
-    
+
     cleanUp();
 }
 
-void DMediaServerMngr::slotTurnOn()
-{
-    startMediaServer();
-}
 
 void DMediaServerMngr::setCollectionMap(const MediaServerMap& map)
 {
@@ -177,12 +168,12 @@ int DMediaServerMngr::itemsShared() const
     int i = 0;
 
     QList<QList<QUrl> > ulst = d->collectionMap.values();
-    
+
     foreach(QList<QUrl> urls, ulst)
     {
         i += urls.count();
     }
-    
+
     return i;
 }
 
@@ -212,7 +203,7 @@ bool DMediaServerMngr::save()
 
         docElem.appendChild(elm);
     }
-   
+
     QFile file(d->mapsConf);
 
     if (!file.open(QIODevice::WriteOnly))

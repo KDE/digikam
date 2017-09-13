@@ -73,7 +73,7 @@ DMediaServer::DMediaServer(QObject* const parent)
       d(new Private)
 {
     // Set Hupnp debug level on the console
-    //SetLoggingLevel(Herqq::Upnp::Debug);
+    SetLoggingLevel(Herqq::Upnp::Debug);
 
     // Configure a data source
     HFileSystemDataSourceConfiguration datasourceConfig;
@@ -158,7 +158,7 @@ void DMediaServer::addAlbumsOnServer(const MediaServerMap& map)
             t++;
         }
     }
-    
+
     qCDebug(DIGIKAM_MEDIASRV_LOG) << "Total items shared by MediaServer:" << t;
 }
 

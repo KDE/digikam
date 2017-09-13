@@ -76,13 +76,13 @@ public:
     QLabel*              iStats;
 
     static const QString configGroupName;
-    static const QString configstartServerOnStartupCheckBoxEntry;
+    static const QString configStartServerOnStartupCheckBoxEntry;
 };
 
 // --------------------------------------------------------
 
 const QString SetupDlna::Private::configGroupName(QLatin1String("DLNA Settings"));
-const QString SetupDlna::Private::configstartServerOnStartupCheckBoxEntry(QLatin1String("Start Server On Startup"));
+const QString SetupDlna::Private::configStartServerOnStartupCheckBoxEntry(QLatin1String("Start MediaServer At Startup"));
 
 SetupDlna::SetupDlna(QWidget* const parent)
     : QScrollArea(parent),
@@ -107,7 +107,7 @@ SetupDlna::SetupDlna(QWidget* const parent)
 
 
     d->startServerOnStartupCheckBox = new QCheckBox(i18n("Automatic Start Server at Startup"));
-    d->startServerOnStartupCheckBox->setWhatsThis(i18n("Set this option to start the DLNA server on digiKam start"));
+    d->startServerOnStartupCheckBox->setWhatsThis(i18n("Set this option to turn-on the DLNA server at digiKam start-up"));
     d->startServerOnStartupCheckBox->setChecked(true);
 
     DHBox* const btnBox = new DHBox(panel);
@@ -116,7 +116,7 @@ SetupDlna::SetupDlna(QWidget* const parent)
     d->stopButton       = new QPushButton(i18n("Stop"),  btnBox);
     btnBox->setStretchFactor(d->srvStatus, 10);
     d->srvStatus->setAlignment(Qt::AlignCenter);
-    
+
     DHBox* const staBox   = new DHBox(panel);
     d->aStats             = new QLabel(staBox);
     QWidget* const spacer = new QLabel(staBox);
@@ -160,14 +160,14 @@ void SetupDlna::readSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->startServerOnStartupCheckBox->setChecked(group.readEntry(d->configstartServerOnStartupCheckBoxEntry, false));
+    d->startServerOnStartupCheckBox->setChecked(group.readEntry(d->configStartServerOnStartupCheckBoxEntry, false));
 }
 
 void SetupDlna::applySettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
-    group.writeEntry(d->configstartServerOnStartupCheckBoxEntry, d->startServerOnStartupCheckBox->isChecked());
+    group.writeEntry(d->configStartServerOnStartupCheckBoxEntry, d->startServerOnStartupCheckBox->isChecked());
     config->sync();
 }
 
@@ -179,7 +179,7 @@ void SetupDlna::slotSelectionChanged()
 void SetupDlna::updateServerStatus()
 {
     QString txt;
-    
+
     if (d->mngr->isRunning())
     {
         txt = i18n("Media server is running");
@@ -212,13 +212,13 @@ void SetupDlna::slotStartMediaServer()
     }
 
     d->mngr->setCollectionMap(map);
-    d->mngr->slotTurnOn();
+    d->mngr->startMediaServer();
     updateServerStatus();
 }
 
 void SetupDlna::slotStopMediaServer()
 {
-    d->mngr->slotTurnOff();
+    d->mngr->cleanUp();
     updateServerStatus();
 }
 

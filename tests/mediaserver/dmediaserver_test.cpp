@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
             return -1;
     }
  
-    DMediaServerMngr::instance()->slotTurnOn();
+    DMediaServerMngr::instance()->startMediaServer();
 
     QProgressDialog* const pdlg = new QProgressDialog(0);
     pdlg->setLabelText(QLatin1String("Sharing files on the network"));
