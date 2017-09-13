@@ -174,6 +174,9 @@ find_package(KF5 ${CALENDAR_MIN_VERSION} QUIET
              OPTIONAL_COMPONENTS
              CalendarCore           # For Calendar tool.
 )
+if ("${KF5CalendarCore_VERSION}" VERSION_GREATER 5.6.40)
+    set(HAVE_KCALENDAR_QDATETIME TRUE)
+endif()
 
 if(ENABLE_AKONADICONTACTSUPPORT AND NOT KF5AkonadiContact_FOUND)
     set(ENABLE_KFILEMETADATASUPPORT OFF)

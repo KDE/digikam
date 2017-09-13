@@ -295,7 +295,13 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
         return;
     }
 
-    KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QTimeZone(0)));
+#if HAVE_KCALENDAR_QDATETIME
+    KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QTimeZone::utc()));
+    using DateTime = QDateTime;
+#else
+    KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QString::fromLatin1("UTC")));
+    using DateTime = KDateTime;
+#endif
     KCalCore::FileStorage::Ptr fileStorage(new KCalCore::FileStorage(memCal, url.toLocalFile(), new KCalCore::ICalFormat));
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Loading calendar from file " << url.toLocalFile();
@@ -313,9 +319,9 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
         qLast  = calSys.date(params.year + 1, 1, 1);
         qLast  = qLast.addDays(-1);
 
-        KDateTime dtFirst(qFirst);
-        KDateTime dtLast(qLast);
-        KDateTime dtCurrent;
+        DateTime dtFirst(qFirst, QTime(0, 0));
+        DateTime dtLast(qLast, QTime(0, 0));
+        DateTime dtCurrent;
 
         int counter                = 0;
         KCalCore::Event::List list = memCal->rawEvents(qFirst, qLast);

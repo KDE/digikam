@@ -75,6 +75,9 @@
 /* Define to 1 if you have KCalendar core shared libraries installed */
 #cmakedefine HAVE_KCALENDAR 1
 
+/* Define to 1 if you have KCalendar core shared libraries with QDateTime support installed */
+#cmakedefine HAVE_KCALENDAR_QDATETIME 1
+
 /* Define to 1 if Panorama tool is supported */
 #cmakedefine HAVE_PANORAMA 1
 
