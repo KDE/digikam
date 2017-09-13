@@ -42,6 +42,7 @@
 #include "hserviceinfo.h"
 #include "hdiscoverytype.h"
 #include "hproduct_tokens.h"
+#include "hdevicehost_ssdp_handler_p.h"
 
 #include <QtCore/QUrl>
 
@@ -149,8 +150,6 @@ public:
             );
     }
 };
-
-class HDeviceHostSsdpHandler;
 
 //
 // Class that sends the SSDP announcements.
@@ -271,8 +270,10 @@ public:
     {
         for (quint32 i = 0; i < m_advertisementCount; ++i)
         {
-            foreach(HSsdp* ssdp, m_ssdps)
+            foreach(HDeviceHostSsdpHandler* const hssdp, m_ssdps)
             {
+                HSsdp* const ssdp = dynamic_cast<HSsdp*>(hssdp);
+
                 foreach(const AnnouncementType& at, announcements)
                 {
                     ssdp->announcePresence(at());
