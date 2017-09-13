@@ -102,7 +102,7 @@ DSplashScreen::DSplashScreen()
     if (isBeta)
     {
         QPainter p(&splash);
-        p.drawPixmap(412, 27, QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-beta.png")));
+        p.drawPixmap(380, 27, QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-beta.png")));
         p.end();
     }
 
