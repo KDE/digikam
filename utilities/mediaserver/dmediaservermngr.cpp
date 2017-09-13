@@ -70,9 +70,9 @@ public:
         server    = 0;
     }
 
-    QString                    file;
-    DMediaServer*              server;
-    QMap<QString, QList<QUrl>> collectionMap;
+    QString                     file;
+    DMediaServer*               server;
+    QMap<QString, QList<QUrl> > collectionMap;
 };
 
 DMediaServerMngr* DMediaServerMngr::instance()
@@ -137,7 +137,7 @@ void DMediaServerMngr::slotTurnOn()
     startMediaServer();
 }
 
-void DMediaServerMngr::setCollectionMap(const QMap<QString, QList<QUrl>>& collectionMap)
+void DMediaServerMngr::setCollectionMap(const QMap<QString, QList<QUrl> >& collectionMap)
 {
     d->collectionMap = collectionMap;
 }

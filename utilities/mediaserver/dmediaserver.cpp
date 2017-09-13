@@ -144,7 +144,7 @@ void DMediaServer::addImagesOnServer(const QList<QUrl>& imageUrlList)
     }
 }
 
-void DMediaServer::addImagesOnServer(const QMap<QString, QList<QUrl>>& collectionMap)
+void DMediaServer::addImagesOnServer(const QMap<QString, QList<QUrl> >& collectionMap)
 {
     QList<QString> keys = collectionMap.uniqueKeys();
     QList<QUrl>    imgUrls;

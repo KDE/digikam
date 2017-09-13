@@ -43,7 +43,7 @@ public:
     virtual ~DMediaServer();
 
     void addImagesOnServer(const QList<QUrl>&);
-    void addImagesOnServer(const QMap<QString, QList<QUrl>>&);
+    void addImagesOnServer(const QMap<QString, QList<QUrl> >&);
 
 private:
 

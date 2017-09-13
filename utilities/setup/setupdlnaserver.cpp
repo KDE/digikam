@@ -198,7 +198,7 @@ void SetupDlna::updateServerStatus()
 void SetupDlna::slotStartMediaServer()
 {
     DInfoInterface::DAlbumIDs albums = d->iface->albumChooserItems();
-    QMap<QString, QList<QUrl>> map;
+    QMap<QString, QList<QUrl> > map;
 
     foreach(int id, albums)
     {
