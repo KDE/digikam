@@ -30,7 +30,7 @@
 class QUrl;
 class QDate;
 class QTime;
-struct QUuid;
+class QUuid;
 class QDateTime;
 class QByteArray;
 
