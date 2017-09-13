@@ -190,7 +190,6 @@ void AdvancedRenameProcessDialog::closeEvent(QCloseEvent* e)
 void AdvancedRenameProcessDialog::abort()
 {
     d->cancel = true;
-    emit signalRebuildAllThumbsDone();
 }
 
 }  // namespace Digikam

@@ -48,10 +48,6 @@ public:
     explicit AdvancedRenameProcessDialog(const NewNamesList& list);
     ~AdvancedRenameProcessDialog();
 
-Q_SIGNALS:
-
-    void signalRebuildAllThumbsDone();
-
 private:
 
     AdvancedRenameProcessDialog(const AdvancedRenameProcessDialog&);
