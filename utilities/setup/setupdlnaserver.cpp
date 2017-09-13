@@ -147,6 +147,7 @@ SetupDlna::SetupDlna(QWidget* const parent)
             this, SLOT(slotStartMediaServer()));
 
     readSettings();
+    updateServerStatus();
 }
 
 SetupDlna::~SetupDlna()
@@ -159,7 +160,7 @@ void SetupDlna::readSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->startServerOnStartupCheckBox->setChecked(group.readEntry(d->configstartServerOnStartupCheckBoxEntry,  false));
+    d->startServerOnStartupCheckBox->setChecked(group.readEntry(d->configstartServerOnStartupCheckBoxEntry, false));
 }
 
 void SetupDlna::applySettings()
@@ -184,12 +185,16 @@ void SetupDlna::updateServerStatus()
         txt = i18n("Media server is running");
         d->aStats->setText(i18np("1 album shared", "%1 albums shared", d->mngr->albumsShared()));
         d->iStats->setText(i18np("1 item shared",  "%1 items shared",  d->mngr->albumsShared()));
+        d->startButton->setEnabled(false);
+        d->stopButton->setEnabled(true);
     }
     else
     {
         txt = i18n("Media server is not running");
         d->aStats->clear();
         d->iStats->clear();
+        d->startButton->setEnabled(true);
+        d->stopButton->setEnabled(false);
     }
 
     d->srvStatus->setText(txt);
