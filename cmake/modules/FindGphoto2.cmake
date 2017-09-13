@@ -35,7 +35,7 @@ mark_as_advanced(GPHOTO2_PORT_LIBRARY)
 find_package(PkgConfig)
 pkg_check_modules(PC_GPHOTO2 QUIET libgphoto2)
 
-if(PC_Gphoto2_FOUND)
+if(PC_GPHOTO2_FOUND)
 
     set(GPHOTO2_VERSION_STRING "${PC_GPHOTO2_VERSION}")
 
