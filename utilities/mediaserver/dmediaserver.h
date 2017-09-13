@@ -35,6 +35,7 @@
 namespace Digikam
 {
 
+/// A kind of map of albums with urls contents to share with DLNA media server.
 typedef QMap<QString, QList<QUrl> > MediaServerMap;
     
 class DMediaServer : public QObject
@@ -46,8 +47,11 @@ public:
     explicit DMediaServer(QObject* const parent = 0);
     virtual ~DMediaServer();
 
-    void addImagesOnServer(const QList<QUrl>&);
-    void addAlbumsOnServer(const MediaServerMap&);
+    /// To share a list of urls to a single album.
+    void addImagesOnServer(const QString& aname, const QList<QUrl>& urls);
+    
+    /// To share a list of albums with dedicated urls list for each one.  
+    void addAlbumsOnServer(const MediaServerMap& map);
 
 private:
 

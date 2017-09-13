@@ -68,9 +68,14 @@ public:
     {
         server = 0;
     }
+    
+    // Configuration XML file to store albums map to share in case of restoring between sessions.
+    QString        mapsConf;
 
-    QString        file;
+    // Server instance pointer.
     DMediaServer*  server;
+    
+    // The current albums collection to share.
     MediaServerMap collectionMap;
 };
 
@@ -82,8 +87,8 @@ DMediaServerMngr* DMediaServerMngr::instance()
 DMediaServerMngr::DMediaServerMngr()
     : d(new Private)
 {
-    d->file = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
-              QLatin1String("/digikam/mediaserver.xml");
+    d->mapsConf = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
+                  QLatin1String("/digikam/mediaserver.xml");
 }
 
 DMediaServerMngr::~DMediaServerMngr()
@@ -106,7 +111,7 @@ void DMediaServerMngr::loadAtStartup()
 {
     KSharedConfig::Ptr config    = KSharedConfig::openConfig();
     KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
-    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start Server On Startup"), false);
+    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start MediaServer On Startup"), false);
 
     if (startServerOnStartup)
     {
@@ -120,7 +125,7 @@ void DMediaServerMngr::saveAtShutdown()
 {
     KSharedConfig::Ptr config    = KSharedConfig::openConfig();
     KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
-    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start Server On Startup"), false);
+    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start MediaServer On Startup"), false);
 
     if (startServerOnStartup)
     {
@@ -208,7 +213,7 @@ bool DMediaServerMngr::save()
         docElem.appendChild(elm);
     }
    
-    QFile file(d->file);
+    QFile file(d->mapsConf);
 
     if (!file.open(QIODevice::WriteOnly))
     {
@@ -228,7 +233,7 @@ bool DMediaServerMngr::save()
 
 bool DMediaServerMngr::load()
 {
-    QFile file(d->file);
+    QFile file(d->mapsConf);
 
     if (file.exists())
     {

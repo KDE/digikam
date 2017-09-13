@@ -46,8 +46,13 @@ class DIGIKAM_EXPORT DMediaServerMngr : public QObject
 
 public:
 
+    /// Setup the list of albums to share with DLNA server.
     void setCollectionMap(const MediaServerMap&);
+    
+    /// Start the DLNA server and shre the contents.
     void startMediaServer();
+    
+    /// Stop the DLNA server and clean-up.
     void cleanUp();
 
     /// Low level methods to save and load from xml data file.
@@ -67,6 +72,7 @@ public:
     
 public:
 
+    /// This manager is a singleton. Use this method to manage the DLNA server instance.
     static DMediaServerMngr* instance();
 
 public Q_SLOTS:

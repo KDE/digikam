@@ -38,8 +38,6 @@
 #include "hdevicehost_configuration.h"
 #include "hav_global.h"
 #include "hrootdir.h"
-#include "himageitem.h"
-#include "hphoto.h"
 #include "hcontainer.h"
 #include "hav_devicemodel_creator.h"
 #include "hmediaserver_deviceconfiguration.h"
@@ -102,10 +100,10 @@ DMediaServer::DMediaServer(QObject* const parent)
     // Setup the HDeviceHost with desired configuration info.
     HDeviceConfiguration config;
 
-    QString filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+    QString descFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                               QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediaserver_description.xml"));
 
-    config.setPathToDeviceDescription(filePath);
+    config.setPathToDeviceDescription(descFile);
     config.setCacheControlMaxAge(180);
 
     HDeviceHostConfiguration hostConfiguration;
@@ -122,7 +120,7 @@ DMediaServer::DMediaServer(QObject* const parent)
     }
     else
     {
-        qCDebug(DIGIKAM_MEDIASRV_LOG) << "MediaServer initialized with DLNA description:" << filePath;
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "MediaServer initialized with DLNA description:" << descFile;
     }
 }
 
@@ -132,38 +130,36 @@ DMediaServer::~DMediaServer()
      delete d;
 }
 
-void DMediaServer::addImagesOnServer(const QList<QUrl>& imageUrlList)
+void DMediaServer::addImagesOnServer(const QString& aname, const QList<QUrl>& urls)
 {
-    QList<HItem*> itemList;
-
-    for (int i = 0 ; i < imageUrlList.size() ; i++)
-    {
-        itemList.append(new HItem(imageUrlList.at(i).fileName(),
-                                  QLatin1String("0"),
-                                  QString()));
-        d->datasource->add(itemList.at(i), imageUrlList.at(i).path());
-    }
+    MediaServerMap map;
+    map.insert(aname, urls);
+    addAlbumsOnServer(map); 
 }
 
 void DMediaServer::addAlbumsOnServer(const MediaServerMap& map)
 {
     QList<QString> keys = map.uniqueKeys();
-    QList<QUrl>    imgUrls;
+    QList<QUrl>    urls;
     QString        album;
+    int            t    = 0;
 
     for (int i = 0 ; i < keys.size() ; i++)
     {
         album                       = keys.at(i);
-        imgUrls                     = map.value(album);
+        urls                        = map.value(album);
         HContainer* const container = new HContainer(album, QLatin1String("0"));
         d->datasource->add(container);
 
-        for (int j = 0 ; j < imgUrls.size() ; j++)
+        for (int j = 0 ; j < urls.size() ; j++)
         {
-            d->datasource->add(imgUrls.at(j).toLocalFile(), container->id());
-            qCDebug(DIGIKAM_MEDIASRV_LOG) << "Add item to mediaserver:" << imgUrls.at(j).toLocalFile();
+            d->datasource->add(urls.at(j).toLocalFile(), container->id());
+            qCDebug(DIGIKAM_MEDIASRV_LOG) << "Add item to MediaServer:" << urls.at(j).toLocalFile();
+            t++;
         }
     }
+    
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << "Total items shared by MediaServer:" << t;
 }
 
 } // namespace Digikam
