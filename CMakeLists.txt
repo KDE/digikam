@@ -102,7 +102,6 @@ option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 
 option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KDE files indexer support (default=OFF)"                         OFF)
 option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contacts support (default=OFF)"                         OFF)
 option(ENABLE_MEDIAPLAYER           "Build digiKam with Media Player support (default=OFF)"                              OFF)
-option(ENABLE_DLNA                  "Build digiKam with DLNA Media Server support (default=ON)"                          ON)
 option(ENABLE_DBUS                  "Build digiKam with DBUS support (default=ON)"                                       ON)
 option(ENABLE_APPSTYLES             "Build digiKam with support for changing the widget application style (default=OFF)" OFF)
 
@@ -411,7 +410,6 @@ MACRO_BOOL_TO_01(MARBLE_FOUND            HAVE_MARBLE)
 MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT     HAVE_MYSQLSUPPORT)
 MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL    HAVE_INTERNALMYSQL)
 MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER      HAVE_MEDIAPLAYER)
-MACRO_BOOL_TO_01(ENABLE_DLNA             HAVE_DLNA)
 MACRO_BOOL_TO_01(ENABLE_DBUS             HAVE_DBUS)
 MACRO_BOOL_TO_01(ENABLE_APPSTYLES        HAVE_APPSTYLE_SUPPORT)
 
