@@ -56,23 +56,7 @@
 #include <QtCore/QPointer>
 #include <QtCore/QScopedPointer>
 
-#ifdef QT_QTSOAP_EXPORT
-#  undef QT_QTSOAP_EXPORT
-#  ifdef Q_OS_WIN
-#    define QT_QTSOAP_EXPORT __declspec(dllexport)
-#  elif defined(QT_VISIBILITY_AVAILABLE)
-#    define QT_QTSOAP_EXPORT __attribute__((visibility("default")))
-#  endif
-#  ifndef QT_QTSOAP_EXPORT
-#    define QT_QTSOAP_EXPORT
-#  endif
-#else
-#  if defined(Q_OS_WIN)
-#    define QT_QTSOAP_EXPORT __declspec(dllimport)
-#  else
-#    define QT_QTSOAP_EXPORT
-#  endif
-#endif
+#include "digikam_export.h"
 
 #define SOAPv11_ENVELOPE    "http://schemas.xmlsoap.org/soap/envelope/"
 #define SOAPv11_ENCODING    "http://schemas.xmlsoap.org/soap/encoding/"
@@ -165,7 +149,7 @@ private:
     T *d;
 };
 
-class QT_QTSOAP_EXPORT QtSoapQName
+class DIGIKAM_EXPORT QtSoapQName
 {
 public:
     QtSoapQName(const QString &name = QString::null, const QString &uri = QString::null);
@@ -184,7 +168,7 @@ private:
 bool operator ==(const QtSoapQName &n1, const QtSoapQName &n2);
 bool operator <(const QtSoapQName &n1, const QtSoapQName &n2);
 
-class QT_QTSOAP_EXPORT QtSoapType
+class DIGIKAM_EXPORT QtSoapType
 {
 public:
     enum Type {
@@ -252,7 +236,7 @@ protected:
 
 class QtSoapArrayIterator;
 
-class QT_QTSOAP_EXPORT QtSoapArray : public QtSoapType
+class DIGIKAM_EXPORT QtSoapArray : public QtSoapType
 {
 public:
     QtSoapArray();
@@ -311,7 +295,7 @@ private:
     int siz0, siz1, siz2, siz3, siz4;
 };
 
-class QT_QTSOAP_EXPORT QtSoapArrayIterator
+class DIGIKAM_EXPORT QtSoapArrayIterator
 {
 public:
     QtSoapArrayIterator(QtSoapArray &);
@@ -338,7 +322,7 @@ private:
 
 class QtSoapStructIterator;
 
-class QT_QTSOAP_EXPORT QtSoapStruct : public QtSoapType
+class DIGIKAM_EXPORT QtSoapStruct : public QtSoapType
 {
 public:
     QtSoapStruct();
@@ -375,7 +359,7 @@ protected:
     QList<QtSmartPtr<QtSoapType> > dict;
 };
 
-class QT_QTSOAP_EXPORT QtSoapStructIterator
+class DIGIKAM_EXPORT QtSoapStructIterator
 {
 public:
     QtSoapStructIterator(QtSoapStruct &);
@@ -394,7 +378,7 @@ private:
     QList<QtSmartPtr<QtSoapType> >::Iterator itEnd;
 };
 
-class QT_QTSOAP_EXPORT QtSoapSimpleType : public QtSoapType
+class DIGIKAM_EXPORT QtSoapSimpleType : public QtSoapType
 {
 public:
     QtSoapSimpleType();
@@ -422,7 +406,7 @@ protected:
     QVariant v;
 };
 
-class QT_QTSOAP_EXPORT QtSoapMessage
+class DIGIKAM_EXPORT QtSoapMessage
 {
     friend class QtSoapHttpServer;
 
@@ -499,7 +483,7 @@ private:
     QString errorStr;
 };
 
-class QT_QTSOAP_EXPORT QtSoapTypeConstructorBase
+class DIGIKAM_EXPORT QtSoapTypeConstructorBase
 {
 public:
     inline QtSoapTypeConstructorBase()
@@ -516,7 +500,7 @@ public:
 };
 
 template <class T>
-class QT_QTSOAP_EXPORT QtSoapTypeConstructor : public QtSoapTypeConstructorBase
+class DIGIKAM_EXPORT QtSoapTypeConstructor : public QtSoapTypeConstructorBase
 {
 public:
     QtSoapTypeConstructor()
@@ -544,7 +528,7 @@ private:
     mutable QString errorStr;
 };
 
-class QT_QTSOAP_EXPORT QtSoapTypeFactory
+class DIGIKAM_EXPORT QtSoapTypeFactory
 {
 private:
     QtSoapTypeFactory();
@@ -569,7 +553,7 @@ private:
     QLinkedList<QtSoapTypeConstructorBase*> deleteList;
 };
 
-class QT_QTSOAP_EXPORT QtSoapNamespaces
+class DIGIKAM_EXPORT QtSoapNamespaces
 {
 public:
     void registerNamespace(const QString &prefix, const QString &uri);
@@ -587,7 +571,7 @@ private:
     QtSoapNamespaces();
 };
 
-class QT_QTSOAP_EXPORT QtSoapHttpTransport : public QObject
+class DIGIKAM_EXPORT QtSoapHttpTransport : public QObject
 {
     Q_OBJECT
 
