@@ -31,12 +31,17 @@
 #include "digikam_debug.h"
 #include "calsystem.h"
 
-// KCalCore includes
 
 #ifdef HAVE_KCALENDAR
+    // KCalCore includes
+
 #   include <kcalcore/icalformat.h>
 #   include <kcalcore/filestorage.h>
 #   include <kcalcore/memorycalendar.h>
+
+    // Qt includes
+
+#   include <QTimeZone>
 #endif // HAVE_KCALENDAR
 
 namespace Digikam
@@ -290,7 +295,7 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
         return;
     }
 
-    KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QString::fromLatin1("UTC")));
+    KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QTimeZone(0)));
     KCalCore::FileStorage::Ptr fileStorage(new KCalCore::FileStorage(memCal, url.toLocalFile(), new KCalCore::ICalFormat));
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Loading calendar from file " << url.toLocalFile();
