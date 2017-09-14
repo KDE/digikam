@@ -71,17 +71,18 @@ int main(int argc, char* argv[])
             return -1;
     }
  
-    DMediaServerMngr::instance()->startMediaServer();
-
-    QProgressDialog* const pdlg = new QProgressDialog(0);
-    pdlg->setLabelText(QLatin1String("Sharing files on the network"));
-    pdlg->setMinimumDuration(0);
-    pdlg->setCancelButtonText(QLatin1String("Close"));
-    pdlg->setMaximum(0);
-    pdlg->setMinimum(0);
-    pdlg->setValue(0);
-    pdlg->exec();
-
+    if (DMediaServerMngr::instance()->startMediaServer())
+    {
+        QProgressDialog* const pdlg = new QProgressDialog(0);
+        pdlg->setLabelText(QLatin1String("Sharing files on the network"));
+        pdlg->setMinimumDuration(0);
+        pdlg->setCancelButtonText(QLatin1String("Close"));
+        pdlg->setMaximum(0);
+        pdlg->setMinimum(0);
+        pdlg->setValue(0);
+        pdlg->exec();
+    }
+    
     DMediaServerMngr::instance()->save();
     DMediaServerMngr::instance()->cleanUp();
 

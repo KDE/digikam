@@ -118,18 +118,23 @@ void DMediaServerMngr::cleanUp()
     d->server = 0;
 }
 
-void DMediaServerMngr::loadAtStartup()
+bool DMediaServerMngr::loadAtStartup()
 {
     KSharedConfig::Ptr config    = KSharedConfig::openConfig();
     KConfigGroup dlnaConfigGroup = config->group(configGroupName());
     bool startServerOnStartup    = dlnaConfigGroup.readEntry(configStartServerOnStartupEntry(), false);
+    bool result                  = true;
 
     if (startServerOnStartup)
     {
         // Restore the old sharing configuration and start the server.
-        load();
-        startMediaServer();
+        result &= load();
+        result &= startMediaServer();
+
+        return result;
     }
+    
+    return false;
 }
 
 void DMediaServerMngr::saveAtShutdown()
@@ -158,14 +163,22 @@ void DMediaServerMngr::setCollectionMap(const MediaServerMap& map)
     d->collectionMap = map;
 }
 
-void DMediaServerMngr::startMediaServer()
+bool DMediaServerMngr::startMediaServer()
 {
     if (!d->server)
     {
         d->server = new DMediaServer();
+
+        if (!d->server->init())
+        {
+            cleanUp();
+            return false;
+        }
     }
 
     d->server->addAlbumsOnServer(d->collectionMap);
+
+    return true;
 }
 
 bool DMediaServerMngr::isRunning() const

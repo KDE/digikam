@@ -72,6 +72,10 @@ DMediaServer::DMediaServer(QObject* const parent)
     : QObject(parent),
       d(new Private)
 {
+}
+
+bool DMediaServer::init()
+{
     // Set Hupnp debug level on the console
     // See hupnp/general/hupnp_global.h for more values available.
     SetLoggingLevel(Herqq::Upnp::Information);
@@ -118,11 +122,14 @@ DMediaServer::DMediaServer(QObject* const parent)
     {
         qCDebug(DIGIKAM_MEDIASRV_LOG) << "MediaServer initialization failed:"
                                       << d->deviceHost->errorDescription().toLocal8Bit();
+        return false;
     }
     else
     {
         qCDebug(DIGIKAM_MEDIASRV_LOG) << "MediaServer initialized with DLNA description:" << descFile;
     }
+    
+    return true;
 }
 
 DMediaServer::~DMediaServer()

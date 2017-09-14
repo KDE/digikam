@@ -47,6 +47,9 @@ public:
     explicit DMediaServer(QObject* const parent = 0);
     virtual ~DMediaServer();
 
+    /// Initialize the internal server instance and return true if all is ready to host contents.
+    bool init();
+
     /// To share a list of albums with dedicated urls list for each one.
     void addAlbumsOnServer(const MediaServerMap& map);
 

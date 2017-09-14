@@ -52,8 +52,8 @@ public:
     /// Setup the list of albums to share with DLNA server.
     void setCollectionMap(const MediaServerMap&);
 
-    /// Start the DLNA server and shre the contents.
-    void startMediaServer();
+    /// Start the DLNA server and share the contents. Return true is all is on-line.
+    bool startMediaServer();
 
     /// Stop the DLNA server and clean-up.
     void cleanUp();
@@ -63,7 +63,7 @@ public:
     bool load();
 
     /// Wrapper to check if server configuration must be saved and restored between application sessions.
-    void loadAtStartup();
+    bool loadAtStartup();
     void saveAtShutdown();
 
     /// Return true if server is running in background.
