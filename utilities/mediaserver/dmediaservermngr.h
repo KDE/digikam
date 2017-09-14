@@ -59,7 +59,7 @@ public:
     bool save();
     bool load();
 
-    /// Wrapper to check if server configuration must be saved and restored between sessions.
+    /// Wrapper to check if server configuration must be saved and restored between application sessions.
     void loadAtStartup();
     void saveAtShutdown();
 
@@ -69,10 +69,15 @@ public:
     /// Return some stats about total albums and total items shared on the network.
     int  albumsShared() const;
     int  itemsShared()  const;
+    
+    /// Config properties methods.
+    
+    QString configGroupName()                 const;
+    QString configStartServerOnStartupEntry() const;
 
 public:
 
-    /// This manager is a singleton. Use this method to manage the DLNA server instance.
+    /// This manager is a singleton. Use this method to control the DLNA server instance.
     static DMediaServerMngr* instance();
 
 private:

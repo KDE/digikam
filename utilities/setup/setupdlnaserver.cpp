@@ -74,15 +74,9 @@ public:
     QLabel*              srvStatus;
     QLabel*              aStats;
     QLabel*              iStats;
-
-    static const QString configGroupName;
-    static const QString configStartServerOnStartupCheckBoxEntry;
 };
 
 // --------------------------------------------------------
-
-const QString SetupDlna::Private::configGroupName(QLatin1String("DLNA Settings"));
-const QString SetupDlna::Private::configStartServerOnStartupCheckBoxEntry(QLatin1String("Start MediaServer At Startup"));
 
 SetupDlna::SetupDlna(QWidget* const parent)
     : QScrollArea(parent),
@@ -158,16 +152,16 @@ SetupDlna::~SetupDlna()
 void SetupDlna::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(d->configGroupName);
+    KConfigGroup group        = config->group(d->mngr->configGroupName());
 
-    d->startServerOnStartupCheckBox->setChecked(group.readEntry(d->configStartServerOnStartupCheckBoxEntry, false));
+    d->startServerOnStartupCheckBox->setChecked(group.readEntry(d->mngr->configStartServerOnStartupEntry(), false));
 }
 
 void SetupDlna::applySettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(d->configGroupName);
-    group.writeEntry(d->configStartServerOnStartupCheckBoxEntry, d->startServerOnStartupCheckBox->isChecked());
+    KConfigGroup group        = config->group(d->mngr->configGroupName());
+    group.writeEntry(d->mngr->configStartServerOnStartupEntry(), d->startServerOnStartupCheckBox->isChecked());
     config->sync();
 }
 

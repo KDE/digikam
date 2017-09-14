@@ -70,14 +70,20 @@ public:
     }
 
     // Configuration XML file to store albums map to share in case of restoring between sessions.
-    QString        mapsConf;
+    QString              mapsConf;
 
     // Server instance pointer.
-    DMediaServer*  server;
+    DMediaServer*        server;
 
     // The current albums collection to share.
-    MediaServerMap collectionMap;
+    MediaServerMap       collectionMap;
+    
+    static const QString configGroupName;
+    static const QString configStartServerOnStartupEntry;
 };
+
+const QString DMediaServerMngr::Private::configGroupName(QLatin1String("DLNA Settings"));
+const QString DMediaServerMngr::Private::configStartServerOnStartupEntry(QLatin1String("Start MediaServer At Startup"));
 
 DMediaServerMngr* DMediaServerMngr::instance()
 {
@@ -96,6 +102,16 @@ DMediaServerMngr::~DMediaServerMngr()
     delete d;
 }
 
+QString DMediaServerMngr::configGroupName() const
+{
+    return d->configGroupName;
+}
+
+QString DMediaServerMngr::configStartServerOnStartupEntry() const
+{
+    return d->configGroupName;
+}
+
 void DMediaServerMngr::cleanUp()
 {
     delete d->server;
@@ -105,8 +121,8 @@ void DMediaServerMngr::cleanUp()
 void DMediaServerMngr::loadAtStartup()
 {
     KSharedConfig::Ptr config    = KSharedConfig::openConfig();
-    KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
-    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start MediaServer At Startup"), false);
+    KConfigGroup dlnaConfigGroup = config->group(configGroupName());
+    bool startServerOnStartup    = dlnaConfigGroup.readEntry(configStartServerOnStartupEntry(), false);
 
     if (startServerOnStartup)
     {
@@ -119,8 +135,8 @@ void DMediaServerMngr::loadAtStartup()
 void DMediaServerMngr::saveAtShutdown()
 {
     KSharedConfig::Ptr config    = KSharedConfig::openConfig();
-    KConfigGroup dlnaConfigGroup = config->group(QLatin1String("DLNA Settings"));
-    bool startServerOnStartup    = dlnaConfigGroup.readEntry(QLatin1String("Start MediaServer At Startup"), false);
+    KConfigGroup dlnaConfigGroup = config->group(configGroupName());
+    bool startServerOnStartup    = dlnaConfigGroup.readEntry(configStartServerOnStartupEntry(), false);
 
     if (startServerOnStartup)
     {
