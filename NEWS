@@ -3,6 +3,7 @@ digiKam 5.8.0 - Release date: 2017-10-29
 
 NEW FEATURES:
 
+General      : New Upnp/Dlna media server to share collections on local network.
 Image Editor : New clone tool to replace old CImg in-painting tool.
 
 BUGFIXES FROM BUGZILLA:
@@ -34,4 +35,5 @@ BUGFIXES FROM BUGZILLA:
 025 ==> 384079 - High CPU usage on Import when color management is enabled.
 026 ==> 384425 - Suspicious condition in dcraw_emu CLI tool source code.
 027 ==> 380333 - Right click - Group and Menu - View - Group do not match
-028 ==>
+028 ==> 160893 - Use UPNP server as image database.
+029 ==> 
