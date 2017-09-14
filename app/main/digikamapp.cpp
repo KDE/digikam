@@ -458,9 +458,9 @@ void DigikamApp::show()
         QTimer::singleShot(1000, tool, SLOT(start()));
     }
 
-    // Start the Media Server is necessary
+    // Start the Media Server if necessary
     
-    if (DMediaServerMngr::instance()->loadAtStartup();
+    DMediaServerMngr::instance()->loadAtStartup();
 }
 
 void DigikamApp::restoreSession()
