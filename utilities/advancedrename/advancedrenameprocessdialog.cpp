@@ -179,7 +179,7 @@ void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
 {
     abort();
 
-    QPixmap pix = QIcon::fromTheme(QLatin1String("error")).pixmap(32, 32);
+    QPixmap pix = QIcon::fromTheme(QLatin1String("emblem-error")).pixmap(32, 32);
     setLabel(i18n("<b>Renaming images is failed...</b>"));
     setTitle(i18n("Canceled..."));
 
