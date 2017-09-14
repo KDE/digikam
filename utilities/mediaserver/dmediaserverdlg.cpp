@@ -35,6 +35,7 @@
 
 // Local includes
 
+#include "dinfointerface.h"
 #include "dimageslist.h"
 #include "dmediaservermngr.h"
 #include "dmediaserverctrl.h"
@@ -62,7 +63,8 @@ public:
     QDialogButtonBox* buttons;
 };
 
-DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/)
+DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
+                                 DInfoInterface* const iface)
     : QDialog(),
       d(new Private)
 {
@@ -81,6 +83,8 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/)
     QGridLayout* const grid = new QGridLayout(d->page);
     d->listView             = new DImagesList(d->page);
     d->listView->setControlButtonsPlacement(DImagesList::ControlButtonsRight);
+    d->listView->setIface(iface);
+    d->listView->loadImagesFromCurrentSelection();
     d->ctrl                 = new DMediaServerCtrl(d->page);
 
     grid->addWidget(d->listView, 0, 0, 1, 1);

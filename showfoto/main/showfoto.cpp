@@ -107,6 +107,7 @@
 #include "expoblendingmanager.h"
 #include "mailwizard.h"
 #include "advprintwizard.h"
+#include "dmediaserverdlg.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -406,6 +407,8 @@ void ShowFoto::setupActions()
     d->fileOpenAction = buildStdAction(StdOpenAction, this, SLOT(slotOpenFile()), this);
     actionCollection()->addAction(QLatin1String("showfoto_open_file"), d->fileOpenAction);
 
+    // ---------
+
     d->openFilesInFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-pictures")), i18n("Open folder"), this);
     actionCollection()->setDefaultShortcut(d->openFilesInFolderAction, Qt::CTRL+Qt::SHIFT+Qt::Key_O);
 
@@ -414,8 +417,19 @@ void ShowFoto::setupActions()
 
     actionCollection()->addAction(QLatin1String("showfoto_open_folder"), d->openFilesInFolderAction);
 
+    // ---------
+
     QAction* const quit = buildStdAction(StdQuitAction, this, SLOT(close()), this);
     actionCollection()->addAction(QLatin1String("showfoto_quit"), quit);
+
+    // Extra 'Tools' menu actions --------------------------------------------
+
+    d->mediaServerAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-right-double")), i18n("Share with DLNA"), this);
+
+    connect(d->mediaServerAction, &QAction::triggered,
+            this, &ShowFoto::slotMediaServer);
+
+    actionCollection()->addAction(QLatin1String("showfoto_tools_mediaserver"), d->mediaServerAction);
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 
@@ -1445,6 +1459,12 @@ void ShowFoto::slotSendByMail()
 void ShowFoto::slotPrintCreator()
 {
     AdvPrintWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+void ShowFoto::slotMediaServer()
+{
+    DMediaServerDlg w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
     w.exec();
 }
 

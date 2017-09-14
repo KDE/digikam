@@ -51,6 +51,7 @@ public:
         vSplitter(0),
         fileOpenAction(0),
         openFilesInFolderAction(0),
+        mediaServerAction(0),
         first(0),
         model(0),
         dDHandler(0),
@@ -75,6 +76,7 @@ public:
     QUrl                             currentLoadedUrl;
     QUrl                             lastOpenedDirectory;
     QAction*                         openFilesInFolderAction;
+    QAction*                         mediaServerAction;
     QAction*                         first;
 
     ShowfotoItemInfoList             infoList;

@@ -219,9 +219,6 @@ Setup::Setup(QWidget* const parent)
                                        "<i>Customize tool used to compare images</i></qt>"));
     d->page_lighttable->setIcon(QIcon::fromTheme(QLatin1String("lighttable")));
 
-    //dlna
-    //QIcon::fromTheme(QLatin1String("arrow-right-double"))
-
     d->dlnaserverPage  = new SetupDlna();
     d->page_dlnaserver = addPage(d->dlnaserverPage, i18n("DLNA Media Server"));
     d->page_dlnaserver->setHeader(i18n("<qt>DLNA Media Server Settings<br/>"

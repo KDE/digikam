@@ -142,6 +142,7 @@ private Q_SLOTS:
     void slotVideoSlideshow();
     void slotSendByMail();
     void slotPrintCreator();
+    void slotMediaServer();
 
 Q_SIGNALS:
 

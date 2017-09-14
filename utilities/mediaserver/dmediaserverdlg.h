@@ -31,6 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
@@ -41,7 +42,8 @@ class DIGIKAM_EXPORT DMediaServerDlg : public QDialog
 
 public:
 
-    explicit DMediaServerDlg(QObject* const parent);
+    explicit DMediaServerDlg(QObject* const parent,
+                             DInfoInterface* const iface=0);
     ~DMediaServerDlg();
 
 private Q_SLOTS:
