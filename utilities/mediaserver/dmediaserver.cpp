@@ -73,7 +73,8 @@ DMediaServer::DMediaServer(QObject* const parent)
       d(new Private)
 {
     // Set Hupnp debug level on the console
-    SetLoggingLevel(Herqq::Upnp::Debug);
+    // See hupnp/general/hupnp_global.h for more values available.
+    SetLoggingLevel(Herqq::Upnp::Information);
 
     // Configure a data source
     HFileSystemDataSourceConfiguration datasourceConfig;
