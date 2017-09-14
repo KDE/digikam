@@ -216,7 +216,6 @@ DigikamApp::DigikamApp()
     ProgressManager::instance();
     ThumbnailLoadThread::setDisplayingWidget(this);
     DIO::instance();
-    DMediaServerMngr::instance()->loadAtStartup();
 
     // creation of the engine on first use - when drawing -
     // can take considerable time and cause a noticeable hang in the UI thread.
@@ -459,6 +458,9 @@ void DigikamApp::show()
         QTimer::singleShot(1000, tool, SLOT(start()));
     }
 
+    // Start the Media Server is necessary
+    
+    if (DMediaServerMngr::instance()->loadAtStartup();
 }
 
 void DigikamApp::restoreSession()
