@@ -176,8 +176,14 @@ bool DMediaServerMngr::startMediaServer()
         }
     }
 
-    d->server->addAlbumsOnServer(d->collectionMap);
+    if (d->collectionMap.isEmpty())
+    {
+        cleanUp();
+        return false;
+    }
 
+    d->server->addAlbumsOnServer(d->collectionMap);
+ 
     return true;
 }
 
