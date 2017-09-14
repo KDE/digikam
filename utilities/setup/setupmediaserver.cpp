@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "setupdlnaserver.h"
+#include "setupmediaserver.h"
 
 // Qt includes
 
@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class SetupDlna::Private
+class SetupMediaServer::Private
 {
 public:
 
@@ -70,14 +70,15 @@ public:
 
 // --------------------------------------------------------
 
-SetupDlna::SetupDlna(QWidget* const parent)
+SetupMediaServer::SetupMediaServer(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
     d->iface             = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);
+
     // NOTE: We overwrite the default albums chooser object name for load save check items state between sessions.
     // The goal is not mix these settings with other export tools.
-    d->iface->setObjectName(QLatin1String("SetupDlnaIface"));
+    d->iface->setObjectName(QLatin1String("SetupMediaServerIface"));
 
     const int spacing    = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QWidget* const panel = new QWidget(viewport());
@@ -118,12 +119,12 @@ SetupDlna::SetupDlna(QWidget* const parent)
     d->ctrl->updateServerStatus();
 }
 
-SetupDlna::~SetupDlna()
+SetupMediaServer::~SetupMediaServer()
 {
     delete d;
 }
 
-void SetupDlna::readSettings()
+void SetupMediaServer::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->mngr->configGroupName());
@@ -131,7 +132,7 @@ void SetupDlna::readSettings()
     d->startServerOnStartupCheckBox->setChecked(group.readEntry(d->mngr->configStartServerOnStartupEntry(), false));
 }
 
-void SetupDlna::applySettings()
+void SetupMediaServer::applySettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->mngr->configGroupName());
@@ -139,12 +140,12 @@ void SetupDlna::applySettings()
     config->sync();
 }
 
-void SetupDlna::slotSelectionChanged()
+void SetupMediaServer::slotSelectionChanged()
 {
-    // TODO
+    // TODO : notify that server needs to be re-started if selection has changed.
 }
 
-void SetupDlna::slotStartMediaServer()
+void SetupMediaServer::slotStartMediaServer()
 {
     DInfoInterface::DAlbumIDs albums = d->iface->albumChooserItems();
     MediaServerMap map;

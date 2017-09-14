@@ -31,14 +31,14 @@
 namespace Digikam
 {
 
-class SetupDlna : public QScrollArea
+class SetupMediaServer : public QScrollArea
 {
     Q_OBJECT
 
 public:
 
-    explicit SetupDlna(QWidget* const parent = 0);
-    ~SetupDlna();
+    explicit SetupMediaServer(QWidget* const parent = 0);
+    ~SetupMediaServer();
 
     void applySettings();
 

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_H
-#define SETUP_H
+#ifndef DIGIKAM_SETUP_H
+#define DIGIKAM_SETUP_H
 
 // Local includes
 
@@ -55,7 +55,7 @@ public:
         EditorPage,
         ICCPage,
         LightTablePage,
-        DlnaServerPage,
+        MediaServerPage,
         SlideshowPage,
         ImageQualityPage,
         CameraPage,
@@ -111,4 +111,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // SETUP_H
+#endif  // DIGIKAM_SETUP_H
