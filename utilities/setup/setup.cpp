@@ -325,7 +325,7 @@ QSize Setup::sizeHint() const
     int maxHintHeight   = 0;
     int maxWidgetHeight = 0;
 
-    for (int page = 0; page != SetupPageEnumLast; ++page)
+    for (int page = 0 ; page != SetupPageEnumLast ; ++page)
     {
         // only take tabs into account here that should better be displayed without scrolling
         if (page == CollectionsPage ||
@@ -608,7 +608,7 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
             return page_lighttable;
 
         case Setup::MediaServerPage:
-        return page_mediaserver;
+            return page_mediaserver;
 
         case Setup::EditorPage:
             return page_editor;
