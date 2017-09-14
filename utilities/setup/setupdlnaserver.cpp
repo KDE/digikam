@@ -112,7 +112,7 @@ SetupDlna::SetupDlna(QWidget* const parent)
 
     connect(d->ctrl, SIGNAL(signalStartMediaServer()),
             this, SLOT(slotStartMediaServer()));
-        
+
     readSettings();
     d->ctrl->updateServerStatus();
 }

@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-05-11
+ * Date        : 2012-05-28
  * Description : Media Server control widget.
  *
  * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
