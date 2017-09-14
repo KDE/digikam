@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef FINDDUPLICATESALBUM_H
-#define FINDDUPLICATESALBUM_H
+#ifndef FIND_DUPLICATES_ALBUM_H
+#define FIND_DUPLICATES_ALBUM_H
 
 // Qt includes
 
@@ -72,4 +72,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // FINDDUPLICATESALBUM_H
+#endif // FIND_DUPLICATES_ALBUM_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef FUZZYSEARCHVIEW_H
-#define FUZZYSEARCHVIEW_H
+#ifndef FUZZY_SEARCH_VIEW_H
+#define FUZZY_SEARCH_VIEW_H
 
 // Qt includes
 
@@ -121,7 +121,7 @@ private:
     void setColor(QColor c);
 
     QWidget* setupFindSimilarPanel() const;
-    QWidget* setupSketchPanel() const;
+    QWidget* setupSketchPanel()      const;
     void     setupConnections();
 
 private:
@@ -132,4 +132,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // FUZZYSEARCHVIEW_H
+#endif // FUZZY_SEARCH_VIEW_H

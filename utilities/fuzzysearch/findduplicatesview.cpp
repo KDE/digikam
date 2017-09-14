@@ -84,36 +84,37 @@ public:
         active                  = false;
     }
 
-    QLabel*                      includeAlbumsLabel;
-    QLabel*                      similarityLabel;
-    QLabel*                      restrictResultsLabel;
-    QLabel*                      albumTagRelationLabel;
+    QLabel*              includeAlbumsLabel;
+    QLabel*              similarityLabel;
+    QLabel*              restrictResultsLabel;
+    QLabel*              albumTagRelationLabel;
 
-    DIntRangeBox*                similarityRange;
+    DIntRangeBox*        similarityRange;
 
-    SqueezedComboBox*            searchResultRestriction;
-    SqueezedComboBox*            albumTagRelation;
+    SqueezedComboBox*    searchResultRestriction;
+    SqueezedComboBox*    albumTagRelation;
 
-    QPushButton*                 scanDuplicatesBtn;
-    QPushButton*                 updateFingerPrtBtn;
+    QPushButton*         scanDuplicatesBtn;
+    QPushButton*         updateFingerPrtBtn;
 
-    FindDuplicatesAlbum*         listView;
+    FindDuplicatesAlbum* listView;
 
-    ProgressItem*                progressItem;
+    ProgressItem*        progressItem;
 
-    AlbumSelectors*              albumSelectors;
+    AlbumSelectors*      albumSelectors;
 
-    ApplicationSettings*         settings;
+    ApplicationSettings* settings;
 
-    bool                         active;
+    bool                 active;
 };
 
 FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->settings = ApplicationSettings::instance();
+    d->settings       = ApplicationSettings::instance();
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -133,7 +134,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->albumSelectors = new AlbumSelectors(i18nc("@label", "Search in:"), QLatin1String("Find Duplicates View"));
+    d->albumSelectors  = new AlbumSelectors(i18nc("@label", "Search in:"), QLatin1String("Find Duplicates View"));
 
     // ---------------------------------------------------------------
 
@@ -152,7 +153,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
         d->similarityRange->setInterval(40, 100);
     }
 
-    d->similarityLabel = new QLabel(i18n("Similarity range:"));
+    d->similarityLabel         = new QLabel(i18n("Similarity range:"));
     d->similarityLabel->setBuddy(d->similarityRange);
 
     d->restrictResultsLabel    = new QLabel(i18n("Restriction:"));
@@ -163,15 +164,15 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Restrict to reference album"), HaarIface::DuplicatesSearchRestrictions::SameAlbum);
     d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Exclude reference album"),     HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
     d->searchResultRestriction->setToolTip(i18n("Use this option to restrict the duplicate search "
-                                                   "with some criteria, as to limit search to the album "
-                                                   "of reference image, or to exclude the album of "
-                                                   "reference image of the search."));
+                                                "with some criteria, as to limit search to the album "
+                                                "of reference image, or to exclude the album of "
+                                                "reference image of the search."));
 
     // Load the last choice from application settings.
     HaarIface::DuplicatesSearchRestrictions restrictions = (HaarIface::DuplicatesSearchRestrictions) d->settings->getDuplicatesSearchRestrictions();
     d->searchResultRestriction->setCurrentIndex(d->searchResultRestriction->findData(restrictions));
 
-    d->albumTagRelationLabel    = new QLabel(i18n("Restrict to images being in:"));
+    d->albumTagRelationLabel    = new QLabel(i18n("Restrict to:"));
     d->albumTagRelationLabel->setBuddy(d->albumTagRelation);
 
     d->albumTagRelation = new SqueezedComboBox();
@@ -197,12 +198,12 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     QGridLayout* const mainLayout = new QGridLayout();
     mainLayout->addWidget(d->listView,                0, 0, 1, -1);
-    mainLayout->addWidget(d->albumTagRelationLabel,   1, 0, 1, 2);
+    mainLayout->addWidget(d->albumTagRelationLabel,   1, 0, 1,  2);
     mainLayout->addWidget(d->albumTagRelation,        1, 2, 1, -1);
     mainLayout->addWidget(d->albumSelectors,          2, 0, 1, -1);
-    mainLayout->addWidget(d->similarityLabel,         3, 0, 1, 1);
-    mainLayout->addWidget(d->similarityRange,         3, 2, 1, 1);
-    mainLayout->addWidget(d->restrictResultsLabel,    4, 0, 1, 2);
+    mainLayout->addWidget(d->similarityLabel,         3, 0, 1,  1);
+    mainLayout->addWidget(d->similarityRange,         3, 2, 1,  1);
+    mainLayout->addWidget(d->restrictResultsLabel,    4, 0, 1,  2);
     mainLayout->addWidget(d->searchResultRestriction, 4, 2, 1, -1);
     mainLayout->addWidget(d->updateFingerPrtBtn,      5, 0, 1, -1);
     mainLayout->addWidget(d->scanDuplicatesBtn,       6, 0, 1, -1);
@@ -270,7 +271,7 @@ void FindDuplicatesView::populateTreeView()
 {
     const AlbumList& aList = AlbumManager::instance()->allSAlbums();
 
-    for (AlbumList::const_iterator it = aList.constBegin(); it != aList.constEnd(); ++it)
+    for (AlbumList::const_iterator it = aList.constBegin() ; it != aList.constEnd() ; ++it)
     {
         SAlbum* const salbum = dynamic_cast<SAlbum*>(*it);
 
@@ -297,6 +298,7 @@ QList<SAlbum*> FindDuplicatesView::currentFindDuplicatesAlbums() const
     if (selectedItems.isEmpty())
     {
         QTreeWidgetItem* const item = d->listView->firstItem();
+
         if (item)
         {
             selectedItems << item;
@@ -304,9 +306,11 @@ QList<SAlbum*> FindDuplicatesView::currentFindDuplicatesAlbums() const
     }
 
     QList<SAlbum*> albumList;
+
     foreach(QTreeWidgetItem* const item, selectedItems)
     {
         FindDuplicatesAlbumItem* const albumItem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
+
         if (albumItem)
         {
             albumList << albumItem->album();
@@ -323,7 +327,7 @@ void FindDuplicatesView::slotAlbumAdded(Album* a)
         return;
     }
 
-    SAlbum* const salbum  = static_cast<SAlbum*>(a);
+    SAlbum* const salbum = static_cast<SAlbum*>(a);
 
     if (!salbum->isDuplicatesSearch())
     {
@@ -380,7 +384,7 @@ void FindDuplicatesView::slotSearchUpdated(SAlbum* a)
 
 void FindDuplicatesView::slotClear()
 {
-    for (QTreeWidgetItemIterator it(d->listView); *it; ++it)
+    for (QTreeWidgetItemIterator it(d->listView) ; *it ; ++it)
     {
         SAlbum* const salbum = static_cast<FindDuplicatesAlbumItem*>(*it)->album();
 
@@ -420,7 +424,7 @@ void FindDuplicatesView::slotFindDuplicates()
         {
             albums = d->albumSelectors->selectedAlbums();
         }
-        else if (d->albumSelectors->typeSelection() == AlbumSelectors::AlbumType::TagsAlbum )
+        else if (d->albumSelectors->typeSelection() == AlbumSelectors::AlbumType::TagsAlbum)
         {
             tags  = d->albumSelectors->selectedTags();
         }
@@ -428,7 +432,7 @@ void FindDuplicatesView::slotFindDuplicates()
     else
     {
         albums = d->albumSelectors->selectedAlbums();
-        tags  = d->albumSelectors->selectedTags();
+        tags   = d->albumSelectors->selectedTags();
     }
 
     DuplicatesFinder* const finder = new DuplicatesFinder(albums, tags,
@@ -442,7 +446,8 @@ void FindDuplicatesView::slotFindDuplicates()
     finder->start();
 }
 
-void FindDuplicatesView::slotUpdateDuplicates(const QList<SAlbum*>& sAlbumsToRebuild, const QList<qlonglong>& deletedImages)
+void FindDuplicatesView::slotUpdateDuplicates(const QList<SAlbum*>& sAlbumsToRebuild,
+                                              const QList<qlonglong>& deletedImages)
 {
     d->listView->updateDuplicatesAlbumItems(sAlbumsToRebuild, deletedImages);
 }
@@ -462,7 +467,7 @@ void FindDuplicatesView::slotDuplicatesAlbumActived()
 {
     QList<Album*> albums;
 
-    foreach(QTreeWidgetItem* item, d->listView->selectedItems())
+    foreach(QTreeWidgetItem* const item, d->listView->selectedItems())
     {
         FindDuplicatesAlbumItem* const albumItem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
 

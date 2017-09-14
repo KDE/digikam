@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef FINDDUPLICATESVIEW_H
-#define FINDDUPLICATESVIEW_H
+#ifndef FIND_DUPLICATES_VIEW_H
+#define FIND_DUPLICATES_VIEW_H
 
 // Qt includes
 
@@ -67,7 +67,8 @@ private Q_SLOTS:
     void slotSearchUpdated(SAlbum* a);
     void slotClear();
     void slotFindDuplicates();
-    void slotUpdateDuplicates(const QList<SAlbum*>& sAlbumsToRebuild,const QList<qlonglong>& deletedImages);
+    void slotUpdateDuplicates(const QList<SAlbum*>& sAlbumsToRebuild,
+                              const QList<qlonglong>& deletedImages);
     void slotDuplicatesAlbumActived();
     void slotComplete();
     void slotUpdateFingerPrints();
@@ -91,4 +92,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // FINDDUPLICATESVIEW_H
+#endif // FIND_DUPLICATES_VIEW_H
