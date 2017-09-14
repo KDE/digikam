@@ -184,7 +184,6 @@ void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
     setTitle(i18n("Canceled..."));
 
     addedAction(pix, QDir::toNativeSeparators(src.toLocalFile()));
-    advance(1);
 }
 
 void AdvancedRenameProcessDialog::closeEvent(QCloseEvent* e)
