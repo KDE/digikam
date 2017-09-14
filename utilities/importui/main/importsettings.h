@@ -82,8 +82,8 @@ public:
     void setImageSortBy(int sortBy);
     int  getImageSortBy() const;
 
-    void setImageGroupMode(int mode);
-    int  getImageGroupMode() const;
+    void setImageSeparationMode(int mode);
+    int  getImageSeparationMode() const;
 
     void setItemLeftClickAction(const ItemLeftClickAction action);
     ItemLeftClickAction getItemLeftClickAction() const;

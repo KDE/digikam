@@ -784,7 +784,7 @@ void ImportView::slotSortImagesOrder(int order)
     d->iconView->importFilterModel()->setSortOrder((CamItemSortSettings::SortOrder) order);
 }
 
-void ImportView::slotGroupImages(int categoryMode)
+void ImportView::slotSeparateImages(int categoryMode)
 {
     ImportSettings* const settings = ImportSettings::instance();
 
@@ -793,7 +793,7 @@ void ImportView::slotGroupImages(int categoryMode)
         return;
     }
 
-    settings->setImageGroupMode(categoryMode);
+    settings->setImageSeparationMode(categoryMode);
     d->iconView->importFilterModel()->setCategorizationMode((CamItemSortSettings::CategorizationMode) categoryMode);
 }
 

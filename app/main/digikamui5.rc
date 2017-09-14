@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="559" name="digikam" translationDomain="digikam" >
+<gui version="560" name="digikam" translationDomain="digikam" >
 
  <MenuBar>
 
@@ -68,7 +68,7 @@
      <Action name="image_transform_exif" />
      <Action name="image_set_exif_orientation" />
    <Separator />
-     <DefineGroup name="kipi_image_group" append="kipi_image_group" />
+     <DefineGroup name="kipi_image_separation" append="kipi_image_separation" />
   </Menu>
 
   <Menu name="Edit" >
@@ -105,8 +105,8 @@
      <Action name="album_sort" />
      <Action name="image_sort" />
      <Action name="image_sort_order" />
-     <Action name="image_group" />
-     <Action name="image_group_sort_order" />
+     <Action name="image_separation" />
+     <Action name="image_separation_sort_order" />
      <Action name="albums_recursive" />
      <Action name="tags_recursive" />
      <Separator />

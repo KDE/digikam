@@ -61,8 +61,8 @@ public:
     static const QString configAlbumSortRoleEntry;
     static const QString configImageSortOrderEntry;
     static const QString configImageSortingEntry;
-    static const QString configImageGroupModeEntry;
-    static const QString configImageGroupSortOrderEntry;
+    static const QString configImageSeparationModeEntry;
+    static const QString configImageSeparationSortOrderEntry;
     static const QString configItemLeftClickActionEntry;
     static const QString configDefaultIconSizeEntry;
     static const QString configDefaultTreeIconSizeEntry;
@@ -124,7 +124,7 @@ public:
     static const QString configToolTipsShowAlbumCategoryEntry;
     static const QString configToolTipsShowAlbumCaptionEntry;
     static const QString configToolTipsShowAlbumPreviewEntry;
-    static const QString configPreviewLoadFullImageSizeEntry;
+    static const QString configPreviewLoadFullItemSizeEntry;
     static const QString configPreviewRawUseEmbeddedPreview;
     static const QString configPreviewRawUseHalfSizeData;
     static const QString configPreviewConvertToEightBitEntry;
@@ -263,8 +263,8 @@ public:
     // icon view settings
     int                                          imageSortOrder;
     int                                          imageSorting;
-    int                                          imageGroupMode;
-    int                                          imageGroupSortOrder;
+    int                                          imageSeparationMode;
+    int                                          imageSeparationSortOrder;
     ApplicationSettings::ItemLeftClickAction     itemLeftClickAction;
 
     // Baloo settings

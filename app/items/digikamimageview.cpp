@@ -110,8 +110,8 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     imageFilterModel()->setStringTypeNatural(settings->isStringTypeNatural());
     imageFilterModel()->setSortRole((ImageSortSettings::SortRole)settings->getImageSortOrder());
     imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder)settings->getImageSorting());
-    imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)settings->getImageGroupMode());
-    imageFilterModel()->setCategorizationSortOrder((ImageSortSettings::SortOrder) settings->getImageGroupSortOrder());
+    imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)settings->getImageSeparationMode());
+    imageFilterModel()->setCategorizationSortOrder((ImageSortSettings::SortOrder) settings->getImageSeparationSortOrder());
 
     // selection overlay
     addSelectionOverlay(d->normalDelegate);

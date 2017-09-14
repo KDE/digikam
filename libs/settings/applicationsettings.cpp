@@ -126,8 +126,8 @@ void ApplicationSettings::readSettings()
 
     d->imageSortOrder                    = group.readEntry(d->configImageSortOrderEntry,      (int)ImageSortSettings::SortByFileName);
     d->imageSorting                      = group.readEntry(d->configImageSortingEntry,        (int)ImageSortSettings::AscendingOrder);
-    d->imageGroupMode                    = group.readEntry(d->configImageGroupModeEntry,      (int)ImageSortSettings::CategoryByAlbum);
-    d->imageGroupSortOrder               = group.readEntry(d->configImageGroupSortOrderEntry, (int)ImageSortSettings::AscendingOrder);
+    d->imageSeparationMode                = group.readEntry(d->configImageSeparationModeEntry,      (int)ImageSortSettings::CategoryByAlbum);
+    d->imageSeparationSortOrder           = group.readEntry(d->configImageSeparationSortOrderEntry, (int)ImageSortSettings::AscendingOrder);
 
     d->itemLeftClickAction               = ApplicationSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
                                            (int)ApplicationSettings::ShowPreview));
@@ -199,7 +199,7 @@ void ApplicationSettings::readSettings()
     d->tooltipShowAlbumCaption           = group.readEntry(d->configToolTipsShowAlbumCaptionEntry,     true);
     d->tooltipShowAlbumPreview           = group.readEntry(d->configToolTipsShowAlbumPreviewEntry,     false);
 
-    if (group.readEntry(d->configPreviewLoadFullImageSizeEntry, true))
+    if (group.readEntry(d->configPreviewLoadFullItemSizeEntry, true))
     {
         d->previewSettings.quality = PreviewSettings::HighQualityPreview;
         if (group.readEntry(d->configPreviewRawUseEmbeddedPreview, false))
@@ -314,8 +314,8 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configAlbumSortRoleEntry,                      (int)d->albumSortRole);
     group.writeEntry(d->configImageSortOrderEntry,                     (int)d->imageSortOrder);
     group.writeEntry(d->configImageSortingEntry,                       (int)d->imageSorting);
-    group.writeEntry(d->configImageGroupModeEntry,                     (int)d->imageGroupMode);
-    group.writeEntry(d->configImageGroupSortOrderEntry,                (int)d->imageGroupSortOrder);
+    group.writeEntry(d->configImageSeparationModeEntry,                     (int)d->imageSeparationMode);
+    group.writeEntry(d->configImageSeparationSortOrderEntry,                (int)d->imageSeparationSortOrder);
 
     group.writeEntry(d->configItemLeftClickActionEntry,                (int)d->itemLeftClickAction);
     group.writeEntry(d->configDefaultIconSizeEntry,                    QString::number(d->thumbnailSize));
@@ -382,7 +382,7 @@ void ApplicationSettings::saveSettings()
 
     if (d->previewSettings.quality == PreviewSettings::HighQualityPreview)
     {
-        group.writeEntry(d->configPreviewLoadFullImageSizeEntry, true);
+        group.writeEntry(d->configPreviewLoadFullItemSizeEntry, true);
         switch (d->previewSettings.rawLoading)
         {
             case PreviewSettings::RawPreviewAutomatic:
@@ -401,7 +401,7 @@ void ApplicationSettings::saveSettings()
     }
     else
     {
-        group.writeEntry(d->configPreviewLoadFullImageSizeEntry, false);
+        group.writeEntry(d->configPreviewLoadFullItemSizeEntry, false);
     }
 
     group.writeEntry(d->configPreviewConvertToEightBitEntry,           d->previewSettings.convertToEightBit);

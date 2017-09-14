@@ -39,6 +39,7 @@ class QDragEnterEvent;
 namespace Digikam
 {
 
+class Album;
 class LoadingDescription;
 
 class ImagePreviewView : public GraphicsDImgView
@@ -55,7 +56,7 @@ public:
 
 public:
 
-    explicit ImagePreviewView(QWidget* const parent, Mode mode=IconViewPreview);
+    explicit ImagePreviewView(QWidget* const parent, Mode mode=IconViewPreview, Album* currAlbum = 0);
     ~ImagePreviewView();
 
     void setImageInfo(const ImageInfo& info     = ImageInfo(),

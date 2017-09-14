@@ -91,6 +91,7 @@ public:
         addPersonAction     = 0;
         forgetFacesAction   = 0;
         fullscreenAction    = 0;
+        currAlbum           = 0;
     }
 
     bool                   fullSize;
@@ -115,14 +116,17 @@ public:
     QAction*               forgetFacesAction;
 
     QAction*               fullscreenAction;
+
+    Album*                 currAlbum;
 };
 
-ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
+ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode, Album* currAlbum)
     : GraphicsDImgView(parent),
-      d(new Private)
+      d(new Private())
 {
     d->mode      = mode;
     d->item      = new ImagePreviewViewItem();
+    d->currAlbum = currAlbum;
     setItem(d->item);
 
     d->faceGroup = new FaceGroup(this);
@@ -316,102 +320,98 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
 
     QList<qlonglong> idList;
     idList << info.id();
-    QList<QUrl> selectedItems;
-    selectedItems << info.fileUrl();
 
     // --------------------------------------------------------
 
     QMenu popmenu(this);
-    ContextMenuHelper cmhelper(&popmenu);
+    ContextMenuHelper cmHelper(&popmenu);
 
-    cmhelper.addAction(QLatin1String("full_screen"));
-    cmhelper.addAction(QLatin1String("options_show_menubar"));
-    cmhelper.addSeparator();
+    cmHelper.addAction(QLatin1String("full_screen"));
+    cmHelper.addAction(QLatin1String("options_show_menubar"));
+    cmHelper.addSeparator();
 
     // --------------------------------------------------------
 
     if (d->mode == IconViewPreview)
     {
-        cmhelper.addAction(d->prevAction, true);
-        cmhelper.addAction(d->nextAction, true);
-        cmhelper.addGotoMenu(idList);
-        cmhelper.addSeparator();
+        cmHelper.addAction(d->prevAction, true);
+        cmHelper.addAction(d->nextAction, true);
+        cmHelper.addSeparator();
     }
 
     // --------------------------------------------------------
 
-    cmhelper.addAction(d->peopleToggleAction, true);
-    cmhelper.addAction(d->addPersonAction,    true);
-    cmhelper.addAction(d->forgetFacesAction,  true);
-    cmhelper.addSeparator();
+    cmHelper.addAction(d->peopleToggleAction, true);
+    cmHelper.addAction(d->addPersonAction,    true);
+    cmHelper.addAction(d->forgetFacesAction,  true);
+    cmHelper.addSeparator();
 
     // --------------------------------------------------------
 
-    cmhelper.addAction(QLatin1String("image_edit"));
-    cmhelper.addServicesMenu(selectedItems);
-    cmhelper.addAction(QLatin1String("image_rotate"));
-    cmhelper.addSeparator();
+    cmHelper.addOpenAndNavigateActions(idList);
+    cmHelper.addSeparator();
 
     // --------------------------------------------------------
 
-    cmhelper.addAction(QLatin1String("image_find_similar"));
+    cmHelper.addAction(QLatin1String("image_find_similar"));
 
     if (d->mode == IconViewPreview)
     {
-        cmhelper.addStandardActionLightTable();
+        cmHelper.addStandardActionLightTable();
     }
 
-    cmhelper.addQueueManagerMenu();
-    cmhelper.addSeparator();
+    cmHelper.addQueueManagerMenu();
+    cmHelper.addSeparator();
 
     // --------------------------------------------------------
 
-    cmhelper.addStandardActionItemDelete(this, SLOT(slotDeleteItem()));
-    cmhelper.addSeparator();
+    cmHelper.addAction(QLatin1String("image_rotate"));
+    cmHelper.addStandardActionItemDelete(this, SLOT(slotDeleteItem()));
+    cmHelper.addSeparator();
 
     // --------------------------------------------------------
 
-    cmhelper.addAssignTagsMenu(idList);
-    cmhelper.addRemoveTagsMenu(idList);
-    cmhelper.addSeparator();
-
-    // --------------------------------------------------------
-
-    cmhelper.addLabelsAction();
+    if (d->mode == IconViewPreview && d->currAlbum)
+    {
+        cmHelper.addStandardActionThumbnail(idList, d->currAlbum);
+    }
+    cmHelper.addAssignTagsMenu(idList);
+    cmHelper.addRemoveTagsMenu(idList);
+    cmHelper.addLabelsAction();
 
     // special action handling --------------------------------
 
-    connect(&cmhelper, SIGNAL(signalAssignTag(int)),
+    connect(&cmHelper, SIGNAL(signalAssignTag(int)),
             this, SLOT(slotAssignTag(int)));
 
-    connect(&cmhelper, SIGNAL(signalPopupTagsView()),
+    connect(&cmHelper, SIGNAL(signalPopupTagsView()),
             this, SIGNAL(signalPopupTagsView()));
 
-    connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
+    connect(&cmHelper, SIGNAL(signalRemoveTag(int)),
             this, SLOT(slotRemoveTag(int)));
 
-    connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
+    connect(&cmHelper, SIGNAL(signalAssignPickLabel(int)),
             this, SLOT(slotAssignPickLabel(int)));
 
-    connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
+    connect(&cmHelper, SIGNAL(signalAssignColorLabel(int)),
             this, SLOT(slotAssignColorLabel(int)));
 
-    connect(&cmhelper, SIGNAL(signalAssignRating(int)),
+    connect(&cmHelper, SIGNAL(signalAssignRating(int)),
             this, SLOT(slotAssignRating(int)));
 
-    connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
+    connect(&cmHelper, SIGNAL(signalAddToExistingQueue(int)),
             this, SIGNAL(signalAddToExistingQueue(int)));
 
-    connect(&cmhelper, SIGNAL(signalGotoTag(int)),
+    connect(&cmHelper, SIGNAL(signalGotoTag(int)),
             this, SIGNAL(signalGotoTagAndItem(int)));
 
-    connect(&cmhelper, SIGNAL(signalGotoAlbum(ImageInfo)),
+    connect(&cmHelper, SIGNAL(signalGotoAlbum(ImageInfo)),
             this, SIGNAL(signalGotoAlbumAndItem(ImageInfo)));
 
-    connect(&cmhelper, SIGNAL(signalGotoDate(ImageInfo)),
+    connect(&cmHelper, SIGNAL(signalGotoDate(ImageInfo)),
             this, SIGNAL(signalGotoDateAndItem(ImageInfo)));
 
-    cmhelper.exec(event->screenPos());
+    cmHelper.exec(event->screenPos());
 }
 
 void ImagePreviewView::slotAssignTag(int tagID)

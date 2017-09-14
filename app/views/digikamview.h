@@ -239,8 +239,8 @@ public Q_SLOTS:
     void slotSelectInvert();
     void slotSortImages(int order);
     void slotSortImagesOrder(int order);
-    void slotGroupImages(int mode);
-    void slotSortImageGroupOrder(int order);
+    void slotSeparateImages(int mode);
+    void slotImageSeparationSortOrder(int order);
     void slotMoveSelectionToAlbum();
     void slotImagePaste();
 

@@ -250,6 +250,13 @@ void ContextMenuHelper::addStandardActionThumbnail(const imageIds& ids, Album* a
     }
 }
 
+void ContextMenuHelper::addOpenAndNavigateActions(const imageIds &ids) {
+    addAction(QLatin1String("image_edit"));
+    addServicesMenu(ImageInfoList(ids).toImageUrlList());
+    addAction(QLatin1String("move_selection_to_album"));
+    addGotoMenu(ids);
+}
+
 void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 {
     setSelectedItems(selectedItems);
