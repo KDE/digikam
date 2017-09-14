@@ -303,7 +303,7 @@ ImageInfo ImageCategorizedView::imageInfo(const QModelIndex& index) const
 }
 
 ImageInfoList ImageCategorizedView::imageInfos(const QList<QModelIndex>& indexes,
-                         ApplicationSettings::OperationType type) const
+                                               ApplicationSettings::OperationType type) const
 {
     return imageInfos(indexes, needGroupResolving(type, indexes));
 }

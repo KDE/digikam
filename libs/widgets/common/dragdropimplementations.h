@@ -43,7 +43,7 @@ public:
     /**
      * A class providing a sample implementation for a QAbstractItemModel
      * redirecting drag-and-drop support to a handler.
-     * Include the macro DECLARE_VIEW_DRAG_DROP_METHODS in your derived QAbstractItemModel class.
+     * Include the macro DECLARE_Model_DRAG_DROP_METHODS in your derived QAbstractItemModel class.
      */
 
     DragDropModelImplementation();
