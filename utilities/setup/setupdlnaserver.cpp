@@ -32,6 +32,7 @@
 #include <QVBoxLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QMessageBox>
 
 // KDE includes
 
@@ -155,7 +156,13 @@ void SetupDlna::slotStartMediaServer()
     }
 
     d->mngr->setCollectionMap(map);
-    d->mngr->startMediaServer();
+    
+    if (!d->mngr->startMediaServer())
+    {
+        QMessageBox::warning(this, i18n("Starting Media Server"),
+                             i18n("An error occurs while to start Media Server..."));
+    }
+
     d->ctrl->updateServerStatus();
 }
 

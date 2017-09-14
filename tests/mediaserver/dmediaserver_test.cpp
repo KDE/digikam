@@ -41,7 +41,7 @@ using namespace Digikam;
 
 int main(int argc, char* argv[])
 {
-    QApplication app(argc, argv);
+    QApplication   app(argc, argv);
     QList<QUrl>    list;
     MediaServerMap map;
 
@@ -52,12 +52,16 @@ int main(int argc, char* argv[])
                                                           QLatin1String("Image Files (*.png *.jpg *.tif *.bmp *.gif)"));
 
         foreach(const QString& f, files)
+        {
             list.append(QUrl::fromLocalFile(f));
+        }
     }
     else
     {
         for (int i = 1 ; i < argc ; i++)
+        {
             list.append(QUrl::fromLocalFile(QString::fromLocal8Bit(argv[i])));
+        }
     }
 
     if (!list.isEmpty())
@@ -81,6 +85,10 @@ int main(int argc, char* argv[])
         pdlg->setMinimum(0);
         pdlg->setValue(0);
         pdlg->exec();
+    }
+    else
+    {
+        qDebug() << "Failed to start the Media Server...";
     }
     
     DMediaServerMngr::instance()->save();

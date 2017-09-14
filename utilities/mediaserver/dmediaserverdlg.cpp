@@ -28,6 +28,7 @@
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QApplication>
+#include <QMessageBox>
 
 // KDE includes
 
@@ -117,7 +118,13 @@ void DMediaServerDlg::slotStartMediaServer()
         return;
 
     d->mngr->setImagesList(i18n("Shared Items"), urls);
-    d->mngr->startMediaServer();
+
+    if (!d->mngr->startMediaServer())
+    {
+        QMessageBox::warning(this, i18n("Starting Media Server"),
+                             i18n("An error occurs while to start Media Server..."));
+    }
+
     d->ctrl->updateServerStatus();
 }
 
