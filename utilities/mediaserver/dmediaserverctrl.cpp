@@ -82,12 +82,25 @@ DMediaServerCtrl::DMediaServerCtrl(QWidget* const parent)
     d->aStats               = new QLabel(this);
     d->iStats               = new QLabel(this);
 
+    QLabel* const explanation = new QLabel(this);
+    explanation->setOpenExternalLinks(true);
+    explanation->setWordWrap(true);
+    QString txt;
+
+    explanation->setText(i18n("<p>The media server permit to share items through the local network "
+                              "using <a href='https://en.wikipedia.org/wiki/Digital_Living_Network_Alliance'>DLNA</a> "
+                              "standard and <a href='https://en.wikipedia.org/wiki/Universal_Plug_and_Play'>UPNP</a> "
+                              "protocol. Many kind of electronic devices can support DLNA, as tablets, cellulars, TV, etc."
+                              "<br>Note: depending of the network features and the configuration, "
+                              "the delay to discover the server on client device can take a while.</p>"));
+
     grid->addWidget(d->srvButton, 0, 0, 1, 1);
     grid->addWidget(d->srvStatus, 0, 1, 1, 1);
     grid->addWidget(d->progress,  0, 2, 1, 1);
+    grid->addWidget(explanation,  0, 3, 3, 1);
     grid->addWidget(d->aStats,    1, 0, 1, 3);
     grid->addWidget(d->iStats,    2, 0, 1, 3);
-    grid->setColumnStretch(1, 10);
+    grid->setColumnStretch(3, 10);
     grid->setSpacing(spacing);
     
     // --------------------------------------------------------
