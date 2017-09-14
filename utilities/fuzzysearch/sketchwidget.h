@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SKETCHWIDGET_H
-#define SKETCHWIDGET_H
+#ifndef SKETCH_WIDGET_H
+#define SKETCH_WIDGET_H
 
 // Qt includes
 
@@ -107,4 +107,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SKETCHWIDGET_H
+#endif // SKETCH_WIDGET_H
