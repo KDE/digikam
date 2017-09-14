@@ -91,16 +91,6 @@ public:
     void renameFile(const QUrl& srcToRename, const QUrl& newName);
 
     /**
-     * @return true if the thread is a renaming thread
-     */
-    bool isRenameThread();
-
-    /**
-     * @return url of the item that is renamed
-     */
-    QUrl oldUrlToRename();
-
-    /**
      * @brief cancels thread execution
      */
     void cancel();
@@ -152,7 +142,10 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void finished();
+
     void renamed(const QUrl& oldUrl, const QUrl& newURl);
+    void renamedFailed(const QUrl& oldUrl);
+
     void collectionTrashItemInfo(const DTrashItemInfo& trashItemInfo);
 
 private:

@@ -90,7 +90,6 @@ Q_SIGNALS:
 
     void imageRenameSucceeded(const QUrl&);
     void imageRenameFailed(const QUrl&);
-    void renamingAborted(const QUrl&);
 
 protected Q_SLOTS:
 

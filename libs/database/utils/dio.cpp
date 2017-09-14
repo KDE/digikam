@@ -338,6 +338,9 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
 
         connect(jobThread, SIGNAL(renamed(QUrl,QUrl)),
                 this, SLOT(slotRenamed(QUrl,QUrl)));
+
+        connect(jobThread, SIGNAL(renamedFailed(QUrl)),
+                this, SIGNAL(imageRenameFailed(QUrl)));
     }
     else if (operation == Trash)
     {
@@ -367,27 +370,8 @@ void DIO::slotResult()
         return;
     }
 
-    if (jobThread->hasErrors())
+    if (jobThread->hasErrors() && jobThread->isKeepingErrors())
     {
-        if (jobThread->isRenameThread())
-        {
-            QUrl url(jobThread->oldUrlToRename());
-
-            if (jobThread->isCanceled())
-            {
-                emit renamingAborted(url);
-            }
-            else
-            {
-                emit imageRenameFailed(url);
-            }
-        }
-
-        if (!jobThread->isKeepingErrors())
-        {
-            return;
-        }
-
         // Pop-up a message about the error.
         QString errors = QStringList(jobThread->errorsList()).join(QLatin1String("\n"));
         DNotificationWrapper(QString(), errors, DigikamApp::instance(),

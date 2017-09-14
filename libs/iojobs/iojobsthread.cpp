@@ -45,16 +45,12 @@ public:
     Private()
         : jobsCount(0),
           isCanceled(false),
-          isRenameThread(false),
           keepErrors(true)
     {
     }
 
     int            jobsCount;
     bool           isCanceled;
-    bool           isRenameThread;
-
-    QUrl           oldUrl;
 
     bool           keepErrors;
     QList<QString> errorsList;
@@ -192,23 +188,13 @@ void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
     connect(j, SIGNAL(signalRenamed(QUrl,QUrl)),
             this, SIGNAL(renamed(QUrl,QUrl)));
 
-    d->isRenameThread = true;
-    d->oldUrl         = srcToRename;
+    connect(j, SIGNAL(signalRenamedFailed(QUrl)),
+            this, SIGNAL(renamedFailed(QUrl)));
 
     collection.insert(j, 0);
     d->jobsCount++;
 
     appendJobs(collection);
-}
-
-bool IOJobsThread::isRenameThread()
-{
-   return d->isRenameThread;
-}
-
-QUrl IOJobsThread::oldUrlToRename()
-{
-    return d->oldUrl;
 }
 
 void IOJobsThread::cancel()

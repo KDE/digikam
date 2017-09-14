@@ -301,6 +301,7 @@ void RenameFileJob::run()
 {
     if (m_newUrl.isEmpty())
     {
+        emit signalRenamedFailed(m_srcToRename);
         emit signalDone();
         return;
     }
@@ -313,6 +314,7 @@ void RenameFileJob::run()
         qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
         emit error(i18n("Image with the same name %1 already there",
                         QDir::toNativeSeparators(m_newUrl.toLocalFile())));
+        emit signalRenamedFailed(m_srcToRename);
         emit signalDone();
         return;
     }
@@ -328,6 +330,7 @@ void RenameFileJob::run()
         qCDebug(DIGIKAM_IOJOB_LOG) << "File couldn't be renamed!";
         emit error(i18n("Image %1 could not be renamed",
                         QDir::toNativeSeparators(m_srcToRename.toLocalFile())));
+        emit signalRenamedFailed(m_srcToRename);
         emit signalDone();
         return;
     }

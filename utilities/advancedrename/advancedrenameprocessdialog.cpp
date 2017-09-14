@@ -25,10 +25,11 @@
 
 // Qt includes
 
+#include <QDialogButtonBox>
 #include <QCloseEvent>
 #include <QPixmap>
 #include <QTimer>
-#include <QDialogButtonBox>
+#include <QDir>
 
 // KDE includes
 
@@ -78,9 +79,6 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
 
     connect(DIO::instance(), SIGNAL(imageRenameFailed(QUrl)),
             this, SLOT(slotRenameFailed(QUrl)));
-
-    connect(DIO::instance(), SIGNAL(renamingAborted(QUrl)),
-            this, SLOT(slotCancel()));
 
     setValue(0);
     setModal(true);
@@ -145,7 +143,7 @@ void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& des
         return;
     }
 
-    addedAction(pix, desc.filePath);
+    addedAction(pix, QDir::toNativeSeparators(desc.filePath));
     advance(1);
 
     NewNameInfo info = d->newNameList.takeFirst();
@@ -177,9 +175,14 @@ void AdvancedRenameProcessDialog::slotRenameSuccess(const QUrl& src)
     }
 }
 
-void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl&)
+void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
 {
     abort();
+    setTitle(i18n("Canceled..."));
+    setLabel(i18n("<b>Renaming images is failed...</b>"));
+    QPixmap pix = QIcon::fromTheme(QLatin1String("error")).pixmap(64, 64);
+    addedAction(pix, QDir::toNativeSeparators(src.toLocalFile()));
+    advance(1);
 }
 
 void AdvancedRenameProcessDialog::closeEvent(QCloseEvent* e)
