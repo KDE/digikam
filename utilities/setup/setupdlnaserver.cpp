@@ -155,6 +155,13 @@ void SetupDlna::slotStartMediaServer()
         map.insert(anf.title(), d->iface->albumItems(id));
     }
 
+    if (map.isEmpty())
+    {
+        QMessageBox::information(this, i18n("Starting Media Server"),
+                                 i18n("There is no items to share with the current selection..."));
+        return;
+    }
+
     d->mngr->setCollectionMap(map);
     
     if (!d->mngr->startMediaServer())

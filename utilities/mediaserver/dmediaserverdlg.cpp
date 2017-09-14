@@ -115,7 +115,12 @@ void DMediaServerDlg::slotStartMediaServer()
     QList<QUrl> urls = d->listView->imageUrls();
 
     if (urls.isEmpty())
+    {
+        QMessageBox::information(this, i18n("Starting Media Server"),
+                                 i18n("There is no items to share with the current selection..."));
+
         return;
+    }
 
     d->mngr->setImagesList(i18n("Shared Items"), urls);
 
