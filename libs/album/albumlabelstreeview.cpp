@@ -873,7 +873,7 @@ QString AlbumLabelsSearchHandler::getDefaultTitle() const
 {
     if (d->treeWidget->isCheckable())
     {
-        return i18n("Exporting Labels");
+        return i18n("Exported Labels");
     }
     else
     {
