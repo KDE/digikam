@@ -52,7 +52,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotStopMediaServer();
+    void slotToggleMediaServer();
 
 private:
 

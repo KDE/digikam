@@ -51,8 +51,7 @@ public:
 
     Private() :
         mngr(DMediaServerMngr::instance()),
-        startButton(0),
-        stopButton(0),
+        srvButton(0),
         srvStatus(0),
         progress(0),
         aStats(0),
@@ -61,8 +60,7 @@ public:
     }
 
     DMediaServerMngr* mngr;
-    QPushButton*      startButton;
-    QPushButton*      stopButton;
+    QPushButton*      srvButton;
     QLabel*           srvStatus;
     WorkingWidget*    progress;
     QLabel*           aStats;
@@ -78,29 +76,24 @@ DMediaServerCtrl::DMediaServerCtrl(QWidget* const parent)
     const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
  
     QGridLayout* const grid = new QGridLayout(this);
-    d->startButton          = new QPushButton(i18n("Start"), this);
+    d->srvButton            = new QPushButton(this);
     d->srvStatus            = new QLabel(this);
     d->progress             = new WorkingWidget(this);
-    d->stopButton           = new QPushButton(i18n("Stop"),  this);
     d->aStats               = new QLabel(this);
     d->iStats               = new QLabel(this);
 
-    grid->addWidget(d->startButton, 0, 0, 1, 1);
-    grid->addWidget(d->srvStatus,   0, 1, 1, 1);
-    grid->addWidget(d->progress,    0, 2, 1, 1);
-    grid->addWidget(d->stopButton,  0, 3, 1, 1);
-    grid->addWidget(d->aStats,      1, 0, 1, 4);
-    grid->addWidget(d->iStats,      2, 0, 1, 4);
+    grid->addWidget(d->srvButton, 0, 0, 1, 1);
+    grid->addWidget(d->srvStatus, 0, 1, 1, 1);
+    grid->addWidget(d->progress,  0, 2, 1, 1);
+    grid->addWidget(d->aStats,    1, 0, 1, 3);
+    grid->addWidget(d->iStats,    2, 0, 1, 3);
     grid->setColumnStretch(1, 10);
     grid->setSpacing(spacing);
     
     // --------------------------------------------------------
 
-    connect(d->stopButton, SIGNAL(clicked()),
-            this, SLOT(slotStopMediaServer()));
-
-    connect(d->startButton, SIGNAL(clicked()),
-            this, SIGNAL(signalStartMediaServer()));
+    connect(d->srvButton, SIGNAL(clicked()),
+            this, SLOT(slotToggleMediaServer()));
 }
 
 DMediaServerCtrl::~DMediaServerCtrl()
@@ -117,8 +110,7 @@ void DMediaServerCtrl::updateServerStatus()
         txt = i18n("Media server is running");
         d->aStats->setText(i18np("1 album shared", "%1 albums shared", d->mngr->albumsShared()));
         d->iStats->setText(i18np("1 item shared",  "%1 items shared",  d->mngr->itemsShared()));
-        d->startButton->setEnabled(false);
-        d->stopButton->setEnabled(true);
+        d->srvButton->setText(i18n("Stop"));
         d->progress->toggleTimer(true);
     }
     else
@@ -126,18 +118,24 @@ void DMediaServerCtrl::updateServerStatus()
         txt = i18n("Media server is not running");
         d->aStats->clear();
         d->iStats->clear();
-        d->startButton->setEnabled(true);
-        d->stopButton->setEnabled(false);
+        d->srvButton->setText(i18n("Start"));
         d->progress->toggleTimer(false);
     }
 
     d->srvStatus->setText(txt);
 }
 
-void DMediaServerCtrl::slotStopMediaServer()
+void DMediaServerCtrl::slotToggleMediaServer()
 {
-    d->mngr->cleanUp();
-    updateServerStatus();
+    if (!d->mngr->isRunning())
+    {
+        emit signalStartMediaServer();
+    }
+    else
+    {
+        d->mngr->cleanUp();
+        updateServerStatus();
+    }
 }
 
 }  // namespace Digikam
