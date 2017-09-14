@@ -12,6 +12,9 @@ endif (POLICY CMP0063)
 set(libmediaserver_SRCS
     dmediaserver.cpp
     dmediaservermngr.cpp
+    dmediaserverdlg.cpp
+    dmediaserverctrl.cpp
+
     hupnp/dataelements/hactioninfo.cpp 
     hupnp/dataelements/hdeviceinfo.cpp 
     hupnp/dataelements/hdiscoverytype.cpp 
@@ -89,6 +92,7 @@ set(libmediaserver_SRCS
     hupnp/devicemodel/server/hserverdevice.cpp 
     hupnp/devicemodel/server/hserverservice.cpp 
     hupnp/devicemodel/server/hserverstatevariable.cpp 
+
     hupnp_av/hav_devicemodel_creator.cpp 
     hupnp_av/hav_devicemodel_infoprovider.cpp 
     hupnp_av/hav_global.cpp 
@@ -220,6 +224,7 @@ set(libmediaserver_SRCS
     hupnp_av/cds_model/model_mgmt/hcdsproperty.cpp 
     hupnp_av/cds_model/model_mgmt/hcdsproperty_db.cpp 
     hupnp_av/cds_model/model_mgmt/hcdspropertyinfo.cpp
+
     qtsoap/qtsoap.cpp
 )
 

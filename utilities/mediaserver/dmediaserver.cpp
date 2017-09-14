@@ -130,13 +130,6 @@ DMediaServer::~DMediaServer()
      delete d;
 }
 
-void DMediaServer::addImagesOnServer(const QString& aname, const QList<QUrl>& urls)
-{
-    MediaServerMap map;
-    map.insert(aname, urls);
-    addAlbumsOnServer(map); 
-}
-
 void DMediaServer::addAlbumsOnServer(const MediaServerMap& map)
 {
     QList<QString> keys = map.uniqueKeys();

@@ -55,3 +55,21 @@ target_link_libraries(dmediaservertest
                       Qt5::Core
                       Qt5::Test
 )
+
+########################################################################
+
+set(dmediaserver_dlg_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/dmediaserver_dlg.cpp
+)
+
+add_executable(dmediaserver_dlg ${dmediaserver_dlg_SRCS})
+
+target_link_libraries(dmediaserver_dlg
+                      digikamcore
+                      libdng
+
+                      Qt5::Widgets
+                      Qt5::Gui
+                      Qt5::Core
+                      Qt5::Test
+)

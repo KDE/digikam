@@ -26,9 +26,7 @@
 
 // Qt includes
 
-#include <QPushButton>
 #include <QCheckBox>
-#include <QColor>
 #include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -45,6 +43,7 @@
 #include "dlayoutbox.h"
 #include "dbinfoiface.h"
 #include "dmediaservermngr.h"
+#include "dmediaserverctrl.h"
 #include "albumselecttabs.h"
 
 namespace Digikam
@@ -55,25 +54,17 @@ class SetupDlna::Private
 public:
 
     Private() :
+        ctrl(0),
         mngr(DMediaServerMngr::instance()),
         iface(0),
-        startServerOnStartupCheckBox(0),
-        startButton(0),
-        stopButton(0),
-        srvStatus(0),
-        aStats(0),
-        iStats(0)
+        startServerOnStartupCheckBox(0)
     {
     }
 
-    DMediaServerMngr*    mngr;
-    DBInfoIface*         iface;
-    QCheckBox*           startServerOnStartupCheckBox;
-    QPushButton*         startButton;
-    QPushButton*         stopButton;
-    QLabel*              srvStatus;
-    QLabel*              aStats;
-    QLabel*              iStats;
+    DMediaServerCtrl* ctrl;
+    DMediaServerMngr* mngr;
+    DBInfoIface*      iface;
+    QCheckBox*        startServerOnStartupCheckBox;
 };
 
 // --------------------------------------------------------
@@ -99,29 +90,14 @@ SetupDlna::SetupDlna(QWidget* const parent)
     QGroupBox* const dlnaServerSettingsGroup = new QGroupBox(i18n("Share on the Network Options"), panel);
     QVBoxLayout* const gLayout               = new QVBoxLayout(dlnaServerSettingsGroup);
 
-
     d->startServerOnStartupCheckBox = new QCheckBox(i18n("Automatic Start Server at Startup"));
     d->startServerOnStartupCheckBox->setWhatsThis(i18n("Set this option to turn-on the DLNA server at digiKam start-up"));
     d->startServerOnStartupCheckBox->setChecked(true);
-
-    DHBox* const btnBox = new DHBox(panel);
-    d->startButton      = new QPushButton(i18n("Start"), btnBox);
-    d->srvStatus        = new QLabel(btnBox);
-    d->stopButton       = new QPushButton(i18n("Stop"),  btnBox);
-    btnBox->setStretchFactor(d->srvStatus, 10);
-    d->srvStatus->setAlignment(Qt::AlignCenter);
-
-    DHBox* const staBox   = new DHBox(panel);
-    d->aStats             = new QLabel(staBox);
-    QWidget* const spacer = new QLabel(staBox);
-    d->iStats             = new QLabel(staBox);
-    d->iStats->setAlignment(Qt::AlignRight);
-    staBox->setStretchFactor(spacer, 10);
+    d->ctrl                         = new DMediaServerCtrl(panel);
 
     gLayout->addWidget(d->startServerOnStartupCheckBox);
     gLayout->addWidget(d->iface->albumChooser(this));
-    gLayout->addWidget(btnBox);
-    gLayout->addWidget(staBox);
+    gLayout->addWidget(d->ctrl);
     gLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     gLayout->setSpacing(spacing);
 
@@ -134,14 +110,11 @@ SetupDlna::SetupDlna(QWidget* const parent)
     connect(d->iface, SIGNAL(signalAlbumChooserSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
 
-    connect(d->stopButton, SIGNAL(clicked()),
-            this, SLOT(slotStopMediaServer()));
-
-    connect(d->startButton, SIGNAL(clicked()),
+    connect(d->ctrl, SIGNAL(signalStartMediaServer()),
             this, SLOT(slotStartMediaServer()));
-
+        
     readSettings();
-    updateServerStatus();
+    d->ctrl->updateServerStatus();
 }
 
 SetupDlna::~SetupDlna()
@@ -170,30 +143,6 @@ void SetupDlna::slotSelectionChanged()
     // TODO
 }
 
-void SetupDlna::updateServerStatus()
-{
-    QString txt;
-
-    if (d->mngr->isRunning())
-    {
-        txt = i18n("Media server is running");
-        d->aStats->setText(i18np("1 album shared", "%1 albums shared", d->mngr->albumsShared()));
-        d->iStats->setText(i18np("1 item shared",  "%1 items shared",  d->mngr->itemsShared()));
-        d->startButton->setEnabled(false);
-        d->stopButton->setEnabled(true);
-    }
-    else
-    {
-        txt = i18n("Media server is not running");
-        d->aStats->clear();
-        d->iStats->clear();
-        d->startButton->setEnabled(true);
-        d->stopButton->setEnabled(false);
-    }
-
-    d->srvStatus->setText(txt);
-}
-
 void SetupDlna::slotStartMediaServer()
 {
     DInfoInterface::DAlbumIDs albums = d->iface->albumChooserItems();
@@ -207,13 +156,7 @@ void SetupDlna::slotStartMediaServer()
 
     d->mngr->setCollectionMap(map);
     d->mngr->startMediaServer();
-    updateServerStatus();
-}
-
-void SetupDlna::slotStopMediaServer()
-{
-    d->mngr->cleanUp();
-    updateServerStatus();
+    d->ctrl->updateServerStatus();
 }
 
 }  // namespace Digikam

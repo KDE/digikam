@@ -147,6 +147,11 @@ void DMediaServerMngr::saveAtShutdown()
     cleanUp();
 }
 
+void DMediaServerMngr::setImagesList(const QString& aname, const QList<QUrl>& urls)
+{
+    d->collectionMap.clear();
+    d->collectionMap.insert(aname, urls);
+}
 
 void DMediaServerMngr::setCollectionMap(const MediaServerMap& map)
 {

@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2007-05-11
- * Description : setup Media Server tab.
+ * Description : Media Server control widget.
  *
- * Copyright (C) 2007-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,35 +21,38 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_MEDIA_SERVER_H
-#define SETUP_MEDIA_SERVER_H
+#ifndef DMEDIA_SERVER_CTRL_H
+#define DMEDIA_SERVER_CTRL_H
 
 // Qt includes
 
-#include <QScrollArea>
+#include <QWidget>
+
+// Local includes
+
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class SetupDlna : public QScrollArea
+class DIGIKAM_EXPORT DMediaServerCtrl : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit SetupDlna(QWidget* const parent = 0);
-    ~SetupDlna();
+    explicit DMediaServerCtrl(QWidget* const parent = 0);
+    ~DMediaServerCtrl();
 
-    void applySettings();
+    void updateServerStatus();
 
-private:
-
-    void readSettings();
+Q_SIGNALS:
+    
+    void signalStartMediaServer();
 
 private Q_SLOTS:
 
-    void slotSelectionChanged();
-    void slotStartMediaServer();
+    void slotStopMediaServer();
 
 private:
 
@@ -59,4 +62,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SETUP_MEDIA_SERVER_H
+#endif // DMEDIA_SERVER_CTRL_H
