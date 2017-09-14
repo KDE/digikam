@@ -28,6 +28,7 @@
 
 #include <QList>
 #include <QMap>
+#include <QApplication>
 #include <QStringList>
 #include <QUrl>
 #include <QFile>
@@ -39,12 +40,14 @@
 
 // KDE includes
 
+#include <klocalizedstring.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "dnotificationwrapper.h"
 
 namespace Digikam
 {
@@ -131,6 +134,8 @@ bool DMediaServerMngr::loadAtStartup()
         result &= load();
         result &= startMediaServer();
 
+        mediaServerNotification(result);
+    
         return result;
     }
     
@@ -150,6 +155,14 @@ void DMediaServerMngr::saveAtShutdown()
     }
 
     cleanUp();
+}
+
+void DMediaServerMngr::mediaServerNotification(bool started)
+{
+    DNotificationWrapper(QLatin1String("mediaserverloadstartup"),
+                         started ? i18n("Media Server have been started")
+                                 : i18n("Media Server cannot be started!"),
+                         qApp->activeWindow(), qApp->applicationName());
 }
 
 void DMediaServerMngr::setImagesList(const QString& aname, const QList<QUrl>& urls)

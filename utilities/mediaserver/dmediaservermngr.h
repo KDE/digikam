@@ -77,6 +77,9 @@ public:
     
     QString configGroupName()                 const;
     QString configStartServerOnStartupEntry() const;
+    
+    /// Send a notification message if MediaServer have been started or not.
+    void mediaServerNotification(bool started);
 
 public:
 

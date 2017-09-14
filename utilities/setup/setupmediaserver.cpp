@@ -170,6 +170,10 @@ void SetupMediaServer::slotStartMediaServer()
         QMessageBox::warning(this, i18n("Starting Media Server"),
                              i18n("An error occurs while to start Media Server..."));
     }
+    else
+    {
+        d->mngr->mediaServerNotification(true);
+    }
 
     d->ctrl->updateServerStatus();
 }
