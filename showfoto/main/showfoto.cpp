@@ -207,6 +207,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     d->thumbBarDock->reInitialize();
 
     // -- Load current items ---------------------------
+
     slotDroppedUrls(urlList);
 
     if (!d->infoList.isEmpty())
@@ -375,7 +376,6 @@ void ShowFoto::setupUserArea()
     viewContainer->addDockWidget(dockArea, d->thumbBarDock);
     d->thumbBarDock->setFloating(false);
 
-
     d->model       = new ShowfotoThumbnailModel(d->thumbBar);
     d->model->setThumbnailLoadThread(d->thumbLoadThread);
     d->dDHandler   = new ShowfotoDragDropHandler(d->model);
@@ -383,7 +383,6 @@ void ShowFoto::setupUserArea()
 
     d->filterModel = new ShowfotoFilterModel(d->thumbBar);
     d->filterModel->setSourceShowfotoModel(d->model);
-
     d->filterModel->setCategorizationMode(ShowfotoItemSortSettings::NoCategories);
     d->filterModel->sort(0);
 
@@ -1075,7 +1074,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
     Digikam::DMetadata meta;
 
     m_nameLabel->setProgressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
-                                 i18n("Preparing slideshow. Please wait..."));
+                                    i18n("Preparing slideshow. Please wait..."));
 
     for (QList<QUrl>::ConstIterator it = settings.fileList.constBegin() ;
          !m_cancelSlideShow && (it != settings.fileList.constEnd()) ; ++it)
@@ -1128,6 +1127,7 @@ void ShowFoto::slotPresentation()
         qApp->processEvents();
     }
 
+    m_nameLabel->setProgressBarMode(Digikam::StatusProgressBar::TextMode, QString());
     mngr->showConfigDialog();
 }
 
