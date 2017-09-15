@@ -189,7 +189,7 @@ void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
             this, SIGNAL(renamed(QUrl,QUrl)));
 
     connect(j, SIGNAL(signalRenamedFailed(QUrl)),
-            this, SIGNAL(renamedFailed(QUrl)));
+            this, SIGNAL(renameFailed(QUrl)));
 
     collection.insert(j, 0);
     d->jobsCount++;
