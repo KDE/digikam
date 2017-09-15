@@ -105,7 +105,7 @@ MediaRendererWindow::MediaRendererWindow(QWidget* parent) :
     creator.setMediaRendererConfiguration(mediaRendererConfig);
 
     const QString renderDescriptionPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-              QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediarender_description.xml")));
+              QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediarenderer_description.xml")));
 
     qDebug() << "Render Description:" << renderDescriptionPath;
 
