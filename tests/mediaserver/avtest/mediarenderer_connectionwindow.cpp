@@ -61,6 +61,8 @@ MediaRendererConnectionWindow::MediaRendererConnectionWindow(
     ui->setupUi(this);
     ui->scrollArea->setWidgetResizable(true);
 
+    qDebug() << "Required format to render:" << contentFormat;
+
     if (isAudio(contentFormat))
     {
 //        m_rendererConnection = new DefaultRendererConnection(
@@ -84,6 +86,9 @@ MediaRendererConnectionWindow::MediaRendererConnectionWindow(
     else if (contentFormat == QLatin1String("*") || contentFormat.isEmpty() ||
              contentFormat == QLatin1String("application/octet-stream"))
     {
+        m_rendererConnection = new RendererConnectionForImagesAndText(
+            RendererConnectionForImagesAndText::Text, m_nam, ui->scrollAreaWidgetContents);
+
 //        m_rendererConnection = new DefaultRendererConnection(
 //            DefaultRendererConnection::Unknown, ui->scrollAreaWidgetContents);
     }
