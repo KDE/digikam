@@ -22,21 +22,21 @@
 
 #include "dataitem_display.h"
 
-#include <HUpnpCore/HDeviceInfo>
-#include <HUpnpCore/HServiceInfo>
-#include <HUpnpCore/HResourceType>
-#include <HUpnpCore/HClientDevice>
-#include <HUpnpCore/HClientService>
+#include "hdeviceinfo.h"
+#include "hserviceinfo.h"
+#include "hresourcetype.h"
+#include "hclientdevice.h"
+#include "hclientservice.h"
 
-#include <HUpnpAv/HItem>
-#include <HUpnpAv/HResource>
-#include <HUpnpAv/HContainer>
-#include <HUpnpAv/HProtocolInfo>
-#include <HUpnpAv/HMediaBrowser>
-#include <HUpnpAv/HCdsDataSource>
-#include <HUpnpAv/HConnectionInfo>
-#include <HUpnpAv/HMediaRendererAdapter>
-#include <HUpnpAv/HContentDirectoryAdapter>
+#include "hitem.h"
+#include "hresource.h"
+#include "hcontainer.h"
+#include "hprotocolinfo.h"
+#include "hmediabrowser.h"
+#include "hcds_datasource.h"
+#include "hconnectioninfo.h"
+#include "hmediarenderer_adapter.h"
+#include "hcontentdirectory_adapter.h"
 
 #include <QSet>
 #include <QUrl>
@@ -81,36 +81,36 @@ void DataItemDisplay::NavItemVisitor::visit(RendererItem* item)
 
     m_owner->m_rootDeviceUdn = device->rootDevice()->info().udn();
     m_owner->m_columns.clear();
-    m_owner->m_columns.insert(0, "Name");
-    m_owner->m_columns.insert(1, "Value");
+    m_owner->m_columns.insert(0, QLatin1String("Name"));
+    m_owner->m_columns.insert(1, QLatin1String("Value"));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "Friendly name,%1").arg(deviceInfo.friendlyName()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "Friendly name,%1").arg(deviceInfo.friendlyName()).split(QLatin1String(","))));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "Device type,%1").arg(deviceInfo.deviceType().toString()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "Device type,%1").arg(deviceInfo.deviceType().toString()).split(QLatin1String(","))));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "Model name,%1").arg(deviceInfo.modelName()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "Model name,%1").arg(deviceInfo.modelName()).split(QLatin1String(","))));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "Manufacturer,%1").arg(deviceInfo.manufacturer()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "Manufacturer,%1").arg(deviceInfo.manufacturer()).split(QLatin1String(","))));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "UDN,%1").arg(deviceInfo.udn().toString()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "UDN,%1").arg(deviceInfo.udn().toString()).split(QLatin1String(","))));
 
     QList<QUrl> locations = device->locations();
     for (qint32 i = 0; i < locations.size(); ++i)
     {
         m_owner->m_modelData.push_back(
-            new DisplayDataRow(QString(
+            new DisplayDataRow(QString::fromUtf8(
                 "Device description URL,%1").arg(
-                    locations.at(i).toString()).split(",")));
+                    locations.at(i).toString()).split(QLatin1String(","))));
     }
 
     m_owner->reset();
@@ -125,24 +125,24 @@ void DataItemDisplay::NavItemVisitor::visit(ConnectionItem* item)
     HConnectionInfo info = conn->info();
 
     m_owner->m_columns.clear();
-    m_owner->m_columns.insert(0, "Name");
-    m_owner->m_columns.insert(1, "Value");
+    m_owner->m_columns.insert(0, QLatin1String("Name"));
+    m_owner->m_columns.insert(1, QLatin1String("Value"));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "AV Transport ID,%1").arg(info.avTransportId()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "AV Transport ID,%1").arg(info.avTransportId()).split(QLatin1String(","))));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "Rendering Control ID,%1").arg(info.rcsId()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "Rendering Control ID,%1").arg(info.rcsId()).split(QLatin1String(","))));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "Protocol Info,%1").arg(info.protocolInfo().toString()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "Protocol Info,%1").arg(info.protocolInfo().toString()).split(QLatin1String(","))));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString("Status,%1").arg(
-            HConnectionManagerInfo::statusToString(info.status())).split(",")));
+        new DisplayDataRow(QString::fromUtf8("Status,%1").arg(
+            HConnectionManagerInfo::statusToString(info.status())).split(QLatin1String(","))));
 
     m_owner->reset();
 }
@@ -154,10 +154,10 @@ void DataItemDisplay::NavItemVisitor::visit(CdsContainerItem* item)
     m_owner->clearModel();
 
     m_owner->m_columns.clear();
-    m_owner->m_columns.insert(0, "Title");
-    m_owner->m_columns.insert(1, "Id");
-    m_owner->m_columns.insert(2, "Class");
-    m_owner->m_columns.insert(3, "Locations");
+    m_owner->m_columns.insert(0, QLatin1String("Title"));
+    m_owner->m_columns.insert(1, QLatin1String("Id"));
+    m_owner->m_columns.insert(2, QLatin1String("Class"));
+    m_owner->m_columns.insert(3, QLatin1String("Locations"));
 
     HCdsDataSource* ds = item->dataSource();
     QSet<QString> childIds = item->container()->childIds();
@@ -168,7 +168,7 @@ void DataItemDisplay::NavItemVisitor::visit(CdsContainerItem* item)
         QString resAsStr;
         for(int i = 0; i < resources.size() - 1; ++i)
         {
-            resAsStr.append(resources[i].location().toString()).append(";");
+            resAsStr.append(resources[i].location().toString()).append(QLatin1String(";"));
         }
         if (resources.size())
         {
@@ -177,11 +177,11 @@ void DataItemDisplay::NavItemVisitor::visit(CdsContainerItem* item)
 
         m_owner->m_modelData.push_back(
             new DisplayDataRow(
-                QString("%1,%2,%3,%4").arg(
+                QString::fromUtf8("%1,%2,%3,%4").arg(
                     item->title(),
                     item->id(),
                     item->clazz(),
-                    resAsStr).split(","),
+                    resAsStr).split(QLatin1String(",")),
                 DisplayDataRow::CdsItem));
     }
 
@@ -200,36 +200,36 @@ void DataItemDisplay::NavItemVisitor::visit(ContentDirectoryItem* item)
 
     m_owner->m_rootDeviceUdn = deviceInfo.udn();
     m_owner->m_columns.clear();
-    m_owner->m_columns.insert(0, "Name");
-    m_owner->m_columns.insert(1, "Value");
+    m_owner->m_columns.insert(0, QLatin1String("Name"));
+    m_owner->m_columns.insert(1, QLatin1String("Value"));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "Friendly name,%1").arg(deviceInfo.friendlyName()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "Friendly name,%1").arg(deviceInfo.friendlyName()).split(QLatin1String(","))));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "Device type,%1").arg(deviceInfo.deviceType().toString()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "Device type,%1").arg(deviceInfo.deviceType().toString()).split(QLatin1String(","))));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "Model name,%1").arg(deviceInfo.modelName()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "Model name,%1").arg(deviceInfo.modelName()).split(QLatin1String(","))));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "Manufacturer,%1").arg(deviceInfo.manufacturer()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "Manufacturer,%1").arg(deviceInfo.manufacturer()).split(QLatin1String(","))));
 
     m_owner->m_modelData.push_back(
-        new DisplayDataRow(QString(
-            "UDN,%1").arg(deviceInfo.udn().toString()).split(",")));
+        new DisplayDataRow(QString::fromUtf8(
+            "UDN,%1").arg(deviceInfo.udn().toString()).split(QLatin1String(","))));
 
     QList<QUrl> locations = clientDevice->locations();
     for (qint32 i = 0; i < locations.size(); ++i)
     {
         m_owner->m_modelData.push_back(
-            new DisplayDataRow(QString(
+            new DisplayDataRow(QString::fromUtf8(
                 "Device description URL,%1").arg(
-                    locations.at(i).toString()).split(",")));
+                    locations.at(i).toString()).split(QLatin1String(","))));
     }
 
     m_owner->reset();

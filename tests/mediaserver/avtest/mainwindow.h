@@ -51,7 +51,7 @@ private:
 
     Ui::MainWindow* m_ui;
 
-private slots:
+private Q_SLOTS:
 
     void on_startControlPoint_clicked();
     void on_startMediaServer_clicked();

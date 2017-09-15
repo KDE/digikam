@@ -23,8 +23,8 @@
 #ifndef RENDERERCONNECTIONS_H_
 #define RENDERERCONNECTIONS_H_
 
-#include <HUpnpCore/HUpnp>
-#include <HUpnpAv/HRendererConnection>
+#include "hupnp_global.h"
+#include "hrendererconnection.h"
 
 #include <QLabel>
 #include <QWidget>

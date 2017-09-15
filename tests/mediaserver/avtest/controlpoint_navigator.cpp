@@ -26,10 +26,10 @@
 #include "hcontainer.h"
 #include "hprotocolinfo.h"
 #include "hmediabrowser.h"
-#include "hcdsdatasource.h"
-#include "hmediaserveradapter.h"
-#include "hmediarendereradapter.h"
-#include "hcontentdirectoryadapter.h"
+#include "hcds_datasource.h"
+#include "hmediaserver_adapter.h"
+#include "hmediarenderer_adapter.h"
+#include "hcontentdirectory_adapter.h"
 
 #include "hclientservice.h"
 
@@ -44,10 +44,10 @@ ControlPointNavigator::ControlPointNavigator(QObject* parent) :
     QAbstractItemModel(parent),
         m_rootItem(new RootItem()), m_renderersItem(), m_serversItem()
 {
-    m_renderersItem = new ContainerItem("Media Renderers", m_rootItem);
+    m_renderersItem = new ContainerItem(QLatin1String("Media Renderers"), m_rootItem);
     m_rootItem->appendChild(m_renderersItem);
 
-    m_serversItem = new ContainerItem("Media Servers", m_rootItem);
+    m_serversItem = new ContainerItem(QLatin1String("Media Servers"), m_rootItem);
     m_rootItem->appendChild(m_serversItem);
 }
 
@@ -277,7 +277,7 @@ void ControlPointNavigator::objectsBrowsed(
             continue;
         }
 
-        if (id != "0")
+        if (id != QLatin1String("0"))
         {
             CdsContainerItem* rootItem =
                 static_cast<CdsContainerItem*>(cdsItem->child(0));
@@ -287,7 +287,7 @@ void ControlPointNavigator::objectsBrowsed(
                 continue;
             }
 
-            if ("0" == container->parentId())
+            if (QLatin1String("0") == container->parentId())
             {
                 CdsContainerItem* newContainerItem =
                     new CdsContainerItem(container, dataSource, rootItem);

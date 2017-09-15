@@ -22,15 +22,15 @@
 
 #include "controlpoint_navigatoritem.h"
 
-#include <HUpnpCore/HDeviceInfo>
-#include <HUpnpCore/HClientService>
-#include <HUpnpCore/HStateVariableInfo>
+#include "hdeviceinfo.h"
+#include "hclientservice.h"
+#include "hstatevariableinfo.h"
 
-#include <HUpnpAv/HContainer>
-#include <HUpnpAv/HMediaBrowser>
-#include <HUpnpAv/HConnectionInfo>
-#include <HUpnpAv/HMediaRendererAdapter>
-#include <HUpnpAv/HContentDirectoryAdapter>
+#include "hcontainer.h"
+#include "hmediabrowser.h"
+#include "hconnectioninfo.h"
+#include "hmediarenderer_adapter.h"
+#include "hcontentdirectory_adapter.h"
 
 #include <QVariant>
 
@@ -124,7 +124,7 @@ RootItem::~RootItem()
 
 QVariant RootItem::data (int /*column*/) const
 {
-    return "Root";
+    return QLatin1String("Root");
 }
 
 void RootItem::accept(ControlPointNavigatorItemVisitor* /*visitor*/)
@@ -198,7 +198,7 @@ QVariant ConnectionItem::data(int /*column*/) const
         return QVariant();
     }
 
-    return QString("Id:%1").arg(
+    return QString::fromUtf8("Id:%1").arg(
         QString::number(m_connection->info().connectionId()));
 }
 

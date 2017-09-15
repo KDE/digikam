@@ -25,7 +25,7 @@
 
 #include "controlpoint_navigatoritem.h"
 
-#include <HUpnpCore/HUdn>
+#include "hudn.h"
 #include "hav_defs.h"
 #include "hav_fwd.h"
 #include "hav_global.h"

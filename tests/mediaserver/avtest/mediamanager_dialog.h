@@ -65,7 +65,7 @@ private:
 
     Herqq::Upnp::HClientAdapterOp<qint32> m_connectionRetrieveOp;
 
-private slots:
+private Q_SLOTS:
 
     void on_mediaRenderersCb_currentIndexChanged(int index);
 

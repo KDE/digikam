@@ -23,24 +23,23 @@
 #include "mediamanager_dialog.h"
 #include "ui_mediamanager_dialog.h"
 
-#include <HUpnpCore/HUdn>
-#include <HUpnpCore/HDeviceInfo>
-#include <HUpnpCore/HClientDevice>
+#include "hudn.h"
+#include "hdeviceinfo.h"
+#include "hclientdevice.h"
 
-#include <HUpnpAv/HItem>
-#include <HUpnpAv/HResource>
-#include <HUpnpAv/HContainer>
-#include <HUpnpAv/HConnection>
-#include <HUpnpAv/HCdsDataSource>
-#include <HUpnpAv/HAvControlPoint>
-#include <HUpnpAv/HAvtLastChangeInfo>
-#include <HUpnpAv/HRcsLastChangeInfo>
-#include <HUpnpAv/HConnectionManagerId>
+#include "hitem.h"
+#include "hresource.h"
+#include "hcontainer.h"
+#include "hconnection.h"
+#include "hcds_datasource.h"
+#include "hav_controlpoint.h"
+#include "havt_lastchange_info.h"
+#include "hrcs_lastchange_info.h"
+#include "hconnectionmanager_id.h"
 
-
-#include <HUpnpAv/HAvTransportAdapter>
-#include <HUpnpAv/HMediaRendererAdapter>
-#include <HUpnpAv/HConnectionManagerAdapter>
+#include "havtransport_adapter.h"
+#include "hmediarenderer_adapter.h"
+#include "hconnectionmanager_adapter.h"
 
 #include <QtCore/QUrl>
 

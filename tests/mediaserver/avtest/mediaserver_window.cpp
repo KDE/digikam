@@ -23,18 +23,18 @@
 #include "mediaserver_window.h"
 #include "ui_mediaserver_window.h"
 
-#include <HUpnpCore/HUpnp>
-#include <HUpnpCore/HDeviceInfo>
-#include <HUpnpCore/HDeviceHostConfiguration>
+#include "hupnp_global.h"
+#include "hdeviceinfo.h"
+#include "hdevicehost_configuration.h"
 
-#include <HUpnpAv/HItem>
-#include <HUpnpAv/HRootDir>
-#include <HUpnpAv/HContainer>
-#include <HUpnpAv/HAvDeviceModelCreator>
-#include <HUpnpAv/HMediaServerDeviceConfiguration>
+#include "hitem.h"
+#include "hrootdir.h"
+#include "hcontainer.h"
+#include "hav_devicemodel_creator.h"
+#include "hmediaserver_deviceconfiguration.h"
 
-#include <HUpnpAv/HFileSystemDataSource>
-#include <HUpnpAv/HContentDirectoryServiceConfiguration>
+#include "hfsys_datasource.h"
+#include "hcontentdirectory_serviceconfiguration.h"
 
 #include <QDir>
 #include <QFileDialog>
@@ -75,7 +75,7 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
 
     // 5) Setup the HDeviceHost with desired configuration info.
     HDeviceConfiguration config;
-    config.setPathToDeviceDescription("./descriptions/herqq_mediaserver_description.xml");
+    config.setPathToDeviceDescription(QLatin1String("./descriptions/herqq_mediaserver_description.xml"));         // FIXME
     config.setCacheControlMaxAge(180);
 
     HDeviceHostConfiguration hostConfiguration;

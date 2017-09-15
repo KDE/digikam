@@ -29,7 +29,7 @@
 #include "hav_defs.h"
 #include "hav_fwd.h"
 #include "hav_global.h"
-#include <HUpnpCore/HDeviceHost>
+#include "hdevicehost.h"
 
 namespace Ui {
     class MediaServerWindow;
@@ -54,7 +54,7 @@ private:
 
     QPointer<AddContentDialog> m_dlg;
 
-private slots:
+private Q_SLOTS:
 
     void on_addContentButton_clicked();
     void addContenDlgtFinished();

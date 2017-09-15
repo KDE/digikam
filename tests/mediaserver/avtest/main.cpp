@@ -21,7 +21,7 @@
  */
 
 #include "mainwindow.h"
-#include <HUpnpCore/HUpnp>
+#include "hupnp_global.h"
 
 #include <QtTest>
 #include <QtDebug>
