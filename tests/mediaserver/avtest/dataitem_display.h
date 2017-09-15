@@ -118,7 +118,7 @@ public:
 
     void deviceRemoved(const Herqq::Upnp::HUdn&);
 
-    void setData(ControlPointNavigatorItem*);
+    void setControlPointData(ControlPointNavigatorItem*);
 
     DisplayDataRow* displayDataRow(qint32 row) const;
 

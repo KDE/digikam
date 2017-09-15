@@ -154,7 +154,7 @@ void ControlPointWindow::on_navigatorTreeView_clicked(const QModelIndex& index)
 
     if (navItem)
     {
-        m_dataItemDisplay->setData(navItem);
+        m_dataItemDisplay->setControlPointData(navItem);
 
         CdsContainerItem* containerItem = dynamic_cast<CdsContainerItem*>(navItem);
         if (containerItem && containerItem->container()->childIds().isEmpty())
@@ -189,7 +189,7 @@ void ControlPointWindow::objectsBrowsed(HMediaBrowser*, const QSet<QString>&)
 
         if (navItem)
         {
-            m_dataItemDisplay->setData(navItem);
+            m_dataItemDisplay->setControlPointData(navItem);
         }
     }
 }

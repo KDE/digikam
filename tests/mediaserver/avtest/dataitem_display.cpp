@@ -252,7 +252,7 @@ void DataItemDisplay::clearModel()
     m_modelData.clear();
 }
 
-void DataItemDisplay::setData(ControlPointNavigatorItem* navItem)
+void DataItemDisplay::setControlPointData(ControlPointNavigatorItem* navItem)
 {
     NavItemVisitor visitor(this);
     navItem->accept(&visitor);
