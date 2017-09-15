@@ -32,6 +32,7 @@
 #include <QVBoxLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QIcon>
 
 // KDE includes
 
@@ -127,6 +128,7 @@ void DMediaServerCtrl::updateServerStatus()
         d->separator->setVisible(true);
         d->iStats->setText(i18np("1 item shared",  "%1 items shared",  d->mngr->itemsShared()));
         d->srvButton->setText(i18n("Stop"));
+        d->srvButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-stop")));
         d->progress->toggleTimer(true);
     }
     else
@@ -136,6 +138,7 @@ void DMediaServerCtrl::updateServerStatus()
         d->separator->setVisible(false);
         d->iStats->clear();
         d->srvButton->setText(i18n("Start"));
+        d->srvButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
         d->progress->toggleTimer(false);
     }
 }
