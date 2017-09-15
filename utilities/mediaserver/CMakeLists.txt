@@ -135,6 +135,10 @@ set(libmediaserver_SRCS
     hupnp_av/contentdirectory/hfreeformqueryresult.cpp 
     hupnp_av/contentdirectory/hsearchresult.cpp 
     hupnp_av/contentdirectory/htransferprogressinfo.cpp 
+    hupnp_av/controlpoint/hav_controlpoint.cpp
+    hupnp_av/controlpoint/hav_controlpoint_configuration.cpp
+    hupnp_av/mediabrowser/hmediabrowser.cpp
+    hupnp_av/mediabrowser/hcds_lastchange_info.cpp
     hupnp_av/mediarenderer/habstractmediarenderer_device.cpp 
     hupnp_av/mediarenderer/havt_lastchange_info.cpp 
     hupnp_av/mediarenderer/hconnection.cpp 
