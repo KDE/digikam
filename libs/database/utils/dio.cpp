@@ -339,7 +339,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
         connect(jobThread, SIGNAL(renamed(QUrl,QUrl)),
                 this, SLOT(slotRenamed(QUrl,QUrl)));
 
-        connect(jobThread, SIGNAL(renamedFailed(QUrl)),
+        connect(jobThread, SIGNAL(renameFailed(QUrl)),
                 this, SIGNAL(imageRenameFailed(QUrl)));
     }
     else if (operation == Trash)

@@ -144,7 +144,7 @@ Q_SIGNALS:
     void finished();
 
     void renamed(const QUrl& oldUrl, const QUrl& newURl);
-    void renamedFailed(const QUrl& oldUrl);
+    void renameFailed(const QUrl& oldUrl);
 
     void collectionTrashItemInfo(const DTrashItemInfo& trashItemInfo);
 
