@@ -46,12 +46,18 @@ class DIGIKAM_EXPORT DMediaServerMngr : public QObject
 
 public:
 
-    // Setup the list of items to share with the DLNA server into a single album.
-    void setImagesList(const QString& aname, const QList<QUrl>& urls);
+    /// Setup the list of items to share with the DLNA server into a single album.
+    void setItemsList(const QString& aname, const QList<QUrl>& urls);
+    
+    /// Return a flat list of items shared
+    QList<QUrl> itemsList() const;
 
     /// Setup the list of albums to share with DLNA server.
     void setCollectionMap(const MediaServerMap&);
-
+    
+    /// Return the current album map shared.
+    MediaServerMap collectionMap() const;
+    
     /// Start the DLNA server and share the contents. Return true is all is on-line.
     bool startMediaServer();
 

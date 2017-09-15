@@ -69,7 +69,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     : QDialog(),
       d(new Private)
 {
-    setWindowTitle(QString::fromUtf8("Share Files on the Network With DLNA Media Server"));
+    setWindowTitle(QString::fromUtf8("Share Files With DLNA Media Server"));
 
     d->buttons               = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->page                  = new QWidget(this);
@@ -85,7 +85,13 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     d->listView             = new DImagesList(d->page);
     d->listView->setControlButtonsPlacement(DImagesList::ControlButtonsRight);
     d->listView->setIface(iface);
+    
+    // Add all items currently loaded in application.
     d->listView->loadImagesFromCurrentSelection();
+    
+    // Replug the previous shared items list.
+    d->listView->slotAddImages(d->mngr->itemsList());
+    
     d->ctrl                 = new DMediaServerCtrl(d->page);
 
     grid->addWidget(d->listView, 0, 0, 1, 1);
@@ -122,7 +128,7 @@ void DMediaServerDlg::slotStartMediaServer()
         return;
     }
 
-    d->mngr->setImagesList(i18n("Shared Items"), urls);
+    d->mngr->setItemsList(i18n("Shared Items"), urls);
 
     if (!d->mngr->startMediaServer())
     {

@@ -165,15 +165,37 @@ void DMediaServerMngr::mediaServerNotification(bool started)
                          qApp->activeWindow(), qApp->applicationName());
 }
 
-void DMediaServerMngr::setImagesList(const QString& aname, const QList<QUrl>& urls)
+void DMediaServerMngr::setItemsList(const QString& aname, const QList<QUrl>& urls)
 {
     d->collectionMap.clear();
     d->collectionMap.insert(aname, urls);
 }
 
+QList<QUrl> DMediaServerMngr::itemsList() const
+{
+    QList<QUrl> ret;
+
+    if (!d->collectionMap.isEmpty())
+    {
+        QList<QList<QUrl> > ulst = d->collectionMap.values();
+
+        foreach(QList<QUrl> urls, ulst)
+        {
+            ret << urls;
+        }
+    }
+
+    return ret;
+}
+
 void DMediaServerMngr::setCollectionMap(const MediaServerMap& map)
 {
     d->collectionMap = map;
+}
+
+MediaServerMap DMediaServerMngr::collectionMap() const
+{
+    return d->collectionMap;
 }
 
 bool DMediaServerMngr::startMediaServer()
@@ -215,19 +237,7 @@ int DMediaServerMngr::albumsShared() const
 
 int DMediaServerMngr::itemsShared() const
 {
-    if (d->collectionMap.isEmpty())
-        return 0;
-
-    int i = 0;
-
-    QList<QList<QUrl> > ulst = d->collectionMap.values();
-
-    foreach(QList<QUrl> urls, ulst)
-    {
-        i += urls.count();
-    }
-
-    return i;
+    return itemsList().count();
 }
 
 bool DMediaServerMngr::save()
