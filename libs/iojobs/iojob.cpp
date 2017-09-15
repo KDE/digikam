@@ -167,9 +167,9 @@ DeleteJob::DeleteJob(const QUrl& srcToDelete, bool useTrash, bool markAsObsolete
 void DeleteJob::run()
 {
     QFileInfo fileInfo(m_srcToDelete.toLocalFile());
-    qCDebug(DIGIKAM_IOJOB_LOG) << "DELETING: "    << fileInfo.filePath() << "\n"
-                               << "FILE EXISTS? " << fileInfo.exists()   << "\n"
-                               << "IS TO TRASH? " << m_useTrash;
+    qCDebug(DIGIKAM_IOJOB_LOG) << "DELETING:    " << fileInfo.filePath();
+    qCDebug(DIGIKAM_IOJOB_LOG) << "FILE EXISTS? " << fileInfo.exists();
+    qCDebug(DIGIKAM_IOJOB_LOG) << "IS TO TRASH? " << m_useTrash;
 
     if (!fileInfo.exists())
     {
@@ -306,8 +306,7 @@ void RenameFileJob::run()
         return;
     }
 
-    qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url: "      << m_newUrl << "\n"
-                               << "Destination Url path: " << m_newUrl.toLocalFile();
+    qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url: " << m_newUrl;
 
     if (QFileInfo(m_newUrl.toLocalFile()).exists())
     {
@@ -322,7 +321,7 @@ void RenameFileJob::run()
     QFile file(m_srcToRename.toLocalFile());
 
     qCDebug(DIGIKAM_IOJOB_LOG) << "Trying to rename"
-                               << m_srcToRename.toLocalFile() << "\nto "
+                               << m_srcToRename.toLocalFile() << " to "
                                << m_newUrl.toLocalFile();
 
     if (!file.rename(m_newUrl.toLocalFile()))
