@@ -23,8 +23,8 @@
 #ifndef MEDIARENDERER_WINDOW_H_
 #define MEDIARENDERER_WINDOW_H_
 
-#include <HUpnpCore/HDeviceHost>
-#include <HUpnpAv/HRendererConnectionManager>
+#include "hdevicehost.h"
+#include "hrendererconnection_manager.h"
 
 #include <QMainWindow>
 

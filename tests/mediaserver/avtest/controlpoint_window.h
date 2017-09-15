@@ -26,7 +26,7 @@
 #include "hav_defs.h"
 #include "hav_fwd.h"
 #include "hav_global.h"
-#include <HUpnpCore/HClientDevice>
+#include "hclientdevice.h"
 
 #include <QtCore/QModelIndex>
 #include <QMainWindow>
@@ -62,7 +62,7 @@ protected:
     virtual void changeEvent(QEvent*);
     virtual void closeEvent(QCloseEvent*);
 
-private slots:
+private Q_SLOTS:
 
     void on_dataTableView_doubleClicked(const QModelIndex& index);
     void mediaRendererOnline(Herqq::Upnp::Av::HMediaRendererAdapter*);

@@ -86,7 +86,7 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
     m_deviceHost = new HDeviceHost(this);
     if (!m_deviceHost->init(hostConfiguration))
     {
-        Q_ASSERT_X(false, "", m_deviceHost->errorDescription().toLocal8Bit());
+        Q_ASSERT_X(false, QLatin1String(""), m_deviceHost->errorDescription().toLocal8Bit());
     }
 }
 
@@ -115,7 +115,7 @@ void MediaServerWindow::closeEvent(QCloseEvent*)
 
 void MediaServerWindow::on_addContentButton_clicked()
 {
-    QString dirName = QFileDialog::getExistingDirectory(this, "Open Directory");
+    QString dirName = QFileDialog::getExistingDirectory(this, QLatin1String("Open Directory"));
     if (!dirName.isEmpty())
     {
         HRootDir::ScanMode smode =
@@ -130,13 +130,13 @@ void MediaServerWindow::on_addContentButton_clicked()
 
             QTableWidgetItem* newItemScanType =
                 new QTableWidgetItem(
-                    smode == HRootDir::RecursiveScan ? "Yes" : "No");
+                    smode == HRootDir::RecursiveScan ? QLatin1String("Yes") : QLatin1String("No"));
 
             newItemScanType->setFlags(Qt::ItemIsEnabled);
 
             m_ui->sharedItemsTable->setItem(rc, 0, newItemScanType);
 
-            QTableWidgetItem* newItemWatchType = new QTableWidgetItem("No");
+            QTableWidgetItem* newItemWatchType = new QTableWidgetItem(QLatin1String("No"));
             newItemWatchType->setFlags(Qt::ItemIsEnabled);
 
             m_ui->sharedItemsTable->setItem(rc, 1, newItemWatchType);
@@ -157,7 +157,7 @@ void MediaServerWindow::addContenDlgtFinished()
 
 void MediaServerWindow::on_addItemButton_clicked()
 {
-    QStringList fullPaths = QFileDialog::getOpenFileNames(this, "Open File(s)");
+    QStringList fullPaths = QFileDialog::getOpenFileNames(this, QLatin1String("Open File(s)"));
     if (!fullPaths.isEmpty())
     {
         foreach(const QString& fullPath, fullPaths)
@@ -166,11 +166,11 @@ void MediaServerWindow::on_addItemButton_clicked()
 
             if (parts.isEmpty())
             {
-                m_datasource->add(fullPath, "0");
+                m_datasource->add(fullPath, QLatin1String("0"));
             }
             else
             {
-                QString lastParentContainerId = "0";
+                QString lastParentContainerId = QLatin1String("0");
                 for(int i = 0; i < parts.count() - 1; ++i)
                 {
                     HContainer* container =
@@ -191,13 +191,13 @@ void MediaServerWindow::on_addItemButton_clicked()
             int rc = m_ui->sharedItemsTable->rowCount();
             m_ui->sharedItemsTable->insertRow(rc);
 
-            QTableWidgetItem* newItemScanType = new QTableWidgetItem("No");
+            QTableWidgetItem* newItemScanType = new QTableWidgetItem(QLatin1String("No"));
 
             newItemScanType->setFlags(Qt::ItemIsEnabled);
 
             m_ui->sharedItemsTable->setItem(rc, 0, newItemScanType);
 
-            QTableWidgetItem* newItemWatchType = new QTableWidgetItem("No");
+            QTableWidgetItem* newItemWatchType = new QTableWidgetItem(QLatin1String("No"));
             newItemWatchType->setFlags(Qt::ItemIsEnabled);
 
             m_ui->sharedItemsTable->setItem(rc, 1, newItemWatchType);

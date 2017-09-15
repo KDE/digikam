@@ -22,10 +22,10 @@
 
 #include "rendererconnections.h"
 
-#include <HUpnpAv/HDuration>
-#include <HUpnpAv/HSeekInfo>
-#include <HUpnpAv/HMediaInfo>
-#include <HUpnpAv/HTransportState>
+#include "hduration.h"
+#include "hseekinfo.h"
+#include "hmediainfo.h"
+#include "htransportstate.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QTime>

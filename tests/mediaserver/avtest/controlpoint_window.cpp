@@ -28,14 +28,14 @@
 #include "controlpoint_navigator.h"
 #include "controlpoint_navigatoritem.h"
 
-#include <HUpnpCore/HDeviceInfo>
+#include "hdeviceinfo.h"
 
-#include <HUpnpAv/HContainer>
-#include <HUpnpAv/HMediaBrowser>
-#include <HUpnpAv/HAvControlPoint>
-#include <HUpnpAv/HMediaServerAdapter>
-#include <HUpnpAv/HMediaRendererAdapter>
-#include <HUpnpAv/HAvControlPointConfiguration>
+#include "hcontainer.h"
+#include "hmediabrowser.h"
+#include "hav_controlpoint.h"
+#include "hmediaserver_adapter.h"
+#include "hmediarenderer_adapter.h"
+#include "hav_controlpoint_configuration.h"
 
 using namespace Herqq::Upnp;
 using namespace Herqq::Upnp::Av;

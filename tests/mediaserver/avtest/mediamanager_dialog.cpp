@@ -185,7 +185,7 @@ void MediaManagerDialog::getConnection()
     Q_ASSERT(!m_connection && m_renderer);
     Q_ASSERT(m_state == Stopped);
 
-    if (m_renderer->connectionManager()->implementsAction("PrepareForConnection"))
+    if (m_renderer->connectionManager()->implementsAction(QLatin1String("PrepareForConnection")))
     {
         QListWidgetItem* curItem = ui->itemsList->currentItem();
         QVariant id = curItem->data(Qt::UserRole);
@@ -237,7 +237,7 @@ void MediaManagerDialog::connectionReady(HMediaRendererAdapter* source, qint32 c
 
     HClientAdapterOpNull op =
         m_connection->transport()->setAVTransportURI(
-            cdsItem->resources().at(0).location(), "");
+            cdsItem->resources().at(0).location(), QLatin1String(""));
 
     Q_ASSERT(!op.isNull()); Q_UNUSED(op)
 
@@ -303,7 +303,7 @@ void MediaManagerDialog::avTransportStateChanged(
 {
     foreach(const HAvtLastChangeInfo& info, infos)
     {
-        if (info.propertyName().compare("TransportState", Qt::CaseInsensitive) == 0)
+        if (info.propertyName().compare(QLatin1String("TransportState"), Qt::CaseInsensitive) == 0)
         {
             HTransportState state(info.value().toString());
             if (state.isValid())
@@ -357,7 +357,7 @@ void MediaManagerDialog::stopCompleted(
 void MediaManagerDialog::setAVTransportURICompleted(
     HAvTransportAdapter*, const HClientAdapterOpNull&)
 {
-    m_connection->transport()->play("1");
+    m_connection->transport()->play(QLatin1String("1"));
     m_state = Playing;
     enableControl(true);
 }
@@ -394,7 +394,7 @@ void MediaManagerDialog::on_playButton_clicked()
     }
     else if (m_connection)
     {
-        m_connection->transport()->play("1");
+        m_connection->transport()->play(QLatin1String("1"));
         m_state = Playing;
     }
     else

@@ -24,19 +24,19 @@
 #include "ui_mediarenderer_window.h"
 #include "mediarenderer_connectionwindow.h"
 
-#include <HUpnpCore/HUpnp>
-#include <HUpnpCore/HDeviceInfo>
-#include <HUpnpCore/HStateVariableEvent>
-#include <HUpnpCore/HServerStateVariable>
-#include <HUpnpCore/HDeviceHostConfiguration>
+#include "hupnp_global.h"
+#include "hdeviceinfo.h"
+#include "hstatevariable_event.h"
+#include "hserverstatevariable.h"
+#include "hdevicehost_configuration.h"
 
-#include <HUpnpAv/HConnectionInfo>
-#include <HUpnpAv/HProtocolInfo>
-#include <HUpnpAv/HTransportState>
-#include <HUpnpAv/HAvDeviceModelCreator>
-#include <HUpnpAv/HAbstractMediaRendererDevice>
-#include <HUpnpAv/HAbstractConnectionManagerService>
-#include <HUpnpAv/HMediaRendererDeviceConfiguration>
+#include "hconnectioninfo.h"
+#include "hprotocolinfo.h"
+#include "htransportstate.h"
+#include "hav_devicemodel_creator.h"
+#include "habstractmediarenderer_device.h"
+#include "habstractconnectionmanager_service.h"
+#include "hmediarenderer_deviceconfiguration.h"
 
 #include <QtNetwork/QNetworkAccessManager>
 

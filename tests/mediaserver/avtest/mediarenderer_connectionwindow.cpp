@@ -33,22 +33,22 @@ namespace
 {
 bool isAudio(const QString& contentFormat)
 {
-    return contentFormat.startsWith("audio", Qt::CaseInsensitive);
+    return contentFormat.startsWith(QLatin1String("audio"), Qt::CaseInsensitive);
 }
 
 bool isVideo(const QString& contentFormat)
 {
-    return contentFormat.startsWith("video", Qt::CaseInsensitive);
+    return contentFormat.startsWith(QLatin1String("video"), Qt::CaseInsensitive);
 }
 
 bool isImage(const QString& contentFormat)
 {
-    return contentFormat.startsWith("image", Qt::CaseInsensitive);
+    return contentFormat.startsWith(QLatin1String("image"), Qt::CaseInsensitive);
 }
 
 bool isText(const QString& contentFormat)
 {
-    return contentFormat.startsWith("text", Qt::CaseInsensitive);
+    return contentFormat.startsWith(QLatin1String("text"), Qt::CaseInsensitive);
 }
 }
 
@@ -81,8 +81,8 @@ MediaRendererConnectionWindow::MediaRendererConnectionWindow(
         m_rendererConnection = new RendererConnectionForImagesAndText(
             RendererConnectionForImagesAndText::Text, m_nam, ui->scrollAreaWidgetContents);
     }
-    else if (contentFormat == "*" || contentFormat.isEmpty() ||
-             contentFormat == "application/octet-stream")
+    else if (contentFormat == QLatin1String("*") || contentFormat.isEmpty() ||
+             contentFormat == QLatin1String("application/octet-stream"))
     {
 //        m_rendererConnection = new DefaultRendererConnection(
 //            DefaultRendererConnection::Unknown, ui->scrollAreaWidgetContents);
