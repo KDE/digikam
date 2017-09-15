@@ -55,6 +55,7 @@ public:
         srvStatus(0),
         progress(0),
         aStats(0),
+        separator(0),
         iStats(0)
     {
     }
@@ -64,6 +65,7 @@ public:
     QLabel*           srvStatus;
     WorkingWidget*    progress;
     QLabel*           aStats;
+    QLabel*           separator;
     QLabel*           iStats;
 };
 
@@ -80,6 +82,7 @@ DMediaServerCtrl::DMediaServerCtrl(QWidget* const parent)
     d->srvStatus            = new QLabel(this);
     d->progress             = new WorkingWidget(this);
     d->aStats               = new QLabel(this);
+    d->separator            = new QLabel(QLatin1String(" / "), this);
     d->iStats               = new QLabel(this);
 
     QLabel* const explanation = new QLabel(this);
@@ -87,20 +90,21 @@ DMediaServerCtrl::DMediaServerCtrl(QWidget* const parent)
     explanation->setWordWrap(true);
     QString txt;
 
-    explanation->setText(i18n("<p>The media server permit to share items through the local network "
+    explanation->setText(i18n("The media server permit to share items through the local network "
                               "using <a href='https://en.wikipedia.org/wiki/Digital_Living_Network_Alliance'>DLNA</a> "
                               "standard and <a href='https://en.wikipedia.org/wiki/Universal_Plug_and_Play'>UPNP</a> "
                               "protocol. Many kind of electronic devices can support DLNA, as tablets, cellulars, TV, etc."
                               "<br>Note: depending of the network features and the configuration, "
-                              "the delay to discover the server on client device can take a while.</p>"));
+                              "the delay to discover the server on client devices can take a while."));
 
     grid->addWidget(d->srvButton, 0, 0, 1, 1);
     grid->addWidget(d->srvStatus, 0, 1, 1, 1);
-    grid->addWidget(d->progress,  0, 2, 1, 1);
-    grid->addWidget(explanation,  0, 3, 3, 1);
-    grid->addWidget(d->aStats,    1, 0, 1, 3);
-    grid->addWidget(d->iStats,    2, 0, 1, 3);
-    grid->setColumnStretch(3, 10);
+    grid->addWidget(d->aStats,    0, 2, 1, 1);
+    grid->addWidget(d->separator, 0, 3, 1, 1);
+    grid->addWidget(d->iStats,    0, 4, 1, 1);
+    grid->addWidget(d->progress,  0, 5, 1, 1);
+    grid->addWidget(explanation,  1, 0, 1, 6);
+    grid->setColumnStretch(1, 10);
     grid->setSpacing(spacing);
     
     // --------------------------------------------------------
@@ -116,26 +120,24 @@ DMediaServerCtrl::~DMediaServerCtrl()
 
 void DMediaServerCtrl::updateServerStatus()
 {
-    QString txt;
-
     if (d->mngr->isRunning())
     {
-        txt = i18n("Media server is running");
+        d->srvStatus->setText(i18n("Media server is running"));
         d->aStats->setText(i18np("1 album shared", "%1 albums shared", d->mngr->albumsShared()));
+        d->separator->setVisible(true);
         d->iStats->setText(i18np("1 item shared",  "%1 items shared",  d->mngr->itemsShared()));
         d->srvButton->setText(i18n("Stop"));
         d->progress->toggleTimer(true);
     }
     else
     {
-        txt = i18n("Media server is not running");
+        d->srvStatus->setText(i18n("Media server is not running"));
         d->aStats->clear();
+        d->separator->setVisible(false);
         d->iStats->clear();
         d->srvButton->setText(i18n("Start"));
         d->progress->toggleTimer(false);
     }
-
-    d->srvStatus->setText(txt);
 }
 
 void DMediaServerCtrl::slotToggleMediaServer()
