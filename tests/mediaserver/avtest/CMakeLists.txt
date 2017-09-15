@@ -37,8 +37,8 @@ set(SRCS ${AvTest_SRCS} ${AvTest_FORMS})
 add_executable(avtest ${SRCS})
 
 target_link_libraries(avtest
-                      HUpnp
-                      HUpnpAv
+                      digikamcore
+                      libdng
                       Qt5::Core
                       Qt5::Widgets
                       Qt5::Network

@@ -59,15 +59,15 @@ HRendererConnection* RendererConnectionManager::doCreate(
             contentFormat, *m_owner->m_nam, 0);
 
     QString cf =
-        contentFormat == "*" || contentFormat.isEmpty() ?
-            "UNKNOWN" : contentFormat;
+        contentFormat == QLatin1String("*") || contentFormat.isEmpty() ?
+            QLatin1String("UNKNOWN") : contentFormat;
 
     if (!mmWindow->rendererConnection())
     {
         return 0;
     }
 
-    mmWindow->setWindowTitle(QString(
+    mmWindow->setWindowTitle(QString::fromUtf8(
         "Media Renderer Connection #%1, content format: [%2]").arg(
             QString::number(connectionInfo->connectionId()), cf));
 
@@ -103,7 +103,7 @@ MediaRendererWindow::MediaRendererWindow(QWidget* parent) :
     creator.setMediaRendererConfiguration(mediaRendererConfig);
 
     HDeviceConfiguration config;
-    config.setPathToDeviceDescription("./descriptions/herqq_mediarenderer_description.xml");
+    config.setPathToDeviceDescription(QLatin1String("./descriptions/herqq_mediarenderer_description.xml"));         // FIXME
     config.setCacheControlMaxAge(180);
 
     HDeviceHostConfiguration hostConfiguration;
@@ -122,7 +122,7 @@ MediaRendererWindow::MediaRendererWindow(QWidget* parent) :
             m_deviceHost->rootDevices().at(0));
 
     HServerStateVariable* currentConnectionIDs =
-        m_mediaRenderer->connectionManager()->stateVariables().value("CurrentConnectionIDs");
+        m_mediaRenderer->connectionManager()->stateVariables().value(QLatin1String("CurrentConnectionIDs"));
 
     currentConnectionIDsChanged(currentConnectionIDs);
 
@@ -156,7 +156,7 @@ void MediaRendererWindow::currentConnectionIDsChanged(HServerStateVariable* sv)
     HAbstractConnectionManagerService* service =
         qobject_cast<HAbstractConnectionManagerService*>(sv->parentService());
 
-    QStringList connections = sv->value().toString().split(",");
+    QStringList connections = sv->value().toString().split(QLatin1String(","));
 
     m_ui->connectionsInfoTable->setRowCount(0);
 
@@ -196,7 +196,7 @@ void MediaRendererWindow::currentConnectionIDsChanged(HServerStateVariable* sv)
 void MediaRendererWindow::propertyChanged(
     HRendererConnectionInfo* source, const HRendererConnectionEventInfo& eventInfo)
 {
-    if (eventInfo.propertyName() != "TransportState")
+    if (eventInfo.propertyName() != QLatin1String("TransportState"))
     {
         return;
     }

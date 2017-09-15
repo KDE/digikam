@@ -74,4 +74,4 @@ target_link_libraries(dmediaserver_dlg
                       Qt5::Test
 )
 
-#add_subdirectory(avtest)
+add_subdirectory(avtest)

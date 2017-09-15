@@ -86,7 +86,7 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
     m_deviceHost = new HDeviceHost(this);
     if (!m_deviceHost->init(hostConfiguration))
     {
-        Q_ASSERT_X(false, QLatin1String(""), m_deviceHost->errorDescription().toLocal8Bit());
+        Q_ASSERT_X(false, "", m_deviceHost->errorDescription().toLocal8Bit().constData());
     }
 }
 
