@@ -38,9 +38,13 @@
 
 #include <QDir>
 #include <QFileDialog>
+#include <QStandardPaths>
 
 using namespace Herqq::Upnp;
 using namespace Herqq::Upnp::Av;
+
+const QString serverDescriptionPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+              QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediaserver_description.xml")));
 
 /*******************************************************************************
  * MediaServerWindow
@@ -75,7 +79,7 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
 
     // 5) Setup the HDeviceHost with desired configuration info.
     HDeviceConfiguration config;
-    config.setPathToDeviceDescription(QLatin1String("./descriptions/herqq_mediaserver_description.xml"));         // FIXME
+    config.setPathToDeviceDescription(serverDescriptionPath);
     config.setCacheControlMaxAge(180);
 
     HDeviceHostConfiguration hostConfiguration;

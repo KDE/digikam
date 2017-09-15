@@ -39,9 +39,13 @@
 #include "hmediarenderer_deviceconfiguration.h"
 
 #include <QtNetwork/QNetworkAccessManager>
+#include <QStandardPaths>
 
 using namespace Herqq::Upnp;
 using namespace Herqq::Upnp::Av;
+
+const QString renderDescriptionPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+              QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediarender_description.xml")));
 
 /*******************************************************************************
  * RendererConnectionManager
@@ -103,7 +107,7 @@ MediaRendererWindow::MediaRendererWindow(QWidget* parent) :
     creator.setMediaRendererConfiguration(mediaRendererConfig);
 
     HDeviceConfiguration config;
-    config.setPathToDeviceDescription(QLatin1String("./descriptions/herqq_mediarenderer_description.xml"));         // FIXME
+    config.setPathToDeviceDescription(renderDescriptionPath);
     config.setCacheControlMaxAge(180);
 
     HDeviceHostConfiguration hostConfiguration;
