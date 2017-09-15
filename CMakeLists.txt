@@ -288,7 +288,7 @@ DETECT_LIBKSANE(${KSANE_MIN_VERSION})
 find_package(Marble)
 
 find_package(PkgConfig)
-find_package(Jasper)
+#find_package(Jasper)
 find_package(Eigen3)                               # For Refocus tool.
 find_package(OpenGL)                               # For Presentation tool.
 
