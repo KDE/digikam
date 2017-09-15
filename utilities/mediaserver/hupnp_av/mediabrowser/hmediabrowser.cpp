@@ -25,7 +25,7 @@
 
 #include "hitem.h"
 #include "hcontainer.h"
-#include "datasource/hcds_datasource.h"
+#include "hcds_datasource.h"
 #include "hcds_dlite_serializer.h"
 
 #include "hsearchresult.h"
