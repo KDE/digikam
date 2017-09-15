@@ -19,7 +19,7 @@ Name[uk]=Класична
 Name[x-test]=xxClassicxx
 Name[zh_CN]=经典
 Comment=A port of the old HTML Export plugin theme
-Comment[ca]=Un port de l'antic tema del connector d'exportació a HTML
+Comment[ca]=Una adaptació de l'antic tema del connector d'exportació a HTML
 Comment[ca@valencia]=Un port de l'antic tema del connector d'exportació a HTML
 Comment[cs]=Port starého motivu pro modul HTML export
 Comment[de]=Eine Portierung des alten Designs des HTML-Export-Moduls
@@ -224,7 +224,7 @@ Default=#d0ffd0
 
 [X-HTMLExport Parameter linkColor]
 Name=Link Color
-Name[ca]=Color d'enllaç
+Name[ca]=Color de l'enllaç
 Name[ca@valencia]=Color d'enllaç
 Name[cs]=Barva odkazu
 Name[de]=Farbe von Verknüpfungen
@@ -246,7 +246,7 @@ Default=#b3b3b3
 
 [X-HTMLExport Parameter visitedLinkColor]
 Name=Visited Link Color
-Name[ca]=Color d'enllaç visitat
+Name[ca]=Color de l'enllaç visitat
 Name[ca@valencia]=Color d'enllaç visitat
 Name[cs]=Barva navštíveného odkazu
 Name[de]=Farbe von besuchten Verknüpfungen
