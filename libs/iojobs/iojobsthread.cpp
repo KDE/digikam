@@ -188,7 +188,7 @@ void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
     connect(j, SIGNAL(signalRenamed(QUrl,QUrl)),
             this, SIGNAL(renamed(QUrl,QUrl)));
 
-    connect(j, SIGNAL(signalRenamedFailed(QUrl)),
+    connect(j, SIGNAL(signalRenameFailed(QUrl)),
             this, SIGNAL(renameFailed(QUrl)));
 
     collection.insert(j, 0);
