@@ -27,7 +27,6 @@ qt5_wrap_ui(AvTest_FORMS
             mainwindow.ui
             mediarenderer_connectionwindow.ui
             mediaserver_window.ui
-            invokeactiondialog.ui
             mediamanager_dialog.ui
             mediarenderer_window.ui
 )
