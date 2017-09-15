@@ -36,15 +36,13 @@
 #include "hfsys_datasource.h"
 #include "hcontentdirectory_serviceconfiguration.h"
 
+#include <QDebug>
 #include <QDir>
 #include <QFileDialog>
 #include <QStandardPaths>
 
 using namespace Herqq::Upnp;
 using namespace Herqq::Upnp::Av;
-
-const QString serverDescriptionPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-              QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediaserver_description.xml")));
 
 /*******************************************************************************
  * MediaServerWindow
@@ -76,6 +74,12 @@ MediaServerWindow::MediaServerWindow(QWidget *parent) :
     // MediaServer configuration HUPnP will pass to the MediaServer device instance.
     HAvDeviceModelCreator creator;
     creator.setMediaServerConfiguration(mediaServerConfig);
+
+    
+    const QString serverDescriptionPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+              QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediaserver_description.xml")));
+
+    qDebug() << "Server Description:" << serverDescriptionPath;
 
     // 5) Setup the HDeviceHost with desired configuration info.
     HDeviceConfiguration config;

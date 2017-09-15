@@ -40,12 +40,10 @@
 
 #include <QtNetwork/QNetworkAccessManager>
 #include <QStandardPaths>
+#include <QDebug>
 
 using namespace Herqq::Upnp;
 using namespace Herqq::Upnp::Av;
-
-const QString renderDescriptionPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-              QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediarender_description.xml")));
 
 /*******************************************************************************
  * RendererConnectionManager
@@ -105,6 +103,11 @@ MediaRendererWindow::MediaRendererWindow(QWidget* parent) :
 
     HAvDeviceModelCreator creator;
     creator.setMediaRendererConfiguration(mediaRendererConfig);
+
+    const QString renderDescriptionPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+              QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediarender_description.xml")));
+
+    qDebug() << "Render Description:" << renderDescriptionPath;
 
     HDeviceConfiguration config;
     config.setPathToDeviceDescription(renderDescriptionPath);
