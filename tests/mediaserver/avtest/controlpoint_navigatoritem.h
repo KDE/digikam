@@ -45,6 +45,8 @@ class ControlPointNavigatorItemVisitor
 {
 public:
 
+    virtual ~ControlPointNavigatorItemVisitor() {};
+    
     virtual void visit(RendererItem*) = 0;
     virtual void visit(ConnectionItem*) = 0;
     virtual void visit(CdsContainerItem*) = 0;
