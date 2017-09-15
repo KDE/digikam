@@ -85,7 +85,7 @@ class HControlPointConfiguration;
  *
  *     Herqq::Upnp::HControlPoint* m_controlPoint;
  *
- * private slots:
+ * private Q_SLOTS:
  *
  *     void rootDeviceOnline(Herqq::Upnp::HClientDevice*);
  *     void rootDeviceOffline(Herqq::Upnp::HClientDevice*);
