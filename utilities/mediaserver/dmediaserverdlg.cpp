@@ -33,6 +33,8 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -40,6 +42,7 @@
 #include "dimageslist.h"
 #include "dmediaservermngr.h"
 #include "dmediaserverctrl.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -57,12 +60,16 @@ public:
     {
     }
 
-    DMediaServerCtrl* ctrl;
-    DMediaServerMngr* mngr;
-    DImagesList*      listView;
-    QWidget*          page;
-    QDialogButtonBox* buttons;
+    static const QString configGroupName;
+    
+    DMediaServerCtrl*    ctrl;
+    DMediaServerMngr*    mngr;
+    DImagesList*         listView;
+    QWidget*             page;
+    QDialogButtonBox*    buttons;
 };
+
+const QString DMediaServerDlg::Private::configGroupName(QLatin1String("DMediaServerDlg Settings"));
 
 DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
                                  DInfoInterface* const iface)
@@ -109,10 +116,20 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     // -------------------
     
     d->ctrl->updateServerStatus();
+    
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(d->configGroupName);
+    winId();
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
+    resize(windowHandle()->size());
 }
 
 DMediaServerDlg::~DMediaServerDlg()
 {
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(d->configGroupName);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
+
     delete d;
 }
 

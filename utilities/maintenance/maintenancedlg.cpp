@@ -184,7 +184,6 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
       d(new Private)
 {
     setWindowTitle(i18n("Maintenance"));
-    resize(500, 400);
 
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Cancel)->setDefault(true);
@@ -214,6 +213,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
                                "<i>Note: only Albums Collection are processed by this tool.</i></qt>")),
                                QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Scan for new items"), QLatin1String("NewItems"), false);
     d->expanderBox->setCheckBoxVisible(Private::NewItems, true);
+
     // --------------------------------------------------------------------------------------
 
     d->vbox3                   = new DVBox;
@@ -280,6 +280,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // Load the last choice from application settings.
     HaarIface::DuplicatesSearchRestrictions restrictions = HaarIface::DuplicatesSearchRestrictions::None;
+
     if (settings)
     {
         restrictions = (HaarIface::DuplicatesSearchRestrictions) settings->getDuplicatesSearchRestrictions();
