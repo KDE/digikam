@@ -32,8 +32,8 @@
   <name xml:lang="x-test">xxdigiKamxx</name>
   <name xml:lang="zh-CN">digiKam</name>
   <summary>Photo Management Program</summary>
-  <summary xml:lang="ca">Programa de gestió de fotografies</summary>
-  <summary xml:lang="ca-valencia">Programa de gestió de fotografies</summary>
+  <summary xml:lang="ca">Programa per a la gestió de fotografies</summary>
+  <summary xml:lang="ca-valencia">Programa per a la gestió de fotografies</summary>
   <summary xml:lang="cs">Program pro správu fotografií</summary>
   <summary xml:lang="de">Fotoverwaltung</summary>
   <summary xml:lang="en-GB">Photo Management Program</summary>
@@ -235,8 +235,8 @@
       <li xml:lang="uk">підтримка понад 900 форматів цифрових негативів (RAW);</li>
       <li xml:lang="x-test">xxSupport for more than 900 RAW format picturesxx</li>
       <li>Light Table to compare photo side by side</li>
-      <li xml:lang="ca">Taula de llum per comparar fotos costat a costat</li>
-      <li xml:lang="ca-valencia">Taula de llum per comparar fotos costat a costat</li>
+      <li xml:lang="ca">Taula de llum per a comparar les fotografies costat a costat</li>
+      <li xml:lang="ca-valencia">Taula de llum per a comparar les fotografies costat a costat</li>
       <li xml:lang="cs">Prohlížecí stolek pro porovnání fotografií vedle sebe</li>
       <li xml:lang="es">Mesa de luz para comparar fotos una junto a otra</li>
       <li xml:lang="fr">Table lumineuse pour comparer des photos côte-à-côte</li>
@@ -262,8 +262,8 @@
       <li xml:lang="uk">розширення можливостей за допомогою додаткових інструментів;</li>
       <li xml:lang="x-test">xxExtended features using extra toolsxx</li>
       <li>Share your photos using HTML or publishing them to remote web services</li>
-      <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les serveis web remots</li>
-      <li xml:lang="ca-valencia">Compartiu les vostres fotografies usant HTML o publicant-les serveis web remots</li>
+      <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les a serveis web remots</li>
+      <li xml:lang="ca-valencia">Compartiu les vostres fotografies usant HTML o publicant-les a serveis web remots</li>
       <li xml:lang="cs">Sdílení fotografií vytvořením HTML galerie nebo přímým publikováním na vzdálených webových službách</li>
       <li xml:lang="es">Compartir fotos usando HTML o publicándolas en servicios web remotos</li>
       <li xml:lang="fr">Permet de partager vos photos avec des pages HTML ou de les publier sur des services web distants</li>
@@ -276,8 +276,8 @@
       <li xml:lang="uk">можливість оприлюднення фотографій на віддалених службах у інтернеті;</li>
       <li xml:lang="x-test">xxShare your photos using HTML or publishing them to remote web servicesxx</li>
       <li>Image editor included with advanced tools to fix photo quickly</li>
-      <li xml:lang="ca">Inclou un editor d'imatges amb eines avançades per esmenar ràpidament les fotos</li>
-      <li xml:lang="ca-valencia">Inclou un editor d'imatges amb eines avançades per esmenar ràpidament les fotos</li>
+      <li xml:lang="ca">Inclou un editor d'imatges amb eines avançades per esmenar ràpidament les fotografies</li>
+      <li xml:lang="ca-valencia">Inclou un editor d'imatges amb eines avançades per esmenar ràpidament les fotografies</li>
       <li xml:lang="cs">Editor obrázků zahrnutý v pokročilých nástrojích pro rychlé opravy fotek</li>
       <li xml:lang="es">Editor de imágenes incluido con herramientas avanzadas para corregir las fotos de forma rápida</li>
       <li xml:lang="fr">Éditeur d'images inclus, avec des fonctionnalités pour réparer rapidement une photo</li>
