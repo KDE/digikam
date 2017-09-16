@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Date Frames
 Name[ca]=Marcs de la data
-Name[ca@valencia]=Marcs de data
+Name[ca@valencia]=Marcs de la data
 Name[cs]=Rámce dat
 Name[de]=Datum-Rahmen
 Name[en_GB]=Date Frames
@@ -60,7 +60,7 @@ Url=mailto:purplegamba@cox.net
 [X-HTMLExport Preview]
 Name=Date Frames
 Name[ca]=Marcs de la data
-Name[ca@valencia]=Marcs de data
+Name[ca@valencia]=Marcs de la data
 Name[cs]=Rámce dat
 Name[de]=Datum-Rahmen
 Name[en_GB]=Date Frames
@@ -81,7 +81,7 @@ Url=preview.png
 [X-HTMLExport Parameter color1]
 Name=Thumbnail Background
 Name[ca]=Fons de les miniatures
-Name[ca@valencia]=Fons de miniatures
+Name[ca@valencia]=Fons de les miniatures
 Name[cs]=Pozadí náhledu
 Name[de]=Hintergrund der Vorschaubilder
 Name[en_GB]=Thumbnail Background
@@ -103,7 +103,7 @@ Default=#FFFFFF
 [X-HTMLExport Parameter color2]
 Name=Image Background (contrasting)
 Name[ca]=Fons de les imatges (amb contrast)
-Name[ca@valencia]=Fons d'imatges (amb contrast)
+Name[ca@valencia]=Fons de les imatges (amb contrast)
 Name[cs]=Pozadí obrázku (kontrastní)
 Name[de]=Bildhintergrund (Kontrastreich)
 Name[en_GB]=Image Background (contrasting)
@@ -189,7 +189,7 @@ Type=string
 Default=%A, %b %e, %Y   %i:%M%P
 Comment=XSL Date Format String: Use the syntax given at http://xsltsl.sourceforge.net/date-time.html
 Comment[ca]=Cadena de format per a les dates en XSL: empreu la sintaxi indicada a http://xsltsl.sourceforge.net/date-time.html
-Comment[ca@valencia]=Cadena de format de les dates en XSL: empreu la sintaxi indicada a http://xsltsl.sourceforge.net/date-time.html
+Comment[ca@valencia]=Cadena de format per a les dates en XSL: empreu la sintaxi indicada a http://xsltsl.sourceforge.net/date-time.html
 Comment[cs]=Řetězec formátu data XSL: Použijte syntaxi určenou na http://xsltsl.sourceforge.net/date-time.html
 Comment[de]=XSL-Datumsformat: Auf der Webseite http://xsltsl.sourceforge.net/date-time.html kann die Syntax nachgeschaut werden.
 Comment[en_GB]=XSL Date Format String: Use the syntax given at http://xsltsl.sourceforge.net/date-time.html
@@ -209,7 +209,7 @@ Comment[x-test]=xxXSL Date Format String: Use the syntax given at http://xsltsl.
 [X-HTMLExport Parameter shortformat]
 Name=Image List Date Format
 Name[ca]=Format de la data per a la llista d'imatges
-Name[ca@valencia]=Format de la data de la llista d'imatges
+Name[ca@valencia]=Format de la data per a la llista d'imatges
 Name[cs]=Formát data seznamu obrázků
 Name[de]=Datumsformat der Bilderliste
 Name[en_GB]=Image List Date Format
@@ -229,7 +229,7 @@ Type=string
 Default=%m-%d-%Y
 Comment=XSL Date Format String: Use the syntax given at http://xsltsl.sourceforge.net/date-time.html
 Comment[ca]=Cadena de format per a les dates en XSL: empreu la sintaxi indicada a http://xsltsl.sourceforge.net/date-time.html
-Comment[ca@valencia]=Cadena de format de les dates en XSL: empreu la sintaxi indicada a http://xsltsl.sourceforge.net/date-time.html
+Comment[ca@valencia]=Cadena de format per a les dates en XSL: empreu la sintaxi indicada a http://xsltsl.sourceforge.net/date-time.html
 Comment[cs]=Řetězec formátu data XSL: Použijte syntaxi určenou na http://xsltsl.sourceforge.net/date-time.html
 Comment[de]=XSL-Datumsformat: Auf der Webseite http://xsltsl.sourceforge.net/date-time.html kann die Syntax nachgeschaut werden.
 Comment[en_GB]=XSL Date Format String: Use the syntax given at http://xsltsl.sourceforge.net/date-time.html

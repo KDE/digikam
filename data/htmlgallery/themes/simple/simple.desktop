@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Simple
 Name[ca]=Senzill
-Name[ca@valencia]=Simple
+Name[ca@valencia]=Senzill
 Name[cs]=Jednoduchý
 Name[de]=Einfach
 Name[en_GB]=Simple
@@ -19,7 +19,7 @@ Name[x-test]=xxSimplexx
 Name[zh_CN]=简单
 Comment=A simple and light theme
 Comment[ca]=Un tema senzill i lluminós
-Comment[ca@valencia]=Un tema simple i lluminós
+Comment[ca@valencia]=Un tema senzill i lluminós
 Comment[cs]=Jednoduchý světlý motiv
 Comment[de]=Ein einfaches und leichtes Design
 Comment[en_GB]=A simple and light theme
@@ -89,7 +89,7 @@ Caption_1=Dark
 [X-HTMLExport Preview]
 Name=Simple
 Name[ca]=Senzill
-Name[ca@valencia]=Simple
+Name[ca@valencia]=Senzill
 Name[cs]=Jednoduchý
 Name[de]=Einfach
 Name[en_GB]=Simple

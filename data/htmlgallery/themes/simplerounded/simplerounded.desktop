@@ -165,7 +165,7 @@ Default=#3e674c
 [X-HTMLExport Parameter content-bgc]
 Name=Content background
 Name[ca]=Fons pel contingut
-Name[ca@valencia]=Fons del contingut
+Name[ca@valencia]=Fons pel contingut
 Name[cs]=Pozadí obsahu
 Name[en_GB]=Content background
 Name[es]=Fondo del contenido
@@ -185,7 +185,7 @@ Default=#d8ffd3
 [X-HTMLExport Parameter listBackground]
 Name=Icon background
 Name[ca]=Fons per a les icones
-Name[ca@valencia]=Fons de les icones
+Name[ca@valencia]=Fons per a les icones
 Name[cs]=Pozadí ikony
 Name[en_GB]=Icon background
 Name[es]=Fondo de los iconos
@@ -205,7 +205,7 @@ Default=#78ca97
 [X-HTMLExport Parameter navigationColor]
 Name= Background of the navigation
 Name[ca]=Fons per a la navegació
-Name[ca@valencia]=Fons de la navegació
+Name[ca@valencia]=Fons per a la navegació
 Name[en_GB]= Background of the navigation
 Name[es]=Fondo de la navegación
 Name[fr]= Fond de la navigation
@@ -224,7 +224,7 @@ Default=#a7dccf
 [X-HTMLExport Parameter thumbBorderColor]
 Name=Thumbnail border
 Name[ca]=Vora per a les miniatures
-Name[ca@valencia]=Vora de les miniatures
+Name[ca@valencia]=Vora per a les miniatures
 Name[cs]=Okraj náhledu
 Name[en_GB]=Thumbnail border
 Name[es]=Borde de las miniaturas
