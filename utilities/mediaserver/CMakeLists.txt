@@ -13,7 +13,6 @@ set(libmediaserver_SRCS
     dmediaserver.cpp
     dmediaservermngr.cpp
     dmediaserverdlg.cpp
-    dmediaserverctrl.cpp
 
     hupnp/dataelements/hactioninfo.cpp 
     hupnp/dataelements/hdeviceinfo.cpp 

@@ -25,11 +25,16 @@
 
 // Qt includes
 
-#include <QGridLayout>
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QApplication>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QLabel>
+#include <QStyle>
+#include <QIcon>
+#include <QCheckBox>
 
 // KDE includes
 
@@ -42,8 +47,8 @@
 #include "dinfointerface.h"
 #include "dimageslist.h"
 #include "dmediaservermngr.h"
-#include "dmediaserverctrl.h"
 #include "dxmlguiwindow.h"
+#include "workingwidget.h"
 
 namespace Digikam
 {
@@ -53,30 +58,38 @@ class DMediaServerDlg::Private
 public:
 
     Private() :
+        mngr(DMediaServerMngr::instance()),
+        srvButton(0),
+        srvStatus(0),
+        progress(0),
+        aStats(0),
+        separator(0),
+        iStats(0),
+        startOnStartup(0),
         albumSupport(false),
         albumSelector(0),
-        ctrl(0),
-        mngr(DMediaServerMngr::instance()),
         listView(0),
         iface(0),
         page(0),
         buttons(0)
     {
     }
-
-    static const QString configGroupName;
     
-    bool                 albumSupport;
-    QWidget*             albumSelector;
-    DMediaServerCtrl*    ctrl;
-    DMediaServerMngr*    mngr;
-    DImagesList*         listView;
-    DInfoInterface*      iface;
-    QWidget*             page;
-    QDialogButtonBox*    buttons;
+    DMediaServerMngr*   mngr;
+    QPushButton*        srvButton;
+    QLabel*             srvStatus;
+    WorkingWidget*      progress;
+    QLabel*             aStats;
+    QLabel*             separator;
+    QLabel*             iStats;
+    QCheckBox*          startOnStartup;
+    bool                albumSupport;
+    QWidget*            albumSelector;
+    DImagesList*        listView;
+    DInfoInterface*     iface;
+    QWidget*            page;
+    QDialogButtonBox*   buttons;
 };
-
-const QString DMediaServerDlg::Private::configGroupName(QLatin1String("DMediaServerDlg Settings"));
 
 DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
                                  DInfoInterface* const iface)
@@ -98,15 +111,14 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     
     QGridLayout* const grid = new QGridLayout(d->page);
     d->albumSupport         = (d->iface && d->iface->supportAlbums());
-    d->ctrl                 = new DMediaServerCtrl(d->page);
 
     if (d->albumSupport)
     {
         d->albumSelector = d->iface->albumChooser(this);
-        grid->addWidget(d->albumSelector, 0, 0, 1, 1);
+        grid->addWidget(d->albumSelector, 0, 0, 1, 6);
 
         connect(d->iface, SIGNAL(signalAlbumChooserSelectionChanged()),
-                d->ctrl, SLOT(slotSelectionChanged()));
+                this, SLOT(slotSelectionChanged()));
     }
     else
     {
@@ -119,43 +131,119 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     
         // Replug the previous shared items list.
         d->listView->slotAddImages(d->mngr->itemsList());
-        grid->addWidget(d->listView, 0, 0, 1, 1);
+        grid->addWidget(d->listView, 0, 0, 1, 6);
 
         connect(d->listView, SIGNAL(signalImageListChanged()),
-                d->ctrl, SLOT(slotSelectionChanged()));
+                this, SLOT(slotSelectionChanged()));
     }
 
-    grid->addWidget(d->ctrl,  1, 0, 1, 1);
-    grid->setRowStretch(0, 10);
-
     // -------------------
+
+    const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+ 
+    d->startOnStartup       = new QCheckBox(i18n("Start Server at Startup"));
+    d->startOnStartup->setWhatsThis(i18n("Set this option to turn-on the DLNA server at application start-up automatically"));
+    d->startOnStartup->setChecked(true);
+
+    d->srvButton            = new QPushButton(this);
+    d->srvStatus            = new QLabel(this);
+    d->progress             = new WorkingWidget(this);
+    d->aStats               = new QLabel(this);
+    d->separator            = new QLabel(QLatin1String(" / "), this);
+    d->iStats               = new QLabel(this);
+
+    QLabel* const explanation = new QLabel(this);
+    explanation->setOpenExternalLinks(true);
+    explanation->setWordWrap(true);
+    QString txt;
+
+    explanation->setText(i18n("The media server permit to share items through the local network "
+                              "using <a href='https://en.wikipedia.org/wiki/Digital_Living_Network_Alliance'>DLNA</a> "
+                              "standard and <a href='https://en.wikipedia.org/wiki/Universal_Plug_and_Play'>UPNP</a> "
+                              "protocol. Many kind of electronic devices can support DLNA, as tablets, cellulars, TV, etc."
+                              "<br>Note: depending of the network features and the configuration, "
+                              "the delay to discover the server on client devices can take a while."));
+
+    grid->addWidget(d->startOnStartup, 1, 0, 1, 6);
+    grid->addWidget(d->srvButton,      2, 0, 1, 1);
+    grid->addWidget(d->srvStatus,      2, 1, 1, 1);
+    grid->addWidget(d->aStats,         2, 2, 1, 1);
+    grid->addWidget(d->separator,      2, 3, 1, 1);
+    grid->addWidget(d->iStats,         2, 4, 1, 1);
+    grid->addWidget(d->progress,       2, 5, 1, 1);
+    grid->addWidget(explanation,       3, 0, 1, 6);
+    grid->setColumnStretch(1, 10);
+    grid->setRowStretch(0, 10);
+    grid->setSpacing(spacing);
     
-    connect(d->ctrl, SIGNAL(signalStartMediaServer()),
-            this, SLOT(slotStartMediaServer()));
+    // --------------------------------------------------------
+
+    connect(d->srvButton, SIGNAL(clicked()),
+            this, SLOT(slotToggleMediaServer()));
 
     connect(d->buttons->button(QDialogButtonBox::Close), &QPushButton::clicked,
             this, &DMediaServerDlg::close);
     
     // -------------------
-    
-    d->ctrl->updateServerStatus();
-    
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(d->configGroupName);
-    winId();
-    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
-    resize(windowHandle()->size());
+
+    readSettings();
 }
 
 DMediaServerDlg::~DMediaServerDlg()
 {
-    setMediaServerContents();
-
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(d->configGroupName);
-    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
-
+    saveSettings();
     delete d;
+}
+
+void DMediaServerDlg::readSettings()
+{
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(d->mngr->configGroupName());
+
+    d->startOnStartup->setChecked(group.readEntry(d->mngr->configStartServerOnStartupEntry(), false));
+    
+    winId();
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
+    resize(windowHandle()->size());
+
+    updateServerStatus();
+}
+
+void DMediaServerDlg::saveSettings()
+{
+    setMediaServerContents();
+        
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(d->mngr->configGroupName());
+    group.writeEntry(d->mngr->configStartServerOnStartupEntry(), d->startOnStartup->isChecked());
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
+    config->sync();
+}
+
+void DMediaServerDlg::updateServerStatus()
+{
+    if (d->mngr->isRunning())
+    {
+        d->srvStatus->setText(i18n("Server is running"));
+        d->aStats->setText(i18np("1 album shared", "%1 albums shared", d->mngr->albumsShared()));
+        d->separator->setVisible(true);
+        d->iStats->setText(i18np("1 item shared",  "%1 items shared",  d->mngr->itemsShared()));
+        d->srvButton->setText(i18n("Stop"));
+        d->srvButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-stop")));
+        d->progress->toggleTimer(true);
+        d->progress->setVisible(true);
+    }
+    else
+    {
+        d->srvStatus->setText(i18n("Server is not running"));
+        d->aStats->clear();
+        d->separator->setVisible(false);
+        d->iStats->clear();
+        d->srvButton->setText(i18n("Start"));
+        d->srvButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
+        d->progress->toggleTimer(false);
+        d->progress->setVisible(false);
+    }
 }
 
 bool DMediaServerDlg::setMediaServerContents()
@@ -198,7 +286,7 @@ bool DMediaServerDlg::setMediaServerContents()
     return true;
 }
 
-void DMediaServerDlg::slotStartMediaServer()
+void DMediaServerDlg::startMediaServer()
 {    
     if (!setMediaServerContents())
         return;
@@ -213,7 +301,25 @@ void DMediaServerDlg::slotStartMediaServer()
         d->mngr->mediaServerNotification(true);
     }
 
-    d->ctrl->updateServerStatus();
+    updateServerStatus();
+}
+
+void DMediaServerDlg::slotSelectionChanged()
+{
+    // TODO : notify that server needs to be re-started if items selection has changed.
+}
+
+void DMediaServerDlg::slotToggleMediaServer()
+{
+    if (!d->mngr->isRunning())
+    {
+        startMediaServer();
+    }
+    else
+    {
+        d->mngr->cleanUp();
+        updateServerStatus();
+    }
 }
 
 } // namespace Digikam

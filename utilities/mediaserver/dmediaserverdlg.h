@@ -47,13 +47,18 @@ public:
     ~DMediaServerDlg();
 
 private:
-    
+
+    void readSettings();    
+    void saveSettings();
+    void updateServerStatus();
     bool setMediaServerContents();
+    void startMediaServer();
     
 private Q_SLOTS:
 
-    void slotStartMediaServer();
-
+    void slotToggleMediaServer();
+    void slotSelectionChanged();
+    
 private:
 
     class Private;
