@@ -130,6 +130,7 @@ void DMediaServerCtrl::updateServerStatus()
         d->srvButton->setText(i18n("Stop"));
         d->srvButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-stop")));
         d->progress->toggleTimer(true);
+        d->progress->setVisible(true);
     }
     else
     {
@@ -140,6 +141,7 @@ void DMediaServerCtrl::updateServerStatus()
         d->srvButton->setText(i18n("Start"));
         d->srvButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
         d->progress->toggleTimer(false);
+        d->progress->setVisible(false);
     }
 }
 
