@@ -81,6 +81,7 @@
 #include "expoblendingmanager.h"
 #include "mailwizard.h"
 #include "advprintwizard.h"
+#include "dmediaserverdlg.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -587,6 +588,7 @@ void LightTableWindow::setupActions()
     createVideoSlideshowAction();
     createSendByMailAction();
     createPrintCreatorAction();
+    createMediaServerAction();
 
     // Left Panel Zoom Actions
 
@@ -1887,6 +1889,17 @@ void LightTableWindow::slotSendByMail()
 void LightTableWindow::slotPrintCreator()
 {
     AdvPrintWizard w(this, new DBInfoIface(this, d->thumbView->allUrls()));
+    w.exec();
+}
+
+void LightTableWindow::slotMediaServer()
+{
+    DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);
+    // NOTE: We overwrite the default albums chooser object name for load save check items state between sessions.
+    // The goal is not mix these settings with other export tools.
+    iface->setObjectName(QLatin1String("SetupMediaServerIface"));
+
+    DMediaServerDlg w(this, iface);
     w.exec();
 }
 

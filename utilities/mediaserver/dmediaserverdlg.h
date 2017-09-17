@@ -46,6 +46,10 @@ public:
                              DInfoInterface* const iface=0);
     ~DMediaServerDlg();
 
+private:
+    
+    bool setMediaServerContents();
+    
 private Q_SLOTS:
 
     void slotStartMediaServer();

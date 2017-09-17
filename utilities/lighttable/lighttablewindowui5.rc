@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="558" name="lighttablewindow" translationDomain="digikam" >
+<gui version="559" name="lighttablewindow" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -60,6 +60,7 @@
         <Action name="videoslideshow" />
         <Action name="sendbymail" />
         <Action name="printcreator" />
+        <Action name="mediaserver" />
     </Menu>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>

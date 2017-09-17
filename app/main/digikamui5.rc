@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="560" name="digikam" translationDomain="digikam" >
+<gui version="561" name="digikam" translationDomain="digikam" >
 
  <MenuBar>
 
@@ -134,6 +134,8 @@
         <Action name="videoslideshow" />
         <Action name="sendbymail" />
         <Action name="printcreator" />
+        <Action name="mediaserver" />
+
         <DefineGroup name="kipi_tool_group" append="kipi_tool_group" />
       <Separator/>
         <DefineGroup name="kipi_batch_group" append="kipi_batch_group" />

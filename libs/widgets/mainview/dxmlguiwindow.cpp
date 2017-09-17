@@ -182,6 +182,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_presentationAction    = 0;
     m_metadataEditAction    = 0;
     m_geolocationEditAction = 0;
+    m_mediaServerAction     = 0;
     m_animLogo              = 0;
 
 #ifdef HAVE_KSANE
@@ -518,6 +519,19 @@ void DXmlGuiWindow::createHtmlGalleryAction()
     connect(m_htmlGalleryAction, SIGNAL(triggered(bool)),
             this, SLOT(slotHtmlGallery()));
 #endif
+}
+
+void DXmlGuiWindow::createMediaServerAction()
+{
+    m_mediaServerAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-right-double")),
+                                      i18n("Share with DLNA"),
+                                      this);
+
+    
+    actionCollection()->addAction(QLatin1String("mediaserver"), m_mediaServerAction);
+
+    connect(m_mediaServerAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotMediaServer()));
 }
 
 void DXmlGuiWindow::createKSaneAction()

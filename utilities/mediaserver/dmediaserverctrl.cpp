@@ -7,6 +7,7 @@
  * Description : Media Server control widget.
  *
  * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017      by Ahmed Fathy <ahmed dot fathi dot abdelmageed at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,10 +34,13 @@
 #include <QApplication>
 #include <QStyle>
 #include <QIcon>
+#include <QCheckBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -57,7 +61,8 @@ public:
         progress(0),
         aStats(0),
         separator(0),
-        iStats(0)
+        iStats(0),
+        startOnStartup(0)
     {
     }
 
@@ -68,6 +73,7 @@ public:
     QLabel*           aStats;
     QLabel*           separator;
     QLabel*           iStats;
+    QCheckBox*        startOnStartup;
 };
 
 // --------------------------------------------------------
@@ -78,7 +84,10 @@ DMediaServerCtrl::DMediaServerCtrl(QWidget* const parent)
 {
     const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
  
-    QGridLayout* const grid = new QGridLayout(this);
+    d->startOnStartup       = new QCheckBox(i18n("Start Server at Startup"));
+    d->startOnStartup->setWhatsThis(i18n("Set this option to turn-on the DLNA server at application start-up automatically"));
+    d->startOnStartup->setChecked(true);
+
     d->srvButton            = new QPushButton(this);
     d->srvStatus            = new QLabel(this);
     d->progress             = new WorkingWidget(this);
@@ -98,13 +107,15 @@ DMediaServerCtrl::DMediaServerCtrl(QWidget* const parent)
                               "<br>Note: depending of the network features and the configuration, "
                               "the delay to discover the server on client devices can take a while."));
 
-    grid->addWidget(d->srvButton, 0, 0, 1, 1);
-    grid->addWidget(d->srvStatus, 0, 1, 1, 1);
-    grid->addWidget(d->aStats,    0, 2, 1, 1);
-    grid->addWidget(d->separator, 0, 3, 1, 1);
-    grid->addWidget(d->iStats,    0, 4, 1, 1);
-    grid->addWidget(d->progress,  0, 5, 1, 1);
-    grid->addWidget(explanation,  1, 0, 1, 6);
+    QGridLayout* const grid = new QGridLayout(this);
+    grid->addWidget(d->startOnStartup, 0, 0, 1, 6);
+    grid->addWidget(d->srvButton,      1, 0, 1, 1);
+    grid->addWidget(d->srvStatus,      1, 1, 1, 1);
+    grid->addWidget(d->aStats,         1, 2, 1, 1);
+    grid->addWidget(d->separator,      1, 3, 1, 1);
+    grid->addWidget(d->iStats,         1, 4, 1, 1);
+    grid->addWidget(d->progress,       1, 5, 1, 1);
+    grid->addWidget(explanation,       2, 0, 1, 6);
     grid->setColumnStretch(1, 10);
     grid->setSpacing(spacing);
     
@@ -112,6 +123,8 @@ DMediaServerCtrl::DMediaServerCtrl(QWidget* const parent)
 
     connect(d->srvButton, SIGNAL(clicked()),
             this, SLOT(slotToggleMediaServer()));
+    
+    readSettings();
 }
 
 DMediaServerCtrl::~DMediaServerCtrl()
@@ -119,11 +132,28 @@ DMediaServerCtrl::~DMediaServerCtrl()
     delete d;
 }
 
+void DMediaServerCtrl::readSettings()
+{
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(d->mngr->configGroupName());
+
+    d->startOnStartup->setChecked(group.readEntry(d->mngr->configStartServerOnStartupEntry(), false));
+    updateServerStatus();
+}
+
+void DMediaServerCtrl::saveSettings()
+{
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(d->mngr->configGroupName());
+    group.writeEntry(d->mngr->configStartServerOnStartupEntry(), d->startOnStartup->isChecked());
+    config->sync();
+}
+
 void DMediaServerCtrl::updateServerStatus()
 {
     if (d->mngr->isRunning())
     {
-        d->srvStatus->setText(i18n("Media server is running"));
+        d->srvStatus->setText(i18n("Server is running"));
         d->aStats->setText(i18np("1 album shared", "%1 albums shared", d->mngr->albumsShared()));
         d->separator->setVisible(true);
         d->iStats->setText(i18np("1 item shared",  "%1 items shared",  d->mngr->itemsShared()));
@@ -134,7 +164,7 @@ void DMediaServerCtrl::updateServerStatus()
     }
     else
     {
-        d->srvStatus->setText(i18n("Media server is not running"));
+        d->srvStatus->setText(i18n("Server is not running"));
         d->aStats->clear();
         d->separator->setVisible(false);
         d->iStats->clear();
@@ -143,6 +173,11 @@ void DMediaServerCtrl::updateServerStatus()
         d->progress->toggleTimer(false);
         d->progress->setVisible(false);
     }
+}
+
+void DMediaServerCtrl::slotSelectionChanged()
+{
+    // TODO : notify that server needs to be re-started if items selection has changed.
 }
 
 void DMediaServerCtrl::slotToggleMediaServer()

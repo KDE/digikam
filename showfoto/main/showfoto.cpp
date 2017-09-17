@@ -107,6 +107,7 @@
 #include "expoblendingmanager.h"
 #include "mailwizard.h"
 #include "advprintwizard.h"
+#include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
 
 #ifdef HAVE_MARBLE
@@ -223,6 +224,7 @@ ShowFoto::~ShowFoto()
 
     Digikam::ThumbnailLoadThread::cleanUp();
     Digikam::LoadingCacheInterface::cleanUp();
+    Digikam::DMediaServerMngr::instance()->saveAtShutdown();
 
     delete d->model;
     delete d->filterModel;
@@ -291,6 +293,10 @@ void ShowFoto::show()
             config->sync();
         }
     }
+    
+    // Start the Media Server if necessary
+    
+    Digikam::DMediaServerMngr::instance()->loadAtStartup();
 }
 
 void ShowFoto::setupConnections()
@@ -420,15 +426,6 @@ void ShowFoto::setupActions()
 
     QAction* const quit = buildStdAction(StdQuitAction, this, SLOT(close()), this);
     actionCollection()->addAction(QLatin1String("showfoto_quit"), quit);
-
-    // Extra 'Tools' menu actions --------------------------------------------
-
-    d->mediaServerAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-right-double")), i18n("Share with DLNA"), this);
-
-    connect(d->mediaServerAction, &QAction::triggered,
-            this, &ShowFoto::slotMediaServer);
-
-    actionCollection()->addAction(QLatin1String("showfoto_tools_mediaserver"), d->mediaServerAction);
 
     // -- Standard 'Help' menu actions ---------------------------------------------
 

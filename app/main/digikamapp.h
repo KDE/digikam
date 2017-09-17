@@ -203,6 +203,7 @@ private Q_SLOTS:
     void slotHtmlGallery();
     void slotCalendar();
     void slotPresentation();
+    void slotMediaServer();
 
     void slotDatabaseMigration();
 

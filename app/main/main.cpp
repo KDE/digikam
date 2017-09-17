@@ -248,6 +248,7 @@ int main(int argc, char* argv[])
     {
         QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     }
+
     // If application cache place in home directory to save cached files do not exist, create it.
     if (!QFile::exists(QStandardPaths::writableLocation(QStandardPaths::CacheLocation)))
     {

@@ -49,10 +49,19 @@ public:
 Q_SIGNALS:
     
     void signalStartMediaServer();
+    
+public Q_SLOTS:
+
+    void slotSelectionChanged();
 
 private Q_SLOTS:
 
     void slotToggleMediaServer();
+
+private:
+
+    void readSettings();    
+    void saveSettings();
 
 private:
 

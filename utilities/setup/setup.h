@@ -55,7 +55,6 @@ public:
         EditorPage,
         ICCPage,
         LightTablePage,
-        MediaServerPage,
         SlideshowPage,
         ImageQualityPage,
         CameraPage,

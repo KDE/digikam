@@ -145,6 +145,10 @@ public:
      */
     void createSendByMailAction();
 
+    /** Create Media Server action to share through DLNA.
+     */
+    void createMediaServerAction();
+    
     /** Create Ksane action to import from scanner.
      */
     void createKSaneAction();
@@ -209,6 +213,7 @@ protected:
     QAction*     m_expoBlendingAction;
     QAction*     m_panoramaAction;
     QAction*     m_videoslideshowAction;
+    QAction*     m_mediaServerAction;
     DLogoAction* m_animLogo;
 
 #ifdef HAVE_KSANE
@@ -313,6 +318,9 @@ private Q_SLOTS:
     // Called by Exposure Blending tool.
     virtual void slotExpoBlending()            {};
 
+    // Called by Media Server tool.
+    virtual void slotMediaServer()             {};
+    
 private:
 
     /** Used by slotToggleFullScreen() to switch tool-bar visibility in managed window

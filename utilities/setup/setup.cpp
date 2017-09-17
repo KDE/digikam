@@ -45,7 +45,6 @@
 #include "setupeditor.h"
 #include "setupicc.h"
 #include "setuplighttable.h"
-#include "setupmediaserver.h"
 #include "setupmetadata.h"
 #include "setupmisc.h"
 #include "setupslideshow.h"
@@ -76,7 +75,6 @@ public:
         page_metadata(0),
         page_template(0),
         page_lighttable(0),
-        page_mediaserver(0),
         page_editor(0),
         page_slideshow(0),
         page_imagequalitysorter(0),
@@ -95,7 +93,6 @@ public:
         metadataPage(0),
         templatePage(0),
         lighttablePage(0),
-        mediaserverPage(0),
         editorPage(0),
         slideshowPage(0),
         imageQualitySorterPage(0),
@@ -117,7 +114,6 @@ public:
     DConfigDlgWdgItem*       page_metadata;
     DConfigDlgWdgItem*       page_template;
     DConfigDlgWdgItem*       page_lighttable;
-    DConfigDlgWdgItem*       page_mediaserver;
     DConfigDlgWdgItem*       page_editor;
     DConfigDlgWdgItem*       page_slideshow;
     DConfigDlgWdgItem*       page_imagequalitysorter;
@@ -136,7 +132,6 @@ public:
     SetupMetadata*           metadataPage;
     SetupTemplate*           templatePage;
     SetupLightTable*         lighttablePage;
-    SetupMediaServer*        mediaserverPage;
     SetupEditor*             editorPage;
     SetupSlideShow*          slideshowPage;
     SetupImageQualitySorter* imageQualitySorterPage;
@@ -217,12 +212,6 @@ Setup::Setup(QWidget* const parent)
     d->page_lighttable->setHeader(i18n("<qt>Light Table Settings<br/>"
                                        "<i>Customize tool used to compare images</i></qt>"));
     d->page_lighttable->setIcon(QIcon::fromTheme(QLatin1String("lighttable")));
-
-    d->mediaserverPage  = new SetupMediaServer();
-    d->page_mediaserver = addPage(d->mediaserverPage, i18n("Media Server"));
-    d->page_mediaserver->setHeader(i18n("<qt>Media Server Settings<br/>"
-                                       "<i>UPNP/DLNA server to share photos on local network</i></qt>"));
-    d->page_mediaserver->setIcon(QIcon::fromTheme(QLatin1String("arrow-right-double")));
 
     d->slideshowPage  = new SetupSlideShow();
     d->page_slideshow = addPage(d->slideshowPage, i18n("Slide Show"));
@@ -332,7 +321,6 @@ QSize Setup::sizeHint() const
             page == AlbumViewPage   ||
             page == TemplatePage    ||
             page == LightTablePage  ||
-            page == MediaServerPage ||
             page == EditorPage      ||
             page == MiscellaneousPage)
         {
@@ -442,7 +430,6 @@ void Setup::slotOkClicked()
     d->metadataPage->applySettings();
     d->templatePage->applySettings();
     d->lighttablePage->applySettings();
-    d->mediaserverPage->applySettings();
     d->editorPage->applySettings();
     d->slideshowPage->applySettings();
     d->imageQualitySorterPage->applySettings();
@@ -537,11 +524,6 @@ Setup::Page Setup::activePageIndex() const
         return LightTablePage;
     }
 
-    if (cur == d->page_mediaserver)
-    {
-        return MediaServerPage;
-    }
-
     if (cur == d->page_editor)
     {
         return EditorPage;
@@ -606,9 +588,6 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
 
         case Setup::LightTablePage:
             return page_lighttable;
-
-        case Setup::MediaServerPage:
-            return page_mediaserver;
 
         case Setup::EditorPage:
             return page_editor;

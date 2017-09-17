@@ -7,6 +7,7 @@
  * Description : Media Server configuration dialog to share a single list of files
  *
  * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017      by Ahmed Fathy <ahmed dot fathi dot abdelmageed at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,9 +53,12 @@ class DMediaServerDlg::Private
 public:
 
     Private() :
+        albumSupport(false),
+        albumSelector(0),
         ctrl(0),
         mngr(DMediaServerMngr::instance()),
         listView(0),
+        iface(0),
         page(0),
         buttons(0)
     {
@@ -62,9 +66,12 @@ public:
 
     static const QString configGroupName;
     
+    bool                 albumSupport;
+    QWidget*             albumSelector;
     DMediaServerCtrl*    ctrl;
     DMediaServerMngr*    mngr;
     DImagesList*         listView;
+    DInfoInterface*      iface;
     QWidget*             page;
     QDialogButtonBox*    buttons;
 };
@@ -78,6 +85,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
 {
     setWindowTitle(QString::fromUtf8("Share Files With DLNA Media Server"));
 
+    d->iface                 = iface;
     d->buttons               = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->page                  = new QWidget(this);
     QVBoxLayout* const vbx   = new QVBoxLayout(this);
@@ -87,22 +95,37 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     setModal(false);
 
     // -------------------
-
+    
     QGridLayout* const grid = new QGridLayout(d->page);
-    d->listView             = new DImagesList(d->page);
-    d->listView->setControlButtonsPlacement(DImagesList::ControlButtonsRight);
-    d->listView->setIface(iface);
-    
-    // Add all items currently loaded in application.
-    d->listView->loadImagesFromCurrentSelection();
-    
-    // Replug the previous shared items list.
-    d->listView->slotAddImages(d->mngr->itemsList());
-    
+    d->albumSupport         = (d->iface && d->iface->supportAlbums());
     d->ctrl                 = new DMediaServerCtrl(d->page);
 
-    grid->addWidget(d->listView, 0, 0, 1, 1);
-    grid->addWidget(d->ctrl,     1, 0, 1, 1);
+    if (d->albumSupport)
+    {
+        d->albumSelector = d->iface->albumChooser(this);
+        grid->addWidget(d->albumSelector, 0, 0, 1, 1);
+
+        connect(d->iface, SIGNAL(signalAlbumChooserSelectionChanged()),
+                d->ctrl, SLOT(slotSelectionChanged()));
+    }
+    else
+    {
+        d->listView = new DImagesList(d->page);
+        d->listView->setControlButtonsPlacement(DImagesList::ControlButtonsRight);
+        d->listView->setIface(d->iface);
+
+        // Add all items currently loaded in application.
+        d->listView->loadImagesFromCurrentSelection();
+    
+        // Replug the previous shared items list.
+        d->listView->slotAddImages(d->mngr->itemsList());
+        grid->addWidget(d->listView, 0, 0, 1, 1);
+
+        connect(d->listView, SIGNAL(signalImageListChanged()),
+                d->ctrl, SLOT(slotSelectionChanged()));
+    }
+
+    grid->addWidget(d->ctrl,  1, 0, 1, 1);
     grid->setRowStretch(0, 10);
 
     // -------------------
@@ -126,6 +149,8 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
 
 DMediaServerDlg::~DMediaServerDlg()
 {
+    setMediaServerContents();
+
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     DXmlGuiWindow::saveWindowSize(windowHandle(), group);
@@ -133,24 +158,55 @@ DMediaServerDlg::~DMediaServerDlg()
     delete d;
 }
 
-void DMediaServerDlg::slotStartMediaServer()
+bool DMediaServerDlg::setMediaServerContents()
 {
-    QList<QUrl> urls = d->listView->imageUrls();
-
-    if (urls.isEmpty())
+    if (d->albumSupport)
     {
-        QMessageBox::information(this, i18n("Starting Media Server"),
-                                 i18n("There is no items to share with the current selection..."));
+        DInfoInterface::DAlbumIDs albums = d->iface->albumChooserItems();
+        MediaServerMap map;
 
-        return;
+        foreach(int id, albums)
+        {
+            DAlbumInfo anf(d->iface->albumInfo(id));
+            map.insert(anf.title(), d->iface->albumItems(id));
+        }
+
+        if (map.isEmpty())
+        {
+            QMessageBox::information(this, i18n("Media Server Contents"),
+                                     i18n("There is no collection to share with the current selection..."));
+            return false;
+        }
+
+        d->mngr->setCollectionMap(map);
     }
+    else
+    {
+        QList<QUrl> urls = d->listView->imageUrls();
 
-    d->mngr->setItemsList(i18n("Shared Items"), urls);
+        if (urls.isEmpty())
+        {
+            QMessageBox::information(this, i18n("Media Server Contents"),
+                                     i18n("There is no item to share with the current selection..."));
 
+            return false;
+        }
+
+        d->mngr->setItemsList(i18n("Shared Items"), urls);
+    }
+    
+    return true;
+}
+
+void DMediaServerDlg::slotStartMediaServer()
+{    
+    if (!setMediaServerContents())
+        return;
+    
     if (!d->mngr->startMediaServer())
     {
         QMessageBox::warning(this, i18n("Starting Media Server"),
-                             i18n("An error occurs while to start Media Server..."));
+                                i18n("An error occurs while to start Media Server..."));
     }
     else
     {

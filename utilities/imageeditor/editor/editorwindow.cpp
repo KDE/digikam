@@ -830,6 +830,7 @@ void EditorWindow::setupStandardActions()
     createVideoSlideshowAction();
     createSendByMailAction();
     createPrintCreatorAction();
+    createMediaServerAction();
 
     m_metadataEditAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);
@@ -3017,6 +3018,7 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_expoBlendingAction,          postCategory);
     actionModel->addAction(m_sendByMailAction,            postCategory);
     actionModel->addAction(m_printCreatorAction,          postCategory);
+    actionModel->addAction(m_mediaServerAction,           postCategory);
 
 #ifdef HAVE_HTMLGALLERY
     actionModel->addAction(m_htmlGalleryAction,           postCategory);

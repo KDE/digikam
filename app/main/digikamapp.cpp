@@ -129,6 +129,7 @@
 #include "advprintwizard.h"
 #include "dfiledialog.h"
 #include "dmediaservermngr.h"
+#include "dmediaserverdlg.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -1356,6 +1357,7 @@ void DigikamApp::setupActions()
     createVideoSlideshowAction();
     createSendByMailAction();
     createPrintCreatorAction();
+    createMediaServerAction();
 
     // -----------------------------------------------------------
 
@@ -2710,6 +2712,17 @@ void DigikamApp::slotPrintCreator()
     w.exec();
 }
 
+void DigikamApp::slotMediaServer()
+{
+    DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);
+    // NOTE: We overwrite the default albums chooser object name for load save check items state between sessions.
+    // The goal is not mix these settings with other export tools.
+    iface->setObjectName(QLatin1String("SetupMediaServerIface"));
+
+    DMediaServerDlg w(this, iface);
+    w.exec();
+}
+
 void DigikamApp::slotRecurseAlbums(bool checked)
 {
     d->view->setRecurseAlbums(checked);
@@ -3405,6 +3418,7 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(m_presentationAction,          postCategory);
     actionModel->addAction(m_sendByMailAction,            postCategory);
     actionModel->addAction(m_printCreatorAction,          postCategory);
+    actionModel->addAction(m_mediaServerAction,           postCategory);
 
 #ifdef HAVE_PANORAMA
     actionModel->addAction(m_panoramaAction,              postCategory);
