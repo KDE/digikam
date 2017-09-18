@@ -37,4 +37,5 @@ BUGFIXES FROM BUGZILLA:
 027 ==> 380333 - Right click - Group and Menu - View - Group do not match
 028 ==> 160893 - Use UPNP server as image database.
 029 ==> 384642 - Geolocation doesn't appear in digiKam for MacOS and Windows : Marble header files are not installed, only the libraries.
-030 ==> 
+030 ==> 384753 - Crash / lock up when setting Icon View font in settings/configure.
+031 ==> 
