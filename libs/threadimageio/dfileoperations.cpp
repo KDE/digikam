@@ -230,7 +230,7 @@ bool DFileOperations::runFiles(const QString& appCmd,
     QStringList dirs;
     QStringList files;
     QStringList cmdArgs;
-    QStringList termCmd;
+    QStringList termOpts;
 
     bool useTerminal = false;
     bool openNewRun  = false;
@@ -241,7 +241,7 @@ bool DFileOperations::runFiles(const QString& appCmd,
         icon     = service->icon();
 
 #ifdef Q_OS_LINUX
-        termCmd  = service->terminalOptions().split(split, QString::SkipEmptyParts);
+        termOpts = service->terminalOptions().split(split, QString::SkipEmptyParts);
         term     = QStandardPaths::findExecutable(QLatin1String("konsole"));
 
         if (term.isEmpty())
@@ -320,8 +320,8 @@ bool DFileOperations::runFiles(const QString& appCmd,
 
     if (useTerminal)
     {
-        termCmd << QLatin1String("-e") << exec << cmdArgs;
-        process->start(term, termCmd);
+        termOpts << QLatin1String("-e") << exec << cmdArgs;
+        process->start(term, termOpts);
     }
     else
     {
