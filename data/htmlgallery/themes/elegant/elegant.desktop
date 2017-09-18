@@ -88,7 +88,6 @@ Name[sv]=Upphovsman
 Name[tr]=Yazar
 Name[uk]=Автор
 Name[x-test]=xxAuthorxx
-Name[zh_CN]=作者
 Type=string
 Default=
 
@@ -211,7 +210,6 @@ Name[sv]=Stil
 Name[tr]=Stil
 Name[uk]=Стиль
 Name[x-test]=xxStylexx
-Name[zh_CN]=样式
 Type=list
 Default=dark.css
 Value_0=natural.css
