@@ -64,14 +64,13 @@ public:
 
     /** Open file urls with the service.
      */
-    static bool runFiles(const KService& service, const QList<QUrl>& urls);
+    static bool runFiles(KService* const service, const QList<QUrl>& urls);
 
     /** Open file urls with the application command.
      */
     static bool runFiles(const QString& appCmd,
                          const QList<QUrl>& urls,
-                         const QString& name = QString(),
-                         const QString& icon = QString());
+                         KService* const service = 0);
 
     /** Return list of service available on desktop to open files.
      */

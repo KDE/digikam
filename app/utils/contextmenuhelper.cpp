@@ -345,7 +345,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
         service = d->servicesMap[name];
     }
 
-    DFileOperations::runFiles(*service, list);
+    DFileOperations::runFiles(service.data(), list);
 }
 
 bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)

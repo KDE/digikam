@@ -196,16 +196,15 @@ QUrl DFileOperations::getUniqueFileUrl(const QUrl& orgUrl,
     return destUrl;
 }
 
-bool DFileOperations::runFiles(const KService& service,
+bool DFileOperations::runFiles(KService* const service,
                                const QList<QUrl>& urls)
 {
-    return (runFiles(service.exec(), urls, service.desktopEntryName(), service.icon()));
+    return (runFiles(service->exec(), urls, service));
 }
 
 bool DFileOperations::runFiles(const QString& appCmd,
                                const QList<QUrl>& urls,
-                               const QString& name,
-                               const QString& icon)
+                               KService* const service)
 {
     QRegExp split(QLatin1String(" +(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"));
     QStringList cmdList = appCmd.split(split, QString::SkipEmptyParts);
@@ -224,10 +223,34 @@ bool DFileOperations::runFiles(const QString& appCmd,
     }
 
     QString exec;
+    QString name;
+    QString icon;
+    QString term;
+
     QStringList dirs;
     QStringList files;
     QStringList cmdArgs;
-    bool openNewRun = false;
+    QStringList termCmd;
+
+    bool useTerminal = false;
+    bool openNewRun  = false;
+
+    if (service)
+    {
+        name     = service->desktopEntryName();
+        icon     = service->icon();
+
+#ifdef Q_OS_LINUX
+        termCmd  = service->terminalOptions().split(split, QString::SkipEmptyParts);
+        term     = QStandardPaths::findExecutable(QLatin1String("konsole"));
+
+        if (term.isEmpty())
+            term = QStandardPaths::findExecutable(QLatin1String("xterm"));
+
+        if (!term.isEmpty())
+            useTerminal = service->terminal();
+#endif
+    }
 
     QProcess* const process = new QProcess();
     QProcessEnvironment env = adjustedEnvironmentForAppImage();
@@ -294,7 +317,16 @@ bool DFileOperations::runFiles(const QString& appCmd,
     }
 
     process->setProcessEnvironment(env);
-    process->start(exec, cmdArgs);
+
+    if (useTerminal)
+    {
+        termCmd << QLatin1String("-e") << exec << cmdArgs;
+        process->start(term, termCmd);
+    }
+    else
+    {
+        process->start(exec, cmdArgs);
+    }
 
     bool ret = true;
     ret     &= process->waitForStarted();
@@ -305,7 +337,7 @@ bool DFileOperations::runFiles(const QString& appCmd,
 
         if (!urlList.isEmpty())
         {
-            ret &= runFiles(appCmd, urlList, name, icon);
+            ret &= runFiles(appCmd, urlList, service);
         }
     }
 
