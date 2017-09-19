@@ -231,19 +231,19 @@ DefaultRendererConnection::DefaultRendererConnection(ContentType ct, QWidget* pa
                       this, SLOT(stateChanged(QtAV::AVPlayer::State)));
 
     Q_ASSERT(ok);
-    Q_UNUSED(ok)
+    Q_UNUSED(ok);
 
     ok = connect(&m_mediaObject, SIGNAL(durationChanged(qint64)),
                  this, SLOT(tick(qint64)));
 
     Q_ASSERT(ok);
-    Q_UNUSED(ok)
+    Q_UNUSED(ok);
 
     ok = connect(&m_mediaObject, SIGNAL(durationChanged(qint64)),
                  this, SLOT(totalTimeChanged(qint64)));
 
     Q_ASSERT(ok);
-    Q_UNUSED(ok)
+    Q_UNUSED(ok);
 
     if (ct == AudioVideo)
     {
@@ -260,12 +260,12 @@ DefaultRendererConnection::~DefaultRendererConnection()
 
 void DefaultRendererConnection::setupVideo()
 {
-    QWidget* parentWidget = static_cast<QWidget*>(parent());
-    m_videoWidget = new QtAV::WidgetRenderer(parentWidget);
+    QWidget* const parentWidget = static_cast<QWidget*>(parent());
+    m_videoWidget               = new QtAV::WidgetRenderer(parentWidget);
     m_videoWidget->setMinimumSize(200, 200);
     m_videoWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-
     parentWidget->layout()->addWidget(m_videoWidget);
+    m_mediaObject.setRenderer(m_videoWidget);
 }
 
 void DefaultRendererConnection::tick(qint64 time)
@@ -327,6 +327,7 @@ void DefaultRendererConnection::stateChanged(QtAV::AVPlayer::State newstate)
             break;
 
         default:
+
             m_mediaObject.play();
             break;
     }
@@ -404,8 +405,7 @@ qint32 DefaultRendererConnection::doSetResource(const QUrl& resourceUri,
 
     qDebug() << "Pass URL to media widget:" << resourceUri.toString();
 
-    m_mediaSource.reset(QtAV::MediaIO::createForUrl(resourceUri.toString()));
-    m_mediaObject.setInput(m_mediaSource.take());
+    m_mediaObject.play(QUrl::fromPercentEncoding(resourceUri.toEncoded()));
 
     if (!m_videoWidget)
     {
