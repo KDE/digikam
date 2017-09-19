@@ -29,7 +29,7 @@
 
 int main(int argc, char* argv[])
 {
-    Herqq::Upnp::SetLoggingLevel(Herqq::Upnp::Debug);
+    Herqq::Upnp::SetLoggingLevel(Herqq::Upnp::Information);
 
     QApplication app(argc, argv);
     app.setApplicationName(QLatin1String("HUpnpAvSimpleTestApp"));

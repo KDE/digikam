@@ -404,19 +404,8 @@ qint32 DefaultRendererConnection::doSetResource(const QUrl& resourceUri,
 
     if (!m_videoWidget)
     {
-        if (m_mediaObject.renderer())
-        {
-            setupVideo();
-            m_videoWidget->show();
-        }
-        else
-        {
-            bool ok = connect(&m_mediaObject, SIGNAL(videoAvailableChanged(bool)),
-                              this, SLOT(hasVideoChanged(bool)));
-
-            Q_ASSERT(ok);
-            Q_UNUSED(ok)
-        }
+        setupVideo();
+        m_videoWidget->show();
     }
 
     writableRendererConnectionInfo()->setRelativeTimePosition(HDuration());
@@ -431,7 +420,7 @@ qint32 DefaultRendererConnection::doSelectPreset(const QString&)
 
 void DefaultRendererConnection::hasVideoChanged(bool b)
 {
-    if (!m_videoWidget && b && m_mediaObject.renderer())
+    if (!m_videoWidget && b)
     {
         setupVideo();
         m_videoWidget->show();
