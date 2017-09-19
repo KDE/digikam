@@ -155,6 +155,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     QLabel* const explanation = new QLabel(this);
     explanation->setOpenExternalLinks(true);
     explanation->setWordWrap(true);
+    explanation->setFrameStyle(QFrame::Box | QFrame::Plain);
     QString txt;
 
     explanation->setText(i18n("The media server permit to share items through the local network "
