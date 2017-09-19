@@ -224,7 +224,6 @@ void RendererConnectionForImagesAndText::resizeEventOccurred(const QResizeEvent&
 DefaultRendererConnection::DefaultRendererConnection(ContentType ct, QWidget* parent)
     : CustomRendererConnection(parent),
       m_mediaObject(parent),
-      m_mediaSource(0),
       m_videoWidget(0)
 {
     bool ok = connect(&m_mediaObject, SIGNAL(stateChanged(QtAV::AVPlayer::State)),
@@ -250,7 +249,7 @@ DefaultRendererConnection::DefaultRendererConnection(ContentType ct, QWidget* pa
         setupVideo();
     }
 
-    QtAV::AudioOutput* audioOutput = new QtAV::AudioOutput();
+    QtAV::AudioOutput* const audioOutput = new QtAV::AudioOutput();
     audioOutput->setParent(parent);
 }
 
@@ -367,18 +366,21 @@ qint32 DefaultRendererConnection::doStop()
 {
     m_mediaObject.stop();
     writableRendererConnectionInfo()->setRelativeTimePosition(HDuration());
+
     return UpnpSuccess;
 }
 
 qint32 DefaultRendererConnection::doPause()
 {
     m_mediaObject.pause();
+
     return UpnpSuccess;
 }
 
 qint32 DefaultRendererConnection::doSeek(const Herqq::Upnp::Av::HSeekInfo& seekInfo)
 {
     Q_UNUSED(seekInfo)
+
     return UpnpSuccess;
 }
 
@@ -398,10 +400,7 @@ qint32 DefaultRendererConnection::doSetResource(const QUrl& resourceUri,
     Q_UNUSED(resourceUri)
     Q_UNUSED(cdsObjectData)
 
-    if (m_mediaSource)
-    {
-        m_mediaObject.stop();
-    }
+    m_mediaObject.stop();
 
     qDebug() << "Pass URL to media widget:" << resourceUri.toString();
 

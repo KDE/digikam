@@ -36,7 +36,6 @@
 
 #ifdef HAVE_MEDIAPLAYER
 #   include <QtAV/AVError.h>
-#   include <QtAV/MediaIO.h>
 #   include <QtAV/AVPlayer.h>
 #   include <QtAVWidgets/WidgetRenderer.h>
 #endif
@@ -151,7 +150,6 @@ class DefaultRendererConnection : public CustomRendererConnection
 private:
 
     QtAV::AVPlayer                m_mediaObject;
-    QScopedPointer<QtAV::MediaIO> m_mediaSource;
     QtAV::WidgetRenderer*         m_videoWidget;
 
 private:
