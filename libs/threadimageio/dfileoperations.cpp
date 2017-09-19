@@ -237,18 +237,20 @@ bool DFileOperations::runFiles(const QString& appCmd,
 
     if (service)
     {
-        name     = service->desktopEntryName();
-        icon     = service->icon();
+        name = service->desktopEntryName();
+        icon = service->icon();
 
 #ifdef Q_OS_LINUX
-        termOpts = service->terminalOptions().split(split, QString::SkipEmptyParts);
-        term     = QStandardPaths::findExecutable(QLatin1String("konsole"));
+        if (service->terminal())
+        {
+            termOpts = service->terminalOptions().split(split, QString::SkipEmptyParts);
+            term     = QStandardPaths::findExecutable(QLatin1String("konsole"));
 
-        if (term.isEmpty())
-            term = QStandardPaths::findExecutable(QLatin1String("xterm"));
+            if (term.isEmpty())
+                term = QStandardPaths::findExecutable(QLatin1String("xterm"));
 
-        if (!term.isEmpty())
-            useTerminal = service->terminal();
+            useTerminal = !term.isEmpty();
+        }
 #endif
     }
 
