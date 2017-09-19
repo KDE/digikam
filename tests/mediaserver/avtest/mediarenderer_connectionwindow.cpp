@@ -22,6 +22,7 @@
 
 #include "mediarenderer_connectionwindow.h"
 #include "ui_mediarenderer_connectionwindow.h"
+#include "digikam_config.h"
 
 #include <QtCore/QUrl>
 #include <QtGui/QCloseEvent>
@@ -52,11 +53,13 @@ bool isText(const QString& contentFormat)
 }
 }
 
-MediaRendererConnectionWindow::MediaRendererConnectionWindow(
-    const QString& contentFormat, QNetworkAccessManager& nam, QWidget* parent) :
-        QWidget(parent),
-            ui(new Ui::MediaRendererConnectionWindow()), m_rendererConnection(0),
-            m_nam(nam)
+MediaRendererConnectionWindow::MediaRendererConnectionWindow(const QString& contentFormat,
+                                                             QNetworkAccessManager& nam,
+                                                             QWidget* parent)
+    : QWidget(parent),
+      ui(new Ui::MediaRendererConnectionWindow()),
+      m_rendererConnection(0),
+      m_nam(nam)
 {
     ui->setupUi(this);
     ui->scrollArea->setWidgetResizable(true);
@@ -65,13 +68,21 @@ MediaRendererConnectionWindow::MediaRendererConnectionWindow(
 
     if (isAudio(contentFormat))
     {
+#ifdef HAVE_MEDIAPLAYER
         m_rendererConnection = new DefaultRendererConnection(
             DefaultRendererConnection::AudioOnly, ui->scrollAreaWidgetContents);
+#else
+        qDebug() << "AvTest is compiled without QtAV media player support...";
+#endif
     }
     else if (isVideo(contentFormat))
     {
+#ifdef HAVE_MEDIAPLAYER
         m_rendererConnection = new DefaultRendererConnection(
             DefaultRendererConnection::AudioVideo, ui->scrollAreaWidgetContents);
+#else
+        qDebug() << "AvTest is compiled without QtAV media player support...";
+#endif
     }
     else if (isImage(contentFormat))
     {
@@ -86,8 +97,12 @@ MediaRendererConnectionWindow::MediaRendererConnectionWindow(
     else if (contentFormat == QLatin1String("*") || contentFormat.isEmpty() ||
              contentFormat == QLatin1String("application/octet-stream"))
     {
+#ifdef HAVE_MEDIAPLAYER
         m_rendererConnection = new DefaultRendererConnection(
             DefaultRendererConnection::Unknown, ui->scrollAreaWidgetContents);
+#else
+        qDebug() << "AvTest is compiled without QtAV media player support...";
+#endif
     }
     else
     {

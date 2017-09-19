@@ -44,3 +44,7 @@ target_link_libraries(avtest
                       Qt5::Xml
                       Qt5::Test
 )
+
+if(ENABLE_MEDIAPLAYER)
+    target_link_libraries(avtest ${QTAV_LIBRARIES})
+endif()

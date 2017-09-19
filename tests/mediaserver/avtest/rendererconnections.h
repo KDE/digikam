@@ -25,6 +25,7 @@
 
 #include "hupnp_global.h"
 #include "hrendererconnection.h"
+#include "digikam_config.h"
 
 #include <QLabel>
 #include <QWidget>
@@ -33,12 +34,12 @@
 #include <QtCore/QPointer>
 #include <QtCore/QScopedPointer>
 
-// QtAV includes
-
-#include <QtAV/AVError.h>
-#include <QtAV/MediaIO.h>
-#include <QtAV/AVPlayer.h>
-#include <QtAVWidgets/WidgetRenderer.h>
+#ifdef HAVE_MEDIAPLAYER
+#   include <QtAV/AVError.h>
+#   include <QtAV/MediaIO.h>
+#   include <QtAV/AVPlayer.h>
+#   include <QtAVWidgets/WidgetRenderer.h>
+#endif
 
 class QLabel;
 class QTextEdit;
@@ -140,6 +141,8 @@ public:
 
 // ---------------------------------------------------------------------------------
 
+#ifdef HAVE_MEDIAPLAYER
+
 class DefaultRendererConnection : public CustomRendererConnection
 {
     Q_OBJECT
@@ -191,5 +194,7 @@ public:
     explicit DefaultRendererConnection(ContentType, QWidget* parent = 0);
     virtual ~DefaultRendererConnection();
 };
+
+#endif // HAVE_MEDIAPLAYER
 
 #endif // RENDERERCONNECTIONS_H_

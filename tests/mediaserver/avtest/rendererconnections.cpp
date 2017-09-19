@@ -40,9 +40,9 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkAccessManager>
 
-// QtAV includes
-
-#include <QtAV/AudioOutput.h>
+#ifdef HAVE_MEDIAPLAYER
+#   include <QtAV/AudioOutput.h>
+#endif
 
 using namespace Herqq::Upnp;
 using namespace Herqq::Upnp::Av;
@@ -219,6 +219,8 @@ void RendererConnectionForImagesAndText::resizeEventOccurred(const QResizeEvent&
  * DefaultRendererConnection
  *******************************************************************************/
 
+#ifdef HAVE_MEDIAPLAYER
+
 DefaultRendererConnection::DefaultRendererConnection(ContentType ct, QWidget* parent)
     : CustomRendererConnection(parent),
       m_mediaObject(parent),
@@ -302,14 +304,17 @@ void DefaultRendererConnection::stateChanged(QtAV::AVPlayer::State newstate)
             break;
 
         case QtAV::AVPlayer::StoppedState:
+
             if (m_mediaObject.isSeekable())
             {
                 m_mediaObject.setPosition(0);
             }
+
             writableRendererConnectionInfo()->setTransportState(HTransportState::Stopped);
             break;
 
         case QtAV::AVPlayer::PausedState:
+
             if (m_mediaObject.position() == m_mediaObject.duration())
             {
                 if (m_mediaObject.isSeekable())
@@ -346,6 +351,7 @@ qint32 DefaultRendererConnection::doPlay(const QString& arg)
                     m_mediaObject.setPosition(0);
                 }
             }
+
             m_mediaObject.play();
             break;
 
@@ -394,10 +400,9 @@ qint32 DefaultRendererConnection::doSetResource(const QUrl& resourceUri,
     if (m_mediaSource)
     {
         m_mediaObject.stop();
-/*
-        if(m_mediaObject.playlist())
-            m_mediaObject.playlist()->clear();*/
     }
+
+    qDebug() << "Pass URL to media widget:" << resourceUri.toString();
 
     m_mediaSource.reset(QtAV::MediaIO::createForUrl(resourceUri.toString()));
     m_mediaObject.setInput(m_mediaSource.take());
@@ -426,3 +431,5 @@ void DefaultRendererConnection::hasVideoChanged(bool b)
         m_videoWidget->show();
     }
 }
+
+#endif // HAVE_MEDIAPLAYER
