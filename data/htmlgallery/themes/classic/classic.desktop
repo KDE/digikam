@@ -17,6 +17,7 @@ Name[sv]=Klassiskt
 Name[tr]=Klasik
 Name[uk]=Класична
 Name[x-test]=xxClassicxx
+Name[zh_CN]=经典
 Comment=A port of the old HTML Export plugin theme
 Comment[ca]=Una adaptació de l'antic tema del connector d'exportació a HTML
 Comment[ca@valencia]=Una adaptació de l'antic tema del connector d'exportació a HTML
@@ -55,6 +56,7 @@ Name[sv]=Klassiskt
 Name[tr]=Klasik
 Name[uk]=Класична
 Name[x-test]=xxClassicxx
+Name[zh_CN]=经典
 Url=preview.png
 
 [X-HTMLExport Author]
@@ -122,6 +124,7 @@ Name[sv]=Bakgrundsfärg
 Name[tr]=Artalan Rengi
 Name[uk]=Колір тла
 Name[x-test]=xxBackground Colorxx
+Name[zh_CN]=背景颜色
 Type=color
 Default=#333333
 
@@ -144,6 +147,7 @@ Name[sv]=Förgrundsfärg
 Name[tr]=Önplan Rengi
 Name[uk]=Колір тексту
 Name[x-test]=xxForeground Colorxx
+Name[zh_CN]=前景颜色
 Type=color
 Default=#d0ffd0
 
@@ -166,6 +170,7 @@ Name[sv]=Teckenstorlek
 Name[tr]=Yazıtipi Boyutu
 Name[uk]=Розмір шрифту
 Name[x-test]=xxFont Sizexx
+Name[zh_CN]=字体大小
 Type=int
 Default=14
 Min=1
