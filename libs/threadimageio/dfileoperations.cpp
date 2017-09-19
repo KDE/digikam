@@ -248,8 +248,9 @@ bool DFileOperations::runFiles(const QString& appCmd,
 
             if (term.isEmpty())
             {
-                termOpts.replaceInStrings(QLatin1String("--noclose"), QLatin1String("-hold"));
                 term = QStandardPaths::findExecutable(QLatin1String("xterm"));
+                termOpts.replaceInStrings(QLatin1String("--noclose"),
+                                          QLatin1String("-hold"));
             }
 
             useTerminal = !term.isEmpty();
