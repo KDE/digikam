@@ -65,13 +65,13 @@ MediaRendererConnectionWindow::MediaRendererConnectionWindow(
 
     if (isAudio(contentFormat))
     {
-//        m_rendererConnection = new DefaultRendererConnection(
-//            DefaultRendererConnection::AudioOnly, ui->scrollAreaWidgetContents);
+        m_rendererConnection = new DefaultRendererConnection(
+            DefaultRendererConnection::AudioOnly, ui->scrollAreaWidgetContents);
     }
     else if (isVideo(contentFormat))
     {
-//        m_rendererConnection = new DefaultRendererConnection(
-//            DefaultRendererConnection::AudioVideo, ui->scrollAreaWidgetContents);
+        m_rendererConnection = new DefaultRendererConnection(
+            DefaultRendererConnection::AudioVideo, ui->scrollAreaWidgetContents);
     }
     else if (isImage(contentFormat))
     {
@@ -86,11 +86,8 @@ MediaRendererConnectionWindow::MediaRendererConnectionWindow(
     else if (contentFormat == QLatin1String("*") || contentFormat.isEmpty() ||
              contentFormat == QLatin1String("application/octet-stream"))
     {
-        m_rendererConnection = new RendererConnectionForImagesAndText(
-            RendererConnectionForImagesAndText::Text, m_nam, ui->scrollAreaWidgetContents);
-
-//        m_rendererConnection = new DefaultRendererConnection(
-//            DefaultRendererConnection::Unknown, ui->scrollAreaWidgetContents);
+        m_rendererConnection = new DefaultRendererConnection(
+            DefaultRendererConnection::Unknown, ui->scrollAreaWidgetContents);
     }
     else
     {

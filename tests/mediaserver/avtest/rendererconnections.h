@@ -33,6 +33,13 @@
 #include <QtCore/QPointer>
 #include <QtCore/QScopedPointer>
 
+// QtAV includes
+
+#include <QtAV/AVError.h>
+#include <QtAV/MediaIO.h>
+#include <QtAV/AVPlayer.h>
+#include <QtAVWidgets/WidgetRenderer.h>
+
 class QLabel;
 class QTextEdit;
 class QNetworkReply;
@@ -131,58 +138,58 @@ public:
     virtual void resizeEventOccurred(const QResizeEvent&);
 };
 
-//
-//
-//
-//class DefaultRendererConnection :
-//    public CustomRendererConnection
-//{
-//Q_OBJECT
-//Q_DISABLE_COPY(DefaultRendererConnection)
+// ---------------------------------------------------------------------------------
 
-//private:
+class DefaultRendererConnection : public CustomRendererConnection
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(DefaultRendererConnection)
 
-//    Phonon::MediaObject m_mediaObject;
-//    QScopedPointer<Phonon::MediaSource> m_mediaSource;
-//    Phonon::VideoWidget* m_videoWidget;
+private:
 
-//private:
+    QtAV::AVPlayer                m_mediaObject;
+    QScopedPointer<QtAV::MediaIO> m_mediaSource;
+    QtAV::WidgetRenderer*         m_videoWidget;
 
-//    void setupVideo();
+private:
 
-//private Q_SLOTS:
+    void setupVideo();
 
-//    void hasVideoChanged(bool);
-//    void stateChanged(Phonon::State newstate, Phonon::State oldstate);
-//    void tick(qint64 time);
-//    void totalTimeChanged(qint64 time);
+private Q_SLOTS:
 
-//protected:
+    void hasVideoChanged(bool);
 
-//    virtual qint32 doPlay(const QString& arg);
-//    virtual qint32 doStop();
-//    virtual qint32 doPause();
+    void stateChanged(QtAV::AVPlayer::State newstate);
 
-//    virtual qint32 doSeek(const Herqq::Upnp::Av::HSeekInfo& seekInfo);
-//    virtual qint32 doNext();
-//    virtual qint32 doPrevious();
+    void tick(qint64 time);
+    void totalTimeChanged(qint64 time);
 
-//    virtual qint32 doSetResource(
-//        const QUrl& resourceUri, Herqq::Upnp::Av::HObject* cdsObjectData = 0);
+protected:
 
-//    virtual qint32 doSelectPreset(const QString& presetName);
+    virtual qint32 doPlay(const QString& arg);
+    virtual qint32 doStop();
+    virtual qint32 doPause();
 
-//public:
+    virtual qint32 doSeek(const Herqq::Upnp::Av::HSeekInfo& seekInfo);
+    virtual qint32 doNext();
+    virtual qint32 doPrevious();
 
-//    enum ContentType
-//    {
-//        AudioOnly,
-//        AudioVideo,
-//        Unknown
-//    };
+    virtual qint32 doSetResource(const QUrl& resourceUri,
+                                 Herqq::Upnp::Av::HObject* cdsObjectData = 0);
 
-//    explicit DefaultRendererConnection(ContentType, QWidget* parent = 0);
-//    virtual ~DefaultRendererConnection();
-//};
+    virtual qint32 doSelectPreset(const QString& presetName);
+
+public:
+
+    enum ContentType
+    {
+        AudioOnly,
+        AudioVideo,
+        Unknown
+    };
+
+    explicit DefaultRendererConnection(ContentType, QWidget* parent = 0);
+    virtual ~DefaultRendererConnection();
+};
 
 #endif // RENDERERCONNECTIONS_H_
