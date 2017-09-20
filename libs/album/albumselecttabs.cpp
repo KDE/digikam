@@ -159,7 +159,8 @@ AlbumSelectTabs::AlbumSelectTabs(const QString& name, QWidget* const parent)
     d->searchTreeView->setAlbumModel(d->searchModel);
     d->searchTreeView->setEntryPrefix(QLatin1String("SearchTreeView"));
     d->searchTreeView->setConfigGroup(configGroup);
-    d->searchTreeView->filteredModel()->listAllSearches();
+    d->searchTreeView->filteredModel()->listNormalSearches();
+    d->searchTreeView->filteredModel()->setListTemporarySearches(false);
     d->prepareTreeView(d->searchTreeView);
 
     d->searchSearchBar = new SearchTextBar(searchBox, QLatin1String("AlbumSelectTabsSearchSearchBar"));
