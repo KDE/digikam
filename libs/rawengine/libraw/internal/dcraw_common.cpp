@@ -2716,6 +2716,10 @@ void CLASS kodak_radc_load_raw()
     checkCancel();
 #endif
     FORC3 mul[c] = getbits(6);
+#ifdef LIBRAW_LIBRARY_BUILD
+    if(!mul[0] || !mul[1] || !mul[2])
+      throw LIBRAW_EXCEPTION_IO_CORRUPT;
+#endif
     FORC3 {
       val = ((0x1000000/last[c] + 0x7ff) >> 12) * mul[c];
       s = val > 65564 ? 10:12;
@@ -4981,6 +4985,10 @@ void CLASS cielab (ushort rgb[3], short lab[3])
 void CLASS xtrans_interpolate (int passes)
 {
   int c, d, f, g, h, i, v, ng, row, col, top, left, mrow, mcol;
+#ifdef LIBRAW_LIBRARY_BUILD
+  int cstat[4]={0,0,0,0};
+#endif
+
   int val, ndir, pass, hm[8], avg[4], color[3][8];
   static const short orth[12] = { 1,0,0,1,-1,0,0,-1,1,0,0,1 },
 	patt[2][16] = { { 0,1,0,-1,2,0,-1,0,1,1,1,-1,0,0,0,0 },
@@ -4997,6 +5005,18 @@ void CLASS xtrans_interpolate (int passes)
   if (verbose)
     fprintf (stderr,_("%d-pass X-Trans interpolation...\n"), passes);
 #endif
+
+#ifdef LIBRAW_LIBRARY_BUILD
+/* Check against right pattern */
+  for (row = 0; row < 6; row++)
+         for (col = 0; col < 6; col++)
+                 cstat[fcol(row,col)]++;
+
+  if(cstat[0] < 6 || cstat[0]>10 || cstat[1]< 16 
+    || cstat[1]>24 || cstat[2]< 6 || cstat[2]>10 || cstat[3])
+         throw LIBRAW_EXCEPTION_IO_CORRUPT;
+#endif
+
 
   cielab (0,0);
   ndir = 4 << (passes > 1);
@@ -5868,6 +5888,7 @@ void CLASS setCanonBodyFeatures (unsigned id)
 void CLASS processCanonCameraInfo (unsigned id, uchar *CameraInfo, unsigned maxlen)
 {
   ushort iCanonLensID = 0, iCanonMaxFocal = 0, iCanonMinFocal = 0, iCanonLens = 0, iCanonCurFocal = 0, iCanonFocalType = 0;
+  if(maxlen<16) return; // too short, so broken
   CameraInfo[0] = 0;
   CameraInfo[1] = 0;
   switch (id) {
@@ -7428,7 +7449,7 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
       {
         if (tag == 0x000d && len < 256000) // camera info
           {
-            CanonCameraInfo = (uchar*)malloc(len);
+            CanonCameraInfo = (uchar*)malloc(MAX(16,len));
             fread(CanonCameraInfo, len, 1, ifp);
             lenCanonCameraInfo = len;
           }
@@ -8293,7 +8314,7 @@ void CLASS parse_makernote (int base, int uptag)
       {
         if (tag == 0x000d && len < 256000)	// camera info
           {
-            CanonCameraInfo = (uchar*)malloc(len);
+            CanonCameraInfo = (uchar*)malloc(MAX(16,len));
             fread(CanonCameraInfo, len, 1, ifp);
             lenCanonCameraInfo = len;
           }
@@ -12078,7 +12099,11 @@ void CLASS parse_fuji (int offset)
       fuji_width = !(fgetc(ifp) & 8);
     } else if (tag == 0x131) {
       filters = 9;
-      FORC(36) xtrans_abs[0][35-c] = fgetc(ifp) & 3;
+      FORC(36)
+        {
+           int q = fgetc(ifp);
+           xtrans_abs[0][35 - c] = MAX(0,MIN(q,2)); /* & 3;*/
+        }
     } else if (tag == 0x2ff0) {
       FORC4 cam_mul[c ^ 1] = get2();
     }

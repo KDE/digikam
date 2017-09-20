@@ -3,6 +3,7 @@ digiKam 5.8.0 - Release date: 2017-10-29
 
 NEW FEATURES:
 
+General      : Updated internal Libraw to last 0.18.4.
 General      : New Upnp/Dlna media server to share collections on local network.
 Image Editor : New clone tool to replace old CImg in-painting tool.
 

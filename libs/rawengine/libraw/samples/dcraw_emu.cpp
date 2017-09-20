@@ -465,8 +465,7 @@ int main(int argc, char *argv[])
               continue;
             }
           close(file);
-
-          if( (ret = RawProcessor.open_buffer(iobuffer,st.st_size)) != LIBRAW_SUCCESS)
+          if( (ret = RawProcessor.open_buffer(iobuffer,st.st_size) != LIBRAW_SUCCESS))
             {
               fprintf(stderr,"Cannot open_buffer %s: %s\n",argv[arg],libraw_strerror(ret));
               continue; // no recycle b/c open file will recycle itself
