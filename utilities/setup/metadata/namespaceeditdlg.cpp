@@ -444,7 +444,7 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
     vbx->addWidget(d->buttons);
 }
 
-void NamespaceEditDlg::populateFields(NamespaceEntry &entry)
+void NamespaceEditDlg::populateFields(NamespaceEntry& entry)
 {
     d->namespaceName->setText(entry.namespaceName);
     d->nameSpaceSeparator->setText(entry.separator);
@@ -633,18 +633,18 @@ bool NamespaceEditDlg::validifyCheck(QString& errMsg)
     return true;
 }
 
-void NamespaceEditDlg::saveData( NamespaceEntry &entry)
+void NamespaceEditDlg::saveData(NamespaceEntry& entry)
 {
     entry.namespaceName = d->namespaceName->text();
     entry.separator     = d->nameSpaceSeparator->text();
 
     if (d->isPath->isChecked())
     {
-        entry.tagPaths      = NamespaceEntry::TAGPATH;
+        entry.tagPaths = NamespaceEntry::TAGPATH;
     }
     else
     {
-        entry.tagPaths      = NamespaceEntry::TAG;
+        entry.tagPaths = NamespaceEntry::TAG;
     }
 
     entry.alternativeName = d->alternativeName->text();

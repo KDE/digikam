@@ -80,7 +80,7 @@ public:
 
     // The current albums collection to share.
     MediaServerMap       collectionMap;
-    
+
     static const QString configGroupName;
     static const QString configStartServerOnStartupEntry;
 };
@@ -112,7 +112,7 @@ QString DMediaServerMngr::configGroupName() const
 
 QString DMediaServerMngr::configStartServerOnStartupEntry() const
 {
-    return d->configGroupName;
+    return d->configStartServerOnStartupEntry;
 }
 
 void DMediaServerMngr::cleanUp()

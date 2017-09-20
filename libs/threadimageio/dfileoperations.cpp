@@ -247,7 +247,11 @@ bool DFileOperations::runFiles(const QString& appCmd,
             term     = QStandardPaths::findExecutable(QLatin1String("konsole"));
 
             if (term.isEmpty())
+            {
                 term = QStandardPaths::findExecutable(QLatin1String("xterm"));
+                termOpts.replaceInStrings(QLatin1String("--noclose"),
+                                          QLatin1String("-hold"));
+            }
 
             useTerminal = !term.isEmpty();
         }

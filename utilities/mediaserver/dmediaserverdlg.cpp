@@ -58,6 +58,7 @@ class DMediaServerDlg::Private
 public:
 
     Private() :
+        dirty(false),
         mngr(DMediaServerMngr::instance()),
         srvButton(0),
         srvStatus(0),
@@ -75,6 +76,7 @@ public:
     {
     }
     
+    bool                dirty;
     DMediaServerMngr*   mngr;
     QPushButton*        srvButton;
     QLabel*             srvStatus;
@@ -99,7 +101,8 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     setWindowTitle(QString::fromUtf8("Share Files With DLNA Media Server"));
 
     d->iface                 = iface;
-    d->buttons               = new QDialogButtonBox(QDialogButtonBox::Close, this);
+    d->buttons               = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
     d->page                  = new QWidget(this);
     QVBoxLayout* const vbx   = new QVBoxLayout(this);
     vbx->addWidget(d->page);
@@ -155,6 +158,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     QLabel* const explanation = new QLabel(this);
     explanation->setOpenExternalLinks(true);
     explanation->setWordWrap(true);
+    explanation->setFrameStyle(QFrame::Box | QFrame::Plain);
     QString txt;
 
     explanation->setText(i18n("The media server permit to share items through the local network "
@@ -181,8 +185,11 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     connect(d->srvButton, SIGNAL(clicked()),
             this, SLOT(slotToggleMediaServer()));
 
-    connect(d->buttons->button(QDialogButtonBox::Close), &QPushButton::clicked,
-            this, &DMediaServerDlg::close);
+    connect(d->buttons->button(QDialogButtonBox::Cancel), &QPushButton::clicked,
+            this, &DMediaServerDlg::reject);
+
+    connect(d->buttons->button(QDialogButtonBox::Ok), &QPushButton::clicked,
+            this, &DMediaServerDlg::accept);
     
     // -------------------
 
@@ -191,8 +198,38 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
 
 DMediaServerDlg::~DMediaServerDlg()
 {
-    saveSettings();
     delete d;
+}
+
+void DMediaServerDlg::accept()
+{
+    if (d->dirty)
+    {
+        bool empty = false;
+
+        if (d->albumSupport)
+        {
+            empty = d->iface->albumChooserItems().isEmpty();
+        }
+        else
+        {
+            empty = d->listView->imageUrls().isEmpty();
+        }
+        
+        if (!empty)
+        {
+            int rc = QMessageBox::question(this, i18n("Media Server Contents"),
+                                           i18n("The items list to share has changed. "
+                                                "Do you want to start now the media server with this contents?"));
+            if (rc == QMessageBox::Yes)
+            {
+                startMediaServer();
+            }
+        }
+    }
+
+    saveSettings();
+    QDialog::accept();
 }
 
 void DMediaServerDlg::readSettings()
@@ -288,13 +325,16 @@ bool DMediaServerDlg::setMediaServerContents()
 
 void DMediaServerDlg::startMediaServer()
 {    
+    if (d->dirty)
+        d->dirty = false;
+    
     if (!setMediaServerContents())
         return;
     
     if (!d->mngr->startMediaServer())
     {
         QMessageBox::warning(this, i18n("Starting Media Server"),
-                                i18n("An error occurs while to start Media Server..."));
+                             i18n("An error occurs while to start Media Server..."));
     }
     else
     {
@@ -306,7 +346,7 @@ void DMediaServerDlg::startMediaServer()
 
 void DMediaServerDlg::slotSelectionChanged()
 {
-    // TODO : notify that server needs to be re-started if items selection has changed.
+    d->dirty = true;
 }
 
 void DMediaServerDlg::slotToggleMediaServer()

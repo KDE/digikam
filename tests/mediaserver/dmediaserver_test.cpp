@@ -27,6 +27,7 @@
 #include <QStringList>
 #include <QApplication>
 #include <QStandardPaths>
+#include <QDir>
 #include <QUrl>
 #include <QMap>
 #include <QDebug>
@@ -45,6 +46,8 @@ int main(int argc, char* argv[])
     QList<QUrl>    list;
     MediaServerMap map;
 
+    QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
+        
     if (argc <= 1)
     {
         QStringList files = DFileDialog::getOpenFileNames(0, QString::fromLatin1("Select Files to Share With Media Server"),
