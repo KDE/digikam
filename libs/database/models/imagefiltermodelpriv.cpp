@@ -156,13 +156,13 @@ void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<Image
         const int chunkSize = qMin(maxChunkSize, size - index);
         infoVector.resize(chunkSize);
         end = it + chunkSize;
-        qCopy(it, end, infoVector.begin());
+        std::copy(it, end, infoVector.begin());
 
         if (hasExtraValues)
         {
             extraValueVector.resize(chunkSize);
             xend = xit + chunkSize;
-            qCopy(xit, xend, extraValueVector.begin());
+            std::copy(xit, xend, extraValueVector.begin());
             xit = xend;
         }
 

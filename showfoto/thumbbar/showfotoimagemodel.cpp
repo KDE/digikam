@@ -470,7 +470,7 @@ void ShowfotoImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
 
         if (d->sendRemovalSignals)
         {
-            qCopy(d->infos.begin() + begin, d->infos.begin() + end, removedInfos.begin());
+            std::copy(d->infos.begin() + begin, d->infos.begin() + end, removedInfos.begin());
             emit itemInfosAboutToBeRemoved(removedInfos);
         }
 
