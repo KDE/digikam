@@ -1143,7 +1143,7 @@ void DCategorizedView::setSelection(const QRect& rect, QItemSelectionModel::Sele
 
                     if (left.center().x() > right.center().x())
                     {
-                        qSwap(left, right);
+                        std::swap(left, right);
                     }
 
                     int ch = fullSize.height();

@@ -298,7 +298,7 @@ OptimalPosition RegionFrameItem::Private::computeOptimalHudWidgetPosition() cons
 
     if (hudSide & HS_Top)
     {
-        qSwap(preferred, fallback);
+        std::swap(preferred, fallback);
     }
 
     // Check if a position outside rect fits

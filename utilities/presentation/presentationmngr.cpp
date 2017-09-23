@@ -124,7 +124,7 @@ void PresentationMngr::slotSlideShow()
             it1  = m_sharedData->urlList.begin();
             it1 += inc;
 
-            qSwap(*(it++), *(it1));
+            std::swap(*(it++), *(it1));
         }
     }
 

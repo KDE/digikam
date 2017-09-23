@@ -779,7 +779,7 @@ void DFontProperties::Private::_d_family_chosen_slot(const QString& family)
                 }
             }
 
-            qSwap(styleIt, styleOb);
+            std::swap(styleIt, styleOb);
         }
     }
 
