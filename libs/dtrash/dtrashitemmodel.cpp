@@ -146,28 +146,28 @@ void DTrashItemModel::sort(int column, Qt::SortOrder order)
         return;
     }
 
-    qSort(d->data.begin(), d->data.end(),
-            [column, order](const DTrashItemInfo& a, const DTrashItemInfo& b)
-            {
-                if (column == 2 && a.deletionTimestamp != b.deletionTimestamp)
+    std::sort(d->data.begin(), d->data.end(),
+                [column, order](const DTrashItemInfo& a, const DTrashItemInfo& b)
                 {
+                    if (column == 2 && a.deletionTimestamp != b.deletionTimestamp)
+                    {
+                        if (order == Qt::DescendingOrder)
+                        {
+                            return a.deletionTimestamp > b.deletionTimestamp;
+                        }
+                        else
+                        {
+                            return a.deletionTimestamp < b.deletionTimestamp;
+                        }
+                    }
+
                     if (order == Qt::DescendingOrder)
                     {
-                        return a.deletionTimestamp > b.deletionTimestamp;
+                        return a.collectionRelativePath > b.collectionRelativePath;
                     }
-                    else
-                    {
-                        return a.deletionTimestamp < b.deletionTimestamp;
-                    }
-                }
 
-                if (order == Qt::DescendingOrder)
-                {
-                    return a.collectionRelativePath > b.collectionRelativePath;
-                }
-
-                return a.collectionRelativePath < b.collectionRelativePath;
-            });
+                    return a.collectionRelativePath < b.collectionRelativePath;
+                });
 
     const QModelIndex topLeft     = index(0, 0, QModelIndex());
     const QModelIndex bottomRight = index(rowCount(QModelIndex())-1,

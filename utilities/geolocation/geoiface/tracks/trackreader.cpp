@@ -330,7 +330,7 @@ TrackReader::TrackReadResult TrackReader::loadTrackFile(const QUrl& url)
     }
 
     // the correlation algorithm relies on sorted data, therefore sort now
-    qSort(parsedData.track.points.begin(), parsedData.track.points.end(), TrackManager::TrackPoint::EarlierThan);
+    std::sort(parsedData.track.points.begin(), parsedData.track.points.end(), TrackManager::TrackPoint::EarlierThan);
 
     return parsedData;
 }

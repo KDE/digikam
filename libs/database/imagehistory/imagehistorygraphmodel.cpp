@@ -521,7 +521,7 @@ void ImageHistoryGraphModel::Private::
 {
     parentItem->addItem(new CategoryItem(title));
 
-    qSort(vertices.begin(), vertices.end(), sortBy(oldestInfoFirst));
+    std::sort(vertices.begin(), vertices.end(), sortBy(oldestInfoFirst));
     bool isFirst     = true;
     VertexItem* item = 0;
 

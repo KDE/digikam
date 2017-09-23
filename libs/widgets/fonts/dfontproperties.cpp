@@ -1037,7 +1037,7 @@ qreal DFontProperties::Private::fillSizeList(const QList<qreal>& sizes_)
 
     // Insert sizes into the listbox.
     sizeListBox->clear();
-    qSort(sizes);
+    std::sort(sizes.begin(), sizes.end());
 
     Q_FOREACH (qreal size, sizes)
     {
@@ -1400,7 +1400,7 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
 
     // Sort real fonts alphabetically.
 
-    qSort(trNames.begin(), trNames.end(), localeLessThan);
+    std::sort(trNames.begin(), trNames.end(), localeLessThan);
 
     // Prepend generic fonts, in the predefined order.
 

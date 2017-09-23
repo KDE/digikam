@@ -926,7 +926,7 @@ QList<QPair<int, int> > ImportImageModelIncrementalUpdater::toContiguousPairs(co
     }
 
     QList<int> indices(unsorted);
-    qSort(indices);
+    std::sort(indices.begin(), indices.end());
 
     QPair<int, int> pair(indices.first(), indices.first());
 

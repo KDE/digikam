@@ -71,7 +71,7 @@ void TagMngrTreeView::contextMenuEvent(QContextMenuEvent* event)
 {
     QModelIndexList selectedItems = selectionModel()->selectedIndexes();
 
-    qSort(selectedItems.begin(),selectedItems.end());
+    std::sort(selectedItems.begin(), selectedItems.end());
     QList<TAlbum*> items;
 
     foreach(const QModelIndex& mIndex, selectedItems)
@@ -85,7 +85,7 @@ void TagMngrTreeView::contextMenuEvent(QContextMenuEvent* event)
      */
     if(items.isEmpty())
     {
-        QModelIndex root = this->model()->index(0,0);
+        QModelIndex root = this->model()->index(0, 0);
         items.append(static_cast<TAlbum*>(albumForIndex(root)));
     }
 
@@ -130,7 +130,7 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> 
 
     if (!isRoot)
     {
-        cmh.addActionDeleteTags(tagModificationHelper(),albums);
+        cmh.addActionDeleteTags(tagModificationHelper(), albums);
     }
     else
     {
@@ -194,7 +194,7 @@ void TagMngrTreeView::slotExpandSelected()
 
 void TagMngrTreeView::slotExpandTree()
 {
-    QModelIndex root                 = this->model()->index(0,0);
+    QModelIndex root                 = this->model()->index(0, 0);
     QItemSelectionModel* const model = this->selectionModel();
     QModelIndexList selected         = model->selectedIndexes();
 
@@ -227,7 +227,7 @@ void TagMngrTreeView::slotExpandTree()
                     expand(child);
                 }
 
-                child = current.child(it++,0);
+                child = current.child(it++, 0);
             }
         }
         else

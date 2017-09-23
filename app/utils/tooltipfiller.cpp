@@ -677,7 +677,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
 
         const QHash<QString, QVariant>& params = action.parameters();
         QList<QString> keys                    = params.keys();
-        qSort(keys);
+        std::sort(keys.begin(), keys.end());
 
         foreach(const QString& key, keys)
         {

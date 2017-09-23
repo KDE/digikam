@@ -175,7 +175,7 @@ void ImageInfoJob::slotData(const QList<ImageListerRecord>& records)
     }
 
     // Sort the itemList based on name
-    qSort(itemsList.begin(), itemsList.end(), ImageInfoList::namefileLessThan);
+    std::sort(itemsList.begin(), itemsList.end(), ImageInfoList::namefileLessThan);
 
     emit signalItemsInfo(itemsList);
 }

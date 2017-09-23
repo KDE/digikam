@@ -183,7 +183,7 @@ void DImgHistoryGraphTest::testEditing()
     controlCloud << IdPair(two.id(), orig.id());
     controlCloud << IdPair(three.id(), orig.id());
     controlCloud << IdPair(four.id(), orig.id());
-    qSort(controlCloud);
+    std::sort(controlCloud.begin(), controlCloud.end());
 
     ImageHistoryGraph graph1 = ImageHistoryGraph::fromInfo(three);
     qDebug() << graph1;
@@ -198,7 +198,7 @@ void DImgHistoryGraphTest::testEditing()
     QVERIFY(graph3.data().vertexCount() == 5);
 
     QList<IdPair> cloud = graph3.relationCloud();
-    qSort(cloud);
+    std::sort(cloud.begin(), cloud.end());
     QVERIFY(cloud == controlCloud);
 
     int needResolvingTag = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needResolvingHistory());
@@ -301,7 +301,7 @@ void DImgHistoryGraphTest::testGraph()
 
     QList<qlonglong> controlLeaves;
     controlLeaves << 8 << 19 << 20 << 21 << 10 << 3 << 11 << 22 << 24 << 14 << 15 << 16 << 17 << 18;
-    qSort(controlLeaves);
+    std::sort(controlLeaves.begin(), controlLeaves.end());
 
     QList<qlonglong> controlRoots;
     controlRoots << 1;
@@ -429,11 +429,11 @@ void DImgHistoryGraphTest::testGraph()
     }
 
     QList<qlonglong> leaves = mapList(graph.data().leaves(), vertexToId);
-    qSort(leaves);
+    std::sort(leaves.begin(), leaves.end());
     QVERIFY(leaves == controlLeaves);
 
     QList<qlonglong> roots = mapList(graph.data().roots(), vertexToId);
-    qSort(roots);
+    std::sort(roots.begin(), roots.end());
     QVERIFY(roots == controlRoots);
 
     QList<qlonglong> longestPath1 = mapList(graph.data().longestPathTouching(idToVertex.value(18)), vertexToId);
@@ -444,13 +444,13 @@ void DImgHistoryGraphTest::testGraph()
     // depth-first
     QList<qlonglong> subgraphTwo = mapList(graph.data().verticesDominatedBy(idToVertex.value(2), idToVertex.value(1),
                                            HistoryGraph::DepthFirstOrder), vertexToId);
-    qSort(subgraphTwo);
+    std::sort(subgraphTwo.begin(), subgraphTwo.end());
     QVERIFY(subgraphTwo == controlSubgraphTwo);
 
     // breadth-first
     QList<qlonglong> subgraphFour = mapList(graph.data().verticesDominatedBy(idToVertex.value(4), idToVertex.value(1)), vertexToId);
     QVERIFY(subgraphFour.indexOf(22) > subgraphFour.indexOf(13));
-    qSort(subgraphFour);
+    std::sort(subgraphFour.begin(), subgraphFour.end());
     QVERIFY(subgraphFour == controlSubgraphFour);
 
     // depth-first
@@ -461,10 +461,10 @@ void DImgHistoryGraphTest::testGraph()
     QVERIFY(subgraphTwoSorted == controlSubgraphTwoSorted);
 
     QList<qlonglong> rootsOfEighteen = mapList(graph.data().rootsOf(idToVertex.value(18)), vertexToId);
-    qSort(rootsOfEighteen);
+    std::sort(rootsOfEighteen.begin(), rootsOfEighteen.end());
     QVERIFY(rootsOfEighteen == controlRootsOfEighteen);
     QList<qlonglong> leavesFromTwo   = mapList(graph.data().leavesFrom(idToVertex.value(2)), vertexToId);
-    qSort(leavesFromTwo);
+    std::sort(leavesFromTwo.begin(), leavesFromTwo.end());
     QVERIFY(leavesFromTwo == controlLeavesFromTwo);
 }
 

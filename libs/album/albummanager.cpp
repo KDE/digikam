@@ -1292,7 +1292,7 @@ void AlbumManager::scanPAlbums()
     QList<AlbumInfo> currentAlbums = CoreDbAccess().db()->scanAlbums();
 
     // sort by relative path so that parents are created before children
-    qSort(currentAlbums);
+    std::sort(currentAlbums.begin(), currentAlbums.end());
 
     QList<AlbumInfo> newAlbums;
 
@@ -1344,7 +1344,7 @@ void AlbumManager::scanPAlbums()
     }
 
     // sort by relative path so that parents are created before children
-    qSort(newAlbums);
+    std::sort(newAlbums.begin(), newAlbums.end());
 
     // create all new albums
     foreach(const AlbumInfo& info, newAlbums)
@@ -1927,7 +1927,7 @@ void AlbumManager::setCurrentAlbums(QList<Album*> albums)
     /**
      * Sort is needed to identify selection correctly, ex AlbumHistory
      */
-    qSort(albums.begin(),albums.end());
+    std::sort(albums.begin(), albums.end());
     d->currentAlbums.clear();
     d->currentAlbums+=albums;
 

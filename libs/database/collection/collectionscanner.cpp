@@ -531,7 +531,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
 
     // remove subalbums from list if parent album is already contained
     QStringList sortedPaths = albumPaths;
-    qSort(sortedPaths);
+    std::sort(sortedPaths.begin(), sortedPaths.end());
     QStringList::iterator it, it2;
 
     for (it = sortedPaths.begin(); it != sortedPaths.end(); )

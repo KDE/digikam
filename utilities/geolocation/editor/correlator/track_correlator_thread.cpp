@@ -50,7 +50,7 @@ TrackCorrelatorThread::~TrackCorrelatorThread()
 void TrackCorrelatorThread::run()
 {
     // sort the items to correlate by time:
-    qSort(itemsToCorrelate.begin(), itemsToCorrelate.end(), TrackCorrelationLessThan);
+    std::sort(itemsToCorrelate.begin(), itemsToCorrelate.end(), TrackCorrelationLessThan);
 
     // now perform the correlation
     // we search all loaded gpx data files in parallel for the points with the best match

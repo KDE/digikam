@@ -315,7 +315,7 @@ void SearchResultModel::removeRowsByIndexes(const QModelIndexList& rowsList)
         return;
     }
 
-    qSort(rowNumbers.begin(), rowNumbers.end());
+    std::sort(rowNumbers.begin(), rowNumbers.end());
 
     // now delete the rows, starting with the last row:
     for (int i = rowNumbers.count()-1; i >= 0; i--)
@@ -340,7 +340,7 @@ void SearchResultModel::removeRowsBySelection(const QItemSelection& selectionLis
     }
 
     // we expect the ranges to be sorted here
-    qSort(rowRanges.begin(), rowRanges.end(), RowRangeLessThan);
+    std::sort(rowRanges.begin(), rowRanges.end(), RowRangeLessThan);
 
     // now delete the rows, starting with the last row:
     for (int i = rowRanges.count()-1; i >= 0; i--)

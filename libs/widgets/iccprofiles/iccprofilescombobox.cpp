@@ -97,7 +97,7 @@ static void formatProfiles(const QList<IccProfile>& givenProfiles, QList<IccProf
         }
     }
 
-    qSort(profiles.begin(), profiles.end(), iccProfileLessThan);
+    std::sort(profiles.begin(), profiles.end(), iccProfileLessThan);
 
     foreach(IccProfile profile, profiles) // krazy:exclude=foreach
     {
