@@ -42,4 +42,5 @@ BUGFIXES FROM BUGZILLA:
 031 ==> 379956 - Can't open a file with a shell script from digiKam.
 032 ==> 384917 - Focus in face text field after adding a face manually should NOT affect Arrow Up and Down function.
 033 ==> 351866 - Make focus to input field after adding a face rectangle as an option and not by default.
-034 ==> 
+034 ==> 384696 - New Lut3D preset [patch].
+035 ==> 
