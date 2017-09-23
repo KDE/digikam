@@ -167,8 +167,8 @@ public:
         TagProperty prop;
         prop.tagId   = id;
         TagPropertiesRange range;
-        range.first  = qLowerBound(tagProperties.begin(), tagProperties.end(), prop, lessThanForTagProperty);
-        range.second = qUpperBound(range.first, tagProperties.end(), prop, lessThanForTagProperty);
+        range.first  = std::lower_bound(tagProperties.begin(), tagProperties.end(), prop, lessThanForTagProperty);
+        range.second = std::upper_bound(range.first, tagProperties.end(), prop, lessThanForTagProperty);
         return range;
     }
 
