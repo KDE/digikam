@@ -385,7 +385,7 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imag
 {
     QList<ImageInfo> groupingList = imageInfoList;
     // sort by time
-    qStableSort(groupingList.begin(), groupingList.end(), lessThanByTimeForImageInfo);
+    std::stable_sort(groupingList.begin(), groupingList.end(), lessThanByTimeForImageInfo);
 
     QList<ImageInfo>::iterator it, it2;
 
@@ -421,7 +421,7 @@ void ImageViewUtilities::createGroupByFilenameFromInfoList(const ImageInfoList& 
 {
     QList<ImageInfo> groupingList = imageInfoList;
     // sort by Name
-    qStableSort(groupingList.begin(), groupingList.end(), lowerThanByNameForImageInfo);
+    std::stable_sort(groupingList.begin(), groupingList.end(), lowerThanByNameForImageInfo);
 
     QList<ImageInfo>::iterator it, it2;
 
@@ -452,7 +452,7 @@ void ImageViewUtilities::createGroupByFilenameFromInfoList(const ImageInfoList& 
         if (group.count() > 1)
         {
             // sort by filesize and take smallest as leader
-            qStableSort(group.begin(), group.end(), lowerThanBySizeForImageInfo);
+            std::stable_sort(group.begin(), group.end(), lowerThanBySizeForImageInfo);
             const ImageInfo& leader = group.takeFirst();
             FileActionMngr::instance()->addToGroup(leader, group);
         }

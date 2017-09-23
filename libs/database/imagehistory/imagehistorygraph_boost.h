@@ -742,7 +742,7 @@ public:
 
         if (!rootCandidates.isEmpty())
         {
-            qStableSort(rootCandidates.begin(), rootCandidates.end(), lessThan);
+            std::stable_sort(rootCandidates.begin(), rootCandidates.end(), lessThan);
             Vertex root = rootCandidates.first();
             fromRoot << listPath(root, v, path.predecessors, ChildToParent);
         }
@@ -753,7 +753,7 @@ public:
 
         if (!leaveCandidates.isEmpty())
         {
-            qStableSort(leaveCandidates.begin(), leaveCandidates.end(), lessThan);
+            std::stable_sort(leaveCandidates.begin(), leaveCandidates.end(), lessThan);
             Vertex leave = leaveCandidates.first();
             toLeave << listPath(leave, v, path.predecessors);
         }

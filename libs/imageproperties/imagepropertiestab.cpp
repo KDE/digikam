@@ -797,7 +797,7 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
         }
     }
 
-    qStableSort(tagsSorted.begin(), tagsSorted.end(), naturalLessThan);
+    std::stable_sort(tagsSorted.begin(), tagsSorted.end(), naturalLessThan);
 
     if (identifiers)
     {

@@ -368,7 +368,7 @@ bool ImageScanner::scanFromIdenticalFile()
     if (!candidates.isEmpty())
     {
         // Sort by priority, as implemented by custom lessThan()
-        qStableSort(candidates.begin(), candidates.end(), lessThanForIdentity);
+        std::stable_sort(candidates.begin(), candidates.end(), lessThanForIdentity);
 
         qCDebug(DIGIKAM_DATABASE_LOG) << "Recognized" << d->fileInfo.filePath() << "as identical to item" << candidates.first().id;
 
@@ -1449,7 +1449,7 @@ void ImageScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subj
 {
     if (!list.isEmpty() && !subject.isNull())
     {
-        qStableSort(list.begin(), list.end(), lessThanByProximityToSubject(subject));
+        std::stable_sort(list.begin(), list.end(), lessThanByProximityToSubject(subject));
     }
 }
 

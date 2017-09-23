@@ -184,7 +184,7 @@ qint32 HContentDirectoryServicePrivate::sort(
         sortInfoObjects.append(so);
     }
 
-    qStableSort(objects.begin(), objects.end(), Sorter(sortInfoObjects));
+    std::stable_sort(objects.begin(), objects.end(), Sorter(sortInfoObjects));
 
     return 0;
 }

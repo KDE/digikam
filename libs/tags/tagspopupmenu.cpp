@@ -601,7 +601,7 @@ void TagsPopupMenu::iterateAndBuildMenu(QMenu* menu, TAlbum* album)
         sortedTags << a;
     }
 
-    qStableSort(sortedTags.begin(), sortedTags.end(), lessThanByTitle);
+    std::stable_sort(sortedTags.begin(), sortedTags.end(), lessThanByTitle);
 
     for (QList<Album*>::const_iterator it = sortedTags.constBegin(); it != sortedTags.constEnd(); ++it)
     {
