@@ -268,7 +268,7 @@ void MailProcess::buildPropertiesFile()
             propertiesText.append(QLatin1String("\n"));
         }
 
-        QFile propertiesFile(d->settings->tempPath + QLatin1Char('/') + i18n("properties.txt"));
+        QFile propertiesFile(d->settings->tempPath + i18n("properties.txt"));
         QTextStream stream(&propertiesFile);
         stream.setCodec(QTextCodec::codecForName("UTF-8"));
         stream.setAutoDetectUnicode(true);
