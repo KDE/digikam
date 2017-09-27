@@ -24,7 +24,7 @@
 
 // Qt includes
 
-#include <QDebug>
+#include <QApplication>
 #include <QList>
 #include <QUrl>
 #include <QFile>
@@ -109,8 +109,10 @@ DMediaServer::DMediaServer(QObject* const parent)
 
 bool DMediaServer::init(int port)
 {
+    QString devDesc = i18n("%1 Media Server", qApp->applicationName());
+
     DLNAMediaServer* const device = new DLNAMediaServer(
-                                    "digiKam Media Server",
+                                    devDesc.toUtf8().data(),
                                     false,
                                     NULL,
                                     port);
