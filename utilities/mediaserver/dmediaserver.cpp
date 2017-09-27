@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-05-28
+ * Date        : 2017-09-24
  * Description : a media server to export collections through DLNA.
  *
- * Copyright (C) 2012      by Smit Mehta <smit dot meh at gmail dot com>
- * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,142 +24,128 @@
 
 // Qt includes
 
+#include <QDebug>
 #include <QList>
 #include <QUrl>
 #include <QFile>
 #include <QStandardPaths>
 
-// Libhupnp includes
+// Platinum includes
 
-#include "hupnp_global.h"
-#include "hdeviceinfo.h"
-#include "hdevicehost.h"
-#include "hdevicehost_configuration.h"
-#include "hav_global.h"
-#include "hrootdir.h"
-#include "hcontainer.h"
-#include "hav_devicemodel_creator.h"
-#include "hmediaserver_deviceconfiguration.h"
-#include "hfsys_datasource.h"
-#include "hcontentdirectory_serviceconfiguration.h"
+#include "PltDeviceHost.h"
+#include "Platinum.h"
 
 // Local includes
 
+#include "dlnaserver.h"
 #include "digikam_debug.h"
+#include "digikam_version.h"
+#include "daboutdata.h"
 
-using namespace Herqq::Upnp;
-using namespace Herqq::Upnp::Av;
+void NPT_Console::Output(const char* msg)
+{
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << msg;
+}
+
+int ConvertLogLevel(int nptLogLevel)
+{
+    return 0;
+/*
+    if (nptLogLevel >= NPT_LOG_LEVEL_FATAL)
+        return LOGFATAL;
+    if (nptLogLevel >= NPT_LOG_LEVEL_SEVERE)
+        return LOGERROR;
+    if (nptLogLevel >= NPT_LOG_LEVEL_WARNING)
+        return LOGWARNING;
+    if (nptLogLevel >= NPT_LOG_LEVEL_INFO)
+        return LOGNOTICE;
+    if (nptLogLevel >= NPT_LOG_LEVEL_FINE)
+        return LOGINFO;
+
+    return LOGDEBUG;*/
+}
+
+void UPnPLogger(const NPT_LogRecord* record)
+{
+    //CLog::Log(ConvertLogLevel(record->m_Level), LOGUPNP, "Platinum [%s]: %s", record->m_LoggerName, record->m_Message);
+}
 
 namespace Digikam
 {
+
+class CDeviceHostReferenceHolder
+{
+public:
+
+    PLT_DeviceHostReference m_device;
+};
 
 class DMediaServer::Private
 {
 public:
 
     Private()
+      : upnp(0),
+        logHandler(NULL),
+        serverHolder(new CDeviceHostReferenceHolder())
     {
-        deviceHost = 0;
-        datasource = 0;
+        NPT_LogManager::GetDefault().Configure("plist:.level=FINE;.handlers=CustomHandler;");
+        NPT_LogHandler::Create("digiKam", "CustomHandler", logHandler);
+        logHandler->SetCustomHandlerFunction(&UPnPLogger);
     }
 
-    HDeviceHost*           deviceHost;
-    HFileSystemDataSource* datasource;
+    PLT_UPnP*                   upnp;
+    NPT_LogHandler*             logHandler;
+    CDeviceHostReferenceHolder* serverHolder;
 };
 
 DMediaServer::DMediaServer(QObject* const parent)
     : QObject(parent),
       d(new Private)
 {
+    d->upnp = new PLT_UPnP();
+    d->upnp->Start();
 }
 
-bool DMediaServer::init()
+bool DMediaServer::init(int port)
 {
-    // Set Hupnp debug level on the console
-    // See hupnp/general/hupnp_global.h for more values available.
-    SetLoggingLevel(Herqq::Upnp::Information);
+    DLNAMediaServer* const device = new DLNAMediaServer(
+                                    "digiKam Media Server",
+                                    false,
+                                    NULL,
+                                    port);
 
-    // Configure a data source
-    HFileSystemDataSourceConfiguration datasourceConfig;
+    device->m_ModelName        = "digiKam";
+    device->m_ModelNumber      = digikam_version;
+    device->m_ModelDescription = DAboutData::digiKamSlogan().toUtf8().data();
+    device->m_ModelURL         = DAboutData::webProjectUrl().toString().toUtf8().data();
+    device->m_Manufacturer     = "digiKam.org";
+    device->m_ManufacturerURL  = DAboutData::webProjectUrl().toString().toUtf8().data();
+    device->SetDelegate(device);
 
-    // Here you could configure the data source in more detail if needed. For example,
-    // you could add "root directories" to the configuration and the data source
-    // would scan those directories for media content upon initialization.
-    d->datasource = new HFileSystemDataSource(datasourceConfig);
+    d->serverHolder->m_device  = device;
 
-    // Configure ContentDirectoryService by providing it access to the desired data source.
-    HContentDirectoryServiceConfiguration cdsConfig;
-    cdsConfig.setDataSource(d->datasource, false);
+    NPT_Result res = d->upnp->AddDevice(d->serverHolder->m_device);
 
-    // Configure MediaServer by giving it the ContentDirectoryService configuration.
-    HMediaServerDeviceConfiguration mediaServerConfig;
-    mediaServerConfig.setContentDirectoryConfiguration(cdsConfig);
-
-    // Setup the "Device Model Cretor" that HUPnP will use to create
-    // appropriate UPnP A/V device and service instances. Here you provide the
-    // MediaServer configuration HUPnP will pass to the MediaServer device instance.
-    HAvDeviceModelCreator creator;
-    creator.setMediaServerConfiguration(mediaServerConfig);
-
-    // Setup the HDeviceHost with desired configuration info.
-    HDeviceConfiguration config;
-
-    QString descFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                              QString::fromLatin1("digikam/mediaserver/descriptions/herqq_mediaserver_description.xml"));
-
-    config.setPathToDeviceDescription(descFile);
-    config.setCacheControlMaxAge(180);
-
-    HDeviceHostConfiguration hostConfiguration;
-    hostConfiguration.setDeviceModelCreator(creator);
-    hostConfiguration.add(config);
-
-    // Initialize the HDeviceHost.
-    d->deviceHost = new HDeviceHost(this);
-
-    if (!d->deviceHost->init(hostConfiguration))
-    {
-        qCDebug(DIGIKAM_MEDIASRV_LOG) << "MediaServer initialization failed:"
-                                      << d->deviceHost->errorDescription().toLocal8Bit();
-        return false;
-    }
-    else
-    {
-        qCDebug(DIGIKAM_MEDIASRV_LOG) << "MediaServer initialized with DLNA description:" << descFile;
-    }
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << "Upnp device created:" << res;
     
     return true;
 }
 
 DMediaServer::~DMediaServer()
 {
-     delete d->datasource;
-     delete d;
+    d->upnp->Stop();
+    d->upnp->RemoveDevice(d->serverHolder->m_device);
+    
+    delete d->upnp;
+    delete d->logHandler;
+    delete d->serverHolder;
+    delete d;
 }
 
 void DMediaServer::addAlbumsOnServer(const MediaServerMap& map)
 {
-    QList<QString> keys = map.uniqueKeys();
-    QList<QUrl>    urls;
-    QString        album;
-    int            t    = 0;
-
-    for (int i = 0 ; i < keys.size() ; i++)
-    {
-        album                       = keys.at(i);
-        urls                        = map.value(album);
-        HContainer* const container = new HContainer(album, QLatin1String("0"));
-        d->datasource->add(container);
-
-        for (int j = 0 ; j < urls.size() ; j++)
-        {
-            d->datasource->add(urls.at(j).toLocalFile(), container->id());
-            qCDebug(DIGIKAM_MEDIASRV_LOG) << "Add item to MediaServer:" << urls.at(j).toLocalFile();
-            t++;
-        }
-    }
-
-    qCDebug(DIGIKAM_MEDIASRV_LOG) << "Total items shared by MediaServer:" << t;
+    static_cast<DLNAMediaServer*>(d->serverHolder->m_device.AsPointer())->addAlbumsOnServer(map);
 }
 
 } // namespace Digikam
