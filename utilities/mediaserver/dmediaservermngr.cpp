@@ -135,10 +135,10 @@ bool DMediaServerMngr::loadAtStartup()
         result &= startMediaServer();
 
         mediaServerNotification(result);
-    
+
         return result;
     }
-    
+
     return false;
 }
 

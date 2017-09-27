@@ -75,7 +75,7 @@ public:
         buttons(0)
     {
     }
-    
+
     bool                dirty;
     DMediaServerMngr*   mngr;
     QPushButton*        srvButton;
@@ -111,7 +111,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     setModal(false);
 
     // -------------------
-    
+
     QGridLayout* const grid = new QGridLayout(d->page);
     d->albumSupport         = (d->iface && d->iface->supportAlbums());
 
@@ -131,7 +131,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
 
         // Add all items currently loaded in application.
         d->listView->loadImagesFromCurrentSelection();
-    
+
         // Replug the previous shared items list.
         d->listView->slotAddImages(d->mngr->itemsList());
         grid->addWidget(d->listView, 0, 0, 1, 6);
@@ -143,7 +143,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     // -------------------
 
     const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
- 
+
     d->startOnStartup       = new QCheckBox(i18n("Start Server at Startup"));
     d->startOnStartup->setWhatsThis(i18n("Set this option to turn-on the DLNA server at application start-up automatically"));
     d->startOnStartup->setChecked(true);
@@ -179,7 +179,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(0, 10);
     grid->setSpacing(spacing);
-    
+
     // --------------------------------------------------------
 
     connect(d->srvButton, SIGNAL(clicked()),
@@ -190,7 +190,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
 
     connect(d->buttons->button(QDialogButtonBox::Ok), &QPushButton::clicked,
             this, &DMediaServerDlg::accept);
-    
+
     // -------------------
 
     readSettings();
@@ -215,7 +215,7 @@ void DMediaServerDlg::accept()
         {
             empty = d->listView->imageUrls().isEmpty();
         }
-        
+
         if (!empty)
         {
             int rc = QMessageBox::question(this, i18n("Media Server Contents"),
@@ -238,7 +238,7 @@ void DMediaServerDlg::readSettings()
     KConfigGroup group        = config->group(d->mngr->configGroupName());
 
     d->startOnStartup->setChecked(group.readEntry(d->mngr->configStartServerOnStartupEntry(), false));
-    
+
     winId();
     DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
     resize(windowHandle()->size());
@@ -249,7 +249,7 @@ void DMediaServerDlg::readSettings()
 void DMediaServerDlg::saveSettings()
 {
     setMediaServerContents();
-        
+
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->mngr->configGroupName());
     group.writeEntry(d->mngr->configStartServerOnStartupEntry(), d->startOnStartup->isChecked());
@@ -319,18 +319,18 @@ bool DMediaServerDlg::setMediaServerContents()
 
         d->mngr->setItemsList(i18n("Shared Items"), urls);
     }
-    
+
     return true;
 }
 
 void DMediaServerDlg::startMediaServer()
-{    
+{
     if (d->dirty)
         d->dirty = false;
-    
+
     if (!setMediaServerContents())
         return;
-    
+
     if (!d->mngr->startMediaServer())
     {
         QMessageBox::warning(this, i18n("Starting Media Server"),

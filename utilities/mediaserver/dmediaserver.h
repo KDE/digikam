@@ -44,10 +44,13 @@ public:
     explicit DMediaServer(QObject* const parent = 0);
     virtual ~DMediaServer();
 
-    /// Initialize the internal server instance and return true if all is ready to host contents.
+    /** Initialize the internal server instance and return true if all is ready to host contents.
+     *  If port = 0, the server will select one automatically, else it will use the specified one.
+     */
     bool init(int port = 0);
 
-    /// To share a list of albums with dedicated urls list for each one.
+    /** To share a list of albums with dedicated urls list for each one.
+     */
     void addAlbumsOnServer(const MediaServerMap& map);
 
 private:

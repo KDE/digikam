@@ -5,6 +5,7 @@
  *
  * Date        : 2017-09-24
  * Description : a media server to export collections through DLNA.
+ *               Implementation inspired on Platinum File Media Server.
  *
  * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -37,9 +38,9 @@ namespace Digikam
 {
 
 /**
- File Media Server Delegate.
- The DLNAMediaServerDelegate class is an example of a PLT_MediaServerDelegate
- implementation for a file system backed Media Server.
+ * File Media Server Delegate for digiKam.
+ * The DLNAMediaServerDelegate class is based on PLT_MediaServerDelegate
+ * implementation for a file system backed Media Server.
  */
 class DLNAMediaServerDelegate : public PLT_MediaServerDelegate
 {
@@ -133,21 +134,18 @@ protected:
     PLT_MediaCache<NPT_Reference<NPT_List<NPT_String> >, NPT_TimeStamp> m_DirCache;
 };
 
-/*----------------------------------------------------------------------
-|   DLNAMediaServer
-+---------------------------------------------------------------------*/
+// --------------------------------------------------------------------------------------
+
 /**
- File Media Server.
- The DLNAMediaServer class is an example of a PLT_MediaServer implementation
- for a file system backed Media Server.
+ * File Media Server for digiKam.
+ * The DLNAMediaServer class is based on PLT_MediaServer implementation
+ * for a file system backed Media Server with album contents.
  */
 class DLNAMediaServer : public PLT_MediaServer,
                         public DLNAMediaServerDelegate
 {
 
 public:
-
-    // constructor
 
     explicit DLNAMediaServer(const char*  friendly_name,
                              bool         show_ip = false,

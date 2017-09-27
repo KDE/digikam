@@ -48,18 +48,18 @@ public:
 
 private:
 
-    void readSettings();    
+    void readSettings();
     void saveSettings();
     void updateServerStatus();
     bool setMediaServerContents();
     void startMediaServer();
-    
+
 private Q_SLOTS:
 
     void accept();
     void slotToggleMediaServer();
     void slotSelectionChanged();
-    
+
 private:
 
     class Private;

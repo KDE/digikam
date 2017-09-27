@@ -50,7 +50,9 @@ void NPT_Console::Output(const char* msg)
 int ConvertLogLevel(int nptLogLevel)
 {
     return 0;
-/*
+
+/* TODO use qCDebug
+
     if (nptLogLevel >= NPT_LOG_LEVEL_FATAL)
         return LOGFATAL;
     if (nptLogLevel >= NPT_LOG_LEVEL_SEVERE)
@@ -62,12 +64,15 @@ int ConvertLogLevel(int nptLogLevel)
     if (nptLogLevel >= NPT_LOG_LEVEL_FINE)
         return LOGINFO;
 
-    return LOGDEBUG;*/
+    return LOGDEBUG;
+*/
 }
 
 void UPnPLogger(const NPT_LogRecord* record)
 {
-    //CLog::Log(ConvertLogLevel(record->m_Level), LOGUPNP, "Platinum [%s]: %s", record->m_LoggerName, record->m_Message);
+/* TODO use qCDebug
+    CLog::Log(ConvertLogLevel(record->m_Level), LOGUPNP, "Platinum [%s]: %s", record->m_LoggerName, record->m_Message);
+*/
 }
 
 namespace Digikam
@@ -89,7 +94,7 @@ public:
         logHandler(NULL),
         serverHolder(new CDeviceHostReferenceHolder())
     {
-        NPT_LogManager::GetDefault().Configure("plist:.level=FINE;.handlers=CustomHandler;");
+        NPT_LogManager::GetDefault().Configure("plist:.level=INFO;.handlers=CustomHandler;");
         NPT_LogHandler::Create("digiKam", "CustomHandler", logHandler);
         logHandler->SetCustomHandlerFunction(&UPnPLogger);
     }
@@ -130,7 +135,7 @@ bool DMediaServer::init(int port)
     NPT_Result res = d->upnp->AddDevice(d->serverHolder->m_device);
 
     qCDebug(DIGIKAM_MEDIASRV_LOG) << "Upnp device created:" << res;
-    
+
     return true;
 }
 
@@ -138,7 +143,7 @@ DMediaServer::~DMediaServer()
 {
     d->upnp->Stop();
     d->upnp->RemoveDevice(d->serverHolder->m_device);
-    
+
     delete d->upnp;
     delete d->logHandler;
     delete d->serverHolder;
