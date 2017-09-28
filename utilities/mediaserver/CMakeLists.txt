@@ -114,6 +114,7 @@ endif()
 
 set(libmediaserver_SRCS
     dlnaserver.cpp
+    dlnaserverdelegate.cpp
     dmediaserver.cpp
     dmediaservermngr.cpp
     dmediaserverdlg.cpp
