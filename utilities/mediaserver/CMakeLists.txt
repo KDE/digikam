@@ -9,7 +9,7 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-set(upnp_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Platinum/Source/Core/PltAction.cpp
+set(upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Platinum/Source/Core/PltAction.cpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Platinum/Source/Core/PltArgument.cpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Platinum/Source/Core/PltConstants.cpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Platinum/Source/Core/PltCtrlPoint.cpp
@@ -84,7 +84,7 @@ set(upnp_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Platinum/Source/Core/PltAct
 )
 
 if(NOT CORE_SYSTEM_NAME STREQUAL windows)
-    list(APPEND upnp_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Posix/NptPosixSystem.cpp
+    list(APPEND upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Posix/NptPosixSystem.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Posix/NptSelectableMessageQueue.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Posix/NptPosixQueue.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Posix/NptPosixThreads.cpp
@@ -93,7 +93,7 @@ if(NOT CORE_SYSTEM_NAME STREQUAL windows)
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Bsd/NptBsdNetwork.cpp
     )
 else()
-    list(APPEND upnp_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Console.cpp
+    list(APPEND upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Console.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Debug.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32DynamicLibraries.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32MessageQueue.cpp
@@ -107,7 +107,7 @@ else()
 endif()
 
 if(APPLE)
-    list(APPEND upnp_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Apple/NptAppleAutoreleasePool.mm
+    list(APPEND upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Apple/NptAppleAutoreleasePool.mm
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Apple/NptAppleLogConfig.mm
     )
 endif()
@@ -117,7 +117,7 @@ set(libmediaserver_SRCS
     dmediaserver.cpp
     dmediaservermngr.cpp
     dmediaserverdlg.cpp
-    ${upnp_SOURCES}
+    ${upnpsdk_SRCS}
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
