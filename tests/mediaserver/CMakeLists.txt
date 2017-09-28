@@ -50,3 +50,17 @@ target_link_libraries(dmediaserver_dlg
                       Qt5::Core
                       Qt5::Test
 )
+
+########################################################################
+# CLI test tool from Platinum SDK
+
+#set(filemediaserver_SRCS
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../../utilities/mediaserver/upnpsdk/Platinum/Source/Tests/FileMediaServer/FileMediaServerTest.cpp
+#)
+
+#add_executable(filemediaserver ${filemediaserver_SRCS} ${upnpsdk_SRCS})
+
+#target_link_libraries(filemediaserver
+#                      digikamcore
+#                      libdng
+#)
