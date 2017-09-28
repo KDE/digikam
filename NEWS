@@ -44,4 +44,5 @@ BUGFIXES FROM BUGZILLA:
 033 ==> 351866 - Make focus to input field after adding a face rectangle as an option and not by default.
 034 ==> 384696 - New Lut3D preset [patch].
 035 ==> 384976 - Missing menu items.
-036 ==> 
+036 ==> 378082 - Several small new bugs in Geolocation Editor.
+037 ==> 

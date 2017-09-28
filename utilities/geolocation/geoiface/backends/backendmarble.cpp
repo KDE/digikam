@@ -1063,7 +1063,7 @@ void BackendMarble::setZoom(const QString& newZoom)
 
     const int myZoom           = myZoomString.mid(QString::fromLatin1("marble:").length()).toInt();
     d->cacheZoom               = myZoom;
-    d->marbleWidget->zoomView(myZoom);
+    d->marbleWidget->setZoom(myZoom);
 }
 
 QString BackendMarble::getZoom() const
