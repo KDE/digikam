@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QBrush>
+#include <QFileInfo>
 #include <QScopedPointer>
 #include <QLocale>
 
@@ -188,13 +189,31 @@ bool GPSImageItem::loadImageData()
 {
     QScopedPointer<DMetadata> meta(getMetadataForFile());
 
-    if (!meta)
-        return false;
-
-    if (!m_dateTime.isValid())
+    if (meta && !m_dateTime.isValid())
     {
         m_dateTime = meta->getImageDateTime();
     }
+
+    if (!m_dateTime.isValid())
+    {
+        // Get date from filesystem.
+        QFileInfo info(m_url.toLocalFile());
+
+        QDateTime ctime = info.created();
+        QDateTime mtime = info.lastModified();
+
+        if (ctime.isNull() || mtime.isNull())
+        {
+            m_dateTime = qMax(ctime, mtime);
+        }
+        else
+        {
+            m_dateTime = qMin(ctime, mtime);
+        }
+    }
+
+    if (!meta)
+        return false;
 
     // The way we read the coordinates here is problematic
     // if the coordinates were in the file initially, but
