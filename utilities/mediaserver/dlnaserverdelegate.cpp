@@ -51,21 +51,43 @@ NPT_SET_LOCAL_LOGGER("digiKam.media.server.delegate")
 namespace Digikam
 {
 
+class DLNAMediaServerDelegate::Private
+{
+public:
+
+    Private() :
+        filterUnknownOut(false),
+        useCache(false)
+    {
+    }
+
+    NPT_String                                                          urlRoot;
+    NPT_String                                                          fileRoot;
+    bool                                                                filterUnknownOut;
+    bool                                                                useCache;
+
+    MediaServerMap                                                      map;
+
+    PLT_MediaCache<NPT_Reference<NPT_List<NPT_String> >, NPT_TimeStamp> dirCache;
+};
+    
 DLNAMediaServerDelegate::DLNAMediaServerDelegate(const char* url_root,
                                                  bool        use_cache)
-    : m_UrlRoot(url_root),
-      m_FilterUnknownOut(false),
-      m_UseCache(use_cache)
+    : d(new Private)
 {
+      d->urlRoot          = url_root;
+      d->filterUnknownOut = false;
+      d->useCache         = use_cache;
 }
 
 DLNAMediaServerDelegate::~DLNAMediaServerDelegate()
 {
+    delete d;
 }
 
 void DLNAMediaServerDelegate::addAlbumsOnServer(const MediaServerMap& map)
 {
-    m_map = map;
+    d->map = map;
 }
 
 NPT_Result DLNAMediaServerDelegate::ProcessFileRequest(NPT_HttpRequest&              request,
@@ -89,7 +111,7 @@ NPT_Result DLNAMediaServerDelegate::ProcessFileRequest(NPT_HttpRequest&         
 
     // Serve file
 
-    NPT_CHECK_WARNING(ServeFile(request, context, response, NPT_FilePath::Create(m_FileRoot, file_path)));
+    NPT_CHECK_WARNING(ServeFile(request, context, response, NPT_FilePath::Create(d->fileRoot, file_path)));
     return NPT_SUCCESS;
 
 failure:
@@ -188,8 +210,8 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
     NPT_Reference<NPT_List<NPT_String> > entries;
     NPT_TimeStamp                        cached_entries_time;
 
-    if (!m_UseCache                                                          ||
-        NPT_FAILED(m_DirCache.Get(uuid, dir, entries, &cached_entries_time)) ||
+    if (!d->useCache                                                          ||
+        NPT_FAILED(d->dirCache.Get(uuid, dir, entries, &cached_entries_time)) ||
         cached_entries_time < info.m_ModificationTime)
     {
         // if not found in cache or if current dir has newer modified time fetch fresh new list from source
@@ -198,7 +220,7 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
 
         if (dir == "/")
         {
-            foreach(QString s, m_map.keys())
+            foreach(QString s, d->map.keys())
             {
                 list << s + QLatin1String("/");
             }
@@ -206,7 +228,7 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
         else
         {
             QString container = QString::fromUtf8(dir.GetChars());
-            QList<QUrl> urls  = m_map.value(container.remove(QLatin1Char('/')));
+            QList<QUrl> urls  = d->map.value(container.remove(QLatin1Char('/')));
 
             foreach(QUrl u, urls)
             {
@@ -226,9 +248,9 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
 
         // add new list to cache
 
-        if (m_UseCache)
+        if (d->useCache)
         {
-            m_DirCache.Put(uuid, dir, entries, &info.m_ModificationTime);
+            d->dirCache.Put(uuid, dir, entries, &info.m_ModificationTime);
         }
     }
 
@@ -324,7 +346,7 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
 
         // make sure we return something with a valid mimetype
 
-        if (m_FilterUnknownOut &&
+        if (d->filterUnknownOut &&
             NPT_StringsEqual(PLT_MimeType::GetMimeType(filepath, &context),
                              "application/octet-stream"))
         {
@@ -376,7 +398,7 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
 
         NPT_HttpUrl base_uri("127.0.0.1",
                              context.GetLocalAddress().GetPort(),
-                             NPT_HttpUrl::PercentEncode(m_UrlRoot, NPT_Uri::PathCharsToEncode));
+                             NPT_HttpUrl::PercentEncode(d->urlRoot, NPT_Uri::PathCharsToEncode));
         NPT_List<NPT_IpAddress>::Iterator ip = ips.GetFirstItem();
 
         while (ip)
@@ -578,12 +600,12 @@ NPT_Result DLNAMediaServerDelegate::ExtractResourcePath(const NPT_HttpUrl& url,
     // Extract non decoded path, we need to autodetect urlencoding
 
     NPT_String uri_path        = url.GetPath();
-    NPT_String url_root_encode = NPT_Uri::PercentEncode(m_UrlRoot, NPT_Uri::PathCharsToEncode);
+    NPT_String url_root_encode = NPT_Uri::PercentEncode(d->urlRoot, NPT_Uri::PathCharsToEncode);
     NPT_Ordinal skip           = 0;
 
-    if (uri_path.StartsWith(m_UrlRoot))
+    if (uri_path.StartsWith(d->urlRoot))
     {
-        skip = m_UrlRoot.GetLength();
+        skip = d->urlRoot.GetLength();
     }
     else if (uri_path.StartsWith(url_root_encode))
     {
@@ -596,7 +618,7 @@ NPT_Result DLNAMediaServerDelegate::ExtractResourcePath(const NPT_HttpUrl& url,
 
     // account for extra slash
 
-    skip     += ((m_UrlRoot == "/") ? 0 : 1);
+    skip     += ((d->urlRoot == "/") ? 0 : 1);
     file_path = uri_path.SubString(skip);
 
     // detect if client such as WMP sent a non urlencoded url

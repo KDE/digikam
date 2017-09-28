@@ -47,7 +47,7 @@ void NPT_Console::Output(const char* msg)
     qCDebug(DIGIKAM_MEDIASRV_LOG) << msg;
 }
 
-int ConvertLogLevel(int nptLogLevel)
+int ConvertLogLevel(int /*nptLogLevel*/)
 {
     return 0;
 
@@ -68,7 +68,7 @@ int ConvertLogLevel(int nptLogLevel)
 */
 }
 
-void UPnPLogger(const NPT_LogRecord* record)
+void UPnPLogger(const NPT_LogRecord* /*record*/)
 {
 /* TODO use qCDebug
     CLog::Log(ConvertLogLevel(record->m_Level), LOGUPNP, "Platinum [%s]: %s", record->m_LoggerName, record->m_Message);

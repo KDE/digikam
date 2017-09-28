@@ -124,14 +124,8 @@ protected:
 
     friend class PLT_MediaItem;
 
-    NPT_String                                                          m_UrlRoot;
-    NPT_String                                                          m_FileRoot;
-    bool                                                                m_FilterUnknownOut;
-    bool                                                                m_UseCache;
-
-    MediaServerMap                                                      m_map;
-
-    PLT_MediaCache<NPT_Reference<NPT_List<NPT_String> >, NPT_TimeStamp> m_DirCache;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
