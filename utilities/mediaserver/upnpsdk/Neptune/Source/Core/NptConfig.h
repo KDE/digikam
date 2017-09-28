@@ -190,6 +190,9 @@
 #include <fcntl.h>
 #define pipe(fds) _pipe(fds, 5000, _O_BINARY)
 #undef NPT_CONFIG_HAVE_LOCALTIME_R
+#define NPT_CONFIG_HAVE_FOPEN_S
+#define NPT_CONFIG_HAVE_FSOPEN
+#include <share.h>
 #endif
 
 /* Microsoft C/C++ Compiler */
