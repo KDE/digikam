@@ -1250,7 +1250,7 @@ void MapWidget::slotClustersMoved(const QIntList& clusterIndices,
         // a not-selected marker was moved. update all of its items:
         const GeoIfaceCluster& cluster = s->clusterList.at(clusterIndex);
 
-        for (int i = 0 ; i<cluster.tileIndicesList.count() ; ++i)
+        for (int i = 0 ; i < cluster.tileIndicesList.count() ; ++i)
         {
             const TileIndex tileIndex = cluster.tileIndicesList.at(i);
             movedTileIndices << tileIndex;
