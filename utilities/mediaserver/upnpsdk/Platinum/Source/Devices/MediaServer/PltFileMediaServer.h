@@ -92,7 +92,13 @@ protected:
     NPT_Result ProcessFileRequest(NPT_HttpRequest&              request, 
                                           const NPT_HttpRequestContext& context,
                                           NPT_HttpResponse&             response) override;
-    
+
+    NPT_Result OnUpdateObject(PLT_ActionReference&            action,
+                              const char*                     object_id,
+                              NPT_Map<NPT_String,NPT_String>& current_vals,
+                              NPT_Map<NPT_String,NPT_String>& new_vals,
+                              const PLT_HttpRequestContext&   context) override;
+
     // overridable methods
     virtual NPT_Result ExtractResourcePath(const NPT_HttpUrl& url, NPT_String& file_path);
     virtual NPT_String BuildResourceUri(const NPT_HttpUrl& base_uri, const char* host, const char* file_path);
@@ -107,15 +113,16 @@ protected:
                                                bool                          with_count = true,
                                                bool                          keep_extension_in_title = false,
                                                bool                          allip = false);
-    
+
 protected:
+
     friend class PLT_MediaItem;
-    
+
     NPT_String  m_UrlRoot;
     NPT_String  m_FileRoot;
     bool        m_FilterUnknownOut;
     bool        m_UseCache;
-    
+
     PLT_MediaCache<NPT_Reference<NPT_List<NPT_String> >, NPT_TimeStamp> m_DirCache;
 };
 
@@ -131,6 +138,7 @@ class PLT_FileMediaServer : public PLT_MediaServer,
                             public PLT_FileMediaServerDelegate
 {
 public:    // constructor
+
     PLT_FileMediaServer(const char*  file_root,
                         const char*  friendly_name,
                         bool         show_ip = false,
@@ -145,6 +153,7 @@ public:    // constructor
         PLT_FileMediaServerDelegate("/", file_root) {SetDelegate(this);}
 
 protected:
+
     ~PLT_FileMediaServer() override {}
 };
 

@@ -517,3 +517,12 @@ failure:
     delete object;
     return NULL;
 }
+
+NPT_Result PLT_FileMediaServerDelegate::OnUpdateObject(PLT_ActionReference&,
+                                                       const char*,
+                                                       NPT_Map<NPT_String,NPT_String>&,
+                                                       NPT_Map<NPT_String,NPT_String>&,
+                                                       const PLT_HttpRequestContext&)
+{
+    return NPT_SUCCESS;
+}
