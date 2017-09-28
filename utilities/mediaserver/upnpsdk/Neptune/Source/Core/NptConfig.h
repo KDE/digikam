@@ -182,6 +182,16 @@
 #endif
 #endif
 
+/* Mingw compiler */
+#if defined(__MINGW32__)
+#undef NPT_CONFIG_HAVE_SETENV
+#undef NPT_CONFIG_HAVE_UNSETENV
+/* See http://mingw.5.n7.nabble.com/How-does-mingw-support-pipe-tt8714.html#a8722 */
+#include <fcntl.h>
+#define pipe(fds) _pipe(fds, 5000, _O_BINARY)
+#undef NPT_CONFIG_HAVE_LOCALTIME_R
+#endif
+
 /* Microsoft C/C++ Compiler */
 #if defined(_MSC_VER)
 #undef NPT_CONFIG_HAVE_STDINT_H
