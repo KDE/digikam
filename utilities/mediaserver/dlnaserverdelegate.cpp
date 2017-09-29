@@ -143,7 +143,9 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseMetadata(PLT_ActionReference&       
     {
         // error
 
-        qCDebug(DIGIKAM_MEDIASRV_LOG) << "OnBrowseMetadata() :: ObjectID not found \"" << object_id << "\"";
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "OnBrowseMetadata()" 
+                                      << ":: ObjectID not found \""
+                                      << object_id << "\"";
         action->SetError(701, "No Such Object.");
         return NPT_FAILURE;
     }
@@ -199,7 +201,8 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
         NPT_CHECK_WARNING(NPT_FAILURE);
     }
 
-    qCDebug(DIGIKAM_MEDIASRV_LOG) << "OnBrowseDirectChildren() :: Object id:" << object_id << "Dir:" << dir.GetChars();
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << "OnBrowseDirectChildren() :: Object id:"
+                                  << object_id << "Dir:" << dir.GetChars();
 
     // get uuid from device via action reference
 
@@ -236,7 +239,9 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
             }
         }
 
-        qCDebug(DIGIKAM_MEDIASRV_LOG) << "OnBrowseDirectChildren() :: Populate cache with contents from Dir" << dir.GetChars();
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "OnBrowseDirectChildren() ::"
+                                      << "Populate cache with contents from Dir"
+                                      << dir.GetChars();
 
         entries = new NPT_List<NPT_String>();
 
@@ -271,7 +276,8 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
         if (!ProcessFile(filepath, filter))
             continue;
 
-        qCDebug(DIGIKAM_MEDIASRV_LOG) << "OnBrowseDirectChildren() :: Process item" << filepath.GetChars();
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "OnBrowseDirectChildren()"
+                                      << "::  Process item" << filepath.GetChars();
 
         // build item object from file path
 
@@ -353,7 +359,8 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
             goto failure;
         }
 
-        qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: Create item as MediaItem \"" << object->m_Title.GetChars() << "\"";
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: Create item as MediaItem \""
+                                      << object->m_Title.GetChars() << "\"";
 
         // Set the protocol Info from the extension
 
@@ -366,7 +373,8 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
 
         NPT_String url  = filepath.SubString(filepath.Find("//") + 1);
 
-        qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: Item URI:\"" << url.GetChars() << "\"";
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: Item URI:\""
+                                      << url.GetChars() << "\"";
 
         // Set the resource file size
 
@@ -445,7 +453,8 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
 
         object->m_ObjectClass.type = "object.container.storageFolder";
 
-        qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: Create item as MediaContainer \"" << object->m_Title.GetChars() << "\"";
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: Create item as MediaContainer \""
+                                      << object->m_Title.GetChars() << "\"";
     }
 
     // is it the root?
@@ -472,14 +481,17 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
         object->m_ObjectID = "0" + filepath.SubString(0);
     }
 
-    qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: New item parent ID:" << object->m_ParentID.GetChars();
-    qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: New item object ID:" << object->m_ObjectID.GetChars();
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: New item parent ID:"
+                                  << object->m_ParentID.GetChars();
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: New item object ID:"
+                                  << object->m_ObjectID.GetChars();
 
     return object;
 
 failure:
 
-    qCDebug(DIGIKAM_MEDIASRV_LOG) << "Failed to build didl for file \"" << filepath.GetChars() << "\"";
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << "Failed to build didl for file \""
+                                  << filepath.GetChars() << "\"";
 
     delete object;
     return NULL;
@@ -507,13 +519,14 @@ NPT_Result DLNAMediaServerDelegate::GetFilePath(const char* object_id,
         filepath += (object_id + index);
     }
 
-    qCDebug(DIGIKAM_MEDIASRV_LOG) << "GetFilePath() :: Object id:" << object_id << "filepath:" << filepath.GetChars();
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << "GetFilePath() :: Object id:"
+                                  << object_id << "filepath:" << filepath.GetChars();
 
     return NPT_SUCCESS;
 }
 
-NPT_Result DLNAMediaServerDelegate::OnSearchContainer(PLT_ActionReference&          action, 
-                                                      const char*                   object_id, 
+NPT_Result DLNAMediaServerDelegate::OnSearchContainer(PLT_ActionReference&          action,
+                                                      const char*                   object_id,
                                                       const char*                   search_criteria,
                                                       const char*                   /* filter */,
                                                       NPT_UInt32                    /* starting_index */,
