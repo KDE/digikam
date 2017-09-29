@@ -23,6 +23,17 @@
 
 #include "dlnaserver.h"
 
+// Qt includes
+
+#include <QImage>
+#include <QString>
+#include <QApplication>
+#include <QStandardPaths>
+
+// Local includes
+
+#include "digikam_debug.h"
+
 namespace Digikam
 {
 
@@ -48,6 +59,43 @@ void DLNAMediaServer::addAlbumsOnServer(const MediaServerMap& map)
 
 DLNAMediaServer::~DLNAMediaServer()
 {
+}
+
+NPT_Result DLNAMediaServer::SetupIcons()
+{
+    QString path;
+
+    if (QApplication::applicationName() == QLatin1String("digikam"))
+    {
+        path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/logo-digikam.png"));
+    }
+    else
+    {
+        path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/logo-showfoto.png"));
+    }
+
+    QImage icon;
+    QImage img(path);
+
+    if (!img.isNull())
+    {
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "Setup Media Server icons";
+
+        icon = img.scaled(256, 256);
+        AddIcon(PLT_DeviceIcon("image/png", icon.width(), icon.height(), icon.depth(), "/icon256x256.png"), icon.bits(), icon.byteCount(), true);
+        icon = img.scaled(120, 120);
+        AddIcon(PLT_DeviceIcon("image/png", icon.width(), icon.height(), icon.depth(), "/icon120x120.png"), icon.bits(), icon.byteCount(), true);
+        icon = img.scaled(48, 48);
+        AddIcon(PLT_DeviceIcon("image/png", icon.width(), icon.height(), icon.depth(), "/icon48x48.png"),   icon.bits(), icon.byteCount(), true);
+        icon = img.scaled(32, 32);
+        AddIcon(PLT_DeviceIcon("image/png", icon.width(), icon.height(), icon.depth(), "/icon32x32.png"),   icon.bits(), icon.byteCount(), true);
+        icon = img.scaled(16, 16);
+        AddIcon(PLT_DeviceIcon("image/png", icon.width(), icon.height(), icon.depth(), "/icon16x16.png"),   icon.bits(), icon.byteCount(), true);
+
+        return NPT_SUCCESS;
+    }
+
+    return NPT_FAILURE;
 }
 
 } // namespace Digikam

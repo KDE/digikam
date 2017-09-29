@@ -56,6 +56,8 @@ public:
 
     void addAlbumsOnServer(const MediaServerMap& map);
 
+    NPT_Result SetupIcons();
+
 protected:
 
     ~DLNAMediaServer() override;
