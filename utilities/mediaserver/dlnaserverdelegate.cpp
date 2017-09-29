@@ -70,7 +70,7 @@ public:
 
     PLT_MediaCache<NPT_Reference<NPT_List<NPT_String> >, NPT_TimeStamp> dirCache;
 };
-    
+
 DLNAMediaServerDelegate::DLNAMediaServerDelegate(const char* url_root,
                                                  bool        use_cache)
     : d(new Private)
@@ -285,7 +285,7 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
 
         if (!item.IsNull())
         {
-            if ((cur_index >= starting_index) && 
+            if ((cur_index >= starting_index) &&
                 ((num_returned < requested_count) || (requested_count == 0)))
             {
                 NPT_String tmp;
@@ -320,9 +320,9 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
 
 PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&             filepath,
                                                             const PLT_HttpRequestContext& context,
-                                                            bool                          with_count /* = true */,
-                                                            bool                          keep_extension_in_title /* = false */,
-                                                            bool                          allip /* = false */)
+                                                            bool                          with_count,
+                                                            bool                          keep_extension_in_title,
+                                                            bool                          allip)
 {
     PLT_MediaItemResource resource;
     PLT_MediaObject*      object = NULL;
@@ -563,8 +563,8 @@ NPT_Result DLNAMediaServerDelegate::OnSearchContainer(PLT_ActionReference&      
     return NPT_ERROR_NOT_IMPLEMENTED;
 }
 
-NPT_String DLNAMediaServerDelegate::BuildSafeResourceUri(const NPT_HttpUrl& base_uri, 
-                                                         const char*        host, 
+NPT_String DLNAMediaServerDelegate::BuildSafeResourceUri(const NPT_HttpUrl& base_uri,
+                                                         const char*        host,
                                                          const char*        file_path)
 {
     NPT_String  result;
