@@ -25,6 +25,8 @@
 
 // Platinum includes
 
+#include "NptStreams.h"
+
 #include "PltUPnP.h"
 #include "PltMediaItem.h"
 #include "PltService.h"
@@ -40,11 +42,15 @@
 #include <QUrl>
 #include <QList>
 #include <QMap>
-#include <QDebug>
+#include <QImage>
+#include <QByteArray>
+#include <QBuffer>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "previewloadthread.h"
+#include "dimg.h"
 
 NPT_SET_LOCAL_LOGGER("digiKam.media.server.delegate")
 
@@ -661,7 +667,98 @@ NPT_Result DLNAMediaServerDelegate::ServeFile(const NPT_HttpRequest&        requ
                                               NPT_HttpResponse&             response,
                                               const NPT_String&             file_path)
 {
-    NPT_CHECK_WARNING(PLT_HttpServer::ServeFile(request, context, response, file_path));
+    // Try to stream image file as transcoded preview.
+    // This will serve image in reduced size, including all know image formats
+    // supported by digiKam core, as JPEG, PNG, TIFF, and RAW files for ex.
+
+    DImg dimg = PreviewLoadThread::loadFastSynchronously(QString::fromUtf8(file_path.GetChars()), 2048);
+
+    if (dimg.isNull())
+    {
+        // Not a supported image format. Try to stream file as well, without transcoding.
+        // TODO : support video file as transcoded video stream using QtAV (if possible).
+
+        NPT_CHECK_WARNING(PLT_HttpServer::ServeFile(request, context, response, file_path));
+        return NPT_SUCCESS;
+    }
+
+    // This code is basically the same than PLT_HttpServer::ServeFile() excepted the
+    // image trancoding pass served as byte stream.
+
+    NPT_InputStreamReference stream;
+    NPT_File                 file(file_path);
+    NPT_FileInfo             file_info;
+
+    // prevent hackers from accessing files outside of our root
+
+    if ((file_path.Find("/..") >= 0)  ||
+        (file_path.Find("\\..") >= 0) ||
+        NPT_FAILED(NPT_File::GetInfo(file_path, &file_info)))
+    {
+        return NPT_ERROR_NO_SUCH_ITEM;
+    }
+
+    // check for range requests
+
+    const NPT_String* range_spec = request.GetHeaders().GetHeaderValue(NPT_HTTP_HEADER_RANGE);
+
+    // handle potential 304 only if range header not set
+
+    NPT_DateTime  date;
+    NPT_TimeStamp timestamp;
+
+    if (NPT_SUCCEEDED(PLT_UPnPMessageHelper::GetIfModifiedSince((NPT_HttpMessage&)request, date)) &&
+        !range_spec)
+    {
+        date.ToTimeStamp(timestamp);
+
+        NPT_LOG_INFO_5("File %s timestamps: request=%d (%s) vs file=%d (%s)", 
+                       (const char*)request.GetUrl().GetPath(),
+                       (NPT_UInt32)timestamp.ToSeconds(),
+                       (const char*)date.ToString(),
+                       (NPT_UInt32)file_info.m_ModificationTime,
+                       (const char*)NPT_DateTime(file_info.m_ModificationTime).ToString());
+
+        if (timestamp >= file_info.m_ModificationTime)
+        {
+            // it's a match
+
+            NPT_LOG_FINE_1("Returning 304 for %s", request.GetUrl().GetPath().GetChars());
+            response.SetStatus(304, "Not Modified", NPT_HTTP_PROTOCOL_1_1);
+            return NPT_SUCCESS;
+        }
+    }
+
+    // Trancoding image as preview.
+
+    QImage preview = dimg.copyQImage();
+    QByteArray ba;
+    QBuffer    buffer(&ba);
+    buffer.open(QIODevice::WriteOnly);
+    preview.save(&buffer, "JPG");
+    buffer.close();
+
+    stream         = new NPT_MemoryStream(ba.data(), (NPT_Size)ba.size());
+
+    if (stream.IsNull())
+    {
+        return NPT_ERROR_NO_SUCH_ITEM;
+    }
+
+    // set Last-Modified and Cache-Control headers
+
+    if (file_info.m_ModificationTime)
+    {
+        NPT_DateTime last_modified = NPT_DateTime(file_info.m_ModificationTime);
+        response.GetHeaders().SetHeader("Last-Modified", last_modified.ToString(NPT_DateTime::FORMAT_RFC_1123), true);
+        response.GetHeaders().SetHeader("Cache-Control", "max-age=0,must-revalidate", true);
+    }
+
+    PLT_HttpRequestContext tmp_context(request, context);
+
+    NPT_CHECK_WARNING(PLT_HttpServer::ServeStream(request, context, response, stream,
+                      "application/octet-stream"));
+
     return NPT_SUCCESS;
 }
 
