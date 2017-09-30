@@ -51,6 +51,7 @@
 #include "digikam_debug.h"
 #include "previewloadthread.h"
 #include "dimg.h"
+#include "drawdecoder.h"
 
 NPT_SET_LOCAL_LOGGER("digiKam.media.server.delegate")
 
@@ -352,6 +353,11 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
         // Set the title using the filename for now
 
         object->m_Title = NPT_FilePath::BaseName(filepath, keep_extension_in_title);
+
+        if (DRawDecoder::isRawFile(QUrl::fromLocalFile(QString::fromUtf8(filepath.GetChars()))))
+        {
+            object->m_Title += ".jpg";
+        }
 
         if (object->m_Title.GetLength() == 0)
             goto failure;
