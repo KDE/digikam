@@ -432,7 +432,7 @@ NPT_Thread::ThreadId
 NPT_Thread::GetCurrentThreadId()
 {
     pthread_t pid = pthread_self();
-    return (NPT_Thread::ThreadId)((void*)pid);
+    return *(NPT_Thread::ThreadId*)((void*)pid);
 }
 
 /*----------------------------------------------------------------------
