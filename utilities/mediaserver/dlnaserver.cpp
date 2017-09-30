@@ -25,10 +25,10 @@
 
 // Qt includes
 
-#include <QImage>
-#include <QString>
 #include <QApplication>
 #include <QStandardPaths>
+#include <QBuffer>
+#include <QIODevice>
 
 // Local includes
 
@@ -74,28 +74,51 @@ NPT_Result DLNAMediaServer::SetupIcons()
         path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("showfoto/data/logo-showfoto.png"));
     }
 
-    QImage icon;
-    QImage img(path);
+    QByteArray icon;
+    QImage     img(path);
+    QString    uri;
+    int        depth;
+    int        size;
 
     if (!img.isNull())
     {
         qCDebug(DIGIKAM_MEDIASRV_LOG) << "Setup Media Server icons";
 
-        icon = img.scaled(256, 256);
-        AddIcon(PLT_DeviceIcon("image/png", icon.width(), icon.height(), icon.depth(), "/icon256x256.png"), icon.bits(), icon.byteCount(), true);
-        icon = img.scaled(120, 120);
-        AddIcon(PLT_DeviceIcon("image/png", icon.width(), icon.height(), icon.depth(), "/icon120x120.png"), icon.bits(), icon.byteCount(), true);
-        icon = img.scaled(48, 48);
-        AddIcon(PLT_DeviceIcon("image/png", icon.width(), icon.height(), icon.depth(), "/icon48x48.png"),   icon.bits(), icon.byteCount(), true);
-        icon = img.scaled(32, 32);
-        AddIcon(PLT_DeviceIcon("image/png", icon.width(), icon.height(), icon.depth(), "/icon32x32.png"),   icon.bits(), icon.byteCount(), true);
-        icon = img.scaled(16, 16);
-        AddIcon(PLT_DeviceIcon("image/png", icon.width(), icon.height(), icon.depth(), "/icon16x16.png"),   icon.bits(), icon.byteCount(), true);
+        size = 256;
+        icon = iconData(img, size, uri, depth);
+        AddIcon(PLT_DeviceIcon("image/png", size, size, depth, uri.toLatin1().data()), icon.data(), icon.size(), true);
+        size = 120;
+        icon = iconData(img, size, uri, depth);
+        AddIcon(PLT_DeviceIcon("image/png", size, size, depth, uri.toLatin1().data()), icon.data(), icon.size(), true);
+        size = 48;
+        icon = iconData(img, size, uri, depth);
+        AddIcon(PLT_DeviceIcon("image/png", size, size, depth, uri.toLatin1().data()), icon.data(), icon.size(), true);
+        size = 32;
+        icon = iconData(img, size, uri, depth);
+        AddIcon(PLT_DeviceIcon("image/png", size, size, depth, uri.toLatin1().data()), icon.data(), icon.size(), true);
+        size = 16;
+        icon = iconData(img, size, uri, depth);
+        AddIcon(PLT_DeviceIcon("image/png", size, size, depth, uri.toLatin1().data()), icon.data(), icon.size(), true);
 
         return NPT_SUCCESS;
     }
 
     return NPT_FAILURE;
+}
+
+QByteArray DLNAMediaServer::iconData(const QImage& img, int size, QString& uri, int& depth) const
+{
+    QByteArray ba;
+    QBuffer    buffer(&ba);
+    buffer.open(QIODevice::WriteOnly);
+    QImage icon = img.scaled(size, size);
+    icon.save(&buffer, "PNG");
+    buffer.close();
+
+    uri         = QString::fromLatin1("/icon%1x%2.png").arg(size).arg(size);
+    depth       = icon.depth();
+
+    return ba;
 }
 
 } // namespace Digikam

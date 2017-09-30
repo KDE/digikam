@@ -29,6 +29,12 @@
 #include "Neptune.h"
 #include "PltMediaServer.h"
 
+// Qt includes
+
+#include <QImage>
+#include <QString>
+#include <QByteArray>
+
 // Local includes
 
 #include "dmediaserver.h"
@@ -61,6 +67,10 @@ public:
 protected:
 
     ~DLNAMediaServer() override;
+
+private:
+
+    QByteArray iconData(const QImage& img, int size, QString& uri, int& depth) const;
 };
 
 } // namespace Digikam
