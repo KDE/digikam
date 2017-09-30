@@ -759,7 +759,7 @@ NPT_Result DLNAMediaServerDelegate::ServeFile(const NPT_HttpRequest&        requ
     PLT_HttpRequestContext tmp_context(request, context);
 
     NPT_CHECK_WARNING(PLT_HttpServer::ServeStream(request, context, response, stream,
-                      "application/octet-stream"));
+                      "image/jpeg"));
 
     return NPT_SUCCESS;
 }
