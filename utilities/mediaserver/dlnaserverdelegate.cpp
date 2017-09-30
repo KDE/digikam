@@ -548,12 +548,16 @@ NPT_Result DLNAMediaServerDelegate::OnSearchContainer(PLT_ActionReference&      
 {
     // parse search criteria
     // TODO: HACK TO PASS DLNA
+    
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << "Received Search request for object \""
+                                  << object_id << "\" with search \""
+                                  << search_criteria << "\"";
 
     if (search_criteria && NPT_StringsEqual(search_criteria, "Unknownfieldname"))
     {
         // error
 
-        NPT_LOG_WARNING_1("Unsupported or invalid search criteria %s", search_criteria);
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "Unsupported or invalid search criteria" << search_criteria;
         action->SetError(708, "Unsupported or invalid search criteria");
         return NPT_FAILURE;
     }
@@ -566,10 +570,12 @@ NPT_Result DLNAMediaServerDelegate::OnSearchContainer(PLT_ActionReference&      
     {
         // error
 
-        NPT_LOG_WARNING("ObjectID not found.");
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "ObjectID not found" << object_id;
         action->SetError(710, "No Such Container.");
         return NPT_FAILURE;
     }
+
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << "OnSearchContainer() :: dir =" << dir.GetChars();
 
     // retrieve the item type
 
@@ -580,11 +586,11 @@ NPT_Result DLNAMediaServerDelegate::OnSearchContainer(PLT_ActionReference&      
     {
         // error
 
-        NPT_LOG_WARNING("No such container");
+        qCDebug(DIGIKAM_MEDIASRV_LOG) << "No such container" << dir.GetChars();
         action->SetError(710, "No such container");
         return NPT_FAILURE;
     }
-
+    
     return NPT_ERROR_NOT_IMPLEMENTED;
 }
 
