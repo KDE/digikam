@@ -456,6 +456,7 @@ int CalSystemPrivate::quarter(int month) const
                 return 4;
             }
 
+            [[fallthrough]];
         default:
             return (((month - 1) / 3) + 1);
     }
