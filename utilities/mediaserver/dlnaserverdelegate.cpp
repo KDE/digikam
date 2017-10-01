@@ -276,7 +276,7 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
 
     for (NPT_List<NPT_String>::Iterator it = entries->GetFirstItem() ; it ; ++it)
     {
-        NPT_String filepath = NPT_FilePath::Create(dir, *it);
+        NPT_String filepath = dir + (*it);
 
         // verify we want to process this file first
 
