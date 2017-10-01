@@ -46,4 +46,9 @@ BUGFIXES FROM BUGZILLA:
 035 ==> 384976 - Missing menu items.
 036 ==> 378082 - Several small new bugs in Geolocation Editor.
 037 ==> 379825 - Conversion of DNG files to DNG with metadata loss - maybe add warning.
-038 ==> 
+038 ==> 315580 - digiKam crashed after I changed the DLNA implementation from "HUPnP API" to "miniDLNA".
+039 ==> 316126 - digiKam crashed when choosing dlna export.
+040 ==> 269929 - DLNA interface : Materialize searches using "virtual albums" containing images by links.
+041 ==> 
+
+
