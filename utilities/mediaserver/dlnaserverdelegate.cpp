@@ -242,7 +242,7 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
 
             foreach(QUrl u, urls)
             {
-                list << u.toLocalFile();
+                list << QLatin1String("file:") + u.toLocalFile();
             }
         }
 
@@ -344,18 +344,30 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
 
     // retrieve the entry type (directory or file)
 
-    if (!QString::fromUtf8(filepath).endsWith(QLatin1Char('/')))
+    if (!QString::fromUtf8(filepath.GetChars()).endsWith(QLatin1Char('/')))
     {
         qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: regular file detected";
 
-        object = new PLT_MediaItem();
+        object        = new PLT_MediaItem();
 
         // Set the title using the filename for now
 
-        object->m_Title = NPT_FilePath::BaseName(filepath, keep_extension_in_title);
+        QString uri   = QString::fromUtf8(filepath.GetChars());
+        int index     = uri.indexOf(QLatin1String("/file:")) + 6;
+        QString path  = uri.remove(0, index);
+        QString title = path.section(QLatin1Char('/'), -1);
+
+        if (!keep_extension_in_title)
+        {
+            title = title.section(QLatin1Char('.'), -2);
+        }
+
+        object->m_Title = NPT_String(title.toUtf8().data());
 
         if (DRawDecoder::isRawFile(QUrl::fromLocalFile(QString::fromUtf8(filepath.GetChars()))))
         {
+            // Special case for RAW file where extension need to be patched as JPEG for client renderer,
+            // as we provide a JPEG preview.
             object->m_Title += ".jpg";
         }
 
@@ -383,7 +395,7 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
 
         // format the resource URI
 
-        NPT_String url  = filepath.SubString(filepath.Find("//") + 1);
+        NPT_String url  = filepath.SubString(filepath.Find("/file:") + 6);
 
         qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: Item URI:\""
                                       << url.GetChars() << "\"";
@@ -447,11 +459,15 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
         }
         else
         {
-            object->m_Title = NPT_FilePath::DirName(filepath)
-                                            .SubString(1);     // To drop extra '/' on the front of name
+            QString path    = QString::fromUtf8(filepath.GetChars());
+            QString title   = path.section(QLatin1Char('/'), -2, -2); // We drop extra '/' too on the front of name
+            object->m_Title = NPT_String(title.toUtf8().data());
 
             if (object->m_Title.GetLength() == 0)
+            {
+                qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: MediaContainer item name is empty.";
                 goto failure;
+            }
         }
 
         // Get the number of children for this container
@@ -487,7 +503,7 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
         }
         else
         {
-            object->m_ParentID = "0" + filepath.Left(filepath.Find("//") + 1);
+            object->m_ParentID = "0" + filepath.Left(filepath.Find("/file:") + 6);
         }
 
         object->m_ObjectID = "0" + filepath.SubString(0);
