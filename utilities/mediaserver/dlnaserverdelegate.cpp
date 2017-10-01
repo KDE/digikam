@@ -232,7 +232,7 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
         {
             foreach(QString s, d->map.keys())
             {
-                list << s + QLatin1String("/");
+                list << s + QLatin1Char('/');
             }
         }
         else
@@ -391,7 +391,7 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
         // Set the resource file size
 
         NPT_FileInfo info;
-        NPT_CHECK_LABEL_FATAL(NPT_File::GetInfo(/*filepath*/ url, &info), failure);
+        NPT_CHECK_LABEL_FATAL(NPT_File::GetInfo(url, &info), failure);
         resource.m_Size = info.m_Size;
 
         // get list of ip addresses
@@ -548,7 +548,7 @@ NPT_Result DLNAMediaServerDelegate::OnSearchContainer(PLT_ActionReference&      
 {
     // parse search criteria
     // TODO: HACK TO PASS DLNA
-    
+
     qCDebug(DIGIKAM_MEDIASRV_LOG) << "Received Search request for object \""
                                   << object_id << "\" with search \""
                                   << search_criteria << "\"";
@@ -590,7 +590,7 @@ NPT_Result DLNAMediaServerDelegate::OnSearchContainer(PLT_ActionReference&      
         action->SetError(710, "No such container");
         return NPT_FAILURE;
     }
-    
+
     return NPT_ERROR_NOT_IMPLEMENTED;
 }
 
