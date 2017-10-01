@@ -37,8 +37,6 @@
 
 #include "digikam_export.h"
 
-class QDateTime;
-
 namespace Digikam
 {
 
@@ -62,7 +60,7 @@ public:
 
     void    setUseDefault(bool val);
     bool    useDefault() const;
-    QString newName(const QString& fileName, const QDateTime& date) const;
+    QString newName(const QString& fileName) const;
     Case    changeCase() const;
     void    setChangeCase(Case val);
 
@@ -75,10 +73,6 @@ public:
 Q_SIGNALS:
 
     void signalChanged();
-
-public Q_SLOTS:
-
-    void restoreFocus();
 
 private:
 

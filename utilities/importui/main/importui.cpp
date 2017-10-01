@@ -54,7 +54,6 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QKeySequence>
-#include <QDesktopServices>
 #include <QInputDialog>
 #include <QMenuBar>
 #include <QMenu>
@@ -239,7 +238,6 @@ void ImportUI::setupUserArea()
 
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->renameCustomizer->setWhatsThis(i18n("Set how digiKam will rename files as they are downloaded."));
-    //d->view->setRenameCustomizer(d->renameCustomizer);
     d->advBox->addItem(d->renameCustomizer, QIcon::fromTheme(QLatin1String("insert-image")), i18n("File Renaming Options"),
                        QLatin1String("RenameCustomizer"), true);
 
@@ -500,11 +498,11 @@ void ImportUI::setupActions()
     connect(sortByRatingAction,   SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByDownloadAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
-    imageSortMapper->setMapping(sortByNameAction, (int)CamItemSortSettings::SortByFileName);
-    imageSortMapper->setMapping(sortByPathAction, (int)CamItemSortSettings::SortByFilePath);
-    imageSortMapper->setMapping(sortByDateAction, (int)CamItemSortSettings::SortByCreationDate); //TODO: Implement sort by creation date.
+    imageSortMapper->setMapping(sortByNameAction,     (int)CamItemSortSettings::SortByFileName);
+    imageSortMapper->setMapping(sortByPathAction,     (int)CamItemSortSettings::SortByFilePath);
+    imageSortMapper->setMapping(sortByDateAction,     (int)CamItemSortSettings::SortByCreationDate); //TODO: Implement sort by creation date.
     imageSortMapper->setMapping(sortByFileSizeAction, (int)CamItemSortSettings::SortByFileSize);
-    imageSortMapper->setMapping(sortByRatingAction, (int)CamItemSortSettings::SortByRating);
+    imageSortMapper->setMapping(sortByRatingAction,   (int)CamItemSortSettings::SortByRating);
     imageSortMapper->setMapping(sortByDownloadAction, (int)CamItemSortSettings::SortByDownloadState);
 
     d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortBy());
@@ -910,11 +908,6 @@ void ImportUI::saveSettings()
     d->filterComboBox->saveSettings();
 
     config->sync();
-}
-
-void ImportUI::slotProcessUrl(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
 }
 
 bool ImportUI::isBusy() const
@@ -1685,11 +1678,11 @@ void ImportUI::slotUpdateDownloadName()
         {
             if (d->renameCustomizer->useDefault())
             {
-                newName = d->renameCustomizer->newName(info.name, info.ctime);
+                newName = d->renameCustomizer->newName(info.name);
             }
             else if (d->renameCustomizer->isEnabled())
             {
-                newName = d->renameCustomizer->newName(info.url().toLocalFile(), info.ctime);
+                newName = d->renameCustomizer->newName(info.url().toLocalFile());
             }
             else if (!refInfo.downloadName.isEmpty())
             {

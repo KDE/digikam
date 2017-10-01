@@ -156,7 +156,6 @@ private Q_SLOTS:
 
     void slotClose();
     void slotCancelButton();
-    void slotProcessUrl(const QString& url);
 
     void slotShowLog();
     void slotConnected(bool val);
