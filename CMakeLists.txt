@@ -292,7 +292,7 @@ find_package(PkgConfig)
 if(NOT WIN32)
     # to disable Jpeg2000 support under MXE as we have linking failure with Jasper lib ver 2.0.
     find_package(Jasper)
-endif
+endif()
 
 find_package(Eigen3)                               # For Refocus tool.
 find_package(OpenGL)                               # For Presentation tool.
