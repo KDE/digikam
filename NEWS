@@ -50,6 +50,7 @@ BUGFIXES FROM BUGZILLA:
 039 ==> 316126 - digiKam crashed when choosing dlna export.
 040 ==> 269929 - DLNA interface : Materialize searches using "virtual albums" containing images by links.
 041 ==> 384858 - Only last picture added to email.
-042 ==> 
+042 ==> 384898 - digiKam issue.
+043 ==> 
 
 
