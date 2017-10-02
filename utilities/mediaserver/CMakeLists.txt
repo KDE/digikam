@@ -84,43 +84,60 @@ set(upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Platinum/Source/Core/PltAct
 )
 
 if(NOT MSVC)
+
+    # Always compiled excepted under Windows with MSVC compiler.
+
     list(APPEND upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Posix/NptPosixSystem.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Posix/NptSelectableMessageQueue.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Posix/NptPosixQueue.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Posix/NptPosixThreads.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Posix/NptPosixFile.cpp
     )
+
 endif()
 
-if (WIN32)
+if(WIN32)
+
+    # Under Windows with MXE
+
     list(APPEND upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Time.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32File.cpp
-                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Network.cpp)
+                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Network.cpp
+    )
 
 else()
+
+    # For Linux and Apple
+
     list(APPEND upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Posix/NptPosixTime.cpp
-                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Bsd/NptBsdNetwork.cpp)
+                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Bsd/NptBsdNetwork.cpp
+    )
+
 endif()
 
-#MSVC
+if(APPLE)
+
+    # For Apple only
+
+    list(APPEND upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Apple/NptAppleAutoreleasePool.mm
+                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Apple/NptAppleLogConfig.mm
+    )
+
+endif()
+
+#if(MSVC)
+#
 #    list(APPEND upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Console.cpp
 #                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Debug.cpp
 #                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32DynamicLibraries.cpp
 #                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32MessageQueue.cpp
-#                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Network.cpp
 #                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Queue.cpp
 #                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32SerialPort.cpp
 #                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32System.cpp
 #                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Threads.cpp
-#                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Win32/NptWin32Time.cpp
 #    )
+#
 #endif()
-
-if(APPLE)
-    list(APPEND upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Apple/NptAppleAutoreleasePool.mm
-                             ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/System/Apple/NptAppleLogConfig.mm
-    )
-endif()
 
 set(libmediaserver_SRCS
     dlnaserver.cpp

@@ -3,7 +3,7 @@ digiKam 5.8.0 - Release date: 2017-10-29
 
 NEW FEATURES:
 
-General      : Updated internal Libraw to last 0.18.4.
+General      : Updated internal Libraw to last 0.18.5.
 General      : New Upnp/Dlna media server to share collections on local network.
 Image Editor : New clone tool to replace old CImg in-painting tool.
 
@@ -44,4 +44,11 @@ BUGFIXES FROM BUGZILLA:
 033 ==> 351866 - Make focus to input field after adding a face rectangle as an option and not by default.
 034 ==> 384696 - New Lut3D preset [patch].
 035 ==> 384976 - Missing menu items.
-036 ==> 
+036 ==> 378082 - Several small new bugs in Geolocation Editor.
+037 ==> 379825 - Conversion of DNG files to DNG with metadata loss - maybe add warning.
+038 ==> 315580 - digiKam crashed after I changed the DLNA implementation from "HUPnP API" to "miniDLNA".
+039 ==> 316126 - digiKam crashed when choosing dlna export.
+040 ==> 269929 - DLNA interface : Materialize searches using "virtual albums" containing images by links.
+041 ==> 
+
+

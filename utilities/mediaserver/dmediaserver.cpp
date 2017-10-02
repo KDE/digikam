@@ -47,32 +47,34 @@ void NPT_Console::Output(const char* msg)
     qCDebug(DIGIKAM_MEDIASRV_LOG) << msg;
 }
 
-int ConvertLogLevel(int /*nptLogLevel*/)
+void UPnPLogger(const NPT_LogRecord* record)
 {
-    return 0;
+    QString msg = QLatin1String("Platinum [")             +
+                  QString::fromUtf8(record->m_LoggerName) +
+                  QLatin1String("] : ")                   +
+                  QString::fromUtf8(record->m_Message);
 
-/* TODO use qCDebug
-
-    if (nptLogLevel >= NPT_LOG_LEVEL_FATAL)
-        return LOGFATAL;
-    if (nptLogLevel >= NPT_LOG_LEVEL_SEVERE)
-        return LOGERROR;
-    if (nptLogLevel >= NPT_LOG_LEVEL_WARNING)
-        return LOGWARNING;
-    if (nptLogLevel >= NPT_LOG_LEVEL_INFO)
-        return LOGNOTICE;
-    if (nptLogLevel >= NPT_LOG_LEVEL_FINE)
-        return LOGINFO;
-
-    return LOGDEBUG;
-*/
-}
-
-void UPnPLogger(const NPT_LogRecord* /*record*/)
-{
-/* TODO use qCDebug
-    CLog::Log(ConvertLogLevel(record->m_Level), LOGUPNP, "Platinum [%s]: %s", record->m_LoggerName, record->m_Message);
-*/
+    switch (record->m_Level)
+    {
+        case NPT_LOG_LEVEL_FATAL:
+            qCDebug(DIGIKAM_MEDIASRV_LOG_FATAL) << msg;
+            break;
+        case NPT_LOG_LEVEL_SEVERE:
+            qCDebug(DIGIKAM_MEDIASRV_LOG_SEVERE) << msg;
+            break;
+        case NPT_LOG_LEVEL_WARNING:
+            qCDebug(DIGIKAM_MEDIASRV_LOG_WARN) << msg;
+            break;
+        case NPT_LOG_LEVEL_INFO:
+            qCDebug(DIGIKAM_MEDIASRV_LOG_INFO) << msg;
+            break;
+        case NPT_LOG_LEVEL_FINE:
+            qCDebug(DIGIKAM_MEDIASRV_LOG) << msg;
+            break;
+        default: // NPT_LOG_LEVEL_DEBUG:
+            qCDebug(DIGIKAM_MEDIASRV_LOG_DEBUG) << msg;
+            break;
+    }
 }
 
 namespace Digikam

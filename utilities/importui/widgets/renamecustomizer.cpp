@@ -67,7 +67,6 @@ public:
         renameDefault(0),
         renameCustom(0),
         changedTimer(0),
-        focusedWidget(0),
         renameDefaultBox(0),
         renameDefaultCaseType(0),
         fileMetadataLabel(0),
@@ -89,7 +88,6 @@ public:
 
     QTimer*                changedTimer;
 
-    QWidget*               focusedWidget;
     QWidget*               renameDefaultBox;
 
     QComboBox*             renameDefaultCaseType;
@@ -231,19 +229,24 @@ AdvancedRenameManager* RenameCustomizer::renameManager() const
     return d->advancedRenameManager;
 }
 
-QString RenameCustomizer::newName(const QString& fileName, const QDateTime& dateTime) const
+QString RenameCustomizer::newName(const QString& fileName) const
 {
-    Q_UNUSED(dateTime)
-
     QString result = fileName.trimmed();
 
     if (d->renameDefault->isChecked())
     {
         switch (changeCase())
         {
-        case UPPER: return result.toUpper(); break;
-        case LOWER: return result.toLower(); break;
-        default: return result;
+            case UPPER:
+                return result.toUpper();
+                break;
+
+            case LOWER:
+                return result.toLower();
+                break;
+
+            default:
+                return result;
         }
     }
 
@@ -277,8 +280,6 @@ void RenameCustomizer::slotRadioButtonClicked(int id)
 
 void RenameCustomizer::slotRenameOptionsChanged()
 {
-    d->focusedWidget = focusWidget();
-
     d->changedTimer->setSingleShot(true);
     d->changedTimer->start(500);
 }
@@ -334,11 +335,6 @@ void RenameCustomizer::saveSettings()
     group.writeEntry("Case Type",            d->renameDefaultCaseType->currentIndex());
     group.writeEntry("Manual Rename String", d->advancedRenameWidget->parseString());
     config->sync();
-}
-
-void RenameCustomizer::restoreFocus()
-{
-    d->focusedWidget->setFocus();
 }
 
 }  // namespace Digikam

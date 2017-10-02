@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QFileInfo>
-#include <QDateTime>
 #include <QTest>
 #include <QUrl>
 
@@ -83,7 +82,7 @@ void RenameCustomizerTest::newName_should_return_empty_string_with_empty_filenam
     QFETCH(QString, result);
 
     RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
-    QCOMPARE(customizer.newName(filename, QDateTime::currentDateTime()), result);
+    QCOMPARE(customizer.newName(filename), result);
 }
 
 void RenameCustomizerTest::setCaseType_set_to_none()
@@ -126,7 +125,7 @@ void RenameCustomizerTest::setUseDefault_case_none_should_deliver_original_filen
     RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     customizer.setUseDefault(true);
     customizer.setChangeCase(RenameCustomizer::NONE);
-    QCOMPARE(customizer.newName(QLatin1String("TeSt.png"), QDateTime::currentDateTime()), QLatin1String("TeSt.png"));
+    QCOMPARE(customizer.newName(QLatin1String("TeSt.png")), QLatin1String("TeSt.png"));
 }
 
 void RenameCustomizerTest::setUseDefault_case_upper_should_deliver_uppercase_filename()
@@ -134,7 +133,7 @@ void RenameCustomizerTest::setUseDefault_case_upper_should_deliver_uppercase_fil
     RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     customizer.setUseDefault(true);
     customizer.setChangeCase(RenameCustomizer::UPPER);
-    QCOMPARE(customizer.newName(QLatin1String("TeSt.png"), QDateTime::currentDateTime()), QLatin1String("TEST.PNG"));
+    QCOMPARE(customizer.newName(QLatin1String("TeSt.png")), QLatin1String("TEST.PNG"));
 }
 
 void RenameCustomizerTest::setUseDefault_case_lower_should_deliver_lowercase_filename()
@@ -142,5 +141,5 @@ void RenameCustomizerTest::setUseDefault_case_lower_should_deliver_lowercase_fil
     RenameCustomizer customizer(0, QLatin1String("Unit Tests"));
     customizer.setUseDefault(true);
     customizer.setChangeCase(RenameCustomizer::LOWER);
-    QCOMPARE(customizer.newName(QLatin1String("TeSt.pnG"), QDateTime::currentDateTime()), QLatin1String("test.png"));
+    QCOMPARE(customizer.newName(QLatin1String("TeSt.pnG")), QLatin1String("test.png"));
 }
