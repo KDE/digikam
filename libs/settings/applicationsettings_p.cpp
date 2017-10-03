@@ -133,6 +133,7 @@ const QString ApplicationSettings::Private::configUseTrashEntry(QLatin1String("U
 const QString ApplicationSettings::Private::configShowTrashDeleteDialogEntry(QLatin1String("Show Trash Delete Dialog"));
 const QString ApplicationSettings::Private::configShowPermanentDeleteDialogEntry(QLatin1String("Show Permanent Delete Dialog"));
 const QString ApplicationSettings::Private::configApplySidebarChangesDirectlyEntry(QLatin1String("Apply Sidebar Changes Directly"));
+const QString ApplicationSettings::Private::configUseNativeFileDialogEntry(QLatin1String("Use Native File Dialog"));
 const QString ApplicationSettings::Private::configDrawFramesToGroupedEntry(QLatin1String("Draw Frames To Grouped Items"));
 const QString ApplicationSettings::Private::configScrollItemToCenterEntry(QLatin1String("Scroll Current Item To Center"));
 const QString ApplicationSettings::Private::configShowOnlyPersonTagsInPeopleSidebarEntry(QLatin1String("Show Only Face Tags For Assigning Name"));
@@ -171,6 +172,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       showTrashDeleteDialog(false),
       showPermanentDeleteDialog(false),
       sidebarApplyDirectly(false),
+      useNativeFileDialog(false),
       drawFramesToGrouped(true),
       scrollItemToCenter(false),
       showOnlyPersonTagsInPeopleSidebar(false),
@@ -296,6 +298,7 @@ void ApplicationSettings::Private::init()
     showTrashDeleteDialog                = true;
     showPermanentDeleteDialog            = true;
     sidebarApplyDirectly                 = false;
+    useNativeFileDialog                  = false;
     drawFramesToGrouped                  = true;
     scrollItemToCenter                   = false;
     showOnlyPersonTagsInPeopleSidebar    = false;

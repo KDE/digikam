@@ -95,6 +95,10 @@ public:
                                                           QString* selectedFilter = 0,
                                                           Options options = Options(),
                                                           const QStringList& supportedSchemes = QStringList());
+
+private:
+
+    static QFileDialog::Option getNativeFileDialogOption();
 };
 
 } // namespace Digikam

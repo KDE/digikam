@@ -51,6 +51,5 @@ BUGFIXES FROM BUGZILLA:
 040 ==> 269929 - DLNA interface : Materialize searches using "virtual albums" containing images by links.
 041 ==> 384858 - Only last picture added to email.
 042 ==> 384898 - digiKam issue.
-043 ==> 
-
-
+043 ==> 385280 - digikam does not use the native Plasma file dialog under Plasma.
+044 ==> 

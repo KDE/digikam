@@ -236,6 +236,7 @@ void ApplicationSettings::readSettings()
     d->showTrashDeleteDialog             = group.readEntry(d->configShowTrashDeleteDialogEntry,                       true);
     d->showPermanentDeleteDialog         = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
     d->sidebarApplyDirectly              = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
+    d->useNativeFileDialog               = group.readEntry(d->configUseNativeFileDialogEntry,                         false);
     d->drawFramesToGrouped               = group.readEntry(d->configDrawFramesToGroupedEntry,                         true);
     d->scrollItemToCenter                = group.readEntry(d->configScrollItemToCenterEntry,                          false);
     d->showOnlyPersonTagsInPeopleSidebar = group.readEntry(d->configShowOnlyPersonTagsInPeopleSidebarEntry,           true);
@@ -419,6 +420,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configShowTrashDeleteDialogEntry,              d->showTrashDeleteDialog);
     group.writeEntry(d->configShowPermanentDeleteDialogEntry,          d->showPermanentDeleteDialog);
     group.writeEntry(d->configApplySidebarChangesDirectlyEntry,        d->sidebarApplyDirectly);
+    group.writeEntry(d->configUseNativeFileDialogEntry,                d->useNativeFileDialog);
     group.writeEntry(d->configDrawFramesToGroupedEntry,                d->drawFramesToGrouped);
     group.writeEntry(d->configScrollItemToCenterEntry,                 d->scrollItemToCenter);
     group.writeEntry(d->configShowOnlyPersonTagsInPeopleSidebarEntry,  d->showOnlyPersonTagsInPeopleSidebar);

@@ -69,6 +69,7 @@ public:
     static const QString configTreeViewFontEntry;
     static const QString configThemeEntry;
     static const QString configSidebarTitleStyleEntry;
+    static const QString configUseNativeFileDialogEntry;
     static const QString configDrawFramesToGroupedEntry;
     static const QString configScrollItemToCenterEntry;
     static const QString configShowOnlyPersonTagsInPeopleSidebarEntry;
@@ -160,11 +161,13 @@ public:
     bool                                         showPermanentDeleteDialog;
     // metadata setting
     bool                                         sidebarApplyDirectly;
-    // grouped item draw settings
+    // file dialog setting
+    bool                                         useNativeFileDialog;
+    // grouped item draw setting
     bool                                         drawFramesToGrouped;
-    // item center settings
+    // item center setting
     bool                                         scrollItemToCenter;
-    // tag filter settings
+    // tag filter setting
     bool                                         showOnlyPersonTagsInPeopleSidebar;
 
     // icon view settings

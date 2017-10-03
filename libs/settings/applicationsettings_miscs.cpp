@@ -117,6 +117,16 @@ bool ApplicationSettings::getApplySidebarChangesDirectly() const
     return d->sidebarApplyDirectly;
 }
 
+void ApplicationSettings::setUseNativeFileDialog(bool val)
+{
+    d->useNativeFileDialog = val;
+}
+
+bool ApplicationSettings::getUseNativeFileDialog() const
+{
+    return d->useNativeFileDialog;
+}
+
 void ApplicationSettings::setDrawFramesToGrouped(bool val)
 {
     d->drawFramesToGrouped = val;

@@ -24,9 +24,14 @@
 
 #include "dfiledialog.h"
 
-// Local includes
+// Qt includes
 
-#include "digikam_debug.h"
+#include <QApplication>
+
+// KDE includes
+
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 namespace Digikam
 {
@@ -34,7 +39,7 @@ namespace Digikam
 DFileDialog::DFileDialog(QWidget* const parent, Qt::WindowFlags flags)
     : QFileDialog(parent, flags)
 {
-    setOption(QFileDialog::DontUseNativeDialog);
+    setOption(getNativeFileDialogOption());
 }
 
 DFileDialog::DFileDialog(QWidget* const parent, const QString& caption,
@@ -42,7 +47,7 @@ DFileDialog::DFileDialog(QWidget* const parent, const QString& caption,
                                                 const QString& filter)
     : QFileDialog(parent, caption, directory, filter)
 {
-    setOption(QFileDialog::DontUseNativeDialog);
+    setOption(getNativeFileDialogOption());
 }
 
 DFileDialog::~DFileDialog()
@@ -53,7 +58,7 @@ QString DFileDialog::getExistingDirectory(QWidget* const parent, const QString& 
                                                                  const QString& dir,
                                                                  Options options)
 {
-    options |= QFileDialog::DontUseNativeDialog;
+    options |= getNativeFileDialogOption();
     return QFileDialog::getExistingDirectory(parent, caption, dir, options);
 }
 
@@ -62,7 +67,7 @@ QUrl DFileDialog::getExistingDirectoryUrl(QWidget* const parent, const QString& 
                                                                  Options options,
                                                                  const QStringList& supportedSchemes)
 {
-    options |= QFileDialog::DontUseNativeDialog;
+    options |= getNativeFileDialogOption();
     return QFileDialog::getExistingDirectoryUrl(parent, caption, dir, options, supportedSchemes);
 }
 
@@ -72,7 +77,7 @@ QString DFileDialog::getOpenFileName(QWidget* const parent, const QString& capti
                                                             QString* selectedFilter,
                                                             Options options)
 {
-    options |= QFileDialog::DontUseNativeDialog;
+    options |= getNativeFileDialogOption();
     return QFileDialog::getOpenFileName(parent, caption, dir, filter, selectedFilter, options);
 }
 
@@ -82,7 +87,7 @@ QStringList DFileDialog::getOpenFileNames(QWidget* const parent, const QString& 
                                                                  QString* selectedFilter,
                                                                  Options options)
 {
-    options |= QFileDialog::DontUseNativeDialog;
+    options |= getNativeFileDialogOption();
     return QFileDialog::getOpenFileNames(parent, caption, dir, filter, selectedFilter, options);
 }
 
@@ -93,7 +98,7 @@ QUrl DFileDialog::getOpenFileUrl(QWidget* const parent, const QString& caption,
                                                         Options options,
                                                         const QStringList& supportedSchemes)
 {
-    options |= QFileDialog::DontUseNativeDialog;
+    options |= getNativeFileDialogOption();
     return QFileDialog::getOpenFileUrl(parent, caption, dir, filter, selectedFilter, options, supportedSchemes);
 }
 
@@ -104,7 +109,7 @@ QList<QUrl> DFileDialog::getOpenFileUrls(QWidget* const parent, const QString& c
                                                                 Options options,
                                                                 const QStringList& supportedSchemes)
 {
-    options |= QFileDialog::DontUseNativeDialog;
+    options |= getNativeFileDialogOption();
     return QFileDialog::getOpenFileUrls(parent, caption, dir, filter, selectedFilter, options, supportedSchemes);
 }
 
@@ -114,7 +119,7 @@ QString DFileDialog::getSaveFileName(QWidget* const parent, const QString& capti
                                                             QString* selectedFilter,
                                                             Options options)
 {
-    options |= QFileDialog::DontUseNativeDialog;
+    options |= getNativeFileDialogOption();
     return QFileDialog::getSaveFileName(parent, caption, dir, filter, selectedFilter, options);
 }
 
@@ -125,8 +130,30 @@ QUrl DFileDialog::getSaveFileUrl(QWidget* const parent, const QString& caption,
                                                         Options options,
                                                         const QStringList& supportedSchemes)
 {
-    options |= QFileDialog::DontUseNativeDialog;
+    options |= getNativeFileDialogOption();
     return QFileDialog::getSaveFileUrl(parent, caption, dir, filter, selectedFilter, options, supportedSchemes);
+}
+
+QFileDialog::Option DFileDialog::getNativeFileDialogOption()
+{
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group;
+
+    if (qApp->applicationName() == QLatin1String("digikam"))
+    {
+        group = config->group(QLatin1String("General Settings"));
+    }
+    else
+    {
+        group = config->group(QLatin1String("ImageViewer Settings"));
+    }
+
+    bool useNativeFileDialog  = group.readEntry(QLatin1String("Use Native File Dialog"), false);
+
+    if (useNativeFileDialog)
+        return (QFileDialog::Option)0;
+
+    return QFileDialog::DontUseNativeDialog;
 }
 
 } // namespace Digikam

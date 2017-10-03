@@ -411,6 +411,9 @@ public:
     void setApplySidebarChangesDirectly(bool val);
     bool getApplySidebarChangesDirectly() const;
 
+    void setUseNativeFileDialog(bool val);
+    bool getUseNativeFileDialog() const;
+
     void setDrawFramesToGrouped(bool val);
     bool getDrawFramesToGrouped() const;
 
