@@ -242,7 +242,10 @@ NPT_Result DLNAMediaServerDelegate::OnBrowseDirectChildren(PLT_ActionReference& 
 
             foreach(QUrl u, urls)
             {
-                list << QLatin1String("file:") + u.toLocalFile();
+                // Internal URL separator between container path and local file path.
+                // Ex: Linux => "/country/town/Paris/?file:/mnt/data/travel/Paris/eiffeltower.jpg
+                //     Win32 => "/Friends/US/Brown/?file:C:/Users/Foo/My Images/Friends/US/Brown/homer.png
+                list << QLatin1String("?file:") + u.toLocalFile();
             }
         }
 
@@ -353,7 +356,7 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
         // Set the title using the filename for now
 
         QString uri   = QString::fromUtf8(filepath.GetChars());
-        int index     = uri.indexOf(QLatin1String("/file:")) + 6;
+        int index     = uri.indexOf(QLatin1String("/?file:")) + 7;
         QString path  = uri.remove(0, index);
         QString title = path.section(QLatin1Char('/'), -1);
 
@@ -395,7 +398,7 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
 
         // format the resource URI
 
-        NPT_String url  = filepath.SubString(filepath.Find("/file:") + 6);
+        NPT_String url  = filepath.SubString(filepath.Find("/?file:") + 7);
 
         qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: Item URI:\""
                                       << url.GetChars() << "\"";
@@ -503,7 +506,7 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
         }
         else
         {
-            object->m_ParentID = "0" + filepath.Left(filepath.Find("/file:") + 6);
+            object->m_ParentID = "0" + filepath.Left(filepath.Find("/?file:") + 1);
         }
 
         object->m_ObjectID = "0" + filepath.SubString(0);
