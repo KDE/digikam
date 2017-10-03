@@ -291,7 +291,8 @@ bool AdvPrintPhotoPage::validatePage()
 
 bool AdvPrintPhotoPage::isComplete() const
 {
-    return (!d->photoUi->mPrintList->imageUrls().empty());
+    return (!d->photoUi->mPrintList->imageUrls().isEmpty() ||
+            !d->wizard->itemsList().isEmpty());
 }
 
 QPrinter* AdvPrintPhotoPage::printer() const

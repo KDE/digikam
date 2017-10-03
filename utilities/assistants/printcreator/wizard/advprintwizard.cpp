@@ -83,7 +83,8 @@ public:
         finalPage(0),
         settings(0),
         previewThread(0),
-        iface(0)
+        iface(0),
+        tempPath(0)
     {
     }
 
@@ -97,6 +98,8 @@ public:
     AdvPrintSettings*    settings;
     AdvPrintThread*      previewThread;
     DInfoInterface*      iface;
+
+    QTemporaryDir*       tempPath;
 };
 
 AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const iface)
@@ -133,6 +136,9 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
     connect(d->previewThread, SIGNAL(signalPreview(QImage)),
             this, SLOT(slotPreview(QImage)));
 
+    d->tempPath = new QTemporaryDir();
+    d->settings->tempPath = d->tempPath->path();
+
     installEventFilter(this);
 }
 
@@ -144,6 +150,7 @@ AdvPrintWizard::~AdvPrintWizard()
     KConfigGroup group = config.group("PrintCreator");
     d->settings->writeSettings(group);
 
+    delete d->tempPath;
     delete d;
 }
 
@@ -230,8 +237,6 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
         d->settings->photos.append(photo);
     }
 
-    QTemporaryDir tempPath;
-    d->settings->tempPath = tempPath.path();
     d->cropPage->ui()->BtnCropPrev->setEnabled(false);
 
     if (d->settings->photos.count() == 1)

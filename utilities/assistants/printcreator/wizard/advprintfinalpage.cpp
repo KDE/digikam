@@ -245,7 +245,7 @@ void AdvPrintFinalPage::slotDone(bool completed)
                                           DHistoryView::ProgressEntry);
             }
         }
-        else if(d->settings->printerName == d->settings->outputName(AdvPrintSettings::GIMP))
+        else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::GIMP))
         {
             if (!d->settings->gimpFiles.isEmpty())
             {
@@ -264,8 +264,8 @@ void AdvPrintFinalPage::slotDone(bool completed)
                 if (!process.startDetached(prog, args))
                 {
                     d->progressView->addEntry(i18n("There was an error to launch the external "
-                                                "Gimp program. Please make sure it is properly "
-                                                "installed."),
+                                                   "Gimp program. Please make sure it is properly "
+                                                   "installed."),
                                               DHistoryView::WarningEntry);
                     return;
                 }
