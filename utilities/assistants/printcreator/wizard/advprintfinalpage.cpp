@@ -140,7 +140,7 @@ void AdvPrintFinalPage::slotProcess()
         return;
     }
 
-    if (d->settings->photos.empty())
+    if (d->settings->photos.isEmpty())
     {
         d->progressView->addEntry(i18n("No page to print..."),
                                   DHistoryView::ErrorEntry);
