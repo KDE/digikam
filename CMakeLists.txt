@@ -282,18 +282,13 @@ find_package(BISON)                                # For Panorama tool.
 find_package(LibXslt)                              # For HTMLGallery tool.
 find_package(LibXml2)                              # For HTMLGallery tool.
 
-DETECT_LIBKIPI(${KIPI_MIN_VERSION})
-DETECT_LIBKSANE(${KSANE_MIN_VERSION})
+DETECT_LIBKIPI(${KIPI_MIN_VERSION})                # For plugins support.
+DETECT_LIBKSANE(${KSANE_MIN_VERSION})              # For digital scanner device support.
 
-find_package(Marble)
+find_package(Marble)                               # For geolocation support.
 
 find_package(PkgConfig)
-
-if(NOT WIN32)
-    # to disable Jpeg2000 support under MXE as we have linking failure with Jasper lib ver 2.0.
-    find_package(Jasper)
-endif()
-
+find_package(Jasper)                               # For JPEG 2000 support.
 find_package(Eigen3)                               # For Refocus tool.
 find_package(OpenGL)                               # For Presentation tool.
 
