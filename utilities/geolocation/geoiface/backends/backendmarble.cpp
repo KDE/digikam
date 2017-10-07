@@ -46,6 +46,7 @@
 #include <marble/MarbleWidget.h>
 #include <marble/ViewportParams.h>
 #include <marble/AbstractFloatItem.h>
+#include <marble/MarbleWidgetInputHandler.h>
 
 // Local includes
 
@@ -220,6 +221,8 @@ QWidget* BackendMarble::mapWidget()
 
             d->marbleWidget->addLayer(d->bmLayer);
         }
+        // hide Marble widget right button context menu
+        d->marbleWidget->inputHandler()->setMouseButtonPopupEnabled(Qt::RightButton, false);
 
         d->marbleWidget->installEventFilter(this);
 

@@ -54,4 +54,5 @@ BUGFIXES FROM BUGZILLA:
 043 ==> 385280 - digikam does not use the native Plasma file dialog under Plasma.
 044 ==> 385315 - kipi-plugins not available in digikam and gwenview menu.
 045 ==> 385433 - Error file numbering.
-046 ==> 
+046 ==> 385467 - Cannot Add Or Edit Bookmarks / No plugins loaded.
+047 ==> 
