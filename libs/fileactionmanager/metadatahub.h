@@ -151,7 +151,7 @@ public:
      * @param settings
      * @return true           - if everything is succesfull
      */
-    bool writeToMetadata(ImageInfo info, WriteComponent writeMode = WRITE_ALL,
+    bool writeToMetadata(const ImageInfo& info, WriteComponent writeMode = WRITE_ALL,
                bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
 

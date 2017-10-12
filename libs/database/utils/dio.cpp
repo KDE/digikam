@@ -117,12 +117,12 @@ void SidecarFinder::process(const QList<QUrl>& files)
 
 // ------------------------------------------------------------------------------------------------
 
-GroupedImagesFinder::GroupedImagesFinder(const QList<ImageInfo> source)
+GroupedImagesFinder::GroupedImagesFinder(const QList<ImageInfo>& source)
 {
     process(source);
 }
 
-void GroupedImagesFinder::process(const QList<ImageInfo> source)
+void GroupedImagesFinder::process(const QList<ImageInfo>& source)
 {
     QSet<qlonglong> ids;
 
@@ -211,7 +211,7 @@ void DIO::Private::albumToAlbum(int operation, const PAlbum* const src, const PA
     emit jobToCreate(operation, QList<QUrl>() << src->fileUrl(), dest->fileUrl());
 }
 
-void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo> infos, const PAlbum* const dest)
+void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo>& infos, const PAlbum* const dest)
 {
     // this is a fast db operation, do here
     GroupedImagesFinder finder(infos);
@@ -417,7 +417,7 @@ void DIO::move(const PAlbum* src, const PAlbum* const dest)
 
 // Images -> Album ----------------------------------------------------
 
-void DIO::copy(const QList<ImageInfo> infos, const PAlbum* const dest)
+void DIO::copy(const QList<ImageInfo>& infos, const PAlbum* const dest)
 {
     if (!dest)
     {
@@ -427,7 +427,7 @@ void DIO::copy(const QList<ImageInfo> infos, const PAlbum* const dest)
     instance()->d->imagesToAlbum(Copy, infos, dest);
 }
 
-void DIO::move(const QList<ImageInfo> infos, const PAlbum* const dest)
+void DIO::move(const QList<ImageInfo>& infos, const PAlbum* const dest)
 {
     if (!dest)
     {
@@ -436,7 +436,7 @@ void DIO::move(const QList<ImageInfo> infos, const PAlbum* const dest)
 
     // update the image infos
     CoreDbAccess access;
-    foreach(ImageInfo info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         access.db()->moveItem(info.albumId(), info.name(), dest->id(), info.name());
     }

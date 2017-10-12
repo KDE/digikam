@@ -236,7 +236,7 @@ template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& 
 // ------------------------------------------------------------------------------------------------------------
 
 /** safe **/
-bool MetadataHub::writeToMetadata(ImageInfo info, WriteComponent writeMode, bool ignoreLazySync, const MetadataSettingsContainer &settings)
+bool MetadataHub::writeToMetadata(const ImageInfo& info, WriteComponent writeMode, bool ignoreLazySync, const MetadataSettingsContainer &settings)
 {
     applyChangeNotifications();
 

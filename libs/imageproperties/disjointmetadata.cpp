@@ -189,7 +189,7 @@ void DisjointMetadata::reset()
     d =  new Private();
 }
 
-void DisjointMetadata::load(const ImageInfo &info)
+void DisjointMetadata::load(const ImageInfo& info)
 {
     CaptionsMap commentMap;
     CaptionsMap titleMap;
