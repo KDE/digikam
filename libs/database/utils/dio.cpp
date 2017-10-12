@@ -72,7 +72,7 @@ SidecarFinder::SidecarFinder(const QUrl& file)
 
 void SidecarFinder::process(const QList<QUrl>& files)
 {
-    foreach (const QUrl& url, files)
+    foreach(const QUrl& url, files)
     {
         if (url.isLocalFile())
         {
@@ -83,7 +83,7 @@ void SidecarFinder::process(const QList<QUrl>& files)
                 qCDebug(DIGIKAM_DATABASE_LOG) << "Detected a sidecar" << localFiles.last();
             }
 
-            foreach (QString suffix, MetadataSettings::instance()->settings().sidecarExtensions)
+            foreach(QString suffix, MetadataSettings::instance()->settings().sidecarExtensions)
             {
                 suffix = QLatin1String(".") + suffix;
                 QString sidecarName = url.toLocalFile() + suffix;
@@ -102,7 +102,7 @@ void SidecarFinder::process(const QList<QUrl>& files)
         {
             possibleRemoteSidecars << DMetadata::sidecarUrl(url);
             possibleRemoteSidecarSuffixes << QLatin1String(".xmp");
-            foreach (QString suffix,  MetadataSettings::instance()->settings().sidecarExtensions)
+            foreach(QString suffix,  MetadataSettings::instance()->settings().sidecarExtensions)
             {
                 suffix = QLatin1String(".") + suffix;
                 QString sidecarName = url.toLocalFile() + suffix;
@@ -126,20 +126,20 @@ void GroupedImagesFinder::process(const QList<ImageInfo>& source)
 {
     QSet<qlonglong> ids;
 
-    foreach (const ImageInfo& info, source)
+    foreach(const ImageInfo& info, source)
     {
         ids << info.id();
     }
 
     infos.reserve(source.size());
 
-    foreach (const ImageInfo& info, source)
+    foreach(const ImageInfo& info, source)
     {
         infos << info;
 
         if (info.hasGroupedImages())
         {
-            foreach (const ImageInfo& groupedImage, info.groupedImages())
+            foreach(const ImageInfo& groupedImage, info.groupedImages())
             {
                 if (ids.contains(groupedImage.id()))
                 {
@@ -188,15 +188,16 @@ void DIO::Private::processRename(const QUrl& src, const QUrl& dest)
 
     if (src.isLocalFile())
     {
-        for(int i = 0; i < finder.localFiles.length(); ++i)
+        for (int i = 0 ; i < finder.localFiles.length() ; ++i)
         {
             emit jobToCreate(Rename, QList<QUrl>() << finder.localFiles.at(i),
                              QUrl::fromLocalFile(dest.toLocalFile() + finder.localFileSuffixes.at(i)));
         }
+
         return;
     }
 
-    for(int i = 0; i < finder.remoteFileSuffixes.length(); ++i)
+    for (int i = 0 ; i < finder.remoteFileSuffixes.length() ; ++i)
     {
         emit jobToCreate(Rename | SourceStatusUnknown,
                          QList<QUrl>() << finder.possibleRemoteSidecars.at(i),
@@ -253,7 +254,7 @@ void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
 
     // If we rename a file, the name changes. This is equivalent to a move.
     // Do this in database, too.
-    CoreDbAccess().db()->moveItem(info.albumId(),oldUrl.fileName(),info.albumId(),newName);
+    CoreDbAccess().db()->moveItem(info.albumId(), oldUrl.fileName(), info.albumId(), newName);
 
     emit renameToProcess(oldUrl, newUrl);
 }
