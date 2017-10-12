@@ -509,7 +509,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
     m_metadata.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
 
     QMatrix qmatrix = matrix.toMatrix();
-    QRect r(QPoint(0,0), m_originalSize);
+    QRect r(QPoint(0, 0), m_originalSize);
     QSize newSize   = qmatrix.mapRect(r).size();
 
     // Get the new image dimension of the temp image. Using a dummy QImage object here
@@ -531,9 +531,6 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
     {
         m_metadata.setImagePreview(imagePreview.transformed(qmatrix));
     }
-
-    // Update Exif Document Name tag (the original file name from camera for example).
-    m_metadata.setExifTagString("Exif.Image.DocumentName", m_documentName);
 
     // We update all new metadata now...
     m_metadata.save(fileName);
