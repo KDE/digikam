@@ -358,8 +358,8 @@ ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& alb
 
         if (!shortInfo.id)
         {
-            info.m_data = 0;
             qCWarning(DIGIKAM_DATABASE_LOG) << "No itemShortInfo could be retrieved from the database for image" << name;
+            info.m_data = 0;
             return info;
         }
 
@@ -583,7 +583,7 @@ QString ImageInfo::comment() const
 
 double ImageInfo::aspectRatio() const
 {
-    if(!m_data)
+    if (!m_data)
     {
         return 0;
     }
@@ -1757,11 +1757,21 @@ double ImageInfo::similarityTo(const qlonglong imageId) const
 
 double ImageInfo::currentSimilarity() const
 {
+    if (!m_data)
+    {
+        return 0.0;
+    }
+
     return m_data->currentSimilarity;
 }
 
 qlonglong ImageInfo::currentReferenceImage() const
 {
+    if (!m_data)
+    {
+        return -1;
+    }
+
     return m_data->currentReferenceImage;
 }
 
