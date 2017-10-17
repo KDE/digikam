@@ -730,7 +730,7 @@ void ImageInfoList::loadTagIds() const
 
     ImageInfoWriteLocker lock;
 
-    for (int i=0; i<size(); i++)
+    for (int i = 0 ; i < size() ; i++)
     {
         const ImageInfo& info = at(i);
         const QList<int>& ids = allTagIds.at(i);
@@ -963,7 +963,7 @@ void ImageInfoList::loadGroupImageIds() const
     QVector<QList<qlonglong> > allGroupIds = CoreDbAccess().db()->getImagesRelatedFrom(toImageIdList(), DatabaseRelation::Grouped);
     ImageInfoWriteLocker lock;
 
-    for (int i=0; i<size(); i++)
+    for (int i = 0 ; i < size() ; i++)
     {
         const ImageInfo& info            = at(i);
         const QList<qlonglong>& groupIds = allGroupIds.at(i);
@@ -1020,7 +1020,7 @@ void ImageInfo::addToGroup(const ImageInfo& givenLeader)
     QList<qlonglong> alreadySeen;
     alreadySeen << m_data->id;
 
-    for (leader = givenLeader; leader.isGrouped(); )
+    for (leader = givenLeader ; leader.isGrouped() ;)
     {
         ImageInfo nextLeader = leader.groupImage();
         // is the new leader currently grouped on this image, or do we have a circular grouping?
@@ -1329,7 +1329,7 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
     ImageMetadataContainer container;
     const DatabaseFieldsHashRaw rawVideoMetadata = getDatabaseFieldsRaw(DatabaseFields::ImageMetadataAll);
     bool allFieldsNull = true;
-    for (DatabaseFields::ImageMetadataIterator it; !it.atEnd(); ++it)
+    for (DatabaseFields::ImageMetadataIterator it ; !it.atEnd() ; ++it)
     {
         const QVariant fieldValue = rawVideoMetadata.value(*it);
 
@@ -1425,7 +1425,7 @@ VideoMetadataContainer ImageInfo::videoMetadataContainer() const
     const DatabaseFieldsHashRaw rawVideoMetadata = getDatabaseFieldsRaw(DatabaseFields::VideoMetadataAll);
 
     bool allFieldsNull = true;
-    for (DatabaseFields::VideoMetadataIterator it; !it.atEnd(); ++it)
+    for (DatabaseFields::VideoMetadataIterator it ; !it.atEnd() ; ++it)
     {
         const QVariant fieldValue = rawVideoMetadata.value(*it);
 
@@ -1884,7 +1884,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             else
             {
                 int fieldsIndex = 0;
-                for (DatabaseFields::VideoMetadataIteratorSetOnly it(missingVideoMetadata); !it.atEnd(); ++it)
+                for (DatabaseFields::VideoMetadataIteratorSetOnly it(missingVideoMetadata) ; !it.atEnd() ; ++it)
                 {
                     const QVariant fieldValue = fieldValues.at(fieldsIndex);
                     ++fieldsIndex;
@@ -1918,7 +1918,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             else
             {
                 int fieldsIndex = 0;
-                for (DatabaseFields::ImageMetadataIteratorSetOnly it(missingImageMetadata); !it.atEnd(); ++it)
+                for (DatabaseFields::ImageMetadataIteratorSetOnly it(missingImageMetadata) ; !it.atEnd() ; ++it)
                 {
                     const QVariant fieldValue = fieldValues.at(fieldsIndex);
                     ++fieldsIndex;
