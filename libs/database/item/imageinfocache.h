@@ -103,6 +103,7 @@ private:
 private:
 
     QHash<qlonglong, ImageInfoData*>    m_infos;
+    QHash<ImageInfoData*, QString>      m_dataHash;
     QMultiHash<QString, ImageInfoData*> m_nameHash;
     volatile bool                       m_needUpdateAlbums;
     QList<AlbumShortInfo>               m_albums;

@@ -380,12 +380,12 @@ void DIO::slotResult()
     }
 }
 
-void DIO::slotRenamed(const QUrl& oldUrl, const QUrl& /*newUrl*/)
+void DIO::slotRenamed(const QUrl& oldUrl, const QUrl& newUrl)
 {
     // delete thumbnail
     ThumbnailLoadThread::deleteThumbnail(oldUrl.toLocalFile());
     // clean LoadingCache as well - be pragmatic, do it here.
-    //LoadingCacheInterface::fileChanged(newUrl.toLocalFile());
+    LoadingCacheInterface::fileChanged(newUrl.toLocalFile());
 
     emit imageRenameSucceeded(oldUrl);
 }

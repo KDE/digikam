@@ -143,7 +143,9 @@ void ImageInfoCache::cacheByName(ImageInfoData* data)
     }
 
     // Called in a context where we can assume that the entry is not yet cached by name (newly created data)
+    m_nameHash.remove(m_dataHash.value(data), data);
     m_nameHash.insert(data->name, data);
+    m_dataHash.insert(data, data->name);
 }
 
 DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForPath(int albumRootId, const QString& relativePath, const QString& name)
@@ -183,8 +185,12 @@ void ImageInfoCache::dropInfo(ImageInfoData* infodata)
     }
 
     ImageInfoWriteLocker lock;
+
     m_infos.remove(infodata->id);
+
+    m_nameHash.remove(m_dataHash.value(infodata), infodata);
     m_nameHash.remove(infodata->name, infodata);
+    m_dataHash.remove(infodata);
     delete infodata;
 }
 
