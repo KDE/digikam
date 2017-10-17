@@ -1333,7 +1333,7 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
     {
         const QVariant fieldValue = rawVideoMetadata.value(*it);
 
-        allFieldsNull&=fieldValue.isNull();
+        allFieldsNull &= fieldValue.isNull();
 
         if (!fieldValue.isNull())
         {
@@ -1429,7 +1429,7 @@ VideoMetadataContainer ImageInfo::videoMetadataContainer() const
     {
         const QVariant fieldValue = rawVideoMetadata.value(*it);
 
-        allFieldsNull&=fieldValue.isNull();
+        allFieldsNull &= fieldValue.isNull();
 
         if (!fieldValue.isNull())
         {
