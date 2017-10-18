@@ -82,6 +82,7 @@ EditorToolIface::EditorToolIface(EditorWindow* const editor)
 
 EditorToolIface::~EditorToolIface()
 {
+    delete d->tool;
     delete d;
 
     if (m_iface == this)
