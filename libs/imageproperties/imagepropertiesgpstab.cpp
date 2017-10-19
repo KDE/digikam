@@ -42,6 +42,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QComboBox>
+#include <QDesktopServices>
 #include <QIcon>
 #include <QLocale>
 
@@ -58,7 +59,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include "digikam_debug.h"
 #include "imagegpsmodelhelper.h"
 #include "dexpanderbox.h"
-#include "webbrowserdlg.h"
+//#include "webbrowserdlg.h"
 
 namespace Digikam
 {
@@ -252,7 +253,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
         case MapQuest:
         {
             url.append(QLatin1String("http://www.mapquest.com/maps/map.adp?searchtype=address"
-                       "&formtype=address&latlongtype=decimal"));
+                                     "&formtype=address&latlongtype=decimal"));
             url.append(QLatin1String("&latitude="));
             url.append(val.setNum(info.coordinates.lat(), 'g', 12));
             url.append(QLatin1String("&longitude="));
@@ -276,7 +277,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             url.append(val.setNum(info.coordinates.lat(), 'g', 12));
             url.append(QLatin1String(","));
             url.append(val.setNum(info.coordinates.lon(), 'g', 12));
-            url.append(QLatin1String(",4,k/"));
+            url.append(QLatin1String(",15,/"));
             break;
         }
 
@@ -303,9 +304,10 @@ void ImagePropertiesGPSTab::slotGPSDetails()
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << url;
+    QDesktopServices::openUrl(QUrl(url));
 
-    WebBrowserDlg* const browser = new WebBrowserDlg(QUrl(url), this);
-    browser->show();
+//    WebBrowserDlg* const browser = new WebBrowserDlg(QUrl(url), this);
+//    browser->show();
 }
 
 void ImagePropertiesGPSTab::setCurrentURL(const QUrl& url)
