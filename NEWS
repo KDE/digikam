@@ -60,4 +60,5 @@ BUGFIXES FROM BUGZILLA:
 049 ==> 382247 - showfoto crashed.
 050 ==> 385958 - "See more information on the Internet" For Bing Maps Doesn't Work In Windows.
 051 ==> 385960 - "See more information on the Internet" For loc.alize.us: No lat/long In URL.
-052 ==> 
+052 ==> 386028 - Database schema link from https://www.digikam.org/documentation/ leads to an useless location.
+053 ==> 
