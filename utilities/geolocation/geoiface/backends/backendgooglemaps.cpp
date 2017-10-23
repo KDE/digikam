@@ -900,29 +900,29 @@ int BackendGoogleMaps::getMarkerModelLevel()
     const int currentZoom = d->cacheZoom;
 
     int tileLevel = 0;
-         if (currentZoom== 0) { tileLevel = 1; }
-    else if (currentZoom== 1) { tileLevel = 1; }
-    else if (currentZoom== 2) { tileLevel = 1; }
-    else if (currentZoom== 3) { tileLevel = 2; }
-    else if (currentZoom== 4) { tileLevel = 2; }
-    else if (currentZoom== 5) { tileLevel = 3; }
-    else if (currentZoom== 6) { tileLevel = 3; }
-    else if (currentZoom== 7) { tileLevel = 3; }
-    else if (currentZoom== 8) { tileLevel = 4; }
-    else if (currentZoom== 9) { tileLevel = 4; }
-    else if (currentZoom==10) { tileLevel = 4; }
-    else if (currentZoom==11) { tileLevel = 4; }
-    else if (currentZoom==12) { tileLevel = 4; }
-    else if (currentZoom==13) { tileLevel = 4; }
-    else if (currentZoom==14) { tileLevel = 5; }
-    else if (currentZoom==15) { tileLevel = 5; }
-    else if (currentZoom==16) { tileLevel = 6; }
-    else if (currentZoom==17) { tileLevel = 7; }
-    else if (currentZoom==18) { tileLevel = 7; }
-    else if (currentZoom==19) { tileLevel = 8; }
-    else if (currentZoom==20) { tileLevel = 9; }
-    else if (currentZoom==21) { tileLevel = 9; }
-    else if (currentZoom==22) { tileLevel = 9; }
+         if (currentZoom ==  0) { tileLevel = 1; }
+    else if (currentZoom ==  1) { tileLevel = 1; }
+    else if (currentZoom ==  2) { tileLevel = 1; }
+    else if (currentZoom ==  3) { tileLevel = 2; }
+    else if (currentZoom ==  4) { tileLevel = 2; }
+    else if (currentZoom ==  5) { tileLevel = 3; }
+    else if (currentZoom ==  6) { tileLevel = 3; }
+    else if (currentZoom ==  7) { tileLevel = 3; }
+    else if (currentZoom ==  8) { tileLevel = 4; }
+    else if (currentZoom ==  9) { tileLevel = 4; }
+    else if (currentZoom == 10) { tileLevel = 4; }
+    else if (currentZoom == 11) { tileLevel = 4; }
+    else if (currentZoom == 12) { tileLevel = 4; }
+    else if (currentZoom == 13) { tileLevel = 4; }
+    else if (currentZoom == 14) { tileLevel = 5; }
+    else if (currentZoom == 15) { tileLevel = 5; }
+    else if (currentZoom == 16) { tileLevel = 6; }
+    else if (currentZoom == 17) { tileLevel = 7; }
+    else if (currentZoom == 18) { tileLevel = 7; }
+    else if (currentZoom == 19) { tileLevel = 8; }
+    else if (currentZoom == 20) { tileLevel = 9; }
+    else if (currentZoom == 21) { tileLevel = 9; }
+    else if (currentZoom == 22) { tileLevel = 9; }
     else
     {
         tileLevel = TileIndex::MaxLevel-1;
