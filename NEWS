@@ -64,5 +64,5 @@ BUGFIXES FROM BUGZILLA:
 053 ==> 385592 - digiKam segfaults occasionally, when renaming/moving multiple images [patch].
 054 ==> 382312 - DigiKam crashes when renaming.
 055 ==> 365337 - Install to non-system volume permitted but fails.
-056 ==> 
-
+056 ==> 385338 - Remember last map view.
+057 ==> 

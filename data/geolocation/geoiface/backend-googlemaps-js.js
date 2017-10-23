@@ -734,7 +734,6 @@ function kgeomapSetMapBoundaries(west, north, east, south, useSaneZoomLevel)
     }
 }
 
-
 function kgeomapInitialize()
 {
     var latlng = new google.maps.LatLng(52.0, 6.0);
@@ -770,4 +769,3 @@ function kgeomapInitialize()
     // source: http://taapps-javalibs.blogspot.com/2009/10/google-map-v3how-to-use-overlayviews.html
     projectionHelper = new ProjectionHelper(map);
 }
-

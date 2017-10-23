@@ -110,6 +110,7 @@ protected:
 private Q_SLOTS:
 
     void slotHTMLInitialized();
+    void slotSetCenterTimer();
     void slotMapTypeActionTriggered(QAction* action);
     void slotHTMLEvents(const QStringList& eventStrings);
     void slotFloatSettingsTriggered(QAction* action);
