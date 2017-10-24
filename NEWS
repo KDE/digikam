@@ -65,4 +65,5 @@ BUGFIXES FROM BUGZILLA:
 054 ==> 382312 - DigiKam crashes when renaming.
 055 ==> 365337 - Install to non-system volume permitted but fails.
 056 ==> 385338 - Remember last map view.
-057 ==> 
+057 ==> 386123 - Properties view does not include label properties
+058 ==> 

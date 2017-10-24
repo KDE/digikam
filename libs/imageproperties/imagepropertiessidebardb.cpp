@@ -222,7 +222,14 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
     {
         m_propertiesTab->setCurrentURL(m_currentURL);
-        ImagePropertiesSideBar::setImagePropertiesInformation(m_currentURL);
+        if (d->currentInfos.isEmpty())
+        {
+            ImagePropertiesSideBar::setImagePropertiesInformation(m_currentURL);
+        }
+        else
+        {
+            setImagePropertiesInformation(m_currentURL);
+        }
         m_dirtyPropertiesTab = true;
     }
     else if (tab == m_metadataTab && !m_dirtyMetadataTab)
