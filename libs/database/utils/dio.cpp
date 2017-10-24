@@ -117,6 +117,9 @@ void SidecarFinder::process(const QList<QUrl>& files)
 
 // ------------------------------------------------------------------------------------------------
 
+// TODO
+// Groups should not be resolved in dio, it should be handled in views.
+// This is already done for most things except for drag&drop, which is hard :)
 GroupedImagesFinder::GroupedImagesFinder(const QList<ImageInfo>& source)
 {
     process(source);
@@ -220,6 +223,16 @@ void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo>& infos, c
     QStringList      filenames;
     QList<qlonglong> ids;
     QList<QUrl>      urls;
+
+    if (operation == Move)
+    {
+        // update the image infos
+        CoreDbAccess access;
+        foreach(const ImageInfo& info, finder.infos)
+        {
+            access.db()->moveItem(info.albumId(), info.name(), dest->id(), info.name());
+        }
+    }
 
     foreach(const ImageInfo& info, finder.infos)
     {
@@ -433,13 +446,6 @@ void DIO::move(const QList<ImageInfo>& infos, const PAlbum* const dest)
     if (!dest)
     {
         return;
-    }
-
-    // update the image infos
-    CoreDbAccess access;
-    foreach(const ImageInfo& info, infos)
-    {
-        access.db()->moveItem(info.albumId(), info.name(), dest->id(), info.name());
     }
 
     instance()->d->imagesToAlbum(Move, infos, dest);
