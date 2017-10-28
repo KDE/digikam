@@ -66,4 +66,6 @@ BUGFIXES FROM BUGZILLA:
 055 ==> 365337 - Install to non-system volume permitted but fails.
 056 ==> 385338 - Remember last map view.
 057 ==> 386123 - Properties view does not include label properties
-058 ==> 
+058 ==> 371968 - Display of captions in caption editing tab broken unless caption ends in a newline.
+059 ==> 
+
