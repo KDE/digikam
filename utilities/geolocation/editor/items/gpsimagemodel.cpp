@@ -42,10 +42,10 @@ public:
     {
     }
 
-    QList<GPSImageItem*>                      items;
-    int                                       columnCount;
-    QMap<QPair<int, int>, QVariant>           headerData;
-    ThumbnailLoadThread*                      thumbnailLoadThread;
+    QList<GPSImageItem*>            items;
+    int                             columnCount;
+    QMap<QPair<int, int>, QVariant> headerData;
+    ThumbnailLoadThread*            thumbnailLoadThread;
 };
 
 GPSImageModel::GPSImageModel(QObject* const parent)
@@ -160,7 +160,7 @@ GPSImageItem* GPSImageModel::itemFromIndex(const QModelIndex& index) const
 
     const int row = index.row();
 
-    if ((row < 0)||(row >= d->items.count()))
+    if ((row < 0) || (row >= d->items.count()))
         return 0;
 
     return d->items.at(row);
@@ -224,7 +224,7 @@ Qt::ItemFlags GPSImageModel::flags(const QModelIndex& index) const
 
 GPSImageItem* GPSImageModel::itemFromUrl(const QUrl& url) const
 {
-    for (int i = 0; i < d->items.count(); ++i)
+    for (int i = 0 ; i < d->items.count() ; ++i)
     {
         if (d->items.at(i)->url() == url)
             return d->items.at(i);
@@ -235,7 +235,7 @@ GPSImageItem* GPSImageModel::itemFromUrl(const QUrl& url) const
 
 QModelIndex GPSImageModel::indexFromUrl(const QUrl& url) const
 {
-    for (int i = 0; i < d->items.count(); ++i)
+    for (int i = 0 ; i < d->items.count() ; ++i)
     {
         if (d->items.at(i)->url() == url)
             return index(i, 0, QModelIndex());

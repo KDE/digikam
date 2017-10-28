@@ -107,7 +107,7 @@ void GPSImageList::startDrag(Qt::DropActions supportedActions)
     const QList<QModelIndex> selectedIndicesFromModel = d->selectionModel->selectedIndexes();
     QList<QPersistentModelIndex> selectedIndices;
 
-    for (int i=0; i<selectedIndicesFromModel.count(); ++i)
+    for (int i = 0 ; i < selectedIndicesFromModel.count() ; ++i)
     {
         selectedIndices << selectedIndicesFromModel.at(i);
     }
@@ -182,7 +182,7 @@ void GPSImageList::wheelEvent(QWheelEvent* we)
 
     we->accept();
 
-    if (we->delta()>0)
+    if (we->delta() > 0)
     {
         slotIncreaseThumbnailSize();
     }
@@ -230,7 +230,7 @@ QItemSelectionModel* GPSImageList::getSelectionModel() const
 
 void GPSImageList::slotInternalTreeViewImageActivated(const QModelIndex& index)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG)<<index<<d->imageSortProxyModel->mapToSource(index);
+    qCDebug(DIGIKAM_GENERAL_LOG) << index << d->imageSortProxyModel->mapToSource(index);
     emit(signalImageActivated(d->imageSortProxyModel->mapToSource(index)));
 }
 
@@ -253,30 +253,30 @@ void GPSImageList::setDragEnabled(const bool state)
 
 void GPSImageList::slotUpdateActionsEnabled()
 {
-    QTreeView::setDragEnabled(d->dragEnabled&&d->editEnabled);
+    QTreeView::setDragEnabled(d->dragEnabled && d->editEnabled);
 
-    if (d->dragEnabled&&d->editEnabled)
+    if (d->dragEnabled && d->editEnabled)
     {
         QTreeView::setDragDropMode(QAbstractItemView::DragOnly);
     }
 }
 
-bool GPSImageList::eventFilter(QObject *watched, QEvent *event)
+bool GPSImageList::eventFilter(QObject* watched, QEvent* event)
 {
     QHeaderView* const headerView = header();
 
-    if ( (watched!=headerView) || (event->type()!=QEvent::ContextMenu) || (!d->model) )
+    if (!d->model || (watched != headerView) || (event->type() != QEvent::ContextMenu))
         return QWidget::eventFilter(watched, event);
 
-    QMenu* const menu             = new QMenu(this);
+    QMenu* const menu               = new QMenu(this);
 
     // add action for all the columns
-    for (int i=0; i<d->model->columnCount(); ++i)
+    for (int i = 0 ; i < d->model->columnCount() ; ++i)
     {
         const QString columnName    = d->model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
         const bool isVisible        = !headerView->isSectionHidden(i);
 
-        QAction * const columnAction = new QAction(columnName, menu);
+        QAction* const columnAction = new QAction(columnName, menu);
         columnAction->setCheckable(true);
         columnAction->setChecked(isVisible);
         columnAction->setData(i);
