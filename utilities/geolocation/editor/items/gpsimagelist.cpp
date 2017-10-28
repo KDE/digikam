@@ -28,12 +28,9 @@
 
 #include <QDrag>
 #include <QHeaderView>
-#include <QPainter>
-#include <QVBoxLayout>
 #include <QWheelEvent>
 #include <QMenu>
 #include <QAction>
-#include <QIcon>
 
 // KDE includes
 
