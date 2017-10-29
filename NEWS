@@ -70,4 +70,5 @@ BUGFIXES FROM BUGZILLA:
 059 ==> 386296 - New Persons Tag aren't listed in People tag collection.
 060 ==> 312551 - showFoto displays camera jpegs with AdobeRGB DCF information with a blue color cast.
 061 ==> 375633 - Two buttons in Map tab on the Right Sidebar are not working.
-062 ==> 
+062 ==> 342689 - Map in image/geolocalisation is always at minimum zoom.
+063 ==> 
