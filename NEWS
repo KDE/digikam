@@ -68,4 +68,5 @@ BUGFIXES FROM BUGZILLA:
 057 ==> 386123 - Properties view does not include label properties
 058 ==> 371968 - Display of captions in caption editing tab broken unless caption ends in a newline.
 059 ==> 386296 - New Persons Tag aren't listed in People tag collection.
-060 ==> 
+060 ==> 312551 - showFoto displays camera jpegs with AdobeRGB DCF information with a blue color cast.
+061 ==> 
