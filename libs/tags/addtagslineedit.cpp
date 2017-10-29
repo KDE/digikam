@@ -49,7 +49,7 @@ public:
         : completer(0),
           tagView(0),
           tagFilterModel(0),
-          parentTagId(-1)
+          parentTagId(0)
     {
     }
 
