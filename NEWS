@@ -71,4 +71,5 @@ BUGFIXES FROM BUGZILLA:
 060 ==> 312551 - showFoto displays camera jpegs with AdobeRGB DCF information with a blue color cast.
 061 ==> 375633 - Two buttons in Map tab on the Right Sidebar are not working.
 062 ==> 342689 - Map in image/geolocalisation is always at minimum zoom.
-063 ==> 
+063 ==> 365744 - GPS information not found in 4.12, but existing in the JPG files.
+064 ==> 
