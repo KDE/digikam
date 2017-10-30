@@ -176,8 +176,8 @@ Default=Welcome to my web gallery!
 
 [X-HTMLExport Parameter longformat]
 Name=Caption Date Format (see http://xsltsl.sourceforge.net/date-time.html)
-Name[ca]=Format de la data del títol (vegeu http://xsltsl.sourceforge.net/date-time.html)
-Name[ca@valencia]=Format de la data del títol (vegeu http://xsltsl.sourceforge.net/date-time.html)
+Name[ca]=Format de la data del comentari (vegeu http://xsltsl.sourceforge.net/date-time.html)
+Name[ca@valencia]=Format de la data del comentari (vegeu http://xsltsl.sourceforge.net/date-time.html)
 Name[cs]=Formát data titulku (viz http://xsltsl.sourceforge.net/date-time.html)
 Name[de]=Datumsformat des Titels (see http://xsltsl.sourceforge.net/date-time.html)
 Name[el]=Μορφή ημερομηνίας τίτλου (δείτε http://xsltsl.sourceforge.net/date-time.html)
