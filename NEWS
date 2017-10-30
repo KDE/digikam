@@ -72,4 +72,5 @@ BUGFIXES FROM BUGZILLA:
 061 ==> 375633 - Two buttons in Map tab on the Right Sidebar are not working.
 062 ==> 342689 - Map in image/geolocalisation is always at minimum zoom.
 063 ==> 365744 - GPS information not found in 4.12, but existing in the JPG files.
-064 ==> 
+064 ==> 386335 - Use a different shortcut for right panel zoom to 100%.
+065 ==> 
