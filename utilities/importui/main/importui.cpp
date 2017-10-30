@@ -574,7 +574,7 @@ void ImportUI::setupActions()
     d->zoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18nc("@action:inmenu", "Zoom to 100%"), this);
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
     ac->addAction(QLatin1String("import_zoomto100percents"), d->zoomTo100percents);
-    ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Comma);
+    ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Period);
 
     // ------------------------------------------------------------------------------------------------
 
