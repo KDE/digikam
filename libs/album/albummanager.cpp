@@ -932,7 +932,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
             migrateChoices = new QComboBox;
 
-            for (int i = 0; i < candidateIds.size(); ++i)
+            for (int i = 0 ; i < candidateIds.size() ; ++i)
             {
                 migrateChoices->addItem(QDir::toNativeSeparators(candidateDescriptions.at(i)), candidateIds.at(i));
             }
@@ -1549,7 +1549,7 @@ void AlbumManager::scanTAlbums()
         QHash<int, TAlbum*> tagHash;
 
         // insert items into a dict for quick lookup
-        for (TagInfo::List::const_iterator iter = tList.constBegin(); iter != tList.constEnd(); ++iter)
+        for (TagInfo::List::const_iterator iter = tList.constBegin() ; iter != tList.constEnd() ; ++iter)
         {
             TagInfo info        = *iter;
             TAlbum* const album = new TAlbum(info.name, info.id);
@@ -1567,8 +1567,7 @@ void AlbumManager::scanTAlbums()
         tagHash.insert(0, rootTag);
 
         // build tree
-        for (QHash<int, TAlbum*>::const_iterator iter = tagHash.constBegin();
-             iter != tagHash.constEnd(); ++iter)
+        for (QHash<int, TAlbum*>::const_iterator iter = tagHash.constBegin() ; iter != tagHash.constEnd() ; ++iter)
         {
             TAlbum* album = *iter;
 
@@ -1619,7 +1618,7 @@ void AlbumManager::scanTAlbums()
         delete rootTag;
     }
 
-    for (TagInfo::List::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
+    for (TagInfo::List::const_iterator it = tList.constBegin() ; it != tList.constEnd() ; ++it)
     {
         TagInfo info = *it;
 
@@ -1906,7 +1905,7 @@ AlbumList AlbumManager::allDAlbums() const
 
 void AlbumManager::setCurrentAlbums(QList<Album*> albums)
 {
-    if(albums.isEmpty())
+    if (albums.isEmpty())
         return;
 
     QList<Album*> filtered;
@@ -1916,7 +1915,7 @@ void AlbumManager::setCurrentAlbums(QList<Album*> albums)
     */
     Q_FOREACH(Album* const album, albums)
     {
-        if(album != 0)
+        if (album != 0)
         {
             filtered.append(album);
         }
@@ -1945,7 +1944,7 @@ PAlbum* AlbumManager::currentPAlbum() const
      * Temporary fix, to return multiple items,
      * iterate and cast each element
      */
-    if(!d->currentAlbums.isEmpty())
+    if (!d->currentAlbums.isEmpty())
         return dynamic_cast<PAlbum*>(d->currentAlbums.first());
     else
         return 0;
@@ -1959,11 +1958,11 @@ QList<TAlbum*> AlbumManager::currentTAlbums() const
     QList<TAlbum*> talbums;
     QList<Album*>::iterator it;
 
-    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
+    for (it = d->currentAlbums.begin() ; it != d->currentAlbums.end() ; ++it)
     {
         TAlbum* const temp = dynamic_cast<TAlbum*>(*it);
 
-        if(temp)
+        if (temp)
             talbums.push_back(temp);
     }
 
@@ -2064,7 +2063,7 @@ TAlbum* AlbumManager::findTAlbum(const QString& tagPath) const
 
 SAlbum* AlbumManager::findSAlbum(const QString& name) const
 {
-    for (Album* album = d->rootSAlbum->firstChild(); album; album = album->next())
+    for (Album* album = d->rootSAlbum->firstChild() ; album ; album = album->next())
     {
         if (album->title() == name)
         {
@@ -2078,7 +2077,7 @@ SAlbum* AlbumManager::findSAlbum(const QString& name) const
 QList<SAlbum*> AlbumManager::findSAlbumsBySearchType(int searchType) const
 {
     QList<SAlbum*> albums;
-    for (Album* album = d->rootSAlbum->firstChild(); album; album = album->next())
+    for (Album* album = d->rootSAlbum->firstChild() ; album ; album = album->next())
     {
         if (album != 0)
         {
@@ -2670,7 +2669,7 @@ QStringList AlbumManager::tagPaths(const QList<int>& tagIDs, bool leadingSlash, 
 {
     QStringList tagPaths;
 
-    for (QList<int>::const_iterator it = tagIDs.constBegin(); it != tagIDs.constEnd(); ++it)
+    for (QList<int>::const_iterator it = tagIDs.constBegin() ; it != tagIDs.constEnd() ; ++it)
     {
         TAlbum* album = findTAlbum(*it);
 
@@ -2864,7 +2863,7 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString& changedQuery,
         emit signalAlbumRenamed(album);
     }
 
-    if(!d->currentAlbums.isEmpty())
+    if (!d->currentAlbums.isEmpty())
     {
         if (d->currentAlbums.first() == album)
         {
@@ -2972,7 +2971,7 @@ void AlbumManager::removePAlbum(PAlbum* album)
 
     CoreDbUrl url = album->databaseUrl();
 
-    if(!d->currentAlbums.isEmpty())
+    if (!d->currentAlbums.isEmpty())
     {
         if (album == d->currentAlbums.first())
         {
@@ -3039,7 +3038,7 @@ void AlbumManager::removeTAlbum(TAlbum* album)
     emit signalAlbumAboutToBeDeleted(album);
     d->allAlbumsIdHash.remove(album->globalID());
 
-    if(!d->currentAlbums.isEmpty())
+    if (!d->currentAlbums.isEmpty())
     {
         if (album == d->currentAlbums.first())
         {
@@ -3123,7 +3122,7 @@ void AlbumManager::slotPeopleJobData(const QMap<QString,QMap<int,int> >& facesSt
     {
         QMap<int, int>::const_iterator it;
 
-        for (it = counts.begin(); it != counts.end(); ++it)
+        for (it = counts.begin() ; it != counts.end() ; ++it)
         {
             d->fAlbumsCount[it.key()] += it.value();
         }
@@ -3213,7 +3212,7 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
 
     QMap<YearMonth, int> yearMonthMap;
 
-    for (QMap<QDateTime, int>::const_iterator it = datesStatMap.constBegin(); it != datesStatMap.constEnd(); ++it)
+    for (QMap<QDateTime, int>::const_iterator it = datesStatMap.constBegin() ; it != datesStatMap.constEnd() ; ++it)
     {
         YearMonth yearMonth = YearMonth(it.key().date().year(), it.key().date().month());
 
@@ -3231,8 +3230,7 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
 
     int year, month;
 
-    for (QMap<YearMonth, int>::const_iterator iter = yearMonthMap.constBegin();
-         iter != yearMonthMap.constEnd(); ++iter)
+    for (QMap<YearMonth, int>::const_iterator iter = yearMonthMap.constBegin() ; iter != yearMonthMap.constEnd() ; ++iter)
     {
         year  = iter.key().first;
         month = iter.key().second;
@@ -3291,8 +3289,7 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
 
     // Now the items contained in the maps are the ones which
     // have been deleted.
-    for (QMap<QDate, DAlbum*>::const_iterator it = mAlbumMap.constBegin();
-         it != mAlbumMap.constEnd(); ++it)
+    for (QMap<QDate, DAlbum*>::const_iterator it = mAlbumMap.constBegin() ; it != mAlbumMap.constEnd() ; ++it)
     {
         DAlbum* const album = it.value();
         emit signalAlbumAboutToBeDeleted(album);
@@ -3303,8 +3300,7 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
         emit signalAlbumHasBeenDeleted(deletedAlbum);
     }
 
-    for (QMap<int, DAlbum*>::const_iterator it = yAlbumMap.constBegin();
-         it != yAlbumMap.constEnd(); ++it)
+    for (QMap<int, DAlbum*>::const_iterator it = yAlbumMap.constBegin() ; it != yAlbumMap.constEnd() ; ++it)
     {
         DAlbum* const album = it.value();
         emit signalAlbumAboutToBeDeleted(album);
@@ -3421,7 +3417,7 @@ void AlbumManager::slotSearchChange(const SearchChangeset& changeset)
             break;
 
         case SearchChangeset::Changed:
-            if(!d->currentAlbums.isEmpty())
+            if (!d->currentAlbums.isEmpty())
             {
                 Album* currentAlbum = d->currentAlbums.first();
 
