@@ -681,8 +681,17 @@ void CoreDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
 
 void CoreDB::setTagParentID(int tagID, int newParentTagID)
 {
-    d->db->execSql(QString::fromUtf8("UPDATE Tags SET pid=? WHERE id=?;"),
-                   newParentTagID, tagID);
+    if (d->db->databaseType() == BdEngineBackend::DbType::SQLite)
+    {
+        d->db->execSql(QString::fromUtf8("UPDATE or REPLACE Tags SET pid=? WHERE id=?;"),
+                       newParentTagID, tagID);
+    }
+    else
+    {
+        d->db->execSql(QString::fromUtf8("UPDATE Tags SET pid=? WHERE id=?;"),
+                       newParentTagID, tagID);
+    }
+
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Reparented));
 }
 

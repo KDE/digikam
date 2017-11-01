@@ -74,4 +74,5 @@ BUGFIXES FROM BUGZILLA:
 063 ==> 365744 - GPS information not found in 4.12, but existing in the JPG files.
 064 ==> 386335 - Use a different shortcut for right panel zoom to 100%.
 065 ==> 382818 - Rotating a picture ends in crash.
-066 ==> 
+066 ==> 368734 - Moving a hierarchy of tags (a tag with subtags) doesn't work and can lead to losing the complete hierarchy.
+067 ==> 
