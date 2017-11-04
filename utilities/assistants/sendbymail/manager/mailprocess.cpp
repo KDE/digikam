@@ -425,7 +425,6 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(QLatin1String("start"));
                     args.append(prog);
                     prog = QLatin1String("cmd");
 #endif
@@ -463,7 +462,6 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(QLatin1String("start"));
                     args.append(prog);
                     prog = QLatin1String("cmd");
 #endif
@@ -500,7 +498,6 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(QLatin1String("start"));
                     args.append(prog);
                     prog = QLatin1String("cmd");
 #endif
@@ -538,7 +535,6 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(QLatin1String("start"));
                     args.append(prog);
                     prog = QLatin1String("cmd");
 #endif
@@ -577,7 +573,6 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(QLatin1String("start"));
                     args.append(prog);
                     prog = QLatin1String("cmd");
 #endif
