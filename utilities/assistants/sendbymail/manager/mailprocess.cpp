@@ -400,13 +400,6 @@ bool MailProcess::invokeMailAgent()
 
         if (!fileList.isEmpty())
         {
-            QStringList stringFileList;
-
-            foreach(const QUrl& file, fileList)
-            {
-                stringFileList << file.toLocalFile();
-            }
-
             QString binPath = d->settings->binPaths[d->settings->mailProgram];
 
             if (binPath.isEmpty())
@@ -425,7 +418,7 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(prog);
+                    args.append(QDir::toNativeSeparators((prog));
                     prog = QLatin1String("cmd");
 #endif
 
@@ -435,7 +428,7 @@ bool MailProcess::invokeMailAgent()
                     for (QList<QUrl>::ConstIterator it = fileList.constBegin() ; it != fileList.constEnd() ; ++it)
                     {
                         args.append(QLatin1String("-a"));
-                        args.append((*it).toLocalFile());
+                        args.append(QDir::toNativeSeparators((*it).toLocalFile()));
                     }
 
                     QProcess process;
@@ -462,7 +455,7 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(prog);
+                    args.append(QDir::toNativeSeparators((prog));
                     prog = QLatin1String("cmd");
 #endif
 
@@ -472,7 +465,7 @@ bool MailProcess::invokeMailAgent()
                     for (QList<QUrl>::ConstIterator it = fileList.constBegin() ;
                          it != fileList.constEnd() ; ++it)
                     {
-                        args.append((*it).toLocalFile());
+                        args.append(QDir::toNativeSeparators((*it).toLocalFile()));
                     }
 
                     QProcess process;
@@ -498,7 +491,7 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(prog);
+                    args.append(QDir::toNativeSeparators((prog));
                     prog = QLatin1String("cmd");
 #endif
 
@@ -507,7 +500,7 @@ bool MailProcess::invokeMailAgent()
                     for (QList<QUrl>::ConstIterator it = fileList.constBegin() ; it != fileList.constEnd() ; ++it)
                     {
                         tmp.append(QLatin1String("&attach="));
-                        tmp.append((*it).toLocalFile());
+                        tmp.append(QDir::toNativeSeparators((*it).toLocalFile()));
                     }
 
                     args.append(tmp);
@@ -535,14 +528,14 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(prog);
+                    args.append(QDir::toNativeSeparators((prog));
                     prog = QLatin1String("cmd");
 #endif
 
                     for (QList<QUrl>::ConstIterator it = fileList.constBegin() ; it != fileList.constEnd() ; ++it)
                     {
                         args.append(QLatin1String("--attach"));
-                        args.append((*it).toLocalFile());
+                        args.append(QDir::toNativeSeparators((*it).toLocalFile()));
                     }
 
                     QProcess process;
@@ -573,7 +566,7 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(prog);
+                    args.append(QDir::toNativeSeparators((prog));
                     prog = QLatin1String("cmd");
 #endif
                     args.append(QLatin1String("-compose"));
@@ -582,7 +575,7 @@ bool MailProcess::invokeMailAgent()
                     for (QList<QUrl>::ConstIterator it = fileList.constBegin() ; it != fileList.constEnd() ; ++it)
                     {
                         tmp.append(QLatin1String("file://"));
-                        tmp.append((*it).toLocalFile());
+                        tmp.append(QDir::toNativeSeparators((*it).toLocalFile()));
                         tmp.append(QLatin1String(","));
                     }
 
