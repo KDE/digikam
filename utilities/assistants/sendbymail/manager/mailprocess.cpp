@@ -418,7 +418,7 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(QDir::toNativeSeparators((prog));
+                    args.append(QDir::toNativeSeparators(prog));
                     prog = QLatin1String("cmd");
 #endif
 
@@ -455,7 +455,7 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(QDir::toNativeSeparators((prog));
+                    args.append(QDir::toNativeSeparators(prog));
                     prog = QLatin1String("cmd");
 #endif
 
@@ -491,7 +491,7 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(QDir::toNativeSeparators((prog));
+                    args.append(QDir::toNativeSeparators(prog));
                     prog = QLatin1String("cmd");
 #endif
 
@@ -528,7 +528,7 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(QDir::toNativeSeparators((prog));
+                    args.append(QDir::toNativeSeparators(prog));
                     prog = QLatin1String("cmd");
 #endif
 
@@ -566,7 +566,7 @@ bool MailProcess::invokeMailAgent()
 
 #ifdef Q_OS_WIN
                     args.append(QLatin1String("/c"));
-                    args.append(QDir::toNativeSeparators((prog));
+                    args.append(QDir::toNativeSeparators(prog));
                     prog = QLatin1String("cmd");
 #endif
                     args.append(QLatin1String("-compose"));
