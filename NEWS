@@ -75,4 +75,5 @@ BUGFIXES FROM BUGZILLA:
 064 ==> 386335 - Use a different shortcut for right panel zoom to 100%.
 065 ==> 382818 - Rotating a picture ends in crash.
 066 ==> 368734 - Moving a hierarchy of tags (a tag with subtags) doesn't work and can lead to losing the complete hierarchy.
-067 ==> 
+067 ==> 385269 - [DK 5.7] database migration sqlite -> mysql external server fails.
+068 ==> 

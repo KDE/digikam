@@ -626,35 +626,40 @@
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageHaarMatrix"><statement mode="query">
-                SELECT imageid, modificationDate, uniqueHash, matrix FROM ImageHaarMatrix;
+                SELECT imageid, modificationDate, uniqueHash, matrix FROM ImageHaarMatrix
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageHaarMatrix"><statement mode="query">
                 INSERT INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageInformation"><statement mode="query">
-                SELECT imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel FROM ImageInformation;
+                SELECT imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel FROM ImageInformation
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageInformation"><statement mode="query">
                 INSERT INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageMetadata"><statement mode="query">
-                SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata;
+                SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageMetadata"><statement mode="query">
                 INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_VideoMetadata"><statement mode="query">
-                SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec FROM VideoMetadata;
+                SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec FROM VideoMetadata
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_VideoMetadata"><statement mode="query">
                 INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
-                SELECT imageid, tagid, property, value FROM ImageTagProperties;
+                SELECT imageid, tagid, property, value FROM ImageTagProperties
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageTagProperties"><statement mode="query">
                 INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
@@ -668,63 +673,70 @@
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImagePositions"><statement mode="query">
-                SELECT  imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description FROM ImagePositions;
+                SELECT imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description FROM ImagePositions
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImagePositions"><statement mode="query">
                 INSERT INTO ImagePositions (imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description) VALUES (:imageid, :latitude, :latitudeNumber, :longitude, :longitudeNumber, :altitude, :orientation, :tilt, :roll, :accuracy, :description);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageComments"><statement mode="query">
-                SELECT  id, imageid, type, language, author, date, comment FROM ImageComments;
+                SELECT id, imageid, type, language, author, date, comment FROM ImageComments
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageComments"><statement mode="query">
                 INSERT INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageCopyright"><statement mode="query">
-                SELECT  id, imageid, property, value, extraValue FROM ImageCopyright;
+                SELECT id, imageid, property, value, extraValue FROM ImageCopyright
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageCopyright"><statement mode="query">
                 INSERT INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, :property, :value, :extraValue);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Tags"><statement mode="query">
-                SELECT  id, pid, name, CASE WHEN icon = 0 THEN NULL ELSE icon END AS icon, iconkde FROM Tags WHERE id != 0;
+                SELECT id, pid, name, CASE WHEN icon = 0 THEN NULL ELSE icon END AS icon, iconkde FROM Tags WHERE id != 0;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Tags"><statement mode="query">
                 INSERT INTO Tags (id, pid, name, icon, iconkde) VALUES (:id, :pid, :name, :icon, :iconkde);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageTags"><statement mode="query">
-                SELECT  imageid, tagid FROM ImageTags;
+                SELECT imageid, tagid FROM ImageTags
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageTags"><statement mode="query">
                 INSERT INTO ImageTags (imageid, tagid) VALUES (:imageid, :tagid);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageProperties"><statement mode="query">
-                SELECT  imageid, property, value FROM ImageProperties;
+                SELECT imageid, property, value FROM ImageProperties
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageProperties"><statement mode="query">
                 INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageHistory"><statement mode="query">
-                SELECT  imageid, uuid, history FROM ImageHistory;
+                SELECT imageid, uuid, history FROM ImageHistory
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageHistory"><statement mode="query">
                 INSERT INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
-                SELECT  subject, object, type FROM ImageRelations;
+                SELECT subject, object, type FROM ImageRelations
+                WHERE  subject IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
                 INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Searches"><statement mode="query">
-                SELECT  id, type, name, query FROM Searches;
+                SELECT id, type, name, query FROM Searches;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Searches"><statement mode="query">
                 INSERT INTO Searches (id, type, name, query) VALUES (:id, :type, :name, :query);
