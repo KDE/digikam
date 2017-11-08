@@ -76,4 +76,5 @@ BUGFIXES FROM BUGZILLA:
 065 ==> 382818 - Rotating a picture ends in crash.
 066 ==> 368734 - Moving a hierarchy of tags (a tag with subtags) doesn't work and can lead to losing the complete hierarchy.
 067 ==> 385269 - [DK 5.7] database migration sqlite -> mysql external server fails.
-068 ==> 
+068 ==> 3386663 - Crash with Samsung Galaxy S7 in the import tool.
+069 ==> 
