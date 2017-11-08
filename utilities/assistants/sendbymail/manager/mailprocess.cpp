@@ -400,9 +400,9 @@ bool MailProcess::invokeMailAgent()
 
         if (!fileList.isEmpty())
         {
-            QString binPath = d->settings->binPaths[d->settings->mailProgram];
+            QString prog = QDir::toNativeSeparators(d->settings->binPaths[d->settings->mailProgram]);
 
-            if (binPath.isEmpty())
+            if (prog.isEmpty())
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Mail binary path is empty."
                                              << "Cannot start Mail client program!";
@@ -413,14 +413,7 @@ bool MailProcess::invokeMailAgent()
             {
                 case MailSettings::BALSA:
                 {
-                    QString prog = binPath;
                     QStringList args;
-
-#ifdef Q_OS_WIN
-                    args.append(QLatin1String("/c"));
-                    args.append(QDir::toNativeSeparators(prog));
-                    prog = QLatin1String("cmd");
-#endif
 
                     args.append(QLatin1String("-m"));
                     args.append(QLatin1String("mailto:"));
@@ -451,13 +444,6 @@ bool MailProcess::invokeMailAgent()
                 case MailSettings::SYLPHEED:
                 {
                     QStringList args;
-                    QString     prog = binPath;
-
-#ifdef Q_OS_WIN
-                    args.append(QLatin1String("/c"));
-                    args.append(QDir::toNativeSeparators(prog));
-                    prog = QLatin1String("cmd");
-#endif
 
                     args.append(QLatin1String("--compose"));
                     args.append(QLatin1String("--attach"));
@@ -486,14 +472,7 @@ bool MailProcess::invokeMailAgent()
 
                 case MailSettings::EVOLUTION:
                 {
-                    QString prog = binPath;
                     QStringList args;
-
-#ifdef Q_OS_WIN
-                    args.append(QLatin1String("/c"));
-                    args.append(QDir::toNativeSeparators(prog));
-                    prog = QLatin1String("cmd");
-#endif
 
                     QString tmp = QLatin1String("mailto:?subject=");
 
@@ -523,14 +502,7 @@ bool MailProcess::invokeMailAgent()
 
                 case MailSettings::KMAIL:
                 {
-                    QString prog = binPath;
                     QStringList args;
-
-#ifdef Q_OS_WIN
-                    args.append(QLatin1String("/c"));
-                    args.append(QDir::toNativeSeparators(prog));
-                    prog = QLatin1String("cmd");
-#endif
 
                     for (QList<QUrl>::ConstIterator it = fileList.constBegin() ; it != fileList.constEnd() ; ++it)
                     {
@@ -560,15 +532,8 @@ bool MailProcess::invokeMailAgent()
                 case MailSettings::NETSCAPE:
                 case MailSettings::THUNDERBIRD:
                 {
-                    QString prog = binPath;
-
                     QStringList args;
 
-#ifdef Q_OS_WIN
-                    args.append(QLatin1String("/c"));
-                    args.append(QDir::toNativeSeparators(prog));
-                    prog = QLatin1String("cmd");
-#endif
                     args.append(QLatin1String("-compose"));
                     QString tmp = QLatin1String("attachment='");
 
