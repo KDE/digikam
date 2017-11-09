@@ -255,6 +255,11 @@ QString DBinaryIface::path(const QString& dir) const
         return baseName();
     }
 
+    if (dir.endsWith(QLatin1Char('/')))
+    {
+        return QString::fromUtf8("%1%2").arg(dir).arg(baseName());
+    }
+
     return QString::fromUtf8("%1%2%3").arg(dir).arg(QLatin1Char('/')).arg(baseName());
 }
 
