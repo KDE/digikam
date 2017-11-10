@@ -43,9 +43,6 @@
 #include "ddragobjects.h"
 #include "imageinfo.h"
 #include "albumtreeview.h"
-#include "coredb.h"
-#include "dbengineparameters.h"
-#include "dbenginebackend.h"
 
 namespace Digikam
 {
