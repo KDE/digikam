@@ -631,17 +631,6 @@ int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
     return id.toInt();
 }
 
-void CoreDB::moveTag(TAlbum* /*parentTagID*/)
-{
-    d->db->execSql(QString::fromUtf8("LOCK TABLE Tags WRITE;"));
-    d->db->execSql(QString::fromUtf8("SELECT @myLeft := lft FROM Tags WHERE id = :parentTagID;"));
-    d->db->execSql(QString::fromUtf8("SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);"));
-    d->db->execSql(QString::fromUtf8("UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;"));
-    d->db->execSql(QString::fromUtf8("UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;"));
-    d->db->execSql(QString::fromUtf8("UPDATE Tags SET lft = @myLeft + 1, rgt = @myLeft + 2 WHERE pid = :parentTagID;"));
-    d->db->execSql(QString::fromUtf8("UNLOCK TABLES;"));
-}
-
 void CoreDB::deleteTag(int tagID)
 {
     /*
@@ -690,7 +679,16 @@ void CoreDB::setTagParentID(int tagID, int newParentTagID)
     {
         d->db->execSql(QString::fromUtf8("UPDATE Tags SET pid=? WHERE id=?;"),
                        newParentTagID, tagID);
-    }
+
+        // NOTE: Update the Mysql TagsTree table which is used only in some search SQL queries (See lft/rgt tag ID properties).
+        // In SQlite, it is nicely maintained by Triggers.
+        // With MySQL, this did not work for some reason, and we patch a tree structure mimics in a different way.
+        QMap<QString, QVariant> bindingMap;
+        bindingMap.insert(QLatin1String(":tagID"),  tagID);
+        bindingMap.insert(QLatin1String(":tagPID"), newParentTagID);
+
+        d->db->execDBAction(d->db->getDBAction(QLatin1String("MoveTag")), bindingMap);
+   }
 
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Reparented));
 }

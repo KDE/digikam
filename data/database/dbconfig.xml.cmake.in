@@ -1276,11 +1276,11 @@
             </dbaction>
 
             <dbaction name="changeImageInformation">
-            <statement mode="query">INSERT INTO ImageInformation ( imageid, :fieldList ) VALUES ( :id, :valueList ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
+                <statement mode="query">INSERT INTO ImageInformation ( imageid, :fieldList ) VALUES ( :id, :valueList ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
             </dbaction>
 
             <dbaction name="changeImageHistory">
-            <statement mode="query">INSERT INTO ImageHistory( imageid, :fieldList ) VALUES ( :id, :valueList ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
+                <statement mode="query">INSERT INTO ImageHistory( imageid, :fieldList ) VALUES ( :id, :valueList ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
             </dbaction>
 
             <dbaction name="InsertTag" mode="transaction">
@@ -1294,14 +1294,30 @@
             </dbaction>
 
             <dbaction name="DeleteTag" mode="transaction">
-            <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
-            <statement mode="query">SELECT @myLeft := lft, @myRight := rgt, @myWidth := rgt - lft + 1
-                                    FROM Tags
-                                    WHERE id = :tagID;</statement>
-            <statement mode="query">DELETE FROM Tags WHERE lft BETWEEN @myLeft AND @myRight;</statement>
-            <statement mode="query">UPDATE Tags SET rgt = rgt - @myWidth WHERE rgt > @myRight;</statement>
-            <statement mode="query">UPDATE Tags SET lft = lft - @myWidth WHERE lft > @myRight;</statement>
-            <statement mode="plain">UNLOCK TABLES;</statement></dbaction>
+                <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
+                <statement mode="query">SELECT @myLeft := lft, @myRight := rgt, @myWidth := rgt - lft + 1
+                                        FROM Tags
+                                        WHERE id = :tagID;</statement>
+                <statement mode="query">DELETE FROM Tags WHERE lft BETWEEN @myLeft AND @myRight;</statement>
+                <statement mode="query">UPDATE Tags SET rgt = rgt - @myWidth WHERE rgt > @myRight;</statement>
+                <statement mode="query">UPDATE Tags SET lft = lft - @myWidth WHERE lft > @myRight;</statement>
+                <statement mode="plain">UNLOCK TABLES;</statement>
+            </dbaction>
+
+            <dbaction name="MoveTag" mode="transaction">
+                <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
+                <statement mode="query">SELECT @myLeft := lft, @myRight := rgt, @myWidth := rgt - lft + 1
+                                        FROM Tags
+                                        WHERE id = :tagID;</statement>
+                <statement mode="query">UPDATE Tags SET rgt = rgt - @myWidth WHERE rgt > @myRight AND id != :tagID;</statement>
+                <statement mode="query">UPDATE Tags SET lft = lft - @myWidth WHERE lft > @myRight AND id != :tagID;</statement>
+                <statement mode="query">SELECT @myLeft := lft FROM Tags WHERE id = :tagPID;</statement>
+                <statement mode="query">SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);</statement>
+                <statement mode="query">UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;</statement>
+                <statement mode="query">UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;</statement>
+                <statement mode="query">UPDATE Tags SET lft = @myLeft + 1, rgt = @myLeft + 2 WHERE id = :tagID;</statement>
+                <statement mode="plain">UNLOCK TABLES;</statement>
+            </dbaction>
 
             <dbaction name="deleteAlbumRoot" mode="transaction">
                 <statement mode="query">SELECT @albumID:=id FROM Albums WHERE albumRoot=:albumRoot;</statement>

@@ -383,13 +383,6 @@ public:
     QList<int> getRecentlyAssignedTags() const;
 
     /**
-     * Moves a tag within tag hierarchy.
-     * Lft and rgt also updated, along with
-     * parent tag id.
-     */
-    void moveTag(TAlbum* parentTagID);
-
-    /**
      * Deletes a tag from the database. This will not delete the
      * subtags of the tag.
      * @param tagID the id of the tag

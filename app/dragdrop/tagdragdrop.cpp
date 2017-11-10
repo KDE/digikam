@@ -118,17 +118,6 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                 {
                     // move dragItem as child of dropItem
                     newParentTag = destAlbum;
-
-                    // NOTE: Update the Mysql TagsTree table which is used only in some search SQL queries (See lft/rgt tag ID properties).
-                    // In SQlite, it is nicely maintained by Triggers.
-                    // With MySQL, this did not work for some reason, and we patch a tree structure mimics in a different way.
-
-                    DbEngineParameters internalServerParameters = DbEngineParameters::parametersFromConfig(KSharedConfig::openConfig());
-
-                    if (internalServerParameters.isMySQL())
-                    {
-                        CoreDbAccess().db()->moveTag(newParentTag);
-                    }
                 }
 
                 QString errMsg;
