@@ -157,6 +157,7 @@ Setup::Setup(QWidget* const parent)
     setStandardButtons(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     button(QDialogButtonBox::Ok)->setDefault(true);
     setFaceType(List);
+    resize(800, 600);
     setModal(true);
 
     d->databasePage     = new SetupDatabase();
