@@ -684,8 +684,8 @@ void CoreDB::setTagParentID(int tagID, int newParentTagID)
         // In SQlite, it is nicely maintained by Triggers.
         // With MySQL, this did not work for some reason, and we patch a tree structure mimics in a different way.
         QMap<QString, QVariant> bindingMap;
-        bindingMap.insert(QLatin1String(":tagID"),  tagID);
-        bindingMap.insert(QLatin1String(":tagPID"), newParentTagID);
+        bindingMap.insert(QLatin1String(":tagID"),     tagID);
+        bindingMap.insert(QLatin1String(":newTagPID"), newParentTagID);
 
         d->db->execDBAction(d->db->getDBAction(QLatin1String("MoveTag")), bindingMap);
    }
