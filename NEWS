@@ -79,4 +79,5 @@ BUGFIXES FROM BUGZILLA:
 068 ==> 386663 - Crash with Samsung Galaxy S7 in the import tool.
 069 ==> 386606 - Tags search is broken after moving tags (invalid lft/rgt columns).
 070 ==> 383326 - Moving a tag does not update the parent tag correctly.
-071 ==> 
+071 ==> 375346 - Many tags disappeared from database.
+072 ==> 
