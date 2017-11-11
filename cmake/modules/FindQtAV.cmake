@@ -25,22 +25,22 @@ Message(STATUS "QtAV search path: ${_qt5_install_prefix}")
 if (NOT APPLE)
     find_path(QTAV_CORE_INCLUDE_DIR
               NAMES QtAV.h
-              HINTS ${_qt5_install_prefix}                                           # For MXE
+              HINTS ${Qt5Core_INCLUDE_DIRS}
+                    ${_qt5_install_prefix}                                           # For MXE
                     ${_qt5_install_prefix}/../qt5/include                            # For Mageia
                     ${_qt5_install_prefix}/../../include/qt5                         # For Suse
-                    ${_qt5_install_prefix}/../../../include/x86_64-linux-gnu/qt5     # For Debian
-                    ${_qt5_install_prefix}/../../../include/i386-linux-gnu/qt5       # For Mint32 (possibly all 32 Debian)
+                    ${_qt5_install_prefix}/../../../include/${CMAKE_LIBRARY_ARCHITECTURE}/qt5     # For Debian
                     ${_qt5_install_prefix}/../../include/qt                          # For Arch
               PATH_SUFFIXES QtAV
     )
 
     find_path(QTAV_WIDGETS_INCLUDE_DIR
               NAMES QtAVWidgets.h
-              HINTS ${_qt5_install_prefix}                                           # For MXE
+              HINTS ${Qt5Core_INCLUDE_DIRS}
+                    ${_qt5_install_prefix}                                           # For MXE
                     ${_qt5_install_prefix}/../qt5/include                            # For Mageia
                     ${_qt5_install_prefix}/../../include/qt5                         # For Suse
-                    ${_qt5_install_prefix}/../../../include/x86_64-linux-gnu/qt5     # For Debian
-                    ${_qt5_install_prefix}/../../../include/i386-linux-gnu/qt5       # For Mint32 (possibly all 32 Debian)
+                    ${_qt5_install_prefix}/../../../include/${CMAKE_LIBRARY_ARCHITECTURE}/qt5     # For Debian
                     ${_qt5_install_prefix}/../../include/qt                          # For Arch
               PATH_SUFFIXES QtAVWidgets
     )
