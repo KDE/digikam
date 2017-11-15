@@ -82,4 +82,5 @@ BUGFIXES FROM BUGZILLA:
 071 ==> 375346 - Many tags disappeared from database.
 072 ==> 384849 - Database dropped when network collection not mounted.
 073 ==> 386874 - Cursor changes to forbidden symbol when dragging picture(s) to map.
-074 ==> 
+074 ==> 381432 - Olympus ORF files to DNG conversion fails in Windows 10.
+075 ==> 

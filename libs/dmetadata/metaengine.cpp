@@ -140,7 +140,7 @@ bool MetaEngine::supportMetadataWritting(const QString& typeMime)
     }
     else if (typeMime == QString::fromLatin1("image/x-raw"))
     {
-        return true;
+        return false;
     }
     else if (typeMime == QString::fromLatin1("image/pgf"))
     {
@@ -480,9 +480,9 @@ QString MetaEngine::getMimeType() const
     return d->mimeType;
 }
 
-void MetaEngine::setWriteRawFiles(const bool on)
+void MetaEngine::setWriteRawFiles(const bool /*on*/)
 {
-    d->writeRawFiles = on;
+    //d->writeRawFiles = on;
 }
 
 bool MetaEngine::writeRawFiles() const

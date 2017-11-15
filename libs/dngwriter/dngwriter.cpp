@@ -1256,7 +1256,8 @@ int DNGWriter::convert()
         // -----------------------------------------------------------------------------------------
         // Metadata makernote cleanup using Exiv2 for some RAW file types
         // See bug #204437 and #210371, and write XMP Sidecar if necessary
-
+        // We disable writing to RAW files, see bug #381432
+/*
         if (meta.load(dngFilePath))
         {
             if (inputInfo.suffix().toUpper() == QLatin1String("ORF"))
@@ -1274,7 +1275,7 @@ int DNGWriter::convert()
 
             meta.applyChanges();
         }
-
+*/
         // -----------------------------------------------------------------------------------------
         // update modification time if desired
 

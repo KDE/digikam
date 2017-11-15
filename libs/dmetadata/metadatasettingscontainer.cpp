@@ -75,7 +75,7 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
     saveColorLabel        = group.readEntry("Save Color Label",            false);
     saveRating            = group.readEntry("Save Rating",                 false);
 
-    writeRawFiles         = group.readEntry("Write RAW Files",             false);
+    //writeRawFiles         = group.readEntry("Write RAW Files",             false);
     useXMPSidecar4Reading = group.readEntry("Use XMP Sidecar For Reading", false);
     metadataWritingMode   = (MetaEngine::MetadataWritingMode)
                             group.readEntry("Metadata Writing Mode",       (int)MetaEngine::WRITETOIMAGEONLY);
