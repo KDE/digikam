@@ -625,6 +625,21 @@ QDateTime MetaEngine::getImageDateTime() const
                 }
             }
             {
+                Exiv2::XmpKey key("Xmp.photoshop.DateCreated");
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
+
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+
+                    if (dateTime.isValid())
+                    {
+                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.photoshop.DateCreated => " << dateTime;
+                        return dateTime;
+                    }
+                }
+            }
+            {
                 Exiv2::XmpKey key("Xmp.xmp.CreateDate");
                 Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
@@ -650,21 +665,6 @@ QDateTime MetaEngine::getImageDateTime() const
                     if (dateTime.isValid())
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.tiff.DateTime => " << dateTime;
-                        return dateTime;
-                    }
-                }
-            }
-            {
-                Exiv2::XmpKey key("Xmp.photoshop.DateCreated");
-                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
-
-                if (it != xmpData.end())
-                {
-                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
-
-                    if (dateTime.isValid())
-                    {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Xmp.photoshop.DateCreated => " << dateTime;
                         return dateTime;
                     }
                 }
