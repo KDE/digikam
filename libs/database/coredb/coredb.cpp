@@ -1020,37 +1020,37 @@ void CoreDB::getIgnoreDirectoryFilterSettings(QStringList* ignoreDirectoryFilter
 
     ignoreDirectoryFormats     = getSetting(QLatin1String("databaseIgnoreDirectoryFormats"));
     userIgnoreDirectoryFormats = getSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"));
-    *ignoreDirectoryFilter     = joinMainAndUserFilterString(QLatin1Char(' '), ignoreDirectoryFormats, userIgnoreDirectoryFormats);
+    *ignoreDirectoryFilter     = joinMainAndUserFilterString(QLatin1Char(';'), ignoreDirectoryFormats, userIgnoreDirectoryFormats);
 }
 
 void CoreDB::setFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter)
 {
-    setSetting(QLatin1String("databaseImageFormats"), imageFilter.join(QLatin1String(";")));
-    setSetting(QLatin1String("databaseVideoFormats"), videoFilter.join(QLatin1String(";")));
-    setSetting(QLatin1String("databaseAudioFormats"), audioFilter.join(QLatin1String(";")));
+    setSetting(QLatin1String("databaseImageFormats"), imageFilter.join(QLatin1Char(';')));
+    setSetting(QLatin1String("databaseVideoFormats"), videoFilter.join(QLatin1Char(';')));
+    setSetting(QLatin1String("databaseAudioFormats"), audioFilter.join(QLatin1Char(';')));
 }
 
 void CoreDB::setIgnoreDirectoryFilterSettings(const QStringList& ignoreDirectoryFilter)
 {
-    setSetting(QLatin1String("databaseIgnoreDirectoryFormats"), ignoreDirectoryFilter.join(QLatin1String(" ")));
+    setSetting(QLatin1String("databaseIgnoreDirectoryFormats"), ignoreDirectoryFilter.join(QLatin1Char(';')));
 }
 
 void CoreDB::setUserFilterSettings(const QStringList& imageFilter,
                                    const QStringList& videoFilter,
                                    const QStringList& audioFilter)
 {
-    setSetting(QLatin1String("databaseUserImageFormats"), imageFilter.join(QLatin1String(";")));
-    setSetting(QLatin1String("databaseUserVideoFormats"), videoFilter.join(QLatin1String(";")));
-    setSetting(QLatin1String("databaseUserAudioFormats"), audioFilter.join(QLatin1String(";")));
+    setSetting(QLatin1String("databaseUserImageFormats"), imageFilter.join(QLatin1Char(';')));
+    setSetting(QLatin1String("databaseUserVideoFormats"), videoFilter.join(QLatin1Char(';')));
+    setSetting(QLatin1String("databaseUserAudioFormats"), audioFilter.join(QLatin1Char(';')));
 }
 
 void CoreDB::setUserIgnoreDirectoryFilterSettings(const QStringList& ignoreDirectoryFilters)
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDB::setUserIgnoreDirectoryFilterSettings. "
                                      "ignoreDirectoryFilterString: "
-                                  << ignoreDirectoryFilters.join(QLatin1Char(' '));
+                                  << ignoreDirectoryFilters.join(QLatin1Char(';'));
 
-    setSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"), ignoreDirectoryFilters.join(QLatin1String(" ")));
+    setSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"), ignoreDirectoryFilters.join(QLatin1Char(';')));
 }
 
 QUuid CoreDB::databaseUuid()

@@ -121,7 +121,7 @@ SetupDatabase::SetupDatabase(QWidget* const parent)
     QLabel* const ignoreInfoLabel = new QLabel(
                 i18n("<p>Set the names of directories that you want to ignore "
                      "from your photo collections. The names are case sensitive "
-                     "and should be separated by a whitespace.</p>"
+                     "and should be separated by a semicolon.</p>"
                      "<p>This is for example useful when you store your photos "
                      "on a Synology NAS (Network Attached Storage). In every "
                      "directory the system creates a subdirectory @eaDir to "
@@ -190,7 +190,7 @@ void SetupDatabase::applySettings()
     if (d->ignoreEdit->text() != ignoreDirectory)
     {
         CoreDbAccess().db()->setUserIgnoreDirectoryFilterSettings(
-                    cleanUserFilterString(d->ignoreEdit->text(), true));
+                    cleanUserFilterString(d->ignoreEdit->text(), true, true));
 
         ScanController::instance()->completeCollectionScanInBackground(false);
     }

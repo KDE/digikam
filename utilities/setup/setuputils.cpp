@@ -30,19 +30,35 @@
 namespace Digikam
 {
 
-QStringList cleanUserFilterString(QString filterString, const bool caseSensitive)
+QStringList cleanUserFilterString(QString filterString,
+                                  const bool caseSensitive,
+                                  const bool useSemicolon)
 {
     if (!caseSensitive)
     {
         filterString = filterString.toLower();
     }
-    filterString.replace(QLatin1Char(';'), QLatin1Char(' '));
-    filterString.remove(QLatin1String("*"));
-    filterString.replace(QLatin1String(" ."), QLatin1String(" "));
-    filterString.replace(QLatin1String(" -."), QLatin1String(" -"));
+
+    QChar separator;
+
+    if (!useSemicolon)
+    {
+        separator = QLatin1Char(' ');
+        filterString.remove(QLatin1String("*"));
+        filterString.replace(QLatin1Char(';'), QLatin1Char(' '));
+        filterString.replace(QLatin1String(" ."), QLatin1String(" "));
+        filterString.replace(QLatin1String(" -."), QLatin1String(" -"));
+    }
+    else
+    {
+        separator = QLatin1Char(';');
+        filterString.replace(QLatin1String(";."), QLatin1String(";"));
+        filterString.replace(QLatin1String(";-."), QLatin1String(";-"));
+    }
 
     QStringList filterList;
-    foreach(const QString& filter, filterString.split(QLatin1Char(' '), QString::SkipEmptyParts))
+
+    foreach(const QString& filter, filterString.split(separator, QString::SkipEmptyParts))
     {
         filterList << filter.trimmed();
     }
