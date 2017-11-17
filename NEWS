@@ -84,4 +84,5 @@ BUGFIXES FROM BUGZILLA:
 073 ==> 386874 - Cursor changes to forbidden symbol when dragging picture(s) to map.
 074 ==> 381432 - Olympus ORF files to DNG conversion fails in Windows 10.
 075 ==> 385471 - Geolocation Editor Opens Map To A Random Location.
-076 ==> 
+076 ==> 387000 - GPS Longitude Decimalisation Appears Incorrect In Map.
+077 ==> 
