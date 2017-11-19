@@ -937,7 +937,7 @@ QString CoreDB::getSetting(const QString& keyword)
 }
 
 // helper method
-static QStringList joinMainAndUserFilterString(const QLatin1Char sep, const QString& filter,
+static QStringList joinMainAndUserFilterString(const QLatin1Char& sep, const QString& filter,
                                                const QString& userFilter)
 {
     QSet<QString> filterSet;
