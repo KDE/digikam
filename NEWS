@@ -77,13 +77,10 @@ BUGFIXES FROM BUGZILLA:
 066 ==> 368734 - Moving a hierarchy of tags (a tag with subtags) doesn't work and can lead to losing the complete hierarchy.
 067 ==> 385269 - [DK 5.7] database migration sqlite -> mysql external server fails.
 068 ==> 386663 - Crash with Samsung Galaxy S7 in the import tool.
-069 ==> 386606 - Tags search is broken after moving tags (invalid lft/rgt columns).
-070 ==> 383326 - Moving a tag does not update the parent tag correctly.
-071 ==> 375346 - Many tags disappeared from database.
-072 ==> 384849 - Database dropped when network collection not mounted.
-073 ==> 386874 - Cursor changes to forbidden symbol when dragging picture(s) to map.
-074 ==> 381432 - Olympus ORF files to DNG conversion fails in Windows 10.
-075 ==> 385471 - Geolocation Editor Opens Map To A Random Location.
-076 ==> 387000 - GPS Longitude Decimalisation Appears Incorrect In Map.
-077 ==> 386785 - Change needed for separator in ignore list (currently blank space).
-078 ==> 
+069 ==> 384849 - Database dropped when network collection not mounted.
+070 ==> 386874 - Cursor changes to forbidden symbol when dragging picture(s) to map.
+071 ==> 381432 - Olympus ORF files to DNG conversion fails in Windows 10.
+072 ==> 385471 - Geolocation Editor Opens Map To A Random Location.
+073 ==> 387000 - GPS Longitude Decimalisation Appears Incorrect In Map.
+074 ==> 386785 - Change needed for separator in ignore list (currently blank space).
+075 ==> 
