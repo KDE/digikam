@@ -83,4 +83,6 @@ BUGFIXES FROM BUGZILLA:
 072 ==> 385471 - Geolocation Editor Opens Map To A Random Location.
 073 ==> 387000 - GPS Longitude Decimalisation Appears Incorrect In Map.
 074 ==> 386785 - Change needed for separator in ignore list (currently blank space).
-075 ==> 
+075 ==> 375346 - Many tags disappeared from database.
+076 ==> 383326 - Moving a tag does not update the parent tag correctly
+077 ==> 
