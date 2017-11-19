@@ -1304,18 +1304,21 @@
                 <statement mode="plain">UNLOCK TABLES;</statement>
             </dbaction>
 
-            <dbaction name="MoveTag" mode="transaction">
+            <dbaction name="MoveTagTree" mode="transaction">
                 <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
                 <statement mode="query">SELECT @myLeft := lft, @myRight := rgt, @myWidth := rgt - lft + 1
-                                        FROM Tags
-                                        WHERE id = :tagID;</statement>
-                <statement mode="query">UPDATE Tags SET rgt = rgt - @myWidth WHERE rgt > @myRight AND id != :tagID;</statement>
-                <statement mode="query">UPDATE Tags SET lft = lft - @myWidth WHERE lft > @myRight AND id != :tagID;</statement>
-                <statement mode="query">SELECT @myLeft := lft FROM Tags WHERE id = :newTagPID;</statement>
-                <statement mode="query">SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);</statement>
-                <statement mode="query">UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;</statement>
-                <statement mode="query">UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;</statement>
-                <statement mode="query">UPDATE Tags SET lft = @myLeft + 1, rgt = @myLeft + 2 WHERE id = :tagID;</statement>
+                                        FROM Tags WHERE id = :tagID;</statement>
+                <statement mode="query">UPDATE Tags SET rgt = rgt * -1, lft = lft * -1
+                                        WHERE lft BETWEEN @myLeft AND @myRight;</statement>
+                <statement mode="query">UPDATE Tags SET rgt = rgt - @myWidth WHERE rgt > @myRight;</statement>
+                <statement mode="query">UPDATE Tags SET lft = lft - @myWidth WHERE lft > @myRight;</statement>
+                <statement mode="query">SELECT @myNewLeft := lft FROM Tags WHERE id = :newTagPID;</statement>
+                <statement mode="query">SELECT @myNewLeft := IF (@myNewLeft is null, 0, @myNewLeft);</statement>
+                <statement mode="query">UPDATE Tags SET rgt = rgt + @myWidth WHERE rgt > @myNewLeft;</statement>
+                <statement mode="query">UPDATE Tags SET lft = lft + @myWidth WHERE lft > @myNewLeft;</statement>
+                <statement mode="query">UPDATE Tags SET lft = lft * -1 - @myLeft + @myNewLeft + 1,
+                                                        rgt = rgt * -1 - @myLeft + @myNewLeft + 1
+                                        WHERE lft * -1 BETWEEN @myLeft AND @myRight;</statement>
                 <statement mode="plain">UNLOCK TABLES;</statement>
             </dbaction>
 

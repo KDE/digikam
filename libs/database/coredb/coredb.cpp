@@ -687,7 +687,7 @@ void CoreDB::setTagParentID(int tagID, int newParentTagID)
         bindingMap.insert(QLatin1String(":tagID"),     tagID);
         bindingMap.insert(QLatin1String(":newTagPID"), newParentTagID);
 
-        d->db->execDBAction(d->db->getDBAction(QLatin1String("MoveTag")), bindingMap);
+        d->db->execDBAction(d->db->getDBAction(QLatin1String("MoveTagTree")), bindingMap);
    }
 
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Reparented));

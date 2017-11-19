@@ -85,4 +85,5 @@ BUGFIXES FROM BUGZILLA:
 074 ==> 386785 - Change needed for separator in ignore list (currently blank space).
 075 ==> 375346 - Many tags disappeared from database.
 076 ==> 383326 - Moving a tag does not update the parent tag correctly
-077 ==> 
+077 ==> 386606 - tags search is broken after moving tags (invalid lft/rgt columns).
+078 ==> 
