@@ -314,7 +314,7 @@ void SetupDatabase::slotShowCurrentIgnoredDirectoriesSettings() const
     CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectoryList);
     QString text = i18n("<p>Directories starting with a dot are ignored by "
                         "default.<br/> <code>%1</code></p>",
-                        ignoreDirectoryList.join(QLatin1String(" ")));
+                        ignoreDirectoryList.join(QLatin1Char(';')));
     QWhatsThis::showText(d->ignoreLabel->mapToGlobal(QPoint(0, 0)), text, d->ignoreLabel);
 }
 
