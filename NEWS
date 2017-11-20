@@ -89,4 +89,5 @@ BUGFIXES FROM BUGZILLA:
 078 ==> 386676 - Multi-processor conversion.
 079 ==> 342427 - Timing issues when large GPX file is loaded and option "Show tracks on Map" is used with GoogleMaps.
 080 ==> 375569 - Wrong tags in tooltips.
-081 ==> 
+081 ==> 371578 - Untagged images no longer shown in "no tags" overview when removing existing tag.
+082 ==> 
