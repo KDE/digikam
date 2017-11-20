@@ -87,4 +87,5 @@ BUGFIXES FROM BUGZILLA:
 076 ==> 383326 - Moving a tag does not update the parent tag correctly
 077 ==> 386606 - Tags search is broken after moving tags (invalid lft/rgt columns).
 078 ==> 386676 - Multi-processor conversion.
-079 ==> 
+079 ==> 342427 - Timing issues when large GPX file is loaded and option "Show tracks on Map" is used with GoogleMaps.
+080 ==> 
