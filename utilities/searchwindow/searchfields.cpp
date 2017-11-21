@@ -1499,7 +1499,7 @@ void SearchFieldRangeInt::valueChanged()
 
         if (!secondAtMinimum)
         {
-            m_firstBox->setRange(m_secondBox->value(), m_max);
+            m_firstBox->setRange(m_secondBox->value() - 1, m_max);
             validValue = true;
         }
 
@@ -1535,7 +1535,7 @@ void SearchFieldRangeInt::valueChanged()
 
         if (!firstAtMinimum)
         {
-            m_secondBox->setRange(m_firstBox->value(), m_max);
+            m_secondBox->setRange(m_firstBox->value() - 1, m_max);
 
             if (secondAtMinimum)
             {
@@ -1757,7 +1757,7 @@ void SearchFieldRangeDouble::valueChanged()
 
     if (!firstAtMinimum)
     {
-        m_secondBox->setRange(m_firstBox->value(), m_max);
+        m_secondBox->setRange(m_firstBox->value() - 0.1, m_max);
 
         if (secondAtMinimum)
         {

@@ -90,4 +90,5 @@ BUGFIXES FROM BUGZILLA:
 079 ==> 342427 - Timing issues when large GPX file is loaded and option "Show tracks on Map" is used with GoogleMaps.
 080 ==> 375569 - Wrong tags in tooltips.
 081 ==> 371578 - Untagged images no longer shown in "no tags" overview when removing existing tag.
-082 ==> 
+082 ==> 387171 - Advanced search by lens by single focal length.
+083 ==> 
