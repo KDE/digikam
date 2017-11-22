@@ -205,7 +205,7 @@ void Task::run()
         QString tmpPath(url.toLocalFile());
         QFile::remove(tmpPath);
 
-        tmpPath.append(QLatin1String(".xmp"));
+        tmpPath = DMetadata::sidecarFilePathForFile(tmpPath);
 
         if (QFile::exists(tmpPath))
             QFile::remove(tmpPath);
