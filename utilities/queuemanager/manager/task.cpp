@@ -24,13 +24,6 @@
 
 #include "task.h"
 
-// C ANSI includes
-
-extern "C"
-{
-#include <unistd.h>
-}
-
 // Qt includes
 
 #include <QFileInfo>
@@ -209,7 +202,13 @@ void Task::run()
 
     foreach (const QUrl& url, tmp2del)
     {
-        unlink(QFile::encodeName(url.toLocalFile()).constData());
+        QString tmpPath(url.toLocalFile());
+        QFile::remove(tmpPath);
+
+        tmpPath.append(QLatin1String(".xmp"));
+
+        if (QFile::exists(tmpPath))
+            QFile::remove(tmpPath);
     }
 
     // Move processed temp file to target
@@ -238,18 +237,18 @@ void Task::run()
         if (DMetadata::hasSidecar(outUrl.toLocalFile()))
         {
             if (!DFileOperations::localFileRename(d->tools.m_itemUrl.toLocalFile(),
-                                                DMetadata::sidecarPath(outUrl.toLocalFile()),
-                                                DMetadata::sidecarPath(dest.toLocalFile()),
-                                                timeAdjust))
+                                                  DMetadata::sidecarPath(outUrl.toLocalFile()),
+                                                  DMetadata::sidecarPath(dest.toLocalFile()),
+                                                  timeAdjust))
             {
                 emitActionData(ActionData::BatchFailed, i18n("Failed to create sidecar file..."), dest);
             }
         }
 
         if (DFileOperations::localFileRename(d->tools.m_itemUrl.toLocalFile(),
-                                           outUrl.toLocalFile(),
-                                           dest.toLocalFile(),
-                                           timeAdjust))
+                                             outUrl.toLocalFile(),
+                                             dest.toLocalFile(),
+                                             timeAdjust))
         {
             emitActionData(ActionData::BatchDone, i18n("Item processed successfully %1", renameMess), dest);
         }
