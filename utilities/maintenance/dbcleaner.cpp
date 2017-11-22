@@ -71,7 +71,7 @@ public:
 
     QList<qlonglong>             imagesToRemove;
     QList<int>                   staleThumbnails;
-    QList<Identity> staleIdentities;
+    QList<Identity>              staleIdentities;
 
     int                          databasesToAnalyseCount;
     int                          databasesToShrinkCount;
@@ -166,6 +166,7 @@ void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
     if (d->imagesToRemove.isEmpty() && d->staleThumbnails.isEmpty() && d->staleIdentities.isEmpty())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Nothing to do. Databases are clean.";
+
         if (d->shrinkDatabases)
         {
             disconnect(d->thread, SIGNAL(signalData(QList<qlonglong>, QList<int>, QList<Identity>)),
@@ -286,6 +287,7 @@ void DbCleaner::slotCleanedFaces()
     {
         slotShrinkDatabases();
     }
+
     slotDone();
 }
 
@@ -300,7 +302,7 @@ void DbCleaner::slotShrinkDatabases()
             d->shrinkDlg, SLOT(exec()));
 
     connect(d->thread, SIGNAL(signalFinished(bool,bool)),
-                this, SLOT(slotShrinkNextDBInfo(bool, bool)));
+            this, SLOT(slotShrinkNextDBInfo(bool, bool)));
 
     connect(d->thread, SIGNAL(signalCompleted()),
             this, SLOT(slotDone()));
@@ -329,6 +331,7 @@ void DbCleaner::slotShrinkNextDBInfo(bool done, bool passed)
     --d->databasesToShrinkCount;
 
     QIcon statusIcon = QIcon::fromTheme(QLatin1String("dialog-cancel"));
+
     if (done)
     {
         if (passed)
@@ -347,10 +350,12 @@ void DbCleaner::slotShrinkNextDBInfo(bool done, bool passed)
             d->shrinkDlg->setIcon(0, statusIcon);
             d->shrinkDlg->setActive(1);
             break;
+
         case 1:
             d->shrinkDlg->setIcon(1, statusIcon);
             d->shrinkDlg->setActive(2);
             break;
+
         case 0:
             d->shrinkDlg->setIcon(2, statusIcon);
             d->shrinkDlg->setActive(-1);
@@ -375,12 +380,13 @@ void DbCleaner::slotDone()
     {
         d->shrinkDlg->hide();
     }
+
     MaintenanceTool::slotDone();
 }
 
 //----------------------------------------------------------------------------
 
-DbShrinkDialog::DbShrinkDialog(QWidget* parent)
+DbShrinkDialog::DbShrinkDialog(QWidget* const parent)
     : QDialog(parent),
       active(-1),
       progressPix(DWorkingPixmap()),
@@ -406,7 +412,8 @@ DbShrinkDialog::DbShrinkDialog(QWidget* parent)
     statusList->addItem(i18n("Core DB"));
     statusList->addItem(i18n("Thumbnails DB"));
     statusList->addItem(i18n("Face Recognition DB"));
-    for (int i = 0; i < 3; ++i)
+
+    for (int i = 0 ; i < 3 ; ++i)
     {
         statusList->item(i)->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
     }
@@ -429,6 +436,7 @@ DbShrinkDialog::~DbShrinkDialog()
 void DbShrinkDialog::setActive(const int pos)
 {
     active = pos;
+
     if (progressTimer->isActive())
     {
         if (active < 0)
@@ -475,9 +483,9 @@ void DbShrinkDialog::slotProgressTimerDone()
     {
         progressIndex = 0;
     }
+
     statusList->item(active)->setIcon(progressPix.frameAt(progressIndex));
     ++progressIndex;
 }
-
 
 } // namespace Digikam
