@@ -3650,9 +3650,8 @@ QStringList CoreDB::getLensesFromImages()
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString::fromUtf8("SELECT lens FROM ImageMetadata "
-                                     " INNER JOIN Images ON imageid=Images.id "
-                                     " GROUP BY lens;"),
+    d->db->execSql(QString::fromUtf8("SELECT DISTINCT lens FROM ImageMetadata "
+                                     " INNER JOIN Images ON imageid=Images.id;"),
                                      &values);
 
     QStringList lenses;
