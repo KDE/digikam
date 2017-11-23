@@ -317,6 +317,18 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(i18n("Camera"), i18n("The model of the camera"));
         return field;
     }
+    else if (name == QLatin1String("lenses"))
+    {
+        //choice
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
+        field->setFieldName(name);
+        field->setText(i18n("Lens"), i18n("The type of the lens"));
+        QStringList lenses = CoreDbAccess().db()->getLensesFromImages();
+        lenses += lenses;
+        lenses.sort();
+        field->setChoice(lenses);
+        return field;
+    }
     else if (name == QLatin1String("aperture"))
     {
         //double

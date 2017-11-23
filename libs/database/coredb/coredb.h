@@ -1255,6 +1255,11 @@ public:
     QMap<QString, int> getFormatStatistics();
     QMap<QString, int> getFormatStatistics(DatabaseItem::Category category);
 
+    /**
+     * Return a list of used lenses from the images
+     */
+    QStringList getLensesFromImages();
+
     // ----------- Moving and Copying Items -----------
 
     /**

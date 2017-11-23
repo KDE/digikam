@@ -92,4 +92,5 @@ BUGFIXES FROM BUGZILLA:
 081 ==> 371578 - Untagged images no longer shown in "no tags" overview when removing existing tag.
 082 ==> 387171 - Advanced search by lens by single focal length.
 083 ==> 387165 - XMP files generated for Batchtool temporary files and not removed.
-084 ==> 
+084 ==> 228015 - Search by lens.
+085 ==> 

@@ -181,6 +181,7 @@ void SearchGroup::setup(Type type)
 
     group->addField(SearchField::createField(QLatin1String("make"),                         group));
     group->addField(SearchField::createField(QLatin1String("model"),                        group));
+    group->addField(SearchField::createField(QLatin1String("lenses"),                       group));
     group->addField(SearchField::createField(QLatin1String("aperture"),                     group));
     group->addField(SearchField::createField(QLatin1String("focallength"),                  group));
     group->addField(SearchField::createField(QLatin1String("focallength35"),                group));

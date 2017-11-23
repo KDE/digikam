@@ -1319,6 +1319,10 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         fieldQuery.addStringField(QLatin1String("ImageMetadata.model"));
     }
+    else if (name == QLatin1String("lenses"))
+    {
+        fieldQuery.addChoiceStringField(QLatin1String("ImageMetadata.lens"));
+    }
     else if (name == QLatin1String("aperture"))
     {
         fieldQuery.addDoubleField(QLatin1String("ImageMetadata.aperture"));

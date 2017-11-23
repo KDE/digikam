@@ -3646,6 +3646,28 @@ QMap<QString, int> CoreDB::getFormatStatistics(DatabaseItem::Category category)
     return map;
 }
 
+QStringList CoreDB::getLensesFromImages()
+{
+    QList<QVariant> values;
+
+    d->db->execSql(QString::fromUtf8("SELECT lens FROM ImageMetadata "
+                                     " INNER JOIN Images ON imageid=Images.id "
+                                     " GROUP BY lens;"),
+                                     &values);
+
+    QStringList lenses;
+
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    {
+        if (!it->isNull())
+        {
+            lenses << it->toString();
+        }
+    }
+
+    return lenses;
+}
+
 /*
 QList<QPair<QString, QDateTime> > CoreDB::getItemsAndDate()
 {
