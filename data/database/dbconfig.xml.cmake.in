@@ -1656,6 +1656,7 @@ ORDER BY inf.rating DESC, img.name ASC
             <dbaction name="Migrate_Write_AlbumRoots" mode="transaction"><statement mode="query">
                 INSERT INTO AlbumRoots (id, label, status, type, identifier, specificPath) VALUES (:id, :label, :status, :type, :identifier, :specificPath);
             </statement></dbaction>
+
             <!-- Note Albums with an icon set are setup after population of the Images table. -->
             <dbaction name="Migrate_Read_Albums"><statement mode="query">
                 SELECT aa.id, aa.albumRoot, aa.relativePath, aa.date, aa.caption, aa.collection FROM Albums AS aa
@@ -1664,6 +1665,7 @@ ORDER BY inf.rating DESC, img.name ASC
             <dbaction name="Migrate_Write_Albums" mode="transaction"><statement mode="query">
                 INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, NULL);
             </statement></dbaction>
+
             <!-- Populate the Albums icon where set. -->
             <dbaction name="Migrate_Read_AlbumsExtra"><statement mode="query">
                 SELECT aa.id, aa.icon FROM Albums AS aa
@@ -1674,6 +1676,7 @@ ORDER BY inf.rating DESC, img.name ASC
             <dbaction name="Migrate_Write_AlbumsExtra" mode="transaction"><statement mode="query">
                 UPDATE Albums set icon = :icon WHERE id = :id;
             </statement></dbaction>
+
             <dbaction name="Migrate_Read_Images"><statement mode="query">
                 SELECT aa.id, aa.album, aa.name, aa.status, aa.category, aa.modificationDate, aa.fileSize, aa.uniqueHash FROM Images AS aa
                 LEFT JOIN Albums ON aa.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
