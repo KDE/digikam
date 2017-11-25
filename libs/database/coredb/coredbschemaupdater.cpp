@@ -56,7 +56,7 @@ namespace Digikam
 
 int CoreDbSchemaUpdater::schemaVersion()
 {
-    return 8;
+    return 9;
 }
 
 int CoreDbSchemaUpdater::filterSettingsVersion()
@@ -386,7 +386,7 @@ bool CoreDbSchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, con
         return false;
     }
 
-    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to v5";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to v9";
     d->backend->commitTransaction();
     return true;
 }
@@ -664,6 +664,9 @@ bool CoreDbSchemaUpdater::updateToVersion(int targetVersion)
         case 8:
             // Digikam for database version 7 can work with version 8, though not using case sensitivity for text fields.
             return performUpdateToVersion(QLatin1String("UpdateSchemaFromV7ToV8"), 8, 5);
+        case 9:
+            // Digikam for database version 8 can work with version 9, now using COLLATE utf8_general_ci for MySQL.
+            return performUpdateToVersion(QLatin1String("UpdateSchemaFromV8ToV9"), 9, 5);
         default:
             qCDebug(DIGIKAM_COREDB_LOG) << "Core database: unsupported update to version" << targetVersion;
             return false;

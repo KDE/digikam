@@ -105,9 +105,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
         << QLatin1String("Searches")
         << QLatin1String("DownloadHistory")
         << QLatin1String("VideoMetadata")
-        /*
         << QLatin1String("Settings")
-        */
     ;
     const int tablesSize = tables.size();
 
@@ -135,15 +133,6 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
             toDBbackend.close();
             return;
         }
-    }
-
-    if ( m_isStopProcessing ||
-         toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS Settings;")) != BdEngineBackend::NoErrors)
-    {
-        emit finished(CoreDbCopyManager::failed, i18n("Error while scrubbing the target database."));
-        fromDBbackend.close();
-        toDBbackend.close();
-        return;
     }
 
     // Then create the schema
@@ -181,15 +170,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
             return;
         }
     }
-/*
-    if (isStopThread ||
-        !copyTable(fromDBbackend, QLatin1String("Migrate_Read_Settings"),
-                   toDBbackend, QLatin1String("Migrate_Write_Settings")))
-    {
-        handleClosing(isStopThread, fromDBbackend, toDBbackend);
-        return;
-    }
-*/
+
     fromDBbackend.close();
     toDBbackend.close();
 
