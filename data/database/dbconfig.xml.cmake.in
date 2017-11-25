@@ -1651,8 +1651,9 @@ ORDER BY inf.rating DESC, img.name ASC
             <!-- Mysql Migration Statements -->
 
             <!-- NOTE: Migrate_Cleanup_DB now it's done by the program except for cleanup prepare -->
-            <dbaction name="Migrate_Cleanup_Prepare"><statement mode="transaction">
-            </statement></dbaction>
+             <dbaction name="Migrate_Cleanup_Prepare"><statement mode="transaction">
+                ALTER TABLE Albums DROP FOREIGN KEY Albums_Images;
+             </statement></dbaction>
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
