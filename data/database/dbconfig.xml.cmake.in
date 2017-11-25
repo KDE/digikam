@@ -1664,7 +1664,8 @@ ORDER BY inf.rating DESC, img.name ASC
 
             <!-- Note Albums with an icon set are setup after population of the Images table. -->
             <dbaction name="Migrate_Read_Albums"><statement mode="query">
-                SELECT id, albumRoot, relativePath, date, caption, collection FROM Albums;
+                SELECT aa.id, aa.albumRoot, aa.relativePath, aa.date, aa.caption, aa.collection FROM Albums AS aa
+                LEFT JOIN AlbumRoots ON aa.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Albums" mode="transaction"><statement mode="query">
                 INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, NULL);
@@ -1672,85 +1673,92 @@ ORDER BY inf.rating DESC, img.name ASC
 
             <!-- Populate the Albums icon where set. -->
             <dbaction name="Migrate_Read_AlbumsExtra"><statement mode="query">
-                SELECT id, icon FROM Albums where icon IS NOT NULL AND icon != 0;
+                SELECT aa.id, aa.icon FROM Albums AS aa
+                LEFT JOIN AlbumRoots ON aa.albumRoot = AlbumRoots.id
+                WHERE AlbumRoots.id IS NOT NULL
+                AND aa.icon IS NOT NULL AND aa.icon != 0;
             </statement></dbaction>
             <dbaction name="Migrate_Write_AlbumsExtra" mode="transaction"><statement mode="query">
                 UPDATE Albums set icon = :icon WHERE id = :id;
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Images"><statement mode="query">
-                SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash FROM Images;
+                SELECT aa.id, aa.album, aa.name, aa.status, aa.category, aa.modificationDate, aa.fileSize, aa.uniqueHash FROM Images AS aa
+                LEFT JOIN Albums ON aa.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Images" mode="transaction"><statement mode="query">
                 INSERT INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageHaarMatrix"><statement mode="query">
-                SELECT imageid, modificationDate, uniqueHash, matrix FROM ImageHaarMatrix
-                INNER JOIN Images ON imageid=Images.id;
+                SELECT aa.imageid, aa.modificationDate, aa.uniqueHash, aa.matrix FROM ImageHaarMatrix AS aa
+                LEFT JOIN Images ON aa.imageid = Images.id LEFT JOIN Albums ON Images.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageHaarMatrix" mode="transaction"><statement mode="query">
                 INSERT INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageInformation"><statement mode="query">
-                SELECT imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel FROM ImageInformation
-                INNER JOIN Images ON imageid=Images.id;
+                SELECT aa.imageid, aa.rating, aa.creationDate, aa.digitizationDate, aa.orientation, aa.width, aa.height, aa.format, aa.colorDepth, aa.colorModel FROM ImageInformation AS aa
+                LEFT JOIN Images ON aa.imageid = Images.id LEFT JOIN Albums ON Images.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageInformation" mode="transaction"><statement mode="query">
                 INSERT INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageMetadata"><statement mode="query">
-                SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata
-                INNER JOIN Images ON imageid=Images.id;
+                SELECT aa.imageid, aa.make, aa.model, aa.lens, aa.aperture, aa.focalLength, aa.focalLength35, aa.exposureTime, aa.exposureProgram, aa.exposureMode, aa.sensitivity, aa.flash, aa.whiteBalance, aa.whiteBalanceColorTemperature, aa.meteringMode, aa.subjectDistance, aa.subjectDistanceCategory FROM ImageMetadata AS aa
+                LEFT JOIN Images ON aa.imageid = Images.id LEFT JOIN Albums ON Images.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageMetadata" mode="transaction"><statement mode="query">
                 INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_VideoMetadata"><statement mode="query">
-                SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec FROM VideoMetadata
-                INNER JOIN Images ON imageid=Images.id;
+                SELECT aa.imageid, aa.aspectRatio, aa.audioBitRate, aa.audioChannelType, aa.audioCompressor, aa.duration, aa.frameRate, aa.videoCodec FROM VideoMetadata AS aa
+                LEFT JOIN Images ON aa.imageid = Images.id LEFT JOIN Albums ON Images.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_VideoMetadata" mode="transaction"><statement mode="query">
                 INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
-                SELECT imageid, tagid, property, value FROM ImageTagProperties
-                INNER JOIN Images ON imageid=Images.id;
+                SELECT aa.imageid, aa.tagid, aa.property, aa.value FROM ImageTagProperties AS aa
+                LEFT JOIN Images ON aa.imageid = Images.id LEFT JOIN Albums ON Images.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id
+                LEFT JOIN Tags ON aa.tagid = Tags.id
+                WHERE AlbumRoots.id IS NOT NULL AND Tags.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageTagProperties"><statement mode="query">
                 INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_TagProperties"><statement mode="query">
-                SELECT tagid, property, value FROM TagProperties;
+                SELECT aa.tagid, aa.property, aa.value FROM TagProperties AS aa
+                LEFT JOIN Tags ON aa.tagid = Tags.id WHERE Tags.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_TagProperties"><statement mode="query">
                 INSERT INTO TagProperties (tagid, property, value) VALUES (:tagid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImagePositions"><statement mode="query">
-                SELECT imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description FROM ImagePositions
-                INNER JOIN Images ON imageid=Images.id;
+                SELECT  aa.imageid, aa.latitude, aa.latitudeNumber, aa.longitude, aa.longitudeNumber, aa.altitude, aa.orientation, aa.tilt, aa.roll, aa.accuracy, aa.description FROM ImagePositions AS aa
+                LEFT JOIN Images ON aa.imageid = Images.id LEFT JOIN Albums ON Images.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImagePositions" mode="transaction"><statement mode="query">
                 INSERT INTO ImagePositions (imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description) VALUES (:imageid, :latitude, :latitudeNumber, :longitude, :longitudeNumber, :altitude, :orientation, :tilt, :roll, :accuracy, :description);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageComments"><statement mode="query">
-                SELECT id, imageid, type, language, author, date, comment FROM ImageComments
-                INNER JOIN Images ON imageid=Images.id;
+                SELECT  aa.id, aa.imageid, aa.type, aa.language, aa.author, aa.date, aa.comment FROM ImageComments AS aa
+                LEFT JOIN Images ON aa.imageid = Images.id LEFT JOIN Albums ON Images.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageComments" mode="transaction"><statement mode="query">
                 INSERT INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageCopyright"><statement mode="query">
-                SELECT id, imageid, property, value, extraValue FROM ImageCopyright
-                INNER JOIN Images ON imageid=Images.id;
+                SELECT  aa.id, aa.imageid, aa.property, aa.value, aa.extraValue FROM ImageCopyright AS aa
+                LEFT JOIN Images ON aa.imageid = Images.id LEFT JOIN Albums ON Images.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageCopyright" mode="transaction"><statement mode="query">
                 INSERT INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, :property, :value, :extraValue);
@@ -1770,32 +1778,36 @@ ORDER BY inf.rating DESC, img.name ASC
             </dbaction>
 
             <dbaction name="Migrate_Read_ImageTags"><statement mode="query">
-                SELECT imageid, tagid FROM ImageTags
-                INNER JOIN Images ON imageid=Images.id;
+                SELECT  aa.imageid, aa.tagid FROM ImageTags AS aa
+                LEFT JOIN Images ON aa.imageid = Images.id LEFT JOIN Albums ON Images.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id
+                LEFT JOIN Tags ON aa.tagid = Tags.id
+                WHERE AlbumRoots.id IS NOT NULL AND Tags.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageTags" mode="transaction"><statement mode="query">
                 INSERT INTO ImageTags (imageid, tagid) VALUES (:imageid, :tagid);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageProperties"><statement mode="query">
-                SELECT imageid, property, value FROM ImageProperties
-                INNER JOIN Images ON imageid=Images.id;
+                SELECT  aa.imageid, aa.property, aa.value FROM ImageProperties AS aa
+                LEFT JOIN Images ON aa.imageid = Images.id LEFT JOIN Albums ON Images.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageProperties" mode="transaction"><statement mode="query">
                 INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageHistory"><statement mode="query">
-                SELECT imageid, uuid, history FROM ImageHistory
-                INNER JOIN Images ON imageid=Images.id;
+                SELECT  aa.imageid, aa.uuid, aa.history FROM ImageHistory AS aa
+                LEFT JOIN Images ON aa.imageid = Images.id LEFT JOIN Albums ON Images.album = Albums.id LEFT JOIN AlbumRoots ON Albums.albumRoot = AlbumRoots.id WHERE AlbumRoots.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageHistory"><statement mode="query">
                 INSERT INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
-                SELECT subject, object, type FROM ImageRelations
-                INNER JOIN Images ON imageid=Images.id AND subject=Images.id;
+                SELECT  aa.subject, aa.object, aa.type FROM ImageRelations AS aa
+                LEFT JOIN Images AS aas ON aa.subject = aas.id LEFT JOIN Albums AS aasal ON aas.id = aasal.id LEFT JOIN AlbumRoots AS aasar ON aasal.id = aasar.id
+                LEFT JOIN Images AS aao ON aa.object  = aao.id LEFT JOIN Albums AS aaoal ON aao.id = aaoal.id LEFT JOIN AlbumRoots AS aaoar ON aaoal.id = aaoar.id
+                WHERE aasar.id IS NOT NULL AND aaoar.id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
                 INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
