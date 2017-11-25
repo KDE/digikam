@@ -386,7 +386,7 @@ bool CoreDbSchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, con
         return false;
     }
 
-    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to v9";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to version " << d->currentVersion.toInt();
     d->backend->commitTransaction();
     return true;
 }
@@ -449,7 +449,7 @@ bool CoreDbSchemaUpdater::makeUpdates()
                 return false;
             }
 
-            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to v" << d->currentVersion;
+            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to version " << d->currentVersion.toInt();
         }
 
         // add future updates here
