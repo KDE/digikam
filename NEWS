@@ -99,4 +99,5 @@ BUGFIXES FROM BUGZILLA:
 088 ==> 325654 - MIGRATION: tags are not shown afterwards, because pid has wrong value.
 089 ==> 385297 - Search results are case sensitive on MySQL remote database.
 090 ==> 373605 - Failed to update database schema from version 7 to version 8.
-091 ==> 
+091 ==> 286492 - MIGRATION : two SQLITE triggers applied for the same table is not supported by MySQL database.
+092 ==> 
