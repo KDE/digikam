@@ -729,7 +729,7 @@
 
             <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
                 SELECT subject, object, type FROM ImageRelations
-                INNER JOIN Images ON imageid=Images.id AND subject=Images.id;
+                INNER JOIN Images ON subject = Images.id AND object = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
                 INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
