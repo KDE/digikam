@@ -683,7 +683,7 @@
 
             <dbaction name="Migrate_Read_ImageComments"><statement mode="query">
                 SELECT id, imageid, type, language, author, date, comment FROM ImageComments
-                INNER JOIN Images ON imageid = Images.id;
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageComments"><statement mode="query">
                 INSERT INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
@@ -691,7 +691,7 @@
 
             <dbaction name="Migrate_Read_ImageCopyright"><statement mode="query">
                 SELECT id, imageid, property, value, extraValue FROM ImageCopyright
-                INNER JOIN Images ON imageid = Images.id;
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageCopyright"><statement mode="query">
                 INSERT INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, :property, :value, :extraValue);
@@ -1745,7 +1745,7 @@ ORDER BY inf.rating DESC, img.name ASC
 
             <dbaction name="Migrate_Read_ImageComments"><statement mode="query">
                 SELECT id, imageid, type, language, author, date, comment FROM ImageComments
-                INNER JOIN Images ON imageid = Images.id;
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageComments" mode="transaction"><statement mode="query">
                 INSERT INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
@@ -1753,7 +1753,7 @@ ORDER BY inf.rating DESC, img.name ASC
 
             <dbaction name="Migrate_Read_ImageCopyright"><statement mode="query">
                 SELECT id, imageid, property, value, extraValue FROM ImageCopyright
-                INNER JOIN Images ON imageid = Images.id;
+                WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageCopyright" mode="transaction"><statement mode="query">
                 INSERT INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, :property, :value, :extraValue);
