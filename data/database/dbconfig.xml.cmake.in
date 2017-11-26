@@ -627,7 +627,7 @@
 
             <dbaction name="Migrate_Read_ImageHaarMatrix"><statement mode="query">
                 SELECT imageid, modificationDate, uniqueHash, matrix FROM ImageHaarMatrix
-                INNER JOIN Images ON imageid=Images.id;
+                INNER JOIN Images ON imageid = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageHaarMatrix"><statement mode="query">
                 INSERT INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
@@ -635,7 +635,7 @@
 
             <dbaction name="Migrate_Read_ImageInformation"><statement mode="query">
                 SELECT imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel FROM ImageInformation
-                INNER JOIN Images ON imageid=Images.id;
+                INNER JOIN Images ON imageid = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageInformation"><statement mode="query">
                 INSERT INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
@@ -643,7 +643,7 @@
 
             <dbaction name="Migrate_Read_ImageMetadata"><statement mode="query">
                 SELECT imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory FROM ImageMetadata
-                INNER JOIN Images ON imageid=Images.id;
+                INNER JOIN Images ON imageid = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageMetadata"><statement mode="query">
                 INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
@@ -651,7 +651,7 @@
 
             <dbaction name="Migrate_Read_VideoMetadata"><statement mode="query">
                 SELECT imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec FROM VideoMetadata
-                INNER JOIN Images ON imageid=Images.id;
+                INNER JOIN Images ON imageid = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_VideoMetadata"><statement mode="query">
                 INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
@@ -659,7 +659,7 @@
 
             <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
                 SELECT imageid, tagid, property, value FROM ImageTagProperties
-                INNER JOIN Images ON imageid=Images.id;
+                INNER JOIN Images ON imageid = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageTagProperties"><statement mode="query">
                 INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
@@ -674,7 +674,7 @@
 
             <dbaction name="Migrate_Read_ImagePositions"><statement mode="query">
                 SELECT imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description FROM ImagePositions
-                INNER JOIN Images ON imageid=Images.id;
+                INNER JOIN Images ON imageid = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImagePositions"><statement mode="query">
                 INSERT INTO ImagePositions (imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description) VALUES (:imageid, :latitude, :latitudeNumber, :longitude, :longitudeNumber, :altitude, :orientation, :tilt, :roll, :accuracy, :description);
@@ -682,7 +682,7 @@
 
             <dbaction name="Migrate_Read_ImageComments"><statement mode="query">
                 SELECT id, imageid, type, language, author, date, comment FROM ImageComments
-                INNER JOIN Images ON imageid=Images.id;
+                INNER JOIN Images ON imageid = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageComments"><statement mode="query">
                 INSERT INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
@@ -690,7 +690,7 @@
 
             <dbaction name="Migrate_Read_ImageCopyright"><statement mode="query">
                 SELECT id, imageid, property, value, extraValue FROM ImageCopyright
-                INNER JOIN Images ON imageid=Images.id;
+                INNER JOIN Images ON imageid = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageCopyright"><statement mode="query">
                 INSERT INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, :property, :value, :extraValue);
@@ -705,7 +705,7 @@
 
             <dbaction name="Migrate_Read_ImageTags"><statement mode="query">
                 SELECT imageid, tagid FROM ImageTags
-                INNER JOIN Images ON imageid=Images.id;
+                INNER JOIN Images ON imageid = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageTags"><statement mode="query">
                 INSERT INTO ImageTags (imageid, tagid) VALUES (:imageid, :tagid);
@@ -713,7 +713,7 @@
 
             <dbaction name="Migrate_Read_ImageProperties"><statement mode="query">
                 SELECT imageid, property, value FROM ImageProperties
-                INNER JOIN Images ON imageid=Images.id;
+                INNER JOIN Images ON imageid = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageProperties"><statement mode="query">
                 INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
@@ -721,7 +721,7 @@
 
             <dbaction name="Migrate_Read_ImageHistory"><statement mode="query">
                 SELECT imageid, uuid, history FROM ImageHistory
-                INNER JOIN Images ON imageid=Images.id;
+                INNER JOIN Images ON imageid = Images.id;
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageHistory"><statement mode="query">
                 INSERT INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
@@ -1651,9 +1651,9 @@ ORDER BY inf.rating DESC, img.name ASC
             <!-- Mysql Migration Statements -->
 
             <!-- NOTE: Migrate_Cleanup_DB now it's done by the program except for cleanup prepare -->
-             <dbaction name="Migrate_Cleanup_Prepare"><statement mode="transaction">
+            <dbaction name="Migrate_Cleanup_Prepare"><statement mode="transaction">
                 ALTER TABLE Albums DROP FOREIGN KEY Albums_Images;
-             </statement></dbaction>
+            </statement></dbaction>
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
@@ -1766,7 +1766,7 @@ ORDER BY inf.rating DESC, img.name ASC
 
             <dbaction name="Migrate_Read_Tags"><statement mode="query">
                 SELECT id, pid, name, CASE WHEN icon = 0 THEN NULL ELSE icon END AS icon, iconkde FROM Tags WHERE id != 0;
-             </statement></dbaction>
+            </statement></dbaction>
             <dbaction name="Migrate_Write_Tags" mode="transaction">
                 <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
                 <statement mode="query">SELECT @myLeft := lft FROM Tags WHERE id = :pid;</statement>
