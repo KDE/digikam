@@ -729,7 +729,7 @@
 
             <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
                 SELECT subject, object, type FROM ImageRelations
-                INNER JOIN Images ON subject = Images.id AND object = Images.id;
+                WHERE  subject IN (SELECT id FROM Images WHERE object IN (SELECT id FROM Images));
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
                 INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
@@ -1804,10 +1804,8 @@ ORDER BY inf.rating DESC, img.name ASC
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
-                SELECT  aa.subject, aa.object, aa.type FROM ImageRelations AS aa
-                LEFT JOIN Images AS aas ON aa.subject = aas.id LEFT JOIN Albums AS aasal ON aas.id = aasal.id LEFT JOIN AlbumRoots AS aasar ON aasal.id = aasar.id
-                LEFT JOIN Images AS aao ON aa.object  = aao.id LEFT JOIN Albums AS aaoal ON aao.id = aaoal.id LEFT JOIN AlbumRoots AS aaoar ON aaoal.id = aaoar.id
-                WHERE aasar.id IS NOT NULL AND aaoar.id IS NOT NULL;
+                SELECT subject, object, type FROM ImageRelations
+                WHERE  subject IN (SELECT id FROM Images WHERE object IN (SELECT id FROM Images));
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
                 INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
