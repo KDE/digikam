@@ -588,7 +588,7 @@ void MailProcess::invokeMailAgentDone(const QString& prog, const QStringList& ar
     emit signalMessage(text, false);
 
     emit signalMessage(i18n("After having sent your images by email..."), false);
-    emit signalMessage(i18n("Press 'Close' button to clean up temporary files"), false);
+    emit signalMessage(i18n("Press 'Finish' button to clean up temporary files"), false);
     emit signalDone(true);
 }
 
