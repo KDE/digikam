@@ -97,4 +97,5 @@ BUGFIXES FROM BUGZILLA:
 086 ==> 369083 - database migration sets wrong parent ids for tags.
 087 ==> 350574 - MIGRATION: MySQL to SQLite fails about Tags tree [patch].
 088 ==> 325654 - MIGRATION: tags are not shown afterwards, because pid has wrong value.
-089 ==> 
+089 ==> 385297 - Search results are case sensitive on MySQL remote database.
+090 ==> 
