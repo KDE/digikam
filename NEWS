@@ -100,4 +100,5 @@ BUGFIXES FROM BUGZILLA:
 089 ==> 385297 - Search results are case sensitive on MySQL remote database.
 090 ==> 373605 - Failed to update database schema from version 7 to version 8.
 091 ==> 286492 - MIGRATION : two SQLITE triggers applied for the same table is not supported by MySQL database.
-092 ==> 
+092 ==> 316690 - MIGRATION : Database conversion by default successfully erases all data.
+093 ==> 

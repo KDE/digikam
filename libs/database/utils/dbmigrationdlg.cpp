@@ -210,6 +210,13 @@ void DatabaseMigrationDialog::slotPerformCopy()
 {
     DbEngineParameters toDBParameters   = d->toDatabaseSettingsWidget->getDbEngineParameters();
     DbEngineParameters fromDBParameters = d->fromDatabaseSettingsWidget->getDbEngineParameters();
+
+    if (fromDBParameters == toDBParameters)
+    {
+        QMessageBox::critical(this, qApp->applicationName(), i18n("The database type or location must be different!"));
+        return;
+    }
+
     d->copyThread->init(fromDBParameters, toDBParameters);
 
     slotLockInputFields();
