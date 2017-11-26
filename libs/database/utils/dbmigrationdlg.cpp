@@ -213,7 +213,7 @@ void DatabaseMigrationDialog::slotPerformCopy()
 
     if (fromDBParameters == toDBParameters)
     {
-        QMessageBox::critical(this, qApp->applicationName(), i18n("The database type or location must be different!"));
+        QMessageBox::critical(this, qApp->applicationName(), i18n("Database type or location must be different!"));
         return;
     }
 
