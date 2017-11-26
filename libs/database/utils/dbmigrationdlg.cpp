@@ -153,7 +153,7 @@ void DatabaseMigrationDialog::setupMainArea()
 
     d->progressBar                     = new QProgressBar(progressBox);
     d->progressBar->setTextVisible(true);
-    d->progressBar->setRange(0, 13);
+    d->progressBar->setRange(0, 21);
     d->progressBarSmallStep            = new QProgressBar(progressBox);
     d->progressBarSmallStep->setTextVisible(true);
 
