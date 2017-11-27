@@ -599,7 +599,7 @@
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
             </statement></dbaction>
             <dbaction name="Migrate_Write_AlbumRoots"><statement mode="query">
-                INSERT INTO AlbumRoots (id, label, status, type, identifier, specificPath) VALUES (:id, :label, :status, :type, :identifier, :specificPath);
+                INSERT OR IGNORE INTO AlbumRoots (id, label, status, type, identifier, specificPath) VALUES (:id, :label, :status, :type, :identifier, :specificPath);
             </statement></dbaction>
 
             <!-- Note Albums with an icon set are setup after population of the Images table. -->
@@ -608,7 +608,7 @@
                 WHERE id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Albums"><statement mode="query">
-                INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, NULL);
+                INSERT OR IGNORE INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, NULL);
             </statement></dbaction>
 
             <!-- Populate the Albums icon where set. -->
@@ -623,7 +623,7 @@
                 SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash FROM Images;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Images"><statement mode="query">
-                INSERT INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
+                INSERT OR IGNORE INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageHaarMatrix"><statement mode="query">
@@ -631,7 +631,7 @@
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageHaarMatrix"><statement mode="query">
-                INSERT INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
+                INSERT OR IGNORE INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageInformation"><statement mode="query">
@@ -639,7 +639,7 @@
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageInformation"><statement mode="query">
-                INSERT INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
+                INSERT OR IGNORE INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageMetadata"><statement mode="query">
@@ -647,7 +647,7 @@
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageMetadata"><statement mode="query">
-                INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
+                INSERT OR IGNORE INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_VideoMetadata"><statement mode="query">
@@ -655,7 +655,7 @@
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_VideoMetadata"><statement mode="query">
-                INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
+                INSERT OR IGNORE INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
@@ -663,14 +663,14 @@
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageTagProperties"><statement mode="query">
-                INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
+                INSERT OR IGNORE INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_TagProperties"><statement mode="query">
                 SELECT tagid, property, value FROM TagProperties;
             </statement></dbaction>
             <dbaction name="Migrate_Write_TagProperties"><statement mode="query">
-                INSERT INTO TagProperties (tagid, property, value) VALUES (:tagid, :property, :value);
+                INSERT OR IGNORE INTO TagProperties (tagid, property, value) VALUES (:tagid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImagePositions"><statement mode="query">
@@ -678,7 +678,7 @@
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImagePositions"><statement mode="query">
-                INSERT INTO ImagePositions (imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description) VALUES (:imageid, :latitude, :latitudeNumber, :longitude, :longitudeNumber, :altitude, :orientation, :tilt, :roll, :accuracy, :description);
+                INSERT OR IGNORE INTO ImagePositions (imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description) VALUES (:imageid, :latitude, :latitudeNumber, :longitude, :longitudeNumber, :altitude, :orientation, :tilt, :roll, :accuracy, :description);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageComments"><statement mode="query">
@@ -686,7 +686,7 @@
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageComments"><statement mode="query">
-                INSERT INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
+                INSERT OR IGNORE INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageCopyright"><statement mode="query">
@@ -694,7 +694,7 @@
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageCopyright"><statement mode="query">
-                INSERT INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, :property, :value, :extraValue);
+                INSERT OR IGNORE INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, :property, :value, :extraValue);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Tags"><statement mode="query">
@@ -709,7 +709,7 @@
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageTags"><statement mode="query">
-                INSERT INTO ImageTags (imageid, tagid) VALUES (:imageid, :tagid);
+                INSERT OR IGNORE INTO ImageTags (imageid, tagid) VALUES (:imageid, :tagid);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageProperties"><statement mode="query">
@@ -717,7 +717,7 @@
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageProperties"><statement mode="query">
-                INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
+                INSERT OR IGNORE INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageHistory"><statement mode="query">
@@ -725,7 +725,7 @@
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageHistory"><statement mode="query">
-                INSERT INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
+                INSERT OR IGNORE INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
@@ -733,21 +733,21 @@
                 WHERE  subject IN (SELECT id FROM Images WHERE object IN (SELECT id FROM Images));
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
-                INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
+                INSERT OR IGNORE INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Searches"><statement mode="query">
                 SELECT id, type, name, query FROM Searches;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Searches"><statement mode="query">
-                INSERT INTO Searches (id, type, name, query) VALUES (:id, :type, :name, :query);
+                INSERT OR IGNORE INTO Searches (id, type, name, query) VALUES (:id, :type, :name, :query);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_DownloadHistory"><statement mode="query">
                 SELECT id, identifier, filename, filesize, filedate FROM DownloadHistory;
             </statement></dbaction>
             <dbaction name="Migrate_Write_DownloadHistory"><statement mode="query">
-                INSERT INTO DownloadHistory (id, identifier, filename, filesize, filedate) VALUES (:id, :identifier, :filename, :filesize, :filedate);
+                INSERT OR IGNORE INTO DownloadHistory (id, identifier, filename, filesize, filedate) VALUES (:id, :identifier, :filename, :filesize, :filedate);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Settings"><statement mode="query">
@@ -755,7 +755,7 @@
                 WHERE keyword = 'Locale';
             </statement></dbaction>
             <dbaction name="Migrate_Write_Settings"><statement mode="query">
-                INSERT INTO Settings (keyword, value) VALUES (:keyword, :value);
+                INSERT OR IGNORE INTO Settings (keyword, value) VALUES (:keyword, :value);
             </statement></dbaction>
 
             <dbaction name="Delete_Thumbnail_ByPath"><statement mode="query">
@@ -1660,7 +1660,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
             </statement></dbaction>
             <dbaction name="Migrate_Write_AlbumRoots" mode="transaction"><statement mode="query">
-                INSERT INTO AlbumRoots (id, label, status, type, identifier, specificPath) VALUES (:id, :label, :status, :type, :identifier, :specificPath);
+                INSERT IGNORE INTO AlbumRoots (id, label, status, type, identifier, specificPath) VALUES (:id, :label, :status, :type, :identifier, :specificPath);
             </statement></dbaction>
 
             <!-- Note Albums with an icon set are setup after population of the Images table. -->
@@ -1669,7 +1669,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE id IS NOT NULL;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Albums" mode="transaction"><statement mode="query">
-                INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, NULL);
+                INSERT IGNORE INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, NULL);
             </statement></dbaction>
 
             <!-- Populate the Albums icon where set. -->
@@ -1684,7 +1684,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash FROM Images;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Images" mode="transaction"><statement mode="query">
-                INSERT INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
+                INSERT IGNORE INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageHaarMatrix"><statement mode="query">
@@ -1692,7 +1692,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageHaarMatrix" mode="transaction"><statement mode="query">
-                INSERT INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
+                INSERT IGNORE INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageInformation"><statement mode="query">
@@ -1700,7 +1700,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageInformation" mode="transaction"><statement mode="query">
-                INSERT INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
+                INSERT IGNORE INTO ImageInformation (imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel) VALUES (:imageid, :rating, :creationDate, :digitizationDate, :orientation, :width, :height, :format, :colorDepth, :colorModel);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageMetadata"><statement mode="query">
@@ -1708,7 +1708,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageMetadata" mode="transaction"><statement mode="query">
-                INSERT INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
+                INSERT IGNORE INTO ImageMetadata (imageid, make, model, lens, aperture, focalLength, focalLength35, exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) VALUES (:imageid, :make, :model, :lens, :aperture, :focalLength, :focalLength35, :exposureTime, :exposureProgram, :exposureMode, :sensitivity, :flash, :whiteBalance, :whiteBalanceColorTemperature, :meteringMode, :subjectDistance, :subjectDistanceCategory);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_VideoMetadata"><statement mode="query">
@@ -1716,7 +1716,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_VideoMetadata" mode="transaction"><statement mode="query">
-                INSERT INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
+                INSERT IGNORE INTO VideoMetadata (imageid, aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec) VALUES (:imageid, :aspectRatio, :audioBitRate, :audioChannelType, :audioCompressor, :duration, :frameRate, :videoCodec);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageTagProperties"><statement mode="query">
@@ -1724,7 +1724,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageTagProperties"><statement mode="query">
-                INSERT INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
+                INSERT IGNORE INTO ImageTagProperties (imageid, tagid, property, value) VALUES (:imageid, :tagid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_TagProperties"><statement mode="query">
@@ -1732,7 +1732,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_TagProperties"><statement mode="query">
-                INSERT INTO TagProperties (tagid, property, value) VALUES (:tagid, :property, :value);
+                INSERT IGNORE INTO TagProperties (tagid, property, value) VALUES (:tagid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImagePositions"><statement mode="query">
@@ -1740,7 +1740,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImagePositions" mode="transaction"><statement mode="query">
-                INSERT INTO ImagePositions (imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description) VALUES (:imageid, :latitude, :latitudeNumber, :longitude, :longitudeNumber, :altitude, :orientation, :tilt, :roll, :accuracy, :description);
+                INSERT IGNORE INTO ImagePositions (imageid, latitude, latitudeNumber, longitude, longitudeNumber, altitude, orientation, tilt, roll, accuracy, description) VALUES (:imageid, :latitude, :latitudeNumber, :longitude, :longitudeNumber, :altitude, :orientation, :tilt, :roll, :accuracy, :description);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageComments"><statement mode="query">
@@ -1748,7 +1748,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageComments" mode="transaction"><statement mode="query">
-                INSERT INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
+                INSERT IGNORE INTO ImageComments (id, imageid, type, language, author, date, comment) VALUES (:id, :imageid, :type, :language, :author, :date, :comment);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageCopyright"><statement mode="query">
@@ -1756,7 +1756,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageCopyright" mode="transaction"><statement mode="query">
-                INSERT INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, :property, :value, :extraValue);
+                INSERT IGNORE INTO ImageCopyright (id, imageid, property, value, extraValue) VALUES (:id, :imageid, :property, :value, :extraValue);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Tags"><statement mode="query">
@@ -1777,7 +1777,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageTags" mode="transaction"><statement mode="query">
-                INSERT INTO ImageTags (imageid, tagid) VALUES (:imageid, :tagid);
+                INSERT IGNORE INTO ImageTags (imageid, tagid) VALUES (:imageid, :tagid);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageProperties"><statement mode="query">
@@ -1785,7 +1785,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageProperties" mode="transaction"><statement mode="query">
-                INSERT INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
+                INSERT IGNORE INTO ImageProperties (imageid, property, value) VALUES (:imageid, :property, :value);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageHistory"><statement mode="query">
@@ -1793,7 +1793,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  imageid IN (SELECT id FROM Images);
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageHistory"><statement mode="query">
-                INSERT INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
+                INSERT IGNORE INTO ImageHistory (imageid, uuid, history) VALUES (:imageid, :uuid, :history);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageRelations"><statement mode="query">
@@ -1801,21 +1801,21 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE  subject IN (SELECT id FROM Images WHERE object IN (SELECT id FROM Images));
             </statement></dbaction>
             <dbaction name="Migrate_Write_ImageRelations"><statement mode="query">
-                INSERT INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
+                INSERT IGNORE INTO ImageRelations (subject, object, type) VALUES (:subject, :object, :type);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Searches"><statement mode="query">
                 SELECT id, type, name, query FROM Searches;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Searches" mode="transaction"><statement mode="query">
-                INSERT INTO Searches (id, type, name, query) VALUES (:id, :type, :name, :query);
+                INSERT IGNORE INTO Searches (id, type, name, query) VALUES (:id, :type, :name, :query);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_DownloadHistory"><statement mode="query">
                 SELECT id, identifier, filename, filesize, filedate FROM DownloadHistory;
             </statement></dbaction>
             <dbaction name="Migrate_Write_DownloadHistory" mode="transaction"><statement mode="query">
-                INSERT INTO DownloadHistory (id, identifier, filename, filesize, filedate) VALUES (:id, :identifier, :filename, :filesize, :filedate);
+                INSERT IGNORE INTO DownloadHistory (id, identifier, filename, filesize, filedate) VALUES (:id, :identifier, :filename, :filesize, :filedate);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Settings"><statement mode="query">
@@ -1823,7 +1823,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 WHERE keyword = 'Locale';
             </statement></dbaction>
             <dbaction name="Migrate_Write_Settings" mode="transaction"><statement mode="query">
-                INSERT INTO Settings (keyword, value) VALUES (:keyword, :value);
+                INSERT IGNORE INTO Settings (keyword, value) VALUES (:keyword, :value);
             </statement></dbaction>
 
             <dbaction name="Delete_Thumbnail_ByPath" mode="query">
