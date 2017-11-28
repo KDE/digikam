@@ -102,4 +102,5 @@ BUGFIXES FROM BUGZILLA:
 091 ==> 286492 - MIGRATION : two SQLITE triggers applied for the same table is not supported by MySQL database.
 092 ==> 316690 - MIGRATION : Database conversion by default successfully erases all data.
 093 ==> 387326 - Send by Mail has no "Close" button, only "Finish" (disabled) and "Back".
-094 ==> 
+094 ==> 385426 - digiKam does not see external(USB) hard drives for adding to collections.
+095 ==> 
