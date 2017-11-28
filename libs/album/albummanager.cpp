@@ -508,7 +508,7 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
     if (newParams.isSQLite())
     {
         DatabaseServerStarter::instance()->stopServerManagerProcess();
-        
+
         QDir newDir(newParams.getCoreDatabaseNameOrDir());
         QFileInfo newFile(newDir, QLatin1String("digikam4.db"));
 
@@ -1393,8 +1393,8 @@ void AlbumManager::scanPAlbums()
             if (!parent)
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) <<  "Could not find parent with url: "
-                                             << QDir::toNativeSeparators(parentPath) << " for: "
-                                             << QDir::toNativeSeparators(info.relativePath);
+                                             << parentPath << " for: "
+                                             << info.relativePath;
                 continue;
             }
 
@@ -3362,7 +3362,7 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
     switch (changeset.operation())
     {
         case TagChangeset::Added:
-        case TagChangeset::Moved:    
+        case TagChangeset::Moved:
         case TagChangeset::Deleted:
         case TagChangeset::Reparented:
 
