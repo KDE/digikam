@@ -88,8 +88,13 @@ CoreDbUrl CoreDbUrl::fromAlbumAndName(const QString& name,
                                       const DbEngineParameters& parameters)
 {
     CoreDbUrl url;
+    QString path(album);
     url.setScheme(QLatin1String("digikamalbums"));
-    url.setPath(QLatin1Char('/') + album + QLatin1Char('/') + name);
+
+    if (path != QLatin1Char('/'))
+        path += QLatin1Char('/');
+
+    url.setPath(path + name);
 
     QUrlQuery q(url);
     q.addQueryItem(QLatin1String("albumRoot"),   albumRoot.adjusted(QUrl::StripTrailingSlash).toLocalFile());
