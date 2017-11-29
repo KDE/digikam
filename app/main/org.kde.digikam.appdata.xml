@@ -24,6 +24,7 @@
   <name xml:lang="pl">digiKam</name>
   <name xml:lang="pt">digiKam</name>
   <name xml:lang="pt-BR">digiKam</name>
+  <name xml:lang="ru">digiKam</name>
   <name xml:lang="sk">digiKam</name>
   <name xml:lang="sl">digiKam</name>
   <name xml:lang="sv">Digikam</name>
@@ -100,6 +101,7 @@
     <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="ru">Возможности:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sl">Zmožnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
@@ -151,6 +153,7 @@
       <li xml:lang="pl">Obsługa Exif, Iptc, Xmp, notatek twórcy</li>
       <li xml:lang="pt">Suporte para o EXIF, IPTC, XMP e notas do fabricante</li>
       <li xml:lang="pt-BR">Suporte a EXIF, IPTC, XMP e Notas do Fabricante</li>
+      <li xml:lang="ru">Поддержка метаданных EXIF, IPTC, XMP и MakerNote</li>
       <li xml:lang="sk">Podpora pre Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="sl">Podpora Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="sv">Stöd för EXIF, IPTC, XMP, tillverkaranteckningar</li>
@@ -252,6 +255,7 @@
       <li xml:lang="pl">Podświetlarka do porównywania zdjęć jedno obok drugiego</li>
       <li xml:lang="pt">Mesa de Luz para comparar as fotografias lado-a-lado</li>
       <li xml:lang="sv">Ljusbord för att jämföra foton sida vid sida</li>
+      <li xml:lang="tr">Fotoğrafı yan yana karşılaştırmak için Tabloyu Işıklandır</li>
       <li xml:lang="uk">стіл із підсвічуванням для порівняння фотографій;</li>
       <li xml:lang="x-test">xxLight Table to compare photo side by sidexx</li>
       <li>Extended features using extra tools</li>
@@ -331,6 +335,7 @@
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
   <developer_name xml:lang="pt">Projecto digiKam</developer_name>
   <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
+  <developer_name xml:lang="ru">Проект digiKam</developer_name>
   <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
   <developer_name xml:lang="sl">Projekt digiKam</developer_name>
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
