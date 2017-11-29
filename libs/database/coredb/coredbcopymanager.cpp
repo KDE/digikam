@@ -174,6 +174,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
     fromDBbackend.close();
     toDBbackend.close();
 
+    emit smallStepStarted(1, 1);
     emit finished(CoreDbCopyManager::success, QString());
 }
 
@@ -250,7 +251,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
 
         // Send a signal to the GUI to entertain the user
 
-        emit smallStepStarted(++resultCounter, resultSize);
+        emit smallStepStarted(resultCounter++, resultSize);
 
         // Read the values from the fromDB into a hash
 
