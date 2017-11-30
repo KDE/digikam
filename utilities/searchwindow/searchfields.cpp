@@ -73,6 +73,7 @@
 #include "colorlabelfilter.h"
 #include "picklabelfilter.h"
 #include "applicationsettings.h"
+#include "imagepropertiestab.h"
 
 namespace Digikam
 {
@@ -303,18 +304,54 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("make"))
     {
-        //string
-        SearchFieldText* const field = new SearchFieldText(parent);
+        //choice
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Camera"), i18n("The make of the camera"));
+        QStringList make = CoreDbAccess().db()->getListFromImageMetadata(DatabaseFields::Make);
+
+        for (int i = 0 ; i < make.count() ; i++)
+        {
+            ImagePropertiesTab::shortenedMakeInfo(make[i]);
+            make[i] = make[i].trimmed();
+        }
+
+        make.removeDuplicates();
+        make += make;
+        make.sort();
+
+        for (int i = 0 ; i < make.count() ; i += 2)
+        {
+            make[i] = QLatin1Char('*') + make[i] + QLatin1Char('*');
+        }
+
+        field->setChoice(make);
         return field;
     }
     else if (name == QLatin1String("model"))
     {
-        //string
-        SearchFieldText* const field = new SearchFieldText(parent);
+        //choice
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Camera"), i18n("The model of the camera"));
+        QStringList model = CoreDbAccess().db()->getListFromImageMetadata(DatabaseFields::Model);
+
+        for (int i = 0 ; i < model.count() ; i++)
+        {
+            ImagePropertiesTab::shortenedModelInfo(model[i]);
+            model[i] = model[i].trimmed();
+        }
+
+        model.removeDuplicates();
+        model += model;
+        model.sort();
+
+        for (int i = 0 ; i < model.count() ; i += 2)
+        {
+            model[i] = QLatin1Char('*') + model[i] + QLatin1Char('*');
+        }
+
+        field->setChoice(model);
         return field;
     }
     else if (name == QLatin1String("lenses"))
@@ -323,10 +360,10 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Lens"), i18n("The type of the lens"));
-        QStringList lenses = CoreDbAccess().db()->getLensesFromImages();
-        lenses += lenses;
-        lenses.sort();
-        field->setChoice(lenses);
+        QStringList lens = CoreDbAccess().db()->getListFromImageMetadata(DatabaseFields::Lens);
+        lens += lens;
+        lens.sort();
+        field->setChoice(lens);
         return field;
     }
     else if (name == QLatin1String("aperture"))

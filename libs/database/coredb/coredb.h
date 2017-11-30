@@ -1256,9 +1256,9 @@ public:
     QMap<QString, int> getFormatStatistics(DatabaseItem::Category category);
 
     /**
-     * Return a list of used lenses from the images
+     * Return a list from a field from imageMetadata
      */
-    QStringList getLensesFromImages();
+    QStringList getListFromImageMetadata(DatabaseFields::ImageMetadata field);
 
     // ----------- Moving and Copying Items -----------
 

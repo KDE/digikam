@@ -3646,25 +3646,32 @@ QMap<QString, int> CoreDB::getFormatStatistics(DatabaseItem::Category category)
     return map;
 }
 
-QStringList CoreDB::getLensesFromImages()
+QStringList CoreDB::getListFromImageMetadata(DatabaseFields::ImageMetadata field)
 {
+    QStringList list;
     QList<QVariant> values;
+    QStringList fieldName = imageMetadataFieldList(field);
 
-    d->db->execSql(QString::fromUtf8("SELECT DISTINCT lens FROM ImageMetadata "
-                                     " INNER JOIN Images ON imageid=Images.id;"),
-                                     &values);
+    if (fieldName.count() != 1)
+    {
+        return list;
+    }
 
-    QStringList lenses;
+    QString sql = QString::fromUtf8("SELECT DISTINCT %1 FROM ImageMetadata "
+                                    " INNER JOIN Images ON imageid=Images.id;");
+
+    sql = sql.arg(fieldName.first());
+    d->db->execSql(sql, &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
     {
         if (!it->isNull())
         {
-            lenses << it->toString();
+            list << it->toString();
         }
     }
 
-    return lenses;
+    return list;
 }
 
 /*

@@ -1313,11 +1313,11 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == QLatin1String("make"))
     {
-        fieldQuery.addStringField(QLatin1String("ImageMetadata.make"));
+        fieldQuery.addChoiceStringField(QLatin1String("ImageMetadata.make"));
     }
     else if (name == QLatin1String("model"))
     {
-        fieldQuery.addStringField(QLatin1String("ImageMetadata.model"));
+        fieldQuery.addChoiceStringField(QLatin1String("ImageMetadata.model"));
     }
     else if (name == QLatin1String("lenses"))
     {
