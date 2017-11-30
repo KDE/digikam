@@ -1768,7 +1768,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="query">SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);</statement>
                 <statement mode="query">UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;</statement>
                 <statement mode="query">UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;</statement>
-                <statement mode="query">INSERT INTO Tags(id, pid, name, icon, iconkde, lft, rgt) VALUES(:id, :pid, :name, :icon, :iconkde, @myLeft + 1, @myLeft + 2);</statement>
+                <statement mode="query">REPLACE INTO Tags(id, pid, name, icon, iconkde, lft, rgt) VALUES(:id, :pid, :name, :icon, :iconkde, @myLeft + 1, @myLeft + 2);</statement>
                 <statement mode="plain">UNLOCK TABLES;</statement>
             </dbaction>
 
