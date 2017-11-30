@@ -91,7 +91,7 @@ CoreDbUrl CoreDbUrl::fromAlbumAndName(const QString& name,
     QString path(album);
     url.setScheme(QLatin1String("digikamalbums"));
 
-    if (path != QLatin1Char('/'))
+    if (path != QLatin1String("/"))
         path += QLatin1Char('/');
 
     url.setPath(path + name);
