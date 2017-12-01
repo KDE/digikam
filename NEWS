@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 5.8.0 - Release date: 2017-10-29
+digiKam 5.8.0 - Release date: 2017-12-17
 
 NEW FEATURES:
 
@@ -105,4 +105,5 @@ BUGFIXES FROM BUGZILLA:
 094 ==> 385426 - digiKam does not see external(USB) hard drives for adding to collections.
 095 ==> 387373 - digiKam does either show no photo in album or all photos of complete database (since Qt 5.9.3).
 096 ==> 305918 - File->Save changes does not always hide the original.
-097 ==> 
+097 ==> 376213 - Tag selection fails to find tagged photo's.
+098 ==> 
