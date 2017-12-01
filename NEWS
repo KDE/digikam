@@ -106,4 +106,5 @@ BUGFIXES FROM BUGZILLA:
 095 ==> 387373 - digiKam does either show no photo in album or all photos of complete database (since Qt 5.9.3).
 096 ==> 305918 - File->Save changes does not always hide the original.
 097 ==> 376213 - Tag selection fails to find tagged photo's.
-098 ==> 
+098 ==> 377746 - Crash at startup.
+099 ==> 
