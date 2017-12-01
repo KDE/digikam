@@ -107,4 +107,6 @@ BUGFIXES FROM BUGZILLA:
 096 ==> 305918 - File->Save changes does not always hide the original.
 097 ==> 376213 - Tag selection fails to find tagged photo's.
 098 ==> 377746 - Crash at startup.
-099 ==> 
+099 ==> 384853 - Ungrouping images is not working.
+100 ==> 
+
