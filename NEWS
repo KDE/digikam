@@ -108,5 +108,6 @@ BUGFIXES FROM BUGZILLA:
 097 ==> 376213 - Tag selection fails to find tagged photo's.
 098 ==> 377746 - Crash at startup.
 099 ==> 384853 - Ungrouping images is not working.
-100 ==> 
+100 ==> 378873 - Crash when trying to add album.
+101 ==> 
 
