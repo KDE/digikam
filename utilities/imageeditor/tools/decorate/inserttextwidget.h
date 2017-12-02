@@ -94,8 +94,8 @@ public:
      */
     void   setBackgroundColor(const QColor& bg);
 
-    void   setText(const QString& text, const QFont& font, const QColor& color, int alignMode,
-                   bool border, bool transparent, int rotation);
+    void   setText(const QString& text, const QFont& font, const QColor& color, int opacity,
+                   int alignMode, bool border, bool transparent, int rotation);
 
     void   resetEdit();
 
@@ -114,7 +114,7 @@ protected:
     QRect composeImage(DImg* const image, QPainter* const destPainter,
                        int x, int y,
                        QFont font, float pointSize, int textRotation, QColor textColor,
-                       int alignMode, const QString& textString,
+                       int textOpacity, int alignMode, const QString& textString,
                        bool transparentBackground, QColor backgroundColor,
                        BorderMode borderMode, int borderWidth, int spacing, float fontScale=1.0f);
 
