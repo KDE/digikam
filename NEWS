@@ -109,5 +109,6 @@ BUGFIXES FROM BUGZILLA:
 098 ==> 377746 - Crash at startup.
 099 ==> 384853 - Ungrouping images is not working.
 100 ==> 378873 - Crash when trying to add album.
-101 ==> 
+101 ==> 373386 - digikam crashes when metadata is written to disk.
+102 ==> 
 
