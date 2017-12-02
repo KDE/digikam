@@ -436,7 +436,7 @@ void InsertTextTool::finalRendering()
 
     action.addParameter(QLatin1String("text"),              d->textEdit->toPlainText());
     action.addParameter(QLatin1String("textRotationIndex"), d->textRotation->currentIndex());
-    //action.addParameter(QLatin1String("textFont",           d->textFont); FIXME: figure out how to store QFont
+    action.addParameter(QLatin1String("textFont"),          d->textFont.toString());
     action.addParameter(QLatin1String("colorR"),            d->fontColorButton->color().red());
     action.addParameter(QLatin1String("colorG"),            d->fontColorButton->color().green());
     action.addParameter(QLatin1String("colorB"),            d->fontColorButton->color().blue());
