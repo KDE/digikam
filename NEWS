@@ -112,4 +112,5 @@ BUGFIXES FROM BUGZILLA:
 101 ==> 373386 - digikam crashes when metadata is written to disk.
 102 ==> 150385 - Add transparent fonts support.
 103 ==> 387547 - Option To Reread Metadata From Images From Subfolders.
-104 ==> 
+104 ==> 370428 - Tool-Tip Text is Unreadable In File and digiKam Properties.
+105 ==> 
