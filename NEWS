@@ -111,4 +111,5 @@ BUGFIXES FROM BUGZILLA:
 100 ==> 378873 - Crash when trying to add album.
 101 ==> 373386 - digikam crashes when metadata is written to disk.
 102 ==> 150385 - Add transparent fonts support.
-103 ==> 
+103 ==> 387547 - Option To Reread Metadata From Images From Subfolders.
+104 ==> 
