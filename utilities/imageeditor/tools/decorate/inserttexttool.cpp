@@ -251,6 +251,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
     mainLayout->addWidget(d->borderText,           8, 0, 1, -1);
     mainLayout->addWidget(d->transparentText,      9, 0, 1, -1);
     mainLayout->setRowStretch(10, 10);
+    mainLayout->setColumnStretch(1, 5);
     mainLayout->setColumnStretch(2, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     mainLayout->setSpacing(spacing);
