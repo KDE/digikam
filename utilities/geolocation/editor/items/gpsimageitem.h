@@ -67,6 +67,7 @@ public:
     SaveProperties()
     {
         shouldRemoveCoordinates = false;
+        shouldRemoveAltitude    = false;
         shouldWriteCoordinates  = false;
         shouldWriteAltitude     = false;
         altitude                = 0.0;
@@ -75,6 +76,7 @@ public:
     }
 
     bool  shouldRemoveCoordinates;
+    bool  shouldRemoveAltitude;
     bool  shouldWriteCoordinates;
     bool  shouldWriteAltitude;
     qreal altitude;

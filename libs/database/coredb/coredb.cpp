@@ -1732,7 +1732,8 @@ QVariantList CoreDB::getImagePosition(qlonglong imageID, DatabaseFields::ImagePo
                      fieldNames.at(i) == QLatin1String("accuracy"))
                    )
                 {
-                    values[i] = values.at(i).toDouble();
+                    if (!values.at(i).isNull())
+                        values[i] = values.at(i).toDouble();
                 }
             }
         }
@@ -1784,7 +1785,8 @@ QVariantList CoreDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseFields
                      fieldNames.at(i) == QLatin1String("accuracy"))
                    )
                 {
-                    values[i] = values.at(i).toDouble();
+                    if (!values.at(i).isNull())
+                        values[i] = values.at(i).toDouble();
                 }
             }
         }
@@ -2015,6 +2017,14 @@ void CoreDB::removeImagePosition(qlonglong imageid)
                    imageid);
 
     d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::ImagePositionsAll));
+}
+
+void CoreDB::removeImagePositionAltitude(qlonglong imageid)
+{
+    d->db->execSql(QString(QString::fromUtf8("UPDATE ImagePositions SET altitude=NULL WHERE imageid=?;")),
+                   imageid);
+
+    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Altitude));
 }
 
 QList<CommentInfo> CoreDB::getImageComments(qlonglong imageID)

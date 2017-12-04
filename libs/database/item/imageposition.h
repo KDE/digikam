@@ -168,6 +168,12 @@ public:
      */
     void remove();
 
+    /**
+     * Removes the altitude for the referenced image
+     * from the database.
+     */
+    void removeAltitude();
+
 private:
 
     QSharedDataPointer<ImagePositionPriv> d;

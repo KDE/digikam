@@ -699,6 +699,10 @@ SaveProperties GPSImageItem::saveProperties() const
             p.shouldWriteAltitude = true;
             p.altitude            = m_gpsData.getCoordinates().alt();
         }
+        else
+        {
+            p.shouldRemoveAltitude = true;
+        }
     }
     else
     {
@@ -805,17 +809,17 @@ QString GPSImageItem::saveChanges()
 
             QStringList tagSeq;
 
-            for (int i=0; i<m_tagList.count(); ++i)
+            for (int i = 0 ; i < m_tagList.count() ; ++i)
             {
                 QList<TagData> currentTagList = m_tagList[i];
                 QString tag;
 
-                for (int j=0; j<currentTagList.count(); ++j)
+                for (int j = 0 ; j<currentTagList.count() ; ++j)
                 {
                     tag.append(QString::fromLatin1("/") + currentTagList[j].tagName);
                 }
 
-                tag.remove(0,1);
+                tag.remove(0, 1);
                 tagSeq.append(tag);
             }
 

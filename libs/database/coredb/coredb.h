@@ -912,6 +912,11 @@ public:
     void removeImagePosition(qlonglong imageid);
 
     /**
+     * Remove the altitude in ImagePositions for the given image
+     */
+    void removeImagePositionAltitude(qlonglong imageid);
+
+    /**
      * Retrieves all available comments for the specified item.
      */
     QList<CommentInfo> getImageComments(qlonglong imageID);
