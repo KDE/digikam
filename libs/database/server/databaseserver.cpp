@@ -191,6 +191,8 @@ void DatabaseServer::stopDatabaseProcess()
 
     databaseServerStateEnum = stopped;
     wait();
+
+    QSqlDatabase::removeDatabase(QLatin1String("initConnection"));
 }
 
 bool DatabaseServer::isRunning() const
@@ -624,7 +626,7 @@ DatabaseServerError DatabaseServer::initMysqlDatabase() const
         db.close();
     }
 
-    QSqlDatabase::removeDatabase(initCon);
+    //QSqlDatabase::removeDatabase(initCon);
 
     return result;
 }
