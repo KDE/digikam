@@ -560,8 +560,8 @@ void ImagePosition::remove()
 void ImagePosition::removeAltitude()
 {
     CoreDbAccess().db()->removeImagePositionAltitude(d->imageId);
+    d->dirtyFields &= ~DatabaseFields::Altitude;
     d->altitude = QVariant();
-    d->dirtyFields |= DatabaseFields::Altitude;
 }
 
 } // namespace Digikam
