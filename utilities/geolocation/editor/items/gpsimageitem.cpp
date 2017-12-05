@@ -159,25 +159,25 @@ int getWarningLevelFromGPSDataContainer(const GPSDataContainer& data)
     {
         const int dopValue = data.getDop();
 
-        if (dopValue<2)
+        if (dopValue < 2)
             return 1;
 
-        if (dopValue<4)
+        if (dopValue < 4)
             return 2;
 
-        if (dopValue<10)
+        if (dopValue < 10)
             return 3;
 
         return 4;
     }
     else if (data.hasFixType())
     {
-        if (data.getFixType()<3)
+        if (data.getFixType() < 3)
             return 4;
     }
     else if (data.hasNSatellites())
     {
-        if (data.getNSatellites()<4)
+        if (data.getNSatellites() < 4)
             return 4;
     }
 
@@ -473,16 +473,16 @@ QVariant GPSImageItem::data(const int column, const int role) const
 
             QString myTagsList;
 
-            for (int i = 0; i < m_tagList.count(); ++i)
+            for (int i = 0 ; i < m_tagList.count() ; ++i)
             {
                 QString myTag;
 
-                for (int j = 0; j < m_tagList[i].count(); ++j)
+                for (int j = 0 ; j < m_tagList[i].count() ; ++j)
                 {
                     myTag.append(QString::fromLatin1("/") + m_tagList[i].at(j).tagName);
 
                     if (j == 0)
-                        myTag.remove(0,1);
+                        myTag.remove(0, 1);
                 }
 
                 if (!myTagsList.isEmpty())
@@ -578,13 +578,13 @@ bool GPSImageItem::lessThan(const GPSImageItem* const otherItem, const int colum
             const int myWarning    = getWarningLevelFromGPSDataContainer(m_gpsData);
             const int otherWarning = getWarningLevelFromGPSDataContainer(otherItem->m_gpsData);
 
-            if (myWarning<0)
+            if (myWarning < 0)
                 return false;
 
-            if (otherWarning<0)
+            if (otherWarning < 0)
                 return true;
 
-            if (myWarning!=otherWarning)
+            if (myWarning != otherWarning)
                 return myWarning < otherWarning;
 
             // TODO: this may not be the best way to sort images with equal warning levels
@@ -814,7 +814,7 @@ QString GPSImageItem::saveChanges()
                 QList<TagData> currentTagList = m_tagList[i];
                 QString tag;
 
-                for (int j = 0 ; j<currentTagList.count() ; ++j)
+                for (int j = 0 ; j < currentTagList.count() ; ++j)
                 {
                     tag.append(QString::fromLatin1("/") + currentTagList[j].tagName);
                 }
@@ -885,7 +885,7 @@ void GPSImageItem::restoreRGTagList(const QList<QList<TagData> >& tagList)
     }
     else
     {
-        for (int i = 0; i < tagList.count(); ++i)
+        for (int i = 0 ; i < tagList.count() ; ++i)
         {
             bool foundNotEqual = false;
 
@@ -895,7 +895,7 @@ void GPSImageItem::restoreRGTagList(const QList<QList<TagData> >& tagList)
                 break;
             }
 
-            for (int j = 0; j < tagList[i].count(); ++j)
+            for (int j = 0 ; j < tagList[i].count() ; ++j)
             {
                 if (tagList[i].at(j).tagName != m_savedTagList[i].at(j).tagName)
                 {
