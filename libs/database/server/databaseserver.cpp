@@ -177,6 +177,8 @@ void DatabaseServer::stopDatabaseProcess()
         return;
     }
 
+    QSqlDatabase::removeDatabase(QLatin1String("initConnection"));
+
     d->databaseProcess->terminate();
 
     if (d->databaseProcess->state() == QProcess::Running && !d->databaseProcess->waitForFinished(5000))
@@ -191,8 +193,6 @@ void DatabaseServer::stopDatabaseProcess()
 
     databaseServerStateEnum = stopped;
     wait();
-
-    QSqlDatabase::removeDatabase(QLatin1String("initConnection"));
 }
 
 bool DatabaseServer::isRunning() const
