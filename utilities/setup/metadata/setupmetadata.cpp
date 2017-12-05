@@ -166,7 +166,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->fieldsGroup                  = new QGroupBox;
     QGridLayout* const fieldsLayout = new QGridLayout;
 
-    d->fieldsGroup->setWhatsThis(i18nc("@info:whatsthis",
+    d->fieldsGroup->setWhatsThis(xi18nc("@info:whatsthis",
                                        "<para>In addition to the pixel content, image files usually "
                                        "contain a variety of metadata. A lot of the parameters you can use "
                                        "in digiKam to manage files, such as rating or comment, can be written "
@@ -352,7 +352,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     d->rotateByFlag->setToolTip(i18nc("@info:tooltip",
                                       "Rotate files only by changing a flag, not touching the pixel data"));
-    d->rotateByFlag->setWhatsThis(i18nc("@info:whatsthis",
+    d->rotateByFlag->setWhatsThis(xi18nc("@info:whatsthis",
                                         "<para>A file can be rotated in two ways:<br/> "
                                         "You can change the contents, rearranging the individual pixels of the image data.<br/> "
                                         "Or you can set a flag that the file is to be rotated before it is shown.</para> "
@@ -363,7 +363,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     d->rotateByContents->setToolTip(i18nc("@info:tooltip",
                                           "If possible rotate files by changing the pixel data"));
-    d->rotateByContents->setWhatsThis(i18nc("@info:whatsthis",
+    d->rotateByContents->setWhatsThis(xi18nc("@info:whatsthis",
                                             "<para>A file can be rotated in two ways:<br/> "
                                             "You can change the contents, rearranging the individual pixels of the image data.<br/> "
                                             "Or you can set a flag that the file is to be rotated before it is shown.</para> "

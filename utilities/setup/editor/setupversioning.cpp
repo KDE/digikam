@@ -122,7 +122,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     d->enableNonDestructive->setText(i18n("Enable Non-Destructive Editing and Versioning"));
     d->enableNonDestructive->setToolTip(i18nc("@info:tooltip",
                                               "Enable support for non-destructive editing and image versioning"));
-    d->enableNonDestructive->setWhatsThis(i18nc("@info:whatsthis",
+    d->enableNonDestructive->setWhatsThis(xi18nc("@info:whatsthis",
                                                 "<qt><para><interface>Non-Destructive Editing and Versioning</interface> "
                                                 "allows different versions of an image to be created, "
                                                 "whilst always preserving the original image.</para> "
@@ -159,7 +159,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     d->formatBox->insertSeparator(1);
     d->formatBox->insertSeparator(4);
 
-    d->formatBox->setWhatsThis(i18nc("@info:whatsthis",
+    d->formatBox->setWhatsThis(xi18nc("@info:whatsthis",
                                      "<qt><title>Default File Format for Saving</title>"
                                      "<para>Select the file format in which edited images are saved automatically. "
                                      "Format-specific options, like compression settings, "
@@ -253,7 +253,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     d->snapshotGB                     = new QGroupBox;//(i18nc("@title:group", "Intermediate Version Snapshots"));
     QGridLayout* const snapshotLayout = new QGridLayout;
 
-    QString snapshotWhatsThis = i18nc("@info:whatsthis",
+    QString snapshotWhatsThis = xi18nc("@info:whatsthis",
                                       "<qt><para>First and foremost, the <emphasis>original image will never be overwritten.</emphasis> "
                                       "Instead, when an image is edited, a new file is created: "
                                       "The <interface>current version</interface>.</para> "
@@ -303,7 +303,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     d->viewGB = new QGroupBox;
     QGridLayout* const viewGBLayout = new QGridLayout;
 
-    QString viewWhatsThis = i18nc("@info:whatsthis",
+    QString viewWhatsThis = xi18nc("@info:whatsthis",
                                   "<qt><para>If an image has been edited, only the <interface>current versions</interface> "
                                   "will be shown in the main thumbnail view. "
                                   "From the <interface>right sidebar</interface>, you always have access to all hidden files.</para> "
