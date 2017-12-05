@@ -620,7 +620,8 @@
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Images"><statement mode="query">
-                SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash FROM Images;
+                SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash FROM Images
+                WHERE  album IN (SELECT id FROM Albums);
             </statement></dbaction>
             <dbaction name="Migrate_Write_Images"><statement mode="query">
                 INSERT OR IGNORE INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
@@ -1681,7 +1682,8 @@ ORDER BY inf.rating DESC, img.name ASC
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Images"><statement mode="query">
-                SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash FROM Images;
+                SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash FROM Images
+                WHERE  album IN (SELECT id FROM Albums);
             </statement></dbaction>
             <dbaction name="Migrate_Write_Images" mode="transaction"><statement mode="query">
                 INSERT IGNORE INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
