@@ -160,8 +160,6 @@ public:
     Private() :
         changed(false),
         hasPriorizedDbPath(false),
-        dbPort(0),
-        dbInternalServer(false),
         dbFakeConnection(false),
         showOnlyAvailableAlbums(false),
         albumListJob(0),
@@ -188,11 +186,7 @@ public:
     bool                        changed;
     bool                        hasPriorizedDbPath;
 
-    QString                     dbType;
     QString                     dbName;
-    QString                     dbHostName;
-    int                         dbPort;
-    bool                        dbInternalServer;
     bool                        dbFakeConnection;
 
     bool                        showOnlyAvailableAlbums;
