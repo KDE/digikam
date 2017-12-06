@@ -58,7 +58,7 @@ readConfigValue()
 {
     local config_file="digikamrc"
     local config_group="Database Settings"
-    local db_dir=$(kreadconfig --file "${config_file}" --group "${config_group}" --key "$1")
+    local db_dir=$(kreadconfig5 --file "${config_file}" --group "${config_group}" --key "$1")
     echo "${db_dir}"
 }
 
