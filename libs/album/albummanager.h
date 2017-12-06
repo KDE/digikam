@@ -625,6 +625,9 @@ public:
 
     void removeWatchedPAlbums(const PAlbum* const album);
 
+    void addFakeConnection();
+    void removeFakeConnection();
+
     //@}
 
 Q_SIGNALS:

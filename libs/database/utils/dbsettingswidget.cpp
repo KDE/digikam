@@ -65,6 +65,7 @@
 #include "dlayoutbox.h"
 #include "mysqlinitbinary.h"
 #include "mysqlservbinary.h"
+#include "albummanager.h"
 
 namespace Digikam
 {
@@ -668,6 +669,8 @@ bool DatabaseSettingsWidget::checkMysqlServerConnection(QString& error)
     }
 
     qApp->setOverrideCursor(Qt::WaitCursor);
+
+    AlbumManager::instance()->addFakeConnection();
 
     QString databaseID(QLatin1String("ConnectionTest"));
     QSqlDatabase testDatabase = QSqlDatabase::addDatabase(databaseBackend(), databaseID);

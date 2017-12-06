@@ -393,11 +393,6 @@ void AlbumManager::cleanUp()
         d->personListJob->cancel();
         d->personListJob = 0;
     }
-
-    if (d->dbFakeConnection)
-    {
-        QSqlDatabase::removeDatabase(QLatin1String("FakeConnection"));
-    }
 }
 
 bool AlbumManager::databaseEqual(const DbEngineParameters& parameters) const
@@ -734,11 +729,10 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
     // ensure, embedded database is loaded
     qCDebug(DIGIKAM_GENERAL_LOG) << params;
 
-    // workaround for the problem mariaDB >= 10.2 and QTBUG-63108.
-    if (params.isMySQL() && !d->dbFakeConnection)
+    // workaround for the problem mariaDB >= 10.2 and QTBUG-63108
+    if (params.isMySQL())
     {
-        QSqlDatabase::addDatabase(QLatin1String("QMYSQL"), QLatin1String("FakeConnection"));
-        d->dbFakeConnection = true;
+        addFakeConnection();
     }
 
     if (params.internalServer)
@@ -3556,6 +3550,24 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 void AlbumManager::removeWatchedPAlbums(const PAlbum* const album)
 {
     d->albumWatch->removeWatchedPAlbums(album);
+}
+
+void AlbumManager::addFakeConnection()
+{
+    if (!d->dbFakeConnection)
+    {
+        // workaround for the problem mariaDB >= 10.2 and QTBUG-63108
+        QSqlDatabase::addDatabase(QLatin1String("QMYSQL"), QLatin1String("FakeConnection"));
+        d->dbFakeConnection = true;
+    }
+}
+
+void AlbumManager::removeFakeConnection()
+{
+    if (d->dbFakeConnection)
+    {
+        QSqlDatabase::removeDatabase(QLatin1String("FakeConnection"));
+    }
 }
 
 }  // namespace Digikam
