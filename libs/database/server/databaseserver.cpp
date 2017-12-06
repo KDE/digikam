@@ -522,106 +522,107 @@ DatabaseServerError DatabaseServer::initMysqlDatabase() const
 
     const QLatin1String initCon("initConnection");
 
-    QSqlDatabase db = QSqlDatabase::addDatabase(DbEngineParameters::MySQLDatabaseType(), initCon);
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase(DbEngineParameters::MySQLDatabaseType(), initCon);
 
 #ifdef Q_OS_WIN
-    db.setHostName(QLatin1String("localhost"));
-    db.setPort(3307);
+        db.setHostName(QLatin1String("localhost"));
+        db.setPort(3307);
 #else
-    db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(d->miscDir));
+        db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(d->miscDir));
 #endif
 
-    db.setUserName(QLatin1String("root"));
+        db.setUserName(QLatin1String("root"));
 
-    // might not exist yet, then connecting to the actual db will fail
-    db.setDatabaseName(QString());
+        // might not exist yet, then connecting to the actual db will fail
+        db.setDatabaseName(QString());
 
-    if (!db.isValid())
-    {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Invalid database object during database server startup";
-
-        return DatabaseServerError(DatabaseServerError::StartError,
-                                   i18n("Invalid database object during database "
-                                        "server startup"));
-    }
-
-    bool opened = false;
-    bool exited = false;
-
-    for (int i = 0; i < 120; ++i)
-    {
-        opened = db.open();
-
-        if (opened)
+        if (!db.isValid())
         {
-            break;
+            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Invalid database object during database server startup";
+
+            return DatabaseServerError(DatabaseServerError::StartError,
+                                       i18n("Invalid database object during database "
+                                            "server startup"));
         }
 
-        if (d->databaseProcess->waitForFinished(500))
-        {
-            exited = true;
-            break;
-        }
-    }
+        bool opened = false;
+        bool exited = false;
 
-    if (!opened)
-    {
-        QString firstLine;
-        QString errorMsg;
+        for (int i = 0; i < 120; ++i)
+        {
+            opened = db.open();
 
-        if (exited)
-        {
-            errorMsg = processErrorLog(d->databaseProcess,
-                                       i18n("Database process exited unexpectedly "
-                                            "during initial connection."));
-        }
-        else
-        {
-            errorMsg = processErrorLog(d->databaseProcess,
-                                       i18n("Could not connect to Database after "
-                                            "trying for 60 seconds."));
+            if (opened)
+            {
+                break;
+            }
+
+            if (d->databaseProcess->waitForFinished(500))
+            {
+                exited = true;
+                break;
+            }
         }
 
-        return DatabaseServerError(DatabaseServerError::StartError, errorMsg);
-    }
-
-    QSqlQuery query(db);
-
-    if (!query.exec(QString::fromLatin1("USE %1").arg(d->internalDBName)))
-    {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Failed to use database"
-                                            << d->internalDBName;
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Query error:"
-                                            << query.lastError().text();
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database error:"
-                                            << db.lastError().text();
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Trying to create database now";
-
-        if (query.exec(QLatin1String("CREATE DATABASE digikam")))
+        if (!opened)
         {
-            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database was successfully created";
+            QString firstLine;
+            QString errorMsg;
+
+            if (exited)
+            {
+                errorMsg = processErrorLog(d->databaseProcess,
+                                           i18n("Database process exited unexpectedly "
+                                                "during initial connection."));
+            }
+            else
+            {
+                errorMsg = processErrorLog(d->databaseProcess,
+                                           i18n("Could not connect to Database after "
+                                                "trying for 60 seconds."));
+            }
+
+            return DatabaseServerError(DatabaseServerError::StartError, errorMsg);
         }
-        else
+
+        QSqlQuery query(db);
+
+        if (!query.exec(QString::fromLatin1("USE %1").arg(d->internalDBName)))
         {
-            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Failed to create database";
+            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Failed to use database"
+                                                << d->internalDBName;
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Query error:"
                                                 << query.lastError().text();
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database error:"
                                                 << db.lastError().text();
+            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Trying to create database now";
 
-            QString  errorMsg = i18n("Failed to create database"
-                                     "<p>Query error: %1</p>"
-                                     "<p>Database error: %2</p>",
-                                     query.lastError().text(),
-                                     db.lastError().text());
+            if (query.exec(QLatin1String("CREATE DATABASE digikam")))
+            {
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database was successfully created";
+            }
+            else
+            {
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Failed to create database";
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Query error:"
+                                                    << query.lastError().text();
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database error:"
+                                                    << db.lastError().text();
 
-            return DatabaseServerError(DatabaseServerError::StartError,
-                                       errorMsg);
+                QString  errorMsg = i18n("Failed to create database"
+                                         "<p>Query error: %1</p>"
+                                         "<p>Database error: %2</p>",
+                                         query.lastError().text(),
+                                         db.lastError().text());
+
+                return DatabaseServerError(DatabaseServerError::StartError, errorMsg);
+            }
+
+            // Make sure query is destroyed before we close the db
+
+            db.close();
         }
-
-        // Make sure query is destroyed before we close the db
-
-        db.close();
     }
 
     QSqlDatabase::removeDatabase(initCon);

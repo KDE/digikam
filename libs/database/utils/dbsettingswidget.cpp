@@ -668,26 +668,32 @@ bool DatabaseSettingsWidget::checkMysqlServerConnection(QString& error)
         return false;
     }
 
+    bool result = false;
+
     qApp->setOverrideCursor(Qt::WaitCursor);
 
     AlbumManager::instance()->addFakeConnection();
 
     QString databaseID(QLatin1String("ConnectionTest"));
-    QSqlDatabase testDatabase = QSqlDatabase::addDatabase(databaseBackend(), databaseID);
 
-    DbEngineParameters prm    = getDbEngineParameters();
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Testing DB connection (" << databaseID << ") with these settings:";
-    qCDebug(DIGIKAM_DATABASE_LOG) << prm;
+    {
+        QSqlDatabase testDatabase = QSqlDatabase::addDatabase(databaseBackend(), databaseID);
 
-    testDatabase.setHostName(prm.hostName);
-    testDatabase.setPort(prm.port);
-    testDatabase.setUserName(prm.userName);
-    testDatabase.setPassword(prm.password);
-    testDatabase.setConnectOptions(prm.connectOptions);
+        DbEngineParameters prm    = getDbEngineParameters();
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Testing DB connection (" << databaseID << ") with these settings:";
+        qCDebug(DIGIKAM_DATABASE_LOG) << prm;
 
-    bool result = testDatabase.open();
-    error       = testDatabase.lastError().text();
-    testDatabase.close();
+        testDatabase.setHostName(prm.hostName);
+        testDatabase.setPort(prm.port);
+        testDatabase.setUserName(prm.userName);
+        testDatabase.setPassword(prm.password);
+        testDatabase.setConnectOptions(prm.connectOptions);
+
+        result = testDatabase.open();
+        error  = testDatabase.lastError().text();
+        testDatabase.close();
+    }
+
     QSqlDatabase::removeDatabase(databaseID);
 
     qApp->restoreOverrideCursor();
