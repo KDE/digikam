@@ -162,6 +162,7 @@ public:
         hasPriorizedDbPath(false),
         dbPort(0),
         dbInternalServer(false),
+        dbFakeConnection(false),
         showOnlyAvailableAlbums(false),
         albumListJob(0),
         dateListJob(0),
@@ -192,6 +193,7 @@ public:
     QString                     dbHostName;
     int                         dbPort;
     bool                        dbInternalServer;
+    bool                        dbFakeConnection;
 
     bool                        showOnlyAvailableAlbums;
 
@@ -390,6 +392,11 @@ void AlbumManager::cleanUp()
     {
         d->personListJob->cancel();
         d->personListJob = 0;
+    }
+
+    if (d->dbFakeConnection)
+    {
+        QSqlDatabase::removeDatabase(QLatin1String("FakeConnection"));
     }
 }
 
@@ -726,6 +733,13 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
     // ensure, embedded database is loaded
     qCDebug(DIGIKAM_GENERAL_LOG) << params;
+
+    // workaround for the problem mariaDB >= 10.2 and QTBUG-63108.
+    if (params.isMySQL() && !d->dbFakeConnection)
+    {
+        QSqlDatabase::addDatabase(QLatin1String("QMYSQL"), QLatin1String("FakeConnection"));
+        d->dbFakeConnection = true;
+    }
 
     if (params.internalServer)
     {
