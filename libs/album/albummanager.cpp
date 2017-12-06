@@ -186,7 +186,6 @@ public:
     bool                        changed;
     bool                        hasPriorizedDbPath;
 
-    QString                     dbName;
     bool                        dbFakeConnection;
 
     bool                        showOnlyAvailableAlbums;
@@ -575,7 +574,6 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                 }
                 else if (result == QMessageBox::Cancel)
                 {
-                    QDir oldDir(d->dbName);
                     QFileInfo oldFile(params.SQLiteDatabaseFile());
                     copyToNewLocation(oldFile, newFile, i18n("Failed to copy the old database file (\"%1\") "
                                                              "to its new location (\"%2\"). "
@@ -610,7 +608,6 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
 
                 if (result == QMessageBox::No)
                 {
-                    QDir oldDir(d->dbName);
                     QFileInfo oldFile(params.SQLiteDatabaseFile());
                     copyToNewLocation(oldFile, newFile);
                 }
@@ -646,7 +643,6 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                 // first backup
                 if (moveToBackup(newFile))
                 {
-                    QDir oldDir(d->dbName);
                     QFileInfo oldFile(params.SQLiteDatabaseFile());
 
                     // then copy
