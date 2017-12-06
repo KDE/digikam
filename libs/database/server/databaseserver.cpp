@@ -177,8 +177,6 @@ void DatabaseServer::stopDatabaseProcess()
         return;
     }
 
-    QSqlDatabase::removeDatabase(QLatin1String("initConnection"));
-
     d->databaseProcess->terminate();
 
     if (d->databaseProcess->state() == QProcess::Running && !d->databaseProcess->waitForFinished(5000))
@@ -626,7 +624,7 @@ DatabaseServerError DatabaseServer::initMysqlDatabase() const
         db.close();
     }
 
-    //QSqlDatabase::removeDatabase(initCon);
+    QSqlDatabase::removeDatabase(initCon);
 
     return result;
 }
