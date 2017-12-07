@@ -7,7 +7,7 @@
  * Description : Exiv2 library interface.
  *               GPS manipulation methods
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2012 by Michael G. Hansen <mike at mghansen dot de>
  *

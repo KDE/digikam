@@ -11,7 +11,7 @@
  *               DOI 10.1007/s00138-010-0250-7
  *
  * Copyright (C) 2010-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2010 by Aditya Bhatt <adityabhatt at gmail dot com>
  * Copyright (C)      2010 by Alex Jironkin <alexjironkin at gmail dot com>
  *
