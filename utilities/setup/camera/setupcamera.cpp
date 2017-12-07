@@ -466,7 +466,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     d->iconShowDateBox    = new QCheckBox(i18n("Show camera creation &date"), iconViewGroup);
     d->iconShowDateBox->setWhatsThis(i18n("Set this option to show the camera creation date "
-                                             "below the image thumbnail"));
+                                             "below the image thumbnail."));
 
 /*
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);

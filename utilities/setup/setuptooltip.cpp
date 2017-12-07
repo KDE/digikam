@@ -307,25 +307,25 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     QGridLayout* const grid5     = new QGridLayout(d->videoSettingBox);
 
     d->showVideoAspectRatio      = new QCheckBox(i18n("Video Aspect Ratio"), d->videoSettingBox);
-    d->showVideoAspectRatio->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
+    d->showVideoAspectRatio->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video."));
 
     d->showVideoAudioBitRate     = new QCheckBox(i18n("Audio Bit Rate"), d->videoSettingBox);
-    d->showVideoAudioBitRate->setWhatsThis(i18n("Set this option to display the Audio Bit Rate of the Video"));
+    d->showVideoAudioBitRate->setWhatsThis(i18n("Set this option to display the Audio Bit Rate of the Video."));
 
     d->showVideoAudioChannelType = new QCheckBox(i18n("Audio Channel Type"), d->videoSettingBox);
-    d->showVideoAudioChannelType->setWhatsThis(i18n("Set this option to display the Audio Channel Type of the Video"));
+    d->showVideoAudioChannelType->setWhatsThis(i18n("Set this option to display the Audio Channel Type of the Video."));
 
     d->showVideoAudioCompressor  = new QCheckBox(i18n("Audio Compressor"), d->videoSettingBox);
-    d->showVideoAudioCompressor->setWhatsThis(i18n("Set this option to display the Audio Compressor of the Video"));
+    d->showVideoAudioCompressor->setWhatsThis(i18n("Set this option to display the Audio Compressor of the Video."));
 
     d->showVideoDuration         = new QCheckBox(i18n("Video Duration"), d->videoSettingBox);
-    d->showVideoDuration->setWhatsThis(i18n("Set this option to display the Duration of the Video"));
+    d->showVideoDuration->setWhatsThis(i18n("Set this option to display the Duration of the Video."));
 
     d->showVideoFrameRate        = new QCheckBox(i18n("Video Frame Rate"), d->videoSettingBox);
-    d->showVideoFrameRate->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
+    d->showVideoFrameRate->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video."));
 
     d->showVideoVideoCodec       = new QCheckBox(i18n("Video Codec"), d->videoSettingBox);
-    d->showVideoVideoCodec->setWhatsThis(i18n("Set this option to display the Codec of the Video"));
+    d->showVideoVideoCodec->setWhatsThis(i18n("Set this option to display the Codec of the Video."));
 
     grid5->addWidget(d->showVideoAspectRatio,      0, 0, 1, 1);
     grid5->addWidget(d->showVideoAudioBitRate,     1, 0, 1, 1);
