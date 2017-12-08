@@ -605,7 +605,7 @@
             <!-- Note Albums with an icon set are setup after population of the Images table. -->
             <dbaction name="Migrate_Read_Albums"><statement mode="query">
                 SELECT id, albumRoot, relativePath, date, caption, collection FROM Albums
-                WHERE id IS NOT NULL;
+                WHERE  albumRoot IN (SELECT id FROM AlbumRoots);
             </statement></dbaction>
             <dbaction name="Migrate_Write_Albums"><statement mode="query">
                 INSERT OR IGNORE INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, NULL);
@@ -1667,7 +1667,7 @@ ORDER BY inf.rating DESC, img.name ASC
             <!-- Note Albums with an icon set are setup after population of the Images table. -->
             <dbaction name="Migrate_Read_Albums"><statement mode="query">
                 SELECT id, albumRoot, relativePath, date, caption, collection FROM Albums
-                WHERE id IS NOT NULL;
+                WHERE  albumRoot IN (SELECT id FROM AlbumRoots);
             </statement></dbaction>
             <dbaction name="Migrate_Write_Albums" mode="transaction"><statement mode="query">
                 INSERT IGNORE INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, NULL);
