@@ -124,20 +124,19 @@ protected:
     void   updatePixmap();
     void   drawLineTo(const QPoint& endPoint);
     void   drawLineTo(int width, bool erase, const QColor& color, const QPoint& start, const QPoint& end);
-    QPoint translatePointPosition(QPoint& point) const;
+    QPoint translatePointPosition(const QPoint& point) const;
     void   drawText(QPainter* const p, const QPoint& corner, const QString& text);
     void   updateMaskCursor();
     void   setSpotPosition(QPoint& point);
     void   updateSpotPosition(int x, int y);
-    QPoint translateImagePosition(QPoint& point, bool src) const;
+    QPoint translateImagePosition(const QPoint& point, bool src) const;
 
 private:
+
     class Private;
     Private* const d;
-
-//    Private* accessD();
 };
 
 }  // namespace Digikam
 
-#endif /* IMAGEGUIDEWIDGET_H */
+#endif // IMAGEGUIDEWIDGET_H
