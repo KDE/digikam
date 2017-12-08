@@ -862,22 +862,13 @@ QPoint ImageGuideWidget::translateImagePosition(const QPoint& point, bool src) c
     int x = (int)(point.x() * (float)(d->preview.width())  / (float) d->iface->originalSize().width());
     int y = (int)(point.y() * (float)(d->preview.height()) / (float) d->iface->originalSize().height());
 
-    //x     += (int)d->rect.x()/2 + 1;
-
-    if (src)
-    {
-        y += (int)d->rect.y() / 2 + 1;
-    }
-    else
+    if (!src)
     {
         x  = (int)(point.x());
         y  = (int)(point.y());
         x -= (int) (d->rect.topLeft().x()) + 1;
         y -= (int) (d->rect.topLeft().y()) + 1;
-
     }
-
-    //d->rect.y() + d->rect.height() / 2 - 1
 
     return (QPoint(x, y));
 }
