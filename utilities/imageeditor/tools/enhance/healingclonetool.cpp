@@ -1,3 +1,27 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2017-06-15
+ * Description : a tool to replace part of the image using another
+ *
+ * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017      by Shaza Ismail Kaoud <shaza dot ismail dot k at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 #include "healingclonetool.h"
 
 // Qt includes
@@ -24,8 +48,10 @@
 
 namespace Digikam
 {
+
 class HealingCloneTool::Private
 {
+
 public:
 
     Private() :
@@ -47,7 +73,6 @@ public:
     QPoint                  destinationStartPoint;
     QPushButton*            src;
     DImg                    currentImg;
-
 };
 
 const QString HealingCloneTool::Private::configGroupName(QLatin1String("Healing Clone Tool"));
@@ -55,7 +80,7 @@ const QString HealingCloneTool::Private::configRadiusAdjustmentEntry(QLatin1Stri
 const QString HealingCloneTool::Private::configBlurAdjustmentEntry(QLatin1String("BlurAdjustment"));
 // --------------------------------------------------------
 
-HealingCloneTool::HealingCloneTool(QObject * const parent)
+HealingCloneTool::HealingCloneTool(QObject* const parent)
     : EditorTool(parent),
       d(new Private)
 {
@@ -69,10 +94,11 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
 
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::PreviewTargetImage);
+
     // --------------------------------------------------------
 
     QLabel* const label  = new QLabel(i18n("Brush Radius:"));
-    d->radiusInput = new DIntNumInput();
+    d->radiusInput       = new DIntNumInput();
     d->radiusInput->setRange(0, 50, 1);
     d->radiusInput->setDefaultValue(0);
     d->radiusInput->setWhatsThis(i18n("A radius of 0 has no effect, "
@@ -80,9 +106,10 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
                                       "that determines the size of parts copied in the image."));
 
     // --------------------------------------------------------
+
     QLabel* const label2  = new QLabel(i18n("Radial Blur Percent:"));
-    d->blurPercent = new DDoubleNumInput();
-    d->blurPercent->setRange(0,100, 0.1);
+    d->blurPercent        = new DDoubleNumInput();
+    d->blurPercent->setRange(0, 100, 0.1);
     d->blurPercent->setDefaultValue(0);
     d->blurPercent->setWhatsThis(i18n("A percent of 0 has no effect, values "
                                       "above 0 represent a factor for mixing "
@@ -91,9 +118,11 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
                                       "the brush radius is totally from source and mixing "
                                       "with destination is done gradually till the outer part "
                                       "of the circle."));
+
     // --------------------------------------------------------
+
     QLabel* const label_src  = new QLabel(i18n("Source:"));
-    d->src = new QPushButton(i18n("click to set/unset"), d->gboxSettings->plainPage());
+    d->src                   = new QPushButton(i18n("click to set/unset"), d->gboxSettings->plainPage());
 
     // --------------------------------------------------------
 
@@ -119,13 +148,18 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
     setToolView(d->previewWidget);
 
     // --------------------------------------------------------
+
     d->previewWidget->setSrcSet(false);
+
     connect(d->radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotRadiusChanged(int)));
+
     connect(d->src, SIGNAL(clicked(bool)),
             d->previewWidget, SLOT(slotSrcSet()));
-    connect(d->previewWidget, SIGNAL(signalClone(QPoint&,QPoint&)),
-            this, SLOT(slotReplace(QPoint&,QPoint&)));
+
+    connect(d->previewWidget, SIGNAL(signalClone(QPoint,QPoint)),
+            this, SLOT(slotReplace(QPoint,QPoint)));
+
     connect(d->previewWidget, SIGNAL(signalResized()),
             this, SLOT(slotResized()));
 }
@@ -173,10 +207,10 @@ void HealingCloneTool::slotResized()
     toolView()->update();
 }
 
-void HealingCloneTool::slotReplace(QPoint &srcPoint, QPoint &dstPoint)
+void HealingCloneTool::slotReplace(const QPoint& srcPoint, const QPoint& dstPoint)
 {
-    ImageIface* const iface        = d->previewWidget->imageIface();
-    DImg * const current           = iface->previewReference();
+    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg * const current    = iface->previewReference();
     clone(current, srcPoint, dstPoint, d->radiusInput->value());
     d->previewWidget->updatePreview();
 }
@@ -186,22 +220,25 @@ void HealingCloneTool::slotRadiusChanged(int r)
     d->previewWidget->setMaskPenSize(r);
 }
 
-void HealingCloneTool::clone(DImg * const img, QPoint &srcPoint, QPoint &dstPoint, int radius)
+void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoint& dstPoint, int radius)
 {
-    double blurPercent = d->blurPercent->value()/100;
-    for(int i = -1* radius; i < radius; i++){
-        for(int j = -1* radius; j < radius; j++){
-            int rPercent = (i*i) + (j*j);
+    double blurPercent = d->blurPercent->value() / 100;
+
+    for (int i = -1 * radius ; i < radius ; i++)
+    {
+        for (int j = -1 * radius ; j < radius ; j++)
+        {
+            int rPercent = (i * i) + (j * j);
+
             if (rPercent < (radius * radius)) // Check for inside the circle
             {
-                double rP = blurPercent * rPercent/(radius * radius);
+                double rP   = blurPercent * rPercent / (radius * radius);
                 DColor cSrc = img->getPixelColor(srcPoint.x()+i, srcPoint.y()+j);
                 DColor cDst = img->getPixelColor(dstPoint.x()+i, dstPoint.y()+j);
                 cSrc.multiply(1 - rP);
                 cDst.multiply(rP);
                 cSrc.blendAdd(cDst);
                 img->setPixelColor(dstPoint.x()+i, dstPoint.y()+j, cSrc);
-
             }
         }
     }
