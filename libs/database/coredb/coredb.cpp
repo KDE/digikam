@@ -672,7 +672,7 @@ void CoreDB::setTagParentID(int tagID, int newParentTagID)
 {
     if (d->db->databaseType() == BdEngineBackend::DbType::SQLite)
     {
-        d->db->execSql(QString::fromUtf8("UPDATE or REPLACE Tags SET pid=? WHERE id=?;"),
+        d->db->execSql(QString::fromUtf8("UPDATE OR REPLACE Tags SET pid=? WHERE id=?;"),
                        newParentTagID, tagID);
     }
     else
