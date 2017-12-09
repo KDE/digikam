@@ -353,8 +353,8 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->rotateByFlag->setToolTip(i18nc("@info:tooltip",
                                       "Rotate files only by changing a flag, not touching the pixel data"));
     d->rotateByFlag->setWhatsThis(xi18nc("@info:whatsthis",
-                                        "<para>A file can be rotated in two ways:<br/> "
-                                        "You can change the contents, rearranging the individual pixels of the image data.<br/> "
+                                        "<para>A file can be rotated in two ways:<nl/> "
+                                        "You can change the contents, rearranging the individual pixels of the image data.<nl/> "
                                         "Or you can set a flag that the file is to be rotated before it is shown.</para> "
                                         "<para>Select this option if you always want to set only a flag. "
                                         "This is less obtrusive, but requires support if the file is accessed with another software. "
@@ -364,8 +364,8 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->rotateByContents->setToolTip(i18nc("@info:tooltip",
                                           "If possible rotate files by changing the pixel data"));
     d->rotateByContents->setWhatsThis(xi18nc("@info:whatsthis",
-                                            "<para>A file can be rotated in two ways:<br/> "
-                                            "You can change the contents, rearranging the individual pixels of the image data.<br/> "
+                                            "<para>A file can be rotated in two ways:<nl/> "
+                                            "You can change the contents, rearranging the individual pixels of the image data.<nl/> "
                                             "Or you can set a flag that the file is to be rotated before it is shown.</para> "
                                             "<para>Select this option if you want the file to be rotated by changing the content. "
                                             "This is a lossless operation for JPEG files. For other formats it is a lossy operation, "
