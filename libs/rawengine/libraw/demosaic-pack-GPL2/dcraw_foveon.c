@@ -352,10 +352,6 @@ void CLASS foveon_load_camf()
   type = get4();  get4();  get4();
   wide = get4();
   high = get4();
-#ifdef LIBRAW_LIBRARY_BUILD
-  if(wide>32767 || high > 32767 || wide*high > 20000000)
-     throw LIBRAW_EXCEPTION_IO_CORRUPT;
-#endif
   if (type == 2) {
     fread (meta_data, 1, meta_length, ifp);
     for (i=0; i < meta_length; i++) {
@@ -364,6 +360,12 @@ void CLASS foveon_load_camf()
       meta_data[i] ^= ((((high << 8) - wide) >> 1) + wide) >> 17;
     }
   } else if (type == 4) {
+#ifdef LIBRAW_LIBRARY_BUILD
+  if(wide>32767 || high > 32767 || wide*high > 20000000)
+  {
+     throw LIBRAW_EXCEPTION_IO_CORRUPT;
+  }
+#endif
     free (meta_data);
     meta_data = (char *) malloc (meta_length = wide*high*3/2);
     merror (meta_data, "foveon_load_camf()");
