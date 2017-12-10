@@ -118,4 +118,6 @@ BUGFIXES FROM BUGZILLA:
 107 ==> 383240 - digikam >5.3 do not run on Windows XP.
 108 ==> 375424 - Thumbnails are not being removed from AlbumsView after moving the images to Trash.
 109 ==> 373638 - digiKam doesn't show any files.
-110 ==> 
+110 ==> 376426 - Exit Full Screen does not restore maximized window.
+111 ==> 
+
