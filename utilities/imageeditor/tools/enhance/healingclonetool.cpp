@@ -124,7 +124,7 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
     // --------------------------------------------------------
 
     QLabel* const label3 = new QLabel(i18n("Source:"));
-    d->srcButton         = new QPushButton(i18n("click to set/unset"), d->gboxSettings->plainPage());
+    d->srcButton         = new QPushButton(i18n("Set Source Point"), d->gboxSettings->plainPage());
 
     // --------------------------------------------------------
 
@@ -151,13 +151,11 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
 
     // --------------------------------------------------------
 
-    d->previewWidget->setSrcSet(false);
-
     connect(d->radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotRadiusChanged(int)));
 
     connect(d->srcButton, SIGNAL(clicked(bool)),
-            d->previewWidget, SLOT(slotSrcSet()));
+            d->previewWidget, SLOT(slotSetSourcePoint()));
 
     connect(d->previewWidget, SIGNAL(signalClone(QPoint,QPoint)),
             this, SLOT(slotReplace(QPoint,QPoint)));

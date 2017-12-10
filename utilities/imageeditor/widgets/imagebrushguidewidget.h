@@ -44,17 +44,12 @@ public:
      */
     using ImageGuideWidget::ImageGuideWidget;
 
-    /**
-     * @brief setSrcSet fixes/unfixes the source spot
-     * @param s
-     */
-    void setSrcSet(bool s);
+public Q_SLOTS:
 
     /**
-     * @brief isSrcSet
-     * @return if the source spot is set
+     * @brief slotSrcSet toggles the fixing of the brush source center
      */
-    bool isSrcSet();
+    void slotSetSourcePoint();
 
 Q_SIGNALS:
 
@@ -64,20 +59,15 @@ Q_SIGNALS:
      */
     void signalClone(const QPoint& currentSrc, const QPoint& currentDst);
 
-public Q_SLOTS:
+protected:
 
-    /**
-     * @brief slotSrcSet toggles the fixing of the brush source center
-     */
-    void slotSrcSet();
+    void mouseReleaseEvent(QMouseEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 
 private:
 
-    void mouseMoveEvent(QMouseEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
-    void mousePressEvent(QMouseEvent*);
-    bool srcSet   = false; //toggle in srcSet slot
-    bool released = true;
+    bool   srcSet = true;
     QPoint src;
     QPoint dst;
 };
