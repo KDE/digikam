@@ -610,57 +610,68 @@ void RatioCropTool::readSettings()
     d->imageSelectionWidget->slotGuideLines(d->guideLinesCB->currentIndex());
     d->imageSelectionWidget->slotChangeGuideColor(d->guideColorBt->color());
 
-    d->preciseCrop->setChecked( group.readEntry(d->configPreciseAspectRatioCropEntry, false) );
+    d->preciseCrop->setChecked(group.readEntry(d->configPreciseAspectRatioCropEntry, false));
     d->imageSelectionWidget->setPreciseCrop( d->preciseCrop->isChecked() );
 
     // Empty selection so it can be moved w/out size constraint
     d->widthInput->setValue(0);
     d->heightInput->setValue(0);
 
-    d->xInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioXposEntry,
-                                        d->xInput->defaultValue()));
-    d->yInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioYposEntry,
-                                        d->yInput->defaultValue()));
-
-    d->widthInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioWidthEntry,
-                                            d->widthInput->defaultValue()));
-    d->heightInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioHeightEntry,
-                             d->heightInput->defaultValue()));
-
     d->imageSelectionWidget->setSelectionOrientation(d->orientCB->currentIndex());
-
-    d->customRatioNInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioNumEntry,
-                                   d->customRatioNInput->defaultValue()));
-    d->customRatioDInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioDenEntry,
-                                   d->customRatioDInput->defaultValue()));
-    d->ratioCB->setCurrentIndex(group.readEntry(d->configHorOrientedAspectRatioEntry,
-                                d->ratioCB->defaultIndex()));
 
     if (d->originalIsLandscape)
     {
+        d->ratioCB->setCurrentIndex(group.readEntry(d->configHorOrientedAspectRatioEntry,
+                                    d->ratioCB->defaultIndex()));
         d->orientCB->setCurrentIndex(group.readEntry(d->configHorOrientedAspectRatioOrientationEntry,
                                      (int)ImageSelectionWidget::Landscape));
         d->orientCB->setDefaultIndex(ImageSelectionWidget::Landscape);
+        d->customRatioNInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioNumEntry,
+                                       d->customRatioNInput->defaultValue()));
+        d->customRatioDInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioDenEntry,
+                                       d->customRatioDInput->defaultValue()));
+        d->heightInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioHeightEntry,
+                                 d->heightInput->defaultValue()));
+        d->widthInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioWidthEntry,
+                                                d->widthInput->defaultValue()));
+        d->xInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioXposEntry,
+                                            d->xInput->defaultValue()));
+        d->yInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioYposEntry,
+                                            d->yInput->defaultValue()));
     }
     else
     {
+        d->ratioCB->setCurrentIndex(group.readEntry(d->configVerOrientedAspectRatioEntry,
+                                    d->ratioCB->defaultIndex()));
         d->orientCB->setCurrentIndex(group.readEntry(d->configVerOrientedAspectRatioOrientationEntry,
                                      (int)ImageSelectionWidget::Portrait));
         d->orientCB->setDefaultIndex(ImageSelectionWidget::Portrait);
+        d->customRatioNInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioNumEntry,
+                                       d->customRatioNInput->defaultValue()));
+        d->customRatioDInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioDenEntry,
+                                       d->customRatioDInput->defaultValue()));
+        d->heightInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioHeightEntry,
+                                 d->heightInput->defaultValue()));
+        d->widthInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioWidthEntry,
+                                                d->widthInput->defaultValue()));
+        d->xInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioXposEntry,
+                                            d->xInput->defaultValue()));
+        d->yInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioYposEntry,
+                                            d->yInput->defaultValue()));
     }
 
     d->autoOrientation->setChecked(group.readEntry(d->configAutoOrientationEntry, false));
-    slotAutoOrientChanged( d->autoOrientation->isChecked() );
+    slotAutoOrientChanged(d->autoOrientation->isChecked());
     applyRatioChanges(d->ratioCB->currentIndex());
 
+    slotHeightChanged(d->heightInput->value());
+    slotWidthChanged(d->widthInput->value());
     slotXChanged(d->xInput->value());
     slotYChanged(d->yInput->value());
-    slotWidthChanged(d->widthInput->value());
 
     // For the last setting to be applied, activate drawing in the selectionWidget,
     // so that we can see the results.
     d->imageSelectionWidget->setIsDrawingSelection(true);
-    slotHeightChanged(d->heightInput->value());
 
     slotGuideTypeChanged(d->guideLinesCB->currentIndex());
 
@@ -682,10 +693,10 @@ void RatioCropTool::writeSettings()
         group.writeEntry(d->configHorOrientedCustomAspectRatioNumEntry,    d->customRatioNInput->value());
         group.writeEntry(d->configHorOrientedCustomAspectRatioDenEntry,    d->customRatioDInput->value());
 
+        group.writeEntry(d->configHorOrientedCustomAspectRatioHeightEntry, d->heightInput->value());
+        group.writeEntry(d->configHorOrientedCustomAspectRatioWidthEntry,  d->widthInput->value());
         group.writeEntry(d->configHorOrientedCustomAspectRatioXposEntry,   d->xInput->value());
         group.writeEntry(d->configHorOrientedCustomAspectRatioYposEntry,   d->yInput->value());
-        group.writeEntry(d->configHorOrientedCustomAspectRatioWidthEntry,  d->widthInput->value());
-        group.writeEntry(d->configHorOrientedCustomAspectRatioHeightEntry, d->heightInput->value());
     }
     else
     {
@@ -694,10 +705,10 @@ void RatioCropTool::writeSettings()
         group.writeEntry(d->configVerOrientedCustomAspectRatioNumEntry,    d->customRatioNInput->value());
         group.writeEntry(d->configVerOrientedCustomAspectRatioDenEntry,    d->customRatioDInput->value());
 
+        group.writeEntry(d->configVerOrientedCustomAspectRatioHeightEntry, d->heightInput->value());
+        group.writeEntry(d->configVerOrientedCustomAspectRatioWidthEntry,  d->widthInput->value());
         group.writeEntry(d->configVerOrientedCustomAspectRatioXposEntry,   d->xInput->value());
         group.writeEntry(d->configVerOrientedCustomAspectRatioYposEntry,   d->yInput->value());
-        group.writeEntry(d->configVerOrientedCustomAspectRatioWidthEntry,  d->widthInput->value());
-        group.writeEntry(d->configVerOrientedCustomAspectRatioHeightEntry, d->heightInput->value());
     }
 
     group.writeEntry(d->configPreciseAspectRatioCropEntry, d->preciseCrop->isChecked());
