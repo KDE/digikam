@@ -117,4 +117,5 @@ BUGFIXES FROM BUGZILLA:
 106 ==> 385438 - Search images with 2 tags should give images with the 2 tags, not all images with one of the two tags.
 107 ==> 383240 - digikam >5.3 do not run on Windows XP.
 108 ==> 375424 - Thumbnails are not being removed from AlbumsView after moving the images to Trash.
-109 ==> 
+109 ==> 373638 - digiKam doesn't show any files.
+110 ==> 
