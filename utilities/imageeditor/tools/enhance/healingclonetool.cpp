@@ -74,7 +74,6 @@ public:
     QPoint                  sourcePoint;
     QPoint                  destinationStartPoint;
     QPushButton*            srcButton;
-    DImg                    currentImg;
 };
 
 const QString HealingCloneTool::Private::configGroupName(QLatin1String("Healing Clone Tool"));
@@ -210,7 +209,7 @@ void HealingCloneTool::slotResized()
 void HealingCloneTool::slotReplace(const QPoint& srcPoint, const QPoint& dstPoint)
 {
     ImageIface* const iface = d->previewWidget->imageIface();
-    DImg * const current    = iface->previewReference();
+    DImg* const current     = iface->previewReference();
     clone(current, srcPoint, dstPoint, d->radiusInput->value());
     d->previewWidget->updatePreview();
 }
@@ -233,11 +232,21 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
             if (rPercent < (radius * radius)) // Check for inside the circle
             {
                 double rP   = blurPercent * rPercent / (radius * radius);
+
+                if (srcPoint.x()+i < 0 || srcPoint.x()+i >= (int)img->width()  ||
+                    srcPoint.y()+j < 0 || srcPoint.y()+j >= (int)img->height() ||
+                    dstPoint.x()+i < 0 || dstPoint.x()+i >= (int)img->width()  ||
+                    dstPoint.y()+j < 0 || dstPoint.y()+j >= (int)img->height())
+                {
+                    continue;
+                }
+
                 DColor cSrc = img->getPixelColor(srcPoint.x()+i, srcPoint.y()+j);
                 DColor cDst = img->getPixelColor(dstPoint.x()+i, dstPoint.y()+j);
                 cSrc.multiply(1 - rP);
                 cDst.multiply(rP);
                 cSrc.blendAdd(cDst);
+
                 img->setPixelColor(dstPoint.x()+i, dstPoint.y()+j, cSrc);
             }
         }
