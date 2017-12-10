@@ -231,8 +231,6 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
 
             if (rPercent < (radius * radius)) // Check for inside the circle
             {
-                double rP   = blurPercent * rPercent / (radius * radius);
-
                 if (srcPoint.x()+i < 0 || srcPoint.x()+i >= (int)img->width()  ||
                     srcPoint.y()+j < 0 || srcPoint.y()+j >= (int)img->height() ||
                     dstPoint.x()+i < 0 || dstPoint.x()+i >= (int)img->width()  ||
@@ -241,6 +239,7 @@ void HealingCloneTool::clone(DImg* const img, const QPoint& srcPoint, const QPoi
                     continue;
                 }
 
+                double rP   = blurPercent * rPercent / (radius * radius);
                 DColor cSrc = img->getPixelColor(srcPoint.x()+i, srcPoint.y()+j);
                 DColor cDst = img->getPixelColor(dstPoint.x()+i, dstPoint.y()+j);
                 cSrc.multiply(1 - rP);
