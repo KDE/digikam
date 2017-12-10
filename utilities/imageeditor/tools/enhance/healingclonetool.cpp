@@ -56,8 +56,10 @@ public:
 
     Private() :
         radiusInput(0),
+        blurPercent(0),
         previewWidget(0),
-        gboxSettings(0)
+        gboxSettings(0),
+        srcButton(0)
     {
     }
 
@@ -71,7 +73,7 @@ public:
     EditorToolSettings*     gboxSettings;
     QPoint                  sourcePoint;
     QPoint                  destinationStartPoint;
-    QPushButton*            src;
+    QPushButton*            srcButton;
     DImg                    currentImg;
 };
 
@@ -89,8 +91,8 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
     setToolIcon(QIcon::fromTheme(QLatin1String("healimage")));
     setToolHelp(QLatin1String("healingclonetool.anchor"));
 
-    d->gboxSettings  = new EditorToolSettings;
-    d->previewWidget = new ImageBrushGuideWidget(0, true, ImageGuideWidget::PickColorMode, Qt::red);
+    d->gboxSettings      = new EditorToolSettings;
+    d->previewWidget     = new ImageBrushGuideWidget(0, true, ImageGuideWidget::PickColorMode, Qt::red);
 
     setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::PreviewTargetImage);
@@ -100,15 +102,15 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
     QLabel* const label  = new QLabel(i18n("Brush Radius:"));
     d->radiusInput       = new DIntNumInput();
     d->radiusInput->setRange(0, 50, 1);
-    d->radiusInput->setDefaultValue(0);
+    d->radiusInput->setDefaultValue(10);
     d->radiusInput->setWhatsThis(i18n("A radius of 0 has no effect, "
                                       "1 and above determine the brush radius "
                                       "that determines the size of parts copied in the image."));
 
     // --------------------------------------------------------
 
-    QLabel* const label2  = new QLabel(i18n("Radial Blur Percent:"));
-    d->blurPercent        = new DDoubleNumInput();
+    QLabel* const label2 = new QLabel(i18n("Radial Blur Percent:"));
+    d->blurPercent       = new DDoubleNumInput();
     d->blurPercent->setRange(0, 100, 0.1);
     d->blurPercent->setDefaultValue(0);
     d->blurPercent->setWhatsThis(i18n("A percent of 0 has no effect, values "
@@ -121,16 +123,16 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* const label_src  = new QLabel(i18n("Source:"));
-    d->src                   = new QPushButton(i18n("click to set/unset"), d->gboxSettings->plainPage());
+    QLabel* const label3 = new QLabel(i18n("Source:"));
+    d->srcButton         = new QPushButton(i18n("click to set/unset"), d->gboxSettings->plainPage());
 
     // --------------------------------------------------------
 
     const int spacing = d->gboxSettings->spacingHint();
 
     QGridLayout* const grid = new QGridLayout( );
-    grid->addWidget(label_src,      1, 0, 1, 2);
-    grid->addWidget(d->src,         2, 0, 1, 2);
+    grid->addWidget(label3,         1, 0, 1, 2);
+    grid->addWidget(d->srcButton,   2, 0, 1, 2);
     grid->addWidget(new DLineWidget(Qt::Horizontal, d->gboxSettings->plainPage()), 3, 0, 1, 2);
     grid->addWidget(label,          4, 0, 1, 2);
     grid->addWidget(d->radiusInput, 5, 0, 1, 2);
@@ -154,7 +156,7 @@ HealingCloneTool::HealingCloneTool(QObject* const parent)
     connect(d->radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotRadiusChanged(int)));
 
-    connect(d->src, SIGNAL(clicked(bool)),
+    connect(d->srcButton, SIGNAL(clicked(bool)),
             d->previewWidget, SLOT(slotSrcSet()));
 
     connect(d->previewWidget, SIGNAL(signalClone(QPoint,QPoint)),
