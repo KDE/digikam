@@ -1452,7 +1452,7 @@ DColor DImg::getSubPixelColorFast(float x, float y) const
 
 void DImg::setPixelColor(uint x, uint y, const DColor& color)
 {
-    if (m_priv->null || x > m_priv->width || y > m_priv->height)
+    if (m_priv->null || x >= m_priv->width || y >= m_priv->height)
     {
         return;
     }
