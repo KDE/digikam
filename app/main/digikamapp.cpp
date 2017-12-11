@@ -899,8 +899,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageViewSelectionAction = new KSelectAction(QIcon::fromTheme(QLatin1String("view-preview")), i18n("Views"), this);
-    ac->addAction(QLatin1String("view_selection"), d->imageViewSelectionAction);
+    d->imageViewSelectionAction = new KSelectAction(this);
 
     d->imageIconViewAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-icons")),
                                          i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);

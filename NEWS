@@ -120,4 +120,5 @@ BUGFIXES FROM BUGZILLA:
 109 ==> 373638 - digiKam doesn't show any files.
 110 ==> 376426 - Exit Full Screen does not restore maximized window.
 111 ==> 387364 - makeUpdates 8 to 9 Failure executing query.
-112 ==> 
+112 ==> 387792 - Action "Views" exists but does nothing
+113 ==> 
