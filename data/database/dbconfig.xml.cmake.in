@@ -1561,18 +1561,18 @@ ORDER BY inf.rating DESC, img.name ASC
             <dbaction name="CreateFaceDB" mode="transaction">
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS Identities
                             (id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                            type INTEGER) ENGINE InnoDB;
+                            `type` INTEGER) ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS IdentityAttributes
                             (id INTEGER,
-                            type INTEGER,
+                            `type` INTEGER,
                             attribute TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            value TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                            `value` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                             CONSTRAINT IdentityAttributes_Identities FOREIGN KEY (id) REFERENCES Identities (id) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS FaceSettings
                             (keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                            value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                            `value` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                             UNIQUE(keyword(255))) ENGINE InnoDB;
                 </statement>
             </dbaction>
@@ -1590,11 +1590,11 @@ ORDER BY inf.rating DESC, img.name ASC
                             (id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             recognizerid INTEGER,
                             identity INTEGER,
-                            context TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            type INTEGER,
-                            rows INTEGER,
-                            cols INTEGER,
-                            data BLOB) ENGINE InnoDB;
+                            `context` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                            `type` INTEGER,
+                            `rows` INTEGER,
+                            `cols` INTEGER,
+                            `data` BLOB) ENGINE InnoDB;
                 </statement>
             </dbaction>
 

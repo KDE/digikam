@@ -119,5 +119,5 @@ BUGFIXES FROM BUGZILLA:
 108 ==> 375424 - Thumbnails are not being removed from AlbumsView after moving the images to Trash.
 109 ==> 373638 - digiKam doesn't show any files.
 110 ==> 376426 - Exit Full Screen does not restore maximized window.
-111 ==> 
-
+111 ==> 387364 - makeUpdates 8 to 9 Failure executing query.
+112 ==> 
