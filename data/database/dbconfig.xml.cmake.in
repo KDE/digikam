@@ -1291,27 +1291,22 @@
             </dbaction>
 
             <dbaction name="InsertTag" mode="transaction">
-                <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
                 <statement mode="query">SELECT @myLeft := lft FROM Tags WHERE id = :tagPID;</statement>
                 <statement mode="query">SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);</statement>
                 <statement mode="query">UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;</statement>
                 <statement mode="query">UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;</statement>
                 <statement mode="query">INSERT INTO Tags(name, pid, lft, rgt) VALUES(:tagname, :tagPID, @myLeft + 1, @myLeft + 2);</statement>
-                <statement mode="plain">UNLOCK TABLES;</statement>
             </dbaction>
 
             <dbaction name="DeleteTag" mode="transaction">
-                <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
                 <statement mode="query">SELECT @myLeft := lft FROM Tags WHERE id = :tagID;</statement>
                 <statement mode="query">SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);</statement>
                 <statement mode="query">DELETE FROM Tags WHERE id = :tagID;</statement>
                 <statement mode="query">UPDATE Tags SET rgt = rgt - 2 WHERE rgt > @myLeft;</statement>
                 <statement mode="query">UPDATE Tags SET lft = lft - 2 WHERE lft > @myLeft;</statement>
-                <statement mode="plain">UNLOCK TABLES;</statement>
             </dbaction>
 
             <dbaction name="MoveTagTree" mode="transaction">
-                <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
                 <statement mode="query">SELECT @myLeft := lft, @myRight := rgt, @myWidth := rgt - lft + 1
                                         FROM Tags WHERE id = :tagID;</statement>
                 <statement mode="query">UPDATE Tags SET rgt = rgt * -1, lft = lft * -1
@@ -1325,7 +1320,6 @@
                 <statement mode="query">UPDATE Tags SET lft = lft * -1 - @myLeft + @myNewLeft + 1,
                                                         rgt = rgt * -1 - @myLeft + @myNewLeft + 1
                                         WHERE lft * -1 BETWEEN @myLeft AND @myRight;</statement>
-                <statement mode="plain">UNLOCK TABLES;</statement>
             </dbaction>
 
             <dbaction name="deleteAlbumRoot" mode="transaction">
@@ -1765,13 +1759,11 @@ ORDER BY inf.rating DESC, img.name ASC
                 SELECT id, pid, name, CASE WHEN icon = 0 THEN NULL ELSE icon END AS icon, iconkde FROM Tags WHERE id != 0;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Tags" mode="transaction">
-                <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
                 <statement mode="query">SELECT @myLeft := lft FROM Tags WHERE id = :pid;</statement>
                 <statement mode="query">SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);</statement>
                 <statement mode="query">UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;</statement>
                 <statement mode="query">UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;</statement>
                 <statement mode="query">REPLACE INTO Tags(id, pid, name, icon, iconkde, lft, rgt) VALUES(:id, :pid, :name, :icon, :iconkde, @myLeft + 1, @myLeft + 2);</statement>
-                <statement mode="plain">UNLOCK TABLES;</statement>
             </dbaction>
 
             <dbaction name="Migrate_Read_ImageTags"><statement mode="query">
