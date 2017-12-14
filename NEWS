@@ -121,4 +121,5 @@ BUGFIXES FROM BUGZILLA:
 110 ==> 376426 - Exit Full Screen does not restore maximized window.
 111 ==> 387364 - makeUpdates 8 to 9 Failure executing query.
 112 ==> 387792 - Action "Views" exists but does nothing
-113 ==> 
+113 ==> 355831 - MySQL Schema Improvements.
+114 ==> 
