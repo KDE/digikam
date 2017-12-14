@@ -127,4 +127,6 @@ BUGFIXES FROM BUGZILLA:
 116 ==> 387892 - Crash in QtAV::VideoFrameExtractor.
 117 ==> 374355 - Video preview lags in the beginning.
 118 ==> 383020 - Only one GPS bookmark can be saved.
-119 ==> 
+119 ==> 111509 - Subalbums not supported by HTML export.
+120 ==> 
+
