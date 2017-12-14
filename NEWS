@@ -136,5 +136,7 @@ BUGFIXES FROM BUGZILLA:
 125 ==> 261743 - Make duplicate image search available outside digiKam.
 126 ==> 344507 - Update slogan to include professional photographers.
 127 ==> 201772 - Slogan reflects poorly on the application capabilities.
-128 ==> 
+128 ==> 091542 - Add a keyboard shortcut for JPEG lossless rotation in album view.
+129 ==> 
+
 
