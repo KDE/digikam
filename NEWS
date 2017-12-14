@@ -124,5 +124,6 @@ BUGFIXES FROM BUGZILLA:
 113 ==> 355831 - MySQL Schema Improvements.
 114 ==> 371840 - Crashes while editing pictures meta data or rotating the picture.
 115 ==> 379986 - Cannot add collection.
-116 ==> 
+116 ==> 387892 - Crash in QtAV::VideoFrameExtractor.
+117 ==> 
 
