@@ -126,6 +126,5 @@ BUGFIXES FROM BUGZILLA:
 115 ==> 379986 - Cannot add collection.
 116 ==> 387892 - Crash in QtAV::VideoFrameExtractor.
 117 ==> 374355 - Video preview lags in the beginning.
-118 ==> 
-
-
+118 ==> 383020 - Only one GPS bookmark can be saved.
+119 ==> 
