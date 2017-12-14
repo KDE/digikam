@@ -122,4 +122,5 @@ BUGFIXES FROM BUGZILLA:
 111 ==> 387364 - makeUpdates 8 to 9 Failure executing query.
 112 ==> 387792 - Action "Views" exists but does nothing
 113 ==> 355831 - MySQL Schema Improvements.
-114 ==> 
+114 ==> 371840 - Crashes while editing pictures meta data or rotating the picture.
+115 ==> 
