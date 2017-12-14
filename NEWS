@@ -132,5 +132,6 @@ BUGFIXES FROM BUGZILLA:
 121 ==> 292050 - Sort by date does not work.
 122 ==> 121765 - wish: MySQL support for digiKam.
 123 ==> 293756 - Develop iOS client (iPhone, iPod, iPad).
-124 ==> 
+124 ==> 382688 - Tag cannot be shown in photo's metadata.
+125 ==> 
 
