@@ -131,4 +131,6 @@ BUGFIXES FROM BUGZILLA:
 120 ==> 129877 - can only batch process albums, not selected images.
 121 ==> 292050 - Sort by date does not work.
 122 ==> 121765 - wish: MySQL support for digiKam.
-123 ==> 
+123 ==> 293756 - Develop iOS client (iPhone, iPod, iPad).
+124 ==> 
+
