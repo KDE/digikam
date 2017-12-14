@@ -133,5 +133,6 @@ BUGFIXES FROM BUGZILLA:
 122 ==> 121765 - wish: MySQL support for digiKam.
 123 ==> 293756 - Develop iOS client (iPhone, iPod, iPad).
 124 ==> 382688 - Tag cannot be shown in photo's metadata.
-125 ==> 
+125 ==> 261743 - Make duplicate image search available outside digiKam.
+126 ==> 
 
