@@ -157,5 +157,5 @@ BUGFIXES FROM BUGZILLA:
 146 ==> 210756 - Rename dialog should not force to add numbers.
 147 ==> 387514 - Importing regular images from Canon EOS 600D crashes digikam.
 148 ==> 222047 - Crash while assigning 4 Stars to JPEG200 Picture.
-149 ==> 
-
+149 ==> 199340 - Reopening a cs4 tiff file with exif data.
+150 ==> 
