@@ -158,4 +158,6 @@ BUGFIXES FROM BUGZILLA:
 147 ==> 387514 - Importing regular images from Canon EOS 600D crashes digikam.
 148 ==> 222047 - Crash while assigning 4 Stars to JPEG200 Picture.
 149 ==> 199340 - Reopening a cs4 tiff file with exif data.
-150 ==> 
+150 ==> 275529 - Crashes when copying one image from Canon Ixus to PC hard drive.
+151 ==> 
+
