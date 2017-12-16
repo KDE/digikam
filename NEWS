@@ -183,4 +183,5 @@ BUGFIXES FROM BUGZILLA:
 172 ==> 252200 - digiKam fails to compile.
 173 ==> 277046 - digiKam doesn't build with libpgf-6.11.24.
 174 ==> 121485 - Current camera images are hidden by cached images.
-
+175 ==> 146169 - Download images into Folder hierarchy (using exif-info).
+176 ==> 
