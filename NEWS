@@ -176,4 +176,6 @@ BUGFIXES FROM BUGZILLA:
 165 ==> 190202 - Crash when transfer image from camera.
 166 ==> 255520 - digiKam crashed while assigning tags to pictures.
 167 ==> 156599 - Bad date in header.
-168 ==> 
+168 ==> 242623 - The default product for Report Bug about metadata editor does not exist.
+169 ==> 
+
