@@ -165,4 +165,5 @@ BUGFIXES FROM BUGZILLA:
 154 ==> 284723 - digiKam crashed after trying to remove photos from device.
 155 ==> 237163 - Crash after multiple queued downloads.
 156 ==> 386063 - Crash on opening file dialog.
-157 ==> 
+157 ==> 190131 - sig SIGABRT when importing from Kodak Camera.
+158 ==> 
