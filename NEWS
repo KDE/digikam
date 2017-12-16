@@ -155,4 +155,6 @@ BUGFIXES FROM BUGZILLA:
 144 ==> 209455 - After slideshow screen blanks after 1 minute.
 145 ==> 130986 - Non-image files appear broken in html gallery.
 146 ==> 210756 - Rename dialog should not force to add numbers.
-147 ==> 
+147 ==> 387514 - Importing regular images from Canon EOS 600D crashes digikam.
+148 ==> 
+
