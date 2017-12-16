@@ -178,5 +178,6 @@ BUGFIXES FROM BUGZILLA:
 167 ==> 156599 - Bad date in header.
 168 ==> 242623 - The default product for Report Bug about metadata editor does not exist.
 169 ==> 094362 - Change permissions while importing images.
-170 ==> 
+170 ==> 152313 - I can't configurate Intel Pocket Camera cs630. I can't get the photos.
+171 ==> 
 
