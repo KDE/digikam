@@ -169,4 +169,10 @@ BUGFIXES FROM BUGZILLA:
 158 ==> 183753 - digiKam crashes while detecting my camera.
 159 ==> 229793 - Drop image file in digiKam.
 160 ==> 187204 - Keeps crashing 6 (SIGABRT) import from camera.
-161 ==> 
+161 ==> 271473 - digiKam crashes reproducably when scanning collection afte re-organising underlying picture folders.
+162 ==> 192426 - Tried to open a picture in Gimp. The Picture opens in Gimp and digiKam crashes.
+163 ==> 241585 - digiKam hangs at 0% in editor when calling "Save as".
+164 ==> 191414 - Selecting "synchronize images with database" in album drop-down menu causes signal 6 (sigabrt).
+165 ==> 190202 - Crash when transfer image from camera.
+166 ==> 255520 - digiKam crashed while assigning tags to pictures.
+167 ==> 
