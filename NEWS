@@ -160,5 +160,5 @@ BUGFIXES FROM BUGZILLA:
 149 ==> 199340 - Reopening a cs4 tiff file with exif data.
 150 ==> 275529 - Crashes when copying one image from Canon Ixus to PC hard drive.
 151 ==> 237752 - digiKam crashes during work.
-152 ==> 
-
+152 ==> 233470 - digiKam crashed on downloading pictures from CF card.
+153 ==> 
