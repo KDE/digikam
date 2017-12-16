@@ -1939,7 +1939,7 @@ void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
     m_nameLabel->setProgressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading:"));
 }
 
-void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success)
+void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
 {
     m_nameLabel->setProgressBarMode(StatusProgressBar::TextMode);
 
@@ -1958,6 +1958,12 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success
         // Set a history which contains all available files as referredImages
         DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getInitialImageHistory());
         m_canvas->interface()->setResolvedInitialHistory(resolved);
+    }
+    else
+    {
+        DNotificationPopup::message(DNotificationPopup::Boxed,
+                                    i18n("Cannot load \"%1\"", filename),
+                                    m_canvas, m_canvas->mapToGlobal(QPoint(30, 30)));
     }
 }
 

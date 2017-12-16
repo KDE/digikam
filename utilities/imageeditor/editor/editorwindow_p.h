@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EDITORWINDOWPRIVATE_H
-#define EDITORWINDOWPRIVATE_H
+#ifndef EDITOR_WINDOW_PRIVATE_H
+#define EDITOR_WINDOW_PRIVATE_H
 
 // Qt includes
 
@@ -380,30 +380,6 @@ void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, 
     menuAction->addAction(action);
 }
 
-// -----------------------------------------------------------------
-
-class EditorToolPassivePopup : public DNotificationPopup
-{
-public:
-
-    explicit EditorToolPassivePopup(QWidget* const parent)
-        : DNotificationPopup(parent),
-          m_parent(parent)
-    {
-    }
-
-protected:
-
-    virtual void positionSelf()
-    {
-        move(m_parent->x() + 30, m_parent->y() + 30);
-    }
-
-private:
-
-    QWidget* m_parent;
-};
-
 }  // namespace Digikam
 
-#endif /* EDITORWINDOWPRIVATE_H */
+#endif // EDITOR_WINDOW_PRIVATE_H
