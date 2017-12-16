@@ -162,4 +162,5 @@ BUGFIXES FROM BUGZILLA:
 151 ==> 237752 - digiKam crashes during work.
 152 ==> 233470 - digiKam crashed on downloading pictures from CF card.
 153 ==> 289144 - digiKam crashes during scan of memory card.
-154 ==> 
+154 ==> 284723 - digiKam crashed after trying to remove photos from device.
+155 ==> 
