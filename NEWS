@@ -138,5 +138,19 @@ BUGFIXES FROM BUGZILLA:
 127 ==> 201772 - Slogan reflects poorly on the application capabilities.
 128 ==> 091542 - Add a keyboard shortcut for JPEG lossless rotation in album view.
 129 ==> 292578 - Windows 7 prof. 32Bits, Context Menu not fully visible.
-130 ==> 
-
+130 ==> 269084 - Crash when editing Geo-Location.
+131 ==> 229900 - digiKam crashed when moving folders into another folder.
+132 ==> 348756 - Crash on Startup.
+133 ==> 232221 - digiKam crashed while editing a photo.
+134 ==> 354468 - digiKam crashing when try to open color effects. No crash info.
+135 ==> 284141 - Crash while adjusting luminosity levels.
+136 ==> 334987 - Crashes during import from Nikon coolpix S01.
+137 ==> 340934 - Crash while starting image viewer with pictures selected by stars.
+138 ==> 298635 - Crashes when deleting.
+139 ==> 307745 - Crash while scanning at startup.
+140 ==> 222044 - crash on importing images from USB camera.
+141 ==> 208315 - digiKam did not create a new folder.
+142 ==> 237773 - Crash while download pictures mobile phone camera Samsung.
+143 ==> 222048 - digiKam doesnt start anymore having JPEG2000 picture in database.
+144 ==> 209455 - After slideshow screen blanks after 1 minute.
+145 ==> 
