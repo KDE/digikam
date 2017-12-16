@@ -153,4 +153,5 @@ BUGFIXES FROM BUGZILLA:
 142 ==> 237773 - Crash while download pictures mobile phone camera Samsung.
 143 ==> 222048 - digiKam doesnt start anymore having JPEG2000 picture in database.
 144 ==> 209455 - After slideshow screen blanks after 1 minute.
-145 ==> 
+145 ==> 130986 - Non-image files appear broken in html gallery.
+146 ==> 
