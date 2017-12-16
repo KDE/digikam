@@ -190,4 +190,4 @@ BUGFIXES FROM BUGZILLA:
 179 ==> 296078 - Changes in the organization of tags are not saved when quitting digiKam.
 180 ==> 271021 - Result: stability improved.
 181 ==> 387958 - Core database: cannot process schema initialization (uprade from 5.7).
-182 ==> 
+182 ==> 387960 - Failed build Calendar tool with kcalcore 17.12.
