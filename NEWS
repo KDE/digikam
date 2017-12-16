@@ -186,4 +186,6 @@ BUGFIXES FROM BUGZILLA:
 175 ==> 146169 - Download images into Folder hierarchy (using exif-info).
 176 ==> 287186 - Import queued downloads does not work anymore.
 177 ==> 296817 - Unsort download of pictures.
-178 ==> 
+178 ==> 291541 - digiKam seems to be rewriting Metadata even if no change is made.
+179 ==> 
+
