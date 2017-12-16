@@ -167,4 +167,5 @@ BUGFIXES FROM BUGZILLA:
 156 ==> 386063 - Crash on opening file dialog.
 157 ==> 190131 - sig SIGABRT when importing from Kodak Camera.
 158 ==> 183753 - digiKam crashes while detecting my camera.
-159 ==> 
+159 ==> 229793 - Drop image file in digiKam.
+160 ==> 
