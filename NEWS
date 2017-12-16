@@ -175,4 +175,5 @@ BUGFIXES FROM BUGZILLA:
 164 ==> 191414 - Selecting "synchronize images with database" in album drop-down menu causes signal 6 (sigabrt).
 165 ==> 190202 - Crash when transfer image from camera.
 166 ==> 255520 - digiKam crashed while assigning tags to pictures.
-167 ==> 
+167 ==> 156599 - Bad date in header.
+168 ==> 
