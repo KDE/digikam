@@ -181,5 +181,6 @@ BUGFIXES FROM BUGZILLA:
 170 ==> 152313 - I can't configurate Intel Pocket Camera cs630. I can't get the photos.
 171 ==> 361982 - Browse tag clicking on a tag crashes digiKam.
 172 ==> 252200 - digikam fails to compile graphics/digikam/utilities/facedetection/facegroup.cpp.
-173 ==> 
+173 ==> 277046 - digikam 1.9.0 doesn't build with libpgf-6.11.24.
+174 ==> 
 
