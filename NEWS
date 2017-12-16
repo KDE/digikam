@@ -161,4 +161,5 @@ BUGFIXES FROM BUGZILLA:
 150 ==> 275529 - Crashes when copying one image from Canon Ixus to PC hard drive.
 151 ==> 237752 - digiKam crashes during work.
 152 ==> 233470 - digiKam crashed on downloading pictures from CF card.
-153 ==> 
+153 ==> 289144 - digiKam crashes during scan of memory card.
+154 ==> 
