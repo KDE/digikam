@@ -192,4 +192,6 @@ BUGFIXES FROM BUGZILLA:
 181 ==> 387958 - Core database: cannot process schema initialization (uprade from 5.7).
 182 ==> 387960 - Failed build Calendar tool with kcalcore 17.12.
 183 ==> 387957 - Image Editor Launches without Image.
-184 ==> 
+184 ==> 387975 - Just after ugrade to 5.7.0 version, none pictures are shown.
+185 ==> 
+
