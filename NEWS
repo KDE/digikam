@@ -194,4 +194,5 @@ BUGFIXES FROM BUGZILLA:
 183 ==> 387957 - Image Editor Launches without Image.
 184 ==> 387975 - Just after ugrade to 5.7.0 version, none pictures are shown.
 185 ==> 387976 - Remember aspect ratio.
-186 ==> 
+186 ==> 375317 - MYSQL: digikam crashes during face recognition.
+187 ==> 

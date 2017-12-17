@@ -52,6 +52,11 @@ AlbumsDBJobsThread* DBJobsManager::startAlbumsJobThread(const AlbumsDBJobInfo& j
 {
     AlbumsDBJobsThread* const thread = new AlbumsDBJobsThread(this);
     thread->albumsListing(jInfo);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;
@@ -61,6 +66,11 @@ DatesDBJobsThread* DBJobsManager::startDatesJobThread(const DatesDBJobInfo& jInf
 {
     DatesDBJobsThread* const thread = new DatesDBJobsThread(this);
     thread->datesListing(jInfo);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;
@@ -70,6 +80,11 @@ TagsDBJobsThread* DBJobsManager::startTagsJobThread(const TagsDBJobInfo& jInfo)
 {
     TagsDBJobsThread* const thread = new TagsDBJobsThread(this);
     thread->tagsListing(jInfo);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;
@@ -79,6 +94,11 @@ SearchesDBJobsThread* DBJobsManager::startSearchesJobThread(const SearchesDBJobI
 {
     SearchesDBJobsThread* const thread = new SearchesDBJobsThread(this);
     thread->searchesListing(jInfo);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;
@@ -88,6 +108,11 @@ GPSDBJobsThread* DBJobsManager::startGPSJobThread(const GPSDBJobInfo& jInfo)
 {
     GPSDBJobsThread* const thread = new GPSDBJobsThread(this);
     thread->GPSListing(jInfo);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;
