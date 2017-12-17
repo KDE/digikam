@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DNOTIFICATIONWIDGET_P_H
-#define DNOTIFICATIONWIDGET_P_H
+#ifndef DNOTIFICATION_WIDGET_P_H
+#define DNOTIFICATION_WIDGET_P_H
 
 // Qt includes
 
@@ -80,4 +80,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* DNOTIFICATIONWIDGET_P_H */
+#endif // DNOTIFICATION_WIDGET_P_H

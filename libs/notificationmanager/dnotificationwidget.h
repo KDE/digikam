@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DNOTIFICATIONWIDGET_H
-#define DNOTIFICATIONWIDGET_H
+#ifndef DNOTIFICATION_WIDGET_H
+#define DNOTIFICATION_WIDGET_H
 
 // Qt includes
 
@@ -289,4 +289,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DNOTIFICATIONWIDGET_H */
+#endif // DNOTIFICATION_WIDGET_H
