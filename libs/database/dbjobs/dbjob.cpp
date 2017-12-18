@@ -325,7 +325,7 @@ void SearchesJob::run()
 
 bool SearchesJob::isCanceled()
 {
-    return this->m_cancel;
+    return m_cancel;
 }
 
 } // namespace Digikam
