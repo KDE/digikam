@@ -1093,6 +1093,11 @@ QMap< double,QMap< qlonglong,QList<qlonglong> > > HaarIface::findDuplicates(cons
 
     for (it = images2Scan.constBegin(); it != images2Scan.constEnd(); ++it)
     {
+        if (observer && observer->isCanceled())
+        {
+            break;
+        }
+
         if (!resultsCandidates.contains(*it))
         {
             QList<int> targetAlbums;

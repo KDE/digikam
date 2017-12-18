@@ -47,4 +47,9 @@ void DuplicatesProgressObserver::processedNumber(int number)
     m_job->processedSize(number);
 }
 
+bool DuplicatesProgressObserver::isCanceled()
+{
+    return m_job->isCanceled();
+}
+
 } // namespace Digikam

@@ -56,6 +56,10 @@ public:
 
     virtual void totalNumberToScan(int number) = 0;
     virtual void processedNumber(int numberThatHasBeenProcessed) = 0;
+    virtual bool isCanceled()
+    {
+        return false;
+    };
 };
 
 // --------------------------------------------------------------------------

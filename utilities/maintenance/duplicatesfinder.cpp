@@ -152,6 +152,9 @@ void DuplicatesFinder::slotStart()
 
     connect(d->job, SIGNAL(processedSize(int)),
             this, SLOT(slotDuplicatesSearchProcessedAmount(int)));
+
+    connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
+            this, SIGNAL(signalComplete()));
 }
 
 void DuplicatesFinder::slotDuplicatesSearchTotalAmount(int amount)
@@ -167,7 +170,7 @@ void DuplicatesFinder::slotDuplicatesSearchProcessedAmount(int amount)
 
 void DuplicatesFinder::slotDone()
 {
-    if (d->job->hasErrors())
+    if (d->job && d->job->hasErrors())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << d->job->errorsList().first();
 
