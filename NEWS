@@ -195,4 +195,5 @@ BUGFIXES FROM BUGZILLA:
 184 ==> 387975 - Just after ugrade to 5.7.0 version, none pictures are shown.
 185 ==> 387976 - Remember aspect ratio.
 186 ==> 375317 - MYSQL: digikam crashes during face recognition.
-187 ==> 
+187 ==> 310050 - MYSQL : Slow database performance after canceling a large duplicate image search.
+188 ==> 
