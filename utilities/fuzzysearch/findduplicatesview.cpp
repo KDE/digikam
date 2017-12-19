@@ -399,14 +399,16 @@ void FindDuplicatesView::slotClear()
 
 void FindDuplicatesView::enableControlWidgets(bool val)
 {
-    d->scanDuplicatesBtn->setEnabled(val);
-    slotCheckForValidSettings();
-
-    d->updateFingerPrtBtn->setEnabled(val);
-    d->albumSelectors->setEnabled(val);
-    d->similarityLabel->setEnabled(val);
-    d->similarityRange->setEnabled(val);
     d->searchResultRestriction->setEnabled(val);
+    d->updateFingerPrtBtn->setEnabled(val);
+    d->scanDuplicatesBtn->setEnabled(val);
+    d->albumTagRelation->setEnabled(val);
+    d->similarityRange->setEnabled(val);
+    d->albumSelectors->setEnabled(val);
+
+    d->albumTagRelationLabel->setEnabled(val);
+    d->restrictResultsLabel->setEnabled(val);
+    d->similarityLabel->setEnabled(val);
 }
 
 void FindDuplicatesView::slotFindDuplicates()
@@ -460,6 +462,7 @@ void FindDuplicatesView::slotApplicationSettingsChanged()
 void FindDuplicatesView::slotComplete()
 {
     enableControlWidgets(true);
+    slotCheckForValidSettings();
     populateTreeView();
 }
 
