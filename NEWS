@@ -196,4 +196,5 @@ BUGFIXES FROM BUGZILLA:
 185 ==> 387976 - Remember aspect ratio.
 186 ==> 375317 - MYSQL: digikam crashes during face recognition.
 187 ==> 310050 - MYSQL : Slow database performance after canceling a large duplicate image search.
-188 ==> 
+188 ==> 385653 - Non handled sqlite exception because of lack of space.
+189 ==> 
