@@ -98,7 +98,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
     : QDialog(),
       d(new Private)
 {
-    setWindowTitle(QString::fromUtf8("Share Files With DLNA Media Server"));
+    setWindowTitle(i18nc("@title:window", "Share Files with DLNA Media Server"));
 
     d->iface                 = iface;
     d->buttons               = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, this);
