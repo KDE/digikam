@@ -2133,6 +2133,7 @@ ORDER BY inf.rating DESC, img.name ASC
             </dbaction>
 
             <dbaction name="UpdateSchemaFromV8ToV9" mode="transaction">
+                <statement mode="plain">SET FOREIGN_KEY_CHECKS=0;</statement>
                 <statement mode="plain">ALTER TABLE AlbumRoots CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
                 <statement mode="plain">ALTER TABLE Albums CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
                 <statement mode="plain">ALTER TABLE Images CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
@@ -2150,6 +2151,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">ALTER TABLE ImageHistory CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
                 <statement mode="plain">ALTER TABLE TagProperties CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
                 <statement mode="plain">ALTER TABLE ImageTagProperties CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">SET FOREIGN_KEY_CHECKS=1;</statement>
             </dbaction>
 
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">

@@ -197,4 +197,5 @@ BUGFIXES FROM BUGZILLA:
 186 ==> 375317 - MYSQL: digikam crashes during face recognition.
 187 ==> 310050 - MYSQL : Slow database performance after canceling a large duplicate image search.
 188 ==> 385653 - Non handled sqlite exception because of lack of space.
-189 ==> 
+189 ==> 388121 - SQL schema update from version 8 to version 9 fails.
+190 ==> 
