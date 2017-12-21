@@ -971,6 +971,8 @@ bool DMetadata::hasImageHistoryTag() const
 
 QString DMetadata::getImageUniqueId() const
 {
+    QString exifUid;
+
     if (hasXmp())
     {
         QString uuid = getXmpTagString("Xmp.digiKam.ImageUniqueID");
@@ -980,41 +982,41 @@ QString DMetadata::getImageUniqueId() const
             return uuid;
         }
 
-        QString exifUid = getXmpTagString("Xmp.exif.ImageUniqueId");
+        exifUid = getXmpTagString("Xmp.exif.ImageUniqueId");
+    }
 
-        if (exifUid.isEmpty())
+    if (exifUid.isEmpty())
+    {
+        exifUid = getExifTagString("Exif.Photo.ImageUniqueID");
+    }
+
+    // same makers may choose to use a "click counter" to generate the id,
+    // which is then weak and not a universally unique id
+    // The Exif ImageUniqueID is 128bit, or 32 hex digits.
+    // If the first 20 are zero, it's probably a counter,
+    // the left 12 are sufficient for more then 10^14 clicks.
+    if (!exifUid.isEmpty() && !exifUid.startsWith(QLatin1String("00000000000000000000")))
+    {
+        if (getExifTagString("Exif.Image.Make").contains(QLatin1String("SAMSUNG"), Qt::CaseInsensitive))
         {
-            exifUid = getExifTagString("Exif.Photo.ImageUniqueID");
+            // Generate for Samsung a new random 32 hex digits unique ID.
+            QString imageUniqueID(QUuid::createUuid().toString());
+            imageUniqueID.remove(QLatin1Char('-'));
+            imageUniqueID.remove(0, 1).chop(1);
+
+            return imageUniqueID;
         }
 
-        // same makers may choose to use a "click counter" to generate the id,
-        // which is then weak and not a universally unique id
-        // The Exif ImageUniqueID is 128bit, or 32 hex digits.
-        // If the first 20 are zero, it's probably a counter,
-        // the left 12 are sufficient for more then 10^14 clicks.
-        if (!exifUid.isEmpty() && !exifUid.startsWith(QLatin1String("00000000000000000000")))
-        {
-            if (getExifTagString("Exif.Image.Make").toUpper() == QLatin1String("SAMSUNG"))
-            {
-                // Generate for Samsung a new random 32 hex digits unique ID.
-                QString imageUniqueID(QUuid::createUuid().toString());
-                imageUniqueID.remove(QLatin1Char('-'));
-                imageUniqueID.remove(0, 1).chop(1);
+        return exifUid;
+    }
 
-                return imageUniqueID;
-            }
+    // Exif.Image.ImageID can also be a pathname, so it's not sufficiently unique
 
-            return exifUid;
-        }
+    QString dngUid = getExifTagString("Exif.Image.RawDataUniqueID");
 
-        // Exif.Image.ImageID can also be a pathname, so it's not sufficiently unique
-
-        QString dngUid = getExifTagString("Exif.Image.RawDataUniqueID");
-
-        if (!dngUid.isEmpty())
-        {
-            return dngUid;
-        }
+    if (!dngUid.isEmpty())
+    {
+        return dngUid;
     }
 
     return QString();
