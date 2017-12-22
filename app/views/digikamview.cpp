@@ -504,9 +504,6 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(zoomInStep()),
             this, SLOT(slotZoomIn()));
 
-    connect(d->iconView, SIGNAL(signalAddToExistingQueue(int)),
-            this, SLOT(slotImageAddToExistingQueue(int)));
-
     connect(d->iconView, SIGNAL(signalShowContextMenu(QContextMenuEvent*,
                                                       QList<QAction*>)),
             this, SLOT(slotShowContextMenu(QContextMenuEvent*,QList<QAction*>)));
