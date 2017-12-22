@@ -199,5 +199,5 @@ BUGFIXES FROM BUGZILLA:
 188 ==> 385653 - Non handled sqlite exception because of lack of space.
 189 ==> 388121 - SQL schema update from version 8 to version 9 fails.
 190 ==> 388130 - Non-GUI commands should not require an X display.
-191 ==> 
-
+191 ==> 388147 - "More Tags..." Doesn't Open Captions Side Menu In Preview.
+192 ==> 

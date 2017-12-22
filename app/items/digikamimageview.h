@@ -72,7 +72,6 @@ Q_SIGNALS:
     void gotoAlbumAndImageRequested(const ImageInfo& info);
     void gotoTagAndImageRequested(int tagId);
     void gotoDateAndImageRequested(const ImageInfo& info);
-    void signalPopupTagsView();
     void signalAddToExistingQueue(int queue);
     void signalShowContextMenu(QContextMenuEvent* event,
                                const QList<QAction*>& actions = QList<QAction*>());

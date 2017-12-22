@@ -141,6 +141,7 @@ Q_SIGNALS:
     void signalInsert2LightTable();
     void signalInsert2QueueMgr();
     void signalFindSimilar();
+    void signalPopupTagsView();
     void signalAddToExistingQueue(int);
 
     void signalGotoAlbumAndItem(const ImageInfo&);

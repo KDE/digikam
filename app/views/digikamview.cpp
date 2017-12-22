@@ -645,6 +645,9 @@ void DigikamView::setupConnections()
     connect(d->stackedview, SIGNAL(signalGotoTagAndItem(int)),
             this, SLOT(slotGotoTagAndItem(int)));
 
+    connect(d->stackedview, SIGNAL(signalPopupTagsView()),
+            d->rightSideBar, SLOT(slotPopupTagsView()));
+
     // -- FileActionMngr progress ---------------
 
     connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString,QStringList)),
