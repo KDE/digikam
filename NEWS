@@ -3,6 +3,7 @@ digiKam 5.8.0 - Release date: 2017-12-17
 
 NEW FEATURES:
 
+General      : Add support to OpenCV 3.4.x.
 General      : Updated internal Libraw to last 0.18.6.
 General      : New Upnp/Dlna media server to share collections on local network.
 Image Editor : New clone tool to replace old CImg in-painting tool.
