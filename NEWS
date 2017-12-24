@@ -200,4 +200,5 @@ BUGFIXES FROM BUGZILLA:
 189 ==> 388121 - SQL schema update from version 8 to version 9 fails.
 190 ==> 388130 - Non-GUI commands should not require an X display.
 191 ==> 388147 - "More Tags..." Doesn't Open Captions Side Menu In Preview.
-192 ==> 
+192 ==> 388183 - Windows installer is not HiDPI ready.
+193 ==> 
