@@ -203,4 +203,5 @@ BUGFIXES FROM BUGZILLA:
 191 ==> 388147 - "More Tags..." Doesn't Open Captions Side Menu In Preview.
 192 ==> 388183 - Windows installer is not HiDPI ready.
 193 ==> 326406 - A picture without geolocalisation is localized in North Pole.
-194 ==> 
+194 ==> 387150 - Crash when syncing metadata from images to database.
+195 ==> 
