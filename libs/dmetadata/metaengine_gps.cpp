@@ -118,6 +118,11 @@ bool MetaEngine::getGPSLatitudeNumber(double* const latitude) const
                 *latitude *= -1.0;
             }
 
+            if (*latitude < -90.0 || *latitude > 90.0)
+            {
+                return false;
+            }
+
             return true;
         }
     }
@@ -195,6 +200,11 @@ bool MetaEngine::getGPSLongitudeNumber(double* const longitude) const
             if (lngRef[0] == 'W')
             {
                 *longitude *= -1.0;
+            }
+
+            if (*longitude < -180.0 || *longitude > 180.0)
+            {
+                return false;
             }
 
             return true;
