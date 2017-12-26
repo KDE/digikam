@@ -202,4 +202,5 @@ BUGFIXES FROM BUGZILLA:
 190 ==> 388130 - Non-GUI commands should not require an X display.
 191 ==> 388147 - "More Tags..." Doesn't Open Captions Side Menu In Preview.
 192 ==> 388183 - Windows installer is not HiDPI ready.
-193 ==> 
+193 ==> 326406 - A picture without geolocalisation is localized in North Pole.
+194 ==> 

@@ -674,7 +674,7 @@ bool ImagePropertiesSideBarDB::GPSImageInfofromImageInfo(const ImageInfo& imageI
 {
     const ImagePosition pos = imageInfo.imagePosition();
 
-    if (pos.isEmpty())
+    if (pos.isEmpty() || !pos.hasCoordinates())
     {
         return false;
     }
