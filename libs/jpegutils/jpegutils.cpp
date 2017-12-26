@@ -409,9 +409,9 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
     QString     dest = m_destFile;
     QString     src  = m_file;
     QString     dir  = fi.absolutePath();
-    QStringList unlinkLater;
+    QStringList removeLater;
 
-    for (int i=0; i<actions.size(); i++)
+    for (int i = 0 ; i < actions.size() ; i++)
     {
         SafeTemporaryFile* const temp = new SafeTemporaryFile(dir + QLatin1String("/JpegRotator-XXXXXX.digikamtempfile.jpg"));
         temp->setAutoRemove(false);
@@ -431,7 +431,7 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
 
             if (!srcImg.load(src))
             {
-                ::unlink(QFile::encodeName(tempFile).constData());
+                QFile::remove(tempFile);
                 return false;
             }
 
@@ -446,7 +446,7 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Lossy transform failed for" << src;
 
-                ::unlink(QFile::encodeName(tempFile).constData());
+                QFile::remove(tempFile);
                 return false;
             }
 
@@ -457,7 +457,7 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
         {
             // another round
             src = tempFile;
-            unlinkLater << tempFile;
+            removeLater << tempFile;
             continue;
         }
 
@@ -471,33 +471,35 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
             QString sidecarTemp = DMetadata::sidecarPath(tempFile);
             QString sidecarDest = DMetadata::sidecarPath(dest);
 
-#ifdef Q_OS_WIN
-            if (::MoveFileEx((LPCWSTR)sidecarTemp.utf16(), (LPCWSTR)sidecarDest.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
-#else
-            if (::rename(QFile::encodeName(sidecarTemp).constData(), QFile::encodeName(sidecarDest).constData()) != 0)
-#endif
+            if (sidecarTemp != sidecarDest && QFile::exists(sidecarTemp) && QFile::exists(sidecarDest))
+            {
+                QFile::remove(sidecarDest);
+            }
+
+            if (!QFile::rename(sidecarTemp, sidecarDest))
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Renaming sidecar file" << sidecarTemp << "to" << sidecarDest << "failed";
-                unlinkLater << sidecarTemp;
+                removeLater << sidecarTemp;
                 break;
             }
         }
 
-#ifdef Q_OS_WIN
-        if (::MoveFileEx((LPCWSTR)tempFile.utf16(), (LPCWSTR)dest.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
-#else
-        if (::rename(QFile::encodeName(tempFile).constData(), QFile::encodeName(dest).constData()) != 0)
-#endif
+        if (tempFile != dest && QFile::exists(tempFile) && QFile::exists(dest))
+        {
+            QFile::remove(dest);
+        }
+
+        if (!QFile::rename(tempFile, dest))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Renaming" << tempFile << "to" << dest << "failed";
-            unlinkLater << tempFile;
+            removeLater << tempFile;
             break;
         }
     }
 
-    foreach (const QString& tempFile, unlinkLater)
+    foreach (const QString& tempFile, removeLater)
     {
-        ::unlink(QFile::encodeName(tempFile).constData());
+        QFile::remove(tempFile);
     }
 
     return true;
