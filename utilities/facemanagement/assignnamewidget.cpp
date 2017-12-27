@@ -756,10 +756,15 @@ void AssignNameWidget::slotLabelClicked()
 
 void AssignNameWidget::keyPressEvent(QKeyEvent* e)
 {
-    if (e->key() == Qt::Key_Escape)
+    switch (e->key())
     {
-        slotReject();
-        return;
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+            return;
+
+        case Qt::Key_Escape:
+            slotReject();
+            return;
     }
 
     QWidget::keyPressEvent(e);
