@@ -2133,25 +2133,42 @@ ORDER BY inf.rating DESC, img.name ASC
             </dbaction>
 
             <dbaction name="UpdateSchemaFromV8ToV9" mode="transaction">
-                <statement mode="plain">SET FOREIGN_KEY_CHECKS=0;</statement>
-                <statement mode="plain">ALTER TABLE AlbumRoots CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE Albums CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE Images CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE ImageHaarMatrix CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE ImageInformation CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE ImageMetadata CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE ImagePositions CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE ImageComments CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE ImageCopyright CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE Tags CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE ImageProperties CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE Searches CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE DownloadHistory CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE Settings CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE ImageHistory CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE TagProperties CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">ALTER TABLE ImageTagProperties CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
-                <statement mode="plain">SET FOREIGN_KEY_CHECKS=1;</statement>
+                <statement mode="plain">ALTER TABLE AlbumRoots MODIFY COLUMN label LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE AlbumRoots MODIFY COLUMN identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE AlbumRoots MODIFY COLUMN specificPath LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE Albums MODIFY COLUMN relativePath LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;</statement>
+                <statement mode="plain">ALTER TABLE Albums MODIFY COLUMN caption LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE Albums MODIFY COLUMN collection LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE Images MODIFY COLUMN name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;</statement>
+                <statement mode="plain">ALTER TABLE ImageHaarMatrix MODIFY COLUMN uniqueHash LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageInformation MODIFY COLUMN format LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageMetadata MODIFY COLUMN make LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageMetadata MODIFY COLUMN model LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageMetadata MODIFY COLUMN lens LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImagePositions MODIFY COLUMN latitude LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImagePositions MODIFY COLUMN longitude LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImagePositions MODIFY COLUMN description LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageComments MODIFY COLUMN language VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageComments MODIFY COLUMN author LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageComments MODIFY COLUMN comment LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageCopyright MODIFY COLUMN property LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageCopyright MODIFY COLUMN value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageCopyright MODIFY COLUMN extraValue LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE Tags MODIFY COLUMN name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;</statement>
+                <statement mode="plain">ALTER TABLE Tags MODIFY COLUMN iconkde LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageProperties MODIFY COLUMN property LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;</statement>
+                <statement mode="plain">ALTER TABLE ImageProperties MODIFY COLUMN value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;</statement>
+                <statement mode="plain">ALTER TABLE Searches MODIFY COLUMN name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;</statement>
+                <statement mode="plain">ALTER TABLE Searches MODIFY COLUMN query LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;</statement>
+                <statement mode="plain">ALTER TABLE DownloadHistory MODIFY COLUMN identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE DownloadHistory MODIFY COLUMN filename LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE Settings MODIFY COLUMN keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;</statement>
+                <statement mode="plain">ALTER TABLE Settings MODIFY COLUMN value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageHistory MODIFY COLUMN history LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE TagProperties MODIFY COLUMN property TEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE TagProperties MODIFY COLUMN value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageTagProperties MODIFY COLUMN property TEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                <statement mode="plain">ALTER TABLE ImageTagProperties MODIFY COLUMN value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
             </dbaction>
 
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">

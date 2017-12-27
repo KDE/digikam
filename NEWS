@@ -206,4 +206,5 @@ BUGFIXES FROM BUGZILLA:
 194 ==> 387150 - Crash when syncing metadata from images to database.
 195 ==> 387764 - Gphoto2 camera drivers not installed by PKG Installer.
 196 ==> 388260 - Pressing <ENTER> on highlited name when browsing "Unknown" face tags will tag two photos instead of one.
-197 ==> 
+197 ==> 388275 - UpdateSchemaFromV8ToV9 fails due to duplicate entry for key albumRoot.
+198 ==> 
