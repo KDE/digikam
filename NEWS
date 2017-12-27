@@ -204,4 +204,5 @@ BUGFIXES FROM BUGZILLA:
 192 ==> 388183 - Windows installer is not HiDPI ready.
 193 ==> 326406 - A picture without geolocalisation is localized in North Pole.
 194 ==> 387150 - Crash when syncing metadata from images to database.
-195 ==> 
+195 ==> 387764 - Gphoto2 camera drivers not installed by PKG Installer.
+196 ==> 
