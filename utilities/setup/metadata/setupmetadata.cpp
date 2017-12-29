@@ -689,6 +689,8 @@ void SetupMetadata::applySettings()
     set.rescanImageIfModified = d->rescanImageIfModifiedBox->isChecked();
 
     set.sidecarExtensions = cleanUserFilterString(d->extensionsEdit->text());
+    set.sidecarExtensions.removeAll(QLatin1String("xmp"));
+    set.sidecarExtensions.removeDuplicates();
 
     mSettings->setSettings(set);
 
