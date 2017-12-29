@@ -208,4 +208,5 @@ BUGFIXES FROM BUGZILLA:
 196 ==> 388260 - Pressing <ENTER> on highlited name when browsing "Unknown" face tags will tag two photos instead of one.
 197 ==> 388275 - UpdateSchemaFromV8ToV9 fails due to duplicate entry for key albumRoot.
 198 ==> 388285 - Problem with MYSQL-Backend.
-199 ==> 
+199 ==> 375035 - Out of memory during face tagging.
+200 ==> 
