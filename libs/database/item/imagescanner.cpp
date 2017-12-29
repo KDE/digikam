@@ -363,14 +363,16 @@ bool ImageScanner::scanFromIdenticalFile()
     // Get a list of other images that are identical. Source image shall not be included.
     // When using the Commit functionality, d->scanInfo.id can be null.
     QList<ItemScanInfo> candidates = CoreDbAccess().db()->getIdenticalFiles(d->scanInfo.uniqueHash,
-                                     d->scanInfo.fileSize, d->scanInfo.id);
+                                                                            d->scanInfo.fileSize,
+                                                                            d->scanInfo.id);
 
     if (!candidates.isEmpty())
     {
         // Sort by priority, as implemented by custom lessThan()
         std::stable_sort(candidates.begin(), candidates.end(), lessThanForIdentity);
 
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Recognized" << d->fileInfo.filePath() << "as identical to item" << candidates.first().id;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Recognized" << d->fileInfo.filePath()
+                                      << "as identical to item" << candidates.first().id;
 
         // Copy attributes.
         // Todo for the future is to worry about syncing identical files.
@@ -431,17 +433,18 @@ void ImageScanner::commitAddImage()
                                                          d->scanInfo.fileSize, d->scanInfo.uniqueHash);
     if (imageId != -1)
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Detected identical image info with id " << imageId << " and album id NULL of a removed image for image " << d->scanInfo.itemName;
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Will reuse this image info and set the status to visible and the album id to " << d->scanInfo.albumID;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Detected identical image info with id" << imageId
+                                      << "and album id NULL of a removed image for image" << d->scanInfo.itemName;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Will reuse this image info and set the status to visible and the album id to" << d->scanInfo.albumID;
         CoreDbAccess().db()->setItemAlbum(imageId,d->scanInfo.albumID);
         CoreDbAccess().db()->setItemStatus(imageId, DatabaseItem::Status::Visible);
     }
     else
     {
         d->scanInfo.id = CoreDbAccess().db()->addItem(d->scanInfo.albumID, d->scanInfo.itemName,
-                                                    d->scanInfo.status, d->scanInfo.category,
-                                                    d->scanInfo.modificationDate, d->scanInfo.fileSize,
-                                                    d->scanInfo.uniqueHash);
+                                                      d->scanInfo.status, d->scanInfo.category,
+                                                      d->scanInfo.modificationDate, d->scanInfo.fileSize,
+                                                      d->scanInfo.uniqueHash);
     }
 }
 
@@ -453,8 +456,8 @@ void ImageScanner::prepareUpdateImage()
 void ImageScanner::commitUpdateImage()
 {
     CoreDbAccess().db()->updateItem(d->scanInfo.id, d->scanInfo.category,
-                                      d->scanInfo.modificationDate, d->scanInfo.fileSize,
-                                      d->scanInfo.uniqueHash);
+                                    d->scanInfo.modificationDate, d->scanInfo.fileSize,
+                                    d->scanInfo.uniqueHash);
 }
 
 void ImageScanner::scanFile(ScanMode mode)
@@ -607,14 +610,14 @@ void ImageScanner::commitImageInformation()
     if (d->scanMode == NewScan)
     {
         CoreDbAccess().db()->addImageInformation(d->scanInfo.id,
-                                                   d->commit.imageInformationInfos,
-                                                   d->commit.imageInformationFields);
+                                                 d->commit.imageInformationInfos,
+                                                 d->commit.imageInformationFields);
     }
     else // d->scanMode == Rescan or d->scanMode == ModifiedScan
     {
         CoreDbAccess().db()->changeImageInformation(d->scanInfo.id,
-                                                      d->commit.imageInformationInfos,
-                                                      d->commit.imageInformationFields);
+                                                    d->commit.imageInformationInfos,
+                                                    d->commit.imageInformationFields);
     }
 }
 
@@ -841,16 +844,16 @@ void ImageScanner::scanTags()
     QStringList filteredKeywords;
 
     // Extra empty tags check, empty tag = root tag which is not asignable
-    for(int index = 0; index < keywords.size(); index++)
+    for (int index = 0 ; index < keywords.size() ; index++)
     {
         QString keyword = keywords.at(index);
 
-        if(!keyword.isEmpty())
+        if (!keyword.isEmpty())
         {
 
             // _Digikam_root_tag_ is present in some photos tagged with older
             // version of digiKam, must be removed
-            if(keyword.contains(QRegExp(QLatin1String("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)"))))
+            if (keyword.contains(QRegExp(QLatin1String("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)"))))
             {
                 keyword = keyword.replace(QRegExp(QLatin1String("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)")),
                                           QLatin1String(""));
@@ -961,7 +964,7 @@ void ImageScanner::commitFaces()
     QSize size = d->img.size();
     QMap<QString, QVariant>::const_iterator it;
 
-    for (it = d->commit.metadataFacesMap.constBegin(); it != d->commit.metadataFacesMap.constEnd(); ++it)
+    for (it = d->commit.metadataFacesMap.constBegin() ; it != d->commit.metadataFacesMap.constEnd() ; ++it)
     {
         QString name = it.key();
         QRectF rect  = it.value().toRectF();
@@ -1002,7 +1005,7 @@ void ImageScanner::commitImageHistory()
         // Delay history resolution by setting this tag:
         // Resolution depends on the presence of other images, possibly only when the scanning process has finished
         CoreDbAccess().db()->addItemTag(d->scanInfo.id, TagsCache::instance()->
-                                          getOrCreateInternalTag(InternalTagName::needResolvingHistory()));
+                                        getOrCreateInternalTag(InternalTagName::needResolvingHistory()));
         d->hasHistoryToResolve = true;
     }
 
@@ -1116,7 +1119,7 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
     QHash<ImageInfo, HistoryImageId::Types>                 types = graph.categorize();
     QHash<ImageInfo, HistoryImageId::Types>::const_iterator it;
 
-    for (it = types.constBegin(); it != types.constEnd(); ++it)
+    for (it = types.constBegin() ; it != types.constEnd() ; ++it)
     {
         qCDebug(DIGIKAM_DATABASE_LOG) << "Image" << it.key().id() << "type" << it.value();
         HistoryImageId::Types types = it.value();
@@ -1860,7 +1863,7 @@ void ImageScanner::scanBalooInfo()
 
     BalooWrap* const baloo = BalooWrap::instance();
 
-    if(!baloo->getSyncToDigikam())
+    if (!baloo->getSyncToDigikam())
     {
         return;
     }
@@ -1874,20 +1877,20 @@ void ImageScanner::scanBalooInfo()
         d->commit.tagIds += tagIds;
     }
 
-    if(bInfo.rating != -1)
+    if (bInfo.rating != -1)
     {
-        if(!d->commit.imageInformationFields.testFlag(DatabaseFields::Rating))
+        if (!d->commit.imageInformationFields.testFlag(DatabaseFields::Rating))
         {
             d->commit.imageInformationFields |= DatabaseFields::Rating;
             d->commit.imageInformationInfos.insert(0, QVariant(bInfo.rating));
         }
     }
 
-    if(!bInfo.comment.isEmpty())
+    if (!bInfo.comment.isEmpty())
     {
         qCDebug(DIGIKAM_DATABASE_LOG) << "+++++++++++++++++++++Comment " << bInfo.comment;
 
-        if(!d->commit.captions.contains(QLatin1String("x-default")))
+        if (!d->commit.captions.contains(QLatin1String("x-default")))
         {
             CaptionValues val;
             val.caption                   = bInfo.comment;
