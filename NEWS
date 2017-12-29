@@ -210,4 +210,5 @@ BUGFIXES FROM BUGZILLA:
 198 ==> 388285 - Problem with MYSQL-Backend.
 199 ==> 375035 - Out of memory during face tagging.
 200 ==> 388329 - UpdateSchemaFromV8ToV9 fails with Cannot delete rows from table which is parent in a foreign key constraint.
-201 ==> 
+201 ==> 384577 - Rename of video files stalls and must click abort due to XMP sidecar.
+202 ==> 
