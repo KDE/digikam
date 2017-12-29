@@ -87,7 +87,8 @@ void SidecarFinder::process(const QList<QUrl>& files)
             {
                 suffix = QLatin1String(".") + suffix;
                 QString sidecarName = url.toLocalFile() + suffix;
-                if (QFileInfo(sidecarName).exists())
+
+                if (QFileInfo(sidecarName).exists() && !localFiles.contains(QUrl::fromLocalFile(sidecarName)))
                 {
                     localFiles << QUrl::fromLocalFile(sidecarName);
                     localFileSuffixes << suffix;
@@ -102,13 +103,19 @@ void SidecarFinder::process(const QList<QUrl>& files)
         {
             possibleRemoteSidecars << DMetadata::sidecarUrl(url);
             possibleRemoteSidecarSuffixes << QLatin1String(".xmp");
+
             foreach(QString suffix,  MetadataSettings::instance()->settings().sidecarExtensions)
             {
                 suffix = QLatin1String(".") + suffix;
                 QString sidecarName = url.toLocalFile() + suffix;
-                possibleRemoteSidecars << QUrl::fromLocalFile(url.toLocalFile() + suffix);
-                possibleRemoteSidecarSuffixes << suffix;
+
+                if (!possibleRemoteSidecars.contains(QUrl::fromLocalFile(sidecarName)))
+                {
+                    possibleRemoteSidecars << QUrl::fromLocalFile(sidecarName);
+                    possibleRemoteSidecarSuffixes << suffix;
+                }
             }
+
             remoteFiles << url;
             remoteFileSuffixes << QString();
         }
