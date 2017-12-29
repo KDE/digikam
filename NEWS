@@ -209,4 +209,5 @@ BUGFIXES FROM BUGZILLA:
 197 ==> 388275 - UpdateSchemaFromV8ToV9 fails due to duplicate entry for key albumRoot.
 198 ==> 388285 - Problem with MYSQL-Backend.
 199 ==> 375035 - Out of memory during face tagging.
-200 ==> 
+200 ==> 388329 - UpdateSchemaFromV8ToV9 fails with Cannot delete rows from table which is parent in a foreign key constraint.
+201 ==> 
