@@ -85,7 +85,7 @@ bool MetaEngine::getGPSLatitudeNumber(double* const latitude) const
 
                 deg = (double)((*it).toFloat(0));
 
-                if (deg == -1.0)
+                if ((*it).toRational(0).second == 0 || deg == -1.0)
                 {
                     return false;
                 }
@@ -94,7 +94,7 @@ bool MetaEngine::getGPSLatitudeNumber(double* const latitude) const
 
                 min = (double)((*it).toFloat(1));
 
-                if (min == -1.0)
+                if ((*it).toRational(1).second == 0 || min == -1.0)
                 {
                     return false;
                 }
@@ -169,7 +169,7 @@ bool MetaEngine::getGPSLongitudeNumber(double* const longitude) const
 
                 deg = (double)((*it).toFloat(0));
 
-                if (deg == -1.0)
+                if ((*it).toRational(0).second == 0 || deg == -1.0)
                 {
                     return false;
                 }
@@ -178,7 +178,7 @@ bool MetaEngine::getGPSLongitudeNumber(double* const longitude) const
 
                 min = (double)((*it).toFloat(1));
 
-                if (min == -1.0)
+                if ((*it).toRational(1).second == 0 || min == -1.0)
                 {
                     return false;
                 }
