@@ -212,4 +212,5 @@ BUGFIXES FROM BUGZILLA:
 200 ==> 388329 - UpdateSchemaFromV8ToV9 fails with Cannot delete rows from table which is parent in a foreign key constraint.
 201 ==> 384577 - Rename of video files stalls and must click abort due to XMP sidecar.
 202 ==> 378587 - Geolocation hangs when opened twice.
-203 ==> 
+203 ==> 388362 - Images disappear appear from map and album by opening left sidebar.
+204 ==> 
