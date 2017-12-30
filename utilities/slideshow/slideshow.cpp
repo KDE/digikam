@@ -490,7 +490,10 @@ bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
 
 void SlideShow::slotMouseMoveTimeOut()
 {
-    setCursor(QCursor(Qt::BlankCursor));
+    if (!d->osd->toolBar()->underMouse())
+    {
+        setCursor(QCursor(Qt::BlankCursor));
+    }
 
 #ifdef HAVE_MEDIAPLAYER
     d->videoView->showIndicator(false);

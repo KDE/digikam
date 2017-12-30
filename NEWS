@@ -214,4 +214,5 @@ BUGFIXES FROM BUGZILLA:
 202 ==> 378587 - Geolocation hangs when opened twice.
 203 ==> 388362 - Images disappear appear from map and album by opening left sidebar.
 204 ==> 379987 - UpdateSchemaFromV7ToV8: Unable to execute query (MySQL specific).
-205 ==> 
+205 ==> 388368 - Mouse disappears in slide show.
+206 ==> 
