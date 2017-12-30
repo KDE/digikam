@@ -213,4 +213,5 @@ BUGFIXES FROM BUGZILLA:
 201 ==> 384577 - Rename of video files stalls and must click abort due to XMP sidecar.
 202 ==> 378587 - Geolocation hangs when opened twice.
 203 ==> 388362 - Images disappear appear from map and album by opening left sidebar.
-204 ==> 
+204 ==> 379987 - UpdateSchemaFromV7ToV8: Unable to execute query (MySQL specific).
+205 ==> 
