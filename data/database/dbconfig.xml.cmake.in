@@ -1984,6 +1984,21 @@ ORDER BY inf.rating DESC, img.name ASC
                         END IF;
                     END;
                 </statement>
+                <statement mode="plain">
+                    DROP PROCEDURE IF EXISTS drop_index_if_exists;
+                </statement>
+                <statement mode="plain">
+                    CREATE PROCEDURE drop_index_if_exists(in tableName varchar(64), in indexName varchar(64))
+                    BEGIN
+                        IF((SELECT COUNT(*) AS index_exists FROM information_schema.statistics
+                            WHERE TABLE_SCHEMA = DATABASE() and table_name = tableName AND index_name = indexName) > 0)
+                        THEN
+                            SET @query = CONCAT('DROP INDEX ' , indexName , ' ON ' , tableName);
+                            PREPARE stmt FROM @query;
+                            EXECUTE stmt;
+                        END IF;
+                    END;
+                </statement>
                 <statement mode="plain">ALTER TABLE AlbumRoots MODIFY COLUMN label LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
                 <statement mode="plain">ALTER TABLE AlbumRoots MODIFY COLUMN identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
                 <statement mode="plain">ALTER TABLE AlbumRoots MODIFY COLUMN specificPath LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
@@ -2025,21 +2040,18 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
                 <statement mode="plain">DROP TRIGGER IF EXISTS delete_tag;</statement>
                 <statement mode="plain">DROP TRIGGER IF EXISTS move_tagstree;</statement>
-                <statement mode="plain">ALTER TABLE AlbumRoots
-                                        DROP INDEX IF EXISTS identifier;</statement>
+                <statement mode="plain">CALL drop_index_if_exists('AlbumRoots', 'identifier');</statement>
                 <statement mode="plain">ALTER TABLE AlbumRoots
                                         ADD UNIQUE (identifier(127), specificPath(128)),
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">CALL drop_foreign_key('Albums', 'Albums_AlbumRoots');</statement>
-                <statement mode="plain">ALTER TABLE Albums
-                                        DROP INDEX IF EXISTS albumRoot;</statement>
+                <statement mode="plain">CALL drop_index_if_exists('Albums', 'albumRoot');</statement>
                 <statement mode="plain">ALTER TABLE Albums
                                         ADD CONSTRAINT Albums_AlbumRoots FOREIGN KEY (albumRoot) REFERENCES AlbumRoots (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD UNIQUE (albumRoot, relativePath(255)),
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">CALL drop_foreign_key('Images', 'Images_Albums');</statement>
-                <statement mode="plain">ALTER TABLE Images
-                                        DROP INDEX IF EXISTS album;</statement>
+                <statement mode="plain">CALL drop_index_if_exists('Images', 'album');</statement>
                 <statement mode="plain">ALTER TABLE Images
                                         ADD CONSTRAINT Images_Albums FOREIGN KEY (album) REFERENCES Albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD UNIQUE (album, name(255)),
@@ -2069,15 +2081,13 @@ ORDER BY inf.rating DESC, img.name ASC
                                         ADD CONSTRAINT ImagePositions_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">CALL drop_foreign_key('ImageComments', 'ImageComments_Images');</statement>
-                <statement mode="plain">ALTER TABLE ImageComments
-                                        DROP INDEX IF EXISTS imageid;</statement>
+                <statement mode="plain">CALL drop_index_if_exists('ImageComments', 'imageid');</statement>
                 <statement mode="plain">ALTER TABLE ImageComments
                                         ADD CONSTRAINT ImageComments_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD UNIQUE(imageid, type, language, author(202)),
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">CALL drop_foreign_key('ImageCopyright', 'ImageCopyright_Images');</statement>
-                <statement mode="plain">ALTER TABLE ImageCopyright
-                                        DROP INDEX IF EXISTS imageid;</statement>
+                <statement mode="plain">CALL drop_index_if_exists('ImageCopyright', 'imageid');</statement>
                 <statement mode="plain">ALTER TABLE ImageCopyright
                                         ADD CONSTRAINT ImageCopyright_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD UNIQUE(imageid, property(110), value(111), extraValue(111)),
@@ -2089,8 +2099,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
                 <statement mode="plain">UPDATE Tags set icon = NULL WHERE icon = 0;</statement>
                 <statement mode="plain">CALL drop_foreign_key('Tags', 'Tags_Images');</statement>
-                <statement mode="plain">ALTER TABLE Tags
-                                        DROP INDEX IF EXISTS pid;</statement>
+                <statement mode="plain">CALL drop_index_if_exists('Tags', 'pid');</statement>
                 <statement mode="plain">ALTER TABLE Tags
                                         ADD CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE,
                                         ADD UNIQUE(pid, name(100)),
@@ -2102,21 +2111,18 @@ ORDER BY inf.rating DESC, img.name ASC
                                         ADD CONSTRAINT ImageTags_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">CALL drop_foreign_key('ImageProperties', 'ImageProperties_Images');</statement>
-                <statement mode="plain">ALTER TABLE ImageProperties
-                                        DROP INDEX IF EXISTS imageid;</statement>
+                <statement mode="plain">CALL drop_index_if_exists('ImageProperties', 'imageid');</statement>
                 <statement mode="plain">ALTER TABLE ImageProperties
                                         ADD CONSTRAINT ImageProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD UNIQUE (imageid, property(255)),
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE Searches
                                         ENGINE InnoDB;</statement>
-                <statement mode="plain">ALTER TABLE DownloadHistory
-                                        DROP INDEX IF EXISTS identifier;</statement>
+                <statement mode="plain">CALL drop_index_if_exists('DownloadHistory', 'identifier');</statement>
                 <statement mode="plain">ALTER TABLE DownloadHistory
                                         ADD UNIQUE(identifier(164), filename(165), filesize, filedate),
                                         ENGINE InnoDB;</statement>
-                <statement mode="plain">ALTER TABLE Settings
-                                        DROP INDEX IF EXISTS keyword;</statement>
+                <statement mode="plain">CALL drop_index_if_exists('Settings', 'keyword');</statement>
                 <statement mode="plain">ALTER TABLE Settings
                                         ADD UNIQUE(keyword(255)),
                                         ENGINE InnoDB;</statement>
