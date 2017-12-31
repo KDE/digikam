@@ -1469,7 +1469,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS UniqueHashes
                             (uniqueHash VARCHAR(128),
-                            fileSize INTEGER,
+                            fileSize BIGINT,
                             thumbId INTEGER,
                             CONSTRAINT UniqueHashes_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
                             UNIQUE(uniqueHash, fileSize)) ENGINE InnoDB;
