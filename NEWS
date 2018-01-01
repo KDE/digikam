@@ -215,4 +215,5 @@ BUGFIXES FROM BUGZILLA:
 203 ==> 388362 - Images disappear appear from map and album by opening left sidebar.
 204 ==> 379987 - UpdateSchemaFromV7ToV8: Unable to execute query (MySQL specific).
 205 ==> 388368 - Mouse disappears in slide show.
-206 ==> 
+206 ==> 388437 - Current photo in the Image Editor is not selected in Albums view.
+207 ==> 

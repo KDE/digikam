@@ -696,6 +696,11 @@ void DigikamView::setupConnections()
 
     connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ImageInfo)),
             this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
+
+    // -- ImageViewUtilities Connections ----------------
+
+    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(QUrl)),
+            d->iconView, SLOT(setCurrentUrlWhenAvailable(QUrl)));
 }
 
 void DigikamView::connectIconViewFilter(FilterStatusBar* const filterbar)
