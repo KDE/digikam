@@ -90,6 +90,7 @@ public:
         updateFileTimeStampBox(0),
         rescanImageIfModifiedBox(0),
         writingModeCombo(0),
+        keepExtensionInXMPSidecarNameBox(0),
         rotateByFlag(0),
         rotateByContents(0),
         allowRotateByMetadata(0),
@@ -130,6 +131,7 @@ public:
     QCheckBox*           updateFileTimeStampBox;
     QCheckBox*           rescanImageIfModifiedBox;
     QComboBox*           writingModeCombo;
+    QCheckBox*           keepExtensionInXMPSidecarNameBox;
 
     QRadioButton*        rotateByFlag;
     QRadioButton*        rotateByContents;
@@ -548,6 +550,12 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->writingModeCombo->setToolTip(i18nc("@info:tooltip", "Specify the exact mode of XMP sidecar writing"));
     d->writingModeCombo->setEnabled(false);
 
+    d->keepExtensionInXMPSidecarNameBox  = new QCheckBox;
+    d->keepExtensionInXMPSidecarNameBox->setText(i18nc("@option:check", "Keep Image Extension in XMP Sidecar Name"));
+    d->keepExtensionInXMPSidecarNameBox->setWhatsThis(i18nc("@info:whatsthis",
+                                             "If checked, when constructing the XMP sidecar file name, append '.xmp' to the image filename. Otherwise, the extension is replaced."));
+    d->keepExtensionInXMPSidecarNameBox->setEnabled(MetaEngine::supportXmp());
+
     connect(d->writeXMPSidecarBox, SIGNAL(toggled(bool)),
             d->writingModeCombo, SLOT(setEnabled(bool)));
 
@@ -555,6 +563,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     rwSidecarsLayout->addWidget(d->readXMPSidecarBox,  1, 0, 1, 3);
     rwSidecarsLayout->addWidget(d->writeXMPSidecarBox, 2, 0, 1, 3);
     rwSidecarsLayout->addWidget(d->writingModeCombo,   3, 1, 1, 2);
+    rwSidecarsLayout->addWidget(d->keepExtensionInXMPSidecarNameBox, 4, 0, 1, 3);
     rwSidecarsLayout->setColumnStretch(3, 10);
     rwSidecarsGroup->setLayout(rwSidecarsLayout);
 
@@ -674,6 +683,7 @@ void SetupMetadata::applySettings()
     set.useLazySync           = d->useLazySync->isChecked();
     set.writeRawFiles         = d->writeRawFilesBox->isChecked();
     set.useXMPSidecar4Reading = d->readXMPSidecarBox->isChecked();
+    set.keepExtensionInXMPSidecarName = d->keepExtensionInXMPSidecarNameBox->isChecked();
 
     if (d->writeXMPSidecarBox->isChecked())
     {
@@ -755,6 +765,7 @@ void SetupMetadata::readSettings()
     d->useLazySync->setChecked(set.useLazySync);
     d->writeRawFilesBox->setChecked(set.writeRawFiles);
     d->readXMPSidecarBox->setChecked(set.useXMPSidecar4Reading);
+    d->keepExtensionInXMPSidecarNameBox->setChecked(set.keepExtensionInXMPSidecarName);
     d->updateFileTimeStampBox->setChecked(set.updateFileTimeStamp);
     d->rescanImageIfModifiedBox->setChecked(set.rescanImageIfModified);
 

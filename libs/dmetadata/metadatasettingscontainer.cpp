@@ -53,6 +53,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     writeRawFiles         = false;
     useXMPSidecar4Reading = false;
     metadataWritingMode   = MetaEngine::WRITETOIMAGEONLY;
+    keepExtensionInXMPSidecarName = true;
     updateFileTimeStamp   = true;
     rescanImageIfModified = false;
     rotationBehavior      = RotatingFlags | RotateByLosslessRotation;
@@ -77,6 +78,7 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
     //writeRawFiles         = group.readEntry("Write RAW Files",             false);
     useXMPSidecar4Reading = group.readEntry("Use XMP Sidecar For Reading", false);
+    keepExtensionInXMPSidecarName = group.readEntry("Keep Image Extension in XMP Sidecar Name", false);
     metadataWritingMode   = (MetaEngine::MetadataWritingMode)
                             group.readEntry("Metadata Writing Mode",       (int)MetaEngine::WRITETOIMAGEONLY);
     updateFileTimeStamp   = group.readEntry("Update File Timestamp",       true);
@@ -125,6 +127,7 @@ void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 
     group.writeEntry("Write RAW Files",             writeRawFiles);
     group.writeEntry("Use XMP Sidecar For Reading", useXMPSidecar4Reading);
+    group.writeEntry("Keep Image Extension in XMP Sidecar Name", keepExtensionInXMPSidecarName);
     group.writeEntry("Metadata Writing Mode",       (int)metadataWritingMode);
     group.writeEntry("Update File Timestamp",       updateFileTimeStamp);
     group.writeEntry("Rescan File If Modified",     rescanImageIfModified);

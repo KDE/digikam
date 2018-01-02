@@ -100,6 +100,7 @@ public:
     bool                            updateFileTimeStamp;
     bool                            rescanImageIfModified;
     bool                            useXMPSidecar4Reading;
+    bool                            keepExtensionInXMPSidecarName;
     bool                            useLazySync;
 
     MetaEngine::MetadataWritingMode metadataWritingMode;

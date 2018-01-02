@@ -30,10 +30,13 @@
 
 #include "metaengine.h"
 #include "metaengine_p.h"
+#include <QDir>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "metadatasettings.h"
+#include "metadatasettingscontainer.h"
 
 namespace Digikam
 {
@@ -164,7 +167,17 @@ QString MetaEngine::sidecarFilePathForFile(const QString& path)
 
     if (!path.isEmpty())
     {
-        ret = path + QString::fromLatin1(".xmp");
+        if (nullptr == MetadataSettings::instance() ||  // Default to this alternative, if, for some reason, we don't have settings.
+            MetadataSettings::instance()->settings().keepExtensionInXMPSidecarName)
+        {
+            ret = path + QString::fromLatin1(".xmp");
+        }
+        else
+        {
+            // Replace the image file name extension with 'xmp'.
+            QFileInfo file_info = QFileInfo(path);
+            ret = file_info.dir().filePath(file_info.completeBaseName() + QString::fromLatin1(".xmp"));
+        }
     }
 
     return ret;
