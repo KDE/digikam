@@ -216,4 +216,5 @@ BUGFIXES FROM BUGZILLA:
 204 ==> 379987 - UpdateSchemaFromV7ToV8: Unable to execute query (MySQL specific).
 205 ==> 388368 - Mouse disappears in slide show.
 206 ==> 388437 - Current photo in the Image Editor is not selected in Albums view.
-207 ==> 
+207 ==> 384934 - Install failed on Windows 10.
+208 ==> 
