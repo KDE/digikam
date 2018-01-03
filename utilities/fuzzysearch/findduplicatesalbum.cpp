@@ -6,7 +6,7 @@
  * Date        : 2008-05-19
  * Description : Find Duplicates tree-view search album.
  *
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -70,7 +70,9 @@ FindDuplicatesAlbum::FindDuplicatesAlbum(QWidget* const parent)
     setIconSize(QSize(d->iconSize, d->iconSize));
     setSortingEnabled(true);
     setColumnCount(3);
-    setHeaderLabels(QStringList() << i18n("Ref. images") << i18n("Items") << i18n("Avg. similarity"));
+    setHeaderLabels(QStringList() << i18n("Ref. images")
+                                  << i18n("Items")
+                                  << i18n("Avg. similarity"));
     header()->setSectionResizeMode(0, QHeaderView::Stretch);
     header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);

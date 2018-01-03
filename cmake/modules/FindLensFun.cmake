@@ -1,7 +1,7 @@
 # - Try to find lensfun
 # Once done this will define
 #
-#  LENSFUN_FOUND        - system has lensfun
+#  LensFun_FOUND        - system has lensfun
 #  LENSFUN_INCLUDE_DIRS - the lensfun include directory
 #  LENSFUN_LIBRARIES    - Link these to use lensfun
 #  LENSFUN_DEFINITIONS  - Compiler switches required for using lensfun
@@ -20,7 +20,7 @@
 IF(LENSFUN_LIBRARIES AND LENSFUN_INCLUDE_DIRS AND LENSFUN_DEFINITIONS AND LENSFUN_VERSION)
 
     # in cache already
-    SET(LENSFUN_FOUND TRUE)
+    SET(LensFun_FOUND TRUE)
 
 ELSE()
 

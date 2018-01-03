@@ -6,7 +6,7 @@
  * Date        : 2004-07-03
  * Description : dialog-like popup that displays messages without interrupting the user
  *
- * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2001-2006 by Richard Moore <rich at kde dot org>
  * Copyright (C) 2004-2005 by Sascha Cunz <sascha.cunz at tiscali dot de>
  *
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DNOTIFICATIONPOPUP_H
-#define DNOTIFICATIONPOPUP_H
+#ifndef DNOTIFICATION_POPUP_H
+#define DNOTIFICATION_POPUP_H
 
 // Qt includes
 
@@ -162,7 +162,7 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(const QString& text, QWidget* parent,
+    static DNotificationPopup* message(const QString& text, QWidget* parent,
                                        const QPoint& p = QPoint());
 
     /**
@@ -171,7 +171,7 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(const QString& text, QSystemTrayIcon* parent);
+    static DNotificationPopup* message(const QString& text, QSystemTrayIcon* parent);
 
     /**
      * Convenience method that displays popup with the specified caption and message
@@ -261,8 +261,8 @@ public:
      * @see setAutoDelete
      */
     static DNotificationPopup* message(int popupStyle, const QString& caption, const QString& text,
-                                  const QPixmap& icon, QWidget* parent, int timeout = -1,
-                                  const QPoint& p = QPoint());
+                                       const QPixmap& icon, QWidget* parent, int timeout = -1,
+                                       const QPoint& p = QPoint());
 
     /**
      * Convenience method that displays popup with the specified popup-style, icon, caption and
@@ -279,7 +279,7 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(int popupStyle, const QString& caption, const QString& text,
+    static DNotificationPopup* message(int popupStyle, const QString& caption, const QString& text,
                                        const QPixmap& icon, WId parent, int timeout = -1,
                                        const QPoint& p = QPoint());
 
@@ -375,4 +375,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DNOTIFICATIONPOPUP_H
+#endif // DNOTIFICATION_POPUP_H

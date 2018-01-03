@@ -7,7 +7,7 @@
  * Description : a combobox with time zones.
  *
  * Copyright (C) 2015      by Maik Qualmann <metzpinguin at gmail dot com>
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

@@ -6,7 +6,7 @@
  * Date        : 2013-04-29
  * Description : digiKam XML GUI window
  *
- * Copyright (C) 2013-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -182,6 +182,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_presentationAction    = 0;
     m_metadataEditAction    = 0;
     m_geolocationEditAction = 0;
+    m_mediaServerAction     = 0;
     m_animLogo              = 0;
 
 #ifdef HAVE_KSANE
@@ -518,6 +519,19 @@ void DXmlGuiWindow::createHtmlGalleryAction()
     connect(m_htmlGalleryAction, SIGNAL(triggered(bool)),
             this, SLOT(slotHtmlGallery()));
 #endif
+}
+
+void DXmlGuiWindow::createMediaServerAction()
+{
+    m_mediaServerAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-right-double")),
+                                      i18n("Share with DLNA"),
+                                      this);
+
+    
+    actionCollection()->addAction(QLatin1String("mediaserver"), m_mediaServerAction);
+
+    connect(m_mediaServerAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotMediaServer()));
 }
 
 void DXmlGuiWindow::createKSaneAction()

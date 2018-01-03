@@ -534,7 +534,7 @@ QString DImageHistory::toXml() const
             if (!params.isEmpty())
             {
                 QList<QString> keys = params.keys();
-                qSort(keys);
+                std::sort(keys.begin(), keys.end());
 
                 foreach(const QString& key, keys)
                 {

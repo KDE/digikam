@@ -7,7 +7,7 @@
  * Description : Albums manager interface.
  *
  * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
@@ -160,8 +160,7 @@ public:
     Private() :
         changed(false),
         hasPriorizedDbPath(false),
-        dbPort(0),
-        dbInternalServer(false),
+        dbFakeConnection(false),
         showOnlyAvailableAlbums(false),
         albumListJob(0),
         dateListJob(0),
@@ -187,11 +186,7 @@ public:
     bool                        changed;
     bool                        hasPriorizedDbPath;
 
-    QString                     dbType;
-    QString                     dbName;
-    QString                     dbHostName;
-    int                         dbPort;
-    bool                        dbInternalServer;
+    bool                        dbFakeConnection;
 
     bool                        showOnlyAvailableAlbums;
 
@@ -508,7 +503,7 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
     if (newParams.isSQLite())
     {
         DatabaseServerStarter::instance()->stopServerManagerProcess();
-        
+
         QDir newDir(newParams.getCoreDatabaseNameOrDir());
         QFileInfo newFile(newDir, QLatin1String("digikam4.db"));
 
@@ -579,7 +574,6 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                 }
                 else if (result == QMessageBox::Cancel)
                 {
-                    QDir oldDir(d->dbName);
                     QFileInfo oldFile(params.SQLiteDatabaseFile());
                     copyToNewLocation(oldFile, newFile, i18n("Failed to copy the old database file (\"%1\") "
                                                              "to its new location (\"%2\"). "
@@ -614,7 +608,6 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
 
                 if (result == QMessageBox::No)
                 {
-                    QDir oldDir(d->dbName);
                     QFileInfo oldFile(params.SQLiteDatabaseFile());
                     copyToNewLocation(oldFile, newFile);
                 }
@@ -650,7 +643,6 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                 // first backup
                 if (moveToBackup(newFile))
                 {
-                    QDir oldDir(d->dbName);
                     QFileInfo oldFile(params.SQLiteDatabaseFile());
 
                     // then copy
@@ -726,6 +718,12 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
     // ensure, embedded database is loaded
     qCDebug(DIGIKAM_GENERAL_LOG) << params;
+
+    // workaround for the problem mariaDB >= 10.2 and QTBUG-63108
+    if (params.isMySQL())
+    {
+        addFakeConnection();
+    }
 
     if (params.internalServer)
     {
@@ -880,7 +878,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
         if (result != QMessageBox::Yes)
         {
-            exit(0);
+            return false;
         }
 
         CoreDbAccess().db()->setSetting(QLatin1String("Locale"), currLocale);
@@ -932,7 +930,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
             migrateChoices = new QComboBox;
 
-            for (int i = 0; i < candidateIds.size(); ++i)
+            for (int i = 0 ; i < candidateIds.size() ; ++i)
             {
                 migrateChoices->addItem(QDir::toNativeSeparators(candidateDescriptions.at(i)), candidateIds.at(i));
             }
@@ -1292,7 +1290,7 @@ void AlbumManager::scanPAlbums()
     QList<AlbumInfo> currentAlbums = CoreDbAccess().db()->scanAlbums();
 
     // sort by relative path so that parents are created before children
-    qSort(currentAlbums);
+    std::sort(currentAlbums.begin(), currentAlbums.end());
 
     QList<AlbumInfo> newAlbums;
 
@@ -1344,7 +1342,7 @@ void AlbumManager::scanPAlbums()
     }
 
     // sort by relative path so that parents are created before children
-    qSort(newAlbums);
+    std::sort(newAlbums.begin(), newAlbums.end());
 
     // create all new albums
     foreach(const AlbumInfo& info, newAlbums)
@@ -1393,8 +1391,8 @@ void AlbumManager::scanPAlbums()
             if (!parent)
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) <<  "Could not find parent with url: "
-                                             << QDir::toNativeSeparators(parentPath) << " for: "
-                                             << QDir::toNativeSeparators(info.relativePath);
+                                             << parentPath << " for: "
+                                             << info.relativePath;
                 continue;
             }
 
@@ -1549,7 +1547,7 @@ void AlbumManager::scanTAlbums()
         QHash<int, TAlbum*> tagHash;
 
         // insert items into a dict for quick lookup
-        for (TagInfo::List::const_iterator iter = tList.constBegin(); iter != tList.constEnd(); ++iter)
+        for (TagInfo::List::const_iterator iter = tList.constBegin() ; iter != tList.constEnd() ; ++iter)
         {
             TagInfo info        = *iter;
             TAlbum* const album = new TAlbum(info.name, info.id);
@@ -1567,8 +1565,7 @@ void AlbumManager::scanTAlbums()
         tagHash.insert(0, rootTag);
 
         // build tree
-        for (QHash<int, TAlbum*>::const_iterator iter = tagHash.constBegin();
-             iter != tagHash.constEnd(); ++iter)
+        for (QHash<int, TAlbum*>::const_iterator iter = tagHash.constBegin() ; iter != tagHash.constEnd() ; ++iter)
         {
             TAlbum* album = *iter;
 
@@ -1619,7 +1616,7 @@ void AlbumManager::scanTAlbums()
         delete rootTag;
     }
 
-    for (TagInfo::List::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
+    for (TagInfo::List::const_iterator it = tList.constBegin() ; it != tList.constEnd() ; ++it)
     {
         TagInfo info = *it;
 
@@ -1906,7 +1903,7 @@ AlbumList AlbumManager::allDAlbums() const
 
 void AlbumManager::setCurrentAlbums(QList<Album*> albums)
 {
-    if(albums.isEmpty())
+    if (albums.isEmpty())
         return;
 
     QList<Album*> filtered;
@@ -1916,7 +1913,7 @@ void AlbumManager::setCurrentAlbums(QList<Album*> albums)
     */
     Q_FOREACH(Album* const album, albums)
     {
-        if(album != 0)
+        if (album != 0)
         {
             filtered.append(album);
         }
@@ -1927,7 +1924,7 @@ void AlbumManager::setCurrentAlbums(QList<Album*> albums)
     /**
      * Sort is needed to identify selection correctly, ex AlbumHistory
      */
-    qSort(albums.begin(),albums.end());
+    std::sort(albums.begin(), albums.end());
     d->currentAlbums.clear();
     d->currentAlbums+=albums;
 
@@ -1945,7 +1942,7 @@ PAlbum* AlbumManager::currentPAlbum() const
      * Temporary fix, to return multiple items,
      * iterate and cast each element
      */
-    if(!d->currentAlbums.isEmpty())
+    if (!d->currentAlbums.isEmpty())
         return dynamic_cast<PAlbum*>(d->currentAlbums.first());
     else
         return 0;
@@ -1959,11 +1956,11 @@ QList<TAlbum*> AlbumManager::currentTAlbums() const
     QList<TAlbum*> talbums;
     QList<Album*>::iterator it;
 
-    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
+    for (it = d->currentAlbums.begin() ; it != d->currentAlbums.end() ; ++it)
     {
         TAlbum* const temp = dynamic_cast<TAlbum*>(*it);
 
-        if(temp)
+        if (temp)
             talbums.push_back(temp);
     }
 
@@ -2064,7 +2061,7 @@ TAlbum* AlbumManager::findTAlbum(const QString& tagPath) const
 
 SAlbum* AlbumManager::findSAlbum(const QString& name) const
 {
-    for (Album* album = d->rootSAlbum->firstChild(); album; album = album->next())
+    for (Album* album = d->rootSAlbum->firstChild() ; album ; album = album->next())
     {
         if (album->title() == name)
         {
@@ -2078,7 +2075,7 @@ SAlbum* AlbumManager::findSAlbum(const QString& name) const
 QList<SAlbum*> AlbumManager::findSAlbumsBySearchType(int searchType) const
 {
     QList<SAlbum*> albums;
-    for (Album* album = d->rootSAlbum->firstChild(); album; album = album->next())
+    for (Album* album = d->rootSAlbum->firstChild() ; album ; album = album->next())
     {
         if (album != 0)
         {
@@ -2670,7 +2667,7 @@ QStringList AlbumManager::tagPaths(const QList<int>& tagIDs, bool leadingSlash, 
 {
     QStringList tagPaths;
 
-    for (QList<int>::const_iterator it = tagIDs.constBegin(); it != tagIDs.constEnd(); ++it)
+    for (QList<int>::const_iterator it = tagIDs.constBegin() ; it != tagIDs.constEnd() ; ++it)
     {
         TAlbum* album = findTAlbum(*it);
 
@@ -2864,7 +2861,7 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString& changedQuery,
         emit signalAlbumRenamed(album);
     }
 
-    if(!d->currentAlbums.isEmpty())
+    if (!d->currentAlbums.isEmpty())
     {
         if (d->currentAlbums.first() == album)
         {
@@ -2972,7 +2969,7 @@ void AlbumManager::removePAlbum(PAlbum* album)
 
     CoreDbUrl url = album->databaseUrl();
 
-    if(!d->currentAlbums.isEmpty())
+    if (!d->currentAlbums.isEmpty())
     {
         if (album == d->currentAlbums.first())
         {
@@ -3039,7 +3036,7 @@ void AlbumManager::removeTAlbum(TAlbum* album)
     emit signalAlbumAboutToBeDeleted(album);
     d->allAlbumsIdHash.remove(album->globalID());
 
-    if(!d->currentAlbums.isEmpty())
+    if (!d->currentAlbums.isEmpty())
     {
         if (album == d->currentAlbums.first())
         {
@@ -3123,7 +3120,7 @@ void AlbumManager::slotPeopleJobData(const QMap<QString,QMap<int,int> >& facesSt
     {
         QMap<int, int>::const_iterator it;
 
-        for (it = counts.begin(); it != counts.end(); ++it)
+        for (it = counts.begin() ; it != counts.end() ; ++it)
         {
             d->fAlbumsCount[it.key()] += it.value();
         }
@@ -3213,7 +3210,7 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
 
     QMap<YearMonth, int> yearMonthMap;
 
-    for (QMap<QDateTime, int>::const_iterator it = datesStatMap.constBegin(); it != datesStatMap.constEnd(); ++it)
+    for (QMap<QDateTime, int>::const_iterator it = datesStatMap.constBegin() ; it != datesStatMap.constEnd() ; ++it)
     {
         YearMonth yearMonth = YearMonth(it.key().date().year(), it.key().date().month());
 
@@ -3231,8 +3228,7 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
 
     int year, month;
 
-    for (QMap<YearMonth, int>::const_iterator iter = yearMonthMap.constBegin();
-         iter != yearMonthMap.constEnd(); ++iter)
+    for (QMap<YearMonth, int>::const_iterator iter = yearMonthMap.constBegin() ; iter != yearMonthMap.constEnd() ; ++iter)
     {
         year  = iter.key().first;
         month = iter.key().second;
@@ -3291,8 +3287,7 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
 
     // Now the items contained in the maps are the ones which
     // have been deleted.
-    for (QMap<QDate, DAlbum*>::const_iterator it = mAlbumMap.constBegin();
-         it != mAlbumMap.constEnd(); ++it)
+    for (QMap<QDate, DAlbum*>::const_iterator it = mAlbumMap.constBegin() ; it != mAlbumMap.constEnd() ; ++it)
     {
         DAlbum* const album = it.value();
         emit signalAlbumAboutToBeDeleted(album);
@@ -3303,8 +3298,7 @@ void AlbumManager::slotDatesJobData(const QMap<QDateTime, int>& datesStatMap)
         emit signalAlbumHasBeenDeleted(deletedAlbum);
     }
 
-    for (QMap<int, DAlbum*>::const_iterator it = yAlbumMap.constBegin();
-         it != yAlbumMap.constEnd(); ++it)
+    for (QMap<int, DAlbum*>::const_iterator it = yAlbumMap.constBegin() ; it != yAlbumMap.constEnd() ; ++it)
     {
         DAlbum* const album = it.value();
         emit signalAlbumAboutToBeDeleted(album);
@@ -3366,7 +3360,7 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
     switch (changeset.operation())
     {
         case TagChangeset::Added:
-        case TagChangeset::Moved:    
+        case TagChangeset::Moved:
         case TagChangeset::Deleted:
         case TagChangeset::Reparented:
 
@@ -3421,7 +3415,7 @@ void AlbumManager::slotSearchChange(const SearchChangeset& changeset)
             break;
 
         case SearchChangeset::Changed:
-            if(!d->currentAlbums.isEmpty())
+            if (!d->currentAlbums.isEmpty())
             {
                 Album* currentAlbum = d->currentAlbums.first();
 
@@ -3546,6 +3540,24 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 void AlbumManager::removeWatchedPAlbums(const PAlbum* const album)
 {
     d->albumWatch->removeWatchedPAlbums(album);
+}
+
+void AlbumManager::addFakeConnection()
+{
+    if (!d->dbFakeConnection)
+    {
+        // workaround for the problem mariaDB >= 10.2 and QTBUG-63108
+        QSqlDatabase::addDatabase(QLatin1String("QMYSQL"), QLatin1String("FakeConnection"));
+        d->dbFakeConnection = true;
+    }
+}
+
+void AlbumManager::removeFakeConnection()
+{
+    if (d->dbFakeConnection)
+    {
+        QSqlDatabase::removeDatabase(QLatin1String("FakeConnection"));
+    }
 }
 
 }  // namespace Digikam

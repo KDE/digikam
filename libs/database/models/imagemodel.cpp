@@ -1012,7 +1012,7 @@ void ImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
 
         if (d->sendRemovalSignals)
         {
-            qCopy(d->infos.begin() + begin, d->infos.begin() + end, removedInfos.begin());
+            std::copy(d->infos.begin() + begin, d->infos.begin() + end, removedInfos.begin());
             emit imageInfosAboutToBeRemoved(removedInfos);
         }
 
@@ -1197,7 +1197,7 @@ QList<QPair<int, int> > ImageModelIncrementalUpdater::toContiguousPairs(const QL
     }
 
     QList<int> indices(unsorted);
-    qSort(indices);
+    std::sort(indices.begin(), indices.end());
 
     QPair<int, int> pair(indices.first(), indices.first());
 

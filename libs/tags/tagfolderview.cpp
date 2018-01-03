@@ -7,7 +7,7 @@
  * Description : tags folder view.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  *
@@ -136,7 +136,7 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
     cmh.addSeparator();
     if (d->showDeleteFaceTagsAction)
     {
-        cmh.addActionDeleteFaceTag(tagModificationHelper(),tag);
+        cmh.addActionDeleteFaceTag(tagModificationHelper(), tag);
         cmh.addSeparator();
     }
     else
@@ -146,7 +146,7 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
         // If the tag is no face tag, add the option to set it as face tag.
         if (!FaceTags::isPerson(tag->id()))
         {
-            cmh.addActionTagToFaceTag(tagModificationHelper(),tag);
+            cmh.addActionTagToFaceTag(tagModificationHelper(), tag);
         }
     }
     cmh.addActionEditTag(tagModificationHelper(), tag);
@@ -199,7 +199,7 @@ void TagFolderView::slotExpandNode()
         {
             expand(child);
             greyNodes.enqueue(child);
-            child = current.child(it++,0);
+            child = current.child(it++, 0);
         }
     }
 }
@@ -234,7 +234,7 @@ void TagFolderView::slotCollapseNode()
         {
             collapse(child);
             greyNodes.enqueue(child);
-            child = current.child(it++,0);
+            child = current.child(it++, 0);
         }
     }
 }
@@ -294,18 +294,18 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > 
     cmh.addSeparator();
     if (d->showDeleteFaceTagsAction)
     {
-        cmh.addActionDeleteFaceTags(tagModificationHelper(),albums);
+        cmh.addActionDeleteFaceTags(tagModificationHelper(), albums);
     }
     else
     {
-        cmh.addActionDeleteTags(tagModificationHelper(),albums);
+        cmh.addActionDeleteTags(tagModificationHelper(), albums);
         // If one of the selected tags is no face tag, add the action to mark them as face tags.
         foreach (TAlbum * const tag, albums)
         {
             if (!FaceTags::isPerson(tag->id()))
             {
                 cmh.addSeparator();
-                cmh.addActionTagToFaceTag(tagModificationHelper(),tag);
+                cmh.addActionTagToFaceTag(tagModificationHelper(), tag);
                 break;
             }
         }
@@ -342,7 +342,7 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
 
     QModelIndexList selectedItems = selectionModel()->selectedIndexes();
 
-    qSort(selectedItems.begin(),selectedItems.end());
+    std::sort(selectedItems.begin(), selectedItems.end());
     QList<TAlbum*> items;
 
     foreach(const QModelIndex& mIndex, selectedItems)
@@ -356,7 +356,7 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
      */
     if(items.isEmpty())
     {
-        QModelIndex root = this->model()->index(0,0);
+        QModelIndex root = this->model()->index(0, 0);
         items.append(static_cast<TAlbum*>(albumForIndex(root)));
     }
 

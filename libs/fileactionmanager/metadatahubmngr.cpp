@@ -76,7 +76,7 @@ bool MetadataHubMngr::isCreated()
     return (!internalPtr.isNull());
 }
 
-void MetadataHubMngr::addPending(ImageInfo &info)
+void MetadataHubMngr::addPending(const ImageInfo& info)
 {
     QMutexLocker locker(&d->mutex);
 

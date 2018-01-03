@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2004      by Enrico Ros <eros dot kde at email dot it>
  *
  * This program is free software; you can redistribute it
@@ -490,7 +490,10 @@ bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
 
 void SlideShow::slotMouseMoveTimeOut()
 {
-    setCursor(QCursor(Qt::BlankCursor));
+    if (!d->osd->toolBar()->underMouse())
+    {
+        setCursor(QCursor(Qt::BlankCursor));
+    }
 
 #ifdef HAVE_MEDIAPLAYER
     d->videoView->showIndicator(false);

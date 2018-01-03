@@ -6,7 +6,7 @@
  * Date        : 2006-09-19
  * Description : Thread for correlator for tracks and images
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -50,7 +50,7 @@ TrackCorrelatorThread::~TrackCorrelatorThread()
 void TrackCorrelatorThread::run()
 {
     // sort the items to correlate by time:
-    qSort(itemsToCorrelate.begin(), itemsToCorrelate.end(), TrackCorrelationLessThan);
+    std::sort(itemsToCorrelate.begin(), itemsToCorrelate.end(), TrackCorrelationLessThan);
 
     // now perform the correlation
     // we search all loaded gpx data files in parallel for the points with the best match

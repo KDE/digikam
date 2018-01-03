@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018 by Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -119,7 +119,7 @@ target_link_libraries(statesavingobjecttest
                       ${OpenCV_LIBRARIES}
 )
 
-if(GPHOTO2_FOUND)
+if(Gphoto2_FOUND)
     target_link_libraries(statesavingobjecttest ${GPHOTO2_LIBRARIES})
 endif()
 

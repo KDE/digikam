@@ -43,9 +43,6 @@
 #include "ddragobjects.h"
 #include "imageinfo.h"
 #include "albumtreeview.h"
-#include "coredb.h"
-#include "dbengineparameters.h"
-#include "dbenginebackend.h"
 
 namespace Digikam
 {
@@ -91,7 +88,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         popMenu.setMouseTracking(true);
         QAction* const choice     = popMenu.exec(QCursor::pos());
 
-        for (int index=0;index<tagIDs.count();++index)
+        for (int index = 0 ; index < tagIDs.count() ; ++index)
         {
             TAlbum* const talbum = AlbumManager::instance()->findTAlbum(tagIDs.at(index));
 
@@ -118,17 +115,6 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                 {
                     // move dragItem as child of dropItem
                     newParentTag = destAlbum;
-
-		    // NOTE: Update the Mysql TagsTree table which is used only in some search SQL queries (See lft/rgt tag ID properties).
-		    // In SQlite, it is nicely maintained by Triggers.
-		    // With MySQL, this did not work for some reason, and we patch a tree structure mimics in a different way.
-
-                    DbEngineParameters internalServerParameters = DbEngineParameters::parametersFromConfig(KSharedConfig::openConfig());
-
-                    if (internalServerParameters.isMySQL())
-                    {
-                        CoreDbAccess().db()->moveTag(newParentTag);
-                    }
                 }
 
                 QString errMsg;
@@ -213,7 +199,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
 
         QList<Album*> selTags = ((AbstractAlbumTreeView*)view)->selectedItems();
 
-        for (int it = 0 ; it < selTags.count(); ++it)
+        for (int it = 0 ; it < selTags.count() ; ++it)
         {
             TAlbum* const temp = dynamic_cast<TAlbum*>(selTags.at(it));
 

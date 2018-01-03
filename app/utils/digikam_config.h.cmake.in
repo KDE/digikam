@@ -6,7 +6,7 @@
  * Date        : 2009-08-03
  * Description : digiKam config header
  *
- * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,6 +74,9 @@
 
 /* Define to 1 if you have KCalendar core shared libraries installed */
 #cmakedefine HAVE_KCALENDAR 1
+
+/* Define to 1 if you have KCalendar core shared libraries with QDateTime support installed */
+#cmakedefine HAVE_KCALENDAR_QDATETIME 1
 
 /* Define to 1 if Panorama tool is supported */
 #cmakedefine HAVE_PANORAMA 1

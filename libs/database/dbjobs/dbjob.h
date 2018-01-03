@@ -161,6 +161,8 @@ public:
     SearchesJob(const SearchesDBJobInfo& jobInfo);
     ~SearchesJob();
 
+    bool isCanceled();
+
 Q_SIGNALS:
 
     void processedSize(int);

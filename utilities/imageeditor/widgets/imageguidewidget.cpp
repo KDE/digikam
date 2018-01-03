@@ -6,7 +6,7 @@
  * Date        : 2004-11-16
  * Description : a widget to display an image with guides
  *
- * Copyright (C) 2004-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -798,12 +798,11 @@ QImage ImageGuideWidget::getMask() const
     return mask;
 }
 
-QPoint ImageGuideWidget::translatePointPosition(QPoint& point) const
+QPoint ImageGuideWidget::translatePointPosition(const QPoint& point) const
 {
     int x  = (int)(point.x() * (float)(d->preview.width())  / (float) d->iface->originalSize().width());
     int y  = (int)(point.y() * (float)(d->preview.height()) / (float) d->iface->originalSize().height());
-    x     += d->rect.x() + 1;
-    y     += d->rect.y() + 1;
+
     return (QPoint(x, y));
 }
 
@@ -836,6 +835,39 @@ void ImageGuideWidget::updateMaskCursor()
     p.drawEllipse(1, 1, size - 2, size - 2);
 
     d->maskCursor = QCursor(pix);
+}
+
+void ImageGuideWidget::setSpotPosition(QPoint &point)
+{
+    d->spot.setX(point.x());
+    d->spot.setY(point.y());
+    updatePreview();
+}
+
+void ImageGuideWidget::updateSpotPosition(int x, int y)
+{
+    QPoint origin = d->rect.topLeft();
+    x -= origin.x();
+    y -= origin.y();
+    d->spot.setX(x);
+    d->spot.setY(y);
+    updatePreview();
+}
+
+QPoint ImageGuideWidget::translateImagePosition(const QPoint& point, bool src) const
+{
+    int x = (int)(point.x() * (float)(d->preview.width())  / (float) d->iface->originalSize().width());
+    int y = (int)(point.y() * (float)(d->preview.height()) / (float) d->iface->originalSize().height());
+
+    if (!src)
+    {
+        x  = (int)(point.x());
+        y  = (int)(point.y());
+        x -= (int)(d->rect.topLeft().x()) + 1;
+        y -= (int)(d->rect.topLeft().y()) + 1;
+    }
+
+    return (QPoint(x, y));
 }
 
 void ImageGuideWidget::setMaskCursor()

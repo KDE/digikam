@@ -20,6 +20,8 @@ install(FILES bleach.png
               instant.png
               original.png
               punch.png
+              summer.png
+              tokyo.png
               vintage.png
               washout_color.png
               washout.png

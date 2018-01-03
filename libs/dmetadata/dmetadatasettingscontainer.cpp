@@ -440,7 +440,7 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup& group, const QString
         container.append(ns);
     }
 
-    qSort(container.begin(), container.end(), Digikam::dmcompare);
+    std::sort(container.begin(), container.end(), Digikam::dmcompare);
 }
 
 void DMetadataSettingsContainer::writeOneGroup(KConfigGroup& group, const QString& name, QList<NamespaceEntry>& container) const

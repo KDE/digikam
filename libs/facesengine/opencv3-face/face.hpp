@@ -47,6 +47,7 @@ the use of this software, even if advised of the possibility of such damage.
 
 */
 
+#include "libopencv.h"
 #include "opencv2/core.hpp"
 #include "predict_collector.hpp"
 #include <map>
@@ -318,7 +319,11 @@ public:
     The suffix const means that prediction does not affect the internal model state, so the method can
     be safely called from within different threads.
      */
+#if OPENCV_TEST_VERSION(3,4,0)
     CV_WRAP virtual void save(const String& filename) const;
+#else
+    CV_WRAP virtual void write(const String& filename) const;
+#endif
 
     /** @brief Loads a FaceRecognizer and its model state.
 
@@ -327,16 +332,28 @@ public:
     FaceRecognizer::load(FileStorage& fs) in turn gets called by
     FaceRecognizer::load(const String& filename), to ease saving a model.
      */
+#if OPENCV_TEST_VERSION(3,4,0)
     CV_WRAP virtual void load(const String& filename);
+#else
+    CV_WRAP virtual void read(const String& filename);
+#endif
 
     /** @overload
     Saves this model to a given FileStorage.
     @param fs The FileStorage to store this FaceRecognizer to.
     */
+#if OPENCV_TEST_VERSION(3,4,0)
     virtual void save(FileStorage& fs) const = 0;
+#else
+    virtual void write(FileStorage& fs) const = 0;
+#endif
 
     /** @overload */
+#if OPENCV_TEST_VERSION(3,4,0)
     virtual void load(const FileStorage& fs) = 0;
+#else
+    virtual void read(const FileStorage& fs) = 0;
+#endif
 
     /** @brief Sets string info for the specified model's label.
 

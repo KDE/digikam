@@ -7,7 +7,7 @@
  * Description : main program from digiKam
  *
  * Copyright (C) 2002-2006 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2002-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -225,7 +225,14 @@ int main(int argc, char* argv[])
     }
 
     // initialize database
-    AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath);
+    if (!AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath))
+    {
+        CoreDbAccess::cleanUpDatabase();
+        ThumbsDbAccess::cleanUpDatabase();
+        FaceDbAccess::cleanUpDatabase();
+        MetaEngine::cleanupExiv2();
+        return 0;
+    }
 
     if (!iconTheme.isEmpty())
     {
@@ -241,6 +248,7 @@ int main(int argc, char* argv[])
     {
         QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     }
+
     // If application cache place in home directory to save cached files do not exist, create it.
     if (!QFile::exists(QStandardPaths::writableLocation(QStandardPaths::CacheLocation)))
     {
@@ -271,6 +279,8 @@ int main(int argc, char* argv[])
     {
         digikam->autoDetect();
     }
+
+
 
     int ret = app.exec();
 

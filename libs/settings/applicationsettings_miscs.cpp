@@ -7,7 +7,7 @@
  * Description : application settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
  * Copyright (C) 2014      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
@@ -115,6 +115,16 @@ void ApplicationSettings::setApplySidebarChangesDirectly(bool val)
 bool ApplicationSettings::getApplySidebarChangesDirectly() const
 {
     return d->sidebarApplyDirectly;
+}
+
+void ApplicationSettings::setUseNativeFileDialog(bool val)
+{
+    d->useNativeFileDialog = val;
+}
+
+bool ApplicationSettings::getUseNativeFileDialog() const
+{
+    return d->useNativeFileDialog;
 }
 
 void ApplicationSettings::setDrawFramesToGrouped(bool val)
@@ -352,26 +362,28 @@ bool ApplicationSettings::askGroupingOperateOnAll(ApplicationSettings::Operation
 
     QMessageBox msgBox(qApp->activeWindow());
     msgBox.setWindowTitle(qApp->applicationName());
-    msgBox.setText(QLatin1String("<p>") + ApplicationSettings::operationTypeTitle(type)
-                   + QLatin1String("</p>") + i18n("Do you want to do this operation on all group items?"));
     msgBox.setStandardButtons(QMessageBox::No | QMessageBox::Yes);
-    QCheckBox *chkBox = new QCheckBox(i18n("Remember choice for this operation"), &msgBox);
+    msgBox.setText(QLatin1String("<p>") + ApplicationSettings::operationTypeTitle(type) +
+                   QLatin1String("</p>") + i18n("Do you want to do this operation on all group items?"));
+
+    QCheckBox* const chkBox = new QCheckBox(i18n("Remember choice for this operation"), &msgBox);
     msgBox.setCheckBox(chkBox);
 
-    int result = msgBox.exec();
-
-    if (result == QMessageBox::No)
+    if (msgBox.exec() == QMessageBox::No)
     {
         if (chkBox->isChecked())
         {
             setGroupingOperateOnAll(type, ApplicationSettings::No);
         }
+
         return false;
     }
+
     if (chkBox->isChecked())
     {
         setGroupingOperateOnAll(type, ApplicationSettings::Yes);
     }
+
     return true;
 }
 

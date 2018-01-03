@@ -147,7 +147,7 @@ MailIntroPage::MailIntroPage(QWizard* const dialog, const QString& title)
     vbox->setStretchFactor(binaryBox, 3);
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("view-presentation")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("mail-client")));
 
     connect(d->binSearch, SIGNAL(signalBinariesFound(bool)),
             this, SLOT(slotBinariesFound()));

@@ -25,10 +25,11 @@
 
 // Qt includes
 
+#include <QDialogButtonBox>
 #include <QCloseEvent>
 #include <QPixmap>
 #include <QTimer>
-#include <QDialogButtonBox>
+#include <QDir>
 
 // KDE includes
 
@@ -79,9 +80,6 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
     connect(DIO::instance(), SIGNAL(imageRenameFailed(QUrl)),
             this, SLOT(slotRenameFailed(QUrl)));
 
-    connect(DIO::instance(), SIGNAL(renamingAborted(QUrl)),
-            this, SLOT(slotCancel()));
-
     setValue(0);
     setModal(true);
     setButtonText(i18n("&Abort"));
@@ -119,6 +117,7 @@ void AdvancedRenameProcessDialog::processOne()
         return;
     }
 
+    d->currentUrl.clear();
     d->thumbLoadThread->find(ThumbnailIdentifier(d->newNameList.first().first.toLocalFile()));
 }
 
@@ -144,7 +143,7 @@ void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& des
         return;
     }
 
-    addedAction(pix, desc.filePath);
+    addedAction(pix, QDir::toNativeSeparators(desc.filePath));
     advance(1);
 
     NewNameInfo info = d->newNameList.takeFirst();
@@ -176,9 +175,15 @@ void AdvancedRenameProcessDialog::slotRenameSuccess(const QUrl& src)
     }
 }
 
-void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl&)
+void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
 {
     abort();
+
+    QPixmap pix = QIcon::fromTheme(QLatin1String("emblem-error")).pixmap(32, 32);
+    setLabel(i18n("<b>Renaming images has failed...</b>"));
+    setTitle(i18n("Canceled..."));
+
+    addedAction(pix, QDir::toNativeSeparators(src.toLocalFile()));
 }
 
 void AdvancedRenameProcessDialog::closeEvent(QCloseEvent* e)
@@ -190,7 +195,6 @@ void AdvancedRenameProcessDialog::closeEvent(QCloseEvent* e)
 void AdvancedRenameProcessDialog::abort()
 {
     d->cancel = true;
-    emit signalRebuildAllThumbsDone();
 }
 
 }  // namespace Digikam

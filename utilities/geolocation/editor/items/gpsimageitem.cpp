@@ -6,7 +6,7 @@
  * Date        : 2010-03-21
  * Description : An item to hold information about an image.
  *
- * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QBrush>
+#include <QFileInfo>
 #include <QScopedPointer>
 #include <QLocale>
 
@@ -158,25 +159,25 @@ int getWarningLevelFromGPSDataContainer(const GPSDataContainer& data)
     {
         const int dopValue = data.getDop();
 
-        if (dopValue<2)
+        if (dopValue < 2)
             return 1;
 
-        if (dopValue<4)
+        if (dopValue < 4)
             return 2;
 
-        if (dopValue<10)
+        if (dopValue < 10)
             return 3;
 
         return 4;
     }
     else if (data.hasFixType())
     {
-        if (data.getFixType()<3)
+        if (data.getFixType() < 3)
             return 4;
     }
     else if (data.hasNSatellites())
     {
-        if (data.getNSatellites()<4)
+        if (data.getNSatellites() < 4)
             return 4;
     }
 
@@ -188,13 +189,31 @@ bool GPSImageItem::loadImageData()
 {
     QScopedPointer<DMetadata> meta(getMetadataForFile());
 
-    if (!meta)
-        return false;
-
-    if (!m_dateTime.isValid())
+    if (meta && !m_dateTime.isValid())
     {
         m_dateTime = meta->getImageDateTime();
     }
+
+    if (!m_dateTime.isValid())
+    {
+        // Get date from filesystem.
+        QFileInfo info(m_url.toLocalFile());
+
+        QDateTime ctime = info.created();
+        QDateTime mtime = info.lastModified();
+
+        if (ctime.isNull() || mtime.isNull())
+        {
+            m_dateTime = qMax(ctime, mtime);
+        }
+        else
+        {
+            m_dateTime = qMin(ctime, mtime);
+        }
+    }
+
+    if (!meta)
+        return false;
 
     // The way we read the coordinates here is problematic
     // if the coordinates were in the file initially, but
@@ -454,16 +473,16 @@ QVariant GPSImageItem::data(const int column, const int role) const
 
             QString myTagsList;
 
-            for (int i = 0; i < m_tagList.count(); ++i)
+            for (int i = 0 ; i < m_tagList.count() ; ++i)
             {
                 QString myTag;
 
-                for (int j = 0; j < m_tagList[i].count(); ++j)
+                for (int j = 0 ; j < m_tagList[i].count() ; ++j)
                 {
                     myTag.append(QString::fromLatin1("/") + m_tagList[i].at(j).tagName);
 
                     if (j == 0)
-                        myTag.remove(0,1);
+                        myTag.remove(0, 1);
                 }
 
                 if (!myTagsList.isEmpty())
@@ -559,13 +578,13 @@ bool GPSImageItem::lessThan(const GPSImageItem* const otherItem, const int colum
             const int myWarning    = getWarningLevelFromGPSDataContainer(m_gpsData);
             const int otherWarning = getWarningLevelFromGPSDataContainer(otherItem->m_gpsData);
 
-            if (myWarning<0)
+            if (myWarning < 0)
                 return false;
 
-            if (otherWarning<0)
+            if (otherWarning < 0)
                 return true;
 
-            if (myWarning!=otherWarning)
+            if (myWarning != otherWarning)
                 return myWarning < otherWarning;
 
             // TODO: this may not be the best way to sort images with equal warning levels
@@ -680,6 +699,10 @@ SaveProperties GPSImageItem::saveProperties() const
             p.shouldWriteAltitude = true;
             p.altitude            = m_gpsData.getCoordinates().alt();
         }
+        else
+        {
+            p.shouldRemoveAltitude = true;
+        }
     }
     else
     {
@@ -786,17 +809,17 @@ QString GPSImageItem::saveChanges()
 
             QStringList tagSeq;
 
-            for (int i=0; i<m_tagList.count(); ++i)
+            for (int i = 0 ; i < m_tagList.count() ; ++i)
             {
                 QList<TagData> currentTagList = m_tagList[i];
                 QString tag;
 
-                for (int j=0; j<currentTagList.count(); ++j)
+                for (int j = 0 ; j < currentTagList.count() ; ++j)
                 {
                     tag.append(QString::fromLatin1("/") + currentTagList[j].tagName);
                 }
 
-                tag.remove(0,1);
+                tag.remove(0, 1);
                 tagSeq.append(tag);
             }
 
@@ -862,7 +885,7 @@ void GPSImageItem::restoreRGTagList(const QList<QList<TagData> >& tagList)
     }
     else
     {
-        for (int i = 0; i < tagList.count(); ++i)
+        for (int i = 0 ; i < tagList.count() ; ++i)
         {
             bool foundNotEqual = false;
 
@@ -872,7 +895,7 @@ void GPSImageItem::restoreRGTagList(const QList<QList<TagData> >& tagList)
                 break;
             }
 
-            for (int j = 0; j < tagList[i].count(); ++j)
+            for (int j = 0 ; j < tagList[i].count() ; ++j)
             {
                 if (tagList[i].at(j).tagName != m_savedTagList[i].at(j).tagName)
                 {

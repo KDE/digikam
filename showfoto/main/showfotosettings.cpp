@@ -7,7 +7,7 @@
  * Description : Settings for Showfoto
  *
  * Copyright (C) 2013-2014 by Mohamed Anwer <m dot anwer at gmx dot com>
- * Copyright (C) 2013-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,8 +54,9 @@ public:
         deleteItem2Trash(true),
         showFormatOverThumbnail(false),
         showCoordinates(false),
-        itemCenter(false),
         showSplash(true),
+        nativeFileDialog(false),
+        itemCenter(false),
         reverseSort(false),
         showToolTip(true),
         showFileName(true),
@@ -85,8 +86,9 @@ public:
     static const QString configIconTheme;
     static const QString configShowFormatOverThumbnail;
     static const QString configShowCoordinates;
-    static const QString configItemCenter;
     static const QString configShowSplash;
+    static const QString configNativeFileDialog;
+    static const QString configItemCenter;
     static const QString configSortOrder;
     static const QString configReverseSort;
 
@@ -111,8 +113,9 @@ public:
     bool                 deleteItem2Trash;
     bool                 showFormatOverThumbnail;
     bool                 showCoordinates;
-    bool                 itemCenter;
     bool                 showSplash;
+    bool                 nativeFileDialog;
+    bool                 itemCenter;
     bool                 reverseSort;
 
     bool                 showToolTip;
@@ -157,8 +160,9 @@ const QString ShowfotoSettings::Private::configApplicationStyle(QLatin1String("A
 const QString ShowfotoSettings::Private::configIconTheme(QLatin1String("Icon Theme"));
 const QString ShowfotoSettings::Private::configShowFormatOverThumbnail(QLatin1String("ShowMimeOverImage"));
 const QString ShowfotoSettings::Private::configShowCoordinates(QLatin1String("Show Coordinates"));
-const QString ShowfotoSettings::Private::configItemCenter(QLatin1String("Item To Center"));
 const QString ShowfotoSettings::Private::configShowSplash(QLatin1String("ShowSplash"));
+const QString ShowfotoSettings::Private::configNativeFileDialog(QLatin1String("Use Native File Dialog"));
+const QString ShowfotoSettings::Private::configItemCenter(QLatin1String("Item To Center"));
 const QString ShowfotoSettings::Private::configSortOrder(QLatin1String("SortOrder"));
 const QString ShowfotoSettings::Private::configReverseSort(QLatin1String("ReverseSort"));
 
@@ -227,6 +231,7 @@ void ShowfotoSettings::init()
 
     d->showFormatOverThumbnail = false;
     d->showCoordinates         = false;
+    d->nativeFileDialog        = false;
     d->itemCenter              = false;
 
     d->showToolTip             = true;
@@ -264,8 +269,9 @@ void ShowfotoSettings::readSettings()
     d->applicationStyle        = group.readEntry(d->configApplicationStyle, qApp->style()->objectName());
 #endif
     d->iconTheme               = group.readEntry(d->configIconTheme, QString());
-    d->itemCenter              = group.readEntry(d->configItemCenter, false);
     d->showSplash              = group.readEntry(d->configShowSplash, true);
+    d->nativeFileDialog        = group.readEntry(d->configNativeFileDialog, false);
+    d->itemCenter              = group.readEntry(d->configItemCenter, false);
     d->sortOrder               = group.readEntry(d->configSortOrder, 0);
     d->reverseSort             = group.readEntry(d->configReverseSort, false);
     d->showFormatOverThumbnail = group.readEntry(d->configShowFormatOverThumbnail, false);
@@ -330,14 +336,19 @@ QString ShowfotoSettings::getIconTheme() const
     return d->iconTheme;
 }
 
-bool ShowfotoSettings::getItemCenter() const
-{
-    return d->itemCenter;
-}
-
 bool ShowfotoSettings::getShowSplash() const
 {
     return d->showSplash;
+}
+
+bool ShowfotoSettings::getNativeFileDialog() const
+{
+    return d->nativeFileDialog;
+}
+
+bool ShowfotoSettings::getItemCenter() const
+{
+    return d->itemCenter;
 }
 
 int ShowfotoSettings::getSortRole() const
@@ -530,14 +541,19 @@ void ShowfotoSettings::setShowCoordinates(bool show)
     d->group.writeEntry(d->configShowCoordinates, show);
 }
 
-void ShowfotoSettings::setItemCenter(bool item)
-{
-    d->group.writeEntry(d->configItemCenter, item);
-}
-
 void ShowfotoSettings::setShowSplash(bool show)
 {
     d->group.writeEntry(d->configShowSplash, show);
+}
+
+void ShowfotoSettings::setNativeFileDialog(bool item)
+{
+    d->group.writeEntry(d->configNativeFileDialog, item);
+}
+
+void ShowfotoSettings::setItemCenter(bool item)
+{
+    d->group.writeEntry(d->configItemCenter, item);
 }
 
 void ShowfotoSettings::setSortRole(int order)

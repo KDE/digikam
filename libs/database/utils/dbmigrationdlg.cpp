@@ -7,7 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -153,7 +153,7 @@ void DatabaseMigrationDialog::setupMainArea()
 
     d->progressBar                     = new QProgressBar(progressBox);
     d->progressBar->setTextVisible(true);
-    d->progressBar->setRange(0, 13);
+    d->progressBar->setRange(0, 21);
     d->progressBarSmallStep            = new QProgressBar(progressBox);
     d->progressBarSmallStep->setTextVisible(true);
 
@@ -210,6 +210,13 @@ void DatabaseMigrationDialog::slotPerformCopy()
 {
     DbEngineParameters toDBParameters   = d->toDatabaseSettingsWidget->getDbEngineParameters();
     DbEngineParameters fromDBParameters = d->fromDatabaseSettingsWidget->getDbEngineParameters();
+
+    if (fromDBParameters == toDBParameters)
+    {
+        QMessageBox::critical(this, qApp->applicationName(), i18n("Database type or location must be different!"));
+        return;
+    }
+
     d->copyThread->init(fromDBParameters, toDBParameters);
 
     slotLockInputFields();

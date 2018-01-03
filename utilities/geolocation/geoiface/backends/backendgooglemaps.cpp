@@ -6,7 +6,7 @@
  * Date        : 2009-12-01
  * Description : Google-Maps-backend for geolocation interface
  *
- * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2014      by Justus Schwartz <justus at gmx dot li>
  *
@@ -33,6 +33,7 @@
 #include <QPointer>
 #include <QResizeEvent>
 #include <QAction>
+#include <QTimer>
 
 // KDE includes
 
@@ -90,10 +91,10 @@ public:
       cacheShowMapTypeControl(true),
       cacheShowNavigationControl(true),
       cacheShowScaleControl(true),
-      cacheZoom(1),
+      cacheZoom(8),
       cacheMaxZoom(0),
       cacheMinZoom(0),
-      cacheCenter(0.0,0.0),
+      cacheCenter(52.0, 6.0),
       cacheBounds(),
       activeState(false),
       widgetIsDocked(false),
@@ -170,7 +171,7 @@ void BackendGoogleMaps::createActions()
         << i18n("Hybrid")
         << i18n("Terrain");
 
-    for (int i = 0; i < mapTypes.count(); ++i)
+    for (int i = 0 ; i < mapTypes.count() ; ++i)
     {
         QAction* const mapTypeAction = new QAction(d->mapTypeActionGroup);
         mapTypeAction->setData(mapTypes.at(i));
@@ -232,7 +233,7 @@ QWidget* BackendGoogleMaps::mapWidget()
             d->htmlWidgetWrapper = new QWidget();
             d->htmlWidgetWrapper->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             d->htmlWidget        = new HTMLWidget(d->htmlWidgetWrapper);
-            d->htmlWidgetWrapper->resize(400,400);
+            d->htmlWidgetWrapper->resize(400, 400);
         }
 
         connect(d->htmlWidget, SIGNAL(signalJavaScriptReady()),
@@ -273,8 +274,15 @@ void BackendGoogleMaps::setCenter(const GeoCoordinates& coordinate)
 
     if (isReady())
     {
-        d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetCenter(%1, %2);").arg(d->cacheCenter.latString()).arg(d->cacheCenter.lonString()));
+        QTimer::singleShot(0, this, SLOT(slotSetCenterTimer()));
     }
+}
+
+void BackendGoogleMaps::slotSetCenterTimer()
+{
+    d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetCenter(%1, %2);")
+                             .arg(d->cacheCenter.latString())
+                             .arg(d->cacheCenter.lonString()));
 }
 
 bool BackendGoogleMaps::isReady() const
@@ -284,17 +292,18 @@ bool BackendGoogleMaps::isReady() const
 
 void BackendGoogleMaps::slotHTMLInitialized()
 {
-    d->isReady = true;
-    d->htmlWidget->runScript(QString::fromLatin1("kgeomapWidgetResized(%1, %2)").arg(d->htmlWidgetWrapper->width()).arg(d->htmlWidgetWrapper->height()));
+    d->isReady     = true;
+    d->htmlWidget->runScript(QString::fromLatin1("kgeomapWidgetResized(%1, %2)")
+                             .arg(d->htmlWidgetWrapper->width())
+                             .arg(d->htmlWidgetWrapper->height()));
 
     // TODO: call javascript directly here and update action availability in one shot
     setMapType(d->cacheMapType);
+    setShowScaleControl(d->cacheShowScaleControl);
     setShowMapTypeControl(d->cacheShowMapTypeControl);
     setShowNavigationControl(d->cacheShowNavigationControl);
-    setShowScaleControl(d->cacheShowNavigationControl);
-    setCenter(d->cacheCenter);
-    d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetZoom(%1);").arg(d->cacheZoom));
-    emit(signalBackendReadyChanged(backendName()));
+
+    emit signalBackendReadyChanged(backendName());
 }
 
 void BackendGoogleMaps::zoomIn()
@@ -349,7 +358,7 @@ void BackendGoogleMaps::addActionsToConfigurationMenu(QMenu* const configuration
     // map type actions:
     const QList<QAction*> mapTypeActions = d->mapTypeActionGroup->actions();
 
-    for (int i = 0; i < mapTypeActions.count(); ++i)
+    for (int i = 0 ; i < mapTypeActions.count() ; ++i)
     {
         QAction* const mapTypeAction = mapTypeActions.at(i);
         configurationMenu->addAction(mapTypeAction);
@@ -376,9 +385,9 @@ void BackendGoogleMaps::saveSettingsToGroup(KConfigGroup* const group)
         return;
 
     group->writeEntry("GoogleMaps Map Type",                getMapType());
+    group->writeEntry("GoogleMaps Show Scale Control",      d->cacheShowScaleControl);
     group->writeEntry("GoogleMaps Show Map Type Control",   d->cacheShowMapTypeControl);
     group->writeEntry("GoogleMaps Show Navigation Control", d->cacheShowNavigationControl);
-    group->writeEntry("GoogleMaps Show Scale Control",      d->cacheShowScaleControl);
 }
 
 void BackendGoogleMaps::readSettingsFromGroup(const KConfigGroup* const group)
@@ -388,11 +397,10 @@ void BackendGoogleMaps::readSettingsFromGroup(const KConfigGroup* const group)
     if (!group)
         return;
 
-    const QString mapType = group->readEntry("GoogleMaps Map Type", "ROADMAP");
-    setMapType(mapType);
+    setMapType(group->readEntry("GoogleMaps Map Type", "ROADMAP"));
+    setShowScaleControl(group->readEntry("GoogleMaps Show Scale Control", true));
     setShowMapTypeControl(group->readEntry("GoogleMaps Show Map Type Control", true));
     setShowNavigationControl(group->readEntry("GoogleMaps Show Navigation Control", true));
-    setShowScaleControl(group->readEntry("GoogleMaps Show Scale Control", true));
 }
 
 void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
@@ -418,7 +426,7 @@ void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
 
     QAbstractItemModel* const model = modelHelper->model();
 
-    for (int row = 0; row < model->rowCount(); ++row)
+    for (int row = 0 ; row < model->rowCount() ; ++row)
     {
         const QModelIndex currentIndex             = model->index(row, 0);
         const GeoModelHelper::PropertyFlags itemFlags = modelHelper->itemFlags(currentIndex);
@@ -437,8 +445,8 @@ void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
                 .arg(row)
                 .arg(currentCoordinates.latString())
                 .arg(currentCoordinates.lonString())
-                .arg(itemFlags.testFlag(GeoModelHelper::FlagMovable)?QLatin1String("true" ):QLatin1String("false"))
-                .arg(itemFlags.testFlag(GeoModelHelper::FlagSnaps)?QLatin1String("true" ):QLatin1String("false"))
+                .arg(itemFlags.testFlag(GeoModelHelper::FlagMovable) ? QLatin1String("true") : QLatin1String("false"))
+                .arg(itemFlags.testFlag(GeoModelHelper::FlagSnaps) ? QLatin1String("true") : QLatin1String("false"))
             );
 
         QPoint     markerCenterPoint;
@@ -460,12 +468,11 @@ void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
             }
         }
     }
-
 }
 void BackendGoogleMaps::updateMarkers()
 {
     // re-transfer all markers to the javascript-part:
-    for (int i = 0; i < s->ungroupedModels.count(); ++i)
+    for (int i = 0 ; i < s->ungroupedModels.count() ; ++i)
     {
         slotUngroupedModelChanged(i);
     }
@@ -484,11 +491,11 @@ void BackendGoogleMaps::slotHTMLEvents(const QStringList& events)
 
     // TODO: verify that the order of the events is still okay
     //       or that the order does not matter
-    for (QStringList::const_iterator it = events.constBegin(); it != events.constEnd(); ++it)
+    for (QStringList::const_iterator it = events.constBegin() ; it != events.constEnd() ; ++it)
     {
         const QString eventCode           = it->left(2);
         const QString eventParameter      = it->mid(2);
-        const QStringList eventParameters = eventParameter.split(QLatin1Char( '/' ));
+        const QStringList eventParameters = eventParameter.split(QLatin1Char('/'));
 
         if (eventCode == QLatin1String("MT"))
         {
@@ -530,7 +537,7 @@ void BackendGoogleMaps::slotHTMLEvents(const QStringList& events)
             GEOIFACE_ASSERT(clusterIndex >= 0);
             GEOIFACE_ASSERT(clusterIndex < s->clusterList.size());
 
-            if ((clusterIndex<0)||(clusterIndex > s->clusterList.size()))
+            if ((clusterIndex < 0) || (clusterIndex > s->clusterList.size()))
                 continue;
 
             // re-read the marker position:
@@ -565,7 +572,7 @@ void BackendGoogleMaps::slotHTMLEvents(const QStringList& events)
             GEOIFACE_ASSERT(clusterIndex >= 0);
             GEOIFACE_ASSERT(clusterIndex < s->clusterList.size());
 
-            if ((clusterIndex<0)||(clusterIndex>s->clusterList.size()))
+            if ((clusterIndex < 0) || (clusterIndex > s->clusterList.size()))
                 continue;
 
             // determine to which marker we snapped:
@@ -585,9 +592,9 @@ void BackendGoogleMaps::slotHTMLEvents(const QStringList& events)
 
             /// @todo emit signal here or later?
             GeoModelHelper* const modelHelper  = s->ungroupedModels.at(snapModelId);
-            QAbstractItemModel* const model = modelHelper->model();
+            QAbstractItemModel* const model    = modelHelper->model();
             QPair<int, QModelIndex> snapTargetIndex(snapModelId, model->index(snapMarkerId, 0));
-            emit(signalClustersMoved(QIntList() << clusterIndex, snapTargetIndex));
+            emit signalClustersMoved(QIntList() << clusterIndex, snapTargetIndex);
         }
         else if (eventCode == QLatin1String("cc"))
         {
@@ -600,10 +607,10 @@ void BackendGoogleMaps::slotHTMLEvents(const QStringList& events)
             if (!okay)
                 continue;
 
-            GEOIFACE_ASSERT(clusterIndex>=0);
+            GEOIFACE_ASSERT(clusterIndex >= 0);
             GEOIFACE_ASSERT(clusterIndex < s->clusterList.size());
 
-            if ((clusterIndex<0) || (clusterIndex > s->clusterList.size()))
+            if ((clusterIndex < 0) || (clusterIndex > s->clusterList.size()))
                 continue;
 
             clickedClusters << clusterIndex;
@@ -653,19 +660,19 @@ void BackendGoogleMaps::slotHTMLEvents(const QStringList& events)
     if (!movedClusters.isEmpty())
     {
         qCDebug(DIGIKAM_GEOIFACE_LOG) << movedClusters;
-        emit(signalClustersMoved(movedClusters, QPair<int, QModelIndex>(-1, QModelIndex())));
+        emit signalClustersMoved(movedClusters, QPair<int, QModelIndex>(-1, QModelIndex()));
     }
 
     if (!movedMarkers.isEmpty())
     {
-        qCDebug(DIGIKAM_GEOIFACE_LOG)<<movedMarkers;
-//         emit(signalSpecialMarkersMoved(movedMarkers));
+        qCDebug(DIGIKAM_GEOIFACE_LOG) << movedMarkers;
+//         emit signalSpecialMarkersMoved(movedMarkers);
     }
 
     if (!clickedClusters.isEmpty())
     {
-        qCDebug(DIGIKAM_GEOIFACE_LOG)<<clickedClusters;
-        emit(signalClustersClicked(clickedClusters));
+        qCDebug(DIGIKAM_GEOIFACE_LOG) << clickedClusters;
+        emit signalClustersClicked(clickedClusters);
     }
 
     // now process the buffered events:
@@ -674,13 +681,13 @@ void BackendGoogleMaps::slotHTMLEvents(const QStringList& events)
         updateZoomMinMaxCache();
     }
 
-    if (zoomProbablyChanged)
+    if (zoomProbablyChanged && !mapTypeChanged)
     {
         d->cacheZoom = d->htmlWidget->runScript(QLatin1String("kgeomapGetZoom();")).toInt();
-        emit(signalZoomChanged(QString::fromLatin1("googlemaps:%1").arg(d->cacheZoom)));
+        emit signalZoomChanged(QString::fromLatin1("googlemaps:%1").arg(d->cacheZoom));
     }
 
-    if (centerProbablyChanged)
+    if (centerProbablyChanged && !mapTypeChanged)
     {
         // there is nothing we can do if the coordinates are invalid
         /*const bool isValid = */d->htmlWidget->runScript2Coordinates(QLatin1String("kgeomapGetCenter();"), &(d->cacheCenter));
@@ -717,11 +724,14 @@ void BackendGoogleMaps::updateClusters()
     // TODO: only update clusters that have actually changed!
 
     // re-transfer all markers to the javascript-part:
-    const bool canMoveItems = s->modificationsAllowed && s->markerModel->tilerFlags().testFlag(AbstractMarkerTiler::FlagMovable) && !s->showThumbnails;
+    const bool canMoveItems = !s->showThumbnails &&
+                               s->modificationsAllowed &&
+                               s->markerModel->tilerFlags().testFlag(AbstractMarkerTiler::FlagMovable);
+
     d->htmlWidget->runScript(QLatin1String("kgeomapClearClusters();"));
     d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetIsInEditMode(%1);").arg(s->showThumbnails?QLatin1String("false" ):QLatin1String("true" )));
 
-    for (int currentIndex = 0; currentIndex < s->clusterList.size(); ++currentIndex)
+    for (int currentIndex = 0 ; currentIndex < s->clusterList.size() ; ++currentIndex)
     {
         const GeoIfaceCluster& currentCluster = s->clusterList.at(currentIndex);
 
@@ -864,8 +874,6 @@ void BackendGoogleMaps::setZoom(const QString& newZoom)
     GEOIFACE_ASSERT(myZoomString.startsWith(QLatin1String("googlemaps:")));
 
     const int myZoom           = myZoomString.mid(QString::fromLatin1("googlemaps:").length()).toInt();
-    qCDebug(DIGIKAM_GEOIFACE_LOG) << myZoom;
-
     d->cacheZoom               = myZoom;
 
     if (isReady())
@@ -892,29 +900,29 @@ int BackendGoogleMaps::getMarkerModelLevel()
     const int currentZoom = d->cacheZoom;
 
     int tileLevel = 0;
-         if (currentZoom== 0) { tileLevel = 1; }
-    else if (currentZoom== 1) { tileLevel = 1; }
-    else if (currentZoom== 2) { tileLevel = 1; }
-    else if (currentZoom== 3) { tileLevel = 2; }
-    else if (currentZoom== 4) { tileLevel = 2; }
-    else if (currentZoom== 5) { tileLevel = 3; }
-    else if (currentZoom== 6) { tileLevel = 3; }
-    else if (currentZoom== 7) { tileLevel = 3; }
-    else if (currentZoom== 8) { tileLevel = 4; }
-    else if (currentZoom== 9) { tileLevel = 4; }
-    else if (currentZoom==10) { tileLevel = 4; }
-    else if (currentZoom==11) { tileLevel = 4; }
-    else if (currentZoom==12) { tileLevel = 4; }
-    else if (currentZoom==13) { tileLevel = 4; }
-    else if (currentZoom==14) { tileLevel = 5; }
-    else if (currentZoom==15) { tileLevel = 5; }
-    else if (currentZoom==16) { tileLevel = 6; }
-    else if (currentZoom==17) { tileLevel = 7; }
-    else if (currentZoom==18) { tileLevel = 7; }
-    else if (currentZoom==19) { tileLevel = 8; }
-    else if (currentZoom==20) { tileLevel = 9; }
-    else if (currentZoom==21) { tileLevel = 9; }
-    else if (currentZoom==22) { tileLevel = 9; }
+         if (currentZoom ==  0) { tileLevel = 1; }
+    else if (currentZoom ==  1) { tileLevel = 1; }
+    else if (currentZoom ==  2) { tileLevel = 1; }
+    else if (currentZoom ==  3) { tileLevel = 2; }
+    else if (currentZoom ==  4) { tileLevel = 2; }
+    else if (currentZoom ==  5) { tileLevel = 3; }
+    else if (currentZoom ==  6) { tileLevel = 3; }
+    else if (currentZoom ==  7) { tileLevel = 3; }
+    else if (currentZoom ==  8) { tileLevel = 4; }
+    else if (currentZoom ==  9) { tileLevel = 4; }
+    else if (currentZoom == 10) { tileLevel = 4; }
+    else if (currentZoom == 11) { tileLevel = 4; }
+    else if (currentZoom == 12) { tileLevel = 4; }
+    else if (currentZoom == 13) { tileLevel = 4; }
+    else if (currentZoom == 14) { tileLevel = 5; }
+    else if (currentZoom == 15) { tileLevel = 5; }
+    else if (currentZoom == 16) { tileLevel = 6; }
+    else if (currentZoom == 17) { tileLevel = 7; }
+    else if (currentZoom == 18) { tileLevel = 7; }
+    else if (currentZoom == 19) { tileLevel = 8; }
+    else if (currentZoom == 20) { tileLevel = 9; }
+    else if (currentZoom == 21) { tileLevel = 9; }
+    else if (currentZoom == 22) { tileLevel = 9; }
     else
     {
         tileLevel = TileIndex::MaxLevel-1;
@@ -966,7 +974,7 @@ GeoCoordinates::PairList BackendGoogleMaps::getNormalizedBounds()
 
 void BackendGoogleMaps::updateActionAvailability()
 {
-    if ( (!d->activeState) || (!isReady()) )
+    if (!d->activeState || !isReady())
     {
         return;
     }
@@ -974,7 +982,7 @@ void BackendGoogleMaps::updateActionAvailability()
     const QString currentMapType         = getMapType();
     const QList<QAction*> mapTypeActions = d->mapTypeActionGroup->actions();
 
-    for (int i = 0; i < mapTypeActions.size(); ++i)
+    for (int i = 0 ; i < mapTypeActions.size() ; ++i)
     {
         mapTypeActions.at(i)->setChecked(mapTypeActions.at(i)->data().toString()==currentMapType);
     }
@@ -1004,7 +1012,7 @@ void BackendGoogleMaps::slotThumbnailAvailableForIndex(const QVariant& index, co
         return;
 
     // find the cluster which is represented by this index:
-    for (int i = 0; i < s->clusterList.count(); ++i)
+    for (int i = 0 ; i < s->clusterList.count() ; ++i)
     {
         // TODO: use the right sortkey
         // TODO: let the representativeChooser handle the index comparison
@@ -1097,7 +1105,9 @@ bool BackendGoogleMaps::eventFilter(QObject* object, QEvent* event)
                 //       therefore we adjust it manually here
                 if (d->isReady)
                 {
-                    d->htmlWidget->runScript(QString::fromLatin1("kgeomapWidgetResized(%1, %2)").arg(d->htmlWidgetWrapper->width()).arg(d->htmlWidgetWrapper->height()));
+                    d->htmlWidget->runScript(QString::fromLatin1("kgeomapWidgetResized(%1, %2)")
+                                             .arg(d->htmlWidgetWrapper->width())
+                                             .arg(d->htmlWidgetWrapper->height()));
                 }
             }
         }
@@ -1163,7 +1173,7 @@ void BackendGoogleMaps::setActive(const bool state)
 
     if (oldState != state)
     {
-        if ((!state) && d->htmlWidgetWrapper)
+        if (!state && d->htmlWidgetWrapper)
         {
             // we should share our widget in the list of widgets in the global object
             GeoIfaceInternalWidgetInfo info;
@@ -1188,11 +1198,13 @@ void BackendGoogleMaps::setActive(const bool state)
             go->removeMyInternalWidgetFromPool(this);
 
             /// @todo re-cluster, update markers?
-            setCenter(d->cacheCenter);
             setMapType(d->cacheMapType);
+            setShowScaleControl(d->cacheShowScaleControl);
             setShowMapTypeControl(d->cacheShowMapTypeControl);
             setShowNavigationControl(d->cacheShowNavigationControl);
-            setShowScaleControl(d->cacheShowScaleControl);
+
+            setCenter(d->cacheCenter);
+            d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetZoom(%1);").arg(d->cacheZoom));
 
             /// @TODO update tracks more gently
             slotTracksChanged(d->trackChangeTracker);
@@ -1224,7 +1236,7 @@ void BackendGoogleMaps::releaseWidget(GeoIfaceInternalWidgetInfo* const info)
     info->state          = GeoIfaceInternalWidgetInfo::InternalWidgetReleased;
     d->isReady           = false;
 
-    emit(signalBackendReadyChanged(backendName()));
+    emit signalBackendReadyChanged(backendName());
 }
 
 void BackendGoogleMaps::mapWidgetDocked(const bool state)
@@ -1232,7 +1244,8 @@ void BackendGoogleMaps::mapWidgetDocked(const bool state)
     if (d->widgetIsDocked != state)
     {
         GeoIfaceGlobalObject* const go = GeoIfaceGlobalObject::instance();
-        go->updatePooledWidgetState(d->htmlWidgetWrapper, state ? GeoIfaceInternalWidgetInfo::InternalWidgetStillDocked : GeoIfaceInternalWidgetInfo::InternalWidgetUndocked);
+        go->updatePooledWidgetState(d->htmlWidgetWrapper, state ? GeoIfaceInternalWidgetInfo::InternalWidgetStillDocked
+                                                                : GeoIfaceInternalWidgetInfo::InternalWidgetUndocked);
     }
 
     d->widgetIsDocked = state;
@@ -1253,9 +1266,9 @@ void BackendGoogleMaps::deleteInfoFunction(GeoIfaceInternalWidgetInfo* const inf
 
 void BackendGoogleMaps::storeTrackChanges(const TrackManager::TrackChanges trackChanges)
 {
-    for (int i = 0; i < d->trackChangeTracker.count(); ++i)
+    for (int i = 0 ; i < d->trackChangeTracker.count() ; ++i)
     {
-        if (d->trackChangeTracker.at(i).first==trackChanges.first)
+        if (d->trackChangeTracker.at(i).first == trackChanges.first)
         {
             d->trackChangeTracker[i].second = TrackManager::ChangeFlag(d->trackChangeTracker.at(i).second | trackChanges.second);
             return;
@@ -1338,18 +1351,15 @@ void BackendGoogleMaps::slotTracksChanged(const QList<TrackManager::TrackChanges
                 continue;
             }
 
-            const QString createTrackScript =
-                    QString::fromLatin1(
-                            "kgeomapCreateTrack(%1,'%2');"
-                        )
-                        .arg(track.id)
-                        .arg(track.color.name()); // QColor::name() returns #ff00ff
+            const QString createTrackScript = QString::fromLatin1("kgeomapCreateTrack(%1,'%2');")
+                                              .arg(track.id)
+                                              .arg(track.color.name()); // QColor::name() returns #ff00ff
             d->htmlWidget->runScript(createTrackScript);
 
             QDateTime t1                    = QDateTime::currentDateTime();
             const int numPointsToPassAtOnce = 1000;
 
-            for (int coordIdx = 0; coordIdx < track.points.count(); coordIdx += numPointsToPassAtOnce)
+            for (int coordIdx = 0 ; coordIdx < track.points.count() ; coordIdx += numPointsToPassAtOnce)
             {
                 /// @TODO Even by passing only a few points each time, we can
                 ///       block the UI for a long time. Instead, it may be better
@@ -1359,7 +1369,7 @@ void BackendGoogleMaps::slotTracksChanged(const QList<TrackManager::TrackChanges
             }
 
             QDateTime t2 = QDateTime::currentDateTime();
-            qCDebug(DIGIKAM_GEOIFACE_LOG)<<track.url.fileName()<<t1.msecsTo(t2);
+            qCDebug(DIGIKAM_GEOIFACE_LOG) << track.url.fileName() << t1.msecsTo(t2);
         }
     }
 }
@@ -1371,12 +1381,12 @@ void BackendGoogleMaps::addPointsToTrack(const quint64 trackId, TrackManager::Tr
     jsonBuilder << '[';
     int lastPoint = track.count()-1;
 
-    if (nPoints>0)
+    if (nPoints > 0)
     {
         lastPoint = qMin(firstPoint + nPoints - 1, track.count()-1);
     }
 
-    for (int coordIdx = firstPoint; coordIdx <= lastPoint; ++coordIdx)
+    for (int coordIdx = firstPoint ; coordIdx <= lastPoint ; ++coordIdx)
     {
         GeoCoordinates const& coordinates = track.at(coordIdx).coordinates;
 
@@ -1409,6 +1419,7 @@ void BackendGoogleMaps::slotTrackVisibilityChanged(const bool newState)
         {
             trackChanges << TrackManager::TrackChanges(t.id, TrackManager::ChangeAdd);
         }
+
         slotTracksChanged(trackChanges);
     }
     else if (d->htmlWidget)

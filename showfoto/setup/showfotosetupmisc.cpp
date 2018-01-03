@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : setup Misc tab.
  *
- * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2008 by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C)      2014 by Mohamed Anwer <m dot anwer at gmx dot com>
  *
@@ -61,8 +61,9 @@ public:
         sidebarTypeLabel(0),
         applicationStyleLabel(0),
         iconThemeLabel(0),
-        itemCenter(0),
         showSplash(0),
+        nativeFileDialog(0),
+        itemCenter(0),
         showMimeOverImage(0),
         showCoordinates(0),
         sortReverse(0),
@@ -78,8 +79,9 @@ public:
     QLabel*              applicationStyleLabel;
     QLabel*              iconThemeLabel;
 
-    QCheckBox*           itemCenter;
     QCheckBox*           showSplash;
+    QCheckBox*           nativeFileDialog;
+    QCheckBox*           itemCenter;
     QCheckBox*           showMimeOverImage;
     QCheckBox*           showCoordinates;
     QCheckBox*           sortReverse;
@@ -146,8 +148,9 @@ SetupMisc::SetupMisc(QWidget* const parent)
     QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), panel);
     QVBoxLayout* const gLayout5     = new QVBoxLayout();
 
-    d->itemCenter        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
-    d->showSplash        = new QCheckBox(i18n("&Show splash screen at startup"),            abOptionsGroup);
+    d->showSplash       = new QCheckBox(i18n("&Show splash screen at startup"),            abOptionsGroup);
+    d->nativeFileDialog = new QCheckBox(i18n("Use file dialogs from the system"),          abOptionsGroup);
+    d->itemCenter       = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
 
     DHBox* const tabStyleHbox = new DHBox(abOptionsGroup);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
@@ -202,8 +205,9 @@ SetupMisc::SetupMisc(QWidget* const parent)
         }
     }
 
-    gLayout5->addWidget(d->itemCenter);
     gLayout5->addWidget(d->showSplash);
+    gLayout5->addWidget(d->nativeFileDialog);
+    gLayout5->addWidget(d->itemCenter);
     gLayout5->addWidget(tabStyleHbox);
     gLayout5->addWidget(appStyleHbox);
     gLayout5->addWidget(iconThemeHbox);
@@ -230,8 +234,9 @@ SetupMisc::~SetupMisc()
 
 void SetupMisc::readSettings()
 {
-    d->itemCenter->setChecked(d->settings->getItemCenter());
     d->showSplash->setChecked(d->settings->getShowSplash());
+    d->nativeFileDialog->setChecked(d->settings->getNativeFileDialog());
+    d->itemCenter->setChecked(d->settings->getItemCenter());
     d->showMimeOverImage->setChecked(d->settings->getShowFormatOverThumbnail());
     d->showCoordinates->setChecked(d->settings->getShowCoordinates());
     d->sidebarType->setCurrentIndex(d->settings->getRightSideBarStyle());
@@ -245,8 +250,9 @@ void SetupMisc::readSettings()
 
 void SetupMisc::applySettings()
 {
-    d->settings->setItemCenter(d->itemCenter->isChecked());
     d->settings->setShowSplash(d->showSplash->isChecked());
+    d->settings->setNativeFileDialog(d->nativeFileDialog->isChecked());
+    d->settings->setItemCenter(d->itemCenter->isChecked());
     d->settings->setShowFormatOverThumbnail(d->showMimeOverImage->isChecked());
     d->settings->setShowCoordinates(d->showCoordinates->isChecked());
     d->settings->setRightSideBarStyle(d->sidebarType->currentIndex());

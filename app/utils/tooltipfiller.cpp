@@ -6,7 +6,7 @@
  * Date        : 2008-12-10
  * Description : album icon view tool tip
  *
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -677,7 +677,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
 
         const QHash<QString, QVariant>& params = action.parameters();
         QList<QString> keys                    = params.keys();
-        qSort(keys);
+        std::sort(keys.begin(), keys.end());
 
         foreach(const QString& key, keys)
         {

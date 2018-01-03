@@ -6,7 +6,7 @@
  * Date        : 2013-04-29
  * Description : digiKam XML GUI window
  *
- * Copyright (C) 2013-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -145,6 +145,10 @@ public:
      */
     void createSendByMailAction();
 
+    /** Create Media Server action to share through DLNA.
+     */
+    void createMediaServerAction();
+    
     /** Create Ksane action to import from scanner.
      */
     void createKSaneAction();
@@ -209,6 +213,7 @@ protected:
     QAction*     m_expoBlendingAction;
     QAction*     m_panoramaAction;
     QAction*     m_videoslideshowAction;
+    QAction*     m_mediaServerAction;
     DLogoAction* m_animLogo;
 
 #ifdef HAVE_KSANE
@@ -313,6 +318,9 @@ private Q_SLOTS:
     // Called by Exposure Blending tool.
     virtual void slotExpoBlending()            {};
 
+    // Called by Media Server tool.
+    virtual void slotMediaServer()             {};
+    
 private:
 
     /** Used by slotToggleFullScreen() to switch tool-bar visibility in managed window

@@ -49,6 +49,7 @@ public:
 
 private Q_SLOTS:
 
+    void slotDone();
     void slotProcess();
     void slotMessage(const QString&, bool);
 

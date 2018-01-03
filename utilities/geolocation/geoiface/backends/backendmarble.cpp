@@ -6,7 +6,7 @@
  * Date        : 2009-12-08
  * Description : Marble-backend for geolocation interface
  *
- * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2014      by Justus Schwartz <justus at gmx dot li>
  *
@@ -46,6 +46,7 @@
 #include <marble/MarbleWidget.h>
 #include <marble/ViewportParams.h>
 #include <marble/AbstractFloatItem.h>
+#include <marble/MarbleWidgetInputHandler.h>
 
 // Local includes
 
@@ -220,6 +221,8 @@ QWidget* BackendMarble::mapWidget()
 
             d->marbleWidget->addLayer(d->bmLayer);
         }
+        // hide Marble widget right button context menu
+        d->marbleWidget->inputHandler()->setMouseButtonPopupEnabled(Qt::RightButton, false);
 
         d->marbleWidget->installEventFilter(this);
 
@@ -312,7 +315,8 @@ void BackendMarble::createActions()
     d->actionGroupMapTheme = new QActionGroup(this);
     d->actionGroupMapTheme->setExclusive(true);
 
-    connect(d->actionGroupMapTheme, &QActionGroup::triggered, this, &BackendMarble::slotMapThemeActionTriggered);
+    connect(d->actionGroupMapTheme, &QActionGroup::triggered,
+            this, &BackendMarble::slotMapThemeActionTriggered);
 
     QAction* const actionAtlas = new QAction(d->actionGroupMapTheme);
     actionAtlas->setCheckable(true);
@@ -328,7 +332,8 @@ void BackendMarble::createActions()
     d->actionGroupProjection = new QActionGroup(this);
     d->actionGroupProjection->setExclusive(true);
 
-    connect(d->actionGroupProjection, &QActionGroup::triggered, this, &BackendMarble::slotProjectionActionTriggered);
+    connect(d->actionGroupProjection, &QActionGroup::triggered,
+            this, &BackendMarble::slotProjectionActionTriggered);
 
     QAction* const actionSpherical = new QAction(d->actionGroupProjection);
     actionSpherical->setCheckable(true);
@@ -1063,7 +1068,7 @@ void BackendMarble::setZoom(const QString& newZoom)
 
     const int myZoom           = myZoomString.mid(QString::fromLatin1("marble:").length()).toInt();
     d->cacheZoom               = myZoom;
-    d->marbleWidget->zoomView(myZoom);
+    d->marbleWidget->setZoom(myZoom);
 }
 
 QString BackendMarble::getZoom() const

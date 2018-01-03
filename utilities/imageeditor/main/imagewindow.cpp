@@ -7,7 +7,7 @@
  * Description : digiKam image editor GUI
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -130,6 +130,7 @@
 #include "expoblendingmanager.h"
 #include "mailwizard.h"
 #include "advprintwizard.h"
+#include "dmediaserverdlg.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -235,7 +236,6 @@ void ImageWindow::closeEvent(QCloseEvent* e)
         e->ignore();
         return;
     }
-
 
     // put right side bar in a defined state
     emit signalNoCurrentItem();
@@ -511,6 +511,7 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
 
     d->currentImageInfo = ImageInfo();
     d->currentImageInfo = imageInfoCurrent;
+
     // Note: Addition is asynchronous, indexes not yet available
     // We enable thumbbar as soon as indexes are available
     // If not, we load imageInfoCurrent, then the index 0, then again imageInfoCurrent
@@ -778,7 +779,6 @@ void ImageWindow::slotChanged()
         return;
     }
 
-
     DImg* const img           = m_canvas->interface()->getImg();
     DImageHistory history     = m_canvas->interface()->getImageHistory();
     DImageHistory redoHistory = m_canvas->interface()->getImageHistoryOfFullRedo();
@@ -979,6 +979,7 @@ void ImageWindow::saveIsComplete()
     // put image in cache, the LoadingCacheInterface cares for the details
     LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
     ScanController::instance()->scannedInfo(m_savingContext.destinationURL.toLocalFile());
+
     // reset the orientation flag in the database
     DMetadata meta(m_canvas->currentImage().getMetadata());
     d->currentImageInfo.setOrientation(meta.getImageOrientation());
@@ -1016,8 +1017,8 @@ void ImageWindow::saveAsIsComplete()
         return;
     }
 
-    if (CollectionManager::instance()->albumRootPath(m_savingContext.srcURL).isNull()
-        || CollectionManager::instance()->albumRootPath(m_savingContext.destinationURL).isNull())
+    if (CollectionManager::instance()->albumRootPath(m_savingContext.srcURL).isNull() ||
+        CollectionManager::instance()->albumRootPath(m_savingContext.destinationURL).isNull())
     {
         // not in-collection operation - nothing to do
         return;
@@ -1041,6 +1042,7 @@ void ImageWindow::saveAsIsComplete()
     }
 
     QStringList derivedFilePaths;
+    
     if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
     {
         derivedFilePaths = m_savingContext.versionFileOperation.allFilePaths();
@@ -1049,6 +1051,7 @@ void ImageWindow::saveAsIsComplete()
     {
         derivedFilePaths << m_savingContext.destinationURL.toLocalFile();
     }
+
     // Will ensure files are scanned, and then copy attributes in a thread
     FileActionMngr::instance()->copyAttributes(sourceInfo, derivedFilePaths);
 
@@ -1750,7 +1753,7 @@ void ImageWindow::slotOpenOriginal()
     foreach(const HistoryImageId& id, originals)
     {
         QUrl url = QUrl::fromLocalFile(id.m_filePath);
-        url = url.adjusted(QUrl::StripTrailingSlash);
+        url      = url.adjusted(QUrl::StripTrailingSlash);
         url.setPath(url.path() + QLatin1Char('/') + (id.m_fileName));
         imageInfos << ImageInfo::fromUrl(url);
     }
@@ -1860,7 +1863,6 @@ void ImageWindow::slotRightSideBarActivateComments()
     d->rightSideBar->imageDescEditTab()->setFocusToCommentsEdit();
 }
 
-
 void ImageWindow::slotRightSideBarActivateAssignedTags()
 {
     d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
@@ -1916,7 +1918,7 @@ void ImageWindow::slotEditGeolocation()
 
 void ImageWindow::slotEditMetadata()
 {
-    if ( d->currentImageInfo.isNull() )
+    if (d->currentImageInfo.isNull())
         return;
 
     QUrl url = d->currentImageInfo.fileUrl();
@@ -1978,6 +1980,17 @@ void ImageWindow::slotSendByMail()
 void ImageWindow::slotPrintCreator()
 {
     AdvPrintWizard w(this, new DBInfoIface(this, d->thumbBar->allUrls()));
+    w.exec();
+}
+
+void ImageWindow::slotMediaServer()
+{
+    DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);
+    // NOTE: We overwrite the default albums chooser object name for load save check items state between sessions.
+    // The goal is not mix these settings with other export tools.
+    iface->setObjectName(QLatin1String("SetupMediaServerIface"));
+
+    DMediaServerDlg w(this, iface);
     w.exec();
 }
 

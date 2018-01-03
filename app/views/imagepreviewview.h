@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
@@ -39,6 +39,7 @@ class QDragEnterEvent;
 namespace Digikam
 {
 
+class Album;
 class LoadingDescription;
 
 class ImagePreviewView : public GraphicsDImgView
@@ -55,7 +56,7 @@ public:
 
 public:
 
-    explicit ImagePreviewView(QWidget* const parent, Mode mode=IconViewPreview);
+    explicit ImagePreviewView(QWidget* const parent, Mode mode=IconViewPreview, Album* currAlbum = 0);
     ~ImagePreviewView();
 
     void setImageInfo(const ImageInfo& info     = ImageInfo(),

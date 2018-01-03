@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018 by Gilles Caulier, <caulier dot gilles at gmail dot com>
 # Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 # Copyright (c) 2015      by Mohamed Anwer, <m dot anwer at gmx dot com>
 #
@@ -118,7 +118,7 @@ if(ENABLE_DBUS)
        )
 endif()
 
-if(MARBLE_FOUND)
+if(Marble_FOUND)
     set(libdatabase_SRCS
         ${libdatabase_SRCS}
         item/imagegps.cpp

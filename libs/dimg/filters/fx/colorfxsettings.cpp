@@ -393,6 +393,14 @@ QString ColorFXSettings::translateLuts(const QString& name) const
     {
         return i18n("Punch");
     }
+    else if (name.toLower() == QLatin1String("summer"))
+    {
+        return i18n("Summer");
+    }
+    else if (name.toLower() == QLatin1String("tokyo"))
+    {
+        return i18n("Tokyo");
+    }
     else if (name.toLower() == QLatin1String("vintage"))
     {
         return i18n("Vintage");

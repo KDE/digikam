@@ -7,7 +7,7 @@
  * Description : Fuzzy search sidebar tab contents.
  *
  * Copyright (C) 2016-2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef FUZZYSEARCHVIEW_H
-#define FUZZYSEARCHVIEW_H
+#ifndef FUZZY_SEARCH_VIEW_H
+#define FUZZY_SEARCH_VIEW_H
 
 // Qt includes
 
@@ -121,7 +121,7 @@ private:
     void setColor(QColor c);
 
     QWidget* setupFindSimilarPanel() const;
-    QWidget* setupSketchPanel() const;
+    QWidget* setupSketchPanel()      const;
     void     setupConnections();
 
 private:
@@ -132,4 +132,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // FUZZYSEARCHVIEW_H
+#endif // FUZZY_SEARCH_VIEW_H

@@ -398,7 +398,7 @@ int FaceTags::personParentTag()
         QList<int> mosttoplevelTags = tiers.values(tiers.begin().key());
 
         // as a pretty weak criterion, take the largest id which usually corresponds to the latest tag creation.
-        qSort(mosttoplevelTags);
+        std::sort(mosttoplevelTags.begin(), mosttoplevelTags.end());
         return TagsCache::instance()->parentTag(mosttoplevelTags.last());
     }
 

@@ -45,7 +45,7 @@ public:
     static QPointer<MetadataHubMngr> internalPtr;
     static bool                      isCreated();
 
-    void addPending(ImageInfo& info);
+    void addPending(const ImageInfo& info);
     void requestShutDown();
 
 Q_SIGNALS:

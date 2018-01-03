@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : core image editor GUI implementation private data.
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EDITORWINDOWPRIVATE_H
-#define EDITORWINDOWPRIVATE_H
+#ifndef EDITOR_WINDOW_PRIVATE_H
+#define EDITOR_WINDOW_PRIVATE_H
 
 // Qt includes
 
@@ -123,6 +123,7 @@ public:
         redeyeAction(0),
         restorationAction(0),
         blurAction(0),
+        healCloneAction(0),
         sharpenAction(0),
         noiseReductionAction(0),
         localContrastAction(0),
@@ -242,6 +243,7 @@ public:
     QAction*                     redeyeAction;
     QAction*                     restorationAction;
     QAction*                     blurAction;
+    QAction*                     healCloneAction;
     QAction*                     sharpenAction;
     QAction*                     noiseReductionAction;
     QAction*                     localContrastAction;
@@ -378,30 +380,6 @@ void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, 
     menuAction->addAction(action);
 }
 
-// -----------------------------------------------------------------
-
-class EditorToolPassivePopup : public DNotificationPopup
-{
-public:
-
-    explicit EditorToolPassivePopup(QWidget* const parent)
-        : DNotificationPopup(parent),
-          m_parent(parent)
-    {
-    }
-
-protected:
-
-    virtual void positionSelf()
-    {
-        move(m_parent->x() + 30, m_parent->y() + 30);
-    }
-
-private:
-
-    QWidget* m_parent;
-};
-
 }  // namespace Digikam
 
-#endif /* EDITORWINDOWPRIVATE_H */
+#endif // EDITOR_WINDOW_PRIVATE_H

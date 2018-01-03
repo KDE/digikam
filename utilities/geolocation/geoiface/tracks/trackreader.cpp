@@ -6,7 +6,7 @@
  * Date        : 2006-09-19
  * Description : Track file reader
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -330,7 +330,7 @@ TrackReader::TrackReadResult TrackReader::loadTrackFile(const QUrl& url)
     }
 
     // the correlation algorithm relies on sorted data, therefore sort now
-    qSort(parsedData.track.points.begin(), parsedData.track.points.end(), TrackManager::TrackPoint::EarlierThan);
+    std::sort(parsedData.track.points.begin(), parsedData.track.points.end(), TrackManager::TrackPoint::EarlierThan);
 
     return parsedData;
 }

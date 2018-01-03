@@ -10,7 +10,7 @@
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
  * Copyright (C) 2011      by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2012      by Angelo Naselli <anaselli at linux dot it>
- * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,12 +31,17 @@
 #include "digikam_debug.h"
 #include "calsystem.h"
 
-// KCalCore includes
 
 #ifdef HAVE_KCALENDAR
+    // KCalCore includes
+
 #   include <kcalcore/icalformat.h>
 #   include <kcalcore/filestorage.h>
 #   include <kcalcore/memorycalendar.h>
+
+    // Qt includes
+
+#   include <QTimeZone>
 #endif // HAVE_KCALENDAR
 
 namespace Digikam
@@ -290,7 +295,13 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
         return;
     }
 
+#ifdef HAVE_KCALENDAR_QDATETIME
+    KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QTimeZone::utc()));
+    using DateTime = QDateTime;
+#else
     KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QString::fromLatin1("UTC")));
+    using DateTime = KDateTime;
+#endif
     KCalCore::FileStorage::Ptr fileStorage(new KCalCore::FileStorage(memCal, url.toLocalFile(), new KCalCore::ICalFormat));
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Loading calendar from file " << url.toLocalFile();
@@ -308,9 +319,9 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
         qLast  = calSys.date(params.year + 1, 1, 1);
         qLast  = qLast.addDays(-1);
 
-        KDateTime dtFirst(qFirst);
-        KDateTime dtLast(qLast);
-        KDateTime dtCurrent;
+        DateTime dtFirst(qFirst, QTime(0, 0));
+        DateTime dtLast(qLast, QTime(0, 0));
+        DateTime dtCurrent;
 
         int counter                = 0;
         KCalCore::Event::List list = memCal->rawEvents(qFirst, qLast);

@@ -291,7 +291,8 @@ bool AdvPrintPhotoPage::validatePage()
 
 bool AdvPrintPhotoPage::isComplete() const
 {
-    return (!d->photoUi->mPrintList->imageUrls().empty());
+    return (!d->photoUi->mPrintList->imageUrls().isEmpty() ||
+            !d->wizard->itemsList().isEmpty());
 }
 
 QPrinter* AdvPrintPhotoPage::printer() const
@@ -656,7 +657,7 @@ void AdvPrintPhotoPage::slotRemovingItems(const QList<int>& list)
     d->photoUi->mPrintList->blockSignals(false);
     d->photoUi->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
 
-    if (d->settings->photos.empty())
+    if (d->settings->photos.isEmpty())
     {
         // No photos => disabling next button (e.g. crop page)
         setComplete(false);
@@ -1102,7 +1103,7 @@ void AdvPrintPhotoPage::slotPageSetup()
 
 void AdvPrintPhotoPage::manageBtnPreviewPage()
 {
-    if (d->settings->photos.empty())
+    if (d->settings->photos.isEmpty())
     {
         d->photoUi->BtnPreviewPageDown->setEnabled(false);
         d->photoUi->BtnPreviewPageUp->setEnabled(false);

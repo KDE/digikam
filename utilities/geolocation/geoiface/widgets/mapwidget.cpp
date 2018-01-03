@@ -6,7 +6,7 @@
  * Date        : 2009-12-01
  * Description : world map widget library
  *
- * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C)      2014 by Justus Schwartz <justus at gmx dot li>
  *
@@ -519,15 +519,16 @@ bool MapWidget::setBackend(const QString& backendName)
 
 void MapWidget::applyCacheToBackend()
 {
-    if ( (!currentBackendReady()) || (!s->activeState) )
+    if ((!currentBackendReady()) || (!s->activeState))
     {
         return;
     }
 
-    setCenter(d->cacheCenterCoordinate);
     /// @todo Only do this if the zoom was changed!
     qCDebug(DIGIKAM_GEOIFACE_LOG) << d->cacheZoom;
+
     setZoom(d->cacheZoom);
+    setCenter(d->cacheCenterCoordinate);
     d->currentBackend->mouseModeChanged();
     d->currentBackend->regionSelectionChanged();
 }
@@ -958,7 +959,7 @@ void MapWidget::slotUpdateActionsEnabled()
 
 void MapWidget::slotChangeBackend(QAction* action)
 {
-    GEOIFACE_ASSERT(action!=0);
+    GEOIFACE_ASSERT(action != 0);
 
     if (!action)
         return;
@@ -1249,7 +1250,7 @@ void MapWidget::slotClustersMoved(const QIntList& clusterIndices,
         // a not-selected marker was moved. update all of its items:
         const GeoIfaceCluster& cluster = s->clusterList.at(clusterIndex);
 
-        for (int i=0; i<cluster.tileIndicesList.count(); ++i)
+        for (int i = 0 ; i < cluster.tileIndicesList.count() ; ++i)
         {
             const TileIndex tileIndex = cluster.tileIndicesList.at(i);
             movedTileIndices << tileIndex;
@@ -1302,7 +1303,7 @@ void MapWidget::removeUngroupedModel(GeoModelHelper* const modelHelper)
 
     const int modelIndex = s->ungroupedModels.indexOf(modelHelper);
 
-    if (modelIndex<0)
+    if (modelIndex < 0)
         return;
 
     /// @todo monitor all model signals!
@@ -1850,7 +1851,7 @@ QPixmap MapWidget::getDecoratedPixmapForCluster(const int clusterId,
     const int pixmapDiameter = 2*(circleRadius+1);
     QPixmap circlePixmap(pixmapDiameter, pixmapDiameter);
     /// @todo cache this somehow
-    circlePixmap.fill(QColor(0,0,0,0));
+    circlePixmap.fill(QColor(0, 0, 0, 0));
 
     QPainter circlePainter(&circlePixmap);
     circlePainter.setPen(circlePen);
@@ -2235,7 +2236,7 @@ void MapWidget::setShowPlaceholderWidget(const bool state)
     }
     else
     {
-        if (d->stackedLayout->count()>1)
+        if (d->stackedLayout->count() > 1)
         {
             d->stackedLayout->setCurrentIndex(1);
         }
@@ -2247,7 +2248,7 @@ void MapWidget::setShowPlaceholderWidget(const bool state)
  */
 void MapWidget::setMapWidgetInFrame(QWidget* const widgetForFrame)
 {
-    if (d->stackedLayout->count()>1)
+    if (d->stackedLayout->count() > 1)
     {
         // widget 0 is the status widget, widget 1 is the map widget
         if (d->stackedLayout->widget(1) == widgetForFrame)
@@ -2265,7 +2266,7 @@ void MapWidget::setMapWidgetInFrame(QWidget* const widgetForFrame)
 
 void MapWidget::removeMapWidgetFromFrame()
 {
-    if (d->stackedLayout->count()>1)
+    if (d->stackedLayout->count() > 1)
     {
         d->stackedLayout->removeWidget(d->stackedLayout->widget(1));
     }

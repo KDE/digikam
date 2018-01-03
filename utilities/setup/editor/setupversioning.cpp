@@ -7,7 +7,7 @@
  * Description : setup tab for image versioning
  *
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
- * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -122,11 +122,11 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     d->enableNonDestructive->setText(i18n("Enable Non-Destructive Editing and Versioning"));
     d->enableNonDestructive->setToolTip(i18nc("@info:tooltip",
                                               "Enable support for non-destructive editing and image versioning"));
-    d->enableNonDestructive->setWhatsThis(i18nc("@info:whatsthis",
-                                                "<qt><para><interface>Non-Destructive Editing and Versioning</interface> "
+    d->enableNonDestructive->setWhatsThis(xi18nc("@info:whatsthis",
+                                                "<para><interface>Non-Destructive Editing and Versioning</interface> "
                                                 "allows different versions of an image to be created, "
                                                 "whilst always preserving the original image.</para> "
-                                                "<para> All steps of the editing history are recorded and can be accessed later.</para></qt>"));
+                                                "<para> All steps of the editing history are recorded and can be accessed later.</para>"));
 
     QLabel* const iconLabel = new QLabel;
     iconLabel->setPixmap(QIcon::fromTheme(QLatin1String("view-catalog")).pixmap(32));
@@ -159,45 +159,45 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     d->formatBox->insertSeparator(1);
     d->formatBox->insertSeparator(4);
 
-    d->formatBox->setWhatsThis(i18nc("@info:whatsthis",
-                                     "<qt><title>Default File Format for Saving</title>"
+    d->formatBox->setWhatsThis(xi18nc("@info:whatsthis",
+                                     "<title>Default File Format for Saving</title>"
                                      "<para>Select the file format in which edited images are saved automatically. "
                                      "Format-specific options, like compression settings, "
                                      "can be configured on the <interface>Format Options</interface> tab.</para>"
                                      "<para><list>"
                                      // Lossy: JPEG
                                      "<item>"
-                                     "<b>JPEG</b>: "
+                                     "<emphasis strong='true'>JPEG</emphasis>: "
                                      "JPEG is the most commonly used file format, but it employs lossy compression, "
                                      "which means that with each saving operation some image information will be irreversibly lost. "
                                      "JPEG offers a good compression rate, resulting in smaller files. "
                                      "</item>"
                                      // Traditional lossless: PNG, TIFF
                                      "<item>"
-                                     "<b>PNG</b>: "
+                                     "<emphasis strong='true'>PNG</emphasis>: "
                                      "A widely used format employing lossless compression. "
                                      "The files, though, will be larger because PNG does not achieve very good compression rates."
                                      "</item>"
                                      "<item>"
-                                     "<b>TIFF</b>: "
+                                     "<emphasis strong='true'>TIFF</emphasis>: "
                                      "A commonly used format, usually uncompressed or with modest lossless compression. "
                                      "Resulting files will be large, but without quality loss due to compression. "
                                      "</item>"
                                      // Modern lossless: PGF, JPEG 2000
                                      "<item>"
-                                     "<b>PGF</b>: "
+                                     "<emphasis strong='true'>PGF</emphasis>: "
                                      "This is a technically superior file format offering good compression rates "
                                      "with either lossy or lossless compression. "
                                      "But it is not yet widely used and supported, so your friends may not directly be able to open these files, "
                                      "and you may not be able to directly publish them on the web. "
                                      "</item>"
                                      "<item>"
-                                     "<b>JPEG 2000</b>: "
+                                     "<emphasis strong='true'>JPEG 2000</emphasis>: "
                                      "JPEG 2000 is similar to PGF. Loading or saving is slower, the compression rate is better, "
                                      "and the format more widely supported, though still not comparable "
                                      "to the tradition formats JPEG, PNG or TIFF. "
                                      "</item>"
-                                     "</list></para></qt>"));
+                                     "</list></para>"));
 
     d->infoFormat = new QPushButton;
     d->infoFormat->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
@@ -253,8 +253,8 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     d->snapshotGB                     = new QGroupBox;//(i18nc("@title:group", "Intermediate Version Snapshots"));
     QGridLayout* const snapshotLayout = new QGridLayout;
 
-    QString snapshotWhatsThis = i18nc("@info:whatsthis",
-                                      "<qt><para>First and foremost, the <emphasis>original image will never be overwritten.</emphasis> "
+    QString snapshotWhatsThis = xi18nc("@info:whatsthis",
+                                      "<para>First and foremost, the <emphasis>original image will never be overwritten.</emphasis> "
                                       "Instead, when an image is edited, a new file is created: "
                                       "The <interface>current version</interface>.</para> "
                                       "<para>You can also create multiple <interface>versions</interface> "
@@ -263,7 +263,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
                                       "digiKam can take and keep additional, <interface>intermediate snapshots</interface> "
                                       "during the editing process. "
                                       "This can be useful if you want to preserve the intermediate steps for later "
-                                      "access, for example if some editing steps cannot be automatically reproduced.</para></qt>");
+                                      "access, for example if some editing steps cannot be automatically reproduced.</para>");
     d->snapshotGB->setWhatsThis(snapshotWhatsThis);
 
     QLabel* const snapshotIconLabel = new QLabel;
@@ -303,11 +303,11 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     d->viewGB = new QGroupBox;
     QGridLayout* const viewGBLayout = new QGridLayout;
 
-    QString viewWhatsThis = i18nc("@info:whatsthis",
-                                  "<qt><para>If an image has been edited, only the <interface>current versions</interface> "
+    QString viewWhatsThis = xi18nc("@info:whatsthis",
+                                  "<para>If an image has been edited, only the <interface>current versions</interface> "
                                   "will be shown in the main thumbnail view. "
                                   "From the <interface>right sidebar</interface>, you always have access to all hidden files.</para> "
-                                  "<para>With the options here, you can choose to show certain files permanently.</para></qt>");
+                                  "<para>With the options here, you can choose to show certain files permanently.</para>");
     d->viewGB->setWhatsThis(viewWhatsThis);
 
     QLabel* const viewLabel     =  new QLabel(i18nc("@label", "In main view"));

@@ -6,7 +6,7 @@
  * Date        : 2005-02-14
  * Description : a plugin to insert a text over an image.
  *
- * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -59,6 +59,7 @@
 #include "inserttextwidget.h"
 #include "dfontproperties.h"
 #include "dcolorselector.h"
+#include "dnuminput.h"
 
 namespace Digikam
 {
@@ -74,6 +75,7 @@ public:
         transparentText(0),
         alignButtonGroup(0),
         textRotation(0),
+        textOpacity(0),
         fontColorButton(0),
         fontChooserWidget(0),
         textEdit(0),
@@ -85,6 +87,7 @@ public:
     static const QString configGroupName;
     static const QString configTextRotationEntry;
     static const QString configFontColorEntry;
+    static const QString configTextOpacity;
     static const QString configTextStringEntry;
     static const QString configFontPropertiesEntry;
     static const QString configTextAlignmentEntry;
@@ -102,6 +105,7 @@ public:
     QFont                textFont;
 
     QComboBox*           textRotation;
+    DIntNumInput*        textOpacity;
     DColorSelector*      fontColorButton;
     DFontProperties*     fontChooserWidget;
     QTextEdit*           textEdit;
@@ -113,6 +117,7 @@ public:
 const QString InsertTextTool::Private::configGroupName(QLatin1String("inserttext Tool"));
 const QString InsertTextTool::Private::configTextRotationEntry(QLatin1String("Text Rotation"));
 const QString InsertTextTool::Private::configFontColorEntry(QLatin1String("Font Color"));
+const QString InsertTextTool::Private::configTextOpacity(QLatin1String("Text Opacity"));
 const QString InsertTextTool::Private::configTextStringEntry(QLatin1String("Enter your text here."));
 const QString InsertTextTool::Private::configFontPropertiesEntry(QLatin1String("Font Properties"));
 const QString InsertTextTool::Private::configTextAlignmentEntry(QLatin1String("Text Alignment"));
@@ -214,6 +219,15 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
+    QLabel* const label3 = new QLabel(i18nc("text opacity", "Opacity:"));
+    d->textOpacity       = new DIntNumInput();
+    d->textOpacity->setRange(0, 100, 1);
+    d->textOpacity->setDefaultValue(100);
+    d->textOpacity->setSuffix(QLatin1String("%"));
+    d->textOpacity->setWhatsThis(i18n("Select the text opacity to use here."));
+
+    // -------------------------------------------------------------
+
     d->borderText      = new QCheckBox(i18n("Add border"));
     d->borderText->setToolTip(i18n("Add a solid border around text using current text color"));
 
@@ -232,9 +246,12 @@ InsertTextTool::InsertTextTool(QObject* const parent)
     mainLayout->addWidget(d->textRotation,         5, 1, 1,  1);
     mainLayout->addWidget(label2,                  6, 0, 1,  1);
     mainLayout->addWidget(d->fontColorButton,      6, 1, 1,  1);
-    mainLayout->addWidget(d->borderText,           7, 0, 1, -1);
-    mainLayout->addWidget(d->transparentText,      8, 0, 1, -1);
-    mainLayout->setRowStretch(9, 10);
+    mainLayout->addWidget(label3,                  7, 0, 1,  1);
+    mainLayout->addWidget(d->textOpacity,          7, 1, 1,  1);
+    mainLayout->addWidget(d->borderText,           8, 0, 1, -1);
+    mainLayout->addWidget(d->transparentText,      9, 0, 1, -1);
+    mainLayout->setRowStretch(10, 10);
+    mainLayout->setColumnStretch(1, 5);
     mainLayout->setColumnStretch(2, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     mainLayout->setSpacing(spacing);
@@ -250,6 +267,9 @@ InsertTextTool::InsertTextTool(QObject* const parent)
             this, SLOT(slotFontPropertiesChanged(QFont)));
 
     connect(d->fontColorButton, SIGNAL(signalColorSelected(QColor)),
+            this, SLOT(slotUpdatePreview()));
+
+    connect(d->textOpacity, SIGNAL(valueChanged(int)),
             this, SLOT(slotUpdatePreview()));
 
     connect(d->textEdit, SIGNAL(textChanged()),
@@ -303,6 +323,7 @@ void InsertTextTool::readSettings()
 
     d->textRotation->setCurrentIndex(group.readEntry(d->configTextRotationEntry,  0));
     d->fontColorButton->setColor(group.readEntry(d->configFontColorEntry,         black));
+    d->textOpacity->setValue(group.readEntry(d->configTextOpacity,                100));
     d->textEdit->setText(group.readEntry(d->configTextStringEntry,                i18n("Enter your text here.")));
     d->textFont = group.readEntry(d->configFontPropertiesEntry,                   defaultFont);
     d->fontChooserWidget->setFont(d->textFont);
@@ -322,6 +343,7 @@ void InsertTextTool::writeSettings()
 
     group.writeEntry(d->configTextRotationEntry,    d->textRotation->currentIndex());
     group.writeEntry(d->configFontColorEntry,       d->fontColorButton->color());
+    group.writeEntry(d->configTextOpacity,          d->textOpacity->value());
     group.writeEntry(d->configTextStringEntry,      d->textEdit->document()->toPlainText());
     group.writeEntry(d->configFontPropertiesEntry,  d->textFont);
     group.writeEntry(d->configTextAlignmentEntry,   d->alignTextMode);
@@ -340,6 +362,7 @@ void InsertTextTool::slotResetSettings()
 
     d->textRotation->setCurrentIndex(0); // No rotation.
     d->fontColorButton->setColor(Qt::black);
+    d->textOpacity->slotReset();
     QFont defaultFont;
     d->textFont = defaultFont; // Reset to default KDE font.
     d->textFont.setPointSize(d->defaultSizeFont);
@@ -397,7 +420,7 @@ void InsertTextTool::setBackgroundColor(const QColor& bg)
 void InsertTextTool::slotUpdatePreview()
 {
     d->previewWidget->setText(d->textEdit->document()->toPlainText(), d->textFont, d->fontColorButton->color(),
-                              d->alignTextMode,
+                              d->textOpacity->value(), d->alignTextMode,
                               d->borderText->isChecked(), d->transparentText->isChecked(),
                               d->textRotation->currentIndex());
 }
@@ -409,16 +432,17 @@ void InsertTextTool::finalRendering()
     ImageIface iface;
     DImg dest = d->previewWidget->makeInsertText();
 
-    FilterAction action(QLatin1String("digikam:insertTextTool"), 1);
+    FilterAction action(QLatin1String("digikam:insertTextTool"), 2);
     action.setDisplayableName(i18n("Insert Text Tool"));
 
     action.addParameter(QLatin1String("text"),              d->textEdit->toPlainText());
     action.addParameter(QLatin1String("textRotationIndex"), d->textRotation->currentIndex());
-    //action.addParameter(QLatin1String("textFont",           d->textFont); FIXME: figure out how to store QFont
+    action.addParameter(QLatin1String("textFont"),          d->textFont.toString());
     action.addParameter(QLatin1String("colorR"),            d->fontColorButton->color().red());
     action.addParameter(QLatin1String("colorG"),            d->fontColorButton->color().green());
     action.addParameter(QLatin1String("colorB"),            d->fontColorButton->color().blue());
     action.addParameter(QLatin1String("colorA"),            d->fontColorButton->color().alpha());
+    action.addParameter(QLatin1String("textOpacity"),       d->textOpacity->value());
     action.addParameter(QLatin1String("borderText"),        d->borderText->isChecked());
     action.addParameter(QLatin1String("transparentText"),   d->transparentText->isChecked());
 

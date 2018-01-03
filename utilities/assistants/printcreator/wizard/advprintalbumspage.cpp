@@ -87,7 +87,7 @@ bool AdvPrintAlbumsPage::validatePage()
     if (!d->iface)
         return false;
 
-    if (d->iface->albumChooserItems().empty())
+    if (d->iface->albumChooserItems().isEmpty())
         return false;
 
     d->wizard->settings()->inputImages.clear();
@@ -106,7 +106,7 @@ bool AdvPrintAlbumsPage::isComplete() const
     if (!d->iface)
         return false;
 
-    return (!d->iface->albumChooserItems().empty());
+    return (!d->iface->albumChooserItems().isEmpty());
 }
 
 } // namespace Digikam

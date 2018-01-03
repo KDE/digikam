@@ -112,6 +112,12 @@ void MailFinalPage::initializePage()
     QTimer::singleShot(0, this, SLOT(slotProcess()));
 }
 
+void MailFinalPage::slotDone()
+{
+    d->complete = true;
+    emit completeChanged();
+}
+
 void MailFinalPage::slotProcess()
 {
     if (!d->wizard)
@@ -155,7 +161,7 @@ void MailFinalPage::slotProcess()
             this, SLOT(slotMessage(QString, bool)));
 
     connect(d->processor, SIGNAL(signalDone(bool)),
-            this, SIGNAL(completeChanged()));
+            this, SLOT(slotDone()));
 
     d->processor->firstStage();
 }

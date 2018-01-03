@@ -7,7 +7,7 @@
  * Description : image data interface for image plugins
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -183,6 +183,11 @@ void ImageIface::setPreviewType(PreviewType type)
 ImageIface::PreviewType ImageIface::previewType() const
 {
     return d->previewType;
+}
+
+DImg *ImageIface::previewReference()
+{
+    return &(d->previewImage);
 }
 
 DColor ImageIface::colorInfoFromOriginal(const QPoint& point) const

@@ -7,7 +7,7 @@
  * Description : Various operations on images
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2002-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -268,6 +268,8 @@ void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, cons
 {
     Q_UNUSED(current);
 
+
+
     QueueMgrWindow* const bqmview = QueueMgrWindow::queueManagerWindow();
 
     if (bqmview->isHidden())
@@ -383,7 +385,7 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imag
 {
     QList<ImageInfo> groupingList = imageInfoList;
     // sort by time
-    qStableSort(groupingList.begin(), groupingList.end(), lessThanByTimeForImageInfo);
+    std::stable_sort(groupingList.begin(), groupingList.end(), lessThanByTimeForImageInfo);
 
     QList<ImageInfo>::iterator it, it2;
 
@@ -419,7 +421,7 @@ void ImageViewUtilities::createGroupByFilenameFromInfoList(const ImageInfoList& 
 {
     QList<ImageInfo> groupingList = imageInfoList;
     // sort by Name
-    qStableSort(groupingList.begin(), groupingList.end(), lowerThanByNameForImageInfo);
+    std::stable_sort(groupingList.begin(), groupingList.end(), lowerThanByNameForImageInfo);
 
     QList<ImageInfo>::iterator it, it2;
 
@@ -450,7 +452,7 @@ void ImageViewUtilities::createGroupByFilenameFromInfoList(const ImageInfoList& 
         if (group.count() > 1)
         {
             // sort by filesize and take smallest as leader
-            qStableSort(group.begin(), group.end(), lowerThanBySizeForImageInfo);
+            std::stable_sort(group.begin(), group.end(), lowerThanBySizeForImageInfo);
             const ImageInfo& leader = group.takeFirst();
             FileActionMngr::instance()->addToGroup(leader, group);
         }

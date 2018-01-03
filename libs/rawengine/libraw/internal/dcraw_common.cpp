@@ -2473,7 +2473,7 @@ void CLASS panasonic_load_raw()
   int row, col, i, j, sh=0, pred[2], nonz[2];
 
   pana_bits(0);
-  for (row=0; row < height; row++)
+  for (row = 0; row < raw_height; row++)
   {
 #ifdef LIBRAW_LIBRARY_BUILD
     checkCancel();
@@ -2486,11 +2486,13 @@ void CLASS panasonic_load_raw()
 	if ((j = pana_bits(8))) {
 	  if ((pred[i & 1] -= 0x80 << sh) < 0 || sh == 4)
             pred[i & 1] &= ~((~0u) << sh);
-	  pred[i & 1] += j << sh;
-	}
-      } else if ((nonz[i & 1] = pana_bits(8)) || i > 11)
-	pred[i & 1] = nonz[i & 1] << 4 | pana_bits(4);
-      if ((RAW(row,col) = pred[col & 1]) > 4098 && col < width) derror();
+          pred[i & 1] += j << sh;
+        }
+      }
+      else if ((nonz[i & 1] = pana_bits(8)) || i > 11)
+        pred[i & 1] = nonz[i & 1] << 4 | pana_bits(4);
+      if ((RAW(row, col) = pred[col & 1]) > 4098 && col < width && row < height)
+        derror();
     }
   }
 }
@@ -2716,6 +2718,10 @@ void CLASS kodak_radc_load_raw()
     checkCancel();
 #endif
     FORC3 mul[c] = getbits(6);
+#ifdef LIBRAW_LIBRARY_BUILD
+    if(!mul[0] || !mul[1] || !mul[2])
+      throw LIBRAW_EXCEPTION_IO_CORRUPT;
+#endif
     FORC3 {
       val = ((0x1000000/last[c] + 0x7ff) >> 12) * mul[c];
       s = val > 65564 ? 10:12;
@@ -3223,7 +3229,7 @@ int CLASS kodak_65000_decode (short *out, int bsize)
 
 void CLASS kodak_65000_load_raw()
 {
-  short buf[256];
+  short buf[272]; /* extra room for data stored w/o predictor */
   int row, col, len, pred[2], ret, i;
 
   for (row=0; row < height; row++)
@@ -3236,8 +3242,15 @@ void CLASS kodak_65000_load_raw()
       len = MIN (256, width-col);
       ret = kodak_65000_decode (buf, len);
       for (i=0; i < len; i++)
-	if ((RAW(row,col+i) =	curve[ret ? buf[i] :
-		(pred[i & 1] += buf[i])]) >> 12) derror();
+      {
+	int idx = ret ? buf[i] : (pred[i & 1] += buf[i]);
+	if(idx >=0 && idx <= 0xffff)
+	 {
+	   if ((RAW(row,col+i) = curve[idx]) >> 12) derror();
+         }
+	 else
+	   derror();
+      }
     }
   }
 }
@@ -4981,6 +4994,10 @@ void CLASS cielab (ushort rgb[3], short lab[3])
 void CLASS xtrans_interpolate (int passes)
 {
   int c, d, f, g, h, i, v, ng, row, col, top, left, mrow, mcol;
+#ifdef LIBRAW_LIBRARY_BUILD
+  int cstat[4]={0,0,0,0};
+#endif
+
   int val, ndir, pass, hm[8], avg[4], color[3][8];
   static const short orth[12] = { 1,0,0,1,-1,0,0,-1,1,0,0,1 },
 	patt[2][16] = { { 0,1,0,-1,2,0,-1,0,1,1,1,-1,0,0,0,0 },
@@ -4998,6 +5015,27 @@ void CLASS xtrans_interpolate (int passes)
     fprintf (stderr,_("%d-pass X-Trans interpolation...\n"), passes);
 #endif
 
+#ifdef LIBRAW_LIBRARY_BUILD
+  if(width < TS || height < TS)
+         throw LIBRAW_EXCEPTION_IO_CORRUPT; // too small image
+
+/* Check against right pattern */
+  for (row = 0; row < 6; row++)
+         for (col = 0; col < 6; col++)
+                 cstat[fcol(row,col)]++;
+
+  if(cstat[0] < 6 || cstat[0]>10 || cstat[1]< 16 
+    || cstat[1]>24 || cstat[2]< 6 || cstat[2]>10 || cstat[3])
+         throw LIBRAW_EXCEPTION_IO_CORRUPT;
+
+ // Init allhex table to unreasonable values
+ for(int i = 0; i < 3; i++)
+  for(int j = 0; j < 3; j++)
+   for(int k = 0; k < 2; k++)
+    for(int l = 0; l < 8; l++)
+     allhex[i][j][k][l]=32700;
+#endif
+
   cielab (0,0);
   ndir = 4 << (passes > 1);
   buffer = (char *) malloc (TS*TS*(ndir*11+6));
@@ -5007,6 +5045,7 @@ void CLASS xtrans_interpolate (int passes)
   drv  = (float (*)[TS][TS])   (buffer + TS*TS*(ndir*6+6));
   homo = (char  (*)[TS][TS])   (buffer + TS*TS*(ndir*10+6));
 
+  int minv=0,maxv=0,minh=0,maxh=0;
 /* Map a green hexagon around each non-green pixel and vice versa:	*/
   for (row=0; row < 3; row++)
     for (col=0; col < 3; col++)
@@ -5017,10 +5056,25 @@ void CLASS xtrans_interpolate (int passes)
 	if (ng == g+1) FORC(8) {
 	  v = orth[d  ]*patt[g][c*2] + orth[d+1]*patt[g][c*2+1];
 	  h = orth[d+2]*patt[g][c*2] + orth[d+3]*patt[g][c*2+1];
+          minv=MIN(v,minv);
+          maxv=MAX(v,maxv);
+          minh=MIN(v,minh);
+          maxh=MAX(v,maxh);
 	  allhex[row][col][0][c^(g*2 & d)] = h + v*width;
 	  allhex[row][col][1][c^(g*2 & d)] = h + v*TS;
 	}
       }
+
+#ifdef LIBRAW_LIBRARY_BUILD
+   // Check allhex table initialization
+  for(int i = 0; i < 3; i++)
+    for(int j = 0; j < 3; j++)
+      for(int k = 0; k < 2; k++)
+        for(int l = 0; l < 8; l++)
+         if(allhex[i][j][k][l]>maxh+maxv*width+1 || allhex[i][j][k][l]<minh+minv*width-1)
+         throw LIBRAW_EXCEPTION_IO_CORRUPT;
+  int retrycount = 0;
+#endif
 
 /* Set green1 and green3 to the minimum and maximum allowed values:	*/
   for (row=2; row < height-2; row++)
@@ -5037,7 +5091,16 @@ void CLASS xtrans_interpolate (int passes)
       pix[0][3] = max;
       switch ((row-sgrow) % 3) {
 	case 1: if (row < height-3) { row++; col--; } break;
-	case 2: if ((min=~(max=0)) && (col+=2) < width-3 && row > 2) row--;
+	case 2: 
+	 if ((min = ~(max = 0)) && (col += 2) < width - 3 && row > 2)
+        {
+           row--;
+#ifdef LIBRAW_LIBRARY_BUILD
+         if(retrycount++ > width*height)
+               throw LIBRAW_EXCEPTION_IO_CORRUPT;
+#endif
+       }
+
       }
     }
 
@@ -5868,6 +5931,7 @@ void CLASS setCanonBodyFeatures (unsigned id)
 void CLASS processCanonCameraInfo (unsigned id, uchar *CameraInfo, unsigned maxlen)
 {
   ushort iCanonLensID = 0, iCanonMaxFocal = 0, iCanonMinFocal = 0, iCanonLens = 0, iCanonCurFocal = 0, iCanonFocalType = 0;
+  if(maxlen<16) return; // too short, so broken
   CameraInfo[0] = 0;
   CameraInfo[1] = 0;
   switch (id) {
@@ -7428,7 +7492,7 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
       {
         if (tag == 0x000d && len < 256000) // camera info
           {
-            CanonCameraInfo = (uchar*)malloc(len);
+            CanonCameraInfo = (uchar*)malloc(MAX(16,len));
             fread(CanonCameraInfo, len, 1, ifp);
             lenCanonCameraInfo = len;
           }
@@ -8293,7 +8357,7 @@ void CLASS parse_makernote (int base, int uptag)
       {
         if (tag == 0x000d && len < 256000)	// camera info
           {
-            CanonCameraInfo = (uchar*)malloc(len);
+            CanonCameraInfo = (uchar*)malloc(MAX(16,len));
             fread(CanonCameraInfo, len, 1, ifp);
             lenCanonCameraInfo = len;
           }
@@ -12061,8 +12125,13 @@ void CLASS parse_fuji (int offset)
 
   fseek (ifp, offset, SEEK_SET);
   entries = get4();
-  if (entries > 255) return;
-  while (entries--) {
+  if (entries > 255)
+    return;
+#ifdef LIBRAW_LIBRARY_BUILD
+  imgdata.process_warnings |=  LIBRAW_WARN_PARSEFUJI_PROCESSED; 
+#endif
+  while (entries--)
+  {
     tag = get2();
     len = get2();
     save = ftell(ifp);
@@ -12078,7 +12147,11 @@ void CLASS parse_fuji (int offset)
       fuji_width = !(fgetc(ifp) & 8);
     } else if (tag == 0x131) {
       filters = 9;
-      FORC(36) xtrans_abs[0][35-c] = fgetc(ifp) & 3;
+      FORC(36)
+        {
+           int q = fgetc(ifp);
+           xtrans_abs[0][35 - c] = MAX(0,MIN(q,2)); /* & 3;*/
+        }
     } else if (tag == 0x2ff0) {
       FORC4 cam_mul[c ^ 1] = get2();
     }
@@ -15374,7 +15447,13 @@ dng_skip:
   if (load_raw == &CLASS kodak_radc_load_raw)
     if (raw_color) adobe_coeff ("Apple","Quicktake");
 
-  if (fuji_width) {
+#ifdef LIBRAW_LIBRARY_BUILD
+  // Clear erorneus fuji_width if not set through parse_fuji or for DNG
+  if(fuji_width && !dng_version && !(imgdata.process_warnings & LIBRAW_WARN_PARSEFUJI_PROCESSED ))
+     fuji_width = 0;
+#endif
+  if (fuji_width)
+  {
     fuji_width = width >> !fuji_layout;
     filters = fuji_width & 1 ? 0x94949494 : 0x49494949;
     width = (height >> fuji_layout) + fuji_width;

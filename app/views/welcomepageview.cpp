@@ -7,7 +7,7 @@
  * Description : a widget to display a welcome page
  *               on root album.
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
@@ -42,9 +42,9 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_version.h"
 #include "daboutdata.h"
 #include "thememanager.h"
-#include "digikam_version.h"
 #include "webbrowserdlg.h"
 
 namespace Digikam
@@ -103,6 +103,7 @@ QStringList WelcomePageView::featuresTabContent() const
     newFeatures << i18n("Add a new editor tool to detect and fix red-eyes automatically;");
     newFeatures << i18n("Add a new editor tool to perform color change based on Lut3D;");
     newFeatures << i18n("Add a new tool in camera import interface to convert RAW files to DNG;");
+    newFeatures << i18n("Add a new tool to export items on local network through UPNP/DLNA;");
     newFeatures << i18n("Consolidation of Mysql database backend;");
     newFeatures << i18n("Improved startup time with differed scan for new items stage.");
     newFeatures << i18n("Presentation and Slideshow tools now support video.");
@@ -188,6 +189,7 @@ void WelcomePageView::slotThemeChanged()
                              .arg(aboutTabContent()[0])
                              .arg(featuresTabContent()[1])
                              .arg(aboutTabContent()[1]);
+
     //qCDebug(DIGIKAM_GENERAL_LOG) << content;
 
     setHtml(content, QUrl::fromLocalFile(locationHtml));

@@ -6,7 +6,7 @@
  * Date        : 2017-05-25
  * Description : a tool to print images
  *
- * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -140,7 +140,7 @@ void AdvPrintFinalPage::slotProcess()
         return;
     }
 
-    if (d->settings->photos.empty())
+    if (d->settings->photos.isEmpty())
     {
         d->progressView->addEntry(i18n("No page to print..."),
                                   DHistoryView::ErrorEntry);
@@ -245,7 +245,7 @@ void AdvPrintFinalPage::slotDone(bool completed)
                                           DHistoryView::ProgressEntry);
             }
         }
-        else if(d->settings->printerName == d->settings->outputName(AdvPrintSettings::GIMP))
+        else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::GIMP))
         {
             if (!d->settings->gimpFiles.isEmpty())
             {
@@ -264,8 +264,8 @@ void AdvPrintFinalPage::slotDone(bool completed)
                 if (!process.startDetached(prog, args))
                 {
                     d->progressView->addEntry(i18n("There was an error to launch the external "
-                                                "Gimp program. Please make sure it is properly "
-                                                "installed."),
+                                                   "Gimp program. Please make sure it is properly "
+                                                   "installed."),
                                               DHistoryView::WarningEntry);
                     return;
                 }

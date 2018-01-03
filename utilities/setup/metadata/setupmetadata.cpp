@@ -7,7 +7,7 @@
  * Description : setup Metadata tab.
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well dot com>
- * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
@@ -166,7 +166,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->fieldsGroup                  = new QGroupBox;
     QGridLayout* const fieldsLayout = new QGridLayout;
 
-    d->fieldsGroup->setWhatsThis(i18nc("@info:whatsthis",
+    d->fieldsGroup->setWhatsThis(xi18nc("@info:whatsthis",
                                        "<para>In addition to the pixel content, image files usually "
                                        "contain a variety of metadata. A lot of the parameters you can use "
                                        "in digiKam to manage files, such as rating or comment, can be written "
@@ -352,9 +352,9 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     d->rotateByFlag->setToolTip(i18nc("@info:tooltip",
                                       "Rotate files only by changing a flag, not touching the pixel data"));
-    d->rotateByFlag->setWhatsThis(i18nc("@info:whatsthis",
-                                        "<para>A file can be rotated in two ways:<br/> "
-                                        "You can change the contents, rearranging the individual pixels of the image data.<br/> "
+    d->rotateByFlag->setWhatsThis(xi18nc("@info:whatsthis",
+                                        "<para>A file can be rotated in two ways:<nl/> "
+                                        "You can change the contents, rearranging the individual pixels of the image data.<nl/> "
                                         "Or you can set a flag that the file is to be rotated before it is shown.</para> "
                                         "<para>Select this option if you always want to set only a flag. "
                                         "This is less obtrusive, but requires support if the file is accessed with another software. "
@@ -363,9 +363,9 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     d->rotateByContents->setToolTip(i18nc("@info:tooltip",
                                           "If possible rotate files by changing the pixel data"));
-    d->rotateByContents->setWhatsThis(i18nc("@info:whatsthis",
-                                            "<para>A file can be rotated in two ways:<br/> "
-                                            "You can change the contents, rearranging the individual pixels of the image data.<br/> "
+    d->rotateByContents->setWhatsThis(xi18nc("@info:whatsthis",
+                                            "<para>A file can be rotated in two ways:<nl/> "
+                                            "You can change the contents, rearranging the individual pixels of the image data.<nl/> "
                                             "Or you can set a flag that the file is to be rotated before it is shown.</para> "
                                             "<para>Select this option if you want the file to be rotated by changing the content. "
                                             "This is a lossless operation for JPEG files. For other formats it is a lossy operation, "
@@ -689,6 +689,8 @@ void SetupMetadata::applySettings()
     set.rescanImageIfModified = d->rescanImageIfModifiedBox->isChecked();
 
     set.sidecarExtensions = cleanUserFilterString(d->extensionsEdit->text());
+    set.sidecarExtensions.removeAll(QLatin1String("xmp"));
+    set.sidecarExtensions.removeDuplicates();
 
     mSettings->setSettings(set);
 

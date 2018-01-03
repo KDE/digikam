@@ -7,7 +7,7 @@
  * Description : Core database interface.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -381,13 +381,6 @@ public:
      */
     //TODO move to other place (AlbumManager)
     QList<int> getRecentlyAssignedTags() const;
-
-    /**
-     * Moves a tag within tag hierarchy.
-     * Lft and rgt also updated, along with
-     * parent tag id.
-     */
-    void moveTag(TAlbum* parentTagID);
 
     /**
      * Deletes a tag from the database. This will not delete the
@@ -919,6 +912,11 @@ public:
     void removeImagePosition(qlonglong imageid);
 
     /**
+     * Remove the altitude in ImagePositions for the given image
+     */
+    void removeImagePositionAltitude(qlonglong imageid);
+
+    /**
      * Retrieves all available comments for the specified item.
      */
     QList<CommentInfo> getImageComments(qlonglong imageID);
@@ -1261,6 +1259,11 @@ public:
      */
     QMap<QString, int> getFormatStatistics();
     QMap<QString, int> getFormatStatistics(DatabaseItem::Category category);
+
+    /**
+     * Return a list from a field from imageMetadata
+     */
+    QStringList getListFromImageMetadata(DatabaseFields::ImageMetadata field);
 
     // ----------- Moving and Copying Items -----------
 

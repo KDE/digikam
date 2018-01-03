@@ -7,7 +7,7 @@
  * Description : Fuzzy search sidebar tab contents.
  *
  * Copyright (C) 2016-2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -134,14 +134,14 @@ public:
     {
     }
 
-    static const QString configTabEntry;
-    static const QString configPenSketchSizeEntry;
-    static const QString configResultSketchItemsEntry;
-    static const QString configPenSketchHueEntry;
-    static const QString configPenSketchSaturationEntry;
-    static const QString configPenSkethValueEntry;
-    static const QString configSimilarsThresholdEntry;
-    static const QString configSimilarsMaxThresholdEntry;
+    static const QString      configTabEntry;
+    static const QString      configPenSketchSizeEntry;
+    static const QString      configResultSketchItemsEntry;
+    static const QString      configPenSketchHueEntry;
+    static const QString      configPenSketchSaturationEntry;
+    static const QString      configPenSkethValueEntry;
+    static const QString      configSimilarsThresholdEntry;
+    static const QString      configSimilarsMaxThresholdEntry;
 
     bool                      active;
     bool                      fingerprintsChecked;
@@ -342,7 +342,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     }
 
     d->similarityRange->setWhatsThis(i18n("Select here the approximate similarity interval "
-                                     "as a percentage. "));
+                                          "as a percentage. "));
 
     // ---------------------------------------------------------------
 
@@ -783,11 +783,11 @@ void FuzzySearchView::slotAlbumSelected(Album* album)
 
     SearchXmlReader reader(salbum->query());
     reader.readToFirstField();
-    QStringRef type             = reader.attributes().value(QLatin1String("type"));
-    QStringRef numResultsString = reader.attributes().value(QLatin1String("numberofresults"));
-    QStringRef thresholdString  = reader.attributes().value(QLatin1String("threshold"));
-    QStringRef maxThresholdString  = reader.attributes().value(QLatin1String("maxthreshold"));
-    QStringRef sketchTypeString = reader.attributes().value(QLatin1String("sketchtype"));
+    QStringRef type               = reader.attributes().value(QLatin1String("type"));
+    QStringRef numResultsString   = reader.attributes().value(QLatin1String("numberofresults"));
+    QStringRef thresholdString    = reader.attributes().value(QLatin1String("threshold"));
+    QStringRef maxThresholdString = reader.attributes().value(QLatin1String("maxthreshold"));
+    QStringRef sketchTypeString   = reader.attributes().value(QLatin1String("sketchtype"));
 
     if (type == QLatin1String("imageid"))
     {
@@ -945,6 +945,7 @@ void FuzzySearchView::dragEnterEvent(QDragEnterEvent* e)
     else if (e->mimeData()->hasUrls())
     {
         QList<QUrl> urls = e->mimeData()->urls();
+
         // If there is at least one URL and the URL is a local file.
         if (!urls.empty())
         {
@@ -991,6 +992,7 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
     if (e->mimeData()->hasUrls())
     {
         QList<QUrl> urls = e->mimeData()->urls();
+
         // If there is at least one URL and the URL is a local file.
         if (!urls.empty())
         {

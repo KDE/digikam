@@ -6,7 +6,7 @@
  * Date        : 2011-07-03
  * Description : A widget to provide feedback or propose opportunistic interactions
  *
- * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (c) 2011      by Aurelien Gateau <agateau at kde dot org>
  * Copyright (c) 2014      by Dominik Haumann <dhaumann at kde dot org>
  *
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DNOTIFICATIONWIDGET_P_H
-#define DNOTIFICATIONWIDGET_P_H
+#ifndef DNOTIFICATION_WIDGET_P_H
+#define DNOTIFICATION_WIDGET_P_H
 
 // Qt includes
 
@@ -80,4 +80,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* DNOTIFICATIONWIDGET_P_H */
+#endif // DNOTIFICATION_WIDGET_P_H

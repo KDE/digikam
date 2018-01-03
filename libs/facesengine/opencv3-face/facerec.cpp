@@ -66,21 +66,37 @@ void FaceRecognizer::update(InputArrayOfArrays src, InputArray labels)
     CV_Error(Error::StsNotImplemented, error_msg);
 }
 
+#if OPENCV_TEST_VERSION(3,4,0)
 void FaceRecognizer::load(const String &filename)
+#else
+void FaceRecognizer::read(const String &filename)
+#endif
 {
     FileStorage fs(filename, FileStorage::READ);
     if (!fs.isOpened())
         CV_Error(Error::StsError, "File can't be opened for writing!");
+#if OPENCV_TEST_VERSION(3,4,0)
     this->load(fs);
+#else
+    this->read(fs);
+#endif
     fs.release();
 }
 
+#if OPENCV_TEST_VERSION(3,4,0)
 void FaceRecognizer::save(const String &filename) const
+#else
+void FaceRecognizer::write(const String &filename) const
+#endif
 {
     FileStorage fs(filename, FileStorage::WRITE);
     if (!fs.isOpened())
         CV_Error(Error::StsError, "File can't be opened for writing!");
+#if OPENCV_TEST_VERSION(3,4,0)
     this->save(fs);
+#else
+    this->write(fs);
+#endif
     fs.release();
 }
 

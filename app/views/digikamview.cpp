@@ -7,7 +7,7 @@
  * Description : implementation of album view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2002-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2011-2013 by Michael G. Hansen <mike at mghansen dot de>
@@ -35,6 +35,10 @@
 #include <QShortcut>
 #include <QApplication>
 #include <QDesktopServices>
+
+// KDE includes
+
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -85,11 +89,11 @@
 #include "contextmenuhelper.h"
 
 #ifdef HAVE_MEDIAPLAYER
-#include "mediaplayerview.h"
+#   include "mediaplayerview.h"
 #endif //HAVE_MEDIAPLAYER
 
 #ifdef HAVE_MARBLE
-#include "mapwidgetview.h"
+#   include "mapwidgetview.h"
 #endif // HAVE_MARBLE
 
 namespace Digikam
@@ -500,9 +504,6 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(zoomInStep()),
             this, SLOT(slotZoomIn()));
 
-    connect(d->iconView, SIGNAL(signalAddToExistingQueue(int)),
-            this, SLOT(slotImageAddToExistingQueue(int)));
-
     connect(d->iconView, SIGNAL(signalShowContextMenu(QContextMenuEvent*,
                                                       QList<QAction*>)),
             this, SLOT(slotShowContextMenu(QContextMenuEvent*,QList<QAction*>)));
@@ -641,6 +642,9 @@ void DigikamView::setupConnections()
     connect(d->stackedview, SIGNAL(signalGotoTagAndItem(int)),
             this, SLOT(slotGotoTagAndItem(int)));
 
+    connect(d->stackedview, SIGNAL(signalPopupTagsView()),
+            d->rightSideBar, SLOT(slotPopupTagsView()));
+
     // -- FileActionMngr progress ---------------
 
     connect(FileActionMngr::instance(), SIGNAL(signalImageChangeFailed(QString,QStringList)),
@@ -692,6 +696,11 @@ void DigikamView::setupConnections()
 
     connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ImageInfo)),
             this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
+
+    // -- ImageViewUtilities Connections ----------------
+
+    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(QUrl)),
+            d->iconView, SLOT(setCurrentUrlWhenAvailable(QUrl)));
 }
 
 void DigikamView::connectIconViewFilter(FilterStatusBar* const filterbar)
@@ -1794,9 +1803,15 @@ void DigikamView::slotFileWithDefaultApplication()
 
 void DigikamView::slotLightTable()
 {
-    const bool grouping = needGroupResolving(ApplicationSettings::LightTable, true);
-    const ImageInfoList allInfoList  = allInfo(grouping);
+    bool grouping = needGroupResolving(ApplicationSettings::LightTable);
     const ImageInfoList selectedList = selectedInfoList(false, grouping);
+
+    if (selectedList.isEmpty())
+    {
+        grouping = needGroupResolving(ApplicationSettings::LightTable, true);
+    }
+
+    const ImageInfoList allInfoList  = allInfo(grouping);
     const ImageInfo currentImageInfo = currentInfo();
 
     d->utilities->insertToLightTableAuto(allInfoList, selectedList, currentImageInfo);
@@ -1804,7 +1819,7 @@ void DigikamView::slotLightTable()
 
 void DigikamView::slotQueueMgr()
 {
-    const bool grouping = needGroupResolving(ApplicationSettings::BQM, true);
+    bool grouping = needGroupResolving(ApplicationSettings::BQM);
     ImageInfoList imageInfoList = selectedInfoList(false, grouping);
     ImageInfo     singleInfo    = currentInfo();
 
@@ -1815,6 +1830,7 @@ void DigikamView::slotQueueMgr()
 
     if (singleInfo.isNull())
     {
+        grouping = needGroupResolving(ApplicationSettings::BQM, true);
         const ImageInfoList allItems = allInfo(grouping);
 
         if (!allItems.isEmpty())
@@ -2012,7 +2028,7 @@ void DigikamView::slotSortImagesOrder(int order)
     settings->emitSetupChanged();
 }
 
-void DigikamView::slotGroupImages(int categoryMode)
+void DigikamView::slotSeparateImages(int categoryMode)
 {
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
@@ -2021,11 +2037,11 @@ void DigikamView::slotGroupImages(int categoryMode)
         return;
     }
 
-    settings->setImageGroupMode(categoryMode);
+    settings->setImageSeparationMode(categoryMode);
     d->iconView->imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode) categoryMode);
 }
 
-void DigikamView::slotSortImageGroupOrder(int order)
+void DigikamView::slotImageSeparationSortOrder(int order)
 {
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
@@ -2034,7 +2050,7 @@ void DigikamView::slotSortImageGroupOrder(int order)
         return;
     }
 
-    settings->setImageGroupSortOrder(order);
+    settings->setImageSeparationSortOrder(order);
     d->iconView->imageFilterModel()->setCategorizationSortOrder((ImageSortSettings::SortOrder) order);
 }
 
@@ -2581,46 +2597,46 @@ void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const Imag
 
     cmHelper.addAction(QLatin1String("full_screen"));
     cmHelper.addAction(QLatin1String("options_show_menubar"));
-
     cmHelper.addSeparator();
 
-    cmHelper.addAction(QLatin1String("move_selection_to_album"));
+    // --------------------------------------------------------
+
     QAction* const viewAction = new QAction(i18nc("View the selected image", "Preview"), this);
     viewAction->setIcon(QIcon::fromTheme(QLatin1String("view-preview")));
     viewAction->setEnabled(selectedImageIds.count() == 1);
     cmHelper.addAction(viewAction);
 
-    cmHelper.addAction(QLatin1String("image_edit"));
-    cmHelper.addServicesMenu(selectedUrls());
-    cmHelper.addGotoMenu(selectedImageIds);
-    cmHelper.addAction(QLatin1String("image_rotate"));
-
+    cmHelper.addOpenAndNavigateActions(selectedImageIds);
     cmHelper.addSeparator();
+
+    // --------------------------------------------------------
 
     cmHelper.addAction(QLatin1String("image_find_similar"));
     cmHelper.addStandardActionLightTable();
     cmHelper.addQueueManagerMenu();
-
     cmHelper.addSeparator();
 
-    cmHelper.addAction(QLatin1String("image_rename"));
+    // --------------------------------------------------------
+
+    cmHelper.addAction(QLatin1String("image_rotate"));
     cmHelper.addAction(QLatin1String("cut_album_selection"));
     cmHelper.addAction(QLatin1String("copy_album_selection"));
     cmHelper.addAction(QLatin1String("paste_album_selection"));
+    cmHelper.addAction(QLatin1String("image_rename"));
     cmHelper.addStandardActionItemDelete(this, SLOT(slotImageDelete()), selectedImageIds.count());
-
     cmHelper.addSeparator();
+
+    // --------------------------------------------------------
 
     cmHelper.addStandardActionThumbnail(selectedImageIds, currentAlbum());
     cmHelper.addAssignTagsMenu(selectedImageIds);
     cmHelper.addRemoveTagsMenu(selectedImageIds);
-
-    cmHelper.addSeparator();
-
     cmHelper.addLabelsAction();
 
     if (d->leftSideBar->getActiveTab() != d->peopleSideBar)
     {
+        cmHelper.addSeparator();
+
         cmHelper.addGroupMenu(selectedImageIds, extraGroupingActions);
     }
 

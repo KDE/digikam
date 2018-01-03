@@ -7,7 +7,7 @@
  * Description : Metadata handling
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2007-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -151,7 +151,7 @@ public:
      * @param settings
      * @return true           - if everything is succesfull
      */
-    bool writeToMetadata(ImageInfo info, WriteComponent writeMode = WRITE_ALL,
+    bool writeToMetadata(const ImageInfo& info, WriteComponent writeMode = WRITE_ALL,
                bool ignoreLazySync = false, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
 

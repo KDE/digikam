@@ -71,7 +71,7 @@ public:
     void writeMetadataToFiles(FileActionImageInfoList infos);
     void writeMetadata(FileActionImageInfoList infos, int flags);
     void transform(FileActionImageInfoList infos, int orientation);
-    void ajustFaceRectangles(const ImageInfo &info, int action);
+    void ajustFaceRectangles(const ImageInfo& info, int action);
 
 private:
 

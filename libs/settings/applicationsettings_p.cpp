@@ -6,7 +6,7 @@
  * Date        : 2003-16-10
  * Description : application settings interface
  *
- * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
@@ -60,8 +60,8 @@ const QString ApplicationSettings::Private::configAlbumCollectionsEntry(QLatin1S
 const QString ApplicationSettings::Private::configAlbumSortRoleEntry(QLatin1String("Album Sort Role"));
 const QString ApplicationSettings::Private::configImageSortOrderEntry(QLatin1String("Image Sort Order"));
 const QString ApplicationSettings::Private::configImageSortingEntry(QLatin1String("Image Sorting"));
-const QString ApplicationSettings::Private::configImageGroupModeEntry(QLatin1String("Image Group Mode"));
-const QString ApplicationSettings::Private::configImageGroupSortOrderEntry(QLatin1String("Image Group Sort Order"));
+const QString ApplicationSettings::Private::configImageSeparationModeEntry(QLatin1String("Image Group Mode"));
+const QString ApplicationSettings::Private::configImageSeparationSortOrderEntry(QLatin1String("Image Group Sort Order"));
 const QString ApplicationSettings::Private::configItemLeftClickActionEntry(QLatin1String("Item Left Click Action"));
 const QString ApplicationSettings::Private::configDefaultIconSizeEntry(QLatin1String("Default Icon Size"));
 const QString ApplicationSettings::Private::configDefaultTreeIconSizeEntry(QLatin1String("Default Tree Icon Size"));
@@ -120,7 +120,7 @@ const QString ApplicationSettings::Private::configToolTipsShowAlbumCollectionEnt
 const QString ApplicationSettings::Private::configToolTipsShowAlbumCategoryEntry(QLatin1String("ToolTips Show Album Category"));
 const QString ApplicationSettings::Private::configToolTipsShowAlbumCaptionEntry(QLatin1String("ToolTips Show Album Caption"));
 const QString ApplicationSettings::Private::configToolTipsShowAlbumPreviewEntry(QLatin1String("ToolTips Show Album Preview"));
-const QString ApplicationSettings::Private::configPreviewLoadFullImageSizeEntry(QLatin1String("Preview Load Full Image Size"));
+const QString ApplicationSettings::Private::configPreviewLoadFullItemSizeEntry(QLatin1String("Preview Load Full Image Size"));
 const QString ApplicationSettings::Private::configPreviewRawUseEmbeddedPreview(QLatin1String("Preview Raw Use Embedded Preview"));
 const QString ApplicationSettings::Private::configPreviewRawUseHalfSizeData(QLatin1String("Preview Raw Use Half Size Data"));
 const QString ApplicationSettings::Private::configPreviewConvertToEightBitEntry(QLatin1String("Preview Convert To Eight Bit"));
@@ -133,6 +133,7 @@ const QString ApplicationSettings::Private::configUseTrashEntry(QLatin1String("U
 const QString ApplicationSettings::Private::configShowTrashDeleteDialogEntry(QLatin1String("Show Trash Delete Dialog"));
 const QString ApplicationSettings::Private::configShowPermanentDeleteDialogEntry(QLatin1String("Show Permanent Delete Dialog"));
 const QString ApplicationSettings::Private::configApplySidebarChangesDirectlyEntry(QLatin1String("Apply Sidebar Changes Directly"));
+const QString ApplicationSettings::Private::configUseNativeFileDialogEntry(QLatin1String("Use Native File Dialog"));
 const QString ApplicationSettings::Private::configDrawFramesToGroupedEntry(QLatin1String("Draw Frames To Grouped Items"));
 const QString ApplicationSettings::Private::configScrollItemToCenterEntry(QLatin1String("Scroll Current Item To Center"));
 const QString ApplicationSettings::Private::configShowOnlyPersonTagsInPeopleSidebarEntry(QLatin1String("Show Only Face Tags For Assigning Name"));
@@ -171,6 +172,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       showTrashDeleteDialog(false),
       showPermanentDeleteDialog(false),
       sidebarApplyDirectly(false),
+      useNativeFileDialog(false),
       drawFramesToGrouped(true),
       scrollItemToCenter(false),
       showOnlyPersonTagsInPeopleSidebar(false),
@@ -237,8 +239,8 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       albumSortChanged(false),
       imageSortOrder(0),
       imageSorting(0),
-      imageGroupMode(0),
-      imageGroupSortOrder(0),
+      imageSeparationMode(0),
+      imageSeparationSortOrder(0),
       itemLeftClickAction(ApplicationSettings::ShowPreview),
       syncToDigikam(false),
       syncToBaloo(false),
@@ -279,8 +281,8 @@ void ApplicationSettings::Private::init()
     albumSortRole                        = ApplicationSettings::ByFolder;
     imageSortOrder                       = ImageSortSettings::SortByFileName;
     imageSorting                         = ImageSortSettings::AscendingOrder;
-    imageGroupMode                       = ImageSortSettings::CategoryByAlbum;
-    imageGroupSortOrder                  = ImageSortSettings::AscendingOrder;
+    imageSeparationMode                       = ImageSortSettings::CategoryByAlbum;
+    imageSeparationSortOrder                  = ImageSortSettings::AscendingOrder;
 
     itemLeftClickAction                  = ApplicationSettings::ShowPreview;
 
@@ -296,6 +298,7 @@ void ApplicationSettings::Private::init()
     showTrashDeleteDialog                = true;
     showPermanentDeleteDialog            = true;
     sidebarApplyDirectly                 = false;
+    useNativeFileDialog                  = false;
     drawFramesToGrouped                  = true;
     scrollItemToCenter                   = false;
     showOnlyPersonTagsInPeopleSidebar    = false;
