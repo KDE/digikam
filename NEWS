@@ -217,4 +217,6 @@ BUGFIXES FROM BUGZILLA:
 205 ==> 388368 - Mouse disappears in slide show.
 206 ==> 388437 - Current photo in the Image Editor is not selected in Albums view.
 207 ==> 384934 - Install failed on Windows 10.
-208 ==> 
+208 ==> 388351 - Use AppImage SDK version 10 instead 6 to be compatible with FireJail.
+209 ==> 
+
