@@ -21,6 +21,12 @@ set(libcommonwidgets_SRCS
     common/dlayoutbox.cpp
 )
 
+set(librangetools_SRCS
+    range/dsliderspinbox.cpp
+    range/dnuminput.cpp
+    range/drangebox.cpp
+)
+
 set(libcombotools_SRCS
     combo/comboboxutilities.cpp
     combo/dcombobox.cpp
@@ -153,6 +159,17 @@ add_library(digikamwidgetscore_src OBJECT
     ${libfontstools_SRCS}
     ${libfilestools_SRCS}
     ${libcombotools_SRCS}
+    ${librangetools_SRCS}
+)
+
+#############################################################"
+
+set(libimagehistory_SRCS
+    imagehistory/filtershistorywidget.cpp
+    imagehistory/imagefiltershistoryitemdelegate.cpp
+    imagehistory/imagefiltershistorymodel.cpp
+    imagehistory/imagefiltershistorytreeitem.cpp
+    imagehistory/versionswidget.cpp
 )
 
 add_library(imagehistorywidgets_src OBJECT ${libimagehistory_SRCS})
