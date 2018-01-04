@@ -61,8 +61,8 @@ EigenFaceMatMetadata::~EigenFaceMatMetadata()
 // ------------------------------------------------------------------------------------
 
 EigenFaceModel::EigenFaceModel()
-    : cv::Ptr<EigenFaceRecognizer>(EigenFaceRecognizer::create())/*,
-      databaseId(0)*/
+    : cv::Ptr<EigenFaceRecognizer>(EigenFaceRecognizer::create())
+    /*, databaseId(0)*/
 {
     ptr()->setThreshold(20000.0);
 }
@@ -115,12 +115,10 @@ void EigenFaceModel::setLabels(cv::Mat new_labels)
     ptr()->setLabels(new_labels);
 }
 
-
 OpenCVMatData EigenFaceModel::matData(int index) const
 {
     return OpenCVMatData(ptr()->getSrc().at(index));
 }
-
 
 QList<EigenFaceMatMetadata> EigenFaceModel::matMetadata() const
 {
@@ -166,7 +164,7 @@ void EigenFaceModel::setMats(const QList<OpenCVMatData>& mats, const QList<Eigen
     //ptr()->setSrc(currentSrcs);
     //ptr()->setLabels(currentLabels);
     //make sure that there exits traing data
-    if(currentSrcs.size()>0)
+    if (currentSrcs.size()>0)
     {
         ptr()->train(currentSrcs, currentLabels);
     }

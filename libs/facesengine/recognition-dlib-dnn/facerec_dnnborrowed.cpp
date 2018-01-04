@@ -40,13 +40,16 @@
 #include <vector>
 #include <cmath>
 
-//Qt includes
+// Qt includes
+
 #include <QFile>
 #include <QDataStream>
 #include <QStandardPaths>
 
-
 // Local includes
+
+#include "digikam_debug.h"
+
 /*
 #include "tensor.h"
 #include "input.h"
@@ -69,10 +72,9 @@
 #include "interpolation.h"
 #include "frontal_face_detector.h"
 #include "dnn_face.h"
+#include "shapepredictor.h"
+#include "fullobjectdetection.h"
 */
-#include "digikam_debug.h"
-//#include "shapepredictor.h"
-//#include "fullobjectdetection.h"
 
 using namespace cv;
 
@@ -167,7 +169,7 @@ void DNNFaceRecognizer::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
     {
         face_flag = true;
         cv::Mat gray;
-        
+
         int type = tmp_mat.type();
         if(type == CV_8UC3 || type == CV_16UC3)
         {

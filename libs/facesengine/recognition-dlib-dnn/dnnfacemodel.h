@@ -62,7 +62,7 @@ public:
 
 public:
 
-    DNNFaceVecMetadata();
+    explicit DNNFaceVecMetadata();
     ~DNNFaceVecMetadata();
 
 public:
@@ -80,7 +80,7 @@ class DNNFaceModel : public cv::Ptr<DNNFaceRecognizer>
 {
 public:
 
-    DNNFaceModel();
+    explicit DNNFaceModel();
     ~DNNFaceModel();
 
     DNNFaceRecognizer*       ptr();
@@ -100,7 +100,6 @@ public:
 
     void setMats(const QList<std::vector<float>>& mats, const QList<DNNFaceVecMetadata>& matMetadata);
 
-    
 //public:
 
     //int databaseId;

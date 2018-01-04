@@ -57,18 +57,22 @@ namespace Digikam
 
 inline Mat asRowMatrix(std::vector<Mat> src, int rtype, double alpha=1, double beta=0)
 {
-
     // number of samples
     size_t n = src.size();
+
     // return empty matrix if no matrices given
-    if(n == 0)
+    if (n == 0)
         return Mat();
+
     // dimensionality of (reshaped) samples
     size_t d = src[0].total();
+
     // create data matrix
     Mat data((int)n, (int)d, rtype);
+
     // now copy data
-    for(unsigned int i = 0; i < n; i++)
+
+    for (unsigned int i = 0 ; i < n ; i++)
     {
         Mat xi = data.row(i);
         // make reshape happy by cloning for non-continuous matrices
@@ -178,6 +182,7 @@ void EigenFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predict
 #endif
 {
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image";
+
     if (m_projections.empty())
     {
         // throw error if no data (or simply return -1?)
@@ -186,20 +191,22 @@ void EigenFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predict
     }
 
     Mat src = _src.getMat();//254*254
+
     //make sure the size of input image is the same as traing image
+
     if(m_src.size()>=1 && (src.rows!=m_src[0].rows||src.cols!=m_src[0].cols))
     {
         resize(src, src, Size(m_src[0].rows, m_src[0].cols), (0, 0), (0, 0), INTER_LINEAR);
     }
 
 #if OPENCV_TEST_VERSION(3,1,0)
-    minDist      = DBL_MAX;
-    minClass     = -1;
+    minDist  = DBL_MAX;
+    minClass = -1;
 #else
     collector->init(0);//here need to confirm
 #endif
 
-    Mat q = LDA::subspaceProject(m_eigenvectors, m_mean, src.reshape(1, 1));
+    Mat q   = LDA::subspaceProject(m_eigenvectors, m_mean, src.reshape(1, 1));
 
     //find nearest neighbor
     for (size_t sampleIdx = 0; sampleIdx < m_projections.size(); sampleIdx++)

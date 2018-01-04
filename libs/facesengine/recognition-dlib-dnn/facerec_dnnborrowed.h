@@ -35,7 +35,6 @@
 #define FACE_REC_DNN_BORROWED_H
 
 #include "libopencv.h"
-//#include "dnn_face.h"
 #include "facedb.h"
 
 #if !OPENCV_TEST_VERSION(3,0,0)
@@ -91,16 +90,16 @@ class DNNFaceRecognizer
 public:
 
     // Initializes this DNNFace Model.
-    DNNFaceRecognizer(double threshold = DBL_MAX):
-    m_threshold(threshold)
+    DNNFaceRecognizer(double threshold = DBL_MAX)
+        : m_threshold(threshold)
     {
     }
 
     // Initializes and computes this DNNFace Model.
     DNNFaceRecognizer(std::vector<std::vector<float>> src,
-                       cv::InputArray labels,
-                       double threshold = DBL_MAX) :
-        m_threshold(threshold)
+                      cv::InputArray labels,
+                      double threshold = DBL_MAX)
+        : m_threshold(threshold)
     {
         train(src, labels);
     }
@@ -179,10 +178,10 @@ private:
 private:
 
     // NOTE: Do not use a d private internal container, this will crash OpenCV in cv::Algorithm::set()
-    double m_threshold;
+    double                          m_threshold;
 
     std::vector<std::vector<float>> m_src;
-    cv::Mat m_labels;
+    cv::Mat                         m_labels;
 };
 
 } // namespace Digikam

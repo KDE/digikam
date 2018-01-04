@@ -33,7 +33,7 @@
 
 #include "opencvdnnfacerecognizer.h"
 
-// local includes
+// Local includes
 
 #include "libopencv.h"
 #include "facedbaccess.h"
@@ -69,12 +69,12 @@ public:
 
 public:
 
-    float             threshold;
+    float        threshold;
 
 private:
 
-    DNNFaceModel      m_dnn;
-    bool              loaded;
+    DNNFaceModel m_dnn;
+    bool         loaded;
 };
 
 OpenCVDNNFaceRecognizer::OpenCVDNNFaceRecognizer()
@@ -90,7 +90,7 @@ OpenCVDNNFaceRecognizer::~OpenCVDNNFaceRecognizer()
 
 void OpenCVDNNFaceRecognizer::setThreshold(float threshold) const
 {
-    d->threshold    = threshold;
+    d->threshold = threshold;
 }
 
 namespace
@@ -131,6 +131,7 @@ cv::Mat OpenCVDNNFaceRecognizer::prepareForRecognition(const QImage& inputImage)
 
     //resize(cvImage, cvImage, Size(256, 256), (0, 0), (0, 0), INTER_LINEAR);
     equalizeHist(cvImage, cvImage);
+
     return cvImage;
 }
 
@@ -148,6 +149,7 @@ int OpenCVDNNFaceRecognizer::recognize(const cv::Mat& inputImage)
 
     return predictedLabel;
 }
+
 //we can delete this function later
 /*
 void OpenCVDNNFaceRecognizer::train(const std::vector<cv::Mat>& images, const std::vector<int>& labels, const QString& context)
@@ -163,4 +165,5 @@ void OpenCVDNNFaceRecognizer::train(const std::vector<cv::Mat>& images, const st
     //FaceDbAccess().db()->updateDNNFaceModel(d->dnn());
 }
 */
+
 } // namespace Digikam
