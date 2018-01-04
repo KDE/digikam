@@ -33,11 +33,12 @@
 // Local includes
 
 #include "libopencv.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class FullObjectDetection
+class DIGIKAM_DATABASE_EXPORT FullObjectDetection
 {
 public:
 

@@ -96,8 +96,8 @@ set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
 add_library(digikamfacesengine_src
             OBJECT
             ${opencv3face_LIB_SRCS}             # Empty with OpenCV2
-#            ${dnnfaces_LIB_SRCS}
             ${facesengine_LIB_SRCS}
+#            ${dnnfaces_LIB_SRCS}
 )
 
 add_library(digikamfacesengine STATIC $<TARGET_OBJECTS:digikamfacesengine_src>)
@@ -105,7 +105,6 @@ add_library(digikamfacesengine STATIC $<TARGET_OBJECTS:digikamfacesengine_src>)
 add_library(digikamfacesenginedatabase_src
             OBJECT
             ${facesengine_database_LIB_SRCS}
-            ${facesengine_LIB_SRCS}
 )
 
 add_library(digikamfacesenginedatabase STATIC $<TARGET_OBJECTS:digikamfacesenginedatabase_src>)
