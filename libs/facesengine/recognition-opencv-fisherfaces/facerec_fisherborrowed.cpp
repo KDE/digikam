@@ -48,22 +48,26 @@ namespace Digikam
 
 inline Mat asRowMatrix(std::vector<Mat> src, int rtype, double alpha=1, double beta=0)
 {
-
     // number of samples
     size_t n = src.size();
+
     // return empty matrix if no matrices given
-    if(n == 0)
+    if (n == 0)
         return Mat();
+
     // dimensionality of (reshaped) samples
     size_t d = src[0].total();
+
     // create data matrix
     Mat data((int)n, (int)d, rtype);
+
     // now copy data
-    for(unsigned int i = 0; i < n; i++)
+    for (unsigned int i = 0 ; i < n ; i++)
     {
         Mat xi = data.row(i);
+
         // make reshape happy by cloning for non-continuous matrices
-        if(src[i].isContinuous())
+        if (src[i].isContinuous())
         {
             src[i].reshape(1, 1).convertTo(xi, rtype, alpha, beta);
         }
@@ -72,6 +76,7 @@ inline Mat asRowMatrix(std::vector<Mat> src, int rtype, double alpha=1, double b
             src[i].clone().reshape(1, 1).convertTo(xi, rtype, alpha, beta);
         }
     }
+
     return data;
 }
 
@@ -82,11 +87,15 @@ inline std::vector<_Tp> remove_dups(const std::vector<_Tp>& src)
     typedef typename std::set<_Tp>::const_iterator constSetIterator;
     typedef typename std::vector<_Tp>::const_iterator constVecIterator;
     std::set<_Tp> set_elems;
-    for (constVecIterator it = src.begin(); it != src.end(); ++it)
+
+    for (constVecIterator it = src.begin() ; it != src.end() ; ++it)
         set_elems.insert(*it);
+
     std::vector<_Tp> elems;
-    for (constSetIterator it = set_elems.begin(); it != set_elems.end(); ++it)
+
+    for (constSetIterator it = set_elems.begin() ; it != set_elems.end() ; ++it)
         elems.push_back(*it);
+
     return elems;
 }
 
@@ -150,7 +159,7 @@ void FisherFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_lab
         m_labels.push_back(labels.at<int>((int)labelIdx));
         m_src.push_back(src[(int)labelIdx]);
     }
-    
+
     // observations in row
     Mat data = asRowMatrix(m_src, CV_64FC1);
 
@@ -162,15 +171,17 @@ void FisherFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_lab
      We have to check the labels first
     */
     bool label_flag = false;
-    for(int i = 1; i < m_labels.rows; i++)
+
+    for (int i = 1 ; i < m_labels.rows ; i++)
     {
-        if(m_labels.at<int>(i, 0)!=m_labels.at<int>(i-1, 0))
+        if (m_labels.at<int>(i, 0)!=m_labels.at<int>(i-1, 0))
         {
             label_flag = true;
             break;
         }
     }
-    if(!label_flag)
+
+    if (!label_flag)
     {
         String error_message = format("The labels should contain more than one types.");
         CV_Error(CV_StsBadArg, error_message);
@@ -180,13 +191,15 @@ void FisherFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_lab
     m_projections.clear();
 
     std::vector<int> ll;
-    for(unsigned int i = 0; i < m_labels.total(); i++)
+
+    for (unsigned int i = 0 ; i < m_labels.total() ; i++)
     {
         ll.push_back(m_labels.at<int>(i));
     }
 
     // get the number of unique classes
     int C = (int) remove_dups(ll).size();
+
     // clip number of components to be valid
     m_num_components = (C-1);
 
@@ -199,7 +212,7 @@ void FisherFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_lab
     gemm(pca.eigenvectors, lda.eigenvectors(), 1.0, Mat(), 0.0, m_eigenvectors, GEMM_1_T);
 
     // store the projections of the original data
-    for(int sampleIdx = 0; sampleIdx < data.rows; sampleIdx++)
+    for (int sampleIdx = 0 ; sampleIdx < data.rows ; sampleIdx++)
     {
         Mat p = LDA::subspaceProject(m_eigenvectors, m_mean, data.row(sampleIdx));
         m_projections.push_back(p);
@@ -214,6 +227,7 @@ void FisherFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predic
 #endif
 {
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image using fisherfaces";
+
     if (m_projections.empty())
     {
         // throw error if no data (or simply return -1?)
@@ -222,8 +236,9 @@ void FisherFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predic
     }
 
     Mat src = _src.getMat();//254*254
+
     //make sure the size of input image is the same as traing image
-    if(m_src.size()>=1 && (src.rows!=m_src[0].rows||src.cols!=m_src[0].cols))
+    if (m_src.size() >= 1 && (src.rows != m_src[0].rows || src.cols != m_src[0].cols))
     {
         //resize(src, src, Size(m_src[0].rows, m_src[0].cols), (0, 0), (0, 0), INTER_LINEAR);
         resize(src, src, Size(m_src[0].rows, m_src[0].cols));
@@ -239,7 +254,7 @@ void FisherFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predic
     Mat q = LDA::subspaceProject(m_eigenvectors, m_mean, src.reshape(1, 1));
 
     //find nearest neighbor
-    for (size_t sampleIdx = 0; sampleIdx < m_projections.size(); sampleIdx++)
+    for (size_t sampleIdx = 0 ; sampleIdx < m_projections.size() ; sampleIdx++)
     {
         double dist = norm(m_projections[sampleIdx], q, NORM_L2);
 

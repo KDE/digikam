@@ -67,7 +67,7 @@ public:
 
 private:
 
-    FisherFaceModel     m_fisher;
+    FisherFaceModel   m_fisher;
     bool              loaded;
 };
 
@@ -84,7 +84,7 @@ OpenCVFISHERFaceRecognizer::~OpenCVFISHERFaceRecognizer()
 
 void OpenCVFISHERFaceRecognizer::setThreshold(float threshold) const
 {
-    d->threshold    = threshold;
+    d->threshold = threshold;
 }
 
 namespace

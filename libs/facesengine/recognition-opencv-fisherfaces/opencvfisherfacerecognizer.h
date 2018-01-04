@@ -36,10 +36,6 @@
 
 #include <QImage>
 
-// Local includes
-
-//#include "opencvmatdata.h"
-
 namespace Digikam
 {
 
@@ -51,7 +47,7 @@ public:
     /**
      *  @brief FaceRecognizer:Master class to control entire recognition using Fisherfaces algorithm
      */
-    OpenCVFISHERFaceRecognizer();
+    explicit OpenCVFISHERFaceRecognizer();
     ~OpenCVFISHERFaceRecognizer();
 
     void setThreshold(float threshold) const;

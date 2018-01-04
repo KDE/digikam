@@ -32,10 +32,6 @@
 
 #include <QImage>
 
-// Local includes
-
-//#include "opencvmatdata.h"
-
 namespace Digikam
 {
 
@@ -47,7 +43,7 @@ public:
     /**
      *  @brief FaceRecognizer:Master class to control entire recognition using Eigenfaces algorithm
      */
-    OpenCVDNNFaceRecognizer();
+    explicit OpenCVDNNFaceRecognizer();
     ~OpenCVDNNFaceRecognizer();
 
     void setThreshold(float threshold) const;

@@ -84,7 +84,7 @@ OpenCVEIGENFaceRecognizer::~OpenCVEIGENFaceRecognizer()
 
 void OpenCVEIGENFaceRecognizer::setThreshold(float threshold) const
 {
-    d->threshold    = threshold;
+    d->threshold = threshold;
 }
 
 namespace
@@ -118,7 +118,7 @@ cv::Mat OpenCVEIGENFaceRecognizer::prepareForRecognition(const QImage& inputImag
             break;
         default:
             image          = image.convertToFormat(QImage::Format_RGB888);
-            cvImage = cv::Mat(image.height(), image.width(), CV_8UC3, image.scanLine(0), image.bytesPerLine());
+            cvImage        = cv::Mat(image.height(), image.width(), CV_8UC3, image.scanLine(0), image.bytesPerLine());
             //cvtColor(cvImageWrapper, cvImage, CV_RGB2GRAY);
             break;
     }

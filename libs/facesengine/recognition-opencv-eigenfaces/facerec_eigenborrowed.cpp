@@ -76,6 +76,7 @@ inline Mat asRowMatrix(std::vector<Mat> src, int rtype, double alpha=1, double b
             src[i].clone().reshape(1, 1).convertTo(xi, rtype, alpha, beta);
         }
     }
+
     return data;
 }
 
@@ -139,12 +140,12 @@ void EigenFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labe
         m_labels.push_back(labels.at<int>((int)labelIdx));
         m_src.push_back(src[(int)labelIdx]);
     }
-    
+
     // observations in row
     Mat data = asRowMatrix(m_src, CV_64FC1);
 
     // number of samples
-    int n = data.rows;
+    int n    = data.rows;
 
     // clear existing model data
     m_projections.clear();
@@ -159,7 +160,7 @@ void EigenFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labe
     transpose(pca.eigenvectors, m_eigenvectors); // eigenvectors by column
 
     // save projections
-    for(int sampleIdx = 0; sampleIdx < data.rows; sampleIdx++)
+    for (int sampleIdx = 0 ; sampleIdx < data.rows ; sampleIdx++)
     {
         Mat p = LDA::subspaceProject(m_eigenvectors, m_mean, data.row(sampleIdx));
         m_projections.push_back(p);
@@ -181,11 +182,11 @@ void EigenFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predict
         CV_Error(CV_StsBadArg, error_message);
     }
 
-    Mat src = _src.getMat();//254*254
+    Mat src = _src.getMat(); //254*254
 
-    //make sure the size of input image is the same as traing image
+    // make sure the size of input image is the same as traing image
 
-    if(m_src.size()>=1 && (src.rows!=m_src[0].rows||src.cols!=m_src[0].cols))
+    if (m_src.size() >= 1 && (src.rows != m_src[0].rows || src.cols != m_src[0].cols))
     {
         resize(src, src, Size(m_src[0].rows, m_src[0].cols), (0, 0), (0, 0), INTER_LINEAR);
     }
@@ -200,7 +201,7 @@ void EigenFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predict
     Mat q   = LDA::subspaceProject(m_eigenvectors, m_mean, src.reshape(1, 1));
 
     //find nearest neighbor
-    for (size_t sampleIdx = 0; sampleIdx < m_projections.size(); sampleIdx++)
+    for (size_t sampleIdx = 0 ; sampleIdx < m_projections.size() ; sampleIdx++)
     {
         double dist = norm(m_projections[sampleIdx], q, NORM_L2);
 

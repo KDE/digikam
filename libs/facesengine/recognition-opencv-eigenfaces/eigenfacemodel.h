@@ -56,7 +56,7 @@ public:
 
 public:
 
-    EigenFaceMatMetadata();
+    explicit EigenFaceMatMetadata();
     ~EigenFaceMatMetadata();
 
 public:
@@ -74,7 +74,7 @@ class EigenFaceModel : public cv::Ptr<EigenFaceRecognizer>
 {
 public:
 
-    EigenFaceModel();
+    explicit EigenFaceModel();
     ~EigenFaceModel();
 
     EigenFaceRecognizer*       ptr();

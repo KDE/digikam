@@ -47,16 +47,18 @@ class FisherFaceRecognizer : public cv::face::FaceRecognizer
 public:
 
     // Initializes this Fisherfaces Model.
-    FisherFaceRecognizer(double threshold = DBL_MAX):
-    m_threshold(threshold), m_num_components(0)
+    FisherFaceRecognizer(double threshold = DBL_MAX)
+        : m_threshold(threshold),
+          m_num_components(0)
     {
     }
 
     // Initializes and computes this Fisherfaces Model.
     FisherFaceRecognizer(cv::InputArrayOfArrays src,
-                       cv::InputArray labels,
-                       double threshold = DBL_MAX) :
-        m_threshold(threshold), m_num_components(0)
+                         cv::InputArray labels,
+                         double threshold = DBL_MAX)
+        : m_threshold(threshold),
+          m_num_components(0)
     {
         train(src, labels);
     }
@@ -158,14 +160,14 @@ private:
 private:
 
     // NOTE: Do not use a d private internal container, this will crash OpenCV in cv::Algorithm::set()
-    double m_threshold;
-    int m_num_components;
+    double               m_threshold;
+    int                  m_num_components;
 
     std::vector<cv::Mat> m_src;
     std::vector<cv::Mat> m_projections;
-    cv::Mat m_labels;
-    cv::Mat m_eigenvectors;
-    cv::Mat m_mean;
+    cv::Mat              m_labels;
+    cv::Mat              m_eigenvectors;
+    cv::Mat              m_mean;
 };
 
 } // namespace Digikam

@@ -56,7 +56,7 @@ public:
 
 public:
 
-    FisherFaceMatMetadata();
+    explicit FisherFaceMatMetadata();
     ~FisherFaceMatMetadata();
 
 public:
@@ -74,7 +74,7 @@ class FisherFaceModel : public cv::Ptr<FisherFaceRecognizer>
 {
 public:
 
-    FisherFaceModel();
+    explicit FisherFaceModel();
     ~FisherFaceModel();
 
     FisherFaceRecognizer*       ptr();

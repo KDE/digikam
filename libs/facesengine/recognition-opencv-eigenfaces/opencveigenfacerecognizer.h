@@ -38,8 +38,6 @@
 
 // Local includes
 
-//#include "opencvmatdata.h"
-
 namespace Digikam
 {
 
@@ -51,7 +49,7 @@ public:
     /**
      *  @brief FaceRecognizer:Master class to control entire recognition using Eigenfaces algorithm
      */
-    OpenCVEIGENFaceRecognizer();
+    explicit OpenCVEIGENFaceRecognizer();
     ~OpenCVEIGENFaceRecognizer();
 
     void setThreshold(float threshold) const;
