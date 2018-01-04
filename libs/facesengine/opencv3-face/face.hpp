@@ -159,6 +159,11 @@ String name = model->name();
 class /*CV_EXPORTS_W*/ DIGIKAM_DATABASE_EXPORT FaceRecognizer : public Algorithm
 {
 public:
+
+#if !OPENCV_TEST_VERSION(3,4,0)
+    using cv::Algorithm::read;
+#endif
+
     /** @brief Trains a FaceRecognizer with given data and associated labels.
 
     @param src The training images, that means the faces you want to learn. The data has to be
