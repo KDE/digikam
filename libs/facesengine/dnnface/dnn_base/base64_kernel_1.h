@@ -1,36 +1,28 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
- * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * This file is a part of digiKam
  *
- * @date    2017-08-08
- * @brief   Class base64 for dnn module, can be used for face recognition, 
- *          all codes are ported from dlib library (http://dlib.net/)
+ * Date        : 2017-08-08
+ * Description : Base functions for dnn module, can be used for face recognition, 
+ *               all codes are ported from dlib library (http://dlib.net/)
  *
- * @section DESCRIPTION
+ * Copyright (C) 2006-2016 by Davis E. King <davis at dlib dot net>
+ * Copyright (C) 2017      by Yingjie Liu <yingjiewudi at gmail dot com>
+ * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
- * @author Copyright (C) 2017 by Yingjie Liu
- *         <a href="mailto:yingjiewudi at gmail dot com">yingjiewudi at gmail dot com</a>
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
  *
- * @section LICENSE
- *
- * Released to public domain under terms of the BSD Simplified license.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *   * Neither the name of the organization nor the names of its contributors
- *     may be used to endorse or promote products derived from this software
- *     without specific prior written permission.
- *
- *   See <http://www.opensource.org/licenses/bsd-license>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #ifndef DLIB_BASE64_KERNEl_1_
 #define DLIB_BASE64_KERNEl_1_
 
