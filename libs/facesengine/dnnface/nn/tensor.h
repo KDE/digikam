@@ -5,7 +5,7 @@
 
 //#include "tensor_abstract.h"
 #include <cstring>
-#include "../matrix.h"
+#include "../matrix/matrix.h"
 #include "../matrix/matrix_utilities.h"
 #include "../matrix/matrix_subexp.h"
 #include "../matrix/matrix_math_functions.h"

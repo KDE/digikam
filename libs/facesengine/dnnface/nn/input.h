@@ -3,7 +3,7 @@
 #ifndef DLIB_DNn_INPUT_H_
 #define DLIB_DNn_INPUT_H_
 
-#include "../matrix.h"
+#include "../matrix/matrix.h"
 #include "../matrix/matrix_utilities.h"
 #include "../matrix/matrix_subexp.h"
 #include "../matrix/matrix_math_functions.h"
