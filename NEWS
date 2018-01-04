@@ -218,5 +218,6 @@ BUGFIXES FROM BUGZILLA:
 206 ==> 388437 - Current photo in the Image Editor is not selected in Albums view.
 207 ==> 384934 - Install failed on Windows 10.
 208 ==> 388351 - Use AppImage SDK version 10 instead 6 to be compatible with FireJail.
-209 ==> 
-
+209 ==> 388501 - UpdateSchemaFromV8ToV9 fails due to duplicate entry for key albumRoot.
+210 ==> 388467 - failed to migrate from schema 7 to 8.
+211 ==> 
