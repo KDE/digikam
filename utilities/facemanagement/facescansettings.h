@@ -7,6 +7,7 @@
  * Description : Face scan settings
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACESCANSETTINGS_H
-#define FACESCANSETTINGS_H
+#ifndef FACE_SCAN_SETTINGS_H
+#define FACE_SCAN_SETTINGS_H
 
 // Local includes
 
@@ -55,13 +56,13 @@ public:
         Rescan
     };
 
-    //for recognize algorithm option
+    // for recognize algorithm option
     enum RecognizeAlgorithm
     {
         LBP,
         EigenFace,
         FisherFace,
-        DNN
+        DNN             // Default one as it must be the best and the most advanced : Deep Neural Networks.
     };
 
 public:
@@ -72,7 +73,7 @@ public:
         accuracy               = 80;
         task                   = Detect;
         alreadyScannedHandling = Skip;
-        recognizeAlgorithm     = LBP;
+        recognizeAlgorithm     = DNN;
     }
 
     // processing power
@@ -93,4 +94,4 @@ public:
 
 } // namespace Digikam
 
-#endif // FACESCANSETTINGS_H
+#endif // FACE_SCAN_SETTINGS_H

@@ -256,7 +256,7 @@ void FacesDetector::slotStart()
     bool hasPAlbums = false;
     bool hasTAlbums = false;
 
-    foreach(Album* const album, d->albumTodoList)
+    foreach (Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {

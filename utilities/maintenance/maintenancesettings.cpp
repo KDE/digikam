@@ -92,6 +92,7 @@ QDebug operator<<(QDebug dbg, const MaintenanceSettings& s)
     dbg.nospace() << "cleanThumbDb          : " << s.cleanThumbDb << endl;
     dbg.nospace() << "cleanFacesDb          : " << s.cleanFacesDb << endl;
     dbg.nospace() << "shrinkDatabases       : " << s.shrinkDatabases << endl;
+
     return dbg.space();
 }
 
