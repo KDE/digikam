@@ -760,14 +760,14 @@ void EditorWindow::setupStandardActions()
     connect(d->blurAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlur()));
     d->blurAction->setEnabled(false);
-
+/*
     d->healCloneAction = new QAction(QIcon::fromTheme(QLatin1String("edit-clone")), i18n("Healing Clone..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_healingclone"), d->healCloneAction);
     d->healCloneAction->setWhatsThis( i18n( "This filter can be used to clone a part in a photo to erase unwanted region.") );
     connect(d->healCloneAction, SIGNAL(triggered(bool)),
             this, SLOT(slotHealingClone()));
     d->healCloneAction->setEnabled(false);
-
+*/
     d->noiseReductionAction = new QAction(QIcon::fromTheme(QLatin1String("noisereduction")), i18n("Noise Reduction..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_noisereduction"), d->noiseReductionAction);
     connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
@@ -1490,7 +1490,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->filmAction->setEnabled(val);
     d->restorationAction->setEnabled(val);
     d->blurAction->setEnabled(val);
-    d->healCloneAction->setEnabled(val);
+    //d->healCloneAction->setEnabled(val);
     d->sharpenAction->setEnabled(val);
     d->noiseReductionAction->setEnabled(val);
     d->localContrastAction->setEnabled(val);
@@ -3004,7 +3004,7 @@ void EditorWindow::setupSelectToolsAction()
     QString enhanceCategory             = i18nc("@title Image Enhance",  "Enhance");
     actionModel->addAction(d->restorationAction,          enhanceCategory);
     actionModel->addAction(d->blurAction,                 enhanceCategory);
-    actionModel->addAction(d->healCloneAction,            enhanceCategory);
+    //actionModel->addAction(d->healCloneAction,            enhanceCategory);
     actionModel->addAction(d->sharpenAction,              enhanceCategory);
     actionModel->addAction(d->noiseReductionAction,       enhanceCategory);
     actionModel->addAction(d->localContrastAction,        enhanceCategory);
