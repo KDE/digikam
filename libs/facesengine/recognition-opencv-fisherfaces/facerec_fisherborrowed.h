@@ -122,22 +122,14 @@ public:
 #endif
 
     /**
-     * See FaceRecognizer::load().
+     * See FaceRecognizer::read().
      */
-#if OPENCV_TEST_VERSION(3,1,0)
-    void load(const cv::FileStorage&) {}
-#else
-    void load(const cv::FileStorage&) override {}
-#endif
+    void read(const cv::FileStorage&) {}
 
     /**
-     * See FaceRecognizer::save().
+     * See FaceRecognizer::write().
      */
-#if OPENCV_TEST_VERSION(3,1,0)
-    void save(cv::FileStorage&) const {}
-#else
-    void save(cv::FileStorage&) const override {}
-#endif
+    void write(cv::FileStorage&) const {}
 
     /**
      * Getter functions.
