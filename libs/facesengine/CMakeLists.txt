@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -64,13 +64,6 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
 #                        preprocessing-tantriggs/tantriggspreprocessor.cpp
 )
 
-#set(dnnfaces_LIB_SRCS dnnface/dnn_base/base64_kernel_1.cpp
-#                      dnnface/dnn_base/entropy_decoder_kernel_2.cpp
-#                      dnnface/dnn_base/entropy_encoder_kernel_2.cpp
-#                      dnnface/nn/gpu_data.cpp
-#                      dnnface/nn/tensor_tools.cpp
-#)
-
 set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
                                   recognition-opencv-eigenfaces/eigenfacemodel.cpp
                                   recognition-opencv-eigenfaces/opencveigenfacerecognizer.cpp
@@ -97,7 +90,6 @@ add_library(digikamfacesengine_src
             OBJECT
             ${opencv3face_LIB_SRCS}             # Empty with OpenCV2
             ${facesengine_LIB_SRCS}
-#            ${dnnfaces_LIB_SRCS}
 )
 
 add_library(digikamfacesengine STATIC $<TARGET_OBJECTS:digikamfacesengine_src>)

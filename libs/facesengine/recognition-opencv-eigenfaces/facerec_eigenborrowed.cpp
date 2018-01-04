@@ -188,7 +188,7 @@ void EigenFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predict
 
     if (m_src.size() >= 1 && (src.rows != m_src[0].rows || src.cols != m_src[0].cols))
     {
-        resize(src, src, Size(m_src[0].rows, m_src[0].cols), (0, 0), (0, 0), INTER_LINEAR);
+        resize(src, src, Size(m_src[0].rows, m_src[0].cols), 0, 0, INTER_LINEAR);
     }
 
 #if OPENCV_TEST_VERSION(3,1,0)

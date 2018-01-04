@@ -47,16 +47,18 @@ class EigenFaceRecognizer : public cv::face::FaceRecognizer
 public:
 
     // Initializes this Eigenfaces Model.
-    EigenFaceRecognizer(double threshold = DBL_MAX):
-        m_threshold(threshold), m_num_components(0)
+    EigenFaceRecognizer(double threshold = DBL_MAX)
+        : m_threshold(threshold),
+          m_num_components(0)
     {
     }
 
     // Initializes and computes this Eigenfaces Model.
     EigenFaceRecognizer(cv::InputArrayOfArrays src,
                         cv::InputArray labels,
-                        double threshold = DBL_MAX) :
-        m_threshold(threshold), m_num_components(0)
+                        double threshold = DBL_MAX)
+        : m_threshold(threshold),
+          m_num_components(0)
     {
         train(src, labels);
     }
@@ -66,9 +68,12 @@ public:
 #if OPENCV_TEST_VERSION(3,0,0)
     using cv::FaceRecognizer::save;
     using cv::FaceRecognizer::load;
-#else
+#elif OPENCV_TEST_VERSION(3,4,0)
     using cv::face::FaceRecognizer::save;
     using cv::face::FaceRecognizer::load;
+#else
+    using cv::face::FaceRecognizer::write;
+    using cv::face::FaceRecognizer::read;
 #endif
 
     static cv::Ptr<EigenFaceRecognizer> create(double threshold = DBL_MAX);
@@ -103,7 +108,7 @@ public:
     /**
      * Predicts the label and confidence for a given sample.
      */
-    void predict(cv::InputArray _src, int &label, double &dist) const;
+    void predict(cv::InputArray _src, int& label, double& dist) const;
 #else
     using cv::face::FaceRecognizer::predict;
     /*

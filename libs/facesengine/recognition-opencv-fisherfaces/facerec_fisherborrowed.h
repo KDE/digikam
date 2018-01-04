@@ -68,9 +68,12 @@ public:
 #if OPENCV_TEST_VERSION(3,0,0)
     using cv::FaceRecognizer::save;
     using cv::FaceRecognizer::load;
-#else
+#elif OPENCV_TEST_VERSION(3,4,0)
     using cv::face::FaceRecognizer::save;
     using cv::face::FaceRecognizer::load;
+#else
+    using cv::face::FaceRecognizer::write;
+    using cv::face::FaceRecognizer::read;
 #endif
 
     static cv::Ptr<FisherFaceRecognizer> create(double threshold = DBL_MAX);
@@ -105,7 +108,7 @@ public:
     /**
      * Predicts the label and confidence for a given sample.
      */
-    void predict(cv::InputArray _src, int &label, double &dist) const;
+    void predict(cv::InputArray _src, int& label, double& dist) const;
 #else
     using cv::face::FaceRecognizer::predict;
     /*

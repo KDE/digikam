@@ -134,7 +134,7 @@ public:
     /**
      * Predicts the label and confidence for a given sample.
      */
-    void predict(cv::InputArray _src, int &label, double &dist) const;
+    void predict(cv::InputArray _src, int& label, double& dist) const;
 //#else
     //using cv::face::FaceRecognizer::predict;
     /*
@@ -155,7 +155,6 @@ public:
 
     cv::Mat getLabels() const                              { return m_labels;                     }
     void setLabels(cv::Mat _labels)                        { m_labels = _labels;                  }
-
 
 private:
 
