@@ -441,7 +441,6 @@ void DigikamImageView::rename()
         QPointer<AdvancedRenameProcessDialog> dlg = new AdvancedRenameProcessDialog(newNamesList);
         dlg->exec();
         delete dlg;
-        imageAlbumModel()->refresh();
     }
 }
 
