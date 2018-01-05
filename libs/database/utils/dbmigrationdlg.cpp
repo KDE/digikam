@@ -213,13 +213,15 @@ void DatabaseMigrationDialog::slotPerformCopy()
 
     if (fromDBParameters == toDBParameters)
     {
-        QMessageBox::critical(this, qApp->applicationName(), i18n("Database type or location must be different!"));
+        QMessageBox::critical(this, qApp->applicationName(),
+                              i18n("Database type or location must be different!"));
         return;
     }
 
     if (fromDBParameters.internalServer && toDBParameters.internalServer)
     {
-        QMessageBox::critical(this, qApp->applicationName(), i18n("Internal server can only be used once!"));
+        QMessageBox::critical(this, qApp->applicationName(),
+                              i18n("Internal server can only be used once!"));
         return;
     }
 
@@ -227,7 +229,8 @@ void DatabaseMigrationDialog::slotPerformCopy()
 
     if ((fromDBParameters.internalServer || toDBParameters.internalServer) && !orgPrms.internalServer)
     {
-        QMessageBox::critical(this, qApp->applicationName(), i18n("Internal server has not been used and started!"));
+        QMessageBox::critical(this, qApp->applicationName(),
+                              i18n("Internal server is not used and is not active!"));
         return;
     }
 
