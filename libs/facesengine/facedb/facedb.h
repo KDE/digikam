@@ -24,6 +24,10 @@
 #ifndef FACE_DATABASE_TRAINING_INTERFACE_H
 #define FACE_DATABASE_TRAINING_INTERFACE_H
 
+// C++ includes
+
+#include <vector>
+
 // Qt includes
 
 #include <QString>
@@ -31,16 +35,11 @@
 #include <QDataStream>
 #include <QStandardPaths>
 
-//c++ includes
-#include <vector>
-
 // Local includes
 
 #include "identity.h"
 #include "facedbbackend.h"
 #include "opencvmatdata.h"
-//#include "dnn_face.h"
-
 
 namespace Digikam
 {
@@ -50,11 +49,6 @@ class EigenFaceModel;
 class FisherFaceModel;
 class DNNFaceModel;
 
-//#ifndef DNN_NETWORK
-//#define DNN_NETWORK
-
-//#endif
-                                
 class FaceDb
 {
 public:
@@ -69,7 +63,7 @@ public:
     int  addIdentity() const;
     void updateIdentity(const Identity& p);
     void deleteIdentity(int id);
-    void deleteIdentity(const QString & uuid);
+    void deleteIdentity(const QString& uuid);
     QList<Identity> identities()  const;
     QList<int>      identityIds() const;
 
@@ -92,7 +86,7 @@ public:
     FisherFaceModel fisherFaceModel() const;
 
     /// DNN
-    DNNFaceModel dnnFaceModel();// const;
+    DNNFaceModel dnnFaceModel() const;
 
     // ----------- Database shrinking methods ----------
 
