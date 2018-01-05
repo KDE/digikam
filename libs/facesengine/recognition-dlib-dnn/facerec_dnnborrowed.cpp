@@ -181,7 +181,7 @@ void DNNFaceRecognizer::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
 }
 */
 //#if OPENCV_TEST_VERSION(3,1,0)
-void DNNFaceRecognizer::predict(cv::InputArray _src, int &minClass, double &minDist) const
+void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minDist) const
 //#else
 //void DNNFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictCollector> collector) const
 //#endif
