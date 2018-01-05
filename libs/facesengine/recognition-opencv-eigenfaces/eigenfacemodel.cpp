@@ -74,11 +74,7 @@ EigenFaceRecognizer* EigenFaceModel::ptr()
 
 const EigenFaceRecognizer* EigenFaceModel::ptr() const
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    const EigenFaceRecognizer* const ptr = cv::Ptr<EigenFaceRecognizer>::operator const Digikam::EigenFaceRecognizer*();
-#else
     const EigenFaceRecognizer* const ptr = cv::Ptr<EigenFaceRecognizer>::operator Digikam::EigenFaceRecognizer*();
-#endif
 
     if (!ptr)
         qCWarning(DIGIKAM_FACESENGINE_LOG) << "EigenFaceRecognizer pointer is null";

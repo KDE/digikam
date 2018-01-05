@@ -59,12 +59,10 @@ void DNNFaceRecognizer::update(std::vector<std::vector<float>> _in_src, InputArr
     this->train(_in_src, _inm_labels, true);
 }
 
+/** This train function is used to store the face vectors, not training
+ */
 void DNNFaceRecognizer::train(std::vector<std::vector<float>> _in_src, InputArray _inm_labels, bool preserveData)
 {
-    /*
-    This train function is used to store the face vectors, not training
-    */
-
     // get the vector of matrices
     std::vector<std::vector<float>> src = _in_src;
 
@@ -180,11 +178,7 @@ void DNNFaceRecognizer::getFaceVector(cv::Mat data, std::vector<float>& vecdata)
     }
 }
 */
-//#if OPENCV_TEST_VERSION(3,1,0)
 void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minDist) const
-//#else
-//void DNNFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictCollector> collector) const
-//#endif
 {
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image";
 
@@ -197,16 +191,8 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minD
     minDist      = DBL_MAX;
     minClass     = -1;
 
-/*
-#if OPENCV_TEST_VERSION(3,1,0)
-    minDist      = DBL_MAX;
-    minClass     = -1;
-#else
-    collector->init(0);//here need to confirm
-#endif
-*/
+    // find nearest neighbor
 
-    //find nearest neighbor
     for (size_t sampleIdx = 0; sampleIdx < m_src.size(); sampleIdx++)
     {
         double dist = 0;
@@ -216,26 +202,14 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minD
         }
         dist = std::sqrt(dist);
 
-//#if OPENCV_TEST_VERSION(3,1,0)
         if ((dist < minDist) && (dist < m_threshold))
         {
             minDist  = dist;
             minClass = m_labels.at<int>((int) sampleIdx);
         }
     }
-/*
-#else
-        int label = m_labels.at<int>((int) sampleIdx);
-
-        if (!collector->collect(label, dist))
-        {
-            return;
-        }
-    }
-#endif*/
 }
 
-//#if OPENCV_TEST_VERSION(3,1,0)
 int DNNFaceRecognizer::predict(InputArray _src) const
 {
     int    label;
@@ -244,7 +218,6 @@ int DNNFaceRecognizer::predict(InputArray _src) const
 
     return label;
 }
-//#endif
 
 // Static method ----------------------------------------------------
 

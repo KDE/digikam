@@ -217,14 +217,9 @@ void FisherFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_lab
         Mat p = LDA::subspaceProject(m_eigenvectors, m_mean, data.row(sampleIdx));
         m_projections.push_back(p);
     }
-
 }
 
-#if OPENCV_TEST_VERSION(3,1,0)
-void FisherFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist) const
-#else
 void FisherFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictCollector> collector) const
-#endif
 {
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image using fisherfaces";
 
@@ -244,12 +239,7 @@ void FisherFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predic
         resize(src, src, Size(m_src[0].rows, m_src[0].cols));
     }
 
-#if OPENCV_TEST_VERSION(3,1,0)
-    minDist      = DBL_MAX;
-    minClass     = -1;
-#else
     collector->init(0);//here need to confirm
-#endif
 
     Mat q = LDA::subspaceProject(m_eigenvectors, m_mean, src.reshape(1, 1));
 
@@ -258,13 +248,6 @@ void FisherFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predic
     {
         double dist = norm(m_projections[sampleIdx], q, NORM_L2);
 
-#if OPENCV_TEST_VERSION(3,1,0)
-        if ((dist < minDist) && (dist < m_threshold))
-        {
-            minDist  = dist;
-            minClass = m_labels.at<int>((int) sampleIdx);
-        }
-#else
         int label = m_labels.at<int>((int) sampleIdx);
 
         if (!collector->collect(label, dist))
@@ -272,19 +255,7 @@ void FisherFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predic
             return;
         }
     }
-#endif
 }
-
-#if OPENCV_TEST_VERSION(3,1,0)
-int FisherFaceRecognizer::predict(InputArray _src) const
-{
-    int    label;
-    double dummy;
-    predict(_src, label, dummy);
-
-    return label;
-}
-#endif
 
 // Static method ----------------------------------------------------
 

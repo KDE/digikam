@@ -51,11 +51,7 @@ LBPHFaceModel::LBPHFaceModel()
     : cv::Ptr<LBPHFaceRecognizer>(LBPHFaceRecognizer::create()),
       databaseId(0)
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    ptr()->set("threshold", 100.0);
-#else
     ptr()->setThreshold(100.0);
-#endif
 }
 
 LBPHFaceModel::~LBPHFaceModel()
@@ -74,11 +70,7 @@ LBPHFaceRecognizer* LBPHFaceModel::ptr()
 
 const LBPHFaceRecognizer* LBPHFaceModel::ptr() const
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    const LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator const Digikam::LBPHFaceRecognizer*();
-#else
     const LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator Digikam::LBPHFaceRecognizer*();
-#endif
 
     if (!ptr)
         qCWarning(DIGIKAM_FACESENGINE_LOG) << "LBPHFaceRecognizer pointer is null";
@@ -88,83 +80,47 @@ const LBPHFaceRecognizer* LBPHFaceModel::ptr() const
 
 int LBPHFaceModel::radius() const
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    return ptr()->get<int>("radius");
-#else
     return ptr()->getRadius();
-#endif
 }
 
 void LBPHFaceModel::setRadius(int radius)
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    ptr()->set("radius", radius);
-#else
     ptr()->setRadius(radius);
-#endif
 }
 
 int LBPHFaceModel::neighbors() const
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    return ptr()->get<int>("neighbors");
-#else
     return ptr()->getNeighbors();
-#endif
 }
 
 void LBPHFaceModel::setNeighbors(int neighbors)
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    ptr()->set("neighbors", neighbors);
-#else
     ptr()->setNeighbors(neighbors);
-#endif
 }
 
 int LBPHFaceModel::gridX() const
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    return ptr()->get<int>("grid_x");
-#else
     return ptr()->getGrid_x();
-#endif
 }
 
 void LBPHFaceModel::setGridX(int grid_x)
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    ptr()->set("grid_x", grid_x);
-#else
     ptr()->setGrid_x(grid_x);
-#endif
 }
 
 int LBPHFaceModel::gridY() const
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    return ptr()->get<int>("grid_y");
-#else
     return ptr()->getGrid_y();
-#endif
 }
 
 void LBPHFaceModel::setGridY(int grid_y)
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    ptr()->set("grid_y", grid_y);
-#else
     ptr()->setGrid_y(grid_y);
-#endif
 }
 
 OpenCVMatData LBPHFaceModel::histogramData(int index) const
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    return OpenCVMatData(ptr()->get<std::vector<cv::Mat> >("histograms").at(index));
-#else
     return OpenCVMatData(ptr()->getHistograms().at(index));
-#endif
 }
 
 QList<LBPHistogramMetadata> LBPHFaceModel::histogramMetadata() const
@@ -202,24 +158,14 @@ void LBPHFaceModel::setHistograms(const QList<OpenCVMatData>& histograms, const 
         m_histogramMetadata << metadata;
     }
 
-#if OPENCV_TEST_VERSION(3,0,0)
-    std::vector<cv::Mat> currentHistograms = ptr()->get<std::vector<cv::Mat> >("histograms");
-    cv::Mat currentLabels                  = ptr()->get<cv::Mat>("labels");
-#else
     std::vector<cv::Mat> currentHistograms = ptr()->getHistograms();
     cv::Mat currentLabels                  = ptr()->getLabels();
-#endif
 
     currentHistograms.insert(currentHistograms.end(), newHistograms.begin(), newHistograms.end());
     currentLabels.push_back(newLabels);
 
-#if OPENCV_TEST_VERSION(3,0,0)
-    ptr()->set("histograms", currentHistograms);
-    ptr()->set("labels",     currentLabels);
-#else
     ptr()->setHistograms(currentHistograms);
     ptr()->setLabels(currentLabels);
-#endif
 
 /*
     //Most cumbersome and inefficient way through a file storage which we were forced to use if we used standard OpenCV
@@ -261,11 +207,7 @@ void LBPHFaceModel::update(const std::vector<cv::Mat>& images, const std::vector
 
     // Update local information
     // We assume new labels are simply appended
-#if OPENCV_TEST_VERSION(3,0,0)
-    cv::Mat currentLabels = ptr()->get<cv::Mat>("labels");
-#else
     cv::Mat currentLabels = ptr()->getLabels();
-#endif
 
     for (int i = m_histogramMetadata.size() ; i < currentLabels.rows ; i++)
     {

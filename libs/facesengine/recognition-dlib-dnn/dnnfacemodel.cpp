@@ -70,11 +70,7 @@ DNNFaceRecognizer* DNNFaceModel::ptr()
 
 const DNNFaceRecognizer* DNNFaceModel::ptr() const
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    const DNNFaceRecognizer* const ptr = cv::Ptr<DNNFaceRecognizer>::operator const Digikam::DNNFaceRecognizer*();
-#else
     const DNNFaceRecognizer* const ptr = cv::Ptr<DNNFaceRecognizer>::operator Digikam::DNNFaceRecognizer*();
-#endif
 
     if (!ptr)
         qCWarning(DIGIKAM_FACESENGINE_LOG) << "DNNFaceRecognizer pointer is null";

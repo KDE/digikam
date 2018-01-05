@@ -74,11 +74,7 @@ FisherFaceRecognizer* FisherFaceModel::ptr()
 
 const FisherFaceRecognizer* FisherFaceModel::ptr() const
 {
-#if OPENCV_TEST_VERSION(3,0,0)
-    const FisherFaceRecognizer* const ptr = cv::Ptr<FisherFaceRecognizer>::operator const Digikam::FisherFaceRecognizer*();
-#else
     const FisherFaceRecognizer* const ptr = cv::Ptr<FisherFaceRecognizer>::operator Digikam::FisherFaceRecognizer*();
-#endif
 
     if (!ptr)
         qCWarning(DIGIKAM_FACESENGINE_LOG) << "FisherFaceRecognizer pointer is null";

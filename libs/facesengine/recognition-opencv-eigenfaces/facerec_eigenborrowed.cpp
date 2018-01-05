@@ -66,7 +66,9 @@ inline Mat asRowMatrix(std::vector<Mat> src, int rtype, double alpha=1, double b
     for (unsigned int i = 0 ; i < n ; i++)
     {
         Mat xi = data.row(i);
+
         // make reshape happy by cloning for non-continuous matrices
+
         if(src[i].isContinuous())
         {
             src[i].reshape(1, 1).convertTo(xi, rtype, alpha, beta);
@@ -135,7 +137,7 @@ void EigenFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labe
     }
 
     // append labels to m_labels matrix
-    for (size_t labelIdx = 0; labelIdx < labels.total(); labelIdx++)
+    for (size_t labelIdx = 0 ; labelIdx < labels.total() ; labelIdx++)
     {
         m_labels.push_back(labels.at<int>((int)labelIdx));
         m_src.push_back(src[(int)labelIdx]);
@@ -167,11 +169,7 @@ void EigenFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_labe
     }
 }
 
-#if OPENCV_TEST_VERSION(3,1,0)
-void EigenFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist) const
-#else
 void EigenFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictCollector> collector) const
-#endif
 {
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image";
 
@@ -191,47 +189,23 @@ void EigenFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::Predict
         resize(src, src, Size(m_src[0].rows, m_src[0].cols), 0, 0, INTER_LINEAR);
     }
 
-#if OPENCV_TEST_VERSION(3,1,0)
-    minDist  = DBL_MAX;
-    minClass = -1;
-#else
-    collector->init(0);//here need to confirm
-#endif
+    collector->init(0); // here need to confirm
 
-    Mat q   = LDA::subspaceProject(m_eigenvectors, m_mean, src.reshape(1, 1));
+    Mat q    = LDA::subspaceProject(m_eigenvectors, m_mean, src.reshape(1, 1));
 
-    //find nearest neighbor
+    // find nearest neighbor
+
     for (size_t sampleIdx = 0 ; sampleIdx < m_projections.size() ; sampleIdx++)
     {
         double dist = norm(m_projections[sampleIdx], q, NORM_L2);
-
-#if OPENCV_TEST_VERSION(3,1,0)
-        if ((dist < minDist) && (dist < m_threshold))
-        {
-            minDist  = dist;
-            minClass = m_labels.at<int>((int) sampleIdx);
-        }
-#else
-        int label = m_labels.at<int>((int) sampleIdx);
+        int label   = m_labels.at<int>((int) sampleIdx);
 
         if (!collector->collect(label, dist))
         {
             return;
         }
     }
-#endif
 }
-
-#if OPENCV_TEST_VERSION(3,1,0)
-int EigenFaceRecognizer::predict(InputArray _src) const
-{
-    int    label;
-    double dummy;
-    predict(_src, label, dummy);
-
-    return label;
-}
-#endif
 
 // Static method ----------------------------------------------------
 

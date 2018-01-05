@@ -26,10 +26,7 @@
  * ============================================================ */
 
 #include "libopencv.h"
-
-#if !OPENCV_TEST_VERSION(3,0,0)
 #include "face.hpp"
-#endif
 
 // C++ includes
 
@@ -38,11 +35,8 @@
 namespace Digikam
 {
 
-#if OPENCV_TEST_VERSION(3,0,0)
-class FisherFaceRecognizer : public cv::FaceRecognizer
-#else
+
 class FisherFaceRecognizer : public cv::face::FaceRecognizer
-#endif
 {
 public:
 
@@ -65,10 +59,9 @@ public:
 
     ~FisherFaceRecognizer() {}
 
-#if OPENCV_TEST_VERSION(3,0,0)
-    using cv::FaceRecognizer::save;
-    using cv::FaceRecognizer::load;
-#elif OPENCV_TEST_VERSION(3,4,0)
+    using cv::face::FaceRecognizer::predict;
+
+#if OPENCV_TEST_VERSION(3,4,0)
     using cv::face::FaceRecognizer::save;
     using cv::face::FaceRecognizer::load;
 #else
@@ -82,40 +75,18 @@ public:
      * Computes a Fisherfaces model with images in src and
      * corresponding labels in labels.
      */
-#if OPENCV_TEST_VERSION(3,1,0)
-    void train(cv::InputArrayOfArrays src, cv::InputArray labels);
-#else
     void train(cv::InputArrayOfArrays src, cv::InputArray labels) override;
-#endif
 
     /**
      * Updates this Fisherfaces model with images in src and
      * corresponding labels in labels.
      */
-#if OPENCV_TEST_VERSION(3,1,0)
-    void update(cv::InputArrayOfArrays src, cv::InputArray labels);
-#else
     void update(cv::InputArrayOfArrays src, cv::InputArray labels) override;
-#endif
 
-
-#if OPENCV_TEST_VERSION(3,1,0)
-    /**
-     * Predicts the label of a query image in src.
-     */
-    int predict(cv::InputArray src) const;
-
-    /**
-     * Predicts the label and confidence for a given sample.
-     */
-    void predict(cv::InputArray _src, int& label, double& dist) const;
-#else
-    using cv::face::FaceRecognizer::predict;
     /*
      * Predict
      */
     void predict(cv::InputArray src, cv::Ptr<cv::face::PredictCollector> collector) const override;
-#endif
 
     /**
      * See FaceRecognizer::read().

@@ -367,11 +367,7 @@ void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_label
     }
 }
 
-#if OPENCV_TEST_VERSION(3,1,0)
-void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist) const
-#else
 void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictCollector> collector) const
-#endif
 {
     if (m_histograms.empty())
     {
@@ -390,36 +386,23 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
                                       m_grid_y,                                                          /* grid size y                 */
                                       true                                                               /* normed histograms           */
                                      );
-#if OPENCV_TEST_VERSION(3,1,0)
-    minDist      = DBL_MAX;
-    minClass     = -1;
-#else
     collector->init((int)m_histograms.size());
-#endif
 
     // This is the standard method
 
     if (m_statisticsMode == NearestNeighbor)
     {
         // find 1-nearest neighbor
-        for (size_t sampleIdx = 0; sampleIdx < m_histograms.size(); sampleIdx++)
+        for (size_t sampleIdx = 0 ; sampleIdx < m_histograms.size() ; sampleIdx++)
         {
             double dist = compareHist(m_histograms[sampleIdx], query, CV_COMP_CHISQR);
 
-#if OPENCV_TEST_VERSION(3,1,0)
-            if ((dist < minDist) && (dist < m_threshold))
-            {
-                minDist  = dist;
-                minClass = m_labels.at<int>((int) sampleIdx);
-            }
-#else
             int label = m_labels.at<int>((int) sampleIdx);
 
             if (!collector->collect(label, dist))
             {
                 return;
             }
-#endif
         }
     }
 
@@ -454,18 +437,10 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
             double mean = sum / it->second.size();
             s          += QString::fromLatin1("%1: %2 - ").arg(it->first).arg(mean);
 
-#if OPENCV_TEST_VERSION(3,1,0)
-            if ((mean < minDist) && (mean < m_threshold))
-            {
-                minDist = mean;
-                minClass = it->first;
-            }
-#else
             if (!collector->collect(it->first, mean))
             {
                 return;
             }
-#endif
         }
 
         qCDebug(DIGIKAM_FACESENGINE_LOG) << s;
@@ -496,9 +471,6 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
             scoreMap[it->second]++;
         }
 
-#if OPENCV_TEST_VERSION(3,1,0)
-        minDist   = 0;
-#endif
         QString s = QString::fromLatin1("Nearest Neighbor score: ");
 
         for (std::map<int,int>::iterator it = scoreMap.begin(); it != scoreMap.end(); ++it)
@@ -506,35 +478,16 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
             double score = double(it->second) / countMap.at(it->first);
             s           += QString::fromLatin1("%1/%2 %3  ").arg(it->second).arg(countMap.at(it->first)).arg(score);
 
-#if OPENCV_TEST_VERSION(3,1,0)
-            if (score > minDist)
-            {
-                minDist  = score;
-                minClass = it->first;
-            }
-#else
             // large is better thus it is -score.
             if (!collector->collect(it->first, -score))
             {
                 return;
             }
-#endif
         }
 
         qCDebug(DIGIKAM_FACESENGINE_LOG) << s;
     }
 }
-
-#if OPENCV_TEST_VERSION(3,1,0)
-int LBPHFaceRecognizer::predict(InputArray _src) const
-{
-    int    label;
-    double dummy;
-    predict(_src, label, dummy);
-
-    return label;
-}
-#endif
 
 // Static method ----------------------------------------------------
 
@@ -559,17 +512,5 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
 
     return ptr;
 }
-
-#if OPENCV_VERSION <= OPENCV_MAKE_VERSION(2,4,99)
-    CV_INIT_ALGORITHM(LBPHFaceRecognizer, "FaceRecognizer.LBPH-FacesEngine",
-                      obj.info()->addParam(obj, "radius",     obj.m_radius);
-                      obj.info()->addParam(obj, "neighbors",  obj.m_neighbors);
-                      obj.info()->addParam(obj, "grid_x",     obj.m_grid_x);
-                      obj.info()->addParam(obj, "grid_y",     obj.m_grid_y);
-                      obj.info()->addParam(obj, "threshold",  obj.m_threshold);
-                      obj.info()->addParam(obj, "histograms", obj.m_histograms);         // modification: Make Read/Write
-                      obj.info()->addParam(obj, "labels",     obj.m_labels);             // modification: Make Read/Write
-                      obj.info()->addParam(obj, "statistic",  obj.m_statisticsMode))     // modification: Add parameter
-#endif
 
 } // namespace Digikam
