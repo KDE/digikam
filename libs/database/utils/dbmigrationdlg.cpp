@@ -223,6 +223,14 @@ void DatabaseMigrationDialog::slotPerformCopy()
         return;
     }
 
+    DbEngineParameters orgPrms = ApplicationSettings::instance()->getDbEngineParameters();
+
+    if ((fromDBParameters.internalServer || toDBParameters.internalServer) && !orgPrms.internalServer)
+    {
+        QMessageBox::critical(this, qApp->applicationName(), i18n("Internal server has not been used and started!"));
+        return;
+    }
+
     d->copyThread->init(fromDBParameters, toDBParameters);
 
     slotLockInputFields();
