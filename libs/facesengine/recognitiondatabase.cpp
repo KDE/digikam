@@ -95,7 +95,7 @@ class RecognitionDatabase::Private
 {
 public:
 
-    //for recognize algorithm option
+    // for recognize algorithm option
     enum RecognizeAlgorithm
     {
         LBP,
@@ -112,7 +112,7 @@ public:
 
 public:
 
-    Private();
+    explicit Private();
     ~Private();
 
 public:
@@ -131,32 +131,20 @@ public:
 
 public:
 
-    // Change these three lines to change CurrentRecognizer
-    typedef OpenCVLBPHFaceRecognizer CurrentRecognizer;
+    OpenCVLBPHFaceRecognizer*   lbph()               { return getObjectOrCreate(opencvlbph);   }
+    OpenCVLBPHFaceRecognizer*   lbphConst() const    { return opencvlbph;                      }
 
-    CurrentRecognizer* recognizer()                 { return getObjectOrCreate(opencvlbph);   }
-    CurrentRecognizer* recognizerConst()  const     { return opencvlbph;                      }
+    OpenCVEIGENFaceRecognizer*  eigen()              { return getObjectOrCreate(opencveigen);  }
+    OpenCVEIGENFaceRecognizer*  eigenConst() const   { return opencveigen;                     }
 
-public:
+    OpenCVFISHERFaceRecognizer* fisher()             { return getObjectOrCreate(opencvfisher); }
+    OpenCVFISHERFaceRecognizer* fisherConst() const  { return opencvfisher;                    }
 
-    OpenCVLBPHFaceRecognizer* lbph()                { return getObjectOrCreate(opencvlbph);   }
-    OpenCVLBPHFaceRecognizer* lbphConst() const     { return opencvlbph;                      }
+    OpenCVDNNFaceRecognizer*    dnn()                { return getObjectOrCreate(opencvdnn);    }
+    OpenCVDNNFaceRecognizer*    dnnConst() const     { return opencvdnn;                       }
 
-    OpenCVEIGENFaceRecognizer* eigen()              { return getObjectOrCreate(opencveigen);  }
-    OpenCVEIGENFaceRecognizer* eigenConst() const   { return opencveigen;                     }
-
-    OpenCVFISHERFaceRecognizer* fisher()            { return getObjectOrCreate(opencvfisher); }
-    OpenCVFISHERFaceRecognizer* fisherConst() const { return opencvfisher;                    }
-
-    OpenCVDNNFaceRecognizer* dnn()                  { return getObjectOrCreate(opencvdnn);    }
-    OpenCVDNNFaceRecognizer* dnnConst() const       { return opencvdnn;                       }
-
-public:
-
-    typedef FunnelReal CurrentAligner;
-
-    CurrentAligner*    aligner();
-    CurrentAligner*    alignerConst()     const     { return funnel;                          }
+    FunnelReal*                 aligner()            { return getObjectOrCreate(funnel);       }
+    FunnelReal*                 alignerConst() const { return funnel;                          }
 
 public:
 
@@ -229,16 +217,6 @@ RecognitionDatabase::Private::~Private()
     delete opencvlbph;
     delete opencvdnn;
     delete funnel;
-}
-
-RecognitionDatabase::Private::CurrentAligner* RecognitionDatabase::Private::aligner()
-{
-    if (!funnel)
-    {
-        funnel = new FunnelReal;
-    }
-
-    return funnel;
 }
 
 // NOTE: other RecognitionDatabase::Private methods are to be found below, in the relevant context of the main class
@@ -665,23 +643,21 @@ cv::Mat RecognitionDatabase::Private::preprocessingChainRGB(const QImage& image)
 {
     try
     {
-        //cv::Mat cvImage = recognizer()->prepareForRecognition(image);
         cv::Mat cvImage;
-        cvImage = eigen()->prepareForRecognition(image);
-        /*
-        if(recognizeAlgorithm==RecognizeAlgorithm::LBP)
+
+        if (recognizeAlgorithm == RecognizeAlgorithm::LBP)
         {
             cvImage = lbph()->prepareForRecognition(image);
         }
-        else if(recognizeAlgorithm==RecognizeAlgorithm::EigenFace)
+        else if (recognizeAlgorithm == RecognizeAlgorithm::EigenFace)
         {
             cvImage = eigen()->prepareForRecognition(image);
         }
-        else if(recognizeAlgorithm==RecognizeAlgorithm::FisherFace)
+        else if (recognizeAlgorithm == RecognizeAlgorithm::FisherFace)
         {
             cvImage = fisher()->prepareForRecognition(image);
         }
-        else if(recognizeAlgorithm==RecognizeAlgorithm::DNN)
+        else if (recognizeAlgorithm == RecognizeAlgorithm::DNN)
         {
             cvImage = dnn()->prepareForRecognition(image);
         }
@@ -689,10 +665,11 @@ cv::Mat RecognitionDatabase::Private::preprocessingChainRGB(const QImage& image)
         {
             qCCritical(DIGIKAM_FACESENGINE_LOG) << "No obvious recognize algorithm";
         }
-        */
-        //cvImage         = aligner()->align(cvImage);
-        //TanTriggsPreprocessor preprocessor;
-        //cvImage         = preprocessor.preprocess(cvImage);
+/*
+        cvImage         = aligner()->align(cvImage);
+        TanTriggsPreprocessor preprocessor;
+        cvImage         = preprocessor.preprocess(cvImage);
+*/
         return cvImage;
     }
     catch (cv::Exception& e)
@@ -729,22 +706,25 @@ QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const ima
 
         try
         {
-            //id = d->recognizer()->recognize(d->preprocessingChain(images->image()));
-            if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::LBP)
+            if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::LBP)
             {
                 id = d->lbph()->recognize(d->preprocessingChain(images->image()));
             }
-            else if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::EigenFace)
+            else if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::EigenFace)
             {
                 id = d->eigen()->recognize(d->preprocessingChain(images->image()));
             }
-            else if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::FisherFace)
+            else if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::FisherFace)
             {
                 id = d->fisher()->recognize(d->preprocessingChain(images->image()));
             }
-            else if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::DNN)
+            else if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::DNN)
             {
                 id = d->dnn()->recognize(d->preprocessingChainRGB(images->image()));
+            }
+            else
+            {
+                qCCritical(DIGIKAM_FACESENGINE_LOG) << "No obvious recognize algorithm";
             }
         }
         catch (cv::Exception& e)
@@ -934,9 +914,26 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
 
     QMutexLocker lock(&d->mutex);
 
-    //d->train(d->recognizer(), identitiesToBeTrained, data, trainingContext);
-    d->train(d->lbph(), identitiesToBeTrained, data, trainingContext);
-    d->train(d->eigen(), identitiesToBeTrained, data, trainingContext);
+    if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::LBP)
+    {
+        d->train(d->lbph(),  identitiesToBeTrained, data, trainingContext);
+    }
+    else if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::EigenFace)
+    {
+        d->train(d->eigen(), identitiesToBeTrained, data, trainingContext);
+    }
+    else if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::FisherFace)
+    {
+        // No method to call
+    }
+    else if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::DNN)
+    {
+        // No method to call
+    }
+    else
+    {
+        qCCritical(DIGIKAM_FACESENGINE_LOG) << "No obvious recognize algorithm";
+    }
 }
 
 void RecognitionDatabase::train(const Identity& identityToBeTrained, const QImage& image,
@@ -956,7 +953,9 @@ void RecognitionDatabase::train(const Identity& identityToBeTrained, const QList
     delete data;
 }
 
-void RecognitionDatabase::Private::clear(OpenCVLBPHFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext)
+void RecognitionDatabase::Private::clear(OpenCVLBPHFaceRecognizer* const,
+                                         const QList<int>& idsToClear,
+                                         const QString& trainingContext)
 {
     // force later reload
     delete opencvlbph;
@@ -972,7 +971,9 @@ void RecognitionDatabase::Private::clear(OpenCVLBPHFaceRecognizer* const, const 
     }
 }
 
-void RecognitionDatabase::Private::clear(OpenCVEIGENFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext)
+void RecognitionDatabase::Private::clear(OpenCVEIGENFaceRecognizer* const,
+                                         const QList<int>& idsToClear,
+                                         const QString& trainingContext)
 {
     // force later reload
     delete opencveigen;
@@ -988,38 +989,22 @@ void RecognitionDatabase::Private::clear(OpenCVEIGENFaceRecognizer* const, const
     }
 }
 
-void RecognitionDatabase::Private::clear(OpenCVFISHERFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext)
+void RecognitionDatabase::Private::clear(OpenCVFISHERFaceRecognizer* const,
+                                         const QList<int>&,
+                                         const QString&)
 {
     // force later reload
     delete opencvfisher;
     opencvfisher = 0;
-
-    if (idsToClear.isEmpty())
-    {
-        FaceDbAccess().db()->clearEIGENTraining(trainingContext);
-    }
-    else
-    {
-        FaceDbAccess().db()->clearEIGENTraining(idsToClear, trainingContext);
-    }
 }
 
 void RecognitionDatabase::Private::clear(OpenCVDNNFaceRecognizer* const,
-                                         const QList<int>& idsToClear,
-                                         const QString& trainingContext)
+                                         const QList<int>&,
+                                         const QString&)
 {
     // force later reload
     delete opencvdnn;
     opencvdnn = 0;
-
-    if (idsToClear.isEmpty())
-    {
-        FaceDbAccess().db()->clearEIGENTraining(trainingContext);
-    }
-    else
-    {
-        FaceDbAccess().db()->clearEIGENTraining(idsToClear, trainingContext);
-    }
 }
 
 void RecognitionDatabase::clearAllTraining(const QString& trainingContext)
