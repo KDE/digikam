@@ -217,6 +217,12 @@ void DatabaseMigrationDialog::slotPerformCopy()
         return;
     }
 
+    if (fromDBParameters.internalServer && toDBParameters.internalServer)
+    {
+        QMessageBox::critical(this, qApp->applicationName(), i18n("Internal server can only be used once!"));
+        return;
+    }
+
     d->copyThread->init(fromDBParameters, toDBParameters);
 
     slotLockInputFields();
