@@ -620,23 +620,21 @@ cv::Mat RecognitionDatabase::Private::preprocessingChain(const QImage& image)
 {
     try
     {
-        //cv::Mat cvImage = recognizer()->prepareForRecognition(image);
         cv::Mat cvImage;
-        cvImage = lbph()->prepareForRecognition(image);
-        /*
-        if(recognizeAlgorithm==RecognizeAlgorithm::LBP)
+
+        if (recognizeAlgorithm == RecognizeAlgorithm::LBP)
         {
             cvImage = lbph()->prepareForRecognition(image);
         }
-        else if(recognizeAlgorithm==RecognizeAlgorithm::EigenFace)
+        else if (recognizeAlgorithm == RecognizeAlgorithm::EigenFace)
         {
             cvImage = eigen()->prepareForRecognition(image);
         }
-        else if(recognizeAlgorithm==RecognizeAlgorithm::FisherFace)
+        else if (recognizeAlgorithm == RecognizeAlgorithm::FisherFace)
         {
             cvImage = fisher()->prepareForRecognition(image);
         }
-        else if(recognizeAlgorithm==RecognizeAlgorithm::DNN)
+        else if (recognizeAlgorithm == RecognizeAlgorithm::DNN)
         {
             cvImage = dnn()->prepareForRecognition(image);
         }
@@ -644,10 +642,11 @@ cv::Mat RecognitionDatabase::Private::preprocessingChain(const QImage& image)
         {
             qCCritical(DIGIKAM_FACESENGINE_LOG) << "No obvious recognize algorithm";
         }
-        */
-        //cvImage         = aligner()->align(cvImage);
-        //TanTriggsPreprocessor preprocessor;
-        //cvImage         = preprocessor.preprocess(cvImage);
+/*
+        cvImage         = aligner()->align(cvImage);
+        TanTriggsPreprocessor preprocessor;
+        cvImage         = preprocessor.preprocess(cvImage);
+*/
         return cvImage;
     }
     catch (cv::Exception& e)
