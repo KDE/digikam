@@ -97,9 +97,6 @@ Use CMake "-DENABLE_AKONADICONTACTSUPPORT=on" flag to compile digiKam with KDE M
 Use CMake "-DENABLE_DBUS=off"                 flag to compile digiKam without DBus support                                           (enabled by default - for Linux desktop only).
 Use CMake "-DENABLE_MEDIAPLAYER=on"           flag to compile digiKam with QtAV support                                              (disabled by default).
 Use Cmake "-DENABLE_APPSTYLES=on"             flag to compile digiKam with widget application style support                          (disabled by default).
-Use CMake "-DENABLE_OPENCV3=on"               flag to compile digiKam source code using OpenCV3 instead OpenCV2                      (disabled by default).
-                                              OpenCV3 support needs extra contrib modules package, especially 'face'
-                                              and 'legacy' components.
 
 Mysql support options (experimental):
 

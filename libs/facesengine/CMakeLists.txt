@@ -25,6 +25,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/facedb
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
+                    ${CMAKE_CURRENT_SOURCE_DIR}/opencv3-face                    
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-eigenfaces
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-fisherfaces
@@ -42,23 +43,18 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
 )
 
-if(ENABLE_OPENCV3)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/opencv3-face)
-
-    set(opencv3face_LIB_SRCS opencv3-face/facerec.cpp
-                             opencv3-face/lbph_faces.cpp
-                             opencv3-face/eigen_faces.cpp
-                             opencv3-face/fisher_faces.cpp
-                             opencv3-face/predict_collector.cpp
-    )
-endif()
-
 set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          shape-predictor/fullobjectdetection.cpp
                          shape-predictor/qdatastreamoverloads.cpp
                          facedetector.cpp
                          identity.cpp
                          dataproviders.cpp
+
+                         opencv3-face/facerec.cpp
+                         opencv3-face/lbph_faces.cpp
+                         opencv3-face/eigen_faces.cpp
+                         opencv3-face/fisher_faces.cpp
+                         opencv3-face/predict_collector.cpp
 
 #                        alignment-flandmark/flandmarkaligner.cpp
 #                        preprocessing-tantriggs/tantriggspreprocessor.cpp
@@ -88,7 +84,6 @@ set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
 
 add_library(digikamfacesengine_src
             OBJECT
-            ${opencv3face_LIB_SRCS}             # Empty with OpenCV2
             ${facesengine_LIB_SRCS}
 )
 

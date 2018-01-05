@@ -59,9 +59,10 @@ set(KIPI_MIN_VERSION     "5.0.0")
 set(KSANE_MIN_VERSION    "5.0.0")
 set(LENSFUN_MIN_VERSION  "0.2.6.0")
 set(EXIV2_MIN_VERSION    "0.26")
-set(AKONADI_MIN_VERSION  "4.89.0")        # Akonadi Contact dependency
-set(CALENDAR_MIN_VERSION "4.81.0")        # Calendar Core dependency
+set(OPENCV_MIN_VERSION   "3.1.0")
 set(QTAV_MIN_VERSION     "1.12.0")
+set(CALENDAR_MIN_VERSION "4.81.0")        # Calendar Core dependency
+set(AKONADI_MIN_VERSION  "4.89.0")        # Akonadi Contact dependency
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
@@ -98,7 +99,6 @@ include(MacroBoolTo01)
 
 # ==============================================================================
 
-option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 (default=ON)"                            ON)
 option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KDE files indexer support (default=OFF)"                         OFF)
 option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contacts support (default=OFF)"                         OFF)
 option(ENABLE_MEDIAPLAYER           "Build digiKam with Media Player support (default=OFF)"                              OFF)
@@ -108,7 +108,6 @@ option(ENABLE_APPSTYLES             "Build digiKam with support for changing the
 # Mysql support options (experimental):
 option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=ON)"                             ON)
 option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=ON)"                   ON)
-
 
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                        OFF)
@@ -245,34 +244,17 @@ endif()
 
 # -- check OpenCV --------------------------------------------------------------
 
-if(ENABLE_OPENCV3)
+DETECT_OPENCV(${OPENCV_MIN_VERSION} core objdetect imgproc imgcodecs)
 
-    set(OPENCV_MIN_VERSION "3.1.0")
-    DETECT_OPENCV(${OPENCV_MIN_VERSION} core objdetect imgproc imgcodecs face)
-
-    if(${OpenCV_FOUND})
-        if(${OpenCV_VERSION} VERSION_LESS 3.1.0)
-            message(STATUS "ENABLE_OPENCV3 option is enabled and OpenCV < 3.1.0 have been found. Disabled ENABLE_OPENCV3")
-            set(OpenCV_FOUND FALSE)
-        endif()
+if(${OpenCV_FOUND})
+    if(${OpenCV_VERSION} VERSION_LESS 3.1.0)
+        message(STATUS "OpenCV < 3.1.0 have been found. Please use a more recent version.")
+        set(OpenCV_FOUND FALSE)
     endif()
-
-else()
-
-    set(OPENCV_MIN_VERSION "2.4.9")
-    DETECT_OPENCV(${OPENCV_MIN_VERSION} core objdetect imgproc contrib legacy)
-
-    if(${OpenCV_FOUND})
-        if(${OpenCV_VERSION} VERSION_GREATER 2.4.99)
-            message(STATUS "ENABLE_OPENCV3 option is disabled and OpenCV >= 3.0.0 have been found. Enabled ENABLE_OPENCV3")
-            set(OpenCV_FOUND FALSE)
-        endif()
-    endif()
-
 endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/app/utils/libopencv.h.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/app/utils/libopencv.h)
+               ${CMAKE_CURRENT_BINARY_DIR}/app/utils/libopencv.h)
 
 # -- optionals -----------------------------------------------------------------
 
