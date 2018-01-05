@@ -28,6 +28,7 @@
 // Local includes
 
 #include "album.h"
+#include "recognitiondatabase.h"
 
 namespace Digikam
 {
@@ -56,15 +57,6 @@ public:
         Rescan
     };
 
-    // for recognize algorithm option
-    enum RecognizeAlgorithm
-    {
-        LBP,
-        EigenFace,
-        FisherFace,
-        DNN             // Default one as it must be the best and the most advanced : Deep Neural Networks.
-    };
-
 public:
 
     FaceScanSettings()
@@ -73,23 +65,23 @@ public:
         accuracy               = 80;
         task                   = Detect;
         alreadyScannedHandling = Skip;
-        recognizeAlgorithm     = DNN;
+        recognizeAlgorithm     = RecognitionDatabase::RecognizeAlgorithm::DNN;
     }
 
     // processing power
-    bool                   useFullCpu;
+    bool                                    useFullCpu;
 
     // detection
-    double                 accuracy;
+    double                                  accuracy;
 
     // albums to scan
-    AlbumList              albums;
+    AlbumList                               albums;
 
-    ScanTask               task;
+    ScanTask                                task;
 
-    AlreadyScannedHandling alreadyScannedHandling;
+    AlreadyScannedHandling                  alreadyScannedHandling;
 
-    RecognizeAlgorithm     recognizeAlgorithm;
+    RecognitionDatabase::RecognizeAlgorithm recognizeAlgorithm;
 };
 
 } // namespace Digikam

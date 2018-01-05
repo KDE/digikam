@@ -36,6 +36,7 @@
 #include "facetagsiface.h"
 #include "dimg.h"
 #include "imageinfo.h"
+#include "recognitiondatabase.h"
 
 namespace Digikam
 {
@@ -127,7 +128,7 @@ public:
     ImageInfo                     info;
     DImg                          image;
     QList<QRectF>                 detectedFaces;
-    QList<Identity>  recognitionResults;
+    QList<Identity>               recognitionResults;
     FacePipelineFaceTagsIfaceList databaseFaces;
 
     ProcessFlags                  processFlags;
@@ -165,7 +166,7 @@ public:
 
 public:
 
-    FacePipeline();
+    explicit FacePipeline();
     ~FacePipeline();
 
     /**
@@ -214,7 +215,7 @@ public:
     /**
      * Set the face recognition algorithm type
      */
-    void activeFaceRecognizer(int algorithmType);
+    void activeFaceRecognizer(RecognitionDatabase::RecognizeAlgorithm algorithmType);
 
     /**
      * Cancels all processing

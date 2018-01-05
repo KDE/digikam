@@ -196,23 +196,23 @@ void FaceScanDialog::doLoadState()
     d->useFullCpuButton->setChecked(group.readEntry(entryName(d->configUseFullCpu), false));
 
     QString recognizeTask = group.readEntry(entryName(d->configRecognizeTask), d->configRecognizeDNN);
-    FaceScanSettings::RecognizeAlgorithm recAlgorithm;
+    RecognitionDatabase::RecognizeAlgorithm recAlgorithm;
 
-    if (recognizeTask==d->configRecognizeLBP)
+    if (recognizeTask == d->configRecognizeLBP)
     {
-        recAlgorithm = FaceScanSettings::LBP;
+        recAlgorithm = RecognitionDatabase::RecognizeAlgorithm::LBP;
     }
-    else if (recognizeTask==d->configRecognizeEigenFace)
+    else if (recognizeTask == d->configRecognizeEigenFace)
     {
-        recAlgorithm = FaceScanSettings::EigenFace;
+        recAlgorithm = RecognitionDatabase::RecognizeAlgorithm::EigenFace;
     }
-    else if (recognizeTask==d->configRecognizeFisherFace)
+    else if (recognizeTask == d->configRecognizeFisherFace)
     {
-        recAlgorithm = FaceScanSettings::FisherFace;
+        recAlgorithm = RecognitionDatabase::RecognizeAlgorithm::FisherFace;
     }
     else
     {
-        recAlgorithm = FaceScanSettings::DNN;
+        recAlgorithm = RecognitionDatabase::RecognizeAlgorithm::DNN;
     }
 
     d->recognizeBox->setCurrentIndex(d->recognizeBox->findData(recAlgorithm));
@@ -273,21 +273,21 @@ void FaceScanDialog::doSaveState()
 
     QString recognizeTask;
 
-    switch ((FaceScanSettings::RecognizeAlgorithm)(d->recognizeBox->itemData(d->recognizeBox->currentIndex()).toInt()))
+    switch ((RecognitionDatabase::RecognizeAlgorithm)(d->recognizeBox->itemData(d->recognizeBox->currentIndex()).toInt()))
     {
-        case FaceScanSettings::LBP:
+        case RecognitionDatabase::RecognizeAlgorithm::LBP:
             recognizeTask = d->configRecognizeLBP;
             break;
 
-        case FaceScanSettings::EigenFace:
+        case RecognitionDatabase::RecognizeAlgorithm::EigenFace:
             recognizeTask = d->configRecognizeEigenFace;
             break;
 
-        case FaceScanSettings::FisherFace:
+        case RecognitionDatabase::RecognizeAlgorithm::FisherFace:
             recognizeTask = d->configRecognizeFisherFace;
             break;
 
-        case FaceScanSettings::DNN:
+        case RecognitionDatabase::RecognizeAlgorithm::DNN:
             recognizeTask = d->configRecognizeDNN;
             break;
     }
@@ -402,11 +402,11 @@ void FaceScanDialog::setupUi()
     // ---- Recognize algorithm ComboBox -----
 
     d->recognizeBox        = new QComboBox;
-    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using LBP algorithm"),           FaceScanSettings::LBP);
-    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using EigenFaces algorithm"),    FaceScanSettings::EigenFace);
-    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"),   FaceScanSettings::FisherFace);
-    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using Deep Learning algorithm"), FaceScanSettings::DNN);
-    d->recognizeBox->setCurrentIndex(FaceScanSettings::DNN);
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using LBP algorithm"),           RecognitionDatabase::RecognizeAlgorithm::LBP);
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using EigenFaces algorithm"),    RecognitionDatabase::RecognizeAlgorithm::EigenFace);
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"),   RecognitionDatabase::RecognizeAlgorithm::FisherFace);
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using Deep Learning algorithm"), RecognitionDatabase::RecognizeAlgorithm::DNN);
+    d->recognizeBox->setCurrentIndex(RecognitionDatabase::RecognizeAlgorithm::DNN);
     d->recognizeBox->setEnabled(false);
 
     d->retrainAllButton = new QCheckBox(advancedTab);
@@ -514,7 +514,7 @@ FaceScanSettings FaceScanDialog::settings() const
 
     settings.useFullCpu             = d->useFullCpuButton->isChecked();
 
-    settings.recognizeAlgorithm     = (FaceScanSettings::RecognizeAlgorithm)
+    settings.recognizeAlgorithm     = (RecognitionDatabase::RecognizeAlgorithm)
                                       d->recognizeBox->itemData(d->recognizeBox->currentIndex()).toInt();
 
     return settings;

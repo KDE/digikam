@@ -70,6 +70,15 @@ public:
         TrainingIsExpensive
     };
 
+    // for recognize algorithm option
+    enum RecognizeAlgorithm
+    {
+        LBP,
+        EigenFace,
+        FisherFace,
+        DNN             // Default one as it must be the best and the most advanced : Deep Neural Networks.
+    };
+
 public:
 
     RecognitionDatabase();
@@ -140,7 +149,7 @@ public:
     /**
      * Set the face recognition algorithm type
      */
-    void activeFaceRecognizer(int algorithmType);
+    void activeFaceRecognizer(RecognizeAlgorithm algorithmType);
 
     /**
      * Performs recognition.
