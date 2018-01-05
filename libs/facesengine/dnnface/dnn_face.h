@@ -40,6 +40,7 @@
 
 #include "shapepredictor.h"
 #include "fullobjectdetection.h"
+#include "digikam_debug.h"
 
 // DNN includes
 
@@ -91,6 +92,7 @@ using anet_type = loss_metric<fc_no_bias<128,avg_pool_everything<
                                 input_rgb_image_sized<150>
                                 >>>>>>>>>>>>;
 
+using namespace Digikam;
 using namespace Digikam::redeye;
 
 class DNNFaceKernel
@@ -102,21 +104,21 @@ public:
     };
 
     void getFaceVector(cv::Mat tmp_mat, std::vector<float>& vecdata)
-    {          
+    {
         anet_type net;
         frontal_face_detector detector = get_frontal_face_detector();
-        //qCDebug(DIGIKAM_FACEDB_LOG) << "Start reading model file";
+
         QString path1 = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                  QLatin1String("digikam/facesengine/dlib_face_recognition_resnet_model_v1.dat")); 
+                                               QLatin1String("digikam/facesengine/dlib_face_recognition_resnet_model_v1.dat")); 
         deserialize(path1.toStdString()) >> net;
-        //qCDebug(DIGIKAM_FACEDB_LOG) << "End reading model file";
-        //qCDebug(DIGIKAM_FACEDB_LOG) << "Start reading shape file";
+
         redeye::ShapePredictor sp;
         QString path2 = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                  QLatin1String("digikam/facesengine/shapepredictor.dat"));
+                                               QLatin1String("digikam/facesengine/shapepredictor.dat"));
         QFile model(path2);
         redeye::ShapePredictor* const temp = new redeye::ShapePredictor();
-        std::cout << "read file\n";
+
+        qCDebug(DIGIKAM_FACEDB_LOG) << "Start reading shape predictor file";
 
         if (model.open(QIODevice::ReadOnly))
         {
@@ -127,31 +129,33 @@ public:
         }
         else
         {
-            std::cout << "Error open file shapepredictor.dat\n";
-            return ;
+            qCDebug(DIGIKAM_FACEDB_LOG) << "Error open file shapepredictor.dat\n";
+            return;
         }
 
         delete temp;
 
-        //cv::Mat tmp_mat = data.toMat();
         matrix<rgb_pixel> img;
         std::vector<matrix<rgb_pixel>> faces;
+
         std::cout << "tmp_mat channels: " << tmp_mat.channels() << std::endl;
+
         assign_image(img, cv_image<rgb_pixel>(tmp_mat));
         bool face_flag = false;
 
         for (auto face : detector(img))
         {
-            std::cout << "detected face\n";
+            qCDebug(DIGIKAM_FACEDB_LOG) << "Detected face";
+
             face_flag = true;
             cv::Mat gray;
-            
+
             int type = tmp_mat.type();
-            std::cout << "type: " << type << std::endl;
+            qCDebug(DIGIKAM_FACEDB_LOG) << "type: " << type;
 
             if (type == CV_8UC3 || type == CV_16UC3)
             {
-                cv::cvtColor(tmp_mat, gray, CV_RGB2GRAY);  // 3 channels
+                cv::cvtColor(tmp_mat, gray, CV_RGB2GRAY);   // 3 channels
             }
             else
             {
@@ -165,10 +169,10 @@ public:
 
             cv::Rect new_rect(face.left(), face.top(), face.right()-face.left(), face.bottom()-face.top());
             FullObjectDetection object = sp(gray,new_rect);
-            std::cout << "FullObjectDetection finished\n";
+            qCDebug(DIGIKAM_FACEDB_LOG) << "Full object detection finished";
             matrix<rgb_pixel> face_chip;
             extract_image_chip(img, get_face_chip_details(object,150,0.25), face_chip);
-            std::cout << "extract_image_chip finished\n";
+            qCDebug(DIGIKAM_FACEDB_LOG) << "Extract image chip finished";
             faces.push_back(move(face_chip));
             break;
         }
@@ -180,9 +184,9 @@ public:
             faces.push_back(img);
         }
 
-        std::cout << "start net\n";
+        qCDebug(DIGIKAM_FACEDB_LOG) << "Start neural network";
         std::vector<matrix<float,0,1>> face_descriptors = net(faces);
-        std::cout << "face_descriptors size: " << face_descriptors.size() << std::endl;
+        qCDebug(DIGIKAM_FACEDB_LOG) << "Face descriptors size:" << face_descriptors.size();
 
         if (face_descriptors.size() != 0)
         {
