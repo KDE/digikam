@@ -134,29 +134,29 @@ public:
     // Change these three lines to change CurrentRecognizer
     typedef OpenCVLBPHFaceRecognizer CurrentRecognizer;
 
-    CurrentRecognizer* recognizer()             { return getObjectOrCreate(opencvlbph); }
-    CurrentRecognizer* recognizerConst()  const { return opencvlbph;                    }
+    CurrentRecognizer* recognizer()                 { return getObjectOrCreate(opencvlbph);   }
+    CurrentRecognizer* recognizerConst()  const     { return opencvlbph;                      }
 
 public:
 
-    OpenCVLBPHFaceRecognizer* lbph()                { return getObjectOrCreate(opencvlbph);  }
-    OpenCVLBPHFaceRecognizer* lbphConst() const     { return opencvlbph;                     }
+    OpenCVLBPHFaceRecognizer* lbph()                { return getObjectOrCreate(opencvlbph);   }
+    OpenCVLBPHFaceRecognizer* lbphConst() const     { return opencvlbph;                      }
 
-    OpenCVEIGENFaceRecognizer* eigen()              { return getObjectOrCreate(opencveigen); }
-    OpenCVEIGENFaceRecognizer* eigenConst() const   { return opencveigen;                    }
+    OpenCVEIGENFaceRecognizer* eigen()              { return getObjectOrCreate(opencveigen);  }
+    OpenCVEIGENFaceRecognizer* eigenConst() const   { return opencveigen;                     }
 
     OpenCVFISHERFaceRecognizer* fisher()            { return getObjectOrCreate(opencvfisher); }
     OpenCVFISHERFaceRecognizer* fisherConst() const { return opencvfisher;                    }
 
-    OpenCVDNNFaceRecognizer* dnn()                  { return getObjectOrCreate(opencvdnn); }
-    OpenCVDNNFaceRecognizer* dnnConst() const       { return opencvdnn;                    }
+    OpenCVDNNFaceRecognizer* dnn()                  { return getObjectOrCreate(opencvdnn);    }
+    OpenCVDNNFaceRecognizer* dnnConst() const       { return opencvdnn;                       }
 
 public:
 
     typedef FunnelReal CurrentAligner;
 
     CurrentAligner*    aligner();
-    CurrentAligner*    alignerConst()     const { return funnel;                        }
+    CurrentAligner*    alignerConst()     const     { return funnel;                          }
 
 public:
 
@@ -166,6 +166,7 @@ public:
                TrainingDataProvider* const data, const QString& trainingContext);
     void train(OpenCVEIGENFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
                TrainingDataProvider* const data, const QString& trainingContext);
+
     void clear(OpenCVLBPHFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
     void clear(OpenCVEIGENFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
     void clear(OpenCVFISHERFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
@@ -204,7 +205,7 @@ RecognitionDatabase::Private::Private()
     params.setFaceDatabasePath(CoreDbAccess::parameters().faceParameters().getFaceDatabaseNameOrDir());
     FaceDbAccess::setParameters(params);
     dbAvailable               = FaceDbAccess::checkReadyForUse(0);
-    recognizeAlgorithm        = RecognizeAlgorithm::LBP;
+    recognizeAlgorithm        = RecognizeAlgorithm::DNN;
 
     if (dbAvailable)
     {
@@ -276,7 +277,7 @@ Identity RecognitionDatabase::identity(int id) const
     return (d->identityCache.value(id));
 }
 
-// Takes care that there may be multiple values of attribute in identity's attributes
+// NOTE: Takes care that there may be multiple values of attribute in identity's attributes
 bool RecognitionDatabase::Private::identityContains(const Identity& identity, const QString& attribute, const QString& value) const
 {
     const QMap<QString, QString> map          = identity.attributesMap();
@@ -635,7 +636,7 @@ cv::Mat RecognitionDatabase::Private::preprocessingChain(const QImage& image)
         qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception:" << e.what();
         return cv::Mat();
     }
-    catch(...)
+    catch (...)
     {
         qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
         return cv::Mat();
@@ -681,7 +682,7 @@ cv::Mat RecognitionDatabase::Private::preprocessingChainRGB(const QImage& image)
         qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception:" << e.what();
         return cv::Mat();
     }
-    catch(...)
+    catch (...)
     {
         qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
         return cv::Mat();
@@ -732,7 +733,7 @@ QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const ima
         {
             qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception:" << e.what();
         }
-        catch(...)
+        catch (...)
         {
             qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
         }
@@ -781,7 +782,7 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
         {
             qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception:" << e.what();
         }
-        catch(...)
+        catch (...)
         {
             qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
         }
@@ -789,12 +790,12 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
 }
 */
 
-/// Training where the train method takes a list of identities and images,
-/// and updating per-identity is non-inferior to updating all at once.
-//template <class Recognizer>
+/** Training where the train method takes a list of identities and images,
+ *  and updating per-identity is non-inferior to updating all at once.
+ */
 static void trainIdentityBatchLBPH(OpenCVLBPHFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
-                               TrainingDataProvider* const data, const QString& trainingContext,
-                               RecognitionDatabase::Private* const d)
+                                   TrainingDataProvider* const data, const QString& trainingContext,
+                                   RecognitionDatabase::Private* const d)
 {
     foreach (const Identity& identity, identitiesToBeTrained)
     {
@@ -818,7 +819,7 @@ static void trainIdentityBatchLBPH(OpenCVLBPHFaceRecognizer* const r, const QLis
             {
                 qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception preparing image for LBPH:" << e.what();
             }
-            catch(...)
+            catch (...)
             {
                 qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
             }
@@ -834,7 +835,7 @@ static void trainIdentityBatchLBPH(OpenCVLBPHFaceRecognizer* const r, const QLis
         {
             qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception training Recognizer:" << e.what();
         }
-        catch(...)
+        catch (...)
         {
             qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
         }
@@ -842,8 +843,8 @@ static void trainIdentityBatchLBPH(OpenCVLBPHFaceRecognizer* const r, const QLis
 }
 
 static void trainIdentityBatchEIGEN(OpenCVEIGENFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
-                               TrainingDataProvider* const data, const QString& trainingContext,
-                               RecognitionDatabase::Private* const d)
+                                    TrainingDataProvider* const data, const QString& trainingContext,
+                                    RecognitionDatabase::Private* const d)
 {
     foreach (const Identity& identity, identitiesToBeTrained)
     {
@@ -869,7 +870,7 @@ static void trainIdentityBatchEIGEN(OpenCVEIGENFaceRecognizer* const r, const QL
             {
                 qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception preparing image for LBPH:" << e.what();
             }
-            catch(...)
+            catch (...)
             {
                 qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
             }
@@ -885,7 +886,7 @@ static void trainIdentityBatchEIGEN(OpenCVEIGENFaceRecognizer* const r, const QL
         {
             qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception training Recognizer:" << e.what();
         }
-        catch(...)
+        catch (...)
         {
             qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
         }

@@ -76,7 +76,6 @@ public:
 
     /// OpenCV EIGEN
 
-    void getFaceVector(cv::Mat data, std::vector<float>& vecdata);
     void updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::Mat>& images_rgb);
     EigenFaceModel eigenFaceModel() const;
     void clearEIGENTraining(const QString& context = QString());
@@ -86,6 +85,7 @@ public:
     FisherFaceModel fisherFaceModel() const;
 
     /// DNN
+    void getFaceVector(cv::Mat data, std::vector<float>& vecdata);
     DNNFaceModel dnnFaceModel() const;
 
     // ----------- Database shrinking methods ----------
