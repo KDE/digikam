@@ -3,7 +3,7 @@
  * This file is a part of digiKam
  *
  * Date        : 2010-06-16
- * Description : A convenience class for a standalone face detector
+ * Description : The recognition database wrapper
  *
  * Copyright (C)      2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C)      2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>

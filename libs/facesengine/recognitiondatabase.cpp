@@ -1,11 +1,9 @@
 /* ============================================================
- * @file
  *
  * This file is a part of digiKam
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * Date        : 2010-06-16
- * Description : A convenience class for a standalone face detector
+ * Description : The recognition database wrapper
  *
  * Copyright (C)      2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C)      2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
@@ -41,6 +39,7 @@
 
 // Local includes
 
+#include "simpletrainingdataprovider.h"
 #include "coredbaccess.h"
 #include "dbengineparameters.h"
 #include "facedbaccess.h"
@@ -53,43 +52,6 @@
 
 namespace Digikam
 {
-
-/** Simple QImage training data container used by RecognitionDatabase::train(Identity, QImage, QString)
- */
-class SimpleTrainingDataProvider : public TrainingDataProvider
-{
-public:
-
-    SimpleTrainingDataProvider(const Identity& identity, const QList<QImage>& newImages)
-        : identity(identity),
-          toTrain(newImages)
-    {
-    }
-
-    ImageListProvider* newImages(const Identity& id)
-    {
-        if (identity == id)
-        {
-            toTrain.reset();
-            return &toTrain;
-        }
-
-        return &empty;
-    }
-
-    ImageListProvider* images(const Identity&)
-    {
-        return &empty;
-    }
-
-public:
-
-    Identity               identity;
-    QListImageListProvider toTrain;
-    QListImageListProvider empty;
-};
-
-// -----------------------------------------------------------------------------------------------
 
 class RecognitionDatabase::Private
 {

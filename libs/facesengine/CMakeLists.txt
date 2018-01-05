@@ -61,6 +61,7 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
 )
 
 set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
+                                  simpletrainingdataprovider.cpp
                                   recognition-opencv-eigenfaces/eigenfacemodel.cpp
                                   recognition-opencv-eigenfaces/opencveigenfacerecognizer.cpp
                                   recognition-opencv-eigenfaces/facerec_eigenborrowed.cpp
