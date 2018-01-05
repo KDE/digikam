@@ -274,7 +274,7 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
 
     imageAlbumModel()->removeIndexes(sourceIndexes);
 
-    for (int i=0; i<infos.size(); i++)
+    for (int i = 0 ; i < infos.size() ; i++)
     {
         d->editPipeline.confirm(infos[i], faces[i], tagId);
     }
@@ -295,7 +295,7 @@ void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
 
     imageAlbumModel()->removeIndexes(sourceIndexes);
 
-    for (int i=0; i<infos.size(); i++)
+    for (int i = 0 ; i < infos.size() ; i++)
     {
         d->editPipeline.remove(infos[i], faces[i]);
     }
@@ -441,7 +441,6 @@ void DigikamImageView::rename()
         QPointer<AdvancedRenameProcessDialog> dlg = new AdvancedRenameProcessDialog(newNamesList);
         dlg->exec();
         delete dlg;
-        imageAlbumModel()->refresh();
     }
 }
 
