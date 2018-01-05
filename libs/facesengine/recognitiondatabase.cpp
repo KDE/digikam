@@ -940,7 +940,6 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
     d->train(d->eigen(), identitiesToBeTrained, data, trainingContext);
 }
 
-
 void RecognitionDatabase::train(const Identity& identityToBeTrained, const QImage& image,
                                 const QString& trainingContext)
 {
@@ -1032,11 +1031,11 @@ void RecognitionDatabase::clearAllTraining(const QString& trainingContext)
     }
 
     QMutexLocker lock(&d->mutex);
-    //d->clear(d->recognizer(), QList<int>(), trainingContext);
-    d->clear(d->lbph(), QList<int>(), trainingContext);
-    d->clear(d->eigen(), QList<int>(), trainingContext);
+
+    d->clear(d->lbph(),   QList<int>(), trainingContext);
+    d->clear(d->eigen(),  QList<int>(), trainingContext);
     d->clear(d->fisher(), QList<int>(), trainingContext);
-    d->clear(d->dnn(), QList<int>(), trainingContext);
+    d->clear(d->dnn(),    QList<int>(), trainingContext);
 }
 
 void RecognitionDatabase::clearTraining(const QList<Identity>& identitiesToClean, const QString& trainingContext)
@@ -1054,7 +1053,26 @@ void RecognitionDatabase::clearTraining(const QList<Identity>& identitiesToClean
         ids << id.id();
     }
 
-    d->clear(d->recognizer(), ids, trainingContext);
+    if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::LBP)
+    {
+        d->clear(d->lbph(), ids, trainingContext);
+    }
+    else if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::EigenFace)
+    {
+        d->clear(d->eigen(), ids, trainingContext);
+    }
+    else if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::FisherFace)
+    {
+        d->clear(d->fisher(), ids, trainingContext);
+    }
+    else if (d->recognizeAlgorithm == Private::RecognizeAlgorithm::DNN)
+    {
+        d->clear(d->dnn(), ids, trainingContext);
+    }
+    else
+    {
+        qCCritical(DIGIKAM_FACESENGINE_LOG) << "No obvious recognize algorithm";
+    }
 }
 
 void RecognitionDatabase::deleteIdentity(const Identity& identityToBeDeleted)
