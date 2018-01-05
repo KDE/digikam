@@ -70,7 +70,7 @@ SlideShowSettings::SlideShowSettings()
     printTags             = false;
     showProgressIndicator = true;
     slideScreen           = -2;
-    autoPlayEnabled       = false;
+    autoPlayEnabled       = true;
 }
 
 SlideShowSettings::~SlideShowSettings()
