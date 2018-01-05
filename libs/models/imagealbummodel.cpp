@@ -750,7 +750,7 @@ void ImageAlbumModel::slotAlbumDeleted(Album* album)
 void ImageAlbumModel::slotAlbumRenamed(Album* album)
 {
     // display changed names
-    if(d->currentAlbums.contains(album))
+    if (d->currentAlbums.contains(album))
     {
         emitDataChangedForAll();
     }
