@@ -276,7 +276,7 @@ QModelIndex ImageModel::indexForImageId(qlonglong id, const QVariant& extraValue
 
     QHash<qlonglong, int>::const_iterator it;
 
-    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
+    for (it = d->idHash.constFind(id) ; it != d->idHash.constEnd() && it.key() == id ; ++it)
     {
         if (d->extraValues.at(it.value()) == extraValue)
             return createIndex(it.value(), 0);
@@ -290,7 +290,7 @@ QList<QModelIndex> ImageModel::indexesForImageId(qlonglong id) const
     QList<QModelIndex> indexes;
     QHash<qlonglong, int>::const_iterator it;
 
-    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
+    for (it = d->idHash.constFind(id) ; it != d->idHash.constEnd() && it.key() == id ; ++it)
     {
         indexes << createIndex(it.value(), 0);
     }
@@ -313,7 +313,7 @@ int ImageModel::numberOfIndexesForImageId(qlonglong id) const
     int count = 0;
     QHash<qlonglong,int>::const_iterator it;
 
-    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
+    for (it = d->idHash.constFind(id) ; it != d->idHash.constEnd() && it.key() == id ; ++it)
     {
         ++count;
     }
@@ -369,7 +369,7 @@ QModelIndex ImageModel::indexForPath(const QString& filePath) const
     {
         const int size = d->infos.size();
 
-        for (int i=0; i<size; ++i)
+        for (int i = 0 ; i < size ; ++i)
         {
             if (d->infos.at(i).filePath() == filePath)
             {
@@ -392,7 +392,7 @@ QList<QModelIndex> ImageModel::indexesForPath(const QString& filePath) const
         QList<QModelIndex> indexes;
         const int size = d->infos.size();
 
-        for (int i=0; i<size; ++i)
+        for (int i = 0 ; i < size ; ++i)
         {
             if (d->infos.at(i).filePath() == filePath)
             {
@@ -604,7 +604,7 @@ bool ImageModel::hasImage(qlonglong id, const QVariant& extraValue) const
 
     QHash<qlonglong, int>::const_iterator it;
 
-    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
+    for (it = d->idHash.constFind(id) ; it != d->idHash.constEnd() && it.key() == id ; ++it)
     {
         if (d->extraValues.at(it.value()) == extraValue)
             return true;
@@ -623,7 +623,7 @@ QList<ImageInfo> ImageModel::uniqueImageInfos() const
     QList<ImageInfo> uniqueInfos;
     const int size = d->infos.size();
 
-    for (int i=0; i<size; ++i)
+    for (int i = 0 ; i < size ; ++i)
     {
         const ImageInfo& info = d->infos.at(i);
 
@@ -708,7 +708,7 @@ void ImageModel::appendInfosChecked(const QList<ImageInfo>& infos, const QList<Q
     {
         QList<ImageInfo> checkedInfos;
 
-        foreach (const ImageInfo& info, infos)
+        foreach(const ImageInfo& info, infos)
         {
             if (!hasImage(info))
             {
@@ -724,7 +724,7 @@ void ImageModel::appendInfosChecked(const QList<ImageInfo>& infos, const QList<Q
         QList<QVariant>  checkedExtraValues;
         const int size = infos.size();
 
-        for (int i=0; i<size; i++)
+        for (int i = 0 ; i < size ; i++)
         {
             if (!hasImage(infos[i], extraValues[i]))
             {
@@ -811,7 +811,7 @@ void ImageModel::publiciseInfos(const QList<ImageInfo>& infos, const QList<QVari
     d->infos << infos;
     d->extraValues << extraValues;
 
-    for (int i=firstNewIndex; i<=lastNewIndex; ++i)
+    for (int i = firstNewIndex ; i <= lastNewIndex ; ++i)
     {
         const ImageInfo& info = d->infos.at(i);
         qlonglong id          = info.id();
@@ -925,7 +925,7 @@ void ImageModel::removeImageInfos(const QList<ImageInfo>& infos, const QList<QVa
 
     QList<int> listIndexes;
 
-    for (int i=0; i<infos.size(); ++i)
+    for (int i = 0 ; i < infos.size() ; ++i)
     {
         QModelIndex index = indexForImageId(infos.at(i).id(), extraValues.at(i));
 
@@ -1022,7 +1022,7 @@ void ImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
         // update idHash - which points to indexes of d->infos, and these change now!
         QHash<qlonglong, int>::iterator it;
 
-        for (it = d->idHash.begin(); it != d->idHash.end(); )
+        for (it = d->idHash.begin() ; it != d->idHash.end() ; )
         {
             if (it.value() >= begin)
             {
@@ -1063,7 +1063,7 @@ void ImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
     {
         QHash<QString, qlonglong>::iterator it;
 
-        for (it = d->filePathHash.begin(); it != d->filePathHash.end(); )
+        for (it = d->filePathHash.begin() ; it != d->filePathHash.end() ; )
         {
             if (pairsContain(toRemove, it.value()))
             {
@@ -1103,13 +1103,13 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
     }
     else
     {
-        for (int i=0; i<infos.size(); ++i)
+        for (int i = 0 ; i < infos.size() ; ++i)
         {
             const ImageInfo& info = infos.at(i);
             bool found            = false;
             QHash<qlonglong,int>::iterator it;
 
-            for (it = oldIds.find(info.id()); it != oldIds.end() && it.key() == info.id(); ++it)
+            for (it = oldIds.find(info.id()) ; it != oldIds.end() && it.key() == info.id() ; ++it)
             {
                 // first check is for bug #262596. Not sure if needed.
                 if (it.value() < oldExtraValues.size() && extraValues.at(i) == oldExtraValues.at(it.value()))
@@ -1158,7 +1158,7 @@ QList<QPair<int, int> > ImageModelIncrementalUpdater::oldIndexes()
             // update idHash - which points to indexes of d->infos, and these change now!
             QHash<qlonglong, int>::iterator it;
 
-            for (it = oldIds.begin(); it != oldIds.end(); )
+            for (it = oldIds.begin() ; it != oldIds.end() ; )
             {
                 if (it.value() >= begin)
                 {
@@ -1201,7 +1201,7 @@ QList<QPair<int, int> > ImageModelIncrementalUpdater::toContiguousPairs(const QL
 
     QPair<int, int> pair(indices.first(), indices.first());
 
-    for (int i=1; i<indices.size(); ++i)
+    for (int i = 1 ; i < indices.size() ; ++i)
     {
         const int &index = indices.at(i);
 
