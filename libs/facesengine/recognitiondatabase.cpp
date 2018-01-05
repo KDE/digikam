@@ -518,13 +518,32 @@ QString RecognitionDatabase::backendIdentifier() const
 
 void RecognitionDatabase::Private::applyParameters()
 {
-    if (recognizerConst())
+    if (lbphConst() || eigenConst() || fisherConst() || dnnConst())
     {
-        for (QVariantMap::const_iterator it = parameters.constBegin(); it != parameters.constEnd(); ++it)
+        for (QVariantMap::const_iterator it = parameters.constBegin() ; it != parameters.constEnd() ; ++it)
         {
             if (it.key() == QString::fromLatin1("threshold") || it.key() == QString::fromLatin1("accuracy"))
             {
-                recognizer()->setThreshold(it.value().toFloat());
+                if (recognizeAlgorithm == Private::RecognizeAlgorithm::LBP)
+                {
+                    lbph()->setThreshold(it.value().toFloat());
+                }
+                else if (recognizeAlgorithm == Private::RecognizeAlgorithm::EigenFace)
+                {
+                    eigen()->setThreshold(it.value().toFloat());
+                }
+                else if (recognizeAlgorithm == Private::RecognizeAlgorithm::FisherFace)
+                {
+                    fisher()->setThreshold(it.value().toFloat());
+                }
+                else if (recognizeAlgorithm == Private::RecognizeAlgorithm::DNN)
+                {
+                    dnn()->setThreshold(it.value().toFloat());
+                }
+                else
+                {
+                    qCCritical(DIGIKAM_FACESENGINE_LOG) << "No obvious recognize algorithm";
+                }
             }
         }
     }
