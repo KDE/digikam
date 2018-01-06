@@ -407,7 +407,6 @@ void FaceScanDialog::setupUi()
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"),   RecognitionDatabase::RecognizeAlgorithm::FisherFace);
     d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using Deep Learning algorithm"), RecognitionDatabase::RecognizeAlgorithm::DNN);
     d->recognizeBox->setCurrentIndex(RecognitionDatabase::RecognizeAlgorithm::DNN);
-    d->recognizeBox->setEnabled(false);
 
     d->retrainAllButton = new QCheckBox(advancedTab);
     d->retrainAllButton->setText(i18nc("@option:check", "Clear and rebuild all training data"));
@@ -478,7 +477,7 @@ void FaceScanDialog::retrainAllButtonToggled(bool on)
 {
     d->optionGroupBox->setEnabled(!on);
     d->albumSelectors->setEnabled(!on);
-//    d->recognizeBox->setEnabled(!on);
+    d->recognizeBox->setEnabled(!on);
 }
 
 FaceScanSettings FaceScanDialog::settings() const
