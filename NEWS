@@ -221,4 +221,5 @@ BUGFIXES FROM BUGZILLA:
 209 ==> 388501 - UpdateSchemaFromV8ToV9 fails due to duplicate entry for key albumRoot.
 210 ==> 388467 - failed to migrate from schema 7 to 8.
 211 ==> 388591 - Rename malfunction.
-212 ==> 
+212 ==> 388610 - digiKam doesn't use native or KDE file dialogs.
+213 ==> 
