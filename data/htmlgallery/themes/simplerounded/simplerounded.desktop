@@ -183,6 +183,7 @@ Name[sv]=Bakgrund
 Name[tr]=Arkaplan
 Name[uk]=Тло
 Name[x-test]=xxBackgroundxx
+Name[zh_CN]=背景色
 Type=color
 Default=#3e674c
 
@@ -298,6 +299,7 @@ Name[sv]=Länkar
 Name[tr]=Bağlantılar
 Name[uk]=Посилання
 Name[x-test]=xxLinksxx
+Name[zh_CN]=链接
 Type=color
 Default=#519e64
 
