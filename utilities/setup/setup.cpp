@@ -7,7 +7,7 @@
  * Description : digiKam setup dialog.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Album
@@ -157,6 +157,7 @@ Setup::Setup(QWidget* const parent)
     setStandardButtons(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     button(QDialogButtonBox::Ok)->setDefault(true);
     setFaceType(List);
+    resize(800, 600);
     setModal(true);
 
     d->databasePage     = new SetupDatabase();
@@ -255,7 +256,7 @@ Setup::Setup(QWidget* const parent)
                                  "<i>Customize behavior of the other parts of digiKam</i></qt>"));
     d->page_misc->setIcon(QIcon::fromTheme(QLatin1String("preferences-other")));
 
-    for (int i = 0; i != SetupPageEnumLast; ++i)
+    for (int i = 0 ; i != SetupPageEnumLast ; ++i)
     {
         DConfigDlgWdgItem* const item = d->pageItem((Page)i);
 
@@ -314,7 +315,7 @@ QSize Setup::sizeHint() const
     int maxHintHeight   = 0;
     int maxWidgetHeight = 0;
 
-    for (int page = 0; page != SetupPageEnumLast; ++page)
+    for (int page = 0 ; page != SetupPageEnumLast ; ++page)
     {
         // only take tabs into account here that should better be displayed without scrolling
         if (page == CollectionsPage ||
@@ -324,7 +325,7 @@ QSize Setup::sizeHint() const
             page == EditorPage      ||
             page == MiscellaneousPage)
         {
-            DConfigDlgWdgItem* const item   = d->pageItem((Page)page);
+            DConfigDlgWdgItem* const item = d->pageItem((Page)page);
 
             if (!item)
             {

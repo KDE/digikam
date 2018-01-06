@@ -6,7 +6,7 @@
  * Date        : 2009-12-01
  * Description : Google-Maps-backend for geolocation interface
  *
- * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2014      by Justus Schwartz <justus at gmx dot li>
  *
@@ -110,6 +110,7 @@ protected:
 private Q_SLOTS:
 
     void slotHTMLInitialized();
+    void slotSetCenterTimer();
     void slotMapTypeActionTriggered(QAction* action);
     void slotHTMLEvents(const QStringList& eventStrings);
     void slotFloatSettingsTriggered(QAction* action);

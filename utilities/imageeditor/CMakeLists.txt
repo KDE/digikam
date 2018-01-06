@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018 by Gilles Caulier, <caulier dot gilles at gmail dot com>
 # Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -30,12 +30,13 @@ if(KF5Kipi_FOUND)
      include_directories($<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-if(GPHOTO2_FOUND)
+if(Gphoto2_FOUND)
     include_directories(${GPHOTO2_INCLUDE_DIRS})
 endif()
 
 set(libeditorwidgets_SRCS
     widgets/imageguidewidget.cpp
+    widgets/imagebrushguidewidget.cpp
     widgets/imagepreviewitem.cpp
     widgets/previewtoolbar.cpp
     widgets/previewlist.cpp
@@ -111,9 +112,9 @@ set(libeditortools_SRCS
     tools/enhance/noisereductiontool.cpp
     tools/enhance/localcontrasttool.cpp
     tools/enhance/redeyetool.cpp
-    tools/enhance/inpaintingtool.cpp
     tools/enhance/antivignettingtool.cpp
     tools/enhance/lensdistortiontool.cpp
+    tools/enhance/healingclonetool.cpp
     tools/enhance/hotpixels/weights.cpp
     tools/enhance/hotpixels/blackframeparser.cpp
     tools/enhance/hotpixels/blackframelistview.cpp
@@ -130,13 +131,13 @@ set(libeditortools_SRCS
     tools/transform/ratiocroptool.cpp
 )
 
-if(LQR-1_FOUND)
+if(Lqr-1_FOUND)
     set(libeditortools_SRCS ${libeditortools_SRCS}
         tools/transform/contentawareresizetool.cpp
        )
 endif()
 
-if(LENSFUN_FOUND)
+if(LensFun_FOUND)
     set(libeditortools_SRCS ${libeditortools_SRCS}
         tools/enhance/lensautofixtool.cpp
        )

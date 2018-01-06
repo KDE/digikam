@@ -6,7 +6,7 @@
  * Date        : 2006-06-14
  * Description : A JPEG2000 IO file for DImg framework
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This implementation use Jasper API
  * library : http://www.ece.uvic.ca/~mdadams/jasper
@@ -31,6 +31,8 @@
  *
  * ============================================================ */
 
+#include "jp2kloader.h"
+
 // Qt includes
 
 #include <QFile>
@@ -44,8 +46,28 @@
 #include "digikam_debug.h"
 #include "dimgloaderobserver.h"
 #include "dmetadata.h"
-/// @todo According to krazy2, this include directive should be the first one, but moving it to the top breaks the build. Should be checked later. MH
-#include "jp2kloader.h"
+
+// Jasper includes
+
+#ifndef Q_CC_MSVC
+extern "C"
+{
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshift-negative-value"
+#endif
+
+#include <jasper/jasper.h>
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+
+#ifndef Q_CC_MSVC
+}
+#endif
 
 namespace Digikam
 {
@@ -104,7 +126,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
         if (size.isValid())
         {
-            imageWidth() = size.width();
+            imageWidth()  = size.width();
             imageHeight() = size.height();
         }
 
@@ -114,7 +136,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Initialize JPEG 2000 API.
 
-   long  i, x, y;
+    long  i, x, y;
     int            components[4];
     unsigned int   maximum_component_depth, scale[4], x_step[4], y_step[4];
     unsigned long  number_components;
@@ -584,7 +606,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Initialize JPEG 2000 API.
 
-   long  i, x, y;
+    long  i, x, y;
     unsigned long  number_components;
 
     jas_image_t*          jp2_image   = 0;
@@ -810,7 +832,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     qCDebug(DIGIKAM_DIMG_LOG_JP2K) << "JPEG2000 quality: " << quality;
     qCDebug(DIGIKAM_DIMG_LOG_JP2K) << "JPEG2000 "          << rateBuffer;
 
-    int ret = jp2_encode(jp2_image, jp2_stream, rateBuffer);
+    int ret = jas_image_encode(jp2_image, jp2_stream, -1, rateBuffer);
 
     if (ret != 0)
     {

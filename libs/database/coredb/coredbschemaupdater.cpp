@@ -7,7 +7,7 @@
  * Description : Core database Schema updater
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@ namespace Digikam
 
 int CoreDbSchemaUpdater::schemaVersion()
 {
-    return 8;
+    return 9;
 }
 
 int CoreDbSchemaUpdater::filterSettingsVersion()
@@ -386,7 +386,7 @@ bool CoreDbSchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, con
         return false;
     }
 
-    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to v5";
+    qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to version " << d->currentVersion.toInt();
     d->backend->commitTransaction();
     return true;
 }
@@ -449,7 +449,7 @@ bool CoreDbSchemaUpdater::makeUpdates()
                 return false;
             }
 
-            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to v" << d->currentVersion;
+            qCDebug(DIGIKAM_COREDB_LOG) << "Core database: success updating to version " << d->currentVersion.toInt();
         }
 
         // add future updates here
@@ -662,8 +662,11 @@ bool CoreDbSchemaUpdater::updateToVersion(int targetVersion)
         // NOTE: If you add a new update step, please check the d->currentVersion at the bottom of updateV4toV7
             // If the update already comes with createTables, createTriggers, we dont need the extra update here
         case 8:
-            // Digikam for database version 7 can work with version 8, though not using case sensitivity for text fields.
-            return performUpdateToVersion(QLatin1String("UpdateSchemaFromV7ToV8"), 8, 5);
+            // Digikam for database version 7 can work with version 8, now using COLLATE utf8_general_ci for MySQL.
+            return performUpdateToVersion(QLatin1String("UpdateSchemaFromV7ToV9"), 8, 5);
+        case 9:
+            // Digikam for database version 8 can work with version 9, now using COLLATE utf8_general_ci for MySQL.
+            return performUpdateToVersion(QLatin1String("UpdateSchemaFromV7ToV9"), 9, 5);
         default:
             qCDebug(DIGIKAM_COREDB_LOG) << "Core database: unsupported update to version" << targetVersion;
             return false;

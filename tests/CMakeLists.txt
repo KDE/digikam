@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018 by Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -25,6 +25,7 @@ add_subdirectory(timestampupdate)
 add_subdirectory(widgets)
 add_subdirectory(rawengine)
 add_subdirectory(presentation)
+add_subdirectory(mediaserver)
 
 if(ENABLE_MEDIAPLAYER)
     add_subdirectory(video)

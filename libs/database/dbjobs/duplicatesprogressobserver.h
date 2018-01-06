@@ -43,6 +43,7 @@ public:
 
     virtual void totalNumberToScan(int number);
     virtual void processedNumber(int number);
+    virtual bool isCanceled();
 
 private:
 

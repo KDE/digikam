@@ -7,7 +7,7 @@
  * Description : ImageInfo common data
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2014-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2014-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -143,7 +143,9 @@ void ImageInfoCache::cacheByName(ImageInfoData* data)
     }
 
     // Called in a context where we can assume that the entry is not yet cached by name (newly created data)
+    m_nameHash.remove(m_dataHash.value(data), data);
     m_nameHash.insert(data->name, data);
+    m_dataHash.insert(data, data->name);
 }
 
 DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForPath(int albumRootId, const QString& relativePath, const QString& name)
@@ -183,8 +185,12 @@ void ImageInfoCache::dropInfo(ImageInfoData* infodata)
     }
 
     ImageInfoWriteLocker lock;
+
     m_infos.remove(infodata->id);
+
+    m_nameHash.remove(m_dataHash.value(infodata), infodata);
     m_nameHash.remove(infodata->name, infodata);
+    m_dataHash.remove(infodata);
     delete infodata;
 }
 

@@ -7,7 +7,7 @@
 * Description : Import tool interface
 *
 * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
-* Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+* Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
 * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
 * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
@@ -54,7 +54,6 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QKeySequence>
-#include <QDesktopServices>
 #include <QInputDialog>
 #include <QMenuBar>
 #include <QMenu>
@@ -239,7 +238,6 @@ void ImportUI::setupUserArea()
 
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->renameCustomizer->setWhatsThis(i18n("Set how digiKam will rename files as they are downloaded."));
-    //d->view->setRenameCustomizer(d->renameCustomizer);
     d->advBox->addItem(d->renameCustomizer, QIcon::fromTheme(QLatin1String("insert-image")), i18n("File Renaming Options"),
                        QLatin1String("RenameCustomizer"), true);
 
@@ -500,11 +498,11 @@ void ImportUI::setupActions()
     connect(sortByRatingAction,   SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByDownloadAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
-    imageSortMapper->setMapping(sortByNameAction, (int)CamItemSortSettings::SortByFileName);
-    imageSortMapper->setMapping(sortByPathAction, (int)CamItemSortSettings::SortByFilePath);
-    imageSortMapper->setMapping(sortByDateAction, (int)CamItemSortSettings::SortByCreationDate); //TODO: Implement sort by creation date.
+    imageSortMapper->setMapping(sortByNameAction,     (int)CamItemSortSettings::SortByFileName);
+    imageSortMapper->setMapping(sortByPathAction,     (int)CamItemSortSettings::SortByFilePath);
+    imageSortMapper->setMapping(sortByDateAction,     (int)CamItemSortSettings::SortByCreationDate); //TODO: Implement sort by creation date.
     imageSortMapper->setMapping(sortByFileSizeAction, (int)CamItemSortSettings::SortByFileSize);
-    imageSortMapper->setMapping(sortByRatingAction, (int)CamItemSortSettings::SortByRating);
+    imageSortMapper->setMapping(sortByRatingAction,   (int)CamItemSortSettings::SortByRating);
     imageSortMapper->setMapping(sortByDownloadAction, (int)CamItemSortSettings::SortByDownloadState);
 
     d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortBy());
@@ -532,8 +530,8 @@ void ImportUI::setupActions()
 
     d->itemsGroupAction                  = new KSelectAction(i18nc("@title:menu", "&Group Items"), this);
     d->itemsGroupAction->setWhatsThis(i18nc("@info:whatsthis", "The categories in which the items in the thumbnail view are displayed"));
-    QSignalMapper* const itemGroupMapper = new QSignalMapper(this);
-    connect(itemGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
+    QSignalMapper* const itemSeparationMapper = new QSignalMapper(this);
+    connect(itemSeparationMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSeparateImages(int)));
     ac->addAction(QLatin1String("item_group"), d->itemsGroupAction);
 
     // map to CamItemSortSettings enum
@@ -542,17 +540,17 @@ void ImportUI::setupActions()
     QAction* const groupByFormatAction = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Format"));
     QAction* const groupByDateAction =   d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Date"));
 
-    connect(noCategoriesAction,  SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(groupByFolderAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(groupByFormatAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
-    connect(groupByDateAction,   SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
+    connect(noCategoriesAction,  SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
+    connect(groupByFolderAction, SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
+    connect(groupByFormatAction, SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
+    connect(groupByDateAction,   SIGNAL(triggered()), itemSeparationMapper, SLOT(map()));
 
-    itemGroupMapper->setMapping(noCategoriesAction,  (int)CamItemSortSettings::NoCategories);
-    itemGroupMapper->setMapping(groupByFolderAction, (int)CamItemSortSettings::CategoryByFolder);
-    itemGroupMapper->setMapping(groupByFormatAction, (int)CamItemSortSettings::CategoryByFormat);
-    itemGroupMapper->setMapping(groupByDateAction,   (int)CamItemSortSettings::CategoryByDate);
+    itemSeparationMapper->setMapping(noCategoriesAction,  (int)CamItemSortSettings::NoCategories);
+    itemSeparationMapper->setMapping(groupByFolderAction, (int)CamItemSortSettings::CategoryByFolder);
+    itemSeparationMapper->setMapping(groupByFormatAction, (int)CamItemSortSettings::CategoryByFormat);
+    itemSeparationMapper->setMapping(groupByDateAction,   (int)CamItemSortSettings::CategoryByDate);
 
-    d->itemsGroupAction->setCurrentItem(ImportSettings::instance()->getImageGroupMode());
+    d->itemsGroupAction->setCurrentItem(ImportSettings::instance()->getImageSeparationMode());
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
@@ -576,7 +574,7 @@ void ImportUI::setupActions()
     d->zoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18nc("@action:inmenu", "Zoom to 100%"), this);
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
     ac->addAction(QLatin1String("import_zoomto100percents"), d->zoomTo100percents);
-    ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Comma);
+    ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Period);
 
     // ------------------------------------------------------------------------------------------------
 
@@ -912,11 +910,6 @@ void ImportUI::saveSettings()
     config->sync();
 }
 
-void ImportUI::slotProcessUrl(const QString& url)
-{
-    QDesktopServices::openUrl(QUrl(url));
-}
-
 bool ImportUI::isBusy() const
 {
     return d->busy;
@@ -942,7 +935,7 @@ DownloadSettings ImportUI::downloadSettings() const
 
 void ImportUI::setInitialSorting()
 {
-    d->view->slotGroupImages(ImportSettings::instance()->getImageGroupMode());
+    d->view->slotSeparateImages(ImportSettings::instance()->getImageSeparationMode());
     d->view->slotSortImagesBy(ImportSettings::instance()->getImageSortBy());
     d->view->slotSortImagesOrder(ImportSettings::instance()->getImageSortOrder());
 }
@@ -1685,11 +1678,11 @@ void ImportUI::slotUpdateDownloadName()
         {
             if (d->renameCustomizer->useDefault())
             {
-                newName = d->renameCustomizer->newName(info.name, info.ctime);
+                newName = d->renameCustomizer->newName(info.name);
             }
             else if (d->renameCustomizer->isEnabled())
             {
-                newName = d->renameCustomizer->newName(info.url().toLocalFile(), info.ctime);
+                newName = d->renameCustomizer->newName(info.url().toLocalFile());
             }
             else if (!refInfo.downloadName.isEmpty())
             {
@@ -2696,6 +2689,7 @@ void ImportUI::slotToggleColorManagedView()
 
     bool cmv = !IccSettings::instance()->settings().useManagedPreviews;
     IccSettings::instance()->setUseManagedPreviews(cmv);
+    d->camThumbsCtrl->clearCache();
 }
 
 void ImportUI::slotColorManagementOptionsChanged()

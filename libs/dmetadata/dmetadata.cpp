@@ -6,7 +6,7 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011      by Leif Huhn <leif at dkstat dot com>
  *
@@ -34,6 +34,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QLocale>
+#include <QUuid>
 
 // Local includes
 
@@ -970,6 +971,8 @@ bool DMetadata::hasImageHistoryTag() const
 
 QString DMetadata::getImageUniqueId() const
 {
+    QString exifUid;
+
     if (hasXmp())
     {
         QString uuid = getXmpTagString("Xmp.digiKam.ImageUniqueID");
@@ -979,32 +982,41 @@ QString DMetadata::getImageUniqueId() const
             return uuid;
         }
 
-        QString exifUid = getXmpTagString("Xmp.exif.ImageUniqueId");
+        exifUid = getXmpTagString("Xmp.exif.ImageUniqueId");
+    }
 
-        if (exifUid.isEmpty())
+    if (exifUid.isEmpty())
+    {
+        exifUid = getExifTagString("Exif.Photo.ImageUniqueID");
+    }
+
+    // same makers may choose to use a "click counter" to generate the id,
+    // which is then weak and not a universally unique id
+    // The Exif ImageUniqueID is 128bit, or 32 hex digits.
+    // If the first 20 are zero, it's probably a counter,
+    // the left 12 are sufficient for more then 10^14 clicks.
+    if (!exifUid.isEmpty() && !exifUid.startsWith(QLatin1String("00000000000000000000")))
+    {
+        if (getExifTagString("Exif.Image.Make").contains(QLatin1String("SAMSUNG"), Qt::CaseInsensitive))
         {
-            exifUid = getExifTagString("Exif.Photo.ImageUniqueID");
+            // Generate for Samsung a new random 32 hex digits unique ID.
+            QString imageUniqueID(QUuid::createUuid().toString());
+            imageUniqueID.remove(QLatin1Char('-'));
+            imageUniqueID.remove(0, 1).chop(1);
+
+            return imageUniqueID;
         }
 
-        // same makers may choose to use a "click counter" to generate the id,
-        // which is then weak and not a universally unique id
-        // The Exif ImageUniqueID is 128bit, or 32 hex digits.
-        // If the first 20 are zero, it's probably a counter,
-        // the left 12 are sufficient for more then 10^14 clicks.
-        if (!exifUid.isEmpty() && !exifUid.startsWith(QLatin1String("00000000000000000000")) &&
-            getExifTagString("Exif.Image.Make").toUpper() != QLatin1String("SAMSUNG"))
-        {
-            return exifUid;
-        }
+        return exifUid;
+    }
 
-        // Exif.Image.ImageID can also be a pathname, so it's not sufficiently unique
+    // Exif.Image.ImageID can also be a pathname, so it's not sufficiently unique
 
-        QString dngUid = getExifTagString("Exif.Image.RawDataUniqueID");
+    QString dngUid = getExifTagString("Exif.Image.RawDataUniqueID");
 
-        if (!dngUid.isEmpty())
-        {
-            return dngUid;
-        }
+    if (!dngUid.isEmpty())
+    {
+        return dngUid;
     }
 
     return QString();
@@ -2914,7 +2926,7 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
 
             convertToUserPresentableNumbers(false, value.toDouble(), &degrees, &minutes, &seconds, &directionRef);
             QString direction = (QLatin1Char(directionRef) == QLatin1Char('N')) ?
-                                i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate", "North");
+                                i18nc("For use in latitude coordinate", "North") : i18nc("For use in latitude coordinate", "South");
             return QString::fromLatin1("%1%2%3%4%L5%6 %7").arg(degrees).arg(QChar(0xB0))
                    .arg(minutes).arg(QChar(0x2032))
                    .arg(seconds, 'f').arg(QChar(0x2033)).arg(direction);

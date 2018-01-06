@@ -7,7 +7,7 @@
  * Description : Qt item model for database entries
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2010 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C)      2014 by Mohamed Anwer <m dot anwer at gmx dot com>
@@ -156,13 +156,13 @@ void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<Image
         const int chunkSize = qMin(maxChunkSize, size - index);
         infoVector.resize(chunkSize);
         end = it + chunkSize;
-        qCopy(it, end, infoVector.begin());
+        std::copy(it, end, infoVector.begin());
 
         if (hasExtraValues)
         {
             extraValueVector.resize(chunkSize);
             xend = xit + chunkSize;
-            qCopy(xit, xend, extraValueVector.begin());
+            std::copy(xit, xend, extraValueVector.begin());
             xit = xend;
         }
 

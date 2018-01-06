@@ -43,7 +43,7 @@ public:
     explicit Private(DIO* const qq);
 
     void albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest);
-    void imagesToAlbum(int operation, const QList<ImageInfo> ids, const PAlbum* const dest);
+    void imagesToAlbum(int operation, const QList<ImageInfo>& ids, const PAlbum* const dest);
     void filesToAlbum(int operation, const QList<QUrl>& src, const PAlbum* const dest);
 
     void renameFile(const ImageInfo& info, const QString& newName);
@@ -100,13 +100,13 @@ class GroupedImagesFinder
 {
 public:
 
-    explicit GroupedImagesFinder(const QList<ImageInfo> source);
+    explicit GroupedImagesFinder(const QList<ImageInfo>& source);
 
     QList<ImageInfo> infos;
 
 private:
 
-    void process(const QList<ImageInfo> source);
+    void process(const QList<ImageInfo>& source);
 };
 
 enum Operation

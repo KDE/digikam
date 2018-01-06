@@ -7,7 +7,7 @@
  * Description : Qt item view for images
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
@@ -110,8 +110,8 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     imageFilterModel()->setStringTypeNatural(settings->isStringTypeNatural());
     imageFilterModel()->setSortRole((ImageSortSettings::SortRole)settings->getImageSortOrder());
     imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder)settings->getImageSorting());
-    imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)settings->getImageGroupMode());
-    imageFilterModel()->setCategorizationSortOrder((ImageSortSettings::SortOrder) settings->getImageGroupSortOrder());
+    imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)settings->getImageSeparationMode());
+    imageFilterModel()->setCategorizationSortOrder((ImageSortSettings::SortOrder) settings->getImageSeparationSortOrder());
 
     // selection overlay
     addSelectionOverlay(d->normalDelegate);
@@ -147,9 +147,6 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
             this, SLOT(showGroupContextMenu(QModelIndex,QContextMenuEvent*)));
 
     d->utilities = new ImageViewUtilities(this);
-
-    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(QUrl)),
-            this, SLOT(setCurrentUrlWhenAvailable(QUrl)));
 
     connect(imageModel()->dragDropHandler(), SIGNAL(assignTags(QList<ImageInfo>,QList<int>)),
             FileActionMngr::instance(), SLOT(assignTags(QList<ImageInfo>,QList<int>)));
@@ -277,7 +274,7 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
 
     imageAlbumModel()->removeIndexes(sourceIndexes);
 
-    for (int i=0; i<infos.size(); i++)
+    for (int i = 0 ; i < infos.size() ; i++)
     {
         d->editPipeline.confirm(infos[i], faces[i], tagId);
     }
@@ -298,7 +295,7 @@ void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
 
     imageAlbumModel()->removeIndexes(sourceIndexes);
 
-    for (int i=0; i<infos.size(); i++)
+    for (int i = 0 ; i < infos.size() ; i++)
     {
         d->editPipeline.remove(infos[i], faces[i]);
     }

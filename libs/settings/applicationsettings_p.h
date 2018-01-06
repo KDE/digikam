@@ -6,7 +6,7 @@
  * Date        : 2003-16-10
  * Description : application settings interface
  *
- * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C  2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
@@ -61,14 +61,15 @@ public:
     static const QString configAlbumSortRoleEntry;
     static const QString configImageSortOrderEntry;
     static const QString configImageSortingEntry;
-    static const QString configImageGroupModeEntry;
-    static const QString configImageGroupSortOrderEntry;
+    static const QString configImageSeparationModeEntry;
+    static const QString configImageSeparationSortOrderEntry;
     static const QString configItemLeftClickActionEntry;
     static const QString configDefaultIconSizeEntry;
     static const QString configDefaultTreeIconSizeEntry;
     static const QString configTreeViewFontEntry;
     static const QString configThemeEntry;
     static const QString configSidebarTitleStyleEntry;
+    static const QString configUseNativeFileDialogEntry;
     static const QString configDrawFramesToGroupedEntry;
     static const QString configScrollItemToCenterEntry;
     static const QString configShowOnlyPersonTagsInPeopleSidebarEntry;
@@ -124,7 +125,7 @@ public:
     static const QString configToolTipsShowAlbumCategoryEntry;
     static const QString configToolTipsShowAlbumCaptionEntry;
     static const QString configToolTipsShowAlbumPreviewEntry;
-    static const QString configPreviewLoadFullImageSizeEntry;
+    static const QString configPreviewLoadFullItemSizeEntry;
     static const QString configPreviewRawUseEmbeddedPreview;
     static const QString configPreviewRawUseHalfSizeData;
     static const QString configPreviewConvertToEightBitEntry;
@@ -160,11 +161,13 @@ public:
     bool                                         showPermanentDeleteDialog;
     // metadata setting
     bool                                         sidebarApplyDirectly;
-    // grouped item draw settings
+    // file dialog setting
+    bool                                         useNativeFileDialog;
+    // grouped item draw setting
     bool                                         drawFramesToGrouped;
-    // item center settings
+    // item center setting
     bool                                         scrollItemToCenter;
-    // tag filter settings
+    // tag filter setting
     bool                                         showOnlyPersonTagsInPeopleSidebar;
 
     // icon view settings
@@ -263,8 +266,8 @@ public:
     // icon view settings
     int                                          imageSortOrder;
     int                                          imageSorting;
-    int                                          imageGroupMode;
-    int                                          imageGroupSortOrder;
+    int                                          imageSeparationMode;
+    int                                          imageSeparationSortOrder;
     ApplicationSettings::ItemLeftClickAction     itemLeftClickAction;
 
     // Baloo settings

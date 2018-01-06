@@ -742,7 +742,7 @@ public:
 
         if (!rootCandidates.isEmpty())
         {
-            qStableSort(rootCandidates.begin(), rootCandidates.end(), lessThan);
+            std::stable_sort(rootCandidates.begin(), rootCandidates.end(), lessThan);
             Vertex root = rootCandidates.first();
             fromRoot << listPath(root, v, path.predecessors, ChildToParent);
         }
@@ -753,7 +753,7 @@ public:
 
         if (!leaveCandidates.isEmpty())
         {
-            qStableSort(leaveCandidates.begin(), leaveCandidates.end(), lessThan);
+            std::stable_sort(leaveCandidates.begin(), leaveCandidates.end(), lessThan);
             Vertex leave = leaveCandidates.first();
             toLeave << listPath(leave, v, path.predecessors);
         }
@@ -1454,7 +1454,7 @@ protected:
             outEdges = toList<edge_descriptor>(boost::out_edges(u, g));
             // Sort edges. The lessThan we have takes vertices, so we use a lessThan which
             // maps the given edges to their targets, and calls our vertex lessThan.
-            qSort(outEdges.begin(), outEdges.end(), lessThanMapEdgeToTarget<IncidenceGraph, LessThan>(g, lessThan));
+            std::sort(outEdges.begin(), outEdges.end(), lessThanMapEdgeToTarget<IncidenceGraph, LessThan>(g, lessThan));
 
             foreach(const edge_descriptor& e, outEdges)
             {

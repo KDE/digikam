@@ -57,7 +57,7 @@ public:
     static void copy(const PAlbum* const src, const PAlbum* const dest);
 
     /// Copy items to another album
-    static void copy(const QList<ImageInfo> infos, const PAlbum* const dest);
+    static void copy(const QList<ImageInfo>& infos, const PAlbum* const dest);
 
     /// Copy an external file to another album
     static void copy(const QUrl& src, const PAlbum* const dest);
@@ -69,7 +69,7 @@ public:
     static void move(const PAlbum* src, const PAlbum* const dest);
 
     /// Move items to another album
-    static void move(const QList<ImageInfo> infos, const PAlbum* const dest);
+    static void move(const QList<ImageInfo>& infos, const PAlbum* const dest);
 
     /// Move external files another album
     static void move(const QUrl& src, const PAlbum* const dest);
@@ -90,7 +90,6 @@ Q_SIGNALS:
 
     void imageRenameSucceeded(const QUrl&);
     void imageRenameFailed(const QUrl&);
-    void renamingAborted(const QUrl&);
 
 protected Q_SLOTS:
 

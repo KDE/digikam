@@ -1144,9 +1144,9 @@ QList<TableViewModel::Item*> TableViewModel::sortItems(const QList<TableViewMode
 {
     QList<Item*> sortedList = itemList;
 
-    qSort(sortedList.begin(),
-          sortedList.end(),
-          LessThan(this));
+    std::sort(sortedList.begin(),
+              sortedList.end(),
+              LessThan(this));
 
     return sortedList;
 }

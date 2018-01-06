@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : core image editor GUI implementation
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
@@ -156,12 +156,12 @@
 #include "filmtool.h"
 #include "restorationtool.h"
 #include "blurtool.h"
+#include "healingclonetool.h"
 #include "sharpentool.h"
 #include "noisereductiontool.h"
 #include "localcontrasttool.h"
 #include "redeyetool.h"
 #include "imageiface.h"
-#include "inpaintingtool.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
 #include "hotpixelstool.h"
@@ -543,7 +543,7 @@ void EditorWindow::setupStandardActions()
     d->zoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18n("Zoom to 100%"), this);
     connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
     ac->addAction(QLatin1String("editorwindow_zoomto100percents"), d->zoomTo100percents);
-    ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Comma);
+    ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Period);
 
     d->zoomFitToWindowAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-fit-best")), i18n("Fit to &Window"), this);
     d->zoomFitToWindowAction->setCheckable(true);
@@ -760,7 +760,14 @@ void EditorWindow::setupStandardActions()
     connect(d->blurAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlur()));
     d->blurAction->setEnabled(false);
-
+/*
+    d->healCloneAction = new QAction(QIcon::fromTheme(QLatin1String("edit-clone")), i18n("Healing Clone..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_enhance_healingclone"), d->healCloneAction);
+    d->healCloneAction->setWhatsThis( i18n( "This filter can be used to clone a part in a photo to erase unwanted region.") );
+    connect(d->healCloneAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotHealingClone()));
+    d->healCloneAction->setEnabled(false);
+*/
     d->noiseReductionAction = new QAction(QIcon::fromTheme(QLatin1String("noisereduction")), i18n("Noise Reduction..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_noisereduction"), d->noiseReductionAction);
     connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
@@ -780,15 +787,6 @@ void EditorWindow::setupStandardActions()
     connect(d->redeyeAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRedEye()));
     d->redeyeAction->setEnabled(false);
-
-    d->inPaintingAction = new QAction(QIcon::fromTheme(QLatin1String("select-rectangular")), i18n("In-painting..."), this);
-    actionCollection()->addAction(QLatin1String("editorwindow_enhance_inpainting"), d->inPaintingAction);
-    actionCollection()->setDefaultShortcut(d->inPaintingAction, Qt::CTRL+Qt::Key_E);
-    d->inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
-                                             "To use this option, select a region to in-paint.") );
-    connect(d->inPaintingAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotInPainting()));
-    d->inPaintingAction->setEnabled(false);
 
     d->antivignettingAction = new QAction(QIcon::fromTheme(QLatin1String("antivignetting")), i18n("Vignetting Correction..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_antivignetting"), d->antivignettingAction);
@@ -832,6 +830,7 @@ void EditorWindow::setupStandardActions()
     createVideoSlideshowAction();
     createSendByMailAction();
     createPrintCreatorAction();
+    createMediaServerAction();
 
     m_metadataEditAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);
@@ -1491,11 +1490,11 @@ void EditorWindow::toggleStandardActions(bool val)
     d->filmAction->setEnabled(val);
     d->restorationAction->setEnabled(val);
     d->blurAction->setEnabled(val);
+    //d->healCloneAction->setEnabled(val);
     d->sharpenAction->setEnabled(val);
     d->noiseReductionAction->setEnabled(val);
     d->localContrastAction->setEnabled(val);
     d->redeyeAction->setEnabled(val);
-    d->inPaintingAction->setEnabled(val);
     d->lensdistortionAction->setEnabled(val);
     d->antivignettingAction->setEnabled(val);
     d->hotpixelsAction->setEnabled(val);
@@ -1940,7 +1939,7 @@ void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
     m_nameLabel->setProgressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading:"));
 }
 
-void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success)
+void EditorWindow::slotLoadingFinished(const QString& filename, bool success)
 {
     m_nameLabel->setProgressBarMode(StatusProgressBar::TextMode);
 
@@ -1959,6 +1958,12 @@ void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success
         // Set a history which contains all available files as referredImages
         DImageHistory resolved = resolvedImageHistory(m_canvas->interface()->getInitialImageHistory());
         m_canvas->interface()->setResolvedInitialHistory(resolved);
+    }
+    else
+    {
+        DNotificationPopup::message(DNotificationPopup::Boxed,
+                                    i18n("Cannot load \"%1\"", filename),
+                                    m_canvas, m_canvas->mapToGlobal(QPoint(30, 30)));
     }
 }
 
@@ -2999,11 +3004,11 @@ void EditorWindow::setupSelectToolsAction()
     QString enhanceCategory             = i18nc("@title Image Enhance",  "Enhance");
     actionModel->addAction(d->restorationAction,          enhanceCategory);
     actionModel->addAction(d->blurAction,                 enhanceCategory);
+    //actionModel->addAction(d->healCloneAction,            enhanceCategory);
     actionModel->addAction(d->sharpenAction,              enhanceCategory);
     actionModel->addAction(d->noiseReductionAction,       enhanceCategory);
     actionModel->addAction(d->localContrastAction,        enhanceCategory);
     actionModel->addAction(d->redeyeAction,               enhanceCategory);
-    actionModel->addAction(d->inPaintingAction,           enhanceCategory);
     actionModel->addAction(d->lensdistortionAction,       enhanceCategory);
     actionModel->addAction(d->antivignettingAction,       enhanceCategory);
     actionModel->addAction(d->hotpixelsAction,            enhanceCategory);
@@ -3019,6 +3024,7 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_expoBlendingAction,          postCategory);
     actionModel->addAction(m_sendByMailAction,            postCategory);
     actionModel->addAction(m_printCreatorAction,          postCategory);
+    actionModel->addAction(m_mediaServerAction,           postCategory);
 
 #ifdef HAVE_HTMLGALLERY
     actionModel->addAction(m_htmlGalleryAction,           postCategory);
@@ -3233,7 +3239,7 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
         service = d->servicesMap[name];
     }
 
-    DFileOperations::runFiles(*service, QList<QUrl>() << url);
+    DFileOperations::runFiles(service.data(), QList<QUrl>() << url);
 }
 
 void EditorWindow::loadTool(EditorTool* const tool)
@@ -3508,6 +3514,11 @@ void EditorWindow::slotBlur()
     loadTool(new BlurTool(this));
 }
 
+void EditorWindow::slotHealingClone()
+{
+    loadTool(new HealingCloneTool(this));
+}
+
 void EditorWindow::slotSharpen()
 {
     loadTool(new SharpenTool(this));
@@ -3526,25 +3537,6 @@ void EditorWindow::slotLocalContrast()
 void EditorWindow::slotRedEye()
 {
     loadTool(new RedEyeTool(this));
-}
-
-void EditorWindow::slotInPainting()
-{
-    ImageIface iface;
-
-    if (iface.selectionRect().size().isNull())
-    {
-        EditorToolPassivePopup* const popup = new EditorToolPassivePopup(qApp->activeWindow());
-        popup->setView(i18n("In-Painting Photograph Tool"),
-                       i18n("To use this tool, you need to select a region "
-                            "to in-paint."));
-        popup->setAutoDelete(true);
-        popup->setTimeout(2500);
-        popup->show();
-        return;
-    }
-
-    loadTool(new InPaintingTool(this));
 }
 
 void EditorWindow::slotLensAutoFix()

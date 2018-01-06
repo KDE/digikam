@@ -7,7 +7,7 @@
  * Description : a tool to print images
  *
  * Copyright (C) 2008-2012 by Angelo Naselli <anaselli at linux dot it>
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -83,7 +83,8 @@ public:
         finalPage(0),
         settings(0),
         previewThread(0),
-        iface(0)
+        iface(0),
+        tempPath(0)
     {
     }
 
@@ -97,6 +98,8 @@ public:
     AdvPrintSettings*    settings;
     AdvPrintThread*      previewThread;
     DInfoInterface*      iface;
+
+    QTemporaryDir*       tempPath;
 };
 
 AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const iface)
@@ -133,6 +136,9 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
     connect(d->previewThread, SIGNAL(signalPreview(QImage)),
             this, SLOT(slotPreview(QImage)));
 
+    d->tempPath = new QTemporaryDir();
+    d->settings->tempPath = d->tempPath->path();
+
     installEventFilter(this);
 }
 
@@ -144,6 +150,7 @@ AdvPrintWizard::~AdvPrintWizard()
     KConfigGroup group = config.group("PrintCreator");
     d->settings->writeSettings(group);
 
+    delete d->tempPath;
     delete d;
 }
 
@@ -230,8 +237,6 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
         d->settings->photos.append(photo);
     }
 
-    QTemporaryDir tempPath;
-    d->settings->tempPath = tempPath.path();
     d->cropPage->ui()->BtnCropPrev->setEnabled(false);
 
     if (d->settings->photos.count() == 1)
@@ -253,9 +258,29 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
                                        s->m_autoRotate,
                                        true);
 
+
+ //AHMED FATHI COMMENTED THIS FOR COMPILE ERRORS NOT RELATED TO HIS WORK
+  /* QListWidgetItem* const pWItem = new QListWidgetItem(i18n(CUSTOM_PAGE_LAYOUT_NAME));
+
+
+    //TODO FREE STYLE ICON
+    TemplateIcon ti(80, pageSize.toSize());
+    ti.begin();
+    QPainter& painter = ti.getPainter();
+    painter.setPen(Qt::color1);
+    painter.drawText(painter.viewport(), Qt::AlignCenter, i18n("Custom layout"));
+    ti.end();
+
+    pWItem->setIcon(ti.getIcon());
+    d->photoPage->ui()->ListPhotoSizes->addItem(pWItem);
+    */
+    d->photoPage->ui()->ListPhotoSizes->blockSignals(false);
+    d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0, QItemSelectionModel::Select);
+
     d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
                                              photoIndex + 1,
                                              QString::number(d->settings->photos.count())));
+
 }
 
 void AdvPrintWizard::previewPhotos()

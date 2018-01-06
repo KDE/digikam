@@ -7,7 +7,7 @@
  * Description : application settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
@@ -207,11 +207,11 @@ public:
     void setImageSorting(int sorting);
     int  getImageSorting() const;
 
-    void setImageGroupMode(int mode);
-    int  getImageGroupMode() const;
+    void setImageSeparationMode(int mode);
+    int  getImageSeparationMode() const;
 
-    void setImageGroupSortOrder(int order);
-    int  getImageGroupSortOrder() const;
+    void setImageSeparationSortOrder(int order);
+    int  getImageSeparationSortOrder() const;
 
     void setItemLeftClickAction(const ItemLeftClickAction action);
     ItemLeftClickAction getItemLeftClickAction() const;
@@ -410,6 +410,9 @@ public:
 
     void setApplySidebarChangesDirectly(bool val);
     bool getApplySidebarChangesDirectly() const;
+
+    void setUseNativeFileDialog(bool val);
+    bool getUseNativeFileDialog() const;
 
     void setDrawFramesToGrouped(bool val);
     bool getDrawFramesToGrouped() const;

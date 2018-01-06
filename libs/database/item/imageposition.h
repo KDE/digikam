@@ -7,7 +7,7 @@
  * Description : Access image position stored in database.
  *
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008 by Patrick Spendrin <ps_ml at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -167,6 +167,12 @@ public:
      * will be empty.
      */
     void remove();
+
+    /**
+     * Removes the altitude for the referenced image
+     * from the database.
+     */
+    void removeAltitude();
 
 private:
 

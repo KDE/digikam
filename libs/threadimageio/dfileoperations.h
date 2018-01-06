@@ -6,7 +6,7 @@
  * Date        : 2008-12-10
  * Description : misc file operation methods
  *
- * Copyright (C) 2014-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -64,14 +64,13 @@ public:
 
     /** Open file urls with the service.
      */
-    static bool runFiles(const KService& service, const QList<QUrl>& urls);
+    static bool runFiles(KService* const service, const QList<QUrl>& urls);
 
     /** Open file urls with the application command.
      */
     static bool runFiles(const QString& appCmd,
                          const QList<QUrl>& urls,
-                         const QString& name = QString(),
-                         const QString& icon = QString());
+                         KService* const service = 0);
 
     /** Return list of service available on desktop to open files.
      */

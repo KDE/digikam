@@ -296,7 +296,7 @@ void CustomStepsDoubleSpinBox::setSuggestedValues(const QList<double>& values)
             this, SLOT(slotValueChanged(double)));
 
     d->values = values;
-    qSort(d->values);
+    std::sort(d->values.begin(), d->values.end());
 }
 
 void CustomStepsDoubleSpinBox::setSuggestedInitialValue(double initialValue)
@@ -469,7 +469,7 @@ void CustomStepsIntSpinBox::setSuggestedValues(const QList<int>& values)
             this, SLOT(slotValueChanged(int)));
 
     d->values = values;
-    qSort(d->values);
+    std::sort(d->values.begin(), d->values.end());
 }
 
 void CustomStepsIntSpinBox::setSuggestedInitialValue(int initialValue)
@@ -491,7 +491,7 @@ void CustomStepsIntSpinBox::setInvertStepping(bool invert)
 void CustomStepsIntSpinBox::enableFractionMagic(const QString& prefix)
 {
     d->fractionPrefix = prefix;
-    qSort(d->values.begin(), d->values.end(), qGreater<int>());
+    std::sort(d->values.begin(), d->values.end(), qGreater<int>());
 }
 
 void CustomStepsIntSpinBox::reset()

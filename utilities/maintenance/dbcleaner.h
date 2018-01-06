@@ -32,13 +32,10 @@
 #include <QTimer>
 #include <QWidget>
 
-// LibDRawDecoder includes
+// Local includes
 
 #include "dlayoutbox.h"
 #include "dworkingpixmap.h"
-
-// Local includes
-
 #include "maintenancetool.h"
 
 namespace Digikam
@@ -93,19 +90,22 @@ class DbShrinkDialog : public QDialog
 
 public:
 
-    explicit DbShrinkDialog(QWidget* parent);
+    explicit DbShrinkDialog(QWidget* const parent);
     virtual ~DbShrinkDialog();
 
     void setActive(const int pos);
     void setIcon(const int pos, const QIcon& icon);
 
 public Q_SLOTS:
+
     virtual int exec();
 
 private Q_SLOTS:
+
     void slotProgressTimerDone();
 
 private:
+
     int            active;
     DWorkingPixmap progressPix;
     QTimer*        progressTimer;

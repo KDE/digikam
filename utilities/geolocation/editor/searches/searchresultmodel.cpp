@@ -6,7 +6,7 @@
  * Date        : 2010-06-01
  * Description : A widget to search for places.
  *
- * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010-2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -315,7 +315,7 @@ void SearchResultModel::removeRowsByIndexes(const QModelIndexList& rowsList)
         return;
     }
 
-    qSort(rowNumbers.begin(), rowNumbers.end());
+    std::sort(rowNumbers.begin(), rowNumbers.end());
 
     // now delete the rows, starting with the last row:
     for (int i = rowNumbers.count()-1; i >= 0; i--)
@@ -340,7 +340,7 @@ void SearchResultModel::removeRowsBySelection(const QItemSelection& selectionLis
     }
 
     // we expect the ranges to be sorted here
-    qSort(rowRanges.begin(), rowRanges.end(), RowRangeLessThan);
+    std::sort(rowRanges.begin(), rowRanges.end(), RowRangeLessThan);
 
     // now delete the rows, starting with the last row:
     for (int i = rowRanges.count()-1; i >= 0; i--)

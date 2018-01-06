@@ -7,7 +7,7 @@
  * Description : camera setup tab.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -466,7 +466,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     d->iconShowDateBox    = new QCheckBox(i18n("Show camera creation &date"), iconViewGroup);
     d->iconShowDateBox->setWhatsThis(i18n("Set this option to show the camera creation date "
-                                             "below the image thumbnail"));
+                                             "below the image thumbnail."));
 
 /*
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);

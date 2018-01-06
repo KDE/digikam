@@ -118,6 +118,7 @@ void DIntRangeBox::setSuffix(const QString& suffix)
 
 void DIntRangeBox::setEnabled(bool enabled)
 {
+    d->intervalLabel->setEnabled(enabled);
     d->minValueBox->setEnabled(enabled);
     d->maxValueBox->setEnabled(enabled);
 }

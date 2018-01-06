@@ -198,7 +198,7 @@ void ImageAlbumModel::openAlbum(QList<Album*> albums)
     /**
      * Extra safety, ensure that no null pointers are added
      */
-    foreach (Album* const a, albums)
+    foreach(Album* const a, albums)
     {
         if (a)
         {
@@ -310,7 +310,7 @@ void ImageAlbumModel::slotNextIncrementalRefresh()
 
 void ImageAlbumModel::startListJob(QList<Album*> albums)
 {
-    if(albums.isEmpty())
+    if (albums.isEmpty())
     {
         return;
     }
@@ -329,14 +329,14 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         return;
     }
 
-    if(albums.first()->type() == Album::TAG || albums.first()->type() == Album::SEARCH)
+    if (albums.first()->type() == Album::TAG || albums.first()->type() == Album::SEARCH)
     {
-        for(QList<Album*>::iterator it = albums.begin(); it != albums.end(); ++it)
+        for (QList<Album*>::iterator it = albums.begin() ; it != albums.end() ; ++it)
         {
             ids << (*it)->id();
         }
 
-        if(albums.first()->type() == Album::TAG)
+        if (albums.first()->type() == Album::TAG)
         {
             url = CoreDbUrl::fromTagIds(ids);
         }
@@ -346,7 +346,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         url = albums.first()->databaseUrl();
     }
 
-    if(albums.first()->type() == Album::DATE)
+    if (albums.first()->type() == Album::DATE)
     {
         d->extraValueJob = false;
 
@@ -385,7 +385,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
 
         d->jobThread = DBJobsManager::instance()->startTagsJobThread(jobInfo);
     }
-    else if(albums.first()->type() == Album::PHYSICAL)
+    else if (albums.first()->type() == Album::PHYSICAL)
     {
         d->extraValueJob = false;
         AlbumsDBJobInfo jobInfo;
@@ -401,7 +401,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
 
         d->jobThread = DBJobsManager::instance()->startAlbumsJobThread(jobInfo);
     }
-    else if(albums.first()->type() == Album::SEARCH)
+    else if (albums.first()->type() == Album::SEARCH)
     {
         d->extraValueJob = false;
 
@@ -449,7 +449,7 @@ void ImageAlbumModel::slotResult()
 
 void ImageAlbumModel::slotData(const QList<ImageListerRecord> &records)
 {
-    if(d->jobThread != sender())
+    if (d->jobThread != sender())
         return;
 
     if (records.isEmpty())
@@ -532,7 +532,7 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
      * QList is designed for multiple selection, for now, only tags are supported
      * for SAlbum it will be a list with one element
      */
-    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
+    for (it = d->currentAlbums.begin() ; it != d->currentAlbums.end() ; ++it)
     {
         if ((*it)->type() == Album::SEARCH)
         {
@@ -588,7 +588,7 @@ void ImageAlbumModel::slotImageTagChange(const ImageTagChangeset& changeset)
     bool doRefresh = false;
     QList<Album*>::iterator it;
 
-    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
+    for (it = d->currentAlbums.begin() ; it != d->currentAlbums.end() ; ++it)
     {
         if ((*it)->type() == Album::TAG)
         {
@@ -609,7 +609,7 @@ void ImageAlbumModel::slotImageTagChange(const ImageTagChangeset& changeset)
             }
         }
 
-        if(doRefresh)
+        if (doRefresh)
         {
             break;
         }
@@ -718,7 +718,7 @@ void ImageAlbumModel::slotSearchChange(const SearchChangeset& changeset)
 
     QList<Album*>::iterator it;
 
-    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
+    for (it = d->currentAlbums.begin() ; it != d->currentAlbums.end() ; ++it)
     {
         if (album && (*it) == album)
         {
@@ -750,7 +750,7 @@ void ImageAlbumModel::slotAlbumDeleted(Album* album)
 void ImageAlbumModel::slotAlbumRenamed(Album* album)
 {
     // display changed names
-    if(d->currentAlbums.contains(album))
+    if (d->currentAlbums.contains(album))
     {
         emitDataChangedForAll();
     }

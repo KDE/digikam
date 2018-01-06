@@ -2,7 +2,7 @@
 #
 # Once done this will define
 #
-#  QTAV_FOUND          - The system has libqtav
+#  QtAV_FOUND          - The system has libqtav
 #  QTAV_INCLUDE_DIRS   - The libqtav include directory
 #  QTAV_LIBRARIES      - Link these to use libqtav
 #  QTAV_MAJOR_VERSION  - The major value of QtAV version ID defined in QtAV/version.h as "1".
@@ -25,22 +25,22 @@ Message(STATUS "QtAV search path: ${_qt5_install_prefix}")
 if (NOT APPLE)
     find_path(QTAV_CORE_INCLUDE_DIR
               NAMES QtAV.h
-              HINTS ${_qt5_install_prefix}                                           # For MXE
+              HINTS ${Qt5Core_INCLUDE_DIRS}
+                    ${_qt5_install_prefix}                                           # For MXE
                     ${_qt5_install_prefix}/../qt5/include                            # For Mageia
                     ${_qt5_install_prefix}/../../include/qt5                         # For Suse
-                    ${_qt5_install_prefix}/../../../include/x86_64-linux-gnu/qt5     # For Debian
-                    ${_qt5_install_prefix}/../../../include/i386-linux-gnu/qt5       # For Mint32 (possibly all 32 Debian)
+                    ${_qt5_install_prefix}/../../../include/${CMAKE_LIBRARY_ARCHITECTURE}/qt5     # For Debian
                     ${_qt5_install_prefix}/../../include/qt                          # For Arch
               PATH_SUFFIXES QtAV
     )
 
     find_path(QTAV_WIDGETS_INCLUDE_DIR
               NAMES QtAVWidgets.h
-              HINTS ${_qt5_install_prefix}                                           # For MXE
+              HINTS ${Qt5Core_INCLUDE_DIRS}
+                    ${_qt5_install_prefix}                                           # For MXE
                     ${_qt5_install_prefix}/../qt5/include                            # For Mageia
                     ${_qt5_install_prefix}/../../include/qt5                         # For Suse
-                    ${_qt5_install_prefix}/../../../include/x86_64-linux-gnu/qt5     # For Debian
-                    ${_qt5_install_prefix}/../../../include/i386-linux-gnu/qt5       # For Mint32 (possibly all 32 Debian)
+                    ${_qt5_install_prefix}/../../../include/${CMAKE_LIBRARY_ARCHITECTURE}/qt5     # For Debian
                     ${_qt5_install_prefix}/../../include/qt                          # For Arch
               PATH_SUFFIXES QtAVWidgets
     )
@@ -93,7 +93,7 @@ endif()
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(QtAV REQUIRED_VARS QTAV_LIBRARIES QTAV_INCLUDE_DIRS)
 
-if(QTAV_FOUND)
+if(QtAV_FOUND)
 
     if (NOT APPLE)
         file(READ ${QTAV_CORE_INCLUDE_DIR}/version.h QTAV_VERSION_CONTENT)
@@ -131,7 +131,7 @@ endif()
 mark_as_advanced(QTAV_INCLUDE_DIRS QTAV_LIBRARIES QTAV_VERSION_STRING
                  QTAV_MAJOR_VERSION QTAV_MINOR_VERSION QTAV_PATCH_VERSION)
 
-message(STATUS "QtAV_FOUND       = ${QTAV_FOUND}")
+message(STATUS "QtAV_FOUND       = ${QtAV_FOUND}")
 message(STATUS "QtAV_INCLUDE_DIR = ${QTAV_INCLUDE_DIRS}")
 message(STATUS "QtAV_LIBRARIES   = ${QTAV_LIBRARIES}")
 message(STATUS "QtAV_VERSION     = ${QTAV_VERSION_STRING}")

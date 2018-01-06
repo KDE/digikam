@@ -6,7 +6,7 @@
  * Date        : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  *
- * Copyright (C) 2004-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
@@ -107,6 +107,8 @@
 #include "expoblendingmanager.h"
 #include "mailwizard.h"
 #include "advprintwizard.h"
+#include "dmediaservermngr.h"
+#include "dmediaserverdlg.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -206,6 +208,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     d->thumbBarDock->reInitialize();
 
     // -- Load current items ---------------------------
+
     slotDroppedUrls(urlList);
 
     if (!d->infoList.isEmpty())
@@ -221,6 +224,7 @@ ShowFoto::~ShowFoto()
 
     Digikam::ThumbnailLoadThread::cleanUp();
     Digikam::LoadingCacheInterface::cleanUp();
+    Digikam::DMediaServerMngr::instance()->saveAtShutdown();
 
     delete d->model;
     delete d->filterModel;
@@ -289,6 +293,10 @@ void ShowFoto::show()
             config->sync();
         }
     }
+    
+    // Start the Media Server if necessary
+    
+    Digikam::DMediaServerMngr::instance()->loadAtStartup();
 }
 
 void ShowFoto::setupConnections()
@@ -374,7 +382,6 @@ void ShowFoto::setupUserArea()
     viewContainer->addDockWidget(dockArea, d->thumbBarDock);
     d->thumbBarDock->setFloating(false);
 
-
     d->model       = new ShowfotoThumbnailModel(d->thumbBar);
     d->model->setThumbnailLoadThread(d->thumbLoadThread);
     d->dDHandler   = new ShowfotoDragDropHandler(d->model);
@@ -382,7 +389,6 @@ void ShowFoto::setupUserArea()
 
     d->filterModel = new ShowfotoFilterModel(d->thumbBar);
     d->filterModel->setSourceShowfotoModel(d->model);
-
     d->filterModel->setCategorizationMode(ShowfotoItemSortSettings::NoCategories);
     d->filterModel->sort(0);
 
@@ -406,6 +412,8 @@ void ShowFoto::setupActions()
     d->fileOpenAction = buildStdAction(StdOpenAction, this, SLOT(slotOpenFile()), this);
     actionCollection()->addAction(QLatin1String("showfoto_open_file"), d->fileOpenAction);
 
+    // ---------
+
     d->openFilesInFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-pictures")), i18n("Open folder"), this);
     actionCollection()->setDefaultShortcut(d->openFilesInFolderAction, Qt::CTRL+Qt::SHIFT+Qt::Key_O);
 
@@ -413,6 +421,8 @@ void ShowFoto::setupActions()
             this, &ShowFoto::slotOpenFilesInFolder);
 
     actionCollection()->addAction(QLatin1String("showfoto_open_folder"), d->openFilesInFolderAction);
+
+    // ---------
 
     QAction* const quit = buildStdAction(StdQuitAction, this, SLOT(close()), this);
     actionCollection()->addAction(QLatin1String("showfoto_quit"), quit);
@@ -1061,7 +1071,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
     Digikam::DMetadata meta;
 
     m_nameLabel->setProgressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
-                                 i18n("Preparing slideshow. Please wait..."));
+                                    i18n("Preparing slideshow. Please wait..."));
 
     for (QList<QUrl>::ConstIterator it = settings.fileList.constBegin() ;
          !m_cancelSlideShow && (it != settings.fileList.constEnd()) ; ++it)
@@ -1114,6 +1124,7 @@ void ShowFoto::slotPresentation()
         qApp->processEvents();
     }
 
+    m_nameLabel->setProgressBarMode(Digikam::StatusProgressBar::TextMode, QString());
     mngr->showConfigDialog();
 }
 
@@ -1445,6 +1456,12 @@ void ShowFoto::slotSendByMail()
 void ShowFoto::slotPrintCreator()
 {
     AdvPrintWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+void ShowFoto::slotMediaServer()
+{
+    DMediaServerDlg w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
     w.exec();
 }
 

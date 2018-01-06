@@ -7,7 +7,7 @@
  * Description : application settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  * Copyright (C) 2014      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
@@ -126,8 +126,8 @@ void ApplicationSettings::readSettings()
 
     d->imageSortOrder                    = group.readEntry(d->configImageSortOrderEntry,      (int)ImageSortSettings::SortByFileName);
     d->imageSorting                      = group.readEntry(d->configImageSortingEntry,        (int)ImageSortSettings::AscendingOrder);
-    d->imageGroupMode                    = group.readEntry(d->configImageGroupModeEntry,      (int)ImageSortSettings::CategoryByAlbum);
-    d->imageGroupSortOrder               = group.readEntry(d->configImageGroupSortOrderEntry, (int)ImageSortSettings::AscendingOrder);
+    d->imageSeparationMode                = group.readEntry(d->configImageSeparationModeEntry,      (int)ImageSortSettings::CategoryByAlbum);
+    d->imageSeparationSortOrder           = group.readEntry(d->configImageSeparationSortOrderEntry, (int)ImageSortSettings::AscendingOrder);
 
     d->itemLeftClickAction               = ApplicationSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
                                            (int)ApplicationSettings::ShowPreview));
@@ -199,7 +199,7 @@ void ApplicationSettings::readSettings()
     d->tooltipShowAlbumCaption           = group.readEntry(d->configToolTipsShowAlbumCaptionEntry,     true);
     d->tooltipShowAlbumPreview           = group.readEntry(d->configToolTipsShowAlbumPreviewEntry,     false);
 
-    if (group.readEntry(d->configPreviewLoadFullImageSizeEntry, true))
+    if (group.readEntry(d->configPreviewLoadFullItemSizeEntry, true))
     {
         d->previewSettings.quality = PreviewSettings::HighQualityPreview;
         if (group.readEntry(d->configPreviewRawUseEmbeddedPreview, false))
@@ -236,6 +236,7 @@ void ApplicationSettings::readSettings()
     d->showTrashDeleteDialog             = group.readEntry(d->configShowTrashDeleteDialogEntry,                       true);
     d->showPermanentDeleteDialog         = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
     d->sidebarApplyDirectly              = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
+    d->useNativeFileDialog               = group.readEntry(d->configUseNativeFileDialogEntry,                         false);
     d->drawFramesToGrouped               = group.readEntry(d->configDrawFramesToGroupedEntry,                         true);
     d->scrollItemToCenter                = group.readEntry(d->configScrollItemToCenterEntry,                          false);
     d->showOnlyPersonTagsInPeopleSidebar = group.readEntry(d->configShowOnlyPersonTagsInPeopleSidebarEntry,           true);
@@ -314,8 +315,8 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configAlbumSortRoleEntry,                      (int)d->albumSortRole);
     group.writeEntry(d->configImageSortOrderEntry,                     (int)d->imageSortOrder);
     group.writeEntry(d->configImageSortingEntry,                       (int)d->imageSorting);
-    group.writeEntry(d->configImageGroupModeEntry,                     (int)d->imageGroupMode);
-    group.writeEntry(d->configImageGroupSortOrderEntry,                (int)d->imageGroupSortOrder);
+    group.writeEntry(d->configImageSeparationModeEntry,                     (int)d->imageSeparationMode);
+    group.writeEntry(d->configImageSeparationSortOrderEntry,                (int)d->imageSeparationSortOrder);
 
     group.writeEntry(d->configItemLeftClickActionEntry,                (int)d->itemLeftClickAction);
     group.writeEntry(d->configDefaultIconSizeEntry,                    QString::number(d->thumbnailSize));
@@ -382,7 +383,7 @@ void ApplicationSettings::saveSettings()
 
     if (d->previewSettings.quality == PreviewSettings::HighQualityPreview)
     {
-        group.writeEntry(d->configPreviewLoadFullImageSizeEntry, true);
+        group.writeEntry(d->configPreviewLoadFullItemSizeEntry, true);
         switch (d->previewSettings.rawLoading)
         {
             case PreviewSettings::RawPreviewAutomatic:
@@ -401,7 +402,7 @@ void ApplicationSettings::saveSettings()
     }
     else
     {
-        group.writeEntry(d->configPreviewLoadFullImageSizeEntry, false);
+        group.writeEntry(d->configPreviewLoadFullItemSizeEntry, false);
     }
 
     group.writeEntry(d->configPreviewConvertToEightBitEntry,           d->previewSettings.convertToEightBit);
@@ -419,6 +420,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configShowTrashDeleteDialogEntry,              d->showTrashDeleteDialog);
     group.writeEntry(d->configShowPermanentDeleteDialogEntry,          d->showPermanentDeleteDialog);
     group.writeEntry(d->configApplySidebarChangesDirectlyEntry,        d->sidebarApplyDirectly);
+    group.writeEntry(d->configUseNativeFileDialogEntry,                d->useNativeFileDialog);
     group.writeEntry(d->configDrawFramesToGroupedEntry,                d->drawFramesToGrouped);
     group.writeEntry(d->configScrollItemToCenterEntry,                 d->scrollItemToCenter);
     group.writeEntry(d->configShowOnlyPersonTagsInPeopleSidebarEntry,  d->showOnlyPersonTagsInPeopleSidebar);

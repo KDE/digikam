@@ -6,7 +6,7 @@
  * Date        : 2008-12-23
  * Description : a widget to change font properties.
  *
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      1996 by Bernd Johannes Wuebben  <wuebben at kde dot org>
  * Copyright (c)      1999 by Preston Brown <pbrown at kde dot org>
  * Copyright (c)      1999 by Mario Weilguni <mweilguni at kde dot org>
@@ -779,7 +779,7 @@ void DFontProperties::Private::_d_family_chosen_slot(const QString& family)
                 }
             }
 
-            qSwap(styleIt, styleOb);
+            std::swap(styleIt, styleOb);
         }
     }
 
@@ -1037,7 +1037,7 @@ qreal DFontProperties::Private::fillSizeList(const QList<qreal>& sizes_)
 
     // Insert sizes into the listbox.
     sizeListBox->clear();
-    qSort(sizes);
+    std::sort(sizes.begin(), sizes.end());
 
     Q_FOREACH (qreal size, sizes)
     {
@@ -1400,7 +1400,7 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
 
     // Sort real fonts alphabetically.
 
-    qSort(trNames.begin(), trNames.end(), localeLessThan);
+    std::sort(trNames.begin(), trNames.end(), localeLessThan);
 
     // Prepend generic fonts, in the predefined order.
 

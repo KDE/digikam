@@ -7,7 +7,7 @@
  * Description : Find Duplicates View.
  *
  * Copyright (C) 2016-2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef FINDDUPLICATESVIEW_H
-#define FINDDUPLICATESVIEW_H
+#ifndef FIND_DUPLICATES_VIEW_H
+#define FIND_DUPLICATES_VIEW_H
 
 // Qt includes
 
@@ -67,7 +67,8 @@ private Q_SLOTS:
     void slotSearchUpdated(SAlbum* a);
     void slotClear();
     void slotFindDuplicates();
-    void slotUpdateDuplicates(const QList<SAlbum*>& sAlbumsToRebuild,const QList<qlonglong>& deletedImages);
+    void slotUpdateDuplicates(const QList<SAlbum*>& sAlbumsToRebuild,
+                              const QList<qlonglong>& deletedImages);
     void slotDuplicatesAlbumActived();
     void slotComplete();
     void slotUpdateFingerPrints();
@@ -91,4 +92,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // FINDDUPLICATESVIEW_H
+#endif // FIND_DUPLICATES_VIEW_H

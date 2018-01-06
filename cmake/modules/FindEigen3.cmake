@@ -6,7 +6,7 @@
 #
 # Once done this will define
 #
-#  EIGEN3_FOUND       - system has eigen lib with correct version
+#  Eigen3_FOUND       - system has eigen lib with correct version
 #  EIGEN3_INCLUDE_DIR - the eigen include directory
 #  EIGEN3_VERSION     - eigen version
 
@@ -57,7 +57,7 @@ if (EIGEN3_INCLUDE_DIR)
 
   # in cache already
   _eigen3_check_version()
-  set(EIGEN3_FOUND ${EIGEN3_VERSION_OK})
+  set(Eigen3_FOUND ${EIGEN3_VERSION_OK})
 
 else (EIGEN3_INCLUDE_DIR)
 

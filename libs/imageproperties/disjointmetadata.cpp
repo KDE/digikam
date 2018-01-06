@@ -189,7 +189,7 @@ void DisjointMetadata::reset()
     d =  new Private();
 }
 
-void DisjointMetadata::load(const ImageInfo &info)
+void DisjointMetadata::load(const ImageInfo& info)
 {
     CaptionsMap commentMap;
     CaptionsMap titleMap;
@@ -609,7 +609,7 @@ void DisjointMetadata::loadTags( QList<int> &loadedTagIds)
         return;
     }
 
-    qSort(loadedTagIds.begin(),loadedTagIds.end());
+    std::sort(loadedTagIds.begin(), loadedTagIds.end());
     // We search for metadata available tags, and
     // it is not present in current list, set it to
     // disjoint

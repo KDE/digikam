@@ -6,7 +6,7 @@
  * Date        : 2007-11-27
  * Description : a bar to indicate icon-view filters status
  *
- * Copyright (C) 2007-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

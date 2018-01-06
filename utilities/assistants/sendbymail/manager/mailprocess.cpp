@@ -6,7 +6,7 @@
  * Date        : 2004-02-25
  * Description : a tool to e-mailing images
  *
- * Copyright (C) 2004-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2006      by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2006      by Michael Hoechstetter <michael dot hoechstetter at gmx dot de>
@@ -268,7 +268,7 @@ void MailProcess::buildPropertiesFile()
             propertiesText.append(QLatin1String("\n"));
         }
 
-        QFile propertiesFile(d->settings->tempPath + QLatin1Char('/') + i18n("properties.txt"));
+        QFile propertiesFile(d->settings->tempPath + i18n("properties.txt"));
         QTextStream stream(&propertiesFile);
         stream.setCodec(QTextCodec::codecForName("UTF-8"));
         stream.setAutoDetectUnicode(true);
@@ -400,16 +400,9 @@ bool MailProcess::invokeMailAgent()
 
         if (!fileList.isEmpty())
         {
-            QStringList stringFileList;
+            QString prog = QDir::toNativeSeparators(d->settings->binPaths[d->settings->mailProgram]);
 
-            foreach(const QUrl& file, fileList)
-            {
-                stringFileList << file.toLocalFile();
-            }
-
-            QString binPath = d->settings->binPaths[d->settings->mailProgram];
-
-            if (binPath.isEmpty())
+            if (prog.isEmpty())
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Mail binary path is empty."
                                              << "Cannot start Mail client program!";
@@ -420,15 +413,7 @@ bool MailProcess::invokeMailAgent()
             {
                 case MailSettings::BALSA:
                 {
-                    QString prog = binPath;
                     QStringList args;
-
-#ifdef Q_OS_WIN
-                    args.append(QLatin1String("/c"));
-                    args.append(QLatin1String("start"));
-                    args.append(prog);
-                    prog = QLatin1String("cmd");
-#endif
 
                     args.append(QLatin1String("-m"));
                     args.append(QLatin1String("mailto:"));
@@ -436,7 +421,7 @@ bool MailProcess::invokeMailAgent()
                     for (QList<QUrl>::ConstIterator it = fileList.constBegin() ; it != fileList.constEnd() ; ++it)
                     {
                         args.append(QLatin1String("-a"));
-                        args.append((*it).toLocalFile());
+                        args.append(QDir::toNativeSeparators((*it).toLocalFile()));
                     }
 
                     QProcess process;
@@ -459,14 +444,6 @@ bool MailProcess::invokeMailAgent()
                 case MailSettings::SYLPHEED:
                 {
                     QStringList args;
-                    QString     prog = binPath;
-
-#ifdef Q_OS_WIN
-                    args.append(QLatin1String("/c"));
-                    args.append(QLatin1String("start"));
-                    args.append(prog);
-                    prog = QLatin1String("cmd");
-#endif
 
                     args.append(QLatin1String("--compose"));
                     args.append(QLatin1String("--attach"));
@@ -474,7 +451,7 @@ bool MailProcess::invokeMailAgent()
                     for (QList<QUrl>::ConstIterator it = fileList.constBegin() ;
                          it != fileList.constEnd() ; ++it)
                     {
-                        args.append((*it).toLocalFile());
+                        args.append(QDir::toNativeSeparators((*it).toLocalFile()));
                     }
 
                     QProcess process;
@@ -495,22 +472,14 @@ bool MailProcess::invokeMailAgent()
 
                 case MailSettings::EVOLUTION:
                 {
-                    QString prog = binPath;
                     QStringList args;
-
-#ifdef Q_OS_WIN
-                    args.append(QLatin1String("/c"));
-                    args.append(QLatin1String("start"));
-                    args.append(prog);
-                    prog = QLatin1String("cmd");
-#endif
 
                     QString tmp = QLatin1String("mailto:?subject=");
 
                     for (QList<QUrl>::ConstIterator it = fileList.constBegin() ; it != fileList.constEnd() ; ++it)
                     {
                         tmp.append(QLatin1String("&attach="));
-                        tmp.append((*it).toLocalFile());
+                        tmp.append(QDir::toNativeSeparators((*it).toLocalFile()));
                     }
 
                     args.append(tmp);
@@ -533,20 +502,12 @@ bool MailProcess::invokeMailAgent()
 
                 case MailSettings::KMAIL:
                 {
-                    QString prog = binPath;
                     QStringList args;
-
-#ifdef Q_OS_WIN
-                    args.append(QLatin1String("/c"));
-                    args.append(QLatin1String("start"));
-                    args.append(prog);
-                    prog = QLatin1String("cmd");
-#endif
 
                     for (QList<QUrl>::ConstIterator it = fileList.constBegin() ; it != fileList.constEnd() ; ++it)
                     {
                         args.append(QLatin1String("--attach"));
-                        args.append((*it).toLocalFile());
+                        args.append(QDir::toNativeSeparators((*it).toLocalFile()));
                     }
 
                     QProcess process;
@@ -571,23 +532,15 @@ bool MailProcess::invokeMailAgent()
                 case MailSettings::NETSCAPE:
                 case MailSettings::THUNDERBIRD:
                 {
-                    QString prog = binPath;
-
                     QStringList args;
 
-#ifdef Q_OS_WIN
-                    args.append(QLatin1String("/c"));
-                    args.append(QLatin1String("start"));
-                    args.append(prog);
-                    prog = QLatin1String("cmd");
-#endif
                     args.append(QLatin1String("-compose"));
                     QString tmp = QLatin1String("attachment='");
 
                     for (QList<QUrl>::ConstIterator it = fileList.constBegin() ; it != fileList.constEnd() ; ++it)
                     {
                         tmp.append(QLatin1String("file://"));
-                        tmp.append((*it).toLocalFile());
+                        tmp.append(QDir::toNativeSeparators((*it).toLocalFile()));
                         tmp.append(QLatin1String(","));
                     }
 
@@ -635,7 +588,7 @@ void MailProcess::invokeMailAgentDone(const QString& prog, const QStringList& ar
     emit signalMessage(text, false);
 
     emit signalMessage(i18n("After having sent your images by email..."), false);
-    emit signalMessage(i18n("Press 'Close' button to clean up temporary files"), false);
+    emit signalMessage(i18n("Press 'Finish' button to clean up temporary files"), false);
     emit signalDone(true);
 }
 

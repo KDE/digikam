@@ -30,7 +30,9 @@ class QStringList;
 namespace Digikam
 {
 
-QStringList cleanUserFilterString(QString filterString, const bool caseSensitive = false);
+QStringList cleanUserFilterString(QString filterString,
+                                  const bool caseSensitive = false,
+                                  const bool useSemicolon  = false);
 
 }  // namespace Digikam
 

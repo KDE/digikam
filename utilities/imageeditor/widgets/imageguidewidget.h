@@ -6,7 +6,7 @@
  * Date        : 2004-08-20
  * Description : a widget to display an image with guides
  *
- * Copyright (C) 2004-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -111,7 +111,7 @@ Q_SIGNALS:
     void spotPositionChangedFromTarget(const Digikam::DColor& color, const QPoint& position);
     void signalResized();
 
-private:
+protected:
 
     void   paintEvent(QPaintEvent*);
     void   resizeEvent(QResizeEvent*);
@@ -124,9 +124,12 @@ private:
     void   updatePixmap();
     void   drawLineTo(const QPoint& endPoint);
     void   drawLineTo(int width, bool erase, const QColor& color, const QPoint& start, const QPoint& end);
-    QPoint translatePointPosition(QPoint& point) const;
+    QPoint translatePointPosition(const QPoint& point) const;
     void   drawText(QPainter* const p, const QPoint& corner, const QString& text);
     void   updateMaskCursor();
+    void   setSpotPosition(QPoint& point);
+    void   updateSpotPosition(int x, int y);
+    QPoint translateImagePosition(const QPoint& point, bool src) const;
 
 private:
 
@@ -136,4 +139,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* IMAGEGUIDEWIDGET_H */
+#endif // IMAGEGUIDEWIDGET_H

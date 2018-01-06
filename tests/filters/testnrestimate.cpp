@@ -6,7 +6,7 @@
  * Date        : 2012-10-23
  * Description : a command line tool to test DImg image loader
  *
- * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012-2013 by Sayantan Datta <sayantan dot knz at gmail dot com>
  *
  * This program is free software; you can redistribute it

@@ -11,7 +11,7 @@
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
- * Copyright (C) 2002-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -128,6 +128,8 @@
 #include "mailwizard.h"
 #include "advprintwizard.h"
 #include "dfiledialog.h"
+#include "dmediaservermngr.h"
+#include "dmediaserverdlg.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -174,6 +176,7 @@ DigikamApp::DigikamApp()
     m_instance         = this;
     d->config          = KSharedConfig::openConfig();
     KConfigGroup group = d->config->group(configGroupName());
+
 
 #ifdef HAVE_DBUS
     new DigikamAdaptor(this);
@@ -372,12 +375,15 @@ DigikamApp::~DigikamApp()
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
     DIO::cleanUp();
+    DMediaServerMngr::instance()->saveAtShutdown();
 
     // close database server
     if (ApplicationSettings::instance()->getDbEngineParameters().internalServer)
     {
         DatabaseServerStarter::instance()->stopServerManagerProcess();
     }
+
+    AlbumManager::instance()->removeFakeConnection();
 
     m_instance = 0;
 
@@ -455,6 +461,9 @@ void DigikamApp::show()
         QTimer::singleShot(1000, tool, SLOT(start()));
     }
 
+    // Start the Media Server if necessary
+    
+    DMediaServerMngr::instance()->loadAtStartup();
 }
 
 void DigikamApp::restoreSession()
@@ -1094,7 +1103,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageSortAction                   = new KSelectAction(i18n("&Sort Images"), this);
+    d->imageSortAction                   = new KSelectAction(i18n("&Sort Items"), this);
     d->imageSortAction->setWhatsThis(i18n("The value by which the images in one album are sorted in the thumbnail view"));
     QSignalMapper* const imageSortMapper = new QSignalMapper(this);
     connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
@@ -1134,7 +1143,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageSortOrderAction                   = new KSelectAction(i18n("Image Sorting &Order"), this);
+    d->imageSortOrderAction                   = new KSelectAction(i18n("Item Sort &Order"), this);
     d->imageSortOrderAction->setWhatsThis(i18n("Defines whether images are sorted in ascending or descending manner."));
     QSignalMapper* const imageSortOrderMapper = new QSignalMapper(this);
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
@@ -1151,41 +1160,41 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageGroupAction                   = new KSelectAction(i18n("&Group Images"), this);
-    d->imageGroupAction->setWhatsThis(i18n("The categories in which the images in the thumbnail view are displayed"));
-    QSignalMapper* const imageGroupMapper = new QSignalMapper(this);
-    connect(imageGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
-    ac->addAction(QLatin1String("image_group"), d->imageGroupAction);
+    d->imageSeparationAction                   = new KSelectAction(i18n("Separate Items"), this);
+    d->imageSeparationAction->setWhatsThis(i18n("The categories in which the images in the thumbnail view are displayed"));
+    QSignalMapper* const imageSeparationMapper = new QSignalMapper(this);
+    connect(imageSeparationMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSeparateImages(int)));
+    ac->addAction(QLatin1String("image_separation"), d->imageSeparationAction);
 
     // map to ImageSortSettings enum
-    QAction* const noCategoriesAction  = d->imageGroupAction->addAction(i18n("Flat List"));
-    QAction* const groupByAlbumAction  = d->imageGroupAction->addAction(i18n("By Album"));
-    QAction* const groupByFormatAction = d->imageGroupAction->addAction(i18n("By Format"));
+    QAction* const noCategoriesAction     = d->imageSeparationAction->addAction(i18n("Flat List"));
+    QAction* const separateByAlbumAction  = d->imageSeparationAction->addAction(i18n("By Album"));
+    QAction* const separateByFormatAction = d->imageSeparationAction->addAction(i18n("By Format"));
 
-    connect(noCategoriesAction,  SIGNAL(triggered()), imageGroupMapper, SLOT(map()));
-    connect(groupByAlbumAction,  SIGNAL(triggered()), imageGroupMapper, SLOT(map()));
-    connect(groupByFormatAction, SIGNAL(triggered()), imageGroupMapper, SLOT(map()));
+    connect(noCategoriesAction,  SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
+    connect(separateByAlbumAction,  SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
+    connect(separateByFormatAction, SIGNAL(triggered()), imageSeparationMapper, SLOT(map()));
 
-    imageGroupMapper->setMapping(noCategoriesAction,  (int)ImageSortSettings::OneCategory);
-    imageGroupMapper->setMapping(groupByAlbumAction,  (int)ImageSortSettings::CategoryByAlbum);
-    imageGroupMapper->setMapping(groupByFormatAction, (int)ImageSortSettings::CategoryByFormat);
+    imageSeparationMapper->setMapping(noCategoriesAction,  (int)ImageSortSettings::OneCategory);
+    imageSeparationMapper->setMapping(separateByAlbumAction,  (int)ImageSortSettings::CategoryByAlbum);
+    imageSeparationMapper->setMapping(separateByFormatAction, (int)ImageSortSettings::CategoryByFormat);
 
     // -----------------------------------------------------------------
 
-    d->imageGroupSortOrderAction                   = new KSelectAction(i18n("Group Sorting Order"), this);
-    d->imageGroupSortOrderAction->setWhatsThis(i18n("The sort order of images groups"));
-    QSignalMapper* const imageGroupSortOrderMapper = new QSignalMapper(this);
-    connect(imageGroupSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImageGroupOrder(int)));
-    ac->addAction(QLatin1String("image_group_sort_order"), d->imageGroupSortOrderAction);
+    d->imageSeparationSortOrderAction                   = new KSelectAction(i18n("Item Separation Order"), this);
+    d->imageSeparationSortOrderAction->setWhatsThis(i18n("The sort order of the groups of separated items"));
+    QSignalMapper* const imageSeparationSortOrderMapper = new QSignalMapper(this);
+    connect(imageSeparationSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotImageSeparationSortOrder(int)));
+    ac->addAction(QLatin1String("image_separation_sort_order"), d->imageSeparationSortOrderAction);
 
-    QAction* const sortGroupsAscending  = d->imageGroupSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-ascending")),  i18n("Ascending"));
-    QAction* const sortGroupsDescending = d->imageGroupSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-descending")), i18n("Descending"));
+    QAction* const sortSeparationsAscending  = d->imageSeparationSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-ascending")),  i18n("Ascending"));
+    QAction* const sortSeparationsDescending = d->imageSeparationSortOrderAction->addAction(QIcon::fromTheme(QLatin1String("view-sort-descending")), i18n("Descending"));
 
-    connect(sortGroupsAscending,  SIGNAL(triggered()), imageGroupSortOrderMapper, SLOT(map()));
-    connect(sortGroupsDescending, SIGNAL(triggered()), imageGroupSortOrderMapper, SLOT(map()));
+    connect(sortSeparationsAscending,  SIGNAL(triggered()), imageSeparationSortOrderMapper, SLOT(map()));
+    connect(sortSeparationsDescending, SIGNAL(triggered()), imageSeparationSortOrderMapper, SLOT(map()));
 
-    imageGroupSortOrderMapper->setMapping(sortGroupsAscending, (int)ImageSortSettings::AscendingOrder);
-    imageGroupSortOrderMapper->setMapping(sortGroupsDescending, (int)ImageSortSettings::DescendingOrder);
+    imageSeparationSortOrderMapper->setMapping(sortSeparationsAscending, (int)ImageSortSettings::AscendingOrder);
+    imageSeparationSortOrderMapper->setMapping(sortSeparationsDescending, (int)ImageSortSettings::DescendingOrder);
 
     // -----------------------------------------------------------------
 
@@ -1251,7 +1260,7 @@ void DigikamApp::setupActions()
     d->zoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18n("Zoom to 100%"), this);
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
     ac->addAction(QLatin1String("album_zoomto100percents"), d->zoomTo100percents);
-    ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Comma);
+    ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Period);
 
     // -----------------------------------------------------------
 
@@ -1350,6 +1359,7 @@ void DigikamApp::setupActions()
     createVideoSlideshowAction();
     createSendByMailAction();
     createPrintCreatorAction();
+    createMediaServerAction();
 
     // -----------------------------------------------------------
 
@@ -1419,8 +1429,8 @@ void DigikamApp::initGui()
     d->albumSortAction->setCurrentItem((int)ApplicationSettings::instance()->getAlbumSortRole());
     d->imageSortAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSortOrder());
     d->imageSortOrderAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSorting());
-    d->imageGroupAction->setCurrentItem((int)ApplicationSettings::instance()->getImageGroupMode()-1); // no action for enum 0
-    d->imageGroupSortOrderAction->setCurrentItem((int)ApplicationSettings::instance()->getImageGroupSortOrder());
+    d->imageSeparationAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSeparationMode()-1); // no action for enum 0
+    d->imageSeparationSortOrderAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSeparationSortOrder());
     d->recurseAlbumsAction->setChecked(ApplicationSettings::instance()->getRecurseAlbums());
     d->recurseTagsAction->setChecked(ApplicationSettings::instance()->getRecurseTags());
     d->showBarAction->setChecked(ApplicationSettings::instance()->getShowThumbbar());
@@ -1549,8 +1559,8 @@ void DigikamApp::slotAlbumSelected(Album* album)
 
 void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageInfoList& listAll)
 {
-    int numImagesWithGrouped    = listAll.count();
-    int numImagesWithoutGrouped = d->view->allUrls(false).count();
+    int numImagesWithGrouped              = listAll.count();
+    int numImagesWithoutGrouped           = d->view->allUrls(false).count();
     ImageInfoList selectionWithoutGrouped = d->view->selectedInfoList(true, false);
 
     QString statusBarSelectionText;
@@ -1585,6 +1595,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageIn
                                               selection.count(), numImagesWithoutGrouped);
                 break;
             }
+
             if (selectionWithoutGrouped.count() > 1)
             {
                 if (selection.count() == selectionWithoutGrouped.count())
@@ -1608,9 +1619,11 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageIn
                                    selectionWithoutGrouped.count(), numImagesWithoutGrouped,
                                    selection.count(), numImagesWithGrouped);
                 }
+
                 break;
             }
             // no break; is completely intentional, arriving here is equivalent to case 1:
+            [[fallthrough]];
         }
         case 1:
         {
@@ -1636,6 +1649,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageIn
                           + i18n(" (%1 of %2. Total with grouped items: %3)", indexWithoutGrouped,
                                  numImagesWithoutGrouped, numImagesWithGrouped);
             }
+
             break;
         }
     }
@@ -2700,6 +2714,17 @@ void DigikamApp::slotPrintCreator()
     w.exec();
 }
 
+void DigikamApp::slotMediaServer()
+{
+    DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);
+    // NOTE: We overwrite the default albums chooser object name for load save check items state between sessions.
+    // The goal is not mix these settings with other export tools.
+    iface->setObjectName(QLatin1String("SetupMediaServerIface"));
+
+    DMediaServerDlg w(this, iface);
+    w.exec();
+}
+
 void DigikamApp::slotRecurseAlbums(bool checked)
 {
     d->view->setRecurseAlbums(checked);
@@ -3395,6 +3420,7 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(m_presentationAction,          postCategory);
     actionModel->addAction(m_sendByMailAction,            postCategory);
     actionModel->addAction(m_printCreatorAction,          postCategory);
+    actionModel->addAction(m_mediaServerAction,           postCategory);
 
 #ifdef HAVE_PANORAMA
     actionModel->addAction(m_panoramaAction,              postCategory);

@@ -760,7 +760,6 @@ void AssignNameWidget::keyPressEvent(QKeyEvent* e)
     {
         case Qt::Key_Enter:
         case Qt::Key_Return:
-            slotConfirm();
             return;
 
         case Qt::Key_Escape:

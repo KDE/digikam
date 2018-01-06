@@ -6,7 +6,7 @@
  * Date        : 2008-06-17
  * Description : Find Duplicates tree-view search album item.
  *
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FINDDUPLICATESALBUMITEM_H
-#define FINDDUPLICATESALBUMITEM_H
+#ifndef FIND_DUPLICATES_ALBUM_ITEM_H
+#define FIND_DUPLICATES_ALBUM_ITEM_H
 
 // Qt includes
 
@@ -66,7 +66,7 @@ public:
     /**
      * Returns the item count.
      **/
-    int itemCount() const;
+    int itemCount()  const;
 
     SAlbum* album()  const;
     QUrl    refUrl() const;
@@ -83,4 +83,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // FINDDUPLICATESALBUMITEM_H
+#endif // FIND_DUPLICATES_ALBUM_ITEM_H

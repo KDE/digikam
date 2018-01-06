@@ -7,7 +7,7 @@
  * Description : Core database interface.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -631,17 +631,6 @@ int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
     return id.toInt();
 }
 
-void CoreDB::moveTag(TAlbum* /*parentTagID*/)
-{
-    d->db->execSql(QString::fromUtf8("LOCK TABLE Tags WRITE;"));
-    d->db->execSql(QString::fromUtf8("SELECT @myLeft := lft FROM Tags WHERE id = :parentTagID;"));
-    d->db->execSql(QString::fromUtf8("SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);"));
-    d->db->execSql(QString::fromUtf8("UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;"));
-    d->db->execSql(QString::fromUtf8("UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;"));
-    d->db->execSql(QString::fromUtf8("UPDATE Tags SET lft = @myLeft + 1, rgt = @myLeft + 2 WHERE pid = :parentTagID;"));
-    d->db->execSql(QString::fromUtf8("UNLOCK TABLES;"));
-}
-
 void CoreDB::deleteTag(int tagID)
 {
     /*
@@ -681,8 +670,26 @@ void CoreDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
 
 void CoreDB::setTagParentID(int tagID, int newParentTagID)
 {
-    d->db->execSql(QString::fromUtf8("UPDATE Tags SET pid=? WHERE id=?;"),
-                   newParentTagID, tagID);
+    if (d->db->databaseType() == BdEngineBackend::DbType::SQLite)
+    {
+        d->db->execSql(QString::fromUtf8("UPDATE OR REPLACE Tags SET pid=? WHERE id=?;"),
+                       newParentTagID, tagID);
+    }
+    else
+    {
+        d->db->execSql(QString::fromUtf8("UPDATE Tags SET pid=? WHERE id=?;"),
+                       newParentTagID, tagID);
+
+        // NOTE: Update the Mysql TagsTree table which is used only in some search SQL queries (See lft/rgt tag ID properties).
+        // In SQlite, it is nicely maintained by Triggers.
+        // With MySQL, this did not work for some reason, and we patch a tree structure mimics in a different way.
+        QMap<QString, QVariant> bindingMap;
+        bindingMap.insert(QLatin1String(":tagID"),     tagID);
+        bindingMap.insert(QLatin1String(":newTagPID"), newParentTagID);
+
+        d->db->execDBAction(d->db->getDBAction(QLatin1String("MoveTagTree")), bindingMap);
+   }
+
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::Reparented));
 }
 
@@ -930,7 +937,7 @@ QString CoreDB::getSetting(const QString& keyword)
 }
 
 // helper method
-static QStringList joinMainAndUserFilterString(const QLatin1Char sep, const QString& filter,
+static QStringList joinMainAndUserFilterString(const QChar& sep, const QString& filter,
                                                const QString& userFilter)
 {
     QSet<QString> filterSet;
@@ -1013,37 +1020,37 @@ void CoreDB::getIgnoreDirectoryFilterSettings(QStringList* ignoreDirectoryFilter
 
     ignoreDirectoryFormats     = getSetting(QLatin1String("databaseIgnoreDirectoryFormats"));
     userIgnoreDirectoryFormats = getSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"));
-    *ignoreDirectoryFilter     = joinMainAndUserFilterString(QLatin1Char(' '), ignoreDirectoryFormats, userIgnoreDirectoryFormats);
+    *ignoreDirectoryFilter     = joinMainAndUserFilterString(QLatin1Char(';'), ignoreDirectoryFormats, userIgnoreDirectoryFormats);
 }
 
 void CoreDB::setFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter)
 {
-    setSetting(QLatin1String("databaseImageFormats"), imageFilter.join(QLatin1String(";")));
-    setSetting(QLatin1String("databaseVideoFormats"), videoFilter.join(QLatin1String(";")));
-    setSetting(QLatin1String("databaseAudioFormats"), audioFilter.join(QLatin1String(";")));
+    setSetting(QLatin1String("databaseImageFormats"), imageFilter.join(QLatin1Char(';')));
+    setSetting(QLatin1String("databaseVideoFormats"), videoFilter.join(QLatin1Char(';')));
+    setSetting(QLatin1String("databaseAudioFormats"), audioFilter.join(QLatin1Char(';')));
 }
 
 void CoreDB::setIgnoreDirectoryFilterSettings(const QStringList& ignoreDirectoryFilter)
 {
-    setSetting(QLatin1String("databaseIgnoreDirectoryFormats"), ignoreDirectoryFilter.join(QLatin1String(" ")));
+    setSetting(QLatin1String("databaseIgnoreDirectoryFormats"), ignoreDirectoryFilter.join(QLatin1Char(';')));
 }
 
 void CoreDB::setUserFilterSettings(const QStringList& imageFilter,
                                    const QStringList& videoFilter,
                                    const QStringList& audioFilter)
 {
-    setSetting(QLatin1String("databaseUserImageFormats"), imageFilter.join(QLatin1String(";")));
-    setSetting(QLatin1String("databaseUserVideoFormats"), videoFilter.join(QLatin1String(";")));
-    setSetting(QLatin1String("databaseUserAudioFormats"), audioFilter.join(QLatin1String(";")));
+    setSetting(QLatin1String("databaseUserImageFormats"), imageFilter.join(QLatin1Char(';')));
+    setSetting(QLatin1String("databaseUserVideoFormats"), videoFilter.join(QLatin1Char(';')));
+    setSetting(QLatin1String("databaseUserAudioFormats"), audioFilter.join(QLatin1Char(';')));
 }
 
 void CoreDB::setUserIgnoreDirectoryFilterSettings(const QStringList& ignoreDirectoryFilters)
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDB::setUserIgnoreDirectoryFilterSettings. "
                                      "ignoreDirectoryFilterString: "
-                                  << ignoreDirectoryFilters.join(QLatin1Char(' '));
+                                  << ignoreDirectoryFilters.join(QLatin1Char(';'));
 
-    setSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"), ignoreDirectoryFilters.join(QLatin1String(" ")));
+    setSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"), ignoreDirectoryFilters.join(QLatin1Char(';')));
 }
 
 QUuid CoreDB::databaseUuid()
@@ -1725,7 +1732,8 @@ QVariantList CoreDB::getImagePosition(qlonglong imageID, DatabaseFields::ImagePo
                      fieldNames.at(i) == QLatin1String("accuracy"))
                    )
                 {
-                    values[i] = values.at(i).toDouble();
+                    if (!values.at(i).isNull())
+                        values[i] = values.at(i).toDouble();
                 }
             }
         }
@@ -1777,7 +1785,8 @@ QVariantList CoreDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseFields
                      fieldNames.at(i) == QLatin1String("accuracy"))
                    )
                 {
-                    values[i] = values.at(i).toDouble();
+                    if (!values.at(i).isNull())
+                        values[i] = values.at(i).toDouble();
                 }
             }
         }
@@ -2008,6 +2017,14 @@ void CoreDB::removeImagePosition(qlonglong imageid)
                    imageid);
 
     d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::ImagePositionsAll));
+}
+
+void CoreDB::removeImagePositionAltitude(qlonglong imageid)
+{
+    d->db->execSql(QString(QString::fromUtf8("UPDATE ImagePositions SET altitude=NULL WHERE imageid=?;")),
+                   imageid);
+
+    d->db->recordChangeset(ImageChangeset(imageid, DatabaseFields::Altitude));
 }
 
 QList<CommentInfo> CoreDB::getImageComments(qlonglong imageID)
@@ -3568,6 +3585,34 @@ QMap<QString, int> CoreDB::getFormatStatistics(DatabaseItem::Category category)
     return map;
 }
 
+QStringList CoreDB::getListFromImageMetadata(DatabaseFields::ImageMetadata field)
+{
+    QStringList list;
+    QList<QVariant> values;
+    QStringList fieldName = imageMetadataFieldList(field);
+
+    if (fieldName.count() != 1)
+    {
+        return list;
+    }
+
+    QString sql = QString::fromUtf8("SELECT DISTINCT %1 FROM ImageMetadata "
+                                    " INNER JOIN Images ON imageid=Images.id;");
+
+    sql = sql.arg(fieldName.first());
+    d->db->execSql(sql, &values);
+
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    {
+        if (!it->isNull())
+        {
+            list << it->toString();
+        }
+    }
+
+    return list;
+}
+
 /*
 QList<QPair<QString, QDateTime> > CoreDB::getItemsAndDate()
 {
@@ -4578,7 +4623,7 @@ void CoreDB::setTagName(int tagID, const QString& name)
 }
 
 void CoreDB::moveItem(int srcAlbumID, const QString& srcName,
-                       int dstAlbumID, const QString& dstName)
+                      int dstAlbumID, const QString& dstName)
 {
     // find id of src image
     qlonglong imageId = getImageId(srcAlbumID, srcName);
@@ -4592,7 +4637,7 @@ void CoreDB::moveItem(int srcAlbumID, const QString& srcName,
     deleteItem(dstAlbumID, dstName);
 
     d->db->execSql(QString::fromUtf8("UPDATE Images SET album=?, name=? "
-                           "WHERE id=?;"),
+                                     "WHERE id=?;"),
                    dstAlbumID, dstName, imageId);
     d->db->recordChangeset(CollectionImageChangeset(imageId, srcAlbumID, CollectionImageChangeset::Moved));
     d->db->recordChangeset(CollectionImageChangeset(imageId, srcAlbumID, CollectionImageChangeset::Removed));

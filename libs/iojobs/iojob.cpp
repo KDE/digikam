@@ -167,9 +167,9 @@ DeleteJob::DeleteJob(const QUrl& srcToDelete, bool useTrash, bool markAsObsolete
 void DeleteJob::run()
 {
     QFileInfo fileInfo(m_srcToDelete.toLocalFile());
-    qCDebug(DIGIKAM_IOJOB_LOG) << "DELETING: "    << fileInfo.filePath() << "\n"
-                               << "FILE EXISTS? " << fileInfo.exists()   << "\n"
-                               << "IS TO TRASH? " << m_useTrash;
+    qCDebug(DIGIKAM_IOJOB_LOG) << "Deleting:   " << fileInfo.filePath();
+    qCDebug(DIGIKAM_IOJOB_LOG) << "File exists?" << fileInfo.exists();
+    qCDebug(DIGIKAM_IOJOB_LOG) << "Is to trash?" << m_useTrash;
 
     if (!fileInfo.exists())
     {
@@ -301,18 +301,19 @@ void RenameFileJob::run()
 {
     if (m_newUrl.isEmpty())
     {
+        emit signalRenameFailed(m_srcToRename);
         emit signalDone();
         return;
     }
 
-    qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url: "      << m_newUrl << "\n"
-                               << "Destination Url path: " << m_newUrl.toLocalFile();
+    qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url:" << m_newUrl;
 
     if (QFileInfo(m_newUrl.toLocalFile()).exists())
     {
         qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
         emit error(i18n("Image with the same name %1 already there",
                         QDir::toNativeSeparators(m_newUrl.toLocalFile())));
+        emit signalRenameFailed(m_srcToRename);
         emit signalDone();
         return;
     }
@@ -320,7 +321,7 @@ void RenameFileJob::run()
     QFile file(m_srcToRename.toLocalFile());
 
     qCDebug(DIGIKAM_IOJOB_LOG) << "Trying to rename"
-                               << m_srcToRename.toLocalFile() << "\nto "
+                               << m_srcToRename.toLocalFile() << "to"
                                << m_newUrl.toLocalFile();
 
     if (!file.rename(m_newUrl.toLocalFile()))
@@ -328,6 +329,7 @@ void RenameFileJob::run()
         qCDebug(DIGIKAM_IOJOB_LOG) << "File couldn't be renamed!";
         emit error(i18n("Image %1 could not be renamed",
                         QDir::toNativeSeparators(m_srcToRename.toLocalFile())));
+        emit signalRenameFailed(m_srcToRename);
         emit signalDone();
         return;
     }
@@ -350,13 +352,13 @@ void DTrashItemsListingJob::run()
     QString collectionTrashFilesPath = m_collectionPath + QLatin1Char('/') + DTrash::TRASH_FOLDER +
                                        QLatin1Char('/') + DTrash::FILES_FOLDER;
 
-    qCDebug(DIGIKAM_IOJOB_LOG) << "collectionTrashFilesPath: " << collectionTrashFilesPath;
+    qCDebug(DIGIKAM_IOJOB_LOG) << "Collection trash files path:" << collectionTrashFilesPath;
 
     QDir filesDir(collectionTrashFilesPath);
 
     foreach (const QFileInfo& fileInfo, filesDir.entryInfoList(QDir::Files))
     {
-        qCDebug(DIGIKAM_IOJOB_LOG) << "file in trash: " << fileInfo.filePath();
+        qCDebug(DIGIKAM_IOJOB_LOG) << "File in trash:" << fileInfo.filePath();
         itemInfo.trashPath = fileInfo.filePath();
 
         DTrash::extractJsonForItem(m_collectionPath, fileInfo.baseName(), itemInfo);

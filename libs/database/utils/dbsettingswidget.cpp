@@ -7,7 +7,7 @@
  * Description : database settings widget
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -65,6 +65,7 @@
 #include "dlayoutbox.h"
 #include "mysqlinitbinary.h"
 #include "mysqlservbinary.h"
+#include "albummanager.h"
 
 namespace Digikam
 {
@@ -294,6 +295,7 @@ void DatabaseSettingsWidget::setupMainArea()
     d->hostPort                                      = new QSpinBox(phbox);
     d->hostPort->setToolTip(i18n("Set the host computer port.\nUsually, MySQL server use port number 3306 by default"));
     d->hostPort->setMaximum(65535);
+    d->hostPort->setValue(3306);
     QWidget* const space                             = new QWidget(phbox);
     phbox->setStretchFactor(space, 10);
     QPushButton* const checkDBConnectBtn             = new QPushButton(i18n("Check Connection"), phbox);
@@ -563,7 +565,6 @@ void DatabaseSettingsWidget::handleInternalServer(int index)
     d->userName->setDisabled(internal);
     d->password->setDisabled(internal);
     d->connectOpts->setDisabled(internal);
-    d->hostPort->setValue(internal ? -1 : 3306);
 }
 
 void DatabaseSettingsWidget::slotUpdateSqlInit()
@@ -667,24 +668,32 @@ bool DatabaseSettingsWidget::checkMysqlServerConnection(QString& error)
         return false;
     }
 
+    bool result = false;
+
     qApp->setOverrideCursor(Qt::WaitCursor);
 
+    AlbumManager::instance()->addFakeConnection();
+
     QString databaseID(QLatin1String("ConnectionTest"));
-    QSqlDatabase testDatabase = QSqlDatabase::addDatabase(databaseBackend(), databaseID);
 
-    DbEngineParameters prm    = getDbEngineParameters();
-    qCDebug(DIGIKAM_DATABASE_LOG) << "Testing DB connection (" << databaseID << ") with these settings:";
-    qCDebug(DIGIKAM_DATABASE_LOG) << prm;
+    {
+        QSqlDatabase testDatabase = QSqlDatabase::addDatabase(databaseBackend(), databaseID);
 
-    testDatabase.setHostName(prm.hostName);
-    testDatabase.setPort(prm.port);
-    testDatabase.setUserName(prm.userName);
-    testDatabase.setPassword(prm.password);
-    testDatabase.setConnectOptions(prm.connectOptions);
+        DbEngineParameters prm    = getDbEngineParameters();
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Testing DB connection (" << databaseID << ") with these settings:";
+        qCDebug(DIGIKAM_DATABASE_LOG) << prm;
 
-    bool result = testDatabase.open();
-    error       = testDatabase.lastError().text();
-    testDatabase.close();
+        testDatabase.setHostName(prm.hostName);
+        testDatabase.setPort(prm.port);
+        testDatabase.setUserName(prm.userName);
+        testDatabase.setPassword(prm.password);
+        testDatabase.setConnectOptions(prm.connectOptions);
+
+        result = testDatabase.open();
+        error  = testDatabase.lastError().text();
+        testDatabase.close();
+    }
+
     QSqlDatabase::removeDatabase(databaseID);
 
     qApp->restoreOverrideCursor();
@@ -731,7 +740,7 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
         d->dbNameThumbs->setText(d->orgPrms.databaseNameThumbnails);
         d->dbNameFace->setText(d->orgPrms.databaseNameFace);
         d->hostName->setText(d->orgPrms.hostName);
-        d->hostPort->setValue(d->orgPrms.port);
+        d->hostPort->setValue((d->orgPrms.port == -1) ? 3306 : d->orgPrms.port);
         d->connectOpts->setText(d->orgPrms.connectOptions);
         d->userName->setText(d->orgPrms.userName);
         d->password->setText(d->orgPrms.password);
@@ -766,7 +775,7 @@ DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
             prm.databaseNameFace       = d->dbNameFace->text();
             prm.connectOptions         = d->connectOpts->text();
             prm.hostName               = d->hostName->text();
-            prm.port                   = d->hostPort->text().toInt();
+            prm.port                   = d->hostPort->value();
             prm.userName               = d->userName->text();
             prm.password               = d->password->text();
             break;

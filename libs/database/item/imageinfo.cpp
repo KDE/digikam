@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -358,8 +358,8 @@ ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& alb
 
         if (!shortInfo.id)
         {
-            info.m_data = 0;
             qCWarning(DIGIKAM_DATABASE_LOG) << "No itemShortInfo could be retrieved from the database for image" << name;
+            info.m_data = 0;
             return info;
         }
 
@@ -583,7 +583,7 @@ QString ImageInfo::comment() const
 
 double ImageInfo::aspectRatio() const
 {
-    if(!m_data)
+    if (!m_data)
     {
         return 0;
     }
@@ -730,7 +730,7 @@ void ImageInfoList::loadTagIds() const
 
     ImageInfoWriteLocker lock;
 
-    for (int i=0; i<size(); i++)
+    for (int i = 0 ; i < size() ; i++)
     {
         const ImageInfo& info = at(i);
         const QList<int>& ids = allTagIds.at(i);
@@ -963,7 +963,7 @@ void ImageInfoList::loadGroupImageIds() const
     QVector<QList<qlonglong> > allGroupIds = CoreDbAccess().db()->getImagesRelatedFrom(toImageIdList(), DatabaseRelation::Grouped);
     ImageInfoWriteLocker lock;
 
-    for (int i=0; i<size(); i++)
+    for (int i = 0 ; i < size() ; i++)
     {
         const ImageInfo& info            = at(i);
         const QList<qlonglong>& groupIds = allGroupIds.at(i);
@@ -1020,7 +1020,7 @@ void ImageInfo::addToGroup(const ImageInfo& givenLeader)
     QList<qlonglong> alreadySeen;
     alreadySeen << m_data->id;
 
-    for (leader = givenLeader; leader.isGrouped(); )
+    for (leader = givenLeader ; leader.isGrouped() ;)
     {
         ImageInfo nextLeader = leader.groupImage();
         // is the new leader currently grouped on this image, or do we have a circular grouping?
@@ -1329,11 +1329,11 @@ ImageMetadataContainer ImageInfo::imageMetadataContainer() const
     ImageMetadataContainer container;
     const DatabaseFieldsHashRaw rawVideoMetadata = getDatabaseFieldsRaw(DatabaseFields::ImageMetadataAll);
     bool allFieldsNull = true;
-    for (DatabaseFields::ImageMetadataIterator it; !it.atEnd(); ++it)
+    for (DatabaseFields::ImageMetadataIterator it ; !it.atEnd() ; ++it)
     {
         const QVariant fieldValue = rawVideoMetadata.value(*it);
 
-        allFieldsNull&=fieldValue.isNull();
+        allFieldsNull &= fieldValue.isNull();
 
         if (!fieldValue.isNull())
         {
@@ -1425,11 +1425,11 @@ VideoMetadataContainer ImageInfo::videoMetadataContainer() const
     const DatabaseFieldsHashRaw rawVideoMetadata = getDatabaseFieldsRaw(DatabaseFields::VideoMetadataAll);
 
     bool allFieldsNull = true;
-    for (DatabaseFields::VideoMetadataIterator it; !it.atEnd(); ++it)
+    for (DatabaseFields::VideoMetadataIterator it ; !it.atEnd() ; ++it)
     {
         const QVariant fieldValue = rawVideoMetadata.value(*it);
 
-        allFieldsNull&=fieldValue.isNull();
+        allFieldsNull &= fieldValue.isNull();
 
         if (!fieldValue.isNull())
         {
@@ -1757,11 +1757,21 @@ double ImageInfo::similarityTo(const qlonglong imageId) const
 
 double ImageInfo::currentSimilarity() const
 {
+    if (!m_data)
+    {
+        return 0.0;
+    }
+
     return m_data->currentSimilarity;
 }
 
 qlonglong ImageInfo::currentReferenceImage() const
 {
+    if (!m_data)
+    {
+        return -1;
+    }
+
     return m_data->currentReferenceImage;
 }
 
@@ -1874,7 +1884,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             else
             {
                 int fieldsIndex = 0;
-                for (DatabaseFields::VideoMetadataIteratorSetOnly it(missingVideoMetadata); !it.atEnd(); ++it)
+                for (DatabaseFields::VideoMetadataIteratorSetOnly it(missingVideoMetadata) ; !it.atEnd() ; ++it)
                 {
                     const QVariant fieldValue = fieldValues.at(fieldsIndex);
                     ++fieldsIndex;
@@ -1908,7 +1918,7 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
             else
             {
                 int fieldsIndex = 0;
-                for (DatabaseFields::ImageMetadataIteratorSetOnly it(missingImageMetadata); !it.atEnd(); ++it)
+                for (DatabaseFields::ImageMetadataIteratorSetOnly it(missingImageMetadata) ; !it.atEnd() ; ++it)
                 {
                     const QVariant fieldValue = fieldValues.at(fieldsIndex);
                     ++fieldsIndex;

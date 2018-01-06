@@ -120,6 +120,12 @@ void AdvPrintTask::run()
             else
             {
                 QStringList files = printPhotosToFile();
+
+                if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::GIMP))
+                {
+                    d->settings->gimpFiles << files;
+                }
+
                 emit signalDone(!m_cancel && !files.isEmpty());
             }
 

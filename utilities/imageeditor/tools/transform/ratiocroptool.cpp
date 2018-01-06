@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007      by Jaromir Malenko <malenko at email dot cz>
  * Copyright (C) 2008      by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -610,57 +610,75 @@ void RatioCropTool::readSettings()
     d->imageSelectionWidget->slotGuideLines(d->guideLinesCB->currentIndex());
     d->imageSelectionWidget->slotChangeGuideColor(d->guideColorBt->color());
 
-    d->preciseCrop->setChecked( group.readEntry(d->configPreciseAspectRatioCropEntry, false) );
+    d->preciseCrop->setChecked(group.readEntry(d->configPreciseAspectRatioCropEntry, false));
     d->imageSelectionWidget->setPreciseCrop( d->preciseCrop->isChecked() );
 
     // Empty selection so it can be moved w/out size constraint
     d->widthInput->setValue(0);
     d->heightInput->setValue(0);
 
-    d->xInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioXposEntry,
-                                        d->xInput->defaultValue()));
-    d->yInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioYposEntry,
-                                        d->yInput->defaultValue()));
-
-    d->widthInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioWidthEntry,
-                                            d->widthInput->defaultValue()));
-    d->heightInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioHeightEntry,
-                             d->heightInput->defaultValue()));
-
     d->imageSelectionWidget->setSelectionOrientation(d->orientCB->currentIndex());
-
-    d->customRatioNInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioNumEntry,
-                                   d->customRatioNInput->defaultValue()));
-    d->customRatioDInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioDenEntry,
-                                   d->customRatioDInput->defaultValue()));
-    d->ratioCB->setCurrentIndex(group.readEntry(d->configHorOrientedAspectRatioEntry,
-                                d->ratioCB->defaultIndex()));
 
     if (d->originalIsLandscape)
     {
+        d->ratioCB->setCurrentIndex(group.readEntry(d->configHorOrientedAspectRatioEntry,
+                                    d->ratioCB->defaultIndex()));
         d->orientCB->setCurrentIndex(group.readEntry(d->configHorOrientedAspectRatioOrientationEntry,
                                      (int)ImageSelectionWidget::Landscape));
         d->orientCB->setDefaultIndex(ImageSelectionWidget::Landscape);
+        d->customRatioNInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioNumEntry,
+                                       d->customRatioNInput->defaultValue()));
+        d->customRatioDInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioDenEntry,
+                                       d->customRatioDInput->defaultValue()));
+        d->xInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioXposEntry,
+                                            d->xInput->defaultValue()));
+        d->yInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioYposEntry,
+                                            d->yInput->defaultValue()));
+        d->widthInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioWidthEntry,
+                                                d->widthInput->defaultValue()));
+        d->heightInput->setValue(group.readEntry(d->configHorOrientedCustomAspectRatioHeightEntry,
+                                 d->heightInput->defaultValue()));
     }
     else
     {
+        d->ratioCB->setCurrentIndex(group.readEntry(d->configVerOrientedAspectRatioEntry,
+                                    d->ratioCB->defaultIndex()));
         d->orientCB->setCurrentIndex(group.readEntry(d->configVerOrientedAspectRatioOrientationEntry,
                                      (int)ImageSelectionWidget::Portrait));
         d->orientCB->setDefaultIndex(ImageSelectionWidget::Portrait);
+        d->customRatioNInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioNumEntry,
+                                       d->customRatioNInput->defaultValue()));
+        d->customRatioDInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioDenEntry,
+                                       d->customRatioDInput->defaultValue()));
+        d->xInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioXposEntry,
+                                            d->xInput->defaultValue()));
+        d->yInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioYposEntry,
+                                            d->yInput->defaultValue()));
+        d->heightInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioHeightEntry,
+                                 d->heightInput->defaultValue()));
+        d->widthInput->setValue(group.readEntry(d->configVerOrientedCustomAspectRatioWidthEntry,
+                                                d->widthInput->defaultValue()));
     }
 
     d->autoOrientation->setChecked(group.readEntry(d->configAutoOrientationEntry, false));
-    slotAutoOrientChanged( d->autoOrientation->isChecked() );
+    slotAutoOrientChanged(d->autoOrientation->isChecked());
     applyRatioChanges(d->ratioCB->currentIndex());
 
     slotXChanged(d->xInput->value());
     slotYChanged(d->yInput->value());
-    slotWidthChanged(d->widthInput->value());
+
+    if (d->originalIsLandscape)
+    {
+        slotHeightChanged(d->heightInput->value());
+    }
+    else
+    {
+        slotWidthChanged(d->widthInput->value());
+    }
 
     // For the last setting to be applied, activate drawing in the selectionWidget,
     // so that we can see the results.
     d->imageSelectionWidget->setIsDrawingSelection(true);
-    slotHeightChanged(d->heightInput->value());
 
     slotGuideTypeChanged(d->guideLinesCB->currentIndex());
 

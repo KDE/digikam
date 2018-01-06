@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QApplication>
+#include <QToolTip>
 
 // Local includes
 
@@ -56,6 +57,8 @@ ItemViewToolTip::ItemViewToolTip(QAbstractItemView* view)
 {
     d->view = view;
 
+    setBackgroundRole(QPalette::ToolTipBase);
+    setPalette(QToolTip::palette());
     setMouseTracking(true);
 }
 

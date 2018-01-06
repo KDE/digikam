@@ -7,7 +7,7 @@
  * Description : digiKam setup dialog.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_H
-#define SETUP_H
+#ifndef DIGIKAM_SETUP_H
+#define DIGIKAM_SETUP_H
 
 // Local includes
 
@@ -110,4 +110,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // SETUP_H
+#endif  // DIGIKAM_SETUP_H

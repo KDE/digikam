@@ -7,7 +7,7 @@
  * Description : image properties side bar using data from
  *               digiKam database.
  *
- * Copyright (C) 2004-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2011 by Martin Klapetek <martin dot klapetek at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -222,7 +222,14 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
     {
         m_propertiesTab->setCurrentURL(m_currentURL);
-        ImagePropertiesSideBar::setImagePropertiesInformation(m_currentURL);
+        if (d->currentInfos.isEmpty())
+        {
+            ImagePropertiesSideBar::setImagePropertiesInformation(m_currentURL);
+        }
+        else
+        {
+            setImagePropertiesInformation(m_currentURL);
+        }
         m_dirtyPropertiesTab = true;
     }
     else if (tab == m_metadataTab && !m_dirtyMetadataTab)
@@ -667,7 +674,7 @@ bool ImagePropertiesSideBarDB::GPSImageInfofromImageInfo(const ImageInfo& imageI
 {
     const ImagePosition pos = imageInfo.imagePosition();
 
-    if (pos.isEmpty())
+    if (pos.isEmpty() || !pos.hasCoordinates())
     {
         return false;
     }

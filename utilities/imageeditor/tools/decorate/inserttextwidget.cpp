@@ -6,7 +6,7 @@
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
  *
- * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -50,6 +50,7 @@ public:
         textBorder(false),
         textTransparent(false),
         alignMode(0),
+        textOpacity(0),
         h(0),
         textRotation(0),
         transparency(0),
@@ -66,6 +67,7 @@ public:
     bool        textTransparent;
 
     int         alignMode;
+    int         textOpacity;
     int         h;
     int         textRotation;
     int         transparency;
@@ -133,11 +135,12 @@ void InsertTextWidget::resetEdit()
     repaint();
 }
 
-void InsertTextWidget::setText(const QString& text, const QFont& font, const QColor& color, int alignMode,
-                               bool border, bool transparent, int rotation)
+void InsertTextWidget::setText(const QString& text, const QFont& font, const QColor& color, int opacity,
+                               int alignMode, bool border, bool transparent, int rotation)
 {
     d->textString      = text;
     d->textColor       = color;
+    d->textOpacity     = opacity;
     d->textBorder      = border;
     d->textTransparent = transparent;
     d->textRotation    = rotation;
@@ -244,8 +247,8 @@ DImg InsertTextWidget::makeInsertText()
     // compose and draw result on image
     composeImage(&image, 0, x, y,
                  d->textFont, d->textFont.pointSizeF(),
-                 d->textRotation, d->textColor, d->alignMode, d->textString,
-                 d->textTransparent, d->backgroundColor,
+                 d->textRotation, d->textColor, d->textOpacity,
+                 d->alignMode, d->textString, d->textTransparent, d->backgroundColor,
                  d->textBorder ? BORDER_NORMAL : BORDER_NONE, borderWidth, borderWidth);
 
     return image;
@@ -295,8 +298,8 @@ void InsertTextWidget::makePixmap()
     // compose image and draw result directly on pixmap, with correct offset
     QRect textRect = composeImage(&image, &p, x, y,
                                   d->textFont, d->textFont.pointSizeF(),
-                                  d->textRotation, d->textColor, d->alignMode, d->textString,
-                                  d->textTransparent, d->backgroundColor,
+                                  d->textRotation, d->textColor, d->textOpacity,
+                                  d->alignMode, d->textString, d->textTransparent, d->backgroundColor,
                                   d->textBorder ? BORDER_NORMAL : BORDER_SUPPORT, borderWidth, borderWidth,
                                   (ratioW > ratioH) ? ratioW : ratioH);
 
@@ -318,7 +321,7 @@ void InsertTextWidget::makePixmap()
 QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPainter,
                                      int x, int y,
                                      QFont font, float pointSize, int textRotation, QColor textColor,
-                                     int alignMode, const QString& textString,
+                                     int textOpacity, int alignMode, const QString& textString,
                                      bool transparentBackground, QColor backgroundColor,
                                      BorderMode borderMode, int borderWidth, int spacing, float fontScale)
 {
@@ -535,6 +538,7 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
     textPixmap.fill(Qt::transparent);
 
     QPainter tp(&textPixmap);
+    tp.setOpacity((qreal)textOpacity / 100.0);
     tp.setPen(QPen(textColor, 1));
     tp.setFont(font);
 

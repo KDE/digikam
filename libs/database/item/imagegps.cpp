@@ -94,6 +94,10 @@ QString ImageGPS::saveChanges()
     {
         pos.remove();
     }
+    else if (p.shouldRemoveAltitude)
+    {
+        pos.removeAltitude();
+    }
 
     pos.apply();
 

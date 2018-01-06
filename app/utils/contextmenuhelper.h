@@ -7,7 +7,7 @@
  * Description : contextmenu helper class
  *
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -209,6 +209,16 @@ public:
     void addStandardActionThumbnail(const imageIds& ids, Album* album);
 
     /**
+     * Add section for main views for opening and moving/going to albums.
+     *
+     * This is a convenience function to ensure consistent menues and reduce
+     * code duplication.
+     *
+     * @param imageIds the list of selected items
+     */
+    void addOpenAndNavigateActions(const imageIds &ids);
+
+    /**
      * Add the services menu to the menu.
      *
      * The services menu is used to open the selected items in a different application.
@@ -230,7 +240,7 @@ public:
      * are not emitted and you will not be able to react on triggered actions from this menu.
      * Make sure to connect the signals to the appropriate slots in the context menu handling method.
      *
-     * @param ids the selected items
+     * @param imageIds the list of selected items
      * @see exec()
      * @see signalGotoAlbum() signalGotoDate() signalGotoTag()
      */

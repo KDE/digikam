@@ -6,7 +6,7 @@
  * Date        : 2008-26-02
  * Description : a widget to select albums using a tab of folder views.
  *
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
@@ -80,6 +80,7 @@ public:
         treeView->setExpandOnSingleClick(false);
         treeView->setEnableContextMenu(false);
         treeView->setDragEnabled(false);
+        treeView->setRestoreCheckState(true);
     }
 
 public:
@@ -101,12 +102,13 @@ public:
     AlbumLabelsSearchHandler* labelsSearchHandler;
 };
 
-AlbumSelectTabs::AlbumSelectTabs(QWidget* const parent)
+AlbumSelectTabs::AlbumSelectTabs(const QString& name, QWidget* const parent)
     : QTabWidget(parent),
       d(new Private)
 {
     KSharedConfigPtr config  = KSharedConfig::openConfig();
-    KConfigGroup configGroup = config->group(QLatin1String("AlbumSelectTabs"));
+    KConfigGroup configGroup = config->group(QLatin1String("AlbumSelectTabs") +
+                               QString::fromLatin1("_%1").arg(name));
 
     DVBox* const albumBox = new DVBox(this);
     d->albumModel         = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
@@ -157,7 +159,8 @@ AlbumSelectTabs::AlbumSelectTabs(QWidget* const parent)
     d->searchTreeView->setAlbumModel(d->searchModel);
     d->searchTreeView->setEntryPrefix(QLatin1String("SearchTreeView"));
     d->searchTreeView->setConfigGroup(configGroup);
-    d->searchTreeView->filteredModel()->listAllSearches();
+    d->searchTreeView->filteredModel()->listNormalSearches();
+    d->searchTreeView->filteredModel()->setListTemporarySearches(false);
     d->prepareTreeView(d->searchTreeView);
 
     d->searchSearchBar = new SearchTextBar(searchBox, QLatin1String("AlbumSelectTabsSearchSearchBar"));
@@ -174,7 +177,9 @@ AlbumSelectTabs::AlbumSelectTabs(QWidget* const parent)
     // -------------------------------------------------------------------------------
 
     DVBox* const labelsBox = new DVBox(this);
-    d->labelsTree          = new AlbumLabelsTreeView(labelsBox,true);
+    d->labelsTree          = new AlbumLabelsTreeView(labelsBox, true);
+    d->labelsTree->setEntryPrefix(QLatin1String("LabelsTreeView"));
+    d->labelsTree->setConfigGroup(configGroup);
     d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsTree);
 
     labelsBox->setContentsMargins(QMargins());
@@ -210,6 +215,7 @@ AlbumSelectTabs::AlbumSelectTabs(QWidget* const parent)
     d->tagSearchBar->loadState();
     d->searchTreeView->loadState();
     d->searchSearchBar->loadState();
+    d->labelsTree->doLoadState();
 }
 
 AlbumSelectTabs::~AlbumSelectTabs()
@@ -220,6 +226,7 @@ AlbumSelectTabs::~AlbumSelectTabs()
     d->tagSearchBar->saveState();
     d->searchTreeView->saveState();
     d->searchSearchBar->saveState();
+    d->labelsTree->doSaveState();
 
     delete d;
 }
@@ -230,7 +237,7 @@ AlbumList AlbumSelectTabs::selectedAlbums() const
 
     list << d->albumModel->checkedAlbums();
     list << d->tagModel->checkedAlbums();
-    list << d->searchModel->checkedAlbums();
+    list << d->searchTreeView->albumModel()->checkedAlbums();
     list << d->labelsSearchHandler->albumForSelectedItems();
 
     // Remove all null albums.

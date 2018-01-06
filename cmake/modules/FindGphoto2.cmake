@@ -1,7 +1,7 @@
 # Cmake macro to detect gphoto2 libraries
 #
 # This module defines
-#  GPHOTO2_FOUND          - True if libgphoto2 is detected.
+#  Gphoto2_FOUND          - True if libgphoto2 is detected.
 #  GPHOTO2_INCLUDE_DIRS   - Path to libgphoto2 header files.
 #  GPHOTO2_LIBRARIES      - Libraries to link against to use libgphoto2.
 #  GPHOTO2_VERSION_STRING - e.g. "2.4.14"
@@ -41,15 +41,15 @@ if(PC_GPHOTO2_FOUND)
 
 endif()
 
-# handle the QUIETLY and REQUIRED arguments and set GPHOTO2_FOUND to TRUE if
+# handle the QUIETLY and REQUIRED arguments and set Gphoto2_FOUND to TRUE if
 # all listed variables are TRUE
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(GPHOTO2 DEFAULT_MSG
+find_package_handle_standard_args(Gphoto2 DEFAULT_MSG
                                   GPHOTO2_LIBRARY
                                   GPHOTO2_INCLUDE_DIRS)
 
-if(GPHOTO2_FOUND)
+if(Gphoto2_FOUND)
 
     set(GPHOTO2_INCLUDE_DIRS ${GPHOTO2_INCLUDE_DIRS}/gphoto2)
     set(GPHOTO2_LIBRARIES    ${GPHOTO2_LIBRARY} ${GPHOTO2_PORT_LIBRARY})
@@ -75,7 +75,7 @@ if(GPHOTO2_FOUND)
 
 endif()
 
-message(STATUS "libgphoto2 found    : ${GPHOTO2_FOUND}")
+message(STATUS "libgphoto2 found    : ${Gphoto2_FOUND}")
 message(STATUS "libgphoto2 version  : ${GPHOTO2_VERSION_STRING}")
 message(STATUS "libgphoto2 includes : ${GPHOTO2_INCLUDE_DIRS}")
 message(STATUS "libgphoto2 libraries: ${GPHOTO2_LIBRARIES}")

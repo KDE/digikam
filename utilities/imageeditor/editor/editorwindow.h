@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : core image editor GUI implementation
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef EDITORWINDOW_H
-#define EDITORWINDOW_H
+#ifndef EDITOR_WINDOW_H
+#define EDITOR_WINDOW_H
 
 // Qt includes
 
@@ -350,11 +350,11 @@ private Q_SLOTS:
     void slotUpdateColorSpaceMenu();
     void slotRestoration();
     void slotBlur();
+    void slotHealingClone();
     void slotSharpen();
     void slotNoiseReduction();
     void slotLocalContrast();
     void slotRedEye();
-    void slotInPainting();
     void slotLensAutoFix();
     void slotAntiVignetting();
     void slotLensDistortion();
@@ -423,4 +423,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* EDITORWINDOW_H */
+#endif // EDITOR_WINDOW_H

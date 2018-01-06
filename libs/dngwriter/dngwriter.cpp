@@ -6,7 +6,7 @@
  * Date        : 2008-09-25
  * Description : a tool to convert RAW file to DNG
  *
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010-2011 by Jens Mueller <tschenser at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -1256,7 +1256,8 @@ int DNGWriter::convert()
         // -----------------------------------------------------------------------------------------
         // Metadata makernote cleanup using Exiv2 for some RAW file types
         // See bug #204437 and #210371, and write XMP Sidecar if necessary
-
+        // We disable writing to RAW files, see bug #381432
+/*
         if (meta.load(dngFilePath))
         {
             if (inputInfo.suffix().toUpper() == QLatin1String("ORF"))
@@ -1274,7 +1275,7 @@ int DNGWriter::convert()
 
             meta.applyChanges();
         }
-
+*/
         // -----------------------------------------------------------------------------------------
         // update modification time if desired
 

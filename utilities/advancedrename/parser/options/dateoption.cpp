@@ -54,11 +54,11 @@ static QString getDateFormatLinkText()
 
 DateFormat::DateFormat()
 {
-    m_map.insert(Standard,      DateFormatDescriptor(i18n("Standard"),        QLatin1String("yyyyMMddThhmmss")));
-    m_map.insert(ISO,           DateFormatDescriptor(i18n("ISO"),             Qt::ISODate));
-    m_map.insert(FullText,      DateFormatDescriptor(i18n("Text"),            Qt::TextDate));
-    m_map.insert(UnixTimeStamp, DateFormatDescriptor(i18n("Unix Time Stamp"), QVariant()));
-    m_map.insert(Custom,        DateFormatDescriptor(i18n("Custom"),          QVariant()));
+    m_map.insert(Standard,      DateFormatDescriptor(i18nc("@item:inlistbox date format", "Standard"),        QLatin1String("yyyyMMddThhmmss")));
+    m_map.insert(ISO,           DateFormatDescriptor(i18nc("@item:inlistbox date format", "ISO"),             Qt::ISODate));
+    m_map.insert(FullText,      DateFormatDescriptor(i18nc("@item:inlistbox date format", "Text"),            Qt::TextDate));
+    m_map.insert(UnixTimeStamp, DateFormatDescriptor(i18nc("@item:inlistbox date format", "Unix Time Stamp"), QVariant()));
+    m_map.insert(Custom,        DateFormatDescriptor(i18nc("@item:inlistbox date format", "Custom"),          QVariant()));
 }
 
 DateFormat::Type DateFormat::type(const QString& identifier)

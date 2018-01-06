@@ -104,9 +104,12 @@ public:
 #if OPENCV_TEST_VERSION(3,0,0)
     using cv::FaceRecognizer::save;
     using cv::FaceRecognizer::load;
-#else
+#elif OPENCV_TEST_VERSION(3,4,0)
     using cv::face::FaceRecognizer::save;
     using cv::face::FaceRecognizer::load;
+#else
+    using cv::face::FaceRecognizer::write;
+    using cv::face::FaceRecognizer::read;
 #endif
 
     static cv::Ptr<LBPHFaceRecognizer> create(int radius=1,
@@ -160,8 +163,10 @@ public:
      */
 #if OPENCV_TEST_VERSION(3,1,0)
     void load(const cv::FileStorage&) {}
-#else
+#elif OPENCV_TEST_VERSION(3,4,0)
     void load(const cv::FileStorage&) override {}
+#else
+    void read(const cv::FileStorage&) override {}
 #endif
 
     /**
@@ -169,8 +174,10 @@ public:
      */
 #if OPENCV_TEST_VERSION(3,1,0)
     void save(cv::FileStorage&) const {}
-#else
+#elif OPENCV_TEST_VERSION(3,4,0)
     void save(cv::FileStorage&) const override {}
+#else
+    void write(cv::FileStorage&) const override {}
 #endif
 
     /**

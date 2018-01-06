@@ -50,6 +50,11 @@ IOJobsThread* IOJobsManager::startCopy(const QList<QUrl>& srcsList, const QUrl& 
 {
     IOJobsThread* const thread = new IOJobsThread(this);
     thread->copy(srcsList, destAlbum);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;
@@ -59,6 +64,11 @@ IOJobsThread* IOJobsManager::startMove(const QList<QUrl>& srcsList, const QUrl& 
 {
     IOJobsThread* const thread = new IOJobsThread(this);
     thread->move(srcsList, destAlbum);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;
@@ -68,6 +78,11 @@ IOJobsThread* IOJobsManager::startDelete(const QList<QUrl>& filesToDelete, bool 
 {
     IOJobsThread* const thread = new IOJobsThread(this);
     thread->deleteFiles(filesToDelete, useTrash);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;
@@ -77,6 +92,11 @@ IOJobsThread* IOJobsManager::startRenameFile(const QUrl& srcToRename, const QUrl
 {
     IOJobsThread* const thread = new IOJobsThread(this);
     thread->renameFile(srcToRename, newUrl);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;
@@ -86,6 +106,11 @@ IOJobsThread *IOJobsManager::startDTrashItemsListingForCollection(const QString&
 {
     IOJobsThread* const thread = new IOJobsThread(this);
     thread->listDTrashItems(collectionPath);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;
@@ -95,6 +120,11 @@ IOJobsThread* IOJobsManager::startRestoringDTrashItems(const DTrashItemInfoList&
 {
     IOJobsThread* const thread = new IOJobsThread(this);
     thread->restoreDTrashItems(trashItemsList);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;
@@ -104,6 +134,11 @@ IOJobsThread* IOJobsManager::startDeletingDTrashItems(const DTrashItemInfoList& 
 {
     IOJobsThread* const thread = new IOJobsThread(this);
     thread->deleteDTrashItems(trashItemsList);
+
+    connect(thread, SIGNAL(finished()),
+            thread, SLOT(deleteLater()),
+            Qt::QueuedConnection);
+
     thread->start();
 
     return thread;

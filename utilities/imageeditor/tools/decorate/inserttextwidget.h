@@ -6,7 +6,7 @@
  * Date        : 2005-02-14
  * Description : a widget to insert a text over an image.
  *
- * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -94,8 +94,8 @@ public:
      */
     void   setBackgroundColor(const QColor& bg);
 
-    void   setText(const QString& text, const QFont& font, const QColor& color, int alignMode,
-                   bool border, bool transparent, int rotation);
+    void   setText(const QString& text, const QFont& font, const QColor& color, int opacity,
+                   int alignMode, bool border, bool transparent, int rotation);
 
     void   resetEdit();
 
@@ -114,7 +114,7 @@ protected:
     QRect composeImage(DImg* const image, QPainter* const destPainter,
                        int x, int y,
                        QFont font, float pointSize, int textRotation, QColor textColor,
-                       int alignMode, const QString& textString,
+                       int textOpacity, int alignMode, const QString& textString,
                        bool transparentBackground, QColor backgroundColor,
                        BorderMode borderMode, int borderWidth, int spacing, float fontScale=1.0f);
 

@@ -6,7 +6,7 @@
  * Date        : 2008-06-17
  * Description : Find Duplicates tree-view search album item.
  *
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,7 +73,8 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlb
         calculateInfos();
     }
 
-    setThumb(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(parent->iconSize().width(), QIcon::Disabled), false);
+    setThumb(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(parent->iconSize().width(),
+                                                                    QIcon::Disabled), false);
 }
 
 FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
@@ -91,6 +92,7 @@ void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImag
     if (d->album)
     {
         qlonglong refImage = d->album->title().toLongLong();
+
         //qCDebug(DIGIKAM_GENERAL_LOG) << "Calculating info for album " << QString::number(refImage);
 
         SearchXmlReader reader(d->album->query());
@@ -122,6 +124,7 @@ void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImag
         }
 
         d->itemCount = filteredList.count();
+
         //qCDebug(DIGIKAM_GENERAL_LOG) << "New Item count: " << QString::number(d->itemCount);
 
         if (d->itemCount > 1)
@@ -140,8 +143,8 @@ void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImag
             this->setHidden(true);
         }
 
-        setText(Column::RESULT_COUNT, QString::number(d->itemCount));
-        setText(Column::AVG_SIMILARITY,QString::number(avgSim,'f',2));
+        setText(Column::RESULT_COUNT,   QString::number(d->itemCount));
+        setText(Column::AVG_SIMILARITY, QString::number(avgSim, 'f', 2));
     }
 }
 

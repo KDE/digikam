@@ -7,7 +7,7 @@
  * Description : digital camera controller
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
@@ -694,7 +694,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                     // When converting a file, we need to set the new format extension..
                     // The new extension is already set in importui.cpp.
 
-                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert to LossLess: " << file << " using " << temp << " destination: " << temp2;
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert to LossLess: " << file;
 
                     if (!JPEGUtils::jpegConvert(temp, temp2, file, losslessFormat))
                     {
@@ -715,30 +715,40 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             }
             else if (convertDng && mime == QLatin1String("image/x-raw"))
             {
-                QString temp2 = tempURL.toLocalFile() + tempFile.arg(2) + file;
+                qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert to DNG: " << file;
 
-                DNGWriter dngWriter;
-
-                dngWriter.setInputFile(temp);
-                dngWriter.setOutputFile(temp2);
-                dngWriter.setBackupOriginalRawFile(backupRaw);
-                dngWriter.setCompressLossLess(compressDng);
-                dngWriter.setPreviewMode(previewMode);
-
-                if (dngWriter.convert() != DNGWriter::PROCESSCOMPLETE)
+                if  (QFileInfo(file).suffix().toUpper() != QLatin1String("DNG"))
                 {
-                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert failed to DNG!";
-                    // convert failed. delete the temp file
-                    QFile::remove(temp);
-                    QFile::remove(temp2);
-                    sendLogMsg(xi18n("Failed to convert file <filename>%1</filename> to DNG", file), DHistoryView::ErrorEntry, folder, file);
+                    QString temp2 = tempURL.toLocalFile() + tempFile.arg(2) + file;
+
+                    DNGWriter dngWriter;
+
+                    dngWriter.setInputFile(temp);
+                    dngWriter.setOutputFile(temp2);
+                    dngWriter.setBackupOriginalRawFile(backupRaw);
+                    dngWriter.setCompressLossLess(compressDng);
+                    dngWriter.setPreviewMode(previewMode);
+
+                    if (dngWriter.convert() != DNGWriter::PROCESSCOMPLETE)
+                    {
+                        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert failed to DNG!";
+                        // convert failed. delete the temp file
+                        QFile::remove(temp);
+                        QFile::remove(temp2);
+                        sendLogMsg(xi18n("Failed to convert file <filename>%1</filename> to DNG", file), DHistoryView::ErrorEntry, folder, file);
+                    }
+                    else
+                    {
+                        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Done, removing the temp file: " << temp;
+                        // Else remove only the first temp file.
+                        QFile::remove(temp);
+                        temp = temp2;
+                    }
                 }
                 else
                 {
-                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Done, removing the temp file: " << temp;
-                    // Else remove only the first temp file.
-                    QFile::remove(temp);
-                    temp = temp2;
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert skipped to DNG";
+                    sendLogMsg(xi18n("Skipped to convert file <filename>%1</filename> to DNG", file), DHistoryView::WarningEntry, folder, file);
                 }
             }
 

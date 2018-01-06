@@ -331,19 +331,19 @@ void AdvancedRenameManager::initializeFileList()
     {
         case SortName:
         {
-            qSort(tmpFiles.begin(), tmpFiles.end(), SortByNameCaseInsensitive());
+            std::sort(tmpFiles.begin(), tmpFiles.end(), SortByNameCaseInsensitive());
             break;
         }
 
         case SortDate:
         {
-            qSort(tmpFiles.begin(), tmpFiles.end(), SortByDate());
+            std::sort(tmpFiles.begin(), tmpFiles.end(), SortByDate());
             break;
         }
 
         case SortSize:
         {
-            qSort(tmpFiles.begin(), tmpFiles.end(), SortBySize());
+            std::sort(tmpFiles.begin(), tmpFiles.end(), SortBySize());
             break;
         }
 

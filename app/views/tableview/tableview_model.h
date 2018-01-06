@@ -90,36 +90,39 @@ public:
     explicit TableViewModel(TableViewShared* const sharedObject, QObject* parent = 0);
     virtual ~TableViewModel();
 
-    void addColumnAt(const TableViewColumnDescription& description, const int targetColumn = -1);
-    void addColumnAt(const TableViewColumnConfiguration& cpp, const int targetColumn = -1);
-    void removeColumnAt(const int columnIndex);
-    TableViewColumn* getColumnObject(const int columnIndex);
+    void                    addColumnAt(const TableViewColumnDescription& description, const int targetColumn = -1);
+    void                    addColumnAt(const TableViewColumnConfiguration& cpp, const int targetColumn = -1);
+    void                    removeColumnAt(const int columnIndex);
+    TableViewColumn*        getColumnObject(const int columnIndex);
     QList<TableViewColumn*> getColumnObjects();
-    QModelIndex fromImageFilterModelIndex(const QModelIndex& imageFilterModelIndex);
-    QModelIndex fromImageModelIndex(const QModelIndex& imageModelIndex);
-    QModelIndex toImageFilterModelIndex(const QModelIndex& i) const;
-    QModelIndex toImageModelIndex(const QModelIndex& i) const;
-    void loadColumnProfile(const TableViewColumnProfile& columnProfile);
-    TableViewColumnProfile getColumnProfile() const;
+    QModelIndex             fromImageFilterModelIndex(const QModelIndex& imageFilterModelIndex);
+    QModelIndex             fromImageModelIndex(const QModelIndex& imageModelIndex);
+    QModelIndex             toImageFilterModelIndex(const QModelIndex& i) const;
+    QModelIndex             toImageModelIndex(const QModelIndex& i) const;
+    void                    loadColumnProfile(const TableViewColumnProfile& columnProfile);
+    TableViewColumnProfile  getColumnProfile() const;
 
-    QModelIndex indexFromImageId(const qlonglong imageId, const int columnIndex) const;
-    Item* itemFromImageId(const qlonglong imageId) const;
-    Item* itemFromIndex(const QModelIndex& i) const;
-    ImageInfo infoFromItem(Item* const item) const;
-    ImageInfoList infosFromItems(QList<Item*> const items) const;
-    QVariant itemDatabaseFieldRaw(Item* const item, const DatabaseFields::Set requestedField);
-    DatabaseFieldsHashRaw itemDatabaseFieldsRaw(Item* const item, const DatabaseFields::Set requestedSet);
-    qlonglong imageId(const QModelIndex& anIndex) const;
-    QList<qlonglong> imageIds(const QModelIndexList& indexList) const;
-    QList<ImageInfo> imageInfos(const QModelIndexList& indexList) const;
-    ImageInfo imageInfo(const QModelIndex& index) const;
-    QModelIndex itemIndex(Item* const item) const;
-    QList<ImageInfo> allImageInfo() const;
     QModelIndex deepRowIndex(const int rowNumber) const;
     int indexToDeepRowNumber(const QModelIndex& index) const;
     int deepRowCount() const;
     int firstDeepRowNotInList(const QList<QModelIndex>& needleList);
     QModelIndex toCol0(const QModelIndex& anIndex) const;
+
+    QModelIndex   itemIndex(Item* const item) const;
+    QModelIndex   indexFromImageId(const qlonglong imageId, const int columnIndex) const;
+    Item*         itemFromImageId(const qlonglong imageId) const;
+    Item*         itemFromIndex(const QModelIndex& i) const;
+    ImageInfo     infoFromItem(Item* const item) const;
+    ImageInfoList infosFromItems(QList<Item*> const items) const;
+
+    QVariant              itemDatabaseFieldRaw(Item* const item, const DatabaseFields::Set requestedField);
+    DatabaseFieldsHashRaw itemDatabaseFieldsRaw(Item* const item, const DatabaseFields::Set requestedSet);
+
+    qlonglong        imageId(const QModelIndex& anIndex) const;
+    QList<qlonglong> imageIds(const QModelIndexList& indexList) const;
+    QList<ImageInfo> imageInfos(const QModelIndexList& indexList) const;
+    ImageInfo        imageInfo(const QModelIndex& index) const;
+    QList<ImageInfo> allImageInfo() const;
 
     QList<Item*> sortItems(const QList<Item*> itemList);
     class LessThan;

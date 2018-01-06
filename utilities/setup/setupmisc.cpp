@@ -7,7 +7,7 @@
  * Description : mics configuration setup tab
  *
  * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -69,6 +69,7 @@ public:
         showTrashDeleteDialogCheck(0),
         showPermanentDeleteDialogCheck(0),
         sidebarApplyDirectlyCheck(0),
+        useNativeFileDialogCheck(0),
         drawFramesToGroupedCheck(0),
         scrollItemToCenterCheck(0),
         showOnlyPersonTagsInPeopleSidebarCheck(0),
@@ -95,6 +96,7 @@ public:
     QCheckBox*                showTrashDeleteDialogCheck;
     QCheckBox*                showPermanentDeleteDialogCheck;
     QCheckBox*                sidebarApplyDirectlyCheck;
+    QCheckBox*                useNativeFileDialogCheck;
     QCheckBox*                drawFramesToGroupedCheck;
     QCheckBox*                scrollItemToCenterCheck;
     QCheckBox*                showOnlyPersonTagsInPeopleSidebarCheck;
@@ -170,6 +172,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     QVBoxLayout* const gLayout5     = new QVBoxLayout();
 
     d->showSplashCheck                        = new QCheckBox(i18n("&Show splash screen at startup"), abOptionsGroup);
+    d->useNativeFileDialogCheck               = new QCheckBox(i18n("Use file dialogs from the system"), abOptionsGroup);
     d->drawFramesToGroupedCheck               = new QCheckBox(i18n("Draw frames around grouped items"), abOptionsGroup);
     d->scrollItemToCenterCheck                = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
     d->showOnlyPersonTagsInPeopleSidebarCheck = new QCheckBox(i18n("Show only face tags for assigning names in people sidebar"), abOptionsGroup);
@@ -243,6 +246,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     }
 
     gLayout5->addWidget(d->showSplashCheck);
+    gLayout5->addWidget(d->useNativeFileDialogCheck);
     gLayout5->addWidget(d->drawFramesToGroupedCheck);
     gLayout5->addWidget(d->scrollItemToCenterCheck);
     gLayout5->addWidget(d->showOnlyPersonTagsInPeopleSidebarCheck);
@@ -358,6 +362,7 @@ void SetupMisc::applySettings()
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
     settings->setScanAtStart(d->scanAtStart->isChecked());
     settings->setCleanAtStart(d->cleanAtStart->isChecked());
+    settings->setUseNativeFileDialog(d->useNativeFileDialogCheck->isChecked());
     settings->setDrawFramesToGrouped(d->drawFramesToGroupedCheck->isChecked());
     settings->setScrollItemToCenter(d->scrollItemToCenterCheck->isChecked());
     settings->setShowOnlyPersonTagsInPeopleSidebar(d->showOnlyPersonTagsInPeopleSidebarCheck->isChecked());
@@ -391,6 +396,7 @@ void SetupMisc::readSettings()
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->scanAtStart->setChecked(settings->getScanAtStart());
     d->cleanAtStart->setChecked(settings->getCleanAtStart());
+    d->useNativeFileDialogCheck->setChecked(settings->getUseNativeFileDialog());
     d->drawFramesToGroupedCheck->setChecked(settings->getDrawFramesToGrouped());
     d->scrollItemToCenterCheck->setChecked(settings->getScrollItemToCenter());
     d->showOnlyPersonTagsInPeopleSidebarCheck->setChecked(settings->showOnlyPersonTagsInPeopleSidebar());

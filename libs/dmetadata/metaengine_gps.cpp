@@ -7,7 +7,7 @@
  * Description : Exiv2 library interface.
  *               GPS manipulation methods
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2012 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -62,10 +62,10 @@ bool MetaEngine::getGPSLatitudeNumber(double* const latitude) const
 {
     try
     {
-        *latitude=0.0;
+        *latitude = 0.0;
 
         // Try XMP first. Reason: XMP in sidecar may be more up-to-date than EXIF in original image.
-        if ( convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLatitude"), latitude) )
+        if (convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLatitude"), latitude))
             return true;
 
         // Now try to get the reference from Exif.
@@ -79,44 +79,34 @@ bool MetaEngine::getGPSLatitudeNumber(double* const latitude) const
 
             if (it != exifData.end() && (*it).count() == 3)
             {
-                // Latitude decoding from Exif.
-                double num, den, min, sec;
+                double deg;
+                double min;
+                double sec;
 
-                num = (double)((*it).toRational(0).first);
-                den = (double)((*it).toRational(0).second);
+                deg = (double)((*it).toFloat(0));
 
-                if (den == 0)
-                    return false;
-
-                *latitude = num/den;
-
-                num = (double)((*it).toRational(1).first);
-                den = (double)((*it).toRational(1).second);
-
-                if (den == 0)
-                    return false;
-
-                min = num/den;
-
-                if (min != -1.0)
-                    *latitude = *latitude + min/60.0;
-
-                num = (double)((*it).toRational(2).first);
-                den = (double)((*it).toRational(2).second);
-
-                if (den == 0)
+                if ((*it).toRational(0).second == 0 || deg == -1.0)
                 {
-                    // be relaxed and accept 0/0 seconds. See #246077.
-                    if (num == 0)
-                        den = 1;
-                    else
-                        return false;
+                    return false;
                 }
 
-                sec = num/den;
+                *latitude = deg;
+
+                min = (double)((*it).toFloat(1));
+
+                if ((*it).toRational(1).second == 0 || min == -1.0)
+                {
+                    return false;
+                }
+
+                *latitude = *latitude + min/60.0;
+
+                sec = (double)((*it).toFloat(2));
 
                 if (sec != -1.0)
+                {
                     *latitude = *latitude + sec/3600.0;
+                }
             }
             else
             {
@@ -124,7 +114,14 @@ bool MetaEngine::getGPSLatitudeNumber(double* const latitude) const
             }
 
             if (latRef[0] == 'S')
+            {
                 *latitude *= -1.0;
+            }
+
+            if (*latitude < -90.0 || *latitude > 90.0)
+            {
+                return false;
+            }
 
             return true;
         }
@@ -145,10 +142,10 @@ bool MetaEngine::getGPSLongitudeNumber(double* const longitude) const
 {
     try
     {
-        *longitude=0.0;
+        *longitude = 0.0;
 
         // Try XMP first. Reason: XMP in sidecar may be more up-to-date than EXIF in original image.
-        if ( convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLongitude"), longitude) )
+        if (convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLongitude"), longitude))
             return true;
 
         // Now try to get the reference from Exif.
@@ -166,46 +163,29 @@ bool MetaEngine::getGPSLongitudeNumber(double* const longitude) const
             {
                 /// @todo Decoding of latitude and longitude works in the same way,
                 ///       code here can be put in a separate function
-                double num, den;
+                double deg;
+                double min;
+                double sec;
 
-                num = (double)((*it).toRational(0).first);
-                den = (double)((*it).toRational(0).second);
+                deg = (double)((*it).toFloat(0));
 
-                if (den == 0)
+                if ((*it).toRational(0).second == 0 || deg == -1.0)
                 {
                     return false;
                 }
 
-                *longitude = num/den;
+                *longitude = deg;
 
-                num = (double)((*it).toRational(1).first);
-                den = (double)((*it).toRational(1).second);
+                min = (double)((*it).toFloat(1));
 
-                if (den == 0)
+                if ((*it).toRational(1).second == 0 || min == -1.0)
                 {
                     return false;
                 }
 
-                const double min = num/den;
+                *longitude = *longitude + min/60.0;
 
-                if (min != -1.0)
-                {
-                    *longitude = *longitude + min/60.0;
-                }
-
-                num = (double)((*it).toRational(2).first);
-                den = (double)((*it).toRational(2).second);
-
-                if (den == 0)
-                {
-                    // be relaxed and accept 0/0 seconds. See #246077.
-                    if (num == 0)
-                        den = 1;
-                    else
-                        return false;
-                }
-
-                const double sec = num/den;
+                sec = (double)((*it).toFloat(2));
 
                 if (sec != -1.0)
                 {
@@ -220,6 +200,11 @@ bool MetaEngine::getGPSLongitudeNumber(double* const longitude) const
             if (lngRef[0] == 'W')
             {
                 *longitude *= -1.0;
+            }
+
+            if (*longitude < -180.0 || *longitude > 180.0)
+            {
+                return false;
             }
 
             return true;

@@ -6,7 +6,7 @@
  * Date        : 2008-05-19
  * Description : Find Duplicates tree-view search album.
  *
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef FINDDUPLICATESALBUM_H
-#define FINDDUPLICATESALBUM_H
+#ifndef FIND_DUPLICATES_ALBUM_H
+#define FIND_DUPLICATES_ALBUM_H
 
 // Qt includes
 
@@ -72,4 +72,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // FINDDUPLICATESALBUM_H
+#endif // FIND_DUPLICATES_ALBUM_H

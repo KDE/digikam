@@ -6,7 +6,7 @@
  * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
- * Copyright (C) 2007-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,6 +81,7 @@
 #include "expoblendingmanager.h"
 #include "mailwizard.h"
 #include "advprintwizard.h"
+#include "dmediaserverdlg.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -459,7 +460,7 @@ void LightTableWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    KActionCollection* const ac = actionCollection();
+    KActionCollection* const ac =   actionCollection();
 
     d->backwardAction = buildStdAction(StdBackAction, this, SLOT(slotBackward()), this);
     ac->addAction(QLatin1String("lighttable_backward"), d->backwardAction);
@@ -587,6 +588,7 @@ void LightTableWindow::setupActions()
     createVideoSlideshowAction();
     createSendByMailAction();
     createPrintCreatorAction();
+    createMediaServerAction();
 
     // Left Panel Zoom Actions
 
@@ -605,7 +607,7 @@ void LightTableWindow::setupActions()
     d->leftZoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18n("Zoom to 100%"), this);
     connect(d->leftZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotLeftZoomTo100()));
     ac->addAction(QLatin1String("lighttable_zoomto100percents_left"), d->leftZoomTo100percents);
-    ac->setDefaultShortcut(d->leftZoomTo100percents, Qt::CTRL + Qt::Key_Comma);
+    ac->setDefaultShortcut(d->leftZoomTo100percents, Qt::CTRL + Qt::Key_Period);
 
     d->leftZoomFitToWindowAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-fit-best")), i18n("Fit to &Window"), this);
     connect(d->leftZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotLeftFitToWindow()));
@@ -629,7 +631,7 @@ void LightTableWindow::setupActions()
     d->rightZoomTo100percents = new QAction(QIcon::fromTheme(QLatin1String("zoom-original")), i18n("Zoom to 100%"), this);
     connect(d->rightZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotRightZoomTo100()));
     ac->addAction(QLatin1String("lighttable_zoomto100percents_right"), d->rightZoomTo100percents);
-    ac->setDefaultShortcut(d->rightZoomTo100percents, Qt::SHIFT + Qt::CTRL + Qt::Key_Comma);
+    ac->setDefaultShortcut(d->rightZoomTo100percents, Qt::SHIFT + Qt::CTRL + Qt::Key_Period);
 
     d->rightZoomFitToWindowAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-fit-best")), i18n("Fit to &Window"), this);
     connect(d->rightZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotRightFitToWindow()));
@@ -1887,6 +1889,17 @@ void LightTableWindow::slotSendByMail()
 void LightTableWindow::slotPrintCreator()
 {
     AdvPrintWizard w(this, new DBInfoIface(this, d->thumbView->allUrls()));
+    w.exec();
+}
+
+void LightTableWindow::slotMediaServer()
+{
+    DBInfoIface* const iface = new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools);
+    // NOTE: We overwrite the default albums chooser object name for load save check items state between sessions.
+    // The goal is not mix these settings with other export tools.
+    iface->setObjectName(QLatin1String("SetupMediaServerIface"));
+
+    DMediaServerDlg w(this, iface);
     w.exec();
 }
 

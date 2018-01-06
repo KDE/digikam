@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<gui version="580" name="imageeditor" translationDomain="digikam" >
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="558" name="imageeditor" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -84,10 +84,10 @@
     <Menu name="Enhance" ><text>Enh&amp;ance</text>
         <Action name="editorwindow_enhance_restoration" />
         <Action name="editorwindow_enhance_blur" />
+        <Action name="editorwindow_enhance_healingclone" />
         <Action name="editorwindow_enhance_sharpen" />
         <Action name="editorwindow_enhance_noisereduction" />
         <Action name="editorwindow_enhance_localcontrast" />
-        <Action name="editorwindow_enhance_inpainting" />
         <Action name="editorwindow_enhance_hotpixels" />
         <Separator />
         <Action name="editorwindow_enhance_redeye" />
@@ -146,6 +146,7 @@
         <Action name="videoslideshow" />
         <Action name="sendbymail" />
         <Action name="printcreator" />
+        <Action name="mediaserver" />
     </Menu>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>

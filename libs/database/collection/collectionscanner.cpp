@@ -9,7 +9,7 @@
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -531,7 +531,7 @@ void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
 
     // remove subalbums from list if parent album is already contained
     QStringList sortedPaths = albumPaths;
-    qSort(sortedPaths);
+    std::sort(sortedPaths.begin(), sortedPaths.end());
     QStringList::iterator it, it2;
 
     for (it = sortedPaths.begin(); it != sortedPaths.end(); )

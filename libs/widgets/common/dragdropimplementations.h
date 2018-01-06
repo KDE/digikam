@@ -43,7 +43,7 @@ public:
     /**
      * A class providing a sample implementation for a QAbstractItemModel
      * redirecting drag-and-drop support to a handler.
-     * Include the macro DECLARE_DRAG_DROP_METHODS in your derived QAbstractItemModel class.
+     * Include the macro DECLARE_Model_DRAG_DROP_METHODS in your derived QAbstractItemModel class.
      */
 
     DragDropModelImplementation();
@@ -111,7 +111,7 @@ public:
 
 protected:
 
-    /// This one is implemented by DECLARE_DRAG_DROP_METHODS
+    /// This one is implemented by DECLARE_VIEW_DRAG_DROP_METHODS
     virtual QAbstractItemView* asView() = 0;
 
     /// You need to implement these three methods

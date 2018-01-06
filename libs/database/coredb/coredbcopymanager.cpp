@@ -7,7 +7,7 @@
  * Description : Core database copy manager for migration operations.
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -105,9 +105,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
         << QLatin1String("Searches")
         << QLatin1String("DownloadHistory")
         << QLatin1String("VideoMetadata")
-        /*
         << QLatin1String("Settings")
-        */
     ;
     const int tablesSize = tables.size();
 
@@ -135,15 +133,6 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
             toDBbackend.close();
             return;
         }
-    }
-
-    if ( m_isStopProcessing ||
-         toDBbackend.execDirectSql(QString::fromUtf8("DROP TABLE IF EXISTS Settings;")) != BdEngineBackend::NoErrors)
-    {
-        emit finished(CoreDbCopyManager::failed, i18n("Error while scrubbing the target database."));
-        fromDBbackend.close();
-        toDBbackend.close();
-        return;
     }
 
     // Then create the schema
@@ -181,18 +170,11 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
             return;
         }
     }
-/*
-    if (isStopThread ||
-        !copyTable(fromDBbackend, QLatin1String("Migrate_Read_Settings"),
-                   toDBbackend, QLatin1String("Migrate_Write_Settings")))
-    {
-        handleClosing(isStopThread, fromDBbackend, toDBbackend);
-        return;
-    }
-*/
+
     fromDBbackend.close();
     toDBbackend.close();
 
+    emit smallStepStarted(1, 1);
     emit finished(CoreDbCopyManager::success, QString());
 }
 
@@ -269,7 +251,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
 
         // Send a signal to the GUI to entertain the user
 
-        emit smallStepStarted(++resultCounter, resultSize);
+        emit smallStepStarted(resultCounter++, resultSize);
 
         // Read the values from the fromDB into a hash
 

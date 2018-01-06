@@ -6,7 +6,7 @@
  * Date        : 2009-02-28
  * Description : batch tool to add visible watermark.
  *
- * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Mikkel Baekhoej Christensen <mbc at baekhoej dot dk>
  * Copyright (C) 2017      by Ahmed Fathi <ahmed dot fathi dot abdelmageed at gmail dot com>
  *
@@ -61,6 +61,11 @@
 #include "loadsavethread.h"
 #include "metaengine.h"
 #include "dcolorselector.h"
+
+
+
+
+
 
 namespace Digikam
 {
@@ -165,6 +170,7 @@ WaterMark::~WaterMark()
 
 void WaterMark::registerSettingsWidget()
 {
+
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     DVBox* const vbox = new DVBox;

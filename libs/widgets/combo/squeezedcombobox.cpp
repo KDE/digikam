@@ -7,7 +7,7 @@
  * Description : a combo box with a width not depending of text
  *               content size
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2008 by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C)      2005 by Tom Albers <tomalbers at kde dot nl>
  *

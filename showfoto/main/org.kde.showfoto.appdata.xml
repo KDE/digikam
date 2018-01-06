@@ -23,6 +23,7 @@
   <name xml:lang="pl">Showfoto</name>
   <name xml:lang="pt">Showfoto</name>
   <name xml:lang="pt-BR">Showfoto</name>
+  <name xml:lang="ru">Showfoto</name>
   <name xml:lang="sk">Showfoto</name>
   <name xml:lang="sl">Showfoto</name>
   <name xml:lang="sv">Showfoto</name>
@@ -37,6 +38,7 @@
   <summary xml:lang="de">Bildbearbeitung</summary>
   <summary xml:lang="en-GB">Image Editor</summary>
   <summary xml:lang="es">Editor de imágenes</summary>
+  <summary xml:lang="fr">Éditeur d'image</summary>
   <summary xml:lang="it">Editor di immagini</summary>
   <summary xml:lang="nl">Afbeeldingsbewerker</summary>
   <summary xml:lang="nn">Biletredigering</summary>
@@ -81,7 +83,7 @@
   <url type="help">http://docs.kde.org/development/en/extragear-graphics/showfoto/</url>
   <screenshots>
     <screenshot type="default">
-      <image>https://userbase.kde.org/images.userbase/thumb/5/5d/PhotoTut1_2.png/550px-PhotoTut1_2.png</image>
+      <image>https://cdn.kde.org/screenshots/digikam/showfoto.png</image>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>

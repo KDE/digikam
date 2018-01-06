@@ -6,7 +6,8 @@
  * Date        : 2014-05-17
  * Description : Album Labels Tree View.
  *
- * Copyright (C) 2014-2015 Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMLABELSTREEVIEW_H
-#define ALBUMLABELSTREEVIEW_H
+#ifndef ALBUM_LABELS_TREEVIEW_H
+#define ALBUM_LABELS_TREEVIEW_H
 
 // Qt includes
 
@@ -173,7 +174,8 @@ public:
      *
      * @param neededLabels a hash to restore selection from it
      */
-    void restoreSelectionFromHistory(const QHash<AlbumLabelsTreeView::Labels, QList<int> >& neededLabels);
+    void restoreSelectionFromHistory(const QHash<AlbumLabelsTreeView::Labels,
+                                     QList<int> >& neededLabels);
 
     /**
      * @return true if the tree-view is restoring the selection state
@@ -207,7 +209,9 @@ private:
      *        "Rating: 2, 5", If there are any selected picks for example
      *        Pending, then the generated name is "Rating: 2, 5 | Picks: Pending"
      */
-    void generateAlbumNameForExporting(const QList<int>& ratings, const QList<int>& colorsList, const QList<int>& picksList);
+    void generateAlbumNameForExporting(const QList<int>& ratings,
+                                       const QList<int>& colorsList,
+                                       const QList<int>& picksList);
 
     /**
      * @brief Passes the current album DB url to a DBJobsManager
@@ -240,4 +244,5 @@ private:
 };
 
 } // namespace Digikam
-#endif // ALBUMLABELSTREEVIEW_H
+
+#endif // ALBUM_LABELS_TREEVIEW_H

@@ -7,7 +7,7 @@
  * Description : database setup tab
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -121,7 +121,7 @@ SetupDatabase::SetupDatabase(QWidget* const parent)
     QLabel* const ignoreInfoLabel = new QLabel(
                 i18n("<p>Set the names of directories that you want to ignore "
                      "from your photo collections. The names are case sensitive "
-                     "and should be separated by a whitespace.</p>"
+                     "and should be separated by a semicolon.</p>"
                      "<p>This is for example useful when you store your photos "
                      "on a Synology NAS (Network Attached Storage). In every "
                      "directory the system creates a subdirectory @eaDir to "
@@ -190,7 +190,7 @@ void SetupDatabase::applySettings()
     if (d->ignoreEdit->text() != ignoreDirectory)
     {
         CoreDbAccess().db()->setUserIgnoreDirectoryFilterSettings(
-                    cleanUserFilterString(d->ignoreEdit->text(), true));
+                    cleanUserFilterString(d->ignoreEdit->text(), true, true));
 
         ScanController::instance()->completeCollectionScanInBackground(false);
     }
@@ -314,7 +314,7 @@ void SetupDatabase::slotShowCurrentIgnoredDirectoriesSettings() const
     CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectoryList);
     QString text = i18n("<p>Directories starting with a dot are ignored by "
                         "default.<br/> <code>%1</code></p>",
-                        ignoreDirectoryList.join(QLatin1String(" ")));
+                        ignoreDirectoryList.join(QLatin1Char(';')));
     QWhatsThis::showText(d->ignoreLabel->mapToGlobal(QPoint(0, 0)), text, d->ignoreLabel);
 }
 

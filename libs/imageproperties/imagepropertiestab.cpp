@@ -6,7 +6,7 @@
  * Date        : 2006-04-19
  * Description : A tab to display general image information
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -797,7 +797,7 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
         }
     }
 
-    qStableSort(tagsSorted.begin(), tagsSorted.end(), naturalLessThan);
+    std::stable_sort(tagsSorted.begin(), tagsSorted.end(), naturalLessThan);
 
     if (identifiers)
     {
@@ -844,12 +844,15 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
 
 void ImagePropertiesTab::shortenedMakeInfo(QString& make)
 {
-    make.remove(QLatin1String(" CORPORATION"),      Qt::CaseInsensitive);        // from Nikon, Pentax, and Olympus
-    make.remove(QLatin1String("EASTMAN "),          Qt::CaseInsensitive);        // from Kodak
-    make.remove(QLatin1String(" COMPANY"),          Qt::CaseInsensitive);        // from Kodak
-    make.remove(QLatin1String(" OPTICAL CO.,LTD"),  Qt::CaseInsensitive);        // from Olympus
-    make.remove(QLatin1String(" Techwin co.,Ltd."), Qt::CaseInsensitive);        // from Samsung
-    make.remove(QLatin1String("  Co.,Ltd."),        Qt::CaseInsensitive);        // from Minolta
+    make.remove(QLatin1String(" CORPORATION"),       Qt::CaseInsensitive);        // from Nikon, Pentax, and Olympus
+    make.remove(QLatin1String("EASTMAN "),           Qt::CaseInsensitive);        // from Kodak
+    make.remove(QLatin1String(" COMPANY"),           Qt::CaseInsensitive);        // from Kodak
+    make.remove(QLatin1String(" OPTICAL CO.,LTD"),   Qt::CaseInsensitive);        // from Olympus
+    make.remove(QLatin1String(" IMAGING CORP."),     Qt::CaseInsensitive);        // from Olympus
+    make.remove(QLatin1String(" Techwin co.,Ltd."),  Qt::CaseInsensitive);        // from Samsung
+    make.remove(QLatin1String("  Co.,Ltd."),         Qt::CaseInsensitive);        // from Minolta
+    make.remove(QLatin1String(" Electric Co.,Ltd."), Qt::CaseInsensitive);        // from Sanyo
+    make.remove(QLatin1String(" Electric Co.,Ltd"),  Qt::CaseInsensitive);        // from Sanyo
 }
 
 void ImagePropertiesTab::shortenedModelInfo(QString& model)
@@ -858,6 +861,8 @@ void ImagePropertiesTab::shortenedModelInfo(QString& model)
     model.remove(QLatin1String("NIKON "),           Qt::CaseInsensitive);
     model.remove(QLatin1String("PENTAX "),          Qt::CaseInsensitive);
     model.remove(QLatin1String(" DIGITAL"),         Qt::CaseInsensitive);        // from Canon
+    model.remove(QLatin1String("KODAK "),           Qt::CaseInsensitive);
+    model.remove(QLatin1String(" CAMERA"),          Qt::CaseInsensitive);        // from Kodak
 }
 
 /**

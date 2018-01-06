@@ -7,7 +7,7 @@
  * Description : application settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
  * Copyright (C) 2014      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
@@ -53,24 +53,24 @@ int ApplicationSettings::getImageSorting() const
     return d->imageSorting;
 }
 
-void ApplicationSettings::setImageGroupMode(int mode)
+void ApplicationSettings::setImageSeparationMode(int mode)
 {
-    d->imageGroupMode = mode;
+    d->imageSeparationMode = mode;
 }
 
-int ApplicationSettings::getImageGroupMode() const
+int ApplicationSettings::getImageSeparationMode() const
 {
-    return d->imageGroupMode;
+    return d->imageSeparationMode;
 }
 
-void ApplicationSettings::setImageGroupSortOrder(int order)
+void ApplicationSettings::setImageSeparationSortOrder(int order)
 {
-    d->imageGroupSortOrder = order;
+    d->imageSeparationSortOrder = order;
 }
 
-int ApplicationSettings::getImageGroupSortOrder() const
+int ApplicationSettings::getImageSeparationSortOrder() const
 {
-    return d->imageGroupSortOrder;
+    return d->imageSeparationSortOrder;
 }
 
 void ApplicationSettings::setItemLeftClickAction(const ItemLeftClickAction action)

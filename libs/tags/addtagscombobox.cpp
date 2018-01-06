@@ -229,12 +229,15 @@ bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
         }
         else if (event->type() == QEvent::ShortcutOverride)
         {
-            QKeyEvent* const keyEvent = static_cast<QKeyEvent*>(event);
-
-            if (keyEvent && (keyEvent->key() == Qt::Key_Up ||
-                             keyEvent->key() == Qt::Key_Down))
+            if (d->lineEdit->completer()->popup()->isVisible())
             {
-                event->accept();
+                QKeyEvent* const keyEvent = static_cast<QKeyEvent*>(event);
+
+                if (keyEvent && (keyEvent->key() == Qt::Key_Up ||
+                                 keyEvent->key() == Qt::Key_Down))
+                {
+                    event->accept();
+                }
             }
         }
         else if (event->type() == QEvent::HoverMove)

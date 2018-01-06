@@ -6,7 +6,7 @@
  * Date        : 2008-05-19
  * Description : a widget to draw sketch.
  *
- * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -92,7 +92,7 @@ public:
         // Remove all draw events from history map which are upper than current index.
         // If user redo actions and make new draw events, theses one will be queued at
         // end of history and will replace removed items.
-        for (int i = drawEventList.count() - 1; i > eventIndex;  --i)
+        for (int i = drawEventList.count() - 1 ; i > eventIndex ;  --i)
         {
             drawEventList.removeAt(i);
         }
@@ -223,7 +223,8 @@ void SketchWidget::slotUndo()
     {
         replayEvents(d->eventIndex);
         emit signalSketchChanged(sketchImage());
-        emit signalUndoRedoStateChanged(d->eventIndex != -1, d->eventIndex != d->drawEventList.count() - 1);
+        emit signalUndoRedoStateChanged(d->eventIndex != -1,
+                                        d->eventIndex != d->drawEventList.count() - 1);
     }
 }
 
@@ -238,7 +239,8 @@ void SketchWidget::slotRedo()
     d->isClear = false;
     replayEvents(d->eventIndex);
     emit signalSketchChanged(sketchImage());
-    emit signalUndoRedoStateChanged(d->eventIndex != -1, d->eventIndex != d->drawEventList.count() - 1);
+    emit signalUndoRedoStateChanged(d->eventIndex != -1,
+                                    d->eventIndex != d->drawEventList.count() - 1);
 }
 
 void SketchWidget::replayEvents(int index)
@@ -258,7 +260,7 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter& writer)
 {
     writer.writeStartElement(QLatin1String("SketchImage"));
 
-    for (int i = 0; i <= d->eventIndex; ++i)
+    for (int i = 0 ; i <= d->eventIndex ; ++i)
     {
         const DrawEvent& event = d->drawEventList.at(i);
 
@@ -272,7 +274,7 @@ void SketchWidget::sketchImageToXML(QXmlStreamWriter& writer)
         // Initial position is 0,0
         QPointF pos(0, 0);
 
-        for (int j = 0; j < event.path.elementCount(); ++j)
+        for (int j = 0 ; j < event.path.elementCount() ; ++j)
         {
             const QPainterPath::Element& element = event.path.elementAt(j);
 
@@ -320,7 +322,8 @@ bool SketchWidget::setSketchImageFromXML(const QString& xml)
     {
         element = reader.readNext();
 
-        if (element == QXmlStreamReader::StartElement && reader.name() == QLatin1String("SketchImage"))
+        if (element == QXmlStreamReader::StartElement &&
+            reader.name() == QLatin1String("SketchImage"))
         {
             return setSketchImageFromXML(reader);
         }
@@ -334,7 +337,8 @@ bool SketchWidget::setSketchImageFromXML(QXmlStreamReader& reader)
     QXmlStreamReader::TokenType element;
 
     // We assume that the reader is positioned at the start element for our XML
-    if (!reader.isStartElement() || reader.name() != QLatin1String("SketchImage"))
+    if (!reader.isStartElement() ||
+        reader.name() != QLatin1String("SketchImage"))
     {
         return false;
     }
