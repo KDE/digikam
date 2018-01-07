@@ -224,4 +224,5 @@ BUGFIXES FROM BUGZILLA:
 212 ==> 388610 - digiKam doesn't use native or KDE file dialogs.
 213 ==> 377444 - C++ runtime error.
 214 ==> 380148 - Windows installer causes BSOD during "Close Conflicting Programs".
-215 ==> 
+215 ==> 338555 - CatalystControlCenter.exe crash on digiKam installation.
+216 ==> 
