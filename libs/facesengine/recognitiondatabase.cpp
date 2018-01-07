@@ -205,7 +205,7 @@ static void trainIdentityBatchLBPH(OpenCVLBPHFaceRecognizer* const r, const QLis
         }
         catch (cv::Exception& e)
         {
-            qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception training Recognizer:" << e.what();
+            qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception training LBPH Recognizer:" << e.what();
         }
         catch (...)
         {
@@ -231,7 +231,7 @@ static void trainIdentityBatchEIGEN(OpenCVEIGENFaceRecognizer* const r, const QL
         {
             try
             {
-                cv::Mat cvImage = d->preprocessingChain(imageList->image());
+                cv::Mat cvImage     = d->preprocessingChain(imageList->image());
                 cv::Mat cvImage_rgb = d->preprocessingChainRGB(imageList->image());
 
                 labels.push_back(identity.id());
@@ -240,7 +240,7 @@ static void trainIdentityBatchEIGEN(OpenCVEIGENFaceRecognizer* const r, const QL
             }
             catch (cv::Exception& e)
             {
-                qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception preparing image for LBPH:" << e.what();
+                qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception preparing image for Eigen:" << e.what();
             }
             catch (...)
             {
@@ -256,7 +256,7 @@ static void trainIdentityBatchEIGEN(OpenCVEIGENFaceRecognizer* const r, const QL
         }
         catch (cv::Exception& e)
         {
-            qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception training Recognizer:" << e.what();
+            qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception training Eigen Recognizer:" << e.what();
         }
         catch (...)
         {
