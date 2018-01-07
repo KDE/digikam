@@ -73,11 +73,7 @@ public:
           configAlreadyScannedHandling(QLatin1String("Already Scanned Handling")),
           configUseFullCpu(QLatin1String("Use Full CPU")),
           configSettingsVisible(QLatin1String("Settings Widget Visible")),
-          configRecognizeTask(QLatin1String("Face Recognize Main Task")),
-          configRecognizeLBP(QLatin1String("Recognize Using LBP")), 
-          configRecognizeEigenFace(QLatin1String("Recognize Using EigenFace")),
-          configRecognizeFisherFace(QLatin1String("Recognize Using FisherFace")),
-          configRecognizeDNN(QLatin1String("Recognize Using Deep Learning"))
+          configRecognizeAlgorithm(QLatin1String("Recognize Algorithm")) 
     {
         buttons                    = 0;
         optionGroupBox             = 0;
@@ -120,11 +116,7 @@ public:
     const QString                configAlreadyScannedHandling;
     const QString                configUseFullCpu;
     const QString                configSettingsVisible;
-    const QString                configRecognizeTask;
-    const QString                configRecognizeLBP;
-    const QString                configRecognizeEigenFace;
-    const QString                configRecognizeFisherFace;
-    const QString                configRecognizeDNN;
+    const QString                configRecognizeAlgorithm;
 };
 
 FaceScanDialog::FaceScanDialog(QWidget* const parent)
@@ -195,27 +187,10 @@ void FaceScanDialog::doLoadState()
 
     d->useFullCpuButton->setChecked(group.readEntry(entryName(d->configUseFullCpu), false));
 
-    QString recognizeTask = group.readEntry(entryName(d->configRecognizeTask), d->configRecognizeDNN);
-    RecognitionDatabase::RecognizeAlgorithm recAlgorithm;
+    RecognitionDatabase::RecognizeAlgorithm algo = (RecognitionDatabase::RecognizeAlgorithm)group.readEntry(entryName(d->configRecognizeAlgorithm),
+                                                                                                            (int)RecognitionDatabase::RecognizeAlgorithm::DNN);
 
-    if (recognizeTask == d->configRecognizeLBP)
-    {
-        recAlgorithm = RecognitionDatabase::RecognizeAlgorithm::LBP;
-    }
-    else if (recognizeTask == d->configRecognizeEigenFace)
-    {
-        recAlgorithm = RecognitionDatabase::RecognizeAlgorithm::EigenFace;
-    }
-    else if (recognizeTask == d->configRecognizeFisherFace)
-    {
-        recAlgorithm = RecognitionDatabase::RecognizeAlgorithm::FisherFace;
-    }
-    else
-    {
-        recAlgorithm = RecognitionDatabase::RecognizeAlgorithm::DNN;
-    }
-
-    d->recognizeBox->setCurrentIndex(d->recognizeBox->findData(recAlgorithm));
+    d->recognizeBox->setCurrentIndex(d->recognizeBox->findData(algo));
 
     // do not load retrainAllButton state from config, dangerous
 
@@ -268,31 +243,9 @@ void FaceScanDialog::doSaveState()
     ApplicationSettings::instance()->setFaceDetectionAccuracy(double(d->accuracyInput->value()) / 100);
     d->albumSelectors->saveState();
 
-    group.writeEntry(entryName(d->configUseFullCpu),      d->useFullCpuButton->isChecked());
-    group.writeEntry(entryName(d->configSettingsVisible), d->tabWidget->isVisible());
-
-    QString recognizeTask;
-
-    switch ((RecognitionDatabase::RecognizeAlgorithm)(d->recognizeBox->itemData(d->recognizeBox->currentIndex()).toInt()))
-    {
-        case RecognitionDatabase::RecognizeAlgorithm::LBP:
-            recognizeTask = d->configRecognizeLBP;
-            break;
-
-        case RecognitionDatabase::RecognizeAlgorithm::EigenFace:
-            recognizeTask = d->configRecognizeEigenFace;
-            break;
-
-        case RecognitionDatabase::RecognizeAlgorithm::FisherFace:
-            recognizeTask = d->configRecognizeFisherFace;
-            break;
-
-        case RecognitionDatabase::RecognizeAlgorithm::DNN:
-            recognizeTask = d->configRecognizeDNN;
-            break;
-    }
-
-    group.writeEntry(entryName(d->configRecognizeTask), recognizeTask);
+    group.writeEntry(entryName(d->configUseFullCpu),         d->useFullCpuButton->isChecked());
+    group.writeEntry(entryName(d->configSettingsVisible),    d->tabWidget->isVisible());
+    group.writeEntry(entryName(d->configRecognizeAlgorithm), d->recognizeBox->itemData(d->recognizeBox->currentIndex()));
 }
 
 void FaceScanDialog::setupUi()
