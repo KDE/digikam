@@ -197,7 +197,7 @@ static void trainIdentityBatchLBPH(OpenCVLBPHFaceRecognizer* const r, const QLis
             }
         }
 
-        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Training " << images.size() << " images for identity " << identity.id();
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "LBPH Training " << images.size() << " images for identity " << identity.id();
 
         try
         {
@@ -248,7 +248,7 @@ static void trainIdentityBatchEIGEN(OpenCVEIGENFaceRecognizer* const r, const QL
             }
         }
 
-        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Training " << images.size() << " images for identity " << identity.id();
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Eigen Training " << images.size() << " images for identity " << identity.id();
 
         try
         {
