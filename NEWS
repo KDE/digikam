@@ -227,4 +227,6 @@ BUGFIXES FROM BUGZILLA:
 215 ==> 338555 - CatalystControlCenter.exe crash on digiKam installation.
 216 ==> 265025 - Usability issues with tagging unknown faces.
 217 ==> 216145 - Infinite Loop when scanning large folders.
-218 ==> 
+218 ==> 379546 - ZTE B2016 causes crash while coupling.
+219 ==> 
+
