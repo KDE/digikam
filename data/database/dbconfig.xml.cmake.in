@@ -2019,8 +2019,8 @@
                         END IF;
                     END;
                 </statement>
-                <statement mode="plain">SET OLD_ALTER_TABLE=1;</statement>
-                <statement mode="plain">SET FOREIGN_KEY_CHECKS=0;</statement>
+                <statement mode="plain">SET SESSION OLD_ALTER_TABLE=1;</statement>
+                <statement mode="plain">SET SESSION FOREIGN_KEY_CHECKS=0;</statement>
                 <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
                 <statement mode="plain">DROP TRIGGER IF EXISTS delete_tag;</statement>
                 <statement mode="plain">DROP TRIGGER IF EXISTS move_tagstree;</statement>
@@ -2168,8 +2168,8 @@
                                         ADD CONSTRAINT ImageTagProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD CONSTRAINT ImageTagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
-                <statement mode="plain">SET FOREIGN_KEY_CHECKS=1;</statement>
-                <statement mode="plain">SET OLD_ALTER_TABLE=0;</statement>
+                <statement mode="plain">SET SESSION FOREIGN_KEY_CHECKS=1;</statement>
+                <statement mode="plain">SET SESSION OLD_ALTER_TABLE=0;</statement>
             </dbaction>
 
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">
