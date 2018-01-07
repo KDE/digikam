@@ -147,6 +147,7 @@ void OpenCVEIGENFaceRecognizer::train(const std::vector<cv::Mat>& images, const 
 {
     if (images.empty() || labels.size() != images.size())
     {
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "Eigenfaces Train: nothing to train...";
         return;
     }
 
