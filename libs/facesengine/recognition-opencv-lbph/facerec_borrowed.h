@@ -25,6 +25,9 @@
  *
  * ============================================================ */
 
+#ifndef FACEREC_BORROWED_H
+#define FACEREC_BORROWED_H
+
 #include "libopencv.h"
 #include "face.hpp"
 
@@ -194,3 +197,5 @@ private:
 };
 
 } // namespace Digikam
+
+#endif // FACEREC_BORROWED_H

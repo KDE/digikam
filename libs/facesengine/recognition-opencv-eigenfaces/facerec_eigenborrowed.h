@@ -25,6 +25,9 @@
  *
  * ============================================================ */
 
+#ifndef FACEREC_EIGENBORROWED_H
+#define FACEREC_EIGENBORROWED_H
+
 #include "libopencv.h"
 #include "face.hpp"
 
@@ -89,14 +92,22 @@ public:
     void predict(cv::InputArray src, cv::Ptr<cv::face::PredictCollector> collector) const override;
 
     /**
-     * See FaceRecognizer::read().
+     * See FaceRecognizer::load().
      */
-    void read(const cv::FileStorage&) {}
+#if OPENCV_TEST_VERSION(3,4,0)
+    void load(const cv::FileStorage&) override {}
+#else
+    void read(const cv::FileStorage&) override {}
+#endif
 
     /**
-     * See FaceRecognizer::write().
+     * See FaceRecognizer::save().
      */
-    void write(cv::FileStorage&) const {}
+#if OPENCV_TEST_VERSION(3,4,0)
+    void save(cv::FileStorage&) const override {}
+#else
+    void write(cv::FileStorage&) const override {}
+#endif
 
     /**
      * Getter functions.
@@ -145,3 +156,5 @@ private:
 };
 
 } // namespace Digikam
+
+#endif // FACEREC_EIGENBORROWED_H
