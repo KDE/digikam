@@ -467,7 +467,7 @@
         virtual gpu_data& data() { return data_instance; }
         virtual const gpu_data& data() const { return data_instance; }
     };
-/*
+
     inline void serialize(const tensor& item, std::ostream& out)
     {
         int version = 2;
@@ -491,7 +491,7 @@
             sbuf->sputn((char*)&d, sizeof(d));
         }
     }
-*/
+
     inline void deserialize(resizable_tensor& item, std::istream& in)
     {
         int version;
@@ -678,7 +678,7 @@
     private:
         mutable alias_tensor_instance inst;
     };
-/*
+
     inline void serialize(const alias_tensor& item, std::ostream& out)
     {
         int version = 1;
@@ -688,7 +688,7 @@
         serialize(item.nr(), out);
         serialize(item.nc(), out);
     }
-*/
+
     inline void deserialize(alias_tensor& item, std::istream& in)
     {
         int version = 0;
