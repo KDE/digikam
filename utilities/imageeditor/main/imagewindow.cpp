@@ -1098,51 +1098,66 @@ void ImageWindow::prepareImageToSave()
         hub.load(d->currentImageInfo);
 
         // Get face tags
-        QSize tempS = d->currentImageInfo.dimensions();
-        //QMultiMap< QString, QVariant > faceTags = hub.loadIntegerFaceTags(d->currentImageInfo);
         d->m_faceTags = hub.loadIntegerFaceTags(d->currentImageInfo);
-        QMultiMap< QString, QVariant > newFaceTags;
-        QMap<QString,QVariant>::const_iterator it;
-        //record the transformation into vector
+        QSize tempS   = d->currentImageInfo.dimensions();
+        QMap<QString, QVariant>::const_iterator it;
+        QMultiMap<QString, QVariant> newFaceTags;
+
+        // Record the transformation into vector
         std::vector<EditorWindow::TransformType> transVec;
-        while(!m_transformQue.empty())
+
+        while (!m_transformQue.empty())
         {
             transVec.push_back(m_transformQue.front());
             m_transformQue.pop();
         }
-        //start transform each face rect
-        int tmpH, tmpW;
-        for(it = d->m_faceTags.begin(); it != d->m_faceTags.end(); it++)
+
+        // Start transform each face rect
+        int tmpH = tempS.height();
+        int tmpW = tempS.width();
+
+        for (it = d->m_faceTags.begin(); it != d->m_faceTags.end(); it++)
         {
             QRect faceRect = it.value().toRect();
-qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect before:" << faceRect.x() << faceRect.y() <<faceRect.width() << faceRect.height();
-            tmpH = tempS.height(), tmpW = tempS.width();
-            for(unsigned int i = 0; i < transVec.size(); i++)
+            tmpH           = tempS.height();
+            tmpW           = tempS.width();
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect before:"
+                                         << faceRect.x()     << faceRect.y()
+                                         << faceRect.width() << faceRect.height();
+
+            for (unsigned int i = 0 ; i < transVec.size() ; i++)
             {
                 EditorWindow::TransformType type = transVec[i];
-                switch(type)
+
+                switch (type)
                 {
                 case EditorWindow::TransformType::RotateLeft:
-                    faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH),1);
+                    faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 1);
                     std::swap(tmpH, tmpW);
                     break;
                 case EditorWindow::TransformType::RotateRight:
-                    faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH),0);
+                    faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 0);
                     std::swap(tmpH, tmpW);
                     break;
                 case EditorWindow::TransformType::FlipHorizontal:
-                    faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH),0);
+                    faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 0);
                     break;
                 case EditorWindow::TransformType::FlipVertical:
-                    faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH),1);
+                    faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 1);
                     break;
                 default:
                     break;
                 }
-qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect transform: " << faceRect.x() << faceRect.y() <<faceRect.width() << faceRect.height();
+
+                qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect transform:"
+                                             << faceRect.x()     << faceRect.y()
+                                             << faceRect.width() << faceRect.height();
             }
+
             newFaceTags.insertMulti(it.key(), QVariant(faceRect));
         }
+
         hub.setFaceTags(newFaceTags, QSize(tmpW, tmpH));
         hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
 
