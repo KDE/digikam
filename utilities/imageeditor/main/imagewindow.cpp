@@ -1138,22 +1138,22 @@ void ImageWindow::prepareImageToSave()
 
                     switch (type)
                     {
-                    case EditorWindow::TransformType::RotateLeft:
-                        faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 1);
-                        std::swap(tmpH, tmpW);
-                        break;
-                    case EditorWindow::TransformType::RotateRight:
-                        faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 0);
-                        std::swap(tmpH, tmpW);
-                        break;
-                    case EditorWindow::TransformType::FlipHorizontal:
-                        faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 0);
-                        break;
-                    case EditorWindow::TransformType::FlipVertical:
-                        faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 1);
-                        break;
-                    default:
-                        break;
+                        case EditorWindow::TransformType::RotateLeft:
+                            faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 1);
+                            std::swap(tmpH, tmpW);
+                            break;
+                        case EditorWindow::TransformType::RotateRight:
+                            faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 0);
+                            std::swap(tmpH, tmpW);
+                            break;
+                        case EditorWindow::TransformType::FlipHorizontal:
+                            faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 0);
+                            break;
+                        case EditorWindow::TransformType::FlipVertical:
+                            faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 1);
+                            break;
+                        default:
+                            break;
                     }
 
                     qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect transform:"

@@ -435,14 +435,13 @@ bool MetadataHub::writeTags(const QString& filePath, WriteComponent writeMode,
     bool saveFaces = settings.saveFaceTags;
     bool saveTags  = settings.saveTags;
 
-
     if (saveFaces)
     {
-        metadata.setImageFacesMap(d->faceTagsList,true);
+        metadata.setImageFacesMap(d->faceTagsList, true);
     }
     else
     {
-        metadata.setImageFacesMap(d->faceTagsList,false);
+        metadata.setImageFacesMap(d->faceTagsList, false);
     }
 
     writeToBaloo(filePath);

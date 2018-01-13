@@ -1698,15 +1698,16 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
     setXmpTagString(winQxmpTagName.toLatin1().constData(),
                     QString(), MetaEngine::XmpTagType(1),false);
 
-    QMap<QString,QVariant>::const_iterator it = facesPath.constBegin();
+    QMap<QString, QVariant>::const_iterator it = facesPath.constBegin();
     int i   = 1;
     bool ok = true;
 
     while (it != facesPath.constEnd())
     {
-        qreal x,y,w,h;
-        it.value().toRectF().getRect(&x,&y,&w,&h);
-qCDebug(DIGIKAM_METAENGINE_LOG) << ">>>>>>>>>>set face meta:"<< x << y << w << h;
+        qreal x, y, w, h;
+        it.value().toRectF().getRect(&x, &y, &w, &h);
+        qCDebug(DIGIKAM_METAENGINE_LOG) << ">>>>>>>>>>set face meta:" << x << y << w << h;
+
         /** Write face tags in Windows Live Photo format **/
 
         QString rectString;
