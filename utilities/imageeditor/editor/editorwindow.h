@@ -163,8 +163,8 @@ protected:
     QString                   m_formatForRAWVersioning;
     QString                   m_formatForSubversions;
 
-    //using std::queue to store transforms
-    std::queue<TransformType> m_transformQue;
+    //using QVector to store transforms
+    QVector<TransformType>    m_transformQue;
 
 protected:
 

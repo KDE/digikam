@@ -3600,22 +3600,22 @@ void EditorWindow::slotFreeRotation()
 
 void EditorWindow::slotRotateLeftIntoQue()
 {
-    m_transformQue.push(TransformType::RotateLeft);
+    m_transformQue.append(TransformType::RotateLeft);
 }
 
 void EditorWindow::slotRotateRightIntoQue()
 {
-    m_transformQue.push(TransformType::RotateRight);
+    m_transformQue.append(TransformType::RotateRight);
 }
 
 void EditorWindow::slotFlipHIntoQue()
 {
-    m_transformQue.push(TransformType::FlipHorizontal);
+    m_transformQue.append(TransformType::FlipHorizontal);
 }
 
 void EditorWindow::slotFlipVIntoQue()
 {
-    m_transformQue.push(TransformType::FlipVertical);
+    m_transformQue.append(TransformType::FlipVertical);
 }
 
 }  // namespace Digikam

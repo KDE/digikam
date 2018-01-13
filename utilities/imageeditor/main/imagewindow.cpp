@@ -1104,6 +1104,7 @@ void ImageWindow::prepareImageToSave()
         hub.load(d->currentImageInfo);
 
         // Get face tags
+        d->newFaceTags.clear();
         QMultiMap<QString, QVariant> faceTags;
         faceTags = hub.loadIntegerFaceTags(d->currentImageInfo);
 
@@ -1111,15 +1112,6 @@ void ImageWindow::prepareImageToSave()
         {
             QSize tempS = d->currentImageInfo.dimensions();
             QMap<QString, QVariant>::const_iterator it;
-
-            // Record the transformation into vector
-            std::vector<EditorWindow::TransformType> transVec;
-
-            while (!m_transformQue.empty())
-            {
-                transVec.push_back(m_transformQue.front());
-                m_transformQue.pop();
-            }
 
             for (it = faceTags.begin() ; it != faceTags.end() ; it++)
             {
@@ -1132,9 +1124,9 @@ void ImageWindow::prepareImageToSave()
                                              << faceRect.x()     << faceRect.y()
                                              << faceRect.width() << faceRect.height();
 
-                for (unsigned int i = 0 ; i < transVec.size() ; i++)
+                for (int i = 0 ; i < m_transformQue.size() ; i++)
                 {
-                    EditorWindow::TransformType type = transVec[i];
+                    EditorWindow::TransformType type = m_transformQue[i];
 
                     switch (type)
                     {
@@ -1210,6 +1202,7 @@ void ImageWindow::saveFaceTagsToImage(const ImageInfo& info)
         hub.write(info.filePath(), MetadataHub::WRITE_ALL);
     }
 
+    m_transformQue.clear();
     d->newFaceTags.clear();
 }
 
