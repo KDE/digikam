@@ -1125,8 +1125,8 @@ void ImageWindow::prepareImageToSave()
             {
                 // Start transform each face rect
                 QRect faceRect = it.value().toRect();
-                int   tmpH     = tempS.height();
-                int   tmpW     = tempS.width();
+                int   tempH    = tempS.height();
+                int   tempW    = tempS.width();
 
                 qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect before:"
                                              << faceRect.x()     << faceRect.y()
@@ -1139,18 +1139,18 @@ void ImageWindow::prepareImageToSave()
                     switch (type)
                     {
                         case EditorWindow::TransformType::RotateLeft:
-                            faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 1);
-                            std::swap(tmpH, tmpW);
+                            faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tempW, tempH), 1);
+                            std::swap(tempH, tempW);
                             break;
                         case EditorWindow::TransformType::RotateRight:
-                            faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 0);
-                            std::swap(tmpH, tmpW);
+                            faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tempW, tempH), 0);
+                            std::swap(tempH, tempW);
                             break;
                         case EditorWindow::TransformType::FlipHorizontal:
-                            faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 0);
+                            faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tempW, tempH), 0);
                             break;
                         case EditorWindow::TransformType::FlipVertical:
-                            faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 1);
+                            faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tempW, tempH), 1);
                             break;
                         default:
                             break;
