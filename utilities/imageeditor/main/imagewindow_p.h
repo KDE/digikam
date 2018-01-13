@@ -141,31 +141,31 @@ public:
 
 public:
 
-    static const QString      configShowThumbbarEntry;
-    static const QString      configHorizontalThumbbarEntry;
+    static const QString         configShowThumbbarEntry;
+    static const QString         configHorizontalThumbbarEntry;
 
-    KMainWindow*              viewContainer;
+    KMainWindow*                 viewContainer;
 
-    QAction*                  toMainWindowAction;
+    QAction*                     toMainWindowAction;
 
     // Delete actions
-    QAction*                  fileDeletePermanentlyAction;
-    QAction*                  fileDeletePermanentlyDirectlyAction;
-    QAction*                  fileTrashDirectlyAction;
+    QAction*                     fileDeletePermanentlyAction;
+    QAction*                     fileDeletePermanentlyDirectlyAction;
+    QAction*                     fileTrashDirectlyAction;
 
-    ImageInfo                 currentImageInfo;
-    ImageListModel*           imageInfoModel;
-    ImageFilterModel*         imageFilterModel;
-    ImageDragDropHandler*     dragDropHandler;
+    ImageInfo                    currentImageInfo;
+    ImageListModel*              imageInfoModel;
+    ImageFilterModel*            imageFilterModel;
+    ImageDragDropHandler*        dragDropHandler;
 
-    ImageThumbnailBar*        thumbBar;
-    ThumbBarDock*             thumbBarDock;
+    ImageThumbnailBar*           thumbBar;
+    ThumbBarDock*                thumbBarDock;
 
-    ImagePropertiesSideBarDB* rightSideBar;
+    ImagePropertiesSideBarDB*    rightSideBar;
 
-    DatabaseVersionManager    versionManager;
+    DatabaseVersionManager       versionManager;
 
-    QMultiMap< QString, QVariant > m_faceTags;
+    QMultiMap<QString, QVariant> newFaceTags;
 };
 
 const QString ImageWindow::Private::configShowThumbbarEntry(QLatin1String("Show Thumbbar"));

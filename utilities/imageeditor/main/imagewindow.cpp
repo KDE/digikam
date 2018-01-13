@@ -131,6 +131,7 @@
 #include "mailwizard.h"
 #include "advprintwizard.h"
 #include "dmediaserverdlg.h"
+#include "facetagseditor.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -978,7 +979,10 @@ void ImageWindow::saveIsComplete()
 
     // put image in cache, the LoadingCacheInterface cares for the details
     LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
-    ScanController::instance()->scannedInfo(m_savingContext.destinationURL.toLocalFile());
+    ImageInfo info = ScanController::instance()->scannedInfo(m_savingContext.destinationURL.toLocalFile());
+
+    // Save new face tags to the image
+    saveFaceTagsToImage(info);
 
     // reset the orientation flag in the database
     DMetadata meta(m_canvas->currentImage().getMetadata());
@@ -1042,7 +1046,7 @@ void ImageWindow::saveAsIsComplete()
     }
 
     QStringList derivedFilePaths;
-    
+
     if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
     {
         derivedFilePaths = m_savingContext.versionFileOperation.allFilePaths();
@@ -1057,6 +1061,9 @@ void ImageWindow::saveAsIsComplete()
 
     // The model updates asynchronously, so we need to force addition of the main entry
     d->ensureModelContains(d->currentImageInfo);
+
+    // Save new face tags to the image
+    saveFaceTagsToImage(d->currentImageInfo);
 
     // set origin of EditorCore: "As if" the last saved image was loaded directly
     resetOriginSwitchFile();
@@ -1093,78 +1100,70 @@ void ImageWindow::prepareImageToSave()
 {
     if (!d->currentImageInfo.isNull())
     {
-        // Write metadata from database to DImg
         MetadataHub hub;
         hub.load(d->currentImageInfo);
 
         // Get face tags
-        d->m_faceTags = hub.loadIntegerFaceTags(d->currentImageInfo);
-        QSize tempS   = d->currentImageInfo.dimensions();
-        QMap<QString, QVariant>::const_iterator it;
-        QMultiMap<QString, QVariant> newFaceTags;
+        QMultiMap<QString, QVariant> faceTags;
+        faceTags = hub.loadIntegerFaceTags(d->currentImageInfo);
 
-        // Record the transformation into vector
-        std::vector<EditorWindow::TransformType> transVec;
-
-        while (!m_transformQue.empty())
+        if (!faceTags.isEmpty())
         {
-            transVec.push_back(m_transformQue.front());
-            m_transformQue.pop();
-        }
+            QSize tempS = d->currentImageInfo.dimensions();
+            QMap<QString, QVariant>::const_iterator it;
 
-        // Start transform each face rect
-        int tmpH = tempS.height();
-        int tmpW = tempS.width();
+            // Record the transformation into vector
+            std::vector<EditorWindow::TransformType> transVec;
 
-        for (it = d->m_faceTags.begin(); it != d->m_faceTags.end(); it++)
-        {
-            QRect faceRect = it.value().toRect();
-            tmpH           = tempS.height();
-            tmpW           = tempS.width();
-
-            qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect before:"
-                                         << faceRect.x()     << faceRect.y()
-                                         << faceRect.width() << faceRect.height();
-
-            for (unsigned int i = 0 ; i < transVec.size() ; i++)
+            while (!m_transformQue.empty())
             {
-                EditorWindow::TransformType type = transVec[i];
-
-                switch (type)
-                {
-                case EditorWindow::TransformType::RotateLeft:
-                    faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 1);
-                    std::swap(tmpH, tmpW);
-                    break;
-                case EditorWindow::TransformType::RotateRight:
-                    faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 0);
-                    std::swap(tmpH, tmpW);
-                    break;
-                case EditorWindow::TransformType::FlipHorizontal:
-                    faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 0);
-                    break;
-                case EditorWindow::TransformType::FlipVertical:
-                    faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 1);
-                    break;
-                default:
-                    break;
-                }
-
-                qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect transform:"
-                                             << faceRect.x()     << faceRect.y()
-                                             << faceRect.width() << faceRect.height();
+                transVec.push_back(m_transformQue.front());
+                m_transformQue.pop();
             }
 
-            newFaceTags.insertMulti(it.key(), QVariant(faceRect));
+            for (it = faceTags.begin() ; it != faceTags.end() ; it++)
+            {
+                // Start transform each face rect
+                QRect faceRect = it.value().toRect();
+                int   tmpH     = tempS.height();
+                int   tmpW     = tempS.width();
+
+                qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect before:"
+                                             << faceRect.x()     << faceRect.y()
+                                             << faceRect.width() << faceRect.height();
+
+                for (unsigned int i = 0 ; i < transVec.size() ; i++)
+                {
+                    EditorWindow::TransformType type = transVec[i];
+
+                    switch (type)
+                    {
+                    case EditorWindow::TransformType::RotateLeft:
+                        faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 1);
+                        std::swap(tmpH, tmpW);
+                        break;
+                    case EditorWindow::TransformType::RotateRight:
+                        faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tmpW, tmpH), 0);
+                        std::swap(tmpH, tmpW);
+                        break;
+                    case EditorWindow::TransformType::FlipHorizontal:
+                        faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 0);
+                        break;
+                    case EditorWindow::TransformType::FlipVertical:
+                        faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tmpW, tmpH), 1);
+                        break;
+                    default:
+                        break;
+                    }
+
+                    qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect transform:"
+                                                 << faceRect.x()     << faceRect.y()
+                                                 << faceRect.width() << faceRect.height();
+                }
+
+                d->newFaceTags.insertMulti(it.key(), QVariant(faceRect));
+            }
         }
-
-        hub.setFaceTags(newFaceTags, QSize(tmpW, tmpH));
-        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
-
-        MetadataHub hub2;
-        hub2.load(d->currentImageInfo);
-        DImg image(m_canvas->currentImage());
-        hub2.write(image, MetadataHub::WRITE_ALL);
 
         // Ensure there is a UUID for the source image in the database,
         // even if not in the source image's metadata
@@ -1177,10 +1176,41 @@ void ImageWindow::prepareImageToSave()
         {
             m_canvas->interface()->provideCurrentUuid(d->currentImageInfo.uuid());
         }
-
-        //hub.setFaceTags(faceTags, tempS);
-        //hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
     }
+}
+
+void ImageWindow::saveFaceTagsToImage(const ImageInfo& info)
+{
+    if (!info.isNull() && !d->newFaceTags.isEmpty())
+    {
+        // Delete all old faces
+        FaceTagsEditor().removeAllFaces(info.id());
+
+        QMap<QString, QVariant>::const_iterator it;
+
+        for (it = d->newFaceTags.begin() ; it != d->newFaceTags.end() ; it++)
+        {
+            int tagId = FaceTags::getOrCreateTagForPerson(it.key());
+
+            if (tagId)
+            {
+                TagRegion region(it.value().toRect());
+                FaceTagsEditor().add(info.id(), tagId, region, false);
+            }
+            else
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to create a person tag for name" << it.key();
+            }
+        }
+
+        MetadataHub hub;
+        hub.load(info);
+        QSize tempS = info.dimensions();
+        hub.setFaceTags(d->newFaceTags, tempS);
+        hub.write(info.filePath(), MetadataHub::WRITE_ALL);
+    }
+
+    d->newFaceTags.clear();
 }
 
 VersionManager* ImageWindow::versionManager() const
@@ -1190,109 +1220,39 @@ VersionManager* ImageWindow::versionManager() const
 
 bool ImageWindow::save()
 {
-    // prepareImageToSave();
-    // startingSave(d->currentUrl());
-    // return true;
     prepareImageToSave();
     startingSave(d->currentUrl());
-    //recover the metadata
-    if (!d->currentImageInfo.isNull())
-    {
-        MetadataHub hub;
-        hub.load(d->currentImageInfo);
-        QSize tempS = d->currentImageInfo.dimensions();
-        hub.setFaceTags(d->m_faceTags, tempS);
-        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
-    }
     return true;
 }
 
 bool ImageWindow::saveAs()
 {
-    // prepareImageToSave();
-    // return startingSaveAs(d->currentUrl());
     prepareImageToSave();
-    bool flag = startingSaveAs(d->currentUrl());
-    //recover the metadata
-    if (!d->currentImageInfo.isNull())
-    {
-        MetadataHub hub;
-        hub.load(d->currentImageInfo);
-        QSize tempS = d->currentImageInfo.dimensions();
-        hub.setFaceTags(d->m_faceTags, tempS);
-        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
-    }
-    return flag;
+    return startingSaveAs(d->currentUrl());
 }
 
 bool ImageWindow::saveNewVersion()
 {
     prepareImageToSave();
-    bool flag = startingSaveNewVersion(d->currentUrl());
-    //recover the metadata
-    if (!d->currentImageInfo.isNull())
-    {
-        MetadataHub hub;
-        hub.load(d->currentImageInfo);
-        QSize tempS = d->currentImageInfo.dimensions();
-        hub.setFaceTags(d->m_faceTags, tempS);
-        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
-    }
-    return flag;
+    return startingSaveNewVersion(d->currentUrl());
 }
 
 bool ImageWindow::saveCurrentVersion()
 {
-    // prepareImageToSave();
-    // return startingSaveCurrentVersion(d->currentUrl());
     prepareImageToSave();
-    bool flag = startingSaveNewVersion(d->currentUrl());
-    //recover the metadata
-    if (!d->currentImageInfo.isNull())
-    {
-        MetadataHub hub;
-        hub.load(d->currentImageInfo);
-        QSize tempS = d->currentImageInfo.dimensions();
-        hub.setFaceTags(d->m_faceTags, tempS);
-        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
-    }
-    return flag;
+    return startingSaveCurrentVersion(d->currentUrl());
 }
 
 bool ImageWindow::saveNewVersionAs()
 {
-    // prepareImageToSave();
-    // return startingSaveNewVersionAs(d->currentUrl());
     prepareImageToSave();
-    bool flag = startingSaveNewVersionAs(d->currentUrl());
-    //recover the metadata
-    if (!d->currentImageInfo.isNull())
-    {
-        MetadataHub hub;
-        hub.load(d->currentImageInfo);
-        QSize tempS = d->currentImageInfo.dimensions();
-        hub.setFaceTags(d->m_faceTags, tempS);
-        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
-    }
-    return flag;
+    return startingSaveNewVersionAs(d->currentUrl());
 }
 
 bool ImageWindow::saveNewVersionInFormat(const QString& format)
 {
-    // prepareImageToSave();
-    // return startingSaveNewVersionInFormat(d->currentUrl(), format);
     prepareImageToSave();
-    bool flag = startingSaveNewVersionInFormat(d->currentUrl(), format);
-    //recover the metadata
-    if (!d->currentImageInfo.isNull())
-    {
-        MetadataHub hub;
-        hub.load(d->currentImageInfo);
-        QSize tempS = d->currentImageInfo.dimensions();
-        hub.setFaceTags(d->m_faceTags, tempS);
-        hub.write(d->currentImageInfo.filePath(), MetadataHub::WRITE_ALL);
-    }
-    return flag;
+    return startingSaveNewVersionInFormat(d->currentUrl(), format);
 }
 
 QUrl ImageWindow::saveDestinationUrl()
