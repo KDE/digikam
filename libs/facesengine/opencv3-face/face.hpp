@@ -156,7 +156,7 @@ String name = model->name();
 @endcode
 
  */
-class /*CV_EXPORTS_W*/ DIGIKAM_DATABASE_EXPORT FaceRecognizer : public Algorithm
+class DIGIKAM_DATABASE_EXPORT FaceRecognizer : public Algorithm
 {
 public:
 
