@@ -48,6 +48,7 @@ the use of this software, even if advised of the possibility of such damage.
 */
 
 #include "libopencv.h"
+#include "digikam_export.h"
 #include "opencv2/core.hpp"
 #include "predict_collector.hpp"
 #include <map>
@@ -155,7 +156,7 @@ String name = model->name();
 @endcode
 
  */
-class CV_EXPORTS_W FaceRecognizer : public Algorithm
+class DIGIKAM_DATABASE_EXPORT FaceRecognizer : public Algorithm
 {
 public:
     /** @brief Trains a FaceRecognizer with given data and associated labels.
