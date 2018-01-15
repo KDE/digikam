@@ -2147,7 +2147,7 @@
                                         ADD CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE,
                                         ADD UNIQUE(pid, name(100)),
                                         ENGINE InnoDB;</statement>
-                <statement mode="plain">INSERT IGNORE INTO Tags SELECT * FROM Tags_old;</statement>
+                <statement mode="plain">REPLACE INTO Tags SELECT * FROM Tags_old;</statement>
                 <statement mode="plain">SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';</statement>
                 <statement mode="plain">REPLACE INTO Tags (id, pid, name, icon, iconkde, lft, rgt) VALUES (0, -1, '_Digikam_root_tag_', NULL, NULL,
                                         (SELECT MIN(tl.lft) FROM Tags AS tl),
