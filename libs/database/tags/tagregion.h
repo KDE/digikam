@@ -127,7 +127,7 @@ public:
     /** When images is flipped, rectangles are off-position, ajust them using
      *  image's current size and flip(horizon,vertical supported only)
      */
-    static QRect ajustToFlippedImg(const QRect& region, const QSize& fullSize, int rotation);
+    static QRect ajustToFlippedImg(const QRect& region, const QSize& fullSize, int flip);
 
 protected:
 
