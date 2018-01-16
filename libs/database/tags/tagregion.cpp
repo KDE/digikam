@@ -265,6 +265,31 @@ QRect TagRegion::ajustToRotatedImg(const QRect& region, const QSize &fullSize, i
     return QRect(newx, newy, neww, newh);
 }
 
+QRect TagRegion::ajustToFlippedImg(const QRect& region, const QSize& fullSize, int flip)
+{
+    int x, y, w, h;
+    region.getRect(&x, &y, &w, &h);
+    int newx, newy, neww, newh;
+
+    if (flip == 0) // Flip horizontally
+    {
+       newx = fullSize.width() - x -w;
+       newy = y;
+       neww = w;
+       newh = h;
+
+    }
+    else             // Flip vertically
+    {
+        newx = x;
+        newy = fullSize.height() - y -h;
+        neww = w;
+        newh = h;
+    }
+
+    return QRect(newx, newy, neww, newh);
+}
+
 QDebug operator<<(QDebug dbg, const TagRegion& r)
 {
     QVariant var = r.toVariant();

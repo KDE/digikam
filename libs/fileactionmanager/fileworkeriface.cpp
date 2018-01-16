@@ -314,24 +314,39 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
      */
     QList<FaceTagsIface> facesList = FaceTagsEditor().databaseFaces(info.id());
 
-    QMap<QString, QRect> ajustedFaces;
+    QMultiMap<QString, QRect> ajustedFaces;
 
     foreach(const FaceTagsIface& dface, facesList)
     {
         QString name  = FaceTags::faceNameForTag(dface.tagId());
         QRect oldrect = dface.region().toRect();
+        QRect newRect;
 
-        if (action == MetaEngineRotation::Rotate90)
+        switch (action)
         {
-            QRect newRect      = TagRegion::ajustToRotatedImg(oldrect, info.dimensions(), 0);
-            ajustedFaces[name] = newRect;
+            default:
+            case MetaEngineRotation::NoTransformation:
+                newRect = oldrect;
+                break;
+            case MetaEngineRotation::Rotate90:
+                newRect = TagRegion::ajustToRotatedImg(oldrect, info.dimensions(), 0);
+                break;
+            case MetaEngineRotation::Rotate180:
+                newRect = TagRegion::ajustToFlippedImg(oldrect, info.dimensions(), 0);
+                newRect = TagRegion::ajustToFlippedImg(newRect, info.dimensions(), 1);
+                break;
+            case MetaEngineRotation::Rotate270:
+                newRect = TagRegion::ajustToRotatedImg(oldrect, info.dimensions(), 1);
+                break;
+            case MetaEngineRotation::FlipHorizontal:
+                newRect = TagRegion::ajustToFlippedImg(oldrect, info.dimensions(), 0);
+                break;
+            case MetaEngineRotation::FlipVertical:
+                newRect = TagRegion::ajustToFlippedImg(oldrect, info.dimensions(), 1);
+                break;
         }
 
-        if (action == MetaEngineRotation::Rotate270)
-        {
-            QRect newRect      = TagRegion::ajustToRotatedImg(oldrect, info.dimensions(), 1);
-            ajustedFaces[name] = newRect;
-        }
+        ajustedFaces.insertMulti(name, newRect);
     }
 
     /**
@@ -339,7 +354,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
      */
     FaceTagsEditor().removeAllFaces(info.id());
 
-    QMap<QString,QRect>::ConstIterator it = ajustedFaces.constBegin();
+    QMap<QString, QRect>::ConstIterator it = ajustedFaces.constBegin();
 
     for (; it != ajustedFaces.constEnd(); ++it)
     {
