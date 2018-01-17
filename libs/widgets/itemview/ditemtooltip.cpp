@@ -52,33 +52,46 @@ namespace Digikam
 DToolTipStyleSheet::DToolTipStyleSheet(const QFont& font)
     : maxStringLength(30)
 {
-    unavailable = i18n("unavailable");
+    unavailable      = i18n("unavailable");
+
+    QString fontSize = (font.pointSize() == -1) ? QString::fromUtf8("font-size: %1px;").arg(font.pixelSize())
+                                                : QString::fromUtf8("font-size: %1pt;").arg(font.pointSize());
 
     tipHeader   = QLatin1String("<qt><table cellspacing=\"0\" cellpadding=\"0\" width=\"250\" border=\"0\">");
     tipFooter   = QLatin1String("</table></qt>");
 
     headBeg     = QString::fromLatin1("<tr bgcolor=\"%1\"><td colspan=\"2\">"
-                                      "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><center><b>")
+                                      "<nobr><p style=\"color:%2; font-family:%3; %4\"><center><b>")
                   .arg(qApp->palette().color(QPalette::Base).name())
                   .arg(qApp->palette().color(QPalette::Text).name())
-                  .arg(font.family());
-    headEnd     = QLatin1String("</b></center></font></nobr></td></tr>");
+                  .arg(font.family())
+                  .arg(fontSize);
 
-    cellBeg     = QString::fromLatin1("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                  .arg(qApp->palette().color(QPalette::ToolTipText).name())
-                  .arg(font.family());
-    cellMid     = QString::fromLatin1("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                  .arg(qApp->palette().color(QPalette::ToolTipText).name())
-                  .arg(font.family());
-    cellEnd     = QLatin1String("</font></nobr></td></tr>");
+    headEnd     = QLatin1String("</b></center></p></nobr></td></tr>");
 
-    cellSpecBeg = QString::fromLatin1("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
+    cellBeg     = QString::fromLatin1("<tr><td><nobr><p style=\"color:%1; font-family:%2; %3\">")
                   .arg(qApp->palette().color(QPalette::ToolTipText).name())
-                  .arg(font.family());
-    cellSpecMid = QString::fromLatin1("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\"><i>")
+                  .arg(font.family())
+                  .arg(fontSize);
+
+    cellMid     = QString::fromLatin1("</p></nobr></td><td><nobr><p style=\"color:%1; font-family:%2; %3\">")
                   .arg(qApp->palette().color(QPalette::ToolTipText).name())
-                  .arg(font.family());
-    cellSpecEnd = QLatin1String("</i></font></nobr></td></tr>");
+                  .arg(font.family())
+                  .arg(fontSize);
+
+    cellEnd     = QLatin1String("</p></nobr></td></tr>");
+
+    cellSpecBeg = QString::fromLatin1("<tr><td><nobr><p style=\"color:%1; font-family:%2; %3\">")
+                  .arg(qApp->palette().color(QPalette::ToolTipText).name())
+                  .arg(font.family())
+                  .arg(fontSize);
+
+    cellSpecMid = QString::fromLatin1("</p></nobr></td><td><nobr><p style=\"color:%1; font-family:%2; %3\"><i>")
+                  .arg(qApp->palette().color(QPalette::ToolTipText).name())
+                  .arg(font.family())
+                  .arg(fontSize);
+
+    cellSpecEnd = QLatin1String("</i></p></nobr></td></tr>");
 }
 
 QString DToolTipStyleSheet::breakString(const QString& input) const
