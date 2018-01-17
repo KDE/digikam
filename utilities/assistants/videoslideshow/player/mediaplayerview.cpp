@@ -166,7 +166,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->playAction          = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")), i18nc("pause/play video", "Pause/Play"), this);
 
     d->errorView           = new QFrame(this);
-    QLabel* const errorMsg = new QLabel(i18n("An error has occurred with the media player...."), this);
+    QLabel* const errorMsg = new QLabel(i18n("An error has occurred with the media player..."), this);
 
     errorMsg->setAlignment(Qt::AlignCenter);
     d->errorView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
