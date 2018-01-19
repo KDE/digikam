@@ -2051,6 +2051,7 @@
                 <statement mode="plain">CALL drop_foreign_key('TagProperties', 'TagProperties_Tags');</statement>
                 <statement mode="plain">CALL drop_foreign_key('ImageTagProperties', 'ImageTagProperties_Images');</statement>
                 <statement mode="plain">CALL drop_foreign_key('ImageTagProperties', 'ImageTagProperties_Tags');</statement>
+
                 <statement mode="plain">ALTER TABLE AlbumRoots MODIFY COLUMN label LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
                 <statement mode="plain">ALTER TABLE AlbumRoots MODIFY COLUMN identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
                 <statement mode="plain">ALTER TABLE AlbumRoots MODIFY COLUMN specificPath LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
@@ -2089,6 +2090,26 @@
                 <statement mode="plain">ALTER TABLE TagProperties MODIFY COLUMN value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
                 <statement mode="plain">ALTER TABLE ImageTagProperties MODIFY COLUMN property TEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
                 <statement mode="plain">ALTER TABLE ImageTagProperties MODIFY COLUMN value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+
+                <statement mode="plain">DROP TABLE IF EXISTS ImageTagProperties_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS TagProperties_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS ImageRelations_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS ImageHistory_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS Settings_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS DownloadHistory_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS ImageProperties_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS ImageTags_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS Tags_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS ImageCopyright_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS ImageComments_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS ImagePositions_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS VideoMetadata_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS ImageMetadata_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS ImageInformation_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS ImageHaarMatrix_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS Images_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS Albums_old;</statement>
+                <statement mode="plain">DROP TABLE IF EXISTS AlbumRoots_old;</statement>
 
                 <statement mode="plain">RENAME TABLE AlbumRoots TO AlbumRoots_old;</statement>
                 <statement mode="plain">CREATE TABLE AlbumRoots LIKE AlbumRoots_old;</statement>
@@ -2168,6 +2189,7 @@
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageCopyright SELECT * FROM ImageCopyright_old;</statement>
 
+                <statement mode="plain">SET FOREIGN_KEY_CHECKS=0;</statement>
                 <statement mode="plain">RENAME TABLE Tags TO Tags_old;</statement>
                 <statement mode="plain">CREATE TABLE Tags LIKE Tags_old;</statement>
                 <statement mode="plain">ALTER TABLE Tags
@@ -2181,6 +2203,7 @@
                                         (SELECT MAX(tr.rgt) FROM Tags AS tr));</statement>
                 <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
                 <statement mode="plain">UPDATE Tags SET icon = NULL WHERE icon = 0;</statement>
+                <statement mode="plain">SET FOREIGN_KEY_CHECKS=1;</statement>
 
                 <statement mode="plain">RENAME TABLE ImageTags TO ImageTags_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageTags LIKE ImageTags_old;</statement>
