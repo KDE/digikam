@@ -2141,6 +2141,7 @@
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageCopyright SELECT * FROM ImageCopyright_old;</statement>
 
+                <statement mode="plain">SET FOREIGN_KEY_CHECKS=0;</statement>
                 <statement mode="plain">RENAME TABLE Tags TO Tags_old;</statement>
                 <statement mode="plain">CREATE TABLE Tags LIKE Tags_old;</statement>
                 <statement mode="plain">ALTER TABLE Tags
@@ -2154,6 +2155,7 @@
                                         (SELECT MAX(tr.rgt) FROM Tags AS tr));</statement>
                 <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
                 <statement mode="plain">UPDATE Tags SET icon = NULL WHERE icon = 0;</statement>
+                <statement mode="plain">SET FOREIGN_KEY_CHECKS=1;</statement>
 
                 <statement mode="plain">RENAME TABLE ImageTags TO ImageTags_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageTags LIKE ImageTags_old;</statement>
