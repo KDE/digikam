@@ -64,6 +64,7 @@ public:
         showImageDimBox(0),
         showImageARBox(0),
         showPhotoMakeBox(0),
+        showPhotoLensBox(0),
         showPhotoDateBox(0),
         showPhotoFocalBox(0),
         showPhotoExpoBox(0),
@@ -123,6 +124,7 @@ public:
     QCheckBox*   showImageARBox;
 
     QCheckBox*   showPhotoMakeBox;
+    QCheckBox*   showPhotoLensBox;
     QCheckBox*   showPhotoDateBox;
     QCheckBox*   showPhotoFocalBox;
     QCheckBox*   showPhotoExpoBox;
@@ -240,6 +242,10 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
                                            "camera with which the image has been taken."));
 
+    d->showPhotoLensBox      = new QCheckBox(i18n("Camera lens model"), d->photoSettingBox);
+    d->showPhotoLensBox->setWhatsThis(i18n("Set this option to display the lens model with"
+                                           "which the image was taken."));
+
     d->showPhotoDateBox      = new QCheckBox(i18n("Camera date"), d->photoSettingBox);
     d->showPhotoDateBox->setWhatsThis(i18n("Set this option to display the date when the image was taken."));
 
@@ -264,12 +270,13 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
                                          "used to take the image."));
 
     grid3->addWidget(d->showPhotoMakeBox,  0, 0, 1, 1);
-    grid3->addWidget(d->showPhotoDateBox,  1, 0, 1, 1);
-    grid3->addWidget(d->showPhotoFocalBox, 2, 0, 1, 1);
-    grid3->addWidget(d->showPhotoExpoBox,  3, 0, 1, 1);
-    grid3->addWidget(d->showPhotoModeBox,  0, 1, 1, 1);
-    grid3->addWidget(d->showPhotoFlashBox, 1, 1, 1, 1);
-    grid3->addWidget(d->showPhotoWbBox,    2, 1, 1, 1);
+    grid3->addWidget(d->showPhotoLensBox,  1, 0, 1, 1);
+    grid3->addWidget(d->showPhotoDateBox,  2, 0, 1, 1);
+    grid3->addWidget(d->showPhotoFocalBox, 3, 0, 1, 1);
+    grid3->addWidget(d->showPhotoExpoBox,  0, 1, 1, 1);
+    grid3->addWidget(d->showPhotoModeBox,  1, 1, 1, 1);
+    grid3->addWidget(d->showPhotoFlashBox, 2, 1, 1, 1);
+    grid3->addWidget(d->showPhotoWbBox,    3, 1, 1, 1);
     grid3->setContentsMargins(spacing, spacing, spacing, spacing);
     grid3->setSpacing(0);
 
@@ -408,7 +415,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showItemDimensionsBox->setWhatsThis(i18n("Set this option to display the item dimensions."));
 
     DLineWidget* const line  = new DLineWidget(Qt::Horizontal, d->photoSettingBox);
-    QLabel* const label      = new QLabel(i18n("Note: these settings require \"Use File Metadata\" option from Camera Setup Behavior page."), d->photoSettingBox);
+    QLabel* const label      = new QLabel(i18n("Note: these settings require \"Use File Metadata\" option "
+                                               "from Camera Setup Behavior page."), d->photoSettingBox);
 
     d->showItemPhotoMakeBox  = new QCheckBox(i18n("Camera make and model"), d->photoSettingBox);
     d->showItemPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
@@ -513,6 +521,7 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowImageDim(d->showImageDimBox->isChecked());
 
     settings->setToolTipsShowPhotoMake(d->showPhotoMakeBox->isChecked());
+    settings->setToolTipsShowPhotoLens(d->showPhotoLensBox->isChecked());
     settings->setToolTipsShowPhotoDate(d->showPhotoDateBox->isChecked());
     settings->setToolTipsShowPhotoFocal(d->showPhotoFocalBox->isChecked());
     settings->setToolTipsShowPhotoExpo(d->showPhotoExpoBox->isChecked());
@@ -588,6 +597,7 @@ void SetupToolTip::readSettings()
     d->showImageDimBox->setChecked(settings->getToolTipsShowImageDim());
 
     d->showPhotoMakeBox->setChecked(settings->getToolTipsShowPhotoMake());
+    d->showPhotoLensBox->setChecked(settings->getToolTipsShowPhotoLens());
     d->showPhotoDateBox->setChecked(settings->getToolTipsShowPhotoDate());
     d->showPhotoFocalBox->setChecked(settings->getToolTipsShowPhotoFocal());
     d->showPhotoExpoBox->setChecked(settings->getToolTipsShowPhotoExpo());

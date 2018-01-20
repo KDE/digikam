@@ -95,6 +95,7 @@ const QString ApplicationSettings::Private::configToolTipsShowImageTypeEntry(QLa
 const QString ApplicationSettings::Private::configToolTipsShowImageDimEntry(QLatin1String("ToolTips Show Image Dim"));
 const QString ApplicationSettings::Private::configToolTipsShowImageAREntry(QLatin1String("ToolTips Show Image AR"));
 const QString ApplicationSettings::Private::configToolTipsShowPhotoMakeEntry(QLatin1String("ToolTips Show Photo Make"));
+const QString ApplicationSettings::Private::configToolTipsShowPhotoLensEntry(QLatin1String("ToolTips Show Photo Lens"));
 const QString ApplicationSettings::Private::configToolTipsShowPhotoDateEntry(QLatin1String("ToolTips Show Photo Date"));
 const QString ApplicationSettings::Private::configToolTipsShowPhotoFocalEntry(QLatin1String("ToolTips Show Photo Focal"));
 const QString ApplicationSettings::Private::configToolTipsShowPhotoExpoEntry(QLatin1String("ToolTips Show Photo Expo"));
@@ -198,6 +199,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       tooltipShowImageDim(false),
       tooltipShowImageAR(false),
       tooltipShowPhotoMake(false),
+      tooltipShowPhotoLens(false),
       tooltipShowPhotoDate(false),
       tooltipShowPhotoFocal(false),
       tooltipShowPhotoExpo(false),
@@ -327,6 +329,7 @@ void ApplicationSettings::Private::init()
     tooltipShowImageDim                  = true;
     tooltipShowImageAR                   = true;
     tooltipShowPhotoMake                 = true;
+    tooltipShowPhotoLens                 = true;
     tooltipShowPhotoDate                 = true;
     tooltipShowPhotoFocal                = true;
     tooltipShowPhotoExpo                 = true;
