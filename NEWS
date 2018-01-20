@@ -14,4 +14,5 @@ BUGFIXES FROM BUGZILLA:
 004 ==> 389042 - Auto-rotation/flip Images delete face tags.
 005 ==> 337243 - Tool-Tips ignoring custom font size setting.
 006 ==> 388320 - Selecting print layout does not stay selected.
-007 ==> 
+007 ==> 389246 - Single click confirmation of suggested face tag.
+008 ==> 
