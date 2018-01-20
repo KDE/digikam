@@ -4,6 +4,7 @@ digiKam 5.9.0 - Release date: 2018-xx-xx
 NEW FEATURES:
 
 Image Editor : New clone tool to replace old CImg in-painting tool.
+General      : Libraw updated to last 0.18.7.
 
 BUGFIXES FROM BUGZILLA:
 
