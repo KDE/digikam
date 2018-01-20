@@ -1033,8 +1033,9 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
 void AdvPrintPhotoPage::slotPageSetup()
 {
     delete d->pageSetupDlg;
-    d->pageSetupDlg = new QPageSetupDialog(d->printer, this);
-    int ret         = d->pageSetupDlg->exec();
+    QString lastSize = d->photoUi->ListPhotoSizes->currentItem()->text();
+    d->pageSetupDlg  = new QPageSetupDialog(d->printer, this);
+    int ret          = d->pageSetupDlg->exec();
 
     if (ret == QDialog::Accepted)
     {
@@ -1088,8 +1089,7 @@ void AdvPrintPhotoPage::slotPageSetup()
     else
     {
         QList<QListWidgetItem*> list =
-            d->photoUi->ListPhotoSizes->findItems(d->settings->savedPhotoSize,
-                                                  Qt::MatchExactly);
+            d->photoUi->ListPhotoSizes->findItems(lastSize, Qt::MatchExactly);
 
         if (list.count())
             d->photoUi->ListPhotoSizes->setCurrentItem(list[0]);

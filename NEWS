@@ -7,5 +7,10 @@ Image Editor : New clone tool to replace old CImg in-painting tool.
 
 BUGFIXES FROM BUGZILLA:
 
-001 ==> 
-
+001 ==> 388977 - Error during upgrading core database schema from v8 to v9.
+002 ==> 388867 - problem migrating databaseschema from 8 to 9.
+003 ==> 388824 - UpdateSchemaFromV7ToV9 fails due to foreign key contraint in 5.8.0-01.
+004 ==> 389042 - Auto-rotation/flip Images delete face tags.
+005 ==> 337243 - Tool-Tips ignoring custom font size setting.
+006 ==> 388320 - Selecting print layout does not stay selected.
+007 ==> 
