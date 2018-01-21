@@ -173,7 +173,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             if (settings->getToolTipsShowPhotoLens())
             {
                 str          = photoInfo.lens.isEmpty() ? cnt.unavailable : photoInfo.lens;
-                QString lens = i18n("Lens:");
+                QString lens = i18nc("camera lens", "Lens:");
 
                 if (str.length() > cnt.maxStringLength)
                 {

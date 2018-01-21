@@ -243,7 +243,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
                                            "camera with which the image has been taken."));
 
     d->showPhotoLensBox      = new QCheckBox(i18n("Camera lens model"), d->photoSettingBox);
-    d->showPhotoLensBox->setWhatsThis(i18n("Set this option to display the lens model with"
+    d->showPhotoLensBox->setWhatsThis(i18n("Set this option to display the lens model with "
                                            "which the image was taken."));
 
     d->showPhotoDateBox      = new QCheckBox(i18n("Camera date"), d->photoSettingBox);
