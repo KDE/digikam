@@ -50,9 +50,9 @@ class SettingsWidget::Private
 {
 public:
 
-    Private(QWidget* const widget, DInfoInterface* const iface, const QString& pluginName)
+    Private(QWidget* const widget, const QString& toolName)
     {
-        m_pluginName         = pluginName;
+        m_toolName           = toolName;
         mainLayout           = new QHBoxLayout(widget);
         m_imgList            = new DImagesList(widget);
         settingsScrollArea   = new QScrollArea(widget);
@@ -71,9 +71,6 @@ public:
         m_sizeBox            = new QGroupBox(i18n("Max Dimension"), m_settingsBox);
         m_sizeBoxLayout      = new QVBoxLayout(m_sizeBox);
         m_dlDimensionCoB     = new QComboBox(m_sizeBox);
-//        m_uploadBox          = new QGroupBox(i18n("Destination"), m_settingsBox);
-//FIXME        m_uploadWidget       = iface->uploadWidget(m_uploadBox);
-//        m_uploadBoxLayout    = new QVBoxLayout(m_uploadBox);
         m_optionsBox         = new QGroupBox(i18n("Options"),m_settingsBox);
         m_optionsBoxLayout   = new QGridLayout(m_optionsBox);
         m_originalChB        = new QCheckBox(m_optionsBox);
@@ -85,8 +82,7 @@ public:
     }
 
     DImagesList*                   m_imgList;
-//FIXME    UploadWidget*                  m_uploadWidget;
-    QString                        m_pluginName;
+    QString                        m_toolName;
 
     QLabel*                        m_headerLbl;
     QLabel*                        m_userNameDisplayLbl;
@@ -113,10 +109,7 @@ public:
 
     QGroupBox*                     m_optionsBox;
     QGridLayout*                   m_optionsBoxLayout;
-/*
-    QGroupBox*                     m_uploadBox;
-    QVBoxLayout*                   m_uploadBoxLayout;
-*/
+
     QGroupBox*                     m_sizeBox;
     QVBoxLayout*                   m_sizeBoxLayout;
 
@@ -126,12 +119,11 @@ public:
     DProgressWdg*                  m_progressBar;
 };
 
-SettingsWidget::SettingsWidget(QWidget* const parent, DInfoInterface* const iface, const QString& pluginName)
+SettingsWidget::SettingsWidget(QWidget* const parent, const QString& toolName)
     : QWidget(parent),
-      d(new Private(this, iface, pluginName))
+      d(new Private(this, toolName))
 {
-    d->m_pluginName = pluginName;
-    setObjectName(d->m_pluginName + QString::fromLatin1(" Widget"));
+    setObjectName(d->m_toolName + QString::fromLatin1(" Widget"));
 
     //----------------------------------------------------------
 
@@ -139,7 +131,7 @@ SettingsWidget::SettingsWidget(QWidget* const parent, DInfoInterface* const ifac
 
     d->m_imgList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
     d->m_imgList->setAllowRAW(true);
-    d->m_imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to your %1 account.", d->m_pluginName));
+    d->m_imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to your %1 account.", d->m_toolName));
 
     d->settingsScrollArea->setMinimumSize(400,500);
     d->settingsScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -147,18 +139,18 @@ SettingsWidget::SettingsWidget(QWidget* const parent, DInfoInterface* const ifac
     d->settingsScrollArea->setWidgetResizable(true);
     d->settingsScrollArea->setFrameShadow(QFrame::Plain);
 
-    d->m_headerLbl->setWhatsThis(i18n("This is a clickable link to open %1 in a browser.", d->m_pluginName));
+    d->m_headerLbl->setWhatsThis(i18n("This is a clickable link to open %1 in a browser.", d->m_toolName));
     d->m_headerLbl->setOpenExternalLinks(true);
     d->m_headerLbl->setFocusPolicy(Qt::NoFocus);
 
     //------------------------------------------------------------
 
-    d->m_accountBox->setWhatsThis(i18n("This is the %1 account that is currently logged in.", d->m_pluginName));
+    d->m_accountBox->setWhatsThis(i18n("This is the %1 account that is currently logged in.", d->m_toolName));
 
     QLabel* const userNameLbl = new QLabel(i18nc("account settings","Name:"), d->m_accountBox);
     d->m_changeUserBtn->setText(i18n("Change Account"));
     d->m_changeUserBtn->setIcon(QIcon::fromTheme(QString::fromLatin1("system-switch-user")).pixmap(16));
-    d->m_changeUserBtn->setToolTip(i18n("Change %1 account for transfer", d->m_pluginName));
+    d->m_changeUserBtn->setToolTip(i18n("Change %1 account for transfer", d->m_toolName));
 
     d->m_accountBoxLayout->addWidget(userNameLbl,             0, 0, 1, 2);
     d->m_accountBoxLayout->addWidget(d->m_userNameDisplayLbl, 0, 2, 1, 2);
@@ -168,7 +160,7 @@ SettingsWidget::SettingsWidget(QWidget* const parent, DInfoInterface* const ifac
 
     //-------------------------------------------------------------
 
-    d->m_albBox->setWhatsThis(i18n("This is the %1 folder to/from which selected photos will be uploaded/downloaded.", d->m_pluginName));
+    d->m_albBox->setWhatsThis(i18n("This is the %1 folder to/from which selected photos will be uploaded/downloaded.", d->m_toolName));
 
     QLabel* const albLbl = new QLabel(i18n("Album:"), d->m_albBox);
 
@@ -176,7 +168,7 @@ SettingsWidget::SettingsWidget(QWidget* const parent, DInfoInterface* const ifac
 
     d->m_newAlbumBtn->setText(i18n("New Album"));
     d->m_newAlbumBtn->setIcon(QIcon::fromTheme(QString::fromLatin1("list-add")).pixmap(16));
-    d->m_newAlbumBtn->setToolTip(i18n("Create new %1 folder", d->m_pluginName));
+    d->m_newAlbumBtn->setToolTip(i18n("Create new %1 folder", d->m_toolName));
 
     d->m_reloadAlbumsBtn->setText(i18nc("album list","Reload"));
     d->m_reloadAlbumsBtn->setIcon(QIcon::fromTheme(QString::fromLatin1("view-refresh")).pixmap(16));
@@ -199,11 +191,6 @@ SettingsWidget::SettingsWidget(QWidget* const parent, DInfoInterface* const ifac
     d->m_dlDimensionCoB->setCurrentIndex(0);
     d->m_sizeBoxLayout->addWidget(d->m_dlDimensionCoB);
 
-    // ------------------------------------------------------------------------
-/*
-    d->m_uploadBox->setWhatsThis(i18n("This is the location where %1 images will be downloaded.", d->m_pluginName));
-    d->m_uploadBoxLayout->addWidget(d->m_uploadWidget);
-*/
     //-----------------------------------------------------------
 
     d->m_optionsBox->setWhatsThis(i18n("These are the options that would be applied to photos before upload."));
@@ -251,7 +238,6 @@ SettingsWidget::SettingsWidget(QWidget* const parent, DInfoInterface* const ifac
     d->m_settingsBoxLayout->addWidget(d->m_accountBox);
     d->m_settingsBoxLayout->addWidget(d->m_albBox);
     d->m_settingsBoxLayout->addWidget(d->m_sizeBox);
-//    d->m_settingsBoxLayout->addWidget(d->m_uploadBox);
     d->m_settingsBoxLayout->addWidget(d->m_optionsBox);
     d->m_settingsBoxLayout->addWidget(d->m_progressBar);
     d->m_settingsBoxLayout->setSpacing(spacing);
@@ -277,12 +263,7 @@ SettingsWidget::~SettingsWidget()
 {
     delete d;
 }
-/*
-QString SettingsWidget::getDestinationPath() const
-{
-    return d->m_uploadWidget->selectedImageCollection().uploadUrl().toLocalFile();
-}
-*/
+
 DImagesList* SettingsWidget::imagesList() const
 {
     return d->m_imgList;
@@ -343,17 +324,7 @@ QGridLayout* SettingsWidget::getOptionsBoxLayout() const
 {
     return d->m_optionsBoxLayout;
 }
-/*
-QGroupBox* SettingsWidget::getUploadBox() const
-{
-    return d->m_uploadBox;
-}
 
-QVBoxLayout* SettingsWidget::getUploadBoxLayout() const
-{
-    return d->m_uploadBoxLayout;
-}
-*/
 QGroupBox* SettingsWidget::getSizeBox() const
 {
     return d->m_sizeBox;

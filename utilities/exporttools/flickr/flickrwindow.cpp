@@ -87,7 +87,7 @@ FlickrWindow::FlickrWindow(QWidget* const /*parent*/, const QString& serviceName
     m_select                    = dlg;
     m_uploadCount               = 0;
     m_uploadTotal               = 0;
-    m_widget                    = new FlickrWidget(this, iface, serviceName);
+    m_widget                    = new FlickrWidget(this, serviceName);
     m_albumDlg                  = new FlickrNewAlbum(this, QString::fromLatin1("Flickr"));
     m_albumsListComboBox        = m_widget->getAlbumsCoB();
     m_newAlbumBtn               = m_widget->getNewAlbmBtn();
