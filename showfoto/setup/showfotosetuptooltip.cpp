@@ -59,6 +59,7 @@ public:
         showPhotoFlashBox(0),
         showPhotoFocalBox(0),
         showPhotoMakeBox(0),
+        showPhotoLensBox(0),
         showPhotoModeBox(0),
         showPhotoWbBox(0),
         showToolTipsBox(0),
@@ -78,6 +79,7 @@ public:
     QCheckBox*            showPhotoFlashBox;
     QCheckBox*            showPhotoFocalBox;
     QCheckBox*            showPhotoMakeBox;
+    QCheckBox*            showPhotoLensBox;
     QCheckBox*            showPhotoModeBox;
     QCheckBox*            showPhotoWbBox;
     QCheckBox*            showToolTipsBox;
@@ -145,6 +147,10 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showPhotoMakeBox->setWhatsThis( i18n("Set this option to display the make and model of the "
                                             "camera with which the image has been taken."));
 
+    d->showPhotoLensBox = new QCheckBox(i18n("Camera lens model"), d->photoSettingBox);
+    d->showPhotoLensBox->setWhatsThis(i18n("Set this option to display the lens model with "
+                                           "which the image was taken."));
+
     d->showPhotoDateBox = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
     d->showPhotoDateBox->setWhatsThis( i18n("Set this option to display the date when the image was taken."));
 
@@ -169,6 +175,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
                                           "used to take the image."));
 
     gLayout2->addWidget(d->showPhotoMakeBox);
+    gLayout2->addWidget(d->showPhotoLensBox);
     gLayout2->addWidget(d->showPhotoDateBox);
     gLayout2->addWidget(d->showPhotoFocalBox);
     gLayout2->addWidget(d->showPhotoExpoBox);
@@ -224,6 +231,7 @@ void SetupToolTip::readSettings()
     d->showImageDimBox->setChecked(d->settings->getShowFileDim());
 
     d->showPhotoMakeBox->setChecked(d->settings->getShowPhotoMake());
+    d->showPhotoLensBox->setChecked(d->settings->getShowPhotoLens());
     d->showPhotoDateBox->setChecked(d->settings->getShowPhotoDate());
     d->showPhotoFocalBox->setChecked(d->settings->getShowPhotoFocal());
     d->showPhotoExpoBox->setChecked(d->settings->getShowPhotoExpo());
@@ -247,6 +255,7 @@ void SetupToolTip::applySettings()
     d->settings->setShowFileDim(d->showImageDimBox->isChecked());
 
     d->settings->setShowPhotoMake(d->showPhotoMakeBox->isChecked());
+    d->settings->setShowPhotoLens(d->showPhotoLensBox->isChecked());
     d->settings->setShowPhotoDate(d->showPhotoDateBox->isChecked());
     d->settings->setShowPhotoFocal(d->showPhotoFocalBox->isChecked());
     d->settings->setShowPhotoExpo(d->showPhotoExpoBox->isChecked());

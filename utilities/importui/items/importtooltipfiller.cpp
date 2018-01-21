@@ -115,6 +115,7 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
     // NOTE: these info require \"Use File Metadata\" option from Camera Setup Behavior page.
 
     if (settings->getToolTipsShowPhotoMake()  ||
+        settings->getToolTipsShowPhotoLens()  ||
         settings->getToolTipsShowPhotoFocal() ||
         settings->getToolTipsShowPhotoExpo()  ||
         settings->getToolTipsShowPhotoFlash() ||
