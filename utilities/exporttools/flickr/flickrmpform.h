@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FLICKR_FlickrMPForm_H
-#define FLICKR_FlickrMPForm_H
+#ifndef FLICKR_MPFORM_H
+#define FLICKR_MPFORM_H
 
 // Qt includes
 
@@ -37,7 +37,7 @@ class FlickrMPForm
 
 public:
 
-    FlickrMPForm();
+    explicit FlickrMPForm();
     ~FlickrMPForm();
 
     void finish();
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FLICKR_FlickrMPForm_H
+#endif // FLICKR_MPFORM_H

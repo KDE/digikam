@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef SELECTUSERDLG_H
-#define SELECTUSERDLG_H
+#ifndef SELECT_USER_DLG_H
+#define SELECT_USER_DLG_H
 
 // Qt includes
 
@@ -39,7 +39,7 @@ class SelectUserDlg : public QDialog
     Q_OBJECT
 public:
 
-    SelectUserDlg(QWidget* const parent, const QString& serviceName);
+    explicit SelectUserDlg(QWidget* const parent, const QString& serviceName);
     ~SelectUserDlg();
 
     void           reactivate();
@@ -63,4 +63,4 @@ protected Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // SELECTUSERDLG_H
+#endif // SELECT_USER_DLG_H

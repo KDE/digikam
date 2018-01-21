@@ -173,4 +173,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FLICKRTALKER_H */
+#endif // FLICKR_TALKER_H

@@ -66,12 +66,6 @@ Q_SIGNALS:
 
 private:
 
-    QPushButton* helpButton() const;
-
-private:
-
-    friend class KPDialogBase;
-
     class Private;
     Private* const d;
 };

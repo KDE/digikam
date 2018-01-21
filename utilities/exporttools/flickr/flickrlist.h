@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef FLICKRLIST_H
-#define FLICKRLIST_H
+#ifndef FLICKR_LIST_H
+#define FLICKR_LIST_H
 
 // Qt includes
 
@@ -132,9 +132,9 @@ class FlickrListViewItem : public DImagesListViewItem
 
 public:
 
-    FlickrListViewItem(DImagesListView* const view, const QUrl& url,
-                       bool, bool, bool, bool,
-                       FlickrList::SafetyLevel, FlickrList::ContentType);
+    explicit FlickrListViewItem(DImagesListView* const view, const QUrl& url,
+                                bool, bool, bool, bool,
+                                FlickrList::SafetyLevel, FlickrList::ContentType);
     ~FlickrListViewItem();
 
     void setPublic(bool);
@@ -177,4 +177,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FLICKRLIST_H
+#endif // FLICKR_LIST_H

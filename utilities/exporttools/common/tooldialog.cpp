@@ -131,11 +131,6 @@ QPushButton* ToolDialog::startButton() const
     return d->startButton;
 }
 
-QPushButton* ToolDialog::helpButton() const
-{
-    return d->buttonBox->button(QDialogButtonBox::Help);
-}
-
 void ToolDialog::addButton(QAbstractButton* button, QDialogButtonBox::ButtonRole role)
 {
     d->buttonBox->addButton(button, role);

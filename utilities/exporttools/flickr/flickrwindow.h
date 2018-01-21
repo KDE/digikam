@@ -155,7 +155,7 @@ private:
     FlickrList*                            m_imglst;
     SelectUserDlg*                         m_select;
     FlickrNewAlbum*                        m_albumDlg;
-    
+
     DInfoInterface*                        m_iface;
 };
 
