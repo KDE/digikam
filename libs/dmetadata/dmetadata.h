@@ -257,6 +257,10 @@ public:
      */
     bool removeXmpSubCategories(const QStringList& categoriesToRemove, bool setProgramName=true);
 
+    bool removeExifTags(const QStringList& tagFilters);
+    bool removeIptcTags(const QStringList& tagFilters);
+    bool removeXmpTags(const QStringList& tagFilters);
+
 private:
 
     bool setProgramId(bool on=true) const;

@@ -3394,4 +3394,49 @@ QString DMetadata::getExifTagStringFromTagsList(const QStringList& tagsList) con
     return QString();
 }
 
+bool DMetadata::removeExifTags(const QStringList& tagFilters)
+{
+    MetaDataMap m = getExifTagsDataList(tagFilters);
+
+    if (m.isEmpty())
+        return false;
+
+    for (MetaDataMap::iterator it = m.begin(); it != m.end(); ++it)
+    {
+        removeExifTag(it.key().toLatin1().constData());
+    }
+
+    return true;
+}
+
+bool DMetadata::removeIptcTags(const QStringList& tagFilters)
+{
+    MetaDataMap m = getIptcTagsDataList(tagFilters);
+
+    if (m.isEmpty())
+        return false;
+
+    for (MetaDataMap::iterator it = m.begin(); it != m.end(); ++it)
+    {
+        removeIptcTag(it.key().toLatin1().constData());
+    }
+
+    return true;
+}
+
+bool DMetadata::removeXmpTags(const QStringList& tagFilters)
+{
+    MetaDataMap m = getXmpTagsDataList(tagFilters);
+
+    if (m.isEmpty())
+        return false;
+
+    for (MetaDataMap::iterator it = m.begin(); it != m.end(); ++it)
+    {
+        removeXmpTag(it.key().toLatin1().constData());
+    }
+
+    return true;
+}
+
 }  // namespace Digikam

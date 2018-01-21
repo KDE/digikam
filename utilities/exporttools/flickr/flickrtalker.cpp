@@ -513,12 +513,12 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
                     // NOTE: see bug #153207: Flickr use IPTC keywords to create Tags in web interface
                     //       As IPTC do not support UTF-8, we need to remove it.
                     //       This function call remove all Application2 Tags.
-                    // FIXME meta.removeIptcTags(QStringList() << QLatin1String("Application2"));
+                    meta.removeIptcTags(QStringList() << QLatin1String("Application2"));
 
                     // NOTE: see bug # 384260: Flickr use Xmp.dc.subject to create Tags
                     //       in web interface, we need to remove it.
                     //       This function call remove all Dublin Core Tags.
-                    // FIXME meta.removeXmpTags(QStringList() << QLatin1String("dc"));
+                    meta.removeXmpTags(QStringList() << QLatin1String("dc"));
 
                     meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
                     meta.save(path);
