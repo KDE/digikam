@@ -49,6 +49,7 @@
 #include "flickrwindow.h"
 #include "digikam_debug.h"
 #include "digikam_version.h"
+#include "previewloadthread.h"
 
 namespace Digikam
 {
@@ -471,7 +472,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
 
         if (m_iface)
         {
-            // FIXME image = m_iface->preview(QUrl::fromLocalFile(photoPath));
+            image = PreviewLoadThread::loadHighQualitySynchronously(photoPath).copyQImage();
         }
 
         if (image.isNull())
