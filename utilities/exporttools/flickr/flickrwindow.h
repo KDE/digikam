@@ -41,6 +41,7 @@
 #include "comboboxintermediate.h"
 #include "dinfointerface.h"
 #include "tooldialog.h"
+#include "digikam_export.h"
 
 class QProgressDialog;
 class QPushButton;
@@ -59,13 +60,15 @@ class GPhoto;
 class GAlbum;
 class FlickrNewAlbum;
 
-class FlickrWindow : public ToolDialog
+class DIGIKAM_EXPORT FlickrWindow : public ToolDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit FlickrWindow(QWidget* const parent, const QString& serviceName, SelectUserDlg* const dlg,
+    explicit FlickrWindow(QWidget* const parent,
+                          const QString& serviceName,
+                          SelectUserDlg* const dlg,
                           DInfoInterface* const iface);
     ~FlickrWindow();
 
@@ -74,6 +77,8 @@ public:
      * to display it. This also loads the currently selected images.
      */
     void reactivate();
+
+    void setItemsList(const QList<QUrl>& urls);
 
 private Q_SLOTS:
 

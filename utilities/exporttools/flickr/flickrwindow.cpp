@@ -198,6 +198,11 @@ FlickrWindow::~FlickrWindow()
     delete m_widget;
 }
 
+void FlickrWindow::setItemsList(const QList<QUrl>& urls)
+{
+    m_widget->imagesList()->slotAddImages(urls);
+}
+
 void FlickrWindow::closeEvent(QCloseEvent* e)
 {
     if (!e)

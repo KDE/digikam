@@ -26,6 +26,8 @@ add_subdirectory(widgets)
 add_subdirectory(rawengine)
 add_subdirectory(presentation)
 add_subdirectory(mediaserver)
+add_subdirectory(exporttools)
+
 
 if(ENABLE_MEDIAPLAYER)
     add_subdirectory(video)
