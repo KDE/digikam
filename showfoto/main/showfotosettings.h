@@ -109,6 +109,9 @@ public:
     bool getShowPhotoMake() const;
     void setShowPhotoMake(bool show);
 
+    bool getShowPhotoLens() const;
+    void setShowPhotoLens(bool show);
+
     bool getShowPhotoFocal() const;
     void setShowPhotoFocal(bool show);
 

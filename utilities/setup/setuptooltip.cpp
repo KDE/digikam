@@ -97,6 +97,7 @@ public:
         showItemTypeBox(0),
         showItemDimensionsBox(0),
         showItemPhotoMakeBox(0),
+        showItemPhotoLensBox(0),
         showItemPhotoFocalBox(0),
         showItemPhotoExpoBox(0),
         showItemPhotoFlashBox(0),
@@ -161,6 +162,7 @@ public:
     QCheckBox*   showItemTypeBox;
     QCheckBox*   showItemDimensionsBox;
     QCheckBox*   showItemPhotoMakeBox;
+    QCheckBox*   showItemPhotoLensBox;
     QCheckBox*   showItemPhotoFocalBox;
     QCheckBox*   showItemPhotoExpoBox;
     QCheckBox*   showItemPhotoFlashBox;
@@ -422,6 +424,10 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showItemPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
                                                "camera with which the image has been taken."));
 
+    d->showItemPhotoLensBox  = new QCheckBox(i18n("Camera lens model"), d->photoSettingBox);
+    d->showItemPhotoLensBox->setWhatsThis(i18n("Set this option to display the lens model with "
+                                               "which the image was taken."));
+
     d->showItemPhotoFocalBox = new QCheckBox(i18n("Camera aperture and focal length"), d->photoSettingBox);
     d->showPhotoFocalBox->setWhatsThis(i18n("Set this option to display the camera aperture and focal settings "
                                             "used to take the image."));
@@ -447,10 +453,11 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     importSettingBoxLayout->addWidget(line,                     3, 0, 1, 2);
     importSettingBoxLayout->addWidget(label,                    4, 0, 1, 2);
     importSettingBoxLayout->addWidget(d->showItemPhotoMakeBox,  5, 0, 1, 1);
-    importSettingBoxLayout->addWidget(d->showItemPhotoFocalBox, 6, 0, 1, 1);
-    importSettingBoxLayout->addWidget(d->showItemPhotoExpoBox,  7, 0, 1, 1);
-    importSettingBoxLayout->addWidget(d->showItemPhotoFlashBox, 5, 1, 1, 1);
-    importSettingBoxLayout->addWidget(d->showItemPhotoWBBox,    6, 1, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemPhotoLensBox,  6, 0, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemPhotoFocalBox, 7, 0, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemPhotoExpoBox,  5, 1, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemPhotoFlashBox, 6, 1, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemPhotoWBBox,    7, 1, 1, 1);
     d->importSettingBox->setLayout(importSettingBoxLayout);
 
     QWidget* const space3 = new QWidget(vbox3);
@@ -569,6 +576,7 @@ void SetupToolTip::applySettings()
     importSettings->setToolTipsShowImageType(d->showItemTypeBox->isChecked());
     importSettings->setToolTipsShowImageDim(d->showItemDimensionsBox->isChecked());
     importSettings->setToolTipsShowPhotoMake(d->showItemPhotoMakeBox->isChecked());
+    importSettings->setToolTipsShowPhotoLens(d->showItemPhotoLensBox->isChecked());
     importSettings->setToolTipsShowPhotoFocal(d->showItemPhotoFocalBox->isChecked());
     importSettings->setToolTipsShowPhotoExpo(d->showItemPhotoExpoBox->isChecked());
     importSettings->setToolTipsShowPhotoFlash(d->showItemPhotoFlashBox->isChecked());
@@ -650,6 +658,7 @@ void SetupToolTip::readSettings()
     d->showItemTypeBox->setChecked(importSettings->getToolTipsShowImageType());
     d->showItemDimensionsBox->setChecked(importSettings->getToolTipsShowImageDim());
     d->showItemPhotoMakeBox->setChecked(importSettings->getToolTipsShowPhotoMake());
+    d->showItemPhotoLensBox->setChecked(importSettings->getToolTipsShowPhotoLens());
     d->showItemPhotoFocalBox->setChecked(importSettings->getToolTipsShowPhotoFocal());
     d->showItemPhotoExpoBox->setChecked(importSettings->getToolTipsShowPhotoExpo());
     d->showItemPhotoFlashBox->setChecked(importSettings->getToolTipsShowPhotoFlash());
@@ -674,6 +683,7 @@ void SetupToolTip::refreshCameraOptions()
     bool b = d->showImportToolTipsBox->isChecked();
     d->importSettingBox->setEnabled(b);
     d->showItemPhotoMakeBox->setEnabled(b && d->cameraUseFileMetadata);
+    d->showItemPhotoLensBox->setEnabled(b && d->cameraUseFileMetadata);
     d->showItemPhotoFocalBox->setEnabled(b && d->cameraUseFileMetadata);
     d->showItemPhotoExpoBox->setEnabled(b && d->cameraUseFileMetadata);
     d->showItemPhotoFlashBox->setEnabled(b && d->cameraUseFileMetadata);

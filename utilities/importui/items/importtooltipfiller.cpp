@@ -115,6 +115,7 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
     // NOTE: these info require \"Use File Metadata\" option from Camera Setup Behavior page.
 
     if (settings->getToolTipsShowPhotoMake()  ||
+        settings->getToolTipsShowPhotoLens()  ||
         settings->getToolTipsShowPhotoFocal() ||
         settings->getToolTipsShowPhotoExpo()  ||
         settings->getToolTipsShowPhotoFlash() ||
@@ -139,6 +140,32 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
                 }
 
                 metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
+            }
+
+            if (settings->getToolTipsShowPhotoLens())
+            {
+                str          = photoInfo.lens.isEmpty() ? cnt.unavailable : photoInfo.lens;
+                QString lens = i18nc("camera lens", "Lens:");
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    int space = str.lastIndexOf(QLatin1Char(' '), cnt.maxStringLength);
+
+                    if (space == -1)
+                        space = cnt.maxStringLength;
+
+                    metaStr += cnt.cellBeg + lens + cnt.cellMid + str.left(space).toHtmlEscaped() + cnt.cellEnd;
+
+                    str  = str.mid(space+1);
+                    lens = QString();
+                }
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
+                }
+
+                metaStr += cnt.cellBeg + lens + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoFocal())
