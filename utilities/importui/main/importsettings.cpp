@@ -68,6 +68,7 @@ public:
         tooltipShowImageType(false),
         tooltipShowImageDim(true),
         tooltipShowPhotoMake(false),
+        tooltipShowPhotoLens(false),
         tooltipShowPhotoFocal(false),
         tooltipShowPhotoExpo(false),
         tooltipShowPhotoFlash(false),
@@ -108,6 +109,7 @@ public:
     static const QString                configToolTipsShowImageTypeEntry;
     static const QString                configToolTipsShowImageDimEntry;
     static const QString                configToolTipsShowPhotoMakeEntry;
+    static const QString                configToolTipsShowPhotoLensEntry;
     static const QString                configToolTipsShowPhotoDateEntry;
     static const QString                configToolTipsShowPhotoFocalEntry;
     static const QString                configToolTipsShowPhotoExpoEntry;
@@ -149,6 +151,7 @@ public:
     bool                                tooltipShowImageType;
     bool                                tooltipShowImageDim;
     bool                                tooltipShowPhotoMake;
+    bool                                tooltipShowPhotoLens;
     bool                                tooltipShowPhotoFocal;
     bool                                tooltipShowPhotoExpo;
     bool                                tooltipShowPhotoFlash;
@@ -194,6 +197,7 @@ const QString ImportSettings::Private::configToolTipsShowFileSizeEntry(QLatin1St
 const QString ImportSettings::Private::configToolTipsShowImageTypeEntry(QLatin1String("ToolTips Show Image Type"));
 const QString ImportSettings::Private::configToolTipsShowImageDimEntry(QLatin1String("ToolTips Show Image Dim"));
 const QString ImportSettings::Private::configToolTipsShowPhotoMakeEntry(QLatin1String("ToolTips Show Photo Make"));
+const QString ImportSettings::Private::configToolTipsShowPhotoLensEntry(QLatin1String("ToolTips Show Photo Lens"));
 const QString ImportSettings::Private::configToolTipsShowPhotoDateEntry(QLatin1String("ToolTips Show Photo Date"));
 const QString ImportSettings::Private::configToolTipsShowPhotoFocalEntry(QLatin1String("ToolTips Show Photo Focal"));
 const QString ImportSettings::Private::configToolTipsShowPhotoExpoEntry(QLatin1String("ToolTips Show Photo Expo"));
@@ -266,6 +270,7 @@ void ImportSettings::init()
     d->tooltipShowImageType         = false;
     d->tooltipShowImageDim          = true;
     d->tooltipShowPhotoMake         = true;
+    d->tooltipShowPhotoLens         = true;
     d->tooltipShowPhotoFocal        = true;
     d->tooltipShowPhotoExpo         = true;
     d->tooltipShowPhotoFlash        = false;
@@ -314,6 +319,7 @@ void ImportSettings::readSettings()
     d->tooltipShowImageType         = group.readEntry(d->configToolTipsShowImageTypeEntry,        false);
     d->tooltipShowImageDim          = group.readEntry(d->configToolTipsShowImageDimEntry,         true);
     d->tooltipShowPhotoMake         = group.readEntry(d->configToolTipsShowPhotoMakeEntry,        true);
+    d->tooltipShowPhotoLens         = group.readEntry(d->configToolTipsShowPhotoLensEntry,        true);
     d->tooltipShowPhotoFocal        = group.readEntry(d->configToolTipsShowPhotoFocalEntry,       true);
     d->tooltipShowPhotoExpo         = group.readEntry(d->configToolTipsShowPhotoExpoEntry,        true);
 //  d->tooltipShowPhotoMode         = group.readEntry(d->configToolTipsShowPhotoModeEntry,        true);
@@ -366,6 +372,7 @@ void ImportSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowImageTypeEntry,        d->tooltipShowImageType);
     group.writeEntry(d->configToolTipsShowImageDimEntry,         d->tooltipShowImageDim);
     group.writeEntry(d->configToolTipsShowPhotoMakeEntry,        d->tooltipShowPhotoMake);
+    group.writeEntry(d->configToolTipsShowPhotoLensEntry,        d->tooltipShowPhotoLens);
     group.writeEntry(d->configToolTipsShowPhotoFocalEntry,       d->tooltipShowPhotoFocal);
     group.writeEntry(d->configToolTipsShowPhotoExpoEntry,        d->tooltipShowPhotoExpo);
     group.writeEntry(d->configToolTipsShowPhotoFlashEntry,       d->tooltipShowPhotoFlash);
@@ -607,6 +614,16 @@ bool ImportSettings::getToolTipsShowPhotoMake() const
     return d->tooltipShowPhotoMake;
 }
 
+void ImportSettings::setToolTipsShowPhotoLens(bool val)
+{
+    d->tooltipShowPhotoLens = val;
+}
+
+bool ImportSettings::getToolTipsShowPhotoLens() const
+{
+    return d->tooltipShowPhotoLens;
+}
+
 void ImportSettings::setToolTipsShowPhotoFocal(bool val)
 {
     d->tooltipShowPhotoFocal = val;
@@ -677,6 +694,7 @@ bool ImportSettings::showToolTipsIsValid() const
             d->tooltipShowImageType  ||
             d->tooltipShowImageDim   ||
             d->tooltipShowPhotoMake  ||
+            d->tooltipShowPhotoLens  ||
             d->tooltipShowPhotoFocal ||
             d->tooltipShowPhotoExpo  ||
             d->tooltipShowPhotoFlash ||
