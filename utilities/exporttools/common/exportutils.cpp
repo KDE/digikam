@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-09-12
- * Description : Simple random string generator
+ * Description : Export tool utils methods
  *
  * Copyright (C) 2014-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "randomgenerator.h"
+#include "exportutils.h"
 
 // Qt includes
 
@@ -32,22 +32,42 @@
 namespace Digikam
 {
 
-RandomGenerator::RandomGenerator()
+QDir ExportUtils::makeTemporaryDir(const char* prefix)
 {
+    QString subDir = QString::fromLatin1("digikam-%1-%2").arg(QString::fromUtf8(prefix)).arg(qApp->applicationPid());
+    QString path   = QDir(QDir::tempPath()).filePath(subDir);
+
+    if (!QDir().exists(path))
+    {
+        QDir().mkpath(path);
+    }
+
+    return QDir(path);
 }
 
-RandomGenerator::~RandomGenerator()
+// ------------------------------------------------------------------------------------
+
+void ExportUtils::removeTemporaryDir(const char* prefix)
 {
+    QString subDir = QString::fromLatin1("digikam-%1-%2").arg(QString::fromUtf8(prefix)).arg(qApp->applicationPid());
+    QString path   = QDir(QDir::tempPath()).filePath(subDir);
+
+    if (QDir().exists(path))
+    {
+        QDir(path).removeRecursively();
+    }
 }
 
-QString RandomGenerator::randomString(const int& length)
+// ------------------------------------------------------------------------------------
+
+QString ExportUtils::randomString(const int& length)
 {
     const QString possibleCharacters(QString::fromLatin1("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"));
 
     QString randomString;
     qsrand((uint)QTime::currentTime().msec());
 
-    for (int i=0 ; i < length ; ++i)
+    for (int i = 0 ; i < length ; ++i)
     {
         int index      = qrand() % possibleCharacters.length();
         QChar nextChar = possibleCharacters.at(index);

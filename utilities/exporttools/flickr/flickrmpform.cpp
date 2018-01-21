@@ -37,7 +37,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "randomgenerator.h"
+#include "exportutils.h"
 
 namespace Digikam
 {
@@ -45,7 +45,7 @@ namespace Digikam
 FlickrMPForm::FlickrMPForm()
 {
     m_boundary  = "----------";
-    m_boundary += RandomGenerator::randomString(42 + 13).toLatin1();
+    m_boundary += ExportUtils::randomString(42 + 13).toLatin1();
 }
 
 FlickrMPForm::~FlickrMPForm()

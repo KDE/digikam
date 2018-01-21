@@ -12,7 +12,7 @@ set(libexporttools_SRCS comboboxdelegate.cpp
                         comboboxintermediate.cpp
                         newalbumdialog.cpp
                         selectuserdlg.cpp
-                        randomgenerator.cpp
+                        exportutils.cpp
                         settingswidget.cpp
                         tooldialog.cpp
 )

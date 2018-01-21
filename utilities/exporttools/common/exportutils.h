@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-09-12
- * Description : Simple random string generator
+ * Description : Export tool utils methods
  *
  * Copyright (C) 2014-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,12 +20,13 @@
  *
  * ============================================================ */
 
-#ifndef RANDOM_GENERATOR_H
-#define RANDOM_GENERATOR_H
+#ifndef EXPORT_UTILS_H
+#define EXPORT_UTILS_H
 
 // Qt includes
 
 #include <QString>
+#include <QDir>
 
 // Local includes
 
@@ -34,19 +35,21 @@
 namespace Digikam
 {
 
-/** Generates random string
- */
-
-class DIGIKAM_EXPORT RandomGenerator
+class DIGIKAM_EXPORT ExportUtils
 {
 public:
 
-    explicit RandomGenerator();
-    ~RandomGenerator();
+    explicit ExportUtils() {};
+    ~ExportUtils()         {};
 
+    /** Generates random string.
+     */
     static QString randomString(const int& length);
+
+    static QDir makeTemporaryDir(const char* prefix);
+    static void removeTemporaryDir(const char* prefix);
 };
 
 } // namespace Digikam
 
-#endif // RANDOM_GENERATOR_H
+#endif // EXPORT_UTILS_H
