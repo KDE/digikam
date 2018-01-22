@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 
     FlickrWindow dlg(0, QString::fromLatin1("Flickr"), &selDlg, new DMetaInfoIface(&app, urlList));
     dlg.setItemsList(urlList);
-    dlg.show();
+    dlg.exec();
 
     MetaEngine::cleanupExiv2();
 
