@@ -25,10 +25,14 @@
 #include <QApplication>
 #include <QDir>
 #include <QStandardPaths>
+#include <QCommandLineParser>
+#include <QUrl>
 
 // Local includes
 
+#include "dmetainfoiface.h"
 #include "dmediaserverdlg.h"
+#include "metaengine.h"
 #include "dmediaservermngr.h"
 
 using namespace Digikam;
@@ -37,16 +41,33 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.addPositionalArgument(QLatin1String("files"), QLatin1String("File(s) to send by mail"), QLatin1String("+[file(s)]"));
+    parser.process(app);
+
+    MetaEngine::initializeExiv2();
+
+    QList<QUrl> urlList;
+    const QStringList args = parser.positionalArguments();
+
+    for (auto& arg : args)
+    {
+        urlList.append(QUrl::fromLocalFile(arg));
+    }
+
     QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     
     DMediaServerMngr::instance()->load();
     
-    DMediaServerDlg* const view = new DMediaServerDlg(&app);
+    DMediaServerDlg* const view = new DMediaServerDlg(&app, new DMetaInfoIface(&app, urlList));
     view->show();
     app.exec();
     
     DMediaServerMngr::instance()->save();
     DMediaServerMngr::instance()->cleanUp();
+
+    MetaEngine::cleanupExiv2();
 
     return 0;
 }

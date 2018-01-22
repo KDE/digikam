@@ -30,6 +30,7 @@
 
 // Local includes
 
+#include "dmetainfoiface.h"
 #include "metaengine.h"
 #include "calwizard.h"
 
@@ -54,7 +55,7 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    CalWizard wzrd(urlList, 0);
+    CalWizard wzrd(urlList);
     wzrd.exec();
 
     MetaEngine::cleanupExiv2();

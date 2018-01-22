@@ -30,6 +30,7 @@
 
 // Local includes
 
+#include "dmetainfoiface.h"
 #include "metaengine.h"
 #include "vidslidewizard.h"
 
@@ -54,7 +55,7 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    VidSlideWizard wzrd(0);
+    VidSlideWizard wzrd(0, new DMetaInfoIface(&app, urlList));
     wzrd.setItemsList(urlList);
     wzrd.exec();
 
