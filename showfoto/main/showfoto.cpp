@@ -99,7 +99,7 @@
 #include "showfotothumbnailmodel.h"
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
-#include "showfotoinfoiface.h"
+#include "dmetainfoiface.h"
 #include "showfoto_p.h"
 #include "dexpanderbox.h"
 #include "dfiledialog.h"
@@ -1380,7 +1380,7 @@ void ShowFoto::slotEditGeolocation()
     }
 
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(0,
-                                                           new ShowfotoInfoIface(this, d->thumbBar->urls()),
+                                                           new DMetaInfoIface(this, d->thumbBar->urls()),
                                                            QApplication::activeWindow());
     dialog->setImages(infos);
     dialog->exec();
@@ -1412,7 +1412,7 @@ void ShowFoto::slotEditMetadata()
 void ShowFoto::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
-    HTMLWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    HTMLWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
     w.exec();
 #endif
 }
@@ -1442,26 +1442,26 @@ void ShowFoto::slotExpoBlending()
 void ShowFoto::slotVideoSlideshow()
 {
 #ifdef HAVE_MEDIAPLAYER
-    VidSlideWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    VidSlideWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
     w.exec();
 #endif
 }
 
 void ShowFoto::slotSendByMail()
 {
-    MailWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    MailWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
     w.exec();
 }
 
 void ShowFoto::slotPrintCreator()
 {
-    AdvPrintWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    AdvPrintWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
     w.exec();
 }
 
 void ShowFoto::slotMediaServer()
 {
-    DMediaServerDlg w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    DMediaServerDlg w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
     w.exec();
 }
 

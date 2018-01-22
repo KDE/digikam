@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2017-05-06
- * Description : interface to item informations for shared tools.
+ * Description : interface to item informations for shared tools
+ *               based on DMetadata.
  *
- * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,24 +22,23 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTO_INFO_IFACE_H
-#define SHOWFOTO_INFO_IFACE_H
+#ifndef DMETA_INFO_IFACE_H
+#define DMETA_INFO_IFACE_H
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dinfointerface.h"
 
-using namespace Digikam;
-
-namespace ShowFoto
+namespace Digikam
 {
 
-class ShowfotoInfoIface : public DInfoInterface
+class DIGIKAM_EXPORT DMetaInfoIface : public DInfoInterface
 {
 public:
 
-    explicit ShowfotoInfoIface(QObject* const, const QList<QUrl>&);
-    ~ShowfotoInfoIface();
+    explicit DMetaInfoIface(QObject* const, const QList<QUrl>&);
+    ~DMetaInfoIface();
 
     QList<QUrl> currentSelectedItems()           const;
     QList<QUrl> currentAlbumItems()              const;
@@ -53,6 +53,6 @@ private:
     Private* const d;
 };
 
-}  // namespace ShowFoto
+}  // namespace Digikam
 
-#endif // SHOWFOTO_INFO_IFACE_H
+#endif // DMETA_INFO_IFACE_H

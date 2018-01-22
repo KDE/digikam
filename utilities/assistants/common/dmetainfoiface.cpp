@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2017-05-06
- * Description : interface to item informations for shared tools.
+ * Description : interface to item informations for shared tools
+ *               based on DMetadata.
  *
- * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "showfotoinfoiface.h"
+#include "dmetainfoiface.h"
 
 // Qt includes
 
@@ -33,10 +34,10 @@
 #include "infocontainer.h"
 #include "template.h"
 
-namespace ShowFoto
+namespace Digikam
 {
 
-class ShowfotoInfoIface::Private
+class DMetaInfoIface::Private
 {
 public:
 
@@ -47,36 +48,36 @@ public:
     QList<QUrl> urls;
 };
 
-ShowfotoInfoIface::ShowfotoInfoIface(QObject* const parent, const QList<QUrl>& lst)
+DMetaInfoIface::DMetaInfoIface(QObject* const parent, const QList<QUrl>& lst)
     : DInfoInterface(parent),
       d(new Private)
 {
     d->urls = lst;
 }
 
-ShowfotoInfoIface::~ShowfotoInfoIface()
+DMetaInfoIface::~DMetaInfoIface()
 {
     delete d;
 }
 
-QList<QUrl> ShowfotoInfoIface::currentAlbumItems() const
+QList<QUrl> DMetaInfoIface::currentAlbumItems() const
 {
     return d->urls;
 }
 
-QList<QUrl> ShowfotoInfoIface::currentSelectedItems() const
+QList<QUrl> DMetaInfoIface::currentSelectedItems() const
 {
-    // No multiple items selection is avaialble in Showfoto.
+    // No multiple items selection is avaialble in DMeta.
     return currentAlbumItems();
 }
 
-QList<QUrl> ShowfotoInfoIface::allAlbumItems() const
+QList<QUrl> DMetaInfoIface::allAlbumItems() const
 {
-    // No album management avaialble in Showfoto.
+    // No album management avaialble in DMeta.
     return currentAlbumItems();
 }
 
-ShowfotoInfoIface::DInfoMap ShowfotoInfoIface::itemInfo(const QUrl& url) const
+DMetaInfoIface::DInfoMap DMetaInfoIface::itemInfo(const QUrl& url) const
 {
     DInfoMap map;
 
@@ -139,9 +140,9 @@ ShowfotoInfoIface::DInfoMap ShowfotoInfoIface::itemInfo(const QUrl& url) const
     return map;
 }
 
-bool ShowfotoInfoIface::supportAlbums() const
+bool DMetaInfoIface::supportAlbums() const
 {
     return false;
 }
 
-}  // namespace ShowFoto
+}  // namespace Digikam

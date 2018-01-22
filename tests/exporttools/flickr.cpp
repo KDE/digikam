@@ -31,6 +31,7 @@
 // Local includes
 
 #include "metaengine.h"
+#include "dmetainfoiface.h"
 #include "selectuserdlg.h"
 #include "flickrwindow.h"
 
@@ -58,7 +59,7 @@ int main(int argc, char* argv[])
     SelectUserDlg selDlg(0, QString::fromLatin1("Flickr"));
     selDlg.reactivate();
 
-    FlickrWindow dlg(0, QString::fromLatin1("Flickr"), &selDlg, 0);
+    FlickrWindow dlg(0, QString::fromLatin1("Flickr"), &selDlg, new DMetaInfoIface(&app, urlList));
     dlg.setItemsList(urlList);
     dlg.show();
 
