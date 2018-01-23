@@ -237,7 +237,10 @@ void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo>& infos, c
         CoreDbAccess access;
         foreach(const ImageInfo& info, finder.infos)
         {
-            access.db()->moveItem(info.albumId(), info.name(), dest->id(), info.name());
+            if (!QFileInfo::exists(dest->fileUrl().toLocalFile() + info.name()))
+            {
+                access.db()->moveItem(info.albumId(), info.name(), dest->id(), info.name());
+            }
         }
     }
 
