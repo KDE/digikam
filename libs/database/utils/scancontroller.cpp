@@ -30,6 +30,7 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <QPixmap>
+#include <QIcon>
 #include <QTime>
 #include <QMutex>
 #include <QMutexLocker>
@@ -55,7 +56,6 @@
 #include "coredbwatch.h"
 #include "dprogressdlg.h"
 #include "dmetadata.h"
-#include "applicationsettings.h"
 #include "coredb.h"
 #include "albummanager.h"
 #include "album.h"
