@@ -88,7 +88,7 @@ void SidecarFinder::process(const QList<QUrl>& files)
                 suffix = QLatin1String(".") + suffix;
                 QString sidecarName = url.toLocalFile() + suffix;
 
-                if (QFileInfo(sidecarName).exists() && !localFiles.contains(QUrl::fromLocalFile(sidecarName)))
+                if (QFileInfo::exists(sidecarName) && !localFiles.contains(QUrl::fromLocalFile(sidecarName)))
                 {
                     localFiles << QUrl::fromLocalFile(sidecarName);
                     localFileSuffixes << suffix;
