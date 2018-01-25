@@ -51,10 +51,8 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:sendbymail_src>
             $<TARGET_OBJECTS:printcreator_src>
             $<TARGET_OBJECTS:mediaserver_src>
-
             $<TARGET_OBJECTS:exporttools_src>
-            $<TARGET_OBJECTS:flickr_src>
-            
+
             utils/digikam_debug.cpp
 )
 
