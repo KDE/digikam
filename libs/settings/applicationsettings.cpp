@@ -171,6 +171,7 @@ void ApplicationSettings::readSettings()
     d->tooltipShowImageDim               = group.readEntry(d->configToolTipsShowImageDimEntry,         true);
     d->tooltipShowImageAR                = group.readEntry(d->configToolTipsShowImageAREntry,          true);
     d->tooltipShowPhotoMake              = group.readEntry(d->configToolTipsShowPhotoMakeEntry,        true);
+    d->tooltipShowPhotoLens              = group.readEntry(d->configToolTipsShowPhotoLensEntry,        true);
     d->tooltipShowPhotoDate              = group.readEntry(d->configToolTipsShowPhotoDateEntry,        true);
     d->tooltipShowPhotoFocal             = group.readEntry(d->configToolTipsShowPhotoFocalEntry,       true);
     d->tooltipShowPhotoExpo              = group.readEntry(d->configToolTipsShowPhotoExpoEntry,        true);
@@ -353,6 +354,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowImageDimEntry,               d->tooltipShowImageDim);
     group.writeEntry(d->configToolTipsShowImageAREntry,                d->tooltipShowImageAR);
     group.writeEntry(d->configToolTipsShowPhotoMakeEntry,              d->tooltipShowPhotoMake);
+    group.writeEntry(d->configToolTipsShowPhotoLensEntry,              d->tooltipShowPhotoLens);
     group.writeEntry(d->configToolTipsShowPhotoDateEntry,              d->tooltipShowPhotoDate);
     group.writeEntry(d->configToolTipsShowPhotoFocalEntry,             d->tooltipShowPhotoFocal);
     group.writeEntry(d->configToolTipsShowPhotoExpoEntry,              d->tooltipShowPhotoExpo);

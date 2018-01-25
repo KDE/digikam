@@ -123,6 +123,16 @@ bool ApplicationSettings::getToolTipsShowPhotoMake() const
     return d->tooltipShowPhotoMake;
 }
 
+void ApplicationSettings::setToolTipsShowPhotoLens(bool val)
+{
+    d->tooltipShowPhotoLens = val;
+}
+
+bool ApplicationSettings::getToolTipsShowPhotoLens() const
+{
+    return d->tooltipShowPhotoLens;
+}
+
 void ApplicationSettings::setToolTipsShowPhotoDate(bool val)
 {
     d->tooltipShowPhotoDate = val;
@@ -384,6 +394,7 @@ bool ApplicationSettings::showToolTipsIsValid() const
             d->tooltipShowImageDim   ||
             d->tooltipShowImageAR    ||
             d->tooltipShowPhotoMake  ||
+            d->tooltipShowPhotoLens  ||
             d->tooltipShowPhotoDate  ||
             d->tooltipShowPhotoFocal ||
             d->tooltipShowPhotoExpo  ||

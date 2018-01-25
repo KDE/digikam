@@ -88,7 +88,7 @@ void SidecarFinder::process(const QList<QUrl>& files)
                 suffix = QLatin1String(".") + suffix;
                 QString sidecarName = url.toLocalFile() + suffix;
 
-                if (QFileInfo(sidecarName).exists() && !localFiles.contains(QUrl::fromLocalFile(sidecarName)))
+                if (QFileInfo::exists(sidecarName) && !localFiles.contains(QUrl::fromLocalFile(sidecarName)))
                 {
                     localFiles << QUrl::fromLocalFile(sidecarName);
                     localFileSuffixes << suffix;
@@ -237,7 +237,10 @@ void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo>& infos, c
         CoreDbAccess access;
         foreach(const ImageInfo& info, finder.infos)
         {
-            access.db()->moveItem(info.albumId(), info.name(), dest->id(), info.name());
+            if (!QFileInfo::exists(dest->fileUrl().toLocalFile() + info.name()))
+            {
+                access.db()->moveItem(info.albumId(), info.name(), dest->id(), info.name());
+            }
         }
     }
 

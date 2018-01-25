@@ -114,6 +114,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
     // -- Photograph Info -----------------------------------------------------------------------
 
     if (settings->getShowPhotoMake()  ||
+        settings->getShowPhotoLens()  ||
         settings->getShowPhotoFocal() ||
         settings->getShowPhotoExpo()  ||
         settings->getShowPhotoFlash() ||
@@ -140,6 +141,32 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
                 }
 
                 metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
+            }
+
+            if (settings->getShowPhotoLens())
+            {
+                str          = photoInfo.lens.isEmpty() ? cnt.unavailable : photoInfo.lens;
+                QString lens = i18nc("camera lens", "Lens:");
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    int space = str.lastIndexOf(QLatin1Char(' '), cnt.maxStringLength);
+
+                    if (space == -1)
+                        space = cnt.maxStringLength;
+
+                    metaStr += cnt.cellBeg + lens + cnt.cellMid + str.left(space).toHtmlEscaped() + cnt.cellEnd;
+
+                    str  = str.mid(space+1);
+                    lens = QString();
+                }
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
+                }
+
+                metaStr += cnt.cellBeg + lens + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getShowPhotoDate())

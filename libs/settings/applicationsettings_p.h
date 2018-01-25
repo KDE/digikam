@@ -100,6 +100,7 @@ public:
     static const QString configToolTipsShowImageDimEntry;
     static const QString configToolTipsShowImageAREntry;
     static const QString configToolTipsShowPhotoMakeEntry;
+    static const QString configToolTipsShowPhotoLensEntry;
     static const QString configToolTipsShowPhotoDateEntry;
     static const QString configToolTipsShowPhotoFocalEntry;
     static const QString configToolTipsShowPhotoExpoEntry;
@@ -196,6 +197,7 @@ public:
     bool                                         tooltipShowImageDim;
     bool                                         tooltipShowImageAR;
     bool                                         tooltipShowPhotoMake;
+    bool                                         tooltipShowPhotoLens;
     bool                                         tooltipShowPhotoDate;
     bool                                         tooltipShowPhotoFocal;
     bool                                         tooltipShowPhotoExpo;

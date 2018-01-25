@@ -172,6 +172,7 @@
       <li xml:lang="nl">Op SQLite of Mysql gebaseerde opslag voor de inhoud van albums en zijn metagegevens met geavanceerde zoekhulpmiddellen</li>
       <li xml:lang="pl">Przechowalnia dla albumów i ich metadanych z zaawansowanymi narzędziami wyszukiwania jest napędzana SQLite lub Mysql</li>
       <li xml:lang="pt">Armazenamento baseado em SQLite ou MySQL para o conteúdo dos álbuns e os seus meta-dados com ferramentas de pesquisa avançadas</li>
+      <li xml:lang="sl">Shramba SQLite ali Mysql za albume in metapodatke ter napredna iskalna orodja</li>
       <li xml:lang="sv">Lagring driven av SQLite eller MySQL för album och deras metadata med avancerade sökverktyg</li>
       <li xml:lang="tr">Albüm içeriği ve meta verileri için gelişmiş arama araçlarıyla, SQLite veya Mysql destekli depolama</li>
       <li xml:lang="uk">сховище даних на основі SQLite або MySQL для вмісту альбомів та метаданих із розширеними можливостями пошуку;</li>
@@ -238,6 +239,7 @@
       <li xml:lang="nl">Ondersteuning voor 900 RAW-format afbeeldingen</li>
       <li xml:lang="pl">Obsługa dla więcej niż 900 postaci zdjęć RAW</li>
       <li xml:lang="pt">Suporte para mais de 900 formatos de imagens RAW</li>
+      <li xml:lang="sl">Podpora več kot 900 vrstam surovih slik (RAW)</li>
       <li xml:lang="sv">Stöd för 900 obehandlade bildformat</li>
       <li xml:lang="tr">900'den fazla RAW biçimli resim desteği</li>
       <li xml:lang="uk">підтримка понад 900 форматів цифрових негативів (RAW);</li>
@@ -254,6 +256,7 @@
       <li xml:lang="nl">Lichttafel om foto's naast elkaar te vergelijken</li>
       <li xml:lang="pl">Podświetlarka do porównywania zdjęć jedno obok drugiego</li>
       <li xml:lang="pt">Mesa de Luz para comparar as fotografias lado-a-lado</li>
+      <li xml:lang="sl">Osvetlitvena miza za primerjavo fotografij</li>
       <li xml:lang="sv">Ljusbord för att jämföra foton sida vid sida</li>
       <li xml:lang="tr">Fotoğrafı yan yana karşılaştırmak için Tabloyu Işıklandır</li>
       <li xml:lang="uk">стіл із підсвічуванням для порівняння фотографій;</li>
@@ -270,6 +273,7 @@
       <li xml:lang="nl">Uitgebreide mogelijkheden met extra hulpmiddelen</li>
       <li xml:lang="pl">Rozszerzone funkcje używające dodatkowych narzędzi</li>
       <li xml:lang="pt">Funcionalidades estendidas com ferramentas extra</li>
+      <li xml:lang="sl">Razširjene zmožnosti preko dodatnih orodij</li>
       <li xml:lang="sv">Utökade funktioner med användning av extra verktyg</li>
       <li xml:lang="tr">Ekstra araçlar kullanan genişletilmiş özellikler</li>
       <li xml:lang="uk">розширення можливостей за допомогою додаткових інструментів;</li>
@@ -286,6 +290,7 @@
       <li xml:lang="nl">Uw foto's delen met HTML of ze publiceren op websites op afstand</li>
       <li xml:lang="pl">Udostępnianie zdjęć przy użyciu HTML lub publikowanie ich poprzez usługi sieciowe</li>
       <li xml:lang="pt">Partilhar as suas fotos por HTML ou publicá-las em serviços Web remotos</li>
+      <li xml:lang="sl">Delite vaše fotografije s pomočjo HTML-ja ali pa jih objavite na oddaljenih storitvah</li>
       <li xml:lang="sv">Dela foton genom att använda HTML eller publicera dem på webbtjänster</li>
       <li xml:lang="tr">Resimlerinizi HTML kullanarak paylaşın veya onları uzak web servislerinde yayımlayın</li>
       <li xml:lang="uk">можливість оприлюднення фотографій на віддалених службах у інтернеті;</li>
@@ -302,6 +307,7 @@
       <li xml:lang="nl">Bewerker van afbeeldingen met geavanceerde hulpmiddelen om foto's snel te repareren</li>
       <li xml:lang="pl">Dołączony edytor obrazów o zaawansowanych narzedziach do szybkiego poprawiania zdjęć</li>
       <li xml:lang="pt">Editor de imagens que inclui ferramentas avançadas para corrigir rapidamente as fotografias</li>
+      <li xml:lang="sl">Vgrajen urejevalnik slik z naprednimi orodji za hitre popravke fotografij</li>
       <li xml:lang="sv">Bildeditor med avancerade funktioner ingår för att snabbt förbättra foton</li>
       <li xml:lang="tr">Fotoğrafı hızla düzeltmek için gelişmiş araçlar içeren resim editörü</li>
       <li xml:lang="uk">редактор зображень із додатковими можливостями для швидкого виправлення фотографій;</li>

@@ -101,6 +101,7 @@ public:
     static const QString configShowFileDim;
 
     static const QString configShowPhotoMake;
+    static const QString configShowPhotoLens;
     static const QString configShowPhotoFocal;
     static const QString configShowPhotoExpo;
     static const QString configShowPhotoFlash;
@@ -127,6 +128,7 @@ public:
     bool                 showFileDim;
 
     bool                 showPhotoMake;
+    bool                 showPhotoLens;
     bool                 showPhotoFocal;
     bool                 showPhotoExpo;
     bool                 showPhotoFlash;
@@ -178,6 +180,7 @@ const QString ShowfotoSettings::Private::configShowFileDim(QLatin1String("ToolTi
 
 //Tool Tip Photograph Info
 const QString ShowfotoSettings::Private::configShowPhotoMake(QLatin1String("ToolTips Show Photo Make"));
+const QString ShowfotoSettings::Private::configShowPhotoLens(QLatin1String("ToolTips Show Photo Lens"));
 const QString ShowfotoSettings::Private::configShowPhotoFocal(QLatin1String("ToolTips Show Photo Focal"));
 const QString ShowfotoSettings::Private::configShowPhotoExpo(QLatin1String("ToolTips Show Photo Expo"));
 const QString ShowfotoSettings::Private::configShowPhotoFlash(QLatin1String("ToolTips Show Photo Flash"));
@@ -243,6 +246,7 @@ void ShowfotoSettings::init()
     d->showFileDim             = true;
 
     d->showPhotoMake           = true;
+    d->showPhotoLens           = true;
     d->showPhotoFocal          = true;
     d->showPhotoExpo           = true;
     d->showPhotoFlash          = false;
@@ -286,6 +290,7 @@ void ShowfotoSettings::readSettings()
     d->showFileDim             = group.readEntry(d->configShowFileDim,  true);
 
     d->showPhotoMake           = group.readEntry(d->configShowPhotoMake,  true);
+    d->showPhotoLens           = group.readEntry(d->configShowPhotoLens,  true);
     d->showPhotoFocal          = group.readEntry(d->configShowPhotoFocal, true);
     d->showPhotoExpo           = group.readEntry(d->configShowPhotoExpo,  true);
     d->showPhotoFlash          = group.readEntry(d->configShowPhotoFlash, false);
@@ -396,6 +401,11 @@ bool ShowfotoSettings::getShowPhotoMake() const
     return d->showPhotoMake;
 }
 
+bool ShowfotoSettings::getShowPhotoLens() const
+{
+    return d->showPhotoLens;
+}
+
 bool ShowfotoSettings::getShowPhotoFocal() const
 {
     return d->showPhotoFocal;
@@ -464,6 +474,11 @@ void ShowfotoSettings::setShowFileDim(bool show)
 void ShowfotoSettings::setShowPhotoMake(bool show)
 {
     d->group.writeEntry(d->configShowPhotoMake, show);
+}
+
+void ShowfotoSettings::setShowPhotoLens(bool show)
+{
+    d->group.writeEntry(d->configShowPhotoLens, show);
 }
 
 void ShowfotoSettings::setShowPhotoFocal(bool show)
