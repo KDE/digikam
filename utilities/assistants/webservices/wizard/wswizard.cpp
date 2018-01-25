@@ -66,7 +66,7 @@ public:
     {
     }
 
-    DInfoInterface*     iface;
+    DInfoInterface*   iface;
     WSIntroPage*      introPage;
     WSAlbumsPage*     albumsPage;
     WSImagesPage*     imagesPage;
@@ -76,30 +76,30 @@ public:
 };
 
 WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
-    : DWizardDlg(parent, QLatin1String("Email Dialog")),
+    : DWizardDlg(parent, QLatin1String("Web Services Dialog")),
       d(new Private)
 {
     setOption(QWizard::NoCancelButtonOnLastPage);
-    setWindowTitle(i18n("Send by Email"));
+    setWindowTitle(i18n("Export to Web Services"));
 
     d->iface             = iface;
     d->settings          = new WSSettings;
 
     KConfig config;
-    KConfigGroup group   = config.group("Email Dialog Settings");
+    KConfigGroup group   = config.group("Web Services Dialog Settings");
     d->settings->readSettings(group);
 
-    d->introPage         = new WSIntroPage(this,    i18n("Welcome to Email Tool"));
+    d->introPage         = new WSIntroPage(this,    i18n("Welcome to Web Services Tool"));
     d->albumsPage        = new WSAlbumsPage(this,   i18n("Albums Selection"));
     d->imagesPage        = new WSImagesPage(this,   i18n("Images List"));
-    d->settingsPage      = new WSSettingsPage(this, i18n("Email Settings"));
-    d->finalPage         = new WSFinalPage(this,    i18n("Export by Email"));
+    d->settingsPage      = new WSSettingsPage(this, i18n("Web Service Settings"));
+    d->finalPage         = new WSFinalPage(this,    i18n("Export by Web Service"));
 }
 
 WSWizard::~WSWizard()
 {
     KConfig config;
-    KConfigGroup group = config.group("Email Dialog Settings");
+    KConfigGroup group = config.group("Web Services Dialog Settings");
     d->settings->writeSettings(group);
 
     delete d;

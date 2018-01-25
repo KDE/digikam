@@ -48,7 +48,7 @@ public:
     bool validateCurrentPage();
     int  nextId() const;
 
-    DInfoInterface* iface()    const;
+    DInfoInterface* iface()  const;
     WSSettings*   settings() const;
 
     void setItemsList(const QList<QUrl>& urls);
