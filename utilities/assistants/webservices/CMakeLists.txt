@@ -37,7 +37,7 @@ endif()
 # Copied from o2/src/CMakeLists.txt
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(libexporto2_SRCS
+set(libwso2_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2reply.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2replyserver.cpp
@@ -64,29 +64,36 @@ set(libexporto2_SRCS
 
 # Base classes ------------------------------------------------------------------
 
-set(libexportbase_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/base/comboboxdelegate.cpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/base/comboboxintermediate.cpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/base/newalbumdialog.cpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/base/selectuserdlg.cpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/base/exportutils.cpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/base/settingswidget.cpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/base/tooldialog.cpp
+set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/base/comboboxdelegate.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/base/comboboxintermediate.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/base/newalbumdialog.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/base/selectuserdlg.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/base/exportutils.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/base/settingswidget.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/base/tooldialog.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/manager/wssettings.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wsalbumspage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wsfinalpage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wsimagespage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wsintropage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wssettingspage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wswizard.cpp
 )
 
 # Flickr export ----------------------------------------------------------------
 
-set(libexportflickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrlist.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrmpform.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrtalker.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwidget.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrnewalbum.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrtalker.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwindow.cpp
+set(libwsflickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrlist.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrmpform.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrtalker.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwidget.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrnewalbum.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrtalker.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwindow.cpp
 )
 
 # ------------------------------------------------------------------------------
 
-add_library(exporttools_src OBJECT ${libexportbase_SRCS}
-                                   ${libexporto2_SRCS}
-                                   ${libexportflickr_SRCS}
+add_library(webservices_src OBJECT ${libwebservices_SRCS}
+                                   ${libwso2_SRCS}
+                                   ${libwsflickr_SRCS}
 )

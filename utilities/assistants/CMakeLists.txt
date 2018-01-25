@@ -10,7 +10,7 @@ add_subdirectory(expoblending)
 add_subdirectory(calendar)
 add_subdirectory(sendbymail)
 add_subdirectory(printcreator)
-add_subdirectory(exporttools)
+add_subdirectory(webservices)
 
 if(LibXml2_FOUND AND LibXslt_FOUND)
     add_subdirectory(htmlgallery)
