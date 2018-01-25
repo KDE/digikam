@@ -1682,7 +1682,7 @@ void DigikamView::slotIconView()
 {
     if (viewMode() == StackedView::PreviewImageMode)
     {
-        emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
+        emit signalThumbSizeChanged(d->thumbSize);
     }
 
     // and switch to icon view
@@ -1745,7 +1745,7 @@ void DigikamView::slotViewModeChanged()
     {
         case StackedView::IconViewMode:
             emit signalSwitchedToIconView();
-            emit signalThumbSizeChanged(d->iconView->thumbnailSize().size());
+            emit signalThumbSizeChanged(d->thumbSize);
             break;
         case StackedView::PreviewImageMode:
             emit signalSwitchedToPreview();
@@ -1763,7 +1763,7 @@ void DigikamView::slotViewModeChanged()
             break;
         case StackedView::TableViewMode:
             emit signalSwitchedToTableView();
-            emit signalThumbSizeChanged(d->trashView->getThumbnailSize().size());
+            emit signalThumbSizeChanged(d->thumbSize);
             break;
         case StackedView::TrashViewMode:
             emit signalSwitchedToTrashView();
