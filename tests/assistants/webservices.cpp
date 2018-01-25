@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2017-06-28
- * Description : stand alone test application for print creator tool.
+ * Description : stand alone test application for webservices tool.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -32,7 +32,7 @@
 
 #include "dmetainfoiface.h"
 #include "metaengine.h"
-#include "advprintwizard.h"
+#include "wswizard.h"
 
 using namespace Digikam;
 
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 
     QCommandLineParser parser;
     parser.addHelpOption();
-    parser.addPositionalArgument(QLatin1String("files"), QLatin1String("File(s) to send by mail"), QLatin1String("+[file(s)]"));
+    parser.addPositionalArgument(QLatin1String("files"), QLatin1String("File(s) to export to a web service"), QLatin1String("+[file(s)]"));
     parser.process(app);
 
     MetaEngine::initializeExiv2();
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    AdvPrintWizard wzrd(0, new DMetaInfoIface(&app, urlList));
+    WSWizard wzrd(0, new DMetaInfoIface(&app, urlList));
     wzrd.setItemsList(urlList);
     wzrd.exec();
 

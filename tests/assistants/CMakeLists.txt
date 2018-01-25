@@ -95,6 +95,21 @@ target_link_libraries(sendbymail
 )
 
 # =======================================================
+# Stand alone version of WebServices tool
+
+set(webservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/webservices.cpp)
+
+add_executable(webservices ${webservices_SRCS})
+
+target_link_libraries(webservices
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)
+
+# =======================================================
 # Stand alone version of PrintCreator tool
 
 set(printcreator_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/printcreator.cpp)
