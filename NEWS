@@ -17,4 +17,5 @@ BUGFIXES FROM BUGZILLA:
 007 ==> 389246 - Single click confirmation of suggested face tag.
 008 ==> 389208 - Request addition of "Lens" to Tool-Tips (Icon Items).
 009 ==> 389342 - Tags are copied although moving of file fails because file with the same name already exists in target location.
-010 ==> 
+010 ==> 389420 - Thumbnails diminishing in size after switching Views.
+011 ==> 
