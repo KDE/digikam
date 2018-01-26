@@ -56,10 +56,7 @@ public:
         hbox(0),
         wizard(0),
         iface(0),
-        btnGrp(0),
-        flickrBtn(0),
-        dropboxBtn(0),
-        imgurBtn(0)
+        wsOption(0)
     {
         wizard = dynamic_cast<WSWizard*>(dialog);
 
@@ -73,10 +70,7 @@ public:
     DHBox*            hbox;
     WSWizard*         wizard;
     DInfoInterface*   iface;
-    QButtonGroup*     btnGrp;
-    QRadioButton*     flickrBtn;
-    QRadioButton*     dropboxBtn;
-    QRadioButton*     imgurBtn;
+    QComboBox*        wsOption;
 };
 
 WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
@@ -107,23 +101,19 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
 
     // --------------------
 
-    QGroupBox* const wsBox      = new QGroupBox(vbox);
-    QVBoxLayout* const wsLayout = new QVBoxLayout(wsBox);
-    wsBox->setLayout(wsLayout);
-    wsBox->setTitle(i18nc("@title:group", "Remote Web Service"));
-    d->btnGrp     = new QButtonGroup(wsBox);
-    QMap<WSSettings::WebService, QString> map = WSSettings::webServiceNames();
-    d->flickrBtn  = new QRadioButton(map[WSSettings::FLICKR],  wsBox);
-    d->dropboxBtn = new QRadioButton(map[WSSettings::DROPBOX], wsBox);
-    d->imgurBtn   = new QRadioButton(map[WSSettings::IMGUR],   wsBox);
-    d->btnGrp->setExclusive(true);
-    d->btnGrp->addButton(d->flickrBtn,  WSSettings::FLICKR);
-    d->btnGrp->addButton(d->dropboxBtn, WSSettings::DROPBOX);
-    d->btnGrp->addButton(d->imgurBtn,   WSSettings::IMGUR);
+    DHBox* const wsBox          = new DHBox(vbox);
+    QLabel* const wsLabel       = new QLabel(i18n("&Choose remote Web Service:"), wsBox);
+    d->wsOption                 = new QComboBox(wsBox);
+    QMap<WSSettings::WebService, QString> map                = WSSettings::webServiceNames();
+    QMap<WSSettings::WebService, QString>::const_iterator it = map.constBegin();
 
-    wsLayout->addWidget(d->flickrBtn);
-    wsLayout->addWidget(d->dropboxBtn);
-    wsLayout->addWidget(d->imgurBtn);
+    while (it != map.constEnd())
+    {
+        d->wsOption->addItem(it.value(), (int)it.key());
+        ++it;
+    }
+
+    wsLabel->setBuddy(d->wsOption);
 
     vbox->setStretchFactor(desc,    3);
     vbox->setStretchFactor(d->hbox, 1);
@@ -131,9 +121,6 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-html")));
-
-    connect(d->btnGrp, SIGNAL(buttonClicked(int)),
-            this, SLOT(slotWSChanged(int)));
 }
 
 WSIntroPage::~WSIntroPage()
@@ -154,22 +141,14 @@ void WSIntroPage::initializePage()
     {
         d->imageGetOption->setCurrentIndex(d->wizard->settings()->selMode);
     }
-
-    slotWSChanged(d->btnGrp->checkedId());
 }
 
 bool WSIntroPage::validatePage()
 {
     d->wizard->settings()->selMode = (WSSettings::Selection)d->imageGetOption->currentIndex();
+    d->wizard->settings()->webService = (WSSettings::WebService)d->wsOption->currentIndex();
 
     return true;
-}
-
-void WSIntroPage::slotWSChanged(int i)
-{
-    d->wizard->settings()->webService = (WSSettings::WebService)i;
-
-    emit completeChanged();
 }
 
 } // namespace Digikam
