@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-11-07
- * Description : mail settings container.
+ * Date        : 2017-01-24
+ * Description : Web Service settings container.
  *
- * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010      by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,9 +37,8 @@ WSSettings::WSSettings()
     addFileProperties = false;
     imagesChangeProp  = false;
     removeMetadata    = false;
-    attLimitInMbytes  = 17;
     imageCompression  = 75;
-    mailProgram       = THUNDERBIRD;
+    webService        = FLICKR;
     imageSize         = 1024;
     imageFormat       = JPEG;
 }
@@ -59,12 +57,10 @@ void WSSettings::readSettings(KConfigGroup& group)
                         false);
     removeMetadata    = group.readEntry("RemoveMetadata",
                         false);
-    attLimitInMbytes  = group.readEntry("AttLimitInMbytes",
-                        17);
     imageCompression  = group.readEntry("ImageCompression",
                         75);
-    mailProgram       = (MailClient)group.readEntry("MailProgram",
-                        (int)THUNDERBIRD);
+    webService        = (WebService)group.readEntry("WebService",
+                        (int)FLICKR);
     imageSize         = group.readEntry("ImageSize",
                         1024);
     imageFormat       = (ImageFormat)group.readEntry("ImageFormat",
@@ -77,9 +73,8 @@ void WSSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("AddCommentsAndTags", addFileProperties);
     group.writeEntry("ImagesChangeProp",   imagesChangeProp);
     group.writeEntry("RemoveMetadata",     removeMetadata);
-    group.writeEntry("AttLimitInMbytes",   attLimitInMbytes);
     group.writeEntry("ImageCompression",   imageCompression);
-    group.writeEntry("MailProgram",        (int)mailProgram);
+    group.writeEntry("WebService",         (int)webService);
     group.writeEntry("ImageSize",          imageSize);
     group.writeEntry("ImageFormat",        (int)imageFormat);
 }
@@ -107,25 +102,15 @@ QUrl WSSettings::mailUrl(const QUrl& orgUrl) const
     return QUrl();
 }
 
-qint64 WSSettings::attachementLimit() const
+QMap<WSSettings::WebService, QString> WSSettings::webServiceNames()
 {
-    qint64 val = attLimitInMbytes * 1024 * 1024;
-    return val;
-}
+    QMap<WebService, QString> services;
 
-QMap<WSSettings::MailClient, QString> WSSettings::mailClientNames()
-{
-    QMap<MailClient, QString> clients;
+    services[FLICKR]    = i18nc("Web Service: FLICKR",    "Flickr");
+    services[DROPBOX]   = i18nc("Web Service: DROPBOX",   "Dropbox");
+    services[IMGUR]     = i18nc("Web Service: IMGUR",     "Imgur");
 
-    clients[BALSA]         = i18nc("Mail client: BALSA",         "Balsa");
-    clients[CLAWSMAIL]     = i18nc("Mail client: CLAWSMAIL",     "Clawsmail");
-    clients[EVOLUTION]     = i18nc("Mail client: EVOLUTION",     "Evolution");
-    clients[KMAIL]         = i18nc("Mail client: KMAIL",         "Kmail");
-    clients[NETSCAPE]      = i18nc("Mail client: NETSCAPE",      "Netscape Messenger");
-    clients[SYLPHEED]      = i18nc("Mail client: SYLPHEED",      "Sylpheed");
-    clients[THUNDERBIRD]   = i18nc("Mail client: THUNDERBIRD",   "Thunderbird");
-
-    return clients;
+    return services;
 }
 
 QMap<WSSettings::ImageFormat, QString> WSSettings::imageFormatNames()

@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-11-07
- * Description : mail settings container.
+ * Date        : 2017-01-24
+ * Description : Web Service settings container.
  *
- * Copyright (C) 2007-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010      by Andi Clemens <andi dot clemens at googlemail dot com>
+ * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,15 +49,11 @@ public:
         ALBUMS
     };
 
-    enum MailClient
+    enum WebService
     {
-        BALSA = 0,
-        CLAWSMAIL,
-        EVOLUTION,
-        KMAIL,
-        NETSCAPE,       // Messenger (https://en.wikipedia.org/wiki/Netscape_Messenger_9)
-        SYLPHEED,
-        THUNDERBIRD
+        FLICKR = 0,
+        DROPBOX,
+        IMGUR
     };
 
     enum ImageFormat
@@ -76,17 +71,13 @@ public:
     void  readSettings(KConfigGroup& group);
     void  writeSettings(KConfigGroup& group);
 
-    QString format()           const;
-
-    /** Return the attachement limit in bytes
-     */
-    qint64  attachementLimit() const;
+    QString format() const;
 
     void setMailUrl(const QUrl& orgUrl, const QUrl& emailUrl);
     QUrl mailUrl(const QUrl& orgUrl) const;
 
-    // Helper methods to fill combobox from GUI.
-    static QMap<MailClient,  QString> mailClientNames();
+    // Helper methods to fill settings from GUI.
+    static QMap<WebService,  QString> webServiceNames();
     static QMap<ImageFormat, QString> imageFormatNames();
 
 public:
@@ -106,15 +97,13 @@ public:
 
     QString                   tempPath;
 
-    MailClient                mailProgram;
+    WebService                webService;
 
     int                       imageSize;
 
     ImageFormat               imageFormat;
 
     QMap<QUrl, QUrl>          itemsList; // Map of original item and attached item (can be resized).
-
-    QMap<MailClient, QString> binPaths;  // Map of paths for all mail clients.
 };
 
 } // namespace Digikam

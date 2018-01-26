@@ -30,6 +30,8 @@
 #include <QIcon>
 #include <QGroupBox>
 #include <QGridLayout>
+#include <QRadioButton>
+#include <QButtonGroup>
 
 // KDE includes
 
@@ -41,14 +43,6 @@
 #include "dlayoutbox.h"
 #include "wswizard.h"
 #include "wssettings.h"
-#include "dbinarysearch.h"
-#include "balsabinary.h"
-#include "clawsmailbinary.h"
-#include "kmailbinary.h"
-#include "evolutionbinary.h"
-#include "netscapebinary.h"
-#include "sylpheedbinary.h"
-#include "thunderbirdbinary.h"
 
 namespace Digikam
 {
@@ -62,7 +56,10 @@ public:
         hbox(0),
         wizard(0),
         iface(0),
-        binSearch(0)
+        btnGrp(0),
+        flickrBtn(0),
+        dropboxBtn(0),
+        imgurBtn(0)
     {
         wizard = dynamic_cast<WSWizard*>(dialog);
 
@@ -74,16 +71,12 @@ public:
 
     QComboBox*        imageGetOption;
     DHBox*            hbox;
-    WSWizard*       wizard;
+    WSWizard*         wizard;
     DInfoInterface*   iface;
-    DBinarySearch*    binSearch;
-    BalsaBinary       balsaBin;
-    ClawsMailBinary   clawsBin;
-    EvolutionBinary   evoluBin;
-    KmailBinary       kmailBin;
-    NetscapeBinary    netscBin;
-    SylpheedBinary    sylphBin;
-    ThunderbirdBinary thundBin;
+    QButtonGroup*     btnGrp;
+    QRadioButton*     flickrBtn;
+    QRadioButton*     dropboxBtn;
+    QRadioButton*     imgurBtn;
 };
 
 WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
@@ -96,11 +89,11 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
     desc->setWordWrap(true);
     desc->setOpenExternalLinks(true);
     desc->setText(i18n("<qt>"
-                       "<p><h1><b>Welcome to Email Tool</b></h1></p>"
-                       "<p>This assistant will guide you to send "
-                       "your items with a mail client application.</p>"
-                       "<p>Before to export contents, you will be able to adjust attachments "
-                       "properties accordingly with your mail service capabilities.</p>"
+                       "<p><h1><b>Welcome to Web Services Tool</b></h1></p>"
+                       "<p>This assistant will guide you to export "
+                       "your items to popular Internet data hosting service.</p>"
+                       "<p>Before to export contents, you will be able to adjust items properties "
+                       "accordingly with your remote Web service capabilities.</p>"
                        "</qt>"));
 
     // ComboBox for image selection method
@@ -114,43 +107,33 @@ WSIntroPage::WSIntroPage(QWizard* const dialog, const QString& title)
 
     // --------------------
 
-    QGroupBox* const binaryBox      = new QGroupBox(vbox);
-    QGridLayout* const binaryLayout = new QGridLayout;
-    binaryBox->setLayout(binaryLayout);
-    binaryBox->setTitle(i18nc("@title:group", "Mail client application Binaries"));
-    d->binSearch = new DBinarySearch(binaryBox);
-    d->binSearch->addBinary(d->balsaBin);
-    d->binSearch->addBinary(d->clawsBin);
-    d->binSearch->addBinary(d->kmailBin);
-    d->binSearch->addBinary(d->evoluBin);
-    d->binSearch->addBinary(d->netscBin);
-    d->binSearch->addBinary(d->sylphBin);
-    d->binSearch->addBinary(d->thundBin);
+    QGroupBox* const wsBox      = new QGroupBox(vbox);
+    QVBoxLayout* const wsLayout = new QVBoxLayout(wsBox);
+    wsBox->setLayout(wsLayout);
+    wsBox->setTitle(i18nc("@title:group", "Remote Web Service"));
+    d->btnGrp     = new QButtonGroup(wsBox);
+    QMap<WSSettings::WebService, QString> map = WSSettings::webServiceNames();
+    d->flickrBtn  = new QRadioButton(map[WSSettings::FLICKR],  wsBox);
+    d->dropboxBtn = new QRadioButton(map[WSSettings::DROPBOX], wsBox);
+    d->imgurBtn   = new QRadioButton(map[WSSettings::IMGUR],   wsBox);
+    d->btnGrp->setExclusive(true);
+    d->btnGrp->addButton(d->flickrBtn,  WSSettings::FLICKR);
+    d->btnGrp->addButton(d->dropboxBtn, WSSettings::DROPBOX);
+    d->btnGrp->addButton(d->imgurBtn,   WSSettings::IMGUR);
 
-#ifdef Q_OS_OSX
-    // Std Macports install
-    d->binSearch->addDirectory(QLatin1String("/opt/local/bin"));
+    wsLayout->addWidget(d->flickrBtn);
+    wsLayout->addWidget(d->dropboxBtn);
+    wsLayout->addWidget(d->imgurBtn);
 
-    // digiKam Bundle PKG install
-    d->binSearch->addDirectory(QLatin1String("/opt/digikam/bin"));
-#endif
-
-#ifdef Q_OS_WIN
-    // FIXME : adjust paths
-    d->binSearch->addDirectory(QLatin1String("C:/Program Files/"));
-
-    d->binSearch->addDirectory(QLatin1String("C:/Program Files (x86)/"));
-#endif
-
-    vbox->setStretchFactor(desc,      2);
-    vbox->setStretchFactor(d->hbox,   1);
-    vbox->setStretchFactor(binaryBox, 3);
+    vbox->setStretchFactor(desc,    3);
+    vbox->setStretchFactor(d->hbox, 1);
+    vbox->setStretchFactor(wsBox,   3);
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("mail-client")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-html")));
 
-    connect(d->binSearch, SIGNAL(signalBinariesFound(bool)),
-            this, SLOT(slotBinariesFound()));
+    connect(d->btnGrp, SIGNAL(buttonClicked(int)),
+            this, SLOT(slotWSChanged(int)));
 }
 
 WSIntroPage::~WSIntroPage()
@@ -172,8 +155,7 @@ void WSIntroPage::initializePage()
         d->imageGetOption->setCurrentIndex(d->wizard->settings()->selMode);
     }
 
-    d->binSearch->allBinariesFound();
-    slotBinariesFound();
+    slotWSChanged(d->btnGrp->checkedId());
 }
 
 bool WSIntroPage::validatePage()
@@ -183,38 +165,11 @@ bool WSIntroPage::validatePage()
     return true;
 }
 
-void WSIntroPage::slotBinariesFound()
+void WSIntroPage::slotWSChanged(int i)
 {
-    d->wizard->settings()->binPaths.insert(WSSettings::BALSA, d->balsaBin.isValid() ?
-                                           d->balsaBin.path() : QString());
-
-    d->wizard->settings()->binPaths.insert(WSSettings::CLAWSMAIL, d->clawsBin.isValid() ?
-                                           d->clawsBin.path() : QString());
-
-    d->wizard->settings()->binPaths.insert(WSSettings::EVOLUTION, d->evoluBin.isValid() ?
-                                           d->evoluBin.path() : QString());
-
-    d->wizard->settings()->binPaths.insert(WSSettings::KMAIL, d->kmailBin.isValid() ?
-                                           d->kmailBin.path() : QString());
-
-    d->wizard->settings()->binPaths.insert(WSSettings::NETSCAPE, d->netscBin.isValid() ?
-                                           d->netscBin.path() : QString());
-
-    d->wizard->settings()->binPaths.insert(WSSettings::SYLPHEED, d->sylphBin.isValid() ?
-                                           d->sylphBin.path() : QString());
-
-    d->wizard->settings()->binPaths.insert(WSSettings::THUNDERBIRD, d->thundBin.isValid() ?
-                                           d->thundBin.path() : QString());
+    d->wizard->settings()->webService = (WSSettings::WebService)i;
 
     emit completeChanged();
-}
-
-bool WSIntroPage::isComplete() const
-{
-    QString val = d->wizard->settings()->binPaths.values().join(QString());
-    qCDebug(DIGIKAM_GENERAL_LOG) << val;
-
-    return (!val.isEmpty());
 }
 
 } // namespace Digikam

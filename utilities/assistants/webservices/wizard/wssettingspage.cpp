@@ -98,9 +98,9 @@ public:
     QSpinBox*       attachmentlimit;
     QSpinBox*       imagesResize;
 
-    WSWizard*     wizard;
+    WSWizard*       wizard;
     DInfoInterface* iface;
-    WSSettings*   settings;
+    WSSettings*     settings;
 };
 
 WSSettingsPage::WSSettingsPage(QWizard* const dialog, const QString& title)
@@ -118,17 +118,6 @@ WSSettingsPage::WSSettingsPage(QWizard* const dialog, const QString& title)
     d->mailAgentName  = new QComboBox(main);
     d->mailAgentName->setEditable(false);
     d->mailAgentName->setWhatsThis(i18n("Select your preferred external mail client program here."));
-
-    QMap<WSSettings::MailClient, QString> map                = WSSettings::mailClientNames();
-    QMap<WSSettings::MailClient, QString>::const_iterator it = map.constBegin();
-
-    while (it != map.constEnd())
-    {
-        d->mailAgentName->insertItem((int)it.key(), it.value(), (int)it.key());
-        ++it;
-    }
-
-    d->labelMailAgent->setBuddy(d->mailAgentName);
 
     //---------------------------------------------
 
@@ -276,23 +265,6 @@ void WSSettingsPage::slotImagesFormatChanged(int i)
 
 void WSSettingsPage::initializePage()
 {
-    QMap<WSSettings::MailClient, QString> map                = d->settings->binPaths;
-    QMap<WSSettings::MailClient, QString>::const_iterator it = map.constBegin();
-
-    while (it != map.constEnd())
-    {
-        if (d->settings->binPaths[it.key()].isEmpty())
-        {
-            d->mailAgentName->setItemData((int)it.key(), false, Qt::UserRole-1);
-        }
-        else if (it.key() == d->settings->mailProgram)
-        {
-            d->mailAgentName->setCurrentIndex((int)d->settings->mailProgram);
-        }
-
-        ++it;
-    }
-
     d->imagesResize->setValue(d->settings->imageSize);
     d->imagesFormat->setCurrentIndex((int)d->settings->imageFormat);
 
@@ -302,7 +274,6 @@ void WSSettingsPage::initializePage()
     d->addFileProperties->setEnabled(d->iface);
 
     d->imageCompression->setValue(d->settings->imageCompression);
-    d->attachmentlimit->setValue(d->settings->attLimitInMbytes);
     d->removeMetadata->setChecked(d->settings->removeMetadata);
 
     slotImagesFormatChanged(d->imagesFormat->currentIndex());
@@ -310,7 +281,6 @@ void WSSettingsPage::initializePage()
 
 bool WSSettingsPage::validatePage()
 {
-    d->settings->mailProgram       = WSSettings::MailClient(d->mailAgentName->currentIndex());
     d->settings->imageSize         = d->imagesResize->value();
     d->settings->imageFormat       = WSSettings::ImageFormat(d->imagesFormat->currentIndex());
 
@@ -319,7 +289,6 @@ bool WSSettingsPage::validatePage()
     d->settings->removeMetadata    = d->removeMetadata->isChecked();
 
     d->settings->imageCompression  = d->imageCompression->value();
-    d->settings->attLimitInMbytes  = d->attachmentlimit->value();
 
     return true;
 }

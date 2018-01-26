@@ -45,11 +45,10 @@ public:
 
     void initializePage();
     bool validatePage();
-    bool isComplete() const;
 
 private Q_SLOTS:
 
-    void slotBinariesFound();
+    void slotWSChanged(int i);
 
 private:
 
