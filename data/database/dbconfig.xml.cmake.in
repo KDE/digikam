@@ -1096,13 +1096,6 @@
                             ENGINE InnoDB;</statement>
             <statement mode="plain">ALTER TABLE Albums
                             ADD CONSTRAINT Albums_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHaarMatrix
-                            (imageid INTEGER PRIMARY KEY,
-                            modificationDate DATETIME,
-                            uniqueHash LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            matrix LONGBLOB,
-                            CONSTRAINT ImageHaarMatrix_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
-                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageInformation
                             (imageid INTEGER PRIMARY KEY,
                             rating INTEGER,
