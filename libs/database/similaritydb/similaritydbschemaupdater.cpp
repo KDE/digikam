@@ -120,7 +120,7 @@ bool SimilarityDbSchemaUpdater::startUpdates()
     // First step: do we have an empty database?
     QStringList tables = d->m_access->backend()->tables();
 
-    if (tables.contains(QLatin1String("Settings"), Qt::CaseInsensitive))
+    if (tables.contains(QLatin1String("SimilaritySettings"), Qt::CaseInsensitive))
     {
         // Find out schema version of db file
         QString version         = d->m_access->db()->getSetting(QLatin1String("DBSimilarityVersion"));

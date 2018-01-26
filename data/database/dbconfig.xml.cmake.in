@@ -1748,13 +1748,14 @@
 
             <!-- Mysql Similarity Triggers -->
             <dbaction name="CreateSimilarityDBTriggers" mode="transaction">
-                <statement mode="plain">
                     <!--
+                <statement mode="plain">
+
                         If an entry of the ImageHaarMatrix is deleted,
                         delete all entries from the ImageSimilarity table
                         for the Haar algorithm (1) where either the first or the second image id is
                         the deleted one.
-                    -->
+
                     CREATE TRIGGER IF NOT EXISTS delete_similarities AFTER DELETE ON ImageHaarMatrix
                     FOR EACH ROW
                     BEGIN
@@ -1762,7 +1763,9 @@
                             WHERE ( ImageSimilarity.imageid1=OLD.id OR ImageSimilarity.imageid2=OLD.id )
                                 AND ( ImageSimilarity.algorithm=1 );
                     END;
+
                 </statement>
+                    -->
             </dbaction>
 
             <!-- Mysql Similarity Queries -->

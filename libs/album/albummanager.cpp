@@ -1030,6 +1030,15 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
     DbEngineGuiErrorHandler* const thumbnailsDBHandler = new DbEngineGuiErrorHandler(ThumbsDbAccess::parameters());
     ThumbsDbAccess::initDbEngineErrorHandler(thumbnailsDBHandler);
 
+    if (SimilarityDbAccess::checkReadyForUse(0))
+    {
+        qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "Similarity database ready for use";
+    }
+    else
+    {
+        qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "Failed to initialize similarity database";
+    }
+
     QApplication::restoreOverrideCursor();
 
     return true;
