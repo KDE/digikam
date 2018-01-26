@@ -86,6 +86,7 @@ public:
         dbNameCore             = 0;
         dbNameThumbs           = 0;
         dbNameFace             = 0;
+        dbNameSimilarity       = 0;
         hostName               = 0;
         connectOpts            = 0;
         userName               = 0;
@@ -105,6 +106,7 @@ public:
     QLineEdit*         dbNameCore;
     QLineEdit*         dbNameThumbs;
     QLineEdit*         dbNameFace;
+    QLineEdit*         dbNameSimilarity;
     QLineEdit*         hostName;
     QLineEdit*         connectOpts;
     QLineEdit*         userName;
@@ -326,6 +328,12 @@ void DatabaseSettingsWidget::setupMainArea()
                                    "and tagged."));
     d->dbNameFace->setValidator(asciiValidator);
 
+    QLabel* const dbNameSimilarityLabel              = new QLabel(i18n("Similarity Db Name:"));
+    d->dbNameSimilarity                              = new QLineEdit();
+    d->dbNameSimilarity->setPlaceholderText(i18n("Set the similarity database name"));
+    d->dbNameSimilarity->setToolTip(i18n("The similarity database is used by digiKam to host image haar matrix datas for the similarity search."));
+    d->dbNameSimilarity->setValidator(asciiValidator);
+
     QPushButton* const defaultValuesBtn              = new QPushButton(i18n("Default Settings"));
     defaultValuesBtn->setToolTip(i18n("Reset database names settings to common default values."));
 
@@ -334,16 +342,17 @@ void DatabaseSettingsWidget::setupMainArea()
     QFormLayout* const expertSettinglayout           = new QFormLayout();
     d->expertSettings->setLayout(expertSettinglayout);
 
-    expertSettinglayout->addRow(hostNameLabel,     d->hostName);
-    expertSettinglayout->addRow(userNameLabel,     d->userName);
-    expertSettinglayout->addRow(passwordLabel,     d->password);
-    expertSettinglayout->addRow(connectOptsLabel,  d->connectOpts);
-    expertSettinglayout->addRow(hostPortLabel,     phbox);
+    expertSettinglayout->addRow(hostNameLabel,         d->hostName);
+    expertSettinglayout->addRow(userNameLabel,         d->userName);
+    expertSettinglayout->addRow(passwordLabel,         d->password);
+    expertSettinglayout->addRow(connectOptsLabel,      d->connectOpts);
+    expertSettinglayout->addRow(hostPortLabel,         phbox);
     expertSettinglayout->addRow(new DLineWidget(Qt::Horizontal, d->expertSettings));
-    expertSettinglayout->addRow(dbNameCoreLabel,   d->dbNameCore);
-    expertSettinglayout->addRow(dbNameThumbsLabel, d->dbNameThumbs);
-    expertSettinglayout->addRow(dbNameFaceLabel,   d->dbNameFace);
-    expertSettinglayout->addRow(new QWidget(),     defaultValuesBtn);
+    expertSettinglayout->addRow(dbNameCoreLabel,       d->dbNameCore);
+    expertSettinglayout->addRow(dbNameThumbsLabel,     d->dbNameThumbs);
+    expertSettinglayout->addRow(dbNameFaceLabel,       d->dbNameFace);
+    expertSettinglayout->addRow(dbNameSimilarityLabel, d->dbNameSimilarity);
+    expertSettinglayout->addRow(new QWidget(),         defaultValuesBtn);
 
     d->tab->addTab(d->expertSettings, i18n("Remote Server Settings"));
 
@@ -454,6 +463,9 @@ void DatabaseSettingsWidget::setupMainArea()
     connect(d->dbNameFace, SIGNAL(textChanged(QString)),
             this, SLOT(slotUpdateSqlInit()));
 
+    connect(d->dbNameSimilarity, SIGNAL(textChanged(QString)),
+            this, SLOT(slotUpdateSqlInit()));
+
     connect(d->userName, SIGNAL(textChanged(QString)),
             this, SLOT(slotUpdateSqlInit()));
 
@@ -501,6 +513,7 @@ void DatabaseSettingsWidget::slotResetMysqlServerDBNames()
     d->dbNameCore->setText(QLatin1String("digikam"));
     d->dbNameThumbs->setText(QLatin1String("digikam"));
     d->dbNameFace->setText(QLatin1String("digikam"));
+    d->dbNameSimilarity->setText(QLatin1String("digikam"));
 }
 
 void DatabaseSettingsWidget::slotHandleDBTypeIndexChanged(int index)
@@ -562,6 +575,7 @@ void DatabaseSettingsWidget::handleInternalServer(int index)
     d->dbNameCore->setDisabled(internal);
     d->dbNameThumbs->setDisabled(internal);
     d->dbNameFace->setDisabled(internal);
+    d->dbNameSimilarity->setDisabled(internal);
     d->userName->setDisabled(internal);
     d->password->setDisabled(internal);
     d->connectOpts->setDisabled(internal);
@@ -599,6 +613,18 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
                                    .arg(d->dbNameFace->text())
                                    .arg(d->userName->text());
     }
+
+    if ((d->dbNameSimilarity->text() != d->dbNameCore->text()) &&
+        (d->dbNameSimilarity->text() != d->dbNameThumbs->text()) &&
+        (d->dbNameSimilarity->text() != d->dbNameFace->text()))
+    {
+        sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
+                                   .arg(d->dbNameSimilarity->text())
+                                   .arg(d->dbNameSimilarity->text())
+                                   .arg(d->userName->text());
+    }
+
     sql += QString::fromLatin1("FLUSH PRIVILEGES;<br>");
 
     d->sqlInit->setText(sql);
@@ -655,6 +681,12 @@ bool DatabaseSettingsWidget::checkMysqlServerDbNamesConfig(QString& error)
     if (d->dbNameFace->text().isEmpty())
     {
         error = i18n("The face database name is empty");
+        return false;
+    }
+
+    if (d->dbNameSimilarity->text().isEmpty())
+    {
+        error = i18n("The similarity database name is empty");
         return false;
     }
 
@@ -739,6 +771,7 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
         d->dbNameCore->setText(d->orgPrms.databaseNameCore);
         d->dbNameThumbs->setText(d->orgPrms.databaseNameThumbnails);
         d->dbNameFace->setText(d->orgPrms.databaseNameFace);
+        d->dbNameSimilarity->setText(d->orgPrms.databaseNameSimilarity);
         d->hostName->setText(d->orgPrms.hostName);
         d->hostPort->setValue((d->orgPrms.port == -1) ? 3306 : d->orgPrms.port);
         d->connectOpts->setText(d->orgPrms.connectOptions);
@@ -773,6 +806,7 @@ DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
             prm.databaseNameCore       = d->dbNameCore->text();
             prm.databaseNameThumbnails = d->dbNameThumbs->text();
             prm.databaseNameFace       = d->dbNameFace->text();
+            prm.databaseNameSimilarity = d->dbNameSimilarity->text();
             prm.connectOptions         = d->connectOpts->text();
             prm.hostName               = d->hostName->text();
             prm.port                   = d->hostPort->value();
