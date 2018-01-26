@@ -2431,7 +2431,7 @@
             <!-- statements for shrinking the databases -->
 
             <dbaction name="vacuumCoreDB">
-                <statement mode="query">OPTIMIZE TABLE Albums, Images, ImageHaarMatrix, ImageInformation, ImageMetadata, VideoMetadata, ImagePositions, ImageComments, ImageCopyright, ImageProperties, ImageHistory, ImageRelations, Tags, ImageTags, ImageTagProperties;</statement>
+                <statement mode="query">OPTIMIZE TABLE Albums, Images, ImageInformation, ImageMetadata, VideoMetadata, ImagePositions, ImageComments, ImageCopyright, ImageProperties, ImageHistory, ImageRelations, Tags, ImageTags, ImageTagProperties;</statement>
             </dbaction>
 
             <dbaction name="vacuumThumbnailsDB">
@@ -2443,7 +2443,7 @@
             </dbaction>
 
             <dbaction name="checkCoreDbIntegrity"> 
-                <statement mode="unprepared">CHECK TABLE Albums, Images, ImageHaarMatrix, ImageInformation, ImageMetadata, VideoMetadata, ImagePositions, ImageComments, ImageCopyright, ImageProperties, ImageHistory, ImageRelations, Tags, ImageTags, ImageTagProperties;</statement>
+                <statement mode="unprepared">CHECK TABLE Albums, Images, ImageInformation, ImageMetadata, VideoMetadata, ImagePositions, ImageComments, ImageCopyright, ImageProperties, ImageHistory, ImageRelations, Tags, ImageTags, ImageTagProperties;</statement>
             </dbaction>
 
             <dbaction name="checkThumbnailsDbIntegrity">
