@@ -32,3 +32,18 @@ target_link_libraries(flickr
                       Qt5::Gui
                       Qt5::Xml
 )
+
+# =======================================================
+# Stand alone version of Imgur tool
+
+set(imgur_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imgur.cpp)
+
+add_executable(imgur ${imgur_SRCS})
+
+target_link_libraries(imgur
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)

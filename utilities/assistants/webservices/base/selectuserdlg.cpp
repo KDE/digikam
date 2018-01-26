@@ -44,7 +44,7 @@ SelectUserDlg::SelectUserDlg(QWidget* const parent, const QString& serviceName)
 {
     m_serviceName = serviceName;
 
-    setWindowTitle(i18n("Flickr Account Selector"));
+    setWindowTitle(i18n("Account Selector"));
     setModal(true);
 
     QDialogButtonBox* const buttonBox   = new QDialogButtonBox();
@@ -103,7 +103,7 @@ SelectUserDlg::~SelectUserDlg()
 
 void SelectUserDlg::reactivate()
 {
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
 
     m_userComboBox->clear();
 

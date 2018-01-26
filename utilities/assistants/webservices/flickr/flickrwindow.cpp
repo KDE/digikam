@@ -75,7 +75,7 @@ FlickrWindow::FlickrWindow(QWidget* const /*parent*/, const QString& serviceName
         setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-flickr")));
     }
 
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
     KConfigGroup grp = config.group(QString::fromLatin1("%1Export Settings").arg(m_serviceName));
 
     if (grp.exists())
@@ -265,7 +265,7 @@ void FlickrWindow::reactivate()
 
 void FlickrWindow::readSettings(QString uname)
 {
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
     qCDebug(DIGIKAM_GENERAL_LOG) << "Group name is : "<<QString::fromLatin1("%1%2Export Settings").arg(m_serviceName, uname);
     KConfigGroup grp = config.group(QString::fromLatin1("%1%2Export Settings").arg(m_serviceName, uname));
     m_exportHostTagsCheckBox->setChecked(grp.readEntry("Export Host Tags",      false));
@@ -311,7 +311,7 @@ void FlickrWindow::readSettings(QString uname)
 
 void FlickrWindow::writeSettings()
 {
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
     qCDebug(DIGIKAM_GENERAL_LOG) << "Group name is : "<<QString::fromLatin1("%1%2Export Settings").arg(m_serviceName,m_username);
 
     if (QString::compare(QString::fromLatin1("%1Export Settings").arg(m_serviceName),
@@ -351,7 +351,7 @@ void FlickrWindow::slotLinkingSucceeded()
     qCDebug(DIGIKAM_GENERAL_LOG) << "SlotLinkingSucceeded invoked setting user Display name to " << m_username;
     m_userNameDisplayLabel->setText(QString::fromLatin1("<b>%1</b>").arg(m_username));
 
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
 
     foreach(const QString& group, config.groupList())
     {
@@ -401,7 +401,7 @@ void FlickrWindow::slotUserChangeRequest()
 
 void FlickrWindow::slotRemoveAccount()
 {
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
     KConfigGroup grp = config.group(QString::fromLatin1("%1%2Export Settings").arg(m_serviceName).arg(m_username));
 
     if (grp.exists())
