@@ -61,6 +61,7 @@
 #include "dxmlguiwindow.h"
 #include "digikam_version.h"
 #include "applicationsettings.h"
+#include "similaritydbaccess.h"
 
 using namespace Digikam;
 
@@ -230,6 +231,7 @@ int main(int argc, char* argv[])
         CoreDbAccess::cleanUpDatabase();
         ThumbsDbAccess::cleanUpDatabase();
         FaceDbAccess::cleanUpDatabase();
+        SimilarityDbAccess::cleanUpDatabase();
         MetaEngine::cleanupExiv2();
         return 0;
     }
@@ -287,6 +289,7 @@ int main(int argc, char* argv[])
     CoreDbAccess::cleanUpDatabase();
     ThumbsDbAccess::cleanUpDatabase();
     FaceDbAccess::cleanUpDatabase();
+    SimilarityDbAccess::cleanUpDatabase();
     MetaEngine::cleanupExiv2();
 
     return ret;

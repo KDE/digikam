@@ -100,6 +100,8 @@ extern "C"
 #include "dbjobinfo.h"
 #include "dbjobsmanager.h"
 #include "dbjobsthread.h"
+#include "similaritydb.h"
+#include "similaritydbaccess.h"
 
 namespace Digikam
 {
@@ -760,6 +762,13 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
     }
 
     d->albumWatch->setDbEngineParameters(params);
+
+    // Activate the similarity database.
+
+    SimilarityDbAccess::setParameters(params.similarityParameters());
+
+    DbEngineGuiErrorHandler* const similarityHandler = new DbEngineGuiErrorHandler(SimilarityDbAccess::parameters());
+    SimilarityDbAccess::initDbEngineErrorHandler(similarityHandler);
 
     // still suspended from above
     ScanController::instance()->resumeCollectionScan();

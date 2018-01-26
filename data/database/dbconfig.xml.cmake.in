@@ -11,6 +11,7 @@
  * Copyright (C) 2009      by Holger Foerster <hamsi2k at freenet dot de>
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -120,11 +121,6 @@
                             fileSize INTEGER,
                             uniqueHash TEXT,
                             UNIQUE (album, name))</statement>
-            <statement mode="plain">CREATE TABLE ImageHaarMatrix
-                            (imageid INTEGER PRIMARY KEY,
-                            modificationDate DATETIME,
-                            uniqueHash TEXT,
-                            matrix BLOB)</statement>
             <statement mode="plain">CREATE TABLE ImageInformation
                             (imageid INTEGER PRIMARY KEY,
                             rating INTEGER,
@@ -602,6 +598,64 @@
             <dbaction name="ReplaceFaceSetting">
                 <statement mode="query">REPLACE INTO Settings VALUES (:keyword, :value);</statement>
             </dbaction>
+            
+            <!-- SQlite Similarity Database -->
+            
+            <dbaction name="CreateSimilarityDB" mode="transaction">
+                    <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageSimilarity
+                            (imageid1 INTEGER NOT NULL,
+                            imageid2 INTEGER NOT NULL,
+                            algorithm INTEGER,
+                            value DOUBLE,
+                            CONSTRAINT Similar UNIQUE(imageid1, imageid2,algorithm)
+                            )</statement>
+                    <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHaarMatrix
+                            (imageid INTEGER PRIMARY KEY,
+                            modificationDate DATETIME,
+                            uniqueHash TEXT,
+                            matrix BLOB)</statement>
+                    <statement mode="plain"> CREATE TABLE IF NOT EXISTS SimilaritySettings
+                                                (keyword TEXT NOT NULL UNIQUE,
+                                                value TEXT)
+                    </statement>
+            </dbaction>
+
+            <!-- SQlite Similarity Indexes -->
+            <dbaction name="CreateSimilarityDBIndices" mode="transaction">
+            </dbaction>
+
+            <!-- SQlite Similarity Triggers -->
+
+            <dbaction name="CreateSimilarityDBTriggers" mode="transaction">
+                <statement mode="plain">
+                    <!--
+                        If an entry of the ImageHaarMatrix is deleted,
+                        delete all entries from the ImageSimilarity table
+                        for the Haar algorithm (1) where either the first or the second image id is
+                        the deleted one.
+                    -->
+                    CREATE TRIGGER IF NOT EXISTS delete_similarities DELETE ON ImageHaarMatrix
+                    BEGIN
+                        DELETE FROM ImageSimilarity
+                            WHERE ( ImageSimilarity.imageid1=OLD.id OR ImageSimilarity.imageid2=OLD.id )
+                              AND ( ImageSimilarity.algorithm=1 );
+                    END;
+                </statement>
+            </dbaction>
+
+            <!-- SQlite Similarity Queries -->
+
+            <dbaction name="SelectSimilaritySetting">
+                <statement mode="query">SELECT value FROM SimilaritySettings WHERE keyword=:keyword;</statement>
+            </dbaction>
+
+            <dbaction name="SelectSimilarityLegacySetting">
+                <statement mode="query">SELECT value FROM SimilaritySettings WHERE keyword=:keyword;</statement>
+            </dbaction>
+
+            <dbaction name="ReplaceSimilaritySetting">
+                <statement mode="query">REPLACE INTO SimilaritySettings VALUES (:keyword, :value);</statement>
+            </dbaction>
 
             <!-- SQlite Migration Statements -->
 
@@ -900,6 +954,13 @@
                 </statement>
             </dbaction>
 
+            <!-- TODO: Make a Core DB Schema update with the following changes:
+                 TODO: 1) Remove ImageHaarMatrix from all triggers on Core DB tables.
+                 TODO: 2) Remove the ImageHaarMatrix table from Core DB.
+                 TODO: 3) MySQL-Migration should be adopted to the new Structure?
+
+            -->
+
             <dbaction name="UpdateThumbnailsDBSchemaFromV2ToV3" mode="transaction">
                 <!-- Nothing to do for SQLite -->
             </dbaction>
@@ -921,6 +982,10 @@
             <dbaction name="vacuumRecognitionDB">
                 <statement mode="query">VACUUM;</statement>
             </dbaction>
+            
+            <dbaction name="vacuumSimilarityDB">
+                <statement mode="query">VACUUM;</statement>
+            </dbaction>
 
             <dbaction name="checkCoreDbIntegrity">
                 <statement mode="query">pragma integrity_check;</statement>
@@ -931,6 +996,10 @@
             </dbaction>
 
             <dbaction name="checkRecognitionDbIntegrity">
+                <statement mode="query">pragma integrity_check;</statement>
+            </dbaction>
+            
+            <dbaction name="checkSimilarityDbIntegrity">
                 <statement mode="query">pragma integrity_check;</statement>
             </dbaction>
 
@@ -1662,6 +1731,67 @@
 
             <dbaction name="ReplaceFaceSetting">
                 <statement mode="query">REPLACE INTO FaceSettings VALUES (:keyword, :value);</statement>
+            </dbaction>
+
+
+            <!-- Mysql Similarity Schema Database -->
+
+            <dbaction name="CreateSimilarityDB" mode="transaction">
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageSimilarity
+                                            (imageid1 INTEGER NOT NULL,
+                                             imageid2 INTEGER NOT NULL,
+                                             algorithm INTEGER,
+                                             value DOUBLE,
+                                             CONSTRAINT Similar UNIQUE(imageid1, imageid2,algorithm)) ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHaarMatrix
+                                            (imageid INTEGER PRIMARY KEY,
+                                             modificationDate DATETIME,
+                                             uniqueHash TEXT,
+                                             matrix BLOB) ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS SimilaritySettings
+                                            (keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                                            `value` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                                            UNIQUE(keyword(255))) ENGINE InnoDB;
+                </statement>
+            </dbaction>
+
+            <!-- Mysql Similarity Indexes -->
+            <dbaction name="CreateSimilarityDBIndices" mode="transaction">
+            </dbaction>
+
+            <!-- Mysql Similarity Triggers -->
+            <dbaction name="CreateSimilarityDBTriggers" mode="transaction">
+                <statement mode="plain">
+                    <!--
+                        If an entry of the ImageHaarMatrix is deleted,
+                        delete all entries from the ImageSimilarity table
+                        for the Haar algorithm (1) where either the first or the second image id is
+                        the deleted one.
+                    -->
+                    CREATE TRIGGER IF NOT EXISTS delete_similarities AFTER DELETE ON ImageHaarMatrix
+                    FOR EACH ROW
+                    BEGIN
+                        DELETE FROM ImageSimilarity
+                            WHERE ( ImageSimilarity.imageid1=OLD.id OR ImageSimilarity.imageid2=OLD.id )
+                                AND ( ImageSimilarity.algorithm=1 );
+                    END;
+                </statement>
+            </dbaction>
+
+            <!-- Mysql Similarity Queries -->
+
+            <dbaction name="SelectSimilaritySetting">
+                <statement mode="query">SELECT value FROM SimilaritySettings WHERE keyword=:keyword;</statement>
+            </dbaction>
+
+            <dbaction name="SelectSimilarityLegacySetting">
+                <statement mode="query">SELECT value FROM SimilaritySettings WHERE keyword=:keyword;</statement>
+            </dbaction>
+
+            <dbaction name="ReplaceSimilaritySetting">
+                <statement mode="query">REPLACE INTO SimilaritySettings VALUES (:keyword, :value);</statement>
             </dbaction>
 
             <!-- Mysql Migration Statements -->

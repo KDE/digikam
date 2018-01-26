@@ -223,6 +223,7 @@ ImageInfoData::ImageInfoData()
     positionsCached        = false;
     groupedImagesCached    = false;
     groupImageCached       = false;
+    uniqueHashCached       = false;
 
     invalid                = false;
 
@@ -535,6 +536,20 @@ qlonglong ImageInfo::fileSize() const
     QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::FileSize);
 
     STORE_IN_CACHE_AND_RETURN(fileSize, values.first().toLongLong())
+}
+
+QString ImageInfo::uniqueHash() const
+{
+    if (!m_data)
+    {
+        return QString();
+    }
+
+    RETURN_IF_CACHED(uniqueHash)
+
+    QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::UniqueHash);
+
+    STORE_IN_CACHE_AND_RETURN(uniqueHash, values.first().toString())
 }
 
 QString ImageInfo::title() const

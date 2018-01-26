@@ -39,6 +39,8 @@
 #include "coredburl.h"
 #include "coredbaccess.h"
 #include "coredb.h"
+#include "similaritydbaccess.h"
+#include "similaritydb.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "facetagseditor.h"
@@ -387,6 +389,8 @@ bool ImageScanner::scanFromIdenticalFile()
 void ImageScanner::commitCopyImageAttributes()
 {
     CoreDbAccess().db()->copyImageAttributes(d->commit.copyImageAttributesId, d->scanInfo.id);
+    // Also copy the similarity information
+    SimilarityDbAccess().db()->copySimilarityAttributes(d->commit.copyImageAttributesId, d->scanInfo.id);
     // Remove grouping for copied or identical images.
     CoreDbAccess().db()->removeAllImageRelationsFrom(d->scanInfo.id, DatabaseRelation::Grouped);
     CoreDbAccess().db()->removeAllImageRelationsTo(d->scanInfo.id, DatabaseRelation::Grouped);

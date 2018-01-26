@@ -6,6 +6,7 @@
  * Date        : 2003-01-17
  * Description : Haar Database interface
  *
+ * Copyright (C) 2016-2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  * Copyright (C) 2003      by Ricardo Niederberger Cabral <nieder at mail dot ru>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -50,9 +51,7 @@ class HaarProgressObserver
 {
 public:
 
-    virtual ~HaarProgressObserver()
-    {
-    };
+    virtual ~HaarProgressObserver() = default;
 
     virtual void totalNumberToScan(int number) = 0;
     virtual void processedNumber(int numberThatHasBeenProcessed) = 0;

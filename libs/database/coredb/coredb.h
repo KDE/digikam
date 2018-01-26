@@ -583,6 +583,14 @@ public:
     QList<qlonglong> getImageIds(DatabaseItem::Status status);
 
     /**
+     * Returns all image ids with the given status and category.
+     * @param status The status.
+     * @param category The category.
+     * @return The ids of the images that have the given status.
+     */
+    QList<qlonglong> getImageIds(DatabaseItem::Status status, DatabaseItem::Category category);
+
+    /**
      * Get the imageId fitting to the information given for the item
      * @param albumID the albumID of the item (-1 means NULL)
      * @param name the name of the item
@@ -1082,21 +1090,6 @@ public:
      */
     QList<qlonglong> getOneRelatedImageEach(const QList<qlonglong>& ids,
                                             DatabaseRelation::Type type = DatabaseRelation::UndefinedType);
-
-    /**
-     * Returns if there are valid entries in the ImageHaarMatrix table.
-     * Returns false if the table is empty.
-     */
-    bool hasHaarFingerprints() const;
-
-    /**
-     * Returns a list of all images where the Haar fingerprint has either not been generated
-     * yet, or is outdated because the file is identified as changed since
-     * the generation of the fingerprint.
-     * Return image ids or item URLs.
-     */
-    QList<qlonglong> getDirtyOrMissingFingerprints();
-    QStringList getDirtyOrMissingFingerprintURLs();
 
     /**
      * Returns a list of all images where the Faces have either not been detected
