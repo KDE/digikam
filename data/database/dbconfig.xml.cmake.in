@@ -695,14 +695,6 @@
                 INSERT OR IGNORE INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
             </statement></dbaction>
 
-            <dbaction name="Migrate_Read_ImageHaarMatrix"><statement mode="query">
-                SELECT imageid, modificationDate, uniqueHash, matrix FROM ImageHaarMatrix
-                WHERE  imageid IN (SELECT id FROM Images);
-            </statement></dbaction>
-            <dbaction name="Migrate_Write_ImageHaarMatrix"><statement mode="query">
-                INSERT OR IGNORE INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
-            </statement></dbaction>
-
             <dbaction name="Migrate_Read_ImageInformation"><statement mode="query">
                 SELECT imageid, rating, creationDate, digitizationDate, orientation, width, height, format, colorDepth, colorModel FROM ImageInformation
                 WHERE  imageid IN (SELECT id FROM Images);
@@ -1824,14 +1816,6 @@
             </statement></dbaction>
             <dbaction name="Migrate_Write_Images" mode="transaction"><statement mode="query">
                 INSERT IGNORE INTO Images (id, album, name, status, category, modificationDate, fileSize, uniqueHash) VALUES (:id, :album, :name, :status, :category, :modificationDate, :fileSize, :uniqueHash);
-            </statement></dbaction>
-
-            <dbaction name="Migrate_Read_ImageHaarMatrix"><statement mode="query">
-                SELECT imageid, modificationDate, uniqueHash, matrix FROM ImageHaarMatrix
-                WHERE  imageid IN (SELECT id FROM Images);
-            </statement></dbaction>
-            <dbaction name="Migrate_Write_ImageHaarMatrix" mode="transaction"><statement mode="query">
-                INSERT IGNORE INTO ImageHaarMatrix (imageid, modificationDate, uniqueHash, matrix) VALUES (:imageid, :modificationDate, :uniqueHash, :matrix);
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_ImageInformation"><statement mode="query">
