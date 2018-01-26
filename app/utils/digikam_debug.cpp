@@ -43,6 +43,7 @@ Q_LOGGING_CATEGORY(DIGIKAM_DBJOB_LOG,          "digikam.dbjob")
 Q_LOGGING_CATEGORY(DIGIKAM_COREDB_LOG,         "digikam.coredb")
 Q_LOGGING_CATEGORY(DIGIKAM_FACEDB_LOG,         "digikam.facedb")
 Q_LOGGING_CATEGORY(DIGIKAM_THUMBSDB_LOG,       "digikam.thumbsdb")
+Q_LOGGING_CATEGORY(DIGIKAM_SIMILARITYDB_LOG,   "digikam.similaritydb")
 
 // NOTE: per default only warnings and more severe messages are logged for other than general category
 Q_LOGGING_CATEGORY(DIGIKAM_DIMG_LOG,           "digikam.dimg")

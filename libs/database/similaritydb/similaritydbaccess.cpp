@@ -9,6 +9,7 @@
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2017 by Swati  Lodha   <swatilodha27 at gmail dot com>
+ * Copyright (C)      2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +40,7 @@
 #include "digikam_debug.h"
 #include "similaritydbbackend.h"
 #include "similaritydb.h"
-#include "similaritydbchemaupdater.h"
+#include "similaritydbschemaupdater.h"
 #include "dbengineparameters.h"
 #include "dbengineaccess.h"
 
@@ -212,7 +213,7 @@ bool SimilarityDbAccess::checkReadyForUse(InitializationObserver* const observer
 
     if (!d->backend)
     {
-        qCWarning(DIGIKAM_SIMILARITY_DB_LOG) << "Similarity database: no database backend available in checkReadyForUse. "
+        qCWarning(DIGIKAM_SIMILARITYDB_LOG) << "Similarity database: no database backend available in checkReadyForUse. "
                                                 "Did you call setParameters before?";
         return false;
     }
@@ -241,7 +242,7 @@ bool SimilarityDbAccess::checkReadyForUse(InitializationObserver* const observer
 
     if (!d->backend->initSchema(&updater))
     {
-        qCWarning(DIGIKAM_SimilarityDB_LOG) << "Similarity database: cannot process schema initialization";
+        qCWarning(DIGIKAM_SIMILARITYDB_LOG) << "Similarity database: cannot process schema initialization";
 
         d->initializing = false;
         return false;

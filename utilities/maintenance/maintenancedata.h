@@ -6,7 +6,7 @@
  * Date        : 2017-02-20
  * Description : Synchronized container for maintenance data.
  *
- * Copyright (C) 2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
+ * Copyright (C) 2017-2018 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,12 +46,14 @@ public:
     void      setImagePaths(const QList<QString>& paths);
     void      setImageInfos(const QList<ImageInfo>& infos);
     void      setIdentities(const QList<Identity>& identities);
+    void      setSimilarityImageIds(const QList<qlonglong>& ids);
 
     qlonglong getImageId() const;
     int       getThumbnailId() const;
     QString   getImagePath() const;
     ImageInfo getImageInfo() const;
     Identity  getIdentity() const;
+    qlonglong getSimilarityImageId() const;
 
 private:
 

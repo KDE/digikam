@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017-2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +30,8 @@
 #include "coredb.h"
 #include "coredbaccess.h"
 #include "imagescanner.h"
+#include "similaritydbaccess.h"
+#include "similaritydb.h"
 
 namespace Digikam
 {
@@ -75,27 +78,21 @@ void ImageExtendedProperties::removeJobId()
 
 double ImageExtendedProperties::similarityTo(const qlonglong imageId)
 {
-    QString similarityString = readProperty(QLatin1String("similarityTo_")+ QString::number(imageId));
-    bool ok;
-    double similarityValue = similarityString.toDouble(&ok);
-    if (ok)
-    {
-        return similarityValue;
-    }
-    else
-    {
-        return 0.0;
-    }
+    // TODO: extend for additional algorithms
+    double similarity = SimilarityDbAccess().db()->getImageSimilarity(m_id, imageId);
+    return (similarity > 0) ? similarity : 0.0;
 }
 
 void ImageExtendedProperties::setSimilarityTo(const qlonglong imageId, const double value)
 {
-    setProperty(QLatin1String("similarityTo_")+ QString::number(imageId),QString::number(value));
+    // TODO: extend for additional algorithms
+    SimilarityDbAccess().db()->setImageSimilarity(m_id, imageId, value);
 }
 
 void ImageExtendedProperties::removeSimilarityTo(const qlonglong imageId)
 {
-    removeProperty(QLatin1String("similarityTo_")+ QString::number(imageId));
+    // TODO: extend for additional algorithms
+    SimilarityDbAccess().db()->removeImageSimilarity(m_id, imageId);
 }
 
 QStringList ImageExtendedProperties::scene()

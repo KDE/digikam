@@ -6,7 +6,7 @@
  * Date        : 2008-05-19
  * Description : Fuzzy search sidebar tab contents.
  *
- * Copyright (C) 2016-2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
+ * Copyright (C) 2016-2018 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *

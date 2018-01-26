@@ -9,6 +9,7 @@
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Holger Foerster <hamsi2k at freenet dot de>
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +55,7 @@ static const char* configDatabaseType                       = "Database Type";
 static const char* configDatabaseName                       = "Database Name";              // For Sqlite the DB file path, for Mysql the DB name
 static const char* configDatabaseNameThumbnails             = "Database Name Thumbnails";   // For Sqlite the DB file path, for Mysql the DB name
 static const char* configDatabaseNameFace                   = "Database Name Face";         // For Sqlite the DB file path, for Mysql the DB name
+static const char* configDatabaseNameSimilarity             = "Database Name Similarity";   // For Sqlite the DB file path, for Mysql the DB name
 static const char* configDatabaseHostName                   = "Database Hostname";
 static const char* configDatabasePort                       = "Database Port";
 static const char* configDatabaseUsername                   = "Database Username";
@@ -66,6 +68,7 @@ static const char* configAlbumPathEntry                     = "Album Path";
 static const char* digikam4db                               = "digikam4.db";
 static const char* thumbnails_digikamdb                     = "thumbnails-digikam.db";
 static const char* face_digikamdb                           = "recognition.db";
+static const char* similarity_digikamdb                     = "similarity.db";
 
 }
 
@@ -94,6 +97,7 @@ DbEngineParameters::DbEngineParameters(const QString& _type,
                                        const QString& _password,
                                        const QString& _databaseNameThumbnails,
                                        const QString& _databaseNameFace,
+                                       const QString& _databaseNameSimilarity,
                                        const QString& _internalServerDBPath,
                                        const QString& _internalServerMysqlServCmd,
                                        const QString& _internalServerMysqlInitCmd
@@ -108,6 +112,7 @@ DbEngineParameters::DbEngineParameters(const QString& _type,
       password(_password),
       databaseNameThumbnails(_databaseNameThumbnails),
       databaseNameFace(_databaseNameFace),
+      databaseNameSimilarity(_databaseNameSimilarity),
       internalServerDBPath(_internalServerDBPath),
       internalServerMysqlServCmd(_internalServerMysqlServCmd),
       internalServerMysqlInitCmd(_internalServerMysqlInitCmd)
@@ -123,6 +128,7 @@ DbEngineParameters::DbEngineParameters(const QUrl& url)
     databaseNameCore       = QUrlQuery(url).queryItemValue(QLatin1String("databaseNameCore"));
     databaseNameThumbnails = QUrlQuery(url).queryItemValue(QLatin1String("databaseNameThumbnails"));
     databaseNameFace       = QUrlQuery(url).queryItemValue(QLatin1String("databaseNameFace"));
+    databaseNameSimilarity = QUrlQuery(url).queryItemValue(QLatin1String("databaseNameSimilarity"));
     connectOptions         = QUrlQuery(url).queryItemValue(QLatin1String("connectOptions"));
     hostName               = QUrlQuery(url).queryItemValue(QLatin1String("hostName"));
     QString queryPort      = QUrlQuery(url).queryItemValue(QLatin1String("port"));
@@ -170,6 +176,7 @@ void DbEngineParameters::insertInUrl(QUrl& url) const
     q.addQueryItem(QLatin1String("databaseNameCore"),       databaseNameCore);
     q.addQueryItem(QLatin1String("databaseNameThumbnails"), databaseNameThumbnails);
     q.addQueryItem(QLatin1String("databaseNameFace"),       databaseNameFace);
+    q.addQueryItem(QLatin1String("databaseNameSimilarity"), databaseNameSimilarity);
 
     if (!connectOptions.isNull())
     {
@@ -215,6 +222,7 @@ void DbEngineParameters::removeFromUrl(QUrl& url)
     q.removeQueryItem(QLatin1String("databaseNameCore"));
     q.removeQueryItem(QLatin1String("databaseNameThumbnails"));
     q.removeQueryItem(QLatin1String("databaseNameFace"));
+    q.removeQueryItem(QLatin1String("databaseNameSimilarity"));
     q.removeQueryItem(QLatin1String("connectOptions"));
     q.removeQueryItem(QLatin1String("hostName"));
     q.removeQueryItem(QLatin1String("port"));
@@ -234,6 +242,7 @@ bool DbEngineParameters::operator==(const DbEngineParameters& other) const
            databaseNameCore           == other.databaseNameCore           &&
            databaseNameThumbnails     == other.databaseNameThumbnails     &&
            databaseNameFace           == other.databaseNameFace           &&
+           databaseNameSimilarity     == other.databaseNameSimilarity     &&
            connectOptions             == other.connectOptions             &&
            hostName                   == other.hostName                   &&
            port                       == other.port                       &&
@@ -298,6 +307,7 @@ QByteArray DbEngineParameters::hash() const
     md5.addData(databaseNameCore.toUtf8());
     md5.addData(databaseNameThumbnails.toUtf8());
     md5.addData(databaseNameFace.toUtf8());
+    md5.addData(databaseNameSimilarity.toUtf8());
     md5.addData(connectOptions.toUtf8());
     md5.addData(hostName.toUtf8());
     md5.addData((const char*)&port, sizeof(int));
@@ -336,12 +346,14 @@ void DbEngineParameters::readFromConfig(KSharedConfig::Ptr config, const QString
         databaseNameCore       = group.readPathEntry(configDatabaseName,                   QString());
         databaseNameThumbnails = group.readPathEntry(configDatabaseNameThumbnails,         QString());
         databaseNameFace       = group.readPathEntry(configDatabaseNameFace,               QString());
+        databaseNameSimilarity = group.readPathEntry(configDatabaseNameSimilarity,         QString());
     }
     else
     {
         databaseNameCore       = group.readEntry(configDatabaseName,                       QString());
         databaseNameThumbnails = group.readEntry(configDatabaseNameThumbnails,             QString());
         databaseNameFace       = group.readEntry(configDatabaseNameFace,                   QString());
+        databaseNameSimilarity = group.readEntry(configDatabaseNameSimilarity,             QString());
     }
 
     hostName                   = group.readEntry(configDatabaseHostName,                   QString());
@@ -364,6 +376,7 @@ void DbEngineParameters::readFromConfig(KSharedConfig::Ptr config, const QString
         setCoreDatabasePath(orgName);
         setThumbsDatabasePath(orgName);
         setFaceDatabasePath(orgName);
+        setSimilarityDatabasePath(orgName);
     }
 }
 
@@ -415,6 +428,19 @@ void DbEngineParameters::setFaceDatabasePath(const QString& folderOrFileOrName)
     }
 }
 
+void DbEngineParameters::setSimilarityDatabasePath(const QString& folderOrFileOrName)
+{
+    if (isSQLite())
+    {
+        databaseNameSimilarity = similarityDatabaseFileSQLite(folderOrFileOrName);
+    }
+    else
+    {
+        databaseNameSimilarity = folderOrFileOrName;
+    }
+}
+
+
 QString DbEngineParameters::coreDatabaseFileSQLite(const QString& folderOrFile)
 {
     QFileInfo fileInfo(folderOrFile);
@@ -451,6 +477,19 @@ QString DbEngineParameters::faceDatabaseFileSQLite(const QString& folderOrFile)
     return QDir::cleanPath(folderOrFile);
 }
 
+QString DbEngineParameters::similarityDatabaseFileSQLite(const QString& folderOrFile)
+{
+    QFileInfo fileInfo(folderOrFile);
+
+    if (fileInfo.isDir())
+    {
+        return QDir::cleanPath(fileInfo.filePath() + QLatin1Char('/') + QLatin1String(similarity_digikamdb));
+    }
+
+    return QDir::cleanPath(folderOrFile);
+}
+
+
 void DbEngineParameters::legacyAndDefaultChecks(const QString& suggestedPath, KSharedConfig::Ptr config)
 {
     // Additional semantic checks for the database section.
@@ -462,6 +501,7 @@ void DbEngineParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
         databaseNameCore           = QLatin1String("digikam");
         databaseNameThumbnails     = QLatin1String("digikam");
         databaseNameFace           = QLatin1String("digikam");
+        databaseNameSimilarity     = QLatin1String("digikam");
         internalServer             = true;
         userName                   = QLatin1String("root");
         password.clear();
@@ -536,14 +576,16 @@ void DbEngineParameters::writeToConfig(KSharedConfig::Ptr config, const QString&
         group = config->group(configGroup);
     }
 
-    QString dbName       = getCoreDatabaseNameOrDir();
-    QString dbNameThumbs = getThumbsDatabaseNameOrDir();
-    QString dbNameFace   = getFaceDatabaseNameOrDir();
+    QString dbName           = getCoreDatabaseNameOrDir();
+    QString dbNameThumbs     = getThumbsDatabaseNameOrDir();
+    QString dbNameFace       = getFaceDatabaseNameOrDir();
+    QString dbNameSimilarity = getSimilarityDatabaseNameOrDir();
 
     group.writeEntry(configDatabaseType,                       databaseType);
     group.writeEntry(configDatabaseName,                       dbName);
     group.writeEntry(configDatabaseNameThumbnails,             dbNameThumbs);
     group.writeEntry(configDatabaseNameFace,                   dbNameFace);
+    group.writeEntry(configDatabaseNameSimilarity,             dbNameSimilarity);
     group.writeEntry(configDatabaseHostName,                   hostName);
     group.writeEntry(configDatabasePort,                       port);
     group.writeEntry(configDatabaseUsername,                   userName);
@@ -585,6 +627,16 @@ QString DbEngineParameters::getFaceDatabaseNameOrDir() const
     return databaseNameFace;
 }
 
+QString DbEngineParameters::getSimilarityDatabaseNameOrDir() const
+{
+    if (isSQLite())
+    {
+        return similarityDatabaseDirectorySQLite(databaseNameSimilarity);
+    }
+
+    return databaseNameSimilarity;
+}
+
 QString DbEngineParameters::coreDatabaseDirectorySQLite(const QString& path)
 {
     if (path.endsWith(QLatin1String(digikam4db)))
@@ -621,6 +673,19 @@ QString DbEngineParameters::faceDatabaseDirectorySQLite(const QString& path)
     return path;
 }
 
+QString DbEngineParameters::similarityDatabaseDirectorySQLite(const QString& path)
+{
+    if (path.endsWith(QLatin1String(similarity_digikamdb)))
+    {
+        QString chopped(path);
+        chopped.chop(QString(QLatin1String(similarity_digikamdb)).length());
+        return chopped;
+    }
+
+    return path;
+}
+
+
 DbEngineParameters DbEngineParameters::defaultParameters(const QString& databaseType)
 {
     DbEngineParameters parameters;
@@ -631,6 +696,7 @@ DbEngineParameters DbEngineParameters::defaultParameters(const QString& database
     parameters.databaseNameCore           = config.databaseName;
     parameters.databaseNameThumbnails     = config.databaseName;
     parameters.databaseNameFace           = config.databaseName;
+    parameters.databaseNameSimilarity     = config.databaseName;
     parameters.userName                   = config.userName;
     parameters.password                   = config.password;
     parameters.internalServer             = (databaseType == QLatin1String("QMYSQL"));
@@ -686,6 +752,13 @@ DbEngineParameters DbEngineParameters::faceParameters() const
     return params;
 }
 
+DbEngineParameters DbEngineParameters::similarityParameters() const
+{
+    DbEngineParameters params = *this;
+    params.databaseNameCore   = databaseNameSimilarity;
+    return params;
+}
+
 DbEngineParameters DbEngineParameters::parametersForSQLite(const QString& databaseFile)
 {
     // only the database name is needed
@@ -693,6 +766,7 @@ DbEngineParameters DbEngineParameters::parametersForSQLite(const QString& databa
     params.setCoreDatabasePath(databaseFile);
     params.setThumbsDatabasePath(params.getCoreDatabaseNameOrDir());
     params.setFaceDatabasePath(params.getCoreDatabaseNameOrDir());
+    params.setSimilarityDatabasePath(params.getSimilarityDatabaseNameOrDir());
     return params;
 }
 
@@ -720,6 +794,7 @@ QDebug operator<<(QDebug dbg, const DbEngineParameters& p)
     dbg.nospace() << "   DB Core Name:             " << p.databaseNameCore                                  << endl;
     dbg.nospace() << "   DB Thumbs Name:           " << p.databaseNameThumbnails                            << endl;
     dbg.nospace() << "   DB Face Name:             " << p.databaseNameFace                                  << endl;
+    dbg.nospace() << "   DB Similyritiy Name:      " << p.databaseNameSimilarity                            << endl;
     dbg.nospace() << "   Connect Options:          " << p.connectOptions                                    << endl;
     dbg.nospace() << "   Host Name:                " << p.hostName                                          << endl;
     dbg.nospace() << "   Host port:                " << p.port                                              << endl;

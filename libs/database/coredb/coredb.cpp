@@ -1230,6 +1230,24 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status)
     return imageIds;
 }
 
+QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status, DatabaseItem::Category category)
+{
+    QList<QVariant> values;
+    d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
+                                             "WHERE status=? AND category=?;"),
+                   status, category,
+                   &values);
+
+    QList<qlonglong> imageIds;
+
+    foreach(QVariant object, values)
+    {
+        imageIds << object.toLongLong();
+    }
+
+    return imageIds;
+}
+
 qlonglong CoreDB::getImageId(int albumID, const QString& name,
                              DatabaseItem::Status status,
                              DatabaseItem::Category category,
@@ -4693,12 +4711,6 @@ void CoreDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
     // Go through all image-specific tables and copy the entries
 
     DatabaseFields::Set fields;
-
-    d->db->execSql(QString::fromUtf8("INSERT INTO ImageHaarMatrix "
-                           " (imageid, modificationDate, uniqueHash, matrix) "
-                           "SELECT ?, modificationDate, uniqueHash, matrix "
-                           "FROM ImageHaarMatrix WHERE imageid=?;"),
-                   dstId, srcId);
 
     d->db->execSql(QString::fromUtf8("INSERT INTO ImageInformation "
                            " (imageid, rating, creationDate, digitizationDate, orientation, "

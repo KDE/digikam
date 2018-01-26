@@ -6,7 +6,7 @@
  * Date        : 2017-01-29
  * Description : Database cleaner.
  *
- * Copyright (C) 2017      by Mario Frank <mario dot frank at uni minus potsdam dot de>
+ * Copyright (C) 2017-2018 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,6 +52,7 @@ public:
         thread(0),
         cleanThumbsDb(false),
         cleanFacesDb(false),
+        cleanSimilarityDb(false),
         shrinkDatabases(false),
         databasesToAnalyseCount(1),
         databasesToShrinkCount(0),
@@ -67,11 +68,13 @@ public:
     MaintenanceThread*           thread;
     bool                         cleanThumbsDb;
     bool                         cleanFacesDb;
+    bool                         cleanSimilarityDb;
     bool                         shrinkDatabases;
 
     QList<qlonglong>             imagesToRemove;
     QList<int>                   staleThumbnails;
     QList<Identity>              staleIdentities;
+    QList<qlonglong>             staleImageSimilarities;
 
     int                          databasesToAnalyseCount;
     int                          databasesToShrinkCount;
@@ -79,23 +82,34 @@ public:
     DbShrinkDialog*              shrinkDlg;
 };
 
-DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases, ProgressItem* const parent)
+DbCleaner::DbCleaner(bool cleanThumbsDb,
+                     bool cleanFacesDb,
+                     bool cleanSimilarityDb,
+                     bool shrinkDatabases,
+                     ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DbCleaner"), parent),
       d(new Private)
 {
     // register the identity list as meta type to be able to use it in signal/slot connection
     qRegisterMetaType<QList<Identity>>("QList<Identity>");
 
-    d->cleanThumbsDb   = cleanThumbsDb;
+    d->cleanThumbsDb     = cleanThumbsDb;
 
     if (cleanThumbsDb)
     {
         d->databasesToAnalyseCount = d->databasesToAnalyseCount + 1;
     }
 
-    d->cleanFacesDb    = cleanFacesDb;
+    d->cleanFacesDb      = cleanFacesDb;
 
     if (cleanFacesDb)
+    {
+        d->databasesToAnalyseCount = d->databasesToAnalyseCount + 1;
+    }
+
+    d->cleanSimilarityDb = cleanSimilarityDb;
+
+    if (cleanSimilarityDb)
     {
         d->databasesToAnalyseCount = d->databasesToAnalyseCount + 1;
     }
@@ -104,7 +118,7 @@ DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases
 
     if (shrinkDatabases)
     {
-        d->databasesToShrinkCount = 3;
+        d->databasesToShrinkCount = 4;
         d->shrinkDlg = new DbShrinkDialog(DigikamApp::instance());
     }
 
@@ -137,12 +151,12 @@ void DbCleaner::slotStart()
             this, SLOT(slotAddItemsToProcess(int)));
 
     // Set the wiring from the data signal to the data slot.
-    connect(d->thread,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<Identity>)),
-            this, SLOT(slotFetchedData(QList<qlonglong>,QList<int>,QList<Identity>)));
+    connect(d->thread,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<Identity>,QList<qlonglong>)),
+            this, SLOT(slotFetchedData(QList<qlonglong>,QList<int>,QList<Identity>,QList<qlonglong>)));
 
     // Compute the database junk. This will lead to the call of the slot
     // slotFetchedData.
-    d->thread->computeDatabaseJunk(d->cleanThumbsDb,d->cleanFacesDb);
+    d->thread->computeDatabaseJunk(d->cleanThumbsDb,d->cleanFacesDb,d->cleanSimilarityDb);
     d->thread->start();
 }
 
@@ -153,12 +167,14 @@ void DbCleaner::slotAddItemsToProcess(int count)
 
 void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
                                 const QList<int>& staleThumbIds,
-                                const QList<Identity>& staleIdentities)
+                                const QList<Identity>& staleIdentities,
+                                const QList<qlonglong>& staleImageSimilarities)
 {
     // We have data now. Store it and trigger the core db cleaning
-    d->imagesToRemove  = staleImageIds;
-    d->staleThumbnails = staleThumbIds;
-    d->staleIdentities = staleIdentities;
+    d->imagesToRemove         = staleImageIds;
+    d->staleThumbnails        = staleThumbIds;
+    d->staleIdentities        = staleIdentities;
+    d->staleImageSimilarities = staleImageSimilarities;
 
     // If we have nothing to do, finish.
     // Signal done if no elements cleanup is necessary
@@ -226,7 +242,7 @@ void DbCleaner::slotCleanedItems()
 
     if (d->cleanThumbsDb)
     {
-        if (d->staleThumbnails.size() > 0)
+        if (!d->staleThumbnails.empty())
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << d->staleThumbnails.size() << " stale thumbnails.";
             setLabel(i18n("Clean up the databases : ") + i18n("cleaning thumbnails db"));
@@ -282,7 +298,43 @@ void DbCleaner::slotCleanedThumbnails()
 
 void DbCleaner::slotCleanedFaces()
 {
-    // We cleaned the recognition db. We are done.
+    // We cleaned the recognition db. Now clean the similarity db
+    disconnect(d->thread, SIGNAL(signalCompleted()),
+               this, SLOT(slotCleanedFaces()));
+
+    if (d->cleanSimilarityDb)
+    {
+        // TODO: implement similarity db cleanup
+        if (!d->staleImageSimilarities.empty())
+        {
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << d->staleImageSimilarities.size() << " image ids that are referenced in similarity db but not used.";
+            setLabel(i18n("Clean up the databases : ") + i18n("cleaning similarity db"));
+
+            // GO! and don't forget the signal!
+            connect(d->thread, SIGNAL(signalCompleted()),
+                    this, SLOT(slotCleanedSimilarity()));
+
+            // We cleaned the thumbs db. Now clean the faces db.
+            d->thread->cleanSimilarityDb(d->staleImageSimilarities);
+            d->thread->start();
+        }
+        else
+        {
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Similarity DB is clean.";
+            slotCleanedSimilarity();
+        }
+    }
+    else
+    {
+        slotCleanedSimilarity();
+    }
+
+    slotDone();
+}
+
+void DbCleaner::slotCleanedSimilarity()
+{
+    // We cleaned the similarity db. We are done.
     if (d->shrinkDatabases)
     {
         slotShrinkDatabases();
@@ -346,18 +398,23 @@ void DbCleaner::slotShrinkNextDBInfo(bool done, bool passed)
 
     switch(d->databasesToShrinkCount)
     {
-        case 2:
+        case 3:
             d->shrinkDlg->setIcon(0, statusIcon);
             d->shrinkDlg->setActive(1);
             break;
 
-        case 1:
+        case 2:
             d->shrinkDlg->setIcon(1, statusIcon);
             d->shrinkDlg->setActive(2);
             break;
 
-        case 0:
+        case 1:
             d->shrinkDlg->setIcon(2, statusIcon);
+            d->shrinkDlg->setActive(3);
+            break;
+
+        case 0:
+            d->shrinkDlg->setIcon(3, statusIcon);
             d->shrinkDlg->setActive(-1);
             break;
     }
@@ -412,15 +469,16 @@ DbShrinkDialog::DbShrinkDialog(QWidget* const parent)
     statusList->addItem(i18n("Core DB"));
     statusList->addItem(i18n("Thumbnails DB"));
     statusList->addItem(i18n("Face Recognition DB"));
+    statusList->addItem(i18n("Similarity DB"));
 
-    for (int i = 0 ; i < 3 ; ++i)
+    for (int i = 0 ; i < 4 ; ++i)
     {
         statusList->item(i)->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
     }
 //    statusList->setMinimumSize(0, 0);
 //    statusList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 //    statusList->adjustSize();
-    statusList->setMaximumHeight(3 * statusList->sizeHintForRow(0)
+    statusList->setMaximumHeight(4 * statusList->sizeHintForRow(0)
                                  + 2 * statusList->frameWidth());
     statusLayout->addWidget(statusList);
 

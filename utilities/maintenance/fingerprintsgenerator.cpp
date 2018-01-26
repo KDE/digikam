@@ -6,6 +6,7 @@
  * Date        : 2008-05-16
  * Description : fingerprints generator
  *
+ * Copyright (C)      2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -41,6 +42,8 @@
 #include "albummanager.h"
 #include "coredbaccess.h"
 #include "maintenancethread.h"
+#include "similaritydb.h"
+#include "similaritydbaccess.h"
 
 namespace Digikam
 {
@@ -107,7 +110,15 @@ void FingerPrintsGenerator::slotStart()
         d->albumList = AlbumManager::instance()->allPAlbums();
     }
 
-    QStringList dirty = CoreDbAccess().db()->getDirtyOrMissingFingerprintURLs();
+    // Get all image infos for images (category 1) that are visible (status 1)
+    QList<ImageInfo> imageInfos;
+    QList<qlonglong> imageIds = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Visible, DatabaseItem::Category::Image);
+    foreach(const qlonglong& id, imageIds)
+    {
+        imageInfos << ImageInfo(id);
+    }
+
+    QStringList dirty = SimilarityDbAccess().db()->getDirtyOrMissingFingerprintURLs(imageInfos);
 
     // Get all digiKam albums collection pictures path, depending of d->rebuildAll flag.
 

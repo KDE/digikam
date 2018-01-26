@@ -7,6 +7,7 @@
  * Description : Thread actions manager for maintenance tools.
  *
  * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017-2018 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,10 +56,11 @@ public:
     void generateFingerprints(const QStringList& paths);
     void sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality);
 
-    void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false);
+    void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false, bool similarityDb=false);
     void cleanCoreDb(const QList<qlonglong>& imageIds);
     void cleanThumbsDb(const QList<int>& thumbnailIds);
     void cleanFacesDb(const QList<Identity>& staleIdentities);
+    void cleanSimilarityDb(const QList<qlonglong>& imageIds);
     void shrinkDatabases();
 
     void cancel();
@@ -91,7 +93,8 @@ Q_SIGNALS:
      */
     void signalData(const QList<qlonglong>& staleImageIds,
                     const QList<int>& staleThumbIds,
-                    const QList<Identity>& staleIdentities);
+                    const QList<Identity>& staleIdentities,
+                    const QList<qlonglong>& staleSimilarityImageIds);
 
     /**
      * Signal to emit the count of additional items to process.

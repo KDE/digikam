@@ -583,6 +583,14 @@ public:
     QList<qlonglong> getImageIds(DatabaseItem::Status status);
 
     /**
+     * Returns all image ids with the given status and category.
+     * @param status The status.
+     * @param category The category.
+     * @return The ids of the images that have the given status.
+     */
+    QList<qlonglong> getImageIds(DatabaseItem::Status status, DatabaseItem::Category category);
+
+    /**
      * Get the imageId fitting to the information given for the item
      * @param albumID the albumID of the item (-1 means NULL)
      * @param name the name of the item

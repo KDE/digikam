@@ -9,6 +9,7 @@
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2017 by Swati  Lodha   <swatilodha27 at gmail dot com>
+ * Copyright (C)      2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "similaritydbchemaupdater.h"
+#include "similaritydbschemaupdater.h"
 
 // Qt includes
 
@@ -40,7 +41,6 @@
 #include "digikam_debug.h"
 #include "collectionscannerobserver.h"
 #include "dbenginebackend.h"
-#include "coredbtransaction.h"
 #include "similaritydbaccess.h"
 #include "similaritydb.h"
 
@@ -59,30 +59,30 @@ class SimilarityDbSchemaUpdater::Private
 public:
 
     Private()
-      : setError(false),
-        currentVersion(0),
-        currentRequiredVersion(0),
-        access(0),
-        observer(0)
+      : m_setError(false),
+        m_currentVersion(0),
+        m_currentRequiredVersion(0),
+        m_access(nullptr),
+        m_observer(nullptr)
     {
     }
 
 public:
 
-    bool                    setError;
+    bool                    m_setError;
 
-    int                     currentVersion;
-    int                     currentRequiredVersion;
+    int                     m_currentVersion;
+    int                     m_currentRequiredVersion;
 
-    SimilarityDbAccess*     access;
+    SimilarityDbAccess*     m_access;
 
-    InitializationObserver* observer;
+    InitializationObserver* m_observer;
 };
 
 SimilarityDbSchemaUpdater::SimilarityDbSchemaUpdater(SimilarityDbAccess* const access)
     : d(new Private)
 {
-    d->access = access;
+    d->m_access = access;
 }
 
 SimilarityDbSchemaUpdater::~SimilarityDbSchemaUpdater()
@@ -95,16 +95,16 @@ bool SimilarityDbSchemaUpdater::update()
     bool success = startUpdates();
 
     // even on failure, try to set current version - it may have incremented
-    if (d->currentVersion)
+    if (d->m_currentVersion)
     {
-        d->access->db()->setSetting(QLatin1String("DBSimilarityVersion"),
-                                    QString::number(d->currentVersion));
+        d->m_access->db()->setSetting(QLatin1String("DBSimilarityVersion"),
+                                      QString::number(d->m_currentVersion));
     }
 
-    if (d->currentRequiredVersion)
+    if (d->m_currentRequiredVersion)
     {
-        d->access->db()->setSetting(QLatin1String("DBSimilarityVersionRequired"),
-                                    QString::number(d->currentRequiredVersion));
+        d->m_access->db()->setSetting(QLatin1String("DBSimilarityVersionRequired"),
+                                      QString::number(d->m_currentRequiredVersion));
     }
 
     return success;
@@ -112,32 +112,32 @@ bool SimilarityDbSchemaUpdater::update()
 
 void SimilarityDbSchemaUpdater::setObserver(InitializationObserver* const observer)
 {
-    d->observer = observer;
+    d->m_observer = observer;
 }
 
 bool SimilarityDbSchemaUpdater::startUpdates()
 {
     // First step: do we have an empty database?
-    QStringList tables = d->access->backend()->tables();
+    QStringList tables = d->m_access->backend()->tables();
 
     if (tables.contains(QLatin1String("Settings"), Qt::CaseInsensitive))
     {
         // Find out schema version of db file
-        QString version         = d->access->db()->getSetting(QLatin1String("DBSimilarityVersion"));
-        QString versionRequired = d->access->db()->getSetting(QLatin1String("DBSimilarityVersionRequired"));
+        QString version         = d->m_access->db()->getSetting(QLatin1String("DBSimilarityVersion"));
+        QString versionRequired = d->m_access->db()->getSetting(QLatin1String("DBSimilarityVersionRequired"));
 
         qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "Similarity database: have a structure version "
                                           << version;
 
         // mini schema update
-        if (version.isEmpty() && d->access->parameters().isSQLite())
+        if (version.isEmpty() && d->m_access->parameters().isSQLite())
         {
-            version = d->access->db()->getSetting(QLatin1String("DBVersion"));
+            version = d->m_access->db()->getSetting(QLatin1String("DBVersion"));
         }
-        if (version.isEmpty() && d->access->parameters().isMySQL())
+        if (version.isEmpty() && d->m_access->parameters().isMySQL())
         {
-            version         = d->access->db()->getLegacySetting(QLatin1String("DBSimilarityVersion"));
-            versionRequired = d->access->db()->getLegacySetting(QLatin1String("DBSimilarityVersionRequired"));
+            version         = d->m_access->db()->getLegacySetting(QLatin1String("DBSimilarityVersion"));
+            versionRequired = d->m_access->db()->getLegacySetting(QLatin1String("DBSimilarityVersionRequired"));
         }
 
         // We absolutely require the DBSimilarityVersion setting
@@ -154,12 +154,12 @@ bool SimilarityDbSchemaUpdater::startUpdates()
                                    "Try to start with an empty database. "
                                    );
 
-            d->access->setLastError(errorMsg);
+            d->m_access->setLastError(errorMsg);
 
-            if (d->observer)
+            if (d->m_observer)
             {
-                d->observer->error(errorMsg);
-                d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                d->m_observer->error(errorMsg);
+                d->m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
             }
 
             return false;
@@ -167,9 +167,9 @@ bool SimilarityDbSchemaUpdater::startUpdates()
 
         // current version describes the current state of the schema in the db,
         // schemaVersion is the version required by the program.
-        d->currentVersion = version.toInt();
+        d->m_currentVersion = version.toInt();
 
-        if (d->currentVersion > schemaVersion())
+        if (d->m_currentVersion > schemaVersion())
         {
             // trying to open a database with a more advanced than this SimilarityDbSchemaUpdater supports
             if (!versionRequired.isEmpty() && versionRequired.toInt() <= schemaVersion())
@@ -183,12 +183,12 @@ bool SimilarityDbSchemaUpdater::startUpdates()
                                         "and has been updated to a database schema which cannot be used with this version. "
                                         "(This means this digiKam version is too old, or the database format is to recent) "
                                         "Please use the more recent version of digikam that you used before. ");
-                d->access->setLastError(errorMsg);
+                d->m_access->setLastError(errorMsg);
 
-                if (d->observer)
+                if (d->m_observer)
                 {
-                    d->observer->error(errorMsg);
-                    d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                    d->m_observer->error(errorMsg);
+                    d->m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
                 }
 
                 return false;
@@ -203,19 +203,19 @@ bool SimilarityDbSchemaUpdater::startUpdates()
     {
         qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "Similarity database: no database file available";
 
-        DbEngineParameters parameters = d->access->parameters();
+        DbEngineParameters parameters = d->m_access->parameters();
 
         // No legacy handling: start with a fresh db
         if (!createDatabase())
         {
             QString errorMsg = i18n("Failed to create tables in database.\n ") +
-                               d->access->backend()->lastError();
-            d->access->setLastError(errorMsg);
+                               d->m_access->backend()->lastError();
+            d->m_access->setLastError(errorMsg);
 
-            if (d->observer)
+            if (d->m_observer)
             {
-                d->observer->error(errorMsg);
-                d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                d->m_observer->error(errorMsg);
+                d->m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
             }
 
             return false;
@@ -232,8 +232,8 @@ bool SimilarityDbSchemaUpdater::createDatabase()
          createIndices() &&
          createTriggers())
     {
-        d->currentVersion         = schemaVersion();
-        d->currentRequiredVersion = 1;
+        d->m_currentVersion         = schemaVersion();
+        d->m_currentRequiredVersion = 1;
         return true;
     }
     else
@@ -244,17 +244,36 @@ bool SimilarityDbSchemaUpdater::createDatabase()
 
 bool SimilarityDbSchemaUpdater::createTables()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QLatin1String("CreateSimilarityDB")));
+    return d->m_access->backend()->execDBAction(d->m_access->backend()->getDBAction(QLatin1String("CreateSimilarityDB")));
 }
 
 bool SimilarityDbSchemaUpdater::createIndices()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QLatin1String("CreateSimilarityDBIndices")));
+    return d->m_access->backend()->execDBAction(d->m_access->backend()->getDBAction(QLatin1String("CreateSimilarityDBIndices")));
 }
 
 bool SimilarityDbSchemaUpdater::createTriggers()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QLatin1String("CreateSimilarityDBTrigger")));
+    return d->m_access->backend()->execDBAction(d->m_access->backend()->getDBAction(QLatin1String("CreateSimilarityDBTriggers")));
+}
+
+bool SimilarityDbSchemaUpdater::makeUpdates()
+{
+    if (d->m_currentVersion < schemaVersion())
+    {
+        if (d->m_currentVersion == 1)
+        {
+            updateV1ToV2();
+        }
+    }
+
+    return true;
+}
+
+bool SimilarityDbSchemaUpdater::updateV1ToV2()
+{
+    // Do nothing for now.
+    return true;
 }
 
 } // namespace Digikam

@@ -113,6 +113,7 @@ public:
     QDateTime              creationDate;
     QDateTime              modificationDate;
     qlonglong              fileSize;
+    QString                uniqueHash;
     QSize                  imageSize;
     QList<int>             tagIds;
 
@@ -139,6 +140,7 @@ public:
     bool                   creationDateCached     : 1;
     bool                   modificationDateCached : 1;
     bool                   fileSizeCached         : 1;
+    bool                   uniqueHashCached       : 1;
     bool                   imageSizeCached        : 1;
     bool                   tagIdsCached           : 1;
     bool                   positionsCached        : 1;

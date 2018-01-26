@@ -27,7 +27,7 @@
 
 #include "similaritydbbackend.h"
 #include "dbenginebackend_p.h"
-#include "similaritydbchemaupdater.h"
+#include "similaritydbschemaupdater.h"
 
 namespace Digikam
 {

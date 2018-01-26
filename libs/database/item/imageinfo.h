@@ -146,6 +146,11 @@ public:
     qlonglong fileSize() const;
 
     /**
+     * @return the unique hash of the image.
+     */
+    QString uniqueHash() const;
+
+    /**
      * @return the dimensions of the image (valid only if dimensions
      * have been requested)
      */

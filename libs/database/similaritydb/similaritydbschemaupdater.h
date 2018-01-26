@@ -9,6 +9,7 @@
  * Copyright (C) 2007-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2017 by Swati  Lodha   <swatilodha27 at gmail dot com>
+ * Copyright (C)      2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,10 +50,12 @@ public:
 private:
 
     bool startUpdates();
+    bool makeUpdates();
     bool createDatabase();
     bool createTables();
     bool createIndices();
     bool createTriggers();
+    bool updateV1ToV2();
 
 private:
 
