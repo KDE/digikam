@@ -274,6 +274,12 @@ void SimilarityDb::removeImageFingerprint(qlonglong imageID,
     {
         // TODO: Extend this when we have another algorithm in place.
     }
+
+    // Also, remove all similarities for the image and algorithm if the backend is a MySQL DB.
+    if (d->db->databaseType() == BdEngineBackend::DbType::MySQL)
+    {
+        removeImageSimilarity(imageID, algorithm);
+    }
 }
 
 // ----------- Methods for image similarity table access ----------
