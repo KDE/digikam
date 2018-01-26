@@ -598,9 +598,9 @@
             <dbaction name="ReplaceFaceSetting">
                 <statement mode="query">REPLACE INTO Settings VALUES (:keyword, :value);</statement>
             </dbaction>
-            
+
             <!-- SQlite Similarity Database -->
-            
+
             <dbaction name="CreateSimilarityDB" mode="transaction">
                     <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageSimilarity
                             (imageid1 INTEGER NOT NULL,
@@ -982,7 +982,7 @@
             <dbaction name="vacuumRecognitionDB">
                 <statement mode="query">VACUUM;</statement>
             </dbaction>
-            
+
             <dbaction name="vacuumSimilarityDB">
                 <statement mode="query">VACUUM;</statement>
             </dbaction>
@@ -998,7 +998,7 @@
             <dbaction name="checkRecognitionDbIntegrity">
                 <statement mode="query">pragma integrity_check;</statement>
             </dbaction>
-            
+
             <dbaction name="checkSimilarityDbIntegrity">
                 <statement mode="query">pragma integrity_check;</statement>
             </dbaction>
@@ -1672,11 +1672,11 @@
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS FaceMatrices
                             (id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             identity INTEGER,
-                            context TEXT CHARACTER SET utf8 COLLATE utf8_bin,
-                            type INTEGER,
-                            rows INTEGER,
-                            cols INTEGER,
-                            data BLOB,
+                            `context` TEXT CHARACTER SET utf8 COLLATE utf8_bin,
+                            `type` INTEGER,
+                            `rows` INTEGER,
+                            `cols` INTEGER,
+                            `data` BLOB,
                             vecdata BLOB) ENGINE InnoDB;
                 </statement>
             </dbaction>

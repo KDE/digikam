@@ -463,7 +463,7 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
                                     << compressed
                                     << compressed_vecdata;
 
-                    d->db->execSql(QString::fromLatin1("INSERT INTO FaceMatrices (identity, context, type, rows, cols, data, vecdata) "
+                    d->db->execSql(QString::fromLatin1("INSERT INTO FaceMatrices (identity, `context`, `type`, `rows`, `cols`, `data`, vecdata) "
                                    "VALUES (?,?,?,?,?,?,?);"),
                                    histogramValues, 0, &insertedId);
 
@@ -480,7 +480,7 @@ void FaceDb::updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::M
 EigenFaceModel FaceDb::eigenFaceModel() const
 {
     qCDebug(DIGIKAM_FACEDB_LOG) << "Loading EIGEN model";
-    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data, vecdata "
+    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, `context`, `type`, `rows`, `cols`, `data`, vecdata "
                                                                   "FROM FaceMatrices;"));
 
     EigenFaceModel model = EigenFaceModel();
@@ -533,7 +533,7 @@ EigenFaceModel FaceDb::eigenFaceModel() const
 FisherFaceModel FaceDb::fisherFaceModel() const
 {
     qCDebug(DIGIKAM_FACEDB_LOG) << "Loading FISHER model from FaceMatrices";
-    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data, vecdata "
+    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, `context`, `type`, `rows`, `cols`, `data`, vecdata "
                                                                   "FROM FaceMatrices;"));
 
     FisherFaceModel model  = FisherFaceModel();
@@ -587,7 +587,7 @@ FisherFaceModel FaceDb::fisherFaceModel() const
 DNNFaceModel FaceDb::dnnFaceModel() const
 {
     qCDebug(DIGIKAM_FACEDB_LOG) << "Loading DNN model";
-    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data, vecdata "
+    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, `context`, `type`, `rows`, `cols`, `data`, vecdata "
                                                                   "FROM FaceMatrices;"));
 
     DNNFaceModel model = DNNFaceModel();
@@ -648,7 +648,7 @@ void FaceDb::clearEIGENTraining(const QString& context)
     }
     else
     {
-        d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices WHERE context=?;"), context);
+        d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices WHERE `context`=?;"), context);
     }
 }
 
@@ -662,7 +662,7 @@ void FaceDb::clearEIGENTraining(const QList<int>& identities, const QString& con
         }
         else
         {
-            d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices WHERE identity=? AND context=?;"), id, context);
+            d->db->execSql(QString::fromLatin1("DELETE FROM FaceMatrices WHERE identity=? AND `context`=?;"), id, context);
         }
     }
 }
