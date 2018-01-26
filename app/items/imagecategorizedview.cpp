@@ -478,7 +478,7 @@ ThumbnailSize ImageCategorizedView::thumbnailSize() const
 */
     if (d->delegate)
     {
-        return ThumbnailSize(imageThumbnailModel()->thumbnailLoadThread()->pixmapToThumbnailSize(d->delegate->thumbnailSize().size()));
+        return d->delegate->thumbnailSize();
     }
 
     return ThumbnailSize();
@@ -493,8 +493,7 @@ void ImageCategorizedView::setThumbnailSize(const ThumbnailSize& s)
 {
     // we abuse this pair of method calls to restore scroll position
     layoutAboutToBeChanged();
-    ThumbnailSize size(imageThumbnailModel()->thumbnailLoadThread()->thumbnailToPixmapSize(s.size()));
-    d->delegate->setThumbnailSize(size);
+    d->delegate->setThumbnailSize(s);
     layoutWasChanged();
 }
 
