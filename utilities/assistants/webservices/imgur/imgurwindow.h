@@ -35,11 +35,12 @@
 #include "imgurimageslist.h"
 #include "tooldialog.h"
 #include "imgurapi3.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class ImgurWindow : public ToolDialog
+class DIGIKAM_EXPORT ImgurWindow : public ToolDialog
 {
     Q_OBJECT
 
