@@ -19,4 +19,5 @@ BUGFIXES FROM BUGZILLA:
 009 ==> 389342 - Tags are copied although moving of file fails because file with the same name already exists in target location.
 010 ==> 389420 - Thumbnails diminishing in size after switching Views.
 011 ==> 389493 - Collection browse dialog should be consistent with other browse dialogs on KDE.
-012 ==> 
+012 ==> 389512 - Timeline Thumbnails Not Shown.
+013 ==> 
