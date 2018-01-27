@@ -98,7 +98,7 @@ set(libwsimgur_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurapi3.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurwindow.cpp
 )
 
-# DropBox export ----------------------------------------------------------------
+# DropBox export --------------------------------------------------------------
 
 set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbalbum.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbmpform.cpp
@@ -107,6 +107,17 @@ set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbalbum.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwindow.cpp
 )
 
+# WikiMedia export ------------------------------------------------------------
+
+if(KF5MediaWiki_FOUND)
+
+    set(libwswikimedia_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/wikimedia/wmwindow.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/wikimedia/wmwidget.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/wikimedia/wmtalker.cpp
+    )
+
+endif()
+
 # ------------------------------------------------------------------------------
 
 add_library(webservices_src OBJECT ${libwebservices_SRCS}
@@ -114,4 +125,5 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsflickr_SRCS}
                                    ${libwsimgur_SRCS}
                                    ${libwsdropbox_SRCS}
+                                   ${libwswikimedia_SRCS}
 )

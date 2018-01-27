@@ -127,6 +127,7 @@ void ImgurImagesList::slotSuccess(const ImgurAPI3Result& result)
     {
         meta.setXmpTagString("Xmp.digiKam.ImgurId",         result.image.url);
         meta.setXmpTagString("Xmp.digiKam.ImgurDeleteHash", ImgurAPI3::urlForDeletehash(result.image.deletehash).toString());
+        meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
         bool saved = meta.applyChanges();
         qCDebug(DIGIKAM_GENERAL_LOG) << "Metadata" << (saved ? "Saved" : "Not Saved") << "to" << imgurl;
     }

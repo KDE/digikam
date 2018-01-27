@@ -81,6 +81,9 @@
 /* Define to 1 if Panorama tool is supported */
 #cmakedefine HAVE_PANORAMA 1
 
+/* Define to 1 if Mediawiki tool is supported */
+#cmakedefine HAVE_MEDIAWIKI 1
+
 /* Define to 1 if HTMLGallery tool is supported */
 #cmakedefine HAVE_HTMLGALLERY 1
 

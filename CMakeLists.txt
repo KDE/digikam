@@ -266,6 +266,7 @@ find_package(LibXml2)                              # For HTMLGallery tool.
 
 DETECT_LIBKIPI(${KIPI_MIN_VERSION})                # For plugins support.
 DETECT_LIBKSANE(${KSANE_MIN_VERSION})              # For digital scanner device support.
+DETECT_LIBMEDIAWIKI(${KF5_MIN_VERSION})            # For Mediawiki webservice support.
 
 find_package(Marble)                               # For geolocation support.
 
@@ -386,6 +387,7 @@ MACRO_BOOL_TO_01(KF5Notifications_FOUND  HAVE_KNOTIFICATIONS)
 MACRO_BOOL_TO_01(KF5NotifyConfig_FOUND   HAVE_KNOTIFYCONFIG)
 MACRO_BOOL_TO_01(KF5KIO_FOUND            HAVE_KIO)
 MACRO_BOOL_TO_01(KF5IconThemes_FOUND     HAVE_KICONTHEMES)
+MACRO_BOOL_TO_01(KF5MediaWiki_FOUND      HAVE_MEDIAWIKI)
 MACRO_BOOL_TO_01(LensFun_FOUND           HAVE_LENSFUN)
 MACRO_BOOL_TO_01(Lqr-1_FOUND             HAVE_LIBLQR_1)
 MACRO_BOOL_TO_01(Gphoto2_FOUND           HAVE_GPHOTO2)
@@ -447,6 +449,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"         "http://eigen.tuxfamily.org"  
 PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"        "http://www.gphoto.org"                                           "(version >= 2.4.0)"                   "digiKam will be compiled without GPhoto2 camera drivers support."            Gphoto2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"         "http://www.ece.uvic.ca/~mdadams/jasper"                          "(version >= 1.7.0)"                   "digiKam will be compiled without JPEG2000 support."                          Jasper_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkcalcore"       "https://projects.kde.org/projects/kde/pim/kcalcore"              "(version >= ${CALENDAR_MIN_VERSION})" "digiKam will be compiled without KDE calendar support."                      KF5CalendarCore_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libmediawiki"      "https://projects.kde.org/projects/extragear/libs/libmediawiki"   "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without libmediawiki support."                      KF5MediaWiki_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/projects/kde/kdelibs/baloo"             "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE file metadata support."                 KF5FileMetaData_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkiconthemes"    "https://projects.kde.org/projects/frameworks/kiconthemes"        "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE desktop icon themes support."           KF5IconThemes_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkio"            "https://projects.kde.org/projects/frameworks/kio"                "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE desktop integration support."           KF5KIO_FOUND)

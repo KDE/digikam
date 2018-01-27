@@ -93,6 +93,7 @@ if(ENABLE_MEDIAPLAYER)
     )
 endif()
 
+
 include_directories($<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
@@ -250,6 +251,10 @@ if(LibXml2_FOUND AND LibXslt_FOUND)
     target_link_libraries(digikamcore PUBLIC ${LIBXSLT_EXSLT_LIBRARIES}
                                              ${LIBXSLT_LIBRARIES}
                                              ${LIBXML2_LIBRARIES})
+endif()
+
+if(KF5MediaWiki_FOUND)
+    target_link_libraries(digikamcore PUBLIC ${LIBMEDIAWIKI_LIBRARIES})
 endif()
 
 if(APPLE)

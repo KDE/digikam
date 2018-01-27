@@ -242,6 +242,7 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
         m_meta.setImageDimensions(image.size());
         m_meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
         m_meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
+        m_meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
         m_meta.save(path);
     }
 

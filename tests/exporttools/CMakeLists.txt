@@ -62,3 +62,18 @@ target_link_libraries(dropbox
                       Qt5::Gui
                       Qt5::Xml
 )
+
+# =======================================================
+# Stand alone version of WikiMedia tool
+
+set(wikimedia_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/wikimedia.cpp)
+
+add_executable(wikimedia ${wikimedia_SRCS})
+
+target_link_libraries(wikimedia
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)

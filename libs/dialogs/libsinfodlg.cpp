@@ -129,6 +129,12 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18nc(CONTEXT, "LibLqr support"),              SUPPORTED_NO);
 #endif // HAVE_LIBLQR_1
 
+#ifdef HAVE_MEDIAWIKI
+    list.insert(i18nc(CONTEXT, "MediaWiki support"),              SUPPORTED_YES);
+#else
+    list.insert(i18nc(CONTEXT, "MediaWiki support"),              SUPPORTED_NO);
+#endif // HAVE_MEDIAWIKI
+
     QString tiffver = QLatin1String(TIFFLIB_VERSION_STR);
     tiffver         = tiffver.left(tiffver.indexOf(QLatin1Char('\n')));
     tiffver         = tiffver.section(QLatin1Char(' '), 2, 2);
