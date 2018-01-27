@@ -194,7 +194,7 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
     for (int i = 0; i < dateRanges.size(); ++i)
     {
         writer.writeGroup();
-        writer.writeField(QLatin1String("creationdate"), SearchXml::GreaterThan);
+        writer.writeField(QLatin1String("creationdate"), SearchXml::GreaterThanOrEqual);
         writer.writeValue(dateRanges.at(i).first);
         writer.finishField();
         writer.writeField(QLatin1String("creationdate"), SearchXml::LessThan);
