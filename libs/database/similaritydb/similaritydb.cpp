@@ -309,6 +309,11 @@ double SimilarityDb::getImageSimilarity(qlonglong imageID1, qlonglong imageID2, 
         bool ok;
         double val = similarityValueString.toDouble(&ok);
 
+        if (ok)
+        {
+            return val;
+        }
+
         qCDebug(DIGIKAM_SIMILARITYDB_LOG()) << "The similarity value for images with ids "
                                             << imageID1 << " and " << imageID2
                                             << " for similarity algorithm with id " << (int)algorithm
