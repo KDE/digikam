@@ -60,7 +60,6 @@ int main(int argc, char* argv[])
     selDlg.reactivate();
 
     FlickrWindow dlg(0, QString::fromLatin1("Flickr"), &selDlg, new DMetaInfoIface(&app, urlList));
-    dlg.setItemsList(urlList);
     dlg.exec();
 
     MetaEngine::cleanupExiv2();

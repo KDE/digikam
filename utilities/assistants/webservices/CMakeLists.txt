@@ -98,10 +98,20 @@ set(libwsimgur_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurapi3.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurwindow.cpp
 )
 
+# DropBox export ----------------------------------------------------------------
+
+set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbalbum.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbmpform.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbtalker.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwidget.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwindow.cpp
+)
+
 # ------------------------------------------------------------------------------
 
 add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwso2_SRCS}
                                    ${libwsflickr_SRCS}
                                    ${libwsimgur_SRCS}
+                                   ${libwsdropbox_SRCS}
 )

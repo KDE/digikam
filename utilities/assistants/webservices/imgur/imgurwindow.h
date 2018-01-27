@@ -36,6 +36,7 @@
 #include "tooldialog.h"
 #include "imgurapi3.h"
 #include "digikam_export.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
@@ -46,7 +47,7 @@ class DIGIKAM_EXPORT ImgurWindow : public ToolDialog
 
 public:
 
-    explicit ImgurWindow(QWidget* const parent = 0);
+    explicit ImgurWindow(DInfoInterface* const iface, QWidget* const parent = 0);
     ~ImgurWindow();
 
     void reactivate();

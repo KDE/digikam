@@ -50,7 +50,7 @@ static const constexpr char *IMGUR_CLIENT_ID("bd2572bce74b73d"),
 namespace Digikam
 {
 
-ImgurWindow::ImgurWindow(QWidget* const /*parent*/)
+ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : ToolDialog(0)
 {
     api = new ImgurAPI3(QString::fromLatin1(IMGUR_CLIENT_ID),
@@ -85,7 +85,8 @@ ImgurWindow::ImgurWindow(QWidget* const /*parent*/)
     this->setMainWidget(mainWidget);
 
     this->list = new ImgurImagesList;
-    mainLayout->addWidget(list);
+    list->setIface(iface);
+    mainLayout->addWidget(list);    
 
     /* |  Logged in as:  |
      * | <Not logged in> |

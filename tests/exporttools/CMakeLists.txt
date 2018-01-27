@@ -47,3 +47,18 @@ target_link_libraries(imgur
                       Qt5::Gui
                       Qt5::Xml
 )
+
+# =======================================================
+# Stand alone version of Dropbox tool
+
+set(dropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox.cpp)
+
+add_executable(dropbox ${dropbox_SRCS})
+
+target_link_libraries(dropbox
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)
