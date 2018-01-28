@@ -53,13 +53,40 @@ int ThumbsDbSchemaUpdater::schemaVersion()
 
 // -------------------------------------------------------------------------------------
 
-ThumbsDbSchemaUpdater::ThumbsDbSchemaUpdater(ThumbsDbAccess* access)
+class ThumbsDbSchemaUpdater::Private
 {
-    m_access                 = access;
-    m_currentVersion         = 0;
-    m_currentRequiredVersion = 0;
-    m_observer               = 0;
-    m_setError               = false;
+public:
+
+    Private()
+      : setError(false),
+        currentVersion(0),
+        currentRequiredVersion(0),
+        access(0),
+        observer(0)
+    {
+    }
+
+public:
+
+    bool                     setError;
+
+    int                      currentVersion;
+    int                      currentRequiredVersion;
+
+    ThumbsDbAccess*          access;
+
+    InitializationObserver*  observer;
+};
+
+ThumbsDbSchemaUpdater::ThumbsDbSchemaUpdater(ThumbsDbAccess* const access)
+    : d(new Private)
+{
+    d->access = access;
+}
+
+ThumbsDbSchemaUpdater::~ThumbsDbSchemaUpdater()
+{
+    delete d;
 }
 
 bool ThumbsDbSchemaUpdater::update()
@@ -67,45 +94,48 @@ bool ThumbsDbSchemaUpdater::update()
     bool success = startUpdates();
 
     // even on failure, try to set current version - it may have incremented
-    if (m_currentVersion)
+    if (d->currentVersion)
     {
-        m_access->db()->setSetting(QLatin1String("DBThumbnailsVersion"), QString::number(m_currentVersion));
+        d->access->db()->setSetting(QLatin1String("DBThumbnailsVersion"),
+                                    QString::number(d->currentVersion));
     }
 
-    if (m_currentRequiredVersion)
+    if (d->currentRequiredVersion)
     {
-        m_access->db()->setSetting(QLatin1String("DBThumbnailsVersionRequired"), QString::number(m_currentRequiredVersion));
+        d->access->db()->setSetting(QLatin1String("DBThumbnailsVersionRequired"),
+                                    QString::number(d->currentRequiredVersion));
     }
 
     return success;
 }
 
-void ThumbsDbSchemaUpdater::setObserver(InitializationObserver* observer)
+void ThumbsDbSchemaUpdater::setObserver(InitializationObserver* const observer)
 {
-    m_observer = observer;
+    d->observer = observer;
 }
 
 bool ThumbsDbSchemaUpdater::startUpdates()
 {
     // First step: do we have an empty database?
-    QStringList tables = m_access->backend()->tables();
+    QStringList tables = d->access->backend()->tables();
 
     if (tables.contains(QLatin1String("Thumbnails"), Qt::CaseInsensitive))
     {
         // Find out schema version of db file
-        QString version         = m_access->db()->getSetting(QLatin1String("DBThumbnailsVersion"));
-        QString versionRequired = m_access->db()->getSetting(QLatin1String("DBThumbnailsVersionRequired"));
+        QString version         = d->access->db()->getSetting(QLatin1String("DBThumbnailsVersion"));
+        QString versionRequired = d->access->db()->getSetting(QLatin1String("DBThumbnailsVersionRequired"));
         qCDebug(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: have a structure version " << version;
 
         // mini schema update
-        if (version.isEmpty() && m_access->parameters().isSQLite())
+        if (version.isEmpty() && d->access->parameters().isSQLite())
         {
-            version = m_access->db()->getSetting(QLatin1String("DBVersion"));
+            version = d->access->db()->getSetting(QLatin1String("DBVersion"));
         }
-        if (version.isEmpty() && m_access->parameters().isMySQL())
+
+        if (version.isEmpty() && d->access->parameters().isMySQL())
         {
-            version         = m_access->db()->getLegacySetting(QLatin1String("DBThumbnailsVersion"));
-            versionRequired = m_access->db()->getLegacySetting(QLatin1String("DBThumbnailsVersionRequired"));
+            version         = d->access->db()->getLegacySetting(QLatin1String("DBThumbnailsVersion"));
+            versionRequired = d->access->db()->getLegacySetting(QLatin1String("DBThumbnailsVersionRequired"));
         }
 
         // We absolutely require the DBThumbnailsVersion setting
@@ -115,18 +145,16 @@ bool ThumbsDbSchemaUpdater::startUpdates()
 
             qCCritical(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: database version not available! Giving up schema upgrading.";
 
-            QString errorMsg = i18n(
-                                   "The database is not valid: "
-                                   "the \"DBThumbnailsVersion\" setting does not exist. "
-                                   "The current database schema version cannot be verified. "
-                                   "Try to start with an empty database. "
-                                   );
-            m_access->setLastError(errorMsg);
+            QString errorMsg = i18n("The database is not valid: "
+                                    "the \"DBThumbnailsVersion\" setting does not exist. "
+                                    "The current database schema version cannot be verified. "
+                                    "Try to start with an empty database. ");
+            d->access->setLastError(errorMsg);
 
-            if (m_observer)
+            if (d->observer)
             {
-                m_observer->error(errorMsg);
-                m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                d->observer->error(errorMsg);
+                d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
             }
 
             return false;
@@ -134,9 +162,9 @@ bool ThumbsDbSchemaUpdater::startUpdates()
 
         // current version describes the current state of the schema in the db,
         // schemaVersion is the version required by the program.
-        m_currentVersion = version.toInt();
+        d->currentVersion = version.toInt();
 
-        if (m_currentVersion > schemaVersion())
+        if (d->currentVersion > schemaVersion())
         {
             // trying to open a database with a more advanced than this ThumbsDbSchemaUpdater supports
             if (!versionRequired.isEmpty() && versionRequired.toInt() <= schemaVersion())
@@ -150,12 +178,12 @@ bool ThumbsDbSchemaUpdater::startUpdates()
                                         "and has been updated to a database schema which cannot be used with this version. "
                                         "(This means this digiKam version is too old, or the database format is to recent) "
                                         "Please use the more recent version of digikam that you used before. ");
-                m_access->setLastError(errorMsg);
+                d->access->setLastError(errorMsg);
 
-                if (m_observer)
+                if (d->observer)
                 {
-                    m_observer->error(errorMsg);
-                    m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                    d->observer->error(errorMsg);
+                    d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
                 }
 
                 return false;
@@ -170,19 +198,19 @@ bool ThumbsDbSchemaUpdater::startUpdates()
     {
         qCDebug(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: no database file available";
 
-        DbEngineParameters parameters = m_access->parameters();
+        DbEngineParameters parameters = d->access->parameters();
 
         // No legacy handling: start with a fresh db
         if (!createDatabase())
         {
             QString errorMsg = i18n("Failed to create tables in database.\n ") +
-                               m_access->backend()->lastError();
-            m_access->setLastError(errorMsg);
+                               d->access->backend()->lastError();
+            d->access->setLastError(errorMsg);
 
-            if (m_observer)
+            if (d->observer)
             {
-                m_observer->error(errorMsg);
-                m_observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
+                d->observer->error(errorMsg);
+                d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
             }
 
             return false;
@@ -194,13 +222,13 @@ bool ThumbsDbSchemaUpdater::startUpdates()
 
 bool ThumbsDbSchemaUpdater::makeUpdates()
 {
-    if (m_currentVersion < schemaVersion())
+    if (d->currentVersion < schemaVersion())
     {
-        if (m_currentVersion == 1)
+        if (d->currentVersion == 1)
         {
             updateV1ToV2();
         }
-        if (m_currentVersion <= 2)
+        if (d->currentVersion <= 2)
         {
             updateV2ToV3();
         }
@@ -215,8 +243,8 @@ bool ThumbsDbSchemaUpdater::createDatabase()
          createIndices() &&
          createTriggers())
     {
-        m_currentVersion         = schemaVersion();
-        m_currentRequiredVersion = 1;
+        d->currentVersion         = schemaVersion();
+        d->currentRequiredVersion = 1;
         return true;
     }
     else
@@ -227,42 +255,42 @@ bool ThumbsDbSchemaUpdater::createDatabase()
 
 bool ThumbsDbSchemaUpdater::createTables()
 {
-    return m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("CreateThumbnailsDB")));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QLatin1String("CreateThumbnailsDB")));
 }
 
 bool ThumbsDbSchemaUpdater::createIndices()
 {
-    return m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("CreateThumbnailsDBIndices")));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QLatin1String("CreateThumbnailsDBIndices")));
 }
 
 bool ThumbsDbSchemaUpdater::createTriggers()
 {
-    return m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("CreateThumbnailsDBTrigger")));
+    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QLatin1String("CreateThumbnailsDBTrigger")));
 }
 
 bool ThumbsDbSchemaUpdater::updateV1ToV2()
 {
-    if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("UpdateThumbnailsDBSchemaFromV1ToV2"))))
+    if (!d->access->backend()->execDBAction(d->access->backend()->getDBAction(QLatin1String("UpdateThumbnailsDBSchemaFromV1ToV2"))))
     {
         qCDebug(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: schema upgrade from V1 to V2 failed!";
         return false;
     }
 
-    m_currentVersion         = 2;
-    m_currentRequiredVersion = 1;
+    d->currentVersion         = 2;
+    d->currentRequiredVersion = 1;
     return true;
 }
 
 bool ThumbsDbSchemaUpdater::updateV2ToV3()
 {
-    if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction(QLatin1String("UpdateThumbnailsDBSchemaFromV2ToV3"))))
+    if (!d->access->backend()->execDBAction(d->access->backend()->getDBAction(QLatin1String("UpdateThumbnailsDBSchemaFromV2ToV3"))))
     {
         qCDebug(DIGIKAM_THUMBSDB_LOG) << "Thumbs database: schema upgrade from V2 to V3 failed!";
         return false;
     }
 
-    m_currentVersion         = 3;
-    m_currentRequiredVersion = 1;
+    d->currentVersion         = 3;
+    d->currentRequiredVersion = 1;
     return true;
 }
 
