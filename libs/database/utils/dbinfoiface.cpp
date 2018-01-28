@@ -28,6 +28,7 @@
 #include "applicationsettings.h"
 #include "album.h"
 #include "albummanager.h"
+#include "albumselectwidget.h"
 #include "coredb.h"
 #include "coredbnamefilter.h"
 #include "dbinfoiface.h"
@@ -52,7 +53,8 @@ public:
 
     Private()
       : albumManager(AlbumManager::instance()),
-        albumChooser(0),
+        albumsChooser(0),
+        albumSelector(0),
         operationType(ApplicationSettings::Unspecified),
         withGroupedIsSet(false),
         withGrouped(false)
@@ -60,7 +62,8 @@ public:
     }
 
     AlbumManager*                      albumManager;
-    AlbumSelectTabs*                   albumChooser;
+    AlbumSelectTabs*                   albumsChooser;
+    AlbumSelectWidget*                 albumSelector;
 
     QList<QUrl>                        itemUrls;
 
@@ -495,30 +498,31 @@ QList<QUrl> DBInfoIface::albumsItems(const DAlbumIDs& lst) const
 
 QWidget* DBInfoIface::albumChooser(QWidget* const parent) const
 {
-    if (!d->albumChooser)
+    if (!d->albumsChooser)
     {
-        d->albumChooser = new AlbumSelectTabs(objectName(), parent);
+        d->albumsChooser = new AlbumSelectTabs(objectName(), parent);
     }
 
-    connect(d->albumChooser, SIGNAL(signalAlbumSelectionChanged()),
+    connect(d->albumsChooser, SIGNAL(signalAlbumSelectionChanged()),
             this, SIGNAL(signalAlbumChooserSelectionChanged()));
 
-    return d->albumChooser;
+    return d->albumsChooser;
 }
 
 DBInfoIface::DAlbumIDs DBInfoIface::albumChooserItems() const
 {
-    if (!d->albumChooser)
+    if (!d->albumsChooser)
     {
         return DAlbumIDs();
     }
 
-    AlbumList lst = d->albumChooser->selectedAlbums();
+    AlbumList lst = d->albumsChooser->selectedAlbums();
     DAlbumIDs ids;
 
     foreach(Album* const a, lst)
     {
-        if (a) ids << a->globalID();
+        if (a)
+            ids << a->globalID();
     }
 
     return ids;
@@ -527,6 +531,37 @@ DBInfoIface::DAlbumIDs DBInfoIface::albumChooserItems() const
 bool DBInfoIface::supportAlbums() const
 {
     return true;
+}
+
+QWidget* DBInfoIface::albumSelector(QWidget* const parent) const
+{
+    if (!d->albumSelector)
+    {
+        d->albumSelector = new AlbumSelectWidget(parent);
+    }
+
+    connect(d->albumSelector, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotSelectionChanged()));
+    
+    return d->albumSelector;
+}
+
+int DBInfoIface::selectedAlbum() const
+{
+    int ret = 0;
+
+    if (!d->albumSelector)
+    {
+        QString ext                = ApplicationSettings::instance()->getAllFileFilter();
+        PAlbum* const currentAlbum = d->albumSelector->currentAlbum();
+
+        if (currentAlbum)
+        {
+            ret = currentAlbum->globalID();
+        }
+    }
+    
+    return ret;
 }
 
 }  // namespace Digikam

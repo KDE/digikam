@@ -75,13 +75,22 @@ public:
 
 public:
 
-    // Album Selector view methods.
+    // Albums chooser view methods (to use items from albums before to process).
 
     virtual QWidget*  albumChooser(QWidget* const parent) const;
     virtual DAlbumIDs albumChooserItems()                 const;
     virtual bool      supportAlbums()                     const;
 
     Q_SIGNAL void signalAlbumChooserSelectionChanged();
+
+public:
+
+    // Album selector view methods (to upload items from an external place).
+
+    virtual QWidget* albumSelector(QWidget* const parent) const;
+    virtual int      selectedAlbum()                      const;
+
+    Q_SIGNAL void selectionChanged();
 };
 
 // -----------------------------------------------------------------

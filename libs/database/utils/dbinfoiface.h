@@ -47,21 +47,25 @@ public:
                          const ApplicationSettings::OperationType type = ApplicationSettings::Unspecified);
     ~DBInfoIface();
 
-    QList<QUrl> currentSelectedItems()              const;
-    QList<QUrl> currentAlbumItems()                 const;
+    QList<QUrl> currentSelectedItems()               const;
+    QList<QUrl> currentAlbumItems()                  const;
 
-    QList<QUrl> albumItems(Album* const album)      const;
-    QList<QUrl> albumItems(int id)                  const;
-    QList<QUrl> albumsItems(const DAlbumIDs&)       const;
-    QList<QUrl> allAlbumItems()                     const;
+    QList<QUrl> albumItems(Album* const album)       const;
+    QList<QUrl> albumItems(int id)                   const;
+    QList<QUrl> albumsItems(const DAlbumIDs&)        const;
+    QList<QUrl> allAlbumItems()                      const;
 
-    DInfoMap    albumInfo(int)                      const;
-    DInfoMap    itemInfo(const QUrl&)               const;
+    DInfoMap    albumInfo(int)                       const;
+    DInfoMap    itemInfo(const QUrl&)                const;
 
-    QWidget*    albumChooser(QWidget* const parent) const;
-    DAlbumIDs   albumChooserItems()                 const;
-    bool        supportAlbums()                     const;
+    QWidget*    albumChooser(QWidget* const parent)  const;
+    DAlbumIDs   albumChooserItems()                  const;
+    bool        supportAlbums()                      const;
 
+    
+    QWidget*    albumSelector(QWidget* const parent) const;
+    int         selectedAlbum()                      const;
+    
 private:
 
     class Private;

@@ -97,6 +97,16 @@ bool DInfoInterface::supportAlbums() const
     return false;
 }
 
+QWidget* DInfoInterface::albumSelector(QWidget* const parent) const
+{
+    return 0;
+}
+
+int DInfoInterface::selectedAlbum() const
+{
+    return 0;
+}
+
 // -----------------------------------------------------------------
 
 DItemInfo::DItemInfo(const DInfoInterface::DInfoMap& info)
