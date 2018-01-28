@@ -302,7 +302,6 @@
                 <statement mode="plain">CREATE TRIGGER delete_image DELETE ON Images
                     BEGIN
                         DELETE FROM ImageTags          WHERE imageid=OLD.id;
-                        DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
                         DELETE From ImageInformation   WHERE imageid=OLD.id;
                         DELETE From ImageMetadata      WHERE imageid=OLD.id;
                         DELETE From VideoMetadata      WHERE imageid=OLD.id;
@@ -551,7 +550,7 @@
                 </statement>
                 <statement mode="plain">CREATE TABLE Identities
                     (id INTEGER PRIMARY KEY,
-                    type INTEGER):
+                    type INTEGER);
                 </statement>
                 <statement mode="plain">CREATE TABLE IdentityAttributes
                     (id INTEGER,
