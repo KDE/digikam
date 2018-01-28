@@ -77,3 +77,18 @@ target_link_libraries(wikimedia
                       Qt5::Gui
                       Qt5::Xml
 )
+
+# =======================================================
+# Stand alone version of SmugMug tool
+
+set(smugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug.cpp)
+
+add_executable(smugmug ${smugmug_SRCS})
+
+target_link_libraries(smugmug
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)

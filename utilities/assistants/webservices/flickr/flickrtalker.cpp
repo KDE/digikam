@@ -468,12 +468,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
 
     if (!original)
     {
-        QImage image;
-
-        if (m_iface)
-        {
-            image = PreviewLoadThread::loadHighQualitySynchronously(photoPath).copyQImage();
-        }
+        QImage image = PreviewLoadThread::loadHighQualitySynchronously(photoPath).copyQImage();
 
         if (image.isNull())
         {
@@ -501,35 +496,32 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
 
             // Restore all metadata.
 
-            if (m_iface)
+            DMetadata meta;
+
+            if (meta.load(photoPath))
             {
-                DMetadata meta;
+                meta.setImageDimensions(image.size());
+                meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
 
-                if (meta.load(photoPath))
-                {
-                    meta.setImageDimensions(image.size());
-                    meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+                // NOTE: see bug #153207: Flickr use IPTC keywords to create Tags in web interface
+                //       As IPTC do not support UTF-8, we need to remove it.
+                //       This function call remove all Application2 Tags.
+                meta.removeIptcTags(QStringList() << QLatin1String("Application2"));
 
-                    // NOTE: see bug #153207: Flickr use IPTC keywords to create Tags in web interface
-                    //       As IPTC do not support UTF-8, we need to remove it.
-                    //       This function call remove all Application2 Tags.
-                    meta.removeIptcTags(QStringList() << QLatin1String("Application2"));
+                // NOTE: see bug # 384260: Flickr use Xmp.dc.subject to create Tags
+                //       in web interface, we need to remove it.
+                //       This function call remove all Dublin Core Tags.
+                meta.removeXmpTags(QStringList() << QLatin1String("dc"));
 
-                    // NOTE: see bug # 384260: Flickr use Xmp.dc.subject to create Tags
-                    //       in web interface, we need to remove it.
-                    //       This function call remove all Dublin Core Tags.
-                    meta.removeXmpTags(QStringList() << QLatin1String("dc"));
-
-                    meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
-                    meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-                    meta.save(path);
-                }
-                else
-                {
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Flickr::Image doesn't have metadata";
-                }
+                meta.setImageProgramId(QLatin1String("digiKam"), digiKamVersion());
+                meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                meta.save(path);
             }
-
+            else
+            {
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Flickr::Image doesn't have metadata";
+            }
+            
             qCDebug(DIGIKAM_GENERAL_LOG) << "Resizing and saving to temp file: " << path;
         }
     }

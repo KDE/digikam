@@ -220,10 +220,7 @@ bool WMWindow::prepareImageForUpload(const QString& imgPath)
 
     if (d->widget->resize())
     {
-        if (d->iface)
-        {
-            image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
-        }
+        image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
 
         if (image.isNull())
         {

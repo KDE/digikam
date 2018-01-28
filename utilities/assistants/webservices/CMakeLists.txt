@@ -66,11 +66,12 @@ set(libwso2_SRCS
 
 set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/base/comboboxdelegate.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/base/comboboxintermediate.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/base/newalbumdialog.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/base/selectuserdlg.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/base/exportutils.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/base/settingswidget.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/base/newalbumdialog.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/base/selectuserdlg.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/base/tooldialog.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/base/logindialog.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/manager/wssettings.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wsalbumspage.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wsfinalpage.cpp
@@ -107,6 +108,15 @@ set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbalbum.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwindow.cpp
 )
 
+# SmugMug export -------------------------------------------------------------
+
+set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugalbum.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugmpform.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugtalker.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugwidget.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugwindow.cpp
+)
+
 # WikiMedia export ------------------------------------------------------------
 
 if(KF5MediaWiki_FOUND)
@@ -125,5 +135,6 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsflickr_SRCS}
                                    ${libwsimgur_SRCS}
                                    ${libwsdropbox_SRCS}
+                                   ${libwssmugmug_SRCS}
                                    ${libwswikimedia_SRCS}
 )
