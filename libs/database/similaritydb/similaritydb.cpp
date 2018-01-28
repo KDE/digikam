@@ -45,7 +45,7 @@ class SimilarityDb::Private
 public:
 
     Private() :
-        db(nullptr)
+        db(0)
     {
     }
 
@@ -112,8 +112,6 @@ QString SimilarityDb::getLegacySetting(const QString& keyword)
         return values.first().toString();
     }
 }
-
-
 
 // ----------- General methods for entry access ----------
 
@@ -188,7 +186,7 @@ QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints(QList<ImageInfo> im
         {
             QList<QVariant> values;
             d->db->execSql(QString::fromUtf8("SELECT ImageHaarMatrix.modificationDate, ImageHaarMatrix.uniqueHash FROM ImageHaarMatrix "
-                                                     "WHERE imageid=? ; "),
+                                                     "WHERE imageid=?;"),
                            info.id(), &values);
 
             if (values.empty())
@@ -225,7 +223,7 @@ QStringList SimilarityDb::getDirtyOrMissingFingerprintURLs(QList<ImageInfo> imag
         {
             QList<QVariant> values;
             d->db->execSql(QString::fromUtf8("SELECT ImageHaarMatrix.modificationDate, ImageHaarMatrix.uniqueHash FROM ImageHaarMatrix "
-                                                     "WHERE imageid=? ; "),
+                                                     "WHERE imageid=?;"),
                            info.id(), &values);
 
             if (values.empty())
@@ -268,7 +266,7 @@ void SimilarityDb::removeImageFingerprint(qlonglong imageID,
 {
     if (algorithm == FuzzyAlgorithm::Haar)
     {
-        d->db->execSql(QString::fromUtf8("DELETE FROM ImageHaarMatrix WHERE imageid=? ;"), imageID);
+        d->db->execSql(QString::fromUtf8("DELETE FROM ImageHaarMatrix WHERE imageid=?;"), imageID);
     }
     else if (algorithm == FuzzyAlgorithm::TfIdf)
     {
@@ -317,8 +315,8 @@ double SimilarityDb::getImageSimilarity(qlonglong imageID1, qlonglong imageID2, 
         qCDebug(DIGIKAM_SIMILARITYDB_LOG()) << "The similarity value for images with ids "
                                             << imageID1 << " and " << imageID2
                                             << " for similarity algorithm with id " << (int)algorithm
-                                            << " cannot be transformed into a double! The value is \""
-                                            << similarityValueString << "\"";
+                                            << " cannot be transformed into a double! The value is "
+                                            << similarityValueString;
     }
 
     // Return the info that there is no value.
@@ -343,31 +341,28 @@ void SimilarityDb::setImageSimilarity(qlonglong imageID1, qlonglong imageID2, do
     //Check if entry already exists for above pair of images.(Avoiding duplicate entries)
     QString res = getImageSimilarityOrdered(orderedIds.first, orderedIds.second, algorithm);
 
-    if(res.isEmpty())
+    if (res.isEmpty())
     {
-            d->db->execSql(QString::fromUtf8("REPLACE INTO ImageSimilarity "
-                                                     "(imageid1, imageid2, value, algorithm) "
-                                                     "VALUES(?, ?, ?, ?);"),
-                           orderedIds.first, orderedIds.second, value, (int)algorithm);
+        d->db->execSql(QString::fromUtf8("REPLACE INTO ImageSimilarity "
+                                                  "(imageid1, imageid2, value, algorithm) "
+                                                  "VALUES(?, ?, ?, ?);"),
+                       orderedIds.first, orderedIds.second, value, (int)algorithm);
     }
 }
 
-void SimilarityDb::removeImageSimilarity(qlonglong imageID,
-                                         FuzzyAlgorithm algorithm)
+void SimilarityDb::removeImageSimilarity(qlonglong imageID, FuzzyAlgorithm algorithm)
 {
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageSimilarity "
-                                             "WHERE ( imageid1=? OR imageid2=? ) AND algorithm=? ;"),
+                                             "WHERE ( imageid1=? OR imageid2=? ) AND algorithm=?;"),
                    imageID, imageID, (int)algorithm);
 }
 
-void SimilarityDb::removeImageSimilarity(qlonglong imageID1,
-                                         qlonglong imageID2,
-                                         FuzzyAlgorithm algorithm)
+void SimilarityDb::removeImageSimilarity(qlonglong imageID1, qlonglong imageID2, FuzzyAlgorithm algorithm)
 {
     QPair<qlonglong, qlonglong> orderedIds = orderIds(imageID1, imageID2);
 
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageSimilarity "
-                                             "WHERE imageid1=? AND imageid2=? AND algorithm=? ;"),
+                                             "WHERE imageid1=? AND imageid2=? AND algorithm=?;"),
                    orderedIds.first, orderedIds.second, (int)algorithm);
 }
 
@@ -387,6 +382,7 @@ QList<FuzzyAlgorithm> SimilarityDb::getImageSimilarityAlgorithms(qlonglong image
     foreach(const QVariant& var, values)
     {
         int algorithmId = var.toInt();
+
         if (algorithmId == 1)
         {
             algorithms << FuzzyAlgorithm::Haar;
@@ -417,7 +413,7 @@ bool SimilarityDb::integrityCheck()
             // For MySQL, for every checked table, the table name, operation (check), message type (status) and the message text (ok on success)
             // are returned. So we check if there are four elements and if yes, whether the fourth element is "ok".
             //qCDebug(DIGIKAM_DATABASE_LOG) << "MySQL check returned " << values.size() << " rows";
-            if ( (values.size() % 4) != 0)
+            if ((values.size() % 4) != 0)
             {
                 return false;
             }
@@ -487,7 +483,7 @@ QString SimilarityDb::getImageSimilarityOrdered(qlonglong imageID1, qlonglong im
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT value FROM ImageSimilarity "
-                                             "WHERE ( imageid1=? OR imageid2=? ) AND algorithm=? ;"),
+                                             "WHERE ( imageid1=? OR imageid2=? ) AND algorithm=?;"),
                    imageID1, imageID2, (int)algorithm,
                    &values);
 
