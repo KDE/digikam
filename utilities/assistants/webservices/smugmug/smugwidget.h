@@ -63,7 +63,7 @@ public:
     QString getNickName() const;
     void    setNickName(const QString& nick);
 
-    QString getSitePassword()    const ;
+    QString getSitePassword()    const;
     QString getAlbumPassword()   const;
     QString getDestinationPath() const;
 
@@ -109,9 +109,10 @@ private:
     QLineEdit*                     m_nickNameEdt;
     QLineEdit*                     m_sitePasswordEdt;
 
+    DInfoInterface*                m_iface;
     DProgressWdg*                  m_progressBar;
     DImagesList*                   m_imgList;
-    //FIXME UploadWidget*                  m_uploadWidget;
+    QWidget*                       m_uploadWidget;
 
     friend class SmugWindow;
 };

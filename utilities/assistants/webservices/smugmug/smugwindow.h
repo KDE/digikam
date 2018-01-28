@@ -130,7 +130,7 @@ private:
     SmugTalker*      m_talker;
     SmugWidget*      m_widget;
     SmugNewAlbum*    m_albumDlg;
-    
+
     DInfoInterface*  m_iface;
 };
 

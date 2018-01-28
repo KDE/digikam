@@ -8,7 +8,7 @@
  *               This class do not depend of digiKam database library
  *               to permit to re-use tools on Showfoto.
  *
- * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,7 +88,7 @@ public:
     // Album selector view methods (to upload items from an external place).
 
     virtual QWidget* albumSelector(QWidget* const parent) const;
-    virtual int      selectedAlbum()                      const;
+    virtual int      albumSelectorItem()                  const;
 
     Q_SIGNAL void selectionChanged();
 };
@@ -155,6 +155,7 @@ public:
     QString title()   const;
     QString caption() const;
     QDate   date()    const;
+    QString path()    const;
 
 private:
 

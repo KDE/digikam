@@ -54,6 +54,7 @@ SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool 
 {
     setObjectName(QString::fromLatin1("SmugWidget"));
 
+    m_iface                       = iface;
     const int spacing             = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QHBoxLayout* const mainLayout = new QHBoxLayout(this);
 
@@ -143,13 +144,13 @@ SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool 
     albumsBoxLayout->addWidget(m_albumPasswordEdt,  3, 1, 1, 4);
 
     // ------------------------------------------------------------------------
-/*FIXME
+
     QGroupBox* const uploadBox         = new QGroupBox(i18n("Destination"), settingsBox);
     uploadBox->setWhatsThis(i18n("This is the location where SmugMug images will be downloaded."));
     QVBoxLayout* const uploadBoxLayout = new QVBoxLayout(uploadBox);
-    m_uploadWidget                     = iface->uploadWidget(uploadBox);
+    m_uploadWidget                     = m_iface->albumSelector(uploadBox);
     uploadBoxLayout->addWidget(m_uploadWidget);
-*/
+
     // ------------------------------------------------------------------------
 
     QGroupBox* const optionsBox         = new QGroupBox(i18n("Options"), settingsBox);
@@ -195,7 +196,7 @@ SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool 
     settingsBoxLayout->addWidget(m_headerLbl);
     settingsBoxLayout->addWidget(accountBox);
     settingsBoxLayout->addWidget(albumsBox);
-//FIXME    settingsBoxLayout->addWidget(uploadBox);
+    settingsBoxLayout->addWidget(uploadBox);
     settingsBoxLayout->addWidget(optionsBox);
     settingsBoxLayout->addWidget(m_progressBar);
     settingsBoxLayout->setSpacing(spacing);
@@ -241,7 +242,7 @@ SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool 
         m_albumPasswordLbl->hide();
         m_albumPasswordEdt->hide();
 
-//FIXME        uploadBox->hide();
+        uploadBox->hide();
     }
 }
 
@@ -287,18 +288,24 @@ QString SmugWidget::getAlbumPassword() const
 
 QString SmugWidget::getDestinationPath() const
 {
-/*FIXME
-    return m_uploadWidget->selectedImageCollection().uploadUrl().toLocalFile();
-*/
-return QString();
+    QString path;
+    int a = m_iface->albumSelectorItem();
+
+    if (a)
+    {
+        DAlbumInfo info(m_iface->albumInfo(a));
+        path = info.path();
+    }
+
+    return path;
 }
 
 void SmugWidget::setNickName(const QString& nick)
 {
     m_nickNameEdt->setText(nick);
     m_headerLbl->setText(QString::fromLatin1("<b><h2><a href='http://%1.smugmug.com'>"
-                                        "<font color=\"#9ACD32\">SmugMug</font>"
-                                        "</a></h2></b>").arg(nick));
+                                             "<font color=\"#9ACD32\">SmugMug</font>"
+                                             "</a></h2></b>").arg(nick));
 }
 
 void SmugWidget::updateLabels(const QString& email, const QString& name, const QString& nick)
@@ -311,8 +318,8 @@ void SmugWidget::updateLabels(const QString& email, const QString& name, const Q
         web = nick;
 
     m_headerLbl->setText(QString::fromLatin1("<b><h2><a href='http://%1.smugmug.com'>"
-                                        "<font color=\"#9ACD32\">SmugMug</font>"
-                                        "</a></h2></b>").arg(web));
+                                             "<font color=\"#9ACD32\">SmugMug</font>"
+                                             "</a></h2></b>").arg(web));
 }
 
 void SmugWidget::slotAnonymousToggled(bool checked)
