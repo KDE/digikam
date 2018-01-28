@@ -290,13 +290,13 @@
                 <statement mode="plain">CREATE TRIGGER delete_albumroot DELETE ON AlbumRoots
                     BEGIN
                         DELETE FROM Albums
-                            WHERE Albums.albumRoot = OLD.id;
+                        WHERE Albums.albumRoot = OLD.id;
                     END;
                 </statement>
                 <statement mode="plain">CREATE TRIGGER delete_album DELETE ON Albums
                 BEGIN
                     DELETE FROM Images
-                        WHERE Images.album = OLD.id;
+                    WHERE Images.album = OLD.id;
                 END;
                 </statement>
                 <statement mode="plain">CREATE TRIGGER delete_image DELETE ON Images
@@ -334,11 +334,11 @@
                 <statement mode="plain">CREATE TRIGGER delete_tagstree DELETE ON Tags
                     BEGIN
                         DELETE FROM Tags
-                            WHERE id  IN (SELECT id FROM TagsTree WHERE pid=OLD.id);
+                        WHERE id  IN (SELECT id FROM TagsTree WHERE pid=OLD.id);
                         DELETE FROM TagsTree
-                            WHERE id IN (SELECT id FROM TagsTree WHERE pid=OLD.id);
+                        WHERE id IN (SELECT id FROM TagsTree WHERE pid=OLD.id);
                         DELETE FROM TagsTree
-                            WHERE id=OLD.id;
+                        WHERE id=OLD.id;
                     END;
                 </statement>
                 <statement mode="plain">CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags
@@ -451,11 +451,11 @@
                     Images.modificationDate, Images.fileSize,
                     ImageInformation.width, ImageInformation.height
                     FROM Images
-                    INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
-                    INNER JOIN Albums ON Albums.id=Images.album
+                        INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
+                        INNER JOIN Albums ON Albums.id=Images.album
                         WHERE Images.status=1 AND Images.id IN
                         (SELECT imageid FROM ImageTags
-                            WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagPID));
+                        WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagPID));
                 </statement>
             </dbaction>
 
@@ -467,11 +467,11 @@
                     Images.modificationDate, Images.fileSize,
                     ImageInformation.width, ImageInformation.height
                     FROM Images
-                    INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
-                    INNER JOIN Albums ON Albums.id=Images.album
+                        INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
+                        INNER JOIN Albums ON Albums.id=Images.album
                         WHERE Images.status=1 AND Images.id IN
                         (SELECT imageid FROM ImageTags
-                            WHERE tagid=:tagID );
+                        WHERE tagid=:tagID );
                 </statement>
             </dbaction>
 
@@ -606,7 +606,7 @@
                     CREATE TRIGGER delete_identities DELETE ON Identities
                     BEGIN
                         DELETE FROM IdentityAttributes
-                            WHERE IdentityAttributes.id = OLD.id;
+                        WHERE IdentityAttributes.id = OLD.id;
                     END;
                 </statement>
             </dbaction>
@@ -837,7 +837,7 @@
 
             <dbaction name="Migrate_Read_Settings"><statement mode="query">
                 SELECT keyword, value FROM Settings
-                WHERE keyword = 'Locale';
+                WHERE  keyword = 'Locale';
             </statement></dbaction>
             <dbaction name="Migrate_Write_Settings"><statement mode="query">
                 INSERT OR IGNORE INTO Settings (keyword, value) VALUES (:keyword, :value);
@@ -1056,223 +1056,245 @@
             <dbaction name="CheckPriv_DROP_TRIGGER">
             </dbaction>
 
-            <dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
-                CREATE TABLE IF NOT EXISTS PrivCheck
-                (
-                   id   INT,
-                   name VARCHAR(35)
-                ) ENGINE InnoDB;
-            </statement>
+            <dbaction name="CheckPriv_CREATE_TABLE">
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS PrivCheck
+                    (id   INT,
+                    name VARCHAR(35))
+                    ENGINE InnoDB;
+                </statement>
             </dbaction>
 
-            <dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
-                ALTER TABLE PrivCheck DROP COLUMN name;
-            </statement>
+            <dbaction name="CheckPriv_ALTER_TABLE">
+                <statement mode="plain">
+                    ALTER TABLE PrivCheck DROP COLUMN name;
+                </statement>
             </dbaction>
 
-            <dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
-                DROP TABLE PrivCheck;
-            </statement>
+            <dbaction name="CheckPriv_DROP_TABLE">
+                <statement mode="plain">
+                    DROP TABLE PrivCheck;
+                </statement>
             </dbaction>
 
-            <dbaction name="CheckPriv_Cleanup"><statement mode="plain">
-                DROP TABLE IF EXISTS PrivCheck;
-            </statement>
+            <dbaction name="CheckPriv_Cleanup">
+                <statement mode="plain">
+                    DROP TABLE IF EXISTS PrivCheck;
+                </statement>
             </dbaction>
 
             <!-- Mysql Core Schema Database -->
 
             <dbaction name="CreateDB" mode="transaction">
-            <statement mode="plain">  CREATE TABLE IF NOT EXISTS AlbumRoots
-                            (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                            label LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            status INTEGER NOT NULL,
-                            type INTEGER NOT NULL,
-                            identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            specificPath LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            UNIQUE(identifier(127), specificPath(128)))
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS Albums
-                            (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                            albumRoot INTEGER NOT NULL,
-                            relativePath LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                            date DATE,
-                            caption LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            collection LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            icon INTEGER,
-                            CONSTRAINT Albums_AlbumRoots FOREIGN KEY (albumRoot) REFERENCES AlbumRoots (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE(albumRoot, relativePath(255)))
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS Images
-                            (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                            album INTEGER,
-                            name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                            status INTEGER NOT NULL,
-                            category INTEGER NOT NULL,
-                            modificationDate DATETIME,
-                            fileSize BIGINT,
-                            uniqueHash VARCHAR(128),
-                            CONSTRAINT Images_Albums FOREIGN KEY (album) REFERENCES Albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE (album, name(255)))
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">ALTER TABLE Albums
-                            ADD CONSTRAINT Albums_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageInformation
-                            (imageid INTEGER PRIMARY KEY,
-                            rating INTEGER,
-                            creationDate DATETIME,
-                            digitizationDate DATETIME,
-                            orientation INTEGER,
-                            width INTEGER,
-                            height INTEGER,
-                            format LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            colorDepth INTEGER,
-                            colorModel INTEGER,
-                            CONSTRAINT ImageInformation_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageMetadata
-                            (imageid INTEGER PRIMARY KEY,
-                            make LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            model LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            lens LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            aperture REAL,
-                            focalLength REAL,
-                            focalLength35 REAL,
-                            exposureTime REAL,
-                            exposureProgram INTEGER,
-                            exposureMode INTEGER,
-                            sensitivity INTEGER,
-                            flash INTEGER,
-                            whiteBalance INTEGER,
-                            whiteBalanceColorTemperature INTEGER,
-                            meteringMode INTEGER,
-                            subjectDistance REAL,
-                            subjectDistanceCategory INTEGER,
-                            CONSTRAINT ImageMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS VideoMetadata
-                            (imageid INTEGER PRIMARY KEY,
-                            aspectRatio TEXT,
-                            audioBitRate TEXT,
-                            audioChannelType TEXT,
-                            audioCompressor TEXT,
-                            duration TEXT,
-                            frameRate TEXT,
-                            exposureProgram INTEGER,
-                            videoCodec TEXT,
-                            CONSTRAINT VideoMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImagePositions
-                            (imageid INTEGER PRIMARY KEY,
-                            latitude LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            latitudeNumber REAL,
-                            longitude LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            longitudeNumber REAL,
-                            altitude REAL,
-                            orientation REAL,
-                            tilt REAL,
-                            roll REAL,
-                            accuracy REAL,
-                            description LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            CONSTRAINT ImagePositions_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageComments
-                            (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                            imageid INTEGER,
-                            type INTEGER,
-                            language VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            author LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            date DATETIME,
-                            comment LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            CONSTRAINT ImageComments_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE(imageid, type, language, author(202)))
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageCopyright
-                            (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                            imageid INTEGER,
-                            property LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            extraValue LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            CONSTRAINT ImageCopyright_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE(imageid, property(110), value(111), extraValue(111)))
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS Tags
-                            (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                            pid INTEGER,
-                            name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                            icon INTEGER,
-                            iconkde LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            lft INT NOT NULL,
-                            rgt INT NOT NULL,
-                            CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE,
-                            UNIQUE(pid, name(100)))
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTags
-                            (imageid INTEGER NOT NULL,
-                            tagid INTEGER NOT NULL,
-                            CONSTRAINT ImageTags_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            CONSTRAINT ImageTags_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE (imageid, tagid))
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain"> CREATE TABLE IF NOT EXISTS ImageProperties
-                            (imageid  INTEGER NOT NULL,
-                            property LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                            value    LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                            CONSTRAINT ImageProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE (imageid, property(255)))
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS Searches
-                            (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                            type INTEGER,
-                            name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                            query LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL)
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS DownloadHistory
-                            (id  INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                            identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            filename LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            filesize BIGINT,
-                            filedate DATETIME,
-                            UNIQUE(identifier(164), filename(165), filesize, filedate))
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
-                            (keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                            value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            UNIQUE(keyword(255)))
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
-                            (imageid INTEGER PRIMARY KEY,
-                             uuid VARCHAR(128),
-                             history LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                             CONSTRAINT ImageHistory_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageRelations
-                            (subject INTEGER,
-                             object INTEGER,
-                             type INTEGER,
-                             CONSTRAINT ImageRelations_ImagesS FOREIGN KEY (subject) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                             CONSTRAINT ImageRelations_ImagesO FOREIGN KEY (object) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                             UNIQUE(subject, object, type))
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS TagProperties
-                            (tagid INTEGER,
-                             property TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                             value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                             CONSTRAINT TagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE)
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTagProperties
-                            (imageid INTEGER,
-                             tagid INTEGER,
-                             property TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                             value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                             CONSTRAINT ImageTagProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                             CONSTRAINT ImageTagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE)
-                            ENGINE InnoDB;</statement>
-            <statement mode="plain">
-                            CREATE OR REPLACE VIEW TagsTree 
-                            AS
-                            SELECT id, pid
-                            FROM Tags;</statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS AlbumRoots
+                    (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    label LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    status INTEGER NOT NULL,
+                    type INTEGER NOT NULL,
+                    identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    specificPath LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    UNIQUE(identifier(127), specificPath(128)))
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Albums
+                    (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    albumRoot INTEGER NOT NULL,
+                    relativePath LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    date DATE,
+                    caption LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    collection LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    icon INTEGER,
+                    CONSTRAINT Albums_AlbumRoots FOREIGN KEY (albumRoot) REFERENCES AlbumRoots (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    UNIQUE(albumRoot, relativePath(255)))
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Images
+                    (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    album INTEGER,
+                    name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    status INTEGER NOT NULL,
+                    category INTEGER NOT NULL,
+                    modificationDate DATETIME,
+                    fileSize BIGINT,
+                    uniqueHash VARCHAR(128),
+                    CONSTRAINT Images_Albums FOREIGN KEY (album) REFERENCES Albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    UNIQUE (album, name(255)))
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">ALTER TABLE Albums
+                    ADD CONSTRAINT Albums_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageInformation
+                    (imageid INTEGER PRIMARY KEY,
+                    rating INTEGER,
+                    creationDate DATETIME,
+                    digitizationDate DATETIME,
+                    orientation INTEGER,
+                    width INTEGER,
+                    height INTEGER,
+                    format LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    colorDepth INTEGER,
+                    colorModel INTEGER,
+                    CONSTRAINT ImageInformation_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageMetadata
+                    (imageid INTEGER PRIMARY KEY,
+                    make LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    model LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    lens LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    aperture REAL,
+                    focalLength REAL,
+                    focalLength35 REAL,
+                    exposureTime REAL,
+                    exposureProgram INTEGER,
+                    exposureMode INTEGER,
+                    sensitivity INTEGER,
+                    flash INTEGER,
+                    whiteBalance INTEGER,
+                    whiteBalanceColorTemperature INTEGER,
+                    meteringMode INTEGER,
+                    subjectDistance REAL,
+                    subjectDistanceCategory INTEGER,
+                    CONSTRAINT ImageMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS VideoMetadata
+                    (imageid INTEGER PRIMARY KEY,
+                    aspectRatio TEXT,
+                    audioBitRate TEXT,
+                    audioChannelType TEXT,
+                    audioCompressor TEXT,
+                    duration TEXT,
+                    frameRate TEXT,
+                    exposureProgram INTEGER,
+                    videoCodec TEXT,
+                    CONSTRAINT VideoMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImagePositions
+                    (imageid INTEGER PRIMARY KEY,
+                    latitude LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    latitudeNumber REAL,
+                    longitude LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    longitudeNumber REAL,
+                    altitude REAL,
+                    orientation REAL,
+                    tilt REAL,
+                    roll REAL,
+                    accuracy REAL,
+                    description LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    CONSTRAINT ImagePositions_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageComments
+                    (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    imageid INTEGER,
+                    type INTEGER,
+                    language VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    author LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    date DATETIME,
+                    comment LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    CONSTRAINT ImageComments_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    UNIQUE(imageid, type, language, author(202)))
+                    ENGINE InnoDB;</statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageCopyright
+                    (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    imageid INTEGER,
+                    property LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    extraValue LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    CONSTRAINT ImageCopyright_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    UNIQUE(imageid, property(110), value(111), extraValue(111)))
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Tags
+                    (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    pid INTEGER,
+                    name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    icon INTEGER,
+                    iconkde LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    lft INT NOT NULL,
+                    rgt INT NOT NULL,
+                    CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE,
+                    UNIQUE(pid, name(100)))
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTags
+                    (imageid INTEGER NOT NULL,
+                    tagid INTEGER NOT NULL,
+                    CONSTRAINT ImageTags_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT ImageTags_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    UNIQUE (imageid, tagid))
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain"> CREATE TABLE IF NOT EXISTS ImageProperties
+                    (imageid  INTEGER NOT NULL,
+                    property LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    value    LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    CONSTRAINT ImageProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    UNIQUE (imageid, property(255)))
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Searches
+                    (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    type INTEGER,
+                    name LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    query LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL)
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS DownloadHistory
+                    (id  INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                    identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    filename LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    filesize BIGINT,
+                    filedate DATETIME,
+                    UNIQUE(identifier(164), filename(165), filesize, filedate))
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
+                    (keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    UNIQUE(keyword(255)))
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
+                    (imageid INTEGER PRIMARY KEY,
+                    uuid VARCHAR(128),
+                    history LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    CONSTRAINT ImageHistory_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageRelations
+                    (subject INTEGER,
+                    object INTEGER,
+                    type INTEGER,
+                    CONSTRAINT ImageRelations_ImagesS FOREIGN KEY (subject) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT ImageRelations_ImagesO FOREIGN KEY (object) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    UNIQUE(subject, object, type))
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS TagProperties
+                    (tagid INTEGER,
+                    property TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    CONSTRAINT TagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTagProperties
+                    (imageid INTEGER,
+                    tagid INTEGER,
+                    property TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    CONSTRAINT ImageTagProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    CONSTRAINT ImageTagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                    ENGINE InnoDB;
+                </statement>
+                <statement mode="plain">
+                    CREATE OR REPLACE VIEW TagsTree 
+                        AS
+                        SELECT id, pid
+                        FROM Tags;
+                </statement>
             </dbaction>
 
             <!-- Mysql Core Indexes -->
@@ -1289,8 +1311,8 @@
                         SELECT COUNT(1) cnt
                         FROM INFORMATION_SCHEMA.STATISTICS
                         WHERE CONVERT(DATABASE() USING latin1) = CONVERT(TABLE_SCHEMA USING latin1)
-                        AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
-                        AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
+                          AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
+                          AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
                     );
 
                     IF IFNULL(@Index_cnt, 0) = 0 THEN
@@ -1551,35 +1573,40 @@
 
             <dbaction name="CreateThumbnailsDB" mode="transaction">
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS Thumbnails
-                            (id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                            type INTEGER,
-                            modificationDate DATETIME,
-                            orientationHint INTEGER,
-                            data LONGBLOB) ENGINE InnoDB;
+                    (id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    type INTEGER,
+                    modificationDate DATETIME,
+                    orientationHint INTEGER,
+                    data LONGBLOB)
+                    ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS UniqueHashes
-                            (uniqueHash VARCHAR(128),
-                            fileSize BIGINT,
-                            thumbId INTEGER,
-                            CONSTRAINT UniqueHashes_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE(uniqueHash, fileSize)) ENGINE InnoDB;
+                    (uniqueHash VARCHAR(128),
+                    fileSize BIGINT,
+                    thumbId INTEGER,
+                    CONSTRAINT UniqueHashes_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    UNIQUE(uniqueHash, fileSize))
+                    ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS FilePaths
-                            (path VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            thumbId INTEGER,
-                            CONSTRAINT FilePaths_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE(path(255))) ENGINE InnoDB;
+                    (path VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    thumbId INTEGER,
+                    CONSTRAINT FilePaths_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    UNIQUE(path(255)))
+                    ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS CustomIdentifiers
-                            (identifier VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            thumbId INTEGER,
-                            CONSTRAINT CustomIdentifiers_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE(identifier(255))) ENGINE InnoDB;
+                    (identifier VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    thumbId INTEGER,
+                    CONSTRAINT CustomIdentifiers_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    UNIQUE(identifier(255)))
+                    ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ThumbSettings
-                            (keyword VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                            value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            UNIQUE(keyword(255))) ENGINE InnoDB;
+                    (keyword VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    UNIQUE(keyword(255)))
+                    ENGINE InnoDB;
                 </statement>
             </dbaction>
 
@@ -1597,8 +1624,8 @@
                         SELECT COUNT(1) cnt
                         FROM INFORMATION_SCHEMA.STATISTICS
                         WHERE CONVERT(DATABASE() USING latin1) = CONVERT(TABLE_SCHEMA USING latin1)
-                        AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
-                        AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
+                          AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
+                          AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
                     );
 
                     IF IFNULL(@Index_cnt, 0) = 0 THEN
@@ -1644,54 +1671,60 @@
 
             <dbaction name="CreateFaceDB" mode="transaction">
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS Identities
-                            (id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                            `type` INTEGER) ENGINE InnoDB;
+                    (id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    `type` INTEGER)
+                    ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS IdentityAttributes
-                            (id INTEGER,
-                            `type` INTEGER,
-                            attribute TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            `value` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            CONSTRAINT IdentityAttributes_Identities FOREIGN KEY (id) REFERENCES Identities (id) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE InnoDB;
+                    (id INTEGER,
+                    `type` INTEGER,
+                    attribute TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    `value` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    CONSTRAINT IdentityAttributes_Identities FOREIGN KEY (id) REFERENCES Identities (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                    ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS FaceSettings
-                            (keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                            `value` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            UNIQUE(keyword(255))) ENGINE InnoDB;
+                    (keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    `value` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    UNIQUE(keyword(255)))
+                    ENGINE InnoDB;
                 </statement>
             </dbaction>
 
             <dbaction name="CreateFaceDBOpenCVLBPH" mode="transaction">
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS OpenCVLBPHRecognizer
-                            (id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                            version INTEGER,
-                            radius INTEGER,
-                            neighbors INTEGER,
-                            grid_x INTEGER,
-                            grid_y INTEGER) ENGINE InnoDB;
+                    (id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    version INTEGER,
+                    radius INTEGER,
+                    neighbors INTEGER,
+                    grid_x INTEGER,
+                    grid_y INTEGER)
+                    ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS OpenCVLBPHistograms
-                            (id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                            recognizerid INTEGER,
-                            identity INTEGER,
-                            `context` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                            `type` INTEGER,
-                            `rows` INTEGER,
-                            `cols` INTEGER,
-                            `data` BLOB) ENGINE InnoDB;
+                    (id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    recognizerid INTEGER,
+                    identity INTEGER,
+                    `context` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    `type` INTEGER,
+                    `rows` INTEGER,
+                    `cols` INTEGER,
+                    `data` BLOB)
+                    ENGINE InnoDB;
                 </statement>
             </dbaction>
 
             <dbaction name="CreateFaceDBFaceMatrices" mode="transaction">
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS FaceMatrices
-                            (id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                            identity INTEGER,
-                            `context` TEXT CHARACTER SET utf8 COLLATE utf8_bin,
-                            `type` INTEGER,
-                            `rows` INTEGER,
-                            `cols` INTEGER,
-                            `data` BLOB,
-                            vecdata BLOB) ENGINE InnoDB;
+                    (id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    identity INTEGER,
+                    `context` TEXT CHARACTER SET utf8 COLLATE utf8_bin,
+                    `type` INTEGER,
+                    `rows` INTEGER,
+                    `cols` INTEGER,
+                    `data` BLOB,
+                    vecdata BLOB)
+                    ENGINE InnoDB;
                 </statement>
             </dbaction>
 
@@ -1709,8 +1742,8 @@
                         SELECT COUNT(1) cnt
                         FROM INFORMATION_SCHEMA.STATISTICS
                         WHERE CONVERT(DATABASE() USING latin1) = CONVERT(TABLE_SCHEMA USING latin1)
-                        AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
-                        AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
+                          AND CONVERT(table_name USING latin1) = CONVERT(table_name_vc USING latin1)
+                          AND CONVERT(index_name USING latin1) = CONVERT(index_name_vc USING latin1)
                     );
 
                     IF IFNULL(@Index_cnt, 0) = 0 THEN
@@ -1752,22 +1785,25 @@
 
             <dbaction name="CreateSimilarityDB" mode="transaction">
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageSimilarity
-                                            (imageid1 INTEGER NOT NULL,
-                                             imageid2 INTEGER NOT NULL,
-                                             algorithm INTEGER,
-                                             value DOUBLE,
-                                             CONSTRAINT Similar UNIQUE(imageid1, imageid2, algorithm)) ENGINE InnoDB;
+                    (imageid1 INTEGER NOT NULL,
+                    imageid2 INTEGER NOT NULL,
+                    algorithm INTEGER,
+                    value DOUBLE,
+                    CONSTRAINT Similar UNIQUE(imageid1, imageid2, algorithm))
+                    ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHaarMatrix
-                                            (imageid INTEGER PRIMARY KEY,
-                                             modificationDate DATETIME,
-                                             uniqueHash TEXT,
-                                             matrix BLOB) ENGINE InnoDB;
+                    (imageid INTEGER PRIMARY KEY,
+                    modificationDate DATETIME,
+                    uniqueHash TEXT,
+                    matrix BLOB)
+                    ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS SimilaritySettings
-                                            (keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                                            `value` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                                            UNIQUE(keyword(255))) ENGINE InnoDB;
+                    (keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    `value` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    UNIQUE(keyword(255)))
+                    ENGINE InnoDB;
                 </statement>
             </dbaction>
 
@@ -1790,7 +1826,7 @@
                     BEGIN
                         DELETE FROM ImageSimilarity
                             WHERE ( ImageSimilarity.imageid1=OLD.id OR ImageSimilarity.imageid2=OLD.id )
-                                AND ( ImageSimilarity.algorithm=1 );
+                              AND ( ImageSimilarity.algorithm=1 );
                     END;
 
                 </statement>
@@ -1973,7 +2009,7 @@
 
             <dbaction name="Migrate_Read_Settings"><statement mode="query">
                 SELECT keyword, value FROM Settings
-                WHERE keyword = 'Locale';
+                WHERE  keyword = 'Locale';
             </statement></dbaction>
             <dbaction name="Migrate_Write_Settings" mode="transaction"><statement mode="query">
                 INSERT IGNORE INTO Settings (keyword, value) VALUES (:keyword, :value);
@@ -2030,39 +2066,43 @@
             <!-- Mysql Migration from Database Version 5 (0.10 - 1.4) to Version 6 (1.5-) -->
 
             <dbaction name="UpdateSchemaFromV5ToV6" mode="transaction">
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
-                            (imageid INTEGER PRIMARY KEY,
-                             uuid VARCHAR(128),
-                             history LONGTEXT CHARACTER SET utf8);</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageRelations
-                            (subject INTEGER,
-                             object INTEGER,
-                             type INTEGER,
-                             UNIQUE(subject, object, type));</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS TagProperties
-                            (tagid INTEGER,
-                             property TEXT CHARACTER SET utf8,
-                             value LONGTEXT CHARACTER SET utf8);</statement>
-            <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTagProperties
-                            (imageid INTEGER,
-                             tagid INTEGER,
-                             property TEXT CHARACTER SET utf8,
-                             value LONGTEXT CHARACTER SET utf8);</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_id_index','imageid');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('Images','image_name_index','name(255)');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('ImageInformation','creationdate_index','creationDate');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('ImageComments','comments_imageid_index','imageid');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('ImageCopyright','copyright_imageid_index','imageid');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('ImageHistory','uuid_index','uuid');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','subject_relations_index','subject');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','object_relations_index','object');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('TagProperties','tagproperties_index','tagid');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_index','imageid,tagid');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_imageid_index','imageid');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_tagid_index','tagid');</statement>
-            <statement mode="plain">ALTER TABLE Images CHANGE uniqueHash uniqueHash VARCHAR(128);</statement>
-            <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
-            <statement mode="plain">CREATE TRIGGER delete_image AFTER DELETE ON Images
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
+                    (imageid INTEGER PRIMARY KEY,
+                    uuid VARCHAR(128),
+                    history LONGTEXT CHARACTER SET utf8);
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageRelations
+                    (subject INTEGER,
+                    object INTEGER,
+                    type INTEGER,
+                    UNIQUE(subject, object, type));
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS TagProperties
+                    (tagid INTEGER,
+                    property TEXT CHARACTER SET utf8,
+                    value LONGTEXT CHARACTER SET utf8);
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTagProperties
+                    (imageid INTEGER,
+                    tagid INTEGER,
+                    property TEXT CHARACTER SET utf8,
+                    value LONGTEXT CHARACTER SET utf8);
+                </statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_id_index','imageid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('Images','image_name_index','name(255)');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageInformation','creationdate_index','creationDate');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageComments','comments_imageid_index','imageid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageCopyright','copyright_imageid_index','imageid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageHistory','uuid_index','uuid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','subject_relations_index','subject');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageRelations','object_relations_index','object');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('TagProperties','tagproperties_index','tagid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_index','imageid,tagid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_imageid_index','imageid');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_tagid_index','tagid');</statement>
+                <statement mode="plain">ALTER TABLE Images CHANGE uniqueHash uniqueHash VARCHAR(128);</statement>
+                <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
+                <statement mode="plain">CREATE TRIGGER delete_image AFTER DELETE ON Images
                     FOR EACH ROW BEGIN
                         DELETE FROM ImageTags          WHERE imageid=OLD.id;
                         DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
@@ -2079,45 +2119,47 @@
                         UPDATE Albums SET icon=null    WHERE icon=OLD.id;
                         UPDATE Tags SET icon=null      WHERE icon=OLD.id;
                     END;
-            </statement>
-            <statement mode="plain">DROP TRIGGER IF EXISTS delete_tag;</statement>
-            <statement mode="plain">CREATE TRIGGER delete_tag AFTER DELETE ON Tags
-                FOR EACH ROW BEGIN
-                    DELETE FROM ImageTags          WHERE tagid=OLD.id;
-                    DELETE FROM TagProperties      WHERE tagid=OLD.id;
-                    DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
-                END;
-            </statement>
+                </statement>
+                <statement mode="plain">DROP TRIGGER IF EXISTS delete_tag;</statement>
+                <statement mode="plain">CREATE TRIGGER delete_tag AFTER DELETE ON Tags
+                    FOR EACH ROW BEGIN
+                        DELETE FROM ImageTags          WHERE tagid=OLD.id;
+                        DELETE FROM TagProperties      WHERE tagid=OLD.id;
+                        DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
+                    END;
+                </statement>
             </dbaction>
+
             <dbaction name="UpdateSchemaFromV6ToV7" mode="transaction">
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS VideoMetadata
-                                (imageid INTEGER PRIMARY KEY,
-                                aspectRatio TEXT,
-                                audioBitRate TEXT,
-                                audioChannelType TEXT,
-                                audioCompressor TEXT,
-                                duration TEXT,
-                                frameRate TEXT,
-                                exposureProgram INTEGER,
-                                videoCodec TEXT);</statement>
+                    (imageid INTEGER PRIMARY KEY,
+                    aspectRatio TEXT,
+                    audioBitRate TEXT,
+                    audioChannelType TEXT,
+                    audioCompressor TEXT,
+                    duration TEXT,
+                    frameRate TEXT,
+                    exposureProgram INTEGER,
+                    videoCodec TEXT);
+                </statement>
                 <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
                 <statement mode="plain">CREATE TRIGGER delete_image AFTER DELETE ON Images
-                        FOR EACH ROW BEGIN
-                            DELETE FROM ImageTags          WHERE imageid=OLD.id;
-                            DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
-                            DELETE From ImageInformation   WHERE imageid=OLD.id;
-                            DELETE From ImageMetadata      WHERE imageid=OLD.id;
-                            DELETE From VideoMetadata      WHERE imageid=OLD.id;
-                            DELETE From ImagePositions     WHERE imageid=OLD.id;
-                            DELETE From ImageComments      WHERE imageid=OLD.id;
-                            DELETE From ImageCopyright     WHERE imageid=OLD.id;
-                            DELETE From ImageProperties    WHERE imageid=OLD.id;
-                            DELETE From ImageHistory       WHERE imageid=OLD.id;
-                            DELETE FROM ImageRelations     WHERE subject=OLD.id OR object=OLD.id;
-                            DELETE FROM ImageTagProperties WHERE imageid=OLD.id;
-                            UPDATE Albums SET icon=null    WHERE icon=OLD.id;
-                            UPDATE Tags SET icon=null      WHERE icon=OLD.id;
-                        END;
+                    FOR EACH ROW BEGIN
+                        DELETE FROM ImageTags          WHERE imageid=OLD.id;
+                        DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
+                        DELETE From ImageInformation   WHERE imageid=OLD.id;
+                        DELETE From ImageMetadata      WHERE imageid=OLD.id;
+                        DELETE From VideoMetadata      WHERE imageid=OLD.id;
+                        DELETE From ImagePositions     WHERE imageid=OLD.id;
+                        DELETE From ImageComments      WHERE imageid=OLD.id;
+                        DELETE From ImageCopyright     WHERE imageid=OLD.id;
+                        DELETE From ImageProperties    WHERE imageid=OLD.id;
+                        DELETE From ImageHistory       WHERE imageid=OLD.id;
+                        DELETE FROM ImageRelations     WHERE subject=OLD.id OR object=OLD.id;
+                        DELETE FROM ImageTagProperties WHERE imageid=OLD.id;
+                        UPDATE Albums SET icon=null    WHERE icon=OLD.id;
+                        UPDATE Tags SET icon=null      WHERE icon=OLD.id;
+                    END;
                 </statement>
             </dbaction>
 
@@ -2253,93 +2295,107 @@
                 <statement mode="plain">RENAME TABLE AlbumRoots TO AlbumRoots_old;</statement>
                 <statement mode="plain">CREATE TABLE AlbumRoots LIKE AlbumRoots_old;</statement>
                 <statement mode="plain">ALTER TABLE AlbumRoots
-                                        ADD UNIQUE (identifier(127), specificPath(128)),
-                                        ENGINE InnoDB;</statement>
+                    ADD UNIQUE (identifier(127), specificPath(128)),
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO AlbumRoots SELECT * FROM AlbumRoots_old;</statement>
 
                 <statement mode="plain">RENAME TABLE Albums TO Albums_old;</statement>
                 <statement mode="plain">CREATE TABLE Albums LIKE Albums_old;</statement>
                 <statement mode="plain">ALTER TABLE Albums
-                                        ADD CONSTRAINT Albums_AlbumRoots FOREIGN KEY (albumRoot) REFERENCES AlbumRoots (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ADD UNIQUE (albumRoot, relativePath(255)),
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT Albums_AlbumRoots FOREIGN KEY (albumRoot) REFERENCES AlbumRoots (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ADD UNIQUE (albumRoot, relativePath(255)),
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO Albums SELECT * FROM Albums_old;</statement>
                 <statement mode="plain">UPDATE Albums SET icon = NULL WHERE icon = 0;</statement>
 
                 <statement mode="plain">RENAME TABLE Images TO Images_old;</statement>
                 <statement mode="plain">CREATE TABLE Images LIKE Images_old;</statement>
                 <statement mode="plain">ALTER TABLE Images
-                                        ADD CONSTRAINT Images_Albums FOREIGN KEY (album) REFERENCES Albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ADD UNIQUE (album, name(255)),
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT Images_Albums FOREIGN KEY (album) REFERENCES Albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ADD UNIQUE (album, name(255)),
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO Images SELECT * FROM Images_old;</statement>
 
                 <statement mode="plain">ALTER TABLE Albums
-                                        ADD CONSTRAINT Albums_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE;</statement>
+                    ADD CONSTRAINT Albums_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE;
+                </statement>
 
                 <statement mode="plain">RENAME TABLE ImageHaarMatrix TO ImageHaarMatrix_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageHaarMatrix LIKE ImageHaarMatrix_old;</statement>
                 <statement mode="plain">ALTER TABLE ImageHaarMatrix
-                                        ADD CONSTRAINT ImageHaarMatrix_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT ImageHaarMatrix_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageHaarMatrix SELECT * FROM ImageHaarMatrix_old;</statement>
 
                 <statement mode="plain">RENAME TABLE ImageInformation TO ImageInformation_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageInformation LIKE ImageInformation_old;</statement>
                 <statement mode="plain">ALTER TABLE ImageInformation
-                                        ADD CONSTRAINT ImageInformation_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT ImageInformation_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageInformation SELECT * FROM ImageInformation_old;</statement>
 
                 <statement mode="plain">RENAME TABLE ImageMetadata TO ImageMetadata_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageMetadata LIKE ImageMetadata_old;</statement>
                 <statement mode="plain">ALTER TABLE ImageMetadata
-                                        ADD CONSTRAINT ImageMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT ImageMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageMetadata SELECT * FROM ImageMetadata_old;</statement>
 
                 <statement mode="plain">RENAME TABLE VideoMetadata TO VideoMetadata_old;</statement>
                 <statement mode="plain">CREATE TABLE VideoMetadata LIKE VideoMetadata_old;</statement>
                 <statement mode="plain">ALTER TABLE VideoMetadata
-                                        ADD CONSTRAINT VideoMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT VideoMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO VideoMetadata SELECT * FROM VideoMetadata_old;</statement>
 
                 <statement mode="plain">RENAME TABLE ImagePositions TO ImagePositions_old;</statement>
                 <statement mode="plain">CREATE TABLE ImagePositions LIKE ImagePositions_old;</statement>
                 <statement mode="plain">ALTER TABLE ImagePositions
-                                        ADD CONSTRAINT ImagePositions_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT ImagePositions_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO ImagePositions SELECT * FROM ImagePositions_old;</statement>
 
                 <statement mode="plain">RENAME TABLE ImageComments TO ImageComments_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageComments LIKE ImageComments_old;</statement>
                 <statement mode="plain">ALTER TABLE ImageComments
-                                        ADD CONSTRAINT ImageComments_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ADD UNIQUE(imageid, type, language, author(202)),
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT ImageComments_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ADD UNIQUE(imageid, type, language, author(202)),
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageComments SELECT * FROM ImageComments_old;</statement>
 
                 <statement mode="plain">RENAME TABLE ImageCopyright TO ImageCopyright_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageCopyright LIKE ImageCopyright_old;</statement>
                 <statement mode="plain">ALTER TABLE ImageCopyright
-                                        ADD CONSTRAINT ImageCopyright_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ADD UNIQUE(imageid, property(110), value(111), extraValue(111)),
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT ImageCopyright_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ADD UNIQUE(imageid, property(110), value(111), extraValue(111)),
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageCopyright SELECT * FROM ImageCopyright_old;</statement>
 
                 <statement mode="plain">SET FOREIGN_KEY_CHECKS=0;</statement>
                 <statement mode="plain">RENAME TABLE Tags TO Tags_old;</statement>
                 <statement mode="plain">CREATE TABLE Tags LIKE Tags_old;</statement>
                 <statement mode="plain">ALTER TABLE Tags
-                                        ADD CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE,
-                                        ADD UNIQUE(pid, name(100)),
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE,
+                    ADD UNIQUE(pid, name(100)),
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">REPLACE INTO Tags SELECT * FROM Tags_old;</statement>
                 <statement mode="plain">SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';</statement>
-                <statement mode="plain">REPLACE INTO Tags (id, pid, name, icon, iconkde, lft, rgt) VALUES (0, -1, '_Digikam_root_tag_', NULL, NULL,
-                                        (SELECT MIN(tl.lft) FROM Tags AS tl),
-                                        (SELECT MAX(tr.rgt) FROM Tags AS tr));</statement>
+                <statement mode="plain">REPLACE INTO Tags
+                    (id, pid, name, icon, iconkde, lft, rgt) VALUES (0, -1, '_Digikam_root_tag_', NULL, NULL,
+                    (SELECT MIN(tl.lft) FROM Tags AS tl),
+                    (SELECT MAX(tr.rgt) FROM Tags AS tr));
+                </statement>
                 <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
                 <statement mode="plain">UPDATE Tags SET icon = NULL WHERE icon = 0;</statement>
                 <statement mode="plain">SET FOREIGN_KEY_CHECKS=1;</statement>
@@ -2347,64 +2403,71 @@
                 <statement mode="plain">RENAME TABLE ImageTags TO ImageTags_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageTags LIKE ImageTags_old;</statement>
                 <statement mode="plain">ALTER TABLE ImageTags
-                                        ADD CONSTRAINT ImageTags_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ADD CONSTRAINT ImageTags_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT ImageTags_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ADD CONSTRAINT ImageTags_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageTags SELECT * FROM ImageTags_old;</statement>
 
                 <statement mode="plain">RENAME TABLE ImageProperties TO ImageProperties_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageProperties LIKE ImageProperties_old;</statement>
                 <statement mode="plain">ALTER TABLE ImageProperties
-                                        ADD CONSTRAINT ImageProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ADD UNIQUE (imageid, property(255)),
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT ImageProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ADD UNIQUE (imageid, property(255)),
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageProperties SELECT * FROM ImageProperties_old;</statement>
 
-                <statement mode="plain">ALTER TABLE Searches
-                                        ENGINE InnoDB;</statement>
+                <statement mode="plain">ALTER TABLE Searches ENGINE InnoDB;</statement>
 
                 <statement mode="plain">RENAME TABLE DownloadHistory TO DownloadHistory_old;</statement>
                 <statement mode="plain">CREATE TABLE DownloadHistory LIKE DownloadHistory_old;</statement>
                 <statement mode="plain">ALTER TABLE DownloadHistory
-                                        ADD UNIQUE(identifier(164), filename(165), filesize, filedate),
-                                        ENGINE InnoDB;</statement>
+                    ADD UNIQUE(identifier(164), filename(165), filesize, filedate),
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO DownloadHistory SELECT * FROM DownloadHistory_old;</statement>
 
                 <statement mode="plain">RENAME TABLE Settings TO Settings_old;</statement>
                 <statement mode="plain">CREATE TABLE Settings LIKE Settings_old;</statement>
                 <statement mode="plain">ALTER TABLE Settings
-                                        ADD UNIQUE(keyword(255)),
-                                        ENGINE InnoDB;</statement>
+                    ADD UNIQUE(keyword(255)),
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO Settings SELECT * FROM Settings_old;</statement>
 
                 <statement mode="plain">RENAME TABLE ImageHistory TO ImageHistory_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageHistory LIKE ImageHistory_old;</statement>
                 <statement mode="plain">ALTER TABLE ImageHistory
-                                        ADD CONSTRAINT ImageHistory_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT ImageHistory_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageHistory SELECT * FROM ImageHistory_old;</statement>
 
                 <statement mode="plain">RENAME TABLE ImageRelations TO ImageRelations_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageRelations LIKE ImageRelations_old;</statement>
                 <statement mode="plain">ALTER TABLE ImageRelations
-                                        ADD CONSTRAINT ImageRelations_ImagesS FOREIGN KEY (subject) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ADD CONSTRAINT ImageRelations_ImagesO FOREIGN KEY (object) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT ImageRelations_ImagesS FOREIGN KEY (subject) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ADD CONSTRAINT ImageRelations_ImagesO FOREIGN KEY (object) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageRelations SELECT * FROM ImageRelations_old;</statement>
 
                 <statement mode="plain">RENAME TABLE TagProperties TO TagProperties_old;</statement>
                 <statement mode="plain">CREATE TABLE TagProperties LIKE TagProperties_old;</statement>
                 <statement mode="plain">ALTER TABLE TagProperties
-                                        ADD CONSTRAINT TagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT TagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO TagProperties SELECT * FROM TagProperties_old;</statement>
 
                 <statement mode="plain">RENAME TABLE ImageTagProperties TO ImageTagProperties_old;</statement>
                 <statement mode="plain">CREATE TABLE ImageTagProperties LIKE ImageTagProperties_old;</statement>
                 <statement mode="plain">ALTER TABLE ImageTagProperties
-                                        ADD CONSTRAINT ImageTagProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ADD CONSTRAINT ImageTagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                        ENGINE InnoDB;</statement>
+                    ADD CONSTRAINT ImageTagProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ADD CONSTRAINT ImageTagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                    ENGINE InnoDB;
+                </statement>
                 <statement mode="plain">INSERT IGNORE INTO ImageTagProperties SELECT * FROM ImageTagProperties_old;</statement>
 
                 <statement mode="plain">DROP TABLE ImageTagProperties_old;</statement>
@@ -2431,17 +2494,19 @@
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">
                 <statement mode="plain">ALTER TABLE UniqueHashes CHANGE uniqueHash uniqueHash VARCHAR(128);</statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS CustomIdentifiers
-                            (identifier LONGTEXT CHARACTER SET utf8,
-                            thumbId INTEGER,
-                            UNIQUE(identifier(333)));
+                    (identifier LONGTEXT CHARACTER SET utf8,
+                    thumbId INTEGER,
+                    UNIQUE(identifier(333)));
                 </statement>
                 <statement mode="plain">CALL create_index_if_not_exists('CustomIdentifiers','id_customIdentifiers','thumbId');</statement>
             </dbaction>
+
             <dbaction name="UpdateThumbnailsDBSchemaFromV2ToV3" mode="transaction">
                 <statement mode="plain">ALTER TABLE Settings RENAME ThumbSettings;</statement>
                 <statement mode="plain">ALTER TABLE ThumbSettings
-                                                      MODIFY COLUMN keyword VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
-                                                      MODIFY COLUMN value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
+                    MODIFY COLUMN keyword VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    MODIFY COLUMN value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci;
+                </statement>
                 <statement mode="plain">ALTER TABLE ThumbSettings ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE Thumbnails ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE UniqueHashes ENGINE InnoDB;</statement>
@@ -2450,13 +2515,13 @@
                 <statement mode="plain">ALTER TABLE CustomIdentifiers MODIFY COLUMN identifier VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci;</statement>
                 <statement mode="plain">ALTER TABLE CustomIdentifiers ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE UniqueHashes
-                            ADD CONSTRAINT UniqueHashes_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE;
+                    ADD CONSTRAINT UniqueHashes_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE;
                 </statement>
                 <statement mode="plain">ALTER TABLE FilePaths
-                            ADD CONSTRAINT FilePaths_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE;
+                    ADD CONSTRAINT FilePaths_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE;
                 </statement>
                 <statement mode="plain">ALTER TABLE CustomIdentifiers
-                            ADD CONSTRAINT CustomIdentifiers_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE;
+                    ADD CONSTRAINT CustomIdentifiers_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE;
                 </statement>
             </dbaction>
 
