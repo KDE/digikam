@@ -960,6 +960,28 @@
                 <!-- Nothing to do for SQLite -->
             </dbaction>
 
+            <dbaction name="UpdateSchemaFromV9ToV10" mode="transaction">
+                <statement mode="plain">DROP TABLE IF EXISTS ImageHaarMatrix;</statement>
+                <statement mode="plain">DROP TRIGGER delete_image;</statement>
+                <statement mode="plain">CREATE TRIGGER delete_image DELETE ON Images
+                    BEGIN
+                        DELETE FROM ImageTags          WHERE imageid=OLD.id;
+                        DELETE From ImageInformation   WHERE imageid=OLD.id;
+                        DELETE From ImageMetadata      WHERE imageid=OLD.id;
+                        DELETE From VideoMetadata      WHERE imageid=OLD.id;
+                        DELETE From ImagePositions     WHERE imageid=OLD.id;
+                        DELETE From ImageComments      WHERE imageid=OLD.id;
+                        DELETE From ImageCopyright     WHERE imageid=OLD.id;
+                        DELETE From ImageProperties    WHERE imageid=OLD.id;
+                        DELETE From ImageHistory       WHERE imageid=OLD.id;
+                        DELETE FROM ImageRelations     WHERE subject=OLD.id OR object=OLD.id;
+                        DELETE FROM ImageTagProperties WHERE imageid=OLD.id;
+                        UPDATE Albums SET icon=null    WHERE icon=OLD.id;
+                        UPDATE Tags SET icon=null      WHERE icon=OLD.id;
+                    END;
+                </statement>
+            </dbaction>
+
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">
                 <statement mode="plain">CREATE TABLE CustomIdentifiers
                     (identifier TEXT,
@@ -976,13 +998,6 @@
                     END;
                 </statement>
             </dbaction>
-
-            <!-- TODO: Make a Core DB Schema update with the following changes:
-                 TODO: 1) Remove ImageHaarMatrix from all triggers on Core DB tables.
-                 TODO: 2) Remove the ImageHaarMatrix table from Core DB.
-                 TODO: 3) MySQL-Migration should be adopted to the new Structure?
-
-            -->
 
             <dbaction name="UpdateThumbnailsDBSchemaFromV2ToV3" mode="transaction">
                 <!-- Nothing to do for SQLite -->
@@ -2491,6 +2506,10 @@
                 <statement mode="plain">DROP TABLE Images_old;</statement>
                 <statement mode="plain">DROP TABLE Albums_old;</statement>
                 <statement mode="plain">DROP TABLE AlbumRoots_old;</statement>
+            </dbaction>
+
+            <dbaction name="UpdateSchemaFromV9ToV10" mode="transaction">
+                <statement mode="plain">DROP TABLE IF EXISTS ImageHaarMatrix;</statement>
             </dbaction>
 
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">
