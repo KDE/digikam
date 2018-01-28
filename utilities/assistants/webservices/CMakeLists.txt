@@ -62,7 +62,7 @@ set(libwso2_SRCS
     #${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2hubic.cpp
 )
 
-# Base classes ------------------------------------------------------------------
+# Helper classes ------------------------------------------------------------------
 
 set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/base/comboboxdelegate.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/base/comboboxintermediate.cpp
@@ -81,7 +81,7 @@ set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/base/comboboxdelegate.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wswizard.cpp
 )
 
-# Flickr export ----------------------------------------------------------------
+# Flickr tool ----------------------------------------------------------------
 
 set(libwsflickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrlist.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrmpform.cpp
@@ -92,14 +92,14 @@ set(libwsflickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrlist.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwindow.cpp
 )
 
-# Imgur export ----------------------------------------------------------------
+# Imgur tool ----------------------------------------------------------------
 
 set(libwsimgur_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurapi3.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurimageslist.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurwindow.cpp
 )
 
-# DropBox export --------------------------------------------------------------
+# DropBox tool --------------------------------------------------------------
 
 set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbalbum.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbmpform.cpp
@@ -108,7 +108,7 @@ set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbalbum.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwindow.cpp
 )
 
-# SmugMug export -------------------------------------------------------------
+# SmugMug tool -------------------------------------------------------------
 
 set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugalbum.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugmpform.cpp
@@ -117,7 +117,17 @@ set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugalbum.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugwindow.cpp
 )
 
-# WikiMedia export ------------------------------------------------------------
+# ImageShack tool -------------------------------------------------------------
+
+set(libwsimageshack_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshack.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshacknewalbumdlg.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshackmpform.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshacktalker.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshackwidget.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshackwindow.cpp
+)
+
+# WikiMedia tool ---------------------------------------------------------
 
 if(KF5MediaWiki_FOUND)
 
@@ -136,5 +146,6 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsimgur_SRCS}
                                    ${libwsdropbox_SRCS}
                                    ${libwssmugmug_SRCS}
+                                   ${libwsimageshack_SRCS}
                                    ${libwswikimedia_SRCS}
 )

@@ -92,3 +92,18 @@ target_link_libraries(smugmug
                       Qt5::Gui
                       Qt5::Xml
 )
+
+# =======================================================
+# Stand alone version of ImageShack tool
+
+set(imageshack_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imageshack.cpp)
+
+add_executable(imageshack ${imageshack_SRCS})
+
+target_link_libraries(imageshack
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)
