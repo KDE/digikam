@@ -55,41 +55,43 @@
 
             <!-- SQlite check privileges rules -->
 
-            <dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
-                CREATE TRIGGER privcheck_trigger DELETE ON PrivCheck
+            <dbaction name="CheckPriv_CREATE_TRIGGER">
+                <statement mode="plain">CREATE TRIGGER privcheck_trigger DELETE ON PrivCheck
                     BEGIN
                         SELECT * FROM PrivCheck;
                     END;
-            </statement>
+                </statement>
             </dbaction>
 
-            <dbaction name="CheckPriv_DROP_TRIGGER"><statement mode="plain">
-                DROP TRIGGER privcheck_trigger;
-            </statement>
+            <dbaction name="CheckPriv_DROP_TRIGGER">
+                <statement mode="plain">
+                    DROP TRIGGER privcheck_trigger;
+                </statement>
             </dbaction>
 
-            <dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
-                CREATE TABLE PrivCheck
-                (
-                    id   INT,
-                    name VARCHAR(35)
-                );
-            </statement>
+            <dbaction name="CheckPriv_CREATE_TABLE">
+                <statement mode="plain">CREATE TABLE PrivCheck
+                    (id   INT,
+                    name VARCHAR(35));
+                </statement>
             </dbaction>
 
-            <dbaction name="CheckPriv_ALTER_TABLE"><statement mode="plain">
-                ALTER TABLE PrivCheck ADD COLUMN addedColumn;
-            </statement>
+            <dbaction name="CheckPriv_ALTER_TABLE">
+                <statement mode="plain">
+                    ALTER TABLE PrivCheck ADD COLUMN addedColumn;
+                </statement>
             </dbaction>
 
-            <dbaction name="CheckPriv_DROP_TABLE"><statement mode="plain">
-                DROP TABLE PrivCheck;
-            </statement>
+            <dbaction name="CheckPriv_DROP_TABLE">
+                <statement mode="plain">
+                    DROP TABLE PrivCheck;
+                </statement>
             </dbaction>
 
-            <dbaction name="CheckPriv_Cleanup"><statement mode="plain">
-                DROP TABLE IF EXISTS PrivCheck;
-            </statement>
+            <dbaction name="CheckPriv_Cleanup">
+                <statement mode="plain">
+                    DROP TABLE IF EXISTS PrivCheck;
+                </statement>
             </dbaction>
 
             <!-- SQlite Core Schema Database -->
