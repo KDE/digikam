@@ -454,9 +454,9 @@
                     FROM Images
                     INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
                     INNER JOIN Albums ON Albums.id=Images.album
-                    WHERE Images.status=1 AND Images.id IN
-                    (SELECT imageid FROM ImageTags
-                    WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagPID));
+                        WHERE Images.status=1 AND Images.id IN
+                        (SELECT imageid FROM ImageTags
+                            WHERE tagid=:tagID OR tagid IN (SELECT id FROM TagsTree WHERE pid=:tagPID));
                 </statement>
             </dbaction>
 
@@ -470,108 +470,106 @@
                     FROM Images
                     INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid
                     INNER JOIN Albums ON Albums.id=Images.album
-                    WHERE Images.status=1 AND Images.id IN
-                    (SELECT imageid FROM ImageTags
-                    WHERE tagid=:tagID );
+                        WHERE Images.status=1 AND Images.id IN
+                        (SELECT imageid FROM ImageTags
+                            WHERE tagid=:tagID );
                 </statement>
             </dbaction>
 
             <!-- SQlite Thumbnails Schema Database -->
 
             <dbaction name="CreateThumbnailsDB" mode="transaction">
-                    <statement mode="plain">CREATE TABLE Thumbnails
-                            (id INTEGER PRIMARY KEY,
-                            type INTEGER,
-                            modificationDate DATETIME,
-                            orientationHint INTEGER,
-                            data BLOB)</statement>
-                    <statement mode="plain">CREATE TABLE UniqueHashes
-                            (uniqueHash TEXT,
-                            fileSize INTEGER,
-                            thumbId INTEGER,
-                            UNIQUE(uniqueHash, fileSize))</statement>
-                    <statement mode="plain">CREATE TABLE FilePaths
-                            (path TEXT,
-                            thumbId INTEGER,
-                            UNIQUE(path))</statement>
-                    <statement mode="plain">CREATE TABLE CustomIdentifiers
-                            (identifier TEXT,
-                            thumbId INTEGER,
-                            UNIQUE(identifier))
-                    </statement>
-                    <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
-                            (keyword TEXT NOT NULL UNIQUE,
-                            value TEXT)
-                    </statement>
-                </dbaction>
+                <statement mode="plain">CREATE TABLE Thumbnails
+                    (id INTEGER PRIMARY KEY,
+                    type INTEGER,
+                    modificationDate DATETIME,
+                    orientationHint INTEGER,
+                    data BLOB);
+                </statement>
+                <statement mode="plain">CREATE TABLE UniqueHashes
+                    (uniqueHash TEXT,
+                    fileSize INTEGER,
+                    thumbId INTEGER,
+                    UNIQUE(uniqueHash, fileSize));
+                </statement>
+                <statement mode="plain">CREATE TABLE FilePaths
+                    (path TEXT,
+                    thumbId INTEGER,
+                    UNIQUE(path));
+                </statement>
+                <statement mode="plain">CREATE TABLE CustomIdentifiers
+                    (identifier TEXT,
+                    thumbId INTEGER,
+                    UNIQUE(identifier));
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
+                    (keyword TEXT NOT NULL UNIQUE,
+                    value TEXT);
+                </statement>
+            </dbaction>
 
-                <!-- SQlite Thumbnails Indexes -->
+            <!-- SQlite Thumbnails Indexes -->
 
-                <dbaction name="CreateThumbnailsDBIndices" mode="transaction">
-                    <statement mode="plain">CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);</statement>
-                    <statement mode="plain">CREATE INDEX id_filePaths ON FilePaths (thumbId);</statement>
-                    <statement mode="plain">CREATE INDEX id_customIdentifiers ON CustomIdentifiers (thumbId);</statement>
-                </dbaction>
+            <dbaction name="CreateThumbnailsDBIndices" mode="transaction">
+                <statement mode="plain">CREATE INDEX id_uniqueHashes ON UniqueHashes (thumbId);</statement>
+                <statement mode="plain">CREATE INDEX id_filePaths ON FilePaths (thumbId);</statement>
+                <statement mode="plain">CREATE INDEX id_customIdentifiers ON CustomIdentifiers (thumbId);</statement>
+            </dbaction>
 
-                <!-- SQlite Thumbnails Trigger -->
+            <!-- SQlite Thumbnails Trigger -->
 
-                <dbaction name="CreateThumbnailsDBTrigger" mode="transaction">
-                    <statement mode="plain">CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails
-                                BEGIN
-                                DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id;
-                                DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id;
-                                DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = OLD.id;
-                                END;
-                    </statement>
-                </dbaction>
+            <dbaction name="CreateThumbnailsDBTrigger" mode="transaction">
+                <statement mode="plain">CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails
+                    BEGIN
+                        DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id;
+                        DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id;
+                        DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = OLD.id;
+                    END;
+                </statement>
+            </dbaction>
 
-                <!-- SQlite Thumbnails Queries -->
+            <!-- SQlite Thumbnails Queries -->
 
-                <dbaction name="SelectThumbnailSetting">
-                    <statement mode="query">SELECT value FROM Settings WHERE keyword=:keyword;</statement>
-                </dbaction>
+            <dbaction name="SelectThumbnailSetting">
+                <statement mode="query">SELECT value FROM Settings WHERE keyword=:keyword;</statement>
+            </dbaction>
 
-                <dbaction name="SelectThumbnailLegacySetting">
-                    <statement mode="query">SELECT value FROM Settings WHERE keyword=:keyword;</statement>
-                </dbaction>
+            <dbaction name="SelectThumbnailLegacySetting">
+                <statement mode="query">SELECT value FROM Settings WHERE keyword=:keyword;</statement>
+            </dbaction>
 
-                <dbaction name="ReplaceThumbnailSetting">
-                    <statement mode="query">REPLACE INTO Settings VALUES (:keyword, :value);</statement>
-                </dbaction>
+            <dbaction name="ReplaceThumbnailSetting">
+                <statement mode="query">REPLACE INTO Settings VALUES (:keyword, :value);</statement>
+            </dbaction>
 
             <!-- SQlite Face Schema Database -->
 
             <dbaction name="CreateFaceDB" mode="transaction">
-                <statement mode="plain">
-                    CREATE TABLE IF NOT EXISTS Settings
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
                     (keyword TEXT NOT NULL UNIQUE,
-                    value TEXT)
+                    value TEXT);
                 </statement>
-                <statement mode="plain">
-                    CREATE TABLE Identities
+                <statement mode="plain">CREATE TABLE Identities
                     (id INTEGER PRIMARY KEY,
-                    type INTEGER)
+                    type INTEGER):
                 </statement>
-                <statement mode="plain">
-                    CREATE TABLE IdentityAttributes
+                <statement mode="plain">CREATE TABLE IdentityAttributes
                     (id INTEGER,
                     attribute TEXT,
-                    value TEXT)
+                    value TEXT);
                 </statement>
             </dbaction>
 
             <dbaction name="CreateFaceDBOpenCVLBPH" mode="transaction">
-                <statement mode="plain">
-                    CREATE TABLE OpenCVLBPHRecognizer
+                <statement mode="plain">CREATE TABLE OpenCVLBPHRecognizer
                     (id INTEGER PRIMARY KEY,
                     version INTEGER,
                     radius INTEGER,
                     neighbors INTEGER,
                     grid_x INTEGER,
-                    grid_y INTEGER)
+                    grid_y INTEGER);
                 </statement>
-                <statement mode="plain">
-                    CREATE TABLE OpenCVLBPHistograms
+                <statement mode="plain">CREATE TABLE OpenCVLBPHistograms
                     (id INTEGER PRIMARY KEY,
                     recognizerid INTEGER,
                     identity INTEGER,
@@ -579,13 +577,12 @@
                     type INTEGER,
                     rows INTEGER,
                     cols INTEGER,
-                    data BLOB)
+                    data BLOB);
                 </statement>
             </dbaction>
 
             <dbaction name="CreateFaceDBFaceMatrices" mode="transaction">
-                <statement mode="plain">
-                    CREATE TABLE FaceMatrices
+                <statement mode="plain">CREATE TABLE FaceMatrices
                     (id INTEGER PRIMARY KEY,
                     identity INTEGER,
                     context TEXT,
@@ -593,7 +590,7 @@
                     rows INTEGER,
                     cols INTEGER,
                     data BLOB,
-                    vecdata BLOB)
+                    vecdata BLOB);
                 </statement>
             </dbaction>
 
@@ -610,7 +607,7 @@
                     CREATE TRIGGER delete_identities DELETE ON Identities
                     BEGIN
                         DELETE FROM IdentityAttributes
-                        WHERE IdentityAttributes.id = OLD.id;
+                            WHERE IdentityAttributes.id = OLD.id;
                     END;
                 </statement>
             </dbaction>
@@ -628,29 +625,27 @@
             <!-- SQlite Similarity Database -->
 
             <dbaction name="CreateSimilarityDB" mode="transaction">
-                    <statement mode="plain">
-                        CREATE TABLE IF NOT EXISTS ImageSimilarity
-                        (imageid1 INTEGER NOT NULL,
-                        imageid2 INTEGER NOT NULL,
-                        algorithm INTEGER,
-                        value DOUBLE,
-                        CONSTRAINT Similar UNIQUE(imageid1, imageid2, algorithm))
-                    </statement>
-                    <statement mode="plain">
-                        CREATE TABLE IF NOT EXISTS ImageHaarMatrix
-                        (imageid INTEGER PRIMARY KEY,
-                        modificationDate DATETIME,
-                        uniqueHash TEXT,
-                        matrix BLOB)
-                    </statement>
-                    <statement mode="plain">
-                        CREATE TABLE IF NOT EXISTS SimilaritySettings
-                        (keyword TEXT NOT NULL UNIQUE,
-                        value TEXT)
-                    </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageSimilarity
+                    (imageid1 INTEGER NOT NULL,
+                    imageid2 INTEGER NOT NULL,
+                    algorithm INTEGER,
+                    value DOUBLE,
+                    CONSTRAINT Similar UNIQUE(imageid1, imageid2, algorithm));
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHaarMatrix
+                    (imageid INTEGER PRIMARY KEY,
+                    modificationDate DATETIME,
+                    uniqueHash TEXT,
+                    matrix BLOB);
+                </statement>
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS SimilaritySettings
+                    (keyword TEXT NOT NULL UNIQUE,
+                    value TEXT);
+                </statement>
             </dbaction>
 
             <!-- SQlite Similarity Indexes -->
+
             <dbaction name="CreateSimilarityDBIndices" mode="transaction">
             </dbaction>
 
@@ -865,23 +860,27 @@
 
             <dbaction name="UpdateSchemaFromV5ToV6" mode="transaction">
                 <statement mode="plain">CREATE TABLE ImageHistory
-                            (imageid INTEGER PRIMARY KEY,
-                             uuid TEXT,
-                             history TEXT);</statement>
+                    (imageid INTEGER PRIMARY KEY,
+                    uuid TEXT,
+                    history TEXT);
+                </statement>
                 <statement mode="plain">CREATE TABLE ImageRelations
-                            (subject INTEGER,
-                             object INTEGER,
-                             type INTEGER,
-                             UNIQUE(subject, object, type));</statement>
+                    (subject INTEGER,
+                    object INTEGER,
+                    type INTEGER,
+                    UNIQUE(subject, object, type));
+                </statement>
                 <statement mode="plain">CREATE TABLE TagProperties
-                            (tagid INTEGER,
-                             property TEXT,
-                             value TEXT);</statement>
+                    (tagid INTEGER,
+                    property TEXT,
+                    value TEXT);
+                </statement>
                 <statement mode="plain">CREATE TABLE ImageTagProperties
-                            (imageid INTEGER,
-                             tagid INTEGER,
-                             property TEXT,
-                             value TEXT);</statement>
+                    (imageid INTEGER,
+                    tagid INTEGER,
+                    property TEXT,
+                    value TEXT);
+                </statement>
                 <statement mode="plain">CREATE INDEX tag_id_index  ON ImageTags (imageid);</statement>
                 <statement mode="plain">CREATE INDEX image_name_index ON Images (name);</statement>
                 <statement mode="plain">CREATE INDEX creationdate_index ON ImageInformation (creationDate);</statement>
@@ -915,25 +914,26 @@
                 </statement>
                 <statement mode="plain">DROP TRIGGER delete_tag;</statement>
                 <statement mode="plain">CREATE TRIGGER delete_tag DELETE ON Tags
-                            BEGIN
-                            DELETE FROM ImageTags WHERE tagid=OLD.id;
-                            DELETE FROM TagProperties WHERE tagid=OLD.id;
-                            DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
-                            END;
+                    BEGIN
+                        DELETE FROM ImageTags WHERE tagid=OLD.id;
+                        DELETE FROM TagProperties WHERE tagid=OLD.id;
+                        DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
+                    END;
                 </statement>
             </dbaction>
 
             <dbaction name="UpdateSchemaFromV6ToV7" mode="transaction">
                 <statement mode="plain"> CREATE TABLE VideoMetadata
-                            (imageid INTEGER PRIMARY KEY,
-                            aspectRatio TEXT,
-                            audioBitRate TEXT,
-                            audioChannelType TEXT,
-                            audioCompressor TEXT,
-                            duration TEXT,
-                            frameRate TEXT,
-                            exposureProgram INTEGER,
-                            videoCodec TEXT)</statement>
+                    (imageid INTEGER PRIMARY KEY,
+                    aspectRatio TEXT,
+                    audioBitRate TEXT,
+                    audioChannelType TEXT,
+                    audioCompressor TEXT,
+                    duration TEXT,
+                    frameRate TEXT,
+                    exposureProgram INTEGER,
+                    videoCodec TEXT);
+                </statement>
                 <statement mode="plain">DROP TRIGGER delete_image;</statement>
                 <statement mode="plain">CREATE TRIGGER delete_image DELETE ON Images
                     BEGIN
@@ -961,18 +961,18 @@
 
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">
                 <statement mode="plain">CREATE TABLE CustomIdentifiers
-                        (identifier TEXT,
-                        thumbId INTEGER,
-                        UNIQUE(identifier))
+                    (identifier TEXT,
+                    thumbId INTEGER,
+                    UNIQUE(identifier));
                 </statement>
                 <statement mode="plain">CREATE INDEX id_customIdentifiers ON CustomIdentifiers (thumbId);</statement>
                 <statement mode="plain">DROP TRIGGER delete_thumbnails;</statement>
                 <statement mode="plain">CREATE TRIGGER delete_thumbnails DELETE ON Thumbnails
-                            BEGIN
-                            DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id;
-                            DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id;
-                            DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = OLD.id;
-                            END;
+                    BEGIN
+                        DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = OLD.id;
+                        DELETE FROM FilePaths WHERE FilePaths.thumbId = OLD.id;
+                        DELETE FROM CustomIdentifiers WHERE CustomIdentifiers.thumbId = OLD.id;
+                    END;
                 </statement>
             </dbaction>
 
