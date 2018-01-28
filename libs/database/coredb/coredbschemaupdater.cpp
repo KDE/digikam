@@ -82,12 +82,12 @@ class CoreDbSchemaUpdater::Private
 public:
 
     Private()
+      : setError(false),
+        backend(0),
+        albumDB(0),
+        access(0),
+        observer(0)
     {
-        setError = false;
-        backend  = 0;
-        albumDB  = 0;
-        access   = 0;
-        observer = 0;
     }
 
     bool                    setError;
@@ -162,12 +162,14 @@ void CoreDbSchemaUpdater::setVersionSettings()
 {
     if (d->currentVersion.isValid())
     {
-        d->albumDB->setSetting(QLatin1String("DBVersion"), QString::number(d->currentVersion.toInt()));
+        d->albumDB->setSetting(QLatin1String("DBVersion"),
+                               QString::number(d->currentVersion.toInt()));
     }
 
     if (d->currentRequiredVersion.isValid())
     {
-        d->albumDB->setSetting(QLatin1String("DBVersionRequired"), QString::number(d->currentRequiredVersion.toInt()));
+        d->albumDB->setSetting(QLatin1String("DBVersionRequired"),
+                               QString::number(d->currentRequiredVersion.toInt()));
     }
 }
 
@@ -209,9 +211,7 @@ bool CoreDbSchemaUpdater::startUpdates()
             QString errorMsg = i18n("You have insufficient privileges on the database.\n"
                                     "Following privileges are not assigned to you:\n %1\n"
                                     "Check your privileges on the database and restart digiKam.",
-                                    insufficientRights.join(QLatin1String(",\n"))
-                                   );
-
+                                    insufficientRights.join(QLatin1String(",\n")));
             d->lastErrorMessage = errorMsg;
 
             if (d->observer)
@@ -242,8 +242,7 @@ bool CoreDbSchemaUpdater::startUpdates()
             QString errorMsg = i18n("The database is not valid: "
                                     "the \"DBVersion\" setting does not exist. "
                                     "The current database schema version cannot be verified. "
-                                    "Try to start with an empty database. "
-                                   );
+                                    "Try to start with an empty database. ");
             d->lastErrorMessage=errorMsg;
 
             if (d->observer)

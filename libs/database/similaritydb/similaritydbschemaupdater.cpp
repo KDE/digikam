@@ -56,6 +56,7 @@ int SimilarityDbSchemaUpdater::schemaVersion()
 
 class SimilarityDbSchemaUpdater::Private
 {
+
 public:
 
     Private()

@@ -55,6 +55,7 @@ int ThumbsDbSchemaUpdater::schemaVersion()
 
 class ThumbsDbSchemaUpdater::Private
 {
+
 public:
 
     Private()
