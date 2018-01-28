@@ -637,7 +637,7 @@
                     CREATE TRIGGER IF NOT EXISTS delete_similarities DELETE ON ImageHaarMatrix
                     BEGIN
                         DELETE FROM ImageSimilarity
-                            WHERE ( ImageSimilarity.imageid1=OLD.id OR ImageSimilarity.imageid2=OLD.id )
+                            WHERE ( ImageSimilarity.imageid1=OLD.imageid OR ImageSimilarity.imageid2=OLD.imageid )
                               AND ( ImageSimilarity.algorithm=1 );
                     END;
                 </statement>
