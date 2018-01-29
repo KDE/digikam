@@ -52,7 +52,7 @@ SmugTalker::SmugTalker(DInfoInterface* const iface, QWidget* const parent)
     m_iface      = iface;
     m_reply      = 0;
     m_state      = SMUG_LOGOUT;
-    
+
     // FIXME ?
     //m_userAgent  = QString::fromLatin1("KIPI-Plugin-Smug/%1 (lure@kubuntu.org)").arg(kipipluginsVersion());
     m_userAgent  = QString::fromLatin1("digiKam/%1 (digikamdeveloper@gmail.com)").arg(digiKamVersion());

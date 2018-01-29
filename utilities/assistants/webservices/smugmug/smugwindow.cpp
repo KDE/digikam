@@ -691,10 +691,8 @@ void SmugWindow::slotStartTransfer()
 
 bool SmugWindow::prepareImageForUpload(const QString& imgPath)
 {
-    QImage image;
+    QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
 
-    image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
-    
     if (image.isNull())
     {
        image.load(imgPath);

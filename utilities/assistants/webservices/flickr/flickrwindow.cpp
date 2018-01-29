@@ -53,6 +53,7 @@
 #include "selectuserdlg.h"
 #include "digikam_debug.h"
 #include "flickrnewalbum.h"
+#include "previewloadthread.h"
 
 namespace Digikam
 {

@@ -1,0 +1,19 @@
+This tool permit to upload items to Facebook web service.
+https://www.facebook.com/
+
+TODO:
+
+* Short term:
+ - Stop upload, start should continue and not upload all again
+ - Continue on error (just report at the end)
+ - Fan page upload
+ - Album with & in name
+
+* Mid term:
+ - switch to new Graph API?
+   http://developers.facebook.com/docs/guides/upgrade
+   Photo: http://developers.facebook.com/docs/reference/api/photo
+ - embeded WebKit?
+
+* Long term:
+ - virtual albums in digikam (show facebook albums in you favourite photo app)?

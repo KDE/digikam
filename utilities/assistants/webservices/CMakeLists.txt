@@ -127,6 +127,15 @@ set(libwsimageshack_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshack.cpp
                          ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshackwindow.cpp
 )
 
+# FaceBook tool -------------------------------------------------------------
+
+set(libwsfacebook_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbnewalbumdlg.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbmpform.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbtalker.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbwidget.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbwindow.cpp
+)
+
 # WikiMedia tool ---------------------------------------------------------
 
 if(KF5MediaWiki_FOUND)
@@ -147,5 +156,6 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsdropbox_SRCS}
                                    ${libwssmugmug_SRCS}
                                    ${libwsimageshack_SRCS}
+                                   ${libwsfacebook_SRCS}
                                    ${libwsmediawiki_SRCS}
 )
