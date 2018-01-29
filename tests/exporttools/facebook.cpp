@@ -32,7 +32,7 @@
 
 #include "metaengine.h"
 #include "dmetainfoiface.h"
-#include "facebookwindow.h"
+#include "fbwindow.h"
 
 using namespace Digikam;
 
