@@ -3,7 +3,6 @@ https://www.mediawiki.org/wiki/MediaWiki
 
 TODO:
 
-* Rename to MediaWiki (name of the software; WikiMedia is a Foundation, Commons a specific project)
 * Allow image resizing by a percentage of the initial size
 * Add explicit error messages (might require hacking libmediawiki)
 * Check for local duplicate file names (easy)

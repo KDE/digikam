@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "wmwindow.h"
+#include "mediawikiwindow.h"
 
 // Qt includes
 
@@ -59,15 +59,15 @@
 #include "exportutils.h"
 #include "dimageslist.h"
 #include "previewloadthread.h"
-#include "wmwidget.h"
-#include "wmtalker.h"
+#include "mediawikiwidget.h"
+#include "mediawikitalker.h"
 
 using namespace mediawiki;
 
 namespace Digikam
 {
 
-class WMWindow::Private
+class MediaWikiWindow::Private
 {
 public:
 
@@ -86,19 +86,19 @@ public:
     QString         wikiName;
     QUrl            wikiUrl;
 
-    WmWidget*       widget;
+    MediaWikiWidget*       widget;
     MediaWiki*      mediawiki;
     DInfoInterface* iface;
-    WMTalker*       uploadTalker;
+    MediaWikiTalker*       uploadTalker;
 };
 
-WMWindow::WMWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
+MediaWikiWindow::MediaWikiWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : ToolDialog(0),
       d(new Private)
 {
     d->tmpPath.clear();
     d->tmpDir       = ExportUtils::makeTemporaryDir("mediawiki").absolutePath() + QLatin1Char('/');
-    d->widget       = new WmWidget(iface, this);
+    d->widget       = new MediaWikiWidget(iface, this);
     d->uploadTalker = 0;
     d->login        = QString();
     d->pass         = QString();
@@ -136,12 +136,12 @@ WMWindow::WMWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     reactivate();
 }
 
-WMWindow::~WMWindow()
+MediaWikiWindow::~MediaWikiWindow()
 {
     delete d;
 }
 
-void WMWindow::closeEvent(QCloseEvent* e)
+void MediaWikiWindow::closeEvent(QCloseEvent* e)
 {
     if (!e)
     {
@@ -152,7 +152,7 @@ void WMWindow::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-void WMWindow::reactivate()
+void MediaWikiWindow::reactivate()
 {
     d->widget->imagesList()->listView()->clear();
     d->widget->imagesList()->loadImagesFromCurrentSelection();
@@ -164,7 +164,7 @@ void WMWindow::reactivate()
     show();
 }
 
-void WMWindow::readSettings()
+void MediaWikiWindow::readSettings()
 {
     KConfig config(QLatin1String("kipirc"));
     KConfigGroup group = config.group(QLatin1String("MediaWiki export settings"));
@@ -177,7 +177,7 @@ void WMWindow::readSettings()
     resize(windowHandle()->size());
 }
 
-void WMWindow::saveSettings()
+void MediaWikiWindow::saveSettings()
 {
     KConfig config(QLatin1String("kipirc"));
     KConfigGroup group = config.group(QLatin1String("MediaWiki export settings"));
@@ -189,19 +189,19 @@ void WMWindow::saveSettings()
     config.sync();
 }
 
-void WMWindow::slotFinished()
+void MediaWikiWindow::slotFinished()
 {
     d->widget->progressBar()->progressCompleted();
     saveSettings();
 }
 
-void WMWindow::slotProgressCanceled()
+void MediaWikiWindow::slotProgressCanceled()
 {
     slotFinished();
     reject();
 }
 
-bool WMWindow::prepareImageForUpload(const QString& imgPath)
+bool MediaWikiWindow::prepareImageForUpload(const QString& imgPath)
 {
     // Create temporary directory if it does not exist
 
@@ -288,7 +288,7 @@ bool WMWindow::prepareImageForUpload(const QString& imgPath)
     return true;
 }
 
-void WMWindow::slotStartTransfer()
+void MediaWikiWindow::slotStartTransfer()
 {
     saveSettings();
     QList<QUrl> urls                                    = d->widget->imagesList()->imageUrls(false);
@@ -322,13 +322,13 @@ void WMWindow::slotStartTransfer()
     d->uploadTalker->begin();
 }
 
-void WMWindow::slotChangeUserClicked()
+void MediaWikiWindow::slotChangeUserClicked()
 {
     startButton()->setEnabled(false);
     d->widget->invertAccountLoginBox();
 }
 
-void WMWindow::slotDoLogin(const QString& login, const QString& pass, const QString& wikiName, const QUrl& wikiUrl)
+void MediaWikiWindow::slotDoLogin(const QString& login, const QString& pass, const QString& wikiName, const QUrl& wikiUrl)
 {
     d->login              = login;
     d->pass               = pass;
@@ -343,7 +343,7 @@ void WMWindow::slotDoLogin(const QString& login, const QString& pass, const QStr
     loginJob->start();
 }
 
-int WMWindow::slotLoginHandle(KJob* loginJob)
+int MediaWikiWindow::slotLoginHandle(KJob* loginJob)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << loginJob->error() << loginJob->errorString() << loginJob->errorText();
 
@@ -356,7 +356,7 @@ int WMWindow::slotLoginHandle(KJob* loginJob)
     }
     else
     {
-        d->uploadTalker = new WMTalker(d->iface, d->mediawiki, this);
+        d->uploadTalker = new MediaWikiTalker(d->iface, d->mediawiki, this);
         startButton()->setEnabled(true);
         d->widget->invertAccountLoginBox();
         d->widget->updateLabels(d->login, d->wikiName, d->wikiUrl.toString());
@@ -365,7 +365,7 @@ int WMWindow::slotLoginHandle(KJob* loginJob)
     return loginJob->error();
 }
 
-void WMWindow::slotEndUpload()
+void MediaWikiWindow::slotEndUpload()
 {
     disconnect(d->uploadTalker, SIGNAL(uploadProgress(int)),
                d->widget->progressBar(),SLOT(setValue(int)));
@@ -378,7 +378,7 @@ void WMWindow::slotEndUpload()
     d->widget->progressBar()->progressCompleted();
 }
 
-bool WMWindow::eventFilter(QObject* /*obj*/, QEvent* event)
+bool MediaWikiWindow::eventFilter(QObject* /*obj*/, QEvent* event)
 {
     if (event->type() == QEvent::KeyRelease)
     {

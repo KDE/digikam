@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "wmwidget.h"
+#include "mediawikiwidget.h"
 
 // Qt includes
 
@@ -66,7 +66,7 @@
 namespace Digikam
 {
 
-class WmWidget::Private
+class MediaWikiWidget::Private
 {
 public:
 
@@ -159,11 +159,11 @@ public:
     QMap <QString, QMap <QString, QString> > imagesDescInfo;
 };
 
-WmWidget::WmWidget(DInfoInterface* const iface, QWidget* const parent)
+MediaWikiWidget::MediaWikiWidget(DInfoInterface* const iface, QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    setObjectName(QLatin1String("WmWidget"));
+    setObjectName(QLatin1String("MediaWikiWidget"));
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -586,12 +586,12 @@ WmWidget::WmWidget(DInfoInterface* const iface, QWidget* const parent)
             this, SLOT(slotRemoveImagesDesc(QList<QUrl>)));
 }
 
-WmWidget::~WmWidget()
+MediaWikiWidget::~MediaWikiWidget()
 {
     delete d;
 }
 
-void WmWidget::readSettings(KConfigGroup& group)
+void MediaWikiWidget::readSettings(KConfigGroup& group)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) <<  "Read settings from" << group.name();
 
@@ -621,7 +621,7 @@ void WmWidget::readSettings(KConfigGroup& group)
     }
 }
 
-void WmWidget::saveSettings(KConfigGroup& group)
+void MediaWikiWidget::saveSettings(KConfigGroup& group)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Save settings to" << group.name();
 
@@ -640,17 +640,17 @@ void WmWidget::saveSettings(KConfigGroup& group)
     group.writeEntry("RemoveGeo",     d->removeGeoChB->isChecked());
 }
 
-DImagesList* WmWidget::imagesList() const
+DImagesList* MediaWikiWidget::imagesList() const
 {
     return d->imgList;
 }
 
-DProgressWdg* WmWidget::progressBar() const
+DProgressWdg* MediaWikiWidget::progressBar() const
 {
     return d->progressBar;
 }
 
-void WmWidget::updateLabels(const QString& userName, const QString& wikiName, const QString& url)
+void MediaWikiWidget::updateLabels(const QString& userName, const QString& wikiName, const QString& url)
 {
     QString web = QLatin1String("https://www.mediawiki.org");
 
@@ -676,7 +676,7 @@ void WmWidget::updateLabels(const QString& userName, const QString& wikiName, co
     }
 }
 
-void WmWidget::invertAccountLoginBox()
+void MediaWikiWidget::invertAccountLoginBox()
 {
     if (d->loginGBox->isHidden())
     {
@@ -690,31 +690,31 @@ void WmWidget::invertAccountLoginBox()
     }
 }
 
-void WmWidget::slotResizeChecked()
+void MediaWikiWidget::slotResizeChecked()
 {
     d->dimensionSpB->setEnabled(d->resizeChB->isChecked());
     d->imageQualitySpB->setEnabled(d->resizeChB->isChecked());
 }
 
-void WmWidget::slotRemoveMetaChecked()
+void MediaWikiWidget::slotRemoveMetaChecked()
 {
     d->removeGeoChB->setEnabled(!d->removeMetaChB->isChecked());
     d->removeGeoChB->setChecked(d->removeMetaChB->isChecked());
 }
 
-void WmWidget::slotChangeUserClicked()
+void MediaWikiWidget::slotChangeUserClicked()
 {
     emit signalChangeUserRequest();
 }
 
-void WmWidget::slotLoginClicked()
+void MediaWikiWidget::slotLoginClicked()
 {
      emit signalLoginRequest(d->nameEdit->text(), d->passwdEdit->text(),
                              d->wikiSelect->itemText(d->wikiSelect->currentIndex()),
                              d->wikiSelect->itemData(d->wikiSelect->currentIndex()).toUrl());
 }
 
-void WmWidget::slotNewWikiClicked()
+void MediaWikiWidget::slotNewWikiClicked()
 {
     if (d->newWikiSv->isVisible())
     {
@@ -726,7 +726,7 @@ void WmWidget::slotNewWikiClicked()
     }
 }
 
-void WmWidget::slotAddWikiClicked()
+void MediaWikiWidget::slotAddWikiClicked()
 {
     KConfig config(QLatin1String("kipirc"));
     KConfigGroup group = config.group(QLatin1String("MediaWiki export settings"));
@@ -743,7 +743,7 @@ void WmWidget::slotAddWikiClicked()
     slotNewWikiClicked();
 }
 
-void WmWidget::loadImageInfoFirstLoad()
+void MediaWikiWidget::loadImageInfoFirstLoad()
 {
     QList<QUrl> urls = d->imgList->imageUrls(false);
 
@@ -755,7 +755,7 @@ void WmWidget::loadImageInfoFirstLoad()
     }
 }
 
-void WmWidget::loadImageInfo(const QUrl& url)
+void MediaWikiWidget::loadImageInfo(const QUrl& url)
 {
     DItemInfo info(d->iface->itemInfo(url));
     QStringList keywar        = info.keywords();
@@ -794,7 +794,7 @@ void WmWidget::loadImageInfo(const QUrl& url)
     d->imagesDescInfo.insert(url.toLocalFile(), imageMetaData);
 }
 
-void WmWidget::clearEditFields()
+void MediaWikiWidget::clearEditFields()
 {
     d->titleEdit->setText(d->defaultMessage);
     d->dateEdit->setText(d->defaultMessage);
@@ -804,7 +804,7 @@ void WmWidget::clearEditFields()
     d->longitudeEdit->setText(d->defaultMessage);
 }
 
-void WmWidget::slotLoadImagesDesc(QTreeWidgetItem* item)
+void MediaWikiWidget::slotLoadImagesDesc(QTreeWidgetItem* item)
 {
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
     DImagesListViewItem* const l_item    = dynamic_cast<DImagesListViewItem*>(item);
@@ -833,7 +833,7 @@ void WmWidget::slotLoadImagesDesc(QTreeWidgetItem* item)
     }
 }
 
-void WmWidget::slotRemoveImagesDesc(const QList<QUrl> urls)
+void MediaWikiWidget::slotRemoveImagesDesc(const QList<QUrl> urls)
 {
     for (QList<QUrl>::const_iterator it = urls.begin(); it != urls.end(); ++it)
     {
@@ -843,7 +843,7 @@ void WmWidget::slotRemoveImagesDesc(const QList<QUrl> urls)
     }
 }
 
-void WmWidget::slotRestoreExtension()
+void MediaWikiWidget::slotRestoreExtension()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "RestoreExtension";
 
@@ -884,7 +884,7 @@ void WmWidget::slotRestoreExtension()
     }
 }
 
-void WmWidget::slotApplyTitle()
+void MediaWikiWidget::slotApplyTitle()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "ApplyTitle";
 
@@ -933,7 +933,7 @@ void WmWidget::slotApplyTitle()
     }
 }
 
-void WmWidget::slotApplyDate()
+void MediaWikiWidget::slotApplyDate()
 {
     QList<QUrl> urls;
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
@@ -955,7 +955,7 @@ void WmWidget::slotApplyDate()
     }
 }
 
-void WmWidget::slotApplyCategories()
+void MediaWikiWidget::slotApplyCategories()
 {
     QList<QUrl> urls;
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
@@ -977,7 +977,7 @@ void WmWidget::slotApplyCategories()
     }
 }
 
-void WmWidget::slotApplyDescription()
+void MediaWikiWidget::slotApplyDescription()
 {
     QList<QUrl> urls;
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
@@ -999,7 +999,7 @@ void WmWidget::slotApplyDescription()
     }
 }
 
-void WmWidget::slotApplyLatitude()
+void MediaWikiWidget::slotApplyLatitude()
 {
 
     QList<QUrl> urls;
@@ -1022,7 +1022,7 @@ void WmWidget::slotApplyLatitude()
     }
 }
 
-void WmWidget::slotApplyLongitude()
+void MediaWikiWidget::slotApplyLongitude()
 {
     QList<QUrl> urls;
     QList<QTreeWidgetItem*> selectedItems = d->imgList->listView()->selectedItems();
@@ -1044,7 +1044,7 @@ void WmWidget::slotApplyLongitude()
     }
 }
 
-QMap <QString,QMap <QString,QString> > WmWidget::allImagesDesc()
+QMap <QString,QMap <QString,QString> > MediaWikiWidget::allImagesDesc()
 {
     QList<QUrl> urls = d->imgList->imageUrls(false);
 
@@ -1063,105 +1063,105 @@ QMap <QString,QMap <QString,QString> > WmWidget::allImagesDesc()
     return d->imagesDescInfo;
 }
 
-QString WmWidget::author() const
+QString MediaWikiWidget::author() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::author()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::author()";
     return d->authorEdit->text();
 }
 
-QString WmWidget::source() const
+QString MediaWikiWidget::source() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::source()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::source()";
     return d->sourceEdit->text();
 }
 
-QString WmWidget::genCategories() const
+QString MediaWikiWidget::genCategories() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::genCategories()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::genCategories()";
     return d->genCatEdit->toPlainText();
 }
 
-QString WmWidget::genText() const
+QString MediaWikiWidget::genText() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::genText()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::genText()";
     return d->genTxtEdit->toPlainText();
 }
 
-QString WmWidget::genComments() const
+QString MediaWikiWidget::genComments() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::genComments()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::genComments()";
     return d->genComEdit->toPlainText();
 }
 
-int WmWidget::quality() const
+int MediaWikiWidget::quality() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::quality()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::quality()";
     return d->imageQualitySpB->value();
 }
 
-int WmWidget::dimension() const
+int MediaWikiWidget::dimension() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::dimension()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::dimension()";
     return d->dimensionSpB->value();
 }
 
-bool WmWidget::resize() const
+bool MediaWikiWidget::resize() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::resize()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::resize()";
     return d->resizeChB->isChecked();
 }
 
-bool WmWidget::removeMeta() const
+bool MediaWikiWidget::removeMeta() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::removeMeta()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::removeMeta()";
     return d->removeMetaChB->isChecked();
 }
 
-bool WmWidget::removeGeo() const
+bool MediaWikiWidget::removeGeo() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::removeGeo()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::removeGeo()";
     return d->removeGeoChB->isChecked();
 }
 
-QString WmWidget::license() const
+QString MediaWikiWidget::license() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::license()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::license()";
     return d->licenseComboBox->itemData(d->licenseComboBox->currentIndex()).toString();
 }
 
-QString WmWidget::title() const
+QString MediaWikiWidget::title() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::title()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::title()";
     return d->titleEdit->text();
 }
 
-QString WmWidget::categories() const
+QString MediaWikiWidget::categories() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::categories()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::categories()";
     return d->categoryEdit->toPlainText();
 }
 
-QString WmWidget::description() const
+QString MediaWikiWidget::description() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::description()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::description()";
     return d->descEdit->toPlainText();
 }
 
-QString WmWidget::date() const
+QString MediaWikiWidget::date() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::date()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::date()";
     return d->dateEdit->text();
 }
 
-QString WmWidget::latitude() const
+QString MediaWikiWidget::latitude() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::latitude()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::latitude()";
     return d->latitudeEdit->text();
 }
 
-QString WmWidget::longitude() const
+QString MediaWikiWidget::longitude() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "WmWidget::longitude()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::longitude()";
     return d->longitudeEdit->text();
 }
 

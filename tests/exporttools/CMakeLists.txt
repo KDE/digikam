@@ -22,7 +22,6 @@ include_directories(
 # Stand alone version of Flickr tool
 
 set(flickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr.cpp)
-
 add_executable(flickr ${flickr_SRCS})
 
 target_link_libraries(flickr
@@ -37,7 +36,6 @@ target_link_libraries(flickr
 # Stand alone version of Imgur tool
 
 set(imgur_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imgur.cpp)
-
 add_executable(imgur ${imgur_SRCS})
 
 target_link_libraries(imgur
@@ -52,7 +50,6 @@ target_link_libraries(imgur
 # Stand alone version of Dropbox tool
 
 set(dropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox.cpp)
-
 add_executable(dropbox ${dropbox_SRCS})
 
 target_link_libraries(dropbox
@@ -64,25 +61,27 @@ target_link_libraries(dropbox
 )
 
 # =======================================================
-# Stand alone version of WikiMedia tool
+# Stand alone version of MediaWiki tool
 
-set(wikimedia_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/wikimedia.cpp)
+if(KF5MediaWiki_FOUND)
 
-add_executable(wikimedia ${wikimedia_SRCS})
+    set(mediawiki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki.cpp)
+    add_executable(mediawiki ${mediawiki_SRCS})
 
-target_link_libraries(wikimedia
-                      digikamcore
-                      libdng
+    target_link_libraries(mediawiki
+                          digikamcore
+                          libdng
 
-                      Qt5::Gui
-                      Qt5::Xml
-)
+                          Qt5::Gui
+                          Qt5::Xml
+    )
+
+endif()
 
 # =======================================================
 # Stand alone version of SmugMug tool
 
 set(smugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug.cpp)
-
 add_executable(smugmug ${smugmug_SRCS})
 
 target_link_libraries(smugmug
@@ -97,7 +96,6 @@ target_link_libraries(smugmug
 # Stand alone version of ImageShack tool
 
 set(imageshack_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imageshack.cpp)
-
 add_executable(imageshack ${imageshack_SRCS})
 
 target_link_libraries(imageshack

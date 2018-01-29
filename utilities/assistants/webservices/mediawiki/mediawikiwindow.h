@@ -8,6 +8,8 @@
  *
  * Copyright (C) 2011      by Alexandre Mendes <alex dot mendes1988 at gmail dot com>
  * Copyright (C) 2011-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012      by Parthasarathy Gopavarapu <gparthasarathy93 at gmail dot com>
+ * Copyright (C) 2013      by Peter Potrowl <peter dot potrowl at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,58 +23,50 @@
  *
  * ============================================================ */
 
-#ifndef WM_TALKER_H
-#define WM_TALKER_H
+#ifndef MEDIAWIKI_WINDOW_H
+#define MEDIAWIKI_WINDOW_H
 
-// Qt includes
+// Local includes
 
-#include <QString>
-#include <QList>
-#include <QMap>
-#include <QUrl>
-
-// KDE includes
-
-#include <kjob.h>
-
-// Local incudes
-
+#include "tooldialog.h"
 #include "dinfointerface.h"
+#include "digikam_export.h"
 
-namespace mediawiki
-{
-    class MediaWiki;
-}
+class QCloseEvent;
 
-using namespace mediawiki;
+class KJob;
 
 namespace Digikam
 {
 
-class WMTalker : public KJob
+class DIGIKAM_EXPORT MediaWikiWindow : public ToolDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit WMTalker(DInfoInterface* const iface, MediaWiki* const mediawiki, QObject* const parent=0);
-    ~WMTalker();
+    explicit MediaWikiWindow(DInfoInterface* const iface, QWidget* const parent);
+    ~MediaWikiWindow();
 
-    QString buildWikiText(const QMap<QString, QString>& info) const;
+    void reactivate();
+    bool prepareImageForUpload(const QString& imgPath);
 
-    void setImageMap(const QMap <QString,QMap <QString,QString> >& imageDesc);
-    void start() Q_DECL_OVERRIDE;
+private Q_SLOTS:
 
-Q_SIGNALS:
+    void slotFinished();
+    void slotProgressCanceled();
+    void slotStartTransfer();
+    void slotChangeUserClicked();
+    void slotDoLogin(const QString& login, const QString& pass, const QString& wikiName, const QUrl& wikiUrl);
+    void slotEndUpload();
+    int  slotLoginHandle(KJob* loginJob);
 
-    void uploadProgress(int percent);
-    void endUpload();
+private:
 
-public Q_SLOTS:
-
-    void begin();
-    void uploadHandle(KJob* j = 0);
-    void slotUploadProgress(KJob* job, unsigned long percent);
+    bool eventFilter(QObject* obj, QEvent* event) Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
+    void readSettings();
+    void saveSettings();
 
 private:
 
@@ -82,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WM_TALKER_H
+#endif // MEDIAWIKI_WINDOW_H

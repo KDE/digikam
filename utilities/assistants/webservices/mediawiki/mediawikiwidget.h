@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef WM_WIDGET_H
-#define WM_WIDGET_H
+#ifndef MEDIAWIKI_WIDGET_H
+#define MEDIAWIKI_WIDGET_H
 
 // Qt includes
 
@@ -46,22 +46,22 @@
 namespace Digikam
 {
 
-enum WmDownloadType
+enum MediaWikiDownloadType
 {
-    WmMyAlbum = 0,
-    WmFriendAlbum,
-    WmPhotosMe,
-    WmPhotosFriend
+    MediaWikiMyAlbum = 0,
+    MediaWikiFriendAlbum,
+    MediaWikiPhotosMe,
+    MediaWikiPhotosFriend
 };
 
-class WmWidget : public QWidget
+class MediaWikiWidget : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit WmWidget(DInfoInterface* const iface, QWidget* const parent);
-    ~WmWidget();
+    explicit MediaWikiWidget(DInfoInterface* const iface, QWidget* const parent);
+    ~MediaWikiWidget();
 
     void updateLabels(const QString& userName = QString(), const QString& wikiName = QString(), const QString& url = QString());
     void invertAccountLoginBox();
@@ -130,4 +130,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WM_WIDGET_H
+#endif // MEDIAWIKI_WIDGET_H

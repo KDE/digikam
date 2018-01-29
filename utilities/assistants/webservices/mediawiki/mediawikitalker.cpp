@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "wmtalker.h"
+#include "mediawikitalker.h"
 
 // Qt includes
 
@@ -50,7 +50,7 @@
 namespace Digikam
 {
 
-class WMTalker::Private
+class MediaWikiTalker::Private
 {
 public:
 
@@ -68,7 +68,7 @@ public:
     QMap <QString, QMap <QString, QString> > imageDesc;
 };
 
-WMTalker::WMTalker(DInfoInterface* const iface, MediaWiki* const mediawiki, QObject* const parent)
+MediaWikiTalker::MediaWikiTalker(DInfoInterface* const iface, MediaWiki* const mediawiki, QObject* const parent)
     : KJob(parent),
       d(new Private)
 {
@@ -76,28 +76,28 @@ WMTalker::WMTalker(DInfoInterface* const iface, MediaWiki* const mediawiki, QObj
     d->mediawiki = mediawiki;
 }
 
-WMTalker::~WMTalker()
+MediaWikiTalker::~MediaWikiTalker()
 {
     delete d;
 }
 
-void WMTalker::start()
+void MediaWikiTalker::start()
 {
     QTimer::singleShot(0, this, SLOT(uploadHandle()));
 }
 
-void WMTalker::begin()
+void MediaWikiTalker::begin()
 {
     start();
 }
 
-void WMTalker::setImageMap(const QMap <QString,QMap <QString,QString> >& imageDesc)
+void MediaWikiTalker::setImageMap(const QMap <QString,QMap <QString,QString> >& imageDesc)
 {
     d->imageDesc = imageDesc;
     qCDebug(DIGIKAM_GENERAL_LOG) << "Map length:" << imageDesc.size();
 }
 
-void WMTalker::uploadHandle(KJob* j)
+void MediaWikiTalker::uploadHandle(KJob* j)
 {
     if (j != 0)
     {
@@ -192,7 +192,7 @@ void WMTalker::uploadHandle(KJob* j)
     }
 }
 
-QString WMTalker::buildWikiText(const QMap<QString, QString>& info) const
+QString MediaWikiTalker::buildWikiText(const QMap<QString, QString>& info) const
 {
     QString text = QString::fromUtf8("=={{int:filedesc}}==");
     text.append(QLatin1String("\n{{Information"));
@@ -261,7 +261,7 @@ QString WMTalker::buildWikiText(const QMap<QString, QString>& info) const
     return text;
 }
 
-void WMTalker::slotUploadProgress(KJob* job, unsigned long percent)
+void MediaWikiTalker::slotUploadProgress(KJob* job, unsigned long percent)
 {
     Q_UNUSED(job)
     emit uploadProgress((int)percent);

@@ -131,9 +131,9 @@ set(libwsimageshack_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshack.cpp
 
 if(KF5MediaWiki_FOUND)
 
-    set(libwswikimedia_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/wikimedia/wmwindow.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/wikimedia/wmwidget.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/wikimedia/wmtalker.cpp
+    set(libwsmediawiki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/mediawikiwindow.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/mediawikiwidget.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/mediawiki/mediawikitalker.cpp
     )
 
 endif()
@@ -147,5 +147,5 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsdropbox_SRCS}
                                    ${libwssmugmug_SRCS}
                                    ${libwsimageshack_SRCS}
-                                   ${libwswikimedia_SRCS}
+                                   ${libwsmediawiki_SRCS}
 )
