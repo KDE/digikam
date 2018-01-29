@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-02-02
- * Description : a tool to export items to ImageShack web service
+ * Description : a tool to export items to ImageShackSession web service
  *
  * Copyright (C) 2012 Dodon Victor <dodonvictor at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_SHACK_H
-#define IMAGE_SHACK_H
+#ifndef IMAGESHACK_SESSION_H
+#define IMAGESHACK_SESSION_H
 
 // Qt includes
 
@@ -30,13 +30,13 @@
 namespace Digikam
 {
 
-class ImageShack
+class ImageShackSession
 {
 
 public:
 
-    explicit ImageShack();
-    ~ImageShack();
+    explicit ImageShackSession();
+    ~ImageShackSession();
 
     bool    loggedIn()  const;
     QString username()  const;
@@ -76,4 +76,4 @@ private:
 
 } // namaspace Digikam
 
-#endif // IMAGE_SHACK_H
+#endif // IMAGESHACK_SESSION_H

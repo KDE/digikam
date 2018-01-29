@@ -37,11 +37,7 @@ class QByteArray;
 namespace Digikam
 {
 
-class ImageShack;
-
-struct ImageShackImageInfo
-{
-};
+class ImageShackSession;
 
 class ImageShackTalker : public QObject
 {
@@ -49,7 +45,7 @@ class ImageShackTalker : public QObject
 
 public:
 
-    explicit ImageShackTalker(ImageShack* const imghack);
+    explicit ImageShackTalker(ImageShackSession* const session);
     ~ImageShackTalker();
 
     void authenticate();
@@ -105,7 +101,7 @@ private:
 
 private:
 
-    ImageShack*            m_imageshack;
+    ImageShackSession*     m_session;
 
     QByteArray             m_buffer;
 

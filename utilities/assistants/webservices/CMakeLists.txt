@@ -120,7 +120,7 @@ set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugalbum.cpp
 
 # ImageShack tool -------------------------------------------------------------
 
-set(libwsimageshack_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshack.cpp
+set(libwsimageshack_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshacksession.cpp
                          ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshacknewalbumdlg.cpp
                          ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshackmpform.cpp
                          ${CMAKE_CURRENT_SOURCE_DIR}/imageshack/imageshacktalker.cpp

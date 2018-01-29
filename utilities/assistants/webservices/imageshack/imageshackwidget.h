@@ -45,7 +45,7 @@ class QPushButton;
 namespace Digikam
 {
 
-class ImageShack;
+class ImageShackSession;
 
 class ImageShackWidget : public SettingsWidget
 {
@@ -54,7 +54,7 @@ class ImageShackWidget : public SettingsWidget
 public:
 
     explicit ImageShackWidget(QWidget* const parent,
-                              ImageShack* const imageshack,
+                              ImageShackSession* const session,
                               DInfoInterface* const iface,
                               const QString& pluginName);
     ~ImageShackWidget();
@@ -76,7 +76,7 @@ private:
 
     DImagesList*                   m_imgList;
     DInfoInterface*                m_iface;
-    ImageShack*                    m_imageshack;
+    ImageShackSession*             m_session;
 
     QLabel*                        m_headerLbl;
     QLabel*                        m_accountNameLbl;

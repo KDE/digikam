@@ -43,15 +43,15 @@
 // Local includes
 
 #include "digikam_version.h"
-#include "imageshack.h"
+#include "imageshacksession.h"
 #include "imageshackmpform.h"
 #include "digikam_debug.h"
 
 namespace Digikam
 {
 
-ImageShackTalker::ImageShackTalker(ImageShack* const imghack)
-    : m_imageshack(imghack),
+ImageShackTalker::ImageShackTalker(ImageShackSession* const session)
+    : m_session(session),
       m_loginInProgress(false),
       m_reply(0),
       m_state(IMGHCK_DONOTHING)
@@ -175,8 +175,8 @@ void ImageShackTalker::authenticate()
 
     QUrl url(QString::fromLatin1("https://api.imageshack.com/v2/user/login"));
     QUrlQuery q(url);
-    q.addQueryItem(QString::fromLatin1("user"), m_imageshack->email());
-    q.addQueryItem(QString::fromLatin1("password"), m_imageshack->password());
+    q.addQueryItem(QString::fromLatin1("user"), m_session->email());
+    q.addQueryItem(QString::fromLatin1("password"), m_session->password());
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
@@ -203,7 +203,7 @@ void ImageShackTalker::getGalleries()
 
     QUrlQuery q(gUrl);
     q.addQueryItem(QString::fromLatin1("action"), QString::fromLatin1("gallery_list"));
-    q.addQueryItem(QString::fromLatin1("user"), m_imageshack->username());
+    q.addQueryItem(QString::fromLatin1("user"), m_session->username());
     gUrl.setQuery(q);
 
     m_reply = m_netMngr->get(QNetworkRequest(gUrl));
@@ -236,16 +236,16 @@ void ImageShackTalker::parseAccessToken(const QByteArray &data)
 
     if(jsonObject[QString::fromLatin1("success")].toBool())
     {
-        m_imageshack->m_loggedIn = true;
+        m_session->m_loggedIn = true;
         QJsonObject obj          = jsonObject[QString::fromLatin1("result")].toObject();
-        m_imageshack->setUsername(obj[QString::fromLatin1("username")].toString());
-        m_imageshack->setEmail(obj[QString::fromLatin1("email")].toString());
-        m_imageshack->setAuthToken(obj[QString::fromLatin1("auth_token")].toString());
+        m_session->setUsername(obj[QString::fromLatin1("username")].toString());
+        m_session->setEmail(obj[QString::fromLatin1("email")].toString());
+        m_session->setAuthToken(obj[QString::fromLatin1("auth_token")].toString());
         checkRegistrationCodeDone(0,QString::fromLatin1(""));
     }
     else
     {
-        m_imageshack->m_loggedIn = false;
+        m_session->m_loggedIn = false;
         QJsonObject obj          = jsonObject[QString::fromLatin1("error")].toObject();
         checkRegistrationCodeDone(obj[QString::fromLatin1("error_code")].toInt(), obj[QString::fromLatin1("error_message")].toString());
     }
@@ -294,7 +294,7 @@ void ImageShackTalker::authenticationDone(int errCode, const QString& errMsg)
 {
     if (errCode)
     {
-        m_imageshack->logOut();
+        m_session->logOut();
     }
 
     emit signalBusy(false);
@@ -304,7 +304,7 @@ void ImageShackTalker::authenticationDone(int errCode, const QString& errMsg)
 
 void ImageShackTalker::logOut()
 {
-    m_imageshack->logOut();
+    m_session->logOut();
     m_loginInProgress = false;
 }
 

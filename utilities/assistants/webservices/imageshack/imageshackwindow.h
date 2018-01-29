@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class ImageShack;
+class ImageShackSession;
 class ImageShackWidget;
 class ImageShackTalker;
 class ImageShackNewAlbumDlg;
@@ -101,7 +101,7 @@ private:
 
     QList<QUrl>            m_transferQueue;
 
-    ImageShack*            m_imageshack;
+    ImageShackSession*     m_session;
     ImageShackWidget*      m_widget;
     ImageShackTalker*      m_talker;
 

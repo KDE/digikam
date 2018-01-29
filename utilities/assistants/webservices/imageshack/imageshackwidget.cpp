@@ -48,17 +48,17 @@
 
 #include "digikam_debug.h"
 #include "dimageslist.h"
-#include "imageshack.h"
+#include "imageshacksession.h"
 
 namespace Digikam
 {
 
 ImageShackWidget::ImageShackWidget(QWidget* const parent,
-                                   ImageShack* const imageshack,
+                                   ImageShackSession* const session,
                                    DInfoInterface* const iface,
                                    const QString& pluginName)
     : SettingsWidget(parent, pluginName),
-      m_imageshack(imageshack)
+      m_session(session)
 {
     m_iface              = iface;
     m_imgList            = imagesList();
@@ -102,10 +102,10 @@ ImageShackWidget::~ImageShackWidget()
 
 void ImageShackWidget::updateLabels(const QString& /*name*/, const QString& /*url*/)
 {
-    if (m_imageshack->loggedIn())
+    if (m_session->loggedIn())
     {
-        m_accountNameLbl->setText(m_imageshack->username());
-        //m_accountEmailLbl->setText(m_imageshack->email());
+        m_accountNameLbl->setText(m_session->username());
+        //m_accountEmailLbl->setText(m_session->email());
     }
     else
     {

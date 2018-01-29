@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-02-02
- * Description : a tool to export items to ImageShack web service
+ * Description : a tool to export items to ImageShackSession web service
  *
  * Copyright (C) 2012 Dodon Victor <dodonvictor at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "imageshack.h"
+#include "imageshacksession.h"
 
 // Qt includes
 
@@ -39,67 +39,67 @@
 namespace Digikam
 {
 
-ImageShack::ImageShack()
+ImageShackSession::ImageShackSession()
 {
     readSettings();
     m_loggedIn = false;
 }
 
-ImageShack::~ImageShack()
+ImageShackSession::~ImageShackSession()
 {
 }
 
-bool ImageShack::loggedIn() const
+bool ImageShackSession::loggedIn() const
 {
     return m_loggedIn;
 }
 
-QString ImageShack::username() const
+QString ImageShackSession::username() const
 {
     return m_username;
 }
 
-QString ImageShack::email() const
+QString ImageShackSession::email() const
 {
     return m_email;
 }
 
-QString ImageShack::password() const
+QString ImageShackSession::password() const
 {
     return m_password;
 }
 
-QString ImageShack::authToken() const
+QString ImageShackSession::authToken() const
 {
     return m_authToken;
 }
 
-QString ImageShack::credits() const
+QString ImageShackSession::credits() const
 {
     return m_credits;
 }
 
-void ImageShack::setUsername(const QString& username)
+void ImageShackSession::setUsername(const QString& username)
 {
     m_username = username;
 }
 
-void ImageShack::setEmail(const QString& email)
+void ImageShackSession::setEmail(const QString& email)
 {
     m_email = email;
 }
 
-void ImageShack::setAuthToken(const QString& token)
+void ImageShackSession::setAuthToken(const QString& token)
 {
     m_authToken = token;
 }
 
-void ImageShack::setPassword(const QString& pass)
+void ImageShackSession::setPassword(const QString& pass)
 {
     m_password = pass;
 }
 
-void ImageShack::logOut()
+void ImageShackSession::logOut()
 {
     m_loggedIn = false;
     m_username.clear();
@@ -108,7 +108,7 @@ void ImageShack::logOut()
     saveSettings();
 }
 
-void ImageShack::readSettings()
+void ImageShackSession::readSettings()
 {
     static bool bLoaded = false;
     if (bLoaded) return;
@@ -118,7 +118,7 @@ void ImageShack::readSettings()
     KConfigGroup group = config.group("ImageShack Settings");
 }
 
-void ImageShack::saveSettings()
+void ImageShackSession::saveSettings()
 {
     KConfig config;
     KConfigGroup group = config.group("ImageShack Settings");

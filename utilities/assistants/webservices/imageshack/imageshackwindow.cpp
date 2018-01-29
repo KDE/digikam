@@ -55,7 +55,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "imageshack.h"
+#include "imageshacksession.h"
 #include "imageshackwidget.h"
 #include "imageshacktalker.h"
 #include "dprogresswdg.h"
@@ -69,9 +69,9 @@ ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
                                    QWidget* const parent)
     : ToolDialog(parent)
 {
-    m_imageshack = new ImageShack();
-    m_iface      = iface;
-    m_widget     = new ImageShackWidget(this, m_imageshack, m_iface, QString::fromLatin1("ImageShack"));
+    m_session = new ImageShackSession();
+    m_iface   = iface;
+    m_widget  = new ImageShackWidget(this, m_session, m_iface, QString::fromLatin1("ImageShack"));
     m_widget->setMinimumSize(700, 500);
     setMainWidget(m_widget);
     setWindowTitle(i18n("Export to ImageShack"));
@@ -95,7 +95,7 @@ ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
     connect(this, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
 
-    m_talker = new ImageShackTalker(m_imageshack);
+    m_talker = new ImageShackTalker(m_session);
 
     connect(m_talker, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
@@ -137,7 +137,7 @@ ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
 
 ImageShackWindow::~ImageShackWindow()
 {
-    delete m_imageshack;
+    delete m_session;
 }
 
 void ImageShackWindow::slotImageListChanged()
@@ -249,8 +249,8 @@ void ImageShackWindow::authenticate()
 
     if (dlg->exec() == QDialog::Accepted)
     {
-        m_imageshack->setEmail(dlg->login());
-        m_imageshack->setPassword(dlg->password());
+        m_session->setEmail(dlg->login());
+        m_session->setPassword(dlg->password());
         m_talker->authenticate();
     }
 }
@@ -268,7 +268,7 @@ void ImageShackWindow::slotBusy(bool val)
     {
         setCursor(Qt::ArrowCursor);
         m_widget->m_chgRegCodeBtn->setEnabled(true);
-        startButton()->setEnabled(m_imageshack->loggedIn() &&
+        startButton()->setEnabled(m_session->loggedIn() &&
                                   !m_widget->imagesList()->imageUrls().isEmpty());
         setRejectButtonMode(QDialogButtonBox::Close);
     }
@@ -292,9 +292,9 @@ void ImageShackWindow::slotLoginDone(int errCode, const QString& errMsg)
 {
     m_widget->updateLabels();
 
-    if (!errCode && m_imageshack->loggedIn())
+    if (!errCode && m_session->loggedIn())
     {
-        m_imageshack->saveSettings();
+        m_session->saveSettings();
         startButton()->setEnabled(!m_widget->imagesList()->imageUrls().isEmpty());
         m_talker->getGalleries();
     }
@@ -353,7 +353,7 @@ void ImageShackWindow::uploadNextItem()
         opts[QString::fromLatin1("tags")] = tagsList.join(QString::fromLatin1(","));
     }
 
-    opts[QString::fromLatin1("auth_token")] = m_imageshack->authToken();
+    opts[QString::fromLatin1("auth_token")] = m_session->authToken();
 
     int gidx = m_widget->m_galleriesCob->currentIndex();
 
