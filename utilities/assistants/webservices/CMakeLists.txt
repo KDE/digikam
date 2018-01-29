@@ -102,7 +102,7 @@ set(libwsimgur_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurapi3.cpp
 
 # DropBox tool --------------------------------------------------------------
 
-set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbalbum.cpp
+set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbnewalbumdlg.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbmpform.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbtalker.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwidget.cpp

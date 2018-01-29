@@ -34,17 +34,17 @@
 namespace Digikam
 {
 
-DropboxWidget::DropboxWidget(QWidget* const parent, const QString& pluginName)
+DBWidget::DBWidget(QWidget* const parent, const QString& pluginName)
     : SettingsWidget(parent, pluginName)
 {
     getSizeBox()->hide();
 }
 
-DropboxWidget::~DropboxWidget()
+DBWidget::~DBWidget()
 {
 }
 
-void DropboxWidget::updateLabels(const QString& name, const QString& url)
+void DBWidget::updateLabels(const QString& name, const QString& url)
 {
     QString web(QLatin1String("https://www.dropbox.com/"));
 

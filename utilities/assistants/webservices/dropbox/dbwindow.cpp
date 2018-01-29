@@ -43,7 +43,7 @@
 #include "digikam_version.h"
 #include "dbtalker.h"
 #include "dbitem.h"
-#include "dbalbum.h"
+#include "dbnewalbumdlg.h"
 #include "dbwidget.h"
 
 namespace Digikam
@@ -55,7 +55,7 @@ DBWindow::DBWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     m_imagesCount = 0;
     m_imagesTotal = 0;
 
-    m_widget      = new DropboxWidget(this, QLatin1String("Dropbox"));
+    m_widget      = new DBWidget(this, QLatin1String("Dropbox"));
     m_widget->imagesList()->setIface(iface);
 
     setMainWidget(m_widget);
@@ -83,7 +83,7 @@ DBWindow::DBWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     connect(startButton(), SIGNAL(clicked()),
             this, SLOT(slotStartTransfer()));
 
-    m_albumDlg = new DBNewAlbum(this, QLatin1String("Dropbox"));
+    m_albumDlg = new DBNewAlbumDlg(this, QLatin1String("Dropbox"));
 
     m_talker   = new DBTalker(this);
 

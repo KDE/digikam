@@ -41,14 +41,14 @@ class QPushButton;
 namespace Digikam
 {
 
-class DropboxWidget : public SettingsWidget
+class DBWidget : public SettingsWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit DropboxWidget(QWidget* const parent, const QString& pluginName);
-    ~DropboxWidget();
+    explicit DBWidget(QWidget* const parent, const QString& pluginName);
+    ~DBWidget();
 
     void updateLabels(const QString& name = QString(), const QString& url = QString()) Q_DECL_OVERRIDE;
 

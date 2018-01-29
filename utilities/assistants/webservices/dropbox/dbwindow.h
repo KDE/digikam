@@ -40,11 +40,11 @@ class QUrl;
 
 namespace Digikam
 {
-class DropboxWidget;
+class DBWidget;
 class DBTalker;
 class DBPhoto;
 class DBFolder;
-class DBNewAlbum;
+class DBNewAlbumDlg;
 
 class DIGIKAM_EXPORT DBWindow : public ToolDialog
 {
@@ -96,8 +96,8 @@ private:
     unsigned int         m_imagesCount;
     unsigned int         m_imagesTotal;
 
-    DropboxWidget*       m_widget;
-    DBNewAlbum*          m_albumDlg;
+    DBWidget*            m_widget;
+    DBNewAlbumDlg*       m_albumDlg;
     DBTalker*            m_talker;
 
     QString              m_currentAlbumName;

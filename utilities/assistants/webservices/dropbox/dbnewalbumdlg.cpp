@@ -20,30 +20,33 @@
  *
  * ============================================================ */
 
-#ifndef DBALBUM_H
-#define DBALBUM_H
+#include "dbnewalbumdlg.h"
 
 // Local includes
 
-#include "newalbumdialog.h"
+#include "digikam_debug.h"
+#include "dbitem.h"
 
 namespace Digikam
 {
 
-class DBFolder;
-
-class DBNewAlbum : public NewAlbumDialog
+DBNewAlbumDlg::DBNewAlbumDlg(QWidget* const parent, const QString& pluginName)
+    : NewAlbumDialog(parent, pluginName)
 {
-    Q_OBJECT
+    hideDateTime();
+    hideDesc();
+    hideLocation();
+    getMainWidget()->setMinimumSize(300, 0);
+}
 
-public:
+DBNewAlbumDlg::~DBNewAlbumDlg()
+{
+}
 
-    explicit DBNewAlbum(QWidget* const parent, const QString& pluginName);
-    ~DBNewAlbum();
+void DBNewAlbumDlg::getFolderTitle(DBFolder& folder)
+{
+    folder.title = QLatin1String("/") + getTitleEdit()->text();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "getFolderTitle:" << folder.title;
+}
 
-    void getFolderTitle(DBFolder& folder);
-};
-
-} //namespace Digikam
-
-#endif /*DBALBUM_H*/
+} // namespace Digikam
