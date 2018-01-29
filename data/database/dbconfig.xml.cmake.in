@@ -1606,21 +1606,21 @@
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS FilePaths
-                    (path VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    (path LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     thumbId INTEGER,
                     CONSTRAINT FilePaths_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     UNIQUE(path(255)))
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS CustomIdentifiers
-                    (identifier VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    (identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     thumbId INTEGER,
                     CONSTRAINT CustomIdentifiers_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     UNIQUE(identifier(255)))
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ThumbSettings
-                    (keyword VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    (keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
                     value LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     UNIQUE(keyword(255)))
                     ENGINE InnoDB;
@@ -1695,8 +1695,8 @@
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS IdentityAttributes
                     (id INTEGER,
                     `type` INTEGER,
-                    attribute TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
-                    `value` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    attribute LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    `value` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     CONSTRAINT IdentityAttributes_Identities FOREIGN KEY (id) REFERENCES Identities (id) ON DELETE CASCADE ON UPDATE CASCADE)
                     ENGINE InnoDB;
                 </statement>
@@ -1722,11 +1722,11 @@
                     (id INTEGER PRIMARY KEY AUTO_INCREMENT,
                     recognizerid INTEGER,
                     identity INTEGER,
-                    `context` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    `context` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     `type` INTEGER,
                     `rows` INTEGER,
                     `cols` INTEGER,
-                    `data` BLOB)
+                    `data` LONGBLOB)
                     ENGINE InnoDB;
                 </statement>
             </dbaction>
@@ -1735,12 +1735,12 @@
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS FaceMatrices
                     (id INTEGER PRIMARY KEY AUTO_INCREMENT,
                     identity INTEGER,
-                    `context` TEXT CHARACTER SET utf8 COLLATE utf8_bin,
+                    `context` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
                     `type` INTEGER,
                     `rows` INTEGER,
                     `cols` INTEGER,
-                    `data` BLOB,
-                    vecdata BLOB)
+                    `data` LONGBLOB,
+                    vecdata LONGBLOB)
                     ENGINE InnoDB;
                 </statement>
             </dbaction>
@@ -1812,8 +1812,8 @@
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHaarMatrix
                     (imageid INTEGER PRIMARY KEY,
                     modificationDate DATETIME,
-                    uniqueHash TEXT,
-                    matrix BLOB)
+                    uniqueHash LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+                    matrix LONGBLOB)
                     ENGINE InnoDB;
                 </statement>
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS SimilaritySettings
