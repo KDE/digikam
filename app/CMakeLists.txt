@@ -140,6 +140,7 @@ target_link_libraries(digikamcore
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Xml
+                      Qt5::XmlPatterns
                       Qt5::Widgets
                       Qt5::Sql
                       Qt5::WebKitWidgets

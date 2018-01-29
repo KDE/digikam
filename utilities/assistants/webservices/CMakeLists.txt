@@ -13,6 +13,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:Qt5::Network,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::XmlPatterns,INTERFACE_INCLUDE_DIRECTORIES>
 
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
@@ -136,6 +137,17 @@ set(libwsfacebook_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbnewalbumdlg.cpp
                        ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbwindow.cpp
 )
 
+# FaceBook tool -------------------------------------------------------------
+
+set(libwsrajce_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcenewalbumdlg.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcempform.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcetalker.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcesession.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcealbum.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcewidget.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcewindow.cpp
+)
+
 # WikiMedia tool ---------------------------------------------------------
 
 if(KF5MediaWiki_FOUND)
@@ -157,5 +169,6 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwssmugmug_SRCS}
                                    ${libwsimageshack_SRCS}
                                    ${libwsfacebook_SRCS}
+                                   ${libwsrajce_SRCS}
                                    ${libwsmediawiki_SRCS}
 )

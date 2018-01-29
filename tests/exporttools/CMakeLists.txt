@@ -119,3 +119,17 @@ target_link_libraries(facebook
                       Qt5::Gui
                       Qt5::Xml
 )
+
+# =======================================================
+# Stand alone version of Rajce tool
+
+set(rajce_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/rajce.cpp)
+add_executable(rajce ${rajce_SRCS})
+
+target_link_libraries(rajce
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)

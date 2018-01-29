@@ -122,6 +122,7 @@ find_package(Qt5 ${QT_MIN_VERSION}
              Gui
              Sql
              Xml
+             XmlPatterns
              PrintSupport
              WebKitWidgets
              Network

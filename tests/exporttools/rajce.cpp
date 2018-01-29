@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : stand alone test application for Imgur tool.
+ * Description : stand alone test application for Rajce tool.
  *
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -32,7 +32,7 @@
 
 #include "metaengine.h"
 #include "dmetainfoiface.h"
-#include "imgurwindow.h"
+#include "rajcewindow.h"
 
 using namespace Digikam;
 
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    ImgurWindow dlg(new DMetaInfoIface(&app, urlList), 0);
+    RajceWindow dlg(new DMetaInfoIface(&app, urlList), 0);
     dlg.exec();
 
     MetaEngine::cleanupExiv2();
