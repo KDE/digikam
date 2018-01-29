@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SMUG_ALBUM_H
-#define SMUG_ALBUM_H
+#ifndef SMUG_NEW_ALBUM_DLG_H
+#define SMUG_NEW_ALBUM_DLG_H
 
 // Qt includes
 
@@ -39,14 +39,14 @@ namespace Digikam
 
 class SmugAlbum;
 
-class SmugNewAlbum : public QDialog
+class SmugNewAlbumDlg : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit SmugNewAlbum(QWidget* const parent);
-    ~SmugNewAlbum();
+    explicit SmugNewAlbumDlg(QWidget* const parent);
+    ~SmugNewAlbumDlg();
 
     void getAlbumProperties(SmugAlbum& album);
 
@@ -69,4 +69,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SMUG_ALBUM_H
+#endif // SMUG_NEW_ALBUM_DLG_H

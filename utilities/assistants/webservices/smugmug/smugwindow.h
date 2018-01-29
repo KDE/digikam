@@ -44,7 +44,7 @@ namespace Digikam
 
 class SmugTalker;
 class SmugWidget;
-class SmugNewAlbum;
+class SmugNewAlbumDlg;
 
 class DIGIKAM_EXPORT SmugWindow : public ToolDialog
 {
@@ -129,7 +129,7 @@ private:
 
     SmugTalker*      m_talker;
     SmugWidget*      m_widget;
-    SmugNewAlbum*    m_albumDlg;
+    SmugNewAlbumDlg*    m_albumDlg;
 
     DInfoInterface*  m_iface;
 };

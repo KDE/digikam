@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "smugalbum.h"
+#include "smugnewalbumdlg.h"
 
 // Qt includes
 
@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-SmugNewAlbum::SmugNewAlbum(QWidget* const parent)
+SmugNewAlbumDlg::SmugNewAlbumDlg(QWidget* const parent)
     : QDialog(parent)
 {
     QString header(i18n("SmugMug New Album"));
@@ -140,11 +140,11 @@ SmugNewAlbum::SmugNewAlbum(QWidget* const parent)
     setLayout(mainLayout);
 }
 
-SmugNewAlbum::~SmugNewAlbum()
+SmugNewAlbumDlg::~SmugNewAlbumDlg()
 {
 }
 
-void SmugNewAlbum::getAlbumProperties(SmugAlbum &album)
+void SmugNewAlbumDlg::getAlbumProperties(SmugAlbum &album)
 {
     album.title         = m_titleEdt->text();
 

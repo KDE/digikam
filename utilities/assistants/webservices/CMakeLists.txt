@@ -111,7 +111,7 @@ set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbnewalbumdlg.cpp
 
 # SmugMug tool -------------------------------------------------------------
 
-set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugalbum.cpp
+set(libwssmugmug_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugnewalbumdlg.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugmpform.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugtalker.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/smugmug/smugwidget.cpp

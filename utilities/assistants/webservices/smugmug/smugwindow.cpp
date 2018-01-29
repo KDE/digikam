@@ -56,7 +56,7 @@
 #include "smugitem.h"
 #include "smugtalker.h"
 #include "smugwidget.h"
-#include "smugalbum.h"
+#include "smugnewalbumdlg.h"
 
 namespace Digikam
 {
@@ -125,7 +125,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface, bool import, QWidget* const 
 
     // ------------------------------------------------------------------------
 
-    m_albumDlg  = new SmugNewAlbum(this);
+    m_albumDlg  = new SmugNewAlbumDlg(this);
 
     connect(m_albumDlg->m_categCoB, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotCategorySelectionChanged(int)) );
