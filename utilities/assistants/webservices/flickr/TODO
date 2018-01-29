@@ -1,0 +1,8 @@
+This tool permit to upload items to Flickr web service.
+https://www.flickr.com/
+
+TODO:
+
+* Support for viewing your photos stored at server.
+* Querying Space Limit from the server.
+* Allow fetching feature of images just uploaded, like url etc.
