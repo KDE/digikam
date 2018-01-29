@@ -137,7 +137,7 @@ set(libwsfacebook_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbnewalbumdlg.cpp
                        ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbwindow.cpp
 )
 
-# FaceBook tool -------------------------------------------------------------
+# Rajce tool ----------------------------------------------------------------
 
 set(libwsrajce_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcenewalbumdlg.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcempform.cpp
@@ -148,7 +148,7 @@ set(libwsrajce_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcenewalbumdlg.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcewindow.cpp
 )
 
-# WikiMedia tool ---------------------------------------------------------
+# MediaWiki tool ------------------------------------------------------------
 
 if(KF5MediaWiki_FOUND)
 
