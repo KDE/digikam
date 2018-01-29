@@ -54,7 +54,7 @@ class DIGIKAM_EXPORT FbWindow : public ToolDialog
 
 public:
 
-    explicit FbWindow(DInfoInterface* const iface, const QString& tmpFolder, QWidget* const parent);
+    explicit FbWindow(DInfoInterface* const iface, QWidget* const parent);
     ~FbWindow();
 
     /**

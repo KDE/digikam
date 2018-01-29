@@ -105,3 +105,17 @@ target_link_libraries(imageshack
                       Qt5::Gui
                       Qt5::Xml
 )
+
+# =======================================================
+# Stand alone version of FaceBook tool
+
+set(facebook_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/facebook.cpp)
+add_executable(facebook ${facebook_SRCS})
+
+target_link_libraries(facebook
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)
