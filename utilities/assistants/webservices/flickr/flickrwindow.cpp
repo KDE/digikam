@@ -52,7 +52,7 @@
 #include "flickrwidget.h"
 #include "selectuserdlg.h"
 #include "digikam_debug.h"
-#include "flickrnewalbum.h"
+#include "flickrnewalbumdlg.h"
 #include "previewloadthread.h"
 
 namespace Digikam
@@ -89,7 +89,7 @@ FlickrWindow::FlickrWindow(QWidget* const /*parent*/, const QString& serviceName
     m_uploadCount               = 0;
     m_uploadTotal               = 0;
     m_widget                    = new FlickrWidget(this, serviceName);
-    m_albumDlg                  = new FlickrNewAlbum(this, QString::fromLatin1("Flickr"));
+    m_albumDlg                  = new FlickrNewAlbumDlg(this, QString::fromLatin1("Flickr"));
     m_albumsListComboBox        = m_widget->getAlbumsCoB();
     m_newAlbumBtn               = m_widget->getNewAlbmBtn();
     m_originalCheckBox          = m_widget->getOriginalCheckBox();

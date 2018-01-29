@@ -55,10 +55,8 @@ class SelectUserDlg;
 class FlickrWidget;
 class FlickrTalker;
 class FlickrList;
+class FlickrNewAlbumDlg;
 class FPhotoInfo;
-class GPhoto;
-class GAlbum;
-class FlickrNewAlbum;
 
 class DIGIKAM_EXPORT FlickrWindow : public ToolDialog
 {
@@ -159,7 +157,7 @@ private:
 
     FlickrList*                            m_imglst;
     SelectUserDlg*                         m_select;
-    FlickrNewAlbum*                        m_albumDlg;
+    FlickrNewAlbumDlg*                     m_albumDlg;
 
     DInfoInterface*                        m_iface;
 };

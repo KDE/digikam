@@ -21,30 +21,40 @@
  *
  * ============================================================ */
 
-#ifndef FLICKR_NEW_ALBUM_H
-#define FLICKR_NEW_ALBUM_H
+#include "flickrnewalbumdlg.h"
+
+// Qt includes
+
+#include <QFormLayout>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 
-#include "newalbumdialog.h"
+#include "digikam_debug.h"
+#include "flickritem.h"
 
 namespace Digikam
 {
 
-class FPhotoSet;
-
-class FlickrNewAlbum : public NewAlbumDialog
+FlickrNewAlbumDlg::FlickrNewAlbumDlg(QWidget* const parent, const QString& pluginName)
+    : NewAlbumDialog(parent, pluginName)
 {
-    Q_OBJECT
+    hideDateTime();
+    hideLocation();
+    getMainWidget()->setMinimumSize(350,0);
+}
 
-public:
+FlickrNewAlbumDlg::~FlickrNewAlbumDlg()
+{
+}
 
-    explicit FlickrNewAlbum(QWidget* const parent, const QString& pluginName);
-    ~FlickrNewAlbum();
+void FlickrNewAlbumDlg::getFolderProperties(FPhotoSet& folder)
+{
+    folder.title       = getTitleEdit()->text();
+    folder.description = getDescEdit()->toPlainText();
 
-    void getFolderProperties(FPhotoSet& folder);
-};
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Folder Title " << folder.title<<" Folder Description "<<folder.description;
+}
 
 } // namespace Digikam
-
-#endif // FLICKR_NEW_ALBUM_H

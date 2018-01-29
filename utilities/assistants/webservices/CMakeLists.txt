@@ -88,7 +88,7 @@ set(libwsflickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrlist.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrmpform.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrtalker.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwidget.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrnewalbum.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrnewalbumdlg.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrtalker.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrwindow.cpp
 )
