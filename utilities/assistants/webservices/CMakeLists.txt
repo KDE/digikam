@@ -162,6 +162,18 @@ set(libwsgoogle_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdmpform.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gswidget.cpp
 )
 
+# YandexFotki tool ----------------------------------------------------------------
+
+set(libwsyandexfotki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfalbum.cpp
+                          ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfauth.cpp
+                          ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfrsa.cpp
+                          ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yftalker.cpp
+                          ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfphoto.cpp
+                          ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfnewalbumdlg.cpp
+                          ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfwindow.cpp
+                          ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfwidget.cpp
+)
+
 # MediaWiki tool ------------------------------------------------------------
 
 if(KF5MediaWiki_FOUND)
@@ -186,4 +198,5 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsrajce_SRCS}
                                    ${libwsmediawiki_SRCS}
                                    ${libwsgoogle_SRCS}
+#                                   ${libwsyandexfotki_SRCS}
 )
