@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2015-06-21
- * Description : a kipi plugin to export images to Google-Drive web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef AUTHORIZE_H
-#define AUTHORIZE_H
+#ifndef GS_SESSION_H
+#define GS_SESSION_H
 
 // Qt includes
 
@@ -33,17 +33,17 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
-class Authorize : public QObject
+class GSSession : public QObject
 {
     Q_OBJECT
 
 public:
 
-    Authorize(QWidget* const parent, const QString& scope);
-    ~Authorize();
+    GSSession(QWidget* const parent, const QString& scope);
+    ~GSSession();
 
 Q_SIGNALS:
 
@@ -114,6 +114,6 @@ private:
     QNetworkAccessManager* m_netMngr;
 };
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam
 
-#endif /* AUTHORIZE_H */
+#endif // GS_SESSION_H

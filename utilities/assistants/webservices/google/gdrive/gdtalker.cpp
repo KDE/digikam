@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-11-18
- * Description : a kipi plugin to export images to Google-Drive web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
  *
@@ -59,7 +59,7 @@
 #include "mpform_gdrive.h"
 #include "kipiplugins_debug.h"
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
 static bool gdriveLessThan(const GSFolder& p1, const GSFolder& p2)
@@ -68,7 +68,7 @@ static bool gdriveLessThan(const GSFolder& p1, const GSFolder& p2)
 }
 
 GDTalker::GDTalker(QWidget* const parent)
-    : Authorize(parent, QString::fromLatin1("https://www.googleapis.com/auth/drive")), m_state(GD_LOGOUT)
+    : GSSession(parent, QString::fromLatin1("https://www.googleapis.com/auth/drive")), m_state(GD_LOGOUT)
 {
     m_rootid          = QString::fromLatin1("root");
     m_rootfoldername  = QString::fromLatin1("GoogleDrive Root");
@@ -156,7 +156,7 @@ void GDTalker::createFolder(const QString& title, const QString& id)
     data += "\"application/vnd.google-apps.folder\"";
     data += "}\r\n";
 
-    qCDebug(KIPIPLUGINS_LOG) << "data:" << data;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "data:" << data;
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -249,7 +249,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
     m_reply = m_netMngr->post(netRequest, form.formData());
 
-    qCDebug(KIPIPLUGINS_LOG) << "In add photo";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "In add photo";
     m_state = GD_ADDPHOTO;
     m_buffer.resize(0);
     emit signalBusy(true);
@@ -282,19 +282,19 @@ void GDTalker::slotFinished(QNetworkReply* reply)
         case (GD_LOGOUT):
             break;
         case (GD_LISTFOLDERS):
-            qCDebug(KIPIPLUGINS_LOG) << "In GD_LISTFOLDERS";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_LISTFOLDERS";
             parseResponseListFolders(m_buffer);
             break;
         case (GD_CREATEFOLDER):
-            qCDebug(KIPIPLUGINS_LOG) << "In GD_CREATEFOLDER";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_CREATEFOLDER";
             parseResponseCreateFolder(m_buffer);
             break;
         case (GD_ADDPHOTO):
-            qCDebug(KIPIPLUGINS_LOG) << "In GD_ADDPHOTO"; // << m_buffer;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_ADDPHOTO"; // << m_buffer;
             parseResponseAddPhoto(m_buffer);
             break;
         case (GD_USERNAME):
-            qCDebug(KIPIPLUGINS_LOG) << "In GD_USERNAME"; // << m_buffer;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_USERNAME"; // << m_buffer;
             parseResponseUserName(m_buffer);
             break;
         default:
@@ -316,10 +316,10 @@ void GDTalker::parseResponseUserName(const QByteArray& data)
     }
 
     QJsonObject jsonObject = doc.object();
-    qCDebug(KIPIPLUGINS_LOG)<<"User Name is: " << jsonObject[QString::fromLatin1("name")].toString();
+    qCDebug(DIGIKAM_GENERAL_LOG)<<"User Name is: " << jsonObject[QString::fromLatin1("name")].toString();
     QString temp           = jsonObject[QString::fromLatin1("name")].toString();
 
-    qCDebug(KIPIPLUGINS_LOG) << "in parseResponseUserName";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "in parseResponseUserName";
 
     emit signalBusy(false);
     emit signalSetUserName(temp);
@@ -327,7 +327,7 @@ void GDTalker::parseResponseUserName(const QByteArray& data)
 
 void GDTalker::parseResponseListFolders(const QByteArray& data)
 {
-    qCDebug(KIPIPLUGINS_LOG) << data;
+    qCDebug(DIGIKAM_GENERAL_LOG) << data;
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
@@ -432,4 +432,4 @@ void GDTalker::cancel()
     emit signalBusy(false);
 }
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam

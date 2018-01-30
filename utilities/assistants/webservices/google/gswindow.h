@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GSWINDOW_H
-#define GSWINDOW_H
+#ifndef GS_WINDOW_H
+#define GS_WINDOW_H
 
 // Qt includes
 
@@ -32,28 +32,24 @@
 #include <QUrl>
 #include <QPointer>
 
-// Libkipi includes
-
-#include <KIPI/Interface>
-
 // Local includes
 
-#include "kptooldialog.h"
+#include "tooldialog.h"
 #include "gsitem.h"
+#include "dinfointerface.h"
+#include "dmetadata.h"
 
 class QCloseEvent;
 
-using namespace KIPI;
-using namespace KIPIPlugins;
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
-class GoogleServicesWidget;
 class GDTalker;
+class GPTalker;
+class GSWidget;
 class GSPhoto;
 class GSFolder;
-class NewAlbumDlg;
-class GPTalker;
+class GSNewAlbumDlg;
 
 class GSWindow : public KPToolDialog
 {
@@ -61,7 +57,9 @@ class GSWindow : public KPToolDialog
 
 public:
 
-    GSWindow(const QString& tmpFolder, QWidget* const parent, const QString& serviceName);
+    explicit GSWindow(DInfoInterface* const iface,
+                      QWidget* const parent,
+                      const QString& serviceName);
     ~GSWindow();
 
     void reactivate();
@@ -114,7 +112,7 @@ private:
     QString                       m_tmp;
     QString                       m_refresh_token;
 
-    GoogleServicesWidget*         m_widget;
+    GSWidget*                     m_widget;
     NewAlbumDlg*                  m_albumDlg;
     NewAlbumDlg*                  m_gphoto_albumdlg;
 
@@ -125,9 +123,9 @@ private:
 
     QList< QPair<QUrl, GSPhoto> > m_transferQueue;
 
-    QPointer<MetadataProcessor>   m_meta;
+    DMetadata                     m_meta;
 };
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam
 
-#endif // GSWINDOW_H
+#endif // GS_WINDOW_H

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-16-07
- * Description : a kipi plugin to export images to Google Photo web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2007-2008 by Vardhman Jain <vardhman at gmail dot com>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -60,7 +60,7 @@
 #include "mpform_gphoto.h"
 #include "kipiplugins_debug.h"
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
 static bool gphotoLessThan(const GSFolder& p1, const GSFolder& p2)
@@ -69,7 +69,7 @@ static bool gphotoLessThan(const GSFolder& p1, const GSFolder& p2)
 }
 
 GPTalker::GPTalker(QWidget* const parent)
-    : Authorize(parent, QString::fromLatin1("https://picasaweb.google.com/data/")),
+    : GSSession(parent, QString::fromLatin1("https://picasaweb.google.com/data/")),
       m_netMngr(0),
       m_reply(0),
       m_state(FE_LOGOUT),
@@ -687,7 +687,7 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
 
     if ( !doc.setContent( data, false, &err, &line, &columns ) )
     {
-        qCCritical(KIPIPLUGINS_LOG) << "error is "<< err << " at line " << line << " at columns " << columns;
+        qCCritical(DIGIKAM_GENERAL_LOG) << "error is "<< err << " at line " << line << " at columns " << columns;
         emit signalListAlbumsDone(0, i18n("Failed to fetch photo-set list"), QList<GSFolder>());
         return;
     }
@@ -963,4 +963,4 @@ void GPTalker::parseResponseAddPhoto(const QByteArray& data)
     emit signalAddPhotoDone(1, QString::fromLatin1(""), photoId);
 }
 
-} // KIPIGoogleServicesPlugin
+} // Digikam

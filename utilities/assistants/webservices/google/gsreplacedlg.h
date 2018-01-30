@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-02-15
- * Description : a kipi plugin to export images to Google Photo web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2010 by Jens Mueller <tschenser at gmx dot de>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef REPLACEDIALOG_H
-#define REPLACEDIALOG_H
+#ifndef GS_REPLACE_DLG_H
+#define GS_REPLACE_DLG_H
 
 // Qt includes
 
@@ -30,13 +30,11 @@
 #include <QUrl>
 #include <QNetworkReply>
 
-// Libkipi includes
+// Local includes
 
-#include <KIPI/Interface>
+#include "dinfointerface.h"
 
-using namespace KIPI;
-
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
 enum ReplaceDialog_Result
@@ -56,7 +54,7 @@ public:
 
     ReplaceDialog(QWidget* const parent,
                   const QString& caption,
-                  Interface* const iface,
+                  DInfoInterface* const iface,
                   const QUrl& src,
                   const QUrl& dest);
     ~ReplaceDialog();
@@ -87,6 +85,6 @@ private:
     Private* const d;
 };
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam
 
-#endif // REPLACEDIALOG_H
+#endif // GS_REPLACE_DLG_H

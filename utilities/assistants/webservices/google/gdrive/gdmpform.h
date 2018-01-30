@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-11-18
- * Description : a kipi plugin to export images to Google-Drive web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
  *
@@ -28,7 +28,7 @@
 #include <QByteArray>
 #include <QString>
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
 class MPForm_GDrive
@@ -56,6 +56,6 @@ private:
     QString    m_file_size;
 };
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam
 
 #endif // MPFORM_GDRIVE_H

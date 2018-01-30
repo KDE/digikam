@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-02-01
- * Description : a kipi plugin to export images to Google Photo web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2010 by Jens Mueller <tschenser at gmx dot de>
  *
@@ -40,13 +40,15 @@
 
 // Local includes
 
-#include <gsitem.h>
+#include "gsitem.h"
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
-NewAlbumDlg::NewAlbumDlg(QWidget* const parent, const QString& serviceName, const QString& pluginName)
-    : KPNewAlbumDialog(parent, pluginName)
+NewAlbumDlg::NewAlbumDlg(QWidget* const parent,
+                         const QString& serviceName,
+                         const QString& pluginName)
+    : NewAlbumDialog(parent, pluginName)
 {
     m_serviceName            = serviceName;
     const int spacing        = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
@@ -73,7 +75,9 @@ NewAlbumDlg::NewAlbumDlg(QWidget* const parent, const QString& serviceName, cons
     privBoxLayout->setSpacing(spacing);
     privBox->setLayout(privBoxLayout);
 
-    if (!(QString::compare(m_serviceName, QString::fromLatin1("googledriveexport"), Qt::CaseInsensitive) == 0))
+    if (!(QString::compare(m_serviceName,
+                           QString::fromLatin1("googledriveexport"),
+                           Qt::CaseInsensitive) == 0))
     {
         addToMainLayout(privBox);
     }
@@ -93,7 +97,9 @@ NewAlbumDlg::~NewAlbumDlg()
 
 void NewAlbumDlg::getAlbumProperties(GSFolder& album)
 {
-    if (QString::compare(m_serviceName, QString::fromLatin1("googledriveexport"), Qt::CaseInsensitive) == 0)
+    if (QString::compare(m_serviceName,
+                         QString::fromLatin1("googledriveexport"),
+                         Qt::CaseInsensitive) == 0)
     {
         album.title = getTitleEdit()->text();
         return;
@@ -114,4 +120,4 @@ void NewAlbumDlg::getAlbumProperties(GSFolder& album)
     album.timestamp     = QString::number(timestamp * 1000);
 }
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam

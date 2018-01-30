@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2015-06-21
- * Description : a kipi plugin to export images to Google-Drive web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
  *
@@ -50,13 +50,13 @@
 
 // Local includes
 
-#include "mpform_gdrive.h"
-#include "kipiplugins_debug.h"
+#include "gdmpform.h"
+#include "digikam_debug.h"
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
-Authorize::Authorize(QWidget* const parent, const QString & scope)
+GSSession::GSSession(QWidget* const parent, const QString & scope)
 {
     m_parent          = parent;
     m_scope           = scope;
@@ -77,13 +77,13 @@ Authorize::Authorize(QWidget* const parent, const QString & scope)
             this, SLOT(slotAuthFinished(QNetworkReply*)));
 }
 
-Authorize::~Authorize()
+GSSession::~GSSession()
 {
     if (m_reply)
         m_reply->abort();
 }
 
-bool Authorize::authenticated()
+bool GSSession::authenticated()
 {
     if (m_access_token.isEmpty())
     {
@@ -96,7 +96,7 @@ bool Authorize::authenticated()
 /**
  * Starts authentication by opening the browser
  */
-void Authorize::doOAuth()
+void GSSession::doOAuth()
 {
     QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/auth"));
     QUrlQuery urlQuery;
@@ -106,7 +106,7 @@ void Authorize::doOAuth()
     urlQuery.addQueryItem(QString::fromLatin1("client_id"),     m_client_id);
     urlQuery.addQueryItem(QString::fromLatin1("access_type"),   QString::fromLatin1("offline"));
     url.setQuery(urlQuery);
-    qCDebug(KIPIPLUGINS_LOG) << "OAuth URL: " << url;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "OAuth URL: " << url;
     QDesktopServices::openUrl(url);
 
     emit signalBusy(false);
@@ -141,13 +141,13 @@ void Authorize::doOAuth()
 
     if (m_window->result() == QDialog::Accepted && !(textbox->text().isEmpty()))
     {
-        qCDebug(KIPIPLUGINS_LOG) << "1";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "1";
         m_code = textbox->text();
     }
 
     if (textbox->text().isEmpty())
     {
-        qCDebug(KIPIPLUGINS_LOG) << "3";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "3";
         emit signalTextBoxEmpty();
     }
 
@@ -157,13 +157,13 @@ void Authorize::doOAuth()
     }
 }
 
-void Authorize::slotAccept()
+void GSSession::slotAccept()
 {
     m_window->close();
     m_window->setResult(QDialog::Accepted);
 }
 
-void Authorize::slotReject()
+void GSSession::slotReject()
 {
     m_window->close();
     m_window->setResult(QDialog::Rejected);
@@ -172,7 +172,7 @@ void Authorize::slotReject()
 /**
  * Gets access token from googledrive after authentication by user
  */
-void Authorize::getAccessToken()
+void GSSession::getAccessToken()
 {
     QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/token?"));
     QUrlQuery urlQuery;
@@ -203,7 +203,7 @@ void Authorize::getAccessToken()
 
 /** Gets access token from refresh token for handling login of user across digikam sessions
  */
-void Authorize::getAccessTokenFromRefreshToken(const QString& msg)
+void GSSession::getAccessTokenFromRefreshToken(const QString& msg)
 {
     QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/token"));
 
@@ -226,7 +226,7 @@ void Authorize::getAccessTokenFromRefreshToken(const QString& msg)
     emit signalBusy(true);
 }
 
-void Authorize::slotAuthFinished(QNetworkReply* reply)
+void GSSession::slotAuthFinished(QNetworkReply* reply)
 {
     if (reply != m_reply)
     {
@@ -258,11 +258,11 @@ void Authorize::slotAuthFinished(QNetworkReply* reply)
     switch(m_Authstate)
     {
         case (GD_ACCESSTOKEN):
-            qCDebug(KIPIPLUGINS_LOG) << "In GD_ACCESSTOKEN";// << m_buffer;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_ACCESSTOKEN";// << m_buffer;
             parseResponseAccessToken(m_buffer);
             break;
         case (GD_REFRESHTOKEN):
-            qCDebug(KIPIPLUGINS_LOG) << "In GD_REFRESHTOKEN" << m_buffer;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_REFRESHTOKEN" << m_buffer;
             parseResponseRefreshToken(m_buffer);
             break;
         default:
@@ -272,7 +272,7 @@ void Authorize::slotAuthFinished(QNetworkReply* reply)
     reply->deleteLater();
 }
 
-void Authorize::parseResponseAccessToken(const QByteArray& data)
+void GSSession::parseResponseAccessToken(const QByteArray& data)
 {
     m_access_token  = getValue(QString::fromUtf8(data), QString::fromLatin1("access_token"));
     m_refresh_token = getValue(QString::fromUtf8(data), QString::fromLatin1("refresh_token"));
@@ -285,12 +285,12 @@ void Authorize::parseResponseAccessToken(const QByteArray& data)
     }
 
     m_bearer_access_token = QString::fromLatin1("Bearer ") + m_access_token;
-    qCDebug(KIPIPLUGINS_LOG) << "In parse GD_ACCESSTOKEN" << m_bearer_access_token << "  " << data;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "In parse GD_ACCESSTOKEN" << m_bearer_access_token << "  " << data;
     //emit signalAccessTokenObtained();
     emit signalRefreshTokenObtained(m_refresh_token);
 }
 
-void Authorize::parseResponseRefreshToken(const QByteArray& data)
+void GSSession::parseResponseRefreshToken(const QByteArray& data)
 {
     m_access_token = getValue(QString::fromUtf8(data), QString::fromLatin1("access_token"));
 
@@ -302,11 +302,11 @@ void Authorize::parseResponseRefreshToken(const QByteArray& data)
     }
 
     m_bearer_access_token = QString::fromLatin1("Bearer ") + m_access_token;
-    qCDebug(KIPIPLUGINS_LOG) << "In parse GD_ACCESSTOKEN" << m_bearer_access_token << "  " << data;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "In parse GD_ACCESSTOKEN" << m_bearer_access_token << "  " << data;
     emit signalAccessTokenObtained();
 }
 
-QString Authorize::getValue(const QString& jsonStr, const QString& key)
+QString GSSession::getValue(const QString& jsonStr, const QString& key)
 {
     QString token(getToken(jsonStr, key, QString::fromLatin1(",")));
 
@@ -321,7 +321,7 @@ QString Authorize::getValue(const QString& jsonStr, const QString& key)
     return value;
 }
 
-QStringList Authorize::getParams(const QString& jsonStr, const QStringList& pathValues, const QString& key)
+QStringList GSSession::getParams(const QString& jsonStr, const QStringList& pathValues, const QString& key)
 {
     if (pathValues.count() == 0)
         return QStringList();
@@ -347,7 +347,7 @@ QStringList Authorize::getParams(const QString& jsonStr, const QStringList& path
     return tokens;
 }
 
-QString Authorize::getToken(const QString& object, const QString& key, const QString& endDivider)
+QString GSSession::getToken(const QString& object, const QString& key, const QString& endDivider)
 {
     QString searchToken(QString::fromLatin1("\"") + key + QString::fromLatin1("\""));
 
@@ -374,7 +374,7 @@ QString Authorize::getToken(const QString& object, const QString& key, const QSt
     return token;
 }
 
-int Authorize::getTokenEnd(const QString& object, int beginPos)
+int GSSession::getTokenEnd(const QString& object, int beginPos)
 {
     int beginDividerPos(object.indexOf(QString::fromLatin1("["), beginPos));
     int endDividerPos(object.indexOf(QString::fromLatin1("]"),   beginPos + 1));
@@ -388,4 +388,4 @@ int Authorize::getTokenEnd(const QString& object, int beginPos)
     return endDividerPos + 1;
 }
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam

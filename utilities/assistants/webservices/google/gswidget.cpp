@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-11-18
- * Description : a kipi plugin to export images to Google-Drive web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
  *
@@ -41,17 +41,18 @@
 
 #include <klocalizedstring.h>
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
-GoogleServicesWidget::GoogleServicesWidget(QWidget* const parent, KIPI::Interface* const iface, const PluginName& pluginName, const QString& serviceName)
-    : KPSettingsWidget(parent,iface,serviceName)
+GSWidget::GSWidget(QWidget* const parent,
+                   DInfoInterface* const iface,
+                   const PluginName& pluginName,
+                   const QString& serviceName)
+    : SettingsWidget(parent, iface, serviceName)
 {
-    m_pluginName = pluginName;
-
+    m_pluginName            = pluginName;
     QGroupBox* m_LeafBox    = new QGroupBox(QString::fromLatin1(""), getSettingsBox());
     QGridLayout* leafLayout = new QGridLayout(m_LeafBox);
-
     m_tagsBGrp              = new QButtonGroup(m_LeafBox);
 
     if (m_pluginName == PluginName::GPhotoExport)
@@ -101,11 +102,11 @@ GoogleServicesWidget::GoogleServicesWidget(QWidget* const parent, KIPI::Interfac
     }
 }
 
-GoogleServicesWidget::~GoogleServicesWidget()
+GSWidget::~GSWidget()
 {
 }
 
-void GoogleServicesWidget::updateLabels(const QString& name, const QString& url)
+void GSWidget::updateLabels(const QString& name, const QString& url)
 {
     switch(m_pluginName)
     {
@@ -136,4 +137,4 @@ void GoogleServicesWidget::updateLabels(const QString& name, const QString& url)
     }
 }
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam

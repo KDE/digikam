@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-02-01
- * Description : a kipi plugin to export images to Google Photo web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2010 by Jens Mueller <tschenser at gmx dot de>
  *
@@ -35,22 +35,22 @@
 
 // Local includes
 
-#include "kpnewalbumdialog.h"
+#include "newalbumdialog.h"
 
-using namespace KIPIPlugins;
-
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
 class GSFolder;
 
-class NewAlbumDlg : public KPNewAlbumDialog
+class NewAlbumDlg : public NewAlbumDialog
 {
     Q_OBJECT
 
 public:
 
-    NewAlbumDlg(QWidget* const parent, const QString& serviceName, const QString& pluginName);
+    explicit NewAlbumDlg(QWidget* const parent,
+                         const QString& serviceName,
+                         const QString& pluginName);
     ~NewAlbumDlg();
 
     void getAlbumProperties(GSFolder& album);
@@ -63,6 +63,6 @@ private:
     QRadioButton*  m_protectedRBtn;
 };
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam
 
 #endif // GS_NEW_ALBUM_DLG_H

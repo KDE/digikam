@@ -46,41 +46,34 @@
 #include <ksharedconfig.h>
 #include <kwindowconfig.h>
 
-// LibKIPI includes
-
-#include <KIPI/Interface>
-
 // Local includes
 
-#include "kpimageslist.h"
-#include "kpaboutdata.h"
-#include "kpimageinfo.h"
-#include "kpversion.h"
-#include "kpprogresswidget.h"
+#include "exportutils.h"
+#include "dimageslist.h"
+#include "digikam_version.h"
+#include "dprogresswdg.h"
 #include "gdtalker.h"
 #include "gsitem.h"
-#include "newalbumdlg.h"
+#include "gsnewalbumdlg.h"
 #include "gswidget.h"
 #include "gptalker.h"
-#include "replacedialog.h"
-#include "kipiplugins_debug.h"
+#include "gsreplacedlg.h"
+#include "digikam_debug.h"
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
-GSWindow::GSWindow(const QString& tmpFolder,QWidget* const /*parent*/, const QString& serviceName)
-    : KPToolDialog(0),
+GSWindow::GSWindow(DInfoInterface* const iface,
+                   QWidget* const /*parent*/,
+                   const QString& serviceName)
+    : ToolDialog(0),
+      m_iface(iface),
       m_widget(0),
       m_albumDlg(0),
       m_gphoto_albumdlg(0),
       m_talker(0),
       m_gphoto_talker(0)
 {
-    if (iface())
-    {
-        m_meta = iface()->createMetadataProcessor();
-    }
-
     m_serviceName = serviceName;
 
     if (QString::compare(m_serviceName, QString::fromLatin1("googledriveexport"), Qt::CaseInsensitive) == 0)
@@ -99,34 +92,18 @@ GSWindow::GSWindow(const QString& tmpFolder,QWidget* const /*parent*/, const QSt
         m_pluginName = QString::fromLatin1("Google Photos/PicasaWeb");
     }
 
-    m_tmp         = tmpFolder;
+    m_tmp         = ExportUtils::makeTemporaryDir("google").absolutePath() + QLatin1Char('/');;
     m_imagesCount = 0;
     m_imagesTotal = 0;
     m_renamingOpt = 0;
-    m_widget      = new GoogleServicesWidget(this, iface(), m_name, m_pluginName);
+    m_widget      = new GSWidget(this, iface(), m_name, m_pluginName);
 
     setMainWidget(m_widget);
     setModal(false);
-    KPAboutData* about = 0;
 
     switch (m_name)
     {
         case PluginName::GDrive:
-
-            about = new KPAboutData(ki18n("Google Drive Export"),
-                                           ki18n("A tool to export images "
-                                                 "to Google Drive"),
-                                           ki18n("(c) 2013, Saurabh Patel\n"
-                                                 "(c) 2015, Shourya Singh Gupta"));
-
-            about->addAuthor(i18n("Saurabh Patel"),i18n("Author and maintainer"),
-                             QString::fromLatin1("saurabhpatel7717 at gmail dot com"));
-
-            about->addAuthor(i18n( "Shourya Singh Gupta" ), i18n("Developer"),
-                             QString::fromLatin1("shouryasgupta at gmail dot com"));
-
-            about->setHandbookEntry(QString::fromLatin1("tool-googleexport"));
-            setAboutData(about);
 
             setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-googledrive")));
             setWindowTitle(i18n("Export to Google Drive"));
@@ -182,33 +159,6 @@ GSWindow::GSWindow(const QString& tmpFolder,QWidget* const /*parent*/, const QSt
 
         case PluginName::GPhotoImport:
         case PluginName::GPhotoExport:
-
-            about = new KPAboutData(ki18n("Google Photos/PicasaWeb Export"),
-                                    ki18n("A tool to export image collections to "
-                                          "Google Photos/Picasa web service."),
-                                    ki18n("(c) 2007-2009, Vardhman Jain\n"
-                                          "(c) 2008-2016, Gilles Caulier\n"
-                                          "(c) 2009, Luka Renko\n"
-                                          "(c) 2010, Jens Mueller\n"
-                                          "(c) 2015, Shourya Singh Gupta"));
-
-            about->addAuthor(i18n( "Vardhman Jain" ), i18n("Author and maintainer"),
-                             QString::fromLatin1("Vardhman at gmail dot com"));
-
-            about->addAuthor(i18n( "Gilles Caulier" ), i18n("Developer"),
-                             QString::fromLatin1("caulier dot gilles at gmail dot com"));
-
-            about->addAuthor(i18n( "Luka Renko" ), i18n("Developer"),
-                             QString::fromLatin1("lure at kubuntu dot org"));
-
-            about->addAuthor(i18n( "Jens Mueller" ), i18n("Developer"),
-                             QString::fromLatin1("tschenser at gmx dot de"));
-
-            about->addAuthor(i18n( "Shourya Singh Gupta" ), i18n("Developer"),
-                             QString::fromLatin1("shouryasgupta at gmail dot com"));
-
-            about->setHandbookEntry(QString::fromLatin1("tool-googleexport"));
-            setAboutData(about);
 
             setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-googlephoto")));
 
@@ -314,7 +264,7 @@ void GSWindow::reactivate()
 
 void GSWindow::readSettings()
 {
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
     KConfigGroup grp;
 
     switch (m_name)
@@ -371,7 +321,7 @@ void GSWindow::readSettings()
 
 void GSWindow::writeSettings()
 {
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
     KConfigGroup grp;
 
     switch(m_name)
@@ -417,7 +367,9 @@ void GSWindow::slotSetUserName(const QString& msg)
     m_widget->updateLabels(msg);
 }
 
-void GSWindow::slotListPhotosDoneForDownload(int errCode, const QString& errMsg, const QList <GSPhoto>& photosList)
+void GSWindow::slotListPhotosDoneForDownload(int errCode,
+                                             const QString& errMsg,
+                                             const QList <GSPhoto>& photosList)
 {
     disconnect(m_gphoto_talker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
                this, SLOT(slotListPhotosDoneForDownload(int, QString, QList<GSPhoto>)));
@@ -454,9 +406,11 @@ void GSWindow::slotListPhotosDoneForDownload(int errCode, const QString& errMsg,
     downloadNextPhoto();
 }
 
-void GSWindow::slotListPhotosDoneForUpload(int errCode, const QString& errMsg, const QList <GSPhoto>& photosList)
+void GSWindow::slotListPhotosDoneForUpload(int errCode,
+                                           const QString& errMsg,
+                                           const QList <GSPhoto>& photosList)
 {
-    qCCritical(KIPIPLUGINS_LOG)<< "err Code is "<< errCode <<" Err Message is "<< errMsg;
+    qCCritical(DIGIKAM_GENERAL_LOG)<< "err Code is "<< errCode <<" Err Message is "<< errMsg;
 
     disconnect(m_gphoto_talker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
                this, SLOT(slotListPhotosDoneForUpload(int, QString, QList<GSPhoto>)));
@@ -493,7 +447,7 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode, const QString& errMsg, c
 
         if (m_meta && m_meta->load(*it))
         {
-            localId = m_meta->getXmpTagString(QLatin1String("Xmp.kipi.picasawebGPhotoId"));
+            localId = m_meta->getXmpTagString(QLatin1String("Xmp.digiKam.picasawebGPhotoId"));
         }
 
         QList<GSPhoto>::const_iterator itPWP;
@@ -551,7 +505,7 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
             }
 
             m_widget->getAlbumsCoB()->clear();
-            qCDebug(KIPIPLUGINS_LOG) << "slotListAlbumsDone1:" << list.size();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "slotListAlbumsDone1:" << list.size();
 
             for (int i=0;i<list.size();i++)
             {
@@ -621,7 +575,7 @@ void GSWindow::slotBusy(bool val)
 
 void GSWindow::googlePhotoTransferHandler()
 {
-    qCDebug(KIPIPLUGINS_LOG) << "Google Photo Transfer invoked";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Google Photo Transfer invoked";
 
     switch (m_name)
     {
@@ -648,7 +602,7 @@ void GSWindow::googlePhotoTransferHandler()
 
 void GSWindow::slotTextBoxEmpty()
 {
-    qCDebug(KIPIPLUGINS_LOG) << "in slotTextBoxEmpty";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "in slotTextBoxEmpty";
     QMessageBox::critical(this, i18nc("@title:window", "Error"),
                           i18n("The textbox is empty, please enter the code from the browser in the textbox. "
                                "To complete the authentication click \"Change Account\", "
@@ -731,7 +685,7 @@ void GSWindow::slotStartTransfer()
     {
         KPImageInfo info(m_widget->imagesList()->imageUrls().value(i));
         GSPhoto temp;
-        qCDebug(KIPIPLUGINS_LOG) << "in start transfer info " <<info.title() << info.description();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "in start transfer info " <<info.title() << info.description();
 
         switch (m_name)
         {
@@ -767,7 +721,7 @@ void GSWindow::slotStartTransfer()
 
 void GSWindow::uploadNextPhoto()
 {
-    qCDebug(KIPIPLUGINS_LOG) << "in upload nextphoto " << m_transferQueue.count();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "in upload nextphoto " << m_transferQueue.count();
 
     if (m_transferQueue.isEmpty())
     {
@@ -992,7 +946,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
             {
                 if (m_meta->supportXmp() && m_meta->canWriteXmp(tmpUrl))
                 {
-                    m_meta->setXmpTagString(QLatin1String("Xmp.kipi.picasawebGPhotoId"), item.id);
+                    m_meta->setXmpTagString(QLatin1String("Xmp.digiKam.picasawebGPhotoId"), item.id);
                     m_meta->setXmpKeywords(item.tags);
                 }
 
@@ -1134,7 +1088,7 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
             !photoId.isEmpty()
            )
         {
-            m_meta->setXmpTagString(QLatin1String("Xmp.kipi.picasawebGPhotoId"), photoId);
+            m_meta->setXmpTagString(QLatin1String("Xmp.digiKam.picasawebGPhotoId"), photoId);
             m_meta->save(fileUrl);
         }
 
@@ -1142,7 +1096,7 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
         m_widget->imagesList()->removeItemByUrl(m_transferQueue.first().first);
         m_transferQueue.pop_front();
         m_imagesCount++;
-        qCDebug(KIPIPLUGINS_LOG) << "In slotAddPhotoSucceeded" << m_imagesCount;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "In slotAddPhotoSucceeded" << m_imagesCount;
         m_widget->progressBar()->setMaximum(m_imagesTotal);
         m_widget->progressBar()->setValue(m_imagesCount);
         uploadNextPhoto();
@@ -1329,4 +1283,4 @@ void GSWindow::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam

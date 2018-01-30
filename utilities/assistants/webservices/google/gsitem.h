@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-11-18
- * Description : a kipi plugin to export images to Google-Drive web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
  *
@@ -20,15 +20,15 @@
  *
  * ============================================================ */
 
-#ifndef GSITEM_H
-#define GSITEM_H
+#ifndef GS_ITEM_H
+#define GS_ITEM_H
 
 // Qt includes
 
 #include <QUrl>
 #include <QString>
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
 enum PluginName
@@ -94,6 +94,6 @@ public:
     QStringList tags;
 };
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam
 
-#endif // GSITEM_H
+#endif // GS_ITEM_H

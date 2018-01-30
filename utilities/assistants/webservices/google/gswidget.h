@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-11-18
- * Description : a kipi plugin to export images to Google-Drive web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef GSWIDGET_H
-#define GSWIDGET_H
+#ifndef GS_WIDGET_H
+#define GS_WIDGET_H
 
 //Qt includes
 
@@ -29,8 +29,9 @@
 
 // Local includes
 
-#include "kpsettingswidget.h"
+#include "settingswidget.h"
 #include "gsitem.h"
+#include "dinfointerface.h"
 
 class QLabel;
 class QSpinBox;
@@ -39,17 +40,9 @@ class QButtonGroup;
 class QComboBox;
 class QPushButton;
 
-namespace KIPI
-{
-    class Interface;
-    class UploadWidget;
-}
-
 enum class PluginName;
 
-using namespace KIPIPlugins;
-
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
 enum GPhotoTagsBehaviour
@@ -59,16 +52,20 @@ enum GPhotoTagsBehaviour
     GPTagCombined
 };
 
-class GoogleServicesWidget : public KPSettingsWidget
+class GSWidget : public SettingsWidget
 {
     Q_OBJECT
 
 public:
 
-    GoogleServicesWidget(QWidget* const parent, KIPI::Interface* const iface, const PluginName& pluginName, const QString& serviceName);
-    ~GoogleServicesWidget();
+    explicit GSWidget(QWidget* const parent,
+                      DInfoInterface* const iface,
+                      const PluginName& pluginName,
+                      const QString& serviceName);
+    ~GSWidget();
 
-    void updateLabels(const QString& name = QString(), const QString& url = QString()) Q_DECL_OVERRIDE;
+    void updateLabels(const QString& name = QString(),
+                      const QString& url = QString()) Q_DECL_OVERRIDE;
 
 private:
 
@@ -78,6 +75,6 @@ private:
     friend class GSWindow;
 };
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam
 
-#endif /* GSWIDGET_H */
+#endif // GS_WIDGET_H

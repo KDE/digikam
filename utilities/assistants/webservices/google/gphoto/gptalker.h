@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-16-07
- * Description : a kipi plugin to export images to Google Photo web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2007-2008 by Vardhman Jain <vardhman at gmail dot com>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -43,10 +43,10 @@
 
 using namespace KIPI;
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
-class GPTalker : public Authorize
+class GPTalker : public GSSession
 {
     Q_OBJECT
 
@@ -131,6 +131,6 @@ private:
     QPointer<MetadataProcessor> m_meta;
 };
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam
 
 #endif // GP_TALKER_H

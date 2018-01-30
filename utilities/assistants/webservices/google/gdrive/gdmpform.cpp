@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-11-18
- * Description : a kipi plugin to export images to Google-Drive web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
  *
@@ -40,7 +40,7 @@
 #include "kipiplugins_debug.h"
 #include "kputil.h"
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
 MPForm_GDrive::MPForm_GDrive()
@@ -60,13 +60,13 @@ void MPForm_GDrive::reset()
 
 void MPForm_GDrive::finish()
 {
-    qCDebug(KIPIPLUGINS_LOG) << "in finish";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "in finish";
     QByteArray str;
     str += "--";
     str += m_boundary;
     str += "--";
     m_buffer.append(str);
-    qCDebug(KIPIPLUGINS_LOG) << "finish:" << m_buffer;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "finish:" << m_buffer;
 }
 
 void MPForm_GDrive::addPair(const QString& name, const QString& description, const QString& path,const QString& id)
@@ -74,7 +74,7 @@ void MPForm_GDrive::addPair(const QString& name, const QString& description, con
     QMimeDatabase db;
     QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(path));
     QString mime  = ptr.name();
-    qCDebug(KIPIPLUGINS_LOG) << "in add pair:" << name << " " << description << " " << path << " " << id << " " << mime;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "in add pair:" << name << " " << description << " " << path << " " << id << " " << mime;
 
     // Generate JSON
     QJsonObject photoInfo;
@@ -105,7 +105,7 @@ void MPForm_GDrive::addPair(const QString& name, const QString& description, con
 bool MPForm_GDrive::addFile(const QString& path)
 {
     QByteArray str;
-    qCDebug(KIPIPLUGINS_LOG) << "in addfile" << path;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "in addfile" << path;
 
     QMimeDatabase db;
     QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(path));
@@ -156,4 +156,4 @@ QString MPForm_GDrive::getFileSize() const
     return m_file_size;
 }
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam

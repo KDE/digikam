@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-02-15
- * Description : a kipi plugin to export images to Google Photo web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2010 by Jens Mueller <tschenser at gmx dot de>
  *
@@ -41,11 +41,10 @@
 
 // Local includes
 
-#include "kputil.h"
+#include "dworkingpixmap.h"
+#include "exportutils.h"
 
-using namespace KIPIPlugins;
-
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
 class ReplaceDialog::Private
@@ -54,7 +53,7 @@ public:
 
     Private()
     {
-        progressPix   = KPWorkingPixmap();
+        progressPix   = DWorkingPixmap();
         bAdd          = 0;
         bAddAll       = 0;
         bReplace      = 0;
@@ -74,13 +73,13 @@ public:
     QPushButton*           bReplaceAll;
     QUrl                   src;
     QUrl                   dest;
-    Interface*             iface;
+    DInfoInterface*        iface;
     QLabel*                lbSrc;
     QLabel*                lbDest;
     QByteArray             buffer;
     QNetworkAccessManager* netMngr;
     QPixmap                mimePix;
-    KPWorkingPixmap        progressPix;
+    DWorkingPixmap         progressPix;
     int                    progressCount;
     QTimer*                progressTimer;
     int                    result;
@@ -88,17 +87,17 @@ public:
 
 ReplaceDialog::ReplaceDialog(QWidget* const parent,
                              const QString& _caption,
-                             Interface* const _iface,
-                             const QUrl& _src,
-                             const QUrl& _dest)
+                             DInfoInterface* const iface,
+                             const QUrl& src,
+                             const QUrl& dest)
     : QDialog(parent),
       d(new Private)
 {
     setObjectName(QString::fromLatin1("ReplaceDialog"));
 
-    d->src   = _src;
-    d->dest  = _dest;
-    d->iface = _iface;
+    d->src   = src;
+    d->dest  = dest;
+    d->iface = iface;
 
     setWindowTitle(_caption);
 
@@ -329,4 +328,4 @@ int ReplaceDialog::getResult()
     return d->result;
 }
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam

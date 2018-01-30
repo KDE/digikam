@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-07-07
- * Description : a kipi plugin to export images to Google Photo web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2005-2008 by Vardhman Jain <vardhman at gmail dot com>
  * Copyright (C) 2008-2016 by Caulier Gilles <caulier dot gilles at gmail dot com>
@@ -36,7 +36,7 @@
 
 #include "kputil.h"
 
-namespace KIPIGoogleServicesPlugin
+namespace Digikam
 {
 
 MPForm_GPhoto::MPForm_GPhoto()
@@ -158,4 +158,4 @@ QByteArray MPForm_GPhoto::formData() const
     return m_buffer;
 }
 
-} // namespace KIPIGoogleServicesPlugin
+} // namespace Digikam
