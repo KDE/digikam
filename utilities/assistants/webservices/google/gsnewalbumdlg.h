@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef NEWALBUMDLG_H
-#define NEWALBUMDLG_H
+#ifndef GS_NEW_ALBUM_DLG_H
+#define GS_NEW_ALBUM_DLG_H
 
 // Qt includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace KIPIGoogleServicesPlugin
 
-#endif // NEWALBUMDLG_H
+#endif // GS_NEW_ALBUM_DLG_H

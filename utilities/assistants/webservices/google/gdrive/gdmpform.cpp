@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "mpform_gdrive.h"
+#include "gdmpform.h"
 
 // Qt includes
 

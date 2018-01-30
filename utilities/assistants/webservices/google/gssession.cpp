@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include <authorize.h>
+#include "gssession.h"
 
 // Qt includes
 

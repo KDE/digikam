@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "newalbumdlg.h"
+#include "gsnewalbumdlg.h"
 
 // Qt includes
 

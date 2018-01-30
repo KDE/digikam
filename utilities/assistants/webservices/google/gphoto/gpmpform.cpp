@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "mpform_gphoto.h"
+#include "gpmpform.h"
 
 // Qt includes
 

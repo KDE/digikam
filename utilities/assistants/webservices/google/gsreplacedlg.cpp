@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "replacedialog.h"
+#include "gsreplacedlg.h"
 
 // Qt includes
 

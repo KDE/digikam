@@ -151,14 +151,14 @@ set(libwsrajce_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcenewalbumdlg.cpp
 
 # Google tool ----------------------------------------------------------------
 
-set(libwsgoogle_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/google/authorize.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/google/replacedialog.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/google/newalbumdlg.cpp
+set(libwsgoogle_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/google/gssession.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gsreplacedlg.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gsnewalbumdlg.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gswidget.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gswindow.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/mpform_gdrive.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdmpform.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdtalker.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gphoto/mpform_gphoto.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gphoto/gpmpform.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gphoto/gptalker.cpp
 )
 
