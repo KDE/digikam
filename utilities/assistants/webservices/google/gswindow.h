@@ -51,7 +51,7 @@ class GSPhoto;
 class GSFolder;
 class GSNewAlbumDlg;
 
-class GSWindow : public KPToolDialog
+class GSWindow : public ToolDialog
 {
     Q_OBJECT
 
@@ -113,8 +113,8 @@ private:
     QString                       m_refresh_token;
 
     GSWidget*                     m_widget;
-    NewAlbumDlg*                  m_albumDlg;
-    NewAlbumDlg*                  m_gphoto_albumdlg;
+    GSNewAlbumDlg*                m_albumDlg;
+    GSNewAlbumDlg*                m_gphoto_albumdlg;
 
     GDTalker*                     m_talker;
     GPTalker*                     m_gphoto_talker;

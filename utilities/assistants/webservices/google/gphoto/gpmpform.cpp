@@ -34,13 +34,13 @@
 
 //local includes
 
-#include "kputil.h"
+#include "exportutils.h"
 
 namespace Digikam
 {
 
 MPForm_GPhoto::MPForm_GPhoto()
-    : m_boundary(QByteArray("----------") + KIPIPlugins::KPRandomGenerator::randomString(42 + 13).toLatin1())
+    : m_boundary(QByteArray("----------") + ExportUtils::randomString(42 + 13).toLatin1())
 {
 }
 
@@ -63,7 +63,9 @@ void MPForm_GPhoto::finish()
     m_buffer.append(str);
 }
 
-bool MPForm_GPhoto::addPair(const QString& name, const QString& value, const QString& contentType)
+bool MPForm_GPhoto::addPair(const QString& name,
+                            const QString& value,
+                            const QString& contentType)
 {
     QByteArray str;
     QString content_length = QString::number(value.length());

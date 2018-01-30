@@ -32,16 +32,11 @@
 #include <QObject>
 #include <QPointer>
 
-// Libkipi includes
-
-#include <KIPI/Interface>
-
 // Local includes
 
 #include "gsitem.h"
-#include "authorize.h"
-
-using namespace KIPI;
+#include "gssession.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -65,7 +60,7 @@ public:
 
 public:
 
-    GPTalker(QWidget* const parent);
+    explicit GPTalker(QWidget* const parent);
     ~GPTalker();
 
     void listAlbums();
@@ -74,11 +69,18 @@ public:
 
     void createAlbum(const GSFolder& newAlbum);
 
-    bool addPhoto(const QString& photoPath, GSPhoto& info, const QString& albumId,
-                  bool rescale, int maxDim, int imageQuality);
+    bool addPhoto(const QString& photoPath,
+                  GSPhoto& info,
+                  const QString& albumId,
+                  bool rescale,
+                  int maxDim,
+                  int imageQuality);
 
-    bool updatePhoto(const QString& photoPath, GSPhoto& info/*, const QString& albumId*/,
-                     bool rescale, int maxDim, int imageQuality);
+    bool updatePhoto(const QString& photoPath,
+                     GSPhoto& info/*, const QString& albumId*/,
+                     bool rescale,
+                     int maxDim,
+                     int imageQuality);
 
     void getPhoto(const QString& imgPath);
 
@@ -127,8 +129,7 @@ private:
 
     State                       m_state;
 
-    Interface*                  m_iface;
-    QPointer<MetadataProcessor> m_meta;
+    DMetadata                   m_meta;
 };
 
 } // namespace Digikam

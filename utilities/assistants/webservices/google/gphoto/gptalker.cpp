@@ -48,17 +48,14 @@
 
 #include <klocalizedstring.h>
 
-// Libkipi includes
-
-#include <KIPI/PluginLoader>
-
 // Local includes
 
-#include "kputil.h"
-#include "kpversion.h"
+#include "exportutils.h"
+#include "digikam_version.h"
 #include "gswindow.h"
-#include "mpform_gphoto.h"
-#include "kipiplugins_debug.h"
+#include "gpmpform.h"
+#include "digikam_debug.h"
+#include "previewloadthread.h"
 
 namespace Digikam
 {
@@ -72,19 +69,8 @@ GPTalker::GPTalker(QWidget* const parent)
     : GSSession(parent, QString::fromLatin1("https://picasaweb.google.com/data/")),
       m_netMngr(0),
       m_reply(0),
-      m_state(FE_LOGOUT),
-      m_iface(0)
+      m_state(FE_LOGOUT)
 {
-    PluginLoader* const pl = PluginLoader::instance();
-
-    if (pl)
-    {
-        m_iface = pl->interface();
-
-        if (m_iface)
-            m_meta = m_iface->createMetadataProcessor();
-    }
-
     m_netMngr = new QNetworkAccessManager(this);
 
     connect(m_netMngr, SIGNAL(finished(QNetworkReply*)),
@@ -252,8 +238,12 @@ void GPTalker::createAlbum(const GSFolder& album)
     emit signalBusy(true);
 }
 
-bool GPTalker::addPhoto(const QString& photoPath, GSPhoto& info, const QString& albumId,
-                               bool rescale, int maxDim, int imageQuality)
+bool GPTalker::addPhoto(const QString& photoPath,
+                        GSPhoto& info,
+                        const QString& albumId,
+                        bool rescale,
+                        int maxDim,
+                        int imageQuality)
 {
    if (m_reply)
     {
@@ -269,12 +259,7 @@ bool GPTalker::addPhoto(const QString& photoPath, GSPhoto& info, const QString& 
 
     if (!mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("video/")))
     {
-        QImage image;
-
-        if (m_iface)
-        {
-            image = m_iface->preview(QUrl::fromLocalFile(photoPath));
-        }
+        QImage image = PreviewLoadThread::loadHighQualitySynchronously(photoPath).copyQImage();
 
         if (image.isNull())
         {
@@ -286,8 +271,10 @@ bool GPTalker::addPhoto(const QString& photoPath, GSPhoto& info, const QString& 
             return false;
         }
 
-        path                  = makeTemporaryDir("gs").filePath(QFileInfo(photoPath)
-                                                      .baseName().trimmed() + QLatin1String(".jpg"));
+        path                  = ExportUtils::makeTemporaryDir("google")
+                                             .filePath(QFileInfo(photoPath)
+                                             .baseName().trimmed() + 
+                                             QLatin1String(".jpg"));
         int imgQualityToApply = 100;
 
         if (rescale)
@@ -300,16 +287,17 @@ bool GPTalker::addPhoto(const QString& photoPath, GSPhoto& info, const QString& 
 
         image.save(path, "JPEG", imgQualityToApply);
 
-        if (m_meta && m_meta->load(QUrl::fromLocalFile(photoPath)))
+        if (m_meta.load(photoPath))
         {
-            m_meta->setImageDimensions(image.size());
-            m_meta->setImageOrientation(MetadataProcessor::NORMAL);
-            m_meta->setImageProgramId(QString::fromLatin1("Kipi-plugins"), kipipluginsVersion());
-            m_meta->save(QUrl::fromLocalFile(path), true);
+            m_meta.setImageDimensions(image.size());
+            m_meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+            m_meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+            m_meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+            m_meta.save(path);
         }
     }
 
-    //Create the Body in atom-xml
+    // Create the Body in atom-xml
 
     QDomDocument docMeta;
     QDomProcessingInstruction instr = docMeta.createProcessingInstruction(QString::fromLatin1("xml"), QString::fromLatin1("version='1.0' encoding='UTF-8'"));
@@ -397,12 +385,7 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
 
     if (!mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("video/")))
     {
-        QImage image;
-
-        if (m_iface)
-        {
-            image = m_iface->preview(QUrl::fromLocalFile(photoPath));
-        }
+        QImage image = PreviewLoadThread::loadHighQualitySynchronously(photoPath).copyQImage();
 
         if (image.isNull())
         {
@@ -414,8 +397,10 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
             return false;
         }
 
-        path                  = makeTemporaryDir("gs").filePath(QFileInfo(photoPath)
-                                                      .baseName().trimmed() + QLatin1String(".jpg"));
+        path                  = ExportUtils::makeTemporaryDir("google")
+                                             .filePath(QFileInfo(photoPath)
+                                             .baseName().trimmed() +
+                                             QLatin1String(".jpg"));
         int imgQualityToApply = 100;
 
         if (rescale)
@@ -426,14 +411,15 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
             imgQualityToApply = imageQuality;
         }
 
-        image.save(path,"JPEG",imgQualityToApply);
+        image.save(path, "JPEG", imgQualityToApply);
 
-        if (m_meta && m_meta->load(QUrl::fromLocalFile(photoPath)))
+        if (m_meta->load(photoPath))
         {
-            m_meta->setImageDimensions(image.size());
-            m_meta->setImageOrientation(MetadataProcessor::NORMAL);
-            m_meta->setImageProgramId(QString::fromLatin1("Kipi-plugins"), kipipluginsVersion());
-            m_meta->save(QUrl::fromLocalFile(path), true);
+            m_meta.setImageDimensions(image.size());
+            m_meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+            m_meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+            m_meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+            m_meta.save(path));
         }
     }
 

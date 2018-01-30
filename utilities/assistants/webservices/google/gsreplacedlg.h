@@ -37,6 +37,8 @@
 namespace Digikam
 {
 
+class LoadingDescription;
+
 enum ReplaceDialog_Result
 {
     PWR_CANCEL      = 0,
@@ -72,7 +74,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotFinished(QNetworkReply* reply);
-    void slotThumbnail(const QUrl&, const QPixmap&);
+    void slotThumbnail(const LoadingDescription&, const QPixmap&);
     void slotProgressTimerDone();
 
 private:

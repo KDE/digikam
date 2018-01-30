@@ -23,23 +23,17 @@
 #ifndef GD_TALKER_H
 #define GD_TALKER_H
 
-//Qt includes
+// Qt includes
 
 #include <QList>
 #include <QString>
 #include <QObject>
 #include <QStringList>
 
-// Libkipi includes
-
-#include <KIPI/Interface>
-
-//local includes
+// Local includes
 
 #include "gsitem.h"
-#include "authorize.h"
-
-using namespace KIPI;
+#include "gssession.h"
 
 namespace Digikam
 {
@@ -50,7 +44,7 @@ class GDTalker : public GSSession
 
 public:
 
-    GDTalker(QWidget* const parent);
+    explicit GDTalker(QWidget* const parent);
     ~GDTalker();
 
 Q_SIGNALS:
@@ -69,7 +63,12 @@ public:
     void getUserName();
     void listFolders();
     void createFolder(const QString& title, const QString& id);
-    bool addPhoto(const QString& imgPath, const GSPhoto& info, const QString& id, bool rescale, int maxDim, int imageQuality);
+    bool addPhoto(const QString& imgPath,
+                  const GSPhoto& info,
+                  const QString& id,
+                  bool rescale,
+                  int maxDim,
+                  int imageQuality);
     void cancel();
 
 private:
@@ -96,11 +95,10 @@ private:
     QString                m_rootfoldername;
     QString                m_username;
     State                  m_state;
-    Interface*             m_iface;
 
     QNetworkAccessManager* m_netMngr;
 };
 
 } // namespace Digikam
 
-#endif /* GD_TALKER_H */
+#endif // GD_TALKER_H

@@ -37,14 +37,14 @@
 
 // local includes
 
-#include "kipiplugins_debug.h"
-#include "kputil.h"
+#include "digikam_debug.h"
+#include "exportutils.h"
 
 namespace Digikam
 {
 
 MPForm_GDrive::MPForm_GDrive()
-    : m_boundary(KIPIPlugins::KPRandomGenerator::randomString(42 + 13).toLatin1())
+    : m_boundary(ExportUtils::randomString(42 + 13).toLatin1())
 {
     reset();
 }
@@ -74,7 +74,12 @@ void MPForm_GDrive::addPair(const QString& name, const QString& description, con
     QMimeDatabase db;
     QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(path));
     QString mime  = ptr.name();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "in add pair:" << name << " " << description << " " << path << " " << id << " " << mime;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "in add pair:"
+                                 << name << " "
+                                 << description
+                                 << " " << path
+                                 << " " << id
+                                 << " " << mime;
 
     // Generate JSON
     QJsonObject photoInfo;

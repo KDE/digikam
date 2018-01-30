@@ -151,15 +151,15 @@ set(libwsrajce_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcenewalbumdlg.cpp
 
 # Google tool ----------------------------------------------------------------
 
-set(libwsgoogle_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/google/gssession.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gsreplacedlg.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gsnewalbumdlg.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gswidget.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gswindow.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdmpform.cpp
+set(libwsgoogle_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdmpform.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdtalker.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gphoto/gpmpform.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gphoto/gptalker.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gssession.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gsreplacedlg.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gsnewalbumdlg.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gswindow.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gswidget.cpp
 )
 
 # MediaWiki tool ------------------------------------------------------------
@@ -185,5 +185,5 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsfacebook_SRCS}
                                    ${libwsrajce_SRCS}
                                    ${libwsmediawiki_SRCS}
-                                   ${libwsgoogle_SRCS}
+#                                   ${libwsgoogle_SRCS}
 )

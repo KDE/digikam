@@ -43,6 +43,7 @@
 
 #include "dworkingpixmap.h"
 #include "exportutils.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -53,18 +54,19 @@ public:
 
     Private()
     {
-        progressPix   = DWorkingPixmap();
-        bAdd          = 0;
-        bAddAll       = 0;
-        bReplace      = 0;
-        bReplaceAll   = 0;
-        iface         = 0;
-        lbSrc         = 0;
-        lbDest        = 0;
-        netMngr       = 0;
-        progressCount = 0;
-        progressTimer = 0;
-        result        = -1;
+        progressPix     = DWorkingPixmap();
+        bAdd            = 0;
+        bAddAll         = 0;
+        bReplace        = 0;
+        bReplaceAll     = 0;
+        iface           = 0;
+        lbSrc           = 0;
+        lbDest          = 0;
+        netMngr         = 0;
+        progressCount   = 0;
+        progressTimer   = 0;
+        result          = -1;
+        thumbLoadThread = ThumbnailLoadThread::defaultThread();
     }
 
     QPushButton*           bAdd;
@@ -80,6 +82,7 @@ public:
     QNetworkAccessManager* netMngr;
     QPixmap                mimePix;
     DWorkingPixmap         progressPix;
+    ThumbnailLoadThread*   thumbLoadThread;
     int                    progressCount;
     QTimer*                progressTimer;
     int                    result;
@@ -208,12 +211,12 @@ ReplaceDialog::ReplaceDialog(QWidget* const parent,
     d->progressTimer->start(300);
 
     // get source thumbnail
-    if (d->iface && d->src.isValid())
+    if (d->src.isValid())
     {
-        connect(d->iface, SIGNAL(gotThumbnail(QUrl, QPixmap)),
-                this, SLOT(slotThumbnail(QUrl, QPixmap)));
+        connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnail(LoadingDescription,QPixmap)));
 
-        d->iface->thumbnail(d->src, 48);
+        d->thumbLoadThread->find(ThumbnailIdentifier(d->src.toLocalFile()));
     }
 
     // get dest thumbnail
@@ -258,9 +261,9 @@ void ReplaceDialog::slotFinished(QNetworkReply* reply)
     reply->deleteLater();
 }
 
-void ReplaceDialog::slotThumbnail(const QUrl& url, const QPixmap& pix)
+void ReplaceDialog::slotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (url == d->src)
+    if (QUrl::fromLocalFile(desc.filePath) == d->src)
     {
         d->lbSrc->setPixmap(pix.scaled(200, 200, Qt::KeepAspectRatio, Qt::FastTransformation));
     }

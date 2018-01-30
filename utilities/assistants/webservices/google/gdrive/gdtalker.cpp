@@ -47,17 +47,15 @@
 #include <QStandardPaths>
 #include <QUrlQuery>
 
-// Libkipi includes
+// Local includes
 
-#include <KIPI/PluginLoader>
-
-// local includes
-
-#include "kputil.h"
-#include "kpversion.h"
+#include "exportutils.h"
+#include "digikam_version.h"
 #include "gswindow.h"
-#include "mpform_gdrive.h"
-#include "kipiplugins_debug.h"
+#include "gdmpform.h"
+#include "digikam_debug.h"
+#include "previewloadthread.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -187,12 +185,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
     if (!mimeDB.mimeTypeForFile(path).name().startsWith(QLatin1String("video/")))
     {
-        QImage image;
-
-        if (m_iface)
-        {
-            image = m_iface->preview(QUrl::fromLocalFile(imgPath));
-        }
+        QImage image = PreviewLoadThread::loadHighQualitySynchronously(imgPath).copyQImage();
 
         if (image.isNull())
         {
@@ -204,8 +197,10 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
             return false;
         }
 
-        path                  = makeTemporaryDir("gs").filePath(QFileInfo(imgPath)
-                                                      .baseName().trimmed() + QLatin1String(".jpg"));
+        path                  = ExportUtils::makeTemporaryDir("google")
+                                             .filePath(QFileInfo(imgPath)
+                                             .baseName().trimmed() +
+                                             QLatin1String(".jpg"));
         int imgQualityToApply = 100;
 
         if (rescale)
@@ -216,19 +211,17 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
             imgQualityToApply = imageQuality;
         }
 
-        image.save(path,"JPEG",imgQualityToApply);
+        image.save(path, "JPEG", imgQualityToApply);
 
-        if (m_iface)
+        DMetadata meta;
+
+        if (meta->load(imgPath))
         {
-            QPointer<MetadataProcessor> meta = m_iface->createMetadataProcessor();
-
-            if (meta && meta->load(QUrl::fromLocalFile(imgPath)))
-            {
-                meta->setImageDimensions(image.size());
-                meta->setImageOrientation(MetadataProcessor::NORMAL);
-                meta->setImageProgramId(QString::fromLatin1("Kipi-plugins"), kipipluginsVersion());
-                meta->save(QUrl::fromLocalFile(path), true);
-            }
+            meta.setImageDimensions(image.size());
+            meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+            meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+            meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+            meta.save(path);
         }
     }
 
