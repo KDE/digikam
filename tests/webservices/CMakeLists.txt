@@ -133,3 +133,31 @@ target_link_libraries(rajce
                       Qt5::Gui
                       Qt5::Xml
 )
+
+# =======================================================
+# Stand alone version of GDrive tool
+
+set(gdrive_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gdrive.cpp)
+add_executable(gdrive ${gdrive_SRCS})
+
+target_link_libraries(gdrive
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)
+
+# =======================================================
+# Stand alone version of GPhoto tool
+
+set(gphoto_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/gphoto.cpp)
+add_executable(gphoto ${gphoto_SRCS})
+
+target_link_libraries(gphoto
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)
