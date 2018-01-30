@@ -30,6 +30,7 @@
 // Local includes
 
 #include "settingswidget.h"
+#include "dinfointerface.h"
 
 class QLabel;
 class QSpinBox;
@@ -47,7 +48,9 @@ class DBWidget : public SettingsWidget
 
 public:
 
-    explicit DBWidget(QWidget* const parent, const QString& pluginName);
+    explicit DBWidget(QWidget* const parent,
+                      DInfoInterface* const iface,
+                      const QString& pluginName);
     ~DBWidget();
 
     void updateLabels(const QString& name = QString(), const QString& url = QString()) Q_DECL_OVERRIDE;

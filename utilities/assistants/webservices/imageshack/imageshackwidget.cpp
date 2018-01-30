@@ -57,7 +57,7 @@ ImageShackWidget::ImageShackWidget(QWidget* const parent,
                                    ImageShackSession* const session,
                                    DInfoInterface* const iface,
                                    const QString& pluginName)
-    : SettingsWidget(parent, pluginName),
+    : SettingsWidget(parent, iface, pluginName),
       m_session(session)
 {
     m_iface              = iface;
@@ -91,6 +91,7 @@ ImageShackWidget::ImageShackWidget(QWidget* const parent,
 
     addWidgetToSettingsBox(tagsBox);
 
+    getUploadBox()->hide();
     getSizeBox()->hide();
 
     updateLabels();

@@ -123,6 +123,7 @@ private:
 
     QList< QPair<QUrl, GSPhoto> > m_transferQueue;
 
+    DInfoInterface*               m_iface;
     DMetadata                     m_meta;
 };
 

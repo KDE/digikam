@@ -36,6 +36,7 @@
 #include "comboboxintermediate.h"
 #include "flickrlist.h"
 #include "settingswidget.h"
+#include "dinfointerface.h"
 
 class QGroupBox;
 class QPushButton;
@@ -55,7 +56,9 @@ class FlickrWidget : public SettingsWidget
 
 public:
 
-    explicit FlickrWidget(QWidget* const parent, const QString& serviceName);
+    explicit FlickrWidget(QWidget* const parent,
+                          DInfoInterface* const iface,
+                          const QString& serviceName);
     ~FlickrWidget();
 
     void updateLabels(const QString& name = QString(), const QString& url = QString()) Q_DECL_OVERRIDE;

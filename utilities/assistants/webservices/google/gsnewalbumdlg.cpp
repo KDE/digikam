@@ -45,9 +45,9 @@
 namespace Digikam
 {
 
-NewAlbumDlg::NewAlbumDlg(QWidget* const parent,
-                         const QString& serviceName,
-                         const QString& pluginName)
+GSNewAlbumDlg::GSNewAlbumDlg(QWidget* const parent,
+                             const QString& serviceName,
+                             const QString& pluginName)
     : NewAlbumDialog(parent, pluginName)
 {
     m_serviceName            = serviceName;
@@ -91,11 +91,11 @@ NewAlbumDlg::NewAlbumDlg(QWidget* const parent,
     }
 }
 
-NewAlbumDlg::~NewAlbumDlg()
+GSNewAlbumDlg::~GSNewAlbumDlg()
 {
 }
 
-void NewAlbumDlg::getAlbumProperties(GSFolder& album)
+void GSNewAlbumDlg::getAlbumProperties(GSFolder& album)
 {
     if (QString::compare(m_serviceName,
                          QString::fromLatin1("googledriveexport"),

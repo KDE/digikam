@@ -34,9 +34,12 @@
 namespace Digikam
 {
 
-DBWidget::DBWidget(QWidget* const parent, const QString& pluginName)
-    : SettingsWidget(parent, pluginName)
+DBWidget::DBWidget(QWidget* const parent,
+                   DInfoInterface* const iface,
+                   const QString& pluginName)
+    : SettingsWidget(parent, iface, pluginName)
 {
+    getUploadBox()->hide();
     getSizeBox()->hide();
 }
 

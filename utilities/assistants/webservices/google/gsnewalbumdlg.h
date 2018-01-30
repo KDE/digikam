@@ -42,16 +42,16 @@ namespace Digikam
 
 class GSFolder;
 
-class NewAlbumDlg : public NewAlbumDialog
+class GSNewAlbumDlg : public NewAlbumDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit NewAlbumDlg(QWidget* const parent,
+    explicit GSNewAlbumDlg(QWidget* const parent,
                          const QString& serviceName,
                          const QString& pluginName);
-    ~NewAlbumDlg();
+    ~GSNewAlbumDlg();
 
     void getAlbumProperties(GSFolder& album);
 

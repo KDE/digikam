@@ -50,8 +50,11 @@ class SettingsWidget::Private
 {
 public:
 
-    Private(QWidget* const widget, const QString& toolName)
+    Private(QWidget* const widget,
+            DInfoInterface* const iface,
+            const QString& toolName)
     {
+        m_iface              = iface;
         m_toolName           = toolName;
         mainLayout           = new QHBoxLayout(widget);
         m_imgList            = new DImagesList(widget);
@@ -71,6 +74,9 @@ public:
         m_sizeBox            = new QGroupBox(i18n("Max Dimension"), m_settingsBox);
         m_sizeBoxLayout      = new QVBoxLayout(m_sizeBox);
         m_dlDimensionCoB     = new QComboBox(m_sizeBox);
+        m_uploadBox          = new QGroupBox(i18n("Destination"), m_settingsBox);
+        m_uploadWidget       = m_iface->albumSelector(m_uploadBox);
+        m_uploadBoxLayout    = new QVBoxLayout(m_uploadBox);
         m_optionsBox         = new QGroupBox(i18n("Options"),m_settingsBox);
         m_optionsBoxLayout   = new QGridLayout(m_optionsBox);
         m_originalChB        = new QCheckBox(m_optionsBox);
@@ -78,10 +84,10 @@ public:
         m_dimensionSpB       = new QSpinBox(m_optionsBox);
         m_imageQualitySpB    = new QSpinBox(m_optionsBox);
         m_progressBar        = new DProgressWdg(m_settingsBox);
-
     }
 
     DImagesList*                   m_imgList;
+    QWidget*                       m_uploadWidget;
     QString                        m_toolName;
 
     QLabel*                        m_headerLbl;
@@ -110,18 +116,24 @@ public:
     QGroupBox*                     m_optionsBox;
     QGridLayout*                   m_optionsBoxLayout;
 
+    QGroupBox*                     m_uploadBox;
+    QVBoxLayout*                   m_uploadBoxLayout;
+
     QGroupBox*                     m_sizeBox;
     QVBoxLayout*                   m_sizeBoxLayout;
 
     QGroupBox*                     m_accountBox;
     QGridLayout*                   m_accountBoxLayout;
 
+    DInfoInterface*                m_iface;
     DProgressWdg*                  m_progressBar;
 };
 
-SettingsWidget::SettingsWidget(QWidget* const parent, const QString& toolName)
+SettingsWidget::SettingsWidget(QWidget* const parent,
+                               DInfoInterface* const iface,
+                               const QString& toolName)
     : QWidget(parent),
-      d(new Private(this, toolName))
+      d(new Private(this, iface, toolName))
 {
     setObjectName(d->m_toolName + QString::fromLatin1(" Widget"));
 
@@ -133,7 +145,7 @@ SettingsWidget::SettingsWidget(QWidget* const parent, const QString& toolName)
     d->m_imgList->setAllowRAW(true);
     d->m_imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to your %1 account.", d->m_toolName));
 
-    d->settingsScrollArea->setMinimumSize(400,500);
+    d->settingsScrollArea->setMinimumSize(400, 500);
     d->settingsScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     d->settingsScrollArea->setWidget(d->m_settingsBox);
     d->settingsScrollArea->setWidgetResizable(true);
@@ -191,6 +203,11 @@ SettingsWidget::SettingsWidget(QWidget* const parent, const QString& toolName)
     d->m_dlDimensionCoB->setCurrentIndex(0);
     d->m_sizeBoxLayout->addWidget(d->m_dlDimensionCoB);
 
+    // ------------------------------------------------------------------------
+
+    d->m_uploadBox->setWhatsThis(i18n("This is the location where %1 images will be downloaded.", d->m_toolName));
+    d->m_uploadBoxLayout->addWidget(d->m_uploadWidget);
+
     //-----------------------------------------------------------
 
     d->m_optionsBox->setWhatsThis(i18n("These are the options that would be applied to photos before upload."));
@@ -238,6 +255,7 @@ SettingsWidget::SettingsWidget(QWidget* const parent, const QString& toolName)
     d->m_settingsBoxLayout->addWidget(d->m_accountBox);
     d->m_settingsBoxLayout->addWidget(d->m_albBox);
     d->m_settingsBoxLayout->addWidget(d->m_sizeBox);
+    d->m_settingsBoxLayout->addWidget(d->m_uploadBox);
     d->m_settingsBoxLayout->addWidget(d->m_optionsBox);
     d->m_settingsBoxLayout->addWidget(d->m_progressBar);
     d->m_settingsBoxLayout->setSpacing(spacing);
@@ -262,6 +280,20 @@ SettingsWidget::SettingsWidget(QWidget* const parent, const QString& toolName)
 SettingsWidget::~SettingsWidget()
 {
     delete d;
+}
+
+QString SettingsWidget::getDestinationPath() const
+{
+    QString path;
+    int a = d->m_iface->albumSelectorItem();
+
+    if (a)
+    {
+        DAlbumInfo info(d->m_iface->albumInfo(a));
+        path = info.path();
+    }
+
+    return path;
 }
 
 DImagesList* SettingsWidget::imagesList() const
@@ -323,6 +355,16 @@ QGroupBox* SettingsWidget::getOptionsBox() const
 QGridLayout* SettingsWidget::getOptionsBoxLayout() const
 {
     return d->m_optionsBoxLayout;
+}
+
+QGroupBox* SettingsWidget::getUploadBox() const
+{
+    return d->m_uploadBox;
+}
+
+QVBoxLayout* SettingsWidget::getUploadBoxLayout() const
+{
+    return d->m_uploadBoxLayout;
 }
 
 QGroupBox* SettingsWidget::getSizeBox() const

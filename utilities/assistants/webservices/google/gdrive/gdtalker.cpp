@@ -70,19 +70,10 @@ GDTalker::GDTalker(QWidget* const parent)
 {
     m_rootid          = QString::fromLatin1("root");
     m_rootfoldername  = QString::fromLatin1("GoogleDrive Root");
-    m_iface           = 0;
-
     m_netMngr         = new QNetworkAccessManager(this);
 
     connect(m_netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
-
-    PluginLoader* const pl = PluginLoader::instance();
-
-    if (pl)
-    {
-        m_iface = pl->interface();
-    }
 }
 
 GDTalker::~GDTalker()
@@ -215,7 +206,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
         DMetadata meta;
 
-        if (meta->load(imgPath))
+        if (meta.load(imgPath))
         {
             meta.setImageDimensions(image.size());
             meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);

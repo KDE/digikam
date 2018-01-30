@@ -57,7 +57,7 @@ namespace Digikam
 {
 
 RajceWidget::RajceWidget(DInfoInterface* const iface, QWidget* const parent)
-    : SettingsWidget(parent, QString::fromLatin1("Rajce.net"))
+    : SettingsWidget(parent, iface, QString::fromLatin1("Rajce.net"))
 {
     m_iface             = iface;
     m_lastLoggedInState = false;
@@ -72,6 +72,7 @@ RajceWidget::RajceWidget(DInfoInterface* const iface, QWidget* const parent)
     m_imgList           = imagesList();
     m_changeUserBtn     = getChangeUserBtn();
 
+    getUploadBox()->hide();
     getSizeBox()->hide();
 
     updateLabels();

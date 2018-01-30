@@ -55,11 +55,14 @@ class DIGIKAM_EXPORT SettingsWidget : public QWidget
 
 public:
 
-    explicit SettingsWidget(QWidget* const parent, const QString& toolName);
+    explicit SettingsWidget(QWidget* const parent,
+                            DInfoInterface* const iface,
+                            const QString& toolName);
     ~SettingsWidget();
 
     virtual void updateLabels(const QString& name = QString(), const QString& url = QString()) = 0;
 
+    QString           getDestinationPath() const;
     DImagesList*      imagesList()  const;
     DProgressWdg*     progressBar() const;
     void              replaceImageList(QWidget* const widget);
@@ -73,6 +76,9 @@ public:
 
     QGroupBox*        getOptionsBox() const;
     QGridLayout*      getOptionsBoxLayout() const;
+
+    QGroupBox*        getUploadBox() const;
+    QVBoxLayout*      getUploadBoxLayout() const;
 
     QGroupBox*        getSizeBox() const;
     QVBoxLayout*      getSizeBoxLayout() const;

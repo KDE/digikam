@@ -56,6 +56,7 @@
 #include "gpmpform.h"
 #include "digikam_debug.h"
 #include "previewloadthread.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -287,13 +288,15 @@ bool GPTalker::addPhoto(const QString& photoPath,
 
         image.save(path, "JPEG", imgQualityToApply);
 
-        if (m_meta.load(photoPath))
+        DMetadata meta;
+
+        if (meta.load(photoPath))
         {
-            m_meta.setImageDimensions(image.size());
-            m_meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            m_meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
-            m_meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-            m_meta.save(path);
+            meta.setImageDimensions(image.size());
+            meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+            meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+            meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+            meta.save(path);
         }
     }
 
@@ -413,13 +416,15 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
 
         image.save(path, "JPEG", imgQualityToApply);
 
-        if (m_meta->load(photoPath))
+        DMetadata meta;
+
+        if (meta.load(photoPath))
         {
-            m_meta.setImageDimensions(image.size());
-            m_meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-            m_meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
-            m_meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-            m_meta.save(path));
+            meta.setImageDimensions(image.size());
+            meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+            meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+            meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+            meta.save(path);
         }
     }
 

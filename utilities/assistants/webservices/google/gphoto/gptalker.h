@@ -36,7 +36,6 @@
 
 #include "gsitem.h"
 #include "gssession.h"
-#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -128,8 +127,6 @@ private:
     QNetworkReply*              m_reply;
 
     State                       m_state;
-
-    DMetadata                   m_meta;
 };
 
 } // namespace Digikam

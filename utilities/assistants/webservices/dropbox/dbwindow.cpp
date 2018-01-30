@@ -49,13 +49,14 @@
 namespace Digikam
 {
 
-DBWindow::DBWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
+DBWindow::DBWindow(DInfoInterface* const iface,
+                   QWidget* const /*parent*/)
     : ToolDialog(0)
 {
     m_imagesCount = 0;
     m_imagesTotal = 0;
 
-    m_widget      = new DBWidget(this, QLatin1String("Dropbox"));
+    m_widget      = new DBWidget(this, iface, QLatin1String("Dropbox"));
     m_widget->imagesList()->setIface(iface);
 
     setMainWidget(m_widget);

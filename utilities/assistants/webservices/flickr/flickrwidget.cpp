@@ -49,8 +49,10 @@
 namespace Digikam
 {
 
-FlickrWidget::FlickrWidget(QWidget* const parent, const QString& serviceName)
-    : SettingsWidget(parent, serviceName)
+FlickrWidget::FlickrWidget(QWidget* const parent,
+                           DInfoInterface* const iface,
+                           const QString& serviceName)
+    : SettingsWidget(parent, iface, serviceName)
 {
     m_serviceName = serviceName;
 
@@ -226,10 +228,11 @@ FlickrWidget::FlickrWidget(QWidget* const parent, const QString& serviceName)
     addWidgetToSettingsBox(publicationBox);
     addWidgetToSettingsBox(tagsBox);
 
-    //hiding widgets not required.
+    // hiding widgets not required.
+    getUploadBox()->hide();
     getSizeBox()->hide();
 
-    //Removing KPImageLists inherited from KPSettingsWidget and replacing it with more specific FlickrList
+    // Removing KPImageLists inherited from KPSettingsWidget and replacing it with more specific FlickrList
     replaceImageList(m_imglst);
 
     updateLabels();

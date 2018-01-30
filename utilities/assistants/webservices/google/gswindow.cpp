@@ -67,12 +67,12 @@ GSWindow::GSWindow(DInfoInterface* const iface,
                    QWidget* const /*parent*/,
                    const QString& serviceName)
     : ToolDialog(0),
-      m_iface(iface),
       m_widget(0),
       m_albumDlg(0),
       m_gphoto_albumdlg(0),
       m_talker(0),
-      m_gphoto_talker(0)
+      m_gphoto_talker(0),
+      m_iface(iface)
 {
     m_serviceName = serviceName;
 
@@ -96,7 +96,7 @@ GSWindow::GSWindow(DInfoInterface* const iface,
     m_imagesCount = 0;
     m_imagesTotal = 0;
     m_renamingOpt = 0;
-    m_widget      = new GSWidget(this, iface(), m_name, m_pluginName);
+    m_widget      = new GSWidget(this, m_iface, m_name, m_pluginName);
 
     setMainWidget(m_widget);
     setModal(false);
@@ -113,7 +113,7 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 
             m_widget->setMinimumSize(700,500);
 
-            m_albumDlg = new NewAlbumDlg(this, m_serviceName, m_pluginName);
+            m_albumDlg = new GSNewAlbumDlg(this, m_serviceName, m_pluginName);
             m_talker   = new GDTalker(this);
 
             connect(m_talker,SIGNAL(signalBusy(bool)),
@@ -181,7 +181,7 @@ GSWindow::GSWindow(DInfoInterface* const iface,
                 m_widget->setMinimumSize(300, 400);
             }
 
-            m_gphoto_albumdlg = new NewAlbumDlg(this, m_serviceName, m_pluginName);
+            m_gphoto_albumdlg = new GSNewAlbumDlg(this, m_serviceName, m_pluginName);
             m_gphoto_talker   = new GPTalker(this);
 
             connect(m_gphoto_talker, SIGNAL(signalBusy(bool)),
@@ -433,21 +433,21 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
 
     for (QList<QUrl>::ConstIterator it = urlList.constBegin(); it != urlList.constEnd(); ++it)
     {
-        KPImageInfo info(*it);
+        DItemInfo info(m_iface->itemInfo((*it).toLocalFile()));
         GSPhoto temp;
         temp.title = info.name();
 
         // Google Photo doesn't support image titles. Include it in descriptions if needed.
-        QStringList descriptions = QStringList() << info.title() << info.description();
+        QStringList descriptions = QStringList() << info.title() << info.comment();
         descriptions.removeAll(QString::fromLatin1(""));
         temp.description         = descriptions.join(QString::fromLatin1("\n\n"));
 
         // check for existing items
         QString localId;
 
-        if (m_meta && m_meta->load(*it))
+        if (m_meta.load((*it).toLocalFile()))
         {
-            localId = m_meta->getXmpTagString(QLatin1String("Xmp.digiKam.picasawebGPhotoId"));
+            localId = m_meta.getXmpTagString("Xmp.digiKam.picasawebGPhotoId");
         }
 
         QList<GSPhoto>::const_iterator itPWP;
@@ -463,7 +463,7 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
             }
         }
 
-        //Tags from the database
+        // Tags from the database
         temp.gpsLat.setNum(info.latitude());
         temp.gpsLon.setNum(info.longitude());
 
@@ -681,11 +681,11 @@ void GSWindow::slotStartTransfer()
 
     typedef QPair<QUrl, GSPhoto> Pair;
 
-    for (int i=0 ;i < (m_widget->imagesList()->imageUrls().size()) ; i++)
+    for (int i = 0 ; i < (m_widget->imagesList()->imageUrls().size()) ; i++)
     {
-        KPImageInfo info(m_widget->imagesList()->imageUrls().value(i));
+        DItemInfo info(m_iface->itemInfo(m_widget->imagesList()->imageUrls().value(i).toLocalFile()));
         GSPhoto temp;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "in start transfer info " <<info.title() << info.description();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "in start transfer info " <<info.title() << info.comment();
 
         switch (m_name)
         {
@@ -697,7 +697,7 @@ void GSWindow::slotStartTransfer()
                 break;
         }
 
-        temp.description = info.description().section(QString::fromLatin1("\n"), 0, 0);
+        temp.description = info.comment().section(QString::fromLatin1("\n"), 0, 0);
         temp.gpsLat.setNum(info.latitude());
         temp.gpsLon.setNum(info.longitude());
         temp.tags        = info.tagsPath();
@@ -766,7 +766,7 @@ void GSWindow::uploadNextPhoto()
                         break;
                     default:
                     {
-                        ReplaceDialog dlg(this, QString::fromLatin1(""), iface(), pathComments.first, info.thumbURL);
+                        ReplaceDialog dlg(this, QString::fromLatin1(""), m_iface, pathComments.first, info.thumbURL);
                         dlg.exec();
 
                         switch (dlg.getResult())
@@ -942,21 +942,21 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
 
         if (errText.isEmpty())
         {
-            if (m_meta && m_meta->load(tmpUrl))
+            if (m_meta.load(tmpUrl.toLocalFile()))
             {
-                if (m_meta->supportXmp() && m_meta->canWriteXmp(tmpUrl))
+                if (m_meta.supportXmp() && m_meta.canWriteXmp(tmpUrl.toLocalFile()))
                 {
-                    m_meta->setXmpTagString(QLatin1String("Xmp.digiKam.picasawebGPhotoId"), item.id);
-                    m_meta->setXmpKeywords(item.tags);
+                    m_meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", item.id);
+                    m_meta.setXmpKeywords(item.tags);
                 }
-
 
                 if (!item.gpsLat.isEmpty() && !item.gpsLon.isEmpty())
                 {
-                    m_meta->setGPSInfo(0.0, item.gpsLat.toDouble(), item.gpsLon.toDouble());
+                    m_meta.setGPSInfo(0.0, item.gpsLat.toDouble(), item.gpsLon.toDouble());
                 }
 
-                m_meta->save(tmpUrl, true);
+                m_meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                m_meta.save(tmpUrl.toLocalFile());
             }
 
             m_transferQueue.pop_front();
@@ -1034,9 +1034,10 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
     }
     else
     {
-        KPImageInfo info(newUrl);
+/* FIXME
+        DItemInfo info(m_iface->itemInfo(newUrl));
         info.setName(item.title);
-        info.setDescription(item.description);
+        info.setComment(item.description);
         info.setTagsPath(item.tags);
 
         if (!item.gpsLat.isEmpty() && !item.gpsLon.isEmpty())
@@ -1044,6 +1045,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
             info.setLatitude(item.gpsLat.toDouble());
             info.setLongitude(item.gpsLon.toDouble());
         }
+*/
     }
 
     downloadNextPhoto();
@@ -1081,15 +1083,14 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
     {
         QUrl fileUrl = m_transferQueue.first().first;
 
-        if (m_meta                       &&
-            m_meta->supportXmp()         &&
-            m_meta->canWriteXmp(fileUrl) &&
-            m_meta->load(fileUrl)        &&
+        if (m_meta.supportXmp()                       &&
+            m_meta.canWriteXmp(fileUrl.toLocalFile()) &&
+            m_meta.load(fileUrl.toLocalFile())        &&
             !photoId.isEmpty()
            )
         {
-            m_meta->setXmpTagString(QLatin1String("Xmp.digiKam.picasawebGPhotoId"), photoId);
-            m_meta->save(fileUrl);
+            m_meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", photoId);
+            m_meta.save(fileUrl.toLocalFile());
         }
 
         // Remove photo uploaded from the list

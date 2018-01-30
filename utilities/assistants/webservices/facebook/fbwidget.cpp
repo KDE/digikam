@@ -45,10 +45,14 @@
 namespace Digikam
 {
 
-FbWidget::FbWidget(QWidget* const parent, DInfoInterface* const iface, const QString& pluginName)
-    : SettingsWidget(parent, pluginName)
+FbWidget::FbWidget(QWidget* const parent,
+                   DInfoInterface* const iface,
+                   const QString& pluginName)
+    : SettingsWidget(parent, iface, pluginName)
 {
     m_iface = iface;
+
+    getUploadBox()->hide();
     getSizeBox()->hide();
 
     connect(getReloadBtn(), SIGNAL(clicked()),
