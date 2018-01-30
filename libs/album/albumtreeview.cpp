@@ -234,6 +234,7 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(QWidget* const parent, Flags flags)
     }
 
     setSortingEnabled(true);
+    albumSettingsChanged();
 }
 
 AbstractAlbumTreeView::~AbstractAlbumTreeView()
