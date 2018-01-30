@@ -148,6 +148,20 @@ set(libwsrajce_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcenewalbumdlg.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcewindow.cpp
 )
 
+
+# Google tool ----------------------------------------------------------------
+
+set(libwsgoogle_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/google/authorize.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/replacedialog.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/newalbumdlg.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gswidget.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gswindow.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/mpform_gdrive.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdtalker.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gphoto/mpform_gphoto.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gphoto/gptalker.cpp
+)
+
 # MediaWiki tool ------------------------------------------------------------
 
 if(KF5MediaWiki_FOUND)
@@ -171,4 +185,5 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsfacebook_SRCS}
                                    ${libwsrajce_SRCS}
                                    ${libwsmediawiki_SRCS}
+#                                   ${libwsgoogle_SRCS}
 )
