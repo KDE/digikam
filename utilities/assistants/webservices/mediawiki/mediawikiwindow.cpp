@@ -86,10 +86,10 @@ public:
     QString         wikiName;
     QUrl            wikiUrl;
 
-    MediaWikiWidget*       widget;
-    MediaWiki*      mediawiki;
-    DInfoInterface* iface;
-    MediaWikiTalker*       uploadTalker;
+    MediaWikiWidget* widget;
+    MediaWiki*       mediawiki;
+    DInfoInterface*  iface;
+    MediaWikiTalker* uploadTalker;
 };
 
 MediaWikiWindow::MediaWikiWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
