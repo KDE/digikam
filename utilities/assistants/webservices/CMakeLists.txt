@@ -174,6 +174,14 @@ set(libwsyandexfotki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfalbum.cpp
                           ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki/yfwidget.cpp
 )
 
+# Piwigo tool -------------------------------------------------------------
+
+set(libwspiwigo_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/piwigo/piwigologindlg.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/piwigo/piwigotalker.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/piwigo/piwigosession.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/piwigo/piwigowindow.cpp
+)
+
 # MediaWiki tool ------------------------------------------------------------
 
 if(KF5MediaWiki_FOUND)
@@ -199,4 +207,5 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsmediawiki_SRCS}
                                    ${libwsgoogle_SRCS}
                                    ${libwsyandexfotki_SRCS}
+#                                   ${libwspiwigo_SRCS}
 )
