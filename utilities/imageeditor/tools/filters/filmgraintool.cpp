@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-26
- * Description : a digiKam image editor plugin for add film
+ * Description : a digiKam image editor tool for add film
  *               grain on an image.
  *
  * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>

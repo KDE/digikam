@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-05-25
- * Description : a digiKam image plugin to reduce
+ * Description : a digiKam image tool to reduce
  *               vignetting on an image.
  *
  * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-03-11
- * Description : a digiKam image editor plugin to correct
+ * Description : a digiKam image editor tool to correct
  *               image white balance
  *
  * Copyright (C) 2008-2009 by Guillaume Castagnino <casta at xwing dot info>

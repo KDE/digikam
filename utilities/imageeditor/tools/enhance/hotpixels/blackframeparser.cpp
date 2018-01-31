@@ -119,7 +119,7 @@ void BlackFrameParser::blackFrameParsing()
     // Now find the hot pixels and store them in a list
     QList<HotPixel> hpList;
 
-    // If you accidentally open a normal image for a black frame, the plugin and host application will
+    // If you accidentally open a normal image for a black frame, the tool and host application will
     // freeze due to heavy calculation.
     // We should stop at a certain amount of hot pixels, to avoid the freeze.
     // 1000 of total hot pixels should be good enough for a trigger. Images with such an amount of hot pixels should

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-03-26
- * Description : a digiKam image editor plugin to restore
+ * Description : a digiKam image editor tool to restore
  *               a photograph
  *
  * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>

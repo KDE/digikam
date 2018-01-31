@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-02-14
- * Description : a digiKam image plugin for to apply a color
+ * Description : a digiKam image tool for to apply a color
  *               effect to an image.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
