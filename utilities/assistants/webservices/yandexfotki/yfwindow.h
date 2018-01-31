@@ -6,9 +6,7 @@
  * Date        : 2010-11-15
  * Description : a tool to export items to YandexFotki web service
  *
- * Copyright (C) 2010 by Roman Tsisyk <roman at tsisyk dot com>
- *
- * GUI based on PicasaWeb KIPI Plugin
+ * Copyright (C) 2010      by Roman Tsisyk <roman at tsisyk dot com>
  * Copyright (C) 2005-2008 by Vardhman Jain <vardhman at gmail dot com>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Luka Renko <lure at kubuntu dot org>
@@ -61,7 +59,7 @@ class DIGIKAM_EXPORT YFWindow : public ToolDialog
 
 public:
 
-    explicit YFWindow(DInfoInterface* const iface, bool import, QWidget* const parent);
+    explicit YFWindow(DInfoInterface* const iface, QWidget* const parent, bool import = false);
     ~YFWindow();
 
     /**

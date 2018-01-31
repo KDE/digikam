@@ -225,6 +225,8 @@ private Q_SLOTS:
     void slotEditMetadata();
     void slotEditGeolocation();
 
+    void slotExportTool();
+
 private:
 
     class Private;

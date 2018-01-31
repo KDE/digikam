@@ -58,10 +58,9 @@
 namespace Digikam
 {
 
-FlickrWindow::FlickrWindow(QWidget* const /*parent*/,
-                           const QString& serviceName,
-                           SelectUserDlg* const dlg,
-                           DInfoInterface* const iface)
+FlickrWindow::FlickrWindow(DInfoInterface* const iface,
+                           QWidget* const /*parent*/,
+                           const QString& serviceName)
     : ToolDialog(0)
 {
     m_iface       = iface;
@@ -87,7 +86,9 @@ FlickrWindow::FlickrWindow(QWidget* const /*parent*/,
         grp.deleteGroup();
     }
 
-    m_select                    = dlg;
+    m_select                    = new SelectUserDlg(0, serviceName);
+    m_select->reactivate();
+
     m_uploadCount               = 0;
     m_uploadTotal               = 0;
     m_widget                    = new FlickrWidget(this, iface, serviceName);
@@ -196,6 +197,7 @@ FlickrWindow::FlickrWindow(QWidget* const /*parent*/,
 
 FlickrWindow::~FlickrWindow()
 {
+    delete m_select;
     delete m_authProgressDlg;
     delete m_talker;
     delete m_widget;

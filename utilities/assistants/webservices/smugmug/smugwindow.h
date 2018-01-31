@@ -52,7 +52,9 @@ class DIGIKAM_EXPORT SmugWindow : public ToolDialog
 
 public:
 
-    explicit SmugWindow(DInfoInterface* const iface, bool import, QWidget* const parent);
+    explicit SmugWindow(DInfoInterface* const iface,
+                        QWidget* const parent,
+                        bool import=false);
     ~SmugWindow();
 
     /**

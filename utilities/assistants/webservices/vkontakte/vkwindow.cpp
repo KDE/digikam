@@ -65,8 +65,8 @@ namespace Digikam
 {
 
 VKWindow::VKWindow(DInfoInterface* const iface,
-                   bool import,
-                   QWidget* const parent)
+                   QWidget* const parent,
+                   bool import)
     : ToolDialog(parent)
 {
     m_iface     = iface;

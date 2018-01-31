@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    SmugWindow dlg(new DMetaInfoIface(&app, urlList), false, 0);
+    SmugWindow dlg(new DMetaInfoIface(&app, urlList), 0);
     dlg.exec();
 
     MetaEngine::cleanupExiv2();

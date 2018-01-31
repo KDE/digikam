@@ -61,7 +61,9 @@
 namespace Digikam
 {
 
-SmugWindow::SmugWindow(DInfoInterface* const iface, bool import, QWidget* const /*parent*/)
+SmugWindow::SmugWindow(DInfoInterface* const iface,
+                       QWidget* const /*parent*/,
+                       bool import)
     : ToolDialog(0)
 {
     m_tmpPath.clear();

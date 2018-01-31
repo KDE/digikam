@@ -56,8 +56,8 @@ class DIGIKAM_EXPORT VKWindow : public ToolDialog
 public:
 
     explicit VKWindow(DInfoInterface* const iface,
-                             bool import,
-                             QWidget* const parent);
+                             QWidget* const parent,
+                             bool import = false);
     ~VKWindow();
 
     /**

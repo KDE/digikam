@@ -541,17 +541,14 @@ QWidget* DBInfoIface::albumSelector(QWidget* const parent) const
         d->albumSelector = new AlbumSelectWidget(parent);
     }
 
-    connect(d->albumSelector, SIGNAL(itemSelectionChanged()),
-            this, SLOT(slotSelectionChanged()));
-
     return d->albumSelector;
 }
 
 int DBInfoIface::albumSelectorItem() const
 {
-    int ret = 0;
+    int ret = -1;
 
-    if (!d->albumSelector)
+    if (d->albumSelector)
     {
         QString ext                = ApplicationSettings::instance()->getAllFileFilter();
         PAlbum* const currentAlbum = d->albumSelector->currentAlbum();

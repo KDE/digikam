@@ -64,10 +64,9 @@ class DIGIKAM_EXPORT FlickrWindow : public ToolDialog
 
 public:
 
-    explicit FlickrWindow(QWidget* const parent,
-                          const QString& serviceName,
-                          SelectUserDlg* const dlg,
-                          DInfoInterface* const iface);
+    explicit FlickrWindow(DInfoInterface* const iface,
+                          QWidget* const parent,
+                          const QString& serviceName = QLatin1String("Flickr"));
     ~FlickrWindow();
 
     /**

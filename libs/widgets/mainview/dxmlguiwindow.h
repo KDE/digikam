@@ -148,7 +148,7 @@ public:
     /** Create Media Server action to share through DLNA.
      */
     void createMediaServerAction();
-    
+
     /** Create Ksane action to import from scanner.
      */
     void createKSaneAction();
@@ -156,6 +156,10 @@ public:
     /** Create common actions to setup all digiKam main windows.
      */
     void createSettingsActions();
+
+    /** Create common actions from Export menu for all digiKam main windows.
+     */
+    void createExportActions();
 
     /** Create common actions from Help menu for all digiKam main windows.
      */
@@ -203,6 +207,8 @@ public:
 
 protected:
 
+    DLogoAction* m_animLogo;
+
     QAction*     m_metadataEditAction;
     QAction*     m_geolocationEditAction;
     QAction*     m_presentationAction;
@@ -214,10 +220,30 @@ protected:
     QAction*     m_panoramaAction;
     QAction*     m_videoslideshowAction;
     QAction*     m_mediaServerAction;
-    DLogoAction* m_animLogo;
 
 #ifdef HAVE_KSANE
     KSaneAction* m_ksaneAction;
+#endif
+
+    // WebServices tools
+    QAction*     m_exportDropboxAction;
+    QAction*     m_exportFacebookAction;
+    QAction*     m_exportFlickrAction;
+    QAction*     m_exportGdriveAction;
+    QAction*     m_exportGphotoAction;
+    QAction*     m_exportImageshackAction;
+    QAction*     m_exportImgurAction;
+    QAction*     m_exportPiwigoAction;
+    QAction*     m_exportRajceAction;
+    QAction*     m_exportSmugmugAction;
+    QAction*     m_exportYandexfotkiAction;
+
+#ifdef HAVE_MEDIAWIKI
+    QAction*     m_exportMediawikiAction;
+#endif
+
+#ifdef HAVE_VKONTAKTE
+    QAction*     m_exportVkontakteAction;
 #endif
 
 protected:
@@ -320,7 +346,10 @@ private Q_SLOTS:
 
     // Called by Media Server tool.
     virtual void slotMediaServer()             {};
-    
+
+    // Called by Export tools.
+    virtual void slotExportTool()              {};
+
 private:
 
     /** Used by slotToggleFullScreen() to switch tool-bar visibility in managed window

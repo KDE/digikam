@@ -32,7 +32,6 @@
 
 #include "metaengine.h"
 #include "dmetainfoiface.h"
-#include "selectuserdlg.h"
 #include "flickrwindow.h"
 
 using namespace Digikam;
@@ -51,15 +50,7 @@ int main(int argc, char* argv[])
     QList<QUrl> urlList;
     const QStringList args = parser.positionalArguments();
 
-    for (auto& arg : args)
-    {
-        urlList.append(QUrl::fromLocalFile(arg));
-    }
-
-    SelectUserDlg selDlg(0, QString::fromLatin1("Flickr"));
-    selDlg.reactivate();
-
-    FlickrWindow dlg(0, QString::fromLatin1("Flickr"), &selDlg, new DMetaInfoIface(&app, urlList));
+    FlickrWindow dlg(new DMetaInfoIface(&app, urlList), 0);
     dlg.exec();
 
     MetaEngine::cleanupExiv2();
