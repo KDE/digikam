@@ -175,3 +175,17 @@ target_link_libraries(yandexfotki
                       Qt5::Gui
                       Qt5::Xml
 )
+
+# =======================================================
+# Stand alone version of Piwigo tool
+
+set(piwigo_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/piwigo.cpp)
+add_executable(piwigo ${piwigo_SRCS})
+
+target_link_libraries(piwigo
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)
