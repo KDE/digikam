@@ -55,7 +55,6 @@ set(CMAKE_MIN_VERSION     "3.0.0")
 set(ECM_MIN_VERSION       "1.7.0")
 set(KF5_MIN_VERSION       "5.1.0")
 set(QT_MIN_VERSION        "5.6.0")
-set(KIPI_MIN_VERSION      "5.0.0")
 set(KSANE_MIN_VERSION     "5.0.0")
 set(LENSFUN_MIN_VERSION   "0.2.6.0")
 set(EXIV2_MIN_VERSION     "0.26")
@@ -266,7 +265,6 @@ find_package(BISON)                                # For Panorama tool.
 find_package(LibXslt)                              # For HTMLGallery tool.
 find_package(LibXml2)                              # For HTMLGallery tool.
 
-DETECT_LIBKIPI(${KIPI_MIN_VERSION})                # For plugins support.
 DETECT_LIBKSANE(${KSANE_MIN_VERSION})              # For digital scanner device support.
 DETECT_LIBMEDIAWIKI(${KF5_MIN_VERSION})            # For Mediawiki webservice support.
 DETECT_LIBKVKONTAKTE(${VKONTAKTE_MIN_VERSION})     # For VKontakte webservice support.
@@ -381,7 +379,6 @@ endif()
 
 # -- compilation options definitions -------------------------------------------
 
-MACRO_BOOL_TO_01(KF5Kipi_FOUND           HAVE_KIPI)
 MACRO_BOOL_TO_01(KF5Sane_FOUND           HAVE_KSANE)
 MACRO_BOOL_TO_01(KF5FileMetaData_FOUND   HAVE_KFILEMETADATA)
 MACRO_BOOL_TO_01(KF5AkonadiContact_FOUND HAVE_AKONADICONTACT)
@@ -458,7 +455,6 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libkvkontakte"     "https://projects.kde.org/proj
 PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/projects/kde/kdelibs/baloo"             "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE file metadata support."                 KF5FileMetaData_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkiconthemes"    "https://projects.kde.org/projects/frameworks/kiconthemes"        "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE desktop icon themes support."           KF5IconThemes_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkio"            "https://projects.kde.org/projects/frameworks/kio"                "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE desktop integration support."           KF5KIO_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"           "https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi"  "(version >= ${KIPI_MIN_VERSION})"      "digiKam will be compiled without Kipi-plugins support."                      KF5Kipi_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libknotifications" "https://projects.kde.org/projects/frameworks/knotifications"     "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE desktop notifications support."         KF5Notifications_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libknotifyconfig"  "https://projects.kde.org/projects/frameworks/knotifyconfig"      "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE desktop notify configuration support."  KF5NotifyConfig_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libksane"          "https://projects.kde.org/projects/kde/kdegraphics/libs/libksane" "(version >= ${KSANE_MIN_VERSION})"     "digiKam will be compiled without libksane support."                          KF5Sane_FOUND)

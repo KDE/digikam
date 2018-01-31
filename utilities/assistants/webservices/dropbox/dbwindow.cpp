@@ -278,7 +278,7 @@ void DBWindow::slotStartTransfer()
     m_widget->progressBar()->show();
     m_widget->progressBar()->progressScheduled(i18n("Dropbox export"), true, true);
     m_widget->progressBar()->progressThumbnailChanged(
-        QIcon(QLatin1String(":/icons/kipi-icon.svg")).pixmap(22, 22));
+        QIcon(QLatin1String("dropbox")).pixmap(22, 22));
 
     uploadNextPhoto();
 }

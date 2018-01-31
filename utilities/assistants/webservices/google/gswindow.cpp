@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-11-18
- * Description : a kipi plugin to export images to Google web service
+ * Description : a tool to export items to Google web services
  *
  * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
  * Copyright (C) 2015      by Shourya Singh Gupta <shouryasgupta at gmail dot com>
@@ -105,7 +105,7 @@ GSWindow::GSWindow(DInfoInterface* const iface,
     {
         case PluginName::GDrive:
 
-            setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-googledrive")));
+            setWindowIcon(QIcon::fromTheme(QString::fromLatin1("googledrive")));
             setWindowTitle(i18n("Export to Google Drive"));
 
             startButton()->setText(i18n("Start Upload"));
@@ -160,7 +160,7 @@ GSWindow::GSWindow(DInfoInterface* const iface,
         case PluginName::GPhotoImport:
         case PluginName::GPhotoExport:
 
-            setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-googlephoto")));
+            setWindowIcon(QIcon::fromTheme(QString::fromLatin1("googlephoto")));
 
             if (m_name == PluginName::GPhotoExport)
             {
@@ -484,7 +484,7 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
     m_widget->progressBar()->show();
     m_widget->progressBar()->progressScheduled(i18n("Google Photo Export"), true, true);
     m_widget->progressBar()->progressThumbnailChanged(QIcon(
-        (QLatin1String(":/icons/kipi-icon.svg"))).pixmap(22, 22));
+        (QLatin1String("googlephoto"))).pixmap(22, 22));
 
     m_renamingOpt = 0;
 
@@ -714,7 +714,7 @@ void GSWindow::slotStartTransfer()
     m_widget->progressBar()->setValue(0);
     m_widget->progressBar()->show();
     m_widget->progressBar()->progressScheduled(i18n("Google Drive export"), true, true);
-    m_widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String(":/icons/kipi-icon.svg")).pixmap(22, 22));
+    m_widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("googledrive")).pixmap(22, 22));
 
     uploadNextPhoto();
 }

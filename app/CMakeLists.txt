@@ -411,13 +411,6 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:advancedrename_src>
 )
 
-if(KF5Kipi_FOUND)
-    set(DIGIKAM_OBJECTS
-        ${DIGIKAM_OBJECTS}
-        $<TARGET_OBJECTS:kipiiface_src>
-    )
-endif()
-
 if(${Marble_FOUND})
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}

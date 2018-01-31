@@ -130,8 +130,6 @@ void MigrateFromDigikam4Page::doMigration()
     QStringList configFiles;
     configFiles << QLatin1String("digikamrc")
                 << QLatin1String("digikam_tagsmanagerrc")
-                << QLatin1String("kipipluginsrc")
-                << QLatin1String("kipirc")
                 << QLatin1String("showfotorc");
     migrator.setConfigFiles(configFiles);
     migrator.migrate();

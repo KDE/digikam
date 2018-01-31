@@ -41,13 +41,6 @@
 #include "dbstatdlg.h"
 #include "libopencv.h"
 
-// Libkipi includes
-
-#ifdef HAVE_KIPI
-#    include <KIPI/Interface>
-#    include <KIPI/PluginLoader>
-#endif // HAVE_KIPI
-
 // LibGphoto2 includes
 
 #ifdef HAVE_GPHOTO2
@@ -103,13 +96,6 @@ void showDigikamComponentsInfo()
 #else
     list.insert(i18n("DBus support"), i18n("no"));
 #endif /* HAVE_DBUS */
-
-#ifdef HAVE_KIPI
-    list.insert(i18n("LibKipi"),      KIPI::Interface::version());
-    list.insert(i18n("Kipi-Plugins"), KIPI::PluginLoader::instance()->kipiPluginsVersion());
-#else
-    list.insert(i18n("LibKipi support"), i18n("no"));
-#endif /* HAVE_KIPI */
 
 #ifdef HAVE_PANORAMA
     list.insert(i18n("Panorama support"), i18n("yes"));

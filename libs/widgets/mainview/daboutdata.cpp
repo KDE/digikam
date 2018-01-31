@@ -214,7 +214,7 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                         );
 
     aboutData.addCredit ( ki18n("Victor Dodon").toString(),
-                          ki18n("XML based GUI port of Libkipi").toString(),
+                          ki18n("XML based GUI port of tools").toString(),
                           QLatin1String("dodonvictor at gmail dot com"),
                           QLatin1String("https://plus.google.com/u/0/107198225472060439855")
                         );

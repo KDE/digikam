@@ -1151,4 +1151,34 @@ void DXmlGuiWindow::createImportActions()
             this, SLOT(slotImportTool()));
 }
 
+QList<QAction*> DXmlGuiWindow::exportActions() const
+{
+    return QList<QAction*>() << m_exportDropboxAction
+                             << m_exportFacebookAction
+                             << m_exportFlickrAction
+                             << m_exportGdriveAction
+                             << m_exportGphotoAction
+                             << m_exportImageshackAction
+                             << m_exportImgurAction
+                             << m_exportPiwigoAction
+                             << m_exportRajceAction
+                             << m_exportSmugmugAction
+                             << m_exportYandexfotkiAction
+#ifdef HAVE_MEDIAWIKI
+                             << m_exportMediawikiAction
+#endif
+
+#ifdef HAVE_VKONTAKTE
+                             << m_exportVkontakteAction
+#endif
+                             ;
+}
+
+QList<QAction*> DXmlGuiWindow::importActions() const
+{
+    return QList<QAction*>() << m_importGphotoAction
+                             << m_importSmugmugAction
+                             ;
+}
+
 } // namespace Digikam

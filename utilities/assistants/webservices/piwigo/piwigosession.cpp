@@ -96,8 +96,6 @@ void PiwigoSession::load()
     KConfig config;
     KConfigGroup group = config.group("Piwigo Settings");
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Reading data from kipirc file..";
-
     m_url      = group.readEntry("URL",      QString());
     m_username = group.readEntry("Username", QString());
     m_password = group.readEntry("Password", QString());
@@ -107,8 +105,6 @@ void PiwigoSession::save()
 {
     KConfig config;
     KConfigGroup group = config.group("Piwigo Settings");
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Saving data to kipirc file..";
 
     group.writeEntry(QString::fromUtf8("URL"),      url());
     group.writeEntry(QString::fromUtf8("Username"), username());

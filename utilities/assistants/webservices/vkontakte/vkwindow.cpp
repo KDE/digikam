@@ -123,7 +123,7 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     optionsBox->setWhatsThis(i18n("These are options that will be applied to images before upload."));
 #endif
 
-//     m_checkKeepOriginal = new QCheckBox(i18n("Save in high resolution"), m_settingsBox); // store state in kipirc
+//     m_checkKeepOriginal = new QCheckBox(i18n("Save in high resolution"), m_settingsBox); // store state in rc file
 
 //     QVBoxLayout* const optionsBoxLayout = new QVBoxLayout(optionsBox);
 //     optionsBoxLayout->addWidget(m_checkKeepOriginal);
@@ -151,7 +151,7 @@ VKWindow::VKWindow(DInfoInterface* const iface,
 //     mainLayout->setMargin(0);
 
     setMainWidget(m_mainWidget);
-    setWindowIcon(QIcon(QLatin1String(":/icons/kipi-icon.svg")));
+    setWindowIcon(QIcon(QLatin1String("preferences-web-browser-shortcuts")));
     setModal(false);
 
     if (!m_import)
@@ -255,7 +255,7 @@ void VKWindow::updateBusyStatusReady()
 
 void VKWindow::readSettings()
 {
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
     KConfigGroup grp = config.group("VKontakte Settings");
 
     m_appId         = grp.readEntry("VkAppId", "2446321");
@@ -267,7 +267,7 @@ void VKWindow::readSettings()
 
 void VKWindow::writeSettings()
 {
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
     KConfigGroup grp = config.group("VKontakte Settings");
 
     grp.writeEntry("VkAppId", m_appId);
@@ -372,7 +372,7 @@ void VKWindow::slotStartTransfer()
 
     m_progressBar->show();
     m_progressBar->progressScheduled(i18n("Vkontakte Export"), false, true);
-    m_progressBar->progressThumbnailChanged(QIcon(QLatin1String(":/icons/kipi-icon.svg")).pixmap(22, 22));
+    m_progressBar->progressThumbnailChanged(QIcon(QLatin1String("preferences-web-browser-shortcuts")).pixmap(22, 22));
 }
 
 void VKWindow::slotPhotoUploadDone(KJob* kjob)

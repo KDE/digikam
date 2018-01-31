@@ -75,7 +75,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
     m_widget      = new SmugWidget(this, iface, import);
 
     setMainWidget(m_widget);
-    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-smugmug")));
+    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("smugmug")));
     setModal(false);
 
     if (import)
@@ -648,9 +648,9 @@ void SmugWindow::slotStartTransfer()
         m_widget->progressBar()->setFormat(i18n("%v / %m"));
         m_widget->progressBar()->setMaximum(0);
         m_widget->progressBar()->setValue(0);
-        m_widget->progressBar()->progressScheduled(i18n("Smug Import"), true, true);
+        m_widget->progressBar()->progressScheduled(i18n("SmugMug Import"), true, true);
         m_widget->progressBar()->progressThumbnailChanged(
-            QIcon(QLatin1String(":/icons/kipi-icon.svg")).pixmap(22, 22));
+            QIcon(QLatin1String("smugmug")).pixmap(22, 22));
         setUiInProgressState(true);
 
         // list photos of the album, then start download
@@ -681,8 +681,8 @@ void SmugWindow::slotStartTransfer()
         m_widget->progressBar()->setFormat(i18n("%v / %m"));
         m_widget->progressBar()->setMaximum(m_imagesTotal);
         m_widget->progressBar()->setValue(0);
-        m_widget->progressBar()->progressScheduled(i18n("Smug Export"), true, true);
-        m_widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String(":/icons/kipi-icon.svg")).pixmap(22, 22));
+        m_widget->progressBar()->progressScheduled(i18n("SmugMug Export"), true, true);
+        m_widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("smugmug")).pixmap(22, 22));
         setUiInProgressState(true);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "m_currentAlbumID" << m_currentAlbumID;

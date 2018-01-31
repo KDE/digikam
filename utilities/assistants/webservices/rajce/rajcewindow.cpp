@@ -47,7 +47,7 @@ RajceWindow::RajceWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     m_widget->readSettings();
 
     setMainWidget(m_widget);
-    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-rajce")));
+    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("rajce")));
     setModal(false);
 
     setWindowTitle(i18n("Export to Rajce.net"));

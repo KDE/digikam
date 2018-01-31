@@ -1,10 +1,10 @@
 /* ============================================================
  *
  * This file is a part of digiKam project
- * http://www.kipi-plugins.org
+ * http://www.digikam.org
  *
  * Date        : 2010-02-04
- * Description : a tool to export images to imgur.com
+ * Description : a tool to export images to Imgur web service
  *
  * Copyright (C) 2010-2012 by Marius Orcsik <marius at habarnam dot ro>
  *

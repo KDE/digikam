@@ -70,11 +70,11 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
 
     if (serviceName == QLatin1String("23"))
     {
-        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-hq")));
+        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("hq")));
     }
     else
     {
-        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-flickr")));
+        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("flickr")));
     }
 
     KConfig config;
@@ -716,7 +716,7 @@ void FlickrWindow::slotAddPhotoNext()
     {
         setUiInProgressState(true);
         m_widget->progressBar()->progressScheduled(i18n("Flickr Export"), true, true);
-        m_widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String(":/icons/kipi-icon.svg")).pixmap(22, 22));
+        m_widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("flickr")).pixmap(22, 22));
     }
 }
 

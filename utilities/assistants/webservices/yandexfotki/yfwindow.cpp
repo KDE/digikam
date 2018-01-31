@@ -68,7 +68,7 @@ namespace Digikam
 /*
  * This tag added to our images after uploading to Fotki web service
  */
-const char* YFWindow::XMP_SERVICE_ID = "Xmp.kipi.yandexGPhotoId";
+const char* YFWindow::XMP_SERVICE_ID = "Xmp.digiKam.yandexGPhotoId";
 
 YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool import)
     : ToolDialog(parent)

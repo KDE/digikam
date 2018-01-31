@@ -105,6 +105,14 @@ public:
     void setConfigGroupName(const QString& name);
     QString configGroupName() const;
 
+    /** List of Webservices export actions
+     */
+    QList<QAction*> exportActions() const;
+
+    /** List of Webservices export actions
+     */
+    QList<QAction*> importActions() const;
+
     /** Create Geolocation Edit tool action.
      */
     void createGeolocationEditAction();

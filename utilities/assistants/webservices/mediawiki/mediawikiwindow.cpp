@@ -105,7 +105,7 @@ MediaWikiWindow::MediaWikiWindow(DInfoInterface* const iface, QWidget* const /*p
     d->iface        = iface;
 
     setMainWidget(d->widget);
-    setWindowIcon(QIcon::fromTheme(QLatin1String("kipi-wikimedia")));
+    setWindowIcon(QIcon::fromTheme(QLatin1String("mediawiki")));
     setModal(false);
     setWindowTitle(i18n("Export to MediaWiki"));
 
@@ -166,7 +166,7 @@ void MediaWikiWindow::reactivate()
 
 void MediaWikiWindow::readSettings()
 {
-    KConfig config(QLatin1String("kipirc"));
+    KConfig config;
     KConfigGroup group = config.group(QLatin1String("MediaWiki export settings"));
 
     d->widget->readSettings(group);
@@ -179,7 +179,7 @@ void MediaWikiWindow::readSettings()
 
 void MediaWikiWindow::saveSettings()
 {
-    KConfig config(QLatin1String("kipirc"));
+    KConfig config;
     KConfigGroup group = config.group(QLatin1String("MediaWiki export settings"));
 
     d->widget->saveSettings(group);
@@ -318,7 +318,7 @@ void MediaWikiWindow::slotStartTransfer()
 
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("MediaWiki export"), true, true);
-    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String(":/icons/kipi-icon.svg")).pixmap(22, 22));
+    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("mediawiki")).pixmap(22, 22));
     d->uploadTalker->begin();
 }
 

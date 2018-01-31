@@ -163,10 +163,6 @@
 #   include "vidslidewizard.h"
 #endif
 
-#ifdef HAVE_KIPI
-#   include "kipipluginloader.h"
-#endif
-
 #ifdef HAVE_KFILEMETADATA
 #   include "baloowrap.h"
 #endif
@@ -2574,12 +2570,7 @@ void DigikamApp::slotSetupChanged()
 
 void DigikamApp::slotEditKeys()
 {
-#ifdef HAVE_KIPI
-    editKeyboardShortcuts(KipiPluginLoader::instance()->pluginsActionCollection(),
-                          i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
-#else
     editKeyboardShortcuts();
-#endif /* HAVE_KIPI */
 }
 
 void DigikamApp::slotShowKipiHelp()
@@ -2594,11 +2585,6 @@ void DigikamApp::slotDBStat()
 
 void DigikamApp::loadPlugins()
 {
-#ifdef HAVE_KIPI
-    // Load KIPI plugins
-    new KipiPluginLoader(this, d->splashScreen);
-#endif /* HAVE_KIPI */
-
     // Setting the initial menu options after all plugins have been loaded
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
 
@@ -3452,31 +3438,19 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(m_geolocationEditAction,       postCategory);
 #endif
 
-    QString importCategory           = i18nc("@title Import Tools",          "Import");
-
-#ifdef HAVE_KIPI
-    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ToolsPlugin))
-    {
-        actionModel->addAction(ac,                        postCategory);
-    }
-
-    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ImagesPlugin))
-    {
-        actionModel->addAction(ac,                        postCategory);
-    }
-
     QString exportCategory           = i18nc("@title Export Tools",          "Export");
 
-    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ExportPlugin))
+    foreach(QAction* const ac, exportActions())
     {
         actionModel->addAction(ac,                        exportCategory);
     }
 
-    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ImportPlugin))
+    QString importCategory           = i18nc("@title Import Tools",          "Import");
+
+    foreach(QAction* const ac, importActions())
     {
         actionModel->addAction(ac,                        importCategory);
     }
-#endif
 
 #ifdef HAVE_KSANE
     actionModel->addAction(m_ksaneAction,                 importCategory);

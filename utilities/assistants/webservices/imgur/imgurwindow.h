@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-02-12
- * Description : a tool to export images to imgur.com
+ * Description : a tool to export images to Imgur web service
  *
  * Copyright (C) 2010-2012 by Marius Orcsik <marius at habarnam dot ro>
  *

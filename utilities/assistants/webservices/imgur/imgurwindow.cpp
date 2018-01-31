@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2016-06-06
- * Description : a tool to export images to imgur.com
+ * Description : a tool to export images to Imgur web service
  *
  * Copyright (C) 2010-2012 by Marius Orcsik <marius at habarnam dot ro>
  * Copyright (C) 2016 by Fabian Vogt <fabian at ritter dash vogt dot de>
@@ -129,7 +129,7 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     connect(this, &ImgurWindow::cancelClicked,
             this, &ImgurWindow::slotCancel);
 
-    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-imgur")));
+    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("imgur")));
     setWindowTitle(i18n("Export to imgur.com"));
     setModal(false);
 

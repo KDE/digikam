@@ -62,11 +62,11 @@ SelectUserDlg::SelectUserDlg(QWidget* const parent, const QString& serviceName)
 
     if (m_serviceName == QString::fromLatin1("23"))
     {
-        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-hq")));
+        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("hq")));
     }
     else
     {
-        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("kipi-flickr")));
+        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("flickr")));
     }
 
     m_uname = QString();
