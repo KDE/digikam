@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-02-17
- * Description : a plugin to change image perspective .
+ * Description : a tool to change image perspective .
  *
  * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

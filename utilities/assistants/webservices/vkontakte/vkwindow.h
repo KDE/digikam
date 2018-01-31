@@ -101,7 +101,6 @@ protected:
 
 protected:
 
-    /// Plugin
     bool                           m_import;
 
     /// User interface

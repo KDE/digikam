@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-12-23
- * Description : a plugin to shear an image
+ * Description : a tool to shear an image
  *
  * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-02-09
- * Description : a plugin to apply Blur FX to images
+ * Description : a tool to apply Blur FX to images
  *
  * Copyright 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>

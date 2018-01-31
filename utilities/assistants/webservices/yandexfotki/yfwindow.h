@@ -110,7 +110,6 @@ protected:
 
 protected:
 
-    // Plugin
     bool                        m_import;
     YFWidget*                   m_widget;
 
