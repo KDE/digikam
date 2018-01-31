@@ -226,6 +226,7 @@ private Q_SLOTS:
     void slotEditGeolocation();
 
     void slotExportTool();
+    void slotImportTool();
 
 private:
 

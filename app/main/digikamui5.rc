@@ -141,6 +141,9 @@
       <Action name="import_addFolders" />
       <Action name="import_scan" />
       <Separator/>
+      <Action name="import_googlephoto" />
+      <Action name="import_smugmug" />
+      <Separator/>
   </Menu>
 
   <Menu name="Export"><text>&amp;Export</text>

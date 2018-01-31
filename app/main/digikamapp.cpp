@@ -1215,6 +1215,7 @@ void DigikamApp::setupActions()
     createMetadataEditAction();
     createGeolocationEditAction();
     createExportActions();
+    createImportActions();
 
     // -----------------------------------------------------------------
 
@@ -3575,6 +3576,24 @@ void DigikamApp::slotExportTool()
         w.exec();
     }
 #endif
+}
+
+void DigikamApp::slotImportTool()
+{
+    QAction* const tool = dynamic_cast<QAction*>(sender());
+
+    if (tool == m_importGphotoAction)
+    {
+        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi),
+                   this, QLatin1String("googlephotoimport"));
+        w.exec();
+    }
+    else if (tool == m_importSmugmugAction)
+    {
+        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi),
+                     this, true);
+        w.exec();
+    }
 }
 
 }  // namespace Digikam

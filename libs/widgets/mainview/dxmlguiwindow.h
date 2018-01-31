@@ -157,9 +157,13 @@ public:
      */
     void createSettingsActions();
 
-    /** Create common actions from Export menu for all digiKam main windows.
+    /** Create common actions from Webservices Export menu for all digiKam main windows.
      */
     void createExportActions();
+
+    /** Create common actions from Webservices Import menu for all digiKam main windows.
+     */
+    void createImportActions();
 
     /** Create common actions from Help menu for all digiKam main windows.
      */
@@ -245,6 +249,9 @@ protected:
 #ifdef HAVE_VKONTAKTE
     QAction*     m_exportVkontakteAction;
 #endif
+
+    QAction*     m_importGphotoAction;
+    QAction*     m_importSmugmugAction;
 
 protected:
 
@@ -347,8 +354,11 @@ private Q_SLOTS:
     // Called by Media Server tool.
     virtual void slotMediaServer()             {};
 
-    // Called by Export tools.
+    // Called by Webservices Export tools.
     virtual void slotExportTool()              {};
+
+    // Called by Webservices Import tools.
+    virtual void slotImportTool()              {};
 
 private:
 

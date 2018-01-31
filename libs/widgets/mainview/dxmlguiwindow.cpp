@@ -189,6 +189,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_ksaneAction             = 0;
 #endif
 
+    // WebServices tools
     m_exportDropboxAction     = 0;
     m_exportFacebookAction    = 0;
     m_exportFlickrAction      = 0;
@@ -208,6 +209,9 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
 #ifdef HAVE_VKONTAKTE
     m_exportVkontakteAction   = 0;
 #endif
+
+    m_importGphotoAction      = 0;
+    m_importSmugmugAction     = 0;
 
     installEventFilter(this);
 }
@@ -1126,7 +1130,25 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportVkontakteAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 #endif
+}
 
+void DXmlGuiWindow::createImportActions()
+{
+    m_importGphotoAction = new QAction(i18n("Import to &Google Photos..."), this);
+    m_importGphotoAction->setIcon(QIcon::fromTheme(QString::fromLatin1("googlephoto")));
+    actionCollection()->addAction(QLatin1String("import_googlephoto"), m_importGphotoAction);
+    actionCollection()->setDefaultShortcut(m_importGphotoAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_P);
+
+    connect(m_importGphotoAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotImportTool()));
+
+    m_importSmugmugAction = new QAction(i18n("Import from &SmugMug..."), this);
+    m_importSmugmugAction->setIcon(QIcon::fromTheme(QString::fromLatin1("smugmug")));
+    actionCollection()->addAction(QLatin1String("import_smugmug"), m_importSmugmugAction);
+    actionCollection()->setDefaultShortcut(m_importSmugmugAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_S);
+
+    connect(m_importSmugmugAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotImportTool()));
 }
 
 } // namespace Digikam
