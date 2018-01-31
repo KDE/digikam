@@ -64,7 +64,7 @@ ToolDialog::ToolDialog(QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
-    d->buttonBox   = new QDialogButtonBox(QDialogButtonBox::Close | QDialogButtonBox::Help, this);
+    d->buttonBox   = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->startButton = new QPushButton(i18nc("@action:button", "&Start"), this);
     d->startButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-playback-start")));
     d->buttonBox->addButton(d->startButton, QDialogButtonBox::ActionRole);
