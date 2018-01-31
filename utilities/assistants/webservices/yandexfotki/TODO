@@ -1,0 +1,12 @@
+This tool permit to upload items to YandexFotki web service.
+https://fotki.yandex.ru/
+
+TODO:
+
+* Features:
+ - Downloading images from the service
+ - Token reusing (not tested)
+
+* GUI:
+ - Icon (copyright problems)
+

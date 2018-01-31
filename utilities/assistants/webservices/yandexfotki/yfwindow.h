@@ -34,6 +34,7 @@
 
 // Local includes
 
+#include "dimageslist.h"
 #include "tooldialog.h"
 #include "yftalker.h"
 #include "digikam_export.h"
@@ -113,7 +114,7 @@ protected:
 
     // Plugin
     bool                        m_import;
-    YFWidget*          m_widget;
+    YFWidget*                   m_widget;
 
     // User interface
     QLabel*                     m_loginLabel;
@@ -136,8 +137,9 @@ protected:
     QSpinBox*                   m_imageQualitySpin;
     QButtonGroup*               m_policyGroup;
 
-    DPImagesList*               m_imgList;
+    DImagesList*                m_imgList;
     DProgressWdg*               m_progressBar;
+    DInfoInterface*             m_iface;
 
     // Backend
     QString                     m_tmpDir;

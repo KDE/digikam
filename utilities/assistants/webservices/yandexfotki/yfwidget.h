@@ -20,25 +20,18 @@
 *
 * ============================================================ */
 
-#ifndef YANDEXFOTKIWIDGET_H
-#define YANDEXFOTKIWIDGET_H
+#ifndef YF_WIDGET_H
+#define YF_WIDGET_H
 
 // Local includes
 
-#include "kpsettingswidget.h"
-
-namespace KIPIPlugins
-{
-    class KPImagesList;
-    class KPProgressWidget;
-}
-
-using namespace KIPIPlugins;
+#include "settingswidget.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
 
-class YFWidget : public KPSettingsWidget
+class YFWidget : public SettingsWidget
 {
     Q_OBJECT
 
@@ -54,7 +47,7 @@ public:
 
 public:
 
-    YFWidget(QWidget* const parent, KIPI::Interface* const iface, const QString& pluginName);
+    explicit YFWidget(QWidget* const parent, DInfoInterface* const iface, const QString& pluginName);
     ~YFWidget();
 
     void updateLabels(const QString& name = QString(), const QString& url = QString()) Q_DECL_OVERRIDE;
@@ -69,9 +62,8 @@ private:
     QButtonGroup* m_policyGroup;
 
     friend class YFWindow;
-
-}; // class YFWidget
+};
 
 }  // namespace Digikam
 
-#endif // YANDEXFOTKIWIDGET_H
+#endif // YF_WIDGET_H

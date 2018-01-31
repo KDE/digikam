@@ -25,15 +25,13 @@
 
 // Qt includes
 
-#include <QtWidgets/QDialog>
+#include <QDialog>
 #include <QLineEdit>
 
 // Local includes
 
 #include "yfalbum.h"
-#include "kpnewalbumdialog.h"
-
-using namespace KIPIPlugins;
+#include "newalbumdialog.h"
 
 namespace Digikam
 {

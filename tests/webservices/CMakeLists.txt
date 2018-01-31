@@ -161,3 +161,17 @@ target_link_libraries(gphoto
                       Qt5::Gui
                       Qt5::Xml
 )
+
+# =======================================================
+# Stand alone version of YandexFotki tool
+
+set(yandexfotki_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/yandexfotki.cpp)
+add_executable(yandexfotki ${yandexfotki_SRCS})
+
+target_link_libraries(yandexfotki
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)
