@@ -291,9 +291,10 @@ DigikamApp::DigikamApp()
     }
 
     AlbumManager::instance()->startScan();
-
-    // Load Plugins.
-    loadPlugins();
+    
+    // Setting the initial menu options after all tools have been loaded
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    d->view->slotAlbumSelected(albumList);
 
     // preload additional windows
     preloadWindows();
@@ -2582,14 +2583,6 @@ void DigikamApp::slotEditKeys()
 void DigikamApp::slotDBStat()
 {
     showDigikamDatabaseStat();
-}
-
-void DigikamApp::loadPlugins()
-{
-    // Setting the initial menu options after all plugins have been loaded
-    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-
-    d->view->slotAlbumSelected(albumList);
 }
 
 void DigikamApp::populateThemes()

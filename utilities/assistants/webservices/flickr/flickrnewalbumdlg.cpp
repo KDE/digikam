@@ -37,8 +37,8 @@
 namespace Digikam
 {
 
-FlickrNewAlbumDlg::FlickrNewAlbumDlg(QWidget* const parent, const QString& pluginName)
-    : NewAlbumDialog(parent, pluginName)
+FlickrNewAlbumDlg::FlickrNewAlbumDlg(QWidget* const parent, const QString& toolName)
+    : NewAlbumDialog(parent, toolName)
 {
     hideDateTime();
     hideLocation();

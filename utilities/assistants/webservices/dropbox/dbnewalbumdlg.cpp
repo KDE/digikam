@@ -30,8 +30,8 @@
 namespace Digikam
 {
 
-DBNewAlbumDlg::DBNewAlbumDlg(QWidget* const parent, const QString& pluginName)
-    : NewAlbumDialog(parent, pluginName)
+DBNewAlbumDlg::DBNewAlbumDlg(QWidget* const parent, const QString& toolName)
+    : NewAlbumDialog(parent, toolName)
 {
     hideDateTime();
     hideDesc();

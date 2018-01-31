@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-02-04
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *               This type is based on pto file format described here:
  *               http://hugin.sourceforge.net/docs/nona/nona.txt, and
  *               on pto files produced by Hugin's tools.

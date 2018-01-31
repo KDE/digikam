@@ -50,8 +50,8 @@
 namespace Digikam
 {
 
-YFWidget::YFWidget(QWidget* const parent, DInfoInterface* const iface, const QString& pluginName)
-    : SettingsWidget(parent, iface, pluginName)
+YFWidget::YFWidget(QWidget* const parent, DInfoInterface* const iface, const QString& toolName)
+    : SettingsWidget(parent, iface, toolName)
 {
     QGroupBox* const optionsBox         = getOptionsBox();
     QGridLayout* const optionsBoxLayout = getOptionsBoxLayout();

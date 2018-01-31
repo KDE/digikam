@@ -44,7 +44,7 @@ class FbNewAlbumDlg : public NewAlbumDialog
 
 public:
 
-    explicit FbNewAlbumDlg(QWidget* const parent, const QString& pluginName);
+    explicit FbNewAlbumDlg(QWidget* const parent, const QString& toolName);
     ~FbNewAlbumDlg();
 
     void getAlbumProperties(FbAlbum& album);

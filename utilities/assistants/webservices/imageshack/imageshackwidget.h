@@ -56,7 +56,7 @@ public:
     explicit ImageShackWidget(QWidget* const parent,
                               ImageShackSession* const session,
                               DInfoInterface* const iface,
-                              const QString& pluginName);
+                              const QString& toolName);
     ~ImageShackWidget();
 
 Q_SIGNALS:

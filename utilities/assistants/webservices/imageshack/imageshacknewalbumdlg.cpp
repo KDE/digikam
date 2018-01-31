@@ -37,8 +37,8 @@
 namespace Digikam
 {
 
-ImageShackNewAlbumDlg::ImageShackNewAlbumDlg(QWidget* const parent, const QString& pluginName)
-    : NewAlbumDialog(parent, pluginName)
+ImageShackNewAlbumDlg::ImageShackNewAlbumDlg(QWidget* const parent, const QString& toolName)
+    : NewAlbumDialog(parent, toolName)
 {
     hideDateTime();
     hideDesc();

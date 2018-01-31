@@ -38,7 +38,7 @@ class DBNewAlbumDlg : public NewAlbumDialog
 
 public:
 
-    explicit DBNewAlbumDlg(QWidget* const parent, const QString& pluginName);
+    explicit DBNewAlbumDlg(QWidget* const parent, const QString& toolName);
     ~DBNewAlbumDlg();
 
     void getFolderTitle(DBFolder& folder);

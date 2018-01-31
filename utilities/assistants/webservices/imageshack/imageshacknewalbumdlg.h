@@ -46,7 +46,7 @@ class ImageShackNewAlbumDlg : public NewAlbumDialog
 
 public:
 
-    explicit ImageShackNewAlbumDlg(QWidget* const parent, const QString& pluginName);
+    explicit ImageShackNewAlbumDlg(QWidget* const parent, const QString& toolName);
     ~ImageShackNewAlbumDlg();
 
     QString getAlbumTitle();

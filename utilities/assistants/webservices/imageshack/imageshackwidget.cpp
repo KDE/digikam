@@ -56,8 +56,8 @@ namespace Digikam
 ImageShackWidget::ImageShackWidget(QWidget* const parent,
                                    ImageShackSession* const session,
                                    DInfoInterface* const iface,
-                                   const QString& pluginName)
-    : SettingsWidget(parent, iface, pluginName),
+                                   const QString& toolName)
+    : SettingsWidget(parent, iface, toolName),
       m_session(session)
 {
     m_iface              = iface;

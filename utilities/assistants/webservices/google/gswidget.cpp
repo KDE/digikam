@@ -46,16 +46,16 @@ namespace Digikam
 
 GSWidget::GSWidget(QWidget* const parent,
                    DInfoInterface* const iface,
-                   const PluginName& pluginName,
+                   const GoogleService& service,
                    const QString& serviceName)
     : SettingsWidget(parent, iface, serviceName)
 {
-    m_pluginName            = pluginName;
+    m_service               = service;
     QGroupBox* m_LeafBox    = new QGroupBox(QString::fromLatin1(""), getSettingsBox());
     QGridLayout* leafLayout = new QGridLayout(m_LeafBox);
     m_tagsBGrp              = new QButtonGroup(m_LeafBox);
 
-    if (m_pluginName == PluginName::GPhotoExport)
+    if (m_service == GoogleService::GPhotoExport)
     {
         QSpacerItem* const spacer = new QSpacerItem(1, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
         QLabel* const tagsLbl     = new QLabel(i18n("Tag path behavior :"), m_LeafBox);
@@ -80,15 +80,15 @@ GSWidget::GSWidget(QWidget* const parent,
         addWidgetToSettingsBox(m_LeafBox);
     }
 
-    switch(m_pluginName)
+    switch(m_service)
     {
-        case PluginName::GPhotoImport:
+        case GoogleService::GPhotoImport:
             getNewAlbmBtn()->hide();
             getOptionsBox()->hide();
             imagesList()->hide();
             m_LeafBox->hide();
             break;
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             getUploadBox()->hide();
             getSizeBox()->hide();
             m_LeafBox->hide();
@@ -108,9 +108,9 @@ GSWidget::~GSWidget()
 
 void GSWidget::updateLabels(const QString& name, const QString& url)
 {
-    switch(m_pluginName)
+    switch(m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
         {
             QString web(QString::fromLatin1("https://drive.google.com"));
             getHeaderLbl()->setText(QString::fromLatin1(

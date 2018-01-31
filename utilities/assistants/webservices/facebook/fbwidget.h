@@ -43,7 +43,7 @@ public:
 
     explicit FbWidget(QWidget* const parent,
                       DInfoInterface* const iface,
-                      const QString& pluginName);
+                      const QString& toolName);
     ~FbWidget();
 
     void updateLabels(const QString& name = QString(),

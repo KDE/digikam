@@ -108,8 +108,8 @@ private:
     int                           m_renamingOpt;
 
     QString                       m_serviceName;
-    QString                       m_pluginName;
-    PluginName                    m_name;
+    QString                       m_toolName;
+    GoogleService                 m_service;
     QString                       m_tmp;
     QString                       m_refresh_token;
 

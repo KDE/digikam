@@ -409,7 +409,7 @@ void ImageGuideWidget::updatePixmap()
         }
     }
 
-    // draw additional points added by the image plugin
+    // draw additional points added by the image tool
     if (d->selectedPoints.count() > 0)
     {
         QPainter::RenderHints hints = p.renderHints();

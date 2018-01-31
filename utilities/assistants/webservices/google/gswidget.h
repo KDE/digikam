@@ -40,7 +40,7 @@ class QButtonGroup;
 class QComboBox;
 class QPushButton;
 
-enum class PluginName;
+enum class GoogleService;
 
 namespace Digikam
 {
@@ -60,7 +60,7 @@ public:
 
     explicit GSWidget(QWidget* const parent,
                       DInfoInterface* const iface,
-                      const PluginName& pluginName,
+                      const GoogleService& service,
                       const QString& serviceName);
     ~GSWidget();
 
@@ -69,7 +69,7 @@ public:
 
 private:
 
-    PluginName    m_pluginName;
+    GoogleService m_service;
     QButtonGroup* m_tagsBGrp;
 
     friend class GSWindow;

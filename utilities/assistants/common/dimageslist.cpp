@@ -1015,15 +1015,15 @@ void DImagesList::slotLoadItems()
 
             if (!urls.isEmpty())
             {
-                //allow plugins to append a new file
+                //allow tools to append a new file
                 slotAddImages(urls);
-                // read plugin Image custom attributes and children element
+                // read tool Image custom attributes and children element
                 emit signalXMLLoadImageElement(xmlReader);
             }
         }
         else if (xmlReader.isStartElement() && xmlReader.name() != QString::fromLatin1("Images"))
         {
-            // unmanaged start element (it should be plugins one)
+            // unmanaged start element (it should be tools one)
             emit signalXMLCustomElements(xmlReader);
         }
         else if (xmlReader.isEndElement() && xmlReader.name() == QString::fromLatin1("Images"))

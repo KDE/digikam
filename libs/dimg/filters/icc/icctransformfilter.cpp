@@ -119,4 +119,4 @@ QString IccTransformFilter::readParametersError(const FilterAction& actionThatFa
     return QString();
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace Digikam

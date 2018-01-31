@@ -78,32 +78,32 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 
     if (QString::compare(m_serviceName, QString::fromLatin1("googledriveexport"), Qt::CaseInsensitive) == 0)
     {
-        m_name       = PluginName::GDrive;
-        m_pluginName = QString::fromLatin1("Google Drive");
+        m_service  = GoogleService::GDrive;
+        m_toolName = QString::fromLatin1("Google Drive");
     }
     else if (QString::compare(m_serviceName, QString::fromLatin1("googlephotoexport"), Qt::CaseInsensitive) == 0)
     {
-        m_name       = PluginName::GPhotoExport;
-        m_pluginName = QString::fromLatin1("Google Photos/PicasaWeb");
+        m_service  = GoogleService::GPhotoExport;
+        m_toolName = QString::fromLatin1("Google Photos/PicasaWeb");
     }
     else
     {
-        m_name       = PluginName::GPhotoImport;
-        m_pluginName = QString::fromLatin1("Google Photos/PicasaWeb");
+        m_service  = GoogleService::GPhotoImport;
+        m_toolName = QString::fromLatin1("Google Photos/PicasaWeb");
     }
 
     m_tmp         = ExportUtils::makeTemporaryDir("google").absolutePath() + QLatin1Char('/');;
     m_imagesCount = 0;
     m_imagesTotal = 0;
     m_renamingOpt = 0;
-    m_widget      = new GSWidget(this, m_iface, m_name, m_pluginName);
+    m_widget      = new GSWidget(this, m_iface, m_service, m_toolName);
 
     setMainWidget(m_widget);
     setModal(false);
 
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
 
             setWindowIcon(QIcon::fromTheme(QString::fromLatin1("googledrive")));
             setWindowTitle(i18n("Export to Google Drive"));
@@ -113,7 +113,7 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 
             m_widget->setMinimumSize(700,500);
 
-            m_albumDlg = new GSNewAlbumDlg(this, m_serviceName, m_pluginName);
+            m_albumDlg = new GSNewAlbumDlg(this, m_serviceName, m_toolName);
             m_talker   = new GDTalker(this);
 
             connect(m_talker,SIGNAL(signalBusy(bool)),
@@ -157,12 +157,12 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 
             break;
 
-        case PluginName::GPhotoImport:
-        case PluginName::GPhotoExport:
+        case GoogleService::GPhotoImport:
+        case GoogleService::GPhotoExport:
 
             setWindowIcon(QIcon::fromTheme(QString::fromLatin1("googlephoto")));
 
-            if (m_name == PluginName::GPhotoExport)
+            if (m_service == GoogleService::GPhotoExport)
             {
                 setWindowTitle(i18n("Export to Google Photos/PicasaWeb Service"));
 
@@ -181,7 +181,7 @@ GSWindow::GSWindow(DInfoInterface* const iface,
                 m_widget->setMinimumSize(300, 400);
             }
 
-            m_gphoto_albumdlg = new GSNewAlbumDlg(this, m_serviceName, m_pluginName);
+            m_gphoto_albumdlg = new GSNewAlbumDlg(this, m_serviceName, m_toolName);
             m_gphoto_talker   = new GPTalker(this);
 
             connect(m_gphoto_talker, SIGNAL(signalBusy(bool)),
@@ -267,9 +267,9 @@ void GSWindow::readSettings()
     KConfig config;
     KConfigGroup grp;
 
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             grp = config.group("Google Drive Settings");
             break;
         default:
@@ -296,20 +296,20 @@ void GSWindow::readSettings()
     m_widget->getDimensionSpB()->setValue(grp.readEntry("Maximum Width",  1600));
     m_widget->getImgQualitySpB()->setValue(grp.readEntry("Image Quality", 90));
 
-    if (m_name == PluginName::GPhotoExport)
+    if (m_service == GoogleService::GPhotoExport)
         m_widget->m_tagsBGrp->button(grp.readEntry("Tag Paths", 0))->setChecked(true);
 
     KConfigGroup dialogGroup;
 
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             dialogGroup = config.group("Google Drive Export Dialog");
             break;
-        case PluginName::GPhotoExport:
+        case GoogleService::GPhotoExport:
             dialogGroup = config.group("Google Photo Export Dialog");
             break;
-        case PluginName::GPhotoImport:
+        case GoogleService::GPhotoImport:
             dialogGroup = config.group("Google Photo Import Dialog");
             break;
     }
@@ -324,9 +324,9 @@ void GSWindow::writeSettings()
     KConfig config;
     KConfigGroup grp;
 
-    switch(m_name)
+    switch(m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             grp = config.group("Google Drive Settings");
             break;
         default:
@@ -340,20 +340,20 @@ void GSWindow::writeSettings()
     grp.writeEntry("Maximum Width", m_widget->getDimensionSpB()->value());
     grp.writeEntry("Image Quality", m_widget->getImgQualitySpB()->value());
 
-    if (m_name == PluginName::GPhotoExport)
+    if (m_service == GoogleService::GPhotoExport)
         grp.writeEntry("Tag Paths", m_widget->m_tagsBGrp->checkedId());
 
     KConfigGroup dialogGroup;
 
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             dialogGroup = config.group("Google Drive Export Dialog");
             break;
-        case PluginName::GPhotoExport:
+        case GoogleService::GPhotoExport:
             dialogGroup = config.group("Google Photo Export Dialog");
             break;
-        case PluginName::GPhotoImport:
+        case GoogleService::GPhotoImport:
             dialogGroup = config.group("Google Photo Import Dialog");
             break;
     }
@@ -493,9 +493,9 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
 
 void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <GSFolder>& list)
 {
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
 
             if (code == 0)
             {
@@ -577,9 +577,9 @@ void GSWindow::googlePhotoTransferHandler()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Google Photo Transfer invoked";
 
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GPhotoImport:
+        case GoogleService::GPhotoImport:
             // list photos of the album, then start download
             connect(m_gphoto_talker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
                     this, SLOT(slotListPhotosDoneForDownload(int, QString, QList<GSPhoto>)));
@@ -613,10 +613,10 @@ void GSWindow::slotStartTransfer()
 {
     m_widget->imagesList()->clearProcessedStatus();
 
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
-        case PluginName::GPhotoExport:
+        case GoogleService::GDrive:
+        case GoogleService::GPhotoExport:
             if (m_widget->imagesList()->imageUrls().isEmpty())
             {
                 QMessageBox::critical(this, i18nc("@title:window", "Error"),
@@ -624,13 +624,13 @@ void GSWindow::slotStartTransfer()
                 return;
             }
             break;
-        case PluginName::GPhotoImport:
+        case GoogleService::GPhotoImport:
             break;
     }
 
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             if (!(m_talker->authenticated()))
             {
                 QMessageBox warn(QMessageBox::Warning,
@@ -687,9 +687,9 @@ void GSWindow::slotStartTransfer()
         GSPhoto temp;
         qCDebug(DIGIKAM_GENERAL_LOG) << "in start transfer info " <<info.title() << info.comment();
 
-        switch (m_name)
+        switch (m_service)
         {
-            case PluginName::GDrive:
+            case GoogleService::GDrive:
                 temp.title      = info.title();
                 break;
             default:
@@ -736,9 +736,9 @@ void GSWindow::uploadNextPhoto()
     bool res          = true;
     m_widget->imagesList()->processing(pathComments.first);
 
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
         {
             res = m_talker->addPhoto(pathComments.first.toLocalFile(),
                                      info,
@@ -749,7 +749,7 @@ void GSWindow::uploadNextPhoto()
             break;
         }
 
-        case PluginName::GPhotoExport:
+        case GoogleService::GPhotoExport:
         {
             bool bCancel = false;
             bool bAdd    = true;
@@ -883,7 +883,7 @@ void GSWindow::uploadNextPhoto()
             break;
         }
 
-        case PluginName::GPhotoImport:
+        case GoogleService::GPhotoImport:
             break;
     }
 
@@ -1044,7 +1044,7 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
 
         QMessageBox warn(QMessageBox::Warning,
                          i18n("Warning"),
-                         i18n("Failed to upload photo to %1.\n%2\nDo you want to continue?", m_pluginName,msg),
+                         i18n("Failed to upload photo to %1.\n%2\nDo you want to continue?", m_toolName,msg),
                          QMessageBox::Yes | QMessageBox::No);
 
         (warn.button(QMessageBox::Yes))->setText(i18n("Continue"));
@@ -1096,9 +1096,9 @@ void GSWindow::slotImageListChanged()
 
 void GSWindow::slotNewAlbumRequest()
 {
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             if (m_albumDlg->exec() == QDialog::Accepted)
             {
                 GSFolder newFolder;
@@ -1121,13 +1121,13 @@ void GSWindow::slotNewAlbumRequest()
 
 void GSWindow::slotReloadAlbumsRequest()
 {
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             m_talker->listFolders();
             break;
-        case PluginName::GPhotoImport:
-        case PluginName::GPhotoExport:
+        case GoogleService::GPhotoImport:
+        case GoogleService::GPhotoExport:
             m_gphoto_talker->listAlbums();
             break;
     }
@@ -1144,13 +1144,13 @@ void GSWindow::slotAccessTokenFailed(int errCode,const QString& errMsg)
 
 void GSWindow::slotAccessTokenObtained()
 {
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             m_talker->listFolders();
             break;
-        case PluginName::GPhotoImport:
-        case PluginName::GPhotoExport:
+        case GoogleService::GPhotoImport:
+        case GoogleService::GPhotoExport:
             m_gphoto_talker->listAlbums();
             break;
     }
@@ -1158,14 +1158,14 @@ void GSWindow::slotAccessTokenObtained()
 
 void GSWindow::slotRefreshTokenObtained(const QString& msg)
 {
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             m_refresh_token = msg;
             m_talker->listFolders();
             break;
-        case PluginName::GPhotoImport:
-        case PluginName::GPhotoExport:
+        case GoogleService::GPhotoImport:
+        case GoogleService::GPhotoExport:
             m_refresh_token = msg;
             m_gphoto_talker->listAlbums();
             break;
@@ -1174,17 +1174,17 @@ void GSWindow::slotRefreshTokenObtained(const QString& msg)
 
 void GSWindow::slotCreateFolderDone(int code, const QString& msg, const QString& albumId)
 {
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             if (code == 0)
                 QMessageBox::critical(this, i18nc("@title:window", "Error"),
                                       i18n("Google Drive call failed:\n%1", msg));
             else
                 m_talker->listFolders();
             break;
-        case PluginName::GPhotoImport:
-        case PluginName::GPhotoExport:
+        case GoogleService::GPhotoImport:
+        case GoogleService::GPhotoExport:
             if (code == 0)
                 QMessageBox::critical(this, i18nc("@title:window", "Error"),
                                       i18n("Google Photos/PicasaWeb call failed:\n%1", msg));
@@ -1202,13 +1202,13 @@ void GSWindow::slotTransferCancel()
     m_transferQueue.clear();
     m_widget->progressBar()->hide();
 
-    switch (m_name)
+    switch (m_service)
     {
-        case PluginName::GDrive:
+        case GoogleService::GDrive:
             m_talker->cancel();
             break;
-        case PluginName::GPhotoImport:
-        case PluginName::GPhotoExport:
+        case GoogleService::GPhotoImport:
+        case GoogleService::GPhotoExport:
             m_gphoto_talker->cancel();
             break;
     }
@@ -1232,13 +1232,13 @@ void GSWindow::slotUserChangeRequest()
     {
         m_refresh_token = QString::fromLatin1("");
 
-        switch (m_name)
+        switch (m_service)
         {
-            case PluginName::GDrive:
+            case GoogleService::GDrive:
                 m_talker->doOAuth();
                 break;
-            case PluginName::GPhotoImport:
-            case PluginName::GPhotoExport:
+            case GoogleService::GPhotoImport:
+            case GoogleService::GPhotoExport:
                 m_gphoto_talker->doOAuth();
                 break;
         }

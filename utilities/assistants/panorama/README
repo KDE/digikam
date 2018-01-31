@@ -7,7 +7,7 @@ NOTE: this tool was originally developped during the GoSC2011.
 
 -- Data Input --
 
-This plugin takes several images taken from the same point of view, either RAW images, TIFF images or JPEG images.
+This tool takes several images taken from the same point of view, either RAW images, TIFF images or JPEG images.
 
 Throughout the process, project files (i.e. dot pto files) are analyzed and modified with GNU Flex and GNU Bison.
 

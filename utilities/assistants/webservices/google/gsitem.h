@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-enum PluginName
+enum GoogleService
 {
     GDrive = 1,
     GPhotoExport,

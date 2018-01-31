@@ -42,7 +42,7 @@ class GSSession : public QObject
 
 public:
 
-    GSSession(QWidget* const parent, const QString& scope);
+    explicit GSSession(QWidget* const parent, const QString& scope);
     ~GSSession();
 
 Q_SIGNALS:

@@ -47,8 +47,8 @@ namespace Digikam
 
 GSNewAlbumDlg::GSNewAlbumDlg(QWidget* const parent,
                              const QString& serviceName,
-                             const QString& pluginName)
-    : NewAlbumDialog(parent, pluginName)
+                             const QString& toolName)
+    : NewAlbumDialog(parent, toolName)
 {
     m_serviceName            = serviceName;
     const int spacing        = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2015-06-07
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2015-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *

@@ -6,7 +6,7 @@ my $NEWS_FILE = "NEWS";
 my $version = "4.0.0";
 
 my $header = 'BUGFIXES FROM KDE BUGZILLA';
-my $url = "https://bugs.kde.org/buglist.cgi?f1=cf_versionfixedin&order=Last%20Changed&o1=equals&query_format=advanced&bug_status=RESOLVED&bug_status=CLOSED&v1=$version&product=digikam&product=digikamimageplugins&product=showfoto&columnlist=short_desc&ctype=csv";
+my $url = "https://bugs.kde.org/buglist.cgi?f1=cf_versionfixedin&order=Last%20Changed&o1=equals&query_format=advanced&bug_status=RESOLVED&bug_status=CLOSED&v1=$version&product=digikam&columnlist=short_desc&ctype=csv";
 
 my $ua = LWP::UserAgent->new;
 print "Fetching closed bugs for digiKam version ${version} ..\n";

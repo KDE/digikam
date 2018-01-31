@@ -40,12 +40,11 @@ class PresentationDlg : public QDialog
 
 public:
 
-    PresentationDlg(QWidget* const parent, PresentationContainer* const sharedData);
+    explicit PresentationDlg(QWidget* const parent, PresentationContainer* const sharedData);
     ~PresentationDlg();
 
 Q_SIGNALS:
 
-     // Signal needed by plugin_slideshow class
     void buttonStartClicked();
 
 private:

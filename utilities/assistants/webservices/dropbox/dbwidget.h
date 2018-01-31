@@ -50,7 +50,7 @@ public:
 
     explicit DBWidget(QWidget* const parent,
                       DInfoInterface* const iface,
-                      const QString& pluginName);
+                      const QString& toolName);
     ~DBWidget();
 
     void updateLabels(const QString& name = QString(), const QString& url = QString()) Q_DECL_OVERRIDE;

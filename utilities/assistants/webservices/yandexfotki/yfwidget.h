@@ -47,7 +47,7 @@ public:
 
 public:
 
-    explicit YFWidget(QWidget* const parent, DInfoInterface* const iface, const QString& pluginName);
+    explicit YFWidget(QWidget* const parent, DInfoInterface* const iface, const QString& toolName);
     ~YFWidget();
 
     void updateLabels(const QString& name = QString(), const QString& url = QString()) Q_DECL_OVERRIDE;

@@ -594,9 +594,9 @@ void ContextMenuHelper::addImportMenu()
     }
     else
     {
-        QAction* const noPlugins = new QAction(i18n("No import tool available"), this);
-        noPlugins->setEnabled(false);
-        menuImport->addAction(noPlugins);
+        QAction* const notools = new QAction(i18n("No import tool available"), this);
+        notools->setEnabled(false);
+        menuImport->addAction(notools);
     }
 
     d->parent->addMenu(menuImport);
@@ -618,9 +618,9 @@ void ContextMenuHelper::addExportMenu()
     }
     else
     {
-        QAction* const noPlugins = new QAction(i18n("No export tool available"), this);
-        noPlugins->setEnabled(false);
-        menuExport->addAction(noPlugins);
+        QAction* const notools = new QAction(i18n("No export tool available"), this);
+        notools->setEnabled(false);
+        menuExport->addAction(notools);
     }
 
     d->parent->addMenu(menuExport);

@@ -42,8 +42,8 @@
 namespace Digikam
 {
 
-FbNewAlbumDlg::FbNewAlbumDlg(QWidget* const parent, const QString& pluginName)
-    : NewAlbumDialog(parent, pluginName)
+FbNewAlbumDlg::FbNewAlbumDlg(QWidget* const parent, const QString& toolName)
+    : NewAlbumDialog(parent, toolName)
 {
     hideDateTime();
 

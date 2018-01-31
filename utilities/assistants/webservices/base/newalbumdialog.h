@@ -52,7 +52,7 @@ class DIGIKAM_EXPORT NewAlbumDialog : public QDialog
 
 public:
 
-    explicit NewAlbumDialog(QWidget* const parent, const QString& pluginName);
+    explicit NewAlbumDialog(QWidget* const parent, const QString& toolName);
     ~NewAlbumDialog();
 
     void hideDateTime();

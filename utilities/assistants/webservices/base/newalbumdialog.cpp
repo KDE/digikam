@@ -44,7 +44,7 @@ class NewAlbumDialog::Private
 {
 public:
 
-    Private(QWidget* const widget, const QString& pluginName)
+    Private(QWidget* const widget, const QString& toolName)
     {
         m_titleEdt     = new QLineEdit;
         m_descEdt      = new QTextEdit;
@@ -64,7 +64,7 @@ public:
 
         buttonBox      = new QDialogButtonBox();
 
-        m_pluginName   = pluginName;
+        m_toolName   = toolName;
     }
 
     QLineEdit*         m_titleEdt;
@@ -77,7 +77,7 @@ public:
     QLabel*            descLabel;
     QLabel*            locLabel;
 
-    QString            m_pluginName;
+    QString            m_toolName;
     QDialogButtonBox*  buttonBox;
 
     QGridLayout*       albumBoxLayout;
@@ -87,13 +87,13 @@ public:
     QWidget*           mainWidget;
 };
 
-NewAlbumDialog::NewAlbumDialog(QWidget* const parent, const QString& pluginName)
+NewAlbumDialog::NewAlbumDialog(QWidget* const parent, const QString& toolName)
     : QDialog(parent),
-      d(new Private(this, pluginName))
+      d(new Private(this, toolName))
 {
-    d->m_pluginName = pluginName;
+    d->m_toolName = toolName;
     d->mainWidget->setMinimumSize(500, 500);
-    setWindowTitle(QString(d->m_pluginName + QString::fromLatin1(" New Album")));
+    setWindowTitle(QString(d->m_toolName + QString::fromLatin1(" New Album")));
     setModal(false);
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
@@ -113,7 +113,7 @@ NewAlbumDialog::NewAlbumDialog(QWidget* const parent, const QString& pluginName)
             this, SLOT(reject()));
 
     d->albumBox->setLayout(d->albumBoxLayout);
-    d->albumBox->setWhatsThis(i18n("These are basic settings for the new %1 album.",d->m_pluginName));
+    d->albumBox->setWhatsThis(i18n("These are basic settings for the new %1 album.",d->m_toolName));
 
     d->m_titleEdt->setToolTip(i18n("Title of the album that will be created (required)."));
 
