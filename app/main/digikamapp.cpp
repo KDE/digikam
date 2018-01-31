@@ -3482,72 +3482,72 @@ void DigikamApp::slotExportTool()
 
     if (tool == m_exportDropboxAction)
     {
-        DBWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi), this);
+        DBWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportFacebookAction)
     {
-        FbWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi), this);
+        FbWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportFlickrAction)
     {
-        FlickrWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi), this);
+        FlickrWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportGdriveAction)
     {
-        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi),
+        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
                    this, QLatin1String("googledriveexport"));
         w.exec();
     }
     else if (tool == m_exportGphotoAction)
     {
-        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi),
+        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
                    this, QLatin1String("googlephotoexport"));
         w.exec();
     }
     else if (tool == m_exportImageshackAction)
     {
-        ImageShackWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi), this);
+        ImageShackWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportImgurAction)
     {
-        ImgurWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi), this);
+        ImgurWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportPiwigoAction)
     {
-        PiwigoWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi), this);
+        PiwigoWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportRajceAction)
     {
-        RajceWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi), this);
+        RajceWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportSmugmugAction)
     {
-        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi), this);
+        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportYandexfotkiAction)
     {
-        YFWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi), this);
+        YFWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w.exec();
     }
 #ifdef HAVE_MEDIAWIKI
     else if (tool == m_exportMediawikiAction)
     {
-        MediaWikiWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi), this);
+        MediaWikiWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w.exec();
     }
 #endif
 #ifdef HAVE_VKONTAKTE
     else if (tool == m_exportVkontakteAction)
     {
-        VKWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi), this);
+        VKWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w.exec();
     }
 #endif
@@ -3559,13 +3559,13 @@ void DigikamApp::slotImportTool()
 
     if (tool == m_importGphotoAction)
     {
-        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi),
+        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
                    this, QLatin1String("googlephotoimport"));
         w.exec();
     }
     else if (tool == m_importSmugmugAction)
     {
-        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi),
+        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
                      this, true);
         w.exec();
     }

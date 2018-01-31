@@ -97,7 +97,7 @@ public:
     enum OperationType
     {
         Metadata = 0,
-        Kipi,
+        ImportExport,
         BQM,
         LightTable,
         Slideshow,

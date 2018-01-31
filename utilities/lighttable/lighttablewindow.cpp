@@ -1930,75 +1930,75 @@ void LightTableWindow::slotExportTool()
     if (tool == m_exportDropboxAction)
     {
         DBWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
-                                   ApplicationSettings::Kipi), this);
+                                   ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportFacebookAction)
     {
         FbWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
-                                   ApplicationSettings::Kipi), this);
+                                   ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportFlickrAction)
     {
         FlickrWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
-                                       ApplicationSettings::Kipi), this);
+                                       ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportGdriveAction)
     {
-        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi),
+        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
                    this, QLatin1String("googledriveexport"));
         w.exec();
     }
     else if (tool == m_exportGphotoAction)
     {
         GSWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
-                                   ApplicationSettings::Kipi),
+                                   ApplicationSettings::ImportExport),
                    this, QLatin1String("googlephotoexport"));
         w.exec();
     }
     else if (tool == m_exportImageshackAction)
     {
         ImageShackWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
-                                           ApplicationSettings::Kipi), this);
+                                           ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportImgurAction)
     {
         ImgurWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
-                                      ApplicationSettings::Kipi), this);
+                                      ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportPiwigoAction)
     {
         PiwigoWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
-                                       ApplicationSettings::Kipi), this);
+                                       ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportRajceAction)
     {
         RajceWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
-                                      ApplicationSettings::Kipi), this);
+                                      ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportSmugmugAction)
     {
         SmugWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
-                                     ApplicationSettings::Kipi), this);
+                                     ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportYandexfotkiAction)
     {
         YFWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
-                                   ApplicationSettings::Kipi), this);
+                                   ApplicationSettings::ImportExport), this);
         w.exec();
     }
 #ifdef HAVE_MEDIAWIKI
     else if (tool == m_exportMediawikiAction)
     {
         MediaWikiWindow w(new DBInfoIface(this, d->thumbView->allUrls(), 
-                                          ApplicationSettings::Kipi), this);
+                                          ApplicationSettings::ImportExport), this);
         w.exec();
     }
 #endif
@@ -2006,7 +2006,7 @@ void LightTableWindow::slotExportTool()
     else if (tool == m_exportVkontakteAction)
     {
         VKWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
-                                   ApplicationSettings::Kipi), this);
+                                   ApplicationSettings::ImportExport), this);
         w.exec();
     }
 #endif
@@ -2018,13 +2018,13 @@ void LightTableWindow::slotImportTool()
 
     if (tool == m_importGphotoAction)
     {
-        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi),
+        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
                    this, QLatin1String("googlephotoimport"));
         w.exec();
     }
     else if (tool == m_importSmugmugAction)
     {
-        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Kipi),
+        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
                      this, true);
         w.exec();
     }

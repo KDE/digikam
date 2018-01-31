@@ -43,9 +43,6 @@ plocal      = re.compile("\"[a-zA-Z].*\.h\"")             # local includes
 pqt         = re.compile("<[Qq].*(.h)?>")                 # Qt includes
 pkde        = re.compile("<k.*\.h>")                      # KDE includes
 pcpp        = re.compile("<c.*(.h)?>")                    # C++ includes
-pkdcraw     = re.compile("<libkdcraw\/.*(.h)?>")          # libkdcraw includes
-pkexiv2     = re.compile("<libkexiv2\/.*(.h)?>")          # libkexiv2 includes
-pkipi       = re.compile("<libkipi\/.*(.h)?>")            # libkipi includes
 pinclude    = "#include"                                  # include statement
 pknown      = dict()                                      # will hold known patterns
 
@@ -138,9 +135,6 @@ def parse_files(filelist):
         kdeinc      = list()
         cppinc      = list()
         cinc        = list()
-        kdcrawinc   = list()
-        kexiv2inc   = list()
-        kipiinc     = list()
         sourcecode  = list()
 
         f = open(file, 'r')
@@ -165,9 +159,6 @@ def parse_files(filelist):
                 elif pqt.match(include):        qtinc.append(include)
                 elif pkde.match(include):       kdeinc.append(include)
                 elif pcpp.match(include):       cppinc.append(include)
-                elif pkdcraw.match(include):    kdcrawinc.append(include)
-                elif pkexiv2.match(include):    kexiv2inc.append(include)
-                elif pkipi.match(include):      kipiinc.append(include)
 
                 else:
                     includes.append(include)
@@ -203,9 +194,6 @@ def parse_files(filelist):
         generate_includes(fw, cppinc,     "C++")
         generate_includes(fw, qtinc,      "Qt")
         generate_includes(fw, kdeinc,     "KDE")
-        generate_includes(fw, kdcrawinc,  "LibKDcraw")
-        generate_includes(fw, kexiv2inc,  "LibKExiv2")
-        generate_includes(fw, kipiinc,    "Libkipi")
         generate_includes(fw, localinc,   "Local")
 
         fw.write("\n"+strip_content(sourcecode)+"\n");

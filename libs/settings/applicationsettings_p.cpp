@@ -157,13 +157,13 @@ const ApplicationSettings::OperationStrings ApplicationSettings::Private::config
 ApplicationSettings::OperationStrings ApplicationSettings::Private::createConfigGroupingOperateOnAll()
 {
     ApplicationSettings::OperationStrings out;
-    out.insert(ApplicationSettings::Metadata, QLatin1String("Do metadata operations on all"));
-    out.insert(ApplicationSettings::Kipi, QLatin1String("Do Kipi operations on all"));
-    out.insert(ApplicationSettings::BQM, QLatin1String("Do BQM operations on all"));
-    out.insert(ApplicationSettings::LightTable, QLatin1String("Do light table operations on all"));
-    out.insert(ApplicationSettings::Slideshow, QLatin1String("Do slideshow operations on all"));
-    out.insert(ApplicationSettings::Rename, QLatin1String("Rename all"));
-    out.insert(ApplicationSettings::Tools, QLatin1String("Operate tools on all"));
+    out.insert(ApplicationSettings::Metadata,     QLatin1String("Do metadata operations on all"));
+    out.insert(ApplicationSettings::ImportExport, QLatin1String("Do Import Export operations on all"));
+    out.insert(ApplicationSettings::BQM,          QLatin1String("Do BQM operations on all"));
+    out.insert(ApplicationSettings::LightTable,   QLatin1String("Do light table operations on all"));
+    out.insert(ApplicationSettings::Slideshow,    QLatin1String("Do slideshow operations on all"));
+    out.insert(ApplicationSettings::Rename,       QLatin1String("Rename all"));
+    out.insert(ApplicationSettings::Tools,        QLatin1String("Operate tools on all"));
     return out;
 }
 
