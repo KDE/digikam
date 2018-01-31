@@ -582,8 +582,8 @@ MediaWikiWidget::MediaWikiWidget(DInfoInterface* const iface, QWidget* const par
     connect(d->imgList, SIGNAL(signalItemClicked(QTreeWidgetItem*)),
             this, SLOT(slotLoadImagesDesc(QTreeWidgetItem*)));
 
-    connect(d->imgList, SIGNAL(signalRemovedItems(QList<QUrl>)),
-            this, SLOT(slotRemoveImagesDesc(QList<QUrl>)));
+    connect(d->imgList, SIGNAL(signalImageListChanged()),
+            this, SLOT(slotRemoveImagesDesc()));
 }
 
 MediaWikiWidget::~MediaWikiWidget()
@@ -833,11 +833,24 @@ void MediaWikiWidget::slotLoadImagesDesc(QTreeWidgetItem* item)
     }
 }
 
-void MediaWikiWidget::slotRemoveImagesDesc(const QList<QUrl> urls)
+void MediaWikiWidget::slotRemoveImagesDesc()
 {
-    for (QList<QUrl>::const_iterator it = urls.begin(); it != urls.end(); ++it)
+    QList<QUrl> items = d->imgList->imageUrls();
+    QStringList toRemove;
+
+    for (QMap <QString, QMap <QString, QString> >::const_iterator it = d->imagesDescInfo.constBegin();
+         it != d->imagesDescInfo.constEnd(); ++it)
     {
-        QString path = (*it).toLocalFile();
+        QString path = it.key();
+
+        if (!items.contains(QUrl::fromLocalFile(path)))
+        {
+            toRemove << path;
+        }
+    }
+
+    foreach(QString path, toRemove)
+    {
         d->imagesDescInfo.remove(path);
         qCDebug(DIGIKAM_GENERAL_LOG) << "Remove" << path << "; new length:" << d->imagesDescInfo.size();
     }

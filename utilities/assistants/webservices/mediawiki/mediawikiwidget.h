@@ -111,7 +111,7 @@ private Q_SLOTS:
     void slotNewWikiClicked();
     void slotAddWikiClicked();
     void slotLoadImagesDesc(QTreeWidgetItem* item);
-    void slotRemoveImagesDesc(const QList<QUrl> urls);
+    void slotRemoveImagesDesc();
     void slotRestoreExtension();
     void slotApplyTitle();
     void slotApplyDate();
