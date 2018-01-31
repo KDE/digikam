@@ -20,4 +20,6 @@ BUGFIXES FROM BUGZILLA:
 010 ==> 389420 - Thumbnails diminishing in size after switching Views.
 011 ==> 389493 - Collection browse dialog should be consistent with other browse dialogs on KDE.
 012 ==> 389512 - Timeline Thumbnails Not Shown.
-013 ==> 
+013 ==> 389651 - Custom font size is not applied until you enter and exit the settings menu.
+014 ==> 388345 - AppImage MySQL connection issues.
+015 ==> 
