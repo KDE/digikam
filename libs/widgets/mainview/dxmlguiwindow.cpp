@@ -1100,7 +1100,7 @@ void DXmlGuiWindow::createExportActions()
     m_exportSmugmugAction = new QAction(i18n("Export to &SmugMug..."), this);
     m_exportSmugmugAction->setIcon(QIcon::fromTheme(QString::fromLatin1("smugmug")));
     actionCollection()->addAction(QLatin1String("export_smugmug"), m_exportSmugmugAction);
-    actionCollection()->setDefaultShortcut(m_exportSmugmugAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_S);
+    actionCollection()->setDefaultShortcut(m_exportSmugmugAction, Qt::ALT + Qt::SHIFT +  Qt::Key_S);
 
     connect(m_exportSmugmugAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
