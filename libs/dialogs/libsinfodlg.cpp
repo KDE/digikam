@@ -130,10 +130,16 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 #endif // HAVE_LIBLQR_1
 
 #ifdef HAVE_MEDIAWIKI
-    list.insert(i18nc(CONTEXT, "MediaWiki support"),              SUPPORTED_YES);
+    list.insert(i18nc(CONTEXT, "MediaWiki support"),           SUPPORTED_YES);
 #else
-    list.insert(i18nc(CONTEXT, "MediaWiki support"),              SUPPORTED_NO);
+    list.insert(i18nc(CONTEXT, "MediaWiki support"),           SUPPORTED_NO);
 #endif // HAVE_MEDIAWIKI
+
+#ifdef HAVE_VKONTAKTE
+    list.insert(i18nc(CONTEXT, "VKontakte support"),           SUPPORTED_YES);
+#else
+    list.insert(i18nc(CONTEXT, "VKontakte support"),           SUPPORTED_NO);
+#endif // HAVE_VKONTAKTE
 
     QString tiffver = QLatin1String(TIFFLIB_VERSION_STR);
     tiffver         = tiffver.left(tiffver.indexOf(QLatin1Char('\n')));

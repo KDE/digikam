@@ -258,6 +258,10 @@ if(KF5MediaWiki_FOUND)
     target_link_libraries(digikamcore PUBLIC ${LIBMEDIAWIKI_LIBRARIES})
 endif()
 
+if(KF5Vkontakte_FOUND)
+    target_link_libraries(digikamcore PUBLIC ${LIBKVKONTAKTE_LIBRARIES})
+endif()
+
 if(APPLE)
     target_link_libraries(digikamcore PUBLIC /System/Library/Frameworks/AppKit.framework)
 endif()

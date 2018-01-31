@@ -193,6 +193,18 @@ if(KF5MediaWiki_FOUND)
 
 endif()
 
+# VKontakte tool ------------------------------------------------------------
+
+if(KF5Vkontakte_FOUND)
+
+    set(libwsvkontakte_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/vkontakte/vkwindow.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/vkontakte/vknewalbumdlg.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/vkontakte/vkalbumchooser.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/vkontakte/vkauthwidget.cpp
+    )
+
+endif()
+
 # ------------------------------------------------------------------------------
 
 add_library(webservices_src OBJECT ${libwebservices_SRCS}
@@ -204,8 +216,9 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsimageshack_SRCS}
                                    ${libwsfacebook_SRCS}
                                    ${libwsrajce_SRCS}
-                                   ${libwsmediawiki_SRCS}
                                    ${libwsgoogle_SRCS}
                                    ${libwsyandexfotki_SRCS}
                                    ${libwspiwigo_SRCS}
+                                   ${libwsmediawiki_SRCS}
+                                   ${libwsvkontakte_SRCS}
 )

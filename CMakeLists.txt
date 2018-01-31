@@ -51,18 +51,19 @@ set(DBCORECONFIG_XML_VERSION "3")
 
 # ==============================================================================
 
-set(CMAKE_MIN_VERSION    "3.0.0")
-set(ECM_MIN_VERSION      "1.7.0")
-set(KF5_MIN_VERSION      "5.1.0")
-set(QT_MIN_VERSION       "5.6.0")
-set(KIPI_MIN_VERSION     "5.0.0")
-set(KSANE_MIN_VERSION    "5.0.0")
-set(LENSFUN_MIN_VERSION  "0.2.6.0")
-set(EXIV2_MIN_VERSION    "0.26")
-set(OPENCV_MIN_VERSION   "3.1.0")
-set(QTAV_MIN_VERSION     "1.12.0")
-set(CALENDAR_MIN_VERSION "4.81.0")        # Calendar Core dependency
-set(AKONADI_MIN_VERSION  "4.89.0")        # Akonadi Contact dependency
+set(CMAKE_MIN_VERSION     "3.0.0")
+set(ECM_MIN_VERSION       "1.7.0")
+set(KF5_MIN_VERSION       "5.1.0")
+set(QT_MIN_VERSION        "5.6.0")
+set(KIPI_MIN_VERSION      "5.0.0")
+set(KSANE_MIN_VERSION     "5.0.0")
+set(LENSFUN_MIN_VERSION   "0.2.6.0")
+set(EXIV2_MIN_VERSION     "0.26")
+set(OPENCV_MIN_VERSION    "3.1.0")
+set(QTAV_MIN_VERSION      "1.12.0")
+set(CALENDAR_MIN_VERSION  "4.81.0")        # Calendar Core dependency
+set(AKONADI_MIN_VERSION   "4.89.0")        # Akonadi Contact dependency
+set(VKONTAKTE_MIN_VERSION "4.70.0")        # VKontakte library dependency
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
@@ -268,6 +269,7 @@ find_package(LibXml2)                              # For HTMLGallery tool.
 DETECT_LIBKIPI(${KIPI_MIN_VERSION})                # For plugins support.
 DETECT_LIBKSANE(${KSANE_MIN_VERSION})              # For digital scanner device support.
 DETECT_LIBMEDIAWIKI(${KF5_MIN_VERSION})            # For Mediawiki webservice support.
+DETECT_LIBKVKONTAKTE(${VKONTAKTE_MIN_VERSION})     # For VKontakte webservice support.
 
 find_package(Marble)                               # For geolocation support.
 
@@ -389,6 +391,7 @@ MACRO_BOOL_TO_01(KF5NotifyConfig_FOUND   HAVE_KNOTIFYCONFIG)
 MACRO_BOOL_TO_01(KF5KIO_FOUND            HAVE_KIO)
 MACRO_BOOL_TO_01(KF5IconThemes_FOUND     HAVE_KICONTHEMES)
 MACRO_BOOL_TO_01(KF5MediaWiki_FOUND      HAVE_MEDIAWIKI)
+MACRO_BOOL_TO_01(KF5Vkontakte_FOUND      HAVE_VKONTAKTE)
 MACRO_BOOL_TO_01(LensFun_FOUND           HAVE_LENSFUN)
 MACRO_BOOL_TO_01(Lqr-1_FOUND             HAVE_LIBLQR_1)
 MACRO_BOOL_TO_01(Gphoto2_FOUND           HAVE_GPHOTO2)
@@ -442,30 +445,31 @@ PRINT_LIBRARY_STATUS("libtiff"       "http://www.remotesensing.org/libtiff"     
 
 # ==============================================================================
 
-PRINT_OPTIONAL_LIBRARY_STATUS("bison"             "https://www.gnu.org/software/bison/"                             "(version >= 2.5.0)"                   "digiKam will be compiled without Panorama support."                          BISON_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"           "http://www.doxygen.org"                                          "(version >= 1.8.0)"                   "digiKam will be compiled without API documentation building support."        Doxygen_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("flex"              "http://flex.sourceforge.net/"                                    "(version >= 2.5.0)"                   "digiKam will be compiled without Panorama support."                          FLEX_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact" "https://projects.kde.org/projects/kde/kdepimlibs"                "(version >= ${AKONADI_MIN_VERSION})"  "digiKam will be compiled without KDE address book support."                  KF5AkonadiContact_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"         "http://eigen.tuxfamily.org"                                      "(version >= 3.0.0)"                   "digiKam will be compiled without Refocus tool support."                      Eigen3_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"        "http://www.gphoto.org"                                           "(version >= 2.4.0)"                   "digiKam will be compiled without GPhoto2 camera drivers support."            Gphoto2_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"         "http://www.ece.uvic.ca/~mdadams/jasper"                          "(version >= 1.7.0)"                   "digiKam will be compiled without JPEG2000 support."                          Jasper_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkcalcore"       "https://projects.kde.org/projects/kde/pim/kcalcore"              "(version >= ${CALENDAR_MIN_VERSION})" "digiKam will be compiled without KDE calendar support."                      KF5CalendarCore_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libmediawiki"      "https://projects.kde.org/projects/extragear/libs/libmediawiki"   "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without libmediawiki support."                      KF5MediaWiki_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/projects/kde/kdelibs/baloo"             "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE file metadata support."                 KF5FileMetaData_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkiconthemes"    "https://projects.kde.org/projects/frameworks/kiconthemes"        "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE desktop icon themes support."           KF5IconThemes_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkio"            "https://projects.kde.org/projects/frameworks/kio"                "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE desktop integration support."           KF5KIO_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"           "https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi"  "(version >= ${KIPI_MIN_VERSION})"     "digiKam will be compiled without Kipi-plugins support."                      KF5Kipi_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libknotifications" "https://projects.kde.org/projects/frameworks/knotifications"     "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE desktop notifications support."         KF5Notifications_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libknotifyconfig"  "https://projects.kde.org/projects/frameworks/knotifyconfig"      "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE desktop notify configuration support."  KF5NotifyConfig_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libksane"          "https://projects.kde.org/projects/kde/kdegraphics/libs/libksane" "(version >= ${KSANE_MIN_VERSION})"    "digiKam will be compiled without libksane support."                          KF5Sane_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"        "http://lensfun.sourceforge.net"                                  "(version >= 0.2.6)"                   "digiKam will be compiled without Lens Auto Correction tool support."         LensFun_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"          "http://liblqr.wikidot.com"                                       "(version >= 0.4.1)"                   "digiKam will be compiled without Contents Aware Resizer tool support."       Lqr-1_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libmarble"         "https://projects.kde.org/projects/kde/kdeedu/marble"             "(version >= 0.22.0)"                  "digiKam will be compiled without geolocation maps support."                  Marble_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libqtav"           "http://www.qtav.org/"                                            "(version >= ${QTAV_MIN_VERSION})"     "digiKam will be compiled without Media Player support."                      QtAV_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libthreadweaver"   "https://projects.kde.org/projects/frameworks/threadweaver"       "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without Panorama support."                          KF5ThreadWeaver_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libxml2"           "http://xmlsoft.org"                                              "(version >= 2.7.0)"                    "digiKam will be compiled without HTMLGallery support."                      LibXml2_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libxslt"           "http://xmlsoft.org/XSLT"                                         "(version >= 1.1.0)"                    "digiKam will be compiled without HTMLGallery support."                      LibXslt_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("OpenGL"            "http://www.mesa3d.org"                                           "(version >= 11.0.0)"                  "digiKam will be compiled without OpenGL support."                            HAVE_OPENGL)
+PRINT_OPTIONAL_LIBRARY_STATUS("bison"             "https://www.gnu.org/software/bison/"                             "(version >= 2.5.0)"                    "digiKam will be compiled without Panorama support."                          BISON_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"           "http://www.doxygen.org"                                          "(version >= 1.8.0)"                    "digiKam will be compiled without API documentation building support."        Doxygen_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("flex"              "http://flex.sourceforge.net/"                                    "(version >= 2.5.0)"                    "digiKam will be compiled without Panorama support."                          FLEX_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact" "https://projects.kde.org/projects/kde/kdepimlibs"                "(version >= ${AKONADI_MIN_VERSION})"   "digiKam will be compiled without KDE address book support."                  KF5AkonadiContact_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"         "http://eigen.tuxfamily.org"                                      "(version >= 3.0.0)"                    "digiKam will be compiled without Refocus tool support."                      Eigen3_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"        "http://www.gphoto.org"                                           "(version >= 2.4.0)"                    "digiKam will be compiled without GPhoto2 camera drivers support."            Gphoto2_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"         "http://www.ece.uvic.ca/~mdadams/jasper"                          "(version >= 1.7.0)"                    "digiKam will be compiled without JPEG2000 support."                          Jasper_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkcalcore"       "https://projects.kde.org/projects/kde/pim/kcalcore"              "(version >= ${CALENDAR_MIN_VERSION})"  "digiKam will be compiled without KDE calendar support."                      KF5CalendarCore_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libmediawiki"      "https://projects.kde.org/projects/extragear/libs/libmediawiki"   "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without libmediawiki support."                      KF5MediaWiki_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkvkontakte"     "https://projects.kde.org/projects/extragear/libs/libkvkontakte"  "(version >= ${VKONTAKTE_MIN_VERSION})" "digiKam will be compiled without libkvkontakte support."                     KF5Vkontakte_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/projects/kde/kdelibs/baloo"             "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE file metadata support."                 KF5FileMetaData_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkiconthemes"    "https://projects.kde.org/projects/frameworks/kiconthemes"        "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE desktop icon themes support."           KF5IconThemes_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkio"            "https://projects.kde.org/projects/frameworks/kio"                "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE desktop integration support."           KF5KIO_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"           "https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi"  "(version >= ${KIPI_MIN_VERSION})"      "digiKam will be compiled without Kipi-plugins support."                      KF5Kipi_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libknotifications" "https://projects.kde.org/projects/frameworks/knotifications"     "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE desktop notifications support."         KF5Notifications_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libknotifyconfig"  "https://projects.kde.org/projects/frameworks/knotifyconfig"      "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without KDE desktop notify configuration support."  KF5NotifyConfig_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libksane"          "https://projects.kde.org/projects/kde/kdegraphics/libs/libksane" "(version >= ${KSANE_MIN_VERSION})"     "digiKam will be compiled without libksane support."                          KF5Sane_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"        "http://lensfun.sourceforge.net"                                  "(version >= 0.2.6)"                    "digiKam will be compiled without Lens Auto Correction tool support."         LensFun_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"          "http://liblqr.wikidot.com"                                       "(version >= 0.4.1)"                    "digiKam will be compiled without Contents Aware Resizer tool support."       Lqr-1_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libmarble"         "https://projects.kde.org/projects/kde/kdeedu/marble"             "(version >= 0.22.0)"                   "digiKam will be compiled without geolocation maps support."                  Marble_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libqtav"           "http://www.qtav.org/"                                            "(version >= ${QTAV_MIN_VERSION})"      "digiKam will be compiled without Media Player support."                      QtAV_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libthreadweaver"   "https://projects.kde.org/projects/frameworks/threadweaver"       "(version >= ${KF5_MIN_VERSION})"       "digiKam will be compiled without Panorama support."                          KF5ThreadWeaver_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libxml2"           "http://xmlsoft.org"                                              "(version >= 2.7.0)"                    "digiKam will be compiled without HTMLGallery support."                       LibXml2_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libxslt"           "http://xmlsoft.org/XSLT"                                         "(version >= 1.1.0)"                    "digiKam will be compiled without HTMLGallery support."                       LibXslt_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("OpenGL"            "http://www.mesa3d.org"                                           "(version >= 11.0.0)"                   "digiKam will be compiled without OpenGL support."                            HAVE_OPENGL)
 
 # ==============================================================================
 
