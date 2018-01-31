@@ -48,10 +48,6 @@ if(KF5Notifications_FOUND)
     target_link_libraries(testdatabaseswitch KF5::Notifications)
 endif()
 
-if(KF5Kipi_FOUND)
-    target_link_libraries(testdatabaseswitch KF5::Kipi)
-endif()
-
 #------------------------------------------------------------------------
 
 set(testdatabaseinit_SRCS testdatabaseinit.cpp)
@@ -76,10 +72,6 @@ target_link_libraries(testdatabaseinit
 
 if(KF5Notifications_FOUND)
     target_link_libraries(testdatabaseinit KF5::Notifications)
-endif()
-
-if(KF5Kipi_FOUND)
-    target_link_libraries(testdatabaseinit KF5::Kipi)
 endif()
 
 #------------------------------------------------------------------------

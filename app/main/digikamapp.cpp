@@ -140,8 +140,14 @@
 #include "rajcewindow.h"
 #include "smugwindow.h"
 #include "yfwindow.h"
-#include "mediawikiwindow.h"
-#include "vkwindow.h"
+
+#ifdef HAVE_MEDIAWIKI
+#   include "mediawikiwindow.h"
+#endif
+
+#ifdef HAVE_VKONTAKTE
+#   include "vkwindow.h"
+#endif
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -2571,11 +2577,6 @@ void DigikamApp::slotSetupChanged()
 void DigikamApp::slotEditKeys()
 {
     editKeyboardShortcuts();
-}
-
-void DigikamApp::slotShowKipiHelp()
-{
-    DXmlGuiWindow::openHandbook();
 }
 
 void DigikamApp::slotDBStat()

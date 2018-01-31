@@ -26,10 +26,6 @@ if(KF5KIO_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-if(KF5Kipi_FOUND)
-     include_directories($<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>)
-endif()
-
 if(Gphoto2_FOUND)
     include_directories(${GPHOTO2_INCLUDE_DIRS})
 endif()

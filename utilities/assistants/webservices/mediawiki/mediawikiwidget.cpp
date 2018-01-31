@@ -437,7 +437,7 @@ MediaWikiWidget::MediaWikiWidget(DInfoInterface* const iface, QWidget* const par
     d->genComEdit           = new QTextEdit(textGBox);
     d->genComEdit->setTabChangesFocus(1);
     d->genComEdit->setWhatsThis(i18n("This is a place to enter text that will be used as upload comments. "
-                                     "The default of 'Uploaded via KIPI uploader' will be used if empty."));
+                                     "The default of 'Uploaded via digiKam uploader' will be used if empty."));
     d->genComEdit->setAcceptRichText(false);
 
     textBoxLayout->addWidget(authorLbl,          1, 0, 1, 1);
@@ -598,10 +598,10 @@ void MediaWikiWidget::readSettings(KConfigGroup& group)
     d->authorEdit->setText(group.readEntry("Author",           ""));
     d->sourceEdit->setText(group.readEntry("Source",           "{{own}}"));
 
-    d->genCatEdit->setText(group.readEntry("genCategories",    "Uploaded with KIPI uploader"));
+    d->genCatEdit->setText(group.readEntry("genCategories",    "Uploaded with digiKam uploader"));
     d->genTxtEdit->setText(group.readEntry("genText",          ""));
 
-    d->genComEdit->setText(group.readEntry("Comments",         "Uploaded with KIPI uploader"));
+    d->genComEdit->setText(group.readEntry("Comments",         "Uploaded with digiKam uploader"));
     d->resizeChB->setChecked(group.readEntry("Resize",         false));
     d->dimensionSpB->setValue(group.readEntry("Dimension",     1600));
     d->imageQualitySpB->setValue(group.readEntry("Quality",    85));

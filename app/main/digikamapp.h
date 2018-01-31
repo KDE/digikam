@@ -151,7 +151,6 @@ private Q_SLOTS:
     void slotImageSelected(const ImageInfoList&, const ImageInfoList&);
     void slotSelectionChanged(int selectionCount);
     void slotExit();
-    void slotShowKipiHelp();
     void slotDBStat();
     void slotComponentsInfo();
 

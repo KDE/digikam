@@ -253,7 +253,7 @@ bool MediaWikiWindow::prepareImageForUpload(const QString& imgPath)
         }
     }
 
-    // NOTE : In case of metadata are saved to tmp file, we will override MetadataProcessor settings from KIPI host
+    // NOTE : In case of metadata are saved to tmp file, we will override metadata processor settings from host
     // to write metadata to image file rather than sidecar file, to be effective with remote web service.
 
     DMetadata meta;

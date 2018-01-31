@@ -160,7 +160,7 @@ void MediaWikiTalker::uploadHandle(KJob* j)
         }
         else
         {
-            e1->setComment(i18n("Uploaded via KIPI uploader"));
+            e1->setComment(i18n("Uploaded via digiKam uploader"));
         }
 
         e1->setText(buildWikiText(info));

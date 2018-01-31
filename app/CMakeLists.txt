@@ -117,10 +117,6 @@ if(HAVE_OPENGL)
     include_directories($<TARGET_PROPERTY:Qt5::OpenGL,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-if(KF5Kipi_FOUND)
-    include_directories($<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>)
-endif()
-
 if(Gphoto2_FOUND)
     include_directories(${GPHOTO2_INCLUDE_DIRS})
 endif()
@@ -179,10 +175,6 @@ endif()
 
 if(KF5KIO_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::KIOWidgets)
-endif()
-
-if(KF5Kipi_FOUND)
-    target_link_libraries(digikamcore PUBLIC KF5::Kipi)
 endif()
 
 if(KF5Notifications_FOUND)
@@ -457,10 +449,6 @@ endif()
 
 if(KF5KIO_FOUND)
     target_link_libraries(digikamgui PUBLIC KF5::KIOWidgets)
-endif()
-
-if(KF5Kipi_FOUND)
-    target_link_libraries(digikamgui PUBLIC KF5::Kipi)
 endif()
 
 if(${Marble_FOUND})

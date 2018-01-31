@@ -110,7 +110,7 @@ struct PanoActionData
     PanoAction          action;
 };
 
-}  // namespace KIPIExpoBlendingPlugin
+}  // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::PanoActionData)
 Q_DECLARE_METATYPE(Digikam::PanoramaPreprocessedUrls)

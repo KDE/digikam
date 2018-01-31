@@ -185,6 +185,9 @@ private Q_SLOTS:
     void slotPrintCreator();
     void slotMediaServer();
 
+    void slotExportTool();
+    void slotImportTool();
+
 private:
 
     class Private;
