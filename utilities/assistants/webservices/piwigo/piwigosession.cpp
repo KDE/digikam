@@ -54,32 +54,32 @@ PiwigoSession::~PiwigoSession()
 
 QString PiwigoSession::url() const
 {
-    return mUrl;
+    return m_url;
 }
 
 QString PiwigoSession::username() const
 {
-    return mUsername;
+    return m_username;
 }
 
 QString PiwigoSession::password() const
 {
-    return mPassword;
+    return m_password;
 }
 
 void PiwigoSession::setUrl(const QString& url)
 {
-    mUrl = url;
+    m_url = url;
 }
 
 void PiwigoSession::setUsername(const QString& username)
 {
-    mUsername = username;
+    m_username = username;
 }
 
 void PiwigoSession::setPassword(const QString& password)
 {
-    mPassword = password;
+    m_password = password;
 }
 
 void PiwigoSession::load()
@@ -98,9 +98,9 @@ void PiwigoSession::load()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Reading data from kipirc file..";
 
-    mUrl      = group.readEntry("URL",      QString());
-    mUsername = group.readEntry("Username", QString());
-    mPassword = group.readEntry("Password", QString());
+    m_url      = group.readEntry("URL",      QString());
+    m_username = group.readEntry("Username", QString());
+    m_password = group.readEntry("Password", QString());
 }
 
 void PiwigoSession::save()

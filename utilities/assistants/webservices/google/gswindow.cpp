@@ -1044,7 +1044,7 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
 
         QMessageBox warn(QMessageBox::Warning,
                          i18n("Warning"),
-                         i18n("Failed to upload photo to %1.\n%2\nDo you want to continue?",m_pluginName,msg),
+                         i18n("Failed to upload photo to %1.\n%2\nDo you want to continue?", m_pluginName,msg),
                          QMessageBox::Yes | QMessageBox::No);
 
         (warn.button(QMessageBox::Yes))->setText(i18n("Continue"));

@@ -71,7 +71,8 @@ class PiwigoWindow::Private
 {
 public:
 
-    Private(PiwigoWindow* const parent);
+    Private(PiwigoWindow* const parent,
+            DInfoInterface* const interface);
 
     QWidget*                       widget;
 
@@ -84,10 +85,11 @@ public:
     QSpinBox*                      heightSpinBox;
     QSpinBox*                      qualitySpinBox;
 
-    QHash<QString, GAlbum>         albumDict;
+    QHash<QString, PiwigoAlbum>         albumDict;
 
     PiwigoTalker*                  talker;
     PiwigoSession*                 pPiwigo;
+    DInfoInterface*                iface;
 
     QProgressDialog*               progressDlg;
     unsigned int                   uploadCount;
@@ -95,8 +97,10 @@ public:
     QStringList*                   pUploadList;
 };
 
-PiwigoWindow::Private::Private(PiwigoWindow* const parent)
+PiwigoWindow::Private::Private(PiwigoWindow* const parent,
+                               DInfoInterface* const interface)
 {
+    iface       = interface;
     talker      = 0;
     pPiwigo     = 0;
     progressDlg = 0;
@@ -214,13 +218,14 @@ PiwigoWindow::Private::Private(PiwigoWindow* const parent)
     widget->setLayout(hlay);
 }
 
-// --------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
-PiwigoWindow::PiwigoWindow(QWidget* const parent, Piwigo* const pPiwigo)
+PiwigoWindow::PiwigoWindow(DInfoInterface* const iface,
+                           QWidget* const parent)
     : ToolDialog(parent),
-      d(new Private(this))
+      d(new Private(this, iface))
 {
-    d->pPiwigo = pPiwigo;
+    d->pPiwigo = new PiwigoSession();
 
     setWindowTitle( i18n("Piwigo Export") );
     setModal(false);
@@ -233,7 +238,7 @@ PiwigoWindow::PiwigoWindow(QWidget* const parent, Piwigo* const pPiwigo)
             this, SLOT(slotAddPhoto()));
 
     // we need to let d->talker work..
-    d->talker      = new PiwigoTalker(d->widget);
+    d->talker      = new PiwigoTalker(iface, d->widget);
 
     // setting progressDlg and its numeric hints
     d->progressDlg = new QProgressDialog(this);
@@ -248,9 +253,22 @@ PiwigoWindow::PiwigoWindow(QWidget* const parent, Piwigo* const pPiwigo)
     // connect functions
     connectSignals();
 
-    // read Settings
-    readSettings();
+    QPointer<PiwigoLoginDlg> configDlg;
+    KConfig config;
 
+    if (!config.hasGroup("Piwigo Settings") )
+    {
+        configDlg = new PiwigoLoginDlg(QApplication::activeWindow(),
+                                       d->pPiwigo,
+                                       i18n("Edit Piwigo Data") );
+
+        if (configDlg->exec() != QDialog::Accepted)
+        {
+            delete configDlg;
+        }
+    }
+
+    readSettings();
     slotDoLogin();
 }
 
@@ -297,8 +315,8 @@ void PiwigoWindow::connectSignals()
     connect(d->talker, SIGNAL(signalLoginFailed(QString)),
             this, SLOT(slotLoginFailed(QString)));
 
-    connect(d->talker, SIGNAL(signalAlbums(QList<GAlbum>)),
-            this, SLOT(slotAlbums(QList<GAlbum>)));
+    connect(d->talker, SIGNAL(signalAlbums(QList<PiwigoAlbum>)),
+            this, SLOT(slotAlbums(QList<PiwigoAlbum>)));
 
     connect(d->talker, SIGNAL(signalAddPhotoSucceeded()),
             this, SLOT(slotAddPhotoSucceeded()));
@@ -401,20 +419,20 @@ void PiwigoWindow::slotError(const QString& msg)
     QMessageBox::critical(this, QString(), msg);
 }
 
-void PiwigoWindow::slotAlbums(const QList<GAlbum>& albumList)
+void PiwigoWindow::slotAlbums(const QList<PiwigoAlbum>& albumList)
 {
     d->albumDict.clear();
     d->albumView->clear();
 
     // album work list
-    QList<GAlbum> workList(albumList);
+    QList<PiwigoAlbum> workList(albumList);
     QList<QTreeWidgetItem *> parentItemList;
 
     // fill QTreeWidget
     while ( !workList.isEmpty() )
     {
         // the album to work on
-        GAlbum album     = workList.takeFirst();
+        PiwigoAlbum album     = workList.takeFirst();
         int parentRefNum = album.parent_ref_num;
 
         if ( parentRefNum == -1 )
@@ -493,15 +511,17 @@ void PiwigoWindow::slotAlbumSelected()
 
 void PiwigoWindow::slotAddPhoto()
 {
-    const QList<QUrl> urls(iface()->currentSelection().images());
+    const QList<QUrl> urls(d->iface->currentSelectedItems());
 
     if ( urls.isEmpty())
     {
-        QMessageBox::critical(this, QString(), i18n("Nothing to upload - please select photos to upload."));
+        QMessageBox::critical(this, QString(),
+                              i18n("Nothing to upload - please select photos to upload."));
         return;
     }
 
-    for (QList<QUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    for (QList<QUrl>::const_iterator it = urls.constBegin();
+         it != urls.constEnd(); ++it)
     {
         d->pUploadList->append( (*it).toLocalFile() );
     }
@@ -525,7 +545,7 @@ void PiwigoWindow::slotAddPhotoNext()
     QTreeWidgetItem* const item = d->albumView->currentItem();
     int column                  = d->albumView->currentColumn();
     QString albumTitle          = item->text(column);
-    const GAlbum& album         = d->albumDict.value(albumTitle);
+    const PiwigoAlbum& album         = d->albumDict.value(albumTitle);
     QString photoPath           = d->pUploadList->takeFirst();
     bool res                    = d->talker->addPhoto(album.ref_num, photoPath,
                                                       d->resizeCheckBox->isChecked(),
@@ -603,7 +623,7 @@ void PiwigoWindow::slotEnableSpinBox(int n)
 void PiwigoWindow::slotSettings()
 {
     // TODO: reload albumlist if OK slot used.
-    QPointer<PiwigoEdit> dlg = new PiwigoEdit(QApplication::activeWindow(), d->pPiwigo, i18n("Edit Piwigo Data") );
+    QPointer<PiwigoLoginDlg> dlg = new PiwigoLoginDlg(QApplication::activeWindow(), d->pPiwigo, i18n("Edit Piwigo Data") );
 
     if ( dlg->exec() == QDialog::Accepted )
     {

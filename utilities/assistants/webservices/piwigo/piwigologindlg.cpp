@@ -38,21 +38,19 @@
 
 #include <klocalizedstring.h>
 
-// Libkipi includes
-
-#include <libkipi_version.h>
-#include <KIPI/Interface>
-
 // Local includes
 
-#include "kipiplugins_debug.h"
-#include "piwigos.h"
+#include "digikam_version.h"
+#include "digikam_debug.h"
+#include "piwigosession.h"
 
 namespace Digikam
 {
 
-PiwigoEdit::PiwigoEdit(QWidget* const pParent, Piwigo* const pPiwigo, const QString& title)
-        : QDialog(pParent, Qt::Dialog)
+PiwigoLoginDlg::PiwigoLoginDlg(QWidget* const pParent,
+                               PiwigoSession* const pPiwigo,
+                               const QString& title)
+    : QDialog(pParent, Qt::Dialog)
 {
     mpPiwigo = pPiwigo;
 
@@ -62,7 +60,7 @@ PiwigoEdit::PiwigoEdit(QWidget* const pParent, Piwigo* const pPiwigo, const QStr
     QGridLayout* const centerLayout = new QGridLayout();
     page->setMinimumSize(500, 128);
 
-    mpUrlEdit = new QLineEdit(this);
+    mpUrlEdit      = new QLineEdit(this);
     centerLayout->addWidget(mpUrlEdit, 1, 1);
 
     mpUsernameEdit = new QLineEdit(this);
@@ -104,15 +102,18 @@ PiwigoEdit::PiwigoEdit(QWidget* const pParent, Piwigo* const pPiwigo, const QStr
     dialogLayout->addWidget(page);
     dialogLayout->addWidget(buttonBox);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(accepted()),
+            this, SLOT(slotOk()));
+
+    connect(buttonBox, SIGNAL(rejected()),
+            this, SLOT(reject()));
 }
 
-PiwigoEdit::~PiwigoEdit()
+PiwigoLoginDlg::~PiwigoLoginDlg()
 {
 }
 
-void PiwigoEdit::slotOk()
+void PiwigoLoginDlg::slotOk()
 {
     if (mpUrlEdit->isModified())
         mpPiwigo->setUrl(mpUrlEdit->text());

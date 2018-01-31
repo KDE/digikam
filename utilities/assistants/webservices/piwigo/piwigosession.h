@@ -60,9 +60,9 @@ private:
 
 private:
 
-    QString          mUrl;
-    QString          mUsername;
-    QString          mPassword;
+    QString m_url;
+    QString m_username;
+    QString m_password;
 };
 
 } // namespace Digikam

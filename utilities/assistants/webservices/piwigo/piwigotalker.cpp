@@ -44,17 +44,19 @@
 
 // Local includes
 
+#include "dmetadata.h"
 #include "digikam_debug.h"
 #include "piwigoitem.h"
 #include "digikam_version.h"
 #include "exportutils.h"
+#include "previewloadthread.h"
 
 namespace Digikam
 {
 
 QString PiwigoTalker::s_authToken = QString::fromLatin1("");
 
-PiwigoTalker::PiwigoTalker(QWidget* const parent)
+PiwigoTalker::PiwigoTalker(DInfoInterface* const iface, QWidget* const parent)
     : m_parent(parent),
       m_state(GE_LOGOUT),
       m_netMngr(0),
@@ -65,19 +67,12 @@ PiwigoTalker::PiwigoTalker(QWidget* const parent)
       m_version(-1),
       m_albumId(0),
       m_photoId(0),
-      m_iface(0)
+      m_iface(iface)
 {
     m_netMngr = new QNetworkAccessManager(this);
 
     connect(m_netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
-
-    PluginLoader* const pl = PluginLoader::instance();
-
-    if (pl)
-    {
-        m_iface = pl->interface();
-    }
 }
 
 PiwigoTalker::~PiwigoTalker()
@@ -197,12 +192,8 @@ bool PiwigoTalker::addPhoto(int   albumId,
     else
     {
         // Image management
-        QImage image;
 
-        if (m_iface)
-        {
-            image = m_iface->preview(QUrl::fromLocalFile(mediaPath));
-        }
+        QImage image = PreviewLoadThread::loadHighQualitySynchronously(mediaPath).copyQImage();
 
         if (image.isNull())
         {
@@ -227,28 +218,29 @@ bool PiwigoTalker::addPhoto(int   albumId,
                 image = image.scaled(maxWidth, maxHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             }
 
-            m_path = m_tmpPath = makeTemporaryDir("piwigo").filePath(QUrl::fromLocalFile(mediaPath).fileName());
+            m_path = ExportUtils::makeTemporaryDir("piwigo")
+                     .filePath(QUrl::fromLocalFile(mediaPath).fileName());
+            m_tmpPath = m_path;
             image.save(m_path, "JPEG", quality);
 
             qCDebug(DIGIKAM_GENERAL_LOG) << "Upload a resized version: " << m_path ;
 
             // Restore all metadata with EXIF
             // in the resized version
-            if (m_iface)
-            {
-                QPointer<MetadataProcessor> meta = m_iface->createMetadataProcessor();
 
-                if (meta && meta->load(QUrl::fromLocalFile(mediaPath)))
-                {
-                    meta->setImageDimensions(image.size());
-                    meta->setImageOrientation(MetadataProcessor::NORMAL);
-                    meta->setImageProgramId(QString::fromLatin1("Kipi-plugins"), kipipluginsVersion());
-                    meta->save(QUrl::fromLocalFile(m_path), true);
-                }
-                else
-                {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Image " << mediaPath << " has no exif data";
-                }
+            DMetadata meta;
+
+            if (meta.load(mediaPath))
+            {
+                meta.setImageDimensions(image.size());
+                meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+                meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+                meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                meta.save(m_path);
+            }
+            else
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Image " << mediaPath << " has no exif data";
             }
         }
     }
@@ -262,20 +254,21 @@ bool PiwigoTalker::addPhoto(int   albumId,
     m_author  = QString::fromLatin1("");
     m_date    = fi.created();
 
-    // Look in the Kipi host database
-    KPImageInfo info(QUrl::fromLocalFile(mediaPath));
+    // Look in the host database
 
-    if (info.hasTitle() && !info.title().isEmpty())
+    DItemInfo info(m_iface->itemInfo(mediaPath));
+
+    if (!info.title().isEmpty())
         m_title = info.title();
 
-    if (info.hasDescription() && !info.description().isEmpty())
-        m_comment = info.description();
+    if (!info.comment().isEmpty())
+        m_comment = info.comment();
 
-    if (info.hasCreators() && !info.creators().isEmpty())
+    if (!info.creators().isEmpty())
         m_author = info.creators().join(QString::fromLatin1(" / "));
 
-    if (info.hasDate())
-        m_date = info.date();
+    if (!info.dateTime().isNull())
+        m_date = info.dateTime();
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Title: "   << m_title;
     qCDebug(DIGIKAM_GENERAL_LOG) << "Comment: " << m_comment;
@@ -492,9 +485,9 @@ void PiwigoTalker::parseResponseListAlbums(const QByteArray& data)
     bool foundResponse = false;
     bool success       = false;
 
-    typedef QList<GAlbum> GAlbumList;
-    GAlbumList albumList;
-    GAlbumList::iterator iter = albumList.begin();
+    typedef QList<PiwigoAlbum> PiwigoAlbumList;
+    PiwigoAlbumList albumList;
+    PiwigoAlbumList::iterator iter = albumList.begin();
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "parseResponseListAlbums";
 
@@ -520,7 +513,7 @@ void PiwigoTalker::parseResponseListAlbums(const QByteArray& data)
 
             if (ts.name() == QString::fromLatin1("category"))
             {
-                GAlbum album;
+                PiwigoAlbum album;
                 album.ref_num = ts.attributes().value(QString::fromLatin1("id")).toString().toInt();
                 album.parent_ref_num = -1;
 

@@ -36,16 +36,18 @@
 namespace Digikam
 {
 
-class Piwigo;
+class PiwigoSession;
 
-class PiwigoEdit : public QDialog
+class PiwigoLoginDlg : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit PiwigoEdit(QWidget* const pParent, Piwigo* const pPiwigo, const QString& title);
-    ~PiwigoEdit();
+    explicit PiwigoLoginDlg(QWidget* const pParent,
+                            PiwigoSession* const pPiwigo,
+                            const QString& title);
+    ~PiwigoLoginDlg();
 
 private Q_SLOTS:
 
@@ -53,11 +55,11 @@ private Q_SLOTS:
 
 private:
 
-    QLineEdit* mpUrlEdit;
-    QLineEdit* mpUsernameEdit;
-    QLineEdit* mpPasswordEdit;
+    QLineEdit*     mpUrlEdit;
+    QLineEdit*     mpUsernameEdit;
+    QLineEdit*     mpPasswordEdit;
 
-    Piwigo*    mpPiwigo;
+    PiwigoSession* mpPiwigo;
 };
 
 } // namespace Digikam

@@ -31,15 +31,15 @@
 
 #include <QList>
 
-// local includes
+// Local includes
 
 #include "tooldialog.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
 
-class PiwigoSession;
-class GAlbum;
+class PiwigoAlbum;
 
 class DIGIKAM_EXPORT PiwigoWindow : public ToolDialog
 {
@@ -47,7 +47,8 @@ class DIGIKAM_EXPORT PiwigoWindow : public ToolDialog
 
 public:
 
-    explicit PiwigoWindow(QWidget* const parent, PiwigoSession* const pPiwigo);
+    explicit PiwigoWindow(DInfoInterface* const iface,
+                          QWidget* const parent);
     ~PiwigoWindow();
 
 private:
@@ -63,7 +64,7 @@ private Q_SLOTS:
     void slotBusy(bool val);
     void slotProgressInfo(const QString& msg);
     void slotError(const QString& msg);
-    void slotAlbums(const QList<GAlbum>& albumList);
+    void slotAlbums(const QList<PiwigoAlbum>& albumList);
     void slotAlbumSelected();
     void slotAddPhoto();
     void slotAddPhotoNext();

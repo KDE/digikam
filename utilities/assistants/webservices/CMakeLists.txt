@@ -207,5 +207,5 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsmediawiki_SRCS}
                                    ${libwsgoogle_SRCS}
                                    ${libwsyandexfotki_SRCS}
-#                                   ${libwspiwigo_SRCS}
+                                   ${libwspiwigo_SRCS}
 )

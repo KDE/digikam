@@ -47,8 +47,7 @@ template <class T> class QList;
 namespace Digikam
 {
 
-class GAlbum;
-class GPhoto;
+class PiwigoAlbum;
 
 class PiwigoTalker : public QObject
 {
@@ -77,7 +76,8 @@ public:
 
 public:
 
-    explicit PiwigoTalker(QWidget* const parent);
+    explicit PiwigoTalker(DInfoInterface* const iface,
+                          QWidget* const parent);
     ~PiwigoTalker();
 
     static QString getAuthToken()
@@ -99,7 +99,10 @@ public:
 
     bool addPhoto(int albumId,
                   const QString& photoPath,
-                  bool  rescale = false, int maxWidth = 1600, int maxHeight = 1600, int quality = 95);
+                  bool  rescale = false,
+                  int maxWidth = 1600,
+                  int maxHeight = 1600,
+                  int quality = 95);
 
     void cancel();
 
@@ -109,7 +112,7 @@ Q_SIGNALS:
     void signalError(const QString& msg);
     void signalLoginFailed(const QString& msg);
     void signalBusy(bool val);
-    void signalAlbums(const QList<GAlbum>& albumList);
+    void signalAlbums(const QList<PiwigoAlbum>& albumList);
     void signalAddPhotoSucceeded();
     void signalAddPhotoFailed(const QString& msg);
 

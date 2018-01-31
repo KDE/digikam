@@ -34,17 +34,17 @@
 namespace Digikam
 {
 
-class GAlbum
+class PiwigoAlbum
 {
 public:
 
-    explicit GAlbum()
+    explicit PiwigoAlbum()
     {
         ref_num        = -1;
         parent_ref_num = -1;
     }
 
-    bool operator<(const GAlbum& rhs) const
+    bool operator<(const PiwigoAlbum& rhs) const
     {
         if (parent_ref_num == rhs.parent_ref_num)
         {
