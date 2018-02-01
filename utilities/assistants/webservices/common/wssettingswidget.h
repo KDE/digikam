@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETTINGS_WIDGET_H
-#define SETTINGS_WIDGET_H
+#ifndef WS_SETTINGS_WIDGET_H
+#define WS_SETTINGS_WIDGET_H
 
 //Qt includes
 
@@ -110,4 +110,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETTINGS_WIDGET_H
+#endif // WS_SETTINGS_WIDGET_H

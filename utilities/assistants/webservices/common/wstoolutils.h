@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPORT_UTILS_H
-#define EXPORT_UTILS_H
+#ifndef WS_EXPORT_UTILS_H
+#define WS_EXPORT_UTILS_H
 
 // Qt includes
 
@@ -52,4 +52,4 @@ public:
 
 } // namespace Digikam
 
-#endif // EXPORT_UTILS_H
+#endif // WS_EXPORT_UTILS_H

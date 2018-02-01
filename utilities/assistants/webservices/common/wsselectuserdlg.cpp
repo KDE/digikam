@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2015-16-05
- * Description : a dialog to select user for export tools
+ * Description : a dialog to select user for Web Service tools
  *
  * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "selectuserdlg.h"
+#include "wsselectuserdlg.h"
 
 // Qt includes
 
@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-SelectUserDlg::SelectUserDlg(QWidget* const parent, const QString& serviceName)
+WSSelectUserDlg::WSSelectUserDlg(QWidget* const parent, const QString& serviceName)
     : QDialog(parent)
 {
     m_serviceName = serviceName;
@@ -95,13 +95,13 @@ SelectUserDlg::SelectUserDlg(QWidget* const parent, const QString& serviceName)
             this, SLOT(slotNewAccountClicked()));
 }
 
-SelectUserDlg::~SelectUserDlg()
+WSSelectUserDlg::~WSSelectUserDlg()
 {
     delete m_userComboBox;
     delete m_label;
 }
 
-void SelectUserDlg::reactivate()
+void WSSelectUserDlg::reactivate()
 {
     KConfig config;
 
@@ -125,22 +125,22 @@ void SelectUserDlg::reactivate()
     exec();
 }
 
-void SelectUserDlg::slotOkClicked()
+void WSSelectUserDlg::slotOkClicked()
 {
     m_uname = m_userComboBox->currentText();
 }
 
-void SelectUserDlg::slotNewAccountClicked()
+void WSSelectUserDlg::slotNewAccountClicked()
 {
     m_uname = QString();
 }
 
-QString SelectUserDlg::getUname() const
+QString WSSelectUserDlg::getUname() const
 {
     return m_uname;
 }
 
-SelectUserDlg* SelectUserDlg::getDlg()
+WSSelectUserDlg* WSSelectUserDlg::getDlg()
 {
     return this;
 }

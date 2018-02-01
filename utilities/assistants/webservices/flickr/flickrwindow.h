@@ -51,7 +51,7 @@ class QCheckBox;
 namespace Digikam
 {
 
-class SelectUserDlg;
+class WSSelectUserDlg;
 class FlickrWidget;
 class FlickrTalker;
 class FlickrList;
@@ -155,7 +155,7 @@ private:
     FlickrTalker*                          m_talker;
 
     FlickrList*                            m_imglst;
-    SelectUserDlg*                         m_select;
+    WSSelectUserDlg*                         m_select;
     FlickrNewAlbumDlg*                     m_albumDlg;
 
     DInfoInterface*                        m_iface;

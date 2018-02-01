@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2015-16-05
- * Description : a dialog to select user for export tools
+ * Description : a dialog to select user for Web Service tools
  *
  * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef SELECT_USER_DLG_H
-#define SELECT_USER_DLG_H
+#ifndef WS_SELECT_USER_DLG_H
+#define WS_SELECT_USER_DLG_H
 
 // Qt includes
 
@@ -34,17 +34,17 @@ class QLabel;
 namespace Digikam
 {
 
-class SelectUserDlg : public QDialog
+class WSSelectUserDlg : public QDialog
 {
     Q_OBJECT
 public:
 
-    explicit SelectUserDlg(QWidget* const parent, const QString& serviceName);
-    ~SelectUserDlg();
+    explicit WSSelectUserDlg(QWidget* const parent, const QString& serviceName);
+    ~WSSelectUserDlg();
 
     void           reactivate();
     QString        getUname() const;
-    SelectUserDlg* getDlg();
+    WSSelectUserDlg* getDlg();
 
 private:
 
@@ -63,4 +63,4 @@ protected Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // SELECT_USER_DLG_H
+#endif // WS_SELECT_USER_DLG_H

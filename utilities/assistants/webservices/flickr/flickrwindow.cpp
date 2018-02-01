@@ -50,7 +50,7 @@
 #include "flickritem.h"
 #include "flickrlist.h"
 #include "flickrwidget.h"
-#include "selectuserdlg.h"
+#include "wsselectuserdlg.h"
 #include "digikam_debug.h"
 #include "flickrnewalbumdlg.h"
 #include "previewloadthread.h"
@@ -86,7 +86,7 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
         grp.deleteGroup();
     }
 
-    m_select                    = new SelectUserDlg(0, serviceName);
+    m_select                    = new WSSelectUserDlg(0, serviceName);
     m_select->reactivate();
 
     m_uploadCount               = 0;
