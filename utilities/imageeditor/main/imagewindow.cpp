@@ -132,6 +132,24 @@
 #include "advprintwizard.h"
 #include "dmediaserverdlg.h"
 #include "facetagseditor.h"
+#include "dbwindow.h"
+#include "fbwindow.h"
+#include "flickrwindow.h"
+#include "gswindow.h"
+#include "imageshackwindow.h"
+#include "imgurwindow.h"
+#include "piwigowindow.h"
+#include "rajcewindow.h"
+#include "smugwindow.h"
+#include "yfwindow.h"
+
+#ifdef HAVE_MEDIAWIKI
+#   include "mediawikiwindow.h"
+#endif
+
+#ifdef HAVE_VKONTAKTE
+#   include "vkwindow.h"
+#endif
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -1960,6 +1978,101 @@ void ImageWindow::slotMediaServer()
 
     DMediaServerDlg w(this, iface);
     w.exec();
+}
+
+void ImageWindow::slotExportTool()
+{
+    QAction* const tool = dynamic_cast<QAction*>(sender());
+
+    if (tool == m_exportDropboxAction)
+    {
+        DBWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportFacebookAction)
+    {
+        FbWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportFlickrAction)
+    {
+        FlickrWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportGdriveAction)
+    {
+        GSWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport),
+                   this, QLatin1String("googledriveexport"));
+        w.exec();
+    }
+    else if (tool == m_exportGphotoAction)
+    {
+        GSWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport),
+                   this, QLatin1String("googlephotoexport"));
+        w.exec();
+    }
+    else if (tool == m_exportImageshackAction)
+    {
+        ImageShackWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportImgurAction)
+    {
+        ImgurWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportPiwigoAction)
+    {
+        PiwigoWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportRajceAction)
+    {
+        RajceWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportSmugmugAction)
+    {
+        SmugWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportYandexfotkiAction)
+    {
+        YFWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#ifdef HAVE_MEDIAWIKI
+    else if (tool == m_exportMediawikiAction)
+    {
+        MediaWikiWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
+#ifdef HAVE_VKONTAKTE
+    else if (tool == m_exportVkontakteAction)
+    {
+        VKWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
+}
+
+void ImageWindow::slotImportTool()
+{
+    QAction* const tool = dynamic_cast<QAction*>(sender());
+
+    if (tool == m_importGphotoAction)
+    {
+        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+                   this, QLatin1String("googlephotoimport"));
+        w.exec();
+    }
+    else if (tool == m_importSmugmugAction)
+    {
+        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+                     this, true);
+        w.exec();
+    }
 }
 
 } // namespace Digikam

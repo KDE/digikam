@@ -831,6 +831,8 @@ void EditorWindow::setupStandardActions()
     createSendByMailAction();
     createPrintCreatorAction();
     createMediaServerAction();
+    createExportActions();
+    createImportActions();
 
     m_metadataEditAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);
@@ -858,6 +860,12 @@ void EditorWindow::setupStandardActions()
     m_videoslideshowAction->setEnabled(false);
 #endif
 
+    foreach (QAction* const ac, exportActions())
+        ac->setEnabled(false);
+        
+    foreach (QAction* const ac, importActions())
+        ac->setEnabled(false);
+    
     // --------------------------------------------------------
 
     createFullScreenAction(QLatin1String("editorwindow_fullscreen"));
@@ -1445,6 +1453,13 @@ void EditorWindow::toggleStandardActions(bool val)
     m_videoslideshowAction->setEnabled(val);
 #endif
 
+    foreach (QAction* const ac, exportActions())
+        ac->setEnabled(val);
+        
+    foreach (QAction* const ac, importActions())
+        ac->setEnabled(val);
+    
+    
     // these actions are special: They are turned off if val is false,
     // but if val is true, they may be turned on or off.
     if (val)
@@ -3053,9 +3068,21 @@ void EditorWindow::setupSelectToolsAction()
 #ifdef HAVE_MARBLE
     actionModel->addAction(m_geolocationEditAction,       postCategory);
 #endif
+    
+    QString exportCategory           = i18nc("@title Export Tools",          "Export");
+
+    foreach(QAction* const ac, exportActions())
+    {
+        actionModel->addAction(ac,                        exportCategory);
+    }
 
     QString importCategory           = i18nc("@title Import Tools",          "Import");
 
+    foreach(QAction* const ac, importActions())
+    {
+        actionModel->addAction(ac,                        importCategory);
+    }
+    
 #ifdef HAVE_KSANE
     actionModel->addAction(m_ksaneAction,                 importCategory);
 #endif

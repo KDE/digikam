@@ -143,7 +143,6 @@
       <Separator/>
       <Action name="import_googlephoto" />
       <Action name="import_smugmug" />
-      <Separator/>
   </Menu>
 
   <Menu name="Export"><text>&amp;Export</text>
