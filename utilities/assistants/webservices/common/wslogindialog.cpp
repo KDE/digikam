@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2015-11-12
- * Description : a common login dialog for export tools
+ * Description : a common login dialog for Web Service tools
  *
  * Copyright (C) 2007-2008 by Vardhman Jain <vardhman at gmail dot com>
  * Copyright (C) 2011      by Roman Tsisyk <roman at tsisyk dot com>
@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "logindialog.h"
+#include "wslogindialog.h"
 
 // Qt includes
 
@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-LoginDialog::LoginDialog(QWidget* const parent, const QString& prompt,
+WSLoginDialog::WSLoginDialog(QWidget* const parent, const QString& prompt,
                          const QString& login, const QString& password)
     : QDialog(parent)
 {
@@ -119,31 +119,31 @@ LoginDialog::LoginDialog(QWidget* const parent, const QString& prompt,
             this, SLOT(reject()));
 }
 
-LoginDialog::~LoginDialog()
+WSLoginDialog::~WSLoginDialog()
 {
 }
 
-QString LoginDialog::login() const
+QString WSLoginDialog::login() const
 {
     return m_loginEdit->text();
 }
 
-QString LoginDialog::password() const
+QString WSLoginDialog::password() const
 {
     return m_passwordEdit->text();
 }
 
-void LoginDialog::setLogin(const QString& login)
+void WSLoginDialog::setLogin(const QString& login)
 {
     m_loginEdit->setText(login);
 }
 
-void LoginDialog::setPassword(const QString& password)
+void WSLoginDialog::setPassword(const QString& password)
 {
     m_passwordEdit->setText(password);
 }
 
-void LoginDialog::slotAccept()
+void WSLoginDialog::slotAccept()
 {
     if (!m_passwordEdit->text().isEmpty())
     {

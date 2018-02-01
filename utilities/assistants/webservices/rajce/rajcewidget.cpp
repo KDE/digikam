@@ -51,7 +51,7 @@
 #include "rajcenewalbumdlg.h"
 #include "dimageslist.h"
 #include "wssettingswidget.h"
-#include "logindialog.h"
+#include "wslogindialog.h"
 
 namespace Digikam
 {
@@ -282,7 +282,7 @@ void RajceWidget::progressStarted(unsigned commandType)
 
 void RajceWidget::changeUserClicked()
 {
-    LoginDialog* const dlg = new LoginDialog(this, QString::fromLatin1("Rajce.net"));
+    WSLoginDialog* const dlg = new WSLoginDialog(this, QString::fromLatin1("Rajce.net"));
 
     if (dlg->exec() == QDialog::Accepted)
     {

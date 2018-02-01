@@ -58,7 +58,7 @@
 #include "yfnewalbumdlg.h"
 #include "digikam_debug.h"
 #include "wstoolutils.h"
-#include "logindialog.h"
+#include "wslogindialog.h"
 #include "yfwidget.h"
 #include "previewloadthread.h"
 
@@ -319,7 +319,7 @@ void YFWindow::authenticate(bool forceAuthWindow)
     // update credentials
     if (forceAuthWindow || m_talker.login().isNull() || m_talker.password().isNull())
     {
-        LoginDialog* const dlg = new LoginDialog(this, QString::fromLatin1("Yandex.Fotki"), m_talker.login(), QString());
+        WSLoginDialog* const dlg = new WSLoginDialog(this, QString::fromLatin1("Yandex.Fotki"), m_talker.login(), QString());
 
         if (dlg->exec() == QDialog::Accepted)
         {

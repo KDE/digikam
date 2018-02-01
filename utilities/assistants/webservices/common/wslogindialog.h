@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2015-11-12
- * Description : a common login dialog for export tools
+ * Description : a common login dialog for Web Service tools
  *
  * Copyright (C) 2007-2008 by Vardhman Jain <vardhman at gmail dot com>
  * Copyright (C) 2011      by Roman Tsisyk <roman at tsisyk dot com>
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef LOGIN_DIALOG_H
-#define LOGIN_DIALOG_H
+#ifndef WS_LOGIN_DIALOG_H
+#define WS_LOGIN_DIALOG_H
 
 #include <QDialog>
 
@@ -38,15 +38,15 @@ class QLineEdit;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT LoginDialog : public QDialog
+class DIGIKAM_EXPORT WSLoginDialog : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit LoginDialog(QWidget* const parent, const QString& prompt,
-                         const QString& header=QString(), const QString& passwd=QString());
-    ~LoginDialog();
+    explicit WSLoginDialog(QWidget* const parent, const QString& prompt,
+                           const QString& header=QString(), const QString& passwd=QString());
+    ~WSLoginDialog();
 
     QString login()    const;
     QString password() const;
@@ -67,4 +67,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // LOGIN_DIALOG_H
+#endif // WS_LOGIN_DIALOG_H

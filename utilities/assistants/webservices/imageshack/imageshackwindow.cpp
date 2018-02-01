@@ -59,7 +59,7 @@
 #include "imageshackwidget.h"
 #include "imageshacktalker.h"
 #include "dprogresswdg.h"
-#include "logindialog.h"
+#include "wslogindialog.h"
 #include "imageshacknewalbumdlg.h"
 
 namespace Digikam
@@ -245,7 +245,7 @@ void ImageShackWindow::authenticate()
     m_widget->m_progressBar->setMaximum(4);
     m_widget->progressBar()->setFormat(i18n("Authenticating..."));
 
-    LoginDialog* const dlg = new LoginDialog(this, QString::fromLatin1("ImageShack"));
+    WSLoginDialog* const dlg = new WSLoginDialog(this, QString::fromLatin1("ImageShack"));
 
     if (dlg->exec() == QDialog::Accepted)
     {

@@ -34,7 +34,7 @@
 // Local includes
 
 #include "wstooldialog.h"
-#include "logindialog.h"
+#include "wslogindialog.h"
 #include "smugitem.h"
 #include "dinfointerface.h"
 #include "digikam_export.h"
@@ -125,7 +125,7 @@ private:
     qint64           m_currentTmplID;
     qint64           m_currentCategoryID;
 
-    LoginDialog*     m_loginDlg;
+    WSLoginDialog*     m_loginDlg;
 
     QList<QUrl>      m_transferQueue;
 
