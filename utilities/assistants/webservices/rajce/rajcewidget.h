@@ -30,7 +30,7 @@
 // Local includes
 
 #include "rajcesession.h"
-#include "settingswidget.h"
+#include "wssettingswidget.h"
 #include "dinfointerface.h"
 #include "dprogresswdg.h"
 
@@ -45,7 +45,7 @@ namespace Digikam
 
 class RajceTalker;
 
-class RajceWidget : public SettingsWidget
+class RajceWidget : public WSSettingsWidget
 {
     Q_OBJECT
 

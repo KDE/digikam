@@ -48,7 +48,7 @@ GSWidget::GSWidget(QWidget* const parent,
                    DInfoInterface* const iface,
                    const GoogleService& service,
                    const QString& serviceName)
-    : SettingsWidget(parent, iface, serviceName)
+    : WSSettingsWidget(parent, iface, serviceName)
 {
     m_service               = service;
     QGroupBox* m_LeafBox    = new QGroupBox(QString::fromLatin1(""), getSettingsBox());

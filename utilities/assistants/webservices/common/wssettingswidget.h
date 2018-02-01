@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2015-07-28
- * Description : Common widgets shared by export tools
+ * Description : Common widgets shared by Web Service tools
  *
  * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
  * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
@@ -49,16 +49,16 @@ class QHBoxLayout;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT SettingsWidget : public QWidget
+class DIGIKAM_EXPORT WSSettingsWidget : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit SettingsWidget(QWidget* const parent,
+    explicit WSSettingsWidget(QWidget* const parent,
                             DInfoInterface* const iface,
                             const QString& toolName);
-    ~SettingsWidget();
+    ~WSSettingsWidget();
 
     virtual void updateLabels(const QString& name = QString(), const QString& url = QString()) = 0;
 

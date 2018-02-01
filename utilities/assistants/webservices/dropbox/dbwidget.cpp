@@ -37,7 +37,7 @@ namespace Digikam
 DBWidget::DBWidget(QWidget* const parent,
                    DInfoInterface* const iface,
                    const QString& toolName)
-    : SettingsWidget(parent, iface, toolName)
+    : WSSettingsWidget(parent, iface, toolName)
 {
     getUploadBox()->hide();
     getSizeBox()->hide();

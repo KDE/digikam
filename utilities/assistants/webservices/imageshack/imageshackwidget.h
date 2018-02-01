@@ -30,7 +30,7 @@
 // Local includes
 
 #include "dprogresswdg.h"
-#include "settingswidget.h"
+#include "wssettingswidget.h"
 #include "dinfointerface.h"
 
 class QRadioButton;
@@ -47,7 +47,7 @@ namespace Digikam
 
 class ImageShackSession;
 
-class ImageShackWidget : public SettingsWidget
+class ImageShackWidget : public WSSettingsWidget
 {
     Q_OBJECT
 

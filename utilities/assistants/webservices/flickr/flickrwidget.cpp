@@ -52,7 +52,7 @@ namespace Digikam
 FlickrWidget::FlickrWidget(QWidget* const parent,
                            DInfoInterface* const iface,
                            const QString& serviceName)
-    : SettingsWidget(parent, iface, serviceName)
+    : WSSettingsWidget(parent, iface, serviceName)
 {
     m_serviceName = serviceName;
 
@@ -232,7 +232,7 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
     getUploadBox()->hide();
     getSizeBox()->hide();
 
-    // Removing KPImageLists inherited from KPSettingsWidget and replacing it with more specific FlickrList
+    // Removing KPImageLists inherited from KPWSSettingsWidget and replacing it with more specific FlickrList
     replaceImageList(m_imglst);
 
     updateLabels();

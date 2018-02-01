@@ -48,7 +48,7 @@ namespace Digikam
 FbWidget::FbWidget(QWidget* const parent,
                    DInfoInterface* const iface,
                    const QString& toolName)
-    : SettingsWidget(parent, iface, toolName)
+    : WSSettingsWidget(parent, iface, toolName)
 {
     m_iface = iface;
 

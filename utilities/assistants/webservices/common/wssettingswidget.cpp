@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2015-07-28
- * Description : Common widgets shared by export tools
+ * Description : Common widgets shared by Web Service tools
  *
  * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
  * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "settingswidget.h"
+#include "wssettingswidget.h"
 
 // Qt includes
 
@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class SettingsWidget::Private
+class WSSettingsWidget::Private
 {
 public:
 
@@ -129,7 +129,7 @@ public:
     DProgressWdg*                  m_progressBar;
 };
 
-SettingsWidget::SettingsWidget(QWidget* const parent,
+WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
                                DInfoInterface* const iface,
                                const QString& toolName)
     : QWidget(parent),
@@ -277,12 +277,12 @@ SettingsWidget::SettingsWidget(QWidget* const parent,
             this, SLOT(slotResizeChecked()));
 }
 
-SettingsWidget::~SettingsWidget()
+WSSettingsWidget::~WSSettingsWidget()
 {
     delete d;
 }
 
-QString SettingsWidget::getDestinationPath() const
+QString WSSettingsWidget::getDestinationPath() const
 {
     QString path;
     int a = d->m_iface->albumSelectorItem();
@@ -296,148 +296,148 @@ QString SettingsWidget::getDestinationPath() const
     return path;
 }
 
-DImagesList* SettingsWidget::imagesList() const
+DImagesList* WSSettingsWidget::imagesList() const
 {
     return d->m_imgList;
 }
 
-void SettingsWidget::slotResizeChecked()
+void WSSettingsWidget::slotResizeChecked()
 {
     d->m_resizeChB->setEnabled(!d->m_originalChB->isChecked());
     d->m_imageQualitySpB->setEnabled(!d->m_originalChB->isChecked());
     d->m_dimensionSpB->setEnabled(d->m_resizeChB->isChecked() && !d->m_originalChB->isChecked());
 }
 
-DProgressWdg* SettingsWidget::progressBar() const
+DProgressWdg* WSSettingsWidget::progressBar() const
 {
     return d->m_progressBar;
 }
 
-void SettingsWidget::addWidgetToSettingsBox(QWidget* const widget)
+void WSSettingsWidget::addWidgetToSettingsBox(QWidget* const widget)
 {
     d->m_settingsBoxLayout->addWidget(widget);
     d->m_settingsBoxLayout->removeWidget(d->m_progressBar); // NOTE: This is important because progress bar always has to be at the end of settings box layout. So we remove it and then add it back.
     d->m_settingsBoxLayout->addWidget(d->m_progressBar);
 }
 
-void SettingsWidget::replaceImageList(QWidget* const imgList)
+void WSSettingsWidget::replaceImageList(QWidget* const imgList)
 {
     d->m_imgList->hide();
     d->mainLayout->removeWidget(d->m_imgList);
     d->mainLayout->insertWidget(0, imgList);
 }
 
-QWidget* SettingsWidget::getSettingsBox() const
+QWidget* WSSettingsWidget::getSettingsBox() const
 {
     return d->m_settingsBox;
 }
 
-QVBoxLayout* SettingsWidget::getSettingsBoxLayout() const
+QVBoxLayout* WSSettingsWidget::getSettingsBoxLayout() const
 {
     return d->m_settingsBoxLayout;
 }
 
-QGroupBox* SettingsWidget::getAlbumBox() const
+QGroupBox* WSSettingsWidget::getAlbumBox() const
 {
     return d->m_albBox;
 }
 
-QGridLayout* SettingsWidget::getAlbumBoxLayout() const
+QGridLayout* WSSettingsWidget::getAlbumBoxLayout() const
 {
     return d->m_albumsBoxLayout;
 }
 
-QGroupBox* SettingsWidget::getOptionsBox() const
+QGroupBox* WSSettingsWidget::getOptionsBox() const
 {
     return d->m_optionsBox;
 }
 
-QGridLayout* SettingsWidget::getOptionsBoxLayout() const
+QGridLayout* WSSettingsWidget::getOptionsBoxLayout() const
 {
     return d->m_optionsBoxLayout;
 }
 
-QGroupBox* SettingsWidget::getUploadBox() const
+QGroupBox* WSSettingsWidget::getUploadBox() const
 {
     return d->m_uploadBox;
 }
 
-QVBoxLayout* SettingsWidget::getUploadBoxLayout() const
+QVBoxLayout* WSSettingsWidget::getUploadBoxLayout() const
 {
     return d->m_uploadBoxLayout;
 }
 
-QGroupBox* SettingsWidget::getSizeBox() const
+QGroupBox* WSSettingsWidget::getSizeBox() const
 {
     return d->m_sizeBox;
 }
 
-QVBoxLayout* SettingsWidget::getSizeBoxLayout() const
+QVBoxLayout* WSSettingsWidget::getSizeBoxLayout() const
 {
     return d->m_sizeBoxLayout;
 }
 
-QGroupBox* SettingsWidget::getAccountBox() const
+QGroupBox* WSSettingsWidget::getAccountBox() const
 {
     return d->m_accountBox;
 }
 
-QGridLayout* SettingsWidget::getAccountBoxLayout() const
+QGridLayout* WSSettingsWidget::getAccountBoxLayout() const
 {
     return d->m_accountBoxLayout;
 }
 
-QLabel* SettingsWidget::getHeaderLbl() const
+QLabel* WSSettingsWidget::getHeaderLbl() const
 {
     return d->m_headerLbl;
 }
 
-QLabel* SettingsWidget::getUserNameLabel() const
+QLabel* WSSettingsWidget::getUserNameLabel() const
 {
     return d->m_userNameDisplayLbl;
 }
 
-QPushButton* SettingsWidget::getChangeUserBtn() const
+QPushButton* WSSettingsWidget::getChangeUserBtn() const
 {
     return d->m_changeUserBtn;
 }
 
-QComboBox* SettingsWidget::getDimensionCoB() const
+QComboBox* WSSettingsWidget::getDimensionCoB() const
 {
     return d->m_dlDimensionCoB;
 }
 
-QPushButton* SettingsWidget::getNewAlbmBtn() const
+QPushButton* WSSettingsWidget::getNewAlbmBtn() const
 {
     return d->m_newAlbumBtn;
 }
 
-QPushButton* SettingsWidget::getReloadBtn() const
+QPushButton* WSSettingsWidget::getReloadBtn() const
 {
     return d->m_reloadAlbumsBtn;
 }
 
-QCheckBox* SettingsWidget::getOriginalCheckBox() const
+QCheckBox* WSSettingsWidget::getOriginalCheckBox() const
 {
     return d->m_originalChB;
 }
 
-QCheckBox* SettingsWidget::getResizeCheckBox() const
+QCheckBox* WSSettingsWidget::getResizeCheckBox() const
 {
     return d->m_resizeChB;
 }
 
-QSpinBox* SettingsWidget::getDimensionSpB() const
+QSpinBox* WSSettingsWidget::getDimensionSpB() const
 {
     return d->m_dimensionSpB;
 }
 
-QSpinBox* SettingsWidget::getImgQualitySpB() const
+QSpinBox* WSSettingsWidget::getImgQualitySpB() const
 {
     return d->m_imageQualitySpB;
 }
 
-QComboBox* SettingsWidget::getAlbumsCoB() const
+QComboBox* WSSettingsWidget::getAlbumsCoB() const
 {
     return d->m_albumsCoB;
 }

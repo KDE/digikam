@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "settingswidget.h"
+#include "wssettingswidget.h"
 #include "gsitem.h"
 #include "dinfointerface.h"
 
@@ -52,7 +52,7 @@ enum GPhotoTagsBehaviour
     GPTagCombined
 };
 
-class GSWidget : public SettingsWidget
+class GSWidget : public WSSettingsWidget
 {
     Q_OBJECT
 

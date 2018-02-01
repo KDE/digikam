@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "settingswidget.h"
+#include "wssettingswidget.h"
 #include "dinfointerface.h"
 
 class QLabel;
@@ -42,7 +42,7 @@ class QPushButton;
 namespace Digikam
 {
 
-class DBWidget : public SettingsWidget
+class DBWidget : public WSSettingsWidget
 {
     Q_OBJECT
 

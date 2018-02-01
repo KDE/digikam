@@ -50,14 +50,14 @@
 #include "rajcesession.h"
 #include "rajcenewalbumdlg.h"
 #include "dimageslist.h"
-#include "settingswidget.h"
+#include "wssettingswidget.h"
 #include "logindialog.h"
 
 namespace Digikam
 {
 
 RajceWidget::RajceWidget(DInfoInterface* const iface, QWidget* const parent)
-    : SettingsWidget(parent, iface, QString::fromLatin1("Rajce.net"))
+    : WSSettingsWidget(parent, iface, QString::fromLatin1("Rajce.net"))
 {
     m_iface             = iface;
     m_lastLoggedInState = false;

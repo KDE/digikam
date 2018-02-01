@@ -29,13 +29,13 @@
 
 //local includes
 
-#include "settingswidget.h"
+#include "wssettingswidget.h"
 #include "dinfointerface.h"
 
 namespace Digikam
 {
 
-class FbWidget : public SettingsWidget
+class FbWidget : public WSSettingsWidget
 {
     Q_OBJECT
 

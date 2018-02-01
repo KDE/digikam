@@ -35,7 +35,7 @@
 
 #include "comboboxintermediate.h"
 #include "flickrlist.h"
-#include "settingswidget.h"
+#include "wssettingswidget.h"
 #include "dinfointerface.h"
 
 class QGroupBox;
@@ -50,7 +50,7 @@ namespace Digikam
 
 class FlickrList;
 
-class FlickrWidget : public SettingsWidget
+class FlickrWidget : public WSSettingsWidget
 {
     Q_OBJECT
 

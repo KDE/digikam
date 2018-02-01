@@ -25,13 +25,13 @@
 
 // Local includes
 
-#include "settingswidget.h"
+#include "wssettingswidget.h"
 #include "dinfointerface.h"
 
 namespace Digikam
 {
 
-class YFWidget : public SettingsWidget
+class YFWidget : public WSSettingsWidget
 {
     Q_OBJECT
 
