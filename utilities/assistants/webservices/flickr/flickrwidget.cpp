@@ -43,7 +43,7 @@
 // Local includes
 
 #include "wscomboboxdelegate.h"
-#include "comboboxintermediate.h"
+#include "wscomboboxintermediate.h"
 #include "flickrlist.h"
 
 namespace Digikam

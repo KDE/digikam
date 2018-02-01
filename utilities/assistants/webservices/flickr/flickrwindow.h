@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "comboboxintermediate.h"
+#include "wscomboboxintermediate.h"
 #include "dinfointerface.h"
 #include "wstooldialog.h"
 #include "digikam_export.h"

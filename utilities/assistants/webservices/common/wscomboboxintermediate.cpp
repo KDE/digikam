@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "comboboxintermediate.h"
+#include "wscomboboxintermediate.h"
 
 // Qt includes
 

@@ -66,7 +66,7 @@ set(libwso2_SRCS
 # Helper classes ------------------------------------------------------------------
 
 set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/common/wscomboboxdelegate.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/comboboxintermediate.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wscomboboxintermediate.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wstoolutils.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wssettingswidget.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wsnewalbumdialog.cpp

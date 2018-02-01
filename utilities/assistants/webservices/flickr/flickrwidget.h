@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "comboboxintermediate.h"
+#include "wscomboboxintermediate.h"
 #include "flickrlist.h"
 #include "wssettingswidget.h"
 #include "dinfointerface.h"
