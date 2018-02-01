@@ -34,13 +34,13 @@
 
 //local includes
 
-#include "exportutils.h"
+#include "wstoolutils.h"
 
 namespace Digikam
 {
 
 MPForm_GPhoto::MPForm_GPhoto()
-    : m_boundary(QByteArray("----------") + ExportUtils::randomString(42 + 13).toLatin1())
+    : m_boundary(QByteArray("----------") + WSToolUtils::randomString(42 + 13).toLatin1())
 {
 }
 

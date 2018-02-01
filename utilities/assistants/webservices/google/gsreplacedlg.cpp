@@ -42,7 +42,7 @@
 // Local includes
 
 #include "dworkingpixmap.h"
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam

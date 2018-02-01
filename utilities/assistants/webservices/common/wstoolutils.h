@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-09-12
- * Description : Export tool utils methods
+ * Description : Web Service tool utils methods
  *
  * Copyright (C) 2014-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -35,12 +35,12 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ExportUtils
+class DIGIKAM_EXPORT WSToolUtils
 {
 public:
 
-    explicit ExportUtils() {};
-    ~ExportUtils()         {};
+    explicit WSToolUtils() {};
+    ~WSToolUtils()         {};
 
     /** Generates random string.
      */

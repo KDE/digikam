@@ -43,7 +43,7 @@
 // Local includes
 
 #include "dmetadata.h"
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "flickrmpform.h"
 #include "flickritem.h"
 #include "flickrwindow.h"
@@ -140,7 +140,7 @@ FlickrTalker::~FlickrTalker()
 
     delete m_photoSetsList;
 
-    ExportUtils::removeTemporaryDir(m_serviceName.toLatin1().constData());
+    WSToolUtils::removeTemporaryDir(m_serviceName.toLatin1().constData());
 }
 
 void FlickrTalker::link(const QString& userName)
@@ -482,7 +482,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
                 QFile::remove(m_lastTmpFile);
             }
 
-            path = ExportUtils::makeTemporaryDir(m_serviceName.toLatin1().constData()).filePath(QFileInfo(photoPath)
+            path = WSToolUtils::makeTemporaryDir(m_serviceName.toLatin1().constData()).filePath(QFileInfo(photoPath)
                                                                          .baseName().trimmed() + QLatin1String(".jpg"));
 
             if (rescale)

@@ -44,7 +44,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_version.h"
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "dbwindow.h"
 #include "dbitem.h"
 #include "dbmpform.h"
@@ -227,7 +227,7 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
         return false;
     }
 
-    QString path = ExportUtils::makeTemporaryDir("dropbox").filePath(QFileInfo(imgPath)
+    QString path = WSToolUtils::makeTemporaryDir("dropbox").filePath(QFileInfo(imgPath)
                                                  .baseName().trimmed() + QLatin1String(".jpg"));
 
     if (rescale && (image.width() > maxDim || image.height() > maxDim))

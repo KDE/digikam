@@ -50,7 +50,7 @@
 
 // Local includes
 
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "digikam_version.h"
 #include "gswindow.h"
 #include "gpmpform.h"
@@ -272,7 +272,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
             return false;
         }
 
-        path                  = ExportUtils::makeTemporaryDir("google")
+        path                  = WSToolUtils::makeTemporaryDir("google")
                                              .filePath(QFileInfo(photoPath)
                                              .baseName().trimmed() + 
                                              QLatin1String(".jpg"));
@@ -400,7 +400,7 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
             return false;
         }
 
-        path                  = ExportUtils::makeTemporaryDir("google")
+        path                  = WSToolUtils::makeTemporaryDir("google")
                                              .filePath(QFileInfo(photoPath)
                                              .baseName().trimmed() +
                                              QLatin1String(".jpg"));

@@ -48,7 +48,7 @@
 #include "digikam_debug.h"
 #include "piwigoitem.h"
 #include "digikam_version.h"
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "previewloadthread.h"
 
 namespace Digikam
@@ -218,7 +218,7 @@ bool PiwigoTalker::addPhoto(int   albumId,
                 image = image.scaled(maxWidth, maxHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             }
 
-            m_path = ExportUtils::makeTemporaryDir("piwigo")
+            m_path = WSToolUtils::makeTemporaryDir("piwigo")
                      .filePath(QUrl::fromLocalFile(mediaPath).fileName());
             m_tmpPath = m_path;
             image.save(m_path, "JPEG", quality);

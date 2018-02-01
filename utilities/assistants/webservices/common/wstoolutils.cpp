@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-09-12
- * Description : Export tool utils methods
+ * Description : Web Service tool utils methods
  *
  * Copyright (C) 2014-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "exportutils.h"
+#include "wstoolutils.h"
 
 // Qt includes
 
@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-QDir ExportUtils::makeTemporaryDir(const char* prefix)
+QDir WSToolUtils::makeTemporaryDir(const char* prefix)
 {
     QString subDir = QString::fromLatin1("digikam-%1-%2").arg(QString::fromUtf8(prefix)).arg(qApp->applicationPid());
     QString path   = QDir(QDir::tempPath()).filePath(subDir);
@@ -47,7 +47,7 @@ QDir ExportUtils::makeTemporaryDir(const char* prefix)
 
 // ------------------------------------------------------------------------------------
 
-void ExportUtils::removeTemporaryDir(const char* prefix)
+void WSToolUtils::removeTemporaryDir(const char* prefix)
 {
     QString subDir = QString::fromLatin1("digikam-%1-%2").arg(QString::fromUtf8(prefix)).arg(qApp->applicationPid());
     QString path   = QDir(QDir::tempPath()).filePath(subDir);
@@ -60,7 +60,7 @@ void ExportUtils::removeTemporaryDir(const char* prefix)
 
 // ------------------------------------------------------------------------------------
 
-QString ExportUtils::randomString(const int& length)
+QString WSToolUtils::randomString(const int& length)
 {
     const QString possibleCharacters(QString::fromLatin1("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"));
 

@@ -48,7 +48,7 @@
 
 // Local includes
 
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "dimageslist.h"
 #include "digikam_version.h"
 #include "dprogresswdg.h"
@@ -92,7 +92,7 @@ GSWindow::GSWindow(DInfoInterface* const iface,
         m_toolName = QString::fromLatin1("Google Photos/PicasaWeb");
     }
 
-    m_tmp         = ExportUtils::makeTemporaryDir("google").absolutePath() + QLatin1Char('/');;
+    m_tmp         = WSToolUtils::makeTemporaryDir("google").absolutePath() + QLatin1Char('/');;
     m_imagesCount = 0;
     m_imagesTotal = 0;
     m_renamingOpt = 0;

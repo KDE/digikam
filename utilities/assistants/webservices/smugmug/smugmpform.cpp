@@ -34,7 +34,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "exportutils.h"
+#include "wstoolutils.h"
 
 namespace Digikam
 {
@@ -42,7 +42,7 @@ namespace Digikam
 SmugMPForm::SmugMPForm()
 {
     m_boundary  = "----------";
-    m_boundary += ExportUtils::randomString(42 + 13).toLatin1();
+    m_boundary += WSToolUtils::randomString(42 + 13).toLatin1();
 }
 
 SmugMPForm::~SmugMPForm()

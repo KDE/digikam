@@ -35,13 +35,13 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "exportutils.h"
+#include "wstoolutils.h"
 
 namespace Digikam
 {
 
 FbMPForm::FbMPForm()
-    : m_boundary(ExportUtils::randomString(42 + 13).toLatin1())
+    : m_boundary(WSToolUtils::randomString(42 + 13).toLatin1())
 {
     reset();
 }

@@ -37,7 +37,7 @@
 #include "rajcempform.h"
 #include "digikam_version.h"
 #include "dmetadata.h"
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "previewloadthread.h"
 
 namespace Digikam
@@ -692,7 +692,7 @@ RajceTalker::RajceTalker(QWidget* const parent)
       m_netMngr(0),
       m_reply(0)
 {
-    m_tmpDir  = ExportUtils::makeTemporaryDir("rajce").absolutePath() + QLatin1Char('/');
+    m_tmpDir  = WSToolUtils::makeTemporaryDir("rajce").absolutePath() + QLatin1Char('/');
     m_netMngr = new QNetworkAccessManager(this);
 
     connect(m_netMngr, SIGNAL(finished(QNetworkReply*)),

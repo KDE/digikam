@@ -49,7 +49,7 @@
 #include "dimageslist.h"
 #include "digikam_version.h"
 #include "dprogresswdg.h"
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "fbitem.h"
 #include "fbtalker.h"
 #include "fbwidget.h"
@@ -95,7 +95,7 @@ FbWindow::FbWindow(DInfoInterface* const iface,
       d(new Private(this, iface))
 {
     m_tmpPath.clear();
-    m_tmpDir      = ExportUtils::makeTemporaryDir("facebook").absolutePath() + QLatin1Char('/');;
+    m_tmpDir      = WSToolUtils::makeTemporaryDir("facebook").absolutePath() + QLatin1Char('/');;
     m_imagesCount = 0;
     m_imagesTotal = 0;
     m_iface       = iface;

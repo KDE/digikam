@@ -58,7 +58,7 @@
 
 // Local includes
 
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "digikam_debug.h"
 #include "dprogresswdg.h"
 #include "dlayoutbox.h"

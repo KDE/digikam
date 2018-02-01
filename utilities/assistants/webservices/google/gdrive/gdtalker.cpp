@@ -49,7 +49,7 @@
 
 // Local includes
 
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "digikam_version.h"
 #include "gswindow.h"
 #include "gdmpform.h"
@@ -188,7 +188,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
             return false;
         }
 
-        path                  = ExportUtils::makeTemporaryDir("google")
+        path                  = WSToolUtils::makeTemporaryDir("google")
                                              .filePath(QFileInfo(imgPath)
                                              .baseName().trimmed() +
                                              QLatin1String(".jpg"));

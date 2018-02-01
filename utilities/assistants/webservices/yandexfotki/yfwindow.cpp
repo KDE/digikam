@@ -57,7 +57,7 @@
 #include "yftalker.h"
 #include "yfnewalbumdlg.h"
 #include "digikam_debug.h"
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "logindialog.h"
 #include "yfwidget.h"
 #include "previewloadthread.h"
@@ -75,7 +75,7 @@ YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool impo
 {
     m_iface  = iface;
     m_import = import;
-    m_tmpDir = ExportUtils::makeTemporaryDir("yandexfotki").absolutePath() + QLatin1Char('/');
+    m_tmpDir = WSToolUtils::makeTemporaryDir("yandexfotki").absolutePath() + QLatin1Char('/');
     m_widget = new YFWidget(this, m_iface, QString::fromLatin1("Yandex.Fotki"));
 
     m_loginLabel           = m_widget->getUserNameLabel();

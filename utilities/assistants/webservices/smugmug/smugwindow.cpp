@@ -48,7 +48,7 @@
 
 #include "digikam_debug.h"
 #include "dimageslist.h"
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "digikam_version.h"
 #include "dprogresswdg.h"
 #include "dmetadata.h"
@@ -67,7 +67,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
     : WSToolDialog(0)
 {
     m_tmpPath.clear();
-    m_tmpDir      = ExportUtils::makeTemporaryDir("smug").absolutePath() + QLatin1Char('/');;
+    m_tmpDir      = WSToolUtils::makeTemporaryDir("smug").absolutePath() + QLatin1Char('/');;
     m_import      = import;
     m_imagesCount = 0;
     m_imagesTotal = 0;

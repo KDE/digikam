@@ -56,7 +56,7 @@
 
 #include "digikam_debug.h"
 #include "dmetadata.h"
-#include "exportutils.h"
+#include "wstoolutils.h"
 #include "dimageslist.h"
 #include "previewloadthread.h"
 #include "mediawikiwidget.h"
@@ -97,7 +97,7 @@ MediaWikiWindow::MediaWikiWindow(DInfoInterface* const iface, QWidget* const /*p
       d(new Private)
 {
     d->tmpPath.clear();
-    d->tmpDir       = ExportUtils::makeTemporaryDir("mediawiki").absolutePath() + QLatin1Char('/');
+    d->tmpDir       = WSToolUtils::makeTemporaryDir("mediawiki").absolutePath() + QLatin1Char('/');
     d->widget       = new MediaWikiWidget(iface, this);
     d->uploadTalker = 0;
     d->login        = QString();
