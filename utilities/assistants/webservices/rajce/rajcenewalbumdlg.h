@@ -25,14 +25,14 @@
 
 // Local includes
 
-#include "newalbumdialog.h"
+#include "wsnewalbumdialog.h"
 
 class QCheckBox;
 
 namespace Digikam
 {
 
-class RajceNewAlbumDlg : public NewAlbumDialog
+class RajceNewAlbumDlg : public WSNewAlbumDialog
 {
 public:
 

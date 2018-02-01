@@ -48,7 +48,7 @@ namespace Digikam
 {
 
 YFNewAlbumDlg::YFNewAlbumDlg(QWidget* const parent, YandexFotkiAlbum& album)
-    : NewAlbumDialog(parent, QString::fromLatin1("Yandex.Fotki")),
+    : WSNewAlbumDialog(parent, QString::fromLatin1("Yandex.Fotki")),
       m_album(album)
 {
     hideLocation();

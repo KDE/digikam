@@ -35,14 +35,14 @@
 
 // Local includes
 
-#include "newalbumdialog.h"
+#include "wsnewalbumdialog.h"
 
 namespace Digikam
 {
 
 class GSFolder;
 
-class GSNewAlbumDlg : public NewAlbumDialog
+class GSNewAlbumDlg : public WSNewAlbumDialog
 {
     Q_OBJECT
 

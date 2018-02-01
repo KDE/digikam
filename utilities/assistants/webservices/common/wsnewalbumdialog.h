@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef NEW_ALBUM_DIALOG_H
-#define NEW_ALBUM_DIALOG_H
+#ifndef WS_NEW_ALBUM_DIALOG_H
+#define WS_NEW_ALBUM_DIALOG_H
 
 // Qt includes
 
@@ -46,14 +46,14 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT NewAlbumDialog : public QDialog
+class DIGIKAM_EXPORT WSNewAlbumDialog : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit NewAlbumDialog(QWidget* const parent, const QString& toolName);
-    ~NewAlbumDialog();
+    explicit WSNewAlbumDialog(QWidget* const parent, const QString& toolName);
+    ~WSNewAlbumDialog();
 
     void hideDateTime();
     void hideDesc();
@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif // NEW_ALBUM_DIALOG_H
+#endif // WS_NEW_ALBUM_DIALOG_H

@@ -26,14 +26,14 @@
 
 // Local includes
 
-#include "newalbumdialog.h"
+#include "wsnewalbumdialog.h"
 
 namespace Digikam
 {
 
 class FPhotoSet;
 
-class FlickrNewAlbumDlg : public NewAlbumDialog
+class FlickrNewAlbumDlg : public WSNewAlbumDialog
 {
     Q_OBJECT
 

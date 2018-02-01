@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 RajceNewAlbumDlg::RajceNewAlbumDlg(QWidget* const parent)
-    : NewAlbumDialog(parent,
+    : WSNewAlbumDialog(parent,
       QString::fromLatin1("Rajce.net"))
 {
     getLocEdit()->hide();

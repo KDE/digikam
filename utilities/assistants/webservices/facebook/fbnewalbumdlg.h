@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "newalbumdialog.h"
+#include "wsnewalbumdialog.h"
 
 class QComboBox;
 
@@ -38,7 +38,7 @@ namespace Digikam
 
 class FbAlbum;
 
-class FbNewAlbumDlg : public NewAlbumDialog
+class FbNewAlbumDlg : public WSNewAlbumDialog
 {
     Q_OBJECT
 

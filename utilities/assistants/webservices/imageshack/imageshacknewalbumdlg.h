@@ -35,12 +35,12 @@
 
 // Local includes
 
-#include "newalbumdialog.h"
+#include "wsnewalbumdialog.h"
 
 namespace Digikam
 {
 
-class ImageShackNewAlbumDlg : public NewAlbumDialog
+class ImageShackNewAlbumDlg : public WSNewAlbumDialog
 {
     Q_OBJECT
 

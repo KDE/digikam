@@ -31,12 +31,12 @@
 // Local includes
 
 #include "yfalbum.h"
-#include "newalbumdialog.h"
+#include "wsnewalbumdialog.h"
 
 namespace Digikam
 {
 
-class YFNewAlbumDlg: public NewAlbumDialog
+class YFNewAlbumDlg: public WSNewAlbumDialog
 {
     Q_OBJECT
 

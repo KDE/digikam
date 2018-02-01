@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "newalbumdialog.h"
+#include "wsnewalbumdialog.h"
 
 // Qt includes
 
@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-class NewAlbumDialog::Private
+class WSNewAlbumDialog::Private
 {
 public:
 
@@ -87,7 +87,7 @@ public:
     QWidget*           mainWidget;
 };
 
-NewAlbumDialog::NewAlbumDialog(QWidget* const parent, const QString& toolName)
+WSNewAlbumDialog::WSNewAlbumDialog(QWidget* const parent, const QString& toolName)
     : QDialog(parent),
       d(new Private(this, toolName))
 {
@@ -142,12 +142,12 @@ NewAlbumDialog::NewAlbumDialog(QWidget* const parent, const QString& toolName)
     setLayout(d->mainLayout);
 }
 
-NewAlbumDialog::~NewAlbumDialog()
+WSNewAlbumDialog::~WSNewAlbumDialog()
 {
     delete d;
 }
 
-void NewAlbumDialog::slotTextChanged(const QString& /*text*/)
+void WSNewAlbumDialog::slotTextChanged(const QString& /*text*/)
 {
     if (QString::compare(getTitleEdit()->text(), QLatin1String(""), Qt::CaseInsensitive) == 0)
         d->buttonBox->button( QDialogButtonBox::Ok )->setEnabled(false);
@@ -155,7 +155,7 @@ void NewAlbumDialog::slotTextChanged(const QString& /*text*/)
         d->buttonBox->button( QDialogButtonBox::Ok )->setEnabled(true);
 }
 
-void NewAlbumDialog::hideDateTime()
+void WSNewAlbumDialog::hideDateTime()
 {
     d->m_dtEdt->hide();
     d->dateLabel->hide();
@@ -163,7 +163,7 @@ void NewAlbumDialog::hideDateTime()
     d->albumBoxLayout->removeWidget(d->dateLabel);
 }
 
-void NewAlbumDialog::hideDesc()
+void WSNewAlbumDialog::hideDesc()
 {
     d->m_descEdt->hide();
     d->descLabel->hide();
@@ -171,7 +171,7 @@ void NewAlbumDialog::hideDesc()
     d->albumBoxLayout->removeWidget(d->descLabel);
 }
 
-void NewAlbumDialog::hideLocation()
+void WSNewAlbumDialog::hideLocation()
 {
     d->m_locEdt->hide();
     d->locLabel->hide();
@@ -179,44 +179,44 @@ void NewAlbumDialog::hideLocation()
     d->albumBoxLayout->removeWidget(d->locLabel);
 }
 
-QWidget* NewAlbumDialog::getMainWidget() const
+QWidget* WSNewAlbumDialog::getMainWidget() const
 {
     return d->mainWidget;
 }
 
-QGroupBox* NewAlbumDialog::getAlbumBox() const
+QGroupBox* WSNewAlbumDialog::getAlbumBox() const
 {
     return d->albumBox;
 }
 
-QLineEdit* NewAlbumDialog::getTitleEdit() const
+QLineEdit* WSNewAlbumDialog::getTitleEdit() const
 {
     return d->m_titleEdt;
 }
 
-QTextEdit* NewAlbumDialog::getDescEdit() const
+QTextEdit* WSNewAlbumDialog::getDescEdit() const
 {
     return d->m_descEdt;
 }
 
-QLineEdit* NewAlbumDialog::getLocEdit() const
+QLineEdit* WSNewAlbumDialog::getLocEdit() const
 {
     return d->m_locEdt;
 }
 
-QDateTimeEdit* NewAlbumDialog::getDateTimeEdit() const
+QDateTimeEdit* WSNewAlbumDialog::getDateTimeEdit() const
 {
     return d->m_dtEdt;
 }
 
-void NewAlbumDialog::addToMainLayout(QWidget* const widget)
+void WSNewAlbumDialog::addToMainLayout(QWidget* const widget)
 {
     d->mainLayout->addWidget(widget);
     d->mainLayout->removeWidget(d->buttonBox);
     d->mainLayout->addWidget(d->buttonBox);
 }
 
-QDialogButtonBox* NewAlbumDialog::getButtonBox() const
+QDialogButtonBox* WSNewAlbumDialog::getButtonBox() const
 {
     return d->buttonBox;
 }
