@@ -42,7 +42,7 @@
 
 // Local includes
 
-#include "comboboxdelegate.h"
+#include "wscomboboxdelegate.h"
 #include "comboboxintermediate.h"
 #include "flickrlist.h"
 
@@ -199,13 +199,13 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
     QGridLayout* const extendedSettingsLayout = new QGridLayout(m_extendedPublicationBox);
 
     QLabel* const imageSafetyLabel = new QLabel(i18n("Safety level:"));
-    m_safetyLevelComboBox          = new ComboBoxIntermediate();
+    m_safetyLevelComboBox          = new WSComboBoxIntermediate();
     m_safetyLevelComboBox->addItem(i18n("Safe"),       QVariant(FlickrList::SAFE));
     m_safetyLevelComboBox->addItem(i18n("Moderate"),   QVariant(FlickrList::MODERATE));
     m_safetyLevelComboBox->addItem(i18n("Restricted"), QVariant(FlickrList::RESTRICTED));
 
     QLabel* const imageTypeLabel = new QLabel(i18n("Content type:"));
-    m_contentTypeComboBox        = new ComboBoxIntermediate();
+    m_contentTypeComboBox        = new WSComboBoxIntermediate();
     m_contentTypeComboBox->addItem(i18nc("photo content type", "Photo"),      QVariant(FlickrList::PHOTO));
     m_contentTypeComboBox->addItem(i18nc("photo content type", "Screenshot"), QVariant(FlickrList::SCREENSHOT));
     m_contentTypeComboBox->addItem(i18nc("photo content type", "Other"),      QVariant(FlickrList::OTHER));

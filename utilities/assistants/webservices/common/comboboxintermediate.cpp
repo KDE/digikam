@@ -31,7 +31,7 @@
 namespace Digikam
 {
 
-ComboBoxIntermediate::ComboBoxIntermediate(QWidget* const parent, const QString& text)
+WSComboBoxIntermediate::WSComboBoxIntermediate(QWidget* const parent, const QString& text)
     : QComboBox(parent),
       m_isIntermediate(false),
       m_intermediateText(text)
@@ -42,11 +42,11 @@ ComboBoxIntermediate::ComboBoxIntermediate(QWidget* const parent, const QString&
             this, SLOT(slotIndexChanged(int)));
 }
 
-ComboBoxIntermediate::~ComboBoxIntermediate()
+WSComboBoxIntermediate::~WSComboBoxIntermediate()
 {
 }
 
-void ComboBoxIntermediate::setIntermediate(bool state)
+void WSComboBoxIntermediate::setIntermediate(bool state)
 {
     if ((state) && (!m_isIntermediate))
     {
@@ -73,7 +73,7 @@ void ComboBoxIntermediate::setIntermediate(bool state)
     }
 }
 
-void ComboBoxIntermediate::slotIndexChanged(int)
+void WSComboBoxIntermediate::slotIndexChanged(int)
 {
     if (m_isIntermediate)
     {

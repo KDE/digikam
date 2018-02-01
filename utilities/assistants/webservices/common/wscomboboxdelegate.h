@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-07-05
- * Description : A combobox delegate to display in image lists.
+ * Description : A combobox delegate to display in Web service image lists.
  *
  * Copyright (C) 2009 by Pieter Edelman <pieter dot edelman at gmx dot net>
  *
@@ -58,11 +58,11 @@ public:
 
     /* Overloaded functions to provide the delegate functionality.
      */
-    void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const Q_DECL_OVERRIDE;
-    QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const Q_DECL_OVERRIDE;
+    void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const           Q_DECL_OVERRIDE;
+    QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const                  Q_DECL_OVERRIDE;
     QWidget* createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const Q_DECL_OVERRIDE;
-    void setEditorData(QWidget*, const QModelIndex&) const Q_DECL_OVERRIDE;
-    void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const Q_DECL_OVERRIDE;
+    void setEditorData(QWidget*, const QModelIndex&) const                                 Q_DECL_OVERRIDE;
+    void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const             Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
 

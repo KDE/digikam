@@ -35,7 +35,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "comboboxdelegate.h"
+#include "wscomboboxdelegate.h"
 
 namespace Digikam
 {

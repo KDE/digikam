@@ -136,8 +136,8 @@ private:
 
     QPushButton*                           m_extendedPublicationButton;
     QPushButton*                           m_extendedTagsButton;
-    ComboBoxIntermediate*                  m_contentTypeComboBox;
-    ComboBoxIntermediate*                  m_safetyLevelComboBox;
+    WSComboBoxIntermediate*                  m_contentTypeComboBox;
+    WSComboBoxIntermediate*                  m_safetyLevelComboBox;
 
     QString                                m_username;
     QString                                m_userId;

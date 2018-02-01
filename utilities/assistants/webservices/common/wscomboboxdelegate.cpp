@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-07-05
- * Description : A combobox delegate to display in image lists.
+ * Description : A combobox delegate to display in Web service image lists.
  *
  * Copyright (C) 2009 by Pieter Edelman <pieter dot edelman at gmx dot net>
  *
@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "comboboxdelegate.h"
+#include "wscomboboxdelegate.h"
 
 // Qt includes
 

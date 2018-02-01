@@ -27,8 +27,8 @@
  *
  * ============================================================ */
 
-#ifndef COMBO_BOX_INTERMEDIATE_H
-#define COMBO_BOX_INTERMEDIATE_H
+#ifndef WS_COMBO_BOX_INTERMEDIATE_H
+#define WS_COMBO_BOX_INTERMEDIATE_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class ComboBoxIntermediate : public QComboBox
+class WSComboBoxIntermediate : public QComboBox
 {
     Q_OBJECT
 
@@ -51,8 +51,8 @@ public:
     /* Initialize the combobox with a parent and a string to indicate the
      * intermediate state.
      */
-    explicit ComboBoxIntermediate(QWidget* const = 0, const QString& = i18n("Various"));
-    ~ComboBoxIntermediate();
+    explicit WSComboBoxIntermediate(QWidget* const = 0, const QString& = i18n("Various"));
+    ~WSComboBoxIntermediate();
 
     /* Set the state of the combobox to intermediate. The intermediate state is
      * 'unset' when another index is selected.
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COMBO_BOX_INTERMEDIATE_H
+#endif // WS_COMBO_BOX_INTERMEDIATE_H

@@ -100,8 +100,8 @@ private: // Data
 
     QLineEdit*                          m_tagsLineEdit;
 
-    ComboBoxIntermediate*               m_contentTypeComboBox;
-    ComboBoxIntermediate*               m_safetyLevelComboBox;
+    WSComboBoxIntermediate*               m_contentTypeComboBox;
+    WSComboBoxIntermediate*               m_safetyLevelComboBox;
 
     FlickrList*                         m_imglst;
 
