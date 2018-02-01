@@ -56,17 +56,17 @@ public:
     {
         m_iface              = iface;
         m_toolName           = toolName;
-        mainLayout           = new QHBoxLayout(widget);
+        m_mainLayout         = new QHBoxLayout(widget);
         m_imgList            = new DImagesList(widget);
-        settingsScrollArea   = new QScrollArea(widget);
-        m_settingsBox        = new QWidget(settingsScrollArea);
+        m_settingsScrollArea = new QScrollArea(widget);
+        m_settingsBox        = new QWidget(m_settingsScrollArea);
         m_settingsBoxLayout  = new QVBoxLayout(m_settingsBox);
         m_headerLbl          = new QLabel(widget);
-        m_accountBox         = new QGroupBox(i18n("Account"),m_settingsBox);
+        m_accountBox         = new QGroupBox(i18n("Account"), m_settingsBox);
         m_accountBoxLayout   = new QGridLayout(m_accountBox);
         m_userNameDisplayLbl = new QLabel(m_accountBox);
         m_changeUserBtn      = new QPushButton(m_accountBox);
-        m_albBox             = new QGroupBox(i18n("Album"),m_settingsBox);
+        m_albBox             = new QGroupBox(i18n("Album"), m_settingsBox);
         m_albumsBoxLayout    = new QGridLayout(m_albBox);
         m_albumsCoB          = new QComboBox(m_albBox);
         m_newAlbumBtn        = new QPushButton(m_accountBox);
@@ -77,7 +77,7 @@ public:
         m_uploadBox          = new QGroupBox(i18n("Destination"), m_settingsBox);
         m_uploadWidget       = m_iface->albumSelector(m_uploadBox);
         m_uploadBoxLayout    = new QVBoxLayout(m_uploadBox);
-        m_optionsBox         = new QGroupBox(i18n("Options"),m_settingsBox);
+        m_optionsBox         = new QGroupBox(i18n("Options"), m_settingsBox);
         m_optionsBoxLayout   = new QGridLayout(m_optionsBox);
         m_originalChB        = new QCheckBox(m_optionsBox);
         m_resizeChB          = new QCheckBox(m_optionsBox);
@@ -94,7 +94,7 @@ public:
     QLabel*                        m_userNameDisplayLbl;
     QPushButton*                   m_changeUserBtn;
     QComboBox*                     m_dlDimensionCoB;
-    QScrollArea*                   settingsScrollArea;
+    QScrollArea*                   m_settingsScrollArea;
 
     QComboBox*                     m_albumsCoB;
     QPushButton*                   m_newAlbumBtn;
@@ -105,7 +105,7 @@ public:
     QSpinBox*                      m_dimensionSpB;
     QSpinBox*                      m_imageQualitySpB;
 
-    QHBoxLayout*                   mainLayout;
+    QHBoxLayout*                   m_mainLayout;
 
     QWidget*                       m_settingsBox;
     QVBoxLayout*                   m_settingsBoxLayout;
@@ -130,8 +130,8 @@ public:
 };
 
 WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
-                               DInfoInterface* const iface,
-                               const QString& toolName)
+                                   DInfoInterface* const iface,
+                                   const QString& toolName)
     : QWidget(parent),
       d(new Private(this, iface, toolName))
 {
@@ -144,12 +144,14 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
     d->m_imgList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
     d->m_imgList->setAllowRAW(true);
     d->m_imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to your %1 account.", d->m_toolName));
+    d->m_imgList->setIface(d->m_iface);
+    d->m_imgList->loadImagesFromCurrentSelection();
 
-    d->settingsScrollArea->setMinimumSize(400, 500);
-    d->settingsScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    d->settingsScrollArea->setWidget(d->m_settingsBox);
-    d->settingsScrollArea->setWidgetResizable(true);
-    d->settingsScrollArea->setFrameShadow(QFrame::Plain);
+    d->m_settingsScrollArea->setMinimumSize(400, 500);
+    d->m_settingsScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    d->m_settingsScrollArea->setWidget(d->m_settingsBox);
+    d->m_settingsScrollArea->setWidgetResizable(true);
+    d->m_settingsScrollArea->setFrameShadow(QFrame::Plain);
 
     d->m_headerLbl->setWhatsThis(i18n("This is a clickable link to open %1 in a browser.", d->m_toolName));
     d->m_headerLbl->setOpenExternalLinks(true);
@@ -263,10 +265,10 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
 
     //--------------------------------------------------------
 
-    d->mainLayout->addWidget(d->m_imgList);
-    d->mainLayout->addWidget(d->settingsScrollArea);
-    d->mainLayout->setContentsMargins(QMargins());
-    d->mainLayout->setSpacing(spacing);
+    d->m_mainLayout->addWidget(d->m_imgList);
+    d->m_mainLayout->addWidget(d->m_settingsScrollArea);
+    d->m_mainLayout->setContentsMargins(QMargins());
+    d->m_mainLayout->setSpacing(spacing);
 
     //-------------------------------------------------------
 
@@ -323,8 +325,8 @@ void WSSettingsWidget::addWidgetToSettingsBox(QWidget* const widget)
 void WSSettingsWidget::replaceImageList(QWidget* const imgList)
 {
     d->m_imgList->hide();
-    d->mainLayout->removeWidget(d->m_imgList);
-    d->mainLayout->insertWidget(0, imgList);
+    d->m_mainLayout->removeWidget(d->m_imgList);
+    d->m_mainLayout->insertWidget(0, imgList);
 }
 
 QWidget* WSSettingsWidget::getSettingsBox() const

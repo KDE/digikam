@@ -769,7 +769,6 @@ void DImagesList::loadImagesFromCurrentSelection()
         {
             slotAddImages(images);
         }
-
     }
     else
     {
