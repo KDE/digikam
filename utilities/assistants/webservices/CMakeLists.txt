@@ -39,47 +39,47 @@ endif()
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(libwso2_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2reply.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2replyserver.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2requestor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2simplecrypt.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o0settingsstore.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o0baseauth.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o0abstractstore.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o0globals.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2reply.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2replyserver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2requestor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2simplecrypt.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o0settingsstore.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o0baseauth.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o0abstractstore.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o0globals.h
     # Enable when needed
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o1.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o1requestor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o1timedreply.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o1smugmug.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o1twitter.h
-    #${CMAKE_CURRENT_SOURCE_DIR}/o2/src/oxtwitter.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o1dropbox.h
-    #${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o1flickr.h
-    #${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2gft.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2facebook.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2skydrive.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/o2/src/o2hubic.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1requestor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1timedreply.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1smugmug.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1twitter.h
+    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/oxtwitter.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1dropbox.h
+    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o1flickr.h
+    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2gft.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2facebook.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2skydrive.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2hubic.cpp
 )
 
 # Helper classes ------------------------------------------------------------------
 
-set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/base/comboboxdelegate.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/base/comboboxintermediate.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/base/exportutils.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/base/settingswidget.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/base/newalbumdialog.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/base/selectuserdlg.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/base/tooldialog.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/base/logindialog.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/manager/wssettings.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wsalbumspage.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wsfinalpage.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wsimagespage.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wsintropage.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wssettingspage.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wswizard.cpp
+set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/common/comboboxdelegate.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/comboboxintermediate.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/exportutils.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/settingswidget.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/newalbumdialog.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/selectuserdlg.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/tooldialog.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/logindialog.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wssettings.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsalbumspage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsfinalpage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsimagespage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsintropage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wssettingspage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wswizard.cpp
 )
 
 # Flickr tool ----------------------------------------------------------------
