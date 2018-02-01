@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "tooldialog.h"
+#include "wstooldialog.h"
 #include "digikam_export.h"
 #include "dimageslist.h"
 #include "dinfointerface.h"
@@ -44,7 +44,7 @@ class ImageShackWidget;
 class ImageShackTalker;
 class ImageShackNewAlbumDlg;
 
-class DIGIKAM_EXPORT ImageShackWindow : public ToolDialog
+class DIGIKAM_EXPORT ImageShackWindow : public WSToolDialog
 {
     Q_OBJECT
 

@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "tooldialog.h"
+#include "wstooldialog.h"
 #include "digikam_export.h"
 #include "dinfointerface.h"
 
@@ -46,7 +46,7 @@ class DBPhoto;
 class DBFolder;
 class DBNewAlbumDlg;
 
-class DIGIKAM_EXPORT DBWindow : public ToolDialog
+class DIGIKAM_EXPORT DBWindow : public WSToolDialog
 {
     Q_OBJECT
 

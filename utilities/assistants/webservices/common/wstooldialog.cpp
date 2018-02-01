@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-04-04
- * Description : export Tool dialog
+ * Description : Web Service Tool dialog
  *
  * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,13 +20,12 @@
  *
  * ============================================================ */
 
-#include "tooldialog.h"
+#include "wstooldialog.h"
 
 // Qt includes
 
 #include <QIcon>
 #include <QAction>
-#include <QDialog>
 #include <QMenu>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -42,7 +41,7 @@
 namespace Digikam
 {
 
-class ToolDialog::Private
+class WSToolDialog::Private
 {
 public:
     Private()
@@ -60,7 +59,7 @@ public:
     bool              propagateReject;
 };
 
-ToolDialog::ToolDialog(QWidget* const parent)
+WSToolDialog::WSToolDialog(QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
@@ -75,15 +74,15 @@ ToolDialog::ToolDialog(QWidget* const parent)
     setLayout(mainLayout);
 
     connect(d->buttonBox, &QDialogButtonBox::rejected,
-            this, &ToolDialog::slotCloseClicked);
+            this, &WSToolDialog::slotCloseClicked);
 }
 
-ToolDialog::~ToolDialog()
+WSToolDialog::~WSToolDialog()
 {
     delete d;
 }
 
-void ToolDialog::setMainWidget(QWidget* const widget)
+void WSToolDialog::setMainWidget(QWidget* const widget)
 {
     if (d->mainWidget == widget)
     {
@@ -104,7 +103,7 @@ void ToolDialog::setMainWidget(QWidget* const widget)
     layout()->addWidget(d->buttonBox);
 }
 
-void ToolDialog::setRejectButtonMode(QDialogButtonBox::StandardButton button)
+void WSToolDialog::setRejectButtonMode(QDialogButtonBox::StandardButton button)
 {
     if (button == QDialogButtonBox::Close)
     {
@@ -126,17 +125,17 @@ void ToolDialog::setRejectButtonMode(QDialogButtonBox::StandardButton button)
     }
 }
 
-QPushButton* ToolDialog::startButton() const
+QPushButton* WSToolDialog::startButton() const
 {
     return d->startButton;
 }
 
-void ToolDialog::addButton(QAbstractButton* button, QDialogButtonBox::ButtonRole role)
+void WSToolDialog::addButton(QAbstractButton* button, QDialogButtonBox::ButtonRole role)
 {
     d->buttonBox->addButton(button, role);
 }
 
-void ToolDialog::slotCloseClicked()
+void WSToolDialog::slotCloseClicked()
 {
     if (d->propagateReject)
     {

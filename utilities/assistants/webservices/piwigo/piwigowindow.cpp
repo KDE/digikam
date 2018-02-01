@@ -222,7 +222,7 @@ PiwigoWindow::Private::Private(PiwigoWindow* const parent,
 
 PiwigoWindow::PiwigoWindow(DInfoInterface* const iface,
                            QWidget* const parent)
-    : ToolDialog(parent),
+    : WSToolDialog(parent),
       d(new Private(this, iface))
 {
     d->pPiwigo = new PiwigoSession();

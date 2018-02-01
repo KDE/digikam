@@ -33,7 +33,7 @@
 // Local includes
 
 #include "imgurimageslist.h"
-#include "tooldialog.h"
+#include "wstooldialog.h"
 #include "imgurapi3.h"
 #include "digikam_export.h"
 #include "dinfointerface.h"
@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImgurWindow : public ToolDialog
+class DIGIKAM_EXPORT ImgurWindow : public WSToolDialog
 {
     Q_OBJECT
 

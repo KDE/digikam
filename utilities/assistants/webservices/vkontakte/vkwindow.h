@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "tooldialog.h"
+#include "wstooldialog.h"
 #include "digikam_export.h"
 #include "dprogresswdg.h"
 #include "dinfointerface.h"
@@ -49,7 +49,7 @@ namespace Digikam
 class VKAlbumChooser;
 class VKAuthWidget;
 
-class DIGIKAM_EXPORT VKWindow : public ToolDialog
+class DIGIKAM_EXPORT VKWindow : public WSToolDialog
 {
     Q_OBJECT
 

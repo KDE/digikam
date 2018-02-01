@@ -51,7 +51,7 @@ namespace Digikam
 {
 
 ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : ToolDialog(0)
+    : WSToolDialog(0)
 {
     api = new ImgurAPI3(QString::fromLatin1(IMGUR_CLIENT_ID),
                         QString::fromLatin1(IMGUR_CLIENT_SECRET), this);

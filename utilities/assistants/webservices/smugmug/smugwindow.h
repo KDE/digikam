@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "tooldialog.h"
+#include "wstooldialog.h"
 #include "logindialog.h"
 #include "smugitem.h"
 #include "dinfointerface.h"
@@ -46,7 +46,7 @@ class SmugTalker;
 class SmugWidget;
 class SmugNewAlbumDlg;
 
-class DIGIKAM_EXPORT SmugWindow : public ToolDialog
+class DIGIKAM_EXPORT SmugWindow : public WSToolDialog
 {
     Q_OBJECT
 

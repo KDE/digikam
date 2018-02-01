@@ -64,7 +64,7 @@ namespace Digikam
 SmugWindow::SmugWindow(DInfoInterface* const iface,
                        QWidget* const /*parent*/,
                        bool import)
-    : ToolDialog(0)
+    : WSToolDialog(0)
 {
     m_tmpPath.clear();
     m_tmpDir      = ExportUtils::makeTemporaryDir("smug").absolutePath() + QLatin1Char('/');;
@@ -113,7 +113,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
     connect(startButton(), &QPushButton::clicked,
             this, &SmugWindow::slotStartTransfer);
 
-    connect(this, &ToolDialog::cancelClicked,
+    connect(this, &WSToolDialog::cancelClicked,
             this, &SmugWindow::slotCancelClicked);
 
     connect(this, &QDialog::finished,

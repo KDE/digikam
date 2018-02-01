@@ -33,7 +33,7 @@
 // Local includes
 
 #include "dimageslist.h"
-#include "tooldialog.h"
+#include "wstooldialog.h"
 #include "yftalker.h"
 #include "digikam_export.h"
 #include "dinfointerface.h"
@@ -53,7 +53,7 @@ namespace Digikam
 
 class YFWidget;
 
-class DIGIKAM_EXPORT YFWindow : public ToolDialog
+class DIGIKAM_EXPORT YFWindow : public WSToolDialog
 {
     Q_OBJECT
 

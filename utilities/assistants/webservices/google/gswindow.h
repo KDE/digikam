@@ -35,7 +35,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "tooldialog.h"
+#include "wstooldialog.h"
 #include "gsitem.h"
 #include "dinfointerface.h"
 #include "dmetadata.h"
@@ -52,7 +52,7 @@ class GSPhoto;
 class GSFolder;
 class GSNewAlbumDlg;
 
-class DIGIKAM_EXPORT GSWindow : public ToolDialog
+class DIGIKAM_EXPORT GSWindow : public WSToolDialog
 {
     Q_OBJECT
 

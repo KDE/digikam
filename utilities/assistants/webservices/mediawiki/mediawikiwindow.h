@@ -28,7 +28,7 @@
 
 // Local includes
 
-#include "tooldialog.h"
+#include "wstooldialog.h"
 #include "dinfointerface.h"
 #include "digikam_export.h"
 
@@ -39,7 +39,7 @@ class KJob;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT MediaWikiWindow : public ToolDialog
+class DIGIKAM_EXPORT MediaWikiWindow : public WSToolDialog
 {
     Q_OBJECT
 

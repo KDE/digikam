@@ -33,7 +33,7 @@
 
 #include "digikam_export.h"
 #include "dinfointerface.h"
-#include "tooldialog.h"
+#include "wstooldialog.h"
 
 class QCloseEvent;
 class QUrl;
@@ -48,7 +48,7 @@ class FbUser;
 class FbNewAlbumDlg;
 class FbPhoto;
 
-class DIGIKAM_EXPORT FbWindow : public ToolDialog
+class DIGIKAM_EXPORT FbWindow : public WSToolDialog
 {
     Q_OBJECT
 

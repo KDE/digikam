@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "tooldialog.h"
+#include "wstooldialog.h"
 #include "dinfointerface.h"
 
 namespace Digikam
@@ -41,7 +41,7 @@ namespace Digikam
 
 class PiwigoAlbum;
 
-class DIGIKAM_EXPORT PiwigoWindow : public ToolDialog
+class DIGIKAM_EXPORT PiwigoWindow : public WSToolDialog
 {
     Q_OBJECT
 

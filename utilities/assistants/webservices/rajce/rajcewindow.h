@@ -25,7 +25,7 @@
 
 // Local includes
 
-#include "tooldialog.h"
+#include "wstooldialog.h"
 #include "dinfointerface.h"
 
 namespace Digikam
@@ -33,7 +33,7 @@ namespace Digikam
 
 class RajceWidget;
 
-class RajceWindow : public ToolDialog
+class RajceWindow : public WSToolDialog
 {
     Q_OBJECT
 

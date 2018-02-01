@@ -51,7 +51,7 @@ namespace Digikam
 
 DBWindow::DBWindow(DInfoInterface* const iface,
                    QWidget* const /*parent*/)
-    : ToolDialog(0)
+    : WSToolDialog(0)
 {
     m_imagesCount = 0;
     m_imagesTotal = 0;

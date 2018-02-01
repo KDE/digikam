@@ -40,7 +40,7 @@ namespace Digikam
 {
 
 RajceWindow::RajceWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : ToolDialog(0)
+    : WSToolDialog(0)
 {
     m_iface  = iface;
     m_widget = new RajceWidget(m_iface, this);

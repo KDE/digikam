@@ -67,7 +67,7 @@ namespace Digikam
 
 ImageShackWindow::ImageShackWindow(DInfoInterface* const iface, 
                                    QWidget* const parent)
-    : ToolDialog(parent)
+    : WSToolDialog(parent)
 {
     m_session = new ImageShackSession();
     m_iface   = iface;

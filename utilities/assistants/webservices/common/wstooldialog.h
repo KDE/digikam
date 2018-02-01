@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-04-04
- * Description : export Tool dialog
+ * Description : Web Service Tool dialog
  *
  * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,12 +20,12 @@
  *
  * ============================================================ */
 
-#ifndef TOOL_DIALOG_H
-#define TOOL_DIALOG_H
+#ifndef WS_TOOL_DIALOG_H
+#define WS_TOOL_DIALOG_H
 
 // KDE includes
 
-#include <QWizard>
+#include <QDialog>
 #include <QDialogButtonBox>
 
 // Local includes
@@ -34,19 +34,18 @@
 
 class QAbstractButton;
 class QPushButton;
-class QDialog;
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ToolDialog : public QDialog
+class DIGIKAM_EXPORT WSToolDialog : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit ToolDialog(QWidget* const parent = 0);
-    ~ToolDialog();
+    explicit WSToolDialog(QWidget* const parent = 0);
+    ~WSToolDialog();
 
     void setMainWidget(QWidget* const widget);
 
@@ -72,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TOOL_DIALOG_H
+#endif // WS_TOOL_DIALOG_H

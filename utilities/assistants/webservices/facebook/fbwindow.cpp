@@ -91,7 +91,7 @@ public:
 
 FbWindow::FbWindow(DInfoInterface* const iface,
                    QWidget* const /*parent*/)
-    : ToolDialog(0),
+    : WSToolDialog(0),
       d(new Private(this, iface))
 {
     m_tmpPath.clear();

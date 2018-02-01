@@ -93,7 +93,7 @@ public:
 };
 
 MediaWikiWindow::MediaWikiWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : ToolDialog(0),
+    : WSToolDialog(0),
       d(new Private)
 {
     d->tmpPath.clear();

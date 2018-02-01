@@ -71,7 +71,7 @@ namespace Digikam
 const char* YFWindow::XMP_SERVICE_ID = "Xmp.digiKam.yandexGPhotoId";
 
 YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool import)
-    : ToolDialog(parent)
+    : WSToolDialog(parent)
 {
     m_iface  = iface;
     m_import = import;
@@ -114,7 +114,7 @@ YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool impo
     connect(startButton(), &QPushButton::clicked,
             this, &YFWindow::slotStartTransfer);
 
-    connect(this, &ToolDialog::cancelClicked,
+    connect(this, &WSToolDialog::cancelClicked,
             this, &YFWindow::slotCancelClicked);
 
     connect(this, &QDialog::finished,

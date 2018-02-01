@@ -71,7 +71,7 @@ set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/common/comboboxdelegate.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/settingswidget.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/newalbumdialog.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/selectuserdlg.cpp
-                        ${CMAKE_CURRENT_SOURCE_DIR}/common/tooldialog.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wstooldialog.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/logindialog.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wssettings.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsalbumspage.cpp

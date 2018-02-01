@@ -61,7 +61,7 @@ namespace Digikam
 FlickrWindow::FlickrWindow(DInfoInterface* const iface,
                            QWidget* const /*parent*/,
                            const QString& serviceName)
-    : ToolDialog(0)
+    : WSToolDialog(0)
 {
     m_iface       = iface;
     m_serviceName = serviceName;

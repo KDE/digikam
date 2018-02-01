@@ -66,7 +66,7 @@ namespace Digikam
 GSWindow::GSWindow(DInfoInterface* const iface,
                    QWidget* const /*parent*/,
                    const QString& serviceName)
-    : ToolDialog(0),
+    : WSToolDialog(0),
       m_widget(0),
       m_albumDlg(0),
       m_gphoto_albumdlg(0),

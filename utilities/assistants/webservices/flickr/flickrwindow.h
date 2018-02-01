@@ -40,7 +40,7 @@
 
 #include "comboboxintermediate.h"
 #include "dinfointerface.h"
-#include "tooldialog.h"
+#include "wstooldialog.h"
 #include "digikam_export.h"
 
 class QProgressDialog;
@@ -58,7 +58,7 @@ class FlickrList;
 class FlickrNewAlbumDlg;
 class FPhotoInfo;
 
-class DIGIKAM_EXPORT FlickrWindow : public ToolDialog
+class DIGIKAM_EXPORT FlickrWindow : public WSToolDialog
 {
     Q_OBJECT
 
