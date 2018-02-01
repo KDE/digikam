@@ -85,6 +85,7 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     m_imgList                     = new DImagesList(this);
     m_imgList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
     m_imgList->setAllowRAW(false); // TODO: implement conversion
+    m_imgList->setIface(m_iface);
     m_imgList->loadImagesFromCurrentSelection();
     m_imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to your VKontakte album."));
 

@@ -71,6 +71,9 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
     int permColWidth       = hdrFont.width(i18nc("photo permissions", "Public"));
 
     m_imglst->setAllowRAW(true);
+    m_imglst->setIface(iface);
+    m_imglst->loadImagesFromCurrentSelection();
+
     m_imglst->listView()->setWhatsThis(i18n("This is the list of images to upload to your Flickr account."));
     m_imglst->listView()->setColumn(static_cast<DImagesListView::ColumnType>(FlickrList::PUBLIC), i18nc("photo permissions", "Public"), true);
 
@@ -117,7 +120,6 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
         ComboBoxDelegate* const contentTypeDelegate = new ComboBoxDelegate(m_imglst, contentTypeItems);
         m_imglst->listView()->setItemDelegateForColumn(static_cast<DImagesListView::ColumnType>(FlickrList::SAFETYLEVEL), safetyLevelDelegate);
         m_imglst->listView()->setItemDelegateForColumn(static_cast<DImagesListView::ColumnType>(FlickrList::CONTENTTYPE), contentTypeDelegate);
-
     }
 
     hdr->setSectionResizeMode(FlickrList::PUBLIC, QHeaderView::Interactive);
@@ -232,7 +234,7 @@ FlickrWidget::FlickrWidget(QWidget* const parent,
     getUploadBox()->hide();
     getSizeBox()->hide();
 
-    // Removing KPImageLists inherited from KPWSSettingsWidget and replacing it with more specific FlickrList
+    // Removing DImagesList inherited from WSSettingsWidget and replacing it with more specific FlickrList
     replaceImageList(m_imglst);
 
     updateLabels();

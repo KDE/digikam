@@ -179,6 +179,7 @@ MediaWikiWidget::MediaWikiWidget(DInfoInterface* const iface, QWidget* const par
     d->imgList   = new DImagesList(this);
     d->imgList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
     d->imgList->setAllowRAW(true);
+    d->imgList->setIface(d->iface);
     d->imgList->loadImagesFromCurrentSelection();
     d->imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to the wiki."));
 

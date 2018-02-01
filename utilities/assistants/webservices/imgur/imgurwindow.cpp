@@ -86,7 +86,8 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
 
     this->list = new ImgurImagesList;
     list->setIface(iface);
-    mainLayout->addWidget(list);    
+    list->loadImagesFromCurrentSelection();
+    mainLayout->addWidget(list);
 
     /* |  Logged in as:  |
      * | <Not logged in> |
