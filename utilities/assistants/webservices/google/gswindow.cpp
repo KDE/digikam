@@ -1032,7 +1032,21 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
         QMessageBox::critical(this, i18nc("@title:window", "Error"),
                               i18n("Failed to save image to %1", newUrl.toLocalFile()));
     }
+/* TODO
+    else
+    {
+        KPImageInfo info(newUrl);
+        info.setName(item.title);
+        info.setDescription(item.description);
+        info.setTagsPath(item.tags);
 
+        if (!item.gpsLat.isEmpty() && !item.gpsLon.isEmpty())
+        {
+            info.setLatitude(item.gpsLat.toDouble());
+            info.setLongitude(item.gpsLon.toDouble());
+        }
+    }
+*/
     downloadNextPhoto();
 }
 
