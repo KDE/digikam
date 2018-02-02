@@ -1174,7 +1174,7 @@ void DXmlGuiWindow::createImportActions()
     actionCollection()->addAction(QLatin1String("import_filetransfer"), m_importFileTransferAction);
     actionCollection()->setDefaultShortcut(m_importFileTransferAction, Qt::ALT + Qt::SHIFT + Qt::Key_I);
 
-    connect(m_importSmugmugAction, SIGNAL(triggered(bool)),
+    connect(m_importFileTransferAction, SIGNAL(triggered(bool)),
             this, SLOT(slotImportTool()));
 #endif
 }
