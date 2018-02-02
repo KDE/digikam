@@ -151,6 +151,11 @@
 #   include "vkwindow.h"
 #endif
 
+#ifdef HAVE_KIO
+#   include "ftexportwindow.h"
+#   include "ftimportwindow.h"
+#endif
+
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
 #endif
@@ -1986,72 +1991,96 @@ void ImageWindow::slotExportTool()
 
     if (tool == m_exportDropboxAction)
     {
-        DBWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        DBWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportFacebookAction)
     {
-        FbWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        FbWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportFlickrAction)
     {
-        FlickrWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        FlickrWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                       ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportGdriveAction)
     {
-        GSWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport),
+        GSWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport),
                    this, QLatin1String("googledriveexport"));
         w.exec();
     }
     else if (tool == m_exportGphotoAction)
     {
-        GSWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport),
+        GSWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport),
                    this, QLatin1String("googlephotoexport"));
         w.exec();
     }
     else if (tool == m_exportImageshackAction)
     {
-        ImageShackWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        ImageShackWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                           ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportImgurAction)
     {
-        ImgurWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        ImgurWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                      ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportPiwigoAction)
     {
-        PiwigoWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        PiwigoWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                       ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportRajceAction)
     {
-        RajceWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        RajceWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                      ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportSmugmugAction)
     {
-        SmugWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        SmugWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                     ApplicationSettings::ImportExport), this);
         w.exec();
     }
     else if (tool == m_exportYandexfotkiAction)
     {
-        YFWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        YFWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
         w.exec();
     }
+
 #ifdef HAVE_MEDIAWIKI
     else if (tool == m_exportMediawikiAction)
     {
-        MediaWikiWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        MediaWikiWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                          ApplicationSettings::ImportExport), this);
         w.exec();
     }
 #endif
+
 #ifdef HAVE_VKONTAKTE
     else if (tool == m_exportVkontakteAction)
     {
-        VKWindow w(new DBInfoIface(this, d->thumbBar->allUrls(), ApplicationSettings::ImportExport), this);
+        VKWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
+
+#ifdef HAVE_KIO
+    else if (tool == m_exportFileTransferAction)
+    {
+        FTExportWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                         ApplicationSettings::ImportExport), this);
         w.exec();
     }
 #endif
@@ -2073,6 +2102,15 @@ void ImageWindow::slotImportTool()
                      this, true);
         w.exec();
     }
+
+#ifdef HAVE_KIO
+    else if (tool == m_importFileTransferAction)
+    {
+        FTImportWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+                         this);
+        w.exec();
+    }
+#endif
 }
 
 } // namespace Digikam

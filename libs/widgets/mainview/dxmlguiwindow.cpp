@@ -172,46 +172,54 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
-    m_expoBlendingAction      = 0;
-    m_panoramaAction          = 0;
-    m_videoslideshowAction    = 0;
-    m_htmlGalleryAction       = 0;
-    m_sendByMailAction        = 0;
-    m_printCreatorAction      = 0;
-    m_calendarAction          = 0;
-    m_presentationAction      = 0;
-    m_metadataEditAction      = 0;
-    m_geolocationEditAction   = 0;
-    m_mediaServerAction       = 0;
-    m_animLogo                = 0;
+    m_expoBlendingAction       = 0;
+    m_panoramaAction           = 0;
+    m_videoslideshowAction     = 0;
+    m_htmlGalleryAction        = 0;
+    m_sendByMailAction         = 0;
+    m_printCreatorAction       = 0;
+    m_calendarAction           = 0;
+    m_presentationAction       = 0;
+    m_metadataEditAction       = 0;
+    m_geolocationEditAction    = 0;
+    m_mediaServerAction        = 0;
+    m_animLogo                 = 0;
 
 #ifdef HAVE_KSANE
-    m_ksaneAction             = 0;
+    m_ksaneAction              = 0;
 #endif
 
     // WebServices tools
-    m_exportDropboxAction     = 0;
-    m_exportFacebookAction    = 0;
-    m_exportFlickrAction      = 0;
-    m_exportGdriveAction      = 0;
-    m_exportGphotoAction      = 0;
-    m_exportImageshackAction  = 0;
-    m_exportImgurAction       = 0;
-    m_exportPiwigoAction      = 0;
-    m_exportRajceAction       = 0;
-    m_exportSmugmugAction     = 0;
-    m_exportYandexfotkiAction = 0;
+    m_exportDropboxAction      = 0;
+    m_exportFacebookAction     = 0;
+    m_exportFlickrAction       = 0;
+    m_exportGdriveAction       = 0;
+    m_exportGphotoAction       = 0;
+    m_exportImageshackAction   = 0;
+    m_exportImgurAction        = 0;
+    m_exportPiwigoAction       = 0;
+    m_exportRajceAction        = 0;
+    m_exportSmugmugAction      = 0;
+    m_exportYandexfotkiAction  = 0;
 
 #ifdef HAVE_MEDIAWIKI
-    m_exportMediawikiAction   = 0;
+    m_exportMediawikiAction    = 0;
 #endif
 
 #ifdef HAVE_VKONTAKTE
-    m_exportVkontakteAction   = 0;
+    m_exportVkontakteAction    = 0;
 #endif
 
-    m_importGphotoAction      = 0;
-    m_importSmugmugAction     = 0;
+#ifdef HAVE_KIO
+    m_exportFileTransferAction = 0;
+#endif
+
+    m_importGphotoAction       = 0;
+    m_importSmugmugAction      = 0;
+
+#ifdef HAVE_KIO
+    m_importFileTransferAction = 0;
+#endif
 
     installEventFilter(this);
 }
@@ -1130,6 +1138,16 @@ void DXmlGuiWindow::createExportActions()
     connect(m_exportVkontakteAction, SIGNAL(triggered(bool)),
             this, SLOT(slotExportTool()));
 #endif
+
+#ifdef HAVE_KIO
+    m_exportFileTransferAction = new QAction(i18n("Export to remote storage..."), this);
+    m_exportFileTransferAction->setIcon(QIcon::fromTheme(QString::fromLatin1("folder-html")));
+    actionCollection()->addAction(QLatin1String("export_filetransfer"), m_exportFileTransferAction);
+    actionCollection()->setDefaultShortcut(m_exportYandexfotkiAction, Qt::ALT + Qt::SHIFT + Qt::Key_K);
+
+    connect(m_exportFileTransferAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+#endif
 }
 
 void DXmlGuiWindow::createImportActions()
@@ -1149,6 +1167,16 @@ void DXmlGuiWindow::createImportActions()
 
     connect(m_importSmugmugAction, SIGNAL(triggered(bool)),
             this, SLOT(slotImportTool()));
+
+#ifdef HAVE_KIO
+    m_importFileTransferAction = new QAction(i18n("Import from remote storage..."), this);
+    m_importFileTransferAction->setIcon(QIcon::fromTheme(QString::fromLatin1("folder-html")));
+    actionCollection()->addAction(QLatin1String("import_filetransfer"), m_importFileTransferAction);
+    actionCollection()->setDefaultShortcut(m_importFileTransferAction, Qt::ALT + Qt::SHIFT + Qt::Key_I);
+
+    connect(m_importSmugmugAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotImportTool()));
+#endif
 }
 
 QList<QAction*> DXmlGuiWindow::exportActions() const
@@ -1171,6 +1199,10 @@ QList<QAction*> DXmlGuiWindow::exportActions() const
 #ifdef HAVE_VKONTAKTE
                              << m_exportVkontakteAction
 #endif
+
+#ifdef HAVE_KIO
+                             << m_exportFileTransferAction;
+#endif
                              ;
 }
 
@@ -1178,6 +1210,10 @@ QList<QAction*> DXmlGuiWindow::importActions() const
 {
     return QList<QAction*>() << m_importGphotoAction
                              << m_importSmugmugAction
+
+#ifdef HAVE_KIO
+                             << m_importFileTransferAction;
+#endif
                              ;
 }
 

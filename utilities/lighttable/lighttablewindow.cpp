@@ -101,6 +101,11 @@
 #   include "vkwindow.h"
 #endif
 
+#ifdef HAVE_KIO
+#   include "ftexportwindow.h"
+#   include "ftimportwindow.h"
+#endif
+
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
 #endif
@@ -1994,6 +1999,7 @@ void LightTableWindow::slotExportTool()
                                    ApplicationSettings::ImportExport), this);
         w.exec();
     }
+
 #ifdef HAVE_MEDIAWIKI
     else if (tool == m_exportMediawikiAction)
     {
@@ -2002,11 +2008,21 @@ void LightTableWindow::slotExportTool()
         w.exec();
     }
 #endif
+
 #ifdef HAVE_VKONTAKTE
     else if (tool == m_exportVkontakteAction)
     {
         VKWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
                                    ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
+
+#ifdef HAVE_KIO
+    else if (tool == m_exportFileTransferAction)
+    {
+        FTExportWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+                                         ApplicationSettings::ImportExport), this);
         w.exec();
     }
 #endif
@@ -2028,6 +2044,14 @@ void LightTableWindow::slotImportTool()
                      this, true);
         w.exec();
     }
+
+#ifdef HAVE_KIO
+    else if (tool == m_importFileTransferAction)
+    {
+        FTImportWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
 }
 
 } // namespace Digikam

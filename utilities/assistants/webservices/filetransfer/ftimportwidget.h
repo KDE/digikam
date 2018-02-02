@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef KIO_IMPORT_WIDGET_H
-#define KIO_IMPORT_WIDGET_H
+#ifndef FT_IMPORT_WIDGET_H
+#define FT_IMPORT_WIDGET_H
 
 // Qt includes
 
@@ -36,11 +36,11 @@ namespace Digikam
 {
 
 class DImagesList;
-    
+
 /**
  * Helper widget for the import tool.
  */
-class KioImportWidget: public QWidget
+class FTImportWidget: public QWidget
 {
     Q_OBJECT
 
@@ -52,12 +52,12 @@ public:
      * @param parent the parent widget
      * @param interface kipi interface to use
      */
-    explicit KioImportWidget(QWidget* const parent, DInfoInterface* const iface);
+    explicit FTImportWidget(QWidget* const parent, DInfoInterface* const iface);
 
     /**
      * Destructor.
      */
-    ~KioImportWidget();
+    ~FTImportWidget();
 
     /**
      * Returns the current list of source urls to import contained in the
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif // KIO_IMPORT_WIDGET_H
+#endif // FT_IMPORT_WIDGET_H

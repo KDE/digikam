@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef KIO_IMPORT_WINDOW_H
-#define KIO_IMPORT_WINDOW_H
+#ifndef FT_IMPORT_WINDOW_H
+#define FT_IMPORT_WINDOW_H
 
 // Qt includes
 
@@ -45,12 +45,12 @@ namespace KIO
 namespace Digikam
 {
 
-class KioImportWidget;
+class FTImportWidget;
 
 /**
  * Main dialog used for the import tool.
  */
-class DIGIKAM_EXPORT KioImportWindow : public WSToolDialog
+class DIGIKAM_EXPORT FTImportWindow : public WSToolDialog
 {
     Q_OBJECT
 
@@ -61,12 +61,12 @@ public:
      *
      * @param parent parent widget
      */
-    explicit KioImportWindow(DInfoInterface* const iface, QWidget* const parent);
+    explicit FTImportWindow(DInfoInterface* const iface, QWidget* const parent);
 
     /**
      * Destructor.
      */
-    ~KioImportWindow();
+    ~FTImportWindow();
 
 private Q_SLOTS:
 
@@ -95,10 +95,10 @@ private Q_SLOTS:
 
 private:
 
-    KioImportWidget* m_importWidget;
-    DInfoInterface*  m_iface;
+    FTImportWidget* m_importWidget;
+    DInfoInterface* m_iface;
 };
 
 } // namespace Digikam
 
-#endif // KIO_IMPORT_WINDOW_H
+#endif // FT_IMPORT_WINDOW_H

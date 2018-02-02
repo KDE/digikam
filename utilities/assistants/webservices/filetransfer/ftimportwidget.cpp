@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "kioimportwidget.h"
+#include "ftimportwidget.h"
 
 // Qt includes
 
@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-KioImportWidget::KioImportWidget(QWidget* const parent, DInfoInterface* const iface)
+FTImportWidget::FTImportWidget(QWidget* const parent, DInfoInterface* const iface)
     : QWidget(parent)
 {
     // setup image list
@@ -60,21 +60,21 @@ KioImportWidget::KioImportWidget(QWidget* const parent, DInfoInterface* const if
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 }
 
-KioImportWidget::~KioImportWidget()
+FTImportWidget::~FTImportWidget()
 {
 }
 
-DImagesList* KioImportWidget::imagesList() const
+DImagesList* FTImportWidget::imagesList() const
 {
     return m_imageList;
 }
 
-QWidget* KioImportWidget::uploadWidget() const
+QWidget* FTImportWidget::uploadWidget() const
 {
     return m_uploadWidget;
 }
 
-QList<QUrl> KioImportWidget::sourceUrls() const
+QList<QUrl> FTImportWidget::sourceUrls() const
 {
     return m_imageList->imageUrls();
 }

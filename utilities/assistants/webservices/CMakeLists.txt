@@ -218,10 +218,10 @@ endif()
 
 if(KF5KIO_FOUND)
 
-    set(libwsfiletransfer_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/kioexportwindow.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/kioexportwidget.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/kioimportwindow.cpp
-                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/kioimportwidget.cpp
+    set(libwsfiletransfer_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/ftexportwindow.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/ftexportwidget.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/ftimportwindow.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/ftimportwidget.cpp
     )
 
 endif()

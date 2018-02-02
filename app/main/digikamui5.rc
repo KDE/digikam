@@ -143,6 +143,7 @@
       <Separator/>
       <Action name="import_googlephoto" />
       <Action name="import_smugmug" />
+      <Action name="import_filetransfer" />
   </Menu>
 
   <Menu name="Export"><text>&amp;Export</text>
@@ -158,6 +159,7 @@
       <Action name="export_yandexfotki" />
       <Action name="export_mediawiki" />
       <Action name="export_vkontakte" />
+      <Action name="export_filetransfer" />
   </Menu>
 
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>

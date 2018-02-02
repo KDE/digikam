@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "kioimportwindow.h"
+#include "ftimportwindow.h"
 
 // Qt includes
 
@@ -38,17 +38,17 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "kioimportwidget.h"
+#include "ftimportwidget.h"
 #include "dimageslist.h"
 
 namespace Digikam
 {
 
-KioImportWindow::KioImportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
+FTImportWindow::FTImportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : WSToolDialog(0)
 {
     m_iface        = iface;
-    m_importWidget = new KioImportWidget(this, m_iface);
+    m_importWidget = new FTImportWidget(this, m_iface);
     setMainWidget(m_importWidget);
 
     // window setup
@@ -74,11 +74,11 @@ KioImportWindow::KioImportWindow(DInfoInterface* const iface, QWidget* const /*p
     slotSourceAndTargetUpdated();
 }
 
-KioImportWindow::~KioImportWindow()
+FTImportWindow::~FTImportWindow()
 {
 }
 
-void KioImportWindow::slotImport()
+void FTImportWindow::slotImport()
 {
     int a = m_iface->albumSelectorItem();
 
@@ -102,7 +102,7 @@ void KioImportWindow::slotImport()
     }
 }
 
-void KioImportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl& to,
+void FTImportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl& to,
                                       const QDateTime& mtime, bool directory, bool renamed)
 {
     Q_UNUSED(job);
@@ -116,7 +116,7 @@ void KioImportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUr
     m_importWidget->imagesList()->removeItemByUrl(from);
 }
 
-void KioImportWindow::slotCopyingFinished(KJob* job)
+void FTImportWindow::slotCopyingFinished(KJob* job)
 {
     Q_UNUSED(job);
 
@@ -131,7 +131,7 @@ void KioImportWindow::slotCopyingFinished(KJob* job)
     }
 }
 
-void KioImportWindow::slotSourceAndTargetUpdated()
+void FTImportWindow::slotSourceAndTargetUpdated()
 {
     bool hasUrlToImport = !m_importWidget->sourceUrls().empty();
     bool hasTarget      = false;

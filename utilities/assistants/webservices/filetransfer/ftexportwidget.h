@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef KIO_EXPORT_WIDGET_H
-#define KIO_EXPORT_WIDGET_H
+#ifndef FT_EXPORT_WIDGET_H
+#define FT_EXPORT_WIDGET_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@ namespace Digikam
 
 class DImagesList;
 
-class KioExportWidget: public QWidget
+class FTExportWidget: public QWidget
 {
     Q_OBJECT
 
@@ -53,12 +53,12 @@ public:
      *
      * @param parent the parent widget
      */
-    explicit KioExportWidget(DInfoInterface* const iface, QWidget* const parent);
+    explicit FTExportWidget(DInfoInterface* const iface, QWidget* const parent);
 
     /**
      * Destructor.
      */
-    ~KioExportWidget();
+    ~FTExportWidget();
 
     /**
      * Returns a pointer to the imagelist that is displayed.
@@ -102,4 +102,4 @@ private:
 
 } // namespace Digikam
 
-#endif // KIO_EXPORT_WIDGET_H
+#endif // FT_EXPORT_WIDGET_H

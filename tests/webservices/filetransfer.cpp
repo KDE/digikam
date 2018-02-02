@@ -32,7 +32,7 @@
 
 #include "metaengine.h"
 #include "dmetainfoiface.h"
-#include "kioexportwindow.h"
+#include "ftexportwindow.h"
 
 using namespace Digikam;
 
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    KioExportWindow dlg(new DMetaInfoIface(&app, urlList), 0);
+    FTExportWindow dlg(new DMetaInfoIface(&app, urlList), 0);
     dlg.exec();
 
     MetaEngine::cleanupExiv2();

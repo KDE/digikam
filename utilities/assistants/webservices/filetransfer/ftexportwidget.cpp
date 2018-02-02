@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "kioexportwidget.h"
+#include "ftexportwidget.h"
 
 // Qt includes
 
@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-KioExportWidget::KioExportWidget(DInfoInterface* const iface, QWidget* const parent)
+FTExportWidget::FTExportWidget(DInfoInterface* const iface, QWidget* const parent)
     : QWidget(parent)
 {
     // setup remote target selection
@@ -98,16 +98,16 @@ KioExportWidget::KioExportWidget(DInfoInterface* const iface, QWidget* const par
     updateTargetLabel();
 }
 
-KioExportWidget::~KioExportWidget()
+FTExportWidget::~FTExportWidget()
 {
 }
 
-QUrl KioExportWidget::targetUrl() const
+QUrl FTExportWidget::targetUrl() const
 {
     return m_targetUrl;
 }
 
-QList<QUrl> KioExportWidget::history() const
+QList<QUrl> FTExportWidget::history() const
 {
     QList<QUrl> urls;
 
@@ -117,7 +117,7 @@ QList<QUrl> KioExportWidget::history() const
     return urls;
 }
 
-void KioExportWidget::setHistory(const QList<QUrl>& urls)
+void FTExportWidget::setHistory(const QList<QUrl>& urls)
 {
     m_targetLabel->comboBox()->clear();
 
@@ -125,13 +125,13 @@ void KioExportWidget::setHistory(const QList<QUrl>& urls)
         m_targetLabel->comboBox()->addUrl(url);
 }
 
-void KioExportWidget::setTargetUrl(const QUrl& url)
+void FTExportWidget::setTargetUrl(const QUrl& url)
 {
     m_targetUrl = url;
     updateTargetLabel();
 }
 
-void KioExportWidget::slotShowTargetDialogClicked(bool checked)
+void FTExportWidget::slotShowTargetDialogClicked(bool checked)
 {
     Q_UNUSED(checked);
 
@@ -150,7 +150,7 @@ void KioExportWidget::slotShowTargetDialogClicked(bool checked)
     delete m_targetDialog;
 }
 
-void KioExportWidget::updateTargetLabel()
+void FTExportWidget::updateTargetLabel()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Call for url "
                              << m_targetUrl.toDisplayString() << ", valid = "
@@ -165,12 +165,12 @@ void KioExportWidget::updateTargetLabel()
     }
 }
 
-DImagesList* KioExportWidget::imagesList() const
+DImagesList* FTExportWidget::imagesList() const
 {
     return m_imageList;
 }
 
-void KioExportWidget::slotLabelUrlChanged()
+void FTExportWidget::slotLabelUrlChanged()
 {
     m_targetUrl = m_targetLabel->url();
     emit signalTargetUrlChanged(m_targetUrl);

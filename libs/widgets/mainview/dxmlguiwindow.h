@@ -258,8 +258,16 @@ protected:
     QAction*     m_exportVkontakteAction;
 #endif
 
+#ifdef HAVE_KIO
+    QAction*     m_exportFileTransferAction;
+#endif
+
     QAction*     m_importGphotoAction;
     QAction*     m_importSmugmugAction;
+
+#ifdef HAVE_KIO
+    QAction*     m_importFileTransferAction;
+#endif
 
 protected:
 

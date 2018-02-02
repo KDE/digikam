@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "kioexportwindow.h"
+#include "ftexportwindow.h"
 
 // Qt includes
 
@@ -44,19 +44,19 @@
 #include "digikam_debug.h"
 #include "digikam_version.h"
 #include "dimageslist.h"
-#include "kioexportwidget.h"
+#include "ftexportwidget.h"
 
 namespace Digikam
 {
 
-const QString KioExportWindow::TARGET_URL_PROPERTY  = QString::fromLatin1("targetUrl");
-const QString KioExportWindow::HISTORY_URL_PROPERTY = QString::fromLatin1("historyUrls");
-const QString KioExportWindow::CONFIG_GROUP         = QString::fromLatin1("KioExport");
+const QString FTExportWindow::TARGET_URL_PROPERTY  = QString::fromLatin1("targetUrl");
+const QString FTExportWindow::HISTORY_URL_PROPERTY = QString::fromLatin1("historyUrls");
+const QString FTExportWindow::CONFIG_GROUP         = QString::fromLatin1("KioExport");
 
-KioExportWindow::KioExportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
+FTExportWindow::FTExportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : WSToolDialog(0)
 {
-    m_exportWidget = new KioExportWidget(iface, this);
+    m_exportWidget = new FTExportWidget(iface, this);
     setMainWidget(m_exportWidget);
 
     // -- Window setup ------------------------------------------------------
@@ -85,17 +85,17 @@ KioExportWindow::KioExportWindow(DInfoInterface* const iface, QWidget* const /*p
     updateUploadButton();
 }
 
-KioExportWindow::~KioExportWindow()
+FTExportWindow::~FTExportWindow()
 {
 }
 
-void KioExportWindow::slotFinished()
+void FTExportWindow::slotFinished()
 {
     saveSettings();
     m_exportWidget->imagesList()->listView()->clear();
 }
 
-void KioExportWindow::closeEvent(QCloseEvent* e)
+void FTExportWindow::closeEvent(QCloseEvent* e)
 {
     if (!e)
     {
@@ -106,13 +106,13 @@ void KioExportWindow::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-void KioExportWindow::reactivate()
+void FTExportWindow::reactivate()
 {
     m_exportWidget->imagesList()->loadImagesFromCurrentSelection();
     show();
 }
 
-void KioExportWindow::restoreSettings()
+void FTExportWindow::restoreSettings()
 {
     KConfig config;
     KConfigGroup group  = config.group(CONFIG_GROUP);
@@ -125,7 +125,7 @@ void KioExportWindow::restoreSettings()
     resize(windowHandle()->size());
 }
 
-void KioExportWindow::saveSettings()
+void FTExportWindow::saveSettings()
 {
     KConfig config;
     KConfigGroup group = config.group(CONFIG_GROUP);
@@ -137,18 +137,18 @@ void KioExportWindow::saveSettings()
     config.sync();
 }
 
-void KioExportWindow::slotImageListChanged()
+void FTExportWindow::slotImageListChanged()
 {
     updateUploadButton();
 }
 
-void KioExportWindow::slotTargetUrlChanged(const QUrl & target)
+void FTExportWindow::slotTargetUrlChanged(const QUrl & target)
 {
     Q_UNUSED(target);
     updateUploadButton();
 }
 
-void KioExportWindow::updateUploadButton()
+void FTExportWindow::updateUploadButton()
 {
     bool listNotEmpty = !m_exportWidget->imagesList()->imageUrls().empty();
     startButton()->setEnabled(listNotEmpty && m_exportWidget->targetUrl().isValid());
@@ -158,7 +158,7 @@ void KioExportWindow::updateUploadButton()
                                  << m_exportWidget->targetUrl().isValid();
 }
 
-void KioExportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl& to,
+void FTExportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl& to,
                                       const QDateTime& mtime, bool directory, bool renamed)
 {
     Q_UNUSED(job);
@@ -172,7 +172,7 @@ void KioExportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUr
     m_exportWidget->imagesList()->removeItemByUrl(from);
 }
 
-void KioExportWindow::slotCopyingFinished(KJob* job)
+void FTExportWindow::slotCopyingFinished(KJob* job)
 {
     Q_UNUSED(job);
 
@@ -187,7 +187,7 @@ void KioExportWindow::slotCopyingFinished(KJob* job)
     }
 }
 
-void KioExportWindow::slotUpload()
+void FTExportWindow::slotUpload()
 {
     saveSettings();
 

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef KIO_EXPORT_WINDOW_H
-#define KIO_EXPORT_WINDOW_H
+#ifndef FT_EXPORT_WINDOW_H
+#define FT_EXPORT_WINDOW_H
 
 // Qt includes
 
@@ -45,13 +45,13 @@ namespace KIO
 namespace Digikam
 {
 
-class KioExportWidget;
+class FTExportWidget;
 
 /**
  * Main window of the KIOExport tool.
  */
 
-class DIGIKAM_EXPORT KioExportWindow: public WSToolDialog
+class DIGIKAM_EXPORT FTExportWindow: public WSToolDialog
 {
     Q_OBJECT
 
@@ -62,12 +62,12 @@ public:
      *
      * @param parent parent QWidget
      */
-    explicit KioExportWindow(DInfoInterface* const iface, QWidget* const parent);
+    explicit FTExportWindow(DInfoInterface* const iface, QWidget* const parent);
 
     /**
      * Destructor.
      */
-    ~KioExportWindow();
+    ~FTExportWindow();
 
     /**
      * Use this method to (re-)activate the dialog after it has been created
@@ -137,9 +137,9 @@ private:
 
 private:
 
-    KioExportWidget* m_exportWidget;
+    FTExportWidget* m_exportWidget;
 };
 
 } // namespace Digikam
 
-#endif // KIO_EXPORT_WINDOW_H
+#endif // FT_EXPORT_WINDOW_H

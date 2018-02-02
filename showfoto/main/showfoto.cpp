@@ -128,6 +128,11 @@
 #   include "vkwindow.h"
 #endif
 
+#ifdef HAVE_KIO
+#   include "ftexportwindow.h"
+#   include "ftimportwindow.h"
+#endif
+
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
 #endif
@@ -1544,6 +1549,7 @@ void ShowFoto::slotExportTool()
         YFWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
         w.exec();
     }
+
 #ifdef HAVE_MEDIAWIKI
     else if (tool == m_exportMediawikiAction)
     {
@@ -1551,10 +1557,19 @@ void ShowFoto::slotExportTool()
         w.exec();
     }
 #endif
+
 #ifdef HAVE_VKONTAKTE
     else if (tool == m_exportVkontakteAction)
     {
         VKWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+#endif
+
+#ifdef HAVE_KIO
+    else if (tool == m_exportFileTransferAction)
+    {
+        FTExportWindow w(new DMetaInfoIface(this, d->thumbBar->urls(), this);
         w.exec();
     }
 #endif
@@ -1576,6 +1591,15 @@ void ShowFoto::slotImportTool()
                      this, true);
         w.exec();
     }
+
+#ifdef HAVE_KIO
+    else if (tool == m_importFileTransferAction)
+    {
+        FTImportWindow w(new DMetaInfoIface(this, QList<QUrl>(),
+                         this);
+        w.exec();
+    }
+#endif
 }
 
 } // namespace ShowFoto
