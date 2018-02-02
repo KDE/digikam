@@ -43,7 +43,9 @@ int main(int argc, char* argv[])
 
     QCommandLineParser parser;
     parser.addHelpOption();
-    parser.addPositionalArgument(QLatin1String("files"), QLatin1String("File(s) to send by mail"), QLatin1String("+[file(s)]"));
+    parser.addPositionalArgument(QLatin1String("files"),
+                                 QLatin1String("File(s) to share with Media Server"),
+                                 QLatin1String("+[file(s)]"));
     parser.process(app);
 
     MetaEngine::initializeExiv2();
@@ -57,13 +59,13 @@ int main(int argc, char* argv[])
     }
 
     QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
-    
+
     DMediaServerMngr::instance()->load();
-    
+
     DMediaServerDlg* const view = new DMediaServerDlg(&app, new DMetaInfoIface(&app, urlList));
     view->show();
     app.exec();
-    
+
     DMediaServerMngr::instance()->save();
     DMediaServerMngr::instance()->cleanUp();
 
