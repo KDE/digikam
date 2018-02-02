@@ -33,6 +33,7 @@
 #include "metaengine.h"
 #include "dmetainfoiface.h"
 #include "ftexportwindow.h"
+#include "ftimportwindow.h"
 
 using namespace Digikam;
 
@@ -42,7 +43,8 @@ int main(int argc, char* argv[])
 
     QCommandLineParser parser;
     parser.addHelpOption();
-    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("import"), i18n("Import files Instead to Export")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("import"),
+                                        QLatin1String("Import files Instead to Export")));
     parser.addPositionalArgument(QLatin1String("files"),
                                  QLatin1String("File(s) to open"),
                                  QLatin1String("+[file(s)]"));
@@ -58,8 +60,16 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    FTExportWindow dlg(new DMetaInfoIface(&app, urlList), 0);
-    dlg.exec();
+    if (parser.isSet(QString::fromLatin1("import")))
+    {
+        FTImportWindow dlg(new DMetaInfoIface(&app, QList<QUrl>()), 0);
+        dlg.exec();
+    }
+    else
+    {
+        FTExportWindow dlg(new DMetaInfoIface(&app, urlList), 0);
+        dlg.exec();
+    }
 
     MetaEngine::cleanupExiv2();
 
