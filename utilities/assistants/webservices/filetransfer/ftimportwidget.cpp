@@ -61,7 +61,7 @@ FTImportWidget::FTImportWidget(QWidget* const parent, DInfoInterface* const ifac
     d->imageList->setAllowRAW(true);
     d->imageList->setIface(iface);
     d->imageList->listView()->setWhatsThis(i18n("This is the list of images to import "
-                                               "into the current album."));
+                                                "into the current album."));
 
     // setup upload widget
     d->uploadWidget           = iface->albumSelector(this);
