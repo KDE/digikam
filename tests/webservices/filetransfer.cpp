@@ -42,7 +42,10 @@ int main(int argc, char* argv[])
 
     QCommandLineParser parser;
     parser.addHelpOption();
-    parser.addPositionalArgument(QLatin1String("files"), QLatin1String("File(s) to open"), QLatin1String("+[file(s)]"));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("import"), i18n("Import files Instead to Export")));
+    parser.addPositionalArgument(QLatin1String("files"),
+                                 QLatin1String("File(s) to open"),
+                                 QLatin1String("+[file(s)]"));
     parser.process(app);
 
     MetaEngine::initializeExiv2();

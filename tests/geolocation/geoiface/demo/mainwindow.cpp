@@ -234,7 +234,7 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
 
     d->treeWidget = new MyTreeWidget(this);
     d->treeWidget->setColumnCount(2);
-    d->treeWidget->setHeaderLabels(QStringList()<<i18n("Filename")<<i18n("Coordinates"));
+    d->treeWidget->setHeaderLabels(QStringList() << i18n("Filename") << i18n("Coordinates"));
     d->treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     d->displayMarkersModel    = d->treeWidget->model();
@@ -313,7 +313,8 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
     // Sagrada Familia in Spain
     markerList<<GeoCoordinates::fromGeoUrl(QLatin1String("geo:41.4036480511,2.1743756533,46" ));
 
-    if (cmdLineArgs->isSet(QString::fromLatin1("demopoints_single")) || cmdLineArgs->isSet(QString::fromLatin1("demopoints_group")))
+    if (cmdLineArgs->isSet(QString::fromLatin1("demopoints_single")) ||
+        cmdLineArgs->isSet(QString::fromLatin1("demopoints_group")))
     {
         for (int i = 0; i < markerList.count(); ++i)
         {
