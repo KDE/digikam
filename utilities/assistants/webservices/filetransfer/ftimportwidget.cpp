@@ -38,45 +38,61 @@
 namespace Digikam
 {
 
+class FTImportWidget::Private
+{
+public:
+
+    Private()
+    {
+        imageList    = 0;
+        uploadWidget = 0;
+    }
+
+    DImagesList* imageList;
+    QWidget*     uploadWidget;
+};
+
 FTImportWidget::FTImportWidget(QWidget* const parent, DInfoInterface* const iface)
-    : QWidget(parent)
+    : QWidget(parent),
+      d(new Private)
 {
     // setup image list
-    m_imageList = new DImagesList(this);
-    m_imageList->setAllowRAW(true);
-    m_imageList->setIface(iface);
-    m_imageList->listView()->setWhatsThis(i18n("This is the list of images to import "
+    d->imageList = new DImagesList(this);
+    d->imageList->setAllowRAW(true);
+    d->imageList->setIface(iface);
+    d->imageList->listView()->setWhatsThis(i18n("This is the list of images to import "
                                                "into the current album."));
 
     // setup upload widget
-    m_uploadWidget            = iface->albumSelector(this);
+    d->uploadWidget           = iface->albumSelector(this);
 
     // layout dialog
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
-    layout->addWidget(m_imageList);
-    layout->addWidget(m_uploadWidget);
+    layout->addWidget(d->imageList);
+    layout->addWidget(d->uploadWidget);
     layout->setContentsMargins(QMargins());
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 }
 
 FTImportWidget::~FTImportWidget()
 {
+    delete d;
 }
 
 DImagesList* FTImportWidget::imagesList() const
 {
-    return m_imageList;
+    return d->imageList;
 }
 
 QWidget* FTImportWidget::uploadWidget() const
 {
-    return m_uploadWidget;
+    return d->uploadWidget;
 }
 
 QList<QUrl> FTImportWidget::sourceUrls() const
 {
-    return m_imageList->imageUrls();
+    return d->imageList->imageUrls();
 }
 
 } // namespace Digikam

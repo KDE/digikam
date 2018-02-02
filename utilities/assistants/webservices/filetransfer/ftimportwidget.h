@@ -83,8 +83,8 @@ public:
 
 private:
 
-    DImagesList* m_imageList;
-    QWidget*     m_uploadWidget;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
