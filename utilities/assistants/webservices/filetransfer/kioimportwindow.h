@@ -28,20 +28,24 @@
 
 #include <QUrl>
 
-// KDE includes
-
-#include <kio/job.h>
-
 // Local includes
 
 #include "dinfointerface.h"
 #include "wstooldialog.h"
-#include "kioimportwidget.h"
 #include "dinfointerface.h"
 #include "digikam_export.h"
 
+class KJob;
+
+namespace KIO 
+{
+    class Job;
+}
+
 namespace Digikam
 {
+
+class KioImportWidget;
 
 /**
  * Main dialog used for the import tool.

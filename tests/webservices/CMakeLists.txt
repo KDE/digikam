@@ -207,3 +207,21 @@ if(KF5Vkontakte_FOUND)
     )
 
 endif()
+
+# =======================================================
+# Stand alone version of FileTransfer tool
+
+if(KF5KIO_FOUND)
+
+    set(filetransfer_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer.cpp)
+    add_executable(filetransfer ${filetransfer_SRCS})
+
+    target_link_libraries(filetransfer
+                          digikamcore
+                          libdng
+
+                          Qt5::Gui
+                          Qt5::Xml
+    )
+
+endif()

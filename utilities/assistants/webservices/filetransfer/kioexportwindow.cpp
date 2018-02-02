@@ -33,10 +33,11 @@
 
 // KDE includes
 
-#include <kio/copyjob.h>
 #include <kconfig.h>
 #include <klocalizedstring.h>
 #include <kwindowconfig.h>
+#include <kio/job.h>
+#include <kio/copyjob.h>
 
 // Local includes
 

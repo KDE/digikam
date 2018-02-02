@@ -33,6 +33,7 @@
 
 #include <klocalizedstring.h>
 #include <kcombobox.h>
+#include <kurlrequester.h>
 
 // Local includes
 
@@ -69,6 +70,8 @@ KioExportWidget::KioExportWidget(DInfoInterface* const iface, QWidget* const par
 
     // setup image list
     m_imageList = new DImagesList(this);
+    m_imageList->setIface(iface);
+    m_imageList->loadImagesFromCurrentSelection();
     m_imageList->setAllowRAW(true);
     m_imageList->listView()->setWhatsThis(i18n("This is the list of images to upload "
                                                "to the specified target."));

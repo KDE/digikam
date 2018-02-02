@@ -27,16 +27,15 @@
 // Qt includes
 
 #include <QWidget>
-#include <QLabel>
 #include <QUrl>
-
-// KDE includes
-
-#include <kurlrequester.h>
+#include <QPushButton>
+#include <QFileDialog>
 
 // Local includes
 
 #include "dinfointerface.h"
+
+class KUrlComboRequester;
 
 namespace Digikam
 {

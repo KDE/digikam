@@ -45,7 +45,6 @@ KioImportWidget::KioImportWidget(QWidget* const parent, DInfoInterface* const if
     m_imageList = new DImagesList(this);
     m_imageList->setAllowRAW(true);
     m_imageList->setIface(iface);
-    m_imageList->loadImagesFromCurrentSelection();
     m_imageList->listView()->setWhatsThis(i18n("This is the list of images to import "
                                                "into the current album."));
 

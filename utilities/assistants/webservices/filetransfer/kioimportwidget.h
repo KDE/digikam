@@ -52,12 +52,12 @@ public:
      * @param parent the parent widget
      * @param interface kipi interface to use
      */
-    KioImportWidget(QWidget* const parent, DInfoInterface* const iface);
+    explicit KioImportWidget(QWidget* const parent, DInfoInterface* const iface);
 
     /**
      * Destructor.
      */
-    virtual ~KioImportWidget();
+    ~KioImportWidget();
 
     /**
      * Returns the current list of source urls to import contained in the
