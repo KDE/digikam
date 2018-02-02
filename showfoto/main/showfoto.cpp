@@ -1569,7 +1569,7 @@ void ShowFoto::slotExportTool()
 #ifdef HAVE_KIO
     else if (tool == m_exportFileTransferAction)
     {
-        FTExportWindow w(new DMetaInfoIface(this, d->thumbBar->urls(), this);
+        FTExportWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
         w.exec();
     }
 #endif
@@ -1595,7 +1595,7 @@ void ShowFoto::slotImportTool()
 #ifdef HAVE_KIO
     else if (tool == m_importFileTransferAction)
     {
-        FTImportWindow w(new DMetaInfoIface(this, QList<QUrl>(),
+        FTImportWindow w(new DMetaInfoIface(this, QList<QUrl>()),
                          this);
         w.exec();
     }
