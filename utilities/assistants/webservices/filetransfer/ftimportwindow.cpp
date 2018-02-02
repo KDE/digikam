@@ -89,7 +89,7 @@ void FTImportWindow::slotImport()
 
         // start copying and react on signals
         setEnabled(false);
-    
+
         DAlbumInfo info(m_iface->albumInfo(a));
 
         KIO::CopyJob* const copyJob = KIO::copy(m_importWidget->imagesList()->imageUrls(),
