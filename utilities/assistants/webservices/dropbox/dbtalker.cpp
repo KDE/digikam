@@ -82,7 +82,7 @@ DBTalker::DBTalker(QWidget* const parent)
     m_o2->setTokenUrl(m_tokenUrl);
     m_o2->setLocalPort(8000);
 
-    QString dkoauth = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1String("/digikam_oauthrc");
+    QString dkoauth = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1String("/digikamoauthrc");
 
     m_settings = new QSettings(dkoauth, QSettings::IniFormat, this);
     m_store    = new O0SettingsStore(m_settings, QLatin1String(O2_ENCRYPTION_KEY), this);
