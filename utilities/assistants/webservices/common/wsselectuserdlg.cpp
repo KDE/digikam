@@ -69,9 +69,9 @@ WSSelectUserDlg::WSSelectUserDlg(QWidget* const parent, const QString& serviceNa
         setWindowIcon(QIcon::fromTheme(QString::fromLatin1("flickr")));
     }
 
-    m_uname = QString();
+    m_uname        = QString();
 
-    m_label = new QLabel(this);
+    m_label        = new QLabel(this);
     m_label->setText(i18n("Choose the %1 account to use for exporting images:", m_serviceName));
 
     m_userComboBox = new QComboBox(this);

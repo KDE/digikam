@@ -37,14 +37,20 @@ namespace Digikam
 class WSSelectUserDlg : public QDialog
 {
     Q_OBJECT
+
 public:
 
     explicit WSSelectUserDlg(QWidget* const parent, const QString& serviceName);
     ~WSSelectUserDlg();
 
-    void           reactivate();
-    QString        getUname() const;
+    void             reactivate();
+    QString          getUname() const;
     WSSelectUserDlg* getDlg();
+
+protected Q_SLOTS:
+
+    void slotOkClicked();
+    void slotNewAccountClicked();
 
 private:
 
@@ -54,11 +60,6 @@ private:
 
     QString      m_uname;
     QString      m_serviceName;
-
-protected Q_SLOTS:
-
-    void slotOkClicked();
-    void slotNewAccountClicked();
 };
 
 } // namespace Digikam

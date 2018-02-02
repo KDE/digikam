@@ -59,14 +59,14 @@ public:
     void hideDesc();
     void hideLocation();
 
-    QWidget*          getMainWidget() const;
-    QGroupBox*        getAlbumBox() const;
+    QWidget*          getMainWidget()   const;
+    QGroupBox*        getAlbumBox()     const;
 
-    QLineEdit*        getTitleEdit() const;
-    QTextEdit*        getDescEdit() const;
-    QLineEdit*        getLocEdit() const;
+    QLineEdit*        getTitleEdit()    const;
+    QTextEdit*        getDescEdit()     const;
+    QLineEdit*        getLocEdit()      const;
     QDateTimeEdit*    getDateTimeEdit() const;
-    QDialogButtonBox* getButtonBox() const;
+    QDialogButtonBox* getButtonBox()    const;
 
     void addToMainLayout(QWidget* const widget);
 

@@ -44,8 +44,10 @@ class DIGIKAM_EXPORT WSLoginDialog : public QDialog
 
 public:
 
-    explicit WSLoginDialog(QWidget* const parent, const QString& prompt,
-                           const QString& header=QString(), const QString& passwd=QString());
+    explicit WSLoginDialog(QWidget* const parent,
+                           const QString& prompt,
+                           const QString& header=QString(),
+                           const QString& passwd=QString());
     ~WSLoginDialog();
 
     QString login()    const;

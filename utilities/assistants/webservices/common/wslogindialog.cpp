@@ -47,17 +47,17 @@
 namespace Digikam
 {
 
-WSLoginDialog::WSLoginDialog(QWidget* const parent, const QString& prompt,
-                         const QString& login, const QString& password)
+WSLoginDialog::WSLoginDialog(QWidget* const parent,
+                             const QString& prompt,
+                             const QString& login,
+                             const QString& password)
     : QDialog(parent)
 {
     setSizeGripEnabled(false);
 
     QVBoxLayout* const vbox = new QVBoxLayout(this);
-
-    m_headerLabel = new QLabel(this);
+    m_headerLabel           = new QLabel(this);
     m_headerLabel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
-
     m_headerLabel->setTextFormat(Qt::RichText);
     m_headerLabel->setText(prompt);
 

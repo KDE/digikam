@@ -44,12 +44,12 @@ class WSNewAlbumDialog::Private
 {
 public:
 
-    Private(QWidget* const widget, const QString& toolName)
+    Private(QWidget* const widget, const QString& name)
     {
-        m_titleEdt     = new QLineEdit;
-        m_descEdt      = new QTextEdit;
-        m_locEdt       = new QLineEdit;
-        m_dtEdt        = new QDateTimeEdit(QDateTime::currentDateTime());
+        titleEdt       = new QLineEdit;
+        descEdt        = new QTextEdit;
+        locEdt         = new QLineEdit;
+        dtEdt          = new QDateTimeEdit(QDateTime::currentDateTime());
 
         mainWidget     = widget;
         mainLayout     = new QVBoxLayout(mainWidget);
@@ -64,20 +64,20 @@ public:
 
         buttonBox      = new QDialogButtonBox();
 
-        m_toolName   = toolName;
+        toolName       = name;
     }
 
-    QLineEdit*         m_titleEdt;
-    QTextEdit*         m_descEdt;
-    QLineEdit*         m_locEdt;
-    QDateTimeEdit*     m_dtEdt;
+    QLineEdit*         titleEdt;
+    QTextEdit*         descEdt;
+    QLineEdit*         locEdt;
+    QDateTimeEdit*     dtEdt;
 
     QLabel*            titleLabel;
     QLabel*            dateLabel;
     QLabel*            descLabel;
     QLabel*            locLabel;
 
-    QString            m_toolName;
+    QString            toolName;
     QDialogButtonBox*  buttonBox;
 
     QGridLayout*       albumBoxLayout;
@@ -91,9 +91,8 @@ WSNewAlbumDialog::WSNewAlbumDialog(QWidget* const parent, const QString& toolNam
     : QDialog(parent),
       d(new Private(this, toolName))
 {
-    d->m_toolName = toolName;
     d->mainWidget->setMinimumSize(500, 500);
-    setWindowTitle(QString(d->m_toolName + QString::fromLatin1(" New Album")));
+    setWindowTitle(QString(d->toolName + QString::fromLatin1(" New Album")));
     setModal(false);
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
@@ -103,7 +102,7 @@ WSNewAlbumDialog::WSNewAlbumDialog(QWidget* const parent, const QString& toolNam
     d->buttonBox->button(QDialogButtonBox::Cancel)->setDefault(true);
     d->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-    connect(d->m_titleEdt, SIGNAL(textChanged(QString)),
+    connect(d->titleEdt, SIGNAL(textChanged(QString)),
             this, SLOT(slotTextChanged(QString)));
 
     connect(d->buttonBox, SIGNAL(accepted()),
@@ -113,25 +112,25 @@ WSNewAlbumDialog::WSNewAlbumDialog(QWidget* const parent, const QString& toolNam
             this, SLOT(reject()));
 
     d->albumBox->setLayout(d->albumBoxLayout);
-    d->albumBox->setWhatsThis(i18n("These are basic settings for the new %1 album.",d->m_toolName));
+    d->albumBox->setWhatsThis(i18n("These are basic settings for the new %1 album.",d->toolName));
 
-    d->m_titleEdt->setToolTip(i18n("Title of the album that will be created (required)."));
+    d->titleEdt->setToolTip(i18n("Title of the album that will be created (required)."));
 
-    d->m_dtEdt->setDisplayFormat(QString::fromLatin1("dd.MM.yyyy HH:mm"));
-    d->m_dtEdt->setWhatsThis(i18n("Date and Time of the album that will be created (optional)."));
+    d->dtEdt->setDisplayFormat(QString::fromLatin1("dd.MM.yyyy HH:mm"));
+    d->dtEdt->setWhatsThis(i18n("Date and Time of the album that will be created (optional)."));
 
-    d->m_descEdt->setToolTip(i18n("Description of the album that will be created (optional)."));
+    d->descEdt->setToolTip(i18n("Description of the album that will be created (optional)."));
 
-    d->m_locEdt->setToolTip(i18n("Location of the album that will be created (optional)."));
+    d->locEdt->setToolTip(i18n("Location of the album that will be created (optional)."));
 
     d->albumBoxLayout->addWidget(d->titleLabel, 0, 0);
-    d->albumBoxLayout->addWidget(d->m_titleEdt, 0, 1);
+    d->albumBoxLayout->addWidget(d->titleEdt,   0, 1);
     d->albumBoxLayout->addWidget(d->dateLabel,  1, 0);
-    d->albumBoxLayout->addWidget(d->m_dtEdt,    1, 1);
+    d->albumBoxLayout->addWidget(d->dtEdt,      1, 1);
     d->albumBoxLayout->addWidget(d->descLabel,  2, 0);
-    d->albumBoxLayout->addWidget(d->m_descEdt,  2, 1);
+    d->albumBoxLayout->addWidget(d->descEdt,    2, 1);
     d->albumBoxLayout->addWidget(d->locLabel,   3, 0);
-    d->albumBoxLayout->addWidget(d->m_locEdt,   3, 1);
+    d->albumBoxLayout->addWidget(d->locEdt,     3, 1);
     d->albumBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     d->albumBoxLayout->setSpacing(spacing);
 
@@ -157,25 +156,25 @@ void WSNewAlbumDialog::slotTextChanged(const QString& /*text*/)
 
 void WSNewAlbumDialog::hideDateTime()
 {
-    d->m_dtEdt->hide();
+    d->dtEdt->hide();
     d->dateLabel->hide();
-    d->albumBoxLayout->removeWidget(d->m_dtEdt);
+    d->albumBoxLayout->removeWidget(d->dtEdt);
     d->albumBoxLayout->removeWidget(d->dateLabel);
 }
 
 void WSNewAlbumDialog::hideDesc()
 {
-    d->m_descEdt->hide();
+    d->descEdt->hide();
     d->descLabel->hide();
-    d->albumBoxLayout->removeWidget(d->m_descEdt);
+    d->albumBoxLayout->removeWidget(d->descEdt);
     d->albumBoxLayout->removeWidget(d->descLabel);
 }
 
 void WSNewAlbumDialog::hideLocation()
 {
-    d->m_locEdt->hide();
+    d->locEdt->hide();
     d->locLabel->hide();
-    d->albumBoxLayout->removeWidget(d->m_locEdt);
+    d->albumBoxLayout->removeWidget(d->locEdt);
     d->albumBoxLayout->removeWidget(d->locLabel);
 }
 
@@ -191,22 +190,22 @@ QGroupBox* WSNewAlbumDialog::getAlbumBox() const
 
 QLineEdit* WSNewAlbumDialog::getTitleEdit() const
 {
-    return d->m_titleEdt;
+    return d->titleEdt;
 }
 
 QTextEdit* WSNewAlbumDialog::getDescEdit() const
 {
-    return d->m_descEdt;
+    return d->descEdt;
 }
 
 QLineEdit* WSNewAlbumDialog::getLocEdit() const
 {
-    return d->m_locEdt;
+    return d->locEdt;
 }
 
 QDateTimeEdit* WSNewAlbumDialog::getDateTimeEdit() const
 {
-    return d->m_dtEdt;
+    return d->dtEdt;
 }
 
 void WSNewAlbumDialog::addToMainLayout(QWidget* const widget)
