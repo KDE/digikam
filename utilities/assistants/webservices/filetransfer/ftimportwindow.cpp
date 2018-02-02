@@ -52,6 +52,7 @@ FTImportWindow::FTImportWindow(DInfoInterface* const iface, QWidget* const /*par
     setMainWidget(m_importWidget);
 
     // window setup
+
     setWindowTitle(i18n("Import from Remote Storage"));
     setModal(false);
     startButton()->setEnabled(false);
@@ -68,7 +69,7 @@ FTImportWindow::FTImportWindow(DInfoInterface* const iface, QWidget* const /*par
     connect(m_importWidget->imagesList(), SIGNAL(signalImageListChanged()),
             this, SLOT(slotSourceAndTargetUpdated()));
 
-    connect(m_importWidget->uploadWidget(), SIGNAL(selectionChanged()),
+    connect(m_iface, SIGNAL(selectionChanged()),
             this, SLOT(slotSourceAndTargetUpdated()));
 
     slotSourceAndTargetUpdated();
