@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef KIOEXPORTWIDGET_H
-#define KIOEXPORTWIDGET_H
+#ifndef KIO_EXPORT_WIDGET_H
+#define KIO_EXPORT_WIDGET_H
 
 // Qt includes
 
@@ -34,15 +34,14 @@
 
 #include <kurlrequester.h>
 
-namespace KIPIPlugins
-{
-    class KPImagesList;
-}
+// Local includes
 
-using namespace KIPIPlugins;
+#include "dinfointerface.h"
 
 namespace Digikam
 {
+
+class DImagesList;
 
 class KioExportWidget: public QWidget
 {
@@ -55,17 +54,17 @@ public:
      *
      * @param parent the parent widget
      */
-    explicit KioExportWidget(QWidget* const parent);
+    explicit KioExportWidget(DInfoInterface* const iface, QWidget* const parent);
 
     /**
      * Destructor.
      */
-    virtual ~KioExportWidget();
+    ~KioExportWidget();
 
     /**
      * Returns a pointer to the imagelist that is displayed.
      */
-    KPImagesList* imagesList() const;
+    DImagesList* imagesList() const;
 
     /**
      * Returns the currently selected target url. Maybe invalid.
@@ -99,9 +98,9 @@ private:
     QFileDialog*        m_targetDialog;
     QPushButton*        m_targetSearchButton;
     QUrl                m_targetUrl;
-    KPImagesList*       m_imageList;
+    DImagesList*        m_imageList;
 };
 
 } // namespace Digikam
 
-#endif /* KIOEXPORTWIDGET_H */
+#endif // KIO_EXPORT_WIDGET_H

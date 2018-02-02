@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef KIOIMPORTWINDOW_H
-#define KIOIMPORTWINDOW_H
+#ifndef KIO_IMPORT_WINDOW_H
+#define KIO_IMPORT_WINDOW_H
 
 // Qt includes
 
@@ -34,16 +34,11 @@
 
 // Local includes
 
-#include "kptooldialog.h"
-#include "KioImportWidget.h"
-
-namespace KIPI
-{
-    class Interface;
-}
-
-using namespace KIPI;
-using namespace KIPIPlugins;
+#include "dinfointerface.h"
+#include "wstooldialog.h"
+#include "kioimportwidget.h"
+#include "dinfointerface.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -51,7 +46,7 @@ namespace Digikam
 /**
  * Main dialog used for the import tool.
  */
-class KioImportWindow : public KPToolDialog
+class DIGIKAM_EXPORT KioImportWindow : public WSToolDialog
 {
     Q_OBJECT
 
@@ -62,12 +57,12 @@ public:
      *
      * @param parent parent widget
      */
-    explicit KioImportWindow(QWidget* const parent);
+    explicit KioImportWindow(DInfoInterface* const iface, QWidget* const parent);
 
     /**
      * Destructor.
      */
-    virtual ~KioImportWindow();
+    ~KioImportWindow();
 
 private Q_SLOTS:
 
@@ -97,8 +92,9 @@ private Q_SLOTS:
 private:
 
     KioImportWidget* m_importWidget;
+    DInfoInterface*  m_iface;
 };
 
 } // namespace Digikam
 
-#endif /* KIOIMPORTWINDOW_H */
+#endif // KIO_IMPORT_WINDOW_H

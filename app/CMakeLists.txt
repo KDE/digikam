@@ -174,6 +174,7 @@ if(KF5IconThemes_FOUND)
 endif()
 
 if(KF5KIO_FOUND)
+    target_link_libraries(digikamcore PUBLIC KF5::KIOCore)
     target_link_libraries(digikamcore PUBLIC KF5::KIOWidgets)
 endif()
 

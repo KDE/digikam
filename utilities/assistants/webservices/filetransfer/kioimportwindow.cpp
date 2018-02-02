@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "KioImportWindow.h"
+#include "kioimportwindow.h"
 
 // Qt includes
 
@@ -34,26 +34,20 @@
 #include <kio/copyjob.h>
 #include <klocalizedstring.h>
 
-// Libkipi includes
-
-#include <KIPI/Interface>
-#include <KIPI/UploadWidget>
-#include <KIPI/ImageCollection>
-
 // Local includes
 
-#include "kipiplugins_debug.h"
-#include "KioImportWidget.h"
-#include "kpaboutdata.h"
-#include "kpimageslist.h"
+#include "digikam_debug.h"
+#include "kioimportwidget.h"
+#include "dimageslist.h"
 
 namespace Digikam
 {
 
-KioImportWindow::KioImportWindow(QWidget* const /*parent*/)
-    : KPToolDialog(0)
+KioImportWindow::KioImportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
+    : WSToolDialog(0)
 {
-    m_importWidget = new KioImportWidget(this, iface());
+    m_iface        = iface;
+    m_importWidget = new KioImportWidget(this, m_iface);
     setMainWidget(m_importWidget);
 
     // window setup
@@ -76,19 +70,6 @@ KioImportWindow::KioImportWindow(QWidget* const /*parent*/)
     connect(m_importWidget->uploadWidget(), SIGNAL(selectionChanged()),
             this, SLOT(slotSourceAndTargetUpdated()));
 
-    // about data and help button
-
-    KPAboutData* const about = new KPAboutData(ki18n("Import from remote storage"),
-                                               ki18n("A tool to import images over network"),
-                                               ki18n("(c) 2009, Johannes Wienke"));
-
-    about->addAuthor(ki18n("Johannes Wienke").toString(),
-                     ki18n("Developer and maintainer").toString(),
-                     QString::fromLatin1("languitar at semipol dot de"));
-
-    about->setHandbookEntry(QString::fromLatin1("tool-remotestorage"));
-    setAboutData(about);
-
     slotSourceAndTargetUpdated();
 }
 
@@ -98,18 +79,26 @@ KioImportWindow::~KioImportWindow()
 
 void KioImportWindow::slotImport()
 {
-    qCDebug(KIPIPLUGINS_LOG) << "starting to import urls: " << m_importWidget->sourceUrls();
+    int a = m_iface->albumSelectorItem();
 
-    // start copying and react on signals
-    setEnabled(false);
-    KIO::CopyJob* const copyJob = KIO::copy(m_importWidget->imagesList()->imageUrls(),
-                                  m_importWidget->uploadWidget()->selectedImageCollection().uploadUrl());
+    if (a)
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "starting to import urls: " << m_importWidget->sourceUrls();
 
-    connect(copyJob, SIGNAL(copyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)),
-            this, SLOT(slotCopyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)));
+        // start copying and react on signals
+        setEnabled(false);
+    
+        DAlbumInfo info(m_iface->albumInfo(a));
 
-    connect(copyJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotCopyingFinished(KJob*)));
+        KIO::CopyJob* const copyJob = KIO::copy(m_importWidget->imagesList()->imageUrls(),
+                                                QUrl::fromLocalFile(info.path()));
+
+        connect(copyJob, SIGNAL(copyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)),
+                this, SLOT(slotCopyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)));
+
+        connect(copyJob, SIGNAL(result(KJob*)),
+                this, SLOT(slotCopyingFinished(KJob*)));
+    }
 }
 
 void KioImportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl& to,
@@ -121,7 +110,7 @@ void KioImportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUr
     Q_UNUSED(directory);
     Q_UNUSED(renamed);
 
-    qCDebug(KIPIPLUGINS_LOG) << "copied " << to.toDisplayString();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "copied " << to.toDisplayString();
 
     m_importWidget->imagesList()->removeItemByUrl(from);
 }
@@ -144,10 +133,17 @@ void KioImportWindow::slotCopyingFinished(KJob* job)
 void KioImportWindow::slotSourceAndTargetUpdated()
 {
     bool hasUrlToImport = !m_importWidget->sourceUrls().empty();
-    bool hasTarget      = m_importWidget->uploadWidget()->selectedImageCollection().uploadUrl().isValid();
+    bool hasTarget      = false;
+    int a               = m_iface->albumSelectorItem();
 
-    qCDebug(KIPIPLUGINS_LOG) << "switching import button activity with: hasUrlToImport = "
-                             << hasUrlToImport << ", hasTarget = " << hasTarget;
+    if (a)
+    {
+        DAlbumInfo info(m_iface->albumInfo(a));
+        hasTarget      = !info.path().isEmpty();
+    }
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "switching import button activity with: hasUrlToImport = "
+                                 << hasUrlToImport << ", hasTarget = " << hasTarget;
 
     startButton()->setEnabled(hasUrlToImport && hasTarget);
 }

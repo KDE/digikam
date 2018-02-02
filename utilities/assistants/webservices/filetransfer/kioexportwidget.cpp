@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "KioExportWidget.h"
+#include "kioexportwidget.h"
 
 // Qt includes
 
@@ -36,19 +36,20 @@
 
 // Local includes
 
-#include "kipiplugins_debug.h"
-#include "kpimageslist.h"
-#include "kputil.h"
+#include "digikam_debug.h"
+#include "dimageslist.h"
+#include "wstoolutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {
 
-KioExportWidget::KioExportWidget(QWidget* const parent)
+KioExportWidget::KioExportWidget(DInfoInterface* const iface, QWidget* const parent)
     : QWidget(parent)
 {
     // setup remote target selection
 
-    KPHBox* const hbox  = new KPHBox(this);
+    DHBox* const hbox   = new DHBox(this);
     QLabel* const label = new QLabel(hbox);
     m_targetLabel       = new KUrlComboRequester(hbox);
     m_targetDialog      = 0;
@@ -67,7 +68,7 @@ KioExportWidget::KioExportWidget(QWidget* const parent)
     m_targetSearchButton->setIcon(QIcon::fromTheme(QString::fromLatin1("folder-remote")));
 
     // setup image list
-    m_imageList = new KPImagesList(this);
+    m_imageList = new DImagesList(this);
     m_imageList->setAllowRAW(true);
     m_imageList->listView()->setWhatsThis(i18n("This is the list of images to upload "
                                                "to the specified target."));
@@ -148,7 +149,7 @@ void KioExportWidget::slotShowTargetDialogClicked(bool checked)
 
 void KioExportWidget::updateTargetLabel()
 {
-    qCDebug(KIPIPLUGINS_LOG) << "Call for url "
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Call for url "
                              << m_targetUrl.toDisplayString() << ", valid = "
                              << m_targetUrl.isValid();
 
@@ -161,7 +162,7 @@ void KioExportWidget::updateTargetLabel()
     }
 }
 
-KPImagesList* KioExportWidget::imagesList() const
+DImagesList* KioExportWidget::imagesList() const
 {
     return m_imageList;
 }

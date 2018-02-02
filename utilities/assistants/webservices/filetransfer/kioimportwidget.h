@@ -20,31 +20,23 @@
  *
  * ============================================================ */
 
-#ifndef KIOIMPORTWIDGET_H
-#define KIOIMPORTWIDGET_H
+#ifndef KIO_IMPORT_WIDGET_H
+#define KIO_IMPORT_WIDGET_H
 
 // Qt includes
 
 #include <QUrl>
 #include <QWidget>
 
-namespace KIPI
-{
-    class Interface;
-    class UploadWidget;
-}
+// Local includes
 
-namespace KIPIPlugins
-{
-    class KPImagesList;
-}
-
-using namespace KIPI;
-using namespace KIPIPlugins;
+#include "dinfointerface.h"
 
 namespace Digikam
 {
 
+class DImagesList;
+    
 /**
  * Helper widget for the import tool.
  */
@@ -60,7 +52,7 @@ public:
      * @param parent the parent widget
      * @param interface kipi interface to use
      */
-    KioImportWidget(QWidget* const parent, Interface* const interface);
+    KioImportWidget(QWidget* const parent, DInfoInterface* const iface);
 
     /**
      * Destructor.
@@ -80,21 +72,21 @@ public:
      *
      * @return pointer to the image list
      */
-    KPImagesList* imagesList() const;
+    DImagesList* imagesList() const;
 
     /**
      * Returns the upload widget for specifying the target location.
      *
      * @return pointer to the widget
      */
-    UploadWidget* uploadWidget() const;
+    QWidget* uploadWidget() const;
 
 private:
 
-    KPImagesList* m_imageList;
-    UploadWidget* m_uploadWidget;
+    DImagesList* m_imageList;
+    QWidget*     m_uploadWidget;
 };
 
 } // namespace Digikam
 
-#endif /* KIOIMPORTWIDGET_H */
+#endif // KIO_IMPORT_WIDGET_H

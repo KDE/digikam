@@ -20,6 +20,14 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
+if(KF5KIO_FOUND)
+
+    include_directories($<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
+                        $<TARGET_PROPERTY:KF5::KIOFileWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+
+endif()
+                      
 # OAuth2 library ---------------------------------------------------
 
 # The o2 library does not adhere to the flags we use
@@ -205,6 +213,19 @@ if(KF5Vkontakte_FOUND)
 
 endif()
 
+
+# FileTransfer tool ---------------------------------------------------------
+
+if(KF5KIO_FOUND)
+
+    set(libwsfiletransfer_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/kioexportwindow.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/kioexportwidget.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/kioimportwindow.cpp
+                               ${CMAKE_CURRENT_SOURCE_DIR}/filetransfer/kioimportwidget.cpp
+    )
+
+endif()
+    
 # ------------------------------------------------------------------------------
 
 add_library(webservices_src OBJECT ${libwebservices_SRCS}
@@ -221,4 +242,5 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwspiwigo_SRCS}
                                    ${libwsmediawiki_SRCS}
                                    ${libwsvkontakte_SRCS}
+                                   ${libwsfiletransfer_SRCS}
 )

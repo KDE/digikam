@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef KIOEXPORTWINDOW_H
-#define KIOEXPORTWINDOW_H
+#ifndef KIO_EXPORT_WINDOW_H
+#define KIO_EXPORT_WINDOW_H
 
 // Qt includes
 
@@ -35,25 +35,19 @@
 
 // Local includes
 
-#include "kptooldialog.h"
-#include "KioExportWidget.h"
-
-namespace KIPI
-{
-    class Interface;
-}
-
-using namespace KIPI;
-using namespace KIPIPlugins;
+#include "wstooldialog.h"
+#include "kioexportwidget.h"
+#include "dinfointerface.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
 /**
- * Main window of the KIOExport Plugin.
+ * Main window of the KIOExport tool.
  */
 
-class KioExportWindow: public KPToolDialog
+class DIGIKAM_EXPORT KioExportWindow: public WSToolDialog
 {
     Q_OBJECT
 
@@ -64,12 +58,12 @@ public:
      *
      * @param parent parent QWidget
      */
-    explicit KioExportWindow(QWidget* const parent);
+    explicit KioExportWindow(DInfoInterface* const iface, QWidget* const parent);
 
     /**
      * Destructor.
      */
-    virtual ~KioExportWindow();
+    ~KioExportWindow();
 
     /**
      * Use this method to (re-)activate the dialog after it has been created
@@ -92,7 +86,7 @@ private Q_SLOTS:
     /**
      * Processes changes in the target url.
      */
-    void slotTargetUrlChanged(const QUrl & target);
+    void slotTargetUrlChanged(const QUrl& target);
 
     /**
      * Removes the copied image from the image list.
@@ -144,4 +138,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* KIOEXPORTWINDOW_H */
+#endif // KIO_EXPORT_WINDOW_H

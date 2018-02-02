@@ -610,6 +610,7 @@ void SmugTalker::parseResponseLogin(const QByteArray& data)
                     m_user.displayName = e.attribute(QString::fromLatin1("DisplayName"));
                 }
             }
+
             errCode = 0;
         }
         else if (e.tagName() == QString::fromLatin1("err"))

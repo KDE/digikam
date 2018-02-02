@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "KioImportWidget.h"
+#include "kioimportwidget.h"
 
 // Qt includes
 
@@ -31,29 +31,26 @@
 
 #include <klocalizedstring.h>
 
-// Libkipi includes
-
-#include <KIPI/Interface>
-#include <KIPI/UploadWidget>
-
 // Local includes
 
-#include "kpimageslist.h"
+#include "dimageslist.h"
 
 namespace Digikam
 {
 
-KioImportWidget::KioImportWidget(QWidget* const parent, Interface* const interface)
+KioImportWidget::KioImportWidget(QWidget* const parent, DInfoInterface* const iface)
     : QWidget(parent)
 {
     // setup image list
-    m_imageList = new KPImagesList(this);
+    m_imageList = new DImagesList(this);
     m_imageList->setAllowRAW(true);
+    m_imageList->setIface(iface);
+    m_imageList->loadImagesFromCurrentSelection();
     m_imageList->listView()->setWhatsThis(i18n("This is the list of images to import "
                                                "into the current album."));
 
     // setup upload widget
-    m_uploadWidget            = interface->uploadWidget(this);
+    m_uploadWidget            = iface->albumSelector(this);
 
     // layout dialog
     QVBoxLayout* const layout = new QVBoxLayout(this);
@@ -68,12 +65,12 @@ KioImportWidget::~KioImportWidget()
 {
 }
 
-KPImagesList* KioImportWidget::imagesList() const
+DImagesList* KioImportWidget::imagesList() const
 {
     return m_imageList;
 }
 
-UploadWidget* KioImportWidget::uploadWidget() const
+QWidget* KioImportWidget::uploadWidget() const
 {
     return m_uploadWidget;
 }

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "KioExportWindow.h"
+#include "kioexportwindow.h"
 
 // Qt includes
 
@@ -40,11 +40,10 @@
 
 // Local includes
 
-#include "kipiplugins_debug.h"
-#include "kpaboutdata.h"
-#include "kpversion.h"
-#include "kpimageslist.h"
-#include "KioExportWidget.h"
+#include "digikam_debug.h"
+#include "digikam_version.h"
+#include "dimageslist.h"
+#include "kioexportwidget.h"
 
 namespace Digikam
 {
@@ -53,10 +52,10 @@ const QString KioExportWindow::TARGET_URL_PROPERTY  = QString::fromLatin1("targe
 const QString KioExportWindow::HISTORY_URL_PROPERTY = QString::fromLatin1("historyUrls");
 const QString KioExportWindow::CONFIG_GROUP         = QString::fromLatin1("KioExport");
 
-KioExportWindow::KioExportWindow(QWidget* const /*parent*/)
-    : KPToolDialog(0)
+KioExportWindow::KioExportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
+    : WSToolDialog(0)
 {
-    m_exportWidget = new KioExportWidget(this);
+    m_exportWidget = new KioExportWidget(iface, this);
     setMainWidget(m_exportWidget);
 
     // -- Window setup ------------------------------------------------------
@@ -78,19 +77,6 @@ KioExportWindow::KioExportWindow(QWidget* const /*parent*/)
 
     connect(m_exportWidget, SIGNAL(signalTargetUrlChanged(QUrl)),
             this, SLOT(slotTargetUrlChanged(QUrl)));
-
-    // -- About data and help button ----------------------------------------
-
-    KPAboutData* const about = new KPAboutData(ki18n("Export to remote storage"),
-                                               ki18n("A tool to export images over network using KIO-Slave"),
-                                               ki18n("(c) 2009, Johannes Wienke"));
-
-    about->addAuthor(ki18n("Johannes Wienke").toString(),
-                     ki18n("Developer and maintainer").toString(),
-                     QString::fromLatin1("languitar at semipol dot de"));
-
-    about->setHandbookEntry(QString::fromLatin1("tool-remotestorage"));
-    setAboutData(about);
 
     // -- initial sync ------------------------------------------------------
 
@@ -127,8 +113,7 @@ void KioExportWindow::reactivate()
 
 void KioExportWindow::restoreSettings()
 {
-    qCDebug(KIPIPLUGINS_LOG) <<  "pass here";
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
     KConfigGroup group  = config.group(CONFIG_GROUP);
     m_exportWidget->setHistory(group.readEntry(HISTORY_URL_PROPERTY, QList<QUrl>()));
     m_exportWidget->setTargetUrl(group.readEntry(TARGET_URL_PROPERTY, QUrl()));
@@ -141,8 +126,7 @@ void KioExportWindow::restoreSettings()
 
 void KioExportWindow::saveSettings()
 {
-    qCDebug(KIPIPLUGINS_LOG) <<  "pass here";
-    KConfig config(QString::fromLatin1("kipirc"));
+    KConfig config;
     KConfigGroup group = config.group(CONFIG_GROUP);
     group.writeEntry(HISTORY_URL_PROPERTY, m_exportWidget->history());
     group.writeEntry(TARGET_URL_PROPERTY,  m_exportWidget->targetUrl().url());
@@ -168,9 +152,9 @@ void KioExportWindow::updateUploadButton()
     bool listNotEmpty = !m_exportWidget->imagesList()->imageUrls().empty();
     startButton()->setEnabled(listNotEmpty && m_exportWidget->targetUrl().isValid());
 
-    qCDebug(KIPIPLUGINS_LOG) << "Updated upload button with listNotEmpty = "
-                             << listNotEmpty << ", targetUrl().isValid() = "
-                             << m_exportWidget->targetUrl().isValid();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Updated upload button with listNotEmpty = "
+                                 << listNotEmpty << ", targetUrl().isValid() = "
+                                 << m_exportWidget->targetUrl().isValid();
 }
 
 void KioExportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl& to,
@@ -182,7 +166,7 @@ void KioExportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUr
     Q_UNUSED(directory);
     Q_UNUSED(renamed);
 
-    qCDebug(KIPIPLUGINS_LOG) << "copied " << to.toDisplayString();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "copied " << to.toDisplayString();
 
     m_exportWidget->imagesList()->removeItemByUrl(from);
 }
