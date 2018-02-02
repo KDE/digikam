@@ -42,7 +42,11 @@ int main(int argc, char* argv[])
 
     QCommandLineParser parser;
     parser.addHelpOption();
-    parser.addPositionalArgument(QLatin1String("files"), QLatin1String("File(s) to open"), QLatin1String("+[file(s)]"));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("import"),
+                                        QLatin1String("Import files instead to export")));
+    parser.addPositionalArgument(QLatin1String("files"),
+                                 QLatin1String("File(s) to open"),
+                                 QLatin1String("+[file(s)]"));
     parser.process(app);
 
     MetaEngine::initializeExiv2();
@@ -55,8 +59,18 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    GSWindow dlg(new DMetaInfoIface(&app, urlList), 0, QLatin1String("googlephotoexport"));
-    dlg.exec();
+    if (parser.isSet(QString::fromLatin1("import")))
+    {
+        GSWindow dlg(new DMetaInfoIface(&app, QList<QUrl>()), 0,
+                     QLatin1String("googlephotoimport"));
+        dlg.exec();
+    }
+    else
+    {
+        GSWindow dlg(new DMetaInfoIface(&app, urlList), 0,
+                     QLatin1String("googlephotoexport"));
+        dlg.exec();
+    }
 
     MetaEngine::cleanupExiv2();
 

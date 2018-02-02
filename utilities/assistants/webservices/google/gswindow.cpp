@@ -76,12 +76,14 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 {
     m_serviceName = serviceName;
 
-    if (QString::compare(m_serviceName, QString::fromLatin1("googledriveexport"), Qt::CaseInsensitive) == 0)
+    if (QString::compare(m_serviceName, QString::fromLatin1("googledriveexport"),
+        Qt::CaseInsensitive) == 0)
     {
         m_service  = GoogleService::GDrive;
         m_toolName = QString::fromLatin1("Google Drive");
     }
-    else if (QString::compare(m_serviceName, QString::fromLatin1("googlephotoexport"), Qt::CaseInsensitive) == 0)
+    else if (QString::compare(m_serviceName, QString::fromLatin1("googlephotoexport"),
+             Qt::CaseInsensitive) == 0)
     {
         m_service  = GoogleService::GPhotoExport;
         m_toolName = QString::fromLatin1("Google Photos/PicasaWeb");

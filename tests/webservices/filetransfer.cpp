@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
     QCommandLineParser parser;
     parser.addHelpOption();
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("import"),
-                                        QLatin1String("Import files Instead to Export")));
+                                        QLatin1String("Import files instead to export")));
     parser.addPositionalArgument(QLatin1String("files"),
                                  QLatin1String("File(s) to open"),
                                  QLatin1String("+[file(s)]"));
