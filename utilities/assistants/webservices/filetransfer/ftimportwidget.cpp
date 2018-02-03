@@ -27,6 +27,8 @@
 
 #include <QBoxLayout>
 #include <QApplication>
+#include <QFileDialog>
+#include <QPushButton>
 
 // KDE includes
 
@@ -45,40 +47,70 @@ public:
 
     Private()
     {
-        imageList    = 0;
-        uploadWidget = 0;
+        imageList       = 0;
+        uploadWidget    = 0;
+        importDlg       = 0;
+        importSearchBtn = 0;
     }
 
     DImagesList* imageList;
     QWidget*     uploadWidget;
+    QFileDialog* importDlg;
+    QPushButton* importSearchBtn;
 };
 
 FTImportWidget::FTImportWidget(QWidget* const parent, DInfoInterface* const iface)
     : QWidget(parent),
       d(new Private)
 {
+    d->importSearchBtn = new QPushButton(i18n("Select import location..."), this);
+    d->importSearchBtn->setIcon(QIcon::fromTheme(QString::fromLatin1("folder-remote")));
+
     // setup image list
     d->imageList = new DImagesList(this);
     d->imageList->setAllowRAW(true);
     d->imageList->setIface(iface);
+    d->imageList->listView()->setColumnEnabled(DImagesListView::Thumbnail, false);
+    d->imageList->setControlButtons(DImagesList::Remove | DImagesList::MoveUp | DImagesList::MoveDown | DImagesList::Clear);
     d->imageList->listView()->setWhatsThis(i18n("This is the list of images to import "
                                                 "into the current album."));
-
+    
     // setup upload widget
-    d->uploadWidget           = iface->albumSelector(this);
+    d->uploadWidget = iface->albumSelector(this);
 
     // layout dialog
     QVBoxLayout* const layout = new QVBoxLayout(this);
-
+    layout->addWidget(d->importSearchBtn);
     layout->addWidget(d->imageList);
     layout->addWidget(d->uploadWidget);
     layout->setContentsMargins(QMargins());
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    
+    connect(d->importSearchBtn, SIGNAL(clicked(bool)),
+            this, SLOT(slotShowImportDialogClicked(bool)));
 }
 
 FTImportWidget::~FTImportWidget()
 {
     delete d;
+}
+
+void FTImportWidget::slotShowImportDialogClicked(bool checked)
+{
+    Q_UNUSED(checked);
+
+    d->importDlg = new QFileDialog(this, i18n("Select items to import..."),
+                                   QString(),  // TODO : store and restore previous session url from rc file
+                                   i18n("All Files (*)"));
+    d->importDlg->setAcceptMode(QFileDialog::AcceptOpen);
+    d->importDlg->setFileMode(QFileDialog::ExistingFiles);
+
+    if (d->importDlg->exec() == QDialog::Accepted)
+    {
+        d->imageList->slotAddImages(d->importDlg->selectedUrls());
+    }
+
+    delete d->importDlg;
 }
 
 DImagesList* FTImportWidget::imagesList() const
