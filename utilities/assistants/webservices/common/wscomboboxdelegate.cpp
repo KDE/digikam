@@ -36,29 +36,56 @@
 namespace Digikam
 {
 
+class ComboBoxDelegate::Private
+{
+public:
+
+    Private()
+    {
+        parent    = 0;
+        rowEdited = -1;
+    }
+
+    DImagesList*       parent;
+    QMap<int, QString> items;
+
+    /* The row in the view that is currently being edited. Should be -1 to
+     * indicate that no row is edited.
+     */
+    int                rowEdited;
+
+    QSize              size;
+};
+
 ComboBoxDelegate::ComboBoxDelegate(DImagesList* const parent, const QMap<int, QString>& items)
     : QAbstractItemDelegate(parent),
-      m_parent(parent),
-      m_items(items),
-      m_rowEdited(-1)
+      d(new Private)
 {
+    d->parent = parent;
+    d->items  = items;
+
     // Figure out the maximum width of a displayed item from the items list and
-    // save it in the m_size parameter.
+    // save it in the d->size parameter.
     QFontMetrics listFont = parent->fontMetrics();
-    m_size                = QSize(0, listFont.height());
+    d->size                = QSize(0, listFont.height());
     int tmpWidth          = 0;
-    QMapIterator<int, QString> i(m_items);
+    QMapIterator<int, QString> i(d->items);
 
     while (i.hasNext())
     {
         i.next();
         tmpWidth = listFont.width(i.value());
 
-        if (tmpWidth > m_size.width())
+        if (tmpWidth > d->size.width())
         {
-            m_size.setWidth(tmpWidth);
+            d->size.setWidth(tmpWidth);
         }
     }
+}
+
+ComboBoxDelegate::~ComboBoxDelegate()
+{
+    delete d;
 }
 
 void ComboBoxDelegate::startEditing(QTreeWidgetItem* item, int column)
@@ -67,9 +94,9 @@ void ComboBoxDelegate::startEditing(QTreeWidgetItem* item, int column)
     // doesn't get painted whenever a combobox is drawn (otherwise the text can
     // be seen around the edges of the combobox. This method breaks the OO
     // paradigm.
-    m_rowEdited = m_parent->listView()->currentIndex().row();
+    d->rowEdited = d->parent->listView()->currentIndex().row();
     item->setFlags(item->flags() | Qt::ItemIsEditable);
-    m_parent->listView()->editItem(item, column);
+    d->parent->listView()->editItem(item, column);
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
 }
 
@@ -87,7 +114,7 @@ void ComboBoxDelegate::paint(QPainter* painter,
     // to work around the fact that there's no reliable way to detect if an item
     // is being edited from the parameters (although the documentation suggests
     // QStyle::State_Editing should be set in the option.flags parameter).
-    if (m_rowEdited != index.row())
+    if (d->rowEdited != index.row())
     {
         // Get the currently selected index in the items list.
         int currIndex = (index.data()).value<int>();
@@ -103,7 +130,7 @@ void ComboBoxDelegate::paint(QPainter* painter,
 
         // Draw the text.
         style->drawItemText(painter, option.rect, option.displayAlignment,
-                            option.palette, true, m_items[currIndex],
+                            option.palette, true, d->items[currIndex],
                             textColor);
     }
 }
@@ -111,17 +138,18 @@ void ComboBoxDelegate::paint(QPainter* painter,
 QSize ComboBoxDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
 {
     // Return the size based on the widest item in the items list.
-    return m_size;
+    return d->size;
 }
 
-QWidget* ComboBoxDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option,
+QWidget* ComboBoxDelegate::createEditor(QWidget* parent,
+                                        const QStyleOptionViewItem& option,
                                         const QModelIndex&) const
 {
     // This method returns the widget that should be used to edit the current
     // element, which is in this case a QComboBox with the items supplied by
     // the user items list on construction.
     QComboBox* const cb = new QComboBox(parent);
-    QMapIterator<int, QString> i(m_items);
+    QMapIterator<int, QString> i(d->items);
 
     while (i.hasNext())
     {
@@ -137,7 +165,7 @@ QWidget* ComboBoxDelegate::createEditor(QWidget* parent, const QStyleOptionViewI
     connect(cb, SIGNAL(activated(int)),
             this, SLOT(slotCommitAndCloseEditor(int)));
 
-    // To keep track of the item being edited, the m_rowEdited parameter should
+    // To keep track of the item being edited, the d->rowEdited parameter should
     // be reset when the editor is destroyed.
     connect(cb, SIGNAL(destroyed(QObject*)),
             this, SLOT(slotResetEditedState(QObject*)));
@@ -159,7 +187,8 @@ void ComboBoxDelegate::setEditorData(QWidget* editor, const QModelIndex& index) 
     }
 }
 
-void ComboBoxDelegate::setModelData(QWidget* editor, QAbstractItemModel* model,
+void ComboBoxDelegate::setModelData(QWidget* editor,
+                                    QAbstractItemModel* model,
                                     const QModelIndex& index) const
 {
     // Write the data to the model when finishing has completed.
@@ -178,7 +207,7 @@ void ComboBoxDelegate::slotCommitAndCloseEditor(int)
 
 void ComboBoxDelegate::slotResetEditedState(QObject*)
 {
-    m_rowEdited = -1;
+    d->rowEdited = -1;
 }
 
 } // namespace Digikam

@@ -49,7 +49,8 @@ class ComboBoxDelegate : public QAbstractItemDelegate
 public:
 
     explicit ComboBoxDelegate(DImagesList* const, const QMap<int, QString>&);
-
+    ~ComboBoxDelegate();
+    
     /* Whenever an element needs to be edited, this method should be called.
      * It's actually a hack to prevent the item text shining through whenever
      * editing occurs.
@@ -58,11 +59,11 @@ public:
 
     /* Overloaded functions to provide the delegate functionality.
      */
-    void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const           Q_DECL_OVERRIDE;
-    QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const                  Q_DECL_OVERRIDE;
+    void     paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const       Q_DECL_OVERRIDE;
+    QSize    sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const               Q_DECL_OVERRIDE;
     QWidget* createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const Q_DECL_OVERRIDE;
-    void setEditorData(QWidget*, const QModelIndex&) const                                 Q_DECL_OVERRIDE;
-    void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const             Q_DECL_OVERRIDE;
+    void     setEditorData(QWidget*, const QModelIndex&) const                             Q_DECL_OVERRIDE;
+    void     setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const         Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
 
@@ -71,14 +72,8 @@ private Q_SLOTS:
 
 private:
 
-    DImagesList*       m_parent;
-    QMap<int, QString> m_items;
-
-    /* The row in the view that is currently being edited. Should be -1 to
-     * indicate that no row is edited. */
-    int                m_rowEdited;
-
-    QSize              m_size;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

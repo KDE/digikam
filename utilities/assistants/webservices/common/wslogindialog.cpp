@@ -50,6 +50,7 @@ namespace Digikam
 class WSLoginDialog::Private
 {
 public:
+
     Private()
         : headerLabel(0),
           loginEdit(0),
