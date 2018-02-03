@@ -82,7 +82,8 @@ QString WSToolUtils::randomString(const int& length)
 
 QSettings* WSToolUtils::getOauthSettings(QObject* const parent)
 {
-    QString dkoauth = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1String("/digikam_oauthrc");
+    QString dkoauth = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) +
+                      QLatin1String("/digikam_oauthrc");
 
     return (new QSettings(dkoauth, QSettings::IniFormat, parent));
 }
