@@ -6,7 +6,8 @@
  * Date        : 2015-16-05
  * Description : a dialog to select user for Web Service tools
  *
- * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2015      by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +30,7 @@
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QIcon>
+#include <QComboBox>
 
 // KDE includes
 
@@ -39,10 +41,29 @@
 namespace Digikam
 {
 
-WSSelectUserDlg::WSSelectUserDlg(QWidget* const parent, const QString& serviceName)
-    : QDialog(parent)
+class WSSelectUserDlg::Private
 {
-    m_serviceName = serviceName;
+public:
+
+    Private()
+    {
+        userComboBox = 0;
+        label        = 0;
+        okButton     = 0;
+    }
+
+    QComboBox*   userComboBox;
+    QLabel*      label;
+    QPushButton* okButton;
+    QString      userName;
+    QString      serviceName;
+};
+
+WSSelectUserDlg::WSSelectUserDlg(QWidget* const parent, const QString& serviceName)
+    : QDialog(parent),
+      d(new Private)
+{
+    d->serviceName = serviceName;
 
     setWindowTitle(i18n("Account Selector"));
     setModal(true);
@@ -58,9 +79,9 @@ WSSelectUserDlg::WSSelectUserDlg(QWidget* const parent, const QString& serviceNa
 
     buttonBox->button(QDialogButtonBox::Close)->setDefault(true);
 
-    m_okButton = buttonBox->button(QDialogButtonBox::Ok);
+    d->okButton = buttonBox->button(QDialogButtonBox::Ok);
 
-    if (m_serviceName == QString::fromLatin1("23"))
+    if (d->serviceName == QString::fromLatin1("23"))
     {
         setWindowIcon(QIcon::fromTheme(QString::fromLatin1("hq")));
     }
@@ -69,16 +90,14 @@ WSSelectUserDlg::WSSelectUserDlg(QWidget* const parent, const QString& serviceNa
         setWindowIcon(QIcon::fromTheme(QString::fromLatin1("flickr")));
     }
 
-    m_uname        = QString();
-
-    m_label        = new QLabel(this);
-    m_label->setText(i18n("Choose the %1 account to use for exporting images:", m_serviceName));
-
-    m_userComboBox = new QComboBox(this);
+    d->userName     = QString();
+    d->label        = new QLabel(this);
+    d->label->setText(i18n("Choose the %1 account to use for exporting images:", d->serviceName));
+    d->userComboBox = new QComboBox(this);
 
     QVBoxLayout* const mainLayout = new QVBoxLayout(this);
-    mainLayout->addWidget(m_label);
-    mainLayout->addWidget(m_userComboBox);
+    mainLayout->addWidget(d->label);
+    mainLayout->addWidget(d->userComboBox);
     mainLayout->addWidget(buttonBox);
     setLayout(mainLayout);
 
@@ -97,19 +116,20 @@ WSSelectUserDlg::WSSelectUserDlg(QWidget* const parent, const QString& serviceNa
 
 WSSelectUserDlg::~WSSelectUserDlg()
 {
-    delete m_userComboBox;
-    delete m_label;
+    delete d->userComboBox;
+    delete d->label;
+    delete d;
 }
 
 void WSSelectUserDlg::reactivate()
 {
     KConfig config;
 
-    m_userComboBox->clear();
+    d->userComboBox->clear();
 
     foreach(const QString& group, config.groupList())
     {
-        if (!(group.contains(m_serviceName)))
+        if (!(group.contains(d->serviceName)))
             continue;
 
         KConfigGroup grp = config.group(group);
@@ -117,32 +137,27 @@ void WSSelectUserDlg::reactivate()
         if (QString::compare(grp.readEntry(QString::fromLatin1("username")), QString(), Qt::CaseInsensitive) == 0)
             continue;
 
-        m_userComboBox->addItem(grp.readEntry(QString::fromLatin1("username")));
+        d->userComboBox->addItem(grp.readEntry(QString::fromLatin1("username")));
     }
 
-    m_okButton->setEnabled(m_userComboBox->count() > 0);
+    d->okButton->setEnabled(d->userComboBox->count() > 0);
 
     exec();
 }
 
 void WSSelectUserDlg::slotOkClicked()
 {
-    m_uname = m_userComboBox->currentText();
+    d->userName = d->userComboBox->currentText();
 }
 
 void WSSelectUserDlg::slotNewAccountClicked()
 {
-    m_uname = QString();
+    d->userName = QString();
 }
 
-QString WSSelectUserDlg::getUname() const
+QString WSSelectUserDlg::getUserName() const
 {
-    return m_uname;
-}
-
-WSSelectUserDlg* WSSelectUserDlg::getDlg()
-{
-    return this;
+    return d->userName;
 }
 
 } // namespace Digikam

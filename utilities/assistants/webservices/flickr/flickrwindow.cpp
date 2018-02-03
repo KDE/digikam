@@ -193,8 +193,8 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
             this, &FlickrWindow::slotUser1);
 
     m_select->reactivate();
-    readSettings(m_select->getUname());
-    m_talker->link(m_select->getUname());
+    readSettings(m_select->getUserName());
+    m_talker->link(m_select->getUserName());
 }
 
 FlickrWindow::~FlickrWindow()
@@ -263,8 +263,8 @@ void FlickrWindow::slotAddPhotoCancelAndClose()
 void FlickrWindow::reactivate()
 {
     m_userNameDisplayLabel->setText(QString());
-    readSettings(m_select->getUname());
-    m_talker->link(m_select->getUname());
+    readSettings(m_select->getUserName());
+    m_talker->link(m_select->getUserName());
 
     m_widget->m_imglst->loadImagesFromCurrentSelection();
     show();
@@ -401,9 +401,9 @@ void FlickrWindow::slotUserChangeRequest()
     m_userNameDisplayLabel->setText(QString());
     qCDebug(DIGIKAM_GENERAL_LOG) << "Slot Change User Request ";
     m_select->reactivate();
-    readSettings(m_select->getUname());
+    readSettings(m_select->getUserName());
 
-    m_talker->link(m_select->getUname());
+    m_talker->link(m_select->getUserName());
 }
 
 void FlickrWindow::slotRemoveAccount()

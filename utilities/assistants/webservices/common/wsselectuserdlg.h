@@ -6,7 +6,8 @@
  * Date        : 2015-16-05
  * Description : a dialog to select user for Web Service tools
  *
- * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2015      by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,9 +28,6 @@
 
 #include <QString>
 #include <QDialog>
-#include <QComboBox>
-
-class QLabel;
 
 namespace Digikam
 {
@@ -43,9 +41,8 @@ public:
     explicit WSSelectUserDlg(QWidget* const parent, const QString& serviceName);
     ~WSSelectUserDlg();
 
-    void             reactivate();
-    QString          getUname() const;
-    WSSelectUserDlg* getDlg();
+    void    reactivate();
+    QString getUserName() const;
 
 protected Q_SLOTS:
 
@@ -53,13 +50,9 @@ protected Q_SLOTS:
     void slotNewAccountClicked();
 
 private:
-
-    QComboBox*   m_userComboBox;
-    QLabel*      m_label;
-    QPushButton* m_okButton;
-
-    QString      m_uname;
-    QString      m_serviceName;
+    
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
