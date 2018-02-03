@@ -419,7 +419,7 @@ void AlbumSelectors::loadState()
 
     if (d->tagWidget)
     {
-        d->wholeTags->setChecked(group.readEntry(d->configUseWholeTagsEntry, true));
+        d->wholeTags->setChecked(group.readEntry(d->configUseWholeTagsEntry, false));
         d->tagSelectCB->view()->loadState();
         d->tagClearButton->animateVisible(!d->tagSelectCB->model()->checkedAlbums().isEmpty());
 
