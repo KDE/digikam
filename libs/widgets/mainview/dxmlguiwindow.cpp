@@ -1152,7 +1152,7 @@ void DXmlGuiWindow::createExportActions()
 
 void DXmlGuiWindow::createImportActions()
 {
-    m_importGphotoAction = new QAction(i18n("Import to &Google Photos..."), this);
+    m_importGphotoAction = new QAction(i18n("Import from &Google Photos..."), this);
     m_importGphotoAction->setIcon(QIcon::fromTheme(QString::fromLatin1("googlephoto")));
     actionCollection()->addAction(QLatin1String("import_googlephoto"), m_importGphotoAction);
     actionCollection()->setDefaultShortcut(m_importGphotoAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_P);
