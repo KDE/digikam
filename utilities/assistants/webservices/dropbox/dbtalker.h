@@ -28,6 +28,7 @@
 #include <QList>
 #include <QPair>
 #include <QString>
+#include <QSettings>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 
@@ -36,7 +37,6 @@
 #include "dbitem.h"
 #include "o2.h"
 #include "o0globals.h"
-#include "o0settingsstore.h"
 #include "dmetadata.h"
 
 namespace Digikam
@@ -121,7 +121,6 @@ private:
     DMetadata              m_meta;
 
     O2*                    m_o2;
-    O0SettingsStore*       m_store;
 };
 
 } // namespace Digikam

@@ -37,7 +37,6 @@
 #include <QWidget>
 #include <QMessageBox>
 #include <QApplication>
-#include <QStandardPaths>
 #include <QDesktopServices>
 
 // Local includes
@@ -49,6 +48,7 @@
 #include "dbitem.h"
 #include "dbmpform.h"
 #include "previewloadthread.h"
+#include "o0settingsstore.h"
 
 namespace Digikam
 {
@@ -63,10 +63,10 @@ DBTalker::DBTalker(QWidget* const parent)
     m_tokenUrl             = QLatin1String("https://api.dropboxapi.com/oauth2/token");
 
     m_state                = DB_USERNAME;
+    m_settings             = 0;
     m_netMngr              = 0;
     m_reply                = 0;
     m_o2                   = 0;
-    m_store                = 0;
 
     m_netMngr = new QNetworkAccessManager(this);
 
@@ -82,12 +82,10 @@ DBTalker::DBTalker(QWidget* const parent)
     m_o2->setTokenUrl(m_tokenUrl);
     m_o2->setLocalPort(8000);
 
-    QString dkoauth = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1String("/digikamoauthrc");
-
-    m_settings = new QSettings(dkoauth, QSettings::IniFormat, this);
-    m_store    = new O0SettingsStore(m_settings, QLatin1String(O2_ENCRYPTION_KEY), this);
-    m_store->setGroupKey(QLatin1String("Dropbox"));
-    m_o2->setStore(m_store);
+    m_settings                   = WSToolUtils::getOauthSettings(this);
+    O0SettingsStore* const store = new O0SettingsStore(m_settings, QLatin1String(O2_ENCRYPTION_KEY), this);
+    store->setGroupKey(QLatin1String("Dropbox"));
+    m_o2->setStore(store);
 
     connect(m_o2, SIGNAL(linkingFailed()),
             this, SLOT(slotLinkingFailed()));

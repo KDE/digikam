@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QSettings>
 #include <QString>
 #include <QDir>
 
@@ -48,6 +49,8 @@ public:
 
     static QDir makeTemporaryDir(const char* prefix);
     static void removeTemporaryDir(const char* prefix);
+
+    static QSettings* getOauthSettings(QObject* const parent);
 };
 
 } // namespace Digikam

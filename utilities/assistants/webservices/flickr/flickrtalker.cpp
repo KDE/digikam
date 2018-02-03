@@ -35,7 +35,6 @@
 #include <QMap>
 #include <QStringList>
 #include <QProgressDialog>
-#include <QStandardPaths>
 #include <QApplication>
 #include <QDesktopServices>
 #include <QMessageBox>
@@ -112,9 +111,7 @@ FlickrTalker::FlickrTalker(QWidget* const parent, const QString& serviceName,
     m_o1->setAccessTokenUrl(QUrl(m_accessUrl));
     m_o1->setRequestTokenUrl(QUrl(m_tokenUrl));
 
-    QString dkoauth = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1String("/digikamoauthrc");
-
-    m_settings = new QSettings(dkoauth, QSettings::IniFormat, this);
+    m_settings = WSToolUtils::getOauthSettings(this);
     m_store    = new O0SettingsStore(m_settings, QLatin1String(O2_ENCRYPTION_KEY), this);
     m_store->setGroupKey(m_serviceName);
     m_o1->setStore(m_store);

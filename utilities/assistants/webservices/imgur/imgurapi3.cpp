@@ -30,7 +30,6 @@
 #include <QJsonObject>
 #include <QTimerEvent>
 #include <QUrlQuery>
-#include <QStandardPaths>
 
 // KDE includes
 
@@ -40,6 +39,7 @@
 
 #include "dinfointerface.h"
 #include "digikam_debug.h"
+#include "wstoolutils.h"
 #include "o0settingsstore.h"
 #include "o0globals.h"
 
@@ -61,9 +61,7 @@ ImgurAPI3::ImgurAPI3(const QString& client_id, const QString& client_secret, QOb
     m_auth.setLocalPort(imgur_redirect_port);
     m_auth.setLocalhostPolicy(QString());
 
-    QString oauth = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1String("/digikamoauthrc");
-
-    QSettings* const settings    = new QSettings(oauth, QSettings::IniFormat, this);
+    QSettings* const settings    = WSToolUtils::getOauthSettings(this);
     O0SettingsStore* const store = new O0SettingsStore(settings, QLatin1String(O2_ENCRYPTION_KEY), this);
     store->setGroupKey(QLatin1String("Imgur"));
     m_auth.setStore(store);

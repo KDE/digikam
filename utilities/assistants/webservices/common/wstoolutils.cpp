@@ -24,9 +24,10 @@
 
 // Qt includes
 
+#include <QStandardPaths>
+#include <QApplication>
 #include <QByteArray>
 #include <QBuffer>
-#include <QApplication>
 #include <QTime>
 
 namespace Digikam
@@ -75,6 +76,15 @@ QString WSToolUtils::randomString(const int& length)
     }
 
     return randomString;
+}
+
+// ------------------------------------------------------------------------------------
+
+QSettings* WSToolUtils::getOauthSettings(QObject* const parent)
+{
+    QString dkoauth = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1String("/digikam_oauthrc");
+
+    return (new QSettings(dkoauth, QSettings::IniFormat, parent));
 }
 
 } // namespace Digikam
