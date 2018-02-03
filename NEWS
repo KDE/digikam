@@ -23,4 +23,5 @@ BUGFIXES FROM BUGZILLA:
 013 ==> 389651 - Custom font size is not applied until you enter and exit the settings menu.
 014 ==> 388345 - AppImage MySQL connection issues.
 015 ==> 389827 - Ignores albums selection.
-016 ==> 
+016 ==> 389835 - Incorrect DateTime manipulation if timestamp is before unix epoch time.
+017 ==> 

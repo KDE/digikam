@@ -352,9 +352,19 @@ bool TimeAdjust::toolOperations()
         // http://www.qtsoftware.com/developer/task-tracker/index_html?id=79427&method=entry
         // we have to use the utime() system call.
 
+        int modtime;
+        QDateTime unixDate;
+        unixDate.setDate(QDate(1970, 1, 1));
+        unixDate.setTime(QTime(0, 0, 0, 0));
+
+        if (dt < unixDate)
+            modtime = -(dt.secsTo(unixDate) + (60 * 60));
+        else
+            modtime = dt.toTime_t();
+
         utimbuf times;
         times.actime  = QDateTime::currentDateTime().toTime_t();
-        times.modtime = dt.toTime_t();
+        times.modtime = modtime;
 
         if (utime(QFile::encodeName(outputUrl().toLocalFile()).constData(), &times) != 0)
         {
