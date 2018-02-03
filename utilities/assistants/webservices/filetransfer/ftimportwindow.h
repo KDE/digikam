@@ -45,8 +45,6 @@ namespace KIO
 namespace Digikam
 {
 
-class FTImportWidget;
-
 /**
  * Main dialog used for the import tool.
  */
@@ -95,8 +93,8 @@ private Q_SLOTS:
 
 private:
 
-    FTImportWidget* m_importWidget;
-    DInfoInterface* m_iface;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

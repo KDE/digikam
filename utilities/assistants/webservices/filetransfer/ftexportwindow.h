@@ -131,13 +131,8 @@ protected:
 
 private:
 
-    const static QString TARGET_URL_PROPERTY;
-    const static QString HISTORY_URL_PROPERTY;
-    const static QString CONFIG_GROUP;
-
-private:
-
-    FTExportWidget* m_exportWidget;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

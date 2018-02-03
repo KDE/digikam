@@ -49,15 +49,32 @@
 namespace Digikam
 {
 
-const QString FTExportWindow::TARGET_URL_PROPERTY  = QString::fromLatin1("targetUrl");
-const QString FTExportWindow::HISTORY_URL_PROPERTY = QString::fromLatin1("historyUrls");
-const QString FTExportWindow::CONFIG_GROUP         = QString::fromLatin1("KioExport");
+class FTExportWindow::Private
+{
+public:
+
+    Private()
+    {
+        exportWidget = 0;
+    }
+
+    const static QString TARGET_URL_PROPERTY;
+    const static QString HISTORY_URL_PROPERTY;
+    const static QString CONFIG_GROUP;
+
+    FTExportWidget* exportWidget;
+};
+
+const QString FTExportWindow::Private::TARGET_URL_PROPERTY  = QString::fromLatin1("targetUrl");
+const QString FTExportWindow::Private::HISTORY_URL_PROPERTY = QString::fromLatin1("historyUrls");
+const QString FTExportWindow::Private::CONFIG_GROUP         = QString::fromLatin1("KioExport");
 
 FTExportWindow::FTExportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0)
+    : WSToolDialog(0),
+      d(new Private)
 {
-    m_exportWidget = new FTExportWidget(iface, this);
-    setMainWidget(m_exportWidget);
+    d->exportWidget = new FTExportWidget(iface, this);
+    setMainWidget(d->exportWidget);
 
     // -- Window setup ------------------------------------------------------
 
@@ -73,10 +90,10 @@ FTExportWindow::FTExportWindow(DInfoInterface* const iface, QWidget* const /*par
     connect(this, SIGNAL(finished(int)),
             this, SLOT(slotFinished()));
 
-    connect(m_exportWidget->imagesList(), SIGNAL(signalImageListChanged()),
+    connect(d->exportWidget->imagesList(), SIGNAL(signalImageListChanged()),
             this, SLOT(slotImageListChanged()));
 
-    connect(m_exportWidget, SIGNAL(signalTargetUrlChanged(QUrl)),
+    connect(d->exportWidget, SIGNAL(signalTargetUrlChanged(QUrl)),
             this, SLOT(slotTargetUrlChanged(QUrl)));
 
     // -- initial sync ------------------------------------------------------
@@ -87,12 +104,13 @@ FTExportWindow::FTExportWindow(DInfoInterface* const iface, QWidget* const /*par
 
 FTExportWindow::~FTExportWindow()
 {
+    delete d;
 }
 
 void FTExportWindow::slotFinished()
 {
     saveSettings();
-    m_exportWidget->imagesList()->listView()->clear();
+    d->exportWidget->imagesList()->listView()->clear();
 }
 
 void FTExportWindow::closeEvent(QCloseEvent* e)
@@ -108,16 +126,16 @@ void FTExportWindow::closeEvent(QCloseEvent* e)
 
 void FTExportWindow::reactivate()
 {
-    m_exportWidget->imagesList()->loadImagesFromCurrentSelection();
+    d->exportWidget->imagesList()->loadImagesFromCurrentSelection();
     show();
 }
 
 void FTExportWindow::restoreSettings()
 {
     KConfig config;
-    KConfigGroup group  = config.group(CONFIG_GROUP);
-    m_exportWidget->setHistory(group.readEntry(HISTORY_URL_PROPERTY, QList<QUrl>()));
-    m_exportWidget->setTargetUrl(group.readEntry(TARGET_URL_PROPERTY, QUrl()));
+    KConfigGroup group  = config.group(d->CONFIG_GROUP);
+    d->exportWidget->setHistory(group.readEntry(d->HISTORY_URL_PROPERTY, QList<QUrl>()));
+    d->exportWidget->setTargetUrl(group.readEntry(d->TARGET_URL_PROPERTY, QUrl()));
 
     winId();
     KConfigGroup group2 = config.group(QString::fromLatin1("Kio Export Dialog"));
@@ -128,9 +146,9 @@ void FTExportWindow::restoreSettings()
 void FTExportWindow::saveSettings()
 {
     KConfig config;
-    KConfigGroup group = config.group(CONFIG_GROUP);
-    group.writeEntry(HISTORY_URL_PROPERTY, m_exportWidget->history());
-    group.writeEntry(TARGET_URL_PROPERTY,  m_exportWidget->targetUrl().url());
+    KConfigGroup group = config.group(d->CONFIG_GROUP);
+    group.writeEntry(d->HISTORY_URL_PROPERTY, d->exportWidget->history());
+    group.writeEntry(d->TARGET_URL_PROPERTY,  d->exportWidget->targetUrl().url());
 
     KConfigGroup group2 = config.group(QString::fromLatin1("Kio Export Dialog"));
     KWindowConfig::saveWindowSize(windowHandle(), group2);
@@ -150,12 +168,12 @@ void FTExportWindow::slotTargetUrlChanged(const QUrl & target)
 
 void FTExportWindow::updateUploadButton()
 {
-    bool listNotEmpty = !m_exportWidget->imagesList()->imageUrls().empty();
-    startButton()->setEnabled(listNotEmpty && m_exportWidget->targetUrl().isValid());
+    bool listNotEmpty = !d->exportWidget->imagesList()->imageUrls().empty();
+    startButton()->setEnabled(listNotEmpty && d->exportWidget->targetUrl().isValid());
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Updated upload button with listNotEmpty = "
                                  << listNotEmpty << ", targetUrl().isValid() = "
-                                 << m_exportWidget->targetUrl().isValid();
+                                 << d->exportWidget->targetUrl().isValid();
 }
 
 void FTExportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl& to,
@@ -169,7 +187,7 @@ void FTExportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "copied " << to.toDisplayString();
 
-    m_exportWidget->imagesList()->removeItemByUrl(from);
+    d->exportWidget->imagesList()->removeItemByUrl(from);
 }
 
 void FTExportWindow::slotCopyingFinished(KJob* job)
@@ -178,7 +196,7 @@ void FTExportWindow::slotCopyingFinished(KJob* job)
 
     setEnabled(true);
 
-    if (!m_exportWidget->imagesList()->imageUrls().empty())
+    if (!d->exportWidget->imagesList()->imageUrls().empty())
     {
         QMessageBox::information(this, i18n("Upload not completed"),
                                  i18n("Some of the images have not been transferred "
@@ -193,8 +211,8 @@ void FTExportWindow::slotUpload()
 
     // start copying and react on signals
     setEnabled(false);
-    KIO::CopyJob* const copyJob = KIO::copy(m_exportWidget->imagesList()->imageUrls(),
-                                            m_exportWidget->targetUrl());
+    KIO::CopyJob* const copyJob = KIO::copy(d->exportWidget->imagesList()->imageUrls(),
+                                            d->exportWidget->targetUrl());
 
     connect(copyJob, SIGNAL(copyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)),
             this, SLOT(slotCopyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)));

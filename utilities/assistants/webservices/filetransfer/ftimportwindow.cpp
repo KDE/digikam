@@ -44,12 +44,27 @@
 namespace Digikam
 {
 
-FTImportWindow::FTImportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0)
+class FTImportWindow::Private
 {
-    m_iface        = iface;
-    m_importWidget = new FTImportWidget(this, m_iface);
-    setMainWidget(m_importWidget);
+public:
+
+    Private()
+    {
+        importWidget = 0;
+        iface        = 0;
+    }
+
+    FTImportWidget* importWidget;
+    DInfoInterface* iface;
+};
+    
+FTImportWindow::FTImportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
+    : WSToolDialog(0),
+      d(new Private)
+{
+    d->iface        = iface;
+    d->importWidget = new FTImportWidget(this, d->iface);
+    setMainWidget(d->importWidget);
 
     // window setup
 
@@ -66,10 +81,10 @@ FTImportWindow::FTImportWindow(DInfoInterface* const iface, QWidget* const /*par
     connect(startButton(), SIGNAL(clicked()),
             this, SLOT(slotImport()));
 
-    connect(m_importWidget->imagesList(), SIGNAL(signalImageListChanged()),
+    connect(d->importWidget->imagesList(), SIGNAL(signalImageListChanged()),
             this, SLOT(slotSourceAndTargetUpdated()));
 
-    connect(m_iface, SIGNAL(selectionChanged()),
+    connect(d->iface, SIGNAL(selectionChanged()),
             this, SLOT(slotSourceAndTargetUpdated()));
 
     slotSourceAndTargetUpdated();
@@ -77,22 +92,23 @@ FTImportWindow::FTImportWindow(DInfoInterface* const iface, QWidget* const /*par
 
 FTImportWindow::~FTImportWindow()
 {
+    delete d;
 }
 
 void FTImportWindow::slotImport()
 {
-    int a = m_iface->albumSelectorItem();
+    int a = d->iface->albumSelectorItem();
 
     if (a)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "starting to import urls: " << m_importWidget->sourceUrls();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "starting to import urls: " << d->importWidget->sourceUrls();
 
         // start copying and react on signals
         setEnabled(false);
 
-        DAlbumInfo info(m_iface->albumInfo(a));
+        DAlbumInfo info(d->iface->albumInfo(a));
 
-        KIO::CopyJob* const copyJob = KIO::copy(m_importWidget->imagesList()->imageUrls(),
+        KIO::CopyJob* const copyJob = KIO::copy(d->importWidget->imagesList()->imageUrls(),
                                                 QUrl::fromLocalFile(info.path()));
 
         connect(copyJob, SIGNAL(copyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)),
@@ -114,7 +130,7 @@ void FTImportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "copied " << to.toDisplayString();
 
-    m_importWidget->imagesList()->removeItemByUrl(from);
+    d->importWidget->imagesList()->removeItemByUrl(from);
 }
 
 void FTImportWindow::slotCopyingFinished(KJob* job)
@@ -123,7 +139,7 @@ void FTImportWindow::slotCopyingFinished(KJob* job)
 
     setEnabled(true);
 
-    if (!m_importWidget->imagesList()->imageUrls().empty())
+    if (!d->importWidget->imagesList()->imageUrls().empty())
     {
         QMessageBox::information(this, i18n("Import not completed"),
                                  i18n("Some of the images have not been transferred "
@@ -134,13 +150,13 @@ void FTImportWindow::slotCopyingFinished(KJob* job)
 
 void FTImportWindow::slotSourceAndTargetUpdated()
 {
-    bool hasUrlToImport = !m_importWidget->sourceUrls().empty();
+    bool hasUrlToImport = !d->importWidget->sourceUrls().empty();
     bool hasTarget      = false;
-    int a               = m_iface->albumSelectorItem();
+    int a               = d->iface->albumSelectorItem();
 
     if (a)
     {
-        DAlbumInfo info(m_iface->albumInfo(a));
+        DAlbumInfo info(d->iface->albumInfo(a));
         hasTarget      = !info.path().isEmpty();
     }
 
