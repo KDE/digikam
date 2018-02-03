@@ -76,7 +76,7 @@ FTImportWidget::FTImportWidget(QWidget* const parent, DInfoInterface* const ifac
                                                 "into the current album."));
     
     // setup upload widget
-    d->uploadWidget = iface->albumSelector(this);
+    d->uploadWidget = iface->uploadWidget(this);
 
     // layout dialog
     QVBoxLayout* const layout = new QVBoxLayout(this);

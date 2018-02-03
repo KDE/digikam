@@ -35,6 +35,8 @@ namespace Digikam
 
 class DIGIKAM_EXPORT DMetaInfoIface : public DInfoInterface
 {
+    Q_OBJECT
+
 public:
 
     explicit DMetaInfoIface(QObject* const, const QList<QUrl>&);
@@ -47,8 +49,8 @@ public:
     DInfoMap    itemInfo(const QUrl&)             const;
     bool        supportAlbums()                   const;
     
-    QWidget* albumSelector(QWidget* const parent) const;
-    QUrl     albumSelectorItem()                  const;
+    QWidget* uploadWidget(QWidget* const parent)  const;
+    QUrl     uploadUrl()                          const;
 
 private:
 

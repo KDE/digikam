@@ -114,7 +114,7 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     QGroupBox* const uploadBox         = new QGroupBox(i18n("Destination"), m_settingsBox);
     uploadBox->setWhatsThis(i18n("This is the location where VKontakte images will be downloaded."));
     QVBoxLayout* const uploadBoxLayout = new QVBoxLayout(uploadBox);
-    m_uploadWidget                     = m_iface->albumSelector(uploadBox);
+    m_uploadWidget                     = m_iface->uploadWidget(uploadBox);
     uploadBoxLayout->addWidget(m_uploadWidget);
 
     // ------------------------------------------------------------------------

@@ -76,7 +76,7 @@ public:
         sizeBoxLayout      = new QVBoxLayout(sizeBox);
         dlDimensionCoB     = new QComboBox(sizeBox);
         uploadBox          = new QGroupBox(i18n("Destination"), settingsBox);
-        uploadWidget       = iface->albumSelector(uploadBox);
+        uploadWidget       = iface->uploadWidget(uploadBox);
         uploadBoxLayout    = new QVBoxLayout(uploadBox);
         optionsBox         = new QGroupBox(i18n("Options"), settingsBox);
         optionsBoxLayout   = new QGridLayout(optionsBox);
@@ -287,7 +287,7 @@ WSSettingsWidget::~WSSettingsWidget()
 
 QString WSSettingsWidget::getDestinationPath() const
 {
-    QUrl url = d->iface->albumSelectorItem();
+    QUrl url = d->iface->uploadUrl();
     return url.toLocalFile();
 }
 

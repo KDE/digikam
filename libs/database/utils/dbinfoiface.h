@@ -62,8 +62,8 @@ public:
     DAlbumIDs   albumChooserItems()                  const;
     bool        supportAlbums()                      const;
 
-    QWidget*    albumSelector(QWidget* const parent) const;
-    QUrl        albumSelectorItem()                  const;
+    QWidget*    uploadWidget(QWidget* const parent)  const;
+    QUrl        uploadUrl()                          const;
 
 private:
 

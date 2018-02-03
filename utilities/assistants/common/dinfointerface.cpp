@@ -97,12 +97,12 @@ bool DInfoInterface::supportAlbums() const
     return false;
 }
 
-QWidget* DInfoInterface::albumSelector(QWidget* const /*parent*/) const
+QWidget* DInfoInterface::uploadWidget(QWidget* const) const
 {
     return 0;
 }
 
-QUrl DInfoInterface::albumSelectorItem() const
+QUrl DInfoInterface::uploadUrl() const
 {
     return QUrl();
 }

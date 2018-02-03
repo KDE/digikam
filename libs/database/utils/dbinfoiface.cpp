@@ -505,7 +505,7 @@ QWidget* DBInfoIface::albumChooser(QWidget* const parent) const
     }
 
     connect(d->albumsChooser, SIGNAL(signalAlbumSelectionChanged()),
-            this, SIGNAL(signalAlbumChooserSelectionChanged()));
+            this, SIGNAL(signalUploadUrlChanged()));
 
     return d->albumsChooser;
 }
@@ -534,7 +534,7 @@ bool DBInfoIface::supportAlbums() const
     return true;
 }
 
-QWidget* DBInfoIface::albumSelector(QWidget* const parent) const
+QWidget* DBInfoIface::uploadWidget(QWidget* const parent) const
 {
     if (!d->albumSelector)
     {
@@ -544,7 +544,7 @@ QWidget* DBInfoIface::albumSelector(QWidget* const parent) const
     return d->albumSelector;
 }
 
-QUrl DBInfoIface::albumSelectorItem() const
+QUrl DBInfoIface::uploadUrl() const
 {
     QUrl url;
 

@@ -84,7 +84,7 @@ FTImportWindow::FTImportWindow(DInfoInterface* const iface, QWidget* const /*par
     connect(d->importWidget->imagesList(), SIGNAL(signalImageListChanged()),
             this, SLOT(slotSourceAndTargetUpdated()));
 
-    connect(d->iface, SIGNAL(selectionChanged()),
+    connect(d->iface, SIGNAL(signalUploadUrlChanged()),
             this, SLOT(slotSourceAndTargetUpdated()));
 
     slotSourceAndTargetUpdated();
@@ -97,7 +97,7 @@ FTImportWindow::~FTImportWindow()
 
 void FTImportWindow::slotImport()
 {
-    QUrl url = d->iface->albumSelectorItem();
+    QUrl url = d->iface->uploadUrl();
 
     if (!url.isEmpty())
     {
@@ -117,7 +117,7 @@ void FTImportWindow::slotImport()
 }
 
 void FTImportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl& to,
-                                      const QDateTime& mtime, bool directory, bool renamed)
+                                     const QDateTime& mtime, bool directory, bool renamed)
 {
     Q_UNUSED(job);
     Q_UNUSED(to);
@@ -148,7 +148,7 @@ void FTImportWindow::slotCopyingFinished(KJob* job)
 void FTImportWindow::slotSourceAndTargetUpdated()
 {
     bool hasUrlToImport = !d->importWidget->sourceUrls().empty();
-    bool hasTarget      = !d->iface->albumSelectorItem().isEmpty();
+    bool hasTarget      = !d->iface->uploadUrl().isEmpty();
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "switching import button activity with: hasUrlToImport = "
                                  << hasUrlToImport << ", hasTarget = " << hasTarget;

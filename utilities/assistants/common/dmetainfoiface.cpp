@@ -148,7 +148,7 @@ bool DMetaInfoIface::supportAlbums() const
     return false;
 }
 
-QWidget* DMetaInfoIface::albumSelector(QWidget* const parent) const
+QWidget* DMetaInfoIface::uploadWidget(QWidget* const parent) const
 {
     if (!d->dirSelector)
     {
@@ -158,11 +158,13 @@ QWidget* DMetaInfoIface::albumSelector(QWidget* const parent) const
         d->dirSelector->lineEdit()->setPlaceholderText(i18n("Output Destination Path"));
     }
 
+    connect(d->dirSelector, SIGNAL(signalUrlSelected(const QUrl&)),
+            this, SIGNAL(signalUploadUrlChanged()));
+    
     return d->dirSelector;
-
 }
 
-QUrl DMetaInfoIface::albumSelectorItem() const
+QUrl DMetaInfoIface::uploadUrl() const
 {
     return QUrl::fromLocalFile(d->dirSelector->fileDlgPath());
 }

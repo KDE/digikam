@@ -150,7 +150,7 @@ SmugWidget::SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool 
     QGroupBox* const uploadBox         = new QGroupBox(i18n("Destination"), settingsBox);
     uploadBox->setWhatsThis(i18n("This is the location where SmugMug images will be downloaded."));
     QVBoxLayout* const uploadBoxLayout = new QVBoxLayout(uploadBox);
-    m_uploadWidget                     = m_iface->albumSelector(uploadBox);
+    m_uploadWidget                     = m_iface->uploadWidget(uploadBox);
     uploadBoxLayout->addWidget(m_uploadWidget);
 
     // ------------------------------------------------------------------------
@@ -290,7 +290,7 @@ QString SmugWidget::getAlbumPassword() const
 
 QString SmugWidget::getDestinationPath() const
 {
-    QUrl url = m_iface->albumSelectorItem();
+    QUrl url = m_iface->uploadUrl();
     return url.toLocalFile();
 }
 
