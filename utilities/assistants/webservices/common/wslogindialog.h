@@ -32,9 +32,6 @@
 
 #include "digikam_export.h"
 
-class QLabel;
-class QLineEdit;
-
 namespace Digikam
 {
 
@@ -60,11 +57,10 @@ protected Q_SLOTS:
 
     void slotAccept();
 
-protected:
-
-    QLabel*    m_headerLabel;
-    QLineEdit* m_loginEdit;
-    QLineEdit* m_passwordEdit;
+private:
+    
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

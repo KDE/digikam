@@ -47,19 +47,35 @@
 namespace Digikam
 {
 
+class WSLoginDialog::Private
+{
+public:
+    Private()
+        : headerLabel(0),
+          loginEdit(0),
+          passwordEdit(0)
+    {
+    }
+
+    QLabel*    headerLabel;
+    QLineEdit* loginEdit;
+    QLineEdit* passwordEdit;
+};
+    
 WSLoginDialog::WSLoginDialog(QWidget* const parent,
                              const QString& prompt,
                              const QString& login,
                              const QString& password)
-    : QDialog(parent)
+    : QDialog(parent),
+      d(new Private)
 {
     setSizeGripEnabled(false);
 
     QVBoxLayout* const vbox = new QVBoxLayout(this);
-    m_headerLabel           = new QLabel(this);
-    m_headerLabel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
-    m_headerLabel->setTextFormat(Qt::RichText);
-    m_headerLabel->setText(prompt);
+    d->headerLabel          = new QLabel(this);
+    d->headerLabel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
+    d->headerLabel->setTextFormat(Qt::RichText);
+    d->headerLabel->setText(prompt);
 
     QFrame* const hline = new QFrame(this);
     hline->setObjectName(QString::fromLatin1("hline"));
@@ -69,9 +85,9 @@ WSLoginDialog::WSLoginDialog(QWidget* const parent,
 
     QGridLayout* const centerLayout = new QGridLayout();
 
-    m_loginEdit    = new QLineEdit(this);
-    m_passwordEdit = new QLineEdit(this);
-    m_passwordEdit->setEchoMode(QLineEdit::Password);
+    d->loginEdit    = new QLineEdit(this);
+    d->passwordEdit = new QLineEdit(this);
+    d->passwordEdit->setEchoMode(QLineEdit::Password);
 
     QLabel* const loginLabel    = new QLabel(this);
     loginLabel->setText(i18n( "Login:" ));
@@ -79,8 +95,8 @@ WSLoginDialog::WSLoginDialog(QWidget* const parent,
     QLabel* const passwordLabel = new QLabel(this);
     passwordLabel->setText(i18n("Password:"));
 
-    centerLayout->addWidget(m_loginEdit,    0, 1);
-    centerLayout->addWidget(m_passwordEdit, 1, 1);
+    centerLayout->addWidget(d->loginEdit,    0, 1);
+    centerLayout->addWidget(d->passwordEdit, 1, 1);
     centerLayout->addWidget(loginLabel,     0, 0);
     centerLayout->addWidget(passwordLabel,  1, 0);
 
@@ -102,7 +118,7 @@ WSLoginDialog::WSLoginDialog(QWidget* const parent,
     vbox->setContentsMargins(5, 5, 5, 5);
     vbox->setSpacing(5);
     vbox->setObjectName(QString::fromLatin1("vbox"));
-    vbox->addWidget(m_headerLabel);
+    vbox->addWidget(d->headerLabel);
     vbox->addWidget(hline);
     vbox->addLayout(centerLayout);
     vbox->addLayout(btnLayout);
@@ -121,31 +137,32 @@ WSLoginDialog::WSLoginDialog(QWidget* const parent,
 
 WSLoginDialog::~WSLoginDialog()
 {
+    delete d;
 }
 
 QString WSLoginDialog::login() const
 {
-    return m_loginEdit->text();
+    return d->loginEdit->text();
 }
 
 QString WSLoginDialog::password() const
 {
-    return m_passwordEdit->text();
+    return d->passwordEdit->text();
 }
 
 void WSLoginDialog::setLogin(const QString& login)
 {
-    m_loginEdit->setText(login);
+    d->loginEdit->setText(login);
 }
 
 void WSLoginDialog::setPassword(const QString& password)
 {
-    m_passwordEdit->setText(password);
+    d->passwordEdit->setText(password);
 }
 
 void WSLoginDialog::slotAccept()
 {
-    if (!m_passwordEdit->text().isEmpty())
+    if (!d->passwordEdit->text().isEmpty())
     {
         accept();
     }
