@@ -33,6 +33,7 @@
 #include "dmetadata.h"
 #include "infocontainer.h"
 #include "template.h"
+#include "dfileselector.h"
 
 namespace Digikam
 {
@@ -43,9 +44,11 @@ public:
 
     Private()
     {
+        dirSelector = 0;
     }
 
-    QList<QUrl> urls;
+    DFileSelector* dirSelector;
+    QList<QUrl>    urls;
 };
 
 DMetaInfoIface::DMetaInfoIface(QObject* const parent, const QList<QUrl>& lst)
@@ -143,6 +146,25 @@ DMetaInfoIface::DInfoMap DMetaInfoIface::itemInfo(const QUrl& url) const
 bool DMetaInfoIface::supportAlbums() const
 {
     return false;
+}
+
+QWidget* DMetaInfoIface::albumSelector(QWidget* const parent) const
+{
+    if (!d->dirSelector)
+    {
+        d->dirSelector = new DFileSelector(parent);
+        d->dirSelector->setFileDlgMode(DFileDialog::DirectoryOnly);
+        d->dirSelector->setFileDlgTitle(i18n("Destination Folder"));
+        d->dirSelector->lineEdit()->setPlaceholderText(i18n("Output Destination Path"));
+    }
+
+    return d->dirSelector;
+
+}
+
+QUrl DMetaInfoIface::albumSelectorItem() const
+{
+    return QUrl::fromLocalFile(d->dirSelector->fileDlgPath());
 }
 
 }  // namespace Digikam

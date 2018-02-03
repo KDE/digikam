@@ -40,12 +40,15 @@ public:
     explicit DMetaInfoIface(QObject* const, const QList<QUrl>&);
     ~DMetaInfoIface();
 
-    QList<QUrl> currentSelectedItems()           const;
-    QList<QUrl> currentAlbumItems()              const;
-    QList<QUrl> allAlbumItems()                  const;
+    QList<QUrl> currentSelectedItems()            const;
+    QList<QUrl> currentAlbumItems()               const;
+    QList<QUrl> allAlbumItems()                   const;
 
-    DInfoMap    itemInfo(const QUrl&)            const;
-    bool        supportAlbums()                  const;
+    DInfoMap    itemInfo(const QUrl&)             const;
+    bool        supportAlbums()                   const;
+    
+    QWidget* albumSelector(QWidget* const parent) const;
+    QUrl     albumSelectorItem()                  const;
 
 private:
 
