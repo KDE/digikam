@@ -87,8 +87,6 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
     }
 
     m_select                    = new WSSelectUserDlg(0, serviceName);
-    m_select->reactivate();
-
     m_uploadCount               = 0;
     m_uploadTotal               = 0;
     m_widget                    = new FlickrWidget(this, iface, serviceName);
@@ -193,6 +191,10 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
 
     connect(startButton(), &QPushButton::clicked,
             this, &FlickrWindow::slotUser1);
+
+    m_select->reactivate();
+    readSettings(m_select->getUname());
+    m_talker->link(m_select->getUname());
 }
 
 FlickrWindow::~FlickrWindow()
