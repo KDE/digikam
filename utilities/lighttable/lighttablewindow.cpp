@@ -601,7 +601,6 @@ void LightTableWindow::setupActions()
 
     // -- Standard 'Tools' menu actions ------------------------
 
-    createKSaneAction();
     createMetadataEditAction();
     createGeolocationEditAction();
     createHtmlGalleryAction();

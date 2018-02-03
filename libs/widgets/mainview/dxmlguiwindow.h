@@ -157,19 +157,15 @@ public:
      */
     void createMediaServerAction();
 
-    /** Create Ksane action to import from scanner.
-     */
-    void createKSaneAction();
-
     /** Create common actions to setup all digiKam main windows.
      */
     void createSettingsActions();
 
-    /** Create common actions from Webservices Export menu for all digiKam main windows.
+    /** Create common actions from Export menu for all digiKam main windows.
      */
     void createExportActions();
 
-    /** Create common actions from Webservices Import menu for all digiKam main windows.
+    /** Create common actions from Import menu for all digiKam main windows.
      */
     void createImportActions();
 
@@ -233,11 +229,6 @@ protected:
     QAction*     m_videoslideshowAction;
     QAction*     m_mediaServerAction;
 
-#ifdef HAVE_KSANE
-    KSaneAction* m_ksaneAction;
-#endif
-
-    // WebServices tools
     QAction*     m_exportDropboxAction;
     QAction*     m_exportFacebookAction;
     QAction*     m_exportFlickrAction;
@@ -267,6 +258,10 @@ protected:
 
 #ifdef HAVE_KIO
     QAction*     m_importFileTransferAction;
+#endif
+
+#ifdef HAVE_KSANE
+    KSaneAction* m_ksaneAction;
 #endif
 
 protected:

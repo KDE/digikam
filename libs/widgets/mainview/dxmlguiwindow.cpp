@@ -185,11 +185,8 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_mediaServerAction        = 0;
     m_animLogo                 = 0;
 
-#ifdef HAVE_KSANE
-    m_ksaneAction              = 0;
-#endif
+    // Export tools
 
-    // WebServices tools
     m_exportDropboxAction      = 0;
     m_exportFacebookAction     = 0;
     m_exportFlickrAction       = 0;
@@ -214,6 +211,8 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_exportFileTransferAction = 0;
 #endif
 
+    // Import tools
+    
     m_importGphotoAction       = 0;
     m_importSmugmugAction      = 0;
 
@@ -221,6 +220,10 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_importFileTransferAction = 0;
 #endif
 
+#ifdef HAVE_KSANE
+    m_ksaneAction              = 0;
+#endif
+    
     installEventFilter(this);
 }
 
@@ -564,17 +567,6 @@ void DXmlGuiWindow::createMediaServerAction()
 
     connect(m_mediaServerAction, SIGNAL(triggered(bool)),
             this, SLOT(slotMediaServer()));
-}
-
-void DXmlGuiWindow::createKSaneAction()
-{
-#ifdef HAVE_KSANE
-    m_ksaneAction = new KSaneAction(this);
-    actionCollection()->addAction(QLatin1String("import_scan"), m_ksaneAction);
-
-    connect(m_ksaneAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotImportFromScanner()));
-#endif
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)
@@ -1177,6 +1169,14 @@ void DXmlGuiWindow::createImportActions()
     connect(m_importFileTransferAction, SIGNAL(triggered(bool)),
             this, SLOT(slotImportTool()));
 #endif
+
+#ifdef HAVE_KSANE
+    m_ksaneAction = new KSaneAction(this);
+    actionCollection()->addAction(QLatin1String("import_scan"), m_ksaneAction);
+
+    connect(m_ksaneAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotImportFromScanner()));
+#endif
 }
 
 QList<QAction*> DXmlGuiWindow::exportActions() const
@@ -1212,7 +1212,11 @@ QList<QAction*> DXmlGuiWindow::importActions() const
                              << m_importSmugmugAction
 
 #ifdef HAVE_KIO
-                             << m_importFileTransferAction;
+                             << m_importFileTransferAction
+#endif
+                       
+#ifdef HAVE_KSANE
+                             << m_ksaneAction
 #endif
                              ;
 }

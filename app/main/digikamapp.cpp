@@ -1016,8 +1016,6 @@ void DigikamApp::setupActions()
     d->quickImportMenu->setIcon(QIcon::fromTheme(QLatin1String("camera-photo")));
     ac->addAction(QLatin1String("import_auto"), d->quickImportMenu->menuAction());
 
-    createKSaneAction();
-
     // -----------------------------------------------------------------
 
     d->imageWriteMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Write Metadata to Selected Images"), this);
