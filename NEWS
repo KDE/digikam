@@ -22,4 +22,5 @@ BUGFIXES FROM BUGZILLA:
 012 ==> 389512 - Timeline Thumbnails Not Shown.
 013 ==> 389651 - Custom font size is not applied until you enter and exit the settings menu.
 014 ==> 388345 - AppImage MySQL connection issues.
-015 ==> 
+015 ==> 389827 - Ignores albums selection.
+016 ==> 
