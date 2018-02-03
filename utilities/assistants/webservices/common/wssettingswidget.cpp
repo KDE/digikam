@@ -287,16 +287,8 @@ WSSettingsWidget::~WSSettingsWidget()
 
 QString WSSettingsWidget::getDestinationPath() const
 {
-    QString path;
-    int a = d->iface->albumSelectorItem();
-
-    if (a)
-    {
-        DAlbumInfo info(d->iface->albumInfo(a));
-        path = info.path();
-    }
-
-    return path;
+    QUrl url = d->iface->albumSelectorItem();
+    return url.toLocalFile();
 }
 
 DImagesList* WSSettingsWidget::imagesList() const

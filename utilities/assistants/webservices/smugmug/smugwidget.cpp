@@ -290,16 +290,8 @@ QString SmugWidget::getAlbumPassword() const
 
 QString SmugWidget::getDestinationPath() const
 {
-    QString path;
-    int a = m_iface->albumSelectorItem();
-
-    if (a)
-    {
-        DAlbumInfo info(m_iface->albumInfo(a));
-        path = info.path();
-    }
-
-    return path;
+    QUrl url = m_iface->albumSelectorItem();
+    return url.toLocalFile();
 }
 
 void SmugWidget::setNickName(const QString& nick)

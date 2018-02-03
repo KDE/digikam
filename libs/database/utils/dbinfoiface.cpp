@@ -353,7 +353,7 @@ DBInfoIface::DInfoMap DBInfoIface::albumInfo(int gid) const
     {
         map.insert(QLatin1String("caption"),  p->caption());
         map.insert(QLatin1String("date"),     p->date());
-        map.insert(QLatin1String("path"),     p->albumPath());
+        map.insert(QLatin1String("path"),     p->folderPath());
     }
 
     return map;
@@ -544,22 +544,21 @@ QWidget* DBInfoIface::albumSelector(QWidget* const parent) const
     return d->albumSelector;
 }
 
-int DBInfoIface::albumSelectorItem() const
+QUrl DBInfoIface::albumSelectorItem() const
 {
-    int ret = -1;
+    QUrl url;
 
     if (d->albumSelector)
     {
-        QString ext                = ApplicationSettings::instance()->getAllFileFilter();
-        PAlbum* const currentAlbum = d->albumSelector->currentAlbum();
+        PAlbum* const p = d->albumSelector->currentAlbum();
 
-        if (currentAlbum)
+        if (p)
         {
-            ret = currentAlbum->globalID();
+            url = QUrl::fromLocalFile(p->folderPath());
         }
     }
 
-    return ret;
+    return url;
 }
 
 }  // namespace Digikam

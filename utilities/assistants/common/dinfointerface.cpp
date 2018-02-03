@@ -102,9 +102,9 @@ QWidget* DInfoInterface::albumSelector(QWidget* const /*parent*/) const
     return 0;
 }
 
-int DInfoInterface::albumSelectorItem() const
+QUrl DInfoInterface::albumSelectorItem() const
 {
-    return 0;
+    return QUrl();
 }
 
 // -----------------------------------------------------------------

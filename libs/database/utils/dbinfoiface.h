@@ -63,7 +63,7 @@ public:
     bool        supportAlbums()                      const;
 
     QWidget*    albumSelector(QWidget* const parent) const;
-    int         albumSelectorItem()                  const;
+    QUrl        albumSelectorItem()                  const;
 
 private:
 

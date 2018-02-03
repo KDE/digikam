@@ -97,19 +97,16 @@ FTImportWindow::~FTImportWindow()
 
 void FTImportWindow::slotImport()
 {
-    int a = d->iface->albumSelectorItem();
+    QUrl url = d->iface->albumSelectorItem();
 
-    if (a)
+    if (!url.isEmpty())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "starting to import urls: " << d->importWidget->sourceUrls();
 
         // start copying and react on signals
         setEnabled(false);
 
-        DAlbumInfo info(d->iface->albumInfo(a));
-
-        KIO::CopyJob* const copyJob = KIO::copy(d->importWidget->imagesList()->imageUrls(),
-                                                QUrl::fromLocalFile(info.path()));
+        KIO::CopyJob* const copyJob = KIO::copy(d->importWidget->imagesList()->imageUrls(), url);
 
         connect(copyJob, SIGNAL(copyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)),
                 this, SLOT(slotCopyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)));
@@ -151,14 +148,7 @@ void FTImportWindow::slotCopyingFinished(KJob* job)
 void FTImportWindow::slotSourceAndTargetUpdated()
 {
     bool hasUrlToImport = !d->importWidget->sourceUrls().empty();
-    bool hasTarget      = false;
-    int a               = d->iface->albumSelectorItem();
-
-    if (a)
-    {
-        DAlbumInfo info(d->iface->albumInfo(a));
-        hasTarget      = !info.path().isEmpty();
-    }
+    bool hasTarget      = !d->iface->albumSelectorItem().isEmpty();
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "switching import button activity with: hasUrlToImport = "
                                  << hasUrlToImport << ", hasTarget = " << hasTarget;
