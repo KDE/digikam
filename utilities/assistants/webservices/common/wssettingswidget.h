@@ -6,8 +6,9 @@
  * Date        : 2015-07-28
  * Description : Common widgets shared by Web Service tools
  *
- * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
- * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2015      by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,47 +57,52 @@ class DIGIKAM_EXPORT WSSettingsWidget : public QWidget
 public:
 
     explicit WSSettingsWidget(QWidget* const parent,
-                            DInfoInterface* const iface,
-                            const QString& toolName);
+                              DInfoInterface* const iface,
+                              const QString& toolName);
     ~WSSettingsWidget();
 
-    virtual void updateLabels(const QString& name = QString(), const QString& url = QString()) = 0;
 
-    QString           getDestinationPath() const;
-    DImagesList*      imagesList()  const;
-    DProgressWdg*     progressBar() const;
     void              replaceImageList(QWidget* const widget);
-
-    QWidget*          getSettingsBox() const;
-    QVBoxLayout*      getSettingsBoxLayout() const;
     void              addWidgetToSettingsBox(QWidget* const widget);
 
-    QGroupBox*        getAlbumBox() const;
-    QGridLayout*      getAlbumBoxLayout() const;
+    QString           getDestinationPath()   const;
+    DImagesList*      imagesList()           const;
+    DProgressWdg*     progressBar()          const;
 
-    QGroupBox*        getOptionsBox() const;
-    QGridLayout*      getOptionsBoxLayout() const;
+    QWidget*          getSettingsBox()       const;
+    QVBoxLayout*      getSettingsBoxLayout() const;
 
-    QGroupBox*        getUploadBox() const;
-    QVBoxLayout*      getUploadBoxLayout() const;
+    QGroupBox*        getAlbumBox()          const;
+    QGridLayout*      getAlbumBoxLayout()    const;
 
-    QGroupBox*        getSizeBox() const;
-    QVBoxLayout*      getSizeBoxLayout() const;
+    QGroupBox*        getOptionsBox()        const;
+    QGridLayout*      getOptionsBoxLayout()  const;
 
-    QGroupBox*        getAccountBox() const;
-    QGridLayout*      getAccountBoxLayout() const;
+    QGroupBox*        getUploadBox()         const;
+    QVBoxLayout*      getUploadBoxLayout()   const;
 
-    QLabel*           getHeaderLbl() const;
-    QLabel*           getUserNameLabel() const;
-    QPushButton*      getChangeUserBtn() const;
-    QComboBox*        getDimensionCoB() const;
-    QPushButton*      getNewAlbmBtn() const;
-    QPushButton*      getReloadBtn() const;
-    QCheckBox*        getOriginalCheckBox() const;
-    QCheckBox*        getResizeCheckBox() const;
-    QSpinBox*         getDimensionSpB() const;
-    QSpinBox*         getImgQualitySpB() const;
-    QComboBox*        getAlbumsCoB() const;
+    QGroupBox*        getSizeBox()           const;
+    QVBoxLayout*      getSizeBoxLayout()     const;
+
+    QGroupBox*        getAccountBox()        const;
+    QGridLayout*      getAccountBoxLayout()  const;
+
+    QLabel*           getHeaderLbl()         const;
+    QLabel*           getUserNameLabel()     const;
+    QPushButton*      getChangeUserBtn()     const;
+    QComboBox*        getDimensionCoB()      const;
+    QPushButton*      getNewAlbmBtn()        const;
+    QPushButton*      getReloadBtn()         const;
+    QCheckBox*        getOriginalCheckBox()  const;
+    QCheckBox*        getResizeCheckBox()    const;
+    QSpinBox*         getDimensionSpB()      const;
+    QSpinBox*         getImgQualitySpB()     const;
+    QComboBox*        getAlbumsCoB()         const;
+
+public:
+
+    virtual void updateLabels(const QString& name = QString(),
+                              const QString& url = QString()) = 0;
 
 protected Q_SLOTS:
 

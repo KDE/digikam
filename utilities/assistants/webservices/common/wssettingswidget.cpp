@@ -6,8 +6,9 @@
  * Date        : 2015-07-28
  * Description : Common widgets shared by Web Service tools
  *
- * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
- * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2015      by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -240,9 +241,9 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
 
     d->optionsBoxLayout->addWidget(d->originalChB,     0, 0, 1, 5);
     d->optionsBoxLayout->addWidget(d->resizeChB,       1, 0, 1, 5);
-    d->optionsBoxLayout->addWidget(imageQualityLbl,      2, 1, 1, 1);
+    d->optionsBoxLayout->addWidget(imageQualityLbl,    2, 1, 1, 1);
     d->optionsBoxLayout->addWidget(d->imageQualitySpB, 2, 2, 1, 1);
-    d->optionsBoxLayout->addWidget(dimensionLbl,         3, 1, 1, 1);
+    d->optionsBoxLayout->addWidget(dimensionLbl,       3, 1, 1, 1);
     d->optionsBoxLayout->addWidget(d->dimensionSpB,    3, 2, 1, 1);
     d->optionsBoxLayout->setRowStretch(4, 10);
     d->optionsBoxLayout->setSpacing(spacing);
@@ -318,7 +319,11 @@ DProgressWdg* WSSettingsWidget::progressBar() const
 void WSSettingsWidget::addWidgetToSettingsBox(QWidget* const widget)
 {
     d->settingsBoxLayout->addWidget(widget);
-    d->settingsBoxLayout->removeWidget(d->progressBar); // NOTE: This is important because progress bar always has to be at the end of settings box layout. So we remove it and then add it back.
+
+    // NOTE: This is important because progress bar always has to be at the end of settings box layout.
+    // So we remove it and then add it back.
+    d->settingsBoxLayout->removeWidget(d->progressBar); 
+
     d->settingsBoxLayout->addWidget(d->progressBar);
 }
 
