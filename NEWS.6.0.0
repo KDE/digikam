@@ -50,6 +50,7 @@ BUGFIXES FROM BUGZILLA:
 039 ==> 095175 - crash on loading, signal 11 SIGSEGV.
 040 ==> 175844 - Crashes at startup loading Export tools.
 041 ==> 306511 - Crash during start.
-042 ==> 
+042 ==> 234021 - Crash on loading.
+043 ==> 
 
 
