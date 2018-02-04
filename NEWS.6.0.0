@@ -11,4 +11,5 @@ BUGFIXES FROM BUGZILLA:
 
 001 ==> 172650 - No export tools available.
 002 ==> 149591 - The export menu is blank.
-003 ==> 
+003 ==> 300424 - Export tools not detected.
+004 ==> 
