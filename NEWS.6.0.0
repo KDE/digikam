@@ -13,4 +13,5 @@ BUGFIXES FROM BUGZILLA:
 002 ==> 149591 - The export menu is blank.
 003 ==> 300424 - Export tools not detected.
 004 ==> 327743 - MediaWiki export not displayed.
-005 ==> 
+005 ==> 348146 - Export tools configuration module.
+006 ==> 
