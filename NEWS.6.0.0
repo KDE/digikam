@@ -10,4 +10,5 @@ Showfoto     : Add Web services Import and Export tools.
 BUGFIXES FROM BUGZILLA:
 
 001 ==> 172650 - No export tools available.
-002 ==> 
+002 ==> 149591 - The export menu is blank.
+003 ==> 
