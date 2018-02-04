@@ -14,4 +14,5 @@ BUGFIXES FROM BUGZILLA:
 003 ==> 300424 - Export tools not detected.
 004 ==> 327743 - MediaWiki export not displayed.
 005 ==> 348146 - Export tools configuration module.
-006 ==> 
+006 ==> 243275 - Crashing when calling configuration.
+007 ==> 
