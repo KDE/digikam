@@ -59,8 +59,8 @@ BUGFIXES FROM BUGZILLA:
 048 ==> 185470 - "Import from facebook" is listed twice in import menu.
 049 ==> 334045 - MediaWiki option not available in Export menu when plugin activated.
 050 ==> 142112 - Can't save on my webspace with ShowFoto.
-051 ==> 
-
+051 ==> 167417 - Showfoto cannot save files of CIFS mount.
+052 ==> 
 
 
 
