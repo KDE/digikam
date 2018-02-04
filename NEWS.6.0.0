@@ -31,7 +31,5 @@ BUGFIXES FROM BUGZILLA:
 020 ==> 276882 - Add export tool buttons to toolbar.
 021 ==> 284801 - Export to picasaweb crashes.
 022 ==> 277669 - Crash after files moved.
-023 ==> 
-
-
+023 ==> 281250 - Crash after disabling Export tools.
 
