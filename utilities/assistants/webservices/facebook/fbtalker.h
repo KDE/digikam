@@ -33,12 +33,11 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 
-// local includes
+// Local includes
 
 #include "fbitem.h"
 
 class QDomElement;
-class QDialog;
 
 namespace Digikam
 {
@@ -114,32 +113,8 @@ private Q_SLOTS:
 
 private:
 
-    QDialog*               m_dialog;
-    QWidget*               m_parent;
-
-    QByteArray             m_buffer;
-
-    QUrl                   m_apiURL;
-    QString                m_apiVersion;
-    QString                m_secretKey;
-    QString                m_appID;
-
-    bool                   m_loginInProgress;
-    QString                m_accessToken;
-
-    /* Session expiration
-     * 0 = doesn't expire or has been invalidated; rest = time of expiry
-     */
-    unsigned int           m_sessionExpires;
-    QTime                  m_callID;
-
-    FbUser                 m_user;
-
-    QNetworkAccessManager* m_netMngr;
-
-    QNetworkReply*         m_reply;
-
-    State                  m_state;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
