@@ -136,6 +136,7 @@ void ImgurAPI3::oauthRequestPin(const QUrl& url)
 
 void ImgurAPI3::oauthFailed()
 {
+    cancelAllWork();
     emit authError(i18n("Could not authorize"));
 }
 
