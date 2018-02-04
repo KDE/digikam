@@ -42,11 +42,6 @@ namespace Digikam
 {
 
 class FbAlbum;
-class FbTalker;
-class FbWidget;
-class FbUser;
-class FbNewAlbumDlg;
-class FbPhoto;
 
 class DIGIKAM_EXPORT FbWindow : public WSToolDialog
 {
@@ -100,29 +95,6 @@ private:
     void    buttonStateChange(bool state);
 
     void    closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
-
-private:
-
-    unsigned int    m_imagesCount;
-    unsigned int    m_imagesTotal;
-    QString         m_tmpDir;
-    QString         m_tmpPath;
-
-    QString         m_profileAID;
-    QString         m_currentAlbumID;
-
-    // the next two entries are only used to upgrade to the new authentication scheme
-    QString         m_sessionKey;             // old world session key
-    QString         m_sessionSecret;          // old world session secret
-    unsigned int    m_sessionExpires;
-    QString         m_accessToken;            // OAuth access token
-
-    QList<QUrl>     m_transferQueue;
-
-    FbTalker*       m_talker;
-    FbNewAlbumDlg*  m_albumDlg;
-
-    DInfoInterface* m_iface;
 
 private:
 

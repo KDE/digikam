@@ -58,7 +58,9 @@ BUGFIXES FROM BUGZILLA:
 047 ==> 306497 - Crash after changing settings segmentation fault possible 2nd report?
 048 ==> 185470 - "Import from facebook" is listed twice in import menu.
 049 ==> 334045 - MediaWiki option not available in Export menu when plugin activated.
-050 ==> 
+050 ==> 142112 - Can't save on my webspace with ShowFoto.
+051 ==> 
+
 
 
 
