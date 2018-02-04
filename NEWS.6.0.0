@@ -46,5 +46,6 @@ BUGFIXES FROM BUGZILLA:
 035 ==> 313890 - Crash when clicking "Send to...".
 036 ==> 315033 - Crashes on pressing Send To... button.
 037 ==> 315914 - The facebook tool crashes everytime on initialization.
-038 ==> 
+038 ==> 326556 - Export tools are not loaded when starting host application for second time.
+039 ==> 
 
