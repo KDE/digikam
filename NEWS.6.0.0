@@ -36,5 +36,6 @@ BUGFIXES FROM BUGZILLA:
 025 ==> 306693 - after update to KDE host application crashes on startup.
 026 ==> 282781 - Crashes when reopening configuration dialog after disabling export tools.
 027 ==> 285499 - Crash when settings window opened.
-028 ==> 
+028 ==> 297629 - Crashed when importing from Nikon P7000.
+029 ==> 
 
