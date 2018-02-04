@@ -51,6 +51,7 @@ BUGFIXES FROM BUGZILLA:
 040 ==> 175844 - Crashes at startup loading Export tools.
 041 ==> 306511 - Crash during start.
 042 ==> 234021 - Crash on loading.
-043 ==> 
+043 ==> 219772 - Opening the application causes crash.
+044 ==> 
 
 
