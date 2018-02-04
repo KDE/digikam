@@ -149,7 +149,7 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
     d->imgList->loadImagesFromCurrentSelection();
 
     d->settingsScrollArea->setMinimumSize(400, 500);
-    d->settingsScrollArea->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    d->settingsScrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     d->settingsScrollArea->setWidget(d->settingsBox);
     d->settingsScrollArea->setWidgetResizable(true);
     d->settingsScrollArea->setFrameShadow(QFrame::Plain);
