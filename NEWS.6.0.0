@@ -45,5 +45,6 @@ BUGFIXES FROM BUGZILLA:
 034 ==> 313577 - Crashes when pressing the "send to" button.
 035 ==> 313890 - Crash when clicking "Send to...".
 036 ==> 315033 - Crashes on pressing Send To... button.
-037 ==> 
+037 ==> 315914 - The facebook tool crashes everytime on initialization.
+038 ==> 
 
