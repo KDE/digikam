@@ -17,4 +17,5 @@ BUGFIXES FROM BUGZILLA:
 006 ==> 243275 - Crashing when calling configuration.
 007 ==> 257134 - Crashes when entering its settings.
 008 ==> 230666 - Crash during start.
-009 ==> 
+009 ==> 306698 - Crashes after update to KDE.
+010 ==> 
