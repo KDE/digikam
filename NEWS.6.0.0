@@ -57,7 +57,8 @@ BUGFIXES FROM BUGZILLA:
 046 ==> 306495 - Crash changing settings linux ubuntu lucid.
 047 ==> 306497 - Crash after changing settings segmentation fault possible 2nd report?
 048 ==> 185470 - "Import from facebook" is listed twice in import menu.
-049 ==> 
+049 ==> 334045 - MediaWiki option not available in Export menu when plugin activated.
+050 ==> 
 
 
 
