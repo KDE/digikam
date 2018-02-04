@@ -49,6 +49,7 @@ BUGFIXES FROM BUGZILLA:
 038 ==> 326556 - Export tools are not loaded when starting host application for second time.
 039 ==> 095175 - crash on loading, signal 11 SIGSEGV.
 040 ==> 175844 - Crashes at startup loading Export tools.
-041 ==> 
+041 ==> 306511 - Crash during start.
+042 ==> 
 
 
