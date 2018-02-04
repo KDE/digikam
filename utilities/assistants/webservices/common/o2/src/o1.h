@@ -8,8 +8,6 @@
 #include "o0export.h"
 #include "o0baseauth.h"
 
-class O2ReplyServer;
-
 /// Simple OAuth 1.0 authenticator.
 class O0_EXPORT O1: public O0BaseAuth {
     Q_OBJECT
@@ -91,10 +89,10 @@ public:
 
 public Q_SLOTS:
     /// Authenticate.
-    Q_INVOKABLE void link() Q_DECL_OVERRIDE;
+    Q_INVOKABLE virtual void link();
 
     /// De-authenticate.
-    Q_INVOKABLE void unlink() Q_DECL_OVERRIDE;
+    Q_INVOKABLE virtual void unlink();
 
 Q_SIGNALS:
     void requestTokenUrlChanged();
@@ -102,10 +100,11 @@ Q_SIGNALS:
     void accessTokenUrlChanged();
     void signatureMethodChanged();
 
-protected Q_SLOTS:
+public Q_SLOTS:
     /// Handle verification received from the reply server.
     virtual void onVerificationReceived(QMap<QString,QString> params);
 
+protected Q_SLOTS:
     /// Handle token request error.
     virtual void onTokenRequestError(QNetworkReply::NetworkError error);
 
@@ -131,7 +130,6 @@ protected:
     QString verifier_;
     QString signatureMethod_;
     QNetworkAccessManager *manager_;
-    O2ReplyServer *replyServer_;
 };
 
 #endif // O1_H

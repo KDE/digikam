@@ -20,6 +20,12 @@ class O0_EXPORT O2Requestor: public QObject {
 public:
     explicit O2Requestor(QNetworkAccessManager *manager, O2 *authenticator, QObject *parent = 0);
     ~O2Requestor();
+    
+    /// Some services require the access token to be sent as a Authentication HTTP header.
+    /// This is the case for Twitch and Mixer.
+    /// When the access token expires and is refreshed, O2Requestor::retry() needs to update the Authentication HTTP header.
+    /// In order to do so, O2Requestor needs to know the format of the Authentication HTTP header.
+    void setAccessTokenInAuthenticationHTTPHeaderFormat(const QString &value);
 
 public Q_SLOTS:
     /// Make a GET request.
@@ -78,6 +84,7 @@ protected:
     QUrl url_;
     O2ReplyList timedReplies_;
     QNetworkReply::NetworkError error_;
+    QString accessTokenInAuthenticationHTTPHeaderFormat_;
 };
 
 #endif // O2REQUESTOR_H

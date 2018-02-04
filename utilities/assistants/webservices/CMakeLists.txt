@@ -69,6 +69,7 @@ set(libwso2_SRCS
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2facebook.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2skydrive.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2hubic.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/common/o2/src/o2uber.cpp
 )
 
 # Helper classes ------------------------------------------------------------------

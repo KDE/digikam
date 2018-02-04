@@ -24,9 +24,8 @@
 O1::O1(QObject *parent, QNetworkAccessManager *manager, O0AbstractStore *store): O0BaseAuth(parent, store) {
     setSignatureMethod(O2_SIGNATURE_TYPE_HMAC_SHA1);
     manager_ = manager ? manager : new QNetworkAccessManager(this);
-    replyServer_ = new O2ReplyServer(this);
     qRegisterMetaType<QNetworkReply::NetworkError>("QNetworkReply::NetworkError");
-    connect(replyServer_, SIGNAL(verificationReceived(QMap<QString,QString>)), this, SLOT(onVerificationReceived(QMap<QString,QString>)));
+    
     setCallbackUrl(O2_CALLBACK_URL);
 }
 
@@ -208,6 +207,16 @@ QByteArray O1::generateSignature(const QList<O0RequestParameter> headers, const 
 
 void O1::link() {
     qDebug() << "O1::link";
+
+    // Create the reply server if it doesn't exist
+    // and we don't use an external web interceptor
+    if(!useExternalWebInterceptor_) {
+        if(replyServer_ == NULL) {
+            replyServer_ = new O2ReplyServer(this);
+            connect(replyServer_, SIGNAL(verificationReceived(QMap<QString,QString>)), this, SLOT(onVerificationReceived(QMap<QString,QString>)));
+        }
+    }
+
     if (linked()) {
         qDebug() << "O1::link: Linked already";
         Q_EMIT linkingSucceeded();
@@ -218,11 +227,13 @@ void O1::link() {
     setToken("");
     setTokenSecret("");
     setExtraTokens(QVariantMap());
-
-    // Start reply server
-    if (!replyServer_->isListening())
-        replyServer_->listen(QHostAddress::Any, localPort());
-
+    
+    if (!useExternalWebInterceptor_) {
+        // Start reply server
+        if (!replyServer_->isListening())
+            replyServer_->listen(QHostAddress::Any, localPort());
+    }
+    
     // Get any query parameters for the request
 #if QT_VERSION >= 0x050000
     QUrlQuery requestData;
@@ -246,7 +257,7 @@ void O1::link() {
 
     // Create initial token request
     QList<O0RequestParameter> headers;
-    headers.append(O0RequestParameter(O2_OAUTH_CALLBACK, callbackUrl().arg(replyServer_->serverPort()).toLatin1()));
+    headers.append(O0RequestParameter(O2_OAUTH_CALLBACK, callbackUrl().arg(localPort()).toLatin1()));
     headers.append(O0RequestParameter(O2_OAUTH_CONSUMER_KEY, clientId().toLatin1()));
     headers.append(O0RequestParameter(O2_OAUTH_NONCE, nonce()));
     headers.append(O0RequestParameter(O2_OAUTH_TIMESTAMP, QString::number(QDateTime::currentDateTimeUtc().toTime_t()).toLatin1()));
@@ -302,11 +313,11 @@ void O1::onTokenRequestFinished() {
     QUrl url(authorizeUrl());
 #if QT_VERSION < 0x050000
     url.addQueryItem(O2_OAUTH_TOKEN, requestToken_);
-    url.addQueryItem(O2_OAUTH_CALLBACK, callbackUrl().arg(replyServer_->serverPort()).toLatin1());
+    url.addQueryItem(O2_OAUTH_CALLBACK, callbackUrl().arg(localPort()).toLatin1());
 #else
     QUrlQuery query(url);
     query.addQueryItem(O2_OAUTH_TOKEN, requestToken_);
-    query.addQueryItem(O2_OAUTH_CALLBACK, callbackUrl().arg(replyServer_->serverPort()).toLatin1());
+    query.addQueryItem(O2_OAUTH_CALLBACK, callbackUrl().arg(localPort()).toLatin1());
     url.setQuery(query);
 #endif
     Q_EMIT openBrowser(url);

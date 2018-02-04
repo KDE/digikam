@@ -21,6 +21,10 @@ O2Requestor::O2Requestor(QNetworkAccessManager *manager, O2 *authenticator, QObj
 O2Requestor::~O2Requestor() {
 }
 
+void O2Requestor::setAccessTokenInAuthenticationHTTPHeaderFormat(const QString &value) {
+    accessTokenInAuthenticationHTTPHeaderFormat_ = value;
+}
+
 int O2Requestor::get(const QNetworkRequest &req) {
     if (-1 == setup(req, QNetworkAccessManager::GetOperation)) {
         return -1;
@@ -138,6 +142,12 @@ int O2Requestor::setup(const QNetworkRequest &req, QNetworkAccessManager::Operat
     url.setQuery(query);
 #endif
     request_.setUrl(url);
+	
+    // If the service require the access token to be sent as a Authentication HTTP header, we add the access token.
+    if(!accessTokenInAuthenticationHTTPHeaderFormat_.isEmpty()) {
+        request_.setRawHeader(O2_HTTP_AUTHORIZATION_HEADER, accessTokenInAuthenticationHTTPHeaderFormat_.arg(authenticator_->token()).toLatin1());
+    }
+	
     status_ = Requesting;
     error_ = QNetworkReply::NoError;
     return id_;
@@ -174,6 +184,13 @@ void O2Requestor::retry() {
     url.setQuery(query);
 #endif
     request_.setUrl(url);
+	
+    // If the service require the access token to be sent as a Authentication HTTP header,
+    // we update the access token when retrying.
+    if(!accessTokenInAuthenticationHTTPHeaderFormat_.isEmpty()) {
+        request_.setRawHeader(O2_HTTP_AUTHORIZATION_HEADER, accessTokenInAuthenticationHTTPHeaderFormat_.arg(authenticator_->token()).toLatin1());
+    }
+	
     status_ = ReRequesting;
     switch (operation_) {
     case QNetworkAccessManager::GetOperation:

@@ -37,6 +37,7 @@ O2Requestor | o2requestor.h | Makes authenticated OAuth 2.0 requests (GET, POST 
 O2Skydrive | o2skydrive.h | OneDrive OAuth specialization
 O2SurveyMonkey | o2surveymonkey.h | SurveyMonkey OAuth specialization
 OXTwitter | oxtwitter.h | Twitter XAuth specialization
+O2Uber | o2uber.h | Uber OAuth specialization
 
 ## Installation
 
