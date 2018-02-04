@@ -152,7 +152,6 @@ VKWindow::VKWindow(DInfoInterface* const iface,
 //     mainLayout->setMargin(0);
 
     setMainWidget(m_mainWidget);
-    setWindowIcon(QIcon(QLatin1String("preferences-web-browser-shortcuts")));
     setModal(false);
 
     if (!m_import)

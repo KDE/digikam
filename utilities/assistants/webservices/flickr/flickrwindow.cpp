@@ -68,15 +68,6 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
     setWindowTitle(i18n("Export to %1 Web Service", m_serviceName));
     setModal(false);
 
-    if (serviceName == QLatin1String("23"))
-    {
-        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("hq")));
-    }
-    else
-    {
-        setWindowIcon(QIcon::fromTheme(QString::fromLatin1("flickr")));
-    }
-
     KConfig config;
     KConfigGroup grp = config.group(QString::fromLatin1("%1Export Settings").arg(m_serviceName));
 

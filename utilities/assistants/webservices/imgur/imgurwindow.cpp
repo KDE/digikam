@@ -130,7 +130,6 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     connect(this, &ImgurWindow::cancelClicked,
             this, &ImgurWindow::slotCancel);
 
-    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("imgur")));
     setWindowTitle(i18n("Export to imgur.com"));
     setModal(false);
 

@@ -48,74 +48,95 @@
 
 namespace Digikam
 {
+    
+class DBWindow::Private
+{
+public:
+
+    Private()
+    {
+        imagesCount = 0;
+        imagesTotal = 0;
+        widget      = 0;
+        albumDlg    = 0;
+        talker      = 0;
+    }
+
+    unsigned int         imagesCount;
+    unsigned int         imagesTotal;
+
+    DBWidget*            widget;
+    DBNewAlbumDlg*       albumDlg;
+    DBTalker*            talker;
+
+    QString              currentAlbumName;
+    QList<QUrl>          transferQueue;
+};
 
 DBWindow::DBWindow(DInfoInterface* const iface,
                    QWidget* const /*parent*/)
-    : WSToolDialog(0)
+    : WSToolDialog(0),
+      d(new Private)
 {
-    m_imagesCount = 0;
-    m_imagesTotal = 0;
+    d->widget      = new DBWidget(this, iface, QLatin1String("Dropbox"));
+    d->widget->imagesList()->setIface(iface);
 
-    m_widget      = new DBWidget(this, iface, QLatin1String("Dropbox"));
-    m_widget->imagesList()->setIface(iface);
-
-    setMainWidget(m_widget);
-    setWindowIcon(QIcon::fromTheme(QLatin1String("dropbox")));
+    setMainWidget(d->widget);
     setModal(false);
     setWindowTitle(i18n("Export to Dropbox"));
 
     startButton()->setText(i18n("Start Upload"));
     startButton()->setToolTip(i18n("Start upload to Dropbox"));
 
-    m_widget->setMinimumSize(700, 500);
+    d->widget->setMinimumSize(700, 500);
 
-    connect(m_widget->imagesList(), SIGNAL(signalImageListChanged()),
+    connect(d->widget->imagesList(), SIGNAL(signalImageListChanged()),
             this, SLOT(slotImageListChanged()));
 
-    connect(m_widget->getChangeUserBtn(), SIGNAL(clicked()),
+    connect(d->widget->getChangeUserBtn(), SIGNAL(clicked()),
             this, SLOT(slotUserChangeRequest()));
 
-    connect(m_widget->getNewAlbmBtn(), SIGNAL(clicked()),
+    connect(d->widget->getNewAlbmBtn(), SIGNAL(clicked()),
             this, SLOT(slotNewAlbumRequest()));
 
-    connect(m_widget->getReloadBtn(), SIGNAL(clicked()),
+    connect(d->widget->getReloadBtn(), SIGNAL(clicked()),
             this, SLOT(slotReloadAlbumsRequest()));
 
     connect(startButton(), SIGNAL(clicked()),
             this, SLOT(slotStartTransfer()));
 
-    m_albumDlg = new DBNewAlbumDlg(this, QLatin1String("Dropbox"));
+    d->albumDlg = new DBNewAlbumDlg(this, QLatin1String("Dropbox"));
 
-    m_talker   = new DBTalker(this);
+    d->talker   = new DBTalker(this);
 
-    connect(m_talker,SIGNAL(signalBusy(bool)),
+    connect(d->talker,SIGNAL(signalBusy(bool)),
             this,SLOT(slotBusy(bool)));
 
-    connect(m_talker,SIGNAL(signalLinkingFailed()),
+    connect(d->talker,SIGNAL(signalLinkingFailed()),
             this,SLOT(slotSignalLinkingFailed()));
 
-    connect(m_talker,SIGNAL(signalLinkingSucceeded()),
+    connect(d->talker,SIGNAL(signalLinkingSucceeded()),
             this,SLOT(slotSignalLinkingSucceeded()));
 
-    connect(m_talker,SIGNAL(signalSetUserName(QString)),
+    connect(d->talker,SIGNAL(signalSetUserName(QString)),
             this,SLOT(slotSetUserName(QString)));
 
-    connect(m_talker,SIGNAL(signalListAlbumsFailed(QString)),
+    connect(d->talker,SIGNAL(signalListAlbumsFailed(QString)),
             this,SLOT(slotListAlbumsFailed(QString)));
 
-    connect(m_talker,SIGNAL(signalListAlbumsDone(QList<QPair<QString,QString> >)),
+    connect(d->talker,SIGNAL(signalListAlbumsDone(QList<QPair<QString,QString> >)),
             this,SLOT(slotListAlbumsDone(QList<QPair<QString,QString> >)));
 
-    connect(m_talker,SIGNAL(signalCreateFolderFailed(QString)),
+    connect(d->talker,SIGNAL(signalCreateFolderFailed(QString)),
             this,SLOT(slotCreateFolderFailed(QString)));
 
-    connect(m_talker,SIGNAL(signalCreateFolderSucceeded()),
+    connect(d->talker,SIGNAL(signalCreateFolderSucceeded()),
             this,SLOT(slotCreateFolderSucceeded()));
 
-    connect(m_talker,SIGNAL(signalAddPhotoFailed(QString)),
+    connect(d->talker,SIGNAL(signalAddPhotoFailed(QString)),
             this,SLOT(slotAddPhotoFailed(QString)));
 
-    connect(m_talker,SIGNAL(signalAddPhotoSucceeded()),
+    connect(d->talker,SIGNAL(signalAddPhotoSucceeded()),
             this,SLOT(slotAddPhotoSucceeded()));
 
     connect(this, SIGNAL(finished(int)),
@@ -124,25 +145,26 @@ DBWindow::DBWindow(DInfoInterface* const iface,
     readSettings();
     buttonStateChange(false);
 
-    m_talker->link();
+    d->talker->link();
 }
 
 DBWindow::~DBWindow()
 {
-    delete m_widget;
-    delete m_albumDlg;
-    delete m_talker;
+    delete d->widget;
+    delete d->albumDlg;
+    delete d->talker;
+    delete d;
 }
 
 void DBWindow::setItemsList(const QList<QUrl>& urls)
 {
-    m_widget->imagesList()->slotAddImages(urls);
+    d->widget->imagesList()->slotAddImages(urls);
 }
 
 void DBWindow::reactivate()
 {
-    m_widget->imagesList()->loadImagesFromCurrentSelection();
-    m_widget->progressBar()->hide();
+    d->widget->imagesList()->loadImagesFromCurrentSelection();
+    d->widget->progressBar()->hide();
 
     show();
 }
@@ -152,23 +174,23 @@ void DBWindow::readSettings()
     KConfig config;
     KConfigGroup grp   = config.group("Dropbox Settings");
 
-    m_currentAlbumName = grp.readEntry("Current Album",QString());
+    d->currentAlbumName = grp.readEntry("Current Album",QString());
 
     if (grp.readEntry("Resize", false))
     {
-        m_widget->getResizeCheckBox()->setChecked(true);
-        m_widget->getDimensionSpB()->setEnabled(true);
-        m_widget->getImgQualitySpB()->setEnabled(true);
+        d->widget->getResizeCheckBox()->setChecked(true);
+        d->widget->getDimensionSpB()->setEnabled(true);
+        d->widget->getImgQualitySpB()->setEnabled(true);
     }
     else
     {
-        m_widget->getResizeCheckBox()->setChecked(false);
-        m_widget->getDimensionSpB()->setEnabled(false);
-        m_widget->getImgQualitySpB()->setEnabled(false);
+        d->widget->getResizeCheckBox()->setChecked(false);
+        d->widget->getDimensionSpB()->setEnabled(false);
+        d->widget->getImgQualitySpB()->setEnabled(false);
     }
 
-    m_widget->getDimensionSpB()->setValue(grp.readEntry("Maximum Width",  1600));
-    m_widget->getImgQualitySpB()->setValue(grp.readEntry("Image Quality", 90));
+    d->widget->getDimensionSpB()->setValue(grp.readEntry("Maximum Width",  1600));
+    d->widget->getImgQualitySpB()->setValue(grp.readEntry("Image Quality", 90));
 
     winId();
     KConfigGroup dialogGroup = config.group("Dropbox Export Dialog");
@@ -181,10 +203,10 @@ void DBWindow::writeSettings()
     KConfig config;
     KConfigGroup grp = config.group("Dropbox Settings");
 
-    grp.writeEntry("Current Album", m_currentAlbumName);
-    grp.writeEntry("Resize",        m_widget->getResizeCheckBox()->isChecked());
-    grp.writeEntry("Maximum Width", m_widget->getDimensionSpB()->value());
-    grp.writeEntry("Image Quality", m_widget->getImgQualitySpB()->value());
+    grp.writeEntry("Current Album", d->currentAlbumName);
+    grp.writeEntry("Resize",        d->widget->getResizeCheckBox()->isChecked());
+    grp.writeEntry("Maximum Width", d->widget->getDimensionSpB()->value());
+    grp.writeEntry("Image Quality", d->widget->getImgQualitySpB()->value());
 
     KConfigGroup dialogGroup = config.group("Dropbox Export Dialog");
     KWindowConfig::saveWindowSize(windowHandle(), dialogGroup);
@@ -194,28 +216,28 @@ void DBWindow::writeSettings()
 
 void DBWindow::slotSetUserName(const QString& msg)
 {
-    m_widget->updateLabels(msg, QLatin1String(""));
+    d->widget->updateLabels(msg, QLatin1String(""));
 }
 
 void DBWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
 {
-    m_widget->getAlbumsCoB()->clear();
+    d->widget->getAlbumsCoB()->clear();
     qCDebug(DIGIKAM_GENERAL_LOG) << "slotListAlbumsDone:" << list.size();
 
     for (int i = 0 ; i < list.size() ; i++)
     {
-        m_widget->getAlbumsCoB()->addItem(
+        d->widget->getAlbumsCoB()->addItem(
         QIcon::fromTheme(QLatin1String("system-users")),
         list.value(i).second, list.value(i).first);
 
-        if (m_currentAlbumName == list.value(i).first)
+        if (d->currentAlbumName == list.value(i).first)
         {
-            m_widget->getAlbumsCoB()->setCurrentIndex(i);
+            d->widget->getAlbumsCoB()->setCurrentIndex(i);
         }
     }
 
     buttonStateChange(true);
-    m_talker->getUserName();
+    d->talker->getUserName();
 }
 
 void DBWindow::slotBusy(bool val)
@@ -223,35 +245,35 @@ void DBWindow::slotBusy(bool val)
     if (val)
     {
         setCursor(Qt::WaitCursor);
-        m_widget->getChangeUserBtn()->setEnabled(false);
+        d->widget->getChangeUserBtn()->setEnabled(false);
         buttonStateChange(false);
     }
     else
     {
         setCursor(Qt::ArrowCursor);
-        m_widget->getChangeUserBtn()->setEnabled(true);
+        d->widget->getChangeUserBtn()->setEnabled(true);
         buttonStateChange(true);
     }
 }
 
 void DBWindow::slotStartTransfer()
 {
-    m_widget->imagesList()->clearProcessedStatus();
+    d->widget->imagesList()->clearProcessedStatus();
 
-    if (m_widget->imagesList()->imageUrls().isEmpty())
+    if (d->widget->imagesList()->imageUrls().isEmpty())
     {
         QMessageBox::critical(this, i18nc("@title:window", "Error"),
                               i18n("No image selected. Please select which images should be uploaded."));
         return;
     }
 
-    if (!(m_talker->authenticated()))
+    if (!(d->talker->authenticated()))
     {
         if (QMessageBox::question(this, i18n("Login Failed"),
                                   i18n("Authentication failed. Do you want to try again?"))
             == QMessageBox::Yes)
         {
-            m_talker->link();
+            d->talker->link();
             return;
         }
         else
@@ -260,24 +282,24 @@ void DBWindow::slotStartTransfer()
         }
     }
 
-    m_transferQueue = m_widget->imagesList()->imageUrls();
+    d->transferQueue = d->widget->imagesList()->imageUrls();
 
-    if (m_transferQueue.isEmpty())
+    if (d->transferQueue.isEmpty())
     {
         return;
     }
 
-    m_currentAlbumName = m_widget->getAlbumsCoB()->itemData(m_widget->getAlbumsCoB()->currentIndex()).toString();
+    d->currentAlbumName = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
 
-    m_imagesTotal = m_transferQueue.count();
-    m_imagesCount = 0;
+    d->imagesTotal = d->transferQueue.count();
+    d->imagesCount = 0;
 
-    m_widget->progressBar()->setFormat(i18n("%v / %m"));
-    m_widget->progressBar()->setMaximum(m_imagesTotal);
-    m_widget->progressBar()->setValue(0);
-    m_widget->progressBar()->show();
-    m_widget->progressBar()->progressScheduled(i18n("Dropbox export"), true, true);
-    m_widget->progressBar()->progressThumbnailChanged(
+    d->widget->progressBar()->setFormat(i18n("%v / %m"));
+    d->widget->progressBar()->setMaximum(d->imagesTotal);
+    d->widget->progressBar()->setValue(0);
+    d->widget->progressBar()->show();
+    d->widget->progressBar()->progressScheduled(i18n("Dropbox export"), true, true);
+    d->widget->progressBar()->progressThumbnailChanged(
         QIcon(QLatin1String("dropbox")).pixmap(22, 22));
 
     uploadNextPhoto();
@@ -285,20 +307,20 @@ void DBWindow::slotStartTransfer()
 
 void DBWindow::uploadNextPhoto()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "uploadNextPhoto:" << m_transferQueue.count();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "uploadNextPhoto:" << d->transferQueue.count();
 
-    if (m_transferQueue.isEmpty())
+    if (d->transferQueue.isEmpty())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "empty";
-        m_widget->progressBar()->progressCompleted();
+        d->widget->progressBar()->progressCompleted();
         return;
     }
 
-    QString imgPath = m_transferQueue.first().toLocalFile();
-    QString temp = m_currentAlbumName + QLatin1String("/");
+    QString imgPath = d->transferQueue.first().toLocalFile();
+    QString temp = d->currentAlbumName + QLatin1String("/");
 
-    bool res = m_talker->addPhoto(imgPath,temp,m_widget->getResizeCheckBox()->isChecked(),m_widget->getDimensionSpB()->value(),
-                                  m_widget->getImgQualitySpB()->value());
+    bool res = d->talker->addPhoto(imgPath,temp,d->widget->getResizeCheckBox()->isChecked(),d->widget->getDimensionSpB()->value(),
+                                  d->widget->getImgQualitySpB()->value());
 
     if (!res)
     {
@@ -315,15 +337,15 @@ void DBWindow::slotAddPhotoFailed(const QString& msg)
                                    "Do you want to continue?", msg))
         != QMessageBox::Yes)
     {
-        m_transferQueue.clear();
-        m_widget->progressBar()->hide();
+        d->transferQueue.clear();
+        d->widget->progressBar()->hide();
     }
     else
     {
-        m_transferQueue.pop_front();
-        m_imagesTotal--;
-        m_widget->progressBar()->setMaximum(m_imagesTotal);
-        m_widget->progressBar()->setValue(m_imagesCount);
+        d->transferQueue.pop_front();
+        d->imagesTotal--;
+        d->widget->progressBar()->setMaximum(d->imagesTotal);
+        d->widget->progressBar()->setValue(d->imagesCount);
         uploadNextPhoto();
     }
 }
@@ -331,53 +353,53 @@ void DBWindow::slotAddPhotoFailed(const QString& msg)
 void DBWindow::slotAddPhotoSucceeded()
 {
     // Remove photo uploaded from the list
-    m_widget->imagesList()->removeItemByUrl(m_transferQueue.first());
-    m_transferQueue.pop_front();
-    m_imagesCount++;
-    m_widget->progressBar()->setMaximum(m_imagesTotal);
-    m_widget->progressBar()->setValue(m_imagesCount);
+    d->widget->imagesList()->removeItemByUrl(d->transferQueue.first());
+    d->transferQueue.pop_front();
+    d->imagesCount++;
+    d->widget->progressBar()->setMaximum(d->imagesTotal);
+    d->widget->progressBar()->setValue(d->imagesCount);
     uploadNextPhoto();
 }
 
 void DBWindow::slotImageListChanged()
 {
-    startButton()->setEnabled(!(m_widget->imagesList()->imageUrls().isEmpty()));
+    startButton()->setEnabled(!(d->widget->imagesList()->imageUrls().isEmpty()));
 }
 
 void DBWindow::slotNewAlbumRequest()
 {
-    if (m_albumDlg->exec() == QDialog::Accepted)
+    if (d->albumDlg->exec() == QDialog::Accepted)
     {
         DBFolder newFolder;
-        m_albumDlg->getFolderTitle(newFolder);
+        d->albumDlg->getFolderTitle(newFolder);
         qCDebug(DIGIKAM_GENERAL_LOG) << "slotNewAlbumRequest:" << newFolder.title;
-        m_currentAlbumName = m_widget->getAlbumsCoB()->itemData(m_widget->getAlbumsCoB()->currentIndex()).toString();
-        QString temp = m_currentAlbumName + newFolder.title;
-        m_talker->createFolder(temp);
+        d->currentAlbumName = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
+        QString temp = d->currentAlbumName + newFolder.title;
+        d->talker->createFolder(temp);
     }
 }
 
 void DBWindow::slotReloadAlbumsRequest()
 {
-    m_talker->listFolders();
+    d->talker->listFolders();
 }
 
 void DBWindow::slotSignalLinkingFailed()
 {
     slotSetUserName(QLatin1String(""));
-    m_widget->getAlbumsCoB()->clear();
+    d->widget->getAlbumsCoB()->clear();
 
     if (QMessageBox::question(this, i18n("Login Failed"),
                               i18n("Authentication failed. Do you want to try again?"))
         == QMessageBox::Yes)
     {
-        m_talker->link();
+        d->talker->link();
     }
 }
 
 void DBWindow::slotSignalLinkingSucceeded()
 {
-    m_talker->listFolders();
+    d->talker->listFolders();
 }
 
 void DBWindow::slotListAlbumsFailed(const QString& msg)
@@ -392,35 +414,35 @@ void DBWindow::slotCreateFolderFailed(const QString& msg)
 
 void DBWindow::slotCreateFolderSucceeded()
 {
-    m_talker->listFolders();
+    d->talker->listFolders();
 }
 
 void DBWindow::slotTransferCancel()
 {
-    m_transferQueue.clear();
-    m_widget->progressBar()->hide();
-    m_talker->cancel();
+    d->transferQueue.clear();
+    d->widget->progressBar()->hide();
+    d->talker->cancel();
 }
 
 void DBWindow::slotUserChangeRequest()
 {
     slotSetUserName(QLatin1String(""));
-    m_widget->getAlbumsCoB()->clear();
-    m_talker->unLink();
-    m_talker->link();
+    d->widget->getAlbumsCoB()->clear();
+    d->talker->unLink();
+    d->talker->link();
 }
 
 void DBWindow::buttonStateChange(bool state)
 {
-    m_widget->getNewAlbmBtn()->setEnabled(state);
-    m_widget->getReloadBtn()->setEnabled(state);
+    d->widget->getNewAlbmBtn()->setEnabled(state);
+    d->widget->getReloadBtn()->setEnabled(state);
     startButton()->setEnabled(state);
 }
 
 void DBWindow::slotFinished()
 {
     writeSettings();
-    m_widget->imagesList()->listView()->clear();
+    d->widget->imagesList()->listView()->clear();
 }
 
 void DBWindow::closeEvent(QCloseEvent* e)

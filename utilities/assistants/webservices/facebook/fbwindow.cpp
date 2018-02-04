@@ -101,7 +101,6 @@ FbWindow::FbWindow(DInfoInterface* const iface,
     m_iface       = iface;
 
     setMainWidget(d->m_widget);
-    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("facebook")));
     setModal(false);
 
     setWindowTitle(i18n("Export to Facebook Web Service"));

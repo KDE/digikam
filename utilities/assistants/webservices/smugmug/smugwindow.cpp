@@ -75,7 +75,6 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
     m_widget      = new SmugWidget(this, iface, import);
 
     setMainWidget(m_widget);
-    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("smugmug")));
     setModal(false);
 
     if (import)

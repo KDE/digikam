@@ -105,7 +105,6 @@ MediaWikiWindow::MediaWikiWindow(DInfoInterface* const iface, QWidget* const /*p
     d->iface        = iface;
 
     setMainWidget(d->widget);
-    setWindowIcon(QIcon::fromTheme(QLatin1String("mediawiki")));
     setModal(false);
     setWindowTitle(i18n("Export to MediaWiki"));
 

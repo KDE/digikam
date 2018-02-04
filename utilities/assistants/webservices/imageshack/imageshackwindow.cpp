@@ -73,6 +73,7 @@ ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
     m_iface   = iface;
     m_widget  = new ImageShackWidget(this, m_session, m_iface, QString::fromLatin1("ImageShack"));
     m_widget->setMinimumSize(700, 500);
+
     setMainWidget(m_widget);
     setWindowTitle(i18n("Export to ImageShack"));
     setModal(true);
@@ -84,7 +85,6 @@ ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
 
     startButton()->setText(i18n("Upload"));
     startButton()->setToolTip(i18n("Start upload to ImageShack web service"));
-
     startButton()->setEnabled(false);
 
     connect(m_widget->m_imgList, SIGNAL(signalImageListChanged()),

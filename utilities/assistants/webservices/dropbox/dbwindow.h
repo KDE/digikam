@@ -93,16 +93,8 @@ private Q_SLOTS:
 
 private:
 
-    unsigned int         m_imagesCount;
-    unsigned int         m_imagesTotal;
-
-    DBWidget*            m_widget;
-    DBNewAlbumDlg*       m_albumDlg;
-    DBTalker*            m_talker;
-
-    QString              m_currentAlbumName;
-
-    QList<QUrl>          m_transferQueue;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

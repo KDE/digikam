@@ -107,7 +107,6 @@ GSWindow::GSWindow(DInfoInterface* const iface,
     {
         case GoogleService::GDrive:
 
-            setWindowIcon(QIcon::fromTheme(QString::fromLatin1("googledrive")));
             setWindowTitle(i18n("Export to Google Drive"));
 
             startButton()->setText(i18n("Start Upload"));
@@ -161,8 +160,6 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 
         case GoogleService::GPhotoImport:
         case GoogleService::GPhotoExport:
-
-            setWindowIcon(QIcon::fromTheme(QString::fromLatin1("googlephoto")));
 
             if (m_service == GoogleService::GPhotoExport)
             {
