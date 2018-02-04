@@ -44,5 +44,6 @@ BUGFIXES FROM BUGZILLA:
 033 ==> 313356 - Crashed when clicking the "send to" button.
 034 ==> 313577 - Crashes when pressing the "send to" button.
 035 ==> 313890 - Crash when clicking "Send to...".
-036 ==> 
+036 ==> 315033 - Crashes on pressing Send To... button.
+037 ==> 
 
