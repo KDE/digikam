@@ -91,36 +91,8 @@ private:
 
 private:
 
-    enum State
-    {
-        DB_USERNAME = 0,
-        DB_LISTFOLDERS,
-        DB_CREATEFOLDER,
-        DB_ADDPHOTO
-    };
-
-private:
-
-    QString                m_apikey;
-    QString                m_secret;
-    QString                m_authUrl;
-    QString                m_tokenUrl;
-
-    QWidget*               m_parent;
-
-    QNetworkAccessManager* m_netMngr;
-
-    QNetworkReply*         m_reply;
-
-    QSettings*             m_settings;
-
-    State                  m_state;
-
-    QByteArray             m_buffer;
-
-    DMetadata              m_meta;
-
-    O2*                    m_o2;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
