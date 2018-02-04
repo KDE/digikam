@@ -54,7 +54,9 @@ BUGFIXES FROM BUGZILLA:
 043 ==> 219772 - Opening the application causes crash.
 044 ==> 294173 - Crash after Image resize start.
 045 ==> 306881 - Crashed when attempting to open Export tools.
-046 ==> 
+046 ==> 306495 - Crash changing settings linux ubuntu lucid.
+047 ==> 
+
 
 
 
