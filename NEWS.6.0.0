@@ -20,4 +20,5 @@ BUGFIXES FROM BUGZILLA:
 009 ==> 306698 - Crashes after update to KDE.
 010 ==> 207640 - Crashes immediately at startup, sometimes at closing.
 011 ==> 245628 - Crash when enabling/disabling Facebook import/export.
-012 ==> 
+012 ==> 097317 - sigsegv [New Thread 1100241184 (LWP 5665)].
+013 ==> 
