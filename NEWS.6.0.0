@@ -35,5 +35,6 @@ BUGFIXES FROM BUGZILLA:
 024 ==> 202637 - Crash trying to start export tool.
 025 ==> 306693 - after update to KDE host application crashes on startup.
 026 ==> 282781 - Crashes when reopening configuration dialog after disabling export tools.
-027 ==> 
+027 ==> 285499 - Crash when settings window opened.
+028 ==> 
 
