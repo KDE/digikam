@@ -22,4 +22,5 @@ BUGFIXES FROM BUGZILLA:
 011 ==> 245628 - Crash when enabling/disabling Facebook import/export.
 012 ==> 097317 - sigsegv [New Thread 1100241184 (LWP 5665)].
 013 ==> 245776 - Crashes when selecting Settings.
-014 ==> 
+014 ==> 245775 - Crashes even without export tools installed.
+015 ==> 
