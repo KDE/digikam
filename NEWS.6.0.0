@@ -19,4 +19,5 @@ BUGFIXES FROM BUGZILLA:
 008 ==> 230666 - Crash during start.
 009 ==> 306698 - Crashes after update to KDE.
 010 ==> 207640 - Crashes immediately at startup, sometimes at closing.
-011 ==> 
+011 ==> 245628 - Crash when enabling/disabling Facebook import/export.
+012 ==> 
