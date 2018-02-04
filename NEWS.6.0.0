@@ -38,5 +38,6 @@ BUGFIXES FROM BUGZILLA:
 027 ==> 285499 - Crash when settings window opened.
 028 ==> 297629 - Crashed when importing from Nikon P7000.
 029 ==> 303338 - Crashes when clicking "send to" button.
-030 ==> 
+030 ==> 307619 - Refuses to load Export tools.
+031 ==> 
 
