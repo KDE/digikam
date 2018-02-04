@@ -26,4 +26,5 @@ BUGFIXES FROM BUGZILLA:
 015 ==> 254283 - Crash as soon as i click settings.
 016 ==> 255733 - crash when reopening configuration dialog.
 017 ==> 262050 - Crash after new install and scan to mysql database.
-018 ==> 
+018 ==> 263871 - Crashed after searching for duplicates.
+019 ==> 
