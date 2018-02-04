@@ -539,6 +539,9 @@ QWidget* DBInfoIface::uploadWidget(QWidget* const parent) const
     if (!d->albumSelector)
     {
         d->albumSelector = new AlbumSelectWidget(parent);
+
+        connect(d->albumSelector, SIGNAL(itemSelectionChanged()),
+                this, SIGNAL(signalUploadUrlChanged()));
     }
 
     return d->albumSelector;

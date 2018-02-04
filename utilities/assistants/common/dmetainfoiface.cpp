@@ -156,11 +156,14 @@ QWidget* DMetaInfoIface::uploadWidget(QWidget* const parent) const
         d->dirSelector->setFileDlgMode(DFileDialog::DirectoryOnly);
         d->dirSelector->setFileDlgTitle(i18n("Destination Folder"));
         d->dirSelector->lineEdit()->setPlaceholderText(i18n("Output Destination Path"));
+
+        connect(d->dirSelector, SIGNAL(signalUrlSelected(const QUrl&)),
+                this, SIGNAL(signalUploadUrlChanged()));
     }
 
-    connect(d->dirSelector, SIGNAL(signalUrlSelected(const QUrl&)),
-            this, SIGNAL(signalUploadUrlChanged()));
-    
+    QFileInfo info(!d->urls.isEmpty() ? d->urls[0].toLocalFile() : QString());
+    d->dirSelector->setFileDlgPath(info.absolutePath());
+
     return d->dirSelector;
 }
 

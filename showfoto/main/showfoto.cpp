@@ -1581,13 +1581,13 @@ void ShowFoto::slotImportTool()
 
     if (tool == m_importGphotoAction)
     {
-        GSWindow w(new DMetaInfoIface(this, QList<QUrl>()),
+        GSWindow w(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
                    this, QLatin1String("googlephotoimport"));
         w.exec();
     }
     else if (tool == m_importSmugmugAction)
     {
-        SmugWindow w(new DMetaInfoIface(this, QList<QUrl>()),
+        SmugWindow w(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
                      this, true);
         w.exec();
     }
@@ -1595,7 +1595,7 @@ void ShowFoto::slotImportTool()
 #ifdef HAVE_KIO
     else if (tool == m_importFileTransferAction)
     {
-        FTImportWindow w(new DMetaInfoIface(this, QList<QUrl>()),
+        FTImportWindow w(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
                          this);
         w.exec();
     }
