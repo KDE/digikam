@@ -52,6 +52,8 @@ BUGFIXES FROM BUGZILLA:
 041 ==> 306511 - Crash during start.
 042 ==> 234021 - Crash on loading.
 043 ==> 219772 - Opening the application causes crash.
-044 ==> 
+044 ==> 294173 - Crash after Image resize start.
+045 ==> 
+
 
 
