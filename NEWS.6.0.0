@@ -40,5 +40,6 @@ BUGFIXES FROM BUGZILLA:
 029 ==> 303338 - Crashes when clicking "send to" button.
 030 ==> 307619 - Refuses to load Export tools.
 031 ==> 311812 - Export tools not loading, SO version not defined.
-032 ==> 
+032 ==> 313186 - Crashes on attempt to use the "Send to" menu.
+033 ==> 
 
