@@ -53,7 +53,8 @@ BUGFIXES FROM BUGZILLA:
 042 ==> 234021 - Crash on loading.
 043 ==> 219772 - Opening the application causes crash.
 044 ==> 294173 - Crash after Image resize start.
-045 ==> 
+045 ==> 306881 - Crashed when attempting to open Export tools.
+046 ==> 
 
 
 
