@@ -33,4 +33,5 @@ BUGFIXES FROM BUGZILLA:
 022 ==> 277669 - Crash after files moved.
 023 ==> 281250 - Crash after disabling Export tools.
 024 ==> 202637 - Crash trying to start export tool.
-025 ==> 
+025 ==> 306693 - after update to KDE host application crashes on startup.
+026 ==> 
