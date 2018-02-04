@@ -55,7 +55,8 @@ BUGFIXES FROM BUGZILLA:
 044 ==> 294173 - Crash after Image resize start.
 045 ==> 306881 - Crashed when attempting to open Export tools.
 046 ==> 306495 - Crash changing settings linux ubuntu lucid.
-047 ==> 
+047 ==> 306497 - Crash after changing settings segmentation fault possible 2nd report?
+048 ==> 
 
 
 
