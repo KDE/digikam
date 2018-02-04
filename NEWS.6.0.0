@@ -25,4 +25,5 @@ BUGFIXES FROM BUGZILLA:
 014 ==> 245775 - Crashes even without export tools installed.
 015 ==> 254283 - Crash as soon as i click settings.
 016 ==> 255733 - crash when reopening configuration dialog.
-017 ==> 
+017 ==> 262050 - Crash after new install and scan to mysql database.
+018 ==> 
