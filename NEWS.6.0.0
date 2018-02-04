@@ -16,4 +16,5 @@ BUGFIXES FROM BUGZILLA:
 005 ==> 348146 - Export tools configuration module.
 006 ==> 243275 - Crashing when calling configuration.
 007 ==> 257134 - Crashes when entering its settings.
-008 ==> 
+008 ==> 230666 - Crash during start.
+009 ==> 
