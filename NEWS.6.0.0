@@ -60,8 +60,4 @@ BUGFIXES FROM BUGZILLA:
 049 ==> 334045 - MediaWiki option not available in Export menu when plugin activated.
 050 ==> 142112 - Can't save on my webspace with ShowFoto.
 051 ==> 167417 - Showfoto cannot save files of CIFS mount.
-052 ==> 
-
-
-
-
+052 ==> 125164 - Flickr export tool should respect host application selection.
