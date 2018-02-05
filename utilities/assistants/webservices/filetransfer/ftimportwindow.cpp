@@ -57,7 +57,7 @@ public:
     FTImportWidget* importWidget;
     DInfoInterface* iface;
 };
-    
+
 FTImportWindow::FTImportWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : WSToolDialog(0),
       d(new Private)

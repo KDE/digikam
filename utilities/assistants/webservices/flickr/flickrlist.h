@@ -6,7 +6,8 @@
  * Date        : 2009-05-22
  * Description : Flickr/23HQ file list view and items.
  *
- * Copyright (C) 2009 by Pieter Edelman <pieter dot edelman at gmx dot net>
+ * Copyright (C) 2009      by Pieter Edelman <pieter dot edelman at gmx dot net>
+ * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -77,6 +78,7 @@ public:
 public:
 
     explicit FlickrList(QWidget* const parent = 0, bool = false);
+    ~FlickrList();
 
     void setPublic(Qt::CheckState);
     void setFamily(Qt::CheckState);
@@ -112,17 +114,8 @@ private Q_SLOTS:
 
 private:
 
-    Qt::CheckState          m_public;
-    Qt::CheckState          m_family;
-    Qt::CheckState          m_friends;
-    FlickrList::SafetyLevel m_safetyLevel;
-    FlickrList::ContentType m_contentType;
-
-    // Used to separate the ImagesList::itemChanged signals that were caused
-    // programmatically from those caused by the user.
-    bool                    m_userIsEditing;
-
-    bool                    m_is23;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------------
@@ -132,9 +125,11 @@ class FlickrListViewItem : public DImagesListViewItem
 
 public:
 
-    explicit FlickrListViewItem(DImagesListView* const view, const QUrl& url,
+    explicit FlickrListViewItem(DImagesListView* const view,
+                                const QUrl& url,
                                 bool, bool, bool, bool,
-                                FlickrList::SafetyLevel, FlickrList::ContentType);
+                                FlickrList::SafetyLevel,
+                                FlickrList::ContentType);
     ~FlickrListViewItem();
 
     void setPublic(bool);
@@ -161,18 +156,8 @@ public:
 
 private:
 
-    bool                    m_is23;
-
-    bool                    m_public;
-    bool                    m_family;
-    bool                    m_friends;
-
-    FlickrList::SafetyLevel m_safetyLevel;
-    FlickrList::ContentType m_contentType;
-
-    /** LineEdit used for extra tags per image.
-     */
-    QLineEdit*              m_tagLineEdit;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
