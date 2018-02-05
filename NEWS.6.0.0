@@ -61,3 +61,5 @@ BUGFIXES FROM BUGZILLA:
 050 ==> 142112 - Can't save on my webspace with ShowFoto.
 051 ==> 167417 - Showfoto cannot save files of CIFS mount.
 052 ==> 125164 - Flickr export tool should respect host application selection.
+053 ==> 238927 - Host application quits when uploading to Flickr.
+054 ==> 
