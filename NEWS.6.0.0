@@ -62,4 +62,5 @@ BUGFIXES FROM BUGZILLA:
 051 ==> 167417 - Showfoto cannot save files of CIFS mount.
 052 ==> 125164 - Flickr export tool should respect host application selection.
 053 ==> 238927 - Host application quits when uploading to Flickr.
-054 ==> 
+054 ==> 326740 - Selection of tools is set to default after each update.
+055 ==> 
