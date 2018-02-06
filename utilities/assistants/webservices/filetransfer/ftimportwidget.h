@@ -51,7 +51,7 @@ public:
      * Constructor.
      *
      * @param parent the parent widget
-     * @param interface kipi interface to use
+     * @param interface application interface to use
      */
     explicit FTImportWidget(QWidget* const parent, DInfoInterface* const iface);
 
