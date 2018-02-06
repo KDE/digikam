@@ -77,33 +77,14 @@ private Q_SLOTS:
     void slotExtendedTagsToggled(bool);
     void slotAddExtraTagsToggled(bool);
 
-private: // Functions
+private:
 
     void mainPermissionToggled(FlickrList::FieldType, Qt::CheckState);
 
-private: // Data
+private:
 
-    QString                             m_serviceName;
-    QPushButton*                        m_removeAccount;
-    QPushButton*                        m_extendedTagsButton;
-    QPushButton*                        m_extendedPublicationButton;
-
-    QCheckBox*                          m_exportHostTagsCheckBox;
-    QCheckBox*                          m_stripSpaceTagsCheckBox;
-    QCheckBox*                          m_addExtraTagsCheckBox;
-    QCheckBox*                          m_familyCheckBox;
-    QCheckBox*                          m_friendsCheckBox;
-    QCheckBox*                          m_publicCheckBox;
-
-    QGroupBox*                          m_extendedTagsBox;
-    QGroupBox*                          m_extendedPublicationBox;
-
-    QLineEdit*                          m_tagsLineEdit;
-
-    WSComboBoxIntermediate*             m_contentTypeComboBox;
-    WSComboBoxIntermediate*             m_safetyLevelComboBox;
-
-    FlickrList*                         m_imglst;
+    class Private;
+    Private* const d;
 
     friend class FlickrWindow;
 };

@@ -49,11 +49,11 @@
 #include "flickrtalker.h"
 #include "flickritem.h"
 #include "flickrlist.h"
-#include "flickrwidget.h"
 #include "wsselectuserdlg.h"
 #include "digikam_debug.h"
 #include "flickrnewalbumdlg.h"
 #include "previewloadthread.h"
+#include "flickrwidget_p.h"
 
 namespace Digikam
 {
@@ -86,23 +86,23 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
     m_newAlbumBtn               = m_widget->getNewAlbmBtn();
     m_originalCheckBox          = m_widget->getOriginalCheckBox();
     m_resizeCheckBox            = m_widget->getResizeCheckBox();
-    m_publicCheckBox            = m_widget->m_publicCheckBox;
-    m_familyCheckBox            = m_widget->m_familyCheckBox;
-    m_friendsCheckBox           = m_widget->m_friendsCheckBox;
+    m_publicCheckBox            = m_widget->d->publicCheckBox;
+    m_familyCheckBox            = m_widget->d->familyCheckBox;
+    m_friendsCheckBox           = m_widget->d->friendsCheckBox;
     m_dimensionSpinBox          = m_widget->getDimensionSpB();
     m_imageQualitySpinBox       = m_widget->getImgQualitySpB();
-    m_extendedTagsButton        = m_widget->m_extendedTagsButton;
-    m_addExtraTagsCheckBox      = m_widget->m_addExtraTagsCheckBox;
-    m_extendedPublicationButton = m_widget->m_extendedPublicationButton;
-    m_safetyLevelComboBox       = m_widget->m_safetyLevelComboBox;
-    m_contentTypeComboBox       = m_widget->m_contentTypeComboBox;
-    m_tagsLineEdit              = m_widget->m_tagsLineEdit;
-    m_exportHostTagsCheckBox    = m_widget->m_exportHostTagsCheckBox;
-    m_stripSpaceTagsCheckBox    = m_widget->m_stripSpaceTagsCheckBox;
+    m_extendedTagsButton        = m_widget->d->extendedTagsButton;
+    m_addExtraTagsCheckBox      = m_widget->d->addExtraTagsCheckBox;
+    m_extendedPublicationButton = m_widget->d->extendedPublicationButton;
+    m_safetyLevelComboBox       = m_widget->d->safetyLevelComboBox;
+    m_contentTypeComboBox       = m_widget->d->contentTypeComboBox;
+    m_tagsLineEdit              = m_widget->d->tagsLineEdit;
+    m_exportHostTagsCheckBox    = m_widget->d->exportHostTagsCheckBox;
+    m_stripSpaceTagsCheckBox    = m_widget->d->stripSpaceTagsCheckBox;
     m_changeUserButton          = m_widget->getChangeUserBtn();
-    m_removeAccount             = m_widget->m_removeAccount;
+    m_removeAccount             = m_widget->d->removeAccount;
     m_userNameDisplayLabel      = m_widget->getUserNameLabel();
-    m_imglst                    = m_widget->m_imglst;
+    m_imglst                    = m_widget->d->imglst;
 
     startButton()->setText(i18n("Start Uploading"));
     startButton()->setToolTip(QString());
@@ -257,7 +257,7 @@ void FlickrWindow::reactivate()
     readSettings(m_select->getUserName());
     m_talker->link(m_select->getUserName());
 
-    m_widget->m_imglst->loadImagesFromCurrentSelection();
+    m_widget->d->imglst->loadImagesFromCurrentSelection();
     show();
 }
 
@@ -766,7 +766,7 @@ void FlickrWindow::slotAddPhotoSetSucceeded()
 
 void FlickrWindow::slotImageListChanged()
 {
-    startButton()->setEnabled(!(m_widget->m_imglst->imageUrls().isEmpty()));
+    startButton()->setEnabled(!(m_widget->d->imglst->imageUrls().isEmpty()));
 }
 
 void FlickrWindow::slotReloadPhotoSetRequest()
