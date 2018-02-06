@@ -442,7 +442,7 @@ QString FlickrWindow::guessSensibleSetName(const QList<QUrl>& urlList) const
     int totalCount = 0;
     QString name;
 
-    for (QMap<QString,int>::const_iterator it=nrFolderOccurences.constBegin();
+    for (QMap<QString,int>::const_iterator it = nrFolderOccurences.constBegin();
          it != nrFolderOccurences.constEnd() ; ++it)
     {
         totalCount += it.value();
@@ -527,7 +527,8 @@ void FlickrWindow::slotPopulatePhotoSetComboBox()
         m_albumsListComboBox->insertItem(0, i18n("Photostream Only"));
         m_albumsListComboBox->insertSeparator(1);
         QLinkedList<FPhotoSet>::iterator it = list->begin();
-        int index = 2, curr_index = 0;
+        int index                           = 2;
+        int curr_index                      = 0;
 
         while (it != list->end())
         {
@@ -627,7 +628,7 @@ void FlickrWindow::slotUser1()
             if (m_stripSpaceTagsCheckBox->isChecked())
             {
                 for (QStringList::iterator it = allTags.begin();
-                    it != allTags.end();
+                     it != allTags.end();
                     ++it)
                 {
                     *it = (*it).trimmed().remove(QLatin1Char(' '));
@@ -755,11 +756,12 @@ void FlickrWindow::slotAddPhotoFailed(const QString& msg)
     }
 }
 
+/* Method called when a photo set has been successfully created on Flickr.
+ * It functions to restart the normal flow after a photo set has been created
+ * on Flickr.
+ */
 void FlickrWindow::slotAddPhotoSetSucceeded()
 {
-    /* Method called when a photo set has been successfully created on Flickr.
-     * It functions to restart the normal flow after a photo set has been created
-     * on Flickr. */
     slotPopulatePhotoSetComboBox();
     slotAddPhotoSucceeded();
 }

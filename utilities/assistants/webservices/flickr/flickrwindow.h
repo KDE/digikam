@@ -155,7 +155,7 @@ private:
     FlickrTalker*                          m_talker;
 
     FlickrList*                            m_imglst;
-    WSSelectUserDlg*                         m_select;
+    WSSelectUserDlg*                       m_select;
     FlickrNewAlbumDlg*                     m_albumDlg;
 
     DInfoInterface*                        m_iface;
