@@ -168,7 +168,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
     }
 
     emit signalBusy(true);
-    MPForm_GDrive form;
+    GDMPForm form;
     form.addPair(QUrl::fromLocalFile(imgPath).fileName(),info.description,imgPath,id);
     QString path = imgPath;
 

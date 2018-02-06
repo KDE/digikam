@@ -253,7 +253,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
     }
 
     QUrl url(QString::fromLatin1("https://picasaweb.google.com/data/feed/api/user/default/albumid/") + albumId);
-    MPForm_GPhoto form;
+    GPMPForm form;
     QString path = photoPath;
 
     QMimeDatabase mimeDB;
@@ -381,7 +381,7 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
         m_reply = 0;
     }
 
-    MPForm_GPhoto form;
+    GPMPForm form;
     QString path = photoPath;
 
     QMimeDatabase mimeDB;

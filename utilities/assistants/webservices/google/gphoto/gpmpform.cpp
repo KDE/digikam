@@ -39,21 +39,21 @@
 namespace Digikam
 {
 
-MPForm_GPhoto::MPForm_GPhoto()
+GPMPForm::GPMPForm()
     : m_boundary(QByteArray("----------") + WSToolUtils::randomString(42 + 13).toLatin1())
 {
 }
 
-MPForm_GPhoto::~MPForm_GPhoto()
+GPMPForm::~GPMPForm()
 {
 }
 
-void MPForm_GPhoto::reset()
+void GPMPForm::reset()
 {
     m_buffer.resize(0);
 }
 
-void MPForm_GPhoto::finish()
+void GPMPForm::finish()
 {
     QByteArray str;
     str += "--";
@@ -63,9 +63,9 @@ void MPForm_GPhoto::finish()
     m_buffer.append(str);
 }
 
-bool MPForm_GPhoto::addPair(const QString& name,
-                            const QString& value,
-                            const QString& contentType)
+bool GPMPForm::addPair(const QString& name,
+                       const QString& value,
+                       const QString& contentType)
 {
     QByteArray str;
     QString content_length = QString::number(value.length());
@@ -99,7 +99,7 @@ bool MPForm_GPhoto::addPair(const QString& name,
     return true;
 }
 
-bool MPForm_GPhoto::addFile(const QString& name, const QString& path)
+bool GPMPForm::addFile(const QString& name, const QString& path)
 {
     QMimeDatabase db;
     QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(path));
@@ -145,17 +145,18 @@ bool MPForm_GPhoto::addFile(const QString& name, const QString& path)
     return true;
 }
 
-QString MPForm_GPhoto::contentType() const
+QString GPMPForm::contentType() const
 {
-    return QString::fromLatin1("multipart/related; boundary=") + QString::fromLatin1(m_boundary);
+    return QString::fromLatin1("multipart/related; boundary=") + 
+           QString::fromLatin1(m_boundary);
 }
 
-QString MPForm_GPhoto::boundary() const
+QString GPMPForm::boundary() const
 {
     return QString::fromLatin1(m_boundary);
 }
 
-QByteArray MPForm_GPhoto::formData() const
+QByteArray GPMPForm::formData() const
 {
     return m_buffer;
 }

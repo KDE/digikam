@@ -6,7 +6,8 @@
  * Date        : 2013-11-18
  * Description : a tool to export items to Google web services
  *
- * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,22 +44,22 @@
 namespace Digikam
 {
 
-MPForm_GDrive::MPForm_GDrive()
+GDMPForm::GDMPForm()
     : m_boundary(WSToolUtils::randomString(42 + 13).toLatin1())
 {
     reset();
 }
 
-MPForm_GDrive::~MPForm_GDrive()
+GDMPForm::~GDMPForm()
 {
 }
 
-void MPForm_GDrive::reset()
+void GDMPForm::reset()
 {
     m_buffer.resize(0);
 }
 
-void MPForm_GDrive::finish()
+void GDMPForm::finish()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in finish";
     QByteArray str;
@@ -69,7 +70,10 @@ void MPForm_GDrive::finish()
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "finish:" << m_buffer;
 }
 
-void MPForm_GDrive::addPair(const QString& name, const QString& description, const QString& path,const QString& id)
+void GDMPForm::addPair(const QString& name,
+                       const QString& description,
+                       const QString& path,
+                       const QString& id)
 {
     QMimeDatabase db;
     QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(path));
@@ -107,7 +111,7 @@ void MPForm_GDrive::addPair(const QString& name, const QString& description, con
     m_buffer.append(str);
 }
 
-bool MPForm_GDrive::addFile(const QString& path)
+bool GDMPForm::addFile(const QString& path)
 {
     QByteArray str;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in addfile" << path;
@@ -141,22 +145,23 @@ bool MPForm_GDrive::addFile(const QString& path)
     return true;
 }
 
-QByteArray MPForm_GDrive::formData() const
+QByteArray GDMPForm::formData() const
 {
     return m_buffer;
 }
 
-QString MPForm_GDrive::boundary() const
+QString GDMPForm::boundary() const
 {
     return QString::fromLatin1(m_boundary);
 }
 
-QString MPForm_GDrive::contentType() const
+QString GDMPForm::contentType() const
 {
-    return QString::fromLatin1("multipart/related;boundary=") + QString::fromLatin1(m_boundary);
+    return QString::fromLatin1("multipart/related;boundary=") + 
+           QString::fromLatin1(m_boundary);
 }
 
-QString MPForm_GDrive::getFileSize() const
+QString GDMPForm::getFileSize() const
 {
     return m_file_size;
 }

@@ -6,7 +6,8 @@
  * Date        : 2013-11-18
  * Description : a tool to export items to Google web services
  *
- * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MPFORM_GDRIVE_H
-#define MPFORM_GDRIVE_H
+#ifndef GD_MPFORM_H
+#define GD_MPFORM_H
 
 // Qt includes
 
@@ -31,17 +32,21 @@
 namespace Digikam
 {
 
-class MPForm_GDrive
+class GDMPForm
 {
 public:
 
-    MPForm_GDrive();
-    ~MPForm_GDrive();
+    explicit GDMPForm();
+    ~GDMPForm();
 
     void finish();
     void reset();
 
-    void addPair(const QString& name, const QString& description, const QString& mimetype, const QString& id);
+    void addPair(const QString& name,
+                 const QString& description,
+                 const QString& mimetype,
+                 const QString& id);
+
     bool addFile(const QString& path);
 
     QString contentType() const;
@@ -58,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MPFORM_GDRIVE_H
+#endif // GD_MPFORM_H
