@@ -81,23 +81,8 @@ private:
 
 private:
 
-    enum State
-    {
-        GD_LOGOUT = -1,
-        GD_LISTFOLDERS = 0,
-        GD_CREATEFOLDER,
-        GD_ADDPHOTO,
-        GD_USERNAME,
-    };
-
-private:
-
-    QString                m_rootid;
-    QString                m_rootfoldername;
-    QString                m_username;
-    State                  m_state;
-
-    QNetworkAccessManager* m_netMngr;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

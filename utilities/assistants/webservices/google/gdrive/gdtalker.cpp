@@ -66,19 +66,52 @@ static bool gdriveLessThan(const GSFolder& p1, const GSFolder& p2)
     return (p1.title.toLower() < p2.title.toLower());
 }
 
-GDTalker::GDTalker(QWidget* const parent)
-    : GSSession(parent, QString::fromLatin1("https://www.googleapis.com/auth/drive")), m_state(GD_LOGOUT)
+class GDTalker::Private
 {
-    m_rootid          = QString::fromLatin1("root");
-    m_rootfoldername  = QString::fromLatin1("GoogleDrive Root");
-    m_netMngr         = new QNetworkAccessManager(this);
+public:
 
-    connect(m_netMngr, SIGNAL(finished(QNetworkReply*)),
+    enum State
+    {
+        GD_LOGOUT      = -1,
+        GD_LISTFOLDERS = 0,
+        GD_CREATEFOLDER,
+        GD_ADDPHOTO,
+        GD_USERNAME,
+    };
+
+public:
+    
+    Private()
+    {
+        state          = GD_LOGOUT;
+        netMngr        = 0;
+        rootid         = QString::fromLatin1("root");
+        rootfoldername = QString::fromLatin1("GoogleDrive Root");
+    }
+    
+public:
+
+    QString                rootid;
+    QString                rootfoldername;
+    QString                username;
+    State                  state;
+
+    QNetworkAccessManager* netMngr;
+};
+
+GDTalker::GDTalker(QWidget* const parent)
+    : GSSession(parent, QString::fromLatin1("https://www.googleapis.com/auth/drive")), 
+      d(new Private)
+{
+    d->netMngr = new QNetworkAccessManager(this);
+
+    connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
 }
 
 GDTalker::~GDTalker()
 {
+    delete d;
 }
 
 /**
@@ -88,7 +121,7 @@ void GDTalker::getUserName()
 {
     QUrl url(QString::fromLatin1("https://www.googleapis.com/drive/v2/about"));
     QUrlQuery urlQuery;
-    urlQuery.addQueryItem(QString::fromLatin1("scope"), m_scope);
+    urlQuery.addQueryItem(QString::fromLatin1("scope"),        m_scope);
     urlQuery.addQueryItem(QString::fromLatin1("access_token"), m_accessToken);
     url.setQuery(urlQuery);
 
@@ -96,10 +129,10 @@ void GDTalker::getUserName()
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
 
-    m_reply = m_netMngr->get(netRequest);
-
-    m_state = GD_USERNAME;
+    m_reply  = d->netMngr->get(netRequest);
+    d->state = Private::GD_USERNAME;
     m_buffer.resize(0);
+
     emit signalBusy(true);
 }
 
@@ -114,10 +147,10 @@ void GDTalker::listFolders()
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
 
-    m_reply = m_netMngr->get(netRequest);
-
-    m_state = GD_LISTFOLDERS;
+    m_reply  = d->netMngr->get(netRequest);
+    d->state = Private::GD_LISTFOLDERS;
     m_buffer.resize(0);
+
     emit signalBusy(true);
 }
 
@@ -152,10 +185,10 @@ void GDTalker::createFolder(const QString& title, const QString& id)
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
 
-    m_reply = m_netMngr->post(netRequest, data);
-
-    m_state = GD_CREATEFOLDER;
+    m_reply  = d->netMngr->post(netRequest, data);
+    d->state = Private::GD_CREATEFOLDER;
     m_buffer.resize(0);
+
     emit signalBusy(true);
 }
 
@@ -232,12 +265,14 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
     netRequest.setRawHeader("Host", "www.googleapis.com");
 
-    m_reply = m_netMngr->post(netRequest, form.formData());
+    m_reply = d->netMngr->post(netRequest, form.formData());
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In add photo";
-    m_state = GD_ADDPHOTO;
+    d->state = Private::GD_ADDPHOTO;
     m_buffer.resize(0);
+    
     emit signalBusy(true);
+
     return true;
 }
 
@@ -262,24 +297,24 @@ void GDTalker::slotFinished(QNetworkReply* reply)
 
     m_buffer.append(reply->readAll());
 
-    switch (m_state)
+    switch (d->state)
     {
-        case (GD_LOGOUT):
+        case (Private::GD_LOGOUT):
             break;
-        case (GD_LISTFOLDERS):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In GD_LISTFOLDERS";
+        case (Private::GD_LISTFOLDERS):
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_LISTFOLDERS";
             parseResponseListFolders(m_buffer);
             break;
-        case (GD_CREATEFOLDER):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In GD_CREATEFOLDER";
+        case (Private::GD_CREATEFOLDER):
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_CREATEFOLDER";
             parseResponseCreateFolder(m_buffer);
             break;
-        case (GD_ADDPHOTO):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In GD_ADDPHOTO"; // << m_buffer;
+        case (Private::GD_ADDPHOTO):
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_ADDPHOTO"; // << m_buffer;
             parseResponseAddPhoto(m_buffer);
             break;
-        case (GD_USERNAME):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In GD_USERNAME"; // << m_buffer;
+        case (Private::GD_USERNAME):
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_USERNAME"; // << m_buffer;
             parseResponseUserName(m_buffer);
             break;
         default:
@@ -328,8 +363,8 @@ void GDTalker::parseResponseListFolders(const QByteArray& data)
 
     QList<GSFolder> albumList;
     GSFolder fps;
-    fps.id    = m_rootid;
-    fps.title = m_rootfoldername;
+    fps.id    = d->rootid;
+    fps.title = d->rootfoldername;
     albumList.append(fps);
 
     foreach (const QJsonValue& value, jsonArray)
@@ -341,6 +376,7 @@ void GDTalker::parseResponseListFolders(const QByteArray& data)
     }
 
     std::sort(albumList.begin(), albumList.end(), gdriveLessThan);
+
     emit signalBusy(false);
     emit signalListAlbumsDone(1,QString(),albumList);
 }
