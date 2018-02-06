@@ -63,47 +63,84 @@
 namespace Digikam
 {
 
+class GSWindow::Private
+{
+public:
+
+    Private()
+    {
+        widget          = 0;
+        albumDlg        = 0;
+        gphotoAlbumDlg  = 0;
+        talker          = 0;
+        gphotoTalker    = 0;
+        iface           = 0;
+        imagesCount     = 0;
+        imagesTotal     = 0;
+        renamingOpt     = 0;
+        service         = GoogleService::GPhotoImport;
+    }
+
+    unsigned int                  imagesCount;
+    unsigned int                  imagesTotal;
+    int                           renamingOpt;
+
+    QString                       serviceName;
+    QString                       toolName;
+    GoogleService                 service;
+    QString                       tmp;
+    QString                       refreshToken;
+
+    GSWidget*                     widget;
+    GSNewAlbumDlg*                albumDlg;
+    GSNewAlbumDlg*                gphotoAlbumDlg;
+
+    GDTalker*                     talker;
+    GPTalker*                     gphotoTalker;
+
+    QString                       currentAlbumId;
+
+    QList< QPair<QUrl, GSPhoto> > transferQueue;
+
+    DInfoInterface*               iface;
+    DMetadata                     meta;
+};
+
 GSWindow::GSWindow(DInfoInterface* const iface,
                    QWidget* const /*parent*/,
                    const QString& serviceName)
     : WSToolDialog(0),
-      m_widget(0),
-      m_albumDlg(0),
-      m_gphoto_albumdlg(0),
-      m_talker(0),
-      m_gphoto_talker(0),
-      m_iface(iface)
+      d(new Private)
+      
 {
-    m_serviceName = serviceName;
+    d->iface       = iface;
+    d->serviceName = serviceName;
 
-    if (QString::compare(m_serviceName, QString::fromLatin1("googledriveexport"),
+    if (QString::compare(d->serviceName, QString::fromLatin1("googledriveexport"),
         Qt::CaseInsensitive) == 0)
     {
-        m_service  = GoogleService::GDrive;
-        m_toolName = QString::fromLatin1("Google Drive");
+        d->service  = GoogleService::GDrive;
+        d->toolName = QString::fromLatin1("Google Drive");
     }
-    else if (QString::compare(m_serviceName, QString::fromLatin1("googlephotoexport"),
+    else if (QString::compare(d->serviceName, QString::fromLatin1("googlephotoexport"),
              Qt::CaseInsensitive) == 0)
     {
-        m_service  = GoogleService::GPhotoExport;
-        m_toolName = QString::fromLatin1("Google Photos/PicasaWeb");
+        d->service  = GoogleService::GPhotoExport;
+        d->toolName = QString::fromLatin1("Google Photos/PicasaWeb");
     }
     else
     {
-        m_service  = GoogleService::GPhotoImport;
-        m_toolName = QString::fromLatin1("Google Photos/PicasaWeb");
+        d->service  = GoogleService::GPhotoImport;
+        d->toolName = QString::fromLatin1("Google Photos/PicasaWeb");
     }
 
-    m_tmp         = WSToolUtils::makeTemporaryDir("google").absolutePath() + QLatin1Char('/');;
-    m_imagesCount = 0;
-    m_imagesTotal = 0;
-    m_renamingOpt = 0;
-    m_widget      = new GSWidget(this, m_iface, m_service, m_toolName);
+    d->tmp         = WSToolUtils::makeTemporaryDir("google").absolutePath() + QLatin1Char('/');;
+    d->widget      = new GSWidget(this, d->iface, d->service, d->toolName);
 
-    setMainWidget(m_widget);
+    setMainWidget(d->widget);
     setModal(false);
 
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
 
@@ -112,48 +149,48 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             startButton()->setText(i18n("Start Upload"));
             startButton()->setToolTip(i18n("Start upload to Google Drive"));
 
-            m_widget->setMinimumSize(700,500);
+            d->widget->setMinimumSize(700,500);
 
-            m_albumDlg = new GSNewAlbumDlg(this, m_serviceName, m_toolName);
-            m_talker   = new GDTalker(this);
+            d->albumDlg = new GSNewAlbumDlg(this, d->serviceName, d->toolName);
+            d->talker   = new GDTalker(this);
 
-            connect(m_talker,SIGNAL(signalBusy(bool)),
+            connect(d->talker,SIGNAL(signalBusy(bool)),
                     this,SLOT(slotBusy(bool)));
 
-            connect(m_talker,SIGNAL(signalTextBoxEmpty()),
+            connect(d->talker,SIGNAL(signalTextBoxEmpty()),
                     this,SLOT(slotTextBoxEmpty()));
 
-            connect(m_talker,SIGNAL(signalAccessTokenFailed(int, QString)),
+            connect(d->talker,SIGNAL(signalAccessTokenFailed(int, QString)),
                     this,SLOT(slotAccessTokenFailed(int, QString)));
 
-            connect(m_talker,SIGNAL(signalAccessTokenObtained()),
+            connect(d->talker,SIGNAL(signalAccessTokenObtained()),
                     this,SLOT(slotAccessTokenObtained()));
 
-            connect(m_talker,SIGNAL(signalRefreshTokenObtained(QString)),
+            connect(d->talker,SIGNAL(signalRefreshTokenObtained(QString)),
                     this,SLOT(slotRefreshTokenObtained(QString)));
 
-            connect(m_talker,SIGNAL(signalSetUserName(QString)),
+            connect(d->talker,SIGNAL(signalSetUserName(QString)),
                     this,SLOT(slotSetUserName(QString)));
 
-            connect(m_talker,SIGNAL(signalListAlbumsDone(int, QString, QList<GSFolder>)),
+            connect(d->talker,SIGNAL(signalListAlbumsDone(int, QString, QList<GSFolder>)),
                     this,SLOT(slotListAlbumsDone(int, QString, QList<GSFolder>)));
 
-            connect(m_talker,SIGNAL(signalCreateFolderDone(int, QString)),
+            connect(d->talker,SIGNAL(signalCreateFolderDone(int, QString)),
                     this,SLOT(slotCreateFolderDone(int, QString)));
 
-            connect(m_talker,SIGNAL(signalAddPhotoDone(int, QString, QString)),
+            connect(d->talker,SIGNAL(signalAddPhotoDone(int, QString, QString)),
                     this,SLOT(slotAddPhotoDone(int, QString, QString)));
 
             readSettings();
             buttonStateChange(false);
 
-            if (m_refreshToken.isEmpty())
+            if (d->refreshToken.isEmpty())
             {
-                m_talker->doOAuth();
+                d->talker->doOAuth();
             }
             else
             {
-                m_talker->getAccessTokenFromRefreshToken(m_refreshToken);
+                d->talker->getAccessTokenFromRefreshToken(d->refreshToken);
             }
 
             break;
@@ -161,14 +198,14 @@ GSWindow::GSWindow(DInfoInterface* const iface,
         case GoogleService::GPhotoImport:
         case GoogleService::GPhotoExport:
 
-            if (m_service == GoogleService::GPhotoExport)
+            if (d->service == GoogleService::GPhotoExport)
             {
                 setWindowTitle(i18n("Export to Google Photos/PicasaWeb Service"));
 
                 startButton()->setText(i18n("Start Upload"));
                 startButton()->setToolTip(i18n("Start upload to Google Photos/PicasaWeb Service"));
 
-                m_widget->setMinimumSize(700, 500);
+                d->widget->setMinimumSize(700, 500);
             }
             else
             {
@@ -177,64 +214,64 @@ GSWindow::GSWindow(DInfoInterface* const iface,
                 startButton()->setText(i18n("Start Download"));
                 startButton()->setToolTip(i18n("Start download from Google Photos/PicasaWeb service"));
 
-                m_widget->setMinimumSize(300, 400);
+                d->widget->setMinimumSize(300, 400);
             }
 
-            m_gphoto_albumdlg = new GSNewAlbumDlg(this, m_serviceName, m_toolName);
-            m_gphoto_talker   = new GPTalker(this);
+            d->gphotoAlbumDlg = new GSNewAlbumDlg(this, d->serviceName, d->toolName);
+            d->gphotoTalker   = new GPTalker(this);
 
-            connect(m_gphoto_talker, SIGNAL(signalBusy(bool)),
+            connect(d->gphotoTalker, SIGNAL(signalBusy(bool)),
                     this, SLOT(slotBusy(bool)));
 
-            connect(m_gphoto_talker, SIGNAL(signalTextBoxEmpty()),
+            connect(d->gphotoTalker, SIGNAL(signalTextBoxEmpty()),
                     this, SLOT(slotTextBoxEmpty()));
 
-            connect(m_gphoto_talker, SIGNAL(signalAccessTokenFailed(int, QString)),
+            connect(d->gphotoTalker, SIGNAL(signalAccessTokenFailed(int, QString)),
                     this, SLOT(slotAccessTokenFailed(int, QString)));
 
-            connect(m_gphoto_talker, SIGNAL(signalAccessTokenObtained()),
+            connect(d->gphotoTalker, SIGNAL(signalAccessTokenObtained()),
                     this, SLOT(slotAccessTokenObtained()));
 
-            connect(m_gphoto_talker, SIGNAL(signalRefreshTokenObtained(QString)),
+            connect(d->gphotoTalker, SIGNAL(signalRefreshTokenObtained(QString)),
                     this, SLOT(slotRefreshTokenObtained(QString)));
 
-            connect(m_gphoto_talker, SIGNAL(signalListAlbumsDone(int, QString, QList<GSFolder>)),
+            connect(d->gphotoTalker, SIGNAL(signalListAlbumsDone(int, QString, QList<GSFolder>)),
                     this, SLOT(slotListAlbumsDone(int, QString, QList<GSFolder>)));
 
-            connect(m_gphoto_talker, SIGNAL(signalCreateAlbumDone(int, QString, QString)),
+            connect(d->gphotoTalker, SIGNAL(signalCreateAlbumDone(int, QString, QString)),
                     this, SLOT(slotCreateFolderDone(int, QString, QString)));
 
-            connect(m_gphoto_talker, SIGNAL(signalAddPhotoDone(int, QString, QString)),
+            connect(d->gphotoTalker, SIGNAL(signalAddPhotoDone(int, QString, QString)),
                     this, SLOT(slotAddPhotoDone(int,QString,QString)));
 
-            connect(m_gphoto_talker, SIGNAL(signalGetPhotoDone(int, QString, QByteArray)),
+            connect(d->gphotoTalker, SIGNAL(signalGetPhotoDone(int, QString, QByteArray)),
                     this, SLOT(slotGetPhotoDone(int, QString, QByteArray)));
 
             readSettings();
             buttonStateChange(false);
 
-            if (m_refreshToken.isEmpty())
+            if (d->refreshToken.isEmpty())
             {
-                m_gphoto_talker->doOAuth();
+                d->gphotoTalker->doOAuth();
             }
             else
             {
-                m_gphoto_talker->getAccessTokenFromRefreshToken(m_refreshToken);
+                d->gphotoTalker->getAccessTokenFromRefreshToken(d->refreshToken);
             }
 
             break;
     }
 
-    connect(m_widget->imagesList(), SIGNAL(signalImageListChanged()),
+    connect(d->widget->imagesList(), SIGNAL(signalImageListChanged()),
             this, SLOT(slotImageListChanged()));
 
-    connect(m_widget->getChangeUserBtn(), SIGNAL(clicked()),
+    connect(d->widget->getChangeUserBtn(), SIGNAL(clicked()),
             this, SLOT(slotUserChangeRequest()));
 
-    connect(m_widget->getNewAlbmBtn(), SIGNAL(clicked()),
+    connect(d->widget->getNewAlbmBtn(), SIGNAL(clicked()),
             this,SLOT(slotNewAlbumRequest()));
 
-    connect(m_widget->getReloadBtn(), SIGNAL(clicked()),
+    connect(d->widget->getReloadBtn(), SIGNAL(clicked()),
             this, SLOT(slotReloadAlbumsRequest()));
 
     connect(startButton(), SIGNAL(clicked()),
@@ -246,17 +283,18 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 
 GSWindow::~GSWindow()
 {
-    delete m_widget;
-    delete m_albumDlg;
-    delete m_gphoto_albumdlg;
-    delete m_talker;
-    delete m_gphoto_talker;
+    delete d->widget;
+    delete d->albumDlg;
+    delete d->gphotoAlbumDlg;
+    delete d->talker;
+    delete d->gphotoTalker;
+    delete d;
 }
 
 void GSWindow::reactivate()
 {
-    m_widget->imagesList()->loadImagesFromCurrentSelection();
-    m_widget->progressBar()->hide();
+    d->widget->imagesList()->loadImagesFromCurrentSelection();
+    d->widget->progressBar()->hide();
 
     show();
 }
@@ -266,7 +304,7 @@ void GSWindow::readSettings()
     KConfig config;
     KConfigGroup grp;
 
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
             grp = config.group("Google Drive Settings");
@@ -276,31 +314,31 @@ void GSWindow::readSettings()
             break;
     }
 
-    m_currentAlbumId = grp.readEntry("Current Album",QString());
-    m_refreshToken  = grp.readEntry("refresh_token");
+    d->currentAlbumId = grp.readEntry("Current Album",QString());
+    d->refreshToken  = grp.readEntry("refresh_token");
 
     if (grp.readEntry("Resize", false))
     {
-        m_widget->getResizeCheckBox()->setChecked(true);
-        m_widget->getDimensionSpB()->setEnabled(true);
-        m_widget->getImgQualitySpB()->setEnabled(true);
+        d->widget->getResizeCheckBox()->setChecked(true);
+        d->widget->getDimensionSpB()->setEnabled(true);
+        d->widget->getImgQualitySpB()->setEnabled(true);
     }
     else
     {
-        m_widget->getResizeCheckBox()->setChecked(false);
-        m_widget->getDimensionSpB()->setEnabled(false);
-        m_widget->getImgQualitySpB()->setEnabled(false);
+        d->widget->getResizeCheckBox()->setChecked(false);
+        d->widget->getDimensionSpB()->setEnabled(false);
+        d->widget->getImgQualitySpB()->setEnabled(false);
     }
 
-    m_widget->getDimensionSpB()->setValue(grp.readEntry("Maximum Width",  1600));
-    m_widget->getImgQualitySpB()->setValue(grp.readEntry("Image Quality", 90));
+    d->widget->getDimensionSpB()->setValue(grp.readEntry("Maximum Width",  1600));
+    d->widget->getImgQualitySpB()->setValue(grp.readEntry("Image Quality", 90));
 
-    if (m_service == GoogleService::GPhotoExport)
-        m_widget->m_tagsBGrp->button(grp.readEntry("Tag Paths", 0))->setChecked(true);
+    if (d->service == GoogleService::GPhotoExport)
+        d->widget->m_tagsBGrp->button(grp.readEntry("Tag Paths", 0))->setChecked(true);
 
     KConfigGroup dialogGroup;
 
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
             dialogGroup = config.group("Google Drive Export Dialog");
@@ -323,7 +361,7 @@ void GSWindow::writeSettings()
     KConfig config;
     KConfigGroup grp;
 
-    switch(m_service)
+    switch(d->service)
     {
         case GoogleService::GDrive:
             grp = config.group("Google Drive Settings");
@@ -333,18 +371,18 @@ void GSWindow::writeSettings()
             break;
     }
 
-    grp.writeEntry("refresh_token", m_refreshToken);
-    grp.writeEntry("Current Album", m_currentAlbumId);
-    grp.writeEntry("Resize",        m_widget->getResizeCheckBox()->isChecked());
-    grp.writeEntry("Maximum Width", m_widget->getDimensionSpB()->value());
-    grp.writeEntry("Image Quality", m_widget->getImgQualitySpB()->value());
+    grp.writeEntry("refresh_token", d->refreshToken);
+    grp.writeEntry("Current Album", d->currentAlbumId);
+    grp.writeEntry("Resize",        d->widget->getResizeCheckBox()->isChecked());
+    grp.writeEntry("Maximum Width", d->widget->getDimensionSpB()->value());
+    grp.writeEntry("Image Quality", d->widget->getImgQualitySpB()->value());
 
-    if (m_service == GoogleService::GPhotoExport)
-        grp.writeEntry("Tag Paths", m_widget->m_tagsBGrp->checkedId());
+    if (d->service == GoogleService::GPhotoExport)
+        grp.writeEntry("Tag Paths", d->widget->m_tagsBGrp->checkedId());
 
     KConfigGroup dialogGroup;
 
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
             dialogGroup = config.group("Google Drive Export Dialog");
@@ -363,14 +401,14 @@ void GSWindow::writeSettings()
 
 void GSWindow::slotSetUserName(const QString& msg)
 {
-    m_widget->updateLabels(msg);
+    d->widget->updateLabels(msg);
 }
 
 void GSWindow::slotListPhotosDoneForDownload(int errCode,
                                              const QString& errMsg,
                                              const QList <GSPhoto>& photosList)
 {
-    disconnect(m_gphoto_talker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
+    disconnect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
                this, SLOT(slotListPhotosDoneForDownload(int, QString, QList<GSPhoto>)));
 
     if (errCode == 0)
@@ -381,25 +419,25 @@ void GSWindow::slotListPhotosDoneForDownload(int errCode,
     }
 
     typedef QPair<QUrl,GSPhoto> Pair;
-    m_transferQueue.clear();
+    d->transferQueue.clear();
     QList<GSPhoto>::const_iterator itPWP;
 
     for (itPWP = photosList.begin(); itPWP != photosList.end(); ++itPWP)
     {
-        m_transferQueue.push_back(Pair((*itPWP).originalURL, (*itPWP)));
+        d->transferQueue.push_back(Pair((*itPWP).originalURL, (*itPWP)));
     }
 
-    if (m_transferQueue.isEmpty())
+    if (d->transferQueue.isEmpty())
         return;
 
-    m_currentAlbumId = m_widget->getAlbumsCoB()->itemData(m_widget->getAlbumsCoB()->currentIndex()).toString();
-    m_imagesTotal    = m_transferQueue.count();
-    m_imagesCount    = 0;
+    d->currentAlbumId = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
+    d->imagesTotal    = d->transferQueue.count();
+    d->imagesCount    = 0;
 
-    m_widget->progressBar()->setFormat(i18n("%v / %m"));
-    m_widget->progressBar()->show();
+    d->widget->progressBar()->setFormat(i18n("%v / %m"));
+    d->widget->progressBar()->show();
 
-    m_renamingOpt = 0;
+    d->renamingOpt = 0;
 
     // start download with first photo in queue
     downloadNextPhoto();
@@ -411,7 +449,7 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
 {
     qCCritical(DIGIKAM_WEBSERVICES_LOG)<< "err Code is "<< errCode <<" Err Message is "<< errMsg;
 
-    disconnect(m_gphoto_talker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
+    disconnect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
                this, SLOT(slotListPhotosDoneForUpload(int, QString, QList<GSPhoto>)));
 
     if (errCode == 0)
@@ -423,16 +461,16 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
 
     typedef QPair<QUrl,GSPhoto> Pair;
 
-    m_transferQueue.clear();
+    d->transferQueue.clear();
 
-    QList<QUrl> urlList = m_widget->imagesList()->imageUrls(true);
+    QList<QUrl> urlList = d->widget->imagesList()->imageUrls(true);
 
     if (urlList.isEmpty())
         return;
 
     for (QList<QUrl>::ConstIterator it = urlList.constBegin(); it != urlList.constEnd(); ++it)
     {
-        DItemInfo info(m_iface->itemInfo((*it).toLocalFile()));
+        DItemInfo info(d->iface->itemInfo((*it).toLocalFile()));
         GSPhoto temp;
         temp.title = info.name();
 
@@ -444,9 +482,9 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
         // check for existing items
         QString localId;
 
-        if (m_meta.load((*it).toLocalFile()))
+        if (d->meta.load((*it).toLocalFile()))
         {
-            localId = m_meta.getXmpTagString("Xmp.digiKam.picasawebGPhotoId");
+            localId = d->meta.getXmpTagString("Xmp.digiKam.picasawebGPhotoId");
         }
 
         QList<GSPhoto>::const_iterator itPWP;
@@ -467,32 +505,32 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
         temp.gpsLon.setNum(info.longitude());
 
         temp.tags = info.tagsPath();
-        m_transferQueue.append( Pair( (*it), temp) );
+        d->transferQueue.append( Pair( (*it), temp) );
     }
 
-    if (m_transferQueue.isEmpty())
+    if (d->transferQueue.isEmpty())
         return;
 
-    m_currentAlbumId = m_widget->getAlbumsCoB()->itemData(m_widget->getAlbumsCoB()->currentIndex()).toString();
-    m_imagesTotal    = m_transferQueue.count();
-    m_imagesCount    = 0;
+    d->currentAlbumId = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
+    d->imagesTotal    = d->transferQueue.count();
+    d->imagesCount    = 0;
 
-    m_widget->progressBar()->setFormat(i18n("%v / %m"));
-    m_widget->progressBar()->setMaximum(m_imagesTotal);
-    m_widget->progressBar()->setValue(0);
-    m_widget->progressBar()->show();
-    m_widget->progressBar()->progressScheduled(i18n("Google Photo Export"), true, true);
-    m_widget->progressBar()->progressThumbnailChanged(QIcon(
+    d->widget->progressBar()->setFormat(i18n("%v / %m"));
+    d->widget->progressBar()->setMaximum(d->imagesTotal);
+    d->widget->progressBar()->setValue(0);
+    d->widget->progressBar()->show();
+    d->widget->progressBar()->progressScheduled(i18n("Google Photo Export"), true, true);
+    d->widget->progressBar()->progressThumbnailChanged(QIcon(
         (QLatin1String("googlephoto"))).pixmap(22, 22));
 
-    m_renamingOpt = 0;
+    d->renamingOpt = 0;
 
     uploadNextPhoto();
 }
 
 void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <GSFolder>& list)
 {
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
 
@@ -503,23 +541,23 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
                 return;
             }
 
-            m_widget->getAlbumsCoB()->clear();
+            d->widget->getAlbumsCoB()->clear();
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone1:" << list.size();
 
             for (int i=0;i<list.size();i++)
             {
-                m_widget->getAlbumsCoB()->addItem(
+                d->widget->getAlbumsCoB()->addItem(
                     QIcon::fromTheme(QString::fromLatin1("system-users")),
                     list.value(i).title, list.value(i).id);
 
-                if (m_currentAlbumId == list.value(i).id)
+                if (d->currentAlbumId == list.value(i).id)
                 {
-                    m_widget->getAlbumsCoB()->setCurrentIndex(i);
+                    d->widget->getAlbumsCoB()->setCurrentIndex(i);
                 }
             }
 
             buttonStateChange(true);
-            m_talker->getUserName();
+            d->talker->getUserName();
             break;
 
         default:
@@ -531,8 +569,8 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
                 return;
             }
 
-            m_widget->updateLabels(m_gphoto_talker->getLoginName(), m_gphoto_talker->getUserName());
-            m_widget->getAlbumsCoB()->clear();
+            d->widget->updateLabels(d->gphotoTalker->getLoginName(), d->gphotoTalker->getUserName());
+            d->widget->getAlbumsCoB()->clear();
 
             for (int i = 0; i < list.size(); ++i)
             {
@@ -545,10 +583,10 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
                 else
                     albumIcon = QString::fromLatin1("folder");
 
-                m_widget->getAlbumsCoB()->addItem(QIcon::fromTheme(albumIcon), list.at(i).title, list.at(i).id);
+                d->widget->getAlbumsCoB()->addItem(QIcon::fromTheme(albumIcon), list.at(i).title, list.at(i).id);
 
-                if (m_currentAlbumId == list.at(i).id)
-                    m_widget->getAlbumsCoB()->setCurrentIndex(i);
+                if (d->currentAlbumId == list.at(i).id)
+                    d->widget->getAlbumsCoB()->setCurrentIndex(i);
 
                 buttonStateChange(true);
             }
@@ -561,13 +599,13 @@ void GSWindow::slotBusy(bool val)
     if (val)
     {
         setCursor(Qt::WaitCursor);
-        m_widget->getChangeUserBtn()->setEnabled(false);
+        d->widget->getChangeUserBtn()->setEnabled(false);
         buttonStateChange(false);
     }
     else
     {
         setCursor(Qt::ArrowCursor);
-        m_widget->getChangeUserBtn()->setEnabled(true);
+        d->widget->getChangeUserBtn()->setEnabled(true);
         buttonStateChange(true);
     }
 }
@@ -576,25 +614,25 @@ void GSWindow::googlePhotoTransferHandler()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Google Photo Transfer invoked";
 
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GPhotoImport:
             // list photos of the album, then start download
-            connect(m_gphoto_talker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
+            connect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
                     this, SLOT(slotListPhotosDoneForDownload(int, QString, QList<GSPhoto>)));
 
-            m_gphoto_talker->listPhotos(
-                m_widget->getAlbumsCoB()->itemData(m_widget->getAlbumsCoB()->currentIndex()).toString(),
-                m_widget->getDimensionCoB()->itemData(m_widget->getDimensionCoB()->currentIndex()).toString());
+            d->gphotoTalker->listPhotos(
+                d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString(),
+                d->widget->getDimensionCoB()->itemData(d->widget->getDimensionCoB()->currentIndex()).toString());
             break;
 
         default:
             // list photos of the album, then start upload with add/update items
-            connect(m_gphoto_talker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
+            connect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
                     this, SLOT(slotListPhotosDoneForUpload(int, QString, QList<GSPhoto>)));
 
-            m_gphoto_talker->listPhotos(
-                m_widget->getAlbumsCoB()->itemData(m_widget->getAlbumsCoB()->currentIndex()).toString());
+            d->gphotoTalker->listPhotos(
+                d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString());
             break;
     }
 }
@@ -610,13 +648,13 @@ void GSWindow::slotTextBoxEmpty()
 
 void GSWindow::slotStartTransfer()
 {
-    m_widget->imagesList()->clearProcessedStatus();
+    d->widget->imagesList()->clearProcessedStatus();
 
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
         case GoogleService::GPhotoExport:
-            if (m_widget->imagesList()->imageUrls().isEmpty())
+            if (d->widget->imagesList()->imageUrls().isEmpty())
             {
                 QMessageBox::critical(this, i18nc("@title:window", "Error"),
                                       i18n("No image selected. Please select which images should be uploaded."));
@@ -627,10 +665,10 @@ void GSWindow::slotStartTransfer()
             break;
     }
 
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
-            if (!(m_talker->authenticated()))
+            if (!(d->talker->authenticated()))
             {
                 QMessageBox warn(QMessageBox::Warning,
                                  i18n("Warning"),
@@ -642,7 +680,7 @@ void GSWindow::slotStartTransfer()
 
                 if (warn.exec() == QMessageBox::Yes)
                 {
-                    m_talker->doOAuth();
+                    d->talker->doOAuth();
                     return;
                 }
                 else
@@ -653,7 +691,7 @@ void GSWindow::slotStartTransfer()
             break;
 
         default:
-            if (!(m_gphoto_talker->authenticated()))
+            if (!(d->gphotoTalker->authenticated()))
             {
                 QMessageBox warn(QMessageBox::Warning,
                                  i18n("Warning"),
@@ -665,7 +703,7 @@ void GSWindow::slotStartTransfer()
 
                 if (warn.exec() == QMessageBox::Yes)
                 {
-                    m_gphoto_talker->doOAuth();
+                    d->gphotoTalker->doOAuth();
                     return;
                 }
                 else
@@ -680,13 +718,13 @@ void GSWindow::slotStartTransfer()
 
     typedef QPair<QUrl, GSPhoto> Pair;
 
-    for (int i = 0 ; i < (m_widget->imagesList()->imageUrls().size()) ; i++)
+    for (int i = 0 ; i < (d->widget->imagesList()->imageUrls().size()) ; i++)
     {
-        DItemInfo info(m_iface->itemInfo(m_widget->imagesList()->imageUrls().value(i).toLocalFile()));
+        DItemInfo info(d->iface->itemInfo(d->widget->imagesList()->imageUrls().value(i).toLocalFile()));
         GSPhoto temp;
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in start transfer info " <<info.title() << info.comment();
 
-        switch (m_service)
+        switch (d->service)
         {
             case GoogleService::GDrive:
                 temp.title      = info.title();
@@ -701,50 +739,50 @@ void GSWindow::slotStartTransfer()
         temp.gpsLon.setNum(info.longitude());
         temp.tags        = info.tagsPath();
 
-        m_transferQueue.append(Pair(m_widget->imagesList()->imageUrls().value(i),temp));
+        d->transferQueue.append(Pair(d->widget->imagesList()->imageUrls().value(i),temp));
     }
 
-    m_currentAlbumId = m_widget->getAlbumsCoB()->itemData(m_widget->getAlbumsCoB()->currentIndex()).toString();
-    m_imagesTotal    = m_transferQueue.count();
-    m_imagesCount    = 0;
+    d->currentAlbumId = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
+    d->imagesTotal    = d->transferQueue.count();
+    d->imagesCount    = 0;
 
-    m_widget->progressBar()->setFormat(i18n("%v / %m"));
-    m_widget->progressBar()->setMaximum(m_imagesTotal);
-    m_widget->progressBar()->setValue(0);
-    m_widget->progressBar()->show();
-    m_widget->progressBar()->progressScheduled(i18n("Google Drive export"), true, true);
-    m_widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("googledrive")).pixmap(22, 22));
+    d->widget->progressBar()->setFormat(i18n("%v / %m"));
+    d->widget->progressBar()->setMaximum(d->imagesTotal);
+    d->widget->progressBar()->setValue(0);
+    d->widget->progressBar()->show();
+    d->widget->progressBar()->progressScheduled(i18n("Google Drive export"), true, true);
+    d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("googledrive")).pixmap(22, 22));
 
     uploadNextPhoto();
 }
 
 void GSWindow::uploadNextPhoto()
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in upload nextphoto " << m_transferQueue.count();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in upload nextphoto " << d->transferQueue.count();
 
-    if (m_transferQueue.isEmpty())
+    if (d->transferQueue.isEmpty())
     {
-        //m_widget->progressBar()->hide();
-        m_widget->progressBar()->progressCompleted();
+        //d->widget->progressBar()->hide();
+        d->widget->progressBar()->progressCompleted();
         return;
     }
 
     typedef QPair<QUrl,GSPhoto> Pair;
-    Pair pathComments = m_transferQueue.first();
+    Pair pathComments = d->transferQueue.first();
     GSPhoto info      = pathComments.second;
     bool res          = true;
-    m_widget->imagesList()->processing(pathComments.first);
+    d->widget->imagesList()->processing(pathComments.first);
 
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
         {
-            res = m_talker->addPhoto(pathComments.first.toLocalFile(),
+            res = d->talker->addPhoto(pathComments.first.toLocalFile(),
                                      info,
-                                     m_currentAlbumId,
-                                     m_widget->getResizeCheckBox()->isChecked(),
-                                     m_widget->getDimensionSpB()->value(),
-                                     m_widget->getImgQualitySpB()->value());
+                                     d->currentAlbumId,
+                                     d->widget->getResizeCheckBox()->isChecked(),
+                                     d->widget->getDimensionSpB()->value(),
+                                     d->widget->getImgQualitySpB()->value());
             break;
         }
 
@@ -755,7 +793,7 @@ void GSWindow::uploadNextPhoto()
 
             if (!info.id.isEmpty() && !info.editUrl.isEmpty())
             {
-                switch(m_renamingOpt)
+                switch(d->renamingOpt)
                 {
                     case PWR_ADD_ALL:
                         bAdd = true;
@@ -765,19 +803,19 @@ void GSWindow::uploadNextPhoto()
                         break;
                     default:
                     {
-                        ReplaceDialog dlg(this, QString::fromLatin1(""), m_iface, pathComments.first, info.thumbURL);
+                        ReplaceDialog dlg(this, QString::fromLatin1(""), d->iface, pathComments.first, info.thumbURL);
                         dlg.exec();
 
                         switch (dlg.getResult())
                         {
                             case PWR_ADD_ALL:
-                                m_renamingOpt = PWR_ADD_ALL;
+                                d->renamingOpt = PWR_ADD_ALL;
                                 break;
                             case PWR_ADD:
                                 bAdd = true;
                                 break;
                             case PWR_REPLACE_ALL:
-                                m_renamingOpt = PWR_REPLACE_ALL;
+                                d->renamingOpt = PWR_REPLACE_ALL;
                                 break;
                             case PWR_REPLACE:
                                 bAdd = false;
@@ -795,7 +833,7 @@ void GSWindow::uploadNextPhoto()
 
             //adjust tags according to radio button clicked
 
-            switch (m_widget->m_tagsBGrp->checkedId())
+            switch (d->widget->m_tagsBGrp->checkedId())
             {
                 case GPTagLeaf:
                 {
@@ -863,20 +901,20 @@ void GSWindow::uploadNextPhoto()
             {
                 if (bAdd)
                 {
-                    res = m_gphoto_talker->addPhoto(pathComments.first.toLocalFile(),
+                    res = d->gphotoTalker->addPhoto(pathComments.first.toLocalFile(),
                                                      info,
-                                                     m_currentAlbumId,
-                                                     m_widget->getResizeCheckBox()->isChecked(),
-                                                     m_widget->getDimensionSpB()->value(),
-                                                     m_widget->getImgQualitySpB()->value());
+                                                     d->currentAlbumId,
+                                                     d->widget->getResizeCheckBox()->isChecked(),
+                                                     d->widget->getDimensionSpB()->value(),
+                                                     d->widget->getImgQualitySpB()->value());
                 }
                 else
                 {
-                    res = m_gphoto_talker->updatePhoto(pathComments.first.toLocalFile(),
+                    res = d->gphotoTalker->updatePhoto(pathComments.first.toLocalFile(),
                                                         info,
-                                                        m_widget->getResizeCheckBox()->isChecked(),
-                                                        m_widget->getDimensionSpB()->value(),
-                                                        m_widget->getImgQualitySpB()->value());
+                                                        d->widget->getResizeCheckBox()->isChecked(),
+                                                        d->widget->getDimensionSpB()->value(),
+                                                        d->widget->getImgQualitySpB()->value());
                 }
             }
             break;
@@ -895,25 +933,25 @@ void GSWindow::uploadNextPhoto()
 
 void GSWindow::downloadNextPhoto()
 {
-    if (m_transferQueue.isEmpty())
+    if (d->transferQueue.isEmpty())
     {
-        m_widget->progressBar()->hide();
-        m_widget->progressBar()->progressCompleted();
+        d->widget->progressBar()->hide();
+        d->widget->progressBar()->progressCompleted();
         return;
     }
 
-    m_widget->progressBar()->setMaximum(m_imagesTotal);
-    m_widget->progressBar()->setValue(m_imagesCount);
+    d->widget->progressBar()->setMaximum(d->imagesTotal);
+    d->widget->progressBar()->setValue(d->imagesCount);
 
-    QString imgPath = m_transferQueue.first().first.url();
+    QString imgPath = d->transferQueue.first().first.url();
 
-    m_gphoto_talker->getPhoto(imgPath);
+    d->gphotoTalker->getPhoto(imgPath);
 }
 
 void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteArray& photoData)
 {
-    GSPhoto item = m_transferQueue.first().second;
-    QUrl tmpUrl  = QUrl::fromLocalFile(QString(m_tmp + item.title));
+    GSPhoto item = d->transferQueue.first().second;
+    QUrl tmpUrl  = QUrl::fromLocalFile(QString(d->tmp + item.title));
 
     if (item.mimeType == QString::fromLatin1("video/mpeg4"))
     {
@@ -941,25 +979,25 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
 
         if (errText.isEmpty())
         {
-            if (m_meta.load(tmpUrl.toLocalFile()))
+            if (d->meta.load(tmpUrl.toLocalFile()))
             {
-                if (m_meta.supportXmp() && m_meta.canWriteXmp(tmpUrl.toLocalFile()))
+                if (d->meta.supportXmp() && d->meta.canWriteXmp(tmpUrl.toLocalFile()))
                 {
-                    m_meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", item.id);
-                    m_meta.setXmpKeywords(item.tags);
+                    d->meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", item.id);
+                    d->meta.setXmpKeywords(item.tags);
                 }
 
                 if (!item.gpsLat.isEmpty() && !item.gpsLon.isEmpty())
                 {
-                    m_meta.setGPSInfo(0.0, item.gpsLat.toDouble(), item.gpsLon.toDouble());
+                    d->meta.setGPSInfo(0.0, item.gpsLat.toDouble(), item.gpsLon.toDouble());
                 }
 
-                m_meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-                m_meta.save(tmpUrl.toLocalFile());
+                d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                d->meta.save(tmpUrl.toLocalFile());
             }
 
-            m_transferQueue.pop_front();
-            m_imagesCount++;
+            d->transferQueue.pop_front();
+            d->imagesCount++;
         }
         else
         {
@@ -997,7 +1035,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
         }
     }
 
-    QUrl newUrl = QUrl::fromLocalFile(QString(m_widget->getDestinationPath() + tmpUrl.fileName()));
+    QUrl newUrl = QUrl::fromLocalFile(QString(d->widget->getDestinationPath() + tmpUrl.fileName()));
 
     QFileInfo targetInfo(newUrl.toLocalFile());
 
@@ -1053,11 +1091,11 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
 {
     if (err == 0)
     {
-        m_widget->imagesList()->processed(m_transferQueue.first().first,false);
+        d->widget->imagesList()->processed(d->transferQueue.first().first,false);
 
         QMessageBox warn(QMessageBox::Warning,
                          i18n("Warning"),
-                         i18n("Failed to upload photo to %1.\n%2\nDo you want to continue?", m_toolName,msg),
+                         i18n("Failed to upload photo to %1.\n%2\nDo you want to continue?", d->toolName,msg),
                          QMessageBox::Yes | QMessageBox::No);
 
         (warn.button(QMessageBox::Yes))->setText(i18n("Continue"));
@@ -1065,68 +1103,68 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
 
         if (warn.exec() != QMessageBox::Yes)
         {
-            m_transferQueue.clear();
-            m_widget->progressBar()->hide();
+            d->transferQueue.clear();
+            d->widget->progressBar()->hide();
         }
         else
         {
-            m_transferQueue.pop_front();
-            m_imagesTotal--;
-            m_widget->progressBar()->setMaximum(m_imagesTotal);
-            m_widget->progressBar()->setValue(m_imagesCount);
+            d->transferQueue.pop_front();
+            d->imagesTotal--;
+            d->widget->progressBar()->setMaximum(d->imagesTotal);
+            d->widget->progressBar()->setValue(d->imagesCount);
             uploadNextPhoto();
         }
     }
     else
     {
-        QUrl fileUrl = m_transferQueue.first().first;
+        QUrl fileUrl = d->transferQueue.first().first;
 
-        if (m_meta.supportXmp()                       &&
-            m_meta.canWriteXmp(fileUrl.toLocalFile()) &&
-            m_meta.load(fileUrl.toLocalFile())        &&
+        if (d->meta.supportXmp()                       &&
+            d->meta.canWriteXmp(fileUrl.toLocalFile()) &&
+            d->meta.load(fileUrl.toLocalFile())        &&
             !photoId.isEmpty()
            )
         {
-            m_meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", photoId);
-            m_meta.save(fileUrl.toLocalFile());
+            d->meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", photoId);
+            d->meta.save(fileUrl.toLocalFile());
         }
 
         // Remove photo uploaded from the list
-        m_widget->imagesList()->removeItemByUrl(m_transferQueue.first().first);
-        m_transferQueue.pop_front();
-        m_imagesCount++;
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In slotAddPhotoSucceeded" << m_imagesCount;
-        m_widget->progressBar()->setMaximum(m_imagesTotal);
-        m_widget->progressBar()->setValue(m_imagesCount);
+        d->widget->imagesList()->removeItemByUrl(d->transferQueue.first().first);
+        d->transferQueue.pop_front();
+        d->imagesCount++;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In slotAddPhotoSucceeded" << d->imagesCount;
+        d->widget->progressBar()->setMaximum(d->imagesTotal);
+        d->widget->progressBar()->setValue(d->imagesCount);
         uploadNextPhoto();
     }
 }
 
 void GSWindow::slotImageListChanged()
 {
-    startButton()->setEnabled(!(m_widget->imagesList()->imageUrls().isEmpty()));
+    startButton()->setEnabled(!(d->widget->imagesList()->imageUrls().isEmpty()));
 }
 
 void GSWindow::slotNewAlbumRequest()
 {
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
-            if (m_albumDlg->exec() == QDialog::Accepted)
+            if (d->albumDlg->exec() == QDialog::Accepted)
             {
                 GSFolder newFolder;
-                m_albumDlg->getAlbumProperties(newFolder);
-                m_currentAlbumId = m_widget->getAlbumsCoB()->itemData(m_widget->getAlbumsCoB()->currentIndex()).toString();
-                m_talker->createFolder(newFolder.title,m_currentAlbumId);
+                d->albumDlg->getAlbumProperties(newFolder);
+                d->currentAlbumId = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
+                d->talker->createFolder(newFolder.title,d->currentAlbumId);
             }
             break;
 
         default:
-            if (m_gphoto_albumdlg->exec() == QDialog::Accepted)
+            if (d->gphotoAlbumDlg->exec() == QDialog::Accepted)
             {
                 GSFolder newFolder;
-                m_gphoto_albumdlg->getAlbumProperties(newFolder);
-                m_gphoto_talker->createAlbum(newFolder);
+                d->gphotoAlbumDlg->getAlbumProperties(newFolder);
+                d->gphotoTalker->createAlbum(newFolder);
             }
             break;
     }
@@ -1134,14 +1172,14 @@ void GSWindow::slotNewAlbumRequest()
 
 void GSWindow::slotReloadAlbumsRequest()
 {
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
-            m_talker->listFolders();
+            d->talker->listFolders();
             break;
         case GoogleService::GPhotoImport:
         case GoogleService::GPhotoExport:
-            m_gphoto_talker->listAlbums();
+            d->gphotoTalker->listAlbums();
             break;
     }
 }
@@ -1157,44 +1195,44 @@ void GSWindow::slotAccessTokenFailed(int errCode,const QString& errMsg)
 
 void GSWindow::slotAccessTokenObtained()
 {
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
-            m_talker->listFolders();
+            d->talker->listFolders();
             break;
         case GoogleService::GPhotoImport:
         case GoogleService::GPhotoExport:
-            m_gphoto_talker->listAlbums();
+            d->gphotoTalker->listAlbums();
             break;
     }
 }
 
 void GSWindow::slotRefreshTokenObtained(const QString& msg)
 {
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
-            m_refreshToken = msg;
-            m_talker->listFolders();
+            d->refreshToken = msg;
+            d->talker->listFolders();
             break;
         case GoogleService::GPhotoImport:
         case GoogleService::GPhotoExport:
-            m_refreshToken = msg;
-            m_gphoto_talker->listAlbums();
+            d->refreshToken = msg;
+            d->gphotoTalker->listAlbums();
             break;
     }
 }
 
 void GSWindow::slotCreateFolderDone(int code, const QString& msg, const QString& albumId)
 {
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
             if (code == 0)
                 QMessageBox::critical(this, i18nc("@title:window", "Error"),
                                       i18n("Google Drive call failed:\n%1", msg));
             else
-                m_talker->listFolders();
+                d->talker->listFolders();
             break;
         case GoogleService::GPhotoImport:
         case GoogleService::GPhotoExport:
@@ -1203,8 +1241,8 @@ void GSWindow::slotCreateFolderDone(int code, const QString& msg, const QString&
                                       i18n("Google Photos/PicasaWeb call failed:\n%1", msg));
             else
             {
-                m_currentAlbumId = albumId;
-                m_gphoto_talker->listAlbums();
+                d->currentAlbumId = albumId;
+                d->gphotoTalker->listAlbums();
             }
             break;
     }
@@ -1212,17 +1250,17 @@ void GSWindow::slotCreateFolderDone(int code, const QString& msg, const QString&
 
 void GSWindow::slotTransferCancel()
 {
-    m_transferQueue.clear();
-    m_widget->progressBar()->hide();
+    d->transferQueue.clear();
+    d->widget->progressBar()->hide();
 
-    switch (m_service)
+    switch (d->service)
     {
         case GoogleService::GDrive:
-            m_talker->cancel();
+            d->talker->cancel();
             break;
         case GoogleService::GPhotoImport:
         case GoogleService::GPhotoExport:
-            m_gphoto_talker->cancel();
+            d->gphotoTalker->cancel();
             break;
     }
 }
@@ -1243,16 +1281,16 @@ void GSWindow::slotUserChangeRequest()
 
     if (warn.exec() == QMessageBox::Yes)
     {
-        m_refreshToken = QString::fromLatin1("");
+        d->refreshToken = QString::fromLatin1("");
 
-        switch (m_service)
+        switch (d->service)
         {
             case GoogleService::GDrive:
-                m_talker->doOAuth();
+                d->talker->doOAuth();
                 break;
             case GoogleService::GPhotoImport:
             case GoogleService::GPhotoExport:
-                m_gphoto_talker->doOAuth();
+                d->gphotoTalker->doOAuth();
                 break;
         }
     }
@@ -1260,15 +1298,15 @@ void GSWindow::slotUserChangeRequest()
 
 void GSWindow::buttonStateChange(bool state)
 {
-    m_widget->getNewAlbmBtn()->setEnabled(state);
-    m_widget->getReloadBtn()->setEnabled(state);
+    d->widget->getNewAlbmBtn()->setEnabled(state);
+    d->widget->getReloadBtn()->setEnabled(state);
     startButton()->setEnabled(state);
 }
 
 void GSWindow::slotFinished()
 {
     writeSettings();
-    m_widget->imagesList()->listView()->clear();
+    d->widget->imagesList()->listView()->clear();
 }
 
 void GSWindow::closeEvent(QCloseEvent* e)

@@ -42,7 +42,6 @@
 
 class QCloseEvent;
 
-
 namespace Digikam
 {
 class GDTalker;
@@ -103,29 +102,8 @@ private Q_SLOTS:
 
 private:
 
-    unsigned int                  m_imagesCount;
-    unsigned int                  m_imagesTotal;
-    int                           m_renamingOpt;
-
-    QString                       m_serviceName;
-    QString                       m_toolName;
-    GoogleService                 m_service;
-    QString                       m_tmp;
-    QString                       m_refreshToken;
-
-    GSWidget*                     m_widget;
-    GSNewAlbumDlg*                m_albumDlg;
-    GSNewAlbumDlg*                m_gphoto_albumdlg;
-
-    GDTalker*                     m_talker;
-    GPTalker*                     m_gphoto_talker;
-
-    QString                       m_currentAlbumId;
-
-    QList< QPair<QUrl, GSPhoto> > m_transferQueue;
-
-    DInfoInterface*               m_iface;
-    DMetadata                     m_meta;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
