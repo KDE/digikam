@@ -6,7 +6,8 @@
  * Date        : 2015-06-21
  * Description : a tool to export items to Google web services
  *
- * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2015      by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2015-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,6 +72,17 @@ public:
     QString     getToken(const QString&, const QString&, const QString&);
     int         getTokenEnd(const QString&, int);
 
+protected:
+
+    QString                m_scope;
+    QString                m_accessToken;
+    QString                m_refreshToken;
+
+    QString                m_bearerAccessToken;
+    QByteArray             m_buffer;
+
+    QNetworkReply*         m_reply;
+
 private:
 
     void parseResponseAccessToken(const QByteArray& data);
@@ -84,33 +96,22 @@ private:
         GD_REFRESHTOKEN
     };
 
-protected:
-
-    QWidget*               m_parent;
-
-    QString                m_scope;
-    QString                m_redirect_uri;
-    QString                m_response_type;
-    QString                m_client_id;
-    QString                m_client_secret;
-    QString                m_access_token;
-    QString                m_refresh_token;
-    QString                m_code;
-
-    QString                m_token_uri;
-
-    QString                m_bearer_access_token;
-    QByteArray             m_buffer;
-
-    QNetworkReply*         m_reply;
-
-    Auth_State             m_Authstate;
-    int                    m_continuePos;
-
 private:
 
-    QDialog*               m_window;
+    int                    m_continuePos;
 
+    QWidget*               m_parent;
+    
+    Auth_State             m_authState;
+    QString                m_tokenUri;
+    QString                m_clientSecret;
+    QString                m_clientId;
+    QString                m_responseType;
+    QString                m_redirectUri;
+    QString                m_code;
+
+    QDialog*               m_window;
+    
     QNetworkAccessManager* m_netMngr;
 };
 

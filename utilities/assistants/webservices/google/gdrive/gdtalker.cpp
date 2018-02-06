@@ -6,7 +6,8 @@
  * Date        : 2013-11-18
  * Description : a tool to export items to Google web services
  *
- * Copyright (C) 2013 by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
+ * Copyright (C) 2013-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,12 +89,12 @@ void GDTalker::getUserName()
     QUrl url(QString::fromLatin1("https://www.googleapis.com/drive/v2/about"));
     QUrlQuery urlQuery;
     urlQuery.addQueryItem(QString::fromLatin1("scope"), m_scope);
-    urlQuery.addQueryItem(QString::fromLatin1("access_token"), m_access_token);
+    urlQuery.addQueryItem(QString::fromLatin1("access_token"), m_accessToken);
     url.setQuery(urlQuery);
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
-    netRequest.setRawHeader("Authorization", m_bearer_access_token.toLatin1());
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
 
     m_reply = m_netMngr->get(netRequest);
 
@@ -111,7 +112,7 @@ void GDTalker::listFolders()
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
-    netRequest.setRawHeader("Authorization", m_bearer_access_token.toLatin1());
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
 
     m_reply = m_netMngr->get(netRequest);
 
@@ -149,7 +150,7 @@ void GDTalker::createFolder(const QString& title, const QString& id)
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
-    netRequest.setRawHeader("Authorization", m_bearer_access_token.toLatin1());
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
 
     m_reply = m_netMngr->post(netRequest, data);
 
@@ -228,7 +229,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
-    netRequest.setRawHeader("Authorization", m_bearer_access_token.toLatin1());
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
     netRequest.setRawHeader("Host", "www.googleapis.com");
 
     m_reply = m_netMngr->post(netRequest, form.formData());

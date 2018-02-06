@@ -107,9 +107,9 @@ void GPTalker::listAlbums()
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
 
-    if (!m_access_token.isEmpty())
+    if (!m_accessToken.isEmpty())
     {
-        netRequest.setRawHeader("Authorization", m_bearer_access_token.toLatin1());
+        netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
     }
 
     m_reply = m_netMngr->get(netRequest);
@@ -142,9 +142,9 @@ void GPTalker::listPhotos(const QString& albumId, const QString& imgmax)
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
 
-    if (!m_access_token.isEmpty())
+    if (!m_accessToken.isEmpty())
     {
-        netRequest.setRawHeader("Authorization", m_bearer_access_token.toLatin1());
+        netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
     }
 
     m_reply = m_netMngr->get(netRequest);
@@ -230,7 +230,7 @@ void GPTalker::createAlbum(const GSFolder& album)
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/atom+xml"));
-    netRequest.setRawHeader("Authorization", m_bearer_access_token.toLatin1());
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
 
     m_reply = m_netMngr->post(netRequest, buffer);
 
@@ -362,7 +362,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
-    netRequest.setRawHeader("Authorization", m_bearer_access_token.toLatin1() + "\nMIME-version: 1.0");
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1() + "\nMIME-version: 1.0");
 
     m_reply = m_netMngr->post(netRequest, form.formData());
 
@@ -493,7 +493,7 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
 
     QNetworkRequest netRequest(info.editUrl);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
-    netRequest.setRawHeader("Authorization", m_bearer_access_token.toLatin1() + "\nIf-Match: *");
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1() + "\nIf-Match: *");
 
     m_reply = m_netMngr->put(netRequest, form.formData());
 

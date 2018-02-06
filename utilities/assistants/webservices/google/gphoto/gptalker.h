@@ -89,7 +89,7 @@ public:
 
     QString token()          const
     {
-        return m_access_token;
+        return m_accessToken;
     }
 
     void cancel();

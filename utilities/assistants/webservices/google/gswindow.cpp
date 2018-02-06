@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2013      by Pankaj Kumar <me at panks dot me>
  * Copyright (C) 2015      by Shourya Singh Gupta <shouryasgupta at gmail dot com>
- * Copyright (C) 2008-2016 by Caulier Gilles <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -147,13 +147,13 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             readSettings();
             buttonStateChange(false);
 
-            if (m_refresh_token.isEmpty())
+            if (m_refreshToken.isEmpty())
             {
                 m_talker->doOAuth();
             }
             else
             {
-                m_talker->getAccessTokenFromRefreshToken(m_refresh_token);
+                m_talker->getAccessTokenFromRefreshToken(m_refreshToken);
             }
 
             break;
@@ -213,13 +213,13 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             readSettings();
             buttonStateChange(false);
 
-            if (m_refresh_token.isEmpty())
+            if (m_refreshToken.isEmpty())
             {
                 m_gphoto_talker->doOAuth();
             }
             else
             {
-                m_gphoto_talker->getAccessTokenFromRefreshToken(m_refresh_token);
+                m_gphoto_talker->getAccessTokenFromRefreshToken(m_refreshToken);
             }
 
             break;
@@ -277,7 +277,7 @@ void GSWindow::readSettings()
     }
 
     m_currentAlbumId = grp.readEntry("Current Album",QString());
-    m_refresh_token  = grp.readEntry("refresh_token");
+    m_refreshToken  = grp.readEntry("refresh_token");
 
     if (grp.readEntry("Resize", false))
     {
@@ -333,7 +333,7 @@ void GSWindow::writeSettings()
             break;
     }
 
-    grp.writeEntry("refresh_token", m_refresh_token);
+    grp.writeEntry("refresh_token", m_refreshToken);
     grp.writeEntry("Current Album", m_currentAlbumId);
     grp.writeEntry("Resize",        m_widget->getResizeCheckBox()->isChecked());
     grp.writeEntry("Maximum Width", m_widget->getDimensionSpB()->value());
@@ -1174,12 +1174,12 @@ void GSWindow::slotRefreshTokenObtained(const QString& msg)
     switch (m_service)
     {
         case GoogleService::GDrive:
-            m_refresh_token = msg;
+            m_refreshToken = msg;
             m_talker->listFolders();
             break;
         case GoogleService::GPhotoImport:
         case GoogleService::GPhotoExport:
-            m_refresh_token = msg;
+            m_refreshToken = msg;
             m_gphoto_talker->listAlbums();
             break;
     }
@@ -1243,7 +1243,7 @@ void GSWindow::slotUserChangeRequest()
 
     if (warn.exec() == QMessageBox::Yes)
     {
-        m_refresh_token = QString::fromLatin1("");
+        m_refreshToken = QString::fromLatin1("");
 
         switch (m_service)
         {

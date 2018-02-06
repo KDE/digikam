@@ -6,7 +6,8 @@
  * Date        : 2015-06-21
  * Description : a tool to export items to Google web services
  *
- * Copyright (C) 2015 by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2015      by Shourya Singh Gupta <shouryasgupta at gmail dot com>
+ * Copyright (C) 2015-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,15 +61,15 @@ GSSession::GSSession(QWidget* const parent, const QString & scope)
 {
     m_parent          = parent;
     m_scope           = scope;
-    m_redirect_uri    = QString::fromLatin1("urn:ietf:wg:oauth:2.0:oob");
-    m_response_type   = QString::fromLatin1("code");
-    m_client_id       = QString::fromLatin1("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
-    m_token_uri       = QString::fromLatin1("https://accounts.google.com/o/oauth2/token");
-    m_client_secret   = QString::fromLatin1("4MJOS0u1-_AUEKJ0ObA-j22U");
+    m_redirectUri    = QString::fromLatin1("urn:ietf:wg:oauth:2.0:oob");
+    m_responseType   = QString::fromLatin1("code");
+    m_clientId       = QString::fromLatin1("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
+    m_tokenUri       = QString::fromLatin1("https://accounts.google.com/o/oauth2/token");
+    m_clientSecret   = QString::fromLatin1("4MJOS0u1-_AUEKJ0ObA-j22U");
     m_code            = QString::fromLatin1("0");
     m_reply           = 0;
     m_continuePos     = 0;
-    m_Authstate       = GD_ACCESSTOKEN;
+    m_authState       = GD_ACCESSTOKEN;
     m_window          = 0;
 
     m_netMngr         = new QNetworkAccessManager(this);
@@ -85,7 +86,7 @@ GSSession::~GSSession()
 
 bool GSSession::authenticated()
 {
-    if (m_access_token.isEmpty())
+    if (m_accessToken.isEmpty())
     {
         return false;
     }
@@ -101,9 +102,9 @@ void GSSession::doOAuth()
     QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/auth"));
     QUrlQuery urlQuery;
     urlQuery.addQueryItem(QString::fromLatin1("scope"),         m_scope);
-    urlQuery.addQueryItem(QString::fromLatin1("redirect_uri"),  m_redirect_uri);
-    urlQuery.addQueryItem(QString::fromLatin1("response_type"), m_response_type);
-    urlQuery.addQueryItem(QString::fromLatin1("client_id"),     m_client_id);
+    urlQuery.addQueryItem(QString::fromLatin1("redirect_uri"),  m_redirectUri);
+    urlQuery.addQueryItem(QString::fromLatin1("response_type"), m_responseType);
+    urlQuery.addQueryItem(QString::fromLatin1("client_id"),     m_clientId);
     urlQuery.addQueryItem(QString::fromLatin1("access_type"),   QString::fromLatin1("offline"));
     url.setQuery(urlQuery);
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "OAuth URL: " << url;
@@ -177,18 +178,18 @@ void GSSession::getAccessToken()
     QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/token?"));
     QUrlQuery urlQuery;
     urlQuery.addQueryItem(QString::fromLatin1("scope"),         m_scope);
-    urlQuery.addQueryItem(QString::fromLatin1("response_type"), m_response_type);
-    urlQuery.addQueryItem(QString::fromLatin1("token_uri"),     m_token_uri);
+    urlQuery.addQueryItem(QString::fromLatin1("response_type"), m_responseType);
+    urlQuery.addQueryItem(QString::fromLatin1("token_uri"),     m_tokenUri);
     url.setQuery(urlQuery);
     QByteArray postData;
     postData = "code=";
     postData += m_code.toLatin1();
     postData += "&client_id=";
-    postData += m_client_id.toLatin1();
+    postData += m_clientId.toLatin1();
     postData += "&client_secret=";
-    postData += m_client_secret.toLatin1();
+    postData += m_clientSecret.toLatin1();
     postData += "&redirect_uri=";
-    postData += m_redirect_uri.toLatin1();
+    postData += m_redirectUri.toLatin1();
     postData += "&grant_type=authorization_code";
 
     QNetworkRequest netRequest(url);
@@ -196,7 +197,7 @@ void GSSession::getAccessToken()
 
     m_reply = m_netMngr->post(netRequest, postData);
 
-    m_Authstate = GD_ACCESSTOKEN;
+    m_authState = GD_ACCESSTOKEN;
     m_buffer.resize(0);
     emit signalBusy(true);
 }
@@ -209,9 +210,9 @@ void GSSession::getAccessTokenFromRefreshToken(const QString& msg)
 
     QByteArray postData;
     postData = "&client_id=";
-    postData += m_client_id.toLatin1();
+    postData += m_clientId.toLatin1();
     postData += "&client_secret=";
-    postData += m_client_secret.toLatin1();
+    postData += m_clientSecret.toLatin1();
     postData += "&refresh_token=";
     postData += msg.toLatin1();
     postData += "&grant_type=refresh_token";
@@ -221,7 +222,7 @@ void GSSession::getAccessTokenFromRefreshToken(const QString& msg)
 
     m_reply = m_netMngr->post(netRequest, postData);
 
-    m_Authstate = GD_REFRESHTOKEN;
+    m_authState = GD_REFRESHTOKEN;
     m_buffer.resize(0);
     emit signalBusy(true);
 }
@@ -237,7 +238,7 @@ void GSSession::slotAuthFinished(QNetworkReply* reply)
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        if (m_Authstate == GD_ACCESSTOKEN)
+        if (m_authState == GD_ACCESSTOKEN)
         {
             emit signalBusy(false);
             emit signalAccessTokenFailed(reply->error(), reply->errorString());
@@ -255,7 +256,7 @@ void GSSession::slotAuthFinished(QNetworkReply* reply)
 
     m_buffer.append(reply->readAll());
 
-    switch(m_Authstate)
+    switch(m_authState)
     {
         case (GD_ACCESSTOKEN):
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In GD_ACCESSTOKEN";// << m_buffer;
@@ -274,8 +275,8 @@ void GSSession::slotAuthFinished(QNetworkReply* reply)
 
 void GSSession::parseResponseAccessToken(const QByteArray& data)
 {
-    m_access_token  = getValue(QString::fromUtf8(data), QString::fromLatin1("access_token"));
-    m_refresh_token = getValue(QString::fromUtf8(data), QString::fromLatin1("refresh_token"));
+    m_accessToken  = getValue(QString::fromUtf8(data), QString::fromLatin1("access_token"));
+    m_refreshToken = getValue(QString::fromUtf8(data), QString::fromLatin1("refresh_token"));
 
     if (getValue(QString::fromUtf8(data), QString::fromLatin1("error")) == QString::fromLatin1("invalid_request") ||
         getValue(QString::fromUtf8(data), QString::fromLatin1("error")) == QString::fromLatin1("invalid_grant"))
@@ -284,15 +285,15 @@ void GSSession::parseResponseAccessToken(const QByteArray& data)
         return;
     }
 
-    m_bearer_access_token = QString::fromLatin1("Bearer ") + m_access_token;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In parse GD_ACCESSTOKEN" << m_bearer_access_token << "  " << data;
+    m_bearerAccessToken = QString::fromLatin1("Bearer ") + m_accessToken;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In parse GD_ACCESSTOKEN" << m_bearerAccessToken << "  " << data;
     //emit signalAccessTokenObtained();
-    emit signalRefreshTokenObtained(m_refresh_token);
+    emit signalRefreshTokenObtained(m_refreshToken);
 }
 
 void GSSession::parseResponseRefreshToken(const QByteArray& data)
 {
-    m_access_token = getValue(QString::fromUtf8(data), QString::fromLatin1("access_token"));
+    m_accessToken = getValue(QString::fromUtf8(data), QString::fromLatin1("access_token"));
 
     if (getValue(QString::fromUtf8(data), QString::fromLatin1("error")) == QString::fromLatin1("invalid_request") ||
         getValue(QString::fromUtf8(data), QString::fromLatin1("error")) == QString::fromLatin1("invalid_grant"))
@@ -301,8 +302,8 @@ void GSSession::parseResponseRefreshToken(const QByteArray& data)
         return;
     }
 
-    m_bearer_access_token = QString::fromLatin1("Bearer ") + m_access_token;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In parse GD_ACCESSTOKEN" << m_bearer_access_token << "  " << data;
+    m_bearerAccessToken = QString::fromLatin1("Bearer ") + m_accessToken;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In parse GD_ACCESSTOKEN" << m_bearerAccessToken << "  " << data;
     emit signalAccessTokenObtained();
 }
 
