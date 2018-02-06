@@ -409,7 +409,7 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
                                            const QString& errMsg,
                                            const QList <GSPhoto>& photosList)
 {
-    qCCritical(DIGIKAM_GENERAL_LOG)<< "err Code is "<< errCode <<" Err Message is "<< errMsg;
+    qCCritical(DIGIKAM_WEBSERVICES_LOG)<< "err Code is "<< errCode <<" Err Message is "<< errMsg;
 
     disconnect(m_gphoto_talker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
                this, SLOT(slotListPhotosDoneForUpload(int, QString, QList<GSPhoto>)));
@@ -504,7 +504,7 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
             }
 
             m_widget->getAlbumsCoB()->clear();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "slotListAlbumsDone1:" << list.size();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone1:" << list.size();
 
             for (int i=0;i<list.size();i++)
             {
@@ -574,7 +574,7 @@ void GSWindow::slotBusy(bool val)
 
 void GSWindow::googlePhotoTransferHandler()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Google Photo Transfer invoked";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Google Photo Transfer invoked";
 
     switch (m_service)
     {
@@ -601,7 +601,7 @@ void GSWindow::googlePhotoTransferHandler()
 
 void GSWindow::slotTextBoxEmpty()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "in slotTextBoxEmpty";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in slotTextBoxEmpty";
     QMessageBox::critical(this, i18nc("@title:window", "Error"),
                           i18n("The textbox is empty, please enter the code from the browser in the textbox. "
                                "To complete the authentication click \"Change Account\", "
@@ -684,7 +684,7 @@ void GSWindow::slotStartTransfer()
     {
         DItemInfo info(m_iface->itemInfo(m_widget->imagesList()->imageUrls().value(i).toLocalFile()));
         GSPhoto temp;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "in start transfer info " <<info.title() << info.comment();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in start transfer info " <<info.title() << info.comment();
 
         switch (m_service)
         {
@@ -720,7 +720,7 @@ void GSWindow::slotStartTransfer()
 
 void GSWindow::uploadNextPhoto()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "in upload nextphoto " << m_transferQueue.count();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in upload nextphoto " << m_transferQueue.count();
 
     if (m_transferQueue.isEmpty())
     {
@@ -1095,7 +1095,7 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
         m_widget->imagesList()->removeItemByUrl(m_transferQueue.first().first);
         m_transferQueue.pop_front();
         m_imagesCount++;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "In slotAddPhotoSucceeded" << m_imagesCount;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In slotAddPhotoSucceeded" << m_imagesCount;
         m_widget->progressBar()->setMaximum(m_imagesTotal);
         m_widget->progressBar()->setValue(m_imagesCount);
         uploadNextPhoto();

@@ -178,7 +178,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
 
     readSettings();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Calling Login method";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
     buttonStateChange(m_talker->loggedIn());
 
     if (m_import)
@@ -580,7 +580,7 @@ void SmugWindow::slotBusy(bool val)
 
 void SmugWindow::slotUserChangeRequest(bool anonymous)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Slot Change User Request";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request";
 
     if (m_talker->loggedIn())
         m_talker->logout();
@@ -619,14 +619,14 @@ void SmugWindow::slotReloadAlbumsRequest()
 
 void SmugWindow::slotNewAlbumRequest()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Slot New Album Request";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot New Album Request";
 
     // get list of album templates from SmugMug to fill in dialog
     m_talker->listAlbumTmpl();
 
     if (m_albumDlg->exec() == QDialog::Accepted)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Calling New Album method";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling New Album method";
         m_currentTmplID = m_albumDlg->m_templateCoB->itemData(
                         m_albumDlg->m_templateCoB->currentIndex()).toLongLong();
         m_currentCategoryID = m_albumDlg->m_categCoB->itemData(
@@ -640,7 +640,7 @@ void SmugWindow::slotNewAlbumRequest()
 
 void SmugWindow::slotStartTransfer()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "slotStartTransfer invoked";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotStartTransfer invoked";
 
     if (m_import)
     {
@@ -684,9 +684,9 @@ void SmugWindow::slotStartTransfer()
         m_widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("smugmug")).pixmap(22, 22));
         setUiInProgressState(true);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "m_currentAlbumID" << m_currentAlbumID;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "m_currentAlbumID" << m_currentAlbumID;
         uploadNextPhoto();
-        qCDebug(DIGIKAM_GENERAL_LOG) << "slotStartTransfer done";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotStartTransfer done";
     }
 }
 
@@ -713,12 +713,12 @@ bool SmugWindow::prepareImageForUpload(const QString& imgPath)
     if (m_widget->m_resizeChB->isChecked() &&
         (image.width() > maxDim || image.height() > maxDim))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Resizing to " << maxDim;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing to " << maxDim;
         image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio,
                                              Qt::SmoothTransformation);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Saving to temp file: " << m_tmpPath;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Saving to temp file: " << m_tmpPath;
     image.save(m_tmpPath, "JPEG", m_widget->m_imageQualitySpB->value());
 
     // copy meta-data to temporary image

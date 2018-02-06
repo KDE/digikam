@@ -101,7 +101,7 @@ void FTImportWindow::slotImport()
 
     if (!url.isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "starting to import urls: " << d->importWidget->sourceUrls();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "starting to import urls: " << d->importWidget->sourceUrls();
 
         // start copying and react on signals
         setEnabled(false);
@@ -125,7 +125,7 @@ void FTImportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl
     Q_UNUSED(directory);
     Q_UNUSED(renamed);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "copied " << to.toDisplayString();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "copied " << to.toDisplayString();
 
     d->importWidget->imagesList()->removeItemByUrl(from);
 }
@@ -150,7 +150,7 @@ void FTImportWindow::slotSourceAndTargetUpdated()
     bool hasUrlToImport = !d->importWidget->sourceUrls().empty();
     bool hasTarget      = !d->iface->uploadUrl().isEmpty();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "switching import button activity with: hasUrlToImport = "
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "switching import button activity with: hasUrlToImport = "
                                  << hasUrlToImport << ", hasTarget = " << hasTarget;
 
     startButton()->setEnabled(hasUrlToImport && hasTarget);

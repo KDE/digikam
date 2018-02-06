@@ -405,7 +405,7 @@ void FlickrList::slotAddImages(const QList<QUrl>& list)
 
         if (!found)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Insterting new item " << imageUrl.fileName();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Insterting new item " << imageUrl.fileName();
             new FlickrListViewItem(listView(), imageUrl, d->is23,
                                    isPublic, isFamily, isFriends,
                                    safetyLevel, contentType);
@@ -587,7 +587,7 @@ void FlickrListViewItem::setPublic(bool status)
         setCheckState(FlickrList::PUBLIC, Qt::Unchecked);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Public status set to" << d->isPublic;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Public status set to" << d->isPublic;
 }
 
 void FlickrListViewItem::setFamily(bool status)
@@ -600,7 +600,7 @@ void FlickrListViewItem::setFamily(bool status)
         setCheckState(FlickrList::FAMILY, d->isFamily ? Qt::Checked : Qt::Unchecked);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Family status set to" << d->isFamily;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Family status set to" << d->isFamily;
 }
 
 void FlickrListViewItem::setFriends(bool status)
@@ -613,21 +613,21 @@ void FlickrListViewItem::setFriends(bool status)
         setCheckState(FlickrList::FRIENDS, d->isFriends ? Qt::Checked : Qt::Unchecked);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Friends status set to" << d->isFriends;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Friends status set to" << d->isFriends;
 }
 
 void FlickrListViewItem::setSafetyLevel(FlickrList::SafetyLevel safetyLevel)
 {
     d->safetyLevel = safetyLevel;
     setData(FlickrList::SAFETYLEVEL, Qt::DisplayRole, QVariant(safetyLevel));
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Safety level set to" << safetyLevel;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Safety level set to" << safetyLevel;
 }
 
 void FlickrListViewItem::setContentType(FlickrList::ContentType contentType)
 {
     d->contentType = contentType;
     setData(FlickrList::CONTENTTYPE, Qt::DisplayRole, QVariant(contentType));
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Content type set to" << contentType;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Content type set to" << contentType;
 }
 
 bool FlickrListViewItem::isPublic() const

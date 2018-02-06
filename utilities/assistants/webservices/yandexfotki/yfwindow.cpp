@@ -337,7 +337,7 @@ void YFWindow::authenticate(bool forceAuthWindow)
 
     /*else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Checking old token...";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Checking old token...";
         m_talker.checkToken();
         return;
     }
@@ -400,8 +400,8 @@ void YFWindow::slotListPhotosDoneForUpload(const QList <YFPhoto>& photosList)
     const YFPhoto::Access access  = static_cast<YFPhoto::Access>(
                                             m_accessCombo->itemData(m_accessCombo->currentIndex()).toInt());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "";
-    qCDebug(DIGIKAM_GENERAL_LOG) << "----";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "----";
     m_transferQueue.clear();
 
     foreach(const QUrl& url, m_imgList->imageUrls(true))
@@ -428,7 +428,7 @@ void YFWindow::slotListPhotosDoneForUpload(const QList <YFPhoto>& photosList)
         {
             if (policy == YFWidget::UpdatePolicy::POLICY_SKIP)
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "SKIP: " << url;
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SKIP: " << url;
                 continue;
             }
 
@@ -477,11 +477,11 @@ void YFWindow::slotListPhotosDoneForUpload(const QList <YFPhoto>& photosList)
 
         if (updateFile)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "METADATA + IMAGE: " << url;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "METADATA + IMAGE: " << url;
         }
         else
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "METADATA: " << url;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "METADATA: " << url;
         }
     }
 
@@ -490,8 +490,8 @@ void YFWindow::slotListPhotosDoneForUpload(const QList <YFPhoto>& photosList)
         return;    // nothing to do
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "----";
-    qCDebug(DIGIKAM_GENERAL_LOG) << "";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "----";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "";
 
     updateControls(false);
     updateNextPhoto();
@@ -528,7 +528,7 @@ void YFWindow::updateNextPhoto()
 
                 if (m_resizeCheck->isChecked() && (image.width() > maxDim || image.height() > maxDim))
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Resizing to " << maxDim;
+                    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing to " << maxDim;
                     image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio,
                                          Qt::SmoothTransformation);
                 }
@@ -570,7 +570,7 @@ void YFWindow::updateNextPhoto()
 
         const YandexFotkiAlbum& album = m_talker.albums().at(m_albumsCombo->currentIndex());
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << photo.originalUrl();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << photo.originalUrl();
 
         m_talker.updatePhoto(photo, album);
 
@@ -605,7 +605,7 @@ void YFWindow::slotReloadAlbumsRequest()
 
 void YFWindow::slotStartTransfer()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "slotStartTransfer invoked";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotStartTransfer invoked";
 
     if (m_albumsCombo->currentIndex() == -1 || m_albumsCombo->count() == 0)
     {
@@ -619,7 +619,7 @@ void YFWindow::slotStartTransfer()
         // list photos of the album, then start upload
         const YandexFotkiAlbum& album = m_talker.albums().at(m_albumsCombo->currentIndex());
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Album selected" << album;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Album selected" << album;
 
         updateControls(false);
         m_talker.listPhotos(album);
@@ -646,7 +646,7 @@ void YFWindow::slotError()
 /*
         case YFTalker::STATE_CHECKTOKEN_INVALID:
             // remove old expired token
-            qCDebug(DIGIKAM_GENERAL_LOG) << "CheckToken invalid";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "CheckToken invalid";
             m_talker.setToken(QString());
             // don't say anything, simple show new auth window
             authenticate(true);
@@ -664,7 +664,7 @@ void YFWindow::slotError()
             break;
         case YFTalker::STATE_UPDATEPHOTO_FILE_ERROR:
         case YFTalker::STATE_UPDATEPHOTO_INFO_ERROR:
-            qCDebug(DIGIKAM_GENERAL_LOG) << "UpdatePhotoError";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UpdatePhotoError";
 
             if (QMessageBox::question(this, i18n("Uploading Failed"),
                                       i18n("Failed to upload image %1\n"
@@ -687,7 +687,7 @@ void YFWindow::slotError()
             }
             break;
         default:
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Unhandled error" << m_talker.state();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Unhandled error" << m_talker.state();
             QMessageBox::critical(this, QString(), i18n("Unknown error"));
     }
 
@@ -698,13 +698,13 @@ void YFWindow::slotError()
 
 void YFWindow::slotGetServiceDone()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "GetService Done";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "GetService Done";
     m_talker.getSession();
 }
 
 void YFWindow::slotGetSessionDone()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "GetSession Done";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "GetSession Done";
     m_talker.getToken();
 }
 
@@ -740,7 +740,7 @@ void YFWindow::slotListAlbumsDone(const QList<YandexFotkiAlbum>& albumsList)
 
 void YFWindow::slotUpdatePhotoDone(YFPhoto& photo)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "photoUploaded" << photo;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "photoUploaded" << photo;
 
     if (m_meta.supportXmp() && m_meta.canWriteXmp(photo.originalUrl()) &&
         m_meta.load(photo.originalUrl()))
@@ -749,7 +749,7 @@ void YFWindow::slotUpdatePhotoDone(YFPhoto& photo)
         if (m_meta.setXmpTagString(XMP_SERVICE_ID, photo.urn()) &&
             m_meta.save(photo.originalUrl()))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "MARK: " << photo.originalUrl();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MARK: " << photo.originalUrl();
         }
     }
 
@@ -759,7 +759,7 @@ void YFWindow::slotUpdatePhotoDone(YFPhoto& photo)
 
 void YFWindow::slotUpdateAlbumDone()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Album created";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Album created";
     m_albumsCombo->clear();
     m_talker.listAlbums();
 }

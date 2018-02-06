@@ -157,9 +157,9 @@ void MediaWikiWindow::reactivate()
     d->widget->imagesList()->loadImagesFromCurrentSelection();
     d->widget->loadImageInfoFirstLoad();
     d->widget->clearEditFields();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "imagesList items count:" << d->widget->imagesList()->listView()->topLevelItemCount();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "imagesList url length:"  << d->widget->imagesList()->imageUrls(false).size();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "allImagesDesc length:"   << d->widget->allImagesDesc().size();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "imagesList items count:" << d->widget->imagesList()->listView()->topLevelItemCount();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "imagesList url length:"  << d->widget->imagesList()->imageUrls(false).size();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "allImagesDesc length:"   << d->widget->allImagesDesc().size();
     show();
 }
 
@@ -235,11 +235,11 @@ bool MediaWikiWindow::prepareImageForUpload(const QString& imgPath)
 
         if (d->widget->resize() && (image.width() > maxDim || image.height() > maxDim))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Resizing to" << maxDim;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing to" << maxDim;
             image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Saving to temp file:" << d->tmpPath;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Saving to temp file:" << d->tmpPath;
         image.save(d->tmpPath, "JPEG", d->widget->quality());
     }
     else
@@ -247,7 +247,7 @@ bool MediaWikiWindow::prepareImageForUpload(const QString& imgPath)
         // file is copied with its embedded metadata
         if (!QFile::copy(imgPath, d->tmpPath))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "File copy error from:" << imgPath << "to" << d->tmpPath;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "File copy error from:" << imgPath << "to" << d->tmpPath;
             return false;
         }
     }
@@ -344,7 +344,7 @@ void MediaWikiWindow::slotDoLogin(const QString& login, const QString& pass, con
 
 int MediaWikiWindow::slotLoginHandle(KJob* loginJob)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << loginJob->error() << loginJob->errorString() << loginJob->errorText();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << loginJob->error() << loginJob->errorString() << loginJob->errorText();
 
     if (loginJob->error())
     {
@@ -386,7 +386,7 @@ bool MediaWikiWindow::eventFilter(QObject* /*obj*/, QEvent* event)
         if (c && c->key() == Qt::Key_Return)
         {
             event->ignore();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Key event pass";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Key event pass";
             return false;
 
         }

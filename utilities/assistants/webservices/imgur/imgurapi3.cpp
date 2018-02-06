@@ -160,7 +160,7 @@ void ImgurAPI3::replyFinished()
 
     if (m_work_queue.empty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Received result without request";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received result without request";
         return;
     }
 
@@ -199,8 +199,8 @@ void ImgurAPI3::replyFinished()
                 /* TODO: Other fields */
                 break;
             default:
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Unexpected action";
-                qCDebug(DIGIKAM_GENERAL_LOG) << response.toJson();
+                qCWarning(DIGIKAM_WEBSERVICES_LOG) << "Unexpected action";
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << response.toJson();
                 break;
         }
 

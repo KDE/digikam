@@ -145,7 +145,7 @@ void GDTalker::createFolder(const QString& title, const QString& id)
     data += "\"application/vnd.google-apps.folder\"";
     data += "}\r\n";
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "data:" << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "data:" << data;
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -233,7 +233,7 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
     m_reply = m_netMngr->post(netRequest, form.formData());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "In add photo";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In add photo";
     m_state = GD_ADDPHOTO;
     m_buffer.resize(0);
     emit signalBusy(true);
@@ -266,19 +266,19 @@ void GDTalker::slotFinished(QNetworkReply* reply)
         case (GD_LOGOUT):
             break;
         case (GD_LISTFOLDERS):
-            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_LISTFOLDERS";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In GD_LISTFOLDERS";
             parseResponseListFolders(m_buffer);
             break;
         case (GD_CREATEFOLDER):
-            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_CREATEFOLDER";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In GD_CREATEFOLDER";
             parseResponseCreateFolder(m_buffer);
             break;
         case (GD_ADDPHOTO):
-            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_ADDPHOTO"; // << m_buffer;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In GD_ADDPHOTO"; // << m_buffer;
             parseResponseAddPhoto(m_buffer);
             break;
         case (GD_USERNAME):
-            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_USERNAME"; // << m_buffer;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In GD_USERNAME"; // << m_buffer;
             parseResponseUserName(m_buffer);
             break;
         default:
@@ -300,10 +300,10 @@ void GDTalker::parseResponseUserName(const QByteArray& data)
     }
 
     QJsonObject jsonObject = doc.object();
-    qCDebug(DIGIKAM_GENERAL_LOG)<<"User Name is: " << jsonObject[QString::fromLatin1("name")].toString();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG)<<"User Name is: " << jsonObject[QString::fromLatin1("name")].toString();
     QString temp           = jsonObject[QString::fromLatin1("name")].toString();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "in parseResponseUserName";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in parseResponseUserName";
 
     emit signalBusy(false);
     emit signalSetUserName(temp);
@@ -311,7 +311,7 @@ void GDTalker::parseResponseUserName(const QByteArray& data)
 
 void GDTalker::parseResponseListFolders(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 

@@ -47,7 +47,7 @@ DBNewAlbumDlg::~DBNewAlbumDlg()
 void DBNewAlbumDlg::getFolderTitle(DBFolder& folder)
 {
     folder.title = QLatin1String("/") + getTitleEdit()->text();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "getFolderTitle:" << folder.title;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getFolderTitle:" << folder.title;
 }
 
 } // namespace Digikam

@@ -458,7 +458,7 @@ void SmugTalker::getPhoto(const QString& imgPath)
 QString SmugTalker::errorToText(int errCode, const QString &errMsg)
 {
     QString transError;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "errorToText: " << errCode << ": " << errMsg;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "errorToText: " << errCode << ": " << errMsg;
 
     switch (errCode)
     {
@@ -575,7 +575,7 @@ void SmugTalker::parseResponseLogin(const QByteArray& data)
     if (!doc.setContent(data))
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parse Login response:" << endl << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Login response:" << endl << data;
 
     QDomElement e = doc.documentElement();
 
@@ -617,7 +617,7 @@ void SmugTalker::parseResponseLogin(const QByteArray& data)
         {
             errCode = e.attribute(QString::fromLatin1("code")).toInt();
             errMsg  = e.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error:" << errCode << errMsg;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
         }
     }
 
@@ -643,7 +643,7 @@ void SmugTalker::parseResponseLogout(const QByteArray& data)
     if (!doc.setContent(data))
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parse Logout response:" << endl << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Logout response:" << endl << data;
 
     QDomElement e = doc.documentElement();
 
@@ -662,7 +662,7 @@ void SmugTalker::parseResponseLogout(const QByteArray& data)
         {
             errCode = e.attribute(QString::fromLatin1("code")).toInt();
             errMsg  = e.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error:" << errCode << errMsg;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
         }
     }
 
@@ -701,13 +701,13 @@ void SmugTalker::parseResponseAddPhoto(const QByteArray& data)
     if (!doc.setContent(data))
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parse Add Photo response:" << endl << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Add Photo response:" << endl << data;
 
     QDomElement document = doc.documentElement();
 
     if (document.tagName() == QString::fromLatin1("rsp"))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "rsp stat: " << document.attribute(QString::fromLatin1("stat"));
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "rsp stat: " << document.attribute(QString::fromLatin1("stat"));
 
         if (document.attribute(QString::fromLatin1("stat")) == QString::fromLatin1("ok"))
         {
@@ -718,14 +718,14 @@ void SmugTalker::parseResponseAddPhoto(const QByteArray& data)
             QDomElement error = document.firstChildElement(QString::fromLatin1("err"));
             errCode           = error.attribute(QString::fromLatin1("code")).toInt();
             errMsg            = error.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "error" << errCode << ":" << errMsg << endl;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error" << errCode << ":" << errMsg << endl;
         }
     }
     else
     {
         errCode = -2;
         errMsg  = QString::fromLatin1("Malformed response from smugmug: ") + document.tagName();
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Error:" << errCode << errMsg;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
     }
 
     emit signalBusy(false);
@@ -741,7 +741,7 @@ void SmugTalker::parseResponseCreateAlbum(const QByteArray& data)
     if (!doc.setContent(data))
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parse Create Album response:" << endl << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Create Album response:" << endl << data;
 
     int newAlbumID = -1;
     QString newAlbumKey;
@@ -758,15 +758,15 @@ void SmugTalker::parseResponseCreateAlbum(const QByteArray& data)
         {
             newAlbumID  = e.attribute(QString::fromLatin1("id")).toLongLong();
             newAlbumKey = e.attribute(QString::fromLatin1("Key"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "AlbumID: " << newAlbumID;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Key: " << newAlbumKey;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "AlbumID: " << newAlbumID;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Key: " << newAlbumKey;
             errCode = 0;
         }
         else if (e.tagName() == QString::fromLatin1("err"))
         {
             errCode = e.attribute(QString::fromLatin1("code")).toInt();
             errMsg  = e.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error:" << errCode << errMsg;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
         }
     }
 
@@ -784,7 +784,7 @@ void SmugTalker::parseResponseListAlbums(const QByteArray& data)
     if (!doc.setContent(data))
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parse Albums response:" << endl << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Albums response:" << endl << data;
 
     QList <SmugAlbum> albumsList;
     QDomElement e = doc.documentElement();
@@ -846,7 +846,7 @@ void SmugTalker::parseResponseListAlbums(const QByteArray& data)
         {
             errCode = e.attribute(QString::fromLatin1("code")).toInt();
             errMsg  = e.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error:" << errCode << errMsg;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
         }
     }
 
@@ -868,7 +868,7 @@ void SmugTalker::parseResponseListPhotos(const QByteArray& data)
     if (!doc.setContent(data))
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parse Photos response:" << endl << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Photos response:" << endl << data;
 
     QList <SmugPhoto> photosList;
     QDomElement e = doc.documentElement();
@@ -942,7 +942,7 @@ void SmugTalker::parseResponseListPhotos(const QByteArray& data)
         {
             errCode = e.attribute(QString::fromLatin1("code")).toInt();
             errMsg  = e.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error:" << errCode << errMsg;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
         }
     }
 
@@ -962,7 +962,7 @@ void SmugTalker::parseResponseListAlbumTmpl(const QByteArray& data)
     if (!doc.setContent(data))
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parse AlbumTemplates response:" << endl << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse AlbumTemplates response:" << endl << data;
 
     QList<SmugAlbumTmpl> albumTList;
     QDomElement e = doc.documentElement();
@@ -1001,7 +1001,7 @@ void SmugTalker::parseResponseListAlbumTmpl(const QByteArray& data)
         {
             errCode = e.attribute(QString::fromLatin1("code")).toInt();
             errMsg  = e.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error:" << errCode << errMsg;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
         }
     }
 
@@ -1021,7 +1021,7 @@ void SmugTalker::parseResponseListCategories(const QByteArray& data)
     if (!doc.setContent(data))
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parse Categories response:" << endl << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Categories response:" << endl << data;
 
     QList <SmugCategory> categoriesList;
     QDomElement e = doc.documentElement();
@@ -1057,7 +1057,7 @@ void SmugTalker::parseResponseListCategories(const QByteArray& data)
         {
             errCode = e.attribute(QString::fromLatin1("code")).toInt();
             errMsg  = e.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error:" << errCode << errMsg;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
         }
     }
 
@@ -1077,7 +1077,7 @@ void SmugTalker::parseResponseListSubCategories(const QByteArray& data)
     if (!doc.setContent(data))
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parse SubCategories response:" << endl << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse SubCategories response:" << endl << data;
 
     QList <SmugCategory> categoriesList;
     QDomElement e = doc.documentElement();
@@ -1113,7 +1113,7 @@ void SmugTalker::parseResponseListSubCategories(const QByteArray& data)
         {
             errCode = e.attribute(QString::fromLatin1("code")).toInt();
             errMsg  = e.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error:" << errCode << errMsg;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
         }
     }
 

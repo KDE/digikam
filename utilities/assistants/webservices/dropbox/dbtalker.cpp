@@ -165,7 +165,7 @@ void DBTalker::unLink()
 
 void DBTalker::slotLinkingFailed()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "LINK to Dropbox fail";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Dropbox fail";
     emit signalBusy(false);
 }
 
@@ -173,18 +173,18 @@ void DBTalker::slotLinkingSucceeded()
 {
     if (!d->o2->linked())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "UNLINK to Dropbox ok";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Dropbox ok";
         emit signalBusy(false);
         return;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "LINK to Dropbox ok";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Dropbox ok";
     emit signalLinkingSucceeded();
 }
 
 void DBTalker::slotOpenBrowser(const QUrl& url)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Open Browser...";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Open Browser...";
     QDesktopServices::openUrl(url);
 }
 
@@ -198,7 +198,7 @@ bool DBTalker::authenticated()
 void DBTalker::createFolder(const QString& path)
 {
     //path also has name of new folder so send path parameter accordingly
-    qCDebug(DIGIKAM_GENERAL_LOG) << "createFolder:" << path;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "createFolder:" << path;
 
     QUrl url(QLatin1String("https://api.dropboxapi.com/2/files/create_folder_v2"));
 
@@ -349,19 +349,19 @@ void DBTalker::slotFinished(QNetworkReply* reply)
     switch (d->state)
     {
         case (d->DB_LISTFOLDERS):
-            qCDebug(DIGIKAM_GENERAL_LOG) << "In d->DB_LISTFOLDERS";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In d->DB_LISTFOLDERS";
             parseResponseListFolders(d->buffer);
             break;
         case (d->DB_CREATEFOLDER):
-            qCDebug(DIGIKAM_GENERAL_LOG) << "In d->DB_CREATEFOLDER";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In d->DB_CREATEFOLDER";
             parseResponseCreateFolder(d->buffer);
             break;
         case (d->DB_ADDPHOTO):
-            qCDebug(DIGIKAM_GENERAL_LOG) << "In d->DB_ADDPHOTO";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In d->DB_ADDPHOTO";
             parseResponseAddPhoto(d->buffer);
             break;
         case (d->DB_USERNAME):
-            qCDebug(DIGIKAM_GENERAL_LOG) << "In d->DB_USERNAME";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In d->DB_USERNAME";
             parseResponseUserName(d->buffer);
             break;
         default:
@@ -428,7 +428,7 @@ void DBTalker::parseResponseListFolders(const QByteArray& data)
 
         if (folder == QLatin1String("folder"))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Path is" << path;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Path is" << path;
             QString name = path.section(QLatin1Char('/'), -1);
             list.append(qMakePair(path, name));
         }

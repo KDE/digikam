@@ -221,7 +221,7 @@ void ImageShackTalker::checkRegistrationCodeDone(int errCode, const QString& err
 
 void ImageShackTalker::parseAccessToken(const QByteArray &data)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Data received is "<< data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Data received is "<< data;
 
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
@@ -461,7 +461,7 @@ int ImageShackTalker::parseErrorResponse(QDomElement elem, QString& errMsg)
 
 void ImageShackTalker::parseUploadPhotoDone(QByteArray data)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "ParseUploadPhotoDone data is "<<data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "ParseUploadPhotoDone data is "<<data;
 
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
@@ -496,7 +496,7 @@ void ImageShackTalker::parseAddPhotoToGalleryDone(QByteArray data)
     QString errMsg = QString::fromLatin1("");
     QDomDocument domDoc(QString::fromLatin1("galleryXML"));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
 
     if (!domDoc.setContent(data))
         return;

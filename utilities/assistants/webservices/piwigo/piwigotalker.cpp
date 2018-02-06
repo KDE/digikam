@@ -97,7 +97,7 @@ QByteArray PiwigoTalker::computeMD5Sum(const QString& filepath)
 
     if (!file.open(QIODevice::ReadOnly))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "File open error:" << filepath;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "File open error:" << filepath;
         return QByteArray();
     }
 
@@ -180,7 +180,7 @@ bool PiwigoTalker::addPhoto(int   albumId,
 
     m_md5sum      = computeMD5Sum(mediaPath);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << mediaPath << " " << m_md5sum.toHex();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << mediaPath << " " << m_md5sum.toHex();
 
     if (mediaPath.endsWith(QString::fromLatin1(".mp4"))  || mediaPath.endsWith(QString::fromLatin1(".MP4")) ||
         mediaPath.endsWith(QString::fromLatin1(".ogg"))  || mediaPath.endsWith(QString::fromLatin1(".OGG")) ||
@@ -208,7 +208,7 @@ bool PiwigoTalker::addPhoto(int   albumId,
 
         if (!rescale)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Upload the original version: " << m_path;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Upload the original version: " << m_path;
         }
         else
         {
@@ -223,7 +223,7 @@ bool PiwigoTalker::addPhoto(int   albumId,
             m_tmpPath = m_path;
             image.save(m_path, "JPEG", quality);
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Upload a resized version: " << m_path ;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Upload a resized version: " << m_path ;
 
             // Restore all metadata with EXIF
             // in the resized version
@@ -240,7 +240,7 @@ bool PiwigoTalker::addPhoto(int   albumId,
             }
             else
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Image " << mediaPath << " has no exif data";
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Image " << mediaPath << " has no exif data";
             }
         }
     }
@@ -270,10 +270,10 @@ bool PiwigoTalker::addPhoto(int   albumId,
     if (!info.dateTime().isNull())
         m_date = info.dateTime();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Title: "   << m_title;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Comment: " << m_comment;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Author: "  << m_author;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Date: "    << m_date;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Title: "   << m_title;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Comment: " << m_comment;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Author: "  << m_author;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Date: "    << m_date;
 
     QStringList qsl;
     qsl.append(QLatin1String("method=pwg.images.exist"));
@@ -310,11 +310,11 @@ void PiwigoTalker::slotFinished(QNetworkReply* reply)
         if (state == GE_LOGIN)
         {
             emit signalLoginFailed(reply->errorString());
-            qCDebug(DIGIKAM_GENERAL_LOG) << reply->errorString();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << reply->errorString();
         }
         else if (state == GE_GETVERSION)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << reply->errorString();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << reply->errorString();
             // Version isn't mandatory and errors can be ignored
             // As login succeeded, albums can be listed
             listAlbums();
@@ -386,7 +386,7 @@ void PiwigoTalker::parseResponseLogin(const QByteArray& data)
     bool foundResponse = false;
     m_loggedIn         = false;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "parseResponseLogin: " << QString::fromUtf8(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseLogin: " << QString::fromUtf8(data);
 
     while (!ts.atEnd())
     {
@@ -441,7 +441,7 @@ void PiwigoTalker::parseResponseGetVersion(const QByteArray& data)
 
     bool foundResponse = false;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "parseResponseGetVersion: " << QString::fromUtf8(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseGetVersion: " << QString::fromUtf8(data);
 
     while (!ts.atEnd())
     {
@@ -460,14 +460,14 @@ void PiwigoTalker::parseResponseGetVersion(const QByteArray& data)
                 {
                     QStringList qsl = verrx.capturedTexts();
                     m_version       = qsl[1].toInt() * 10 + qsl[2].toInt();
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Version: " << m_version;
+                    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Version: " << m_version;
                     break;
                 }
             }
         }
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "foundResponse : " << foundResponse;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "foundResponse : " << foundResponse;
 
     if (m_version < PIWIGO_VER_2_4)
     {
@@ -489,7 +489,7 @@ void PiwigoTalker::parseResponseListAlbums(const QByteArray& data)
     PiwigoAlbumList albumList;
     PiwigoAlbumList::iterator iter = albumList.begin();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "parseResponseListAlbums";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseListAlbums";
 
     while (!ts.atEnd())
     {
@@ -517,7 +517,7 @@ void PiwigoTalker::parseResponseListAlbums(const QByteArray& data)
                 album.ref_num = ts.attributes().value(QString::fromLatin1("id")).toString().toInt();
                 album.parent_ref_num = -1;
 
-                qCDebug(DIGIKAM_GENERAL_LOG) << album.ref_num << "\n";
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << album.ref_num << "\n";
 
                 iter = albumList.insert(iter, album);
             }
@@ -525,7 +525,7 @@ void PiwigoTalker::parseResponseListAlbums(const QByteArray& data)
             if (ts.name() == QString::fromLatin1("name"))
             {
                 (*iter).name = ts.readElementText();
-                qCDebug(DIGIKAM_GENERAL_LOG) << (*iter).name << "\n";
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << (*iter).name << "\n";
             }
 
             if (ts.name() == QString::fromLatin1("uppercats"))
@@ -536,7 +536,7 @@ void PiwigoTalker::parseResponseListAlbums(const QByteArray& data)
                 if (catlist.size() > 1 && catlist.at(catlist.size() - 2).toInt() != (*iter).ref_num)
                 {
                     (*iter).parent_ref_num = catlist.at(catlist.size() - 2).toInt();
-                    qCDebug(DIGIKAM_GENERAL_LOG) << (*iter).parent_ref_num << "\n";
+                    qCDebug(DIGIKAM_WEBSERVICES_LOG) << (*iter).parent_ref_num << "\n";
                 }
             }
         }
@@ -568,7 +568,7 @@ void PiwigoTalker::parseResponseDoesPhotoExist(const QByteArray& data)
     bool foundResponse = false;
     bool success       = false;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "parseResponseDoesPhotoExist: " << QString::fromUtf8(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseDoesPhotoExist: " << QString::fromUtf8(data);
 
     while (!ts.atEnd())
     {
@@ -594,7 +594,7 @@ void PiwigoTalker::parseResponseDoesPhotoExist(const QByteArray& data)
                 if (qsl[1] == QString::fromLatin1(m_md5sum.toHex()))
                 {
                     m_photoId = qsl[2].toInt();
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "m_photoId: " << m_photoId;
+                    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "m_photoId: " << m_photoId;
 
                     emit signalProgressInfo(i18n("Photo '%1' already exists.", m_title));
 
@@ -660,7 +660,7 @@ void PiwigoTalker::parseResponseGetInfo(const QByteArray& data)
     bool success       = false;
     QList<int> categories;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "parseResponseGetInfo: " << QString::fromUtf8(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseGetInfo: " << QString::fromUtf8(data);
 
     while (!ts.atEnd())
     {
@@ -687,7 +687,7 @@ void PiwigoTalker::parseResponseGetInfo(const QByteArray& data)
         }
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "success : " << success;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "success : " << success;
 
     if (!foundResponse)
     {
@@ -740,7 +740,7 @@ void PiwigoTalker::parseResponseSetInfo(const QByteArray& data)
     bool foundResponse = false;
     bool success       = false;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "parseResponseSetInfo: " << QString::fromUtf8(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseSetInfo: " << QString::fromUtf8(data);
 
     while (!ts.atEnd())
     {
@@ -821,7 +821,7 @@ void PiwigoTalker::parseResponseAddPhotoChunk(const QByteArray& data)
     bool foundResponse = false;
     bool success       = false;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "parseResponseAddPhotoChunk: " << QString::fromUtf8(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseAddPhotoChunk: " << QString::fromUtf8(data);
 
     while (!ts.atEnd())
     {
@@ -900,7 +900,7 @@ void PiwigoTalker::parseResponseAddPhotoSummary(const QByteArray& data)
     bool foundResponse = false;
     bool success       = false;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "parseResponseAddPhotoSummary: " << QString::fromUtf8(data);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseAddPhotoSummary: " << QString::fromUtf8(data);
 
     while (!ts.atEnd())
     {

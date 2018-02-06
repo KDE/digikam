@@ -106,7 +106,7 @@ void GSSession::doOAuth()
     urlQuery.addQueryItem(QString::fromLatin1("client_id"),     m_client_id);
     urlQuery.addQueryItem(QString::fromLatin1("access_type"),   QString::fromLatin1("offline"));
     url.setQuery(urlQuery);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "OAuth URL: " << url;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "OAuth URL: " << url;
     QDesktopServices::openUrl(url);
 
     emit signalBusy(false);
@@ -141,13 +141,13 @@ void GSSession::doOAuth()
 
     if (m_window->result() == QDialog::Accepted && !(textbox->text().isEmpty()))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "1";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "1";
         m_code = textbox->text();
     }
 
     if (textbox->text().isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "3";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "3";
         emit signalTextBoxEmpty();
     }
 
@@ -258,11 +258,11 @@ void GSSession::slotAuthFinished(QNetworkReply* reply)
     switch(m_Authstate)
     {
         case (GD_ACCESSTOKEN):
-            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_ACCESSTOKEN";// << m_buffer;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In GD_ACCESSTOKEN";// << m_buffer;
             parseResponseAccessToken(m_buffer);
             break;
         case (GD_REFRESHTOKEN):
-            qCDebug(DIGIKAM_GENERAL_LOG) << "In GD_REFRESHTOKEN" << m_buffer;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In GD_REFRESHTOKEN" << m_buffer;
             parseResponseRefreshToken(m_buffer);
             break;
         default:
@@ -285,7 +285,7 @@ void GSSession::parseResponseAccessToken(const QByteArray& data)
     }
 
     m_bearer_access_token = QString::fromLatin1("Bearer ") + m_access_token;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "In parse GD_ACCESSTOKEN" << m_bearer_access_token << "  " << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In parse GD_ACCESSTOKEN" << m_bearer_access_token << "  " << data;
     //emit signalAccessTokenObtained();
     emit signalRefreshTokenObtained(m_refresh_token);
 }
@@ -302,7 +302,7 @@ void GSSession::parseResponseRefreshToken(const QByteArray& data)
     }
 
     m_bearer_access_token = QString::fromLatin1("Bearer ") + m_access_token;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "In parse GD_ACCESSTOKEN" << m_bearer_access_token << "  " << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In parse GD_ACCESSTOKEN" << m_bearer_access_token << "  " << data;
     emit signalAccessTokenObtained();
 }
 

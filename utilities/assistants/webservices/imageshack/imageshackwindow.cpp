@@ -207,7 +207,7 @@ void ImageShackWindow::slotStartTransfer()
         return;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Transfer started!";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Transfer started!";
 
     m_imagesTotal = m_transferQueue.count();
     m_imagesCount = 0;
@@ -233,7 +233,7 @@ void ImageShackWindow::slotCancelClicked()
 
 void ImageShackWindow::slotChangeRegistrantionCode()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Change registration code";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Change registration code";
     authenticate();
 }
 
@@ -357,7 +357,7 @@ void ImageShackWindow::uploadNextItem()
 
     int gidx = m_widget->m_galleriesCob->currentIndex();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Album ID is "<< m_widget->m_galleriesCob->itemData(gidx).toString();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Album ID is "<< m_widget->m_galleriesCob->itemData(gidx).toString();
 
     switch(gidx)
     {

@@ -223,7 +223,7 @@ void DBWindow::slotSetUserName(const QString& msg)
 void DBWindow::slotListAlbumsDone(const QList<QPair<QString,QString> >& list)
 {
     d->widget->getAlbumsCoB()->clear();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "slotListAlbumsDone:" << list.size();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone:" << list.size();
 
     for (int i = 0 ; i < list.size() ; i++)
     {
@@ -308,11 +308,11 @@ void DBWindow::slotStartTransfer()
 
 void DBWindow::uploadNextPhoto()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "uploadNextPhoto:" << d->transferQueue.count();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "uploadNextPhoto:" << d->transferQueue.count();
 
     if (d->transferQueue.isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "empty";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "empty";
         d->widget->progressBar()->progressCompleted();
         return;
     }
@@ -373,7 +373,7 @@ void DBWindow::slotNewAlbumRequest()
     {
         DBFolder newFolder;
         d->albumDlg->getFolderTitle(newFolder);
-        qCDebug(DIGIKAM_GENERAL_LOG) << "slotNewAlbumRequest:" << newFolder.title;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotNewAlbumRequest:" << newFolder.title;
         d->currentAlbumName = d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString();
         QString temp = d->currentAlbumName + newFolder.title;
         d->talker->createFolder(temp);

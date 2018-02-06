@@ -69,15 +69,15 @@ PreparedImage _prepareImageForUpload(const QString& saveDir, const QImage& img, 
 
     if (maxDimension > 0 && ((unsigned) image.width() > maxDimension || (unsigned) image.height() > maxDimension))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Resizing to " << maxDimension;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing to " << maxDimension;
         image = image.scaled(maxDimension, maxDimension, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Saving to temp file: " << ret.scaledImagePath;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Saving to temp file: " << ret.scaledImagePath;
     image.save(ret.scaledImagePath, "JPEG", jpgQuality);
 
     QImage thumb = image.scaled(thumbDimension, thumbDimension, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Saving thumb to temp file: " << ret.thumbPath;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Saving thumb to temp file: " << ret.thumbPath;
     thumb.save(ret.thumbPath, "JPEG", jpgQuality);
 
     // copy meta data to temporary image
@@ -497,7 +497,7 @@ void AlbumListCommand::parseResponse(QXmlQuery& q, RajceSession& state)
         q.evaluateTo(&detail);
         album.createDate  = QDateTime::fromString(detail.trimmed(), QString::fromLatin1("yyyy-MM-dd hh:mm:ss"));
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Create date: " << detail.trimmed() << " = " << QDateTime::fromString(detail.trimmed(), QString::fromLatin1("yyyy-MM-dd hh:mm:ss"));
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Create date: " << detail.trimmed() << " = " << QDateTime::fromString(detail.trimmed(), QString::fromLatin1("yyyy-MM-dd hh:mm:ss"));
 
         q.setQuery(QString::fromLatin1("data(./updateDate)"));
         q.evaluateTo(&detail);
@@ -561,7 +561,7 @@ AddPhotoCommand::AddPhotoCommand(const QString& tmpDir, const QString& path, uns
 
     if (m_image.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Could not read in an image from " << path << ". Adding the photo will not work.";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Could not read in an image from " << path << ". Adding the photo will not work.";
         return;
     }
 
@@ -647,7 +647,7 @@ QByteArray AddPhotoCommand::encode() const
 {
     if (m_image.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << m_imagePath << " could not be read, no data will be sent.";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << m_imagePath << " could not be read, no data will be sent.";
         return QByteArray();
     }
 
@@ -664,7 +664,7 @@ QByteArray AddPhotoCommand::encode() const
     parameters()[QString::fromLatin1("height")] = QString::number(scaled.height());
     QString xml                                 = getXml();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Really sending:\n" << xml;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Really sending:\n" << xml;
 
     //now we can create the form with all the info
     m_form->reset();
@@ -706,7 +706,7 @@ const RajceSession& RajceTalker::session() const
 
 void RajceTalker::_startJob(RajceCommand* command)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Sending command:\n" << command->getXml();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Sending command:\n" << command->getXml();
 
     QByteArray data = command->encode();
 
@@ -748,7 +748,7 @@ void RajceTalker::slotFinished(QNetworkReply* reply)
 
     QString response      = QString::fromUtf8(reply->readAll());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << response;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << response;
 
     m_queueAccess.lock();
 
@@ -761,7 +761,7 @@ void RajceTalker::slotFinished(QNetworkReply* reply)
 
     delete c;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "State after command: " << m_session;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "State after command: " << m_session;
 
     // Let the users react on the command before we
     // let the next queued command in.
@@ -834,7 +834,7 @@ void RajceTalker::slotUploadProgress(qint64 bytesSent, qint64 bytesTotal)
 
     unsigned percent = (unsigned)((float)bytesSent / bytesTotal * 100);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Percent signalled: " << percent;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Percent signalled: " << percent;
 
     emit busyProgress(m_commandQueue.head()->commandType(), percent);
 }

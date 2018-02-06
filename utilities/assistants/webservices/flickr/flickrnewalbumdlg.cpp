@@ -55,7 +55,7 @@ void FlickrNewAlbumDlg::getFolderProperties(FPhotoSet& folder)
     folder.title       = getTitleEdit()->text();
     folder.description = getDescEdit()->toPlainText();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Folder Title " << folder.title<<" Folder Description "<<folder.description;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Folder Title " << folder.title<<" Folder Description "<<folder.description;
 }
 
 } // namespace Digikam

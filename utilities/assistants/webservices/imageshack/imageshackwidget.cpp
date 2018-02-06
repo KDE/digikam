@@ -128,7 +128,7 @@ void ImageShackWidget::slotGetGalleries(const QStringList &gTexts, const QString
     // TODO check if the lists have the same size
     for (int i = 0; i < gTexts.size(); ++i)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "gTexts is "<<gTexts[i] << " gNames is "<<gNames[i];
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "gTexts is "<<gTexts[i] << " gNames is "<<gNames[i];
         m_galleriesCob->addItem(gTexts[i], gNames[i]);
     }
 

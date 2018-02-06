@@ -94,14 +94,14 @@ void MediaWikiTalker::begin()
 void MediaWikiTalker::setImageMap(const QMap <QString,QMap <QString,QString> >& imageDesc)
 {
     d->imageDesc = imageDesc;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Map length:" << imageDesc.size();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Map length:" << imageDesc.size();
 }
 
 void MediaWikiTalker::uploadHandle(KJob* j)
 {
     if (j != 0)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Upload error" << j->error() << j->errorString() << j->errorText();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Upload error" << j->error() << j->errorString() << j->errorText();
         emit uploadProgress(100);
 
         disconnect(j, SIGNAL(result(KJob*)),
@@ -135,13 +135,13 @@ void MediaWikiTalker::uploadHandle(KJob* j)
         QMap<QString,QString> info = d->imageDesc.take(keys.first());
         Upload* const e1           = new Upload(*d->mediawiki, this);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Path:" << keys.first();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Path:" << keys.first();
 
         QFile* const file = new QFile(keys.first(),this);
 
         if (!file->open(QIODevice::ReadOnly))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "File open error:" << keys.first();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "File open error:" << keys.first();
             delete file;
             return;
         }
@@ -150,9 +150,9 @@ void MediaWikiTalker::uploadHandle(KJob* j)
 
         e1->setFile(file);
         d->currentFile = file->fileName();
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Name:" << file->fileName();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Name:" << file->fileName();
         e1->setFilename(info[QLatin1String("title")].replace(QLatin1String(" "), QLatin1String("_")));
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Title:" << info[QLatin1String("title")];
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Title:" << info[QLatin1String("title")];
 
         if (!info[QLatin1String("comments")].isEmpty())
         {
@@ -221,7 +221,7 @@ QString MediaWikiTalker::buildWikiText(const QMap<QString, QString>& info) const
 
     if (!latitude.isEmpty() && !longitude.isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Latitude:" << latitude << "; longitude:" << longitude;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Latitude:" << latitude << "; longitude:" << longitude;
         text.append(QLatin1String("{{Location|")).append(latitude).append(QLatin1String("|")).append(longitude).append(QLatin1String("}}\n"));
     }
 

@@ -176,7 +176,7 @@ void FTExportWidget::slotShowTargetDialogClicked(bool checked)
 
 void FTExportWidget::updateTargetLabel()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Call for url "
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Call for url "
                                  << d->targetUrl.toDisplayString()
                                  << ", valid = "
                                  << d->targetUrl.isValid();

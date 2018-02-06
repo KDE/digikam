@@ -60,13 +60,13 @@ void MPForm_GDrive::reset()
 
 void MPForm_GDrive::finish()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "in finish";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in finish";
     QByteArray str;
     str += "--";
     str += m_boundary;
     str += "--";
     m_buffer.append(str);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "finish:" << m_buffer;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "finish:" << m_buffer;
 }
 
 void MPForm_GDrive::addPair(const QString& name, const QString& description, const QString& path,const QString& id)
@@ -74,7 +74,7 @@ void MPForm_GDrive::addPair(const QString& name, const QString& description, con
     QMimeDatabase db;
     QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(path));
     QString mime  = ptr.name();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "in add pair:"
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in add pair:"
                                  << name << " "
                                  << description
                                  << " " << path
@@ -110,7 +110,7 @@ void MPForm_GDrive::addPair(const QString& name, const QString& description, con
 bool MPForm_GDrive::addFile(const QString& path)
 {
     QByteArray str;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "in addfile" << path;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in addfile" << path;
 
     QMimeDatabase db;
     QMimeType ptr = db.mimeTypeForUrl(QUrl::fromLocalFile(path));

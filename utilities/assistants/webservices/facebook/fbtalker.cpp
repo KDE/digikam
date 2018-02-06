@@ -230,7 +230,7 @@ QString FbTalker::getCallString(const QMap<QString, QString>& args)
 
     concat.append(url.query());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "CALL: " << concat;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "CALL: " << concat;
 
     return concat;
 }
@@ -318,7 +318,7 @@ void FbTalker::doOAuth()
                      QString::fromLatin1("user_photos,publish_actions,user_friends"));
     q.addQueryItem(QString::fromLatin1("response_type"), QString::fromLatin1("token"));
     url.setQuery(q);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "OAuth URL: " << url;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "OAuth URL: " << url;
     QDesktopServices::openUrl(url);
 
     emit signalBusy(false);
@@ -356,7 +356,7 @@ void FbTalker::doOAuth()
 
         url                        = QUrl( textbox->text() );
         QString fragment           = url.fragment();
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Split out the fragment from the URL: " << fragment;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Split out the fragment from the URL: " << fragment;
         QStringList params         = fragment.split(QLatin1Char('&'));
         QList<QString>::iterator i = params.begin();
 
@@ -447,7 +447,7 @@ void FbTalker::logout()
     q.addQueryItem(QString::fromLatin1("next"), QString::fromLatin1("http://www.digikam.org"));
     q.addQueryItem(QString::fromLatin1("access_token"), d->accessToken);
     url.setQuery(q);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Logout URL: " << url;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logout URL: " << url;
     QDesktopServices::openUrl(url);
 
     emit signalBusy(false);
@@ -455,7 +455,7 @@ void FbTalker::logout()
 
 void FbTalker::listAlbums(long long userID)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Requesting albums for user " << userID;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Requesting albums for user " << userID;
 
     if (d->reply)
     {
@@ -537,7 +537,7 @@ void FbTalker::createAlbum(const FbAlbum& album)
 
 bool FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QString& caption)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Adding photo " << imgPath << " to album with id "
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Adding photo " << imgPath << " to album with id "
              << albumID << " using caption '" << caption << "'";
 
     if (d->reply)
@@ -571,7 +571,7 @@ bool FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
 
     form.finish();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "FORM: " << endl << form.formData();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "FORM: " << endl << form.formData();
 
     QNetworkRequest netRequest(QUrl(QLatin1String("https://graph.facebook.com/v2.4/") +
                                     albumID + QLatin1String("/photos")));
@@ -587,7 +587,7 @@ bool FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
 QString FbTalker::errorToText(int errCode, const QString &errMsg)
 {
     QString transError;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "errorToText: " << errCode << ": " << errMsg;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "errorToText: " << errCode << ": " << errMsg;
 
     switch (errCode)
     {
@@ -705,12 +705,12 @@ int FbTalker::parseErrorResponse(const QDomElement& e, QString& errMsg)
         if (node.nodeName() == QString::fromLatin1("error_code"))
         {
             errCode = node.toElement().text().toInt();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error Code:" << errCode;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error Code:" << errCode;
         }
         else if (node.nodeName() == QString::fromLatin1("error_msg"))
         {
             errMsg = node.toElement().text();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error Text:" << errMsg;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error Text:" << errMsg;
         }
     }
 
@@ -719,7 +719,7 @@ int FbTalker::parseErrorResponse(const QDomElement& e, QString& errMsg)
 
 void FbTalker::parseExchangeSession(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parse exchange_session response:" << endl << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse exchange_session response:" << endl << data;
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
@@ -750,7 +750,7 @@ void FbTalker::parseExchangeSession(const QByteArray& data)
 
 void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG)<<"Logged in data "<<data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG)<<"Logged in data "<<data;
     int errCode = -1;
     QString errMsg;
     QJsonParseError err;
@@ -789,7 +789,7 @@ void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
 
 void FbTalker::parseResponseAddPhoto(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) <<"Parse Add Photo data is "<<data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) <<"Parse Add Photo data is "<<data;
     int errCode = -1;
     QString errMsg;
     QJsonParseError err;
@@ -805,7 +805,7 @@ void FbTalker::parseResponseAddPhoto(const QByteArray& data)
 
     if(jsonObject.contains(QString::fromLatin1("id")))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Id of photo exported is" << jsonObject[QString::fromLatin1("id")].toString();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Id of photo exported is" << jsonObject[QString::fromLatin1("id")].toString();
         errCode = 0;
     }
 
@@ -822,7 +822,7 @@ void FbTalker::parseResponseAddPhoto(const QByteArray& data)
 
 void FbTalker::parseResponseCreateAlbum(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) <<"Parse Create album data is"<<data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) <<"Parse Create album data is"<<data;
     int errCode = -1;
     QString errMsg;
     QString newAlbumID;
@@ -840,7 +840,7 @@ void FbTalker::parseResponseCreateAlbum(const QByteArray& data)
     if(jsonObject.contains(QString::fromLatin1("id")))
     {
         newAlbumID = jsonObject[QString::fromLatin1("id")].toString();
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Id of album created is" << newAlbumID;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Id of album created is" << newAlbumID;
         errCode = 0;
     }
 

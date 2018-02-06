@@ -144,7 +144,7 @@ bool RajceMPForm::addFile(const QString& name,const QString& path)
     m_buffer.append(imageData);
     m_buffer.append("\r\n");
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Added file " << path << " with detected mime type " << mime;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Added file " << path << " with detected mime type " << mime;
 
     return true;
 }

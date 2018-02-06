@@ -110,7 +110,7 @@ void PiwigoSession::save()
     group.writeEntry(QString::fromUtf8("Username"), username());
     group.writeEntry(QString::fromUtf8("Password"), password());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "syncing..";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "syncing..";
     config.sync();
 }
 

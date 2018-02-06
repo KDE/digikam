@@ -594,7 +594,7 @@ MediaWikiWidget::~MediaWikiWidget()
 
 void MediaWikiWidget::readSettings(KConfigGroup& group)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) <<  "Read settings from" << group.name();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) <<  "Read settings from" << group.name();
 
     d->authorEdit->setText(group.readEntry("Author",           ""));
     d->sourceEdit->setText(group.readEntry("Source",           "{{own}}"));
@@ -614,7 +614,7 @@ void MediaWikiWidget::readSettings(KConfigGroup& group)
     d->WikisHistory = group.readEntry("Wikis history",         QStringList());
     d->UrlsHistory  = group.readEntry("Urls history",          QStringList());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "UrlHistory.size: " << d->UrlsHistory.size() << "; WikisHistory.size:" << d->WikisHistory.size();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UrlHistory.size: " << d->UrlsHistory.size() << "; WikisHistory.size:" << d->WikisHistory.size();
 
     for(int i = 0 ; i < d->UrlsHistory.size() && i < d->WikisHistory.size() ; i++)
     {
@@ -624,7 +624,7 @@ void MediaWikiWidget::readSettings(KConfigGroup& group)
 
 void MediaWikiWidget::saveSettings(KConfigGroup& group)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Save settings to" << group.name();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Save settings to" << group.name();
 
     group.writeEntry("Author",        d->authorEdit->text());
     group.writeEntry("Source",        d->sourceEdit->text());
@@ -853,13 +853,13 @@ void MediaWikiWidget::slotRemoveImagesDesc()
     foreach(QString path, toRemove)
     {
         d->imagesDescInfo.remove(path);
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Remove" << path << "; new length:" << d->imagesDescInfo.size();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Remove" << path << "; new length:" << d->imagesDescInfo.size();
     }
 }
 
 void MediaWikiWidget::slotRestoreExtension()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "RestoreExtension";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "RestoreExtension";
 
     QString imageTitle;
     QString originalExtension;
@@ -892,7 +892,7 @@ void MediaWikiWidget::slotRestoreExtension()
             d->titleEdit->setText(imageTitle);
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << urls.at(i).toLocalFile() << "renamed to" << imageTitle;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << urls.at(i).toLocalFile() << "renamed to" << imageTitle;
         imageMetaData[QLatin1String("title")] = imageTitle;
         d->imagesDescInfo[urls.at(i).toLocalFile()]  = imageMetaData;
     }
@@ -900,7 +900,7 @@ void MediaWikiWidget::slotRestoreExtension()
 
 void MediaWikiWidget::slotApplyTitle()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "ApplyTitle";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "ApplyTitle";
 
     QString givenTitle = title();
     QString imageTitle;
@@ -941,7 +941,7 @@ void MediaWikiWidget::slotApplyTitle()
             imageTitle.replace(imageTitle.indexOf(QLatin1String("#")), 1, number);
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << urls.at(i).toLocalFile() << "renamed to" << imageTitle;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << urls.at(i).toLocalFile() << "renamed to" << imageTitle;
         imageMetaData[QLatin1String("title")] = imageTitle;
         d->imagesDescInfo[urls.at(i).toLocalFile()]  = imageMetaData;
     }
@@ -1079,103 +1079,103 @@ QMap <QString,QMap <QString,QString> > MediaWikiWidget::allImagesDesc()
 
 QString MediaWikiWidget::author() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::author()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::author()";
     return d->authorEdit->text();
 }
 
 QString MediaWikiWidget::source() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::source()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::source()";
     return d->sourceEdit->text();
 }
 
 QString MediaWikiWidget::genCategories() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::genCategories()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::genCategories()";
     return d->genCatEdit->toPlainText();
 }
 
 QString MediaWikiWidget::genText() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::genText()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::genText()";
     return d->genTxtEdit->toPlainText();
 }
 
 QString MediaWikiWidget::genComments() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::genComments()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::genComments()";
     return d->genComEdit->toPlainText();
 }
 
 int MediaWikiWidget::quality() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::quality()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::quality()";
     return d->imageQualitySpB->value();
 }
 
 int MediaWikiWidget::dimension() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::dimension()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::dimension()";
     return d->dimensionSpB->value();
 }
 
 bool MediaWikiWidget::resize() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::resize()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::resize()";
     return d->resizeChB->isChecked();
 }
 
 bool MediaWikiWidget::removeMeta() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::removeMeta()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::removeMeta()";
     return d->removeMetaChB->isChecked();
 }
 
 bool MediaWikiWidget::removeGeo() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::removeGeo()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::removeGeo()";
     return d->removeGeoChB->isChecked();
 }
 
 QString MediaWikiWidget::license() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::license()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::license()";
     return d->licenseComboBox->itemData(d->licenseComboBox->currentIndex()).toString();
 }
 
 QString MediaWikiWidget::title() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::title()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::title()";
     return d->titleEdit->text();
 }
 
 QString MediaWikiWidget::categories() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::categories()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::categories()";
     return d->categoryEdit->toPlainText();
 }
 
 QString MediaWikiWidget::description() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::description()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::description()";
     return d->descEdit->toPlainText();
 }
 
 QString MediaWikiWidget::date() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::date()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::date()";
     return d->dateEdit->text();
 }
 
 QString MediaWikiWidget::latitude() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::latitude()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::latitude()";
     return d->latitudeEdit->text();
 }
 
 QString MediaWikiWidget::longitude() const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "MediaWikiWidget::longitude()";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MediaWikiWidget::longitude()";
     return d->longitudeEdit->text();
 }
 

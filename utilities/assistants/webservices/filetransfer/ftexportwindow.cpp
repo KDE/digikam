@@ -171,7 +171,7 @@ void FTExportWindow::updateUploadButton()
     bool listNotEmpty = !d->exportWidget->imagesList()->imageUrls().empty();
     startButton()->setEnabled(listNotEmpty && d->exportWidget->targetUrl().isValid());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Updated upload button with listNotEmpty = "
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Updated upload button with listNotEmpty = "
                                  << listNotEmpty << ", targetUrl().isValid() = "
                                  << d->exportWidget->targetUrl().isValid();
 }
@@ -185,7 +185,7 @@ void FTExportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl
     Q_UNUSED(directory);
     Q_UNUSED(renamed);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "copied " << to.toDisplayString();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "copied " << to.toDisplayString();
 
     d->exportWidget->imagesList()->removeItemByUrl(from);
 }

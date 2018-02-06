@@ -73,7 +73,7 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
 
     if (grp.exists())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << QString::fromLatin1("%1Export Settings").arg(m_serviceName) << " exists, deleting it";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString::fromLatin1("%1Export Settings").arg(m_serviceName) << " exists, deleting it";
         grp.deleteGroup();
     }
 
@@ -264,7 +264,7 @@ void FlickrWindow::reactivate()
 void FlickrWindow::readSettings(QString uname)
 {
     KConfig config;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Group name is : "<<QString::fromLatin1("%1%2Export Settings").arg(m_serviceName, uname);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Group name is : "<<QString::fromLatin1("%1%2Export Settings").arg(m_serviceName, uname);
     KConfigGroup grp = config.group(QString::fromLatin1("%1%2Export Settings").arg(m_serviceName, uname));
     m_exportHostTagsCheckBox->setChecked(grp.readEntry("Export Host Tags",      false));
     m_extendedTagsButton->setChecked(grp.readEntry("Show Extended Tag Options", false));
@@ -310,12 +310,12 @@ void FlickrWindow::readSettings(QString uname)
 void FlickrWindow::writeSettings()
 {
     KConfig config;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Group name is : "<<QString::fromLatin1("%1%2Export Settings").arg(m_serviceName,m_username);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Group name is : "<<QString::fromLatin1("%1%2Export Settings").arg(m_serviceName,m_username);
 
     if (QString::compare(QString::fromLatin1("%1Export Settings").arg(m_serviceName),
         QString::fromLatin1("%1%2Export Settings").arg(m_serviceName, m_username), Qt::CaseInsensitive) == 0)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Not writing entry of group " << QString::fromLatin1("%1%2Export Settings").arg(m_serviceName,m_username);
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Not writing entry of group " << QString::fromLatin1("%1%2Export Settings").arg(m_serviceName,m_username);
         return;
     }
 
@@ -346,7 +346,7 @@ void FlickrWindow::slotLinkingSucceeded()
 {
     m_username = m_talker->getUserName();
     m_userId   = m_talker->getUserId();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "SlotLinkingSucceeded invoked setting user Display name to " << m_username;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SlotLinkingSucceeded invoked setting user Display name to " << m_username;
     m_userNameDisplayLabel->setText(QString::fromLatin1("<b>%1</b>").arg(m_username));
 
     KConfig config;
@@ -390,7 +390,7 @@ void FlickrWindow::slotUserChangeRequest()
 {
     writeSettings();
     m_userNameDisplayLabel->setText(QString());
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Slot Change User Request ";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request ";
     m_select->reactivate();
     readSettings(m_select->getUserName());
 
@@ -404,7 +404,7 @@ void FlickrWindow::slotRemoveAccount()
 
     if (grp.exists())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Removing Account having group"<<QString::fromLatin1("%1%2Export Settings").arg(m_serviceName);
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Removing Account having group"<<QString::fromLatin1("%1%2Export Settings").arg(m_serviceName);
         grp.deleteGroup();
     }
 
@@ -473,7 +473,7 @@ void FlickrWindow::slotCreateNewPhotoSet()
     {
         FPhotoSet fps;
         m_albumDlg->getFolderProperties(fps);
-        qCDebug(DIGIKAM_GENERAL_LOG) << "in slotCreateNewPhotoSet() " << fps.title;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in slotCreateNewPhotoSet() " << fps.title;
 
         // Lets find an UNDEFINED_ style id that isn't taken yet.s
         QString id;
@@ -496,7 +496,7 @@ void FlickrWindow::slotCreateNewPhotoSet()
 
         fps.id = id;
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Created new photoset with temporary id " << id;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Created new photoset with temporary id " << id;
         // Append the new photoset to the list.
         m_talker->m_photoSetsList->prepend(fps);
         m_talker->m_selectedPhotoSet = fps;
@@ -506,7 +506,7 @@ void FlickrWindow::slotCreateNewPhotoSet()
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "New Photoset creation aborted ";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "New Photoset creation aborted ";
     }
 }
 
@@ -518,7 +518,7 @@ void FlickrWindow::slotAuthCancel()
 
 void FlickrWindow::slotPopulatePhotoSetComboBox()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "slotPopulatePhotoSetComboBox invoked";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotPopulatePhotoSetComboBox invoked";
 
     if (m_talker && m_talker->m_photoSetsList)
     {
@@ -553,7 +553,7 @@ void FlickrWindow::slotPopulatePhotoSetComboBox()
 */
 void FlickrWindow::slotUser1()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "SlotUploadImages invoked";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SlotUploadImages invoked";
 
     //m_widget->m_tab->setCurrentIndex(FlickrWidget::FILELIST);
 
@@ -573,7 +573,7 @@ void FlickrWindow::slotUser1()
         if (lvItem)
         {
             DItemInfo info(m_iface->itemInfo(lvItem->url()));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Adding images"<< lvItem->url() << " to the list";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Adding images"<< lvItem->url() << " to the list";
             FPhotoInfo temp;
 
             temp.title                 = info.title();
@@ -639,7 +639,7 @@ void FlickrWindow::slotUser1()
 
             while (itTags != allTags.end())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Tags list: " << (*itTags);
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Tags list: " << (*itTags);
                 ++itTags;
             }
 
@@ -652,7 +652,7 @@ void FlickrWindow::slotUser1()
     m_uploadCount = 0;
     m_widget->progressBar()->reset();
     slotAddPhotoNext();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "SlotUploadImages done";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SlotUploadImages done";
 }
 
 void FlickrWindow::slotAddPhotoNext()
@@ -690,7 +690,7 @@ void FlickrWindow::slotAddPhotoNext()
         }
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Max allowed file size is : "<<((m_talker->getMaxAllowedFileSize()).toLongLong())<<"File Size is "<<info.size;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Max allowed file size is : "<<((m_talker->getMaxAllowedFileSize()).toLongLong())<<"File Size is "<<info.size;
 
     bool res = m_talker->addPhoto(pathComments.first.toLocalFile(), //the file path
                                   info,

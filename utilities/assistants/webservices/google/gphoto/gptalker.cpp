@@ -678,7 +678,7 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
 
     if ( !doc.setContent( data, false, &err, &line, &columns ) )
     {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "error is "<< err << " at line " << line << " at columns " << columns;
+        qCCritical(DIGIKAM_WEBSERVICES_LOG) << "error is "<< err << " at line " << line << " at columns " << columns;
         emit signalListAlbumsDone(0, i18n("Failed to fetch photo-set list"), QList<GSFolder>());
         return;
     }

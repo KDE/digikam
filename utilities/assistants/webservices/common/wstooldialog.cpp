@@ -121,7 +121,7 @@ void WSToolDialog::setRejectButtonMode(QDialogButtonBox::StandardButton button)
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Unexpected button mode passed";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Unexpected button mode passed";
     }
 }
 

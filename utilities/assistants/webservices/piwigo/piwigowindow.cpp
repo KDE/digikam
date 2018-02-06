@@ -443,7 +443,7 @@ void PiwigoWindow::slotAlbums(const QList<PiwigoAlbum>& albumList)
             item->setData(1, Qt::UserRole, QVariant(album.ref_num) );
             item->setText(2, i18n("Album") );
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Top : " << album.name << " " << album.ref_num << "\n";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Top : " << album.name << " " << album.ref_num << "\n";
 
             d->albumView->addTopLevelItem(item);
             d->albumDict.insert(album.name, album);
@@ -493,10 +493,10 @@ void PiwigoWindow::slotAlbumSelected()
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Album selected\n";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Album selected\n";
 
         int albumId = item->data(1, Qt::UserRole).toInt();
-        qCDebug(DIGIKAM_GENERAL_LOG) << albumId << "\n";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << albumId << "\n";
 
         if (d->talker->loggedIn() && albumId )
         {

@@ -173,7 +173,7 @@ void FlickrTalker::removeUserName(const QString& userName)
 
 void FlickrTalker::slotLinkingFailed()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "LINK to Flickr fail";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Flickr fail";
     m_username = QString();
     emit signalBusy(false);
 }
@@ -182,12 +182,12 @@ void FlickrTalker::slotLinkingSucceeded()
 {
     if (!m_o1->linked())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "UNLINK to Flickr ok";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Flickr ok";
         m_username = QString();
         return;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "LINK to Flickr ok";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Flickr ok";
 
     m_username = m_o1->extraTokens()[QLatin1String("username")].toString();
     m_userId   = m_o1->extraTokens()[QLatin1String("user_nsid")].toString();
@@ -217,7 +217,7 @@ void FlickrTalker::slotLinkingSucceeded()
 
 void FlickrTalker::slotOpenBrowser(const QUrl& url)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Open Browser...";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Open Browser...";
     QDesktopServices::openUrl(url);
 }
 
@@ -268,7 +268,7 @@ void FlickrTalker::listPhotoSets()
     if (!m_o1->linked())
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "List photoset invoked";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "List photoset invoked";
 
     QUrl url(m_apiUrl);
     QNetworkRequest netRequest(url);
@@ -338,7 +338,7 @@ void FlickrTalker::createPhotoSet(const QString& /*albumName*/, const QString& a
     if (!m_o1->linked())
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Create photoset invoked";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Create photoset invoked";
 
     QUrl url(m_apiUrl);
     QNetworkRequest netRequest(url);
@@ -372,7 +372,7 @@ void FlickrTalker::addPhotoToPhotoSet(const QString& photoId,
     if (!m_o1->linked())
         return;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AddPhotoToPhotoSet invoked";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "AddPhotoToPhotoSet invoked";
 
     /* If the photoset id starts with the special string "UNDEFINED_", it means
      * it doesn't exist yet on Flickr and needs to be created. Note that it's
@@ -516,16 +516,16 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
             }
             else
             {
-                qCWarning(DIGIKAM_GENERAL_LOG) << "Flickr::Image doesn't have metadata";
+                qCWarning(DIGIKAM_WEBSERVICES_LOG) << "Flickr::Image doesn't have metadata";
             }
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Resizing and saving to temp file: " << path;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing and saving to temp file: " << path;
         }
     }
 
     QFileInfo tempFileInfo(path);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "QUrl path is " << QUrl::fromLocalFile(path) << "Image size (in bytes) is "<< tempFileInfo.size();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "QUrl path is " << QUrl::fromLocalFile(path) << "Image size (in bytes) is "<< tempFileInfo.size();
 
     if (tempFileInfo.size() > (getMaxAllowedFileSize().toLongLong()))
     {
@@ -757,7 +757,7 @@ void FlickrTalker::parseResponseMaxSize(const QByteArray& data)
                     {
                         QDomAttr a = e.attributeNode(QLatin1String("maxupload"));
                         m_maxSize = a.value();
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "Max upload size is"<<m_maxSize;
+                        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Max upload size is"<<m_maxSize;
                     }
                 }
 
@@ -767,10 +767,10 @@ void FlickrTalker::parseResponseMaxSize(const QByteArray& data)
 
         if (node.isElement() && node.nodeName() == QLatin1String("err"))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Checking Error in response";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Checking Error in response";
             errorString = node.toElement().attribute(QLatin1String("code"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error code=" << errorString;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Msg=" << node.toElement().attribute(QLatin1String("msg"));
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error code=" << errorString;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Msg=" << node.toElement().attribute(QLatin1String("msg"));
         }
 
         node = node.nextSibling();
@@ -781,7 +781,7 @@ void FlickrTalker::parseResponseMaxSize(const QByteArray& data)
 
 void FlickrTalker::parseResponseCreatePhotoSet(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Parse response create photoset received " << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse response create photoset received " << data;
 
     //bool success = false;
 
@@ -820,17 +820,17 @@ void FlickrTalker::parseResponseCreatePhotoSet(const QByteArray& data)
             // Set the new id in the selected photo set.
             m_selectedPhotoSet.id = new_id;
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "PhotoSet created successfully with id" << new_id;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "PhotoSet created successfully with id" << new_id;
             emit signalAddPhotoSetSucceeded();
         }
 
         if (node.isElement() && node.nodeName() == QLatin1String("err"))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Checking Error in response";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Checking Error in response";
             QString code = node.toElement().attribute(QLatin1String("code"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error code=" << code;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error code=" << code;
             QString msg = node.toElement().attribute(QLatin1String("msg"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Msg=" << msg;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Msg=" << msg;
             QMessageBox::critical(QApplication::activeWindow(), i18n("Error"), i18n("PhotoSet creation failed: ") + msg);
         }
 
@@ -840,7 +840,7 @@ void FlickrTalker::parseResponseCreatePhotoSet(const QByteArray& data)
 
 void FlickrTalker::parseResponseListPhotoSets(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "parseResponseListPhotosets" << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseListPhotosets" << data;
     bool success = false;
     QDomDocument doc(QLatin1String("getListPhotoSets"));
 
@@ -873,7 +873,7 @@ void FlickrTalker::parseResponseListPhotoSets(const QByteArray& data)
 
                     if (detailsNode.nodeName() == QLatin1String("photoset"))
                     {
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "id=" << e.attribute(QLatin1String("id"));
+                        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "id=" << e.attribute(QLatin1String("id"));
                         photoSet_id              = e.attribute(QLatin1String("id"));     // this is what is obtained from data.
                         fps.id                   = photoSet_id;
                         QDomNode photoSetDetails = detailsNode.firstChild();
@@ -885,13 +885,13 @@ void FlickrTalker::parseResponseListPhotoSets(const QByteArray& data)
 
                             if (photoSetDetails.nodeName() == QLatin1String("title"))
                             {
-                                qCDebug(DIGIKAM_GENERAL_LOG) << "Title=" << e_detail.text();
+                                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Title=" << e_detail.text();
                                 photoSet_title = e_detail.text();
                                 fps.title      = photoSet_title;
                             }
                             else if (photoSetDetails.nodeName() == QLatin1String("description"))
                             {
-                                qCDebug(DIGIKAM_GENERAL_LOG) << "Description =" << e_detail.text();
+                                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Description =" << e_detail.text();
                                 photoSet_description = e_detail.text();
                                 fps.description      = photoSet_description;
                             }
@@ -912,17 +912,17 @@ void FlickrTalker::parseResponseListPhotoSets(const QByteArray& data)
 
         if (node.isElement() && node.nodeName() == QLatin1String("err"))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Checking Error in response";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Checking Error in response";
             QString code = node.toElement().attribute(QLatin1String("code"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error code=" << code;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Msg=" << node.toElement().attribute(QLatin1String("msg"));
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error code=" << code;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Msg=" << node.toElement().attribute(QLatin1String("msg"));
             emit signalError(code);
         }
 
         node = node.nextSibling();
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "GetPhotoList finished";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "GetPhotoList finished";
 
     if (!success)
     {
@@ -988,16 +988,16 @@ void FlickrTalker::parseResponseAddPhoto(const QByteArray& data)
             e                = node.toElement();           // try to convert the node to an element.
             QDomNode details = e.firstChild();
             photoId          = e.text();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Photoid= " << photoId;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Photoid= " << photoId;
             success          = true;
         }
 
         if (node.isElement() && node.nodeName() == QLatin1String("err"))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Checking Error in response";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Checking Error in response";
             QString code = node.toElement().attribute(QLatin1String("code"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error code=" << code;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Msg=" << node.toElement().attribute(QLatin1String("msg"));
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error code=" << code;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Msg=" << node.toElement().attribute(QLatin1String("msg"));
             emit signalError(code);
         }
 
@@ -1014,7 +1014,7 @@ void FlickrTalker::parseResponseAddPhoto(const QByteArray& data)
 
         if (photoSetId == QLatin1String("-1"))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "PhotoSet Id not set, not adding the photo to any photoset";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "PhotoSet Id not set, not adding the photo to any photoset";
             emit signalAddPhotoSucceeded();
         }
         else
@@ -1046,22 +1046,22 @@ void FlickrTalker::parseResponsePhotoProperty(const QByteArray& data)
             e                = node.toElement();                 // try to convert the node to an element.
             QDomNode details = e.firstChild();
             success          = true;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Photoid=" << e.text();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Photoid=" << e.text();
         }
 
         if (node.isElement() && node.nodeName() == QLatin1String("err"))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Checking Error in response";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Checking Error in response";
             QString code = node.toElement().attribute(QLatin1String("code"));
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error code=" << code;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Msg=" << node.toElement().attribute(QLatin1String("msg"));
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error code=" << code;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Msg=" << node.toElement().attribute(QLatin1String("msg"));
             emit signalError(code);
         }
 
         node = node.nextSibling();
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "GetToken finished";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "GetToken finished";
 
     if (!success)
     {
@@ -1075,7 +1075,7 @@ void FlickrTalker::parseResponsePhotoProperty(const QByteArray& data)
 
 void FlickrTalker::parseResponseAddPhotoToPhotoSet(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "parseResponseListPhotosets" << data;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseListPhotosets" << data;
     emit signalAddPhotoSucceeded();
 }
 
