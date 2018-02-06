@@ -45,29 +45,47 @@
 namespace Digikam
 {
 
+class GSNewAlbumDlg::Private
+{
+public:
+
+    Private()
+    {
+        publicRBtn    = 0;
+        unlistedRBtn  = 0;
+        protectedRBtn = 0;
+    }
+
+    QString        serviceName;
+    QRadioButton*  publicRBtn;
+    QRadioButton*  unlistedRBtn;
+    QRadioButton*  protectedRBtn;
+};
+    
 GSNewAlbumDlg::GSNewAlbumDlg(QWidget* const parent,
                              const QString& serviceName,
                              const QString& toolName)
-    : WSNewAlbumDialog(parent, toolName)
+    : WSNewAlbumDialog(parent, toolName),
+      d(new Private)
 {
-    m_serviceName            = serviceName;
+    d->serviceName           = serviceName;
     const int spacing        = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QGroupBox* const privBox = new QGroupBox(i18n("Access Level"), getMainWidget());
     privBox->setWhatsThis(i18n("These are security and privacy settings for the new Google Photos/PicasaWeb album."));
 
-    m_publicRBtn        = new QRadioButton(i18nc("google photos/picasaweb album privacy", "Public"));
-    m_publicRBtn->setChecked(true);
-    m_publicRBtn->setWhatsThis(i18n("Public album is listed on your public Google Photos/PicasaWeb page."));
-    m_unlistedRBtn      = new QRadioButton(i18nc("google photos/picasaweb album privacy", "Unlisted / Private"));
-    m_unlistedRBtn->setWhatsThis(i18n("Unlisted album is only accessible via URL."));
-    m_protectedRBtn     = new QRadioButton(i18nc("google photos/picasaweb album privacy", "Sign-In Required to View"));
-    m_protectedRBtn->setWhatsThis(i18n("Unlisted album require Sign-In to View"));
+    d->publicRBtn        = new QRadioButton(i18nc("google photos/picasaweb album privacy", "Public"));
+    d->publicRBtn->setChecked(true);
+    d->publicRBtn->setWhatsThis(i18n("Public album is listed on your public Google Photos/PicasaWeb page."));
+    d->unlistedRBtn      = new QRadioButton(i18nc("google photos/picasaweb album privacy", "Unlisted / Private"));
+    d->unlistedRBtn->setWhatsThis(i18n("Unlisted album is only accessible via URL."));
+    d->protectedRBtn     = new QRadioButton(i18nc("google photos/picasaweb album privacy", "Sign-In Required to View"));
+    d->protectedRBtn->setWhatsThis(i18n("Unlisted album require Sign-In to View"));
 
     QVBoxLayout* const radioLayout = new QVBoxLayout;
-    radioLayout->addWidget(m_publicRBtn);
-    radioLayout->addWidget(m_unlistedRBtn);
-    radioLayout->addWidget(m_protectedRBtn);
+    radioLayout->addWidget(d->publicRBtn);
+    radioLayout->addWidget(d->unlistedRBtn);
+    radioLayout->addWidget(d->protectedRBtn);
 
     QFormLayout* const privBoxLayout = new QFormLayout;
     privBoxLayout->addRow(i18n("Privacy:"), radioLayout);
@@ -75,7 +93,7 @@ GSNewAlbumDlg::GSNewAlbumDlg(QWidget* const parent,
     privBoxLayout->setSpacing(spacing);
     privBox->setLayout(privBoxLayout);
 
-    if (!(QString::compare(m_serviceName,
+    if (!(QString::compare(d->serviceName,
                            QString::fromLatin1("googledriveexport"),
                            Qt::CaseInsensitive) == 0))
     {
@@ -93,11 +111,12 @@ GSNewAlbumDlg::GSNewAlbumDlg(QWidget* const parent,
 
 GSNewAlbumDlg::~GSNewAlbumDlg()
 {
+    delete d;
 }
 
 void GSNewAlbumDlg::getAlbumProperties(GSFolder& album)
 {
-    if (QString::compare(m_serviceName,
+    if (QString::compare(d->serviceName,
                          QString::fromLatin1("googledriveexport"),
                          Qt::CaseInsensitive) == 0)
     {
@@ -109,9 +128,9 @@ void GSNewAlbumDlg::getAlbumProperties(GSFolder& album)
     album.description = getDescEdit()->toPlainText();
     album.location    = getLocEdit()->text();
 
-    if (m_publicRBtn->isChecked())
+    if (d->publicRBtn->isChecked())
         album.access = QString::fromLatin1("public");
-    else if (m_unlistedRBtn->isChecked())
+    else if (d->unlistedRBtn->isChecked())
         album.access = QString::fromLatin1("private");
     else
         album.access = QString::fromLatin1("protected");

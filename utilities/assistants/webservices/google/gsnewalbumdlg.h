@@ -49,18 +49,16 @@ class GSNewAlbumDlg : public WSNewAlbumDialog
 public:
 
     explicit GSNewAlbumDlg(QWidget* const parent,
-                         const QString& serviceName,
-                         const QString& toolName);
+                           const QString& serviceName,
+                           const QString& toolName);
     ~GSNewAlbumDlg();
 
     void getAlbumProperties(GSFolder& album);
 
 private:
 
-    QString        m_serviceName;
-    QRadioButton*  m_publicRBtn;
-    QRadioButton*  m_unlistedRBtn;
-    QRadioButton*  m_protectedRBtn;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
