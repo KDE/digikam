@@ -422,7 +422,7 @@ void FlickrWindow::slotRemoveAccount()
  * accept the path if it occurs at least 50% of the time. It could also look
  * further up in the path name.
  */
-QString FlickrWindow::guessSensibleSetName(const QList<QUrl>& urlList)
+QString FlickrWindow::guessSensibleSetName(const QList<QUrl>& urlList) const
 {
     QMap<QString,int> nrFolderOccurences;
 

@@ -102,7 +102,7 @@ private Q_SLOTS:
 
 private:
 
-    QString guessSensibleSetName(const QList<QUrl>& urlList);
+    QString guessSensibleSetName(const QList<QUrl>& urlList) const;
 
     void closeEvent(QCloseEvent*)  Q_DECL_OVERRIDE;
     void readSettings(QString uname);
@@ -136,8 +136,8 @@ private:
 
     QPushButton*                           m_extendedPublicationButton;
     QPushButton*                           m_extendedTagsButton;
-    WSComboBoxIntermediate*                  m_contentTypeComboBox;
-    WSComboBoxIntermediate*                  m_safetyLevelComboBox;
+    WSComboBoxIntermediate*                m_contentTypeComboBox;
+    WSComboBoxIntermediate*                m_safetyLevelComboBox;
 
     QString                                m_username;
     QString                                m_userId;
