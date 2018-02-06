@@ -225,3 +225,18 @@ if(KF5KIO_FOUND)
     )
 
 endif()
+
+# =======================================================
+# Stand alone version of factored WebServices tool
+
+set(webservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/webservices.cpp)
+
+add_executable(webservices ${webservices_SRCS})
+
+target_link_libraries(webservices
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)
