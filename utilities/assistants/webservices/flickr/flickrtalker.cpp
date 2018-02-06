@@ -53,50 +53,90 @@
 namespace Digikam
 {
 
-FlickrTalker::FlickrTalker(QWidget* const parent, const QString& serviceName,
-                           DInfoInterface* const iface
-)
+class FlickrTalker::Private
 {
-    m_parent          = parent;
-    m_netMngr         = 0;
-    m_reply           = 0;
-    m_settings        = 0;
+public:
+
+    Private()
+    {
+        parent          = 0;
+        netMngr         = 0;
+        reply           = 0;
+        settings        = 0;
+        state           = FE_LOGOUT;
+        iface           = 0;
+        o1              = 0;
+        store           = 0;
+        requestor       = 0;
+    }
+
+    QWidget*               parent;
+    QByteArray             buffer;
+
+    QString                serviceName;
+    QString                apiUrl;
+    QString                authUrl;
+    QString                tokenUrl;
+    QString                accessUrl;
+    QString                uploadUrl;
+    QString                apikey;
+    QString                secret;
+    QString                maxSize;
+    QString                username;
+    QString                userId;
+    QString                lastTmpFile;
+
+    QNetworkAccessManager* netMngr;
+    QNetworkReply*         reply;
+
+    QSettings*             settings;
+
+    State                  state;
+
+    DInfoInterface*        iface;
+
+    O1*                    o1;
+    O0SettingsStore*       store;
+    O1Requestor*           requestor;
+};    
+    
+FlickrTalker::FlickrTalker(QWidget* const parent,
+                           const QString& serviceName,
+                           DInfoInterface* const iface)
+    : d(new Private)
+{
+    d->parent         = parent;
+    d->serviceName    = serviceName;
+    d->iface          = iface;
     m_photoSetsList   = 0;
     m_authProgressDlg = 0;
-    m_state           = FE_LOGOUT;
-    m_serviceName     = serviceName;
-    m_iface           = 0;
-    m_o1              = 0;
-    m_store           = 0;
-    m_requestor       = 0;
-    m_iface           = iface;
 
-    if (serviceName == QLatin1String("23"))
+    if (d->serviceName == QLatin1String("23"))
     {
-        m_apiUrl    = QLatin1String("http://www.23hq.com/services/rest/");
-        m_authUrl   = QLatin1String("http://www.23hq.com/services/auth/");
-        m_uploadUrl = QLatin1String("http://www.23hq.com/services/upload/");
+        d->apiUrl    = QLatin1String("http://www.23hq.com/services/rest/");
+        d->authUrl   = QLatin1String("http://www.23hq.com/services/auth/");
+        d->uploadUrl = QLatin1String("http://www.23hq.com/services/upload/");
 
         // bshanks: do 23 and flickr really share API keys? or does 23 not need
         // one?
-        m_apikey    = QLatin1String("49d585bafa0758cb5c58ab67198bf632");
-        m_secret    = QLatin1String("34b39925e6273ffd");
+        d->apikey    = QLatin1String("49d585bafa0758cb5c58ab67198bf632");
+        d->secret    = QLatin1String("34b39925e6273ffd");
     }
     else
     {
-        m_apiUrl    = QLatin1String("https://www.flickr.com/services/rest/");
-        m_authUrl   = QLatin1String("https://www.flickr.com/services/oauth/authorize?perms=write");
-        m_tokenUrl  = QLatin1String("https://www.flickr.com/services/oauth/request_token");
-        m_accessUrl = QLatin1String("https://www.flickr.com/services/oauth/access_token");
-        m_uploadUrl = QLatin1String("https://up.flickr.com/services/upload/");
+        d->apiUrl    = QLatin1String("https://www.flickr.com/services/rest/");
+        d->authUrl   = QLatin1String("https://www.flickr.com/services/oauth/authorize?perms=write");
+        d->tokenUrl  = QLatin1String("https://www.flickr.com/services/oauth/request_token");
+        d->accessUrl = QLatin1String("https://www.flickr.com/services/oauth/access_token");
+        d->uploadUrl = QLatin1String("https://up.flickr.com/services/upload/");
 
-        m_apikey    = QLatin1String("49d585bafa0758cb5c58ab67198bf632");
-        m_secret    = QLatin1String("34b39925e6273ffd");
+        d->apikey    = QLatin1String("49d585bafa0758cb5c58ab67198bf632");
+        d->secret    = QLatin1String("34b39925e6273ffd");
     }
 
-    m_netMngr = new QNetworkAccessManager(this);
+    d->netMngr = new QNetworkAccessManager(this);
 
-    connect(m_netMngr, SIGNAL(finished(QNetworkReply*)),
+    connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
 
     /* Initialize selected photo set as empty. */
@@ -104,40 +144,42 @@ FlickrTalker::FlickrTalker(QWidget* const parent, const QString& serviceName,
     /* Initialize photo sets list. */
     m_photoSetsList    = new QLinkedList<FPhotoSet>();
 
-    m_o1 = new O1(this);
-    m_o1->setClientId(m_apikey);
-    m_o1->setClientSecret(m_secret);
-    m_o1->setAuthorizeUrl(QUrl(m_authUrl));
-    m_o1->setAccessTokenUrl(QUrl(m_accessUrl));
-    m_o1->setRequestTokenUrl(QUrl(m_tokenUrl));
+    d->o1 = new O1(this);
+    d->o1->setClientId(d->apikey);
+    d->o1->setClientSecret(d->secret);
+    d->o1->setAuthorizeUrl(QUrl(d->authUrl));
+    d->o1->setAccessTokenUrl(QUrl(d->accessUrl));
+    d->o1->setRequestTokenUrl(QUrl(d->tokenUrl));
 
-    m_settings = WSToolUtils::getOauthSettings(this);
-    m_store    = new O0SettingsStore(m_settings, QLatin1String(O2_ENCRYPTION_KEY), this);
-    m_store->setGroupKey(m_serviceName);
-    m_o1->setStore(m_store);
+    d->settings = WSToolUtils::getOauthSettings(this);
+    d->store    = new O0SettingsStore(d->settings, QLatin1String(O2_ENCRYPTION_KEY), this);
+    d->store->setGroupKey(d->serviceName);
+    d->o1->setStore(d->store);
 
-    connect(m_o1, SIGNAL(linkingFailed()),
+    connect(d->o1, SIGNAL(linkingFailed()),
             this, SLOT(slotLinkingFailed()));
 
-    connect(m_o1, SIGNAL(linkingSucceeded()),
+    connect(d->o1, SIGNAL(linkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
 
-    connect(m_o1, SIGNAL(openBrowser(QUrl)),
+    connect(d->o1, SIGNAL(openBrowser(QUrl)),
             this, SLOT(slotOpenBrowser(QUrl)));
 
-    m_requestor = new O1Requestor(m_netMngr, m_o1, this);
+    d->requestor = new O1Requestor(d->netMngr, d->o1, this);
 }
 
 FlickrTalker::~FlickrTalker()
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
+        d->reply->abort();
     }
 
     delete m_photoSetsList;
 
-    WSToolUtils::removeTemporaryDir(m_serviceName.toLatin1().constData());
+    WSToolUtils::removeTemporaryDir(d->serviceName.toLatin1().constData());
+    
+    delete d;
 }
 
 void FlickrTalker::link(const QString& userName)
@@ -146,70 +188,70 @@ void FlickrTalker::link(const QString& userName)
 
     if (userName.isEmpty())
     {
-        m_store->setGroupKey(m_serviceName);
+        d->store->setGroupKey(d->serviceName);
     }
     else
     {
-        m_store->setGroupKey(m_serviceName + userName);
+        d->store->setGroupKey(d->serviceName + userName);
     }
 
-    m_o1->link();
+    d->o1->link();
 }
 
 void FlickrTalker::unLink()
 {
-    m_o1->unlink();
+    d->o1->unlink();
 }
 
 void FlickrTalker::removeUserName(const QString& userName)
 {
-    if (userName.startsWith(m_serviceName))
+    if (userName.startsWith(d->serviceName))
     {
-        m_settings->beginGroup(userName);
-        m_settings->remove(QString());
-        m_settings->endGroup();
+        d->settings->beginGroup(userName);
+        d->settings->remove(QString());
+        d->settings->endGroup();
     }
 }
 
 void FlickrTalker::slotLinkingFailed()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Flickr fail";
-    m_username = QString();
+    d->username = QString();
     emit signalBusy(false);
 }
 
 void FlickrTalker::slotLinkingSucceeded()
 {
-    if (!m_o1->linked())
+    if (!d->o1->linked())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Flickr ok";
-        m_username = QString();
+        d->username = QString();
         return;
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Flickr ok";
 
-    m_username = m_o1->extraTokens()[QLatin1String("username")].toString();
-    m_userId   = m_o1->extraTokens()[QLatin1String("user_nsid")].toString();
+    d->username = d->o1->extraTokens()[QLatin1String("username")].toString();
+    d->userId   = d->o1->extraTokens()[QLatin1String("user_nsid")].toString();
 
-    if (m_store->groupKey() == m_serviceName)
+    if (d->store->groupKey() == d->serviceName)
     {
-        m_settings->beginGroup(m_serviceName);
-        QStringList keys = m_settings->allKeys();
-        m_settings->endGroup();
+        d->settings->beginGroup(d->serviceName);
+        QStringList keys = d->settings->allKeys();
+        d->settings->endGroup();
 
         foreach(const QString& key, keys)
         {
-            m_settings->beginGroup(m_serviceName);
-            QVariant value = m_settings->value(key);
-            m_settings->endGroup();
-            m_settings->beginGroup(m_serviceName + m_username);
-            m_settings->setValue(key, value);
-            m_settings->endGroup();
+            d->settings->beginGroup(d->serviceName);
+            QVariant value = d->settings->value(key);
+            d->settings->endGroup();
+            d->settings->beginGroup(d->serviceName + d->username);
+            d->settings->setValue(key, value);
+            d->settings->endGroup();
         }
 
-        m_store->setGroupKey(m_serviceName + m_username);
-        removeUserName(m_serviceName);
+        d->store->setGroupKey(d->serviceName + d->username);
+        removeUserName(d->serviceName);
     }
 
     emit signalLinkingSucceeded();
@@ -223,21 +265,21 @@ void FlickrTalker::slotOpenBrowser(const QUrl& url)
 
 QString FlickrTalker::getMaxAllowedFileSize()
 {
-    return m_maxSize;
+    return d->maxSize;
 }
 
 void FlickrTalker::maxAllowedFileSize()
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
-    if (!m_o1->linked())
+    if (!d->o1->linked())
         return;
 
-    QUrl url(m_apiUrl);
+    QUrl url(d->apiUrl);
     QNetworkRequest netRequest(url);
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
 
@@ -247,30 +289,30 @@ void FlickrTalker::maxAllowedFileSize()
 
     QByteArray postData = O1::createQueryParameters(reqParams);
 
-    m_reply = m_requestor->post(netRequest, reqParams, postData);
+    d->reply = d->requestor->post(netRequest, reqParams, postData);
 
-    m_state = FE_GETMAXSIZE;
+    d->state = FE_GETMAXSIZE;
     m_authProgressDlg->setLabelText(i18n("Getting the maximum allowed file size."));
     m_authProgressDlg->setMaximum(4);
     m_authProgressDlg->setValue(1);
-    m_buffer.resize(0);
+    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
 void FlickrTalker::listPhotoSets()
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
-    if (!m_o1->linked())
+    if (!d->o1->linked())
         return;
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "List photoset invoked";
 
-    QUrl url(m_apiUrl);
+    QUrl url(d->apiUrl);
     QNetworkRequest netRequest(url);
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
 
@@ -280,25 +322,25 @@ void FlickrTalker::listPhotoSets()
 
     QByteArray postData = O1::createQueryParameters(reqParams);
 
-    m_reply = m_requestor->post(netRequest, reqParams, postData);
+    d->reply = d->requestor->post(netRequest, reqParams, postData);
 
-    m_state = FE_LISTPHOTOSETS;
-    m_buffer.resize(0);
+    d->state = FE_LISTPHOTOSETS;
+    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
 void FlickrTalker::getPhotoProperty(const QString& method, const QStringList& argList)
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
-    if (!m_o1->linked())
+    if (!d->o1->linked())
         return;
 
-    QUrl url(m_apiUrl);
+    QUrl url(d->apiUrl);
     QNetworkRequest netRequest(url);
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
 
@@ -314,10 +356,10 @@ void FlickrTalker::getPhotoProperty(const QString& method, const QStringList& ar
 
     QByteArray postData = O1::createQueryParameters(reqParams);
 
-    m_reply = m_requestor->post(netRequest, reqParams, postData);
+    d->reply = d->requestor->post(netRequest, reqParams, postData);
 
-    m_state = FE_GETPHOTOPROPERTY;
-    m_buffer.resize(0);
+    d->state = FE_GETPHOTOPROPERTY;
+    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
@@ -329,18 +371,18 @@ void FlickrTalker::listPhotos(const QString& /*albumName*/)
 void FlickrTalker::createPhotoSet(const QString& /*albumName*/, const QString& albumTitle,
                                   const QString& albumDescription, const QString& primaryPhotoId)
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
-    if (!m_o1->linked())
+    if (!d->o1->linked())
         return;
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Create photoset invoked";
 
-    QUrl url(m_apiUrl);
+    QUrl url(d->apiUrl);
     QNetworkRequest netRequest(url);
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
 
@@ -353,23 +395,23 @@ void FlickrTalker::createPhotoSet(const QString& /*albumName*/, const QString& a
 
     QByteArray postData = O1::createQueryParameters(reqParams);
 
-    m_reply = m_requestor->post(netRequest, reqParams, postData);
+    d->reply = d->requestor->post(netRequest, reqParams, postData);
 
-    m_state = FE_CREATEPHOTOSET;
-    m_buffer.resize(0);
+    d->state = FE_CREATEPHOTOSET;
+    d->buffer.resize(0);
     emit signalBusy(true);
 }
 
 void FlickrTalker::addPhotoToPhotoSet(const QString& photoId,
                                       const QString& photoSetId)
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
-    if (!m_o1->linked())
+    if (!d->o1->linked())
         return;
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "AddPhotoToPhotoSet invoked";
@@ -384,7 +426,7 @@ void FlickrTalker::addPhotoToPhotoSet(const QString& photoId,
     }
     else
     {
-        QUrl url(m_apiUrl);
+        QUrl url(d->apiUrl);
         QNetworkRequest netRequest(url);
         QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
 
@@ -396,10 +438,10 @@ void FlickrTalker::addPhotoToPhotoSet(const QString& photoId,
 
         QByteArray postData = O1::createQueryParameters(reqParams);
 
-        m_reply = m_requestor->post(netRequest, reqParams, postData);
+        d->reply = d->requestor->post(netRequest, reqParams, postData);
 
-        m_state = FE_ADDPHOTOTOPHOTOSET;
-        m_buffer.resize(0);
+        d->state = FE_ADDPHOTOTOPHOTOSET;
+        d->buffer.resize(0);
         emit signalBusy(true);
     }
 }
@@ -407,16 +449,16 @@ void FlickrTalker::addPhotoToPhotoSet(const QString& photoId,
 bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
                             bool original, bool rescale, int maxDim, int imageQuality)
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
-    if (!m_o1->linked())
+    if (!d->o1->linked())
         return false;
 
-    QUrl url(m_uploadUrl);
+    QUrl url(d->uploadUrl);
     QNetworkRequest netRequest(url);
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
 
@@ -474,12 +516,12 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
 
         if (!image.isNull())
         {
-            if (!m_lastTmpFile.isEmpty())
+            if (!d->lastTmpFile.isEmpty())
             {
-                QFile::remove(m_lastTmpFile);
+                QFile::remove(d->lastTmpFile);
             }
 
-            path = WSToolUtils::makeTemporaryDir(m_serviceName.toLatin1().constData()).filePath(QFileInfo(photoPath)
+            path = WSToolUtils::makeTemporaryDir(d->serviceName.toLatin1().constData()).filePath(QFileInfo(photoPath)
                                                                          .baseName().trimmed() + QLatin1String(".jpg"));
 
             if (rescale)
@@ -489,7 +531,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
             }
 
             image.save(path, "JPEG", imageQuality);
-            m_lastTmpFile = path;
+            d->lastTmpFile = path;
 
             // Restore all metadata.
 
@@ -542,30 +584,30 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
 
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
 
-    m_reply = m_requestor->post(netRequest, reqParams, form.formData());
+    d->reply = d->requestor->post(netRequest, reqParams, form.formData());
 
-    m_state = FE_ADDPHOTO;
-    m_buffer.resize(0);
+    d->state = FE_ADDPHOTO;
+    d->buffer.resize(0);
     emit signalBusy(true);
     return true;
 }
 
 QString FlickrTalker::getUserName() const
 {
-    return m_username;
+    return d->username;
 }
 
 QString FlickrTalker::getUserId() const
 {
-    return m_userId;
+    return d->userId;
 }
 
 void FlickrTalker::cancel()
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     if (m_authProgressDlg && !m_authProgressDlg->isHidden())
@@ -659,16 +701,16 @@ void FlickrTalker::slotFinished(QNetworkReply* reply)
 {
     emit signalBusy(false);
 
-    if (reply != m_reply)
+    if (reply != d->reply)
     {
         return;
     }
 
-    m_reply = 0;
+    d->reply = 0;
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        if (m_state == FE_ADDPHOTO)
+        if (d->state == FE_ADDPHOTO)
         {
             emit signalAddPhotoFailed(reply->errorString());
         }
@@ -682,40 +724,40 @@ void FlickrTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    m_buffer.append(reply->readAll());
+    d->buffer.append(reply->readAll());
 
-    switch (m_state)
+    switch (d->state)
     {
         case (FE_LOGIN):
-            //parseResponseLogin(m_buffer);
+            //parseResponseLogin(d->buffer);
             break;
 
         case (FE_LISTPHOTOSETS):
-            parseResponseListPhotoSets(m_buffer);
+            parseResponseListPhotoSets(d->buffer);
             break;
 
         case (FE_LISTPHOTOS):
-            parseResponseListPhotos(m_buffer);
+            parseResponseListPhotos(d->buffer);
             break;
 
         case (FE_GETPHOTOPROPERTY):
-            parseResponsePhotoProperty(m_buffer);
+            parseResponsePhotoProperty(d->buffer);
             break;
 
         case (FE_ADDPHOTO):
-            parseResponseAddPhoto(m_buffer);
+            parseResponseAddPhoto(d->buffer);
             break;
 
         case (FE_ADDPHOTOTOPHOTOSET):
-            parseResponseAddPhotoToPhotoSet(m_buffer);
+            parseResponseAddPhotoToPhotoSet(d->buffer);
             break;
 
         case (FE_CREATEPHOTOSET):
-            parseResponseCreatePhotoSet(m_buffer);
+            parseResponseCreatePhotoSet(d->buffer);
             break;
 
         case (FE_GETMAXSIZE):
-            parseResponseMaxSize(m_buffer);
+            parseResponseMaxSize(d->buffer);
             break;
 
         default:  // FR_LOGOUT
@@ -756,8 +798,8 @@ void FlickrTalker::parseResponseMaxSize(const QByteArray& data)
                     if (details.nodeName() == QLatin1String("photos"))
                     {
                         QDomAttr a = e.attributeNode(QLatin1String("maxupload"));
-                        m_maxSize = a.value();
-                        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Max upload size is"<<m_maxSize;
+                        d->maxSize = a.value();
+                        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Max upload size is"<<d->maxSize;
                     }
                 }
 

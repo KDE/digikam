@@ -49,8 +49,6 @@ class QProgressDialog;
 namespace Digikam
 {
 
-class GAlbum;
-class GPhoto;
 class FPhotoInfo;
 class FPhotoSet;
 
@@ -141,34 +139,8 @@ private Q_SLOTS:
 
 private:
 
-    QWidget*               m_parent;
-    QByteArray             m_buffer;
-
-    QString                m_serviceName;
-    QString                m_apiUrl;
-    QString                m_authUrl;
-    QString                m_tokenUrl;
-    QString                m_accessUrl;
-    QString                m_uploadUrl;
-    QString                m_apikey;
-    QString                m_secret;
-    QString                m_maxSize;
-    QString                m_username;
-    QString                m_userId;
-    QString                m_lastTmpFile;
-
-    QNetworkAccessManager* m_netMngr;
-    QNetworkReply*         m_reply;
-
-    QSettings*             m_settings;
-
-    State                  m_state;
-
-    DInfoInterface*        m_iface;
-
-    O1*                    m_o1;
-    O0SettingsStore*       m_store;
-    O1Requestor*           m_requestor;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
