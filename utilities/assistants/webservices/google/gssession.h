@@ -74,14 +74,14 @@ public:
 
 protected:
 
-    QString                m_scope;
-    QString                m_accessToken;
-    QString                m_refreshToken;
+    QString        m_scope;
+    QString        m_accessToken;
+    QString        m_refreshToken;
 
-    QString                m_bearerAccessToken;
-    QByteArray             m_buffer;
+    QString        m_bearerAccessToken;
+    QByteArray     m_buffer;
 
-    QNetworkReply*         m_reply;
+    QNetworkReply* m_reply;
 
 private:
 
@@ -90,29 +90,8 @@ private:
 
 private:
 
-    enum Auth_State
-    {
-        GD_ACCESSTOKEN=0,
-        GD_REFRESHTOKEN
-    };
-
-private:
-
-    int                    m_continuePos;
-
-    QWidget*               m_parent;
-    
-    Auth_State             m_authState;
-    QString                m_tokenUri;
-    QString                m_clientSecret;
-    QString                m_clientId;
-    QString                m_responseType;
-    QString                m_redirectUri;
-    QString                m_code;
-
-    QDialog*               m_window;
-    
-    QNetworkAccessManager* m_netMngr;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
