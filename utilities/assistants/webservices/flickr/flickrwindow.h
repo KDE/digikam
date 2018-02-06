@@ -43,20 +43,8 @@
 #include "wstooldialog.h"
 #include "digikam_export.h"
 
-class QProgressDialog;
-class QPushButton;
-class QSpinBox;
-class QCheckBox;
-
 namespace Digikam
 {
-
-class WSSelectUserDlg;
-class FlickrWidget;
-class FlickrTalker;
-class FlickrList;
-class FlickrNewAlbumDlg;
-class FPhotoInfo;
 
 class DIGIKAM_EXPORT FlickrWindow : public WSToolDialog
 {

@@ -38,17 +38,8 @@
 #include "wssettingswidget.h"
 #include "dinfointerface.h"
 
-class QGroupBox;
-class QPushButton;
-class QSpinBox;
-class QCheckBox;
-class QLabel;
-class QTreeWidgetItem;
-
 namespace Digikam
 {
-
-class FlickrList;
 
 class FlickrWidget : public WSSettingsWidget
 {
