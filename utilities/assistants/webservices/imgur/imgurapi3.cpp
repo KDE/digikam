@@ -46,8 +46,8 @@
 namespace Digikam
 {
 
-static const QString imgur_auth_url = QLatin1String("https://api.imgur.com/oauth2/authorize"),
-imgur_token_url = QLatin1String("https://api.imgur.com/oauth2/token");
+static const QString imgur_auth_url       = QLatin1String("https://api.imgur.com/oauth2/authorize"),
+imgur_token_url                           = QLatin1String("https://api.imgur.com/oauth2/token");
 static const uint16_t imgur_redirect_port = 8000; // Redirect URI is http://127.0.0.1:8000
 
 ImgurAPI3::ImgurAPI3(const QString& client_id, const QString& client_secret, QObject* parent)
@@ -83,7 +83,7 @@ ImgurAPI3::~ImgurAPI3()
     cancelAllWork();
 }
 
-O2 &ImgurAPI3::getAuth()
+O2& ImgurAPI3::getAuth()
 {
     return m_auth;
 }
@@ -165,7 +165,7 @@ void ImgurAPI3::replyFinished()
     }
 
     /* toInt() returns 0 if conversion fails. That fits nicely already. */
-    int code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    int code      = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     auto response = QJsonDocument::fromJson(reply->readAll());
 
     if (code == 200 && !response.isEmpty())

@@ -94,7 +94,11 @@ struct ImgurAPI3Result
     } account;
 };
 
-/* Main class, handles the client side of the Imgur API v3. */
+// ----------------------------------------------------------------
+
+/*
+ * Main class, handles the client side of the Imgur API v3.
+ */
 class ImgurAPI3 : public QObject
 {
 Q_OBJECT
@@ -105,7 +109,7 @@ public:
     ~ImgurAPI3();
 
     /* Use this to read/write the access and refresh tokens. */
-    O2 &getAuth();
+    O2& getAuth();
 
     unsigned int workQueueLength();
     void queueWork(const ImgurAPI3Action& action);
@@ -163,22 +167,25 @@ private:
      * by sending a request. */
     void doWork();
 
+private:
+
     /* Handler for OAuth 2 related requests. */
-    O2 m_auth;
+    O2                          m_auth;
 
     /* Work queue. */
     std::queue<ImgurAPI3Action> m_work_queue;
+
     /* ID of timer triggering on idle (0ms). */
-    int m_work_timer = 0;
+    int                         m_work_timer = 0;
 
     /* Current QNetworkReply */
-    QNetworkReply* m_reply = nullptr;
+    QNetworkReply*              m_reply = nullptr;
 
     /* Current image being uploaded */
-    QFile* m_image = nullptr;
+    QFile*                      m_image = nullptr;
 
     /* The QNetworkAccessManager used for connections */
-    QNetworkAccessManager m_net;
+    QNetworkAccessManager       m_net;
 };
 
 } // namespace Digikam
