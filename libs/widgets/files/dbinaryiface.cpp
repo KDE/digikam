@@ -44,12 +44,12 @@ namespace Digikam
 {
 
 DBinaryIface::DBinaryIface(const QString& binaryName, const QString& projectName, const QString& url,
-                           const QString& pluginName, const QStringList& args, const QString& desc)
+                           const QString& toolName, const QStringList& args, const QString& desc)
     : m_checkVersion(false),
       m_headerStarts(QLatin1String("")),
       m_headerLine(0),
       m_minimalVersion(QLatin1String("")),
-      m_configGroup(!pluginName.isEmpty() ? QString::fromLatin1("%1 Settings").arg(pluginName) : QLatin1String("")),
+      m_configGroup(!toolName.isEmpty() ? QString::fromLatin1("%1 Settings").arg(toolName) : QLatin1String("")),
       m_binaryBaseName(goodBaseName(binaryName)),
       m_binaryArguments(args),
       m_projectName(projectName),
@@ -71,12 +71,12 @@ DBinaryIface::DBinaryIface(const QString& binaryName, const QString& projectName
 
 DBinaryIface::DBinaryIface(const QString& binaryName, const QString& minimalVersion, const QString& header,
                            const int headerLine, const QString& projectName, const QString& url,
-                           const QString& pluginName, const QStringList& args, const QString& desc)
+                           const QString& toolName, const QStringList& args, const QString& desc)
     : m_checkVersion(true),
       m_headerStarts(header),
       m_headerLine(headerLine),
       m_minimalVersion(minimalVersion),
-      m_configGroup(!pluginName.isEmpty() ? QString::fromLatin1("%1 Settings").arg(pluginName) : QLatin1String("")),
+      m_configGroup(!toolName.isEmpty() ? QString::fromLatin1("%1 Settings").arg(toolName) : QLatin1String("")),
       m_binaryBaseName(goodBaseName(binaryName)),
       m_binaryArguments(args),
       m_projectName(projectName),
