@@ -58,119 +58,206 @@
 namespace Digikam
 {
 
+class FlickrWindow::Private
+{
+public:
+
+    Private()
+    {
+        uploadCount               = 0;
+        uploadTotal               = 0;
+        newAlbumBtn               = 0;
+        changeUserButton          = 0;
+        removeAccount             = 0;
+        albumsListComboBox        = 0;
+        publicCheckBox            = 0;
+        familyCheckBox            = 0;
+        friendsCheckBox           = 0;
+        exportHostTagsCheckBox    = 0;
+        stripSpaceTagsCheckBox    = 0;
+        addExtraTagsCheckBox      = 0;
+        originalCheckBox          = 0;
+        resizeCheckBox            = 0;
+        dimensionSpinBox          = 0;
+        imageQualitySpinBox       = 0;
+        extendedPublicationButton = 0;
+        extendedTagsButton        = 0;
+        contentTypeComboBox       = 0;
+        safetyLevelComboBox       = 0;
+        userNameDisplayLabel      = 0;
+        authProgressDlg           = 0;
+        tagsLineEdit              = 0;
+        widget                    = 0;
+        talker                    = 0;
+        imglst                    = 0;
+        select                    = 0;
+        albumDlg                  = 0;
+        iface                     = 0;
+    }
+
+    unsigned int                     uploadCount;
+    unsigned int                     uploadTotal;
+
+    QString                          serviceName;
+
+    QPushButton*                     newAlbumBtn;
+    QPushButton*                     changeUserButton;
+    QPushButton*                     removeAccount;
+
+    QComboBox*                       albumsListComboBox;
+    QCheckBox*                       publicCheckBox;
+    QCheckBox*                       familyCheckBox;
+    QCheckBox*                       friendsCheckBox;
+    QCheckBox*                       exportHostTagsCheckBox;
+    QCheckBox*                       stripSpaceTagsCheckBox;
+    QCheckBox*                       addExtraTagsCheckBox;
+    QCheckBox*                       originalCheckBox;
+    QCheckBox*                       resizeCheckBox;
+
+    QSpinBox*                        dimensionSpinBox;
+    QSpinBox*                        imageQualitySpinBox;
+
+    QPushButton*                     extendedPublicationButton;
+    QPushButton*                     extendedTagsButton;
+    WSComboBoxIntermediate*          contentTypeComboBox;
+    WSComboBoxIntermediate*          safetyLevelComboBox;
+
+    QString                          username;
+    QString                          userId;
+    QString                          lastSelectedAlbum;
+
+    QLabel*                          userNameDisplayLabel;
+
+    QProgressDialog*                 authProgressDlg;
+
+    QList< QPair<QUrl, FPhotoInfo> > uploadQueue;
+
+    QLineEdit*                       tagsLineEdit;
+
+    FlickrWidget*                    widget;
+    FlickrTalker*                    talker;
+
+    FlickrList*                      imglst;
+    WSSelectUserDlg*                 select;
+    FlickrNewAlbumDlg*               albumDlg;
+
+    DInfoInterface*                  iface;
+};
+
 FlickrWindow::FlickrWindow(DInfoInterface* const iface,
                            QWidget* const /*parent*/,
                            const QString& serviceName)
-    : WSToolDialog(0)
+    : WSToolDialog(0),
+      d(new Private)
 {
-    m_iface       = iface;
-    m_serviceName = serviceName;
-    setWindowTitle(i18n("Export to %1 Web Service", m_serviceName));
+    d->iface       = iface;
+    d->serviceName = serviceName;
+    setWindowTitle(i18n("Export to %1 Web Service", d->serviceName));
     setModal(false);
 
     KConfig config;
-    KConfigGroup grp = config.group(QString::fromLatin1("%1Export Settings").arg(m_serviceName));
+    KConfigGroup grp = config.group(QString::fromLatin1("%1Export Settings").arg(d->serviceName));
 
     if (grp.exists())
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString::fromLatin1("%1Export Settings").arg(m_serviceName) << " exists, deleting it";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString::fromLatin1("%1Export Settings").arg(d->serviceName) << " exists, deleting it";
         grp.deleteGroup();
     }
 
-    m_select                    = new WSSelectUserDlg(0, serviceName);
-    m_uploadCount               = 0;
-    m_uploadTotal               = 0;
-    m_widget                    = new FlickrWidget(this, iface, serviceName);
-    m_albumDlg                  = new FlickrNewAlbumDlg(this, QString::fromLatin1("Flickr"));
-    m_albumsListComboBox        = m_widget->getAlbumsCoB();
-    m_newAlbumBtn               = m_widget->getNewAlbmBtn();
-    m_originalCheckBox          = m_widget->getOriginalCheckBox();
-    m_resizeCheckBox            = m_widget->getResizeCheckBox();
-    m_publicCheckBox            = m_widget->d->publicCheckBox;
-    m_familyCheckBox            = m_widget->d->familyCheckBox;
-    m_friendsCheckBox           = m_widget->d->friendsCheckBox;
-    m_dimensionSpinBox          = m_widget->getDimensionSpB();
-    m_imageQualitySpinBox       = m_widget->getImgQualitySpB();
-    m_extendedTagsButton        = m_widget->d->extendedTagsButton;
-    m_addExtraTagsCheckBox      = m_widget->d->addExtraTagsCheckBox;
-    m_extendedPublicationButton = m_widget->d->extendedPublicationButton;
-    m_safetyLevelComboBox       = m_widget->d->safetyLevelComboBox;
-    m_contentTypeComboBox       = m_widget->d->contentTypeComboBox;
-    m_tagsLineEdit              = m_widget->d->tagsLineEdit;
-    m_exportHostTagsCheckBox    = m_widget->d->exportHostTagsCheckBox;
-    m_stripSpaceTagsCheckBox    = m_widget->d->stripSpaceTagsCheckBox;
-    m_changeUserButton          = m_widget->getChangeUserBtn();
-    m_removeAccount             = m_widget->d->removeAccount;
-    m_userNameDisplayLabel      = m_widget->getUserNameLabel();
-    m_imglst                    = m_widget->d->imglst;
+    d->select                    = new WSSelectUserDlg(0, serviceName);
+    d->uploadCount               = 0;
+    d->uploadTotal               = 0;
+    d->widget                    = new FlickrWidget(this, iface, serviceName);
+    d->albumDlg                  = new FlickrNewAlbumDlg(this, QString::fromLatin1("Flickr"));
+    d->albumsListComboBox        = d->widget->getAlbumsCoB();
+    d->newAlbumBtn               = d->widget->getNewAlbmBtn();
+    d->originalCheckBox          = d->widget->getOriginalCheckBox();
+    d->resizeCheckBox            = d->widget->getResizeCheckBox();
+    d->publicCheckBox            = d->widget->d->publicCheckBox;
+    d->familyCheckBox            = d->widget->d->familyCheckBox;
+    d->friendsCheckBox           = d->widget->d->friendsCheckBox;
+    d->dimensionSpinBox          = d->widget->getDimensionSpB();
+    d->imageQualitySpinBox       = d->widget->getImgQualitySpB();
+    d->extendedTagsButton        = d->widget->d->extendedTagsButton;
+    d->addExtraTagsCheckBox      = d->widget->d->addExtraTagsCheckBox;
+    d->extendedPublicationButton = d->widget->d->extendedPublicationButton;
+    d->safetyLevelComboBox       = d->widget->d->safetyLevelComboBox;
+    d->contentTypeComboBox       = d->widget->d->contentTypeComboBox;
+    d->tagsLineEdit              = d->widget->d->tagsLineEdit;
+    d->exportHostTagsCheckBox    = d->widget->d->exportHostTagsCheckBox;
+    d->stripSpaceTagsCheckBox    = d->widget->d->stripSpaceTagsCheckBox;
+    d->changeUserButton          = d->widget->getChangeUserBtn();
+    d->removeAccount             = d->widget->d->removeAccount;
+    d->userNameDisplayLabel      = d->widget->getUserNameLabel();
+    d->imglst                    = d->widget->d->imglst;
 
     startButton()->setText(i18n("Start Uploading"));
     startButton()->setToolTip(QString());
 
-    setMainWidget(m_widget);
-    m_widget->setMinimumSize(800, 600);
+    setMainWidget(d->widget);
+    d->widget->setMinimumSize(800, 600);
 
-    connect(m_imglst, SIGNAL(signalImageListChanged()),
+    connect(d->imglst, SIGNAL(signalImageListChanged()),
             this, SLOT(slotImageListChanged()));
 
     // --------------------------------------------------------------------------
 
-    m_talker = new FlickrTalker(this, serviceName, m_iface);
+    d->talker = new FlickrTalker(this, serviceName, d->iface);
 
-    connect(m_talker, SIGNAL(signalError(QString)),
-            m_talker, SLOT(slotError(QString)));
+    connect(d->talker, SIGNAL(signalError(QString)),
+            d->talker, SLOT(slotError(QString)));
 
-    connect(m_talker, SIGNAL(signalBusy(bool)),
+    connect(d->talker, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
 
-    connect(m_talker, SIGNAL(signalAddPhotoSucceeded()),
+    connect(d->talker, SIGNAL(signalAddPhotoSucceeded()),
             this, SLOT(slotAddPhotoSucceeded()));
 
-    connect(m_talker, SIGNAL(signalAddPhotoFailed(QString)),
+    connect(d->talker, SIGNAL(signalAddPhotoFailed(QString)),
             this, SLOT(slotAddPhotoFailed(QString)));
 
-    connect(m_talker, SIGNAL(signalAddPhotoSetSucceeded()),
+    connect(d->talker, SIGNAL(signalAddPhotoSetSucceeded()),
             this, SLOT(slotAddPhotoSetSucceeded()));
 
-    connect(m_talker, SIGNAL(signalListPhotoSetsSucceeded()),
+    connect(d->talker, SIGNAL(signalListPhotoSetsSucceeded()),
             this, SLOT(slotPopulatePhotoSetComboBox()));
 
-    connect(m_talker, SIGNAL(signalListPhotoSetsFailed(QString)),
+    connect(d->talker, SIGNAL(signalListPhotoSetsFailed(QString)),
             this, SLOT(slotListPhotoSetsFailed(QString)));
 
-    connect(m_talker, SIGNAL(signalLinkingSucceeded()),
+    connect(d->talker, SIGNAL(signalLinkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
 
-    connect(m_widget->progressBar(), SIGNAL(signalProgressCanceled()),
+    connect(d->widget->progressBar(), SIGNAL(signalProgressCanceled()),
             this, SLOT(slotAddPhotoCancelAndClose()));
 
-    connect(m_widget->getReloadBtn(), SIGNAL(clicked()),
+    connect(d->widget->getReloadBtn(), SIGNAL(clicked()),
             this, SLOT(slotReloadPhotoSetRequest()));
 
     // --------------------------------------------------------------------------
 
-    connect(m_changeUserButton, SIGNAL(clicked()),
+    connect(d->changeUserButton, SIGNAL(clicked()),
             this, SLOT(slotUserChangeRequest()));
 
-    connect(m_removeAccount, SIGNAL(clicked()),
+    connect(d->removeAccount, SIGNAL(clicked()),
             this, SLOT(slotRemoveAccount()));
 
-    connect(m_newAlbumBtn, SIGNAL(clicked()),
+    connect(d->newAlbumBtn, SIGNAL(clicked()),
             this, SLOT(slotCreateNewPhotoSet()));
 
     // --------------------------------------------------------------------------
 
-    m_authProgressDlg = new QProgressDialog(this);
-    m_authProgressDlg->setModal(true);
-    m_authProgressDlg->setAutoReset(true);
-    m_authProgressDlg->setAutoClose(true);
-    m_authProgressDlg->setMaximum(0);
-    m_authProgressDlg->reset();
+    d->authProgressDlg = new QProgressDialog(this);
+    d->authProgressDlg->setModal(true);
+    d->authProgressDlg->setAutoReset(true);
+    d->authProgressDlg->setAutoClose(true);
+    d->authProgressDlg->setMaximum(0);
+    d->authProgressDlg->reset();
 
-    connect(m_authProgressDlg, SIGNAL(canceled()),
+    connect(d->authProgressDlg, SIGNAL(canceled()),
             this, SLOT(slotAuthCancel()));
 
-    m_talker->m_authProgressDlg = m_authProgressDlg;
+    d->talker->m_authProgressDlg = d->authProgressDlg;
 
     // --------------------------------------------------------------------------
 
@@ -183,22 +270,23 @@ FlickrWindow::FlickrWindow(DInfoInterface* const iface,
     connect(startButton(), &QPushButton::clicked,
             this, &FlickrWindow::slotUser1);
 
-    m_select->reactivate();
-    readSettings(m_select->getUserName());
-    m_talker->link(m_select->getUserName());
+    d->select->reactivate();
+    readSettings(d->select->getUserName());
+    d->talker->link(d->select->getUserName());
 }
 
 FlickrWindow::~FlickrWindow()
 {
-    delete m_select;
-    delete m_authProgressDlg;
-    delete m_talker;
-    delete m_widget;
+    delete d->select;
+    delete d->authProgressDlg;
+    delete d->talker;
+    delete d->widget;
+    delete d;
 }
 
 void FlickrWindow::setItemsList(const QList<QUrl>& urls)
 {
-    m_widget->imagesList()->slotAddImages(urls);
+    d->widget->imagesList()->slotAddImages(urls);
 }
 
 void FlickrWindow::closeEvent(QCloseEvent* e)
@@ -215,7 +303,7 @@ void FlickrWindow::closeEvent(QCloseEvent* e)
 void FlickrWindow::slotFinished()
 {
     writeSettings();
-    m_imglst->listView()->clear();
+    d->imglst->listView()->clear();
 }
 
 void FlickrWindow::setUiInProgressState(bool inProgress)
@@ -224,85 +312,85 @@ void FlickrWindow::setUiInProgressState(bool inProgress)
 
     if (inProgress)
     {
-        m_widget->progressBar()->show();
+        d->widget->progressBar()->show();
     }
     else
     {
-        m_widget->progressBar()->hide();
-        m_widget->progressBar()->progressCompleted();
+        d->widget->progressBar()->hide();
+        d->widget->progressBar()->progressCompleted();
     }
 }
 
 void FlickrWindow::slotCancelClicked()
 {
-    m_talker->cancel();
-    m_uploadQueue.clear();
+    d->talker->cancel();
+    d->uploadQueue.clear();
     setUiInProgressState(false);
 }
 
 void FlickrWindow::slotAddPhotoCancelAndClose()
 {
     writeSettings();
-    m_imglst->listView()->clear();
-    m_uploadQueue.clear();
-    m_widget->progressBar()->reset();
+    d->imglst->listView()->clear();
+    d->uploadQueue.clear();
+    d->widget->progressBar()->reset();
     setUiInProgressState(false);
-    m_talker->cancel();
+    d->talker->cancel();
     reject();
 }
 
 void FlickrWindow::reactivate()
 {
-    m_userNameDisplayLabel->setText(QString());
-    readSettings(m_select->getUserName());
-    m_talker->link(m_select->getUserName());
+    d->userNameDisplayLabel->setText(QString());
+    readSettings(d->select->getUserName());
+    d->talker->link(d->select->getUserName());
 
-    m_widget->d->imglst->loadImagesFromCurrentSelection();
+    d->widget->d->imglst->loadImagesFromCurrentSelection();
     show();
 }
 
 void FlickrWindow::readSettings(QString uname)
 {
     KConfig config;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Group name is : "<<QString::fromLatin1("%1%2Export Settings").arg(m_serviceName, uname);
-    KConfigGroup grp = config.group(QString::fromLatin1("%1%2Export Settings").arg(m_serviceName, uname));
-    m_exportHostTagsCheckBox->setChecked(grp.readEntry("Export Host Tags",      false));
-    m_extendedTagsButton->setChecked(grp.readEntry("Show Extended Tag Options", false));
-    m_addExtraTagsCheckBox->setChecked(grp.readEntry("Add Extra Tags",          false));
-    m_stripSpaceTagsCheckBox->setChecked(grp.readEntry("Strip Space From Tags", false));
-    m_stripSpaceTagsCheckBox->setEnabled(m_exportHostTagsCheckBox->isChecked());
-    m_exportHostTagsCheckBox->setEnabled(false);
-    m_stripSpaceTagsCheckBox->setEnabled(false);
-    m_publicCheckBox->setChecked(grp.readEntry("Public Sharing",                               false));
-    m_familyCheckBox->setChecked(grp.readEntry("Family Sharing",                               false));
-    m_friendsCheckBox->setChecked(grp.readEntry("Friends Sharing",                             false));
-    m_extendedPublicationButton->setChecked(grp.readEntry("Show Extended Publication Options", false));
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Group name is : "<<QString::fromLatin1("%1%2Export Settings").arg(d->serviceName, uname);
+    KConfigGroup grp = config.group(QString::fromLatin1("%1%2Export Settings").arg(d->serviceName, uname));
+    d->exportHostTagsCheckBox->setChecked(grp.readEntry("Export Host Tags",      false));
+    d->extendedTagsButton->setChecked(grp.readEntry("Show Extended Tag Options", false));
+    d->addExtraTagsCheckBox->setChecked(grp.readEntry("Add Extra Tags",          false));
+    d->stripSpaceTagsCheckBox->setChecked(grp.readEntry("Strip Space From Tags", false));
+    d->stripSpaceTagsCheckBox->setEnabled(d->exportHostTagsCheckBox->isChecked());
+    d->exportHostTagsCheckBox->setEnabled(false);
+    d->stripSpaceTagsCheckBox->setEnabled(false);
+    d->publicCheckBox->setChecked(grp.readEntry("Public Sharing",                               false));
+    d->familyCheckBox->setChecked(grp.readEntry("Family Sharing",                               false));
+    d->friendsCheckBox->setChecked(grp.readEntry("Friends Sharing",                             false));
+    d->extendedPublicationButton->setChecked(grp.readEntry("Show Extended Publication Options", false));
 
-    int safetyLevel = m_safetyLevelComboBox->findData(QVariant(grp.readEntry("Safety Level", 0)));
+    int safetyLevel = d->safetyLevelComboBox->findData(QVariant(grp.readEntry("Safety Level", 0)));
 
     if (safetyLevel == -1)
     {
         safetyLevel = 0;
     }
 
-    m_safetyLevelComboBox->setCurrentIndex(safetyLevel);
+    d->safetyLevelComboBox->setCurrentIndex(safetyLevel);
 
-    int contentType = m_contentTypeComboBox->findData(QVariant(grp.readEntry("Content Type", 0)));
+    int contentType = d->contentTypeComboBox->findData(QVariant(grp.readEntry("Content Type", 0)));
 
     if (contentType == -1)
     {
         contentType = 0;
     }
 
-    m_contentTypeComboBox->setCurrentIndex(contentType);
+    d->contentTypeComboBox->setCurrentIndex(contentType);
 
-    m_originalCheckBox->setChecked(grp.readEntry("Upload Original", false));
-    m_resizeCheckBox->setChecked(grp.readEntry("Resize",            false));
-    m_dimensionSpinBox->setValue(grp.readEntry("Maximum Width",     1600));
-    m_imageQualitySpinBox->setValue(grp.readEntry("Image Quality",  85));
+    d->originalCheckBox->setChecked(grp.readEntry("Upload Original", false));
+    d->resizeCheckBox->setChecked(grp.readEntry("Resize",            false));
+    d->dimensionSpinBox->setValue(grp.readEntry("Maximum Width",     1600));
+    d->imageQualitySpinBox->setValue(grp.readEntry("Image Quality",  85));
 
     winId();
-    KConfigGroup dialogGroup = config.group(QString::fromLatin1("%1Export Dialog").arg(m_serviceName));
+    KConfigGroup dialogGroup = config.group(QString::fromLatin1("%1Export Dialog").arg(d->serviceName));
     KWindowConfig::restoreWindowSize(windowHandle(), dialogGroup);
     resize(windowHandle()->size());
 }
@@ -310,63 +398,63 @@ void FlickrWindow::readSettings(QString uname)
 void FlickrWindow::writeSettings()
 {
     KConfig config;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Group name is : "<<QString::fromLatin1("%1%2Export Settings").arg(m_serviceName,m_username);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Group name is : "<<QString::fromLatin1("%1%2Export Settings").arg(d->serviceName,d->username);
 
-    if (QString::compare(QString::fromLatin1("%1Export Settings").arg(m_serviceName),
-        QString::fromLatin1("%1%2Export Settings").arg(m_serviceName, m_username), Qt::CaseInsensitive) == 0)
+    if (QString::compare(QString::fromLatin1("%1Export Settings").arg(d->serviceName),
+        QString::fromLatin1("%1%2Export Settings").arg(d->serviceName, d->username), Qt::CaseInsensitive) == 0)
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Not writing entry of group " << QString::fromLatin1("%1%2Export Settings").arg(m_serviceName,m_username);
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Not writing entry of group " << QString::fromLatin1("%1%2Export Settings").arg(d->serviceName,d->username);
         return;
     }
 
-    KConfigGroup grp = config.group(QString::fromLatin1("%1%2Export Settings").arg(m_serviceName, m_username));
-    grp.writeEntry("username",                          m_username);
-    grp.writeEntry("Export Host Tags",                  m_exportHostTagsCheckBox->isChecked());
-    grp.writeEntry("Show Extended Tag Options",         m_extendedTagsButton->isChecked());
-    grp.writeEntry("Add Extra Tags",                    m_addExtraTagsCheckBox->isChecked());
-    grp.writeEntry("Strip Space From Tags",             m_stripSpaceTagsCheckBox->isChecked());
-    grp.writeEntry("Public Sharing",                    m_publicCheckBox->isChecked());
-    grp.writeEntry("Family Sharing",                    m_familyCheckBox->isChecked());
-    grp.writeEntry("Friends Sharing",                   m_friendsCheckBox->isChecked());
-    grp.writeEntry("Show Extended Publication Options", m_extendedPublicationButton->isChecked());
-    int safetyLevel = m_safetyLevelComboBox->itemData(m_safetyLevelComboBox->currentIndex()).toInt();
+    KConfigGroup grp = config.group(QString::fromLatin1("%1%2Export Settings").arg(d->serviceName, d->username));
+    grp.writeEntry("username",                          d->username);
+    grp.writeEntry("Export Host Tags",                  d->exportHostTagsCheckBox->isChecked());
+    grp.writeEntry("Show Extended Tag Options",         d->extendedTagsButton->isChecked());
+    grp.writeEntry("Add Extra Tags",                    d->addExtraTagsCheckBox->isChecked());
+    grp.writeEntry("Strip Space From Tags",             d->stripSpaceTagsCheckBox->isChecked());
+    grp.writeEntry("Public Sharing",                    d->publicCheckBox->isChecked());
+    grp.writeEntry("Family Sharing",                    d->familyCheckBox->isChecked());
+    grp.writeEntry("Friends Sharing",                   d->friendsCheckBox->isChecked());
+    grp.writeEntry("Show Extended Publication Options", d->extendedPublicationButton->isChecked());
+    int safetyLevel = d->safetyLevelComboBox->itemData(d->safetyLevelComboBox->currentIndex()).toInt();
     grp.writeEntry("Safety Level",                      safetyLevel);
-    int contentType = m_contentTypeComboBox->itemData(m_contentTypeComboBox->currentIndex()).toInt();
+    int contentType = d->contentTypeComboBox->itemData(d->contentTypeComboBox->currentIndex()).toInt();
     grp.writeEntry("Content Type",                      contentType);
-    grp.writeEntry("Resize",                            m_resizeCheckBox->isChecked());
-    grp.writeEntry("Upload Original",                   m_originalCheckBox->isChecked());
-    grp.writeEntry("Maximum Width",                     m_dimensionSpinBox->value());
-    grp.writeEntry("Image Quality",                     m_imageQualitySpinBox->value());
-    KConfigGroup dialogGroup = config.group(QString::fromLatin1("%1Export Dialog").arg(m_serviceName));
+    grp.writeEntry("Resize",                            d->resizeCheckBox->isChecked());
+    grp.writeEntry("Upload Original",                   d->originalCheckBox->isChecked());
+    grp.writeEntry("Maximum Width",                     d->dimensionSpinBox->value());
+    grp.writeEntry("Image Quality",                     d->imageQualitySpinBox->value());
+    KConfigGroup dialogGroup = config.group(QString::fromLatin1("%1Export Dialog").arg(d->serviceName));
     KWindowConfig::saveWindowSize(windowHandle(), dialogGroup);
     config.sync();
 }
 
 void FlickrWindow::slotLinkingSucceeded()
 {
-    m_username = m_talker->getUserName();
-    m_userId   = m_talker->getUserId();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SlotLinkingSucceeded invoked setting user Display name to " << m_username;
-    m_userNameDisplayLabel->setText(QString::fromLatin1("<b>%1</b>").arg(m_username));
+    d->username = d->talker->getUserName();
+    d->userId   = d->talker->getUserId();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SlotLinkingSucceeded invoked setting user Display name to " << d->username;
+    d->userNameDisplayLabel->setText(QString::fromLatin1("<b>%1</b>").arg(d->username));
 
     KConfig config;
 
     foreach(const QString& group, config.groupList())
     {
-        if (!(group.contains(m_serviceName)))
+        if (!(group.contains(d->serviceName)))
             continue;
 
         KConfigGroup grp = config.group(group);
 
-        if (group.contains(m_username))
+        if (group.contains(d->username))
         {
-            readSettings(m_username);
+            readSettings(d->username);
             break;
         }
     }
 
     writeSettings();
-    m_talker->listPhotoSets();
+    d->talker->listPhotoSets();
 }
 
 void FlickrWindow::slotBusy(bool val)
@@ -389,30 +477,30 @@ void FlickrWindow::slotError(const QString& msg)
 void FlickrWindow::slotUserChangeRequest()
 {
     writeSettings();
-    m_userNameDisplayLabel->setText(QString());
+    d->userNameDisplayLabel->setText(QString());
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request ";
-    m_select->reactivate();
-    readSettings(m_select->getUserName());
+    d->select->reactivate();
+    readSettings(d->select->getUserName());
 
-    m_talker->link(m_select->getUserName());
+    d->talker->link(d->select->getUserName());
 }
 
 void FlickrWindow::slotRemoveAccount()
 {
     KConfig config;
-    KConfigGroup grp = config.group(QString::fromLatin1("%1%2Export Settings").arg(m_serviceName).arg(m_username));
+    KConfigGroup grp = config.group(QString::fromLatin1("%1%2Export Settings").arg(d->serviceName).arg(d->username));
 
     if (grp.exists())
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Removing Account having group"<<QString::fromLatin1("%1%2Export Settings").arg(m_serviceName);
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Removing Account having group"<<QString::fromLatin1("%1%2Export Settings").arg(d->serviceName);
         grp.deleteGroup();
     }
 
-    m_talker->unLink();
-    m_talker->removeUserName(m_serviceName + m_username);
+    d->talker->unLink();
+    d->talker->removeUserName(d->serviceName + d->username);
 
-    m_userNameDisplayLabel->setText(QString());
-    m_username = QString();
+    d->userNameDisplayLabel->setText(QString());
+    d->username = QString();
 }
 
 /**
@@ -469,26 +557,26 @@ QString FlickrWindow::guessSensibleSetName(const QList<QUrl>& urlList) const
  */
 void FlickrWindow::slotCreateNewPhotoSet()
 {
-    if (m_albumDlg->exec() == QDialog::Accepted)
+    if (d->albumDlg->exec() == QDialog::Accepted)
     {
         FPhotoSet fps;
-        m_albumDlg->getFolderProperties(fps);
+        d->albumDlg->getFolderProperties(fps);
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in slotCreateNewPhotoSet() " << fps.title;
 
         // Lets find an UNDEFINED_ style id that isn't taken yet.s
         QString id;
         int i                               = 0;
         id                                  = QString::fromLatin1("UNDEFINED_") + QString::number(i);
-        QLinkedList<FPhotoSet>::iterator it = m_talker->m_photoSetsList->begin();
+        QLinkedList<FPhotoSet>::iterator it = d->talker->m_photoSetsList->begin();
 
-        while (it != m_talker->m_photoSetsList->end())
+        while (it != d->talker->m_photoSetsList->end())
         {
             FPhotoSet fps = *it;
 
             if (fps.id == id)
             {
                 id = QString::fromLatin1("UNDEFINED_") + QString::number(++i);
-                it = m_talker->m_photoSetsList->begin();
+                it = d->talker->m_photoSetsList->begin();
             }
 
             ++it;
@@ -498,8 +586,8 @@ void FlickrWindow::slotCreateNewPhotoSet()
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Created new photoset with temporary id " << id;
         // Append the new photoset to the list.
-        m_talker->m_photoSetsList->prepend(fps);
-        m_talker->m_selectedPhotoSet = fps;
+        d->talker->m_photoSetsList->prepend(fps);
+        d->talker->m_selectedPhotoSet = fps;
 
         // Re-populate the photo sets combo box.
         slotPopulatePhotoSetComboBox();
@@ -512,20 +600,20 @@ void FlickrWindow::slotCreateNewPhotoSet()
 
 void FlickrWindow::slotAuthCancel()
 {
-    m_talker->cancel();
-    m_authProgressDlg->hide();
+    d->talker->cancel();
+    d->authProgressDlg->hide();
 }
 
 void FlickrWindow::slotPopulatePhotoSetComboBox()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotPopulatePhotoSetComboBox invoked";
 
-    if (m_talker && m_talker->m_photoSetsList)
+    if (d->talker && d->talker->m_photoSetsList)
     {
-        QLinkedList <FPhotoSet>* const list = m_talker->m_photoSetsList;
-        m_albumsListComboBox->clear();
-        m_albumsListComboBox->insertItem(0, i18n("Photostream Only"));
-        m_albumsListComboBox->insertSeparator(1);
+        QLinkedList <FPhotoSet>* const list = d->talker->m_photoSetsList;
+        d->albumsListComboBox->clear();
+        d->albumsListComboBox->insertItem(0, i18n("Photostream Only"));
+        d->albumsListComboBox->insertSeparator(1);
         QLinkedList<FPhotoSet>::iterator it = list->begin();
         int index                           = 2;
         int curr_index                      = 0;
@@ -537,16 +625,16 @@ void FlickrWindow::slotPopulatePhotoSetComboBox()
             // Store the id as user data, because the title is not unique.
             QVariant id        = QVariant(photoSet.id);
 
-            if (id == m_talker->m_selectedPhotoSet.id)
+            if (id == d->talker->m_selectedPhotoSet.id)
             {
                 curr_index = index;
             }
 
-            m_albumsListComboBox->insertItem(index++, name, id);
+            d->albumsListComboBox->insertItem(index++, name, id);
             ++it;
         }
 
-        m_albumsListComboBox->setCurrentIndex(curr_index);
+        d->albumsListComboBox->setCurrentIndex(curr_index);
     }
 }
 
@@ -556,24 +644,24 @@ void FlickrWindow::slotUser1()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SlotUploadImages invoked";
 
-    //m_widget->m_tab->setCurrentIndex(FlickrWidget::FILELIST);
+    //d->widget->d->tab->setCurrentIndex(FlickrWidget::FILELIST);
 
-    if (m_imglst->imageUrls().isEmpty())
+    if (d->imglst->imageUrls().isEmpty())
     {
         return;
     }
 
     typedef QPair<QUrl, FPhotoInfo> Pair;
 
-    m_uploadQueue.clear();
+    d->uploadQueue.clear();
 
-    for (int i = 0; i < m_imglst->listView()->topLevelItemCount(); ++i)
+    for (int i = 0; i < d->imglst->listView()->topLevelItemCount(); ++i)
     {
-        FlickrListViewItem* const lvItem = dynamic_cast<FlickrListViewItem*>(m_imglst->listView()->topLevelItem(i));
+        FlickrListViewItem* const lvItem = dynamic_cast<FlickrListViewItem*>(d->imglst->listView()->topLevelItem(i));
 
         if (lvItem)
         {
-            DItemInfo info(m_iface->itemInfo(lvItem->url()));
+            DItemInfo info(d->iface->itemInfo(lvItem->url()));
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Adding images"<< lvItem->url() << " to the list";
             FPhotoInfo temp;
 
@@ -585,7 +673,7 @@ void FlickrWindow::slotUser1()
             temp.is_friend             = lvItem->isFriends() ? 1 : 0;
             temp.safety_level          = lvItem->safetyLevel();
             temp.content_type          = lvItem->contentType();
-            QStringList tagsFromDialog = m_tagsLineEdit->text().split(QLatin1Char(','), QString::SkipEmptyParts);
+            QStringList tagsFromDialog = d->tagsLineEdit->text().split(QLatin1Char(','), QString::SkipEmptyParts);
             QStringList tagsFromList   = lvItem->extraTags();
 
             QStringList           allTags;
@@ -601,7 +689,7 @@ void FlickrWindow::slotUser1()
             }
 
             // Tags from the database
-            if (m_exportHostTagsCheckBox->isChecked())
+            if (d->exportHostTagsCheckBox->isChecked())
             {
                 QStringList tagsFromDatabase;
 
@@ -625,7 +713,7 @@ void FlickrWindow::slotUser1()
             }
 
             // Remove spaces if the user doesn't like them.
-            if (m_stripSpaceTagsCheckBox->isChecked())
+            if (d->stripSpaceTagsCheckBox->isChecked())
             {
                 for (QStringList::iterator it = allTags.begin();
                      it != allTags.end();
@@ -645,45 +733,45 @@ void FlickrWindow::slotUser1()
             }
 
             temp.tags = allTags;
-            m_uploadQueue.append(Pair(lvItem->url(), temp));
+            d->uploadQueue.append(Pair(lvItem->url(), temp));
         }
     }
 
-    m_uploadTotal = m_uploadQueue.count();
-    m_uploadCount = 0;
-    m_widget->progressBar()->reset();
+    d->uploadTotal = d->uploadQueue.count();
+    d->uploadCount = 0;
+    d->widget->progressBar()->reset();
     slotAddPhotoNext();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "SlotUploadImages done";
 }
 
 void FlickrWindow::slotAddPhotoNext()
 {
-    if (m_uploadQueue.isEmpty())
+    if (d->uploadQueue.isEmpty())
     {
-        m_widget->progressBar()->reset();
+        d->widget->progressBar()->reset();
         setUiInProgressState(false);
         return;
     }
 
     typedef QPair<QUrl, FPhotoInfo> Pair;
-    Pair pathComments = m_uploadQueue.first();
+    Pair pathComments = d->uploadQueue.first();
     FPhotoInfo info   = pathComments.second;
 
-    QString selectedPhotoSetId = m_albumsListComboBox->itemData(m_albumsListComboBox->currentIndex()).toString();
+    QString selectedPhotoSetId = d->albumsListComboBox->itemData(d->albumsListComboBox->currentIndex()).toString();
 
     if (selectedPhotoSetId.isEmpty())
     {
-        m_talker->m_selectedPhotoSet = FPhotoSet();
+        d->talker->m_selectedPhotoSet = FPhotoSet();
     }
     else
     {
-        QLinkedList<FPhotoSet>::iterator it = m_talker->m_photoSetsList->begin();
+        QLinkedList<FPhotoSet>::iterator it = d->talker->m_photoSetsList->begin();
 
-        while (it != m_talker->m_photoSetsList->end())
+        while (it != d->talker->m_photoSetsList->end())
         {
             if (it->id == selectedPhotoSetId)
             {
-                m_talker->m_selectedPhotoSet = *it;
+                d->talker->m_selectedPhotoSet = *it;
                 break;
             }
 
@@ -691,14 +779,14 @@ void FlickrWindow::slotAddPhotoNext()
         }
     }
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Max allowed file size is : "<<((m_talker->getMaxAllowedFileSize()).toLongLong())<<"File Size is "<<info.size;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Max allowed file size is : "<<((d->talker->getMaxAllowedFileSize()).toLongLong())<<"File Size is "<<info.size;
 
-    bool res = m_talker->addPhoto(pathComments.first.toLocalFile(), //the file path
+    bool res = d->talker->addPhoto(pathComments.first.toLocalFile(), //the file path
                                   info,
-                                  m_originalCheckBox->isChecked(),
-                                  m_resizeCheckBox->isChecked(),
-                                  m_dimensionSpinBox->value(),
-                                  m_imageQualitySpinBox->value());
+                                  d->originalCheckBox->isChecked(),
+                                  d->resizeCheckBox->isChecked(),
+                                  d->dimensionSpinBox->value(),
+                                  d->imageQualitySpinBox->value());
 
     if (!res)
     {
@@ -706,35 +794,35 @@ void FlickrWindow::slotAddPhotoNext()
         return;
     }
 
-    if (m_widget->progressBar()->isHidden())
+    if (d->widget->progressBar()->isHidden())
     {
         setUiInProgressState(true);
-        m_widget->progressBar()->progressScheduled(i18n("Flickr Export"), true, true);
-        m_widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("flickr")).pixmap(22, 22));
+        d->widget->progressBar()->progressScheduled(i18n("Flickr Export"), true, true);
+        d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("flickr")).pixmap(22, 22));
     }
 }
 
 void FlickrWindow::slotAddPhotoSucceeded()
 {
     // Remove photo uploaded from the list
-    m_imglst->removeItemByUrl(m_uploadQueue.first().first);
-    m_uploadQueue.pop_front();
-    m_uploadCount++;
-    m_widget->progressBar()->setMaximum(m_uploadTotal);
-    m_widget->progressBar()->setValue(m_uploadCount);
+    d->imglst->removeItemByUrl(d->uploadQueue.first().first);
+    d->uploadQueue.pop_front();
+    d->uploadCount++;
+    d->widget->progressBar()->setMaximum(d->uploadTotal);
+    d->widget->progressBar()->setValue(d->uploadCount);
     slotAddPhotoNext();
 }
 
 void FlickrWindow::slotListPhotoSetsFailed(const QString& msg)
 {
-    QMessageBox::critical(this, QString::fromLatin1("Error"), i18n("Failed to Fetch Photoset information from %1. %2\n", m_serviceName, msg));
+    QMessageBox::critical(this, QString::fromLatin1("Error"), i18n("Failed to Fetch Photoset information from %1. %2\n", d->serviceName, msg));
 }
 
 void FlickrWindow::slotAddPhotoFailed(const QString& msg)
 {
     QMessageBox warn(QMessageBox::Warning,
                      i18n("Warning"),
-                     i18n("Failed to upload photo into %1. %2\nDo you want to continue?", m_serviceName, msg),
+                     i18n("Failed to upload photo into %1. %2\nDo you want to continue?", d->serviceName, msg),
                      QMessageBox::Yes | QMessageBox::No);
 
     (warn.button(QMessageBox::Yes))->setText(i18n("Continue"));
@@ -742,16 +830,16 @@ void FlickrWindow::slotAddPhotoFailed(const QString& msg)
 
     if (warn.exec() != QMessageBox::Yes)
     {
-        m_uploadQueue.clear();
-        m_widget->progressBar()->reset();
+        d->uploadQueue.clear();
+        d->widget->progressBar()->reset();
         setUiInProgressState(false);
     }
     else
     {
-        m_uploadQueue.pop_front();
-        m_uploadTotal--;
-        m_widget->progressBar()->setMaximum(m_uploadTotal);
-        m_widget->progressBar()->setValue(m_uploadCount);
+        d->uploadQueue.pop_front();
+        d->uploadTotal--;
+        d->widget->progressBar()->setMaximum(d->uploadTotal);
+        d->widget->progressBar()->setValue(d->uploadCount);
         slotAddPhotoNext();
     }
 }
@@ -768,12 +856,12 @@ void FlickrWindow::slotAddPhotoSetSucceeded()
 
 void FlickrWindow::slotImageListChanged()
 {
-    startButton()->setEnabled(!(m_widget->d->imglst->imageUrls().isEmpty()));
+    startButton()->setEnabled(!(d->widget->d->imglst->imageUrls().isEmpty()));
 }
 
 void FlickrWindow::slotReloadPhotoSetRequest()
 {
-    m_talker->listPhotoSets();
+    d->talker->listPhotoSets();
 }
 
 } // namespace Digikam

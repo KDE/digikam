@@ -112,53 +112,8 @@ private:
 
 private:
 
-    unsigned int                           m_uploadCount;
-    unsigned int                           m_uploadTotal;
-
-    QString                                m_serviceName;
-
-    QPushButton*                           m_newAlbumBtn;
-    QPushButton*                           m_changeUserButton;
-    QPushButton*                           m_removeAccount;
-
-    QComboBox*                             m_albumsListComboBox;
-    QCheckBox*                             m_publicCheckBox;
-    QCheckBox*                             m_familyCheckBox;
-    QCheckBox*                             m_friendsCheckBox;
-    QCheckBox*                             m_exportHostTagsCheckBox;
-    QCheckBox*                             m_stripSpaceTagsCheckBox;
-    QCheckBox*                             m_addExtraTagsCheckBox;
-    QCheckBox*                             m_originalCheckBox;
-    QCheckBox*                             m_resizeCheckBox;
-
-    QSpinBox*                              m_dimensionSpinBox;
-    QSpinBox*                              m_imageQualitySpinBox;
-
-    QPushButton*                           m_extendedPublicationButton;
-    QPushButton*                           m_extendedTagsButton;
-    WSComboBoxIntermediate*                m_contentTypeComboBox;
-    WSComboBoxIntermediate*                m_safetyLevelComboBox;
-
-    QString                                m_username;
-    QString                                m_userId;
-    QString                                m_lastSelectedAlbum;
-
-    QLabel*                                m_userNameDisplayLabel;
-
-    QProgressDialog*                       m_authProgressDlg;
-
-    QList< QPair<QUrl, FPhotoInfo> >       m_uploadQueue;
-
-    QLineEdit*                             m_tagsLineEdit;
-
-    FlickrWidget*                          m_widget;
-    FlickrTalker*                          m_talker;
-
-    FlickrList*                            m_imglst;
-    WSSelectUserDlg*                       m_select;
-    FlickrNewAlbumDlg*                     m_albumDlg;
-
-    DInfoInterface*                        m_iface;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
