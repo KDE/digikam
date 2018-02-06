@@ -154,6 +154,11 @@ void GPTalker::listPhotos(const QString& albumId, const QString& imgmax)
     emit signalBusy(true);
 }
 
+QString GPTalker::token() const
+{
+    return m_accessToken;
+}
+
 void GPTalker::createAlbum(const GSFolder& album)
 {
     if (m_reply)
@@ -954,4 +959,4 @@ void GPTalker::parseResponseAddPhoto(const QByteArray& data)
     emit signalAddPhotoDone(1, QString::fromLatin1(""), photoId);
 }
 
-} // Digikam
+} // namespace Digikam

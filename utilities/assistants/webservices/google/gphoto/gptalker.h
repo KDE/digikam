@@ -76,7 +76,8 @@ public:
                   int imageQuality);
 
     bool updatePhoto(const QString& photoPath,
-                     GSPhoto& info/*, const QString& albumId*/,
+                     GSPhoto& info,
+                     //const QString& albumId,
                      bool rescale,
                      int maxDim,
                      int imageQuality);
@@ -86,11 +87,7 @@ public:
     QString getLoginName()   const;
     QString getUserName()    const;
     QString getUserEmailId() const;
-
-    QString token()          const
-    {
-        return m_accessToken;
-    }
+    QString token()          const;
 
     void cancel();
 
@@ -113,20 +110,20 @@ private:
 
 private Q_SLOTS:
 
-    void slotError( const QString& msg );
+    void slotError(const QString& msg);
     void slotFinished(QNetworkReply* reply);
 
 private:
 
-    QString                     m_loginName;
-    QString                     m_username;
-    QString                     m_password;
-    QString                     m_userEmailId;
+    QString                m_loginName;
+    QString                m_username;
+    QString                m_password;
+    QString                m_userEmailId;
 
-    QNetworkAccessManager*      m_netMngr;
-    QNetworkReply*              m_reply;
+    QNetworkAccessManager* m_netMngr;
+    QNetworkReply*         m_reply;
 
-    State                       m_state;
+    State                  m_state;
 };
 
 } // namespace Digikam
