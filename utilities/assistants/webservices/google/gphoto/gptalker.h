@@ -35,32 +35,21 @@
 // Local includes
 
 #include "gsitem.h"
-#include "gssession.h"
+#include "gstalkerbase.h"
 
 namespace Digikam
 {
 
-class GPTalker : public GSSession
+class GPTalker : public GSTalkerBase
 {
     Q_OBJECT
 
 public:
 
-    enum State
-    {
-        FE_LOGOUT = -1,
-        FE_LISTALBUMS = 0,
-        FE_LISTPHOTOS,
-        FE_ADDPHOTO,
-        FE_UPDATEPHOTO,
-        FE_GETPHOTO,
-        FE_CREATEALBUM
-    };
-
-public:
-
     explicit GPTalker(QWidget* const parent);
     ~GPTalker();
+
+public:
 
     void listAlbums();
     void listPhotos(const QString& albumId,
@@ -112,6 +101,19 @@ private Q_SLOTS:
 
     void slotError(const QString& msg);
     void slotFinished(QNetworkReply* reply);
+
+private:
+
+    enum State
+    {
+        GP_LOGOUT     = -1,
+        GP_LISTALBUMS = 0,
+        GP_LISTPHOTOS,
+        GP_ADDPHOTO,
+        GP_UPDATEPHOTO,
+        GP_GETPHOTO,
+        GP_CREATEALBUM
+    };
 
 private:
 

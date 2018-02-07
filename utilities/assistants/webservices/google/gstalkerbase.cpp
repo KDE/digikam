@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "gssession.h"
+#include "gstalkerbase.h"
 
 // Qt includes
 
@@ -57,14 +57,14 @@
 namespace Digikam
 {
 
-class GSSession::Private
+class GSTalkerBase::Private
 {
 public:
 
     enum AuthState
     {
-        GD_ACCESSTOKEN = 0,
-        GD_REFRESHTOKEN
+        GS_ACCESSTOKEN = 0,
+        GS_REFRESHTOKEN
     };
 
 public:
@@ -73,22 +73,22 @@ public:
     {
         parent       = 0;
         netMngr      = 0;
-        redirectUri     = QString::fromLatin1("urn:ietf:wg:oauth:2.0:oob");
-        responseType    = QString::fromLatin1("code");
-        clientId        = QString::fromLatin1("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
-        tokenUri        = QString::fromLatin1("https://accounts.google.com/o/oauth2/token");
-        clientSecret    = QString::fromLatin1("4MJOS0u1-_AUEKJ0ObA-j22U");
-        code            = QString::fromLatin1("0");
-        continuePos     = 0;
-        authState       = GD_ACCESSTOKEN;
-        window          = 0;
+        redirectUri  = QString::fromLatin1("urn:ietf:wg:oauth:2.0:oob");
+        responseType = QString::fromLatin1("code");
+        clientId     = QString::fromLatin1("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
+        tokenUri     = QString::fromLatin1("https://accounts.google.com/o/oauth2/token");
+        clientSecret = QString::fromLatin1("4MJOS0u1-_AUEKJ0ObA-j22U");
+        code         = QString::fromLatin1("0");
+        continuePos  = 0;
+        authState    = GS_ACCESSTOKEN;
+        window       = 0;
     }
 
     int                    continuePos;
 
     QWidget*               parent;
 
-    AuthState             authState;
+    AuthState              authState;
     QString                tokenUri;
     QString                clientSecret;
     QString                clientId;
@@ -101,7 +101,7 @@ public:
     QNetworkAccessManager* netMngr;
 };
 
-GSSession::GSSession(QWidget* const parent, const QString & scope)
+GSTalkerBase::GSTalkerBase(QWidget* const parent, const QString & scope)
     : d(new Private)
 {
     m_reply    = 0;
@@ -113,7 +113,7 @@ GSSession::GSSession(QWidget* const parent, const QString & scope)
             this, SLOT(slotAuthFinished(QNetworkReply*)));
 }
 
-GSSession::~GSSession()
+GSTalkerBase::~GSTalkerBase()
 {
     if (m_reply)
         m_reply->abort();
@@ -121,7 +121,7 @@ GSSession::~GSSession()
     delete d;
 }
 
-bool GSSession::authenticated()
+bool GSTalkerBase::authenticated()
 {
     if (m_accessToken.isEmpty())
     {
@@ -134,7 +134,7 @@ bool GSSession::authenticated()
 /**
  * Starts authentication by opening the browser
  */
-void GSSession::doOAuth()
+void GSTalkerBase::doOAuth()
 {
     QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/auth"));
     QUrlQuery urlQuery;
@@ -195,13 +195,13 @@ void GSSession::doOAuth()
     }
 }
 
-void GSSession::slotAccept()
+void GSTalkerBase::slotAccept()
 {
     d->window->close();
     d->window->setResult(QDialog::Accepted);
 }
 
-void GSSession::slotReject()
+void GSTalkerBase::slotReject()
 {
     d->window->close();
     d->window->setResult(QDialog::Rejected);
@@ -210,7 +210,7 @@ void GSSession::slotReject()
 /**
  * Gets access token from googledrive after authentication by user
  */
-void GSSession::getAccessToken()
+void GSTalkerBase::getAccessToken()
 {
     QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/token?"));
     QUrlQuery urlQuery;
@@ -234,14 +234,14 @@ void GSSession::getAccessToken()
 
     m_reply = d->netMngr->post(netRequest, postData);
 
-    d->authState = Private::GD_ACCESSTOKEN;
+    d->authState = Private::GS_ACCESSTOKEN;
     m_buffer.resize(0);
     emit signalBusy(true);
 }
 
 /** Gets access token from refresh token for handling login of user across digikam sessions
  */
-void GSSession::getAccessTokenFromRefreshToken(const QString& msg)
+void GSTalkerBase::getAccessTokenFromRefreshToken(const QString& msg)
 {
     QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/token"));
 
@@ -259,12 +259,12 @@ void GSSession::getAccessTokenFromRefreshToken(const QString& msg)
 
     m_reply = d->netMngr->post(netRequest, postData);
 
-    d->authState = Private::GD_REFRESHTOKEN;
+    d->authState = Private::GS_REFRESHTOKEN;
     m_buffer.resize(0);
     emit signalBusy(true);
 }
 
-void GSSession::slotAuthFinished(QNetworkReply* reply)
+void GSTalkerBase::slotAuthFinished(QNetworkReply* reply)
 {
     if (reply != m_reply)
     {
@@ -275,7 +275,7 @@ void GSSession::slotAuthFinished(QNetworkReply* reply)
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        if (d->authState == Private::GD_ACCESSTOKEN)
+        if (d->authState == Private::GS_ACCESSTOKEN)
         {
             emit signalBusy(false);
             emit signalAccessTokenFailed(reply->error(), reply->errorString());
@@ -295,12 +295,12 @@ void GSSession::slotAuthFinished(QNetworkReply* reply)
 
     switch(d->authState)
     {
-        case (Private::GD_ACCESSTOKEN):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_ACCESSTOKEN";// << m_buffer;
+        case (Private::GS_ACCESSTOKEN):
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GS_ACCESSTOKEN";// << m_buffer;
             parseResponseAccessToken(m_buffer);
             break;
-        case (Private::GD_REFRESHTOKEN):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GD_REFRESHTOKEN" << m_buffer;
+        case (Private::GS_REFRESHTOKEN):
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In Private::GS_REFRESHTOKEN" << m_buffer;
             parseResponseRefreshToken(m_buffer);
             break;
         default:
@@ -310,7 +310,7 @@ void GSSession::slotAuthFinished(QNetworkReply* reply)
     reply->deleteLater();
 }
 
-void GSSession::parseResponseAccessToken(const QByteArray& data)
+void GSTalkerBase::parseResponseAccessToken(const QByteArray& data)
 {
     m_accessToken  = getValue(QString::fromUtf8(data), QString::fromLatin1("access_token"));
     m_refreshToken = getValue(QString::fromUtf8(data), QString::fromLatin1("refresh_token"));
@@ -323,14 +323,14 @@ void GSSession::parseResponseAccessToken(const QByteArray& data)
     }
 
     m_bearerAccessToken = QString::fromLatin1("Bearer ") + m_accessToken;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In parse Private::GD_ACCESSTOKEN"
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In parse Private::GS_ACCESSTOKEN"
                                      << m_bearerAccessToken
                                      << "  " << data;
     //emit signalAccessTokenObtained();
     emit signalRefreshTokenObtained(m_refreshToken);
 }
 
-void GSSession::parseResponseRefreshToken(const QByteArray& data)
+void GSTalkerBase::parseResponseRefreshToken(const QByteArray& data)
 {
     m_accessToken = getValue(QString::fromUtf8(data), QString::fromLatin1("access_token"));
 
@@ -342,13 +342,13 @@ void GSSession::parseResponseRefreshToken(const QByteArray& data)
     }
 
     m_bearerAccessToken = QString::fromLatin1("Bearer ") + m_accessToken;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In parse Private::GD_ACCESSTOKEN"
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In parse Private::GS_ACCESSTOKEN"
                                      << m_bearerAccessToken
                                      << "  " << data;
     emit signalAccessTokenObtained();
 }
 
-QString GSSession::getValue(const QString& jsonStr, const QString& key)
+QString GSTalkerBase::getValue(const QString& jsonStr, const QString& key)
 {
     QString token(getToken(jsonStr, key, QString::fromLatin1(",")));
 
@@ -363,7 +363,7 @@ QString GSSession::getValue(const QString& jsonStr, const QString& key)
     return value;
 }
 
-QStringList GSSession::getParams(const QString& jsonStr, const QStringList& pathValues, const QString& key)
+QStringList GSTalkerBase::getParams(const QString& jsonStr, const QStringList& pathValues, const QString& key)
 {
     if (pathValues.count() == 0)
         return QStringList();
@@ -389,7 +389,7 @@ QStringList GSSession::getParams(const QString& jsonStr, const QStringList& path
     return tokens;
 }
 
-QString GSSession::getToken(const QString& object, const QString& key, const QString& endDivider)
+QString GSTalkerBase::getToken(const QString& object, const QString& key, const QString& endDivider)
 {
     QString searchToken(QString::fromLatin1("\"") + key + QString::fromLatin1("\""));
 
@@ -416,7 +416,7 @@ QString GSSession::getToken(const QString& object, const QString& key, const QSt
     return token;
 }
 
-int GSSession::getTokenEnd(const QString& object, int beginPos)
+int GSTalkerBase::getTokenEnd(const QString& object, int beginPos)
 {
     int beginDividerPos(object.indexOf(QString::fromLatin1("["), beginPos));
     int endDividerPos(object.indexOf(QString::fromLatin1("]"),   beginPos + 1));

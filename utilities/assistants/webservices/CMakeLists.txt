@@ -164,7 +164,7 @@ set(libwsgoogle_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdmpform.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gdrive/gdtalker.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gphoto/gpmpform.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gphoto/gptalker.cpp
-                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gssession.cpp
+                     ${CMAKE_CURRENT_SOURCE_DIR}/google/gstalkerbase.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gsreplacedlg.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gsnewalbumdlg.cpp
                      ${CMAKE_CURRENT_SOURCE_DIR}/google/gswindow.cpp

@@ -34,12 +34,12 @@
 // Local includes
 
 #include "gsitem.h"
-#include "gssession.h"
+#include "gstalkerbase.h"
 
 namespace Digikam
 {
 
-class GDTalker : public GSSession
+class GDTalker : public GSTalkerBase
 {
     Q_OBJECT
 
@@ -47,17 +47,6 @@ public:
 
     explicit GDTalker(QWidget* const parent);
     ~GDTalker();
-
-Q_SIGNALS:
-
-    void signalListAlbumsDone(int, const QString&, const QList <GSFolder>&);
-    void signalCreateFolderDone(int,const QString& msg);
-    void signalAddPhotoDone(int,const QString& msg, const QString&);
-    void signalSetUserName(const QString& msg);
-
-private Q_SLOTS:
-
-    void slotFinished(QNetworkReply* reply);
 
 public:
 
@@ -71,6 +60,17 @@ public:
                   int maxDim,
                   int imageQuality);
     void cancel();
+
+Q_SIGNALS:
+
+    void signalListAlbumsDone(int, const QString&, const QList <GSFolder>&);
+    void signalCreateFolderDone(int,const QString& msg);
+    void signalAddPhotoDone(int,const QString& msg, const QString&);
+    void signalSetUserName(const QString& msg);
+
+private Q_SLOTS:
+
+    void slotFinished(QNetworkReply* reply);
 
 private:
 

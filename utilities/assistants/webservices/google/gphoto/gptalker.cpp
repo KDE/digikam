@@ -67,10 +67,10 @@ static bool gphotoLessThan(const GSFolder& p1, const GSFolder& p2)
 }
 
 GPTalker::GPTalker(QWidget* const parent)
-    : GSSession(parent, QString::fromLatin1("https://picasaweb.google.com/data/")),
+    : GSTalkerBase(parent, QString::fromLatin1("https://picasaweb.google.com/data/")),
       m_netMngr(0),
       m_reply(0),
-      m_state(FE_LOGOUT)
+      m_state(GP_LOGOUT)
 {
     m_netMngr = new QNetworkAccessManager(this);
 
@@ -114,7 +114,7 @@ void GPTalker::listAlbums()
 
     m_reply = m_netMngr->get(netRequest);
 
-    m_state = FE_LISTALBUMS;
+    m_state = GP_LISTALBUMS;
     m_buffer.resize(0);
     emit signalBusy(true);
 }
@@ -149,7 +149,7 @@ void GPTalker::listPhotos(const QString& albumId, const QString& imgmax)
 
     m_reply = m_netMngr->get(netRequest);
 
-    m_state = FE_LISTPHOTOS;
+    m_state = GP_LISTPHOTOS;
     m_buffer.resize(0);
     emit signalBusy(true);
 }
@@ -239,7 +239,7 @@ void GPTalker::createAlbum(const GSFolder& album)
 
     m_reply = m_netMngr->post(netRequest, buffer);
 
-    m_state = FE_CREATEALBUM;
+    m_state = GP_CREATEALBUM;
     m_buffer.resize(0);
     emit signalBusy(true);
 }
@@ -371,7 +371,7 @@ bool GPTalker::addPhoto(const QString& photoPath,
 
     m_reply = m_netMngr->post(netRequest, form.formData());
 
-    m_state = FE_ADDPHOTO;
+    m_state = GP_ADDPHOTO;
     m_buffer.resize(0);
     emit signalBusy(true);
     return true;
@@ -502,7 +502,7 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
 
     m_reply = m_netMngr->put(netRequest, form.formData());
 
-    m_state = FE_UPDATEPHOTO;
+    m_state = GP_UPDATEPHOTO;
     m_buffer.resize(0);
     emit signalBusy(true);
     return true;
@@ -521,7 +521,7 @@ void GPTalker::getPhoto(const QString& imgPath)
     QUrl url(imgPath);
     m_reply = m_netMngr->get(QNetworkRequest(url));
 
-    m_state = FE_GETPHOTO;
+    m_state = GP_GETPHOTO;
     m_buffer.resize(0);
 }
 
@@ -630,7 +630,7 @@ void GPTalker::slotFinished(QNetworkReply* reply)
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        if (m_state == FE_ADDPHOTO)
+        if (m_state == GP_ADDPHOTO)
         {
             emit signalAddPhotoDone(reply->error(), reply->errorString(), QString::fromLatin1("-1"));
         }
@@ -648,24 +648,24 @@ void GPTalker::slotFinished(QNetworkReply* reply)
 
     switch (m_state)
     {
-        case (FE_LOGOUT):
+        case (GP_LOGOUT):
             break;
-        case (FE_CREATEALBUM):
+        case (GP_CREATEALBUM):
             parseResponseCreateAlbum(m_buffer);
             break;
-        case (FE_LISTALBUMS):
+        case (GP_LISTALBUMS):
             parseResponseListAlbums(m_buffer);
             break;
-        case (FE_LISTPHOTOS):
+        case (GP_LISTPHOTOS):
             parseResponseListPhotos(m_buffer);
             break;
-        case (FE_ADDPHOTO):
+        case (GP_ADDPHOTO):
             parseResponseAddPhoto(m_buffer);
             break;
-        case (FE_UPDATEPHOTO):
+        case (GP_UPDATEPHOTO):
             emit signalAddPhotoDone(1, QString::fromLatin1(""), QString::fromLatin1(""));
             break;
-        case (FE_GETPHOTO):
+        case (GP_GETPHOTO):
             // all we get is data of the image
             emit signalGetPhotoDone(1, QString(), m_buffer);
             break;
@@ -732,6 +732,7 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
                         fps.access = detailsNode.toElement().text();
                     }
                 }
+
                 detailsNode = detailsNode.nextSibling();
             }
 

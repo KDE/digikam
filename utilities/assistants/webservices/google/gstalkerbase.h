@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GS_SESSION_H
-#define GS_SESSION_H
+#ifndef GS_TALKER_BASE_H
+#define GS_TALKER_BASE_H
 
 // Qt includes
 
@@ -37,14 +37,26 @@
 namespace Digikam
 {
 
-class GSSession : public QObject
+class GSTalkerBase : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit GSSession(QWidget* const parent, const QString& scope);
-    ~GSSession();
+    explicit GSTalkerBase(QWidget* const parent, const QString& scope);
+    ~GSTalkerBase();
+
+public:
+
+    void doOAuth();
+    void getAccessToken();
+    void getAccessTokenFromRefreshToken(const QString& msg);
+    bool authenticated();
+
+    QString     getValue(const QString&, const QString&);
+    QStringList getParams(const QString&, const QStringList&, const QString&);
+    QString     getToken(const QString&, const QString&, const QString&);
+    int         getTokenEnd(const QString&, int);
 
 Q_SIGNALS:
 
@@ -59,18 +71,6 @@ private Q_SLOTS:
     void slotAuthFinished(QNetworkReply* reply);
     void slotAccept();
     void slotReject();
-
-public:
-
-    void doOAuth();
-    void getAccessToken();
-    void getAccessTokenFromRefreshToken(const QString& msg);
-    bool authenticated();
-
-    QString     getValue(const QString&, const QString&);
-    QStringList getParams(const QString&, const QStringList&, const QString&);
-    QString     getToken(const QString&, const QString&, const QString&);
-    int         getTokenEnd(const QString&, int);
 
 protected:
 
@@ -96,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GS_SESSION_H
+#endif // GS_TALKER_BASE_H
