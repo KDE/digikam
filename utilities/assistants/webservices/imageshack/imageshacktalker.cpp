@@ -227,7 +227,7 @@ void ImageShackTalker::parseAccessToken(const QByteArray &data)
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         return;
@@ -235,9 +235,9 @@ void ImageShackTalker::parseAccessToken(const QByteArray &data)
 
     QJsonObject jsonObject = doc.object();
 
-    if(jsonObject[QString::fromLatin1("success")].toBool())
+    if (jsonObject[QString::fromLatin1("success")].toBool())
     {
-        m_session->m_loggedIn = true;
+        m_session->setLoggedIn(true);
         QJsonObject obj          = jsonObject[QString::fromLatin1("result")].toObject();
         m_session->setUsername(obj[QString::fromLatin1("username")].toString());
         m_session->setEmail(obj[QString::fromLatin1("email")].toString());
@@ -246,7 +246,7 @@ void ImageShackTalker::parseAccessToken(const QByteArray &data)
     }
     else
     {
-        m_session->m_loggedIn = false;
+        m_session->setLoggedIn(false);
         QJsonObject obj          = jsonObject[QString::fromLatin1("error")].toObject();
         checkRegistrationCodeDone(obj[QString::fromLatin1("error_code")].toInt(), obj[QString::fromLatin1("error_message")].toString());
     }

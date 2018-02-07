@@ -48,34 +48,24 @@ public:
     QString credits()   const;
     QString authToken() const;
 
+    void setLoggedIn(bool b);
     void setUsername(const QString& username);
     void setEmail(const QString& email);
     void setPassword(const QString& pass);
+    void setCredits(const QString& credits);
     void setAuthToken(const QString& token);
 
     void readSettings();
+    void saveSettings();
 
     void logOut();
 
 private:
 
-    void saveSettings();
-
-private:
-
-    bool    m_loggedIn;
-
-    QString m_authToken;
-    QString m_username;
-    QString m_email;
-    QString m_password;
-    QString m_credits;
-
-    friend class ImageShackWindow;
-    friend class ImageShackWidget;
-    friend class ImageShackTalker;
+    class Private;
+    Private* const d;    
 };
 
-} // namaspace Digikam
+} // namespace Digikam
 
 #endif // IMAGESHACK_SESSION_H

@@ -40,79 +40,112 @@
 namespace Digikam
 {
 
+class ImageShackSession::Private
+{
+
+public:
+
+    Private()
+    {
+        loggedIn = false;
+    }
+    
+    bool    loggedIn;
+
+    QString authToken;
+    QString username;
+    QString email;
+    QString password;
+    QString credits;
+};
+
 ImageShackSession::ImageShackSession()
+    : d(new Private)
 {
     readSettings();
-    m_loggedIn = false;
 }
 
 ImageShackSession::~ImageShackSession()
 {
+    delete d;
 }
 
 bool ImageShackSession::loggedIn() const
 {
-    return m_loggedIn;
+    return d->loggedIn;
 }
 
 QString ImageShackSession::username() const
 {
-    return m_username;
+    return d->username;
 }
 
 QString ImageShackSession::email() const
 {
-    return m_email;
+    return d->email;
 }
 
 QString ImageShackSession::password() const
 {
-    return m_password;
+    return d->password;
 }
 
 QString ImageShackSession::authToken() const
 {
-    return m_authToken;
+    return d->authToken;
 }
 
 QString ImageShackSession::credits() const
 {
-    return m_credits;
+    return d->credits;
+}
+
+void ImageShackSession::setLoggedIn(bool b)
+{
+    d->loggedIn = b;
 }
 
 void ImageShackSession::setUsername(const QString& username)
 {
-    m_username = username;
+    d->username = username;
 }
 
 void ImageShackSession::setEmail(const QString& email)
 {
-    m_email = email;
+    d->email = email;
 }
 
 void ImageShackSession::setAuthToken(const QString& token)
 {
-    m_authToken = token;
+    d->authToken = token;
 }
 
 void ImageShackSession::setPassword(const QString& pass)
 {
-    m_password = pass;
+    d->password = pass;
+}
+
+void ImageShackSession::setCredits(const QString& credits)
+{
+    d->credits = credits;
 }
 
 void ImageShackSession::logOut()
 {
-    m_loggedIn = false;
-    m_username.clear();
-    m_email.clear();
-    m_credits.clear();
+    d->loggedIn = false;
+    d->username.clear();
+    d->email.clear();
+    d->credits.clear();
     saveSettings();
 }
 
 void ImageShackSession::readSettings()
 {
     static bool bLoaded = false;
-    if (bLoaded) return;
+
+    if (bLoaded)
+        return;
+    
     bLoaded = true;
 
     KConfig config;
