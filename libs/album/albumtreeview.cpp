@@ -861,6 +861,10 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex& index, QMap<int, Dig
                  << ", expanded = " << state.expanded
                  << ", currentIndex = " << state.currentIndex << ")" << this;
 */
+        // Block signals to prevent that the searches started when the last
+        // selected index is restored when loading the GUI
+        selectionModel()->blockSignals(true);
+
         if (state.selected)
         {
             //qCDebug(DIGIKAM_GENERAL_LOG) << "Selecting" << album->title();
@@ -883,6 +887,8 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex& index, QMap<int, Dig
             //qCDebug(DIGIKAM_GENERAL_LOG) << "Setting current index" << album->title() << "(" << album->id() << ")";
             selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
         }
+
+        selectionModel()->blockSignals(false);
     }
 }
 
