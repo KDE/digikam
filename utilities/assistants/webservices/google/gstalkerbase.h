@@ -48,15 +48,14 @@ public:
 
 public:
 
-    void doOAuth();
-    void getAccessToken();
-    void getAccessTokenFromRefreshToken(const QString& msg);
-    bool authenticated();
-
-    QString     getValue(const QString&, const QString&);
-    QStringList getParams(const QString&, const QStringList&, const QString&);
-    QString     getToken(const QString&, const QString&, const QString&);
-    int         getTokenEnd(const QString&, int);
+    void        doOAuth();
+    void        getAccessToken();
+    void        getAccessTokenFromRefreshToken(const QString& msg);
+    bool        authenticated()                                               const;
+    QString     getValue(const QString&, const QString&)                      const;
+    QStringList getParams(const QString&, const QStringList&, const QString&) const;
+    QString     getToken(const QString&, const QString&, const QString&)      const;
+    int         getTokenEnd(const QString&, int)                              const;
 
 Q_SIGNALS:
 

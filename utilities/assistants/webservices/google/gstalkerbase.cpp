@@ -121,7 +121,7 @@ GSTalkerBase::~GSTalkerBase()
     delete d;
 }
 
-bool GSTalkerBase::authenticated()
+bool GSTalkerBase::authenticated() const
 {
     if (m_accessToken.isEmpty())
     {
@@ -239,7 +239,8 @@ void GSTalkerBase::getAccessToken()
     emit signalBusy(true);
 }
 
-/** Gets access token from refresh token for handling login of user across digikam sessions
+/**
+ * Gets access token from refresh token for handling login of user across digikam sessions
  */
 void GSTalkerBase::getAccessTokenFromRefreshToken(const QString& msg)
 {
@@ -348,7 +349,7 @@ void GSTalkerBase::parseResponseRefreshToken(const QByteArray& data)
     emit signalAccessTokenObtained();
 }
 
-QString GSTalkerBase::getValue(const QString& jsonStr, const QString& key)
+QString GSTalkerBase::getValue(const QString& jsonStr, const QString& key) const
 {
     QString token(getToken(jsonStr, key, QString::fromLatin1(",")));
 
@@ -363,7 +364,7 @@ QString GSTalkerBase::getValue(const QString& jsonStr, const QString& key)
     return value;
 }
 
-QStringList GSTalkerBase::getParams(const QString& jsonStr, const QStringList& pathValues, const QString& key)
+QStringList GSTalkerBase::getParams(const QString& jsonStr, const QStringList& pathValues, const QString& key) const
 {
     if (pathValues.count() == 0)
         return QStringList();
@@ -389,7 +390,7 @@ QStringList GSTalkerBase::getParams(const QString& jsonStr, const QStringList& p
     return tokens;
 }
 
-QString GSTalkerBase::getToken(const QString& object, const QString& key, const QString& endDivider)
+QString GSTalkerBase::getToken(const QString& object, const QString& key, const QString& endDivider) const
 {
     QString searchToken(QString::fromLatin1("\"") + key + QString::fromLatin1("\""));
 
@@ -416,7 +417,7 @@ QString GSTalkerBase::getToken(const QString& object, const QString& key, const 
     return token;
 }
 
-int GSTalkerBase::getTokenEnd(const QString& object, int beginPos)
+int GSTalkerBase::getTokenEnd(const QString& object, int beginPos) const
 {
     int beginDividerPos(object.indexOf(QString::fromLatin1("["), beginPos));
     int endDividerPos(object.indexOf(QString::fromLatin1("]"),   beginPos + 1));
