@@ -82,37 +82,37 @@ private Q_SLOTS:
 
 private:
 
-    QLabel*                        m_headerLbl;
-    QLabel*                        m_userNameLbl;
-    QLabel*                        m_userName;
-    QLabel*                        m_emailLbl;
-    QLabel*                        m_email;
-    QLabel*                        m_nickNameLbl;
-    QLabel*                        m_sitePasswordLbl;
-    QLabel*                        m_albumPasswordLbl;
+    QLabel*         m_headerLbl;
+    QLabel*         m_userNameLbl;
+    QLabel*         m_userName;
+    QLabel*         m_emailLbl;
+    QLabel*         m_email;
+    QLabel*         m_nickNameLbl;
+    QLabel*         m_sitePasswordLbl;
+    QLabel*         m_albumPasswordLbl;
 
-    QRadioButton*                  m_anonymousRBtn;
-    QRadioButton*                  m_accountRBtn;
+    QRadioButton*   m_anonymousRBtn;
+    QRadioButton*   m_accountRBtn;
 
-    QCheckBox*                     m_resizeChB;
+    QCheckBox*      m_resizeChB;
 
-    QSpinBox*                      m_dimensionSpB;
-    QSpinBox*                      m_imageQualitySpB;
+    QSpinBox*       m_dimensionSpB;
+    QSpinBox*       m_imageQualitySpB;
 
-    QComboBox*                     m_albumsCoB;
+    QComboBox*      m_albumsCoB;
 
-    QPushButton*                   m_newAlbumBtn;
-    QPushButton*                   m_reloadAlbumsBtn;
-    QPushButton*                   m_changeUserBtn;
+    QPushButton*    m_newAlbumBtn;
+    QPushButton*    m_reloadAlbumsBtn;
+    QPushButton*    m_changeUserBtn;
 
-    QLineEdit*                     m_albumPasswordEdt;
-    QLineEdit*                     m_nickNameEdt;
-    QLineEdit*                     m_sitePasswordEdt;
+    QLineEdit*      m_albumPasswordEdt;
+    QLineEdit*      m_nickNameEdt;
+    QLineEdit*      m_sitePasswordEdt;
 
-    DInfoInterface*                m_iface;
-    DProgressWdg*                  m_progressBar;
-    DImagesList*                   m_imgList;
-    QWidget*                       m_uploadWidget;
+    DInfoInterface* m_iface;
+    DProgressWdg*   m_progressBar;
+    DImagesList*    m_imgList;
+    QWidget*        m_uploadWidget;
 
     friend class SmugWindow;
 };

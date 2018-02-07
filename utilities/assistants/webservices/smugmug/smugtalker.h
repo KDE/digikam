@@ -49,6 +49,8 @@ public:
     explicit SmugTalker(DInfoInterface* const iface, QWidget* const parent);
     ~SmugTalker();
 
+public:
+
     SmugUser getUser() const;
 
     bool    loggedIn() const;
@@ -128,6 +130,8 @@ private:
         SMUG_ADDPHOTO,
         SMUG_GETPHOTO
     };
+
+private:
 
     QWidget*               m_parent;
 

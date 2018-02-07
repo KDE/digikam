@@ -125,13 +125,13 @@ private:
     qint64           m_currentTmplID;
     qint64           m_currentCategoryID;
 
-    WSLoginDialog*     m_loginDlg;
+    WSLoginDialog*   m_loginDlg;
 
     QList<QUrl>      m_transferQueue;
 
     SmugTalker*      m_talker;
     SmugWidget*      m_widget;
-    SmugNewAlbumDlg*    m_albumDlg;
+    SmugNewAlbumDlg* m_albumDlg;
 
     DInfoInterface*  m_iface;
 };

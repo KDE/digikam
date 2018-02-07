@@ -40,6 +40,8 @@ public:
     explicit SmugMPForm();
     ~SmugMPForm();
 
+public:
+
     void finish();
     void reset();
 
