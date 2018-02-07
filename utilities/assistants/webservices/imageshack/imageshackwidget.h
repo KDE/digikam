@@ -6,7 +6,8 @@
  * Date        : 2012-02-02
  * Description : a tool to export items to ImageShack web service
  *
- * Copyright (C) 2012 Dodon Victor <dodonvictor at gmail dot com>
+ * Copyright (C) 2012      by Dodon Victor <dodonvictor at gmail dot com>
+ * Copyright (C) 2013-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,37 +75,25 @@ private Q_SLOTS:
 
 private:
 
-    DImagesList*                   m_imgList;
-    DInfoInterface*                m_iface;
-    ImageShackSession*             m_session;
+    DImagesList*       m_imgList;
+    DInfoInterface*    m_iface;
+    ImageShackSession* m_session;
 
-    QLabel*                        m_headerLbl;
-    QLabel*                        m_accountNameLbl;
+    QLabel*            m_headerLbl;
+    QLabel*            m_accountNameLbl;
 
-    QLineEdit*                     m_tagsFld;
+    QLineEdit*         m_tagsFld;
 
-    QCheckBox*                     m_privateImagesChb;
-    QCheckBox*                     m_remBarChb;
+    QCheckBox*         m_privateImagesChb;
+    QCheckBox*         m_remBarChb;
 
-    QPushButton*                   m_chgRegCodeBtn;
-    QPushButton*                   m_reloadGalleriesBtn;
+    QPushButton*       m_chgRegCodeBtn;
+    QPushButton*       m_reloadGalleriesBtn;
 
-    QComboBox*                     m_galleriesCob;
+    QComboBox*         m_galleriesCob;
 
-    DProgressWdg*                  m_progressBar;
-/*
-    QLabel*                        m_accountEmailLbl;
-    QLineEdit*                     m_newGalleryName;
-    QRadioButton*                  m_noResizeRdb;
-    QRadioButton*                  m_predefSizeRdb;
-    QRadioButton*                  m_customSizeRdb;
-    QCheckBox*                     m_useGalleriesChb;
-    QComboBox*                     m_resizeOptsCob;
-    QSpinBox*                      m_widthSpb;
-    QSpinBox*                      m_heightSpb;
-    QGroupBox*                     m_galleriesBox;
-    QWidget*                       m_galleriesWidget;
-*/
+    DProgressWdg*      m_progressBar;
+
     friend class ImageShackWindow;
 };
 

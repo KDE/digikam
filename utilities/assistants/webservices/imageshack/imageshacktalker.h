@@ -6,7 +6,8 @@
  * Date        : 2012-02-02
  * Description : a tool to export items to ImageShack web service
  *
- * Copyright (C) 2012 Dodon Victor <dodonvictor at gmail dot com>
+ * Copyright (C) 2012      by Dodon Victor <dodonvictor at gmail dot com>
+ * Copyright (C) 2013-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,13 +49,17 @@ public:
     explicit ImageShackTalker(ImageShackSession* const session);
     ~ImageShackTalker();
 
+public:
+
     void authenticate();
     void cancelLogIn();
     void cancel();
     void getGalleries();
 
     void uploadItem(const QString& path, const QMap<QString, QString>& opts);
-    void uploadItemToGallery(const QString& path, const QString& gallery, const QMap<QString, QString>& opts);
+    void uploadItemToGallery(const QString& path,
+                             const QString& gallery,
+                             const QMap<QString, QString>& opts);
 
 Q_SIGNALS:
 
@@ -65,18 +70,6 @@ Q_SIGNALS:
 
     void signalAddPhotoDone(int errCode, const QString& errMsg);
     void signalUpdateGalleries(const QStringList& gTexts, const QStringList& gNames);
-
-private:
-
-    enum State
-    {
-        IMGHCK_AUTHENTICATING,
-        IMGHCK_DONOTHING,
-        IMGHCK_GETGALLERIES,
-        IMGHCK_ADDPHOTO,
-        IMGHCK_ADDVIDEO,
-        IMGHCK_ADDPHOTOGALLERY
-    };
 
 private Q_SLOTS:
 
@@ -98,6 +91,18 @@ private:
     void parseAddPhotoToGalleryDone(QByteArray data);
 
     QString mimeType(const QString& path);
+
+private:
+
+    enum State
+    {
+        IMGHCK_AUTHENTICATING,
+        IMGHCK_DONOTHING,
+        IMGHCK_GETGALLERIES,
+        IMGHCK_ADDPHOTO,
+        IMGHCK_ADDVIDEO,
+        IMGHCK_ADDPHOTOGALLERY
+    };
 
 private:
 

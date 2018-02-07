@@ -6,7 +6,8 @@
  * Date        : 2012-02-02
  * Description : a tool to export items to ImageShack web service
  *
- * Copyright (C) 2012 Dodon Victor <dodonvictor at gmail dot com>
+ * Copyright (C) 2012      by Dodon Victor <dodonvictor at gmail dot com>
+ * Copyright (C) 2013-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -106,12 +107,10 @@ void ImageShackWidget::updateLabels(const QString& /*name*/, const QString& /*ur
     if (m_session->loggedIn())
     {
         m_accountNameLbl->setText(m_session->username());
-        //m_accountEmailLbl->setText(m_session->email());
     }
     else
     {
         m_accountNameLbl->clear();
-        //m_accountEmailLbl->clear();
     }
 }
 
