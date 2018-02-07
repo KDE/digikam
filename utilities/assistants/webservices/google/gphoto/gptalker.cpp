@@ -66,15 +66,49 @@ static bool gphotoLessThan(const GSFolder& p1, const GSFolder& p2)
     return (p1.title.toLower() < p2.title.toLower());
 }
 
+class GPTalker::Private
+{
+public:
+
+    enum State
+    {
+        GP_LOGOUT     = -1,
+        GP_LISTALBUMS = 0,
+        GP_LISTPHOTOS,
+        GP_ADDPHOTO,
+        GP_UPDATEPHOTO,
+        GP_GETPHOTO,
+        GP_CREATEALBUM
+    };
+
+    
+public:
+    
+    Private()
+    {
+        state   = GP_LOGOUT;
+        netMngr = 0;
+    }
+
+public:
+
+    QString                loginName;
+    QString                username;
+    QString                password;
+    QString                userEmailId;
+    State                  state;
+
+    QNetworkAccessManager* netMngr;
+};
+
 GPTalker::GPTalker(QWidget* const parent)
     : GSTalkerBase(parent, QString::fromLatin1("https://picasaweb.google.com/data/")),
-      m_netMngr(0),
-      m_reply(0),
-      m_state(GP_LOGOUT)
+      d(new Private)
 {
-    m_netMngr = new QNetworkAccessManager(this);
+    m_reply   = 0;
+    d->netMngr = new QNetworkAccessManager(this);
 
-    connect(m_netMngr, SIGNAL(finished(QNetworkReply*)),
+    connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
 
     connect(this, SIGNAL(signalError(QString)),
@@ -85,6 +119,8 @@ GPTalker::~GPTalker()
 {
     if (m_reply)
         m_reply->abort();
+    
+    delete d;
 }
 
 /**
@@ -112,9 +148,9 @@ void GPTalker::listAlbums()
         netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
     }
 
-    m_reply = m_netMngr->get(netRequest);
+    m_reply = d->netMngr->get(netRequest);
 
-    m_state = GP_LISTALBUMS;
+    d->state = Private::GP_LISTALBUMS;
     m_buffer.resize(0);
     emit signalBusy(true);
 }
@@ -147,9 +183,9 @@ void GPTalker::listPhotos(const QString& albumId, const QString& imgmax)
         netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
     }
 
-    m_reply = m_netMngr->get(netRequest);
+    m_reply = d->netMngr->get(netRequest);
 
-    m_state = GP_LISTPHOTOS;
+    d->state = Private::GP_LISTPHOTOS;
     m_buffer.resize(0);
     emit signalBusy(true);
 }
@@ -237,9 +273,9 @@ void GPTalker::createAlbum(const GSFolder& album)
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/atom+xml"));
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
 
-    m_reply = m_netMngr->post(netRequest, buffer);
+    m_reply = d->netMngr->post(netRequest, buffer);
 
-    m_state = GP_CREATEALBUM;
+    d->state = Private::GP_CREATEALBUM;
     m_buffer.resize(0);
     emit signalBusy(true);
 }
@@ -369,9 +405,9 @@ bool GPTalker::addPhoto(const QString& photoPath,
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1() + "\nMIME-version: 1.0");
 
-    m_reply = m_netMngr->post(netRequest, form.formData());
+    m_reply = d->netMngr->post(netRequest, form.formData());
 
-    m_state = GP_ADDPHOTO;
+    d->state = Private::GP_ADDPHOTO;
     m_buffer.resize(0);
     emit signalBusy(true);
     return true;
@@ -500,9 +536,9 @@ bool GPTalker::updatePhoto(const QString& photoPath, GSPhoto& info/*, const QStr
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1() + "\nIf-Match: *");
 
-    m_reply = m_netMngr->put(netRequest, form.formData());
+    m_reply = d->netMngr->put(netRequest, form.formData());
 
-    m_state = GP_UPDATEPHOTO;
+    d->state = Private::GP_UPDATEPHOTO;
     m_buffer.resize(0);
     emit signalBusy(true);
     return true;
@@ -519,25 +555,25 @@ void GPTalker::getPhoto(const QString& imgPath)
     emit signalBusy(true);
 
     QUrl url(imgPath);
-    m_reply = m_netMngr->get(QNetworkRequest(url));
+    m_reply = d->netMngr->get(QNetworkRequest(url));
 
-    m_state = GP_GETPHOTO;
+    d->state = Private::GP_GETPHOTO;
     m_buffer.resize(0);
 }
 
 QString GPTalker::getUserName() const
 {
-    return m_username;
+    return d->username;
 }
 
 QString GPTalker::getUserEmailId() const
 {
-    return m_userEmailId;
+    return d->userEmailId;
 }
 
 QString GPTalker::getLoginName() const
 {
-    return m_loginName;
+    return d->loginName;
 }
 
 void GPTalker::cancel()
@@ -630,7 +666,7 @@ void GPTalker::slotFinished(QNetworkReply* reply)
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        if (m_state == GP_ADDPHOTO)
+        if (d->state == Private::GP_ADDPHOTO)
         {
             emit signalAddPhotoDone(reply->error(), reply->errorString(), QString::fromLatin1("-1"));
         }
@@ -646,26 +682,26 @@ void GPTalker::slotFinished(QNetworkReply* reply)
 
     m_buffer.append(reply->readAll());
 
-    switch (m_state)
+    switch (d->state)
     {
-        case (GP_LOGOUT):
+        case (Private::GP_LOGOUT):
             break;
-        case (GP_CREATEALBUM):
+        case (Private::GP_CREATEALBUM):
             parseResponseCreateAlbum(m_buffer);
             break;
-        case (GP_LISTALBUMS):
+        case (Private::GP_LISTALBUMS):
             parseResponseListAlbums(m_buffer);
             break;
-        case (GP_LISTPHOTOS):
+        case (Private::GP_LISTPHOTOS):
             parseResponseListPhotos(m_buffer);
             break;
-        case (GP_ADDPHOTO):
+        case (Private::GP_ADDPHOTO):
             parseResponseAddPhoto(m_buffer);
             break;
-        case (GP_UPDATEPHOTO):
+        case (Private::GP_UPDATEPHOTO):
             emit signalAddPhotoDone(1, QString::fromLatin1(""), QString::fromLatin1(""));
             break;
-        case (GP_GETPHOTO):
+        case (Private::GP_GETPHOTO):
             // all we get is data of the image
             emit signalGetPhotoDone(1, QString(), m_buffer);
             break;
@@ -698,12 +734,12 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
     {
         if (node.isElement() && node.nodeName() == QString::fromLatin1("gphoto:nickname"))
         {
-            m_loginName = node.toElement().text();
+            d->loginName = node.toElement().text();
         }
 
         if (node.isElement() && node.nodeName() == QString::fromLatin1("gphoto:user"))
         {
-            m_username = node.toElement().text();
+            d->username = node.toElement().text();
         }
 
         if (node.isElement() && node.nodeName() == QString::fromLatin1("entry"))

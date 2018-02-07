@@ -104,28 +104,8 @@ private Q_SLOTS:
 
 private:
 
-    enum State
-    {
-        GP_LOGOUT     = -1,
-        GP_LISTALBUMS = 0,
-        GP_LISTPHOTOS,
-        GP_ADDPHOTO,
-        GP_UPDATEPHOTO,
-        GP_GETPHOTO,
-        GP_CREATEALBUM
-    };
-
-private:
-
-    QString                m_loginName;
-    QString                m_username;
-    QString                m_password;
-    QString                m_userEmailId;
-
-    QNetworkAccessManager* m_netMngr;
-    QNetworkReply*         m_reply;
-
-    State                  m_state;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
