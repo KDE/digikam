@@ -591,6 +591,9 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     include_directories(${OpenCV_INCLUDE_DIRS})
 
+    include_directories(${LIBMEDIAWIKI_INCLUDES})
+    include_directories(${LIBKVKONTAKTE_INCLUDES})
+
     # ==========================================================================
     # Common targets parts
 
