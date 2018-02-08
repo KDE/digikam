@@ -49,7 +49,7 @@
 
 namespace Digikam
 {
-    
+
 class DBWindow::Private
 {
 public:
@@ -63,15 +63,15 @@ public:
         talker      = 0;
     }
 
-    unsigned int         imagesCount;
-    unsigned int         imagesTotal;
+    unsigned int   imagesCount;
+    unsigned int   imagesTotal;
 
-    DBWidget*            widget;
-    DBNewAlbumDlg*       albumDlg;
-    DBTalker*            talker;
+    DBWidget*      widget;
+    DBNewAlbumDlg* albumDlg;
+    DBTalker*      talker;
 
-    QString              currentAlbumName;
-    QList<QUrl>          transferQueue;
+    QString        currentAlbumName;
+    QList<QUrl>    transferQueue;
 };
 
 DBWindow::DBWindow(DInfoInterface* const iface,

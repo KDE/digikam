@@ -117,7 +117,7 @@ GSTalkerBase::~GSTalkerBase()
 {
     if (m_reply)
         m_reply->abort();
-    
+
     delete d;
 }
 

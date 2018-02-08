@@ -83,7 +83,7 @@ public:
     QWidget* uploadWidget() const;
 
 private Q_SLOTS:
-    
+
     void slotShowImportDialogClicked(bool);
 
 private:

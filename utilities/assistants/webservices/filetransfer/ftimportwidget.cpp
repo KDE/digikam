@@ -74,7 +74,7 @@ FTImportWidget::FTImportWidget(QWidget* const parent, DInfoInterface* const ifac
     d->imageList->setControlButtons(DImagesList::Remove | DImagesList::MoveUp | DImagesList::MoveDown | DImagesList::Clear);
     d->imageList->listView()->setWhatsThis(i18n("This is the list of images to import "
                                                 "into the current album."));
-    
+
     // setup upload widget
     d->uploadWidget = iface->uploadWidget(this);
 
@@ -85,7 +85,7 @@ FTImportWidget::FTImportWidget(QWidget* const parent, DInfoInterface* const ifac
     layout->addWidget(d->uploadWidget);
     layout->setContentsMargins(QMargins());
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    
+
     connect(d->importSearchBtn, SIGNAL(clicked(bool)),
             this, SLOT(slotShowImportDialogClicked(bool)));
 }

@@ -80,7 +80,7 @@ public:
     };
 
 public:
-    
+
     Private()
     {
         state          = GD_LOGOUT;
@@ -88,7 +88,7 @@ public:
         rootid         = QString::fromLatin1("root");
         rootfoldername = QString::fromLatin1("GoogleDrive Root");
     }
-    
+
 public:
 
     QString                rootid;

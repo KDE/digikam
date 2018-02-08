@@ -49,7 +49,7 @@ public:
     {
         loggedIn = false;
     }
-    
+
     bool    loggedIn;
 
     QString authToken;
@@ -145,7 +145,7 @@ void ImageShackSession::readSettings()
 
     if (bLoaded)
         return;
-    
+
     bLoaded = true;
 
     KConfig config;

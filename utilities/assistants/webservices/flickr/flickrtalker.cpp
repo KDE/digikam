@@ -98,8 +98,8 @@ public:
     O1*                    o1;
     O0SettingsStore*       store;
     O1Requestor*           requestor;
-};    
-    
+};
+
 FlickrTalker::FlickrTalker(QWidget* const parent,
                            const QString& serviceName,
                            DInfoInterface* const iface)
@@ -178,7 +178,7 @@ FlickrTalker::~FlickrTalker()
     delete m_photoSetsList;
 
     WSToolUtils::removeTemporaryDir(d->serviceName.toLatin1().constData());
-    
+
     delete d;
 }
 

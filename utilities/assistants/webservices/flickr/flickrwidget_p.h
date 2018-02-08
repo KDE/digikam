@@ -72,27 +72,27 @@ public:
         imglst                    = 0;
     }
 
-    QString                             serviceName;
-    QPushButton*                        removeAccount;
-    QPushButton*                        extendedTagsButton;
-    QPushButton*                        extendedPublicationButton;
+    QString                 serviceName;
+    QPushButton*            removeAccount;
+    QPushButton*            extendedTagsButton;
+    QPushButton*            extendedPublicationButton;
 
-    QCheckBox*                          exportHostTagsCheckBox;
-    QCheckBox*                          stripSpaceTagsCheckBox;
-    QCheckBox*                          addExtraTagsCheckBox;
-    QCheckBox*                          familyCheckBox;
-    QCheckBox*                          friendsCheckBox;
-    QCheckBox*                          publicCheckBox;
+    QCheckBox*              exportHostTagsCheckBox;
+    QCheckBox*              stripSpaceTagsCheckBox;
+    QCheckBox*              addExtraTagsCheckBox;
+    QCheckBox*              familyCheckBox;
+    QCheckBox*              friendsCheckBox;
+    QCheckBox*              publicCheckBox;
 
-    QGroupBox*                          extendedTagsBox;
-    QGroupBox*                          extendedPublicationBox;
+    QGroupBox*              extendedTagsBox;
+    QGroupBox*              extendedPublicationBox;
 
-    QLineEdit*                          tagsLineEdit;
+    QLineEdit*              tagsLineEdit;
 
-    WSComboBoxIntermediate*             contentTypeComboBox;
-    WSComboBoxIntermediate*             safetyLevelComboBox;
+    WSComboBoxIntermediate* contentTypeComboBox;
+    WSComboBoxIntermediate* safetyLevelComboBox;
 
-    FlickrList*                         imglst;
+    FlickrList*             imglst;
 };
 
 } // namespace Digikam

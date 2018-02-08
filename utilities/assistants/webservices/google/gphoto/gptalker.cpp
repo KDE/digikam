@@ -81,9 +81,8 @@ public:
         GP_CREATEALBUM
     };
 
-    
 public:
-    
+
     Private()
     {
         state   = GP_LOGOUT;
@@ -119,7 +118,7 @@ GPTalker::~GPTalker()
 {
     if (m_reply)
         m_reply->abort();
-    
+
     delete d;
 }
 

@@ -26,7 +26,7 @@
 
 namespace Digikam
 {
-    
+
 FlickrWidget::FlickrWidget(QWidget* const parent,
                            DInfoInterface* const iface,
                            const QString& serviceName)

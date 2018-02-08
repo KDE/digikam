@@ -111,7 +111,6 @@ GSWindow::GSWindow(DInfoInterface* const iface,
                    const QString& serviceName)
     : WSToolDialog(0),
       d(new Private)
-      
 {
     d->iface       = iface;
     d->serviceName = serviceName;

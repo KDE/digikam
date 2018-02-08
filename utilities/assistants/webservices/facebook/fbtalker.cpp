@@ -74,6 +74,18 @@ bool operator< (const FbAlbum& first, const FbAlbum& second)
 
 class FbTalker::Private
 {
+
+public:
+
+    enum State
+    {
+        FB_GETLOGGEDINUSER = 0,
+        FB_LISTALBUMS,
+        FB_CREATEALBUM,
+        FB_ADDPHOTO,
+        FB_EXCHANGESESSION
+    };
+
 public:
 
     Private()
@@ -124,8 +136,8 @@ public:
 FbTalker::FbTalker(QWidget* const parent)
     : d(new Private)
 {
-    d->parent          = parent;
-    d->netMngr         = new QNetworkAccessManager(this);
+    d->parent  = parent;
+    d->netMngr = new QNetworkAccessManager(this);
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
@@ -139,7 +151,7 @@ FbTalker::~FbTalker()
     {
         d->reply->abort();
     }
-    
+
     delete d;
 }
 
@@ -289,7 +301,7 @@ void FbTalker::exchangeSession(const QString& sessionKey)
 
     d->reply = d->netMngr->post(netRequest, tmp);
 
-    d->state = FB_EXCHANGESESSION;
+    d->state = Private::FB_EXCHANGESESSION;
     d->buffer.resize(0);
 }
 
@@ -426,7 +438,7 @@ void FbTalker::getLoggedInUser()
 
     d->reply = d->netMngr->get(netRequest);
 
-    d->state = FB_GETLOGGEDINUSER;
+    d->state = Private::FB_GETLOGGEDINUSER;
     d->buffer.resize(0);
 }
 
@@ -477,7 +489,7 @@ void FbTalker::listAlbums(long long userID)
 
     d->reply = d->netMngr->get(netRequest);
 
-    d->state = FB_LISTALBUMS;
+    d->state = Private::FB_LISTALBUMS;
     d->buffer.resize(0);
 }
 
@@ -531,7 +543,7 @@ void FbTalker::createAlbum(const FbAlbum& album)
 
     d->reply = d->netMngr->post(netRequest, tmp);
 
-    d->state = FB_CREATEALBUM;
+    d->state = Private::FB_CREATEALBUM;
     d->buffer.resize(0);
 }
 
@@ -579,7 +591,7 @@ bool FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
 
     d->reply = d->netMngr->post(netRequest, form.formData());
 
-    d->state = FB_ADDPHOTO;
+    d->state = Private::FB_ADDPHOTO;
     d->buffer.resize(0);
     return true;
 }
@@ -638,7 +650,7 @@ void FbTalker::slotFinished(QNetworkReply* reply)
         {
             authenticationDone(reply->error(), reply->errorString());
         }
-        else if (d->state == FB_ADDPHOTO)
+        else if (d->state == Private::FB_ADDPHOTO)
         {
             emit signalBusy(false);
             emit signalAddPhotoDone(reply->error(), reply->errorString());
@@ -658,19 +670,19 @@ void FbTalker::slotFinished(QNetworkReply* reply)
 
     switch(d->state)
     {
-        case (FB_EXCHANGESESSION):
+        case (Private::FB_EXCHANGESESSION):
             parseExchangeSession(d->buffer);
             break;
-        case (FB_GETLOGGEDINUSER):
+        case (Private::FB_GETLOGGEDINUSER):
             parseResponseGetLoggedInUser(d->buffer);
             break;
-        case (FB_LISTALBUMS):
+        case (Private::FB_LISTALBUMS):
             parseResponseListAlbums(d->buffer);
             break;
-        case (FB_CREATEALBUM):
+        case (Private::FB_CREATEALBUM):
             parseResponseCreateAlbum(d->buffer);
             break;
-        case (FB_ADDPHOTO):
+        case (Private::FB_ADDPHOTO):
             parseResponseAddPhoto(d->buffer);
             break;
     }
@@ -902,6 +914,7 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
 
             albumsList.append(album);
         }
+
         errCode = 0;
     }
 

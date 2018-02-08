@@ -144,7 +144,7 @@ DBTalker::~DBTalker()
     {
         d->reply->abort();
     }
-    
+
     delete d;
 }
 

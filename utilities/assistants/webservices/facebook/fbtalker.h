@@ -81,17 +81,6 @@ Q_SIGNALS:
 
 private:
 
-    enum State
-    {
-        FB_GETLOGGEDINUSER = 0,
-        FB_LISTALBUMS,
-        FB_CREATEALBUM,
-        FB_ADDPHOTO,
-        FB_EXCHANGESESSION
-    };
-
-private:
-
     //QString getApiSig(const QMap<QString, QString>& args);
     QString getCallString(const QMap<QString, QString>& args);
     void    authenticationDone(int errCode, const QString& errMsg);

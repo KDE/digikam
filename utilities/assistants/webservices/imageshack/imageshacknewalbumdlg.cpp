@@ -44,7 +44,7 @@ ImageShackNewAlbumDlg::ImageShackNewAlbumDlg(QWidget* const parent, const QStrin
     hideDateTime();
     hideDesc();
     hideLocation();
-    getMainWidget()->setMinimumSize(300,0);
+    getMainWidget()->setMinimumSize(300, 0);
 }
 
 ImageShackNewAlbumDlg::~ImageShackNewAlbumDlg()

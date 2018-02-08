@@ -84,7 +84,7 @@ public:
     }
 
 public:
-    
+
     ImageShackSession*     session;
 
     QByteArray             buffer;
@@ -119,7 +119,7 @@ ImageShackTalker::~ImageShackTalker()
 {
     if (d->reply)
         d->reply->abort();
-    
+
     delete d;
 }
 
@@ -463,7 +463,7 @@ void ImageShackTalker::uploadItemToGallery(const QString& path, const QString& /
     QUrl uploadUrl;
 
     uploadUrl           = QUrl(d->photoApiUrl);
-    d->state             = Private::IMGHCK_ADDPHOTO;
+    d->state            = Private::IMGHCK_ADDPHOTO;
 
     QNetworkRequest netRequest(uploadUrl);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
