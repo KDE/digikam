@@ -222,6 +222,7 @@ QString FbTalker::getCallString(const QMap<QString, QString>& args)
     QUrlQuery q;
 
     // NOTE: QMap iterator will sort alphabetically
+
     for (QMap<QString, QString>::const_iterator it = args.constBegin();
          it != args.constEnd();
          ++it)
@@ -297,10 +298,10 @@ void FbTalker::exchangeSession(const QString& sessionKey)
     QByteArray tmp(getCallString(args).toUtf8());
 
     QNetworkRequest netRequest(QUrl(QLatin1String("https://graph.facebook.com/oauth/exchange_sessions")));
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                         QLatin1String("application/x-www-form-urlencoded"));
 
     d->reply = d->netMngr->post(netRequest, tmp);
-
     d->state = Private::FB_EXCHANGESESSION;
     d->buffer.resize(0);
 }
@@ -335,7 +336,7 @@ void FbTalker::doOAuth()
 
     emit signalBusy(false);
 
-    d->dialog = new QDialog(QApplication::activeWindow(), 0);
+    d->dialog                       = new QDialog(QApplication::activeWindow(), 0);
     d->dialog->setModal(true);
     d->dialog->setWindowTitle(i18n("Facebook Application Authorization"));
     QLineEdit* const textbox        = new QLineEdit();
@@ -360,7 +361,7 @@ void FbTalker::doOAuth()
 
     d->dialog->exec();
 
-    if( d->dialog->result()  == QDialog::Accepted )
+    if ( d->dialog->result() == QDialog::Accepted )
     {
         // Error code and reason from the Facebook service
         QString errorReason;
@@ -376,26 +377,26 @@ void FbTalker::doOAuth()
         {
             QStringList keyvalue = (*i).split(QLatin1Char('='));
 
-            if( keyvalue.size() == 2 )
+            if ( keyvalue.size() == 2 )
             {
-                if( ! keyvalue[0].compare( QString::fromLatin1("access_token") ) )
+                if ( ! keyvalue[0].compare( QString::fromLatin1("access_token") ) )
                 {
                     d->accessToken = keyvalue[1];
                 }
-                else if( ! keyvalue[0].compare( QString::fromLatin1("expires_in") ) )
+                else if ( ! keyvalue[0].compare( QString::fromLatin1("expires_in") ) )
                 {
                     d->sessionExpires = keyvalue[1].toUInt();
 
-                    if( d->sessionExpires != 0 )
+                    if ( d->sessionExpires != 0 )
                     {
                         d->sessionExpires += QDateTime::currentMSecsSinceEpoch() / 1000;
                     }
                 }
-                else if( ! keyvalue[0].compare( QString::fromLatin1("error_reason") ) )
+                else if ( ! keyvalue[0].compare( QString::fromLatin1("error_reason") ) )
                 {
                     errorReason = keyvalue[1];
                 }
-                else if( ! keyvalue[0].compare( QString::fromLatin1("error") ) )
+                else if ( ! keyvalue[0].compare( QString::fromLatin1("error") ) )
                 {
                     errorCode = keyvalue[1];
                 }
@@ -404,7 +405,7 @@ void FbTalker::doOAuth()
             ++i;
         }
 
-        if( !d->accessToken.isEmpty() && errorCode.isEmpty() && errorReason.isEmpty() )
+        if (!d->accessToken.isEmpty() && errorCode.isEmpty() && errorReason.isEmpty())
         {
             return getLoggedInUser();
         }
@@ -434,10 +435,10 @@ void FbTalker::getLoggedInUser()
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                         QLatin1String("application/x-www-form-urlencoded"));
 
     d->reply = d->netMngr->get(netRequest);
-
     d->state = Private::FB_GETLOGGEDINUSER;
     d->buffer.resize(0);
 }
@@ -451,7 +452,7 @@ void FbTalker::logout()
     }
 
     QMap<QString, QString> args;
-    args[QString::fromLatin1("next")] = QString::fromLatin1("http://www.digikam.org");
+    args[QString::fromLatin1("next")]         = QString::fromLatin1("http://www.digikam.org");
     args[QString::fromLatin1("access_token")] = d->accessToken;
 
     QUrl url(QString::fromLatin1("https://www.facebook.com/logout.php"));
@@ -480,12 +481,13 @@ void FbTalker::listAlbums(long long userID)
     QUrl url(QString::fromLatin1("https://graph.facebook.com/me/albums"));
     QUrlQuery q;
     q.addQueryItem(QString::fromLatin1("fields"),
-                     QString::fromLatin1("id,name,description,privacy,link,location"));
+                   QString::fromLatin1("id,name,description,privacy,link,location"));
     q.addQueryItem(QString::fromLatin1("access_token"), d->accessToken);
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                         QLatin1String("application/x-www-form-urlencoded"));
 
     d->reply = d->netMngr->get(netRequest);
 
@@ -542,7 +544,6 @@ void FbTalker::createAlbum(const FbAlbum& album)
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
 
     d->reply = d->netMngr->post(netRequest, tmp);
-
     d->state = Private::FB_CREATEALBUM;
     d->buffer.resize(0);
 }
@@ -550,7 +551,7 @@ void FbTalker::createAlbum(const FbAlbum& album)
 bool FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QString& caption)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Adding photo " << imgPath << " to album with id "
-             << albumID << " using caption '" << caption << "'";
+                                     << albumID << " using caption '" << caption << "'";
 
     if (d->reply)
     {
@@ -590,9 +591,9 @@ bool FbTalker::addPhoto(const QString& imgPath, const QString& albumID, const QS
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
 
     d->reply = d->netMngr->post(netRequest, form.formData());
-
     d->state = Private::FB_ADDPHOTO;
     d->buffer.resize(0);
+
     return true;
 }
 
@@ -738,8 +739,9 @@ void FbTalker::parseExchangeSession(const QByteArray& data)
     if(err.error == QJsonParseError::NoError)
     {
         QJsonObject jsonObject = doc.object();
-        d->accessToken       = jsonObject[QString::fromLatin1("access_token")].toString();
-        d->sessionExpires    = jsonObject[QString::fromLatin1("expires")].toInt();
+        d->accessToken         = jsonObject[QString::fromLatin1("access_token")].toString();
+        d->sessionExpires      = jsonObject[QString::fromLatin1("expires")].toInt();
+
         if( d->sessionExpires != 0 )
         {
             d->sessionExpires += QDateTime::currentMSecsSinceEpoch() / 1000;
@@ -762,20 +764,20 @@ void FbTalker::parseExchangeSession(const QByteArray& data)
 
 void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG)<<"Logged in data "<<data;
-    int errCode = -1;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Logged in data " << data;
+    int errCode       = -1;
     QString errMsg;
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         return;
     }
 
     QJsonObject jsonObject = doc.object();
-    d->user.id = jsonObject[QString::fromLatin1("id")].toString().toLongLong();
+    d->user.id             = jsonObject[QString::fromLatin1("id")].toString().toLongLong();
 
     if (!(QString::compare(jsonObject[QString::fromLatin1("id")].toString(),
                            QString::fromLatin1(""), Qt::CaseInsensitive) == 0))
@@ -783,7 +785,7 @@ void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
         errCode = 0;
     }
 
-    d->user.name = jsonObject[QString::fromLatin1("name")].toString();
+    d->user.name       = jsonObject[QString::fromLatin1("name")].toString();
     d->user.profileURL = jsonObject[QString::fromLatin1("link")].toString();
 
     if(errCode!=0)
@@ -796,18 +798,20 @@ void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
         doOAuth();
     }
     else
+    {
         authenticationDone(0, QString::fromLatin1(""));
+    }
 }
 
 void FbTalker::parseResponseAddPhoto(const QByteArray& data)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) <<"Parse Add Photo data is "<<data;
-    int errCode = -1;
+    int errCode       = -1;
     QString errMsg;
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         return;
@@ -815,17 +819,17 @@ void FbTalker::parseResponseAddPhoto(const QByteArray& data)
 
     QJsonObject jsonObject = doc.object();
 
-    if(jsonObject.contains(QString::fromLatin1("id")))
+    if (jsonObject.contains(QString::fromLatin1("id")))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Id of photo exported is" << jsonObject[QString::fromLatin1("id")].toString();
         errCode = 0;
     }
 
-    if(jsonObject.contains(QString::fromLatin1("error")))
+    if (jsonObject.contains(QString::fromLatin1("error")))
     {
         QJsonObject obj = jsonObject[QString::fromLatin1("error")].toObject();
-        errCode = obj[QString::fromLatin1("code")].toInt();
-        errMsg  = obj[QString::fromLatin1("message")].toString();
+        errCode         = obj[QString::fromLatin1("code")].toInt();
+        errMsg          = obj[QString::fromLatin1("message")].toString();
     }
 
     emit signalBusy(false);
@@ -835,13 +839,13 @@ void FbTalker::parseResponseAddPhoto(const QByteArray& data)
 void FbTalker::parseResponseCreateAlbum(const QByteArray& data)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) <<"Parse Create album data is"<<data;
-    int errCode = -1;
+    int errCode       = -1;
     QString errMsg;
     QString newAlbumID;
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         return;
@@ -849,18 +853,18 @@ void FbTalker::parseResponseCreateAlbum(const QByteArray& data)
 
     QJsonObject jsonObject = doc.object();
 
-    if(jsonObject.contains(QString::fromLatin1("id")))
+    if (jsonObject.contains(QString::fromLatin1("id")))
     {
         newAlbumID = jsonObject[QString::fromLatin1("id")].toString();
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Id of album created is" << newAlbumID;
-        errCode = 0;
+        errCode    = 0;
     }
 
-    if(jsonObject.contains(QString::fromLatin1("error")))
+    if (jsonObject.contains(QString::fromLatin1("error")))
     {
         QJsonObject obj = jsonObject[QString::fromLatin1("error")].toObject();
-        errCode = obj[QString::fromLatin1("code")].toInt();
-        errMsg  = obj[QString::fromLatin1("message")].toString();
+        errCode         = obj[QString::fromLatin1("code")].toInt();
+        errMsg          = obj[QString::fromLatin1("message")].toString();
     }
 
     emit signalBusy(false);
@@ -876,7 +880,7 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
     QList <FbAlbum> albumsList;
     QJsonDocument doc = QJsonDocument::fromJson(data, &err);
 
-    if(err.error != QJsonParseError::NoError)
+    if (err.error != QJsonParseError::NoError)
     {
         emit signalBusy(false);
         return;
@@ -887,15 +891,17 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
     if (jsonObject.contains(QString::fromLatin1("data")))
     {
         QJsonArray jsonArray = jsonObject[QString::fromLatin1("data")].toArray();
+
         foreach (const QJsonValue & value, jsonArray)
         {
-            QJsonObject obj = value.toObject();
+            QJsonObject obj   = value.toObject();
             FbAlbum album;
             album.id          = obj[QString::fromLatin1("id")].toString();
             album.title       = obj[QString::fromLatin1("name")].toString();
             album.location    = obj[QString::fromLatin1("location")].toString();
             album.url         = obj[QString::fromLatin1("link")].toString();
             album.description = obj[QString::fromLatin1("description")].toString();
+
             if (QString::compare(obj[QString::fromLatin1("privacy")].toString(),
                                  QString::fromLatin1("friends"), Qt::CaseInsensitive) == 0)
             {
@@ -921,8 +927,8 @@ void FbTalker::parseResponseListAlbums(const QByteArray& data)
     if (jsonObject.contains(QString::fromLatin1("error")))
     {
         QJsonObject obj = jsonObject[QString::fromLatin1("error")].toObject();
-        errCode = obj[QString::fromLatin1("code")].toInt();
-        errMsg  = obj[QString::fromLatin1("message")].toString();
+        errCode         = obj[QString::fromLatin1("code")].toInt();
+        errMsg          = obj[QString::fromLatin1("message")].toString();
     }
 
     std::sort(albumsList.begin(), albumsList.end());
