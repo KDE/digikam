@@ -101,35 +101,35 @@ protected:
 
 protected:
 
-    bool                           m_import;
+    bool              m_import;
 
     /// User interface
-    QWidget*                       m_mainWidget;
-    QWidget*                       m_settingsBox;
-    QLabel*                        m_headerLabel;
+    QWidget*          m_mainWidget;
+    QWidget*          m_settingsBox;
+    QLabel*           m_headerLabel;
 
     /// accounts
-    VKAuthWidget*                  m_accountBox;
+    VKAuthWidget*     m_accountBox;
 
     // album selection
-    VKAlbumChooser*                m_albumsBox;
+    VKAlbumChooser*   m_albumsBox;
 
     /// options
-    //QCheckBox*                    m_checkKeepOriginal;
+    //QCheckBox*       m_checkKeepOriginal;
 
-    DImagesList*                   m_imgList;
-    QWidget*                       m_uploadWidget;
-    DInfoInterface*                m_iface;
-    DProgressWdg*                  m_progressBar;
+    DImagesList*      m_imgList;
+    QWidget*          m_uploadWidget;
+    DInfoInterface*   m_iface;
+    DProgressWdg*     m_progressBar;
 
     /// Pointers to running jobs
-    QList<KJob*>                   m_jobs;
+    QList<KJob*>      m_jobs;
 
-    Vkontakte::VkApi*              m_vkapi;
+    Vkontakte::VkApi* m_vkapi;
 
-    int                            m_albumToSelect;
+    int               m_albumToSelect;
 
-    QString                        m_appId;
+    QString           m_appId;
 };
 
 } // namespace Digikam

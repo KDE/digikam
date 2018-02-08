@@ -152,4 +152,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* YF_WINDOW_H */
+#endif // YF_WINDOW_H

@@ -54,6 +54,8 @@ public:
     explicit SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool import);
     ~SmugWidget();
 
+public:
+
     void updateLabels(const QString& email = QString(), const QString& name = QString(),
                       const QString& nick = QString());
 

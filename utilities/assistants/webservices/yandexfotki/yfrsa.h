@@ -136,7 +136,6 @@ public:
 
     virtual void Encrypt(const char*, std::size_t,char*, std::size_t&);
     virtual void ImportPublicKey(const char*);
-
 };
 
 } // namespace YFAuth
