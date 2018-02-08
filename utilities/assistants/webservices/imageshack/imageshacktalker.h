@@ -77,53 +77,25 @@ private Q_SLOTS:
 
 private:
 
-    QString getCallString(QMap<QString, QString>& args);
-    void checkRegistrationCodeDone(int errCode, const QString& errMsg);
-    void parseAccessToken(const QByteArray& data);
-    void parseGetGalleries(const QByteArray& data);
-    void authenticationDone(int errCode, const QString& errMsg);
+    QString getCallString(QMap<QString, QString>& args) const;
+    void    checkRegistrationCodeDone(int errCode, const QString& errMsg);
+    void    parseAccessToken(const QByteArray& data);
+    void    parseGetGalleries(const QByteArray& data);
+    void    authenticationDone(int errCode, const QString& errMsg);
 
-    void logOut();
+    void    logOut();
 
-    int parseErrorResponse(QDomElement elem, QString& errMsg);
+    int     parseErrorResponse(QDomElement elem, QString& errMsg) const;
 
-    void parseUploadPhotoDone(QByteArray data);
-    void parseAddPhotoToGalleryDone(QByteArray data);
+    void    parseUploadPhotoDone(QByteArray data);
+    void    parseAddPhotoToGalleryDone(QByteArray data);
 
-    QString mimeType(const QString& path);
-
-private:
-
-    enum State
-    {
-        IMGHCK_AUTHENTICATING,
-        IMGHCK_DONOTHING,
-        IMGHCK_GETGALLERIES,
-        IMGHCK_ADDPHOTO,
-        IMGHCK_ADDVIDEO,
-        IMGHCK_ADDPHOTOGALLERY
-    };
+    QString mimeType(const QString& path) const;
 
 private:
 
-    ImageShackSession*     m_session;
-
-    QByteArray             m_buffer;
-
-    QString                m_userAgent;
-    QUrl                   m_photoApiUrl;
-    QUrl                   m_videoApiUrl;
-    QUrl                   m_loginApiUrl;
-    QUrl                   m_galleryUrl;
-    QString                m_appKey;
-
-    bool                   m_loginInProgress;
-
-    QNetworkAccessManager* m_netMngr;
-
-    QNetworkReply*         m_reply;
-
-    State                  m_state;
+    class Private;
+    Private* const d;  
 };
 
 } // namespace Digikam
