@@ -48,8 +48,8 @@
 
 // MediaWiki includes
 
-#include <MediaWiki/Login>
-#include <MediaWiki/MediaWiki>
+#include <MediaWiki/login.h>
+#include <MediaWiki/mediawiki.h>
 #include <mediawiki_version.h>
 
 // Local includes

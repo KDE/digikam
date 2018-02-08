@@ -40,8 +40,8 @@
 
 // MediaWiki includes
 
-#include <MediaWiki/Upload>
-#include <MediaWiki/MediaWiki>
+#include <MediaWiki/upload.h>
+#include <MediaWiki/mediawiki.h>
 
 // Local includes
 
