@@ -97,20 +97,8 @@ private Q_SLOTS:
 
 private:
 
-    bool                   m_import;
-    unsigned int           m_imagesCount;
-    unsigned int           m_imagesTotal;
-    QString                m_newAlbmTitle;
-
-    QList<QUrl>            m_transferQueue;
-
-    ImageShackSession*     m_session;
-    ImageShackWidget*      m_widget;
-    ImageShackTalker*      m_talker;
-
-    ImageShackNewAlbumDlg* m_albumDlg;
-
-    DInfoInterface*        m_iface;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

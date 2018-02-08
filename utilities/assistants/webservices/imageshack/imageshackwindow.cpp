@@ -66,29 +66,63 @@
 namespace Digikam
 {
 
+class ImageShackWindow::Private
+{
+public:
+
+    Private()
+    {
+        imagesCount = 0;
+        imagesTotal = 0;
+        session     = 0;
+        widget      = 0;
+        talker      = 0;
+        albumDlg    = 0;
+        iface       = 0;        
+    }
+
+    unsigned int           imagesCount;
+    unsigned int           imagesTotal;
+    QString                newAlbmTitle;
+
+    QList<QUrl>            transferQueue;
+
+    ImageShackSession*     session;
+    ImageShackWidget*      widget;
+    ImageShackTalker*      talker;
+
+    ImageShackNewAlbumDlg* albumDlg;
+
+    DInfoInterface*        iface;
+};
+
 ImageShackWindow::ImageShackWindow(DInfoInterface* const iface, 
                                    QWidget* const parent)
-    : WSToolDialog(parent)
+    : WSToolDialog(parent),
+      d(new Private)
 {
-    m_session = new ImageShackSession();
-    m_iface   = iface;
-    m_widget  = new ImageShackWidget(this, m_session, m_iface, QString::fromLatin1("ImageShack"));
-    m_widget->setMinimumSize(700, 500);
+    d->session = new ImageShackSession();
+    d->iface   = iface;
+    d->widget  = new ImageShackWidget(this,
+                                      d->session,
+                                      d->iface,
+                                      QString::fromLatin1("ImageShack"));
+    d->widget->setMinimumSize(700, 500);
 
-    setMainWidget(m_widget);
+    setMainWidget(d->widget);
     setWindowTitle(i18n("Export to ImageShack"));
     setModal(true);
 
-    m_albumDlg =  new ImageShackNewAlbumDlg(this, QString::fromLatin1("ImageShack"));
+    d->albumDlg = new ImageShackNewAlbumDlg(this, QString::fromLatin1("ImageShack"));
 
-    connect(m_widget->d->chgRegCodeBtn, SIGNAL(clicked(bool)),
+    connect(d->widget->d->chgRegCodeBtn, SIGNAL(clicked(bool)),
             this, SLOT(slotChangeRegistrantionCode()));
 
     startButton()->setText(i18n("Upload"));
     startButton()->setToolTip(i18n("Start upload to ImageShack web service"));
     startButton()->setEnabled(false);
 
-    connect(m_widget->d->imgList, SIGNAL(signalImageListChanged()),
+    connect(d->widget->d->imgList, SIGNAL(signalImageListChanged()),
             this, SLOT(slotImageListChanged()));
 
     // -----------------------------------------------------------
@@ -96,27 +130,27 @@ ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
     connect(this, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
 
-    m_talker = new ImageShackTalker(m_session);
+    d->talker = new ImageShackTalker(d->session);
 
-    connect(m_talker, SIGNAL(signalBusy(bool)),
+    connect(d->talker, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
 
-    connect(m_talker, SIGNAL(signalJobInProgress(int,int,QString)),
+    connect(d->talker, SIGNAL(signalJobInProgress(int,int,QString)),
             this, SLOT(slotJobInProgress(int,int,QString)));
 
-    connect(m_talker, SIGNAL(signalLoginDone(int,QString)),
+    connect(d->talker, SIGNAL(signalLoginDone(int,QString)),
             this, SLOT(slotLoginDone(int,QString)));
 
-    connect(m_talker, SIGNAL(signalGetGalleriesDone(int,QString)),
+    connect(d->talker, SIGNAL(signalGetGalleriesDone(int,QString)),
             this, SLOT(slotGetGalleriesDone(int,QString)));
 
-    connect(m_talker, SIGNAL(signalUpdateGalleries(QStringList,QStringList)),
-            m_widget, SLOT(slotGetGalleries(QStringList,QStringList)));
+    connect(d->talker, SIGNAL(signalUpdateGalleries(QStringList,QStringList)),
+            d->widget, SLOT(slotGetGalleries(QStringList,QStringList)));
 
-    connect(m_talker, SIGNAL(signalAddPhotoDone(int,QString)),
+    connect(d->talker, SIGNAL(signalAddPhotoDone(int,QString)),
             this, SLOT(slotAddPhotoDone(int,QString)));
 
-    connect(m_widget, SIGNAL(signalReloadGalleries()),
+    connect(d->widget, SIGNAL(signalReloadGalleries()),
             this, SLOT(slotGetGalleries()));
 
     connect(startButton(), SIGNAL(clicked()),
@@ -128,7 +162,7 @@ ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
     connect(this, SIGNAL(cancelClicked()),
             this, SLOT(slotCancelClicked()));
 
-    connect(m_widget->getNewAlbmBtn(), SIGNAL(clicked()),
+    connect(d->widget->getNewAlbmBtn(), SIGNAL(clicked()),
             this, SLOT(slotNewAlbumRequest()));
 
     readSettings();
@@ -138,19 +172,20 @@ ImageShackWindow::ImageShackWindow(DInfoInterface* const iface,
 
 ImageShackWindow::~ImageShackWindow()
 {
-    delete m_session;
+    delete d->session;
+    delete d;
 }
 
 void ImageShackWindow::slotImageListChanged()
 {
-    startButton()->setEnabled(!m_widget->d->imgList->imageUrls().isEmpty());
+    startButton()->setEnabled(!d->widget->d->imgList->imageUrls().isEmpty());
 }
 
 void ImageShackWindow::slotFinished()
 {
     saveSettings();
-    m_widget->d->progressBar->progressCompleted();
-    m_widget->d->imgList->listView()->clear();
+    d->widget->d->progressBar->progressCompleted();
+    d->widget->d->imgList->listView()->clear();
 }
 
 void ImageShackWindow::closeEvent(QCloseEvent* e)
@@ -174,16 +209,16 @@ void ImageShackWindow::readSettings()
 
     if (group.readEntry("Private", false))
     {
-        m_widget->d->privateImagesChb->setChecked(true);
+        d->widget->d->privateImagesChb->setChecked(true);
     }
 
     if (group.readEntry("Rembar", false))
     {
-        m_widget->d->remBarChb->setChecked(true);
+        d->widget->d->remBarChb->setChecked(true);
     }
     else
     {
-        m_widget->d->remBarChb->setChecked(false);
+        d->widget->d->remBarChb->setChecked(false);
     }
 }
 
@@ -193,43 +228,43 @@ void ImageShackWindow::saveSettings()
     KConfigGroup group = config.group("ImageShack Settings");
     KWindowConfig::saveWindowSize(windowHandle(), group);
 
-    group.writeEntry("Private", m_widget->d->privateImagesChb->isChecked());
-    group.writeEntry("Rembar",  m_widget->d->remBarChb->isChecked());
+    group.writeEntry("Private", d->widget->d->privateImagesChb->isChecked());
+    group.writeEntry("Rembar",  d->widget->d->remBarChb->isChecked());
     group.sync();
 }
 
 void ImageShackWindow::slotStartTransfer()
 {
-    m_widget->d->imgList->clearProcessedStatus();
-    m_transferQueue = m_widget->d->imgList->imageUrls();
+    d->widget->d->imgList->clearProcessedStatus();
+    d->transferQueue = d->widget->d->imgList->imageUrls();
 
-    if (m_transferQueue.isEmpty())
+    if (d->transferQueue.isEmpty())
     {
         return;
     }
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Transfer started!";
 
-    m_imagesTotal = m_transferQueue.count();
-    m_imagesCount = 0;
+    d->imagesTotal = d->transferQueue.count();
+    d->imagesCount = 0;
 
-    m_widget->d->progressBar->setFormat(i18n("%v / %m"));
-    m_widget->d->progressBar->setMaximum(m_imagesTotal);
-    m_widget->d->progressBar->setValue(0);
-    m_widget->d->progressBar->setVisible(true);
-    m_widget->d->progressBar->progressScheduled(i18n("Image Shack Export"), false, true);
-    m_widget->d->progressBar->progressThumbnailChanged(QIcon(QLatin1String("imageshack")).pixmap(22, 22));
+    d->widget->d->progressBar->setFormat(i18n("%v / %m"));
+    d->widget->d->progressBar->setMaximum(d->imagesTotal);
+    d->widget->d->progressBar->setValue(0);
+    d->widget->d->progressBar->setVisible(true);
+    d->widget->d->progressBar->progressScheduled(i18n("Image Shack Export"), false, true);
+    d->widget->d->progressBar->progressThumbnailChanged(QIcon(QLatin1String("imageshack")).pixmap(22, 22));
 
     uploadNextItem();
 }
 
 void ImageShackWindow::slotCancelClicked()
 {
-    m_talker->cancel();
-    m_transferQueue.clear();
-    m_widget->d->imgList->cancelProcess();
-    m_widget->d->progressBar->setVisible(false);
-    m_widget->d->progressBar->progressCompleted();
+    d->talker->cancel();
+    d->transferQueue.clear();
+    d->widget->d->imgList->cancelProcess();
+    d->widget->d->progressBar->setVisible(false);
+    d->widget->d->progressBar->progressCompleted();
 }
 
 void ImageShackWindow::slotChangeRegistrantionCode()
@@ -241,18 +276,18 @@ void ImageShackWindow::slotChangeRegistrantionCode()
 void ImageShackWindow::authenticate()
 {
     emit signalBusy(true);
-    m_widget->progressBar()->show();
-    m_widget->d->progressBar->setValue(0);
-    m_widget->d->progressBar->setMaximum(4);
-    m_widget->progressBar()->setFormat(i18n("Authenticating..."));
+    d->widget->progressBar()->show();
+    d->widget->d->progressBar->setValue(0);
+    d->widget->d->progressBar->setMaximum(4);
+    d->widget->progressBar()->setFormat(i18n("Authenticating..."));
 
     WSLoginDialog* const dlg = new WSLoginDialog(this, QString::fromLatin1("ImageShack"));
 
     if (dlg->exec() == QDialog::Accepted)
     {
-        m_session->setEmail(dlg->login());
-        m_session->setPassword(dlg->password());
-        m_talker->authenticate();
+        d->session->setEmail(dlg->login());
+        d->session->setPassword(dlg->password());
+        d->talker->authenticate();
     }
 }
 
@@ -261,16 +296,16 @@ void ImageShackWindow::slotBusy(bool val)
     if (val)
     {
         setCursor(Qt::WaitCursor);
-        m_widget->d->chgRegCodeBtn->setEnabled(false);
+        d->widget->d->chgRegCodeBtn->setEnabled(false);
         startButton()->setEnabled(false);
         setRejectButtonMode(QDialogButtonBox::Cancel);
     }
     else
     {
         setCursor(Qt::ArrowCursor);
-        m_widget->d->chgRegCodeBtn->setEnabled(true);
-        startButton()->setEnabled(m_session->loggedIn() &&
-                                  !m_widget->imagesList()->imageUrls().isEmpty());
+        d->widget->d->chgRegCodeBtn->setEnabled(true);
+        startButton()->setEnabled(d->session->loggedIn() &&
+                                  !d->widget->imagesList()->imageUrls().isEmpty());
         setRejectButtonMode(QDialogButtonBox::Close);
     }
 }
@@ -279,32 +314,32 @@ void ImageShackWindow::slotJobInProgress(int step, int maxStep, const QString &f
 {
     if (maxStep > 0)
     {
-        m_widget->d->progressBar->setMaximum(maxStep);
+        d->widget->d->progressBar->setMaximum(maxStep);
     }
 
-    m_widget->d->progressBar->setValue(step);
+    d->widget->d->progressBar->setValue(step);
 
     if (!format.isEmpty())
     {
-        m_widget->d->progressBar->setFormat(format);
+        d->widget->d->progressBar->setFormat(format);
     }
 }
 
 void ImageShackWindow::slotLoginDone(int errCode, const QString& errMsg)
 {
-    m_widget->updateLabels();
+    d->widget->updateLabels();
 
-    if (!errCode && m_session->loggedIn())
+    if (!errCode && d->session->loggedIn())
     {
-        m_session->saveSettings();
-        startButton()->setEnabled(!m_widget->imagesList()->imageUrls().isEmpty());
-        m_talker->getGalleries();
+        d->session->saveSettings();
+        startButton()->setEnabled(!d->widget->imagesList()->imageUrls().isEmpty());
+        d->talker->getGalleries();
     }
     else
     {
         QMessageBox::critical(this, QString(), i18n("Login failed: %1\n", errMsg));
         startButton()->setEnabled(false);
-        m_widget->d->progressBar->setVisible(false);
+        d->widget->d->progressBar->setVisible(false);
         slotBusy(false);
     }
 }
@@ -312,7 +347,7 @@ void ImageShackWindow::slotLoginDone(int errCode, const QString& errMsg)
 void ImageShackWindow::slotGetGalleriesDone(int errCode, const QString &errMsg)
 {
     slotBusy(false);
-    m_widget->d->progressBar->setVisible(false);
+    d->widget->d->progressBar->setVisible(false);
 
     if (errCode)
     {
@@ -322,69 +357,69 @@ void ImageShackWindow::slotGetGalleriesDone(int errCode, const QString &errMsg)
 
 void ImageShackWindow::uploadNextItem()
 {
-    if (m_transferQueue.empty())
+    if (d->transferQueue.empty())
     {
-        m_widget->d->progressBar->hide();
+        d->widget->d->progressBar->hide();
         return;
     }
 
-    m_widget->d->imgList->processing(m_transferQueue.first());
-    QString imgPath = m_transferQueue.first().toLocalFile();
+    d->widget->d->imgList->processing(d->transferQueue.first());
+    QString imgPath = d->transferQueue.first().toLocalFile();
 
-    m_widget->d->progressBar->setMaximum(m_imagesTotal);
-    m_widget->d->progressBar->setValue(m_imagesCount);
+    d->widget->d->progressBar->setMaximum(d->imagesTotal);
+    d->widget->d->progressBar->setValue(d->imagesCount);
 
     QMap<QString, QString> opts;
 
-    if (m_widget->d->privateImagesChb->isChecked())
+    if (d->widget->d->privateImagesChb->isChecked())
     {
         opts[QString::fromLatin1("public")] = QString::fromLatin1("no");
     }
 
-    if (m_widget->d->remBarChb->isChecked())
+    if (d->widget->d->remBarChb->isChecked())
     {
         opts[QString::fromLatin1("rembar")] = QString::fromLatin1("yes");
     }
 
     // tags
-    if (!m_widget->d->tagsFld->text().isEmpty())
+    if (!d->widget->d->tagsFld->text().isEmpty())
     {
-        QString str = m_widget->d->tagsFld->text();
+        QString str = d->widget->d->tagsFld->text();
         QStringList tagsList;
         tagsList = str.split(QRegExp(QString::fromLatin1("\\W+")), QString::SkipEmptyParts);
         opts[QString::fromLatin1("tags")] = tagsList.join(QString::fromLatin1(","));
     }
 
-    opts[QString::fromLatin1("auth_token")] = m_session->authToken();
+    opts[QString::fromLatin1("auth_token")] = d->session->authToken();
 
-    int gidx = m_widget->d->galleriesCob->currentIndex();
+    int gidx = d->widget->d->galleriesCob->currentIndex();
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Album ID is "<< m_widget->d->galleriesCob->itemData(gidx).toString();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Album ID is "<< d->widget->d->galleriesCob->itemData(gidx).toString();
 
     switch(gidx)
     {
         case 0:
-            m_talker->uploadItem(imgPath, opts);
+            d->talker->uploadItem(imgPath, opts);
             break;
         case 1:
-            opts[QString::fromLatin1("album")] = m_newAlbmTitle;
-            m_talker->uploadItemToGallery(imgPath, m_newAlbmTitle, opts);
+            opts[QString::fromLatin1("album")] = d->newAlbmTitle;
+            d->talker->uploadItemToGallery(imgPath, d->newAlbmTitle, opts);
             break;
         default:
-            opts[QString::fromLatin1("album")] = m_widget->d->galleriesCob->itemData(gidx).toString();
-            m_talker->uploadItemToGallery(imgPath, m_widget->d->galleriesCob->itemData(gidx).toString(), opts);
+            opts[QString::fromLatin1("album")] = d->widget->d->galleriesCob->itemData(gidx).toString();
+            d->talker->uploadItemToGallery(imgPath, d->widget->d->galleriesCob->itemData(gidx).toString(), opts);
     }
 }
 
 void ImageShackWindow::slotAddPhotoDone(int errCode, const QString& errMsg)
 {
-    m_widget->d->imgList->processed(m_transferQueue.first(), (errCode == 0));
+    d->widget->d->imgList->processed(d->transferQueue.first(), (errCode == 0));
 
     if (!errCode)
     {
-        m_widget->imagesList()->removeItemByUrl(m_transferQueue.first());
-        m_transferQueue.pop_front();
-        m_imagesCount++;
+        d->widget->imagesList()->removeItemByUrl(d->transferQueue.first());
+        d->transferQueue.pop_front();
+        d->imagesCount++;
     }
     else
     {
@@ -393,8 +428,8 @@ void ImageShackWindow::slotAddPhotoDone(int errCode, const QString& errMsg)
                                        "Do you want to continue?", errMsg))
             != QMessageBox::Yes)
         {
-            m_widget->d->progressBar->setVisible(false);
-            m_transferQueue.clear();
+            d->widget->d->progressBar->setVisible(false);
+            d->transferQueue.clear();
             return;
         }
     }
@@ -404,15 +439,15 @@ void ImageShackWindow::slotAddPhotoDone(int errCode, const QString& errMsg)
 
 void ImageShackWindow::slotGetGalleries()
 {
-    m_widget->d->progressBar->setVisible(true);
-    m_talker->getGalleries();
+    d->widget->d->progressBar->setVisible(true);
+    d->talker->getGalleries();
 }
 
 void ImageShackWindow::slotNewAlbumRequest()
 {
-    if (m_albumDlg->exec() == QDialog::Accepted)
+    if (d->albumDlg->exec() == QDialog::Accepted)
     {
-        m_newAlbmTitle = m_albumDlg->getAlbumTitle();
+        d->newAlbmTitle = d->albumDlg->getAlbumTitle();
     }
 }
 
