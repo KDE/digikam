@@ -104,7 +104,7 @@ set(libwsflickr_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/flickr/flickrlist.cpp
 
 # Imgur tool ----------------------------------------------------------------
 
-set(libwsimgur_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurapi3.cpp
+set(libwsimgur_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurtalker.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurimageslist.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/imgur/imgurwindow.cpp
 )

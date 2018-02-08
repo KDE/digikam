@@ -7,6 +7,7 @@
  * Description : a tool to export images to Imgur web service
  *
  * Copyright (C) 2010-2012 by Marius Orcsik <marius at habarnam dot ro>
+ * Copyright (C) 2013-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -99,7 +100,7 @@ void ImgurImagesList::slotAddImages(const QList<QUrl>& list)
         // Already in the list?
         if (listView()->findItem(*it) == nullptr)
         {
-            auto* item = new ImgurImageListViewItem(listView(), *it);
+            auto* const item = new ImgurImageListViewItem(listView(), *it);
 
             // Load URLs from meta data, if possible
             if (meta.load((*it).toLocalFile()))
@@ -114,7 +115,7 @@ void ImgurImagesList::slotAddImages(const QList<QUrl>& list)
     emit signalAddItems(list);
 }
 
-void ImgurImagesList::slotSuccess(const ImgurAPI3Result& result)
+void ImgurImagesList::slotSuccess(const ImgurTalkerResult& result)
 {
     QUrl imgurl = QUrl::fromLocalFile(result.action->upload.imgpath);
 
@@ -126,7 +127,7 @@ void ImgurImagesList::slotSuccess(const ImgurAPI3Result& result)
     if (meta.load(imgurl.toLocalFile()))
     {
         meta.setXmpTagString("Xmp.digiKam.ImgurId",         result.image.url);
-        meta.setXmpTagString("Xmp.digiKam.ImgurDeleteHash", ImgurAPI3::urlForDeletehash(result.image.deletehash).toString());
+        meta.setXmpTagString("Xmp.digiKam.ImgurDeleteHash", ImgurTalker::urlForDeletehash(result.image.deletehash).toString());
         meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
         bool saved = meta.applyChanges();
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Metadata" << (saved ? "Saved" : "Not Saved") << "to" << imgurl;
@@ -141,7 +142,7 @@ void ImgurImagesList::slotSuccess(const ImgurAPI3Result& result)
         currItem->setImgurUrl(result.image.url);
 
     if (!result.image.deletehash.isEmpty())
-        currItem->setImgurDeleteUrl(ImgurAPI3::urlForDeletehash(result.image.deletehash).toString());
+        currItem->setImgurDeleteUrl(ImgurTalker::urlForDeletehash(result.image.deletehash).toString());
 }
 
 void ImgurImagesList::slotDoubleClick(QTreeWidgetItem* element, int i)

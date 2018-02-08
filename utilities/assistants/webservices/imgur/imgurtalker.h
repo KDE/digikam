@@ -7,6 +7,7 @@
  * Description : Implementation of v3 of the Imgur API
  *
  * Copyright (C) 2016 by Fabian Vogt <fabian at ritter dash vogt dot de>
+ * Copyright (C) 2016-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMGUR_API3_H
-#define IMGUR_API3_H
+#ifndef IMGUR_TALKER_H
+#define IMGUR_TALKER_H
 
 // C++ includes
 
@@ -42,16 +43,16 @@
 namespace Digikam
 {
 
-enum class ImgurAPI3ActionType
+enum class ImgurTalkerActionType
 {
     ACCT_INFO,       // Action: account Result : account
     IMG_UPLOAD,      // Action: upload Result  : image
     ANON_IMG_UPLOAD, // Action: upload Result  : image
 };
 
-struct ImgurAPI3Action
+struct ImgurTalkerAction
 {
-    ImgurAPI3ActionType type;
+    ImgurTalkerActionType type;
 
     struct
     {
@@ -66,9 +67,9 @@ struct ImgurAPI3Action
     } account;
 };
 
-struct ImgurAPI3Result
+struct ImgurTalkerResult
 {
-    const ImgurAPI3Action* action;
+    const ImgurTalkerAction* action;
 
     struct ImgurImage
     {
@@ -99,23 +100,23 @@ struct ImgurAPI3Result
 /*
  * Main class, handles the client side of the Imgur API v3.
  */
-class ImgurAPI3 : public QObject
+class ImgurTalker : public QObject
 {
 Q_OBJECT
 
 public:
 
-    explicit ImgurAPI3(const QString& client_id,
-                       const QString& client_secret,
-                       QObject* const parent = nullptr);
-    ~ImgurAPI3();
+    explicit ImgurTalker(const QString& client_id,
+                         const QString& client_secret,
+                         QObject* const parent = nullptr);
+    ~ImgurTalker();
 
     /* Use this method to read/write the access and refresh tokens.
      */
     O2& getAuth();
 
     unsigned int workQueueLength();
-    void queueWork(const ImgurAPI3Action& action);
+    void queueWork(const ImgurTalkerAction& action);
     void cancelAllWork();
 
     static QUrl urlForDeletehash(const QString& deletehash);
@@ -134,9 +135,9 @@ Q_SIGNALS:
 
     /* Emitted on progress changes.
      */
-    void progress(unsigned int percent, const ImgurAPI3Action& action);
-    void success(const ImgurAPI3Result& result);
-    void error(const QString& msg, const ImgurAPI3Action& action);
+    void progress(unsigned int percent, const ImgurTalkerAction& action);
+    void success(const ImgurTalkerResult& result);
+    void error(const QString& msg, const ImgurTalkerAction& action);
 
     /* Emitted when the status changes.
      */
@@ -192,29 +193,29 @@ private:
 
     /* Handler for OAuth 2 related requests.
      */
-    O2                          m_auth;
+    O2                            m_auth;
 
     /* Work queue.
      */
-    std::queue<ImgurAPI3Action> m_work_queue;
+    std::queue<ImgurTalkerAction> m_work_queue;
 
     /* ID of timer triggering on idle (0ms).
      */
-    int                         m_work_timer = 0;
+    int                           m_work_timer = 0;
 
     /* Current QNetworkReply instance.
      */
-    QNetworkReply*              m_reply = nullptr;
+    QNetworkReply*                m_reply = nullptr;
 
     /* Current image being uploaded.
      */
-    QFile*                      m_image = nullptr;
+    QFile*                        m_image = nullptr;
 
     /* The QNetworkAccessManager instance used for connections
      */
-    QNetworkAccessManager       m_net;
+    QNetworkAccessManager         m_net;
 };
 
 } // namespace Digikam
 
-#endif // IMGUR_API3_H
+#endif // IMGUR_TALKER_H

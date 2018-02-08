@@ -7,6 +7,7 @@
  * Description : a tool to export images to Imgur web service
  *
  * Copyright (C) 2010-2012 by Marius Orcsik <marius at habarnam dot ro>
+ * Copyright (C) 2013-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +31,7 @@
 // Local includes
 
 #include "dimageslist.h"
-#include "imgurapi3.h"
+#include "imgurtalker.h"
 
 namespace Digikam
 {
@@ -43,7 +44,7 @@ class ImgurImagesList : public DImagesList
 
 public:
 
-    /* The different columns in a list. */
+    // The different columns in a list.
     enum FieldType
     {
         Title           = DImagesListView::User1,
@@ -62,7 +63,7 @@ public:
 public Q_SLOTS:
 
     void slotAddImages(const QList<QUrl>& list) override;
-    void slotSuccess(const ImgurAPI3Result& result);
+    void slotSuccess(const ImgurTalkerResult& result);
     void slotDoubleClick(QTreeWidgetItem* element, int i);
 };
 

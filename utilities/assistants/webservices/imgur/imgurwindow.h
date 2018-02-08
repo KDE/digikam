@@ -7,6 +7,7 @@
  * Description : a tool to export images to Imgur web service
  *
  * Copyright (C) 2010-2012 by Marius Orcsik <marius at habarnam dot ro>
+ * Copyright (C) 2013-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,7 +35,7 @@
 
 #include "imgurimageslist.h"
 #include "wstooldialog.h"
-#include "imgurapi3.h"
+#include "imgurtalker.h"
 #include "digikam_export.h"
 #include "dinfointerface.h"
 
@@ -56,20 +57,20 @@ public:
 
 public Q_SLOTS:
 
-    /* UI callbacks */
+    // UI callbacks
     void forgetButtonClicked();
     void slotUpload();
     void slotAnonUpload();
     void slotFinished();
     void slotCancel();
 
-    /* ImgurAPI3 callbacks */
+    // ImgurTalker callbacks
     void apiAuthorized(bool success, const QString& username);
     void apiAuthError(const QString& msg);
-    void apiProgress(unsigned int percent, const ImgurAPI3Action& action);
+    void apiProgress(unsigned int percent, const ImgurTalkerAction& action);
     void apiRequestPin(const QUrl& url);
-    void apiSuccess(const ImgurAPI3Result& result);
-    void apiError(const QString &msg, const ImgurAPI3Action& action);
+    void apiSuccess(const ImgurTalkerResult& result);
+    void apiError(const QString &msg, const ImgurTalkerAction& action);
     void apiBusy(bool busy);
 
 private:
@@ -82,12 +83,14 @@ private:
 private:
 
     ImgurImagesList* list = nullptr;
-    ImgurAPI3*       api  = nullptr;
+    ImgurTalker*     api  = nullptr;
     QPushButton*     forgetButton = nullptr;
     QPushButton*     uploadAnonButton = nullptr;
     QLabel*          userLabel = nullptr;
+
     /* Contains the imgur username if API authorized.
-     * If not, username is null. */
+     * If not, username is null.
+     */
     QString          username;
 };
 

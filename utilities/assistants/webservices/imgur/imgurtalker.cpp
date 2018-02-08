@@ -7,6 +7,7 @@
  * Description : Implementation of v3 of the Imgur API
  *
  * Copyright (C) 2016 by Fabian Vogt <fabian at ritter dash vogt dot de>
+ * Copyright (C) 2016-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imgurapi3.h"
+#include "imgurtalker.h"
 
 // Qt includes
 
@@ -50,7 +51,7 @@ static const QString imgur_auth_url       = QLatin1String("https://api.imgur.com
 imgur_token_url                           = QLatin1String("https://api.imgur.com/oauth2/token");
 static const uint16_t imgur_redirect_port = 8000; // Redirect URI is http://127.0.0.1:8000
 
-ImgurAPI3::ImgurAPI3(const QString& client_id,
+ImgurTalker::ImgurTalker(const QString& client_id,
                      const QString& client_secret,
                      QObject* const parent)
     : QObject(parent)
@@ -69,39 +70,39 @@ ImgurAPI3::ImgurAPI3(const QString& client_id,
     m_auth.setStore(store);
 
     connect(&m_auth, &O2::linkedChanged,
-            this, &ImgurAPI3::oauthAuthorized);
+            this, &ImgurTalker::oauthAuthorized);
 
     connect(&m_auth, &O2::openBrowser,
-            this, &ImgurAPI3::oauthRequestPin);
+            this, &ImgurTalker::oauthRequestPin);
 
     connect(&m_auth, &O2::linkingFailed,
-            this, &ImgurAPI3::oauthFailed);
+            this, &ImgurTalker::oauthFailed);
 }
 
-ImgurAPI3::~ImgurAPI3()
+ImgurTalker::~ImgurTalker()
 {
     // Disconnect all signals as cancelAllWork may emit.
     disconnect(this, 0, 0, 0);
     cancelAllWork();
 }
 
-O2& ImgurAPI3::getAuth()
+O2& ImgurTalker::getAuth()
 {
     return m_auth;
 }
 
-unsigned int ImgurAPI3::workQueueLength()
+unsigned int ImgurTalker::workQueueLength()
 {
     return m_work_queue.size();
 }
 
-void ImgurAPI3::queueWork(const ImgurAPI3Action& action)
+void ImgurTalker::queueWork(const ImgurTalkerAction& action)
 {
     m_work_queue.push(action);
     startWorkTimer();
 }
 
-void ImgurAPI3::cancelAllWork()
+void ImgurTalker::cancelAllWork()
 {
     stopWorkTimer();
 
@@ -113,12 +114,12 @@ void ImgurAPI3::cancelAllWork()
         m_work_queue.pop();
 }
 
-QUrl ImgurAPI3::urlForDeletehash(const QString& deletehash)
+QUrl ImgurTalker::urlForDeletehash(const QString& deletehash)
 {
     return QUrl{QLatin1String("https://imgur.com/delete/") + deletehash};
 }
 
-void ImgurAPI3::oauthAuthorized()
+void ImgurTalker::oauthAuthorized()
 {
     bool success = m_auth.linked();
 
@@ -130,25 +131,28 @@ void ImgurAPI3::oauthAuthorized()
     emit authorized(success, m_auth.extraTokens()[QLatin1String("account_username")].toString());
 }
 
-void ImgurAPI3::oauthRequestPin(const QUrl& url)
+void ImgurTalker::oauthRequestPin(const QUrl& url)
 {
     emit busy(false);
     emit requestPin(url);
 }
 
-void ImgurAPI3::oauthFailed()
+void ImgurTalker::oauthFailed()
 {
     cancelAllWork();
     emit authError(i18n("Could not authorize"));
 }
 
-void ImgurAPI3::uploadProgress(qint64 sent, qint64 total)
+void ImgurTalker::uploadProgress(qint64 sent, qint64 total)
 {
-    if (total > 0) // Don't divide by 0
+    // Don't divide by 0
+    if (total > 0)
+    {
         emit progress((sent * 100) / total, m_work_queue.front());
+    }
 }
 
-void ImgurAPI3::replyFinished()
+void ImgurTalker::replyFinished()
 {
     auto* reply = m_reply;
     reply->deleteLater();
@@ -173,14 +177,14 @@ void ImgurAPI3::replyFinished()
     if (code == 200 && !response.isEmpty())
     {
         // Success!
-        ImgurAPI3Result result;
+        ImgurTalkerResult result;
         result.action = &m_work_queue.front();
         auto data = response.object()[QLatin1String("data")].toObject();
 
         switch (result.action->type)
         {
-            case ImgurAPI3ActionType::IMG_UPLOAD:
-            case ImgurAPI3ActionType::ANON_IMG_UPLOAD:
+            case ImgurTalkerActionType::IMG_UPLOAD:
+            case ImgurTalkerActionType::ANON_IMG_UPLOAD:
                 result.image.animated = data[QLatin1String("animated")].toBool();
                 result.image.bandwidth = data[QLatin1String("bandwidth")].toInt();
                 result.image.datetime = data[QLatin1String("datetime")].toInt();
@@ -196,7 +200,7 @@ void ImgurAPI3::replyFinished()
                 result.image.views = data[QLatin1String("views")].toInt();
                 result.image.width = data[QLatin1String("width")].toInt();
                 break;
-            case ImgurAPI3ActionType::ACCT_INFO:
+            case ImgurTalkerActionType::ACCT_INFO:
                 result.account.username = data[QLatin1String("url")].toString();
                 // TODO: Other fields.
                 break;
@@ -235,7 +239,7 @@ void ImgurAPI3::replyFinished()
     startWorkTimer();
 }
 
-void ImgurAPI3::timerEvent(QTimerEvent* event)
+void ImgurTalker::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() != m_work_timer)
         return QObject::timerEvent(event);
@@ -249,7 +253,7 @@ void ImgurAPI3::timerEvent(QTimerEvent* event)
     doWork();
 }
 
-void ImgurAPI3::startWorkTimer()
+void ImgurTalker::startWorkTimer()
 {
     if (!m_work_queue.empty() && m_work_timer == 0)
     {
@@ -262,7 +266,7 @@ void ImgurAPI3::startWorkTimer()
     }
 }
 
-void ImgurAPI3::stopWorkTimer()
+void ImgurTalker::stopWorkTimer()
 {
     if (m_work_timer != 0)
     {
@@ -271,26 +275,26 @@ void ImgurAPI3::stopWorkTimer()
     }
 }
 
-void ImgurAPI3::addAuthToken(QNetworkRequest* request)
+void ImgurTalker::addAuthToken(QNetworkRequest* request)
 {
     request->setRawHeader(QByteArray("Authorization"),
                           QString::fromLatin1("Bearer %1").arg(m_auth.token()).toUtf8());
 }
 
-void ImgurAPI3::addAnonToken(QNetworkRequest* request)
+void ImgurTalker::addAnonToken(QNetworkRequest* request)
 {
     request->setRawHeader(QByteArray("Authorization"),
                           QString::fromLatin1("Client-ID %1").arg(m_auth.clientId()).toUtf8());
 }
 
-void ImgurAPI3::doWork()
+void ImgurTalker::doWork()
 {
     if (m_work_queue.empty() || m_reply != nullptr)
         return;
 
     auto &work = m_work_queue.front();
 
-    if (work.type != ImgurAPI3ActionType::ANON_IMG_UPLOAD && !m_auth.linked())
+    if (work.type != ImgurTalkerActionType::ANON_IMG_UPLOAD && !m_auth.linked())
     {
         m_auth.link();
         return; // Wait for the authorized() signal.
@@ -298,7 +302,7 @@ void ImgurAPI3::doWork()
 
     switch(work.type)
     {
-        case ImgurAPI3ActionType::ACCT_INFO:
+        case ImgurTalkerActionType::ACCT_INFO:
         {
             QNetworkRequest request(QUrl(QString::fromLatin1("https://api.imgur.com/3/account/%1")
                                         .arg(QLatin1String(work.account.username.toUtf8().toPercentEncoding()))));
@@ -307,8 +311,8 @@ void ImgurAPI3::doWork()
             this->m_reply = m_net.get(request);
             break;
         }
-        case ImgurAPI3ActionType::ANON_IMG_UPLOAD:
-        case ImgurAPI3ActionType::IMG_UPLOAD:
+        case ImgurTalkerActionType::ANON_IMG_UPLOAD:
+        case ImgurTalkerActionType::IMG_UPLOAD:
         {
             this->m_image = new QFile(work.upload.imgpath);
 
@@ -348,7 +352,7 @@ void ImgurAPI3::doWork()
 
             QNetworkRequest request(QUrl(QLatin1String("https://api.imgur.com/3/image")));
 
-            if (work.type == ImgurAPI3ActionType::IMG_UPLOAD)
+            if (work.type == ImgurTalkerActionType::IMG_UPLOAD)
                 addAuthToken(&request);
             else
                 addAnonToken(&request);
@@ -362,10 +366,10 @@ void ImgurAPI3::doWork()
     if (this->m_reply)
     {
         connect(m_reply, &QNetworkReply::uploadProgress,
-                this, &ImgurAPI3::uploadProgress);
+                this, &ImgurTalker::uploadProgress);
 
         connect(m_reply, &QNetworkReply::finished,
-                this, &ImgurAPI3::replyFinished);
+                this, &ImgurTalker::replyFinished);
     }
 }
 

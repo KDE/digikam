@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2010-2012 by Marius Orcsik <marius at habarnam dot ro>
  * Copyright (C) 2016 by Fabian Vogt <fabian at ritter dash vogt dot de>
+ * Copyright (C) 2013-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,29 +54,29 @@ namespace Digikam
 ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : WSToolDialog(0)
 {
-    api = new ImgurAPI3(QString::fromLatin1(IMGUR_CLIENT_ID),
+    api = new ImgurTalker(QString::fromLatin1(IMGUR_CLIENT_ID),
                         QString::fromLatin1(IMGUR_CLIENT_SECRET), this);
 
-    /* Connect API signals */
-    connect(api, &ImgurAPI3::authorized,
+    // Connect API signals
+    connect(api, &ImgurTalker::authorized,
             this, &ImgurWindow::apiAuthorized);
 
-    connect(api, &ImgurAPI3::authError,
+    connect(api, &ImgurTalker::authError,
             this, &ImgurWindow::apiAuthError);
 
-    connect(api, &ImgurAPI3::progress,
+    connect(api, &ImgurTalker::progress,
             this, &ImgurWindow::apiProgress);
 
-    connect(api, &ImgurAPI3::requestPin,
+    connect(api, &ImgurTalker::requestPin,
             this, &ImgurWindow::apiRequestPin);
 
-    connect(api, &ImgurAPI3::success,
+    connect(api, &ImgurTalker::success,
             this, &ImgurWindow::apiSuccess);
 
-    connect(api, &ImgurAPI3::error,
+    connect(api, &ImgurTalker::error,
             this, &ImgurWindow::apiError);
 
-    connect(api, &ImgurAPI3::busy,
+    connect(api, &ImgurTalker::busy,
             this, &ImgurWindow::apiBusy);
 
     /* | List | Auth | */
@@ -110,11 +111,11 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     authLayout->addWidget(forgetButton);
     authLayout->insertStretch(-1, 1);
 
-    /* Add anonymous upload button */
+    // Add anonymous upload button
     uploadAnonButton = new QPushButton(i18n("Upload Anonymously"));
     addButton(uploadAnonButton, QDialogButtonBox::ApplyRole);
 
-    /* Connect UI signals */
+    // Connect UI signals
     connect(forgetButton, &QPushButton::clicked,
             this, &ImgurWindow::forgetButtonClicked);
 
@@ -137,7 +138,7 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     startButton()->setToolTip(i18n("Start upload to Imgur"));
     startButton()->setEnabled(true);
 
-    /* Only used if not overwritten by readSettings() */
+    // Only used if not overwritten by readSettings()
     resize(650, 320);
     readSettings();
 }
@@ -171,8 +172,8 @@ void ImgurWindow::slotUpload()
 
     for (auto item : pending)
     {
-        ImgurAPI3Action action;
-        action.type = ImgurAPI3ActionType::IMG_UPLOAD;
+        ImgurTalkerAction action;
+        action.type = ImgurTalkerActionType::IMG_UPLOAD;
         action.upload.imgpath = item->url().toLocalFile();
         action.upload.title = item->Title();
         action.upload.description = item->Description();
@@ -187,8 +188,8 @@ void ImgurWindow::slotAnonUpload()
 
     for (auto item : pending)
     {
-        ImgurAPI3Action action;
-        action.type = ImgurAPI3ActionType::ANON_IMG_UPLOAD;
+        ImgurTalkerAction action;
+        action.type = ImgurTalkerActionType::ANON_IMG_UPLOAD;
         action.upload.imgpath = item->url().toLocalFile();
         action.upload.title = item->Title();
         action.upload.description = item->Description();
@@ -229,7 +230,7 @@ void ImgurWindow::apiAuthError(const QString& msg)
                           i18n("Failed to log into Imgur: %1\n", msg));
 }
 
-void ImgurWindow::apiProgress(unsigned int /*percent*/, const ImgurAPI3Action& action)
+void ImgurWindow::apiProgress(unsigned int /*percent*/, const ImgurTalkerAction& action)
 {
     list->processing(QUrl::fromLocalFile(action.upload.imgpath));
 }
@@ -239,12 +240,12 @@ void ImgurWindow::apiRequestPin(const QUrl& url)
     QDesktopServices::openUrl(url);
 }
 
-void ImgurWindow::apiSuccess(const ImgurAPI3Result& result)
+void ImgurWindow::apiSuccess(const ImgurTalkerResult& result)
 {
     list->slotSuccess(result);
 }
 
-void ImgurWindow::apiError(const QString& msg, const ImgurAPI3Action& action)
+void ImgurWindow::apiError(const QString& msg, const ImgurTalkerAction& action)
 {
     list->processed(QUrl::fromLocalFile(action.upload.imgpath), false);
 
