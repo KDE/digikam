@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QString>
 #include <QWidget>
 
 // Local includes
@@ -33,15 +34,6 @@
 #include "dprogresswdg.h"
 #include "wssettingswidget.h"
 #include "dinfointerface.h"
-
-class QRadioButton;
-class QSpinBox;
-class QCheckBox;
-class QLineEdit;
-class QLabel;
-class QGroupBox;
-class QComboBox;
-class QPushButton;
 
 namespace Digikam
 {
@@ -66,7 +58,8 @@ Q_SIGNALS:
 
 private:
 
-    void updateLabels(const QString& name = QString(), const QString& url = QString()) Q_DECL_OVERRIDE;
+    void updateLabels(const QString& name = QString(),
+                      const QString& url = QString()) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
 
