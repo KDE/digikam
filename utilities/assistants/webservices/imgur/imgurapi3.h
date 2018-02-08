@@ -44,9 +44,9 @@ namespace Digikam
 
 enum class ImgurAPI3ActionType
 {
-    ACCT_INFO,       /* Action: account Result: account */
-    IMG_UPLOAD,      /* Action: upload Result: image    */
-    ANON_IMG_UPLOAD, /* Action: upload Result: image    */
+    ACCT_INFO,       // Action: account Result : account
+    IMG_UPLOAD,      // Action: upload Result  : image
+    ANON_IMG_UPLOAD, // Action: upload Result  : image
 };
 
 struct ImgurAPI3Action
@@ -105,10 +105,13 @@ Q_OBJECT
 
 public:
 
-    explicit ImgurAPI3(const QString& client_id, const QString& client_secret, QObject* parent = nullptr);
+    explicit ImgurAPI3(const QString& client_id,
+                       const QString& client_secret,
+                       QObject* const parent = nullptr);
     ~ImgurAPI3();
 
-    /* Use this to read/write the access and refresh tokens. */
+    /* Use this method to read/write the access and refresh tokens.
+     */
     O2& getAuth();
 
     unsigned int workQueueLength();
@@ -119,32 +122,42 @@ public:
 
 Q_SIGNALS:
 
-    /* Called if authentication state changes. */
+    /* Called if authentication state changes.
+     */
     void authorized(bool success, const QString& username);
     void authError(const QString& msg);
 
     /* Open url in a browser and let the user copy the pin.
-     * Call setPin(pin) to authorize. */
+     * Call setPin(pin) to authorize.
+     */
     void requestPin(const QUrl& url);
 
-    /* Emitted on progress changes. */
+    /* Emitted on progress changes.
+     */
     void progress(unsigned int percent, const ImgurAPI3Action& action);
     void success(const ImgurAPI3Result& result);
     void error(const QString& msg, const ImgurAPI3Action& action);
 
-    /* Emitted when the status changes. */
+    /* Emitted when the status changes.
+     */
     void busy(bool b);
 
 public Q_SLOTS:
 
-    /* Connected to m_auth.linkedChanged(). */
+    /* Connected to m_auth.linkedChanged().
+     */
     void oauthAuthorized();
-    /* Connected to m_auth.openBrowser(QUrl). */
+
+    /* Connected to m_auth.openBrowser(QUrl).
+     */
     void oauthRequestPin(const QUrl& url);
-    /* Connected to m_auth.linkingFailed(). */
+
+    /* Connected to m_auth.linkingFailed().
+     */
     void oauthFailed();
 
-    /* Connected to the current QNetworkReply. */
+    /* Connected to the current QNetworkReply.
+     */
     void uploadProgress(qint64 sent, qint64 total);
     void replyFinished();
 
@@ -154,37 +167,51 @@ protected:
 
 private:
 
-    /* Starts m_work_timer if m_work_queue not empty. */
+    /* Starts timer if queue not empty.
+     */
     void startWorkTimer();
-    /* Stops m_work_timer if running. */
+
+    /* Stops timer if running.
+     */
     void stopWorkTimer();
-    /* Adds the user authorization info to the request. */
+
+    /* Adds the user authorization info to the request.
+     */
     void addAuthToken(QNetworkRequest* request);
-    /* Adds the client authorization info to the request. */
+
+    /* Adds the client authorization info to the request.
+     */
     void addAnonToken(QNetworkRequest* request);
 
     /* Start working on the first item of m_work_queue
-     * by sending a request. */
+     * by sending a request.
+     */
     void doWork();
 
 private:
 
-    /* Handler for OAuth 2 related requests. */
+    /* Handler for OAuth 2 related requests.
+     */
     O2                          m_auth;
 
-    /* Work queue. */
+    /* Work queue.
+     */
     std::queue<ImgurAPI3Action> m_work_queue;
 
-    /* ID of timer triggering on idle (0ms). */
+    /* ID of timer triggering on idle (0ms).
+     */
     int                         m_work_timer = 0;
 
-    /* Current QNetworkReply */
+    /* Current QNetworkReply instance.
+     */
     QNetworkReply*              m_reply = nullptr;
 
-    /* Current image being uploaded */
+    /* Current image being uploaded.
+     */
     QFile*                      m_image = nullptr;
 
-    /* The QNetworkAccessManager used for connections */
+    /* The QNetworkAccessManager instance used for connections
+     */
     QNetworkAccessManager       m_net;
 };
 

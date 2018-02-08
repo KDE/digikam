@@ -50,7 +50,9 @@ static const QString imgur_auth_url       = QLatin1String("https://api.imgur.com
 imgur_token_url                           = QLatin1String("https://api.imgur.com/oauth2/token");
 static const uint16_t imgur_redirect_port = 8000; // Redirect URI is http://127.0.0.1:8000
 
-ImgurAPI3::ImgurAPI3(const QString& client_id, const QString& client_secret, QObject* parent)
+ImgurAPI3::ImgurAPI3(const QString& client_id,
+                     const QString& client_secret,
+                     QObject* const parent)
     : QObject(parent)
 {
     m_auth.setClientId(client_id);
@@ -78,7 +80,7 @@ ImgurAPI3::ImgurAPI3(const QString& client_id, const QString& client_secret, QOb
 
 ImgurAPI3::~ImgurAPI3()
 {
-    /* Disconnect all signals as cancelAllWork may emit */
+    // Disconnect all signals as cancelAllWork may emit.
     disconnect(this, 0, 0, 0);
     cancelAllWork();
 }
@@ -106,7 +108,7 @@ void ImgurAPI3::cancelAllWork()
     if (m_reply)
         m_reply->abort();
 
-    /* Should error be emitted for those actions? */
+    // Should error be emitted for those actions?
     while (!m_work_queue.empty())
         m_work_queue.pop();
 }
@@ -142,7 +144,7 @@ void ImgurAPI3::oauthFailed()
 
 void ImgurAPI3::uploadProgress(qint64 sent, qint64 total)
 {
-    if (total > 0) /* Don't divide by 0 */
+    if (total > 0) // Don't divide by 0
         emit progress((sent * 100) / total, m_work_queue.front());
 }
 
@@ -150,7 +152,7 @@ void ImgurAPI3::replyFinished()
 {
     auto* reply = m_reply;
     reply->deleteLater();
-    m_reply = nullptr;
+    m_reply     = nullptr;
 
     if (this->m_image)
     {
@@ -164,13 +166,13 @@ void ImgurAPI3::replyFinished()
         return;
     }
 
-    /* toInt() returns 0 if conversion fails. That fits nicely already. */
+    // NOTE: toInt() returns 0 if conversion fails. That fits nicely already.
     int code      = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     auto response = QJsonDocument::fromJson(reply->readAll());
 
     if (code == 200 && !response.isEmpty())
     {
-        /* Success! */
+        // Success!
         ImgurAPI3Result result;
         result.action = &m_work_queue.front();
         auto data = response.object()[QLatin1String("data")].toObject();
@@ -196,7 +198,7 @@ void ImgurAPI3::replyFinished()
                 break;
             case ImgurAPI3ActionType::ACCT_INFO:
                 result.account.username = data[QLatin1String("url")].toString();
-                /* TODO: Other fields */
+                // TODO: Other fields.
                 break;
             default:
                 qCWarning(DIGIKAM_WEBSERVICES_LOG) << "Unexpected action";
@@ -212,14 +214,14 @@ void ImgurAPI3::replyFinished()
         {
             /* HTTP 403 Forbidden -> Invalid token? 
              * That needs to be handled internally, so don't emit progress
-             * and keep the action in the queue for later retries. */
-
+             * and keep the action in the queue for later retries.
+             */
             m_auth.refresh();
             return;
         }
         else
         {
-            /* Failed. */
+            // Failed.
             auto msg = response.object()[QLatin1String("data")]
                        .toObject()[QLatin1String("error")]
                        .toString(QLatin1String("Could not read response."));
@@ -228,7 +230,7 @@ void ImgurAPI3::replyFinished()
         }
     }
 
-    /* Next work item. */
+    // Next work item.
     m_work_queue.pop();
     startWorkTimer();
 }
@@ -240,7 +242,7 @@ void ImgurAPI3::timerEvent(QTimerEvent* event)
 
     event->accept();
 
-    /* One-shot only. */
+    // One-shot only.
     QObject::killTimer(event->timerId());
     m_work_timer = 0;
 
@@ -255,7 +257,9 @@ void ImgurAPI3::startWorkTimer()
         emit busy(true);
     }
     else
+    {
         emit busy(false);
+    }
 }
 
 void ImgurAPI3::stopWorkTimer()
@@ -289,7 +293,7 @@ void ImgurAPI3::doWork()
     if (work.type != ImgurAPI3ActionType::ANON_IMG_UPLOAD && !m_auth.linked())
     {
         m_auth.link();
-        return; /* Wait for the authorized() signal. */
+        return; // Wait for the authorized() signal.
     }
 
     switch(work.type)
@@ -313,14 +317,14 @@ void ImgurAPI3::doWork()
                 delete this->m_image;
                 this->m_image = nullptr;
 
-                /* Failed. */
+                // Failed.
                 emit error(i18n("Could not open file"), m_work_queue.front());
 
                 m_work_queue.pop();
                 return doWork();
             }
 
-            /* Set ownership to m_image to delete that as well. */
+            // Set ownership to m_image to delete that as well.
             auto* multipart = new QHttpMultiPart(QHttpMultiPart::FormDataType, m_image);
             QHttpPart title;
             title.setHeader(QNetworkRequest::ContentDispositionHeader,
