@@ -26,9 +26,8 @@
 
 // Qt includes
 
-#include <QList>
-#include <QTextStream>
-#include <QFile>
+#include <QString>
+#include <QWidget>
 
 // Local includes
 
@@ -39,11 +38,6 @@
 
 namespace Digikam
 {
-
-class ImageShackSession;
-class ImageShackWidget;
-class ImageShackTalker;
-class ImageShackNewAlbumDlg;
 
 class DIGIKAM_EXPORT ImageShackWindow : public WSToolDialog
 {
