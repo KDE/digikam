@@ -75,24 +75,8 @@ private Q_SLOTS:
 
 private:
 
-    DImagesList*       m_imgList;
-    DInfoInterface*    m_iface;
-    ImageShackSession* m_session;
-
-    QLabel*            m_headerLbl;
-    QLabel*            m_accountNameLbl;
-
-    QLineEdit*         m_tagsFld;
-
-    QCheckBox*         m_privateImagesChb;
-    QCheckBox*         m_remBarChb;
-
-    QPushButton*       m_chgRegCodeBtn;
-    QPushButton*       m_reloadGalleriesBtn;
-
-    QComboBox*         m_galleriesCob;
-
-    DProgressWdg*      m_progressBar;
+    class Private;
+    Private* const d;
 
     friend class ImageShackWindow;
 };
