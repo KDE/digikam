@@ -58,6 +58,8 @@ public:
     explicit MediaWikiTalker(DInfoInterface* const iface, MediaWiki* const mediawiki, QObject* const parent=0);
     ~MediaWikiTalker();
 
+public:
+
     QString buildWikiText(const QMap<QString, QString>& info) const;
 
     void setImageMap(const QMap <QString,QMap <QString,QString> >& imageDesc);

@@ -63,6 +63,8 @@ public:
     explicit MediaWikiWidget(DInfoInterface* const iface, QWidget* const parent);
     ~MediaWikiWidget();
 
+public:
+
     void updateLabels(const QString& userName = QString(), const QString& wikiName = QString(), const QString& url = QString());
     void invertAccountLoginBox();
 

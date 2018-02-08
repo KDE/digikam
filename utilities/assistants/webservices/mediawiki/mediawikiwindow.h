@@ -48,6 +48,8 @@ public:
     explicit MediaWikiWindow(DInfoInterface* const iface, QWidget* const parent);
     ~MediaWikiWindow();
 
+public:
+
     void reactivate();
     bool prepareImageForUpload(const QString& imgPath);
 
