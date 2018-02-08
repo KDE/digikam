@@ -45,7 +45,7 @@
 
 // libvkontakte includes
 
-#include <Vkontakte/AlbumInfo>
+#include <Vkontakte/albuminfo.h>
 
 namespace Digikam
 {
