@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COLORFX_H_
-#define COLORFX_H_
+#ifndef COLOR_FX_H_
+#define COLOR_FX_H_
 
 #include "batchtool.h"
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* COLORFX_H_ */
+#endif // COLOR_FX_H_/

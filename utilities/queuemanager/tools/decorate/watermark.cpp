@@ -45,6 +45,7 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QDoubleSpinBox>
+
 // KDE includes
 
 #include <klocalizedstring.h>
@@ -61,11 +62,6 @@
 #include "loadsavethread.h"
 #include "metaengine.h"
 #include "dcolorselector.h"
-
-
-
-
-
 
 namespace Digikam
 {

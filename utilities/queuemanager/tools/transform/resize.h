@@ -63,4 +63,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* RESIZE_H */
+#endif // RESIZE_H

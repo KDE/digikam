@@ -43,8 +43,6 @@
 #include "autoexpofilter.h"
 #include "normalizefilter.h"
 
-
-
 namespace Digikam
 {
 

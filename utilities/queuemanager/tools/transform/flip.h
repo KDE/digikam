@@ -39,7 +39,7 @@ class Flip : public BatchTool
 
 public:
 
-    explicit Flip(QObject* parent = 0);
+    explicit Flip(QObject* const parent = 0);
     ~Flip();
 
     BatchToolSettings defaultSettings();
@@ -64,4 +64,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* FLIP_H */
+#endif // FLIP_H

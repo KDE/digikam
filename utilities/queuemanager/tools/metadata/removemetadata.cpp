@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-RemoveMetadata::RemoveMetadata(QObject* parent)
+RemoveMetadata::RemoveMetadata(QObject* const parent)
     : BatchTool(QLatin1String("RemoveMetadata"), MetadataTool, parent)
 {
     m_removeExif = 0;

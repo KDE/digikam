@@ -41,12 +41,10 @@
 #include "dimgbuiltinfilter.h"
 #include "jpegutils.h"
 
-
-
 namespace Digikam
 {
 
-Flip::Flip(QObject* parent)
+Flip::Flip(QObject* const parent)
     : BatchTool(QLatin1String("Flip"), TransformTool, parent)
 {
     m_comboBox = 0;

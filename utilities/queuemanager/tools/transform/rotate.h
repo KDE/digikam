@@ -65,4 +65,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* ROTATE_H */
+#endif // ROTATE_H

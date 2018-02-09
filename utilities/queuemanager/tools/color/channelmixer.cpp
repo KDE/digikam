@@ -38,8 +38,6 @@
 #include "mixerfilter.h"
 #include "mixersettings.h"
 
-
-
 namespace Digikam
 {
 
