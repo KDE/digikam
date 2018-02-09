@@ -83,10 +83,10 @@ MediaWikiTalker::~MediaWikiTalker()
 
 void MediaWikiTalker::start()
 {
-    QTimer::singleShot(0, this, SLOT(uploadHandle()));
+    QTimer::singleShot(0, this, SLOT(slotUploadHandle()));
 }
 
-void MediaWikiTalker::begin()
+void MediaWikiTalker::slotBegin()
 {
     start();
 }
@@ -97,15 +97,15 @@ void MediaWikiTalker::setImageMap(const QMap <QString,QMap <QString,QString> >& 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Map length:" << imageDesc.size();
 }
 
-void MediaWikiTalker::uploadHandle(KJob* j)
+void MediaWikiTalker::slotUploadHandle(KJob* j)
 {
     if (j != 0)
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Upload error" << j->error() << j->errorString() << j->errorText();
-        emit uploadProgress(100);
+        emit signalUploadProgress(100);
 
         disconnect(j, SIGNAL(result(KJob*)),
-                   this, SLOT(uploadHandle(KJob*)));
+                   this, SLOT(slotUploadHandle(KJob*)));
 
         disconnect(j, SIGNAL(percent(KJob*, ulong)),
                    this, SLOT(slotUploadProgress(KJob*, ulong)));
@@ -167,12 +167,12 @@ void MediaWikiTalker::uploadHandle(KJob* j)
         keys.removeFirst();
 
         connect(e1, SIGNAL(result(KJob*)),
-                this, SLOT(uploadHandle(KJob*)));
+                this, SLOT(slotUploadHandle(KJob*)));
 
         connect(e1, SIGNAL(percent(KJob*, ulong)),
                 this, SLOT(slotUploadProgress(KJob*, ulong)));
 
-        emit uploadProgress(0);
+        emit signalUploadProgress(0);
         e1->start();
     }
     else
@@ -185,7 +185,7 @@ void MediaWikiTalker::uploadHandle(KJob* j)
         }
         else
         {
-            emit endUpload();
+            emit signalEndUpload();
         }
 
         d->error.clear();
@@ -264,7 +264,7 @@ QString MediaWikiTalker::buildWikiText(const QMap<QString, QString>& info) const
 void MediaWikiTalker::slotUploadProgress(KJob* job, unsigned long percent)
 {
     Q_UNUSED(job)
-    emit uploadProgress((int)percent);
+    emit signalUploadProgress((int)percent);
 }
 
 } // namespace Digikam

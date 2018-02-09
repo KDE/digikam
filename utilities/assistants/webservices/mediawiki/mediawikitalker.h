@@ -67,13 +67,13 @@ public:
 
 Q_SIGNALS:
 
-    void uploadProgress(int percent);
-    void endUpload();
+    void signalUploadProgress(int percent);
+    void signalEndUpload();
 
 public Q_SLOTS:
 
-    void begin();
-    void uploadHandle(KJob* j = 0);
+    void slotBegin();
+    void slotUploadHandle(KJob* j = 0);
     void slotUploadProgress(KJob* job, unsigned long percent);
 
 private:

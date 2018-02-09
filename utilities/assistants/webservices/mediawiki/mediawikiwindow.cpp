@@ -309,16 +309,16 @@ void MediaWikiWindow::slotStartTransfer()
     d->widget->progressBar()->setRange(0, 100);
     d->widget->progressBar()->setValue(0);
 
-    connect(d->uploadTalker, SIGNAL(uploadProgress(int)),
+    connect(d->uploadTalker, SIGNAL(signalUploadProgress(int)),
             d->widget->progressBar(), SLOT(setValue(int)));
 
-    connect(d->uploadTalker, SIGNAL(endUpload()),
+    connect(d->uploadTalker, SIGNAL(signalEndUpload()),
             this, SLOT(slotEndUpload()));
 
     d->widget->progressBar()->show();
     d->widget->progressBar()->progressScheduled(i18n("MediaWiki export"), true, true);
     d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("mediawiki")).pixmap(22, 22));
-    d->uploadTalker->begin();
+    d->uploadTalker->slotBegin();
 }
 
 void MediaWikiWindow::slotChangeUserClicked()
@@ -366,10 +366,10 @@ int MediaWikiWindow::slotLoginHandle(KJob* loginJob)
 
 void MediaWikiWindow::slotEndUpload()
 {
-    disconnect(d->uploadTalker, SIGNAL(uploadProgress(int)),
+    disconnect(d->uploadTalker, SIGNAL(signalUploadProgress(int)),
                d->widget->progressBar(),SLOT(setValue(int)));
 
-    disconnect(d->uploadTalker, SIGNAL(endUpload()),
+    disconnect(d->uploadTalker, SIGNAL(signalEndUpload()),
                this, SLOT(slotEndUpload()));
 
     QMessageBox::information(this, QString(), i18n("Upload finished with no errors."));
