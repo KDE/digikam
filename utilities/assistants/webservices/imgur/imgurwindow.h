@@ -60,20 +60,20 @@ public:
 public Q_SLOTS:
 
     // UI callbacks
-    void forgetButtonClicked();
+    void slotForgetButtonClicked();
     void slotUpload();
     void slotAnonUpload();
     void slotFinished();
     void slotCancel();
 
     // ImgurTalker callbacks
-    void apiAuthorized(bool success, const QString& username);
-    void apiAuthError(const QString& msg);
-    void apiProgress(unsigned int percent, const ImgurTalkerAction& action);
-    void apiRequestPin(const QUrl& url);
-    void apiSuccess(const ImgurTalkerResult& result);
-    void apiError(const QString &msg, const ImgurTalkerAction& action);
-    void apiBusy(bool busy);
+    void slotApiAuthorized(bool success, const QString& username);
+    void slotApiAuthError(const QString& msg);
+    void slotApiProgress(unsigned int percent, const ImgurTalkerAction& action);
+    void slotApiRequestPin(const QUrl& url);
+    void slotApiSuccess(const ImgurTalkerResult& result);
+    void slotApiError(const QString &msg, const ImgurTalkerAction& action);
+    void slotApiBusy(bool busy);
 
 private:
 

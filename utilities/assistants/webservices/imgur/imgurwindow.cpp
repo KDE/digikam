@@ -59,25 +59,25 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
 
     // Connect API signals
     connect(api, &ImgurTalker::authorized,
-            this, &ImgurWindow::apiAuthorized);
+            this, &ImgurWindow::slotApiAuthorized);
 
     connect(api, &ImgurTalker::authError,
-            this, &ImgurWindow::apiAuthError);
+            this, &ImgurWindow::slotApiAuthError);
 
     connect(api, &ImgurTalker::progress,
-            this, &ImgurWindow::apiProgress);
+            this, &ImgurWindow::slotApiProgress);
 
     connect(api, &ImgurTalker::requestPin,
-            this, &ImgurWindow::apiRequestPin);
+            this, &ImgurWindow::slotApiRequestPin);
 
     connect(api, &ImgurTalker::success,
-            this, &ImgurWindow::apiSuccess);
+            this, &ImgurWindow::slotApiSuccess);
 
     connect(api, &ImgurTalker::error,
-            this, &ImgurWindow::apiError);
+            this, &ImgurWindow::slotApiError);
 
     connect(api, &ImgurTalker::busy,
-            this, &ImgurWindow::apiBusy);
+            this, &ImgurWindow::slotApiBusy);
 
     // | List | Auth |
     auto* mainLayout = new QHBoxLayout;
@@ -118,7 +118,7 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
 
     // Connect UI signals
     connect(forgetButton, &QPushButton::clicked,
-            this, &ImgurWindow::forgetButtonClicked);
+            this, &ImgurWindow::slotForgetButtonClicked);
 
     connect(startButton(), &QPushButton::clicked,
             this, &ImgurWindow::slotUpload);
@@ -160,11 +160,11 @@ void ImgurWindow::reactivate()
     show();
 }
 
-void ImgurWindow::forgetButtonClicked()
+void ImgurWindow::slotForgetButtonClicked()
 {
     api->getAuth().unlink();
 
-    apiAuthorized(false, {});
+    slotApiAuthorized(false, {});
 }
 
 void ImgurWindow::slotUpload()
@@ -209,7 +209,7 @@ void ImgurWindow::slotCancel()
     api->cancelAllWork();
 }
 
-void ImgurWindow::apiAuthorized(bool success, const QString& username)
+void ImgurWindow::slotApiAuthorized(bool success, const QString& username)
 {
     if (success)
     {
@@ -224,29 +224,29 @@ void ImgurWindow::apiAuthorized(bool success, const QString& username)
     this->forgetButton->setEnabled(false);
 }
 
-void ImgurWindow::apiAuthError(const QString& msg)
+void ImgurWindow::slotApiAuthError(const QString& msg)
 {
     QMessageBox::critical(this,
                           i18n("Authorization Failed"),
                           i18n("Failed to log into Imgur: %1\n", msg));
 }
 
-void ImgurWindow::apiProgress(unsigned int /*percent*/, const ImgurTalkerAction& action)
+void ImgurWindow::slotApiProgress(unsigned int /*percent*/, const ImgurTalkerAction& action)
 {
     list->processing(QUrl::fromLocalFile(action.upload.imgpath));
 }
 
-void ImgurWindow::apiRequestPin(const QUrl& url)
+void ImgurWindow::slotApiRequestPin(const QUrl& url)
 {
     QDesktopServices::openUrl(url);
 }
 
-void ImgurWindow::apiSuccess(const ImgurTalkerResult& result)
+void ImgurWindow::slotApiSuccess(const ImgurTalkerResult& result)
 {
     list->slotSuccess(result);
 }
 
-void ImgurWindow::apiError(const QString& msg, const ImgurTalkerAction& action)
+void ImgurWindow::slotApiError(const QString& msg, const ImgurTalkerAction& action)
 {
     list->processed(QUrl::fromLocalFile(action.upload.imgpath), false);
 
@@ -269,7 +269,7 @@ void ImgurWindow::apiError(const QString& msg, const ImgurTalkerAction& action)
         api->cancelAllWork();
 }
 
-void ImgurWindow::apiBusy(bool busy)
+void ImgurWindow::slotApiBusy(bool busy)
 {
     setCursor(busy ? Qt::WaitCursor : Qt::ArrowCursor);
     startButton()->setEnabled(!busy);
@@ -289,7 +289,7 @@ void ImgurWindow::readSettings()
     KConfig config;
     KConfigGroup groupAuth = config.group("Imgur Auth");
     username               = groupAuth.readEntry("username", QString());
-    apiAuthorized(!username.isEmpty(), username);
+    slotApiAuthorized(!username.isEmpty(), username);
 
     winId();
     KConfigGroup groupDialog = config.group("Imgur Dialog");
