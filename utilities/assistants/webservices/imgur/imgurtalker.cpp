@@ -70,13 +70,13 @@ ImgurTalker::ImgurTalker(const QString& client_id,
     m_auth.setStore(store);
 
     connect(&m_auth, &O2::linkedChanged,
-            this, &ImgurTalker::oauthAuthorized);
+            this, &ImgurTalker::slotOauthAuthorized);
 
     connect(&m_auth, &O2::openBrowser,
-            this, &ImgurTalker::oauthRequestPin);
+            this, &ImgurTalker::slotOauthRequestPin);
 
     connect(&m_auth, &O2::linkingFailed,
-            this, &ImgurTalker::oauthFailed);
+            this, &ImgurTalker::slotOauthFailed);
 }
 
 ImgurTalker::~ImgurTalker()
@@ -109,7 +109,7 @@ void ImgurTalker::cancelAllWork()
     if (m_reply)
         m_reply->abort();
 
-    // Should error be emitted for those actions?
+    // Should signalError be emitted for those actions?
     while (!m_work_queue.empty())
         m_work_queue.pop();
 }
@@ -119,40 +119,40 @@ QUrl ImgurTalker::urlForDeletehash(const QString& deletehash)
     return QUrl{QLatin1String("https://imgur.com/delete/") + deletehash};
 }
 
-void ImgurTalker::oauthAuthorized()
+void ImgurTalker::slotOauthAuthorized()
 {
     bool success = m_auth.linked();
 
     if (success)
         startWorkTimer();
     else
-        emit busy(false);
+        emit signalBusy(false);
 
     emit signalAuthorized(success, m_auth.extraTokens()[QLatin1String("account_username")].toString());
 }
 
-void ImgurTalker::oauthRequestPin(const QUrl& url)
+void ImgurTalker::slotOauthRequestPin(const QUrl& url)
 {
-    emit busy(false);
-    emit requestPin(url);
+    emit signalBusy(false);
+    emit signalRequestPin(url);
 }
 
-void ImgurTalker::oauthFailed()
+void ImgurTalker::slotOauthFailed()
 {
     cancelAllWork();
     emit signalAuthError(i18n("Could not authorize"));
 }
 
-void ImgurTalker::uploadProgress(qint64 sent, qint64 total)
+void ImgurTalker::slotUploadProgress(qint64 sent, qint64 total)
 {
     // Don't divide by 0
     if (total > 0)
     {
-        emit progress((sent * 100) / total, m_work_queue.front());
+        emit signalProgress((sent * 100) / total, m_work_queue.front());
     }
 }
 
-void ImgurTalker::replyFinished()
+void ImgurTalker::slotReplyFinished()
 {
     auto* reply = m_reply;
     reply->deleteLater();
@@ -210,14 +210,14 @@ void ImgurTalker::replyFinished()
                 break;
         }
 
-        emit success(result);
+        emit signalSuccess(result);
     }
     else
     {
         if (code == 403)
         {
             /* HTTP 403 Forbidden -> Invalid token? 
-             * That needs to be handled internally, so don't emit progress
+             * That needs to be handled internally, so don't emit signalProgress
              * and keep the action in the queue for later retries.
              */
             m_auth.refresh();
@@ -230,7 +230,7 @@ void ImgurTalker::replyFinished()
                        .toObject()[QLatin1String("error")]
                        .toString(QLatin1String("Could not read response."));
 
-            emit error(msg, m_work_queue.front());
+            emit signalError(msg, m_work_queue.front());
         }
     }
 
@@ -258,11 +258,11 @@ void ImgurTalker::startWorkTimer()
     if (!m_work_queue.empty() && m_work_timer == 0)
     {
         m_work_timer = QObject::startTimer(0);
-        emit busy(true);
+        emit signalBusy(true);
     }
     else
     {
-        emit busy(false);
+        emit signalBusy(false);
     }
 }
 
@@ -322,7 +322,7 @@ void ImgurTalker::doWork()
                 this->m_image = nullptr;
 
                 // Failed.
-                emit error(i18n("Could not open file"), m_work_queue.front());
+                emit signalError(i18n("Could not open file"), m_work_queue.front());
 
                 m_work_queue.pop();
                 return doWork();
@@ -366,10 +366,10 @@ void ImgurTalker::doWork()
     if (this->m_reply)
     {
         connect(m_reply, &QNetworkReply::uploadProgress,
-                this, &ImgurTalker::uploadProgress);
+                this, &ImgurTalker::slotUploadProgress);
 
         connect(m_reply, &QNetworkReply::finished,
-                this, &ImgurTalker::replyFinished);
+                this, &ImgurTalker::slotReplyFinished);
     }
 }
 

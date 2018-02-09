@@ -64,19 +64,19 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     connect(api, &ImgurTalker::signalAuthError,
             this, &ImgurWindow::slotApiAuthError);
 
-    connect(api, &ImgurTalker::progress,
+    connect(api, &ImgurTalker::signalProgress,
             this, &ImgurWindow::slotApiProgress);
 
-    connect(api, &ImgurTalker::requestPin,
+    connect(api, &ImgurTalker::signalRequestPin,
             this, &ImgurWindow::slotApiRequestPin);
 
-    connect(api, &ImgurTalker::success,
+    connect(api, &ImgurTalker::signalSuccess,
             this, &ImgurWindow::slotApiSuccess);
 
-    connect(api, &ImgurTalker::error,
+    connect(api, &ImgurTalker::signalError,
             this, &ImgurWindow::slotApiError);
 
-    connect(api, &ImgurTalker::busy,
+    connect(api, &ImgurTalker::signalBusy,
             this, &ImgurWindow::slotApiBusy);
 
     // | List | Auth |

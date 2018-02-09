@@ -133,36 +133,36 @@ Q_SIGNALS:
     /* Open url in a browser and let the user copy the pin.
      * Call setPin(pin) to authorize.
      */
-    void requestPin(const QUrl& url);
+    void signalRequestPin(const QUrl& url);
 
     /* Emitted on progress changes.
      */
-    void progress(unsigned int percent, const ImgurTalkerAction& action);
-    void success(const ImgurTalkerResult& result);
-    void error(const QString& msg, const ImgurTalkerAction& action);
+    void signalProgress(unsigned int percent, const ImgurTalkerAction& action);
+    void signalSuccess(const ImgurTalkerResult& result);
+    void signalError(const QString& msg, const ImgurTalkerAction& action);
 
     /* Emitted when the status changes.
      */
-    void busy(bool b);
+    void signalBusy(bool b);
 
 public Q_SLOTS:
 
     /* Connected to O2 linkedChanged().
      */
-    void oauthAuthorized();
+    void slotOauthAuthorized();
 
     /* Connected to O2 openBrowser(QUrl).
      */
-    void oauthRequestPin(const QUrl& url);
+    void slotOauthRequestPin(const QUrl& url);
 
     /* Connected to O2 linkingFailed().
      */
-    void oauthFailed();
+    void slotOauthFailed();
 
     /* Connected to the current QNetworkReply.
      */
-    void uploadProgress(qint64 sent, qint64 total);
-    void replyFinished();
+    void slotUploadProgress(qint64 sent, qint64 total);
+    void slotReplyFinished();
 
 protected:
 
