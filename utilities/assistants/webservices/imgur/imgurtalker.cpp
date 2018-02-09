@@ -128,7 +128,7 @@ void ImgurTalker::oauthAuthorized()
     else
         emit busy(false);
 
-    emit authorized(success, m_auth.extraTokens()[QLatin1String("account_username")].toString());
+    emit signalAuthorized(success, m_auth.extraTokens()[QLatin1String("account_username")].toString());
 }
 
 void ImgurTalker::oauthRequestPin(const QUrl& url)
@@ -140,7 +140,7 @@ void ImgurTalker::oauthRequestPin(const QUrl& url)
 void ImgurTalker::oauthFailed()
 {
     cancelAllWork();
-    emit authError(i18n("Could not authorize"));
+    emit signalAuthError(i18n("Could not authorize"));
 }
 
 void ImgurTalker::uploadProgress(qint64 sent, qint64 total)
@@ -297,7 +297,7 @@ void ImgurTalker::doWork()
     if (work.type != ImgurTalkerActionType::ANON_IMG_UPLOAD && !m_auth.linked())
     {
         m_auth.link();
-        return; // Wait for the authorized() signal.
+        return; // Wait for the signalAuthorized() signal.
     }
 
     switch(work.type)

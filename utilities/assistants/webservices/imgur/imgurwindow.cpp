@@ -58,10 +58,10 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
                           QString::fromLatin1(IMGUR_CLIENT_SECRET), this);
 
     // Connect API signals
-    connect(api, &ImgurTalker::authorized,
+    connect(api, &ImgurTalker::signalAuthorized,
             this, &ImgurWindow::slotApiAuthorized);
 
-    connect(api, &ImgurTalker::authError,
+    connect(api, &ImgurTalker::signalAuthError,
             this, &ImgurWindow::slotApiAuthError);
 
     connect(api, &ImgurTalker::progress,

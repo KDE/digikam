@@ -127,8 +127,8 @@ Q_SIGNALS:
 
     /* Called if authentication state changes.
      */
-    void authorized(bool success, const QString& username);
-    void authError(const QString& msg);
+    void signalAuthorized(bool success, const QString& username);
+    void signalAuthError(const QString& msg);
 
     /* Open url in a browser and let the user copy the pin.
      * Call setPin(pin) to authorize.
