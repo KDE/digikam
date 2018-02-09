@@ -53,7 +53,7 @@ ImgurImagesList::ImgurImagesList(QWidget* const parent)
     setAllowDuplicate(false);
     setAllowRAW(false);
 
-    auto* list = listView();
+    auto* const list = listView();
 
     list->setColumnLabel(DImagesListView::Thumbnail, i18n("Thumbnail"));
 
@@ -126,11 +126,16 @@ void ImgurImagesList::slotSuccess(const ImgurTalkerResult& result)
     // Save URLs to meta data, if possible
     if (meta.load(imgurl.toLocalFile()))
     {
-        meta.setXmpTagString("Xmp.digiKam.ImgurId",         result.image.url);
-        meta.setXmpTagString("Xmp.digiKam.ImgurDeleteHash", ImgurTalker::urlForDeletehash(result.image.deletehash).toString());
+        meta.setXmpTagString("Xmp.digiKam.ImgurId",
+                             result.image.url);
+        meta.setXmpTagString("Xmp.digiKam.ImgurDeleteHash",
+                             ImgurTalker::urlForDeletehash(result.image.deletehash).toString());
         meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
         bool saved = meta.applyChanges();
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Metadata" << (saved ? "Saved" : "Not Saved") << "to" << imgurl;
+
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Metadata"
+                                         << (saved ? "Saved" : "Not Saved")
+                                         << "to" << imgurl;
     }
 
     ImgurImageListViewItem* const currItem = dynamic_cast<ImgurImageListViewItem*>(listView()->findItem(imgurl));
@@ -162,7 +167,7 @@ ImgurImageListViewItem::ImgurImageListViewItem(DImagesListView* const view, cons
 {
     const QColor blue(50, 50, 255);
 
-    setTextColor(ImgurImagesList::URL, blue);
+    setTextColor(ImgurImagesList::URL,       blue);
     setTextColor(ImgurImagesList::DeleteURL, blue);
 }
 

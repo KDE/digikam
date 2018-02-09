@@ -7,7 +7,7 @@
  * Description : a tool to export images to Imgur web service
  *
  * Copyright (C) 2010-2012 by Marius Orcsik <marius at habarnam dot ro>
- * Copyright (C) 2016 by Fabian Vogt <fabian at ritter dash vogt dot de>
+ * Copyright (C) 2016      by Fabian Vogt <fabian at ritter dash vogt dot de>
  * Copyright (C) 2013-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -45,8 +45,8 @@
 #include "dinfointerface.h"
 #include "digikam_version.h"
 
-static const constexpr char *IMGUR_CLIENT_ID("bd2572bce74b73d"),
-                            *IMGUR_CLIENT_SECRET("300988683e99cb7b203a5889cf71de9ac891c1c1");
+static const constexpr char* IMGUR_CLIENT_ID("bd2572bce74b73d");
+static const constexpr char* IMGUR_CLIENT_SECRET("300988683e99cb7b203a5889cf71de9ac891c1c1");
 
 namespace Digikam
 {
@@ -55,7 +55,7 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : WSToolDialog(0)
 {
     api = new ImgurTalker(QString::fromLatin1(IMGUR_CLIENT_ID),
-                        QString::fromLatin1(IMGUR_CLIENT_SECRET), this);
+                          QString::fromLatin1(IMGUR_CLIENT_SECRET), this);
 
     // Connect API signals
     connect(api, &ImgurTalker::authorized,
@@ -79,32 +79,33 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     connect(api, &ImgurTalker::busy,
             this, &ImgurWindow::apiBusy);
 
-    /* | List | Auth | */
+    // | List | Auth |
     auto* mainLayout = new QHBoxLayout;
     auto* mainWidget = new QWidget(this);
     mainWidget->setLayout(mainLayout);
     this->setMainWidget(mainWidget);
 
-    this->list = new ImgurImagesList;
+    this->list       = new ImgurImagesList;
     list->setIface(iface);
     list->loadImagesFromCurrentSelection();
     mainLayout->addWidget(list);
 
     /* |  Logged in as:  |
      * | <Not logged in> |
-     * |     Forget      | */
-
-    auto* userLabelLabel = new QLabel(i18n("Logged in as:"));
+     * |     Forget      |
+     */
+    auto* const userLabelLabel = new QLabel(i18n("Logged in as:"));
     userLabelLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     userLabelLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
-    this->userLabel = new QLabel; /* Label set in readSettings() */
+    // Label set in readSettings().
+    this->userLabel            = new QLabel; 
     userLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     userLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
-    forgetButton = new QPushButton(i18n("Forget"));
+    forgetButton           = new QPushButton(i18n("Forget"));
 
-    auto* authLayout = new QVBoxLayout;
+    auto* const authLayout = new QVBoxLayout;
     mainLayout->addLayout(authLayout);
     authLayout->addWidget(userLabelLabel);
     authLayout->addWidget(userLabel);
@@ -112,7 +113,7 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     authLayout->insertStretch(-1, 1);
 
     // Add anonymous upload button
-    uploadAnonButton = new QPushButton(i18n("Upload Anonymously"));
+    uploadAnonButton       = new QPushButton(i18n("Upload Anonymously"));
     addButton(uploadAnonButton, QDialogButtonBox::ApplyRole);
 
     // Connect UI signals
@@ -173,9 +174,9 @@ void ImgurWindow::slotUpload()
     for (auto item : pending)
     {
         ImgurTalkerAction action;
-        action.type = ImgurTalkerActionType::IMG_UPLOAD;
-        action.upload.imgpath = item->url().toLocalFile();
-        action.upload.title = item->Title();
+        action.type               = ImgurTalkerActionType::IMG_UPLOAD;
+        action.upload.imgpath     = item->url().toLocalFile();
+        action.upload.title       = item->Title();
         action.upload.description = item->Description();
 
         api->queueWork(action);
@@ -189,9 +190,9 @@ void ImgurWindow::slotAnonUpload()
     for (auto item : pending)
     {
         ImgurTalkerAction action;
-        action.type = ImgurTalkerActionType::ANON_IMG_UPLOAD;
-        action.upload.imgpath = item->url().toLocalFile();
-        action.upload.title = item->Title();
+        action.type               = ImgurTalkerActionType::ANON_IMG_UPLOAD;
+        action.upload.imgpath     = item->url().toLocalFile();
+        action.upload.title       = item->Title();
         action.upload.description = item->Description();
 
         api->queueWork(action);
@@ -287,7 +288,7 @@ void ImgurWindow::readSettings()
 {
     KConfig config;
     KConfigGroup groupAuth = config.group("Imgur Auth");
-    username = groupAuth.readEntry("username", QString());
+    username               = groupAuth.readEntry("username", QString());
     apiAuthorized(!username.isEmpty(), username);
 
     winId();
@@ -299,7 +300,7 @@ void ImgurWindow::readSettings()
 void ImgurWindow::saveSettings()
 {
     KConfig config;
-    KConfigGroup groupAuth = config.group("Imgur Auth");
+    KConfigGroup groupAuth   = config.group("Imgur Auth");
     groupAuth.writeEntry("username", username);
 
     KConfigGroup groupDialog = config.group("Imgur Dialog");

@@ -6,7 +6,7 @@
  * Date        : 2016-05-27
  * Description : Implementation of v3 of the Imgur API
  *
- * Copyright (C) 2016 by Fabian Vogt <fabian at ritter dash vogt dot de>
+ * Copyright (C) 2016      by Fabian Vogt <fabian at ritter dash vogt dot de>
  * Copyright (C) 2016-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -111,15 +111,17 @@ public:
                          QObject* const parent = nullptr);
     ~ImgurTalker();
 
+public:
+
     /* Use this method to read/write the access and refresh tokens.
      */
     O2& getAuth();
 
     unsigned int workQueueLength();
-    void queueWork(const ImgurTalkerAction& action);
-    void cancelAllWork();
+    void         queueWork(const ImgurTalkerAction& action);
+    void         cancelAllWork();
 
-    static QUrl urlForDeletehash(const QString& deletehash);
+    static QUrl  urlForDeletehash(const QString& deletehash);
 
 Q_SIGNALS:
 
@@ -145,15 +147,15 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    /* Connected to m_auth.linkedChanged().
+    /* Connected to O2 linkedChanged().
      */
     void oauthAuthorized();
 
-    /* Connected to m_auth.openBrowser(QUrl).
+    /* Connected to O2 openBrowser(QUrl).
      */
     void oauthRequestPin(const QUrl& url);
 
-    /* Connected to m_auth.linkingFailed().
+    /* Connected to O2 linkingFailed().
      */
     void oauthFailed();
 
@@ -211,7 +213,7 @@ private:
      */
     QFile*                        m_image = nullptr;
 
-    /* The QNetworkAccessManager instance used for connections
+    /* The QNetworkAccessManager instance used for connections.
      */
     QNetworkAccessManager         m_net;
 };

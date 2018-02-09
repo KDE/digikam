@@ -51,6 +51,8 @@ public:
     explicit ImgurWindow(DInfoInterface* const iface, QWidget* const parent = 0);
     ~ImgurWindow();
 
+public:
+
     void reactivate();
 
     void setItemsList(const QList<QUrl>& urls);
@@ -82,15 +84,13 @@ private:
 
 private:
 
-    ImgurImagesList* list = nullptr;
-    ImgurTalker*     api  = nullptr;
-    QPushButton*     forgetButton = nullptr;
+    ImgurImagesList* list             = nullptr;
+    ImgurTalker*     api              = nullptr;
+    QPushButton*     forgetButton     = nullptr;
     QPushButton*     uploadAnonButton = nullptr;
-    QLabel*          userLabel = nullptr;
+    QLabel*          userLabel        = nullptr;
 
-    /* Contains the imgur username if API authorized.
-     * If not, username is null.
-     */
+    // Contains the imgur username if API authorized, else is null.
     QString          username;
 };
 
