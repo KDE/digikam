@@ -51,31 +51,69 @@ static const QString imgur_auth_url       = QLatin1String("https://api.imgur.com
 imgur_token_url                           = QLatin1String("https://api.imgur.com/oauth2/token");
 static const uint16_t imgur_redirect_port = 8000; // Redirect URI is http://127.0.0.1:8000
 
-ImgurTalker::ImgurTalker(const QString& client_id,
-                     const QString& client_secret,
-                     QObject* const parent)
-    : QObject(parent)
+class ImgurTalker::Private
 {
-    m_auth.setClientId(client_id);
-    m_auth.setClientSecret(client_secret);
-    m_auth.setRequestUrl(imgur_auth_url);
-    m_auth.setTokenUrl(imgur_token_url);
-    m_auth.setRefreshTokenUrl(imgur_token_url);
-    m_auth.setLocalPort(imgur_redirect_port);
-    m_auth.setLocalhostPolicy(QString());
+public:
+
+    Private()
+    {
+        workTimer = 0;
+        reply     = 0;
+        image     = 0;
+    }
+
+    /* Handler for OAuth 2 related requests.
+     */
+    O2                            auth;
+
+    /* Work queue.
+     */
+    std::queue<ImgurTalkerAction> workQueue;
+
+    /* ID of timer triggering on idle (0ms).
+     */
+    int                           workTimer;
+
+    /* Current QNetworkReply instance.
+     */
+    QNetworkReply*                reply;
+
+    /* Current image being uploaded.
+     */
+    QFile*                        image;
+
+    /* The QNetworkAccessManager instance used for connections.
+     */
+    QNetworkAccessManager         net;
+};
+
+ImgurTalker::ImgurTalker(const QString& client_id,
+                         const QString& client_secret,
+                         QObject* const parent)
+    : QObject(parent),
+      d(new Private)
+{
+    d->auth.setClientId(client_id);
+    d->auth.setClientSecret(client_secret);
+    d->auth.setRequestUrl(imgur_auth_url);
+    d->auth.setTokenUrl(imgur_token_url);
+    d->auth.setRefreshTokenUrl(imgur_token_url);
+    d->auth.setLocalPort(imgur_redirect_port);
+    d->auth.setLocalhostPolicy(QString());
 
     QSettings* const settings    = WSToolUtils::getOauthSettings(this);
-    O0SettingsStore* const store = new O0SettingsStore(settings, QLatin1String(O2_ENCRYPTION_KEY), this);
+    O0SettingsStore* const store = new O0SettingsStore(settings,
+                                                       QLatin1String(O2_ENCRYPTION_KEY), this);
     store->setGroupKey(QLatin1String("Imgur"));
-    m_auth.setStore(store);
+    d->auth.setStore(store);
 
-    connect(&m_auth, &O2::linkedChanged,
+    connect(&d->auth, &O2::linkedChanged,
             this, &ImgurTalker::slotOauthAuthorized);
 
-    connect(&m_auth, &O2::openBrowser,
+    connect(&d->auth, &O2::openBrowser,
             this, &ImgurTalker::slotOauthRequestPin);
 
-    connect(&m_auth, &O2::linkingFailed,
+    connect(&d->auth, &O2::linkingFailed,
             this, &ImgurTalker::slotOauthFailed);
 }
 
@@ -84,21 +122,23 @@ ImgurTalker::~ImgurTalker()
     // Disconnect all signals as cancelAllWork may emit.
     disconnect(this, 0, 0, 0);
     cancelAllWork();
+
+    delete d;
 }
 
 O2& ImgurTalker::getAuth()
 {
-    return m_auth;
+    return d->auth;
 }
 
 unsigned int ImgurTalker::workQueueLength()
 {
-    return m_work_queue.size();
+    return d->workQueue.size();
 }
 
 void ImgurTalker::queueWork(const ImgurTalkerAction& action)
 {
-    m_work_queue.push(action);
+    d->workQueue.push(action);
     startWorkTimer();
 }
 
@@ -106,12 +146,12 @@ void ImgurTalker::cancelAllWork()
 {
     stopWorkTimer();
 
-    if (m_reply)
-        m_reply->abort();
+    if (d->reply)
+        d->reply->abort();
 
     // Should signalError be emitted for those actions?
-    while (!m_work_queue.empty())
-        m_work_queue.pop();
+    while (!d->workQueue.empty())
+        d->workQueue.pop();
 }
 
 QUrl ImgurTalker::urlForDeletehash(const QString& deletehash)
@@ -121,14 +161,15 @@ QUrl ImgurTalker::urlForDeletehash(const QString& deletehash)
 
 void ImgurTalker::slotOauthAuthorized()
 {
-    bool success = m_auth.linked();
+    bool success = d->auth.linked();
 
     if (success)
         startWorkTimer();
     else
         emit signalBusy(false);
 
-    emit signalAuthorized(success, m_auth.extraTokens()[QLatin1String("account_username")].toString());
+    emit signalAuthorized(success,
+                          d->auth.extraTokens()[QLatin1String("account_username")].toString());
 }
 
 void ImgurTalker::slotOauthRequestPin(const QUrl& url)
@@ -148,23 +189,23 @@ void ImgurTalker::slotUploadProgress(qint64 sent, qint64 total)
     // Don't divide by 0
     if (total > 0)
     {
-        emit signalProgress((sent * 100) / total, m_work_queue.front());
+        emit signalProgress((sent * 100) / total, d->workQueue.front());
     }
 }
 
 void ImgurTalker::slotReplyFinished()
 {
-    auto* reply = m_reply;
+    auto* const reply = d->reply;
     reply->deleteLater();
-    m_reply     = nullptr;
+    d->reply          = nullptr;
 
-    if (this->m_image)
+    if (this->d->image)
     {
-        delete this->m_image;
-        this->m_image = nullptr;
+        delete this->d->image;
+        this->d->image = nullptr;
     }
 
-    if (m_work_queue.empty())
+    if (d->workQueue.empty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received result without request";
         return;
@@ -178,27 +219,27 @@ void ImgurTalker::slotReplyFinished()
     {
         // Success!
         ImgurTalkerResult result;
-        result.action = &m_work_queue.front();
+        result.action = &d->workQueue.front();
         auto data = response.object()[QLatin1String("data")].toObject();
 
         switch (result.action->type)
         {
             case ImgurTalkerActionType::IMG_UPLOAD:
             case ImgurTalkerActionType::ANON_IMG_UPLOAD:
-                result.image.animated = data[QLatin1String("animated")].toBool();
-                result.image.bandwidth = data[QLatin1String("bandwidth")].toInt();
-                result.image.datetime = data[QLatin1String("datetime")].toInt();
-                result.image.deletehash = data[QLatin1String("deletehash")].toString();
+                result.image.animated    = data[QLatin1String("animated")].toBool();
+                result.image.bandwidth   = data[QLatin1String("bandwidth")].toInt();
+                result.image.datetime    = data[QLatin1String("datetime")].toInt();
+                result.image.deletehash  = data[QLatin1String("deletehash")].toString();
                 result.image.description = data[QLatin1String("description")].toString();
-                result.image.height = data[QLatin1String("height")].toInt();
-                result.image.hash = data[QLatin1String("id")].toString();
-                result.image.name = data[QLatin1String("name")].toString();
-                result.image.size = data[QLatin1String("size")].toInt();
-                result.image.title = data[QLatin1String("title")].toString();
-                result.image.type = data[QLatin1String("type")].toString();
-                result.image.url = data[QLatin1String("link")].toString();
-                result.image.views = data[QLatin1String("views")].toInt();
-                result.image.width = data[QLatin1String("width")].toInt();
+                result.image.height      = data[QLatin1String("height")].toInt();
+                result.image.hash        = data[QLatin1String("id")].toString();
+                result.image.name        = data[QLatin1String("name")].toString();
+                result.image.size        = data[QLatin1String("size")].toInt();
+                result.image.title       = data[QLatin1String("title")].toString();
+                result.image.type        = data[QLatin1String("type")].toString();
+                result.image.url         = data[QLatin1String("link")].toString();
+                result.image.views       = data[QLatin1String("views")].toInt();
+                result.image.width       = data[QLatin1String("width")].toInt();
                 break;
             case ImgurTalkerActionType::ACCT_INFO:
                 result.account.username = data[QLatin1String("url")].toString();
@@ -220,7 +261,7 @@ void ImgurTalker::slotReplyFinished()
              * That needs to be handled internally, so don't emit signalProgress
              * and keep the action in the queue for later retries.
              */
-            m_auth.refresh();
+            d->auth.refresh();
             return;
         }
         else
@@ -230,34 +271,34 @@ void ImgurTalker::slotReplyFinished()
                        .toObject()[QLatin1String("error")]
                        .toString(QLatin1String("Could not read response."));
 
-            emit signalError(msg, m_work_queue.front());
+            emit signalError(msg, d->workQueue.front());
         }
     }
 
     // Next work item.
-    m_work_queue.pop();
+    d->workQueue.pop();
     startWorkTimer();
 }
 
 void ImgurTalker::timerEvent(QTimerEvent* event)
 {
-    if (event->timerId() != m_work_timer)
+    if (event->timerId() != d->workTimer)
         return QObject::timerEvent(event);
 
     event->accept();
 
     // One-shot only.
     QObject::killTimer(event->timerId());
-    m_work_timer = 0;
+    d->workTimer = 0;
 
     doWork();
 }
 
 void ImgurTalker::startWorkTimer()
 {
-    if (!m_work_queue.empty() && m_work_timer == 0)
+    if (!d->workQueue.empty() && d->workTimer == 0)
     {
-        m_work_timer = QObject::startTimer(0);
+        d->workTimer = QObject::startTimer(0);
         emit signalBusy(true);
     }
     else
@@ -268,35 +309,35 @@ void ImgurTalker::startWorkTimer()
 
 void ImgurTalker::stopWorkTimer()
 {
-    if (m_work_timer != 0)
+    if (d->workTimer != 0)
     {
-        QObject::killTimer(m_work_timer);
-        m_work_timer = 0;
+        QObject::killTimer(d->workTimer);
+        d->workTimer = 0;
     }
 }
 
 void ImgurTalker::addAuthToken(QNetworkRequest* request)
 {
     request->setRawHeader(QByteArray("Authorization"),
-                          QString::fromLatin1("Bearer %1").arg(m_auth.token()).toUtf8());
+                          QString::fromLatin1("Bearer %1").arg(d->auth.token()).toUtf8());
 }
 
 void ImgurTalker::addAnonToken(QNetworkRequest* request)
 {
     request->setRawHeader(QByteArray("Authorization"),
-                          QString::fromLatin1("Client-ID %1").arg(m_auth.clientId()).toUtf8());
+                          QString::fromLatin1("Client-ID %1").arg(d->auth.clientId()).toUtf8());
 }
 
 void ImgurTalker::doWork()
 {
-    if (m_work_queue.empty() || m_reply != nullptr)
+    if (d->workQueue.empty() || d->reply != nullptr)
         return;
 
-    auto &work = m_work_queue.front();
+    auto &work = d->workQueue.front();
 
-    if (work.type != ImgurTalkerActionType::ANON_IMG_UPLOAD && !m_auth.linked())
+    if (work.type != ImgurTalkerActionType::ANON_IMG_UPLOAD && !d->auth.linked())
     {
-        m_auth.link();
+        d->auth.link();
         return; // Wait for the signalAuthorized() signal.
     }
 
@@ -308,28 +349,28 @@ void ImgurTalker::doWork()
                                         .arg(QLatin1String(work.account.username.toUtf8().toPercentEncoding()))));
             addAuthToken(&request);
 
-            this->m_reply = m_net.get(request);
+            this->d->reply = d->net.get(request);
             break;
         }
         case ImgurTalkerActionType::ANON_IMG_UPLOAD:
         case ImgurTalkerActionType::IMG_UPLOAD:
         {
-            this->m_image = new QFile(work.upload.imgpath);
+            this->d->image = new QFile(work.upload.imgpath);
 
-            if (!m_image->open(QIODevice::ReadOnly))
+            if (!d->image->open(QIODevice::ReadOnly))
             {
-                delete this->m_image;
-                this->m_image = nullptr;
+                delete this->d->image;
+                this->d->image = nullptr;
 
                 // Failed.
-                emit signalError(i18n("Could not open file"), m_work_queue.front());
+                emit signalError(i18n("Could not open file"), d->workQueue.front());
 
-                m_work_queue.pop();
+                d->workQueue.pop();
                 return doWork();
             }
 
-            // Set ownership to m_image to delete that as well.
-            auto* multipart = new QHttpMultiPart(QHttpMultiPart::FormDataType, m_image);
+            // Set ownership to d->image to delete that as well.
+            auto* multipart = new QHttpMultiPart(QHttpMultiPart::FormDataType, d->image);
             QHttpPart title;
             title.setHeader(QNetworkRequest::ContentDispositionHeader,
                             QLatin1String("form-data; name=\"title\""));
@@ -347,7 +388,7 @@ void ImgurTalker::doWork()
                             QVariant(QString::fromLatin1("form-data; name=\"image\"; filename=\"%1\"")
                             .arg(QLatin1String(QFileInfo(work.upload.imgpath).fileName().toUtf8().toPercentEncoding()))));
             image.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
-            image.setBodyDevice(this->m_image);
+            image.setBodyDevice(this->d->image);
             multipart->append(image);
 
             QNetworkRequest request(QUrl(QLatin1String("https://api.imgur.com/3/image")));
@@ -357,18 +398,18 @@ void ImgurTalker::doWork()
             else
                 addAnonToken(&request);
 
-            this->m_reply = this->m_net.post(request, multipart);
+            this->d->reply = this->d->net.post(request, multipart);
 
             break;
         }
     }
 
-    if (this->m_reply)
+    if (this->d->reply)
     {
-        connect(m_reply, &QNetworkReply::uploadProgress,
+        connect(d->reply, &QNetworkReply::uploadProgress,
                 this, &ImgurTalker::slotUploadProgress);
 
-        connect(m_reply, &QNetworkReply::finished,
+        connect(d->reply, &QNetworkReply::finished,
                 this, &ImgurTalker::slotReplyFinished);
     }
 }

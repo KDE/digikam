@@ -193,29 +193,8 @@ private:
 
 private:
 
-    /* Handler for OAuth 2 related requests.
-     */
-    O2                            m_auth;
-
-    /* Work queue.
-     */
-    std::queue<ImgurTalkerAction> m_work_queue;
-
-    /* ID of timer triggering on idle (0ms).
-     */
-    int                           m_work_timer = 0;
-
-    /* Current QNetworkReply instance.
-     */
-    QNetworkReply*                m_reply = nullptr;
-
-    /* Current image being uploaded.
-     */
-    QFile*                        m_image = nullptr;
-
-    /* The QNetworkAccessManager instance used for connections.
-     */
-    QNetworkAccessManager         m_net;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
