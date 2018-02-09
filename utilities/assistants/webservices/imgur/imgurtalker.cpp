@@ -199,10 +199,10 @@ void ImgurTalker::slotReplyFinished()
     reply->deleteLater();
     d->reply          = nullptr;
 
-    if (this->d->image)
+    if (d->image)
     {
-        delete this->d->image;
-        this->d->image = nullptr;
+        delete d->image;
+        d->image = nullptr;
     }
 
     if (d->workQueue.empty())
@@ -220,7 +220,7 @@ void ImgurTalker::slotReplyFinished()
         // Success!
         ImgurTalkerResult result;
         result.action = &d->workQueue.front();
-        auto data = response.object()[QLatin1String("data")].toObject();
+        auto data     = response.object()[QLatin1String("data")].toObject();
 
         switch (result.action->type)
         {
@@ -349,18 +349,18 @@ void ImgurTalker::doWork()
                                         .arg(QLatin1String(work.account.username.toUtf8().toPercentEncoding()))));
             addAuthToken(&request);
 
-            this->d->reply = d->net.get(request);
+            d->reply = d->net.get(request);
             break;
         }
         case ImgurTalkerActionType::ANON_IMG_UPLOAD:
         case ImgurTalkerActionType::IMG_UPLOAD:
         {
-            this->d->image = new QFile(work.upload.imgpath);
+            d->image = new QFile(work.upload.imgpath);
 
             if (!d->image->open(QIODevice::ReadOnly))
             {
-                delete this->d->image;
-                this->d->image = nullptr;
+                delete d->image;
+                d->image = nullptr;
 
                 // Failed.
                 emit signalError(i18n("Could not open file"), d->workQueue.front());
@@ -388,7 +388,7 @@ void ImgurTalker::doWork()
                             QVariant(QString::fromLatin1("form-data; name=\"image\"; filename=\"%1\"")
                             .arg(QLatin1String(QFileInfo(work.upload.imgpath).fileName().toUtf8().toPercentEncoding()))));
             image.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
-            image.setBodyDevice(this->d->image);
+            image.setBodyDevice(d->image);
             multipart->append(image);
 
             QNetworkRequest request(QUrl(QLatin1String("https://api.imgur.com/3/image")));
@@ -398,13 +398,13 @@ void ImgurTalker::doWork()
             else
                 addAnonToken(&request);
 
-            this->d->reply = this->d->net.post(request, multipart);
+            d->reply = d->net.post(request, multipart);
 
             break;
         }
     }
 
-    if (this->d->reply)
+    if (d->reply)
     {
         connect(d->reply, &QNetworkReply::uploadProgress,
                 this, &ImgurTalker::slotUploadProgress);

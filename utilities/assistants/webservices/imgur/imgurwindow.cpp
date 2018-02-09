@@ -51,44 +51,68 @@ static const constexpr char* IMGUR_CLIENT_SECRET("300988683e99cb7b203a5889cf71de
 namespace Digikam
 {
 
-ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
-    : WSToolDialog(0)
+class ImgurWindow::Private
 {
-    api = new ImgurTalker(QString::fromLatin1(IMGUR_CLIENT_ID),
-                          QString::fromLatin1(IMGUR_CLIENT_SECRET), this);
+public:
+
+    Private()
+    {
+        list             = 0;
+        api              = 0;
+        forgetButton     = 0;
+        uploadAnonButton = 0;
+        userLabel        = 0;
+    }
+
+    ImgurImagesList* list             = nullptr;
+    ImgurTalker*     api              = nullptr;
+    QPushButton*     forgetButton     = nullptr;
+    QPushButton*     uploadAnonButton = nullptr;
+    QLabel*          userLabel        = nullptr;
+
+    // Contains the imgur username if API authorized, else is null.
+    QString          username;
+};
+
+ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
+    : WSToolDialog(0),
+      d(new Private)
+{
+    d->api = new ImgurTalker(QString::fromLatin1(IMGUR_CLIENT_ID),
+                             QString::fromLatin1(IMGUR_CLIENT_SECRET), this);
 
     // Connect API signals
-    connect(api, &ImgurTalker::signalAuthorized,
+    connect(d->api, &ImgurTalker::signalAuthorized,
             this, &ImgurWindow::slotApiAuthorized);
 
-    connect(api, &ImgurTalker::signalAuthError,
+    connect(d->api, &ImgurTalker::signalAuthError,
             this, &ImgurWindow::slotApiAuthError);
 
-    connect(api, &ImgurTalker::signalProgress,
+    connect(d->api, &ImgurTalker::signalProgress,
             this, &ImgurWindow::slotApiProgress);
 
-    connect(api, &ImgurTalker::signalRequestPin,
+    connect(d->api, &ImgurTalker::signalRequestPin,
             this, &ImgurWindow::slotApiRequestPin);
 
-    connect(api, &ImgurTalker::signalSuccess,
+    connect(d->api, &ImgurTalker::signalSuccess,
             this, &ImgurWindow::slotApiSuccess);
 
-    connect(api, &ImgurTalker::signalError,
+    connect(d->api, &ImgurTalker::signalError,
             this, &ImgurWindow::slotApiError);
 
-    connect(api, &ImgurTalker::signalBusy,
+    connect(d->api, &ImgurTalker::signalBusy,
             this, &ImgurWindow::slotApiBusy);
 
     // | List | Auth |
-    auto* mainLayout = new QHBoxLayout;
-    auto* mainWidget = new QWidget(this);
+    auto* const mainLayout = new QHBoxLayout;
+    auto* const mainWidget = new QWidget(this);
     mainWidget->setLayout(mainLayout);
     this->setMainWidget(mainWidget);
 
-    this->list       = new ImgurImagesList;
-    list->setIface(iface);
-    list->loadImagesFromCurrentSelection();
-    mainLayout->addWidget(list);
+    d->list                = new ImgurImagesList;
+    d->list->setIface(iface);
+    d->list->loadImagesFromCurrentSelection();
+    mainLayout->addWidget(d->list);
 
     /* |  Logged in as:  |
      * | <Not logged in> |
@@ -99,31 +123,31 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     userLabelLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
     // Label set in readSettings().
-    this->userLabel            = new QLabel; 
-    userLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    userLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    d->userLabel               = new QLabel; 
+    d->userLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    d->userLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
-    forgetButton           = new QPushButton(i18n("Forget"));
+    d->forgetButton            = new QPushButton(i18n("Forget"));
 
     auto* const authLayout = new QVBoxLayout;
     mainLayout->addLayout(authLayout);
     authLayout->addWidget(userLabelLabel);
-    authLayout->addWidget(userLabel);
-    authLayout->addWidget(forgetButton);
+    authLayout->addWidget(d->userLabel);
+    authLayout->addWidget(d->forgetButton);
     authLayout->insertStretch(-1, 1);
 
     // Add anonymous upload button
-    uploadAnonButton       = new QPushButton(i18n("Upload Anonymously"));
-    addButton(uploadAnonButton, QDialogButtonBox::ApplyRole);
+    d->uploadAnonButton    = new QPushButton(i18n("Upload Anonymously"));
+    addButton(d->uploadAnonButton, QDialogButtonBox::ApplyRole);
 
     // Connect UI signals
-    connect(forgetButton, &QPushButton::clicked,
+    connect(d->forgetButton, &QPushButton::clicked,
             this, &ImgurWindow::slotForgetButtonClicked);
 
     connect(startButton(), &QPushButton::clicked,
             this, &ImgurWindow::slotUpload);
 
-    connect(uploadAnonButton, &QPushButton::clicked,
+    connect(d->uploadAnonButton, &QPushButton::clicked,
             this, &ImgurWindow::slotAnonUpload);
 
     connect(this, &ImgurWindow::finished,
@@ -147,29 +171,30 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
 ImgurWindow::~ImgurWindow()
 {
     saveSettings();
+    delete d;
 }
 
 void ImgurWindow::setItemsList(const QList<QUrl>& urls)
 {
-    this->list->slotAddImages(urls);
+    d->list->slotAddImages(urls);
 }
 
 void ImgurWindow::reactivate()
 {
-    list->loadImagesFromCurrentSelection();
+    d->list->loadImagesFromCurrentSelection();
     show();
 }
 
 void ImgurWindow::slotForgetButtonClicked()
 {
-    api->getAuth().unlink();
+    d->api->getAuth().unlink();
 
     slotApiAuthorized(false, {});
 }
 
 void ImgurWindow::slotUpload()
 {
-    QList<const ImgurImageListViewItem*> pending = this->list->getPendingItems();
+    QList<const ImgurImageListViewItem*> pending = d->list->getPendingItems();
 
     for (auto item : pending)
     {
@@ -179,13 +204,13 @@ void ImgurWindow::slotUpload()
         action.upload.title       = item->Title();
         action.upload.description = item->Description();
 
-        api->queueWork(action);
+        d->api->queueWork(action);
     }
 }
 
 void ImgurWindow::slotAnonUpload()
 {
-    QList<const ImgurImageListViewItem*> pending = this->list->getPendingItems();
+    QList<const ImgurImageListViewItem*> pending = d->list->getPendingItems();
 
     for (auto item : pending)
     {
@@ -195,7 +220,7 @@ void ImgurWindow::slotAnonUpload()
         action.upload.title       = item->Title();
         action.upload.description = item->Description();
 
-        api->queueWork(action);
+        d->api->queueWork(action);
     }
 }
 
@@ -206,22 +231,22 @@ void ImgurWindow::slotFinished()
 
 void ImgurWindow::slotCancel()
 {
-    api->cancelAllWork();
+    d->api->cancelAllWork();
 }
 
 void ImgurWindow::slotApiAuthorized(bool success, const QString& username)
 {
     if (success)
     {
-        this->username = username;
-        this->userLabel->setText(this->username);
-        this->forgetButton->setEnabled(true);
+        d->username = username;
+        d->userLabel->setText(d->username);
+        d->forgetButton->setEnabled(true);
         return;
     }
 
-    this->username = QString();
-    this->userLabel->setText(i18n("<Not logged in>"));
-    this->forgetButton->setEnabled(false);
+    d->username = QString();
+    d->userLabel->setText(i18n("<Not logged in>"));
+    d->forgetButton->setEnabled(false);
 }
 
 void ImgurWindow::slotApiAuthError(const QString& msg)
@@ -233,7 +258,7 @@ void ImgurWindow::slotApiAuthError(const QString& msg)
 
 void ImgurWindow::slotApiProgress(unsigned int /*percent*/, const ImgurTalkerAction& action)
 {
-    list->processing(QUrl::fromLocalFile(action.upload.imgpath));
+    d->list->processing(QUrl::fromLocalFile(action.upload.imgpath));
 }
 
 void ImgurWindow::slotApiRequestPin(const QUrl& url)
@@ -243,15 +268,15 @@ void ImgurWindow::slotApiRequestPin(const QUrl& url)
 
 void ImgurWindow::slotApiSuccess(const ImgurTalkerResult& result)
 {
-    list->slotSuccess(result);
+    d->list->slotSuccess(result);
 }
 
 void ImgurWindow::slotApiError(const QString& msg, const ImgurTalkerAction& action)
 {
-    list->processed(QUrl::fromLocalFile(action.upload.imgpath), false);
+    d->list->processed(QUrl::fromLocalFile(action.upload.imgpath), false);
 
-    /* 1 here because the current item is still in the queue. */
-    if (api->workQueueLength() <= 1)
+    // 1 here because the current item is still in the queue.
+    if (d->api->workQueueLength() <= 1)
     {
         QMessageBox::critical(this,
                               i18n("Uploading Failed"),
@@ -266,7 +291,7 @@ void ImgurWindow::slotApiError(const QString& msg, const ImgurTalkerAction& acti
                                        "Do you want to continue?", msg));
 
     if (cont != QMessageBox::Yes)
-        api->cancelAllWork();
+        d->api->cancelAllWork();
 }
 
 void ImgurWindow::slotApiBusy(bool busy)
@@ -288,8 +313,8 @@ void ImgurWindow::readSettings()
 {
     KConfig config;
     KConfigGroup groupAuth = config.group("Imgur Auth");
-    username               = groupAuth.readEntry("username", QString());
-    slotApiAuthorized(!username.isEmpty(), username);
+    d->username            = groupAuth.readEntry("username", QString());
+    slotApiAuthorized(!d->username.isEmpty(), d->username);
 
     winId();
     KConfigGroup groupDialog = config.group("Imgur Dialog");
@@ -301,7 +326,7 @@ void ImgurWindow::saveSettings()
 {
     KConfig config;
     KConfigGroup groupAuth   = config.group("Imgur Auth");
-    groupAuth.writeEntry("username", username);
+    groupAuth.writeEntry("username", d->username);
 
     KConfigGroup groupDialog = config.group("Imgur Dialog");
     KWindowConfig::saveWindowSize(windowHandle(), groupDialog);

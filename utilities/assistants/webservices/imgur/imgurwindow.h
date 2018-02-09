@@ -83,15 +83,9 @@ private:
     void saveSettings();
 
 private:
-
-    ImgurImagesList* list             = nullptr;
-    ImgurTalker*     api              = nullptr;
-    QPushButton*     forgetButton     = nullptr;
-    QPushButton*     uploadAnonButton = nullptr;
-    QLabel*          userLabel        = nullptr;
-
-    // Contains the imgur username if API authorized, else is null.
-    QString          username;
+   
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
