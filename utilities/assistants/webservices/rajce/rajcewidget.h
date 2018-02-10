@@ -94,31 +94,31 @@ private:
 
 private:
 
-    QLabel*                    m_headerLbl;
-    QLabel*                    m_userNameLbl;
-    QLabel*                    m_userName;
+    QLabel*                  m_headerLbl;
+    QLabel*                  m_userNameLbl;
+    QLabel*                  m_userName;
 
-    QSpinBox*                  m_dimensionSpB;
-    QSpinBox*                  m_imageQualitySpB;
+    QSpinBox*                m_dimensionSpB;
+    QSpinBox*                m_imageQualitySpB;
 
-    QComboBox*                 m_albumsCoB;
+    QComboBox*               m_albumsCoB;
 
-    QPushButton*               m_newAlbumBtn;
-    QPushButton*               m_reloadAlbumsBtn;
-    QPushButton*               m_changeUserBtn;
+    QPushButton*             m_newAlbumBtn;
+    QPushButton*             m_reloadAlbumsBtn;
+    QPushButton*             m_changeUserBtn;
 
-    DInfoInterface*            m_iface;
-    DImagesList*               m_imgList;
-    DProgressWdg*              m_progressBar;
+    DInfoInterface*          m_iface;
+    DImagesList*             m_imgList;
+    DProgressWdg*            m_progressBar;
 
-    RajceTalker*               m_talker;
+    RajceTalker*             m_talker;
 
-    QList<QString>             m_uploadQueue;
-    QList<QString>::Iterator   m_currentUploadImage;
+    QList<QString>           m_uploadQueue;
+    QList<QString>::Iterator m_currentUploadImage;
 
-    bool                       m_uploadingPhotos;
-    bool                       m_lastLoggedInState;
-    QString                    m_currentAlbumName;
+    bool                     m_uploadingPhotos;
+    bool                     m_lastLoggedInState;
+    QString                  m_currentAlbumName;
 };
 
 } // namespace Digikam
