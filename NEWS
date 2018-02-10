@@ -24,4 +24,5 @@ BUGFIXES FROM BUGZILLA:
 014 ==> 388345 - AppImage MySQL connection issues.
 015 ==> 389827 - Ignores albums selection.
 016 ==> 389835 - Incorrect DateTime manipulation if timestamp is before unix epoch time.
-017 ==> 
+017 ==> 390121 - Thumbnail size is too small.
+018 ==> 
