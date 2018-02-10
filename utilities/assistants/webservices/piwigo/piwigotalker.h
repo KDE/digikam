@@ -139,30 +139,10 @@ private Q_SLOTS:
 
 private:
 
-    QWidget*               m_parent;
-    State                  m_state;
-    QString                m_cookie;
-    QUrl                   m_url;
-    QNetworkAccessManager* m_netMngr;
-    QNetworkReply*         m_reply;
-    bool                   m_loggedIn;
-    QByteArray             m_talker_buffer;
-    uint                   m_chunkId;
-    uint                   m_nbOfChunks;
-    int                    m_version;
-
-    QByteArray             m_md5sum;
-    QString                m_path;
-    QString                m_tmpPath;    // If set, contains a temporary file which must be deleted
-    int                    m_albumId;
-    int                    m_photoId;    // Filled when the photo already exist
-    QString                m_comment;    // Synchronized with Piwigo comment
-    QString                m_title;      // Synchronized with Piwigo name
-    QString                m_author;     // Synchronized with Piwigo author
-    QDateTime              m_date;       // Synchronized with Piwigo date
-    DInfoInterface*        m_iface;
-
-    static QString         s_authToken;
+    class Private;
+    Private* const d;
+    
+    static QString s_authToken;
 };
 
 } // namespace Digikam
