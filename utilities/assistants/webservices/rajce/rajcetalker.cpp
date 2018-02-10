@@ -26,6 +26,10 @@
 // Qt includes
 
 #include <QWidget>
+#include <QMutex>
+#include <QQueue>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
 #include <QCryptographicHash>
 #include <QXmlResultItems>
 #include <QXmlQuery>
@@ -53,8 +57,8 @@ struct PreparedImage
     QString thumbPath;
 };
 
-PreparedImage _prepareImageForUpload(const QString& saveDir, const QImage& img, const QString& imagePath,
-                                     unsigned maxDimension, unsigned thumbDimension, int jpgQuality)
+PreparedImage s_prepareImageForUpload(const QString& saveDir, const QImage& img, const QString& imagePath,
+                                      unsigned maxDimension, unsigned thumbDimension, int jpgQuality)
 {
     PreparedImage ret;
 
@@ -652,7 +656,7 @@ QByteArray AddPhotoCommand::encode() const
         return QByteArray();
     }
 
-    PreparedImage prepared                      = _prepareImageForUpload(m_tmpDir,
+    PreparedImage prepared                      = s_prepareImageForUpload(m_tmpDir,
                                                                          m_image,
                                                                          m_imagePath,
                                                                          m_desiredDimension,

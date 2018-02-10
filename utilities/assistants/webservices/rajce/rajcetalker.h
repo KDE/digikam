@@ -27,16 +27,14 @@
 // Qt includes
 
 #include <QObject>
-#include <QMutex>
-#include <QQueue>
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
+#include <QString>
 
 // Local includes
 
 #include "rajcesession.h"
 
 class QWidget;
+class QNetworkReply;
 
 namespace Digikam
 {
