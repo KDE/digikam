@@ -31,7 +31,6 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "rajcealbum.h"
 
 namespace Digikam
@@ -81,134 +80,46 @@ public:
     explicit RajceSession();
     ~RajceSession();
 
+    /** Copy constructor.
+     */
+    RajceSession(const RajceSession& other);
+
+    /** Create a copy of container
+     */
+    RajceSession& operator=(const RajceSession& other);
+    
 public:
 
-    inline QString& sessionToken()
-    {
-        return m_sessionToken;
-    }
+    QString& sessionToken();
+    QString const& sessionToken() const;
+    QString& nickname();
+    QString const& nickname() const;
+    QString& username();
+    QString const& username() const;
+    QString& openAlbumToken();
+    QString const& openAlbumToken() const;
+    QString& lastErrorMessage();
+    QString const& lastErrorMessage() const;
 
-    inline QString const& sessionToken() const
-    {
-        return m_sessionToken;
-    }
+    unsigned& maxWidth();
+    unsigned maxWidth() const;
+    unsigned& maxHeight();
+    unsigned maxHeight() const;
+    unsigned& imageQuality();
+    unsigned imageQuality() const;
+    unsigned& lastErrorCode();
+    unsigned lastErrorCode() const;
 
-    inline QString& nickname()
-    {
-        return m_nickname;
-    }
-
-    inline QString const& nickname() const
-    {
-        return m_nickname;
-    }
-
-    inline QString& username()
-    {
-        return m_username;
-    }
-
-    inline QString const& username() const
-    {
-        return m_username;
-    }
-
-    inline QString& openAlbumToken()
-    {
-        return m_albumToken;
-    }
-
-    inline QString const& openAlbumToken() const
-    {
-        return m_albumToken;
-    }
-
-    inline QString& lastErrorMessage()
-    {
-        return m_lastErrorMessage;
-    }
-
-    inline QString const& lastErrorMessage() const
-    {
-        return m_lastErrorMessage;
-    }
-
-    inline unsigned& maxWidth()
-    {
-        return m_maxWidth;
-    }
-
-    inline unsigned maxWidth() const
-    {
-        return m_maxWidth;
-    }
-
-    inline unsigned& maxHeight()
-    {
-        return m_maxHeight;
-    }
-
-    inline unsigned maxHeight() const
-    {
-        return m_maxHeight;
-    }
-
-    inline unsigned& imageQuality()
-    {
-        return m_imageQuality;
-    }
-
-    inline unsigned imageQuality() const
-    {
-        return m_imageQuality;
-    }
-
-    inline unsigned& lastErrorCode()
-    {
-        return m_lastErrorCode;
-    }
-
-    inline unsigned lastErrorCode() const
-    {
-        return m_lastErrorCode;
-    }
-
-    inline QVector<RajceAlbum>& albums()
-    {
-        return m_albums;
-    }
-
-    inline const QVector<RajceAlbum>& albums() const
-    {
-        return m_albums;
-    }
-
-    inline RajceCommandType lastCommand() const
-    {
-        return m_lastCommand;
-    }
-
-    inline RajceCommandType& lastCommand()
-    {
-        return m_lastCommand;
-    }
-
+    QVector<RajceAlbum>& albums();
+    const QVector<RajceAlbum>& albums() const;
+    
+    RajceCommandType lastCommand() const;
+    RajceCommandType& lastCommand();
+    
 private:
 
-    unsigned            m_maxWidth;
-    unsigned            m_maxHeight;
-    unsigned            m_imageQuality;
-    unsigned            m_lastErrorCode;
-
-    QString             m_sessionToken;
-    QString             m_nickname;
-    QString             m_username;
-    QString             m_albumToken;
-    QString             m_lastErrorMessage;
-
-    QVector<RajceAlbum> m_albums;
-
-    RajceCommandType    m_lastCommand;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

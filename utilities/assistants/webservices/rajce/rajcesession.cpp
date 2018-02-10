@@ -23,20 +23,172 @@
 
 #include "rajcesession.h"
 
+// Local includes
+
+#include "digikam_debug.h"
+
 namespace Digikam
 {
 
+class RajceSession::Private
+{
+public:
+
+    Private()
+    {
+        maxWidth      = 0;
+        maxHeight     = 0;
+        imageQuality  = 0;
+        lastErrorCode = 0;
+        lastCommand   = Logout;
+    }
+
+    unsigned            maxWidth;
+    unsigned            maxHeight;
+    unsigned            imageQuality;
+    unsigned            lastErrorCode;
+
+    QString             sessionToken;
+    QString             nickname;
+    QString             username;
+    QString             albumToken;
+    QString             lastErrorMessage;
+
+    QVector<RajceAlbum> albums;
+
+    RajceCommandType    lastCommand;
+};
+
 RajceSession::RajceSession()
-    : m_maxWidth(0),
-      m_maxHeight(0),
-      m_imageQuality(0),
-      m_lastErrorCode(0),
-      m_lastCommand(Logout)
+    : d(new Private)
 {
 }
 
 RajceSession::~RajceSession()
 {
+    delete d;
+}
+
+RajceSession::RajceSession(const RajceSession& other)
+    : d(other.d)
+{
+}
+
+RajceSession& RajceSession::operator=(const RajceSession& other)
+{
+    *d = *other.d;
+
+    return *this;
+}
+
+QString& RajceSession::sessionToken()
+{
+    return d->sessionToken;
+}
+
+QString const& RajceSession::sessionToken() const
+{
+    return d->sessionToken;
+}
+
+QString& RajceSession::nickname()
+{
+    return d->nickname;
+}
+
+QString const& RajceSession::nickname() const
+{
+    return d->nickname;
+}
+
+QString& RajceSession::username()
+{
+    return d->username;
+}
+
+QString const& RajceSession::username() const
+{
+    return d->username;
+}
+
+QString& RajceSession::openAlbumToken()
+{
+    return d->albumToken;
+}
+
+QString const& RajceSession::openAlbumToken() const
+{
+    return d->albumToken;
+}
+
+QString& RajceSession::lastErrorMessage()
+{
+    return d->lastErrorMessage;
+}
+
+QString const& RajceSession::lastErrorMessage() const
+{
+    return d->lastErrorMessage;
+}
+
+unsigned& RajceSession::maxWidth()
+{
+    return d->maxWidth;
+}
+
+unsigned RajceSession::maxWidth() const
+{
+    return d->maxWidth;
+}
+
+unsigned& RajceSession::maxHeight()
+{
+    return d->maxHeight;
+}
+
+unsigned RajceSession::maxHeight() const
+{
+    return d->maxHeight;
+}
+
+unsigned& RajceSession::imageQuality()
+{
+    return d->imageQuality;
+}
+
+unsigned RajceSession::imageQuality() const
+{
+    return d->imageQuality;
+}
+
+unsigned& RajceSession::lastErrorCode()
+{
+    return d->lastErrorCode;
+}
+
+unsigned RajceSession::lastErrorCode() const
+{
+    return d->lastErrorCode;
+}
+
+QVector<RajceAlbum>& RajceSession::albums()
+{
+    return d->albums;
+}
+
+const QVector<RajceAlbum>& RajceSession::albums() const
+{
+    return d->albums;
+}
+
+RajceCommandType RajceSession::lastCommand() const
+{
+    return d->lastCommand;
+}
+
+RajceCommandType& RajceSession::lastCommand()
+{
+    return d->lastCommand;
 }
 
 } // namespace Digikam
