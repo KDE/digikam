@@ -55,11 +55,8 @@ private Q_SLOTS:
 
 private:
 
-    QLineEdit*     mpUrlEdit;
-    QLineEdit*     mpUsernameEdit;
-    QLineEdit*     mpPasswordEdit;
-
-    PiwigoSession* mpPiwigo;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -18,7 +18,7 @@
  * either version 2, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY; without even the id->plied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
@@ -47,12 +47,32 @@
 namespace Digikam
 {
 
+class PiwigoLoginDlg::Private
+{
+public:
+
+    Private()
+    {
+        pUrlEdit      = 0;
+        pUsernameEdit = 0;
+        pPasswordEdit = 0;
+        pPiwigo       = 0;
+    }
+
+    QLineEdit*     pUrlEdit;
+    QLineEdit*     pUsernameEdit;
+    QLineEdit*     pPasswordEdit;
+
+    PiwigoSession* pPiwigo;
+};
+
 PiwigoLoginDlg::PiwigoLoginDlg(QWidget* const pParent,
                                PiwigoSession* const pPiwigo,
                                const QString& title)
-    : QDialog(pParent, Qt::Dialog)
+    : QDialog(pParent, Qt::Dialog),
+      d(new Private)
 {
-    mpPiwigo = pPiwigo;
+    d->pPiwigo = pPiwigo;
 
     setWindowTitle(title);
 
@@ -60,15 +80,15 @@ PiwigoLoginDlg::PiwigoLoginDlg(QWidget* const pParent,
     QGridLayout* const centerLayout = new QGridLayout();
     page->setMinimumSize(500, 128);
 
-    mpUrlEdit      = new QLineEdit(this);
-    centerLayout->addWidget(mpUrlEdit, 1, 1);
+    d->pUrlEdit      = new QLineEdit(this);
+    centerLayout->addWidget(d->pUrlEdit, 1, 1);
 
-    mpUsernameEdit = new QLineEdit(this);
-    centerLayout->addWidget(mpUsernameEdit, 2, 1);
+    d->pUsernameEdit = new QLineEdit(this);
+    centerLayout->addWidget(d->pUsernameEdit, 2, 1);
 
-    mpPasswordEdit = new QLineEdit(this);
-    mpPasswordEdit->setEchoMode(QLineEdit::Password);
-    centerLayout->addWidget(mpPasswordEdit, 3, 1);
+    d->pPasswordEdit = new QLineEdit(this);
+    d->pPasswordEdit->setEchoMode(QLineEdit::Password);
+    centerLayout->addWidget(d->pPasswordEdit, 3, 1);
 
     QLabel* const urlLabel = new QLabel(this);
     urlLabel->setText(i18nc("piwigo login settings", "URL:"));
@@ -89,9 +109,9 @@ PiwigoLoginDlg::PiwigoLoginDlg(QWidget* const pParent,
     resize(QSize(300, 150).expandedTo(minimumSizeHint()));
 
     // setting initial data
-    mpUrlEdit->setText(pPiwigo->url());
-    mpUsernameEdit->setText(pPiwigo->username());
-    mpPasswordEdit->setText(pPiwigo->password());
+    d->pUrlEdit->setText(pPiwigo->url());
+    d->pUsernameEdit->setText(pPiwigo->username());
+    d->pPasswordEdit->setText(pPiwigo->password());
 
     //---------------------------------------------
 
@@ -112,20 +132,21 @@ PiwigoLoginDlg::PiwigoLoginDlg(QWidget* const pParent,
 
 PiwigoLoginDlg::~PiwigoLoginDlg()
 {
+    delete d;
 }
 
 void PiwigoLoginDlg::slotOk()
 {
-    if (mpUrlEdit->isModified())
-        mpPiwigo->setUrl(mpUrlEdit->text());
+    if (d->pUrlEdit->isModified())
+        d->pPiwigo->setUrl(d->pUrlEdit->text());
 
-    if (mpUsernameEdit->isModified())
-        mpPiwigo->setUsername(mpUsernameEdit->text());
+    if (d->pUsernameEdit->isModified())
+        d->pPiwigo->setUsername(d->pUsernameEdit->text());
 
-    if (mpPasswordEdit->isModified())
-        mpPiwigo->setPassword(mpPasswordEdit->text());
+    if (d->pPasswordEdit->isModified())
+        d->pPiwigo->setPassword(d->pPasswordEdit->text());
 
-    mpPiwigo->save();
+    d->pPiwigo->save();
     accept();
 }
 
