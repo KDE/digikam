@@ -31,7 +31,6 @@
 
 #include <QString>
 #include <QDialog>
-#include <QLineEdit>
 
 namespace Digikam
 {

@@ -43,43 +43,58 @@
 namespace Digikam
 {
 
+class PiwigoSession::Private
+{
+public:
+
+    Private()
+    {
+    }
+
+    QString url;
+    QString username;
+    QString password;
+};
+
 PiwigoSession::PiwigoSession()
+    : d(new Private)
 {
     load();
 }
 
 PiwigoSession::~PiwigoSession()
 {
+    delete d;
 }
 
 QString PiwigoSession::url() const
 {
-    return m_url;
+    return d->url;
 }
 
 QString PiwigoSession::username() const
 {
-    return m_username;
+    return d->username;
 }
 
 QString PiwigoSession::password() const
 {
-    return m_password;
+    return d->password;
 }
 
 void PiwigoSession::setUrl(const QString& url)
 {
-    m_url = url;
+    d->url = url;
 }
 
 void PiwigoSession::setUsername(const QString& username)
 {
-    m_username = username;
+    d->username = username;
 }
 
 void PiwigoSession::setPassword(const QString& password)
 {
-    m_password = password;
+    d->password = password;
 }
 
 void PiwigoSession::load()
@@ -96,9 +111,9 @@ void PiwigoSession::load()
     KConfig config;
     KConfigGroup group = config.group("Piwigo Settings");
 
-    m_url      = group.readEntry("URL",      QString());
-    m_username = group.readEntry("Username", QString());
-    m_password = group.readEntry("Password", QString());
+    d->url      = group.readEntry("URL",      QString());
+    d->username = group.readEntry("Username", QString());
+    d->password = group.readEntry("Password", QString());
 }
 
 void PiwigoSession::save()
@@ -110,7 +125,6 @@ void PiwigoSession::save()
     group.writeEntry(QString::fromUtf8("Username"), username());
     group.writeEntry(QString::fromUtf8("Password"), password());
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "syncing..";
     config.sync();
 }
 

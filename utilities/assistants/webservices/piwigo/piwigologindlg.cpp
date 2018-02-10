@@ -32,6 +32,7 @@
 #include <QFrame>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QLineEdit>
 #include <QDialogButtonBox>
 
 // KDE includes

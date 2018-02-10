@@ -62,9 +62,8 @@ private:
 
 private:
 
-    QString m_url;
-    QString m_username;
-    QString m_password;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
