@@ -150,6 +150,7 @@ set(libwsfacebook_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/facebook/fbnewalbumdlg.cpp
 
 set(libwsrajce_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcenewalbumdlg.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcempform.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcecommand.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcetalker.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcesession.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/rajce/rajcealbum.cpp
