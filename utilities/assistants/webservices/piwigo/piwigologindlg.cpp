@@ -95,10 +95,11 @@ PiwigoLoginDlg::PiwigoLoginDlg(QWidget* const pParent,
 
     //---------------------------------------------
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox* const buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |
+                                                             QDialogButtonBox::Cancel);
     buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
 
-    QVBoxLayout* dialogLayout = new QVBoxLayout(this);
+    QVBoxLayout* const dialogLayout   = new QVBoxLayout(this);
     dialogLayout->addWidget(page);
     dialogLayout->addWidget(buttonBox);
 

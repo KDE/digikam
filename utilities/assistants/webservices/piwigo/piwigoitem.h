@@ -40,26 +40,26 @@ public:
 
     explicit PiwigoAlbum()
     {
-        ref_num        = -1;
-        parent_ref_num = -1;
+        m_refNum       = -1;
+        m_parentRefNum = -1;
     }
 
     bool operator<(const PiwigoAlbum& rhs) const
     {
-        if (parent_ref_num == rhs.parent_ref_num)
+        if (m_parentRefNum == rhs.m_parentRefNum)
         {
-            return ref_num < rhs.ref_num;
+            return m_refNum < rhs.m_refNum;
         }
 
-        return parent_ref_num < rhs.parent_ref_num;
+        return m_parentRefNum < rhs.m_parentRefNum;
     }
 
 public:
 
-    int     ref_num;         // album reference number
-    int     parent_ref_num;  // parent's album reference number
+    int     m_refNum;         // album reference number
+    int     m_parentRefNum;   // parent's album reference number
 
-    QString name;            // Album name
+    QString m_name;           // Album name
 };
 
 } // namespace Digikam

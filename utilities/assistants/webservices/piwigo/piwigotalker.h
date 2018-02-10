@@ -80,10 +80,7 @@ public:
                           QWidget* const parent);
     ~PiwigoTalker();
 
-    static QString getAuthToken()
-    {
-        return s_authToken;
-    };
+public:
 
     bool loggedIn() const;
 
@@ -91,20 +88,23 @@ public:
     void listAlbums();
     void listPhotos(const QString& albumName);
 
-    /* TODO Implement this function
+/* TODO Implement this function
     void createAlbum(const QString& parentAlbumName,
                      const QString& albumName,
                      const QString& albumTitle,
-                     const QString& albumCaption);*/
+                     const QString& albumCaption);
+*/
 
-    bool addPhoto(int albumId,
+    bool addPhoto(int   albumId,
                   const QString& photoPath,
                   bool  rescale = false,
-                  int maxWidth = 1600,
-                  int maxHeight = 1600,
-                  int quality = 95);
+                  int   maxWidth = 1600,
+                  int   maxHeight = 1600,
+                  int   quality = 95);
 
     void cancel();
+
+    static QString getAuthToken();
 
 Q_SIGNALS:
 

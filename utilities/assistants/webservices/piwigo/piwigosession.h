@@ -42,6 +42,8 @@ public:
     explicit PiwigoSession();
     ~PiwigoSession();
 
+public:
+
     QString url()      const;
     QString username() const;
     QString password() const;

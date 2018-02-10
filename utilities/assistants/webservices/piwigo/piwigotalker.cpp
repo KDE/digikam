@@ -91,6 +91,11 @@ void PiwigoTalker::cancel()
     }
 }
 
+QString PiwigoTalker::getAuthToken()
+{
+    return s_authToken;
+}
+
 QByteArray PiwigoTalker::computeMD5Sum(const QString& filepath)
 {
     QFile file(filepath);
@@ -514,18 +519,18 @@ void PiwigoTalker::parseResponseListAlbums(const QByteArray& data)
             if (ts.name() == QString::fromLatin1("category"))
             {
                 PiwigoAlbum album;
-                album.ref_num = ts.attributes().value(QString::fromLatin1("id")).toString().toInt();
-                album.parent_ref_num = -1;
+                album.m_refNum = ts.attributes().value(QString::fromLatin1("id")).toString().toInt();
+                album.m_parentRefNum = -1;
 
-                qCDebug(DIGIKAM_WEBSERVICES_LOG) << album.ref_num << "\n";
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << album.m_refNum << "\n";
 
                 iter = albumList.insert(iter, album);
             }
 
             if (ts.name() == QString::fromLatin1("name"))
             {
-                (*iter).name = ts.readElementText();
-                qCDebug(DIGIKAM_WEBSERVICES_LOG) << (*iter).name << "\n";
+                (*iter).m_name = ts.readElementText();
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << (*iter).m_name << "\n";
             }
 
             if (ts.name() == QString::fromLatin1("uppercats"))
@@ -533,10 +538,10 @@ void PiwigoTalker::parseResponseListAlbums(const QByteArray& data)
                 QString uppercats   = ts.readElementText();
                 QStringList catlist = uppercats.split(QLatin1Char(','));
 
-                if (catlist.size() > 1 && catlist.at(catlist.size() - 2).toInt() != (*iter).ref_num)
+                if (catlist.size() > 1 && catlist.at(catlist.size() - 2).toInt() != (*iter).m_refNum)
                 {
-                    (*iter).parent_ref_num = catlist.at(catlist.size() - 2).toInt();
-                    qCDebug(DIGIKAM_WEBSERVICES_LOG) << (*iter).parent_ref_num << "\n";
+                    (*iter).m_parentRefNum = catlist.at(catlist.size() - 2).toInt();
+                    qCDebug(DIGIKAM_WEBSERVICES_LOG) << (*iter).m_parentRefNum << "\n";
                 }
             }
         }

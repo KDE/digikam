@@ -85,7 +85,7 @@ public:
     QSpinBox*                      heightSpinBox;
     QSpinBox*                      qualitySpinBox;
 
-    QHash<QString, PiwigoAlbum>         albumDict;
+    QHash<QString, PiwigoAlbum>    albumDict;
 
     PiwigoTalker*                  talker;
     PiwigoSession*                 pPiwigo;
@@ -278,11 +278,10 @@ PiwigoWindow::~PiwigoWindow()
     KConfig config;
     KConfigGroup group = config.group("PiwigoSync Galleries");
 
-    group.writeEntry("Resize",          d->resizeCheckBox->isChecked());
-    group.writeEntry("Maximum Width",   d->widthSpinBox->value());
-    group.writeEntry("Maximum Height",  d->heightSpinBox->value());
-    group.writeEntry("Quality",         d->qualitySpinBox->value());
-    group.deleteEntry("Thumbnail Width"); // Old config, no longer used
+    group.writeEntry("Resize",         d->resizeCheckBox->isChecked());
+    group.writeEntry("Maximum Width",  d->widthSpinBox->value());
+    group.writeEntry("Maximum Height", d->heightSpinBox->value());
+    group.writeEntry("Quality",        d->qualitySpinBox->value());
 
     delete d->talker;
     delete d->pUploadList;
@@ -292,10 +291,10 @@ PiwigoWindow::~PiwigoWindow()
 void PiwigoWindow::connectSignals()
 {
     connect(d->albumView, SIGNAL(itemSelectionChanged()),
-            this , SLOT(slotAlbumSelected()) );
+            this, SLOT(slotAlbumSelected()));
 
     connect(d->confButton, SIGNAL(clicked()),
-             this, SLOT(slotSettings()) );
+            this, SLOT(slotSettings()));
 
     connect(d->resizeCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(slotEnableSpinBox(int)));
@@ -327,7 +326,6 @@ void PiwigoWindow::connectSignals()
 
 void PiwigoWindow::readSettings()
 {
-    // read Config
     KConfig config;
     KConfigGroup group = config.group("PiwigoSync Galleries");
 
@@ -346,7 +344,6 @@ void PiwigoWindow::readSettings()
 
     d->widthSpinBox->setValue(group.readEntry("Maximum Width", 1600));
     d->heightSpinBox->setValue(group.readEntry("Maximum Height", 1600));
-
     d->qualitySpinBox->setValue(group.readEntry("Quality", 95));
 }
 
@@ -381,7 +378,8 @@ void PiwigoWindow::slotLoginFailed(const QString& msg)
         return;
     }
 
-    QPointer<PiwigoLoginDlg> configDlg = new PiwigoLoginDlg(QApplication::activeWindow(), d->pPiwigo, i18n("Edit Piwigo Data") );
+    QPointer<PiwigoLoginDlg> configDlg = new PiwigoLoginDlg(QApplication::activeWindow(),
+                                                            d->pPiwigo, i18n("Edit Piwigo Data") );
 
     if ( configDlg->exec() != QDialog::Accepted )
     {
@@ -426,32 +424,32 @@ void PiwigoWindow::slotAlbums(const QList<PiwigoAlbum>& albumList)
 
     // album work list
     QList<PiwigoAlbum> workList(albumList);
-    QList<QTreeWidgetItem *> parentItemList;
+    QList<QTreeWidgetItem*> parentItemList;
 
     // fill QTreeWidget
     while ( !workList.isEmpty() )
     {
         // the album to work on
-        PiwigoAlbum album     = workList.takeFirst();
-        int parentRefNum = album.parent_ref_num;
+        PiwigoAlbum album = workList.takeFirst();
+        int parentRefNum  = album.m_parentRefNum;
 
         if ( parentRefNum == -1 )
         {
-            QTreeWidgetItem *item = new QTreeWidgetItem();
-            item->setText(0, cleanName(album.name) );
+            QTreeWidgetItem* const item = new QTreeWidgetItem();
+            item->setText(0, cleanName(album.m_name) );
             item->setIcon(0, QIcon::fromTheme(QString::fromLatin1("inode-directory")) );
-            item->setData(1, Qt::UserRole, QVariant(album.ref_num) );
+            item->setData(1, Qt::UserRole, QVariant(album.m_refNum) );
             item->setText(2, i18n("Album") );
 
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Top : " << album.name << " " << album.ref_num << "\n";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Top : " << album.m_name << " " << album.m_refNum << "\n";
 
             d->albumView->addTopLevelItem(item);
-            d->albumDict.insert(album.name, album);
+            d->albumDict.insert(album.m_name, album);
             parentItemList << item;
         }
         else
         {
-            QTreeWidgetItem *parentItem = 0;
+            QTreeWidgetItem* parentItem = 0;
             bool found                  = false;
             int i                       = 0;
 
@@ -461,14 +459,14 @@ void PiwigoWindow::slotAlbums(const QList<PiwigoAlbum>& albumList)
 
                 if (parentItem && (parentItem->data(1, Qt::UserRole).toInt() == parentRefNum))
                 {
-                    QTreeWidgetItem *item = new QTreeWidgetItem(parentItem);
-                    item->setText(0, cleanName(album.name) );
+                    QTreeWidgetItem* const item = new QTreeWidgetItem(parentItem);
+                    item->setText(0, cleanName(album.m_name) );
                     item->setIcon(0, QIcon::fromTheme(QString::fromLatin1("inode-directory")) );
-                    item->setData(1, Qt::UserRole, album.ref_num );
+                    item->setData(1, Qt::UserRole, album.m_refNum );
                     item->setText(2, i18n("Album") );
 
                     parentItem->addChild(item);
-                    d->albumDict.insert(album.name, album);
+                    d->albumDict.insert(album.m_name, album);
                     parentItemList << item;
                     found = true;
                 }
@@ -513,7 +511,7 @@ void PiwigoWindow::slotAddPhoto()
 {
     const QList<QUrl> urls(d->iface->currentSelectedItems());
 
-    if ( urls.isEmpty())
+    if (urls.isEmpty())
     {
         QMessageBox::critical(this, QString(),
                               i18n("Nothing to upload - please select photos to upload."));
@@ -545,21 +543,22 @@ void PiwigoWindow::slotAddPhotoNext()
     QTreeWidgetItem* const item = d->albumView->currentItem();
     int column                  = d->albumView->currentColumn();
     QString albumTitle          = item->text(column);
-    const PiwigoAlbum& album         = d->albumDict.value(albumTitle);
+    const PiwigoAlbum& album    = d->albumDict.value(albumTitle);
     QString photoPath           = d->pUploadList->takeFirst();
-    bool res                    = d->talker->addPhoto(album.ref_num, photoPath,
+    bool res                    = d->talker->addPhoto(album.m_refNum, photoPath,
                                                       d->resizeCheckBox->isChecked(),
                                                       d->widthSpinBox->value(),
                                                       d->heightSpinBox->value(),
-                                                      d->qualitySpinBox->value() );
+                                                      d->qualitySpinBox->value());
 
     if (!res)
     {
-        slotAddPhotoFailed( i18n("The file %1 is not a supported image or video format", QUrl(photoPath).fileName()) );
+        slotAddPhotoFailed(i18n("The file %1 is not a supported image or video format",
+                                QUrl(photoPath).fileName()) );
         return;
     }
 
-    d->progressDlg->setLabelText( i18n("Uploading file %1", QUrl(photoPath).fileName()) );
+    d->progressDlg->setLabelText(i18n("Uploading file %1", QUrl(photoPath).fileName()) );
 
     if (d->progressDlg->isHidden())
         d->progressDlg->show();
@@ -623,7 +622,8 @@ void PiwigoWindow::slotEnableSpinBox(int n)
 void PiwigoWindow::slotSettings()
 {
     // TODO: reload albumlist if OK slot used.
-    QPointer<PiwigoLoginDlg> dlg = new PiwigoLoginDlg(QApplication::activeWindow(), d->pPiwigo, i18n("Edit Piwigo Data") );
+    QPointer<PiwigoLoginDlg> dlg = new PiwigoLoginDlg(QApplication::activeWindow(),
+                                                      d->pPiwigo, i18n("Edit Piwigo Data") );
 
     if ( dlg->exec() == QDialog::Accepted )
     {
@@ -636,10 +636,10 @@ void PiwigoWindow::slotSettings()
 QString PiwigoWindow::cleanName(const QString& str) const
 {
     QString plain = str;
-    plain.replace(QString::fromLatin1("&lt;"), QString::fromLatin1("<"));
-    plain.replace(QString::fromLatin1("&gt;"), QString::fromLatin1(">"));
+    plain.replace(QString::fromLatin1("&lt;"),   QString::fromLatin1("<"));
+    plain.replace(QString::fromLatin1("&gt;"),   QString::fromLatin1(">"));
     plain.replace(QString::fromLatin1("&quot;"), QString::fromLatin1("\""));
-    plain.replace(QString::fromLatin1("&amp;"), QString::fromLatin1("&"));
+    plain.replace(QString::fromLatin1("&amp;"),  QString::fromLatin1("&"));
 
     return plain;
 }
