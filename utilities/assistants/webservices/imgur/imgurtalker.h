@@ -31,7 +31,6 @@
 
 // Qt includes
 
-#include <QNetworkAccessManager>
 #include <QString>
 #include <QFile>
 #include <QUrl>

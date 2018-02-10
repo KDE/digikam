@@ -31,6 +31,7 @@
 #include <QJsonObject>
 #include <QTimerEvent>
 #include <QUrlQuery>
+#include <QNetworkAccessManager>
 
 // KDE includes
 
