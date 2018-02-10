@@ -56,8 +56,7 @@ private Q_SLOTS:
 
 private:
 
-    RajceWidget*    m_widget;
-    DInfoInterface* m_iface;
+    RajceWidget* m_widget;
 };
 
 } // namespace Digikam

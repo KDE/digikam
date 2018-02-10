@@ -57,7 +57,7 @@ public:
 
 Q_SIGNALS:
 
-    void loginStatusChanged(bool loggedIn);
+    void signalLoginStatusChanged(bool loggedIn);
 
 public Q_SLOTS:
 
@@ -73,24 +73,24 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void changeUserClicked();
+    void slotChangeUserClicked();
 
-    void progressStarted(unsigned);
-    void progressFinished(unsigned);
-    void progressChange(unsigned, unsigned percent);
+    void slotProgressStarted(unsigned);
+    void slotProgressFinished(unsigned);
+    void slotProgressChanged(unsigned, unsigned percent);
 
-    void loadAlbums();
-    void createAlbum();
-    void closeAlbum();
+    void slotLoadAlbums();
+    void slotCreateAlbum();
+    void slotCloseAlbum();
 
-    void uploadNext();
+    void slotUploadNext();
 
-    void startUploadAfterAlbumOpened();
-    void selectedAlbumChanged(const QString&);
+    void slotStartUploadAfterAlbumOpened();
+    void slotSelectedAlbumChanged(const QString&);
 
 private:
 
-    void _setEnabled(bool);
+    void setEnabledWidgets(bool);
 
 private:
 

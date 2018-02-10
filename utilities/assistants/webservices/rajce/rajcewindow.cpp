@@ -43,8 +43,7 @@ namespace Digikam
 RajceWindow::RajceWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     : WSToolDialog(0)
 {
-    m_iface  = iface;
-    m_widget = new RajceWidget(m_iface, this);
+    m_widget = new RajceWidget(iface, this);
     m_widget->readSettings();
 
     setMainWidget(m_widget);
@@ -62,7 +61,7 @@ RajceWindow::RajceWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     connect(this, SIGNAL(finished(int)),
             this, SLOT(slotFinished()));
 
-    connect(m_widget, SIGNAL(loginStatusChanged(bool)),
+    connect(m_widget, SIGNAL(signalLoginStatusChanged(bool)),
             this, SLOT(slotSetUploadButtonEnabled(bool)));
 
     startButton()->setEnabled(false);
