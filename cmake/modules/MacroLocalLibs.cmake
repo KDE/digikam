@@ -67,14 +67,12 @@ macro(DETECT_LIBMEDIAWIKI MIN_VERSION)
             set(KF5MediaWiki_FOUND TRUE)
 
             # Create symbolic links to compile fine with client codes.
-            if(NOT WIN32)
-                execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
-                                ${CMAKE_SOURCE_DIR}/extra/libmediawiki/src/
-                                ${CMAKE_SOURCE_DIR}/extra/libmediawiki/MediaWiki)
-                execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
-                                ${CMAKE_BINARY_DIR}/extra/libmediawiki/src/
-                                ${CMAKE_BINARY_DIR}/extra/libmediawiki/MediaWiki)
-            endif()
+            execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+                            ${CMAKE_SOURCE_DIR}/extra/libmediawiki/src/
+                            ${CMAKE_SOURCE_DIR}/extra/libmediawiki/MediaWiki)
+            execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+                            ${CMAKE_BINARY_DIR}/extra/libmediawiki/src/
+                            ${CMAKE_BINARY_DIR}/extra/libmediawiki/MediaWiki)
 
         else()
             message(WARNING "libmediawiki : local library not found")
@@ -119,14 +117,12 @@ macro(DETECT_LIBKVKONTAKTE MIN_VERSION)
             set(KF5Vkontakte_FOUND TRUE)
 
             # Create symbolic links to compile fine with client codes.
-            if(NOT WIN32)
-                execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
-                                ${CMAKE_SOURCE_DIR}/extra/libkvkontakte/src/
-                                ${CMAKE_SOURCE_DIR}/extra/libkvkontakte/Vkontakte)
-                execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
-                                ${CMAKE_BINARY_DIR}/extra/libkvkontakte/src/
-                                ${CMAKE_BINARY_DIR}/extra/libkvkontakte/Vkontakte)
-            endif()
+            execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+                            ${CMAKE_SOURCE_DIR}/extra/libkvkontakte/src/
+                            ${CMAKE_SOURCE_DIR}/extra/libkvkontakte/Vkontakte)
+            execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+                            ${CMAKE_BINARY_DIR}/extra/libkvkontakte/src/
+                            ${CMAKE_BINARY_DIR}/extra/libkvkontakte/Vkontakte)
 
         else()
             message(WARNING "libkvkontakte : local library not found")
