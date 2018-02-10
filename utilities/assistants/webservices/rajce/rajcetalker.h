@@ -50,6 +50,9 @@ class RajceTalker : public QObject
 public:
 
     explicit RajceTalker(QWidget* const parent);
+    ~RajceTalker();
+
+public:
 
     void  init(const RajceSession& initialState);
     const RajceSession& session() const;
@@ -84,14 +87,8 @@ private:
 
 private:
 
-    QQueue<RajceCommand*>  m_commandQueue;
-    QMutex                 m_queueAccess;
-    QString                m_tmpDir;
-
-    QNetworkAccessManager* m_netMngr;
-    QNetworkReply*         m_reply;
-
-    RajceSession           m_session;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

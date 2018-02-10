@@ -685,24 +685,49 @@ QByteArray AddPhotoCommand::encode() const
     return ret;
 }
 
+// ---------------------------------------------------------------
 /// RajceTalker impl
+
+class RajceTalker::Private
+{
+public:
+
+    Private()
+      : queueAccess(QMutex::Recursive),
+        netMngr(0),
+        reply(0)
+    {
+    }
+
+    QQueue<RajceCommand*>  commandQueue;
+    QMutex                 queueAccess;
+    QString                tmpDir;
+
+    QNetworkAccessManager* netMngr;
+    QNetworkReply*         reply;
+
+    RajceSession           session;
+};
 
 RajceTalker::RajceTalker(QWidget* const parent)
     : QObject(parent),
-      m_queueAccess(QMutex::Recursive),
-      m_netMngr(0),
-      m_reply(0)
+      d(new Private)
 {
-    m_tmpDir  = WSToolUtils::makeTemporaryDir("rajce").absolutePath() + QLatin1Char('/');
-    m_netMngr = new QNetworkAccessManager(this);
+    d->tmpDir  = WSToolUtils::makeTemporaryDir("rajce").absolutePath() + QLatin1Char('/');
+    d->netMngr = new QNetworkAccessManager(this);
 
-    connect(m_netMngr, SIGNAL(finished(QNetworkReply*)),
+    connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
+}
+
+RajceTalker::~RajceTalker()
+{
+    delete d;
 }
 
 const RajceSession& RajceTalker::session() const
 {
-    return m_session;
+    return d->session;
 }
 
 void RajceTalker::startCommand(RajceCommand* const command)
@@ -714,9 +739,9 @@ void RajceTalker::startCommand(RajceCommand* const command)
     QNetworkRequest netRequest(RAJCE_URL);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, command->contentType());
 
-    m_reply = m_netMngr->post(netRequest, data);
+    d->reply = d->netMngr->post(netRequest, data);
 
-    connect(m_reply, SIGNAL(uploadProgress(qint64,qint64)),
+    connect(d->reply, SIGNAL(uploadProgress(qint64,qint64)),
             SLOT(slotUploadProgress(qint64,qint64)));
 
     emit signalBusyStarted(command->commandType());
@@ -730,19 +755,19 @@ void RajceTalker::login(const QString& username, const QString& password)
 
 void RajceTalker::loadAlbums()
 {
-    AlbumListCommand* const command = new AlbumListCommand(m_session);
+    AlbumListCommand* const command = new AlbumListCommand(d->session);
     enqueueCommand(command);
 }
 
 void RajceTalker::createAlbum(const QString& name, const QString& description, bool visible)
 {
-    CreateAlbumCommand* const command = new CreateAlbumCommand(name, description, visible, m_session);
+    CreateAlbumCommand* const command = new CreateAlbumCommand(name, description, visible, d->session);
     enqueueCommand(command);
 }
 
 void RajceTalker::slotFinished(QNetworkReply* reply)
 {
-    if (reply != m_reply)
+    if (reply != d->reply)
     {
         return;
     }
@@ -751,18 +776,18 @@ void RajceTalker::slotFinished(QNetworkReply* reply)
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << response;
 
-    m_queueAccess.lock();
+    d->queueAccess.lock();
 
-    RajceCommand* const c = m_commandQueue.head();
-    m_reply               = 0;
+    RajceCommand* const c = d->commandQueue.head();
+    d->reply              = 0;
 
-    c->processResponse(response, m_session);
+    c->processResponse(response, d->session);
 
     RajceCommandType type = c->commandType();
 
     delete c;
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "State after command: " << m_session;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "State after command: " << d->session;
 
     // Let the users react on the command before we
     // let the next queued command in.
@@ -779,15 +804,15 @@ void RajceTalker::slotFinished(QNetworkReply* reply)
     // method which would happen if the command was dequed
     // before the signal and the signal was emitted in the same
     // thread (which is the case (always?)).
-    m_commandQueue.dequeue();
+    d->commandQueue.dequeue();
 
     // see if there's something to continue with
-    if (m_commandQueue.size() > 0)
+    if (d->commandQueue.size() > 0)
     {
-        startCommand(m_commandQueue.head());
+        startCommand(d->commandQueue.head());
     }
 
-    m_queueAccess.unlock();
+    d->queueAccess.unlock();
 }
 
 void RajceTalker::logout()
@@ -797,15 +822,15 @@ void RajceTalker::logout()
 
 void RajceTalker::openAlbum(const RajceAlbum& album)
 {
-    OpenAlbumCommand* const command = new OpenAlbumCommand(album.id, m_session);
+    OpenAlbumCommand* const command = new OpenAlbumCommand(album.id, d->session);
     enqueueCommand(command);
 }
 
 void RajceTalker::closeAlbum()
 {
-    if (!m_session.openAlbumToken().isEmpty())
+    if (!d->session.openAlbumToken().isEmpty())
     {
-        CloseAlbumCommand* const command = new CloseAlbumCommand(m_session);
+        CloseAlbumCommand* const command = new CloseAlbumCommand(d->session);
         enqueueCommand(command);
     }
     else
@@ -816,14 +841,14 @@ void RajceTalker::closeAlbum()
 
 void RajceTalker::uploadPhoto(const QString& path, unsigned dimension, int jpgQuality)
 {
-    AddPhotoCommand* const command = new AddPhotoCommand(m_tmpDir, path, dimension, jpgQuality, m_session);
+    AddPhotoCommand* const command = new AddPhotoCommand(d->tmpDir, path, dimension, jpgQuality, d->session);
     enqueueCommand(command);
 }
 
 void RajceTalker::clearLastError()
 {
-    m_session.lastErrorCode()    = 0;
-    m_session.lastErrorMessage() = QString::fromLatin1("");
+    d->session.lastErrorCode()    = 0;
+    d->session.lastErrorMessage() = QString::fromLatin1("");
 }
 
 void RajceTalker::slotUploadProgress(qint64 bytesSent, qint64 bytesTotal)
@@ -837,40 +862,40 @@ void RajceTalker::slotUploadProgress(qint64 bytesSent, qint64 bytesTotal)
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Percent signalled: " << percent;
 
-    emit signalBusyProgress(m_commandQueue.head()->commandType(), percent);
+    emit signalBusyProgress(d->commandQueue.head()->commandType(), percent);
 }
 
 void RajceTalker::enqueueCommand(RajceCommand* const command)
 {
-    if (m_session.lastErrorCode() != 0)
+    if (d->session.lastErrorCode() != 0)
     {
         return;
     }
 
-    m_queueAccess.lock();
-    m_commandQueue.enqueue(command);
+    d->queueAccess.lock();
+    d->commandQueue.enqueue(command);
 
-    if (m_commandQueue.size() == 1)
+    if (d->commandQueue.size() == 1)
     {
         startCommand(command);
     }
 
-    m_queueAccess.unlock();
+    d->queueAccess.unlock();
 }
 
 void RajceTalker::cancelCurrentCommand()
 {
-    if (m_reply != 0)
+    if (d->reply != 0)
     {
-        slotFinished(m_reply);
-        m_reply->abort();
-        m_reply = 0;
+        slotFinished(d->reply);
+        d->reply->abort();
+        d->reply = 0;
     }
 }
 
 void RajceTalker::init(const Digikam::RajceSession& initialState)
 {
-    m_session = initialState;
+    d->session = initialState;
 }
 
 } // namespace Digikam
