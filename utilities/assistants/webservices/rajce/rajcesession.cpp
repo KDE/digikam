@@ -23,6 +23,24 @@
 
 #include "rajcesession.h"
 
+namespace Digikam
+{
+
+RajceSession::RajceSession()
+    : m_maxWidth(0),
+      m_maxHeight(0),
+      m_imageQuality(0),
+      m_lastErrorCode(0),
+      m_lastCommand(Logout)
+{
+}
+
+RajceSession::~RajceSession()
+{
+}
+
+} // namespace Digikam
+
 QDebug operator<<(QDebug d, const Digikam::RajceSession& s)
 {
     QString     ss;

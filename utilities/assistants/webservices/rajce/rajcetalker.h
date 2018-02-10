@@ -56,21 +56,21 @@ public:
     void  login(const QString& username, const QString& password);
     void  logout();
 
-    void loadAlbums();
-    void createAlbum(const QString& name, const QString& description, bool visible);
-    void openAlbum(const RajceAlbum& album);
-    void closeAlbum();
+    void  loadAlbums();
+    void  createAlbum(const QString& name, const QString& description, bool visible);
+    void  openAlbum(const RajceAlbum& album);
+    void  closeAlbum();
 
-    void uploadPhoto(const QString& path, unsigned dimension, int jpgQuality);
+    void  uploadPhoto(const QString& path, unsigned dimension, int jpgQuality);
 
-    void clearLastError();
-    void cancelCurrentCommand();
+    void  clearLastError();
+    void  cancelCurrentCommand();
 
 Q_SIGNALS:
 
-    void busyStarted(unsigned);
-    void busyFinished(unsigned);
-    void busyProgress(unsigned, unsigned percent);
+    void signalBusyStarted(unsigned);
+    void signalBusyFinished(unsigned);
+    void signalBusyProgress(unsigned, unsigned percent);
 
 private Q_SLOTS:
 
@@ -79,8 +79,8 @@ private Q_SLOTS:
 
 private:
 
-    void _startJob(RajceCommand*);
-    void _enqueue(RajceCommand*);
+    void startCommand(RajceCommand* const);
+    void enqueueCommand(RajceCommand* const);
 
 private:
 

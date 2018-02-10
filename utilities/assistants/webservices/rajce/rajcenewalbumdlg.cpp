@@ -61,6 +61,10 @@ RajceNewAlbumDlg::RajceNewAlbumDlg(QWidget* const parent)
     addToMainLayout(privBox);
 }
 
+RajceNewAlbumDlg::~RajceNewAlbumDlg()
+{
+}
+
 QString RajceNewAlbumDlg::albumDescription() const
 {
     return getDescEdit()->toPlainText();

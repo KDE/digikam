@@ -705,7 +705,7 @@ const RajceSession& RajceTalker::session() const
     return m_session;
 }
 
-void RajceTalker::_startJob(RajceCommand* command)
+void RajceTalker::startCommand(RajceCommand* const command)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Sending command:\n" << command->getXml();
 
@@ -719,25 +719,25 @@ void RajceTalker::_startJob(RajceCommand* command)
     connect(m_reply, SIGNAL(uploadProgress(qint64,qint64)),
             SLOT(slotUploadProgress(qint64,qint64)));
 
-    emit busyStarted(command->commandType());
+    emit signalBusyStarted(command->commandType());
 }
 
 void RajceTalker::login(const QString& username, const QString& password)
 {
     LoginCommand* const command = new LoginCommand(username, password);
-    _enqueue(command);
+    enqueueCommand(command);
 }
 
 void RajceTalker::loadAlbums()
 {
     AlbumListCommand* const command = new AlbumListCommand(m_session);
-    _enqueue(command);
+    enqueueCommand(command);
 }
 
 void RajceTalker::createAlbum(const QString& name, const QString& description, bool visible)
 {
     CreateAlbumCommand* const command = new CreateAlbumCommand(name, description, visible, m_session);
-    _enqueue(command);
+    enqueueCommand(command);
 }
 
 void RajceTalker::slotFinished(QNetworkReply* reply)
@@ -769,7 +769,7 @@ void RajceTalker::slotFinished(QNetworkReply* reply)
     // This enables the connected slots to read in
     // reliable values from the state and/or
     // clear the error state once it's handled.
-    emit busyFinished(type);
+    emit signalBusyFinished(type);
 
     reply->deleteLater();
 
@@ -784,7 +784,7 @@ void RajceTalker::slotFinished(QNetworkReply* reply)
     // see if there's something to continue with
     if (m_commandQueue.size() > 0)
     {
-        _startJob(m_commandQueue.head());
+        startCommand(m_commandQueue.head());
     }
 
     m_queueAccess.unlock();
@@ -798,7 +798,7 @@ void RajceTalker::logout()
 void RajceTalker::openAlbum(const RajceAlbum& album)
 {
     OpenAlbumCommand* const command = new OpenAlbumCommand(album.id, m_session);
-    _enqueue(command);
+    enqueueCommand(command);
 }
 
 void RajceTalker::closeAlbum()
@@ -806,18 +806,18 @@ void RajceTalker::closeAlbum()
     if (!m_session.openAlbumToken().isEmpty())
     {
         CloseAlbumCommand* const command = new CloseAlbumCommand(m_session);
-        _enqueue(command);
+        enqueueCommand(command);
     }
     else
     {
-        emit busyFinished(CloseAlbum);
+        emit signalBusyFinished(CloseAlbum);
     }
 }
 
 void RajceTalker::uploadPhoto(const QString& path, unsigned dimension, int jpgQuality)
 {
     AddPhotoCommand* const command = new AddPhotoCommand(m_tmpDir, path, dimension, jpgQuality, m_session);
-    _enqueue(command);
+    enqueueCommand(command);
 }
 
 void RajceTalker::clearLastError()
@@ -837,10 +837,10 @@ void RajceTalker::slotUploadProgress(qint64 bytesSent, qint64 bytesTotal)
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Percent signalled: " << percent;
 
-    emit busyProgress(m_commandQueue.head()->commandType(), percent);
+    emit signalBusyProgress(m_commandQueue.head()->commandType(), percent);
 }
 
-void RajceTalker::_enqueue(RajceCommand* command)
+void RajceTalker::enqueueCommand(RajceCommand* const command)
 {
     if (m_session.lastErrorCode() != 0)
     {
@@ -852,7 +852,7 @@ void RajceTalker::_enqueue(RajceCommand* command)
 
     if (m_commandQueue.size() == 1)
     {
-        _startJob(command);
+        startCommand(command);
     }
 
     m_queueAccess.unlock();

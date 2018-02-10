@@ -39,6 +39,8 @@ public:
     explicit RajceMPForm();
     ~RajceMPForm();
 
+public:
+
     void finish();
     void reset();
 

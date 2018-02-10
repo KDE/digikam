@@ -80,13 +80,13 @@ RajceWidget::RajceWidget(DInfoInterface* const iface, QWidget* const parent)
 
     // ------------------------------------------------------------------------
 
-    connect(m_talker, SIGNAL(busyStarted(uint)),
+    connect(m_talker, SIGNAL(signalBusyStarted(uint)),
             this, SLOT(progressStarted(uint)));
 
-    connect(m_talker, SIGNAL(busyFinished(uint)),
+    connect(m_talker, SIGNAL(signalBusyFinished(uint)),
             this, SLOT(progressFinished(uint)));
 
-    connect(m_talker, SIGNAL(busyProgress(uint,uint)),
+    connect(m_talker, SIGNAL(signalBusyProgress(uint,uint)),
             this, SLOT(progressChange(uint,uint)));
 
     connect(m_changeUserBtn, SIGNAL(clicked()),
@@ -100,6 +100,10 @@ RajceWidget::RajceWidget(DInfoInterface* const iface, QWidget* const parent)
 
     connect(m_albumsCoB, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(selectedAlbumChanged(QString)));
+}
+
+RajceWidget::~RajceWidget()
+{
 }
 
 void RajceWidget::updateLabels(const QString&, const QString&)
@@ -289,7 +293,7 @@ void RajceWidget::changeUserClicked()
     {
         m_talker->clearLastError();
 
-        connect(m_talker, SIGNAL(busyFinished(uint)),
+        connect(m_talker, SIGNAL(signalBusyFinished(uint)),
                 this, SLOT(loadAlbums()));
 
         m_talker->login(dlg->login(), dlg->password());
@@ -300,7 +304,7 @@ void RajceWidget::changeUserClicked()
 
 void RajceWidget::loadAlbums()
 {
-    disconnect(m_talker, SIGNAL(busyFinished(uint)),
+    disconnect(m_talker, SIGNAL(signalBusyFinished(uint)),
                this, SLOT(loadAlbums()));
 
     m_talker->loadAlbums();
@@ -314,7 +318,7 @@ void RajceWidget::createAlbum()
     {
         m_talker->clearLastError();
 
-        connect(m_talker, SIGNAL(busyFinished(uint)),
+        connect(m_talker, SIGNAL(signalBusyFinished(uint)),
                 this, SLOT(loadAlbums()));
 
         m_talker->createAlbum(dlg->albumName(), dlg->albumDescription(), dlg->albumVisible());
@@ -342,7 +346,7 @@ void RajceWidget::startUpload()
         return;
     }
 
-    connect(m_talker, SIGNAL(busyFinished(uint)),
+    connect(m_talker, SIGNAL(signalBusyFinished(uint)),
             this, SLOT(startUploadAfterAlbumOpened()));
 
     QString albumName = m_albumsCoB->currentText();
@@ -365,10 +369,10 @@ void RajceWidget::startUpload()
 
 void RajceWidget::startUploadAfterAlbumOpened()
 {
-    disconnect(m_talker, SIGNAL(busyFinished(uint)),
+    disconnect(m_talker, SIGNAL(signalBusyFinished(uint)),
                this, SLOT(startUploadAfterAlbumOpened()));
 
-    connect(m_talker, SIGNAL(busyFinished(uint)),
+    connect(m_talker, SIGNAL(signalBusyFinished(uint)),
             this, SLOT(uploadNext()));
 
     m_uploadingPhotos    = true;
@@ -382,7 +386,7 @@ void RajceWidget::closeAlbum()
 {
     _setEnabled(true);
 
-    disconnect(m_talker, SIGNAL(busyFinished(uint)),
+    disconnect(m_talker, SIGNAL(signalBusyFinished(uint)),
                this, SLOT(closeAlbum()));
 
     m_uploadQueue.clear();
@@ -426,10 +430,10 @@ void RajceWidget::cancelUpload()
         m_imgList->processed(QUrl::fromLocalFile(*m_currentUploadImage), false);
     }
 
-    disconnect(m_talker, SIGNAL(busyFinished(uint)),
+    disconnect(m_talker, SIGNAL(signalBusyFinished(uint)),
                this, SLOT(uploadNext()));
 
-    connect(m_talker, SIGNAL(busyFinished(uint)),
+    connect(m_talker, SIGNAL(signalBusyFinished(uint)),
             this, SLOT(closeAlbum()));
 
     m_talker->cancelCurrentCommand();

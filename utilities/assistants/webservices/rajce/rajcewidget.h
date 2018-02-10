@@ -53,6 +53,7 @@ class RajceWidget : public WSSettingsWidget
 public:
 
     explicit RajceWidget(DInfoInterface* const iface, QWidget* const parent);
+    ~RajceWidget();
 
 Q_SIGNALS:
 
@@ -60,7 +61,8 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void updateLabels(const QString& name = QString(), const QString& url = QString()) Q_DECL_OVERRIDE;
+    void updateLabels(const QString& name = QString(),
+                      const QString& url = QString()) Q_DECL_OVERRIDE;
     void reactivate();
 
     void startUpload();

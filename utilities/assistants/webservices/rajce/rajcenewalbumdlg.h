@@ -38,6 +38,9 @@ class RajceNewAlbumDlg : public WSNewAlbumDialog
 public:
 
     explicit RajceNewAlbumDlg(QWidget* const parent = 0);
+    ~RajceNewAlbumDlg();
+
+public:
 
     QString albumName()        const;
     QString albumDescription() const;
