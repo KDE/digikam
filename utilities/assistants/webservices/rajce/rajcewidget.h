@@ -27,25 +27,17 @@
 // Qt includes
 
 #include <QWidget>
+#include <QString>
 
 // Local includes
 
-#include "rajcesession.h"
 #include "wssettingswidget.h"
-#include "dinfointerface.h"
-#include "dprogresswdg.h"
-
-class QLabel;
-class QRadioButton;
-class QSpinBox;
-class QComboBox;
-class QPushButton;
 
 namespace Digikam
 {
 
-class RajceTalker;
-
+class DInfoInterface;
+   
 class RajceWidget : public WSSettingsWidget
 {
     Q_OBJECT
@@ -93,32 +85,9 @@ private:
     void setEnabledWidgets(bool);
 
 private:
-
-    QLabel*                  m_headerLbl;
-    QLabel*                  m_userNameLbl;
-    QLabel*                  m_userName;
-
-    QSpinBox*                m_dimensionSpB;
-    QSpinBox*                m_imageQualitySpB;
-
-    QComboBox*               m_albumsCoB;
-
-    QPushButton*             m_newAlbumBtn;
-    QPushButton*             m_reloadAlbumsBtn;
-    QPushButton*             m_changeUserBtn;
-
-    DInfoInterface*          m_iface;
-    DImagesList*             m_imgList;
-    DProgressWdg*            m_progressBar;
-
-    RajceTalker*             m_talker;
-
-    QList<QString>           m_uploadQueue;
-    QList<QString>::Iterator m_currentUploadImage;
-
-    bool                     m_uploadingPhotos;
-    bool                     m_lastLoggedInState;
-    QString                  m_currentAlbumName;
+    
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
