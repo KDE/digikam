@@ -509,7 +509,7 @@ void SmugTalker::getPhoto(const QString& imgPath)
     d->buffer.resize(0);
 }
 
-QString SmugTalker::errorToText(int errCode, const QString &errMsg)
+QString SmugTalker::errorToText(int errCode, const QString& errMsg) const
 {
     QString transError;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "errorToText: " << errCode << ": " << errMsg;
@@ -1178,7 +1178,7 @@ void SmugTalker::parseResponseListSubCategories(const QByteArray& data)
     emit signalListSubCategoriesDone(errCode, errorToText(errCode, errMsg), categoriesList);
 }
 
-QString SmugTalker::htmlToText(const QString& htmlText)
+QString SmugTalker::htmlToText(const QString& htmlText) const
 {
     QTextDocument txtDoc;
     txtDoc.setHtml(htmlText);

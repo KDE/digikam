@@ -45,9 +45,12 @@ public:
     void finish();
     void reset();
 
-    bool addPair(const QString& name, const QString& value,
+    bool addPair(const QString& name,
+                 const QString& value,
                  const QString& type = QStringLiteral("text/plain"));
-    bool addFile(const QString& name, const QString& path);
+    
+    bool addFile(const QString& name,
+                 const QString& path);
 
     QString    contentType() const;
     QByteArray formData()    const;

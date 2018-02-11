@@ -114,7 +114,7 @@ private Q_SLOTS:
 
 private:
 
-    bool prepareImageForUpload(const QString& imgPath);
+    bool prepareImageForUpload(const QString& imgPath) const;
     void uploadNextPhoto();
     void downloadNextPhoto();
 

@@ -70,15 +70,18 @@ public:
 
     void    createAlbum(const SmugAlbum& album);
 
-    bool    addPhoto(const QString& imgPath, qint64 albumID,
+    bool    addPhoto(const QString& imgPath,
+                     qint64 albumID,
                      const QString& albumKey,
                      const QString& caption);
+
     void    getPhoto(const QString& imgPath);
 
 Q_SIGNALS:
 
     void signalBusy(bool val);
-    void signalLoginProgress(int step, int maxStep = 0,
+    void signalLoginProgress(int step,
+                             int maxStep = 0,
                              const QString& label = QString());
     void signalLoginDone(int errCode, const QString& errMsg);
     void signalAddPhotoDone(int errCode, const QString& errMsg);
@@ -99,8 +102,8 @@ Q_SIGNALS:
 
 private:
 
-    QString htmlToText(const QString& htmlText);
-    QString errorToText(int errCode, const QString& errMsg);
+    QString htmlToText(const QString& htmlText) const;
+    QString errorToText(int errCode, const QString& errMsg) const;
     void parseResponseLogin(const QByteArray& data);
     void parseResponseLogout(const QByteArray& data);
     void parseResponseAddPhoto(const QByteArray& data);

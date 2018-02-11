@@ -63,7 +63,9 @@ void SmugMPForm::finish()
     m_buffer.append(str);
 }
 
-bool SmugMPForm::addPair(const QString& name, const QString& value, const QString& contentType)
+bool SmugMPForm::addPair(const QString& name,
+                         const QString& value,
+                         const QString& contentType)
 {
     QByteArray str;
     QString content_length = QString::number(value.length());
