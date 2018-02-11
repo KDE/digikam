@@ -574,9 +574,9 @@ void PiwigoTalker::parseResponseListAlbums(const QByteArray& data)
                 QString uppercats   = ts.readElementText();
                 QStringList catlist = uppercats.split(QLatin1Char(','));
 
-                if (catlist.size() > 1 && catlist.at(catlist.size() - 2).toInt() != (*iter).m_refNum)
+                if (catlist.size() > 1 && catlist.at((uint)catlist.size() - 2).toInt() != (*iter).m_refNum)
                 {
-                    (*iter).m_parentRefNum = catlist.at(catlist.size() - 2).toInt();
+                    (*iter).m_parentRefNum = catlist.at((uint)catlist.size() - 2).toInt();
                     qCDebug(DIGIKAM_WEBSERVICES_LOG) << (*iter).m_parentRefNum << "\n";
                 }
             }
