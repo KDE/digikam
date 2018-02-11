@@ -52,11 +52,11 @@ public:
 
 public:
 
-    QString     email;
-    QString     nickName;
-    QString     displayName;
-    QString     accountType;
-    int         fileSizeLimit;
+    QString email;
+    QString nickName;
+    QString displayName;
+    QString accountType;
+    int     fileSizeLimit;
 };
 
 // ---------------------------------------------------------------------------------

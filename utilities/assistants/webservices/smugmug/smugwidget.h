@@ -51,18 +51,21 @@ class SmugWidget : public QWidget
 
 public:
 
-    explicit SmugWidget(QWidget* const parent, DInfoInterface* const iface, bool import);
+    explicit SmugWidget(QWidget* const parent,
+                        DInfoInterface* const iface,
+                        bool import);
     ~SmugWidget();
 
 public:
 
-    void updateLabels(const QString& email = QString(), const QString& name = QString(),
+    void updateLabels(const QString& email = QString(),
+                      const QString& name = QString(),
                       const QString& nick = QString());
 
-    bool isAnonymous() const;
+    bool isAnonymous()           const;
     void setAnonymous(bool checked);
 
-    QString getNickName() const;
+    QString getNickName()        const;
     void    setNickName(const QString& nick);
 
     QString getSitePassword()    const;

@@ -120,8 +120,8 @@ void SmugTalker::login(const QString& email, const QString& password)
 
     if (email.isEmpty())
     {
-        q.addQueryItem(QString::fromLatin1("method"), QString::fromLatin1("smugmug.login.anonymously"));
-        q.addQueryItem(QString::fromLatin1("APIKey"), m_apiKey);
+        q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.login.anonymously"));
+        q.addQueryItem(QString::fromLatin1("APIKey"),       m_apiKey);
     }
     else
     {
@@ -135,7 +135,7 @@ void SmugTalker::login(const QString& email, const QString& password)
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
 
     m_reply = m_netMngr->get(netRequest);
 
@@ -163,7 +163,7 @@ void SmugTalker::logout()
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
 
     m_reply = m_netMngr->get(netRequest);
 
@@ -194,7 +194,7 @@ void SmugTalker::listAlbums(const QString& nickName)
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
 
     m_reply = m_netMngr->get(netRequest);
 
@@ -224,7 +224,7 @@ void SmugTalker::listPhotos(const qint64 albumID,
     q.addQueryItem(QString::fromLatin1("Heavy"),     QString::fromLatin1("1"));
 
     if (!albumPassword.isEmpty())
-        q.addQueryItem(QString::fromLatin1("Password"), albumPassword);
+        q.addQueryItem(QString::fromLatin1("Password"),     albumPassword);
 
     if (!sitePassword.isEmpty())
         q.addQueryItem(QString::fromLatin1("SitePassword"), sitePassword);
@@ -233,7 +233,7 @@ void SmugTalker::listPhotos(const qint64 albumID,
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
 
     m_reply = m_netMngr->get(netRequest);
 
@@ -259,7 +259,7 @@ void SmugTalker::listAlbumTmpl()
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
 
     m_reply = m_netMngr->get(netRequest);
 
@@ -285,7 +285,7 @@ void SmugTalker::listCategories()
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
 
     m_reply = m_netMngr->get(netRequest);
 
@@ -312,7 +312,7 @@ void SmugTalker::listSubCategories(qint64 categoryID)
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
 
     m_reply = m_netMngr->get(netRequest);
 
@@ -341,7 +341,7 @@ void SmugTalker::createAlbum(const SmugAlbum& album)
         q.addQueryItem(QString::fromLatin1("SubCategoryID"), QString::number(album.subCategoryID));
 
     if (!album.description.isEmpty())
-        q.addQueryItem(QString::fromLatin1("Description"), album.description);
+        q.addQueryItem(QString::fromLatin1("Description"),   album.description);
 
     if (album.tmplID > 0)
     {
@@ -366,7 +366,7 @@ void SmugTalker::createAlbum(const SmugAlbum& album)
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
 
     m_reply = m_netMngr->get(netRequest);
 
@@ -374,10 +374,10 @@ void SmugTalker::createAlbum(const SmugAlbum& album)
     m_buffer.resize(0);
 }
 
-bool SmugTalker::addPhoto(const QString& imgPath,
+bool SmugTalker::addPhoto(const  QString& imgPath,
                           qint64 albumID,
-                          const QString& albumKey,
-                          const QString& caption)
+                          const  QString& albumKey,
+                          const  QString& caption)
 {
     if (m_reply)
     {
@@ -423,9 +423,9 @@ bool SmugTalker::addPhoto(const QString& imgPath,
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
     netRequest.setRawHeader("X-Smug-SessionID", m_sessionID.toLatin1());
-    netRequest.setRawHeader("X-Smug-Version", m_apiVersion.toLatin1());
+    netRequest.setRawHeader("X-Smug-Version",   m_apiVersion.toLatin1());
 
     m_reply = m_netMngr->post(netRequest, form.formData());
 
@@ -447,7 +447,7 @@ void SmugTalker::getPhoto(const QString& imgPath)
     QNetworkRequest netRequest(QUrl::fromLocalFile(imgPath));
     netRequest.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
     netRequest.setRawHeader("X-Smug-SessionID", m_sessionID.toLatin1());
-    netRequest.setRawHeader("X-Smug-Version", m_apiVersion.toLatin1());
+    netRequest.setRawHeader("X-Smug-Version",   m_apiVersion.toLatin1());
 
     m_reply = m_netMngr->get(netRequest);
 
@@ -759,7 +759,7 @@ void SmugTalker::parseResponseCreateAlbum(const QByteArray& data)
             newAlbumID  = e.attribute(QString::fromLatin1("id")).toLongLong();
             newAlbumKey = e.attribute(QString::fromLatin1("Key"));
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "AlbumID: " << newAlbumID;
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Key: " << newAlbumKey;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Key: "     << newAlbumKey;
             errCode = 0;
         }
         else if (e.tagName() == QString::fromLatin1("err"))

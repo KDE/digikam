@@ -54,7 +54,6 @@ SmugNewAlbumDlg::SmugNewAlbumDlg(QWidget* const parent)
     QString header(i18n("SmugMug New Album"));
     setWindowTitle(header);
     setModal(false);
-
     setMinimumSize(400, 400);
 
     // ------------------------------------------------------------------------
@@ -124,10 +123,14 @@ SmugNewAlbumDlg::SmugNewAlbumDlg(QWidget* const parent)
 
     // ------------------------------------------------------------------------
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    QDialogButtonBox* const buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     buttonBox->button(QDialogButtonBox::Cancel)->setDefault(true);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &QDialog::accept);
+
+    connect(buttonBox, &QDialogButtonBox::rejected,
+            this, &QDialog::reject);
 
     // ------------------------------------------------------------------------
 
