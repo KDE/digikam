@@ -60,7 +60,7 @@ PreparedImage s_prepareImageForUpload(const QString& saveDir,
                                       const QString& imagePath,
                                       unsigned maxDimension,
                                       unsigned thumbDimension,
-                                      int jpgQuality)
+                                      int      jpgQuality)
 {
     PreparedImage ret;
 
@@ -106,19 +106,34 @@ PreparedImage s_prepareImageForUpload(const QString& saveDir,
 
 // -----------------------------------------------------------------------
 
-RajceCommand::RajceCommand(const QString& name, RajceCommandType type)
-    : m_name(name),
-      m_commandType(type)
+class RajceCommand::Private
 {
+public:
+
+    Private()
+    {
+    }
+
+    QString                name;
+    RajceCommandType       commandType;
+    QMap<QString, QString> parameters;
+};
+
+RajceCommand::RajceCommand(const QString& name, RajceCommandType type)
+    : d(new Private)
+{
+    d->name        = name;
+    d->commandType = type;
 }
 
 RajceCommand::~RajceCommand()
 {
+    delete d;
 }
 
 QMap<QString, QString>& RajceCommand::parameters() const
 {
-    return const_cast<QMap<QString, QString> &>(m_parameters);
+    return const_cast<QMap<QString, QString> &>(d->parameters);
 }
 
 QString RajceCommand::getXml() const
@@ -126,13 +141,13 @@ QString RajceCommand::getXml() const
     QString ret(QString::fromLatin1("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"));
 
     ret.append(QString::fromLatin1("<request>\n"));
-    ret.append(QString::fromLatin1("  <command>")).append(m_name).append(QString::fromLatin1("</command>\n"));
+    ret.append(QString::fromLatin1("  <command>")).append(d->name).append(QString::fromLatin1("</command>\n"));
     ret.append(QString::fromLatin1("  <parameters>\n"));
 
-    foreach (QString key, m_parameters.keys())
+    foreach (QString key, d->parameters.keys())
     {
         ret.append(QString::fromLatin1("    <")).append(key).append(QString::fromLatin1(">"));
-        ret.append(m_parameters[key]);
+        ret.append(d->parameters[key]);
         ret.append(QString::fromLatin1("</")).append(key).append(QString::fromLatin1(">\n"));
     }
 
@@ -143,7 +158,7 @@ QString RajceCommand::getXml() const
     return ret;
 }
 
-bool RajceCommand::_parseError(QXmlQuery& query, RajceSession& state)
+bool RajceCommand::parseErrorFromQuery(QXmlQuery& query, RajceSession& state)
 {
     QString results;
 
@@ -168,9 +183,9 @@ void RajceCommand::processResponse(const QString& response, RajceSession& state)
     QXmlQuery q;
     q.setFocus(response);
 
-    state.lastCommand() = m_commandType;
+    state.lastCommand() = d->commandType;
 
-    if (_parseError(q, state))
+    if (parseErrorFromQuery(q, state))
     {
         cleanUpOnError(state);
     }
@@ -200,7 +215,7 @@ QString RajceCommand::contentType() const
 
 RajceCommandType RajceCommand::commandType() const
 {
-    return m_commandType;
+    return d->commandType;
 }
 
 // -----------------------------------------------------------------------
@@ -412,43 +427,68 @@ void AlbumListCommand::cleanUpOnError(RajceSession& state)
 
 // -----------------------------------------------------------------------
 
+class AddPhotoCommand::Private
+{
+public:
+
+    Private()
+    {
+        jpgQuality       = 90;
+        desiredDimension = 0;
+        maxDimension     = 0;
+        form             = 0;
+    }
+
+    int          jpgQuality;
+
+    unsigned     desiredDimension;
+    unsigned     maxDimension;
+
+    QString      tmpDir;
+    QString      imagePath;
+
+    QImage       image;
+
+    RajceMPForm* form;
+};
+
 AddPhotoCommand::AddPhotoCommand(const QString& tmpDir,
                                  const QString& path,
                                  unsigned dimension,
-                                 int jpgQuality,
+                                 int      jpgQuality,
                                  const RajceSession& state)
     : RajceCommand(QString::fromLatin1("addPhoto"), AddPhoto),
-      m_jpgQuality(jpgQuality),
-      m_desiredDimension(dimension),
-      m_maxDimension(0),
-      m_tmpDir(tmpDir),
-      m_imagePath(path),
-      m_form(0)
+      d(new Private)
 {
-    m_image = PreviewLoadThread::loadHighQualitySynchronously(path).copyQImage();
+    d->jpgQuality       = jpgQuality;
+    d->desiredDimension = dimension;
+    d->tmpDir           = tmpDir;
+    d->imagePath        = path;
+    d->image            = PreviewLoadThread::loadHighQualitySynchronously(path).copyQImage();
 
-    if (m_image.isNull())
+    if (d->image.isNull())
     {
-        m_image.load(path);
+        d->image.load(path);
     }
 
-    if (m_image.isNull())
+    if (d->image.isNull())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Could not read in an image from "
                                          << path << ". Adding the photo will not work.";
         return;
     }
 
-    m_maxDimension                                  = (state.maxHeight() > state.maxWidth()) ? state.maxWidth()
+    d->maxDimension                                 = (state.maxHeight() > state.maxWidth()) ? state.maxWidth()
                                                                                              : state.maxHeight();
     parameters()[QString::fromLatin1("token")]      = state.sessionToken();
     parameters()[QString::fromLatin1("albumToken")] = state.openAlbumToken();
-    m_form                                          = new RajceMPForm;
+    d->form                                         = new RajceMPForm;
 }
 
 AddPhotoCommand::~AddPhotoCommand()
 {
-    delete m_form;
+    delete d->form;
+    delete d;
 }
 
 void AddPhotoCommand::cleanUpOnError(RajceSession&)
@@ -461,20 +501,20 @@ void AddPhotoCommand::parseResponse(QXmlQuery&, RajceSession&)
 
 QString AddPhotoCommand::additionalXml() const
 {
-    if (m_image.isNull())
+    if (d->image.isNull())
     {
         return QString();
     }
 
     QMap<QString, QString> metadata;
-    QFileInfo f(m_imagePath);
+    QFileInfo f(d->imagePath);
 
-    metadata[QString::fromLatin1("FullFilePath")]          = m_imagePath;
+    metadata[QString::fromLatin1("FullFilePath")]          = d->imagePath;
     metadata[QString::fromLatin1("OriginalFileName")]      = f.fileName();
     metadata[QString::fromLatin1("OriginalFileExtension")] = QString::fromLatin1(".") + f.suffix();
     metadata[QString::fromLatin1("PerceivedType")]         = QString::fromLatin1("image"); //what are the other values here? video?
-    metadata[QString::fromLatin1("OriginalWidth")]         = QString::number(m_image.width());
-    metadata[QString::fromLatin1("OriginalHeight")]        = QString::number(m_image.height());
+    metadata[QString::fromLatin1("OriginalWidth")]         = QString::number(d->image.width());
+    metadata[QString::fromLatin1("OriginalHeight")]        = QString::number(d->image.height());
     metadata[QString::fromLatin1("LengthMS")]              = QLatin1Char('0');
     metadata[QString::fromLatin1("FileSize")]              = QString::number(f.size());
 
@@ -514,23 +554,23 @@ QString AddPhotoCommand::additionalXml() const
 
 QString AddPhotoCommand::contentType() const
 {
-    return m_form->contentType();
+    return d->form->contentType();
 }
 
 QByteArray AddPhotoCommand::encode() const
 {
-    if (m_image.isNull())
+    if (d->image.isNull())
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << m_imagePath << " could not be read, no data will be sent.";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << d->imagePath << " could not be read, no data will be sent.";
         return QByteArray();
     }
 
-    PreparedImage prepared                      = s_prepareImageForUpload(m_tmpDir,
-                                                                          m_image,
-                                                                          m_imagePath,
-                                                                          m_desiredDimension,
+    PreparedImage prepared                      = s_prepareImageForUpload(d->tmpDir,
+                                                                          d->image,
+                                                                          d->imagePath,
+                                                                          d->desiredDimension,
                                                                           THUMB_SIZE,
-                                                                          m_jpgQuality);
+                                                                          d->jpgQuality);
 
     //add the rest of the parameters to be encoded as xml
     QImage scaled(prepared.scaledImagePath);
@@ -541,19 +581,19 @@ QByteArray AddPhotoCommand::encode() const
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Really sending:\n" << xml;
 
     //now we can create the form with all the info
-    m_form->reset();
+    d->form->reset();
 
-    m_form->addPair(QString::fromLatin1("data"), xml);
+    d->form->addPair(QString::fromLatin1("data"),  xml);
 
-    m_form->addFile(QString::fromLatin1("thumb"), prepared.thumbPath);
-    m_form->addFile(QString::fromLatin1("photo"), prepared.scaledImagePath);
+    d->form->addFile(QString::fromLatin1("thumb"), prepared.thumbPath);
+    d->form->addFile(QString::fromLatin1("photo"), prepared.scaledImagePath);
 
     QFile::remove(prepared.thumbPath);
     QFile::remove(prepared.scaledImagePath);
 
-    m_form->finish();
+    d->form->finish();
 
-    QByteArray ret = m_form->formData();
+    QByteArray ret = d->form->formData();
 
     return ret;
 }

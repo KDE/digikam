@@ -68,13 +68,12 @@ protected:
 
 private:
 
-    bool _parseError(QXmlQuery& query, RajceSession& state);
+    bool parseErrorFromQuery(QXmlQuery& query, RajceSession& state);
 
 private:
 
-    QString                m_name;
-    RajceCommandType       m_commandType;
-    QMap<QString, QString> m_parameters;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------------------
@@ -176,17 +175,8 @@ protected:
 
 private:
 
-    int          m_jpgQuality;
-
-    unsigned     m_desiredDimension;
-    unsigned     m_maxDimension;
-
-    QString      m_tmpDir;
-    QString      m_imagePath;
-
-    QImage       m_image;
-
-    RajceMPForm* m_form;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
