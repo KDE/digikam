@@ -35,6 +35,8 @@
 #include <QApplication>
 #include <QCryptographicHash>
 #include <QUrlQuery>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
 
 // Local includes
 
@@ -46,24 +48,74 @@
 namespace Digikam
 {
 
-SmugTalker::SmugTalker(DInfoInterface* const iface, QWidget* const parent)
+class SmugTalker::Private
 {
-    m_parent     = parent;
-    m_iface      = iface;
-    m_reply      = 0;
-    m_state      = SMUG_LOGOUT;
 
-    // FIXME ?
-    //m_userAgent  = QString::fromLatin1("KIPI-Plugin-Smug/%1 (lure@kubuntu.org)").arg(kipipluginsVersion());
-    m_userAgent  = QString::fromLatin1("digiKam/%1 (digikamdeveloper@gmail.com)").arg(digiKamVersion());
+public:
 
-    m_apiVersion = QString::fromLatin1("1.2.2");
-    m_apiURL     = QString::fromLatin1("https://api.smugmug.com/services/api/rest/%1/").arg(m_apiVersion);
-    m_apiKey     = QString::fromLatin1("R83lTcD4TvMsIiXqpdrA9OdIJ22uA4Wi");
+    enum State
+    {
+        SMUG_LOGIN = 0,
+        SMUG_LOGOUT,
+        SMUG_LISTALBUMS,
+        SMUG_LISTPHOTOS,
+        SMUG_LISTALBUMTEMPLATES,
+        SMUG_LISTCATEGORIES,
+        SMUG_LISTSUBCATEGORIES,
+        SMUG_CREATEALBUM,
+        SMUG_ADDPHOTO,
+        SMUG_GETPHOTO
+    };
 
-    m_netMngr    = new QNetworkAccessManager(this);
+public:
 
-    connect(m_netMngr, SIGNAL(finished(QNetworkReply*)),
+    Private()
+    {
+        parent     = 0;
+
+        // FIXME ?
+        //userAgent  = QString::fromLatin1("KIPI-Plugin-Smug/%1 (lure@kubuntu.org)").arg(kipipluginsVersion());
+        userAgent  = QString::fromLatin1("digiKam/%1 (digikamdeveloper@gmail.com)").arg(digiKamVersion());
+
+        apiVersion = QString::fromLatin1("1.2.2");
+        apiURL     = QString::fromLatin1("https://api.smugmug.com/services/api/rest/%1/").arg(apiVersion);
+        apiKey     = QString::fromLatin1("R83lTcD4TvMsIiXqpdrA9OdIJ22uA4Wi");
+        iface      = 0;
+        netMngr    = 0;
+        reply      = 0;
+        state      = SMUG_LOGOUT;
+    }
+    
+public:
+
+    QWidget*               parent;
+
+    QByteArray             buffer;
+
+    QString                userAgent;
+    QString                apiURL;
+    QString                apiVersion;
+    QString                apiKey;
+    QString                sessionID;
+
+    SmugUser               user;
+    DInfoInterface*        iface;
+
+    QNetworkAccessManager* netMngr;
+
+    QNetworkReply*         reply;
+
+    State                  state;
+};
+    
+SmugTalker::SmugTalker(DInfoInterface* const iface, QWidget* const parent)
+    : d(new Private)
+{
+    d->parent     = parent;
+    d->iface      = iface;
+    d->netMngr    = new QNetworkAccessManager(this);
+
+    connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
 }
 
@@ -73,32 +125,34 @@ SmugTalker::~SmugTalker()
     {
         logout();
 
-        while (m_reply && m_reply->isRunning())
+        while (d->reply && d->reply->isRunning())
         {
             qApp->processEvents();
         }
     }
 
-    if (m_reply)
-        m_reply->abort();
+    if (d->reply)
+        d->reply->abort();
+    
+    delete d;
 }
 
 bool SmugTalker::loggedIn() const
 {
-    return !m_sessionID.isEmpty();
+    return !d->sessionID.isEmpty();
 }
 
 SmugUser SmugTalker::getUser() const
 {
-    return m_user;
+    return d->user;
 }
 
 void SmugTalker::cancel()
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     emit signalBusy(false);
@@ -106,27 +160,27 @@ void SmugTalker::cancel()
 
 void SmugTalker::login(const QString& email, const QString& password)
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     emit signalBusy(true);
     emit signalLoginProgress(1, 4, i18n("Logging in to SmugMug service..."));
 
-    QUrl url(m_apiURL);
+    QUrl url(d->apiURL);
     QUrlQuery q;
 
     if (email.isEmpty())
     {
         q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.login.anonymously"));
-        q.addQueryItem(QString::fromLatin1("APIKey"),       m_apiKey);
+        q.addQueryItem(QString::fromLatin1("APIKey"),       d->apiKey);
     }
     else
     {
         q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.login.withPassword"));
-        q.addQueryItem(QString::fromLatin1("APIKey"),       m_apiKey);
+        q.addQueryItem(QString::fromLatin1("APIKey"),       d->apiKey);
         q.addQueryItem(QString::fromLatin1("EmailAddress"), email);
         q.addQueryItem(QString::fromLatin1("Password"),     password);
     }
@@ -135,56 +189,56 @@ void SmugTalker::login(const QString& email, const QString& password)
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    m_reply = m_netMngr->get(netRequest);
+    d->reply = d->netMngr->get(netRequest);
 
-    m_state = SMUG_LOGIN;
-    m_buffer.resize(0);
+    d->state = Private::SMUG_LOGIN;
+    d->buffer.resize(0);
 
-    m_user.email = email;
+    d->user.email = email;
 }
 
 void SmugTalker::logout()
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     emit signalBusy(true);
 
-    QUrl url(m_apiURL);
+    QUrl url(d->apiURL);
     QUrlQuery q;
     q.addQueryItem(QString::fromLatin1("method"),    QString::fromLatin1("smugmug.logout"));
-    q.addQueryItem(QString::fromLatin1("SessionID"), m_sessionID);
+    q.addQueryItem(QString::fromLatin1("SessionID"), d->sessionID);
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    m_reply = m_netMngr->get(netRequest);
+    d->reply = d->netMngr->get(netRequest);
 
-    m_state = SMUG_LOGOUT;
-    m_buffer.resize(0);
+    d->state = Private::SMUG_LOGOUT;
+    d->buffer.resize(0);
 }
 
 void SmugTalker::listAlbums(const QString& nickName)
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     emit signalBusy(true);
 
-    QUrl url(m_apiURL);
+    QUrl url(d->apiURL);
     QUrlQuery q;
     q.addQueryItem(QString::fromLatin1("method"),    QString::fromLatin1("smugmug.albums.get"));
-    q.addQueryItem(QString::fromLatin1("SessionID"), m_sessionID);
+    q.addQueryItem(QString::fromLatin1("SessionID"), d->sessionID);
     q.addQueryItem(QString::fromLatin1("Heavy"),     QString::fromLatin1("1"));
 
     if (!nickName.isEmpty())
@@ -194,12 +248,12 @@ void SmugTalker::listAlbums(const QString& nickName)
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    m_reply = m_netMngr->get(netRequest);
+    d->reply = d->netMngr->get(netRequest);
 
-    m_state = SMUG_LISTALBUMS;
-    m_buffer.resize(0);
+    d->state = Private::SMUG_LISTALBUMS;
+    d->buffer.resize(0);
 }
 
 void SmugTalker::listPhotos(const qint64 albumID,
@@ -207,18 +261,18 @@ void SmugTalker::listPhotos(const qint64 albumID,
                             const QString& albumPassword,
                             const QString& sitePassword)
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     emit signalBusy(true);
 
-    QUrl url(m_apiURL);
+    QUrl url(d->apiURL);
     QUrlQuery q;
     q.addQueryItem(QString::fromLatin1("method"),    QString::fromLatin1("smugmug.images.get"));
-    q.addQueryItem(QString::fromLatin1("SessionID"), m_sessionID);
+    q.addQueryItem(QString::fromLatin1("SessionID"), d->sessionID);
     q.addQueryItem(QString::fromLatin1("AlbumID"),   QString::number(albumID));
     q.addQueryItem(QString::fromLatin1("AlbumKey"),  albumKey);
     q.addQueryItem(QString::fromLatin1("Heavy"),     QString::fromLatin1("1"));
@@ -233,107 +287,107 @@ void SmugTalker::listPhotos(const qint64 albumID,
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    m_reply = m_netMngr->get(netRequest);
+    d->reply = d->netMngr->get(netRequest);
 
-    m_state = SMUG_LISTPHOTOS;
-    m_buffer.resize(0);
+    d->state = Private::SMUG_LISTPHOTOS;
+    d->buffer.resize(0);
 }
 
 void SmugTalker::listAlbumTmpl()
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     emit signalBusy(true);
 
-    QUrl url(m_apiURL);
+    QUrl url(d->apiURL);
     QUrlQuery q;
     q.addQueryItem(QString::fromLatin1("method"),    QString::fromLatin1("smugmug.albumtemplates.get"));
-    q.addQueryItem(QString::fromLatin1("SessionID"), m_sessionID);
+    q.addQueryItem(QString::fromLatin1("SessionID"), d->sessionID);
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    m_reply = m_netMngr->get(netRequest);
+    d->reply = d->netMngr->get(netRequest);
 
-    m_state = SMUG_LISTALBUMTEMPLATES;
-    m_buffer.resize(0);
+    d->state = Private::SMUG_LISTALBUMTEMPLATES;
+    d->buffer.resize(0);
 }
 
 void SmugTalker::listCategories()
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     emit signalBusy(true);
 
-    QUrl url(m_apiURL);
+    QUrl url(d->apiURL);
     QUrlQuery q;
     q.addQueryItem(QString::fromLatin1("method"),    QString::fromLatin1("smugmug.categories.get"));
-    q.addQueryItem(QString::fromLatin1("SessionID"), m_sessionID);
+    q.addQueryItem(QString::fromLatin1("SessionID"), d->sessionID);
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    m_reply = m_netMngr->get(netRequest);
+    d->reply = d->netMngr->get(netRequest);
 
-    m_state = SMUG_LISTCATEGORIES;
-    m_buffer.resize(0);
+    d->state = Private::SMUG_LISTCATEGORIES;
+    d->buffer.resize(0);
 }
 
 void SmugTalker::listSubCategories(qint64 categoryID)
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     emit signalBusy(true);
 
-    QUrl url(m_apiURL);
+    QUrl url(d->apiURL);
     QUrlQuery q;
     q.addQueryItem(QString::fromLatin1("method"),     QString::fromLatin1("smugmug.subcategories.get"));
-    q.addQueryItem(QString::fromLatin1("SessionID"),  m_sessionID);
+    q.addQueryItem(QString::fromLatin1("SessionID"),  d->sessionID);
     q.addQueryItem(QString::fromLatin1("CategoryID"), QString::number(categoryID));
     url.setQuery(q);
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    m_reply = m_netMngr->get(netRequest);
+    d->reply = d->netMngr->get(netRequest);
 
-    m_state = SMUG_LISTSUBCATEGORIES;
-    m_buffer.resize(0);
+    d->state = Private::SMUG_LISTSUBCATEGORIES;
+    d->buffer.resize(0);
 }
 
 void SmugTalker::createAlbum(const SmugAlbum& album)
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     emit signalBusy(true);
 
-    QUrl url(m_apiURL);
+    QUrl url(d->apiURL);
     QUrlQuery q;
     q.addQueryItem(QString::fromLatin1("method"),     QString::fromLatin1("smugmug.albums.create"));
-    q.addQueryItem(QString::fromLatin1("SessionID"),  m_sessionID);
+    q.addQueryItem(QString::fromLatin1("SessionID"),  d->sessionID);
     q.addQueryItem(QString::fromLatin1("Title"),      album.title);
     q.addQueryItem(QString::fromLatin1("CategoryID"), QString::number(album.categoryID));
 
@@ -366,12 +420,12 @@ void SmugTalker::createAlbum(const SmugAlbum& album)
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    m_reply = m_netMngr->get(netRequest);
+    d->reply = d->netMngr->get(netRequest);
 
-    m_state = SMUG_CREATEALBUM;
-    m_buffer.resize(0);
+    d->state = Private::SMUG_CREATEALBUM;
+    d->buffer.resize(0);
 }
 
 bool SmugTalker::addPhoto(const  QString& imgPath,
@@ -379,10 +433,10 @@ bool SmugTalker::addPhoto(const  QString& imgPath,
                           const  QString& albumKey,
                           const  QString& caption)
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     emit signalBusy(true);
@@ -423,36 +477,36 @@ bool SmugTalker::addPhoto(const  QString& imgPath,
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   m_userAgent);
-    netRequest.setRawHeader("X-Smug-SessionID", m_sessionID.toLatin1());
-    netRequest.setRawHeader("X-Smug-Version",   m_apiVersion.toLatin1());
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
+    netRequest.setRawHeader("X-Smug-SessionID", d->sessionID.toLatin1());
+    netRequest.setRawHeader("X-Smug-Version",   d->apiVersion.toLatin1());
 
-    m_reply = m_netMngr->post(netRequest, form.formData());
+    d->reply = d->netMngr->post(netRequest, form.formData());
 
-    m_state = SMUG_ADDPHOTO;
-    m_buffer.resize(0);
+    d->state = Private::SMUG_ADDPHOTO;
+    d->buffer.resize(0);
     return true;
 }
 
 void SmugTalker::getPhoto(const QString& imgPath)
 {
-    if (m_reply)
+    if (d->reply)
     {
-        m_reply->abort();
-        m_reply = 0;
+        d->reply->abort();
+        d->reply = 0;
     }
 
     emit signalBusy(true);
 
     QNetworkRequest netRequest(QUrl::fromLocalFile(imgPath));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
-    netRequest.setRawHeader("X-Smug-SessionID", m_sessionID.toLatin1());
-    netRequest.setRawHeader("X-Smug-Version",   m_apiVersion.toLatin1());
+    netRequest.setHeader(QNetworkRequest::UserAgentHeader, d->userAgent);
+    netRequest.setRawHeader("X-Smug-SessionID", d->sessionID.toLatin1());
+    netRequest.setRawHeader("X-Smug-Version",   d->apiVersion.toLatin1());
 
-    m_reply = m_netMngr->get(netRequest);
+    d->reply = d->netMngr->get(netRequest);
 
-    m_state = SMUG_GETPHOTO;
-    m_buffer.resize(0);
+    d->state = Private::SMUG_GETPHOTO;
+    d->buffer.resize(0);
 }
 
 QString SmugTalker::errorToText(int errCode, const QString &errMsg)
@@ -484,29 +538,29 @@ QString SmugTalker::errorToText(int errCode, const QString &errMsg)
 
 void SmugTalker::slotFinished(QNetworkReply* reply)
 {
-    if (reply != m_reply)
+    if (reply != d->reply)
     {
         return;
     }
 
-    m_reply = 0;
+    d->reply = 0;
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        if (m_state == SMUG_LOGIN)
+        if (d->state == Private::SMUG_LOGIN)
         {
-            m_sessionID.clear();
-            m_user.clear();
+            d->sessionID.clear();
+            d->user.clear();
 
             emit signalBusy(false);
             emit signalLoginDone(reply->error(), reply->errorString());
         }
-        else if (m_state == SMUG_ADDPHOTO)
+        else if (d->state == Private::SMUG_ADDPHOTO)
         {
             emit signalBusy(false);
             emit signalAddPhotoDone(reply->error(), reply->errorString());
         }
-        else if (m_state == SMUG_GETPHOTO)
+        else if (d->state == Private::SMUG_GETPHOTO)
         {
             emit signalBusy(false);
             emit signalGetPhotoDone(reply->error(), reply->errorString(), QByteArray());
@@ -522,41 +576,41 @@ void SmugTalker::slotFinished(QNetworkReply* reply)
         return;
     }
 
-    m_buffer.append(reply->readAll());
+    d->buffer.append(reply->readAll());
 
-    switch(m_state)
+    switch(d->state)
     {
-        case (SMUG_LOGIN):
-            parseResponseLogin(m_buffer);
+        case (Private::SMUG_LOGIN):
+            parseResponseLogin(d->buffer);
             break;
-        case (SMUG_LOGOUT):
-            parseResponseLogout(m_buffer);
+        case (Private::SMUG_LOGOUT):
+            parseResponseLogout(d->buffer);
             break;
-        case (SMUG_LISTALBUMS):
-            parseResponseListAlbums(m_buffer);
+        case (Private::SMUG_LISTALBUMS):
+            parseResponseListAlbums(d->buffer);
             break;
-        case (SMUG_LISTPHOTOS):
-            parseResponseListPhotos(m_buffer);
+        case (Private::SMUG_LISTPHOTOS):
+            parseResponseListPhotos(d->buffer);
             break;
-        case (SMUG_LISTALBUMTEMPLATES):
-            parseResponseListAlbumTmpl(m_buffer);
+        case (Private::SMUG_LISTALBUMTEMPLATES):
+            parseResponseListAlbumTmpl(d->buffer);
             break;
-        case (SMUG_LISTCATEGORIES):
-            parseResponseListCategories(m_buffer);
+        case (Private::SMUG_LISTCATEGORIES):
+            parseResponseListCategories(d->buffer);
             break;
-        case (SMUG_LISTSUBCATEGORIES):
-            parseResponseListSubCategories(m_buffer);
+        case (Private::SMUG_LISTSUBCATEGORIES):
+            parseResponseListSubCategories(d->buffer);
             break;
-        case (SMUG_CREATEALBUM):
-            parseResponseCreateAlbum(m_buffer);
+        case (Private::SMUG_CREATEALBUM):
+            parseResponseCreateAlbum(d->buffer);
             break;
-        case (SMUG_ADDPHOTO):
-            parseResponseAddPhoto(m_buffer);
+        case (Private::SMUG_ADDPHOTO):
+            parseResponseAddPhoto(d->buffer);
             break;
-        case (SMUG_GETPHOTO):
+        case (Private::SMUG_GETPHOTO):
             // all we get is data of the image
             emit signalBusy(false);
-            emit signalGetPhotoDone(0, QString(), m_buffer);
+            emit signalGetPhotoDone(0, QString(), d->buffer);
             break;
     }
 
@@ -590,8 +644,8 @@ void SmugTalker::parseResponseLogin(const QByteArray& data)
 
         if (e.tagName() == QString::fromLatin1("Login"))
         {
-            m_user.accountType   = e.attribute(QString::fromLatin1("AccountType"));
-            m_user.fileSizeLimit = e.attribute(QString::fromLatin1("FileSizeLimit")).toInt();
+            d->user.accountType   = e.attribute(QString::fromLatin1("AccountType"));
+            d->user.fileSizeLimit = e.attribute(QString::fromLatin1("FileSizeLimit")).toInt();
 
             for (QDomNode nodeL = e.firstChild(); !nodeL.isNull(); nodeL = nodeL.nextSibling())
             {
@@ -602,12 +656,12 @@ void SmugTalker::parseResponseLogin(const QByteArray& data)
 
                 if (e.tagName() == QString::fromLatin1("Session"))
                 {
-                    m_sessionID = e.attribute(QString::fromLatin1("id"));
+                    d->sessionID = e.attribute(QString::fromLatin1("id"));
                 }
                 else if (e.tagName() == QString::fromLatin1("User"))
                 {
-                    m_user.nickName    = e.attribute(QString::fromLatin1("NickName"));
-                    m_user.displayName = e.attribute(QString::fromLatin1("DisplayName"));
+                    d->user.nickName    = e.attribute(QString::fromLatin1("NickName"));
+                    d->user.displayName = e.attribute(QString::fromLatin1("DisplayName"));
                 }
             }
 
@@ -625,8 +679,8 @@ void SmugTalker::parseResponseLogin(const QByteArray& data)
 
     if (errCode != 0) // if login failed, reset user properties
     {
-        m_sessionID.clear();
-        m_user.clear();
+        d->sessionID.clear();
+        d->user.clear();
     }
 
     emit signalBusy(false);
@@ -667,8 +721,8 @@ void SmugTalker::parseResponseLogout(const QByteArray& data)
     }
 
     // consider we are logged out in any case
-    m_sessionID.clear();
-    m_user.clear();
+    d->sessionID.clear();
+    d->user.clear();
 
     emit signalBusy(false);
 }

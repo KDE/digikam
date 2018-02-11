@@ -29,13 +29,13 @@
 #include <QList>
 #include <QString>
 #include <QObject>
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
 
 // local includes
 
 #include "smugitem.h"
 #include "dinfointerface.h"
+
+class QNetworkReply;
 
 namespace Digikam
 {
@@ -117,40 +117,8 @@ private Q_SLOTS:
 
 private:
 
-    enum State
-    {
-        SMUG_LOGIN = 0,
-        SMUG_LOGOUT,
-        SMUG_LISTALBUMS,
-        SMUG_LISTPHOTOS,
-        SMUG_LISTALBUMTEMPLATES,
-        SMUG_LISTCATEGORIES,
-        SMUG_LISTSUBCATEGORIES,
-        SMUG_CREATEALBUM,
-        SMUG_ADDPHOTO,
-        SMUG_GETPHOTO
-    };
-
-private:
-
-    QWidget*               m_parent;
-
-    QByteArray             m_buffer;
-
-    QString                m_userAgent;
-    QString                m_apiURL;
-    QString                m_apiVersion;
-    QString                m_apiKey;
-    QString                m_sessionID;
-
-    SmugUser               m_user;
-    DInfoInterface*        m_iface;
-
-    QNetworkAccessManager* m_netMngr;
-
-    QNetworkReply*         m_reply;
-
-    State                  m_state;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

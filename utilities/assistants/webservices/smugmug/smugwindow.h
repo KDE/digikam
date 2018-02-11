@@ -42,10 +42,6 @@
 namespace Digikam
 {
 
-class SmugTalker;
-class SmugWidget;
-class SmugNewAlbumDlg;
-
 class DIGIKAM_EXPORT SmugWindow : public WSToolDialog
 {
     Q_OBJECT
