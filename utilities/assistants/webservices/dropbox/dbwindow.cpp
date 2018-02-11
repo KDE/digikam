@@ -320,8 +320,11 @@ void DBWindow::uploadNextPhoto()
     QString imgPath = d->transferQueue.first().toLocalFile();
     QString temp = d->currentAlbumName + QLatin1String("/");
 
-    bool res = d->talker->addPhoto(imgPath,temp,d->widget->getResizeCheckBox()->isChecked(),d->widget->getDimensionSpB()->value(),
-                                  d->widget->getImgQualitySpB()->value());
+    bool res = d->talker->addPhoto(imgPath,
+                                   temp,
+                                   d->widget->getResizeCheckBox()->isChecked(),
+                                   d->widget->getDimensionSpB()->value(),
+                                   d->widget->getImgQualitySpB()->value());
 
     if (!res)
     {

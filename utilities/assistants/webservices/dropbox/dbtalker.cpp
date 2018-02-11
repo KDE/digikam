@@ -69,17 +69,17 @@ public:
 
     Private()
     {
-        apikey               = QLatin1String("mv2pk07ym9bx3r8");
-        secret               = QLatin1String("f33sflc8jhiozqu");
+        apikey   = QLatin1String("mv2pk07ym9bx3r8");
+        secret   = QLatin1String("f33sflc8jhiozqu");
 
-        authUrl              = QLatin1String("https://www.dropbox.com/oauth2/authorize");
-        tokenUrl             = QLatin1String("https://api.dropboxapi.com/oauth2/token");
+        authUrl  = QLatin1String("https://www.dropbox.com/oauth2/authorize");
+        tokenUrl = QLatin1String("https://api.dropboxapi.com/oauth2/token");
 
-        state                = DB_USERNAME;
-        settings             = 0;
-        netMngr              = 0;
-        reply                = 0;
-        o2                   = 0;
+        state    = DB_USERNAME;
+        settings = 0;
+        netMngr  = 0;
+        reply    = 0;
+        o2       = 0;
     }
 
 public:
@@ -210,7 +210,7 @@ void DBTalker::createFolder(const QString& path)
 
     d->reply = d->netMngr->post(netRequest, postData);
 
-    d->state = d->DB_CREATEFOLDER;
+    d->state = Private::DB_CREATEFOLDER;
     d->buffer.resize(0);
     emit signalBusy(true);
 }
@@ -226,7 +226,7 @@ void DBTalker::getUserName()
 
     d->reply = d->netMngr->post(netRequest, QByteArray());
 
-    d->state = d->DB_USERNAME;
+    d->state = Private::DB_USERNAME;
     d->buffer.resize(0);
     emit signalBusy(true);
 }
@@ -245,7 +245,7 @@ void DBTalker::listFolders(const QString& path)
 
     d->reply = d->netMngr->post(netRequest, postData);
 
-    d->state = d->DB_LISTFOLDERS;
+    d->state = Private::DB_LISTFOLDERS;
     d->buffer.resize(0);
     emit signalBusy(true);
 }
@@ -305,7 +305,7 @@ bool DBTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     d->reply = d->netMngr->post(netRequest, form.formData());
 
-    d->state = d->DB_ADDPHOTO;
+    d->state = Private::DB_ADDPHOTO;
     d->buffer.resize(0);
     emit signalBusy(true);
     return true;
@@ -333,7 +333,7 @@ void DBTalker::slotFinished(QNetworkReply* reply)
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        if (d->state != d->DB_CREATEFOLDER)
+        if (d->state != Private::DB_CREATEFOLDER)
         {
             emit signalBusy(false);
             QMessageBox::critical(QApplication::activeWindow(),
@@ -348,20 +348,20 @@ void DBTalker::slotFinished(QNetworkReply* reply)
 
     switch (d->state)
     {
-        case (d->DB_LISTFOLDERS):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In d->DB_LISTFOLDERS";
+        case Private::DB_LISTFOLDERS:
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In DB_LISTFOLDERS";
             parseResponseListFolders(d->buffer);
             break;
-        case (d->DB_CREATEFOLDER):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In d->DB_CREATEFOLDER";
+        case Private::DB_CREATEFOLDER:
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In DB_CREATEFOLDER";
             parseResponseCreateFolder(d->buffer);
             break;
-        case (d->DB_ADDPHOTO):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In d->DB_ADDPHOTO";
+        case Private::DB_ADDPHOTO:
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In DB_ADDPHOTO";
             parseResponseAddPhoto(d->buffer);
             break;
-        case (d->DB_USERNAME):
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In d->DB_USERNAME";
+        case Private::DB_USERNAME:
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In DB_USERNAME";
             parseResponseUserName(d->buffer);
             break;
         default:
