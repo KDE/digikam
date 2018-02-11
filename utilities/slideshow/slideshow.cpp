@@ -408,7 +408,8 @@ void SlideShow::preloadNextItem()
 
     if (index < num)
     {
-        d->imageView->setPreloadUrl(currentItem());
+        QUrl nextItem = d->settings.fileList.value(index);
+        d->imageView->setPreloadUrl(nextItem);
     }
 }
 
