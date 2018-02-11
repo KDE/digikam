@@ -122,7 +122,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 081 ==> 230003 : Zoombar slider adjustments below 100% are hard to archieve [patch].
 082 ==> 228810 : Need to roll over again on a thumb to correct the rating.
 083 ==> 210259 : Scan crashed on multi-layer TIFFs.
-084 ==> 229344 : digiKam starting up - loading kipi-plugins.
+084 ==> 229344 : digiKam starting up - loading tools.
 085 ==> 229578 : Metadata is not correctly updated when just assigning tags.
 086 ==> 230323 : ShowFoto and digiKam opening Olympus E-P2 ORF file will crash.
 087 ==> 229108 : digiKam doesn't display all images after and upgrade.

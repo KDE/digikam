@@ -39,7 +39,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 032 ==> 326589 - When detect face with one folder limit and option skip already scanned image, .avi and .move in other folder are scanned too.
 033 ==> 337878 - THUMBBAR : item focus must stay in the middle [patch].
 034 ==> 344952 - Keep selected image in thumbbar in the middle while being in preview mode.
-035 ==> 348146 - kipi configuration module?
+035 ==> 348146 - Tools configuration module?
 036 ==> 332316 - Lens Auto-Correction should remember previously used settings.
 037 ==> 333630 - Cannot search items with exposure times > 30s or focal lengths > 1000mm.
 038 ==> 257679 - Build a PKG package for digiKam under MacOSX.
