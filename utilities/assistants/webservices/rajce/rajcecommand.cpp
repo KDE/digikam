@@ -55,8 +55,12 @@ struct PreparedImage
     QString thumbPath;
 };
 
-PreparedImage s_prepareImageForUpload(const QString& saveDir, const QImage& img, const QString& imagePath,
-                                      unsigned maxDimension, unsigned thumbDimension, int jpgQuality)
+PreparedImage s_prepareImageForUpload(const QString& saveDir,
+                                      const QImage& img,
+                                      const QString& imagePath,
+                                      unsigned maxDimension,
+                                      unsigned thumbDimension,
+                                      int jpgQuality)
 {
     PreparedImage ret;
 
@@ -70,7 +74,8 @@ PreparedImage s_prepareImageForUpload(const QString& saveDir, const QImage& img,
     ret.scaledImagePath = baseName + QString::fromLatin1(".jpg");
     ret.thumbPath       = baseName + QString::fromLatin1(".thumb.jpg");
 
-    if (maxDimension > 0 && ((unsigned) image.width() > maxDimension || (unsigned) image.height() > maxDimension))
+    if (maxDimension > 0 && ((unsigned) image.width() > maxDimension ||
+        (unsigned) image.height() > maxDimension))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing to " << maxDimension;
         image = image.scaled(maxDimension, maxDimension, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -275,8 +280,10 @@ void LoginCommand::cleanUpOnError(RajceSession& state)
 
 // -----------------------------------------------------------------------
 
-CreateAlbumCommand::CreateAlbumCommand(const QString& name, const QString& description,
-                                       bool visible, const RajceSession& state)
+CreateAlbumCommand::CreateAlbumCommand(const QString& name,
+                                       const QString& description,
+                                       bool visible,
+                                       const RajceSession& state)
     : RajceCommand(QString::fromLatin1("createAlbum"), CreateAlbum)
 {
     parameters()[QString::fromLatin1("token")]            = state.sessionToken();
@@ -359,7 +366,8 @@ void AlbumListCommand::parseResponse(QXmlQuery& q, RajceSession& state)
         q.evaluateTo(&detail);
         album.createDate  = QDateTime::fromString(detail.trimmed(), QString::fromLatin1("yyyy-MM-dd hh:mm:ss"));
 
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Create date: " << detail.trimmed() << " = " << QDateTime::fromString(detail.trimmed(), QString::fromLatin1("yyyy-MM-dd hh:mm:ss"));
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Create date: " << detail.trimmed() << " = "
+                                         << QDateTime::fromString(detail.trimmed(), QString::fromLatin1("yyyy-MM-dd hh:mm:ss"));
 
         q.setQuery(QString::fromLatin1("data(./updateDate)"));
         q.evaluateTo(&detail);
@@ -404,8 +412,11 @@ void AlbumListCommand::cleanUpOnError(RajceSession& state)
 
 // -----------------------------------------------------------------------
 
-AddPhotoCommand::AddPhotoCommand(const QString& tmpDir, const QString& path, unsigned dimension,
-                                 int jpgQuality, const RajceSession& state)
+AddPhotoCommand::AddPhotoCommand(const QString& tmpDir,
+                                 const QString& path,
+                                 unsigned dimension,
+                                 int jpgQuality,
+                                 const RajceSession& state)
     : RajceCommand(QString::fromLatin1("addPhoto"), AddPhoto),
       m_jpgQuality(jpgQuality),
       m_desiredDimension(dimension),
@@ -440,11 +451,11 @@ AddPhotoCommand::~AddPhotoCommand()
     delete m_form;
 }
 
-void AddPhotoCommand::cleanUpOnError(Digikam::RajceSession&)
+void AddPhotoCommand::cleanUpOnError(RajceSession&)
 {
 }
 
-void AddPhotoCommand::parseResponse(QXmlQuery&, Digikam::RajceSession&)
+void AddPhotoCommand::parseResponse(QXmlQuery&, RajceSession&)
 {
 }
 

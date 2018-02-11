@@ -87,35 +87,35 @@ public:
     /** Create a copy of container
      */
     RajceSession& operator=(const RajceSession& other);
-    
+
 public:
 
     QString& sessionToken();
-    QString const& sessionToken() const;
+    QString  const& sessionToken()      const;
     QString& nickname();
-    QString const& nickname() const;
+    QString  const& nickname()          const;
     QString& username();
-    QString const& username() const;
+    QString  const& username()          const;
     QString& openAlbumToken();
-    QString const& openAlbumToken() const;
+    QString  const& openAlbumToken()    const;
     QString& lastErrorMessage();
-    QString const& lastErrorMessage() const;
+    QString  const& lastErrorMessage()  const;
 
     unsigned& maxWidth();
-    unsigned maxWidth() const;
+    unsigned  maxWidth()                const;
     unsigned& maxHeight();
-    unsigned maxHeight() const;
+    unsigned  maxHeight()               const;
     unsigned& imageQuality();
-    unsigned imageQuality() const;
+    unsigned  imageQuality()            const;
     unsigned& lastErrorCode();
-    unsigned lastErrorCode() const;
+    unsigned  lastErrorCode()           const;
 
     QVector<RajceAlbum>& albums();
     const QVector<RajceAlbum>& albums() const;
-    
-    RajceCommandType lastCommand() const;
+
     RajceCommandType& lastCommand();
-    
+    RajceCommandType  lastCommand()     const;
+
 private:
 
     class Private;

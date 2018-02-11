@@ -48,22 +48,22 @@ public:
 
 public:
 
-    QString getXml() const;
-
     void processResponse(const QString& response, RajceSession& state);
 
-    RajceCommandType commandType() const;
-    virtual QByteArray encode()    const;
-    virtual QString contentType()  const;
+    QString            getXml()      const;
+    RajceCommandType   commandType() const;
+    virtual QByteArray encode()      const;
+    virtual QString    contentType() const;
 
 protected:
 
     virtual void parseResponse(QXmlQuery& query, RajceSession& state) = 0;
-    virtual void cleanUpOnError(RajceSession& state) = 0;
+    virtual void cleanUpOnError(RajceSession& state)                  = 0;
 
-    QMap<QString, QString>& parameters() const; // allow modification in const methods for lazy init to be possible
+    // Allow modification in const methods for lazy init to be possible
+    QMap<QString, QString>& parameters() const;
 
-    // additional xml after the "parameters"
+    // Aooend additional xml after the "parameters"
     virtual QString additionalXml() const;
 
 private:
@@ -88,7 +88,7 @@ public:
 protected:
 
     void parseResponse(QXmlQuery& response, RajceSession& state) Q_DECL_OVERRIDE;
-    void cleanUpOnError(RajceSession& state) Q_DECL_OVERRIDE;
+    void cleanUpOnError(RajceSession& state)                     Q_DECL_OVERRIDE;
 };
 
 // -----------------------------------------------------------------------
@@ -102,7 +102,7 @@ public:
 protected:
 
     void parseResponse(QXmlQuery& response, RajceSession& state) Q_DECL_OVERRIDE;
-    void cleanUpOnError(RajceSession& state) Q_DECL_OVERRIDE;
+    void cleanUpOnError(RajceSession& state)                     Q_DECL_OVERRIDE;
 };
 
 // -----------------------------------------------------------------------
@@ -113,13 +113,13 @@ public:
 
     explicit CreateAlbumCommand(const QString& name,
                                 const QString& description,
-                                bool visible,
+                                bool  visible,
                                 const RajceSession& state);
 
 protected:
 
     void parseResponse(QXmlQuery& response, RajceSession& state) Q_DECL_OVERRIDE;
-    void cleanUpOnError(RajceSession& state) Q_DECL_OVERRIDE;
+    void cleanUpOnError(RajceSession& state)                     Q_DECL_OVERRIDE;
 };
 
 // -----------------------------------------------------------------------
@@ -133,7 +133,7 @@ public:
 protected:
 
     void parseResponse(QXmlQuery& response, RajceSession& state) Q_DECL_OVERRIDE;
-    void cleanUpOnError(RajceSession& state) Q_DECL_OVERRIDE;
+    void cleanUpOnError(RajceSession& state)                     Q_DECL_OVERRIDE;
 };
 
 // -----------------------------------------------------------------------
@@ -147,7 +147,7 @@ public:
 protected:
 
     void parseResponse(QXmlQuery& response, RajceSession& state) Q_DECL_OVERRIDE;
-    void cleanUpOnError(RajceSession& state) Q_DECL_OVERRIDE;
+    void cleanUpOnError(RajceSession& state)                     Q_DECL_OVERRIDE;
 };
 
 // -----------------------------------------------------------------------
@@ -156,21 +156,23 @@ class AddPhotoCommand : public RajceCommand
 {
 public:
 
-    explicit AddPhotoCommand(const QString& tmpDir,
-                             const QString& path,
+    explicit AddPhotoCommand(const    QString& tmpDir,
+                             const    QString& path,
                              unsigned dimension,
-                             int jpgQuality,
-                             const RajceSession& state);
+                             int      jpgQuality,
+                             const    RajceSession& state);
     virtual ~AddPhotoCommand();
 
-    QByteArray encode() const Q_DECL_OVERRIDE;
+public:
+
+    QByteArray encode()      const Q_DECL_OVERRIDE;
     QString    contentType() const Q_DECL_OVERRIDE;
 
 protected:
 
-    void    cleanUpOnError(Digikam::RajceSession& state) Q_DECL_OVERRIDE;
-    void    parseResponse(QXmlQuery& query, Digikam::RajceSession& state) Q_DECL_OVERRIDE;
-    QString additionalXml() const Q_DECL_OVERRIDE;
+    void    cleanUpOnError(RajceSession& state)                  Q_DECL_OVERRIDE;
+    void    parseResponse(QXmlQuery& query, RajceSession& state) Q_DECL_OVERRIDE;
+    QString additionalXml() const                                Q_DECL_OVERRIDE;
 
 private:
 
