@@ -61,20 +61,65 @@
 namespace Digikam
 {
 
+class SmugWindow::Private
+{
+public:
+
+    Private()
+    {
+        import            = false;
+        imagesCount       = 0;
+        imagesTotal       = 0;
+        anonymousImport   = false;
+        currentAlbumID    = 0;
+        currentTmplID     = 0;
+        currentCategoryID = 0;
+        loginDlg          = 0;
+        talker            = 0;
+        widget            = 0;
+        albumDlg          = 0;
+        iface             = 0;
+    }
+
+    bool             import;
+    unsigned int     imagesCount;
+    unsigned int     imagesTotal;
+    QString          tmpDir;
+    QString          tmpPath;
+
+    bool             anonymousImport;
+    QString          anonymousNick;
+    QString          email;
+    QString          password;
+    qint64           currentAlbumID;
+    QString          currentAlbumKey;
+    qint64           currentTmplID;
+    qint64           currentCategoryID;
+
+    WSLoginDialog*   loginDlg;
+
+    QList<QUrl>      transferQueue;
+
+    SmugTalker*      talker;
+    SmugWidget*      widget;
+    SmugNewAlbumDlg* albumDlg;
+
+    DInfoInterface*  iface;
+};
+
 SmugWindow::SmugWindow(DInfoInterface* const iface,
                        QWidget* const /*parent*/,
                        bool import)
-    : WSToolDialog(0)
+    : WSToolDialog(0),
+      d(new Private)
 {
-    m_tmpPath.clear();
-    m_tmpDir      = WSToolUtils::makeTemporaryDir("smug").absolutePath() + QLatin1Char('/');;
-    m_import      = import;
-    m_imagesCount = 0;
-    m_imagesTotal = 0;
-    m_iface       = iface;
-    m_widget      = new SmugWidget(this, iface, import);
+    d->tmpPath.clear();
+    d->tmpDir = WSToolUtils::makeTemporaryDir("smug").absolutePath() + QLatin1Char('/');;
+    d->import = import;
+    d->iface  = iface;
+    d->widget = new SmugWidget(this, iface, import);
 
-    setMainWidget(m_widget);
+    setMainWidget(d->widget);
     setModal(false);
 
     if (import)
@@ -84,7 +129,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
         startButton()->setText(i18n("Start Download"));
         startButton()->setToolTip(i18n("Start download from SmugMug web service"));
 
-        m_widget->setMinimumSize(300, 400);
+        d->widget->setMinimumSize(300, 400);
     }
     else
     {
@@ -93,20 +138,19 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
         startButton()->setText(i18n("Start Upload"));
         startButton()->setToolTip(i18n("Start upload to SmugMug web service"));
 
-        m_widget->setMinimumSize(700, 500);
+        d->widget->setMinimumSize(700, 500);
     }
 
-
-    connect(m_widget, SIGNAL(signalUserChangeRequest(bool)),
+    connect(d->widget, SIGNAL(signalUserChangeRequest(bool)),
             this, SLOT(slotUserChangeRequest(bool)) );
 
-    connect(m_widget->m_imgList, SIGNAL(signalImageListChanged()),
+    connect(d->widget->m_imgList, SIGNAL(signalImageListChanged()),
             this, SLOT(slotImageListChanged()) );
 
-    connect(m_widget->m_reloadAlbumsBtn, SIGNAL(clicked()),
+    connect(d->widget->m_reloadAlbumsBtn, SIGNAL(clicked()),
             this, SLOT(slotReloadAlbumsRequest()) );
 
-    connect(m_widget->m_newAlbumBtn, SIGNAL(clicked()),
+    connect(d->widget->m_newAlbumBtn, SIGNAL(clicked()),
             this, SLOT(slotNewAlbumRequest()) );
 
     connect(startButton(), &QPushButton::clicked,
@@ -120,58 +164,58 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
 
     // ------------------------------------------------------------------------
 
-    m_loginDlg  = new WSLoginDialog(this,
-                                  i18n("<qt>Enter the <b>email address</b> and <b>password</b> for your "
-                                       "<a href=\"http://www.smugmug.com\">SmugMug</a> account</qt>"));
+    d->loginDlg  = new WSLoginDialog(this,
+                                     i18n("<qt>Enter the <b>email address</b> and <b>password</b> for your "
+                                          "<a href=\"http://www.smugmug.com\">SmugMug</a> account</qt>"));
 
     // ------------------------------------------------------------------------
 
-    m_albumDlg  = new SmugNewAlbumDlg(this);
+    d->albumDlg  = new SmugNewAlbumDlg(this);
 
-    connect(m_albumDlg->m_categCoB, SIGNAL(currentIndexChanged(int)),
+    connect(d->albumDlg->m_categCoB, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotCategorySelectionChanged(int)) );
 
-    connect(m_albumDlg->m_templateCoB, SIGNAL(currentIndexChanged(int)),
+    connect(d->albumDlg->m_templateCoB, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotTemplateSelectionChanged(int)) );
 
     // ------------------------------------------------------------------------
 
-    m_talker = new SmugTalker(m_iface, this);
+    d->talker = new SmugTalker(d->iface, this);
 
-    connect(m_talker, SIGNAL(signalBusy(bool)),
+    connect(d->talker, SIGNAL(signalBusy(bool)),
             this, SLOT(slotBusy(bool)));
 
-    connect(m_talker, SIGNAL(signalLoginProgress(int,int,QString)),
+    connect(d->talker, SIGNAL(signalLoginProgress(int,int,QString)),
             this, SLOT(slotLoginProgress(int,int,QString)));
 
-    connect(m_talker, SIGNAL(signalLoginDone(int,QString)),
+    connect(d->talker, SIGNAL(signalLoginDone(int,QString)),
             this, SLOT(slotLoginDone(int,QString)));
 
-    connect(m_talker, SIGNAL(signalAddPhotoDone(int,QString)),
+    connect(d->talker, SIGNAL(signalAddPhotoDone(int,QString)),
             this, SLOT(slotAddPhotoDone(int,QString)));
 
-    connect(m_talker, SIGNAL(signalGetPhotoDone(int,QString,QByteArray)),
+    connect(d->talker, SIGNAL(signalGetPhotoDone(int,QString,QByteArray)),
             this, SLOT(slotGetPhotoDone(int,QString,QByteArray)));
 
-    connect(m_talker, SIGNAL(signalCreateAlbumDone(int,QString,qint64,QString)),
+    connect(d->talker, SIGNAL(signalCreateAlbumDone(int,QString,qint64,QString)),
             this, SLOT(slotCreateAlbumDone(int,QString,qint64,QString)));
 
-    connect(m_talker, SIGNAL(signalListAlbumsDone(int,QString,QList<SmugAlbum>)),
+    connect(d->talker, SIGNAL(signalListAlbumsDone(int,QString,QList<SmugAlbum>)),
             this, SLOT(slotListAlbumsDone(int,QString,QList<SmugAlbum>)));
 
-    connect(m_talker, SIGNAL(signalListPhotosDone(int,QString,QList<SmugPhoto>)),
+    connect(d->talker, SIGNAL(signalListPhotosDone(int,QString,QList<SmugPhoto>)),
             this, SLOT(slotListPhotosDone(int,QString,QList<SmugPhoto>)));
 
-    connect(m_talker, SIGNAL(signalListAlbumTmplDone(int,QString,QList<SmugAlbumTmpl>)),
+    connect(d->talker, SIGNAL(signalListAlbumTmplDone(int,QString,QList<SmugAlbumTmpl>)),
             this, SLOT(slotListAlbumTmplDone(int,QString,QList<SmugAlbumTmpl>)));
 
-    connect(m_talker, SIGNAL(signalListCategoriesDone(int,QString,QList<SmugCategory>)),
+    connect(d->talker, SIGNAL(signalListCategoriesDone(int,QString,QList<SmugCategory>)),
             this, SLOT(slotListCategoriesDone(int,QString,QList<SmugCategory>)));
 
-    connect(m_talker, SIGNAL(signalListSubCategoriesDone(int,QString,QList<SmugCategory>)),
+    connect(d->talker, SIGNAL(signalListSubCategoriesDone(int,QString,QList<SmugCategory>)),
             this, SLOT(slotListSubCategoriesDone(int,QString,QList<SmugCategory>)));
 
-    connect(m_widget->progressBar(), SIGNAL(signalProgressCanceled()),
+    connect(d->widget->progressBar(), SIGNAL(signalProgressCanceled()),
             this, SLOT(slotStopAndCloseProgressBar()));
 
     // ------------------------------------------------------------------------
@@ -179,33 +223,34 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
     readSettings();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
-    buttonStateChange(m_talker->loggedIn());
+    buttonStateChange(d->talker->loggedIn());
 
-    if (m_import)
+    if (d->import)
     {
         // if no e-mail, switch to anonymous login
-        if (m_anonymousImport || m_email.isEmpty())
+        if (d->anonymousImport || d->email.isEmpty())
         {
-            m_anonymousImport = true;
+            d->anonymousImport = true;
             authenticate();
         }
         else
-            authenticate(m_email, m_password);
-        m_widget->setAnonymous(m_anonymousImport);
+            authenticate(d->email, d->password);
+        d->widget->setAnonymous(d->anonymousImport);
     }
     else
     {
         // export cannot login anonymously: pop-up login window`
-        if (m_email.isEmpty())
+        if (d->email.isEmpty())
             slotUserChangeRequest(false);
         else
-            authenticate(m_email, m_password);
+            authenticate(d->email, d->password);
     }
 }
 
 SmugWindow::~SmugWindow()
 {
-    delete m_talker;
+    delete d->talker;
+    delete d;
 }
 
 void SmugWindow::closeEvent(QCloseEvent* e)
@@ -223,11 +268,11 @@ void SmugWindow::slotDialogFinished()
 {
     slotCancelClicked();
 
-    if (m_talker->loggedIn())
-        m_talker->logout();
+    if (d->talker->loggedIn())
+        d->talker->logout();
 
     writeSettings();
-    m_widget->imagesList()->listView()->clear();
+    d->widget->imagesList()->listView()->clear();
 }
 
 void SmugWindow::setUiInProgressState(bool inProgress)
@@ -236,20 +281,20 @@ void SmugWindow::setUiInProgressState(bool inProgress)
 
     if (inProgress)
     {
-        m_widget->progressBar()->show();
+        d->widget->progressBar()->show();
     }
     else
     {
-        m_widget->progressBar()->hide();
-        m_widget->progressBar()->progressCompleted();
+        d->widget->progressBar()->hide();
+        d->widget->progressBar()->progressCompleted();
     }
 }
 
 void SmugWindow::slotCancelClicked()
 {
-    m_talker->cancel();
-    m_transferQueue.clear();
-    m_widget->m_imgList->cancelProcess();
+    d->talker->cancel();
+    d->transferQueue.clear();
+    d->widget->m_imgList->cancelProcess();
     setUiInProgressState(false);
 }
 
@@ -258,51 +303,51 @@ void SmugWindow::slotStopAndCloseProgressBar()
     slotCancelClicked();
 
     writeSettings();
-    m_widget->imagesList()->listView()->clear();
+    d->widget->imagesList()->listView()->clear();
     reject();
 }
 
 void SmugWindow::reactivate()
 {
-    m_widget->imagesList()->loadImagesFromCurrentSelection();
+    d->widget->imagesList()->loadImagesFromCurrentSelection();
     show();
 }
 
 void SmugWindow::authenticate(const QString& email, const QString& password)
 {
     setUiInProgressState(true);
-    m_widget->progressBar()->setFormat(QString());
+    d->widget->progressBar()->setFormat(QString());
 
-    m_talker->login(email, password);
+    d->talker->login(email, password);
 }
 
 void SmugWindow::readSettings()
 {
     KConfig config;
     KConfigGroup grp  = config.group("Smug Settings");
-    m_anonymousImport = grp.readEntry("AnonymousImport", true);
-    m_email           = grp.readEntry("Email");
-    m_password        = grp.readEntry("Password");
-    m_currentAlbumID  = grp.readEntry("Current Album", -1);
-    m_currentAlbumKey = grp.readEntry("Current Key", -1);
+    d->anonymousImport = grp.readEntry("AnonymousImport", true);
+    d->email           = grp.readEntry("Email");
+    d->password        = grp.readEntry("Password");
+    d->currentAlbumID  = grp.readEntry("Current Album", -1);
+    d->currentAlbumKey = grp.readEntry("Current Key", -1);
 
     if (grp.readEntry("Resize", false))
     {
-        m_widget->m_resizeChB->setChecked(true);
-        m_widget->m_dimensionSpB->setEnabled(true);
-        m_widget->m_imageQualitySpB->setEnabled(true);
+        d->widget->m_resizeChB->setChecked(true);
+        d->widget->m_dimensionSpB->setEnabled(true);
+        d->widget->m_imageQualitySpB->setEnabled(true);
     }
     else
     {
-        m_widget->m_resizeChB->setChecked(false);
-        m_widget->m_dimensionSpB->setEnabled(false);
-        m_widget->m_imageQualitySpB->setEnabled(false);
+        d->widget->m_resizeChB->setChecked(false);
+        d->widget->m_dimensionSpB->setEnabled(false);
+        d->widget->m_imageQualitySpB->setEnabled(false);
     }
 
-    m_widget->m_dimensionSpB->setValue(grp.readEntry("Maximum Width", 1600));
-    m_widget->m_imageQualitySpB->setValue(grp.readEntry("Image Quality", 85));
+    d->widget->m_dimensionSpB->setValue(grp.readEntry("Maximum Width", 1600));
+    d->widget->m_imageQualitySpB->setValue(grp.readEntry("Image Quality", 85));
 
-    if (m_import)
+    if (d->import)
     {
         winId();
         KConfigGroup dialogGroup = config.group("Smug Import Dialog");
@@ -322,16 +367,16 @@ void SmugWindow::writeSettings()
 {
     KConfig config;
     KConfigGroup grp = config.group("Smug Settings");
-    grp.writeEntry("AnonymousImport", m_anonymousImport);
-    grp.writeEntry("Email",           m_email);
-    grp.writeEntry("Password",        m_password);
-    grp.writeEntry("Current Album",   m_currentAlbumID);
-    grp.writeEntry("Current Key",     m_currentAlbumKey);
-    grp.writeEntry("Resize",          m_widget->m_resizeChB->isChecked());
-    grp.writeEntry("Maximum Width",   m_widget->m_dimensionSpB->value());
-    grp.writeEntry("Image Quality",   m_widget->m_imageQualitySpB->value());
+    grp.writeEntry("AnonymousImport", d->anonymousImport);
+    grp.writeEntry("Email",           d->email);
+    grp.writeEntry("Password",        d->password);
+    grp.writeEntry("Current Album",   d->currentAlbumID);
+    grp.writeEntry("Current Key",     d->currentAlbumKey);
+    grp.writeEntry("Resize",          d->widget->m_resizeChB->isChecked());
+    grp.writeEntry("Maximum Width",   d->widget->m_dimensionSpB->value());
+    grp.writeEntry("Image Quality",   d->widget->m_imageQualitySpB->value());
 
-    if (m_import)
+    if (d->import)
     {
         KConfigGroup dialogGroup = config.group("Smug Import Dialog");
         KWindowConfig::saveWindowSize(windowHandle(), dialogGroup);
@@ -347,7 +392,7 @@ void SmugWindow::writeSettings()
 
 void SmugWindow::slotLoginProgress(int step, int maxStep, const QString &label)
 {
-    DProgressWdg* progressBar = m_widget->progressBar();
+    DProgressWdg* progressBar = d->widget->progressBar();
 
     if (!label.isEmpty())
         progressBar->setFormat(label);
@@ -362,28 +407,28 @@ void SmugWindow::slotLoginDone(int errCode, const QString &errMsg)
 {
     setUiInProgressState(false);
 
-    buttonStateChange(m_talker->loggedIn());
-    SmugUser user = m_talker->getUser();
-    m_widget->updateLabels(user.email, user.displayName, user.nickName);
-    m_widget->m_albumsCoB->clear();
+    buttonStateChange(d->talker->loggedIn());
+    SmugUser user = d->talker->getUser();
+    d->widget->updateLabels(user.email, user.displayName, user.nickName);
+    d->widget->m_albumsCoB->clear();
 
-    if (errCode == 0 && m_talker->loggedIn())
+    if (errCode == 0 && d->talker->loggedIn())
     {
-        if (m_import)
+        if (d->import)
         {
-            m_anonymousImport = m_widget->isAnonymous();
+            d->anonymousImport = d->widget->isAnonymous();
             // anonymous: list albums after login only if nick is not empty
-            QString nick = m_widget->getNickName();
+            QString nick = d->widget->getNickName();
 
-            if (!nick.isEmpty() || !m_anonymousImport)
+            if (!nick.isEmpty() || !d->anonymousImport)
             {
-                m_talker->listAlbums(nick);
+                d->talker->listAlbums(nick);
             }
         }
         else
         {
             // get albums from current user
-            m_talker->listAlbums();
+            d->talker->listAlbums();
         }
     }
     else
@@ -401,7 +446,7 @@ void SmugWindow::slotListAlbumsDone(int errCode, const QString &errMsg,
         return;
     }
 
-    m_widget->m_albumsCoB->clear();
+    d->widget->m_albumsCoB->clear();
 
     for (int i = 0; i < albumsList.size(); ++i)
     {
@@ -415,10 +460,10 @@ void SmugWindow::slotListAlbumsDone(int errCode, const QString &errMsg,
             albumIcon = QString::fromLatin1("folder");
 
         QString data = QString::fromLatin1("%1:%2").arg(albumsList.at(i).id).arg(albumsList.at(i).key);
-        m_widget->m_albumsCoB->addItem(QIcon::fromTheme(albumIcon), albumsList.at(i).title, data);
+        d->widget->m_albumsCoB->addItem(QIcon::fromTheme(albumIcon), albumsList.at(i).title, data);
 
-        if (m_currentAlbumID == albumsList.at(i).id)
-            m_widget->m_albumsCoB->setCurrentIndex(i);
+        if (d->currentAlbumID == albumsList.at(i).id)
+            d->widget->m_albumsCoB->setCurrentIndex(i);
     }
 }
 
@@ -431,21 +476,21 @@ void SmugWindow::slotListPhotosDone(int errCode, const QString &errMsg,
         return;
     }
 
-    m_transferQueue.clear();
+    d->transferQueue.clear();
 
     for (int i = 0; i < photosList.size(); ++i)
     {
-        m_transferQueue.push_back(QUrl::fromLocalFile(photosList.at(i).originalURL));
+        d->transferQueue.push_back(QUrl::fromLocalFile(photosList.at(i).originalURL));
     }
 
-    if (m_transferQueue.isEmpty())
+    if (d->transferQueue.isEmpty())
         return;
 
-    m_imagesTotal = m_transferQueue.count();
-    m_imagesCount = 0;
+    d->imagesTotal = d->transferQueue.count();
+    d->imagesCount = 0;
 
-    m_widget->progressBar()->setMaximum(m_imagesTotal);
-    m_widget->progressBar()->setValue(0);
+    d->widget->progressBar()->setMaximum(d->imagesTotal);
+    d->widget->progressBar()->setValue(0);
 
     // start download with first photo in queue
     downloadNextPhoto();
@@ -455,8 +500,8 @@ void SmugWindow::slotListAlbumTmplDone(int errCode, const QString &errMsg,
                                        const QList <SmugAlbumTmpl>& albumTList)
 {
     // always put at least default <none> subcategory
-    m_albumDlg->m_templateCoB->clear();
-    m_albumDlg->m_templateCoB->addItem(i18n("&lt;none&gt;"), 0);
+    d->albumDlg->m_templateCoB->clear();
+    d->albumDlg->m_templateCoB->addItem(i18n("&lt;none&gt;"), 0);
 
     if (errCode != 0)
     {
@@ -475,19 +520,20 @@ void SmugWindow::slotListAlbumTmplDone(int errCode, const QString &errMsg,
         else
             albumIcon = QString::fromLatin1("folder");
 
-        m_albumDlg->m_templateCoB->addItem(QIcon::fromTheme(albumIcon), albumTList.at(i).name, albumTList.at(i).id);
+        d->albumDlg->m_templateCoB->addItem(QIcon::fromTheme(albumIcon), albumTList.at(i).name, albumTList.at(i).id);
 
-        if (m_currentTmplID == albumTList.at(i).id)
-            m_albumDlg->m_templateCoB->setCurrentIndex(i+1);
+        if (d->currentTmplID == albumTList.at(i).id)
+            d->albumDlg->m_templateCoB->setCurrentIndex(i+1);
     }
 
-    m_currentTmplID = m_albumDlg->m_templateCoB->itemData(m_albumDlg->m_templateCoB->currentIndex()).toLongLong();
+    d->currentTmplID = d->albumDlg->m_templateCoB->itemData(d->albumDlg->m_templateCoB->currentIndex()).toLongLong();
 
     // now fill in categories
-    m_talker->listCategories();
+    d->talker->listCategories();
 }
 
-void SmugWindow::slotListCategoriesDone(int errCode, const QString& errMsg,
+void SmugWindow::slotListCategoriesDone(int errCode,
+                                        const QString& errMsg,
                                         const QList <SmugCategory>& categoriesList)
 {
     if (errCode != 0)
@@ -496,29 +542,30 @@ void SmugWindow::slotListCategoriesDone(int errCode, const QString& errMsg,
         return;
     }
 
-    m_albumDlg->m_categCoB->clear();
+    d->albumDlg->m_categCoB->clear();
 
     for (int i = 0; i < categoriesList.size(); ++i)
     {
-        m_albumDlg->m_categCoB->addItem(
+        d->albumDlg->m_categCoB->addItem(
             categoriesList.at(i).name,
             categoriesList.at(i).id);
 
-        if (m_currentCategoryID == categoriesList.at(i).id)
-            m_albumDlg->m_categCoB->setCurrentIndex(i);
+        if (d->currentCategoryID == categoriesList.at(i).id)
+            d->albumDlg->m_categCoB->setCurrentIndex(i);
     }
 
-    m_currentCategoryID = m_albumDlg->m_categCoB->itemData(
-                          m_albumDlg->m_categCoB->currentIndex()).toLongLong();
-    m_talker->listSubCategories(m_currentCategoryID);
+    d->currentCategoryID = d->albumDlg->m_categCoB->itemData(
+                          d->albumDlg->m_categCoB->currentIndex()).toLongLong();
+    d->talker->listSubCategories(d->currentCategoryID);
 }
 
-void SmugWindow::slotListSubCategoriesDone(int errCode, const QString &errMsg,
-                                              const QList <SmugCategory>& categoriesList)
+void SmugWindow::slotListSubCategoriesDone(int errCode,
+                                           const QString &errMsg,
+                                           const QList <SmugCategory>& categoriesList)
 {
     // always put at least default <none> subcategory
-    m_albumDlg->m_subCategCoB->clear();
-    m_albumDlg->m_subCategCoB->addItem(i18n("&lt;none&gt;"), 0);
+    d->albumDlg->m_subCategCoB->clear();
+    d->albumDlg->m_subCategCoB->addItem(i18n("&lt;none&gt;"), 0);
 
     if (errCode != 0)
     {
@@ -528,7 +575,7 @@ void SmugWindow::slotListSubCategoriesDone(int errCode, const QString &errMsg,
 
     for (int i = 0; i < categoriesList.size(); ++i)
     {
-        m_albumDlg->m_subCategCoB->addItem(
+        d->albumDlg->m_subCategCoB->addItem(
             categoriesList.at(i).name,
             categoriesList.at(i).id);
     }
@@ -539,10 +586,10 @@ void SmugWindow::slotTemplateSelectionChanged(int index)
     if (index < 0)
         return;
 
-    m_currentTmplID = m_albumDlg->m_templateCoB->itemData(index).toLongLong();
+    d->currentTmplID = d->albumDlg->m_templateCoB->itemData(index).toLongLong();
 
     // if template is selected, then disable Security & Privacy
-    m_albumDlg->m_privBox->setEnabled(m_currentTmplID == 0);
+    d->albumDlg->m_privBox->setEnabled(d->currentTmplID == 0);
 }
 
 void SmugWindow::slotCategorySelectionChanged(int index)
@@ -551,14 +598,14 @@ void SmugWindow::slotCategorySelectionChanged(int index)
         return;
 
     // subcategories are per category -> reload
-    m_currentCategoryID = m_albumDlg->m_categCoB->itemData(index).toLongLong();
-    m_talker->listSubCategories(m_currentCategoryID);
+    d->currentCategoryID = d->albumDlg->m_categCoB->itemData(index).toLongLong();
+    d->talker->listSubCategories(d->currentCategoryID);
 }
 
 void SmugWindow::buttonStateChange(bool state)
 {
-    m_widget->m_newAlbumBtn->setEnabled(state);
-    m_widget->m_reloadAlbumsBtn->setEnabled(state);
+    d->widget->m_newAlbumBtn->setEnabled(state);
+    d->widget->m_reloadAlbumsBtn->setEnabled(state);
     startButton()->setEnabled(state);
 }
 
@@ -567,14 +614,14 @@ void SmugWindow::slotBusy(bool val)
     if (val)
     {
         setCursor(Qt::WaitCursor);
-        m_widget->m_changeUserBtn->setEnabled(false);
+        d->widget->m_changeUserBtn->setEnabled(false);
         buttonStateChange(false);
     }
     else
     {
         setCursor(Qt::ArrowCursor);
-        m_widget->m_changeUserBtn->setEnabled(!m_widget->isAnonymous());
-        buttonStateChange(m_talker->loggedIn());
+        d->widget->m_changeUserBtn->setEnabled(!d->widget->isAnonymous());
+        buttonStateChange(d->talker->loggedIn());
     }
 }
 
@@ -582,8 +629,8 @@ void SmugWindow::slotUserChangeRequest(bool anonymous)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request";
 
-    if (m_talker->loggedIn())
-        m_talker->logout();
+    if (d->talker->loggedIn())
+        d->talker->logout();
 
     if (anonymous)
     {
@@ -592,28 +639,28 @@ void SmugWindow::slotUserChangeRequest(bool anonymous)
     else
     {
         // fill in current email and password
-        m_loginDlg->setLogin(m_email);
-        m_loginDlg->setPassword(m_password);
+        d->loginDlg->setLogin(d->email);
+        d->loginDlg->setPassword(d->password);
 
-        if (m_loginDlg->exec())
+        if (d->loginDlg->exec())
         {
-            m_email    = m_loginDlg->login();
-            m_password = m_loginDlg->password();
-            authenticate(m_email, m_password);
+            d->email    = d->loginDlg->login();
+            d->password = d->loginDlg->password();
+            authenticate(d->email, d->password);
         }
     }
 }
 
 void SmugWindow::slotReloadAlbumsRequest()
 {
-    if (m_import)
+    if (d->import)
     {
-        m_talker->listAlbums(m_widget->getNickName());
+        d->talker->listAlbums(d->widget->getNickName());
     }
     else
     {
         // get albums for current user
-        m_talker->listAlbums();
+        d->talker->listAlbums();
     }
 }
 
@@ -622,19 +669,19 @@ void SmugWindow::slotNewAlbumRequest()
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot New Album Request";
 
     // get list of album templates from SmugMug to fill in dialog
-    m_talker->listAlbumTmpl();
+    d->talker->listAlbumTmpl();
 
-    if (m_albumDlg->exec() == QDialog::Accepted)
+    if (d->albumDlg->exec() == QDialog::Accepted)
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling New Album method";
-        m_currentTmplID = m_albumDlg->m_templateCoB->itemData(
-                        m_albumDlg->m_templateCoB->currentIndex()).toLongLong();
-        m_currentCategoryID = m_albumDlg->m_categCoB->itemData(
-                        m_albumDlg->m_categCoB->currentIndex()).toLongLong();
+        d->currentTmplID = d->albumDlg->m_templateCoB->itemData(
+                        d->albumDlg->m_templateCoB->currentIndex()).toLongLong();
+        d->currentCategoryID = d->albumDlg->m_categCoB->itemData(
+                        d->albumDlg->m_categCoB->currentIndex()).toLongLong();
 
         SmugAlbum newAlbum;
-        m_albumDlg->getAlbumProperties(newAlbum);
-        m_talker->createAlbum(newAlbum);
+        d->albumDlg->getAlbumProperties(newAlbum);
+        d->talker->createAlbum(newAlbum);
     }
 }
 
@@ -642,49 +689,49 @@ void SmugWindow::slotStartTransfer()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotStartTransfer invoked";
 
-    if (m_import)
+    if (d->import)
     {
-        m_widget->progressBar()->setFormat(i18n("%v / %m"));
-        m_widget->progressBar()->setMaximum(0);
-        m_widget->progressBar()->setValue(0);
-        m_widget->progressBar()->progressScheduled(i18n("SmugMug Import"), true, true);
-        m_widget->progressBar()->progressThumbnailChanged(
+        d->widget->progressBar()->setFormat(i18n("%v / %m"));
+        d->widget->progressBar()->setMaximum(0);
+        d->widget->progressBar()->setValue(0);
+        d->widget->progressBar()->progressScheduled(i18n("SmugMug Import"), true, true);
+        d->widget->progressBar()->progressThumbnailChanged(
             QIcon(QLatin1String("smugmug")).pixmap(22, 22));
         setUiInProgressState(true);
 
         // list photos of the album, then start download
-        QString dataStr = m_widget->m_albumsCoB->itemData(m_widget->m_albumsCoB->currentIndex()).toString();
+        QString dataStr = d->widget->m_albumsCoB->itemData(d->widget->m_albumsCoB->currentIndex()).toString();
         int colonIdx = dataStr.indexOf(QLatin1Char(':'));
         qint64 albumID = dataStr.left(colonIdx).toLongLong();
         QString albumKey = dataStr.right(dataStr.length() - colonIdx - 1);
-        m_talker->listPhotos(albumID, albumKey,
-                             m_widget->getAlbumPassword(),
-                             m_widget->getSitePassword());
+        d->talker->listPhotos(albumID, albumKey,
+                             d->widget->getAlbumPassword(),
+                             d->widget->getSitePassword());
     }
     else
     {
-        m_widget->m_imgList->clearProcessedStatus();
-        m_transferQueue = m_widget->m_imgList->imageUrls();
+        d->widget->m_imgList->clearProcessedStatus();
+        d->transferQueue = d->widget->m_imgList->imageUrls();
 
-        if (m_transferQueue.isEmpty())
+        if (d->transferQueue.isEmpty())
             return;
 
-        QString data = m_widget->m_albumsCoB->itemData(m_widget->m_albumsCoB->currentIndex()).toString();
+        QString data = d->widget->m_albumsCoB->itemData(d->widget->m_albumsCoB->currentIndex()).toString();
         int colonIdx = data.indexOf(QLatin1Char(':'));
-        m_currentAlbumID = data.left(colonIdx).toLongLong();
-        m_currentAlbumKey = data.right(data.length() - colonIdx - 1);
+        d->currentAlbumID = data.left(colonIdx).toLongLong();
+        d->currentAlbumKey = data.right(data.length() - colonIdx - 1);
 
-        m_imagesTotal = m_transferQueue.count();
-        m_imagesCount = 0;
+        d->imagesTotal = d->transferQueue.count();
+        d->imagesCount = 0;
 
-        m_widget->progressBar()->setFormat(i18n("%v / %m"));
-        m_widget->progressBar()->setMaximum(m_imagesTotal);
-        m_widget->progressBar()->setValue(0);
-        m_widget->progressBar()->progressScheduled(i18n("SmugMug Export"), true, true);
-        m_widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("smugmug")).pixmap(22, 22));
+        d->widget->progressBar()->setFormat(i18n("%v / %m"));
+        d->widget->progressBar()->setMaximum(d->imagesTotal);
+        d->widget->progressBar()->setValue(0);
+        d->widget->progressBar()->progressScheduled(i18n("SmugMug Export"), true, true);
+        d->widget->progressBar()->progressThumbnailChanged(QIcon(QLatin1String("smugmug")).pixmap(22, 22));
         setUiInProgressState(true);
 
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "m_currentAlbumID" << m_currentAlbumID;
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "d->currentAlbumID" << d->currentAlbumID;
         uploadNextPhoto();
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotStartTransfer done";
     }
@@ -705,12 +752,12 @@ bool SmugWindow::prepareImageForUpload(const QString& imgPath)
     }
 
     // get temporary file name
-    m_tmpPath  = m_tmpDir + QFileInfo(imgPath).baseName().trimmed() + QString::fromLatin1(".jpg");
+    d->tmpPath  = d->tmpDir + QFileInfo(imgPath).baseName().trimmed() + QString::fromLatin1(".jpg");
 
     // rescale image if requested
-    int maxDim = m_widget->m_dimensionSpB->value();
+    int maxDim = d->widget->m_dimensionSpB->value();
 
-    if (m_widget->m_resizeChB->isChecked() &&
+    if (d->widget->m_resizeChB->isChecked() &&
         (image.width() > maxDim || image.height() > maxDim))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing to " << maxDim;
@@ -718,8 +765,8 @@ bool SmugWindow::prepareImageForUpload(const QString& imgPath)
                                              Qt::SmoothTransformation);
     }
 
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Saving to temp file: " << m_tmpPath;
-    image.save(m_tmpPath, "JPEG", m_widget->m_imageQualitySpB->value());
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Saving to temp file: " << d->tmpPath;
+    image.save(d->tmpPath, "JPEG", d->widget->m_imageQualitySpB->value());
 
     // copy meta-data to temporary image
     DMetadata meta;
@@ -730,7 +777,7 @@ bool SmugWindow::prepareImageForUpload(const QString& imgPath)
         meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
         meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
         meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-        meta.save(m_tmpPath);
+        meta.save(d->tmpPath);
     }
 
     return true;
@@ -738,23 +785,23 @@ bool SmugWindow::prepareImageForUpload(const QString& imgPath)
 
 void SmugWindow::uploadNextPhoto()
 {
-    if (m_transferQueue.isEmpty())
+    if (d->transferQueue.isEmpty())
     {
         setUiInProgressState(false);
         return;
     }
 
-    m_widget->m_imgList->processing(m_transferQueue.first());
+    d->widget->m_imgList->processing(d->transferQueue.first());
 
-    QUrl imgPath = m_transferQueue.first();
-    DItemInfo info(m_iface->itemInfo(imgPath));
+    QUrl imgPath = d->transferQueue.first();
+    DItemInfo info(d->iface->itemInfo(imgPath));
 
-    m_widget->progressBar()->setMaximum(m_imagesTotal);
-    m_widget->progressBar()->setValue(m_imagesCount);
+    d->widget->progressBar()->setMaximum(d->imagesTotal);
+    d->widget->progressBar()->setValue(d->imagesCount);
 
     bool res;
 
-    if (m_widget->m_resizeChB->isChecked())
+    if (d->widget->m_resizeChB->isChecked())
     {
         if (!prepareImageForUpload(imgPath.toLocalFile()))
         {
@@ -762,12 +809,12 @@ void SmugWindow::uploadNextPhoto()
             return;
         }
 
-        res = m_talker->addPhoto(m_tmpPath, m_currentAlbumID, m_currentAlbumKey, info.comment());
+        res = d->talker->addPhoto(d->tmpPath, d->currentAlbumID, d->currentAlbumKey, info.comment());
     }
     else
     {
-        m_tmpPath.clear();
-        res = m_talker->addPhoto(imgPath.toLocalFile(), m_currentAlbumID, m_currentAlbumKey, info.comment());
+        d->tmpPath.clear();
+        res = d->talker->addPhoto(imgPath.toLocalFile(), d->currentAlbumID, d->currentAlbumKey, info.comment());
     }
 
     if (!res)
@@ -780,18 +827,18 @@ void SmugWindow::uploadNextPhoto()
 void SmugWindow::slotAddPhotoDone(int errCode, const QString& errMsg)
 {
     // Remove temporary file if it was used
-    if (!m_tmpPath.isEmpty())
+    if (!d->tmpPath.isEmpty())
     {
-        QFile::remove(m_tmpPath);
-        m_tmpPath.clear();
+        QFile::remove(d->tmpPath);
+        d->tmpPath.clear();
     }
 
-    m_widget->m_imgList->processed(m_transferQueue.first(), (errCode == 0));
+    d->widget->m_imgList->processed(d->transferQueue.first(), (errCode == 0));
 
     if (errCode == 0)
     {
-        m_transferQueue.pop_front();
-        m_imagesCount++;
+        d->transferQueue.pop_front();
+        d->imagesCount++;
     }
     else
     {
@@ -802,7 +849,7 @@ void SmugWindow::slotAddPhotoDone(int errCode, const QString& errMsg)
             != QMessageBox::Yes)
         {
             setUiInProgressState(false);
-            m_transferQueue.clear();
+            d->transferQueue.clear();
             return;
         }
     }
@@ -812,25 +859,26 @@ void SmugWindow::slotAddPhotoDone(int errCode, const QString& errMsg)
 
 void SmugWindow::downloadNextPhoto()
 {
-    if (m_transferQueue.isEmpty())
+    if (d->transferQueue.isEmpty())
     {
         setUiInProgressState(false);
         return;
     }
 
-    m_widget->progressBar()->setMaximum(m_imagesTotal);
-    m_widget->progressBar()->setValue(m_imagesCount);
+    d->widget->progressBar()->setMaximum(d->imagesTotal);
+    d->widget->progressBar()->setValue(d->imagesCount);
 
-    QString imgPath = m_transferQueue.first().url();
+    QString imgPath = d->transferQueue.first().url();
 
-    m_talker->getPhoto(imgPath);
+    d->talker->getPhoto(imgPath);
 }
 
-void SmugWindow::slotGetPhotoDone(int errCode, const QString& errMsg,
+void SmugWindow::slotGetPhotoDone(int errCode,
+                                  const QString& errMsg,
                                   const QByteArray& photoData)
 {
-    QString imgPath = m_widget->getDestinationPath() + QLatin1Char('/')
-                      + m_transferQueue.first().fileName();
+    QString imgPath = d->widget->getDestinationPath() + QLatin1Char('/')
+                      + d->transferQueue.first().fileName();
 
     if (errCode == 0)
     {
@@ -852,8 +900,8 @@ void SmugWindow::slotGetPhotoDone(int errCode, const QString& errMsg,
 
         if (errText.isEmpty())
         {
-            m_transferQueue.pop_front();
-            m_imagesCount++;
+            d->transferQueue.pop_front();
+            d->imagesCount++;
         }
         else
         {
@@ -862,7 +910,7 @@ void SmugWindow::slotGetPhotoDone(int errCode, const QString& errMsg,
                                            "Do you want to continue?", errText))
                 != QMessageBox::Yes)
             {
-                m_transferQueue.clear();
+                d->transferQueue.clear();
                 setUiInProgressState(false);
                 return;
             }
@@ -875,7 +923,7 @@ void SmugWindow::slotGetPhotoDone(int errCode, const QString& errMsg,
                                        "Do you want to continue?", errMsg))
                 != QMessageBox::Yes)
         {
-            m_transferQueue.clear();
+            d->transferQueue.clear();
             setUiInProgressState(false);
             return;
         }
@@ -884,8 +932,10 @@ void SmugWindow::slotGetPhotoDone(int errCode, const QString& errMsg,
     downloadNextPhoto();
 }
 
-void SmugWindow::slotCreateAlbumDone(int errCode, const QString& errMsg,
-                                     qint64 newAlbumID, const QString& newAlbumKey)
+void SmugWindow::slotCreateAlbumDone(int errCode,
+                                     const QString& errMsg,
+                                     qint64 newAlbumID,
+                                     const QString& newAlbumKey)
 {
     if (errCode != 0)
     {
@@ -894,14 +944,14 @@ void SmugWindow::slotCreateAlbumDone(int errCode, const QString& errMsg,
     }
 
     // reload album list and automatically select new album
-    m_currentAlbumID  = newAlbumID;
-    m_currentAlbumKey = newAlbumKey;
-    m_talker->listAlbums();
+    d->currentAlbumID  = newAlbumID;
+    d->currentAlbumKey = newAlbumKey;
+    d->talker->listAlbums();
 }
 
 void SmugWindow::slotImageListChanged()
 {
-    startButton()->setEnabled(!(m_widget->m_imgList->imageUrls().isEmpty()));
+    startButton()->setEnabled(!(d->widget->m_imgList->imageUrls().isEmpty()));
 }
 
 } // namespace Digikam

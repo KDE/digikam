@@ -73,13 +73,35 @@ private Q_SLOTS:
     void slotLoginProgress(int step, int maxStep, const QString& label);
     void slotLoginDone(int errCode, const QString& errMsg);
     void slotAddPhotoDone(int errCode, const QString& errMsg);
-    void slotGetPhotoDone(int errCode, const QString& errMsg, const QByteArray& photoData);
-    void slotCreateAlbumDone(int errCode, const QString& errMsg, qint64 newAlbumID, const QString& newAlbumKey);
-    void slotListAlbumsDone(int errCode, const QString& errMsg, const QList <SmugAlbum>& albumsList);
-    void slotListPhotosDone(int errCode, const QString& errMsg, const QList <SmugPhoto>& photosList);
-    void slotListAlbumTmplDone(int errCode, const QString& errMsg, const QList <SmugAlbumTmpl>& albumTList);
-    void slotListCategoriesDone(int errCode, const QString& errMsg, const QList <SmugCategory>& categoriesList);
-    void slotListSubCategoriesDone(int errCode, const QString& errMsg, const QList <SmugCategory>& categoriesList);
+
+    void slotGetPhotoDone(int errCode,
+                          const QString& errMsg,
+                          const QByteArray& photoData);
+
+    void slotCreateAlbumDone(int errCode,
+                             const QString& errMsg,
+                             qint64 newAlbumID,
+                             const QString& newAlbumKey);
+
+    void slotListAlbumsDone(int errCode,
+                            const QString& errMsg,
+                            const QList <SmugAlbum>& albumsList);
+
+    void slotListPhotosDone(int errCode,
+                            const QString& errMsg,
+                            const QList <SmugPhoto>& photosList);
+
+    void slotListAlbumTmplDone(int errCode,
+                               const QString& errMsg,
+                               const QList <SmugAlbumTmpl>& albumTList);
+
+    void slotListCategoriesDone(int errCode,
+                                const QString& errMsg,
+                                const QList <SmugCategory>& categoriesList);
+
+    void slotListSubCategoriesDone(int errCode,
+                                   const QString& errMsg,
+                                   const QList <SmugCategory>& categoriesList);
 
     void slotUserChangeRequest(bool anonymous);
     void slotReloadAlbumsRequest();
@@ -111,30 +133,8 @@ private:
 
 private:
 
-    bool             m_import;
-    unsigned int     m_imagesCount;
-    unsigned int     m_imagesTotal;
-    QString          m_tmpDir;
-    QString          m_tmpPath;
-
-    bool             m_anonymousImport;
-    QString          m_anonymousNick;
-    QString          m_email;
-    QString          m_password;
-    qint64           m_currentAlbumID;
-    QString          m_currentAlbumKey;
-    qint64           m_currentTmplID;
-    qint64           m_currentCategoryID;
-
-    WSLoginDialog*   m_loginDlg;
-
-    QList<QUrl>      m_transferQueue;
-
-    SmugTalker*      m_talker;
-    SmugWidget*      m_widget;
-    SmugNewAlbumDlg* m_albumDlg;
-
-    DInfoInterface*  m_iface;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
