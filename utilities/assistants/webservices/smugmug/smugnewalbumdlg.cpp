@@ -28,9 +28,7 @@
 #include <QFormLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QGroupBox>
 #include <QRadioButton>
-#include <QComboBox>
 #include <QApplication>
 #include <QTextEdit>
 #include <QLineEdit>
@@ -48,8 +46,39 @@
 namespace Digikam
 {
 
+class SmugNewAlbumDlg::Private
+{
+public:
+
+    Private()
+    {
+        categCoB     = 0;
+        subCategCoB  = 0;
+        templateCoB  = 0;
+        privBox      = 0;
+        titleEdt     = 0;
+        passwdEdt    = 0;
+        hintEdt      = 0;
+        descEdt      = 0;
+        publicRBtn   = 0;
+        unlistedRBtn = 0;        
+    }
+
+    QComboBox*    categCoB;
+    QComboBox*    subCategCoB;
+    QComboBox*    templateCoB;
+    QGroupBox*    privBox;
+    QLineEdit*    titleEdt;
+    QLineEdit*    passwdEdt;
+    QLineEdit*    hintEdt;
+    QTextEdit*    descEdt;
+    QRadioButton* publicRBtn;
+    QRadioButton* unlistedRBtn;
+};
+
 SmugNewAlbumDlg::SmugNewAlbumDlg(QWidget* const parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      d(new Private)
 {
     QString header(i18n("SmugMug New Album"));
     setWindowTitle(header);
@@ -58,35 +87,35 @@ SmugNewAlbumDlg::SmugNewAlbumDlg(QWidget* const parent)
 
     // ------------------------------------------------------------------------
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QGroupBox* const albumBox = new QGroupBox(i18n("Album"), this);
     albumBox->setWhatsThis(i18n("These are basic settings for the new SmugMug album."));
 
-    m_titleEdt          = new QLineEdit;
-    m_titleEdt->setWhatsThis(i18n("Title of the album that will be created (required)."));
+    d->titleEdt          = new QLineEdit;
+    d->titleEdt->setWhatsThis(i18n("Title of the album that will be created (required)."));
 
-    m_categCoB          = new QComboBox;
-    m_categCoB->setEditable(false);
-    m_categCoB->setWhatsThis(i18n("Category of the album that will be created (required)."));
+    d->categCoB          = new QComboBox;
+    d->categCoB->setEditable(false);
+    d->categCoB->setWhatsThis(i18n("Category of the album that will be created (required)."));
 
-    m_subCategCoB       = new QComboBox;
-    m_subCategCoB->setEditable(false);
-    m_subCategCoB->setWhatsThis(i18n("Subcategory of the album that will be created (optional)."));
+    d->subCategCoB       = new QComboBox;
+    d->subCategCoB->setEditable(false);
+    d->subCategCoB->setWhatsThis(i18n("Subcategory of the album that will be created (optional)."));
 
-    m_descEdt           = new QTextEdit;
-    m_descEdt->setWhatsThis(i18n("Description of the album that will be created (optional)."));
+    d->descEdt           = new QTextEdit;
+    d->descEdt->setWhatsThis(i18n("Description of the album that will be created (optional)."));
 
-    m_templateCoB      = new QComboBox;
-    m_templateCoB->setEditable(false);
-    m_templateCoB->setWhatsThis(i18n("Album template for the new album (optional)."));
+    d->templateCoB       = new QComboBox;
+    d->templateCoB->setEditable(false);
+    d->templateCoB->setWhatsThis(i18n("Album template for the new album (optional)."));
 
     QFormLayout* const albumBoxLayout = new QFormLayout;
-    albumBoxLayout->addRow(i18nc("new smug album dialog", "Title:"), m_titleEdt);
-    albumBoxLayout->addRow(i18nc("new smug album dialog", "Category:"), m_categCoB);
-    albumBoxLayout->addRow(i18nc("new smug album dialog", "Subcategory:"), m_subCategCoB);
-    albumBoxLayout->addRow(i18nc("new smug album dialog", "Description:"), m_descEdt);
-    albumBoxLayout->addRow(i18nc("new smug album dialog", "Template:"), m_templateCoB);
+    albumBoxLayout->addRow(i18nc("new smug album dialog", "Title:"),       d->titleEdt);
+    albumBoxLayout->addRow(i18nc("new smug album dialog", "Category:"),    d->categCoB);
+    albumBoxLayout->addRow(i18nc("new smug album dialog", "Subcategory:"), d->subCategCoB);
+    albumBoxLayout->addRow(i18nc("new smug album dialog", "Description:"), d->descEdt);
+    albumBoxLayout->addRow(i18nc("new smug album dialog", "Template:"),    d->templateCoB);
     albumBoxLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
     albumBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     albumBoxLayout->setSpacing(spacing);
@@ -94,32 +123,32 @@ SmugNewAlbumDlg::SmugNewAlbumDlg(QWidget* const parent)
 
     // ------------------------------------------------------------------------
 
-    m_privBox      = new QGroupBox(i18n("Security && Privacy"), this);
-    m_privBox->setWhatsThis(i18n("These are security and privacy settings for the new SmugMug album."));
+    d->privBox      = new QGroupBox(i18n("Security && Privacy"), this);
+    d->privBox->setWhatsThis(i18n("These are security and privacy settings for the new SmugMug album."));
 
-    m_publicRBtn   = new QRadioButton(i18nc("smug album privacy", "Public"));
-    m_publicRBtn->setChecked(true);
-    m_publicRBtn->setWhatsThis(i18n("Public album is listed on your public SmugMug page."));
-    m_unlistedRBtn = new QRadioButton(i18nc("smug album privacy", "Unlisted"));
-    m_unlistedRBtn->setWhatsThis(i18n("Unlisted album is only accessible via URL."));
+    d->publicRBtn   = new QRadioButton(i18nc("smug album privacy", "Public"));
+    d->publicRBtn->setChecked(true);
+    d->publicRBtn->setWhatsThis(i18n("Public album is listed on your public SmugMug page."));
+    d->unlistedRBtn = new QRadioButton(i18nc("smug album privacy", "Unlisted"));
+    d->unlistedRBtn->setWhatsThis(i18n("Unlisted album is only accessible via URL."));
 
     QHBoxLayout* const radioLayout = new QHBoxLayout;
-    radioLayout->addWidget(m_publicRBtn);
-    radioLayout->addWidget(m_unlistedRBtn);
+    radioLayout->addWidget(d->publicRBtn);
+    radioLayout->addWidget(d->unlistedRBtn);
 
-    m_passwdEdt = new QLineEdit;
-    m_passwdEdt->setWhatsThis(i18n("Require password to access the album (optional)."));
+    d->passwdEdt = new QLineEdit;
+    d->passwdEdt->setWhatsThis(i18n("Require password to access the album (optional)."));
 
-    m_hintEdt   = new QLineEdit;
-    m_hintEdt->setWhatsThis(i18n("Password hint to present to users in the password prompt (optional)."));
+    d->hintEdt   = new QLineEdit;
+    d->hintEdt->setWhatsThis(i18n("Password hint to present to users in the password prompt (optional)."));
 
     QFormLayout* const privBoxLayout = new QFormLayout;
-    privBoxLayout->addRow(i18n("Privacy:"), radioLayout);
-    privBoxLayout->addRow(i18n("Password:"), m_passwdEdt);
-    privBoxLayout->addRow(i18n("Password Hint:"), m_hintEdt);
+    privBoxLayout->addRow(i18n("Privacy:"),       radioLayout);
+    privBoxLayout->addRow(i18n("Password:"),      d->passwdEdt);
+    privBoxLayout->addRow(i18n("Password Hint:"), d->hintEdt);
     privBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     privBoxLayout->setSpacing(spacing);
-    m_privBox->setLayout(privBoxLayout);
+    d->privBox->setLayout(privBoxLayout);
 
     // ------------------------------------------------------------------------
 
@@ -136,7 +165,7 @@ SmugNewAlbumDlg::SmugNewAlbumDlg(QWidget* const parent)
 
     QVBoxLayout* const mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(albumBox);
-    mainLayout->addWidget(m_privBox);
+    mainLayout->addWidget(d->privBox);
     mainLayout->addWidget(buttonBox);
     mainLayout->setContentsMargins(QMargins());
     mainLayout->setSpacing(spacing);
@@ -145,26 +174,47 @@ SmugNewAlbumDlg::SmugNewAlbumDlg(QWidget* const parent)
 
 SmugNewAlbumDlg::~SmugNewAlbumDlg()
 {
+    delete d;
 }
 
 void SmugNewAlbumDlg::getAlbumProperties(SmugAlbum &album)
 {
-    album.title         = m_titleEdt->text();
+    album.title         = d->titleEdt->text();
 
-    album.category      = m_categCoB->currentText();
-    album.categoryID    = m_categCoB->itemData(m_categCoB->currentIndex()).toLongLong();
+    album.category      = d->categCoB->currentText();
+    album.categoryID    = d->categCoB->itemData(d->categCoB->currentIndex()).toLongLong();
 
-    album.subCategory   = m_subCategCoB->currentText();
-    album.subCategoryID = m_subCategCoB->itemData(m_subCategCoB->currentIndex()).toLongLong();
+    album.subCategory   = d->subCategCoB->currentText();
+    album.subCategoryID = d->subCategCoB->itemData(d->subCategCoB->currentIndex()).toLongLong();
 
-    album.description   = m_descEdt->toPlainText();
+    album.description   = d->descEdt->toPlainText();
 
-    album.tmpl          = m_templateCoB->currentText();
-    album.tmplID        = m_templateCoB->itemData(m_templateCoB->currentIndex()).toLongLong();
+    album.tmpl          = d->templateCoB->currentText();
+    album.tmplID        = d->templateCoB->itemData(d->templateCoB->currentIndex()).toLongLong();
 
-    album.isPublic      = m_publicRBtn->isChecked();
-    album.password      = m_passwdEdt->text();
-    album.passwordHint  = m_hintEdt->text();
+    album.isPublic      = d->publicRBtn->isChecked();
+    album.password      = d->passwdEdt->text();
+    album.passwordHint  = d->hintEdt->text();
+}
+
+QComboBox* SmugNewAlbumDlg::categoryCombo() const
+{
+    return d->categCoB;
+}
+
+QComboBox* SmugNewAlbumDlg::subCategoryCombo() const
+{
+    return d->subCategCoB;
+}
+
+QComboBox* SmugNewAlbumDlg::templateCombo() const
+{
+    return d->templateCoB;
+}
+
+QGroupBox* SmugNewAlbumDlg::privateGroupBox() const
+{
+    return d->privBox;
 }
 
 } // namespace Digikam

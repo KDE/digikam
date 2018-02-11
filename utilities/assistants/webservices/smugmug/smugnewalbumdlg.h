@@ -27,12 +27,8 @@
 // Qt includes
 
 #include <QDialog>
-
-class QGroupBox;
-class QRadioButton;
-class QComboBox;
-class QLineEdit;
-class QTextEdit;
+#include <QGroupBox>
+#include <QComboBox>
 
 namespace Digikam
 {
@@ -50,21 +46,15 @@ public:
 
     void getAlbumProperties(SmugAlbum& album);
 
+    QComboBox* categoryCombo()    const;
+    QComboBox* subCategoryCombo() const;
+    QComboBox* templateCombo()    const;
+    QGroupBox* privateGroupBox()  const;
+
 private:
 
-    QLineEdit*    m_titleEdt;
-    QTextEdit*    m_descEdt;
-    QComboBox*    m_categCoB;
-    QComboBox*    m_subCategCoB;
-    QComboBox*    m_templateCoB;
-
-    QGroupBox*    m_privBox;
-    QLineEdit*    m_passwdEdt;
-    QLineEdit*    m_hintEdt;
-    QRadioButton* m_publicRBtn;
-    QRadioButton* m_unlistedRBtn;
-
-    friend class SmugWindow;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
