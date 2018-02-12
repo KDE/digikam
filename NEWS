@@ -1,9 +1,8 @@
 *****************************************************************************************************
-digiKam 5.9.0 - Release date: 2018-xx-xx
+digiKam 5.9.0 - Release date: 2018-02-25
 
 NEW FEATURES:
 
-Image Editor : New clone tool to replace old CImg in-painting tool.
 General      : Libraw updated to last 0.18.7.
 
 BUGFIXES FROM BUGZILLA:
@@ -25,4 +24,6 @@ BUGFIXES FROM BUGZILLA:
 015 ==> 389827 - Ignores albums selection.
 016 ==> 389835 - Incorrect DateTime manipulation if timestamp is before unix epoch time.
 017 ==> 390121 - Thumbnail size is too small.
-018 ==> 
+018 ==> 390136 - digiKam crashes when launching scan and recognize faces.
+019 ==> 
+
