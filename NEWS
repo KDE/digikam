@@ -25,5 +25,5 @@ BUGFIXES FROM BUGZILLA:
 016 ==> 389835 - Incorrect DateTime manipulation if timestamp is before unix epoch time.
 017 ==> 390121 - Thumbnail size is too small.
 018 ==> 390136 - digiKam crashes when launching scan and recognize faces.
-019 ==> 
-
+019 ==> 390325 - Segmentation fault - QMutex::lock().
+020 ==> 

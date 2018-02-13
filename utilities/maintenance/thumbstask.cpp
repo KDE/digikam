@@ -41,11 +41,10 @@ class ThumbsTask::Private
 public:
 
     Private()
-        : cancel(false),catcher(0), data(0)
+        : catcher(0),
+          data(0)
     {
     }
-
-    bool                   cancel;
 
     ThumbnailImageCatcher* catcher;
 
@@ -66,23 +65,19 @@ ThumbsTask::ThumbsTask()
 
 ThumbsTask::~ThumbsTask()
 {
-    slotCancel();
+    cancel();
+
+    d->catcher->setActive(false);
+    d->catcher->thread()->stopAllTasks();
 
     delete d->catcher->thread();
     delete d->catcher;
     delete d;
 }
 
-void ThumbsTask::setMaintenanceData(MaintenanceData* data)
+void ThumbsTask::setMaintenanceData(MaintenanceData* const data)
 {
     d->data = data;
-}
-
-void ThumbsTask::slotCancel()
-{
-    d->catcher->thread()->stopAllTasks();
-    d->catcher->cancel();
-    d->cancel = true;
 }
 
 void ThumbsTask::run()
@@ -92,8 +87,10 @@ void ThumbsTask::run()
     // While we have data (using this as check for non-null)
     while (d->data)
     {
-        if (d->cancel)
+        if (m_cancel)
         {
+            d->catcher->setActive(false);
+            d->catcher->thread()->stopAllTasks();
             return;
         }
 

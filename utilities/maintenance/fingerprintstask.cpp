@@ -42,13 +42,10 @@ class FingerprintsTask::Private
 {
 public:
 
-    Private() :
-        cancel(false),
-        data(0)
+    Private()
+        : data(0)
     {
     }
-
-    bool             cancel;
 
     MaintenanceData* data;
 };
@@ -63,18 +60,13 @@ FingerprintsTask::FingerprintsTask()
 
 FingerprintsTask::~FingerprintsTask()
 {
-    slotCancel();
+    cancel();
     delete d;
 }
 
-void FingerprintsTask::setMaintenanceData(MaintenanceData* data)
+void FingerprintsTask::setMaintenanceData(MaintenanceData* const data)
 {
     d->data = data;
-}
-
-void FingerprintsTask::slotCancel()
-{
-    d->cancel = true;
 }
 
 void FingerprintsTask::run()
@@ -82,13 +74,17 @@ void FingerprintsTask::run()
     // While we have data (using this as check for non-null)
     while (d->data)
     {
-        if (d->cancel)
+        if (m_cancel)
+        {
             return;
+        }
 
         QString path = d->data->getImagePath();
 
         if (path.isEmpty())
+        {
             break;
+        }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Updating fingerprints for file: " << path ;
 

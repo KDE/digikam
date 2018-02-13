@@ -47,15 +47,11 @@ public:
     ThumbsTask();
     ~ThumbsTask();
 
-    void setMaintenanceData(MaintenanceData* data=0);
+    void setMaintenanceData(MaintenanceData* const data=0);
 
 Q_SIGNALS:
 
     void signalFinished(const QImage&);
-
-public Q_SLOTS:
-
-    void slotCancel();
 
 protected:
 
