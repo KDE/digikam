@@ -45,7 +45,8 @@ AutoCropTask::~AutoCropTask()
 
 void AutoCropTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
-    viewCropPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("view_crop_pano.pto")));
+    viewCropPtoUrl = tmpDir;
+    viewCropPtoUrl.setPath(viewCropPtoUrl.path() + QLatin1String("view_crop_pano.pto"));
 
     QStringList args;
     args << QLatin1String("-c");               // Center the panorama

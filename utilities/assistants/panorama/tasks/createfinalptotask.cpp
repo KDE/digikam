@@ -47,7 +47,8 @@ CreateFinalPtoTask::~CreateFinalPtoTask()
 
 void CreateFinalPtoTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
-    finalPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("final.pto")));
+    finalPtoUrl = tmpDir;
+    finalPtoUrl.setPath(finalPtoUrl.path() + QLatin1String("final.pto"));
 
     QFile pto(finalPtoUrl.toLocalFile());
 

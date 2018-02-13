@@ -45,7 +45,8 @@ CpFindTask::~CpFindTask()
 void CpFindTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
     // Run CPFind to get control points and order the images
-    cpFindPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("cp_pano.pto")));
+    cpFindPtoUrl = tmpDir;
+    cpFindPtoUrl.setPath(cpFindPtoUrl.path() + QLatin1String("cp_pano.pto"));
 
     QStringList args;
     if (celeste)
