@@ -81,10 +81,6 @@ Q_SIGNALS:
      */
     void signalAddItemsToProcess(int count);
 
-public Q_SLOTS:
-
-    void slotCancel();
-
 protected:
 
     void run();
