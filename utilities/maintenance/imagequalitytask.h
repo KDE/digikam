@@ -48,7 +48,7 @@ public:
     ~ImageQualityTask();
 
     void setQuality(const ImageQualitySettings& quality);
-    void setMaintenanceData(MaintenanceData* data=0);
+    void setMaintenanceData(MaintenanceData* const data=0);
 
 Q_SIGNALS:
 

@@ -52,7 +52,6 @@ public:
         scanThumbsDb(false),
         scanRecognitionDb(false),
         scanSimilarityDb(false),
-        cancel(false),
         mode(Mode::Unknown),
         data(0)
     {
@@ -63,9 +62,9 @@ public:
     bool             scanThumbsDb;
     bool             scanRecognitionDb;
     bool             scanSimilarityDb;
-    bool             cancel;
 
     Mode             mode;
+
     MaintenanceData* data;
 };
 
@@ -79,8 +78,7 @@ DatabaseTask::DatabaseTask()
 
 DatabaseTask::~DatabaseTask()
 {
-    slotCancel();
-
+    cancel();
     delete d;
 }
 
@@ -96,19 +94,14 @@ void DatabaseTask::setMode(Mode mode)
     d->mode = mode;
 }
 
-void DatabaseTask::setMaintenanceData(MaintenanceData* data)
+void DatabaseTask::setMaintenanceData(MaintenanceData* const data)
 {
     d->data = data;
 }
 
-void DatabaseTask::slotCancel()
-{
-    d->cancel = true;
-}
-
 void DatabaseTask::run()
 {
-    if (d->cancel)
+    if (m_cancel)
     {
         return;
     }
@@ -145,7 +138,7 @@ void DatabaseTask::run()
 
         QThread::sleep(1);
 
-        if (d->cancel)
+        if (m_cancel)
         {
             return;
         }
@@ -183,7 +176,7 @@ void DatabaseTask::run()
 
         QThread::sleep(1);
 
-        if (d->cancel)
+        if (m_cancel)
         {
             return;
         }
@@ -213,7 +206,7 @@ void DatabaseTask::run()
 
         QThread::sleep(1);
 
-        if (d->cancel)
+        if (m_cancel)
         {
             return;
         }
@@ -300,7 +293,7 @@ void DatabaseTask::run()
 
             foreach(qlonglong item, coredbItems)
             {
-                if (d->cancel)
+                if (m_cancel)
                 {
                     return;
                 }
@@ -358,7 +351,7 @@ void DatabaseTask::run()
             emit signalFinished();
         }
 
-        if (d->cancel)
+        if (m_cancel)
         {
             return;
         }
@@ -395,7 +388,7 @@ void DatabaseTask::run()
             emit signalFinished();
         }
 
-        if (d->cancel)
+        if (m_cancel)
         {
             return;
         }
@@ -427,12 +420,13 @@ void DatabaseTask::run()
         // While we have data (using this as check for non-null)
         while (d->data)
         {
-            if (d->cancel)
+            if (m_cancel)
             {
                 return;
             }
 
             qlonglong imageId = d->data->getImageId();
+
             if (imageId == -1)
             {
                 break;
@@ -457,7 +451,7 @@ void DatabaseTask::run()
             // While we have data (using this as check for non-null)
             while (d->data)
             {
-                if (d->cancel)
+                if (m_cancel)
                 {
                     return;
                 }
@@ -482,17 +476,23 @@ void DatabaseTask::run()
 
                 if (BdEngineBackend::NoErrors != lastQueryState)
                 {
-                    qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not commit the removal of " << d->objectIdentification << " due to error ";
+                    qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not commit the removal of "
+                                                    << d->objectIdentification
+                                                    << " due to error ";
                 }
             }
             else
             {
-                qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not start the removal of " << d->objectIdentification << " due to error ";
+                qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not start the removal of "
+                                                << d->objectIdentification
+                                                << " due to error ";
             }
         }
         else
         {
-            qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not begin the transaction for the removal of " << d->objectIdentification << " due to error ";
+            qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not begin the transaction for the removal of "
+                                            << d->objectIdentification
+                                            << " due to error ";
         }
     }
     else if (d->mode == Mode::CleanRecognitionDb)
@@ -500,7 +500,7 @@ void DatabaseTask::run()
         // While we have data (using this as check for non-null)
         while (d->data)
         {
-            if (d->cancel)
+            if (m_cancel)
             {
                 return;
             }
@@ -521,7 +521,7 @@ void DatabaseTask::run()
         // While we have data (using this as check for non-null)
         while (d->data)
         {
-            if (d->cancel)
+            if (m_cancel)
             {
                 return;
             }
