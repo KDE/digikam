@@ -66,7 +66,7 @@ public:
     Private()
     {
         running = false;
-        pool    = QThreadPool::globalInstance();
+        pool    = 0;
     }
 
     volatile bool       running;
@@ -85,6 +85,8 @@ ActionThreadBase::ActionThreadBase(QObject* const parent)
     : QThread(parent),
       d(new Private)
 {
+    d->pool = new QThreadPool(this);
+
     defaultMaximumNumberOfThreads();
 }
 
@@ -130,13 +132,7 @@ int ActionThreadBase::maximumNumberOfThreads() const
 
 void ActionThreadBase::defaultMaximumNumberOfThreads()
 {
-    int maximumNumberOfThreads = qMax(QThread::idealThreadCount(), 1);
-
-    if (d->pool->activeThreadCount())
-    {
-        maximumNumberOfThreads = qMax(d->pool->maxThreadCount(), 1);
-    }
-
+    const int maximumNumberOfThreads = qMax(QThread::idealThreadCount(), 1);
     setMaximumNumberOfThreads(maximumNumberOfThreads);
 }
 
