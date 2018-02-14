@@ -93,10 +93,6 @@ void DatabaseTask::setMaintenanceData(MaintenanceData* const data)
     d->data = data;
 }
 
-void DatabaseTask::slotCancel()
-{
-}
-
 void DatabaseTask::run()
 {
     if (m_cancel)
