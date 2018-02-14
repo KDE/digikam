@@ -258,6 +258,9 @@ ScanController::ScanController()
     connect(this, SIGNAL(completeScanDone()),
             d->eventLoop, SLOT(quit()));
 
+    connect(this, SIGNAL(completeScanCanceled()),
+            d->eventLoop, SLOT(quit()));
+
     // create timer to show progress dialog
     d->showTimer = new QTimer(this);
     d->showTimer->setSingleShot(true);
@@ -579,6 +582,7 @@ void ScanController::cancelCompleteScan()
     QMutexLocker lock(&d->mutex);
     d->needsCompleteScan = false;
     d->continueScan      = false;
+    emit completeScanCanceled();
 }
 
 void ScanController::cancelAllAndSuspendCollectionScan()
