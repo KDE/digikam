@@ -26,4 +26,5 @@ BUGFIXES FROM BUGZILLA:
 017 ==> 390121 - Thumbnail size is too small.
 018 ==> 390136 - digiKam crashes when launching scan and recognize faces.
 019 ==> 390325 - Segmentation fault - QMutex::lock().
-020 ==> 
+020 ==> 390443 - FAQ entry unaccurate - Thumbnail generation fails on video files.
+021 ==> 
