@@ -48,12 +48,12 @@ class DatabaseTask::Private
 {
 public:
 
-    Private():
-        scanThumbsDb(false),
-        scanRecognitionDb(false),
-        scanSimilarityDb(false),
-        mode(Mode::Unknown),
-        data(0)
+    Private()
+        : scanThumbsDb(false),
+          scanRecognitionDb(false),
+          scanSimilarityDb(false),
+          mode(Mode::Unknown),
+          data(0)
     {
     }
 
