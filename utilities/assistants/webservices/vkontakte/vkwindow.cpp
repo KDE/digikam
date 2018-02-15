@@ -191,6 +191,7 @@ VKWindow::VKWindow(DInfoInterface* const iface,
             this, SLOT(updateBusyStatusReady()));
 
     updateBusyStatus(true);
+    startReactivation();
 }
 
 VKWindow::~VKWindow()
@@ -331,7 +332,8 @@ void VKWindow::updateHeaderLabel()
 
 void VKWindow::handleVkError(KJob* kjob)
 {
-    QMessageBox::critical(this, i18nc("@title:window", "Request to VKontakte failed"), kjob->errorText());
+    QMessageBox::critical(this, i18nc("@title:window", "Request to VKontakte failed"),
+                          kjob->errorText());
 }
 
 //---------------------------------------------------------------------------
@@ -381,6 +383,7 @@ void VKWindow::slotPhotoUploadDone(KJob* kjob)
 {
     Vkontakte::UploadPhotosJob* const job = dynamic_cast<Vkontakte::UploadPhotosJob*>(kjob);
     Q_ASSERT(job);
+
     m_jobs.removeAll(job);
 
     if (job == 0 || job->error())
