@@ -36,6 +36,7 @@
 #include "dimageslist.h"
 
 class QLabel;
+
 class KJob;
 
 namespace Vkontakte
@@ -56,8 +57,8 @@ class DIGIKAM_EXPORT VKWindow : public WSToolDialog
 public:
 
     explicit VKWindow(DInfoInterface* const iface,
-                             QWidget* const parent,
-                             bool import = false);
+                      QWidget* const parent,
+                      bool import = false);
     ~VKWindow();
 
     /**

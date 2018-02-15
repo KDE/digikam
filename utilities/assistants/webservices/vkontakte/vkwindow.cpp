@@ -193,6 +193,13 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     updateBusyStatus(true);
 }
 
+VKWindow::~VKWindow()
+{
+    reset();
+}
+
+//---------------------------------------------------------------------------
+
 void VKWindow::initAccountBox()
 {
     m_accountBox = new VKAuthWidget(m_settingsBox, m_vkapi);
@@ -206,13 +213,6 @@ void VKWindow::initAccountBox()
     connect(m_accountBox, SIGNAL(signalUpdateAuthInfo()),
             this, SLOT(updateHeaderLabel()));
 }
-
-VKWindow::~VKWindow()
-{
-    reset();
-}
-
-//---------------------------------------------------------------------------
 
 void VKWindow::startReactivation()
 {
@@ -258,8 +258,8 @@ void VKWindow::readSettings()
     KConfig config;
     KConfigGroup grp = config.group("VKontakte Settings");
 
-    m_appId         = grp.readEntry("VkAppId", "2446321");
-    m_albumToSelect = grp.readEntry("SelectedAlbumId", -1);
+    m_appId          = grp.readEntry("VkAppId", "2446321");
+    m_albumToSelect  = grp.readEntry("SelectedAlbumId", -1);
     m_vkapi->setAppId(m_appId);
     m_vkapi->setRequiredPermissions(Vkontakte::AppPermissions::Photos);
     m_vkapi->setInitialAccessToken(grp.readEntry("AccessToken", ""));
@@ -276,6 +276,7 @@ void VKWindow::writeSettings()
         grp.writeEntry("AccessToken", m_vkapi->accessToken());
 
     int aid = 0;
+
     if (!m_albumsBox->getCurrentAlbumId(aid))
     {
         grp.deleteEntry("SelectedAlbumId");
@@ -338,6 +339,7 @@ void VKWindow::handleVkError(KJob* kjob)
 void VKWindow::slotStartTransfer()
 {
     int aid = 0;
+
     if (!m_albumsBox->getCurrentAlbumId(aid))
     {
         // TODO: offer the user to create an album if there are no albums yet
