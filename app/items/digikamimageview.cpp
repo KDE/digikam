@@ -154,6 +154,9 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(ImageInfo,QList<ImageInfo>)),
             FileActionMngr::instance(), SLOT(addToGroup(ImageInfo,QList<ImageInfo>)));
 
+    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(QUrl)),
+            this, SLOT(setCurrentUrlWhenAvailable(QUrl)));
+
     connect(settings, SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
