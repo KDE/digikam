@@ -859,9 +859,6 @@ void EditorWindow::setupStandardActions()
     foreach (QAction* const ac, exportActions())
         ac->setEnabled(false);
 
-    foreach (QAction* const ac, importActions())
-        ac->setEnabled(false);
-
     // --------------------------------------------------------
 
     createFullScreenAction(QLatin1String("editorwindow_fullscreen"));
@@ -1447,9 +1444,6 @@ void EditorWindow::toggleStandardActions(bool val)
 #endif
 
     foreach (QAction* const ac, exportActions())
-        ac->setEnabled(val);
-
-    foreach (QAction* const ac, importActions())
         ac->setEnabled(val);
 
     // these actions are special: They are turned off if val is false,
@@ -3060,7 +3054,7 @@ void EditorWindow::setupSelectToolsAction()
 #ifdef HAVE_MARBLE
     actionModel->addAction(m_geolocationEditAction,       postCategory);
 #endif
-    
+
     QString exportCategory           = i18nc("@title Export Tools",          "Export");
 
     foreach(QAction* const ac, exportActions())
@@ -3074,7 +3068,7 @@ void EditorWindow::setupSelectToolsAction()
     {
         actionModel->addAction(ac,                        importCategory);
     }
-    
+
     // setup categorized view
     DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
 
