@@ -287,7 +287,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->tableView = d->stackedview->tableView();
     d->trashView = d->stackedview->trashView();
 
-    d->utilities = new ImageViewUtilities(this);
+    d->utilities = d->iconView->utilities();
 
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());
@@ -696,11 +696,6 @@ void DigikamView::setupConnections()
 
     connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ImageInfo)),
             this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
-
-    // -- ImageViewUtilities Connections ----------------
-
-    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(QUrl)),
-            d->iconView, SLOT(setCurrentUrlWhenAvailable(QUrl)));
 }
 
 void DigikamView::connectIconViewFilter(FilterStatusBar* const filterbar)
