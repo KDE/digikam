@@ -505,7 +505,7 @@ QWidget* DBInfoIface::albumChooser(QWidget* const parent) const
     }
 
     connect(d->albumsChooser, SIGNAL(signalAlbumSelectionChanged()),
-            this, SIGNAL(signalUploadUrlChanged()));
+            this, SIGNAL(signalAlbumChooserSelectionChanged()));
 
     return d->albumsChooser;
 }
