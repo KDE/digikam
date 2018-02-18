@@ -213,13 +213,11 @@ void Task::run()
 
     // Move processed temp file to target
 
-    QUrl dest = workUrl;
-    dest      = dest.adjusted(QUrl::RemoveFilename);
+    QUrl dest = workUrl.adjusted(QUrl::RemoveFilename);
     dest.setPath(dest.path() + d->tools.m_destFileName);
     QString renameMess;
-    QFileInfo fi(dest.toLocalFile());
 
-    if (fi.exists())
+    if (QFileInfo::exists(dest.toLocalFile()))
     {
         if (d->settings.conflictRule != FileSaveConflictBox::OVERWRITE)
         {
@@ -230,6 +228,12 @@ void Task::run()
         {
             renameMess = i18n("(overwritten)");
         }
+    }
+
+    if (QFileInfo(outUrl.toLocalFile()).size() == 0)
+    {
+        QFile::remove(outUrl.toLocalFile());
+        dest.clear();
     }
 
     if (!dest.isEmpty())
