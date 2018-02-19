@@ -114,7 +114,6 @@ void ImageThumbnailDelegate::updateRects()
 {
     Q_D(ImageThumbnailDelegate);
 
-    d->coordinatesRect = QRect(d->contentWidth - 16+2, d->pixmapRect.top(), 16, 16);
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
     d->pixmapRect      = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
     const int iconSize = qBound(16, (d->contentWidth + 2*d->margin) / 8 - 2, 48);
