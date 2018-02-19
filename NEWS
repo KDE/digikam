@@ -25,4 +25,9 @@ BUGFIXES FROM BUGZILLA:
 015 ==> 389827 - Ignores albums selection.
 016 ==> 389835 - Incorrect DateTime manipulation if timestamp is before unix epoch time.
 017 ==> 390121 - Thumbnail size is too small.
-018 ==> 
+018 ==> 390136 - digiKam crashes when launching scan and recognize faces.
+019 ==> 390325 - Segmentation fault - QMutex::lock().
+020 ==> 390443 - FAQ entry unaccurate - Thumbnail generation fails on video files.
+021 ==> 390529 - Import from scanner not enabled.
+022 ==> 390683 - Batch processing creates 0 byte files on Fujifilm RAF RAW images with lens correction.
+023 ==> 
