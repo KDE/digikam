@@ -2560,6 +2560,10 @@
                 <statement mode="query">OPTIMIZE TABLE Identities, IdentityAttributes;</statement>
             </dbaction>
 
+            <dbaction name="vacuumSimilarityDB">
+                <statement mode="query">OPTIMIZE TABLE ImageSimilarity, ImageHaarMatrix, SimilaritySettings;</statement>
+            </dbaction>
+
             <dbaction name="checkCoreDbIntegrity"> 
                 <statement mode="unprepared">CHECK TABLE Albums, Images, ImageInformation, ImageMetadata, VideoMetadata, ImagePositions, ImageComments, ImageCopyright, ImageProperties, ImageHistory, ImageRelations, Tags, ImageTags, ImageTagProperties;</statement>
             </dbaction>
@@ -2570,6 +2574,10 @@
 
             <dbaction name="checkRecognitionDbIntegrity">
                 <statement mode="unprepared">CHECK TABLE Identities, IdentityAttributes;</statement>
+            </dbaction>
+
+            <dbaction name="checkSimilarityDbIntegrity">
+                <statement mode="unprepared">CHECK TABLE ImageSimilarity, ImageHaarMatrix, SimilaritySettings;</statement>
             </dbaction>
 
         </dbactions>
