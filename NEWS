@@ -30,4 +30,5 @@ BUGFIXES FROM BUGZILLA:
 020 ==> 390443 - FAQ entry unaccurate - Thumbnail generation fails on video files.
 021 ==> 390529 - Import from scanner not enabled.
 022 ==> 390683 - Batch processing creates 0 byte files on Fujifilm RAF RAW images with lens correction.
-023 ==> 
+023 ==> 390688 - Show pick and color label in thumbnail list [patch].
+024 ==> 
