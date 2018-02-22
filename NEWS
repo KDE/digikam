@@ -31,4 +31,5 @@ BUGFIXES FROM BUGZILLA:
 022 ==> 390683 - Batch processing creates 0 byte files on Fujifilm RAF RAW images with lens correction.
 023 ==> 390688 - Show pick and color label in thumbnail list [patch].
 024 ==> 390162 - digiKam-5.9.0 appimage fail to start.
-025 ==> 
+025 ==> 384853 - Ungrouping images is not working.
+026 ==> 
