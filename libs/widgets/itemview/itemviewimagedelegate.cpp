@@ -493,12 +493,17 @@ void ItemViewImageDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewIte
     }
 }
 
-void ItemViewImageDelegate::drawImageFormat(QPainter* p, const QRect& r, const QString& f) const
+void ItemViewImageDelegate::drawImageFormat(QPainter* p, const QRect& r, const QString& f, bool drawTop) const
 {
     Q_D(const ItemViewImageDelegate);
 
     if (!f.isEmpty() && !r.isNull())
     {
+        Qt::Alignment alignment = Qt::AlignBottom;
+
+        if (drawTop)
+            alignment = Qt::AlignTop;
+
         p->save();
 
         QFont fnt(d->fontReg);
@@ -508,9 +513,11 @@ void ItemViewImageDelegate::drawImageFormat(QPainter* p, const QRect& r, const Q
         p->setPen(QPen(Qt::gray));
         p->setOpacity(0.50);
 
-        QRect bRect = p->boundingRect(r, Qt::AlignBottom | Qt::AlignHCenter, f.toUpper());
-        bRect.adjust(1, 1, -1, -1);
-        bRect.translate(0, 1);
+        QRect bRect = p->boundingRect(r, alignment | Qt::AlignHCenter, f.toUpper());
+        bRect.adjust(0, 0, 0, -2);
+
+        if (!drawTop)
+            bRect.translate(0, 1);
 
         p->fillRect(bRect, Qt::SolidPattern);
         p->setPen(QPen(Qt::white));
