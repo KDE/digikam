@@ -336,38 +336,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMenuEvent* event)
 {
     Q_UNUSED(index);
-    QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
-    QList<qlonglong> selectedImageIDs;
-
-    foreach (const ImageInfo& info, selectedInfos)
-    {
-        selectedImageIDs << info.id();
-    }
-
-    QMenu popmenu(this);
-    ContextMenuHelper cmhelper(&popmenu);
-    cmhelper.setImageFilterModel(imageFilterModel());
-    cmhelper.addGroupActions(selectedImageIDs);
-
-    // special action handling --------------------------------
-
-    connect(&cmhelper, SIGNAL(signalCreateGroup()),
-            this, SLOT(createGroupFromSelection()));
-
-    connect(&cmhelper, SIGNAL(signalCreateGroupByTime()),
-            this, SLOT(createGroupByTimeFromSelection()));
-
-    connect(&cmhelper, SIGNAL(signalCreateGroupByFilename()),
-            this, SLOT(createGroupByFilenameFromSelection()));
-
-    connect(&cmhelper, SIGNAL(signalUngroup()),
-            this, SLOT(ungroupSelected()));
-
-    connect(&cmhelper, SIGNAL(signalRemoveFromGroup()),
-            this, SLOT(removeSelectedFromGroup()));
-
-
-    cmhelper.exec(event->globalPos());
+    emit signalShowGroupContextMenu(event, selectedImageInfosCurrentFirst(), imageFilterModel());
 }
 
 void DigikamImageView::showContextMenu(QContextMenuEvent* event)

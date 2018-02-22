@@ -513,6 +513,11 @@ void DigikamView::setupConnections()
             this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,
                                                  QList<QAction*>,ImageFilterModel*)));
 
+    connect(d->iconView, SIGNAL(signalShowGroupContextMenu(QContextMenuEvent*,QList<ImageInfo>,
+                                                           ImageFilterModel*)),
+            this, SLOT(slotShowGroupContextMenu(QContextMenuEvent*,QList<ImageInfo>,
+                                                ImageFilterModel*)));
+
     // -- TableView Connections -----------------------------------
 
     connect(d->tableView, SIGNAL(signalPreviewRequested(ImageInfo)),
@@ -2699,6 +2704,42 @@ void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const Imag
     {
         slotTogglePreviewMode(info);
     }
+}
+
+void DigikamView::slotShowGroupContextMenu(QContextMenuEvent* event,
+                                           const QList<ImageInfo>& selectedInfos,
+                                           ImageFilterModel* imageFilterModel)
+{
+    QList<qlonglong> selectedImageIDs;
+
+    foreach(const ImageInfo& info, selectedInfos)
+    {
+        selectedImageIDs << info.id();
+    }
+
+    QMenu popmenu(this);
+    ContextMenuHelper cmhelper(&popmenu);
+    cmhelper.setImageFilterModel(imageFilterModel);
+    cmhelper.addGroupActions(selectedImageIDs);
+
+    // special action handling --------------------------------
+
+    connect(&cmhelper, SIGNAL(signalCreateGroup()),
+            this, SLOT(slotCreateGroupFromSelection()));
+
+    connect(&cmhelper, SIGNAL(signalCreateGroupByTime()),
+            this, SLOT(slotCreateGroupByTimeFromSelection()));
+
+    connect(&cmhelper, SIGNAL(signalCreateGroupByFilename()),
+            this, SLOT(slotCreateGroupByFilenameFromSelection()));
+
+    connect(&cmhelper, SIGNAL(signalUngroup()),
+            this, SLOT(slotUngroupSelected()));
+
+    connect(&cmhelper, SIGNAL(signalRemoveFromGroup()),
+            this, SLOT(slotRemoveSelectedFromGroup()));
+
+    cmhelper.exec(event->globalPos());
 }
 
 void DigikamView::slotSetAsAlbumThumbnail(const ImageInfo& info)
