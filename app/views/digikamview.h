@@ -325,9 +325,14 @@ private Q_SLOTS:
 
     void slotShowContextMenu(QContextMenuEvent* event,
                              const QList<QAction*>& extraGroupingActions = QList<QAction*>());
+
     void slotShowContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info,
                                    const QList<QAction*>& extraGroupingActions = QList<QAction*>(),
                                    ImageFilterModel* imageFilterModel = 0);
+
+    void slotShowGroupContextMenu(QContextMenuEvent* event,
+                                  const QList<ImageInfo>& selectedInfos,
+                                  ImageFilterModel* imageFilterModel = 0);
 
 private:
 
