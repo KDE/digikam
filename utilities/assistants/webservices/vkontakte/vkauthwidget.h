@@ -26,10 +26,9 @@
 
 // Qt includes
 
+#include <QWidget>
+#include <QString>
 #include <QGroupBox>
-
-class QLabel;
-class QPushButton;
 
 class KJob;
 
@@ -54,7 +53,7 @@ public:
 
 Q_SIGNALS:
 
-    void authCleared();
+    void signalAuthCleared();
     void signalUpdateAuthInfo();
 
 public Q_SLOTS:
@@ -64,10 +63,8 @@ public Q_SLOTS:
 protected Q_SLOTS:
 
     void slotChangeUserClicked();
-
-    void updateAuthInfo();
-
-    void startGetUserInfo();
+    void slotUpdateAuthInfo();
+    void slotStartGetUserInfo();
     void slotGetUserInfoDone(KJob* kjob);
 
 protected:
@@ -76,16 +73,8 @@ protected:
 
 private:
 
-    // VK.com interface
-    Vkontakte::VkApi* m_vkapi;
-
-    // Data
-    int               m_userId;
-    QString           m_userFullName;
-
-    // GUI
-    QLabel*           m_loginLabel;
-    QPushButton*      m_changeUserButton;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

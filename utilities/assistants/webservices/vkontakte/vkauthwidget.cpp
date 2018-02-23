@@ -25,7 +25,6 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QLabel>
 #include <QGridLayout>
 #include <QPushButton>
@@ -53,12 +52,36 @@
 namespace Digikam
 {
 
+class VKAuthWidget::Private
+{
+public:
+
+    Private()
+    {
+        vkapi            = 0;
+        userId           = -1;
+        loginLabel       = 0;
+        changeUserButton = 0;
+    }
+
+    // VK.com interface
+    Vkontakte::VkApi* vkapi;
+
+    // Data
+    int               userId;
+    QString           userFullName;
+
+    // GUI
+    QLabel*           loginLabel;
+    QPushButton*      changeUserButton;
+};
+
 VKAuthWidget::VKAuthWidget(QWidget* const parent,
                            Vkontakte::VkApi* const vkapi)
-    : QGroupBox(i18n("Account"), parent)
+    : QGroupBox(i18n("Account"), parent),
+      d(new Private)
 {
-    m_vkapi  = vkapi;
-    m_userId = -1;
+    d->vkapi  = vkapi;
 
     setWhatsThis(i18n("This account is used for authentication."));
 
@@ -67,41 +90,42 @@ VKAuthWidget::VKAuthWidget(QWidget* const parent,
     loginDescLabel->setText(i18n("Name:"));
     loginDescLabel->setWhatsThis(i18n("Your VKontakte login"));
 
-    m_loginLabel       = new QLabel(this);
-    m_changeUserButton = new QPushButton(QIcon::fromTheme(QString::fromLatin1("system-switch-user")),
+    d->loginLabel       = new QLabel(this);
+    d->changeUserButton = new QPushButton(QIcon::fromTheme(QString::fromLatin1("system-switch-user")),
                                          i18n("Change Account"), this);
-    m_changeUserButton->setToolTip(i18n("Change VKontakte account used to authenticate"));
-    m_changeUserButton->hide(); // changing account does not work anyway
+    d->changeUserButton->setToolTip(i18n("Change VKontakte account used to authenticate"));
+    d->changeUserButton->hide(); // changing account does not work anyway
 
-    accountBoxLayout->addWidget(loginDescLabel,     0, 0);
-    accountBoxLayout->addWidget(m_loginLabel,       0, 1);
-    accountBoxLayout->addWidget(m_changeUserButton, 1, 1);
+    accountBoxLayout->addWidget(loginDescLabel,      0, 0);
+    accountBoxLayout->addWidget(d->loginLabel,       0, 1);
+    accountBoxLayout->addWidget(d->changeUserButton, 1, 1);
 //     accountBoxLayout->setSpacing(KDialog::spacingHint());
 //     accountBoxLayout->setMargin(KDialog::spacingHint());
 
-    connect(m_changeUserButton, SIGNAL(clicked()),
+    connect(d->changeUserButton, SIGNAL(clicked()),
             this, SLOT(slotChangeUserClicked()));
 
-    connect(m_vkapi, SIGNAL(authenticated()),
-            this, SLOT(startGetUserInfo()));
+    connect(d->vkapi, SIGNAL(authenticated()),
+            this, SLOT(slotStartGetUserInfo()));
 
     connect(this, SIGNAL(signalUpdateAuthInfo()),
-            this, SLOT(updateAuthInfo()));
+            this, SLOT(slotUpdateAuthInfo()));
 }
 
 VKAuthWidget::~VKAuthWidget()
 {
+    delete d;
 }
 
 //---------------------------------------------------------------------------
 
 void VKAuthWidget::startAuthentication(bool forceLogout)
 {
-    m_userFullName.clear();
-    m_userId = -1;
-    m_vkapi->startAuthentication(forceLogout);
+    d->userFullName.clear();
+    d->userId = -1;
+    d->vkapi->startAuthentication(forceLogout);
 
-    emit authCleared();
+    emit signalAuthCleared();
 }
 
 void VKAuthWidget::slotChangeUserClicked()
@@ -112,10 +136,10 @@ void VKAuthWidget::slotChangeUserClicked()
 
 //---------------------------------------------------------------------------
 
-void VKAuthWidget::startGetUserInfo()
+void VKAuthWidget::slotStartGetUserInfo()
 {
     // Retrieve user info with UserInfoJob
-    Vkontakte::UserInfoJob* const job = new Vkontakte::UserInfoJob(m_vkapi->accessToken());
+    Vkontakte::UserInfoJob* const job = new Vkontakte::UserInfoJob(d->vkapi->accessToken());
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotGetUserInfoDone(KJob*)));
@@ -132,28 +156,28 @@ void VKAuthWidget::slotGetUserInfoDone(KJob* kjob)
     QList<Vkontakte::UserInfo> res = job->userInfo();
     Vkontakte::UserInfo user = res.first();
 
-    m_userId = user.userId();
-    m_userFullName = i18nc("Concatenation of first name (%1) and last name (%2)", "%1 %2",
+    d->userId = user.userId();
+    d->userFullName = i18nc("Concatenation of first name (%1) and last name (%2)", "%1 %2",
                            user.firstName(), user.lastName());
     emit signalUpdateAuthInfo();
 }
 
 //---------------------------------------------------------------------------
 
-void VKAuthWidget::updateAuthInfo()
+void VKAuthWidget::slotUpdateAuthInfo()
 {
     QString loginText;
 
-    if (m_vkapi->isAuthenticated())
+    if (d->vkapi->isAuthenticated())
     {
-        loginText = m_userFullName;
+        loginText = d->userFullName;
     }
     else
     {
         loginText = i18n("Unauthorized");
     }
 
-    m_loginLabel->setText(QString::fromLatin1("<b>%1</b>").arg(loginText));
+    d->loginLabel->setText(QString::fromLatin1("<b>%1</b>").arg(loginText));
 }
 
 // TODO: share this code with `vkwindow.cpp`
@@ -166,8 +190,8 @@ void VKAuthWidget::handleVkError(KJob* kjob)
 
 QString VKAuthWidget::albumsURL() const
 {
-    if (m_vkapi->isAuthenticated() && m_userId != -1)
-        return QString::fromLatin1("http://vk.com/albums%1").arg(m_userId);
+    if (d->vkapi->isAuthenticated() && d->userId != -1)
+        return QString::fromLatin1("http://vk.com/albums%1").arg(d->userId);
     else
         return QString::fromLatin1("http://vk.com/");
 }

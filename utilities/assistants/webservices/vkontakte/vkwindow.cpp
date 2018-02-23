@@ -208,7 +208,7 @@ void VKWindow::initAccountBox()
     connect(m_vkapi, SIGNAL(authenticated()),
             this, SLOT(authenticated()));
 
-    connect(m_accountBox, SIGNAL(authCleared()),
+    connect(m_accountBox, SIGNAL(signalAuthCleared()),
             this, SLOT(authCleared()));
 
     connect(m_accountBox, SIGNAL(signalUpdateAuthInfo()),
