@@ -50,9 +50,29 @@
 namespace Digikam
 {
 
+class VKNewAlbumDlg::Private
+{
+public:
+
+    Private()
+    {
+        titleEdit            = 0;
+        summaryEdit          = 0;
+        albumPrivacyCombo    = 0;
+        commentsPrivacyCombo = 0; 
+    }
+
+    QLineEdit*      titleEdit;
+    QTextEdit*      summaryEdit;
+    QComboBox*      albumPrivacyCombo;
+    QComboBox*      commentsPrivacyCombo;
+
+    AlbumProperties album;
+};
+
 VKNewAlbumDlg::VKNewAlbumDlg(QWidget* const parent)
     : QDialog(parent),
-      m_album()
+      d(new Private)
 {
     initDialog(false);
 }
@@ -60,14 +80,15 @@ VKNewAlbumDlg::VKNewAlbumDlg(QWidget* const parent)
 VKNewAlbumDlg::VKNewAlbumDlg(QWidget* const parent,
                              const AlbumProperties& album)
     : QDialog(parent),
-      m_album(album)
+      d(new Private)
 {
+    d->album = album;
     initDialog(true);
 }
 
 VKNewAlbumDlg::~VKNewAlbumDlg()
 {
-    // nothing
+    delete d;
 }
 
 void VKNewAlbumDlg::initDialog(bool editing)
@@ -76,12 +97,12 @@ void VKNewAlbumDlg::initDialog(bool editing)
                            : i18nc("@title:window", "New album"));
     setMinimumSize(400, 300);
 
-    QVBoxLayout* const mainLayout = new QVBoxLayout(this);
+    QVBoxLayout* const mainLayout     = new QVBoxLayout(this);
     setLayout(mainLayout);
 
     QDialogButtonBox* const buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
 
-    QPushButton* const okButton = buttonBox->button(QDialogButtonBox::Ok);
+    QPushButton* const okButton       = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
 
@@ -95,36 +116,36 @@ void VKNewAlbumDlg::initDialog(bool editing)
     QGroupBox* const albumBox = new QGroupBox(i18nc("@title:group Header above Title and Summary fields", "Album"), this);
     albumBox->setWhatsThis(i18n("These are basic settings for the new VKontakte album."));
 
-    m_titleEdit = new QLineEdit(m_album.title);
-    m_titleEdit->setWhatsThis(i18n("Title of the album that will be created (required)."));
+    d->titleEdit              = new QLineEdit(d->album.title);
+    d->titleEdit->setWhatsThis(i18n("Title of the album that will be created (required)."));
 
-    m_summaryEdit = new QTextEdit(m_album.description);
-    m_summaryEdit->setWhatsThis(i18n("Description of the album that will be created (optional)."));
+    d->summaryEdit            = new QTextEdit(d->album.description);
+    d->summaryEdit->setWhatsThis(i18n("Description of the album that will be created (optional)."));
 
 
     QFormLayout* const albumBoxLayout   = new QFormLayout;
-    albumBoxLayout->addRow(i18n("Title:"),   m_titleEdit);
-    albumBoxLayout->addRow(i18n("Summary:"), m_summaryEdit);
+    albumBoxLayout->addRow(i18n("Title:"),   d->titleEdit);
+    albumBoxLayout->addRow(i18n("Summary:"), d->summaryEdit);
     albumBox->setLayout(albumBoxLayout);
 
     QGroupBox* const privacyBox         = new QGroupBox(i18n("Privacy Settings"), this);
     QGridLayout* const privacyBoxLayout = new QGridLayout;
 
-    m_albumPrivacyCombo = new QComboBox(privacyBox);
-    m_albumPrivacyCombo->addItem(i18n("Only me"),               QVariant(Vkontakte::AlbumInfo::PRIVACY_PRIVATE));
-    m_albumPrivacyCombo->addItem(i18n("My friends"),            QVariant(Vkontakte::AlbumInfo::PRIVACY_FRIENDS));
-    m_albumPrivacyCombo->addItem(i18n("Friends of my friends"), QVariant(Vkontakte::AlbumInfo::PRIVACY_FRIENDS_OF_FRIENDS));
-    m_albumPrivacyCombo->addItem(i18n("Everyone"),              QVariant(Vkontakte::AlbumInfo::PRIVACY_PUBLIC));
+    d->albumPrivacyCombo = new QComboBox(privacyBox);
+    d->albumPrivacyCombo->addItem(i18n("Only me"),               QVariant(Vkontakte::AlbumInfo::PRIVACY_PRIVATE));
+    d->albumPrivacyCombo->addItem(i18n("My friends"),            QVariant(Vkontakte::AlbumInfo::PRIVACY_FRIENDS));
+    d->albumPrivacyCombo->addItem(i18n("Friends of my friends"), QVariant(Vkontakte::AlbumInfo::PRIVACY_FRIENDS_OF_FRIENDS));
+    d->albumPrivacyCombo->addItem(i18n("Everyone"),              QVariant(Vkontakte::AlbumInfo::PRIVACY_PUBLIC));
     privacyBoxLayout->addWidget(new QLabel(i18n("Album available to:")), 0, 0);
-    privacyBoxLayout->addWidget(m_albumPrivacyCombo, 0, 1);
+    privacyBoxLayout->addWidget(d->albumPrivacyCombo, 0, 1);
 
-    m_commentsPrivacyCombo = new QComboBox(privacyBox);
-    m_commentsPrivacyCombo->addItem(i18n("Only me"),               QVariant(Vkontakte::AlbumInfo::PRIVACY_PRIVATE));
-    m_commentsPrivacyCombo->addItem(i18n("My friends"),            QVariant(Vkontakte::AlbumInfo::PRIVACY_FRIENDS));
-    m_commentsPrivacyCombo->addItem(i18n("Friends of my friends"), QVariant(Vkontakte::AlbumInfo::PRIVACY_FRIENDS_OF_FRIENDS));
-    m_commentsPrivacyCombo->addItem(i18n("Everyone"),              QVariant(Vkontakte::AlbumInfo::PRIVACY_PUBLIC));
+    d->commentsPrivacyCombo = new QComboBox(privacyBox);
+    d->commentsPrivacyCombo->addItem(i18n("Only me"),               QVariant(Vkontakte::AlbumInfo::PRIVACY_PRIVATE));
+    d->commentsPrivacyCombo->addItem(i18n("My friends"),            QVariant(Vkontakte::AlbumInfo::PRIVACY_FRIENDS));
+    d->commentsPrivacyCombo->addItem(i18n("Friends of my friends"), QVariant(Vkontakte::AlbumInfo::PRIVACY_FRIENDS_OF_FRIENDS));
+    d->commentsPrivacyCombo->addItem(i18n("Everyone"),              QVariant(Vkontakte::AlbumInfo::PRIVACY_PUBLIC));
     privacyBoxLayout->addWidget(new QLabel(i18n("Comments available to:")), 1, 0);
-    privacyBoxLayout->addWidget(m_commentsPrivacyCombo, 1, 1);
+    privacyBoxLayout->addWidget(d->commentsPrivacyCombo, 1, 1);
 
     privacyBox->setLayout(privacyBoxLayout);
 
@@ -134,42 +155,42 @@ void VKNewAlbumDlg::initDialog(bool editing)
 
     if (editing)
     {
-        m_titleEdit->setText(m_album.title);
-        m_summaryEdit->setText(m_album.description);
-        m_albumPrivacyCombo->setCurrentIndex(m_albumPrivacyCombo->findData(m_album.privacy));
-        m_commentsPrivacyCombo->setCurrentIndex(m_commentsPrivacyCombo->findData(m_album.commentPrivacy));
+        d->titleEdit->setText(d->album.title);
+        d->summaryEdit->setText(d->album.description);
+        d->albumPrivacyCombo->setCurrentIndex(d->albumPrivacyCombo->findData(d->album.privacy));
+        d->commentsPrivacyCombo->setCurrentIndex(d->commentsPrivacyCombo->findData(d->album.commentPrivacy));
     }
 
-    m_titleEdit->setFocus();
+    d->titleEdit->setFocus();
 }
 
 void VKNewAlbumDlg::accept()
 {
-    if (m_titleEdit->text().isEmpty())
+    if (d->titleEdit->text().isEmpty())
     {
         QMessageBox::critical(this, i18n("Error"), i18n("Title cannot be empty."));
         return;
     }
 
-    m_album.title       = m_titleEdit->text();
-    m_album.description = m_summaryEdit->toPlainText();
+    d->album.title       = d->titleEdit->text();
+    d->album.description = d->summaryEdit->toPlainText();
 
-    if (m_albumPrivacyCombo->currentIndex() != -1)
-        m_album.privacy = m_albumPrivacyCombo->itemData(m_albumPrivacyCombo->currentIndex()).toInt();
+    if (d->albumPrivacyCombo->currentIndex() != -1)
+        d->album.privacy = d->albumPrivacyCombo->itemData(d->albumPrivacyCombo->currentIndex()).toInt();
     else // for safety, see info about VK API bug below
-        m_album.privacy = Vkontakte::AlbumInfo::PRIVACY_PRIVATE;
+        d->album.privacy = Vkontakte::AlbumInfo::PRIVACY_PRIVATE;
 
-    if (m_commentsPrivacyCombo->currentIndex() != -1)
-        m_album.commentPrivacy = m_commentsPrivacyCombo->itemData(m_commentsPrivacyCombo->currentIndex()).toInt();
+    if (d->commentsPrivacyCombo->currentIndex() != -1)
+        d->album.commentPrivacy = d->commentsPrivacyCombo->itemData(d->commentsPrivacyCombo->currentIndex()).toInt();
     else // VK API has a bug: if "comment_privacy" is not set, it will be set to PRIVACY_PUBLIC
-        m_album.commentPrivacy = Vkontakte::AlbumInfo::PRIVACY_PRIVATE;
+        d->album.commentPrivacy = Vkontakte::AlbumInfo::PRIVACY_PRIVATE;
 
     QDialog::accept();
 }
 
 const VKNewAlbumDlg::AlbumProperties& VKNewAlbumDlg::album() const
 {
-    return m_album;
+    return d->album;
 }
 
 } // namespace Digikam

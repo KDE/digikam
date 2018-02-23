@@ -28,10 +28,8 @@
 // Qt includes
 
 #include <QDialog>
-
-class QComboBox;
-class QTextEdit;
-class QLineEdit;
+#include <QWidget>
+#include <QString>
 
 namespace Digikam
 {
@@ -81,12 +79,8 @@ private:
 
 private:
 
-    QLineEdit*      m_titleEdit;
-    QTextEdit*      m_summaryEdit;
-    QComboBox*      m_albumPrivacyCombo;
-    QComboBox*      m_commentsPrivacyCombo;
-
-    AlbumProperties m_album;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
