@@ -6,7 +6,7 @@
  * Date        : 2017-01-29
  * Description : Thread actions task for database cleanup.
  *
- * Copyright (C) 2017-2018 by Mario Frank <mario dot frank at uni minus potsdam dot de>
+ * Copyright (C) 2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,8 +38,6 @@
 #include "recognitiondatabase.h"
 #include "facetagseditor.h"
 #include "maintenancedata.h"
-#include "similaritydb.h"
-#include "similaritydbaccess.h"
 
 namespace Digikam
 {
@@ -51,7 +49,6 @@ public:
     Private()
         : scanThumbsDb(false),
           scanRecognitionDb(false),
-          scanSimilarityDb(false),
           mode(Mode::Unknown),
           data(0)
     {
@@ -61,7 +58,6 @@ public:
 
     bool             scanThumbsDb;
     bool             scanRecognitionDb;
-    bool             scanSimilarityDb;
 
     Mode             mode;
     MaintenanceData* data;
@@ -81,11 +77,10 @@ DatabaseTask::~DatabaseTask()
     delete d;
 }
 
-void DatabaseTask::computeDatabaseJunk(bool thumbsDb, bool facesDb, bool similarityDb)
+void DatabaseTask::computeDatabaseJunk(bool thumbsDb, bool facesDb)
 {
     d->scanThumbsDb      = thumbsDb;
     d->scanRecognitionDb = facesDb;
-    d->scanSimilarityDb  = similarityDb;
 }
 
 void DatabaseTask::setMode(Mode mode)
@@ -204,49 +199,13 @@ void DatabaseTask::run()
         }
 
         QThread::sleep(1);
-
-        if (m_cancel)
-        {
-            return;
-        }
-
-        if (SimilarityDbAccess::isInitialized())
-        {
-            if (SimilarityDbAccess().db()->integrityCheck())
-            {
-                SimilarityDbAccess().db()->vacuum();
-
-                if (!SimilarityDbAccess().db()->integrityCheck())
-                {
-                    qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for similarity DB failed after vacuum. Something went wrong.";
-                    // Signal that the database was vacuumed but failed the integrity check afterwards.
-                    emit signalFinished(true,false);
-                }
-                else
-                {
-                    qCDebug(DIGIKAM_DATABASE_LOG) << "Finished vacuuming of similarity DB. Integrity check after vacuuming was positive.";
-                    emit signalFinished(true,true);
-                }
-            }
-            else
-            {
-                qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for recognition DB failed. Will not vacuum.";
-                // Signal that the integrity check failed and thus the vacuum was skipped
-                emit signalFinished(false,false);
-            }
-        }
-
-        QThread::sleep(1);
     }
     else if (d->mode == Mode::ComputeDatabaseJunk)
     {
         QList<qlonglong>              staleImageIds;
         QList<int>                    staleThumbIds;
-        QList<Identity>               staleIdentities;
-        QList<qlonglong>              staleSimilarityImageIds;
+        QList<Identity>  staleIdentities;
         int additionalItemsToProcess = 0;
-
-        QList<qlonglong> coredbItems = CoreDbAccess().db()->getAllItems();
 
         // Get the count of image entries in DB to delete.
         staleImageIds   = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Obsolete);
@@ -254,18 +213,13 @@ void DatabaseTask::run()
         // get the count of items to process for thumbnails cleanup it enabled.
         if (d->scanThumbsDb && ThumbsDbAccess::isInitialized())
         {
-            additionalItemsToProcess += coredbItems.size();
+            additionalItemsToProcess += CoreDbAccess().db()->getAllItems().size();
         }
 
         // get the count of items to process for identities cleanup it enabled.
         if (d->scanRecognitionDb)
         {
             additionalItemsToProcess += RecognitionDatabase().allIdentities().size();
-        }
-
-        if (d->scanSimilarityDb)
-        {
-            additionalItemsToProcess += coredbItems.size();
         }
 
         if (additionalItemsToProcess > 0)
@@ -288,9 +242,12 @@ void DatabaseTask::run()
 
             QSet<int> thumbIds     = ThumbsDbAccess().db()->findAll().toSet();
 
+            // Get all items, i.e. images, videos, ...
+            QList<qlonglong> items = CoreDbAccess().db()->getAllItems();
+
             FaceTagsEditor editor;
 
-            foreach(qlonglong item, coredbItems)
+            foreach(qlonglong item, items)
             {
                 if (m_cancel)
                 {
@@ -387,32 +344,7 @@ void DatabaseTask::run()
             emit signalFinished();
         }
 
-        if (m_cancel)
-        {
-            return;
-        }
-
-        if (d->scanSimilarityDb)
-        {
-            // Get all registered image ids from the similarity db.
-            QSet<qlonglong> similarityDbItems = SimilarityDbAccess().db()->registeredImageIds();
-
-            // Remove all image ids that are existent in the core db
-            foreach(const qlonglong& imageId, coredbItems)
-            {
-                similarityDbItems.remove(imageId);
-
-                // Signal that this image id was processed.
-                signalFinished();
-            }
-            // The remaining image ids should be removed from the similarity db.
-            staleSimilarityImageIds = similarityDbItems.toList();
-
-            // Signal that the database was processed.
-            signalFinished();
-        }
-
-        emit signalData(staleImageIds,staleThumbIds,staleIdentities, staleSimilarityImageIds);
+        emit signalData(staleImageIds,staleThumbIds,staleIdentities);
     }
     else if (d->mode == Mode::CleanCoreDb)
     {
@@ -431,6 +363,7 @@ void DatabaseTask::run()
             }
 
             CoreDbAccess().db()->deleteItem(imageId);
+            CoreDbAccess().db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(imageId));
 
             emit signalFinished();
         }
@@ -505,29 +438,6 @@ void DatabaseTask::run()
             }
 
             RecognitionDatabase().deleteIdentity(identity);
-            emit signalFinished();
-        }
-    }
-    else if (d->mode == Mode::CleanSimilarityDb)
-    {
-        // While we have data (using this as check for non-null)
-        while (d->data)
-        {
-            if (m_cancel)
-            {
-                return;
-            }
-
-            qlonglong imageId = d->data->getSimilarityImageId();
-
-            if (imageId == -1)
-            {
-                break;
-            }
-
-            SimilarityDbAccess().db()->removeImageFingerprint(imageId, FuzzyAlgorithm::Haar);
-            SimilarityDbAccess().db()->removeImageFingerprint(imageId, FuzzyAlgorithm::TfIdf);
-
             emit signalFinished();
         }
     }
