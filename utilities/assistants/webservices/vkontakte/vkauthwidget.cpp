@@ -119,7 +119,7 @@ VKAuthWidget::~VKAuthWidget()
 
 //---------------------------------------------------------------------------
 
-void VKAuthWidget::startAuthentication(bool forceLogout)
+void VKAuthWidget::slotStartAuthentication(bool forceLogout)
 {
     d->userFullName.clear();
     d->userId = -1;
@@ -131,7 +131,7 @@ void VKAuthWidget::startAuthentication(bool forceLogout)
 void VKAuthWidget::slotChangeUserClicked()
 {
     // force authenticate window
-    startAuthentication(true);
+    slotStartAuthentication(true);
 }
 
 //---------------------------------------------------------------------------

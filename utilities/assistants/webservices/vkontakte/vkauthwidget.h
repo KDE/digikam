@@ -58,7 +58,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void startAuthentication(bool forceLogout);
+    void slotStartAuthentication(bool forceLogout);
 
 private Q_SLOTS:
 

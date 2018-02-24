@@ -220,7 +220,7 @@ void VKWindow::startReactivation()
     m_imgList->loadImagesFromCurrentSelection();
 
     reset();
-    m_accountBox->startAuthentication(false); // show() will be called after that
+    m_accountBox->slotStartAuthentication(false); // show() will be called after that
 }
 
 void VKWindow::reset()
