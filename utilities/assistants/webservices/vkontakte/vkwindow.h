@@ -80,12 +80,12 @@ private Q_SLOTS:
 
     void slotFinished();
 
-    void updateBusyStatus(bool busy);
-    void updateBusyStatusReady();
+    void slotUpdateBusyStatus(bool busy);
+    void slotUpdateBusyStatusReady();
 
-    void authenticated();
-    void authCleared();
-    void updateHeaderLabel();
+    void slotAuthenticated();
+    void slotAuthCleared();
+    void slotUpdateHeaderLabel();
 
 private:
 

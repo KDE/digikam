@@ -185,12 +185,12 @@ VKWindow::VKWindow(DInfoInterface* const iface,
      * Dialog update slots
      */
     connect(this, SIGNAL(signalUpdateBusyStatus(bool)),
-            this, SLOT(updateBusyStatus(bool)));
+            this, SLOT(slotUpdateBusyStatus(bool)));
 
     connect(m_vkapi, SIGNAL(authenticated()), // TBD: busy status handling needs improvement
-            this, SLOT(updateBusyStatusReady()));
+            this, SLOT(slotUpdateBusyStatusReady()));
 
-    updateBusyStatus(true);
+    slotUpdateBusyStatus(true);
     startReactivation();
 }
 
@@ -206,13 +206,13 @@ void VKWindow::initAccountBox()
     m_accountBox = new VKAuthWidget(m_settingsBox, m_vkapi);
 
     connect(m_vkapi, SIGNAL(authenticated()),
-            this, SLOT(authenticated()));
+            this, SLOT(slotAuthenticated()));
 
     connect(m_accountBox, SIGNAL(signalAuthCleared()),
-            this, SLOT(authCleared()));
+            this, SLOT(slotAuthCleared()));
 
     connect(m_accountBox, SIGNAL(signalUpdateAuthInfo()),
-            this, SLOT(updateHeaderLabel()));
+            this, SLOT(slotUpdateHeaderLabel()));
 }
 
 void VKWindow::startReactivation()
@@ -228,7 +228,7 @@ void VKWindow::reset()
     emit signalUpdateBusyStatus(false);
 }
 
-void VKWindow::updateBusyStatus(bool busy)
+void VKWindow::slotUpdateBusyStatus(bool busy)
 {
     if (m_albumsBox)
         m_albumsBox->setEnabled(!busy && m_vkapi->isAuthenticated());
@@ -247,9 +247,9 @@ void VKWindow::updateBusyStatus(bool busy)
     }
 }
 
-void VKWindow::updateBusyStatusReady()
+void VKWindow::slotUpdateBusyStatusReady()
 {
-    updateBusyStatus(false);
+    slotUpdateBusyStatus(false);
 }
 
 //---------------------------------------------------------------------------
@@ -307,13 +307,13 @@ void VKWindow::slotFinished()
     reset();
 }
 
-void VKWindow::authenticated()
+void VKWindow::slotAuthenticated()
 {
     if (m_albumsBox)
         m_albumsBox->setEnabled(true);
 }
 
-void VKWindow::authCleared()
+void VKWindow::slotAuthCleared()
 {
     if (m_albumsBox)
     {
@@ -322,7 +322,7 @@ void VKWindow::authCleared()
     }
 }
 
-void VKWindow::updateHeaderLabel()
+void VKWindow::slotUpdateHeaderLabel()
 {
     m_headerLabel->setText(QString::fromLatin1("<b><h2><a href=\"%1\"><font color=\"black\">%2</font></a></h2></b>")
                            .arg(m_accountBox->albumsURL()).arg(i18n("VKontakte")));
