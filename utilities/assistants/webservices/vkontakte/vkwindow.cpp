@@ -135,14 +135,15 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     d->imgList->setAllowRAW(false); // TODO: implement conversion
     d->imgList->setIface(d->iface);
     d->imgList->loadImagesFromCurrentSelection();
-    d->imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to your VKontakte album."));
+    d->imgList->listView()->setWhatsThis(i18n("This is the list of images "
+                                              "to upload to your VKontakte album."));
 
     d->settingsBox                       = new QWidget(this);
     QVBoxLayout* const settingsBoxLayout = new QVBoxLayout(d->settingsBox);
 
     d->headerLabel                       = new QLabel(d->settingsBox);
     d->headerLabel->setWhatsThis(i18n("This is a clickable link to open the "
-                                     "VKontakte service in a web browser."));
+                                      "VKontakte service in a web browser."));
     d->headerLabel->setOpenExternalLinks(true);
     d->headerLabel->setFocusPolicy(Qt::NoFocus);
 
@@ -156,7 +157,8 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     // ------------------------------------------------------------------------
 
     QGroupBox* const uploadBox         = new QGroupBox(i18n("Destination"), d->settingsBox);
-    uploadBox->setWhatsThis(i18n("This is the location where VKontakte images will be downloaded."));
+    uploadBox->setWhatsThis(i18n("This is the location where VKontakte images "
+                                 "will be downloaded."));
     QVBoxLayout* const uploadBoxLayout = new QVBoxLayout(uploadBox);
     d->uploadWidget                    = d->iface->uploadWidget(uploadBox);
     uploadBoxLayout->addWidget(d->uploadWidget);
@@ -186,13 +188,9 @@ VKWindow::VKWindow(DInfoInterface* const iface,
 //     settingsBoxLayout->addWidget(optionsBox);
     settingsBoxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
     settingsBoxLayout->addWidget(d->progressBar);
-//     settingsBoxLayout->setSpacing(KDialog::spacingHint());
-//     settingsBoxLayout->setMargin(KDialog::spacingHint());
 
     mainLayout->addWidget(d->imgList);
     mainLayout->addWidget(d->settingsBox);
-//     mainLayout->setSpacing(KDialog::spacingHint());
-//     mainLayout->setMargin(0);
 
     setMainWidget(d->mainWidget);
     setModal(false);
@@ -261,7 +259,9 @@ void VKWindow::startReactivation()
     d->imgList->loadImagesFromCurrentSelection();
 
     reset();
-    d->accountBox->slotStartAuthentication(false); // show() will be called after that
+
+     // show() will be called after that
+    d->accountBox->slotStartAuthentication(false);
 }
 
 void VKWindow::reset()

@@ -112,7 +112,6 @@ void VKNewAlbumDlg::initDialog(bool editing)
     connect(buttonBox, &QDialogButtonBox::rejected,
             this, &VKNewAlbumDlg::reject);
 
-
     QGroupBox* const albumBox = new QGroupBox(i18nc("@title:group Header above Title and Summary fields", "Album"), this);
     albumBox->setWhatsThis(i18n("These are basic settings for the new VKontakte album."));
 
@@ -176,14 +175,24 @@ void VKNewAlbumDlg::accept()
     d->album.description = d->summaryEdit->toPlainText();
 
     if (d->albumPrivacyCombo->currentIndex() != -1)
+    {
         d->album.privacy = d->albumPrivacyCombo->itemData(d->albumPrivacyCombo->currentIndex()).toInt();
-    else // for safety, see info about VK API bug below
+    }
+    else
+    {
+        // for safety, see info about VK API bug below
         d->album.privacy = Vkontakte::AlbumInfo::PRIVACY_PRIVATE;
+    }
 
     if (d->commentsPrivacyCombo->currentIndex() != -1)
+    {
         d->album.commentPrivacy = d->commentsPrivacyCombo->itemData(d->commentsPrivacyCombo->currentIndex()).toInt();
-    else // VK API has a bug: if "comment_privacy" is not set, it will be set to PRIVACY_PUBLIC
+    }
+    else
+    {
+        // VK API has a bug: if "comment_privacy" is not set, it will be set to PRIVACY_PUBLIC
         d->album.commentPrivacy = Vkontakte::AlbumInfo::PRIVACY_PRIVATE;
+    }
 
     QDialog::accept();
 }

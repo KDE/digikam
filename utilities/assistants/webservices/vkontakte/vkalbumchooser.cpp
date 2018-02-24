@@ -204,7 +204,7 @@ void VKAlbumChooser::selectAlbum(int aid)
      */
     d->albumToSelect = aid;
 
-    for (int i = 0; i < d->albums.size(); i ++)
+    for (int i = 0 ; i < d->albums.size() ; i ++)
     {
         if (d->albums.at(i).aid() == aid)
         {
@@ -287,7 +287,7 @@ void VKAlbumChooser::slotEditAlbumRequest()
 void VKAlbumChooser::slotStartAlbumEditing(int aid, const VKNewAlbumDlg::AlbumProperties& album)
 {
     // Select the same album again in the combobox later (in "slotAlbumsReloadDone()")
-    d->albumToSelect                    = aid;
+    d->albumToSelect                   = aid;
 
     Vkontakte::EditAlbumJob* const job = new Vkontakte::EditAlbumJob(d->vkapi->accessToken(),
                                                                      aid, album.title, album.description,

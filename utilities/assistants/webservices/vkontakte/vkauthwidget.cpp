@@ -71,7 +71,7 @@ VKAuthWidget::VKAuthWidget(QWidget* const parent,
     : QGroupBox(i18n("Account"), parent),
       d(new Private)
 {
-    d->vkapi  = vkapi;
+    d->vkapi = vkapi;
 
     setWhatsThis(i18n("This account is used for authentication."));
 
@@ -89,8 +89,6 @@ VKAuthWidget::VKAuthWidget(QWidget* const parent,
     accountBoxLayout->addWidget(loginDescLabel,      0, 0);
     accountBoxLayout->addWidget(d->loginLabel,       0, 1);
     accountBoxLayout->addWidget(d->changeUserButton, 1, 1);
-//     accountBoxLayout->setSpacing(KDialog::spacingHint());
-//     accountBoxLayout->setMargin(KDialog::spacingHint());
 
     connect(d->changeUserButton, SIGNAL(clicked()),
             this, SLOT(slotChangeUserClicked()));
@@ -152,7 +150,7 @@ void VKAuthWidget::slotGetUserInfoDone(KJob* kjob)
         return;
 
     QList<Vkontakte::UserInfo> res = job->userInfo();
-    Vkontakte::UserInfo user = res.first();
+    Vkontakte::UserInfo user       = res.first();
 
     d->userId       = user.userId();
     d->userFullName = i18nc("Concatenation of first name (%1) and last name (%2)", "%1 %2",
