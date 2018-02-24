@@ -47,9 +47,6 @@ class YFTalker : public QObject
 
 public:
 
-    explicit YFTalker(QObject* const parent = 0);
-    ~YFTalker();
-
     /*
      * We use FSM for async I/O
      */
@@ -97,6 +94,11 @@ public:
         STATE_UPDATEALBUM_ERROR      = STATE_AUTHENTICATED | STATE_ERROR | 0xc,
         STATE_UPDATEALBUM_DONE       = STATE_AUTHENTICATED
     };
+
+public:
+
+    explicit YFTalker(QObject* const parent = 0);
+    ~YFTalker();
 
     /*
      * Fields
@@ -197,7 +199,7 @@ Q_SIGNALS:
     void signalUpdatePhotoDone(YFPhoto& );
     void signalUpdateAlbumDone();
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
     void slotFinished(QNetworkReply* reply);
 
@@ -215,7 +217,7 @@ protected Q_SLOTS:
     void parseResponseUpdatePhotoInfo();
     void parseResponseUpdateAlbum();
 
-protected:
+private:
 
     /*
      * API-related
@@ -238,7 +240,7 @@ protected:
     static const QString AUTH_REALM;
     static const QString ACCESS_STRINGS[];
 
-protected:
+private:
 
     /*
      * Utils
@@ -258,14 +260,14 @@ protected:
     // for photos pagination in listPhotos()
     void listPhotosNext(); // see listPhotos();
 
-protected:
+private:
 
     /*
      * FSM data
      */
     State                   m_state;
     // temporary data
-    YFPhoto*       m_lastPhoto;
+    YFPhoto*                m_lastPhoto;
     QString                 m_lastPhotosUrl;
 
     // for albums pagination in listAlbums()

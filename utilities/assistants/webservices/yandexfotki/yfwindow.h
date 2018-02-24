@@ -70,7 +70,7 @@ public:
 
     QString getDestinationPath() const;
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
     // ui slots
     void slotChangeUserClicked();
@@ -94,7 +94,7 @@ protected Q_SLOTS:
     void slotCancelClicked();
     void slotFinished();
 
-protected:
+private:
 
     void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 
@@ -108,7 +108,7 @@ protected:
     void authenticate(bool forceAuthWindow);
     void updateNextPhoto();
 
-protected:
+private:
 
     bool                        m_import;
     YFWidget*                   m_widget;

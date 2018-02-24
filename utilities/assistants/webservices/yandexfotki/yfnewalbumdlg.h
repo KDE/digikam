@@ -51,11 +51,11 @@ public:
         return m_album;
     }
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
     void slotOkClicked();
 
-protected:
+private:
 
     QLineEdit*        m_passwordEdit;
 
