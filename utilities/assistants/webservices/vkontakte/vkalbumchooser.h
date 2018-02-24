@@ -81,10 +81,10 @@ private Q_SLOTS:
     void slotDeleteAlbumRequest();
     void slotReloadAlbumsRequest();
 
-    void startAlbumCreation(const VKNewAlbumDlg::AlbumProperties& album);
-    void startAlbumEditing(int aid, const VKNewAlbumDlg::AlbumProperties& album);
-    void startAlbumDeletion(int aid);
-    void startAlbumsReload();
+    void slotStartAlbumCreation(const VKNewAlbumDlg::AlbumProperties& album);
+    void slotStartAlbumEditing(int aid, const VKNewAlbumDlg::AlbumProperties& album);
+    void slotStartAlbumDeletion(int aid);
+    void slotStartAlbumsReload();
 
     void slotAlbumCreationDone(KJob* kjob);
     void slotAlbumEditingDone(KJob* kjob);

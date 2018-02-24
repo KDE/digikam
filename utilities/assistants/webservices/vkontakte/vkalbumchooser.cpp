@@ -223,13 +223,13 @@ void VKAlbumChooser::slotNewAlbumRequest()
     if (dlg->exec() == QDialog::Accepted)
     {
         updateBusyStatus(true);
-        startAlbumCreation(dlg->album());
+        slotStartAlbumCreation(dlg->album());
     }
 
     delete dlg;
 }
 
-void VKAlbumChooser::startAlbumCreation(const VKNewAlbumDlg::AlbumProperties &album)
+void VKAlbumChooser::slotStartAlbumCreation(const VKNewAlbumDlg::AlbumProperties &album)
 {
     Vkontakte::CreateAlbumJob* const job = new Vkontakte::CreateAlbumJob(d->vkapi->accessToken(),
                                                                          album.title, album.description,
@@ -256,7 +256,7 @@ void VKAlbumChooser::slotAlbumCreationDone(KJob* kjob)
         // Select the newly created album in the combobox later (in "slotAlbumsReloadDone()")
         d->albumToSelect = job->album().aid();
 
-        startAlbumsReload();
+        slotStartAlbumsReload();
         updateBusyStatus(true);
     }
 }
@@ -278,13 +278,13 @@ void VKAlbumChooser::slotEditAlbumRequest()
     if (dlg->exec() == QDialog::Accepted)
     {
         updateBusyStatus(true);
-        startAlbumEditing(aid, dlg->album());
+        slotStartAlbumEditing(aid, dlg->album());
     }
 
     delete dlg;
 }
 
-void VKAlbumChooser::startAlbumEditing(int aid, const VKNewAlbumDlg::AlbumProperties& album)
+void VKAlbumChooser::slotStartAlbumEditing(int aid, const VKNewAlbumDlg::AlbumProperties& album)
 {
     // Select the same album again in the combobox later (in "slotAlbumsReloadDone()")
     d->albumToSelect                    = aid;
@@ -303,7 +303,7 @@ void VKAlbumChooser::slotAlbumEditingDone(KJob* kjob)
 {
     SLOT_JOB_DONE_INIT(Vkontakte::EditAlbumJob)
 
-    startAlbumsReload();
+    slotStartAlbumsReload();
 
     updateBusyStatus(true);
 }
@@ -329,10 +329,10 @@ void VKAlbumChooser::slotDeleteAlbumRequest()
     }
 
     updateBusyStatus(true);
-    startAlbumDeletion(aid);
+    slotStartAlbumDeletion(aid);
 }
 
-void VKAlbumChooser::startAlbumDeletion(int aid)
+void VKAlbumChooser::slotStartAlbumDeletion(int aid)
 {
     Vkontakte::DeleteAlbumJob* const job = new Vkontakte::DeleteAlbumJob(d->vkapi->accessToken(), aid);
 
@@ -346,7 +346,7 @@ void VKAlbumChooser::slotAlbumDeletionDone(KJob* kjob)
 {
     SLOT_JOB_DONE_INIT(Vkontakte::DeleteAlbumJob)
 
-    startAlbumsReload();
+    slotStartAlbumsReload();
 
     updateBusyStatus(true);
 }
@@ -364,10 +364,10 @@ void VKAlbumChooser::slotReloadAlbumsRequest()
         d->albumToSelect = aid;
     }
 
-    startAlbumsReload();
+    slotStartAlbumsReload();
 }
 
-void VKAlbumChooser::startAlbumsReload()
+void VKAlbumChooser::slotStartAlbumsReload()
 {
     updateBusyStatus(true);
 
