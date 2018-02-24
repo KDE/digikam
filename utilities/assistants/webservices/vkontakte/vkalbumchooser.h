@@ -77,7 +77,7 @@ public:
     bool getCurrentAlbumId(int &out);
     void selectAlbum(int aid);
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
     void slotNewAlbumRequest();
     void slotEditAlbumRequest();
@@ -94,7 +94,7 @@ protected Q_SLOTS:
     void slotAlbumDeletionDone(KJob* kjob);
     void slotAlbumsReloadDone(KJob* kjob);
 
-protected:
+private:
 
     void updateBusyStatus(bool busy);
     void handleVkError(KJob* kjob);

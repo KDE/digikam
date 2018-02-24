@@ -60,14 +60,14 @@ public Q_SLOTS:
 
     void startAuthentication(bool forceLogout);
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
     void slotChangeUserClicked();
     void slotUpdateAuthInfo();
     void slotStartGetUserInfo();
     void slotGetUserInfoDone(KJob* kjob);
 
-protected:
+private:
 
     void handleVkError(KJob* kjob);
 

@@ -69,7 +69,7 @@ public:
 
     const AlbumProperties& album() const;
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
     void accept() Q_DECL_OVERRIDE;
 

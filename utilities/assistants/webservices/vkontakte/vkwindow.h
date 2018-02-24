@@ -71,7 +71,7 @@ Q_SIGNALS:
 
     void signalUpdateBusyStatus(bool busy);
 
-protected Q_SLOTS:
+private Q_SLOTS:
 
     // requesting photo information
     void slotPhotoUploadDone(KJob* kjob);
@@ -87,7 +87,7 @@ protected Q_SLOTS:
     void authCleared();
     void updateHeaderLabel();
 
-protected:
+private:
 
     void initAccountBox();
 
@@ -100,7 +100,7 @@ protected:
 
     void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 
-protected:
+private:
 
     bool              m_import;
 
