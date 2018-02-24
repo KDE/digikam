@@ -47,9 +47,7 @@ class YFTalker : public QObject
 
 public:
 
-    /*
-     * We use FSM for async I/O
-     */
+    // We use FSM for async I/O
 
     enum State
     {
@@ -102,9 +100,8 @@ public:
 
 public:
 
-    /*
-     * Fields
-     */
+    // Fields
+
     State state() const
     {
         return m_state;
@@ -166,10 +163,8 @@ public:
     }
 
 public:
-    
-    /*
-     * Actions
-     */
+
+    // Actions
     void getService();
     //void checkToken();
     void getSession();
@@ -185,9 +180,7 @@ public:
 
 public:
 
-    /*
-     * API-related public constants
-     */
+    // API-related public constants
     static const QString USERPAGE_URL;
     static const QString USERPAGE_DEFAULT_URL;
 
@@ -224,9 +217,6 @@ private Q_SLOTS:
 
 private:
 
-    /*
-     * Utils
-     */
     // for updatePhoto
     void updatePhotoFile(YFPhoto& photo);
     void updatePhotoInfo(YFPhoto& photo);
@@ -253,11 +243,7 @@ private:
 
 private:
 
-    /*
-     * API-related
-     */
-
-    // fields
+    // API-related fields
     QString                 m_sessionKey;
     QString                 m_sessionId;
     QString                 m_token;
@@ -267,9 +253,7 @@ private:
     QString                 m_apiPhotosUrl;
     QString                 m_apiTagsUrl;
 
-    /*
-     * FSM data
-     */
+    // FSM data
     State                   m_state;
     // temporary data
     YFPhoto*                m_lastPhoto;

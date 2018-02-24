@@ -94,7 +94,6 @@ YFWidget::YFWidget(QWidget* const parent, DInfoInterface* const iface, const QSt
     optionsBoxLayout->addWidget(m_hideOriginalCheck,    7, 1, 1, 4);
     optionsBoxLayout->addWidget(m_disableCommentsCheck, 8, 1, 1, 4);
     optionsBoxLayout->addItem(spacer2,                  9, 0, 1, 5);
-
     optionsBoxLayout->addWidget(policyLabel,            10, 0, 1, 5);
     optionsBoxLayout->addWidget(policyRadio1,           11, 1, 1, 4);
     optionsBoxLayout->addWidget(policyRadio3,           13, 1, 1, 4);

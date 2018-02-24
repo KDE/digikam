@@ -481,7 +481,7 @@ void YFWindow::slotListPhotosDoneForUpload(const QList <YFPhoto>& photosList)
     foreach(const QUrl& url, d->imgList->imageUrls(true))
     {
         DItemInfo info(d->iface->itemInfo(url.toLocalFile()));
-    
+
         // check if photo alredy uploaded
 
         int oldPhotoId = -1;

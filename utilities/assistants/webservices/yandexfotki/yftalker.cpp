@@ -288,11 +288,11 @@ void YFTalker::updatePhotoInfo(YFPhoto& photo)
     linkAlbum.setAttribute(QString::fromLatin1("rel"), QString::fromLatin1("album"));
     entryElem.appendChild(linkAlbum);
 
-    QDomElement summary = doc.createElement(QString::fromLatin1("summary"));
+    QDomElement summary   = doc.createElement(QString::fromLatin1("summary"));
     summary.appendChild(doc.createTextNode(photo.summary()));
     entryElem.appendChild(summary);
 
-    QDomElement adult = doc.createElement(QString::fromLatin1("f:xxx"));
+    QDomElement adult     = doc.createElement(QString::fromLatin1("f:xxx"));
     adult.setAttribute(QString::fromLatin1("value"), photo.isAdult() ? QString::fromLatin1("true") : QString::fromLatin1("false"));
     entryElem.appendChild(adult);
 
@@ -706,9 +706,9 @@ void YFTalker::parseResponseListAlbums()
 
     // find next page link
     m_albumsNextUrl.clear();
-    QDomElement linkElem = rootElem.firstChildElement(QString::fromLatin1("link"));
+    QDomElement linkElem       = rootElem.firstChildElement(QString::fromLatin1("link"));
 
-    for ( ; !linkElem.isNull();
+    for ( ; !linkElem.isNull() ;
           linkElem = linkElem.nextSiblingElement(QString::fromLatin1("link")))
     {
         if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("next") &&
@@ -721,7 +721,7 @@ void YFTalker::parseResponseListAlbums()
 
     QDomElement entryElem = rootElem.firstChildElement(QString::fromLatin1("entry"));
 
-    for ( ; !entryElem.isNull();
+    for ( ; !entryElem.isNull() ;
           entryElem = entryElem.nextSiblingElement(QString::fromLatin1("entry")))
     {
         const QDomElement urn       = entryElem.firstChildElement(QString::fromLatin1("id"));
@@ -739,7 +739,7 @@ void YFTalker::parseResponseListAlbums()
 
         QDomElement linkElem = entryElem.firstChildElement(QString::fromLatin1("link"));
 
-        for ( ; !linkElem.isNull();
+        for ( ; !linkElem.isNull() ;
               linkElem = linkElem.nextSiblingElement(QString::fromLatin1("link")))
         {
             if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("self"))
@@ -830,7 +830,7 @@ bool YFTalker::parsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
 
     QDomElement linkElem = entryElem.firstChildElement(QString::fromLatin1("link"));
 
-    for ( ; !linkElem.isNull();
+    for ( ; !linkElem.isNull() ;
           linkElem = linkElem.nextSiblingElement(QString::fromLatin1("link")))
     {
 
@@ -874,8 +874,8 @@ bool YFTalker::parsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
         access = YFPhoto::ACCESS_PUBLIC;
     }
 
-    photo.m_urn    = urn.text();
-    photo.m_author = author.text();
+    photo.m_urn           = urn.text();
+    photo.m_author        = author.text();
 
     photo.setTitle(title.text());
     photo.setSummary(summary.text());
@@ -906,7 +906,7 @@ bool YFTalker::parsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
     photo.tags.clear();
     QDomElement category = entryElem.firstChildElement(QString::fromLatin1("category"));
 
-    for ( ; !category.isNull();
+    for ( ; !category.isNull() ;
          category = category.nextSiblingElement(QString::fromLatin1("category")))
     {
         if (category.hasAttribute(QString::fromLatin1("term")) &&
@@ -931,16 +931,15 @@ void YFTalker::parseResponseListPhotos()
         return setErrorState(STATE_LISTPHOTOS_ERROR);
     }
 
-    int initialSize    = m_photos.size();
-    bool errorOccurred = false;
-
+    int initialSize            = m_photos.size();
+    bool errorOccurred         = false;
     const QDomElement rootElem = doc.documentElement();
 
     // find next page link
     m_photosNextUrl.clear();
-    QDomElement linkElem = rootElem.firstChildElement(QString::fromLatin1("link"));
+    QDomElement linkElem       = rootElem.firstChildElement(QString::fromLatin1("link"));
 
-    for ( ; !linkElem.isNull();
+    for ( ; !linkElem.isNull() ;
           linkElem = linkElem.nextSiblingElement(QString::fromLatin1("link")))
     {
         if (linkElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("next") &&
@@ -953,7 +952,7 @@ void YFTalker::parseResponseListPhotos()
 
     QDomElement entryElem = rootElem.firstChildElement(QString::fromLatin1("entry"));
 
-    for ( ; !entryElem.isNull();
+    for ( ; !entryElem.isNull() ;
           entryElem = entryElem.nextSiblingElement(QString::fromLatin1("entry")))
     {
         YFPhoto photo;
@@ -1001,7 +1000,6 @@ void YFTalker::parseResponseUpdatePhotoFile()
     }
 
     YFPhoto& photo              = *m_lastPhoto;
-
     YFPhoto tmpPhoto;
     const QDomElement entryElem = doc.documentElement();
 
@@ -1031,7 +1029,7 @@ void YFTalker::parseResponseUpdatePhotoInfo()
     // reload all information
     QDomDocument doc("entry");
 
-    if ( !doc.setContent( m_buffer ) )
+    if (!doc.setContent(m_buffer))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Invalid XML: parse error" << m_buffer;
         return setErrorState(STATE_UPDATEPHOTO_INFO_ERROR);
@@ -1039,7 +1037,7 @@ void YFTalker::parseResponseUpdatePhotoInfo()
 
     const QDomElement entryElem = doc.documentElement();
 
-    if(!parsePhotoXml(entryElem, photo))
+    if (!parsePhotoXml(entryElem, photo))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Can't reload photo after uploading";
         return setErrorState(STATE_UPDATEPHOTO_INFO_ERROR);

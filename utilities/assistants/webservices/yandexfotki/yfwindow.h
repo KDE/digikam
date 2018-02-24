@@ -41,7 +41,7 @@ class QCloseEvent;
 
 namespace Digikam
 {
-    
+
 class DInfoInterface;
 
 class DIGIKAM_EXPORT YFWindow : public WSToolDialog
