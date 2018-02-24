@@ -64,7 +64,6 @@ public:
     bool             scanSimilarityDb;
 
     Mode             mode;
-
     MaintenanceData* data;
 };
 
@@ -426,7 +425,6 @@ void DatabaseTask::run()
             }
 
             qlonglong imageId = d->data->getImageId();
-
             if (imageId == -1)
             {
                 break;
@@ -476,23 +474,17 @@ void DatabaseTask::run()
 
                 if (BdEngineBackend::NoErrors != lastQueryState)
                 {
-                    qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not commit the removal of "
-                                                    << d->objectIdentification
-                                                    << " due to error ";
+                    qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not commit the removal of " << d->objectIdentification << " due to error ";
                 }
             }
             else
             {
-                qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not start the removal of "
-                                                << d->objectIdentification
-                                                << " due to error ";
+                qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not start the removal of " << d->objectIdentification << " due to error ";
             }
         }
         else
         {
-            qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not begin the transaction for the removal of "
-                                            << d->objectIdentification
-                                            << " due to error ";
+            qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not begin the transaction for the removal of " << d->objectIdentification << " due to error ";
         }
     }
     else if (d->mode == Mode::CleanRecognitionDb)
