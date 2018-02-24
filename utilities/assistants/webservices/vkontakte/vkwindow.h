@@ -35,20 +35,10 @@
 #include "dinfointerface.h"
 #include "dimageslist.h"
 
-class QLabel;
-
 class KJob;
-
-namespace Vkontakte
-{
-    class VkApi;
-}
 
 namespace Digikam
 {
-
-class VKAlbumChooser;
-class VKAuthWidget;
 
 class DIGIKAM_EXPORT VKWindow : public WSToolDialog
 {
@@ -101,36 +91,9 @@ private:
     void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 
 private:
-
-    bool              m_import;
-
-    /// User interface
-    QWidget*          m_mainWidget;
-    QWidget*          m_settingsBox;
-    QLabel*           m_headerLabel;
-
-    /// accounts
-    VKAuthWidget*     m_accountBox;
-
-    // album selection
-    VKAlbumChooser*   m_albumsBox;
-
-    /// options
-    //QCheckBox*       m_checkKeepOriginal;
-
-    DImagesList*      m_imgList;
-    QWidget*          m_uploadWidget;
-    DInfoInterface*   m_iface;
-    DProgressWdg*     m_progressBar;
-
-    /// Pointers to running jobs
-    QList<KJob*>      m_jobs;
-
-    Vkontakte::VkApi* m_vkapi;
-
-    int               m_albumToSelect;
-
-    QString           m_appId;
+    
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
