@@ -47,9 +47,6 @@
         return;                                          \
     }
 
-class QToolButton;
-class QPushButton;
-class QComboBox;
 class KJob;
 
 namespace Vkontakte
@@ -101,18 +98,8 @@ private:
 
 private:
 
-    QComboBox*                     m_albumsCombo;
-    QPushButton*                   m_newAlbumButton;
-    QPushButton*                   m_reloadAlbumsButton;
-    QToolButton*                   m_editAlbumButton;
-    QToolButton*                   m_deleteAlbumButton;
-
-    QList<Vkontakte::AlbumInfo>    m_albums;
-
-    /** album with this "aid" will be selected in slotAlbumsReloadDone() */
-    int                            m_albumToSelect;
-
-    Vkontakte::VkApi*              m_vkapi;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

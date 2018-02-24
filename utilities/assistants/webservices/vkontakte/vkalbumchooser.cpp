@@ -51,72 +51,105 @@
 namespace Digikam
 {
 
-VKAlbumChooser::VKAlbumChooser(QWidget* const parent,
-                                       Vkontakte::VkApi* const vkapi)
-    : QGroupBox(i18nc("@title:group Header above controls for managing albums", "Album"), parent)
+class VKAlbumChooser::Private
 {
-    m_vkapi         = vkapi;
-    m_albumToSelect = -1;
+public:
+
+    Private()
+    {
+        albumsCombo        = 0;
+        newAlbumButton     = 0;
+        reloadAlbumsButton = 0;
+        editAlbumButton    = 0;
+        deleteAlbumButton  = 0;
+        albumToSelect      = -1;
+        vkapi              = 0;
+    }
+
+    QComboBox*                     albumsCombo;
+    QPushButton*                   newAlbumButton;
+    QPushButton*                   reloadAlbumsButton;
+    QToolButton*                   editAlbumButton;
+    QToolButton*                   deleteAlbumButton;
+
+    QList<Vkontakte::AlbumInfo>    albums;
+
+    /** Album with this "aid" will
+     *  be selected in 
+     *  slotAlbumsReloadDone()
+     */
+    int                            albumToSelect;
+
+    Vkontakte::VkApi*              vkapi;
+};    
+    
+VKAlbumChooser::VKAlbumChooser(QWidget* const parent,
+                               Vkontakte::VkApi* const vkapi)
+    : QGroupBox(i18nc("@title:group Header above controls for managing albums", "Album"), parent),
+      d(new Private)
+{
+    d->vkapi              = vkapi;
 
     setWhatsThis(i18n("This is the VKontakte album that will be used for the transfer."));
     QVBoxLayout* const albumsBoxLayout = new QVBoxLayout(this);
 
-    m_albumsCombo        = new QComboBox(this);
-    m_albumsCombo->setEditable(false);
+    d->albumsCombo        = new QComboBox(this);
+    d->albumsCombo->setEditable(false);
 
-    m_newAlbumButton     = new QPushButton(QIcon::fromTheme(QString::fromLatin1("list-add")),
+    d->newAlbumButton     = new QPushButton(QIcon::fromTheme(QString::fromLatin1("list-add")),
                                            i18n("New Album"), this);
-    m_newAlbumButton->setToolTip(i18n("Create new VKontakte album"));
+    d->newAlbumButton->setToolTip(i18n("Create new VKontakte album"));
 
-    m_reloadAlbumsButton = new QPushButton(QIcon::fromTheme(QString::fromLatin1("view-refresh")),
+    d->reloadAlbumsButton = new QPushButton(QIcon::fromTheme(QString::fromLatin1("view-refresh")),
                                            i18nc("reload albums list", "Reload"), this);
-    m_reloadAlbumsButton->setToolTip(i18n("Reload albums list"));
+    d->reloadAlbumsButton->setToolTip(i18n("Reload albums list"));
 
-    m_editAlbumButton    = new QToolButton(this);
-    m_editAlbumButton->setToolTip(i18n("Edit selected album"));
-    m_editAlbumButton->setEnabled(false);
-    m_editAlbumButton->setIcon(QIcon::fromTheme(QString::fromLatin1("document-edit")));
+    d->editAlbumButton    = new QToolButton(this);
+    d->editAlbumButton->setToolTip(i18n("Edit selected album"));
+    d->editAlbumButton->setEnabled(false);
+    d->editAlbumButton->setIcon(QIcon::fromTheme(QString::fromLatin1("document-edit")));
 
-    m_deleteAlbumButton  = new QToolButton(this);
-    m_deleteAlbumButton->setToolTip(i18n("Delete selected album"));
-    m_deleteAlbumButton->setEnabled(false);
-    m_deleteAlbumButton->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-delete")));
+    d->deleteAlbumButton  = new QToolButton(this);
+    d->deleteAlbumButton->setToolTip(i18n("Delete selected album"));
+    d->deleteAlbumButton->setEnabled(false);
+    d->deleteAlbumButton->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-delete")));
 
     QWidget* const currentAlbumWidget           = new QWidget(this);
     QHBoxLayout* const currentAlbumWidgetLayout = new QHBoxLayout(currentAlbumWidget);
     currentAlbumWidgetLayout->setContentsMargins(0, 0, 0, 0);
-    currentAlbumWidgetLayout->addWidget(m_albumsCombo);
-    currentAlbumWidgetLayout->addWidget(m_editAlbumButton);
-    currentAlbumWidgetLayout->addWidget(m_deleteAlbumButton);
+    currentAlbumWidgetLayout->addWidget(d->albumsCombo);
+    currentAlbumWidgetLayout->addWidget(d->editAlbumButton);
+    currentAlbumWidgetLayout->addWidget(d->deleteAlbumButton);
 
     QWidget* const albumButtons           = new QWidget(this);
     QHBoxLayout* const albumButtonsLayout = new QHBoxLayout(albumButtons);
     albumButtonsLayout->setContentsMargins(0, 0, 0, 0);
     albumButtonsLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    albumButtonsLayout->addWidget(m_newAlbumButton);
-    albumButtonsLayout->addWidget(m_reloadAlbumsButton);
+    albumButtonsLayout->addWidget(d->newAlbumButton);
+    albumButtonsLayout->addWidget(d->reloadAlbumsButton);
 
     albumsBoxLayout->addWidget(currentAlbumWidget);
     albumsBoxLayout->addWidget(albumButtons);
 
-    connect(m_newAlbumButton, SIGNAL(clicked()),
+    connect(d->newAlbumButton, SIGNAL(clicked()),
             this, SLOT(slotNewAlbumRequest()));
 
-    connect(m_editAlbumButton, SIGNAL(clicked()),
+    connect(d->editAlbumButton, SIGNAL(clicked()),
             this, SLOT(slotEditAlbumRequest()));
 
-    connect(m_deleteAlbumButton, SIGNAL(clicked()),
+    connect(d->deleteAlbumButton, SIGNAL(clicked()),
             this, SLOT(slotDeleteAlbumRequest()));
 
-    connect(m_reloadAlbumsButton, SIGNAL(clicked()),
+    connect(d->reloadAlbumsButton, SIGNAL(clicked()),
             this, SLOT(slotReloadAlbumsRequest()));
 
-    connect(m_vkapi, SIGNAL(authenticated()),
+    connect(d->vkapi, SIGNAL(authenticated()),
             this, SLOT(slotReloadAlbumsRequest()));
 }
 
 VKAlbumChooser::~VKAlbumChooser()
 {
+    delete d;
 }
 
 /**
@@ -124,16 +157,16 @@ VKAlbumChooser::~VKAlbumChooser()
  **/
 void VKAlbumChooser::clearList()
 {
-    m_albumsCombo->clear();
+    d->albumsCombo->clear();
 }
 
 bool VKAlbumChooser::getCurrentAlbumInfo(VKNewAlbumDlg::AlbumProperties& out)
 {
-    int index = m_albumsCombo->currentIndex();
+    int index = d->albumsCombo->currentIndex();
 
     if (index >= 0)
     {
-        Vkontakte::AlbumInfo album = m_albums.at(index);
+        Vkontakte::AlbumInfo album = d->albums.at(index);
         out.title                  = album.title();
         out.description            = album.description();
         out.privacy                = album.privacy();
@@ -149,11 +182,11 @@ bool VKAlbumChooser::getCurrentAlbumInfo(VKNewAlbumDlg::AlbumProperties& out)
 
 bool VKAlbumChooser::getCurrentAlbumId(int& out)
 {
-    int index = m_albumsCombo->currentIndex();
+    int index = d->albumsCombo->currentIndex();
 
     if (index >= 0)
     {
-        Vkontakte::AlbumInfo album = m_albums.at(index);
+        Vkontakte::AlbumInfo album = d->albums.at(index);
         out                        = album.aid();
 
         return true;
@@ -169,13 +202,13 @@ void VKAlbumChooser::selectAlbum(int aid)
     /*
      * If the album list is not ready yet, select this album later
      */
-    m_albumToSelect = aid;
+    d->albumToSelect = aid;
 
-    for (int i = 0; i < m_albums.size(); i ++)
+    for (int i = 0; i < d->albums.size(); i ++)
     {
-        if (m_albums.at(i).aid() == aid)
+        if (d->albums.at(i).aid() == aid)
         {
-            m_albumsCombo->setCurrentIndex(i);
+            d->albumsCombo->setCurrentIndex(i);
             break;
         }
     }
@@ -198,7 +231,7 @@ void VKAlbumChooser::slotNewAlbumRequest()
 
 void VKAlbumChooser::startAlbumCreation(const VKNewAlbumDlg::AlbumProperties &album)
 {
-    Vkontakte::CreateAlbumJob* const job = new Vkontakte::CreateAlbumJob(m_vkapi->accessToken(),
+    Vkontakte::CreateAlbumJob* const job = new Vkontakte::CreateAlbumJob(d->vkapi->accessToken(),
                                                                          album.title, album.description,
                                                                          album.privacy, album.commentPrivacy);
 
@@ -221,7 +254,7 @@ void VKAlbumChooser::slotAlbumCreationDone(KJob* kjob)
     else
     {
         // Select the newly created album in the combobox later (in "slotAlbumsReloadDone()")
-        m_albumToSelect = job->album().aid();
+        d->albumToSelect = job->album().aid();
 
         startAlbumsReload();
         updateBusyStatus(true);
@@ -254,9 +287,9 @@ void VKAlbumChooser::slotEditAlbumRequest()
 void VKAlbumChooser::startAlbumEditing(int aid, const VKNewAlbumDlg::AlbumProperties& album)
 {
     // Select the same album again in the combobox later (in "slotAlbumsReloadDone()")
-    m_albumToSelect                    = aid;
+    d->albumToSelect                    = aid;
 
-    Vkontakte::EditAlbumJob* const job = new Vkontakte::EditAlbumJob(m_vkapi->accessToken(),
+    Vkontakte::EditAlbumJob* const job = new Vkontakte::EditAlbumJob(d->vkapi->accessToken(),
                                                                      aid, album.title, album.description,
                                                                      album.privacy, album.commentPrivacy);
 
@@ -301,7 +334,7 @@ void VKAlbumChooser::slotDeleteAlbumRequest()
 
 void VKAlbumChooser::startAlbumDeletion(int aid)
 {
-    Vkontakte::DeleteAlbumJob* const job = new Vkontakte::DeleteAlbumJob(m_vkapi->accessToken(), aid);
+    Vkontakte::DeleteAlbumJob* const job = new Vkontakte::DeleteAlbumJob(d->vkapi->accessToken(), aid);
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotAlbumDeletionDone(KJob*)));
@@ -328,7 +361,7 @@ void VKAlbumChooser::slotReloadAlbumsRequest()
 
     if (getCurrentAlbumId(aid))
     {
-        m_albumToSelect = aid;
+        d->albumToSelect = aid;
     }
 
     startAlbumsReload();
@@ -338,7 +371,7 @@ void VKAlbumChooser::startAlbumsReload()
 {
     updateBusyStatus(true);
 
-    Vkontakte::AlbumListJob* const job = new Vkontakte::AlbumListJob(m_vkapi->accessToken());
+    Vkontakte::AlbumListJob* const job = new Vkontakte::AlbumListJob(d->vkapi->accessToken());
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotAlbumsReloadDone(KJob*)));
@@ -352,24 +385,24 @@ void VKAlbumChooser::slotAlbumsReloadDone(KJob* kjob)
 
     if (!job) return;
 
-    m_albumsCombo->clear();
-    m_albums = job->list();
+    d->albumsCombo->clear();
+    d->albums = job->list();
 
-    foreach (const Vkontakte::AlbumInfo &album, m_albums)
-        m_albumsCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder-image")), album.title());
+    foreach (const Vkontakte::AlbumInfo &album, d->albums)
+        d->albumsCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder-image")), album.title());
 
-    if (m_albumToSelect != -1)
+    if (d->albumToSelect != -1)
     {
-        selectAlbum(m_albumToSelect);
-        m_albumToSelect = -1;
+        selectAlbum(d->albumToSelect);
+        d->albumToSelect = -1;
     }
 
-    m_albumsCombo->setEnabled(true);
+    d->albumsCombo->setEnabled(true);
 
-    if (!m_albums.empty())
+    if (!d->albums.empty())
     {
-        m_editAlbumButton->setEnabled(true);
-        m_deleteAlbumButton->setEnabled(true);
+        d->editAlbumButton->setEnabled(true);
+        d->deleteAlbumButton->setEnabled(true);
     }
 
     updateBusyStatus(false);
