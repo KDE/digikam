@@ -28,30 +28,21 @@
 
 // Qt includes
 
-#include <QStack>
+#include <QWidget>
 
 // Local includes
 
-#include "dimageslist.h"
 #include "wstooldialog.h"
-#include "yftalker.h"
 #include "digikam_export.h"
-#include "dinfointerface.h"
-#include "dprogresswdg.h"
-#include "dmetadata.h"
+#include "yfalbum.h"
+#include "yfphoto.h"
 
-class QLabel;
-class QSpinBox;
-class QCheckBox;
-class QGroupBox;
-class QButtonGroup;
 class QCloseEvent;
-class QComboBox;
 
 namespace Digikam
 {
-
-class YFWidget;
+    
+class DInfoInterface;
 
 class DIGIKAM_EXPORT YFWindow : public WSToolDialog
 {
@@ -112,44 +103,8 @@ private:
 
 private:
 
-    bool                        m_import;
-    YFWidget*                   m_widget;
-
-    // User interface
-    QLabel*                     m_loginLabel;
-    QLabel*                     m_headerLabel;
-    QPushButton*                m_changeUserButton;
-
-    // albums
-    QGroupBox*                  m_albumsBox;
-    QPushButton*                m_newAlbumButton;
-    QPushButton*                m_reloadAlbumsButton;
-    QComboBox*                  m_albumsCombo;
-
-    // upload settings
-    QComboBox*                  m_accessCombo;
-    QCheckBox*                  m_hideOriginalCheck;
-    QCheckBox*                  m_disableCommentsCheck;
-    QCheckBox*                  m_adultCheck;
-    QCheckBox*                  m_resizeCheck;
-    QSpinBox*                   m_dimensionSpin;
-    QSpinBox*                   m_imageQualitySpin;
-    QButtonGroup*               m_policyGroup;
-
-    DImagesList*                m_imgList;
-    DProgressWdg*               m_progressBar;
-    DInfoInterface*             m_iface;
-
-    // Backend
-    QString                     m_tmpDir;
-    YFTalker                    m_talker;
-
-    QStack<YFPhoto>             m_transferQueue;
-
-    DMetadata                   m_meta;
-
-    // XMP id const for images
-    static const char*          XMP_SERVICE_ID;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

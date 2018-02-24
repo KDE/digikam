@@ -43,6 +43,7 @@
 #include <QComboBox>
 #include <QApplication>
 #include <QMessageBox>
+#include <QStack>
 
 // KDE includes
 
@@ -57,56 +58,129 @@
 #include "yftalker.h"
 #include "yfnewalbumdlg.h"
 #include "digikam_debug.h"
+#include "dinfointerface.h"
 #include "wstoolutils.h"
 #include "wslogindialog.h"
 #include "yfwidget.h"
 #include "previewloadthread.h"
+#include "dprogresswdg.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
 
+class YFWindow::Private
+{
+public:
+
+    explicit Private()
+    {
+        import               = false;
+        widget               = 0;
+        loginLabel           = 0;
+        headerLabel          = 0;
+        changeUserButton     = 0;
+        albumsBox            = 0;
+        newAlbumButton       = 0;
+        reloadAlbumsButton   = 0;
+        albumsCombo          = 0;
+        accessCombo          = 0;
+        hideOriginalCheck    = 0;
+        disableCommentsCheck = 0;
+        adultCheck           = 0;
+        resizeCheck          = 0;
+        dimensionSpin        = 0;
+        imageQualitySpin     = 0;
+        policyGroup          = 0;
+        imgList              = 0;
+        progressBar          = 0;
+        iface                = 0;
+    }
+
+    bool                        import;
+    YFWidget*                   widget;
+
+    // User interface
+    QLabel*                     loginLabel;
+    QLabel*                     headerLabel;
+    QPushButton*                changeUserButton;
+
+    // albums
+    QGroupBox*                  albumsBox;
+    QPushButton*                newAlbumButton;
+    QPushButton*                reloadAlbumsButton;
+    QComboBox*                  albumsCombo;
+
+    // upload settings
+    QComboBox*                  accessCombo;
+    QCheckBox*                  hideOriginalCheck;
+    QCheckBox*                  disableCommentsCheck;
+    QCheckBox*                  adultCheck;
+    QCheckBox*                  resizeCheck;
+    QSpinBox*                   dimensionSpin;
+    QSpinBox*                   imageQualitySpin;
+    QButtonGroup*               policyGroup;
+
+    DImagesList*                imgList;
+    DProgressWdg*               progressBar;
+    DInfoInterface*             iface;
+
+    // Backend
+    QString                     tmpDir;
+    YFTalker                    talker;
+
+    QStack<YFPhoto>             transferQueue;
+
+    DMetadata                   meta;
+
+    // XMP id const for images
+    static const char*          XMP_SERVICE_ID;
+};
+    
 /*
  * This tag added to our images after uploading to Fotki web service
  */
-const char* YFWindow::XMP_SERVICE_ID = "Xmp.digiKam.yandexGPhotoId";
+const char* YFWindow::Private::XMP_SERVICE_ID = "Xmp.digiKam.yandexGPhotoId";
+
 
 YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool import)
-    : WSToolDialog(parent)
+    : WSToolDialog(parent),
+      d(new Private)
 {
-    m_iface                = iface;
-    m_import               = import;
-    m_tmpDir               = WSToolUtils::makeTemporaryDir("yandexfotki").absolutePath() + QLatin1Char('/');
-    m_widget               = new YFWidget(this, m_iface, QString::fromLatin1("Yandex.Fotki"));
-    m_loginLabel           = m_widget->getUserNameLabel();
-    m_headerLabel          = m_widget->getHeaderLbl();
-    m_changeUserButton     = m_widget->getChangeUserBtn();
-    m_newAlbumButton       = m_widget->getNewAlbmBtn();
-    m_reloadAlbumsButton   = m_widget->getReloadBtn();
-    m_albumsCombo          = m_widget->getAlbumsCoB();
-    m_resizeCheck          = m_widget->getResizeCheckBox();
-    m_dimensionSpin        = m_widget->getDimensionSpB();
-    m_imageQualitySpin     = m_widget->getImgQualitySpB();
-    m_imgList              = m_widget->imagesList();
-    m_progressBar          = m_widget->progressBar();
-    m_accessCombo          = m_widget->m_accessCombo;
-    m_hideOriginalCheck    = m_widget->m_hideOriginalCheck;
-    m_disableCommentsCheck = m_widget->m_disableCommentsCheck;
-    m_adultCheck           = m_widget->m_adultCheck;
-    m_policyGroup          = m_widget->m_policyGroup;
-    m_albumsBox            = m_widget->getAlbumBox();
+    d->iface                = iface;
+    d->import               = import;
+    d->tmpDir               = WSToolUtils::makeTemporaryDir("yandexfotki").absolutePath() + QLatin1Char('/');
+    d->widget               = new YFWidget(this, d->iface, QString::fromLatin1("Yandex.Fotki"));
+    d->loginLabel           = d->widget->getUserNameLabel();
+    d->headerLabel          = d->widget->getHeaderLbl();
+    d->changeUserButton     = d->widget->getChangeUserBtn();
+    d->newAlbumButton       = d->widget->getNewAlbmBtn();
+    d->reloadAlbumsButton   = d->widget->getReloadBtn();
+    d->albumsCombo          = d->widget->getAlbumsCoB();
+    d->resizeCheck          = d->widget->getResizeCheckBox();
+    d->dimensionSpin        = d->widget->getDimensionSpB();
+    d->imageQualitySpin     = d->widget->getImgQualitySpB();
+    d->imgList              = d->widget->imagesList();
+    d->progressBar          = d->widget->progressBar();
+    d->accessCombo          = d->widget->m_accessCombo;
+    d->hideOriginalCheck    = d->widget->m_hideOriginalCheck;
+    d->disableCommentsCheck = d->widget->m_disableCommentsCheck;
+    d->adultCheck           = d->widget->m_adultCheck;
+    d->policyGroup          = d->widget->m_policyGroup;
+    d->albumsBox            = d->widget->getAlbumBox();
 
-    connect(m_changeUserButton, SIGNAL(clicked()),
+    connect(d->changeUserButton, SIGNAL(clicked()),
             this, SLOT(slotChangeUserClicked()));
 
-    connect(m_newAlbumButton, SIGNAL(clicked()),
+    connect(d->newAlbumButton, SIGNAL(clicked()),
             this, SLOT(slotNewAlbumRequest()) );
 
 
-    connect(m_reloadAlbumsButton, SIGNAL(clicked()),
+    connect(d->reloadAlbumsButton, SIGNAL(clicked()),
             this, SLOT(slotReloadAlbumsRequest()) );
 
-    setMainWidget(m_widget);
-    m_widget->setMinimumSize(800, 600);
+    setMainWidget(d->widget);
+    d->widget->setMinimumSize(800, 600);
 
     // -- UI slots -----------------------------------------------------------------------
 
@@ -121,28 +195,28 @@ YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool impo
 
     // -- Talker slots -------------------------------------------------------------------
 
-    connect(&m_talker, SIGNAL(signalError()),
+    connect(&d->talker, SIGNAL(signalError()),
             this, SLOT(slotError()));
 
-    connect(&m_talker, SIGNAL(signalGetSessionDone()),
+    connect(&d->talker, SIGNAL(signalGetSessionDone()),
             this, SLOT(slotGetSessionDone()));
 
-    connect(&m_talker, SIGNAL(signalGetTokenDone()),
+    connect(&d->talker, SIGNAL(signalGetTokenDone()),
             this, SLOT(slotGetTokenDone()));
 
-    connect(&m_talker, SIGNAL(signalGetServiceDone()),
+    connect(&d->talker, SIGNAL(signalGetServiceDone()),
             this, SLOT(slotGetServiceDone()));
 
-    connect(&m_talker, SIGNAL(signalListAlbumsDone(QList<YandexFotkiAlbum>)),
+    connect(&d->talker, SIGNAL(signalListAlbumsDone(QList<YandexFotkiAlbum>)),
             this, SLOT(slotListAlbumsDone(QList<YandexFotkiAlbum>)));
 
-    connect(&m_talker, SIGNAL(signalListPhotosDone(QList<YFPhoto>)),
+    connect(&d->talker, SIGNAL(signalListPhotosDone(QList<YFPhoto>)),
             this, SLOT(slotListPhotosDone(QList<YFPhoto>)));
 
-    connect(&m_talker, SIGNAL(signalUpdatePhotoDone(YFPhoto&)),
+    connect(&d->talker, SIGNAL(signalUpdatePhotoDone(YFPhoto&)),
             this, SLOT(slotUpdatePhotoDone(YFPhoto&)));
 
-    connect(&m_talker, SIGNAL(signalUpdateAlbumDone()),
+    connect(&d->talker, SIGNAL(signalUpdateAlbumDone()),
             this, SLOT(slotUpdateAlbumDone()));
 
     // read settings from file
@@ -152,11 +226,12 @@ YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool impo
 YFWindow::~YFWindow()
 {
     reset();
+    delete d;
 }
 
 void YFWindow::reactivate()
 {
-    m_imgList->loadImagesFromCurrentSelection();
+    d->imgList->loadImagesFromCurrentSelection();
 
     reset();
     authenticate(false);
@@ -165,7 +240,7 @@ void YFWindow::reactivate()
 
 void YFWindow::reset()
 {
-    m_talker.reset();
+    d->talker.reset();
     updateControls(true);
     updateLabels();
 }
@@ -174,18 +249,18 @@ void YFWindow::updateControls(bool val)
 {
     if (val)
     {
-        if (m_talker.isAuthenticated())
+        if (d->talker.isAuthenticated())
         {
-            m_albumsBox->setEnabled(true);
+            d->albumsBox->setEnabled(true);
             startButton()->setEnabled(true);
         }
         else
         {
-            m_albumsBox->setEnabled(false);
+            d->albumsBox->setEnabled(false);
             startButton()->setEnabled(false);
         }
 
-        m_changeUserButton->setEnabled(true);
+        d->changeUserButton->setEnabled(true);
         setCursor(Qt::ArrowCursor);
 
         setRejectButtonMode(QDialogButtonBox::Close);
@@ -193,8 +268,8 @@ void YFWindow::updateControls(bool val)
     else
     {
         setCursor(Qt::WaitCursor);
-        m_albumsBox->setEnabled(false);
-        m_changeUserButton->setEnabled(false);
+        d->albumsBox->setEnabled(false);
+        d->changeUserButton->setEnabled(false);
         startButton()->setEnabled(false);
 
         setRejectButtonMode(QDialogButtonBox::Cancel);
@@ -206,21 +281,21 @@ void YFWindow::updateLabels()
     QString urltext;
     QString logintext;
 
-    if (m_talker.isAuthenticated())
+    if (d->talker.isAuthenticated())
     {
-        logintext = m_talker.login();
-        urltext = YFTalker::USERPAGE_URL.arg(m_talker.login());
-        m_albumsBox->setEnabled(true);
+        logintext = d->talker.login();
+        urltext = YFTalker::USERPAGE_URL.arg(d->talker.login());
+        d->albumsBox->setEnabled(true);
     }
     else
     {
         logintext = i18n("Unauthorized");
         urltext = YFTalker::USERPAGE_DEFAULT_URL;
-        m_albumsCombo->clear();
+        d->albumsCombo->clear();
     }
 
-    m_loginLabel->setText(QString::fromLatin1("<b>%1</b>").arg(logintext));
-    m_headerLabel->setText(QString::fromLatin1(
+    d->loginLabel->setText(QString::fromLatin1("<b>%1</b>").arg(logintext));
+    d->headerLabel->setText(QString::fromLatin1(
         "<b><h2><a href=\"%1\">"
         "<font color=\"#ff000a\">%2</font>"
         "<font color=\"black\">%3</font>"
@@ -237,26 +312,26 @@ void YFWindow::readSettings()
     KConfig config;
     KConfigGroup grp = config.group("YandexFotki Settings");
 
-    m_talker.setLogin(grp.readEntry("login", ""));
+    d->talker.setLogin(grp.readEntry("login", ""));
     // don't store tokens in plaintext
-    //m_talker.setToken(grp.readEntry("token", ""));
+    //d->talker.setToken(grp.readEntry("token", ""));
 
     if (grp.readEntry("Resize", false))
     {
-        m_resizeCheck->setChecked(true);
-        m_dimensionSpin->setEnabled(true);
-        m_imageQualitySpin->setEnabled(true);
+        d->resizeCheck->setChecked(true);
+        d->dimensionSpin->setEnabled(true);
+        d->imageQualitySpin->setEnabled(true);
     }
     else
     {
-        m_resizeCheck->setChecked(false);
-        m_dimensionSpin->setEnabled(false);
-        m_imageQualitySpin->setEnabled(false);
+        d->resizeCheck->setChecked(false);
+        d->dimensionSpin->setEnabled(false);
+        d->imageQualitySpin->setEnabled(false);
     }
 
-    m_dimensionSpin->setValue(grp.readEntry("Maximum Width", 1600));
-    m_imageQualitySpin->setValue(grp.readEntry("Image Quality", 85));
-    m_policyGroup->button(grp.readEntry("Sync policy", 0))->setChecked(true);
+    d->dimensionSpin->setValue(grp.readEntry("Maximum Width", 1600));
+    d->imageQualitySpin->setValue(grp.readEntry("Image Quality", 85));
+    d->policyGroup->button(grp.readEntry("Sync policy", 0))->setChecked(true);
 }
 
 void YFWindow::writeSettings()
@@ -264,14 +339,14 @@ void YFWindow::writeSettings()
     KConfig config;
     KConfigGroup grp = config.group("YandexFotki Settings");
 
-    grp.writeEntry("token", m_talker.token());
+    grp.writeEntry("token", d->talker.token());
     // don't store tokens in plaintext
-    //grp.writeEntry("login", m_talker.login());
+    //grp.writeEntry("login", d->talker.login());
 
-    grp.writeEntry("Resize", m_resizeCheck->isChecked());
-    grp.writeEntry("Maximum Width", m_dimensionSpin->value());
-    grp.writeEntry("Image Quality", m_imageQualitySpin->value());
-    grp.writeEntry("Sync policy", m_policyGroup->checkedId());
+    grp.writeEntry("Resize", d->resizeCheck->isChecked());
+    grp.writeEntry("Maximum Width", d->dimensionSpin->value());
+    grp.writeEntry("Image Quality", d->imageQualitySpin->value());
+    grp.writeEntry("Sync policy", d->policyGroup->checkedId());
 }
 
 void YFWindow::slotChangeUserClicked()
@@ -299,16 +374,16 @@ void YFWindow::slotFinished()
 
 void YFWindow::slotCancelClicked()
 {
-    m_talker.cancel();
+    d->talker.cancel();
     updateControls(true);
 }
 
 /*
 void YFWindow::cancelProcessing()
 {
-    m_talker.cancel();
-    m_transferQueue.clear();
-    m_imgList->processed(false);
+    d->talker.cancel();
+    d->transferQueue.clear();
+    d->imgList->processed(false);
     progressBar()->hide();
 }
 */
@@ -316,14 +391,14 @@ void YFWindow::cancelProcessing()
 void YFWindow::authenticate(bool forceAuthWindow)
 {
     // update credentials
-    if (forceAuthWindow || m_talker.login().isNull() || m_talker.password().isNull())
+    if (forceAuthWindow || d->talker.login().isNull() || d->talker.password().isNull())
     {
-        WSLoginDialog* const dlg = new WSLoginDialog(this, QString::fromLatin1("Yandex.Fotki"), m_talker.login(), QString());
+        WSLoginDialog* const dlg = new WSLoginDialog(this, QString::fromLatin1("Yandex.Fotki"), d->talker.login(), QString());
 
         if (dlg->exec() == QDialog::Accepted)
         {
-            m_talker.setLogin(dlg->login());
-            m_talker.setPassword(dlg->password());
+            d->talker.setLogin(dlg->login());
+            d->talker.setPassword(dlg->password());
         }
         else
         {
@@ -337,20 +412,20 @@ void YFWindow::authenticate(bool forceAuthWindow)
     else
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Checking old token...";
-        m_talker.checkToken();
+        d->talker.checkToken();
         return;
     }
 */
 
     // if new credentials non-empty, authenticate
-    if (!m_talker.login().isEmpty() && !m_talker.password().isEmpty())
+    if (!d->talker.login().isEmpty() && !d->talker.password().isEmpty())
     {
         // cancel all tasks first
         reset();
 
         // start authentication chain
         updateControls(false);
-        m_talker.getService();
+        d->talker.getService();
     }
     else
     {
@@ -366,7 +441,7 @@ void YFWindow::authenticate(bool forceAuthWindow)
 
 void YFWindow::slotListPhotosDone(const QList <YFPhoto>& photosList)
 {
-    if (m_import)
+    if (d->import)
     {
         slotListPhotosDoneForDownload(photosList);
     }
@@ -395,25 +470,25 @@ void YFWindow::slotListPhotosDoneForUpload(const QList <YFPhoto>& photosList)
         i++;
     }
 
-    YFWidget::UpdatePolicy policy = static_cast<YFWidget::UpdatePolicy>(m_policyGroup->checkedId());
+    YFWidget::UpdatePolicy policy = static_cast<YFWidget::UpdatePolicy>(d->policyGroup->checkedId());
     const YFPhoto::Access access  = static_cast<YFPhoto::Access>(
-                                            m_accessCombo->itemData(m_accessCombo->currentIndex()).toInt());
+                                            d->accessCombo->itemData(d->accessCombo->currentIndex()).toInt());
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "";
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "----";
-    m_transferQueue.clear();
+    d->transferQueue.clear();
 
-    foreach(const QUrl& url, m_imgList->imageUrls(true))
+    foreach(const QUrl& url, d->imgList->imageUrls(true))
     {
-        DItemInfo info(m_iface->itemInfo(url.toLocalFile()));
+        DItemInfo info(d->iface->itemInfo(url.toLocalFile()));
     
         // check if photo alredy uploaded
 
         int oldPhotoId = -1;
 
-        if (m_meta.load(url.toLocalFile()))
+        if (d->meta.load(url.toLocalFile()))
         {
-            QString localId = m_meta.getXmpTagString(XMP_SERVICE_ID);
+            QString localId = d->meta.getXmpTagString(d->XMP_SERVICE_ID);
             oldPhotoId      = dups.value(localId, -1);
         }
 
@@ -432,11 +507,11 @@ void YFWindow::slotListPhotosDoneForUpload(const QList <YFPhoto>& photosList)
             }
 
             // old photo copy
-            m_transferQueue.push(photosList[oldPhotoId]);
+            d->transferQueue.push(photosList[oldPhotoId]);
 
             if (policy == YFWidget::UpdatePolicy::POLICY_UPDATE_MERGE)
             {
-                foreach(const QString& t, m_transferQueue.top().tags)
+                foreach(const QString& t, d->transferQueue.top().tags)
                 {
                     oldtags.insert(t);
                 }
@@ -450,21 +525,21 @@ void YFWindow::slotListPhotosDoneForUpload(const QList <YFPhoto>& photosList)
         else
         {
             // empty photo
-            m_transferQueue.push(YFPhoto());
+            d->transferQueue.push(YFPhoto());
         }
 
-        YFPhoto& photo = m_transferQueue.top();
+        YFPhoto& photo = d->transferQueue.top();
         // TODO: updateFile is not used
         photo.setOriginalUrl(url.toLocalFile());
         photo.setTitle(info.name());
         photo.setSummary(info.comment());
         photo.setAccess(access);
-        photo.setHideOriginal(m_hideOriginalCheck->isChecked());
-        photo.setDisableComments(m_disableCommentsCheck->isChecked());
+        photo.setHideOriginal(d->hideOriginalCheck->isChecked());
+        photo.setDisableComments(d->disableCommentsCheck->isChecked());
 
         // adult flag can't be removed, API restrictions
         if (!photo.isAdult())
-            photo.setAdult(m_adultCheck->isChecked());
+            photo.setAdult(d->adultCheck->isChecked());
 
         foreach(const QString& t, tags)
         {
@@ -484,7 +559,7 @@ void YFWindow::slotListPhotosDoneForUpload(const QList <YFPhoto>& photosList)
         }
     }
 
-    if (m_transferQueue.isEmpty())
+    if (d->transferQueue.isEmpty())
     {
         return;    // nothing to do
     }
@@ -499,9 +574,9 @@ void YFWindow::slotListPhotosDoneForUpload(const QList <YFPhoto>& photosList)
 void YFWindow::updateNextPhoto()
 {
     // select only one image from stack
-    while (!m_transferQueue.isEmpty())
+    while (!d->transferQueue.isEmpty())
     {
-        YFPhoto& photo = m_transferQueue.top();
+        YFPhoto& photo = d->transferQueue.top();
 
         if (!photo.originalUrl().isNull())
         {
@@ -512,7 +587,7 @@ void YFWindow::updateNextPhoto()
                 image.load(photo.originalUrl());
             }
 
-            photo.setLocalUrl(m_tmpDir + QFileInfo(photo.originalUrl())
+            photo.setLocalUrl(d->tmpDir + QFileInfo(photo.originalUrl())
                               .baseName()
                               .trimmed() + QString::fromLatin1(".jpg"));
 
@@ -523,9 +598,9 @@ void YFWindow::updateNextPhoto()
                 // get temporary file name
 
                 // rescale image if requested
-                int maxDim = m_dimensionSpin->value();
+                int maxDim = d->dimensionSpin->value();
 
-                if (m_resizeCheck->isChecked() && (image.width() > maxDim || image.height() > maxDim))
+                if (d->resizeCheck->isChecked() && (image.width() > maxDim || image.height() > maxDim))
                 {
                     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing to " << maxDim;
                     image = image.scaled(maxDim, maxDim, Qt::KeepAspectRatio,
@@ -534,15 +609,15 @@ void YFWindow::updateNextPhoto()
 
                 // copy meta data to temporary image
 
-                if (image.save(photo.localUrl(), "JPEG", m_imageQualitySpin->value()))
+                if (image.save(photo.localUrl(), "JPEG", d->imageQualitySpin->value()))
                 {
-                    if (m_meta.load(photo.originalUrl()))
+                    if (d->meta.load(photo.originalUrl()))
                     {
-                        m_meta.setImageDimensions(image.size());
-                        m_meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
-                        m_meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
-                        m_meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
-                        m_meta.save(photo.localUrl());
+                        d->meta.setImageDimensions(image.size());
+                        d->meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
+                        d->meta.setImageProgramId(QString::fromLatin1("digiKam"), digiKamVersion());
+                        d->meta.setMetadataWritingMode((int)DMetadata::WRITETOIMAGEONLY);
+                        d->meta.save(photo.localUrl());
                         prepared = true;
                     }
                 }
@@ -556,22 +631,22 @@ void YFWindow::updateNextPhoto()
                     != QMessageBox::Yes)
                 {
                     // stop uploading
-                    m_transferQueue.clear();
+                    d->transferQueue.clear();
                     continue;
                 }
                 else
                 {
-                    m_transferQueue.pop();
+                    d->transferQueue.pop();
                     continue;
                 }
             }
         }
 
-        const YandexFotkiAlbum& album = m_talker.albums().at(m_albumsCombo->currentIndex());
+        const YandexFotkiAlbum& album = d->talker.albums().at(d->albumsCombo->currentIndex());
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << photo.originalUrl();
 
-        m_talker.updatePhoto(photo, album);
+        d->talker.updatePhoto(photo, album);
 
         return;
     }
@@ -590,7 +665,7 @@ void YFWindow::slotNewAlbumRequest()
     if (dlg->exec() == QDialog::Accepted)
     {
         updateControls(false);
-        m_talker.updateAlbum(album);
+        d->talker.updateAlbum(album);
     }
 
     delete dlg;
@@ -599,35 +674,35 @@ void YFWindow::slotNewAlbumRequest()
 void YFWindow::slotReloadAlbumsRequest()
 {
     updateControls(false);
-    m_talker.listAlbums();
+    d->talker.listAlbums();
 }
 
 void YFWindow::slotStartTransfer()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotStartTransfer invoked";
 
-    if (m_albumsCombo->currentIndex() == -1 || m_albumsCombo->count() == 0)
+    if (d->albumsCombo->currentIndex() == -1 || d->albumsCombo->count() == 0)
     {
         QMessageBox::information(this, QString(), i18n("Please select album first"));
         return;
     }
 
     // TODO: import support
-    if (!m_import)
+    if (!d->import)
     {
         // list photos of the album, then start upload
-        const YandexFotkiAlbum& album = m_talker.albums().at(m_albumsCombo->currentIndex());
+        const YandexFotkiAlbum& album = d->talker.albums().at(d->albumsCombo->currentIndex());
 
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Album selected" << album;
 
         updateControls(false);
-        m_talker.listPhotos(album);
+        d->talker.listPhotos(album);
     }
 }
 
 void YFWindow::slotError()
 {
-    switch (m_talker.state())
+    switch (d->talker.state())
     {
         case YFTalker::STATE_GETSESSION_ERROR:
             QMessageBox::critical(this, QString(), i18n("Session error"));
@@ -646,13 +721,13 @@ void YFWindow::slotError()
         case YFTalker::STATE_CHECKTOKEN_INVALID:
             // remove old expired token
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "CheckToken invalid";
-            m_talker.setToken(QString());
+            d->talker.setToken(QString());
             // don't say anything, simple show new auth window
             authenticate(true);
             break;
 */
         case YFTalker::STATE_LISTALBUMS_ERROR:
-            m_albumsCombo->clear();
+            d->albumsCombo->clear();
             QMessageBox::critical(this, QString(), i18n("Cannot list albums"));
             break;
         case YFTalker::STATE_LISTPHOTOS_ERROR:
@@ -668,43 +743,43 @@ void YFWindow::slotError()
             if (QMessageBox::question(this, i18n("Uploading Failed"),
                                       i18n("Failed to upload image %1\n"
                                            "Do you want to continue?",
-                                      m_transferQueue.top().originalUrl()))
+                                      d->transferQueue.top().originalUrl()))
                 != QMessageBox::Yes)
             {
                 // clear upload stack
-                m_transferQueue.clear();
+                d->transferQueue.clear();
             }
             else
             {
                 // cancel current operation
-                m_talker.cancel();
+                d->talker.cancel();
                 // remove only bad image
-                m_transferQueue.pop();
+                d->transferQueue.pop();
                 // and try next
                 updateNextPhoto();
                 return;
             }
             break;
         default:
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Unhandled error" << m_talker.state();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Unhandled error" << d->talker.state();
             QMessageBox::critical(this, QString(), i18n("Unknown error"));
     }
 
     // cancel current operation
-    m_talker.cancel();
+    d->talker.cancel();
     updateControls(true);
 }
 
 void YFWindow::slotGetServiceDone()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "GetService Done";
-    m_talker.getSession();
+    d->talker.getSession();
 }
 
 void YFWindow::slotGetSessionDone()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "GetSession Done";
-    m_talker.getToken();
+    d->talker.getToken();
 }
 
 void YFWindow::slotGetTokenDone()
@@ -715,7 +790,7 @@ void YFWindow::slotGetTokenDone()
 
 void YFWindow::slotListAlbumsDone(const QList<YandexFotkiAlbum>& albumsList)
 {
-    m_albumsCombo->clear();
+    d->albumsCombo->clear();
 
     foreach(const YandexFotkiAlbum& album, albumsList)
     {
@@ -730,10 +805,10 @@ void YFWindow::slotListAlbumsDone(const QList<YandexFotkiAlbum>& albumsList)
             albumIcon = QString::fromLatin1("folder-image");
         }
 
-        m_albumsCombo->addItem(QIcon::fromTheme(albumIcon), album.toString());
+        d->albumsCombo->addItem(QIcon::fromTheme(albumIcon), album.toString());
     }
 
-    m_albumsCombo->setEnabled(true);
+    d->albumsCombo->setEnabled(true);
     updateControls(true);
 }
 
@@ -741,26 +816,26 @@ void YFWindow::slotUpdatePhotoDone(YFPhoto& photo)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "photoUploaded" << photo;
 
-    if (m_meta.supportXmp() && m_meta.canWriteXmp(photo.originalUrl()) &&
-        m_meta.load(photo.originalUrl()))
+    if (d->meta.supportXmp() && d->meta.canWriteXmp(photo.originalUrl()) &&
+        d->meta.load(photo.originalUrl()))
     {
         // ignore errors here
-        if (m_meta.setXmpTagString(XMP_SERVICE_ID, photo.urn()) &&
-            m_meta.save(photo.originalUrl()))
+        if (d->meta.setXmpTagString(d->XMP_SERVICE_ID, photo.urn()) &&
+            d->meta.save(photo.originalUrl()))
         {
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "MARK: " << photo.originalUrl();
         }
     }
 
-    m_transferQueue.pop();
+    d->transferQueue.pop();
     updateNextPhoto();
 }
 
 void YFWindow::slotUpdateAlbumDone()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Album created";
-    m_albumsCombo->clear();
-    m_talker.listAlbums();
+    d->albumsCombo->clear();
+    d->talker.listAlbums();
 }
 
 } // namespace Digikam
