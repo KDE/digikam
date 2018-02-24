@@ -118,8 +118,8 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     : WSToolDialog(parent),
       d(new Private)
 {
-    d->iface     = iface;
-    d->vkapi     = new Vkontakte::VkApi(this);
+    d->iface = iface;
+    d->vkapi = new Vkontakte::VkApi(this);
 
     // read settings from file
     readSettings();
@@ -127,33 +127,29 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     connect(this, SIGNAL(finished(int)),
             this, SLOT(slotFinished()));
 
-    d->import                      = import;
-    d->mainWidget                  = new QWidget(this);
+    d->import                     = import;
+    d->mainWidget                 = new QWidget(this);
     QHBoxLayout* const mainLayout = new QHBoxLayout(d->mainWidget);
-    d->imgList                     = new DImagesList(this);
+    d->imgList                    = new DImagesList(this);
     d->imgList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
     d->imgList->setAllowRAW(false); // TODO: implement conversion
     d->imgList->setIface(d->iface);
     d->imgList->loadImagesFromCurrentSelection();
     d->imgList->listView()->setWhatsThis(i18n("This is the list of images to upload to your VKontakte album."));
 
-    d->settingsBox                        = new QWidget(this);
+    d->settingsBox                       = new QWidget(this);
     QVBoxLayout* const settingsBoxLayout = new QVBoxLayout(d->settingsBox);
 
-    d->headerLabel = new QLabel(d->settingsBox);
+    d->headerLabel                       = new QLabel(d->settingsBox);
     d->headerLabel->setWhatsThis(i18n("This is a clickable link to open the "
                                      "VKontakte service in a web browser."));
     d->headerLabel->setOpenExternalLinks(true);
     d->headerLabel->setFocusPolicy(Qt::NoFocus);
 
-    /*
-     * Account box
-     */
+    // Account box
     initAccountBox();
 
-    /*
-     * Album box
-     */
+    // Album box
     d->albumsBox = new VKAlbumChooser(d->settingsBox, d->vkapi);
     d->albumsBox->selectAlbum(d->albumToSelect);
 
@@ -162,7 +158,7 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     QGroupBox* const uploadBox         = new QGroupBox(i18n("Destination"), d->settingsBox);
     uploadBox->setWhatsThis(i18n("This is the location where VKontakte images will be downloaded."));
     QVBoxLayout* const uploadBoxLayout = new QVBoxLayout(uploadBox);
-    d->uploadWidget                     = d->iface->uploadWidget(uploadBox);
+    d->uploadWidget                    = d->iface->uploadWidget(uploadBox);
     uploadBoxLayout->addWidget(d->uploadWidget);
 
     // ------------------------------------------------------------------------
@@ -172,18 +168,17 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     optionsBox->setWhatsThis(i18n("These are options that will be applied to images before upload."));
 #endif
 
-//     d->checkKeepOriginal = new QCheckBox(i18n("Save in high resolution"), d->settingsBox); // store state in rc file
+//    store state in rc file
+//    d->checkKeepOriginal = new QCheckBox(i18n("Save in high resolution"), d->settingsBox);
 
-//     QVBoxLayout* const optionsBoxLayout = new QVBoxLayout(optionsBox);
-//     optionsBoxLayout->addWidget(d->checkKeepOriginal);
+//    QVBoxLayout* const optionsBoxLayout = new QVBoxLayout(optionsBox);
+//    optionsBoxLayout->addWidget(d->checkKeepOriginal);
 
     d->progressBar = new DProgressWdg(d->settingsBox);
     d->progressBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     d->progressBar->hide();
 
-    /*
-     * Layouts
-     */
+    // Layouts
     settingsBoxLayout->addWidget(d->headerLabel);
     settingsBoxLayout->addWidget(d->accountBox);
     settingsBoxLayout->addWidget(d->albumsBox);
@@ -219,9 +214,7 @@ VKWindow::VKWindow(DInfoInterface* const iface,
 //         optionsBox->hide();
     }
 
-    /*
-     * UI slots
-     */
+    // UI slots
     connect(startButton(), SIGNAL(clicked(bool)),
             this, SLOT(slotStartTransfer()));
 
@@ -229,13 +222,12 @@ VKWindow::VKWindow(DInfoInterface* const iface,
     connect(d->vkapi, SIGNAL(authenticated()),
             this, SLOT(show()));
 
-    /*
-     * Dialog update slots
-     */
+    // Dialog update slots
     connect(this, SIGNAL(signalUpdateBusyStatus(bool)),
             this, SLOT(slotUpdateBusyStatus(bool)));
 
-    connect(d->vkapi, SIGNAL(authenticated()), // TBD: busy status handling needs improvement
+    // TBD: busy status handling needs improvement
+    connect(d->vkapi, SIGNAL(authenticated()),
             this, SLOT(slotUpdateBusyStatusReady()));
 
     slotUpdateBusyStatus(true);
@@ -308,8 +300,8 @@ void VKWindow::readSettings()
     KConfig config;
     KConfigGroup grp = config.group("VKontakte Settings");
 
-    d->appId          = grp.readEntry("VkAppId", "2446321");
-    d->albumToSelect  = grp.readEntry("SelectedAlbumId", -1);
+    d->appId         = grp.readEntry("VkAppId", "2446321");
+    d->albumToSelect = grp.readEntry("SelectedAlbumId", -1);
     d->vkapi->setAppId(d->appId);
     d->vkapi->setRequiredPermissions(Vkontakte::AppPermissions::Photos);
     d->vkapi->setInitialAccessToken(grp.readEntry("AccessToken", ""));
@@ -373,7 +365,8 @@ void VKWindow::slotAuthCleared()
 
 void VKWindow::slotUpdateHeaderLabel()
 {
-    d->headerLabel->setText(QString::fromLatin1("<b><h2><a href=\"%1\"><font color=\"black\">%2</font></a></h2></b>")
+    d->headerLabel->setText(QString::fromLatin1("<b><h2><a href=\"%1\">"
+                                                "<font color=\"black\">%2</font></a></h2></b>")
                            .arg(d->accountBox->albumsURL()).arg(i18n("VKontakte")));
 }
 
@@ -408,10 +401,11 @@ void VKWindow::slotStartTransfer()
         foreach(const QUrl& url, d->imgList->imageUrls(true))
             files.append(url.toLocalFile());
 
-        Vkontakte::UploadPhotosJob* const job = new Vkontakte::UploadPhotosJob(d->vkapi->accessToken(),
-                                                                               files,
-                                                                               false /*d->checkKeepOriginal->isChecked()*/,
-                                                                               aid);
+        Vkontakte::UploadPhotosJob* const job
+            = new Vkontakte::UploadPhotosJob(d->vkapi->accessToken(),
+                                             files,
+                                             false /*d->checkKeepOriginal->isChecked()*/,
+                                             aid);
 
         connect(job, SIGNAL(result(KJob*)),
                 this, SLOT(slotPhotoUploadDone(KJob*)));

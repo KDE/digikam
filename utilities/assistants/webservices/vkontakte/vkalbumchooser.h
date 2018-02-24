@@ -37,16 +37,6 @@
 
 #include "vknewalbumdlg.h"
 
-// TODO: share this code with `vkwindow.cpp`
-#define SLOT_JOB_DONE_INIT(JobClass)                     \
-    JobClass* const job = dynamic_cast<JobClass*>(kjob); \
-    Q_ASSERT(job);                                       \
-    if (job && job->error())                             \
-    {                                                    \
-        handleVkError(job);                              \
-        return;                                          \
-    }
-
 class KJob;
 
 namespace Vkontakte

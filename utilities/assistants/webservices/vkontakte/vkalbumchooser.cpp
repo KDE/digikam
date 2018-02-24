@@ -301,7 +301,14 @@ void VKAlbumChooser::slotStartAlbumEditing(int aid, const VKNewAlbumDlg::AlbumPr
 
 void VKAlbumChooser::slotAlbumEditingDone(KJob* kjob)
 {
-    SLOT_JOB_DONE_INIT(Vkontakte::EditAlbumJob)
+    Vkontakte::EditAlbumJob* const job = dynamic_cast<Vkontakte::EditAlbumJob*>(kjob);
+    Q_ASSERT(job);                                      
+
+    if (job && job->error())                            
+    {                                                   
+        handleVkError(job);                             
+        return;                                         
+    }
 
     slotStartAlbumsReload();
 
@@ -344,7 +351,14 @@ void VKAlbumChooser::slotStartAlbumDeletion(int aid)
 
 void VKAlbumChooser::slotAlbumDeletionDone(KJob* kjob)
 {
-    SLOT_JOB_DONE_INIT(Vkontakte::DeleteAlbumJob)
+    Vkontakte::DeleteAlbumJob* const job = dynamic_cast<Vkontakte::DeleteAlbumJob*>(kjob);
+    Q_ASSERT(job);                                      
+
+    if (job && job->error())                            
+    {                                                   
+        handleVkError(job);                             
+        return;                                         
+    }
 
     slotStartAlbumsReload();
 
@@ -381,9 +395,17 @@ void VKAlbumChooser::slotStartAlbumsReload()
 
 void VKAlbumChooser::slotAlbumsReloadDone(KJob* kjob)
 {
-    SLOT_JOB_DONE_INIT(Vkontakte::AlbumListJob)
+    Vkontakte::AlbumListJob* const job = dynamic_cast<Vkontakte::AlbumListJob*>(kjob);
+    Q_ASSERT(job);                                      
 
-    if (!job) return;
+    if (job && job->error())                            
+    {                                                   
+        handleVkError(job);                             
+        return;                                         
+    }
+
+    if (!job)
+        return;
 
     d->albumsCombo->clear();
     d->albums = job->list();

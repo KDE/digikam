@@ -39,16 +39,6 @@
 #include <Vkontakte/userinfojob.h>
 #include <Vkontakte/vkapi.h>
 
-// TODO: share this code with `vkwindow.cpp`
-#define SLOT_JOB_DONE_INIT(JobClass) \
-    JobClass* const job = dynamic_cast<JobClass*>(kjob); \
-    Q_ASSERT(job);                                       \
-    if (job && job->error())                             \
-    {                                                    \
-        handleVkError(job);                              \
-        return;                                          \
-    }
-
 namespace Digikam
 {
 
@@ -149,14 +139,22 @@ void VKAuthWidget::slotStartGetUserInfo()
 
 void VKAuthWidget::slotGetUserInfoDone(KJob* kjob)
 {
-    SLOT_JOB_DONE_INIT(Vkontakte::UserInfoJob)
+    Vkontakte::UserInfoJob* const job = dynamic_cast<Vkontakte::UserInfoJob*>(kjob);
+    Q_ASSERT(job);                                      
 
-    if (!job) return;
+    if (job && job->error())                            
+    {                                                   
+        handleVkError(job);                             
+        return;                                         
+    }
+    
+    if (!job)
+        return;
 
     QList<Vkontakte::UserInfo> res = job->userInfo();
     Vkontakte::UserInfo user = res.first();
 
-    d->userId = user.userId();
+    d->userId       = user.userId();
     d->userFullName = i18nc("Concatenation of first name (%1) and last name (%2)", "%1 %2",
                            user.firstName(), user.lastName());
     emit signalUpdateAuthInfo();
