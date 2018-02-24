@@ -61,12 +61,12 @@ public:
         STATE_GETSERVICE             = STATE_UNAUTHENTICATED | 0x1,
         STATE_GETSERVICE_ERROR       = STATE_UNAUTHENTICATED | STATE_ERROR | 0x2,
         STATE_GETSERVICE_DONE        = STATE_UNAUTHENTICATED | 0x3,
-        /*
+/*
         // for future use
         STATE_CHECKTOKEN             = STATE_UNAUTHENTICATED | 0x4,
         STATE_CHECKTOKEN_INVALID     = STATE_UNAUTHENTICATED | 0x5,
         STATE_CHECKTOKEN_DONE        = STATE_UNAUTHENTICATED | 0x6,
-        */
+*/
         STATE_GETSESSION             = STATE_UNAUTHENTICATED | 0x7,
         STATE_GETSESSION_ERROR       = STATE_UNAUTHENTICATED | STATE_ERROR | 0x8,
         STATE_GETSESSION_DONE        = STATE_UNAUTHENTICATED | 0x9,
@@ -99,6 +99,8 @@ public:
 
     explicit YFTalker(QObject* const parent = 0);
     ~YFTalker();
+
+public:
 
     /*
      * Fields
@@ -163,10 +165,11 @@ public:
         return m_photos;
     }
 
+public:
+    
     /*
      * Actions
      */
-
     void getService();
     //void checkToken();
     void getSession();
@@ -179,6 +182,8 @@ public:
 
     void reset();
     void cancel();
+
+public:
 
     /*
      * API-related public constants
@@ -220,29 +225,6 @@ private Q_SLOTS:
 private:
 
     /*
-     * API-related
-     */
-
-    // fields
-    QString              m_sessionKey;
-    QString              m_sessionId;
-    QString              m_token;
-    QString              m_login;
-    QString              m_password;
-    QString              m_apiAlbumsUrl;
-    QString              m_apiPhotosUrl;
-    QString              m_apiTagsUrl;
-
-    // constants
-    static const QString SESSION_URL; // use QString insted of QUrl, we need .arg
-    static const QString TOKEN_URL;
-    static const QString SERVICE_URL;
-    static const QString AUTH_REALM;
-    static const QString ACCESS_STRINGS[];
-
-private:
-
-    /*
      * Utils
      */
     // for updatePhoto
@@ -261,6 +243,29 @@ private:
     void listPhotosNext(); // see listPhotos();
 
 private:
+
+    // constants
+    static const QString SESSION_URL; // use QString insted of QUrl, we need .arg
+    static const QString TOKEN_URL;
+    static const QString SERVICE_URL;
+    static const QString AUTH_REALM;
+    static const QString ACCESS_STRINGS[];
+
+private:
+
+    /*
+     * API-related
+     */
+
+    // fields
+    QString                 m_sessionKey;
+    QString                 m_sessionId;
+    QString                 m_token;
+    QString                 m_login;
+    QString                 m_password;
+    QString                 m_apiAlbumsUrl;
+    QString                 m_apiPhotosUrl;
+    QString                 m_apiTagsUrl;
 
     /*
      * FSM data
@@ -288,4 +293,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* YF_TALKER_H */
+#endif // YF_TALKER_H

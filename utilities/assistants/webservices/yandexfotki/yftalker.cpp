@@ -52,10 +52,13 @@ const QString YFTalker::TOKEN_URL            = QString::fromLatin1("http://auth.
 const QString YFTalker::SERVICE_URL          = QString::fromLatin1("http://api-fotki.yandex.ru/api/users/%1/");
 const QString YFTalker::USERPAGE_URL         = QString::fromLatin1("http://fotki.yandex.ru/users/%1/");
 const QString YFTalker::USERPAGE_DEFAULT_URL = QString::fromLatin1("http://fotki.yandex.ru/");
-const QString YFTalker::ACCESS_STRINGS[]     = {
+
+const QString YFTalker::ACCESS_STRINGS[]     =
+{
     QString::fromLatin1("public"),
     QString::fromLatin1("friends"),
-    QString::fromLatin1("private") };
+    QString::fromLatin1("private")
+};
 
 YFTalker::YFTalker(QObject* const parent)
     : QObject(parent),
@@ -217,7 +220,7 @@ void YFTalker::updatePhoto(YFPhoto& photo, const YandexFotkiAlbum& album)
     // move photo to another album (if changed)
     photo.m_apiAlbumUrl = album.m_apiSelfUrl;
     // FIXME: hack
-    m_lastPhotosUrl = album.m_apiPhotosUrl;
+    m_lastPhotosUrl     = album.m_apiPhotosUrl;
 
     if (!photo.remoteUrl().isNull())
     {
@@ -319,15 +322,17 @@ void YFTalker::updatePhotoInfo(YFPhoto& photo)
     QByteArray buffer = doc.toString(1).toUtf8(); // with idents
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Prepared data: " << buffer;
-    m_lastPhoto = &photo;
 
-    m_state = STATE_UPDATEPHOTO_INFO;
+    m_lastPhoto = &photo;
+    m_state     = STATE_UPDATEPHOTO_INFO;
 
     QUrl url(photo.m_apiEditUrl);
     QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/atom+xml; charset=utf-8; type=entry"));
-    netRequest.setRawHeader("Authorization", QString::fromLatin1("FimpToken realm=\"%1\", token=\"%2\"")
-                                             .arg(AUTH_REALM).arg(m_token).toLatin1());
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                         QLatin1String("application/atom+xml; charset=utf-8; type=entry"));
+    netRequest.setRawHeader("Authorization",
+                            QString::fromLatin1("FimpToken realm=\"%1\", token=\"%2\"")
+                                                .arg(AUTH_REALM).arg(m_token).toLatin1());
 
     m_reply = m_netMngr->put(netRequest, buffer);
 
@@ -539,7 +544,7 @@ void YFTalker::parseResponseGetService()
     if (workspaceElem.isNull())
     {
         workspaceElem = rootElem.firstChildElement(QString::fromLatin1("workspace"));
-        prefix = QString();
+        prefix        = QString();
         qCCritical(DIGIKAM_WEBSERVICES_LOG) << "Service document without namespaces found";
     }
 
@@ -555,10 +560,9 @@ void YFTalker::parseResponseGetService()
 
     QDomElement collectionElem = workspaceElem.firstChildElement(prefix + QString::fromLatin1("collection"));
 
-    for ( ; !collectionElem.isNull();
+    for ( ; !collectionElem.isNull() ;
           collectionElem = collectionElem.nextSiblingElement(prefix + QString::fromLatin1("collection")))
     {
-
         const QDomElement acceptElem = collectionElem.firstChildElement(prefix + QString::fromLatin1("accept"));
 
         if (acceptElem.isNull()) // invalid section, ignore
@@ -578,7 +582,8 @@ void YFTalker::parseResponseGetService()
         else if (collectionElem.attribute(QString::fromLatin1("id")) == QString::fromLatin1("tag-list"))
         {
             apiTagsUrl = collectionElem.attribute(QString::fromLatin1("href"));
-        } // else skip unknown section
+        }
+        // else skip unknown section
     }
 
     if (apiAlbumsUrl.isNull() || apiPhotosUrl.isNull())
@@ -589,12 +594,12 @@ void YFTalker::parseResponseGetService()
 
     m_apiAlbumsUrl = apiAlbumsUrl;
     m_apiPhotosUrl = apiPhotosUrl;
-    m_apiTagsUrl = apiTagsUrl;
+    m_apiTagsUrl   = apiTagsUrl;
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "ServiceUrls:";
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Albums" << m_apiAlbumsUrl;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Photos" << m_apiPhotosUrl;
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Tags" << m_apiTagsUrl;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Tags"   << m_apiTagsUrl;
 
     m_state = STATE_GETSERVICE_DONE;
     emit signalGetServiceDone();
@@ -636,7 +641,7 @@ void YFTalker::parseResponseGetSession()
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Session started" << m_sessionKey << m_sessionId;
 
-    m_state = STATE_GETSESSION_DONE;
+    m_state      = STATE_GETSESSION_DONE;
     emit signalGetSessionDone();
 }
 
@@ -651,11 +656,11 @@ void YFTalker::parseResponseGetToken()
     }
 
     const QDomElement rootElem  = doc.documentElement();
-    const QDomElement tokenElem =  rootElem.firstChildElement(QString::fromLatin1("token"));
+    const QDomElement tokenElem = rootElem.firstChildElement(QString::fromLatin1("token"));
 
     if (tokenElem.isNull() || tokenElem.nodeType() != QDomNode::ElementNode)
     {
-        const QDomElement errorElem =  rootElem.firstChildElement(QString::fromLatin1("error"));
+        const QDomElement errorElem = rootElem.firstChildElement(QString::fromLatin1("error"));
 
         if (errorElem.isNull() || errorElem.nodeType() != QDomNode::ElementNode)
         {
@@ -663,15 +668,17 @@ void YFTalker::parseResponseGetToken()
             return setErrorState(STATE_GETTOKEN_ERROR);
         }
 
-        /*
-          // checked by HTTP error code in prepareJobResult
+/*
+        // checked by HTTP error code in prepareJobResult
         const QString errorCode = errorElem.attribute("code", "0");
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString("Auth error: %1, code=%2").arg(errorElem.text()).arg(errorCode);
 
-        if (errorCode == "2")  { // Invalid credentials
+        if (errorCode == "2")
+        {
+            // Invalid credentials
             return setErrorState(STATE_GETTOKEN_INVALID_CREDENTIALS);
         }
-        */
+*/
 
         return;
     }
@@ -717,7 +724,6 @@ void YFTalker::parseResponseListAlbums()
     for ( ; !entryElem.isNull();
           entryElem = entryElem.nextSiblingElement(QString::fromLatin1("entry")))
     {
-
         const QDomElement urn       = entryElem.firstChildElement(QString::fromLatin1("id"));
         const QDomElement author    = entryElem.firstChildElement(QString::fromLatin1("author"));
         const QDomElement title     = entryElem.firstChildElement(QString::fromLatin1("title"));
@@ -840,9 +846,9 @@ bool YFTalker::parsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
     }
 
     // XML sanity checks
-    if (urn.isNull() || title.isNull() ||
-        linkSelf.isNull() || linkEdit.isNull() ||
-        linkMedia.isNull() || linkAlbum.isNull() ||
+    if (urn.isNull()       || title.isNull()              ||
+        linkSelf.isNull()  || linkEdit.isNull()           ||
+        linkMedia.isNull() || linkAlbum.isNull()          ||
         !content.hasAttribute(QString::fromLatin1("src")) ||
         !accessAttr.hasAttribute(QString::fromLatin1("value")))
     {
@@ -946,6 +952,7 @@ void YFTalker::parseResponseListPhotos()
     }
 
     QDomElement entryElem = rootElem.firstChildElement(QString::fromLatin1("entry"));
+
     for ( ; !entryElem.isNull();
           entryElem = entryElem.nextSiblingElement(QString::fromLatin1("entry")))
     {
@@ -993,7 +1000,7 @@ void YFTalker::parseResponseUpdatePhotoFile()
         return setErrorState(STATE_UPDATEPHOTO_INFO_ERROR);
     }
 
-    YFPhoto& photo = *m_lastPhoto;
+    YFPhoto& photo              = *m_lastPhoto;
 
     YFPhoto tmpPhoto;
     const QDomElement entryElem = doc.documentElement();
@@ -1020,9 +1027,10 @@ void YFTalker::parseResponseUpdatePhotoInfo()
 {
     YFPhoto& photo = *m_lastPhoto;
 
-    /*
+/*
     // reload all information
     QDomDocument doc("entry");
+
     if ( !doc.setContent( m_buffer ) )
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Invalid XML: parse error" << m_buffer;
@@ -1030,11 +1038,13 @@ void YFTalker::parseResponseUpdatePhotoInfo()
     }
 
     const QDomElement entryElem = doc.documentElement();
+
     if(!parsePhotoXml(entryElem, photo))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Can't reload photo after uploading";
         return setErrorState(STATE_UPDATEPHOTO_INFO_ERROR);
-    }*/
+    }
+*/
 
     m_state     = STATE_UPDATEPHOTO_DONE;
     m_lastPhoto = 0;

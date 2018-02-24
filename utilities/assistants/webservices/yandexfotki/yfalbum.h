@@ -121,10 +121,9 @@ protected:
                      const QDateTime& publishedDate,
                      const QDateTime& editedDate,
                      const QDateTime& updatedDate,
-                     const QString& password
-                    );
+                     const QString& password);
 
-protected:
+private:
 
     QString   m_urn;
     QString   m_author;

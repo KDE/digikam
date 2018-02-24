@@ -62,6 +62,8 @@ public:
     explicit YFWindow(DInfoInterface* const iface, QWidget* const parent, bool import = false);
     ~YFWindow();
 
+public:
+
     /**
      * Use this method to (re-)activate the dialog after it has been created
      * to display it. This also loads the currently selected images.

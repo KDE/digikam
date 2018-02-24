@@ -46,11 +46,11 @@ public:
 
 public:
 
-    YFPhoto()
-        :   m_access(ACCESS_PUBLIC),
-            m_hideOriginal(false),
-            m_disableComments(false),
-            m_adult(false)
+    explicit YFPhoto()
+      : m_access(ACCESS_PUBLIC),
+        m_hideOriginal(false),
+        m_disableComments(false),
+        m_adult(false)
     {
 
     }

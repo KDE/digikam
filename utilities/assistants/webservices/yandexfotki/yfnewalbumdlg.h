@@ -24,11 +24,6 @@
 #ifndef YF_NEW_ALBUM_DLG_H
 #define YF_NEW_ALBUM_DLG_H
 
-// Qt includes
-
-#include <QDialog>
-#include <QLineEdit>
-
 // Local includes
 
 #include "yfalbum.h"
@@ -46,10 +41,7 @@ public:
     explicit YFNewAlbumDlg(QWidget* const parent, YandexFotkiAlbum& album);
     ~YFNewAlbumDlg();
 
-    YandexFotkiAlbum& album() const
-    {
-        return m_album;
-    }
+    YandexFotkiAlbum& album() const;
 
 private Q_SLOTS:
 
@@ -57,9 +49,8 @@ private Q_SLOTS:
 
 private:
 
-    QLineEdit*        m_passwordEdit;
-
-    YandexFotkiAlbum& m_album;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

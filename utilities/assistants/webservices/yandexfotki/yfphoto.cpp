@@ -33,64 +33,63 @@ namespace Digikam
 {
 
 YFPhoto::YFPhoto(const QString& urn,
-                                   const QString& author,
-                                   const QString& title,
-                                   const QString& summary,
-                                   const QString& apiEditUrl,
-                                   const QString& apiSelfUrl,
-                                   const QString& apiMediaUrl,
-                                   const QString& apiAlbumUrl,
-                                   const QDateTime& publishedDate,
-                                   const QDateTime& editedDate,
-                                   const QDateTime& updatedDate,
-                                   const QDateTime& createdDate,
-                                   Access access,
-                                   bool hideOriginal,
-                                   bool disableComments,
-                                   bool adult,
-                                   const QString& remoteUrl
-                                  )
-    :   m_urn(urn),
-        m_author(author),
-        m_title(title),
-        m_summary(summary),
-        m_apiEditUrl(apiEditUrl),
-        m_apiSelfUrl(apiSelfUrl),
-        m_apiMediaUrl(apiMediaUrl),
-        m_apiAlbumUrl(apiAlbumUrl),
-        m_publishedDate(publishedDate),
-        m_editedDate(editedDate),
-        m_updatedDate(updatedDate),
-        m_createdDate(createdDate),
-        m_access(access),
-        m_hideOriginal(hideOriginal),
-        m_disableComments(disableComments),
-        m_adult(adult),
-        m_remoteUrl(remoteUrl)
+                 const QString& author,
+                 const QString& title,
+                 const QString& summary,
+                 const QString& apiEditUrl,
+                 const QString& apiSelfUrl,
+                 const QString& apiMediaUrl,
+                 const QString& apiAlbumUrl,
+                 const QDateTime& publishedDate,
+                 const QDateTime& editedDate,
+                 const QDateTime& updatedDate,
+                 const QDateTime& createdDate,
+                 Access access,
+                 bool hideOriginal,
+                 bool disableComments,
+                 bool adult,
+                 const QString& remoteUrl)
+    : m_urn(urn),
+      m_author(author),
+      m_title(title),
+      m_summary(summary),
+      m_apiEditUrl(apiEditUrl),
+      m_apiSelfUrl(apiSelfUrl),
+      m_apiMediaUrl(apiMediaUrl),
+      m_apiAlbumUrl(apiAlbumUrl),
+      m_publishedDate(publishedDate),
+      m_editedDate(editedDate),
+      m_updatedDate(updatedDate),
+      m_createdDate(createdDate),
+      m_access(access),
+      m_hideOriginal(hideOriginal),
+      m_disableComments(disableComments),
+      m_adult(adult),
+      m_remoteUrl(remoteUrl)
 {
     // nothing
 }
 
 YFPhoto::YFPhoto(const YFPhoto& photo)
-    :   m_urn(photo.urn()),
-        m_author(photo.author()),
-        m_title(photo.title()),
-        m_summary(photo.summary()),
-        m_apiEditUrl(photo.m_apiEditUrl),
-        m_apiSelfUrl(photo.m_apiSelfUrl),
-        m_apiMediaUrl(photo.m_apiMediaUrl),
-        m_apiAlbumUrl(photo.m_apiAlbumUrl),
-        m_publishedDate(photo.publishedDate()),
-        m_editedDate(photo.editedDate()),
-        m_updatedDate(photo.updatedDate()),
-        m_createdDate(photo.createdDate()),
-        m_access(photo.access()),
-        m_hideOriginal(photo.isHideOriginal()),
-        m_disableComments(photo.isDisableComments()),
-        m_adult(photo.isAdult()),
-        m_remoteUrl(photo.remoteUrl()),
-        m_localUrl(photo.localUrl()),
-        m_originalUrl(photo.originalUrl())
+    : m_urn(photo.urn()),
+      m_author(photo.author()),
+      m_title(photo.title()),
+      m_summary(photo.summary()),
+      m_apiEditUrl(photo.m_apiEditUrl),
+      m_apiSelfUrl(photo.m_apiSelfUrl),
+      m_apiMediaUrl(photo.m_apiMediaUrl),
+      m_apiAlbumUrl(photo.m_apiAlbumUrl),
+      m_publishedDate(photo.publishedDate()),
+      m_editedDate(photo.editedDate()),
+      m_updatedDate(photo.updatedDate()),
+      m_createdDate(photo.createdDate()),
+      m_access(photo.access()),
+      m_hideOriginal(photo.isHideOriginal()),
+      m_disableComments(photo.isDisableComments()),
+      m_adult(photo.isAdult()),
+      m_remoteUrl(photo.remoteUrl()),
+      m_localUrl(photo.localUrl()),
+      m_originalUrl(photo.originalUrl())
 {
     //nothing
 }
@@ -120,10 +119,12 @@ QDebug operator<<(QDebug d, const YFPhoto& p)
     d.space() << "localUrl:" << p.localUrl() << ",\n";
     d.space() << "originalUrl:" << p.originalUrl() << ",\n";
     d.space() << "tags:" << "\n";
+
     foreach(const QString& t, p.tags)
     {
         d.space() << t << ",";
     }
+
     d.space() << "\n";
 
     d.nospace() << ")";

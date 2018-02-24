@@ -73,11 +73,10 @@ const char* YFWindow::XMP_SERVICE_ID = "Xmp.digiKam.yandexGPhotoId";
 YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool import)
     : WSToolDialog(parent)
 {
-    m_iface  = iface;
-    m_import = import;
-    m_tmpDir = WSToolUtils::makeTemporaryDir("yandexfotki").absolutePath() + QLatin1Char('/');
-    m_widget = new YFWidget(this, m_iface, QString::fromLatin1("Yandex.Fotki"));
-
+    m_iface                = iface;
+    m_import               = import;
+    m_tmpDir               = WSToolUtils::makeTemporaryDir("yandexfotki").absolutePath() + QLatin1Char('/');
+    m_widget               = new YFWidget(this, m_iface, QString::fromLatin1("Yandex.Fotki"));
     m_loginLabel           = m_widget->getUserNameLabel();
     m_headerLabel          = m_widget->getHeaderLbl();
     m_changeUserButton     = m_widget->getChangeUserBtn();
@@ -334,14 +333,14 @@ void YFWindow::authenticate(bool forceAuthWindow)
 
         delete dlg;
     }
-
-    /*else
+/*
+    else
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Checking old token...";
         m_talker.checkToken();
         return;
     }
-    */
+*/
 
     // if new credentials non-empty, authenticate
     if (!m_talker.login().isEmpty() && !m_talker.password().isEmpty())
@@ -360,8 +359,8 @@ void YFWindow::authenticate(bool forceAuthWindow)
     }
 
 /*
-        progressBar()->show();
-        progressBar()->setFormat("");
+    progressBar()->show();
+    progressBar()->setFormat("");
 */
 }
 

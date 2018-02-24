@@ -25,14 +25,15 @@
 
 // Qt includes
 
+#include <QDialog>
+#include <QLineEdit>
 #include <QFormLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGroupBox>
 #include <QApplication>
 #include <QStyle>
-#include <QLineEdit>
-#include <QtWidgets/QPushButton>
+#include <QPushButton>
 #include <QDebug>
 #include <QMessageBox>
 
@@ -48,20 +49,36 @@
 namespace Digikam
 {
 
+class YFNewAlbumDlg::Private
+{
+public:
+
+    explicit Private()
+    {
+        passwordEdit = 0;
+    }
+
+    QLineEdit*       passwordEdit;
+
+    YandexFotkiAlbum album;
+};
+
 YFNewAlbumDlg::YFNewAlbumDlg(QWidget* const parent, YandexFotkiAlbum& album)
     : WSNewAlbumDialog(parent, QString::fromLatin1("Yandex.Fotki")),
-      m_album(album)
+      d(new Private)
 {
+    d->album = album;
+    
     hideLocation();
     hideDateTime();
 
-    QGroupBox* const albumBox = new QGroupBox(QString(), this);
+    QGroupBox* const albumBox         = new QGroupBox(QString(), this);
 
-    m_passwordEdit = new QLineEdit();
-    m_passwordEdit->setWhatsThis(i18n("Password for the album (optional)."));
+    d->passwordEdit                   = new QLineEdit();
+    d->passwordEdit->setWhatsThis(i18n("Password for the album (optional)."));
 
-    QFormLayout* const albumBoxLayout  = new QFormLayout;
-    albumBoxLayout->addRow(i18n("Password:"), m_passwordEdit);
+    QFormLayout* const albumBoxLayout = new QFormLayout;
+    albumBoxLayout->addRow(i18n("Password:"), d->passwordEdit);
 
     albumBox->setLayout(albumBoxLayout);
     addToMainLayout(albumBox);
@@ -72,6 +89,12 @@ YFNewAlbumDlg::YFNewAlbumDlg(QWidget* const parent, YandexFotkiAlbum& album)
 
 YFNewAlbumDlg::~YFNewAlbumDlg()
 {
+    delete d;
+}
+
+YandexFotkiAlbum& YFNewAlbumDlg::album() const
+{
+    return d->album;
 }
 
 void YFNewAlbumDlg::slotOkClicked()
@@ -82,16 +105,16 @@ void YFNewAlbumDlg::slotOkClicked()
         return;
     }
 
-    m_album.setTitle(getTitleEdit()->text());
-    m_album.setSummary(getDescEdit()->toPlainText());
+    d->album.setTitle(getTitleEdit()->text());
+    d->album.setSummary(getDescEdit()->toPlainText());
 
-    if (m_passwordEdit->text().isEmpty())
+    if (d->passwordEdit->text().isEmpty())
     {
-        m_album.setPassword(QString()); // force null string
+        d->album.setPassword(QString()); // force null string
     }
     else
     {
-        m_album.setPassword(m_passwordEdit->text());
+        d->album.setPassword(d->passwordEdit->text());
     }
 
     accept();
