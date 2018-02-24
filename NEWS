@@ -1,9 +1,8 @@
 *****************************************************************************************************
-digiKam 5.9.0 - Release date: 2018-xx-xx
+digiKam 5.9.0 - Release date: 2018-02-25
 
 NEW FEATURES:
 
-Image Editor : New clone tool to replace old CImg in-painting tool.
 General      : Libraw updated to last 0.18.7.
 
 BUGFIXES FROM BUGZILLA:
@@ -31,4 +30,6 @@ BUGFIXES FROM BUGZILLA:
 021 ==> 390529 - Import from scanner not enabled.
 022 ==> 390683 - Batch processing creates 0 byte files on Fujifilm RAF RAW images with lens correction.
 023 ==> 390688 - Show pick and color label in thumbnail list [patch].
-024 ==> 
+024 ==> 390162 - digiKam-5.9.0 appimage fail to start.
+025 ==> 384853 - Ungrouping images is not working.
+026 ==> 

@@ -98,7 +98,9 @@ void ImageQualityTask::run()
         QString path = d->data->getImagePath();
 
         if (path.isEmpty())
+        {
             break;
+        }
 
         // Get item preview to perform quality analysis. No need to load whole image, this will be slower.
         // TODO : check if 1024 pixels size is enough to get suitable Quality results.
