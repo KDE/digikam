@@ -1,5 +1,5 @@
-MAIN DEVELOPERS :
----------------
+MAIN DEVELOPERS:
+----------------
 
 Gilles Caulier <caulier dot gilles at gmail dot com>                      : Coordinator, lead developer, project management.
 Maik Qualmann <metzpinguin at gmail dot com>                              : Lead Developer.
@@ -7,8 +7,8 @@ Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                         : Lead
 Mario Frank <mario dot frank at uni-potsdam dot de>                       : Developer.
 Simon Frei <freisim93 at gmail dot com>                                   : Developer.
 
-CONTRIBUTORS :
---------------
+CONTRIBUTORS:
+-------------
 
 Nicolas Lecureuil <nlecureuil at mandriva dot com>                        : Release manager.
 Mohamed Anwer <m dot anwer at gmx dot com>                                : Developer.
@@ -84,16 +84,17 @@ Rune Laursen <runerl at skjoldhoej dot dk>                                : Dani
 Jasper van der Marel <jasper dot van dot der dot marel at wanadoo dot nl> : Dutch translations.
 Anna Sawicka <ania at kajak dot org dot pl>                               : Polish translations.
 
-FORMER MEMBERS :
---------------
+FORMER MEMBERS:
+---------------
 
 Renchi Raju <renchi dot raju at gmail dot com>                            : 0.1.0 to 0.8.0 : main coordinator and lead developer.
 Joern Ahrens <kde at jokele dot de>                                       : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
 Tom Albers <tomalbers at kde dot nl>                                      : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
 
-DIGIKAM SPLASHSCREENS CREDITS :
------------------------------
+DIGIKAM SPLASHSCREENS CREDITS:
+------------------------------
 
+6.0.0-beta1    : Petr Simacek            <petr dot simacek at gmail dot com>
 5.9.0          : Emanuele Feligioni      <212eyewear at gmail dot com>
 5.8.0          : Caulier Gilles          <caulier dot gilles at gmail dot com>
 5.7.0          : Ahmed Madi              <ahmed dot tarek dot mady at gmail dot com>
@@ -175,9 +176,10 @@ DIGIKAM SPLASHSCREENS CREDITS :
 0.5.0          : Renchi Raju             <renchi dot raju at gmail dot com>
 0.4.0          : NONE
 
-SHOWFOTO SPLASHSCREENS CREDITS :
-------------------------------
+SHOWFOTO SPLASHSCREENS CREDITS:
+-------------------------------
 
+6.0.0-beta1    : Petr Simacek            <petr dot simacek at gmail dot com>
 5.9.0          : Petr Simacek            <petr dot simacek at gmail dot com>
 5.8.0          : Mattia Verga            <mattia dot verga at tiscali dot it>
 5.7.0          : Ahmed Madi              <ahmed dot tarek dot mady at gmail dot com>
@@ -252,9 +254,10 @@ SHOWFOTO SPLASHSCREENS CREDITS :
 0.2.0          : Joern Ahrens            <kde at jokele dot de>
 0.1.0          : NONE
 
-ABOUT BACKGROUND IMAGE :
-----------------------
+ABOUT BACKGROUND IMAGE:
+-----------------------
 
+6.0.0-beta1    : Petr Simacek            <petr dot simacek at gmail dot com>
 5.9.0          : Petr Simacek            <petr dot simacek at gmail dot com>
 5.8.0          : Ahmed Madi              <ahmed dot tarek dot mady at gmail dot com>
 5.7.0          : Ahmed Madi              <ahmed dot tarek dot mady at gmail dot com>
