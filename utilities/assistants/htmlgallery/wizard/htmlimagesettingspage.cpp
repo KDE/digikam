@@ -54,7 +54,7 @@ class HTMLImageSettingsPage::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : kcfg_thumbnailSquare(0)
     {
     }

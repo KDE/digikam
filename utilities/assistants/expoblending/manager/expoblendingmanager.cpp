@@ -38,10 +38,10 @@ class ExpoBlendingManager::Private
 {
 public:
 
-    Private()
-        : thread(0),
-          wizard(0),
-          dlg(0)
+    explicit Private()
+      : thread(0),
+        wizard(0),
+        dlg(0)
     {
     }
 

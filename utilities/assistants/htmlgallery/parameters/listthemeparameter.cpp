@@ -40,6 +40,10 @@ static const char* ITEM_CAPTION_KEY = "Caption_";
 class ListThemeParameter::Private
 {
 public:
+    
+    explicit Private()
+    {
+    }
 
     QStringList            mOrderedValueList;
     QMap<QString, QString> mContentMap;
@@ -69,8 +73,8 @@ void ListThemeParameter::init(const QByteArray& internalName, const KConfigGroup
             break;
         }
 
-        QString value   = configGroup->readEntry(valueKey);
-        QString caption = configGroup->readEntry(captionKey);
+        QString value         = configGroup->readEntry(valueKey);
+        QString caption       = configGroup->readEntry(captionKey);
 
         d->mOrderedValueList << value;
         d->mContentMap[value] = caption;

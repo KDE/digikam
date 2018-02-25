@@ -49,8 +49,8 @@ class RawPage::Private
 {
 public:
 
-    Private() :
-        openDirectly(0),
+    explicit Private()
+      : openDirectly(0),
         useRawImport(0),
         rawHandling(0)
     {
@@ -58,7 +58,6 @@ public:
 
     QRadioButton* openDirectly;
     QRadioButton* useRawImport;
-
     QButtonGroup* rawHandling;
 };
 

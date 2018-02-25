@@ -52,8 +52,8 @@ class FirstRunDlg::Private
 {
 public:
 
-    Private() :
-        welcomePage(0),
+    explicit Private()
+      : welcomePage(0),
         migrateFromDigikam4Page(0),
         collectionPage(0),
         databasePage(0),

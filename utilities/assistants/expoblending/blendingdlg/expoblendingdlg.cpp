@@ -80,19 +80,19 @@ class ExpoBlendingDlg::Private
 {
 public:
 
-    Private()
-        : templateFileName(0),
-          previewWidget(0),
-          enfuseSettingsBox(0),
-          saveSettingsBox(0),
-          bracketStack(0),
-          enfuseStack(0),
-          mngr(0),
-          firstImageDisplayed(false),
-          buttonBox(0),
-          previewButton(0),
-          startButton(0),
-          propagateReject(true)
+    explicit Private()
+      : templateFileName(0),
+        previewWidget(0),
+        enfuseSettingsBox(0),
+        saveSettingsBox(0),
+        bracketStack(0),
+        enfuseStack(0),
+        mngr(0),
+        firstImageDisplayed(false),
+        buttonBox(0),
+        previewButton(0),
+        startButton(0),
+        propagateReject(true)
     {
     }
 

@@ -57,7 +57,7 @@ class HTMLFinalPage::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : progressView(0),
         progressBar(0),
         complete(false)

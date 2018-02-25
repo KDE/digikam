@@ -57,6 +57,8 @@ public:
     explicit DSaveSettingsWidget(QWidget* const parent);
     ~DSaveSettingsWidget();
 
+public:
+
     void setCustomSettingsWidget(QWidget* const custom);
 
     OutputFormat fileFormat() const;
@@ -66,7 +68,7 @@ public:
     void setConflictRule(FileSaveConflictBox::ConflictRule r);
 
     QString extension() const;
-    QString typeMime() const;
+    QString typeMime()  const;
 
     void resetToDefault();
 

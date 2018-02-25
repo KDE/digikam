@@ -42,6 +42,8 @@ public:
     explicit DMetaInfoIface(QObject* const, const QList<QUrl>&);
     ~DMetaInfoIface();
 
+public:
+
     QList<QUrl> currentSelectedItems()            const;
     QList<QUrl> currentAlbumItems()               const;
     QList<QUrl> allAlbumItems()                   const;

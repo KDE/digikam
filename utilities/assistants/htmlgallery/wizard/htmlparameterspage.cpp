@@ -53,7 +53,7 @@ class HTMLParametersPage::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : content(0)
     {
     }

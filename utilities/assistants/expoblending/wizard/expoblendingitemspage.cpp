@@ -49,9 +49,9 @@ class ItemsPage::Private
 {
 public:
 
-    Private()
-        : list(0),
-          mngr(0)
+    explicit Private()
+      : list(0),
+        mngr(0)
     {
     }
 

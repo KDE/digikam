@@ -47,9 +47,9 @@ class ExpoBlendingIntroPage::Private
 {
 public:
 
-    Private(ExpoBlendingManager* const m)
-        : mngr(m),
-          binariesWidget(0)
+    explicit Private(ExpoBlendingManager* const m)
+      : mngr(m),
+        binariesWidget(0)
     {
     }
 

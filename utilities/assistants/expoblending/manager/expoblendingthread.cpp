@@ -81,11 +81,11 @@ class ExpoBlendingThread::Private
 {
 public:
 
-    Private()
-        : cancel(false),
-          align(false),
-          enfuseVersion4x(true),
-          rawObserver(0)
+    explicit Private()
+      : cancel(false),
+        align(false),
+        enfuseVersion4x(true),
+        rawObserver(0)
     {
     }
 

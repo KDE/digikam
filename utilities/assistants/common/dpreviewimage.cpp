@@ -55,10 +55,24 @@ namespace Digikam
 {
 
 static const qreal   selMargin = 8.0;
-static const QPointF boundMargin(selMargin,selMargin);
+static const QPointF boundMargin(selMargin, selMargin);
 
-struct DSelectionItem::Private
+class DSelectionItem::Private
 {
+public:
+    
+    explicit Private()
+    {
+        selMargin   = 0.0;
+        invZoom     = 1.0;
+        maxX        = 0.0;
+        maxY        = 0.0;
+        showAnchors = true;
+        hasMaxX     = false;
+        hasMaxY     = false;
+        hasMax      = false;
+    }
+    
     QPen        penDark;
     QPen        penLight;
     QPen        penAnchors;
@@ -85,15 +99,9 @@ DSelectionItem::DSelectionItem(const QRectF& rect)
     : QGraphicsItem(),
       d(new Private)
 {
-    d->invZoom     = 1;
-    d->selMargin   = selMargin;
-    d->showAnchors = true;
-    d->hasMaxX     = false;
-    d->hasMaxY     = false;
-    d->hasMax      = false;
+    d->selMargin = selMargin;
     setRect(rect);
 
-    // FIXME We should probably use some standard KDE color here and not hard code it
     d->penDark.setColor(Qt::black);
     d->penDark.setStyle(Qt::SolidLine);
     d->penLight.setColor(Qt::white);
@@ -272,6 +280,7 @@ void DSelectionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, Q
     {
         painter->setPen(d->penAnchors);
         painter->setOpacity(0.4);
+
         if (!d->anchorTop.isNull())
         {
             painter->drawLine(d->anchorTop);
@@ -417,7 +426,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
         : mouseDragAction(NONE),
           lastdx(0),
           lastdy(0),
@@ -438,27 +447,27 @@ public:
     {
     }
 
-    int                         lastdx;
-    int                         lastdy;
+    int                        lastdx;
+    int                        lastdy;
 
-    QGraphicsScene*             scene;
-    QGraphicsPixmapItem*        pixmapItem;
+    QGraphicsScene*            scene;
+    QGraphicsPixmapItem*       pixmapItem;
     DSelectionItem*            selection;
-    bool                        enableSelection;
+    bool                       enableSelection;
     DSelectionItem::Intersects mouseZone;
-    QPointF                     lastMousePoint;
+    QPointF                    lastMousePoint;
 
-    QAction*                    zoomInAction;
-    QAction*                    zoomOutAction;
-    QAction*                    zoom2FitAction;
+    QAction*                   zoomInAction;
+    QAction*                   zoomOutAction;
+    QAction*                   zoom2FitAction;
 
-    QToolBar*                   toolBar;
+    QToolBar*                  toolBar;
 
-    QGraphicsRectItem*          highLightLeft;
-    QGraphicsRectItem*          highLightRight;
-    QGraphicsRectItem*          highLightTop;
-    QGraphicsRectItem*          highLightBottom;
-    QGraphicsRectItem*          highLightArea;
+    QGraphicsRectItem*         highLightLeft;
+    QGraphicsRectItem*         highLightRight;
+    QGraphicsRectItem*         highLightTop;
+    QGraphicsRectItem*         highLightBottom;
+    QGraphicsRectItem*         highLightArea;
 };
 
 DPreviewImage::DPreviewImage(QWidget* const parent)
@@ -470,10 +479,10 @@ DPreviewImage::DPreviewImage(QWidget* const parent)
     setMouseTracking(true);
     setCacheMode(QGraphicsView::CacheBackground);
 
-    d->scene      = new QGraphicsScene;
-    d->pixmapItem = new QGraphicsPixmapItem;
+    d->scene           = new QGraphicsScene;
+    d->pixmapItem      = new QGraphicsPixmapItem;
 
-    d->selection  = new DSelectionItem(QRectF());
+    d->selection       = new DSelectionItem(QRectF());
     d->selection->setZValue(10);
     d->selection->setVisible(false);
     d->enableSelection = false;
@@ -518,17 +527,23 @@ DPreviewImage::DPreviewImage(QWidget* const parent)
     d->zoomInAction = new QAction(QIcon::fromTheme(QString::fromLatin1("zoom-in")), i18n("Zoom In"), this);
     d->zoomInAction->setToolTip(i18n("Zoom In"));
     d->zoomInAction->setShortcut(Qt::Key_Plus);
-    connect(d->zoomInAction, &QAction::triggered, this, &DPreviewImage::slotZoomIn);
+
+    connect(d->zoomInAction, &QAction::triggered,
+            this, &DPreviewImage::slotZoomIn);
 
     d->zoomOutAction = new QAction(QIcon::fromTheme(QString::fromLatin1("zoom-out")), i18n("Zoom Out"), this);
     d->zoomOutAction->setToolTip(i18n("Zoom Out"));
     d->zoomOutAction->setShortcut(Qt::Key_Minus);
-    connect(d->zoomOutAction, &QAction::triggered, this, &DPreviewImage::slotZoomOut);
+
+    connect(d->zoomOutAction, &QAction::triggered,
+            this, &DPreviewImage::slotZoomOut);
 
     d->zoom2FitAction = new QAction(QIcon::fromTheme(QString::fromLatin1("zoom-fit-best")), i18n("Zoom to Fit"), this);
     d->zoom2FitAction->setToolTip(i18n("Zoom to Fit"));
     d->zoom2FitAction->setShortcut(Qt::Key_Asterisk);
-    connect(d->zoom2FitAction, &QAction::triggered, this, &DPreviewImage::slotZoom2Fit);
+
+    connect(d->zoom2FitAction, &QAction::triggered,
+            this, &DPreviewImage::slotZoom2Fit);
 
     addAction(d->zoomInAction);
     addAction(d->zoomOutAction);
@@ -866,7 +881,7 @@ void DPreviewImage::mouseMoveEvent(QMouseEvent* e)
             d->lastdx = e->x();
             d->lastdy = e->y();
         }
-        else if (d->mouseDragAction == Private::DRAWSELECTION ||
+        else if (d->mouseDragAction == Private::DRAWSELECTION  ||
                  d->mouseDragAction == Private::EXPANDORSHRINK ||
                  d->mouseDragAction == Private::MOVESELECTION)
         {
@@ -1174,7 +1189,7 @@ void DPreviewImage::updateSelVisibility()
 {
     if ((d->selection->rect().width()  > 0.001) &&
         (d->selection->rect().height() > 0.001) &&
-        ((d->scene->width() - d->selection->rect().width() > 0.1) ||
+        ((d->scene->width() - d->selection->rect().width()  > 0.1) ||
         (d->scene->height() - d->selection->rect().height() > 0.1)))
     {
         d->selection->setVisible(true);

@@ -48,13 +48,13 @@ class ExpoBlendingWizard::Private
 {
 public:
 
-    Private()
-        : mngr(0),
-          introPage(0),
-          itemsPage(0),
-          preProcessingPage(0),
-          lastPage(0),
-          preProcessed(false)
+    explicit Private()
+      : mngr(0),
+        introPage(0),
+        itemsPage(0),
+        preProcessingPage(0),
+        lastPage(0),
+        preProcessed(false)
     {
     }
 

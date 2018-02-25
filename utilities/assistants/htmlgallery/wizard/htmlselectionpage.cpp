@@ -41,7 +41,7 @@ class HTMLSelectionPage::Private
 {
 public:
 
-    Private(QWizard* const dialog)
+    explicit Private(QWizard* const dialog)
       : albumSupport(false),
         albumSelector(0),
         imageList(0),

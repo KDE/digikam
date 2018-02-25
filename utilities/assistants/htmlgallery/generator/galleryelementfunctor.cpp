@@ -46,8 +46,6 @@
 #include "drawdecoder.h"
 #include "rawinfo.h"
 
-
-
 namespace Digikam
 {
 

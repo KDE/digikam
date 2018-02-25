@@ -118,7 +118,7 @@ DPreviewManager::DPreviewManager(QWidget* const parent)
     hboxLay->setStretchFactor(space4, 10);
     hboxLay->setStretchFactor(space5, 10);
 
-    QLabel* const space6 = new QLabel(vbox);
+    QLabel* const space6       = new QLabel(vbox);
 
     vboxLay->addWidget(space1);
     vboxLay->addWidget(d->progressLabel);

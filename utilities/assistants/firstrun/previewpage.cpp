@@ -49,8 +49,8 @@ class PreviewPage::Private
 {
 public:
 
-    Private() :
-        loadReduced(0),
+    explicit Private()
+      : loadReduced(0),
         loadimage(0),
         previewBehavior(0)
     {
@@ -58,7 +58,6 @@ public:
 
     QRadioButton* loadReduced;
     QRadioButton* loadimage;
-
     QButtonGroup* previewBehavior;
 };
 

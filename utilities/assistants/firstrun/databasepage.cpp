@@ -49,8 +49,8 @@ class DatabasePage::Private
 {
 public:
 
-    Private() :
-        dbsettingswidget(0)
+    explicit Private()
+      : dbsettingswidget(0)
     {
     }
 

@@ -51,8 +51,8 @@ class EnfuseStackItem::Private
 {
 public:
 
-    Private()
-        : asValidThumb(false)
+    explicit Private()
+      : asValidThumb(false)
     {
     }
 
@@ -145,12 +145,12 @@ class EnfuseStackList::Private
 {
 public:
 
-    Private()
-        : outputFormat(DSaveSettingsWidget::OUTPUT_PNG),
-          progressCount(0),
-          progressTimer(0),
-          progressPix(DWorkingPixmap()),
-          processItem(0)
+    explicit Private()
+      : outputFormat(DSaveSettingsWidget::OUTPUT_PNG),
+        progressCount(0),
+        progressTimer(0),
+        progressPix(DWorkingPixmap()),
+        processItem(0)
     {
     }
 

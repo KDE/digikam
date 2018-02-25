@@ -160,6 +160,7 @@ BracketStackItem* BracketStackList::findItem(const QUrl& url)
         {
             return lvItem;
         }
+
         ++it;
     }
 

@@ -49,8 +49,8 @@ class TooltipsPage::Private
 {
 public:
 
-    Private() :
-        showTooltips(0),
+    explicit Private()
+      : showTooltips(0),
         hideTooltips(0),
         tooltipsBehavior(0)
     {
@@ -58,7 +58,6 @@ public:
 
     QRadioButton* showTooltips;
     QRadioButton* hideTooltips;
-
     QButtonGroup* tooltipsBehavior;
 };
 

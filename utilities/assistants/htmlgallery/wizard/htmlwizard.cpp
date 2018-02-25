@@ -61,7 +61,7 @@ class HTMLWizard::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : info(0),
         configManager(0),
         introPage(0),

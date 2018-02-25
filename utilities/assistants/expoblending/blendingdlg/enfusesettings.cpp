@@ -78,18 +78,18 @@ class EnfuseSettingsWidget::Private
 {
 public:
 
-    Private()
-        : autoLevelsCB(0),
-          hardMaskCB(0),
-          ciecam02CB(0),
-          levelsLabel(0),
-          exposureLabel(0),
-          saturationLabel(0),
-          contrastLabel(0),
-          levelsInput(0),
-          exposureInput(0),
-          saturationInput(0),
-          contrastInput(0)
+    explicit Private()
+      : autoLevelsCB(0),
+        hardMaskCB(0),
+        ciecam02CB(0),
+        levelsLabel(0),
+        exposureLabel(0),
+        saturationLabel(0),
+        contrastLabel(0),
+        levelsInput(0),
+        exposureInput(0),
+        saturationInput(0),
+        contrastInput(0)
     {
     }
 
@@ -117,9 +117,9 @@ EnfuseSettingsWidget::EnfuseSettingsWidget(QWidget* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* const grid = new QGridLayout(this);
 
     // ------------------------------------------------------------------------
 

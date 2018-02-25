@@ -46,7 +46,7 @@ class ExpoBlendingLastPage::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         mngr = 0;
     }

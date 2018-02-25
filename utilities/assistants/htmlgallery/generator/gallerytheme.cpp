@@ -63,7 +63,7 @@ class GalleryTheme::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : desktopFile(0)
     {
     }

@@ -48,8 +48,8 @@ class MetadataPage::Private
 {
 public:
 
-    Private() :
-        doNothing(0),
+    explicit Private()
+      : doNothing(0),
         storeInFiles(0),
         metadataStorage(0)
     {
@@ -57,7 +57,6 @@ public:
 
     QRadioButton* doNothing;
     QRadioButton* storeInFiles;
-
     QButtonGroup* metadataStorage;
 };
 

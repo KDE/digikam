@@ -58,8 +58,8 @@ class MigrateFromDigikam4Page::Private
 {
 public:
 
-    Private() :
-        migrateBehavior(0),
+    explicit Private()
+      : migrateBehavior(0),
         migrate(0),
         createnew(0)
     {
