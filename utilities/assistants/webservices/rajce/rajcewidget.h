@@ -85,7 +85,7 @@ private:
     void setEnabledWidgets(bool);
 
 private:
-    
+
     class Private;
     Private* const d;
 };
