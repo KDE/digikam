@@ -297,6 +297,8 @@ void DIO::del(const PAlbum* const album, bool useTrash)
     instance()->createJob(useTrash ? Trash : Delete, QList<QUrl>() << album->fileUrl(), QUrl());
 }
 
+// ------------------------------------------------------------------------------------------------
+
 void DIO::imagesToAlbum(int operation, const QList<ImageInfo>& infos, const PAlbum* const dest)
 {
     // this is a fast db operation, do here
@@ -335,7 +337,7 @@ void DIO::imagesToAlbum(int operation, const QList<ImageInfo>& infos, const PAlb
 void DIO::albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest)
 {
     ScanController::instance()->hintAtMoveOrCopyOfAlbum(src, dest);
-    instance()->createJob(operation, QList<QUrl>() << src->fileUrl(), dest->fileUrl());
+    createJob(operation, QList<QUrl>() << src->fileUrl(), dest->fileUrl());
 }
 
 void DIO::filesToAlbum(int operation, const QList<QUrl>& srcList, const PAlbum* const dest)
@@ -382,13 +384,13 @@ void DIO::processJob(int operation, const QList<QUrl>& srcList, const QUrl& dest
 {
     SidecarFinder finder(srcList);
 
-    instance()->createJob(operation, finder.localFiles, dest);
+    createJob(operation, finder.localFiles, dest);
 
     if (!finder.remoteFiles.isEmpty())
     {
-        instance()->createJob(operation, finder.remoteFiles, dest);
+        createJob(operation, finder.remoteFiles, dest);
         // stat'ing is unreliable; just try to copy and suppress error message
-        instance()->createJob(operation | SourceStatusUnknown, finder.possibleRemoteSidecars, dest);
+        createJob(operation | SourceStatusUnknown, finder.possibleRemoteSidecars, dest);
     }
 }
 
@@ -400,8 +402,8 @@ void DIO::processRename(const QUrl& src, const QUrl& dest)
     {
         for (int i = 0 ; i < finder.localFiles.length() ; ++i)
         {
-            instance()->createJob(Rename, QList<QUrl>() << finder.localFiles.at(i),
-                        QUrl::fromLocalFile(dest.toLocalFile() + finder.localFileSuffixes.at(i)));
+            createJob(Rename, QList<QUrl>() << finder.localFiles.at(i),
+                      QUrl::fromLocalFile(dest.toLocalFile() + finder.localFileSuffixes.at(i)));
         }
 
         return;
@@ -409,12 +411,12 @@ void DIO::processRename(const QUrl& src, const QUrl& dest)
 
     for (int i = 0 ; i < finder.remoteFileSuffixes.length() ; ++i)
     {
-        instance()->createJob(Rename | SourceStatusUnknown,
-                    QList<QUrl>() << finder.possibleRemoteSidecars.at(i),
-                    QUrl::fromLocalFile(dest.toLocalFile() + finder.possibleRemoteSidecarSuffixes.at(i)));
+        createJob(Rename | SourceStatusUnknown,
+                  QList<QUrl>() << finder.possibleRemoteSidecars.at(i),
+                  QUrl::fromLocalFile(dest.toLocalFile() + finder.possibleRemoteSidecarSuffixes.at(i)));
     }
 
-    instance()->createJob(Rename, QList<QUrl>() << src, dest);
+    createJob(Rename, QList<QUrl>() << src, dest);
 }
 
 void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
