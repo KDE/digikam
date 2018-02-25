@@ -53,13 +53,13 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void updateLabels(const QString& name = QString(),
-                      const QString& url = QString()) Q_DECL_OVERRIDE;
+    void slotStartUpload();
+    
+public:
+
     void reactivate();
-
-    void startUpload();
     void cancelUpload();
-
+    
     void writeSettings();
     void readSettings();
 
@@ -82,6 +82,9 @@ private Q_SLOTS:
 
 private:
 
+    void updateLabels(const QString& name = QString(),
+                      const QString& url = QString()) Q_DECL_OVERRIDE;
+    
     void setEnabledWidgets(bool);
 
 private:

@@ -56,7 +56,7 @@ RajceWindow::RajceWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     m_widget->setMinimumSize(700, 500);
 
     connect(startButton(), SIGNAL(clicked()),
-            m_widget, SLOT(startUpload()));
+            m_widget, SLOT(slotStartUpload()));
 
     connect(this, SIGNAL(finished(int)),
             this, SLOT(slotFinished()));

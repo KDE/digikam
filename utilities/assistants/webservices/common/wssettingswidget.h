@@ -61,6 +61,7 @@ public:
                               const QString& toolName);
     ~WSSettingsWidget();
 
+public:
 
     void              replaceImageList(QWidget* const widget);
     void              addWidgetToSettingsBox(QWidget* const widget);

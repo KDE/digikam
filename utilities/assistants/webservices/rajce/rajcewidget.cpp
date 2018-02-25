@@ -367,7 +367,7 @@ void RajceWidget::slotCreateAlbum()
     delete dlg;
 }
 
-void RajceWidget::startUpload()
+void RajceWidget::slotStartUpload()
 {
     d->talker->clearLastError();
     setEnabledWidgets(false);
