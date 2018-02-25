@@ -44,6 +44,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QStack>
+#include <QPointer>
 
 // KDE includes
 
@@ -284,13 +285,13 @@ void YFWindow::updateLabels()
     if (d->talker.isAuthenticated())
     {
         logintext = d->talker.login();
-        urltext = YFTalker::USERPAGE_URL.arg(d->talker.login());
+        urltext   = YFTalker::USERPAGE_URL.arg(d->talker.login());
         d->albumsBox->setEnabled(true);
     }
     else
     {
         logintext = i18n("Unauthorized");
-        urltext = YFTalker::USERPAGE_DEFAULT_URL;
+        urltext   = YFTalker::USERPAGE_DEFAULT_URL;
         d->albumsCombo->clear();
     }
 

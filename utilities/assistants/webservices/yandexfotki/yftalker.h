@@ -27,16 +27,15 @@
 // Qt includes
 
 #include <QObject>
-#include <QPointer>
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
+#include <QString>
+#include <QDomElement>
 
 // Local includes
 
 #include "yfphoto.h"
 #include "yfalbum.h"
 
-class QDomElement;
+class QNetworkReply;
 
 namespace Digikam
 {
@@ -74,22 +73,22 @@ public:
         STATE_GETTOKEN_ERROR         = STATE_UNAUTHENTICATED | STATE_ERROR | 0xc,
         STATE_GETTOKEN_DONE          = STATE_AUTHENTICATED, // simple alias
 
-        STATE_LISTALBUMS             = STATE_AUTHENTICATED | 0x1,
-        STATE_LISTALBUMS_ERROR       = STATE_AUTHENTICATED | STATE_ERROR | 0x2,
+        STATE_LISTALBUMS             = STATE_AUTHENTICATED   | 0x1,
+        STATE_LISTALBUMS_ERROR       = STATE_AUTHENTICATED   | STATE_ERROR | 0x2,
         STATE_LISTALBUMS_DONE        = STATE_AUTHENTICATED,
 
-        STATE_LISTPHOTOS             = STATE_AUTHENTICATED | 0x4,
-        STATE_LISTPHOTOS_ERROR       = STATE_AUTHENTICATED | STATE_ERROR | 0x5,
+        STATE_LISTPHOTOS             = STATE_AUTHENTICATED   | 0x4,
+        STATE_LISTPHOTOS_ERROR       = STATE_AUTHENTICATED   | STATE_ERROR | 0x5,
         STATE_LISTPHOTOS_DONE        = STATE_AUTHENTICATED,
 
-        STATE_UPDATEPHOTO_FILE       = STATE_AUTHENTICATED | 0x7,
-        STATE_UPDATEPHOTO_FILE_ERROR = STATE_AUTHENTICATED | STATE_ERROR | 0x8,
-        STATE_UPDATEPHOTO_INFO       = STATE_AUTHENTICATED | 0x9,
-        STATE_UPDATEPHOTO_INFO_ERROR = STATE_AUTHENTICATED | STATE_ERROR | 0xa,
+        STATE_UPDATEPHOTO_FILE       = STATE_AUTHENTICATED   | 0x7,
+        STATE_UPDATEPHOTO_FILE_ERROR = STATE_AUTHENTICATED   | STATE_ERROR | 0x8,
+        STATE_UPDATEPHOTO_INFO       = STATE_AUTHENTICATED   | 0x9,
+        STATE_UPDATEPHOTO_INFO_ERROR = STATE_AUTHENTICATED   | STATE_ERROR | 0xa,
         STATE_UPDATEPHOTO_DONE       = STATE_AUTHENTICATED,
 
-        STATE_UPDATEALBUM            = STATE_AUTHENTICATED | 0xb,
-        STATE_UPDATEALBUM_ERROR      = STATE_AUTHENTICATED | STATE_ERROR | 0xc,
+        STATE_UPDATEALBUM            = STATE_AUTHENTICATED   | 0xb,
+        STATE_UPDATEALBUM_ERROR      = STATE_AUTHENTICATED   | STATE_ERROR | 0xc,
         STATE_UPDATEALBUM_DONE       = STATE_AUTHENTICATED
     };
 
@@ -102,65 +101,18 @@ public:
 
     // Fields
 
-    State state() const
-    {
-        return m_state;
-    }
-
-    const QString& sessionKey() const
-    {
-        return m_sessionKey;
-    }
-
-    const QString& sessionId() const
-    {
-        return m_sessionId;
-    }
-
-    const QString& token() const
-    {
-        return m_token;
-    }
-
-    const QString& login() const
-    {
-        return m_login;
-    }
-
-    void setLogin(const QString& login)
-    {
-        m_login = login;
-    }
-
-    const QString& password() const
-    {
-        return m_password;
-    }
-
-    void setPassword(const QString& password)
-    {
-        m_password = password;
-    }
-
-    bool isAuthenticated() const
-    {
-        return (m_state & STATE_AUTHENTICATED) != 0;
-    }
-
-    bool isErrorState() const
-    {
-        return (m_state & STATE_ERROR) != 0;
-    }
-
-    const QList<YandexFotkiAlbum>& albums() const
-    {
-        return m_albums;
-    }
-
-    const QList<YFPhoto>& photos() const
-    {
-        return m_photos;
-    }
+    State state()                           const;
+    const QString& sessionKey()             const;
+    const QString& sessionId()              const;
+    const QString& token()                  const;
+    const QString& login()                  const;
+    void setLogin(const QString& login);
+    const QString& password()               const;
+    void setPassword(const QString& password);
+    bool isAuthenticated()                  const;
+    bool isErrorState()                     const;
+    const QList<YandexFotkiAlbum>& albums() const;
+    const QList<YFPhoto>& photos()          const;
 
 public:
 
@@ -234,45 +186,8 @@ private:
 
 private:
 
-    // constants
-    static const QString SESSION_URL; // use QString insted of QUrl, we need .arg
-    static const QString TOKEN_URL;
-    static const QString SERVICE_URL;
-    static const QString AUTH_REALM;
-    static const QString ACCESS_STRINGS[];
-
-private:
-
-    // API-related fields
-    QString                 m_sessionKey;
-    QString                 m_sessionId;
-    QString                 m_token;
-    QString                 m_login;
-    QString                 m_password;
-    QString                 m_apiAlbumsUrl;
-    QString                 m_apiPhotosUrl;
-    QString                 m_apiTagsUrl;
-
-    // FSM data
-    State                   m_state;
-    // temporary data
-    YFPhoto*                m_lastPhoto;
-    QString                 m_lastPhotosUrl;
-
-    // for albums pagination in listAlbums()
-    QList<YandexFotkiAlbum> m_albums;
-
-    QString                 m_albumsNextUrl;
-
-    QList<YFPhoto> m_photos;
-    QString                 m_photosNextUrl;
-
-    QNetworkAccessManager*  m_netMngr;
-
-    QNetworkReply*          m_reply;
-
-    // Data buffer
-    QByteArray              m_buffer;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
