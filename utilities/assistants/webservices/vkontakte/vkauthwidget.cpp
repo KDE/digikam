@@ -46,7 +46,7 @@ class VKAuthWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         vkapi            = 0;
         userId           = -1;
@@ -138,14 +138,14 @@ void VKAuthWidget::slotStartGetUserInfo()
 void VKAuthWidget::slotGetUserInfoDone(KJob* kjob)
 {
     Vkontakte::UserInfoJob* const job = dynamic_cast<Vkontakte::UserInfoJob*>(kjob);
-    Q_ASSERT(job);                                      
+    Q_ASSERT(job);
 
-    if (job && job->error())                            
-    {                                                   
-        handleVkError(job);                             
-        return;                                         
+    if (job && job->error())
+    {
+        handleVkError(job);
+        return;
     }
-    
+
     if (!job)
         return;
 

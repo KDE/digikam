@@ -91,7 +91,7 @@ private:
     void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 
 private:
-    
+
     class Private;
     Private* const d;
 };

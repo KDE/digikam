@@ -55,7 +55,7 @@ class VKAlbumChooser::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         albumsCombo        = 0;
         newAlbumButton     = 0;
@@ -66,23 +66,22 @@ public:
         vkapi              = 0;
     }
 
-    QComboBox*                     albumsCombo;
-    QPushButton*                   newAlbumButton;
-    QPushButton*                   reloadAlbumsButton;
-    QToolButton*                   editAlbumButton;
-    QToolButton*                   deleteAlbumButton;
+    QComboBox*                  albumsCombo;
+    QPushButton*                newAlbumButton;
+    QPushButton*                reloadAlbumsButton;
+    QToolButton*                editAlbumButton;
+    QToolButton*                deleteAlbumButton;
 
-    QList<Vkontakte::AlbumInfo>    albums;
+    QList<Vkontakte::AlbumInfo> albums;
 
     /** Album with this "aid" will
-     *  be selected in 
-     *  slotAlbumsReloadDone()
+     *  be selected in slotAlbumsReloadDone()
      */
-    int                            albumToSelect;
+    int                         albumToSelect;
 
-    Vkontakte::VkApi*              vkapi;
-};    
-    
+    Vkontakte::VkApi*           vkapi;
+};
+
 VKAlbumChooser::VKAlbumChooser(QWidget* const parent,
                                Vkontakte::VkApi* const vkapi)
     : QGroupBox(i18nc("@title:group Header above controls for managing albums", "Album"), parent),
@@ -302,12 +301,12 @@ void VKAlbumChooser::slotStartAlbumEditing(int aid, const VKNewAlbumDlg::AlbumPr
 void VKAlbumChooser::slotAlbumEditingDone(KJob* kjob)
 {
     Vkontakte::EditAlbumJob* const job = dynamic_cast<Vkontakte::EditAlbumJob*>(kjob);
-    Q_ASSERT(job);                                      
+    Q_ASSERT(job);
 
-    if (job && job->error())                            
-    {                                                   
-        handleVkError(job);                             
-        return;                                         
+    if (job && job->error())
+    {
+        handleVkError(job);
+        return;
     }
 
     slotStartAlbumsReload();
@@ -352,12 +351,12 @@ void VKAlbumChooser::slotStartAlbumDeletion(int aid)
 void VKAlbumChooser::slotAlbumDeletionDone(KJob* kjob)
 {
     Vkontakte::DeleteAlbumJob* const job = dynamic_cast<Vkontakte::DeleteAlbumJob*>(kjob);
-    Q_ASSERT(job);                                      
+    Q_ASSERT(job);
 
-    if (job && job->error())                            
-    {                                                   
-        handleVkError(job);                             
-        return;                                         
+    if (job && job->error())
+    {
+        handleVkError(job);
+        return;
     }
 
     slotStartAlbumsReload();

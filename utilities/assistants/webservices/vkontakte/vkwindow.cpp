@@ -68,7 +68,7 @@ class VKWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         import        = false;
         mainWidget    = 0;
@@ -83,7 +83,7 @@ public:
         vkapi         = 0;
         albumToSelect = -1;
     }
-     
+
     bool              import;
 
     /// User interface

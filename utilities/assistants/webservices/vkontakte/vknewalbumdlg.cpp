@@ -54,7 +54,7 @@ class VKNewAlbumDlg::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         titleEdit            = 0;
         summaryEdit          = 0;
