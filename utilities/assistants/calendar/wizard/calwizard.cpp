@@ -61,7 +61,7 @@ class CalWizard::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         introPage     = 0;
         cSettings     = 0;

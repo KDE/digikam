@@ -42,7 +42,7 @@ class DMetaInfoIface::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         dirSelector = 0;
     }

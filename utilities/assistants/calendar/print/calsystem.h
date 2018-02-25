@@ -66,6 +66,8 @@ public:
 
     CalSystem& operator=(const CalSystem& other);
 
+public:
+
     CalSystem::CalendarSystem calendarSystem() const;
 
     QDate epoch()             const;

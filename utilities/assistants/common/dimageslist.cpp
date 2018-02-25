@@ -72,7 +72,7 @@ class DImagesListViewItem::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         rating   = -1;
         view     = 0;
@@ -467,7 +467,7 @@ class DImagesList::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         listView               = 0;
         addButton              = 0;

@@ -54,7 +54,7 @@ class DPreviewManager::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         progressPix   = DWorkingPixmap();
         progressCount = 0;
@@ -67,19 +67,19 @@ public:
         button        = 0;
     }
 
-    bool                       busy;
+    bool           busy;
 
-    QLabel*                    textLabel;
-    QLabel*                    thumbLabel;
+    QLabel*        textLabel;
+    QLabel*        thumbLabel;
 
-    QPushButton*               button;
+    QPushButton*   button;
 
-    int                        progressCount;
-    DWorkingPixmap            progressPix;
-    QTimer*                    progressTimer;
-    QLabel*                    progressLabel;
+    int            progressCount;
+    DWorkingPixmap progressPix;
+    QTimer*        progressTimer;
+    QLabel*        progressLabel;
 
-    DPreviewImage*            preview;
+    DPreviewImage* preview;
 };
 
 DPreviewManager::DPreviewManager(QWidget* const parent)

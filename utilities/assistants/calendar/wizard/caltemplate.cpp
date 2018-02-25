@@ -45,8 +45,8 @@ class CalTemplate::Private
 {
 public:
 
-    Private() :
-        MAX_MONTHS(13)
+    explicit Private()
+      : MAX_MONTHS(13)
     {
     }
 

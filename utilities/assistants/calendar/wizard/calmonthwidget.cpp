@@ -55,8 +55,8 @@ class CalMonthWidget::Private
 {
 public:
 
-    Private() :
-        thumbSize(QSize(64, 64)),
+    explicit Private()
+      : thumbSize(QSize(64, 64)),
         month(0),
         thumbLoadThread(ThumbnailLoadThread::defaultThread())
     {

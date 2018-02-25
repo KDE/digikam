@@ -42,7 +42,7 @@ class DSaveSettingsWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         formatLabel    = 0;
         formatComboBox = 0;

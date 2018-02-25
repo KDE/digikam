@@ -40,7 +40,7 @@ class DWizardPage::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         hlay          = 0;
         logo          = 0;
@@ -51,16 +51,16 @@ public:
         dlg           = 0;
     }
 
-    bool            isComplete;
-    int             id;
+    bool         isComplete;
+    int          id;
 
-    QWidget*        leftView;
-    QLabel*         logo;
-    QLabel*         leftBottomPix;
+    QWidget*     leftView;
+    QLabel*      logo;
+    QLabel*      leftBottomPix;
 
-    QHBoxLayout*    hlay;
+    QHBoxLayout* hlay;
 
-    QWizard*        dlg;
+    QWizard*     dlg;
 };
 
 DWizardPage::DWizardPage(QWizard* const dlg, const QString& title)

@@ -34,7 +34,7 @@ class CalSystemPrivate : public QSharedData
 {
 public:
 
-    CalSystemPrivate(CalSystem::CalendarSystem calendar);
+    explicit CalSystemPrivate(CalSystem::CalendarSystem calendar);
 
     CalSystem::CalendarSystem calendarSystem()                         const;
     qint64 epoch()                                                     const;
