@@ -196,7 +196,7 @@ void DIO::copy(const PAlbum* const src, const PAlbum* const dest)
     instance()->albumToAlbum(Copy, src, dest);
 }
 
-void DIO::move(const PAlbum* src, const PAlbum* const dest)
+void DIO::move(const PAlbum* const src, const PAlbum* const dest)
 {
     if (!src || !dest)
     {
@@ -442,7 +442,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
         }
 
         item->setTotalItems(item->totalItems() + src.count());
-        jobThread = IOJobsManager::instance()->startCopy(operation, src, dest);
+        jobThread = IOJobsManager::instance()->startCopy(Copy, src, dest);
     }
     else if (operation == Move)
     {
@@ -455,7 +455,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
         }
 
         item->setTotalItems(item->totalItems() + src.count());
-        jobThread = IOJobsManager::instance()->startMove(operation, src, dest);
+        jobThread = IOJobsManager::instance()->startMove(Move, src, dest);
     }
     else if (operation == Rename)
     {
@@ -465,13 +465,13 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
             return;
         }
 
-        jobThread = IOJobsManager::instance()->startRenameFile(operation, src.first(), dest);
+        jobThread = IOJobsManager::instance()->startRenameFile(Rename, src.first(), dest);
 
         connect(jobThread, SIGNAL(signalRenamed(QUrl,QUrl)),
                 this, SLOT(slotRenamed(QUrl,QUrl)));
 
         connect(jobThread, SIGNAL(signalRenameFailed(QUrl)),
-                this, SIGNAL(imageRenameFailed(QUrl)));
+                this, SIGNAL(signalRenameFailed(QUrl)));
     }
     else if (operation == Trash)
     {
@@ -484,7 +484,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
         }
 
         item->setTotalItems(item->totalItems() + src.count());
-        jobThread = IOJobsManager::instance()->startDelete(operation, src);
+        jobThread = IOJobsManager::instance()->startDelete(Trash, src);
     }
     else // operation == Del
     {
@@ -498,7 +498,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
 
         qCDebug(DIGIKAM_DATABASE_LOG) << "SRCS " << src;
         item->setTotalItems(item->totalItems() + src.count());
-        jobThread = IOJobsManager::instance()->startDelete(operation, src, false);
+        jobThread = IOJobsManager::instance()->startDelete(Delete, src, false);
     }
 
     if (flags & SourceStatusUnknown)
@@ -568,7 +568,7 @@ void DIO::slotRenamed(const QUrl& oldUrl, const QUrl& newUrl)
     // clean LoadingCache as well - be pragmatic, do it here.
     LoadingCacheInterface::fileChanged(newUrl.toLocalFile());
 
-    emit imageRenameSucceeded(oldUrl);
+    emit signalRenameSucceeded(oldUrl);
 }
 
 ProgressItem* DIO::getProgressItem(int operation)

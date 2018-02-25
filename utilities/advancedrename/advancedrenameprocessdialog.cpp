@@ -74,10 +74,10 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
 
-    connect(DIO::instance(), SIGNAL(imageRenameSucceeded(QUrl)),
-            this, SLOT(slotRenameSuccess(QUrl)));
+    connect(DIO::instance(), SIGNAL(signalRenameSucceeded(QUrl)),
+            this, SLOT(slotRenameSuccessded(QUrl)));
 
-    connect(DIO::instance(), SIGNAL(imageRenameFailed(QUrl)),
+    connect(DIO::instance(), SIGNAL(signalRenameFailed(QUrl)),
             this, SLOT(slotRenameFailed(QUrl)));
 
     setValue(0);
@@ -158,7 +158,7 @@ void AdvancedRenameProcessDialog::slotCancel()
     done(QDialogButtonBox::Cancel);
 }
 
-void AdvancedRenameProcessDialog::slotRenameSuccess(const QUrl& src)
+void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& src)
 {
     if (d->cancel || d->currentUrl != src)
     {

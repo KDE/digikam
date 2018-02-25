@@ -67,7 +67,7 @@ public:
     static void copy(const QList<QUrl>& srcList, const PAlbum* const dest);
 
     /// Move an album into another album
-    static void move(const PAlbum* src, const PAlbum* const dest);
+    static void move(const PAlbum* const src, const PAlbum* const dest);
 
     /// Move items to another album
     static void move(const QList<ImageInfo>& infos, const PAlbum* const dest);
@@ -89,8 +89,8 @@ public:
 
 Q_SIGNALS:
 
-    void imageRenameSucceeded(const QUrl&);
-    void imageRenameFailed(const QUrl&);
+    void signalRenameSucceeded(const QUrl&);
+    void signalRenameFailed(const QUrl&);
 
 private:
 
