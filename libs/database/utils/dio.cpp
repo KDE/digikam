@@ -24,7 +24,6 @@
  * ============================================================ */
 
 #include "dio.h"
-#include "dio_p.h"
 
 // Qt includes
 
@@ -157,53 +156,148 @@ void GroupedImagesFinder::process(const QList<ImageInfo>& source)
 
 // ------------------------------------------------------------------------------------------------
 
-DIO::Private::Private(DIO* const qq)
-    : q(qq)
+class DIOCreator
 {
-    connect(this, SIGNAL(jobToCreate(int,QList<QUrl>,QUrl)),
-            q, SLOT(createJob(int,QList<QUrl>,QUrl)));
+public:
+
+    DIO object;
+};
+
+Q_GLOBAL_STATIC(DIOCreator, creator)
+
+// ------------------------------------------------------------------------------------------------
+
+DIO* DIO::instance()
+{
+    return &creator->object;
 }
 
-void DIO::Private::processJob(int operation, const QList<QUrl>& srcList, const QUrl& dest)
+DIO::DIO()
 {
-    SidecarFinder finder(srcList);
-
-    emit jobToCreate(operation, finder.localFiles, dest);
-
-    if (!finder.remoteFiles.isEmpty())
-    {
-        emit jobToCreate(operation, finder.remoteFiles, dest);
-        // stat'ing is unreliable; just try to copy and suppress error message
-        emit jobToCreate(operation | SourceStatusUnknown, finder.possibleRemoteSidecars, dest);
-    }
 }
 
-void DIO::Private::processRename(const QUrl& src, const QUrl& dest)
+DIO::~DIO()
 {
-    SidecarFinder finder(src);
+}
 
-    if (src.isLocalFile())
+void DIO::cleanUp()
+{
+}
+
+// Album -> Album -----------------------------------------------------
+
+void DIO::copy(const PAlbum* const src, const PAlbum* const dest)
+{
+    if (!src || !dest)
     {
-        for (int i = 0 ; i < finder.localFiles.length() ; ++i)
-        {
-            emit jobToCreate(Rename, QList<QUrl>() << finder.localFiles.at(i),
-                             QUrl::fromLocalFile(dest.toLocalFile() + finder.localFileSuffixes.at(i)));
-        }
-
         return;
     }
 
-    for (int i = 0 ; i < finder.remoteFileSuffixes.length() ; ++i)
-    {
-        emit jobToCreate(Rename | SourceStatusUnknown,
-                         QList<QUrl>() << finder.possibleRemoteSidecars.at(i),
-                         QUrl::fromLocalFile(dest.toLocalFile() + finder.possibleRemoteSidecarSuffixes.at(i)));
-    }
-
-    emit jobToCreate(Rename, QList<QUrl>() << src, dest);
+    instance()->albumToAlbum(Copy, src, dest);
 }
 
-void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo>& infos, const PAlbum* const dest)
+void DIO::move(const PAlbum* src, const PAlbum* const dest)
+{
+    if (!src || !dest)
+    {
+        return;
+    }
+
+#ifdef Q_OS_WIN
+    AlbumManager::instance()->removeWatchedPAlbums(src);
+#endif
+
+    instance()->albumToAlbum(Move, src, dest);
+}
+
+// Images -> Album ----------------------------------------------------
+
+void DIO::copy(const QList<ImageInfo>& infos, const PAlbum* const dest)
+{
+    if (!dest)
+    {
+        return;
+    }
+
+    instance()->imagesToAlbum(Copy, infos, dest);
+}
+
+void DIO::move(const QList<ImageInfo>& infos, const PAlbum* const dest)
+{
+    if (!dest)
+    {
+        return;
+    }
+
+    instance()->imagesToAlbum(Move, infos, dest);
+}
+
+// External files -> album --------------------------------------------
+
+void DIO::copy(const QUrl& src, const PAlbum* const dest)
+{
+    copy(QList<QUrl>() << src, dest);
+}
+
+void DIO::copy(const QList<QUrl>& srcList, const PAlbum* const dest)
+{
+    if (!dest)
+    {
+        return;
+    }
+
+    instance()->filesToAlbum(Copy, srcList, dest);
+}
+
+void DIO::move(const QUrl& src, const PAlbum* const dest)
+{
+    move(QList<QUrl>() << src, dest);
+}
+
+void DIO::move(const QList<QUrl>& srcList, const PAlbum* const dest)
+{
+    if (!dest)
+    {
+        return;
+    }
+
+    instance()->filesToAlbum(Move, srcList, dest);
+}
+
+// Rename --------------------------------------------------------------
+
+void DIO::rename(const ImageInfo& info, const QString& newName)
+{
+    instance()->renameFile(info, newName);
+}
+
+// Delete --------------------------------------------------------------
+
+void DIO::del(const QList<ImageInfo>& infos, bool useTrash)
+{
+    instance()->deleteFiles(infos, useTrash);
+}
+
+void DIO::del(const ImageInfo& info, bool useTrash)
+{
+    del(QList<ImageInfo>() << info, useTrash);
+}
+
+void DIO::del(const PAlbum* const album, bool useTrash)
+{
+    if (!album)
+    {
+        return;
+    }
+
+#ifdef Q_OS_WIN
+    AlbumManager::instance()->removeWatchedPAlbums(album);
+#endif
+
+    instance()->createJob(useTrash ? Trash : Delete, QList<QUrl>() << album->fileUrl(), QUrl());
+}
+
+void DIO::imagesToAlbum(int operation, const QList<ImageInfo>& infos, const PAlbum* const dest)
 {
     // this is a fast db operation, do here
     GroupedImagesFinder finder(infos);
@@ -238,18 +332,18 @@ void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo>& infos, c
     processJob(operation, urls, dest->fileUrl());
 }
 
-void DIO::Private::albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest)
+void DIO::albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest)
 {
     ScanController::instance()->hintAtMoveOrCopyOfAlbum(src, dest);
-    emit jobToCreate(operation, QList<QUrl>() << src->fileUrl(), dest->fileUrl());
+    instance()->createJob(operation, QList<QUrl>() << src->fileUrl(), dest->fileUrl());
 }
 
-void DIO::Private::filesToAlbum(int operation, const QList<QUrl>& srcList, const PAlbum* const dest)
+void DIO::filesToAlbum(int operation, const QList<QUrl>& srcList, const PAlbum* const dest)
 {
     processJob(operation, srcList, dest->fileUrl());
 }
 
-void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
+void DIO::renameFile(const ImageInfo& info, const QString& newName)
 {
     QUrl oldUrl = info.fileUrl();
     QUrl newUrl = oldUrl;
@@ -270,7 +364,7 @@ void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
     processRename(oldUrl, newUrl);
 }
 
-void DIO::Private::deleteFiles(const QList<ImageInfo>& infos, bool useTrash)
+void DIO::deleteFiles(const QList<ImageInfo>& infos, bool useTrash)
 {
     QList<QUrl> urls;
 
@@ -284,37 +378,43 @@ void DIO::Private::deleteFiles(const QList<ImageInfo>& infos, bool useTrash)
     processJob(useTrash ? Trash : Delete, urls, QUrl());
 }
 
-// ------------------------------------------------------------------------------------------------
-
-class DIOCreator
+void DIO::processJob(int operation, const QList<QUrl>& srcList, const QUrl& dest)
 {
-public:
+    SidecarFinder finder(srcList);
 
-    DIO object;
-};
+    instance()->createJob(operation, finder.localFiles, dest);
 
-Q_GLOBAL_STATIC(DIOCreator, creator)
-
-// ------------------------------------------------------------------------------------------------
-
-DIO* DIO::instance()
-{
-    return &creator->object;
+    if (!finder.remoteFiles.isEmpty())
+    {
+        instance()->createJob(operation, finder.remoteFiles, dest);
+        // stat'ing is unreliable; just try to copy and suppress error message
+        instance()->createJob(operation | SourceStatusUnknown, finder.possibleRemoteSidecars, dest);
+    }
 }
 
-DIO::DIO()
-    : d(new Private(this))
+void DIO::processRename(const QUrl& src, const QUrl& dest)
 {
-    qRegisterMetaType<QList<QUrl>>("QList<QUrl>");
-}
+    SidecarFinder finder(src);
 
-DIO::~DIO()
-{
-    delete d;
-}
+    if (src.isLocalFile())
+    {
+        for (int i = 0 ; i < finder.localFiles.length() ; ++i)
+        {
+            instance()->createJob(Rename, QList<QUrl>() << finder.localFiles.at(i),
+                        QUrl::fromLocalFile(dest.toLocalFile() + finder.localFileSuffixes.at(i)));
+        }
 
-void DIO::cleanUp()
-{
+        return;
+    }
+
+    for (int i = 0 ; i < finder.remoteFileSuffixes.length() ; ++i)
+    {
+        instance()->createJob(Rename | SourceStatusUnknown,
+                    QList<QUrl>() << finder.possibleRemoteSidecars.at(i),
+                    QUrl::fromLocalFile(dest.toLocalFile() + finder.possibleRemoteSidecarSuffixes.at(i)));
+    }
+
+    instance()->createJob(Rename, QList<QUrl>() << src, dest);
 }
 
 void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
@@ -397,119 +497,6 @@ void DIO::slotRenamed(const QUrl& oldUrl, const QUrl& newUrl)
     LoadingCacheInterface::fileChanged(newUrl.toLocalFile());
 
     emit imageRenameSucceeded(oldUrl);
-}
-
-// Album -> Album -----------------------------------------------------
-
-void DIO::copy(const PAlbum* const src, const PAlbum* const dest)
-{
-    if (!src || !dest)
-    {
-        return;
-    }
-
-    instance()->d->albumToAlbum(Copy, src, dest);
-}
-
-void DIO::move(const PAlbum* src, const PAlbum* const dest)
-{
-    if (!src || !dest)
-    {
-        return;
-    }
-
-#ifdef Q_OS_WIN
-    AlbumManager::instance()->removeWatchedPAlbums(src);
-#endif
-
-    instance()->d->albumToAlbum(Move, src, dest);
-}
-
-// Images -> Album ----------------------------------------------------
-
-void DIO::copy(const QList<ImageInfo>& infos, const PAlbum* const dest)
-{
-    if (!dest)
-    {
-        return;
-    }
-
-    instance()->d->imagesToAlbum(Copy, infos, dest);
-}
-
-void DIO::move(const QList<ImageInfo>& infos, const PAlbum* const dest)
-{
-    if (!dest)
-    {
-        return;
-    }
-
-    instance()->d->imagesToAlbum(Move, infos, dest);
-}
-
-// External files -> album --------------------------------------------
-
-void DIO::copy(const QUrl& src, const PAlbum* const dest)
-{
-    copy(QList<QUrl>() << src, dest);
-}
-
-void DIO::copy(const QList<QUrl>& srcList, const PAlbum* const dest)
-{
-    if (!dest)
-    {
-        return;
-    }
-
-    instance()->d->filesToAlbum(Copy, srcList, dest);
-}
-
-void DIO::move(const QUrl& src, const PAlbum* const dest)
-{
-    move(QList<QUrl>() << src, dest);
-}
-
-void DIO::move(const QList<QUrl>& srcList, const PAlbum* const dest)
-{
-    if (!dest)
-    {
-        return;
-    }
-
-    instance()->d->filesToAlbum(Move, srcList, dest);
-}
-
-// Rename --------------------------------------------------------------
-
-void DIO::rename(const ImageInfo& info, const QString& newName)
-{
-    instance()->d->renameFile(info, newName);
-}
-
-// Delete --------------------------------------------------------------
-
-void DIO::del(const QList<ImageInfo>& infos, bool useTrash)
-{
-    instance()->d->deleteFiles(infos, useTrash);
-}
-
-void DIO::del(const ImageInfo& info, bool useTrash)
-{
-    del(QList<ImageInfo>() << info, useTrash);
-}
-
-void DIO::del(const PAlbum* const album, bool useTrash)
-{
-    if (!album)
-    {
-        return;
-    }
-
-#ifdef Q_OS_WIN
-    AlbumManager::instance()->removeWatchedPAlbums(album);
-#endif
-
-    instance()->createJob(useTrash ? Trash : Delete, QList<QUrl>() << album->fileUrl(), QUrl());
 }
 
 } // namespace Digikam
