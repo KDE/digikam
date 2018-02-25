@@ -105,12 +105,15 @@ public:
     const QString& sessionKey()             const;
     const QString& sessionId()              const;
     const QString& token()                  const;
+
     const QString& login()                  const;
-    void setLogin(const QString& login);
+    void  setLogin(const QString& login);
+
     const QString& password()               const;
-    void setPassword(const QString& password);
-    bool isAuthenticated()                  const;
-    bool isErrorState()                     const;
+    void  setPassword(const QString& password);
+
+    bool  isAuthenticated()                 const;
+    bool  isErrorState()                    const;
     const QList<YandexFotkiAlbum>& albums() const;
     const QList<YFPhoto>& photos()          const;
 

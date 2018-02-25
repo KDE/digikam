@@ -121,6 +121,8 @@ public:
     vlong p,q;
 };
 
+// ---------------------------------------------------
+
 #define MAX_CRYPT_BITS 1024
 
 class CCryptoProviderRSA

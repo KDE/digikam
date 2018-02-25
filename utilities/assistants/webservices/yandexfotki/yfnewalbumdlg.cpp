@@ -68,7 +68,7 @@ YFNewAlbumDlg::YFNewAlbumDlg(QWidget* const parent, YandexFotkiAlbum& album)
       d(new Private)
 {
     d->album = album;
-    
+
     hideLocation();
     hideDateTime();
 

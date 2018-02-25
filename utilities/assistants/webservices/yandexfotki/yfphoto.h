@@ -47,19 +47,10 @@ public:
 
 public:
 
-    explicit YFPhoto()
-      : m_access(ACCESS_PUBLIC),
-        m_hideOriginal(false),
-        m_disableComments(false),
-        m_adult(false)
-    {
+    explicit YFPhoto();
+    virtual ~YFPhoto();
 
-    }
-
-    virtual ~YFPhoto()
-    {
-        // nothing
-    }
+    YFPhoto(const YFPhoto& other);
 
 public:
 
@@ -183,9 +174,8 @@ public:
         return m_title;
     }
 
-    YFPhoto(const YFPhoto& photo);
+public:
 
-    // public
     QStringList tags;
 
 protected:

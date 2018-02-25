@@ -31,18 +31,17 @@ YandexFotkiAlbum::YandexFotkiAlbum()
     // nothing
 }
 
-YandexFotkiAlbum::YandexFotkiAlbum(const QString& urn,
-                                   const QString& author,
-                                   const QString& title,
-                                   const QString& summary,
-                                   const QString& apiEditUrl,
-                                   const QString& apiSelfUrl,
-                                   const QString& apiPhotosUrl,
+YandexFotkiAlbum::YandexFotkiAlbum(const QString&   urn,
+                                   const QString&   author,
+                                   const QString&   title,
+                                   const QString&   summary,
+                                   const QString&   apiEditUrl,
+                                   const QString&   apiSelfUrl,
+                                   const QString&   apiPhotosUrl,
                                    const QDateTime& publishedDate,
                                    const QDateTime& editedDate,
                                    const QDateTime& updatedDate,
-                                   const QString& password
-                                  )
+                                   const QString&   password)
     :   m_urn(urn),
         m_author(author),
         m_title(title),
@@ -58,38 +57,42 @@ YandexFotkiAlbum::YandexFotkiAlbum(const QString& urn,
     // nothing
 }
 
-YandexFotkiAlbum::YandexFotkiAlbum(const YandexFotkiAlbum& album)
-    :   m_urn(album.urn()),
-        m_author(album.author()),
-        m_title(album.title()),
-        m_summary(album.summary()),
-        m_apiEditUrl(album.m_apiEditUrl),
-        m_apiSelfUrl(album.m_apiSelfUrl),
-        m_apiPhotosUrl(album.m_apiPhotosUrl),
-        m_publishedDate(album.publishedDate()),
-        m_editedDate(album.editedDate()),
-        m_updatedDate(album.updatedDate()),
-        m_password(album.m_password)
+YandexFotkiAlbum::YandexFotkiAlbum(const YandexFotkiAlbum& other)
+    :   m_urn(other.urn()),
+        m_author(other.author()),
+        m_title(other.title()),
+        m_summary(other.summary()),
+        m_apiEditUrl(other.m_apiEditUrl),
+        m_apiSelfUrl(other.m_apiSelfUrl),
+        m_apiPhotosUrl(other.m_apiPhotosUrl),
+        m_publishedDate(other.publishedDate()),
+        m_editedDate(other.editedDate()),
+        m_updatedDate(other.updatedDate()),
+        m_password(other.m_password)
 {
     //nothing
 }
 
-/*
-YandexFotkiAlbum& YandexFotkiAlbum::operator=(const YandexFotkiAlbum& album) {
-    m_urn = album.urn();
-    m_author = album.author();
-    m_title = album.title();
-    m_summary = album.summary();
-    m_apiEditUrl = album.m_apiEditUrl;
-    m_apiSelfUrl = album.m_apiSelfUrl;
-    m_apiPhotosUrl = album.m_apiPhotosUrl;
-    m_publishedDate = album.publishedDate();
-    m_editedDate = album.editedDate();
-    m_updatedDate = album.updatedDate();
-    m_password = album.m_password;
+YandexFotkiAlbum::~YandexFotkiAlbum()
+{
+}
+
+YandexFotkiAlbum& YandexFotkiAlbum::operator=(const YandexFotkiAlbum& other)
+{
+    m_urn           = other.urn();
+    m_author        = other.author();
+    m_title         = other.title();
+    m_summary       = other.summary();
+    m_apiEditUrl    = other.m_apiEditUrl;
+    m_apiSelfUrl    = other.m_apiSelfUrl;
+    m_apiPhotosUrl  = other.m_apiPhotosUrl;
+    m_publishedDate = other.publishedDate();
+    m_editedDate    = other.editedDate();
+    m_updatedDate   = other.updatedDate();
+    m_password      = other.m_password;
+
     return *this;
 }
-*/
 
 QDebug operator<<(QDebug d, const YandexFotkiAlbum& a)
 {

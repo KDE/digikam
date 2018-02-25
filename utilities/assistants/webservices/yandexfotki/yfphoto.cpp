@@ -26,6 +26,20 @@
 namespace Digikam
 {
 
+YFPhoto::YFPhoto()
+  : m_access(ACCESS_PUBLIC),
+    m_hideOriginal(false),
+    m_disableComments(false),
+    m_adult(false)
+{
+
+}
+
+YFPhoto::~YFPhoto()
+{
+    // nothing
+}
+
 YFPhoto::YFPhoto(const QString& urn,
                  const QString& author,
                  const QString& title,
@@ -64,26 +78,26 @@ YFPhoto::YFPhoto(const QString& urn,
     // nothing
 }
 
-YFPhoto::YFPhoto(const YFPhoto& photo)
-    : m_urn(photo.urn()),
-      m_author(photo.author()),
-      m_title(photo.title()),
-      m_summary(photo.summary()),
-      m_apiEditUrl(photo.m_apiEditUrl),
-      m_apiSelfUrl(photo.m_apiSelfUrl),
-      m_apiMediaUrl(photo.m_apiMediaUrl),
-      m_apiAlbumUrl(photo.m_apiAlbumUrl),
-      m_publishedDate(photo.publishedDate()),
-      m_editedDate(photo.editedDate()),
-      m_updatedDate(photo.updatedDate()),
-      m_createdDate(photo.createdDate()),
-      m_access(photo.access()),
-      m_hideOriginal(photo.isHideOriginal()),
-      m_disableComments(photo.isDisableComments()),
-      m_adult(photo.isAdult()),
-      m_remoteUrl(photo.remoteUrl()),
-      m_localUrl(photo.localUrl()),
-      m_originalUrl(photo.originalUrl())
+YFPhoto::YFPhoto(const YFPhoto& other)
+    : m_urn(other.urn()),
+      m_author(other.author()),
+      m_title(other.title()),
+      m_summary(other.summary()),
+      m_apiEditUrl(other.m_apiEditUrl),
+      m_apiSelfUrl(other.m_apiSelfUrl),
+      m_apiMediaUrl(other.m_apiMediaUrl),
+      m_apiAlbumUrl(other.m_apiAlbumUrl),
+      m_publishedDate(other.publishedDate()),
+      m_editedDate(other.editedDate()),
+      m_updatedDate(other.updatedDate()),
+      m_createdDate(other.createdDate()),
+      m_access(other.access()),
+      m_hideOriginal(other.isHideOriginal()),
+      m_disableComments(other.isDisableComments()),
+      m_adult(other.isAdult()),
+      m_remoteUrl(other.remoteUrl()),
+      m_localUrl(other.localUrl()),
+      m_originalUrl(other.originalUrl())
 {
     //nothing
 }

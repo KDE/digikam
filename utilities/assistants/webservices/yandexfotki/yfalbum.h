@@ -39,12 +39,12 @@ class YandexFotkiAlbum
 public:
 
     YandexFotkiAlbum();
-    YandexFotkiAlbum(const YandexFotkiAlbum& album);
+    YandexFotkiAlbum(const YandexFotkiAlbum& other);
+    virtual ~YandexFotkiAlbum();
 
-    virtual ~YandexFotkiAlbum()
-    {
-        // nothing
-    }
+    YandexFotkiAlbum& operator=(const YandexFotkiAlbum& other);
+
+public:
 
     const QString& urn() const
     {
@@ -106,11 +106,7 @@ public:
         return m_title;
     }
 
-    // virtual YandexFotkiAlbum& operator=(const YandexFotkiAlbum& album);
-
 protected:
-
-    friend class YFTalker;
 
     YandexFotkiAlbum(const QString& urn,
                      const QString& author,
