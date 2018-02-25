@@ -21,13 +21,7 @@
  *
  * ============================================================ */
 
-// Local includes
-
 #include "yfalbum.h"
-
-#ifndef KDE_NO_DEBUG_OUTPUT
-#include <QDebug>
-#endif // KDE_NO_DEBUG_OUTPUT
 
 namespace Digikam
 {
@@ -97,7 +91,6 @@ YandexFotkiAlbum& YandexFotkiAlbum::operator=(const YandexFotkiAlbum& album) {
 }
 */
 
-#ifndef KDE_NO_DEBUG_OUTPUT
 QDebug operator<<(QDebug d, const YandexFotkiAlbum& a)
 {
     d.nospace() << "YandexFotkiAlbum(\n";
@@ -117,6 +110,5 @@ QDebug operator<<(QDebug d, const YandexFotkiAlbum& a)
     d.nospace() << ")";
     return d;
 }
-#endif // KDE_NO_DEBUG_OUTPUT
 
 } // namespace Digikam

@@ -22,7 +22,7 @@
  * ============================================================
  *
  * See http://api.yandex.ru/ (ru)
- *   for detailes
+ * for details
  */
 
 #ifndef YF_AUTH_H
@@ -35,7 +35,9 @@
 namespace YFAuth
 {
 
-QString makeCredentials(const QString& publicKey, const QString& login, const QString& password);
+QString makeCredentials(const QString& publicKey,
+                        const QString& login,
+                        const QString& password);
 
 } // namespace YFAuth
 

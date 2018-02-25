@@ -39,7 +39,9 @@
 namespace YFAuth
 {
 
-QString makeCredentials(const QString& publicKey, const QString& login, const QString& password)
+QString makeCredentials(const QString& publicKey,
+                        const QString& login,
+                        const QString& password)
 {
     // prepare string
     QByteArray credentials = "<credentials login=\"";

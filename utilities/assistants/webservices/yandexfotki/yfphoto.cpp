@@ -23,12 +23,6 @@
 
 #include "yfphoto.h"
 
-// Qt includes
-
-#ifndef KDE_NO_DEBUG_OUTPUT
-#include <QDebug>
-#endif // KDE_NO_DEBUG_OUTPUT
-
 namespace Digikam
 {
 
@@ -94,7 +88,6 @@ YFPhoto::YFPhoto(const YFPhoto& photo)
     //nothing
 }
 
-#ifndef KDE_NO_DEBUG_OUTPUT
 QDebug operator<<(QDebug d, const YFPhoto& p)
 {
     d.nospace() << "YFPhoto(\n";
@@ -130,6 +123,5 @@ QDebug operator<<(QDebug d, const YFPhoto& p)
     d.nospace() << ")";
     return d;
 }
-#endif // KDE_NO_DEBUG_OUTPUT
 
 } // namespace Digikam

@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QDebug>
 #include <QString>
 #include <QDateTime>
 #include <QStringList>
@@ -192,23 +193,22 @@ protected:
     friend class YFTalker;
 
     YFPhoto(const QString& urn,
-                     const QString& author,
-                     const QString& title,
-                     const QString& summary,
-                     const QString& apiEditUrl,
-                     const QString& apiSelfUrl,
-                     const QString& apiMediaUrl,
-                     const QString& apiAlbumUrl,
-                     const QDateTime& publishedDate,
-                     const QDateTime& editedDate,
-                     const QDateTime& updatedDate,
-                     const QDateTime& createdDate,
-                     Access access,
-                     bool hideOriginal,
-                     bool disableComments,
-                     bool adult,
-                     const QString& remoteUrl
-                    );
+            const QString& author,
+            const QString& title,
+            const QString& summary,
+            const QString& apiEditUrl,
+            const QString& apiSelfUrl,
+            const QString& apiMediaUrl,
+            const QString& apiAlbumUrl,
+            const QDateTime& publishedDate,
+            const QDateTime& editedDate,
+            const QDateTime& updatedDate,
+            const QDateTime& createdDate,
+            Access access,
+            bool hideOriginal,
+            bool disableComments,
+            bool adult,
+            const QString& remoteUrl);
 
     QString   m_urn;
     QString   m_author;
@@ -234,15 +234,10 @@ protected:
     QString   m_localUrl;
     QString   m_originalUrl;
 
-#ifndef KDE_NO_DEBUG_OUTPUT
     friend QDebug operator<<(QDebug d, const YFPhoto& p);
-#endif // KDE_NO_DEBUG_OUTPUT
-
 };
 
-#ifndef KDE_NO_DEBUG_OUTPUT
 QDebug operator<<(QDebug d, const YFPhoto& p);
-#endif // KDE_NO_DEBUG_OUTPUT
 
 } // namespace Digikam
 
