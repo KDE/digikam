@@ -112,7 +112,7 @@ void IOJobsThread::deleteFiles(int operation, const QList<QUrl>& srcsToDelete, b
 
     foreach (const QUrl& url, srcsToDelete)
     {
-        DeleteJob* const j = new DeleteJob(url, useTrash,true);
+        DeleteJob* const j = new DeleteJob(url, useTrash, true);
 
         connectOneJob(j);
 

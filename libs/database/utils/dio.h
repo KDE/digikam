@@ -94,6 +94,19 @@ Q_SIGNALS:
 
 private:
 
+enum Operation
+{
+    Copy                = 1 << 0,
+    Move                = 1 << 1,
+    Rename              = 1 << 2,
+    Trash               = 1 << 3,
+    Delete              = 1 << 4,
+    SourceStatusUnknown = 1 << 20,
+
+    OperationMask       = 0xffff,
+    FlagMask            = 0xffff0000
+};
+
     DIO();
     ~DIO();
 
@@ -157,19 +170,6 @@ public:
 private:
 
     void process(const QList<ImageInfo>& source);
-};
-
-enum Operation
-{
-    Copy                = 1 << 0,
-    Move                = 1 << 1,
-    Rename              = 1 << 2,
-    Trash               = 1 << 3,
-    Delete              = 1 << 4,
-    SourceStatusUnknown = 1 << 20,
-
-    OperationMask       = 0xffff,
-    FlagMask            = 0xffff0000
 };
 
 } // namespace Digikam

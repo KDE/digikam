@@ -38,7 +38,6 @@
 #include "coredbaccess.h"
 #include "album.h"
 #include "dmetadata.h"
-#include "imagelister.h"
 #include "loadingcacheinterface.h"
 #include "metadatasettings.h"
 #include "scancontroller.h"
@@ -96,7 +95,7 @@ void SidecarFinder::process(const QList<QUrl>& files)
             possibleRemoteSidecars << DMetadata::sidecarUrl(url);
             possibleRemoteSidecarSuffixes << QLatin1String(".xmp");
 
-            foreach(QString suffix,  MetadataSettings::instance()->settings().sidecarExtensions)
+            foreach(QString suffix, MetadataSettings::instance()->settings().sidecarExtensions)
             {
                 suffix = QLatin1String(".") + suffix;
                 QString sidecarName = url.toLocalFile() + suffix;
