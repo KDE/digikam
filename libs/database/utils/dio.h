@@ -96,18 +96,75 @@ private:
     DIO();
     ~DIO();
 
+    void imagesToAlbum(int operation, const QList<ImageInfo>& ids, const PAlbum* const dest);
+    void albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest);
+    void filesToAlbum(int operation, const QList<QUrl>& src, const PAlbum* const dest);
+
+    void renameFile(const ImageInfo& info, const QString& newName);
+    void deleteFiles(const QList<ImageInfo>& infos, bool useTrash);
+
+    void processJob(int operation, const QList<QUrl>& src, const QUrl& dest);
+    void processRename(const QUrl& src, const QUrl& dest);
+    void createJob(int operation, const QList<QUrl>& src, const QUrl& dest);
+
 private Q_SLOTS:
 
     void slotResult();
     void slotRenamed(const QUrl& oldUrl, const QUrl& newUrl);
-    void createJob(int operation, const QList<QUrl>& src, const QUrl& dest);
 
 private:
 
-    class Private;
-    Private* const d;
-
     friend class DIOCreator;
+};
+
+// -----------------------------------------------------------------------------------------
+
+class SidecarFinder
+{
+public:
+
+    explicit SidecarFinder(const QList<QUrl>& files);
+    explicit SidecarFinder(const QUrl& file);
+
+    QList<QUrl> localFiles;
+    QList<QUrl> remoteFiles;
+    QList<QUrl> possibleRemoteSidecars;
+
+    QList<QString> localFileSuffixes;
+    QList<QString> remoteFileSuffixes;
+    QList<QString> possibleRemoteSidecarSuffixes;
+
+private:
+
+    void process(const QList<QUrl>&);
+};
+
+// -----------------------------------------------------------------------------------------
+
+class GroupedImagesFinder
+{
+public:
+
+    explicit GroupedImagesFinder(const QList<ImageInfo>& source);
+
+    QList<ImageInfo> infos;
+
+private:
+
+    void process(const QList<ImageInfo>& source);
+};
+
+enum Operation
+{
+    Copy                = 1 << 0,
+    Move                = 1 << 1,
+    Rename              = 1 << 2,
+    Trash               = 1 << 3,
+    Delete              = 1 << 4,
+    SourceStatusUnknown = 1 << 20,
+
+    OperationMask       = 0xffff,
+    FlagMask            = 0xffff0000
 };
 
 } // namespace Digikam
