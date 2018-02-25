@@ -193,21 +193,15 @@ void IOJobsThread::renameFile(int operation, const QUrl& srcToRename, const QUrl
     connectOneJob(j);
 
     connect(j, SIGNAL(signalRenamed(QUrl,QUrl)),
-            this, SIGNAL(renamed(QUrl,QUrl)));
+            this, SIGNAL(signalRenamed(QUrl,QUrl)));
 
     connect(j, SIGNAL(signalRenameFailed(QUrl)),
-            this, SIGNAL(renameFailed(QUrl)));
+            this, SIGNAL(signalRenameFailed(QUrl)));
 
     collection.insert(j, 0);
     d->jobsCount++;
 
     appendJobs(collection);
-}
-
-void IOJobsThread::cancel()
-{
-    d->isCanceled = true;
-    ActionThreadBase::cancel();
 }
 
 bool IOJobsThread::isCanceled()
@@ -238,10 +232,10 @@ QList<QString>& IOJobsThread::errorsList()
 void IOJobsThread::connectOneJob(IOJob* const j)
 {
     connect(j, SIGNAL(error(QString)),
-            this, SLOT(error(QString)));
+            this, SLOT(slotError(QString)));
 
     connect(j, SIGNAL(signalDone()),
-            this, SLOT(oneJobFinished()));
+            this, SLOT(slotOneJobFinished()));
 }
 
 QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColPath, QList<QUrl>& usedUrls, int version)
@@ -269,11 +263,11 @@ QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColP
     }
 }
 
-void IOJobsThread::oneJobFinished()
+void IOJobsThread::slotOneJobFinished()
 {
     d->jobsCount--;
 
-    emit oneProccessed(d->operation);
+    emit signalOneProccessed(d->operation);
 
     if (d->jobsCount == 0)
     {
@@ -282,9 +276,15 @@ void IOJobsThread::oneJobFinished()
     }
 }
 
-void IOJobsThread::error(const QString& errString)
+void IOJobsThread::slotError(const QString& errString)
 {
     d->errorsList.append(errString);
+}
+
+void IOJobsThread::slotCancel()
+{
+    d->isCanceled = true;
+    ActionThreadBase::cancel();
 }
 
 int IOJobsThread::operation()

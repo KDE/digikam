@@ -468,10 +468,10 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
 
         jobThread = IOJobsManager::instance()->startRenameFile(operation, src.first(), dest);
 
-        connect(jobThread, SIGNAL(renamed(QUrl,QUrl)),
+        connect(jobThread, SIGNAL(signalRenamed(QUrl,QUrl)),
                 this, SLOT(slotRenamed(QUrl,QUrl)));
 
-        connect(jobThread, SIGNAL(renameFailed(QUrl)),
+        connect(jobThread, SIGNAL(signalRenameFailed(QUrl)),
                 this, SIGNAL(imageRenameFailed(QUrl)));
     }
     else if (operation == Trash)
@@ -507,7 +507,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
         jobThread->setKeepErrors(false);
     }
 
-    connect(jobThread, SIGNAL(oneProccessed(int)),
+    connect(jobThread, SIGNAL(signalOneProccessed(int)),
             this, SLOT(slotOneProccessed(int)));
 
     connect(jobThread, SIGNAL(finished()),
@@ -516,7 +516,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
     if (item)
     {
         connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
-                jobThread, SLOT(cancel()));
+                jobThread, SLOT(slotCancel()));
 
         connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
                 this, SLOT(slotCancel(ProgressItem*)));

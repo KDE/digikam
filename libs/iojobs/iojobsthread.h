@@ -133,29 +133,17 @@ public:
 public Q_SLOTS:
 
     /**
-     * @brief connected to all active jobs and checks if the job
-     *        list has finished to report that thread is finished
-     */
-    void oneJobFinished();
-
-    /**
-     * @brief A slot to receive the error from the job
-     * @param errString: string to be appended
-     */
-
-    void error(const QString& errString);
-    /**
      * @brief cancels thread execution
      */
-    void cancel();
+    void slotCancel();
 
 Q_SIGNALS:
 
     void finished();
 
-    void renamed(const QUrl& oldUrl, const QUrl& newURl);
-    void renameFailed(const QUrl& oldUrl);
-    void oneProccessed(int operation);
+    void signalRenamed(const QUrl& oldUrl, const QUrl& newURl);
+    void signalRenameFailed(const QUrl& oldUrl);
+    void signalOneProccessed(int operation);
 
     void collectionTrashItemInfo(const DTrashItemInfo& trashItemInfo);
 
@@ -176,6 +164,20 @@ private:
      * @return QUrl to use in the renameFile() method
      */
     QUrl getAvailableQUrlToRestoreInCollection(const QString& fileColPath, QList<QUrl>& usedUrls, int version = 0);
+
+private Q_SLOTS:
+
+    /**
+     * @brief connected to all active jobs and checks if the job
+     *        list has finished to report that thread is finished
+     */
+    void slotOneJobFinished();
+
+    /**
+     * @brief A slot to receive the error from the job
+     * @param errString: string to be appended
+     */
+    void slotError(const QString& errString);
 
 private:
 
