@@ -52,14 +52,6 @@
 namespace Digikam
 {
 
-namespace
-{
-    const QString renameFileProperty(QLatin1String("DIO Rename source file"));
-    const QString noErrorMessageProperty(QLatin1String("DIO Ignore Error Message"));
-}
-
-// ------------------------------------------------------------------------------------------------
-
 SidecarFinder::SidecarFinder(const QList<QUrl>& files)
 {
     process(files);
@@ -168,12 +160,6 @@ void GroupedImagesFinder::process(const QList<ImageInfo>& source)
 DIO::Private::Private(DIO* const qq)
     : q(qq)
 {
-    connectAndSchedule(this, SIGNAL(jobToProcess(int,QList<QUrl>,QUrl)),
-                       this, SLOT(processJob(int,QList<QUrl>,QUrl)));
-
-    connectAndSchedule(this, SIGNAL(renameToProcess(QUrl,QUrl)),
-                       this, SLOT(processRename(QUrl,QUrl)));
-
     connect(this, SIGNAL(jobToCreate(int,QList<QUrl>,QUrl)),
             q, SLOT(createJob(int,QList<QUrl>,QUrl)));
 }
@@ -213,13 +199,8 @@ void DIO::Private::processRename(const QUrl& src, const QUrl& dest)
                          QList<QUrl>() << finder.possibleRemoteSidecars.at(i),
                          QUrl::fromLocalFile(dest.toLocalFile() + finder.possibleRemoteSidecarSuffixes.at(i)));
     }
-    emit jobToCreate(Rename, QList<QUrl>() << src, dest);
-}
 
-void DIO::Private::albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest)
-{
-    ScanController::instance()->hintAtMoveOrCopyOfAlbum(src, dest);
-    emit jobToCreate(operation, QList<QUrl>() << src->fileUrl(), dest->fileUrl());
+    emit jobToCreate(Rename, QList<QUrl>() << src, dest);
 }
 
 void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo>& infos, const PAlbum* const dest)
@@ -235,6 +216,7 @@ void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo>& infos, c
     {
         // update the image infos
         CoreDbAccess access;
+
         foreach(const ImageInfo& info, finder.infos)
         {
             if (!QFileInfo::exists(dest->fileUrl().toLocalFile() + info.name()))
@@ -253,12 +235,18 @@ void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo>& infos, c
 
     ScanController::instance()->hintAtMoveOrCopyOfItems(ids, dest, filenames);
 
-    emit jobToProcess(operation, urls, dest->fileUrl());
+    processJob(operation, urls, dest->fileUrl());
+}
+
+void DIO::Private::albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest)
+{
+    ScanController::instance()->hintAtMoveOrCopyOfAlbum(src, dest);
+    emit jobToCreate(operation, QList<QUrl>() << src->fileUrl(), dest->fileUrl());
 }
 
 void DIO::Private::filesToAlbum(int operation, const QList<QUrl>& srcList, const PAlbum* const dest)
 {
-    emit jobToProcess(operation, srcList, dest->fileUrl());
+    processJob(operation, srcList, dest->fileUrl());
 }
 
 void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
@@ -279,7 +267,7 @@ void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
     // Do this in database, too.
     CoreDbAccess().db()->moveItem(info.albumId(), oldUrl.fileName(), info.albumId(), newName);
 
-    emit renameToProcess(oldUrl, newUrl);
+    processRename(oldUrl, newUrl);
 }
 
 void DIO::Private::deleteFiles(const QList<ImageInfo>& infos, bool useTrash)
@@ -293,7 +281,7 @@ void DIO::Private::deleteFiles(const QList<ImageInfo>& infos, bool useTrash)
 
     qCDebug(DIGIKAM_DATABASE_LOG) << "Deleting files:" << urls;
 
-    emit jobToProcess(useTrash ? Trash : Delete, urls, QUrl());
+    processJob(useTrash ? Trash : Delete, urls, QUrl());
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -327,8 +315,6 @@ DIO::~DIO()
 
 void DIO::cleanUp()
 {
-    instance()->d->deactivate();
-    instance()->d->wait();
 }
 
 void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
