@@ -34,7 +34,7 @@ class RajceSession::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         maxWidth      = 0;
         maxHeight     = 0;

@@ -69,7 +69,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         parent     = 0;
 
@@ -85,7 +85,7 @@ public:
         reply      = 0;
         state      = SMUG_LOGOUT;
     }
-    
+
 public:
 
     QWidget*               parent;
@@ -107,7 +107,7 @@ public:
 
     State                  state;
 };
-    
+
 SmugTalker::SmugTalker(DInfoInterface* const iface, QWidget* const parent)
     : d(new Private)
 {

@@ -65,7 +65,7 @@ class SmugWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         import            = false;
         imagesCount       = 0;

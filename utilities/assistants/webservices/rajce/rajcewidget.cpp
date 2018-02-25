@@ -63,7 +63,7 @@ class RajceWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         headerLbl         = 0;
         userNameLbl       = 0;

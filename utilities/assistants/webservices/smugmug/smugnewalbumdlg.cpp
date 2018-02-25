@@ -50,7 +50,7 @@ class SmugNewAlbumDlg::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         categCoB     = 0;
         subCategCoB  = 0;
@@ -61,7 +61,7 @@ public:
         hintEdt      = 0;
         descEdt      = 0;
         publicRBtn   = 0;
-        unlistedRBtn = 0;        
+        unlistedRBtn = 0;
     }
 
     QComboBox*    categCoB;

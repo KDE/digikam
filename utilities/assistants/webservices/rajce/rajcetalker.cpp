@@ -55,7 +55,7 @@ class RajceTalker::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : queueAccess(QMutex::Recursive),
         netMngr(0),
         reply(0)
