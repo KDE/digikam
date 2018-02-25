@@ -46,10 +46,10 @@ IOJobsManager* IOJobsManager::instance()
     return& creator->object;
 }
 
-IOJobsThread* IOJobsManager::startCopy(const QList<QUrl>& srcsList, const QUrl& destAlbum)
+IOJobsThread* IOJobsManager::startCopy(int operation, const QList<QUrl>& srcsList, const QUrl& destAlbum)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->copy(srcsList, destAlbum);
+    thread->copy(operation, srcsList, destAlbum);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -60,10 +60,10 @@ IOJobsThread* IOJobsManager::startCopy(const QList<QUrl>& srcsList, const QUrl& 
     return thread;
 }
 
-IOJobsThread* IOJobsManager::startMove(const QList<QUrl>& srcsList, const QUrl& destAlbum)
+IOJobsThread* IOJobsManager::startMove(int operation, const QList<QUrl>& srcsList, const QUrl& destAlbum)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->move(srcsList, destAlbum);
+    thread->move(operation, srcsList, destAlbum);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -74,10 +74,10 @@ IOJobsThread* IOJobsManager::startMove(const QList<QUrl>& srcsList, const QUrl& 
     return thread;
 }
 
-IOJobsThread* IOJobsManager::startDelete(const QList<QUrl>& filesToDelete, bool useTrash)
+IOJobsThread* IOJobsManager::startDelete(int operation, const QList<QUrl>& filesToDelete, bool useTrash)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->deleteFiles(filesToDelete, useTrash);
+    thread->deleteFiles(operation, filesToDelete, useTrash);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -88,10 +88,10 @@ IOJobsThread* IOJobsManager::startDelete(const QList<QUrl>& filesToDelete, bool 
     return thread;
 }
 
-IOJobsThread* IOJobsManager::startRenameFile(const QUrl& srcToRename, const QUrl& newUrl)
+IOJobsThread* IOJobsManager::startRenameFile(int operation, const QUrl& srcToRename, const QUrl& newUrl)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->renameFile(srcToRename, newUrl);
+    thread->renameFile(operation, srcToRename, newUrl);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),

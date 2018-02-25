@@ -46,6 +46,7 @@
 #include "iojobsmanager.h"
 #include "collectionmanager.h"
 #include "dnotificationwrapper.h"
+#include "progressmanager.h"
 #include "digikamapp.h"
 
 namespace Digikam
@@ -426,17 +427,36 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
         return;
     }
 
+    ProgressItem* item      = 0;
     IOJobsThread* jobThread = 0;
     int flags               = operation & FlagMask;
     operation              &= OperationMask;
 
     if (operation == Copy)
     {
-        jobThread = IOJobsManager::instance()->startCopy(src, dest);
+        item = getProgressItem(Copy);
+
+        if (!item || item->totalCompleted())
+        {
+            item = ProgressManager::instance()->createProgressItem(QLatin1String("DIOCopy"),
+                                                                   i18n("Copy"), QString(), true, false);
+        }
+
+        item->setTotalItems(item->totalItems() + src.count());
+        jobThread = IOJobsManager::instance()->startCopy(operation, src, dest);
     }
     else if (operation == Move)
     {
-        jobThread = IOJobsManager::instance()->startMove(src, dest);
+        item = getProgressItem(Move);
+
+        if (!item || item->totalCompleted())
+        {
+            item = ProgressManager::instance()->createProgressItem(QLatin1String("DIOMove"),
+                                                                   i18n("Move"), QString(), true, false);
+        }
+
+        item->setTotalItems(item->totalItems() + src.count());
+        jobThread = IOJobsManager::instance()->startMove(operation, src, dest);
     }
     else if (operation == Rename)
     {
@@ -446,7 +466,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
             return;
         }
 
-        jobThread = IOJobsManager::instance()->startRenameFile(src.first(), dest);
+        jobThread = IOJobsManager::instance()->startRenameFile(operation, src.first(), dest);
 
         connect(jobThread, SIGNAL(renamed(QUrl,QUrl)),
                 this, SLOT(slotRenamed(QUrl,QUrl)));
@@ -456,12 +476,30 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
     }
     else if (operation == Trash)
     {
-        jobThread = IOJobsManager::instance()->startDelete(src);
+        item = getProgressItem(Trash);
+
+        if (!item || item->totalCompleted())
+        {
+            item = ProgressManager::instance()->createProgressItem(QLatin1String("DIOTrash"),
+                                                                   i18n("Trash"), QString(), true, false);
+        }
+
+        item->setTotalItems(item->totalItems() + src.count());
+        jobThread = IOJobsManager::instance()->startDelete(operation, src);
     }
     else // operation == Del
     {
+        item = getProgressItem(Delete);
+
+        if (!item || item->totalCompleted())
+        {
+            item = ProgressManager::instance()->createProgressItem(QLatin1String("DIODelete"),
+                                                                   i18n("Delete"), QString(), true, false);
+        }
+
         qCDebug(DIGIKAM_DATABASE_LOG) << "SRCS " << src;
-        jobThread = IOJobsManager::instance()->startDelete(src, false);
+        item->setTotalItems(item->totalItems() + src.count());
+        jobThread = IOJobsManager::instance()->startDelete(operation, src, false);
     }
 
     if (flags & SourceStatusUnknown)
@@ -469,8 +507,20 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
         jobThread->setKeepErrors(false);
     }
 
+    connect(jobThread, SIGNAL(oneProccessed(int)),
+            this, SLOT(slotOneProccessed(int)));
+
     connect(jobThread, SIGNAL(finished()),
             this, SLOT(slotResult()));
+
+    if (item)
+    {
+        connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
+                jobThread, SLOT(cancel()));
+
+        connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
+                this, SLOT(slotCancel(ProgressItem*)));
+    }
 }
 
 void DIO::slotResult()
@@ -489,6 +539,27 @@ void DIO::slotResult()
         DNotificationWrapper(QString(), errors, DigikamApp::instance(),
                              DigikamApp::instance()->windowTitle());
     }
+
+    ProgressItem* const item = getProgressItem(jobThread->operation());
+    slotCancel(item);
+}
+
+void DIO::slotCancel(ProgressItem* item)
+{
+    if (item)
+    {
+        item->setComplete();
+    }
+}
+
+void DIO::slotOneProccessed(int operation)
+{
+    ProgressItem* const item = getProgressItem(operation);
+
+    if (item)
+    {
+        item->advance(1);
+    }
 }
 
 void DIO::slotRenamed(const QUrl& oldUrl, const QUrl& newUrl)
@@ -499,6 +570,31 @@ void DIO::slotRenamed(const QUrl& oldUrl, const QUrl& newUrl)
     LoadingCacheInterface::fileChanged(newUrl.toLocalFile());
 
     emit imageRenameSucceeded(oldUrl);
+}
+
+ProgressItem* DIO::getProgressItem(int operation)
+{
+    ProgressItem* item = 0;
+
+    switch (operation)
+    {
+        case Copy:
+            item = ProgressManager::instance()->findItembyId(QLatin1String("DIOCopy"));
+            break;
+        case Move:
+            item = ProgressManager::instance()->findItembyId(QLatin1String("DIOMove"));
+            break;
+        case Trash:
+            item = ProgressManager::instance()->findItembyId(QLatin1String("DIOTrash"));
+            break;
+        case Delete:
+            item = ProgressManager::instance()->findItembyId(QLatin1String("DIODelete"));
+            break;
+        default:
+            break;
+    }
+
+    return item;
 }
 
 } // namespace Digikam

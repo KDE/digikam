@@ -44,12 +44,14 @@ public:
 
     Private()
         : jobsCount(0),
+          operation(0),
           isCanceled(false),
           keepErrors(true)
     {
     }
 
     int            jobsCount;
+    int            operation;
     bool           isCanceled;
 
     bool           keepErrors;
@@ -67,8 +69,9 @@ IOJobsThread::~IOJobsThread()
     delete d;
 }
 
-void IOJobsThread::copy(const QList<QUrl>& srcFiles, const QUrl destAlbum)
+void IOJobsThread::copy(int operation, const QList<QUrl>& srcFiles, const QUrl destAlbum)
 {
+    d->operation = operation;
     ActionJobCollection collection;
 
     foreach (const QUrl& url, srcFiles)
@@ -84,8 +87,9 @@ void IOJobsThread::copy(const QList<QUrl>& srcFiles, const QUrl destAlbum)
     appendJobs(collection);
 }
 
-void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
+void IOJobsThread::move(int operation, const QList<QUrl>& srcFiles, const QUrl destAlbum)
 {
+    d->operation = operation;
     ActionJobCollection collection;
 
     foreach (const QUrl& url, srcFiles)
@@ -101,8 +105,9 @@ void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
     appendJobs(collection);
 }
 
-void IOJobsThread::deleteFiles(const QList<QUrl>& srcsToDelete, bool useTrash)
+void IOJobsThread::deleteFiles(int operation, const QList<QUrl>& srcsToDelete, bool useTrash)
 {
+    d->operation = operation;
     ActionJobCollection collection;
 
     foreach (const QUrl& url, srcsToDelete)
@@ -155,11 +160,11 @@ void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
             fi.dir().mkpath(fi.dir().path());
         }
 
-        renameFile(srcToRename, newName);
+        renameFile(0, srcToRename, newName);
         listOfJsonFilesToRemove << QUrl::fromLocalFile(item.jsonFilePath);
     }
 
-    deleteFiles(listOfJsonFilesToRemove, false);
+    deleteFiles(0, listOfJsonFilesToRemove, false);
 }
 
 void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
@@ -175,12 +180,14 @@ void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
         access.db()->setItemStatus(item.imageId, DatabaseItem::Status::Obsolete);
     }
 
-    deleteFiles(urlsToDelete, false);
+    deleteFiles(0, urlsToDelete, false);
 }
 
-void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
+void IOJobsThread::renameFile(int operation, const QUrl& srcToRename, const QUrl& newName)
 {
+    d->operation = operation;
     ActionJobCollection collection;
+
     RenameFileJob* const j = new RenameFileJob(srcToRename, newName);
 
     connectOneJob(j);
@@ -266,6 +273,8 @@ void IOJobsThread::oneJobFinished()
 {
     d->jobsCount--;
 
+    emit oneProccessed(d->operation);
+
     if (d->jobsCount == 0)
     {
         emit finished();
@@ -276,6 +285,11 @@ void IOJobsThread::oneJobFinished()
 void IOJobsThread::error(const QString& errString)
 {
     d->errorsList.append(errString);
+}
+
+int IOJobsThread::operation()
+{
+    return d->operation;
 }
 
 } // namespace Digikam

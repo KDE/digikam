@@ -46,17 +46,19 @@ public:
 
     /**
      * @brief Starts a number of jobs to copy source files to destination
+     * @param operation: file operation mode
      * @param srcFiles: files to be copied
      * @param destAlbum: destination folder
      */
-    void copy(const QList<QUrl>& srcFiles, const QUrl destAlbum);
+    void copy(int operation, const QList<QUrl>& srcFiles, const QUrl destAlbum);
 
     /**
      * @brief Starts a number of jobs to move source files to destination
+     * @param operation: file operation mode
      * @param srcFiles: files to be moved
      * @param destAlbum: destination folder
      */
-    void move(const QList<QUrl>& srcFiles, const QUrl destAlbum);
+    void move(int operation, const QList<QUrl>& srcFiles, const QUrl destAlbum);
 
     /**
      * @brief Starts a job for listing trash items in a collection
@@ -78,22 +80,19 @@ public:
 
     /**
      * @brief Starts a number of jobs to delete multiple files
+     * @param operation: file operation mode
      * @param srcsToDelete: files to be deleted
      * @param useTrash: a flag to use trash or not
      */
-    void deleteFiles(const QList<QUrl>& srcsToDelete, bool useTrash);
+    void deleteFiles(int operation, const QList<QUrl>& srcsToDelete, bool useTrash);
 
     /**
      * @brief Starts one job to rename a file to a new name
+     * @param operation: file operation mode
      * @param srcToRename: the url to be renamed
      * @param newName: the url of the renamed item
      */
-    void renameFile(const QUrl& srcToRename, const QUrl& newName);
-
-    /**
-     * @brief cancels thread execution
-     */
-    void cancel();
+    void renameFile(int operation, const QUrl& srcToRename, const QUrl& newName);
 
     /**
      * @brief isCanceled
@@ -125,6 +124,12 @@ public:
      */
     QList<QString>& errorsList();
 
+    /**
+     * @brief operation
+     * @return
+     */
+    int operation();
+
 public Q_SLOTS:
 
     /**
@@ -137,7 +142,12 @@ public Q_SLOTS:
      * @brief A slot to receive the error from the job
      * @param errString: string to be appended
      */
+
     void error(const QString& errString);
+    /**
+     * @brief cancels thread execution
+     */
+    void cancel();
 
 Q_SIGNALS:
 
@@ -145,6 +155,7 @@ Q_SIGNALS:
 
     void renamed(const QUrl& oldUrl, const QUrl& newURl);
     void renameFailed(const QUrl& oldUrl);
+    void oneProccessed(int operation);
 
     void collectionTrashItemInfo(const DTrashItemInfo& trashItemInfo);
 

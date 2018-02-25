@@ -61,6 +61,11 @@ CopyJob::CopyJob(const QUrl& src, const QUrl& dest, bool isMove)
 
 void CopyJob::run()
 {
+    if (m_cancel)
+    {
+        return;
+    }
+
     QFileInfo srcInfo(m_src.toLocalFile());
     QDir dstDir(m_dest.toLocalFile());
 
@@ -166,6 +171,11 @@ DeleteJob::DeleteJob(const QUrl& srcToDelete, bool useTrash, bool markAsObsolete
 
 void DeleteJob::run()
 {
+    if (m_cancel)
+    {
+        return;
+    }
+
     QFileInfo fileInfo(m_srcToDelete.toLocalFile());
     qCDebug(DIGIKAM_IOJOB_LOG) << "Deleting:   " << fileInfo.filePath();
     qCDebug(DIGIKAM_IOJOB_LOG) << "File exists?" << fileInfo.exists();

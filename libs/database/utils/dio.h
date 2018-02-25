@@ -40,6 +40,7 @@ namespace Digikam
 
 class PAlbum;
 class ImageInfo;
+class ProgressItem;
 
 class DIGIKAM_EXPORT DIO : public QObject
 {
@@ -107,9 +108,13 @@ private:
     void processRename(const QUrl& src, const QUrl& dest);
     void createJob(int operation, const QList<QUrl>& src, const QUrl& dest);
 
+    ProgressItem* getProgressItem(int operation);
+
 private Q_SLOTS:
 
     void slotResult();
+    void slotCancel(ProgressItem* item);
+    void slotOneProccessed(int operation);
     void slotRenamed(const QUrl& oldUrl, const QUrl& newUrl);
 
 private:
