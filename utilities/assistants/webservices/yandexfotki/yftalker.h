@@ -156,19 +156,19 @@ private Q_SLOTS:
 
     void slotFinished(QNetworkReply* reply);
 
-    void parseResponseGetSession();
-    //void parseResponseCheckToken();
-    void parseResponseGetToken();
-    void parseResponseGetService();
-    void parseResponseListAlbums();
+    void slotParseResponseGetSession();
+    //void slotParseResponseCheckToken();
+    void slotParseResponseGetToken();
+    void slotParseResponseGetService();
+    void slotParseResponseListAlbums();
 
-    void parseResponseListPhotos();
-    bool parsePhotoXml(const QDomElement& entryElem,
-                       YFPhoto& photo);
+    void slotParseResponseListPhotos();
+    bool slotParsePhotoXml(const QDomElement& entryElem,
+                           YFPhoto& photo);
 
-    void parseResponseUpdatePhotoFile();
-    void parseResponseUpdatePhotoInfo();
-    void parseResponseUpdateAlbum();
+    void slotParseResponseUpdatePhotoFile();
+    void slotParseResponseUpdatePhotoInfo();
+    void slotParseResponseUpdateAlbum();
 
 private:
 

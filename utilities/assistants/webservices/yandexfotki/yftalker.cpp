@@ -220,7 +220,7 @@ void YFTalker::checkToken()
     d->reply = d->netMngr->get(netRequest);
 
     // Error:    STATE_CHECKTOKEN_INVALID
-    // Function: parseResponseCheckToken()
+    // Function: slotParseResponseCheckToken()
 
     d->buffer.resize(0);
 }
@@ -611,28 +611,28 @@ void YFTalker::slotFinished(QNetworkReply* reply)
     switch(d->state)
     {
         case (STATE_GETSERVICE):
-            parseResponseGetService();
+            slotParseResponseGetService();
             break;
         case (STATE_GETSESSION):
-            parseResponseGetSession();
+            slotParseResponseGetSession();
             break;
         case (STATE_GETTOKEN):
-            parseResponseGetToken();
+            slotParseResponseGetToken();
             break;
         case (STATE_LISTALBUMS):
-            parseResponseListAlbums();
+            slotParseResponseListAlbums();
             break;
         case (STATE_LISTPHOTOS):
-            parseResponseListPhotos();
+            slotParseResponseListPhotos();
             break;
         case (STATE_UPDATEPHOTO_FILE):
-            parseResponseUpdatePhotoFile();
+            slotParseResponseUpdatePhotoFile();
             break;
         case (STATE_UPDATEPHOTO_INFO):
-            parseResponseUpdatePhotoInfo();
+            slotParseResponseUpdatePhotoInfo();
             break;
         case (STATE_UPDATEALBUM):
-            parseResponseUpdateAlbum();
+            slotParseResponseUpdateAlbum();
             break;
         default:
             break;
@@ -641,7 +641,7 @@ void YFTalker::slotFinished(QNetworkReply* reply)
     reply->deleteLater();
 }
 
-void YFTalker::parseResponseGetService()
+void YFTalker::slotParseResponseGetService()
 {
     QDomDocument doc(QString::fromLatin1("service"));
 
@@ -723,7 +723,7 @@ void YFTalker::parseResponseGetService()
 }
 
 /*
-void YFTalker::parseResponseCheckToken()
+void YFTalker::slotParseResponseCheckToken()
 {
     // token still valid, skip getSession and getToken
     d->state = STATE_GETTOKEN_DONE;
@@ -731,7 +731,7 @@ void YFTalker::parseResponseCheckToken()
 }
 */
 
-void YFTalker::parseResponseGetSession()
+void YFTalker::slotParseResponseGetSession()
 {
     QDomDocument doc(QString::fromLatin1("session"));
 
@@ -762,7 +762,7 @@ void YFTalker::parseResponseGetSession()
     emit signalGetSessionDone();
 }
 
-void YFTalker::parseResponseGetToken()
+void YFTalker::slotParseResponseGetToken()
 {
     QDomDocument doc(QString::fromLatin1("response"));
 
@@ -808,7 +808,7 @@ void YFTalker::parseResponseGetToken()
 }
 
 
-void YFTalker::parseResponseListAlbums()
+void YFTalker::slotParseResponseListAlbums()
 {
     QDomDocument doc(QString::fromLatin1("feed"));
 
@@ -923,7 +923,7 @@ void YFTalker::parseResponseListAlbums()
     }
 }
 
-bool YFTalker::parsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
+bool YFTalker::slotParsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
 {
 
     const QDomElement urn             = entryElem.firstChildElement(QString::fromLatin1("id"));
@@ -1038,7 +1038,7 @@ bool YFTalker::parsePhotoXml(const QDomElement& entryElem, YFPhoto& photo)
     return true;
 }
 
-void YFTalker::parseResponseListPhotos()
+void YFTalker::slotParseResponseListPhotos()
 {
     QDomDocument doc(QString::fromLatin1("feed"));
 
@@ -1074,7 +1074,7 @@ void YFTalker::parseResponseListPhotos()
     {
         YFPhoto photo;
 
-        if (parsePhotoXml(entryElem, photo))
+        if (slotParsePhotoXml(entryElem, photo))
         {
             d->photos.append(photo);
         }
@@ -1105,7 +1105,7 @@ void YFTalker::parseResponseListPhotos()
     }
 }
 
-void YFTalker::parseResponseUpdatePhotoFile()
+void YFTalker::slotParseResponseUpdatePhotoFile()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Uploaded photo document" << d->buffer;
     QDomDocument doc(QString::fromLatin1("entry"));
@@ -1120,7 +1120,7 @@ void YFTalker::parseResponseUpdatePhotoFile()
     YFPhoto tmpPhoto;
     const QDomElement entryElem = doc.documentElement();
 
-    if (!parsePhotoXml(entryElem, tmpPhoto))
+    if (!slotParsePhotoXml(entryElem, tmpPhoto))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Invalid XML, entry not found" << d->buffer;
         return setErrorState(STATE_UPDATEPHOTO_INFO_ERROR);
@@ -1138,7 +1138,7 @@ void YFTalker::parseResponseUpdatePhotoFile()
     updatePhotoInfo(photo);
 }
 
-void YFTalker::parseResponseUpdatePhotoInfo()
+void YFTalker::slotParseResponseUpdatePhotoInfo()
 {
     YFPhoto& photo = *d->lastPhoto;
 
@@ -1154,7 +1154,7 @@ void YFTalker::parseResponseUpdatePhotoInfo()
 
     const QDomElement entryElem = doc.documentElement();
 
-    if (!parsePhotoXml(entryElem, photo))
+    if (!slotParsePhotoXml(entryElem, photo))
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Can't reload photo after uploading";
         return setErrorState(STATE_UPDATEPHOTO_INFO_ERROR);
@@ -1166,7 +1166,7 @@ void YFTalker::parseResponseUpdatePhotoInfo()
     emit signalUpdatePhotoDone(photo);
 }
 
-void YFTalker::parseResponseUpdateAlbum()
+void YFTalker::slotParseResponseUpdateAlbum()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Updated album" << d->buffer;
 
