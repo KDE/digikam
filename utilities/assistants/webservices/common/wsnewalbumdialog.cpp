@@ -44,7 +44,7 @@ class WSNewAlbumDialog::Private
 {
 public:
 
-    Private(QWidget* const widget, const QString& name)
+    explicit Private(QWidget* const widget, const QString& name)
     {
         titleEdt       = new QLineEdit;
         descEdt        = new QTextEdit;

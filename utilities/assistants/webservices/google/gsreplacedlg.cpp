@@ -53,7 +53,7 @@ class ReplaceDialog::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         progressPix     = DWorkingPixmap();
         bAdd            = 0;

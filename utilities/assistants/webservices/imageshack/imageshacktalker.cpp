@@ -67,7 +67,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         //userAgent   = QString::fromLatin1("KIPI-Plugin-ImageShack/%1").arg(kipipluginsVersion());
         userAgent       = QString::fromLatin1("digiKam-ImageShack/%1").arg(digiKamVersion());

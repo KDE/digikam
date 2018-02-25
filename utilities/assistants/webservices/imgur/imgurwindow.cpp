@@ -55,7 +55,7 @@ class ImgurWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         list             = 0;
         api              = 0;

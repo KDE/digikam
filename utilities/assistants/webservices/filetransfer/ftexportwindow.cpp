@@ -53,7 +53,7 @@ class FTExportWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         exportWidget = 0;
     }

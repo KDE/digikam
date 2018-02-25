@@ -25,6 +25,7 @@
 #define FB_ITEM_H
 
 // Qt includes
+
 #include <QString>
 
 namespace Digikam

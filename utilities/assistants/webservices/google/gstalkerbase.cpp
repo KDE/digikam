@@ -69,7 +69,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         parent       = 0;
         netMngr      = 0;

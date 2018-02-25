@@ -47,7 +47,7 @@ class PiwigoSession::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

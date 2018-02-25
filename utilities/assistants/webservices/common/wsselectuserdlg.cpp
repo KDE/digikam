@@ -45,7 +45,7 @@ class WSSelectUserDlg::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         userComboBox = 0;
         label        = 0;

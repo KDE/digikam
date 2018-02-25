@@ -83,7 +83,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         state   = GP_LOGOUT;
         netMngr = 0;

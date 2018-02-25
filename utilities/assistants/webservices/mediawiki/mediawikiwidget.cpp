@@ -70,7 +70,7 @@ class MediaWikiWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         fileBox            = 0;
         titleEdit          = 0;

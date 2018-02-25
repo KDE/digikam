@@ -56,7 +56,7 @@ class ImgurTalker::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         workTimer = 0;
         reply     = 0;

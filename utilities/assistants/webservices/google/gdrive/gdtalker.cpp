@@ -81,7 +81,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         state          = GD_LOGOUT;
         netMngr        = 0;

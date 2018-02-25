@@ -51,9 +51,9 @@ class WSSettingsWidget::Private
 {
 public:
 
-    Private(QWidget* const widget,
-            DInfoInterface* const interface,
-            const QString& name)
+    explicit Private(QWidget* const widget,
+                     DInfoInterface* const interface,
+                     const QString& name)
     {
         iface              = interface;
         toolName           = name;

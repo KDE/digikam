@@ -54,7 +54,7 @@ class MediaWikiTalker::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         interface = 0;
         mediawiki = 0;

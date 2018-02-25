@@ -71,8 +71,8 @@ class PiwigoWindow::Private
 {
 public:
 
-    Private(PiwigoWindow* const parent,
-            DInfoInterface* const interface);
+    explicit Private(PiwigoWindow* const parent,
+                     DInfoInterface* const interface);
 
     QWidget*                       widget;
 

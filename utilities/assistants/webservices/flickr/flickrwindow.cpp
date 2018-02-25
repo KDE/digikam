@@ -62,7 +62,7 @@ class FlickrWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         uploadCount               = 0;
         uploadTotal               = 0;

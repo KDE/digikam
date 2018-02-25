@@ -88,7 +88,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         state           = FB_GETLOGGEDINUSER;
         apiVersion      = QString::fromLatin1("2.4");

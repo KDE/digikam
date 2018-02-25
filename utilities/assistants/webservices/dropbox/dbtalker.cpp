@@ -67,7 +67,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         apikey   = QLatin1String("mv2pk07ym9bx3r8");
         secret   = QLatin1String("f33sflc8jhiozqu");

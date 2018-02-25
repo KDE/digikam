@@ -44,7 +44,8 @@ namespace Digikam
 class WSToolDialog::Private
 {
 public:
-    Private()
+
+    explicit Private()
         : buttonBox(0),
           startButton(0),
           mainWidget(0),

@@ -52,7 +52,7 @@ class FTExportWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         targetLabel        = 0;
         targetDialog       = 0;

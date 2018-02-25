@@ -45,7 +45,7 @@ class WSImagesPage::Private
 {
 public:
 
-    Private(QWizard* const dialog)
+    explicit Private(QWizard* const dialog)
       : imageList(0),
         wizard(0),
         iface(0)

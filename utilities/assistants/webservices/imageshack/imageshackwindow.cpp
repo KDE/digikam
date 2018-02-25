@@ -70,7 +70,7 @@ class ImageShackWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         imagesCount = 0;
         imagesTotal = 0;
@@ -78,7 +78,7 @@ public:
         widget      = 0;
         talker      = 0;
         albumDlg    = 0;
-        iface       = 0;        
+        iface       = 0;
     }
 
     unsigned int           imagesCount;

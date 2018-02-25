@@ -49,7 +49,7 @@ class GSNewAlbumDlg::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         publicRBtn    = 0;
         unlistedRBtn  = 0;
@@ -61,7 +61,7 @@ public:
     QRadioButton*  unlistedRBtn;
     QRadioButton*  protectedRBtn;
 };
-    
+
 GSNewAlbumDlg::GSNewAlbumDlg(QWidget* const parent,
                              const QString& serviceName,
                              const QString& toolName)

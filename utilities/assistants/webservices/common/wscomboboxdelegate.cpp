@@ -40,7 +40,7 @@ class ComboBoxDelegate::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         parent    = 0;
         rowEdited = -1;

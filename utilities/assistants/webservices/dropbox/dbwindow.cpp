@@ -54,7 +54,7 @@ class DBWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         imagesCount = 0;
         imagesTotal = 0;

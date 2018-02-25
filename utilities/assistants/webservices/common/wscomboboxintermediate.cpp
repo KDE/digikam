@@ -36,7 +36,7 @@ class WSComboBoxIntermediate::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : isIntermediate(false)
     {
     }
@@ -44,7 +44,7 @@ public:
     bool    isIntermediate;
     QString intermediateText;
 };
-    
+
 WSComboBoxIntermediate::WSComboBoxIntermediate(QWidget* const parent, const QString& text)
     : QComboBox(parent),
       d(new Private)

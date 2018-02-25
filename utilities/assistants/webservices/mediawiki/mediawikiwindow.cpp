@@ -71,7 +71,7 @@ class MediaWikiWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         widget       = 0;
         mediawiki    = 0;

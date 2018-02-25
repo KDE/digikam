@@ -45,7 +45,7 @@ class ImageShackSession::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         loggedIn = false;
     }

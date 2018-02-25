@@ -51,7 +51,7 @@ class WSLoginDialog::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : headerLabel(0),
           loginEdit(0),
           passwordEdit(0)

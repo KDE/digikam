@@ -44,7 +44,7 @@ class FlickrList::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         isPublic      = Qt::Unchecked;
         isFamily      = Qt::Unchecked;

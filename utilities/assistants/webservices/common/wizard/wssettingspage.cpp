@@ -54,7 +54,7 @@ class WSSettingsPage::Private
 {
 public:
 
-    Private(QWizard* const dialog)
+    explicit Private(QWizard* const dialog)
       : labelMailAgent(0),
         labelImagesResize(0),
         labelImagesFormat(0),

@@ -63,7 +63,7 @@ class FbWindow::Private
 {
 public:
 
-    Private(QWidget* const parent, DInfoInterface* const interface)
+    explicit Private(QWidget* const parent, DInfoInterface* const interface)
     {
         iface           = interface;
         widget          = new FbWidget(parent, iface, QString::fromLatin1("Facebook"));

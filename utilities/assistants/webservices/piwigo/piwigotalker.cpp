@@ -58,7 +58,7 @@ class PiwigoTalker::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         parent     = 0;
         state      = GE_LOGOUT;

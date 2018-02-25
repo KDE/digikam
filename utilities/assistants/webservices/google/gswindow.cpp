@@ -67,7 +67,7 @@ class GSWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         widget          = 0;
         albumDlg        = 0;

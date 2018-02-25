@@ -48,7 +48,7 @@ class FTImportWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         importWidget = 0;
         iface        = 0;

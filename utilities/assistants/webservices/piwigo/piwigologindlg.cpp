@@ -52,7 +52,7 @@ class PiwigoLoginDlg::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         pUrlEdit      = 0;
         pUsernameEdit = 0;

@@ -45,7 +45,7 @@ class FTImportWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         imageList       = 0;
         uploadWidget    = 0;
