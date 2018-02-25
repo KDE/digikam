@@ -26,7 +26,6 @@ add_executable(flickr ${flickr_SRCS})
 
 target_link_libraries(flickr
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -40,7 +39,6 @@ add_executable(imgur ${imgur_SRCS})
 
 target_link_libraries(imgur
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -54,7 +52,6 @@ add_executable(dropbox ${dropbox_SRCS})
 
 target_link_libraries(dropbox
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -68,7 +65,6 @@ add_executable(smugmug ${smugmug_SRCS})
 
 target_link_libraries(smugmug
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -82,7 +78,6 @@ add_executable(imageshack ${imageshack_SRCS})
 
 target_link_libraries(imageshack
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -96,7 +91,6 @@ add_executable(facebook ${facebook_SRCS})
 
 target_link_libraries(facebook
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -110,7 +104,6 @@ add_executable(rajce ${rajce_SRCS})
 
 target_link_libraries(rajce
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -124,7 +117,6 @@ add_executable(gdrive ${gdrive_SRCS})
 
 target_link_libraries(gdrive
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -138,7 +130,6 @@ add_executable(gphoto ${gphoto_SRCS})
 
 target_link_libraries(gphoto
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -152,7 +143,6 @@ add_executable(yandexfotki ${yandexfotki_SRCS})
 
 target_link_libraries(yandexfotki
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -166,7 +156,6 @@ add_executable(piwigo ${piwigo_SRCS})
 
 target_link_libraries(piwigo
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -182,7 +171,6 @@ if(KF5MediaWiki_FOUND)
 
     target_link_libraries(mediawiki
                           digikamcore
-                          libdng
 
                           Qt5::Gui
                           Qt5::Xml
@@ -200,7 +188,6 @@ if(KF5Vkontakte_FOUND)
 
     target_link_libraries(vkontakte
                           digikamcore
-                          libdng
 
                           Qt5::Gui
                           Qt5::Xml
@@ -218,7 +205,6 @@ if(KF5KIO_FOUND)
 
     target_link_libraries(filetransfer
                           digikamcore
-                          libdng
 
                           Qt5::Gui
                           Qt5::Xml
@@ -235,7 +221,6 @@ add_executable(webservices ${webservices_SRCS})
 
 target_link_libraries(webservices
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
