@@ -27,13 +27,10 @@
 
 #include <QLabel>
 #include <QSpinBox>
-#include <QCheckBox>
-#include <QGroupBox>
 #include <QRadioButton>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QComboBox>
 #include <QApplication>
 #include <QPushButton>
 #include <QLineEdit>
@@ -51,8 +48,30 @@
 namespace Digikam
 {
 
+class YFWidget::Private
+{
+public:
+
+    explicit Private()
+    {
+        accessCombo          = 0;
+        hideOriginalCheck    = 0;
+        disableCommentsCheck = 0;
+        adultCheck           = 0;
+        policyGroup          = 0;
+    }
+
+    // upload settings
+    QComboBox*    accessCombo;
+    QCheckBox*    hideOriginalCheck;
+    QCheckBox*    disableCommentsCheck;
+    QCheckBox*    adultCheck;
+    QButtonGroup* policyGroup;
+};
+
 YFWidget::YFWidget(QWidget* const parent, DInfoInterface* const iface, const QString& toolName)
-    : WSSettingsWidget(parent, iface, toolName)
+    : WSSettingsWidget(parent, iface, toolName),
+      d(new Private)
 {
     QGroupBox* const optionsBox         = getOptionsBox();
     QGridLayout* const optionsBoxLayout = getOptionsBoxLayout();
@@ -70,29 +89,29 @@ YFWidget::YFWidget(QWidget* const parent, DInfoInterface* const iface, const QSt
     policyRadio4->setWhatsThis(i18n("Add photo as new"));
 
     QLabel* const accessLabel = new QLabel(i18n("Privacy settings:"), optionsBox);
-    m_accessCombo             = new QComboBox(optionsBox);
-    m_accessCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder")),
+    d->accessCombo             = new QComboBox(optionsBox);
+    d->accessCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder")),
                            i18n("Public access"), YFPhoto::ACCESS_PUBLIC);
-    m_accessCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder-red")),
+    d->accessCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder-red")),
                            i18n("Friends access"), YFPhoto::ACCESS_FRIENDS);
-    m_accessCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder-locked")),
+    d->accessCombo->addItem(QIcon::fromTheme(QString::fromLatin1("folder-locked")),
                            i18n("Private access"), YFPhoto::ACCESS_PRIVATE);
 
-    m_hideOriginalCheck    = new QCheckBox(i18n("Hide original photo"), optionsBox);
-    m_disableCommentsCheck = new QCheckBox(i18n("Disable comments"), optionsBox);
-    m_adultCheck           = new QCheckBox(i18n("Adult content"), optionsBox);
+    d->hideOriginalCheck    = new QCheckBox(i18n("Hide original photo"), optionsBox);
+    d->disableCommentsCheck = new QCheckBox(i18n("Disable comments"), optionsBox);
+    d->adultCheck           = new QCheckBox(i18n("Adult content"), optionsBox);
 
-    m_policyGroup          = new QButtonGroup(optionsBox);
-    m_policyGroup->addButton(policyRadio1, POLICY_UPDATE_MERGE);
-    m_policyGroup->addButton(policyRadio3, POLICY_SKIP);
-    m_policyGroup->addButton(policyRadio4, POLICY_ADDNEW);
+    d->policyGroup          = new QButtonGroup(optionsBox);
+    d->policyGroup->addButton(policyRadio1, POLICY_UPDATE_MERGE);
+    d->policyGroup->addButton(policyRadio3, POLICY_SKIP);
+    d->policyGroup->addButton(policyRadio4, POLICY_ADDNEW);
 
     optionsBoxLayout->addItem(spacer1,                  3, 0, 1, 5);
     optionsBoxLayout->addWidget(accessLabel,            4, 0, 1, 5);
-    optionsBoxLayout->addWidget(m_accessCombo,          5, 1, 1, 4);
-    optionsBoxLayout->addWidget(m_adultCheck,           6, 1, 1, 4);
-    optionsBoxLayout->addWidget(m_hideOriginalCheck,    7, 1, 1, 4);
-    optionsBoxLayout->addWidget(m_disableCommentsCheck, 8, 1, 1, 4);
+    optionsBoxLayout->addWidget(d->accessCombo,          5, 1, 1, 4);
+    optionsBoxLayout->addWidget(d->adultCheck,           6, 1, 1, 4);
+    optionsBoxLayout->addWidget(d->hideOriginalCheck,    7, 1, 1, 4);
+    optionsBoxLayout->addWidget(d->disableCommentsCheck, 8, 1, 1, 4);
     optionsBoxLayout->addItem(spacer2,                  9, 0, 1, 5);
     optionsBoxLayout->addWidget(policyLabel,            10, 0, 1, 5);
     optionsBoxLayout->addWidget(policyRadio1,           11, 1, 1, 4);
@@ -105,10 +124,36 @@ YFWidget::YFWidget(QWidget* const parent, DInfoInterface* const iface, const QSt
 
 YFWidget::~YFWidget()
 {
+    delete d;
 }
 
 void YFWidget::updateLabels(const QString& /*name*/, const QString& /*url*/)
 {
 }
 
+QComboBox* YFWidget::accessCB() const
+{
+    return d->accessCombo;
+}
+
+QCheckBox* YFWidget::hideOriginalCB() const
+{
+    return d->hideOriginalCheck;
+}
+    
+QCheckBox* YFWidget::disableCommentsCB() const
+{
+    return d->disableCommentsCheck;
+}
+    
+QCheckBox* YFWidget::adultCB() const
+{
+    return d->adultCheck;
+}
+    
+QButtonGroup* YFWidget::policyGB() const
+{
+    return d->policyGroup;
+}
+    
 } // namespace Digikam

@@ -163,11 +163,11 @@ YFWindow::YFWindow(DInfoInterface* const iface, QWidget* const parent, bool impo
     d->imageQualitySpin     = d->widget->getImgQualitySpB();
     d->imgList              = d->widget->imagesList();
     d->progressBar          = d->widget->progressBar();
-    d->accessCombo          = d->widget->m_accessCombo;
-    d->hideOriginalCheck    = d->widget->m_hideOriginalCheck;
-    d->disableCommentsCheck = d->widget->m_disableCommentsCheck;
-    d->adultCheck           = d->widget->m_adultCheck;
-    d->policyGroup          = d->widget->m_policyGroup;
+    d->accessCombo          = d->widget->accessCB();
+    d->hideOriginalCheck    = d->widget->hideOriginalCB();
+    d->disableCommentsCheck = d->widget->disableCommentsCB();
+    d->adultCheck           = d->widget->adultCB();
+    d->policyGroup          = d->widget->policyGB();
     d->albumsBox            = d->widget->getAlbumBox();
 
     connect(d->changeUserButton, SIGNAL(clicked()),

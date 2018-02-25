@@ -24,6 +24,12 @@
 #ifndef YF_WIDGET_H
 #define YF_WIDGET_H
 
+// Qt includes
+
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QComboBox>
+
 // Local includes
 
 #include "wssettingswidget.h"
@@ -41,7 +47,7 @@ public:
     enum UpdatePolicy
     {
         POLICY_UPDATE_MERGE = 0,
-        POLICY_UPDATE_KEEP, // is not used in GUI
+        POLICY_UPDATE_KEEP,       // is not used in GUI
         POLICY_SKIP,
         POLICY_ADDNEW
     };
@@ -51,18 +57,22 @@ public:
     explicit YFWidget(QWidget* const parent, DInfoInterface* const iface, const QString& toolName);
     ~YFWidget();
 
-    void updateLabels(const QString& name = QString(), const QString& url = QString()) Q_DECL_OVERRIDE;
+public:
+
+    void updateLabels(const QString& name = QString(),
+                      const QString& url  = QString())
+                      Q_DECL_OVERRIDE;
+
+    QComboBox*    accessCB()          const;
+    QCheckBox*    hideOriginalCB()    const;
+    QCheckBox*    disableCommentsCB() const;
+    QCheckBox*    adultCB()           const;
+    QButtonGroup* policyGB()          const;
 
 private:
 
-    // upload settings
-    QComboBox*    m_accessCombo;
-    QCheckBox*    m_hideOriginalCheck;
-    QCheckBox*    m_disableCommentsCheck;
-    QCheckBox*    m_adultCheck;
-    QButtonGroup* m_policyGroup;
-
-    friend class YFWindow;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
