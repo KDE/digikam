@@ -31,8 +31,6 @@ target_link_libraries(testdatabaseswitch
                       digikamcore
                       digikamgui
 
-                      libdng
-
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Test
@@ -56,8 +54,6 @@ add_executable(testdatabaseinit ${testdatabaseinit_SRCS})
 target_link_libraries(testdatabaseinit
                       digikamcore
                       digikamgui
-
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -84,8 +80,6 @@ ecm_mark_as_test(databasefieldstest)
 target_link_libraries(databasefieldstest
 
                       digikamgui
-
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -114,8 +108,6 @@ endif()
 # target_link_libraries(databasetagstest
 #
 #                       digikamgui
-#
-#                       libdng
 #
 #                       Qt5::Core
 #                       Qt5::Gui
