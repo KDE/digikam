@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_COPYFILESTASK_H
-#define PANO_COPYFILESTASK_H
+#ifndef PANO_COPY_FILES_TASK_H
+#define PANO_COPY_FILES_TASK_H
 
 // Qt includes
 
@@ -39,8 +39,13 @@ class CopyFilesTask : public PanoTask
 {
 public:
 
-    CopyFilesTask(const QString& workDirPath, const QUrl& panoUrl, const QUrl& finalPanoUrl,
-                    const QUrl& ptoUrl, const PanoramaItemUrlsMap& urls, bool sPTO, bool GPlusMetadata);
+    explicit CopyFilesTask(const QString& workDirPath,
+                           const QUrl& panoUrl,
+                           const QUrl& finalPanoUrl,
+                           const QUrl& ptoUrl,
+                           const PanoramaItemUrlsMap& urls,
+                           bool sPTO,
+                           bool GPlusMetadata);
     ~CopyFilesTask();
 
 protected:
@@ -52,7 +57,7 @@ private:
     const QUrl&                         panoUrl;
     const QUrl                          finalPanoUrl;
     const QUrl&                         ptoUrl;
-    const PanoramaItemUrlsMap* const            urlList;
+    const PanoramaItemUrlsMap* const    urlList;
     const bool                          savePTO;
     const bool                          addGPlusMetadata;
 
@@ -61,4 +66,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* PANO_COPYFILESTASK_H */
+#endif // PANO_COPY_FILES_TASK_H

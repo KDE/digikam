@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef COMMANDTASK_H
-#define COMMANDTASK_H
+#ifndef COMMAND_TASK_H
+#define COMMAND_TASK_H
 
 // Qt includes
 
@@ -38,14 +38,14 @@ class CommandTask : public PanoTask
 {
 public:
 
-    CommandTask(PanoAction action, const QString& workDirPath, const QString& commandPath);
+    explicit CommandTask(PanoAction action, const QString& workDirPath, const QString& commandPath);
     ~CommandTask();
 
     void    requestAbort();
 
 protected:
 
-    QString                             output;
+    QString output;
 
 protected:
 
@@ -57,10 +57,10 @@ protected:
 
 private:
 
-    QSharedPointer<QProcess>            process;
-    QString                             commandPath;
+    QSharedPointer<QProcess> process;
+    QString                  commandPath;
 };
 
 }  // namespace Digikam
 
-#endif /* COMMANDTASK_H */
+#endif // COMMAND_TASK_H

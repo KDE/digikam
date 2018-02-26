@@ -35,9 +35,11 @@ class AutoCropTask : public CommandTask
 
 public:
 
-    AutoCropTask(const QString& workDirPath,
-                 const QUrl& autoOptimiserPtoUrl, QUrl& viewCropPtoUrl,
-                 bool buildGPano, const QString& panoModifyPath);
+    explicit AutoCropTask(const QString& workDirPath,
+                          const QUrl& autoOptimiserPtoUrl,
+                          QUrl& viewCropPtoUrl,
+                          bool buildGPano,
+                          const QString& panoModifyPath);
     ~AutoCropTask();
 
 protected:

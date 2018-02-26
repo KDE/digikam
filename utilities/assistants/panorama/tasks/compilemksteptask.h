@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef COMPILEMKSTEPTASK_H
-#define COMPILEMKSTEPTASK_H
+#ifndef COMPILE_MK_STEP_TASK_H
+#define COMPILE_MK_STEP_TASK_H
 
 // Local includes
 
@@ -34,9 +34,13 @@ class CompileMKStepTask : public CommandTask
 {
 public:
 
-    CompileMKStepTask(const QString& workDirPath, int id, const QUrl& mkUrl,
-                      const QString& nonaPath, const QString& enblendPath,
-                      const QString& makePath, bool preview);
+    explicit CompileMKStepTask(const QString& workDirPath,
+                               int id,
+                               const QUrl& mkUrl,
+                               const QString& nonaPath,
+                               const QString& enblendPath,
+                               const QString& makePath,
+                               bool preview);
     ~CompileMKStepTask();
 
 public:
@@ -56,4 +60,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* COMPILEMKSTEPTASK_H */
+#endif // COMPILE_MK_STEP_TASK_H
