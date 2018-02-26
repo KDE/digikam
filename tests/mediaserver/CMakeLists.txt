@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -25,7 +25,6 @@ add_executable(dmediaservertest ${dmediaservertest_SRCS})
 
 target_link_libraries(dmediaservertest
                       digikamcore
-                      libdng
 
                       Qt5::Widgets
                       Qt5::Gui
@@ -43,7 +42,6 @@ add_executable(dmediaserver_dlg ${dmediaserver_dlg_SRCS})
 
 target_link_libraries(dmediaserver_dlg
                       digikamcore
-                      libdng
 
                       Qt5::Widgets
                       Qt5::Gui
@@ -62,5 +60,4 @@ target_link_libraries(dmediaserver_dlg
 
 #target_link_libraries(filemediaserver
 #                      digikamcore
-#                      libdng
 #)

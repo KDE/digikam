@@ -32,7 +32,6 @@ ecm_mark_as_test(dimgfilteractiontest)
 target_link_libraries(dimgfilteractiontest
 
                       digikamcore
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -60,7 +59,6 @@ target_link_libraries(dimghistorygraphtest
 
                       digikamcore
                       digikamdatabase
-                      libdng
 
                       Qt5::Sql
                       Qt5::Gui
@@ -86,7 +84,6 @@ ecm_mark_as_test(dimghistorytest)
 target_link_libraries(dimghistorytest
 
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Test
@@ -110,7 +107,6 @@ ecm_mark_as_test(dimgfreerotationtest)
 target_link_libraries(dimgfreerotationtest
 
                       digikamcore
-                      libdng
 
                       Qt5::Test
 )
@@ -124,7 +120,6 @@ ecm_mark_nongui_executable(testdimgloader)
 target_link_libraries(testdimgloader
 
                       digikamcore
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -144,7 +139,6 @@ ecm_mark_nongui_executable(testequalizefilter)
 target_link_libraries(testequalizefilter
 
                       digikamcore
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -164,7 +158,6 @@ ecm_mark_nongui_executable(testcolorbalancefilter)
 target_link_libraries(testcolorbalancefilter
 
                       digikamcore
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui

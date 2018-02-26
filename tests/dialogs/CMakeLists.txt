@@ -23,7 +23,6 @@ add_executable(browser ${browser_SRCS})
 target_link_libraries(browser
 
                       digikamcore
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui

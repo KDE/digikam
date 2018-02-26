@@ -24,7 +24,6 @@ ecm_mark_nongui_executable(framesencoder)
 target_link_libraries(framesencoder
 
                       digikamcore
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -44,7 +43,6 @@ ecm_mark_nongui_executable(qtavcodecs)
 target_link_libraries(qtavcodecs
 
                       digikamcore
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -63,7 +61,6 @@ add_executable(player ${player_SRCS})
 target_link_libraries(player
 
                       digikamcore
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui
