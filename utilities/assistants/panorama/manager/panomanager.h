@@ -58,10 +58,14 @@ public:
     explicit PanoManager(QObject* const parent = 0);
     ~PanoManager();
 
+public:
+
     static QPointer<PanoManager> internalPtr;
     static PanoManager*          instance();
     static bool                  isCreated();
 
+public:
+    
     bool checkBinaries();
 
     void checkForHugin2015();
@@ -136,7 +140,7 @@ private:
 
 private:
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 

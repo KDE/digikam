@@ -52,9 +52,11 @@
 namespace Digikam
 {
 
-struct PanoManager::Private
+class PanoManager::Private
 {
-    Private()
+public:
+
+    explicit Private()
       : basePtoData(0),
         cpFindPtoData(0),
         cpCleanPtoData(0),
