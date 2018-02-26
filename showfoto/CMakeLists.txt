@@ -74,8 +74,6 @@ target_link_libraries(showfoto
                       PRIVATE
                       digikamcore
 
-                      libdng
-
                       Qt5::Core
 
                       KF5::I18n
