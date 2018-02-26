@@ -839,7 +839,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
 bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized, bool setProgramName) const
 {
-    if(!dateTime.isValid())
+    if (!dateTime.isValid())
         return false;
 
     if (!setProgramId(setProgramName))
@@ -854,18 +854,18 @@ bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDig
         // For digital cameras, these dates should be both set, and identical.
         // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
 
-        const std::string &exifdatetime(dateTime.toString(QString::fromLatin1("yyyy:MM:dd hh:mm:ss")).toLatin1().constData());
+        const std::string& exifdatetime(dateTime.toString(QString::fromLatin1("yyyy:MM:dd hh:mm:ss")).toLatin1().constData());
         d->exifMetadata()["Exif.Image.DateTime"]         = exifdatetime;
         d->exifMetadata()["Exif.Photo.DateTimeOriginal"] = exifdatetime;
 
-        if(setDateTimeDigitized)
+        if (setDateTimeDigitized)
             d->exifMetadata()["Exif.Photo.DateTimeDigitized"] = exifdatetime;
 
 #ifdef _XMP_SUPPORT_
 
         // In second we write date & time into Xmp.
 
-        const std::string &xmpdatetime(dateTime.toString(Qt::ISODate).toLatin1().constData());
+        const std::string& xmpdatetime(dateTime.toString(Qt::ISODate).toLatin1().constData());
 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
         xmpTxtVal->read(xmpdatetime);
@@ -879,7 +879,7 @@ bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDig
         d->xmpMetadata().add(Exiv2::XmpKey("Xmp.video.DateUTC"),          xmpTxtVal.get());
         d->xmpMetadata().add(Exiv2::XmpKey("Xmp.video.ModificationDate"), xmpTxtVal.get());
 
-        if(setDateTimeDigitized)
+        if (setDateTimeDigitized)
         {
             d->xmpMetadata().add(Exiv2::XmpKey("Xmp.exif.DateTimeDigitized"),  xmpTxtVal.get());
             d->xmpMetadata().add(Exiv2::XmpKey("Xmp.video.DateTimeDigitized"), xmpTxtVal.get());
@@ -893,12 +893,12 @@ bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDig
 
         // In third we write date & time into Iptc.
 
-        const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).toLatin1().constData());
-        const std::string &iptctime(dateTime.time().toString(Qt::ISODate).toLatin1().constData());
+        const std::string& iptcdate(dateTime.date().toString(Qt::ISODate).toLatin1().constData());
+        const std::string& iptctime(dateTime.time().toString(Qt::ISODate).toLatin1().constData());
         d->iptcMetadata()["Iptc.Application2.DateCreated"] = iptcdate;
         d->iptcMetadata()["Iptc.Application2.TimeCreated"] = iptctime;
 
-        if(setDateTimeDigitized)
+        if (setDateTimeDigitized)
         {
             d->iptcMetadata()["Iptc.Application2.DigitizationDate"] = iptcdate;
             d->iptcMetadata()["Iptc.Application2.DigitizationTime"] = iptctime;

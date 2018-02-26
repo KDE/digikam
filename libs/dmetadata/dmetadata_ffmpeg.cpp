@@ -84,6 +84,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     setXmpTagString("Xmp.video.MaxBitRate",  QString::number(bitrate), false);
     setXmpTagString("Xmp.video.StreamCount", QString::number(fmt_ctx->nb_streams), false);
 
+    // TODO: fmt_ctx->video_codec_id => "Xmp.video.Codec"     (the codec type, the value corresponds to enum AVCodecID).
+
     for (uint i = 0 ; i < fmt_ctx->nb_streams ; i++)
     {
         const AVStream* const stream   = fmt_ctx->streams[i];
@@ -124,6 +126,42 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                     setXmpTagString("Xmp.video.FrameRate", QString::number(frameRate), false);
 
                 setXmpTagString("Xmp.video.PixelDepth",  QString::number(codec->bits_per_coded_sample), false);
+
+                AVDictionary* const dict = stream->metadata;
+                AVDictionaryEntry* entry = av_dict_get(dict, "rotate", NULL, 0);
+
+                if (entry)
+                {
+                    bool b               = false;
+                    int val              = QString::fromUtf8(entry->value).toInt(&b);
+                    ImageOrientation ori = ORIENTATION_UNSPECIFIED;
+
+                    if (b)
+                    {
+                        switch (val)
+                        {
+                            case 0:
+                                ori = ORIENTATION_NORMAL;
+                                break;
+                            case 90:
+                                ori = ORIENTATION_ROT_90;
+                                break;
+                            case 180:
+                                ori = ORIENTATION_ROT_180;
+                                break;
+                            case 270:
+                                ori = ORIENTATION_ROT_270;
+                                break;
+                            default:
+                                break;
+                       }
+
+                       setXmpTagString("Xmp.video.Orientation", QString::number(ori), false);
+                       // Backport orientation in Exif
+                       setImageOrientation(ori, false);
+                    }
+                }
+
 
                 //TODO: codec->format      => "Xmp.video.Format"     (the pixel format, the value corresponds to enum AVPixelFormat).
                 //TODO: codec->color_space => "Xmp.video.ColorSpace" (the YUV colorspace type, the value corresponds to enum AVColorSpace).
