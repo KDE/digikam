@@ -42,14 +42,14 @@ class AtkinsPageLayout::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         tree = 0;
     }
 
-    QMap<int, int>      indexMap;
+    QMap<int, int>        indexMap;
     AtkinsPageLayoutTree* tree;
-    QRectF              pageRect;
+    QRectF                pageRect;
 };
 
 AtkinsPageLayout::AtkinsPageLayout(const QRectF& pageRect)

@@ -63,7 +63,7 @@ class AdvPrintFinalPage::Private
 {
 public:
 
-    Private(QWizard* const dialog)
+    explicit Private(QWizard* const dialog)
       : FONT_HEIGHT_RATIO(0.8F),
         progressView(0),
         progressBar(0),
