@@ -30,6 +30,7 @@ set(libdmetadata_SRCS
     metaengine_previews.cpp
     metaengine_rotation.cpp
     dmetadata.cpp
+#    dmetadata_ffmpeg.cpp
     dmetadatasettings.cpp
     dmetadatasettingscontainer.cpp
     metadatasettings.cpp

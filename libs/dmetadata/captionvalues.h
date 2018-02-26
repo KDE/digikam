@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT CaptionValues
 {
 public:
 
-    CaptionValues();
+    explicit CaptionValues();
     ~CaptionValues();
 
     bool operator==(const CaptionValues& val) const;
