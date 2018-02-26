@@ -28,32 +28,31 @@
 #include <string>
 #include <iostream>
 
-// #include <mcheck.h>
-
 // Qt includes
 
 #include <QFile>
 
 // Local includes
 
-// #include "digikam_debug.h"
-
+#include "digikam_debug.h"
 #include "ptofile.h"
 
 extern "C"
 {
-    #include "tparser.h"
-    #include "tparsergetters.h"
+#include "tparser.h"
+#include "tparsergetters.h"
 }
 
 namespace Digikam
 {
 
-struct PTOFile::Private
+class PTOFile::Private
 {
-    Private(const QString& huginVersion)
-        : script(NULL),
-          huginVersion(huginVersion)
+public:
+
+    explicit Private(const QString& huginVersion)
+      : script(NULL),
+        huginVersion(huginVersion)
     {
     }
 

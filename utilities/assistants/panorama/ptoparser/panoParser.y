@@ -5,7 +5,7 @@
  *
  * Description : Hugin pto file parser
  *
- * Copyright (C) 2007 Daniel M German <dmgerman at uvic doooot ca>
+ * Copyright (C) 2007 by Daniel M German <dmgerman at uvic doooot ca>
  * Copyright (C) 2012 by Benjamin Girault <benjamin dot girault at gmail dot com>
  * 
  * This program is free software; you can redistribute it and/or

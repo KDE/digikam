@@ -43,7 +43,9 @@ namespace Digikam
 bool PTOType::createFile(const QString& filepath)
 {
     QFile file(filepath);
-    if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
+
+    if (!file.open(QFile::WriteOnly | QFile::Truncate))
+    {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open " << filepath << " to write the pto file";
         return false;
     }
@@ -54,17 +56,23 @@ bool PTOType::createFile(const QString& filepath)
     // First, the pano line
     if (project.previousComments.size() > 0)
         out << project.previousComments.join(QChar::fromLatin1('\n')) << endl;
+
     out << "p";
     out << " f" << project.projection;
+
     if (project.size.width() > 0)
         out << " w" << project.size.width();
+
     if (project.size.height() > 0)
         out << " h" << project.size.height();
+
     if (project.fieldOfView > 0)
         out << " v" << project.fieldOfView;
+
     out << " k" << project.photometricReferenceId;
     out << " E" << project.exposure;
     out << " R" << project.hdr;
+
     switch (project.bitDepth)
     {
         case Project::UINT16:
@@ -76,6 +84,7 @@ bool PTOType::createFile(const QString& filepath)
         default:
             break;
     }
+
     if (project.crop.height() > 1 && project.crop.width() > 1)
     {
         out << " S";
@@ -84,7 +93,9 @@ bool PTOType::createFile(const QString& filepath)
         out <<  "," << project.crop.top();
         out <<  "," << project.crop.bottom();
     }
+
     out << " n\"";
+
     switch (project.fileFormat.fileType)
     {
         case Project::FileFormat::PNG:
@@ -107,7 +118,9 @@ bool PTOType::createFile(const QString& filepath)
             {
                 out << "TIFF_m";
             }
+
             out << " c:";
+
             switch (project.fileFormat.compressionMethod)
             {
                 case Project::FileFormat::PANO_NONE:
@@ -120,29 +133,36 @@ bool PTOType::createFile(const QString& filepath)
                     out << "DEFLATE";
                     break;
             }
+
             if (project.fileFormat.savePositions)
                 out << " p1";
+
             if (project.fileFormat.cropped)
                 out << " r:CROP";
             break;
+
         default:
             qCCritical(DIGIKAM_GENERAL_LOG) << "Unknown file format for pto file generation!";
             file.close();
             return false;
     }
+
     out << "\"";
     out << project.unmatchedParameters.join(QChar::fromLatin1(' ')) << endl;
 
     // Second, the stitcher line
     if (stitcher.previousComments.size() > 0)
         out << stitcher.previousComments.join(QChar::fromLatin1('\n')) << endl;
+
     out << "m";
     out << " g" << stitcher.gamma;
     out << " i" << (int) stitcher.interpolator;
+
     if (stitcher.speedUp != Stitcher::SLOW)
     {
         out << " f" << 2 - ((int) stitcher.speedUp);
     }
+
     out << " m" << stitcher.huberSigma;
     out << " p" << stitcher.photometricHuberSigma;
     out << stitcher.unmatchedParameters.join(QChar::fromLatin1(' ')) << endl;
@@ -155,12 +175,15 @@ bool PTOType::createFile(const QString& filepath)
 
         if (image.previousComments.size() > 0)
             out << image.previousComments.join(QChar::fromLatin1('\n')) << endl;
+
         out << "i";
         out << " w" << image.size.width();
         out << " h" << image.size.height();
         out << " f" << (int) image.lensProjection;
+
         if (image.fieldOfView.referenceId >= 0 || image.fieldOfView.value > 0)
             out << " v" << image.fieldOfView;
+
         out << " Ra" << image.photometricEMoRA;
         out << " Rb" << image.photometricEMoRB;
         out << " Rc" << image.photometricEMoRC;
@@ -175,10 +198,13 @@ bool PTOType::createFile(const QString& filepath)
         out << " TrX" << image.mosaicCameraPositionX;
         out << " TrY" << image.mosaicCameraPositionY;
         out << " TrZ" << image.mosaicCameraPositionZ;
-        if (version == V2014) {
+
+        if (version == V2014)
+        {
             out << " Tpy" << image.mosaicProjectionPlaneYaw;
             out << " Tpp" << image.mosaicProjectionPlanePitch;
         }
+
         out << " j" << image.stackNumber;
         out << " a" << image.lensBarrelCoefficientA;
         out << " b" << image.lensBarrelCoefficientB;
@@ -187,9 +213,12 @@ bool PTOType::createFile(const QString& filepath)
         out << " e" << image.lensCenterOffsetY;
         out << " g" << image.lensShearX;
         out << " t" << image.lensShearY;
+
         const Image* imageVM = &image;
+
         if (image.vignettingMode.referenceId >= 0)
             imageVM = &images[image.vignettingMode.referenceId];
+
         if (((int) imageVM->vignettingMode.value) & ((int) Image::RADIAL))
         {
             out << " Va" << image.vignettingCorrectionI;
@@ -218,7 +247,9 @@ bool PTOType::createFile(const QString& filepath)
         {
             if (optim.previousComments.size() > 0)
                 out << optim.previousComments.join(QChar::fromLatin1('\n')) << endl;
+
             out << "v ";
+
             switch (optim.parameter)
             {
                 case Optimisation::LENSA:
@@ -295,9 +326,11 @@ bool PTOType::createFile(const QString& filepath)
                     file.close();
                     return false;
             }
+
             out << id << endl;
         }
     }
+
     out << "v" << endl;
 
     // Fifth, the masks
@@ -309,14 +342,17 @@ bool PTOType::createFile(const QString& filepath)
         {
             if (mask.previousComments.size() > 0)
                 out << mask.previousComments.join(QChar::fromLatin1('\n')) << endl;
+
             out << "k i" << id;
             out << " t" << (int) mask.type;
             out << " p\"";
+
             for (int pid = 0; pid < mask.hull.size(); pid++)
             {
                 out << (pid == 0 ? "" : " ");
                 out << mask.hull[pid].x() << ' ' << mask.hull[pid].y();
             }
+
             out << "\"" << endl;
         }
     }
@@ -326,6 +362,7 @@ bool PTOType::createFile(const QString& filepath)
     {
         if (cp.previousComments.size() > 0)
             out << cp.previousComments.join(QChar::fromLatin1('\n')) << endl;
+
         out << "c n" << cp.image1Id;
         out << " N" << cp.image2Id;
         out << " x" << cp.p1_x;
@@ -348,6 +385,7 @@ QPair<double, int> PTOType::standardDeviation(int image1Id, int image2Id)
 {
     double mean_x = 0, mean_y = 0;
     double n = 0;
+
     foreach (ControlPoint cp, controlPoints)
     {
         if ((cp.image1Id == image1Id && cp.image2Id == image2Id) || (cp.image1Id == image2Id && cp.image2Id == image1Id))
@@ -357,13 +395,16 @@ QPair<double, int> PTOType::standardDeviation(int image1Id, int image2Id)
             n++;
         }
     }
+
     if (n == 0)
     {
         return QPair<double, int>(0, 0);
     }
+
     mean_x /= n;
     mean_y /= n;
     double result = 0;
+
     foreach (PTOType::ControlPoint cp, controlPoints)
     {
         if ((cp.image1Id == image1Id && cp.image2Id == image2Id) || (cp.image1Id == image2Id && cp.image2Id == image1Id))
@@ -373,6 +414,7 @@ QPair<double, int> PTOType::standardDeviation(int image1Id, int image2Id)
             result += epsilon_x * epsilon_x + epsilon_y * epsilon_y;
         }
     }
+
     return QPair<double, int>(result, n);
 }
 
@@ -380,12 +422,14 @@ QPair<double, int> PTOType::standardDeviation(int imageId)
 {
     int n = 0;
     double result = 0;
+
     for (int i = 0; i < images.size(); ++i)
     {
         QPair<double, int> tmp = standardDeviation(imageId, i);
         result += tmp.first;
         n += tmp.second;
     }
+
     return QPair<double, int>(result, n);
 }
 
@@ -393,12 +437,14 @@ QPair<double, int> PTOType::standardDeviation()
 {
     int n = 0;
     double result = 0;
+
     for (int i = 0; i < images.size(); ++i)
     {
         QPair<double, int> tmp = standardDeviation(i);
         result += tmp.first;
         n += tmp.second;
     }
+
     return QPair<double, int>(result, n);
 }
 */
