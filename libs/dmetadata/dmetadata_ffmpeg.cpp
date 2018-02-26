@@ -52,7 +52,7 @@ extern "C"
 namespace Digikam
 {
 
-bool DMetadata::loadUsingFFmpeg(const QString& filePath) const
+bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 {
 #ifdef HAVE_MEDIAPLAYER
 
@@ -113,6 +113,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath) const
                 setXmpTagString("Xmp.video.SourceImageWidth",  QString::number(codec->width),  false);
                 setXmpTagString("Xmp.video.SourceImageHeight", QString::number(codec->height), false);
 
+                // Backport size in Exif and Iptc
+                setImageDimensions(QSize(codec->width, codec->height), false);
+
                 if (aspectRatio)
                     setXmpTagString("Xmp.video.AspectRatio", QString::number(aspectRatio), false);
 
@@ -153,7 +156,10 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath) const
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Comment", QString::fromUtf8(entry->value), false);
+        QString data = QString::fromUtf8(entry->value);
+        setXmpTagString("Xmp.video.Comment", data, false);
+        // Backport comment in Exif
+        setExifComment(data, false);
     }
 
     entry = av_dict_get(dict, "album", NULL, 0);
@@ -195,7 +201,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath) const
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.CreationDate", QString::fromUtf8(entry->value), false);
+        QString data = QString::fromUtf8(entry->value);
+        setXmpTagString("Xmp.video.CreationDate", data, false);
+        // Backport date in Exif and Iptc.
+        QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+        setImageDateTime(dt, true, false);
     }
 
     // GPS info as string. ex: "+44.8511-000.6229/"
@@ -203,7 +213,36 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath) const
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.LocationInfo", QString::fromUtf8(entry->value), false);
+        QString data     = QString::fromUtf8(entry->value);
+        setXmpTagString("Xmp.video.LocationInfo", data, false);
+
+        // Backport location in Exif.
+        data.remove(QLatin1Char('/'));
+        QLatin1Char sep  = QLatin1Char('+');
+
+        int index        = data.indexOf(sep, 1);
+
+        if (index == -1)
+        {
+            sep   = QLatin1Char('-');
+            index = data.indexOf(sep, 1);
+        }
+
+        QString lng      = data.right(data.length() - index);
+        QString lat      = data.left(index);
+
+        qCDebug(DIGIKAM_METAENGINE_LOG) << lat << lng;
+
+        bool b1          = false;
+        bool b2          = false;
+        double lattitude = lat.toDouble(&b1);
+        double longitude = lng.toDouble(&b2);
+        double* alt      = 0;
+
+        if (b1 && b2)
+        {
+            setGPSInfo(alt, lattitude, longitude, false);
+        }
     }
 
     avformat_close_input(&fmt_ctx);

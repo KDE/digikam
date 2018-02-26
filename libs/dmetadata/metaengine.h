@@ -220,12 +220,12 @@ public:
     /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a byte array.
         Return true if metadata have been loaded successfully from image data.
      */
-    bool loadFromData(const QByteArray& imgData) const;
+    bool loadFromData(const QByteArray& imgData);
 
     /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG,
         DNG, etc...). Return true if metadata have been loaded successfully from file.
      */
-    virtual bool load(const QString& filePath) const;
+    virtual bool load(const QString& filePath);
 
     /** Save all metadata to a file. This one can be different than original picture to perform
         transfert operation Return true if metadata have been saved into file.

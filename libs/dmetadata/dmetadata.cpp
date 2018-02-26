@@ -87,7 +87,7 @@ void DMetadata::setSettings(const MetadataSettingsContainer& settings)
     setUpdateFileTimeStamp(settings.updateFileTimeStamp);
 }
 
-bool DMetadata::load(const QString& filePath) const
+bool DMetadata::load(const QString& filePath)
 {
     // In first, we trying to get metadata using Exiv2,
     // else we will use Raw engine to extract minimal information.
@@ -120,7 +120,7 @@ bool DMetadata::applyChanges() const
     return MetaEngine::applyChanges();
 }
 
-bool DMetadata::loadUsingRawEngine(const QString& filePath) const
+bool DMetadata::loadUsingRawEngine(const QString& filePath)
 {
     RawInfo identify;
 
@@ -626,6 +626,7 @@ bool DMetadata::setImageTitles(const CaptionsMap& titles) const
         }
 
         removeXmpTag("Xmp.acdsee.caption");
+
         if (!defaultTitle.isEmpty())
         {
             if (!setXmpTagString("Xmp.acdsee.caption", defaultTitle, false))

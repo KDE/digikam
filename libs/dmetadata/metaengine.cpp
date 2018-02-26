@@ -213,7 +213,7 @@ void MetaEngine::setData(const MetaEngineData& data)
     }
 }
 
-bool MetaEngine::loadFromData(const QByteArray& imgData) const
+bool MetaEngine::loadFromData(const QByteArray& imgData)
 {
     if (imgData.isEmpty())
         return false;
@@ -264,7 +264,7 @@ bool MetaEngine::loadFromData(const QByteArray& imgData) const
     return false;
 }
 
-bool MetaEngine::load(const QString& filePath) const
+bool MetaEngine::load(const QString& filePath)
 {
     if (filePath.isEmpty())
     {

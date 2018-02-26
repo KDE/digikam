@@ -66,7 +66,7 @@ class DIGIKAM_EXPORT CaptionsMap : public QMap<QString, CaptionValues>
 {
 public:
 
-    CaptionsMap();
+    explicit CaptionsMap();
     ~CaptionsMap();
 
     void setData(const MetaEngine::AltLangMap& comments,

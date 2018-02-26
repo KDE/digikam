@@ -62,23 +62,23 @@ public:
 
     /** Re-implemented from libMetaEngine to use dcraw identify method if Exiv2 failed.
      */
-    bool load(const QString& filePath) const;
+    bool load(const QString& filePath);
     bool save(const QString& filePath) const;
     bool applyChanges() const;
 
     /** Try to extract metadata using Raw Engine identify method
      */
-    bool loadUsingRawEngine(const QString& filePath) const;
+    bool loadUsingRawEngine(const QString& filePath);
 
     /** Try to extract metadata using FFMpeg (libav)
      */
-    bool loadUsingFFmpeg(const QString& filePath) const;
+    bool loadUsingFFmpeg(const QString& filePath);
 
     /** Metadata manipulation methods */
 
-    CaptionsMap getImageComments(const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
+    CaptionsMap getImageComments(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
     bool setImageComments(const CaptionsMap& comments,
-                          const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
+                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
 
     int  getImagePickLabel() const;
     bool setImagePickLabel(int pickId) const;
@@ -89,14 +89,14 @@ public:
     CaptionsMap getImageTitles() const;
     bool setImageTitles(const CaptionsMap& title) const;
 
-    int  getImageRating(const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
+    int  getImageRating(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
     bool setImageRating(int rating,
-                        const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
+                        const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
 
     bool getImageTagsPath(QStringList& tagsPath,
-                          const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
+                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
     bool setImageTagsPath(const QStringList& tagsPath,
-                          const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
+                          const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
 
     bool getACDSeeTagsPath(QStringList& tagsPath) const;
 
@@ -282,4 +282,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* DMETADATA_H */
+#endif // DMETADATA_H
