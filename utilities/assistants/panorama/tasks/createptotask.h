@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_CREATEPTOTASK_H
-#define PANO_CREATEPTOTASK_H
+#ifndef PANO_CREATE_PTO_TASK_H
+#define PANO_CREATE_PTO_TASK_H
 
 // Qt includes
 
@@ -39,9 +39,13 @@ class CreatePtoTask : public PanoTask
 {
 public:
 
-    CreatePtoTask(const QString& workDirPath, PanoramaFileType fileType,
-                  QUrl& ptoUrl, const QList<QUrl>& inputFiles, const PanoramaItemUrlsMap& preProcessedMap,
-                  bool addGPlusMetadata, const QString& huginVersion);
+    explicit CreatePtoTask(const QString& workDirPath,
+                           PanoramaFileType fileType,
+                           QUrl& ptoUrl,
+                           const QList<QUrl>& inputFiles,
+                           const PanoramaItemUrlsMap& preProcessedMap,
+                           bool addGPlusMetadata,
+                           const QString& huginVersion);
     ~CreatePtoTask();
 
 protected:
@@ -61,4 +65,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* PANO_CREATEPTOTASK_H */
+#endif // PANO_CREATE_PTO_TASK_H

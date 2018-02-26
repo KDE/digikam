@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PREPROCESSTASK_H
-#define PREPROCESSTASK_H
+#ifndef PRE_PROCESS_TASK_H
+#define PRE_PROCESS_TASK_H
 
 // Qt includes
 
@@ -43,8 +43,10 @@ public:
 
 public:
 
-    PreProcessTask(const QString& workDirPath, int id, PanoramaPreprocessedUrls& targetUrls,
-                   const QUrl& sourceUrl);
+    explicit PreProcessTask(const QString& workDirPath,
+                            int id,
+                            PanoramaPreprocessedUrls& targetUrls,
+                            const QUrl& sourceUrl);
     ~PreProcessTask();
 
     void requestAbort() override;
@@ -64,6 +66,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* PREPROCESSTASK_H */
+#endif // PRE_PROCESS_TASK_H

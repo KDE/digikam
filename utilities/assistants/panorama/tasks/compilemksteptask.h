@@ -53,9 +53,9 @@ protected:
 
 private:
 
-    const QUrl&                         mkUrl;
-    const QString                       nonaPath;
-    const QString                       enblendPath;
+    const QUrl&   mkUrl;
+    const QString nonaPath;
+    const QString enblendPath;
 };
 
 }  // namespace Digikam

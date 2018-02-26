@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PANOITEMS_PAGE_H
-#define PANOITEMS_PAGE_H
+#ifndef PANO_ITEMS_PAGE_H
+#define PANO_ITEMS_PAGE_H
 
 // Local includes
 
@@ -41,7 +41,7 @@ class PanoItemsPage : public DWizardPage
 
 public:
 
-    PanoItemsPage(PanoManager* const mngr, QWizard* const dlg);
+    explicit PanoItemsPage(PanoManager* const mngr, QWizard* const dlg);
     ~PanoItemsPage();
 
     QList<QUrl> itemUrls() const;
@@ -57,10 +57,10 @@ private Q_SLOTS:
 
 private:
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* PANOITEMS_PAGE_H */
+#endif // PANO_ITEMS_PAGE_H

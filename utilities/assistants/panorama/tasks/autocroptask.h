@@ -48,9 +48,9 @@ protected:
 
 private:
 
-    const QUrl&                         autoOptimiserPtoUrl;
-    QUrl&                               viewCropPtoUrl;
-//    const bool                          buildGPano;
+    const QUrl& autoOptimiserPtoUrl;
+    QUrl&       viewCropPtoUrl;
+//  const bool  buildGPano;
 };
 
 }  // namespace Digikam

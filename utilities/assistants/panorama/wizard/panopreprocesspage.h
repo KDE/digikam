@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PANOPREPROCESS_PAGE_H
-#define PANOPREPROCESS_PAGE_H
+#ifndef PANO_PRE_PROCESS_PAGE_H
+#define PANO_PRE_PROCESS_PAGE_H
 
 // Local includes
 
@@ -41,7 +41,7 @@ class PanoPreProcessPage : public DWizardPage
 
 public:
 
-    PanoPreProcessPage(PanoManager* const mngr, QWizard* const dlg);
+    explicit PanoPreProcessPage(PanoManager* const mngr, QWizard* const dlg);
     ~PanoPreProcessPage();
 
 private:
@@ -62,10 +62,10 @@ private Q_SLOTS:
 
 private:
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* PANOPREPROCESS_PAGE_H */
+#endif // PANO_PRE_PROCESS_PAGE_H

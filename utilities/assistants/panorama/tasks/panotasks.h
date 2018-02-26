@@ -37,4 +37,4 @@
 #include "huginexecutortask.h"
 #include "copyfilestask.h"
 
-#endif /* PANO_TASKS_H */
+#endif // PANO_TASKS_H

@@ -54,14 +54,14 @@ protected:
 
 private:
 
-    const QUrl&                         panoUrl;
-    const QUrl                          finalPanoUrl;
-    const QUrl&                         ptoUrl;
-    const PanoramaItemUrlsMap* const    urlList;
-    const bool                          savePTO;
-    const bool                          addGPlusMetadata;
+    const QUrl&                      panoUrl;
+    const QUrl                       finalPanoUrl;
+    const QUrl&                      ptoUrl;
+    const PanoramaItemUrlsMap* const urlList;
+    const bool                       savePTO;
+    const bool                       addGPlusMetadata;
 
-    MetaEngine                          m_meta;
+    MetaEngine                       m_meta;
 };
 
 }  // namespace Digikam

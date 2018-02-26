@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef CREATEPFINALPTOTASK_H
-#define CREATEPFINALPTOTASK_H
+#ifndef CREATE_PFINAL_PTO_TASK_H
+#define CREATE_PFINAL_PTO_TASK_H
 
 // Local includes
 
@@ -35,7 +35,10 @@ class CreateFinalPtoTask : public PanoTask
 {
 public:
 
-    CreateFinalPtoTask(const QString& workDirPath, QSharedPointer<const PTOType> ptoData, QUrl& finalPtoUrl, const QRect& crop);
+    explicit CreateFinalPtoTask(const QString& workDirPath,
+                                QSharedPointer<const PTOType> ptoData,
+                                QUrl& finalPtoUrl,
+                                const QRect& crop);
     ~CreateFinalPtoTask();
 
 protected:
@@ -44,11 +47,11 @@ protected:
 
 private:
 
-    PTOType                 ptoData;
-    QUrl&                   finalPtoUrl;
-    const QRect             crop;
+    PTOType     ptoData;
+    QUrl&       finalPtoUrl;
+    const QRect crop;
 };
 
 }  // namespace Digikam
 
-#endif /* CREATEPFINALPTOTASK_H */
+#endif // CREATE_PFINAL_PTO_TASK_H

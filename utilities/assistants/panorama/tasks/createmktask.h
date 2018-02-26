@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_CREATEMKTASK_H
-#define PANO_CREATEMKTASK_H
+#ifndef PANO_CREATE_MK_TASK_H
+#define PANO_CREATE_MK_TASK_H
 
 // Local includes
 
@@ -34,9 +34,13 @@ class CreateMKTask : public CommandTask
 {
 public:
 
-    CreateMKTask(const QString& workDirPath, const QUrl& input, QUrl& mkUrl,
-                 QUrl& panoUrl, PanoramaFileType fileType,
-                 const QString& pto2mkPath, bool preview);
+    explicit CreateMKTask(const QString& workDirPath,
+                          const QUrl& input,
+                          QUrl& mkUrl,
+                          QUrl& panoUrl,
+                          PanoramaFileType fileType,
+                          const QString& pto2mkPath,
+                          bool preview);
     ~CreateMKTask();
 
 protected:
@@ -45,12 +49,12 @@ protected:
 
 private:
 
-    const QUrl&                         ptoUrl;
-    QUrl&                               mkUrl;
-    QUrl&                               panoUrl;
-    const PanoramaFileType              fileType;
+    const QUrl&            ptoUrl;
+    QUrl&                  mkUrl;
+    QUrl&                  panoUrl;
+    const PanoramaFileType fileType;
 };
 
 }  // namespace Digikam
 
-#endif /* PANO_CREATEMKTASK_H */
+#endif // PANO_CREATE_MK_TASK_H

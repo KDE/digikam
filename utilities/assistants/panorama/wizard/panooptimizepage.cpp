@@ -57,21 +57,23 @@
 namespace Digikam
 {
 
-struct PanoOptimizePage::Private
+class PanoOptimizePage::Private
 {
-    Private()
-        : progressCount(0),
-          progressLabel(0),
-          progressTimer(0),
-          optimisationDone(false),
-          canceled(false),
-          title(0),
-//        preprocessResults(0),
-          horizonCheckbox(0),
-//        projectionAndSizeCheckbox(0),
-          detailsText(0),
-          progressPix(DWorkingPixmap()),
-          mngr(0)
+public:
+
+    explicit Private()
+      : progressCount(0),
+        progressLabel(0),
+        progressTimer(0),
+        optimisationDone(false),
+        canceled(false),
+        title(0),
+//      preprocessResults(0),
+        horizonCheckbox(0),
+//      projectionAndSizeCheckbox(0),
+        detailsText(0),
+        progressPix(DWorkingPixmap()),
+        mngr(0)
     {
     }
 
@@ -356,4 +358,4 @@ void PanoOptimizePage::slotPanoAction(const Digikam::PanoActionData& ad)
     }
 }
 
-}   // namespace Digikam
+} // namespace Digikam

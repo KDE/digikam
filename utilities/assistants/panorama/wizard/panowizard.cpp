@@ -49,9 +49,11 @@
 namespace Digikam
 {
 
-struct PanoWizard::Private
+class PanoWizard::Private
 {
-    Private()
+public:
+
+    explicit Private()
       : mngr(0),
         introPage(0),
         itemsPage(0),

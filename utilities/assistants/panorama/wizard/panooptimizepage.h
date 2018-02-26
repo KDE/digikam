@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANOPANO_OPTIMIZE_PAGE_H
-#define PANOPANO_OPTIMIZE_PAGE_H
+#ifndef PANO_OPTIMIZE_PAGE_H
+#define PANO_OPTIMIZE_PAGE_H
 
 // Local includes
 
@@ -39,7 +39,7 @@ class PanoOptimizePage : public DWizardPage
 
 public:
 
-    PanoOptimizePage(PanoManager* const mngr, QWizard* const dlg);
+    explicit PanoOptimizePage(PanoManager* const mngr, QWizard* const dlg);
     ~PanoOptimizePage();
 
 private:
@@ -61,10 +61,10 @@ private Q_SLOTS:
 
 private:
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* PANOPANO_OPTIMIZE_PAGE_H */
+#endif // PANO_OPTIMIZE_PAGE_H

@@ -49,10 +49,10 @@ protected:
 
 private:
 
-//    const QUrl* const                   panoUrl;
-    const QUrl&                         mkUrl;
-    const QString                       nonaPath;
-    const QString                       enblendPath;
+//  const QUrl* const panoUrl;
+    const QUrl&       mkUrl;
+    const QString     nonaPath;
+    const QString     enblendPath;
 };
 
 }  // namespace Digikam

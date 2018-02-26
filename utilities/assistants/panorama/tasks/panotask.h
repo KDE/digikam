@@ -38,8 +38,11 @@ class PanoTask : public ThreadWeaver::Job
 {
 public:
 
-    PanoTask(PanoAction action, const QString& workDirPath);
+    explicit PanoTask(PanoAction action,
+                      const QString& workDirPath);
     ~PanoTask();
+
+public:
 
     bool success() const;
     void requestAbort();

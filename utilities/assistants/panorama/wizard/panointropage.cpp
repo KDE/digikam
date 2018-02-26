@@ -56,9 +56,11 @@
 namespace Digikam
 {
 
-struct PanoIntroPage::Private
+class PanoIntroPage::Private
 {
-    Private(PanoManager* const m)
+public:
+
+    explicit Private(PanoManager* const m)
         : mngr(m),
 //        addGPlusMetadataCheckBox(0),
 

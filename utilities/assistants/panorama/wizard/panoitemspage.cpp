@@ -45,9 +45,11 @@
 namespace Digikam
 {
 
-struct PanoItemsPage::Private
+class PanoItemsPage::Private
 {
-    Private()
+public:
+
+    explicit Private()
       : list(0),
         mngr(0)
     {
@@ -120,4 +122,4 @@ void PanoItemsPage::slotImageListChanged()
     emit completeChanged();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

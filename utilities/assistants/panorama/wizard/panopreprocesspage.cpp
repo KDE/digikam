@@ -62,20 +62,22 @@
 namespace Digikam
 {
 
-struct PanoPreProcessPage::Private
+class PanoPreProcessPage::Private
 {
-    Private()
-        : progressCount(0),
-          progressLabel(0),
-          progressTimer(0),
-          preprocessingDone(false),
-          canceled(false),
-          nbFilesProcessed(0),
-          title(0),
-          celesteCheckBox(0),
-          detailsText(0),
-          progressPix(DWorkingPixmap()),
-          mngr(0)
+public:
+
+    explicit Private()
+      : progressCount(0),
+        progressLabel(0),
+        progressTimer(0),
+        preprocessingDone(false),
+        canceled(false),
+        nbFilesProcessed(0),
+        title(0),
+        celesteCheckBox(0),
+        detailsText(0),
+        progressPix(DWorkingPixmap()),
+        mngr(0)
     {
     }
 
@@ -356,4 +358,4 @@ void PanoPreProcessPage::slotPanoAction(const Digikam::PanoActionData& ad)
     }
 }
 
-}   // namespace Digikam
+} // namespace Digikam

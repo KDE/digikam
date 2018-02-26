@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_CPFINDTASK_H
-#define PANO_CPFINDTASK_H
+#ifndef PANO_CP_FIND_TASK_H
+#define PANO_CP_FIND_TASK_H
 
 // Local includes
 
@@ -34,8 +34,11 @@ class CpFindTask : public CommandTask
 {
 public:
 
-    CpFindTask(const QString& workDirPath, const QUrl& input,
-               QUrl& cpFindUrl, bool celeste, const QString& cpFindPath);
+    explicit CpFindTask(const QString& workDirPath,
+                        const QUrl& input,
+                        QUrl& cpFindUrl,
+                        bool celeste,
+                        const QString& cpFindPath);
     ~CpFindTask();
 
 protected:
@@ -44,11 +47,11 @@ protected:
 
 private:
 
-    QUrl&                               cpFindPtoUrl;
-    const bool                          celeste;
-    const QUrl&                         ptoUrl;
+    QUrl&       cpFindPtoUrl;
+    const bool  celeste;
+    const QUrl& ptoUrl;
 };
 
 }  // namespace Digikam
 
-#endif /* PANO_CPFINDTASK_H */
+#endif // PANO_CP_FIND_TASK_H

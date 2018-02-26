@@ -54,22 +54,24 @@
 namespace Digikam
 {
 
-struct PanoPreviewPage::Private
+class PanoPreviewPage::Private
 {
-    Private(PanoManager* const m)
-        : title(0),
-          previewWidget(0),
-          previewBusy(false),
-          previewDone(false),
-          stitchingBusy(false),
-          stitchingDone(false),
-          postProcessing(0),
-          progressBar(0),
-          curProgress(0),
-          totalProgress(0),
-          canceled(false),
-          mngr(m),
-          dlg(0)
+public:
+
+    explicit Private(PanoManager* const m)
+      : title(0),
+        previewWidget(0),
+        previewBusy(false),
+        previewDone(false),
+        stitchingBusy(false),
+        stitchingDone(false),
+        postProcessing(0),
+        progressBar(0),
+        curProgress(0),
+        totalProgress(0),
+        canceled(false),
+        mngr(m),
+        dlg(0)
     {
     }
 
@@ -635,4 +637,4 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
     }
 }
 
-}   // namespace Digikam
+} // namespace Digikam

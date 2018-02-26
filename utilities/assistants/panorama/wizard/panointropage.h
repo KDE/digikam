@@ -65,7 +65,7 @@ private:
 
 private:
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 
