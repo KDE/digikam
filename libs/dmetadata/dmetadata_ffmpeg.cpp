@@ -80,8 +80,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     int totalSecs = fmt_ctx->duration / AV_TIME_BASE;
     int bitrate   = fmt_ctx->bit_rate;
 
-    setXmpTagString("Xmp.video.Duration", QString::number(totalSecs), false);
-    setXmpTagString("Xmp.video.MaxBitRate", QString::number(bitrate), false);
+    setXmpTagString("Xmp.video.Duration",    QString::number(totalSecs), false);
+    setXmpTagString("Xmp.video.MaxBitRate",  QString::number(bitrate), false);
+    setXmpTagString("Xmp.video.StreamCount", QString::number(fmt_ctx->nb_streams), false);
 
     for (uint i = 0 ; i < fmt_ctx->nb_streams ; i++)
     {
