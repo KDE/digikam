@@ -56,6 +56,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath) const
 {
 #ifdef HAVE_MEDIAPLAYER
 
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "Parse metadada with FFMpeg:" << filePath;
+
     av_register_all();
 
     AVFormatContext* fmt_ctx = avformat_alloc_context();

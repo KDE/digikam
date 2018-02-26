@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-11
- * Description : a command line tool to load metadata from file
+ * Description : a command line tool to load all IPTC metadata from file
  *
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -33,13 +33,13 @@
 
 using namespace Digikam;
 
-int main (int argc, char **argv)
+int main (int argc, char** argv)
 {
     QApplication app(argc, argv);
 
     if (argc != 2)
     {
-        qDebug() << "loadfromfile - test to load metadata from file and print main tags";
+        qDebug() << "loadfromfile_iptc - load and print all iptc metadata from file";
         qDebug() << "Usage: <file>";
         return -1;
     }
@@ -49,21 +49,20 @@ int main (int argc, char **argv)
     DMetadata meta;
     meta.load(filePath);
 
-    qDebug() << "--- Comments   -------------------------------";
-    qDebug() << meta.getImageComments();
-    qDebug() << "--- Titles     -------------------------------";
-    qDebug() << meta.getImageTitles();
-    qDebug() << "--- IPTC info  -------------------------------";
-    qDebug() << meta.getCreatorContactInfo();
-    qDebug() << meta.getIptcCoreLocation();
-    qDebug() << meta.getIptcCoreSubjects();
-    qDebug() << "--- Media info -------------------------------";
-    qDebug() << meta.getPhotographInformation();
-    qDebug() << meta.getVideoInformation();
-    qDebug() << "--- XMP info   -------------------------------";
-    qDebug() << meta.getXmpKeywords();
-    qDebug() << meta.getXmpSubjects();
-    qDebug() << meta.getXmpSubCategories();
+    DMetadata::MetaDataMap map = meta.getIptcTagsDataList();
+
+    if (map.isEmpty())
+    {
+        qDebug() << "No metadata to show...";
+    }
+    else
+    {
+        for (DMetadata::MetaDataMap::const_iterator it = map.constBegin();
+             it != map.constEnd() ; ++it)
+        {
+            qDebug() << it.key() << "::" << it.value();
+        }
+    }
 
     return 0;
 }
