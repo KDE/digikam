@@ -162,6 +162,8 @@ target_link_libraries(digikamcore
                       PNG::PNG
                       ${EXIV2_LIBRARIES}
 
+                      ${FFMPEG_LIBRARIES}
+
                       libdng
                       libraw
 )

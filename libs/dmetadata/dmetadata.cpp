@@ -98,7 +98,10 @@ bool DMetadata::load(const QString& filePath) const
     {
         if (!loadUsingRawEngine(filePath))
         {
-            return false;
+            if (!loadUsingFFmpeg(filePath))
+            {
+                return false;
+            }
         }
     }
 

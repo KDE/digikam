@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-06-11
- * Description : a command line tool to read metadata from image
+ * Description : a command line tool to load metadata from file
  *
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -25,6 +25,7 @@
 
 #include <QString>
 #include <QDebug>
+#include <QApplication>
 
 // Local includes
 
@@ -34,10 +35,12 @@ using namespace Digikam;
 
 int main (int argc, char **argv)
 {
+    QApplication app(argc, argv);
+
     if (argc != 2)
     {
-        qDebug() << "readfromimage - test to load metadata from image and print main tags";
-        qDebug() << "Usage: <image>";
+        qDebug() << "loadfromfile - test to load metadata from file and print main tags";
+        qDebug() << "Usage: <file>";
         return -1;
     }
 

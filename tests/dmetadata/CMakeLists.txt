@@ -87,10 +87,10 @@ target_link_libraries(loadfromba
                       KF5::I18n
 )
 
-set(readfromimage_SRCS readfromimage.cpp)
-add_executable(readfromimage ${readfromimage_SRCS})
-ecm_mark_nongui_executable(readfromimage)
-target_link_libraries(readfromimage
+set(loadfromfile_SRCS loadfromfile.cpp)
+add_executable(loadfromfile ${loadfromfile_SRCS})
+ecm_mark_nongui_executable(loadfromfile)
+target_link_libraries(loadfromfile
                       digikamcore
 
                       Qt5::Core

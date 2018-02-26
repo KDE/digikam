@@ -73,7 +73,7 @@ public:
     /** Try to extract metadata using FFMpeg (libav)
      */
     bool loadUsingFFmpeg(const QString& filePath) const;
-    
+
     /** Metadata manipulation methods */
 
     CaptionsMap getImageComments(const DMetadataSettingsContainer &settings = DMetadataSettings::instance()->settings()) const;
