@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2015,      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
-# Copyright (c) 2010-2017, by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018, by Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -30,7 +30,6 @@ ecm_mark_as_test(tagsReadWriteTest)
 
 target_link_libraries(tagsReadWriteTest
                       digikamcore
-                      libdng
 
                       Qt5::Core
                       Qt5::Test
@@ -45,7 +44,6 @@ ecm_mark_as_test(ratingReadWriteTest)
 
 target_link_libraries(ratingReadWriteTest
                       digikamcore
-                      libdng
 
                       Qt5::Core
                       Qt5::Test
@@ -60,7 +58,6 @@ ecm_mark_as_test(commentReadWriteTest)
 
 target_link_libraries(commentReadWriteTest
                       digikamcore
-                      libdng
 
                       Qt5::Core
                       Qt5::Test
@@ -73,7 +70,6 @@ add_executable(setiptcpreview ${setiptcpreview_SRCS})
 ecm_mark_nongui_executable(setiptcpreview)
 target_link_libraries(setiptcpreview
                       digikamcore
-                      libdng
 
                       Qt5::Core
 
@@ -85,7 +81,6 @@ add_executable(loadfromba ${loadfromba_SRCS})
 ecm_mark_nongui_executable(loadfromba)
 target_link_libraries(loadfromba
                       digikamcore
-                      libdng
 
                       Qt5::Core
 
@@ -97,7 +92,6 @@ add_executable(readfromimage ${readfromimage_SRCS})
 ecm_mark_nongui_executable(readfromimage)
 target_link_libraries(readfromimage
                       digikamcore
-                      libdng
 
                       Qt5::Core
 
@@ -109,7 +103,6 @@ add_executable(erasetag ${erasetag_SRCS})
 ecm_mark_nongui_executable(erasetag)
 target_link_libraries(erasetag
                       digikamcore
-                      libdng
 
                       Qt5::Core
 
@@ -121,7 +114,6 @@ add_executable(printtagslist ${printtagslist_SRCS})
 ecm_mark_nongui_executable(printtagslist)
 target_link_libraries(printtagslist
                       digikamcore
-                      libdng
 
                       Qt5::Core
 
@@ -133,7 +125,6 @@ add_executable(usexmpsidecar ${usexmpsidecar_SRCS})
 ecm_mark_nongui_executable(usexmpsidecar)
 target_link_libraries(usexmpsidecar
                       digikamcore
-                      libdng
 
                       Qt5::Core
 
@@ -145,7 +136,6 @@ add_executable(readimagewritexmpsidecar ${readimagewritexmpsidecar_SRCS})
 ecm_mark_nongui_executable(readimagewritexmpsidecar)
 target_link_libraries(readimagewritexmpsidecar
                       digikamcore
-                      libdng
 
                       Qt5::Core
 
@@ -157,7 +147,6 @@ add_executable(setxmpface ${setxmpface_SRCS})
 ecm_mark_nongui_executable(setxmpface)
 target_link_libraries(setxmpface
                       digikamcore
-                      libdng
 
                       Qt5::Core
 
