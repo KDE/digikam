@@ -55,6 +55,28 @@ extern "C"
 namespace Digikam
 {
 
+#ifdef HAVE_MEDIAPLAYER
+
+QStringList s_extractFFMpegMetadataEntriesFromDictionary(AVDictionary* const dict)
+{
+    AVDictionaryEntry* entry = 0; 
+    QStringList meta;
+
+    do
+    {
+        entry = av_dict_get(dict, "", entry, AV_DICT_IGNORE_SUFFIX);
+
+        if (entry)
+            meta.append(QString::fromUtf8("%1 = %2").arg(QString::fromUtf8(entry->key))
+                                                    .arg(QString::fromUtf8(entry->value))); 
+    }
+    while (entry);
+
+    return meta;
+}
+
+#endif
+
 bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 {
 #ifdef HAVE_MEDIAPLAYER
@@ -84,7 +106,6 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     int bitrate              = fmt_ctx->bit_rate;
     AVDictionaryEntry* entry = 0;
     AVDictionary* dict       = 0;
-    QStringList meta;
 
     setXmpTagString("Xmp.video.Duration",    QString::number(totalSecs), false);
     setXmpTagString("Xmp.video.MaxBitRate",  QString::number(bitrate), false);
@@ -99,6 +120,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         if (codec->codec_type == AVMEDIA_TYPE_AUDIO || codec->codec_type == AVMEDIA_TYPE_VIDEO)
         {
 /*
+            // TODO: handle audio stream.
+
             if (codec->codec_type == AVMEDIA_TYPE_AUDIO)
             {
                 subRes.addType( NFO::Audio() );
@@ -122,7 +145,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 setXmpTagString("Xmp.video.SourceImageHeight", QString::number(codec->height), false);
 
                 // Backport size in Exif and Iptc
-                //TODO setImageDimensions(QSize(codec->width, codec->height), false);
+                setImageDimensions(QSize(codec->width, codec->height), false);
 
                 if (aspectRatio)
                     setXmpTagString("Xmp.video.AspectRatio", QString::number(aspectRatio), false);
@@ -134,26 +157,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
                 dict = stream->metadata;
 
-                // ----------------------------
-
-                meta.clear();
-                entry = 0;
-
-                do
-                {
-                    entry = av_dict_get(dict, "", entry, AV_DICT_IGNORE_SUFFIX);
-
-                    if (entry)
-                        meta.append(QString::fromUtf8("%1 = %2").arg(QString::fromUtf8(entry->key))
-                                                                .arg(QString::fromUtf8(entry->value))); 
-                }
-                while (entry);
-                
-                qCDebug(DIGIKAM_METAENGINE_LOG) << "Found FFMpeg video stream metadata entries:";
-                qCDebug(DIGIKAM_METAENGINE_LOG) << meta;
+                qCDebug(DIGIKAM_METAENGINE_LOG) << "FFMpeg video stream metadata entries:";
+                qCDebug(DIGIKAM_METAENGINE_LOG) << s_extractFFMpegMetadataEntriesFromDictionary(dict);
 
                 // ----------------------------
-                
+
                 entry = av_dict_get(dict, "rotate", NULL, 0);
 
                 if (entry)
@@ -187,9 +195,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                        setImageOrientation(ori, false);
                     }
                 }
-                
-                entry = av_dict_get(dict, "language", NULL, 0);   
-                
+
+                entry = av_dict_get(dict, "language", NULL, 0);
+
                 if (entry)
                 {
                     setXmpTagString("Xmp.video.Language", QString::fromUtf8(entry->value), false);
@@ -204,25 +212,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     dict  = fmt_ctx->metadata;
     entry = 0;
 
-    // ----------------------------
-
-    meta.clear();
-
-    do
-    {
-        entry = av_dict_get(dict, "", entry, AV_DICT_IGNORE_SUFFIX);
-
-        if (entry)
-            meta.append(QString::fromUtf8("%1 = %2").arg(QString::fromUtf8(entry->key))
-                                                    .arg(QString::fromUtf8(entry->value))); 
-    }
-    while (entry);
-
-    qCDebug(DIGIKAM_METAENGINE_LOG) << "Found FFMpeg lead container metadata entries:";
-    qCDebug(DIGIKAM_METAENGINE_LOG) << meta;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "FFMpeg lead container metadata entries:";
+    qCDebug(DIGIKAM_METAENGINE_LOG) << s_extractFFMpegMetadataEntriesFromDictionary(dict);
 
     // ----------------------------
-    
+
     entry = av_dict_get(dict, "title", NULL, 0);
 
     if (entry)
