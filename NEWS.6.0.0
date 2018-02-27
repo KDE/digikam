@@ -65,4 +65,5 @@ BUGFIXES FROM BUGZILLA:
 053 ==> 238927 - Host application quits when uploading to Flickr.
 054 ==> 326740 - Selection of tools is set to default after each update.
 055 ==> 233063 - Add progress indicator when moving or copy files [patch].
-056 ==> 
+056 ==> 361829 - Rotated MP4 video with "Orientation" flag are not played back in the correct rotation angle.
+057 ==> 
