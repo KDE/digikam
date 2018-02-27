@@ -47,8 +47,9 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dlayoutbox.h"
 #include "thememanager.h"
+#include "dlayoutbox.h"
+#include "dmetadata.h"
 
 using namespace QtAV;
 
@@ -387,8 +388,30 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
     d->currentItem = url;
 
     d->player->stop();
-    setPreviewMode(Private::PlayerView);
+
+    int orientation = 0;
+    DMetadata meta(url.toLocalFile());
+
+    switch (meta.getImageOrientation())
+    {
+        case MetaEngine::ORIENTATION_ROT_90:
+            orientation = 90;
+            break;
+        case MetaEngine::ORIENTATION_ROT_180:
+            orientation = 180;
+            break;
+        case MetaEngine::ORIENTATION_ROT_270:
+            orientation = 270;
+            break;
+        default:
+            break;
+    }
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Found video orientation:" << orientation;
+    d->videoWidget->setOrientation(orientation);
+
     d->player->setFile(d->currentItem.toLocalFile());
+    setPreviewMode(Private::PlayerView);
     d->player->play();
 }
 
