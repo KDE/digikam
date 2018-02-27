@@ -368,7 +368,7 @@ bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude,
     try
     {
         // In first, we need to clean up all existing GPS info.
-        removeGPSInfo();
+        removeGPSInfo(setProgramName);
 
         // now re-initialize the GPS info:
         if (!initializeGPSInfo(setProgramName))

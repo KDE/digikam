@@ -5,6 +5,7 @@
  *
  * Date        : 2018-02-26
  * Description : metadata extraction with ffmpeg (libav)
+ * Reference   : https://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
  *
  * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -44,6 +45,7 @@ extern "C"
 {
 #include <libavformat/avformat.h>
 #include <libavutil/dict.h>
+#include <libavutil/pixdesc.h>
 #include <libavcodec/avcodec.h>
 }
 
@@ -77,14 +79,16 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         return false;
     }
 
-    int totalSecs = fmt_ctx->duration / AV_TIME_BASE;
-    int bitrate   = fmt_ctx->bit_rate;
+    int totalSecs            = fmt_ctx->duration / AV_TIME_BASE;
+    int bitrate              = fmt_ctx->bit_rate;
+    AVDictionaryEntry* entry = 0;
+    AVDictionary* dict       = 0;
+    QStringList meta;
 
     setXmpTagString("Xmp.video.Duration",    QString::number(totalSecs), false);
     setXmpTagString("Xmp.video.MaxBitRate",  QString::number(bitrate), false);
     setXmpTagString("Xmp.video.StreamCount", QString::number(fmt_ctx->nb_streams), false);
-
-    // TODO: fmt_ctx->video_codec_id => "Xmp.video.Codec"     (the codec type, the value corresponds to enum AVCodecID).
+    setXmpTagString("Xmp.video.Codec",       QString::fromUtf8(avcodec_get_name(fmt_ctx->video_codec_id)), false);
 
     for (uint i = 0 ; i < fmt_ctx->nb_streams ; i++)
     {
@@ -117,7 +121,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 setXmpTagString("Xmp.video.SourceImageHeight", QString::number(codec->height), false);
 
                 // Backport size in Exif and Iptc
-                setImageDimensions(QSize(codec->width, codec->height), false);
+                //TODO setImageDimensions(QSize(codec->width, codec->height), false);
 
                 if (aspectRatio)
                     setXmpTagString("Xmp.video.AspectRatio", QString::number(aspectRatio), false);
@@ -127,8 +131,29 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
                 setXmpTagString("Xmp.video.PixelDepth",  QString::number(codec->bits_per_coded_sample), false);
 
-                AVDictionary* const dict = stream->metadata;
-                AVDictionaryEntry* entry = av_dict_get(dict, "rotate", NULL, 0);
+                dict = stream->metadata;
+
+                // ----------------------------
+
+                meta.clear();
+                entry = 0;
+
+                do
+                {
+                    entry = av_dict_get(dict, "", entry, AV_DICT_IGNORE_SUFFIX);
+
+                    if (entry)
+                        meta.append(QString::fromUtf8("%1 = %2").arg(QString::fromUtf8(entry->key))
+                                                                .arg(QString::fromUtf8(entry->value))); 
+                }
+                while (entry);
+                
+                qCDebug(DIGIKAM_METAENGINE_LOG) << "Found FFMpeg video stream metadata entries:";
+                qCDebug(DIGIKAM_METAENGINE_LOG) << meta;
+
+                // ----------------------------
+                
+                entry = av_dict_get(dict, "rotate", NULL, 0);
 
                 if (entry)
                 {
@@ -161,16 +186,43 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                        setImageOrientation(ori, false);
                     }
                 }
+                
+                entry = av_dict_get(dict, "language", NULL, 0);   
+                
+                if (entry)
+                {
+                    setXmpTagString("Xmp.video.Language", QString::fromUtf8(entry->value), false);
+                }
 
-
-                //TODO: codec->format      => "Xmp.video.Format"     (the pixel format, the value corresponds to enum AVPixelFormat).
-                //TODO: codec->color_space => "Xmp.video.ColorSpace" (the YUV colorspace type, the value corresponds to enum AVColorSpace).
+                setXmpTagString("Xmp.video.Format",     QString::fromUtf8(av_get_pix_fmt_name((AVPixelFormat)codec->format)), false);
+                setXmpTagString("Xmp.video.ColorSpace", QString::fromUtf8(av_color_space_name(codec->color_space)), false);
             }
         }
     }
 
-    AVDictionary* const dict = fmt_ctx->metadata;
-    AVDictionaryEntry* entry = av_dict_get(dict, "title", NULL, 0);
+    dict  = fmt_ctx->metadata;
+    entry = 0;
+
+    // ----------------------------
+
+    meta.clear();
+
+    do
+    {
+        entry = av_dict_get(dict, "", entry, AV_DICT_IGNORE_SUFFIX);
+
+        if (entry)
+            meta.append(QString::fromUtf8("%1 = %2").arg(QString::fromUtf8(entry->key))
+                                                    .arg(QString::fromUtf8(entry->value))); 
+    }
+    while (entry);
+
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "Found FFMpeg lead container metadata entries:";
+    qCDebug(DIGIKAM_METAENGINE_LOG) << meta;
+
+    // ----------------------------
+    
+    entry = av_dict_get(dict, "title", NULL, 0);
 
     if (entry)
     {
@@ -270,7 +322,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         QString lng      = data.right(data.length() - index);
         QString lat      = data.left(index);
 
-        qCDebug(DIGIKAM_METAENGINE_LOG) << lat << lng;
+        //qCDebug(DIGIKAM_METAENGINE_LOG) << lat << lng;
 
         bool b1          = false;
         bool b2          = false;
