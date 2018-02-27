@@ -47,6 +47,7 @@ public:
         running     = false;
         jobDone     = true;
         createStrip = true;
+        exifRotate  = true;
         thumbSize   = ThumbnailSize::Huge;
         vthumb      = 0;
     }
@@ -55,6 +56,7 @@ public:
     volatile bool     running;
     volatile bool     jobDone;
     bool              createStrip;
+    bool              exifRotate;
     int               thumbSize;
 
     QMutex            mutex;
@@ -71,14 +73,14 @@ VideoThumbnailerJob::VideoThumbnailerJob(QObject* const parent)
 {
     d->vthumb = new VideoThumbnailer(this);
 
-    connect(this, SIGNAL(signalGetThumbnail(const QString&,int,bool)),
-            d->vthumb, SLOT(slotGetThumbnail(const QString&,int,bool)));
+    connect(this, SIGNAL(signalGetThumbnail(QString,int,bool,bool)),
+            d->vthumb, SLOT(slotGetThumbnail(QString,int,bool,bool)));
 
-    connect(d->vthumb, SIGNAL(signalThumbnailDone(const QString&, const QImage&)),
-            this, SLOT(slotThumbnailDone(const QString&, const QImage&)));
+    connect(d->vthumb, SIGNAL(signalThumbnailDone(QString,QImage)),
+            this, SLOT(slotThumbnailDone(QString,QImage)));
 
-    connect(d->vthumb, SIGNAL(signalThumbnailFailed(const QString&)),
-            this, SLOT(slotThumbnailFailed(const QString&)));
+    connect(d->vthumb, SIGNAL(signalThumbnailFailed(QString)),
+            this, SLOT(slotThumbnailFailed(QString)));
 }
 
 VideoThumbnailerJob::~VideoThumbnailerJob()
@@ -106,6 +108,11 @@ void VideoThumbnailerJob::setThumbnailSize(int size)
 void VideoThumbnailerJob::setCreateStrip(bool strip)
 {
     d->createStrip = strip;
+}
+
+void VideoThumbnailerJob::setExifRotate(bool rotate)
+{
+    d->exifRotate = rotate;
 }
 
 void VideoThumbnailerJob::slotCancel()
@@ -159,7 +166,7 @@ void VideoThumbnailerJob::run()
             d->jobDone = false;
             d->currentFile = d->todo.takeFirst();
             qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << d->currentFile;
-            emit signalGetThumbnail(d->currentFile, d->thumbSize, d->createStrip);
+            emit signalGetThumbnail(d->currentFile, d->thumbSize, d->createStrip, d->exifRotate);
         }
 
         d->condVar.wait(&d->mutex);

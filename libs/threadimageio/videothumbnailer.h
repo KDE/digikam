@@ -54,7 +54,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotGetThumbnail(const QString&, int size, bool strip);
+    void slotGetThumbnail(const QString&, int size, bool strip, bool rotate);
 
 Q_SIGNALS:
 

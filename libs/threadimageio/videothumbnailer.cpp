@@ -37,8 +37,10 @@
 
 // Local includes
 
+#include "metaengine_rotation.h"
 #include "thumbnailsize.h"
 #include "digikam_debug.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -114,6 +116,7 @@ public:
     Private()
     {
         createStrip = false;
+        exifRotate  = false;
         audioFile   = false;
         thumbSize   = ThumbnailSize::Huge;
         position    = 0;
@@ -122,6 +125,7 @@ public:
     }
 
     bool                 createStrip;
+    bool                 exifRotate;
     bool                 audioFile;
     int                  thumbSize;
     qint64               position;
@@ -163,9 +167,10 @@ VideoThumbnailer::~VideoThumbnailer()
     delete d;
 }
 
-void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool strip)
+void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool strip, bool rotate)
 {
     d->createStrip = strip;
+    d->exifRotate  = rotate;
 
     if (size < ThumbnailSize::Step || size > ThumbnailSize::HD)
     {
@@ -262,11 +267,24 @@ void VideoThumbnailer::slotFrameExtracted(const QtAV::VideoFrame& frame)
     {
         img = img.scaled(d->thumbSize, d->thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
+        if (d->exifRotate)
+        {
+            DMetadata meta(d->file);
+            int orientation = meta.getImageOrientation();
+
+            if (orientation != DMetadata::ORIENTATION_NORMAL &&
+                orientation != DMetadata::ORIENTATION_UNSPECIFIED)
+            {
+                QMatrix matrix = MetaEngineRotation::toMatrix((MetaEngine::ImageOrientation)orientation);
+                img            = img.transformed(matrix);
+            }
+        }
+
         if (d->createStrip && img.width() > d->strip.width() && img.height() > d->strip.height())
         {
             // Add a video strip on the left side of video thumb.
 
-            for (int y = 0; y < img.height(); y += d->strip.height())
+            for (int y = 0 ; y < img.height() ; y += d->strip.height())
             {
                 for (int ys = 0 ; ys < d->strip.height() ; ys++)
                 {

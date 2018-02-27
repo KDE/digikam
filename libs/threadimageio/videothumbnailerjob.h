@@ -49,13 +49,17 @@ public:
     explicit VideoThumbnailerJob(QObject* const parent);
     virtual ~VideoThumbnailerJob();
 
-    /** Add a film strip on the left side of video thumnails
-     */
-    void setCreateStrip(bool);
-
     /** Set size of thumbnails to generate
      */
-    void setThumbnailSize(int);
+    void setThumbnailSize(int size);
+
+    /** Add a film strip on the left side of video thumnails
+     */
+    void setCreateStrip(bool strip);
+
+    /** Set exif rotation of thumbnails to generate
+     */
+    void  setExifRotate(bool rotate);
 
     /** Add new video files to process on the pending list
      */
@@ -76,7 +80,7 @@ Q_SIGNALS:
     void signalThumbnailJobFinished();
 
     /// Internal use only.
-    void signalGetThumbnail(const QString&, int size, bool strip);
+    void signalGetThumbnail(const QString&, int size, bool strip, bool rotate);
 
 public Q_SLOTS:
 
