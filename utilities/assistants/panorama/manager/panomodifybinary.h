@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANOMODIFYBINARY_H
-#define PANOMODIFYBINARY_H
+#ifndef PANO_MODIFY_BINARY_H
+#define PANO_MODIFY_BINARY_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class PanoModifyBinary : public DBinaryIface
 
 public:
 
-    PanoModifyBinary()
+    explicit PanoModifyBinary()
         : DBinaryIface(QLatin1String("pano_modify"),
                        QLatin1String("2012.0"),
                        QLatin1String("pano_modify version "),
@@ -52,4 +52,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // PANOMODIFYBINARY_H
+#endif // PANO_MODIFY_BINARY_H

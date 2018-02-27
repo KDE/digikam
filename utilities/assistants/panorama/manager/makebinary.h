@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef MAKEBINARY_H
-#define MAKEBINARY_H
+#ifndef MAKE_BINARY_H
+#define MAKE_BINARY_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class MakeBinary : public DBinaryIface
 
 public:
 
-    MakeBinary()
+    explicit MakeBinary()
         : DBinaryIface(QLatin1String("make"),
                        QLatin1String("3.80"),
                        QLatin1String("GNU Make "),
@@ -60,4 +60,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // MAKEBINARY_H
+#endif  // MAKE_BINARY_H

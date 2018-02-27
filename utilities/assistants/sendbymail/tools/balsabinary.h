@@ -34,7 +34,7 @@ class BalsaBinary : public DBinaryIface
 {
 public:
 
-    BalsaBinary()
+    explicit BalsaBinary()
         : DBinaryIface(
                        QLatin1String("balsa"),
                        QLatin1String("Balsa"),

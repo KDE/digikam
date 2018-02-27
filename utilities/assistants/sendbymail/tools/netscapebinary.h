@@ -34,7 +34,7 @@ class NetscapeBinary : public DBinaryIface
 {
 public:
 
-    NetscapeBinary()
+    explicit NetscapeBinary()
         : DBinaryIface(
                        QLatin1String("netscape"),
                        QLatin1String("Netscape Messenger"),

@@ -62,11 +62,11 @@ struct PTOType
                 DEFLATE
             } CompressionMethod;
 
-            FileType                    fileType;
-            unsigned char               quality;            // JPEG
-            CompressionMethod           compressionMethod;  // TIFF
-            bool                        cropped;            // TIFF
-            bool                        savePositions;      // TIFF
+            FileType          fileType;
+            unsigned char     quality;            // JPEG
+            CompressionMethod compressionMethod;  // TIFF
+            bool              cropped;            // TIFF
+            bool              savePositions;      // TIFF
 
             FileFormat()
               : fileType(JPEG),
@@ -93,17 +93,17 @@ struct PTOType
             FLOAT
         } BitDepth;
 
-        QStringList                 previousComments;
-        QSize                       size;
-        QRect                       crop;
-        ProjectionType              projection;
-        double                      fieldOfView;
-        FileFormat                  fileFormat;
-        double                      exposure;
-        bool                        hdr;
-        BitDepth                    bitDepth;
-        int                         photometricReferenceId;
-        QStringList                 unmatchedParameters;
+        QStringList    previousComments;
+        QSize          size;
+        QRect          crop;
+        ProjectionType projection;
+        double         fieldOfView;
+        FileFormat     fileFormat;
+        double         exposure;
+        bool           hdr;
+        BitDepth       bitDepth;
+        int            photometricReferenceId;
+        QStringList    unmatchedParameters;
 
         Project()
           : size(0, 0),
@@ -117,6 +117,8 @@ struct PTOType
         {
         }
     };
+
+    // --------------------------------------------------------------------------------------
 
     struct Stitcher
     {
@@ -139,13 +141,13 @@ struct PTOType
             FAST   = 2
         } SpeedUp;
 
-        QStringList                 previousComments;
-        double                      gamma;
-        Interpolator                interpolator;
-        SpeedUp                     speedUp;
-        double                      huberSigma;
-        double                      photometricHuberSigma;
-        QStringList                 unmatchedParameters;
+        QStringList  previousComments;
+        double       gamma;
+        Interpolator interpolator;
+        SpeedUp      speedUp;
+        double       huberSigma;
+        double       photometricHuberSigma;
+        QStringList  unmatchedParameters;
 
         Stitcher()
           : gamma(1),
@@ -156,6 +158,8 @@ struct PTOType
         {
         }
     };
+
+    // --------------------------------------------------------------------------------------
 
     struct Mask
     {
@@ -168,10 +172,12 @@ struct PTOType
             NEGATIVELENS  = 4
         } MaskType;
 
-        QStringList                 previousComments;
-        MaskType                    type;
-        QList<QPoint>               hull;
+        QStringList   previousComments;
+        MaskType      type;
+        QList<QPoint> hull;
     };
+
+    // --------------------------------------------------------------------------------------
 
     struct Optimisation
     {
@@ -203,9 +209,11 @@ struct PTOType
             UNKNOWN
         } Parameter;
 
-        QStringList                 previousComments;
-        Parameter                   parameter;
+        QStringList previousComments;
+        Parameter   parameter;
     };
+
+    // --------------------------------------------------------------------------------------
 
     struct Image
     {
@@ -255,48 +263,48 @@ struct PTOType
             PROPORTIONNALFLATFIELD = 6
         } VignettingMode;
 
-        QStringList                     previousComments;
-        QSize                           size;
-        int                             id;
-        QList<Mask>                     masks;
-        QList<Optimisation>             optimisationParameters;
-        LensProjection                  lensProjection;
-        LensParameter<double>           fieldOfView;
-        double                          yaw;
-        double                          pitch;
-        double                          roll;
-        LensParameter<double>           lensBarrelCoefficientA;
-        LensParameter<double>           lensBarrelCoefficientB;
-        LensParameter<double>           lensBarrelCoefficientC;
-        LensParameter<int>              lensCenterOffsetX;
-        LensParameter<int>              lensCenterOffsetY;
-        LensParameter<int>              lensShearX;
-        LensParameter<int>              lensShearY;
-        LensParameter<double>           exposure;
-        LensParameter<double>           whiteBalanceRed;
-        LensParameter<double>           whiteBalanceBlue;
-        LensParameter<VignettingMode>   vignettingMode;
-        LensParameter<double>           vignettingCorrectionI;      // Va
-        LensParameter<double>           vignettingCorrectionJ;      // Vb
-        LensParameter<double>           vignettingCorrectionK;      // Vc
-        LensParameter<double>           vignettingCorrectionL;      // Vd
-        LensParameter<int>              vignettingOffsetX;
-        LensParameter<int>              vignettingOffsetY;
-        QString                         vignettingFlatfieldImageName;
-        LensParameter<double>           photometricEMoRA;
-        LensParameter<double>           photometricEMoRB;
-        LensParameter<double>           photometricEMoRC;
-        LensParameter<double>           photometricEMoRD;
-        LensParameter<double>           photometricEMoRE;
-        double                          mosaicCameraPositionX;
-        double                          mosaicCameraPositionY;
-        double                          mosaicCameraPositionZ;
-        double                          mosaicProjectionPlaneYaw;
-        double                          mosaicProjectionPlanePitch;
-        QRect                           crop;
-        LensParameter<int>              stackNumber;
-        QString                         fileName;
-        QStringList                     unmatchedParameters;
+        QStringList                   previousComments;
+        QSize                         size;
+        int                           id;
+        QList<Mask>                   masks;
+        QList<Optimisation>           optimisationParameters;
+        LensProjection                lensProjection;
+        LensParameter<double>         fieldOfView;
+        double                        yaw;
+        double                        pitch;
+        double                        roll;
+        LensParameter<double>         lensBarrelCoefficientA;
+        LensParameter<double>         lensBarrelCoefficientB;
+        LensParameter<double>         lensBarrelCoefficientC;
+        LensParameter<int>            lensCenterOffsetX;
+        LensParameter<int>            lensCenterOffsetY;
+        LensParameter<int>            lensShearX;
+        LensParameter<int>            lensShearY;
+        LensParameter<double>         exposure;
+        LensParameter<double>         whiteBalanceRed;
+        LensParameter<double>         whiteBalanceBlue;
+        LensParameter<VignettingMode> vignettingMode;
+        LensParameter<double>         vignettingCorrectionI;      // Va
+        LensParameter<double>         vignettingCorrectionJ;      // Vb
+        LensParameter<double>         vignettingCorrectionK;      // Vc
+        LensParameter<double>         vignettingCorrectionL;      // Vd
+        LensParameter<int>            vignettingOffsetX;
+        LensParameter<int>            vignettingOffsetY;
+        QString                       vignettingFlatfieldImageName;
+        LensParameter<double>         photometricEMoRA;
+        LensParameter<double>         photometricEMoRB;
+        LensParameter<double>         photometricEMoRC;
+        LensParameter<double>         photometricEMoRD;
+        LensParameter<double>         photometricEMoRE;
+        double                        mosaicCameraPositionX;
+        double                        mosaicCameraPositionY;
+        double                        mosaicCameraPositionZ;
+        double                        mosaicProjectionPlaneYaw;
+        double                        mosaicProjectionPlanePitch;
+        QRect                         crop;
+        LensParameter<int>            stackNumber;
+        QString                       fileName;
+        QStringList                   unmatchedParameters;
 
         Image()
           : size(0, 0),
@@ -339,18 +347,22 @@ struct PTOType
         }
     };
 
+    // --------------------------------------------------------------------------------------
+
     struct ControlPoint
     {
-        QStringList                 previousComments;
-        int                         image1Id;
-        int                         image2Id;
-        double                      p1_x;
-        double                      p1_y;
-        double                      p2_x;
-        double                      p2_y;
-        int                         type;   // FIXME: change that for an enum if possible
-        QStringList                 unmatchedParameters;
+        QStringList previousComments;
+        int         image1Id;
+        int         image2Id;
+        double      p1_x;
+        double      p1_y;
+        double      p2_x;
+        double      p2_y;
+        int         type;   // FIXME: change that for an enum if possible
+        QStringList unmatchedParameters;
     };
+
+    // --------------------------------------------------------------------------------------
 
     PTOType()
       : version(PRE_V2014)
@@ -362,7 +374,7 @@ struct PTOType
     {
     }
 
-    bool    createFile(const QString& filepath);
+    bool createFile(const QString& filepath);
 
 /*
     NOTE: Work in progress
@@ -371,11 +383,11 @@ struct PTOType
     QPair<double, int>  standardDeviation();
 */
 
-    Project                 project;
-    Stitcher                stitcher;
-    QVector<Image>          images;
-    QList<ControlPoint>     controlPoints;
-    QStringList             lastComments;
+    Project             project;
+    Stitcher            stitcher;
+    QVector<Image>      images;
+    QList<ControlPoint> controlPoints;
+    QStringList         lastComments;
 
     enum
     {

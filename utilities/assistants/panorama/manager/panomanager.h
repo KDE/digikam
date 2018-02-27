@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PANOMANAGER_H
-#define PANOMANAGER_H
+#ifndef PANO_MANAGER_H
+#define PANO_MANAGER_H
 
 // Qt includes
 
@@ -146,4 +146,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* PANOMANAGER_H */
+#endif // PANO_MANAGER_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_HUGINEXECUTORBINARY_H
-#define PANO_HUGINEXECUTORBINARY_H
+#ifndef PANO_HUGIN_EXECUTOR_BINARY_H
+#define PANO_HUGIN_EXECUTOR_BINARY_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class HuginExecutorBinary : public DBinaryIface
 
 public:
 
-    HuginExecutorBinary()
+    explicit HuginExecutorBinary()
         : DBinaryIface(QLatin1String("hugin_executor"),
                        QLatin1String("Hugin"),
                        QLatin1String("http://hugin.sourceforge.net/download/"),
@@ -53,4 +53,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // PANO_HUGINEXECUTORBINARY_H
+#endif  // PANO_HUGIN_EXECUTOR_BINARY_H

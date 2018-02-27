@@ -34,7 +34,7 @@ class SylpheedBinary : public DBinaryIface
 {
 public:
 
-    SylpheedBinary()
+    explicit SylpheedBinary()
         : DBinaryIface(
                        QLatin1String("sylpheed"),
                        QLatin1String("Sylpheed"),

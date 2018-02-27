@@ -34,7 +34,7 @@ class ThunderbirdBinary : public DBinaryIface
 {
 public:
 
-    ThunderbirdBinary()
+    explicit ThunderbirdBinary()
         : DBinaryIface(
                        QLatin1String("thunderbird"),
                        QLatin1String("Thunderbird"),

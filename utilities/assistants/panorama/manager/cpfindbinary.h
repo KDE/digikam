@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_CPFINDBINARY_H
-#define PANO_CPFINDBINARY_H
+#ifndef PANO_CPFIND_BINARY_H
+#define PANO_CPFIND_BINARY_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class CPFindBinary : public DBinaryIface
 
 public:
 
-    CPFindBinary()
+    explicit CPFindBinary()
         : DBinaryIface(QLatin1String("cpfind"),
                        QLatin1String("2010.4"),
                        QString(),
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif  // PANO_CPFINDBINARY_H
+#endif  // PANO_CPFIND_BINARY_H

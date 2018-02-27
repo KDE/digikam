@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef AUTOOPTIMISERBINARY_H
-#define AUTOOPTIMISERBINARY_H
+#ifndef AUTO_OPTIMISER_BINARY_H
+#define AUTO_OPTIMISER_BINARY_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class AutoOptimiserBinary : public DBinaryIface
 
 public:
 
-    AutoOptimiserBinary()
+    explicit AutoOptimiserBinary()
         : DBinaryIface(QLatin1String("autooptimiser"),
                        QLatin1String("2010.4"),
                        QLatin1String("autooptimiser version "),
@@ -56,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // AUTOOPTIMISERBINARY_H
+#endif  // AUTO_OPTIMISER_BINARY_H
