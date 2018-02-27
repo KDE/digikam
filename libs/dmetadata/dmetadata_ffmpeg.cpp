@@ -5,8 +5,11 @@
  *
  * Date        : 2018-02-26
  * Description : metadata extraction with ffmpeg (libav)
- * References  : https://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
- *               https://github.com/FFmpeg/FFmpeg/blob/master/libavformat/mov.c#L298
+ * References  :
+ *
+ * FFMpeg metadata review: https://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
+ * FFMpeg MP4 parser     : https://github.com/FFmpeg/FFmpeg/blob/master/libavformat/mov.c#L298
+ * Exiv2 XMP video       : https://github.com/Exiv2/exiv2/blob/master/src/properties.cpp#L1331
  *
  * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -59,7 +62,7 @@ namespace Digikam
 
 QStringList s_extractFFMpegMetadataEntriesFromDictionary(AVDictionary* const dict)
 {
-    AVDictionaryEntry* entry = 0; 
+    AVDictionaryEntry* entry = 0;
     QStringList meta;
 
     do
@@ -68,7 +71,7 @@ QStringList s_extractFFMpegMetadataEntriesFromDictionary(AVDictionary* const dic
 
         if (entry)
             meta.append(QString::fromUtf8("%1 = %2").arg(QString::fromUtf8(entry->key))
-                                                    .arg(QString::fromUtf8(entry->value))); 
+                                                    .arg(QString::fromUtf8(entry->value)));
     }
     while (entry);
 
