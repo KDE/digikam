@@ -5,7 +5,8 @@
  *
  * Date        : 2018-02-26
  * Description : metadata extraction with ffmpeg (libav)
- * Reference   : https://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
+ * References  : https://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
+ *               https://github.com/FFmpeg/FFmpeg/blob/master/libavformat/mov.c#L298
  *
  * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
