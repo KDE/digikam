@@ -75,4 +75,5 @@ BUGFIXES FROM BUGZILLA:
 062 ==> 383588 - Imported video files have time shifted exactly 2 hours later.
 063 ==> 380847 - MP4 video not importing with correct date.
 064 ==> 373682 - geolocalisation filter does not take care of the videos geolocalisation tags.
-065 ==> 
+065 ==> 340925 - Digikam crash when start it.
+066 ==> 
