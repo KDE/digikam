@@ -78,5 +78,42 @@ BUGFIXES FROM BUGZILLA:
 065 ==> 340925 - digiKam crash when start it.
 066 ==> 331506 - digiKam crashes on startup.
 067 ==> 335816 - Crash when trying to add a big collection.
-068 ==> 
-
+068 ==> 353295 - digiKam repeatedly crashes while importing pictures.
+069 ==> 341433 - Crash when opening digiKam application.
+070 ==> 375562 - digiKam crashes while scanning images into sqlite database.
+071 ==> 334782 - Crash while doing nothing.
+072 ==> 362672 - Crash on start of digiKam.
+073 ==> 341023 - Crash after startup during check for updated images.
+074 ==> 386891 - Crashed while adding pictures.
+075 ==> 342666 - digiKam crashes during find new items.
+076 ==> 341274 - digiKam crash on startup.
+077 ==> 343708 - Crash when scanning album.
+078 ==> 332721 - Crash when reading a certain MP4 video file.
+079 ==> 343736 - Crashes when rebuilding thumbnails from database.
+080 ==> 346356 - digiKam crashes when adding 90.000 pictures to library.
+081 ==> 343714 - digiKam crash when scanning for new items.
+082 ==> 341091 - digiKam crashes when updating the MySQL database of a a hudge photo collection.
+083 ==> 340879 - digiKam crashes after getting unexpected but reasonable output from libexiv2.
+084 ==> 342712 - Crash on collection scanning.
+085 ==> 356704 - digiKam still crashes while scanning a new photo directory and subdirs.
+086 ==> 339269 - Segfault when opening a folder that contains unknown file types (mov, avi, xcf).
+087 ==> 364635 - digiKam crashes on startup.
+088 ==> 357356 - digiKam crash on startup while scanning photos.
+089 ==> 341554 - digiKam crashed by Data-Import from NFS.
+090 ==> 345457 - digiKam crashes at "loading tools".
+091 ==> 349635 - Crash of digiKam - moving album.
+092 ==> 342604 - digiKam crash.
+093 ==> 331450 - Signal 8 on album opening.
+094 ==> 342030 - digiKam crashes when checking an AVI video file using exiv2.
+095 ==> 352777 - Crash during scan.
+096 ==> 352944 - digiKam crashes on start.
+097 ==> 343643 - digiKam crashes while perform initial scanning of custom photo folder.
+098 ==> 342000 - digiKam crash when opening folder with Videos (Album or SD Card import).
+099 ==> 353447 - digiKam crashes when scanning files.
+100 ==> 346807 - Crashes on startup.
+101 ==> 364639 - digiKam crashed while opening database.
+102 ==> 341504 - Crash while using application.
+103 ==> 367691 - Searching for pictures crashes at 30% every time.
+104 ==> 334604 - Crash after changing disk partions.
+105 ==> 351689 - Crash on opening digiKam.
+106 ==> 
