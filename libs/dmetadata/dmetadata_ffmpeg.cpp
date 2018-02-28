@@ -748,6 +748,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                             getXmpTagString("Xmp.exif.GPSMapDatum"));      
             setXmpTagString("Xmp.video.GPSVersionID",
                             getXmpTagString("Xmp.exif.GPSVersionID"));     
+
+            setXmpTagString("Xmp.exif.GPSLatitude",
+                            getXmpTagString("Xmp.exif.GPSLatitude"));     
+            setXmpTagString("Xmp.exif.GPSLongitude",
+                            getXmpTagString("Xmp.exif.GPSLongitude"));    
+            setXmpTagString("Xmp.exif.GPSMapDatum",
+                            getXmpTagString("Xmp.exif.GPSMapDatum"));      
+            setXmpTagString("Xmp.exif.GPSVersionID",
+                            getXmpTagString("Xmp.exif.GPSVersionID"));  
         }
     }
 
