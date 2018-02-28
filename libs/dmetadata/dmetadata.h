@@ -60,17 +60,18 @@ public:
     void registerMetadataSettings();
     void setSettings(const MetadataSettingsContainer& settings);
 
-    /** Re-implemented from libMetaEngine to use dcraw identify method if Exiv2 failed.
+    /** Re-implemented from libMetaEngine to use libraw identify and 
+     *  ffmpeg probe methods if Exiv2 failed.
      */
     bool load(const QString& filePath);
     bool save(const QString& filePath) const;
     bool applyChanges() const;
 
-    /** Try to extract metadata using Raw Engine identify method
+    /** Try to extract metadata using Raw Engine identify method (libraw)
      */
     bool loadUsingRawEngine(const QString& filePath);
 
-    /** Try to extract metadata using FFMpeg (libav)
+    /** Try to extract metadata using FFMpeg probe method (libav)
      */
     bool loadUsingFFmpeg(const QString& filePath);
 

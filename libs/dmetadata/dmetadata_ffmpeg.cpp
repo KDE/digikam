@@ -219,6 +219,205 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     qCDebug(DIGIKAM_METAENGINE_LOG) << s_extractFFMpegMetadataEntriesFromDictionary(dict);
 
     // ----------------------------
+/* TODO :
+    premiere_version
+    quicktime_version
+    album_artist
+    account_type
+    account_id
+    category
+    compilation
+    disc
+    episode_uid
+    firmware
+    hd_video
+    keywords
+    synopsis
+    podcast
+    gapless_playback
+    purchase_date
+    sort_album_artist
+    sort_album
+    sort_artist
+    sort_composer
+    sort_name
+    sort_show
+    episode_id
+    episode_sort
+    network
+    show
+    season_number
+    chapter
+    disclaimer
+    host_computer
+    original_artist
+    playback_requirements
+    warning
+*/
+
+    // --------------
+
+    entry = av_dict_get(dict, "composer", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Composer", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "lyrics", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Lyrics", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "performers", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Performers", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "producer", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Producer", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "artist", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "edit_date", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.ModificationDate", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "date", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.CreateDate", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "director", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Director", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "media_type", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Medium", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "grouping", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Grouping", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "encoder", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Encoder", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "subtitle", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Subtitle", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "original_source", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.SourceCredits", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "original_format", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Format", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "rating", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Rating", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+    
+    entry = av_dict_get(dict, "make", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Make", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "model", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Model", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "URL", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.URL", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
 
     entry = av_dict_get(dict, "title", NULL, 0);
 
@@ -227,12 +426,16 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         setXmpTagString("Xmp.video.Title", QString::fromUtf8(entry->value), false);
     }
 
+    // --------------
+
     entry = av_dict_get(dict, "author", NULL, 0);
 
     if (entry)
     {
         setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value), false);
     }
+
+    // --------------
 
     entry = av_dict_get(dict, "copyright", NULL, 0);
 
@@ -241,15 +444,28 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         setXmpTagString("Xmp.video.Copyright", QString::fromUtf8(entry->value), false);
     }
 
+    // --------------
+
     entry = av_dict_get(dict, "comment", NULL, 0);
 
     if (entry)
     {
         QString data = QString::fromUtf8(entry->value);
-        setXmpTagString("Xmp.video.Comment", data, false);
+        setXmpTagString("Xmp.video.Comment",     data, false);
         // Backport comment in Exif
         setExifComment(data, false);
     }
+
+    // --------------
+
+    entry = av_dict_get(dict, "description", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Information", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
 
     entry = av_dict_get(dict, "album", NULL, 0);
 
@@ -258,12 +474,16 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         setXmpTagString("Xmp.video.Album", QString::fromUtf8(entry->value), false);
     }
 
+    // --------------
+
     entry = av_dict_get(dict, "genre", NULL, 0);
 
     if (entry)
     {
         setXmpTagString("Xmp.video.Genre", QString::fromUtf8(entry->value), false);
     }
+
+    // --------------
 
     entry = av_dict_get(dict, "track", NULL, 0);
 
@@ -278,6 +498,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             setXmpTagString("Xmp.video.TrackNumber", QString::number(track), false);
     }
 
+    // --------------
+
     entry = av_dict_get(dict, "year", NULL, 0);
 
     if (entry)
@@ -285,6 +507,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         int year = QString::fromUtf8(entry->value).toInt();
         setXmpTagString("Xmp.video.Year", QString::number(year), false);
     }
+
+    // --------------
 
     entry = av_dict_get(dict, "creation_time", NULL, 0);
 
@@ -297,13 +521,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         setImageDateTime(dt, true, false);
     }
 
+    // --------------
+
     // GPS info as string. ex: "+44.8511-000.6229/"
     entry = av_dict_get(dict, "location", NULL, 0);
 
     if (entry)
     {
         QString data     = QString::fromUtf8(entry->value);
-        setXmpTagString("Xmp.video.LocationInfo", data, false);
+        setXmpTagString("Xmp.video.GPSCoordinates", data, false);
 
         // Backport location in Exif.
         data.remove(QLatin1Char('/'));
