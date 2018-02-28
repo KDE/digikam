@@ -7,7 +7,7 @@ Image Editor : New clone tool to replace old CImg in-painting tool.
 ImageEditor  : Add Web services Import and Export tools.
 Showfoto     : Add Web services Import and Export tools.
 LightTable   : Add Web services Import and Export tools.
-General      : new video metadata parser based on libav to populate database.
+General      : New video metadata parser based on libav to populate database.
 
 BUGFIXES FROM BUGZILLA:
 
