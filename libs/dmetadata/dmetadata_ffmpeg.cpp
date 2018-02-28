@@ -34,7 +34,10 @@
 
 // Qt includes
 
+#include <QDate>
+#include <QTime>
 #include <QDateTime>
+#include <QFileInfo>
 
 // Local incudes
 
@@ -116,6 +119,10 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     AVDictionaryEntry* entry = 0;
     AVDictionary* dict       = 0;
 
+    QFileInfo fi(filePath);
+    setXmpTagString("Xmp.video.FileName",    fi.fileName(), false);
+    setXmpTagString("Xmp.video.FileSize",    QString::number(fi.size() / (1024*1024)), false);
+    setXmpTagString("Xmp.video.FileType",    fi.suffix(), false);
     setXmpTagString("Xmp.video.Duration",    QString::number(totalSecs), false);
     setXmpTagString("Xmp.video.MaxBitRate",  QString::number(bitrate), false);
     setXmpTagString("Xmp.video.StreamCount", QString::number(fmt_ctx->nb_streams), false);
@@ -683,6 +690,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         if (b1 && b2)
         {
             setGPSInfo(alt, lattitude, longitude, false);
+
+            setXmpTagString("Xmp.video.GPSLatitude",
+                            getXmpTagString("Xmp.exif.GPSLatitude"),  false);     
+            setXmpTagString("Xmp.video.GPSLongitude",
+                            getXmpTagString("Xmp.exif.GPSLongitude"), false);    
+            setXmpTagString("Xmp.video.GPSMapDatum",
+                            getXmpTagString("Xmp.exif.GPSMapDatum"),  false);      
+            setXmpTagString("Xmp.video.GPSVersionID",
+                            getXmpTagString("Xmp.exif.GPSVersionID"), false);     
         }
     }
 
