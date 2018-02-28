@@ -491,7 +491,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Rating", QString::fromUtf8(entry->value));
+        QString data = QString::fromUtf8(entry->value);
+        setXmpTagString("Xmp.video.Rating", data);
+        
+        // Backport rating in Exif and Iptc
+        bool b     = false;
+        int rating = data.toInt(&b);
+        
+        if (b)
+            setImageRating(rating);
     }
 
     // --------------
