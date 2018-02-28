@@ -58,6 +58,12 @@ extern "C"
 namespace Digikam
 {
 
+qint64 s_secondsSinceJanuary1904(const QDateTime dt)
+{
+    QDateTime dt1904(QDate(1904, 1, 1), QTime(0, 0, 0));
+    return dt1904.secsTo(dt);
+}
+
 #ifdef HAVE_MEDIAPLAYER
 
 QStringList s_extractFFMpegMetadataEntriesFromDictionary(AVDictionary* const dict)
@@ -149,6 +155,17 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             {
                 setXmpTagString("Xmp.audio.TrackLang", QString::fromUtf8(entry->value), false);
             }
+            
+            // --------------
+            
+            entry = av_dict_get(dict, "creation_time", NULL, 0);
+
+            if (entry)
+            {
+                QDateTime dt = QDateTime::fromString(QString::fromUtf8(entry->value), Qt::ISODate);
+                setXmpTagString("Xmp.audio.TrackCreateDate",
+                                QString::number(s_secondsSinceJanuary1904(dt)), false);
+            }
         }
 
         if (!vstream && codec->codec_type == AVMEDIA_TYPE_VIDEO)
@@ -234,6 +251,17 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             if (entry)
             {
                 setXmpTagString("Xmp.video.Language", QString::fromUtf8(entry->value), false);
+            }
+
+            // --------------
+            
+            entry = av_dict_get(dict, "creation_time", NULL, 0);
+
+            if (entry)
+            {
+                QDateTime dt = QDateTime::fromString(QString::fromUtf8(entry->value), Qt::ISODate);
+                setXmpTagString("Xmp.video.TrackCreateDate",
+                                QString::number(s_secondsSinceJanuary1904(dt)), false);
             }
         }
     }
@@ -383,24 +411,6 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value), false);
             }
         }
-    }
-
-    // --------------
-
-    entry = av_dict_get(dict, "edit_date", NULL, 0);
-
-    if (entry)
-    {
-        setXmpTagString("Xmp.video.ModificationDate", QString::fromUtf8(entry->value), false);
-    }
-
-    // --------------
-
-    entry = av_dict_get(dict, "date", NULL, 0);
-
-    if (entry)
-    {
-        setXmpTagString("Xmp.video.CreateDate", QString::fromUtf8(entry->value), false);
     }
 
     // --------------
@@ -609,12 +619,34 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     if (entry)
     {
         QString data = QString::fromUtf8(entry->value);
-        setXmpTagString("Xmp.video.CreationDate", data, false);
+        setXmpTagString("Xmp.video.DateTimeOriginal", data, false);
+        setXmpTagString("Xmp.video.DateTimeDigitized", data, false);
         // Backport date in Exif and Iptc.
         QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
         setImageDateTime(dt, true, false);
     }
 
+    // --------------
+
+    entry = av_dict_get(dict, "edit_date", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.ModificationDate",
+                        QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "date", NULL, 0);
+
+    if (entry)
+    {
+        QDateTime dt = QDateTime::fromString(QString::fromUtf8(entry->value), Qt::ISODate);
+        setXmpTagString("Xmp.video.MediaCreateDate",
+                        QString::number(s_secondsSinceJanuary1904(dt)), false);
+    }
+    
     // --------------
 
     // GPS info as string. ex: "+44.8511-000.6229/"
