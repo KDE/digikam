@@ -67,4 +67,7 @@ BUGFIXES FROM BUGZILLA:
 055 ==> 233063 - Add progress indicator when moving or copy files [patch].
 056 ==> 361829 - Rotated MP4 video with "Orientation" flag are not played back in the correct rotation angle.
 057 ==> 329854 - digiKam doesn't rotate video thumbnail.
-058 ==> 
+058 ==> 376661 - When importing ~200,000 video files Digikam crashes in about 2-5 seconds of starting.
+059 ==> 377072 - Cannot read video metadata.
+060 ==> 
+
