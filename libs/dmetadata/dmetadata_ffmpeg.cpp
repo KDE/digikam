@@ -220,19 +220,12 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // ----------------------------
 /* TODO :
-    premiere_version
-    quicktime_version
-    album_artist
     account_type
     account_id
-    category
     compilation
     disc
     episode_uid
-    firmware
     hd_video
-    keywords
-    synopsis
     podcast
     gapless_playback
     purchase_date
@@ -250,10 +243,54 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     chapter
     disclaimer
     host_computer
-    original_artist
     playback_requirements
     warning
 */
+
+    // --------------
+
+    entry = av_dict_get(dict, "keywords", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.InfoText", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "category", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Subject", QString::fromUtf8(entry->value), false);
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "premiere_version", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.SoftwareVersion", QString::fromUtf8(entry->value), false);
+    }
+    else
+    {
+        entry = av_dict_get(dict, "quicktime_version", NULL, 0);
+
+        if (entry)
+        {
+            setXmpTagString("Xmp.video.SoftwareVersion", QString::fromUtf8(entry->value), false);
+        }
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "firmware", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.FirmwareVersion", QString::fromUtf8(entry->value), false);
+    }
 
     // --------------
 
@@ -298,6 +335,24 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     if (entry)
     {
         setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value), false);
+    }
+    else
+    {
+        entry = av_dict_get(dict, "album_artist", NULL, 0);
+
+        if (entry)
+        {
+            setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value), false);
+        }
+        else
+        {
+            entry = av_dict_get(dict, "original_artist", NULL, 0);
+
+            if (entry)
+            {
+                setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value), false);
+            }
+        }
     }
 
     // --------------
@@ -463,6 +518,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     if (entry)
     {
         setXmpTagString("Xmp.video.Information", QString::fromUtf8(entry->value), false);
+    }
+    else
+    {
+        entry = av_dict_get(dict, "synopsis", NULL, 0);
+
+        if (entry)
+        {
+            setXmpTagString("Xmp.video.Information", QString::fromUtf8(entry->value), false);
+        }
     }
 
     // --------------
