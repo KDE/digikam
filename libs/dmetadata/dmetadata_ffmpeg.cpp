@@ -121,13 +121,13 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     AVDictionary* dict       = 0;
 
     QFileInfo fi(filePath);
-    setXmpTagString("Xmp.video.FileName",    fi.fileName(), false);
-    setXmpTagString("Xmp.video.FileSize",    QString::number(fi.size() / (1024*1024)), false);
-    setXmpTagString("Xmp.video.FileType",    fi.suffix(), false);
-    setXmpTagString("Xmp.video.MimeType",    QMimeDatabase().mimeTypeForFile(filePath).name(), false);
-    setXmpTagString("Xmp.video.Duration",    QString::number(totalSecs), false);
-    setXmpTagString("Xmp.video.MaxBitRate",  QString::number(bitrate), false);
-    setXmpTagString("Xmp.video.StreamCount", QString::number(fmt_ctx->nb_streams), false);
+    setXmpTagString("Xmp.video.FileName",    fi.fileName());
+    setXmpTagString("Xmp.video.FileSize",    QString::number(fi.size() / (1024*1024)));
+    setXmpTagString("Xmp.video.FileType",    fi.suffix());
+    setXmpTagString("Xmp.video.MimeType",    QMimeDatabase().mimeTypeForFile(filePath).name());
+    setXmpTagString("Xmp.video.Duration",    QString::number(totalSecs));
+    setXmpTagString("Xmp.video.MaxBitRate",  QString::number(bitrate));
+    setXmpTagString("Xmp.video.StreamCount", QString::number(fmt_ctx->nb_streams));
 
     // To only register one video and one audio stream in XMP metadata.
     bool vstream = false;
@@ -143,11 +143,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             astream           = true;
             const char* cname = avcodec_get_name(codec->codec_id);
 
-            setXmpTagString("Xmp.audio.Codec", QString::fromUtf8(cname), false);
-            setXmpTagString("Xmp.audio.CodecDescription", QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name), false);
-            setXmpTagString("Xmp.audio.SampleRate", QString::number(codec->sample_rate), false);
-            setXmpTagString("Xmp.audio.ChannelType", QString::number(codec->channels), false);
-            setXmpTagString("Xmp.audio.Format",     QString::fromUtf8(av_get_sample_fmt_name((AVSampleFormat)codec->format)), false);
+            setXmpTagString("Xmp.audio.Codec", QString::fromUtf8(cname));
+            setXmpTagString("Xmp.audio.CodecDescription", QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name));
+            setXmpTagString("Xmp.audio.SampleRate", QString::number(codec->sample_rate));
+            setXmpTagString("Xmp.audio.ChannelType", QString::number(codec->channels));
+            setXmpTagString("Xmp.audio.Format",     QString::fromUtf8(av_get_sample_fmt_name((AVSampleFormat)codec->format)));
 
             // --------------
 
@@ -162,7 +162,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             if (entry)
             {
-                setXmpTagString("Xmp.audio.TrackLang", QString::fromUtf8(entry->value), false);
+                setXmpTagString("Xmp.audio.TrackLang", QString::fromUtf8(entry->value));
             }
             
             // --------------
@@ -173,7 +173,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             {
                 QDateTime dt = QDateTime::fromString(QString::fromUtf8(entry->value), Qt::ISODate);
                 setXmpTagString("Xmp.audio.TrackCreateDate",
-                                QString::number(s_secondsSinceJanuary1904(dt)), false);
+                                QString::number(s_secondsSinceJanuary1904(dt)));
             }
         }
 
@@ -182,10 +182,10 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             vstream           = true;
             const char* cname = avcodec_get_name(codec->codec_id); 
 
-            setXmpTagString("Xmp.video.Codec", QString::fromUtf8(cname), false);
-            setXmpTagString("Xmp.video.CodecDescription", QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name), false);
-            setXmpTagString("Xmp.video.Format",     QString::fromUtf8(av_get_pix_fmt_name((AVPixelFormat)codec->format)), false);
-            setXmpTagString("Xmp.video.ColorSpace", QString::fromUtf8(av_color_space_name(codec->color_space)), false);
+            setXmpTagString("Xmp.video.Codec", QString::fromUtf8(cname));
+            setXmpTagString("Xmp.video.CodecDescription", QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name));
+            setXmpTagString("Xmp.video.Format",     QString::fromUtf8(av_get_pix_fmt_name((AVPixelFormat)codec->format)));
+            setXmpTagString("Xmp.video.ColorSpace", QString::fromUtf8(av_color_space_name(codec->color_space)));
 
             int aspectRatio = codec->sample_aspect_ratio.num;
             int frameRate   = stream->avg_frame_rate.num;
@@ -196,19 +196,19 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             if (stream->avg_frame_rate.den)
                 frameRate /= stream->avg_frame_rate.den;
 
-            setXmpTagString("Xmp.video.SourceImageWidth",  QString::number(codec->width),  false);
-            setXmpTagString("Xmp.video.SourceImageHeight", QString::number(codec->height), false);
+            setXmpTagString("Xmp.video.SourceImageWidth",  QString::number(codec->width));
+            setXmpTagString("Xmp.video.SourceImageHeight", QString::number(codec->height));
 
             // Backport size in Exif and Iptc
-            setImageDimensions(QSize(codec->width, codec->height), false);
+            setImageDimensions(QSize(codec->width, codec->height));
 
             if (aspectRatio)
-                setXmpTagString("Xmp.video.AspectRatio", QString::number(aspectRatio), false);
+                setXmpTagString("Xmp.video.AspectRatio", QString::number(aspectRatio));
 
             if (frameRate)
-                setXmpTagString("Xmp.video.FrameRate", QString::number(frameRate), false);
+                setXmpTagString("Xmp.video.FrameRate", QString::number(frameRate));
 
-            setXmpTagString("Xmp.video.PixelDepth",  QString::number(codec->bits_per_coded_sample), false);
+            setXmpTagString("Xmp.video.PixelDepth",  QString::number(codec->bits_per_coded_sample));
 
             // ----------------------------
 
@@ -247,9 +247,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                             break;
                     }
 
-                    setXmpTagString("Xmp.video.Orientation", QString::number(ori), false);
+                    setXmpTagString("Xmp.video.Orientation", QString::number(ori));
                     // Backport orientation in Exif
-                    setImageOrientation(ori, false);
+                    setImageOrientation(ori);
                 }
             }
            
@@ -259,7 +259,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             if (entry)
             {
-                setXmpTagString("Xmp.video.Language", QString::fromUtf8(entry->value), false);
+                setXmpTagString("Xmp.video.Language", QString::fromUtf8(entry->value));
             }
 
             // --------------
@@ -270,7 +270,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             {
                 QDateTime dt = QDateTime::fromString(QString::fromUtf8(entry->value), Qt::ISODate);
                 setXmpTagString("Xmp.video.TrackCreateDate",
-                                QString::number(s_secondsSinceJanuary1904(dt)), false);
+                                QString::number(s_secondsSinceJanuary1904(dt)));
             }
         }
     }
@@ -320,7 +320,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.InfoText", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.InfoText", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -329,7 +329,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Subject", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Subject", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -338,7 +338,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.SoftwareVersion", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.SoftwareVersion", QString::fromUtf8(entry->value));
     }
     else
     {
@@ -346,7 +346,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         if (entry)
         {
-            setXmpTagString("Xmp.video.SoftwareVersion", QString::fromUtf8(entry->value), false);
+            setXmpTagString("Xmp.video.SoftwareVersion", QString::fromUtf8(entry->value));
         }
     }
 
@@ -356,7 +356,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.FirmwareVersion", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.FirmwareVersion", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -365,7 +365,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Composer", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Composer", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -374,7 +374,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Lyrics", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Lyrics", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -383,7 +383,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Performers", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Performers", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -392,7 +392,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Producer", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Producer", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -401,7 +401,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value));
     }
     else
     {
@@ -409,7 +409,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         if (entry)
         {
-            setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value), false);
+            setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value));
         }
         else
         {
@@ -417,7 +417,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             if (entry)
             {
-                setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value), false);
+                setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value));
             }
         }
     }
@@ -428,7 +428,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Director", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Director", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -437,7 +437,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Medium", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Medium", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -446,7 +446,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Grouping", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Grouping", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -455,7 +455,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Encoder", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Encoder", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -464,7 +464,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Subtitle", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Subtitle", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -473,7 +473,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.SourceCredits", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.SourceCredits", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -482,7 +482,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Format", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Format", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -491,7 +491,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Rating", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Rating", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -500,7 +500,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Make", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Make", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -509,7 +509,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Model", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Model", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -518,7 +518,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.URL", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.URL", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -527,7 +527,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Title", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Title", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -536,7 +536,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -545,7 +545,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Copyright", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Copyright", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -555,9 +555,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     if (entry)
     {
         QString data = QString::fromUtf8(entry->value);
-        setXmpTagString("Xmp.video.Comment",     data, false);
+        setXmpTagString("Xmp.video.Comment", data);
         // Backport comment in Exif
-        setExifComment(data, false);
+        setExifComment(data);
     }
 
     // --------------
@@ -566,7 +566,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Information", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Information", QString::fromUtf8(entry->value));
     }
     else
     {
@@ -574,7 +574,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         if (entry)
         {
-            setXmpTagString("Xmp.video.Information", QString::fromUtf8(entry->value), false);
+            setXmpTagString("Xmp.video.Information", QString::fromUtf8(entry->value));
         }
     }
 
@@ -584,7 +584,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Album", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Album", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -593,7 +593,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Genre", QString::fromUtf8(entry->value), false);
+        setXmpTagString("Xmp.video.Genre", QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -608,7 +608,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         int track = value.toInt(&ok);
 
         if (ok && track)
-            setXmpTagString("Xmp.video.TrackNumber", QString::number(track), false);
+            setXmpTagString("Xmp.video.TrackNumber", QString::number(track));
     }
 
     // --------------
@@ -618,7 +618,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     if (entry)
     {
         int year = QString::fromUtf8(entry->value).toInt();
-        setXmpTagString("Xmp.video.Year", QString::number(year), false);
+        setXmpTagString("Xmp.video.Year", QString::number(year));
     }
 
     // --------------
@@ -628,11 +628,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     if (entry)
     {
         QString data = QString::fromUtf8(entry->value);
-        setXmpTagString("Xmp.video.DateTimeOriginal", data, false);
-        setXmpTagString("Xmp.video.DateTimeDigitized", data, false);
+        setXmpTagString("Xmp.video.DateTimeOriginal", data);
+        setXmpTagString("Xmp.video.DateTimeDigitized", data);
         // Backport date in Exif and Iptc.
         QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
-        setImageDateTime(dt, true, false);
+        setImageDateTime(dt, true);
     }
 
     // --------------
@@ -642,7 +642,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     if (entry)
     {
         setXmpTagString("Xmp.video.ModificationDate",
-                        QString::fromUtf8(entry->value), false);
+                        QString::fromUtf8(entry->value));
     }
 
     // --------------
@@ -653,7 +653,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     {
         QDateTime dt = QDateTime::fromString(QString::fromUtf8(entry->value), Qt::ISODate);
         setXmpTagString("Xmp.video.MediaCreateDate",
-                        QString::number(s_secondsSinceJanuary1904(dt)), false);
+                        QString::number(s_secondsSinceJanuary1904(dt)));
     }
     
     // --------------
@@ -664,7 +664,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     if (entry)
     {
         QString data     = QString::fromUtf8(entry->value);
-        setXmpTagString("Xmp.video.GPSCoordinates", data, false);
+        setXmpTagString("Xmp.video.GPSCoordinates", data);
 
         // Backport location in Exif.
         data.remove(QLatin1Char('/'));
@@ -691,16 +691,16 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
         if (b1 && b2)
         {
-            setGPSInfo(alt, lattitude, longitude, false);
+            setGPSInfo(alt, lattitude, longitude);
 
             setXmpTagString("Xmp.video.GPSLatitude",
-                            getXmpTagString("Xmp.exif.GPSLatitude"),  false);     
+                            getXmpTagString("Xmp.exif.GPSLatitude"));     
             setXmpTagString("Xmp.video.GPSLongitude",
-                            getXmpTagString("Xmp.exif.GPSLongitude"), false);    
+                            getXmpTagString("Xmp.exif.GPSLongitude"));    
             setXmpTagString("Xmp.video.GPSMapDatum",
-                            getXmpTagString("Xmp.exif.GPSMapDatum"),  false);      
+                            getXmpTagString("Xmp.exif.GPSMapDatum"));      
             setXmpTagString("Xmp.video.GPSVersionID",
-                            getXmpTagString("Xmp.exif.GPSVersionID"), false);     
+                            getXmpTagString("Xmp.exif.GPSVersionID"));     
         }
     }
 

@@ -348,7 +348,7 @@ bool LensFunFilter::registerSettingsToXmp(MetaEngineData& data) const
 
     DMetadata meta(data);
     bool ret = meta.setXmpTagString("Xmp.digiKam.LensCorrectionSettings",
-                                    str.replace(QLatin1Char('\n'), QLatin1String(" ; ")), false);
+                                    str.replace(QLatin1Char('\n'), QLatin1String(" ; ")));
     data     = meta.data();
 
     return ret;

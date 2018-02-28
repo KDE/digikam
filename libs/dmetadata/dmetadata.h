@@ -203,15 +203,13 @@ public:
         all new with all already existing entries to prevent duplicates in the image.
         Return true if the entries have been added to metadata.
      */
-    bool addToXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToAdd,
-                              bool setProgramName) const;
+    bool addToXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToAdd) const;
 
     /** Remove those Xmp tag entries that are listed in entriesToRemove from the entries in metadata.
         Return true if tag entries are no longer contained in metadata.
         All other entries are preserved.
      */
-    bool removeFromXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToRemove,
-                                   bool setProgramName) const;
+    bool removeFromXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToRemove) const;
 
     /** Return a strings list of Xmp keywords from image. Return an empty list if no keyword are set.
      */
@@ -222,12 +220,12 @@ public:
         all new keywords with all already existing keywords to prevent duplicate entries in image.
         Return true if keywords have been changed in metadata.
      */
-    bool setXmpKeywords(const QStringList& newKeywords, bool setProgramName=true) const;
+    bool setXmpKeywords(const QStringList& newKeywords) const;
 
     /** Remove those Xmp keywords that are listed in keywordsToRemove from the keywords in metadata.
         Return true if keywords are no longer contained in metadata.
      */
-    bool removeXmpKeywords(const QStringList& keywordsToRemove, bool setProgramName=true);
+    bool removeXmpKeywords(const QStringList& keywordsToRemove);
 
     /** Return a strings list of Xmp subjects from image. Return an empty list if no subject are set.
      */
@@ -238,12 +236,12 @@ public:
         all new subject with all already existing subject to prevent duplicate entries in image.
         Return true if subjects have been changed in metadata.
      */
-    bool setXmpSubjects(const QStringList& newSubjects, bool setProgramName=true) const;
+    bool setXmpSubjects(const QStringList& newSubjects) const;
 
     /** Remove those Xmp subjects that are listed in subjectsToRemove from the subjects in metadata.
         Return true if subjects are no longer contained in metadata.
      */
-    bool removeXmpSubjects(const QStringList& subjectsToRemove, bool setProgramName=true);
+    bool removeXmpSubjects(const QStringList& subjectsToRemove);
 
     /** Return a strings list of Xmp sub-categories from image. Return an empty list if no sub-category
         are set.
@@ -255,12 +253,12 @@ public:
         all new sub-categories with all already existing sub-categories to prevent duplicate entries in image.
         Return true if sub-categories have been changed in metadata.
      */
-    bool setXmpSubCategories(const QStringList& newSubCategories, bool setProgramName=true) const;
+    bool setXmpSubCategories(const QStringList& newSubCategories) const;
 
     /** Remove those Xmp sub-categories that are listed in categoriesToRemove from the sub-categories in metadata.
         Return true if subjects are no longer contained in metadata.
      */
-    bool removeXmpSubCategories(const QStringList& categoriesToRemove, bool setProgramName=true);
+    bool removeXmpSubCategories(const QStringList& categoriesToRemove);
 
     bool removeExifTags(const QStringList& tagFilters);
     bool removeIptcTags(const QStringList& tagFilters);
@@ -268,7 +266,6 @@ public:
 
 private:
 
-    bool setProgramId(bool on=true) const;
     bool setIptcTag(const QString& text, int maxLength, const char* const debugLabel, const char* const tagKey) const;
 
     QVariant fromExifOrXmp(const char* const exifTagName, const char* const xmpTagName) const;

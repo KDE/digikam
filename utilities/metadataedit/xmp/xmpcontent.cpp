@@ -272,7 +272,7 @@ void XMPContent::applyMetadata(QByteArray& exifData, QByteArray& xmpData)
 
     if (d->captionEdit->getValues(oldAltLangMap, newAltLangMap))
     {
-        meta.setXmpTagStringListLangAlt("Xmp.dc.description", newAltLangMap, false);
+        meta.setXmpTagStringListLangAlt("Xmp.dc.description", newAltLangMap);
 
         if (syncEXIFCommentIsChecked())
             meta.setExifComment(getXMPCaption());
@@ -291,7 +291,7 @@ void XMPContent::applyMetadata(QByteArray& exifData, QByteArray& xmpData)
         meta.removeXmpTag("Xmp.photoshop.CaptionWriter");
 
     if (d->copyrightEdit->getValues(oldAltLangMap, newAltLangMap))
-        meta.setXmpTagStringListLangAlt("Xmp.dc.rights", newAltLangMap, false);
+        meta.setXmpTagStringListLangAlt("Xmp.dc.rights", newAltLangMap);
     else if (d->copyrightEdit->isValid())
         meta.removeXmpTag("Xmp.dc.rights");
 

@@ -317,11 +317,8 @@ QString MetaEngine::getGPSLongitudeString() const
     return convertToGPSCoordinateString(false, longitude);
 }
 
-bool MetaEngine::initializeGPSInfo(const bool setProgramName)
+bool MetaEngine::initializeGPSInfo()
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         // TODO: what happens if these already exist?
@@ -337,8 +334,8 @@ bool MetaEngine::initializeGPSInfo(const bool setProgramName)
         d->exifMetadata()["Exif.GPSInfo.GPSMapDatum"] = "WGS-84";
 
 #ifdef _XMP_SUPPORT_
-        setXmpTagString("Xmp.exif.GPSVersionID", QString::fromLatin1("2.0.0.0"), false);
-        setXmpTagString("Xmp.exif.GPSMapDatum",  QString::fromLatin1("WGS-84"),  false);
+        setXmpTagString("Xmp.exif.GPSVersionID", QString::fromLatin1("2.0.0.0"));
+        setXmpTagString("Xmp.exif.GPSMapDatum",  QString::fromLatin1("WGS-84"));
 #endif // _XMP_SUPPORT_
 
         return true;
@@ -355,23 +352,20 @@ bool MetaEngine::initializeGPSInfo(const bool setProgramName)
     return false;
 }
 
-bool MetaEngine::setGPSInfo(const double altitude, const double latitude, const double longitude, const bool setProgramName)
+bool MetaEngine::setGPSInfo(const double altitude, const double latitude, const double longitude)
 {
-    return setGPSInfo(&altitude, latitude, longitude, setProgramName);
+    return setGPSInfo(&altitude, latitude, longitude);
 }
 
-bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude, const double longitude, const bool setProgramName)
+bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude, const double longitude)
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         // In first, we need to clean up all existing GPS info.
-        removeGPSInfo(setProgramName);
+        removeGPSInfo();
 
         // now re-initialize the GPS info:
-        if (!initializeGPSInfo(setProgramName))
+        if (!initializeGPSInfo())
             return false;
 
         char scratchBuf[100];
@@ -397,8 +391,8 @@ bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude,
             d->exifMetadata()["Exif.GPSInfo.GPSAltitude"] = scratchBuf;
 
 #ifdef _XMP_SUPPORT_
-            setXmpTagString("Xmp.exif.GPSAltitudeRef", ((*altitude) >= 0) ? QString::fromLatin1("0") : QString::fromLatin1("1"), false);
-            setXmpTagString("Xmp.exif.GPSAltitude",    QString::fromLatin1(scratchBuf),                                          false);
+            setXmpTagString("Xmp.exif.GPSAltitudeRef", ((*altitude) >= 0) ? QString::fromLatin1("0") : QString::fromLatin1("1"));
+            setXmpTagString("Xmp.exif.GPSAltitude",    QString::fromLatin1(scratchBuf));
 #endif // _XMP_SUPPORT_
         }
 
@@ -434,8 +428,8 @@ bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude,
          * because the reference is included in Xmp.exif.GPSLatitude.
          * Is there a historic reason for writing it anyway?
          */
-        setXmpTagString("Xmp.exif.GPSLatitudeRef", (latitude < 0) ? QString::fromLatin1("S") : QString::fromLatin1("N"), false);
-        setXmpTagString("Xmp.exif.GPSLatitude",    convertToGPSCoordinateString(true, latitude),                         false);
+        setXmpTagString("Xmp.exif.GPSLatitudeRef", (latitude < 0) ? QString::fromLatin1("S") : QString::fromLatin1("N"));
+        setXmpTagString("Xmp.exif.GPSLatitude",    convertToGPSCoordinateString(true, latitude));
 #endif // _XMP_SUPPORT_
 
         // LONGITUDE
@@ -469,8 +463,8 @@ bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude,
          * because the reference is included in Xmp.exif.GPSLongitude.
          * Is there a historic reason for writing it anyway?
          */
-        setXmpTagString("Xmp.exif.GPSLongitudeRef", (longitude < 0) ? QString::fromLatin1("W") : QString::fromLatin1("E"), false);
-        setXmpTagString("Xmp.exif.GPSLongitude",    convertToGPSCoordinateString(false, longitude),                        false);
+        setXmpTagString("Xmp.exif.GPSLongitudeRef", (longitude < 0) ? QString::fromLatin1("W") : QString::fromLatin1("E"));
+        setXmpTagString("Xmp.exif.GPSLongitude",    convertToGPSCoordinateString(false, longitude));
 #endif // _XMP_SUPPORT_
 
         return true;
@@ -487,7 +481,7 @@ bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude,
     return false;
 }
 
-bool MetaEngine::setGPSInfo(const double altitude, const QString& latitude, const QString& longitude, const bool setProgramName)
+bool MetaEngine::setGPSInfo(const double altitude, const QString& latitude, const QString& longitude)
 {
     double longitudeValue, latitudeValue;
 
@@ -497,14 +491,11 @@ bool MetaEngine::setGPSInfo(const double altitude, const QString& latitude, cons
     if (!convertFromGPSCoordinateString(longitude, &longitudeValue))
         return false;
 
-    return setGPSInfo(&altitude, latitudeValue, longitudeValue, setProgramName);
+    return setGPSInfo(&altitude, latitudeValue, longitudeValue);
 }
 
-bool MetaEngine::removeGPSInfo(const bool setProgramName)
+bool MetaEngine::removeGPSInfo()
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         QStringList gpsTagsKeys;
@@ -532,34 +523,34 @@ bool MetaEngine::removeGPSInfo(const bool setProgramName)
          * and Xmp.exif.GPSLatitudeRef. But because we write them in setGPSInfo(),
          * we should also remove them here.
          */
-        removeXmpTag("Xmp.exif.GPSLatitudeRef", false);
-        removeXmpTag("Xmp.exif.GPSLongitudeRef", false);
-        removeXmpTag("Xmp.exif.GPSVersionID", false);
-        removeXmpTag("Xmp.exif.GPSLatitude", false);
-        removeXmpTag("Xmp.exif.GPSLongitude", false);
-        removeXmpTag("Xmp.exif.GPSAltitudeRef", false);
-        removeXmpTag("Xmp.exif.GPSAltitude", false);
-        removeXmpTag("Xmp.exif.GPSTimeStamp", false);
-        removeXmpTag("Xmp.exif.GPSSatellites", false);
-        removeXmpTag("Xmp.exif.GPSStatus", false);
-        removeXmpTag("Xmp.exif.GPSMeasureMode", false);
-        removeXmpTag("Xmp.exif.GPSDOP", false);
-        removeXmpTag("Xmp.exif.GPSSpeedRef", false);
-        removeXmpTag("Xmp.exif.GPSSpeed", false);
-        removeXmpTag("Xmp.exif.GPSTrackRef", false);
-        removeXmpTag("Xmp.exif.GPSTrack", false);
-        removeXmpTag("Xmp.exif.GPSImgDirectionRef", false);
-        removeXmpTag("Xmp.exif.GPSImgDirection", false);
-        removeXmpTag("Xmp.exif.GPSMapDatum", false);
-        removeXmpTag("Xmp.exif.GPSDestLatitude", false);
-        removeXmpTag("Xmp.exif.GPSDestLongitude", false);
-        removeXmpTag("Xmp.exif.GPSDestBearingRef", false);
-        removeXmpTag("Xmp.exif.GPSDestBearing", false);
-        removeXmpTag("Xmp.exif.GPSDestDistanceRef", false);
-        removeXmpTag("Xmp.exif.GPSDestDistance", false);
-        removeXmpTag("Xmp.exif.GPSProcessingMethod", false);
-        removeXmpTag("Xmp.exif.GPSAreaInformation", false);
-        removeXmpTag("Xmp.exif.GPSDifferential", false);
+        removeXmpTag("Xmp.exif.GPSLatitudeRef");
+        removeXmpTag("Xmp.exif.GPSLongitudeRef");
+        removeXmpTag("Xmp.exif.GPSVersionID");
+        removeXmpTag("Xmp.exif.GPSLatitude");
+        removeXmpTag("Xmp.exif.GPSLongitude");
+        removeXmpTag("Xmp.exif.GPSAltitudeRef");
+        removeXmpTag("Xmp.exif.GPSAltitude");
+        removeXmpTag("Xmp.exif.GPSTimeStamp");
+        removeXmpTag("Xmp.exif.GPSSatellites");
+        removeXmpTag("Xmp.exif.GPSStatus");
+        removeXmpTag("Xmp.exif.GPSMeasureMode");
+        removeXmpTag("Xmp.exif.GPSDOP");
+        removeXmpTag("Xmp.exif.GPSSpeedRef");
+        removeXmpTag("Xmp.exif.GPSSpeed");
+        removeXmpTag("Xmp.exif.GPSTrackRef");
+        removeXmpTag("Xmp.exif.GPSTrack");
+        removeXmpTag("Xmp.exif.GPSImgDirectionRef");
+        removeXmpTag("Xmp.exif.GPSImgDirection");
+        removeXmpTag("Xmp.exif.GPSMapDatum");
+        removeXmpTag("Xmp.exif.GPSDestLatitude");
+        removeXmpTag("Xmp.exif.GPSDestLongitude");
+        removeXmpTag("Xmp.exif.GPSDestBearingRef");
+        removeXmpTag("Xmp.exif.GPSDestBearing");
+        removeXmpTag("Xmp.exif.GPSDestDistanceRef");
+        removeXmpTag("Xmp.exif.GPSDestDistance");
+        removeXmpTag("Xmp.exif.GPSProcessingMethod");
+        removeXmpTag("Xmp.exif.GPSAreaInformation");
+        removeXmpTag("Xmp.exif.GPSDifferential");
 #endif // _XMP_SUPPORT_
 
         return true;

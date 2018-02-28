@@ -47,7 +47,7 @@ int main (int argc, char **argv)
     DMetadata meta;
     meta.load(filePath);
     meta.setWriteRawFiles(true);
-    bool b = meta.removeExifTag("Exif.OlympusIp.BlackLevel", false);
+    bool b = meta.removeExifTag("Exif.OlympusIp.BlackLevel");
     qDebug() << "Exif.OlympusIp.BlackLevel found = " << b;
 
     QByteArray ba = meta.getExifTagData("Exif.OlympusIp.BlackLevel");

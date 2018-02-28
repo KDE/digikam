@@ -130,71 +130,59 @@ bool DMetadata::loadUsingRawEngine(const QString& filePath)
 
         if (!identify.model.isNull())
         {
-            setExifTagString("Exif.Image.Model", identify.model, false);
+            setExifTagString("Exif.Image.Model", identify.model);
         }
 
         if (!identify.make.isNull())
         {
-            setExifTagString("Exif.Image.Make", identify.make, false);
+            setExifTagString("Exif.Image.Make", identify.make);
         }
 
         if (!identify.owner.isNull())
         {
-            setExifTagString("Exif.Image.Artist", identify.owner, false);
+            setExifTagString("Exif.Image.Artist", identify.owner);
         }
 
         if (identify.sensitivity != -1)
         {
-            setExifTagLong("Exif.Photo.ISOSpeedRatings", lroundf(identify.sensitivity), false);
+            setExifTagLong("Exif.Photo.ISOSpeedRatings", lroundf(identify.sensitivity));
         }
 
         if (identify.dateTime.isValid())
         {
-            setImageDateTime(identify.dateTime, false, false);
+            setImageDateTime(identify.dateTime, false);
         }
 
         if (identify.exposureTime != -1.0)
         {
             convertToRationalSmallDenominator(identify.exposureTime, &num, &den);
-            setExifTagRational("Exif.Photo.ExposureTime", num, den, false);
+            setExifTagRational("Exif.Photo.ExposureTime", num, den);
         }
 
         if (identify.aperture != -1.0)
         {
             convertToRational(identify.aperture, &num, &den, 8);
-            setExifTagRational("Exif.Photo.ApertureValue", num, den, false);
+            setExifTagRational("Exif.Photo.ApertureValue", num, den);
         }
 
         if (identify.focalLength != -1.0)
         {
             convertToRational(identify.focalLength, &num, &den, 8);
-            setExifTagRational("Exif.Photo.FocalLength", num, den, false);
+            setExifTagRational("Exif.Photo.FocalLength", num, den);
         }
 
         if (identify.imageSize.isValid())
         {
-            setImageDimensions(identify.imageSize, false);
+            setImageDimensions(identify.imageSize);
         }
 
         // A RAW image is always uncalibrated. */
-        setImageColorWorkSpace(WORKSPACE_UNCALIBRATED, false);
+        setImageColorWorkSpace(WORKSPACE_UNCALIBRATED);
 
         return true;
     }
 
     return false;
-}
-
-bool DMetadata::setProgramId(bool on) const
-{
-    if (on)
-    {
-        QString version(digiKamVersion());
-        QLatin1String software("digiKam");
-        return setImageProgramId(software, version);
-    }
-
-    return true;
 }
 
 int DMetadata::getMSecsInfo() const
@@ -359,7 +347,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
 
     if (supportXmp())
     {
-        if (!setXmpTagStringListLangAlt("Xmp.digiKam.CaptionsAuthorNames", comments.authorsList(), false))
+        if (!setXmpTagStringListLangAlt("Xmp.digiKam.CaptionsAuthorNames", comments.authorsList()))
         {
             return false;
         }
@@ -369,13 +357,13 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
 
         if (!defaultAuthor.isNull())
         {
-            if (!setXmpTagString("Xmp.acdsee.author", defaultAuthor, false))
+            if (!setXmpTagString("Xmp.acdsee.author", defaultAuthor))
             {
                 return false;
             }
         }
 
-        if (!setXmpTagStringListLangAlt("Xmp.digiKam.CaptionsDateTimeStamps", comments.datesList(), false))
+        if (!setXmpTagStringListLangAlt("Xmp.digiKam.CaptionsDateTimeStamps", comments.datesList()))
         {
             return false;
         }
@@ -406,7 +394,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
                     case NamespaceEntry::COMMENT_ALTLANG:
                         if (!defaultComment.isNull())
                         {
-                            if (!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
+                            if (!setXmpTagStringLangAlt(nameSpace, defaultComment, QString()))
                             {
                                 qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image comment failed" << nameSpace;
                                 return false;
@@ -415,7 +403,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
                         break;
 
                     case NamespaceEntry::COMMENT_ATLLANGLIST:
-                        if (!setXmpTagStringListLangAlt(nameSpace, comments.toAltLangMap(), false))
+                        if (!setXmpTagStringListLangAlt(nameSpace, comments.toAltLangMap()))
                         {
                             return false;
                         }
@@ -424,7 +412,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
                     case NamespaceEntry::COMMENT_XMP:
                         if (!defaultComment.isNull())
                         {
-                            if (!setXmpTagString(nameSpace, defaultComment, false))
+                            if (!setXmpTagString(nameSpace, defaultComment))
                             {
                                 return false;
                             }
@@ -620,7 +608,7 @@ bool DMetadata::setImageTitles(const CaptionsMap& titles) const
     if (supportXmp())
     {
         // NOTE : setXmpTagStringListLangAlt remove xmp tag before to add new values
-        if (!setXmpTagStringListLangAlt("Xmp.dc.title", titles.toAltLangMap(), false))
+        if (!setXmpTagStringListLangAlt("Xmp.dc.title", titles.toAltLangMap()))
         {
             return false;
         }
@@ -629,7 +617,7 @@ bool DMetadata::setImageTitles(const CaptionsMap& titles) const
 
         if (!defaultTitle.isEmpty())
         {
-            if (!setXmpTagString("Xmp.acdsee.caption", defaultTitle, false))
+            if (!setXmpTagString("Xmp.acdsee.caption", defaultTitle))
             {
                 return false;
             }
@@ -754,11 +742,6 @@ bool DMetadata::setImagePickLabel(int pickId) const
 
     qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Pick Label: " << pickId;
 
-    if (!setProgramId())
-    {
-        return false;
-    }
-
     if (supportXmp())
     {
         if (!setXmpTagString("Xmp.digiKam.PickLabel", QString::number(pickId)))
@@ -779,11 +762,6 @@ bool DMetadata::setImageColorLabel(int colorId) const
     }
 
     qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Color Label: " << colorId;
-
-    if (!setProgramId())
-    {
-        return false;
-    }
 
     if (supportXmp())
     {
@@ -846,12 +824,6 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
     }
 
     qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Rating: +++++++++++" << rating;
-
-    if (!setProgramId())
-    {
-        qCDebug(DIGIKAM_METAENGINE_LOG) << "Could not set program id";
-        return false;
-    }
 
     QList<NamespaceEntry> toWrite = settings.getReadMapping(QLatin1String(DM_RATING_CONTAINER));
 
@@ -931,7 +903,7 @@ bool DMetadata::setImageHistory(QString& imageHistoryXml) const
 {
     if (supportXmp())
     {
-        if (!setXmpTagString("Xmp.digiKam.ImageHistory", imageHistoryXml, false))
+        if (!setXmpTagString("Xmp.digiKam.ImageHistory", imageHistoryXml))
         {
             return false;
         }
@@ -1585,7 +1557,7 @@ bool DMetadata::setACDSeeTagsPath(const QStringList &tagsPath) const
 
     if (!xmlTags.isEmpty())
     {
-        if (!setXmpTagString("Xmp.acdsee.categories", xmlACDSee, false))
+        if (!setXmpTagString("Xmp.acdsee.categories", xmlACDSee))
         {
             return false;
         }
@@ -1697,10 +1669,10 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
     }
 
     setXmpTagString(qxmpTagName.toLatin1().constData(),
-                    QString(), MetaEngine::XmpTagType(1),false);
+                    QString(), MetaEngine::XmpTagType(1));
 
     setXmpTagString(winQxmpTagName.toLatin1().constData(),
-                    QString(), MetaEngine::XmpTagType(1),false);
+                    QString(), MetaEngine::XmpTagType(1));
 
     QMap<QString, QVariant>::const_iterator it = facesPath.constBegin();
     int i   = 1;
@@ -1723,11 +1695,11 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
 
         /** Set tag rect **/
         setXmpTagString(winRectTagKey.arg(i).toLatin1().constData(), rectString,
-                             MetaEngine::XmpTagType(0),false);
+                             MetaEngine::XmpTagType(0));
         /** Set tag name **/
 
         setXmpTagString(winNameTagKey.arg(i).toLatin1().constData(),it.key(),
-                             MetaEngine::XmpTagType(0),false);
+                             MetaEngine::XmpTagType(0));
 
         /** Writing rectangle in Metadata Group format **/
         x += w/2;
@@ -1735,34 +1707,34 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
 
         /** Set tag name **/
         ok &= setXmpTagString(nameTagKey.arg(i).toLatin1().constData(),
-                              it.key(),MetaEngine::XmpTagType(0),false);
+                              it.key(),MetaEngine::XmpTagType(0));
         /** Set tag type as Face **/
         ok &= setXmpTagString(typeTagKey.arg(i).toLatin1().constData(),
-                              QLatin1String("Face"), MetaEngine::XmpTagType(0),false);
+                              QLatin1String("Face"), MetaEngine::XmpTagType(0));
 
         /** Set tag Area, with xmp type struct **/
         ok &= setXmpTagString(areaTagKey.arg(i).toLatin1().constData(),
-                              QString(), MetaEngine::XmpTagType(2),false);
+                              QString(), MetaEngine::XmpTagType(2));
 
         /** Set stArea:x inside Area structure **/
         ok &= setXmpTagString(areaxTagKey.arg(i).toLatin1().constData(),
-                              QString::number(x), MetaEngine::XmpTagType(0),false);
+                              QString::number(x), MetaEngine::XmpTagType(0));
 
         /** Set stArea:y inside Area structure **/
         ok &= setXmpTagString(areayTagKey.arg(i).toLatin1().constData(),
-                              QString::number(y), MetaEngine::XmpTagType(0),false);
+                              QString::number(y), MetaEngine::XmpTagType(0));
 
         /** Set stArea:w inside Area structure **/
         ok &= setXmpTagString(areawTagKey.arg(i).toLatin1().constData(),
-                              QString::number(w), MetaEngine::XmpTagType(0),false);
+                              QString::number(w), MetaEngine::XmpTagType(0));
 
         /** Set stArea:h inside Area structure **/
         ok &= setXmpTagString(areahTagKey.arg(i).toLatin1().constData(),
-                              QString::number(h), MetaEngine::XmpTagType(0),false);
+                              QString::number(h), MetaEngine::XmpTagType(0));
 
         /** Set stArea:unit inside Area structure  as normalized **/
         ok &= setXmpTagString(areanormTagKey.arg(i).toLatin1().constData(),
-                              QLatin1String("normalized"), MetaEngine::XmpTagType(0),false);
+                              QLatin1String("normalized"), MetaEngine::XmpTagType(0));
 
         ++it;
         ++i;
@@ -1774,11 +1746,6 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
 bool DMetadata::setMetadataTemplate(const Template& t) const
 {
     if (t.isNull())
-    {
-        return false;
-    }
-
-    if (!setProgramId())
     {
         return false;
     }
@@ -1797,52 +1764,52 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
 
     if (supportXmp())
     {
-        if (!setXmpTagStringSeq("Xmp.dc.creator", authors, false))
+        if (!setXmpTagStringSeq("Xmp.dc.creator", authors))
         {
             return false;
         }
 
-        if (!setXmpTagStringSeq("Xmp.tiff.Artist", authors, false))
+        if (!setXmpTagStringSeq("Xmp.tiff.Artist", authors))
         {
             return false;
         }
 
-        if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorsPosition, false))
+        if (!setXmpTagString("Xmp.photoshop.AuthorsPosition", authorsPosition))
         {
             return false;
         }
 
-        if (!setXmpTagString("Xmp.photoshop.Credit", credit, false))
+        if (!setXmpTagString("Xmp.photoshop.Credit", credit))
         {
             return false;
         }
 
-        if (!setXmpTagString("Xmp.photoshop.Source", source, false))
+        if (!setXmpTagString("Xmp.photoshop.Source", source))
         {
             return false;
         }
 
-        if (!setXmpTagString("Xmp.dc.source", source, false))
+        if (!setXmpTagString("Xmp.dc.source", source))
         {
             return false;
         }
 
-        if (!setXmpTagStringListLangAlt("Xmp.dc.rights", copyright, false))
+        if (!setXmpTagStringListLangAlt("Xmp.dc.rights", copyright))
         {
             return false;
         }
 
-        if (!setXmpTagStringListLangAlt("Xmp.tiff.Copyright", copyright, false))
+        if (!setXmpTagStringListLangAlt("Xmp.tiff.Copyright", copyright))
         {
             return false;
         }
 
-        if (!setXmpTagStringListLangAlt("Xmp.xmpRights.UsageTerms", rightUsage, false))
+        if (!setXmpTagStringListLangAlt("Xmp.xmpRights.UsageTerms", rightUsage))
         {
             return false;
         }
 
-        if (!setXmpTagString("Xmp.photoshop.Instructions", instructions, false))
+        if (!setXmpTagString("Xmp.photoshop.Instructions", instructions))
         {
             return false;
         }
@@ -1852,7 +1819,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
 
     if (!setIptcTagsStringList("Iptc.Application2.Byline", 32,
                                getIptcTagsStringList("Iptc.Application2.Byline"),
-                               authors, false))
+                               authors))
     {
         return false;
     }
@@ -2073,42 +2040,42 @@ bool DMetadata::setCreatorContactInfo(const IptcCoreContactInfo& info) const
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCity", info.city, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCity", info.city))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCtry", info.country, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCtry", info.country))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr", info.address, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr", info.address))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrPcode", info.postalCode, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrPcode", info.postalCode))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrRegion", info.provinceState, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrRegion", info.provinceState))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiEmailWork", info.email, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiEmailWork", info.email))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork", info.phone, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork", info.phone))
     {
         return false;
     }
 
-    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork", info.webUrl, false))
+    if (!setXmpTagString("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork", info.webUrl))
     {
         return false;
     }
@@ -2145,27 +2112,27 @@ bool DMetadata::setIptcCoreLocation(const IptcCoreLocationInfo& location) const
 {
     if (supportXmp())
     {
-        if (!setXmpTagString("Xmp.photoshop.Country", location.country, false))
+        if (!setXmpTagString("Xmp.photoshop.Country", location.country))
         {
             return false;
         }
 
-        if (!setXmpTagString("Xmp.iptc.CountryCode", location.countryCode, false))
+        if (!setXmpTagString("Xmp.iptc.CountryCode", location.countryCode))
         {
             return false;
         }
 
-        if (!setXmpTagString("Xmp.photoshop.City", location.city, false))
+        if (!setXmpTagString("Xmp.photoshop.City", location.city))
         {
             return false;
         }
 
-        if (!setXmpTagString("Xmp.iptc.Location", location.location, false))
+        if (!setXmpTagString("Xmp.iptc.Location", location.location))
         {
             return false;
         }
 
-        if (!setXmpTagString("Xmp.photoshop.State", location.provinceState, false))
+        if (!setXmpTagString("Xmp.photoshop.State", location.provinceState))
         {
             return false;
         }
@@ -2323,12 +2290,15 @@ bool DMetadata::setIccProfile(const IccProfile& profile)
     else
     {
         QByteArray data = IccProfile(profile).data();
+
         if (!setExifTagData("Exif.Image.InterColorProfile", data))
         {
             return false;
         }
     }
+
     removeExifColorSpace();
+
     return true;
 }
 
@@ -3266,15 +3236,9 @@ MetaEngine::AltLangMap DMetadata::toAltLangMap(const QVariant& var)
     return map;
 }
 
-bool DMetadata::addToXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToAdd,
-                                     bool setProgramName) const
+bool DMetadata::addToXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToAdd) const
 {
     //#ifdef _XMP_SUPPORT_
-
-    if (!setProgramId(setProgramName))
-    {
-        return false;
-    }
 
     QStringList oldEntries = getXmpTagStringBag(xmpTagName, false);
     QStringList newEntries = entriesToAdd;
@@ -3288,7 +3252,7 @@ bool DMetadata::addToXmpTagStringBag(const char* const xmpTagName, const QString
         }
     }
 
-    if (setXmpTagStringBag(xmpTagName, newEntries, false))
+    if (setXmpTagStringBag(xmpTagName, newEntries))
     {
         return true;
     }
@@ -3298,15 +3262,9 @@ bool DMetadata::addToXmpTagStringBag(const char* const xmpTagName, const QString
     return false;
 }
 
-bool DMetadata::removeFromXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToRemove,
-        bool setProgramName) const
+bool DMetadata::removeFromXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToRemove) const
 {
     //#ifdef _XMP_SUPPORT_
-
-    if (!setProgramId(setProgramName))
-    {
-        return false;
-    }
 
     QStringList currentEntries = getXmpTagStringBag(xmpTagName, false);
     QStringList newEntries;
@@ -3320,7 +3278,7 @@ bool DMetadata::removeFromXmpTagStringBag(const char* const xmpTagName, const QS
         }
     }
 
-    if (setXmpTagStringBag(xmpTagName, newEntries, false))
+    if (setXmpTagStringBag(xmpTagName, newEntries))
     {
         return true;
     }
@@ -3335,14 +3293,14 @@ QStringList DMetadata::getXmpKeywords() const
     return (getXmpTagStringBag("Xmp.dc.subject", false));
 }
 
-bool DMetadata::setXmpKeywords(const QStringList& newKeywords, bool setProgramName) const
+bool DMetadata::setXmpKeywords(const QStringList& newKeywords) const
 {
-    return setXmpTagStringBag("Xmp.dc.subject", newKeywords, setProgramName);
+    return setXmpTagStringBag("Xmp.dc.subject", newKeywords);
 }
 
-bool DMetadata::removeXmpKeywords(const QStringList& keywordsToRemove, bool setProgramName)
+bool DMetadata::removeXmpKeywords(const QStringList& keywordsToRemove)
 {
-    return removeFromXmpTagStringBag("Xmp.dc.subject", keywordsToRemove, setProgramName);
+    return removeFromXmpTagStringBag("Xmp.dc.subject", keywordsToRemove);
 }
 
 QStringList DMetadata::getXmpSubCategories() const
@@ -3350,14 +3308,14 @@ QStringList DMetadata::getXmpSubCategories() const
     return (getXmpTagStringBag("Xmp.photoshop.SupplementalCategories", false));
 }
 
-bool DMetadata::setXmpSubCategories(const QStringList& newSubCategories, bool setProgramName) const
+bool DMetadata::setXmpSubCategories(const QStringList& newSubCategories) const
 {
-    return addToXmpTagStringBag("Xmp.photoshop.SupplementalCategories", newSubCategories, setProgramName);
+    return addToXmpTagStringBag("Xmp.photoshop.SupplementalCategories", newSubCategories);
 }
 
-bool DMetadata::removeXmpSubCategories(const QStringList& subCategoriesToRemove, bool setProgramName)
+bool DMetadata::removeXmpSubCategories(const QStringList& subCategoriesToRemove)
 {
-    return removeFromXmpTagStringBag("Xmp.photoshop.SupplementalCategories", subCategoriesToRemove, setProgramName);
+    return removeFromXmpTagStringBag("Xmp.photoshop.SupplementalCategories", subCategoriesToRemove);
 }
 
 QStringList DMetadata::getXmpSubjects() const
@@ -3365,21 +3323,21 @@ QStringList DMetadata::getXmpSubjects() const
     return (getXmpTagStringBag("Xmp.iptc.SubjectCode", false));
 }
 
-bool DMetadata::setXmpSubjects(const QStringList& newSubjects, bool setProgramName) const
+bool DMetadata::setXmpSubjects(const QStringList& newSubjects) const
 {
-    return addToXmpTagStringBag("Xmp.iptc.SubjectCode", newSubjects, setProgramName);
+    return addToXmpTagStringBag("Xmp.iptc.SubjectCode", newSubjects);
 }
 
-bool DMetadata::removeXmpSubjects(const QStringList& subjectsToRemove, bool setProgramName)
+bool DMetadata::removeXmpSubjects(const QStringList& subjectsToRemove)
 {
-    return removeFromXmpTagStringBag("Xmp.iptc.SubjectCode", subjectsToRemove, setProgramName);
+    return removeFromXmpTagStringBag("Xmp.iptc.SubjectCode", subjectsToRemove);
 }
 
 bool DMetadata::removeExifColorSpace() const
 {
     bool ret =  true;
-    ret      &= removeExifTag("Exif.Photo.ColorSpace", true);
-    ret      &= removeXmpTag("Xmp.exif.ColorSpace", true);
+    ret     &= removeExifTag("Exif.Photo.ColorSpace");
+    ret     &= removeXmpTag("Xmp.exif.ColorSpace");
 
     return ret;
 }
@@ -3391,6 +3349,7 @@ QString DMetadata::getExifTagStringFromTagsList(const QStringList& tagsList) con
     foreach(const QString& tag, tagsList)
     {
         val = getExifTagString(tag.toLatin1().constData());
+
         if (!val.isEmpty())
             return val;
     }

@@ -113,7 +113,7 @@ void TimeStampUpdateTest::cleanup()
     meta.setMetadataWritingMode(MetaEngine::WRITETOIMAGEONLY);
     meta.setUpdateFileTimeStamp(true);
     meta.load(originalImageFile);
-    meta.removeExifTag("Exif.Image.Model", false);
+    meta.removeExifTag("Exif.Image.Model");
     QVERIFY2(meta.applyChanges(), "Exif.Image.Model is removed");
     QVERIFY(meta.getExifTagString("Exif.Image.Model").isEmpty());
 
@@ -157,7 +157,7 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
     QVERIFY(model.isEmpty());
 
     // Change the metadata in image file
-    meta.setExifTagString("Exif.Image.Model", QLatin1String("TimeStampUpdateTestCamera"), false);
+    meta.setExifTagString("Exif.Image.Model", QLatin1String("TimeStampUpdateTestCamera"));
     QVERIFY2(meta.applyChanges(), "Exif.Image.Model is added");
     QVERIFY(meta.getExifTagString("Exif.Image.Model") == QLatin1String("TimeStampUpdateTestCamera"));
 
@@ -203,7 +203,7 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2False()
     QVERIFY(model.isEmpty());
 
     // Change the metadata in image file
-    meta.setExifTagString("Exif.Image.Model", QLatin1String("TimeStampUpdateTestCamera"), false);
+    meta.setExifTagString("Exif.Image.Model", QLatin1String("TimeStampUpdateTestCamera"));
     QVERIFY2(meta.applyChanges(), "Exif.Image.Model is added");
     QVERIFY(meta.getExifTagString("Exif.Image.Model") == QLatin1String("TimeStampUpdateTestCamera"));
 

@@ -485,7 +485,7 @@ void XMPProperties::applyMetadata(QByteArray& xmpData)
         for (QStringList::Iterator it2 = newList.begin(); it2 != newList.end(); ++it2)
             newCode.append((*it2).left(2));
 
-        meta.setXmpTagStringBag("Xmp.dc.language", newCode, false);
+        meta.setXmpTagStringBag("Xmp.dc.language", newCode);
     }
     else
     {
@@ -508,7 +508,7 @@ void XMPProperties::applyMetadata(QByteArray& xmpData)
         for (QStringList::Iterator it2 = newList.begin(); it2 != newList.end(); ++it2)
             newCode.append((*it2).left(6));
 
-        meta.setXmpTagStringBag("Xmp.iptc.Scene", newCode, false);
+        meta.setXmpTagStringBag("Xmp.iptc.Scene", newCode);
     }
     else
     {
@@ -518,7 +518,7 @@ void XMPProperties::applyMetadata(QByteArray& xmpData)
     // ---------------------------------------------------------------
 
     if (d->objectTypeEdit->getValues(oldList, newList))
-        meta.setXmpTagStringBag("Xmp.dc.type", newList, false);
+        meta.setXmpTagStringBag("Xmp.dc.type", newList);
     else
         meta.removeXmpTag("Xmp.dc.type");
 
