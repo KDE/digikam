@@ -39,6 +39,7 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QMimeDatabase>
+#include <QStringList>
 
 // Local incudes
 
@@ -320,7 +321,23 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.InfoText", QString::fromUtf8(entry->value));
+        QString data = QString::fromUtf8(entry->value);
+        setXmpTagString("Xmp.video.InfoText", data);
+
+        QStringList keywords = data.split(QLatin1String("/"));
+        
+        if (keywords.isEmpty())
+        {
+            keywords = data.split(QLatin1String(","));
+            
+            if (keywords.isEmpty())
+            {
+                keywords = data.split(QLatin1String(" "));
+            }
+        }
+        
+        if (!keywords.isEmpty())
+            setXmpKeywords(keywords);
     }
 
     // --------------
