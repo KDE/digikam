@@ -69,5 +69,6 @@ BUGFIXES FROM BUGZILLA:
 057 ==> 329854 - digiKam doesn't rotate video thumbnail.
 058 ==> 376661 - When importing ~200,000 video files Digikam crashes in about 2-5 seconds of starting.
 059 ==> 377072 - Cannot read video metadata.
-060 ==> 
-
+060 ==> 374453 - Extract right video date from MP4 files metadata.
+061 ==> 377177 - Geolocation / GPS information doesn't appear in video metadata.
+062 ==> 
