@@ -38,6 +38,7 @@
 #include <QTime>
 #include <QDateTime>
 #include <QFileInfo>
+#include <QMimeDatabase>
 
 // Local incudes
 
@@ -123,6 +124,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     setXmpTagString("Xmp.video.FileName",    fi.fileName(), false);
     setXmpTagString("Xmp.video.FileSize",    QString::number(fi.size() / (1024*1024)), false);
     setXmpTagString("Xmp.video.FileType",    fi.suffix(), false);
+    setXmpTagString("Xmp.video.MimeType",    QMimeDatabase().mimeTypeForFile(filePath).name(), false);
     setXmpTagString("Xmp.video.Duration",    QString::number(totalSecs), false);
     setXmpTagString("Xmp.video.MaxBitRate",  QString::number(bitrate), false);
     setXmpTagString("Xmp.video.StreamCount", QString::number(fmt_ctx->nb_streams), false);
