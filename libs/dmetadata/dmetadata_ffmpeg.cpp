@@ -337,7 +337,10 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         }
         
         if (!keywords.isEmpty())
+        {
             setXmpKeywords(keywords);
+            setIptcKeywords(QStringList(), keywords);
+        }
     }
 
     // --------------
@@ -346,7 +349,26 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        setXmpTagString("Xmp.video.Subject", QString::fromUtf8(entry->value));
+        QString data = QString::fromUtf8(entry->value);
+        setXmpTagString("Xmp.video.Subject", data);
+
+        QStringList categories = data.split(QLatin1String("/"));
+        
+        if (categories.isEmpty())
+        {
+            categories = data.split(QLatin1String(","));
+            
+            if (categories.isEmpty())
+            {
+                categories = data.split(QLatin1String(" "));
+            }
+        }
+        
+        if (!categories.isEmpty())
+        {
+            setXmpSubCategories(categories);
+            setIptcSubCategories(QStringList(), categories);
+        }
     }
 
     // --------------
