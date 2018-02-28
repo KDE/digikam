@@ -77,4 +77,6 @@ BUGFIXES FROM BUGZILLA:
 064 ==> 373682 - geolocalisation filter does not take care of the videos geolocalisation tags.
 065 ==> 340925 - digiKam crash when start it.
 066 ==> 331506 - digiKam crashes on startup.
-067 ==> 
+067 ==> 335816 - Crash when trying to add a big collection.
+068 ==> 
+
