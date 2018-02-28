@@ -113,112 +113,142 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     setXmpTagString("Xmp.video.Duration",    QString::number(totalSecs), false);
     setXmpTagString("Xmp.video.MaxBitRate",  QString::number(bitrate), false);
     setXmpTagString("Xmp.video.StreamCount", QString::number(fmt_ctx->nb_streams), false);
-    setXmpTagString("Xmp.video.Codec",       QString::fromUtf8(avcodec_get_name(fmt_ctx->video_codec_id)), false);
+
+    // To only register one video and one audio stream in XMP metadata.
+    bool vstream = false;
+    bool astream = false;
 
     for (uint i = 0 ; i < fmt_ctx->nb_streams ; i++)
     {
         const AVStream* const stream   = fmt_ctx->streams[i];
         AVCodecParameters* const codec = stream->codecpar;
 
-        if (codec->codec_type == AVMEDIA_TYPE_AUDIO || codec->codec_type == AVMEDIA_TYPE_VIDEO)
+        if (!astream && codec->codec_type == AVMEDIA_TYPE_AUDIO)
         {
-/*
-            // TODO: handle audio stream.
+            astream           = true;
+            const char* cname = avcodec_get_name(codec->codec_id);
 
-            if (codec->codec_type == AVMEDIA_TYPE_AUDIO)
+            setXmpTagString("Xmp.audio.Codec", QString::fromUtf8(cname), false);
+            setXmpTagString("Xmp.audio.CodecDescription", QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name), false);
+            setXmpTagString("Xmp.audio.SampleRate", QString::number(codec->sample_rate), false);
+            setXmpTagString("Xmp.audio.ChannelType", QString::number(codec->channels), false);
+            setXmpTagString("Xmp.audio.Format",     QString::fromUtf8(av_get_sample_fmt_name((AVSampleFormat)codec->format)), false);
+
+            // --------------
+
+            dict  = stream->metadata;
+
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "FFMpeg audio stream metadata entries:";
+            qCDebug(DIGIKAM_METAENGINE_LOG) << s_extractFFMpegMetadataEntriesFromDictionary(dict);
+
+            // --------------
+
+            entry = av_dict_get(dict, "language", NULL, 0);
+
+            if (entry)
             {
-                subRes.addType( NFO::Audio() );
-                subRes.addProperty( NFO::sampleRate(), codec->sample_rate );
-                subRes.addProperty( NFO::channels(), codec->channels );
+                setXmpTagString("Xmp.audio.TrackLang", QString::fromUtf8(entry->value), false);
             }
-*/
+        }
 
-            if (codec->codec_type == AVMEDIA_TYPE_VIDEO)
+        if (!vstream && codec->codec_type == AVMEDIA_TYPE_VIDEO)
+        {
+            vstream           = true;
+            const char* cname = avcodec_get_name(codec->codec_id); 
+
+            setXmpTagString("Xmp.video.Codec", QString::fromUtf8(cname), false);
+            setXmpTagString("Xmp.video.CodecDescription", QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name), false);
+            setXmpTagString("Xmp.video.Format",     QString::fromUtf8(av_get_pix_fmt_name((AVPixelFormat)codec->format)), false);
+            setXmpTagString("Xmp.video.ColorSpace", QString::fromUtf8(av_color_space_name(codec->color_space)), false);
+
+            int aspectRatio = codec->sample_aspect_ratio.num;
+            int frameRate   = stream->avg_frame_rate.num;
+
+            if (codec->sample_aspect_ratio.den)
+                aspectRatio /= codec->sample_aspect_ratio.den;
+
+            if (stream->avg_frame_rate.den)
+                frameRate /= stream->avg_frame_rate.den;
+
+            setXmpTagString("Xmp.video.SourceImageWidth",  QString::number(codec->width),  false);
+            setXmpTagString("Xmp.video.SourceImageHeight", QString::number(codec->height), false);
+
+            // Backport size in Exif and Iptc
+            setImageDimensions(QSize(codec->width, codec->height), false);
+
+            if (aspectRatio)
+                setXmpTagString("Xmp.video.AspectRatio", QString::number(aspectRatio), false);
+
+            if (frameRate)
+                setXmpTagString("Xmp.video.FrameRate", QString::number(frameRate), false);
+
+            setXmpTagString("Xmp.video.PixelDepth",  QString::number(codec->bits_per_coded_sample), false);
+
+            // ----------------------------
+
+            dict = stream->metadata;
+
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "FFMpeg video stream metadata entries:";
+            qCDebug(DIGIKAM_METAENGINE_LOG) << s_extractFFMpegMetadataEntriesFromDictionary(dict);
+
+            // --------------
+
+            entry = av_dict_get(dict, "rotate", NULL, 0);
+
+            if (entry)
             {
-                int aspectRatio = codec->sample_aspect_ratio.num;
-                int frameRate   = stream->avg_frame_rate.num;
+                bool b               = false;
+                int val              = QString::fromUtf8(entry->value).toInt(&b);
+                ImageOrientation ori = ORIENTATION_UNSPECIFIED;
 
-                if (codec->sample_aspect_ratio.den)
-                    aspectRatio /= codec->sample_aspect_ratio.den;
-
-                if (stream->avg_frame_rate.den)
-                    frameRate /= stream->avg_frame_rate.den;
-
-                setXmpTagString("Xmp.video.SourceImageWidth",  QString::number(codec->width),  false);
-                setXmpTagString("Xmp.video.SourceImageHeight", QString::number(codec->height), false);
-
-                // Backport size in Exif and Iptc
-                setImageDimensions(QSize(codec->width, codec->height), false);
-
-                if (aspectRatio)
-                    setXmpTagString("Xmp.video.AspectRatio", QString::number(aspectRatio), false);
-
-                if (frameRate)
-                    setXmpTagString("Xmp.video.FrameRate", QString::number(frameRate), false);
-
-                setXmpTagString("Xmp.video.PixelDepth",  QString::number(codec->bits_per_coded_sample), false);
-
-                dict = stream->metadata;
-
-                qCDebug(DIGIKAM_METAENGINE_LOG) << "FFMpeg video stream metadata entries:";
-                qCDebug(DIGIKAM_METAENGINE_LOG) << s_extractFFMpegMetadataEntriesFromDictionary(dict);
-
-                // ----------------------------
-
-                entry = av_dict_get(dict, "rotate", NULL, 0);
-
-                if (entry)
+                if (b)
                 {
-                    bool b               = false;
-                    int val              = QString::fromUtf8(entry->value).toInt(&b);
-                    ImageOrientation ori = ORIENTATION_UNSPECIFIED;
-
-                    if (b)
+                    switch (val)
                     {
-                        switch (val)
-                        {
-                            case 0:
-                                ori = ORIENTATION_NORMAL;
-                                break;
-                            case 90:
-                                ori = ORIENTATION_ROT_90;
-                                break;
-                            case 180:
-                                ori = ORIENTATION_ROT_180;
-                                break;
-                            case 270:
-                                ori = ORIENTATION_ROT_270;
-                                break;
-                            default:
-                                break;
-                       }
-
-                       setXmpTagString("Xmp.video.Orientation", QString::number(ori), false);
-                       // Backport orientation in Exif
-                       setImageOrientation(ori, false);
+                        case 0:
+                            ori = ORIENTATION_NORMAL;
+                            break;
+                        case 90:
+                            ori = ORIENTATION_ROT_90;
+                            break;
+                        case 180:
+                            ori = ORIENTATION_ROT_180;
+                            break;
+                        case 270:
+                            ori = ORIENTATION_ROT_270;
+                            break;
+                        default:
+                            break;
                     }
+
+                    setXmpTagString("Xmp.video.Orientation", QString::number(ori), false);
+                    // Backport orientation in Exif
+                    setImageOrientation(ori, false);
                 }
+            }
+           
+            // --------------
 
-                entry = av_dict_get(dict, "language", NULL, 0);
+            entry = av_dict_get(dict, "language", NULL, 0);
 
-                if (entry)
-                {
-                    setXmpTagString("Xmp.video.Language", QString::fromUtf8(entry->value), false);
-                }
-
-                setXmpTagString("Xmp.video.Format",     QString::fromUtf8(av_get_pix_fmt_name((AVPixelFormat)codec->format)), false);
-                setXmpTagString("Xmp.video.ColorSpace", QString::fromUtf8(av_color_space_name(codec->color_space)), false);
+            if (entry)
+            {
+                setXmpTagString("Xmp.video.Language", QString::fromUtf8(entry->value), false);
             }
         }
     }
 
-    dict  = fmt_ctx->metadata;
     entry = 0;
+
+    // ----------------------------
+
+    dict  = fmt_ctx->metadata;
 
     qCDebug(DIGIKAM_METAENGINE_LOG) << "FFMpeg lead container metadata entries:";
     qCDebug(DIGIKAM_METAENGINE_LOG) << s_extractFFMpegMetadataEntriesFromDictionary(dict);
 
     // ----------------------------
+
 /* TODO :
     account_type
     account_id
