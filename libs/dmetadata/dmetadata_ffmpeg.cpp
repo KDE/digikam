@@ -329,7 +329,6 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     chapter
     disclaimer
     host_computer
-    playback_requirements
     warning
 */
 
@@ -403,6 +402,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     if (entry)
     {
         setXmpTagString("Xmp.video.Composer", QString::fromUtf8(entry->value));
+    }
+
+    // --------------
+
+    entry = av_dict_get(dict, "playback_requirements", NULL, 0);
+
+    if (entry)
+    {
+        setXmpTagString("Xmp.video.Requirements", QString::fromUtf8(entry->value));
     }
 
     // --------------
