@@ -81,6 +81,7 @@
     <p xml:lang="tr">digiKam, resimlerinizi içe aktarma ve düzenlemeyi aniden yapmanızı sağlayan bir gelişmiş resim yönetme uygulamasıdır. Resimleriniz albümlerde düzenlenir ve bu albümler tarihe göre sıralanıp, dizin düzeninde ya da özelleşmiş koleksiyonlarda gösterilebilir.</p>
     <p xml:lang="uk">digiKam — програма з розширеними можливостями щодо керування цифровими фотографіями, яка робить імпортування і впорядкування цифрових фотографій зовсім простою справою". Програма впорядковує фотографії за альбомами, які можна розташовувати у вікні програму у хронологічному порядку, за теками або за нетиповими збірками.</p>
     <p xml:lang="x-test">xxdigiKam is an advanced digital photo management application, which makes importing and organizing digital photos a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom collections.xx</p>
+    <p xml:lang="zh-CN">digiKam 是一种先进的数字照片管理应用程序，它使导入和组织数字照片变得轻而易举。照片按照时间顺序、文件夹布局或自定义集合来排列。</p>
     <p>Features:</p>
     <p xml:lang="ar">الميزات:</p>
     <p xml:lang="bs">Svojstva:</p>
@@ -160,6 +161,7 @@
       <li xml:lang="tr">Exif, Iptc, Xmp, Makernotes desteği</li>
       <li xml:lang="uk">підтримка Exif, Iptc, Xmp, Makernotes;</li>
       <li xml:lang="x-test">xxSupport for Exif, Iptc, Xmp, Makernotesxx</li>
+      <li xml:lang="zh-CN">支持 Exif、Iptc、Xmp、Makernotes</li>
       <li>SQLite or Mysql powered storage for the album contents and its metadata with advanced search tools</li>
       <li xml:lang="ca">Emmagatzematge basat en SQLite o Mysql per als continguts dels àlbums i les seves metadades amb eines de cerca avançades</li>
       <li xml:lang="ca-valencia">Emmagatzematge basat en SQLite o Mysql per als continguts dels àlbums i les seues metadades amb eines de busca avançades</li>
@@ -177,6 +179,7 @@
       <li xml:lang="tr">Albüm içeriği ve meta verileri için gelişmiş arama araçlarıyla, SQLite veya Mysql destekli depolama</li>
       <li xml:lang="uk">сховище даних на основі SQLite або MySQL для вмісту альбомів та метаданих із розширеними можливостями пошуку;</li>
       <li xml:lang="x-test">xxSQLite or Mysql powered storage for the album contents and its metadata with advanced search toolsxx</li>
+      <li xml:lang="zh-CN">SQLite 或 Mysql 为相册内容及其元数据提供高级搜索工具的存储</li>
       <li>Support for filtering and sorting albums</li>
       <li xml:lang="ar">دعم ترشيح الألبومات وفرزها</li>
       <li xml:lang="bs">Podrška za filtriranje i sortiranje albuma</li>
@@ -202,6 +205,7 @@
       <li xml:lang="tr">Albümleri filtreleme ve sıralama desteği</li>
       <li xml:lang="uk">підтримка фільтрування та упорядковування альбомів;</li>
       <li xml:lang="x-test">xxSupport for filtering and sorting albumsxx</li>
+      <li xml:lang="zh-CN">支持筛选和排序相册</li>
       <li>Import from more than 1100 digital camera devices</li>
       <li xml:lang="ar">الاستيراد من أكثر من 1100 كمرة رقميّة</li>
       <li xml:lang="bs">Uvoz iz više od 1100 digitalnih kamera uređaja</li>
@@ -227,6 +231,7 @@
       <li xml:lang="tr">1100den fazla kamera cihazından içe aktarma</li>
       <li xml:lang="uk">можливість імпортування даних з понад 1100 цифрових фотоапаратів;</li>
       <li xml:lang="x-test">xxImport from more than 1100 digital camera devicesxx</li>
+      <li xml:lang="zh-CN">从1100多种数码相机设备中导入</li>
       <li>Support for more than 900 RAW format pictures</li>
       <li xml:lang="ca">Admet més de 900 formats d'imatge RAW</li>
       <li xml:lang="ca-valencia">Admet més de 900 formats d'imatge RAW</li>
@@ -244,6 +249,7 @@
       <li xml:lang="tr">900'den fazla RAW biçimli resim desteği</li>
       <li xml:lang="uk">підтримка понад 900 форматів цифрових негативів (RAW);</li>
       <li xml:lang="x-test">xxSupport for more than 900 RAW format picturesxx</li>
+      <li xml:lang="zh-CN">支持超过900种 RAW 格式的图片</li>
       <li>Light Table to compare photo side by side</li>
       <li xml:lang="ca">Taula de llum per a comparar les fotografies costat a costat</li>
       <li xml:lang="ca-valencia">Taula de llum per a comparar les fotografies costat a costat</li>
@@ -278,6 +284,7 @@
       <li xml:lang="tr">Ekstra araçlar kullanan genişletilmiş özellikler</li>
       <li xml:lang="uk">розширення можливостей за допомогою додаткових інструментів;</li>
       <li xml:lang="x-test">xxExtended features using extra toolsxx</li>
+      <li xml:lang="zh-CN">使用额外工具的扩展功能</li>
       <li>Share your photos using HTML or publishing them to remote web services</li>
       <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les a serveis web remots</li>
       <li xml:lang="ca-valencia">Compartiu les vostres fotografies usant HTML o publicant-les a serveis web remots</li>
@@ -295,6 +302,7 @@
       <li xml:lang="tr">Resimlerinizi HTML kullanarak paylaşın veya onları uzak web servislerinde yayımlayın</li>
       <li xml:lang="uk">можливість оприлюднення фотографій на віддалених службах у інтернеті;</li>
       <li xml:lang="x-test">xxShare your photos using HTML or publishing them to remote web servicesxx</li>
+      <li xml:lang="zh-CN">使用 HTML 共享您的照片或将其发布到远程 WEB 服务</li>
       <li>Image editor included with advanced tools to fix photo quickly</li>
       <li xml:lang="ca">Inclou un editor d'imatges amb eines avançades per esmenar ràpidament les fotografies</li>
       <li xml:lang="ca-valencia">Inclou un editor d'imatges amb eines avançades per esmenar ràpidament les fotografies</li>
@@ -312,6 +320,7 @@
       <li xml:lang="tr">Fotoğrafı hızla düzeltmek için gelişmiş araçlar içeren resim editörü</li>
       <li xml:lang="uk">редактор зображень із додатковими можливостями для швидкого виправлення фотографій;</li>
       <li xml:lang="x-test">xxImage editor included with advanced tools to fix photo quicklyxx</li>
+      <li xml:lang="zh-CN">图像编辑器包含高级工具以快速修复照片</li>
     </ul>
   </description>
   <url type="homepage">http://www.digikam.org/</url>
