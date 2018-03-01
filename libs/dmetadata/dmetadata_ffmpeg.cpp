@@ -490,7 +490,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     tagsLst.clear();
-    tagsLst << QLatin1String("producer");
+    tagsLst << QLatin1String("producer")
+            << QLatin1String("com.apple.quicktime.producer");
 
     foreach (QString tags, tagsLst)
     {
@@ -508,7 +509,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     tagsLst.clear();
     tagsLst << QLatin1String("artist")
             << QLatin1String("album_artist")
-            << QLatin1String("original_artist");
+            << QLatin1String("original_artist")
+            << QLatin1String("com.apple.quicktime.artist");
 
     foreach (QString tags, tagsLst)
     {
@@ -524,7 +526,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     tagsLst.clear();
-    tagsLst << QLatin1String("director");
+    tagsLst << QLatin1String("director")
+            << QLatin1String("com.apple.quicktime.director");
 
     foreach (QString tags, tagsLst)
     {
@@ -711,7 +714,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     tagsLst.clear();
-    tagsLst << QLatin1String("title");
+    tagsLst << QLatin1String("title")
+            << QLatin1String("com.apple.quicktime.title");
 
     foreach (QString tags, tagsLst)
     {
@@ -727,7 +731,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     tagsLst.clear();
-    tagsLst << QLatin1String("author");
+    tagsLst << QLatin1String("author")
+            << QLatin1String("com.apple.quicktime.author");
 
     foreach (QString tags, tagsLst)
     {
@@ -742,7 +747,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     tagsLst.clear();
-    tagsLst << QLatin1String("copyright");
+    tagsLst << QLatin1String("copyright")
+            << QLatin1String("com.apple.quicktime.copyright");
 
     foreach (QString tags, tagsLst)
     {
@@ -859,7 +865,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     tagsLst.clear();
-    tagsLst << QLatin1String("year");
+    tagsLst << QLatin1String("year")
+            << QLatin1String("com.apple.quicktime.year");
 
     foreach (QString tags, tagsLst)
     {
@@ -937,9 +944,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     // GPS info as string. ex: "+44.8511-000.6229/"
+    // Defined in ISO 6709:2008.
 
     tagsLst.clear();
-    tagsLst << QLatin1String("location");
+    tagsLst << QLatin1String("location")
+            << QLatin1String("com.apple.quicktime.location.ISO6709");
 
     foreach (QString tags, tagsLst)
     {
