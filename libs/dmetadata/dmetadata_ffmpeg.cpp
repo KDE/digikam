@@ -64,6 +64,23 @@ extern "C"
 namespace Digikam
 {
 
+QStringList s_keywordsSeparation(const QString& data)
+{
+    QStringList keywords = data.split(QLatin1String("/"));
+
+    if (keywords.isEmpty())
+    {
+        keywords = data.split(QLatin1String(","));
+
+        if (keywords.isEmpty())
+        {
+            keywords = data.split(QLatin1String(" "));
+        }
+    }
+    
+    return keywords;
+}
+    
 qint64 s_secondsSinceJanuary1904(const QDateTime dt)
 {
     QDateTime dt1904(QDate(1904, 1, 1), QTime(0, 0, 0));
@@ -166,9 +183,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             {
                 setXmpTagString("Xmp.audio.TrackLang", QString::fromUtf8(entry->value));
             }
-            
+
             // --------------
-            
+
             entry = av_dict_get(dict, "creation_time", NULL, 0);
 
             if (entry)
@@ -254,7 +271,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                     setImageOrientation(ori);
                 }
             }
-           
+
             // --------------
 
             entry = av_dict_get(dict, "language", NULL, 0);
@@ -265,7 +282,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             }
 
             // --------------
-            
+
             entry = av_dict_get(dict, "creation_time", NULL, 0);
 
             if (entry)
@@ -322,21 +339,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        QString data = QString::fromUtf8(entry->value);
+        QString data         = QString::fromUtf8(entry->value);
         setXmpTagString("Xmp.video.InfoText", data);
 
-        QStringList keywords = data.split(QLatin1String("/"));
-        
-        if (keywords.isEmpty())
-        {
-            keywords = data.split(QLatin1String(","));
-            
-            if (keywords.isEmpty())
-            {
-                keywords = data.split(QLatin1String(" "));
-            }
-        }
-        
+        QStringList keywords = s_keywordsSeparation(data);
+
         if (!keywords.isEmpty())
         {
             setXmpKeywords(keywords);
@@ -350,21 +357,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (entry)
     {
-        QString data = QString::fromUtf8(entry->value);
+        QString data           = QString::fromUtf8(entry->value);
         setXmpTagString("Xmp.video.Subject", data);
 
-        QStringList categories = data.split(QLatin1String("/"));
-        
-        if (categories.isEmpty())
-        {
-            categories = data.split(QLatin1String(","));
-            
-            if (categories.isEmpty())
-            {
-                categories = data.split(QLatin1String(" "));
-            }
-        }
-        
+        QStringList categories = s_keywordsSeparation(data);
+
         if (!categories.isEmpty())
         {
             setXmpSubCategories(categories);
@@ -533,17 +530,17 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     {
         QString data = QString::fromUtf8(entry->value);
         setXmpTagString("Xmp.video.Rating", data);
-        
+
         // Backport rating in Exif and Iptc
         bool b     = false;
         int rating = data.toInt(&b);
-        
+
         if (b)
             setImageRating(rating);
     }
 
     // --------------
-    
+
     entry = av_dict_get(dict, "make", NULL, 0);
 
     if (entry)
@@ -606,7 +603,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         setXmpTagString("Xmp.video.Comment", data);
 
         // Backport comment in Exif and Iptc
-        
+
         CaptionsMap capMap;
         MetaEngine::AltLangMap comMap;
         comMap.insert(QLatin1String("x-default"), data);
@@ -710,7 +707,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         setXmpTagString("Xmp.video.MediaCreateDate",
                         QString::number(s_secondsSinceJanuary1904(dt)));
     }
-    
+
     // --------------
 
     // GPS info as string. ex: "+44.8511-000.6229/"
@@ -749,22 +746,22 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             setGPSInfo(alt, lattitude, longitude);
 
             setXmpTagString("Xmp.video.GPSLatitude",
-                            getXmpTagString("Xmp.exif.GPSLatitude"));     
+                            getXmpTagString("Xmp.exif.GPSLatitude"));
             setXmpTagString("Xmp.video.GPSLongitude",
-                            getXmpTagString("Xmp.exif.GPSLongitude"));    
+                            getXmpTagString("Xmp.exif.GPSLongitude"));
             setXmpTagString("Xmp.video.GPSMapDatum",
-                            getXmpTagString("Xmp.exif.GPSMapDatum"));      
+                            getXmpTagString("Xmp.exif.GPSMapDatum"));
             setXmpTagString("Xmp.video.GPSVersionID",
-                            getXmpTagString("Xmp.exif.GPSVersionID"));     
+                            getXmpTagString("Xmp.exif.GPSVersionID"));
 
             setXmpTagString("Xmp.exif.GPSLatitude",
-                            getXmpTagString("Xmp.exif.GPSLatitude"));     
+                            getXmpTagString("Xmp.exif.GPSLatitude"));
             setXmpTagString("Xmp.exif.GPSLongitude",
-                            getXmpTagString("Xmp.exif.GPSLongitude"));    
+                            getXmpTagString("Xmp.exif.GPSLongitude"));
             setXmpTagString("Xmp.exif.GPSMapDatum",
-                            getXmpTagString("Xmp.exif.GPSMapDatum"));      
+                            getXmpTagString("Xmp.exif.GPSMapDatum"));
             setXmpTagString("Xmp.exif.GPSVersionID",
-                            getXmpTagString("Xmp.exif.GPSVersionID"));  
+                            getXmpTagString("Xmp.exif.GPSVersionID"));
         }
     }
 
