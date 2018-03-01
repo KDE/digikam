@@ -43,6 +43,7 @@
 
 // Local incudes
 
+#include "captionvalues.h"
 #include "digikam_debug.h"
 #include "digikam_config.h"
 
@@ -603,8 +604,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     {
         QString data = QString::fromUtf8(entry->value);
         setXmpTagString("Xmp.video.Comment", data);
-        // Backport comment in Exif
-        setExifComment(data);
+
+        // Backport comment in Exif and Iptc
+        
+        CaptionsMap capMap;
+        MetaEngine::AltLangMap comMap;
+        comMap.insert(QLatin1String("x-default"), data);
+        capMap.setData(comMap, MetaEngine::AltLangMap(), QString(), MetaEngine::AltLangMap());
+
+        setImageComments(capMap);
     }
 
     // --------------
