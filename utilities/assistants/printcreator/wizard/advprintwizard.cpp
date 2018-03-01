@@ -258,24 +258,6 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
                                        s->m_autoRotate,
                                        true);
 
-    //AHMED FATHI COMMENTED THIS FOR COMPILE ERRORS NOT RELATED TO HIS WORK
-    /*
-    QListWidgetItem* const pWItem = new QListWidgetItem(i18n(CUSTOM_PAGE_LAYOUT_NAME));
-
-    //TODO FREE STYLE ICON
-    TemplateIcon ti(80, pageSize.toSize());
-    ti.begin();
-    QPainter& painter = ti.getPainter();
-    painter.setPen(Qt::color1);
-    painter.drawText(painter.viewport(), Qt::AlignCenter, i18n("Custom layout"));
-    ti.end();
-
-    pWItem->setIcon(ti.getIcon());
-    d->photoPage->ui()->ListPhotoSizes->addItem(pWItem);
-
-    d->photoPage->ui()->ListPhotoSizes->blockSignals(false);
-    d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0, QItemSelectionModel::Select);
-    */
     d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
                                              photoIndex + 1,
                                              QString::number(d->settings->photos.count())));
