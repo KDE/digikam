@@ -215,6 +215,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             if (stream->avg_frame_rate.den)
                 frameRate /= stream->avg_frame_rate.den;
 
+            setXmpTagString("Xmp.video.Width",             QString::number(codec->width));
+            setXmpTagString("Xmp.video.Height",            QString::number(codec->height));
             setXmpTagString("Xmp.video.SourceImageWidth",  QString::number(codec->width));
             setXmpTagString("Xmp.video.SourceImageHeight", QString::number(codec->height));
 
