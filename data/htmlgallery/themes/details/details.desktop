@@ -20,6 +20,7 @@ Comment[sv]=Ytterligare ett enkelt tema. Rent utseende med fler bilddetaljer.
 Comment[tr]=Bir diğer basit tema. Daha fazla resim detayıyla temiz görünüm.
 Comment[uk]=Ще одна проста тема. Строгий вигляд з додатковими параметрами зображень.
 Comment[x-test]=xxYet another simple theme. Clean look with more image details.xx
+Comment[zh_CN]=另一款简洁的主题。干净且富含更多图像细节。
 Icon=
 Name=Details
 Name[ca]=Detalls
@@ -115,6 +116,7 @@ Name[sv]=Sidfotsinformation
 Name[tr]=Dipnot bilgisi
 Name[uk]=Відомості нижнього колонтитула
 Name[x-test]=xxFooter informationxx
+Name[zh_CN]=页脚信息
 
 Type=string
 Default=My personal gallery <a href="mailto:email@mydomain.tld">email@mydomain.tld</a> - Powered by <a href="http://www.digikam.org">digiKam - HTMLGallery</a>

@@ -42,6 +42,7 @@ Comment[sv]=En konvertering av det gamla HTML-exportinsticksprogrammets tema
 Comment[tr]=Eski HTML Dışa Aktarma eklenti temasının bir portu
 Comment[uk]=Портування старої теми додатка експорту HTML
 Comment[x-test]=xxA port of the old HTML Export plugin themexx
+Comment[zh_CN]=旧版 HTML 导出插件主题的移植
 
 [X-HTMLExport Preview]
 Name=Classic
@@ -222,6 +223,7 @@ Name[sv]=Bildens kantstorlek
 Name[tr]=Resim Kenarlık Boyutu
 Name[uk]=Розмір рамки зображення
 Name[x-test]=xxImage Border Sizexx
+Name[zh_CN]=图像边框大小
 Type=int
 Default=1
 Min=1
@@ -249,6 +251,7 @@ Name[sv]=Bildens kantfärg
 Name[tr]=Resim Kenarlık Rengi
 Name[uk]=Колір рамки зображення
 Name[x-test]=xxImage Border Colorxx
+Name[zh_CN]=图片边框颜色
 Type=color
 Default=#d0ffd0
 
@@ -274,6 +277,7 @@ Name[sv]=Länkfärg
 Name[tr]=Bağlantı Rengi
 Name[uk]=Колір посилання
 Name[x-test]=xxLink Colorxx
+Name[zh_CN]=链接颜色
 Type=color
 Default=#b3b3b3
 
@@ -299,5 +303,6 @@ Name[sv]=Besökt länkfärg
 Name[tr]=Ziyaret Edilmiş Bağlantı Rengi
 Name[uk]=Колір відвіданого посилання
 Name[x-test]=xxVisited Link Colorxx
+Name[zh_CN]=已访问链接颜色
 Type=color
 Default=#b3b3b3

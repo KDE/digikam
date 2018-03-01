@@ -20,6 +20,7 @@ Name[sv]=Fria kort
 Name[tr]=Yüzen Kartlar
 Name[uk]=Картки, що плавають
 Name[x-test]=xxFloating Cardsxx
+Name[zh_CN]=浮动卡片
 Comment=A dark theme with floating thumbnail/description cards. Fast navigation through the gallery.
 Comment[ca]=Un tema fosc amb targetes de miniatures/descripcions flotants. Navegació ràpida per la galeria.
 Comment[ca@valencia]=Un tema fosc amb targetes de miniatures/descripcions flotants. Navegació ràpida per la galeria.
@@ -41,6 +42,7 @@ Comment[sv]=Ett mörkt tema med fria miniatyrbilder och beskrivningskort. Fast n
 Comment[tr]=Yüzen küçük resim/açıklama kartları ile koyu bir tema. Galeri içerisinde hızlı gezinme.
 Comment[uk]=Темна тема з картками мініатюр або описів, що неначебто плавають панеллю. Пришвидшує орієнтування у галереї.
 Comment[x-test]=xxA dark theme with floating thumbnail/description cards. Fast navigation through the gallery.xx
+Comment[zh_CN]=带有浮动缩略图/描述卡片的暗色调主题。快速导航画册。
 
 [X-HTMLExport Author]
 Name=Jiří Boháč
@@ -88,6 +90,7 @@ Name[sv]=Fria kort
 Name[tr]=Yüzen Kartlar
 Name[uk]=Картки, що плавають
 Name[x-test]=xxFloating Cardsxx
+Name[zh_CN]=浮动卡片
 Url=preview.png
 
 [X-HTMLExport Options]
@@ -148,6 +151,7 @@ Name[sv]=Läs in i förväg
 Name[tr]=Önyükleme
 Name[uk]=Попереднє завантаження
 Name[x-test]=xxPreloadxx
+Name[zh_CN]=预加载
 Type=list
 Default=1
 Value_0=1
