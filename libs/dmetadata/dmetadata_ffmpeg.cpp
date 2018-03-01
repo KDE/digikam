@@ -5,12 +5,15 @@
  *
  * Date        : 2018-02-26
  * Description : metadata extraction with ffmpeg (libav)
+ * 
  * References  :
  *
  * FFMpeg metadata review: https://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
  * FFMpeg MP4 parser     : https://github.com/FFmpeg/FFmpeg/blob/master/libavformat/mov.c#L298
  * Exiv2 XMP video       : https://github.com/Exiv2/exiv2/blob/master/src/properties.cpp#L1331
- *
+ * Apple metadata desc   : https://developer.apple.com/library/content/documentation/QuickTime/QTFF/Metadata/Metadata.html
+ * FFMpeg metadata writer: https://github.com/kritzikratzi/ofxAvCodec/blob/master/src/ofxAvUtils.cpp#L61
+ * 
  * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -89,18 +92,19 @@ qint64 s_secondsSinceJanuary1904(const QDateTime dt)
 
 #ifdef HAVE_MEDIAPLAYER
 
-QStringList s_extractFFMpegMetadataEntriesFromDictionary(AVDictionary* const dict)
+DMetadata::MetaDataMap s_extractFFMpegMetadataEntriesFromDictionary(AVDictionary* const dict)
 {
     AVDictionaryEntry* entry = 0;
-    QStringList meta;
+    DMetadata::MetaDataMap meta;
 
     do
     {
         entry = av_dict_get(dict, "", entry, AV_DICT_IGNORE_SUFFIX);
 
         if (entry)
-            meta.append(QString::fromUtf8("%1 = %2").arg(QString::fromUtf8(entry->key))
-                                                    .arg(QString::fromUtf8(entry->value)));
+        {
+            meta.insert(QString::fromUtf8(entry->key), QString::fromUtf8(entry->value));
+        }   
     }
     while (entry);
 
@@ -134,10 +138,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         return false;
     }
 
-    int totalSecs            = fmt_ctx->duration / AV_TIME_BASE;
-    int bitrate              = fmt_ctx->bit_rate;
-    AVDictionaryEntry* entry = 0;
-    AVDictionary* dict       = 0;
+    int totalSecs = fmt_ctx->duration / AV_TIME_BASE;
+    int bitrate   = fmt_ctx->bit_rate;
+    MetaDataMap::const_iterator it;
 
     QFileInfo fi(filePath);
     setXmpTagString("Xmp.video.FileName",    fi.fileName());
@@ -170,27 +173,28 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             // --------------
 
-            dict  = stream->metadata;
+            MetaDataMap ameta = s_extractFFMpegMetadataEntriesFromDictionary(stream->metadata);
 
-            qCDebug(DIGIKAM_METAENGINE_LOG) << "FFMpeg audio stream metadata entries:";
-            qCDebug(DIGIKAM_METAENGINE_LOG) << s_extractFFMpegMetadataEntriesFromDictionary(dict);
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "-- FFMpeg audio stream metadata entries :";
+            qCDebug(DIGIKAM_METAENGINE_LOG) << ameta;
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "-----------------------------------------";
 
             // --------------
 
-            entry = av_dict_get(dict, "language", NULL, 0);
+            it = ameta.find(QLatin1String("language"));
 
-            if (entry)
+            if (it != ameta.end())
             {
-                setXmpTagString("Xmp.audio.TrackLang", QString::fromUtf8(entry->value));
+                setXmpTagString("Xmp.audio.TrackLang", it.value());
             }
 
             // --------------
 
-            entry = av_dict_get(dict, "creation_time", NULL, 0);
+            it = ameta.find(QLatin1String("creation_time"));
 
-            if (entry)
+            if (it != ameta.end())
             {
-                QDateTime dt = QDateTime::fromString(QString::fromUtf8(entry->value), Qt::ISODate);
+                QDateTime dt = QDateTime::fromString(it.value(), Qt::ISODate);
                 setXmpTagString("Xmp.audio.TrackCreateDate",
                                 QString::number(s_secondsSinceJanuary1904(dt)));
             }
@@ -233,19 +237,20 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             // ----------------------------
 
-            dict = stream->metadata;
+            MetaDataMap vmeta = s_extractFFMpegMetadataEntriesFromDictionary(stream->metadata);
 
-            qCDebug(DIGIKAM_METAENGINE_LOG) << "FFMpeg video stream metadata entries:";
-            qCDebug(DIGIKAM_METAENGINE_LOG) << s_extractFFMpegMetadataEntriesFromDictionary(dict);
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "-- FFMpeg video stream metadata entries :";
+            qCDebug(DIGIKAM_METAENGINE_LOG) << vmeta;
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "-----------------------------------------";
 
             // --------------
 
-            entry = av_dict_get(dict, "rotate", NULL, 0);
+            it = vmeta.find(QLatin1String("rotate"));
 
-            if (entry)
+            if (it != vmeta.end())
             {
                 bool b               = false;
-                int val              = QString::fromUtf8(entry->value).toInt(&b);
+                int val              = it.value().toInt(&b);
                 ImageOrientation ori = ORIENTATION_UNSPECIFIED;
 
                 if (b)
@@ -276,34 +281,33 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             // --------------
 
-            entry = av_dict_get(dict, "language", NULL, 0);
+            it = vmeta.find(QLatin1String("language"));
 
-            if (entry)
+            if (it != vmeta.end())
             {
-                setXmpTagString("Xmp.video.Language", QString::fromUtf8(entry->value));
+                setXmpTagString("Xmp.video.Language", it.value());
             }
 
             // --------------
 
-            entry = av_dict_get(dict, "creation_time", NULL, 0);
+            it = vmeta.find(QLatin1String("creation_time"));
 
-            if (entry)
+            if (it != vmeta.end())
             {
-                QDateTime dt = QDateTime::fromString(QString::fromUtf8(entry->value), Qt::ISODate);
+                QDateTime dt = QDateTime::fromString(it.value(), Qt::ISODate);
                 setXmpTagString("Xmp.video.TrackCreateDate",
                                 QString::number(s_secondsSinceJanuary1904(dt)));
             }
         }
     }
 
-    entry = 0;
-
     // ----------------------------
 
-    dict  = fmt_ctx->metadata;
+    MetaDataMap rmeta = s_extractFFMpegMetadataEntriesFromDictionary(fmt_ctx->metadata);
 
-    qCDebug(DIGIKAM_METAENGINE_LOG) << "FFMpeg lead container metadata entries:";
-    qCDebug(DIGIKAM_METAENGINE_LOG) << s_extractFFMpegMetadataEntriesFromDictionary(dict);
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "-- FFMpeg root container metadata entries :";
+    qCDebug(DIGIKAM_METAENGINE_LOG) << rmeta;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << "------------------------------------------";
 
     // ----------------------------
 
@@ -336,11 +340,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    entry = av_dict_get(dict, "keywords", NULL, 0);
+    it = rmeta.find(QLatin1String("keywords"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        QString data         = QString::fromUtf8(entry->value);
+        QString data         = it.value();
         setXmpTagString("Xmp.video.InfoText", data);
 
         QStringList keywords = s_keywordsSeparation(data);
@@ -354,11 +358,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    entry = av_dict_get(dict, "category", NULL, 0);
+    it = rmeta.find(QLatin1String("category"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        QString data           = QString::fromUtf8(entry->value);
+        QString data           = it.value();
         setXmpTagString("Xmp.video.Subject", data);
 
         QStringList categories = s_keywordsSeparation(data);
@@ -372,173 +376,173 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    entry = av_dict_get(dict, "premiere_version", NULL, 0);
+    it = rmeta.find(QLatin1String("premiere_version"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.SoftwareVersion", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.SoftwareVersion", it.value());
     }
     else
     {
-        entry = av_dict_get(dict, "quicktime_version", NULL, 0);
+        it = rmeta.find(QLatin1String("quicktime_version"));
 
-        if (entry)
+        if (it != rmeta.end())
         {
-            setXmpTagString("Xmp.video.SoftwareVersion", QString::fromUtf8(entry->value));
+            setXmpTagString("Xmp.video.SoftwareVersion", it.value());
         }
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "firmware", NULL, 0);
+    it = rmeta.find(QLatin1String("firmware"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.FirmwareVersion", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.FirmwareVersion", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "composer", NULL, 0);
+    it = rmeta.find(QLatin1String("composer"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Composer", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Composer", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "playback_requirements", NULL, 0);
+    it = rmeta.find(QLatin1String("playback_requirements"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Requirements", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Requirements", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "lyrics", NULL, 0);
+    it = rmeta.find(QLatin1String("lyrics"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Lyrics", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Lyrics", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "performers", NULL, 0);
+    it = rmeta.find(QLatin1String("performers"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Performers", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Performers", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "producer", NULL, 0);
+    it = rmeta.find(QLatin1String("producer"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Producer", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Producer", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "artist", NULL, 0);
+    it = rmeta.find(QLatin1String("artist"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Artist", it.value());
     }
     else
     {
-        entry = av_dict_get(dict, "album_artist", NULL, 0);
+        it = rmeta.find(QLatin1String("album_artist"));
 
-        if (entry)
+        if (it != rmeta.end())
         {
-            setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value));
+            setXmpTagString("Xmp.video.Artist", it.value());
         }
         else
         {
-            entry = av_dict_get(dict, "original_artist", NULL, 0);
+            it = rmeta.find(QLatin1String("original_artist"));
 
-            if (entry)
+            if (it != rmeta.end())
             {
-                setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value));
+                setXmpTagString("Xmp.video.Artist", it.value());
             }
         }
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "director", NULL, 0);
+    it = rmeta.find(QLatin1String("director"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Director", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Director", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "media_type", NULL, 0);
+    it = rmeta.find(QLatin1String("media_type"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Medium", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Medium", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "grouping", NULL, 0);
+    it = rmeta.find(QLatin1String("grouping"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Grouping", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Grouping", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "encoder", NULL, 0);
+    it = rmeta.find(QLatin1String("encoder"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Encoder", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Encoder", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "subtitle", NULL, 0);
+    it = rmeta.find(QLatin1String("subtitle"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Subtitle", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Subtitle", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "original_source", NULL, 0);
+    it = rmeta.find(QLatin1String("original_source"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.SourceCredits", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.SourceCredits", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "original_format", NULL, 0);
+    it = rmeta.find(QLatin1String("original_format"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Format", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Format", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "rating", NULL, 0);
+    it = rmeta.find(QLatin1String("rating"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        QString data = QString::fromUtf8(entry->value);
+        QString data = it.value();
         setXmpTagString("Xmp.video.Rating", data);
 
         // Backport rating in Exif and Iptc
@@ -551,65 +555,65 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    entry = av_dict_get(dict, "make", NULL, 0);
+    it = rmeta.find(QLatin1String("make"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Make", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Make", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "model", NULL, 0);
+    it = rmeta.find(QLatin1String("model"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Model", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Model", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "URL", NULL, 0);
+    it = rmeta.find(QLatin1String("URL"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.URL", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.URL", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "title", NULL, 0);
+    it = rmeta.find(QLatin1String("title"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Title", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Title", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "author", NULL, 0);
+    it = rmeta.find(QLatin1String("author"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Artist", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Artist", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "copyright", NULL, 0);
+    it = rmeta.find(QLatin1String("copyright"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Copyright", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Copyright", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "comment", NULL, 0);
+    it = rmeta.find(QLatin1String("comment"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        QString data = QString::fromUtf8(entry->value);
+        QString data = it.value();
         setXmpTagString("Xmp.video.Comment", data);
 
         // Backport comment in Exif and Iptc
@@ -624,47 +628,47 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    entry = av_dict_get(dict, "description", NULL, 0);
+    it = rmeta.find(QLatin1String("description"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Information", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Information", it.value());
     }
     else
     {
-        entry = av_dict_get(dict, "synopsis", NULL, 0);
+        it = rmeta.find(QLatin1String("synopsis"));
 
-        if (entry)
+        if (it != rmeta.end())
         {
-            setXmpTagString("Xmp.video.Information", QString::fromUtf8(entry->value));
+            setXmpTagString("Xmp.video.Information", it.value());
         }
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "album", NULL, 0);
+    it = rmeta.find(QLatin1String("album"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Album", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Album", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "genre", NULL, 0);
+    it = rmeta.find(QLatin1String("genre"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        setXmpTagString("Xmp.video.Genre", QString::fromUtf8(entry->value));
+        setXmpTagString("Xmp.video.Genre", it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "track", NULL, 0);
+    it = rmeta.find(QLatin1String("track"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        QString value = QString::fromUtf8(entry->value);
+        QString value = it.value();
 
         bool ok   = false;
         int track = value.toInt(&ok);
@@ -675,21 +679,21 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    entry = av_dict_get(dict, "year", NULL, 0);
+    it = rmeta.find(QLatin1String("year"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        int year = QString::fromUtf8(entry->value).toInt();
+        int year = it.value().toInt();
         setXmpTagString("Xmp.video.Year", QString::number(year));
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "creation_time", NULL, 0);
+    it = rmeta.find(QLatin1String("creation_time"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        QString data = QString::fromUtf8(entry->value);
+        QString data = it.value();
         setXmpTagString("Xmp.video.DateTimeOriginal", data);
         setXmpTagString("Xmp.video.DateTimeDigitized", data);
         // Backport date in Exif and Iptc.
@@ -699,21 +703,21 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    entry = av_dict_get(dict, "edit_date", NULL, 0);
+    it = rmeta.find(QLatin1String("edit_date"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
         setXmpTagString("Xmp.video.ModificationDate",
-                        QString::fromUtf8(entry->value));
+                        it.value());
     }
 
     // --------------
 
-    entry = av_dict_get(dict, "date", NULL, 0);
+    it = rmeta.find(QLatin1String("date"));
 
-    if (entry)
+    if (it != rmeta.end())
     {
-        QDateTime dt = QDateTime::fromString(QString::fromUtf8(entry->value), Qt::ISODate);
+        QDateTime dt = QDateTime::fromString(it.value(), Qt::ISODate);
         setXmpTagString("Xmp.video.MediaCreateDate",
                         QString::number(s_secondsSinceJanuary1904(dt)));
     }
@@ -721,11 +725,12 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     // GPS info as string. ex: "+44.8511-000.6229/"
-    entry = av_dict_get(dict, "location", NULL, 0);
 
-    if (entry)
+    it = rmeta.find(QLatin1String("location"));
+
+    if (it != rmeta.end())
     {
-        QString data     = QString::fromUtf8(entry->value);
+        QString data     = it.value();
         setXmpTagString("Xmp.video.GPSCoordinates", data);
 
         // Backport location in Exif.
