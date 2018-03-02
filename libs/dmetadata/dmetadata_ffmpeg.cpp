@@ -43,6 +43,7 @@
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QStringList>
+#include <QRegExp>
 
 // Local incudes
 
@@ -66,6 +67,31 @@ extern "C"
 
 namespace Digikam
 {
+
+/** Search first occurence of string in 'map' with keys given by 'lst'.
+ *  Return the string match.
+ *  If 'xmpTag' is not null, register XMP tag value with string.
+ */    
+QString s_setXmpTagStringFromEntry(DMetadata* const meta,
+                                   const QStringList& lst,
+                                   const DMetadata::MetaDataMap& map,
+                                   const char* const xmpTag=0) 
+{
+    foreach (QString tag, lst)
+    {
+        DMetadata::MetaDataMap::const_iterator it = map.find(tag);
+
+        if (it != map.end())
+        {
+            if (xmpTag)
+                meta->setXmpTagString(xmpTag, it.value());
+
+            return it.value();
+        }
+    }
+    
+    return QString();
+}
 
 QStringList s_keywordsSeparation(const QString& data)
 {
@@ -303,6 +329,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // ----------------------------
 
+    QString data;
     MetaDataMap rmeta = s_extractFFMpegMetadataEntriesFromDictionary(fmt_ctx->metadata);
 
     qCDebug(DIGIKAM_METAENGINE_LOG) << "-- FFMpeg root container metadata entries :";
@@ -340,605 +367,310 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    QStringList tagsLst;
-    tagsLst << QLatin1String("keywords")
-            << QLatin1String("com.apple.quicktime.keywords");
+    data = s_setXmpTagStringFromEntry(this, 
+               QStringList() << QLatin1String("keywords")
+                             << QLatin1String("com.apple.quicktime.keywords"),
+               rmeta,
+               "Xmp.video.InfoText");
 
-    foreach (QString tags, tagsLst)
+    if (!data.isEmpty())
     {
-        it = rmeta.find(tags);
+        QStringList keywords = s_keywordsSeparation(data);
 
-        if (it != rmeta.end())
-        {        
-            QString data         = it.value();
-            setXmpTagString("Xmp.video.InfoText", data);
-
-            QStringList keywords = s_keywordsSeparation(data);
-
-            if (!keywords.isEmpty())
-            {
-                setXmpKeywords(keywords);
-                setIptcKeywords(QStringList(), keywords);
-                break;
-            }
+        if (!keywords.isEmpty())
+        {
+            setXmpKeywords(keywords);
+            setIptcKeywords(QStringList(), keywords);
         }
     }
 
     // --------------
 
-    tagsLst.clear();
-    tagsLst << QLatin1String("category");
+    data = s_setXmpTagStringFromEntry(this, 
+               QStringList() << QLatin1String("category"),
+               rmeta,
+               "Xmp.video.Subject");
 
-    foreach (QString tags, tagsLst)
+    if (!data.isEmpty())
     {
-        it = rmeta.find(tags);
+        QStringList categories = s_keywordsSeparation(data);
 
-        if (it != rmeta.end())
+        if (!categories.isEmpty())
         {
-            QString data           = it.value();
-            setXmpTagString("Xmp.video.Subject", data);
-
-            QStringList categories = s_keywordsSeparation(data);
-
-            if (!categories.isEmpty())
-            {
-                setXmpSubCategories(categories);
-                setIptcSubCategories(QStringList(), categories);
-            }
-
-            break;
+            setXmpSubCategories(categories);
+            setIptcSubCategories(QStringList(), categories);
         }
     }
 
     // --------------
 
-    tagsLst.clear();
-    tagsLst << QLatin1String("premiere_version")
-            << QLatin1String("quicktime_version");
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("premiere_version")
+                                             << QLatin1String("quicktime_version"),
+                               rmeta,
+                               "Xmp.video.SoftwareVersion");
 
-    foreach (QString tags, tagsLst)
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("firmware"),
+                               rmeta,
+                               "Xmp.video.FirmwareVersion");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("composer"),
+                               rmeta,
+                               "Xmp.video.Composer");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("playback_requirements"),
+                               rmeta,
+                               "Xmp.video.Requirements");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("lyrics"),
+                               rmeta,
+                               "Xmp.video.Lyrics");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("performers"),
+                               rmeta,
+                               "Xmp.video.Performers");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("producer")
+                                             << QLatin1String("com.apple.quicktime.producer"),
+                               rmeta,
+                               "Xmp.video.Producer");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("artist")
+                                             << QLatin1String("album_artist")
+                                             << QLatin1String("original_artist")
+                                             << QLatin1String("com.apple.quicktime.artist"),
+                               rmeta,
+                               "Xmp.video.Artist");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("director")
+                                             << QLatin1String("com.apple.quicktime.director"),
+                               rmeta,
+                               "Xmp.video.Director");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("media_type"),
+                               rmeta,
+                               "Xmp.video.Medium");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("grouping"),
+                               rmeta,
+                               "Xmp.video.Grouping");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("encoder"),
+                               rmeta,
+                               "Xmp.video.Encoder");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("subtitle"),
+                               rmeta,
+                               "Xmp.video.Subtitle");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("original_source"),
+                               rmeta,
+                               "Xmp.video.SourceCredits");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("original_format"),
+                               rmeta,
+                               "Xmp.video.Format");
+
+    // --------------
+
+    data = s_setXmpTagStringFromEntry(this, 
+               QStringList() << QLatin1String("rating")
+                             << QLatin1String("com.apple.quicktime.rating.user"),
+               rmeta,
+               "Xmp.video.Rating");
+
+    if (!data.isEmpty())
     {
-        it = rmeta.find(tags);
+        // Backport rating in Exif and Iptc
+        bool b     = false;
+        int rating = data.toInt(&b);
 
-        if (it != rmeta.end())
+        if (b)
         {
-            setXmpTagString("Xmp.video.SoftwareVersion", it.value());
-            break;
+            setImageRating(rating);
         }
     }
 
     // --------------
 
-    tagsLst.clear();
-    tagsLst << QLatin1String("firmware");
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("make"),
+                               rmeta,
+                               "Xmp.video.Make");
 
-    foreach (QString tags, tagsLst)
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("model"),
+                               rmeta,
+                               "Xmp.video.Model");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("URL"),
+                               rmeta,
+                               "Xmp.video.URL");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("title")
+                                             << QLatin1String("com.apple.quicktime.title"),
+                               rmeta,
+                               "Xmp.video.Title");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("author")
+                                             << QLatin1String("com.apple.quicktime.author"),
+                               rmeta,
+                               "Xmp.video.Artist");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("copyright")
+                                             << QLatin1String("com.apple.quicktime.copyright"),
+                               rmeta,
+                               "Xmp.video.Copyright");
+
+    // --------------
+
+    data = s_setXmpTagStringFromEntry(this, 
+               QStringList() << QLatin1String("comment")
+                             << QLatin1String("description")
+                             << QLatin1String("com.apple.quicktime.description"),
+               rmeta,
+               "Xmp.video.Comment");
+
+    if (!data.isEmpty())
     {
-        it = rmeta.find(tags);
+        // Backport comment in Exif and Iptc
 
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.FirmwareVersion", it.value());
-            break;
-        }
+        CaptionsMap capMap;
+        MetaEngine::AltLangMap comMap;
+        comMap.insert(QLatin1String("x-default"), data);
+        capMap.setData(comMap, MetaEngine::AltLangMap(), QString(), MetaEngine::AltLangMap());
+
+        setImageComments(capMap);
     }
 
     // --------------
 
-    tagsLst.clear();
-    tagsLst << QLatin1String("composer");
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("synopsis"),
+                               rmeta,
+                               "Xmp.video.Information");
 
-    foreach (QString tags, tagsLst)
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("album")
+                                             << QLatin1String("com.apple.quicktime.album"),
+                               rmeta,
+                               "Xmp.video.Album");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("genre")
+                                             << QLatin1String("com.apple.quicktime.genre"),
+                               rmeta,
+                               "Xmp.video.Genre");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("track"),
+                               rmeta,
+                               "Xmp.video.TrackNumber");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("year")
+                                             << QLatin1String("com.apple.quicktime.year"),
+                               rmeta,
+                               "Xmp.video.Year");
+
+    // --------------
+
+    data = s_setXmpTagStringFromEntry(this, 
+               QStringList() << QLatin1String("creation_time")
+                             << QLatin1String("com.apple.quicktime.creationdate"),
+               rmeta,
+               "Xmp.video.DateTimeOriginal");
+
+    if (!data.isEmpty())
     {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Composer", it.value());
-            break;
-        }
+        setXmpTagString("Xmp.video.DateTimeDigitized", data);
+        // Backport date in Exif and Iptc.
+        QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+        setImageDateTime(dt, true);
     }
 
     // --------------
 
-    tagsLst.clear();
-    tagsLst << QLatin1String("playback_requirements");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Requirements", it.value());
-            break;
-        }
-    }
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("edit_date"),
+                               rmeta,
+                               "Xmp.video.ModificationDate");
 
     // --------------
 
-    tagsLst.clear();
-    tagsLst << QLatin1String("lyrics");
+    data = s_setXmpTagStringFromEntry(this, 
+               QStringList() << QLatin1String("date"),
+               rmeta);
 
-    foreach (QString tags, tagsLst)
+    if (!data.isEmpty())
     {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Lyrics", it.value());
-            break;            
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("performers");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Performers", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("producer")
-            << QLatin1String("com.apple.quicktime.producer");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Producer", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("artist")
-            << QLatin1String("album_artist")
-            << QLatin1String("original_artist")
-            << QLatin1String("com.apple.quicktime.artist");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Artist", it.value());
-            break;            
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("director")
-            << QLatin1String("com.apple.quicktime.director");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Director", it.value());
-            break;            
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("media_type");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Medium", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("grouping");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Grouping", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("encoder");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Encoder", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("subtitle");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Subtitle", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("original_source");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.SourceCredits", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("original_format");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Format", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("rating")
-            << QLatin1String("com.apple.quicktime.rating.user");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            QString data = it.value();
-            setXmpTagString("Xmp.video.Rating", data);
-
-            // Backport rating in Exif and Iptc
-            bool b     = false;
-            int rating = data.toInt(&b);
-
-            if (b)
-            {
-                setImageRating(rating);
-                break;
-            }
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("make");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Make", it.value());
-            break;            
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("model");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Model", it.value());
-            break;            
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("URL");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.URL", it.value());
-            break;            
-        }
-    }
-        
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("title")
-            << QLatin1String("com.apple.quicktime.title");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Title", it.value());
-            break;            
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("author")
-            << QLatin1String("com.apple.quicktime.author");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Artist", it.value());
-        }
-    }
-        
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("copyright")
-            << QLatin1String("com.apple.quicktime.copyright");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Copyright", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("comment")
-            << QLatin1String("description")
-            << QLatin1String("com.apple.quicktime.description");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            QString data = it.value();
-            setXmpTagString("Xmp.video.Comment", data);
-
-            // Backport comment in Exif and Iptc
-
-            CaptionsMap capMap;
-            MetaEngine::AltLangMap comMap;
-            comMap.insert(QLatin1String("x-default"), data);
-            capMap.setData(comMap, MetaEngine::AltLangMap(), QString(), MetaEngine::AltLangMap());
-
-            setImageComments(capMap);
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("synopsis");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Information", it.value());
-        }
-        
-        break;
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("album")
-            << QLatin1String("com.apple.quicktime.album");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Album", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("genre")
-            << QLatin1String("com.apple.quicktime.genre");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.Genre", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("track");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            bool ok   = false;
-            int track = it.value().toInt(&ok);
-
-            if (ok)
-            {
-                setXmpTagString("Xmp.video.TrackNumber", QString::number(track));
-                break;
-            }
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("year")
-            << QLatin1String("com.apple.quicktime.year");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            bool ok  = false;
-            int year = it.value().toInt(&ok);
-            
-            if (ok)
-            {
-                setXmpTagString("Xmp.video.Year", QString::number(year));
-                break;
-            }
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("creation_time")
-            << QLatin1String("com.apple.quicktime.creationdate");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            QString data = it.value();
-            setXmpTagString("Xmp.video.DateTimeOriginal", data);
-            setXmpTagString("Xmp.video.DateTimeDigitized", data);
-            // Backport date in Exif and Iptc.
-            QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
-            setImageDateTime(dt, true);
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("edit_date");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            setXmpTagString("Xmp.video.ModificationDate", it.value());
-            break;
-        }
-    }
-
-    // --------------
-
-    tagsLst.clear();
-    tagsLst << QLatin1String("date");
-
-    foreach (QString tags, tagsLst)
-    {
-        it = rmeta.find(tags);
-
-        if (it != rmeta.end())
-        {
-            QDateTime dt = QDateTime::fromString(it.value(), Qt::ISODate);
-            setXmpTagString("Xmp.video.MediaCreateDate",
-                            QString::number(s_secondsSinceJanuary1904(dt)));
-            break;
-        }
+        QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+        setXmpTagString("Xmp.video.MediaCreateDate",
+                        QString::number(s_secondsSinceJanuary1904(dt)));
     }
 
     // --------------
@@ -946,66 +678,58 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // GPS info as string. ex: "+44.8511-000.6229/"
     // Defined in ISO 6709:2008.
 
-    tagsLst.clear();
-    tagsLst << QLatin1String("location")
-            << QLatin1String("com.apple.quicktime.location.ISO6709");
+    data = s_setXmpTagStringFromEntry(this, 
+               QStringList() << QLatin1String("location")
+                             << QLatin1String("com.apple.quicktime.location.ISO6709"),
+               rmeta,
+               "Xmp.video.GPSCoordinates");
 
-    foreach (QString tags, tagsLst)
+    if (!data.isEmpty())
     {
-        it = rmeta.find(tags);
+        // Backport location in Exif.
+        data.remove(QLatin1Char('/'));
+        QLatin1Char sep  = QLatin1Char('+');
 
-        if (it != rmeta.end())
+        int index        = data.indexOf(sep, 1);
+
+        if (index == -1)
         {
-            QString data     = it.value();
-            setXmpTagString("Xmp.video.GPSCoordinates", data);
+            sep   = QLatin1Char('-');
+            index = data.indexOf(sep, 1);
+        }
 
-            // Backport location in Exif.
-            data.remove(QLatin1Char('/'));
-            QLatin1Char sep  = QLatin1Char('+');
+        QString lng      = data.right(data.length() - index);
+        QString lat      = data.left(index);
 
-            int index        = data.indexOf(sep, 1);
+        //qCDebug(DIGIKAM_METAENGINE_LOG) << lat << lng;
 
-            if (index == -1)
-            {
-                sep   = QLatin1Char('-');
-                index = data.indexOf(sep, 1);
-            }
+        bool b1          = false;
+        bool b2          = false;
+        double lattitude = lat.toDouble(&b1);
+        double longitude = lng.toDouble(&b2);
+        double* alt      = 0;
 
-            QString lng      = data.right(data.length() - index);
-            QString lat      = data.left(index);
+        if (b1 && b2)
+        {
+            setGPSInfo(alt, lattitude, longitude);
 
-            //qCDebug(DIGIKAM_METAENGINE_LOG) << lat << lng;
+            setXmpTagString("Xmp.video.GPSLatitude",
+                            getXmpTagString("Xmp.exif.GPSLatitude"));
+            setXmpTagString("Xmp.video.GPSLongitude",
+                            getXmpTagString("Xmp.exif.GPSLongitude"));
+            setXmpTagString("Xmp.video.GPSMapDatum",
+                            getXmpTagString("Xmp.exif.GPSMapDatum"));
+            setXmpTagString("Xmp.video.GPSVersionID",
+                            getXmpTagString("Xmp.exif.GPSVersionID"));
 
-            bool b1          = false;
-            bool b2          = false;
-            double lattitude = lat.toDouble(&b1);
-            double longitude = lng.toDouble(&b2);
-            double* alt      = 0;
-
-            if (b1 && b2)
-            {
-                setGPSInfo(alt, lattitude, longitude);
-
-                setXmpTagString("Xmp.video.GPSLatitude",
-                                getXmpTagString("Xmp.exif.GPSLatitude"));
-                setXmpTagString("Xmp.video.GPSLongitude",
-                                getXmpTagString("Xmp.exif.GPSLongitude"));
-                setXmpTagString("Xmp.video.GPSMapDatum",
-                                getXmpTagString("Xmp.exif.GPSMapDatum"));
-                setXmpTagString("Xmp.video.GPSVersionID",
-                                getXmpTagString("Xmp.exif.GPSVersionID"));
-
-                setXmpTagString("Xmp.exif.GPSLatitude",
-                                getXmpTagString("Xmp.exif.GPSLatitude"));
-                setXmpTagString("Xmp.exif.GPSLongitude",
-                                getXmpTagString("Xmp.exif.GPSLongitude"));
-                setXmpTagString("Xmp.exif.GPSMapDatum",
-                                getXmpTagString("Xmp.exif.GPSMapDatum"));
-                setXmpTagString("Xmp.exif.GPSVersionID",
-                                getXmpTagString("Xmp.exif.GPSVersionID"));
-            }
-            
-            break;
+            setXmpTagString("Xmp.exif.GPSLatitude",
+                            getXmpTagString("Xmp.exif.GPSLatitude"));
+            setXmpTagString("Xmp.exif.GPSLongitude",
+                            getXmpTagString("Xmp.exif.GPSLongitude"));
+            setXmpTagString("Xmp.exif.GPSMapDatum",
+                            getXmpTagString("Xmp.exif.GPSMapDatum"));
+            setXmpTagString("Xmp.exif.GPSVersionID",
+                            getXmpTagString("Xmp.exif.GPSVersionID"));
         }
     }
 
