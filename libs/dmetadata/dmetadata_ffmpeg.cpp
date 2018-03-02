@@ -262,6 +262,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             setXmpTagString("Xmp.video.Width",             QString::number(codec->width));
             setXmpTagString("Xmp.video.Height",            QString::number(codec->height));
+            setXmpTagString("Xmp.video.FrameWidth",        QString::number(codec->width));
+            setXmpTagString("Xmp.video.FrameHeight",       QString::number(codec->height));
+            setXmpTagString("Xmp.video.FrameSize",         QString::fromLatin1("w:%1, h:%2, unit:pixels").arg(codec->width).arg(codec->height));
             setXmpTagString("Xmp.video.SourceImageWidth",  QString::number(codec->width));
             setXmpTagString("Xmp.video.SourceImageHeight", QString::number(codec->height));
 
