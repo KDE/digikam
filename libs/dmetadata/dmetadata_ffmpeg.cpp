@@ -164,8 +164,6 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         return false;
     }
 
-    int totalSecs = fmt_ctx->duration / AV_TIME_BASE;
-    int bitrate   = fmt_ctx->bit_rate;
     QString data;
 
     QFileInfo fi(filePath);
@@ -173,13 +171,14 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     setXmpTagString("Xmp.video.FileSize",    QString::number(fi.size() / (1024*1024)));
     setXmpTagString("Xmp.video.FileType",    fi.suffix());
     setXmpTagString("Xmp.video.MimeType",    QMimeDatabase().mimeTypeForFile(filePath).name());
-    setXmpTagString("Xmp.video.Duration",    QString::number(totalSecs));
-    setXmpTagString("Xmp.video.MaxBitRate",  QString::number(bitrate));
+    setXmpTagString("Xmp.video.Duration",    QString::number((int)1000.0*(double)fmt_ctx->duration / (double)AV_TIME_BASE));
+    setXmpTagString("Xmp.video.MaxBitRate",  QString::number(fmt_ctx->bit_rate));
     setXmpTagString("Xmp.video.StreamCount", QString::number(fmt_ctx->nb_streams));
 
-    // To only register one video and one audio stream in XMP metadata.
+    // To only register one video, one audio stream, and one subtitle stream in XMP metadata.
     bool vstream = false;
     bool astream = false;
+    bool sstream = false;
 
     for (uint i = 0 ; i < fmt_ctx->nb_streams ; i++)
     {
@@ -351,6 +350,42 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                                        QStringList() << QLatin1String("handler_name"),
                                        vmeta,
                                        "Xmp.video.HandlerDescription");
+        }
+
+        // -----------------------------------------
+        // Subtitle stream parsing
+        // -----------------------------------------
+
+        if (!sstream && codec->codec_type == AVMEDIA_TYPE_SUBTITLE)
+        {
+            sstream           = true;
+            const char* cname = avcodec_get_name(codec->codec_id); 
+
+            setXmpTagString("Xmp.video.SubTCodec", QString::fromUtf8(cname));
+            setXmpTagString("Xmp.video.SubTCodecInfo", QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name));
+
+            // -----------------------------------------
+
+            MetaDataMap smeta = s_extractFFMpegMetadataEntriesFromDictionary(stream->metadata);
+
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "-- FFMpeg subtitle stream metadata entries :";
+            qCDebug(DIGIKAM_METAENGINE_LOG) << smeta;
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "--------------------------------------------";
+
+            // --------------
+            
+            s_setXmpTagStringFromEntry(this, 
+                                       QStringList() << QLatin1String("subtitle")
+                                                     << QLatin1String("title"),
+                                       smeta,
+                                       "Xmp.video.Subtitle");
+
+            // --------------
+
+            s_setXmpTagStringFromEntry(this, 
+                                       QStringList() << QLatin1String("language"),
+                                       smeta,
+                                       "Xmp.video.SubTLang");
         }
     }
 
@@ -548,13 +583,6 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                                QStringList() << QLatin1String("encoder"),
                                rmeta,
                                "Xmp.video.Encoder");
-
-    // --------------
-
-    s_setXmpTagStringFromEntry(this, 
-                               QStringList() << QLatin1String("subtitle"),
-                               rmeta,
-                               "Xmp.video.Subtitle");
 
     // --------------
 
