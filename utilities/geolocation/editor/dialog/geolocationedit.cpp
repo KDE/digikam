@@ -270,7 +270,6 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel,
     setAttribute(Qt::WA_DeleteOnClose, true);
     setWindowTitle(i18n("Geolocation Editor"));
     setMinimumSize(300, 400);
-    resize(800, 600);
 
     d->iface          = iface;
     d->imageModel     = new GPSImageModel(this);
@@ -658,6 +657,7 @@ void GeolocationEdit::readSettings()
     const KConfigGroup groupDialog = KConfigGroup(&group, "Dialog");
 
     winId();
+    windowHandle()->resize(800, 600);
     DXmlGuiWindow::restoreWindowSize(windowHandle(), groupDialog);
     resize(windowHandle()->size());
 
