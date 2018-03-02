@@ -166,7 +166,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     int totalSecs = fmt_ctx->duration / AV_TIME_BASE;
     int bitrate   = fmt_ctx->bit_rate;
-    MetaDataMap::const_iterator it;
+    QString data;
 
     QFileInfo fi(filePath);
     setXmpTagString("Xmp.video.FileName",    fi.fileName());
@@ -186,6 +186,10 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         const AVStream* const stream   = fmt_ctx->streams[i];
         AVCodecParameters* const codec = stream->codecpar;
 
+        // -----------------------------------------
+        // Audio stream parsing
+        // -----------------------------------------
+        
         if (!astream && codec->codec_type == AVMEDIA_TYPE_AUDIO)
         {
             astream           = true;
@@ -207,24 +211,35 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             // --------------
 
-            it = ameta.find(QLatin1String("language"));
-
-            if (it != ameta.end())
-            {
-                setXmpTagString("Xmp.audio.TrackLang", it.value());
-            }
+            s_setXmpTagStringFromEntry(this, 
+                                       QStringList() << QLatin1String("language"),
+                                       ameta,
+                                       "Xmp.audio.TrackLang");
 
             // --------------
 
-            it = ameta.find(QLatin1String("creation_time"));
+            data = s_setXmpTagStringFromEntry(this, 
+                                              QStringList() << QLatin1String("creation_time"),
+                                              ameta);
 
-            if (it != ameta.end())
+            if (!data.isEmpty())
             {
-                QDateTime dt = QDateTime::fromString(it.value(), Qt::ISODate);
+                QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
                 setXmpTagString("Xmp.audio.TrackCreateDate",
                                 QString::number(s_secondsSinceJanuary1904(dt)));
             }
+            
+            // --------------
+
+            s_setXmpTagStringFromEntry(this, 
+                                       QStringList() << QLatin1String("handler_name"),
+                                       ameta,
+                                       "Xmp.audio.HandlerDescription");
         }
+
+        // -----------------------------------------
+        // Video stream parsing
+        // -----------------------------------------
 
         if (!vstream && codec->codec_type == AVMEDIA_TYPE_VIDEO)
         {
@@ -261,7 +276,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             setXmpTagString("Xmp.video.PixelDepth",  QString::number(codec->bits_per_coded_sample));
 
-            // ----------------------------
+            // -----------------------------------------
 
             MetaDataMap vmeta = s_extractFFMpegMetadataEntriesFromDictionary(stream->metadata);
 
@@ -271,12 +286,14 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             // --------------
 
-            it = vmeta.find(QLatin1String("rotate"));
+            data = s_setXmpTagStringFromEntry(this, 
+                                              QStringList() << QLatin1String("rotate"),
+                                              vmeta);
 
-            if (it != vmeta.end())
+            if (!data.isEmpty())
             {
                 bool b               = false;
-                int val              = it.value().toInt(&b);
+                int val              = data.toInt(&b);
                 ImageOrientation ori = ORIENTATION_UNSPECIFIED;
 
                 if (b)
@@ -307,29 +324,37 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             // --------------
 
-            it = vmeta.find(QLatin1String("language"));
+            s_setXmpTagStringFromEntry(this, 
+                                       QStringList() << QLatin1String("language"),
+                                       vmeta,
+                                       "Xmp.video.Language");
 
-            if (it != vmeta.end())
+            // --------------
+
+            data = s_setXmpTagStringFromEntry(this, 
+                                              QStringList() << QLatin1String("creation_time"),
+                                              vmeta);
+
+            if (!data.isEmpty())
             {
-                setXmpTagString("Xmp.video.Language", it.value());
+                QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+                setXmpTagString("Xmp.video.TrackCreateDate",
+                                QString::number(s_secondsSinceJanuary1904(dt)));
             }
 
             // --------------
 
-            it = vmeta.find(QLatin1String("creation_time"));
-
-            if (it != vmeta.end())
-            {
-                QDateTime dt = QDateTime::fromString(it.value(), Qt::ISODate);
-                setXmpTagString("Xmp.video.TrackCreateDate",
-                                QString::number(s_secondsSinceJanuary1904(dt)));
-            }
+            s_setXmpTagStringFromEntry(this, 
+                                       QStringList() << QLatin1String("handler_name"),
+                                       vmeta,
+                                       "Xmp.video.HandlerDescription");
         }
     }
 
-    // ----------------------------
+    // -----------------------------------------
+    // Root container parsing
+    // -----------------------------------------
 
-    QString data;
     MetaDataMap rmeta = s_extractFFMpegMetadataEntriesFromDictionary(fmt_ctx->metadata);
 
     qCDebug(DIGIKAM_METAENGINE_LOG) << "-- FFMpeg root container metadata entries :";
@@ -364,6 +389,27 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     host_computer
     warning
 */
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("major_brand"),
+                               rmeta,
+                               "Xmp.video.MajorBrand");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("compatible_brands"),
+                               rmeta,
+                               "Xmp.video.CompatibleBrands");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("minor_version"),
+                               rmeta,
+                               "Xmp.video.MinorVersion");
 
     // --------------
 
@@ -406,7 +452,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     s_setXmpTagStringFromEntry(this, 
                                QStringList() << QLatin1String("premiere_version")
-                                             << QLatin1String("quicktime_version"),
+                                             << QLatin1String("quicktime_version")
+                                             << QLatin1String("com.apple.quicktime.software"),
                                rmeta,
                                "Xmp.video.SoftwareVersion");
 
@@ -424,6 +471,13 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                                rmeta,
                                "Xmp.video.Composer");
 
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("com.apple.quicktime.displayname"),
+                               rmeta,
+                               "Xmp.video.Name");
+    
     // --------------
 
     s_setXmpTagStringFromEntry(this, 
