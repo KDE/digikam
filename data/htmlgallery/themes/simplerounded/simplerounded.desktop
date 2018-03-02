@@ -109,6 +109,7 @@ Name[sv]=Bilder per sida
 Name[tr]=Sayfa başına resim
 Name[uk]=Кількість зображень на сторінку
 Name[x-test]=xxImages per pagexx
+Name[zh_CN]=每页的图像
 Type=int
 Default= 15
 Min=1
@@ -275,6 +276,7 @@ Name[sv]=Miniatyrbildskant
 Name[tr]=Küçük resim kenarlığı
 Name[uk]=Рамка мініатюр
 Name[x-test]=xxThumbnail borderxx
+Name[zh_CN]=缩略图边框
 Type=color
 Default=#41696d
 

@@ -104,6 +104,7 @@ Name[sv]=Introduktion till Galleri
 Name[tr]=Galeri Tanıtımı
 Name[uk]=Вступ до галереї
 Name[x-test]=xxGallery Introductionxx
+Name[zh_CN]=相册介绍
 Type=string
 Default=Title of my web gallery
 

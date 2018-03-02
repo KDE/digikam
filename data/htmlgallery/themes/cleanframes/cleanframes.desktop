@@ -20,6 +20,7 @@ Name[sv]=Rena ramar
 Name[tr]=Çerçeveleri Temizle
 Name[uk]=Чіткі рамки
 Name[x-test]=xxClean Framesxx
+Name[zh_CN]=简洁边框
 Comment=A frame theme based on Ruediger Bente's frame theme
 Comment[ca]=Un tema de marcs basat en el tema de marcs del Ruediger Bente
 Comment[ca@valencia]=Un tema de marcs basat en el tema de marcs del Ruediger Bente
@@ -41,6 +42,7 @@ Comment[sv]=Ett ramtema baserat på Ruediger Bentes ramtema.
 Comment[tr]=Ruediger Bente'nin çerçeve teması tabanlı bir çerçeve temeası
 Comment[uk]=Тема рамок на основі теми Ruediger Bente
 Comment[x-test]=xxA frame theme based on Ruediger Bente's frame themexx
+Comment[zh_CN]=基于 Ruediger Bente 边框主题的边框主题
 
 [X-HTMLExport Author]
 Name=Elizabeth Marmorstein
@@ -88,6 +90,7 @@ Name[sv]=Rena ramar
 Name[tr]=Çerçeveleri Temizle
 Name[uk]=Чіткі рамки
 Name[x-test]=xxClean Framesxx
+Name[zh_CN]=简洁边框
 Url=preview.png
 
 [X-HTMLExport Parameter style]
