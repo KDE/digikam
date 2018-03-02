@@ -794,34 +794,62 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                "Xmp.video.GPSCoordinates");
 
     if (!data.isEmpty())
-    {
-        // Backport location in Exif.
-        data.remove(QLatin1Char('/'));
-        QLatin1Char sep  = QLatin1Char('+');
+    {        
+        QList<int> digits;
 
-        int index        = data.indexOf(sep, 1);
-
-        if (index == -1)
+        for (int i = 0 ; i < data.length() ; i++)
         {
-            sep   = QLatin1Char('-');
-            index = data.indexOf(sep, 1);
+            QChar c = data[i];
+            
+            if (c == QLatin1Char('+') || c == QLatin1Char('-') || c == QLatin1Char('/'))
+            {
+                digits << i;
+            }
         }
-
-        QString lng      = data.right(data.length() - index);
-        QString lat      = data.left(index);
-
-        //qCDebug(DIGIKAM_METAENGINE_LOG) << lat << lng;
-
+        
+        QString coord;
+        double lattitude = 0.0;
+        double longitude = 0.0;
+        double altitude  = 0.0;
         bool b1          = false;
         bool b2          = false;
-        double lattitude = lat.toDouble(&b1);
-        double longitude = lng.toDouble(&b2);
-        double* alt      = 0;
+        bool b3          = false;
+        
+        if (digits.size() > 1)
+        {
+            coord     = data.mid(digits[0], digits[1] - digits[0]);
+            lattitude = coord.toDouble(&b1);
+        }
+
+        if (digits.size() > 2)
+        {
+            coord     = data.mid(digits[1], digits[2] - digits[1]);
+            longitude = coord.toDouble(&b2);
+        }
+        
+        if (digits.size() > 3)
+        {
+            coord    = data.mid(digits[2], digits[3] - digits[2]);
+            altitude = coord.toDouble(&b3);
+        }
 
         if (b1 && b2)
         {
-            setGPSInfo(alt, lattitude, longitude);
-
+            if (b3)
+            {
+                setGPSInfo(altitude, lattitude, longitude);
+                
+                setXmpTagString("Xmp.video.GPSAltitude",
+                                getXmpTagString("Xmp.exif.GPSAltitude"));
+                setXmpTagString("Xmp.exif.GPSAltitude",
+                                getXmpTagString("Xmp.exif.GPSAltitude"));
+            }
+            else
+            {
+                double* alt = 0;
+                setGPSInfo(alt, lattitude, longitude);
+            }
+            
             setXmpTagString("Xmp.video.GPSLatitude",
                             getXmpTagString("Xmp.exif.GPSLatitude"));
             setXmpTagString("Xmp.video.GPSLongitude",
