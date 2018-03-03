@@ -118,4 +118,5 @@ BUGFIXES FROM BUGZILLA:
 105 ==> 351689 - Crash on opening digiKam.
 106 ==> 149267 - digiKam crashes after finding avi and so on.
 107 ==> 170387 - Add movies management.
-108 ==> 
+108 ==> 369629 - digiKam does not use GPS data from video files.
+109 ==> 
