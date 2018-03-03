@@ -33,4 +33,5 @@ BUGFIXES FROM BUGZILLA:
 024 ==> 390162 - digiKam-5.9.0 appimage fail to start.
 025 ==> 384853 - Ungrouping images is not working.
 026 ==> 390902 - Right sidebar icons not displayed.
-027 ==> 
+027 ==> 391312 - Rename with time template can add colons (:) forbidden character in Windows 10.
+028 ==> 
