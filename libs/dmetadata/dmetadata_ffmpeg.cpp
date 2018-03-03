@@ -5,7 +5,7 @@
  *
  * Date        : 2018-02-26
  * Description : metadata extraction with ffmpeg (libav)
- * 
+ *
  * References  :
  *
  * FFMpeg metadata review: https://wiki.multimedia.cx/index.php?title=FFmpeg_Metadata
@@ -13,7 +13,7 @@
  * Exiv2 XMP video       : https://github.com/Exiv2/exiv2/blob/master/src/properties.cpp#L1331
  * Apple metadata desc   : https://developer.apple.com/library/content/documentation/QuickTime/QTFF/Metadata/Metadata.html
  * FFMpeg metadata writer: https://github.com/kritzikratzi/ofxAvCodec/blob/master/src/ofxAvUtils.cpp#L61
- * 
+ *
  * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -798,6 +798,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // GPS info as string. ex: "+44.8511-000.6229/"
     // Defined in ISO 6709:2008.
+    // Notes: altitude can be passed as 3rd values.
+    //        each value is separated from others by '-' or '+'.
+    //        '/' is always the terminaison character.
 
     data = s_setXmpTagStringFromEntry(this,
                QStringList() << QLatin1String("location")
@@ -806,19 +809,21 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                "Xmp.video.GPSCoordinates");
 
     if (!data.isEmpty())
-    {        
+    {
+        // Backport location to Exif.
+
         QList<int> digits;
 
         for (int i = 0 ; i < data.length() ; i++)
         {
             QChar c = data[i];
-            
+
             if (c == QLatin1Char('+') || c == QLatin1Char('-') || c == QLatin1Char('/'))
             {
                 digits << i;
             }
         }
-        
+
         QString coord;
         double lattitude = 0.0;
         double longitude = 0.0;
@@ -826,7 +831,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         bool b1          = false;
         bool b2          = false;
         bool b3          = false;
-        
+
         if (digits.size() > 1)
         {
             coord     = data.mid(digits[0], digits[1] - digits[0]);
@@ -838,7 +843,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             coord     = data.mid(digits[1], digits[2] - digits[1]);
             longitude = coord.toDouble(&b2);
         }
-        
+
         if (digits.size() > 3)
         {
             coord    = data.mid(digits[2], digits[3] - digits[2]);
@@ -849,8 +854,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         {
             if (b3)
             {
+                // All GPS values are available.
                 setGPSInfo(altitude, lattitude, longitude);
-                
+
                 setXmpTagString("Xmp.video.GPSAltitude",
                                 getXmpTagString("Xmp.exif.GPSAltitude"));
                 setXmpTagString("Xmp.exif.GPSAltitude",
@@ -858,10 +864,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             }
             else
             {
+                // No altitude available.
                 double* alt = 0;
                 setGPSInfo(alt, lattitude, longitude);
             }
-            
+
             setXmpTagString("Xmp.video.GPSLatitude",
                             getXmpTagString("Xmp.exif.GPSLatitude"));
             setXmpTagString("Xmp.video.GPSLongitude",
