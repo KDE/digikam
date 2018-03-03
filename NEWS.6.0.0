@@ -116,4 +116,6 @@ BUGFIXES FROM BUGZILLA:
 103 ==> 367691 - Searching for pictures crashes at 30% every time.
 104 ==> 334604 - Crash after changing disk partions.
 105 ==> 351689 - Crash on opening digiKam.
-106 ==> 
+106 ==> 149267 - digiKam crashes after finding avi and so on.
+107 ==> 
+
