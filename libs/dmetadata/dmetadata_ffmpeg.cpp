@@ -522,7 +522,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("firmware"),
+                               QStringList() << QLatin1String("firmware")
+                                             << QLatin1String("com.apple.proapps.serialno"),
                                rmeta,
                                "Xmp.video.FirmwareVersion");
 
@@ -611,14 +612,23 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("original_source"),
+                               QStringList() << QLatin1String("com.apple.proapps.clipID"),
                                rmeta,
-                               "Xmp.video.SourceCredits");
+                               "Xmp.video.FileID");
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("original_format"),
+                               QStringList() << QLatin1String("original_source")
+                                             << QLatin1String("com.apple.proapps.cameraName"),
+                               rmeta,
+                               "Xmp.video.Source");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this,
+                               QStringList() << QLatin1String("original_format")
+                                             << QLatin1String("com.apple.proapps.originalFormat"),
                                rmeta,
                                "Xmp.video.Format");
 
@@ -645,14 +655,16 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("make"),
+                               QStringList() << QLatin1String("make")
+                                             << QLatin1String("com.apple.quicktime.make"),
                                rmeta,
                                "Xmp.video.Make");
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("model"),
+                               QStringList() << QLatin1String("model")
+                                             << QLatin1String("com.apple.quicktime.model"),
                                rmeta,
                                "Xmp.video.Model");
 
