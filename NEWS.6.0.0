@@ -117,5 +117,5 @@ BUGFIXES FROM BUGZILLA:
 104 ==> 334604 - Crash after changing disk partions.
 105 ==> 351689 - Crash on opening digiKam.
 106 ==> 149267 - digiKam crashes after finding avi and so on.
-107 ==> 
-
+107 ==> 170387 - Add movies management.
+108 ==> 
