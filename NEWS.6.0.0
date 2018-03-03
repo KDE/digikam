@@ -119,4 +119,5 @@ BUGFIXES FROM BUGZILLA:
 106 ==> 149267 - digiKam crashes after finding avi and so on.
 107 ==> 170387 - Add movies management.
 108 ==> 369629 - digiKam does not use GPS data from video files.
-109 ==> 
+109 ==> 367880 - Nexus 5X videos show up upside-down in digiKam.
+110 ==> 
