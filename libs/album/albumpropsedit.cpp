@@ -51,6 +51,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "dlayoutbox.h"
 #include "coredb.h"
 #include "album.h"
@@ -155,7 +156,12 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     d->titleEdit->setClearButtonEnabled(true);
     titleLabel->setBuddy(d->titleEdit);
 
+#ifdef Q_OS_WIN
+    QRegExp titleRx(QLatin1String("[^/:]+"));
+#else
     QRegExp titleRx(QLatin1String("[^/]+"));
+#endif
+
     QValidator* const titleValidator = new QRegExpValidator(titleRx, this);
     d->titleEdit->setValidator(titleValidator);
     d->titleEdit->setPlaceholderText(i18n("Enter album title here..."));
