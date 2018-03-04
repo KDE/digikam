@@ -90,7 +90,7 @@ void DMetadata::setSettings(const MetadataSettingsContainer& settings)
 bool DMetadata::load(const QString& filePath)
 {
     // In first, we trying to get metadata using Exiv2,
-    // else we will use Raw engine to extract minimal information.
+    // else we will use other engine to extract minimal information.
 
     FileReadLocker lock(filePath);
 
@@ -550,14 +550,15 @@ CaptionsMap DMetadata::getImageTitles() const
     if (getFilePath().isEmpty())
         return CaptionsMap();
 
-    CaptionsMap        captionsMap;
+    CaptionsMap            captionsMap;
     MetaEngine::AltLangMap authorsMap;
     MetaEngine::AltLangMap datesMap;
     MetaEngine::AltLangMap titlesMap;
-    QString            commonAuthor;
+    QString                commonAuthor;
 
     // Get author name from IPTC DescriptionWriter. Private namespace above gets precedence.
     QVariant descriptionWriter = getMetadataField(MetadataInfo::DescriptionWriter);
+
     if (!descriptionWriter.isNull())
         commonAuthor = descriptionWriter.toString();
 
@@ -566,6 +567,7 @@ CaptionsMap DMetadata::getImageTitles() const
     if (hasXmp())
     {
         titlesMap = getXmpTagStringListLangAlt("Xmp.dc.title", false);
+
         if (!titlesMap.isEmpty())
         {
             captionsMap.setData(titlesMap, authorsMap, commonAuthor, datesMap);
@@ -573,6 +575,7 @@ CaptionsMap DMetadata::getImageTitles() const
         }
 
         QString xmpTitle = getXmpTagString("Xmp.acdsee.caption" ,false);
+
         if (!xmpTitle.isEmpty() && !xmpTitle.trimmed().isEmpty())
         {
             titlesMap.insert(QLatin1String("x-default"), xmpTitle);
@@ -586,6 +589,7 @@ CaptionsMap DMetadata::getImageTitles() const
     if (hasIptc())
     {
         QString iptcTitle = getIptcTagString("Iptc.Application2.ObjectName", false);
+
         if (!iptcTitle.isEmpty() && !iptcTitle.trimmed().isEmpty())
         {
             titlesMap.insert(QLatin1String("x-default"), iptcTitle);
@@ -698,7 +702,7 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
         if (!value.isEmpty())
         {
             bool ok = false;
-            rating = value.toLong(&ok);
+            rating  = value.toLong(&ok);
 
             if (!ok)
             {
@@ -710,11 +714,11 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
 
         // Exact value was not found,but rating is in range,
         // so we try to aproximate it
-        if (index == -1
-                && rating > entry.convertRatio.first()
-                && rating < entry.convertRatio.last())
+        if ((index == -1)                         &&
+            (rating > entry.convertRatio.first()) &&
+            (rating < entry.convertRatio.last()))
         {
-            for (int i = 0; i < entry.convertRatio.size(); i++)
+            for (int i = 0 ; i < entry.convertRatio.size() ; i++)
             {
                 if (rating > entry.convertRatio.at(i))
                 {
@@ -3364,7 +3368,7 @@ bool DMetadata::removeExifTags(const QStringList& tagFilters)
     if (m.isEmpty())
         return false;
 
-    for (MetaDataMap::iterator it = m.begin(); it != m.end(); ++it)
+    for (MetaDataMap::iterator it = m.begin() ; it != m.end() ; ++it)
     {
         removeExifTag(it.key().toLatin1().constData());
     }
@@ -3379,7 +3383,7 @@ bool DMetadata::removeIptcTags(const QStringList& tagFilters)
     if (m.isEmpty())
         return false;
 
-    for (MetaDataMap::iterator it = m.begin(); it != m.end(); ++it)
+    for (MetaDataMap::iterator it = m.begin() ; it != m.end() ; ++it)
     {
         removeIptcTag(it.key().toLatin1().constData());
     }
@@ -3394,7 +3398,7 @@ bool DMetadata::removeXmpTags(const QStringList& tagFilters)
     if (m.isEmpty())
         return false;
 
-    for (MetaDataMap::iterator it = m.begin(); it != m.end(); ++it)
+    for (MetaDataMap::iterator it = m.begin() ; it != m.end() ; ++it)
     {
         removeXmpTag(it.key().toLatin1().constData());
     }
