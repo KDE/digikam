@@ -734,12 +734,12 @@ void ImagePropertiesTab::setVideoDuration(const QString& str)
     // use string given as parameter by default because it contains the value for "unavailable" if needed
     QString durationString = str;
     bool ok;
-    const double durationDouble = str.toDouble(&ok);
+    const int durationVal = str.toInt(&ok);
 
     if (ok)
     {
-        const QTime durationTime = QTime().addMSecs(durationDouble);
-        durationString = QLocale().toString(durationTime, QLocale::ShortFormat);
+        const QTime durationTime = QTime().addMSecs(durationVal);
+        durationString           = QLocale().toString(durationTime, QLocale::ShortFormat);
     }
 
     d->labelVideoDuration->setAdjustedText(durationString);
