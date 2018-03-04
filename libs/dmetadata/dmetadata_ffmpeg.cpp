@@ -12,6 +12,7 @@
  * FFMpeg MP4 parser     : https://github.com/FFmpeg/FFmpeg/blob/master/libavformat/mov.c#L298
  * Exiv2 XMP video       : https://github.com/Exiv2/exiv2/blob/master/src/properties.cpp#L1331
  * Apple metadata desc   : https://developer.apple.com/library/content/documentation/QuickTime/QTFF/Metadata/Metadata.html
+ * Matroska metadata desc: https://matroska.org/technical/specs/tagging/index.html
  * FFMpeg metadata writer: https://github.com/kritzikratzi/ofxAvCodec/blob/master/src/ofxAvUtils.cpp#L61
  *
  * Copyright (C) 2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -82,8 +83,12 @@ QString s_setXmpTagStringFromEntry(DMetadata* const meta,
 
         if (it != map.end())
         {
-            if (xmpTag)
+            if (meta   &&                               // Protection.
+                xmpTag &&                               // If xmp tag is null, we only return the matching value from the map.
+                meta->getXmpTagString(xmpTag).isNull()) // Only register the tag value if it doesn't exists yet.
+            {
                 meta->setXmpTagString(xmpTag, it.value());
+            }
 
             return it.value();
         }
@@ -356,7 +361,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             // --------------
 
             data = s_setXmpTagStringFromEntry(this,
-                                              QStringList() << QLatin1String("creation_time"),
+                                              QStringList() << QLatin1String("creation_time")
+                                                            << QLatin1String("_STATISTICS_WRITING_DATE_UTC"), // MKV
                                               vmeta);
 
             if (!data.isEmpty())
@@ -372,6 +378,13 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                                        QStringList() << QLatin1String("handler_name"),
                                        vmeta,
                                        "Xmp.video.HandlerDescription");
+            
+            // --------------
+            
+            s_setXmpTagStringFromEntry(this,
+                                       QStringList() << QLatin1String("_STATISTICS_WRITING_APP"), // MKV (in video stream, not root container)
+                                       vmeta,
+                                       "Xmp.video.SoftwareVersion");
         }
 
         // -----------------------------------------
@@ -424,35 +437,6 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     qCDebug(DIGIKAM_METAENGINE_LOG) << "------------------------------------------";
 
     // ----------------------------
-
-/* TODO :
-    account_type
-    account_id
-    compilation
-    disc
-    episode_uid
-    hd_video
-    podcast
-    gapless_playback
-    purchase_date
-    sort_album_artist
-    sort_album
-    sort_artist
-    sort_composer
-    sort_name
-    sort_show
-    episode_id
-    episode_sort
-    network
-    show
-    season_number
-    chapter
-    disclaimer
-    host_computer
-    warning
-*/
-
-    // --------------
 
     s_setXmpTagStringFromEntry(this,
                                QStringList() << QLatin1String("major_brand"),
