@@ -122,4 +122,7 @@ BUGFIXES FROM BUGZILLA:
 109 ==> 367880 - Nexus 5X videos show up upside-down in digiKam.
 110 ==> 330116 - digiKam does not take care about GPS info stored in MP4 video files.
 111 ==> 339150 - digikam crashes when trying to display video file.
-112 ==>
+112 ==> 344406 - Crash at start.
+113 ==> 339909 - digiKam Segmentation Fault on open.
+114 ==> 343231 - Crash at scanning for new fotos.
+115 ==> 
