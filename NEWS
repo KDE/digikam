@@ -42,6 +42,5 @@ BUGFIXES FROM BUGZILLA:
 033 ==> 381586 - Crash after tagging ~5 images.
 034 ==> 339803 - digiKam crashes frequently on batch rename.
 035 ==> 346698 - Delete Duplicate on NAS - Crash.
-036 ==> 
-
-
+036 ==> 379420 - Showphoto crashed after resize.
+037 ==> 
