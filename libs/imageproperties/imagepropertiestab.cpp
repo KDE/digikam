@@ -738,8 +738,6 @@ void ImagePropertiesTab::setVideoDuration(const QString& str)
 
     if (ok)
     {
-        const QTime durationTime = QTime().a
-        durationString           = QLocale()
         unsigned int r, d, h, m, s, f;
         r = qAbs(durationVal);
         d = r / 86400000;
@@ -751,7 +749,7 @@ void ImagePropertiesTab::setVideoDuration(const QString& str)
         s = r / 1000;
         f = r % 1000;
 
-        durationString = QString().sprintf("
+        durationString = QString().sprintf("%d.%02d:%02d:%02d.%03d", d, h, m, s, f);
     }
 
     d->labelVideoDuration->setAdjustedText(durationString);
