@@ -181,33 +181,33 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     d->saveTagsBox      = new QCheckBox;
     d->saveTagsBox->setText(i18nc("@option:check", "Image tags"));
-    d->saveTagsBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image tags "
+    d->saveTagsBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the item tags "
                                        "in the XMP and IPTC tags."));
 
     d->saveCommentsBox  = new QCheckBox;
     d->saveCommentsBox->setText(i18nc("@option:check", "Captions and title"));
-    d->saveCommentsBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store image caption and title "
+    d->saveCommentsBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store item caption and title "
                                            "in the JFIF Comment section, the EXIF tag, the XMP tag, "
                                            "and the IPTC tag."));
 
     d->saveRatingBox    = new QCheckBox;
     d->saveRatingBox->setText(i18nc("@option:check", "Rating"));
-    d->saveRatingBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image rating "
+    d->saveRatingBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the item rating "
                                          "in the EXIF tag and the XMP tags."));
 
     d->savePickLabelBox = new QCheckBox;
     d->savePickLabelBox->setText(i18nc("@option:check", "Pick label"));
-    d->savePickLabelBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image pick label "
+    d->savePickLabelBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the item pick label "
                                             "in the XMP tags."));
 
     d->saveColorLabelBox = new QCheckBox;
     d->saveColorLabelBox->setText(i18nc("@option:check", "Color label"));
-    d->saveColorLabelBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image color label "
+    d->saveColorLabelBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the item color label "
                                              "in the XMP tags."));
 
     d->saveDateTimeBox   = new QCheckBox;
     d->saveDateTimeBox->setText(i18nc("@option:check", "Timestamps"));
-    d->saveDateTimeBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the image date and time "
+    d->saveDateTimeBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store the item date and time "
                                            "in the EXIF, XMP, and IPTC tags."));
 
     d->saveTemplateBox   = new QCheckBox;
@@ -467,8 +467,8 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->readFromBalooBox         = new QCheckBox;
     d->readFromBalooBox->setText(i18n("Read metadata from Baloo"));
     d->readFromBalooBox->setWhatsThis(i18n("Turn on this option if you want to apply changes to "
-                                             "rating, comments and tags made in Baloo to digiKam's metadata storage. "
-                                             "Please note that image metadata will not be edited automatically."));
+                                           "rating, comments and tags made in Baloo to digiKam's metadata storage. "
+                                           "Please note that image metadata will not be edited automatically."));
 
     gLayout3->addWidget(d->saveToBalooBox);
     gLayout3->addWidget(d->readFromBalooBox);
@@ -490,10 +490,10 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QString balootxt;
 
     balootxt.append(i18n("<p><a href='http://community.kde.org/Baloo'>Baloo</a> "
-                        "provides the basis to handle all kinds of metadata on the KDE desktop in a generic fashion. "
-                        "It allows you to tag, rate and comment your files in KDE applications like Dolphin.</p> "
-                        "<p>Please set here if you want to synchronize the metadata stored by digiKam desktop-wide with the "
-                        "Baloo Desktop Search.</p> "));
+                         "provides the basis to handle all kinds of metadata on the KDE desktop in a generic fashion. "
+                         "It allows you to tag, rate and comment your files in KDE applications like Dolphin.</p> "
+                         "<p>Please set here if you want to synchronize the metadata stored by digiKam desktop-wide with the "
+                         "Baloo Desktop Search.</p> "));
 
     balooExplanation->setText(balootxt);
 
@@ -542,7 +542,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->writeXMPSidecarBox->setEnabled(MetaEngine::supportXmp());
 
     d->writingModeCombo   = new QComboBox;
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), MetaEngine::WRITETOSIDECARONLY4READONLYFILES);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only item only"), MetaEngine::WRITETOSIDECARONLY4READONLYFILES);
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     MetaEngine::WRITETOSIDECARONLY);
     d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                MetaEngine::WRITETOSIDECARANDIMAGE);
     d->writingModeCombo->setToolTip(i18nc("@info:tooltip", "Specify the exact mode of XMP sidecar writing"));
