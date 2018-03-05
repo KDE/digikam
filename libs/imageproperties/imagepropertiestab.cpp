@@ -733,13 +733,25 @@ void ImagePropertiesTab::setVideoDuration(const QString& str)
     // duration is given as a string in milliseconds
     // use string given as parameter by default because it contains the value for "unavailable" if needed
     QString durationString = str;
-    bool ok;
-    const double durationDouble = str.toDouble(&ok);
+    bool ok                = false;
+    const int durationVal  = str.toInt(&ok);
 
     if (ok)
     {
-        const QTime durationTime = QTime().addMSecs(durationDouble);
-        durationString = QLocale().toString(durationTime, QLocale::ShortFormat);
+        const QTime durationTime = QTime().a
+        durationString           = QLocale()
+        unsigned int r, d, h, m, s, f;
+        r = qAbs(durationVal);
+        d = r / 86400000;
+        r = r % 86400000;
+        h = r / 3600000;
+        r = r % 3600000;
+        m = r / 60000;
+        r = r % 60000;
+        s = r / 1000;
+        f = r % 1000;
+
+        durationString = QString().sprintf("
     }
 
     d->labelVideoDuration->setAdjustedText(durationString);
@@ -754,7 +766,7 @@ void ImagePropertiesTab::setVideoFrameRate(const QString& str)
 
     if (ok)
     {
-        frameRateString = QLocale().toString(frameRateDouble);
+        frameRateString = QLocale().toString(frameRateDouble) + i18n(" fps");
     }
 
     d->labelVideoFrameRate->setAdjustedText(frameRateString);
