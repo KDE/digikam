@@ -34,4 +34,8 @@ BUGFIXES FROM BUGZILLA:
 025 ==> 384853 - Ungrouping images is not working.
 026 ==> 390902 - Right sidebar icons not displayed.
 027 ==> 391312 - Rename with time template can add colons (:) forbidden character in Windows 10.
-028 ==> 
+028 ==> 386921 - Import Sony video metadata from sidecar file.
+029 ==> 377133 - Multiple tags don't display in video metadata.
+030 ==> 389619 - digiKam does not read from sidecars for video/mp4.
+031 ==> 375570 - XMP sidecar files are not read for videos when importing metadata.
+032 ==> 
