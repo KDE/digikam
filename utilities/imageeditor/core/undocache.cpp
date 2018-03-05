@@ -74,7 +74,7 @@ UndoCache::UndoCache()
     // remove any remnants
     QDir dir(d->cacheDir);
 
-    foreach(const QFileInfo& info, dir.entryInfoList(QStringList() << (d->cachePrefix + QLatin1Char('*'))))
+    foreach(const QFileInfo& info, dir.entryInfoList(QStringList() << QLatin1String("undocache-*")))
     {
         QFile(info.filePath()).remove();
     }

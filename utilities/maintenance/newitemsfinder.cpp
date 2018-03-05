@@ -46,12 +46,16 @@ class NewItemsFinder::Private
 {
 public:
 
-    Private() :
-        mode(CompleteCollectionScan)
+    Private()
+        : mode(CompleteCollectionScan),
+          cancel(false)
     {
     }
 
     FinderMode  mode;
+
+    bool        cancel;
+
     QStringList foldersToScan;
     QStringList foldersScanned;
 };
@@ -122,6 +126,11 @@ void NewItemsFinder::slotStart()
 
             ScanController::instance()->completeCollectionScanInBackground(false);
 
+            if (d->cancel)
+            {
+                break;
+            }
+
             connect(ScanController::instance(), SIGNAL(completeScanDone()),
                     this, SLOT(slotDone()));
 
@@ -136,7 +145,14 @@ void NewItemsFinder::slotStart()
             d->foldersScanned.clear();
 
             foreach(const QString& folder, d->foldersToScan)
+            {
+                if (d->cancel)
+                {
+                    break;
+                }
+
                 ScanController::instance()->scheduleCollectionScan(folder);
+            }
 
             break;
         }
@@ -163,6 +179,8 @@ void NewItemsFinder::slotFilesScanned(int s)
 
 void NewItemsFinder::slotCancel()
 {
+    d->cancel = true;
+
     ScanController::instance()->cancelCompleteScan();
     MaintenanceTool::slotCancel();
 }

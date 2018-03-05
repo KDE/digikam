@@ -58,7 +58,7 @@ public:
     virtual ~DatabaseTask();
 
     void setMode(Mode mode);
-    void setMaintenanceData(MaintenanceData* data=0);
+    void setMaintenanceData(MaintenanceData* const data=0);
 
     void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false);
 
@@ -78,10 +78,6 @@ Q_SIGNALS:
      * Signal to emit the count of additional items to process.
      */
     void signalAddItemsToProcess(int count);
-
-public Q_SLOTS:
-
-    void slotCancel();
 
 protected:
 

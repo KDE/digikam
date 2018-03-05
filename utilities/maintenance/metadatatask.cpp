@@ -37,15 +37,13 @@ class MetadataTask::Private
 {
 public:
 
-    Private() :
-        cancel(false),
-        tagsOnly(false),
-        direction(MetadataSynchronizer::WriteFromDatabaseToFile),
-        data(0)
+    Private()
+        : tagsOnly(false),
+          direction(MetadataSynchronizer::WriteFromDatabaseToFile),
+          data(0)
     {
     }
 
-    bool                                cancel;
     bool                                tagsOnly;
 
     MetadataSynchronizer::SyncDirection direction;
@@ -63,7 +61,7 @@ MetadataTask::MetadataTask()
 
 MetadataTask::~MetadataTask()
 {
-    slotCancel();
+    cancel();
     delete d;
 }
 
@@ -77,14 +75,9 @@ void MetadataTask::setDirection(MetadataSynchronizer::SyncDirection dir)
     d->direction = dir;
 }
 
-void MetadataTask::setMaintenanceData(MaintenanceData* data)
+void MetadataTask::setMaintenanceData(MaintenanceData* const data)
 {
     d->data = data;
-}
-
-void MetadataTask::slotCancel()
-{
-    d->cancel = true;
 }
 
 void MetadataTask::run()
@@ -92,17 +85,17 @@ void MetadataTask::run()
     // While we have data (using this as check for non-null)
     while (d->data)
     {
+        if (m_cancel)
+        {
+            return;
+        }
+
         ImageInfo item = d->data->getImageInfo();
 
         // If the item is null, we are done.
         if (item.isNull())
         {
             break;
-        }
-
-        if (d->cancel)
-        {
-            return;
         }
 
         if (d->direction == MetadataSynchronizer::WriteFromDatabaseToFile)

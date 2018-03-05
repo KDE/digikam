@@ -837,10 +837,7 @@ void EditorWindow::setupStandardActions()
     m_calendarAction->setEnabled(false);
     m_sendByMailAction->setEnabled(false);
     m_printCreatorAction->setEnabled(false);
-
-#ifdef HAVE_KSANE
-    m_ksaneAction->setEnabled(false);
-#endif
+    m_mediaServerAction->setEnabled(false);
 
 #ifdef HAVE_MARBLE
     m_geolocationEditAction->setEnabled(false);
@@ -1420,10 +1417,7 @@ void EditorWindow::toggleStandardActions(bool val)
     m_expoBlendingAction->setEnabled(val);
     m_sendByMailAction->setEnabled(val);
     m_printCreatorAction->setEnabled(val);
-
-#ifdef HAVE_KSANE
-    m_ksaneAction->setEnabled(val);
-#endif
+    m_mediaServerAction->setEnabled(val);
 
 #ifdef HAVE_MARBLE
     m_geolocationEditAction->setEnabled(val);

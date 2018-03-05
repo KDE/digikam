@@ -3,7 +3,7 @@ digiKam 5.9.0 - Release date: 2018-02-25
 
 NEW FEATURES:
 
-General      : Libraw updated to last 0.18.7.
+General      : Libraw updated to last 0.18.8.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -25,5 +25,13 @@ BUGFIXES FROM BUGZILLA:
 016 ==> 389835 - Incorrect DateTime manipulation if timestamp is before unix epoch time.
 017 ==> 390121 - Thumbnail size is too small.
 018 ==> 390136 - digiKam crashes when launching scan and recognize faces.
-019 ==> 
-
+019 ==> 390325 - Segmentation fault - QMutex::lock().
+020 ==> 390443 - FAQ entry unaccurate - Thumbnail generation fails on video files.
+021 ==> 390529 - Import from scanner not enabled.
+022 ==> 390683 - Batch processing creates 0 byte files on Fujifilm RAF RAW images with lens correction.
+023 ==> 390688 - Show pick and color label in thumbnail list [patch].
+024 ==> 390162 - digiKam-5.9.0 appimage fail to start.
+025 ==> 384853 - Ungrouping images is not working.
+026 ==> 390902 - Right sidebar icons not displayed.
+027 ==> 391312 - Rename with time template can add colons (:) forbidden character in Windows 10.
+028 ==> 

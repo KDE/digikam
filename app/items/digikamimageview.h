@@ -71,9 +71,14 @@ Q_SIGNALS:
     void fullscreenRequested(const ImageInfo& info);
     void signalShowContextMenu(QContextMenuEvent* event,
                                const QList<QAction*>& actions = QList<QAction*>());
+
     void signalShowContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info,
                                      const QList<QAction*>& actions,
                                      ImageFilterModel* filterModel);
+
+    void signalShowGroupContextMenu(QContextMenuEvent* event,
+                                    const QList<ImageInfo>& selectedInfos,
+                                    ImageFilterModel* filterModel);
 
 protected Q_SLOTS:
 

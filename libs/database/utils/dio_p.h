@@ -24,9 +24,9 @@
 #ifndef _DIGIKAM_IO_P_H_
 #define _DIGIKAM_IO_P_H_
 
-// Local includes
+// Qt includes
 
-#include "workerobject.h"
+#include <QObject>
 
 namespace Digikam
 {
@@ -34,7 +34,7 @@ namespace Digikam
 class Album;
 class DIO;
 
-class DIO::Private : public WorkerObject
+class DIO::Private : public QObject
 {
     Q_OBJECT
 
@@ -42,27 +42,19 @@ public:
 
     explicit Private(DIO* const qq);
 
-    void albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest);
     void imagesToAlbum(int operation, const QList<ImageInfo>& ids, const PAlbum* const dest);
+    void albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest);
     void filesToAlbum(int operation, const QList<QUrl>& src, const PAlbum* const dest);
 
     void renameFile(const ImageInfo& info, const QString& newName);
-
     void deleteFiles(const QList<ImageInfo>& infos, bool useTrash);
-
-    bool directLocalFileMove(const QString& src, const QString& destPath);
-
-public Q_SLOTS:
 
     void processJob(int operation, const QList<QUrl>& src, const QUrl& dest);
     void processRename(const QUrl& src, const QUrl& dest);
 
 Q_SIGNALS:
 
-    void jobToProcess(int operation, const QList<QUrl>& src, const QUrl& dest);
-    void renameToProcess(const QUrl& src, const QUrl& dest);
     void jobToCreate(int operation, const QList<QUrl>& src, const QUrl& dest);
-    void remoteFilesToStat(int operation, const QList<QUrl>& srcToStat, const QUrl& dest);
 
 public:
 
@@ -70,9 +62,6 @@ public:
 };
 
 // -----------------------------------------------------------------------------------------
-
-namespace // anonymous namespace
-{
 
 class SidecarFinder
 {
@@ -121,8 +110,6 @@ enum Operation
     OperationMask       = 0xffff,
     FlagMask            = 0xffff0000
 };
-
-} // anonymous namespace
 
 } // namespace Digikam
 

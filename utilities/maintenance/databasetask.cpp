@@ -46,12 +46,11 @@ class DatabaseTask::Private
 {
 public:
 
-    Private():
-        scanThumbsDb(false),
-        scanRecognitionDb(false),
-        cancel(false),
-        mode(Mode::Unknown),
-        data(0)
+    Private()
+        : scanThumbsDb(false),
+          scanRecognitionDb(false),
+          mode(Mode::Unknown),
+          data(0)
     {
     }
 
@@ -59,7 +58,6 @@ public:
 
     bool             scanThumbsDb;
     bool             scanRecognitionDb;
-    bool             cancel;
 
     Mode             mode;
     MaintenanceData* data;
@@ -75,8 +73,7 @@ DatabaseTask::DatabaseTask()
 
 DatabaseTask::~DatabaseTask()
 {
-    slotCancel();
-
+    cancel();
     delete d;
 }
 
@@ -91,19 +88,14 @@ void DatabaseTask::setMode(Mode mode)
     d->mode = mode;
 }
 
-void DatabaseTask::setMaintenanceData(MaintenanceData* data)
+void DatabaseTask::setMaintenanceData(MaintenanceData* const data)
 {
     d->data = data;
 }
 
-void DatabaseTask::slotCancel()
-{
-    d->cancel = true;
-}
-
 void DatabaseTask::run()
 {
-    if (d->cancel)
+    if (m_cancel)
     {
         return;
     }
@@ -140,7 +132,7 @@ void DatabaseTask::run()
 
         QThread::sleep(1);
 
-        if (d->cancel)
+        if (m_cancel)
         {
             return;
         }
@@ -178,7 +170,7 @@ void DatabaseTask::run()
 
         QThread::sleep(1);
 
-        if (d->cancel)
+        if (m_cancel)
         {
             return;
         }
@@ -257,7 +249,7 @@ void DatabaseTask::run()
 
             foreach(qlonglong item, items)
             {
-                if (d->cancel)
+                if (m_cancel)
                 {
                     return;
                 }
@@ -315,7 +307,7 @@ void DatabaseTask::run()
             emit signalFinished();
         }
 
-        if (d->cancel)
+        if (m_cancel)
         {
             return;
         }
@@ -359,7 +351,7 @@ void DatabaseTask::run()
         // While we have data (using this as check for non-null)
         while (d->data)
         {
-            if (d->cancel)
+            if (m_cancel)
             {
                 return;
             }
@@ -390,7 +382,7 @@ void DatabaseTask::run()
             // While we have data (using this as check for non-null)
             while (d->data)
             {
-                if (d->cancel)
+                if (m_cancel)
                 {
                     return;
                 }
@@ -433,7 +425,7 @@ void DatabaseTask::run()
         // While we have data (using this as check for non-null)
         while (d->data)
         {
-            if (d->cancel)
+            if (m_cancel)
             {
                 return;
             }

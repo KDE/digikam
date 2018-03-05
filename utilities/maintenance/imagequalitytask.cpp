@@ -40,14 +40,12 @@ class ImageQualityTask::Private
 {
 public:
 
-    Private() :
-        cancel(false),
-        imgqsort(0),
-        data(0)
+    Private()
+        : imgqsort(0),
+          data(0)
     {
     }
 
-    bool                 cancel;
     ImageQualitySettings quality;
     ImgQSort*            imgqsort;
 
@@ -65,6 +63,7 @@ ImageQualityTask::ImageQualityTask()
 ImageQualityTask::~ImageQualityTask()
 {
     slotCancel();
+    cancel();
     delete d;
 }
 
@@ -73,15 +72,13 @@ void ImageQualityTask::setQuality(const ImageQualitySettings& quality)
     d->quality = quality;
 }
 
-void ImageQualityTask::setMaintenanceData(MaintenanceData* data)
+void ImageQualityTask::setMaintenanceData(MaintenanceData* const data)
 {
     d->data = data;
 }
 
 void ImageQualityTask::slotCancel()
 {
-    d->cancel = true;
-
     if (d->imgqsort)
     {
         d->imgqsort->cancelAnalyse();
@@ -93,7 +90,7 @@ void ImageQualityTask::run()
     // While we have data (using this as check for non-null)
     while (d->data)
     {
-        if (d->cancel)
+        if (m_cancel)
         {
             return;
         }
@@ -101,13 +98,15 @@ void ImageQualityTask::run()
         QString path = d->data->getImagePath();
 
         if (path.isEmpty())
+        {
             break;
+        }
 
         // Get item preview to perform quality analysis. No need to load whole image, this will be slower.
         // TODO : check if 1024 pixels size is enough to get suitable Quality results.
         DImg dimg = PreviewLoadThread::loadFastSynchronously(path, 1024);
 
-        if (!dimg.isNull() && !d->cancel)
+        if (!dimg.isNull() && !m_cancel)
         {
             // TODO : run here Quality analysis backend and store Pick Label result to DB.
             // Backend Input : d->quality as Quality analysis settings,

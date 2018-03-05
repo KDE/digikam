@@ -287,7 +287,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->tableView = d->stackedview->tableView();
     d->trashView = d->stackedview->trashView();
 
-    d->utilities = new ImageViewUtilities(this);
+    d->utilities = d->iconView->utilities();
 
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());
@@ -513,6 +513,11 @@ void DigikamView::setupConnections()
             this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,
                                                  QList<QAction*>,ImageFilterModel*)));
 
+    connect(d->iconView, SIGNAL(signalShowGroupContextMenu(QContextMenuEvent*,QList<ImageInfo>,
+                                                           ImageFilterModel*)),
+            this, SLOT(slotShowGroupContextMenu(QContextMenuEvent*,QList<ImageInfo>,
+                                                ImageFilterModel*)));
+
     // -- TableView Connections -----------------------------------
 
     connect(d->tableView, SIGNAL(signalPreviewRequested(ImageInfo)),
@@ -696,11 +701,6 @@ void DigikamView::setupConnections()
 
     connect(d->rightSideBar->getFiltersHistoryTab(), SIGNAL(actionTriggered(ImageInfo)),
             this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
-
-    // -- ImageViewUtilities Connections ----------------
-
-    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(QUrl)),
-            d->iconView, SLOT(setCurrentUrlWhenAvailable(QUrl)));
 }
 
 void DigikamView::connectIconViewFilter(FilterStatusBar* const filterbar)
@@ -2704,6 +2704,42 @@ void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const Imag
     {
         slotTogglePreviewMode(info);
     }
+}
+
+void DigikamView::slotShowGroupContextMenu(QContextMenuEvent* event,
+                                           const QList<ImageInfo>& selectedInfos,
+                                           ImageFilterModel* imageFilterModel)
+{
+    QList<qlonglong> selectedImageIDs;
+
+    foreach(const ImageInfo& info, selectedInfos)
+    {
+        selectedImageIDs << info.id();
+    }
+
+    QMenu popmenu(this);
+    ContextMenuHelper cmhelper(&popmenu);
+    cmhelper.setImageFilterModel(imageFilterModel);
+    cmhelper.addGroupActions(selectedImageIDs);
+
+    // special action handling --------------------------------
+
+    connect(&cmhelper, SIGNAL(signalCreateGroup()),
+            this, SLOT(slotCreateGroupFromSelection()));
+
+    connect(&cmhelper, SIGNAL(signalCreateGroupByTime()),
+            this, SLOT(slotCreateGroupByTimeFromSelection()));
+
+    connect(&cmhelper, SIGNAL(signalCreateGroupByFilename()),
+            this, SLOT(slotCreateGroupByFilenameFromSelection()));
+
+    connect(&cmhelper, SIGNAL(signalUngroup()),
+            this, SLOT(slotUngroupSelected()));
+
+    connect(&cmhelper, SIGNAL(signalRemoveFromGroup()),
+            this, SLOT(slotRemoveSelectedFromGroup()));
+
+    cmhelper.exec(event->globalPos());
 }
 
 void DigikamView::slotSetAsAlbumThumbnail(const ImageInfo& info)

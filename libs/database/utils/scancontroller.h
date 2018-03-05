@@ -203,6 +203,7 @@ Q_SIGNALS:
 
     void databaseInitialized(bool success);
     void completeScanDone();
+    void completeScanCanceled();
     void triggerShowProgressDialog();
     void incrementProgressDialog(int);
     void errorFromInitialization(const QString&);

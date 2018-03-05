@@ -461,16 +461,9 @@ void RatingWidget::applyFading(QPixmap& pix)
 {
     if (hasFading() && d->fadingValue < 255)
     {
-        QPixmap alphaMask(pix.width(), pix.height());
-        const QColor color(d->fadingValue, d->fadingValue, d->fadingValue);
-        alphaMask.fill(color);
-
-        /* NOTE : old Qt4 code ported to Qt5 due to deprecated QPixmap::setAlphaChannel()
-         *        clusterPixmap.setAlphaChannel(alphaPixmap);
-         */
         QPainter p(&pix);
-        p.setOpacity(0.2);
-        p.drawPixmap(0, 0, alphaMask);
+        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        p.fillRect(pix.rect(), QColor(0, 0, 0, d->fadingValue));
         p.end();
     }
 }

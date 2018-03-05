@@ -154,6 +154,7 @@ WebBrowserDlg::WebBrowserDlg(const QUrl& url, QWidget* const parent)
     KConfigGroup group = KSharedConfig::openConfig()->group("WebBrowserDlg");
 
     winId();
+    windowHandle()->resize(800, 600);
     DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
     resize(windowHandle()->size());
 
