@@ -70,6 +70,7 @@
 #include "albummodel.h"
 #include "albumfiltermodel.h"
 #include "coredbchangesets.h"
+#include "collectionscanner.h"
 #include "scancontroller.h"
 #include "tagsactionmngr.h"
 #include "thumbbardock.h"
@@ -1823,7 +1824,8 @@ void LightTableWindow::slotEditMetadata()
     delete dialog;
 
     // Refresh Database with new metadata from file.
-    ScanController::instance()->scannedInfo(url.toLocalFile());
+    CollectionScanner scanner;
+    scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
 }
 
 void LightTableWindow::slotImportFromScanner()
