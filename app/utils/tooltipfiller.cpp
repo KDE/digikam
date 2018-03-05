@@ -337,13 +337,23 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             if (settings->getToolTipsShowVideoDuration())
             {
                 QString durationString;
-                bool ok;
-                const double durationDouble = videoInfo.duration.toDouble(&ok);
+                bool ok                = false;
+                const int durationVal  = videoInfo.duration.toInt(&ok);
 
                 if (ok)
                 {
-                    const QTime durationTime = QTime().addMSecs(durationDouble);
-                    durationString = QLocale().toString(durationTime, QLocale::ShortFormat);
+                    unsigned int r, d, h, m, s, f;
+                    r = qAbs(durationVal);
+                    d = r / 86400000;
+                    r = r % 86400000;
+                    h = r / 3600000;
+                    r = r % 3600000;
+                    m = r / 60000;
+                    r = r % 60000;
+                    s = r / 1000;
+                    f = r % 1000;
+
+                    durationString = QString().sprintf("%d.%02d:%02d:%02d.%03d", d, h, m, s, f);
                 }
 
                 str = videoInfo.duration.isEmpty() ? cnt.unavailable : durationString;
@@ -374,7 +384,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
-                metaStr += cnt.cellBeg + i18n("Frame Rate:") + cnt.cellMid + str.toHtmlEscaped() + i18n("fps") + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Frame Rate:") + cnt.cellMid + str.toHtmlEscaped() + i18n(" fps") + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowVideoVideoCodec())
