@@ -511,6 +511,11 @@ void ImageScanner::scanFile(ScanMode mode)
             if (d->hasMetadata)
             {
                 scanVideoMetadata();
+                scanImagePosition();
+                scanImageComments();
+                scanImageCopyright();
+                scanIPTCCore();
+                scanTags();
             }
         }
         else if (d->scanInfo.category == DatabaseItem::Audio)
@@ -1482,10 +1487,14 @@ void ImageScanner::scanVideoInformation()
         MetadataFields fields;
         fields << MetadataInfo::Rating
                << MetadataInfo::CreationDate
-               << MetadataInfo::DigitizationDate;
+               << MetadataInfo::DigitizationDate
+               << MetadataInfo::Orientation;
         QVariantList metadataInfos = d->metadata.getMetadataFields(fields);
 
-        d->commit.imageInformationFields = DatabaseFields::Rating | DatabaseFields::CreationDate | DatabaseFields::DigitizationDate;
+        d->commit.imageInformationFields = DatabaseFields::Rating           |
+                                           DatabaseFields::CreationDate     |
+                                           DatabaseFields::DigitizationDate |
+                                           DatabaseFields::Orientation;
 
         checkCreationDateFromMetadata(metadataInfos[1]);
 
