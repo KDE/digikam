@@ -39,7 +39,6 @@
 #include <QIcon>
 #include <QLocale>
 #include <QTime>
-#include <QDebug>
 #include <QtMath>
 
 // KDE includes
