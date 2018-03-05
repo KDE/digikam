@@ -41,6 +41,7 @@ BUGFIXES FROM BUGZILLA:
 032 ==> 374684 - Crash in Digikam when importing from SD card via reader.
 033 ==> 381586 - Crash after tagging ~5 images.
 034 ==> 339803 - digiKam crashes frequently on batch rename.
-035 ==> 
+035 ==> 346698 - Delete Duplicate on NAS - Crash.
+036 ==> 
 
 
