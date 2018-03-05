@@ -40,5 +40,7 @@ BUGFIXES FROM BUGZILLA:
 031 ==> 375570 - XMP sidecar files are not read for videos when importing metadata.
 032 ==> 374684 - Crash in Digikam when importing from SD card via reader.
 033 ==> 381586 - Crash after tagging ~5 images.
-034 ==> 
+034 ==> 339803 - digiKam crashes frequently on batch rename.
+035 ==> 
+
 
