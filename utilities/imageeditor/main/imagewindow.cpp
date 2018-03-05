@@ -70,6 +70,7 @@
 #include "canvas.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
+#include "collectionscanner.h"
 #include "componentsinfo.h"
 #include "coredbaccess.h"
 #include "coredbwatch.h"
@@ -1921,7 +1922,8 @@ void ImageWindow::slotEditMetadata()
     delete dialog;
 
     // Refresh Database with new metadata from file.
-    ScanController::instance()->scannedInfo(url.toLocalFile());
+    CollectionScanner scanner;
+    scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
 }
 
 void ImageWindow::slotHtmlGallery()
