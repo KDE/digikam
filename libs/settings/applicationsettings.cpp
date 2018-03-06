@@ -187,7 +187,7 @@ void ApplicationSettings::readSettings()
     d->tooltipShowVideoAspectRatio       = group.readEntry(d->configToolTipsShowVideoAspectRatioEntry,      true);
     d->tooltipShowVideoAudioBitRate      = group.readEntry(d->configToolTipsShowVideoAudioBitRateEntry,     true);
     d->tooltipShowVideoAudioChannelType  = group.readEntry(d->configToolTipsShowVideoAudioChannelTypeEntry, true);
-    d->tooltipShowVideoAudioCompressor   = group.readEntry(d->configToolTipsShowVideoAudioCompressorEntry,  true);
+    d->tooltipShowVideoAudioCodec   = group.readEntry(d->configToolTipsShowVideoAudioCodecEntry,  true);
     d->tooltipShowVideoDuration          = group.readEntry(d->configToolTipsShowVideoDurationEntry,         true);
     d->tooltipShowVideoFrameRate         = group.readEntry(d->configToolTipsShowVideoFrameRateEntry,        true);
     d->tooltipShowVideoVideoCodec        = group.readEntry(d->configToolTipsShowVideoVideoCodecEntry,       true);
@@ -370,7 +370,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowVideoAspectRatioEntry,       d->tooltipShowVideoAspectRatio);
     group.writeEntry(d->configToolTipsShowVideoAudioBitRateEntry,      d->tooltipShowVideoAudioBitRate);
     group.writeEntry(d->configToolTipsShowVideoAudioChannelTypeEntry,  d->tooltipShowVideoAudioChannelType);
-    group.writeEntry(d->configToolTipsShowVideoAudioCompressorEntry,   d->tooltipShowVideoAudioCompressor);
+    group.writeEntry(d->configToolTipsShowVideoAudioCodecEntry,   d->tooltipShowVideoAudioCodec);
     group.writeEntry(d->configToolTipsShowVideoDurationEntry,          d->tooltipShowVideoDuration);
     group.writeEntry(d->configToolTipsShowVideoFrameRateEntry,         d->tooltipShowVideoFrameRate);
     group.writeEntry(d->configToolTipsShowVideoVideoCodecEntry,        d->tooltipShowVideoVideoCodec);

@@ -110,7 +110,7 @@ const QString ApplicationSettings::Private::configToolTipsShowLabelRatingEntry(Q
 const QString ApplicationSettings::Private::configToolTipsShowVideoAspectRatioEntry(QLatin1String("ToolTips Show Video Aspect Ratio"));
 const QString ApplicationSettings::Private::configToolTipsShowVideoAudioBitRateEntry(QLatin1String("ToolTips Show Audio Bit Rate"));
 const QString ApplicationSettings::Private::configToolTipsShowVideoAudioChannelTypeEntry(QLatin1String("ToolTips Show Audio Channel Type"));
-const QString ApplicationSettings::Private::configToolTipsShowVideoAudioCompressorEntry(QLatin1String("ToolTips Show Audio Compressor"));
+const QString ApplicationSettings::Private::configToolTipsShowVideoAudioCodecEntry(QLatin1String("ToolTips Show Audio Codec"));
 const QString ApplicationSettings::Private::configToolTipsShowVideoDurationEntry(QLatin1String("ToolTips Show Video Duration"));
 const QString ApplicationSettings::Private::configToolTipsShowVideoFrameRateEntry(QLatin1String("ToolTips Show Video Frame Rate"));
 const QString ApplicationSettings::Private::configToolTipsShowVideoVideoCodecEntry(QLatin1String("ToolTips Show Video Codec"));
@@ -214,7 +214,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       tooltipShowVideoAspectRatio(false),
       tooltipShowVideoAudioBitRate(false),
       tooltipShowVideoAudioChannelType(false),
-      tooltipShowVideoAudioCompressor(false),
+      tooltipShowVideoAudioCodec(false),
       tooltipShowVideoDuration(false),
       tooltipShowVideoFrameRate(false),
       tooltipShowVideoVideoCodec(false),
@@ -345,7 +345,7 @@ void ApplicationSettings::Private::init()
     tooltipShowVideoAspectRatio          = true;
     tooltipShowVideoAudioBitRate         = true;
     tooltipShowVideoAudioChannelType     = true;
-    tooltipShowVideoAudioCompressor      = true;
+    tooltipShowVideoAudioCodec      = true;
     tooltipShowVideoDuration             = true;
     tooltipShowVideoFrameRate            = true;
     tooltipShowVideoVideoCodec           = true;

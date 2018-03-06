@@ -1474,7 +1474,7 @@ static MetadataFields allVideoMetadataFields()
     fields << MetadataInfo::AspectRatio
            << MetadataInfo::AudioBitRate
            << MetadataInfo::AudioChannelType
-           << MetadataInfo::AudioCompressor
+           << MetadataInfo::AudioCodec
            << MetadataInfo::Duration
            << MetadataInfo::FrameRate
            << MetadataInfo::VideoCodec;
@@ -2012,7 +2012,7 @@ void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataCo
     container->aspectRatio                  = strings.at(0);
     container->audioBitRate                 = strings.at(1);
     container->audioChannelType             = strings.at(2);
-    container->audioCompressor              = strings.at(3);
+    container->audioCodec                   = strings.at(3);
     container->duration                     = strings.at(4);
     container->frameRate                    = strings.at(5);
     container->videoCodec                   = strings.at(6);

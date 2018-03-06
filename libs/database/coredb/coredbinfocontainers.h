@@ -107,7 +107,7 @@ public:
     QString aspectRatio;
     QString audioBitRate;
     QString audioChannelType;
-    QString audioCompressor;
+    QString audioCodec;
     QString duration;
     QString frameRate;
     QString videoCodec;

@@ -110,7 +110,7 @@ public:
     static const QString configToolTipsShowVideoAspectRatioEntry;
     static const QString configToolTipsShowVideoAudioBitRateEntry;
     static const QString configToolTipsShowVideoAudioChannelTypeEntry;
-    static const QString configToolTipsShowVideoAudioCompressorEntry;
+    static const QString configToolTipsShowVideoAudioCodecEntry;
     static const QString configToolTipsShowVideoDurationEntry;
     static const QString configToolTipsShowVideoFrameRateEntry;
     static const QString configToolTipsShowVideoVideoCodecEntry;
@@ -212,7 +212,7 @@ public:
     bool                                         tooltipShowVideoAspectRatio;
     bool                                         tooltipShowVideoAudioBitRate;
     bool                                         tooltipShowVideoAudioChannelType;
-    bool                                         tooltipShowVideoAudioCompressor;
+    bool                                         tooltipShowVideoAudioCodec;
     bool                                         tooltipShowVideoDuration;
     bool                                         tooltipShowVideoFrameRate;
     bool                                         tooltipShowVideoVideoCodec;

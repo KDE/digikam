@@ -144,7 +144,7 @@ void ImageDialogPreview::slotShowPreview(const QUrl& url)
             DToolTipStyleSheet cnt;
             QString identify = QString::fromLatin1("<qt><center>");
             QString make, model, dateTime, aperture, focalLength, exposureTime, sensitivity;
-            QString aspectRatio, audioBitRate, audioChannelType, audioCompressor, duration, frameRate, videoCodec;
+            QString aspectRatio, audioBitRate, audioChannelType, audioCodec, duration, frameRate, videoCodec;
 
             if (info.make.isEmpty())
             {
@@ -236,13 +236,13 @@ void ImageDialogPreview::slotShowPreview(const QUrl& url)
                 audioChannelType = videoInfo.audioChannelType;
             }
 
-            if (videoInfo.audioCompressor.isEmpty())
+            if (videoInfo.audioCodec.isEmpty())
             {
-                audioCompressor = cnt.unavailable;
+                audioCodec = cnt.unavailable;
             }
             else
             {
-                audioCompressor = videoInfo.audioCompressor;
+                audioCodec = videoInfo.audioCodec;
             }
 
             if (videoInfo.duration.isEmpty())
@@ -286,7 +286,7 @@ void ImageDialogPreview::slotShowPreview(const QUrl& url)
                 identify += cnt.cellBeg + i18n("<i>AspectRatio:</i>")       + cnt.cellMid + aspectRatio         + cnt.cellEnd;
                 identify += cnt.cellBeg + i18n("<i>AudioBitRate:</i>")      + cnt.cellMid + audioBitRate        + cnt.cellEnd;
                 identify += cnt.cellBeg + i18n("<i>AudioChannelType:</i>")  + cnt.cellMid + audioChannelType    + cnt.cellEnd;
-                identify += cnt.cellBeg + i18n("<i>AudioCompressor:</i>")   + cnt.cellMid + audioCompressor     + cnt.cellEnd;
+                identify += cnt.cellBeg + i18n("<i>AudioCodec:</i>")   + cnt.cellMid + audioCodec     + cnt.cellEnd;
                 identify += cnt.cellBeg + i18n("<i>Duration:</i>")          + cnt.cellMid + duration            + cnt.cellEnd;
                 identify += cnt.cellBeg + i18n("<i>FrameRate:</i>")         + cnt.cellMid + frameRate           + cnt.cellEnd;
                 identify += cnt.cellBeg + i18n("<i>VideoCodec:</i>")        + cnt.cellMid + videoCodec          + cnt.cellEnd;

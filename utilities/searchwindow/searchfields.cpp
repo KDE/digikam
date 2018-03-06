@@ -727,11 +727,11 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setChoice(type);
         return field;
     }
-    else if (name == QLatin1String("videoaudiocompressor"))
+    else if (name == QLatin1String("videoaudioCodec"))
     {
         SearchFieldChoice* field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Audio Compressor"), i18n("Return video audio Compressor"));
+        field->setText(i18n("Audio Codec"), i18n("Return video audio Codec"));
         QStringList type;
         type << QLatin1String("raw")           << QLatin1String("RAW");
         type << QLatin1String("mp3")           << QLatin1String("MPEG Layer 3");
@@ -739,7 +739,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         type << QLatin1String("samr")          << QLatin1String("Adaptive Multi-rate Audio");
         type << QLatin1String("sowt")          << QLatin1String("Apple QuickTime SWOT Little Endian PCM Audio");
         type << QLatin1String("Microsoft PCM") << QLatin1String("Microsoft PCM");
-        // TODO: add more possible audio compressor
+        // TODO: add more possible audio Codec
         field->setChoice(type);
         return field;
     }

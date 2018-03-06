@@ -131,14 +131,14 @@ public:
         videoCodec(0),
         audioBitRate(0),
         audioChannelType(0),
-        audioCompressor(0),
+        audioCodec(0),
         labelVideoAspectRatio(0),
         labelVideoDuration(0),
         labelVideoFrameRate(0),
         labelVideoVideoCodec(0),
         labelVideoAudioBitRate(0),
         labelVideoAudioChannelType(0),
-        labelVideoAudioCompressor(0)
+        labelVideoAudioCodec(0)
     {
     }
 
@@ -210,7 +210,7 @@ public:
     DTextLabelName*  videoCodec;
     DTextLabelName*  audioBitRate;
     DTextLabelName*  audioChannelType;
-    DTextLabelName*  audioCompressor;
+    DTextLabelName*  audioCodec;
 
     DTextLabelValue* labelVideoAspectRatio;
     DTextLabelValue* labelVideoDuration;
@@ -218,7 +218,7 @@ public:
     DTextLabelValue* labelVideoVideoCodec;
     DTextLabelValue* labelVideoAudioBitRate;
     DTextLabelValue* labelVideoAudioChannelType;
-    DTextLabelValue* labelVideoAudioCompressor;
+    DTextLabelValue* labelVideoAudioCodec;
 };
 
 ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
@@ -374,7 +374,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     d->videoCodec                 = new DTextLabelName(i18n("Video Codec: "),        w4);
     d->audioBitRate               = new DTextLabelName(i18n("Audio Bit Rate: "),     w4);
     d->audioChannelType           = new DTextLabelName(i18n("Audio Channel Type: "), w4);
-    d->audioCompressor            = new DTextLabelName(i18n("Audio Compressor: "),   w4);
+    d->audioCodec            = new DTextLabelName(i18n("Audio Codec: "),   w4);
 
     d->labelVideoAspectRatio      = new DTextLabelValue(QString(), w4);
     d->labelVideoDuration         = new DTextLabelValue(QString(), w4);
@@ -382,7 +382,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     d->labelVideoVideoCodec       = new DTextLabelValue(QString(), w4);
     d->labelVideoAudioBitRate     = new DTextLabelValue(QString(), w4);
     d->labelVideoAudioChannelType = new DTextLabelValue(QString(), w4);
-    d->labelVideoAudioCompressor  = new DTextLabelValue(QString(), w4);
+    d->labelVideoAudioCodec  = new DTextLabelValue(QString(), w4);
 
     glay4->addWidget(d->aspectRatio,                0, 0, 1, 1);
     glay4->addWidget(d->labelVideoAspectRatio,      0, 1, 1, 1);
@@ -396,8 +396,8 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay4->addWidget(d->labelVideoAudioBitRate,     4, 1, 1, 1);
     glay4->addWidget(d->audioChannelType,           5, 0, 1, 1);
     glay4->addWidget(d->labelVideoAudioChannelType, 5, 1, 1, 1);
-    glay4->addWidget(d->audioCompressor,            6, 0, 1, 1);
-    glay4->addWidget(d->labelVideoAudioCompressor,  6, 1, 1, 1);
+    glay4->addWidget(d->audioCodec,            6, 0, 1, 1);
+    glay4->addWidget(d->labelVideoAudioCodec,  6, 1, 1, 1);
     glay4->setContentsMargins(spacing, spacing, spacing, spacing);
     glay4->setSpacing(0);
     glay4->setColumnStretch(1, 10);
@@ -493,7 +493,7 @@ void ImagePropertiesTab::setCurrentURL(const QUrl& url)
         d->labelVideoVideoCodec->setAdjustedText();
         d->labelVideoAudioBitRate->setAdjustedText();
         d->labelVideoAudioChannelType->setAdjustedText();
-        d->labelVideoAudioCompressor->setAdjustedText();
+        d->labelVideoAudioCodec->setAdjustedText();
 
         setEnabled(false);
         return;
@@ -723,9 +723,9 @@ void ImagePropertiesTab::setVideoAudioChannelType(const QString& str)
     d->labelVideoAudioChannelType->setAdjustedText(str);
 }
 
-void ImagePropertiesTab::setVideoAudioCompressor(const QString& str)
+void ImagePropertiesTab::setVideoAudioCodec(const QString& str)
 {
-    d->labelVideoAudioCompressor->setAdjustedText(str);
+    d->labelVideoAudioCodec->setAdjustedText(str);
 }
 
 void ImagePropertiesTab::setVideoDuration(const QString& str)

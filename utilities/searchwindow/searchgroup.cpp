@@ -148,7 +148,7 @@ void SearchGroup::setup(Type type)
     group->addField(SearchField::createField(QLatin1String("videocodec"),            group));
     group->addField(SearchField::createField(QLatin1String("videoaudiobitrate"),     group));
     group->addField(SearchField::createField(QLatin1String("videoaudiochanneltype"), group));
-    group->addField(SearchField::createField(QLatin1String("videoaudiocompressor"),  group));
+    group->addField(SearchField::createField(QLatin1String("videoaudioCodec"),       group));
 
     m_fieldLabels << label;
     m_fieldGroups << group;

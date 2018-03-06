@@ -102,14 +102,14 @@ public:
         videoCodec(0),
         audioBitRate(0),
         audioChannelType(0),
-        audioCompressor(0),
+        audioCodec(0),
         labelVideoAspectRatio(0),
         labelVideoDuration(0),
         labelVideoFrameRate(0),
         labelVideoVideoCodec(0),
         labelVideoAudioBitRate(0),
         labelVideoAudioChannelType(0),
-        labelVideoAudioCompressor(0)
+        labelVideoAudioCodec(0)
     {
     }
 
@@ -167,7 +167,7 @@ public:
     DTextLabelName*  videoCodec;
     DTextLabelName*  audioBitRate;
     DTextLabelName*  audioChannelType;
-    DTextLabelName*  audioCompressor;
+    DTextLabelName*  audioCodec;
 
     DTextLabelValue* labelVideoAspectRatio;
     DTextLabelValue* labelVideoDuration;
@@ -175,7 +175,7 @@ public:
     DTextLabelValue* labelVideoVideoCodec;
     DTextLabelValue* labelVideoAudioBitRate;
     DTextLabelValue* labelVideoAudioChannelType;
-    DTextLabelValue* labelVideoAudioCompressor;
+    DTextLabelValue* labelVideoAudioCodec;
 };
 
 CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
@@ -311,7 +311,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     d->aspectRatio                = new DTextLabelName(i18n("Aspect Ratio: "),       w3);
     d->audioBitRate               = new DTextLabelName(i18n("Audio Bit Rate: "),     w3);
     d->audioChannelType           = new DTextLabelName(i18n("Audio Channel Type: "), w3);
-    d->audioCompressor            = new DTextLabelName(i18n("Audio Compressor: "),   w3);
+    d->audioCodec            = new DTextLabelName(i18n("Audio Codec: "),   w3);
     d->duration                   = new DTextLabelName(i18n("Duration: "),           w3);
     d->frameRate                  = new DTextLabelName(i18n("Frame Rate: "),         w3);
     d->videoCodec                 = new DTextLabelName(i18n("Video Codec: "),        w3);
@@ -319,7 +319,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     d->labelVideoAspectRatio      = new DTextLabelValue(QString(), w3);
     d->labelVideoAudioBitRate     = new DTextLabelValue(QString(), w3);
     d->labelVideoAudioChannelType = new DTextLabelValue(QString(), w3);
-    d->labelVideoAudioCompressor  = new DTextLabelValue(QString(), w3);
+    d->labelVideoAudioCodec  = new DTextLabelValue(QString(), w3);
     d->labelVideoDuration         = new DTextLabelValue(QString(), w3);
     d->labelVideoFrameRate        = new DTextLabelValue(QString(), w3);
     d->labelVideoVideoCodec       = new DTextLabelValue(QString(), w3);
@@ -330,8 +330,8 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay3->addWidget(d->labelVideoAudioBitRate,     1, 1, 1, 1);
     glay3->addWidget(d->audioChannelType,           2, 0, 1, 1);
     glay3->addWidget(d->labelVideoAudioChannelType, 2, 1, 1, 1);
-    glay3->addWidget(d->audioCompressor,            3, 0, 1, 1);
-    glay3->addWidget(d->labelVideoAudioCompressor,  3, 1, 1, 1);
+    glay3->addWidget(d->audioCodec,            3, 0, 1, 1);
+    glay3->addWidget(d->labelVideoAudioCodec,  3, 1, 1, 1);
     glay3->addWidget(d->duration,                   4, 0, 1, 1);
     glay3->addWidget(d->labelVideoDuration,         4, 1, 1, 1);
     glay3->addWidget(d->frameRate,                  5, 0, 1, 1);
@@ -386,7 +386,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         d->labelVideoAspectRatio->setAdjustedText(QString());
         d->labelVideoAudioBitRate->setAdjustedText(QString());
         d->labelVideoAudioChannelType->setAdjustedText(QString());
-        d->labelVideoAudioCompressor->setAdjustedText(QString());
+        d->labelVideoAudioCodec->setAdjustedText(QString());
         d->labelVideoDuration->setAdjustedText(QString());
         d->labelVideoFrameRate->setAdjustedText(QString());
         d->labelVideoVideoCodec->setAdjustedText(QString());
@@ -600,7 +600,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
     d->labelVideoAspectRatio->setAdjustedText(videoInfo.aspectRatio.isEmpty()           ? unavailable : videoInfo.aspectRatio);
     d->labelVideoAudioBitRate->setAdjustedText(videoInfo.audioBitRate.isEmpty()         ? unavailable : videoInfo.audioBitRate);
     d->labelVideoAudioChannelType->setAdjustedText(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
-    d->labelVideoAudioCompressor->setAdjustedText(videoInfo.audioCompressor.isEmpty()   ? unavailable : videoInfo.audioCompressor);
+    d->labelVideoAudioCodec->setAdjustedText(videoInfo.audioCodec.isEmpty()   ? unavailable : videoInfo.audioCodec);
     d->labelVideoDuration->setAdjustedText(videoInfo.duration.isEmpty()                 ? unavailable : videoInfo.duration);
     d->labelVideoFrameRate->setAdjustedText(videoInfo.frameRate.isEmpty()               ? unavailable : videoInfo.frameRate);
     d->labelVideoVideoCodec->setAdjustedText(videoInfo.videoCodec.isEmpty()             ? unavailable : videoInfo.videoCodec);

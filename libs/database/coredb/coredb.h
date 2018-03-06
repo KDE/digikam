@@ -854,7 +854,7 @@ public:
      * 0) String    AspectRatio
      * 1) String    AudioBitRate
      * 2) String    AudioChannelType
-     * 3) String    AudioCompressor
+     * 3) String    AudioCodec
      * 4) String    Duration
      * 5) String    FrameRate
      * 6) String    VideoCodec

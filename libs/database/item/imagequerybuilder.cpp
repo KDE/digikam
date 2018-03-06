@@ -1236,9 +1236,9 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             sql += QString::fromUtf8(")) ");
         }
     }
-    else if (name == QLatin1String("videoaudiocompressor"))
+    else if (name == QLatin1String("videoaudioCodec"))
     {
-        fieldQuery.addChoiceStringField(QLatin1String("VideoMetadata.audioCompressor"));
+        fieldQuery.addChoiceStringField(QLatin1String("VideoMetadata.audioCodec"));
     }
     else if (name == QLatin1String("videoduration"))
     {

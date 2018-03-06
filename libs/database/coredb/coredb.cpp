@@ -2902,7 +2902,7 @@ QStringList CoreDB::videoMetadataFieldList(DatabaseFields::VideoMetadata fields)
         list << QLatin1String("audioChannelType");
     }
 
-    if (fields & DatabaseFields::AudioCompressor)
+    if (fields & DatabaseFields::AudioCodec)
     {
         list << QLatin1String("audioCompressor");
     }

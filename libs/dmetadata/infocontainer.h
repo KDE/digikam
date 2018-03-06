@@ -96,7 +96,7 @@ public:
     QString videoCodec;
     QString audioBitRate;
     QString audioChannelType;
-    QString audioCompressor;
+    QString audioCodec;
 };
 
 DIGIKAM_EXPORT QDataStream& operator<<(QDataStream& ds, const VideoInfoContainer& info);

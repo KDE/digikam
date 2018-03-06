@@ -78,8 +78,8 @@ MetadataInfo::Field DatabaseVideoMetadataFieldsToMetadataInfoField(const Databas
         case DatabaseFields::AudioChannelType:
             return MetadataInfo::AudioChannelType;
 
-        case DatabaseFields::AudioCompressor:
-            return MetadataInfo::AudioCompressor;
+        case DatabaseFields::AudioCodec:
+            return MetadataInfo::AudioCodec;
 
         case DatabaseFields::Duration:
             return MetadataInfo::Duration;
@@ -1465,8 +1465,8 @@ VideoMetadataContainer ImageInfo::videoMetadataContainer() const
                     container.audioChannelType = fieldString;
                     break;
 
-                case DatabaseFields::AudioCompressor:
-                    container.audioCompressor = fieldString;
+                case DatabaseFields::AudioCodec:
+                    container.audioCodec = fieldString;
                     break;
 
                 case DatabaseFields::Duration:
@@ -1533,7 +1533,7 @@ VideoInfoContainer ImageInfo::videoInfoContainer() const
     videoInfo.aspectRatio       = meta.aspectRatio;
     videoInfo.audioBitRate      = meta.audioBitRate;
     videoInfo.audioChannelType  = meta.audioChannelType;
-    videoInfo.audioCompressor   = meta.audioCompressor;
+    videoInfo.audioCodec   = meta.audioCodec;
     videoInfo.duration          = meta.duration;
     videoInfo.frameRate         = meta.frameRate;
     videoInfo.videoCodec        = meta.videoCodec;

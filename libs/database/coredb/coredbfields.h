@@ -209,14 +209,14 @@ enum VideoMetadataField
     AspectRatio                  = 1 << 0,
     AudioBitRate                 = 1 << 1,
     AudioChannelType             = 1 << 2,
-    AudioCompressor              = 1 << 3,
+    AudioCodec              = 1 << 3,
     Duration                     = 1 << 4,
     FrameRate                    = 1 << 5,
     VideoCodec                   = 1 << 6,
     VideoMetadataAll             = AspectRatio      |
                                    AudioBitRate     |
                                    AudioChannelType |
-                                   AudioCompressor  |
+                                   AudioCodec  |
                                    Duration         |
                                    FrameRate        |
                                    VideoCodec,

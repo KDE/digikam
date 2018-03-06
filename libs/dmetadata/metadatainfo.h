@@ -172,7 +172,7 @@ enum Field
     AspectRatio,                      /// String
     AudioBitRate,                     /// String
     AudioChannelType,                 /// String
-    AudioCompressor,                  /// String
+    AudioCodec,                  /// String
     Duration,                         /// String
     FrameRate,                        /// String
     VideoCodec,                       /// String

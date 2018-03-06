@@ -379,8 +379,8 @@ public:
     void setToolTipsShowVideoAudioChannelType(bool val);
     bool getToolTipsShowVideoAudioChannelType() const;
 
-    void setToolTipsShowVideoAudioCompressor(bool val);
-    bool getToolTipsShowVideoAudioCompressor() const;
+    void setToolTipsShowVideoAudioCodec(bool val);
+    bool getToolTipsShowVideoAudioCodec() const;
 
     void setToolTipsShowVideoDuration(bool val);
     bool getToolTipsShowVideoDuration() const;

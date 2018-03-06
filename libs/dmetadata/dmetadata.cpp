@@ -1215,9 +1215,9 @@ VideoInfoContainer DMetadata::getVideoInformation() const
             videoInfo.audioChannelType = getXmpTagString("Xmp.audio.ChannelType");
         }
 
-        if (videoInfo.audioCompressor.isEmpty())
+        if (videoInfo.audioCodec.isEmpty())
         {
-            videoInfo.audioCompressor = getXmpTagString("Xmp.audio.Compressor");
+            videoInfo.audioCodec = getXmpTagString("Xmp.audio.Codec");
         }
 
         if (videoInfo.duration.isEmpty())
@@ -2734,8 +2734,8 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             return fromXmpLangAlt("Xmp.audio.SampleRate");
         case MetadataInfo::AudioChannelType:
             return fromXmpLangAlt("Xmp.audio.ChannelType");
-        case MetadataInfo::AudioCompressor:
-            return fromXmpLangAlt("Xmp.audio.Compressor");
+        case MetadataInfo::AudioCodec:
+            return fromXmpLangAlt("Xmp.audio.Codec");
         case MetadataInfo::Duration:
             return fromXmpLangAlt("Xmp.video.Duration"); // duration is in ms
         case MetadataInfo::FrameRate:
@@ -2844,7 +2844,7 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
         case MetadataInfo::AspectRatio:
         case MetadataInfo::AudioBitRate:
         case MetadataInfo::AudioChannelType:
-        case MetadataInfo::AudioCompressor:
+        case MetadataInfo::AudioCodec:
         case MetadataInfo::Duration:
         case MetadataInfo::FrameRate:
         case MetadataInfo::VideoCodec:
