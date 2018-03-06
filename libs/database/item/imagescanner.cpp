@@ -1521,10 +1521,11 @@ void ImageScanner::scanVideoInformation()
     d->commit.imageInformationInfos  << detectVideoFormat();
     d->commit.imageInformationFields |= DatabaseFields::Format;
 
-    // There is use of bit depth, but not ColorModel
-    // For bit depth - 8bit, 16bit with videos
-    d->commit.imageInformationInfos  << d->metadata.getMetadataField(MetadataInfo::VideoBitDepth);
+    d->commit.imageInformationInfos << d->metadata.getMetadataField(MetadataInfo::VideoBitDepth);
     d->commit.imageInformationFields |= DatabaseFields::ColorDepth;
+
+    d->commit.imageInformationInfos << d->metadata.getMetadataField(MetadataInfo::VideoColorSpace);
+    d->commit.imageInformationFields |= DatabaseFields::ColorModel;
 }
 
 // commitImageInformation method is reused
@@ -1924,6 +1925,7 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
         CoreDbAccess access;
         imagesFields = access.db()->getImagesFields(imageid,
                                                     DatabaseFields::Name             |
+                                                    DatabaseFields::Category         |
                                                     DatabaseFields::ModificationDate |
                                                     DatabaseFields::FileSize);
 
@@ -1942,8 +1944,8 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
     if (!imagesFields.isEmpty())
     {
         container->fileName             = imagesFields.at(0).toString();
-        container->fileModificationDate = imagesFields.at(1).toDateTime();
-        container->fileSize             = imagesFields.at(2).toLongLong();
+        container->fileModificationDate = imagesFields.at(2).toDateTime();
+        container->fileSize             = imagesFields.at(3).toLongLong();
     }
 
     if (!imageInformationFields.isEmpty())
@@ -1956,7 +1958,11 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
         container->height           = imageInformationFields.at(5).toInt();
         container->format           = formatToString(imageInformationFields.at(6).toString());
         container->colorDepth       = imageInformationFields.at(7).toInt();
-        container->colorModel       = DImg::colorModelToString((DImg::COLORMODEL)imageInformationFields.at(8).toInt());
+
+        container->colorModel
+            = (imagesFields.at(1).toInt() == DatabaseItem::Video) ?
+            DMetadata::videoColorModelToString(imageInformationFields.at(8).toInt()) :
+            DImg::colorModelToString((DImg::COLORMODEL)imageInformationFields.at(8).toInt());
     }
 }
 

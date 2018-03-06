@@ -45,6 +45,10 @@
 #include <QMimeDatabase>
 #include <QStringList>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local incudes
 
 #include "captionvalues.h"
@@ -267,8 +271,10 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                  QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name));
             setXmpTagString("Xmp.video.Format",
                  QString::fromUtf8(av_get_pix_fmt_name((AVPixelFormat)codec->format)));
+            setXmpTagString("Xmp.video.ColorMode",
+                 QString::number(codec->color_space));
             setXmpTagString("Xmp.video.ColorSpace",
-                 QString::fromUtf8(av_color_space_name(codec->color_space)));
+                 videoColorModelToString(codec->color_space));
 
             double aspectRatio = -1.0;
             int frameRate      = -1.0;
@@ -890,6 +896,17 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     Q_UNUSED(filePath);
     return false;
 #endif
+}
+
+QString DMetadata::videoColorModelToString(int colorSpace)
+{
+    QString cs = i18n("unknown");
+
+#ifdef HAVE_MEDIAPLAYER
+    cs = QString::fromUtf8(av_color_space_name((AVColorSpace)colorSpace));
+#endif
+
+    return cs;
 }
 
 } // namespace Digikam

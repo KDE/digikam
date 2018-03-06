@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATAINFO_H
-#define METADATAINFO_H
+#ifndef METADATA_INFO_H
+#define METADATA_INFO_H
 
 // Qt includes
 
@@ -172,13 +172,14 @@ enum Field
     AspectRatio,                      /// String
     AudioBitRate,                     /// String
     AudioChannelType,                 /// String
-    AudioCodec,                  /// String
+    AudioCodec,                       /// String
     Duration,                         /// String
     FrameRate,                        /// String
     VideoCodec,                       /// String
     VideoBitDepth,                    /// String
     VideoHeight,                      /// String
-    VideoWidth                        /// String
+    VideoWidth,                       /// String
+    VideoColorSpace                   /// String
 };
 
 } // namespace MetadataInfo
@@ -190,4 +191,4 @@ typedef QList<MetadataInfo::Field> MetadataFields;
 Q_DECLARE_METATYPE(Digikam::IptcCoreContactInfo)
 Q_DECLARE_METATYPE(Digikam::IptcCoreLocationInfo)
 
-#endif // METADATAINFO_H
+#endif // METADATA_INFO_H

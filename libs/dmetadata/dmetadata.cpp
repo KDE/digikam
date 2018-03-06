@@ -224,7 +224,7 @@ bool DMetadata::mSecTimeStamp(const char* const exifTagName, int& ms) const
     return ok;
 }
 
-CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settings) const
+CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer& settings) const
 {
     if (getFilePath().isEmpty())
     {
@@ -2748,6 +2748,8 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             return fromXmpLangAlt("Xmp.video.Height");
         case MetadataInfo::VideoWidth:
             return fromXmpLangAlt("Xmp.video.Width");
+        case MetadataInfo::VideoColorSpace:
+            return fromXmpLangAlt("Xmp.video.ColorMode");
 
         default:
             return QVariant();

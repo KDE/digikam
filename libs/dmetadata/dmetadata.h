@@ -264,6 +264,10 @@ public:
     bool removeIptcTags(const QStringList& tagFilters);
     bool removeXmpTags(const QStringList& tagFilters);
 
+    /** Return the description of video color space detected by FFMpeg
+     */
+    static QString videoColorModelToString(int colorSpace);
+
 private:
 
     bool setIptcTag(const QString& text, int maxLength, const char* const debugLabel, const char* const tagKey) const;
