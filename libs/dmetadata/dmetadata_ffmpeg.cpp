@@ -270,10 +270,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             setXmpTagString("Xmp.video.ColorSpace",
                  QString::fromUtf8(av_color_space_name(codec->color_space)));
 
-            double aspectRatio = 0.0;
-            int frameRate      = 0.0;
+            double aspectRatio = -1.0;
+            int frameRate      = -1.0;
 
-            if (codec->sample_aspect_ratio.den)
+            if (codec->sample_aspect_ratio.num && // Check if undefined
+                codec->sample_aspect_ratio.den)   // Check div by 0
             {
                 aspectRatio = (double)codec->sample_aspect_ratio.num / (double)codec->sample_aspect_ratio.den;
             }
@@ -305,10 +306,10 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             // Backport size in Exif and Iptc
             setImageDimensions(QSize(codec->width, codec->height));
 
-            if (aspectRatio != 0.0)
+            if (aspectRatio != -1.0)
                 setXmpTagString("Xmp.video.AspectRatio", QString::number(aspectRatio));
 
-            if (frameRate != 0.0)
+            if (frameRate != -1.0)
                 setXmpTagString("Xmp.video.FrameRate", QString::number(frameRate));
 
             setXmpTagString("Xmp.video.BitDepth", QString::number(codec->bits_per_coded_sample));
