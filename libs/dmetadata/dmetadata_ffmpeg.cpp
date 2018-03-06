@@ -307,11 +307,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             if (aspectRatio != 0.0)
                 setXmpTagString("Xmp.video.AspectRatio", QString::number(aspectRatio));
-            
+
             if (frameRate != 0.0)
                 setXmpTagString("Xmp.video.FrameRate", QString::number(frameRate));
 
-            setXmpTagString("Xmp.video.PixelDepth",  QString::number(codec->bits_per_coded_sample));
+            setXmpTagString("Xmp.video.BitDepth", QString::number(codec->bits_per_coded_sample));
 
             // -----------------------------------------
 
