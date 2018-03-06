@@ -147,6 +147,9 @@ VideoThumbnailer::VideoThumbnailer(QObject* const parent)
             this, SLOT(slotFrameExtracted(QtAV::VideoFrame)));
 
 #if QTAV_VERSION > QTAV_VERSION_CHK(1, 12, 0)
+    connect(d->extractor, SIGNAL(aborted(QString)),
+            this, SLOT(slotFrameError()));
+
     connect(d->extractor, SIGNAL(error(QString)),
             this, SLOT(slotFrameError()));
 #else
