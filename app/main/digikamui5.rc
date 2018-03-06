@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="600" name="digikam" translationDomain="digikam" >
+<gui version="601" name="digikam" translationDomain="digikam" >
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
 
  <MenuBar>
@@ -60,6 +60,7 @@
    <Separator />
      <Action name="image_write_metadata" />
      <Action name="image_read_metadata" />
+   <Separator />
      <Action name="metadata_edit" />
      <Action name="geolocation_edit" />
    <Separator />

@@ -772,7 +772,9 @@ void DigikamApp::setupActions()
             d->view, SLOT(slotAlbumHistoryBack(int)));
 
     // connect action to mapper
-    connect(d->backwardActionMenu, SIGNAL(triggered()), d->backwardSignalMapper, SLOT(map()));
+    connect(d->backwardActionMenu, SIGNAL(triggered()),
+            d->backwardSignalMapper, SLOT(map()));
+
     // inform mapper about number of steps
     d->backwardSignalMapper->setMapping(d->backwardActionMenu, 1);
 
@@ -862,17 +864,17 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->writeAlbumMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Write Metadata to Images"), this);
-    d->writeAlbumMetadataAction->setWhatsThis(i18n("Updates metadata of images in the current "
+    d->writeAlbumMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Write Metadata to Files"), this);
+    d->writeAlbumMetadataAction->setWhatsThis(i18n("Updates metadata of files in the current "
                                                    "album with the contents of digiKam database "
-                                                   "(image metadata will be overwritten with data from "
+                                                   "(file metadata will be overwritten with data from "
                                                    "the database)."));
     connect(d->writeAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumWriteMetadata()));
     ac->addAction(QLatin1String("album_write_metadata"), d->writeAlbumMetadataAction);
 
     // -----------------------------------------------------------------
 
-    d->readAlbumMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("edit-redo")), i18n("Reread Metadata From Images"), this);
+    d->readAlbumMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("edit-redo")), i18n("Reread Metadata From Files"), this);
     d->readAlbumMetadataAction->setWhatsThis(i18n("Updates the digiKam database from the metadata "
                                                   "of the files in the current album "
                                                   "(information in the database will be overwritten with data from "
@@ -1018,17 +1020,19 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->imageWriteMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Write Metadata to Selected Images"), this);
-    d->imageWriteMetadataAction->setWhatsThis(i18n("Updates metadata of images in the current "
+    d->imageWriteMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")),
+                                              i18n("Write Metadata to Selected Files"), this);
+    d->imageWriteMetadataAction->setWhatsThis(i18n("Updates metadata of files in the current "
                                                    "album with the contents of digiKam database "
-                                                   "(image metadata will be overwritten with data from "
+                                                   "(file metadata will be overwritten with data from "
                                                    "the database)."));
     connect(d->imageWriteMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotImageWriteMetadata()));
     ac->addAction(QLatin1String("image_write_metadata"), d->imageWriteMetadataAction);
 
     // -----------------------------------------------------------------
 
-    d->imageReadMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("edit-redo")), i18n("Reread Metadata From Selected Images"), this);
+    d->imageReadMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("edit-redo")),
+                                             i18n("Reread Metadata From Selected Files"), this);
     d->imageReadMetadataAction->setWhatsThis(i18n("Updates the digiKam database from the metadata "
                                                   "of the files in the current album "
                                                   "(information in the database will be overwritten with data from "
