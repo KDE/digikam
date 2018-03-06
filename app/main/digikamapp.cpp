@@ -1716,10 +1716,10 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
 
     if (selectionCount > 0)
     {
-        d->imageWriteMetadataAction->setText(i18np("Write Metadata to Image",
-                                                   "Write Metadata to Selected Images", selectionCount));
-        d->imageReadMetadataAction->setText(i18np("Reread Metadata From Image",
-                                                  "Reread Metadata From Selected Images", selectionCount));
+        d->imageWriteMetadataAction->setText(i18np("Write Metadata to File",
+                                                   "Write Metadata to Selected Files", selectionCount));
+        d->imageReadMetadataAction->setText(i18np("Reread Metadata From File",
+                                                  "Reread Metadata From Selected Filess", selectionCount));
 
         slotResetExifOrientationActions();
     }
