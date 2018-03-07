@@ -182,6 +182,8 @@ DItemToolTip::DItemToolTip(QWidget* const parent)
 {
     hide();
 
+    setBackgroundRole(QPalette::ToolTipBase);
+    setPalette(QToolTip::palette());
     ensurePolished();
     const int fwidth = qMax(d->tipBorder, 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, this));
     setContentsMargins(fwidth, fwidth, fwidth, fwidth);
