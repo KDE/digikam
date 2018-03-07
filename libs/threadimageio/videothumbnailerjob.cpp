@@ -31,6 +31,7 @@
 // Local includes
 
 #include "videothumbnailer.h"
+#include "filmstripfilter.h"
 #include "thumbnailsize.h"
 #include "digikam_debug.h"
 
@@ -45,16 +46,13 @@ public:
     {
         canceled    = false;
         running     = false;
-        jobDone     = true;
         createStrip = true;
         exifRotate  = true;
         thumbSize   = ThumbnailSize::Huge;
-        vthumb      = 0;
     }
 
     volatile bool     canceled;
     volatile bool     running;
-    volatile bool     jobDone;
     bool              createStrip;
     bool              exifRotate;
     int               thumbSize;
@@ -63,24 +61,12 @@ public:
     QWaitCondition    condVar;
 
     QStringList       todo;
-    QString           currentFile;
-    VideoThumbnailer* vthumb;
 };
 
 VideoThumbnailerJob::VideoThumbnailerJob(QObject* const parent)
     : QThread(parent),
       d(new Private)
 {
-    d->vthumb = new VideoThumbnailer(this);
-
-    connect(this, SIGNAL(signalGetThumbnail(QString,int,bool,bool)),
-            d->vthumb, SLOT(slotGetThumbnail(QString,int,bool,bool)));
-
-    connect(d->vthumb, SIGNAL(signalThumbnailDone(QString,QImage)),
-            this, SLOT(slotThumbnailDone(QString,QImage)));
-
-    connect(d->vthumb, SIGNAL(signalThumbnailFailed(QString)),
-            this, SLOT(slotThumbnailFailed(QString)));
 }
 
 VideoThumbnailerJob::~VideoThumbnailerJob()
@@ -140,19 +126,7 @@ void VideoThumbnailerJob::addItems(const QStringList& files)
         }
     }
 
-    processOne();
-}
-
-void VideoThumbnailerJob::processOne()
-{
-    if (!d->todo.isEmpty())
-    {
-        d->condVar.wakeAll();
-    }
-    else
-    {
-        emit signalThumbnailJobFinished();
-    }
+    d->condVar.wakeAll();
 }
 
 void VideoThumbnailerJob::run()
@@ -161,42 +135,40 @@ void VideoThumbnailerJob::run()
     {
         QMutexLocker lock(&d->mutex);
 
-        if (d->jobDone && !d->todo.isEmpty())
+        if (!d->todo.isEmpty())
         {
-            d->jobDone = false;
-            d->currentFile = d->todo.takeFirst();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << d->currentFile;
-            emit signalGetThumbnail(d->currentFile, d->thumbSize, d->createStrip, d->exifRotate);
+            QString file = d->todo.takeFirst();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << file;
+
+            VideoThumbnailer thumbnailer;
+            FilmStripFilter  filmStrip;
+            QImage           img;
+
+            if (d->createStrip)
+            {
+                thumbnailer.addFilter(&filmStrip);
+            }
+
+            thumbnailer.setThumbnailSize(d->thumbSize);
+            thumbnailer.generateThumbnail(file, img);
+
+            if (!img.isNull())
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Video thumbnail extracted for " << file << " :: " << img;
+                emit signalThumbnailDone(file, img);
+            }
+            else
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to extract video thumbnail for " << file;
+                emit signalThumbnailFailed(file);
+            }
         }
-
-        d->condVar.wait(&d->mutex);
+        else
+        {
+            emit signalThumbnailJobFinished();
+            d->condVar.wait(&d->mutex);
+        }
     }
-}
-
-void VideoThumbnailerJob::slotThumbnailDone(const QString& file, const QImage& img)
-{
-    if (d->jobDone || d->currentFile != file)
-    {
-        return;
-    }
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Video thumbnail extracted for " << file << " :: " << img;
-    emit signalThumbnailDone(file, img);
-    d->jobDone = true;
-    processOne();
-}
-
-void VideoThumbnailerJob::slotThumbnailFailed(const QString& file)
-{
-    if (d->jobDone || d->currentFile != file)
-    {
-        return;
-    }
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to extract video thumbnail for " << file;
-    emit signalThumbnailFailed(file);
-    d->jobDone = true;
-    processOne();
 }
 
 }  // namespace Digikam

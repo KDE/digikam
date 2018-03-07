@@ -224,12 +224,12 @@ set_package_properties("Exiv2"     PROPERTIES
 
 # -- check Media player --------------------------------------------------------
 
-find_package(FFmpeg COMPONENTS AVCODEC AVFORMAT AVUTIL)
+find_package(FFmpeg COMPONENTS AVCODEC AVFILTER AVFORMAT AVUTIL SWSCALE)
 find_package(QtAV)
 
 if(ENABLE_MEDIAPLAYER)
 
-    if(${AVCODEC_FOUND} AND ${AVFORMAT_FOUND} AND ${AVUTIL_FOUND})
+    if(${AVCODEC_FOUND} AND ${AVFILTER_FOUND} AND ${AVFORMAT_FOUND} AND ${AVUTIL_FOUND} AND ${SWSCALE_FOUND})
 
         include_directories(${FFMPEG_INCLUDE_DIRS})
 

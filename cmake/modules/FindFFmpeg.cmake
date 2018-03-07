@@ -38,7 +38,7 @@ INCLUDE(FindPackageHandleStandardArgs)
 
 # The default components were taken from a survey over other FindFFMPEG.cmake files
 IF(NOT FFmpeg_FIND_COMPONENTS)
-    SET(FFmpeg_FIND_COMPONENTS AVCODEC AVFORMAT AVUTIL)
+    SET(FFmpeg_FIND_COMPONENTS AVCODEC AVFILTER AVFORMAT AVUTIL SWSCALE)
 ENDIF()
 
 # Macro to marks the given component as found if both *_LIBRARIES AND *_INCLUDE_DIRS is present.
@@ -143,7 +143,7 @@ if(NOT FFMPEG_LIBRARIES)
 ENDIF()
 
 # Now set the noncached _FOUND vars for the components.
-FOREACH(_component AVCODEC AVDEVICE AVFORMAT AVUTIL POSTPROCESS SWSCALE)
+FOREACH(_component AVCODEC AVDEVICE AVFILTER AVFORMAT AVUTIL POSTPROCESS SWSCALE)
     SET_COMPONENT_FOUND(${_component})
 ENDFOREACH()
 
