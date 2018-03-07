@@ -393,9 +393,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                                        QStringList() << QLatin1String("handler_name"),
                                        vmeta,
                                        "Xmp.video.HandlerDescription");
-            
+
             // --------------
-            
+
             s_setXmpTagStringFromEntry(this,
                                        QStringList() << QLatin1String("_STATISTICS_WRITING_APP"), // MKV (in video stream, not root container)
                                        vmeta,
@@ -904,6 +904,8 @@ QString DMetadata::videoColorModelToString(int colorSpace)
 
 #ifdef HAVE_MEDIAPLAYER
     cs = QString::fromUtf8(av_color_space_name((AVColorSpace)colorSpace));
+#else
+    Q_UNUSED(colorSpace);
 #endif
 
     return cs;
