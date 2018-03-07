@@ -44,4 +44,6 @@ BUGFIXES FROM BUGZILLA:
 035 ==> 346698 - Delete Duplicate on NAS - Crash.
 036 ==> 379420 - Showphoto crashed after resize.
 037 ==> 391440 - Metadata (date) is not refreshed after a file has been modified.
-038 ==> 
+038 ==> 391497 - digiKam crashes when manually stopping database sync.
+039 ==> 
+
