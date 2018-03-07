@@ -1238,7 +1238,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == QLatin1String("videoaudioCodec"))
     {
-        fieldQuery.addChoiceStringField(QLatin1String("VideoMetadata.audioCodec"));
+        fieldQuery.addChoiceStringField(QLatin1String("VideoMetadata.audioCompressor"));
     }
     else if (name == QLatin1String("videoduration"))
     {
