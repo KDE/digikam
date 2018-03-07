@@ -634,7 +634,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
 
     else if (name == QLatin1String("videoaspectratio"))
     {
-        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Aspect Ratio"), i18n("Return video with the frame aspect ratio"));
         QStringList ratio;
@@ -648,7 +648,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("videoduration"))
     {
-        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
+        SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Duration"), i18n("Length of the video"));
         field->setBetweenText(i18nc("Find video with a length between...and...", "and"));
@@ -665,7 +665,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("videoframerate"))
     {
-        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
+        SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Frame Rate"), i18n("Return video with the frame rate"));
         field->setBetweenText(i18nc("Find video with frame rate between...and...", "and"));
@@ -681,26 +681,74 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("videocodec"))
     {
-        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Codec"), i18n("Return video codec"));
         QStringList codec;
-        codec << QLatin1String("avi")  << QLatin1String("Audio Video Interleave");
-        codec << QLatin1String("mov")  << QLatin1String("QuickTime");
-        codec << QLatin1String("mp4")  << QLatin1String("MPEG Layer 4");
-        codec << QLatin1String("3gp")  << QLatin1String("3GPP");
-        codec << QLatin1String("divx") << QLatin1String("DivX");
-        codec << QLatin1String("wma")  << QLatin1String("Windows Media Video");
-        codec << QLatin1String("mkv")  << QLatin1String("Matroska");
-        codec << QLatin1String("s263") << QLatin1String("H.263");
-        codec << QLatin1String("mjpg") << QLatin1String("Motion JPEG");
+
+        // List of most common video codecs supported by FFMpeg (see "ffpmpeg -codecs" for details)
+        //
+        //       FFMpeg codec name                 FFMpeg codec description
+        codec << QLatin1String("8bps")          << QLatin1String("QuickTime 8BPS video");
+        codec << QLatin1String("amv")           << QLatin1String("AMV Video");
+        codec << QLatin1String("avs")           << QLatin1String("AVS (Audio Video Standard) video");
+        codec << QLatin1String("cavs")          << QLatin1String("Chinese AVS (Audio Video Standard) (AVS1-P2, JiZhun profile)");
+        codec << QLatin1String("cinepak")       << QLatin1String("Cinepak");
+        codec << QLatin1String("dirac")         << QLatin1String("Dirac");
+        codec << QLatin1String("flv1")          << QLatin1String("FLV / Sorenson Spark / Sorenson H.263 (Flash Video)");
+        codec << QLatin1String("h261")          << QLatin1String("H.261");
+        codec << QLatin1String("h263")          << QLatin1String("H.263 / H.263-1996, H.263+ / H.263-1998 / H.263 version 2");
+        codec << QLatin1String("h263i")         << QLatin1String("Intel H.263");
+        codec << QLatin1String("h263p")         << QLatin1String("H.263+ / H.263-1998 / H.263 version 2");
+        codec << QLatin1String("h264")          << QLatin1String("H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10");
+        codec << QLatin1String("hevc")          << QLatin1String("H.265 / HEVC (High Efficiency Video Coding)");
+        codec << QLatin1String("jpeg2000")      << QLatin1String("JPEG 2000");
+        codec << QLatin1String("mjpeg")         << QLatin1String("Motion JPEG");
+        codec << QLatin1String("mjpegb")        << QLatin1String("Apple MJPEG-B");
+        codec << QLatin1String("mpeg1video")    << QLatin1String("MPEG-1 video");
+        codec << QLatin1String("mpeg2video")    << QLatin1String("MPEG-2 video");
+        codec << QLatin1String("mpeg4")         << QLatin1String("MPEG-4 part 2");
+        codec << QLatin1String("msmpeg4v1")     << QLatin1String("MPEG-4 part 2 Microsoft variant version 1");
+        codec << QLatin1String("msmpeg4v2")     << QLatin1String("MPEG-4 part 2 Microsoft variant version 2");
+        codec << QLatin1String("msmpeg4v3")     << QLatin1String("MPEG-4 part 2 Microsoft variant version 3");
+        codec << QLatin1String("msvideo1")      << QLatin1String("Microsoft Video 1");
+        codec << QLatin1String("msrle")         << QLatin1String("Microsoft RLE");
+        codec << QLatin1String("mvc1")          << QLatin1String("Silicon Graphics Motion Video Compressor 1");
+        codec << QLatin1String("mvc2")          << QLatin1String("Silicon Graphics Motion Video Compressor 2");
+        codec << QLatin1String("qtrle")         << QLatin1String("QuickTime Animation (RLE) video");
+        codec << QLatin1String("rawvideo")      << QLatin1String("Raw video");
+        codec << QLatin1String("rpza")          << QLatin1String("QuickTime video (RPZA)");
+        codec << QLatin1String("rv10")          << QLatin1String("RealVideo 1.0");
+        codec << QLatin1String("rv20")          << QLatin1String("RealVideo 2.0");
+        codec << QLatin1String("rv30")          << QLatin1String("RealVideo 3.0");
+        codec << QLatin1String("rv40")          << QLatin1String("RealVideo 4.0");
+        codec << QLatin1String("smc")           << QLatin1String("QuickTime Graphics (SMC)");
+        codec << QLatin1String("snow")          << QLatin1String("Snow");
+        codec << QLatin1String("svq1")          << QLatin1String("Sorenson Vector Quantizer 1 / Sorenson Video 1 / SVQ1");
+        codec << QLatin1String("svq3")          << QLatin1String("Sorenson Vector Quantizer 3 / Sorenson Video 3 / SVQ3");
+        codec << QLatin1String("theora")        << QLatin1String("Theora");
+        codec << QLatin1String("vc1")           << QLatin1String("SMPTE VC-1");
+        codec << QLatin1String("vc1image")      << QLatin1String("Windows Media Video 9 Image v2");
+        codec << QLatin1String("vp3")           << QLatin1String("On2 VP3");
+        codec << QLatin1String("vp5")           << QLatin1String("On2 VP5");
+        codec << QLatin1String("vp6")           << QLatin1String("On2 VP6");
+        codec << QLatin1String("vp6a")          << QLatin1String("On2 VP6 (Flash version, with alpha channel)");
+        codec << QLatin1String("vp6f")          << QLatin1String("On2 VP6 (Flash version)");
+        codec << QLatin1String("vp7")           << QLatin1String("On2 VP7");
+        codec << QLatin1String("vp8")           << QLatin1String("On2 VP8");
+        codec << QLatin1String("vp9")           << QLatin1String("Google VP9");
+        codec << QLatin1String("wmv1")          << QLatin1String("Windows Media Video 7");
+        codec << QLatin1String("wmv2")          << QLatin1String("Windows Media Video 8");
+        codec << QLatin1String("wmv3")          << QLatin1String("Windows Media Video 9");
+        codec << QLatin1String("wmv3image")     << QLatin1String("Windows Media Video 9 Image");
+
         // TODO: add more possible codec
         field->setChoice(codec);
         return field;
     }
     else if (name == QLatin1String("videoaudiobitrate"))
     {
-        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
+        SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Audio Bit Rate"), i18n("Return video audio bits rate"));
         field->setBetweenText(i18nc("Find video with audio bit rate between...and...", "and"));
@@ -717,7 +765,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("videoaudiochanneltype"))
     {
-        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Audio Channel Type"), i18n("Return video audio Channel Type"));
         QStringList type;
@@ -729,16 +777,96 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("videoaudioCodec"))
     {
-        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Audio Codec"), i18n("Return video audio Codec"));
         QStringList type;
-        type << QLatin1String("raw")           << QLatin1String("RAW");
-        type << QLatin1String("mp3")           << QLatin1String("MPEG Layer 3");
-        type << QLatin1String("mp4a")          << QLatin1String("MPEG4 Audio");
-        type << QLatin1String("samr")          << QLatin1String("Adaptive Multi-rate Audio");
-        type << QLatin1String("sowt")          << QLatin1String("Apple QuickTime SWOT Little Endian PCM Audio");
-        type << QLatin1String("Microsoft PCM") << QLatin1String("Microsoft PCM");
+
+        // List of most common audio codecs supported by FFMpeg (see "ffpmpeg -codecs" for details)
+        //
+        //      FFMpeg codec name                      FFMpeg codec description
+        type << QLatin1String("aac")                << QLatin1String("AAC (Advanced Audio Coding)");
+        type << QLatin1String("aac_latm")           << QLatin1String("AAC LATM (Advanced Audio Coding LATM syntax)");
+        type << QLatin1String("ac3")                << QLatin1String("ATSC A/52A (AC-3)");
+        type << QLatin1String("adpcm_g722")         << QLatin1String("G.722 ADPCM");
+        type << QLatin1String("adpcm_g726")         << QLatin1String("G.726 ADPCM");
+        type << QLatin1String("adpcm_g726le")       << QLatin1String("G.726 ADPCM little-endian");
+        type << QLatin1String("adpcm_ima_wav")      << QLatin1String("ADPCM IMA WAV");
+        type << QLatin1String("adpcm_ima_qt")       << QLatin1String("ADPCM IMA QuickTime");
+        type << QLatin1String("adpcm_swf")          << QLatin1String("ADPCM Shockwave Flash");
+        type << QLatin1String("alac")               << QLatin1String("ALAC (Apple Lossless Audio Codec)");
+        type << QLatin1String("amr_nb")             << QLatin1String("AMR-NB (Adaptive Multi-Rate NarrowBand)");
+        type << QLatin1String("amr_wb")             << QLatin1String("AMR-WB (Adaptive Multi-Rate WideBand)");
+        type << QLatin1String("ape")                << QLatin1String("Monkey's Audio");
+        type << QLatin1String("atrac1")             << QLatin1String("ATRAC1 (Adaptive TRansform Acoustic Coding)");
+        type << QLatin1String("atrac3")             << QLatin1String("ATRAC3 (Adaptive TRansform Acoustic Coding 3)");
+        type << QLatin1String("atrac3al")           << QLatin1String("ATRAC3 AL (Adaptive TRansform Acoustic Coding 3 Advanced Lossless)");
+        type << QLatin1String("atrac3p")            << QLatin1String("ATRAC3+ (Adaptive TRansform Acoustic Coding 3+)");
+        type << QLatin1String("atrac3pal")          << QLatin1String("ATRAC3+ AL (Adaptive TRansform Acoustic Coding 3+ Advanced Lossless)");
+        type << QLatin1String("celt")               << QLatin1String("Constrained Energy Lapped Transform (CELT)");
+        type << QLatin1String("cook")               << QLatin1String("Cook / Cooker / Gecko (RealAudio G2)");
+        type << QLatin1String("dts")                << QLatin1String("DCA (DTS Coherent Acoustics)");
+        type << QLatin1String("eac3")               << QLatin1String("ATSC A/52B (AC-3, E-AC-3)");
+        type << QLatin1String("flac")               << QLatin1String("FLAC (Free Lossless Audio Codec)");
+        type << QLatin1String("g723_1")             << QLatin1String("G.723.1");
+        type << QLatin1String("g729")               << QLatin1String("G.729");
+        type << QLatin1String("mp1")                << QLatin1String("MP1 (MPEG audio layer 1)");
+        type << QLatin1String("mp2")                << QLatin1String("MP2 (MPEG audio layer 2)");
+        type << QLatin1String("mp3")                << QLatin1String("MP3 (MPEG audio layer 3)");
+        type << QLatin1String("mp3adu")             << QLatin1String("ADU (Application Data Unit) MP3 (MPEG audio layer 3)");
+        type << QLatin1String("mp3on4")             << QLatin1String("MP3 on MP4");
+        type << QLatin1String("mp4als")             << QLatin1String("MPEG-4 Audio Lossless Coding (ALS)");
+        type << QLatin1String("musepack7")          << QLatin1String("Musepack SV7");
+        type << QLatin1String("musepack8")          << QLatin1String("Musepack SV8");
+        type << QLatin1String("nellymoser")         << QLatin1String("Nellymoser Asao");
+        type << QLatin1String("opus")               << QLatin1String("Opus (Opus Interactive Audio Codec)");
+        type << QLatin1String("pcm_alaw")           << QLatin1String("PCM A-law / G.711 A-law");
+        type << QLatin1String("pcm_bluray")         << QLatin1String("PCM signed 16|20|24-bit big-endian for Blu-ray media");
+        type << QLatin1String("pcm_dvd")            << QLatin1String("PCM signed 20|24-bit big-endian");
+        type << QLatin1String("pcm_f16le")          << QLatin1String("PCM 16.8 floating point little-endian");
+        type << QLatin1String("pcm_f24le")          << QLatin1String("PCM 24.0 floating point little-endian");
+        type << QLatin1String("pcm_f32be")          << QLatin1String("PCM 32-bit floating point big-endian");
+        type << QLatin1String("pcm_f32le")          << QLatin1String("PCM 32-bit floating point little-endian");
+        type << QLatin1String("pcm_f64be")          << QLatin1String("PCM 64-bit floating point big-endian");
+        type << QLatin1String("pcm_f64le")          << QLatin1String("PCM 64-bit floating point little-endian");
+        type << QLatin1String("pcm_lxf")            << QLatin1String("PCM signed 20-bit little-endian planar");
+        type << QLatin1String("pcm_mulaw")          << QLatin1String("PCM mu-law / G.711 mu-law");
+        type << QLatin1String("pcm_s16be")          << QLatin1String("PCM signed 16-bit big-endian");
+        type << QLatin1String("pcm_s16be_planar")   << QLatin1String("PCM signed 16-bit big-endian planar");
+        type << QLatin1String("pcm_s16le")          << QLatin1String("PCM signed 16-bit little-endian");
+        type << QLatin1String("pcm_s16le_planar")   << QLatin1String("PCM signed 16-bit little-endian planar");
+        type << QLatin1String("pcm_s24be")          << QLatin1String("PCM signed 24-bit big-endian");
+        type << QLatin1String("pcm_s24daud")        << QLatin1String("PCM D-Cinema audio signed 24-bit");
+        type << QLatin1String("pcm_s24le")          << QLatin1String("PCM signed 24-bit little-endian");
+        type << QLatin1String("pcm_s24le_planar")   << QLatin1String("PCM signed 24-bit little-endian planar");
+        type << QLatin1String("pcm_s32be")          << QLatin1String("PCM signed 32-bit big-endian");
+        type << QLatin1String("pcm_s32le")          << QLatin1String("PCM signed 32-bit little-endian");
+        type << QLatin1String("pcm_s32le_planar")   << QLatin1String("PCM signed 32-bit little-endian planar");
+        type << QLatin1String("pcm_s64be")          << QLatin1String("PCM signed 64-bit big-endian");
+        type << QLatin1String("pcm_s64le")          << QLatin1String("PCM signed 64-bit little-endian");
+        type << QLatin1String("pcm_s8")             << QLatin1String("PCM signed 8-bit");
+        type << QLatin1String("pcm_s8_planar")      << QLatin1String("PCM signed 8-bit planar");
+        type << QLatin1String("pcm_u16be")          << QLatin1String("PCM unsigned 16-bit big-endian");
+        type << QLatin1String("pcm_u16le")          << QLatin1String("PCM unsigned 16-bit little-endian");
+        type << QLatin1String("pcm_u24be")          << QLatin1String("PCM unsigned 24-bit big-endian");
+        type << QLatin1String("pcm_u24le")          << QLatin1String("PCM unsigned 24-bit little-endian");
+        type << QLatin1String("pcm_u32be")          << QLatin1String("PCM unsigned 32-bit big-endian");
+        type << QLatin1String("pcm_u32le")          << QLatin1String("PCM unsigned 32-bit little-endian");
+        type << QLatin1String("pcm_u8")             << QLatin1String("PCM unsigned 8-bit");
+        type << QLatin1String("pcm_zork")           << QLatin1String("PCM Zork");
+        type << QLatin1String("ra_144")             << QLatin1String("RealAudio 1.0 (14.4K)");
+        type << QLatin1String("ra_288")             << QLatin1String("RealAudio 2.0 (28.8K)");
+        type << QLatin1String("ralf")               << QLatin1String("RealAudio Lossless");
+        type << QLatin1String("sipr")               << QLatin1String("RealAudio SIPR / ACELP.NET");
+        type << QLatin1String("speex")              << QLatin1String("Speex");
+        type << QLatin1String("tak")                << QLatin1String("TAK (Tom's lossless Audio Kompressor)");
+        type << QLatin1String("wavpack")            << QLatin1String("WavPack");
+        type << QLatin1String("wmalossless")        << QLatin1String("Windows Media Audio Lossless");
+        type << QLatin1String("wmapro")             << QLatin1String("Windows Media Audio 9 Professional");
+        type << QLatin1String("wmav1")              << QLatin1String("Windows Media Audio 1");
+        type << QLatin1String("wmav2")              << QLatin1String("Windows Media Audio 2");
+        type << QLatin1String("wmavoice")           << QLatin1String("Windows Media Audio Voice");
+
         // TODO: add more possible audio Codec
         field->setChoice(type);
         return field;
