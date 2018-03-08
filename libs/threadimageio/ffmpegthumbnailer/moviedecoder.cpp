@@ -283,7 +283,7 @@ void MovieDecoder::seek(int timeInSeconds)
     int keyFrameAttempts = 0;
     bool gotFrame        = 0;
 
-    do 
+    do
     {
         int count = 0;
         gotFrame  = 0;
@@ -292,12 +292,13 @@ void MovieDecoder::seek(int timeInSeconds)
         {
             getVideoPacket();
             gotFrame = decodeVideoPacket();
-            ++count;
+            count++;
         }
 
-        ++keyFrameAttempts;
+        keyFrameAttempts++;
     }
-    while ((!gotFrame || !d->pFrame->key_frame) && keyFrameAttempts < 200);
+    while ((!gotFrame || !d->pFrame->key_frame) &&
+            keyFrameAttempts < 200);
 
     if (gotFrame == 0)
     {
@@ -368,13 +369,15 @@ bool MovieDecoder::getVideoPacket()
 
     d->pPacket = new AVPacket();
 
-    while (framesAvailable && !frameDecoded && (attempts++ < 1000))
+    while (framesAvailable &&
+           !frameDecoded &&
+           (attempts++ < 1000))
     {
-        framesAvailable = av_read_frame(d->pFormatContext, d->pPacket) >= 0;
+        framesAvailable = (av_read_frame(d->pFormatContext, d->pPacket) >= 0);
 
         if (framesAvailable)
         {
-            frameDecoded = d->pPacket->stream_index == d->videoStream;
+            frameDecoded = (d->pPacket->stream_index == d->videoStream);
 
             if (!frameDecoded)
             {
@@ -402,7 +405,7 @@ bool MovieDecoder::initFilterGraph(enum AVPixelFormat pixfmt, int width, int hei
     AVFilterInOut* outputs = 0;
 
     deleteFilterGraph();
-    d->filterGraph          = avfilter_graph_alloc();
+    d->filterGraph         = avfilter_graph_alloc();
 
     QByteArray arguments("buffer=");
     arguments += "video_size=" + QByteArray::number(width)  + "x" + QByteArray::number(height) + ":";
@@ -420,7 +423,9 @@ bool MovieDecoder::initFilterGraph(enum AVPixelFormat pixfmt, int width, int hei
     }
 
     if (inputs || outputs)
+    {
         return -1;
+    }
 
     ret = avfilter_graph_config(d->filterGraph, nullptr);
 
@@ -464,7 +469,7 @@ bool MovieDecoder::processFilterGraph(AVPicture* dst,
         }
     }
 
-    memcpy(d->filterFrame->data, src->data, sizeof(src->data));
+    memcpy(d->filterFrame->data,     src->data,     sizeof(src->data));
     memcpy(d->filterFrame->linesize, src->linesize, sizeof(src->linesize));
 
     d->filterFrame->width  = width;
@@ -484,7 +489,7 @@ bool MovieDecoder::processFilterGraph(AVPicture* dst,
         return false;
     }
 
-    av_picture_copy(dst, (const AVPicture *) d->filterFrame, pixfmt, width, height);
+    av_picture_copy(dst, (const AVPicture*)d->filterFrame, pixfmt, width, height);
     av_frame_unref(d->filterFrame);
 
     return true;
@@ -496,8 +501,8 @@ void MovieDecoder::getScaledVideoFrame(int scaledSize,
 {
     if (d->pFrame->interlaced_frame)
     {
-        processFilterGraph((AVPicture*) d->pFrame,
-                           (AVPicture*) d->pFrame,
+        processFilterGraph((AVPicture*)d->pFrame,
+                           (AVPicture*)d->pFrame,
                            d->pVideoCodecContext->pix_fmt,
                            d->pVideoCodecContext->width,
                            d->pVideoCodecContext->height);
@@ -535,26 +540,36 @@ void MovieDecoder::convertAndScaleFrame(AVPixelFormat format,
                                                     NULL,
                                                     NULL);
 
-    if (NULL == scaleContext)
+    if (!scaleContext)
     {
         qDebug(DIGIKAM_GENERAL_LOG) << "Failed to create resize context";
         return;
     }
 
-    AVFrame* convertedFrame       = NULL;
-    uint8_t* convertedFrameBuffer = NULL;
+    AVFrame* convertedFrame       = 0;
+    uint8_t* convertedFrameBuffer = 0;
 
-    createAVFrame(&convertedFrame, &convertedFrameBuffer, scaledWidth, scaledHeight, format);
+    createAVFrame(&convertedFrame,
+                  &convertedFrameBuffer,
+                  scaledWidth,
+                  scaledHeight,
+                  format);
 
-    sws_scale(scaleContext, d->pFrame->data, d->pFrame->linesize, 0, d->pVideoCodecContext->height,
-              convertedFrame->data, convertedFrame->linesize);
+    sws_scale(scaleContext,
+              d->pFrame->data,
+              d->pFrame->linesize,
+              0,
+              d->pVideoCodecContext->height,
+              convertedFrame->data,
+              convertedFrame->linesize);
+
     sws_freeContext(scaleContext);
 
     av_frame_free(&d->pFrame);
     av_free(d->pFrameBuffer);
 
-    d->pFrame        = convertedFrame;
-    d->pFrameBuffer  = convertedFrameBuffer;
+    d->pFrame       = convertedFrame;
+    d->pFrameBuffer = convertedFrameBuffer;
 }
 
 void MovieDecoder::calculateDimensions(int squareSize,

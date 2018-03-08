@@ -52,13 +52,12 @@ using namespace std;
 namespace Digikam
 {
 
-static const int SMART_FRAME_ATTEMPTS = 25;
-
 class VideoThumbnailer::Private
 {
 public:
 
     Private()
+      :  SMART_FRAME_ATTEMPTS(25)
     {
         thumbnailSize       = 128;
         seekPercentage      = 10;
@@ -76,8 +75,10 @@ public:
     bool                          smartFrameSelection;
     QString                       seekTime;
     std::vector<FilmStripFilter*> filters;
+
+    const int                     SMART_FRAME_ATTEMPTS;
 };
-    
+
 VideoThumbnailer::VideoThumbnailer()
     : d(new Private)
 {
@@ -142,17 +143,18 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile, ImageWriter& 
 
     if (movieDecoder.getInitialized())
     {
-        movieDecoder.decodeVideoFrame(); //before seeking, a frame has to be decoded
-        
+        movieDecoder.decodeVideoFrame(); // before seeking, a frame has to be decoded
+
         if ((!d->workAroundIssues) || (movieDecoder.getCodec() != QLatin1String("h264")))
         {
-            //workaround for bug in older ffmpeg (100% cpu usage when seeking in h264 files)
-            int secondToSeekTo = d->seekTime.isEmpty() ? movieDecoder.getDuration() * d->seekPercentage / 100 : timeToSeconds(d->seekTime);
+            // workaround for bug in older ffmpeg (100% cpu usage when seeking in h264 files)
+            int secondToSeekTo = d->seekTime.isEmpty() ? movieDecoder.getDuration() * d->seekPercentage / 100 
+                                                       : timeToSeconds(d->seekTime);
             movieDecoder.seek(secondToSeekTo);
         }
-    
+
         VideoFrame videoFrame;
-        
+
         if (d->smartFrameSelection)
         {
             generateSmartThumbnail(movieDecoder, videoFrame);
@@ -161,7 +163,7 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile, ImageWriter& 
         {
             movieDecoder.getScaledVideoFrame(d->thumbnailSize, d->maintainAspectRatio, videoFrame);
         }
-        
+
         applyFilters(videoFrame);
         imageWriter.writeFrame(videoFrame, image);
     }
@@ -169,10 +171,10 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile, ImageWriter& 
 
 void VideoThumbnailer::generateSmartThumbnail(MovieDecoder& movieDecoder, VideoFrame& videoFrame)
 {
-    vector<VideoFrame> videoFrames(SMART_FRAME_ATTEMPTS);
-    vector<Histogram<int> > histograms(SMART_FRAME_ATTEMPTS);
+    vector<VideoFrame> videoFrames(d->SMART_FRAME_ATTEMPTS);
+    vector<Histogram<int> > histograms(d->SMART_FRAME_ATTEMPTS);
 
-    for (int i = 0; i < SMART_FRAME_ATTEMPTS; ++i)
+    for (int i = 0 ; i < d->SMART_FRAME_ATTEMPTS ; i++)
     {
         movieDecoder.decodeVideoFrame();
         movieDecoder.getScaledVideoFrame(d->thumbnailSize, d->maintainAspectRatio, videoFrames[i]);
@@ -182,6 +184,7 @@ void VideoThumbnailer::generateSmartThumbnail(MovieDecoder& movieDecoder, VideoF
     int bestFrame = getBestThumbnailIndex(videoFrames, histograms);
 
     Q_ASSERT(bestFrame != -1);
+
     videoFrame = videoFrames[bestFrame];
 }
 
@@ -228,11 +231,11 @@ void VideoThumbnailer::applyFilters(VideoFrame& videoFrame)
 
 void VideoThumbnailer::generateHistogram(const VideoFrame& videoFrame, Histogram<int>& histogram)
 {
-    for (quint32 i = 0; i < videoFrame.height; ++i)
+    for (quint32 i = 0 ; i < videoFrame.height ; i++)
     {
         int pixelIndex = i * videoFrame.lineSize;
 
-        for (quint32 j = 0; j < videoFrame.width * 3; j += 3)
+        for (quint32 j = 0 ; j < videoFrame.width * 3 ; j += 3)
         {
             ++histogram.r[videoFrame.frameData[pixelIndex + j]];
             ++histogram.g[videoFrame.frameData[pixelIndex + j + 1]];
@@ -246,10 +249,10 @@ int VideoThumbnailer::getBestThumbnailIndex(vector<VideoFrame>& videoFrames,
 {
     Q_UNUSED(videoFrames);
     Histogram<float> avgHistogram;
-    
-    for (size_t i = 0; i < histograms.size(); ++i)
+
+    for (size_t i = 0 ; i < histograms.size() ; i++)
     {
-        for (int j = 0; j < 255; ++j)
+        for (int j = 0 ; j < 255 ; j++)
         {
             avgHistogram.r[j] += static_cast<float>(histograms[i].r[j]) / histograms.size();
             avgHistogram.g[j] += static_cast<float>(histograms[i].g[j]) / histograms.size();
@@ -260,30 +263,34 @@ int VideoThumbnailer::getBestThumbnailIndex(vector<VideoFrame>& videoFrames,
     int bestFrame = -1;
     float minRMSE = FLT_MAX;
 
-    for (size_t i = 0; i < histograms.size(); ++i) 
+    for (size_t i = 0 ; i < histograms.size(); i++)
     {
         //calculate root mean squared error
         float rmse = 0.0;
 
-        for (int j = 0; j < 255; ++j)
+        for (int j = 0 ; j < 255 ; j++)
         {
-            float error = fabsf(avgHistogram.r[j] - histograms[i].r[j])
-                        + fabsf(avgHistogram.g[j] - histograms[i].g[j])
-                        + fabsf(avgHistogram.b[j] - histograms[i].b[j]);
+            float error = fabsf(avgHistogram.r[j] - histograms[i].r[j]) +
+                          fabsf(avgHistogram.g[j] - histograms[i].g[j]) +
+                          fabsf(avgHistogram.b[j] - histograms[i].b[j]);
             rmse += (error * error) / 255;
         }
 
         rmse = sqrtf(rmse);
-        
+
         if (rmse < minRMSE)
         {
             minRMSE   = rmse;
             bestFrame = i;
         }
     }
-
-    // qCDebug(DIGIKAM_GENERAL_LOG) << "Best frame was: " << bestFrame << "(RMSE: " << minRMSE << ")" << endl;
-
+/*
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Best frame was: "
+                                 << bestFrame
+                                 << "(RMSE: "
+                                 << minRMSE
+                                 << ")" << endl;
+*/
     return bestFrame;
 }
 

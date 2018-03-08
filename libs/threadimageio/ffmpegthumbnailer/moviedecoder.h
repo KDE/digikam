@@ -52,7 +52,7 @@ class MovieDecoder
 public:
 
     explicit MovieDecoder(const QString& filename,
-                          AVFormatContext* const pavContext = NULL);
+                          AVFormatContext* const pavContext = 0);
     ~MovieDecoder();
 
 public:

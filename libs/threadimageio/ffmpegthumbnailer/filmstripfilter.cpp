@@ -79,7 +79,7 @@ static const quint8 filmStrip16[16 * 16 * 3] =
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
 };
-                                                    
+
 static const quint8 filmStrip32[32 * 32 * 3] =
 {
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
@@ -183,7 +183,7 @@ static const quint8 filmStrip32[32 * 32 * 3] =
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
 };
-                                                    
+
 static const quint8 filmStrip64[64 * 64 * 3] =
 {
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
@@ -590,7 +590,7 @@ static const quint8 filmStrip64[64 * 64 * 3] =
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
 };
-    
+
 static const quint32 SMALLEST_FILM_STRIP_WIDTH = 4;
 static const int FILMHOLE_WIDTH                = 12;
 static const int FILMHOLE_HEIGHT               = 10;
@@ -601,7 +601,7 @@ static const quint8* determineFilmStrip(quint32 videoWidth, quint32& filmStripWi
     {
         return NULL;
     }
-    
+
     if (videoWidth <= 96)
     {
         filmStripWidth = filmStripHeight = 4;
@@ -644,17 +644,17 @@ void FilmStripFilter::process(VideoFrame& videoFrame)
     quint32 filmStripWidth;
     quint32 filmStripHeight;
     const quint8* filmHole = determineFilmStrip(videoFrame.width, filmStripWidth, filmStripHeight);
-    
+
     if (!filmHole)
     {
         return;
     }
-    
+
     int frameIndex    = 0;
     int filmHoleIndex = 0;
     int offset        = (videoFrame.width * 3) - 3;
 
-    for (quint32 i = 0 ; i < videoFrame.height ; ++i)
+    for (quint32 i = 0 ; i < videoFrame.height ; i++)
     {
         for (quint32 j = 0 ; j < filmStripWidth * 3 ; j+=3)
         {
@@ -671,7 +671,7 @@ void FilmStripFilter::process(VideoFrame& videoFrame)
 
         frameIndex   += videoFrame.lineSize;
         filmHoleIndex = (i % filmStripHeight) * filmStripWidth * 3;
-    }   
+    }
 }
 
 } // namespace Digikam

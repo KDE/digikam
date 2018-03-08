@@ -85,7 +85,7 @@ private:
         ~Histogram()
         {
         }
-        
+
     public:
 
         T r[256];

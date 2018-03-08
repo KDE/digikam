@@ -36,7 +36,7 @@ public:
 
     explicit FilmStripFilter();
     ~FilmStripFilter();
-    
+
     void process(VideoFrame& videoFrame);
 };
 
