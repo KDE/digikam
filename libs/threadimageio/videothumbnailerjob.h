@@ -7,6 +7,7 @@
  * Description : a class to manage video thumbnails extraction
  *
  * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2016-2018 by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VIDEOTHUMBNAILERJOB_H
-#define VIDEOTHUMBNAILERJOB_H
+#ifndef VIDEO_THUMBNAILER_JOB_H
+#define VIDEO_THUMBNAILER_JOB_H
 
 // Qt includes
 
@@ -95,4 +96,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* VIDEOTHUMBNAILERJOB_H */
+#endif // VIDEO_THUMBNAILER_JOB_H

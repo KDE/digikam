@@ -1,32 +1,47 @@
-//    Copyright (C) 2010 Dirk Vanden Boer <dirk.vdb@gmail.com>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2016-04-21
+ * Description : video thumbnails extraction based on ffmpeg
+ *
+ * Copyright (C) 2010      by Dirk Vanden Boer <dirk dot vdb at gmail dot com>
+ * Copyright (C) 2016-2018 by Maik Qualmann <metzpinguin at gmail dot com>
+ * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #include "videothumbnailer.h"
+
+// C++ includes
+
+#include <vector>
+#include <cfloat>
+#include <cmath>
+#include <sys/stat.h>
+
+// Qt includes
+
+#include <QtGlobal>
+#include <QTime>
+
+// Local includes
 
 #include "moviedecoder.h"
 #include "filmstripfilter.h"
 #include "imagewriter.h"
-
-#include <iostream>
-#include <cfloat>
-#include <cmath>
-#include <qglobal.h>
-#include <sys/stat.h>
-#include <QTime>
-
+#include "digikam_debug.h"
 
 using namespace std;
 
@@ -36,21 +51,24 @@ namespace Digikam
 static const int SMART_FRAME_ATTEMPTS = 25;
 
 VideoThumbnailer::VideoThumbnailer()
-        : m_ThumbnailSize(128)
-        , m_SeekPercentage(10)
-        , m_OverlayFilmStrip(false)
-        , m_WorkAroundIssues(false)
-        , m_MaintainAspectRatio(true)
-        , m_SmartFrameSelection(false)
+    : m_ThumbnailSize(128),
+      m_SeekPercentage(10),
+      m_OverlayFilmStrip(false),
+      m_WorkAroundIssues(false),
+      m_MaintainAspectRatio(true),
+      m_SmartFrameSelection(false)
 {
 }
 
-VideoThumbnailer::VideoThumbnailer(int thumbnailSize, bool workaroundIssues, bool maintainAspectRatio, bool smartFrameSelection)
-        : m_ThumbnailSize(thumbnailSize)
-        , m_SeekPercentage(10)
-        , m_WorkAroundIssues(workaroundIssues)
-        , m_MaintainAspectRatio(maintainAspectRatio)
-        , m_SmartFrameSelection(smartFrameSelection)
+VideoThumbnailer::VideoThumbnailer(int thumbnailSize,
+                                   bool workaroundIssues,
+                                   bool maintainAspectRatio,
+                                   bool smartFrameSelection)
+    : m_ThumbnailSize(thumbnailSize),
+      m_SeekPercentage(10),
+      m_WorkAroundIssues(workaroundIssues),
+      m_MaintainAspectRatio(maintainAspectRatio),
+      m_SmartFrameSelection(smartFrameSelection)
 {
 }
 
@@ -97,19 +115,26 @@ int timeToSeconds(const QString& time)
 void VideoThumbnailer::generateThumbnail(const QString& videoFile, ImageWriter& imageWriter, QImage &image)
 {
     MovieDecoder movieDecoder(videoFile, NULL);
-    if (movieDecoder.getInitialized()) {
+
+    if (movieDecoder.getInitialized())
+    {
         movieDecoder.decodeVideoFrame(); //before seeking, a frame has to be decoded
         
-        if ((!m_WorkAroundIssues) || (movieDecoder.getCodec() != QLatin1String("h264"))) { //workaround for bug in older ffmpeg (100% cpu usage when seeking in h264 files)
+        if ((!m_WorkAroundIssues) || (movieDecoder.getCodec() != QLatin1String("h264")))
+        {
+            //workaround for bug in older ffmpeg (100% cpu usage when seeking in h264 files)
             int secondToSeekTo = m_SeekTime.isEmpty() ? movieDecoder.getDuration() * m_SeekPercentage / 100 : timeToSeconds(m_SeekTime);
             movieDecoder.seek(secondToSeekTo);
         }
     
         VideoFrame videoFrame;
         
-        if (m_SmartFrameSelection) {
+        if (m_SmartFrameSelection)
+        {
             generateSmartThumbnail(movieDecoder, videoFrame);
-        } else {
+        }
+        else
+        {
             movieDecoder.getScaledVideoFrame(m_ThumbnailSize, m_MaintainAspectRatio, videoFrame);
         }
         
@@ -123,7 +148,8 @@ void VideoThumbnailer::generateSmartThumbnail(MovieDecoder& movieDecoder, VideoF
     vector<VideoFrame> videoFrames(SMART_FRAME_ATTEMPTS);
     vector<Histogram<int> > histograms(SMART_FRAME_ATTEMPTS);
 
-    for (int i = 0; i < SMART_FRAME_ATTEMPTS; ++i) {
+    for (int i = 0; i < SMART_FRAME_ATTEMPTS; ++i)
+    {
         movieDecoder.decodeVideoFrame();
         movieDecoder.getScaledVideoFrame(m_ThumbnailSize, m_MaintainAspectRatio, videoFrames[i]);
         generateHistogram(videoFrames[i], histograms[i]);
@@ -137,22 +163,24 @@ void VideoThumbnailer::generateSmartThumbnail(MovieDecoder& movieDecoder, VideoF
 
 void VideoThumbnailer::generateThumbnail(const QString& videoFile, QImage &image)
 {
-    ImageWriter* imageWriter = new  ImageWriter();
+    ImageWriter* const imageWriter = new  ImageWriter();
     generateThumbnail(videoFile, *imageWriter, image);
     delete imageWriter;
 }
 
-void VideoThumbnailer::addFilter(IFilter* filter)
+void VideoThumbnailer::addFilter(FilmStripFilter* filter)
 {
     m_Filters.push_back(filter);
 }
 
-void VideoThumbnailer::removeFilter(IFilter* filter)
+void VideoThumbnailer::removeFilter(FilmStripFilter* filter)
 {
-    for (vector<IFilter*>::iterator iter = m_Filters.begin();
-            iter != m_Filters.end();
-            ++iter) {
-        if (*iter == filter) {
+    for (vector<FilmStripFilter*>::iterator iter = m_Filters.begin();
+         iter != m_Filters.end();
+         ++iter)
+    {
+        if (*iter == filter)
+        {
             m_Filters.erase(iter);
             break;
         }
@@ -166,18 +194,22 @@ void VideoThumbnailer::clearFilters()
 
 void VideoThumbnailer::applyFilters(VideoFrame& videoFrame)
 {
-    for (vector<IFilter*>::iterator iter = m_Filters.begin();
-            iter != m_Filters.end();
-            ++iter) {
+    for (vector<FilmStripFilter*>::iterator iter = m_Filters.begin();
+         iter != m_Filters.end();
+         ++iter)
+    {
         (*iter)->process(videoFrame);
     }
 }
 
 void VideoThumbnailer::generateHistogram(const VideoFrame& videoFrame, Histogram<int>& histogram)
 {
-    for (quint32 i = 0; i < videoFrame.height; ++i) {
+    for (quint32 i = 0; i < videoFrame.height; ++i)
+    {
         int pixelIndex = i * videoFrame.lineSize;
-        for (quint32 j = 0; j < videoFrame.width * 3; j += 3) {
+
+        for (quint32 j = 0; j < videoFrame.width * 3; j += 3)
+        {
             ++histogram.r[videoFrame.frameData[pixelIndex + j]];
             ++histogram.g[videoFrame.frameData[pixelIndex + j + 1]];
             ++histogram.b[videoFrame.frameData[pixelIndex + j + 2]];
@@ -185,12 +217,16 @@ void VideoThumbnailer::generateHistogram(const VideoFrame& videoFrame, Histogram
     }
 }
 
-int VideoThumbnailer::getBestThumbnailIndex(vector<VideoFrame>& videoFrames, const vector<Histogram<int> >& histograms)
+int VideoThumbnailer::getBestThumbnailIndex(vector<VideoFrame>& videoFrames,
+                                            const vector<Histogram<int> >& histograms)
 {
     Q_UNUSED(videoFrames);
     Histogram<float> avgHistogram;
-    for (size_t i = 0; i < histograms.size(); ++i) {
-        for (int j = 0; j < 255; ++j) {
+    
+    for (size_t i = 0; i < histograms.size(); ++i)
+    {
+        for (int j = 0; j < 255; ++j)
+        {
             avgHistogram.r[j] += static_cast<float>(histograms[i].r[j]) / histograms.size();
             avgHistogram.g[j] += static_cast<float>(histograms[i].g[j]) / histograms.size();
             avgHistogram.b[j] += static_cast<float>(histograms[i].b[j]) / histograms.size();
@@ -199,26 +235,32 @@ int VideoThumbnailer::getBestThumbnailIndex(vector<VideoFrame>& videoFrames, con
 
     int bestFrame = -1;
     float minRMSE = FLT_MAX;
-    for (size_t i = 0; i < histograms.size(); ++i) {
+
+    for (size_t i = 0; i < histograms.size(); ++i) 
+    {
         //calculate root mean squared error
         float rmse = 0.0;
-        for (int j = 0; j < 255; ++j) {
+
+        for (int j = 0; j < 255; ++j)
+        {
             float error = fabsf(avgHistogram.r[j] - histograms[i].r[j])
-                          + fabsf(avgHistogram.g[j] - histograms[i].g[j])
-                          + fabsf(avgHistogram.b[j] - histograms[i].b[j]);
+                        + fabsf(avgHistogram.g[j] - histograms[i].g[j])
+                        + fabsf(avgHistogram.b[j] - histograms[i].b[j]);
             rmse += (error * error) / 255;
         }
 
         rmse = sqrtf(rmse);
-        if (rmse < minRMSE) {
-            minRMSE = rmse;
+        
+        if (rmse < minRMSE)
+        {
+            minRMSE   = rmse;
             bestFrame = i;
         }
     }
-#ifdef DEBUG_MODE
-    cout << "Best frame was: " << bestFrame << "(RMSE: " << minRMSE << ")" << endl;
-#endif
+
+    // qCDebug(DIGIKAM_GENERAL_LOG) << "Best frame was: " << bestFrame << "(RMSE: " << minRMSE << ")" << endl;
+
     return bestFrame;
 }
 
-}
+} // namespace Digikam

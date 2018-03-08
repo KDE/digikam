@@ -1,33 +1,46 @@
-//    Copyright (C) 2010 Dirk Vanden Boer <dirk.vdb@gmail.com>
-//
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 2016-04-21
+ * Description : video thumbnails extraction based on ffmpeg
+ *
+ * Copyright (C) 2010      by Dirk Vanden Boer <dirk dot vdb at gmail dot com>
+ * Copyright (C) 2016-2018 by Maik Qualmann <metzpinguin at gmail dot com>
+ * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
 
 #ifndef VIDEO_THUMBNAILER_H
 #define VIDEO_THUMBNAILER_H
+
+// C++ includes
 
 #include <string>
 #include <vector>
 #include <map>
 #include <inttypes.h>
 
-#include "digikam_export.h"
-#include "ifilter.h"
-#include "histogram.h"
+// Qt includes
+
 #include <QString>
 #include <QImage>
 
+// Local includes
+
+#include "digikam_export.h"
+#include "filmstripfilter.h"
 
 namespace Digikam
 {
@@ -36,12 +49,33 @@ class VideoFrame;
 class ImageWriter;
 class MovieDecoder;
 
+template <typename T>
+struct Histogram
+{
+    T r[256];
+    T g[256];
+    T b[256];
+
+    Histogram()
+    {
+        memset(r, 0, 255 * sizeof(T));
+        memset(g, 0, 255 * sizeof(T));
+        memset(b, 0, 255 * sizeof(T));
+    }
+};
+
 class DIGIKAM_EXPORT VideoThumbnailer
 {
 public:
+
     VideoThumbnailer();
-    VideoThumbnailer(int thumbnailSize, bool workaroundIssues, bool maintainAspectRatio, bool smartFrameSelection);
+    VideoThumbnailer(int thumbnailSize,
+                     bool workaroundIssues,
+                     bool maintainAspectRatio,
+                     bool smartFrameSelection);
     ~VideoThumbnailer();
+
+public:
 
     void generateThumbnail(const QString& videoFile, QImage &image);
 
@@ -51,11 +85,12 @@ public:
     void setWorkAroundIssues(bool workAround);
     void setMaintainAspectRatio(bool enabled);
     void setSmartFrameSelection(bool enabled);
-    void addFilter(IFilter* filter);
-    void removeFilter(IFilter* filter);
+    void addFilter(FilmStripFilter* filter);
+    void removeFilter(FilmStripFilter* filter);
     void clearFilters();
 
 private:
+
     void generateThumbnail(const QString& videoFile, ImageWriter& imageWriter, QImage& image);
     void generateSmartThumbnail(MovieDecoder& movieDecoder, VideoFrame& videoFrame);
 
@@ -63,20 +98,22 @@ private:
     QString getExtension(const QString& videoFilename);
 
     void generateHistogram(const VideoFrame& videoFrame, Histogram<int>& histogram);
-    int getBestThumbnailIndex(std::vector<VideoFrame>& videoFrames, const std::vector<Histogram<int> >& histograms);
+    int  getBestThumbnailIndex(std::vector<VideoFrame>& videoFrames,
+                               const std::vector<Histogram<int> >& histograms);
     void applyFilters(VideoFrame& frameData);
 
 private:
-    int                         m_ThumbnailSize;
-    quint16                     m_SeekPercentage;
-    bool                        m_OverlayFilmStrip;
-    bool                        m_WorkAroundIssues;
-    bool                        m_MaintainAspectRatio;
-    bool                        m_SmartFrameSelection;
-    QString                     m_SeekTime;
-    std::vector<IFilter*>       m_Filters;
+
+    int                           m_ThumbnailSize;
+    quint16                       m_SeekPercentage;
+    bool                          m_OverlayFilmStrip;
+    bool                          m_WorkAroundIssues;
+    bool                          m_MaintainAspectRatio;
+    bool                          m_SmartFrameSelection;
+    QString                       m_SeekTime;
+    std::vector<FilmStripFilter*> m_Filters;
 };
 
-}
+} // namespace Digikam
 
-#endif
+#endif // VIDEO_THUMBNAILER_H
