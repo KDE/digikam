@@ -158,7 +158,7 @@ void MovieDecoder::initializeVideo()
 {
     for (unsigned int i = 0; i < m_pFormatContext->nb_streams; i++)
     {
-        if (m_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
+        if (m_pFormatContext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO)
         {
             m_pVideoStream = m_pFormatContext->streams[i];
             m_VideoStream  = i;
@@ -426,11 +426,11 @@ bool MovieDecoder::processFilterGraph(AVPicture* dst,
 
     memcpy(m_filterFrame->data, src->data, sizeof(src->data));
     memcpy(m_filterFrame->linesize, src->linesize, sizeof(src->linesize));
-    m_filterFrame->width = width;
+
+    m_filterFrame->width  = width;
     m_filterFrame->height = height;
     m_filterFrame->format = pixfmt;
-
-    int ret = av_buffersrc_add_frame(m_bufferSourceContext, m_filterFrame);
+    int ret               = av_buffersrc_add_frame(m_bufferSourceContext, m_filterFrame);
     
     if (ret < 0)
     {
@@ -517,7 +517,7 @@ void MovieDecoder::calculateDimensions(int squareSize, bool maintainAspectRatio,
 {
     if (!maintainAspectRatio)
     {
-        destWidth = squareSize;
+        destWidth  = squareSize;
         destHeight = squareSize;
     }
     else
