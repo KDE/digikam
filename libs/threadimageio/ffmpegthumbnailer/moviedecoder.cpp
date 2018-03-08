@@ -95,7 +95,7 @@ public:
 
     void initializeVideo();
 
-    bool decodeVideoPacket();
+    bool decodeVideoPacket() const;
     bool getVideoPacket();
     void convertAndScaleFrame(AVPixelFormat format,
                               int scaledSize,
@@ -171,7 +171,7 @@ void MovieDecoder::Private::initializeVideo()
     }
 }
 
-bool MovieDecoder::Private::decodeVideoPacket()
+bool MovieDecoder::Private::decodeVideoPacket() const
 {
     if (pPacket->stream_index != videoStream)
     {

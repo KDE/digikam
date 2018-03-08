@@ -98,13 +98,11 @@ private:
     void generateThumbnail(const QString& videoFile, ImageWriter& imageWriter, QImage& image);
     void generateSmartThumbnail(MovieDecoder& movieDecoder, VideoFrame& videoFrame);
 
-    QString getMimeType(const QString& videoFile);
-    QString getExtension(const QString& videoFilename);
-
     void generateHistogram(const VideoFrame& videoFrame, Histogram<int>& histogram);
     int  getBestThumbnailIndex(std::vector<VideoFrame>& videoFrames,
                                const std::vector<Histogram<int> >& histograms);
     void applyFilters(VideoFrame& frameData);
+    int  timeToSeconds(const QString& time) const;
 
 private:
 

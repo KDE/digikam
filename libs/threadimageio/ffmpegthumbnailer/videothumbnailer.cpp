@@ -132,7 +132,7 @@ void VideoThumbnailer::setSmartFrameSelection(bool enabled)
     d->smartFrameSelection = enabled;
 }
 
-int timeToSeconds(const QString& time)
+int VideoThumbnailer::timeToSeconds(const QString& time) const
 {
     return QTime::fromString(time, QLatin1String("hh:mm:ss")).secsTo(QTime(0, 0, 0));
 }
