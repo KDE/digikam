@@ -276,17 +276,21 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             setXmpTagString("Xmp.video.ColorSpace",
                  videoColorModelToString(codec->color_space));
 
-            double aspectRatio = -1.0;
-            int frameRate      = -1.0;
+            // TODO: codec->field_order ==>  Xmp.video.FieldOrder ?
 
-            if (codec->sample_aspect_ratio.num && // Check if undefined
-                codec->sample_aspect_ratio.den)   // Check div by 0
+            QString aspectRatio;
+            int frameRate = -1.0;
+
+            if (codec->sample_aspect_ratio.num != 0 &&    // Check if undefined by ffmpeg
+                codec->sample_aspect_ratio.den != 0 &&    // Prevent div by 0
+                (codec->sample_aspect_ratio.num != 1      // Special case where aspect ratio is
+                 && codec->sample_aspect_ratio.den != 1)) // not calculed properly by ffmpeg.
             {
-                aspectRatio = (double)codec->sample_aspect_ratio.num / (double)codec->sample_aspect_ratio.den;
+                aspectRatio = QString::fromLatin1("%1/%2").arg(codec->sample_aspect_ratio.num).arg(codec->sample_aspect_ratio.den);
             }
             else if (codec->height)
             {
-                aspectRatio = (double)codec->width / (double)codec->height;
+                aspectRatio = QString::fromLatin1("%1/%2").arg(codec->width).arg(codec->height);
             }
 
             if (stream->avg_frame_rate.den)
@@ -312,8 +316,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             // Backport size in Exif and Iptc
             setImageDimensions(QSize(codec->width, codec->height));
 
-            if (aspectRatio != -1.0)
-                setXmpTagString("Xmp.video.AspectRatio", QString::number(aspectRatio));
+            if (!aspectRatio.isEmpty())
+                setXmpTagString("Xmp.video.AspectRatio", aspectRatio);
 
             if (frameRate != -1.0)
                 setXmpTagString("Xmp.video.FrameRate", QString::number(frameRate));

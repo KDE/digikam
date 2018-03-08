@@ -1902,7 +1902,7 @@ void ImageScanner::scanBalooInfo()
 
     if (!bInfo.comment.isEmpty())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "+++++++++++++++++++++Comment " << bInfo.comment;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Comment " << bInfo.comment;
 
         if (!d->commit.captions.contains(QLatin1String("x-default")))
         {

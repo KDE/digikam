@@ -1202,7 +1202,7 @@ VideoInfoContainer DMetadata::getVideoInformation() const
     {
         if (videoInfo.aspectRatio.isEmpty())
         {
-            videoInfo.aspectRatio = getXmpTagString("Xmp.video.AspectRatio");
+            videoInfo.aspectRatio = getMetadataField(MetadataInfo::AspectRatio).toString();
         }
 
         if (videoInfo.audioBitRate.isEmpty())
@@ -1234,13 +1234,13 @@ VideoInfoContainer DMetadata::getVideoInformation() const
         {
             videoInfo.videoCodec = getXmpTagString("Xmp.video.Codec");
         }
-
     }
 
     return videoInfo;
 }
 
-bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsContainer &settings) const
+bool DMetadata::getImageTagsPath(QStringList& tagsPath,
+                                 const DMetadataSettingsContainer& settings) const
 {
     for (NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_TAG_CONTAINER)))
     {
@@ -2728,8 +2728,26 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
             return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork");
         case MetadataInfo::IptcCoreContactInfoWebUrl:
             return getXmpTagVariant("Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork");
+
         case MetadataInfo::AspectRatio:
-            return fromXmpLangAlt("Xmp.video.AspectRatio");
+        {
+            long num             = 0;
+            long den             = 1;
+
+            // NOTE: there is a bug in Exiv2 xmp::video tag definition as "Rational" value is defined as "Ratio"...
+            //QList<QVariant> list = getXmpTagVariant("Xmp.video.AspectRatio").toList();
+
+            QString ar       = getXmpTagString("Xmp.video.AspectRatio");
+            QStringList list = ar.split(QLatin1Char('/'));
+
+            if (list.size() >= 1)
+                num = list[0].toInt();
+
+            if (list.size() >= 2)
+                den = list[1].toInt();
+
+            return QString::number((double)num / (double)den);
+        }
         case MetadataInfo::AudioBitRate:
             return fromXmpLangAlt("Xmp.audio.SampleRate");
         case MetadataInfo::AudioChannelType:
@@ -2759,14 +2777,16 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
 QVariantList DMetadata::getMetadataFields(const MetadataFields& fields) const
 {
     QVariantList list;
+
     foreach(MetadataInfo::Field field, fields) // krazy:exclude=foreach
     {
         list << getMetadataField(field);
     }
+
     return list;
 }
 
-QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field field)
+QString DMetadata::valueToString(const QVariant& value, MetadataInfo::Field field)
 {
     MetaEngine exiv2Iface;
 
