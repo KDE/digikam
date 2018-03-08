@@ -172,21 +172,29 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         return false;
     }
 
-    QString data;
-
+    QString   data;
     QFileInfo fi(filePath);
+    
     setXmpTagString("Xmp.video.FileName",
         fi.fileName());
+
     setXmpTagString("Xmp.video.FileSize",
         QString::number(fi.size() / (1024*1024)));
+
     setXmpTagString("Xmp.video.FileType",
         fi.suffix());
+
     setXmpTagString("Xmp.video.MimeType",
         QMimeDatabase().mimeTypeForFile(filePath).name());
+
     setXmpTagString("Xmp.video.duration",
         QString::number((int)(1000.0 * (double)fmt_ctx->duration / (double)AV_TIME_BASE)));
+    setXmpTagString("Xmp.xmpDM.duration",
+        QString::number((int)(1000.0 * (double)fmt_ctx->duration / (double)AV_TIME_BASE)));
+
     setXmpTagString("Xmp.video.MaxBitRate",
         QString::number(fmt_ctx->bit_rate));
+
     setXmpTagString("Xmp.video.StreamCount",
         QString::number(fmt_ctx->nb_streams));
 
@@ -211,12 +219,20 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             setXmpTagString("Xmp.audio.Codec",
                 QString::fromUtf8(cname));
+
             setXmpTagString("Xmp.audio.CodecDescription",
                 QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name));
+            
             setXmpTagString("Xmp.audio.SampleRate",
                 QString::number(codec->sample_rate));
+            setXmpTagString("Xmp.xmpDM.audioSampleRate",
+                QString::number(codec->sample_rate));
+            
             setXmpTagString("Xmp.audio.ChannelType",
                 QString::number(codec->channels));
+            setXmpTagString("Xmp.xmpDM.audioChannelType",
+                QString::number(codec->channels));
+
             setXmpTagString("Xmp.audio.Format",
                 QString::fromUtf8(av_get_sample_fmt_name((AVSampleFormat)codec->format)));
 
@@ -275,6 +291,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                  QString::number(codec->color_space));
             setXmpTagString("Xmp.video.ColorSpace",
                  videoColorModelToString(codec->color_space));
+            setXmpTagString("Xmp.xmpDM.videoColorSpace",
+                 videoColorModelToString(codec->color_space));
            
             // ----------
 
@@ -326,29 +344,40 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             setXmpTagString("Xmp.video.Width",
                 QString::number(codec->width));
-            setXmpTagString("Xmp.video.Height",
-                QString::number(codec->height));
             setXmpTagString("Xmp.video.FrameWidth",
                 QString::number(codec->width));
-            setXmpTagString("Xmp.video.FrameHeight",
-                QString::number(codec->height));
-            setXmpTagString("Xmp.video.FrameSize",
-                QString::fromLatin1("w:%1, h:%2, unit:pixels").arg(codec->width).arg(codec->height));
             setXmpTagString("Xmp.video.SourceImageWidth",
                 QString::number(codec->width));
+
+            setXmpTagString("Xmp.video.Height",
+                QString::number(codec->height));
+            setXmpTagString("Xmp.video.FrameHeight",
+                QString::number(codec->height));
             setXmpTagString("Xmp.video.SourceImageHeight",
                 QString::number(codec->height));
 
+            setXmpTagString("Xmp.video.FrameSize",
+                QString::fromLatin1("w:%1, h:%2, unit:pixels").arg(codec->width).arg(codec->height));
+            setXmpTagString("Xmp.xmpDM.videoFrameSize",
+                QString::fromLatin1("w:%1, h:%2, unit:pixels").arg(codec->width).arg(codec->height));
+            
             // Backport size in Exif and Iptc
             setImageDimensions(QSize(codec->width, codec->height));
 
             if (!aspectRatio.isEmpty())
-                setXmpTagString("Xmp.video.AspectRatio", aspectRatio);
+            {
+                setXmpTagString("Xmp.video.AspectRatio",           aspectRatio);
+                setXmpTagString("Xmp.xmpDM.videoPixelAspectRatio", aspectRatio);
+            }
 
             if (frameRate != -1.0)
-                setXmpTagString("Xmp.video.FrameRate", QString::number(frameRate));
+            {
+                setXmpTagString("Xmp.video.FrameRate",      QString::number(frameRate));
+                setXmpTagString("Xmp.xmpDM.videoFrameRate", QString::number(frameRate));
+            }
 
-            setXmpTagString("Xmp.video.BitDepth", QString::number(codec->bits_per_coded_sample));
+            setXmpTagString("Xmp.video.BitDepth",        QString::number(codec->bits_per_coded_sample));
+            setXmpTagString("Xmp.xmpDM.videoPixelDepth", QString::number(codec->bits_per_coded_sample));
 
             // -----------------------------------------
 
@@ -415,6 +444,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
                 setXmpTagString("Xmp.video.TrackCreateDate",
                                 QString::number(s_secondsSinceJanuary1904(dt)));
+                
+                setXmpTagString("Xmp.xmpDM.shotDate", dt.toString());
             }
 
             // --------------
