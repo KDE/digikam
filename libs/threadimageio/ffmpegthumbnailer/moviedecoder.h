@@ -83,8 +83,8 @@ private:
                               bool maintainAspectRatio,
                               int& scaledWidth,
                               int& scaledHeight);
-    void createAVFrame(AVFrame** avFrame,
-                       quint8** frameBuffer,
+    void createAVFrame(AVFrame** const avFrame,
+                       quint8** const frameBuffer,
                        int width,
                        int height,
                        AVPixelFormat format);
@@ -95,8 +95,8 @@ private:
 
     void deleteFilterGraph();
     bool initFilterGraph(enum AVPixelFormat pixfmt, int width, int height);
-    bool processFilterGraph(AVPicture* dst,
-                            const AVPicture* src,
+    bool processFilterGraph(AVPicture* const dst,
+                            const AVPicture* const src,
                             enum AVPixelFormat pixfmt,
                             int width,
                             int height);

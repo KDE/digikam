@@ -452,8 +452,8 @@ bool MovieDecoder::initFilterGraph(enum AVPixelFormat pixfmt, int width, int hei
     return true;
 }
 
-bool MovieDecoder::processFilterGraph(AVPicture* dst,
-                                      const AVPicture* src,
+bool MovieDecoder::processFilterGraph(AVPicture* const dst,
+                                      const AVPicture* const src,
                                       enum AVPixelFormat pixfmt,
                                       int width, int height)
 {
@@ -607,8 +607,8 @@ void MovieDecoder::calculateDimensions(int squareSize,
     }
 }
 
-void MovieDecoder::createAVFrame(AVFrame** avFrame,
-                                 quint8** frameBuffer,
+void MovieDecoder::createAVFrame(AVFrame** const avFrame,
+                                 quint8** const frameBuffer,
                                  int width,
                                  int height,
                                  AVPixelFormat format)

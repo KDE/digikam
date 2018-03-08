@@ -63,8 +63,8 @@ public:
     void setWorkAroundIssues(bool workAround);
     void setMaintainAspectRatio(bool enabled);
     void setSmartFrameSelection(bool enabled);
-    void addFilter(FilmStripFilter* filter);
-    void removeFilter(FilmStripFilter* filter);
+    void addFilter(FilmStripFilter* const filter);
+    void removeFilter(FilmStripFilter* const filter);
     void clearFilters();
 
 private:

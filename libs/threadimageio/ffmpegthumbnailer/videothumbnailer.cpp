@@ -195,12 +195,12 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile, QImage &image
     delete imageWriter;
 }
 
-void VideoThumbnailer::addFilter(FilmStripFilter* filter)
+void VideoThumbnailer::addFilter(FilmStripFilter* const filter)
 {
     d->filters.push_back(filter);
 }
 
-void VideoThumbnailer::removeFilter(FilmStripFilter* filter)
+void VideoThumbnailer::removeFilter(FilmStripFilter* const filter)
 {
     for (vector<FilmStripFilter*>::iterator it = d->filters.begin();
          it != d->filters.end();
