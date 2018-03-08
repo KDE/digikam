@@ -25,12 +25,6 @@
 #ifndef VIDEO_THUMBNAILER_H
 #define VIDEO_THUMBNAILER_H
 
-// C++ includes
-
-#include <vector>
-#include <map>
-#include <inttypes.h>
-
 // Qt includes
 
 #include <QString>
@@ -114,14 +108,8 @@ private:
 
 private:
 
-    int                           m_ThumbnailSize;
-    quint16                       m_SeekPercentage;
-    bool                          m_OverlayFilmStrip;
-    bool                          m_WorkAroundIssues;
-    bool                          m_MaintainAspectRatio;
-    bool                          m_SmartFrameSelection;
-    QString                       m_SeekTime;
-    std::vector<FilmStripFilter*> m_Filters;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -24,11 +24,16 @@
 
 #include "videothumbnailer.h"
 
+// C includes
+
+#include <inttypes.h>
+
 // C++ includes
 
 #include <vector>
 #include <cfloat>
 #include <cmath>
+#include <map>
 
 // Qt includes
 
@@ -49,13 +54,32 @@ namespace Digikam
 
 static const int SMART_FRAME_ATTEMPTS = 25;
 
+class VideoThumbnailer::Private
+{
+public:
+
+    Private()
+    {
+        thumbnailSize       = 128;
+        seekPercentage      = 10;
+        overlayFilmStrip    = false;
+        workAroundIssues    = false;
+        maintainAspectRatio = true;
+        smartFrameSelection = false;
+    }
+
+    int                           thumbnailSize;
+    quint16                       seekPercentage;
+    bool                          overlayFilmStrip;
+    bool                          workAroundIssues;
+    bool                          maintainAspectRatio;
+    bool                          smartFrameSelection;
+    QString                       seekTime;
+    std::vector<FilmStripFilter*> filters;
+};
+    
 VideoThumbnailer::VideoThumbnailer()
-    : m_ThumbnailSize(128),
-      m_SeekPercentage(10),
-      m_OverlayFilmStrip(false),
-      m_WorkAroundIssues(false),
-      m_MaintainAspectRatio(true),
-      m_SmartFrameSelection(false)
+    : d(new Private)
 {
 }
 
@@ -63,47 +87,48 @@ VideoThumbnailer::VideoThumbnailer(int thumbnailSize,
                                    bool workaroundIssues,
                                    bool maintainAspectRatio,
                                    bool smartFrameSelection)
-    : m_ThumbnailSize(thumbnailSize),
-      m_SeekPercentage(10),
-      m_WorkAroundIssues(workaroundIssues),
-      m_MaintainAspectRatio(maintainAspectRatio),
-      m_SmartFrameSelection(smartFrameSelection)
+    : d(new Private)
 {
+    d->thumbnailSize       = thumbnailSize;
+    d->workAroundIssues    = workaroundIssues;
+    d->maintainAspectRatio = maintainAspectRatio;
+    d->smartFrameSelection = smartFrameSelection;
 }
 
 VideoThumbnailer::~VideoThumbnailer()
 {
+    delete d;
 }
 
 void VideoThumbnailer::setSeekPercentage(int percentage)
 {
-    m_SeekTime.clear();
-    m_SeekPercentage = percentage > 95 ? 95 : percentage;
+    d->seekTime.clear();
+    d->seekPercentage = percentage > 95 ? 95 : percentage;
 }
 
 void VideoThumbnailer::setSeekTime(const QString& seekTime)
 {
-    m_SeekTime = seekTime;
+    d->seekTime = seekTime;
 }
 
 void VideoThumbnailer::setThumbnailSize(int size)
 {
-    m_ThumbnailSize = size;
+    d->thumbnailSize = size;
 }
 
 void VideoThumbnailer::setWorkAroundIssues(bool workAround)
 {
-    m_WorkAroundIssues = workAround;
+    d->workAroundIssues = workAround;
 }
 
 void VideoThumbnailer::setMaintainAspectRatio(bool enabled)
 {
-    m_MaintainAspectRatio = enabled;
+    d->maintainAspectRatio = enabled;
 }
 
 void VideoThumbnailer::setSmartFrameSelection(bool enabled)
 {
-    m_SmartFrameSelection = enabled;
+    d->smartFrameSelection = enabled;
 }
 
 int timeToSeconds(const QString& time)
@@ -119,22 +144,22 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile, ImageWriter& 
     {
         movieDecoder.decodeVideoFrame(); //before seeking, a frame has to be decoded
         
-        if ((!m_WorkAroundIssues) || (movieDecoder.getCodec() != QLatin1String("h264")))
+        if ((!d->workAroundIssues) || (movieDecoder.getCodec() != QLatin1String("h264")))
         {
             //workaround for bug in older ffmpeg (100% cpu usage when seeking in h264 files)
-            int secondToSeekTo = m_SeekTime.isEmpty() ? movieDecoder.getDuration() * m_SeekPercentage / 100 : timeToSeconds(m_SeekTime);
+            int secondToSeekTo = d->seekTime.isEmpty() ? movieDecoder.getDuration() * d->seekPercentage / 100 : timeToSeconds(d->seekTime);
             movieDecoder.seek(secondToSeekTo);
         }
     
         VideoFrame videoFrame;
         
-        if (m_SmartFrameSelection)
+        if (d->smartFrameSelection)
         {
             generateSmartThumbnail(movieDecoder, videoFrame);
         }
         else
         {
-            movieDecoder.getScaledVideoFrame(m_ThumbnailSize, m_MaintainAspectRatio, videoFrame);
+            movieDecoder.getScaledVideoFrame(d->thumbnailSize, d->maintainAspectRatio, videoFrame);
         }
         
         applyFilters(videoFrame);
@@ -150,7 +175,7 @@ void VideoThumbnailer::generateSmartThumbnail(MovieDecoder& movieDecoder, VideoF
     for (int i = 0; i < SMART_FRAME_ATTEMPTS; ++i)
     {
         movieDecoder.decodeVideoFrame();
-        movieDecoder.getScaledVideoFrame(m_ThumbnailSize, m_MaintainAspectRatio, videoFrames[i]);
+        movieDecoder.getScaledVideoFrame(d->thumbnailSize, d->maintainAspectRatio, videoFrames[i]);
         generateHistogram(videoFrames[i], histograms[i]);
     }
 
@@ -169,18 +194,18 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile, QImage &image
 
 void VideoThumbnailer::addFilter(FilmStripFilter* filter)
 {
-    m_Filters.push_back(filter);
+    d->filters.push_back(filter);
 }
 
 void VideoThumbnailer::removeFilter(FilmStripFilter* filter)
 {
-    for (vector<FilmStripFilter*>::iterator iter = m_Filters.begin();
-         iter != m_Filters.end();
-         ++iter)
+    for (vector<FilmStripFilter*>::iterator it = d->filters.begin();
+         it != d->filters.end();
+         ++it)
     {
-        if (*iter == filter)
+        if (*it == filter)
         {
-            m_Filters.erase(iter);
+            d->filters.erase(it);
             break;
         }
     }
@@ -188,16 +213,16 @@ void VideoThumbnailer::removeFilter(FilmStripFilter* filter)
 
 void VideoThumbnailer::clearFilters()
 {
-    m_Filters.clear();
+    d->filters.clear();
 }
 
 void VideoThumbnailer::applyFilters(VideoFrame& videoFrame)
 {
-    for (vector<FilmStripFilter*>::iterator iter = m_Filters.begin();
-         iter != m_Filters.end();
-         ++iter)
+    for (vector<FilmStripFilter*>::iterator it = d->filters.begin();
+         it != d->filters.end();
+         ++it)
     {
-        (*iter)->process(videoFrame);
+        (*it)->process(videoFrame);
     }
 }
 
