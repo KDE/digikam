@@ -29,7 +29,6 @@
 #include <vector>
 #include <cfloat>
 #include <cmath>
-#include <sys/stat.h>
 
 // Qt includes
 

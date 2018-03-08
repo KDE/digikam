@@ -27,7 +27,6 @@
 
 // C++ includes
 
-#include <string>
 #include <vector>
 #include <map>
 #include <inttypes.h>
@@ -49,21 +48,6 @@ class VideoFrame;
 class ImageWriter;
 class MovieDecoder;
 
-template <typename T>
-struct Histogram
-{
-    T r[256];
-    T g[256];
-    T b[256];
-
-    Histogram()
-    {
-        memset(r, 0, 255 * sizeof(T));
-        memset(g, 0, 255 * sizeof(T));
-        memset(b, 0, 255 * sizeof(T));
-    }
-};
-
 class DIGIKAM_EXPORT VideoThumbnailer
 {
 public:
@@ -77,7 +61,7 @@ public:
 
 public:
 
-    void generateThumbnail(const QString& videoFile, QImage &image);
+    void generateThumbnail(const QString& videoFile, QImage& image);
 
     void setThumbnailSize(int size);
     void setSeekPercentage(int percentage);
@@ -88,6 +72,32 @@ public:
     void addFilter(FilmStripFilter* filter);
     void removeFilter(FilmStripFilter* filter);
     void clearFilters();
+
+private:
+
+    template <typename T>
+    class Histogram
+    {
+
+    public:
+
+        explicit Histogram()
+        {
+            memset(r, 0, 255 * sizeof(T));
+            memset(g, 0, 255 * sizeof(T));
+            memset(b, 0, 255 * sizeof(T));
+        }
+
+        ~Histogram()
+        {
+        }
+        
+    public:
+
+        T r[256];
+        T g[256];
+        T b[256];
+    };
 
 private:
 

@@ -39,21 +39,15 @@
 namespace Digikam
 {
 
-struct VideoFrame
+class VideoFrame
 {
-    VideoFrame()
-      : width(0),
-        height(0),
-        lineSize(0)
-    {
-    }
+public:
 
-    VideoFrame(int width, int height, int lineSize)
-      : width(width),
-        height(height),
-        lineSize(lineSize)
-    {
-    }
+    VideoFrame();
+    VideoFrame(int width, int height, int lineSize);
+    ~VideoFrame();
+
+public:
 
     quint32             width;
     quint32             height;
