@@ -293,7 +293,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 case AV_FIELD_TB:                       // Top coded first, bottom displayed first
                     fo = QLatin1String("Lower");
                     break;
-                default
+                default:
                     break;
             }
             
