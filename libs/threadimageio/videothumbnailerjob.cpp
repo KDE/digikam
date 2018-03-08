@@ -43,7 +43,7 @@ class VideoThumbnailerJob::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         canceled    = false;
         running     = false;

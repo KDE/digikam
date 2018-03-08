@@ -25,17 +25,6 @@
 #ifndef MOVIE_DECODER_H
 #define MOVIE_DECODER_H
 
-// FFMpeg includes
-
-extern "C"
-{
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-#include <libavfilter/avfilter.h>
-#include <libavfilter/buffersrc.h>
-#include <libavfilter/buffersink.h>
-}
-
 // Qt includes
 
 #include <QString>
@@ -51,8 +40,7 @@ class MovieDecoder
 {
 public:
 
-    explicit MovieDecoder(const QString& filename,
-                          AVFormatContext* const pavContext = 0);
+    explicit MovieDecoder(const QString& filename);
     ~MovieDecoder();
 
 public:
@@ -71,35 +59,6 @@ public:
 
     void initialize(const QString& filename);
     void destroy();
-
-private:
-
-    void initializeVideo();
-
-    bool decodeVideoPacket();
-    bool getVideoPacket();
-    void convertAndScaleFrame(AVPixelFormat format,
-                              int scaledSize,
-                              bool maintainAspectRatio,
-                              int& scaledWidth,
-                              int& scaledHeight);
-    void createAVFrame(AVFrame** const avFrame,
-                       quint8** const frameBuffer,
-                       int width,
-                       int height,
-                       AVPixelFormat format);
-    void calculateDimensions(int squareSize,
-                             bool maintainAspectRatio,
-                             int& destWidth,
-                             int& destHeight);
-
-    void deleteFilterGraph();
-    bool initFilterGraph(enum AVPixelFormat pixfmt, int width, int height);
-    bool processFilterGraph(AVPicture* const dst,
-                            const AVPicture* const src,
-                            enum AVPixelFormat pixfmt,
-                            int width,
-                            int height);
 
 private:
 

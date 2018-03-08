@@ -137,9 +137,11 @@ int timeToSeconds(const QString& time)
     return QTime::fromString(time, QLatin1String("hh:mm:ss")).secsTo(QTime(0, 0, 0));
 }
 
-void VideoThumbnailer::generateThumbnail(const QString& videoFile, ImageWriter& imageWriter, QImage &image)
+void VideoThumbnailer::generateThumbnail(const QString& videoFile,
+                                         ImageWriter& imageWriter,
+                                         QImage &image)
 {
-    MovieDecoder movieDecoder(videoFile, NULL);
+    MovieDecoder movieDecoder(videoFile);
 
     if (movieDecoder.getInitialized())
     {
@@ -169,7 +171,8 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile, ImageWriter& 
     }
 }
 
-void VideoThumbnailer::generateSmartThumbnail(MovieDecoder& movieDecoder, VideoFrame& videoFrame)
+void VideoThumbnailer::generateSmartThumbnail(MovieDecoder& movieDecoder,
+                                              VideoFrame& videoFrame)
 {
     vector<VideoFrame> videoFrames(d->SMART_FRAME_ATTEMPTS);
     vector<Histogram<int> > histograms(d->SMART_FRAME_ATTEMPTS);
@@ -188,7 +191,8 @@ void VideoThumbnailer::generateSmartThumbnail(MovieDecoder& movieDecoder, VideoF
     videoFrame = videoFrames[bestFrame];
 }
 
-void VideoThumbnailer::generateThumbnail(const QString& videoFile, QImage &image)
+void VideoThumbnailer::generateThumbnail(const QString& videoFile,
+                                         QImage &image)
 {
     ImageWriter* const imageWriter = new  ImageWriter();
     generateThumbnail(videoFile, *imageWriter, image);
@@ -229,7 +233,8 @@ void VideoThumbnailer::applyFilters(VideoFrame& videoFrame)
     }
 }
 
-void VideoThumbnailer::generateHistogram(const VideoFrame& videoFrame, Histogram<int>& histogram)
+void VideoThumbnailer::generateHistogram(const VideoFrame& videoFrame,
+                                         Histogram<int>& histogram)
 {
     for (quint32 i = 0 ; i < videoFrame.height ; i++)
     {
