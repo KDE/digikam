@@ -30,6 +30,7 @@ extern "C"
 {
 #include <libswscale/swscale.h>
 #include <libavcodec/avcodec.h>
+#include <libavutil/imgutils.h>
 #include <libavformat/avformat.h>
 #include <libavfilter/avfilter.h>
 #include <libavfilter/buffersrc.h>
@@ -128,7 +129,7 @@ void MovieDecoder::Private::createAVFrame(AVFrame** const avFrame,
                                           AVPixelFormat format)
 {
     *avFrame     = av_frame_alloc();
-    int numBytes = avpicture_get_size(format, width, height);
+    int numBytes = av_image_get_buffer_size(format, width, height, 1);
     *frameBuffer = reinterpret_cast<quint8*>(av_malloc(numBytes));
 
     avpicture_fill((AVPicture*) *avFrame, *frameBuffer, format, width, height);
