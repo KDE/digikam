@@ -641,9 +641,9 @@ FilmStripFilter::~FilmStripFilter()
 
 void FilmStripFilter::process(VideoFrame& videoFrame)
 {
-    quint32 filmStripWidth;
-    quint32 filmStripHeight;
-    const quint8* filmHole = determineFilmStrip(videoFrame.width, filmStripWidth, filmStripHeight);
+    quint32 filmStripWidth       = 0;
+    quint32 filmStripHeight      = 0;
+    const quint8* const filmHole = determineFilmStrip(videoFrame.width, filmStripWidth, filmStripHeight);
 
     if (!filmHole)
     {
