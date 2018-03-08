@@ -43,112 +43,145 @@ extern "C"
 namespace Digikam
 {
 
+class MovieDecoder::Private
+{
+public:
+
+    Private()
+    {
+        videoStream           = -1;
+        pVideoCodecContext    = 0;
+        pVideoCodec           = 0;
+        pVideoStream          = 0;
+        pFrame                = 0;
+        pFrameBuffer          = 0;
+        pPacket               = 0;
+        formatContextWasGiven = false;
+        allowSeek             = true;
+        initialized           = false;
+        bufferSinkContext     = 0;
+        bufferSourceContext   = 0;
+        filterGraph           = 0;
+        filterFrame           = 0;
+    }
+
+    int                videoStream;
+    AVFormatContext*   pFormatContext;
+    AVCodecContext*    pVideoCodecContext;
+    AVCodec*           pVideoCodec;
+    AVStream*          pVideoStream;
+    AVFrame*           pFrame;
+    quint8*            pFrameBuffer;
+    AVPacket*          pPacket;
+    bool               formatContextWasGiven;
+    bool               allowSeek;
+    bool               initialized;
+    AVFilterContext*   bufferSinkContext;
+    AVFilterContext*   bufferSourceContext;
+    AVFilterGraph*     filterGraph;
+    AVFrame*           filterFrame;
+    int                lastWidth;
+    int                lastHeight;
+    enum AVPixelFormat lastPixfmt;
+};
+
 MovieDecoder::MovieDecoder(const QString& filename,
                            AVFormatContext* const pavContext)
-    : m_VideoStream(-1),
-      m_pFormatContext(pavContext),
-      m_pVideoCodecContext(NULL),
-      m_pVideoCodec(NULL),
-      m_pVideoStream(NULL),
-      m_pFrame(NULL),
-      m_pFrameBuffer(NULL),
-      m_pPacket(NULL),
-      m_FormatContextWasGiven(pavContext != NULL),
-      m_AllowSeek(true),
-      m_initialized(false),
-      m_bufferSinkContext(nullptr),
-      m_bufferSourceContext(nullptr),
-      m_filterGraph(nullptr),
-      m_filterFrame(nullptr)
+    : d(new Private)
 {
+    d->pFormatContext        = pavContext;
+    d->formatContextWasGiven = pavContext ? true : false;
+
     initialize(filename);
 }
 
 MovieDecoder::~MovieDecoder()
 {
     destroy();
+    delete d;
 }
 
 void MovieDecoder::initialize(const QString& filename)
 {
-    m_lastWidth  = -1;
-    m_lastHeight = -1;
-    m_lastPixfmt = AV_PIX_FMT_NONE;
+    d->lastWidth  = -1;
+    d->lastHeight = -1;
+    d->lastPixfmt = AV_PIX_FMT_NONE;
     av_register_all();
     avcodec_register_all();
 
     QFileInfo fileInfo(filename);
 
-    if ((!m_FormatContextWasGiven) && 
-        avformat_open_input(&m_pFormatContext, fileInfo.absoluteFilePath().toLocal8Bit().data(), NULL, NULL) != 0)
+    if ((!d->formatContextWasGiven) &&
+        avformat_open_input(&d->pFormatContext, fileInfo.absoluteFilePath().toLocal8Bit().data(), NULL, NULL) != 0)
     {
-        qDebug(DIGIKAM_GENERAL_LOG) <<  "Could not open input file: " << fileInfo.absoluteFilePath();
+        qDebug(DIGIKAM_GENERAL_LOG) << "Could not open input file: "
+                                    << fileInfo.absoluteFilePath();
         return;
     }
 
-    if (avformat_find_stream_info(m_pFormatContext, 0) < 0) {
+    if (avformat_find_stream_info(d->pFormatContext, 0) < 0)
+    {
         qDebug(DIGIKAM_GENERAL_LOG) << "Could not find stream information";
         return;
     }
 
     initializeVideo();
-    m_pFrame = av_frame_alloc();
+    d->pFrame = av_frame_alloc();
 
-    if (m_pFrame)
+    if (d->pFrame)
     {
-        m_initialized=true;
+        d->initialized=true;
     }
 }
 
 bool MovieDecoder::getInitialized() const
 {
-    return m_initialized;
+    return d->initialized;
 }
-
 
 void MovieDecoder::destroy()
 {
     deleteFilterGraph();
 
-    if (m_pVideoCodecContext)
+    if (d->pVideoCodecContext)
     {
-        avcodec_close(m_pVideoCodecContext);
-        m_pVideoCodecContext = NULL;
+        avcodec_close(d->pVideoCodecContext);
+        d->pVideoCodecContext = 0;
     }
 
-    if ((!m_FormatContextWasGiven) && m_pFormatContext)
+    if ((!d->formatContextWasGiven) && d->pFormatContext)
     {
-        avformat_close_input(&m_pFormatContext);
-        m_pFormatContext = NULL;
+        avformat_close_input(&d->pFormatContext);
+        d->pFormatContext = 0;
     }
 
-    if (m_pPacket)
+    if (d->pPacket)
     {
-        av_packet_unref(m_pPacket);
-        delete m_pPacket;
-        m_pPacket = NULL;
+        av_packet_unref(d->pPacket);
+        delete d->pPacket;
+        d->pPacket = 0;
     }
 
-    if (m_pFrame)
+    if (d->pFrame)
     {
-        av_frame_free(&m_pFrame);
-        m_pFrame = NULL;
+        av_frame_free(&d->pFrame);
+        d->pFrame = 0;
     }
 
-    if (m_pFrameBuffer)
+    if (d->pFrameBuffer)
     {
-        av_free(m_pFrameBuffer);
-        m_pFrameBuffer = NULL;
+        av_free(d->pFrameBuffer);
+        d->pFrameBuffer = 0;
     }
 }
 
 QString MovieDecoder::getCodec() const 
 {
     QString codecName;
-    
-    if (m_pVideoCodec)
+
+    if (d->pVideoCodec)
     {
-        codecName = QString::fromLatin1(m_pVideoCodec->name);
+        codecName = QString::fromLatin1(d->pVideoCodec->name);
     }
 
     return codecName;
@@ -156,36 +189,36 @@ QString MovieDecoder::getCodec() const
 
 void MovieDecoder::initializeVideo()
 {
-    for (unsigned int i = 0; i < m_pFormatContext->nb_streams; i++)
+    for (unsigned int i = 0 ; i < d->pFormatContext->nb_streams ; i++)
     {
-        if (m_pFormatContext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO)
+        if (d->pFormatContext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO)
         {
-            m_pVideoStream = m_pFormatContext->streams[i];
-            m_VideoStream  = i;
+            d->pVideoStream = d->pFormatContext->streams[i];
+            d->videoStream  = i;
             break;
         }
     }
 
-    if (m_VideoStream == -1)
+    if (d->videoStream == -1)
     {
         qDebug(DIGIKAM_GENERAL_LOG) << "Could not find video stream";
         return;
     }
 
-    m_pVideoCodecContext = m_pFormatContext->streams[m_VideoStream]->codec;
-    m_pVideoCodec        = avcodec_find_decoder(m_pVideoCodecContext->codec_id);
+    d->pVideoCodecContext = d->pFormatContext->streams[d->videoStream]->codec;
+    d->pVideoCodec        = avcodec_find_decoder(d->pVideoCodecContext->codec_id);
 
-    if (m_pVideoCodec == NULL)
+    if (d->pVideoCodec == 0)
     {
-        // set to NULL, otherwise avcodec_close(m_pVideoCodecContext) crashes
-        m_pVideoCodecContext = NULL;
+        // set to 0, otherwise avcodec_close(d->pVideoCodecContext) crashes
+        d->pVideoCodecContext = 0;
         qDebug(DIGIKAM_GENERAL_LOG) << "Video Codec not found";
         return;
     }
 
-    m_pVideoCodecContext->workaround_bugs = 1;
+    d->pVideoCodecContext->workaround_bugs = 1;
 
-    if (avcodec_open2(m_pVideoCodecContext, m_pVideoCodec, 0) < 0)
+    if (avcodec_open2(d->pVideoCodecContext, d->pVideoCodec, 0) < 0)
     {
         qDebug(DIGIKAM_GENERAL_LOG) << "Could not open video codec";
     }
@@ -193,9 +226,9 @@ void MovieDecoder::initializeVideo()
 
 int MovieDecoder::getWidth() const
 {
-    if (m_pVideoCodecContext)
+    if (d->pVideoCodecContext)
     {
-        return m_pVideoCodecContext->width;
+        return d->pVideoCodecContext->width;
     }
 
     return -1;
@@ -203,9 +236,9 @@ int MovieDecoder::getWidth() const
 
 int MovieDecoder::getHeight() const
 {
-    if (m_pVideoCodecContext)
+    if (d->pVideoCodecContext)
     {
-        return m_pVideoCodecContext->height;
+        return d->pVideoCodecContext->height;
     }
 
     return -1;
@@ -213,9 +246,9 @@ int MovieDecoder::getHeight() const
 
 int MovieDecoder::getDuration() const
 {
-    if (m_pFormatContext)
+    if (d->pFormatContext)
     {
-        return static_cast<int>(m_pFormatContext->duration / AV_TIME_BASE);
+        return static_cast<int>(d->pFormatContext->duration / AV_TIME_BASE);
     }
 
     return 0;
@@ -223,7 +256,7 @@ int MovieDecoder::getDuration() const
 
 void MovieDecoder::seek(int timeInSeconds)
 {
-    if (!m_AllowSeek)
+    if (!d->allowSeek)
     {
         return;
     }
@@ -235,11 +268,11 @@ void MovieDecoder::seek(int timeInSeconds)
         timestamp = 0;
     }
 
-    int ret = av_seek_frame(m_pFormatContext, -1, timestamp, 0);
-    
+    int ret = av_seek_frame(d->pFormatContext, -1, timestamp, 0);
+
     if (ret >= 0) 
     {
-        avcodec_flush_buffers(m_pFormatContext->streams[m_VideoStream]->codec);
+        avcodec_flush_buffers(d->pFormatContext->streams[d->videoStream]->codec);
     }
     else
     {
@@ -264,7 +297,7 @@ void MovieDecoder::seek(int timeInSeconds)
 
         ++keyFrameAttempts;
     }
-    while ((!gotFrame || !m_pFrame->key_frame) && keyFrameAttempts < 200);
+    while ((!gotFrame || !d->pFrame->key_frame) && keyFrameAttempts < 200);
 
     if (gotFrame == 0)
     {
@@ -290,19 +323,26 @@ void MovieDecoder::decodeVideoFrame()
 
 bool MovieDecoder::decodeVideoPacket()
 {
-    if (m_pPacket->stream_index != m_VideoStream)
+    if (d->pPacket->stream_index != d->videoStream)
     {
         return false;
     }
 
-    av_frame_unref(m_pFrame);
+    av_frame_unref(d->pFrame);
 
     int frameFinished = 0;
 
 #if LIBAVCODEC_VERSION_MAJOR < 53
-    int bytesDecoded = avcodec_decode_video(m_pVideoCodecContext, m_pFrame, &frameFinished, m_pPacket->data, m_pPacket->size);
+    int bytesDecoded = avcodec_decode_video(d->pVideoCodecContext,
+                                            d->pFrame,
+                                            &frameFinished,
+                                            d->pPacket->data,
+                                            d->pPacket->size);
 #else
-    int bytesDecoded = avcodec_decode_video2(m_pVideoCodecContext, m_pFrame, &frameFinished, m_pPacket);
+    int bytesDecoded = avcodec_decode_video2(d->pVideoCodecContext,
+                                             d->pFrame,
+                                             &frameFinished,
+                                             d->pPacket);
 #endif
 
     if (bytesDecoded < 0)
@@ -320,25 +360,25 @@ bool MovieDecoder::getVideoPacket()
 
     int attempts = 0;
 
-    if (m_pPacket) 
+    if (d->pPacket)
     {
-        av_packet_unref(m_pPacket);
-        delete m_pPacket;
+        av_packet_unref(d->pPacket);
+        delete d->pPacket;
     }
 
-    m_pPacket = new AVPacket();
+    d->pPacket = new AVPacket();
 
     while (framesAvailable && !frameDecoded && (attempts++ < 1000))
     {
-        framesAvailable = av_read_frame(m_pFormatContext, m_pPacket) >= 0;
-        
+        framesAvailable = av_read_frame(d->pFormatContext, d->pPacket) >= 0;
+
         if (framesAvailable)
         {
-            frameDecoded = m_pPacket->stream_index == m_VideoStream;
-            
+            frameDecoded = d->pPacket->stream_index == d->videoStream;
+
             if (!frameDecoded)
             {
-                av_packet_unref(m_pPacket);
+                av_packet_unref(d->pPacket);
             }
         }
     }
@@ -348,21 +388,21 @@ bool MovieDecoder::getVideoPacket()
 
 void MovieDecoder::deleteFilterGraph()
 {
-    if (m_filterGraph)
+    if (d->filterGraph)
     {
-        av_frame_free(&m_filterFrame);
-        avfilter_graph_free(&m_filterGraph);
-        m_filterGraph = nullptr;
+        av_frame_free(&d->filterFrame);
+        avfilter_graph_free(&d->filterGraph);
+        d->filterGraph = 0;
     }
 }
 
 bool MovieDecoder::initFilterGraph(enum AVPixelFormat pixfmt, int width, int height)
 {
-    AVFilterInOut* inputs  = nullptr;
-    AVFilterInOut* outputs = nullptr;
+    AVFilterInOut* inputs  = 0;
+    AVFilterInOut* outputs = 0;
 
     deleteFilterGraph();
-    m_filterGraph          = avfilter_graph_alloc();
+    d->filterGraph          = avfilter_graph_alloc();
 
     QByteArray arguments("buffer=");
     arguments += "video_size=" + QByteArray::number(width)  + "x" + QByteArray::number(height) + ":";
@@ -371,8 +411,8 @@ bool MovieDecoder::initFilterGraph(enum AVPixelFormat pixfmt, int width, int hei
     arguments += "[in]yadif[out];";
     arguments += "[out]buffersink";
 
-    int ret = avfilter_graph_parse2(m_filterGraph, arguments.constData(), &inputs, &outputs);
-    
+    int ret = avfilter_graph_parse2(d->filterGraph, arguments.constData(), &inputs, &outputs);
+
     if (ret < 0)
     {
         qWarning(DIGIKAM_GENERAL_LOG) << "Unable to parse filter graph";
@@ -382,7 +422,7 @@ bool MovieDecoder::initFilterGraph(enum AVPixelFormat pixfmt, int width, int hei
     if (inputs || outputs)
         return -1;
 
-    ret = avfilter_graph_config(m_filterGraph, nullptr);
+    ret = avfilter_graph_config(d->filterGraph, nullptr);
 
     if (ret < 0)
     {
@@ -390,32 +430,32 @@ bool MovieDecoder::initFilterGraph(enum AVPixelFormat pixfmt, int width, int hei
         return false;
     }
 
-    m_bufferSourceContext = avfilter_graph_get_filter(m_filterGraph, "Parsed_buffer_0");
-    m_bufferSinkContext = avfilter_graph_get_filter(m_filterGraph, "Parsed_buffersink_2");
-    
-    if (!m_bufferSourceContext || !m_bufferSinkContext)
+    d->bufferSourceContext = avfilter_graph_get_filter(d->filterGraph, "Parsed_buffer_0");
+    d->bufferSinkContext   = avfilter_graph_get_filter(d->filterGraph, "Parsed_buffersink_2");
+
+    if (!d->bufferSourceContext || !d->bufferSinkContext)
     {
         qWarning(DIGIKAM_GENERAL_LOG) << "Unable to get source or sink";
         return false;
     }
-    
-    m_filterFrame = av_frame_alloc();
-    m_lastWidth   = width;
-    m_lastHeight  = height;
-    m_lastPixfmt  = pixfmt;
+
+    d->filterFrame = av_frame_alloc();
+    d->lastWidth   = width;
+    d->lastHeight  = height;
+    d->lastPixfmt  = pixfmt;
 
     return true;
 }
 
 bool MovieDecoder::processFilterGraph(AVPicture* dst,
-                                      const AVPicture *src,
+                                      const AVPicture* src,
                                       enum AVPixelFormat pixfmt,
                                       int width, int height)
 {
-    if (!m_filterGraph         ||
-        width  != m_lastWidth  ||
-        height != m_lastHeight ||
-        pixfmt != m_lastPixfmt)
+    if (!d->filterGraph         ||
+        width  != d->lastWidth  ||
+        height != d->lastHeight ||
+        pixfmt != d->lastPixfmt)
     {
 
         if (!initFilterGraph(pixfmt, width, height))
@@ -424,41 +464,43 @@ bool MovieDecoder::processFilterGraph(AVPicture* dst,
         }
     }
 
-    memcpy(m_filterFrame->data, src->data, sizeof(src->data));
-    memcpy(m_filterFrame->linesize, src->linesize, sizeof(src->linesize));
+    memcpy(d->filterFrame->data, src->data, sizeof(src->data));
+    memcpy(d->filterFrame->linesize, src->linesize, sizeof(src->linesize));
 
-    m_filterFrame->width  = width;
-    m_filterFrame->height = height;
-    m_filterFrame->format = pixfmt;
-    int ret               = av_buffersrc_add_frame(m_bufferSourceContext, m_filterFrame);
-    
+    d->filterFrame->width  = width;
+    d->filterFrame->height = height;
+    d->filterFrame->format = pixfmt;
+    int ret                = av_buffersrc_add_frame(d->bufferSourceContext, d->filterFrame);
+
     if (ret < 0)
     {
         return false;
     }
 
-    ret = av_buffersink_get_frame(m_bufferSinkContext, m_filterFrame);
-    
+    ret = av_buffersink_get_frame(d->bufferSinkContext, d->filterFrame);
+
     if (ret < 0)
     {
         return false;
     }
 
-    av_picture_copy(dst, (const AVPicture *) m_filterFrame, pixfmt, width, height);
-    av_frame_unref(m_filterFrame);
+    av_picture_copy(dst, (const AVPicture *) d->filterFrame, pixfmt, width, height);
+    av_frame_unref(d->filterFrame);
 
     return true;
 }
 
-void MovieDecoder::getScaledVideoFrame(int scaledSize, bool maintainAspectRatio, VideoFrame& videoFrame)
+void MovieDecoder::getScaledVideoFrame(int scaledSize,
+                                       bool maintainAspectRatio,
+                                       VideoFrame& videoFrame)
 {
-    if (m_pFrame->interlaced_frame)
+    if (d->pFrame->interlaced_frame)
     {
-        processFilterGraph((AVPicture*) m_pFrame,
-                           (AVPicture*) m_pFrame,
-                           m_pVideoCodecContext->pix_fmt,
-                           m_pVideoCodecContext->width,
-                           m_pVideoCodecContext->height);
+        processFilterGraph((AVPicture*) d->pFrame,
+                           (AVPicture*) d->pFrame,
+                           d->pVideoCodecContext->pix_fmt,
+                           d->pVideoCodecContext->width,
+                           d->pVideoCodecContext->height);
     }
 
     int scaledWidth, scaledHeight;
@@ -466,11 +508,13 @@ void MovieDecoder::getScaledVideoFrame(int scaledSize, bool maintainAspectRatio,
 
     videoFrame.width    = scaledWidth;
     videoFrame.height   = scaledHeight;
-    videoFrame.lineSize = m_pFrame->linesize[0];
+    videoFrame.lineSize = d->pFrame->linesize[0];
 
     videoFrame.frameData.clear();
     videoFrame.frameData.resize(videoFrame.lineSize * videoFrame.height);
-    memcpy((&(videoFrame.frameData.front())), m_pFrame->data[0], videoFrame.lineSize * videoFrame.height);
+    memcpy((&(videoFrame.frameData.front())),
+           d->pFrame->data[0],
+           videoFrame.lineSize * videoFrame.height);
 }
 
 void MovieDecoder::convertAndScaleFrame(AVPixelFormat format,
@@ -480,12 +524,12 @@ void MovieDecoder::convertAndScaleFrame(AVPixelFormat format,
                                         int& scaledHeight)
 {
     calculateDimensions(scaledSize, maintainAspectRatio, scaledWidth, scaledHeight);
-    SwsContext* const scaleContext = sws_getContext(m_pVideoCodecContext->width,
-                                                    m_pVideoCodecContext->height,
-                                                    m_pVideoCodecContext->pix_fmt,
-                                                    scaledWidth, 
+    SwsContext* const scaleContext = sws_getContext(d->pVideoCodecContext->width,
+                                                    d->pVideoCodecContext->height,
+                                                    d->pVideoCodecContext->pix_fmt,
+                                                    scaledWidth,
                                                     scaledHeight,
-                                                    format, 
+                                                    format,
                                                     SWS_BICUBIC,
                                                     NULL,
                                                     NULL,
@@ -502,18 +546,21 @@ void MovieDecoder::convertAndScaleFrame(AVPixelFormat format,
 
     createAVFrame(&convertedFrame, &convertedFrameBuffer, scaledWidth, scaledHeight, format);
 
-    sws_scale(scaleContext, m_pFrame->data, m_pFrame->linesize, 0, m_pVideoCodecContext->height,
+    sws_scale(scaleContext, d->pFrame->data, d->pFrame->linesize, 0, d->pVideoCodecContext->height,
               convertedFrame->data, convertedFrame->linesize);
     sws_freeContext(scaleContext);
 
-    av_frame_free(&m_pFrame);
-    av_free(m_pFrameBuffer);
+    av_frame_free(&d->pFrame);
+    av_free(d->pFrameBuffer);
 
-    m_pFrame        = convertedFrame;
-    m_pFrameBuffer  = convertedFrameBuffer;
+    d->pFrame        = convertedFrame;
+    d->pFrameBuffer  = convertedFrameBuffer;
 }
 
-void MovieDecoder::calculateDimensions(int squareSize, bool maintainAspectRatio, int& destWidth, int& destHeight)
+void MovieDecoder::calculateDimensions(int squareSize,
+                                       bool maintainAspectRatio,
+                                       int& destWidth,
+                                       int& destHeight)
 {
     if (!maintainAspectRatio)
     {
@@ -522,10 +569,10 @@ void MovieDecoder::calculateDimensions(int squareSize, bool maintainAspectRatio,
     }
     else
     {
-        int srcWidth            = m_pVideoCodecContext->width;
-        int srcHeight           = m_pVideoCodecContext->height;
-        int ascpectNominator    = m_pVideoCodecContext->sample_aspect_ratio.num;
-        int ascpectDenominator  = m_pVideoCodecContext->sample_aspect_ratio.den;
+        int srcWidth            = d->pVideoCodecContext->width;
+        int srcHeight           = d->pVideoCodecContext->height;
+        int ascpectNominator    = d->pVideoCodecContext->sample_aspect_ratio.num;
+        int ascpectDenominator  = d->pVideoCodecContext->sample_aspect_ratio.den;
 
         if (ascpectNominator != 0 && ascpectDenominator != 0)
         {
@@ -545,7 +592,11 @@ void MovieDecoder::calculateDimensions(int squareSize, bool maintainAspectRatio,
     }
 }
 
-void MovieDecoder::createAVFrame(AVFrame** avFrame, quint8** frameBuffer, int width, int height, AVPixelFormat format)
+void MovieDecoder::createAVFrame(AVFrame** avFrame,
+                                 quint8** frameBuffer,
+                                 int width,
+                                 int height,
+                                 AVPixelFormat format)
 {
     *avFrame     = av_frame_alloc();
     int numBytes = avpicture_get_size(format, width, height);

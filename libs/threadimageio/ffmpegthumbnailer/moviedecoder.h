@@ -103,24 +103,8 @@ private:
 
 private:
 
-    int                m_VideoStream;
-    AVFormatContext*   m_pFormatContext;
-    AVCodecContext*    m_pVideoCodecContext;
-    AVCodec*           m_pVideoCodec;
-    AVStream*          m_pVideoStream;
-    AVFrame*           m_pFrame;
-    quint8*            m_pFrameBuffer;
-    AVPacket*          m_pPacket;
-    bool               m_FormatContextWasGiven;
-    bool               m_AllowSeek;
-    bool               m_initialized;
-    AVFilterContext*   m_bufferSinkContext;
-    AVFilterContext*   m_bufferSourceContext;
-    AVFilterGraph*     m_filterGraph;
-    AVFrame*           m_filterFrame;
-    int                m_lastWidth;
-    int                m_lastHeight;
-    enum AVPixelFormat m_lastPixfmt;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
