@@ -27,8 +27,6 @@
 
 // C++ includes
 
-#include <string>
-#include <inttypes.h>
 #include <vector>
 
 // Qt includes

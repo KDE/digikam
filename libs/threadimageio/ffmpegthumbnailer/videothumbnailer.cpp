@@ -24,16 +24,11 @@
 
 #include "videothumbnailer.h"
 
-// C includes
-
-#include <inttypes.h>
-
 // C++ includes
 
 #include <vector>
 #include <cfloat>
 #include <cmath>
-#include <map>
 
 // Qt includes
 
