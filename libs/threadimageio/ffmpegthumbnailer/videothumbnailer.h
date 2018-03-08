@@ -33,7 +33,6 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "filmstripfilter.h"
 
 namespace Digikam
 {
@@ -41,6 +40,7 @@ namespace Digikam
 class VideoFrame;
 class ImageWriter;
 class MovieDecoder;
+class FilmStripFilter;
 
 class DIGIKAM_EXPORT VideoThumbnailer
 {
