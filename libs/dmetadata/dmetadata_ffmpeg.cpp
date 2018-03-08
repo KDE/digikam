@@ -183,7 +183,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         fi.suffix());
     setXmpTagString("Xmp.video.MimeType",
         QMimeDatabase().mimeTypeForFile(filePath).name());
-    setXmpTagString("Xmp.video.Duration",
+    setXmpTagString("Xmp.video.duration",
         QString::number((int)(1000.0 * (double)fmt_ctx->duration / (double)AV_TIME_BASE)));
     setXmpTagString("Xmp.video.MaxBitRate",
         QString::number(fmt_ctx->bit_rate));
@@ -266,7 +266,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             const char* cname = avcodec_get_name(codec->codec_id); 
 
             setXmpTagString("Xmp.video.Codec",
-                QString::fromUtf8(cname));
+                 QString::fromUtf8(cname));
             setXmpTagString("Xmp.video.CodecDescription",
                  QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name));
             setXmpTagString("Xmp.video.Format",
@@ -275,8 +275,34 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                  QString::number(codec->color_space));
             setXmpTagString("Xmp.video.ColorSpace",
                  videoColorModelToString(codec->color_space));
+           
+            // ----------
 
-            // TODO: codec->field_order ==>  Xmp.video.FieldOrder ?
+            QString fo;
+
+            switch (codec->field_order)
+            {
+                case AV_FIELD_PROGRESSIVE:
+                    fo = QLatin1String("Progressive");
+                    break;
+                case AV_FIELD_TT:                       // Top coded first, top displayed first
+                case AV_FIELD_BT:                       // Bottom coded first, top displayed first
+                    fo = QLatin1String("Upper");
+                    break;
+                case AV_FIELD_BB:                       // Bottom coded first, bottom displayed first
+                case AV_FIELD_TB:                       // Top coded first, bottom displayed first
+                    fo = QLatin1String("Lower");
+                    break;
+                default
+                    break;
+            }
+            
+            if (!fo.isEmpty())
+            {
+                setXmpTagString("Xmp.xmpDM.FieldOrder", fo);
+            }
+
+            // ----------
 
             QString aspectRatio;
             int frameRate = -1.0;

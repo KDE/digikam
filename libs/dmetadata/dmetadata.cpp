@@ -1222,7 +1222,7 @@ VideoInfoContainer DMetadata::getVideoInformation() const
 
         if (videoInfo.duration.isEmpty())
         {
-            videoInfo.duration = getXmpTagString("Xmp.video.Duration");
+            videoInfo.duration = getXmpTagString("Xmp.video.duration");
         }
 
         if (videoInfo.frameRate.isEmpty())
@@ -2755,7 +2755,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
         case MetadataInfo::AudioCodec:
             return fromXmpLangAlt("Xmp.audio.Codec");
         case MetadataInfo::Duration:
-            return fromXmpLangAlt("Xmp.video.Duration"); // duration is in ms
+            return fromXmpLangAlt("Xmp.video.duration"); // duration is in ms
         case MetadataInfo::FrameRate:
             return fromXmpLangAlt("Xmp.video.FrameRate");
         case MetadataInfo::VideoCodec:
