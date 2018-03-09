@@ -58,6 +58,7 @@ public:
         videoStream           = -1;
         pFormatContext        = 0;
         pVideoCodecContext    = 0;
+        pVideoCodecParameters = 0;
         pVideoCodec           = 0;
         pVideoStream          = 0;
         pFrame                = 0;
@@ -77,6 +78,7 @@ public:
     int                videoStream;
     AVFormatContext*   pFormatContext;
     AVCodecContext*    pVideoCodecContext;
+    AVCodecParameters* pVideoCodecParameters;
     AVCodec*           pVideoCodec;
     AVStream*          pVideoStream;
     AVFrame*           pFrame;
@@ -115,8 +117,8 @@ public:
 
     void deleteFilterGraph();
     bool initFilterGraph(enum AVPixelFormat pixfmt, int width, int height);
-    bool processFilterGraph(AVPicture* const dst,
-                            const AVPicture* const src,
+    bool processFilterGraph(AVFrame* const dst,
+                            const AVFrame* const src,
                             enum AVPixelFormat pixfmt,
                             int width,
                             int height);
@@ -132,7 +134,7 @@ void MovieDecoder::Private::createAVFrame(AVFrame** const avFrame,
     int numBytes = av_image_get_buffer_size(format, width, height, 1);
     *frameBuffer = reinterpret_cast<quint8*>(av_malloc(numBytes));
 
-    avpicture_fill((AVPicture*) *avFrame, *frameBuffer, format, width, height);
+    av_image_fill_arrays((*avFrame)->data, (*avFrame)->linesize, *frameBuffer, format, width, height, 1);
 }
 
 void MovieDecoder::Private::initializeVideo()
@@ -153,8 +155,8 @@ void MovieDecoder::Private::initializeVideo()
         return;
     }
 
-    pVideoCodecContext = pFormatContext->streams[videoStream]->codec;
-    pVideoCodec        = avcodec_find_decoder(pVideoCodecContext->codec_id);
+    pVideoCodecParameters = pFormatContext->streams[videoStream]->codecpar;
+    pVideoCodec           = avcodec_find_decoder(pVideoCodecParameters->codec_id);
 
     if (pVideoCodec == 0)
     {
@@ -164,7 +166,8 @@ void MovieDecoder::Private::initializeVideo()
         return;
     }
 
-    pVideoCodecContext->workaround_bugs = 1;
+    pVideoCodecContext = avcodec_alloc_context3(pVideoCodec);
+    avcodec_parameters_to_context(pVideoCodecContext, pVideoCodecParameters);
 
     if (avcodec_open2(pVideoCodecContext, pVideoCodec, 0) < 0)
     {
@@ -303,8 +306,8 @@ bool MovieDecoder::Private::initFilterGraph(enum AVPixelFormat pixfmt,
     return true;
 }
 
-bool MovieDecoder::Private::processFilterGraph(AVPicture* const dst,
-                                               const AVPicture* const src,
+bool MovieDecoder::Private::processFilterGraph(AVFrame* const dst,
+                                               const AVFrame* const src,
                                                enum AVPixelFormat pixfmt,
                                                int width, int height)
 {
@@ -340,7 +343,7 @@ bool MovieDecoder::Private::processFilterGraph(AVPicture* const dst,
         return false;
     }
 
-    av_picture_copy(dst, (const AVPicture*)filterFrame, pixfmt, width, height);
+    av_image_copy(dst->data, dst->linesize, (const uint8_t**)filterFrame->data, filterFrame->linesize, pixfmt, width, height);
     av_frame_unref(filterFrame);
 
     return true;
@@ -579,7 +582,7 @@ void MovieDecoder::seek(int timeInSeconds)
 
     if (ret >= 0) 
     {
-        avcodec_flush_buffers(d->pFormatContext->streams[d->videoStream]->codec);
+        avcodec_flush_buffers(d->pVideoCodecContext);
     }
     else
     {
@@ -635,8 +638,8 @@ void MovieDecoder::getScaledVideoFrame(int scaledSize,
 {
     if (d->pFrame->interlaced_frame)
     {
-        d->processFilterGraph((AVPicture*)d->pFrame,
-                              (AVPicture*)d->pFrame,
+        d->processFilterGraph((AVFrame*)d->pFrame,
+                              (AVFrame*)d->pFrame,
                               d->pVideoCodecContext->pix_fmt,
                               d->pVideoCodecContext->width,
                               d->pVideoCodecContext->height);
