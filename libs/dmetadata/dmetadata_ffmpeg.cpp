@@ -329,13 +329,17 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             QString aspectRatio;
             int frameRate = -1.0;
 
-            if (codec->sample_aspect_ratio.num != 0 &&    // Check if undefined by ffmpeg
-                codec->sample_aspect_ratio.den != 0 &&    // Prevent div by 0
-                (codec->sample_aspect_ratio.num != 1      // Special case where aspect ratio is
-                 && codec->sample_aspect_ratio.den != 1)) // not calculed properly by ffmpeg.
+            if (codec->sample_aspect_ratio.num != 0)    // Check if undefined by ffmpeg
             {
-                aspectRatio = QString::fromLatin1("%1/%2").arg(codec->sample_aspect_ratio.num)
-                                                          .arg(codec->sample_aspect_ratio.den);
+                AVRational displayAspectRatio;
+
+                av_reduce(&displayAspectRatio.num, &displayAspectRatio.den,
+                          codec->width  * (int64_t)codec->sample_aspect_ratio.num,
+                          codec->height * (int64_t)codec->sample_aspect_ratio.den,
+                          1024 * 1024);
+
+                aspectRatio = QString::fromLatin1("%1/%2").arg(displayAspectRatio.num)
+                                                          .arg(displayAspectRatio.den);
             }
             else if (codec->height)
             {
