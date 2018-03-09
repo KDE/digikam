@@ -97,19 +97,27 @@ public:
 public:
 
     void initializeVideo();
-
     bool decodeVideoPacket() const;
+
+    int decodeVideoNew(AVCodecContext* const avContext,
+                       AVFrame* const avFrame,
+                       int *gotFrame,
+                       AVPacket* const avPacket) const;
+
     bool getVideoPacket();
+
     void convertAndScaleFrame(AVPixelFormat format,
                               int scaledSize,
                               bool maintainAspectRatio,
                               int& scaledWidth,
                               int& scaledHeight);
+
     void createAVFrame(AVFrame** const avFrame,
                        quint8** const frameBuffer,
                        int width,
                        int height,
                        AVPixelFormat format);
+
     void calculateDimensions(int squareSize,
                              bool maintainAspectRatio,
                              int& destWidth,
@@ -117,6 +125,7 @@ public:
 
     void deleteFilterGraph();
     bool initFilterGraph(enum AVPixelFormat pixfmt, int width, int height);
+
     bool processFilterGraph(AVFrame* const dst,
                             const AVFrame* const src,
                             enum AVPixelFormat pixfmt,
@@ -193,10 +202,10 @@ bool MovieDecoder::Private::decodeVideoPacket() const
                                             pPacket->data,
                                             pPacket->size);
 #else
-    int bytesDecoded = avcodec_decode_video2(pVideoCodecContext,
-                                             pFrame,
-                                             &frameFinished,
-                                             pPacket);
+    int bytesDecoded = decodeVideoNew(pVideoCodecContext,
+                                      pFrame,
+                                      &frameFinished,
+                                      pPacket);
 #endif
 
     if (bytesDecoded < 0)
@@ -205,6 +214,34 @@ bool MovieDecoder::Private::decodeVideoPacket() const
     }
 
     return (frameFinished > 0);
+}
+
+int MovieDecoder::Private::decodeVideoNew(AVCodecContext* const avContext,
+                                          AVFrame* const avFrame,
+                                          int *gotFrame,
+                                          AVPacket* const avPacket) const
+{
+    int ret   = 0;
+    *gotFrame = 0;
+
+    if (avPacket)
+    {
+        ret = avcodec_send_packet(avContext, avPacket);
+        // In particular, we don't expect AVERROR(EAGAIN), because we read all
+        // decoded frames with avcodec_receive_frame() until done.
+        if (ret < 0)
+            return ret == AVERROR_EOF ? 0 : ret;
+    }
+
+    ret = avcodec_receive_frame(avContext, avFrame);
+
+    if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF)
+        return ret;
+
+    if (ret >= 0)
+        *gotFrame = 1;
+
+    return 0;
 }
 
 bool MovieDecoder::Private::getVideoPacket()
@@ -638,8 +675,8 @@ void MovieDecoder::getScaledVideoFrame(int scaledSize,
 {
     if (d->pFrame->interlaced_frame)
     {
-        d->processFilterGraph((AVFrame*)d->pFrame,
-                              (AVFrame*)d->pFrame,
+        d->processFilterGraph(d->pFrame,
+                              d->pFrame,
                               d->pVideoCodecContext->pix_fmt,
                               d->pVideoCodecContext->width,
                               d->pVideoCodecContext->height);
