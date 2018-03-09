@@ -283,12 +283,16 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             setXmpTagString("Xmp.video.Codec",
                  QString::fromUtf8(cname));
+
             setXmpTagString("Xmp.video.CodecDescription",
                  QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name));
+
             setXmpTagString("Xmp.video.Format",
                  QString::fromUtf8(av_get_pix_fmt_name((AVPixelFormat)codec->format)));
+
             setXmpTagString("Xmp.video.ColorMode",
                  QString::number(codec->color_space));
+
             setXmpTagString("Xmp.video.ColorSpace",
                  videoColorModelToString(codec->color_space));
             setXmpTagString("Xmp.xmpDM.videoColorSpace",
@@ -330,11 +334,13 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 (codec->sample_aspect_ratio.num != 1      // Special case where aspect ratio is
                  && codec->sample_aspect_ratio.den != 1)) // not calculed properly by ffmpeg.
             {
-                aspectRatio = QString::fromLatin1("%1/%2").arg(codec->sample_aspect_ratio.num).arg(codec->sample_aspect_ratio.den);
+                aspectRatio = QString::fromLatin1("%1/%2").arg(codec->sample_aspect_ratio.num)
+                                                          .arg(codec->sample_aspect_ratio.den);
             }
             else if (codec->height)
             {
-                aspectRatio = QString::fromLatin1("%1/%2").arg(codec->width).arg(codec->height);
+                aspectRatio = QString::fromLatin1("%1/%2").arg(codec->width)
+                                                          .arg(codec->height);
             }
 
             if (stream->avg_frame_rate.den)
