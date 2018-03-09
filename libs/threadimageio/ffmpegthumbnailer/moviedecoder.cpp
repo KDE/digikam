@@ -101,7 +101,7 @@ public:
 
     int decodeVideoNew(AVCodecContext* const avContext,
                        AVFrame* const avFrame,
-                       int *gotFrame,
+                       int* gotFrame,
                        AVPacket* const avPacket) const;
 
     bool getVideoPacket();
@@ -218,7 +218,7 @@ bool MovieDecoder::Private::decodeVideoPacket() const
 
 int MovieDecoder::Private::decodeVideoNew(AVCodecContext* const avContext,
                                           AVFrame* const avFrame,
-                                          int *gotFrame,
+                                          int* gotFrame,
                                           AVPacket* const avPacket) const
 {
     int ret   = 0;
