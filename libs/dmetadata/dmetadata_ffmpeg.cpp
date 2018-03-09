@@ -589,10 +589,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("composer"),
-                               rmeta,
-                               "Xmp.video.Composer");
+    data = s_setXmpTagStringFromEntry(this,
+                                      QStringList() << QLatin1String("composer"),
+                                      rmeta,
+                                      "Xmp.video.Composer");
+
+    if (!data.isEmpty())
+    {
+        setXmpTagString("Xmp.xmpDM.composer", data);
+    }
 
     // --------------
 
@@ -632,13 +637,20 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("artist")
-                                             << QLatin1String("album_artist")
-                                             << QLatin1String("original_artist")
-                                             << QLatin1String("com.apple.quicktime.artist"),
-                               rmeta,
-                               "Xmp.video.Artist");
+    data = s_setXmpTagStringFromEntry(this,
+                                      QStringList() << QLatin1String("artist")
+                                                    << QLatin1String("album_artist")
+                                                    << QLatin1String("original_artist")
+                                                    << QLatin1String("com.apple.quicktime.artist")
+                                                    << QLatin1String("author")
+                                                    << QLatin1String("com.apple.quicktime.author"),
+                                      rmeta,
+                                      "Xmp.video.Artist");
+
+    if (!data.isEmpty())
+    {
+        setXmpTagString("Xmp.xmpDM.artist", data);
+    }
 
     // --------------
 
@@ -737,36 +749,38 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("title")
-                                             << QLatin1String("com.apple.quicktime.title"),
-                               rmeta,
-                               "Xmp.video.Title");
+    data = s_setXmpTagStringFromEntry(this,
+                                      QStringList() << QLatin1String("title")
+                                                    << QLatin1String("com.apple.quicktime.title"),
+                                      rmeta,
+                                      "Xmp.video.Title");
 
+    if (!data.isEmpty())
+    {
+        setXmpTagString("Xmp.xmpDM.shotName", data);
+    }
+    
     // --------------
 
-    s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("author")
-                                             << QLatin1String("com.apple.quicktime.author"),
-                               rmeta,
-                               "Xmp.video.Artist");
+    data = s_setXmpTagStringFromEntry(this,
+                                      QStringList() << QLatin1String("copyright")
+                                                    << QLatin1String("com.apple.quicktime.copyright"),
+                                      rmeta,
+                                      "Xmp.video.Copyright");
 
-    // --------------
-
-    s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("copyright")
-                                             << QLatin1String("com.apple.quicktime.copyright"),
-                               rmeta,
-                               "Xmp.video.Copyright");
+    if (!data.isEmpty())
+    {
+        setXmpTagString("Xmp.xmpDM.copyright", data);
+    }
 
     // --------------
 
     data = s_setXmpTagStringFromEntry(this,
-               QStringList() << QLatin1String("comment")
-                             << QLatin1String("description")
-                             << QLatin1String("com.apple.quicktime.description"),
-               rmeta,
-               "Xmp.video.Comment");
+                                      QStringList() << QLatin1String("comment")
+                                                    << QLatin1String("description")
+                                                    << QLatin1String("com.apple.quicktime.description"),
+                                      rmeta,
+                                      "Xmp.video.Comment");
 
     if (!data.isEmpty())
     {
@@ -778,6 +792,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         capMap.setData(comMap, MetaEngine::AltLangMap(), QString(), MetaEngine::AltLangMap());
 
         setImageComments(capMap);
+        
+        setXmpTagString("Xmp.xmpDM.logComment", data);
     }
 
     // --------------
@@ -789,26 +805,41 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("album")
-                                             << QLatin1String("com.apple.quicktime.album"),
-                               rmeta,
-                               "Xmp.video.Album");
+    data = s_setXmpTagStringFromEntry(this,
+                                      QStringList() << QLatin1String("album")
+                                                    << QLatin1String("com.apple.quicktime.album"),
+                                      rmeta,
+                                      "Xmp.video.Album");
+    
+    if (!data.isEmpty())
+    {
+        setXmpTagString("Xmp.xmpDM.album", data);
+    }
+    
+    // --------------
+
+    data = s_setXmpTagStringFromEntry(this,
+                                      QStringList() << QLatin1String("genre")
+                                                    << QLatin1String("com.apple.quicktime.genre"),
+                                      rmeta,
+                                      "Xmp.video.Genre");
+
+    if (!data.isEmpty())
+    {
+        setXmpTagString("Xmp.xmpDM.genre", data);
+    }
 
     // --------------
 
-    s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("genre")
-                                             << QLatin1String("com.apple.quicktime.genre"),
-                               rmeta,
-                               "Xmp.video.Genre");
+    data = s_setXmpTagStringFromEntry(this,
+                                      QStringList() << QLatin1String("track"),
+                                      rmeta,
+                                      "Xmp.video.TrackNumber");
 
-    // --------------
-
-    s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("track"),
-                               rmeta,
-                               "Xmp.video.TrackNumber");
+    if (!data.isEmpty())
+    {
+        setXmpTagString("Xmp.xmpDM.trackNumber", data);
+    }
 
     // --------------
 
@@ -836,10 +867,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("edit_date"),
-                               rmeta,
-                               "Xmp.video.ModificationDate");
+    data = s_setXmpTagStringFromEntry(this,
+                                      QStringList() << QLatin1String("edit_date"),
+                                      rmeta,
+                                      "Xmp.video.ModificationDate");
+
+    if (!data.isEmpty())
+    {
+        setXmpTagString("Xmp.xmpDM.videoModDate", data);
+    }
 
     // --------------
 
@@ -870,6 +906,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (!data.isEmpty())
     {
+        setXmpTagString("Xmp.xmpDM.shotLocation", data);
+
         // Backport location to Exif.
 
         QList<int> digits;
