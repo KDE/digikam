@@ -771,6 +771,8 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         QStringList type;
         type << QLatin1String("1") << i18n("Mono");
         type << QLatin1String("2") << i18n("Stereo");
+        type << QLatin1String("6") << i18n("5.1 Surround Sound");
+        type << QLatin1String("8") << i18n("7.1 Surround Sound");
         // TODO: add more possible audio channel type
         field->setChoice(type);
         return field;
