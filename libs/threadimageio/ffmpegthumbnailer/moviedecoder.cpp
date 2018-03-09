@@ -70,6 +70,8 @@ public:
         bufferSourceContext   = 0;
         filterGraph           = 0;
         filterFrame           = 0;
+        lastWidth             = 0;
+        lastHeight            = 0;
         lastPixfmt            = AV_PIX_FMT_NONE;
     }
 
