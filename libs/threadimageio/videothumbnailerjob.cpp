@@ -139,7 +139,7 @@ void VideoThumbnailerJob::run()
         if (!d->todo.isEmpty())
         {
             QString file = d->todo.takeFirst();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << file;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for" << file;
 
             VideoThumbnailer thumbnailer;
             FilmStripFilter  filmStrip;
@@ -155,12 +155,12 @@ void VideoThumbnailerJob::run()
 
             if (!img.isNull())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Video thumbnail extracted for " << file << " :: " << img;
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Video thumbnail extracted for" << file << "with size:" << img.size();
                 emit signalThumbnailDone(file, img);
             }
             else
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to extract video thumbnail for " << file;
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to extract video thumbnail for" << file;
                 emit signalThumbnailFailed(file);
             }
         }
