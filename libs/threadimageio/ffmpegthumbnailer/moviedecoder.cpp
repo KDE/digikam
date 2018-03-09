@@ -232,16 +232,22 @@ int MovieDecoder::Private::decodeVideoNew(AVCodecContext* const avContext,
         // In particular, we don't expect AVERROR(EAGAIN), because we read all
         // decoded frames with avcodec_receive_frame() until done.
         if (ret < 0)
-            return ret == AVERROR_EOF ? 0 : ret;
+        {
+            return (ret == AVERROR_EOF ? 0 : ret);
+        }
     }
 
     ret = avcodec_receive_frame(avContext, avFrame);
 
     if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF)
+    {
         return ret;
+    }
 
     if (ret >= 0)
+    {
         *gotFrame = 1;
+    }
 
     return 0;
 }
