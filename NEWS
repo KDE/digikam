@@ -46,5 +46,6 @@ BUGFIXES FROM BUGZILLA:
 037 ==> 391440 - Metadata (date) is not refreshed after a file has been modified.
 038 ==> 391497 - digiKam crashes when manually stopping database sync.
 039 ==> 391627 - Select to run Face Detection, process indicator stets to increase. Some time later return to find computer has crashed and needs power off reset.
-040 ==> 
+040 ==> 391397 - File rename allows for month number >12.
+041 ==> 
 
