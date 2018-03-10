@@ -178,8 +178,7 @@ bool MovieDecoder::Private::getVideoPacket()
 {
     bool framesAvailable = true;
     bool frameDecoded    = false;
-
-    int attempts = 0;
+    int  attempts        = 0;
 
     if (pPacket)
     {

@@ -71,14 +71,8 @@ public:
 public:
 
     void initializeVideo();
-    bool decodeVideoPacket() const;
-
-    int  decodeVideoNew(AVCodecContext* const avContext,
-                        AVFrame* const avFrame,
-                        int* gotFrame,
-                        AVPacket* const avPacket) const;
-
     bool getVideoPacket();
+    bool decodeVideoPacket() const;
 
     void convertAndScaleFrame(AVPixelFormat format,
                               int scaledSize,
@@ -86,25 +80,33 @@ public:
                               int& scaledWidth,
                               int& scaledHeight);
 
+    bool processFilterGraph(AVFrame* const dst,
+                            const AVFrame* const src,
+                            enum AVPixelFormat pixfmt,
+                            int width,
+                            int height);
+
+    void deleteFilterGraph();
+    
+private:
+
+    bool initFilterGraph(enum AVPixelFormat pixfmt, int width, int height);
+    
+    void calculateDimensions(int squareSize,
+                             bool maintainAspectRatio,
+                             int& destWidth,
+                             int& destHeight);
+    
     void createAVFrame(AVFrame** const avFrame,
                        quint8** const frameBuffer,
                        int width,
                        int height,
                        AVPixelFormat format);
 
-    void calculateDimensions(int squareSize,
-                             bool maintainAspectRatio,
-                             int& destWidth,
-                             int& destHeight);
-
-    void deleteFilterGraph();
-    bool initFilterGraph(enum AVPixelFormat pixfmt, int width, int height);
-
-    bool processFilterGraph(AVFrame* const dst,
-                            const AVFrame* const src,
-                            enum AVPixelFormat pixfmt,
-                            int width,
-                            int height);
+    int  decodeVideoNew(AVCodecContext* const avContext,
+                        AVFrame* const avFrame,
+                        int* gotFrame,
+                        AVPacket* const avPacket) const;
 };
 
 } // namespace Digikam
