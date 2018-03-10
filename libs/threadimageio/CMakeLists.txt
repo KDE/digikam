@@ -35,6 +35,7 @@ if(ENABLE_MEDIAPLAYER)
         ${libthreadimageio_SRCS}
         ffmpegthumbnailer/filmstripfilter.cpp
         ffmpegthumbnailer/moviedecoder.cpp
+        ffmpegthumbnailer/moviedecoder_p.cpp
         ffmpegthumbnailer/imagewriter.cpp
         ffmpegthumbnailer/videothumbnailer.cpp
         videothumbnailerjob.cpp
