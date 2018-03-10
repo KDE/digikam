@@ -174,7 +174,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     QString   data;
     QFileInfo fi(filePath);
-    
+
     setXmpTagString("Xmp.video.FileName",
         fi.fileName());
 
@@ -222,12 +222,12 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             setXmpTagString("Xmp.audio.CodecDescription",
                 QString::fromUtf8(avcodec_descriptor_get_by_name(cname)->long_name));
-            
+
             setXmpTagString("Xmp.audio.SampleRate",
                 QString::number(codec->sample_rate));
             setXmpTagString("Xmp.xmpDM.audioSampleRate",
                 QString::number(codec->sample_rate));
-            
+
             setXmpTagString("Xmp.audio.ChannelType",
                 QString::number(codec->channels));
             setXmpTagString("Xmp.xmpDM.audioChannelType",
@@ -318,7 +318,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 default:
                     break;
             }
-            
+
             if (!fo.isEmpty())
             {
                 setXmpTagString("Xmp.xmpDM.FieldOrder", fo);
@@ -370,7 +370,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 QString::fromLatin1("w:%1, h:%2, unit:pixels").arg(codec->width).arg(codec->height));
             setXmpTagString("Xmp.xmpDM.videoFrameSize",
                 QString::fromLatin1("w:%1, h:%2, unit:pixels").arg(codec->width).arg(codec->height));
-            
+
             // Backport size in Exif and Iptc
             setImageDimensions(QSize(codec->width, codec->height));
 
@@ -454,7 +454,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
                 setXmpTagString("Xmp.video.TrackCreateDate",
                                 QString::number(s_secondsSinceJanuary1904(dt)));
-                
+
                 setXmpTagString("Xmp.xmpDM.shotDate", dt.toString());
             }
 
@@ -802,7 +802,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         capMap.setData(comMap, MetaEngine::AltLangMap(), QString(), MetaEngine::AltLangMap());
 
         setImageComments(capMap);
-        
+
         setXmpTagString("Xmp.xmpDM.logComment", data);
     }
 
@@ -820,12 +820,12 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                                                     << QLatin1String("com.apple.quicktime.album"),
                                       rmeta,
                                       "Xmp.video.Album");
-    
+
     if (!data.isEmpty())
     {
         setXmpTagString("Xmp.xmpDM.album", data);
     }
-    
+
     // --------------
 
     data = s_setXmpTagStringFromEntry(this,
