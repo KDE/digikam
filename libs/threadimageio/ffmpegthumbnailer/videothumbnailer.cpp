@@ -53,7 +53,7 @@ public:
     Private()
       :  SMART_FRAME_ATTEMPTS(25)
     {
-        thumbnailSize       = 128;
+        thumbnailSize       = 256;
         seekPercentage      = 10;
         overlayFilmStrip    = false;
         workAroundIssues    = false;
