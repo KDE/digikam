@@ -27,11 +27,11 @@
 // C++ includes
 
 #include <cfloat>
-#include <cmath>
 
 // Qt includes
 
 #include <QtGlobal>
+#include <QtMath>
 #include <QTime>
 
 // Local includes
@@ -264,18 +264,18 @@ int VideoThumbnailer::getBestThumbnailIndex(vector<VideoFrame>& videoFrames,
 
     for (size_t i = 0 ; i < histograms.size(); i++)
     {
-        //calculate root mean squared error
+        // calculate root mean squared error
         float rmse = 0.0;
 
         for (int j = 0 ; j < 255 ; j++)
         {
-            float error = fabsf(avgHistogram.r[j] - histograms[i].r[j]) +
-                          fabsf(avgHistogram.g[j] - histograms[i].g[j]) +
-                          fabsf(avgHistogram.b[j] - histograms[i].b[j]);
+            float error = qFabs(avgHistogram.r[j] - histograms[i].r[j]) +
+                          qFabs(avgHistogram.g[j] - histograms[i].g[j]) +
+                          qFabs(avgHistogram.b[j] - histograms[i].b[j]);
             rmse += (error * error) / 255;
         }
 
-        rmse = sqrtf(rmse);
+        rmse = qSqrt(rmse);
 
         if (rmse < minRMSE)
         {
