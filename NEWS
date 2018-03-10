@@ -45,5 +45,6 @@ BUGFIXES FROM BUGZILLA:
 036 ==> 379420 - Showphoto crashed after resize.
 037 ==> 391440 - Metadata (date) is not refreshed after a file has been modified.
 038 ==> 391497 - digiKam crashes when manually stopping database sync.
-039 ==> 
+039 ==> 391627 - Select to run Face Detection, process indicator stets to increase. Some time later return to find computer has crashed and needs power off reset.
+040 ==> 
 
