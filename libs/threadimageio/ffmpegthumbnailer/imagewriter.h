@@ -25,14 +25,11 @@
 #ifndef IMAGE_WRITER_H
 #define IMAGE_WRITER_H
 
-// C++ includes
-
-#include <vector>
-
 // Qt includes
 
 #include <QtGlobal>
 #include <QImage>
+#include <QVector>
 
 namespace Digikam
 {
@@ -47,10 +44,10 @@ public:
 
 public:
 
-    quint32             width;
-    quint32             height;
-    quint32             lineSize;
-    std::vector<quint8> frameData;
+    quint32         width;
+    quint32         height;
+    quint32         lineSize;
+    QVector<quint8> frameData;
 };
 
 // -----------------------------------------------------------------

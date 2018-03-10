@@ -26,7 +26,6 @@
 
 // C++ includes
 
-#include <vector>
 #include <cfloat>
 #include <cmath>
 
