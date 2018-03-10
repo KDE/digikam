@@ -47,5 +47,5 @@ BUGFIXES FROM BUGZILLA:
 038 ==> 391497 - digiKam crashes when manually stopping database sync.
 039 ==> 391627 - Select to run Face Detection, process indicator stets to increase. Some time later return to find computer has crashed and needs power off reset.
 040 ==> 391397 - File rename allows for month number >12.
-041 ==> 
-
+041 ==> 365725 - Menus in Ubuntu Unity 16.04 is show twice. This is when Unity is tweaked to show menus in the windows titlebar instead of the menu bar.
+042 ==> 
