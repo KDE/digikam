@@ -151,8 +151,10 @@ int MovieDecoder::Private::decodeVideoNew(AVCodecContext* const avContext,
     if (avPacket)
     {
         ret = avcodec_send_packet(avContext, avPacket);
+
         // In particular, we don't expect AVERROR(EAGAIN), because we read all
         // decoded frames with avcodec_receive_frame() until done.
+
         if (ret < 0)
         {
             return (ret == AVERROR_EOF ? 0 : ret);

@@ -87,16 +87,16 @@ public:
                             int height);
 
     void deleteFilterGraph();
-    
+
 private:
 
     bool initFilterGraph(enum AVPixelFormat pixfmt, int width, int height);
-    
+
     void calculateDimensions(int squareSize,
                              bool maintainAspectRatio,
                              int& destWidth,
                              int& destHeight);
-    
+
     void createAVFrame(AVFrame** const avFrame,
                        quint8** const frameBuffer,
                        int width,
