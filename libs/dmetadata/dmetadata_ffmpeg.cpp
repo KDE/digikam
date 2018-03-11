@@ -1236,7 +1236,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
     
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("album")
+                               QStringList() << QLatin1String("album")              // MOV files.
                                              << QLatin1String("com.apple.quicktime.album"),
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Album")
@@ -1245,7 +1245,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("genre")
+                               QStringList() << QLatin1String("genre")              // MOV files.
                                              << QLatin1String("GENR")               // Riff files.
                                              << QLatin1String("IGNR")               // Riff files.
                                              << QLatin1String("GENRE")              // MKV files.
@@ -1257,7 +1257,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("track")
+                               QStringList() << QLatin1String("track")              // MOV files.
                                              << QLatin1String("TRCK"),              // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.TrackNumber")
@@ -1266,7 +1266,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("year")
+                               QStringList() << QLatin1String("year")               // MOV files.
                                              << QLatin1String("YEAR")               // Riff files.
                                              << QLatin1String("com.apple.quicktime.year"),
                                rmeta,
@@ -1283,7 +1283,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("creation_time")
+                               QStringList() << QLatin1String("creation_time")      // MOV files.
                                              << QLatin1String("DTIM")               // Riff files.
                                              << QLatin1String("DATE_RECORDED")      // MKV files.
                                              << QLatin1String("com.apple.quicktime.creationdate"),
@@ -1300,7 +1300,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("edit_date"),
+                               QStringList() << QLatin1String("edit_date"),         // MOV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.ModificationDate")
                                              << QLatin1String("Xmp.xmpDM.videoModDate"));
@@ -1308,8 +1308,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("date")
-                                             << QLatin1String("DATE_RELEASED"),    // MKV files.
+                               QStringList() << QLatin1String("date")               // MOV files.
+                                             << QLatin1String("DATE_RELEASED"),     // MKV files.
                                rmeta);
 
     if (!data.isEmpty())
@@ -1328,7 +1328,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     //        '/' is always the terminaison character.
 
     data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("location")
+                               QStringList() << QLatin1String("location")           // MOV files.
                                              << QLatin1String("RECORDING_LOCATION") // MKV files.
                                              << QLatin1String("com.apple.quicktime.location.ISO6709"),
                                rmeta,
