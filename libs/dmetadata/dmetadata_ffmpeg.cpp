@@ -780,6 +780,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                                       QStringList() << QLatin1String("title")
                                                     << QLatin1String("INAM")            // Riff files.
                                                     << QLatin1String("TITL")            // Riff files.
+                                                    << QLatin1String("TITLE")           // MKV files.
                                                     << QLatin1String("com.apple.quicktime.title"),
                                       rmeta,
                                       "Xmp.video.Title");
@@ -811,6 +812,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                                                     << QLatin1String("CMNT")                             // Riff Files.
                                                     << QLatin1String("COMN")                             // Riff Files.
                                                     << QLatin1String("ICMT")                             // Riff Files.
+                                                    << QLatin1String("COMMENT")                          // MKV Files.
                                                     << QLatin1String("com.apple.quicktime.description"),
                                       rmeta,
                                       "Xmp.video.Comment");
