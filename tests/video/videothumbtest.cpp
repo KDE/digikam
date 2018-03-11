@@ -50,10 +50,30 @@ int main(int argc, char** argv)
     vthumbs->setThumbnailSize(256);
     vthumbs->setCreateStrip(true);
 
+    // NOTE: connection to signal/C++11 lambda methods to catch events from thumbnail job.
+    // This permit to write test tool without to implement a QObject receiver for thumbnailer events.
+
+    // Write thumbnail image to png when file can be processed
     QObject::connect(vthumbs, &VideoThumbnailerJob::signalThumbnailDone,
                      [vthumbs, &app](const QString& str, const QImage& img)
                         {
                             img.save(QString::fromUtf8("./%1.png").arg(str), "PNG");
+                            app.quit();
+                        }
+                    );
+
+    // PRint a message is a file cannot be processed
+    QObject::connect(vthumbs, &VideoThumbnailerJob::signalThumbnailFailed,
+                     [vthumbs, &app](const QString& str)
+                        {
+                            qDebug() << "Cannot extract thumbnail from" << str;
+                        }
+                    );
+
+    // Quit when all is done.
+    QObject::connect(vthumbs, &VideoThumbnailerJob::signalThumbnailJobFinished,
+                     [vthumbs, &app]()
+                        {
                             app.quit();
                         }
                     );
