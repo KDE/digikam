@@ -116,20 +116,3 @@ if(Gphoto2_FOUND)
     target_link_libraries(statesavingobjecttest ${GPHOTO2_LIBRARIES})
 endif()
 
-#------------------------------------------------------------------------
-
-if(ENABLE_MEDIAPLAYER)
-
-    set(videothumbtest_SRCS videothumbtest.cpp)
-    add_executable(videothumbtest ${videothumbtest_SRCS})
-    ecm_mark_nongui_executable(videothumbtest)
-
-    target_link_libraries(videothumbtest
-                          digikamcore
-
-                          Qt5::Core
-                          Qt5::Widgets
-    )
-
-endif()
-

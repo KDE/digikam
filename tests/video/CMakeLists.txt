@@ -70,3 +70,16 @@ target_link_libraries(player
 
                       ${OpenCV_LIBRARIES}
 )
+
+# -------------------------------------------------
+
+set(videothumbtest_SRCS videothumbtest.cpp)
+add_executable(videothumbtest ${videothumbtest_SRCS})
+ecm_mark_nongui_executable(videothumbtest)
+
+target_link_libraries(videothumbtest
+                      digikamcore
+
+                      Qt5::Core
+                      Qt5::Widgets
+)
