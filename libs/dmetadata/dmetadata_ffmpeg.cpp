@@ -408,7 +408,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             // --------------
 
             data = s_setXmpTagStringFromEntry(this,
-                                              QStringList() << QLatin1String("rotate"),   // MOV files.
+                                              QStringList() << QLatin1String("rotate"),                         // MOV files.
                                               vmeta);
 
             if (!data.isEmpty())
@@ -446,17 +446,17 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             // --------------
 
             s_setXmpTagStringFromEntry(this,
-                                       QStringList() << QLatin1String("language")   // MOV files.
-                                                     << QLatin1String("ILNG")       // Riff files.
-                                                     << QLatin1String("LANG"),      // Riff files.
+                                       QStringList() << QLatin1String("language")                               // MOV files.
+                                                     << QLatin1String("ILNG")                                   // Riff files.
+                                                     << QLatin1String("LANG"),                                  // Riff files.
                                        vmeta,
                                        QStringList() << QLatin1String("Xmp.video.Language"));
 
             // --------------
 
             data = s_setXmpTagStringFromEntry(this,
-                                              QStringList() << QLatin1String("creation_time")                 // MOV files.
-                                                            << QLatin1String("_STATISTICS_WRITING_DATE_UTC"), // MKV files.
+                                              QStringList() << QLatin1String("creation_time")                   // MOV files.
+                                                            << QLatin1String("_STATISTICS_WRITING_DATE_UTC"),   // MKV files.
                                               vmeta);
 
             if (!data.isEmpty())
@@ -471,15 +471,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             // --------------
 
             s_setXmpTagStringFromEntry(this,
-                                       QStringList() << QLatin1String("handler_name"),            // MOV files.
+                                       QStringList() << QLatin1String("handler_name"),                          // MOV files.
                                        vmeta,
                                        QStringList() << QLatin1String("Xmp.video.HandlerDescription"));
 
             // --------------
 
             s_setXmpTagStringFromEntry(this,
-                                       QStringList() << QLatin1String("TVER")                     // Riff files.
-                                                     << QLatin1String("_STATISTICS_WRITING_APP"), // MKV files.
+                                       QStringList() << QLatin1String("TVER")                                   // Riff files.
+                                                     << QLatin1String("_STATISTICS_WRITING_APP"),               // MKV files.
                                        vmeta,
                                        QStringList() << QLatin1String("Xmp.video.SoftwareVersion"));
         }
@@ -509,15 +509,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             // --------------
 
             s_setXmpTagStringFromEntry(this,
-                                       QStringList() << QLatin1String("subtitle")           // MOV files.
-                                                     << QLatin1String("title"),             // MOV files.
+                                       QStringList() << QLatin1String("subtitle")                               // MOV files.
+                                                     << QLatin1String("title"),                                 // MOV files.
                                        smeta,
                                        QStringList() << QLatin1String("Xmp.video.Subtitle"));
 
             // --------------
 
             s_setXmpTagStringFromEntry(this,
-                                       QStringList() << QLatin1String("language"),          // MOV files.
+                                       QStringList() << QLatin1String("language"),                              // MOV files.
                                        smeta,
                                        QStringList() << QLatin1String("Xmp.video.SubTLang"));
         }
@@ -536,31 +536,31 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // ----------------------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("major_brand"),               // MOV files.
+                               QStringList() << QLatin1String("major_brand"),                                   // MOV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.MajorBrand"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("compatible_brands"),         // MOV files.
+                               QStringList() << QLatin1String("compatible_brands"),                             // MOV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.CompatibleBrands"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("minor_version"),             // MOV files.
+                               QStringList() << QLatin1String("minor_version"),                                 // MOV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.MinorVersion"));
 
     // --------------
 
     data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("keywords")                   // MOV files.
-                                             << QLatin1String("IMIT")                       // Riff files.
-                                             << QLatin1String("KEYWORDS")                   // MKV files.
-                                             << QLatin1String("com.apple.quicktime.keywords"),
+                               QStringList() << QLatin1String("keywords")                                       // MOV files.
+                                             << QLatin1String("IMIT")                                           // Riff files.
+                                             << QLatin1String("KEYWORDS")                                       // MKV files.
+                                             << QLatin1String("com.apple.quicktime.keywords"),                  // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.InfoText"));
 
@@ -578,9 +578,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("category")                   // MOV files.
-                                             << QLatin1String("ISBJ")                       // RIFF files.
-                                             << QLatin1String("SUBJECT"),                   // MKV files.
+                               QStringList() << QLatin1String("category")                                       // MOV files.
+                                             << QLatin1String("ISBJ")                                           // Riff files.
+                                             << QLatin1String("SUBJECT"),                                       // MKV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Subject"));
 
@@ -598,26 +598,26 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("premiere_version")           // MOV files.
-                                             << QLatin1String("quicktime_version")          // MOV files.
-                                             << QLatin1String("ISFT")                       // Riff files
-                                             << QLatin1String("com.apple.quicktime.software"),
+                               QStringList() << QLatin1String("premiere_version")                               // MOV files.
+                                             << QLatin1String("quicktime_version")                              // MOV files.
+                                             << QLatin1String("ISFT")                                           // Riff files
+                                             << QLatin1String("com.apple.quicktime.software"),                  // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.SoftwareVersion"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("firmware")                   // MOV files.
-                                             << QLatin1String("com.apple.proapps.serialno"),
+                               QStringList() << QLatin1String("firmware")                                       // MOV files.
+                                             << QLatin1String("com.apple.proapps.serialno"),                    // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.FirmwareVersion"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("composer")                   // MOV files.
-                                             << QLatin1String("COMPOSER"),                  // MKV files
+                               QStringList() << QLatin1String("composer")                                       // MOV files.
+                                             << QLatin1String("COMPOSER"),                                      // MKV files
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Composer")
                                              << QLatin1String("Xmp.xmpDM.composer"));
@@ -625,51 +625,51 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("com.apple.quicktime.displayname"),
+                               QStringList() << QLatin1String("com.apple.quicktime.displayname"),               // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Name"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("playback_requirements"),     // MOV files.
+                               QStringList() << QLatin1String("playback_requirements"),                         // MOV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Requirements"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this, 
-                               QStringList() << QLatin1String("lyrics"),                    // MOV files.
+                               QStringList() << QLatin1String("lyrics"),                                        // MOV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Lyrics"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("performers"),                // MOV files.
+                               QStringList() << QLatin1String("performers"),                                    // MOV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Performers"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("producer")                   // MOV files.
-                                             << QLatin1String("PRODUCER")                   // MKV files.
-                                             << QLatin1String("com.apple.quicktime.producer"),
+                               QStringList() << QLatin1String("producer")                                       // MOV files.
+                                             << QLatin1String("PRODUCER")                                       // MKV files.
+                                             << QLatin1String("com.apple.quicktime.producer"),                  // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Producer"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("artist")                     // MOV files.
-                                             << QLatin1String("album_artist")               // MOV files.
-                                             << QLatin1String("original_artist")            // MOV files.
-                                             << QLatin1String("com.apple.quicktime.artist")
-                                             << QLatin1String("IART")                       // Riff files.
-                                             << QLatin1String("ARTIST")                     // MKV files.
-                                             << QLatin1String("author")                     // MOV files.
-                                             << QLatin1String("com.apple.quicktime.author"),
+                               QStringList() << QLatin1String("artist")                                         // MOV files.
+                                             << QLatin1String("album_artist")                                   // MOV files.
+                                             << QLatin1String("original_artist")                                // MOV files.
+                                             << QLatin1String("com.apple.quicktime.artist")                     // QT files.
+                                             << QLatin1String("IART")                                           // Riff files.
+                                             << QLatin1String("ARTIST")                                         // MKV files.
+                                             << QLatin1String("author")                                         // MOV files.
+                                             << QLatin1String("com.apple.quicktime.author"),                    // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Artist")
                                              << QLatin1String("Xmp.xmpDM.artist"));
@@ -677,10 +677,10 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("director")                   // MOV files.
-                                             << QLatin1String("DIRC")                       // Riff files.
-                                             << QLatin1String("DIRECTOR")                   // MKV files.
-                                             << QLatin1String("com.apple.quicktime.director"),
+                               QStringList() << QLatin1String("director")                                       // MOV files.
+                                             << QLatin1String("DIRC")                                           // Riff files.
+                                             << QLatin1String("DIRECTOR")                                       // MKV files.
+                                             << QLatin1String("com.apple.quicktime.director"),                  // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Director")
                                              << QLatin1String("Xmp.xmpDM.director"));
@@ -688,44 +688,44 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("media_type")                 // MOV files.
-                                             << QLatin1String("IMED")                       // Riff files.
-                                             << QLatin1String("ORIGINAL_MEDIA_TYPE"),       // MKV files.
+                               QStringList() << QLatin1String("media_type")                                     // MOV files.
+                                             << QLatin1String("IMED")                                           // Riff files.
+                                             << QLatin1String("ORIGINAL_MEDIA_TYPE"),                           // MKV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Medium"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("grouping"),                  // MOV files.
+                               QStringList() << QLatin1String("grouping"),                                      // MOV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Grouping"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("BPS"),                       // MKV files
+                               QStringList() << QLatin1String("BPS"),                                           // MKV files
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.MaxBitRate"));
     
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ISRC"),                      // MKV files
+                               QStringList() << QLatin1String("ISRC"),                                          // MKV files
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.ISRCCode"));
 
     // --------------
     
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("CONTENT_TYPE"),              // MKV files
+                               QStringList() << QLatin1String("CONTENT_TYPE"),                                  // MKV files
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.ExtendedContentDescription"));
     
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("FPS"),                       // MKV files.                                                    
+                               QStringList() << QLatin1String("FPS"),                                           // MKV files.                                                    
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.videoFrameRate")
                                              << QLatin1String("Xmp.xmpDM.FrameRate"));
@@ -733,31 +733,31 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("encoder")                    // MOV files.
-                                             << QLatin1String("ENCODER"),                   // MKV files.
+                               QStringList() << QLatin1String("encoder")                                        // MOV files.
+                                             << QLatin1String("ENCODER"),                                       // MKV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Encoder"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("com.apple.proapps.clipID"),
+                               QStringList() << QLatin1String("com.apple.proapps.clipID"),                      // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.FileID"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("original_source")            // MOV files.
-                                             << QLatin1String("ISRC")                       // Riff files
-                                             << QLatin1String("com.apple.proapps.cameraName"),
+                               QStringList() << QLatin1String("original_source")                                // MOV files.
+                                             << QLatin1String("ISRC")                                           // Riff files
+                                             << QLatin1String("com.apple.proapps.cameraName"),                  // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Source"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("original_format")            // MOV files.
+                               QStringList() << QLatin1String("original_format")                                // MOV files.
                                              << QLatin1String("com.apple.proapps.originalFormat"),
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Format"));
@@ -765,11 +765,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     data = s_setXmpTagStringFromEntry(this,
-               QStringList() << QLatin1String("rating")                                     // MOV files.
-                             << QLatin1String("IRTD")                                       // Riff files.
-                             << QLatin1String("RATE")                                       // Riff files.
-                             << QLatin1String("RATING")                                     // MKV files.
-                             << QLatin1String("com.apple.quicktime.rating.user"),
+               QStringList() << QLatin1String("rating")                                                         // MOV files.
+                             << QLatin1String("IRTD")                                                           // Riff files.
+                             << QLatin1String("RATE")                                                           // Riff files.
+                             << QLatin1String("RATING")                                                         // MKV files.
+                             << QLatin1String("com.apple.quicktime.rating.user"),                               // QT files.
                rmeta,
                QStringList() << QLatin1String("Xmp.video.Rating")
                              << QLatin1String("Xmp.video.Rate"));
@@ -789,16 +789,16 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("make")           // MOV files.
-                                             << QLatin1String("com.apple.quicktime.make"),
+                               QStringList() << QLatin1String("make")                                           // MOV files.
+                                             << QLatin1String("com.apple.quicktime.make"),                      // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Make"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("model")          // MOV files.
-                                             << QLatin1String("com.apple.quicktime.model"),
+                               QStringList() << QLatin1String("model")                                          // MOV files.
+                                             << QLatin1String("com.apple.quicktime.model"),                     // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Model")
                                              << QLatin1String("Xmp.xmpDM.cameraModel"));
@@ -806,8 +806,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("URL")            // MOV files.
-                                             << QLatin1String("TURL"),          // Riff files.
+                               QStringList() << QLatin1String("URL")                                            // MOV files.
+                                             << QLatin1String("TURL"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.URL"));
 
@@ -815,11 +815,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("title")           // MOV files.
-                                             << QLatin1String("INAM")            // Riff files.
-                                             << QLatin1String("TITL")            // Riff files.
-                                             << QLatin1String("TITLE")           // MKV files.
-                                             << QLatin1String("com.apple.quicktime.title"),
+                               QStringList() << QLatin1String("title")                                          // MOV files.
+                                             << QLatin1String("INAM")                                           // Riff files.
+                                             << QLatin1String("TITL")                                           // Riff files.
+                                             << QLatin1String("TITLE")                                          // MKV files.
+                                             << QLatin1String("com.apple.quicktime.title"),                     // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Title")
                                              << QLatin1String("Xmp.xmpDM.shotName"));
@@ -827,10 +827,10 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("copyright")          // MOV files.
-                                             << QLatin1String("ICOP")               // Riff files.
-                                             << QLatin1String("COPYRIGHT")          // MKV files.
-                                             << QLatin1String("com.apple.quicktime.copyright"),
+                               QStringList() << QLatin1String("copyright")                                      // MOV files.
+                                             << QLatin1String("ICOP")                                           // Riff files.
+                                             << QLatin1String("COPYRIGHT")                                      // MKV files.
+                                             << QLatin1String("com.apple.quicktime.copyright"),                 // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Copyright")
                                              << QLatin1String("Xmp.xmpDM.copyright"));
@@ -838,14 +838,14 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("comment")            // MOV files.
-                                             << QLatin1String("description")        // MOV files.
-                                             << QLatin1String("CMNT")               // Riff Files.
-                                             << QLatin1String("COMN")               // Riff Files.
-                                             << QLatin1String("ICMT")               // Riff Files.
-                                             << QLatin1String("COMMENT")            // MKV Files.
-                                             << QLatin1String("DESCRIPTION")        // MKV Files.
-                                             << QLatin1String("com.apple.quicktime.description"),
+                               QStringList() << QLatin1String("comment")                                        // MOV files.
+                                             << QLatin1String("description")                                    // MOV files.
+                                             << QLatin1String("CMNT")                                           // Riff Files.
+                                             << QLatin1String("COMN")                                           // Riff Files.
+                                             << QLatin1String("ICMT")                                           // Riff Files.
+                                             << QLatin1String("COMMENT")                                        // MKV Files.
+                                             << QLatin1String("DESCRIPTION")                                    // MKV Files.
+                                             << QLatin1String("com.apple.quicktime.description"),               // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Comment")
                                              << QLatin1String("Xmp.xmpDM.logComment"));
@@ -865,17 +865,17 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("synopsis")           // MOV files.
-                                             << QLatin1String("SUMMARY")            // MKV files.
-                                             << QLatin1String("SYNOPSIS"),          // MKV files.
+                               QStringList() << QLatin1String("synopsis")                                       // MOV files.
+                                             << QLatin1String("SUMMARY")                                        // MKV files.
+                                             << QLatin1String("SYNOPSIS"),                                      // MKV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Information"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("lyrics")             // MOV files.
-                                             << QLatin1String("LYRICS"),            // MKV files.
+                               QStringList() << QLatin1String("lyrics")                                         // MOV files.
+                                             << QLatin1String("LYRICS"),                                        // MKV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.xmpDM.lyrics"));
         
@@ -884,7 +884,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     for (int i = 1 ; i <= 9 ; i++)
     {    
         s_setXmpTagStringFromEntry(this,
-                               QStringList() << QString::fromLatin1("IAS%1").arg(i), // Riff files.
+                               QStringList() << QString::fromLatin1("IAS%1").arg(i),                            // Riff files.
                                rmeta,
                                QStringList() << QString::fromLatin1("Xmp.video.Edit%1").arg(i));
     }
@@ -892,117 +892,117 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("CODE")               // Riff files.
-                                             << QLatin1String("IECN")               // Riff files.
-                                             << QLatin1String("ENCODED_BY"),        // MKV files.
+                               QStringList() << QLatin1String("CODE")                                           // Riff files.
+                                             << QLatin1String("IECN")                                           // Riff files.
+                                             << QLatin1String("ENCODED_BY"),                                    // MKV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.EncodedBy"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("DISP"),              // Riff files.
+                               QStringList() << QLatin1String("DISP"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.SchemeTitle"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("AGES")               // Riff files.
-                                             << QLatin1String("ICRA")               // MKV files.
-                                             << QLatin1String("LAW_RATING"),        // MKV files.
+                               QStringList() << QLatin1String("AGES")                                           // Riff files.
+                                             << QLatin1String("ICRA")                                           // MKV files.
+                                             << QLatin1String("LAW_RATING"),                                    // MKV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Rated"));
     
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IBSU"),              // Riff files.
+                               QStringList() << QLatin1String("IBSU"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.BaseURL"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ICAS"),              // Riff files.
+                               QStringList() << QLatin1String("ICAS"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.DefaultStream"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ICDS"),              // Riff files.
+                               QStringList() << QLatin1String("ICDS"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.CostumeDesigner"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ICMS"),              // Riff files.
+                               QStringList() << QLatin1String("ICMS"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Commissioned"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ICNM"),              // Riff files.
+                               QStringList() << QLatin1String("ICNM"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Cinematographer"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ICNT"),              // Riff files.
+                               QStringList() << QLatin1String("ICNT"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Country"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IARL"),              // Riff files.
+                               QStringList() << QLatin1String("IARL"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.ArchivalLocation"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ICRP"),              // Riff files.
+                               QStringList() << QLatin1String("ICRP"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Cropped"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IDIM"),              // Riff files.
+                               QStringList() << QLatin1String("IDIM"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Dimensions"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IDPI"),              // Riff files.
+                               QStringList() << QLatin1String("IDPI"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.DotsPerInch"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IDST")               // Riff files.
-                                             << QLatin1String("DISTRIBUTED_BY"),    // MKV files.
+                               QStringList() << QLatin1String("IDST")                                           // Riff files.
+                                             << QLatin1String("DISTRIBUTED_BY"),                                // MKV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.DistributedBy"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IEDT"),              // Riff files.
+                               QStringList() << QLatin1String("IEDT"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.EditedBy"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IENG"),              // Riff files.
+                               QStringList() << QLatin1String("IENG"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Engineer")
                                              << QLatin1String("Xmp.xmpDM.engineer"));
@@ -1010,225 +1010,225 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IKEY"),              // Riff files.
+                               QStringList() << QLatin1String("IKEY"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.PerformerKeywords"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ILGT"),              // Riff files.
+                               QStringList() << QLatin1String("ILGT"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Lightness"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ILGU"),              // Riff files.
+                               QStringList() << QLatin1String("ILGU"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.LogoURL"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ILIU"),              // Riff files.
+                               QStringList() << QLatin1String("ILIU"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.LogoIconURL"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IMBI"),              // Riff files.
+                               QStringList() << QLatin1String("IMBI"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.InfoBannerImage"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IMBU"),              // Riff files.
+                               QStringList() << QLatin1String("IMBU"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.InfoBannerURL"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IMIU"),              // Riff files.
+                               QStringList() << QLatin1String("IMIU"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.InfoURL"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IMUS"),              // Riff files.
+                               QStringList() << QLatin1String("IMUS"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.MusicBy"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IPDS"),              // Riff files.
+                               QStringList() << QLatin1String("IPDS"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.ProductionDesigner"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IPLT"),              // Riff files.
+                               QStringList() << QLatin1String("IPLT"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.NumOfColors"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IPRD"),              // Riff files.
+                               QStringList() << QLatin1String("IPRD"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Product"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IPRO"),              // Riff files.
+                               QStringList() << QLatin1String("IPRO"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.ProducedBy"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IRIP"),              // Riff files.
+                               QStringList() << QLatin1String("IRIP"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.RippedBy"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ISGN"),              // Riff files.
+                               QStringList() << QLatin1String("ISGN"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.SecondaryGenre"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ISHP"),              // Riff files.
+                               QStringList() << QLatin1String("ISHP"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Sharpness"));
     
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ISRF"),              // Riff files.
+                               QStringList() << QLatin1String("ISRF"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.SourceForm"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ISTD"),              // Riff files.
+                               QStringList() << QLatin1String("ISTD"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.ProductionStudio"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ISTR")               // Riff files.
-                                             << QLatin1String("STAR"),              // Riff files.
+                               QStringList() << QLatin1String("ISTR")                                           // Riff files.
+                                             << QLatin1String("STAR"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Starring"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ITCH"),              // Riff files.
+                               QStringList() << QLatin1String("ITCH"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Technician"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IWMU"),              // Riff files.
+                               QStringList() << QLatin1String("IWMU"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.WatermarkURL"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("IWRI"),              // Riff files.
+                               QStringList() << QLatin1String("IWRI"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.WrittenBy"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("PRT1"),              // Riff files.
+                               QStringList() << QLatin1String("PRT1"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Part"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("PRT2"),              // Riff files.
+                               QStringList() << QLatin1String("PRT2"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.NumOfParts"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("STAT"),              // Riff files.
+                               QStringList() << QLatin1String("STAT"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Statistics"));
     
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("TAPE"),              // Riff files.
+                               QStringList() << QLatin1String("TAPE"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.TapeName"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("TCDO"),              // Riff files.
+                               QStringList() << QLatin1String("TCDO"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.EndTimecode"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("TCOD"),              // Riff files.
+                               QStringList() << QLatin1String("TCOD"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.StartTimecode"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("TLEN"),              // Riff files.
+                               QStringList() << QLatin1String("TLEN"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Length"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("TORG"),              // Riff files.
+                               QStringList() << QLatin1String("TORG"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Organization"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("VMAJ"),              // Riff files.
+                               QStringList() << QLatin1String("VMAJ"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.VegasVersionMajor"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("VMIN"),              // Riff files.
+                               QStringList() << QLatin1String("VMIN"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.VegasVersionMinor"));
 
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("LOCA"),              // Riff files.
+                               QStringList() << QLatin1String("LOCA"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.LocationInfo")
                                              << QLatin1String("Xmp.xmpDM.shotLocation"));
@@ -1236,8 +1236,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
     
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("album")              // MOV files.
-                                             << QLatin1String("com.apple.quicktime.album"),
+                               QStringList() << QLatin1String("album")                                          // MOV files.
+                                             << QLatin1String("com.apple.quicktime.album"),                     // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Album")
                                              << QLatin1String("Xmp.xmpDM.album"));
@@ -1245,11 +1245,11 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("genre")              // MOV files.
-                                             << QLatin1String("GENR")               // Riff files.
-                                             << QLatin1String("IGNR")               // Riff files.
-                                             << QLatin1String("GENRE")              // MKV files.
-                                             << QLatin1String("com.apple.quicktime.genre"),
+                               QStringList() << QLatin1String("genre")                                          // MOV files.
+                                             << QLatin1String("GENR")                                           // Riff files.
+                                             << QLatin1String("IGNR")                                           // Riff files.
+                                             << QLatin1String("GENRE")                                          // MKV files.
+                                             << QLatin1String("com.apple.quicktime.genre"),                     // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Genre")
                                              << QLatin1String("Xmp.xmpDM.genre"));
@@ -1257,8 +1257,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("track")              // MOV files.
-                                             << QLatin1String("TRCK"),              // Riff files.
+                               QStringList() << QLatin1String("track")                                          // MOV files.
+                                             << QLatin1String("TRCK"),                                          // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.TrackNumber")
                                              << QLatin1String("Xmp.xmpDM.trackNumber"));
@@ -1266,8 +1266,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("year")               // MOV files.
-                                             << QLatin1String("YEAR")               // Riff files.
+                               QStringList() << QLatin1String("year")                                           // MOV files.
+                                             << QLatin1String("YEAR")                                           // Riff files.
                                              << QLatin1String("com.apple.quicktime.year"),
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Year"));
@@ -1275,18 +1275,18 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ICRD")               // Riff files
-                                             << QLatin1String("DATE_DIGITIZED"),    // MKV files
+                               QStringList() << QLatin1String("ICRD")                                           // Riff files
+                                             << QLatin1String("DATE_DIGITIZED"),                                // MKV files
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.DateTimeDigitized"));
 
     // --------------
 
     data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("creation_time")      // MOV files.
-                                             << QLatin1String("DTIM")               // Riff files.
-                                             << QLatin1String("DATE_RECORDED")      // MKV files.
-                                             << QLatin1String("com.apple.quicktime.creationdate"),
+                               QStringList() << QLatin1String("creation_time")                                  // MOV files.
+                                             << QLatin1String("DTIM")                                           // Riff files.
+                                             << QLatin1String("DATE_RECORDED")                                  // MKV files.
+                                             << QLatin1String("com.apple.quicktime.creationdate"),              // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.DateTimeOriginal"));
 
@@ -1300,7 +1300,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("edit_date"),         // MOV files.
+                               QStringList() << QLatin1String("edit_date"),                                     // MOV files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.ModificationDate")
                                              << QLatin1String("Xmp.xmpDM.videoModDate"));
@@ -1308,8 +1308,8 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("date")               // MOV files.
-                                             << QLatin1String("DATE_RELEASED"),     // MKV files.
+                               QStringList() << QLatin1String("date")                                           // MOV files.
+                                             << QLatin1String("DATE_RELEASED"),                                 // MKV files.
                                rmeta);
 
     if (!data.isEmpty())
@@ -1328,9 +1328,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     //        '/' is always the terminaison character.
 
     data = s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("location")           // MOV files.
-                                             << QLatin1String("RECORDING_LOCATION") // MKV files.
-                                             << QLatin1String("com.apple.quicktime.location.ISO6709"),
+                               QStringList() << QLatin1String("location")                                       // MOV files.
+                                             << QLatin1String("RECORDING_LOCATION")                             // MKV files.
+                                             << QLatin1String("com.apple.quicktime.location.ISO6709"),          // QT files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.GPSCoordinates")
                                              << QLatin1String("Xmp.xmpDM.shotLocation"));
