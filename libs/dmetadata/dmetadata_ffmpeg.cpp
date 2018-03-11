@@ -963,13 +963,6 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("ICRP"),              // Riff files.
-                               rmeta,
-                               QStringList() << QLatin1String("Xmp.video.Cropped"));
-
-    // --------------
-
-    s_setXmpTagStringFromEntry(this,
                                QStringList() << QLatin1String("IDIM"),              // Riff files.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Dimensions"));
