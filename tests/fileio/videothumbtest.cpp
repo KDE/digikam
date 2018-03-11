@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2016-04-21
- * Description : Video thumbnailer CLI test tool
+ * Description : Video thumbnails extraction CLI test tool
  *
  * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -50,8 +50,13 @@ int main(int argc, char** argv)
     vthumbs->setThumbnailSize(256);
     vthumbs->setCreateStrip(true);
 
-    QObject::connect(vthumbs, SIGNAL(signalThumbnailJobFinished()),
-                     &app, SLOT(quit()));
+    QObject::connect(vthumbs, &VideoThumbnailerJob::signalThumbnailDone,
+                     [vthumbs, &app](const QString& str, const QImage& img)
+                        {
+                            img.save(QString::fromUtf8("./%1.png").arg(str), "PNG");
+                            app.quit();
+                        }
+                    );
 
     qDebug() << "Video files to process : " << files;
 
