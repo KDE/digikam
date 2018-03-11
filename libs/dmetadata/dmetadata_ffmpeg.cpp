@@ -780,7 +780,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     // --------------
 
     s_setXmpTagStringFromEntry(this,
-                               QStringList() << QLatin1String("AGES"),               // Riff files.
+                               QStringList() << QLatin1String("AGES"),                  // Riff files.
                                rmeta,
                                "Xmp.video.Rated");
 
@@ -801,6 +801,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     data = s_setXmpTagStringFromEntry(this,
                                       QStringList() << QLatin1String("copyright")
+                                                    << QLatin1String("ICOP")            // Riff files.
                                                     << QLatin1String("com.apple.quicktime.copyright"),
                                       rmeta,
                                       "Xmp.video.Copyright");
@@ -838,10 +839,62 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
+    for (int i = 1 ; i <= 9 ; i++)
+    {    
+        s_setXmpTagStringFromEntry(this,
+                                   QStringList() << QString::fromLatin1("IAS%1").arg(i),          // Riff files.
+                                   rmeta,
+                                   QString::fromLatin1("Xmp.video.Edit%1").arg(i).toLatin1().data());
+    }
+
+    // --------------
+
     s_setXmpTagStringFromEntry(this,
                                QStringList() << QLatin1String("synopsis"),
                                rmeta,
                                "Xmp.video.Information");
+    
+    // --------------
+
+    s_setXmpTagStringFromEntry(this,
+                               QStringList() << QLatin1String("IBSU"),   // Riff files.
+                               rmeta,
+                               "Xmp.video.BaseURL");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this,
+                               QStringList() << QLatin1String("ICAS"),   // Riff files.
+                               rmeta,
+                               "Xmp.video.DefaultStream");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this,
+                               QStringList() << QLatin1String("ICDS"),   // Riff files.
+                               rmeta,
+                               "Xmp.video.CostumeDesigner");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this,
+                               QStringList() << QLatin1String("ICMS"),   // Riff files.
+                               rmeta,
+                               "Xmp.video.Commissioned");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this,
+                               QStringList() << QLatin1String("ICNM"),   // Riff files.
+                               rmeta,
+                               "Xmp.video.Cinematographer");
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this,
+                               QStringList() << QLatin1String("ICNT"),   // Riff files.
+                               rmeta,
+                               "Xmp.video.Country");
 
     // --------------
 
@@ -852,8 +905,13 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
-    // --------------
+    s_setXmpTagStringFromEntry(this,
+                               QStringList() << QLatin1String("ICRP"),   // Riff files.
+                               rmeta,
+                               "Xmp.video.Cropped");
 
+    // --------------
+    
     data = s_setXmpTagStringFromEntry(this,
                                       QStringList() << QLatin1String("album")
                                                     << QLatin1String("com.apple.quicktime.album"),
@@ -902,16 +960,22 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     // --------------
 
+    s_setXmpTagStringFromEntry(this,
+                               QStringList() << QLatin1String("ICRD"),              // Riff files
+                               rmeta,
+                               "Xmp.video.DateTimeDigitized");
+
+    // --------------
+
     data = s_setXmpTagStringFromEntry(this,
                QStringList() << QLatin1String("creation_time")
-                             << QLatin1String("DTIM")                                 // Riff files.
+                             << QLatin1String("DTIM")                               // Riff files.
                              << QLatin1String("com.apple.quicktime.creationdate"),
                rmeta,
                "Xmp.video.DateTimeOriginal");
 
     if (!data.isEmpty())
     {
-        setXmpTagString("Xmp.video.DateTimeDigitized", data);
         // Backport date in Exif and Iptc.
         QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
         setImageDateTime(dt, true);
