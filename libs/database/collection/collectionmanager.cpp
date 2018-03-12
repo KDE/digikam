@@ -506,7 +506,7 @@ QString CollectionManagerPrivate::pathFromIdentifier(const AlbumRootLocation* lo
 QStringList CollectionManagerPrivate::networkShareMountPathsFromIdentifier(const AlbumRootLocation* location)
 {
     // using a QUrl because QUrl cannot handle duplicate query items
-    QUrl url = QUrl::fromEncoded(location->identifier.toLocal8Bit());
+    QUrl url(location->identifier);
 
     if (url.scheme() != QLatin1String("networkshareid"))
     {
