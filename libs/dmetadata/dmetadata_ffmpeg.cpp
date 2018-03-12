@@ -188,20 +188,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     }
 
     QString   data;
-    QFileInfo fi(filePath);
-
-    setXmpTagString("Xmp.video.FileName",
-        fi.fileName());
-
-    setXmpTagString("Xmp.video.FileSize",
-        QString::number(fi.size() / (1024*1024)));
-
-    setXmpTagString("Xmp.video.FileType",
-        fi.suffix());
-
-    setXmpTagString("Xmp.video.MimeType",
-        QMimeDatabase().mimeTypeForFile(filePath).name());
-
+    
     setXmpTagString("Xmp.video.duration",
         QString::number((int)(1000.0 * (double)fmt_ctx->duration / (double)AV_TIME_BASE)));
     setXmpTagString("Xmp.xmpDM.duration",
@@ -649,6 +636,20 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                                QStringList() << QLatin1String("lyrics"),                                        // Generic.
                                rmeta,
                                QStringList() << QLatin1String("Xmp.video.Lyrics"));
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("filename"),                                      // Generic.
+                               rmeta,
+                               QStringList() << QLatin1String("Xmp.video.FileName"));
+
+    // --------------
+
+    s_setXmpTagStringFromEntry(this, 
+                               QStringList() << QLatin1String("disk"),                                          // Generic.
+                               rmeta,
+                               QStringList() << QLatin1String("Xmp.xmpDM.discNumber"));
 
     // --------------
 
@@ -1425,6 +1426,20 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     }
 
     avformat_close_input(&fmt_ctx);
+
+    QFileInfo fi(filePath);
+
+    if (getXmpTagString("Xmp.video.FileName").isNull())
+        setXmpTagString("Xmp.video.FileName", fi.fileName());
+
+    if (getXmpTagString("Xmp.video.FileSize").isNull())
+        setXmpTagString("Xmp.video.FileSize", QString::number(fi.size() / (1024*1024)));
+
+    if (getXmpTagString("Xmp.video.FileType").isNull())
+        setXmpTagString("Xmp.video.FileType", fi.suffix());
+
+    if (getXmpTagString("Xmp.video.MimeType").isNull())
+        setXmpTagString("Xmp.video.MimeType", QMimeDatabase().mimeTypeForFile(filePath).name());
 
     return true;
 
