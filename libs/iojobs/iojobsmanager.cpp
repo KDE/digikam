@@ -23,6 +23,10 @@
 
 #include "iojobsmanager.h"
 
+// Local includes
+
+#include "iojobdata.h"
+
 namespace Digikam
 {
 
@@ -46,10 +50,10 @@ IOJobsManager* IOJobsManager::instance()
     return& creator->object;
 }
 
-IOJobsThread* IOJobsManager::startCopy(int operation, const QList<QUrl>& srcsList, const QUrl& destAlbum)
+IOJobsThread* IOJobsManager::startCopy(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->copy(operation, srcsList, destAlbum);
+    thread->copy(data, data->sourceUrls(), data->destUrl());
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -60,10 +64,10 @@ IOJobsThread* IOJobsManager::startCopy(int operation, const QList<QUrl>& srcsLis
     return thread;
 }
 
-IOJobsThread* IOJobsManager::startMove(int operation, const QList<QUrl>& srcsList, const QUrl& destAlbum)
+IOJobsThread* IOJobsManager::startMove(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->move(operation, srcsList, destAlbum);
+    thread->move(data, data->sourceUrls(), data->destUrl());
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -74,10 +78,10 @@ IOJobsThread* IOJobsManager::startMove(int operation, const QList<QUrl>& srcsLis
     return thread;
 }
 
-IOJobsThread* IOJobsManager::startDelete(int operation, const QList<QUrl>& filesToDelete, bool useTrash)
+IOJobsThread* IOJobsManager::startDelete(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->deleteFiles(operation, filesToDelete, useTrash);
+    thread->deleteFiles(data, data->sourceUrls(), true);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -88,10 +92,10 @@ IOJobsThread* IOJobsManager::startDelete(int operation, const QList<QUrl>& files
     return thread;
 }
 
-IOJobsThread* IOJobsManager::startRenameFile(int operation, const QUrl& srcToRename, const QUrl& newUrl)
+IOJobsThread* IOJobsManager::startRenameFile(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->renameFile(operation, srcToRename, newUrl);
+    thread->renameFile(data, data->srcUrl(), data->destUrl());
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),

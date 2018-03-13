@@ -40,6 +40,7 @@ namespace Digikam
 
 class PAlbum;
 class ImageInfo;
+class IOJobData;
 class ProgressItem;
 
 class DIGIKAM_EXPORT DIO : public QObject
@@ -55,32 +56,32 @@ public:
      */
 
     /// Copy an album to another album
-    static void copy(const PAlbum* const src, const PAlbum* const dest);
+    static void copy(PAlbum* const src, PAlbum* const dest);
 
     /// Copy items to another album
-    static void copy(const QList<ImageInfo>& infos, const PAlbum* const dest);
+    static void copy(const QList<ImageInfo>& infos, PAlbum* const dest);
 
     /// Copy an external file to another album
-    static void copy(const QUrl& src, const PAlbum* const dest);
+    static void copy(const QUrl& src, PAlbum* const dest);
 
     /// Copy external files to another album
-    static void copy(const QList<QUrl>& srcList, const PAlbum* const dest);
+    static void copy(const QList<QUrl>& srcList, PAlbum* const dest);
 
     /// Move an album into another album
-    static void move(const PAlbum* const src, const PAlbum* const dest);
+    static void move(PAlbum* const src, PAlbum* const dest);
 
     /// Move items to another album
-    static void move(const QList<ImageInfo>& infos, const PAlbum* const dest);
+    static void move(const QList<ImageInfo>& infos, PAlbum* const dest);
 
     /// Move external files another album
-    static void move(const QUrl& src, const PAlbum* const dest);
+    static void move(const QUrl& src, PAlbum* const dest);
 
     /// Move external files into another album
-    static void move(const QList<QUrl>& srcList, const PAlbum* const dest);
+    static void move(const QList<QUrl>& srcList, PAlbum* const dest);
 
     static void del(const QList<ImageInfo>& infos, bool useTrash);
     static void del(const ImageInfo& info, bool useTrash);
-    static void del(const PAlbum* const album, bool useTrash);
+    static void del(PAlbum* const album, bool useTrash);
 
     /// Rename item to new name
     static void rename(const ImageInfo& info, const QString& newName);
@@ -96,30 +97,25 @@ private:
 
 enum Operation
 {
-    Copy                = 1 << 0,
-    Move                = 1 << 1,
-    Rename              = 1 << 2,
-    Trash               = 1 << 3,
-    Delete              = 1 << 4,
-    SourceStatusUnknown = 1 << 20,
-
-    OperationMask       = 0xffff,
-    FlagMask            = 0xffff0000
+    CopyAlbum           = 1 << 0,
+    CopyImage           = 1 << 1,
+    CopyFiles           = 1 << 2,
+    MoveAlbum           = 1 << 3,
+    MoveImage           = 1 << 4,
+    MoveFiles           = 1 << 5,
+    Rename              = 1 << 6,
+    Delete              = 1 << 7,
+    Trash               = 1 << 8,
 };
 
     DIO();
     ~DIO();
 
-    void imagesToAlbum(int operation, const QList<ImageInfo>& ids, const PAlbum* const dest);
-    void albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest);
-    void filesToAlbum(int operation, const QList<QUrl>& src, const PAlbum* const dest);
+    void renameFile(IOJobData* const data);
 
-    void renameFile(const ImageInfo& info, const QString& newName);
-    void deleteFiles(const QList<ImageInfo>& infos, bool useTrash);
-
-    void processJob(int operation, const QList<QUrl>& src, const QUrl& dest);
-    void processRename(const QUrl& src, const QUrl& dest);
-    void createJob(int operation, const QList<QUrl>& src, const QUrl& dest);
+    void processRename(IOJobData* const data);
+    void processJob(IOJobData* const data);
+    void createJob(IOJobData* const data);
 
     ProgressItem* getProgressItem(int operation);
 
@@ -145,12 +141,8 @@ public:
     explicit SidecarFinder(const QUrl& file);
 
     QList<QUrl> localFiles;
-    QList<QUrl> remoteFiles;
-    QList<QUrl> possibleRemoteSidecars;
 
     QList<QString> localFileSuffixes;
-    QList<QString> remoteFileSuffixes;
-    QList<QString> possibleRemoteSidecarSuffixes;
 
 private:
 

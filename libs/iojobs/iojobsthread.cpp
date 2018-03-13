@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "iojobsthread.h"
+
 // Qt includes
 
 #include <QFileInfo>
@@ -28,8 +30,8 @@
 
 // Local includes
 
-#include "iojobsthread.h"
 #include "iojob.h"
+#include "iojobdata.h"
 #include "digikam_debug.h"
 #include "coredb.h"
 #include "coredbaccess.h"
@@ -44,18 +46,18 @@ public:
 
     Private()
         : jobsCount(0),
-          operation(0),
           isCanceled(false),
-          keepErrors(true)
+          jobData(0)
     {
     }
 
     int            jobsCount;
-    int            operation;
     bool           isCanceled;
 
-    bool           keepErrors;
+    IOJobData*     jobData;
+
     QList<QString> errorsList;
+
 };
 
 IOJobsThread::IOJobsThread(QObject* const parent)
@@ -66,12 +68,13 @@ IOJobsThread::IOJobsThread(QObject* const parent)
 
 IOJobsThread::~IOJobsThread()
 {
+    delete d->jobData;
     delete d;
 }
 
-void IOJobsThread::copy(int operation, const QList<QUrl>& srcFiles, const QUrl destAlbum)
+void IOJobsThread::copy(IOJobData* const data, const QList<QUrl>& srcFiles, const QUrl destAlbum)
 {
-    d->operation = operation;
+    d->jobData = data;
     ActionJobCollection collection;
 
     foreach (const QUrl& url, srcFiles)
@@ -87,9 +90,9 @@ void IOJobsThread::copy(int operation, const QList<QUrl>& srcFiles, const QUrl d
     appendJobs(collection);
 }
 
-void IOJobsThread::move(int operation, const QList<QUrl>& srcFiles, const QUrl destAlbum)
+void IOJobsThread::move(IOJobData* const data, const QList<QUrl>& srcFiles, const QUrl destAlbum)
 {
-    d->operation = operation;
+    d->jobData = data;
     ActionJobCollection collection;
 
     foreach (const QUrl& url, srcFiles)
@@ -105,9 +108,9 @@ void IOJobsThread::move(int operation, const QList<QUrl>& srcFiles, const QUrl d
     appendJobs(collection);
 }
 
-void IOJobsThread::deleteFiles(int operation, const QList<QUrl>& srcsToDelete, bool useTrash)
+void IOJobsThread::deleteFiles(IOJobData* const data, const QList<QUrl>& srcsToDelete, bool useTrash)
 {
-    d->operation = operation;
+    d->jobData = data;
     ActionJobCollection collection;
 
     foreach (const QUrl& url, srcsToDelete)
@@ -183,9 +186,9 @@ void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
     deleteFiles(0, urlsToDelete, false);
 }
 
-void IOJobsThread::renameFile(int operation, const QUrl& srcToRename, const QUrl& newName)
+void IOJobsThread::renameFile(IOJobData* const data, const QUrl& srcToRename, const QUrl& newName)
 {
-    d->operation = operation;
+    d->jobData = data;
     ActionJobCollection collection;
 
     RenameFileJob* const j = new RenameFileJob(srcToRename, newName);
@@ -212,16 +215,6 @@ bool IOJobsThread::isCanceled()
 bool IOJobsThread::hasErrors()
 {
     return !d->errorsList.isEmpty();
-}
-
-void IOJobsThread::setKeepErrors(bool keepErrors)
-{
-    d->keepErrors = keepErrors;
-}
-
-bool IOJobsThread::isKeepingErrors()
-{
-    return d->keepErrors;
 }
 
 QList<QString>& IOJobsThread::errorsList()
@@ -267,7 +260,10 @@ void IOJobsThread::slotOneJobFinished()
 {
     d->jobsCount--;
 
-    emit signalOneProccessed(d->operation);
+    if (d->jobData)
+    {
+        emit signalOneProccessed(d->jobData->operation());
+    }
 
     if (d->jobsCount == 0)
     {
@@ -287,9 +283,9 @@ void IOJobsThread::slotCancel()
     ActionThreadBase::cancel();
 }
 
-int IOJobsThread::operation()
+IOJobData* IOJobsThread::jobData()
 {
-    return d->operation;
+    return d->jobData;
 }
 
 } // namespace Digikam

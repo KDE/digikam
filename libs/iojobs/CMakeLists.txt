@@ -10,6 +10,7 @@ endif (POLICY CMP0063)
 
 set(libiojobs_SRCS
     iojob.cpp
+    iojobdata.cpp
     iojobsthread.cpp
     iojobsmanager.cpp
 )

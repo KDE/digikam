@@ -34,6 +34,7 @@ namespace Digikam
 {
 
 class IOJob;
+class IOJobData;
 
 class DIGIKAM_EXPORT IOJobsThread : public ActionThreadBase
 {
@@ -46,19 +47,19 @@ public:
 
     /**
      * @brief Starts a number of jobs to copy source files to destination
-     * @param operation: file operation mode
+     * @param data: IOJobsData container
      * @param srcFiles: files to be copied
      * @param destAlbum: destination folder
      */
-    void copy(int operation, const QList<QUrl>& srcFiles, const QUrl destAlbum);
+    void copy(IOJobData* const data, const QList<QUrl>& srcFiles, const QUrl destAlbum);
 
     /**
      * @brief Starts a number of jobs to move source files to destination
-     * @param operation: file operation mode
+     * @param data: IOJobsData container
      * @param srcFiles: files to be moved
      * @param destAlbum: destination folder
      */
-    void move(int operation, const QList<QUrl>& srcFiles, const QUrl destAlbum);
+    void move(IOJobData* const data, const QList<QUrl>& srcFiles, const QUrl destAlbum);
 
     /**
      * @brief Starts a job for listing trash items in a collection
@@ -80,19 +81,19 @@ public:
 
     /**
      * @brief Starts a number of jobs to delete multiple files
-     * @param operation: file operation mode
+     * @param data: IOJobsData container
      * @param srcsToDelete: files to be deleted
      * @param useTrash: a flag to use trash or not
      */
-    void deleteFiles(int operation, const QList<QUrl>& srcsToDelete, bool useTrash);
+    void deleteFiles(IOJobData* const data, const QList<QUrl>& srcsToDelete, bool useTrash);
 
     /**
      * @brief Starts one job to rename a file to a new name
-     * @param operation: file operation mode
+     * @param data: IOJobsData container
      * @param srcToRename: the url to be renamed
      * @param newName: the url of the renamed item
      */
-    void renameFile(int operation, const QUrl& srcToRename, const QUrl& newName);
+    void renameFile(IOJobData* const data, const QUrl& srcToRename, const QUrl& newName);
 
     /**
      * @brief isCanceled
@@ -107,28 +108,16 @@ public:
     bool hasErrors();
 
     /**
-     * @brief a setter to make the thread keep errors reported
-     *        by the job
-     */
-    void setKeepErrors(bool keepErrors);
-
-    /**
-     * @brief isKeepingErrors
-     * @return true if the thread keeps error
-     */
-    bool isKeepingErrors();
-
-    /**
      * @brief errorsList
      * @return
      */
     QList<QString>& errorsList();
 
     /**
-     * @brief operation
+     * @brief jobData
      * @return
      */
-    int operation();
+    IOJobData* jobData();
 
 public Q_SLOTS:
 
