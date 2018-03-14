@@ -50,6 +50,7 @@ public:
 
     QList<ImageInfo> imageInfoList;
     QList<QUrl>      sourceUrlList;
+    QList<QUrl>      processedUrlList;
 
     QUrl             destUrl;
 };
@@ -155,6 +156,11 @@ void IOJobData::setDestUrl(const QUrl& url)
     d->destUrl = url;
 }
 
+void IOJobData::addProcessedUrl(const QUrl& url)
+{
+    d->processedUrlList << url;
+}
+
 int IOJobData::operation() const
 {
     return d->operation;
@@ -203,6 +209,11 @@ QList<QUrl> IOJobData::sourceUrls() const
 QList<ImageInfo> IOJobData::imageInfos() const
 {
     return d->imageInfoList;
+}
+
+QList<QUrl> IOJobData::processedUrls() const
+{
+    return d->processedUrlList;
 }
 
 } // namespace Digikam
