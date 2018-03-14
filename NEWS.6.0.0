@@ -133,7 +133,8 @@ BUGFIXES FROM BUGZILLA:
 120 ==> 303218 - digiKam import crashes when you select video files.
 121 ==> 374241 - Bad video date rename.
 122 ==> 375646 - Be able to scan only photo, not video and audio.
-123 ==> 
+123 ==> 262499 - Cannot rename .AVI files.
+124 ==> 
 
 
 
