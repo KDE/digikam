@@ -135,7 +135,9 @@ BUGFIXES FROM BUGZILLA:
 122 ==> 375646 - Be able to scan only photo, not video and audio.
 123 ==> 262499 - Cannot rename .AVI files.
 124 ==> 199261 - Import avi movies from sdcard wrong date and no thumbnail.
-125 ==> 
+125 ==> 181521 - NEF's in descending order, AVI in ascending order in import from SD-card.
+126 ==> 
+
 
 
 
