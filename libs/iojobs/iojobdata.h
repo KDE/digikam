@@ -71,7 +71,7 @@ enum Operation
 
     explicit IOJobData(int operation,
                        const ImageInfo& info,
-                       const QString& name);
+                       const QString& newName);
 
     ~IOJobData();
 

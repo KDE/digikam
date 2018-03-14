@@ -117,15 +117,15 @@ IOJobData::IOJobData(int operation,
     d->destUrl       = dest;
 }
 
-IOJobData::IOJobData(int operation, const ImageInfo& info, const QString& name)
+IOJobData::IOJobData(int operation, const ImageInfo& info, const QString& newName)
     : d(new Private)
 {
-    d->operation     = operation;
+    d->operation = operation;
 
     setImageInfos(QList<ImageInfo>() << info);
 
     d->destUrl = srcUrl().adjusted(QUrl::RemoveFilename);
-    d->destUrl.setPath(d->destUrl.path() + name);
+    d->destUrl.setPath(d->destUrl.path() + newName);
 }
 
 IOJobData::~IOJobData()

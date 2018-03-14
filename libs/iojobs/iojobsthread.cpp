@@ -57,7 +57,6 @@ public:
     IOJobData*     jobData;
 
     QList<QString> errorsList;
-
 };
 
 IOJobsThread::IOJobsThread(QObject* const parent)
