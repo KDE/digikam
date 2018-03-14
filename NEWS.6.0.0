@@ -126,4 +126,5 @@ BUGFIXES FROM BUGZILLA:
 113 ==> 339909 - digiKam Segmentation Fault on open.
 114 ==> 343231 - Crash at scanning for new fotos.
 115 ==> 340373 - Crash on scanning video directory.
-116 ==> 
+116 ==> 134679 - Video and audio files are not imported.
+117 ==> 
