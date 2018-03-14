@@ -379,4 +379,59 @@ void DTrashItemsListingJob::run()
     emit signalDone();
 }
 
+// ----------------------------------------------
+
+RestoreDTrashItemsJob::RestoreDTrashItemsJob(const DTrashItemInfoList& infos)
+{
+    m_dtrashItemInfoList = infos;
+}
+
+void RestoreDTrashItemsJob::run()
+{
+    foreach (const DTrashItemInfo& item, m_dtrashItemInfoList)
+    {
+        QUrl srcToRename = QUrl::fromLocalFile(item.collectionPath);
+        QUrl newName     = DFileOperations::getUniqueFileUrl(srcToRename);
+
+        QFileInfo fi(item.collectionPath);
+
+        if (!fi.dir().exists())
+        {
+            fi.dir().mkpath(fi.dir().path());
+        }
+
+        if (!QFile::rename(item.trashPath, newName.toLocalFile()))
+        {
+            qCDebug(DIGIKAM_IOJOB_LOG) << "Trash file couldn't be renamed!";
+            return;
+        }
+
+        QFile::remove(item.jsonFilePath);
+    }
+
+    emit signalDone();
+}
+
+// ----------------------------------------------
+
+DeleteDTrashItemsJob::DeleteDTrashItemsJob(const DTrashItemInfoList& infos)
+{
+    m_dtrashItemInfoList = infos;
+}
+
+void DeleteDTrashItemsJob::run()
+{
+    CoreDbAccess access;
+
+    foreach (const DTrashItemInfo& item, m_dtrashItemInfoList)
+    {
+        QFile::remove(item.trashPath);
+        QFile::remove(item.jsonFilePath);
+        // Set the status of the image id to obsolete, i.e. to remove.
+        access.db()->setItemStatus(item.imageId, DatabaseItem::Status::Obsolete);
+    }
+
+    emit signalDone();
+}
+
 } // namespace Digikam

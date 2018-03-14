@@ -31,13 +31,13 @@
 // Local includes
 
 #include "actionthreadbase.h"
+#include "dtrashiteminfo.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
 class ImageInfo;
-class DTrashItemInfo;
 
 class DIGIKAM_EXPORT IOJob : public ActionJob
 {
@@ -144,6 +144,44 @@ private:
 private:
 
     QString m_collectionPath;
+};
+
+// ----------------------------------------------
+
+class DIGIKAM_EXPORT RestoreDTrashItemsJob : public IOJob
+{
+    Q_OBJECT
+
+public:
+
+    RestoreDTrashItemsJob(const DTrashItemInfoList& infos);
+
+private:
+
+    void run();
+
+private:
+
+    DTrashItemInfoList m_dtrashItemInfoList;
+};
+
+// ----------------------------------------------
+
+class DIGIKAM_EXPORT DeleteDTrashItemsJob : public IOJob
+{
+    Q_OBJECT
+
+public:
+
+    DeleteDTrashItemsJob(const DTrashItemInfoList& infos);
+
+private:
+
+    void run();
+
+private:
+
+    DTrashItemInfoList m_dtrashItemInfoList;
 };
 
 } // namespace Digikam

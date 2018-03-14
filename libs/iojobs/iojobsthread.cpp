@@ -146,44 +146,32 @@ void IOJobsThread::listDTrashItems(const QString& collectionPath)
 
 void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
 {
-    QList<QUrl> listOfJsonFilesToRemove;
-    QList<QUrl> listOfUsedUrls;
+    ActionJobCollection collection;
 
-    foreach (const DTrashItemInfo& item, items)
-    {
-        QUrl srcToRename = QUrl::fromLocalFile(item.trashPath);
-        QUrl newName     = getAvailableQUrlToRestoreInCollection(item.collectionPath, listOfUsedUrls);
+    RestoreDTrashItemsJob* const j = new RestoreDTrashItemsJob(items);
 
-        listOfUsedUrls << newName;
+    connect(j, SIGNAL(signalDone()),
+            this, SIGNAL(finished()));
 
-        QFileInfo fi(item.collectionPath);
+    collection.insert(j, 0);
+    d->jobsCount++;
 
-        if (!fi.dir().exists())
-        {
-            fi.dir().mkpath(fi.dir().path());
-        }
-
-        renameFile(0, srcToRename, newName);
-        listOfJsonFilesToRemove << QUrl::fromLocalFile(item.jsonFilePath);
-    }
-
-    deleteFiles(0, listOfJsonFilesToRemove, false);
+    appendJobs(collection);
 }
 
 void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
 {
-    QList<QUrl> urlsToDelete;
-    CoreDbAccess access;
+    ActionJobCollection collection;
 
-    foreach (const DTrashItemInfo& item, items)
-    {
-        urlsToDelete << QUrl::fromLocalFile(item.trashPath);
-        urlsToDelete << QUrl::fromLocalFile(item.jsonFilePath);
-        // Set the status of the image id to obsolete, i.e. to remove.
-        access.db()->setItemStatus(item.imageId, DatabaseItem::Status::Obsolete);
-    }
+    DeleteDTrashItemsJob* const j = new DeleteDTrashItemsJob(items);
 
-    deleteFiles(0, urlsToDelete, false);
+    connect(j, SIGNAL(signalDone()),
+            this, SIGNAL(finished()));
+
+    collection.insert(j, 0);
+    d->jobsCount++;
+
+    appendJobs(collection);
 }
 
 void IOJobsThread::renameFile(IOJobData* const data, const QUrl& srcToRename, const QUrl& newName)
@@ -229,31 +217,6 @@ void IOJobsThread::connectOneJob(IOJob* const j)
 
     connect(j, SIGNAL(signalDone()),
             this, SLOT(slotOneJobFinished()));
-}
-
-QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColPath, QList<QUrl>& usedUrls, int version)
-{
-    QFileInfo fileInfo(fileColPath);
-
-    if (version != 0)
-    {
-        QString dir      = fileInfo.dir().path() + QLatin1Char('/');
-        QString baseName = fileInfo.baseName()   + QString::number(version);
-        QString suffix   = QLatin1String(".")    + fileInfo.completeSuffix();
-        fileInfo.setFile(dir + baseName + suffix);
-    }
-
-    QUrl url = QUrl::fromLocalFile(fileInfo.filePath());
-    qCDebug(DIGIKAM_IOJOB_LOG) << "URL USED BEFORE: " << usedUrls.contains(url);
-
-    if (!fileInfo.exists() && !usedUrls.contains(url))
-    {
-        return url;
-    }
-    else
-    {
-        return getAvailableQUrlToRestoreInCollection(fileColPath, usedUrls, ++version);
-    }
 }
 
 void IOJobsThread::slotOneJobFinished()

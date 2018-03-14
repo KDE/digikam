@@ -144,16 +144,6 @@ private:
      */
     void connectOneJob(IOJob* const j);
 
-    /**
-     * @brief Recursive method to find the suitable to restore items from trash
-     * @param colPath: Path of item in collection before deleting to trash
-     * @param usedUrls: a list of all used urls to rename previous files,
-     *        to prevent duplication
-     * @param version: to add to the base name in case the name was taken
-     * @return QUrl to use in the renameFile() method
-     */
-    QUrl getAvailableQUrlToRestoreInCollection(const QString& fileColPath, QList<QUrl>& usedUrls, int version = 0);
-
 private Q_SLOTS:
 
     /**
