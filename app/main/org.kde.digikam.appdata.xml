@@ -164,7 +164,7 @@
       <li xml:lang="zh-CN">支持 Exif、Iptc、Xmp、Makernotes</li>
       <li>SQLite or Mysql powered storage for the album contents and its metadata with advanced search tools</li>
       <li xml:lang="ca">Emmagatzematge basat en SQLite o Mysql per als continguts dels àlbums i les seves metadades amb eines de cerca avançades</li>
-      <li xml:lang="ca-valencia">Emmagatzematge basat en SQLite o Mysql per als continguts dels àlbums i les seues metadades amb eines de busca avançades</li>
+      <li xml:lang="ca-valencia">Emmagatzematge basat en SQLite o Mysql per als continguts dels àlbums i les seues metadades amb eines de cerca avançades</li>
       <li xml:lang="cs">Ukládání informace o albech do databáze založené na SQLite nebo MySQL s pokročilými vyhledávacími nástroji</li>
       <li xml:lang="el">Αποθηκευτικός χώρος με SQLite ή Mysql για τα άλμπουμ και τα μεταδεδομένα τους με προηγμένα εργαλεία αναζήτησης</li>
       <li xml:lang="en-GB">SQLite or Mysql powered storage for the album contents and its metadata with advanced search tools</li>
