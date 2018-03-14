@@ -475,7 +475,8 @@ void ImageScanner::scanFile(ScanMode mode)
             scanImageInformation();
             scanImageHistoryIfModified();
         }
-        else if (d->scanInfo.category == DatabaseItem::Video)
+        else if (d->scanInfo.category == DatabaseItem::Video ||
+                 d->scanInfo.category == DatabaseItem::Audio)
         {
             scanVideoInformation();
 
@@ -487,6 +488,10 @@ void ImageScanner::scanFile(ScanMode mode)
             {
                 scanVideoMetadata();
             }
+        }
+        else if (d->scanInfo.category == DatabaseItem::Other)
+        {
+            // unsupported
         }
     }
     else
@@ -508,7 +513,8 @@ void ImageScanner::scanFile(ScanMode mode)
                 scanBalooInfo();
             }
         }
-        else if (d->scanInfo.category == DatabaseItem::Video)
+        else if (d->scanInfo.category == DatabaseItem::Video ||
+                 d->scanInfo.category == DatabaseItem::Audio)
         {
             scanVideoInformation();
 
@@ -521,10 +527,6 @@ void ImageScanner::scanFile(ScanMode mode)
                 scanIPTCCore();
                 scanTags();
             }
-        }
-        else if (d->scanInfo.category == DatabaseItem::Audio)
-        {
-            scanAudioFile();
         }
         else if (d->scanInfo.category == DatabaseItem::Other)
         {
@@ -1518,7 +1520,11 @@ void ImageScanner::scanVideoInformation()
     // TODO: Please check / improve / rewrite detectVideoFormat().
     // The format strings shall be uppercase, and a clearly defined set
     // (all format strings used in the database should be defined in advance)
-    d->commit.imageInformationInfos  << detectVideoFormat();
+    if (d->scanInfo.category == DatabaseItem::Video)
+        d->commit.imageInformationInfos << detectVideoFormat();
+    else
+        d->commit.imageInformationInfos << detectAudioFormat();
+
     d->commit.imageInformationFields |= DatabaseFields::Format;
 
     d->commit.imageInformationInfos << d->metadata.getMetadataField(MetadataInfo::VideoBitDepth);
@@ -1548,25 +1554,6 @@ void ImageScanner::commitVideoMetadata()
 }
 
 // ---------------------------------------------------------------------------------------
-
-void ImageScanner::scanAudioFile()
-{
-    /**
-    * @todo
-    */
-
-    d->commit.commitImageInformation = true;
-
-    d->commit.imageInformationInfos
-          << -1
-          << creationDateFromFilesystem(d->fileInfo)
-          << detectAudioFormat();
-
-    d->commit.imageInformationFields =
-            DatabaseFields::Rating       |
-            DatabaseFields::CreationDate |
-            DatabaseFields::Format;
-}
 
 void ImageScanner::loadFromDisk()
 {

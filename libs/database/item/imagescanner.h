@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGESCANNER_H
-#define IMAGESCANNER_H
+#ifndef IMAGE_SCANNER_H
+#define IMAGE_SCANNER_H
 
 // Qt includes
 
@@ -263,7 +263,6 @@ protected:
     void scanVideoInformation();
     void scanVideoMetadata();
     void commitVideoMetadata();
-    void scanAudioFile();
 
     QString uniqueHash()        const;
     QString detectImageFormat() const;
@@ -281,4 +280,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGESCANNER_H
+#endif // IMAGE_SCANNER_H

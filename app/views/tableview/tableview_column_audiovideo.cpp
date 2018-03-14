@@ -59,9 +59,9 @@ ColumnAudioVideoProperties::~ColumnAudioVideoProperties()
 QStringList ColumnAudioVideoProperties::getSubColumns()
 {
     QStringList columns;
-    columns << QLatin1String("audiobitrate")    << QLatin1String("audiochanneltype")
-            << QLatin1String("audioCodec") << QLatin1String("duration")
-            << QLatin1String("framerate")       << QLatin1String("videocodec");
+    columns << QLatin1String("audiobitrate") << QLatin1String("audiochanneltype")
+            << QLatin1String("audioCodec")   << QLatin1String("duration")
+            << QLatin1String("framerate")    << QLatin1String("videocodec");
 
     return columns;
 }
@@ -73,7 +73,7 @@ TableViewColumnDescription ColumnAudioVideoProperties::getDescription()
 
     description.addSubColumn(TableViewColumnDescription(QLatin1String("audiobitrate"),     i18n("Audio bitrate")));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("audiochanneltype"), i18n("Audio channel type")));
-    description.addSubColumn(TableViewColumnDescription(QLatin1String("audioCodec"),  i18n("Audio Codec")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("audioCodec"),       i18n("Audio Codec")));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("duration"),         i18n("Duration")));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("framerate"),        i18n("Frame rate")));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("videocodec"),       i18n("Video codec")));
@@ -264,6 +264,6 @@ void ColumnAudioVideoProperties::setConfiguration(const TableViewColumnConfigura
     emit(signalAllDataChanged());
 }
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam

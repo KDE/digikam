@@ -320,7 +320,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         if (!videoInfo.allFieldsNull)
         {
             QString metaStr;
-            tip += cnt.headBeg + i18n("Video Properties") + cnt.headEnd;
+            tip += cnt.headBeg + i18n("Audio/Video Properties") + cnt.headEnd;
 
             if (settings->getToolTipsShowVideoAspectRatio())
             {

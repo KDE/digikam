@@ -87,7 +87,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
 
 #ifdef HAVE_MARBLE
     m_gpsTab = new ImagePropertiesGPSTab(parent);
-    appendTab(m_gpsTab,        QIcon::fromTheme(QLatin1String("globe")),      i18n("Map"));
+    appendTab(m_gpsTab,        QIcon::fromTheme(QLatin1String("globe")),            i18n("Map"));
 #endif // HAVE_MARBLE
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
@@ -314,7 +314,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     m_propertiesTab->setPhotoFlash(photoInfo.flash.isEmpty()               ? unavailable : photoInfo.flash);
     m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 
-    // -- Video information ------------------------------------------
+    // -- Audio/Video information ------------------------------------------
 
     VideoInfoContainer videoInfo = metaData.getVideoInformation();
 

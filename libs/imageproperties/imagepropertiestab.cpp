@@ -374,7 +374,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     d->videoCodec                 = new DTextLabelName(i18n("Video Codec: "),        w4);
     d->audioBitRate               = new DTextLabelName(i18n("Audio Bit Rate: "),     w4);
     d->audioChannelType           = new DTextLabelName(i18n("Audio Channel Type: "), w4);
-    d->audioCodec            = new DTextLabelName(i18n("Audio Codec: "),   w4);
+    d->audioCodec                 = new DTextLabelName(i18n("Audio Codec: "),        w4);
 
     d->labelVideoAspectRatio      = new DTextLabelValue(QString(), w4);
     d->labelVideoDuration         = new DTextLabelValue(QString(), w4);
@@ -382,7 +382,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     d->labelVideoVideoCodec       = new DTextLabelValue(QString(), w4);
     d->labelVideoAudioBitRate     = new DTextLabelValue(QString(), w4);
     d->labelVideoAudioChannelType = new DTextLabelValue(QString(), w4);
-    d->labelVideoAudioCodec  = new DTextLabelValue(QString(), w4);
+    d->labelVideoAudioCodec       = new DTextLabelValue(QString(), w4);
 
     glay4->addWidget(d->aspectRatio,                0, 0, 1, 1);
     glay4->addWidget(d->labelVideoAspectRatio,      0, 1, 1, 1);
@@ -404,7 +404,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
 
     insertItem(ImagePropertiesTab::Private::VideoProperties,
                w4, QIcon::fromTheme(QLatin1String("video-x-generic")),
-               i18n("Video Properties"), QLatin1String("VideoProperties"), true);
+               i18n("Audio/Video Properties"), QLatin1String("VideoProperties"), true);
 
     // --------------------------------------------------
 
@@ -684,11 +684,11 @@ void ImagePropertiesTab::setRating(int rating)
 {
     QString str;
 
-    if (rating > RatingMin && rating <= RatingMax)
+    if ((rating > RatingMin) && (rating <= RatingMax))
     {
         str = QLatin1Char(' ');
 
-        for (int i=0; i<rating; ++i)
+        for (int i = 0 ; i < rating ; i++)
         {
             str += QChar(0x2730);
             str += QLatin1Char(' ');
@@ -707,8 +707,8 @@ void ImagePropertiesTab::setVideoAudioBitRate(const QString& str)
 {
     // use string given as parameter by default because it contains the value for "unavailable" if needed
     QString audioBitRateString = str;
-    bool ok;
-    const int audioBitRateInt = str.toInt(&ok);
+    bool ok                    = false;
+    const int audioBitRateInt  = str.toInt(&ok);
 
     if (ok)
     {
@@ -794,14 +794,14 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
 
     if (identifiers)
     {
-        for (int i = 0; i < tagPaths.size(); ++i)
+        for (int i = 0; i < tagPaths.size(); i++)
         {
             tagsSorted << PathValuePair(tagPaths.at(i), (*identifiers).at(i));
         }
     }
     else
     {
-        for (int i = 0; i < tagPaths.size(); ++i)
+        for (int i = 0; i < tagPaths.size(); i++)
         {
             tagsSorted << PathValuePair(tagPaths.at(i), QVariant());
         }

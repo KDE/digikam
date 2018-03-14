@@ -138,7 +138,7 @@ void SearchGroup::setup(Type type)
     // ----- //
 
     label = new SearchFieldGroupLabel(this);
-    label->setTitle(i18n("Video Properties"));
+    label->setTitle(i18n("Audio/Video Properties"));
     group = new SearchFieldGroup(this);
     group->setLabel(label);
 

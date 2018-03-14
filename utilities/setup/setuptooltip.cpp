@@ -312,7 +312,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->videoSettingBox           = new QGroupBox(i18n("Video Information"), vbox);
+    d->videoSettingBox           = new QGroupBox(i18n("Audio/Video Information"), vbox);
     QGridLayout* const grid5     = new QGridLayout(d->videoSettingBox);
 
     d->showVideoAspectRatio      = new QCheckBox(i18n("Video Aspect Ratio"), d->videoSettingBox);
