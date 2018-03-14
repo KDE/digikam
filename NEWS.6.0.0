@@ -129,5 +129,6 @@ BUGFIXES FROM BUGZILLA:
 116 ==> 134679 - Video and audio files are not imported.
 117 ==> 375357 - No video preview.
 118 ==> 261773 - Batch renaming does not complete when MP4 video file is processed.
-119 ==> 
+119 ==> 185915 - Album View: "Created" time of video set to "00:00".
+120 ==> 
 
