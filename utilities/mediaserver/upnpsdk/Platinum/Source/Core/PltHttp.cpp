@@ -348,6 +348,7 @@ PLT_HttpHelper::ToLog(NPT_LoggerReference    logger,
 {
     NPT_COMPILER_UNUSED(logger);
     NPT_COMPILER_UNUSED(level);
+    NPT_COMPILER_UNUSED(prefix);
 
     NPT_StringOutputStreamReference stream(new NPT_StringOutputStream);
     NPT_OutputStreamReference output = stream;
@@ -423,6 +424,7 @@ PLT_HttpHelper::ToLog(NPT_LoggerReference     logger,
 {
     NPT_COMPILER_UNUSED(logger);
     NPT_COMPILER_UNUSED(level);
+    NPT_COMPILER_UNUSED(prefix);
 
     NPT_StringOutputStreamReference stream(new NPT_StringOutputStream);
     NPT_OutputStreamReference output = stream;
