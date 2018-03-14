@@ -72,14 +72,15 @@ IOJobsThread::~IOJobsThread()
     delete d;
 }
 
-void IOJobsThread::copy(IOJobData* const data, const QList<QUrl>& srcFiles, const QUrl destAlbum)
+void IOJobsThread::copy(IOJobData* const data)
 {
     d->jobData = data;
+
     ActionJobCollection collection;
 
-    foreach (const QUrl& url, srcFiles)
+    foreach (const QUrl& url, data->sourceUrls())
     {
-        CopyJob* const j = new CopyJob(url, destAlbum, false);
+        CopyJob* const j = new CopyJob(url, data->destUrl(), false);
 
         connectOneJob(j);
 
@@ -90,14 +91,15 @@ void IOJobsThread::copy(IOJobData* const data, const QList<QUrl>& srcFiles, cons
     appendJobs(collection);
 }
 
-void IOJobsThread::move(IOJobData* const data, const QList<QUrl>& srcFiles, const QUrl destAlbum)
+void IOJobsThread::move(IOJobData* const data)
 {
     d->jobData = data;
+
     ActionJobCollection collection;
 
-    foreach (const QUrl& url, srcFiles)
+    foreach (const QUrl& url, data->sourceUrls())
     {
-        CopyJob* const j = new CopyJob(url, destAlbum, true);
+        CopyJob* const j = new CopyJob(url, data->destUrl(), true);
 
         connectOneJob(j);
 
@@ -108,12 +110,15 @@ void IOJobsThread::move(IOJobData* const data, const QList<QUrl>& srcFiles, cons
     appendJobs(collection);
 }
 
-void IOJobsThread::deleteFiles(IOJobData* const data, const QList<QUrl>& srcsToDelete, bool useTrash)
+void IOJobsThread::deleteFiles(IOJobData* const data)
 {
     d->jobData = data;
+
     ActionJobCollection collection;
 
-    foreach (const QUrl& url, srcsToDelete)
+    bool useTrash = (data->operation() == IOJobData::Trash);
+
+    foreach (const QUrl& url, data->sourceUrls())
     {
         DeleteJob* const j = new DeleteJob(url, useTrash, true);
 
@@ -122,6 +127,27 @@ void IOJobsThread::deleteFiles(IOJobData* const data, const QList<QUrl>& srcsToD
         collection.insert(j, 0);
         d->jobsCount++;
     }
+
+    appendJobs(collection);
+}
+
+void IOJobsThread::renameFile(IOJobData* const data)
+{
+    d->jobData = data;
+    ActionJobCollection collection;
+
+    RenameFileJob* const j = new RenameFileJob(data->srcUrl(), data->destUrl());
+
+    connectOneJob(j);
+
+    connect(j, SIGNAL(signalRenamed(QUrl,QUrl)),
+            this, SIGNAL(signalRenamed(QUrl,QUrl)));
+
+    connect(j, SIGNAL(signalRenameFailed(QUrl)),
+            this, SIGNAL(signalRenameFailed(QUrl)));
+
+    collection.insert(j, 0);
+    d->jobsCount++;
 
     appendJobs(collection);
 }
@@ -167,27 +193,6 @@ void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
 
     connect(j, SIGNAL(signalDone()),
             this, SIGNAL(finished()));
-
-    collection.insert(j, 0);
-    d->jobsCount++;
-
-    appendJobs(collection);
-}
-
-void IOJobsThread::renameFile(IOJobData* const data, const QUrl& srcToRename, const QUrl& newName)
-{
-    d->jobData = data;
-    ActionJobCollection collection;
-
-    RenameFileJob* const j = new RenameFileJob(srcToRename, newName);
-
-    connectOneJob(j);
-
-    connect(j, SIGNAL(signalRenamed(QUrl,QUrl)),
-            this, SIGNAL(signalRenamed(QUrl,QUrl)));
-
-    connect(j, SIGNAL(signalRenameFailed(QUrl)),
-            this, SIGNAL(signalRenameFailed(QUrl)));
 
     collection.insert(j, 0);
     d->jobsCount++;

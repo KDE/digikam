@@ -48,18 +48,26 @@ public:
     /**
      * @brief Starts a number of jobs to copy source files to destination
      * @param data: IOJobsData container
-     * @param srcFiles: files to be copied
-     * @param destAlbum: destination folder
      */
-    void copy(IOJobData* const data, const QList<QUrl>& srcFiles, const QUrl destAlbum);
+    void copy(IOJobData* const data);
 
     /**
      * @brief Starts a number of jobs to move source files to destination
      * @param data: IOJobsData container
-     * @param srcFiles: files to be moved
-     * @param destAlbum: destination folder
      */
-    void move(IOJobData* const data, const QList<QUrl>& srcFiles, const QUrl destAlbum);
+    void move(IOJobData* const data);
+
+    /**
+     * @brief Starts a number of jobs to delete multiple files
+     * @param data: IOJobsData container
+     */
+    void deleteFiles(IOJobData* const data);
+
+    /**
+     * @brief Starts one job to rename a file to a new name
+     * @param data: IOJobsData container
+     */
+    void renameFile(IOJobData* const data);
 
     /**
      * @brief Starts a job for listing trash items in a collection
@@ -78,22 +86,6 @@ public:
      * @param items to delete
      */
     void deleteDTrashItems(const DTrashItemInfoList& items);
-
-    /**
-     * @brief Starts a number of jobs to delete multiple files
-     * @param data: IOJobsData container
-     * @param srcsToDelete: files to be deleted
-     * @param useTrash: a flag to use trash or not
-     */
-    void deleteFiles(IOJobData* const data, const QList<QUrl>& srcsToDelete, bool useTrash);
-
-    /**
-     * @brief Starts one job to rename a file to a new name
-     * @param data: IOJobsData container
-     * @param srcToRename: the url to be renamed
-     * @param newName: the url of the renamed item
-     */
-    void renameFile(IOJobData* const data, const QUrl& srcToRename, const QUrl& newName);
 
     /**
      * @brief isCanceled

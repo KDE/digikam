@@ -53,7 +53,7 @@ IOJobsManager* IOJobsManager::instance()
 IOJobsThread* IOJobsManager::startCopy(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->copy(data, data->sourceUrls(), data->destUrl());
+    thread->copy(data);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -67,7 +67,7 @@ IOJobsThread* IOJobsManager::startCopy(IOJobData* const data)
 IOJobsThread* IOJobsManager::startMove(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->move(data, data->sourceUrls(), data->destUrl());
+    thread->move(data);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -81,7 +81,7 @@ IOJobsThread* IOJobsManager::startMove(IOJobData* const data)
 IOJobsThread* IOJobsManager::startDelete(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->deleteFiles(data, data->sourceUrls(), true);
+    thread->deleteFiles(data);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -95,7 +95,7 @@ IOJobsThread* IOJobsManager::startDelete(IOJobData* const data)
 IOJobsThread* IOJobsManager::startRenameFile(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->renameFile(data, data->srcUrl(), data->destUrl());
+    thread->renameFile(data);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),

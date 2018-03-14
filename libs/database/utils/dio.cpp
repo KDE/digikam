@@ -171,7 +171,7 @@ void DIO::copy(PAlbum* const src, PAlbum* const dest)
         return;
     }
 
-    instance()->processJob(new IOJobData(CopyAlbum, src, dest));
+    instance()->processJob(new IOJobData(IOJobData::CopyAlbum, src, dest));
 }
 
 void DIO::move(PAlbum* const src, PAlbum* const dest)
@@ -185,7 +185,7 @@ void DIO::move(PAlbum* const src, PAlbum* const dest)
     AlbumManager::instance()->removeWatchedPAlbums(src);
 #endif
 
-    instance()->processJob(new IOJobData(MoveAlbum, src, dest));
+    instance()->processJob(new IOJobData(IOJobData::MoveAlbum, src, dest));
 }
 
 // Images -> Album ----------------------------------------------------
@@ -197,7 +197,7 @@ void DIO::copy(const QList<ImageInfo>& infos, PAlbum* const dest)
         return;
     }
 
-    instance()->processJob(new IOJobData(CopyImage, infos, dest));
+    instance()->processJob(new IOJobData(IOJobData::CopyImage, infos, dest));
 }
 
 void DIO::move(const QList<ImageInfo>& infos, PAlbum* const dest)
@@ -207,7 +207,7 @@ void DIO::move(const QList<ImageInfo>& infos, PAlbum* const dest)
         return;
     }
 
-    instance()->processJob(new IOJobData(MoveImage, infos, dest));
+    instance()->processJob(new IOJobData(IOJobData::MoveImage, infos, dest));
 }
 
 // External files -> album --------------------------------------------
@@ -224,7 +224,7 @@ void DIO::copy(const QList<QUrl>& srcList, PAlbum* const dest)
         return;
     }
 
-    instance()->processJob(new IOJobData(CopyFiles, srcList, dest));
+    instance()->processJob(new IOJobData(IOJobData::CopyFiles, srcList, dest));
 }
 
 void DIO::move(const QUrl& src, PAlbum* const dest)
@@ -239,21 +239,22 @@ void DIO::move(const QList<QUrl>& srcList, PAlbum* const dest)
         return;
     }
 
-    instance()->processJob(new IOJobData(MoveFiles, srcList, dest));
+    instance()->processJob(new IOJobData(IOJobData::MoveFiles, srcList, dest));
 }
 
 // Rename --------------------------------------------------------------
 
 void DIO::rename(const ImageInfo& info, const QString& newName)
 {
-    instance()->renameFile(new IOJobData(Rename, info, newName));
+    instance()->renameFile(new IOJobData(IOJobData::Rename, info, newName));
 }
 
 // Delete --------------------------------------------------------------
 
 void DIO::del(const QList<ImageInfo>& infos, bool useTrash)
 {
-    instance()->processJob(new IOJobData(useTrash ? Trash : Delete, infos));
+    instance()->processJob(new IOJobData(useTrash ? IOJobData::Trash 
+                                                  : IOJobData::Delete, infos));
 }
 
 void DIO::del(const ImageInfo& info, bool useTrash)
@@ -272,7 +273,8 @@ void DIO::del(PAlbum* const album, bool useTrash)
     AlbumManager::instance()->removeWatchedPAlbums(album);
 #endif
 
-    instance()->createJob(new IOJobData(useTrash ? Trash : Delete,
+    instance()->createJob(new IOJobData(useTrash ? IOJobData::Trash 
+                                                 : IOJobData::Delete,
                                         QList<QUrl>() << album->fileUrl()));
 }
 
@@ -309,7 +311,7 @@ void DIO::processRename(IOJobData* const data)
 
     for (int i = 0 ; i < finder.localFiles.length() ; ++i)
     {
-        createJob(new IOJobData(Rename, QList<QUrl>() << finder.localFiles.at(i),
+        createJob(new IOJobData(IOJobData::Rename, QList<QUrl>() << finder.localFiles.at(i),
                                 QUrl::fromLocalFile(data->destUrl().toLocalFile() +
                                                     finder.localFileSuffixes.at(i))));
     }
@@ -321,7 +323,7 @@ void DIO::processJob(IOJobData* const data)
 {
     int operation = data->operation();
 
-    if (operation == CopyImage || operation == MoveImage)
+    if (operation == IOJobData::CopyImage || operation == IOJobData::MoveImage)
     {
         // this is a fast db operation, do here
         GroupedImagesFinder finder(data->imageInfos());
@@ -338,13 +340,13 @@ void DIO::processJob(IOJobData* const data)
 
         ScanController::instance()->hintAtMoveOrCopyOfItems(ids, data->destAlbum(), filenames);
     }
-    else if (operation == CopyAlbum || operation == MoveAlbum)
+    else if (operation == IOJobData::CopyAlbum || operation == IOJobData::MoveAlbum)
     {
         ScanController::instance()->hintAtMoveOrCopyOfAlbum(data->srcAlbum(), data->destAlbum());
         createJob(data);
         return;
     }
-    else if (operation == Delete || operation == Trash)
+    else if (operation == IOJobData::Delete || operation == IOJobData::Trash)
     {
         qCDebug(DIGIKAM_DATABASE_LOG) << "Deleting files:" << data->sourceUrls();
     }
@@ -367,7 +369,9 @@ void DIO::createJob(IOJobData* const data)
     IOJobsThread* jobThread = 0;
     int operation           = data->operation();
 
-    if (operation == CopyAlbum || operation == CopyImage || operation == CopyFiles)
+    if (operation == IOJobData::CopyAlbum ||
+        operation == IOJobData::CopyImage ||
+        operation == IOJobData::CopyFiles)
     {
         item = getProgressItem(operation);
 
@@ -380,7 +384,9 @@ void DIO::createJob(IOJobData* const data)
         item->setTotalItems(item->totalItems() + data->sourceUrls().count());
         jobThread = IOJobsManager::instance()->startCopy(data);
     }
-    else if (operation == MoveAlbum || operation == MoveImage || operation == MoveFiles)
+    else if (operation == IOJobData::MoveAlbum ||
+             operation == IOJobData::MoveImage ||
+             operation == IOJobData::MoveFiles)
     {
         item = getProgressItem(operation);
 
@@ -393,7 +399,7 @@ void DIO::createJob(IOJobData* const data)
         item->setTotalItems(item->totalItems() + data->sourceUrls().count());
         jobThread = IOJobsManager::instance()->startMove(data);
     }
-    else if (operation == Rename)
+    else if (operation == IOJobData::Rename)
     {
         if (data->sourceUrls().count() != 1)
         {
@@ -409,7 +415,7 @@ void DIO::createJob(IOJobData* const data)
         connect(jobThread, SIGNAL(signalRenameFailed(QUrl)),
                 this, SIGNAL(signalRenameFailed(QUrl)));
     }
-    else if (operation == Trash)
+    else if (operation == IOJobData::Trash)
     {
         item = getProgressItem(operation);
 
@@ -422,7 +428,7 @@ void DIO::createJob(IOJobData* const data)
         item->setTotalItems(item->totalItems() + data->sourceUrls().count());
         jobThread = IOJobsManager::instance()->startDelete(data);
     }
-    else if (operation == Delete)
+    else if (operation == IOJobData::Delete)
     {
         item = getProgressItem(operation);
 
@@ -465,7 +471,7 @@ void DIO::slotResult()
     IOJobData* const data = jobThread->jobData();
     int operation         = data->operation();
 
-    if (operation == MoveImage)
+    if (operation == IOJobData::MoveImage)
     {
         // update the image infos
         CoreDbAccess access;
@@ -525,20 +531,20 @@ ProgressItem* DIO::getProgressItem(int operation)
 
     switch (operation)
     {
-        case CopyAlbum:
-        case CopyImage:
-        case CopyFiles:
+        case IOJobData::CopyAlbum:
+        case IOJobData::CopyImage:
+        case IOJobData::CopyFiles:
             item = ProgressManager::instance()->findItembyId(QLatin1String("DIOCopy"));
             break;
-        case MoveAlbum:
-        case MoveImage:
-        case MoveFiles:
+        case IOJobData::MoveAlbum:
+        case IOJobData::MoveImage:
+        case IOJobData::MoveFiles:
             item = ProgressManager::instance()->findItembyId(QLatin1String("DIOMove"));
             break;
-        case Trash:
+        case IOJobData::Trash:
             item = ProgressManager::instance()->findItembyId(QLatin1String("DIOTrash"));
             break;
-        case Delete:
+        case IOJobData::Delete:
             item = ProgressManager::instance()->findItembyId(QLatin1String("DIODelete"));
             break;
         default:

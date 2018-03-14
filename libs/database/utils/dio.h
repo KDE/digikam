@@ -95,19 +95,6 @@ Q_SIGNALS:
 
 private:
 
-enum Operation
-{
-    CopyAlbum           = 1 << 0,
-    CopyImage           = 1 << 1,
-    CopyFiles           = 1 << 2,
-    MoveAlbum           = 1 << 3,
-    MoveImage           = 1 << 4,
-    MoveFiles           = 1 << 5,
-    Rename              = 1 << 6,
-    Delete              = 1 << 7,
-    Trash               = 1 << 8,
-};
-
     DIO();
     ~DIO();
 
