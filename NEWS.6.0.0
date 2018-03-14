@@ -134,7 +134,8 @@ BUGFIXES FROM BUGZILLA:
 121 ==> 374241 - Bad video date rename.
 122 ==> 375646 - Be able to scan only photo, not video and audio.
 123 ==> 262499 - Cannot rename .AVI files.
-124 ==> 
+124 ==> 199261 - Import avi movies from sdcard wrong date and no thumbnail.
+125 ==> 
 
 
 
