@@ -45,8 +45,6 @@ public:
 
     int              operation;
 
-    QString          newName;
-
     PAlbum*          srcAlbum;
     PAlbum*          destAlbum;
 
@@ -123,9 +121,11 @@ IOJobData::IOJobData(int operation, const ImageInfo& info, const QString& name)
     : d(new Private)
 {
     d->operation     = operation;
-    d->newName       = name;
 
     setImageInfos(QList<ImageInfo>() << info);
+
+    d->destUrl = srcUrl().adjusted(QUrl::RemoveFilename);
+    d->destUrl.setPath(d->destUrl.path() + name);
 }
 
 IOJobData::~IOJobData()
@@ -145,15 +145,9 @@ void IOJobData::setImageInfos(const QList<ImageInfo>& infos)
     }
 }
 
-void IOJobData::addSourceUrls(const QList<QUrl>& urls)
+void IOJobData::setSourceUrls(const QList<QUrl>& urls)
 {
-    foreach(const QUrl& url, urls)
-    {
-        if (!d->sourceUrlList.contains(url))
-        {
-            d->sourceUrlList << url;
-        }
-    }
+    d->sourceUrlList = urls;
 }
 
 void IOJobData::setDestUrl(const QUrl& url)
@@ -199,11 +193,6 @@ ImageInfo IOJobData::imageInfo() const
     }
 
     return d->imageInfoList.first();
-}
-
-QString IOJobData::newName() const
-{
-    return d->newName;
 }
 
 QList<QUrl> IOJobData::sourceUrls() const

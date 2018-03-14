@@ -76,7 +76,7 @@ enum Operation
     ~IOJobData();
 
     void             setImageInfos(const QList<ImageInfo>& infos);
-    void             addSourceUrls(const QList<QUrl>& urls);
+    void             setSourceUrls(const QList<QUrl>& urls);
     void             setDestUrl(const QUrl& url);
 
     int              operation()  const;
@@ -88,8 +88,6 @@ enum Operation
     QUrl             destUrl()    const;
 
     ImageInfo        imageInfo()  const;
-
-    QString          newName()    const;
 
     QList<QUrl>      sourceUrls() const;
     QList<ImageInfo> imageInfos() const;

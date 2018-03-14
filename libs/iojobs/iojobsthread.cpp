@@ -140,8 +140,8 @@ void IOJobsThread::renameFile(IOJobData* const data)
 
     connectOneJob(j);
 
-    connect(j, SIGNAL(signalRenamed(QUrl,QUrl)),
-            this, SIGNAL(signalRenamed(QUrl,QUrl)));
+    connect(j, SIGNAL(signalRenamed(QUrl)),
+            this, SIGNAL(signalRenamed(QUrl)));
 
     connect(j, SIGNAL(signalRenameFailed(QUrl)),
             this, SIGNAL(signalRenameFailed(QUrl)));

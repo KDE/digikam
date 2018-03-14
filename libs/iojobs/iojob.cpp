@@ -293,7 +293,7 @@ qlonglong DeleteJob::getItemFromUrl(const QUrl& url)
 
     if (pAlbum)
     {
-        imageId = CoreDbAccess().db()->getItemFromAlbum(pAlbum->id(),fileName);
+        imageId = CoreDbAccess().db()->getItemFromAlbum(pAlbum->id(), fileName);
     }
 
     return imageId;
@@ -344,7 +344,7 @@ void RenameFileJob::run()
         return;
     }
 
-    emit signalRenamed(m_srcToRename, m_newUrl);
+    emit signalRenamed(m_srcToRename);
     emit signalDone();
 }
 

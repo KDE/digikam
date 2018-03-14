@@ -98,9 +98,6 @@ private:
     DIO();
     ~DIO();
 
-    void renameFile(IOJobData* const data);
-
-    void processRename(IOJobData* const data);
     void processJob(IOJobData* const data);
     void createJob(IOJobData* const data);
 
@@ -111,7 +108,6 @@ private Q_SLOTS:
     void slotResult();
     void slotCancel(ProgressItem* item);
     void slotOneProccessed(int operation);
-    void slotRenamed(const QUrl& oldUrl, const QUrl& newUrl);
 
 private:
 

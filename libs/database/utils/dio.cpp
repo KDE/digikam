@@ -246,7 +246,7 @@ void DIO::move(const QList<QUrl>& srcList, PAlbum* const dest)
 
 void DIO::rename(const ImageInfo& info, const QString& newName)
 {
-    instance()->renameFile(new IOJobData(IOJobData::Rename, info, newName));
+    instance()->processJob(new IOJobData(IOJobData::Rename, info, newName));
 }
 
 // Delete --------------------------------------------------------------
@@ -280,45 +280,6 @@ void DIO::del(PAlbum* const album, bool useTrash)
 
 // ------------------------------------------------------------------------------------------------
 
-void DIO::renameFile(IOJobData* const data)
-{
-    QUrl newUrl = data->srcUrl();
-    newUrl      = newUrl.adjusted(QUrl::RemoveFilename);
-    newUrl.setPath(newUrl.path() + data->newName());
-    data->setDestUrl(newUrl);
-
-    PAlbum* const album = AlbumManager::instance()->findPAlbum(data->imageInfo().albumId());
-
-    if (album)
-    {
-        ScanController::instance()->hintAtMoveOrCopyOfItem(data->imageInfo().id(),
-                                                           album, data->newName());
-    }
-
-    // If we rename a file, the name changes. This is equivalent to a move.
-    // Do this in database, too.
-    CoreDbAccess().db()->moveItem(data->imageInfo().albumId(),
-                                  data->srcUrl().fileName(),
-                                  data->imageInfo().albumId(),
-                                  data->newName());
-
-    processRename(data);
-}
-
-void DIO::processRename(IOJobData* const data)
-{
-    SidecarFinder finder(data->srcUrl());
-
-    for (int i = 0 ; i < finder.localFiles.length() ; ++i)
-    {
-        createJob(new IOJobData(IOJobData::Rename, QList<QUrl>() << finder.localFiles.at(i),
-                                QUrl::fromLocalFile(data->destUrl().toLocalFile() +
-                                                    finder.localFileSuffixes.at(i))));
-    }
-
-    delete data;
-}
-
 void DIO::processJob(IOJobData* const data)
 {
     int operation = data->operation();
@@ -350,9 +311,33 @@ void DIO::processJob(IOJobData* const data)
     {
         qCDebug(DIGIKAM_DATABASE_LOG) << "Deleting files:" << data->sourceUrls();
     }
+    else if (operation == IOJobData::Rename)
+    {
+        PAlbum* const album = AlbumManager::instance()->findPAlbum(data->imageInfo().albumId());
+
+        if (album)
+        {
+            ScanController::instance()->hintAtMoveOrCopyOfItem(data->imageInfo().id(),
+                                                               album, data->destUrl().fileName());
+        }
+
+        SidecarFinder finder(data->srcUrl());
+
+        for (int i = 0 ; i < finder.localFiles.length() ; ++i)
+        {
+            IOJobData* const newdata = new IOJobData(IOJobData::Rename, data->imageInfos());
+            newdata->setSourceUrls(QList<QUrl>() << finder.localFiles.at(i));
+            newdata->setDestUrl(QUrl::fromLocalFile(data->destUrl().toLocalFile() +
+                                                    finder.localFileSuffixes.at(i)));
+            createJob(newdata);
+        }
+
+        delete data;
+        return;
+    }
 
     SidecarFinder finder(data->sourceUrls());
-    data->addSourceUrls(finder.localFiles);
+    data->setSourceUrls(finder.localFiles);
 
     createJob(data);
 }
@@ -409,8 +394,8 @@ void DIO::createJob(IOJobData* const data)
 
         jobThread = IOJobsManager::instance()->startRenameFile(data);
 
-        connect(jobThread, SIGNAL(signalRenamed(QUrl,QUrl)),
-                this, SLOT(slotRenamed(QUrl,QUrl)));
+        connect(jobThread, SIGNAL(signalRenamed(QUrl)),
+                this, SIGNAL(signalRenameSucceeded(QUrl)));
 
         connect(jobThread, SIGNAL(signalRenameFailed(QUrl)),
                 this, SIGNAL(signalRenameFailed(QUrl)));
@@ -438,7 +423,6 @@ void DIO::createJob(IOJobData* const data)
                                                                    i18n("Delete"), QString(), true, false);
         }
 
-        qCDebug(DIGIKAM_DATABASE_LOG) << "SRCS " << data->sourceUrls();
         item->setTotalItems(item->totalItems() + data->sourceUrls().count());
         jobThread = IOJobsManager::instance()->startDelete(data);
     }
@@ -484,6 +468,22 @@ void DIO::slotResult()
             }
         }
     }
+    else if (operation == IOJobData::Rename)
+    {
+        // If we rename a file, the name changes. This is equivalent to a move.
+        // Do this in database, too.
+        if (QFileInfo::exists(data->destUrl().toLocalFile()))
+        {
+            CoreDbAccess().db()->moveItem(data->imageInfo().albumId(),
+                                          data->srcUrl().fileName(),
+                                          data->imageInfo().albumId(),
+                                          data->destUrl().fileName());
+
+            // delete thumbnail
+            ThumbnailLoadThread::deleteThumbnail(data->srcUrl().toLocalFile());
+            LoadingCacheInterface::fileChanged(data->destUrl().toLocalFile());
+        }
+    }
 
     if (jobThread->hasErrors())
     {
@@ -513,16 +513,6 @@ void DIO::slotOneProccessed(int operation)
     {
         item->advance(1);
     }
-}
-
-void DIO::slotRenamed(const QUrl& oldUrl, const QUrl& newUrl)
-{
-    // delete thumbnail
-    ThumbnailLoadThread::deleteThumbnail(oldUrl.toLocalFile());
-    // clean LoadingCache as well - be pragmatic, do it here.
-    LoadingCacheInterface::fileChanged(newUrl.toLocalFile());
-
-    emit signalRenameSucceeded(oldUrl);
 }
 
 ProgressItem* DIO::getProgressItem(int operation)
