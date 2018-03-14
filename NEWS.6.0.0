@@ -132,6 +132,8 @@ BUGFIXES FROM BUGZILLA:
 119 ==> 185915 - Album View: "Created" time of video set to "00:00".
 120 ==> 303218 - digiKam import crashes when you select video files.
 121 ==> 374241 - Bad video date rename.
-122 ==> 
+122 ==> 375646 - Be able to scan only photo, not video and audio.
+123 ==> 
+
 
 
