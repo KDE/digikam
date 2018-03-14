@@ -131,6 +131,7 @@ BUGFIXES FROM BUGZILLA:
 118 ==> 261773 - Batch renaming does not complete when MP4 video file is processed.
 119 ==> 185915 - Album View: "Created" time of video set to "00:00".
 120 ==> 303218 - digiKam import crashes when you select video files.
-121 ==> 
+121 ==> 374241 - Bad video date rename.
+122 ==> 
 
 
