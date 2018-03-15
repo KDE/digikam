@@ -462,7 +462,7 @@ void DIO::slotResult()
 
         foreach(const ImageInfo& info, data->imageInfos())
         {
-            if (QFileInfo::exists(data->destUrl().toLocalFile() + info.name()))
+            if (data->processedUrls().contains(info.fileUrl()))
             {
                 access.db()->moveItem(info.albumId(), info.name(), data->destAlbum()->id(), info.name());
             }

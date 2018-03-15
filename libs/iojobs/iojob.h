@@ -33,6 +33,7 @@
 #include "actionthreadbase.h"
 #include "dtrashiteminfo.h"
 #include "digikam_export.h"
+#include "iojobdata.h"
 
 namespace Digikam
 {
@@ -49,6 +50,7 @@ protected:
 
 Q_SIGNALS:
 
+    void signalOneProccessed(int operation);
     void error(const QString& errMsg);
 };
 
@@ -60,7 +62,7 @@ class DIGIKAM_EXPORT CopyJob : public IOJob
 
 public:
 
-    CopyJob(const QUrl& src, const QUrl& dest, bool isMove);
+    CopyJob(IOJobData* const data);
 
 protected:
 
@@ -68,9 +70,7 @@ protected:
 
 private:
 
-    QUrl m_src;
-    QUrl m_dest;
-    bool m_isMove;
+    IOJobData* m_data;
 };
 
 // ---------------------------------------
@@ -137,7 +137,7 @@ Q_SIGNALS:
 
     void trashItemInfo(const DTrashItemInfo& info);
 
-private:
+protected:
 
     void run();
 
@@ -156,7 +156,7 @@ public:
 
     RestoreDTrashItemsJob(const DTrashItemInfoList& infos);
 
-private:
+protected:
 
     void run();
 
@@ -175,7 +175,7 @@ public:
 
     DeleteDTrashItemsJob(const DTrashItemInfoList& infos);
 
-private:
+protected:
 
     void run();
 

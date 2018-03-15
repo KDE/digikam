@@ -77,9 +77,9 @@ void IOJobsThread::copy(IOJobData* const data)
 
     ActionJobCollection collection;
 
-    foreach (const QUrl& url, data->sourceUrls())
+    for (int i = 0; i < maximumNumberOfThreads(); i++)
     {
-        CopyJob* const j = new CopyJob(url, data->destUrl(), false);
+        CopyJob* const j = new CopyJob(data);
 
         connectOneJob(j);
 
@@ -96,9 +96,9 @@ void IOJobsThread::move(IOJobData* const data)
 
     ActionJobCollection collection;
 
-    foreach (const QUrl& url, data->sourceUrls())
+    for (int i = 0; i < maximumNumberOfThreads(); i++)
     {
-        CopyJob* const j = new CopyJob(url, data->destUrl(), true);
+        CopyJob* const j = new CopyJob(data);
 
         connectOneJob(j);
 
@@ -221,16 +221,14 @@ void IOJobsThread::connectOneJob(IOJob* const j)
 
     connect(j, SIGNAL(signalDone()),
             this, SLOT(slotOneJobFinished()));
+
+    connect(j, SIGNAL(signalOneProccessed(int)),
+            this, SIGNAL(signalOneProccessed(int)));
 }
 
 void IOJobsThread::slotOneJobFinished()
 {
     d->jobsCount--;
-
-    if (d->jobData)
-    {
-        emit signalOneProccessed(d->jobData->operation());
-    }
 
     if (d->jobsCount == 0)
     {

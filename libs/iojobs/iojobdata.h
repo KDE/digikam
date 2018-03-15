@@ -50,7 +50,7 @@ enum Operation
     MoveFiles = 1 << 5,
     Rename    = 1 << 6,
     Delete    = 1 << 7,
-    Trash     = 1 << 8,
+    Trash     = 1 << 8
 };
 
     explicit IOJobData(int operation,

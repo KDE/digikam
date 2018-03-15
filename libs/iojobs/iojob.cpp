@@ -52,109 +52,130 @@ IOJob::IOJob()
 
 // --------------------------------------------
 
-CopyJob::CopyJob(const QUrl& src, const QUrl& dest, bool isMove)
+CopyJob::CopyJob(IOJobData* const data)
 {
-    m_src    = src;
-    m_dest   = dest;
-    m_isMove = isMove;
+    m_data = data;
 }
 
 void CopyJob::run()
 {
-    if (m_cancel)
+    while (m_data)
     {
-        return;
-    }
-
-    QFileInfo srcInfo(m_src.toLocalFile());
-    QDir dstDir(m_dest.toLocalFile());
-
-    if (!srcInfo.exists())
-    {
-        emit error(i18n("File/Folder %1 does not exist anymore", srcInfo.baseName()));
-        emit signalDone();
-        return;
-    }
-
-    if (!dstDir.exists())
-    {
-        emit error(i18n("Album %1 does not exist anymore", dstDir.dirName()));
-        emit signalDone();
-        return;
-    }
-
-    // Checking if there is a file with the same name in destination folder
-    QString destenationName = srcInfo.isFile() ? srcInfo.fileName() : srcInfo.dir().dirName();
-    QString destenation     = dstDir.path() + QLatin1Char('/') + destenationName;
-    QFileInfo fileInfoForDestination(destenation);
-
-    if (fileInfoForDestination.exists())
-    {
-        emit error(i18n("A file or folder named %1 already exists in %2",
-                        srcInfo.baseName(), QDir::toNativeSeparators(dstDir.path())));
-
-        emit signalDone();
-        return;
-    }
-
-    if (m_isMove)
-    {
-        if (srcInfo.isDir())
+        if (m_cancel)
         {
-            QDir srcDir(srcInfo.filePath());
+            return;
+        }
 
-            if (!srcDir.rename(srcDir.path(), destenation))
+        QUrl srcUrl = m_data->getNextUrl();
+
+        if (srcUrl.isEmpty())
+        {
+            break;
+        }
+
+        QFileInfo srcInfo(srcUrl.toLocalFile());
+        QDir dstDir(m_data->destUrl().toLocalFile());
+
+        if (!srcInfo.exists())
+        {
+            emit error(i18n("File/Folder %1 does not exist anymore", srcInfo.baseName()));
+            emit signalOneProccessed(m_data->operation());
+            continue;
+        }
+
+        if (!dstDir.exists())
+        {
+            emit error(i18n("Album %1 does not exist anymore", dstDir.dirName()));
+            emit signalOneProccessed(m_data->operation());
+            continue;
+        }
+
+        // Checking if there is a file with the same name in destination folder
+        QString destenationName = srcInfo.isFile() ? srcInfo.fileName() : srcInfo.dir().dirName();
+        QString destenation     = dstDir.path() + QLatin1Char('/') + destenationName;
+        QFileInfo fileInfoForDestination(destenation);
+
+        if (fileInfoForDestination.exists())
+        {
+            emit error(i18n("A file or folder named %1 already exists in %2",
+                            srcInfo.baseName(), QDir::toNativeSeparators(dstDir.path())));
+            emit signalOneProccessed(m_data->operation());
+            continue;
+        }
+
+        if (m_data->operation() == IOJobData::MoveAlbum ||
+            m_data->operation() == IOJobData::MoveImage ||
+            m_data->operation() == IOJobData::MoveFiles)
+        {
+            if (srcInfo.isDir())
             {
-                // If QDir::rename fails, try copy and remove.
+                QDir srcDir(srcInfo.filePath());
+
+                if (!srcDir.rename(srcDir.path(), destenation))
+                {
+                    // If QDir::rename fails, try copy and remove.
+                    if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
+                    {
+                        emit error(i18n("Could not move folder %1 to album %2",
+                                        QDir::toNativeSeparators(srcDir.path()),
+                                        QDir::toNativeSeparators(dstDir.path())));
+                        emit signalOneProccessed(m_data->operation());
+                        continue;
+                    }
+                    else if (!srcDir.removeRecursively())
+                    {
+                        emit error(i18n("Could not move folder %1 to album %2. "
+                                        "The folder %1 was copied as well to album %2",
+                                        QDir::toNativeSeparators(srcDir.path()),
+                                        QDir::toNativeSeparators(dstDir.path())));
+                    }
+                }
+            }
+            else
+            {
+                QFile srcFile(srcInfo.filePath());
+
+                if (!srcFile.rename(destenation))
+                {
+                    emit error(i18n("Could not move file %1 to album %2",
+                                    srcInfo.filePath(),
+                                    QDir::toNativeSeparators(dstDir.path())));
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
+                }
+           }
+        }
+        else
+        {
+            if (srcInfo.isDir())
+            {
+                QDir srcDir(srcInfo.filePath());
+
                 if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
                 {
-                    emit error(i18n("Could not move folder %1 to album %2",
+                    emit error(i18n("Could not copy folder %1 to album %2",
                                     QDir::toNativeSeparators(srcDir.path()),
                                     QDir::toNativeSeparators(dstDir.path())));
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
                 }
-                else if (!srcDir.removeRecursively())
+            }
+            else
+            {
+                if (!QFile::copy(srcInfo.filePath(), destenation))
                 {
-                    emit error(i18n("Could not move folder %1 to album %2. "
-                                    "The folder %1 was copied as well to album %2",
-                                    QDir::toNativeSeparators(srcDir.path()),
+                    emit error(i18n("Could not copy file %1 to album %2",
+                                    QDir::toNativeSeparators(srcInfo.path()),
                                     QDir::toNativeSeparators(dstDir.path())));
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
                 }
-            }
-        }
-        else
-        {
-            QFile srcFile(srcInfo.filePath());
 
-            if (!srcFile.rename(destenation))
-            {
-                emit error(i18n("Could not move file %1 to album %2",
-                                srcInfo.filePath(),
-                                QDir::toNativeSeparators(dstDir.path())));
             }
         }
-    }
-    else
-    {
-        if (srcInfo.isDir())
-        {
-            QDir srcDir(srcInfo.filePath());
 
-            if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
-            {
-                emit error(i18n("Could not copy folder %1 to album %2",
-                                QDir::toNativeSeparators(srcDir.path()),
-                                QDir::toNativeSeparators(dstDir.path())));
-            }
-        }
-        else
-        {
-            if (!QFile::copy(srcInfo.filePath(), destenation))
-            {
-                emit error(i18n("Could not copy file %1 to album %2",
-                                QDir::toNativeSeparators(srcInfo.path()),
-                                QDir::toNativeSeparators(dstDir.path())));
-            }
-        }
+        emit signalOneProccessed(m_data->operation());
+        m_data->addProcessedUrl(srcUrl);
     }
 
     emit signalDone();
