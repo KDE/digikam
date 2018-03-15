@@ -88,6 +88,7 @@ enum Operation
 
     QUrl             srcUrl()        const;
     QUrl             destUrl()       const;
+    QUrl             getNextUrl()    const;
 
     ImageInfo        imageInfo()     const;
 

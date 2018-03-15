@@ -23,6 +23,10 @@
 
 #include "iojobdata.h"
 
+// Qt includes
+
+#include <QMutex>
+
 // Local includes
 
 #include "album.h"
@@ -53,6 +57,8 @@ public:
     QList<QUrl>      processedUrlList;
 
     QUrl             destUrl;
+
+    QMutex           lock;
 };
 
 IOJobData::IOJobData(int operation,
@@ -189,6 +195,20 @@ QUrl IOJobData::srcUrl() const
 QUrl IOJobData::destUrl() const
 {
     return d->destUrl;
+}
+
+QUrl IOJobData::getNextUrl() const
+{
+    d->lock.lock();
+    QUrl url;
+
+    if (!d->sourceUrlList.isEmpty())
+    {
+        url = d->sourceUrlList.takeFirst();
+    }
+
+    d->lock.unlock();
+    return url;
 }
 
 ImageInfo IOJobData::imageInfo() const
