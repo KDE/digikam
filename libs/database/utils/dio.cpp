@@ -282,7 +282,7 @@ void DIO::del(PAlbum* const album, bool useTrash)
 
 void DIO::processJob(IOJobData* const data)
 {
-    int operation = data->operation();
+    const int operation = data->operation();
 
     if (operation == IOJobData::CopyImage || operation == IOJobData::MoveImage)
     {
@@ -309,7 +309,7 @@ void DIO::processJob(IOJobData* const data)
     }
     else if (operation == IOJobData::Delete || operation == IOJobData::Trash)
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Deleting files:" << data->sourceUrls();
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Number of files to be deleted:" << data->sourceUrls().count();
     }
     else if (operation == IOJobData::Rename)
     {
@@ -352,7 +352,7 @@ void DIO::createJob(IOJobData* const data)
 
     ProgressItem* item      = 0;
     IOJobsThread* jobThread = 0;
-    int operation           = data->operation();
+    const int operation     = data->operation();
 
     if (operation == IOJobData::CopyAlbum ||
         operation == IOJobData::CopyImage ||
@@ -453,7 +453,7 @@ void DIO::slotResult()
     }
 
     IOJobData* const data = jobThread->jobData();
-    int operation         = data->operation();
+    const int operation   = data->operation();
 
     if (operation == IOJobData::MoveImage)
     {
