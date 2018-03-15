@@ -183,65 +183,79 @@ void CopyJob::run()
 
 // --------------------------------------------
 
-DeleteJob::DeleteJob(const QUrl& srcToDelete, bool useTrash, bool markAsObsolete)
+DeleteJob::DeleteJob(IOJobData* const data)
 {
-    m_srcToDelete    = srcToDelete;
-    m_useTrash       = useTrash;
-    m_markAsObsolete = markAsObsolete;
+    m_data = data;
 }
 
 void DeleteJob::run()
 {
-    if (m_cancel)
+    while (m_data)
     {
-        return;
-    }
-
-    QFileInfo fileInfo(m_srcToDelete.toLocalFile());
-    qCDebug(DIGIKAM_IOJOB_LOG) << "Deleting:   " << fileInfo.filePath();
-    qCDebug(DIGIKAM_IOJOB_LOG) << "File exists?" << fileInfo.exists();
-    qCDebug(DIGIKAM_IOJOB_LOG) << "Is to trash?" << m_useTrash;
-
-    if (!fileInfo.exists())
-    {
-        emit error(i18n("File/Folder %1 does not exist",
-                        QDir::toNativeSeparators(fileInfo.filePath())));
-        emit signalDone();
-        return;
-    }
-
-    if (m_useTrash)
-    {
-        if (fileInfo.isDir())
+        if (m_cancel)
         {
-            if (!DTrash::deleteDirRecursivley(m_srcToDelete.toLocalFile()))
+            return;
+        }
+
+        QUrl deleteUrl = m_data->getNextUrl();
+
+        if (deleteUrl.isEmpty())
+        {
+            break;
+        }
+
+        bool useTrash = (m_data->operation() == IOJobData::Trash);
+
+        QFileInfo fileInfo(deleteUrl.toLocalFile());
+        qCDebug(DIGIKAM_IOJOB_LOG) << "Deleting:   " << fileInfo.filePath();
+        qCDebug(DIGIKAM_IOJOB_LOG) << "File exists?" << fileInfo.exists();
+        qCDebug(DIGIKAM_IOJOB_LOG) << "Is to trash?" << useTrash;
+
+        if (!fileInfo.exists())
+        {
+            emit error(i18n("File/Folder %1 does not exist",
+                            QDir::toNativeSeparators(fileInfo.filePath())));
+            emit signalOneProccessed(m_data->operation());
+            continue;
+        }
+
+        if (useTrash)
+        {
+            if (fileInfo.isDir())
             {
-                emit error(i18n("Couldn't move folder %1 to collection trash",
-                                QDir::toNativeSeparators(fileInfo.path())));
+                if (!DTrash::deleteDirRecursivley(deleteUrl.toLocalFile()))
+                {
+                    emit error(i18n("Couldn't move folder %1 to collection trash",
+                                    QDir::toNativeSeparators(fileInfo.path())));
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
+                }
+            }
+            else
+            {
+                if (!DTrash::deleteImage(deleteUrl.toLocalFile()))
+                {
+                    emit error(i18n("Couldn't move image %1 to collection trash",
+                                QDir::toNativeSeparators(fileInfo.filePath())));
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
+                }
             }
         }
         else
         {
-            if (!DTrash::deleteImage(m_srcToDelete.toLocalFile()))
+            if (fileInfo.isDir())
             {
-                emit error(i18n("Couldn't move image %1 to collection trash",
-                                QDir::toNativeSeparators(fileInfo.filePath())));
-            }
-        }
-    }
-    else
-    {
-        if (fileInfo.isDir())
-        {
-            QDir dir(fileInfo.filePath());
+                QDir dir(fileInfo.filePath());
 
-            if (!dir.removeRecursively())
-            {
-                emit error(i18n("Album %1 could not be removed",
-                                QDir::toNativeSeparators(fileInfo.path())));
-            }
-            else if (m_markAsObsolete)
-            {
+                if (!dir.removeRecursively())
+                {
+                    emit error(i18n("Album %1 could not be removed",
+                                    QDir::toNativeSeparators(fileInfo.path())));
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
+                }
+
                 CoreDbAccess access;
                 // If the images in the directory should be marked as obsolete
                 // get all files recursively and remove all image information
@@ -273,18 +287,18 @@ void DeleteJob::run()
                     access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
                 }
             }
-        }
-        else
-        {
-            QFile file(fileInfo.filePath());
+            else
+            {
+                QFile file(fileInfo.filePath());
 
-            if (!file.remove())
-            {
-                emit error(i18n("Image %1 could not be removed",
-                                QDir::toNativeSeparators(fileInfo.filePath())));
-            }
-            else if (m_markAsObsolete)
-            {
+                if (!file.remove())
+                {
+                    emit error(i18n("Image %1 could not be removed",
+                                    QDir::toNativeSeparators(fileInfo.filePath())));
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
+                }
+
                 // Mark the image info of the removed file as obsolete
                 CoreDbAccess access;
                 qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(fileInfo.filePath()));
@@ -295,6 +309,9 @@ void DeleteJob::run()
                 }
             }
         }
+
+        emit signalOneProccessed(m_data->operation());
+        m_data->addProcessedUrl(deleteUrl);
     }
 
     emit signalDone();
@@ -426,8 +443,10 @@ void RestoreDTrashItemsJob::run()
             qCDebug(DIGIKAM_IOJOB_LOG) << "Trash file couldn't be renamed!";
             return;
         }
-
-        QFile::remove(item.jsonFilePath);
+        else
+        {
+            QFile::remove(item.jsonFilePath);
+        }
     }
 
     emit signalDone();

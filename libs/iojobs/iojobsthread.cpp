@@ -115,11 +115,9 @@ void IOJobsThread::deleteFiles(IOJobData* const data)
 
     ActionJobCollection collection;
 
-    bool useTrash = (data->operation() == IOJobData::Trash);
-
-    foreach (const QUrl& url, data->sourceUrls())
+    for (int i = 0; i < maximumNumberOfThreads(); i++)
     {
-        DeleteJob* const j = new DeleteJob(url, useTrash, true);
+        DeleteJob* const j = new DeleteJob(data);
 
         connectOneJob(j);
 

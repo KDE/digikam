@@ -81,7 +81,7 @@ class DIGIKAM_EXPORT DeleteJob : public IOJob
 
 public:
 
-    DeleteJob(const QUrl& srcToDelete, bool useTrash, bool markAsObsolete=false);
+    DeleteJob(IOJobData* const data);
 
 protected:
 
@@ -93,9 +93,7 @@ private:
 
 private:
 
-    QUrl m_srcToDelete;
-    bool m_useTrash;
-    bool m_markAsObsolete;
+    IOJobData* m_data;
 };
 
 // ---------------------------------------
