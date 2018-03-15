@@ -541,7 +541,6 @@ bool AdvancedRenameDialog::checkNewNames() const
             completeNewName.append(item->newName());
 
             bool invalid = tmpNewNames.contains(completeNewName);
-            invalid     |= QFile::exists(completeNewName);
             tmpNewNames << completeNewName;
 
             item->markInvalid(invalid);

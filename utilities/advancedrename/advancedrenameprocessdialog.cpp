@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QDialogButtonBox>
+#include <QApplication>
 #include <QCloseEvent>
 #include <QPixmap>
 #include <QTimer>
@@ -144,6 +145,7 @@ void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& des
     }
 
     addedAction(pix, QDir::toNativeSeparators(desc.filePath));
+    setLabel(i18n("<b>Renaming images. Please wait...</b>"));
     advance(1);
 
     NewNameInfo info = d->newNameList.takeFirst();
@@ -177,13 +179,14 @@ void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& src)
 
 void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
 {
-    abort();
-
     QPixmap pix = QIcon::fromTheme(QLatin1String("emblem-error")).pixmap(32, 32);
-    setLabel(i18n("<b>Renaming images has failed...</b>"));
-    setTitle(i18n("Canceled..."));
-
     addedAction(pix, QDir::toNativeSeparators(src.toLocalFile()));
+    setLabel(i18n("<b>Renaming images has failed...</b>"));
+    qApp->processEvents();
+
+    QThread::sleep(2);
+
+    slotRenameSuccessded(src);
 }
 
 void AdvancedRenameProcessDialog::closeEvent(QCloseEvent* e)
