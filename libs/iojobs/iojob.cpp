@@ -119,6 +119,7 @@ void CopyJob::run()
                         emit error(i18n("Could not move folder %1 to album %2",
                                         QDir::toNativeSeparators(srcDir.path()),
                                         QDir::toNativeSeparators(dstDir.path())));
+
                         emit signalOneProccessed(m_data->operation());
                         continue;
                     }
@@ -140,6 +141,7 @@ void CopyJob::run()
                     emit error(i18n("Could not move file %1 to album %2",
                                     srcInfo.filePath(),
                                     QDir::toNativeSeparators(dstDir.path())));
+
                     emit signalOneProccessed(m_data->operation());
                     continue;
                 }
@@ -156,6 +158,7 @@ void CopyJob::run()
                     emit error(i18n("Could not copy folder %1 to album %2",
                                     QDir::toNativeSeparators(srcDir.path()),
                                     QDir::toNativeSeparators(dstDir.path())));
+
                     emit signalOneProccessed(m_data->operation());
                     continue;
                 }
@@ -167,6 +170,7 @@ void CopyJob::run()
                     emit error(i18n("Could not copy file %1 to album %2",
                                     QDir::toNativeSeparators(srcInfo.path()),
                                     QDir::toNativeSeparators(dstDir.path())));
+
                     emit signalOneProccessed(m_data->operation());
                     continue;
                 }
@@ -215,6 +219,7 @@ void DeleteJob::run()
         {
             emit error(i18n("File/Folder %1 does not exist",
                             QDir::toNativeSeparators(fileInfo.filePath())));
+
             emit signalOneProccessed(m_data->operation());
             continue;
         }
@@ -227,6 +232,7 @@ void DeleteJob::run()
                 {
                     emit error(i18n("Couldn't move folder %1 to collection trash",
                                     QDir::toNativeSeparators(fileInfo.path())));
+
                     emit signalOneProccessed(m_data->operation());
                     continue;
                 }
@@ -237,6 +243,7 @@ void DeleteJob::run()
                 {
                     emit error(i18n("Couldn't move image %1 to collection trash",
                                 QDir::toNativeSeparators(fileInfo.filePath())));
+
                     emit signalOneProccessed(m_data->operation());
                     continue;
                 }
@@ -252,6 +259,7 @@ void DeleteJob::run()
                 {
                     emit error(i18n("Album %1 could not be removed",
                                     QDir::toNativeSeparators(fileInfo.path())));
+
                     emit signalOneProccessed(m_data->operation());
                     continue;
                 }
@@ -295,6 +303,7 @@ void DeleteJob::run()
                 {
                     emit error(i18n("Image %1 could not be removed",
                                     QDir::toNativeSeparators(fileInfo.filePath())));
+
                     emit signalOneProccessed(m_data->operation());
                     continue;
                 }
@@ -367,6 +376,7 @@ void RenameFileJob::run()
             qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
             emit error(i18n("Image with the same name %1 already there",
                             QDir::toNativeSeparators(m_data->destUrl().toLocalFile())));
+
             emit signalOneProccessed(m_data->operation());
             emit signalRenameFailed(renameUrl);
             continue;
@@ -383,6 +393,7 @@ void RenameFileJob::run()
             qCDebug(DIGIKAM_IOJOB_LOG) << "File couldn't be renamed!";
             emit error(i18n("Image %1 could not be renamed",
                             QDir::toNativeSeparators(renameUrl.toLocalFile())));
+
             emit signalOneProccessed(m_data->operation());
             emit signalRenameFailed(renameUrl);
             continue;
@@ -451,7 +462,6 @@ void RestoreDTrashItemsJob::run()
         if (!QFile::rename(item.trashPath, newName.toLocalFile()))
         {
             qCDebug(DIGIKAM_IOJOB_LOG) << "Trash file couldn't be renamed!";
-            return;
         }
         else
         {
