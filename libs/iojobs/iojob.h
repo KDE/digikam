@@ -104,7 +104,7 @@ class DIGIKAM_EXPORT RenameFileJob : public IOJob
 
 public:
 
-    RenameFileJob(const QUrl& srcToRename, const QUrl& newName);
+    RenameFileJob(IOJobData* const data);
 
 Q_SIGNALS:
 
@@ -117,8 +117,7 @@ protected:
 
 private:
 
-    QUrl m_srcToRename;
-    QUrl m_newUrl;
+    IOJobData* m_data;
 };
 
 // ----------------------------------------------

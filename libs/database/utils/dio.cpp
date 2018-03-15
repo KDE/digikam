@@ -472,7 +472,7 @@ void DIO::slotResult()
     {
         // If we rename a file, the name changes. This is equivalent to a move.
         // Do this in database, too.
-        if (QFileInfo::exists(data->destUrl().toLocalFile()))
+        if (data->processedUrls().contains(data->imageInfo().fileUrl()))
         {
             CoreDbAccess().db()->moveItem(data->imageInfo().albumId(),
                                           data->srcUrl().fileName(),

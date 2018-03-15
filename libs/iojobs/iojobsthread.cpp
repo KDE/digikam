@@ -133,7 +133,7 @@ void IOJobsThread::renameFile(IOJobData* const data)
     d->jobData = data;
     ActionJobCollection collection;
 
-    RenameFileJob* const j = new RenameFileJob(data->srcUrl(), data->destUrl());
+    RenameFileJob* const j = new RenameFileJob(data);
 
     connectOneJob(j);
 
