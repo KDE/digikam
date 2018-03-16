@@ -230,10 +230,38 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             setXmpTagString("Xmp.xmpDM.audioSampleRate",
                 QString::number(codec->sample_rate));
 
-            setXmpTagString("Xmp.audio.ChannelType",
-                QString::number(codec->channels));
-            setXmpTagString("Xmp.xmpDM.audioChannelType",
-                QString::number(codec->channels));
+            // See XMP Dynamic Media properties from Adobe.
+            // Audio Chanel type is a limited untranslated string choice depending of amount of audio channels 
+
+            switch (codec->channels)
+            {
+                case 0:
+                    break;
+                case 1:
+                    data = QLatin1String("Mono");
+                    break;
+                case 2:
+                    data = QLatin1String("Stereo");
+                    break;
+                case 6:
+                    data = QLatin1String("5.1");
+                    break;
+                case 8:
+                    data = QLatin1String("7.1");
+                    break;
+                case 16:
+                    data = QLatin1String("16 Channel");
+                    break;
+                default:
+                    data = QLatin1String("Other");
+                    break;
+            }
+
+            if (!data.isEmpty())
+            {
+                setXmpTagString("Xmp.audio.ChannelType",      data);
+                setXmpTagString("Xmp.xmpDM.audioChannelType", data);
+            }
 
             setXmpTagString("Xmp.audio.Format",
                 QString::fromUtf8(av_get_sample_fmt_name((AVSampleFormat)codec->format)));

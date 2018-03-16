@@ -630,8 +630,6 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setBoundary(1, 2000000000, 100);
         return field;
     }
-
-
     else if (name == QLatin1String("videoaspectratio"))
     {
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
@@ -750,8 +748,8 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
-        field->setText(i18n("Audio Bit Rate"), i18n("Return video audio bits rate"));
-        field->setBetweenText(i18nc("Find video with audio bit rate between...and...", "and"));
+        field->setText(i18n("Audio Bit Rate"), i18n("Return Audio Bits Rate"));
+        field->setBetweenText(i18nc("Find files with audio bit rate between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Bits per Second", "bps"));
         field->setBoundary(1000, 100000, 1000);
         field->setSuggestedValues(QList<int>()
@@ -767,12 +765,15 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Audio Channel Type"), i18n("Return video audio Channel Type"));
+        field->setText(i18n("Audio Channel Type"), i18n("Return Audio Channel Type"));
         QStringList type;
-        type << QLatin1String("1") << i18n("Mono");
-        type << QLatin1String("2") << i18n("Stereo");
-        type << QLatin1String("6") << i18n("5.1 Surround Sound");
-        type << QLatin1String("8") << i18n("7.1 Surround Sound");
+        type << QLatin1String("Mono")       << i18n("Mono");
+        type << QLatin1String("Stereo")     << i18n("Stereo");
+        type << QLatin1String("5.1")        << i18n("5.1 Surround Sound");
+        type << QLatin1String("7.1")        << i18n("7.1 Surround Sound");
+        type << QLatin1String("16 Channel") << i18n("16 Channels Sequence");
+        type << QLatin1String("Other")      << i18n("Other Channel Type");
+
         // TODO: add more possible audio channel type
         field->setChoice(type);
         return field;
@@ -781,7 +782,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Audio Codec"), i18n("Return video audio Codec"));
+        field->setText(i18n("Audio Codec"), i18n("Return Audio Codec"));
         QStringList type;
 
         // List of most common audio codecs supported by FFMpeg (see "ffpmpeg -codecs" for details)
