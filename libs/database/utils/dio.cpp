@@ -470,18 +470,16 @@ void DIO::slotResult()
     {
         // If we rename a file, the name changes. This is equivalent to a move.
         // Do this in database, too.
-        QUrl srcUrl(data->imageInfo().fileUrl());
-
-        if (data->processedUrls().contains(srcUrl))
+        if (data->processedUrls().contains(data->srcUrl()))
         {
             CoreDbAccess().db()->moveItem(data->imageInfo().albumId(),
-                                          srcUrl.fileName(),
+                                          data->srcUrl().fileName(),
                                           data->imageInfo().albumId(),
-                                          data->destUrl(srcUrl).fileName());
+                                          data->destUrl(data->srcUrl()).fileName());
 
             // delete thumbnail
-            ThumbnailLoadThread::deleteThumbnail(srcUrl.toLocalFile());
-            LoadingCacheInterface::fileChanged(data->destUrl(srcUrl).toLocalFile());
+            ThumbnailLoadThread::deleteThumbnail(data->srcUrl().toLocalFile());
+            LoadingCacheInterface::fileChanged(data->destUrl(data->srcUrl()).toLocalFile());
         }
     }
 

@@ -186,7 +186,11 @@ PAlbum* IOJobData::destAlbum() const
 
 QUrl IOJobData::srcUrl() const
 {
-    if (d->sourceUrlList.isEmpty())
+    if (!d->imageInfoList.isEmpty())
+    {
+        return d->imageInfoList.first().fileUrl();
+    }
+    else if (d->sourceUrlList.isEmpty())
     {
         return QUrl();
     }
