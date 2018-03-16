@@ -322,17 +322,16 @@ void DIO::processJob(IOJobData* const data)
         }
 
         SidecarFinder finder(data->srcUrl());
+        data->setSourceUrls(finder.localFiles);
 
         for (int i = 0 ; i < finder.localFiles.length() ; ++i)
         {
-            IOJobData* const newdata = new IOJobData(IOJobData::Rename, data->imageInfos());
-            newdata->setSourceUrls(QList<QUrl>() << finder.localFiles.at(i));
-            newdata->setDestUrl(QUrl::fromLocalFile(data->destUrl().toLocalFile() +
-                                                    finder.localFileSuffixes.at(i)));
-            createJob(newdata);
+            data->setDestUrl(finder.localFiles.at(i),
+                             QUrl::fromLocalFile(data->destUrl().toLocalFile() +
+                                                 finder.localFileSuffixes.at(i)));
         }
 
-        delete data;
+        createJob(data);
         return;
     }
 
@@ -386,12 +385,6 @@ void DIO::createJob(IOJobData* const data)
     }
     else if (operation == IOJobData::Rename)
     {
-        if (data->sourceUrls().count() != 1)
-        {
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Invalid operation: renaming is not 1:1";
-            return;
-        }
-
         jobThread = IOJobsManager::instance()->startRenameFile(data);
 
         connect(jobThread, SIGNAL(signalRenamed(QUrl)),
@@ -477,16 +470,18 @@ void DIO::slotResult()
     {
         // If we rename a file, the name changes. This is equivalent to a move.
         // Do this in database, too.
-        if (data->processedUrls().contains(data->imageInfo().fileUrl()))
+        QUrl srcUrl(data->imageInfo().fileUrl());
+
+        if (data->processedUrls().contains(srcUrl))
         {
             CoreDbAccess().db()->moveItem(data->imageInfo().albumId(),
-                                          data->srcUrl().fileName(),
+                                          srcUrl.fileName(),
                                           data->imageInfo().albumId(),
-                                          data->destUrl().fileName());
+                                          data->destUrl(srcUrl).fileName());
 
             // delete thumbnail
-            ThumbnailLoadThread::deleteThumbnail(data->srcUrl().toLocalFile());
-            LoadingCacheInterface::fileChanged(data->destUrl().toLocalFile());
+            ThumbnailLoadThread::deleteThumbnail(srcUrl.toLocalFile());
+            LoadingCacheInterface::fileChanged(data->destUrl(srcUrl).toLocalFile());
         }
     }
 

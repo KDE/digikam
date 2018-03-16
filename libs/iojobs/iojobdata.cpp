@@ -52,9 +52,10 @@ public:
     PAlbum*          srcAlbum;
     PAlbum*          destAlbum;
 
+    QMap<QUrl, QUrl> changeDestMap;
     QList<ImageInfo> imageInfoList;
     QList<QUrl>      sourceUrlList;
-    QList<QUrl>      processedUrlList;
+    QList<QUrl>      processedList;
 
     QUrl             destUrl;
 
@@ -101,8 +102,6 @@ IOJobData::IOJobData(int operation,
     d->srcAlbum  = src;
     d->destAlbum = dest;
 
-    d->sourceUrlList.clear();
-
     if (d->srcAlbum)
     {
         d->sourceUrlList << d->srcAlbum->fileUrl();
@@ -124,7 +123,9 @@ IOJobData::IOJobData(int operation,
     d->destUrl       = dest;
 }
 
-IOJobData::IOJobData(int operation, const ImageInfo& info, const QString& newName)
+IOJobData::IOJobData(int operation,
+                     const ImageInfo& info,
+                     const QString& newName)
     : d(new Private)
 {
     d->operation = operation;
@@ -157,14 +158,15 @@ void IOJobData::setSourceUrls(const QList<QUrl>& urls)
     d->sourceUrlList = urls;
 }
 
-void IOJobData::setDestUrl(const QUrl& url)
+void IOJobData::setDestUrl(const QUrl& srcUrl,
+                           const QUrl& destUrl)
 {
-    d->destUrl = url;
+    d->changeDestMap.insert(srcUrl, destUrl);
 }
 
 void IOJobData::addProcessedUrl(const QUrl& url)
 {
-    d->processedUrlList << url;
+    d->processedList << url;
 }
 
 int IOJobData::operation() const
@@ -192,9 +194,14 @@ QUrl IOJobData::srcUrl() const
     return d->sourceUrlList.first();
 }
 
-QUrl IOJobData::destUrl() const
+QUrl IOJobData::destUrl(const QUrl& srcUrl) const
 {
-    return d->destUrl;
+    if (srcUrl.isEmpty())
+    {
+        return d->destUrl;
+    }
+
+    return d->changeDestMap.value(srcUrl, d->destUrl);
 }
 
 QUrl IOJobData::getNextUrl() const
@@ -233,7 +240,7 @@ QList<ImageInfo> IOJobData::imageInfos() const
 
 QList<QUrl> IOJobData::processedUrls() const
 {
-    return d->processedUrlList;
+    return d->processedList;
 }
 
 } // namespace Digikam

@@ -82,25 +82,27 @@ enum Operation
 
     void             setImageInfos(const QList<ImageInfo>& infos);
     void             setSourceUrls(const QList<QUrl>& urls);
-    void             setDestUrl(const QUrl& url);
+
+    void             setDestUrl(const QUrl& srcUrl,
+                                const QUrl& destUrl);
 
     void             addProcessedUrl(const QUrl& url);
 
-    int              operation()     const;
+    int              operation()                          const;
 
-    PAlbum*          srcAlbum()      const;
-    PAlbum*          destAlbum()     const;
+    PAlbum*          srcAlbum()                           const;
+    PAlbum*          destAlbum()                          const;
 
-    QUrl             srcUrl()        const;
-    QUrl             destUrl()       const;
-    QUrl             getNextUrl()    const;
+    QUrl             srcUrl()                             const;
+    QUrl             destUrl(const QUrl& srcUrl = QUrl()) const;
+    QUrl             getNextUrl()                         const;
 
-    ImageInfo        imageInfo()     const;
+    ImageInfo        imageInfo()                          const;
 
-    QList<QUrl>      sourceUrls()    const;
-    QList<ImageInfo> imageInfos()    const;
+    QList<QUrl>      sourceUrls()                         const;
+    QList<ImageInfo> imageInfos()                         const;
 
-    QList<QUrl>      processedUrls() const;
+    QList<QUrl>      processedUrls()                      const;
 
 private:
 
