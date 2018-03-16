@@ -254,35 +254,38 @@ void DeleteJob::run()
                     continue;
                 }
 
-                CoreDbAccess access;
-                // If the images in the directory should be marked as obsolete
-                // get all files recursively and remove all image information
-                // for which the file path leads to an image id.
-                QList<qlonglong> imageIds;
-                QDirIterator iter(dir);
-
-                while (iter.hasNext())
+                if (m_data->operation() == IOJobData::Delete)
                 {
-                    // get the next path and advance the iterator
-                    QString filePath = iter.next();
-                    // Use the file info to get the file type
-                    QFileInfo info = iter.fileInfo();
+                    CoreDbAccess access;
+                    // If the images in the directory should be marked as obsolete
+                    // get all files recursively and remove all image information
+                    // for which the file path leads to an image id.
+                    QList<qlonglong> imageIds;
+                    QDirIterator iter(dir);
 
-                    if (info.isFile())
+                    while (iter.hasNext())
                     {
-                        qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(filePath));
+                        // get the next path and advance the iterator
+                        QString filePath = iter.next();
+                        // Use the file info to get the file type
+                        QFileInfo info = iter.fileInfo();
 
-                        if (imageId != -1)
+                        if (info.isFile())
                         {
-                            imageIds << imageId;
+                            qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(filePath));
+
+                            if (imageId != -1)
+                            {
+                                imageIds << imageId;
+                            }
                         }
                     }
-                }
 
-                // Mark all image ids as obsolete.
-                foreach(qlonglong imageId, imageIds)
-                {
-                    access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
+                    // Mark all image ids as obsolete.
+                    foreach(qlonglong imageId, imageIds)
+                    {
+                        access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
+                    }
                 }
             }
             else
@@ -298,13 +301,16 @@ void DeleteJob::run()
                     continue;
                 }
 
-                // Mark the image info of the removed file as obsolete
-                CoreDbAccess access;
-                qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(fileInfo.filePath()));
-
-                if (imageId != -1)
+                if (m_data->operation() == IOJobData::Delete)
                 {
-                    access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
+                    CoreDbAccess access;
+                    // Mark the image info of the removed file as obsolete
+                    qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(fileInfo.filePath()));
+
+                    if (imageId != -1)
+                    {
+                        access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
+                    }
                 }
             }
         }

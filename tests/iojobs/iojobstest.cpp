@@ -82,14 +82,18 @@ void IOJobsTest::copyAndMove()
     QFileInfo srcFi(src);
     QFileInfo dstFi(dst);
 
-    QUrl srcUrl        = QUrl::fromLocalFile(srcFi.absoluteFilePath());
-    QUrl dstUrl        = QUrl::fromLocalFile(dstFi.absoluteFilePath());
-    CopyJob* const job = new CopyJob(srcUrl, dstUrl, isMove);
+    QUrl srcUrl           = QUrl::fromLocalFile(srcFi.absoluteFilePath());
+    QUrl dstUrl           = QUrl::fromLocalFile(dstFi.absoluteFilePath());
+    int operation         = (isMove ? IOJobData::MoveFiles : IOJobData::CopyFiles);
+
+    IOJobData* const data = new IOJobData(operation, QList<QUrl>() << srcUrl, dstUrl);
+    CopyJob* const job    = new CopyJob(data);
 
     QThreadPool::globalInstance()->start(job);
     QThreadPool::globalInstance()->waitForDone();
 
     delete job;
+    delete data;
 
     QFileInfo dstFiAfterCopy(pathToCheckInDst);
 
@@ -141,14 +145,16 @@ void IOJobsTest::permanentDel()
 
     QFileInfo fi(srcToDel);
 
-    QUrl fileUrl = QUrl::fromLocalFile(fi.absoluteFilePath());
+    QUrl fileUrl          = QUrl::fromLocalFile(fi.absoluteFilePath());
 
-    DeleteJob* job = new DeleteJob(fileUrl, false);
+    IOJobData* const data = new IOJobData(IOJobData::DFiles, QList<QUrl>() << fileUrl);
+    DeleteJob* job        = new DeleteJob(data);
 
     QThreadPool::globalInstance()->start(job);
     QThreadPool::globalInstance()->waitForDone();
 
     delete job;
+    delete data;
 
     fi.refresh();
     QVERIFY(!fi.exists());

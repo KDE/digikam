@@ -400,6 +400,19 @@ void DIO::createJob(IOJobData* const data)
         connect(jobThread, SIGNAL(signalRenameFailed(QUrl)),
                 this, SIGNAL(signalRenameFailed(QUrl)));
     }
+    else if (operation == IOJobData::Delete || operation == IOJobData::DFiles)
+    {
+        item = getProgressItem(operation);
+
+        if (!item || item->totalCompleted())
+        {
+            item = ProgressManager::instance()->createProgressItem(QLatin1String("DIODelete"),
+                                                                   i18n("Delete"), QString(), true, false);
+        }
+
+        item->setTotalItems(item->totalItems() + data->sourceUrls().count());
+        jobThread = IOJobsManager::instance()->startDelete(data);
+    }
     else if (operation == IOJobData::Trash)
     {
         item = getProgressItem(operation);
@@ -413,18 +426,10 @@ void DIO::createJob(IOJobData* const data)
         item->setTotalItems(item->totalItems() + data->sourceUrls().count());
         jobThread = IOJobsManager::instance()->startDelete(data);
     }
-    else if (operation == IOJobData::Delete)
+    else
     {
-        item = getProgressItem(operation);
-
-        if (!item || item->totalCompleted())
-        {
-            item = ProgressManager::instance()->createProgressItem(QLatin1String("DIODelete"),
-                                                                   i18n("Delete"), QString(), true, false);
-        }
-
-        item->setTotalItems(item->totalItems() + data->sourceUrls().count());
-        jobThread = IOJobsManager::instance()->startDelete(data);
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Unknown IOJob operation:" << operation;
+        return;
     }
 
     connect(jobThread, SIGNAL(signalOneProccessed(int)),

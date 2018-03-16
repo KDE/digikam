@@ -29,13 +29,17 @@
 #include <QUrl>
 #include <QList>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class PAlbum;
 class ImageInfo;
 
-class IOJobData
+class DIGIKAM_EXPORT IOJobData
 {
 
 public:
@@ -50,7 +54,8 @@ enum Operation
     MoveFiles = 1 << 5,
     Rename    = 1 << 6,
     Delete    = 1 << 7,
-    Trash     = 1 << 8
+    DFiles    = 1 << 8, // not mark as obsolete in the database
+    Trash     = 1 << 9
 };
 
     explicit IOJobData(int operation,
