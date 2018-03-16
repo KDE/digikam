@@ -59,13 +59,8 @@ CopyJob::CopyJob(IOJobData* const data)
 
 void CopyJob::run()
 {
-    while (m_data)
+    while (m_data && !m_cancel)
     {
-        if (m_cancel)
-        {
-            return;
-        }
-
         QUrl srcUrl = m_data->getNextUrl();
 
         if (srcUrl.isEmpty())
@@ -194,13 +189,8 @@ DeleteJob::DeleteJob(IOJobData* const data)
 
 void DeleteJob::run()
 {
-    while (m_data)
+    while (m_data && !m_cancel)
     {
-        if (m_cancel)
-        {
-            return;
-        }
-
         QUrl deleteUrl = m_data->getNextUrl();
 
         if (deleteUrl.isEmpty())
@@ -355,13 +345,8 @@ RenameFileJob::RenameFileJob(IOJobData* const data)
 
 void RenameFileJob::run()
 {
-    while (m_data)
+    while (m_data && !m_cancel)
     {
-        if (m_cancel)
-        {
-            return;
-        }
-
         QUrl renameUrl = m_data->getNextUrl();
 
         if (renameUrl.isEmpty())
