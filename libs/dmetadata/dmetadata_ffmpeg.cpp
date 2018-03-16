@@ -231,7 +231,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 QString::number(codec->sample_rate));
 
             // See XMP Dynamic Media properties from Adobe.
-            // Audio Chanel type is a limited untranslated string choice depending of amount of audio channels 
+            // Audio Channel type is a limited untranslated string choice depending of amount of audio channels 
+
+            data = QString();
 
             switch (codec->channels)
             {
@@ -265,6 +267,48 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             setXmpTagString("Xmp.audio.Format",
                 QString::fromUtf8(av_get_sample_fmt_name((AVSampleFormat)codec->format)));
+
+            // See XMP Dynamic Media properties from Adobe.
+            // Audio Sample type is a limited untranslated string choice depending of amount of audio samples 
+
+            data = QString();
+
+            switch (codec->format)
+            {
+                case AV_SAMPLE_FMT_U8:
+                case AV_SAMPLE_FMT_U8P:
+                    data = QLatin1String("8Int");
+                    break;
+                case AV_SAMPLE_FMT_S16:
+                case AV_SAMPLE_FMT_S16P:
+                    data = QLatin1String("16Int");
+                    break;
+                case AV_SAMPLE_FMT_S32:
+                case AV_SAMPLE_FMT_S32P:
+                    data = QLatin1String("32Int");
+                    break;
+                case AV_SAMPLE_FMT_FLT:
+                case AV_SAMPLE_FMT_FLTP:
+                    data = QLatin1String("32Float");
+                    break;
+                case AV_SAMPLE_FMT_DBL:     // Not supported by XMP spec.
+                case AV_SAMPLE_FMT_DBLP:    // Not supported by XMP spec.
+                case AV_SAMPLE_FMT_S64:     // Not supported by XMP spec.
+                case AV_SAMPLE_FMT_S64P:    // Not supported by XMP spec.
+                case AV_SAMPLE_FMT_NONE:
+                case AV_SAMPLE_FMT_NB:
+                default:
+                    data = QLatin1String("Other");
+                    break;
+
+                // NOTE: where are 'Compressed' and 'Packed' type from XMP spec into FFMPEG ?
+            }
+
+            if (!data.isEmpty())
+            {
+                setXmpTagString("Xmp.audio.SampleType",      data);
+                setXmpTagString("Xmp.xmpDM.audioSampleType", data);
+            }
 
             // --------------
 
