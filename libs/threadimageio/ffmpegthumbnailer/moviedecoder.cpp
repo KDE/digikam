@@ -71,7 +71,7 @@ void MovieDecoder::initialize(const QString& filename)
 
     if (d->pFrame)
     {
-        d->initialized=true;
+        d->initialized = true;
     }
 }
 

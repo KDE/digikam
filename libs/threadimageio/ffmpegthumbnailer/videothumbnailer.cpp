@@ -61,16 +61,16 @@ public:
         smartFrameSelection = false;
     }
 
-    int                           thumbnailSize;
-    quint16                       seekPercentage;
-    bool                          overlayFilmStrip;
-    bool                          workAroundIssues;
-    bool                          maintainAspectRatio;
-    bool                          smartFrameSelection;
-    QString                       seekTime;
-    std::vector<FilmStripFilter*> filters;
+    int                       thumbnailSize;
+    quint16                   seekPercentage;
+    bool                      overlayFilmStrip;
+    bool                      workAroundIssues;
+    bool                      maintainAspectRatio;
+    bool                      smartFrameSelection;
+    QString                   seekTime;
+    QVector<FilmStripFilter*> filters;
 
-    const int                     SMART_FRAME_ATTEMPTS;
+    const int                 SMART_FRAME_ATTEMPTS;
 };
 
 VideoThumbnailer::VideoThumbnailer()
@@ -195,12 +195,12 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile,
 
 void VideoThumbnailer::addFilter(FilmStripFilter* const filter)
 {
-    d->filters.push_back(filter);
+    d->filters.append(filter);
 }
 
 void VideoThumbnailer::removeFilter(FilmStripFilter* const filter)
 {
-    for (vector<FilmStripFilter*>::iterator it = d->filters.begin();
+    for (QVector<FilmStripFilter*>::iterator it = d->filters.begin();
          it != d->filters.end();
          ++it)
     {
@@ -219,7 +219,7 @@ void VideoThumbnailer::clearFilters()
 
 void VideoThumbnailer::applyFilters(VideoFrame& videoFrame)
 {
-    for (vector<FilmStripFilter*>::iterator it = d->filters.begin();
+    for (QVector<FilmStripFilter*>::iterator it = d->filters.begin();
          it != d->filters.end();
          ++it)
     {
@@ -262,7 +262,7 @@ int VideoThumbnailer::getBestThumbnailIndex(vector<VideoFrame>& videoFrames,
     int bestFrame = -1;
     float minRMSE = FLT_MAX;
 
-    for (size_t i = 0 ; i < histograms.size(); i++)
+    for (size_t i = 0 ; i < histograms.size() ; i++)
     {
         // calculate root mean squared error
         float rmse = 0.0;
