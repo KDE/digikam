@@ -28,7 +28,7 @@ namespace Digikam
 
 bool XMLWriter::open(const QString& name)
 {
-    xmlTextWriterPtr ptr = xmlNewTextWriterFilename(name.toLocal8Bit().constData(), 0);
+    xmlTextWriterPtr ptr = xmlNewTextWriterFilename(name.toUtf8().constData(), 0);
 
     if (!ptr)
     {

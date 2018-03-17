@@ -26,8 +26,6 @@
 // Qt includes
 
 #include <QDir>
-#include <QFile>
-#include <QFileInfo>
 #include <QFutureWatcher>
 #include <QRegExp>
 #include <QStringList>
@@ -307,7 +305,7 @@ public:
 
         QString xsltFileName                                 = theme->directory() + QLatin1String("/template.xsl");
         CWrapper<xsltStylesheetPtr, xsltFreeStylesheet> xslt = xsltParseStylesheetFile((const xmlChar*)
-            QDir::toNativeSeparators(xsltFileName).toLocal8Bit().data());
+            QDir::toNativeSeparators(xsltFileName).toUtf8().data());
 
         if (!xslt)
         {
@@ -316,7 +314,7 @@ public:
         }
 
         CWrapper<xmlDocPtr, xmlFreeDoc> xmlGallery =
-            xmlParseFile(QDir::toNativeSeparators(xmlFileName).toLocal8Bit().data() );
+            xmlParseFile(QDir::toNativeSeparators(xmlFileName).toUtf8().data() );
 
         if (!xmlGallery)
         {
@@ -363,24 +361,11 @@ public:
         QString destFileName = QDir::toNativeSeparators(info->destUrl().toLocalFile() + 
                                                         QLatin1String("/index.html"));
 
-#ifdef Q_CC_MSVC
-        if (xsltSaveResultToFilename(destFileName.toLocal8Bit().data(), xmlOutput, xslt, 0) == -1)
+        if (xsltSaveResultToFilename(destFileName.toUtf8().data(), xmlOutput, xslt, 0) == -1)
         {
             logError(i18n("Could not open '%1' for writing", destFileName));
             return false;
         }
-#else
-        FILE* const file = fopen(destFileName.toLocal8Bit().data(), "w");
-
-        if (!file)
-        {
-            logError(i18n("Could not open '%1' for writing", destFileName));
-            return false;
-        }
-
-        xsltSaveResultToFile(file, xmlOutput, xslt);
-        fclose(file);
-#endif
 
         return true;
     }
