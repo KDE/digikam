@@ -25,10 +25,6 @@
 #include "moviedecoder.h"
 #include "moviedecoder_p.h"
 
-// Qt includes
-
-#include <QFileInfo>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -56,13 +52,11 @@ void MovieDecoder::initialize(const QString& filename)
     av_register_all();
     avcodec_register_all();
 
-    QFileInfo fileInfo(filename);
-
     if (avformat_open_input(&d->pFormatContext,
-                            fileInfo.absoluteFilePath().toLocal8Bit().data(), NULL, NULL) != 0)
+                            filename.toUtf8().data(), NULL, NULL) != 0)
     {
         qDebug(DIGIKAM_GENERAL_LOG) << "Could not open input file: "
-                                    << fileInfo.absoluteFilePath();
+                                    << filename;
         return;
     }
 
