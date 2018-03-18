@@ -52,6 +52,20 @@ class DIGIKAM_EXPORT DMetadata : public MetaEngine
 
 public:
 
+    /** Video color model reported by FFMPEG following XMP DM Spec from Adobe.
+     *  These value are stored in DB as Image color model properties (extension of DImg::ColorModel)
+     */
+    enum VIDEOCOLORMODEL
+    {
+        VIDEOCOLORMODEL_UNKNOWN=1000,
+        VIDEOCOLORMODEL_OTHER,
+        VIDEOCOLORMODEL_SRGB,
+        VIDEOCOLORMODEL_BT709,
+        VIDEOCOLORMODEL_BT601
+    };
+
+public:
+
     DMetadata();
     explicit DMetadata(const QString& filePath);
     explicit DMetadata(const MetaEngineData& data);
@@ -264,9 +278,10 @@ public:
     bool removeIptcTags(const QStringList& tagFilters);
     bool removeXmpTags(const QStringList& tagFilters);
 
-    /** Return the description of video color space detected by FFMpeg
+    /**
+     * Helper method to translate enum values to user presentable strings
      */
-    static QString videoColorModelToString(int colorSpace);
+    static QString videoColorModelToString(VIDEOCOLORMODEL videoColorModel);
 
 private:
 

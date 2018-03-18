@@ -2767,8 +2767,20 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
         case MetadataInfo::VideoWidth:
             return fromXmpLangAlt("Xmp.video.Width");
         case MetadataInfo::VideoColorSpace:
-            return fromXmpLangAlt("Xmp.video.ColorMode");
-
+        {
+            QString cs = getXmpTagString("Xmp.video.ColorSpace");
+            
+            if (cs == QLatin1String("sRGB"))
+                return QString::number(VIDEOCOLORMODEL_SRGB);
+            else if (cs == QLatin1String("CCIR-601"))
+                return QString::number(VIDEOCOLORMODEL_BT601);
+            else if (cs == QLatin1String("CCIR-709"))
+                return QString::number(VIDEOCOLORMODEL_BT709);
+            else if (cs == QLatin1String("Other"))
+                return QString::number(VIDEOCOLORMODEL_OTHER);
+            else
+                return QVariant(QVariant::Int);
+        }
         default:
             return QVariant();
     }
