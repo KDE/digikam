@@ -134,14 +134,14 @@ SetupMime::SetupMime(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* const movieFileFilterBox = new QGroupBox(i18n("Movie Files"), panel);
+    QGroupBox* const movieFileFilterBox = new QGroupBox(i18n("Video Files"), panel);
     QGridLayout* const grid2            = new QGridLayout(movieFileFilterBox);
 
     QLabel* const logoLabel2 = new QLabel(movieFileFilterBox);
     logoLabel2->setPixmap(QIcon::fromTheme(QLatin1String("video-x-matroska")).pixmap(48));
 
     d->movieFileFilterLabel  = new QLabel(movieFileFilterBox);
-    d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
+    d->movieFileFilterLabel->setText(i18n("Additional &video file extensions (<a href='video'>Currently-supported types</a>):"));
 
     DHBox* const hbox2       = new DHBox(movieFileFilterBox);
     d->movieFileFilterEdit   = new QLineEdit(hbox2);
@@ -149,7 +149,7 @@ SetupMime::SetupMime(QWidget* const parent)
                                               "to be displayed in your Album view. Just write \"xyz abc\" "
                                               "to support files with the *.xyz and *.abc extensions. "
                                               "Clicking on these files will "
-                                              "play them in an embedded movie player.</p>"
+                                              "play them in an embedded video player.</p>"
                                               "<p>You can also remove file formats that are supported by default "
                                               "by putting a minus sign in front of the extension: e.g. \"-avi\" would remove "
                                               "all AVI files from your Album view and any trace of them in your database. "
@@ -157,7 +157,7 @@ SetupMime::SetupMime(QWidget* const parent)
                                               "<p><b>Warning:</b> Removing files from the database means losing "
                                               "all of their tags and ratings.</p>"));
     d->movieFileFilterEdit->setClearButtonEnabled(true);
-    d->movieFileFilterEdit->setPlaceholderText(i18n("Enter additional movie file extensions."));
+    d->movieFileFilterEdit->setPlaceholderText(i18n("Enter additional video file extensions."));
     d->movieFileFilterLabel->setBuddy(d->movieFileFilterEdit);
     hbox2->setStretchFactor(d->movieFileFilterEdit, 10);
 
@@ -314,7 +314,7 @@ void SetupMime::slotShowCurrentMovieSettings()
 {
     QStringList movieList;
     CoreDbAccess().db()->getFilterSettings(0, &movieList, 0);
-    QString text = i18n("<p>Files with these extensions will be recognized as movie files "
+    QString text = i18n("<p>Files with these extensions will be recognized as video files "
                         "and included into the database:<br/> <code>%1</code></p>",
                         movieList.join(QLatin1String(" ")));
     QWhatsThis::showText(d->movieFileFilterLabel->mapToGlobal(QPoint(0, 0)), text, d->movieFileFilterLabel);

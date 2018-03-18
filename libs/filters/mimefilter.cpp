@@ -41,7 +41,7 @@ MimeFilter::MimeFilter(QWidget* const parent)
     insertItem( TIFFiles,    i18n("TIFF Files") );
     insertItem( DNGFiles,    i18n("DNG Files") );
     insertItem( RAWFiles,    i18n("RAW Files") );
-    insertItem( MoviesFiles, i18n("Movie Files") );
+    insertItem( MoviesFiles, i18n("Video Files") );
     insertItem( AudioFiles,  i18n("Audio Files") );
     insertItem( RasterFiles, i18n("Raster Files") );
 
