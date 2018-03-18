@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 5.9.0 - Release date: 2018-02-25
+digiKam 5.9.0 - Release date: 2018-03-18
 
 NEW FEATURES:
 
@@ -50,4 +50,3 @@ BUGFIXES FROM BUGZILLA:
 041 ==> 365725 - Menus in Ubuntu Unity 16.04 is show twice. This is when Unity is tweaked to show menus in the windows titlebar instead of the menu bar.
 042 ==> 391744 - Can't import network share with non-ascii character in path.
 043 ==> 380220 - On windows cannot use shared folders with non-ascii name.
-044 ==> 
