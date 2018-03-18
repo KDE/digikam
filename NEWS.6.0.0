@@ -137,7 +137,8 @@ BUGFIXES FROM BUGZILLA:
 124 ==> 199261 - Import avi movies from sdcard wrong date and no thumbnail.
 125 ==> 181521 - NEF's in descending order, AVI in ascending order in import from SD-card.
 126 ==> 392019 - Two persons can point to the same face tag in pictures.
-127 ==> 
+127 ==> 392013 - Metadata explorer does not show XMP face rectangles.
+128 ==> 
 
 
 
