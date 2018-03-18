@@ -119,33 +119,25 @@ private:
 
 class SidecarFinder
 {
+
 public:
 
     explicit SidecarFinder(const QList<QUrl>& files);
-    explicit SidecarFinder(const QUrl& file);
 
-    QList<QUrl> localFiles;
-
+    QList<QUrl>    localFiles;
     QList<QString> localFileSuffixes;
-
-private:
-
-    void process(const QList<QUrl>&);
 };
 
 // -----------------------------------------------------------------------------------------
 
 class GroupedImagesFinder
 {
+
 public:
 
     explicit GroupedImagesFinder(const QList<ImageInfo>& source);
 
     QList<ImageInfo> infos;
-
-private:
-
-    void process(const QList<ImageInfo>& source);
 };
 
 } // namespace Digikam

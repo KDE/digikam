@@ -55,16 +55,6 @@ namespace Digikam
 
 SidecarFinder::SidecarFinder(const QList<QUrl>& files)
 {
-    process(files);
-}
-
-SidecarFinder::SidecarFinder(const QUrl& file)
-{
-    process(QList<QUrl>() << file);
-}
-
-void SidecarFinder::process(const QList<QUrl>& files)
-{
     foreach(const QUrl& url, files)
     {
         if (DMetadata::hasSidecar(url.toLocalFile()))
@@ -98,11 +88,6 @@ void SidecarFinder::process(const QList<QUrl>& files)
 // Groups should not be resolved in dio, it should be handled in views.
 // This is already done for most things except for drag&drop, which is hard :)
 GroupedImagesFinder::GroupedImagesFinder(const QList<ImageInfo>& source)
-{
-    process(source);
-}
-
-void GroupedImagesFinder::process(const QList<ImageInfo>& source)
 {
     QSet<qlonglong> ids;
 
@@ -312,7 +297,11 @@ void DIO::processJob(IOJobData* const data)
     {
         qCDebug(DIGIKAM_DATABASE_LOG) << "Number of files to be deleted:" << data->sourceUrls().count();
     }
-    else if (operation == IOJobData::Rename)
+
+    SidecarFinder finder(data->sourceUrls());
+    data->setSourceUrls(finder.localFiles);
+
+    if (operation == IOJobData::Rename)
     {
         PAlbum* const album = AlbumManager::instance()->findPAlbum(data->imageInfo().albumId());
 
@@ -322,22 +311,13 @@ void DIO::processJob(IOJobData* const data)
                                                                album, data->destUrl().fileName());
         }
 
-        SidecarFinder finder(data->srcUrl());
-        data->setSourceUrls(finder.localFiles);
-
         for (int i = 0 ; i < finder.localFiles.length() ; ++i)
         {
             data->setDestUrl(finder.localFiles.at(i),
                              QUrl::fromLocalFile(data->destUrl().toLocalFile() +
                                                  finder.localFileSuffixes.at(i)));
         }
-
-        createJob(data);
-        return;
     }
-
-    SidecarFinder finder(data->sourceUrls());
-    data->setSourceUrls(finder.localFiles);
 
     createJob(data);
 }
