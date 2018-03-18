@@ -1,0 +1,52 @@
+*****************************************************************************************************
+digiKam 5.9.0 - Release date: 2018-03-18
+
+NEW FEATURES:
+
+General      : Libraw updated to last 0.18.8.
+
+BUGFIXES FROM BUGZILLA:
+
+001 ==> 388977 - Error during upgrading core database schema from v8 to v9.
+002 ==> 388867 - problem migrating databaseschema from 8 to 9.
+003 ==> 388824 - UpdateSchemaFromV7ToV9 fails due to foreign key contraint in 5.8.0-01.
+004 ==> 389042 - Auto-rotation/flip Images delete face tags.
+005 ==> 337243 - Tool-Tips ignoring custom font size setting.
+006 ==> 388320 - Selecting print layout does not stay selected.
+007 ==> 389246 - Single click confirmation of suggested face tag.
+008 ==> 389208 - Request addition of "Lens" to Tool-Tips (Icon Items).
+009 ==> 389342 - Tags are copied although moving of file fails because file with the same name already exists in target location.
+010 ==> 389420 - Thumbnails diminishing in size after switching Views.
+011 ==> 389493 - Collection browse dialog should be consistent with other browse dialogs on KDE.
+012 ==> 389512 - Timeline Thumbnails Not Shown.
+013 ==> 389651 - Custom font size is not applied until you enter and exit the settings menu.
+014 ==> 388345 - AppImage MySQL connection issues.
+015 ==> 389827 - Ignores albums selection.
+016 ==> 389835 - Incorrect DateTime manipulation if timestamp is before unix epoch time.
+017 ==> 390121 - Thumbnail size is too small.
+018 ==> 390136 - digiKam crashes when launching scan and recognize faces.
+019 ==> 390325 - Segmentation fault - QMutex::lock().
+020 ==> 390443 - FAQ entry unaccurate - Thumbnail generation fails on video files.
+021 ==> 390529 - Import from scanner not enabled.
+022 ==> 390683 - Batch processing creates 0 byte files on Fujifilm RAF RAW images with lens correction.
+023 ==> 390688 - Show pick and color label in thumbnail list [patch].
+024 ==> 390162 - digiKam-5.9.0 appimage fail to start.
+025 ==> 384853 - Ungrouping images is not working.
+026 ==> 390902 - Right sidebar icons not displayed.
+027 ==> 391312 - Rename with time template can add colons (:) forbidden character in Windows 10.
+028 ==> 386921 - Import Sony video metadata from sidecar file.
+029 ==> 377133 - Multiple tags don't display in video metadata.
+030 ==> 389619 - digiKam does not read from sidecars for video/mp4.
+031 ==> 375570 - XMP sidecar files are not read for videos when importing metadata.
+032 ==> 374684 - Crash in Digikam when importing from SD card via reader.
+033 ==> 381586 - Crash after tagging ~5 images.
+034 ==> 339803 - digiKam crashes frequently on batch rename.
+035 ==> 346698 - Delete Duplicate on NAS - Crash.
+036 ==> 379420 - Showphoto crashed after resize.
+037 ==> 391440 - Metadata (date) is not refreshed after a file has been modified.
+038 ==> 391497 - digiKam crashes when manually stopping database sync.
+039 ==> 391627 - Select to run Face Detection, process indicator stets to increase. Some time later return to find computer has crashed and needs power off reset.
+040 ==> 391397 - File rename allows for month number >12.
+041 ==> 365725 - Menus in Ubuntu Unity 16.04 is show twice. This is when Unity is tweaked to show menus in the windows titlebar instead of the menu bar.
+042 ==> 391744 - Can't import network share with non-ascii character in path.
+043 ==> 380220 - On windows cannot use shared folders with non-ascii name.
