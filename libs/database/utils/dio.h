@@ -102,7 +102,8 @@ private:
     void processJob(IOJobData* const data);
     void createJob(IOJobData* const data);
 
-    ProgressItem* getProgressItem(int operation);
+    ProgressItem* getProgressItem(int operation) const;
+    QString       getItemString(int operation)   const;
 
 private Q_SLOTS:
 

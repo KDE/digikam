@@ -342,7 +342,7 @@ void DIO::createJob(IOJobData* const data)
 
         if (!item || item->totalCompleted())
         {
-            item = ProgressManager::instance()->createProgressItem(QLatin1String("DIOCopy"),
+            item = ProgressManager::instance()->createProgressItem(getItemString(operation),
                                                                    i18n("Copy"), QString(), true, false);
         }
 
@@ -357,7 +357,7 @@ void DIO::createJob(IOJobData* const data)
 
         if (!item || item->totalCompleted())
         {
-            item = ProgressManager::instance()->createProgressItem(QLatin1String("DIOMove"),
+            item = ProgressManager::instance()->createProgressItem(getItemString(operation),
                                                                    i18n("Move"), QString(), true, false);
         }
 
@@ -380,7 +380,7 @@ void DIO::createJob(IOJobData* const data)
 
         if (!item || item->totalCompleted())
         {
-            item = ProgressManager::instance()->createProgressItem(QLatin1String("DIODelete"),
+            item = ProgressManager::instance()->createProgressItem(getItemString(operation),
                                                                    i18n("Delete"), QString(), true, false);
         }
 
@@ -393,7 +393,7 @@ void DIO::createJob(IOJobData* const data)
 
         if (!item || item->totalCompleted())
         {
-            item = ProgressManager::instance()->createProgressItem(QLatin1String("DIOTrash"),
+            item = ProgressManager::instance()->createProgressItem(getItemString(operation),
                                                                    i18n("Trash"), QString(), true, false);
         }
 
@@ -472,16 +472,49 @@ void DIO::slotResult()
                              DigikamApp::instance()->windowTitle());
     }
 
-    ProgressItem* const item = getProgressItem(operation);
-    slotCancel(item);
+    slotCancel(getProgressItem(operation));
 }
 
-void DIO::slotCancel(ProgressItem* item)
+ProgressItem* DIO::getProgressItem(int operation) const
 {
-    if (item)
+    ProgressItem* item = 0;
+    QString itemString = getItemString(operation);
+
+    if (!itemString.isEmpty())
     {
-        item->setComplete();
+        item = ProgressManager::instance()->findItembyId(itemString);
     }
+
+    return item;
+}
+
+QString DIO::getItemString(int operation) const
+{
+    QString itemString;
+
+    switch (operation)
+    {
+        case IOJobData::CopyAlbum:
+        case IOJobData::CopyImage:
+        case IOJobData::CopyFiles:
+            itemString = QLatin1String("DIOCopy");
+            break;
+        case IOJobData::MoveAlbum:
+        case IOJobData::MoveImage:
+        case IOJobData::MoveFiles:
+            itemString = QLatin1String("DIOMove");
+            break;
+        case IOJobData::Trash:
+            itemString = QLatin1String("DIOTrash");
+            break;
+        case IOJobData::Delete:
+            itemString = QLatin1String("DIODelete");
+            break;
+        default:
+            break;
+    }
+
+    return itemString;
 }
 
 void DIO::slotOneProccessed(int operation)
@@ -494,33 +527,12 @@ void DIO::slotOneProccessed(int operation)
     }
 }
 
-ProgressItem* DIO::getProgressItem(int operation)
+void DIO::slotCancel(ProgressItem* item)
 {
-    ProgressItem* item = 0;
-
-    switch (operation)
+    if (item)
     {
-        case IOJobData::CopyAlbum:
-        case IOJobData::CopyImage:
-        case IOJobData::CopyFiles:
-            item = ProgressManager::instance()->findItembyId(QLatin1String("DIOCopy"));
-            break;
-        case IOJobData::MoveAlbum:
-        case IOJobData::MoveImage:
-        case IOJobData::MoveFiles:
-            item = ProgressManager::instance()->findItembyId(QLatin1String("DIOMove"));
-            break;
-        case IOJobData::Trash:
-            item = ProgressManager::instance()->findItembyId(QLatin1String("DIOTrash"));
-            break;
-        case IOJobData::Delete:
-            item = ProgressManager::instance()->findItembyId(QLatin1String("DIODelete"));
-            break;
-        default:
-            break;
+        item->setComplete();
     }
-
-    return item;
 }
 
 } // namespace Digikam
