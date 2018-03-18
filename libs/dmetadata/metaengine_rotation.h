@@ -113,6 +113,6 @@ protected:
     int m[2][2];
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // META_ENGINE_ROTATION_H
+#endif // META_ENGINE_ROTATION_H

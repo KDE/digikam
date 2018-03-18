@@ -61,4 +61,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* META_ENGINE_DATA_H */
+#endif // META_ENGINE_DATA_H

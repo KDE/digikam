@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATASETTINGS_H
-#define METADATASETTINGS_H
+#ifndef METADATA_SETTINGS_H
+#define METADATA_SETTINGS_H
 
 // Qt includes
 
@@ -84,4 +84,4 @@ private:
 
 }  // namespace Digikam
 
-#endif   // METADATASETTINGS_H
+#endif // METADATA_SETTINGS_H

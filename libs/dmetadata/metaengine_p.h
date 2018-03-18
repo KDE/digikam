@@ -131,21 +131,21 @@ public:
 
     void copyPrivateData(const Private* const other);
 
-    bool saveToXMPSidecar(const QFileInfo& finfo)                            const;
-    bool saveToFile(const QFileInfo& finfo)                                  const;
-    bool saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoPtr image) const;
+    bool saveToXMPSidecar(const QFileInfo& finfo)                                 const;
+    bool saveToFile(const QFileInfo& finfo)                                       const;
+    bool saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoPtr image)      const;
 
     /** Wrapper method to convert a Comments content to a QString.
      */
-    QString convertCommentValue(const Exiv2::Exifdatum& exifDatum) const;
+    QString convertCommentValue(const Exiv2::Exifdatum& exifDatum)                const;
 
     /** Charset autodetection to convert a string to a QString.
      */
-    QString detectEncodingAndDecode(const std::string& value)      const;
+    QString detectEncodingAndDecode(const std::string& value)                     const;
 
     /** UTF8 autodetection from a string.
      */
-    bool isUtf8(const char* const buffer)                          const;
+    bool isUtf8(const char* const buffer)                                         const;
 
     int getXMPTagsListFromPrefix(const QString& pf, MetaEngine::TagsMap& tagsMap) const;
 
@@ -170,12 +170,12 @@ public:
 public:
 
     /** Generic method to print the Exiv2 C++ Exception error message from 'e'.
-     *  'msg' string is printed using kDebug rules..
+     *  'msg' string is printed using qDebug rules.
      */
     static void printExiv2ExceptionError(const QString& msg, Exiv2::Error& e);
 
     /** Generic method to print debug message from Exiv2.
-     *  'msg' string is printed using kDebug rules. 'lvl' is the debug level of Exiv2 message.
+     *  'msg' string is printed using qDebug rules. 'lvl' is the debug level of Exiv2 message.
      */
     static void printExiv2MessageHandler(int lvl, const char* msg);
 
@@ -216,7 +216,7 @@ public:
     }
 
     /**
-      * Merge two (Exif,IPTC,Xmp)Data packages, where the result is stored in dest
+      * Merge two (Exif,IPTC,Xmp) Data packages, where the result is stored in dest
       * and fields from src take precedence over existing data from dest.
       */
     void mergeAll(const Data& src, Data& dest)
@@ -237,7 +237,7 @@ public:
     }
 
     /**
-     * Merge two (Exif,IPTC,Xmp)Data packages, the result is stored in dest.
+     * Merge two (Exif,IPTC,Xmp) Data packages, the result is stored in dest.
      * Only keys in keys are considered for merging.
      * Fields from src take precedence over existing data from dest.
      */
@@ -267,7 +267,7 @@ public:
     }
 
     /**
-     * Merge two (Exif,IPTC,Xmp)Data packages, the result is stored in dest.
+     * Merge two (Exif,IPTC,Xmp) Data packages, the result is stored in dest.
      * The following steps apply only to keys in "keys":
      * The result is determined by src.
      * Keys must exist in src to kept in dest.

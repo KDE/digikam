@@ -282,6 +282,6 @@ private:
     QString getExifTagStringFromTagsList(const QStringList& tagsList)                   const;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DMETADATA_H

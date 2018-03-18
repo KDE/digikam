@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATASETTINGSCONTAINER_H
-#define METADATASETTINGSCONTAINER_H
+#ifndef METADATA_SETTINGS_CONTAINER_H
+#define METADATA_SETTINGS_CONTAINER_H
 
 // Qt includes
 
@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT MetadataSettingsContainer
 {
 public:
 
-    MetadataSettingsContainer();
+    explicit MetadataSettingsContainer();
     ~MetadataSettingsContainer()
     {
     };
@@ -109,8 +109,8 @@ public:
     QStringList                     sidecarExtensions;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetadataSettingsContainer::RotationBehaviorFlags)
 
-#endif  // METADATASETTINGSCONTAINER_H
+#endif // METADATA_SETTINGS_CONTAINER_H

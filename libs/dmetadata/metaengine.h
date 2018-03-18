@@ -1073,4 +1073,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* META_ENGINE_H */
+#endif // META_ENGINE_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GEODETICTOOLS_H
-#define GEODETICTOOLS_H
+#ifndef GEODETIC_TOOLS_H
+#define GEODETIC_TOOLS_H
 
 // C++ includes
 
@@ -549,4 +549,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // GEODETICTOOLS_H
+#endif // GEODETIC_TOOLS_H
