@@ -46,16 +46,17 @@ public:
 
 enum Operation
 {
-    CopyAlbum = 1 << 0,
-    CopyImage = 1 << 1,
-    CopyFiles = 1 << 2,
-    MoveAlbum = 1 << 3,
-    MoveImage = 1 << 4,
-    MoveFiles = 1 << 5,
-    Rename    = 1 << 6,
-    Delete    = 1 << 7,
-    DFiles    = 1 << 8, // not mark as obsolete in the database
-    Trash     = 1 << 9
+    Unknown=0,
+    CopyAlbum,
+    CopyImage,
+    CopyFiles,
+    MoveAlbum,
+    MoveImage,
+    MoveFiles,
+    Rename,
+    Delete,
+    DFiles, // not mark as obsolete in the database
+    Trash
 };
 
     explicit IOJobData(int operation,
