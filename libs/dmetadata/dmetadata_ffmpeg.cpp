@@ -369,8 +369,38 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             setXmpTagString("Xmp.video.ColorSpace",
                  videoColorModelToString(codec->color_space));
-            setXmpTagString("Xmp.xmpDM.videoColorSpace",
-                 videoColorModelToString(codec->color_space));
+
+            // See XMP Dynamic Media properties from Adobe.
+            // Video Color Space is a limited untranslated string choice depending of video color space value.
+
+            data = QString();
+
+            switch (codec->color_space)
+            {
+                case AVCOL_SPC_UNSPECIFIED:
+                case AVCOL_SPC_RESERVED:
+                case AVCOL_SPC_NB:
+                    break;
+                case AVCOL_SPC_RGB:
+                    data = QLatin1String("sRGB");
+                    break;
+                case AVCOL_SPC_BT470BG:
+                case AVCOL_SPC_SMPTE170M:
+                case AVCOL_SPC_SMPTE240M:
+                    data = QLatin1String("CCIR-601");
+                    break;
+                case AVCOL_SPC_BT709:
+                    data = QLatin1String("CCIR-709");
+                    break;
+                default:
+                    data = QLatin1String("Other");
+                    break;
+            }
+
+            if (!data.isEmpty())
+            {
+                setXmpTagString("Xmp.xmpDM.videoColorSpace", data);
+            }
 
             // ----------
 
