@@ -141,6 +141,44 @@ qint64 s_secondsSinceJanuary1904(const QDateTime dt)
 
 #ifdef HAVE_MEDIAPLAYER
 
+QString s_convertFFMpegFormatToXMP(int format)
+{
+    QString data;
+
+    switch (format)
+    {
+        case AV_SAMPLE_FMT_U8:
+        case AV_SAMPLE_FMT_U8P:
+            data = QLatin1String("8Int");
+            break;
+        case AV_SAMPLE_FMT_S16:
+        case AV_SAMPLE_FMT_S16P:
+            data = QLatin1String("16Int");
+            break;
+        case AV_SAMPLE_FMT_S32:
+        case AV_SAMPLE_FMT_S32P:
+            data = QLatin1String("32Int");
+            break;
+        case AV_SAMPLE_FMT_FLT:
+        case AV_SAMPLE_FMT_FLTP:
+            data = QLatin1String("32Float");
+            break;
+        case AV_SAMPLE_FMT_DBL:     // Not supported by XMP spec.
+        case AV_SAMPLE_FMT_DBLP:    // Not supported by XMP spec.
+        case AV_SAMPLE_FMT_S64:     // Not supported by XMP spec.
+        case AV_SAMPLE_FMT_S64P:    // Not supported by XMP spec.
+        case AV_SAMPLE_FMT_NONE:
+        case AV_SAMPLE_FMT_NB:
+        default:
+            data = QLatin1String("Other");
+            break;
+
+        // NOTE: where are 'Compressed' and 'Packed' type from XMP spec into FFMPEG ?
+    }
+
+    return data;
+}
+
 DMetadata::MetaDataMap s_extractFFMpegMetadataEntriesFromDictionary(AVDictionary* const dict)
 {
     AVDictionaryEntry* entry = 0;
@@ -271,38 +309,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             // See XMP Dynamic Media properties from Adobe.
             // Audio Sample type is a limited untranslated string choice depending of amount of audio samples 
 
-            data = QString();
-
-            switch (codec->format)
-            {
-                case AV_SAMPLE_FMT_U8:
-                case AV_SAMPLE_FMT_U8P:
-                    data = QLatin1String("8Int");
-                    break;
-                case AV_SAMPLE_FMT_S16:
-                case AV_SAMPLE_FMT_S16P:
-                    data = QLatin1String("16Int");
-                    break;
-                case AV_SAMPLE_FMT_S32:
-                case AV_SAMPLE_FMT_S32P:
-                    data = QLatin1String("32Int");
-                    break;
-                case AV_SAMPLE_FMT_FLT:
-                case AV_SAMPLE_FMT_FLTP:
-                    data = QLatin1String("32Float");
-                    break;
-                case AV_SAMPLE_FMT_DBL:     // Not supported by XMP spec.
-                case AV_SAMPLE_FMT_DBLP:    // Not supported by XMP spec.
-                case AV_SAMPLE_FMT_S64:     // Not supported by XMP spec.
-                case AV_SAMPLE_FMT_S64P:    // Not supported by XMP spec.
-                case AV_SAMPLE_FMT_NONE:
-                case AV_SAMPLE_FMT_NB:
-                default:
-                    data = QLatin1String("Other");
-                    break;
-
-                // NOTE: where are 'Compressed' and 'Packed' type from XMP spec into FFMPEG ?
-            }
+            data = s_convertFFMpegFormatToXMP(codec->format);
 
             if (!data.isEmpty())
             {
@@ -487,7 +494,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             if (frameRate != -1.0)
             {
-                setXmpTagString("Xmp.video.FrameRate",      QString::number(frameRate));
+                setXmpTagString("Xmp.video.FrameRate", QString::number(frameRate));
 
                 // See XMP Dynamic Media properties from Adobe.
                 // Video Color Space is a limited untranslated string choice depending of video frame rate.
@@ -506,8 +513,15 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 setXmpTagString("Xmp.xmpDM.videoFrameRate", data);
             }
 
-            setXmpTagString("Xmp.video.BitDepth",        QString::number(codec->bits_per_coded_sample));
-            setXmpTagString("Xmp.xmpDM.videoPixelDepth", QString::number(codec->bits_per_coded_sample));
+            setXmpTagString("Xmp.video.BitDepth", QString::number(codec->bits_per_coded_sample));
+            
+            // See XMP Dynamic Media properties from Adobe.
+            // Video Pixel Depth is a limited untranslated string choice depending of amount of samples format.
+
+            data = s_convertFFMpegFormatToXMP(codec->format);
+
+            if (!data.isEmpty())
+                setXmpTagString("Xmp.xmpDM.videoPixelDepth", data);
 
             // -----------------------------------------
 
