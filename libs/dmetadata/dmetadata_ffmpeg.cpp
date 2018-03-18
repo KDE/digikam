@@ -488,7 +488,22 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
             if (frameRate != -1.0)
             {
                 setXmpTagString("Xmp.video.FrameRate",      QString::number(frameRate));
-                setXmpTagString("Xmp.xmpDM.videoFrameRate", QString::number(frameRate));
+
+                // See XMP Dynamic Media properties from Adobe.
+                // Video Color Space is a limited untranslated string choice depending of video frame rate.
+                // https://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=D%26section=4%26tasks=true
+                
+                data = QLatin1String("Other");
+                
+                if (frameRate == 24.0)
+                    data = QLatin1String("24");
+                else if (frameRate == 23.98 || frameRate == 29.97 ||
+                         frameRate == 30.0  || frameRate == 59.94)
+                    data = QLatin1String("NTSC");
+                else if (frameRate == 25 || frameRate == 50)
+                    data = QLatin1String("PAL");
+                
+                setXmpTagString("Xmp.xmpDM.videoFrameRate", data);
             }
 
             setXmpTagString("Xmp.video.BitDepth",        QString::number(codec->bits_per_coded_sample));
