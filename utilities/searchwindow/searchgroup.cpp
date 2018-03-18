@@ -445,7 +445,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
 
     // leave styling to style sheet (by object name)
 
-    QLabel* const mainLabel = new QLabel(i18n("Find Pictures"));
+    QLabel* const mainLabel = new QLabel(i18n("Find Items"));
     mainLabel->setObjectName(QLatin1String("SearchGroupLabel_MainLabel"));
 
     // Use radio button with a separate label to fix styling problem, see bug 195809
@@ -493,7 +493,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
         QLabel* const simpleLabel1      = new QLabel;
         //simpleLabel->setText(i18n("Find Pictures meeting all of these conditions"));
         //simpleLabel->setPixmap(QIcon::fromTheme(QLatin1String("edit-find")).pixmap(128));
-        simpleLabel1->setText(i18n("<qt><p>Search your collection<br/>for pictures meeting the following conditions</p></qt>"));
+        simpleLabel1->setText(i18n("<qt><p>Search your collection<br/>for Items meeting the following conditions</p></qt>"));
         simpleLabel1->setObjectName(QLatin1String("SearchGroupLabel_SimpleLabel"));
         headerLayout->addStretch(3);
         headerLayout->addWidget(simpleLabel1);
@@ -503,9 +503,9 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
 
         QWidget* const optionsBox        = new QWidget;
         QGridLayout* const optionsLayout = new QGridLayout;
-        optionsLayout->addLayout(new RadioButtonHBox(d->allBox, allBoxLabel, layoutDirection()),       0, 0);
-        optionsLayout->addLayout(new RadioButtonHBox(d->anyBox, anyBoxLabel, layoutDirection()),       1, 0);
-        optionsLayout->addLayout(new RadioButtonHBox(d->noneBox, noneBoxLabel, layoutDirection()),     0, 1);
+        optionsLayout->addLayout(new RadioButtonHBox(d->allBox,    allBoxLabel,    layoutDirection()), 0, 0);
+        optionsLayout->addLayout(new RadioButtonHBox(d->anyBox,    anyBoxLabel,    layoutDirection()), 1, 0);
+        optionsLayout->addLayout(new RadioButtonHBox(d->noneBox,   noneBoxLabel,   layoutDirection()), 0, 1);
         optionsLayout->addLayout(new RadioButtonHBox(d->oneNotBox, oneNotBoxLabel, layoutDirection()), 1, 1);
         optionsLayout->setContentsMargins(QMargins());
         optionsBox->setLayout(optionsLayout);

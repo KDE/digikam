@@ -84,7 +84,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldAlbum* const field = new SearchFieldAlbum(parent, SearchFieldAlbum::TypeAlbum);
         field->setFieldName(name);
-        field->setText(i18n("Album"), i18n("Search pictures located in"));
+        field->setText(i18n("Album"), i18n("Search items located in"));
         return field;
     }
     else if (name == QLatin1String("albumname"))
@@ -128,14 +128,14 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldAlbum* const field = new SearchFieldAlbum(parent, SearchFieldAlbum::TypeTag);
         field->setFieldName(name);
-        field->setText(i18n("Tags"), i18n("Return pictures with tag"));
+        field->setText(i18n("Tags"), i18n("Return items with tag"));
         return field;
     }
     else if (name == QLatin1String("tagname"))
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Tags"), i18n("A tag of the picture contains"));
+        field->setText(i18n("Tags"), i18n("A tag of the item contains"));
         return field;
     }
     else if (name == QLatin1String("notag"))
@@ -146,7 +146,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         */
         SearchFieldCheckBox* const field = new SearchFieldCheckBox(parent);
         field->setFieldName(name);
-        field->setText(i18n("Tags"), i18n("Image has no tags"));
+        field->setText(i18n("Tags"), i18n("item has no tags"));
         field->setLabel(i18n("Not Tagged"));
         return field;
     }
@@ -154,15 +154,15 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("File Name"), i18n("Return pictures whose file name contains"));
+        field->setText(i18n("File Name"), i18n("Return items whose file name contains"));
         return field;
     }
     else if (name == QLatin1String("modificationdate"))
     {
         SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateTime);
         field->setFieldName(name);
-        field->setText(i18n("Modification"), i18n("Return pictures modified between"));
-        field->setBetweenText(i18nc("'Return pictures modified between...and...", "and"));
+        field->setText(i18n("Modification"), i18n("Return items modified between"));
+        field->setBetweenText(i18nc("'Return items modified between...and...", "and"));
         return field;
     }
     else if (name == QLatin1String("filesize"))
@@ -180,31 +180,31 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldLabels* const field = new SearchFieldLabels(parent);
         field->setFieldName(name);
-        field->setText(i18n("Labels"), i18n("Return pictures with labels"));
+        field->setText(i18n("Labels"), i18n("Return items with labels"));
         return field;
     }
     else if (name == QLatin1String("rating"))
     {
         SearchFieldRating* const field = new SearchFieldRating(parent);
         field->setFieldName(name);
-        field->setText(i18n("Rating"), i18n("Return pictures rated at least"));
-        field->setBetweenText(i18nc("Return pictures rated at least...at most...", "at most"));
+        field->setText(i18n("Rating"), i18n("Return items rated at least"));
+        field->setBetweenText(i18nc("Return items rated at least...at most...", "at most"));
         return field;
     }
     else if (name == QLatin1String("creationdate"))
     {
         SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateTime);
         field->setFieldName(name);
-        field->setText(i18n("Date"), i18n("Return pictures created between"));
-        field->setBetweenText(i18nc("'Return pictures created between...and...", "and"));
+        field->setText(i18n("Date"), i18n("Return items created between"));
+        field->setBetweenText(i18nc("'Return items created between...and...", "and"));
         return field;
     }
     else if (name == QLatin1String("digitizationdate"))
     {
         SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateTime);
         field->setFieldName(name);
-        field->setText(i18n("Digitization"), i18n("Return pictures digitized between"));
-        field->setBetweenText(i18nc("'Return pictures digitized between...and...", "and"));
+        field->setText(i18n("Digitization"), i18n("Return items digitized between"));
+        field->setBetweenText(i18nc("'Return items digitized between...and...", "and"));
         return field;
     }
     else if (name == QLatin1String("orientation"))
@@ -212,7 +212,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         //choice
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Exif Orientation"), i18n("Find pictures with orientation flag"));
+        field->setText(i18n("Exif Orientation"), i18n("Find items with orientation flag"));
         QMap<int, QString> map = DMetadata::possibleValuesForEnumField(MetadataInfo::Orientation);
         field->setChoice(map);
         return field;
@@ -225,8 +225,8 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
-        field->setText(i18n("Width"), i18n("Find pictures with a width between"));
-        field->setBetweenText(i18nc("Find pictures with a width between...and...", "and"));
+        field->setText(i18n("Width"), i18n("Find items with a width between"));
+        field->setBetweenText(i18nc("Find items with a width between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
         field->setBoundary(1, 1000000, 250);
         field->setSuggestedValues(QList<int>()
@@ -242,8 +242,8 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
-        field->setText(i18n("Height"), i18n("Find pictures with a height between"));
-        field->setBetweenText(i18nc("Find pictures with a height between...and...", "and"));
+        field->setText(i18n("Height"), i18n("Find items with a height between"));
+        field->setBetweenText(i18nc("Find items with a height between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
         field->setBoundary(1, 1000000, 250);
         field->setSuggestedValues(QList<int>()
@@ -259,8 +259,8 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldPageOrientation* const field = new SearchFieldPageOrientation(parent);
         field->setFieldName(name);
-        field->setText(i18n("Orientation"), i18nc("Find pictures with any orientation / landscape / portrait orientation...",
-                                                  "Find pictures with"));
+        field->setText(i18n("Orientation"), i18nc("Find items with any orientation / landscape / portrait orientation...",
+                                                  "Find items with"));
         return field;
     }
     else if (name == QLatin1String("format"))
@@ -268,10 +268,26 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         //choice
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("File Format"), i18n("Return pictures with the image file format"));
-        QStringList formats = CoreDbAccess().db()->getFormatStatistics().keys();
-        formats += formats;
+        field->setText(i18n("File Format"), i18n("Return items with the file format"));
+        QStringList formats;
+
+        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Image).keys())
+            formats << fmt << i18n("%1 [Image]", fmt);
+
+        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Video).keys())
+            formats << fmt << i18n("%1 [Video]", fmt);
+
+        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Audio).keys())
+            formats << fmt << i18n("%1 [Audio]", fmt);
+
+/* FIXME: This can report 2 times JPG : one as image, one as other. Where is the problem ?
+        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Other).keys())
+            formats << fmt << i18n("%1 [Other]", fmt);
+*/
         formats.sort();
+        
+        qCDebug(DIGIKAM_GENERAL_LOG) << formats;
+
         field->setChoice(formats);
         return field;
     }
@@ -280,7 +296,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         //choice
         SearchFieldColorDepth* const field = new SearchFieldColorDepth(parent);
         field->setFieldName(name);
-        field->setText(i18n("Color Depth"), i18nc("Find pictures with any color depth / 8 bits per channel...", "Find pictures with"));
+        field->setText(i18n("Color Depth"), i18nc("Find items with any color depth / 8 bits per channel...", "Find items with"));
         return field;
     }
     else if (name == QLatin1String("colormodel"))
@@ -288,17 +304,23 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         //choice
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Color Model"), i18n("Find pictures with the color model"));
+        field->setText(i18n("Color Model"), i18n("Find items with the color model"));
         QMap<int, QString> map;
-        map.insert(DImg::COLORMODELUNKNOWN, DImg::colorModelToString(DImg::COLORMODELUNKNOWN));
-        map.insert(DImg::RGB,               DImg::colorModelToString(DImg::RGB));
-        map.insert(DImg::GRAYSCALE,         DImg::colorModelToString(DImg::GRAYSCALE));
-        map.insert(DImg::MONOCHROME,        DImg::colorModelToString(DImg::MONOCHROME));
-        map.insert(DImg::INDEXED,           DImg::colorModelToString(DImg::INDEXED));
-        map.insert(DImg::YCBCR,             DImg::colorModelToString(DImg::YCBCR));
-        map.insert(DImg::CMYK,              DImg::colorModelToString(DImg::CMYK));
-        map.insert(DImg::CIELAB,            DImg::colorModelToString(DImg::CIELAB));
-        map.insert(DImg::COLORMODELRAW,     DImg::colorModelToString(DImg::COLORMODELRAW));
+        // Images
+        map.insert(DImg::COLORMODELUNKNOWN,          i18n("%1 [Image]", DImg::colorModelToString(DImg::COLORMODELUNKNOWN)));
+        map.insert(DImg::RGB,                        i18n("%1 [Image]", DImg::colorModelToString(DImg::RGB)));
+        map.insert(DImg::GRAYSCALE,                  i18n("%1 [Image]", DImg::colorModelToString(DImg::GRAYSCALE)));
+        map.insert(DImg::MONOCHROME,                 i18n("%1 [Image]", DImg::colorModelToString(DImg::MONOCHROME)));
+        map.insert(DImg::INDEXED,                    i18n("%1 [Image]", DImg::colorModelToString(DImg::INDEXED)));
+        map.insert(DImg::YCBCR,                      i18n("%1 [Image]", DImg::colorModelToString(DImg::YCBCR)));
+        map.insert(DImg::CMYK,                       i18n("%1 [Image]", DImg::colorModelToString(DImg::CMYK)));
+        map.insert(DImg::CIELAB,                     i18n("%1 [Image]", DImg::colorModelToString(DImg::CIELAB)));
+        map.insert(DImg::COLORMODELRAW,              i18n("%1 [Image]", DImg::colorModelToString(DImg::COLORMODELRAW)));
+        // Video
+        map.insert(DMetadata::VIDEOCOLORMODEL_SRGB,  i18n("%1 [Video]", DMetadata::videoColorModelToString(DMetadata::VIDEOCOLORMODEL_SRGB)));
+        map.insert(DMetadata::VIDEOCOLORMODEL_BT709, i18n("%1 [Video]", DMetadata::videoColorModelToString(DMetadata::VIDEOCOLORMODEL_BT709)));
+        map.insert(DMetadata::VIDEOCOLORMODEL_BT601, i18n("%1 [Video]", DMetadata::videoColorModelToString(DMetadata::VIDEOCOLORMODEL_BT601)));
+        map.insert(DMetadata::VIDEOCOLORMODEL_OTHER, i18n("%1 [Video]", DMetadata::videoColorModelToString(DMetadata::VIDEOCOLORMODEL_OTHER)));
         field->setChoice(map);
         return field;
     }
@@ -573,7 +595,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldCheckBox* const field = new SearchFieldCheckBox(parent);
         field->setFieldName(name);
-        field->setText(i18n("GPS"), i18n("Image has no GPS info"));
+        field->setText(i18n("GPS"), i18n("Ttem has no GPS info"));
         field->setLabel(i18n("Not Geo-located"));
         return field;
     }
@@ -582,42 +604,42 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Caption"), i18n("Return pictures whose comment contains"));
+        field->setText(i18n("Caption"), i18n("Return items whose comment contains"));
         return field;
     }
     else if (name == QLatin1String("commentauthor"))
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Author"), i18n("Return pictures commented by"));
+        field->setText(i18n("Author"), i18n("Return items commented by"));
         return field;
     }
     else if (name == QLatin1String("headline"))
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Headline"), i18n("Return pictures with the IPTC headline"));
+        field->setText(i18n("Headline"), i18n("Return items with the IPTC headline"));
         return field;
     }
     else if (name == QLatin1String("title"))
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Title"), i18n("Return pictures with the IPTC title"));
+        field->setText(i18n("Title"), i18n("Return items with the IPTC title"));
         return field;
     }
     else if (name == QLatin1String("keyword"))
     {
         SearchFieldText* const field = new SearchFieldKeyword(parent);
         field->setFieldName(name);
-        field->setText(QString(), i18n("Find pictures that have associated all these words:"));
+        field->setText(QString(), i18n("Find items that have associated all these words:"));
         return field;
     }
     else if (name == QLatin1String("aspectratioimg"))
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Aspect Ratio"), i18n("Return pictures with the aspect ratio"));
+        field->setText(i18n("Aspect Ratio"), i18n("Return items with the aspect ratio"));
         return field;
     }
     else if (name == QLatin1String("pixelsize"))
@@ -1984,7 +2006,8 @@ QList<QRect> SearchFieldRangeDouble::valueWidgetRects() const
 
 SearchFieldChoice::SearchFieldChoice(QObject* const parent)
     : SearchField(parent),
-      m_comboBox(0), m_type(QVariant::Invalid)
+      m_comboBox(0),
+      m_type(QVariant::Invalid)
 {
     m_model   = new ChoiceSearchModel(this);
     m_anyText = i18n("Any");
