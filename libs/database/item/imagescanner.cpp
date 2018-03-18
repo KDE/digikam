@@ -1946,9 +1946,8 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
         container->format           = formatToString(imageInformationFields.at(6).toString());
         container->colorDepth       = imageInformationFields.at(7).toInt();
 
-        container->colorModel
-            = (imagesFields.at(1).toInt() == DatabaseItem::Video) ?
-            DMetadata::videoColorModelToString(imageInformationFields.at(8).toInt()) :
+        container->colorModel       = (imagesFields.at(1).toInt() == DatabaseItem::Video) ?
+            DMetadata::videoColorModelToString(imageInformationFields.at(8).toInt())      :
             DImg::colorModelToString((DImg::COLORMODEL)imageInformationFields.at(8).toInt());
     }
 }
