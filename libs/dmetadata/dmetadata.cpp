@@ -231,11 +231,11 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer& settin
         return CaptionsMap();
     }
 
-    CaptionsMap        captionsMap;
+    CaptionsMap            captionsMap;
     MetaEngine::AltLangMap authorsMap;
     MetaEngine::AltLangMap datesMap;
     MetaEngine::AltLangMap commentsMap;
-    QString            commonAuthor;
+    QString                commonAuthor;
 
     // In first try to get captions properties from digiKam XMP namespace
 
@@ -827,7 +827,7 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
         return false;
     }
 
-    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Rating: +++++++++++" << rating;
+    qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Rating:" << rating;
 
     QList<NamespaceEntry> toWrite = settings.getReadMapping(QLatin1String(DM_RATING_CONTAINER));
 
@@ -1294,7 +1294,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath,
                     else if (!entry.alternativeName.isEmpty())
                     {
                         currentNamespace = entry.alternativeName;
-                        currentOpts = entry.secondNameOpts;
+                        currentOpts      = entry.secondNameOpts;
                     }
                     else
                     {
@@ -1686,7 +1686,7 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
     {
         qreal x, y, w, h;
         it.value().toRectF().getRect(&x, &y, &w, &h);
-        qCDebug(DIGIKAM_METAENGINE_LOG) << ">>>>>>>>>>set face meta:" << x << y << w << h;
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Set face region:" << x << y << w << h;
 
         /** Write face tags in Windows Live Photo format **/
 
