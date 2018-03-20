@@ -68,7 +68,7 @@ cd "$DK_BUILDTEMP"
 echo -e "\n\n"
 echo "---------- Downloading digiKam $DK_VERSION"
 
-git clone git://anongit.kde.org/digikam-software-compilation.git digikam-$DK_VERSION
+git clone git://anongit.kde.org/digikam.git digikam-$DK_VERSION
 cd digikam-$DK_VERSION
 export GITSLAVE=".gitslave.bundle"
 ./download-repos
@@ -79,7 +79,6 @@ if [ $? -ne 0 ] ; then
     exit;
 fi
 
-cd ./core
 git checkout $DK_VERSION
 
 echo -e "\n\n"
@@ -101,7 +100,6 @@ cmake3 -G "Unix Makefiles" .. \
       -DDIGIKAMSC_COMPILE_LIBKSANE=OFF \
       -DDIGIKAMSC_COMPILE_LIBMEDIAWIKI=ON \
       -DDIGIKAMSC_COMPILE_LIBKVKONTAKTE=OFF \
-      -DENABLE_OPENCV3=ON \
       -DENABLE_KFILEMETADATASUPPORT=OFF \
       -DENABLE_AKONADICONTACTSUPPORT=OFF \
       -DENABLE_MYSQLSUPPORT=ON \

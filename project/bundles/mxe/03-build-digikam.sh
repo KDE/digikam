@@ -63,7 +63,7 @@ cd "$DK_BUILDTEMP"
 echo -e "\n\n"
 echo "---------- Downloading digiKam $DK_VERSION"
 
-git clone git://anongit.kde.org/digikam-software-compilation.git digikam-$DK_VERSION
+git clone git://anongit.kde.org/digikam.git digikam-$DK_VERSION
 cd digikam-$DK_VERSION
 export GITSLAVE=".gitslave.bundle"
 ./download-repos
@@ -74,7 +74,7 @@ if [ $? -ne 0 ] ; then
     exit;
 fi
 
-git -C ./core checkout $DK_VERSION
+git checkout $DK_VERSION
 
 echo -e "\n\n"
 echo "---------- Configure digiKam $DK_VERSION"
