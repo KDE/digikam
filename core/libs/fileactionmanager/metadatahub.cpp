@@ -47,7 +47,7 @@
 #include "metadatahubmngr.h"
 
 #ifdef HAVE_KFILEMETADATA
-#include "baloowrap.h"
+#   include "baloowrap.h"
 #endif
 
 namespace Digikam
@@ -698,8 +698,9 @@ QMultiMap<QString, QVariant> Digikam::MetadataHub::loadIntegerFaceTags(const Ima
 void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags, QSize size)
 {
     d->faceTagsList.clear();
-    QMultiMap<QString,QVariant>::const_iterator it;
-    for(it = newFaceTags.begin(); it != newFaceTags.end(); it++)
+    QMultiMap<QString, QVariant>::iterator it;
+
+    for(it = newFaceTags.begin() ; it != newFaceTags.end() ; it++)
     {
         QRect  temprect  = it.value().toRect();
         QRectF faceRect  = TagRegion::absoluteToRelative(temprect,size);
