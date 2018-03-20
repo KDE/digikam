@@ -1,52 +1,145 @@
 *****************************************************************************************************
-digiKam 5.9.0 - Release date: 2018-03-18
+digiKam 6.0.0 - Release date: 2018-xx-xx
 
 NEW FEATURES:
 
-General      : Libraw updated to last 0.18.8.
+Image Editor : New clone tool to replace old CImg in-painting tool.
+ImageEditor  : Add Web services Import and Export tools.
+Showfoto     : Add Web services Import and Export tools.
+LightTable   : Add Web services Import and Export tools.
+General      : New video metadata parser based on libav to populate database.
 
 BUGFIXES FROM BUGZILLA:
 
-001 ==> 388977 - Error during upgrading core database schema from v8 to v9.
-002 ==> 388867 - problem migrating databaseschema from 8 to 9.
-003 ==> 388824 - UpdateSchemaFromV7ToV9 fails due to foreign key contraint in 5.8.0-01.
-004 ==> 389042 - Auto-rotation/flip Images delete face tags.
-005 ==> 337243 - Tool-Tips ignoring custom font size setting.
-006 ==> 388320 - Selecting print layout does not stay selected.
-007 ==> 389246 - Single click confirmation of suggested face tag.
-008 ==> 389208 - Request addition of "Lens" to Tool-Tips (Icon Items).
-009 ==> 389342 - Tags are copied although moving of file fails because file with the same name already exists in target location.
-010 ==> 389420 - Thumbnails diminishing in size after switching Views.
-011 ==> 389493 - Collection browse dialog should be consistent with other browse dialogs on KDE.
-012 ==> 389512 - Timeline Thumbnails Not Shown.
-013 ==> 389651 - Custom font size is not applied until you enter and exit the settings menu.
-014 ==> 388345 - AppImage MySQL connection issues.
-015 ==> 389827 - Ignores albums selection.
-016 ==> 389835 - Incorrect DateTime manipulation if timestamp is before unix epoch time.
-017 ==> 390121 - Thumbnail size is too small.
-018 ==> 390136 - digiKam crashes when launching scan and recognize faces.
-019 ==> 390325 - Segmentation fault - QMutex::lock().
-020 ==> 390443 - FAQ entry unaccurate - Thumbnail generation fails on video files.
-021 ==> 390529 - Import from scanner not enabled.
-022 ==> 390683 - Batch processing creates 0 byte files on Fujifilm RAF RAW images with lens correction.
-023 ==> 390688 - Show pick and color label in thumbnail list [patch].
-024 ==> 390162 - digiKam-5.9.0 appimage fail to start.
-025 ==> 384853 - Ungrouping images is not working.
-026 ==> 390902 - Right sidebar icons not displayed.
-027 ==> 391312 - Rename with time template can add colons (:) forbidden character in Windows 10.
-028 ==> 386921 - Import Sony video metadata from sidecar file.
-029 ==> 377133 - Multiple tags don't display in video metadata.
-030 ==> 389619 - digiKam does not read from sidecars for video/mp4.
-031 ==> 375570 - XMP sidecar files are not read for videos when importing metadata.
-032 ==> 374684 - Crash in Digikam when importing from SD card via reader.
-033 ==> 381586 - Crash after tagging ~5 images.
-034 ==> 339803 - digiKam crashes frequently on batch rename.
-035 ==> 346698 - Delete Duplicate on NAS - Crash.
-036 ==> 379420 - Showphoto crashed after resize.
-037 ==> 391440 - Metadata (date) is not refreshed after a file has been modified.
-038 ==> 391497 - digiKam crashes when manually stopping database sync.
-039 ==> 391627 - Select to run Face Detection, process indicator stets to increase. Some time later return to find computer has crashed and needs power off reset.
-040 ==> 391397 - File rename allows for month number >12.
-041 ==> 365725 - Menus in Ubuntu Unity 16.04 is show twice. This is when Unity is tweaked to show menus in the windows titlebar instead of the menu bar.
-042 ==> 391744 - Can't import network share with non-ascii character in path.
-043 ==> 380220 - On windows cannot use shared folders with non-ascii name.
+001 ==> 172650 - No export tools available.
+002 ==> 149591 - The export menu is blank.
+003 ==> 300424 - Export tools not detected.
+004 ==> 327743 - MediaWiki export not displayed.
+005 ==> 348146 - Export tools configuration module.
+006 ==> 243275 - Crashing when calling configuration.
+007 ==> 257134 - Crashes when entering its settings.
+008 ==> 230666 - Crash during start.
+009 ==> 306698 - Crashes after update to KDE.
+010 ==> 207640 - Crashes immediately at startup, sometimes at closing.
+011 ==> 245628 - Crash when enabling/disabling Facebook import/export.
+012 ==> 097317 - sigsegv [New Thread 1100241184 (LWP 5665)].
+013 ==> 245776 - Crashes when selecting Settings.
+014 ==> 245775 - Crashes even without export tools installed.
+015 ==> 254283 - Crash as soon as i click settings.
+016 ==> 255733 - crash when reopening configuration dialog.
+017 ==> 262050 - Crash after new install and scan to mysql database.
+018 ==> 263871 - Crashed after searching for duplicates.
+019 ==> 268242 - Crashes after I clicked on 'Settings'.
+020 ==> 276882 - Add export tool buttons to toolbar.
+021 ==> 284801 - Export to picasaweb crashes.
+022 ==> 277669 - Crash after files moved.
+023 ==> 281250 - Crash after disabling Export tools.
+024 ==> 202637 - Crash trying to start export tool.
+025 ==> 306693 - after update to KDE host application crashes on startup.
+026 ==> 282781 - Crashes when reopening configuration dialog after disabling export tools.
+027 ==> 285499 - Crash when settings window opened.
+028 ==> 297629 - Crashed when importing from Nikon P7000.
+029 ==> 303338 - Crashes when clicking "send to" button.
+030 ==> 307619 - Refuses to load Export tools.
+031 ==> 311812 - Export tools not loading, SO version not defined.
+032 ==> 313186 - Crashes on attempt to use the "Send to" menu.
+033 ==> 313356 - Crashed when clicking the "send to" button.
+034 ==> 313577 - Crashes when pressing the "send to" button.
+035 ==> 313890 - Crash when clicking "Send to...".
+036 ==> 315033 - Crashes on pressing Send To... button.
+037 ==> 315914 - The facebook tool crashes everytime on initialization.
+038 ==> 326556 - Export tools are not loaded when starting host application for second time.
+039 ==> 095175 - crash on loading, signal 11 SIGSEGV.
+040 ==> 175844 - Crashes at startup loading Export tools.
+041 ==> 306511 - Crash during start.
+042 ==> 234021 - Crash on loading.
+043 ==> 219772 - Opening the application causes crash.
+044 ==> 294173 - Crash after Image resize start.
+045 ==> 306881 - Crashed when attempting to open Export tools.
+046 ==> 306495 - Crash changing settings linux ubuntu lucid.
+047 ==> 306497 - Crash after changing settings segmentation fault possible 2nd report?
+048 ==> 185470 - "Import from facebook" is listed twice in import menu.
+049 ==> 334045 - MediaWiki option not available in Export menu when plugin activated.
+050 ==> 142112 - Can't save on my webspace with ShowFoto.
+051 ==> 167417 - Showfoto cannot save files of CIFS mount.
+052 ==> 125164 - Flickr export tool should respect host application selection.
+053 ==> 238927 - Host application quits when uploading to Flickr.
+054 ==> 326740 - Selection of tools is set to default after each update.
+055 ==> 233063 - Add progress indicator when moving or copy files [patch].
+056 ==> 361829 - Rotated MP4 video with "Orientation" flag are not played back in the correct rotation angle.
+057 ==> 329854 - digiKam doesn't rotate video thumbnail.
+058 ==> 376661 - When importing ~200,000 video files Digikam crashes in about 2-5 seconds of starting.
+059 ==> 377072 - Cannot read video metadata.
+060 ==> 374453 - Extract right video date from MP4 files metadata.
+061 ==> 377177 - Geolocation / GPS information doesn't appear in video metadata.
+062 ==> 383588 - Imported video files have time shifted exactly 2 hours later.
+063 ==> 380847 - MP4 video not importing with correct date.
+064 ==> 373682 - geolocalisation filter does not take care of the videos geolocalisation tags.
+065 ==> 340925 - digiKam crash when start it.
+066 ==> 331506 - digiKam crashes on startup.
+067 ==> 335816 - Crash when trying to add a big collection.
+068 ==> 353295 - digiKam repeatedly crashes while importing pictures.
+069 ==> 341433 - Crash when opening digiKam application.
+070 ==> 375562 - digiKam crashes while scanning images into sqlite database.
+071 ==> 334782 - Crash while doing nothing.
+072 ==> 362672 - Crash on start of digiKam.
+073 ==> 341023 - Crash after startup during check for updated images.
+074 ==> 386891 - Crashed while adding pictures.
+075 ==> 342666 - digiKam crashes during find new items.
+076 ==> 341274 - digiKam crash on startup.
+077 ==> 343708 - Crash when scanning album.
+078 ==> 332721 - Crash when reading a certain MP4 video file.
+079 ==> 343736 - Crashes when rebuilding thumbnails from database.
+080 ==> 346356 - digiKam crashes when adding 90.000 pictures to library.
+081 ==> 343714 - digiKam crash when scanning for new items.
+082 ==> 341091 - digiKam crashes when updating the MySQL database of a a hudge photo collection.
+083 ==> 340879 - digiKam crashes after getting unexpected but reasonable output from libexiv2.
+084 ==> 342712 - Crash on collection scanning.
+085 ==> 356704 - digiKam still crashes while scanning a new photo directory and subdirs.
+086 ==> 339269 - Segfault when opening a folder that contains unknown file types (mov, avi, xcf).
+087 ==> 364635 - digiKam crashes on startup.
+088 ==> 357356 - digiKam crash on startup while scanning photos.
+089 ==> 341554 - digiKam crashed by Data-Import from NFS.
+090 ==> 345457 - digiKam crashes at "loading tools".
+091 ==> 349635 - Crash of digiKam - moving album.
+092 ==> 342604 - digiKam crash.
+093 ==> 331450 - Signal 8 on album opening.
+094 ==> 342030 - digiKam crashes when checking an AVI video file using exiv2.
+095 ==> 352777 - Crash during scan.
+096 ==> 352944 - digiKam crashes on start.
+097 ==> 343643 - digiKam crashes while perform initial scanning of custom photo folder.
+098 ==> 342000 - digiKam crash when opening folder with Videos (Album or SD Card import).
+099 ==> 353447 - digiKam crashes when scanning files.
+100 ==> 346807 - Crashes on startup.
+101 ==> 364639 - digiKam crashed while opening database.
+102 ==> 341504 - Crash while using application.
+103 ==> 367691 - Searching for pictures crashes at 30% every time.
+104 ==> 334604 - Crash after changing disk partions.
+105 ==> 351689 - Crash on opening digiKam.
+106 ==> 149267 - digiKam crashes after finding avi and so on.
+107 ==> 170387 - Add movies management.
+108 ==> 369629 - digiKam does not use GPS data from video files.
+109 ==> 367880 - Nexus 5X videos show up upside-down in digiKam.
+110 ==> 330116 - digiKam does not take care about GPS info stored in MP4 video files.
+111 ==> 339150 - digikam crashes when trying to display video file.
+112 ==> 344406 - Crash at start.
+113 ==> 339909 - digiKam Segmentation Fault on open.
+114 ==> 343231 - Crash at scanning for new fotos.
+115 ==> 340373 - Crash on scanning video directory.
+116 ==> 134679 - Video and audio files are not imported.
+117 ==> 375357 - No video preview.
+118 ==> 261773 - Batch renaming does not complete when MP4 video file is processed.
+119 ==> 185915 - Album View: "Created" time of video set to "00:00".
+120 ==> 303218 - digiKam import crashes when you select video files.
+121 ==> 374241 - Bad video date rename.
+122 ==> 375646 - Be able to scan only photo, not video and audio.
+123 ==> 262499 - Cannot rename .AVI files.
+124 ==> 199261 - Import avi movies from sdcard wrong date and no thumbnail.
+125 ==> 181521 - NEF's in descending order, AVI in ascending order in import from SD-card.
+126 ==> 392019 - Two persons can point to the same face tag in pictures.
+127 ==> 392013 - Metadata explorer does not show XMP face rectangles.
+128 ==> 
+
+
+
+
