@@ -4,7 +4,7 @@ This is the digiKam README for developpers
 
 digiKam is an advanced digital photo management application for KDE, which makes importing and organizing digital photos a 'snap'.
 
-This is a super-repository that helps to download and compile digiKam with all components developed by digiKam team.
+This is README will help you to download and compile digiKam with all extra components as documents and translations.
 
 - DEPENDENCIES -------------------------------------------------------------
 
@@ -31,10 +31,6 @@ This is a super-repository that helps to download and compile digiKam with all c
 - COMPONENTS ---------------------------------------------------------------
 
 Redmine project pages can be found here :
-
-* This super repository:
-
-digiKam SC       : https://projects.kde.org/projects/extragear/graphics/digikam/digikam-software-compilation
 
 Code base:
 
