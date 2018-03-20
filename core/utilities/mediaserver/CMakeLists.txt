@@ -48,7 +48,6 @@ set(upnpsdk_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Platinum/Source/Core/PltAct
                  ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Platinum/Source/Devices/MediaRenderer/RenderingControlSCPD.cpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Platinum/Source/Devices/MediaConnect/X_MS_MediaReceiverRegistrarSCPD.cpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Platinum/Source/Devices/MediaConnect/PltMediaConnect.cpp
-                 ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/Core/Neptune.cpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/Core/NptAutomaticCleaner.cpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/Core/NptBase64.cpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/upnpsdk/Neptune/Source/Core/NptBufferedStreams.cpp
