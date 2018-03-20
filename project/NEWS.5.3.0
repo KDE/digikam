@@ -51,4 +51,6 @@ BUGFIXES FROM BUGZILLA:
 038 ==> 369003 - Editor crash.
 039 ==> 366104 - digikam5 "hangs' @ 100%CPU at exit.
 040 ==> 367495 - Geolocation editor and reverse geocoding segmentation fault.
-
+041 ==> 369630 - Unable to export movie to google photo.
+042 ==> 370025 - KMLExport cannot move data to destination directory.
+043 ==> 369639 - Window exceeds available screen space.

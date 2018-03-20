@@ -96,3 +96,6 @@ BUGFIXES FROM BUGZILLA:
 074 ==> 380949 - Bad quality image view.
 075 ==> 377842 - Export slide show as movie.
 076 ==> 379855 - QtAV is not detected but assumed present on MacOS [patch].
+077 ==> 349270 - Missing direct .png image URL.
+078 ==> 377837 - Crashed while using print assistant plugin.
+079 ==> 381026 - Tool piwigo not sort albums.

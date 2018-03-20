@@ -239,3 +239,10 @@ BUGFIXES FROM BUGZILLA:
 191 ==> 323194 - Crash of digiKam by starting as user.
 192 ==> 261397 - digiKam Crashes on Startup.
 193 ==> 323514 - digiKam crashes when viewing a video.
+194 ==> 373434 - No exif data in pictures exported to Flickr.
+195 ==> 374242 - exported photos to Gphoto are rotated.
+196 ==> 374409 - Export to Flickr ignores EXIF Orientation.
+197 ==> 329309 - TIF files appear not in correct orientation in Piwigo.
+198 ==> 374510 - Creating albums on flickr with line breaks in their descriptions fails [patch].
+199 ==> 374442 - Exporting images with line breaks in their captions to flickr fails.
+200 ==> 374293 - Google albums reload button still display albums which have been removed from google photos.

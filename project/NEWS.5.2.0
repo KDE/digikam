@@ -52,3 +52,5 @@ BUGFIXES FROM BUGZILLA:
 038 ==> 366557 - Face detection/recognition options are not persistent.
 039 ==> 365321 - Scan + recognize faces does not work.
 040 ==> 365667 - Face image tagger obscuring image.
+041 ==> 217070 - Share by email fails under MacOSX.
+042 ==> 367711 - Picture size larger than 1600px.

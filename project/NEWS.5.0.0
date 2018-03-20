@@ -3,6 +3,19 @@ digiKam 5.0.0 - Release date: 2016-07-03
 
 NEW FEATURES:
 
+General            : Tool obsolete/unmaintained and removed : BatchProcessImages, JPEGLossLess, Kopete, IpodExport, GalleryExport, RawConverter
+General            : KIOExportImport tool renamed as RemoteStorage.
+General            : FlickrExport toom renamed as Flickr.
+General            : ImageShackExport tool renamed as ImageShack.
+General            : PiwigoExport tool renamed as Piwigo.
+General            : GPSSync tool renamed as Geolocator.
+General            : DNGConverter moved to digiKam core.
+General            : AcquireImages moved to digiKam core.
+General            : MetadataEdit moved to digiKam core.
+General            : Geolocator moved to digiKam core.
+General            : ExpoBlending moved to digiKam core.
+General            : Calendar moved to digiKam core.
+General            : KIO support replaced by native Qt5::Network everywhere (excepted for RemoteStorage tool which is optional).
 General            : Implementations ported to Qt5 libraries and KF5 libraries.
 General            : Integer and double input value sliders use now PhotoShop/Krita/Gimp like widget.
 General            : LCMS1 support removed.
@@ -347,3 +360,69 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 303 ==> 162132 - Crash while saving tiff (possibly caused by present alpha channel).
 304 ==> 221985 - Update histogram before preview.
 305 ==> 204311 - Choice of resizing algorithms in resize dialog along with preview of each.
+306 ==> 348340 - Progress halts when finished resizing images.
+307 ==> 225409 - Gallery tool should save multiples gallery settings.
+308 ==> 229341 - Add export support for Gallery3.
+309 ==> 257166 - Unable to create a new album or upload photos when gallery use https.
+310 ==> 195136 - Hard coded GALLERYSID cookie name breaks compatibility with other G2 API compatible backends.
+311 ==> 257184 - When browsing twice an album, images list contains duplicates.
+312 ==> 094496 - Support for gallery photo addition order override.
+313 ==> 206121 - digiKam export to gallery fails "Failed to login into remote gallery".
+314 ==> 206114 - Connection to remote gallery hangs.
+315 ==> 148521 - Gallery export does not see deep directories.
+316 ==> 202284 - Export problem using port 990.
+317 ==> 332430 - Application crashes when accidentally converting to black and white.
+318 ==> 120501 - Smart rotation (first keystroke 90°, second keystroke 180°).
+319 ==> 315489 - Application crash.
+320 ==> 107723 - Allow to tune batch process priority.
+321 ==> 333734 - Improve image filters preview.
+322 ==> 107541 - Add a process console and scripting support.
+323 ==> 264075 - Usability issues in batch resizing dialog.
+324 ==> 345198 - Batch rename is *extremely* slow.
+325 ==> 252181 - Resizing images: "Start" button hidden after non-existent folder has been selected.
+326 ==> 308019 - Application crash after using Plugins->Collections->Border images.
+327 ==> 125039 - Rename Images cancel button do not cancel but stop.
+328 ==> 126113 - schema of renaming images: resetting counter.
+329 ==> 302714 - Crash when selecting Tools->Image Effects.
+330 ==> 144528 - in a batch process the resize images in 2d produces black images.
+331 ==> 152210 - Metadata lost when converting from png to jpeg (IPTC thumbnail too big).
+332 ==> 152905 - Batch processes does not work properly if target directory is outside Album Library Path.
+333 ==> 203379 - Error while converting RAW images to JPEG.
+334 ==> 161347 - Application doesn't clean properly ~/tmp/kde-username.
+335 ==> 177175 - Resize image prepare to print 9x13 results in wrong.
+336 ==> 213172 - Convert images: png conversion not deterministic.
+337 ==> 289181 - Raw processor rotates images without Orientation EXIF tag.
+338 ==> 211524 - Raw batch converter kipi can't get rid of scroll bar.
+339 ==> 215037 - Batch RAW converter crashed after open with NEF file.
+340 ==> 246437 - digiKam crashes when loading a raw file.
+341 ==> 342687 - Panorama file time-stamps should be the same than the stitched pictures [patch].
+342 ==> 356673 - MediaWiki export doesn't work.
+343 ==> 353626 - Processing of bracketed images fails after the first set is done.
+344 ==> 359257 - Image size spinbox doesn't allow values larger than 99.
+345 ==> 359478 - Flickr export tool crashed on creating new set.
+346 ==> 321647 - Kenburns effect from AdvancedSlideshow forgets to auto-rotate photos.
+347 ==> 356939 - Advanced slide show: playing sound track does not work.
+348 ==> 361329 - Flickr uploader does not clean /tmp after upload.
+349 ==> 353135 - Unable to sign in to Flickr or Facebook, Geolocation Search in GeoNames.
+350 ==> 358759 - Unable to import/export from google photos.
+351 ==> 363925 - Export Menu - Export to Smugmug not working.
+352 ==> 361323 - Application "Send To..." button crash.
+353 ==> 309613 - Crash on exit after unsucessful photo time adjustment.
+354 ==> 303878 - digiKam crashed after clicking "Photo -> Adjust Date and Time".
+355 ==> 150191 - Embedded thumbnail date is used for sorting.
+356 ==> 296113 - Regression: Can't transfer EXIF creation date to file date.
+357 ==> 363162 - dngconverter crashes when converting any RAW file.
+358 ==> 302292 - application crashes when batch editing EXIF data.
+359 ==> 269106 - digiKam crashes if the currently uploading item is removed from the export list.
+360 ==> 290509 - Application crashed exporting to PicasaWeb & Facebook.
+361 ==> 322056 - Imgur exporter can crash application.
+362 ==> 233909 - Crash when creating new folder on 23HQ.
+363 ==> 307666 - Flick export plug in crash.
+364 ==> 232599 - digiKam crashed when selecting Export -> Export to Shwup.
+365 ==> 304560 - Application crashes when trying to send picture to other computer.
+366 ==> 319077 - Application se cierra al crear una carpeta para subir archivos a flickr.
+367 ==> 240763 - Export Shwup crash when trying to export with latest SVN version as of today.
+368 ==> 352391 - Crash when exporting to facebook.com.
+369 ==> 272168 - Crash when starting Flickr Uploadr.
+370 ==> 264390 - digiKam crashes when uploading to Flickr.
+371 ==> 327342 - Application crash.

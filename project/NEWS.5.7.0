@@ -531,3 +531,6 @@ BUGFIXES FROM BUGZILLA:
 510 ==> 384049 - Add an option for group icon-view frame.
 511 ==> 383989 - Cannot create panoramas.
 512 ==> 383912 - AppImage crashes when started in terminal with 'debug' option.
+513 ==> 381144 - SmugMug export max dimension limited to 5000 pixels.
+514 ==> 381664 - Plugin leads to the home page of Flickr and 'An error has occurred: Invalid Frob It can not be continued.'
+515 ==> 383988 - Imgur plugin does not provide authentication mechanism.

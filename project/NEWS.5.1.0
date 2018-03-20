@@ -3,6 +3,8 @@ digiKam 5.1.0 - Release date: 2016-08-07
 
 NEW FEATURES:
 
+Imgur   : Remove libqtkoauth dependency
+General : Integrate liboauth2 in libkipiplugins. First tool to use it is Imgur.
 General : Fix broken Windows 64bits installer due to mix with 32 bits dlls.
 General : Internal Libraw updated to 0.18.0 beta (201604). New lead cameras supported:
           Canon 80D, 1300D, 1DX MkII
@@ -358,3 +360,13 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 334 ==> 366109 - Slideshow freezes on first image (Windows).
 335 ==> 366391 - Rotating an image seems to forget to reset the orientation flag.
 336 ==> 366445 - MySQL Schema upgrade from V7 to V8 fails [patch].
+337 ==> 305517 - digiKam segfaults after choosing Export - Export to Flash.
+338 ==> 231584 - digiKam crashes when asked to print image.
+339 ==> 311020 - Print some pages in reverted colors.
+340 ==> 329899 - Print Assistant (Print Wizard) showing incorrect page sizes.
+341 ==> 365049 - Export to Piwigo not working - Dialog box not responding.
+342 ==> 365676 - Improper handling of temporary directory.
+343 ==> 308783 - No photo attachments when items are shared by e-mail.
+344 ==> 365571 - Flickr export plugin not freeing tmp space.
+345 ==> 360404 - Imgur autorization not work : Integrate Oauth2 library in core [patch].
+346 ==> 306207 - Application does not pass .desktop validation.
