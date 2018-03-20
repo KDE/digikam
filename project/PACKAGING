@@ -3,28 +3,28 @@ Notice to make release tarballs from SVN
 
 1/ release announcements can be send to kde-i18n-docs if internationalized strings are frozen.
    The earlier the better.
-  
+
 2/ Commit changed source code files to SVN.
 
 3/ Update the release info in digikam/CMakeLists.txt and commit it to SVN.
 
-4/ Update NEWS file. If Changelog is a dry historical record of development, 
-   NEWS should focus on the improvements and changes, summarize everything since 
+4/ Update NEWS file. If Changelog is a dry historical record of development,
+   NEWS should focus on the improvements and changes, summarize everything since
    last major release. Look into ML, changelog and use BKO filter for bug summaries.
    Commit to SVN.
 
 5/ Run project/release/release_digikam.rb script to release digiKam source tarball.
    Run project/release/release_digikam_docs.rb script to release documentation tarball.
-   
+
    Note: the documentation must be packaged in a separate tarball to decrease the source code tarball size.
 
 6/ When tarball is created, decompress it in a temp folder and try to compile it to prevent any problems.
 
-7/ In tarball, Changelog file have been updated using svn2cl. copy it to your local and replace versioned 
+7/ In tarball, Changelog file have been updated using svn2cl. copy it to your local and replace versioned
    Changelog file. Commit to svn.
 
-8/ Upload tarball to ftp://digikam3rdparty@ftpperso.free.fr and post a message on digikam-devel@kde.org 
-   mailing list with a link to files available by http://digikam3rdparty.free.fr to have a 
+8/ Upload tarball to ftp://digikam3rdparty@ftpperso.free.fr and post a message on digikam-devel@kde.org
+   mailing list with a link to files available by http://digikam3rdparty.free.fr to have a
    feedback from packagers before posting an official release announcement.
 
 9/ When the official tarball is ready to post, don't forget to copy the current trunk to the tags branch
@@ -40,7 +40,6 @@ Notice to make release tarballs from SVN
 
 * digikam-users@kde.org
 * digikam-devel@kde.org
-* kde-extra-gear@kde.org
 * kde-announce@kde.org
 
 ------------------ TAGGING ------------------
