@@ -1,2 +1,2 @@
-SKIP /core/libs/dimg/filters/greycstoration/cimg|/core/libs/jpegutils/|/core/libs/pgfutils/|/core/libs/rawengine/libraw/|/core/libs/dngwriter/extra/
+SKIP /core/libs/dimg/filters/greycstoration/cimg|/core/libs/jpegutils/|/core/libs/pgfutils/|/core/libs/rawengine/libraw/|/core/libs/dngwriter/extra/|/core/utilities/assistants/webservices/common/o2/|/core/utilities/mediaserver/upnpsdk/
 
