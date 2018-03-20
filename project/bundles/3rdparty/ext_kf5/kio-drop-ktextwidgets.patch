@@ -1,0 +1,131 @@
+diff --git a/autotests/jobtest.h b/autotests/jobtest.h
+index 2080668..eb5e957 100644
+--- a/autotests/jobtest.h
++++ b/autotests/jobtest.h
+@@ -24,6 +24,8 @@
+ #include <QtCore/QObject>
+ #include <kio/job.h>
+ 
++#undef stat
++
+ class JobTest : public QObject
+ {
+     Q_OBJECT
+diff --git a/src/core/slaveinterface.h b/src/core/slaveinterface.h
+index 4cd60c5..f2e9436 100644
+--- a/src/core/slaveinterface.h
++++ b/src/core/slaveinterface.h
+@@ -31,6 +31,8 @@
+ 
+ class QUrl;
+ 
++#undef open
++
+ namespace KIO
+ {
+ 
+diff --git a/src/kcms/kio/CMakeLists.txt b/src/kcms/kio/CMakeLists.txt
+index 3bb827f..d165fca 100644
+--- a/src/kcms/kio/CMakeLists.txt
++++ b/src/kcms/kio/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ 
+ add_subdirectory( uasproviders )
+ 
+-find_package(KF5TextWidgets ${KF5_DEP_VERSION} REQUIRED)
++#find_package(KF5TextWidgets ${KF5_DEP_VERSION} REQUIRED)
+ 
+ ########### next target ###############
+ 
+@@ -42,7 +42,7 @@ target_link_libraries(kcm_kio
+     KF5::KIOWidgets
+     KF5::IconThemes
+     KF5::ItemViews   # KTreeWidgetSearchLine
+-    KF5::TextWidgets # KPluralHandlingSpinBox
++#    KF5::TextWidgets # KPluralHandlingSpinBox
+   PRIVATE
+     KF5::I18n)
+ 
+diff --git a/src/kcms/kio/netpref.cpp b/src/kcms/kio/netpref.cpp
+index 8f4b96c..051309f 100644
+--- a/src/kcms/kio/netpref.cpp
++++ b/src/kcms/kio/netpref.cpp
+@@ -5,13 +5,13 @@
+ // Qt
+ #include <QCheckBox>
+ #include <QGroupBox>
+-#include <KPluralHandlingSpinBox>
++#include <QSpinBox>
+ #include <QFormLayout>
+ 
+ // KDE
+ #include <ioslave_defaults.h>
+ #include <KLocalizedString>
+-#include <KPluralHandlingSpinBox>
++#include <QSpinBox>
+ #include <QDialog>
+ #include <kconfig.h>
+ #include <kpluginfactory.h>
+@@ -41,26 +41,26 @@ KIOPreferences::KIOPreferences(QWidget *parent, const QVariantList &)
+     mainLayout->addWidget( gb_Timeout );
+ 
+     QFormLayout* timeoutLayout = new QFormLayout(gb_Timeout);
+-    sb_socketRead = new KPluralHandlingSpinBox( this );
+-    sb_socketRead->setSuffix( ki18np( " second", " seconds" ) );
++    sb_socketRead = new QSpinBox( this );
++    sb_socketRead->setSuffix( ki18np( " second", " seconds" ).toString() );
+     connect(sb_socketRead, SIGNAL(valueChanged(int)), SLOT(configChanged()));
+     timeoutLayout->addRow(i18n( "Soc&ket read:" ), sb_socketRead);
+ 
+-    sb_proxyConnect = new KPluralHandlingSpinBox( this );
++    sb_proxyConnect = new QSpinBox( this );
+     sb_proxyConnect->setValue(0);
+-    sb_proxyConnect->setSuffix( ki18np( " second", " seconds" ) );
++    sb_proxyConnect->setSuffix( ki18np( " second", " seconds" ).toString() );
+     connect(sb_proxyConnect, SIGNAL(valueChanged(int)), SLOT(configChanged()));
+     timeoutLayout->addRow(i18n( "Pro&xy connect:" ), sb_proxyConnect);
+ 
+-    sb_serverConnect = new KPluralHandlingSpinBox( this );
++    sb_serverConnect = new QSpinBox( this );
+     sb_serverConnect->setValue(0);
+-    sb_serverConnect->setSuffix( ki18np( " second", " seconds" ) );
++    sb_serverConnect->setSuffix( ki18np( " second", " seconds" ).toString() );
+     connect(sb_serverConnect, SIGNAL(valueChanged(int)), SLOT(configChanged()));
+     timeoutLayout->addRow(i18n("Server co&nnect:"), sb_serverConnect);
+ 
+-    sb_serverResponse = new KPluralHandlingSpinBox( this );
++    sb_serverResponse = new QSpinBox( this );
+     sb_serverResponse->setValue(0);
+-    sb_serverResponse->setSuffix( ki18np( " second", " seconds" ) );
++    sb_serverResponse->setSuffix( ki18np( " second", " seconds" ).toString() );
+     connect(sb_serverResponse, SIGNAL(valueChanged(int)), SLOT(configChanged()));
+     timeoutLayout->addRow(i18n("&Server response:"), sb_serverResponse);
+ 
+diff --git a/src/kcms/kio/netpref.h b/src/kcms/kio/netpref.h
+index 32174ef..d1ed9be 100644
+--- a/src/kcms/kio/netpref.h
++++ b/src/kcms/kio/netpref.h
+@@ -6,7 +6,7 @@
+ class QGroupBox;
+ class QCheckBox;
+ 
+-class KPluralHandlingSpinBox;
++class QSpinBox;
+ 
+ class KIOPreferences : public KCModule
+ {
+@@ -32,10 +32,10 @@ private:
+     QCheckBox* cb_ftpEnablePasv;
+     QCheckBox* cb_ftpMarkPartial;
+ 
+-    KPluralHandlingSpinBox* sb_socketRead;
+-    KPluralHandlingSpinBox* sb_proxyConnect;
+-    KPluralHandlingSpinBox* sb_serverConnect;
+-    KPluralHandlingSpinBox* sb_serverResponse;
++    QSpinBox* sb_socketRead;
++    QSpinBox* sb_proxyConnect;
++    QSpinBox* sb_serverConnect;
++    QSpinBox* sb_serverResponse;
+ };
+ 
+ #endif // NETPREF_H

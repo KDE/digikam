@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b57e549..f88e08b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,8 +23,8 @@ include(ECMAddQch)
+ include(ECMSetupVersion)
+ include(ECMQtDeclareLoggingCategory)
+ 
+-option(BUILD_KWALLETD "Build the kwallet daemon" ON)
+-option(BUILD_KWALLET_QUERY "Build kwallet-query tool" ON)
++option(BUILD_KWALLETD "Build the kwallet daemon" OFF)
++option(BUILD_KWALLET_QUERY "Build kwallet-query tool" OFF)
+ option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)" OFF)
+ add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)")
+ 
+@@ -39,8 +39,8 @@ if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+     ki18n_install(po)
+ endif()
+ add_subdirectory(src)
+-add_subdirectory(autotests)
+-add_subdirectory(tests)
++#add_subdirectory(autotests)
++#add_subdirectory(tests)
+ if (KF5DocTools_FOUND)
+     add_subdirectory(docs)
+ endif()

@@ -1,0 +1,35 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 699c9dd..8793a93 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,7 +4,7 @@ set(PIM_VERSION "5.7.1")
+ project(KCalCore VERSION ${PIM_VERSION})
+ 
+ # ECM setup
+-set(KF5_VERSION "5.39.0")
++set(KF5_VERSION "5.36.0")
+ 
+ find_package(ECM ${KF5_VERSION} CONFIG REQUIRED)
+ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${KCalCore_SOURCE_DIR}/cmake)
+@@ -35,7 +35,7 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KCALCORE
+ ########### Find packages ###########
+ find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Core Gui)
+ 
+-set(LibIcal_MIN_VERSION "1.0")
++set(LibIcal_MIN_VERSION "0.43")
+ find_package(LibIcal ${LibIcal_MIN_VERSION})
+ set_package_properties(LibIcal PROPERTIES
+   DESCRIPTION "The libical library"
+diff --git a/src/icalformat_p.cpp b/src/icalformat_p.cpp
+index 8708e26..b994e06 100644
+--- a/src/icalformat_p.cpp
++++ b/src/icalformat_p.cpp
+@@ -886,7 +886,7 @@ icalproperty *ICalFormatImpl::writeAttachment(const Attachment::Ptr &att)
+     if (att->isUri()) {
+         attach = icalattach_new_from_url(att->uri().toUtf8().data());
+     } else {
+-        attach = icalattach_new_from_data((const char *)att->data().constData(), nullptr, nullptr);
++        attach = icalattach_new_from_data((unsigned char *)att->data().constData(), nullptr, nullptr);
+     }
+     icalproperty *p = icalproperty_new_attach(attach);
+ 

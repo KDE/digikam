@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# Main AppImage script to wrap XDG_* variable properly for Qt5.
+#
+# Copyright (c) 2015-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
+
+echo "-- digiKam AppImage Bundle"
+echo "-- Use 'help' as CLI argument to know all available options"
+
+DIR="`dirname \"$0\"`"
+DIR="`( cd \"$DIR\" && pwd )`"
+export APPDIR=$DIR
+
+export APPIMAGE_ORIGINAL_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+export APPIMAGE_ORIGINAL_QT_PLUGIN_PATH=$QT_PLUGIN_PATH
+export APPIMAGE_ORIGINAL_XDG_DATA_DIRS=$XDG_DATA_DIRS
+export APPIMAGE_ORIGINAL_PATH=$PATH
+
+export LD_LIBRARY_PATH=$DIR/usr/lib/:$LD_LIBRARY_PATH
+export QT_PLUGIN_PATH=$DIR/usr/plugins/
+export XDG_DATA_DIRS=$DIR/usr/share/:$XDG_DATA_DIRS
+export PATH=$DIR/usr/bin:$DIR/usr/lib:$DIR/usr/lib/libexec/kf5:$DIR/usr/share/digikam/utils:$PATH
+export KDE_FORK_SLAVES=1
+export CAMLIBS=$DIR/usr/lib/libgphoto2
+export IOLIBS=$DIR/usr/lib/libgphoto2_port
+
+export APPIMAGE_STARTUP_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+export APPIMAGE_STARTUP_QT_PLUGIN_PATH=$QT_PLUGIN_PATH
+export APPIMAGE_STARTUP_XDG_DATA_DIRS=$XDG_DATA_DIRS
+export APPIMAGE_STARTUP_PATH=$PATH
+
+if [[ $1 == "showfoto" ]] ; then
+
+    # Run Showfoto as well.
+    showfoto ${@:2}
+
+elif [[ $1 == "debug" ]] ; then
+
+    if [[ $2 == "showfoto" ]] ; then
+
+        echo "Starting Showfoto into GDB..."
+        echo "Use 'bt' command on debugger prompt to get a crash backtrace."
+        echo "Use 'q' command to quit debugger session."
+        gdb -ex=r --args showfoto ${@:3}
+
+    else
+
+        echo "Starting digiKam into GDB..."
+        echo "Use 'bt' command on debugger prompt to get a crash backtrace."
+        echo "Use 'q' command to quit debugger session."
+        gdb -ex=r --args digikam ${@:2}
+
+    fi
+
+elif [[ $1 == "help" ]] ; then
+
+        echo "digiKam AppImage bundle CLI options:"
+        echo " without option     : run digiKam."
+        echo " <showfoto>         : run Showfoto instead digiKam."
+        echo " <debug>            : run digiKam into GDB."
+        echo " <debug> <showfoto> : run Showfoto into GDB."
+        echo " <help>             : show this help."
+
+else
+
+    # Run digiKam as well.
+    digikam $@
+
+fi

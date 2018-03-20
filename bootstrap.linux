@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# Copyright (c) 2008-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c)      2015, Ulf Rompe <kde dot org at rompe dot org>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+# Halt and catch errors
+set -eE
+trap 'PREVIOUS_COMMAND=$THIS_COMMAND; THIS_COMMAND=$BASH_COMMAND' DEBUG
+trap 'echo "FAILED COMMAND: $PREVIOUS_COMMAND"' ERR
+
+SOURCEDIR=$PWD
+
+command -v qtpaths >/dev/null 2>&1 || { echo >&2 "This script require qtpaths CLI tool from Qt5 project but it's not installed. Aborting."; exit 1; }
+
+if [ "$1" == "" ]; then
+    MAKEFILES_TYPE='Unix Makefiles'
+    BUILDDIR=$PWD"/build"
+    MESSAGE="Now run make in $BUILDDIR."
+elif [ "$1" == "--eclipse" ]; then
+    MAKEFILES_TYPE='Eclipse CDT4 - Unix Makefiles'
+    ADDITIONAL_CMAKE_FLAGS="-DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=ON $ADDITIONAL_CMAKE_FLAGS"
+    BUILDDIR=$PWD"-debug"
+    MESSAGE="
+Now import these folders as existing projects into Eclipse without
+copying source into the workspace:
+$SOURCEDIR
+$BUILDDIR"
+else
+    echo "Syntax: $0 [--eclipse]"
+    echo "Run without arguments to create a Unix Makefile project in a build subdir."
+    echo "Run with '--eclipse' to create an Eclipse IDE project and build source in a parallel directory."
+    exit 1
+fi
+
+if [[ "$ARCH" = "x86_64" ]] ; then
+    LIBPATH="lib64"
+elif [[ "$ARCH" = "i686" ]] ; then
+    LIBPATH="lib"
+fi
+
+QT_INSTALL_PREFIX=`qtpaths --install-prefix`
+QT_PLUGIN_INSTALL_DIR=`qtpaths --plugin-dir`
+export PATH=$QT_INSTALL_PREFIX/bin:$PATH
+
+if [ "$CMAKE_BINARY" == "" ]; then
+    CMAKE_BINARY="cmake"
+fi
+
+if [ "$DIGIKAM_INSTALL_PREFIX" == "" ]; then
+    DIGIKAM_INSTALL_PREFIX="/usr"
+else
+    # bootstrap.local may have preset DIGIKAM_INSTALL_PREFIX.
+    QT_PLUGIN_INSTALL_DIR=$DIGIKAM_INSTALL_PREFIX/$LIBPATH/plugins
+    export PATH=$DIGIKAM_INSTALL_PREFIX/bin:$PATH
+fi
+
+export LD_LIBRARY_PATH=$DIGIKAM_INSTALL_PREFIX/$LIBPATH:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=$DIGIKAM_INSTALL_PREFIX/$LIBPATH/pkgconfig:$PKG_CONFIG_PATH
+
+echo "Qt5     Install Path : $QT_INSTALL_PREFIX"
+echo "digiKam Install Path : $DIGIKAM_INSTALL_PREFIX"
+
+mkdir -p $DIGIKAM_INSTALL_PREFIX
+mkdir -p $BUILDDIR
+cd $BUILDDIR
+
+$CMAKE_BINARY -G "$MAKEFILES_TYPE" . \
+      -DCMAKE_BUILD_TYPE=debug \
+      -DCMAKE_INSTALL_PREFIX=$DIGIKAM_INSTALL_PREFIX/ \
+      -DKDE_INSTALL_QTPLUGINDIR=$QT_PLUGIN_INSTALL_DIR/ \
+      $ADDITIONAL_CMAKE_FLAGS \
+      -DBUILD_TESTING=ON \
+      -DDIGIKAMSC_CHECKOUT_PO=OFF \
+      -DDIGIKAMSC_CHECKOUT_DOC=OFF \
+      -DDIGIKAMSC_COMPILE_PO=OFF \
+      -DDIGIKAMSC_COMPILE_DOC=ON \
+      -DDIGIKAMSC_COMPILE_DIGIKAM=ON \
+      -DDIGIKAMSC_COMPILE_LIBKSANE=ON \
+      -DDIGIKAMSC_COMPILE_LIBMEDIAWIKI=ON \
+      -DDIGIKAMSC_COMPILE_LIBKVKONTAKTE=ON \
+      -DENABLE_KFILEMETADATASUPPORT=OFF \
+      -DENABLE_AKONADICONTACTSUPPORT=OFF \
+      -DENABLE_MYSQLSUPPORT=ON \
+      -DENABLE_INTERNALMYSQL=ON \
+      -DENABLE_MEDIAPLAYER=ON \
+      -DENABLE_DBUS=ON \
+      -DENABLE_APPSTYLES=ON \
+      -Wno-dev \
+      $SOURCEDIR && echo "$MESSAGE"

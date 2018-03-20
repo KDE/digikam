@@ -1,0 +1,145 @@
+RESUME
+------
+This scripts build a binary digiKam installer for Windows under Linux using cross-compiler
+environnement MXE and NSIS application.
+
+This script follow instructions from Qt bundle deployement for Windows as shared libraries
+available at this url: http://doc.qt.io/qt-5/windows-deployment.html
+
+AUTHORS
+-------
+(c) 2015-2018 by :
+
+Gilles Caulier <caulier dot gilles at gmail dot com>
+
+DESCRIPTION
+-----------
+These files and scripts are used to make binary installer of the digiKam
+Software Collection for Windows 32 bits or 64 bits. In addition to this README,
+there are comments in the scripts that provide some additional explanations for
+how they work.
+
+Note : these cross-compiling scripts exists because the way provided by KDE team to compile 
+a KDE application under Windows with MSVC compiler through emerge tool never work and is just
+a big pain to use/configure/run with a Windows OS. Also KDE Windows initiative look like 
+unmaintained/inactive since a while.
+Another big advantage of cross-compiling is to not require a Windows to do the job, which 
+is definitively a weird operating system to compile and hack.
+
+BUNDLE CONTENTS
+---------------
+
+Note : the bundle is rellocable.
+
+|                                                    Executable, shared dlls, KDE plugins dlls, qt.conf
+|--- data
+|   |--- audio                                       Marble data files
+|   |--- bitmaps                                     Marble data files
+|   |--- digikam                                     digiKam data files
+|   |--- flags                                       Marble data files
+|   |--- kconf_update                                Really need ?
+|   |--- kf5                                         Really need ?
+|   |   |--- kauth
+|   |   |-- kcharselect
+|   |--- knotifications5                             Really need ?
+|   |--- kservices5                                  KDE service descriptions
+|   |--- kservicetypes5                              KDE service type definitions
+|   |--- kxmlgui5                                    KDE xml gui decription files
+|   |   |--- digikam
+|   |   |-- showfoto
+|   |--- lensfun                                     Lensfun data files
+|   |--- locale                                      KDE GUI translations
+|   |--- maps                                        Marble data files
+|   |--- mwdbii                                      Marble data files
+|   |--- naturalearth                                Marble data files
+|   |--- placemarks                                  Marble data files
+|   |--- showfoto                                    Showfoto data files
+|   |--- solid                                       Solid service descriptions
+|   |--- stars                                       Marble data files
+|   |--- svg                                         Marble data files
+|   |-- weather                                      Marble data files
+|--- etc                                             Really need ?
+|   |-- xdg
+|       |-- ui
+|--- plugins                                         Qt plugins
+|--- share                                           Really need ?
+|   |-- xdg
+|       |-- menus
+|-- translations                                     Qt GUI translations
+
+
+REQUIREMENTS
+------------
+The scripts build digiKam with MXE cross compiler, so you will need all dependencies
+and the other pre-requisites first for MXE.
+See http://mxe.cc/#requirements for details.
+
+IMPORTANT:
+- You must set the right target architecture : windows 32 or 64 bits.
+- You must set the digiKam git tags to checkout right source code in installer.
+- You must set the option to host debug symbols or not in installer.
+Look in config.sh file for details.
+
+COMPONENTS
+----------
+There are 4 scripts to be run by the user. 2 first ones installs
+MXE and all dependencies, next one digiKam, and last one makes a 
+binary installer for Windows.
+
+SCRIPT DESCRIPTIONS
+-------------------
+All scripts should be run from within this directory.
+
+* 01-build-mxe.sh:
+
+This script downloads and configures a custom install
+of MXE to ./build.
+
+* 02-build-extralibs.sh:
+
+This script configures, and compile a install to ./build
+of extra libraries, including KF5 frameworks, and most important photo management
+libs used by digiKam as Exiv2 and LensFun.
+
+* 03-build-digikam.sh:
+
+This script configures, and compile a custom install of digiKam to ./build.
+
+* 04-build-installer.sh:
+
+Once you've successfully built digiKam, ./build may contain over 4GB of files.
+The make-installer.sh script grabs the ~200MB needed to run digiKam and showfoto.
+These include applications documentations and translations.
+
+This script creates Windows application links for the programs that will
+be run by the user (digiKam and Showfoto). It use makensis CLI tool from NSIS
+application dedicated to build Windows installer. This one is available for Linux
+as Mingw package. The version >= 3 is required to be compatible with Windows 10.
+
+Depending of configuration done in config.sh, this script is able to upload automatically
+the bundle file on files.kde.org digiKam area through ssh. A valid ssh key configured
+with remote KDE server need to be set previously with the account. You can load ssh key
+at startup following instruction give at this url:
+
+https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-password-prompt
+
+* rll.py
+
+Run by 04-build-installer.sh. It is a python script that takes a list of binaries
+and libraries supplied by 04-build-installer.sh and recursively lists the dlls on
+which they depend, and their dependencies, etc...
+Adapted with minimal modification (mostly deleting stuff) from
+https://github.com/mpreisler/mingw-bundledlls
+
+* makeall.sh
+
+This script permit to build whole 32 and 64 bits installers from scratch at the same time.
+
+* update.sh
+
+This script re-build only digiKam and installers in 32 and 64 bits.
+
+LICENSES
+--------
+The scripts and other contents of this package are licensed
+under the GNU General Public License version 2, or any later version.

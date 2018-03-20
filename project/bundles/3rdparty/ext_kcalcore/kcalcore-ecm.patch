@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 699c9dd1c..9b0800465 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,7 +4,7 @@ set(PIM_VERSION "5.7.1")
+ project(KCalCore VERSION ${PIM_VERSION})
+ 
+ # ECM setup
+-set(KF5_VERSION "5.39.0")
++set(KF5_VERSION "5.36.0")
+ 
+ find_package(ECM ${KF5_VERSION} CONFIG REQUIRED)
+ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${KCalCore_SOURCE_DIR}/cmake)

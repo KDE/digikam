@@ -1,0 +1,102 @@
+#!/bin/bash
+
+# Copyright (c) 2008-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
+# Arguments : $1 : install path '/opt/local' (default).
+#             $2 : build type   'debug' to hack (default), 'release' for production.
+#             $3 : target type  'x86_64' for OSX Lion (default), 'i386' for Snow Leopard.
+#             $4 : Cmake extra configure options.
+
+# Halt and catch errors
+set -eE
+trap 'PREVIOUS_COMMAND=$THIS_COMMAND; THIS_COMMAND=$BASH_COMMAND' DEBUG
+trap 'echo "FAILED COMMAND: $PREVIOUS_COMMAND"' ERR
+
+INSTALL_PREFIX=$1
+
+if [ "$INSTALL_PREFIX" = "" ]; then
+    INSTALL_PREFIX="/opt/local"
+    BUNDLE_INSTALL_DIR="/Applications/KF5"
+    BUNDLE_DATA_INSTALL_DIR="/Library/Application Support"
+else
+    BUNDLE_INSTALL_DIR="${INSTALL_PREFIX}/Applications/KF5"
+    BUNDLE_DATA_INSTALL_DIR="${INSTALL_PREFIX}/Library/Application Support"
+fi
+
+BUILD_TYPE=$2
+
+if [ "$BUILD_TYPE" = "" ]; then
+        BUILD_TYPE=debug
+fi
+
+TARGET_TYPE=$3
+
+if [ "$TARGET_TYPE" = "" ]; then
+        TARGET_TYPE=x86_64
+fi
+
+OPTIONS=$4
+
+echo "Installing to $INSTALL_PREFIX for target $TARGET_TYPE with build mode $BUILD_TYPE and compilation options $OPTIONS"
+
+# set devel env from MacOS-X through MacPorts
+export QTDIR=$INSTALL_PREFIX/libexec/qt5
+export QT_INCLUDE_DIR=$QTDIR/include
+export PKG_CONFIG_PATH=$INSTALL_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
+
+# Pathes rules
+ORIG_PATH="$PATH"
+export PATH=$INSTALL_PREFIX/bin:$QTDIR/bin:$PATH
+
+# We will work on command line using GNU make
+export MAKEFILES_TYPE='Unix Makefiles'
+
+if [ ! -d "build" ]; then
+    mkdir build
+fi
+
+cd build
+
+cmake -G "$MAKEFILES_TYPE" . \
+      -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+      -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX}/ \
+      -DCMAKE_OSX_ARCHITECTURES=${TARGET_TYPE} \
+      -DBUILD_TESTING=ON \
+      -DDIGIKAMSC_CHECKOUT_PO=OFF \
+      -DDIGIKAMSC_CHECKOUT_DOC=OFF \
+      -DDIGIKAMSC_COMPILE_PO=OFF \
+      -DDIGIKAMSC_COMPILE_DOC=OFF \
+      -DDIGIKAMSC_COMPILE_DIGIKAM=ON \
+      -DDIGIKAMSC_COMPILE_LIBKSANE=OFF \
+      -DDIGIKAMSC_COMPILE_LIBMEDIAWIKI=ON \
+      -DDIGIKAMSC_COMPILE_LIBKVKONTAKTE=OFF \
+      -DENABLE_KFILEMETADATASUPPORT=OFF \
+      -DENABLE_AKONADICONTACTSUPPORT=OFF \
+      -DENABLE_INTERNALMYSQL=ON \
+      -DENABLE_MYSQLSUPPORT=ON \
+      -DENABLE_MEDIAPLAYER=ON \
+      -DENABLE_DBUS=OFF \
+      -DENABLE_KIO=OFF \
+      -DENABLE_APPSTYLES=OFF \
+      -DAPPLE_SUPPRESS_X11_WARNING=ON \
+      -DCMAKE_COLOR_MAKEFILE=ON \
+      -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
+      -DCMAKE_INSTALL_NAME_DIR=${INSTALL_PREFIX}/lib \
+      -DCMAKE_SYSTEM_PREFIX_PATH="${INSTALL_PREFIX};/usr" \
+      -DCMAKE_MODULE_PATH="${INSTALL_PREFIX}/share/cmake/Modules;${INSTALL_PREFIX}/share/cmake-3.7/Modules" \
+      -DKDE_INSTALL_BUNDLEDIR=${BUNDLE_INSTALL_DIR} \
+      -DKDE_INSTALL_DATADIR=${BUNDLE_DATA_INSTALL_DIR} \
+      -DQT_QT_INCLUDE_DIR=${QT_INCLUDE_DIR} \
+      -DQT_LIBRARY_DIR=${QTDIR}/lib \
+      -DQT_QMAKE_EXECUTABLE=${QTDIR}/bin/qmake \
+      ${OPTIONS} \
+      ..
+
+CMAKE_VAL_RET=$?
+
+export PATH=$ORIG_PATH
+
+exit $CMAKE_VAL_RET

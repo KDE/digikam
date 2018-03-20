@@ -1,0 +1,24 @@
+diff -r e9df4bb31222 CMakeLists.txt
+--- a/CMakeLists.txt	Sun Oct 27 12:22:25 2013 +0100
++++ b/CMakeLists.txt	Thu Apr 13 15:01:39 2017 +0200
+@@ -174,7 +174,7 @@
+ #  This must come before FINDs for tiff, jpeg, png, zlib to enable
+ #  finding the wxWidgets distributions of those packages (Win32 only).
+ SET(wxWidgets_USE_LIBS base core aui xrc html xml adv gl net)
+-FIND_PACKAGE(wxWidgets REQUIRED)
++FIND_PACKAGE(wxWidgets)
+ 
+ # hugin requires wxwidgets 2.7.0 or above
+ IF (UNIX)
+diff -r e9df4bb31222 src/hugin_base/lensdb/LensDB.cpp
+--- a/src/hugin_base/lensdb/LensDB.cpp	Sun Oct 27 12:22:25 2013 +0100
++++ b/src/hugin_base/lensdb/LensDB.cpp	Thu Apr 13 15:01:39 2017 +0200
+@@ -627,7 +627,7 @@
+                 break;
+             case LF_DIST_MODEL_NONE:
+             case LF_DIST_MODEL_POLY5:
+-            case LF_DIST_MODEL_FOV1:
++//            case LF_DIST_MODEL_FOV1:
+             default:
+                 return false;
+                 break;

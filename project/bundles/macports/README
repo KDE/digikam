@@ -1,0 +1,205 @@
+RESUME
+------
+Scripts to build binary digiKam package for MacOS
+
+These scripts build a binary digiKam package for MacOS using Macports 
+environnement and Packages application.
+
+These scripts follow instructions from Qt bundle deployement for MacOS as shared libraries
+available at this url: http://doc.qt.io/qt-5/osx-deployment.html
+
+AUTHORS
+-------
+(c)      2015 by Shanti <listaccount at revenant dot org>
+(c) 2015-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+
+DESCRIPTION
+-----------
+These files and scripts are used to make a binary package of the digiKam
+Software Collection for MacOS. In addition to this README, there are
+comments in the scripts that provide some additional explanations for
+how they work.
+
+BUNDLE CONTENTS
+---------------
+
+Note : the bundle is not relocable.
+
+   |-- Applications
+   |   |-- KF5                                Binary applications directories (digiKam and Showfoto)
+   |       |-- digikam.app
+   |       |   |-- Contents
+   |       |       |-- MacOS
+   |       |       |-- Resources              Shared data files (marble, i18n, etc...)
+   |       |-- showfoto.app
+   |           |-- Contents
+   |               |-- MacOS
+   |               |-- Resources              ==> symbolic link to Applications/KF5/digikam.app/Contents/Resources
+   |-- digiKam                                Link to MacOS desktop with scripts.
+   |   |-- digikam.app
+   |       |-- Contents
+   |          |-- MacOS
+   |          |-- Resources
+   |              |-- Scripts
+   |     showfoto.app
+   |     |-- Contents
+   |         |-- MacOS
+   |         |-- Resources
+   |             |-- Scripts
+   |-- bin                                    Extra binaries
+   |-- etc                                    Really need ?
+   |   |-- xdg
+   |       |-- ui
+   |-- lib                                    Shared libraries
+   |   |-- mysql56
+   |       |-- mysql
+   |-- libexec                                Run-times libraries and plugins
+   |   |-- qt5
+   |       |-- lib
+   |       |   |-- QtConcurrent.framework
+   |       |   |-- QtCore.framework
+   |       |   |-- QtDBus.framework
+   |       |   |-- QtGui.framework
+   |       |   |-- QtLocation.framework
+   |       |   |-- QtMultimedia.framework
+   |       |   |-- QtMultimediaWidgets.framework
+   |       |   |-- QtNetwork.framework
+   |       |   |-- QtOpenGL.framework
+   |       |   |-- QtPositioning.framework
+   |       |   |-- QtPrintSupport.framework
+   |       |   |-- QtQml.framework
+   |       |   |-- QtQuick.framework
+   |       |   |-- QtScript.framework
+   |       |   |-- QtSensors.framework
+   |       |   |-- QtSql.framework
+   |       |   |-- QtSvg.framework
+   |       |   |-- QtWebChannel.framework
+   |       |   |-- QtWebKit.framework
+   |       |   |-- QtWebKitWidgets.framework
+   |       |   |-- QtWidgets.framework
+   |       |   |-- QtXml.framework
+   |       |   |-- QtXmlPatterns.framework
+   |       |-- plugins                              Qt and KF5 plugins
+   |           |-- audio
+   |           |-- geoservices
+   |           |-- iconengines
+   |           |-- imageformats
+   |           |-- mediaservice
+   |           |-- platforms
+   |           |-- position
+   |           |-- printsupport
+   |           |-- sqldrivers
+
+
+REQUIREMENTS
+------------
+The scripts build digiKam with MacPorts, so you will need Xcode and the other
+prerequisites for Macports. To install it for MacOS versions 10.7 and later,
+download Xcode from the AppStore:
+
+http://itunes.apple.com/us/app/xcode/id497799835?mt=12
+
+NOTE: since Xcode 4.3.2, you need to install Xcode Command Line Tools extension package to be able to
+use Macport on your computer.
+Run Xcode and got to Preference menu entry, Download section, and install Command Line Tools component.
+See this url for details : http://guide.macports.org/#installing.xcode.
+
+For all other Macports requirement, see http://www.macports.org/install.php.
+
+You will also need to install Packages software from which does the actual packaging of the files needed to install digiKam:
+
+http://s.sudre.free.fr/Software/Packages/about.html
+
+IMPORTANT:
+- You must set the minimal MacOS target with relevant SDK installed for backward compatibility.
+- You must set the digiKam git tags to checkout right source code to package.
+- You must set the option to host debug symbols or not in package.
+Look in config.sh file for details.
+
+HERE THERE BE DRAGONS
+---------------------
+Use these scripts at your own risk. For example, both scripts contain
+"rm -rf" (to clear previous builds) -- a mistake could wipe your drive.
+
+COMPONENTS
+----------
+There are 4 main scripts to be run by the user. 2 first ones installs
+MacPorts and all dependencies, next one digiKam, and last one makes a
+PKG binary installer for MacOS using Packages.
+
+SCRIPT DESCRIPTIONS
+-------------------
+All scripts should be run from within the digikam-package directory.
+
+* 01-build-macports.sh:
+
+This script downloads and configures a custom non-root install
+of MacPorts to /opt/digikam. The PKG will install to the same place,
+avoiding the confusion associated with relocation and install_name_tool. The
+custom location, as opposed to /opt/local, should allow digiKam to co-exist
+with a standard Macports installation
+
+* 02-build-extralibs.sh:
+
+This script configures, and compile a custom non-root install to /opt/digikam
+of extra libraries, including KF5 frameworks, and most important photo management
+libs used by digiKam as Exiv2 and LensFun.
+
+* 03-build-digikam.sh:
+
+This script configures, and compile a custom non-root install of digiKam to
+/opt/digikam.
+
+* 04-build-installer.sh:
+
+Once you've successfully built digiKam, /opt/digikam may contain over 10GB of files.
+This script grabs the ~250MB needed to run digiKam and Showfoto,
+and places them in ./installer/opt. These include applications documentations
+and translations.
+
+This script creates Applescript launch applications for the programs that will
+be run by the user (digiKam, Showfoto, etc), and preinstall/postinstall
+scripts in ./installer.
+
+The launcher applications:
+     1) Update desktop.org files cache system with kbuildsyscoca5.
+     2) set "DYLD_IMAGE_SUFFIX=_debug" if the digikam port was built with the
+        +debug variant.
+
+This script also create the pre-install and post-install scripts that are run
+when the package is installed. They delete any pre-existing /opt/digikam,
+delete and recreate /Applications/digiKam.
+
+Finally, this script sets the version number, and runs Packages to
+put everything together in the bundle.
+
+Depending of configuration done in config.sh, this script is able to upload automatically
+the bundle file on files.kde.org digiKam area through ssh. A valid ssh key configured
+with remote KDE server need to be set previously with the account. You can load ssh key
+at startup following instruction give at this url:
+
+https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-password-prompt
+
+* rll.py
+
+Run by 04-build-installer.sh. It is a Python script that takes a list of binaries
+and libraries supplied by 04-build-installer.sh and recursively lists the dylibs on
+which they depend, and their dependencies, etc.. Adapted with minimal
+modification (mostly deleting stuff) from
+https://github.com/mixxxdj/mixxx/blob/master/build/osx/otool.py.
+
+* makeall.sh
+
+This script permit to build whole package from scratch (all stages).
+
+* update.sh
+
+This script re-build only digiKam and package (2 last stages).
+
+LICENSES
+--------
+rll.py, like the otool.py source from which it has been adapted, is licensed
+under GNU General Public License version 2.
+
+The scripts and other contents that we have created are licensed
+under the GNU General Public License version 2, or any later version.

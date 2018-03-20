@@ -1,0 +1,74 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ee35783..d680102 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -43,7 +43,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core Widgets)
+ find_package(KF5I18n ${KF5_VERSION} REQUIRED)
+ find_package(KF5Wallet ${KF5_VERSION} REQUIRED)
+ find_package(KF5WidgetsAddons ${KF5_VERSION} REQUIRED)
+-find_package(KF5TextWidgets ${KF5_VERSION} REQUIRED)
++#find_package(KF5TextWidgets ${KF5_VERSION} REQUIRED)
+ # ...
+ 
+ # Check if sane API is available.
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index e650bb8..03c308e 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -51,7 +51,7 @@ target_link_libraries(KF5Sane
+         KF5::I18n
+         KF5::Wallet
+         KF5::WidgetsAddons
+-        KF5::TextWidgets
++#       KF5::TextWidgets
+ )
+ 
+ set_target_properties(KF5Sane
+diff --git a/src/widgets/labeledslider.cpp b/src/widgets/labeledslider.cpp
+index 8ce9ddc..48c43e0 100644
+--- a/src/widgets/labeledslider.cpp
++++ b/src/widgets/labeledslider.cpp
+@@ -32,10 +32,11 @@
+ 
+ #include <QLabel>
+ #include <QSlider>
++#include <QSpinBox>
+ 
+ // KDE includes
+ 
+-#include <kpluralhandlingspinbox.h>
++#include <klocalizedstring.h>
+ 
+ namespace KSaneIface
+ {
+@@ -55,7 +56,7 @@ LabeledSlider::LabeledSlider(QWidget *parent, const QString &ltext,
+     m_slider->setMaximum(max);
+     m_slider->setSingleStep(m_step);
+ 
+-    m_spinb = new KPluralHandlingSpinBox(this);
++    m_spinb = new QSpinBox(this);
+     m_spinb->setMinimum(min);
+     m_spinb->setMaximum(max);
+     m_slider->setSingleStep(m_step);
+@@ -84,7 +85,7 @@ LabeledSlider::~LabeledSlider()
+ 
+ void LabeledSlider::setSuffix(const KLocalizedString &text)
+ {
+-    m_spinb->setSuffix(text);
++    m_spinb->setSuffix(text.toString());
+ }
+ 
+ void LabeledSlider::setValue(int value)
+diff --git a/src/widgets/labeledslider.h b/src/widgets/labeledslider.h
+index 838c53e..927b3be 100644
+--- a/src/widgets/labeledslider.h
++++ b/src/widgets/labeledslider.h
+@@ -95,7 +95,7 @@ Q_SIGNALS:
+ 
+ private:
+     QSlider   *m_slider;
+-    KPluralHandlingSpinBox  *m_spinb;
++    QSpinBox  *m_spinb;
+     int        m_step;
+ };
+ 

@@ -1,0 +1,2581 @@
+Index: src/solid/devices/CMakeLists.txt
+===================================================================
+--- src/solid/devices/CMakeLists.txt
++++ src/solid/devices/CMakeLists.txt
+@@ -172,7 +172,7 @@
+ endif()
+ 
+ if(APPLE)
+-   set(solid_OPTIONAL_LIBS ${IOKIT_LIBRARY})
++   set(solid_OPTIONAL_LIBS ${IOKIT_LIBRARY} "-framework DiskArbitration")
+ endif()
+ 
+ if ( UDEV_FOUND )
+Index: src/solid/devices/backends/iokit/CMakeLists.txt
+===================================================================
+--- src/solid/devices/backends/iokit/CMakeLists.txt
++++ src/solid/devices/backends/iokit/CMakeLists.txt
+@@ -1,9 +1,20 @@
++include_directories(
++    ${Qt5Core_PRIVATE_INCLUDE_DIRS}
++)
++
+ set(solid_LIB_SRCS ${solid_LIB_SRCS}
+     devices/backends/iokit/iokitmanager.cpp
+     devices/backends/iokit/iokitdevice.cpp
+     devices/backends/iokit/cfhelper.cpp
++    devices/backends/iokit/dadictionary.cpp
+     devices/backends/iokit/iokitdeviceinterface.cpp
+     devices/backends/iokit/iokitgenericinterface.cpp
+     devices/backends/iokit/iokitprocessor.cpp
+     devices/backends/iokit/iokitbattery.cpp
+-)
+\ No newline at end of file
++    devices/backends/iokit/iokitblock.cpp
++    devices/backends/iokit/iokitstorage.cpp
++    devices/backends/iokit/iokitvolume.cpp
++    devices/backends/iokit/iokitstorageaccess.cpp
++    devices/backends/iokit/iokitopticaldrive.cpp
++    devices/backends/iokit/iokitopticaldisc.cpp
++)
+Index: src/solid/devices/backends/iokit/cfhelper.cpp
+===================================================================
+--- src/solid/devices/backends/iokit/cfhelper.cpp
++++ src/solid/devices/backends/iokit/cfhelper.cpp
+@@ -1,5 +1,6 @@
+ /*
+     Copyright 2009 Harald Fernengel <harry@kdevelop.org>
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
+ 
+     This library is free software; you can redistribute it and/or
+     modify it under the terms of the GNU Lesser General Public
+@@ -27,6 +28,8 @@
+ 
+ #include <CoreFoundation/CoreFoundation.h>
+ 
++#include <sys/sysctl.h>
++
+ /* helper classes to convert from CF types to Qt */
+ 
+ static QString q_toString(const CFStringRef &str)
+@@ -175,3 +178,18 @@
+     return result;
+ }
+ 
++bool q_sysctlbyname(const char *name, QString &result)
++{
++    char *property = nullptr;
++    size_t size = 0;
++    int error = 0;
++    if (name && sysctlbyname(name, nullptr, &size, nullptr, 0) == 0 && size > 0) {
++        property = new char [size];
++        error = sysctlbyname(name, property, &size, nullptr, 0);
++        if (!error) {
++            result = QLatin1String(property);
++        }
++        delete[] property;
++    }
++    return !error;
++}
+Index: src/solid/devices/backends/iokit/dadictionary.cpp
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/dadictionary.cpp
+@@ -0,0 +1,98 @@
++/*
++    Copyright 2018 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#include "dadictionary_p.h"
++
++using namespace Solid::Backends::IOKit;
++
++DADictionary::DADictionary(const IOKitDevice *device)
++    : device(device)
++    , daDict(nullptr)
++{
++    daSession = DASessionCreate(kCFAllocatorDefault);
++    if (daSession) {
++        const QString devName = device->property(QStringLiteral("BSD Name")).toString();
++        daRef = DADiskCreateFromBSDName(kCFAllocatorDefault, daSession, devName.toStdString().c_str());
++    } else {
++        daRef = nullptr;
++    }
++}
++
++DADictionary::~DADictionary()
++{
++    releaseDict();
++    if (daRef) {
++        CFRelease(daRef);
++        daRef = nullptr;
++    }
++    if (daSession) {
++        CFRelease(daSession);
++        daSession = nullptr;
++    }
++}
++
++bool DADictionary::getDict()
++{
++    if (daRef) {
++        daDict = DADiskCopyDescription(daRef);
++    }
++    return daRef != nullptr;
++}
++
++void DADictionary::releaseDict()
++{
++    if (daDict) {
++        CFRelease(daDict);
++        daDict = nullptr;
++    }
++}
++
++const QString DADictionary::stringForKey(const CFStringRef key)
++{
++    QString ret;
++    if (getDict()) {
++        ret = QString::fromCFString((const CFStringRef) CFDictionaryGetValue(daDict, key));
++    }
++    releaseDict();
++    return ret;
++}
++
++CFURLRef DADictionary::cfUrLRefForKey(const CFStringRef key)
++{
++    CFURLRef ret = nullptr;
++    if (getDict()) {
++        ret = (const CFURLRef) CFDictionaryGetValue(daDict, key);
++    }
++    // we cannot release the dictionary here, or else we'd need to
++    // copy the CFURLRef and oblige our caller to release the return value.
++    return ret;
++}
++
++bool DADictionary::boolForKey(const CFStringRef key, bool &value)
++{
++    if (getDict()) {
++        const CFBooleanRef boolRef = (const CFBooleanRef) CFDictionaryGetValue(daDict, key);
++        if (boolRef) {
++            value = CFBooleanGetValue(boolRef);
++        }
++        return boolRef != nullptr;
++    }
++    return false;
++}
+Index: src/solid/devices/backends/iokit/dadictionary_p.h
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/dadictionary_p.h
+@@ -0,0 +1,58 @@
++/*
++    Copyright 2018 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#ifndef SOLID_BACKENDS_IOKIT_DADICTIONARY_H
++#define SOLID_BACKENDS_IOKIT_DADICTIONARY_H
++
++#include <QString>
++
++#include "iokitdevice.h"
++
++#include <CoreFoundation/CoreFoundation.h>
++#include <DiskArbitration/DiskArbitration.h>
++
++namespace Solid
++{
++namespace Backends
++{
++namespace IOKit
++{
++class DADictionary
++{
++public:
++    DADictionary(const IOKitDevice *device);
++    virtual ~DADictionary();
++
++    bool getDict();
++    void releaseDict();
++    const QString stringForKey(const CFStringRef key);
++    CFURLRef cfUrLRefForKey(const CFStringRef key);
++    bool boolForKey(const CFStringRef key, bool &value);
++
++    const IOKitDevice *device;
++    DASessionRef daSession;
++    DADiskRef daRef;
++    CFDictionaryRef daDict;
++};
++}
++}
++}
++
++#endif // SOLID_BACKENDS_IOKIT_DADICTIONARY_H
+Index: src/solid/devices/backends/iokit/iokitbattery.h
+===================================================================
+--- src/solid/devices/backends/iokit/iokitbattery.h
++++ src/solid/devices/backends/iokit/iokitbattery.h
+@@ -41,50 +41,51 @@
+     Battery(IOKitDevice *device);
+     virtual ~Battery();
+ 
+-    bool isPresent() const;
+-    Solid::Battery::BatteryType type() const;
++    bool isPresent() const Q_DECL_OVERRIDE;
++    Solid::Battery::BatteryType type() const Q_DECL_OVERRIDE;
+ 
+-    int chargePercent() const;
+-    int capacity() const;
++    int chargePercent() const Q_DECL_OVERRIDE;
++    int capacity() const Q_DECL_OVERRIDE;
+ 
+-    bool isRechargeable() const;
+-    bool isPowerSupply() const;
++    bool isRechargeable() const Q_DECL_OVERRIDE;
++    bool isPowerSupply() const Q_DECL_OVERRIDE;
+ 
+-    Solid::Battery::ChargeState chargeState() const;
++    Solid::Battery::ChargeState chargeState() const Q_DECL_OVERRIDE;
++
++    qlonglong timeToEmpty() const Q_DECL_OVERRIDE;
++    qlonglong timeToFull() const Q_DECL_OVERRIDE;
++    double voltage() const Q_DECL_OVERRIDE;
++    double temperature() const Q_DECL_OVERRIDE;
++    QString serial() const Q_DECL_OVERRIDE;
+ 
+     // ### the ones below are TODO
+-    qlonglong timeToEmpty() const { return 0; }
+-    qlonglong timeToFull() const { return 0; }
+-    Solid::Battery::Technology technology() const { return Solid::Battery::UnknownTechnology; }
+-    double energy() const { return 0.0; }
+-    double energyFull() const { return 0.0; }
+-    double energyFullDesign() const { return 0.0; }
+-    double energyRate() const { return 0.0; }
+-    double voltage() const { return 0.0; }
+-    double temperature() const { return 0.0; }
+-
+-    bool isRecalled() const { return false; }
+-    QString recallVendor() const { return QString(); }
+-    QString recallUrl() const { return QString(); }
+-    QString serial() const { return QString(); }
+-
+-    qlonglong remainingTime() const { return -1; }
++    Solid::Battery::Technology technology() const Q_DECL_OVERRIDE { return Solid::Battery::UnknownTechnology; }
++    double energy() const Q_DECL_OVERRIDE { return 0.0; }
++    double energyFull() const Q_DECL_OVERRIDE { return 0.0; }
++    double energyFullDesign() const Q_DECL_OVERRIDE { return 0.0; }
++    double energyRate() const Q_DECL_OVERRIDE { return 0.0; }
++
++    bool isRecalled() const Q_DECL_OVERRIDE { return false; }
++    QString recallVendor() const Q_DECL_OVERRIDE { return QString(); }
++    QString recallUrl() const Q_DECL_OVERRIDE { return QString(); }
++
++    qlonglong remainingTime() const Q_DECL_OVERRIDE { return -1; }
+ 
+ Q_SIGNALS:
+-    void energyChanged(double energy, const QString &udi);
+-    void energyFullChanged(double energyFull, const QString &udi);
+-    void energyFullDesignChanged(double energyFullDesign, const QString &udi);
+-    void energyRateChanged(double energyRate, const QString &udi);
+-    void chargePercentChanged(int value, const QString &udi);
+-    void capacityChanged(int value, const QString &udi);
+-    void chargeStateChanged(int newState, const QString &udi);
+-    void presentStateChanged(bool newState, const QString &udi);
+-    void powerSupplyStateChanged(bool newState, const QString &udi);
+-    void timeToEmptyChanged(qlonglong time, const QString &udi);
+-    void timeToFullChanged(qlonglong time, const QString &udi);
+-    void temperatureChanged(double temperature, const QString &udi);
+-    void voltageChanged(double voltage, const QString &udi);
+-    void remainingTimeChanged(qlonglong time, const QString &udi);
++    void energyChanged(double energy, const QString &udi) Q_DECL_OVERRIDE;
++    void energyFullChanged(double energyFull, const QString &udi) Q_DECL_OVERRIDE;
++    void energyFullDesignChanged(double energyFullDesign, const QString &udi) Q_DECL_OVERRIDE;
++    void energyRateChanged(double energyRate, const QString &udi) Q_DECL_OVERRIDE;
++    void chargePercentChanged(int value, const QString &udi) Q_DECL_OVERRIDE;
++    void capacityChanged(int value, const QString &udi) Q_DECL_OVERRIDE;
++    void chargeStateChanged(int newState, const QString &udi) Q_DECL_OVERRIDE;
++    void presentStateChanged(bool newState, const QString &udi) Q_DECL_OVERRIDE;
++    void powerSupplyStateChanged(bool newState, const QString &udi) Q_DECL_OVERRIDE;
++    void timeToEmptyChanged(qlonglong time, const QString &udi) Q_DECL_OVERRIDE;
++    void timeToFullChanged(qlonglong time, const QString &udi) Q_DECL_OVERRIDE;
++    void temperatureChanged(double temperature, const QString &udi) Q_DECL_OVERRIDE;
++    void voltageChanged(double voltage, const QString &udi) Q_DECL_OVERRIDE;
++    void remainingTimeChanged(qlonglong time, const QString &udi) Q_DECL_OVERRIDE;
+ };
+ }
+ }
+Index: src/solid/devices/backends/iokit/iokitbattery.cpp
+===================================================================
+--- src/solid/devices/backends/iokit/iokitbattery.cpp
++++ src/solid/devices/backends/iokit/iokitbattery.cpp
+@@ -1,5 +1,6 @@
+ /*
+     Copyright 2009 Harald Fernengel <harry@kdevelop.org>
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
+ 
+     This library is free software; you can redistribute it and/or
+     modify it under the terms of the GNU Lesser General Public
+@@ -21,7 +22,7 @@
+ #include "iokitbattery.h"
+ #include "iokitdevice.h"
+ 
+-#include <QtCore/qdebug.h>
++#include <QDebug>
+ 
+ // TODO - emit the signals
+ 
+@@ -34,57 +35,138 @@
+ 
+ Battery::~Battery()
+ {
++}
++
++// properties: QMap(("AdapterInfo", QVariant(int, 0))
++//     ("Amperage", QVariant(int, 0))
++//     ("AvgTimeToEmpty", QVariant(int, 65535))
++//     ("AvgTimeToFull", QVariant(int, 65535))
++//     ("BatteryInstalled", QVariant(bool, true))
++//     ("BatteryInvalidWakeSeconds", QVariant(int, 30))
++//     ("BatterySerialNumber", QVariant(QString, "W01286PEED3BA"))
++//     ("BootPathUpdated", QVariant(int, 1501532930))
++//     ("CellVoltage", QVariant(QVariantList, (QVariant(int, 4136), QVariant(int, 4134), QVariant(int, 4134), QVariant(int, 0))))
++//     ("CurrentCapacity", QVariant(int, 5552))
++//     ("CycleCount", QVariant(int, 16))
++//     ("DesignCapacity", QVariant(int, 5770))
++//     ("DesignCycleCount", QVariant(int, 1000))
++//     ("DeviceName", QVariant(QString, "bq20z451"))
++//     ("ExternalChargeCapable", QVariant(bool, true))
++//     ("ExternalConnected", QVariant(bool, true))
++//     ("FirmwareSerialNumber", QVariant(int, 48))
++//     ("FullPathUpdated", QVariant(int, 1502790621))
++//     ("FullyCharged", QVariant(bool, true))
++//     ("IOGeneralInterest", QVariant(QString, "IOCommand is not serializable"))
++//     ("InstantAmperage", QVariant(int, 0))
++//     ("InstantTimeToEmpty", QVariant(int, 65535))
++//     ("IsCharging", QVariant(bool, false))
++//     ("LegacyBatteryInfo", QVariant(QVariantMap, QMap(("Amperage", QVariant(int, 0))
++//         ("Capacity", QVariant(int, 5814))
++//         ("Current", QVariant(int, 5552))
++//         ("Cycle Count", QVariant(int, 16))
++//         ("Flags", QVariant(int, 5))
++//         ("Voltage", QVariant(int, 12403)))))
++//     ("Location", QVariant(int, 0))
++//     ("ManufactureDate", QVariant(int, 16106))
++//     ("Manufacturer", QVariant(QString, "SMP"))
++//     ("ManufacturerData", QVariant(QByteArray, "\x00\x00\x00\x00\x02\x01\x00\n\x01X\x00\x00\x02K6c\x03""00A\x03""ATL\x00\x12\x00\x00"))
++//     ("MaxCapacity", QVariant(int, 5814))
++//     ("MaxErr", QVariant(int, 1))
++//     ("OperationStatus", QVariant(int, 58435))
++//     ("PackReserve", QVariant(int, 200))
++//     ("PermanentFailureStatus", QVariant(int, 0))
++//     ("PostChargeWaitSeconds", QVariant(int, 120))
++//     ("PostDischargeWaitSeconds", QVariant(int, 120))
++//     ("Temperature", QVariant(int, 2965))
++//     ("TimeRemaining", QVariant(int, 0))
++//     ("UserVisiblePathUpdated", QVariant(int, 1502790679))
++//     ("Voltage", QVariant(int, 12403))
++//     ("className", QVariant(QString, "AppleSmartBattery")))
++
++qlonglong Battery::timeToEmpty() const
++{
++    if (chargeState() != Solid::Battery::Charging) {
++        int t = m_device->property(QStringLiteral("AvgTimeToEmpty")).toInt();
++        return t == 65535 ? -1 : t * 60;
++    }
++    return -1;
++}
++
++qlonglong Battery::timeToFull() const
++{
++    if (chargeState() == Solid::Battery::Charging) {
++        int t = m_device->property(QStringLiteral("AvgTimeToFull")).toInt();
++        return t == 65535 ? -1 : t * 60;
++    }
++    return -1;
++}
++
++double Battery::voltage() const
++{
++    return m_device->property(QStringLiteral("Voltage")).toInt() / 1000.0;
++}
++
++double Battery::temperature() const
++{
++    return m_device->property(QStringLiteral("Temperature")).toInt() / 100.0;
++}
+ 
++
++QString Battery::serial() const
++{
++    return m_device->property(QStringLiteral("BatterySerialNumber")).toString();
+ }
+ 
+ bool Battery::isPresent() const
+ {
+-    return m_device->property(QLatin1String("ExternalConnected")).toBool();
++    return m_device->property(QStringLiteral("ExternalConnected")).toBool();
+ }
+ 
+ Solid::Battery::BatteryType Battery::type() const
+ {
+-    // TODO - how to figure that one out?
+-    return Solid::Battery::UnknownBattery;
++    // TODO - how to figure that one out? Just presume we're
++    // only called with the main battery.
++    return Solid::Battery::PrimaryBattery;
+ }
+ 
+ int Battery::chargePercent() const
+ {
+-    if (m_device->property(QLatin1String("FullyCharged")).toBool()) {
+-        return 100;
+-    }
+-
+-    int maxCapacity = m_device->property(QLatin1String("MaxCapacity")).toInt();
++    // always calculate since FullyCharged remains true down to 92% or so.
++    int maxCapacity = m_device->property(QStringLiteral("MaxCapacity")).toInt();
+     if (maxCapacity == 0) {
+         return 0;    // prevent divide by 0
+     }
+-    return m_device->property(QLatin1String("CurrentCapacity")).toInt() / maxCapacity;
++    return int(m_device->property(QStringLiteral("CurrentCapacity")).toInt() * 100.0 / maxCapacity + 0.5);
+ }
+ 
+ int Battery::capacity() const
+ {
+-    // TODO
++    if (m_device->iOKitPropertyExists(QStringLiteral("PermanentFailureStatus"))
++        && m_device->property(QStringLiteral("PermanentFailureStatus")).toInt()) {
++        return 0;
++    }
+     return 100;
+ }
+ 
+ bool Battery::isRechargeable() const
+ {
+-    return m_device->property(QLatin1String("DesignCycleCount")).toInt() > 1;
++    return m_device->property(QStringLiteral("CycleCount")).toInt() > 1;
+ }
+ 
+ bool Battery::isPowerSupply() const
+ {
+-    // TODO
+-    return true;
++    return m_device->iOKitPropertyExists(QStringLiteral("BatteryInstalled"))
++        ? m_device->property(QStringLiteral("BatteryInstalled")).toBool()
++        : true;
+ }
+ 
+ Solid::Battery::ChargeState Battery::chargeState() const
+ {
+-    if (m_device->property(QLatin1String("IsCharging")).toBool()) {
++    if (m_device->property(QStringLiteral("IsCharging")).toBool()) {
+         return Solid::Battery::Charging;
+     }
+-    if (m_device->property(QLatin1String("FullyCharged")).toBool()) {
+-        return Solid::Battery::NoCharge;
++    if (m_device->property(QStringLiteral("FullyCharged")).toBool()) {
++        return Solid::Battery::FullyCharged;
+     }
+     return Solid::Battery::Discharging;
+ }
+Index: src/solid/devices/backends/iokit/iokitblock.h
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitblock.h
+@@ -0,0 +1,51 @@
++/*
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#ifndef SOLID_BACKENDS_IOKIT_BLOCK_H
++#define SOLID_BACKENDS_IOKIT_BLOCK_H
++
++#include <solid/devices/ifaces/block.h>
++#include "iokitdeviceinterface.h"
++
++namespace Solid
++{
++namespace Backends
++{
++namespace IOKit
++{
++class Block : public DeviceInterface, virtual public Solid::Ifaces::Block
++{
++    Q_OBJECT
++    Q_INTERFACES(Solid::Ifaces::Block)
++
++public:
++    Block(IOKitDevice *device);
++    Block(const IOKitDevice *device);
++    virtual ~Block();
++
++    virtual int deviceMajor() const Q_DECL_OVERRIDE;
++    virtual int deviceMinor() const Q_DECL_OVERRIDE;
++    virtual QString device() const Q_DECL_OVERRIDE;
++};
++}
++}
++}
++
++#endif // SOLID_BACKENDS_IOKIT_BLOCK_H
+Index: src/solid/devices/backends/iokit/iokitblock.cpp
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitblock.cpp
+@@ -0,0 +1,58 @@
++/*
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#include "iokitblock.h"
++
++#include "iokitdevice.h"
++
++using namespace Solid::Backends::IOKit;
++
++Block::Block(IOKitDevice *device)
++    : DeviceInterface(device)
++{
++}
++
++Block::Block(const IOKitDevice *device)
++    : DeviceInterface(device)
++{
++}
++
++Block::~Block()
++{
++}
++
++int Block::deviceMajor() const
++{
++    return m_device->property(QLatin1String("BSD Major")).toInt();
++}
++
++int Block::deviceMinor() const
++{
++    return m_device->property(QLatin1String("BSD Minor")).toInt();
++}
++
++QString Block::device() const
++{
++    if (m_device->iOKitPropertyExists(QStringLiteral("BSD Name"))) {
++        return QStringLiteral("/dev/") + m_device->property(QLatin1String("BSD Name")).toString();
++    }
++    return QString();
++}
++
+Index: src/solid/devices/backends/iokit/iokitdevice.h
+===================================================================
+--- src/solid/devices/backends/iokit/iokitdevice.h
++++ src/solid/devices/backends/iokit/iokitdevice.h
+@@ -39,25 +39,28 @@
+ 
+ public:
+     IOKitDevice(const QString &udi);
++    IOKitDevice(const IOKitDevice &device);
+     virtual ~IOKitDevice();
+ 
+-    virtual QString udi() const;
+-    virtual QString parentUdi() const;
++    virtual QString udi() const Q_DECL_OVERRIDE;
++    virtual QString parentUdi() const Q_DECL_OVERRIDE;
+ 
+-    virtual QString vendor() const;
+-    virtual QString product() const;
+-    virtual QString icon() const;
+-    virtual QStringList emblems() const;
+-    virtual QString description() const;
++    virtual QString vendor() const Q_DECL_OVERRIDE;
++    virtual QString product() const Q_DECL_OVERRIDE;
++    virtual QString icon() const Q_DECL_OVERRIDE;
++    virtual QStringList emblems() const Q_DECL_OVERRIDE;
++    virtual QString description() const Q_DECL_OVERRIDE;
+ 
+     virtual QVariant property(const QString &key) const;
+ 
+     virtual QMap<QString, QVariant> allProperties() const;
+ 
+-    virtual bool propertyExists(const QString &key) const;
++    virtual bool iOKitPropertyExists(const QString &key) const;
+ 
+-    virtual bool queryDeviceInterface(const Solid::DeviceInterface::Type &type) const;
+-    virtual QObject *createDeviceInterface(const Solid::DeviceInterface::Type &type);
++    virtual bool queryDeviceInterface(const Solid::DeviceInterface::Type &type) const Q_DECL_OVERRIDE;
++    virtual QObject *createDeviceInterface(const Solid::DeviceInterface::Type &type) Q_DECL_OVERRIDE;
++
++    bool conformsToIOKitClass(const QString &className) const;
+ 
+ Q_SIGNALS:
+     void propertyChanged(const QMap<QString, int> &changes);
+Index: src/solid/devices/backends/iokit/iokitdevice.cpp
+===================================================================
+--- src/solid/devices/backends/iokit/iokitdevice.cpp
++++ src/solid/devices/backends/iokit/iokitdevice.cpp
+@@ -1,5 +1,6 @@
+ /*
+     Copyright 2009 Harald Fernengel <harry@kdevelop.org>
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
+ 
+     This library is free software; you can redistribute it and/or
+     modify it under the terms of the GNU Lesser General Public
+@@ -22,8 +23,19 @@
+ #include "iokitgenericinterface.h"
+ #include "iokitprocessor.h"
+ #include "iokitbattery.h"
++#include "iokitstorage.h"
++#include "iokitstorageaccess.h"
++#include "iokitvolume.h"
++#include "iokitopticaldrive.h"
++#include "iokitopticaldisc.h"
+ 
+-#include <QtCore/qdebug.h>
++#include <QDebug>
++#include <QSet>
++#include <QPointer>
++#include <QUrl>
++
++#include <sys/types.h>
++#include <sys/sysctl.h>
+ 
+ #include <IOKit/IOKitLib.h>
+ #include <IOKit/usb/IOUSBLib.h>
+@@ -33,6 +45,9 @@
+ 
+ // from cfhelper.cpp
+ extern QMap<QString, QVariant> q_toVariantMap(const CFMutableDictionaryRef &dict);
++extern bool q_sysctlbyname(const char *name, QString &result);
++
++typedef QSet<Solid::DeviceInterface::Type> DeviceInterfaceTypes;
+ 
+ namespace Solid
+ {
+@@ -42,17 +57,48 @@
+ {
+ 
+ // returns a solid type from an entry and its properties
+-static Solid::DeviceInterface::Type typeFromEntry(const io_registry_entry_t &entry,
+-        const QMap<QString, QVariant> &properties)
++static DeviceInterfaceTypes typesFromEntry(const io_registry_entry_t &entry,
++        const QMap<QString, QVariant> &properties,
++        Solid::DeviceInterface::Type &mainType)
+ {
++    DeviceInterfaceTypes types;
++    mainType = Solid::DeviceInterface::Unknown;
+     if (IOObjectConformsTo(entry, "AppleACPICPU")) {
+-        return Solid::DeviceInterface::Processor;
++        mainType = Solid::DeviceInterface::Processor;
++        types << mainType;
+     }
+     if (IOObjectConformsTo(entry, "AppleSmartBattery")) {
+-        return Solid::DeviceInterface::Battery;
++        mainType = Solid::DeviceInterface::Battery;
++        types << mainType;
++    }
++    const QString bsdName = QStringLiteral("BSD Name"),
++        leaf = QStringLiteral("Leaf");
++    if (IOObjectConformsTo(entry, "IOCDMedia")
++        || IOObjectConformsTo(entry, "IODVDMedia")
++        || IOObjectConformsTo(entry, "IOBDMedia")) {
++        mainType = Solid::DeviceInterface::OpticalDrive;
++        types << mainType
++            << Solid::DeviceInterface::OpticalDisc;
++    }
++    if (properties.contains(bsdName) && properties.value(bsdName).toString().startsWith(QStringLiteral("disk"))) {
++        if ((properties.contains(leaf) && properties.value(leaf).toBool() == false)
++            || mainType == Solid::DeviceInterface::OpticalDrive) {
++            if (mainType == Solid::DeviceInterface::Unknown) {
++                mainType = Solid::DeviceInterface::StorageDrive;
++            }
++            types << Solid::DeviceInterface::StorageDrive;
++        } else if (mainType == Solid::DeviceInterface::Unknown) {
++            mainType = Solid::DeviceInterface::StorageVolume;
++        }
++        types << Solid::DeviceInterface::StorageVolume;
++    }
++
++    if (types.isEmpty()) {
++        types << mainType;
++//         qWarning() << "unsupported entry" << entry << "with properties" << properties;
+     }
+ 
+-    return Solid::DeviceInterface::Unknown;
++    return types;
+ }
+ 
+ // gets all properties from an entry into a QMap
+@@ -68,6 +114,10 @@
+ 
+     CFRelease(propertyDict);
+ 
++    io_name_t className;
++    IOObjectGetClass(entry, className);
++    result["className"] = QString::fromUtf8(className);
++
+     return result;
+ }
+ 
+@@ -94,19 +144,38 @@
+     return result;
+ }
+ 
++static const QString computerModel()
++{
++    QString qModel;
++    q_sysctlbyname("hw.model", qModel);
++    return qModel;
++}
++
+ class IOKitDevicePrivate
+ {
+ public:
+     inline IOKitDevicePrivate()
+-        : type(Solid::DeviceInterface::Unknown)
+-    {}
++        : type({Solid::DeviceInterface::Unknown})
++        , parentDevice(nullptr)
++    {
++    }
++    ~IOKitDevicePrivate()
++    {
++        if (parentDevice) {
++            delete parentDevice;
++            parentDevice = nullptr;
++        }
++    }
+ 
+     void init(const QString &udiString, const io_registry_entry_t &entry);
++    IOKitDevice* getParentDevice();
+ 
+     QString udi;
+     QString parentUdi;
+     QMap<QString, QVariant> properties;
+-    Solid::DeviceInterface::Type type;
++    DeviceInterfaceTypes type;
++    Solid::DeviceInterface::Type mainType;
++    IOKitDevice *parentDevice;
+ };
+ 
+ void IOKitDevicePrivate::init(const QString &udiString, const io_registry_entry_t &entry)
+@@ -117,16 +186,26 @@
+ 
+     properties = getProperties(entry);
+ 
+-    io_name_t className;
+-    IOObjectGetClass(entry, className);
+-    properties["className"] = QString::fromUtf8(className);
+-
+     parentUdi = getParentDeviceUdi(entry);
+-    type = typeFromEntry(entry, properties);
++    type = typesFromEntry(entry, properties, mainType);
++    if (udi.contains(QStringLiteral("IOBD")) || udi.contains(QStringLiteral("BD PX"))) {
++        qWarning() << "Solid: BlueRay entry" << entry << "mainType=" << mainType << "typeList:" << type
++            << "with properties" << properties;
++    }
++    if (mainType != Solid::DeviceInterface::Unknown) {
++    }
+ 
+     IOObjectRelease(entry);
+ }
+ 
++IOKitDevice* IOKitDevicePrivate::getParentDevice()
++{
++    if (!parentDevice) {
++        parentDevice = new IOKitDevice(parentUdi);
++    }
++    return parentDevice;
++}
++
+ IOKitDevice::IOKitDevice(const QString &udi, const io_registry_entry_t &entry)
+     : d(new IOKitDevicePrivate)
+ {
+@@ -136,23 +215,63 @@
+ IOKitDevice::IOKitDevice(const QString &udi)
+     : d(new IOKitDevicePrivate)
+ {
++    if (udi.isEmpty()) {
++        qWarning() << Q_FUNC_INFO << "Tried to create Device from empty UDI";
++        return;
++    }
++
+     io_registry_entry_t entry = IORegistryEntryFromPath(
+                                     kIOMasterPortDefault,
+                                     udi.toLocal8Bit().constData());
+ 
+     if (entry == MACH_PORT_NULL) {
+-        qDebug() << Q_FUNC_INFO << "Tried to create Device from invalid UDI" << udi;
++        qWarning() << Q_FUNC_INFO << "Tried to create Device from invalid UDI" << udi;
+         return;
+     }
+ 
+     d->init(udi, entry);
+ }
+ 
++IOKitDevice::IOKitDevice(const IOKitDevice &device)
++    : d(new IOKitDevicePrivate)
++{
++    if (device.udi().isEmpty()) {
++        qWarning() << Q_FUNC_INFO << "Tried to create Device from empty UDI";
++        return;
++    }
++
++    io_registry_entry_t entry = IORegistryEntryFromPath(
++                                    kIOMasterPortDefault,
++                                    device.udi().toLocal8Bit().constData());
++
++    if (entry == MACH_PORT_NULL) {
++        qWarning() << Q_FUNC_INFO << "Tried to create Device from invalid UDI" << device.udi();
++        return;
++    }
++
++    d->init(device.udi(), entry);
++}
++
+ IOKitDevice::~IOKitDevice()
+ {
+     delete d;
+ }
+ 
++bool IOKitDevice::conformsToIOKitClass(const QString &className) const
++{
++    bool conforms = false;
++    if (!className.isEmpty()) {
++        io_registry_entry_t entry = IORegistryEntryFromPath(
++                                    kIOMasterPortDefault,
++                                    udi().toLocal8Bit().constData());
++        if (entry != MACH_PORT_NULL) {
++            conforms = IOObjectConformsTo(entry, className.toLocal8Bit().constData());
++            IOObjectRelease(entry);
++        }
++    }
++    return conforms;
++}
++
+ QString IOKitDevice::udi() const
+ {
+     return d->udi;
+@@ -165,31 +284,167 @@
+ 
+ QString IOKitDevice::vendor() const
+ {
+-    return QString(); // TODO
++    QString vendor;
++    if (parentUdi().isEmpty()) {
++        return QStringLiteral("Apple");
++    }
++    switch (d->mainType) {
++    case Solid::DeviceInterface::Processor:
++        return Processor::vendor();
++        break;
++    case Solid::DeviceInterface::Battery:
++        return property(QStringLiteral("Manufacturer")).toString();
++        break;
++    case Solid::DeviceInterface::StorageDrive:
++    case Solid::DeviceInterface::OpticalDrive:
++    case Solid::DeviceInterface::OpticalDisc:
++        return IOKitStorage(this).vendor();
++        break;
++    case Solid::DeviceInterface::StorageVolume:
++        return IOKitVolume(this).vendor();
++        break;
++    default:
++        return QString();
++        break;
++    }
++    return QString();
+ }
+ 
+ QString IOKitDevice::product() const
+ {
++    if (parentUdi().isEmpty()) {
++        return computerModel();
++    }
++    switch (d->mainType) {
++    case Solid::DeviceInterface::Processor:
++        return Processor::product();
++        break;
++    case Solid::DeviceInterface::Battery:
++        return property(QStringLiteral("DeviceName")).toString();
++        break;
++    case Solid::DeviceInterface::StorageDrive:
++    case Solid::DeviceInterface::OpticalDrive:
++    case Solid::DeviceInterface::OpticalDisc:
++        return IOKitStorage(this).product();
++        break;
++    case Solid::DeviceInterface::StorageVolume:
++        return IOKitVolume(this).product();
++        break;
++    }
+     return QString(); // TODO
+ }
+ 
+-QString IOKitDevice::icon() const
++QString IOKitDevice::description() const
+ {
+-    return QString(); // TODO
++    switch (d->mainType) {
++    case Solid::DeviceInterface::Processor:
++        return QStringLiteral("Processor");
++        break;
++    case Solid::DeviceInterface::Battery:
++        return QStringLiteral("Apple Smart Battery");
++        break;
++    case Solid::DeviceInterface::StorageDrive:
++    case Solid::DeviceInterface::OpticalDrive:
++    case Solid::DeviceInterface::OpticalDisc:
++        return IOKitStorage(this).description();
++        break;
++    case Solid::DeviceInterface::StorageVolume: {
++        const QString volLabel = IOKitVolume(this).description();
++        const QString mountPoint = IOKitStorageAccess(this).filePath();
++        if (volLabel.isEmpty()) {
++            return QUrl::fromLocalFile(mountPoint).fileName();
++        } else if (mountPoint.startsWith(QStringLiteral("/Volumes/"))) {
++            // Mac users will expect to see the name under which the volume is mounted here.
++            return QString(QStringLiteral("%1 (%2)")).arg(QUrl::fromLocalFile(mountPoint).fileName()).arg(volLabel);
++        }
++        return volLabel;
++        break;
++    }
++    }
++    return product(); // TODO
+ }
+ 
+-QStringList IOKitDevice::emblems() const
++QString IOKitDevice::icon() const
+ {
+-    return QStringList(); // TODO
++    // adapted from HalDevice::icon()
++    if (parentUdi().isEmpty()) {
++        if (computerModel().contains(QStringLiteral("MacBook"))) {
++            return QStringLiteral("computer-laptop");
++        } else {
++            return QStringLiteral("computer");
++        }
++
++    } else if (d->type.contains(Solid::DeviceInterface::StorageDrive)) {
++        IOKitStorage drive(this);
++        Solid::StorageDrive::DriveType driveType = drive.driveType();
++
++        switch (driveType) {
++        case Solid::StorageDrive::Floppy:
++            // why not :)
++            return QStringLiteral("media-floppy");
++            break;
++        case Solid::StorageDrive::CdromDrive: {
++            const IOKitOpticalDisc disc(this);
++            if (disc.availableContent() == Solid::OpticalDisc::Audio ) {
++                return QStringLiteral("media-optical-audio");
++            } else switch (disc.discType()) {
++                case Solid::OpticalDisc::CdRom:
++                    return QStringLiteral("media-optical-data");
++                    break;
++                case Solid::OpticalDisc::CdRecordable:
++                case Solid::OpticalDisc::CdRewritable:
++                    return QStringLiteral("media-optical-recordable");
++                    break;
++                case Solid::OpticalDisc::BluRayRom:
++                case Solid::OpticalDisc::BluRayRecordable:
++                case Solid::OpticalDisc::BluRayRewritable:
++                    return QStringLiteral("media-optical-blu-ray");
++                    break;
++            }
++            break;
++        }
++        case Solid::StorageDrive::SdMmc:
++            return QStringLiteral("media-flash-sd-mmc");
++            break;
++        case Solid::StorageDrive::CompactFlash:
++            return QStringLiteral("media-flash-cf");
++            break;
++        }
++        if (drive.bus() == Solid::StorageDrive::Usb) {
++            return QStringLiteral("drive-removable-media-usb");
++        }
++        if (drive.isRemovable()) {
++            return QStringLiteral("drive-removable-media");
++        }
++        return QStringLiteral("drive-harddisk");
++
++    } else if (d->mainType == Solid::DeviceInterface::StorageVolume) {
++    } else if (d->mainType == Solid::DeviceInterface::Battery) {
++        return QStringLiteral("battery");
++    } else if (d->mainType == Solid::DeviceInterface::Processor) {
++        return QStringLiteral("cpu"); // FIXME: Doesn't follow icon spec
++    } else {
++        QString iconName = d->getParentDevice()->icon();
++
++        if (!iconName.isEmpty()) {
++            return iconName;
++        }
++
++        return QStringLiteral("drive-harddisk");
++    }
++    return QString();
+ }
+ 
+-QString IOKitDevice::description() const
++QStringList IOKitDevice::emblems() const
+ {
+-    return product(); // TODO
++    return QStringList(); // TODO
+ }
+ 
+ QVariant IOKitDevice::property(const QString &key) const
+ {
++    if (!d->properties.contains(key)) {
++        return QObject::property(key.toUtf8());
++    }
+     return d->properties.value(key);
+ }
+ 
+@@ -198,35 +453,85 @@
+     return d->properties;
+ }
+ 
+-bool IOKitDevice::propertyExists(const QString &key) const
++bool IOKitDevice::iOKitPropertyExists(const QString &key) const
+ {
+     return d->properties.contains(key);
+ }
+ 
+ bool IOKitDevice::queryDeviceInterface(const Solid::DeviceInterface::Type &type) const
+ {
+-    return (type == Solid::DeviceInterface::GenericInterface
+-            || type == d->type);
++    switch (type) {
++    case Solid::DeviceInterface::GenericInterface:
++        return true;
++        break;
++    case Solid::DeviceInterface::StorageAccess:
++        if (d->type.contains(Solid::DeviceInterface::StorageDrive)
++            || d->type.contains(Solid::DeviceInterface::StorageVolume)) {
++            return true;
++        }
++        break;
++    default:
++        return d->type.contains(type);
++        break;
++    }
++    return false;
+ }
+ 
+ QObject *IOKitDevice::createDeviceInterface(const Solid::DeviceInterface::Type &type)
+ {
+-    QObject *iface = 0;
++    QObject *iface = nullptr;
+ 
+     switch (type) {
+     case Solid::DeviceInterface::GenericInterface:
+         iface = new GenericInterface(this);
+         break;
+     case Solid::DeviceInterface::Processor:
+-        if (d->type == Solid::DeviceInterface::Processor) {
++        if (d->type.contains(Solid::DeviceInterface::Processor)) {
+             iface = new Processor(this);
+         }
+         break;
+     case Solid::DeviceInterface::Battery:
+-        if (d->type == Solid::DeviceInterface::Battery) {
++        if (d->type.contains(Solid::DeviceInterface::Battery)) {
+             iface = new Battery(this);
+         }
+         break;
++    case Solid::DeviceInterface::OpticalDrive:
++        if (d->type.contains(Solid::DeviceInterface::OpticalDrive)) {
++            iface = new IOKitOpticalDrive(this);
++        }
++        break;
++    case Solid::DeviceInterface::OpticalDisc:
++        if (d->type.contains(Solid::DeviceInterface::OpticalDisc)) {
++            iface = new IOKitOpticalDisc(this);
++        }
++        break;
++    case Solid::DeviceInterface::StorageDrive:
++        if (d->type.contains(Solid::DeviceInterface::StorageDrive)) {
++            iface = new IOKitStorage(this);
++        }
++        break;
++    case Solid::DeviceInterface::Block:
++        if (d->type.contains(Solid::DeviceInterface::OpticalDisc)) {
++            iface = new IOKitOpticalDisc(this);
++        } else if (d->type.contains(Solid::DeviceInterface::OpticalDrive)) {
++            iface = new IOKitOpticalDrive(this);
++        } else if (d->type.contains(Solid::DeviceInterface::StorageVolume)) {
++            iface = new IOKitVolume(this);
++        } else if (d->type.contains(Solid::DeviceInterface::StorageDrive)) {
++            iface = new IOKitStorage(this);
++        }
++        break;
++    case Solid::DeviceInterface::StorageVolume:
++        if (d->type.contains(Solid::DeviceInterface::StorageVolume)) {
++            iface = new IOKitVolume(this);
++        }
++        break;
++    case Solid::DeviceInterface::StorageAccess:
++        if (d->type.contains(Solid::DeviceInterface::StorageDrive)
++            || d->type.contains(Solid::DeviceInterface::StorageVolume)) {
++            iface = new IOKitStorageAccess(this);
++        }
++        break;
+         // the rest is TODO
+     }
+ 
+Index: src/solid/devices/backends/iokit/iokitdeviceinterface.h
+===================================================================
+--- src/solid/devices/backends/iokit/iokitdeviceinterface.h
++++ src/solid/devices/backends/iokit/iokitdeviceinterface.h
+@@ -1,5 +1,6 @@
+ /*
+     Copyright 2009 Harald Fernengel <harry@kdevelop.org>
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
+ 
+     This library is free software; you can redistribute it and/or
+     modify it under the terms of the GNU Lesser General Public
+@@ -39,10 +40,15 @@
+     Q_INTERFACES(Solid::Ifaces::DeviceInterface)
+ public:
+     DeviceInterface(IOKitDevice *device);
++    // the ctor taking a const device* argument makes a deep
++    // copy of the IOKitDevice; any property changes made via 
++    // the resulting instance will not affect the original device.
++    DeviceInterface(const IOKitDevice *device);
+     virtual ~DeviceInterface();
+ 
+ protected:
+     IOKitDevice *m_device;
++    IOKitDevice *m_deviceCopy;
+ };
+ }
+ }
+Index: src/solid/devices/backends/iokit/iokitdeviceinterface.cpp
+===================================================================
+--- src/solid/devices/backends/iokit/iokitdeviceinterface.cpp
++++ src/solid/devices/backends/iokit/iokitdeviceinterface.cpp
+@@ -1,5 +1,6 @@
+ /*
+     Copyright 2009 Harald Fernengel <harry@kdevelop.org>
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
+ 
+     This library is free software; you can redistribute it and/or
+     modify it under the terms of the GNU Lesser General Public
+@@ -23,11 +24,23 @@
+ using namespace Solid::Backends::IOKit;
+ 
+ DeviceInterface::DeviceInterface(IOKitDevice *device)
+-    : QObject(device), m_device(device)
++    : QObject(device)
++    , m_device(device)
++    , m_deviceCopy(nullptr)
+ {
+ }
+ 
++DeviceInterface::DeviceInterface(const IOKitDevice *device)
++    : QObject(device->parent()), m_deviceCopy(new IOKitDevice(*device))
++{
++    m_device = m_deviceCopy;
++}
++
+ DeviceInterface::~DeviceInterface()
+ {
++    if (m_deviceCopy) {
++        delete m_deviceCopy;
++        m_deviceCopy = nullptr;
++    }
+ }
+ 
+Index: src/solid/devices/backends/iokit/iokitgenericinterface.cpp
+===================================================================
+--- src/solid/devices/backends/iokit/iokitgenericinterface.cpp
++++ src/solid/devices/backends/iokit/iokitgenericinterface.cpp
+@@ -46,6 +46,6 @@
+ 
+ bool GenericInterface::propertyExists(const QString &key) const
+ {
+-    return m_device->propertyExists(key);
++    return m_device->iOKitPropertyExists(key);
+ }
+ 
+Index: src/solid/devices/backends/iokit/iokitmanager.cpp
+===================================================================
+--- src/solid/devices/backends/iokit/iokitmanager.cpp
++++ src/solid/devices/backends/iokit/iokitmanager.cpp
+@@ -40,7 +40,7 @@
+ {
+ public:
+     inline IOKitManagerPrivate()
+-        : port(0), source(0)
++        : port(nullptr), source(nullptr)
+     {}
+ 
+     IONotificationPortRef port;
+@@ -89,11 +89,13 @@
+ 
+         //Solid::DeviceInterface::GenericInterface:
+         //Solid::DeviceInterface::Block:
+-        //Solid::DeviceInterface::StorageAccess:
+-        //Solid::DeviceInterface::StorageDrive:
+-        //Solid::DeviceInterface::OpticalDrive:
+-        //Solid::DeviceInterface::StorageVolume:
+-        //Solid::DeviceInterface::OpticalDisc:
++    case Solid::DeviceInterface::StorageAccess:
++    case Solid::DeviceInterface::StorageDrive:
++    case Solid::DeviceInterface::StorageVolume:
++        return "IOMedia";
++    case Solid::DeviceInterface::OpticalDrive:
++    case Solid::DeviceInterface::OpticalDisc:
++        return "IOCDMedia";
+         //Solid::DeviceInterface::Camera:
+         //Solid::DeviceInterface::PortableMediaPlayer:
+     }
+Index: src/solid/devices/backends/iokit/iokitopticaldisc.h
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitopticaldisc.h
+@@ -0,0 +1,58 @@
++/*
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#ifndef SOLID_BACKENDS_IOKIT_OPTICALDISC_H
++#define SOLID_BACKENDS_IOKIT_OPTICALDISC_H
++
++#include <solid/devices/ifaces/opticaldisc.h>
++#include "iokitvolume.h"
++
++namespace Solid
++{
++namespace Backends
++{
++namespace IOKit
++{
++class IOKitOpticalDisc : public IOKitVolume, virtual public Solid::Ifaces::OpticalDisc
++{
++    Q_OBJECT
++    Q_INTERFACES(Solid::Ifaces::OpticalDisc)
++
++public:
++    IOKitOpticalDisc(IOKitDevice *device);
++    IOKitOpticalDisc(const IOKitDevice *device);
++    virtual ~IOKitOpticalDisc();
++
++    // overriden from IOKit::Block because optical discs must
++    // be accessed through the raw device.
++    virtual QString device() const Q_DECL_OVERRIDE;
++
++    virtual Solid::OpticalDisc::ContentTypes availableContent() const Q_DECL_OVERRIDE;
++    virtual Solid::OpticalDisc::DiscType discType() const Q_DECL_OVERRIDE;
++    virtual bool isAppendable() const Q_DECL_OVERRIDE;
++    virtual bool isBlank() const Q_DECL_OVERRIDE;
++    virtual bool isRewritable() const Q_DECL_OVERRIDE;
++    virtual qulonglong capacity() const Q_DECL_OVERRIDE;
++};
++}
++}
++}
++
++#endif // SOLID_BACKENDS_IOKIT_OPTICALDISC_H
+Index: src/solid/devices/backends/iokit/iokitopticaldisc.cpp
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitopticaldisc.cpp
+@@ -0,0 +1,120 @@
++/*
++    Copyright 2006 Kevin Ottens <ervin@kde.org>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#include "iokitopticaldisc.h"
++
++#include <QDebug>
++
++#include <CoreFoundation/CoreFoundation.h>
++
++using namespace Solid::Backends::IOKit;
++
++IOKitOpticalDisc::IOKitOpticalDisc(IOKitDevice *device)
++    : IOKitVolume(device)
++{
++}
++
++IOKitOpticalDisc::IOKitOpticalDisc(const IOKitDevice *device)
++    : IOKitVolume(device)
++{
++}
++
++IOKitOpticalDisc::~IOKitOpticalDisc()
++{
++}
++
++QString IOKitOpticalDisc::device() const
++{
++    const QString devName = m_device->property(QLatin1String("BSD Name")).toString();
++    if (devName.startsWith(QLatin1Char('r'))) {
++        return QStringLiteral("/dev/") + devName;
++    } else {
++        return QStringLiteral("/dev/r") + devName;
++    }
++}
++
++Solid::OpticalDisc::ContentTypes IOKitOpticalDisc::availableContent() const
++{
++    if (fsType() == QStringLiteral("cddafs")) {
++        return Solid::OpticalDisc::Audio;
++    }
++    return Solid::OpticalDisc::Data;
++}
++
++Solid::OpticalDisc::DiscType IOKitOpticalDisc::discType() const
++{
++    QString type = m_device->property(QStringLiteral("Type")).toString();
++
++    if (type == "CD-ROM") {
++        return Solid::OpticalDisc::CdRom;
++    } else if (type == "CD-R") {
++        return Solid::OpticalDisc::CdRecordable;
++    } else if (type == "CD-RW") {
++        return Solid::OpticalDisc::CdRewritable;
++    } else if (type == "DVD-ROM") {
++        return Solid::OpticalDisc::DvdRom;
++    } else if (type == "DVD-RAM") {
++        return Solid::OpticalDisc::DvdRam;
++    } else if (type == "DVD-R") {
++        return Solid::OpticalDisc::DvdRecordable;
++    } else if (type == "DVD-RW") {
++        return Solid::OpticalDisc::DvdRewritable;
++    } else if (type == "DVD+R") {
++        return Solid::OpticalDisc::DvdPlusRecordable;
++    } else if (type == "DVD+RW") {
++        return Solid::OpticalDisc::DvdPlusRewritable;
++    } else if (type == "BD-ROM") {
++        return Solid::OpticalDisc::BluRayRom;
++    } else if (type == "BD-R") {
++        return Solid::OpticalDisc::BluRayRecordable;
++    } else if (type == "BD-RE") {
++        return Solid::OpticalDisc::BluRayRewritable;
++    } else if (type == "HD DVD-ROM") {
++        return Solid::OpticalDisc::HdDvdRom;
++    } else if (type == "HD DVD-R") {
++        return Solid::OpticalDisc::HdDvdRecordable;
++    } else if (type == "HD DVD-RW") {
++        return Solid::OpticalDisc::HdDvdRewritable;
++    } else {
++        return Solid::OpticalDisc::UnknownDiscType;
++    }
++}
++
++bool IOKitOpticalDisc::isAppendable() const
++{
++    // TODO!
++    return isRewritable();
++}
++
++bool IOKitOpticalDisc::isBlank() const
++{
++    // TODO!
++    return isRewritable();
++}
++
++bool IOKitOpticalDisc::isRewritable() const
++{
++    return m_device->property(QStringLiteral("Writable")).toBool();
++}
++
++qulonglong IOKitOpticalDisc::capacity() const
++{
++    return size();
++}
+Index: src/solid/devices/backends/iokit/iokitopticaldrive.h
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitopticaldrive.h
+@@ -0,0 +1,62 @@
++/*
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#ifndef SOLID_BACKENDS_IOKIT_OPTICALDRIVE_H
++#define SOLID_BACKENDS_IOKIT_OPTICALDRIVE_H
++
++#include <solid/devices/ifaces/opticaldrive.h>
++#include "iokitstorage.h"
++
++namespace Solid
++{
++namespace Backends
++{
++namespace IOKit
++{
++class IOKitOpticalDrive : public IOKitStorage, virtual public Solid::Ifaces::OpticalDrive
++{
++    Q_OBJECT
++    Q_INTERFACES(Solid::Ifaces::OpticalDrive)
++
++public:
++    explicit IOKitOpticalDrive(IOKitDevice *device);
++    virtual ~IOKitOpticalDrive();
++
++public Q_SLOTS:
++    Solid::OpticalDrive::MediumTypes supportedMedia() const Q_DECL_OVERRIDE;
++    int readSpeed() const Q_DECL_OVERRIDE;
++    int writeSpeed() const Q_DECL_OVERRIDE;
++    QList<int> writeSpeeds() const Q_DECL_OVERRIDE;
++    bool eject() Q_DECL_OVERRIDE;
++
++Q_SIGNALS:
++    void ejectPressed(const QString &udi) Q_DECL_OVERRIDE;
++    void ejectDone(Solid::ErrorType error, QVariant errorData, const QString &udi) Q_DECL_OVERRIDE;
++    void ejectRequested(const QString &udi);
++
++private:
++    class Private;
++    Private *d;
++};
++}
++}
++}
++
++#endif // SOLID_BACKENDS_IOKIT_OPTICALDRIVE_H
+Index: src/solid/devices/backends/iokit/iokitopticaldrive.cpp
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitopticaldrive.cpp
+@@ -0,0 +1,358 @@
++/*
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#include "iokitopticaldrive.h"
++
++#include <QStringList>
++#include <QDebug>
++#include <QProcess>
++
++#ifdef EJECT_USING_DISKARBITRATION
++// for QCFType:
++#include <QtCore/private/qcore_mac_p.h>
++#else
++#include <QStandardPaths>
++#endif
++
++#include <CoreFoundation/CoreFoundation.h>
++#include <DiskArbitration/DiskArbitration.h>
++#include <IOKit/scsi/IOSCSIMultimediaCommandsDevice.h>
++
++using namespace Solid::Backends::IOKit;
++
++
++class IOKitOpticalDrive::Private
++{
++public:
++    Private(const IOKitDevice *device, const QVariantMap &devCharMap)
++        : m_device(device)
++        , m_deviceCharacteristics(devCharMap)
++    {
++    }
++    virtual ~Private()
++    {
++    }
++
++    QVariant property(const QString &key) const
++    {
++        return m_deviceCharacteristics.value(key);
++    }
++
++    const IOKitDevice *m_device;
++    const QVariantMap m_deviceCharacteristics;
++
++    static const QMap<Solid::OpticalDrive::MediumType, uint32_t> cdTypeMap;
++    static const QMap<Solid::OpticalDrive::MediumType, uint32_t> dvdTypeMap;
++    static const QMap<Solid::OpticalDrive::MediumType, uint32_t> bdTypeMap;
++
++#ifdef EJECT_USING_DISKARBITRATION
++    // DiskArbitration-based ejection based on the implementation in libcdio's osx.c
++    // in turn based on VideoLAN (VLC) code.
++    // Not activated by default ATM because I have only been able to test it with the
++    // solid-hardware5 utility and that one remains stuck after a successful return
++    // from IOKitOpticalDrive::eject(). It does so too when using the hdiutil external
++    // utility which cannot be due to using QProcess (to the best of my knowledge).
++    // NB: the full-fledged approach using a cancel sourc ref (cancel_signal) etc. may
++    // well be too complicated.
++
++    typedef struct DAContext {
++        const IOKitDevice *device;
++        int success;
++        bool completed;
++        DASessionRef session;
++        CFRunLoopRef runloop;
++        CFRunLoopSourceRef cancel_signal;
++    } DAContext;
++
++    static void cancelEjectRunloop(void*) {};
++
++    static void daEjectCallback(DADiskRef disk, DADissenterRef dissenter, void *context)
++    {
++        Q_UNUSED(disk);
++        DAContext *daContext = static_cast<DAContext*>(context);
++
++        if (dissenter) {
++            CFStringRef status = DADissenterGetStatusString(dissenter);
++            if (status){
++                qWarning() << "Warning while ejecting" << daContext->device->property("BSD Name").toString()
++                    << ":" << QString::fromCFString(status);
++                CFRelease( status );
++            }
++        }
++
++        daContext->success = dissenter ? false : true;
++        daContext->completed = TRUE;
++        CFRunLoopSourceSignal(daContext->cancel_signal);
++        CFRunLoopWakeUp(daContext->runloop);
++    }
++
++    static void daUnmountCallback(DADiskRef disk, DADissenterRef dissenter, void *context)
++    {
++        DAContext *daContext = (DAContext *)context;
++
++        if (!dissenter) {
++            DADiskEject(disk, kDADiskEjectOptionDefault, daEjectCallback, context);
++            daContext->success = (daContext->success == -1 ? true : daContext->success);
++        }
++        else {
++            daContext->success = false;
++            daContext->completed = true;
++            CFRunLoopSourceSignal(daContext->cancel_signal);
++            CFRunLoopWakeUp(daContext->runloop);
++        }
++    }
++
++    bool eject(double timeoutSeconds)
++    {
++        CFDictionaryRef description = nullptr;
++        CFRunLoopSourceContext cancelRunLoopSourceContext = {
++            .perform = cancelEjectRunloop
++        };
++        DAContext daContext = {m_device, -1 , false, 0,
++            CFRunLoopGetCurrent(), 0};
++        QCFType<CFRunLoopSourceRef> cancel = CFRunLoopSourceCreate(kCFAllocatorDefault, 0, &cancelRunLoopSourceContext);
++        if (!(daContext.cancel_signal = cancel)) {
++            qWarning() << Q_FUNC_INFO << "failed to create cancel runloop source";
++            return false;
++        }
++        QCFType<DASessionRef> session = DASessionCreate(kCFAllocatorDefault);
++        if (!(daContext.session = session)) {
++            qWarning() << Q_FUNC_INFO << "failed to create DiskArbitration session";
++            return false;
++        }
++        const QString devName = m_device->property(QStringLiteral("BSD Name")).toString();
++        QCFType<DADiskRef> daRef = DADiskCreateFromBSDName(kCFAllocatorDefault, daContext.session, devName.toStdString().c_str());
++        if (!daRef) {
++            qWarning() << Q_FUNC_INFO << "failed to create DiskArbitration reference for" << devName;
++            return false;
++        }
++        description = DADiskCopyDescription(daRef);
++        if (description ){
++            DASessionScheduleWithRunLoop(daContext.session, daContext.runloop, kCFRunLoopDefaultMode);
++            CFRunLoopAddSource(daContext.runloop, daContext.cancel_signal, kCFRunLoopDefaultMode);
++            if (CFDictionaryGetValueIfPresent(description, kDADiskDescriptionVolumePathKey, nullptr)) {
++                DADiskUnmount(daRef, kDADiskUnmountOptionWhole, daUnmountCallback, &daContext);
++            }
++            DADiskEject(daRef, kDADiskEjectOptionDefault, daEjectCallback, &daContext);
++            daContext.success = (daContext.success == -1 ? true : daContext.success);
++            while (!daContext.completed) {
++                if (CFRunLoopRunInMode(kCFRunLoopDefaultMode, timeoutSeconds, true) == kCFRunLoopRunTimedOut) {
++                    break;
++                }
++            }
++            if (daContext.completed) {
++                qWarning() << Q_FUNC_INFO << "ejected" << devName;
++            } else{
++                qWarning() << Q_FUNC_INFO << "timeout ejecting" << devName;
++            }
++            CFRunLoopRemoveSource(daContext.runloop, daContext.cancel_signal, kCFRunLoopDefaultMode);
++            DASessionSetDispatchQueue(daContext.session, 0);
++            DASessionUnscheduleFromRunLoop(daContext.session, daContext.runloop, kCFRunLoopDefaultMode);
++            CFRelease(description);
++        } else {
++            qWarning() << Q_FUNC_INFO << "failed to fetch DiskArbitration description for" << devName;
++        }
++        return daContext.success == -1 ? false : daContext.success;
++    }
++#endif //EJECT_USING_DISKARBITRATION
++};
++
++const QMap<Solid::OpticalDrive::MediumType, uint32_t> IOKitOpticalDrive::Private::cdTypeMap = {
++    {Solid::OpticalDrive::Cdr, kCDFeaturesWriteOnceMask},
++    {Solid::OpticalDrive::Cdrw, kCDFeaturesReWriteableMask}};
++const QMap<Solid::OpticalDrive::MediumType, uint32_t> IOKitOpticalDrive::Private::dvdTypeMap = {
++    {Solid::OpticalDrive::Dvd, kDVDFeaturesReadStructuresMask},
++    {Solid::OpticalDrive::Dvdr, kDVDFeaturesWriteOnceMask},
++    {Solid::OpticalDrive::Dvdrw, kDVDFeaturesReWriteableMask},
++    {Solid::OpticalDrive::Dvdram, kDVDFeaturesRandomWriteableMask},
++    {Solid::OpticalDrive::Dvdplusr, kDVDFeaturesPlusRMask},
++    {Solid::OpticalDrive::Dvdplusrw, kDVDFeaturesPlusRWMask},
++// not supported:
++//         {Solid::OpticalDrive::Dvdplusdl, "dvdplusrdl"}
++//         {Solid::OpticalDrive::Dvdplusdlrw, "dvdplusrwdl"}
++    {Solid::OpticalDrive::HdDvd, kDVDFeaturesHDReadMask},
++    {Solid::OpticalDrive::HdDvdr, kDVDFeaturesHDRMask},
++    {Solid::OpticalDrive::HdDvdrw, kDVDFeaturesHDRWMask}};
++const QMap<Solid::OpticalDrive::MediumType, uint32_t> IOKitOpticalDrive::Private::bdTypeMap = {
++    {Solid::OpticalDrive::Bd, kBDFeaturesReadMask},
++    {Solid::OpticalDrive::Bdr, kBDFeaturesWriteMask}}; // also Solid::OpticalDrive::Bdre
++
++IOKitOpticalDrive::IOKitOpticalDrive(IOKitDevice *device)
++    : IOKitStorage(device)
++{
++    // walk up the IOKit chain to find the parent that has the "Device Characteristics" property
++    // In the examples I've seen this is always the 2nd parent but if ever that turns out
++    // to be non-guaranteed we'll need to do a true walk.
++    IOKitDevice ioDVDServices(IOKitDevice(device->parentUdi()).parentUdi());
++    QVariantMap devCharMap;
++    if (!ioDVDServices.iOKitPropertyExists(QStringLiteral("Device Characteristics"))) {
++        qWarning() << Q_FUNC_INFO << "Grandparent of" << m_device->udi()
++            << "doesn't have the \"Device Characteristics\" but is" << ioDVDServices.udi();
++    } else {
++        const QVariant devCharVar = ioDVDServices.property(QStringLiteral("Device Characteristics"));
++        devCharMap = devCharVar.toMap();
++    }
++    d = new Private(device, devCharMap);
++}
++
++IOKitOpticalDrive::~IOKitOpticalDrive()
++{
++}
++
++// // Example properties: QMap(("BSD Major", QVariant(int, 1))
++//     ("BSD Minor", QVariant(int, 12))
++//     ("BSD Name", QVariant(QString, "disk3"))
++//     ("BSD Unit", QVariant(int, 3))
++//     ("Content", QVariant(QString, "CD_partition_scheme"))
++//     ("Content Hint", QVariant(QString, ""))
++//     ("Ejectable", QVariant(bool, true))
++//     ("IOBusyInterest", QVariant(QString, "IOCommand is not serializable"))
++//     ("IOGeneralInterest", QVariant(QString, "IOCommand is not serializable"))
++//     ("IOMediaIcon", QVariant(QVariantMap, QMap(("CFBundleIdentifier", QVariant(QString, "com.apple.iokit.IOCDStorageFamily"))
++//         ("IOBundleResourceFile", QVariant(QString, "CD.icns")))))
++//     ("Leaf", QVariant(bool, false))
++//     ("Open", QVariant(bool, true))
++//     ("Preferred Block Size", QVariant(qlonglong, 2352))
++//     ("Removable", QVariant(bool, true))
++//     ("Size", QVariant(qlonglong, 750932448))
++//     ("TOC", QVariant(QByteArray, "\x00\xA7\x01\x01\x01\x10\x00\xA0\x00\x00\x00\x00\x01\x00\x00\x01\x12\x00\xA1\x00\x00\x00\x00\f\x00\x00\x01\x12\x00\xA2\x00\x00\x00\x00""F:J\x01\x12\x00\x01\x00\x00\x00\x00\x00\x02\x00\x01\x12\x00\x02\x00\x00\x00\x00\x07/\b\x01\x12\x00\x03\x00\x00\x00\x00\x12\b\x0E\x01\x12\x00\x04\x00\x00\x00\x00\x17\x12""0\x01\x12\x00\x05\x00\x00\x00\x00\x1B+ \x01\x12\x00\x06\x00\x00\x00\x00 \x11\n\x01\x12\x00\x07\x00\x00\x00\x00!-\n\x01\x12\x00\b\x00\x00\x00\x00'\f\x1F\x01\x12\x00\t\x00\x00\x00\x00-\x13;\x01\x12\x00\n\x00\x00\x00\x00""4%\x1E\x01\x12\x00\x0B\x00\x00\x00\x00""62 \x01\x12\x00\f\x00\x00\x00\x00""C\x06""E"))
++//     ("Type", QVariant(QString, "CD-ROM"))
++//     ("Whole", QVariant(bool, true))
++//     ("Writable", QVariant(bool, false))
++//     ("className", QVariant(QString, "IOCDMedia")))
++// // related useful entry: QMap(("Device Characteristics", QVariant(QVariantMap, QMap(("Async Notification", QVariant(bool, false))
++//         ("BD Features", QVariant(int, 0))
++//         ("CD Features", QVariant(int, 2047))
++//         ("DVD Features", QVariant(int, 503))
++//         ("Fast Spindown", QVariant(bool, true))
++//         ("Loading Mechanism", QVariant(QString, "Slot"))
++//         ("Low Power Polling", QVariant(bool, false))
++//         ("Power Off", QVariant(bool, true))
++//         ("Product Name", QVariant(QString, "DVD-R   UJ-8A8"))
++//         ("Product Revision Level", QVariant(QString, "HA13"))
++//         ("Vendor Name", QVariant(QString, "MATSHITA")))))
++//     ("IOCFPlugInTypes", QVariant(QVariantMap, QMap(("97ABCF2C-23CC-11D5-A0E8-003065704866", QVariant(QString, "IOSCSIArchitectureModelFamily.kext/Contents/PlugIns/SCSITaskUserClient.kext/Contents/PlugIns/SCSITaskLib.plugin")))))
++//     ("IOGeneralInterest", QVariant(QString, "IOCommand is not serializable"))
++//     ("IOMatchCategory", QVariant(QString, "SCSITaskUserClientIniter"))
++//     ("IOMinimumSegmentAlignmentByteCount", QVariant(qlonglong, 4))
++//     ("IOUserClientClass", QVariant(QString, "SCSITaskUserClient"))
++//     ("Protocol Characteristics", QVariant(QVariantMap, QMap(("AHCI Port Number", QVariant(qlonglong, 0))
++//         ("ATAPI", QVariant(bool, true))
++//         ("Physical Interconnect", QVariant(QString, "SATA"))
++//         ("Physical Interconnect Location", QVariant(QString, "Internal"))
++//         ("Port Speed", QVariant(QString, "1.5 Gigabit"))
++//         ("Read Time Out Duration", QVariant(qlonglong, 15000))
++//         ("Retry Count", QVariant(qlonglong, 1))
++//         ("Write Time Out Duration", QVariant(qlonglong, 15000)))))
++//     ("SCSITaskDeviceCategory", QVariant(QString, "SCSITaskAuthoringDevice"))
++//     ("SCSITaskUserClient GUID", QVariant(QByteArray, "\x00]\x0F""F\x80\xFF\xFF\xFFg\xB6\xAB\x1B\x00\x00\x00\x00"))
++//     ("className", QVariant(QString, "IODVDServices"))
++//     ("device-type", QVariant(QString, "DVD")))
++// //                       QMap(("CFBundleIdentifier", QVariant(QString, "com.apple.iokit.IODVDStorageFamily"))
++//     ("IOClass", QVariant(QString, "IODVDBlockStorageDriver"))
++//     ("IOGeneralInterest", QVariant(QString, "IOCommand is not serializable"))
++//     ("IOMatchCategory", QVariant(QString, "IODefaultMatchCategory"))
++//     ("IOProbeScore", QVariant(int, 0))
++//     ("IOPropertyMatch", QVariant(QVariantMap, QMap(("device-type", QVariant(QString, "DVD")))))
++//     ("IOProviderClass", QVariant(QString, "IODVDBlockStorageDevice"))
++//     ("Statistics", QVariant(QVariantMap, QMap(("Bytes (Read)", QVariant(qlonglong, 578020608))
++//         ("Bytes (Write)", QVariant(qlonglong, 0))
++//         ("Errors (Read)", QVariant(qlonglong, 0))
++//         ("Errors (Write)", QVariant(qlonglong, 0))
++//         ("Latency Time (Read)", QVariant(qlonglong, 0))
++//         ("Latency Time (Write)", QVariant(qlonglong, 0))
++//         ("Operations (Read)", QVariant(qlonglong, 18475))
++//         ("Operations (Write)", QVariant(qlonglong, 0))
++//         ("Retries (Read)", QVariant(qlonglong, 0))
++//         ("Retries (Write)", QVariant(qlonglong, 0))
++//         ("Total Time (Read)", QVariant(qlonglong, 219944025102))
++//         ("Total Time (Write)", QVariant(qlonglong, 0)))))
++//     ("className", QVariant(QString, "IODVDBlockStorageDriver")))
++
++Solid::OpticalDrive::MediumTypes IOKitOpticalDrive::supportedMedia() const
++{
++    Solid::OpticalDrive::MediumTypes supported;
++
++    uint32_t cdFeatures = d->property(QStringLiteral("CD Features")).toInt();
++    uint32_t dvdFeatures = d->property(QStringLiteral("DVD Features")).toInt();
++    uint32_t bdFeatures = d->property(QStringLiteral("BD Features")).toInt();
++
++    qDebug() << Q_FUNC_INFO << "cdFeatures" << cdFeatures << "dvdFeatures" << dvdFeatures << "bdFeatures" << bdFeatures;
++
++    foreach (const Solid::OpticalDrive::MediumType type, d->cdTypeMap.keys()) {
++        if (cdFeatures & d->cdTypeMap[type]) {
++            supported |= type;
++        }
++    }
++    foreach (const Solid::OpticalDrive::MediumType type, d->dvdTypeMap.keys()) {
++        if (dvdFeatures & d->dvdTypeMap[type]) {
++            supported |= type;
++        }
++    }
++    foreach (const Solid::OpticalDrive::MediumType type, d->bdTypeMap.keys()) {
++        if (bdFeatures & d->bdTypeMap[type]) {
++            supported |= type;
++            if (d->bdTypeMap[type] == kBDFeaturesWriteMask) {
++                supported |= Solid::OpticalDrive::Bdre;
++            }
++        }
++    }
++
++    return supported;
++}
++
++int IOKitOpticalDrive::readSpeed() const
++{
++    return 0;
++}
++
++int IOKitOpticalDrive::writeSpeed() const
++{
++    return 0;
++}
++
++QList<int> IOKitOpticalDrive::writeSpeeds() const
++{
++    return {};
++}
++
++bool IOKitOpticalDrive::eject()
++{
++#ifdef EJECT_USING_DISKARBITRATION
++    // give the devices 30 seconds to eject
++    int error = !d->eject(30.0);
++#else
++    QProcess ejectJob;
++    int error = ejectJob.execute(QStandardPaths::findExecutable(QStringLiteral("hdiutil")),
++        {QStringLiteral("detach"), QStringLiteral("-verbose"),
++            QStringLiteral("/dev/") + m_device->property(QStringLiteral("BSD Name")).toString()});
++    if (error) {
++        qWarning() << "hdiutil returned" << error << "trying to eject" << m_device->product();
++    }
++#endif //EJECT_USING_DISKARBITRATION
++    if (error) {
++        emit ejectDone(Solid::ErrorType::OperationFailed, QVariant(), m_device->udi());
++        return false;
++    } else {
++        emit ejectDone(Solid::ErrorType::NoError, QVariant(), m_device->udi());
++        return true;
++    }
++}
++
+Index: src/solid/devices/backends/iokit/iokitprocessor.h
+===================================================================
+--- src/solid/devices/backends/iokit/iokitprocessor.h
++++ src/solid/devices/backends/iokit/iokitprocessor.h
+@@ -41,10 +41,12 @@
+     Processor(IOKitDevice *device);
+     virtual ~Processor();
+ 
+-    virtual int number() const;
+-    virtual int maxSpeed() const;
+-    virtual bool canChangeFrequency() const;
+-    virtual Solid::Processor::InstructionSets instructionSets() const;
++    virtual int number() const Q_DECL_OVERRIDE;
++    virtual int maxSpeed() const Q_DECL_OVERRIDE;
++    virtual bool canChangeFrequency() const Q_DECL_OVERRIDE;
++    virtual Solid::Processor::InstructionSets instructionSets() const Q_DECL_OVERRIDE;
++    static QString vendor();
++    static QString product();
+ };
+ }
+ }
+Index: src/solid/devices/backends/iokit/iokitprocessor.cpp
+===================================================================
+--- src/solid/devices/backends/iokit/iokitprocessor.cpp
++++ src/solid/devices/backends/iokit/iokitprocessor.cpp
+@@ -1,5 +1,6 @@
+ /*
+     Copyright 2009 Harald Fernengel <harry@kdevelop.org>
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
+ 
+     This library is free software; you can redistribute it and/or
+     modify it under the terms of the GNU Lesser General Public
+@@ -23,6 +24,15 @@
+ 
+ #include <QtCore/qdebug.h>
+ 
++#include <sys/types.h>
++#include <sys/sysctl.h>
++#include <errno.h>
++
++#include "../shared/cpufeatures.h"
++
++// from cfhelper.cpp
++extern bool q_sysctlbyname(const char *name, QString &result);
++
+ using namespace Solid::Backends::IOKit;
+ 
+ Processor::Processor(IOKitDevice *device)
+@@ -43,16 +53,47 @@
+ 
+ int Processor::maxSpeed() const
+ {
+-    return 0; // TODO
++    uint64_t freq = 0;
++    size_t size = sizeof(freq);
++
++    if (sysctlbyname("hw.cpufrequency", &freq, &size, nullptr, 0) < 0) {
++        qWarning() << "sysctl error reading hw.cpufrequency:" << strerror(errno);
++        return 0;
++    } else {
++        return int(freq / 1000000);
++    }
+ }
+ 
+ bool Processor::canChangeFrequency() const
+ {
+-    return false; // TODO
++    uint64_t minFreq = 0, maxFreq = 0;
++    size_t size = sizeof(uint64_t);
++
++    if (sysctlbyname("hw.cpufrequency_min", &minFreq, &size, nullptr, 0) == 0
++        && sysctlbyname("hw.cpufrequency_max", &maxFreq, &size, nullptr, 0) == 0) {
++        return maxFreq > minFreq;
++    }
++    return false;
+ }
+ 
+ Solid::Processor::InstructionSets Processor::instructionSets() const
+ {
+-    return 0; // TODO
++    // use sysctlbyname() and "machdep.cpu.features" + "machdep.cpu.extfeatures"
++    static Solid::Processor::InstructionSets cpuextensions = Solid::Backends::Shared::cpuFeatures();
++
++    return cpuextensions;
+ }
+ 
++QString Processor::vendor()
++{
++    QString qVendor;
++    q_sysctlbyname("machdep.cpu.vendor", qVendor);
++    return qVendor;
++}
++
++QString Processor::product()
++{
++    QString product;
++    q_sysctlbyname("machdep.cpu.brand_string", product);
++    return product;
++}
+Index: src/solid/devices/backends/iokit/iokitstorage.h
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitstorage.h
+@@ -0,0 +1,63 @@
++/*
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#ifndef SOLID_BACKENDS_IOKIT_IOKITSTORAGE_H
++#define SOLID_BACKENDS_IOKIT_IOKITSTORAGE_H
++
++#include "iokitblock.h"
++#include "dadictionary_p.h"
++
++#include <solid/devices/ifaces/storagedrive.h>
++
++namespace Solid
++{
++namespace Backends
++{
++namespace IOKit
++{
++class IOKitStorage : public Block, virtual public Solid::Ifaces::StorageDrive
++{
++    Q_OBJECT
++    Q_INTERFACES(Solid::Ifaces::StorageDrive)
++
++public:
++    explicit IOKitStorage(IOKitDevice *device);
++    explicit IOKitStorage(const IOKitDevice *device);
++    ~IOKitStorage();
++
++    QString vendor() const;
++    QString product() const;
++    QString description() const;
++
++public Q_SLOTS:
++    Solid::StorageDrive::Bus bus() const Q_DECL_OVERRIDE;
++    Solid::StorageDrive::DriveType driveType() const Q_DECL_OVERRIDE;
++
++    bool isRemovable() const Q_DECL_OVERRIDE;
++    bool isHotpluggable() const Q_DECL_OVERRIDE;
++    qulonglong size() const Q_DECL_OVERRIDE;
++private:
++    DADictionary *daDict;
++};
++}
++}
++}
++
++#endif // SOLID_BACKENDS_IOKIT_IOKITSTORAGE_H
+Index: src/solid/devices/backends/iokit/iokitstorage.cpp
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitstorage.cpp
+@@ -0,0 +1,119 @@
++/*
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#include "iokitstorage.h"
++
++#include <QDebug>
++
++#include <CoreFoundation/CoreFoundation.h>
++#include <DiskArbitration/DiskArbitration.h>
++
++using namespace Solid::Backends::IOKit;
++
++IOKitStorage::IOKitStorage(IOKitDevice *device)
++    : Block(device)
++    , daDict(new DADictionary(device))
++{
++}
++
++IOKitStorage::IOKitStorage(const IOKitDevice *device)
++    : Block(device)
++    , daDict(new DADictionary(device))
++{
++}
++
++IOKitStorage::~IOKitStorage()
++{
++    delete daDict;
++}
++
++Solid::StorageDrive::Bus IOKitStorage::bus() const
++{
++    const QString udi = m_device->udi();
++    // TODO: figure out how to return something useful here.
++    if (udi.contains(QStringLiteral("/SATA@"))) {
++        return Solid::StorageDrive::Sata;
++    }
++    if (udi.contains(QStringLiteral("/SDXC@"))) {
++        // TODO: return something finer grained; the built-in card reader
++        // is NOT connected via USB on Macs, for instance (but there's no PCI option)
++        return Solid::StorageDrive::Usb;
++    }
++    if (udi.contains(QStringLiteral("/IOUSBInterface@"))) {
++        return Solid::StorageDrive::Usb;
++    }
++    if (daDict->stringForKey(kDADiskDescriptionDeviceProtocolKey) == QStringLiteral("USB")) {
++        return Solid::StorageDrive::Usb;
++    }
++    return Solid::StorageDrive::Platform;
++}
++
++Solid::StorageDrive::DriveType IOKitStorage::driveType() const
++{
++    const QString udi = m_device->udi();
++    const QString type = m_device->property(QLatin1String("className")).toString();
++
++    if (type == QStringLiteral("IOCDMedia")
++        || type == QStringLiteral("IOBDMedia")
++        || type == QStringLiteral("IODVDMedia")) {
++        return Solid::StorageDrive::CdromDrive;
++    }
++    if (udi.contains(QStringLiteral("/SDXC@"))) {
++        return Solid::StorageDrive::SdMmc;
++    }
++    if (daDict->stringForKey(kDADiskDescriptionDeviceModelKey) == QStringLiteral("Compact Flash")) {
++        return Solid::StorageDrive::CompactFlash;
++    }
++    return Solid::StorageDrive::HardDisk;
++}
++
++bool IOKitStorage::isRemovable() const
++{
++    bool isExternal = false;
++    daDict->boolForKey(kDADiskDescriptionDeviceInternalKey, isExternal);
++    return isExternal || m_device->property(QLatin1String("Removable")).toBool();
++}
++
++bool IOKitStorage::isHotpluggable() const
++{
++    const Solid::StorageDrive::DriveType type = driveType();
++    return bus() == Solid::StorageDrive::Usb
++        || type == Solid::StorageDrive::CdromDrive || type == Solid::StorageDrive::SdMmc;
++}
++
++qulonglong IOKitStorage::size() const
++{
++    return m_device->property(QLatin1String("Size")).toULongLong();
++}
++
++QString IOKitStorage::vendor() const
++{
++    return daDict->stringForKey(kDADiskDescriptionDeviceVendorKey);
++}
++
++QString IOKitStorage::product() const
++{
++    return daDict->stringForKey(kDADiskDescriptionDeviceModelKey);
++}
++
++QString IOKitStorage::description() const
++{
++    return daDict->stringForKey(kDADiskDescriptionMediaNameKey);
++}
+Index: src/solid/devices/backends/iokit/iokitstorageaccess.h
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitstorageaccess.h
+@@ -0,0 +1,67 @@
++/*
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#ifndef SOLID_BACKENDS_IOKIT_STORAGEACCESS_H
++#define SOLID_BACKENDS_IOKIT_STORAGEACCESS_H
++
++#include <solid/devices/ifaces/storageaccess.h>
++#include "iokitdeviceinterface.h"
++#include "dadictionary_p.h"
++
++namespace Solid
++{
++namespace Backends
++{
++namespace IOKit
++{
++class IOKitStorageAccess : public DeviceInterface, virtual public Solid::Ifaces::StorageAccess
++{
++    Q_OBJECT
++    Q_INTERFACES(Solid::Ifaces::StorageAccess)
++
++public:
++    IOKitStorageAccess(IOKitDevice *device);
++    IOKitStorageAccess(const IOKitDevice *device);
++    virtual ~IOKitStorageAccess();
++
++    bool isAccessible() const Q_DECL_OVERRIDE;
++    QString filePath() const Q_DECL_OVERRIDE;
++    bool isIgnored() const Q_DECL_OVERRIDE;
++public Q_SLOTS:
++    bool setup() Q_DECL_OVERRIDE;
++    bool teardown() Q_DECL_OVERRIDE;
++
++Q_SIGNALS:
++    void accessibilityChanged(bool accessible, const QString &udi) Q_DECL_OVERRIDE;
++    void setupDone(Solid::ErrorType error, QVariant errorData, const QString &udi) Q_DECL_OVERRIDE;
++    void teardownDone(Solid::ErrorType error, QVariant errorData, const QString &udi) Q_DECL_OVERRIDE;
++    void setupRequested(const QString &udi) Q_DECL_OVERRIDE;
++    void teardownRequested(const QString &udi) Q_DECL_OVERRIDE;
++
++private Q_SLOTS:
++    void onPropertyChanged(const QMap<QString, int> &changes);
++private:
++    DADictionary *daDict;
++};
++}
++}
++}
++
++#endif // SOLID_BACKENDS_IOKIT_STORAGEACCESS_H
+Index: src/solid/devices/backends/iokit/iokitstorageaccess.cpp
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitstorageaccess.cpp
+@@ -0,0 +1,110 @@
++/*
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#include "iokitstorageaccess.h"
++
++#include <QDebug>
++
++#include <CoreFoundation/CoreFoundation.h>
++#include <DiskArbitration/DiskArbitration.h>
++
++using namespace Solid::Backends::IOKit;
++
++IOKitStorageAccess::IOKitStorageAccess(IOKitDevice *device)
++    : DeviceInterface(device)
++    , daDict(new DADictionary(device))
++{
++    connect(device, SIGNAL(propertyChanged(QMap<QString,int>)),
++            this, SLOT(onPropertyChanged(QMap<QString,int>)));
++}
++
++IOKitStorageAccess::IOKitStorageAccess(const IOKitDevice *device)
++    : DeviceInterface(device)
++    , daDict(new DADictionary(device))
++{
++    connect(device, SIGNAL(propertyChanged(QMap<QString,int>)),
++            this, SLOT(onPropertyChanged(QMap<QString,int>)));
++}
++
++IOKitStorageAccess::~IOKitStorageAccess()
++{
++    delete daDict;
++}
++
++bool IOKitStorageAccess::isAccessible() const
++{
++    filePath();
++    const QVariant isMounted = m_device->property(QStringLiteral("isMounted"));
++    return isMounted.isValid() && isMounted.toBool();
++}
++
++QString IOKitStorageAccess::filePath() const
++{
++    // mount points can change (but can they between invocations of filePath()?)
++    QString mountPoint;
++    if (const CFURLRef urlRef  = daDict->cfUrLRefForKey(kDADiskDescriptionVolumePathKey)) {
++        const CFStringRef mpRef = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
++        mountPoint = QString::fromCFString(mpRef);
++        CFRelease(mpRef);
++        m_device->setProperty("mountPoint", QVariant(mountPoint));
++        bool isMounted = !mountPoint.isEmpty();
++        const QString isMountedKey = QStringLiteral("isMounted");
++        const QVariant wasMounted = m_device->property(isMountedKey);
++        if (wasMounted.isValid() && wasMounted.toBool() != isMounted) {
++            IOKitStorageAccess(m_device).onPropertyChanged(QMap<QString,int>{{isMountedKey,isMounted}});
++        }
++        m_device->setProperty("isMounted", QVariant(isMounted));
++    }
++    return mountPoint;
++}
++
++bool IOKitStorageAccess::isIgnored() const
++{
++    if (m_device->iOKitPropertyExists(QStringLiteral("Open"))) {
++        // ignore storage volumes that aren't mounted
++        bool isIgnored = m_device->property(QStringLiteral("Open")).toBool() == false;
++        m_device->setProperty("isIgnored", QVariant(isIgnored));
++        return isIgnored;
++    }
++    const QVariant isIgnored = m_device->property(QStringLiteral("isIgnored"));
++    return isIgnored.isValid() && isIgnored.toBool();
++}
++
++bool IOKitStorageAccess::setup()
++{
++    // TODO?
++    return false;
++}
++
++bool IOKitStorageAccess::teardown()
++{
++    // TODO?
++    return false;
++}
++
++void IOKitStorageAccess::onPropertyChanged(const QMap<QString, int> &changes)
++{
++    Q_FOREACH (const QString &property, changes.keys()) {
++        if (property == QStringLiteral("isMounted")) {
++            emit accessibilityChanged(m_device->property(QStringLiteral("isMounted")).toBool(), m_device->udi());
++        }
++    }
++}
++
+Index: src/solid/devices/backends/iokit/iokitvolume.h
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitvolume.h
+@@ -0,0 +1,67 @@
++/*
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#ifndef SOLID_BACKENDS_IOKIT_VOLUME_H
++#define SOLID_BACKENDS_IOKIT_VOLUME_H
++
++#include <solid/devices/ifaces/storagevolume.h>
++#include "iokitblock.h"
++#include "dadictionary_p.h"
++
++#include <DiskArbitration/DiskArbitration.h>
++
++namespace Solid
++{
++namespace Backends
++{
++namespace IOKit
++{
++class IOKitVolume : public Block, virtual public Solid::Ifaces::StorageVolume
++{
++    Q_OBJECT
++    Q_INTERFACES(Solid::Ifaces::StorageVolume)
++
++public:
++    IOKitVolume(IOKitDevice *device);
++    IOKitVolume(const IOKitDevice *device);
++    virtual ~IOKitVolume();
++
++    bool isIgnored() const Q_DECL_OVERRIDE;
++    Solid::StorageVolume::UsageType usage() const Q_DECL_OVERRIDE;
++    QString fsType() const Q_DECL_OVERRIDE;
++    QString label() const Q_DECL_OVERRIDE;
++    QString uuid() const Q_DECL_OVERRIDE;
++    qulonglong size() const Q_DECL_OVERRIDE;
++    QString encryptedContainerUdi() const Q_DECL_OVERRIDE;
++
++    QString vendor() const;
++    QString product() const;
++    QString description() const;
++
++    DADiskRef daRef() const;
++
++private:
++    DADictionary *daDict;
++};
++}
++}
++}
++
++#endif // SOLID_BACKENDS_IOKIT_VOLUME_H
+Index: src/solid/devices/backends/iokit/iokitvolume.cpp
+===================================================================
+--- /dev/null
++++ src/solid/devices/backends/iokit/iokitvolume.cpp
+@@ -0,0 +1,113 @@
++/*
++    Copyright 2017 René J.V. Bertin <rjvbertin@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++    License as published by the Free Software Foundation; either
++    version 2.1 of the License, or (at your option) version 3, or any
++    later version accepted by the membership of KDE e.V. (or its
++    successor approved by the membership of KDE e.V.), which shall
++    act as a proxy defined in Section 6 of version 3 of the license.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Lesser General Public License for more details.
++
++    You should have received a copy of the GNU Lesser General Public
++    License along with this library. If not, see <http://www.gnu.org/licenses/>.
++*/
++
++#include "iokitvolume.h"
++#include "iokitgenericinterface.h"
++
++#include <QDebug>
++
++#include <CoreFoundation/CoreFoundation.h>
++#include <DiskArbitration/DiskArbitration.h>
++
++using namespace Solid::Backends::IOKit;
++
++IOKitVolume::IOKitVolume(IOKitDevice *device)
++    : Block(device)
++    , daDict(new DADictionary(device))
++{
++}
++
++IOKitVolume::IOKitVolume(const IOKitDevice *device)
++    : Block(device)
++    , daDict(new DADictionary(device))
++{
++}
++
++IOKitVolume::~IOKitVolume()
++{
++    delete daDict;
++}
++
++bool IOKitVolume::isIgnored() const
++{
++    // ignore storage volumes that aren't mounted
++    bool isIgnored = m_device->property(QStringLiteral("Open")).toBool() == false;
++    m_device->setProperty("isIgnored", isIgnored);
++    m_device->setProperty("isMounted", !isIgnored);
++    return isIgnored;
++}
++
++Solid::StorageVolume::UsageType IOKitVolume::usage() const
++{
++    const QString content = m_device->property(QStringLiteral("Content")).toString();
++    if (content == QStringLiteral("CD_DA")) {
++        // this is (probably) a CD track
++        return Solid::StorageVolume::Other;
++    }
++    if (content.contains(QStringLiteral("partition_scheme"))) {
++        return Solid::StorageVolume::PartitionTable;
++    }
++    return Solid::StorageVolume::FileSystem;
++}
++
++QString IOKitVolume::fsType() const
++{
++    return daDict->stringForKey(kDADiskDescriptionVolumeKindKey);
++}
++
++QString IOKitVolume::label() const
++{
++    return daDict->stringForKey(kDADiskDescriptionVolumeNameKey);
++}
++
++QString IOKitVolume::uuid() const
++{
++    return m_device->property(QStringLiteral("UUID")).toString();
++}
++
++qulonglong IOKitVolume::size() const
++{
++    return m_device->property(QStringLiteral("Size")).toULongLong();
++}
++
++QString IOKitVolume::encryptedContainerUdi() const
++{
++    return QString();
++}
++
++QString IOKitVolume::vendor() const
++{
++    return daDict->stringForKey(kDADiskDescriptionDeviceVendorKey);
++}
++
++QString IOKitVolume::product() const
++{
++    return daDict->stringForKey(kDADiskDescriptionDeviceModelKey);
++}
++
++QString IOKitVolume::description() const
++{
++    return daDict->stringForKey(kDADiskDescriptionMediaNameKey);
++}
++
++DADiskRef IOKitVolume::daRef() const
++{
++    return daDict->daRef;
++}

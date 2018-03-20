@@ -1,0 +1,2731 @@
+#!/usr/bin/perl
+#
+# Support .gitslave files, recursive processing of git commands into slave directories
+#
+# ++Copyright LIBBK++
+#
+# Copyright (c) 2003 The Authors. All rights reserved.
+#
+# This source code is licensed to you under the terms of the file
+# LICENSE.TXT in this release for further details.
+#
+# Mail <projectbaka@baka.org> for further information
+#
+# --Copyright LIBBK--
+#
+# This version was modified to work for the digiKam Software Compilation
+#
+use strict;
+use warnings;
+no warnings 'uninitialized';
+no warnings 'io';
+use Cwd;
+use File::Spec;
+use constant GITSLAVE => '.gitslave';
+use Getopt::Long;
+use File::Path;
+use File::Basename;
+
+my $eval_errs = '';
+my ($want_parallel) = (0);
+eval 'use Parallel::Iterator;';
+if ($@)
+{
+  undef($want_parallel);
+  my $err = $@;
+  $err =~ s/\(\@INC [^)]*\)//g;
+  $err =~ s/ at .* line \d+\.//g;
+  $eval_errs .= $err;
+}
+my ($want_progress,$progress_count) = (0,0);
+eval 'use Term::ProgressBar;';
+if ($@)
+{
+  undef($want_progress);
+  my $err = $@;
+  $err =~ s/\(\@INC [^)]*\)//g;
+  $err =~ s/ at .* line \d+\.//g;
+  $eval_errs .= $err;
+}
+my ($progress);
+
+our($GITSLAVE) = $ENV{'GITSLAVE'}||GITSLAVE;
+our($GITS_DIR);
+our(@slaves);
+my($USAGE) = "usage: gits [--exclude /slave-regexp/] [--version] [--eval-args] [--with-ifpresent] [--no-master] [--no-hide] [--no-commit] [--keep-going] [--no-progress] [-p|--parallel <count>][-v|--verbose]+ [--quiet] [--help] [-- <git-options>...] <subcommand> [args]...\n";
+our(%OPTIONS);
+my ($returncode) = 0;
+delete($ENV{'GIT_DIR'});
+our($fromcheckout);
+our($git) = 'git';
+
+# Some people are stupid enough to set CDPATH and that screws up the formatting
+delete($ENV{'CDPATH'});
+
+######################################################################
+#
+# Translate wait status ($?) into human-readable terms
+#
+sub exitcode(;$)
+{
+  my ($ret) = @_;
+  $ret = $? if !defined($ret);
+
+  if ($ret & 127)
+  {
+    return "killed by signal " . ($ret & 127);
+  }
+  return "exit " . ($ret >> 8);
+}
+
+######################################################################
+#
+# Perform substitution of path and directory components
+#
+sub gitsubst($$)
+{
+  my ($data,$slave) = @_;
+
+  my ($pattern) = quotemeta('%%dir%%');
+  if ($data =~ /$pattern/)
+  {
+    $data =~ s/$pattern/$slave/g;
+  }
+
+  $pattern = quotemeta('%%path%%');
+  if ($data =~ /$pattern/)
+  {
+    my $subst = Cwd::realpath($GITS_DIR."/".$slave);
+    $data =~ s/$pattern/$subst/g;
+  }
+
+  $pattern = quotemeta('%%basename%%');
+  if ($data =~ /$pattern/)
+  {
+    my $subst = basename(Cwd::realpath($GITS_DIR."/".$slave));
+    $data =~ s/$pattern/$subst/g;
+  }
+
+  $data;
+}
+
+######################################################################
+#
+# Run a command where we don't care about the output
+#
+sub docmd($)
+{
+  my ($cmd) = @_;
+
+  $cmd .= " 2>/dev/null" if ($OPTIONS{'quiet'});
+  print STDERR "Running command: `$cmd`\n" if ($OPTIONS{'verbose'} > 0);
+  system($cmd);
+  print STDERR "Command " . exitcode() . "\n" if ($OPTIONS{'verbose'} > 1);
+  $? == 0;
+}
+
+
+
+######################################################################
+#
+# Run a command, retrieving the output
+#
+sub getcmd($;$)
+{
+  my ($cmd,$slave) = @_;
+
+  $cmd = gitsubst($cmd,$slave) if ($slave);
+
+  $cmd = "($cmd) 2>&1";
+  print STDERR "Running command: `$cmd`\n" if ($OPTIONS{'verbose'} > 0);
+  my $out = `$cmd`;
+  if ($OPTIONS{'verbose'} > 1)
+  {
+    my $tout = $out;
+    chomp($tout);
+    print STDERR "Command " . exitcode() . "\n ($tout)\n";
+  }
+
+  wantarray?($?, $out):$out;
+}
+
+
+
+######################################################################
+#
+# Find the absolute path to repository (relatives are relative to upstream repository)
+#
+sub resolve_repository($$;$)
+{
+  my ($relrepos,$relative,$absrepos) = @_;
+
+  # Check for already absolute
+  return $relrepos if ($relrepos =~ m-^(/|\w+:/)-);
+
+  # Break into method and path sections
+  my ($prefix, $suffix) = ("", $relrepos);
+  ($prefix, $suffix) = ($1, $2) if ($relrepos =~ m-^(\w+:)(.*)-);
+
+  # Find upstream origin URL
+  if (!$absrepos)
+  {
+    my ($ret, $master_repo) = getcmd("$git config remote.origin.url");
+    chomp($master_repo);
+    die "Could not find git upstream clone which this is relative to\n" unless ($ret == 0 && $master_repo);
+    $absrepos = $master_repo;
+  }
+
+  # Nuke trailing .git, if necessary
+  $absrepos =~ s:/.git$::;
+
+  if ($fromcheckout)
+  {
+    $relrepos = "$absrepos/$relative";
+  }
+  else
+  {
+    my ($mprefix, $msuffix) = ("", $absrepos);
+    ($mprefix, $msuffix) = ($1, $2) if ($absrepos =~ m-^([\w\@\.]+:(?://[^/]*|))(.*)-);
+
+    # Is this repository-relative? (keep method://host from master)
+    if ($relrepos =~ m:^\^(/?.*):)
+    {
+      my $path = $1;
+      if ($path =~ m-^/- || $mprefix =~ m-[:/]$-)
+      {
+          return "$mprefix$path";
+      }
+      else
+      {
+          return "$mprefix/$path";
+      }
+    }
+
+    # Do we have a replacement method://?  (Seems like an unlikely case)
+    if ($prefix)
+    {
+      $absrepos = $prefix.$msuffix;
+    }
+
+    # Handle smushing together, relative paths, etc
+    $relrepos = "$absrepos/$suffix";
+    while ($relrepos =~ s:/\./:/:) {;}
+    while ($relrepos =~ s:/[^/]+?/\.\./:/:) {;}
+    while ($relrepos =~ s-(^\w+://.*)//-$1-g) {;}
+    while ($relrepos !~ m-^\w+://- && $relrepos =~ s://:/:g) {;}
+  }
+  $relrepos =~ s:/\.$::;
+  $relrepos;
+}
+
+
+
+######################################################################
+#
+# check whether command requires slave configuration
+#
+sub ephemeral_command($)
+{
+  my ($cmd) = @_;
+  return ($cmd eq "prepare" or $cmd eq "resolve" or $cmd eq "clone" or $cmd eq "help");
+}
+
+
+
+######################################################################
+#
+# Recursive slave list population
+#
+sub git_slave_list_recursive($$$$$);
+sub git_slave_list_recursive($$$$$)
+{
+  my ($file,$gitsp,$seenp,$cmd,$base) = @_;
+
+  my ($r);
+
+  if (!open($r, "<", $file))
+  {
+    die "Could not find $file file\n"
+      unless (!defined($cmd) or ephemeral_command($cmd));
+    return;
+  }
+  my ($lineno) = 0;
+  while (<$r>)
+  {
+    $lineno++;
+    if (/^\#include\s+\"([^\"]+)\"\s*$/)
+    {
+      my $slavefile = $1;
+      $slavefile = "$base/$slavefile" unless ($slavefile =~ m:^/:);
+      my $newbase = $slavefile;
+      $newbase =~ s:^(.*)/.*:$1:;
+      git_slave_list_recursive($slavefile,$gitsp,$seenp,$cmd,$newbase);
+      next;
+    }
+    next if (/^\s*(?:\#.*)$/);
+    next if ($OPTIONS{'exclude'} && /$OPTIONS{'exclude'}/);
+    die "Bad line $lineno in $file\n" unless (/^\"(.*)\" \"(.*)\"( ifpresent)?$/);
+    my ($baserel,$ckoutrel,$flags) = ($1,$2,$3);
+
+    if ($flags !~ /ifpresent/ || $OPTIONS{'with-ifpresent'} || -d "$base/$ckoutrel/.")
+    {
+      my ($relbase) = $base;
+      my ($qbase) = quotemeta($GITS_DIR);
+      $relbase =~ s:^$qbase/*::;
+      $relbase = "$relbase/" if ($relbase);
+
+      $ckoutrel = "$relbase$ckoutrel";
+
+      push(@$gitsp,[$baserel, $ckoutrel]) if (!$seenp->{$ckoutrel});
+      $seenp->{$ckoutrel} = 1;
+    }
+  }
+  close($r);
+}
+
+
+
+######################################################################
+#
+# Get list of currently configured slaves
+#
+sub git_slave_list($)
+{
+  my ($cmd) = @_;
+  my (@gits);
+  my (%seen);
+
+  # Discover the current fromcheckout status
+  my $thisfromcheckout = `$git config gits.fromcheckout`;
+  $fromcheckout = 1 if ($thisfromcheckout && $thisfromcheckout ne "false");
+
+  foreach my $slavefile (split(/, /,$GITSLAVE))
+  {
+    $slavefile = "$GITS_DIR/$slavefile" unless ($slavefile =~ m:^/:);
+    git_slave_list_recursive($slavefile,\@gits,\%seen,$cmd,$GITS_DIR);
+  }
+  @gits;
+}
+
+
+
+######################################################################
+#
+# Configure persistent fromcheckout
+#
+sub set_fromcheckout($)
+{
+  if ($_[0])
+  {
+    `$git config gits.fromcheckout 1`;
+    $fromcheckout = 1;
+  }
+  else
+  {
+    `$git config --unset gits.fromcheckout`;
+    $fromcheckout = 0;
+  }
+  $? == 0;
+}
+
+
+
+######################################################################
+#
+# Check for presence of slave
+#
+my ($warngitslavesync) = 0;
+
+sub missing_slave($)
+{
+  my ($slave) = @_;
+  if (!-d $slave)
+  {
+    warn "Missing one or more git slaves including $slave, consider 'gits populate'.\n" unless ($warngitslavesync);
+    $warngitslavesync++;
+    return 1;
+  }
+  return 0;
+}
+
+
+
+######################################################################
+#
+# Add shell quoting to avoid problems
+#
+sub quoteit(@)
+{
+  my $str;
+  foreach my $item (@_)
+  {
+    my ($i) = $item;
+    my $o;
+    my $len = length($i);
+
+    foreach(my $x=0;$x<$len;$x++)
+    {
+      my $c = substr($i,$x,1);
+      if ($OPTIONS{'eval-args'})
+      {
+	$o .= '\\' if ($c =~ /[\\\"]/);
+      }
+      else
+      {
+	$o .= '\\' if ($c =~ /[\\\$\`\"]/);
+      }
+      $o .= $c;
+    }
+    $str .= '"'.$o.'" ';
+  }
+  chop($str);
+  $str;
+}
+
+
+
+######################################################################
+#
+# Populate - clone projects listed in .gitslaves
+#
+sub do_populate(;$)
+{
+  my ($nocheckout)=@_;
+  my $curbranch;
+
+  $nocheckout='-n' if ($nocheckout);
+
+  foreach my $group (@slaves)
+  {
+    my $slave = $group->[1];
+
+    if (! -d $slave)
+    {
+      print "gits: Cloning $slave\n" if ($OPTIONS{'verbose'});
+      my ($repos) = resolve_repository($group->[0],$group->[1]);
+      docmd(qq^$git clone $nocheckout "$repos" "$slave"^) || die "Could not clone $repos onto $slave\n";
+
+      $curbranch = (grep(s/\s*\*\s+//, split(/\n/,getcmd("$git branch"))))[0] unless ($curbranch);
+      if ($curbranch ne "master" && $curbranch !~ /no branch/)
+      {
+        print qq^Switching "$ARGV[2]" to branch "$curbranch"\n^;
+        docmd(qq^cd "$slave"; $git checkout -b $curbranch origin/$curbranch^) || die "Branch inconsistency, branch $curbranch does not exist for $slave\n";
+      }
+    }
+    else
+    {
+      print "gits: $slave already exists\n" if ($OPTIONS{'verbose'});
+    }
+    # Update hooks from master (-regex '.*\\*\$' matches bogus symlink '*')
+    docmd(qq^cd $slave/.git/hooks; find . -type l -a '(' -lname '../../../git-hooks*' -o -regex '.*\\*\$' ')' -exec rm -f '{}' ';'; find ../../../git-hooks/ -type f 8>&2 2>/dev/null -exec sh -c 'ln -s \$0 . 2>&8' '{}' ';'^);
+  }
+  # Update master's hooks as well
+  docmd(qq^cd .git/hooks; find . -type l -a '(' -lname '../../git-hooks*' -o -regex '.*\\*\$' ')' -exec rm -f '{}' ';'; find ../../git-hooks/ -type f 8>&2 2>/dev/null -exec sh -c 'ln -s \$0 . 2>&8' '{}' ';'^);
+}
+
+
+
+######################################################################
+#
+# git checkout, gits style
+#
+# pushprocessing: 0 -- want progress bar
+# pushprocessing: 1 -- print informational messages, revert to oldbranch on die
+#			(oldbranch is first argument, popped from @args)
+# pushprocessing: 2 -- do not abort on errors - return warning
+#
+sub do_checkout($@);
+sub do_checkout($@)
+{
+  my ($pushprocessing,@args) = @_;
+  my ($oldbranch);
+  my ($ret, $msg) = (0, undef);
+  my ($slavecnt) = -1;
+  my ($ok, $okcnt);
+  my (%msg);
+  my ($group, $slave) = (undef, ".");
+
+  $oldbranch = shift(@args) if ($pushprocessing == 1);
+
+  if (!$OPTIONS{'no-master'})
+  {
+    my ($cmd) = qq^cd %%dir%% && $git checkout ^.quoteit(@args);
+    $cmd .= " --" if ($pushprocessing);
+    $cmd .= " >/dev/null 2>&1" if ($pushprocessing == 2);
+    ($ret, $msg) = getcmd($cmd,$slave);
+
+    if ($ret == 0)
+    {
+      # Reload list of slaves, which might have changed due to superproject checkout
+      @slaves = git_slave_list("checkout");
+
+      # New list of slaves might have stuff we need to check out
+      do_populate(1);
+    }
+  }
+  my ($totcnt) = $#slaves + ($OPTIONS{'no-master'} ? 1 : 2);
+  my ($progress) = Term::ProgressBar->new({remove=>1, count=>($#slaves+1)}) if ($want_progress && !$pushprocessing);
+  $progress->max_update_rate(1) if ($progress);
+
+  # Tricky: This backwards loop is designed so that the return code processing can be shared between superproject and slaves
+  my $failed;
+  do
+  {
+    if ($ret != 0)
+    {
+      chomp($msg);
+      my $warn = "gits checkout (@{[join(' ',@args)]}), failed for: '$slave': " . exitcode($ret);
+      if ($pushprocessing > 1)
+      {
+	$failed .= " $slave";
+      }
+      elsif ($OPTIONS{'keep-going'})
+      {
+	warn "Error in $warn (continuing)\n $msg\n";
+      }
+      else
+      {
+	my $diemsg = "Aborting $warn\n ";
+	if ($ok)
+	{
+	  $diemsg .= "(ran fine on: $ok, did not run on @{[$totcnt-$okcnt]} other(s); no rollbacks)";
+	}
+	else
+	{
+	  $diemsg .= "(first entry, no other successfully executed)";
+	}
+	# <TODO>try to restore old branch, if desirable/possible</TODO>
+	$msg .= do_checkout(2, $oldbranch) if ($pushprocessing == 1);
+	die "$diemsg\n  $msg\n";
+      }
+    }
+    else
+    {
+      $ok .= " $slave";
+      $okcnt++;
+      if ($pushprocessing)
+      {
+	$msg =~ s/Switched to branch.*\n//;
+	$msg =~ s/Already on \".*\n//;
+	push(@{$msg{"$args[0]\@$slave"}}, $slave);
+      }
+      else
+      {
+	push(@{$msg{$msg}}, $slave);
+      }
+    }
+
+    # Forward through the slave list
+    if (++$slavecnt <= $#slaves)
+    {
+      $group = $slaves[$slavecnt];
+      $slave = $group->[1];
+
+      my ($cmd) = qq^cd %%dir%% && $git checkout ^.quoteit(@args);
+      $cmd .= " --" if ($pushprocessing);
+      $cmd .= " >/dev/null 2>&1" if ($pushprocessing == 2);
+      ($ret, $msg) = getcmd($cmd,$slave);
+    }
+
+    $progress->update($slavecnt) if ($progress);
+  } while ($slavecnt <= $#slaves);
+
+  if ($pushprocessing > 1)
+  {
+    my $msg = "\nUnable to checkout original $args[0] for$failed" if ($failed);
+    $msg .= " (successful for $okcnt other(s))" if ($failed);
+    return $msg;
+  }
+
+  %msg;
+}
+
+
+
+######################################################################
+#
+# Standard gits output summmarization routine
+#
+sub stdout($;$)
+{
+  my ($msgp,$suppressempty) = @_;
+
+  # Skip output if all commands returned empty output strings unless we are in verbose mode
+  return if (!$OPTIONS{'verbose'} && scalar(keys(%{$msgp})) == 1 && defined($msgp->{""}));
+
+  foreach my $msg (sort { $#{$msgp->{$a}} <=> $#{$msgp->{$b}} } keys %{$msgp})
+  {
+    next if ($suppressempty && !$OPTIONS{'verbose'} && $msg eq "");
+    print "On: ", join(', ',@{$msgp->{$msg}}), ":\n";
+    $msg =~ s/^/  /mg if (length($msg));
+    print $msg;
+  }
+}
+
+
+
+######################################################################
+#
+# Main functionality
+#
+Getopt::Long::Configure("bundling", "no_ignore_case", "no_auto_abbrev", "no_getopt_compat", "require_order");
+GetOptions(\%OPTIONS, 'no-progress', 'exclude=s', 'version', 'no-master', 'eval-args', 'with-ifpresent', 'no-hide', 'no-commit', 'keep-going', 'parallel|p=i', 'press-on', 'verbose|v+', 'quiet', 'help') || die $USAGE;
+
+while ($ARGV[0] =~ /^--/)
+{
+  $git .= " " . shift @ARGV;
+}
+# provide baka terminology compatibility
+my $BAKANAMES = { 'inits' => 'prepare', 'clones' => 'attach',
+		  'checkouts' => 'populate', 'execs' => 'exec',
+		  'resolves' => 'resolve', 'stati' => 'statuses' };
+$ARGV[0] = $BAKANAMES->{$ARGV[0]} if $BAKANAMES->{$ARGV[0]};
+$OPTIONS{'keep-going'} = 1 if $OPTIONS{'press-on'};
+
+$want_parallel = $OPTIONS{'parallel'} if (defined($want_parallel));
+$OPTIONS{'no-progress'} = 1 if ($want_parallel);
+
+die "$USAGE" if ($#ARGV < 0 and !($OPTIONS{'version'} or $OPTIONS{'help'}));
+
+print STDERR $eval_errs if ($eval_errs ne '' && $OPTIONS{'verbose'} > 1);
+
+# Find GITS_DIR -- location of git slave file
+if ($ENV{'GITS_DIR'} && -f $ENV{'GITS_DIR'}."/".GITSLAVE)
+{				# Use gitslave location user told us
+  $GITS_DIR = $ENV{'GITS_DIR'};
+}
+else
+{				# Probe for gitslave location
+  $GITS_DIR = '.';
+  my (@S,$dev,$ino) = stat($GITS_DIR);
+
+  do
+  {
+    if (!-f $GITS_DIR."/".GITSLAVE)
+    {
+      $GITS_DIR .= '/..';
+      $dev = $S[0];
+      $ino = $S[1];
+      @S = stat($GITS_DIR);
+    }
+  } while (!-f $GITS_DIR."/".GITSLAVE && $S[0] == $dev && $S[1] != $ino);
+}
+
+# All operations are relative to gitslave base
+if (-f $GITS_DIR."/".GITSLAVE)
+{
+  $GITS_DIR = Cwd::realpath($GITS_DIR);
+  chdir($GITS_DIR);
+  print STDERR "gits: Gitslave found in $GITS_DIR\n" if ($OPTIONS{'verbose'} > 1);
+}
+else
+{
+  die "Could not find @{[GITSLAVE]}, either you are not inside a meta-module\nor one of its slaves or this is a new meta-module which has not yet\nbeen configured for gits.  Probably it is the first case so you simply\nneed to cd into the correct git checkout with a @{[GITSLAVE]} file, but in\nthe rare event that this is a new meta-module, you need run `gits\nprepare` and then a few `gits attach` commands to set up gits for this\nnew meta-module.\n"
+    unless ($#ARGV < 0 or ephemeral_command($ARGV[0]));
+}
+
+@slaves = git_slave_list($ARGV[0]);
+
+if (!$OPTIONS{'no-progress'})
+{
+  if (defined($want_progress) && -t STDERR)
+  {
+    $want_progress = 1;
+  }
+  else
+  {
+    warn "Progress bar unavailable - install Term::ProgressBar" .
+      " (perl-Term-ProgressBar RPM)\n"
+      if ($OPTIONS{'verbose'} > 0);
+  }
+}
+
+if ($OPTIONS{'parallel'})
+{
+  if (!defined($want_parallel))
+  {
+    warn "Parallelism unavailable - install Parallel::Iterator" .
+      " (no RPM exists, use CPAN)\n";
+  }
+}
+
+
+if ($ARGV[0] eq 'version' or $OPTIONS{'version'})
+{
+  my $version = "1.3";
+
+  # <TRICKY> If the version string is still UNTAGGED, try to run the local
+  # git commands to get the current hash and possibly tag; this is used by
+  # Makefile to get the correct string to replace it with.  Otherwise, the
+  # installation has replaced it with a version; don't mess with it.  Use
+  # string concatenation to keep this check from getting replaced. </TRICKY>
+
+  if ($version eq "{" . "UNTAGGED" . "}")
+  {
+    my ($ret,$hash) = getcmd("$git log --pretty=format:%H -n 1");
+    chomp($hash);
+
+    my ($dret,$desc) = getcmd("$git describe --candidates=1 --tags $hash 2>/dev/null");
+    if ($dret)
+    {
+      $desc = "Untagged ($hash)\n";
+    }
+    else
+    {
+      # strip out leading tag alphabetic and space, get just the numbers
+      $desc =~ s/^.*?([0-9][0-9._-]*[0-9]).*/$1/;
+      $desc =~ y=/_=--=;
+    }
+    print $desc;
+  }
+  else
+  {
+    print "gits version $version\n";
+    my ($vret,$vers) = getcmd("$git --version");
+    if ($vret || ($vers !~ /version ([2-9]|1\.[6-9])/))
+    {
+      print STDERR "$git version >= 1.6 required!\n";
+      $returncode = 1;
+    }
+    print $vers;
+    ($vret,$vers) = getcmd("perl --version");
+    $vers =~ s/^\n//;
+    $vers =~ s/This is perl,/Perl/;
+    $vers =~ s/\nCopyright.*//s;
+    print $vers;
+  }
+}
+elsif ($ARGV[0] eq 'help' or $OPTIONS{'help'})
+{
+  print "$USAGE";
+  use FindBin qw($Bin $Script);
+  docmd("pod2text < $Bin/$Script |" .
+	"sed -n -e '/^DESCRIPTION/,/^BUGS/H'" .
+	" -e '/^BUGS/{x;s/\\n[[:upper:]]*/\\n/g;s/\\n\\n/\\n/;p;}'");
+  exit;
+}
+elsif ($ARGV[0] eq 'prepare')
+{
+  die "gits prepare takes no arguments\n" if ($#ARGV != 0);
+  $GITS_DIR=$ENV{'GITS_DIR'} || ".";
+  die "Refusing to prepare, \$GITSLAVE variable is multipath\n" if ($GITSLAVE =~ /, /);
+  die "Refusing to prepare, $GITS_DIR/@{[$GITSLAVE]} already exists\n" if (-f $GITS_DIR."/".$GITSLAVE);
+  open(W, ">", $GITS_DIR."/".$GITSLAVE) || die "Could not create $GITS_DIR/@{[$GITSLAVE]}\n";
+  close(W);
+  docmd("$git add @{[$GITSLAVE]}");
+  docmd(qq^$git commit -m "gits creating @{[$GITSLAVE]}" @{[$GITSLAVE]}^) unless ($OPTIONS{'no-commit'});
+}
+elsif ($ARGV[0] eq 'attach')
+{
+  die "gits attach requires two arguments\nusage: gits attach <repository> <directory> [flags]\n" if ($#ARGV < 2 || $#ARGV > 3 || !$ARGV[1] || !$ARGV[2]);
+  my ($repos) = resolve_repository($ARGV[1],$ARGV[2]);
+  die "Unknown flag $ARGV[3]\n" if ($ARGV[3] && $ARGV[3] ne "ifpresent");
+  die "Refusing to attach, \$GITSLAVE variable is multipath\n" if ($GITSLAVE =~ /, /);
+  die "Destination ($ARGV[2]) already exists\n" if (-e $ARGV[2]);
+  if ($ARGV[2] =~ m:(.*)/(.*):)
+  {
+    die "Destination ($ARGV[2]) cannot end in a slash" if (length($2) < 1);
+    die "Destination parent ($1) does not exist\n" if (!-d $1);
+  }
+  my $files = $GITS_DIR."/".$GITSLAVE;
+  docmd(qq^$git clone "$repos" "$ARGV[2]"^) || die "Could not clone $repos onto $ARGV[2]\n";
+
+  open(W, ">>", $files);
+  print W qq^"$ARGV[1]" "$ARGV[2]"^;
+  print W " $ARGV[3]" if ($ARGV[3]);
+  print W "\n";
+  close(W);
+
+  if ($ARGV[2] !~ m:/:)
+  {
+    my ($needadd) = 0;
+    $needadd++ if (! -f "$GITS_DIR/.gitignore");
+    open(W, ">>", $GITS_DIR."/.gitignore");
+    print W qq^$ARGV[2]\n^;
+    close(W);
+    $files .= " .gitignore";
+    docmd(qq^$git add .gitignore^) if ($needadd);
+  }
+  docmd(qq^$git commit -m 'gits adding "$ARGV[1]" "$ARGV[2]"' $files^) unless ($OPTIONS{'no-commit'});
+
+  my $curbranch = (grep(s/\s*\*\s+//, split(/\n/,getcmd("$git branch"))))[0];
+  if ($curbranch ne "master")
+  {
+    print qq^Switching "$ARGV[2]" to branch "$curbranch"\n^;
+    docmd(qq^cd "$ARGV[2]"; $git checkout $curbranch --^) || die "Branch inconsistency, branch $curbranch does not exist\n";
+  }
+}
+elsif ($ARGV[0] eq 'detach')
+{
+  die "gits detach requires one directory (sub-module) argument which must exist\nusage: gits detach <directory>\n" if ($#ARGV != 1);
+
+  die "$ARGV[1] is not a git repository or does not exist\n" unless (-d "$ARGV[1]/.git");
+  my $files = $GITS_DIR."/".$GITSLAVE;
+
+  die "$files, the gitslave management file, does not exist\n" unless (-f $files);
+  open(R,"<",$files) || die "Cannot open $files";
+  my $save;
+  my ($lineno) = 0;
+  my $found = 0;
+  while (<R>)
+  {
+    $lineno++;
+    if (/^\s*(?:\#.*)$/)
+    {
+      $save .= $_;
+      next;
+    }
+    die "Bad line $lineno in $files\n" unless (/^\"(.*)\" \"(.*)\"( ifpresent)?$/);
+    if ($2 eq $ARGV[1])
+    {
+      $found++;
+      next;
+    }
+    $save .= $_;
+  }
+  close(R);
+  die "Could not requested repository $ARGV[1] in $files for detaching.  Aborting\n" unless ($found);
+  open(W,">",$files) || die "Cannot open $files for writing";
+  print W $save;
+  close(W) || die "Cannot write $files";
+
+  if (open(R,"<",".gitignore"))
+  {
+    my $save2;
+    while (<R>)
+    {
+      my ($c) = $_;
+      chomp($c);
+      next if ($c eq "$ARGV[1]");
+      $save2 .= $_;
+    }
+    close(R);
+    open(W,">",".gitignore") || die "Cannot open .gitignore for writing";
+    print W $save2;
+    close(W) || die "Cannot write .gitignore";
+  }
+
+  docmd(qq^rm -rf ^.quoteit($ARGV[1])) unless ($OPTIONS{'no-commit'});
+  docmd(qq^$git commit -m 'gits removing ^.quoteit($ARGV[1])."' ".quoteit($GITSLAVE)." .gitignore") unless ($OPTIONS{'no-commit'});
+}
+elsif ($ARGV[0] eq 'clone')
+{
+  if (grep(/^--fromcheckout$/,@ARGV))
+  {
+    set_fromcheckout(1);
+    @ARGV = grep(!/^--fromcheckout$/,@ARGV);
+  }
+
+  if (grep(/^--no-fromcheckout$/,@ARGV))
+  {
+    set_fromcheckout(0);
+    @ARGV = grep(!/^--no-fromcheckout$/,@ARGV);
+  }
+
+  my ($ret,$out) = getcmd(qq^git ^.quoteit(@ARGV));
+  print STDERR $out;
+  if ($ret != 0 || $out !~ /^Cloning into (.*)\.\.\.\n/)
+  {
+    die "Could not parse git clone output\n";
+  }
+  chdir($1);
+  my $cmd = "$0 ";
+  foreach my $arg (keys %OPTIONS)
+  {
+    if ($arg eq "exclude" || $arg eq "parallel")
+    {
+      $cmd .= qq^'--$arg=$OPTIONS{"$arg"}' ^;
+    }
+    else
+    {
+      $cmd .= "--$arg ";
+    }
+  }
+  $cmd .= "populate";
+  docmd($cmd);
+}
+elsif ($ARGV[0] eq 'populate')
+{
+  if (grep(/^--fromcheckout$/,@ARGV))
+  {
+    set_fromcheckout(1);
+    @ARGV = grep(!/^--fromcheckout$/,@ARGV);
+  }
+
+  if (grep(/^--no-fromcheckout$/,@ARGV))
+  {
+    set_fromcheckout(0);
+    @ARGV = grep(!/^--no-fromcheckout$/,@ARGV);
+  }
+
+  die "gits populate only accepts --(no-)fromcheckout option argument\n" if ($#ARGV != 0);
+
+  do_populate();
+}
+elsif ($ARGV[0] eq 'resolve')
+{
+  if (grep(/^--fromcheckout$/,@ARGV))
+  {
+    $fromcheckout = 1;
+    @ARGV = grep(!/^--fromcheckout$/,@ARGV);
+  }
+
+  if (grep(/^--no-fromcheckout$/,@ARGV))
+  {
+    $fromcheckout = 0;
+    @ARGV = grep(!/^--no-fromcheckout$/,@ARGV);
+  }
+
+  die "gits resolve requires two non-option arguments\n" if ($#ARGV != 2 || !$ARGV[1] || !$ARGV[2]);
+
+  print resolve_repository($ARGV[1], $ARGV[2])."\n";
+}
+elsif ($ARGV[0] eq 'pulls')
+{
+  shift(@ARGV);
+  my ($ok,$okcnt,%msg);
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+  my $oldbranch = (grep(s/\s*\*\s+//, split(/\n/,getcmd("$git branch"))))[0];
+  my @branches = grep(s/branch\.(.*)\.remote=.*/$1/,split(/\n/,getcmd(qq%$git config -l%)));
+
+  $progress = Term::ProgressBar->new({remove=>1, ETA => 'linear', count=>(($#branches + 1)*($#list+1))}) if ($want_progress);
+  $progress->max_update_rate(1) if ($progress);
+
+  foreach my $branch (@branches)
+  {
+    my (%newmsg) = do_checkout(1, $oldbranch, $branch);
+
+    my (%results);
+
+    foreach my $group (@list)
+    {
+      my $slave = $group->[1];
+      next if missing_slave($slave);
+
+      $results{$group} = gitsubst("cd %%dir%% && $git pull ".quoteit(@ARGV),$slave);
+    }
+    if ($want_parallel)
+    {
+      %results = Parallel::Iterator::iterate_as_hash({'workers' => $want_parallel},sub { [getcmd($_[1])] }, \%results);
+    }
+
+    foreach my $group (@list)
+    {
+      my $slave = $group->[1];
+
+      next if missing_slave($slave);
+
+      my ($ret, $msg);
+      if ($want_parallel)
+      {
+	($ret, $msg) = @{$results{$group}};
+      }
+      else
+      {
+	($ret, $msg) = getcmd($results{$group});
+      }
+      if ($ret != 0)
+      {
+	chomp($msg);
+	my $warn = "gits pulls, failed on branch $branch for: '$slave': " . exitcode($ret);
+	if ($OPTIONS{'keep-going'} || $want_parallel)
+	{
+	  warn "Error in $warn (continuing)\n $msg\n";
+	  $returncode = 2;
+	  next;
+	}
+
+	my $diemsg = "Aborting $warn\n ";
+	if ($ok)
+	{
+	  $diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+	}
+	else
+	{
+	  $diemsg .= "(first entry, no other successfully executed)";
+	}
+	# <TODO>some way for do_checkout to only operate on some slaves</TODO>
+	$msg .= do_checkout(2, $oldbranch);
+	die "$diemsg\n  $msg\n";
+      }
+      $msg = $newmsg{$slave}.$msg;
+      $msg =~ s/Switched to branch.*\n//;
+      $msg =~ s/Already on \".*\n//;
+      $ok .= " $slave";
+      $okcnt++;
+      # replace module name with %MODULE% to collapse redundant messages
+      my $mod = $slave;
+      if ($mod eq '.')
+      {
+	$mod = `$git config remote.origin.url`;
+	chomp $mod;
+	$mod =~ s=.*/==;
+      }
+      $msg =~ s/\b$mod\b/%MODULE%/g;
+      my $submod = $mod;
+      $submod =~ s=.*/==;
+      $msg =~ s/\b$submod\b/%MODULE%/g if ($mod ne $submod);
+      # remove hash ids in various places to collapse redundant messages
+      if (!$OPTIONS{'no-hide'})
+      {
+	$msg =~ s/\n {3}[0-9a-fA-F]{7}\.\.[0-9a-fA-F]{7} /\n /g;
+	$msg =~ s/\nUpdating [0-9a-fA-F]{7}\.\.[0-9a-fA-F]{7}\n/\n/g;
+	$msg =~ s/(Fast-forwarded \S+) to [0-9a-fA-F]*\./$1/g;
+      }
+      push(@{$msg{$msg}}, "$branch\@$slave");
+
+      $progress->update(++$progress_count) if ($progress);
+    }
+  }
+
+  stdout(\%msg);
+
+  print do_checkout(2, $oldbranch) . "\n";
+}
+elsif ($ARGV[0] eq 'pull')
+{
+  my ($ok,$okcnt,%msg);
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+
+  $progress = Term::ProgressBar->new({remove=>1, ETA => 'linear', count=>($#list+1)}) if ($want_progress);
+  $progress->max_update_rate(1) if ($progress);
+
+  my (%results,%worklist);
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+
+    next if missing_slave($slave);
+
+    $worklist{$group} = gitsubst(qq^cd %%dir%% && $git ^.quoteit(@ARGV),$slave);
+  }
+
+  if ($want_parallel)
+  {
+    %results = Parallel::Iterator::iterate_as_hash({'workers' => $want_parallel},sub { [getcmd($_[1])] }, \%worklist);
+  }
+
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+
+    next if missing_slave($slave);
+
+    my ($ret, $msg);
+    if ($want_parallel || ref($results{$group}))
+    {
+      ($ret, $msg) = @{$results{$group}};
+    }
+    else
+    {
+      ($ret, $msg) = getcmd($worklist{$group});
+    }
+    if ($ret != 0)
+    {
+      chomp($msg);
+      my $warn = "gits $ARGV[0], failed for: '$slave': " . exitcode($ret);
+      if ($OPTIONS{'keep-going'} || $want_parallel)
+      {
+	warn "Error in $warn (continuing)\n $msg\n";
+	$returncode = 2;
+	next;
+      }
+
+      my $diemsg = "Aborting $warn\n ";
+      if ($ok)
+      {
+	$diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+      }
+      else
+      {
+	$diemsg .= "(first entry, no other successfully executed)";
+      }
+      die "$diemsg\n  $msg\n";
+    }
+    $ok .= " $slave";
+    $okcnt++;
+    # replace module name with %MODULE% to collapse redundant messages
+    my $mod = $slave;
+    if ($mod eq '.')
+    {
+      $mod = `$git config remote.origin.url`;
+      chomp $mod;
+      $mod =~ s=.*/==;
+    }
+    $msg =~ s/\b$mod\b/%MODULE%/g;
+    my $submod = $mod;
+    $submod =~ s=.*/==;
+    $msg =~ s/\b$submod\b/%MODULE%/g if ($mod ne $submod);
+    # remove hash ids in various places to collapse redundant messages
+    if (!$OPTIONS{'no-hide'})
+    {
+      $msg =~ s/\n {3}[0-9a-fA-F]{7}\.\.[0-9a-fA-F]{7} /\n /g;
+      $msg =~ s/\nUpdating [0-9a-fA-F]{7}\.\.[0-9a-fA-F]{7}\n/\n/g;
+      $msg =~ s/(Fast-forwarded \S+) to [0-9a-fA-F]*\./$1/g;
+    }
+    push(@{$msg{$msg}}, $slave);
+
+    $progress->update(++$progress_count) if ($progress);
+  }
+
+  stdout(\%msg);
+}
+elsif ($ARGV[0] eq 'push')
+{
+  my ($ok,$okcnt,%msg);
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+  my ($quick) = 0;
+
+  if (!$>)
+  {
+    # git uses $HOME only for configuration search, not ~user
+    my $dir = $ENV{'HOME'};
+    my @statinfo = stat("$dir/.gitconfig") if ($dir);
+
+    # If ~/.gitconfig exists and is owned by root, root push is allowed
+    die "push should not be performed as root\n" unless (exists($statinfo[4]) && $statinfo[4] == $>);
+  }
+
+  if (grep(/^--quick$/,@ARGV))
+  {
+    $quick = 1;
+    @ARGV = grep(!/^--quick$/,@ARGV);
+  }
+
+  $progress = Term::ProgressBar->new({remove=>1, ETA => 'linear', count=>($#list+1)}) if ($want_progress);
+  $progress->max_update_rate(1) if ($progress);
+
+  my (%results,%worklist);
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+
+    next if missing_slave($slave);
+
+    if ($quick)
+    {
+      my ($ret, $msg) = getcmd(qq^cd %%dir%% && $git status^, $slave);
+      if (!($msg =~ /Your branch is /))
+      {
+	$results{$group} = [0, "Skipping push, this branch is up to date.\n"];
+	next;
+      }
+    }
+
+    $worklist{$group} = gitsubst("cd %%dir%% && $git ".quoteit(@ARGV),$slave);
+  }
+
+  if ($want_parallel)
+  {
+    %results = Parallel::Iterator::iterate_as_hash({'workers' => $want_parallel},sub { [getcmd($_[1])] }, \%worklist);
+  }
+
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+
+    next if missing_slave($slave);
+
+    my ($ret, $msg);
+    if ($want_parallel || ref($results{$group}))
+    {
+      ($ret, $msg) = @{$results{$group}};
+    }
+    else
+    {
+      ($ret, $msg) = getcmd($worklist{$group});
+    }
+    if ($ret != 0)
+    {
+      chomp($msg);
+      my $warn = "gits $ARGV[0], failed for: '$slave': " . exitcode($ret);
+      if ($OPTIONS{'keep-going'} || $want_parallel)
+      {
+	warn "Error in $warn (continuing)\n $msg\n";
+	$returncode = 2;
+	next;
+      }
+
+      my $diemsg = "Aborting $warn\n ";
+      if ($ok)
+      {
+	$diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+      }
+      else
+      {
+	$diemsg .= "(first entry, no other successfully executed)";
+      }
+      die "$diemsg\n  $msg\n";
+    }
+    $ok .= " $slave";
+    $okcnt++;
+    push(@{$msg{$msg}}, $slave);
+
+    $progress->update(++$progress_count) if ($progress);
+  }
+
+  stdout(\%msg);
+}
+elsif ($ARGV[0] eq 'checkout')
+{
+  shift(@ARGV);
+  my (%msg) = do_checkout(0, @ARGV);
+
+  stdout(\%msg);
+}
+elsif ($ARGV[0] eq 'archive')
+{
+  shift(@ARGV);
+  my $format;
+  my $outfile;
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+  my ($ok,$okcnt);
+  my (%group,%msg);
+
+  for(my $i=0; $i <= $#ARGV; $i++)
+  {
+    # OK, not the sanest options parse in the world, but it should be
+    # close enough for sane developers to use.
+    if ($ARGV[$i] eq "-l" || $ARGV[$i] eq "--list")
+    {
+      print "gits-tar\n";
+      print `git archive -l`;
+      exit(0);
+    }
+    if ($ARGV[$i] eq "--format" && $i < $#ARGV)
+    {
+      $format = $ARGV[$i+1];
+      $ARGV[$i+1] = "tar" if ($format eq "gits-tar");
+    }
+    if ($ARGV[$i] =~ /^--format=(.*)/)
+    {
+      $format = $1;
+      $ARGV[$i] =~ s/gits-tar/tar/ if ($format eq "gits-tar");
+    }
+    if (($ARGV[$i] eq "-o" || $ARGV[$i] eq "--output") && $i < $#ARGV)
+    {
+      $outfile = $ARGV[$i+1];
+    }
+    if ($ARGV[$i] =~ /^--output=(.*)/)
+    {
+      $outfile = $1;
+    }
+  }
+
+  if ($format eq "gits-tar" && !$outfile)
+  {
+    print STDERR "Must provide a --output file with gits-tar archive format\n";
+    exit(1);
+  }
+  if ($format eq "gits-tar" && $outfile)
+  {
+    my $prefix;
+    my $cmdargs;
+
+    for(my $i=0; $i <= $#ARGV; $i++)
+    {
+      if ($ARGV[$i] eq "--prefix" && $i < $#ARGV)
+      {
+	$prefix=$ARGV[++$i];
+	next;
+      }
+      if ($ARGV[$i] =~ /--prefix=(.*)/)
+      {
+	$prefix=$1;
+	next;
+      }
+      if (($ARGV[$i] eq "--output" || $ARGV[$i] eq "-o") && $i < $#ARGV)
+      {
+	$i++;
+	next;
+      }
+      next if ($ARGV[$i] eq "--output=(.*)");
+      $cmdargs .= quoteit($ARGV[$i])." ";
+    }
+
+    $prefix .= "/" if ($prefix && $prefix !~ m:/$:);
+    my $first = 1;
+    my $curout = $outfile;
+    foreach my $group (@list)
+    {
+      my $slave = $group->[1];
+      next if missing_slave($slave);
+
+      my ($ret, $msg) = getcmd(qq^cd %%dir%% && $git archive $cmdargs --prefix ${prefix}$slave/ --output $curout^,$slave);
+      if ($ret == 0)
+      {
+	if ($first)
+	{
+	  undef($first);
+	  $curout = ($ENV{'TMPDIR'}||'/tmp')."/gitslave-archive-tmp.$$";
+	}
+	else
+	{
+	  my($ret1, $msg1) = getcmd("tar -Af $outfile $curout");
+	  unlink($curout) if ($ret1 == 0);
+	  $ret = $ret1;
+	  $msg .= $msg1;
+	}
+      }
+
+      if ($ret != 0)
+      {
+	chomp($msg);
+	my $warn = "gits archive failed for: '$slave': " . exitcode($ret);
+
+	if ($OPTIONS{'keep-going'})
+	{
+	  warn "Error in $warn (continuing)\n $msg\n";
+	  $returncode = 2;
+	  next;
+	}
+
+	my $diemsg = "Aborting $warn\n ";
+	if ($ok)
+	{
+	  $diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+	}
+	else
+	{
+	  $diemsg .= "(first entry, no other successfully executed)";
+	}
+	die "$diemsg\n  $msg\n";
+      }
+      $ok .= " $slave";
+      $okcnt++;
+
+
+      push(@{$msg{$msg}}, $slave);
+    }
+  }
+  else
+  {
+    foreach my $group (@list)
+    {
+      my $slave = $group->[1];
+
+      next if missing_slave($slave);
+
+      my ($ret, $msg) = getcmd(qq^cd %%dir%% && $git archive ^.quoteit(@ARGV),$slave);
+      if ($ret != 0)
+      {
+	chomp($msg);
+	my $warn = "gits archive failed for: '$slave': " . exitcode($ret);
+
+	if ($OPTIONS{'keep-going'})
+	{
+	  warn "Error in $warn (continuing)\n $msg\n";
+	  $returncode = 2;
+	  next;
+	}
+
+	my $diemsg = "Aborting $warn\n ";
+	if ($ok)
+	{
+	  $diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+	}
+	else
+	{
+	  $diemsg .= "(first entry, no other successfully executed)";
+	}
+	die "$diemsg\n  $msg\n";
+      }
+      $ok .= " $slave";
+      $okcnt++;
+
+      push(@{$msg{$msg}}, $slave);
+    }
+
+  }
+
+  stdout(\%msg);
+}
+elsif ($ARGV[0] eq 'exec')
+{
+  shift(@ARGV);
+  my ($ok,$okcnt);
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+  my ($branch);
+  my (%group,%msg);
+
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+
+    next if missing_slave($slave);
+
+    my ($ret, $msg) = getcmd(qq^cd %%dir%% && ^.quoteit(@ARGV),$slave);
+    if ($ret != 0)
+    {
+      chomp($msg);
+      my $warn = "gits exec $ARGV[0], failed for: '$slave': " . exitcode($ret);
+
+      if ($OPTIONS{'keep-going'})
+      {
+	warn "Error in $warn (continuing)\n $msg\n";
+	$returncode = 2;
+	next;
+      }
+
+      my $diemsg = "Aborting $warn\n ";
+      if ($ok)
+      {
+	$diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+      }
+      else
+      {
+	$diemsg .= "(first entry, no other successfully executed)";
+      }
+      die "$diemsg\n  $msg\n";
+    }
+    $ok .= " $slave";
+    $okcnt++;
+
+    push(@{$msg{$msg}}, $slave);
+  }
+
+  stdout(\%msg);
+}
+elsif ($ARGV[0] eq 'remote')
+{
+  my ($ok,$okcnt);
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+  my ($branch);
+  my (%group,%msg);
+  my ($realurl);
+
+  if ($ARGV[1] eq "add")
+  {
+    $fromcheckout = 0;
+    if (grep(/^--fromcheckout$/,@ARGV))
+    {
+      $fromcheckout = 1;
+      @ARGV = grep(!/^--fromcheckout$/,@ARGV);
+    }
+
+    if (grep(/^--no-fromcheckout$/,@ARGV))
+    {
+      $fromcheckout = 0;
+      @ARGV = grep(!/^--no-fromcheckout$/,@ARGV);
+    }
+
+    $realurl = $ARGV[$#ARGV];
+  }
+
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+    next if missing_slave($slave);
+
+    if ($ARGV[1] eq "add")
+    {
+      $ARGV[$#ARGV] = resolve_repository($group->[0],$group->[1],$realurl);
+    }
+
+    my ($ret, $msg) = getcmd(qq^cd %%dir%% && $git ^.quoteit(@ARGV),$slave);
+    if ($ret != 0)
+    {
+      chomp($msg);
+      my $warn = "gits remote $ARGV[1], failed for: '$slave': " . exitcode($ret);
+
+      if ($OPTIONS{'keep-going'})
+      {
+	warn "Error in $warn (continuing)\n $msg\n";
+	$returncode = 2;
+	next;
+      }
+
+      my $diemsg = "Aborting $warn\n ";
+      if ($ok)
+      {
+	$diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+      }
+      else
+      {
+	$diemsg .= "(first entry, no other successfully executed)";
+      }
+      die "$diemsg\n  $msg\n";
+    }
+    $ok .= " $slave";
+    $okcnt++;
+
+    push(@{$msg{$msg}}, $slave);
+  }
+
+  stdout(\%msg);
+}
+elsif ($ARGV[0] eq 'update-remote-url')
+{
+  $fromcheckout = 0;
+  if (grep(/^--fromcheckout$/,@ARGV))
+  {
+    $fromcheckout = 1;
+    @ARGV = grep(!/^--fromcheckout$/,@ARGV);
+  }
+
+  if (grep(/^--no-fromcheckout$/,@ARGV))
+  {
+    $fromcheckout = 0;
+    @ARGV = grep(!/^--no-fromcheckout$/,@ARGV);
+  }
+
+  if ($#ARGV != 2 || !$ARGV[1] || !$ARGV[2])
+  {
+    my $example = `$git config remote.origin.url`;
+
+    if ($example)
+    {
+      my ($from) = $fromcheckout?"--fromcheckout":"";
+      $example = "Example: gits update-remote-url $from origin $example\n"
+    }
+
+    die "gits update-remote-url requires two non-option arguments\nusage: gits update-remote-url [--fromcheckout] [--no-fromcheckout] <remote-name> <new-super-url>\n$example";
+  }
+
+  my ($cmd,$name,$url) = @ARGV;
+  my ($ok,$okcnt);
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+  my (%msg);
+
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+
+    next if missing_slave($slave);
+
+    my ($thisurl) = $url;
+    if ($slave ne ".")
+    {
+      $thisurl = resolve_repository($group->[0],$group->[1]);
+    }
+
+    my ($ret, $msg) = getcmd(qq^cd %%dir%% && $git config "remote.$name.url" "$thisurl"^,$slave);
+    if ($ret != 0)
+    {
+      chomp($msg);
+      my $warn = "gits $cmd, failed for: '$slave': " . exitcode($ret);
+
+      if ($OPTIONS{'keep-going'})
+      {
+	warn "Error in $warn\n $msg\n";
+	$returncode = 2;
+	next;
+      }
+
+      my $diemsg = "Aborting $warn\n ";
+      if ($ok)
+      {
+	$diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+      }
+      else
+      {
+	$diemsg .= "(first entry, no other successfully executed)";
+      }
+      die "$diemsg\n  $msg\n";
+    }
+    $ok .= " $slave";
+    $okcnt++;
+
+    push(@{$msg{$msg}}, $slave);
+  }
+
+  stdout(\%msg);
+  set_fromcheckout($fromcheckout);
+}
+elsif ($ARGV[0] eq 'status')
+{
+  my ($ok,$okcnt);
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+  my ($branch);
+  my (%group,%groupc,%msg);
+
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+
+    next if missing_slave($slave);
+
+    my ($ret, $msg) = getcmd(qq^cd $slave && $git ^.quoteit(@ARGV),$slave);
+    if ($ret != 0 && $ret != 256)
+    {
+      chomp($msg);
+      my $warn = "gits $ARGV[0], failed for: '$slave': " . exitcode($ret);
+
+      if ($OPTIONS{'keep-going'})
+      {
+	warn "Error in $warn\n $msg\n";
+	$returncode = 2;
+	next;
+      }
+
+      my $diemsg = "Aborting $warn\n ";
+      if ($ok)
+      {
+	$diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+      }
+      else
+      {
+	$diemsg .= "(first entry, no other successfully executed)";
+      }
+      die "$diemsg\n  $msg\n";
+    }
+    elsif ($ret == 256)
+    {
+      # git status seems to return 1 (nee wait 256) under all circumstances, so do
+      # not even propagate this condition.
+      #$returncode = 1;
+      1;
+    }
+    $ok .= " $slave";
+    $okcnt++;
+
+    my ($premove);
+    while ($msg =~ s/(^[^\#].*\n)//)
+    {
+      $premove .= $1;
+    }
+
+    die "gits unexpected status output (missing branch): $msg" unless ($msg =~ s/^\# (?:On branch |Not currently on any branch.)(.+)?\n//);
+    my $localbranch = $1 ? $1 : "(no branch)";
+    $branch = $localbranch unless ($branch);
+    unless ($branch eq $localbranch)
+    {
+      my $warning = "Branch $branch of @{[$list[0]->[1]]} and $localbranch of $slave are different!\n";
+      warn $warning;
+      $msg = $warning . $msg;
+    }
+
+    if ($msg =~ /^\# Your branch/)
+    {
+      while ($msg =~ s/^(\# \S.*\n)//)
+      {
+	$premove .= $1;
+      }
+      $msg =~ s/^\#\s*\n//;
+    }
+
+    $msg =~ s/^no(thing| changes)( added)? to commit .*\n//m;
+
+    while ($msg =~ s/^(\# \S.*\n)//)
+    {
+      my ($group) = $1;
+      while ($msg =~ s/^(\#\s{2,}\S.*\n)//)
+      {
+	$groupc{$group}->{$1} = 1;
+      }
+      die "Could not parse git status output for $slave <$group> <$msg>\n" unless ($msg =~ s/^(\#\s*\n)//);
+
+      while ($msg =~ s/^(\#(?:\s*|(\s{2,}|\t)\S.*)\n)//)
+      {
+	my ($line) = $1;
+
+	if ($line =~ /([^:]+:\s+)(.*)/s)
+	{
+	  $line = "$1$slave/$2";
+	}
+	elsif ($line =~ /(\#\s+)(.+)/)
+	{
+	  $line = "$1$slave/$2 # Do not git(s) add this path\n";
+	}
+	else
+	{
+	  next if ($line =~ /\#\s*\n/);
+	}
+
+	$group{$group} .= $line;
+      }
+    }
+
+    push(@{$msg{$premove.$msg}}, $slave);
+  }
+
+  print "# On branch $branch\n";
+  foreach my $group (sort keys %group)
+  {
+    print $group;
+    foreach my $msg (sort keys %{$groupc{$group}})
+    {
+      print $msg;
+    }
+    print "#\n";
+    print $group{$group};
+    print "#\n";
+  }
+
+  stdout(\%msg,1);
+}
+elsif ($ARGV[0] eq 'statuses')
+{
+  my ($ok,$okcnt);
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+  my $oldbranch = (grep(s/\s*\*\s+//, split(/\n/,getcmd("$git branch"))))[0];
+  my @branches = grep(s/branch\.(.*)\.remote=.*/$1/,split(/\n/,getcmd(qq%$git config -l%)));
+  my @oldbranch = ($oldbranch);
+
+  shift(@ARGV);
+  my $move;
+  if ($ARGV[0] eq '-m')
+  {
+    shift(@ARGV);
+    unshift(@oldbranch, '-m');
+    $move = '-m';
+  }
+
+  my $firstbranch = 1;
+
+  foreach my $branch (@branches)
+  {
+    my %newmsg = $move
+      ? do_checkout(1, $oldbranch, $move, $branch)
+	: do_checkout(1, $oldbranch, $branch);
+
+    my (%group,%groupc,%msg);
+
+    foreach my $group (@list)
+    {
+      my $slave = $group->[1];
+
+      next if missing_slave($slave);
+
+      my ($ret, $msg) = getcmd(qq^cd %%dir%% && $git status ^.quoteit(@ARGV),$slave);
+      if ($ret != 0 && $ret != 256)
+      {
+	chomp($msg);
+	my $warn = "gits statuses, failed on branch $branch for: '$slave': " . exitcode($ret);
+
+	if ($OPTIONS{'keep-going'})
+	{
+	  warn "Error in $warn\n $msg\n";
+	  $returncode = 2;
+	  next;
+	}
+
+	my $diemsg = "Aborting $warn\n ";
+	if ($ok)
+	{
+	  $diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+	}
+	else
+	{
+	  $diemsg .= "(first entry, no other successfully executed)";
+	}
+	# <TODO>some way for do_checkout to only operate on some slaves</TODO>
+	$msg .= do_checkout(2, @oldbranch);
+	die "$diemsg\n  $msg\n";
+      }
+      elsif ($ret == 256)
+      {
+	# git status seems to return 1 (nee wait 256) under all circumstances, so do
+	# not even propagate this condition.
+	#$returncode = 1;
+	1;
+      }
+      $msg = $newmsg{$slave}.$msg;
+      $msg =~ s/Switched to branch.*\n//;
+      $msg =~ s/Already on \".*\n//;
+      $ok .= " $slave";
+      $okcnt++;
+
+      my ($premove);
+      while ($msg =~ s/(^[^\#].*\n)//)
+      {
+	$premove .= $1;
+      }
+
+      unless ($msg =~ s/^\# (?:On branch |Not currently on any branch.)(.+)?\n//)
+      {
+	# <TODO>some way for do_checkout to only operate on some slaves</TODO>
+	$msg .= do_checkout(2, @oldbranch);
+        die "gits unexpected status output (missing branch): $msg";
+      }
+
+      if ($msg =~ /^\# Your branch/)
+      {
+	while ($msg =~ s/^(\# \S.*\n)//)
+	{
+	  $premove .= $1;
+	}
+	$msg =~ s/^\#\s*\n//;
+      }
+
+      $msg =~ s/^no(thing| changes)( added)? to commit .*\n//m;
+
+      while ($msg =~ s/^(\# \S.*\n)//)
+      {
+	my ($group) = $1;
+
+	while ($msg =~ s/^(\#\s{2,}\S.*\n)//)
+	{
+	  $groupc{$group}->{$1} = 1 if ($firstbranch);
+	}
+
+	unless ($msg =~ s/^(\#\s*\n)//)
+	{
+	  # <TODO>some way for do_checkout to only operate on some slaves</TODO>
+	  my $c = do_checkout(2, @oldbranch);
+	  die "Could not parse git status output for $slave <$group> <$msg>$c\n"
+	}
+	while ($msg =~ s/^(\#(?:\s*|(\s{2,}|\t)\S.*)\n)//)
+	{
+	  next unless ($firstbranch);
+
+	  my ($line) = $1;
+
+	  if ($line =~ /([^:]+:\s+)(.*)/s)
+	  {
+	    $line = "$1$slave/$2";
+	  }
+	  elsif ($line =~ /(\#\s+)(.+)/)
+	  {
+	    $line = "$1$slave/$2 # Do not git(s) add this path\n";
+	  }
+	  else
+	  {
+	    next if ($line =~ /\#\s*\n/);
+	  }
+
+	  $group{$group} .= $line;
+	}
+      }
+
+      push(@{$msg{$premove.$msg}}, $slave);
+    }
+
+    if ($firstbranch)
+    {
+      $firstbranch = 0;
+      foreach my $group (sort keys %group)
+      {
+	print $group;
+	foreach my $msg (sort keys %{$groupc{$group}})
+	{
+	  print $msg;
+	}
+	print "#\n";
+	print $group{$group};
+	print "#\n";
+      }
+    }
+
+    print "# On branch $branch\n";
+    stdout(\%msg,1);
+  }
+  print do_checkout(2, @oldbranch) . "\n";
+}
+elsif ($ARGV[0] eq 'grep')
+{
+  my ($ok,$okcnt);
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+  my ($out);
+
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+
+    next if missing_slave($slave);
+
+    my ($ret, $msg) = getcmd(qq^cd %%dir%% && $git ^.quoteit(@ARGV),$slave);
+    next if ($ret == 256);
+    if ($ret != 0)
+    {
+      chomp($msg);
+      my $warn = "gits $ARGV[0], failed for: '$slave': " . exitcode($ret);
+
+      if ($OPTIONS{'keep-going'})
+      {
+	warn "Error in $warn\n $msg\n";
+	$returncode = 2;
+	next;
+      }
+
+      my $diemsg = "Aborting $warn\n ";
+      if ($ok)
+      {
+	$diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+      }
+      else
+      {
+	$diemsg .= "(first entry, no other successfully executed)";
+      }
+      die "$diemsg\n  $msg\n";
+    }
+
+    $ok .= " $slave";
+    $okcnt++;
+
+    $msg =~ s:^(.*\S.*\n):$slave/$1:gm unless (grep(/-h/,@ARGV));
+
+    $out .= $msg;
+  }
+
+  print $out;
+}
+elsif ($ARGV[0] eq 'clean')
+{
+  shift(@ARGV);
+  my ($ok,$okcnt);
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+  my (@unlinkers);
+  my (%msg);
+  my ($commonout);
+
+  my $CLEAN_USAGE = "usage: gits clean -f|-n [-dqxX] [--] [path]...\n";
+  my %COPTIONS;
+  GetOptions(\%COPTIONS, 'd', 'f', 'q', 'n', 'X', 'x') || die $CLEAN_USAGE;
+
+  die "Must set exactly one of -n or -f\n$CLEAN_USAGE" unless (!$COPTIONS{'f'} != !$COPTIONS{'n'});
+
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+
+    next if missing_slave($slave);
+
+    my ($cmd) = qq^cd %%dir%% && $git clean -n^;
+    $cmd .= " -d" if ($COPTIONS{'d'});
+    $cmd .= " -f" if ($COPTIONS{'f'});
+    $cmd .= " -X" if ($COPTIONS{'X'});
+    $cmd .= " -x" if ($COPTIONS{'x'});
+    $cmd .= " -- ".quoteit(@ARGV) if ($#ARGV >= 0);
+
+    my ($ret, $msg) = getcmd($cmd,$slave);
+    if ($ret != 0)
+    {
+      chomp($msg);
+      my $warn = "gits $ARGV[0], failed for: '$slave': " . exitcode($ret);
+
+      if ($OPTIONS{'keep-going'})
+      {
+	warn "Error in $warn\n $msg\n";
+	$returncode = 2;
+	next;
+      }
+
+      my $diemsg = "Aborting $warn\n ";
+      if ($ok)
+      {
+	$diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+      }
+      else
+      {
+	$diemsg .= "(first entry, no other successfully executed)";
+      }
+      die "$diemsg\n  $msg\n";
+    }
+    $ok .= " $slave";
+    $okcnt++;
+
+    my $newmsg;
+    foreach my $line (split(/\n/,$msg))
+    {
+      if ($line =~ s/(Would( not)? remove )(.*)//)
+      {
+	my ($pre,$not,$path) = ($1,$2,$3);
+
+	# Canonicalize
+	$path = "$slave/$path";
+	$path =~ s:^./::;
+
+	# Check directory to see if it matches slavedir
+	if ($path =~ s:/$::)
+	{
+	  my ($qpath) = quotemeta($path);
+
+	  next if grep($_->[1] =~ m:^$qpath$:, @slaves);
+
+	  # Restore trailing /
+	  $path .= "/";
+	}
+	if ($COPTIONS{'n'})
+	{
+	  $commonout .= $pre.$path."\n";
+	  next;
+	}
+	next if ($not);
+	$commonout .= "Removing $path\n";
+	push(@unlinkers,$path);
+      }
+      else
+      {
+	$newmsg .= $_;
+      }
+    }
+
+    push(@{$msg{$newmsg}}, $slave);
+  }
+
+  print $commonout unless ($COPTIONS{'q'});
+
+  if (!$COPTIONS{'n'} && $#unlinkers >= 0)
+  {
+    rmtree(\@unlinkers, $OPTIONS{'verbose'}) || die "Cannot unlink";
+  }
+
+  stdout(\%msg);
+}
+elsif ($ARGV[0] eq 'logs')
+{
+  shift(@ARGV);
+  my ($ok,$okcnt);
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+  my (%group,@msg,$out);
+  my ($window) = 28800;				# 8 hours
+
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+
+    next if missing_slave($slave);
+
+    my ($ret, $msg) = getcmd(qq^cd %%dir%% && $git log --pretty='tformat: %at %h %ae %ar:: %s' ^.quoteit(@ARGV),$slave);
+    if ($ret != 0)
+    {
+      chomp($msg);
+      my $warn = "gits exec log, failed for: '$slave': " . exitcode($ret);
+
+      if ($OPTIONS{'keep-going'})
+      {
+	warn "Error in $warn (continuing)\n $msg\n";
+	$returncode = 2;
+	next;
+      }
+
+      my $diemsg = "Aborting $warn\n ";
+      if ($ok)
+      {
+	$diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+      }
+      else
+      {
+	$diemsg .= "(first entry, no other successfully executed)";
+      }
+      die "$diemsg\n  $msg\n";
+    }
+    $ok .= " $slave";
+    $okcnt++;
+
+    foreach my $line (split(/\n/,$msg))
+    {
+      chomp($slave);
+      chomp($line);
+      warn "Bad entry on $slave" unless ($line =~ /^\s*(\d+)\s+([[:xdigit:]]+)\s+(\S+)\s+(.*)/);
+      push(@msg, [$1,$2,$slave,$3,$4]);
+    }
+  }
+
+  @msg = sort { my $x; return($x) if ($x = $b->[0] <=> $a->[0]); $b->[2] cmp $a->[2]; } @msg;
+
+  while (my $line = shift(@msg))
+  {
+    $out = "$line->[4] <$line->[3]>\n\t$line->[1] $line->[2]\n";
+    my $i = 0;
+    my $lower = $line->[0] - $window;
+
+    for(;$i <= $#msg && $msg[$i]->[0] > $lower;$i++)
+    {
+      # Require matching committer
+      next if ($line->[4] ne $msg[$i]->[4]);
+
+      # Require matching commit message
+      next if ($line->[5] ne $msg[$i]->[5]);
+
+      $out .= "\t$msg[$i]->[1] $msg[$i]->[2]\n";
+      $lower = $msg[$i]->[0] - $window;
+      splice(@msg,$i--,1);			# Get rid of item we already matched
+    }
+    print "$out\n";
+  }
+}
+else
+{
+  my ($ok,$okcnt);
+  my %msg;
+
+  # This is a sign that you are doing something wrong
+  if (-f $ARGV[$#ARGV])
+  {
+    warn "You have a pathname in a generic gits command, this is a sign that the command\nwill not work since it is unlikely to exist in all modules\nProbably you want to cd to the submodule and run a raw git command\n";
+  }
+
+  # Run the command for each module
+  my (@list) = @slaves;
+  unshift(@list,[undef,"."]) unless ($OPTIONS{'no-master'});
+
+  if ($ARGV[0] eq 'gc' || $ARGV[0] eq 'fsck')
+  {
+    $progress = Term::ProgressBar->new({remove=>1, ETA => 'linear', count=>(($#list+1))}) if ($want_progress);
+    $progress->max_update_rate(1) if ($progress);
+  }
+
+  foreach my $group (@list)
+  {
+    my $slave = $group->[1];
+
+    next if missing_slave($slave);
+
+    my ($ret, $msg) = getcmd(qq^cd %%dir%% && $git ^.quoteit(@ARGV),$slave);
+    if ($ret != 0 &&
+	!($ARGV[0] eq "commit" && $msg =~ /nothing to commit/) &&
+	!($ARGV[0] eq "stash" && $ARGV[1] eq "apply" && $msg =~ /no valid stashed state found/))
+    {
+      chomp($msg);
+      my $warn = "gits $ARGV[0], failed for: '$slave': " . exitcode($ret);
+
+      if ($OPTIONS{'keep-going'})
+      {
+	warn "Error in $warn\n $msg\n";
+	$returncode = 2;
+	next;
+      }
+
+      my $diemsg = "Aborting $warn\n ";
+      if ($ok)
+      {
+	$diemsg .= "(ran fine on: $ok, did not run on @{[$#list-$okcnt]} other(s); no rollbacks)";
+      }
+      else
+      {
+	$diemsg .= "(first entry, no other successfully executed)";
+      }
+      die "$diemsg\n  $msg\n";
+    }
+    $ok .= " $slave";
+    $okcnt++;
+    push(@{$msg{$msg}}, $slave);
+
+    $progress->update(++$progress_count) if ($progress);
+  }
+
+  stdout(\%msg);
+}
+exit($returncode);
+
+
+
+=pod
+
+=head1 NAME
+
+gits - The git slave repository tool for super-project multi-repository management
+
+=head1 SYNOPSIS
+
+gits [--exclude /slave-regexp/] [--version] [--eval-args] [--with-ifpresent] [--no-master] [--no-hide] [--no-commit] [--keep-going] [--no-progress] [-p|--parallel <count>][-v|--verbose]+ [--quiet] [--help] [-- <git-options>...] <subcommand> [args]...
+
+=head1 OVERVIEW
+
+gits is a program that assists in assembling a meta-project from a
+number of individual git repositories which operate (when using gits)
+as if they were one git repository instead of many, similar to the way
+that CVS works by default and svn (v1.5) can be coerced to work.  Some
+of these individual git repositories may be part of other
+meta-projects as well.
+
+Unfortunately, the functionality provided by git-submodule is not
+sufficient for this mode of operation.  Most git commands, like
+checkout or commit, do not recursively descend into the submodules so
+you are forced to do execute all git commands N+1 times (leading to
+pain and mistakes), also, submodules revisions are tracked in the
+supermodule so that change to the slave project made outside the
+superproject are not automatically seen.  Since git does not allow
+partial checkouts, we are left with little alternative.
+
+Thus, to solve these problems gits was born.  Complexity pain is still
+involved, but the hope is that it is minimized compared to all of the
+other alternatives.
+
+The basic theory is that there are a few sub-commands (prepare, attach,
+populate) which help set up the meta-project for gits operations.
+Then, for any git command which is not file specific (git add
+<filename>; git reset <filename>; etc), you should use "gits" instead
+of "git", and the command will run on all repositories in the project.
+
+=head2 Example Usage
+
+In the following example, we will have the following master
+repositories:
+
+  ssh://sourcemaster/src/repos/super.git
+  ssh://sourcemaster/src/repos/lib1.git
+  ssh://sourcemaster/src/repos/lib2.git
+
+
+The desired working layout of directories with .git in them on disk
+is:
+
+  ..../super
+  ..../super/lib1
+  ..../super/lib2
+
+
+
+=head3 Clone a gits project
+
+gits [--[no-]fromcheckout] clone <superproject-URL>
+
+This command clones an existing superproject and all associated slave
+repoistories.  It runs `git clone` on the arguments you provide
+(allowing you to change the name of the checked-out repository for
+example) and then runs `gits populate` inside that newly checked out
+repository.  If you are cloning from an existing gitslave format slave
+instead of the master layout, you would want to use the --fromcheckout
+argument.
+
+  --------------------------------------------------
+  gits clone ssh://sourcemaster/src/repos/super.git super2
+  cd super2
+  --------------------------------------------------
+
+The gits flag --with-ifpresent is useful here as one way to populate
+conditional repositories.
+
+
+
+=head3 Initialize a gits project
+
+gits prepare
+
+You run this command in the git directory which will be your top level
+master repository (super here).  Typically you would clone this top
+level master from some other location which has all of your git
+projects.
+
+  --------------------------------------------------
+  git clone ssh://sourcemaster/src/repos/super.git super
+  cd super
+  gits prepare
+  --------------------------------------------------
+
+
+
+=head3 Add a slave repository to top level master
+
+  gits attach <repository> <localpath> [flags]
+
+Clone the named git repository into the named local directory, and set
+it up for further gits operations.
+
+Typically <localpath> would be a path relative to the top level
+working directory, for example, a subdirectory in the top level.
+
+<repository> can also be relative (relative to the URL the top level
+master checkout was cloned from).  It may also be an absolute URL but
+if so, `gits remote add` is not going to be happy.  If the URL starts
+with ^, it will use only the method and hostname from the master's
+URL.  Otherwise, it will be relative to the fully qualified path.  We
+will show both in operation in the example.
+
+The only flag currently supported is "ifpresent" which will be set for
+this slave repository.  Other people cloning or populating the
+superproject will not check out this subrepository if this flag is
+set, unless they add --with-ifpresent or otherwise arrange for the
+<localpath> to be created.
+
+ --------------------------------------------------
+ gits attach ../lib1.git lib1
+ gits attach ^/src/repos/lib2.git lib2
+ gits push
+ --------------------------------------------------
+
+The push in the example is to share the attach with other users.
+
+
+
+=head3 Remove a slave repository from top level master
+
+  gits detach <localpath>
+
+Remove the named directory from both the local filesystem, the
+.gitslave management file, and the .gitignore file so that it will not
+be used in subsequent gits activities.
+
+ --------------------------------------------------
+ gits detach lib1
+ gits push
+ --------------------------------------------------
+
+The push in the example is to share the detach with other users.
+
+
+
+=head3 Check out any new slave modules which someone else might have added
+
+  gits populate [--[no-]fromcheckout]
+
+Go through the list of configured slaves and check out (clone) any which have
+not already been retrieved.
+
+With --fromcheckout, assume that the remote repository is a gits checkout
+instead of in standard repository layout.  With --no-fromcheckout, assume
+that the remote repository has the standard layout.  If either option is
+given, sets the default repository layout, which is used when no explicit
+option is provided.
+
+The gits flag --with-ifpresent is useful here as one way to populate
+conditional repositories.
+
+  --------------------------------------------------
+  gits populate
+  --------------------------------------------------
+
+
+
+=head3 Perform a pull operation for all tracked branches
+
+  gits pulls [pull args]
+
+For each branch being tracked by the superproject, go through the list
+of configured slaves, check yourself out to the branch, perform a pull,
+then switch back to the branch you were on.
+
+Please see SUBSTITUTION for information on how to replace part of the
+command with the slave module name for each executed command.
+
+  --------------------------------------------------
+  gits pulls --rebase
+  --------------------------------------------------
+
+
+
+=head3 Perform a pull operation for the current branch only
+
+  gits pull [pull args]
+
+Go through the list of configured slaves and perform a pull,  Note that
+even though only the current branch HEAD will be advanced, the commits
+on other branches will still be fetched.
+
+Please see SUBSTITUTION for information on how to replace part of the
+command with the slave module name for each executed command.
+
+  --------------------------------------------------
+  gits pull --rebase
+  --------------------------------------------------
+  gits pull otherhost:/src/work/wb/%%dir%%
+  --------------------------------------------------
+
+
+
+=head3 Show unified commit logs in a fixed output format
+
+  gits logs [log args]
+
+For each branch being tracked by the superproject, generate a list
+of the "log" messages as specified by the log args, and output them in
+a fixed format, with related commits grouped together and ordered by
+time. Do I<not> provide git log options that modify the output format,
+as they will break the ordering and grouping functionality; only
+arguments that control the selection of commits should be used.
+
+The related commit grouping will group together all commits (in any
+sub-project) within an 8-hour period that have the same author
+e-mail and commit message.
+
+  --------------------------------------------------
+  gits logs HEAD...Product-3.1.1
+  --------------------------------------------------
+
+
+
+=head3 Perform an arbitrary command for all tracked branches
+
+  gits exec <command> [args]
+
+For each slave being tracked by the superproject and the superproject itself,
+cd to the root of the slave project directory and execute the listed command.
+
+Please see SUBSTITUTION for information on how to replace part of the
+command with the slave module name for each executed command.
+
+  --------------------------------------------------
+  gits exec gitk
+  --------------------------------------------------
+  gits exec git diff
+  --------------------------------------------------
+
+
+
+=head3 Print out URLs for arbitrary repositories like those used by attach
+
+  gits resolve [--[no-]fromcheckout] <repository> <local_relpath>
+
+Go through the same process that gits uses for resolving relative
+repository URLs into absolute URLs, for debugging and certain porting
+efforts.
+
+With --fromcheckout, resolve URLs as if the repository were a clone of
+another gits checkout.  With --no-fromcheckout, resolve URLs as if it were
+not a clone of another gits checkout.  By default it uses the saved
+repository layout from gits populate or update-remote-url; however gits
+resolve does not change the saved default even if --fromcheckout or
+--no-fromcheckout is given.
+
+  --------------------------------------------------
+  gits resolve ../otherpos otherpos
+  --------------------------------------------------
+
+
+
+=head3 Update the URL a remote repository points at
+
+  gits update-remote-url [--[no-]fromcheckout] <remote-name> <url>
+
+Update the super-project's remote.name.url using the url and remote
+name listed above.  Then go though each slave repository and update
+its url using the normal relative url mechanism.
+
+The --fromcheckout option supports using a gits checkout as the remote
+repository, adjusting the repository paths from their default.  The
+--no-fromcheckout option assumes a normal repository layout for the
+remote. If neither option is given, the saved repository layout from the
+most recent gits populate or update-remote-url command is used; however,
+this is not generally correct, as the repository layout of the new remote
+need not be the same as the old one.  If either --fromcheckout or
+--no-fromcheckout is given, sets the default repository layout accordingly.
+
+You can use this command after a clone of a local repository (or local gits
+checkout, using gits populate --fromcheckout) so that the new repository
+uses the same remote origin as the first one.  (The local clone/populate is
+much faster than performing a remote clone/populate.)
+
+  --------------------------------------------------
+  git clone /home/user/work/wb /home/user/work/newwb
+  cd /home/user/work/newwb
+  gits populate --fromcheckout
+  gits update-remote-url --no-fromcheckout origin ssh://git/src/git/wb
+  --------------------------------------------------
+
+
+
+=head3 Add a new remote to all repositories
+
+  gits remote add [--[no-]fromcheckout] <git-remote-add options> <repositoryname> <url>
+
+Adds a remote named <name> for the repository at <url> (as modified by
+the relative URL rules from `gits attach` and `gits update-remote-url`
+and the --fromcheckout argument). The command gits fetch <name> can
+then be used to create and update remote-tracking branches
+<name>/<branch>.
+
+The <url> would be the absolute url for the superproject and each
+slave repository would have a modified version of that path.
+
+Please note that we do not currently support `gits remote set-url` in
+a useful way.  See `gits update-remote-url` for an alternate method
+which will satisfy most use cases.
+
+ --------------------------------------------------
+ gits remote add fred --fromcheckout /home/fred/src/foo
+ --------------------------------------------------
+ gits remote add backup ssh://backups/src/git/foo
+ --------------------------------------------------
+
+
+
+=head3 Push a change to a remote repository
+
+  gits push [--quick] [push args]
+
+This is the standard git push command--with the addition of a --quick
+option which will only attempt to push for branches which have
+outstanding changes.  For slow connections to large number of slave
+repositories, the overhead of an empty push can be large.
+
+However, --quick only checks to see if the I<current> branch needs to
+push data.  If you have changes on other branches, a slow push is
+still required, as it is if you are pushing to a repository other than
+the standard origin.
+
+Please see SUBSTITUTION for information on how to replace part of the
+command with the slave module name for each executed command.
+
+  --------------------------------------------------
+  gits push --quick
+  --------------------------------------------------
+  gits push otherhost:/src/work/wb/%%dir%%
+  --------------------------------------------------
+
+
+
+=head3 Get status on all branches
+
+  gits statuses [-m] [status args]
+
+For each branch being tracked by the superproject, go through the list
+of configured slaves, check yourself out to the branch, get the git
+status, then switch back to the branch you were on.  The output is
+summarized for each branch to merge the lists of files in each section.
+
+The -m option will attempt to "move" any uncommitted changes, which
+may prevent failures checking out other branches, at the risk of
+creating conflicts, which are then moved as well
+
+Other args supported by `git status` are also supported; these are
+the same options supported by `git commit`.
+
+  --------------------------------------------------
+  gits statuses
+  --------------------------------------------------
+
+
+
+=head3 Make an archive of the repositories
+
+  gits archive <standard git-archive arguments>
+
+This is the standard git archive command--with the addition of a new
+--format option of "gits-tar".  When you select the gits-tar option,
+you must supply a on-disk --output file and you cannot use any tar
+compression options.  With gits-tar, the output tar archive will be a
+unified archive of the entire project, superproject and slaves.  Any
+existing prefix will be treated as a directory prefix (e.g. --prefix
+foo and --prefix foo/ are the same) and all slave repositories will be
+unpacked in their corresponding superproject locations.
+
+Remember the %%type%% substitutions if you choose to not use gits-tar.
+
+  --------------------------------------------------
+  gits archive --format gits-tar -o /tmp/foo.tar master
+  --------------------------------------------------
+  gits archive --format tar -o /tmp/foo-%%basename%%.tar master
+  --------------------------------------------------
+
+
+
+=head3 Everything else
+
+All other commands are passed directly though to git, with one command
+being run per repository.  Output summarizing is performed so that
+multiple repositories with the same git output will only have the git
+output shown once.  `git status` has a more aggressive summarizing
+to merge the lists of files in each section.
+
+  Examples:
+  --------------------------------------------------
+  gits commit -a -m "This is a change"
+  gits push
+  gits pull
+  gits branch testing
+  gits checkout testing
+  gits diff master testing
+  gits status
+  gits ....
+  --------------------------------------------------
+
+All normal git commands are supported (plus any potential future
+commands) but not all commands make sense to run with gits.  One good
+example is git-daemon.
+
+=head1 DESCRIPTION
+
+=head2 --no-master
+
+This flag requests that gits only run the listed command on the slave
+repositories and NOT the super/master/top repository.  This probably
+will not be needed much.
+
+=head2 --exclude regexp
+
+Provide a regular expression which excludes those slaves from
+consideration from gits commands which it matches.
+
+=head2 --no-progress
+
+This flag requests that gits NOT print a progress bar, which it does
+by default for slow operations if Term::ProgressBar is loaded.  Slow
+operations are the checkout, pull(s), and push subcommands.  You may use this
+flag for all operations.
+
+=head2 --eval-args
+
+When quoting gits arguments, do not quote dollar '$' and backtick '`'
+characters, to allow interpolation in the slave environment (but still
+quote double-quote and backslash).  This is mostly useful for exec,
+where you might want something like the command below to do something
+useful.
+
+  gits --eval-args exec echo Directory is '`pwd`'
+
+=head2 --parallel COUNT
+
+Specify the number of parallel git operations you wish to execute.
+Parallelism is only activated for push and pull(s) subcommands.
+This can speed up your processing significantly for large
+numbers of submodules.
+
+If remote repositories are accessed over ssh, you may also wish to
+activate ssh "ControlMaster" multiplexing.
+
+  ssh_config
+  --------------------------------------------------
+  Host git
+     ControlMaster auto
+     ControlPath ~/.ssh/master-%r@%h:%p
+  --------------------------------------------------
+
+However, there currently is a "auto" race condition so the first batch
+of peers do not necessarily take advantage of the multiplexing and
+there have occasionally been spurious errors with this enabled.
+
+=head2 --no-commit
+
+This flag requests that gits-internal sub-commands, such as prepare or
+attach should not commit their changes after they made them.
+
+=head2 --keep-going
+
+Do not abort when any subsidiary git command fails - instead print a
+warning and continue processing.  Some git command failures will still
+be considered fatal and cause gits to abort.
+
+=head2 --with-ifpresent
+
+Operate also on those slave repositories which are marked as
+"ifpresent" even if they are not present.  This is mostly useful for
+`gits populate` and `gits checkout`.
+
+=head2 --verbose -v
+
+Ask for more information about what is happening.  You may repeat the
+flag multiple times to get more information.  Two levels of verbosity
+typically prints the underlying commands being executed and the data
+being returned from them.
+
+=head2 --quiet
+
+Ask for less information, which currently means discarding the STDERR
+of some of the administrative git commands which are executed.
+
+=head2 subcommand args...
+
+Run the specified git command (with associated arguments) on the
+repository and all slave repositories.  Typically they are git
+commands run over each slave, but there are gits specific commands
+such as: pulls, prepare, attach, populate, resolve, exec, logs, and
+update-remote-url.  See OVERVIEW for more information on specific
+subcommands.
+
+
+
+=head1 SUBSTITUTION
+
+Before execution, essentially all commands running over all of the
+repositories will go through a substitution phase where certain magic
+tokens will be replaced with information about the repository in
+question.  These are most often used with `gits exec` and `gits
+archive`.
+
+%%dir%% represents the on-disk .gitslave-relative of the repository
+(e.g. the second field in .gitslave) with the superproject getting the
+value of ".".
+
+%%path%% represents the fully qualified path to the repository in
+question.
+
+%%basename%% represents the basename of the %%path%%, which is
+typically the last component of %%dir%% except for the superproject
+for which it is whatever the last directory name of the path to the
+superproject.
+
+Also see --eval-args for an options to support standard shell `cmd`
+and $VARIABLE expansion where it might otherwise be quoted.  Run the
+following commmands to see the difference:
+
+
+
+=head1 BUGS
+
+gits changes directory to the directory where .gitslave exists.
+Likewise, when executing most git commands, gits changes directory to
+the root of the git slave, so any pathnames being passed in to gits
+must be absolute, not relative.  Generally this is only a concern for
+pre-generate commit messages or something, you should NOT be passing
+files checked into git in a gits command--you will likely get the
+wrong result.
+
+No coding has been performed yet to handle `gits remote set-url` or
+`gits branch --set-upstream`.  See `gits update-remote-url` for a
+supported method to perform this operation.  Support could be added if
+necessary.
+
+You can have partial success, failure, and repositories on which the
+operation was never tried and you must recover from such manually.
+This is usually not very complicated.  See --keep-going.
+
+Programs like gitk will not show the global system history.
+
+The behavior when different branches have different slave modules
+associated with them and you checkout back and forth is probably not
+ideal (nor are any of the options we have thought of completely
+ideal).
+
+
+
+=head1 FILES
+
+=head2 .gitslave
+
+The file containing the list of slave repositories (possibly in
+relative form) and the directories relative to the master root where
+they should be checked out.
+
+The format of this file is:
+
+"possibly-relative-repository-path" "top-level-checkout-relative-path"[ flags]
+
+The flags, which are optional, currently can be the value "ifpresent"
+which indicates that gits will only process those modules if the
+top-level-checkout-relative-path is already present.
+
+=head1 ENVIRONMENT
+
+=head2 $GITSLAVE
+
+Allow overriding on the name of the .gitslave file (for supplemental
+activity, the .gitslave file must still exist even if it is not used
+for this particular operation).  Also, allows a comma-space separated
+list of files names, the sum of which will be the list of slaves to
+use.
+
+An example ".gitslave, .gitslave-extras" would allow an supplemental
+list of slaves for unusual activity (e.g. release tagging) to the
+normal list.
+
+Alternately, you could play tricks where you only get a subset of the
+modules when you don't need to play with everything.
+
+=head1 REQUIREMENTS
+
+perl 5 (probably almost any version of perl 5)
+
+Optionally uses Parallel::Iterator and Term::ProgressBar if available
+
+=head1 AUTHOR
+
+Seth Robertson
+
+=head1 REPORTING BUGS
+
+Report bugs to http://sourceforge.net/projects/gitslave
+
+=head1 COPYRIGHT
+
+Copyright (c) 2008 Seth Robertson.  License is similar to the GNU
+Lesser General Public License version 2.1, see LICENSE.TXT for more
+details.
+
+=head1 SEE ALSO
+
+git(1), git-submodule(1), git-subtree(google)

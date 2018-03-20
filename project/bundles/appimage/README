@@ -1,0 +1,143 @@
+RESUME
+------
+This scripts build a binary digiKam AppImage bundle for Linux using CentOS 6.
+
+
+AUTHORS
+-------
+(c) 2015-2018 by :
+
+Gilles Caulier <caulier dot gilles at gmail dot com>
+
+
+DESCRIPTION
+-----------
+These files and scripts are used to make binary AppImage bundle of the digiKam
+Software Collection for Linux.
+
+For more information about AppImage, see at this url:
+http://appimage.org/
+
+In addition to this README, there are comments in the scripts that provide some
+additional explanation for how they work.
+
+
+BUNDLE CONTENTS
+---------------
+
+Note : the bundle is rellocable.
+
+.
+└── usr
+    ├── bin                                         Main executable
+    │   ├── data                                    Marble data
+    │   └── plugins                                 Marble plugins
+    ├── lib                                         All Shared libraries, including 64 bits
+    ├── lib64 -> lib                                Symbolic link, for compatibility
+    ├── plugins                                     Qt5 based plugins
+    │   ├── bearer
+    │   ├── designer
+    │   ├── generic
+    │   ├── geoservices
+    │   ├── iconengines
+    │   ├── imageformats
+    │   ├── kauth                                   KF5 authentification
+    │   ├── kf5                                     Generic KF5 plugins
+    │   ├── mediaservice
+    │   ├── org.kde.kglobalaccel5.platforms         KF5 global accelerators
+    │   ├── platforminputcontexts
+    │   ├── platforms
+    │   ├── playlistformats
+    │   ├── position
+    │   ├── sensorgestures
+    │   ├── sensors
+    │   ├── sqldrivers
+    │   ├── webkit
+    │   └── xcbglintegrations
+    ├── share                                       Shared data files
+    │   ├── digikam                                 digiKam 
+    │   ├── knotifications5                         KF5
+    │   ├── kservices5                              KF5
+    │   ├── kservicetypes5                          KF5
+    │   ├── kxmlgui5                                KF5
+    │   ├── lensfun                                 Lens database for Lensfun
+    │   ├── locale                                  KF5 i18n
+    │   ├── metainfo                                Application metadata
+    │   ├── OpenCV                                  OpenCv shared lib data
+    │   └── solid                                   KF5 Solid
+    └── translations                                Qt5 i18n
+
+
+REQUIREMENTS
+------------
+
+- For technical reasons about compatibility with libc, CentOS 6 is used to be compatible
+  at run-time under other Linux distributions.
+
+- Create a fresh CentOS 6 environment in a Virtual Machine:
+  Install from CentOS-6.8-x86_64-bin-DVD1.iso
+  yum install git
+  git clone git://anongit.kde.org/digikam-software-compilation.git DK
+  cd DK/project/appimage/
+
+- You must set the digiKam git tags to checkout right source code in bundle.
+- You must set the option to host debug symbols or not in bundle.
+  Look in config.sh file for details.
+
+
+COMPONENTS
+----------
+There are 4 scripts to be run by the user. 2 first ones installs
+components on CentOS 6 and all dependencies, next one digiKam, and last one makes a 
+binary AppImage bundle for Linux.
+
+
+SCRIPT DESCRIPTIONS
+-------------------
+All scripts should be run from within this directory.
+
+* 01-build-centos6.sh:
+
+This script downloads and configures all packages for CentOS 6 to compile digiKam, KF5, Qt5,
+and all other important low level libraries. When the system is ready, this script compile
+and install low level and Qt5 libraries.
+
+* 02-build-extralibs.sh:
+
+This script configures, compile, and install KF5 frameworks and Marble.
+
+* 03-build-digikam.sh:
+
+This script configures, and compile digiKam.
+
+* 04-build-installer.sh:
+
+Once you've successfully built digiKam, this script create the AppImage bundle.
+This include applications documentations and translations.
+Depending of configuration done in config.sh, this script is able to upload automatically
+the bundle file on files.kde.org digiKam area through ssh. A valid ssh key configured
+with remote KDE server need to be set previously with the account. You can load ssh key
+at startup following instruction give at this url:
+
+https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-password-prompt
+
+* makeall.sh
+
+This script permit to build whole Linux bundle from scratch in one time.
+
+* update.sh
+
+This script re-build only digiKam and Linux bundle.
+
+
+AT RUN-TIME ON TARGET COMPUTER
+------------------------------
+- Make AppImage file executable (CentOS : chmod +x _bundle_file_).
+- Add Fuse on on computer       (CentOS : yum install fuse).
+- Add user right to use Fuse    (CentOS : usermod -a -G fuse _user_name_).
+
+
+LICENSES
+--------
+The scripts and other contents of this package are licensed
+under the GNU General Public License version 2, or any later version.

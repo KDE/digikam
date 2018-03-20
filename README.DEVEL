@@ -1,0 +1,138 @@
+This is the digiKam README for developpers
+
+- ABOUT --------------------------------------------------------------------
+
+digiKam is an advanced digital photo management application for KDE, which makes importing and organizing digital photos a 'snap'.
+
+This is a super-repository that helps to download and compile digiKam with all components developed by digiKam team.
+
+- DEPENDENCIES -------------------------------------------------------------
+
+* To checkout all source code:
+
+- Perl       <http://www.perl.org>
+- Git        <http://git-scm.com>
+
+* To process translations files (optional)
+
+- Ruby       <http://www.ruby-lang.org>             (to extract translations files from KDE repositories)
+- Subversion <https://subversion.apache.org/>       (to extract translations files from KDE repositories)
+- Gettext    <https://www.gnu.org/software/gettext> (including Msgfmt to compile po files to mo files)
+
+* To download all needed git repositories, execute download script like this: perl ./download-repos
+
+* Important: by default only components required for packaging are downloaded. To populate whole developers
+  components, set $GITSLAVE environnement variable before to run ./download-repos script, like this:
+
+  export GITSLAVE=.gitslave.devel
+
+* To compile all source code, take a look on each README files to resolve dependencies.
+
+- COMPONENTS ---------------------------------------------------------------
+
+Redmine project pages can be found here :
+
+* This super repository:
+
+digiKam SC       : https://projects.kde.org/projects/extragear/graphics/digikam/digikam-software-compilation
+
+Code base:
+
+digiKam          : https://projects.kde.org/projects/extragear/graphics/digikam
+
+* Extra components managed by this Software Compilation for developers only are listed below:
+
+libksane         : https://projects.kde.org/projects/kde/kdegraphics/libs/libksane
+libmediawiki     : https://projects.kde.org/projects/extragear/libs/libmediawiki
+libkvkontatke    : https://projects.kde.org/projects/extragear/libs/libkvkontatke
+
+* Documentations:
+
+digiKam DOC      : https://projects.kde.org/projects/extragear/graphics/digikam/digikam-doc
+
+- NOTES ---------------------------------------------------------------------
+
+If you are a developer with push access to the repositories, it is strongly recommended
+to use the "kde:" prefix and let git use the read-only mirrors for pulling.
+
+If you did not clone this repository (digikam-software-compilation) from "kde:", do it again:
+    git config --global url.git://anongit.kde.org/.insteadof kde:
+    git config --global url.ssh://git@git.kde.org/.pushinsteadof kde:
+    git clone kde:digikam-software-compilation
+
+See below an example of .gitconfig file working with a developer account :
+
+[url "git://anongit.kde.org/"]
+        insteadof = kde://
+
+[url "git@git.kde.org:"]
+        pushinsteadof = kde://
+
+[url "ssh://git@git.kde.org/"]
+        pushinsteadof = kde://
+
+[alias]
+        up = pull --rebase -v --stat
+        ci = commit -a -v
+[core]
+        editor = mcedit
+
+[user]
+        name = my name
+        email = my email
+
+[push]
+        default = tracking
+
+[color]
+        # turn on color
+        diff = auto
+        status = auto
+        branch = auto
+        interactive = auto
+        ui = auto
+
+[color "branch"]
+        current = green bold
+        local = green
+        remote = red bold
+
+[color "diff"]
+        meta = yellow bold
+        frag = magenta bold
+        old = red bold
+        new = green bold
+
+[color "status"]
+        added = green bold
+        changed = yellow bold
+        untracked = red
+
+[color "sh"]
+        branch = yellow                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             [color "sh"]                                                                                                                                                                                                       
+
+- CMAKE OPTIONS --------------------------------------------------------------
+
+Packaging options:
+
+"-DDIGIKAMSC_COMPILE_DIGIKAM=ON"           Build digiKam core.
+
+"-DDIGIKAMSC_CHECKOUT_PO=ON"               Extract application translation files from KDE repositories.
+"-DDIGIKAMSC_CHECKOUT_DOC=ON"              Extract documentation translation files from KDE repositories.
+"-DDIGIKAMSC_COMPILE_DOC=ON"               Build handbook i18n files. It require to checkout documentation translations files before from KDE repositories.
+"-DDIGIKAMSC_COMPILE_PO=ON"                Build GUI i18n files. It require to checkout application translations files before from KDE repositories.
+
+Developers only options:
+
+"-DBUILD_TESTING=ON"                       Build tests code.
+"-DDIGIKAMSC_COMPILE_LIBKSANE=OFF"         Force to use local libksane instead version installed on your computer.
+"-DDIGIKAMSC_COMPILE_LIBMEDIAWIKI=OFF"     Force to use local libmediawiki instead version installed on your computer.
+"-DDIGIKAMSC_COMPILE_LIBKVKONTAKE=OFF"     Force to use local libkvkontakte instead version installed on your computer.
+
+
+Look README files from sub-dirs for more options available to configure compilation environnement.
+
+To configure project with CMake, use dedicated "bootstrap" script for your platform.
+
+------------
+digiKam team

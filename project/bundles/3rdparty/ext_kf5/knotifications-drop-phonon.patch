@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0104c73..de44e9a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -59,11 +59,11 @@ find_package(KF5Config ${KF5_DEP_VERSION} REQUIRED)
+ find_package(KF5Codecs ${KF5_DEP_VERSION} REQUIRED)
+ find_package(KF5CoreAddons ${KF5_DEP_VERSION} REQUIRED)
+ 
+-find_package(Phonon4Qt5 4.6.60 REQUIRED NO_MODULE)
+-set_package_properties(Phonon4Qt5 PROPERTIES
+-   DESCRIPTION "Qt-based audio library"
+-   TYPE REQUIRED
+-   PURPOSE "Required to build audio notification support")
++#find_package(Phonon4Qt5 4.6.60 REQUIRED NO_MODULE)
++#set_package_properties(Phonon4Qt5 PROPERTIES
++#   DESCRIPTION "Qt-based audio library"
++#   TYPE REQUIRED
++#   PURPOSE "Required to build audio notification support")
+ if (Phonon4Qt5_FOUND)
+   add_definitions(-DHAVE_PHONON4QT5)
+ endif()

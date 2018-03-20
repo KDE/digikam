@@ -1,0 +1,30 @@
+This files describes how to install digiKam software compilation from
+the git repository, while keeping a system-wide digiKam software compilation
+install.
+
+This procedure is based on the boostrap script boostrap.local
+
+ 1. Set the root directory for your git install in boostrap.local (DIGIKAM_INSTALL_PREFIX variable)
+ 2. If you want a clean build directory, set CLEANROOT to 1
+ 3. Type the following command in your terminal:
+   $ ./boostrap.local  # or "./bootstrap.local --eclipse" if you intend to use Eclipse
+   $ cd build
+   $ make
+   $ make install
+   $ KDESYCOCA="/your/root/directory/var/tmp/kde-$USER/ksycoca5" kbuildsycoca5
+
+To run digikam, use the following commands:
+
+ $ export KDESYCOCA=/your/root/directory/var/tmp/kde-$USER/ksycoca5
+ $ export QT_PLUGIN_PATH=/your/root/directory/lib64/plugins:/your/root/directory/lib/plugins:$QT_PLUGIN_PATH
+ $ export XDG_DATA_DIRS=/your/root/directory/share:$XDG_DATA_DIRS
+ $ /your/root/directory/bin/digikam
+
+The same applies for all binaries in /your/root/directory/bin/
+
+If your shell is bash, you can edit your .bashrc file (in $HOME) and add the follwing alias:
+ DIGIKAMROOT="/your/root/directory"
+ alias digikam-dev="KDESYCOCA=\$DIGIKAMROOT/var/tmp/kde-$USER/ksycoca5 XDG_DATA_DIRS=\$DIGIKAMROOT/share:\$XDG_DATA_DIRS QT_PLUGIN_PATH=\$DIGIKAMROOT/lib64/plugins:\$DIGIKAMROOT/lib/plugins:\$QT_PLUGIN_PATH \$DIGIKAMROOT/bin/digikam"
+
+then you can start your newly installed digikam with
+ $ digikam-dev

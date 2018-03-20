@@ -1,0 +1,24 @@
+diff --git a/src/lib/marble/MarbleDirs.cpp b/src/lib/marble/MarbleDirs.cpp
+index dc48da5..4b31397 100644
+--- a/src/lib/marble/MarbleDirs.cpp
++++ b/src/lib/marble/MarbleDirs.cpp
+@@ -121,6 +121,9 @@ QStringList MarbleDirs::pluginEntryList( const QString& relativePath, QDir::Filt
+ 
+ QString MarbleDirs::systemPath()
+ {
++	QString path = QCoreApplication::applicationDirPath() + QDir::separator() + "data";
++	//qDebug() << "Marble data path: " << path;
++	return path;
+     if (!runTimeMarbleDataPath.isEmpty()) {
+         return runTimeMarbleDataPath;
+     }
+@@ -179,6 +182,9 @@ QString MarbleDirs::systemPath()
+ 
+ QString MarbleDirs::pluginSystemPath()
+ {
++	QString path = QCoreApplication::applicationDirPath() + QDir::separator() + "plugins";
++	//qDebug() << "Marble plugins path: " << path;
++	return path;
+     if (!runTimeMarblePluginPath.isEmpty()) {
+         return runTimeMarblePluginPath;
+     }

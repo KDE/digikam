@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Copyright (c) 2008-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2012-2016, Benjamin Girault <benjamin dot girault at gmail dot com>
+# Copyright (c)      2015, Ulf Rompe <kde dot org at rompe dot org>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
+# See README.LOCAL for more information
+#
+# WARNING: Make sure you understand what this does before using it!
+
+# Halt and catch errors
+set -eE
+trap 'PREVIOUS_COMMAND=$THIS_COMMAND; THIS_COMMAND=$BASH_COMMAND' DEBUG
+trap 'echo "FAILED COMMAND: $PREVIOUS_COMMAND"' ERR
+
+########################## CONFIG ######################
+
+# Replace this with the directory where you want your local digikam
+DIGIKAM_INSTALL_PREFIX=$HOME/local/opt/digikam
+
+# Set to 1 if you want to clean that directory (this script will delete and recreate it)
+CLEANROOT=0
+
+# Additional options for cmake.
+#ADDITIONAL_CMAKE_FLAGS='-DCMAKE_CXX_FLAGS="-pedantic -Werror=return-type" -DCMAKE_C_FLAGS="-pedantic -Werror=return-type"'
+
+###################### END CONFIG ######################
+
+if [ "$CLEANROOT" == "1" ]; then
+    if expr $DIGIKAM_INSTALL_PREFIX : $HOME'.*'; then
+        rm -Rf $DIGIKAM_INSTALL_PREFIX
+    else
+        echo "Refusing to remove $DIGIKAM_INSTALL_PREFIX since it is outside your HOME."
+    fi
+fi
+. `dirname $0`/bootstrap.linux $*
+mkdir -p $DIGIKAM_INSTALL_PREFIX/var/tmp/kde-$USER
+
+cat << EOF > finish_install.sh
+#!/bin/bash
+KCOCA=$DIGIKAM_INSTALL_PREFIX/var/tmp/kde-$USER/ksycoca5
+XDG=$DIGIKAM_INSTALL_PREFIX/share:\$XDG_DATA_DIRS
+QTPLUG=$DIGIKAM_INSTALL_PREFIX/lib64/plugins:$DIGIKAM_INSTALL_PREFIX/lib/plugins:$QT_PLUGIN_PATH
+
+KDESYCOCA="\$KCOCA" XDG_DATA_DIRS="\$XDG" QT_PLUGIN_PATH="\$QTPLUG" kbuildsycoca5
+echo "Use the following command line to start digiKam:"
+echo "  KDESYCOCA="\$KCOCA" XDG_DATA_DIRS=\$XDG QT_PLUGIN_PATH=\$QTPLUG $DIGIKAM_INSTALL_PREFIX/bin/digikam"
+echo
+echo "or add an alias to your .bashrc file:"
+echo "  alias digikam-dev=\"KDESYCOCA=\$KCOCA XDG_DATA_DIRS=\$XDG QT_PLUGIN_PATH=\$QTPLUG $DIGIKAM_INSTALL_PREFIX/bin/digikam\""
+echo "and start digiKam using \"digikam-dev\""
+EOF
+chmod u+x finish_install.sh
+
+echo
+echo -e "\033[01;32m[Important]\033[00m After compiling and installing digiKam, run the script build/finish_install.sh to finalize the install."

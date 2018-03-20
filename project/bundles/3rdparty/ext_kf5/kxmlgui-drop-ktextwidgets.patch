@@ -1,0 +1,83 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c32eaa5..7581e60 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,7 +42,7 @@ find_package(KF5Config ${KF5_DEP_VERSION} REQUIRED)
+ find_package(KF5ConfigWidgets ${KF5_DEP_VERSION} REQUIRED)
+ find_package(KF5I18n ${KF5_DEP_VERSION} REQUIRED)
+ find_package(KF5IconThemes ${KF5_DEP_VERSION} REQUIRED)
+-find_package(KF5TextWidgets ${KF5_DEP_VERSION} REQUIRED)
++#find_package(KF5TextWidgets ${KF5_DEP_VERSION} REQUIRED)
+ find_package(KF5WidgetsAddons ${KF5_DEP_VERSION} REQUIRED)
+ find_package(KF5WindowSystem ${KF5_DEP_VERSION} REQUIRED)
+ find_package(KF5Attica ${KF5_DEP_VERSION})
+@@ -64,8 +64,8 @@ if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+     ki18n_install(po)
+ endif()
+ add_subdirectory(src)
+-add_subdirectory(tests)
+-add_subdirectory(autotests)
++#add_subdirectory(tests)
++#add_subdirectory(autotests)
+ 
+ 
+ # create a Config.cmake and a ConfigVersion.cmake file and install them
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 8126b5e..829f18c 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -90,7 +90,7 @@ PRIVATE
+     KF5::ItemViews           #KWidgetItemDelegate in KAboutApplicationPersonListDelegate
+     KF5::I18n                #i18n and i18nc in many places
+     KF5::IconThemes         #KIconLoader and KIconThemes in KToolBar
+-    KF5::TextWidgets        #KTextEdit in kbugreport
++#    KF5::TextWidgets        #KTextEdit in kbugreport
+     KF5::WindowSystem       #KKeyServer in kkeysequencewidget
+     ${XMLGUI_EXTRA_LIBS}
+ )
+diff --git a/src/kbugreport.cpp b/src/kbugreport.cpp
+index f418dde..65965ad 100644
+--- a/src/kbugreport.cpp
++++ b/src/kbugreport.cpp
+@@ -36,6 +36,7 @@
+ #include <QLineEdit>
+ #include <QStandardPaths>
+ #include <QDebug>
++#include <QTextEdit>
+ 
+ #include <kaboutdata.h>
+ #include <kconfig.h>
+@@ -43,7 +44,7 @@
+ #include <kemailsettings.h>
+ #include <klocalizedstring.h>
+ #include <kmessagebox.h>
+-#include <ktextedit.h>
++//#include <ktextedit.h>
+ #include <ktitlewidget.h>
+ 
+ #include "kdepackages.h"
+@@ -65,7 +66,7 @@ public:
+     QProcess *m_process;
+     KAboutData m_aboutData;
+ 
+-    KTextEdit *m_lineedit;
++    QTextEdit *m_lineedit;
+     QLineEdit *m_subject;
+     QLabel *m_from;
+     QLabel *m_version;
+@@ -263,12 +264,12 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
+         lay->addWidget(label);
+ 
+         // The multiline-edit
+-        d->m_lineedit = new KTextEdit(this);
++        d->m_lineedit = new QTextEdit(this);
+         d->m_lineedit->setMinimumHeight(180);   // make it big
+         d->m_lineedit->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+         d->m_lineedit->setLineWrapMode(QTextEdit::WidgetWidth);
+-        d->m_lineedit->setCheckSpellingEnabled(true);
+-        d->m_lineedit->setSpellCheckingLanguage(QStringLiteral("en"));
++        //d->m_lineedit->setCheckSpellingEnabled(true);
++        //d->m_lineedit->setSpellCheckingLanguage(QStringLiteral("en"));
+         lay->addWidget(d->m_lineedit, 10 /*stretch*/);
+ 
+         d->_k_slotSetFrom();

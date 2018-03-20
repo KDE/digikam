@@ -1,0 +1,67 @@
+                         status      version        Project URL                                        remarks                                                 TODO
+                         ------      -------        -----------                                        -------                                                 ----
+
+
+CMake                      X         >= 3.0.0       http://www.cmake.org                               > 3.1.0 hightly recommended.
+ECM                        X         >= 1.7.0       https://cgit.kde.org/extra-cmake-modules.git/
+
+
+Qt5::Core                  X         >= 5.6.0       http://code.qt.io/cgit/qt/qtbase.git/
+Qt5::Gui                   X         >= 5.6.0       http://code.qt.io/cgit/qt/qtbase.git/
+Qt5::Widgets               X         >= 5.6.0       http://code.qt.io/cgit/qt/qtbase.git/
+Qt5::Network               X         >= 5.6.0       http://code.qt.io/cgit/qt/qtbase.git/
+Qt5::Sql                   X         >= 5.6.0       http://code.qt.io/cgit/qt/qtbase.git/              Including Qt5::Sqlite and Qt5::Mysql plugins.
+Qt5::Xml                   X         >= 5.6.0       http://code.qt.io/cgit/qt/qtbase.git/
+Qt5::Concurrent            X         >= 5.6.0       http://code.qt.io/cgit/qt/qtbase.git/
+Qt5::PrintSupport          X         >= 5.6.0       http://code.qt.io/cgit/qt/qtbase.git/
+Qt5::Svg                   X         >= 5.6.0       http://code.qt.io/cgit/qt/qtsvg.git/
+Qt5::XmlPatterns           X         >= 5.6.0       http://code.qt.io/cgit/qt/qtxmlpatterns.git/
+Qt5::WebKitWidgets         X         >= 5.6.0       http://code.qt.io/cgit/qt/qtwebkit.git/
+Qt5::X11Extras            opt        >= 5.6.0       http://code.qt.io/cgit/qt/qtx11extras.git/         For color management support under Linux.
+Qt5::DBus                 opt        >= 5.6.0       http://code.qt.io/cgit/qt/qtbase.git/              Optional: only for Linux Desktop.
+Qt5::OpenGL               opt        >= 5.6.0       http://code.qt.io/cgit/qt/qtbase.git/              For Presentation tool.
+Qt5::Test                 opt        >= 5.6.0       http://code.qt.io/cgit/qt/qtbase.git/              To compile test codes (BUILD_TESTING=on).
+
+
+KF5::Config                X         >= 5.5.0       https://cgit.kde.org/kconfig.git/about/
+KF5::XmlGui                X         >= 5.5.0       https://cgit.kde.org/kxmlgui.git/about/
+KF5::I18n                  X         >= 5.5.0       https://cgit.kde.org/ki18n.git/about/
+KF5::WindowSystem          X         >= 5.5.0       https://cgit.kde.org/kwindowsystem.git/about/
+KF5::Service               X         >= 5.5.0       https://cgit.kde.org/kservice.git/about/           TODO: make optional for KDE desktop (DFileOperations).
+KF5::Solid                 X         >= 5.5.0       https://cgit.kde.org/solid.git/about/
+KF5::CoreAddons            X         >= 5.5.0       https://cgit.kde.org/kcoreaddons.git/about/        Needs for KAboutData.
+KF5::NotifyConfig         opt        >= 5.5.0       https://cgit.kde.org/knotifyconfig.git/about/      For Linux/KDE desktop application notify configuration.
+KF5::Notifications        opt        >= 5.5.0       https://cgit.kde.org/knotifications.git/about/     For Linux/KDE desktop notifications integrations.
+KF5::ThreadWeaver         opt        >= 5.5.0       https://cgit.kde.org/threadweaver.git/about/       For panorama tool.
+KF5::IconThemes           opt        >= 5.5.0       https://cgit.kde.org/kiconthemes.git/about/        Optional: only for Linux Desktop (KIconDialog)
+KF5::FileMetaData         opt        >= 5.5.0       https://cgit.kde.org/kfilemetadata.git/about/      KDE files indexer (ENABLE_KFILEMETADATASUPPORT=on)      Still experimental, disabled by default. Implementation from KDE side very unstable.
+KF5::AkonadiContact       opt        >= 17.12.1     https://cgit.kde.org/akonadi-contacts.git/about/   KDE Mail contacts (ENABLE_AKONADICONTACTSUPPORT=on)     Still experimental, disabled by default. Need testing.
+KF5::CalendarCore         opt        >= 17.12.1     https://cgit.kde.org/kcalcore.git/about/           For calendar tool to setup ical special events.
+KF5::KIO                  opt        >= 5.5.0       https://cgit.kde.org/kio.git/about/                Optional: only for Linux Desktop
+
+libopencv                  X         >= 3.1         http://opencv.willowgarage.com                     Both versions supported using a cmake flag.             To compile with OpenCV 3.x use cmake option ENABLE_OPENCV3=on.
+libpthread                 X         >= 2.0.0       http://www.gnu.org/software/hurd/libpthread.html   For DNG converter.
+libtiff                    X         >= 4.0         http://www.remotesensing.org/libtiff               For DImg image loader.
+libpng                     X         >= 1.6         http://www.libpng.org/pub/png/libpng.html          For DImg image loader.
+libjpeg                    X         >= 6b          http://www.ijg.org                                 jpeglib >= 8.0 hightly recommended for RawEngine.
+libboost                   X         >= 1.55.0      http://www.boost.org/doc/libs                      For Versionning support.
+liblcms                    X         >= 2.x         http://www.littlecms.com                           For Color Management support.
+libexpat                   X         >= 2.1.0       http://expat.sourceforge.net                       For DNG converter.
+libexiv2                   X         >= 0.26        http://www.exiv2.org                               Metadata low level management. 0.24 deprecated.
+libxml2                   opt        >= 2.7.0       http://xmlsoft.org                                 For HtmlGallery tool.
+libxslt                   opt        >= 1.1.0       http://xmlsoft.org/XSLT                            For HtmlGallery tool.
+libqtav                   opt        >= 1.12.0      http://www.qtav.org                                To play video and audio (ENABLE_MEDIAPLAYER=on)
+libffmpeg                 opt        >= 3.3.x       http://www.ffmpeg.org                              To play video and audio (ENABLE_MEDIAPLAYER=on)         libavformat, libavutil, libavcodec used to extract video metadata.
+Flex                      opt        >= 2.5.0       http://flex.sourceforge.net                        For Panorama tool.
+Bison                     opt        >= 2.5.0       http://www.gnu.org/software/bison/bison.html       For Panorama tool.
+libmesa                   opt        >= 11.0        http://www.mesa3d.org                              For Presentation tools (Linux only).
+libmediawiki              opt        >= 5.5.0       https://cgit.kde.org/libmediawiki.git/about/       For MediaWiki tool (DIGIKAMSC_COMPILE_LIBMEDIAWIKI=on)
+libkvkontakte             opt        >= 4.70.0      https://cgit.kde.org/libkvkontatke.git/about/      For Vkontakte tool (DIGIKAMSC_COMPILE_LIBKVKONTAKTE=on)
+libksane                  opt        >= 5.0.0       https://cgit.kde.org/libksane.git/about/           Digital scanner (DIGIKAMSC_COMPILE_LIBKSANE=on).
+libjpasper                opt        >= 1.900.1     http://www.ece.uvic.ca/~mdadams/jasper             For JPEG-2000 support.
+libmarble                 opt        >= 0.21.80     https://cgit.kde.org/marble.git/about/             For geolocation support.
+libeigen3                 opt        >= 3.2         http://eigen.tuxfamily.org                         For Refocus tool.                                       See if Clapack from OpenCV can be used instead.
+liblensfun                opt        >= 0.2.8       http://lensfun.sourceforge.net                     For LensCorrection tool.
+liblqr-1                  opt        >= 0.4.2       http://liblqr.wikidot.com                          For Liquid rescale tool.
+libgphoto2                opt        >= 2.5         http://www.gphoto.org                              Digital camera drivers support. Need libusb-1.
+libgomp                   opt        >= 5.0         https://gcc.gnu.org/onlinedocs/libgomp             OpenMP support for RawEngine.
