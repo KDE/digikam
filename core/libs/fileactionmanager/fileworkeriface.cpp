@@ -108,8 +108,8 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
             ScanController::FileMetadataWrite writeScope(info);
             writeScope.changed(hub.write(filePath, MetadataHub::WRITE_ALL));
         }
-        // hub emits fileMetadataChanged
 
+        // hub emits fileMetadataChanged
         infos.writtenToOne();
     }
 
@@ -144,8 +144,8 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, int 
             ScanController::FileMetadataWrite writeScope(info);
             writeScope.changed(hub.writeToMetadata(info, (MetadataHub::WriteComponents)flags));
         }
-        // hub emits fileMetadataChanged
 
+        // hub emits fileMetadataChanged
         infos.writtenToOne();
     }
 
@@ -356,7 +356,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
 
     QMap<QString, QRect>::ConstIterator it = ajustedFaces.constBegin();
 
-    for (; it != ajustedFaces.constEnd(); ++it)
+    for (; it != ajustedFaces.constEnd() ; ++it)
     {
         int tagId = FaceTags::getOrCreateTagForPerson(it.key());
 
