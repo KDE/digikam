@@ -66,6 +66,7 @@ The current bugs and devel wishes reported to the bugzilla servers can be seen a
 
 Extra Bugzilla servers for shared libs used by digiKam :
 
+* [LibRaw library](https://github.com/LibRaw/LibRaw/issues)
 * [GPhoto2 library](http://gphoto.org/bugs)
 * [Exiv2 library](http://dev.exiv2.org/projects/exiv2/issues)
 * [QtAV library](https://github.com/wang-bin/QtAV/issues)
@@ -74,7 +75,7 @@ Extra Bugzilla servers for shared libs used by digiKam :
 
 See the complete list of dependencies at this url:
 
-https://cgit.kde.org/digikam-software-compilation.git/tree/DEPENDENCIES 
+https://cgit.kde.org/digikam.git/tree/DEPENDENCIES 
 
 CMake compilation options to custom digiKam:
 
@@ -83,7 +84,6 @@ Use CMake `-DENABLE_AKONADICONTACTSUPPORT=on` flag to compile digiKam with KDE M
 Use CMake `-DENABLE_DBUS=off`                 flag to compile digiKam without DBus support                                           (enabled by default - for Linux desktop only).
 Use CMake `-DENABLE_MEDIAPLAYER=on`           flag to compile digiKam with QtAV support                                              (disabled by default).
 Use Cmake `-DENABLE_APPSTYLES=on`             flag to compile digiKam with widget application style support                          (disabled by default).
-Use CMake `-DENABLE_OPENCV3=on`               flag to compile digiKam source code using OpenCV3 instead OpenCV2                      (disabled by default).
 
 OpenCV3 support needs extra contrib modules package, especially 'face'
 and 'legacy' components.
