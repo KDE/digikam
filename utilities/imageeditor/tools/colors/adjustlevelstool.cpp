@@ -775,7 +775,7 @@ void AdjustLevelsTool::readSettings()
         ch = LuminosityChannel;
 
     // This is mandatory here to set spinbox values because slot connections
-    // can be not set completely at plugin startup.
+    // can be not set completely at tool startup.
     d->minInput->setValue(d->levels->getLevelLowInputValue(ch));
     d->minOutput->setValue(d->levels->getLevelLowOutputValue(ch));
     d->maxInput->setValue(d->levels->getLevelHighInputValue(ch));

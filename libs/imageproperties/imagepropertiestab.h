@@ -80,7 +80,7 @@ public:
     void setVideoAspectRatio(const QString& str);
     void setVideoAudioBitRate(const QString& str);
     void setVideoAudioChannelType(const QString& str);
-    void setVideoAudioCompressor(const QString& str);
+    void setVideoAudioCodec(const QString& str);
     void setVideoDuration(const QString& str);
     void setVideoFrameRate(const QString& str);
     void setVideoVideoCodec(const QString& str);

@@ -29,7 +29,6 @@ ecm_mark_as_test(timestampupdatetest)
 target_link_libraries(timestampupdatetest
                       digikamdatabase
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Test

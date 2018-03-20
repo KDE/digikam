@@ -58,8 +58,8 @@ class MigrateFromDigikam4Page::Private
 {
 public:
 
-    Private() :
-        migrateBehavior(0),
+    explicit Private()
+      : migrateBehavior(0),
         migrate(0),
         createnew(0)
     {
@@ -130,8 +130,6 @@ void MigrateFromDigikam4Page::doMigration()
     QStringList configFiles;
     configFiles << QLatin1String("digikamrc")
                 << QLatin1String("digikam_tagsmanagerrc")
-                << QLatin1String("kipipluginsrc")
-                << QLatin1String("kipirc")
                 << QLatin1String("showfotorc");
     migrator.setConfigFiles(configFiles);
     migrator.migrate();

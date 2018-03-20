@@ -6,7 +6,7 @@
  * Date        : 2017-02-20
  * Description : Synchronized container for maintenance data.
  *
- * Copyright (C) 2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
+ * Copyright (C) 2017-2018 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,6 +47,7 @@ public:
     QList<QString>                imagePathList;
     QList<ImageInfo>              imageInfoList;
     QList<Identity>               identitiesList;
+    QList<qlonglong>              similarityImageIdList;
 
     QMutex                        lock;
 };
@@ -79,6 +80,11 @@ void MaintenanceData::setImagePaths(const QList<QString>& paths)
 void MaintenanceData::setImageInfos(const QList<ImageInfo>& infos)
 {
     d->imageInfoList = infos;
+}
+
+void MaintenanceData::setSimilarityImageIds(const QList<qlonglong>& ids)
+{
+    d->similarityImageIdList = ids;
 }
 
 void MaintenanceData::setIdentities(const QList<Identity>& identities)
@@ -154,6 +160,20 @@ Identity MaintenanceData::getIdentity() const
 
     d->lock.unlock();
     return identity;
+}
+
+qlonglong MaintenanceData::getSimilarityImageId() const
+{
+    d->lock.lock();
+    qlonglong id = -1;
+
+    if (!d->similarityImageIdList.isEmpty())
+    {
+        id = d->similarityImageIdList.takeFirst();
+    }
+
+    d->lock.unlock();
+    return id;
 }
 
 } // namespace Digikam

@@ -83,7 +83,7 @@ void DbEngineConnectionChecker::run()
 {
     QString databaseID(QLatin1String("ConnectionTest"));
 
-    // NOTE: wrap this code into bracket to prevent QtQSL plugin warning. See bug #339074 for details.
+    // NOTE: wrap this code into bracket to prevent QtSQL plugin warning. See bug #339074 for details.
     {
         QSqlDatabase databaseHandler = QSqlDatabase::addDatabase(d->parameters.databaseType, databaseID);
 

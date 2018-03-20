@@ -295,11 +295,8 @@ QString MetaEngine::getIptcTagDescription(const char* iptcTagName)
     return QString();
 }
 
-bool MetaEngine::removeIptcTag(const char* iptcTagName, bool setProgramName) const
+bool MetaEngine::removeIptcTag(const char* iptcTagName) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         Exiv2::IptcData::iterator it = d->iptcMetadata().begin();
@@ -335,12 +332,9 @@ bool MetaEngine::removeIptcTag(const char* iptcTagName, bool setProgramName) con
     return false;
 }
 
-bool MetaEngine::setIptcTagData(const char* iptcTagName, const QByteArray& data, bool setProgramName) const
+bool MetaEngine::setIptcTagData(const char* iptcTagName, const QByteArray& data) const
 {
     if (data.isEmpty())
-        return false;
-
-    if (!setProgramId(setProgramName))
         return false;
 
     try
@@ -422,11 +416,8 @@ QString MetaEngine::getIptcTagString(const char* iptcTagName, bool escapeCR) con
     return QString();
 }
 
-bool MetaEngine::setIptcTagString(const char* iptcTagName, const QString& value, bool setProgramName) const
+bool MetaEngine::setIptcTagString(const char* iptcTagName, const QString& value) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         d->iptcMetadata()[iptcTagName] = std::string(value.toUtf8().constData());
@@ -487,12 +478,8 @@ QStringList MetaEngine::getIptcTagsStringList(const char* iptcTagName, bool esca
 }
 
 bool MetaEngine::setIptcTagsStringList(const char* iptcTagName, int maxSize,
-                                       const QStringList& oldValues, const QStringList& newValues,
-                                       bool setProgramName) const
+                                       const QStringList& oldValues, const QStringList& newValues) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         QStringList oldvals = oldValues;
@@ -536,7 +523,7 @@ bool MetaEngine::setIptcTagsStringList(const char* iptcTagName, int maxSize,
         d->iptcMetadata() = iptcData;
 
         // Make sure character set is UTF-8
-        setIptcTagString("Iptc.Envelope.CharacterSet", QString::fromLatin1("\33%G"), false);
+        setIptcTagString("Iptc.Envelope.CharacterSet", QString::fromLatin1("\33%G"));
 
         return true;
     }
@@ -589,12 +576,8 @@ QStringList MetaEngine::getIptcKeywords() const
     return QStringList();
 }
 
-bool MetaEngine::setIptcKeywords(const QStringList& oldKeywords, const QStringList& newKeywords,
-                             bool setProgramName) const
+bool MetaEngine::setIptcKeywords(const QStringList& oldKeywords, const QStringList& newKeywords) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         QStringList oldkeys = oldKeywords;
@@ -637,7 +620,7 @@ bool MetaEngine::setIptcKeywords(const QStringList& oldKeywords, const QStringLi
         d->iptcMetadata() = iptcData;
 
         // Make sure character set is UTF-8
-        setIptcTagString("Iptc.Envelope.CharacterSet", QString::fromLatin1("\33%G"), false);
+        setIptcTagString("Iptc.Envelope.CharacterSet", QString::fromLatin1("\33%G"));
 
         return true;
     }
@@ -688,12 +671,8 @@ QStringList MetaEngine::getIptcSubjects() const
     return QStringList();
 }
 
-bool MetaEngine::setIptcSubjects(const QStringList& oldSubjects, const QStringList& newSubjects,
-                                 bool setProgramName) const
+bool MetaEngine::setIptcSubjects(const QStringList& oldSubjects, const QStringList& newSubjects) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         QStringList oldDef = oldSubjects;
@@ -731,7 +710,7 @@ bool MetaEngine::setIptcSubjects(const QStringList& oldSubjects, const QStringLi
         d->iptcMetadata() = iptcData;
 
         // Make sure character set is UTF-8
-        setIptcTagString("Iptc.Envelope.CharacterSet", QString::fromLatin1("\33%G"), false);
+        setIptcTagString("Iptc.Envelope.CharacterSet", QString::fromLatin1("\33%G"));
 
         return true;
     }
@@ -782,12 +761,8 @@ QStringList MetaEngine::getIptcSubCategories() const
     return QStringList();
 }
 
-bool MetaEngine::setIptcSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories,
-                                      bool setProgramName) const
+bool MetaEngine::setIptcSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         QStringList oldkeys = oldSubCategories;
@@ -826,7 +801,7 @@ bool MetaEngine::setIptcSubCategories(const QStringList& oldSubCategories, const
         d->iptcMetadata() = iptcData;
 
         // Make sure character set is UTF-8
-        setIptcTagString("Iptc.Envelope.CharacterSet", QString::fromLatin1("\33%G"), false);
+        setIptcTagString("Iptc.Envelope.CharacterSet", QString::fromLatin1("\33%G"));
 
         return true;
     }

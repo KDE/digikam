@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_HUGINEXECUTORTASK_H
-#define PANO_HUGINEXECUTORTASK_H
+#ifndef PANO_HUGIN_EXECUTOR_TASK_H
+#define PANO_HUGIN_EXECUTOR_TASK_H
 
 // Local includes
 
@@ -34,9 +34,12 @@ class HuginExecutorTask : public CommandTask
 {
 public:
 
-    HuginExecutorTask(const QString& workDirPath, const QUrl& input,
-                      QUrl& panoUrl, PanoramaFileType fileType,
-                      const QString& huginExecutorPath, bool preview);
+    explicit HuginExecutorTask(const QString& workDirPath,
+                               const QUrl& input,
+                               QUrl& panoUrl,
+                               PanoramaFileType fileType,
+                               const QString& huginExecutorPath,
+                               bool preview);
     ~HuginExecutorTask();
 
 protected:
@@ -45,11 +48,11 @@ protected:
 
 private:
 
-    const QUrl&                         ptoUrl;
-    QUrl&                               panoUrl;
-    const PanoramaFileType              fileType;
+    const QUrl&            ptoUrl;
+    QUrl&                  panoUrl;
+    const PanoramaFileType fileType;
 };
 
 }  // namespace Digikam
 
-#endif /* PANO_HUGINEXECUTORTASK_H */
+#endif // PANO_HUGIN_EXECUTOR_TASK_H

@@ -87,7 +87,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
 
 #ifdef HAVE_MARBLE
     m_gpsTab = new ImagePropertiesGPSTab(parent);
-    appendTab(m_gpsTab,        QIcon::fromTheme(QLatin1String("globe")),      i18n("Map"));
+    appendTab(m_gpsTab,        QIcon::fromTheme(QLatin1String("globe")),            i18n("Map"));
 #endif // HAVE_MARBLE
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
@@ -314,7 +314,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     m_propertiesTab->setPhotoFlash(photoInfo.flash.isEmpty()               ? unavailable : photoInfo.flash);
     m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 
-    // -- Video information ------------------------------------------
+    // -- Audio/Video information ------------------------------------------
 
     VideoInfoContainer videoInfo = metaData.getVideoInformation();
 
@@ -326,7 +326,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     m_propertiesTab->setVideoVideoCodec(videoInfo.videoCodec.isEmpty()             ? unavailable : videoInfo.videoCodec);
     m_propertiesTab->setVideoAudioBitRate(videoInfo.audioBitRate.isEmpty()         ? unavailable : videoInfo.audioBitRate);
     m_propertiesTab->setVideoAudioChannelType(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
-    m_propertiesTab->setVideoAudioCompressor(videoInfo.audioCompressor.isEmpty()   ? unavailable : videoInfo.audioCompressor);
+    m_propertiesTab->setVideoAudioCodec(videoInfo.audioCodec.isEmpty()   ? unavailable : videoInfo.audioCodec);
 
     // -- Caption, ratings, tag information ---------------------
 

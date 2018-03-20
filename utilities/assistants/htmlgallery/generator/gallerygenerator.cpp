@@ -74,7 +74,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
       : that(0),
         info(0),
         warnings(false),

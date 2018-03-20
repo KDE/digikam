@@ -64,6 +64,8 @@ public:
     explicit DSelectionItem(const QRectF& rect);
     ~DSelectionItem();
 
+public:
+
     void setMaxRight(qreal maxRight);
     void setMaxBottom(qreal maxBottom);
 
@@ -71,9 +73,9 @@ public:
 
     void saveZoom(qreal zoom);
 
-    void setRect(const QRectF& rect);
+    void    setRect(const QRectF& rect);
+    QRectF  rect()                     const;
     QPointF fixTranslation(QPointF dp) const;
-    QRectF rect() const;
 
 public:
 
@@ -87,7 +89,7 @@ private:
 
 private:
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 
@@ -102,7 +104,9 @@ public:
     DPreviewImage(QWidget* const parent);
     ~DPreviewImage();
 
-    bool load(const QUrl& file) const;
+public:
+
+    bool load(const QUrl& file)      const;
     bool setImage(const QImage& img) const;
     void enableSelectionArea(bool b);
 
@@ -111,7 +115,7 @@ public:
      *
      * @param rectangle This rectangle should have height and width of 1.0
      */
-    void setSelectionArea(const QRectF& rectangle);
+    void   setSelectionArea(const QRectF& rectangle);
     QRectF getSelectionArea() const;
 
 public Q_SLOTS:
@@ -132,7 +136,8 @@ public Q_SLOTS:
      * \param tl_x is the x coordinate of the top left corner 0=0 1=image with.
      * \param tl_y is the y coordinate of the top left corner 0=0 1=image height.
      * \param br_x is the x coordinate of the bottom right corner 0=0 1=image with.
-     * \param br_y is the y coordinate of the bottom right corner 0=0 1=image height. */
+     * \param br_y is the y coordinate of the bottom right corner 0=0 1=image height.
+     */
     void slotSetSelection(float tl_x, float tl_y, float br_x, float br_y);
     void slotClearActiveSelection();
 
@@ -141,16 +146,19 @@ public Q_SLOTS:
      * \param tl_x is the x coordinate of the top left corner 0=0 1=image with.
      * \param tl_y is the y coordinate of the top left corner 0=0 1=image height.
      * \param br_x is the x coordinate of the bottom right corner 0=0 1=image with.
-     * \param br_y is the y coordinate of the bottom right corner 0=0 1=image height. */
+     * \param br_y is the y coordinate of the bottom right corner 0=0 1=image height.
+     */
     void slotSetHighlightArea(float tl_x, float tl_y, float br_x, float br_y);
 
     /** This function sets the percentage of the highlighted area that is visible.
      *  The rest is hidden. This stacks with the previous highlight area.
      * \param percentage is the percentage of the highlighted area that is shown.
-     * \param hideColor is the color to use to hide the highlighted area of the image.*/
+     * \param hideColor is the color to use to hide the highlighted area of the image.
+     */
     void slotSetHighlightShown(int percentage, QColor highLightColor = Qt::white);
 
-    /** This function removes the highlight area. */
+    /** This function removes the highlight area.
+     */
     void slotClearHighlight();
 
 protected:

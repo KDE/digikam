@@ -749,7 +749,7 @@ void PerspectiveWidget::transformAffine(DImg* const orgImage, DImg* const destIm
                 }
                 else
                 {
-                    qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "homogeneous coordinate = 0...\n";
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "homogeneous coordinate = 0...\n";
                 }
             }
 

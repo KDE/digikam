@@ -150,10 +150,12 @@ void OpenCVLBPHFaceRecognizer::train(const std::vector<cv::Mat>& images, const s
 {
     if (images.empty() || labels.size() != images.size())
     {
+        qCDebug(DIGIKAM_FACESENGINE_LOG) << "LBPH Train: nothing to train...";
         return;
     }
 
     d->lbph().update(images, labels, context);
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "LBPH Train: Adding model to Facedb";
     // add to database
     FaceDbAccess().db()->updateLBPHFaceModel(d->lbph());
 }

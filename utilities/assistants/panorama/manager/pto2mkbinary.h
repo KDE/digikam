@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PTO2MKBINARY_H
-#define PTO2MKBINARY_H
+#ifndef PTO_2MK_BINARY_H
+#define PTO_2MK_BINARY_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class Pto2MkBinary : public DBinaryIface
 
 public:
 
-    Pto2MkBinary()
+    explicit Pto2MkBinary()
         : DBinaryIface(QLatin1String("pto2mk"),
                        QLatin1String("2010.4"),
                        QLatin1String("pto2mk version "),
@@ -56,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // PTO2MKBINARY_H
+#endif // PTO_2MK_BINARY_H

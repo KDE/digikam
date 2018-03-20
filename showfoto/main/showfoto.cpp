@@ -99,7 +99,7 @@
 #include "showfotothumbnailmodel.h"
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
-#include "showfotoinfoiface.h"
+#include "dmetainfoiface.h"
 #include "showfoto_p.h"
 #include "dexpanderbox.h"
 #include "dfiledialog.h"
@@ -109,6 +109,29 @@
 #include "advprintwizard.h"
 #include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
+#include "dbwindow.h"
+#include "fbwindow.h"
+#include "flickrwindow.h"
+#include "gswindow.h"
+#include "imageshackwindow.h"
+#include "imgurwindow.h"
+#include "piwigowindow.h"
+#include "rajcewindow.h"
+#include "smugwindow.h"
+#include "yfwindow.h"
+
+#ifdef HAVE_MEDIAWIKI
+#   include "mediawikiwindow.h"
+#endif
+
+#ifdef HAVE_VKONTAKTE
+#   include "vkwindow.h"
+#endif
+
+#ifdef HAVE_KIO
+#   include "ftexportwindow.h"
+#   include "ftimportwindow.h"
+#endif
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -1380,7 +1403,7 @@ void ShowFoto::slotEditGeolocation()
     }
 
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(0,
-                                                           new ShowfotoInfoIface(this, d->thumbBar->urls()),
+                                                           new DMetaInfoIface(this, d->thumbBar->urls()),
                                                            QApplication::activeWindow());
     dialog->setImages(infos);
     dialog->exec();
@@ -1412,7 +1435,7 @@ void ShowFoto::slotEditMetadata()
 void ShowFoto::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
-    HTMLWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    HTMLWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
     w.exec();
 #endif
 }
@@ -1442,27 +1465,141 @@ void ShowFoto::slotExpoBlending()
 void ShowFoto::slotVideoSlideshow()
 {
 #ifdef HAVE_MEDIAPLAYER
-    VidSlideWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    VidSlideWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
     w.exec();
 #endif
 }
 
 void ShowFoto::slotSendByMail()
 {
-    MailWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    MailWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
     w.exec();
 }
 
 void ShowFoto::slotPrintCreator()
 {
-    AdvPrintWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    AdvPrintWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
     w.exec();
 }
 
 void ShowFoto::slotMediaServer()
 {
-    DMediaServerDlg w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    DMediaServerDlg w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
     w.exec();
+}
+
+void ShowFoto::slotExportTool()
+{
+    QAction* const tool = dynamic_cast<QAction*>(sender());
+
+    if (tool == m_exportDropboxAction)
+    {
+        DBWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+    else if (tool == m_exportFacebookAction)
+    {
+        FbWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+    else if (tool == m_exportFlickrAction)
+    {
+        FlickrWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+    else if (tool == m_exportGdriveAction)
+    {
+        GSWindow w(new DMetaInfoIface(this, d->thumbBar->urls()),
+                   this, QLatin1String("googledriveexport"));
+        w.exec();
+    }
+    else if (tool == m_exportGphotoAction)
+    {
+        GSWindow w(new DMetaInfoIface(this, d->thumbBar->urls()),
+                   this, QLatin1String("googlephotoexport"));
+        w.exec();
+    }
+    else if (tool == m_exportImageshackAction)
+    {
+        ImageShackWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+    else if (tool == m_exportImgurAction)
+    {
+        ImgurWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+    else if (tool == m_exportPiwigoAction)
+    {
+        PiwigoWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+    else if (tool == m_exportRajceAction)
+    {
+        RajceWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+    else if (tool == m_exportSmugmugAction)
+    {
+        SmugWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+    else if (tool == m_exportYandexfotkiAction)
+    {
+        YFWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+
+#ifdef HAVE_MEDIAWIKI
+    else if (tool == m_exportMediawikiAction)
+    {
+        MediaWikiWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+#endif
+
+#ifdef HAVE_VKONTAKTE
+    else if (tool == m_exportVkontakteAction)
+    {
+        VKWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+#endif
+
+#ifdef HAVE_KIO
+    else if (tool == m_exportFileTransferAction)
+    {
+        FTExportWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w.exec();
+    }
+#endif
+}
+
+void ShowFoto::slotImportTool()
+{
+    QAction* const tool = dynamic_cast<QAction*>(sender());
+
+    if (tool == m_importGphotoAction)
+    {
+        GSWindow w(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
+                   this, QLatin1String("googlephotoimport"));
+        w.exec();
+    }
+    else if (tool == m_importSmugmugAction)
+    {
+        SmugWindow w(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
+                     this, true);
+        w.exec();
+    }
+
+#ifdef HAVE_KIO
+    else if (tool == m_importFileTransferAction)
+    {
+        FTImportWindow w(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
+                         this);
+        w.exec();
+    }
+#endif
 }
 
 } // namespace ShowFoto

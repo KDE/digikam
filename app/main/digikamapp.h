@@ -127,7 +127,6 @@ private:
     void    setupExifOrientationActions();
     void    setupImageTransformActions();
     void    setupSelectToolsAction();
-    void    loadPlugins();
     void    loadCameras();
     void    populateThemes();
     void    preloadWindows();
@@ -151,7 +150,6 @@ private Q_SLOTS:
     void slotImageSelected(const ImageInfoList&, const ImageInfoList&);
     void slotSelectionChanged(int selectionCount);
     void slotExit();
-    void slotShowKipiHelp();
     void slotDBStat();
     void slotComponentsInfo();
 
@@ -224,6 +222,9 @@ private Q_SLOTS:
     void slotImportFromScanner();
     void slotEditMetadata();
     void slotEditGeolocation();
+
+    void slotExportTool();
+    void slotImportTool();
 
 private:
 

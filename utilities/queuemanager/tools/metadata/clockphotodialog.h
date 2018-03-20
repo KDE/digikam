@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CLOCKPHOTODIALOG_H
-#define CLOCKPHOTODIALOG_H
+#ifndef CLOCK_PHOTO_DIALOG_H
+#define CLOCK_PHOTO_DIALOG_H
 
 // Qt includes
 
@@ -70,4 +70,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* CLOCKPHOTODIALOG_H */
+#endif // CLOCK_PHOTO_DIALOG_H

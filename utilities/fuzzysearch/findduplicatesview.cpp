@@ -259,7 +259,6 @@ void FindDuplicatesView::initAlbumUpdateConnections()
 
     connect(AlbumManager::instance(),SIGNAL(signalUpdateDuplicatesAlbums(QList<SAlbum*>, QList<qlonglong>)),
             this,SLOT(slotUpdateDuplicates(QList<SAlbum*>,QList<qlonglong>)));
-
 }
 
 void FindDuplicatesView::setActive(bool val)
@@ -456,7 +455,7 @@ void FindDuplicatesView::slotUpdateDuplicates(const QList<SAlbum*>& sAlbumsToReb
 
 void FindDuplicatesView::slotApplicationSettingsChanged()
 {
-    d->similarityRange->setRange(d->settings->getMinimumSimilarityBound(),100);
+    d->similarityRange->setRange(d->settings->getMinimumSimilarityBound(), 100);
 }
 
 void FindDuplicatesView::slotComplete()

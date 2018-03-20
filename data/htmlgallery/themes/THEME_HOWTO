@@ -27,7 +27,7 @@ When the tool is run it does the following:
 ## Presentation of the desktop file
 
 The desktop file describes the theme. The information it contains is used in the
-theme selection page of the plugin.
+theme selection page of the tool.
 
 It's a .ini-style file and looks like this:
 
@@ -44,7 +44,7 @@ It's a .ini-style file and looks like this:
     Url=preview.png
 
 We use a desktop file format so that entries can be translated. If you look at
-the desktop file for one of the themes shipped with the plugin, you will find
+the desktop file for one of the themes shipped with the tool, you will find
 something like this:
 
     [Desktop Entry]
@@ -206,7 +206,7 @@ If you need other i18n parameters, let us know.
 ## Images, CSS files and others
 
 You are free to use images, CSS files or other files in your theme: just put
-them in the theme folder and the plugin will copy them in the output folder.
+them in the theme folder and the tool will copy them in the output folder.
 
 ## Original images
 

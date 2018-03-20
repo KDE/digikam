@@ -72,10 +72,6 @@
 #include "dxmlguiwindow.h"
 #include "akonadiiface.h"
 
-#ifdef HAVE_KIPI
-#    include "kipipluginloader.h"
-#endif
-
 namespace Digikam
 {
 
@@ -589,12 +585,8 @@ void ContextMenuHelper::slotDeselectAllAlbumItems()
 
 void ContextMenuHelper::addImportMenu()
 {
-    QMenu* const menuImport = new QMenu(i18n("Import"), d->parent);
-    QList<QAction*> importActions;
-
-#ifdef HAVE_KIPI
-    importActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ImportPlugin);
-#endif /* HAVE_KIPI */
+    QMenu* const menuImport       = new QMenu(i18n("Import"), d->parent);
+    QList<QAction*> importActions = DigikamApp::instance()->importActions();
 
     if (!importActions.isEmpty())
     {
@@ -602,9 +594,9 @@ void ContextMenuHelper::addImportMenu()
     }
     else
     {
-        QAction* const noPlugins = new QAction(i18n("No import plugins available"), this);
-        noPlugins->setEnabled(false);
-        menuImport->addAction(noPlugins);
+        QAction* const notools = new QAction(i18n("No import tool available"), this);
+        notools->setEnabled(false);
+        menuImport->addAction(notools);
     }
 
     d->parent->addMenu(menuImport);
@@ -613,11 +605,7 @@ void ContextMenuHelper::addImportMenu()
 void ContextMenuHelper::addExportMenu()
 {
     QMenu* const menuExport = new QMenu(i18n("Export"), d->parent);
-    QList<QAction*> exportActions;
-
-#ifdef HAVE_KIPI
-    exportActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ExportPlugin);
-#endif /* HAVE_KIPI */
+    QList<QAction*> exportActions = DigikamApp::instance()->exportActions();
 
 #if 0
     QAction* selectAllAction = 0;
@@ -630,9 +618,9 @@ void ContextMenuHelper::addExportMenu()
     }
     else
     {
-        QAction* const noPlugins = new QAction(i18n("No export plugins available"), this);
-        noPlugins->setEnabled(false);
-        menuExport->addAction(noPlugins);
+        QAction* const notools = new QAction(i18n("No export tool available"), this);
+        notools->setEnabled(false);
+        menuExport->addAction(notools);
     }
 
     d->parent->addMenu(menuExport);
@@ -641,10 +629,6 @@ void ContextMenuHelper::addExportMenu()
 void ContextMenuHelper::addAlbumActions()
 {
     QList<QAction*> albumActions;
-
-#ifdef HAVE_KIPI
-    albumActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::CollectionsPlugin);
-#endif /* HAVE_KIPI */
 
     if (!albumActions.isEmpty())
     {

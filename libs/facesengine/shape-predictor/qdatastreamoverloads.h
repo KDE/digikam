@@ -29,8 +29,12 @@
 
 #include <QDataStream>
 
-QDataStream& operator >> (QDataStream& dataStream, unsigned long& in);
+// Local includes
 
-QDataStream& operator << (QDataStream& dataStream, const unsigned long& in);
+#include "digikam_export.h"
+
+DIGIKAM_DATABASE_EXPORT QDataStream& operator >> (QDataStream& dataStream, unsigned long& in);
+
+DIGIKAM_DATABASE_EXPORT QDataStream& operator << (QDataStream& dataStream, const unsigned long& in);
 
 #endif // QDATASTREAM_OVERLOADS_H

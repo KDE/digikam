@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TIMEADJUSTSETTINGS_H
-#define TIMEADJUSTSETTINGS_H
+#ifndef TIME_ADJUST_SETTINGS_H
+#define TIME_ADJUST_SETTINGS_H
 
 // Qt includes
 
@@ -46,6 +46,8 @@ public:
 
     explicit TimeAdjustSettings(QWidget* const parent = 0);
     ~TimeAdjustSettings();
+
+public:
 
     void setSettings(const TimeAdjustContainer& settings);
     TimeAdjustContainer settings() const;
@@ -71,4 +73,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* TIMEADJUSTSETTINGS_H */
+#endif // TIME_ADJUST_SETTINGS_H

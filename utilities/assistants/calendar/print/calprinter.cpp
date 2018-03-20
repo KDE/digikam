@@ -38,8 +38,8 @@ class CalPrinter::Private
 {
 public:
 
-    Private() :
-        cancelled(false),
+    explicit Private()
+      : cancelled(false),
         printer(0),
         painter(0)
     {

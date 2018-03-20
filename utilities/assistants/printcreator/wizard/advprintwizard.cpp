@@ -73,7 +73,7 @@ class AdvPrintWizard::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : introPage(0),
         albumsPage(0),
         photoPage(0),

@@ -44,8 +44,6 @@
 #include "lensfuniface.h"
 #include "dexpanderbox.h"
 
-
-
 namespace Digikam
 {
 

@@ -144,6 +144,9 @@ private Q_SLOTS:
     void slotPrintCreator();
     void slotMediaServer();
 
+    void slotExportTool();
+    void slotImportTool();
+
 Q_SIGNALS:
 
     void signalLoadCurrentItem(const QList<QUrl>& urlList);

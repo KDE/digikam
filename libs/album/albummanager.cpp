@@ -100,6 +100,8 @@ extern "C"
 #include "dbjobinfo.h"
 #include "dbjobsmanager.h"
 #include "dbjobsthread.h"
+#include "similaritydb.h"
+#include "similaritydbaccess.h"
 
 namespace Digikam
 {
@@ -690,7 +692,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
     }
 
     DatabaseServerStarter::instance()->stopServerManagerProcess();
-    
+
     d->albumWatch->clear();
 
     cleanUp();
@@ -1020,6 +1022,22 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
     DbEngineGuiErrorHandler* const thumbnailsDBHandler = new DbEngineGuiErrorHandler(ThumbsDbAccess::parameters());
     ThumbsDbAccess::initDbEngineErrorHandler(thumbnailsDBHandler);
+
+    // Activate the similarity database.
+
+    SimilarityDbAccess::setParameters(params.similarityParameters());
+
+    DbEngineGuiErrorHandler* const similarityHandler = new DbEngineGuiErrorHandler(SimilarityDbAccess::parameters());
+    SimilarityDbAccess::initDbEngineErrorHandler(similarityHandler);
+
+    if (SimilarityDbAccess::checkReadyForUse(0))
+    {
+        qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "Similarity database ready for use";
+    }
+    else
+    {
+        qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "Failed to initialize similarity database";
+    }
 
     QApplication::restoreOverrideCursor();
 

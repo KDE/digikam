@@ -823,14 +823,14 @@ QString GPSImageItem::saveChanges()
                 tagSeq.append(tag);
             }
 
-            bool success = meta->setXmpTagStringSeq("Xmp.digiKam.TagsList", tagSeq, true);
+            bool success = meta->setXmpTagStringSeq("Xmp.digiKam.TagsList", tagSeq);
 
             if (!success)
             {
                 returnString = i18n("Failed to save tags to file.");
             }
 
-            success = meta->setXmpTagStringSeq("Xmp.dc.subject", tagSeq, true);
+            success = meta->setXmpTagStringSeq("Xmp.dc.subject", tagSeq);
 
             if (!success)
             {

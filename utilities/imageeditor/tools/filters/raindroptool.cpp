@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-09-30
- * Description : a plugin to add rain drop over an image
+ * Description : a tool to add rain drop over an image
  *
  * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>

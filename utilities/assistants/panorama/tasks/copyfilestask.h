@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-03-15
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_COPYFILESTASK_H
-#define PANO_COPYFILESTASK_H
+#ifndef PANO_COPY_FILES_TASK_H
+#define PANO_COPY_FILES_TASK_H
 
 // Qt includes
 
@@ -39,8 +39,13 @@ class CopyFilesTask : public PanoTask
 {
 public:
 
-    CopyFilesTask(const QString& workDirPath, const QUrl& panoUrl, const QUrl& finalPanoUrl,
-                    const QUrl& ptoUrl, const PanoramaItemUrlsMap& urls, bool sPTO, bool GPlusMetadata);
+    explicit CopyFilesTask(const QString& workDirPath,
+                           const QUrl& panoUrl,
+                           const QUrl& finalPanoUrl,
+                           const QUrl& ptoUrl,
+                           const PanoramaItemUrlsMap& urls,
+                           bool sPTO,
+                           bool GPlusMetadata);
     ~CopyFilesTask();
 
 protected:
@@ -49,16 +54,16 @@ protected:
 
 private:
 
-    const QUrl&                         panoUrl;
-    const QUrl                          finalPanoUrl;
-    const QUrl&                         ptoUrl;
-    const PanoramaItemUrlsMap* const            urlList;
-    const bool                          savePTO;
-    const bool                          addGPlusMetadata;
+    const QUrl&                      panoUrl;
+    const QUrl                       finalPanoUrl;
+    const QUrl&                      ptoUrl;
+    const PanoramaItemUrlsMap* const urlList;
+    const bool                       savePTO;
+    const bool                       addGPlusMetadata;
 
-    MetaEngine                          m_meta;
+    MetaEngine                       m_meta;
 };
 
 }  // namespace Digikam
 
-#endif /* PANO_COPYFILESTASK_H */
+#endif // PANO_COPY_FILES_TASK_H

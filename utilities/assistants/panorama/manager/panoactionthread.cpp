@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : a plugin to create panorama by fusion of several images.
- * Acknowledge : based on the expoblending plugin
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,8 +23,6 @@
  * ============================================================ */
 
 #include "panoactionthread.h"
-
-// #include <typeinfo>
 
 // Qt includes
 
@@ -50,10 +47,12 @@ using namespace ThreadWeaver;
 namespace Digikam
 {
 
-struct PanoActionThread::Private
+class PanoActionThread::Private
 {
-    Private(QObject* parent = 0)
-         : threadQueue(new Queue(parent))
+public:
+
+    explicit Private(QObject* const parent = 0)
+      : threadQueue(new Queue(parent))
     {
         ThreadWeaver::setDebugLevel(true, 10);
     }
@@ -65,8 +64,8 @@ struct PanoActionThread::Private
         threadQueue->finish();
     }
 
-    QSharedPointer<QTemporaryDir>   preprocessingTmpDir;
-    QSharedPointer<Queue>           threadQueue;
+    QSharedPointer<QTemporaryDir> preprocessingTmpDir;
+    QSharedPointer<Queue>         threadQueue;
 };
 
 PanoActionThread::PanoActionThread(QObject* const parent)
@@ -102,12 +101,17 @@ void PanoActionThread::finish()
     d->threadQueue->resume();
 }
 
-
-void PanoActionThread::preProcessFiles(const QList<QUrl>& urlList, PanoramaItemUrlsMap& preProcessedMap,
-                                   QUrl& baseUrl, QUrl& cpFindPtoUrl, QUrl& cpCleanPtoUrl,
-                                   bool celeste, PanoramaFileType fileType, bool gPano,
-                                   const QString& huginVersion,
-                                   const QString& cpCleanPath, const QString& cpFindPath)
+void PanoActionThread::preProcessFiles(const QList<QUrl>& urlList,
+                                       PanoramaItemUrlsMap& preProcessedMap,
+                                       QUrl& baseUrl,
+                                       QUrl& cpFindPtoUrl,
+                                       QUrl& cpCleanPtoUrl,
+                                       bool celeste,
+                                       PanoramaFileType fileType,
+                                       bool gPano,
+                                       const QString& huginVersion,
+                                       const QString& cpCleanPath,
+                                       const QString& cpFindPath)
 {
     QString prefix = QDir::tempPath() + QLatin1Char('/') +
                      QLatin1String("digiKam-panorama-tmp-XXXXXX");
@@ -124,10 +128,11 @@ void PanoActionThread::preProcessFiles(const QList<QUrl>& urlList, PanoramaItemU
     {
         preProcessedMap.insert(file, PanoramaPreprocessedUrls());
 
-        QObjectDecorator* t = new QObjectDecorator(new PreProcessTask(d->preprocessingTmpDir->path(),
-                                                                      id++,
-                                                                      preProcessedMap[file],
-                                                                      file));
+        QObjectDecorator* const t
+            = new QObjectDecorator(new PreProcessTask(d->preprocessingTmpDir->path(),
+                                                      id++,
+                                                      preProcessedMap[file],
+                                                      file));
 
         connect(t, SIGNAL(started(ThreadWeaver::JobPointer)),
                 this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -140,13 +145,14 @@ void PanoActionThread::preProcessFiles(const QList<QUrl>& urlList, PanoramaItemU
 
     (*jobSeq) << preprocessJobs;
 
-    QObjectDecorator* pto = new QObjectDecorator(new CreatePtoTask(d->preprocessingTmpDir->path(),
-                                                                   fileType,
-                                                                   baseUrl,
-                                                                   urlList,
-                                                                   preProcessedMap,
-                                                                   gPano,
-                                                                   huginVersion));
+    QObjectDecorator* const pto
+        = new QObjectDecorator(new CreatePtoTask(d->preprocessingTmpDir->path(),
+                                                 fileType,
+                                                 baseUrl,
+                                                 urlList,
+                                                 preProcessedMap,
+                                                 gPano,
+                                                 huginVersion));
 
     connect(pto, SIGNAL(started(ThreadWeaver::JobPointer)),
             this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -156,11 +162,12 @@ void PanoActionThread::preProcessFiles(const QList<QUrl>& urlList, PanoramaItemU
 
     (*jobSeq) << JobPointer(pto);
 
-    QObjectDecorator* cpFind = new QObjectDecorator(new CpFindTask(d->preprocessingTmpDir->path(),
-                                                                   baseUrl,
-                                                                   cpFindPtoUrl,
-                                                                   celeste,
-                                                                   cpFindPath));
+    QObjectDecorator* const cpFind
+        = new QObjectDecorator(new CpFindTask(d->preprocessingTmpDir->path(),
+                                              baseUrl,
+                                              cpFindPtoUrl,
+                                              celeste,
+                                              cpFindPath));
 
     connect(cpFind, SIGNAL(started(ThreadWeaver::JobPointer)),
             this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -170,10 +177,11 @@ void PanoActionThread::preProcessFiles(const QList<QUrl>& urlList, PanoramaItemU
 
     (*jobSeq) << JobPointer(cpFind);
 
-    QObjectDecorator* cpClean = new QObjectDecorator(new CpCleanTask(d->preprocessingTmpDir->path(),
-                                                                     cpFindPtoUrl,
-                                                                     cpCleanPtoUrl,
-                                                                     cpCleanPath));
+    QObjectDecorator* const cpClean
+        = new QObjectDecorator(new CpCleanTask(d->preprocessingTmpDir->path(),
+                                               cpFindPtoUrl,
+                                               cpCleanPtoUrl,
+                                               cpCleanPath));
 
     connect(cpClean, SIGNAL(started(ThreadWeaver::JobPointer)),
             this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -186,18 +194,23 @@ void PanoActionThread::preProcessFiles(const QList<QUrl>& urlList, PanoramaItemU
     d->threadQueue->enqueue(jobSeq);
 }
 
-void PanoActionThread::optimizeProject(QUrl& ptoUrl, QUrl& optimizePtoUrl, QUrl& viewCropPtoUrl,
-                                   bool levelHorizon, bool buildGPano,
-                                   const QString& autooptimiserPath, const QString& panoModifyPath)
+void PanoActionThread::optimizeProject(QUrl& ptoUrl,
+                                       QUrl& optimizePtoUrl,
+                                       QUrl& viewCropPtoUrl,
+                                       bool levelHorizon,
+                                       bool buildGPano,
+                                       const QString& autooptimiserPath,
+                                       const QString& panoModifyPath)
 {
     QSharedPointer<Sequence> jobs(new Sequence());
 
-    QObjectDecorator* ot = new QObjectDecorator(new OptimisationTask(d->preprocessingTmpDir->path(),
-                                                                     ptoUrl,
-                                                                     optimizePtoUrl,
-                                                                     levelHorizon,
-                                                                     buildGPano,
-                                                                     autooptimiserPath));
+    QObjectDecorator* const ot
+        = new QObjectDecorator(new OptimisationTask(d->preprocessingTmpDir->path(),
+                                                    ptoUrl,
+                                                    optimizePtoUrl,
+                                                    levelHorizon,
+                                                    buildGPano,
+                                                    autooptimiserPath));
 
     connect(ot, SIGNAL(started(ThreadWeaver::JobPointer)),
             this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -207,11 +220,12 @@ void PanoActionThread::optimizeProject(QUrl& ptoUrl, QUrl& optimizePtoUrl, QUrl&
 
     (*jobs) << ot;
 
-    QObjectDecorator* act = new QObjectDecorator(new AutoCropTask(d->preprocessingTmpDir->path(),
-                                                                  optimizePtoUrl,
-                                                                  viewCropPtoUrl,
-                                                                  buildGPano,
-                                                                  panoModifyPath));
+    QObjectDecorator* const act
+        = new QObjectDecorator(new AutoCropTask(d->preprocessingTmpDir->path(),
+                                                optimizePtoUrl,
+                                                viewCropPtoUrl,
+                                                buildGPano,
+                                                panoModifyPath));
 
     connect(act, SIGNAL(started(ThreadWeaver::JobPointer)),
             this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -224,17 +238,25 @@ void PanoActionThread::optimizeProject(QUrl& ptoUrl, QUrl& optimizePtoUrl, QUrl&
     d->threadQueue->enqueue(jobs);
 }
 
-void PanoActionThread::generatePanoramaPreview(QSharedPointer<const PTOType> ptoData, QUrl& previewPtoUrl, QUrl& previewMkUrl, QUrl& previewUrl,
-                                           const PanoramaItemUrlsMap& preProcessedUrlsMap,
-                                           const QString& makePath, const QString& pto2mkPath, const QString& huginExecutorPath, bool hugin2015,
-                                           const QString& enblendPath, const QString& nonaPath)
+void PanoActionThread::generatePanoramaPreview(QSharedPointer<const PTOType> ptoData,
+                                               QUrl& previewPtoUrl,
+                                               QUrl& previewMkUrl,
+                                               QUrl& previewUrl,
+                                               const PanoramaItemUrlsMap& preProcessedUrlsMap,
+                                               const QString& makePath,
+                                               const QString& pto2mkPath,
+                                               const QString& huginExecutorPath,
+                                               bool hugin2015,
+                                               const QString& enblendPath,
+                                               const QString& nonaPath)
 {
     QSharedPointer<Sequence> jobs(new Sequence());
 
-    QObjectDecorator* ptoTask = new QObjectDecorator(new CreatePreviewTask(d->preprocessingTmpDir->path(),
-                                                                           ptoData,
-                                                                           previewPtoUrl,
-                                                                           preProcessedUrlsMap));
+    QObjectDecorator* const ptoTask
+        = new QObjectDecorator(new CreatePreviewTask(d->preprocessingTmpDir->path(),
+                                                     ptoData,
+                                                     previewPtoUrl,
+                                                     preProcessedUrlsMap));
 
     connect(ptoTask, SIGNAL(started(ThreadWeaver::JobPointer)),
             this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -260,12 +282,13 @@ void PanoActionThread::generatePanoramaPreview(QSharedPointer<const PTOType> pto
     }
     else
     {
-        QObjectDecorator* huginExecutorTask = new QObjectDecorator(new HuginExecutorTask(d->preprocessingTmpDir->path(),
-                                                                                         previewPtoUrl,
-                                                                                         previewUrl,
-                                                                                         JPEG,
-                                                                                         huginExecutorPath,
-                                                                                         true));
+        QObjectDecorator* const huginExecutorTask
+            = new QObjectDecorator(new HuginExecutorTask(d->preprocessingTmpDir->path(),
+                                                         previewPtoUrl,
+                                                         previewUrl,
+                                                         JPEG,
+                                                         huginExecutorPath,
+                                                         true));
 
         connect(huginExecutorTask, SIGNAL(started(ThreadWeaver::JobPointer)),
                 this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -279,18 +302,27 @@ void PanoActionThread::generatePanoramaPreview(QSharedPointer<const PTOType> pto
     d->threadQueue->enqueue(jobs);
 }
 
-void PanoActionThread::compileProject(QSharedPointer<const PTOType> basePtoData, QUrl& panoPtoUrl, QUrl& mkUrl, QUrl& panoUrl,
-                                  const PanoramaItemUrlsMap& preProcessedUrlsMap,
-                                  PanoramaFileType fileType, const QRect& crop,
-                                  const QString& makePath, const QString& pto2mkPath, const QString& huginExecutorPath, bool hugin2015,
-                                  const QString& enblendPath, const QString& nonaPath)
+void PanoActionThread::compileProject(QSharedPointer<const PTOType> basePtoData,
+                                      QUrl& panoPtoUrl,
+                                      QUrl& mkUrl,
+                                      QUrl& panoUrl,
+                                      const PanoramaItemUrlsMap& preProcessedUrlsMap,
+                                      PanoramaFileType fileType,
+                                      const QRect& crop,
+                                      const QString& makePath,
+                                      const QString& pto2mkPath,
+                                      const QString& huginExecutorPath,
+                                      bool hugin2015,
+                                      const QString& enblendPath,
+                                      const QString& nonaPath)
 {
     QSharedPointer<Sequence> jobs(new Sequence());
 
-    QObjectDecorator* ptoTask = new QObjectDecorator(new CreateFinalPtoTask(d->preprocessingTmpDir->path(),
-                                                                            basePtoData,
-                                                                            panoPtoUrl,
-                                                                            crop));
+    QObjectDecorator* const ptoTask
+        = new QObjectDecorator(new CreateFinalPtoTask(d->preprocessingTmpDir->path(),
+                                                      basePtoData,
+                                                      panoPtoUrl,
+                                                      crop));
 
     connect(ptoTask, SIGNAL(started(ThreadWeaver::JobPointer)),
             this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -316,12 +348,13 @@ void PanoActionThread::compileProject(QSharedPointer<const PTOType> basePtoData,
     }
     else
     {
-        QObjectDecorator* huginExecutorTask = new QObjectDecorator(new HuginExecutorTask(d->preprocessingTmpDir->path(),
-                                                                                         panoPtoUrl,
-                                                                                         panoUrl,
-                                                                                         fileType,
-                                                                                         huginExecutorPath,
-                                                                                         false));
+        QObjectDecorator* const huginExecutorTask
+            = new QObjectDecorator(new HuginExecutorTask(d->preprocessingTmpDir->path(),
+                                                         panoPtoUrl,
+                                                         panoUrl,
+                                                         fileType,
+                                                         huginExecutorPath,
+                                                         false));
 
         connect(huginExecutorTask, SIGNAL(started(ThreadWeaver::JobPointer)),
                 this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -335,16 +368,21 @@ void PanoActionThread::compileProject(QSharedPointer<const PTOType> basePtoData,
     d->threadQueue->enqueue(jobs);
 }
 
-void PanoActionThread::copyFiles(const QUrl& ptoUrl, const QUrl& panoUrl, const QUrl& finalPanoUrl,
-                             const PanoramaItemUrlsMap& preProcessedUrlsMap, bool savePTO, bool addGPlusMetadata)
+void PanoActionThread::copyFiles(const QUrl& ptoUrl,
+                                 const QUrl& panoUrl,
+                                 const QUrl& finalPanoUrl,
+                                 const PanoramaItemUrlsMap& preProcessedUrlsMap,
+                                 bool savePTO,
+                                 bool addGPlusMetadata)
 {
-    QObjectDecorator* t = new QObjectDecorator(new CopyFilesTask(d->preprocessingTmpDir->path(),
-                                                                 panoUrl,
-                                                                 finalPanoUrl,
-                                                                 ptoUrl,
-                                                                 preProcessedUrlsMap,
-                                                                 savePTO,
-                                                                 addGPlusMetadata));
+    QObjectDecorator* const t
+        = new QObjectDecorator(new CopyFilesTask(d->preprocessingTmpDir->path(),
+                                                 panoUrl,
+                                                 finalPanoUrl,
+                                                 ptoUrl,
+                                                 preProcessedUrlsMap,
+                                                 savePTO,
+                                                 addGPlusMetadata));
 
     connect(t, SIGNAL(started(ThreadWeaver::JobPointer)),
             this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -358,7 +396,7 @@ void PanoActionThread::copyFiles(const QUrl& ptoUrl, const QUrl& panoUrl, const 
 void PanoActionThread::slotStarting(JobPointer j)
 {
     QSharedPointer<QObjectDecorator> dec = j.staticCast<QObjectDecorator>();
-    PanoTask* t = static_cast<PanoTask*>(dec->job());
+    PanoTask* const t                    = static_cast<PanoTask*>(dec->job());
 
     PanoActionData ad;
     ad.starting     = true;
@@ -369,13 +407,13 @@ void PanoActionThread::slotStarting(JobPointer j)
 
     if (t->action == PANO_NONAFILE)
     {
-        CompileMKStepTask* c = static_cast<CompileMKStepTask*>(t);
-        ad.id = c->id;
+        CompileMKStepTask* const c = static_cast<CompileMKStepTask*>(t);
+        ad.id                      = c->id;
     }
     else if (t->action == PANO_PREPROCESS_INPUT)
     {
-        PreProcessTask* p = static_cast<PreProcessTask*>(t);
-        ad.id = p->id;
+        PreProcessTask* const p = static_cast<PreProcessTask*>(t);
+        ad.id                   = p->id;
     }
 
     emit starting(ad);
@@ -384,7 +422,7 @@ void PanoActionThread::slotStarting(JobPointer j)
 void PanoActionThread::slotStepDone(JobPointer j)
 {
     QSharedPointer<QObjectDecorator> dec = j.staticCast<QObjectDecorator>();
-    PanoTask* t = static_cast<PanoTask*>(dec->job());
+    PanoTask* const t                    = static_cast<PanoTask*>(dec->job());
 
     PanoActionData ad;
     ad.starting     = false;
@@ -397,13 +435,13 @@ void PanoActionThread::slotStepDone(JobPointer j)
 
     if (t->action == PANO_NONAFILE)
     {
-        CompileMKStepTask* c = static_cast<CompileMKStepTask*>(t);
-        ad.id = c->id;
+        CompileMKStepTask* const c = static_cast<CompileMKStepTask*>(t);
+        ad.id                      = c->id;
     }
     else if (t->action == PANO_PREPROCESS_INPUT)
     {
-        PreProcessTask* p = static_cast<PreProcessTask*>(t);
-        ad.id = p->id;
+        PreProcessTask* const p = static_cast<PreProcessTask*>(t);
+        ad.id                   = p->id;
     }
 
     if (!ad.success)
@@ -417,7 +455,7 @@ void PanoActionThread::slotStepDone(JobPointer j)
 void PanoActionThread::slotDone(JobPointer j)
 {
     QSharedPointer<QObjectDecorator> dec = j.staticCast<QObjectDecorator>();
-    PanoTask* t = static_cast<PanoTask*>(dec->job());
+    PanoTask* const t                    = static_cast<PanoTask*>(dec->job());
 
     PanoActionData ad;
     ad.starting     = false;
@@ -426,37 +464,45 @@ void PanoActionThread::slotDone(JobPointer j)
     ad.success      = t->success();
     ad.message      = t->errString;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Done (PanoAction Thread) (action, success):" << ad.action << ad.success;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Done (PanoAction Thread) (action, success):"
+                                 << ad.action << ad.success;
 
     if (t->action == PANO_NONAFILE)
     {
-        CompileMKStepTask* c = static_cast<CompileMKStepTask*>(t);
-        ad.id = c->id;
+        CompileMKStepTask* const c = static_cast<CompileMKStepTask*>(t);
+        ad.id                      = c->id;
     }
     else if (t->action == PANO_PREPROCESS_INPUT)
     {
-        PreProcessTask* p = static_cast<PreProcessTask*>(t);
-        ad.id = p->id;
+        PreProcessTask* const p = static_cast<PreProcessTask*>(t);
+        ad.id                   = p->id;
     }
 
     emit jobCollectionFinished(ad);
 }
 
-void PanoActionThread::appendStitchingJobs(QSharedPointer<Sequence>& js, const QUrl& ptoUrl, QUrl& mkUrl,
-                                       QUrl& outputUrl, const PanoramaItemUrlsMap& preProcessedUrlsMap,
-                                       PanoramaFileType fileType,
-                                       const QString& makePath, const QString& pto2mkPath,
-                                       const QString& enblendPath, const QString& nonaPath, bool preview)
+void PanoActionThread::appendStitchingJobs(QSharedPointer<Sequence>& js,
+                                           const QUrl& ptoUrl,
+                                           QUrl& mkUrl,
+                                           QUrl& outputUrl,
+                                           const PanoramaItemUrlsMap& preProcessedUrlsMap,
+                                           PanoramaFileType fileType,
+                                           const QString& makePath,
+                                           const QString& pto2mkPath,
+                                           const QString& enblendPath,
+                                           const QString& nonaPath,
+                                           bool preview)
 {
     QSharedPointer<Sequence> jobs(new Sequence());
 
-    QObjectDecorator* createMKTask = new QObjectDecorator(new CreateMKTask(d->preprocessingTmpDir->path(),
-                                                                           ptoUrl,
-                                                                           mkUrl,
-                                                                           outputUrl,
-                                                                           fileType,
-                                                                           pto2mkPath,
-                                                                           preview));
+    QObjectDecorator* const createMKTask
+        = new QObjectDecorator(new CreateMKTask(d->preprocessingTmpDir->path(),
+                                                ptoUrl,
+                                                mkUrl,
+                                                outputUrl,
+                                                fileType,
+                                                pto2mkPath,
+                                                preview));
 
     connect(createMKTask, SIGNAL(started(ThreadWeaver::JobPointer)),
             this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -466,15 +512,16 @@ void PanoActionThread::appendStitchingJobs(QSharedPointer<Sequence>& js, const Q
 
     (*jobs) << createMKTask;
 
-    for (int i = 0; i < preProcessedUrlsMap.size(); i++)
+    for (int i = 0 ; i < preProcessedUrlsMap.size() ; i++)
     {
-        QObjectDecorator* t = new QObjectDecorator(new CompileMKStepTask(d->preprocessingTmpDir->path(),
-                                                                         i,
-                                                                         mkUrl,
-                                                                         nonaPath,
-                                                                         enblendPath,
-                                                                         makePath,
-                                                                         preview));
+        QObjectDecorator* const t
+            = new QObjectDecorator(new CompileMKStepTask(d->preprocessingTmpDir->path(),
+                                                         i,
+                                                         mkUrl,
+                                                         nonaPath,
+                                                         enblendPath,
+                                                         makePath,
+                                                         preview));
 
         connect(t, SIGNAL(started(ThreadWeaver::JobPointer)),
                 this, SLOT(slotStarting(ThreadWeaver::JobPointer)));
@@ -485,13 +532,14 @@ void PanoActionThread::appendStitchingJobs(QSharedPointer<Sequence>& js, const Q
         (*jobs) << t;
     }
 
-    QObjectDecorator* compileMKTask = new QObjectDecorator(new CompileMKTask(d->preprocessingTmpDir->path(),
-                                                                             mkUrl,
-                                                                             outputUrl,
-                                                                             nonaPath,
-                                                                             enblendPath,
-                                                                             makePath,
-                                                                             preview));
+    QObjectDecorator* const compileMKTask
+        = new QObjectDecorator(new CompileMKTask(d->preprocessingTmpDir->path(),
+                                                 mkUrl,
+                                                 outputUrl,
+                                                 nonaPath,
+                                                 enblendPath,
+                                                 makePath,
+                                                 preview));
 
     connect(compileMKTask, SIGNAL(started(ThreadWeaver::JobPointer)),
             this, SLOT(slotStarting(ThreadWeaver::JobPointer)));

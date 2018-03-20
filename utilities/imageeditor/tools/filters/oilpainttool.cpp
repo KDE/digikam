@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-25
- * Description : a plugin to simulate Oil Painting
+ * Description : a tool to simulate Oil Painting
  *
  * Copyright (C) 2004-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>

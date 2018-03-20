@@ -34,7 +34,7 @@ class KmailBinary : public DBinaryIface
 {
 public:
 
-    KmailBinary()
+    explicit KmailBinary()
         : DBinaryIface(
                        QLatin1String("kmail"),
                        QLatin1String("KMail"),

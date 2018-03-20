@@ -34,7 +34,7 @@ class EvolutionBinary : public DBinaryIface
 {
 public:
 
-    EvolutionBinary()
+    explicit EvolutionBinary()
         : DBinaryIface(
                        QLatin1String("evolution"),
                        QLatin1String("Evolution"),

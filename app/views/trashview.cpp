@@ -90,7 +90,7 @@ TrashView::TrashView(QWidget* const parent)
     d->mainLayout    = new QVBoxLayout(this);
     d->btnsLayout    = new QHBoxLayout();
 
-    // View and plugins
+    // View and tools
     d->tableView     = new QTableView(this);
     d->model         = new DTrashItemModel(this);
     d->thumbDelegate = new ThumbnailAligningDelegate(this);

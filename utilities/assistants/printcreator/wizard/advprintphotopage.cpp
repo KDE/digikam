@@ -78,7 +78,7 @@ public:
 
 public:
 
-    Private(QWizard* const dialog)
+    explicit Private(QWizard* const dialog)
       : pageSetupDlg(0),
         printer(0),
         wizard(0),

@@ -49,7 +49,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title><xsl:value-of select="title"/></title>
-		<link rel="stylesheet" type="text/css" href="../matrix/style.css"/>
+		<link rel="stylesheet" type="text/css" href="style.css"/>
 		<xsl:call-template name="linkTagsImagePage"/>
 	</head>
 	<body id="imagePage">

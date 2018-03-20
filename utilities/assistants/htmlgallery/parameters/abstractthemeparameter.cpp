@@ -42,7 +42,7 @@ class AbstractThemeParameter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

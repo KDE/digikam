@@ -6,8 +6,8 @@
  * Date        : 2017-05-06
  * Description : interface to database informations for shared tools.
  *
- * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
+ * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017      by Mario Frank <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,20 +47,23 @@ public:
                          const ApplicationSettings::OperationType type = ApplicationSettings::Unspecified);
     ~DBInfoIface();
 
-    QList<QUrl> currentSelectedItems()              const;
-    QList<QUrl> currentAlbumItems()                 const;
+    QList<QUrl> currentSelectedItems()               const;
+    QList<QUrl> currentAlbumItems()                  const;
 
-    QList<QUrl> albumItems(Album* const album)      const;
-    QList<QUrl> albumItems(int id)                  const;
-    QList<QUrl> albumsItems(const DAlbumIDs&)       const;
-    QList<QUrl> allAlbumItems()                     const;
+    QList<QUrl> albumItems(Album* const album)       const;
+    QList<QUrl> albumItems(int id)                   const;
+    QList<QUrl> albumsItems(const DAlbumIDs&)        const;
+    QList<QUrl> allAlbumItems()                      const;
 
-    DInfoMap    albumInfo(int)                      const;
-    DInfoMap    itemInfo(const QUrl&)               const;
+    DInfoMap    albumInfo(int)                       const;
+    DInfoMap    itemInfo(const QUrl&)                const;
 
-    QWidget*    albumChooser(QWidget* const parent) const;
-    DAlbumIDs   albumChooserItems()                 const;
-    bool        supportAlbums()                     const;
+    QWidget*    albumChooser(QWidget* const parent)  const;
+    DAlbumIDs   albumChooserItems()                  const;
+    bool        supportAlbums()                      const;
+
+    QWidget*    uploadWidget(QWidget* const parent)  const;
+    QUrl        uploadUrl()                          const;
 
 private:
 

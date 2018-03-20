@@ -73,4 +73,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* AUTO_CORRECTION_H */
+#endif // AUTO_CORRECTION_H

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-03-15
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
@@ -38,8 +38,11 @@ class PanoTask : public ThreadWeaver::Job
 {
 public:
 
-    PanoTask(PanoAction action, const QString& workDirPath);
+    explicit PanoTask(PanoAction action,
+                      const QString& workDirPath);
     ~PanoTask();
+
+public:
 
     bool success() const;
     void requestAbort();

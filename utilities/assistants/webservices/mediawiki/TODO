@@ -1,0 +1,17 @@
+This tool permit to upload items to Mediawiki web services.
+https://www.mediawiki.org/wiki/MediaWiki
+
+TODO:
+
+* Allow image resizing by a percentage of the initial size
+* Add explicit error messages (might require hacking libmediawiki)
+* Check for local duplicate file names (easy)
+* Check for distant duplicate file names (API)
+* Check for distant duplicate files (API)
+* Write a documentation
+* Pre-fill the description in several languages
+* Color the categories depending on their existence on the distant wiki (AJAX, API)
+* Apply a tag on uploaded images (eg. "Now on Commons")
+* Allow editing and deleting wikis
+* Allow editing and deleting licenses
+* Add a notification zone to tell about problems or if everything is ready

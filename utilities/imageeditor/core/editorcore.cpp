@@ -523,7 +523,7 @@ void EditorCore::setModified()
 void EditorCore::readMetadataFromFile(const QString& file)
 {
     DMetadata meta(file);
-    // This can overwrite metadata changes introduced by imageplugins.
+    // This can overwrite metadata changes introduced by tools.
     // Currently, this is ProfileConversion and lensfun.
     // ProfileConversion's changes is redone when saving by DImgLoader.
     // Lensfun is not critical.

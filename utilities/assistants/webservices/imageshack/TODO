@@ -1,0 +1,11 @@
+This tool permit to upload items to ImagesShack web service.
+https://imageshack.us/
+
+TODO:
+
+* Upload to galleries (the infrastructure is done, but there are some issues
+  with the api, so it is disabled for the moment)
+* Support video uploads (currently video uploads are supported but are disabled
+  because the videos are loaded in memory. This works for small videos, but for
+  big videos this is a big issue).
+* Import from galleries

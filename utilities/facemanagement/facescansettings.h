@@ -7,6 +7,7 @@
  * Description : Face scan settings
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,12 +22,13 @@
  *
  * ============================================================ */
 
-#ifndef FACESCANSETTINGS_H
-#define FACESCANSETTINGS_H
+#ifndef FACE_SCAN_SETTINGS_H
+#define FACE_SCAN_SETTINGS_H
 
 // Local includes
 
 #include "album.h"
+#include "recognitiondatabase.h"
 
 namespace Digikam
 {
@@ -63,22 +65,25 @@ public:
         accuracy               = 80;
         task                   = Detect;
         alreadyScannedHandling = Skip;
+        recognizeAlgorithm     = RecognitionDatabase::RecognizeAlgorithm::DNN;
     }
 
     // processing power
-    bool                   useFullCpu;
+    bool                                    useFullCpu;
 
     // detection
-    double                 accuracy;
+    double                                  accuracy;
 
     // albums to scan
-    AlbumList              albums;
+    AlbumList                               albums;
 
-    ScanTask               task;
+    ScanTask                                task;
 
-    AlreadyScannedHandling alreadyScannedHandling;
+    AlreadyScannedHandling                  alreadyScannedHandling;
+
+    RecognitionDatabase::RecognizeAlgorithm recognizeAlgorithm;
 };
 
 } // namespace Digikam
 
-#endif // FACESCANSETTINGS_H
+#endif // FACE_SCAN_SETTINGS_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef REMOVEMETADATA_H
-#define REMOVEMETADATA_H
+#ifndef REMOVE_METADATA_H
+#define REMOVE_METADATA_H
 
 // Local includes
 
@@ -39,7 +39,7 @@ class RemoveMetadata : public BatchTool
 
 public:
 
-    explicit RemoveMetadata(QObject* parent = 0);
+    explicit RemoveMetadata(QObject* const parent = 0);
     virtual ~RemoveMetadata();
 
     BatchToolSettings defaultSettings();
@@ -76,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif // REMOVEMETADATA_H
+#endif // REMOVE_METADATA_H

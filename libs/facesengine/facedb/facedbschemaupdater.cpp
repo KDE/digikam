@@ -40,7 +40,7 @@ namespace Digikam
 
 int FaceDbSchemaUpdater::schemaVersion()
 {
-    return 2;
+    return 3;
 }
 
 // -------------------------------------------------------------------------------------
@@ -211,6 +211,10 @@ bool FaceDbSchemaUpdater::makeUpdates()
         {
             updateV1ToV2();
         }
+        else if (d->currentVersion == 2)
+        {
+            updateV2ToV3();
+        }
     }
 
     return true;
@@ -222,7 +226,7 @@ bool FaceDbSchemaUpdater::createDatabase()
     if ( createTables() && createIndices() && createTriggers())
     {
         d->currentVersion         = schemaVersion();
-        d->currentRequiredVersion = 1;
+        d->currentRequiredVersion = 3;
         return true;
     }
     else
@@ -234,7 +238,8 @@ bool FaceDbSchemaUpdater::createDatabase()
 bool FaceDbSchemaUpdater::createTables()
 {
     return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDB"))) &&
-           d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBOpenCVLBPH")));
+           d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBOpenCVLBPH"))) &&
+           d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBFaceMatrices")));
 }
 
 bool FaceDbSchemaUpdater::createIndices()
@@ -259,6 +264,14 @@ bool FaceDbSchemaUpdater::updateV1ToV2()
 
     d->currentVersion         = 2;
     d->currentRequiredVersion = 1;
+    return true;
+}
+
+bool FaceDbSchemaUpdater::updateV2ToV3()
+{
+    d->currentVersion         = 3;
+    d->currentRequiredVersion = 3;
+    d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBFaceMatrices")));
     return true;
 }
 

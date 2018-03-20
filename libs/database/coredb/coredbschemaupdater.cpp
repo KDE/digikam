@@ -61,7 +61,7 @@ int CoreDbSchemaUpdater::schemaVersion()
 
 int CoreDbSchemaUpdater::filterSettingsVersion()
 {
-    return 6;
+    return 7;
 }
 
 int CoreDbSchemaUpdater::uniqueHashVersion()
@@ -82,12 +82,12 @@ class CoreDbSchemaUpdater::Private
 public:
 
     Private()
+      : setError(false),
+        backend(0),
+        albumDB(0),
+        access(0),
+        observer(0)
     {
-        setError = false;
-        backend  = 0;
-        albumDB  = 0;
-        access   = 0;
-        observer = 0;
     }
 
     bool                    setError;
@@ -162,12 +162,14 @@ void CoreDbSchemaUpdater::setVersionSettings()
 {
     if (d->currentVersion.isValid())
     {
-        d->albumDB->setSetting(QLatin1String("DBVersion"), QString::number(d->currentVersion.toInt()));
+        d->albumDB->setSetting(QLatin1String("DBVersion"),
+                               QString::number(d->currentVersion.toInt()));
     }
 
     if (d->currentRequiredVersion.isValid())
     {
-        d->albumDB->setSetting(QLatin1String("DBVersionRequired"), QString::number(d->currentRequiredVersion.toInt()));
+        d->albumDB->setSetting(QLatin1String("DBVersionRequired"),
+                               QString::number(d->currentRequiredVersion.toInt()));
     }
 }
 
@@ -209,9 +211,7 @@ bool CoreDbSchemaUpdater::startUpdates()
             QString errorMsg = i18n("You have insufficient privileges on the database.\n"
                                     "Following privileges are not assigned to you:\n %1\n"
                                     "Check your privileges on the database and restart digiKam.",
-                                    insufficientRights.join(QLatin1String(",\n"))
-                                   );
-
+                                    insufficientRights.join(QLatin1String(",\n")));
             d->lastErrorMessage = errorMsg;
 
             if (d->observer)
@@ -242,8 +242,7 @@ bool CoreDbSchemaUpdater::startUpdates()
             QString errorMsg = i18n("The database is not valid: "
                                     "the \"DBVersion\" setting does not exist. "
                                     "The current database schema version cannot be verified. "
-                                    "Try to start with an empty database. "
-                                   );
+                                    "Try to start with an empty database. ");
             d->lastErrorMessage=errorMsg;
 
             if (d->observer)
@@ -464,6 +463,8 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
     //NOTE for updating:
     //When changing anything here, just increment filterSettingsVersion() so that the changes take effect
 
+    // https://en.wikipedia.org/wiki/Image_file_formats
+
     defaultImageFilter << QLatin1String("jpg") << QLatin1String("jpeg") << QLatin1String("jpe")                                                 // JPEG
                        << QLatin1String("jp2") << QLatin1String("j2k")  << QLatin1String("jpx") << QLatin1String("jpc") << QLatin1String("pgx") // JPEG-2000
                        << QLatin1String("tif") << QLatin1String("tiff")                                                                         // TIFF
@@ -474,6 +475,8 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
 
     defaultImageFilter << DRawDecoder::rawFilesList();
 
+    // https://en.wikipedia.org/wiki/Video_file_format
+
     defaultVideoFilter << QLatin1String("mpeg") << QLatin1String("mpg")  << QLatin1String("mpo") << QLatin1String("mpe") << QLatin1String("mts") << QLatin1String("vob")    // MPEG
                        << QLatin1String("avi")  << QLatin1String("divx")                                                                                                    // RIFF
                        << QLatin1String("wmv")  << QLatin1String("wmf")  << QLatin1String("asf")                                                                            // ASF
@@ -481,13 +484,20 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
                        << QLatin1String("mkv")  << QLatin1String("webm")                                                                                                    // Matroska
                        << QLatin1String("mng");                                                                                                                             // Animated PNG image
 
-    defaultAudioFilter << QLatin1String("ogg") << QLatin1String("mp3") << QLatin1String("wma") << QLatin1String("wav");                                                                                                                             // Animated PNG image
+    // https://en.wikipedia.org/wiki/Audio_file_format
+
+    defaultAudioFilter << QLatin1String("ogg") << QLatin1String("oga") << QLatin1String("flac") << QLatin1String("wv")  << QLatin1String("ape") // Linux audio
+                       << QLatin1String("mpc") << QLatin1String("au")                                                                           // Linux audio
+                       << QLatin1String("m4b") << QLatin1String("aax") << QLatin1String("aa")                                                   // Book audio
+                       << QLatin1String("mp3") << QLatin1String("aac")                                                                          // MPEG based audio
+                       << QLatin1String("m4a") << QLatin1String("m4p") << QLatin1String("caf") << QLatin1String("aiff")                         // Apple audio
+                       << QLatin1String("wma") << QLatin1String("wav");                                                                         // Windows audio
 }
 
 void CoreDbSchemaUpdater::defaultIgnoreDirectoryFilterSettings(QStringList& defaultIgnoreDirectoryFilter)
 {
-    //NOTE for updating:
-    //When changing anything here, just increment filterSettingsVersion() so that the changes take effect
+    // NOTE: when update this section,
+    // just increment filterSettingsVersion() so that the changes take effect
 
     defaultIgnoreDirectoryFilter << QLatin1String("@eaDir");
 }

@@ -1,0 +1,20 @@
+This tool permit to upload items to SmugMug web service.
+https://www.smugmug.com/
+
+TODO:
+
+* Minor improvements:
+ - Fix button enable/disable when image list is empty (ImagesList)
+ - Fix button enable/disable on new album dialog
+ - Check FileSizeLimit before upload
+ - Keywords, GPS coordinates support
+ - Implement validators for email and password
+
+* Short term:
+ - video file upload - do not perform resize
+
+* Long term:
+ - Synchronize with local album (upload/download)
+ - Virtual albums support
+ - Support for adding categories/subcategories (is this needed?)
+ - SmugVault support?

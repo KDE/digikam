@@ -63,7 +63,6 @@ or a devel wish.
 The current bugs and devel wishes reported to the bugzilla servers can be seen at these urls :
 
 * [digiKam](http://bugs.kde.org/buglist.cgi?product=digikam&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED)
-* [Kipi-plugins](http://bugs.kde.org/buglist.cgi?product=kipiplugins&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED)
 
 Extra Bugzilla servers for shared libs used by digiKam :
 

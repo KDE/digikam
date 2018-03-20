@@ -42,8 +42,6 @@
 #include "curvesfilter.h"
 #include "curvessettings.h"
 
-
-
 namespace Digikam
 {
 

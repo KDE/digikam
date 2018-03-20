@@ -4,27 +4,24 @@
  *
  * Date        : 2012-01-03
  * Description : http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms
- *          Ahonen T, Hadid A. and Pietikäinen M. "Face description with local binary
- *          patterns: Application to face recognition." IEEE Transactions on Pattern
- *          Analysis and Machine Intelligence, 28(12):2037-2041.
+ *               Ahonen T, Hadid A. and Pietikäinen M. "Face description with local binary
+ *               patterns: Application to face recognition." IEEE Transactions on Pattern
+ *               Analysis and Machine Intelligence, 28(12):2037-2041.
  *
  * Copyright (C) 2012-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2012 Philipp Wagner <bytefish at gmx dot de>
+ * Copyright (C) 2011-2012 by Philipp Wagner <bytefish at gmx dot de>
+ * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
- * Released to public domain under terms of the BSD Simplified license.
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *   * Neither the name of the organization nor the names of its contributors
- *     may be used to endorse or promote products derived from this software
- *     without specific prior written permission.
- *
- *   See http://www.opensource.org/licenses/bsd-license
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * ============================================================ */
 
@@ -370,11 +367,7 @@ void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_label
     }
 }
 
-#if OPENCV_TEST_VERSION(3,1,0)
-void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist) const
-#else
 void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictCollector> collector) const
-#endif
 {
     if (m_histograms.empty())
     {
@@ -393,36 +386,23 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
                                       m_grid_y,                                                          /* grid size y                 */
                                       true                                                               /* normed histograms           */
                                      );
-#if OPENCV_TEST_VERSION(3,1,0)
-    minDist      = DBL_MAX;
-    minClass     = -1;
-#else
     collector->init((int)m_histograms.size());
-#endif
 
     // This is the standard method
 
     if (m_statisticsMode == NearestNeighbor)
     {
         // find 1-nearest neighbor
-        for (size_t sampleIdx = 0; sampleIdx < m_histograms.size(); sampleIdx++)
+        for (size_t sampleIdx = 0 ; sampleIdx < m_histograms.size() ; sampleIdx++)
         {
             double dist = compareHist(m_histograms[sampleIdx], query, CV_COMP_CHISQR);
 
-#if OPENCV_TEST_VERSION(3,1,0)
-            if ((dist < minDist) && (dist < m_threshold))
-            {
-                minDist  = dist;
-                minClass = m_labels.at<int>((int) sampleIdx);
-            }
-#else
             int label = m_labels.at<int>((int) sampleIdx);
 
             if (!collector->collect(label, dist))
             {
                 return;
             }
-#endif
         }
     }
 
@@ -457,18 +437,10 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
             double mean = sum / it->second.size();
             s          += QString::fromLatin1("%1: %2 - ").arg(it->first).arg(mean);
 
-#if OPENCV_TEST_VERSION(3,1,0)
-            if ((mean < minDist) && (mean < m_threshold))
-            {
-                minDist = mean;
-                minClass = it->first;
-            }
-#else
             if (!collector->collect(it->first, mean))
             {
                 return;
             }
-#endif
         }
 
         qCDebug(DIGIKAM_FACESENGINE_LOG) << s;
@@ -499,9 +471,6 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
             scoreMap[it->second]++;
         }
 
-#if OPENCV_TEST_VERSION(3,1,0)
-        minDist   = 0;
-#endif
         QString s = QString::fromLatin1("Nearest Neighbor score: ");
 
         for (std::map<int,int>::iterator it = scoreMap.begin(); it != scoreMap.end(); ++it)
@@ -509,35 +478,16 @@ void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictC
             double score = double(it->second) / countMap.at(it->first);
             s           += QString::fromLatin1("%1/%2 %3  ").arg(it->second).arg(countMap.at(it->first)).arg(score);
 
-#if OPENCV_TEST_VERSION(3,1,0)
-            if (score > minDist)
-            {
-                minDist  = score;
-                minClass = it->first;
-            }
-#else
             // large is better thus it is -score.
             if (!collector->collect(it->first, -score))
             {
                 return;
             }
-#endif
         }
 
         qCDebug(DIGIKAM_FACESENGINE_LOG) << s;
     }
 }
-
-#if OPENCV_TEST_VERSION(3,1,0)
-int LBPHFaceRecognizer::predict(InputArray _src) const
-{
-    int    label;
-    double dummy;
-    predict(_src, label, dummy);
-
-    return label;
-}
-#endif
 
 // Static method ----------------------------------------------------
 
@@ -562,17 +512,5 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
 
     return ptr;
 }
-
-#if OPENCV_VERSION <= OPENCV_MAKE_VERSION(2,4,99)
-    CV_INIT_ALGORITHM(LBPHFaceRecognizer, "FaceRecognizer.LBPH-FacesEngine",
-                      obj.info()->addParam(obj, "radius",     obj.m_radius);
-                      obj.info()->addParam(obj, "neighbors",  obj.m_neighbors);
-                      obj.info()->addParam(obj, "grid_x",     obj.m_grid_x);
-                      obj.info()->addParam(obj, "grid_y",     obj.m_grid_y);
-                      obj.info()->addParam(obj, "threshold",  obj.m_threshold);
-                      obj.info()->addParam(obj, "histograms", obj.m_histograms);         // modification: Make Read/Write
-                      obj.info()->addParam(obj, "labels",     obj.m_labels);             // modification: Make Read/Write
-                      obj.info()->addParam(obj, "statistic",  obj.m_statisticsMode))     // modification: Add parameter
-#endif
 
 } // namespace Digikam

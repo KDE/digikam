@@ -71,7 +71,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 061 ==> 219745 : Zoom is ignored in the tools on 1. try.
 062 ==> 222748 : Editor preview mode buttons lack tooltip.
 063 ==> 222744 : Mouse-over preview mode with zoom removes ability to see whole image.
-064 ==> 220365 : digiKam crashes at startup (kipi-plugins work now).
+064 ==> 220365 : digiKam crashes at startup.
 065 ==> 222975 : Wrong editorwindow zoom behaviour.
 066 ==> 163284 : Choose smart default zoom factor for each filter preview.
 067 ==> 148072 : zoom tool for sharpen tool is ankward.

@@ -50,7 +50,7 @@ class AdvPrintCropFrame::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : photo(0),
         mouseDown(false),
         image(0),

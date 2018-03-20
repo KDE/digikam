@@ -212,7 +212,7 @@ void TagsReadWriteTest::testTagSeparatorRead()
     toWrite   = tagSet1;
     toWrite   = toWrite.replaceInStrings(QLatin1String("/"),QLatin1String("|"));
 
-    dmeta.setXmpTagStringBag("Xmp.lr.hierarchicalSubject",toWrite, false);
+    dmeta.setXmpTagStringBag("Xmp.lr.hierarchicalSubject", toWrite);
 
     reference = dmeta.getXmpTagStringBag("Xmp.lr.hierarchicalSubject", false);
 
@@ -250,7 +250,7 @@ void TagsReadWriteTest::testTagReadAlternativeNameSpace()
     toWrite   = tagSet1;
     toWrite   = toWrite.replaceInStrings(QLatin1String("/"),QLatin1String("|"));
 
-    dmeta.setXmpTagStringSeq("Xmp.lr.HierarchicalSubject",toWrite, false);
+    dmeta.setXmpTagStringSeq("Xmp.lr.HierarchicalSubject", toWrite);
 
     // We write some data to alternative namespace
     reference = dmeta.getXmpTagStringSeq("Xmp.lr.HierarchicalSubject", false);

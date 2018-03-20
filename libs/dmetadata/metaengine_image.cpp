@@ -74,10 +74,10 @@ bool MetaEngine::setImageProgramId(const QString& program, const QString& versio
             Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
             if (it == xmpData.end())
-                setXmpTagString("Xmp.xmp.CreatorTool", software, false);
+                setXmpTagString("Xmp.xmp.CreatorTool", software);
         }
 
-        setXmpTagString("Xmp.tiff.Software", software, false);
+        setXmpTagString("Xmp.tiff.Software", software);
 
 #endif // _XMP_SUPPORT_
 
@@ -200,11 +200,8 @@ QSize MetaEngine::getImageDimensions() const
     return QSize();
 }
 
-bool MetaEngine::setImageDimensions(const QSize& size, bool setProgramName) const
+bool MetaEngine::setImageDimensions(const QSize& size) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         // Set Exif values.
@@ -219,10 +216,10 @@ bool MetaEngine::setImageDimensions(const QSize& size, bool setProgramName) cons
 
 #ifdef _XMP_SUPPORT_
 
-        setXmpTagString("Xmp.tiff.ImageWidth",      QString::number(size.width()),  false);
-        setXmpTagString("Xmp.tiff.ImageLength",     QString::number(size.height()), false);
-        setXmpTagString("Xmp.exif.PixelXDimension", QString::number(size.width()),  false);
-        setXmpTagString("Xmp.exif.PixelYDimension", QString::number(size.height()), false);
+        setXmpTagString("Xmp.tiff.ImageWidth",      QString::number(size.width()));
+        setXmpTagString("Xmp.tiff.ImageLength",     QString::number(size.height()));
+        setXmpTagString("Xmp.exif.PixelXDimension", QString::number(size.width()));
+        setXmpTagString("Xmp.exif.PixelYDimension", QString::number(size.height()));
 
 #endif // _XMP_SUPPORT_
 
@@ -341,11 +338,8 @@ MetaEngine::ImageOrientation MetaEngine::getImageOrientation() const
     return ORIENTATION_UNSPECIFIED;
 }
 
-bool MetaEngine::setImageOrientation(ImageOrientation orientation, bool setProgramName) const
+bool MetaEngine::setImageOrientation(ImageOrientation orientation) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
@@ -363,7 +357,7 @@ bool MetaEngine::setImageOrientation(ImageOrientation orientation, bool setProgr
 
 #ifdef _XMP_SUPPORT_
 
-        setXmpTagString("Xmp.tiff.Orientation", QString::number((int)orientation), false);
+        setXmpTagString("Xmp.tiff.Orientation", QString::number((int)orientation));
 
 #endif // _XMP_SUPPORT_
 
@@ -498,11 +492,8 @@ MetaEngine::ImageColorWorkSpace MetaEngine::getImageColorWorkSpace() const
     return WORKSPACE_UNSPECIFIED;
 }
 
-bool MetaEngine::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgramName) const
+bool MetaEngine::setImageColorWorkSpace(ImageColorWorkSpace workspace) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         // Set Exif value.
@@ -513,7 +504,7 @@ bool MetaEngine::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setP
 
 #ifdef _XMP_SUPPORT_
 
-        setXmpTagString("Xmp.exif.ColorSpace", QString::number((int)workspace), false);
+        setXmpTagString("Xmp.exif.ColorSpace", QString::number((int)workspace));
 
 #endif // _XMP_SUPPORT_
 
@@ -837,12 +828,9 @@ QDateTime MetaEngine::getImageDateTime() const
     return QDateTime();
 }
 
-bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized, bool setProgramName) const
+bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized) const
 {
-    if(!dateTime.isValid())
-        return false;
-
-    if (!setProgramId(setProgramName))
+    if (!dateTime.isValid())
         return false;
 
     try
@@ -854,18 +842,18 @@ bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDig
         // For digital cameras, these dates should be both set, and identical.
         // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
 
-        const std::string &exifdatetime(dateTime.toString(QString::fromLatin1("yyyy:MM:dd hh:mm:ss")).toLatin1().constData());
+        const std::string& exifdatetime(dateTime.toString(QString::fromLatin1("yyyy:MM:dd hh:mm:ss")).toLatin1().constData());
         d->exifMetadata()["Exif.Image.DateTime"]         = exifdatetime;
         d->exifMetadata()["Exif.Photo.DateTimeOriginal"] = exifdatetime;
 
-        if(setDateTimeDigitized)
+        if (setDateTimeDigitized)
             d->exifMetadata()["Exif.Photo.DateTimeDigitized"] = exifdatetime;
 
 #ifdef _XMP_SUPPORT_
 
         // In second we write date & time into Xmp.
 
-        const std::string &xmpdatetime(dateTime.toString(Qt::ISODate).toLatin1().constData());
+        const std::string& xmpdatetime(dateTime.toString(Qt::ISODate).toLatin1().constData());
 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
         xmpTxtVal->read(xmpdatetime);
@@ -879,7 +867,7 @@ bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDig
         d->xmpMetadata().add(Exiv2::XmpKey("Xmp.video.DateUTC"),          xmpTxtVal.get());
         d->xmpMetadata().add(Exiv2::XmpKey("Xmp.video.ModificationDate"), xmpTxtVal.get());
 
-        if(setDateTimeDigitized)
+        if (setDateTimeDigitized)
         {
             d->xmpMetadata().add(Exiv2::XmpKey("Xmp.exif.DateTimeDigitized"),  xmpTxtVal.get());
             d->xmpMetadata().add(Exiv2::XmpKey("Xmp.video.DateTimeDigitized"), xmpTxtVal.get());
@@ -893,12 +881,12 @@ bool MetaEngine::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDig
 
         // In third we write date & time into Iptc.
 
-        const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).toLatin1().constData());
-        const std::string &iptctime(dateTime.time().toString(Qt::ISODate).toLatin1().constData());
+        const std::string& iptcdate(dateTime.date().toString(Qt::ISODate).toLatin1().constData());
+        const std::string& iptctime(dateTime.time().toString(Qt::ISODate).toLatin1().constData());
         d->iptcMetadata()["Iptc.Application2.DateCreated"] = iptcdate;
         d->iptcMetadata()["Iptc.Application2.TimeCreated"] = iptctime;
 
-        if(setDateTimeDigitized)
+        if (setDateTimeDigitized)
         {
             d->iptcMetadata()["Iptc.Application2.DigitizationDate"] = iptcdate;
             d->iptcMetadata()["Iptc.Application2.DigitizationTime"] = iptctime;
@@ -1056,11 +1044,8 @@ bool MetaEngine::getImagePreview(QImage& preview) const
     return false;
 }
 
-bool MetaEngine::setImagePreview(const QImage& preview, bool setProgramName) const
+bool MetaEngine::setImagePreview(const QImage& preview) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     if (preview.isNull())
     {
         removeIptcTag("Iptc.Application2.Preview");

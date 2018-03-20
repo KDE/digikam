@@ -5,7 +5,7 @@
  *
  * Description : Hugin parser API
  *
- * Copyright (C) 2007 Daniel M German <dmgerman at uvic doooot ca>
+ * Copyright (C) 2007 by Daniel M German <dmgerman at uvic doooot ca>
  * Copyright (C) 2012 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,8 +23,8 @@
  *
 //  * ============================================================ */
 
-#ifndef TPARSER_H
-#define TPARSER_H
+#ifndef T_PARSER_H
+#define T_PARSER_H
 
 /* Maximum size for an input token */
 #define PARSER_MAX_LINE 1000
@@ -225,5 +225,4 @@ void    panoScriptParserSetDefaults(pt_script* ptr);
 int     panoScriptParse(const char* const filename, pt_script* scriptOut);
 void    panoScriptFree(pt_script* ptr);
 
-#endif // TPARSER_H
-
+#endif // T_PARSER_H

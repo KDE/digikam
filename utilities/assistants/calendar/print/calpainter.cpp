@@ -53,8 +53,8 @@ class CalPainter::Private
 {
 public:
 
-    Private() :
-        cancelled(false),
+    explicit Private()
+      : cancelled(false),
         orientation(MetaEngine::ORIENTATION_UNSPECIFIED)
     {
     }

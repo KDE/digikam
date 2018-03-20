@@ -14,7 +14,7 @@
    inkscape:label="Pozadí"
    sodipodi:version="0.32"
    inkscape:version="0.44"
-   sodipodi:docbase="/home/pvanek/.kde/share/apps/kipiplugin_htmlexport/themes/s0"
+   sodipodi:docbase="/home/pvanek/.kde/share/apps/htmlexport/themes/s0"
    sodipodi:docname="arrows_source.svg">
   <defs
      id="defs3" />
@@ -52,7 +52,7 @@
     <g
        id="g1897"
        transform="matrix(0.304031,0,0,0.304031,67.82486,264.6121)"
-       inkscape:export-filename="/home/pvanek/.kde/share/apps/kipiplugin_htmlexport/themes/s0/previous.png"
+       inkscape:export-filename="/home/pvanek/.kde/share/apps/htmlexport/themes/s0/previous.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <path
@@ -67,7 +67,7 @@
     <g
        id="g1905"
        transform="matrix(0.199566,0,0,0.199566,105.9595,235.9365)"
-       inkscape:export-filename="/home/pvanek/.kde/share/apps/kipiplugin_htmlexport/themes/s0/up.png"
+       inkscape:export-filename="/home/pvanek/.kde/share/apps/htmlexport/themes/s0/up.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <path
@@ -82,7 +82,7 @@
     <g
        id="g1923"
        transform="matrix(0.92827,0,0,0.92827,15.49829,31.2752)"
-       inkscape:export-filename="/home/pvanek/.kde/share/apps/kipiplugin_htmlexport/themes/s0/next.png"
+       inkscape:export-filename="/home/pvanek/.kde/share/apps/htmlexport/themes/s0/next.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <path
@@ -98,7 +98,7 @@
        id="g1927"
        transform="matrix(0.304031,0,0,0.304031,61.578,328.1894)"
        style="fill:#9ea59e;fill-opacity:1"
-       inkscape:export-filename="/home/pvanek/.kde/share/apps/kipiplugin_htmlexport/themes/s0/previous_disabled.png"
+       inkscape:export-filename="/home/pvanek/.kde/share/apps/htmlexport/themes/s0/previous_disabled.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <path
@@ -114,7 +114,7 @@
        id="g1939"
        transform="matrix(0.92827,0,0,0.92827,9.2514,94.8525)"
        style="fill:#9ea59e;fill-opacity:1"
-       inkscape:export-filename="/home/pvanek/.kde/share/apps/kipiplugin_htmlexport/themes/s0/next_disabled.png"
+       inkscape:export-filename="/home/pvanek/.kde/share/apps/htmlexport/themes/s0/next_disabled.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <path

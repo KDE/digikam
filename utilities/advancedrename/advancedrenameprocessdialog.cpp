@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QDialogButtonBox>
+#include <QApplication>
 #include <QCloseEvent>
 #include <QPixmap>
 #include <QTimer>
@@ -74,10 +75,10 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
 
-    connect(DIO::instance(), SIGNAL(imageRenameSucceeded(QUrl)),
-            this, SLOT(slotRenameSuccess(QUrl)));
+    connect(DIO::instance(), SIGNAL(signalRenameSucceeded(QUrl)),
+            this, SLOT(slotRenameSuccessded(QUrl)));
 
-    connect(DIO::instance(), SIGNAL(imageRenameFailed(QUrl)),
+    connect(DIO::instance(), SIGNAL(signalRenameFailed(QUrl)),
             this, SLOT(slotRenameFailed(QUrl)));
 
     setValue(0);
@@ -144,6 +145,7 @@ void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& des
     }
 
     addedAction(pix, QDir::toNativeSeparators(desc.filePath));
+    setLabel(i18n("<b>Renaming images. Please wait...</b>"));
     advance(1);
 
     NewNameInfo info = d->newNameList.takeFirst();
@@ -158,7 +160,7 @@ void AdvancedRenameProcessDialog::slotCancel()
     done(QDialogButtonBox::Cancel);
 }
 
-void AdvancedRenameProcessDialog::slotRenameSuccess(const QUrl& src)
+void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& src)
 {
     if (d->cancel || d->currentUrl != src)
     {
@@ -177,13 +179,14 @@ void AdvancedRenameProcessDialog::slotRenameSuccess(const QUrl& src)
 
 void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
 {
-    abort();
-
     QPixmap pix = QIcon::fromTheme(QLatin1String("emblem-error")).pixmap(32, 32);
-    setLabel(i18n("<b>Renaming images has failed...</b>"));
-    setTitle(i18n("Canceled..."));
-
     addedAction(pix, QDir::toNativeSeparators(src.toLocalFile()));
+    setLabel(i18n("<b>Renaming images has failed...</b>"));
+    qApp->processEvents();
+
+    QThread::sleep(2);
+
+    slotRenameSuccessded(src);
 }
 
 void AdvancedRenameProcessDialog::closeEvent(QCloseEvent* e)

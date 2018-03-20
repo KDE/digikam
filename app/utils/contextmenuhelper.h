@@ -366,12 +366,12 @@ public:
     void setAlbumModel(AbstractCheckableAlbumModel* model);
 
     /**
-     * Add Import KIPI actions menu.
+     * Add Import Webservices actions menu.
      */
     void addImportMenu();
 
     /**
-     * Add Export KIPI actions menu.
+     * Add Export Webservices actions menu.
      */
     void addExportMenu();
 

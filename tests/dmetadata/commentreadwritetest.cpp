@@ -151,8 +151,8 @@ void CommentReadWriteTest::testReadFromDisabledNamespaces()
              << commNs1
              << commNs2;
 
-    dmeta.setXmpTagStringListLangAlt("Xmp.dc.description", commentSet1.toAltLangMap(),false);
-    dmeta.setXmpTagStringLangAlt("Xmp.exif.UserComment", commentSet2.value(QLatin1String("x-default")).caption, QString(),false);
+    dmeta.setXmpTagStringListLangAlt("Xmp.dc.description", commentSet1.toAltLangMap());
+    dmeta.setXmpTagStringLangAlt("Xmp.exif.UserComment", commentSet2.value(QLatin1String("x-default")).caption, QString());
 
     rez = dmeta.getImageComments(dmsettings);
     QCOMPARE(rez.value(QLatin1String("x-default")).caption, commentSet2.value(QLatin1String("x-default")).caption);

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ASSIGNTEMPLATE_H
-#define ASSIGNTEMPLATE_H
+#ifndef ASSIGN_TEMPLATE_H
+#define ASSIGN_TEMPLATE_H
 
 // Local includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ASSIGNTEMPLATE_H
+#endif // ASSIGN_TEMPLATE_H

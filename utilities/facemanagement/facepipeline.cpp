@@ -582,6 +582,11 @@ RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
 {
 }
 
+void RecognitionWorker::activeFaceRecognizer(RecognitionDatabase::RecognizeAlgorithm algorithmType)
+{
+    database.activeFaceRecognizer(algorithmType);
+}
+
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
     FaceUtils     utils;
@@ -994,6 +999,8 @@ public:
     EmptyImageListProvider            empty;
     QMap<int, QListImageListProvider> imagesToTrain;
 };
+
+// ----------------------------------------------------------------------------------------
 
 Trainer::Trainer(FacePipeline::Private* const d)
     : imageRetriever(d),
@@ -1599,6 +1606,14 @@ void FacePipeline::setPriority(QThread::Priority priority)
 QThread::Priority FacePipeline::priority() const
 {
     return d->priority;
+}
+
+void FacePipeline::activeFaceRecognizer(RecognitionDatabase::RecognizeAlgorithm algorithmType)
+{
+    if (d->recognitionWorker != 0)
+    {
+        d->recognitionWorker->activeFaceRecognizer(algorithmType);
+    }
 }
 
 void FacePipeline::cancel()

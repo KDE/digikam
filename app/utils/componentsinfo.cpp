@@ -41,13 +41,6 @@
 #include "dbstatdlg.h"
 #include "libopencv.h"
 
-// Libkipi includes
-
-#ifdef HAVE_KIPI
-#    include <KIPI/Interface>
-#    include <KIPI/PluginLoader>
-#endif // HAVE_KIPI
-
 // LibGphoto2 includes
 
 #ifdef HAVE_GPHOTO2
@@ -63,6 +56,14 @@ extern "C"
 
 #ifdef HAVE_MEDIAPLAYER
 #    include <QtAV/version.h>
+
+extern "C"
+{
+#   include <libavformat/version.h>
+#   include <libavutil/version.h>
+#   include <libavcodec/version.h>
+}
+
 #endif // HAVE_MEDIAPLAYER
 
 namespace Digikam
@@ -94,6 +95,9 @@ void showDigikamComponentsInfo()
 #ifdef HAVE_MEDIAPLAYER
     list.insert(i18n("Media player support"), i18n("Yes"));
     list.insert(i18n("LibQtAV"),              QString::fromLatin1("%1.%2.%3").arg(QTAV_MAJOR).arg(QTAV_MINOR).arg(QTAV_PATCH));
+    list.insert(i18n("LibAVFormat"),          QString::fromLatin1("%1.%2.%3").arg(LIBAVFORMAT_VERSION_MAJOR).arg(LIBAVFORMAT_VERSION_MINOR).arg(LIBAVFORMAT_VERSION_MICRO));
+    list.insert(i18n("LibAVCodec"),           QString::fromLatin1("%1.%2.%3").arg(LIBAVCODEC_VERSION_MAJOR).arg(LIBAVCODEC_VERSION_MINOR).arg(LIBAVCODEC_VERSION_MICRO));
+    list.insert(i18n("LibAVUtil"),            QString::fromLatin1("%1.%2.%3").arg(LIBAVUTIL_VERSION_MAJOR).arg(LIBAVUTIL_VERSION_MINOR).arg(LIBAVUTIL_VERSION_MICRO));
 #else
     list.insert(i18n("Media player support"), i18n("no"));
 #endif /* HAVE_MEDIAPLAYER */
@@ -103,13 +107,6 @@ void showDigikamComponentsInfo()
 #else
     list.insert(i18n("DBus support"), i18n("no"));
 #endif /* HAVE_DBUS */
-
-#ifdef HAVE_KIPI
-    list.insert(i18n("LibKipi"),      KIPI::Interface::version());
-    list.insert(i18n("Kipi-Plugins"), KIPI::PluginLoader::instance()->kipiPluginsVersion());
-#else
-    list.insert(i18n("LibKipi support"), i18n("no"));
-#endif /* HAVE_KIPI */
 
 #ifdef HAVE_PANORAMA
     list.insert(i18n("Panorama support"), i18n("yes"));

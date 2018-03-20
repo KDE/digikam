@@ -110,7 +110,7 @@ const QString ApplicationSettings::Private::configToolTipsShowLabelRatingEntry(Q
 const QString ApplicationSettings::Private::configToolTipsShowVideoAspectRatioEntry(QLatin1String("ToolTips Show Video Aspect Ratio"));
 const QString ApplicationSettings::Private::configToolTipsShowVideoAudioBitRateEntry(QLatin1String("ToolTips Show Audio Bit Rate"));
 const QString ApplicationSettings::Private::configToolTipsShowVideoAudioChannelTypeEntry(QLatin1String("ToolTips Show Audio Channel Type"));
-const QString ApplicationSettings::Private::configToolTipsShowVideoAudioCompressorEntry(QLatin1String("ToolTips Show Audio Compressor"));
+const QString ApplicationSettings::Private::configToolTipsShowVideoAudioCodecEntry(QLatin1String("ToolTips Show Audio Codec"));
 const QString ApplicationSettings::Private::configToolTipsShowVideoDurationEntry(QLatin1String("ToolTips Show Video Duration"));
 const QString ApplicationSettings::Private::configToolTipsShowVideoFrameRateEntry(QLatin1String("ToolTips Show Video Frame Rate"));
 const QString ApplicationSettings::Private::configToolTipsShowVideoVideoCodecEntry(QLatin1String("ToolTips Show Video Codec"));
@@ -157,13 +157,13 @@ const ApplicationSettings::OperationStrings ApplicationSettings::Private::config
 ApplicationSettings::OperationStrings ApplicationSettings::Private::createConfigGroupingOperateOnAll()
 {
     ApplicationSettings::OperationStrings out;
-    out.insert(ApplicationSettings::Metadata, QLatin1String("Do metadata operations on all"));
-    out.insert(ApplicationSettings::Kipi, QLatin1String("Do Kipi operations on all"));
-    out.insert(ApplicationSettings::BQM, QLatin1String("Do BQM operations on all"));
-    out.insert(ApplicationSettings::LightTable, QLatin1String("Do light table operations on all"));
-    out.insert(ApplicationSettings::Slideshow, QLatin1String("Do slideshow operations on all"));
-    out.insert(ApplicationSettings::Rename, QLatin1String("Rename all"));
-    out.insert(ApplicationSettings::Tools, QLatin1String("Operate tools on all"));
+    out.insert(ApplicationSettings::Metadata,     QLatin1String("Do metadata operations on all"));
+    out.insert(ApplicationSettings::ImportExport, QLatin1String("Do Import Export operations on all"));
+    out.insert(ApplicationSettings::BQM,          QLatin1String("Do BQM operations on all"));
+    out.insert(ApplicationSettings::LightTable,   QLatin1String("Do light table operations on all"));
+    out.insert(ApplicationSettings::Slideshow,    QLatin1String("Do slideshow operations on all"));
+    out.insert(ApplicationSettings::Rename,       QLatin1String("Rename all"));
+    out.insert(ApplicationSettings::Tools,        QLatin1String("Operate tools on all"));
     return out;
 }
 
@@ -214,7 +214,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       tooltipShowVideoAspectRatio(false),
       tooltipShowVideoAudioBitRate(false),
       tooltipShowVideoAudioChannelType(false),
-      tooltipShowVideoAudioCompressor(false),
+      tooltipShowVideoAudioCodec(false),
       tooltipShowVideoDuration(false),
       tooltipShowVideoFrameRate(false),
       tooltipShowVideoVideoCodec(false),
@@ -345,7 +345,7 @@ void ApplicationSettings::Private::init()
     tooltipShowVideoAspectRatio          = true;
     tooltipShowVideoAudioBitRate         = true;
     tooltipShowVideoAudioChannelType     = true;
-    tooltipShowVideoAudioCompressor      = true;
+    tooltipShowVideoAudioCodec      = true;
     tooltipShowVideoDuration             = true;
     tooltipShowVideoFrameRate            = true;
     tooltipShowVideoVideoCodec           = true;

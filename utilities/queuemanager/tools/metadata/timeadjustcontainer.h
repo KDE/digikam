@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TIMEADJUSTCONTAINER_H
-#define TIMEADJUSTCONTAINER_H
+#ifndef TIME_ADJUST_CONTAINER_H
+#define TIME_ADJUST_CONTAINER_H
 
 // Qt includes
 
@@ -109,7 +109,7 @@ class DeltaTime
 
 public:
 
-    DeltaTime();
+    explicit DeltaTime();
 
     ~DeltaTime();
 
@@ -128,4 +128,4 @@ public:
 
 }  // namespace Digikam
 
-#endif  // TIMEADJUSTCONTAINER_H
+#endif  // TIME_ADJUST_CONTAINER_H

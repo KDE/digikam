@@ -195,7 +195,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 003 ==> 200758 : digiKam, dolphin, dc is not in peripherals list.
 004 ==> 206071 : Not reading image properties.
 005 ==> 191113 : digiKam doesn't recognize images with colorspace AdobeRGB.
-006 ==> 206487 : Unsharp mask algorithm in batch processing should equal the one in kipi.
+006 ==> 206487 : Unsharp mask algorithm in batch processing should equal the one in external module.
 007 ==> 206570 : Crashed when scrolling through thumbnails in edit mode.
 008 ==> 206712 : Raw Import Tool: RGB (linear) provides gamma corrected output and should be named as such.
 009 ==> 206857 : Unclear English in sentence.
@@ -490,7 +490,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 004 ==> 187569 : Crash on star removing when filtering by stars.
 005 ==> 186549 : digiKam crashes when hovering the bottom part of its.
 006 ==> 187641 : Error while loading shared libraries: libkdcraw.so.5.
-007 ==> 187429 : Crash on Launch after disable KIPI plugins rotate.
+007 ==> 187429 : Crash on Launch after disable rotate tool.
 008 ==> 187937 : Writing tags to files doesn't update modification timestamp.
 009 ==> 184687 : Crash after deleting an empty album.
 010 ==> 186766 : Crash after finish resize and rename of images in folder.

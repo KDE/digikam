@@ -39,7 +39,7 @@ class InvisibleButtonGroup::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : group(0)
     {
     }

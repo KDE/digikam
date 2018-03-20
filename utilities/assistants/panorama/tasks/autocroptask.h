@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-03-15
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_AUTOCROPTASK_H
-#define PANO_AUTOCROPTASK_H
+#ifndef PANO_AUTOCROP_TASK_H
+#define PANO_AUTOCROP_TASK_H
 
 // Local includes
 
@@ -35,9 +35,11 @@ class AutoCropTask : public CommandTask
 
 public:
 
-    AutoCropTask(const QString& workDirPath,
-                 const QUrl& autoOptimiserPtoUrl, QUrl& viewCropPtoUrl,
-                 bool buildGPano, const QString& panoModifyPath);
+    explicit AutoCropTask(const QString& workDirPath,
+                          const QUrl& autoOptimiserPtoUrl,
+                          QUrl& viewCropPtoUrl,
+                          bool buildGPano,
+                          const QString& panoModifyPath);
     ~AutoCropTask();
 
 protected:
@@ -46,11 +48,11 @@ protected:
 
 private:
 
-    const QUrl&                         autoOptimiserPtoUrl;
-    QUrl&                               viewCropPtoUrl;
-//    const bool                          buildGPano;
+    const QUrl& autoOptimiserPtoUrl;
+    QUrl&       viewCropPtoUrl;
+//  const bool  buildGPano;
 };
 
 }  // namespace Digikam
 
-#endif /* PANO_AUTOCROPTASK_H */
+#endif // PANO_AUTOCROP_TASK_H

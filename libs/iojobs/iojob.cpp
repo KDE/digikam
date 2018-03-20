@@ -7,6 +7,7 @@
  * Description : IO Jobs for file systems jobs
  *
  * Copyright (C) 2015 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2018 by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,104 +53,129 @@ IOJob::IOJob()
 
 // --------------------------------------------
 
-CopyJob::CopyJob(const QUrl& src, const QUrl& dest, bool isMove)
+CopyJob::CopyJob(IOJobData* const data)
 {
-    m_src    = src;
-    m_dest   = dest;
-    m_isMove = isMove;
+    m_data = data;
 }
 
 void CopyJob::run()
 {
-    QFileInfo srcInfo(m_src.toLocalFile());
-    QDir dstDir(m_dest.toLocalFile());
-
-    if (!srcInfo.exists())
+    while (m_data && !m_cancel)
     {
-        emit error(i18n("File/Folder %1 does not exist anymore", srcInfo.baseName()));
-        emit signalDone();
-        return;
-    }
+        QUrl srcUrl = m_data->getNextUrl();
 
-    if (!dstDir.exists())
-    {
-        emit error(i18n("Album %1 does not exist anymore", dstDir.dirName()));
-        emit signalDone();
-        return;
-    }
-
-    // Checking if there is a file with the same name in destination folder
-    QString destenationName = srcInfo.isFile() ? srcInfo.fileName() : srcInfo.dir().dirName();
-    QString destenation     = dstDir.path() + QLatin1Char('/') + destenationName;
-    QFileInfo fileInfoForDestination(destenation);
-
-    if (fileInfoForDestination.exists())
-    {
-        emit error(i18n("A file or folder named %1 already exists in %2",
-                        srcInfo.baseName(), QDir::toNativeSeparators(dstDir.path())));
-
-        emit signalDone();
-        return;
-    }
-
-    if (m_isMove)
-    {
-        if (srcInfo.isDir())
+        if (srcUrl.isEmpty())
         {
-            QDir srcDir(srcInfo.filePath());
+            break;
+        }
 
-            if (!srcDir.rename(srcDir.path(), destenation))
+        QFileInfo srcInfo(srcUrl.toLocalFile());
+        QDir dstDir(m_data->destUrl().toLocalFile());
+
+        if (!srcInfo.exists())
+        {
+            emit error(i18n("File/Folder %1 does not exist anymore", srcInfo.baseName()));
+            emit signalOneProccessed(m_data->operation());
+            continue;
+        }
+
+        if (!dstDir.exists())
+        {
+            emit error(i18n("Album %1 does not exist anymore", dstDir.dirName()));
+            emit signalOneProccessed(m_data->operation());
+            continue;
+        }
+
+        // Checking if there is a file with the same name in destination folder
+        QString destenationName = srcInfo.isFile() ? srcInfo.fileName() : srcInfo.dir().dirName();
+        QString destenation     = dstDir.path() + QLatin1Char('/') + destenationName;
+        QFileInfo fileInfoForDestination(destenation);
+
+        if (fileInfoForDestination.exists())
+        {
+            emit error(i18n("A file or folder named %1 already exists in %2",
+                            srcInfo.baseName(), QDir::toNativeSeparators(dstDir.path())));
+            emit signalOneProccessed(m_data->operation());
+            continue;
+        }
+
+        if (m_data->operation() == IOJobData::MoveAlbum ||
+            m_data->operation() == IOJobData::MoveImage ||
+            m_data->operation() == IOJobData::MoveFiles)
+        {
+            if (srcInfo.isDir())
             {
-                // If QDir::rename fails, try copy and remove.
+                QDir srcDir(srcInfo.filePath());
+
+                if (!srcDir.rename(srcDir.path(), destenation))
+                {
+                    // If QDir::rename fails, try copy and remove.
+                    if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
+                    {
+                        emit error(i18n("Could not move folder %1 to album %2",
+                                        QDir::toNativeSeparators(srcDir.path()),
+                                        QDir::toNativeSeparators(dstDir.path())));
+
+                        emit signalOneProccessed(m_data->operation());
+                        continue;
+                    }
+                    else if (!srcDir.removeRecursively())
+                    {
+                        emit error(i18n("Could not move folder %1 to album %2. "
+                                        "The folder %1 was copied as well to album %2",
+                                        QDir::toNativeSeparators(srcDir.path()),
+                                        QDir::toNativeSeparators(dstDir.path())));
+                    }
+                }
+            }
+            else
+            {
+                QFile srcFile(srcInfo.filePath());
+
+                if (!srcFile.rename(destenation))
+                {
+                    emit error(i18n("Could not move file %1 to album %2",
+                                    srcInfo.filePath(),
+                                    QDir::toNativeSeparators(dstDir.path())));
+
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
+                }
+           }
+        }
+        else
+        {
+            if (srcInfo.isDir())
+            {
+                QDir srcDir(srcInfo.filePath());
+
                 if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
                 {
-                    emit error(i18n("Could not move folder %1 to album %2",
+                    emit error(i18n("Could not copy folder %1 to album %2",
                                     QDir::toNativeSeparators(srcDir.path()),
                                     QDir::toNativeSeparators(dstDir.path())));
+
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
                 }
-                else if (!srcDir.removeRecursively())
+            }
+            else
+            {
+                if (!QFile::copy(srcInfo.filePath(), destenation))
                 {
-                    emit error(i18n("Could not move folder %1 to album %2. "
-                                    "The folder %1 was copied as well to album %2",
-                                    QDir::toNativeSeparators(srcDir.path()),
+                    emit error(i18n("Could not copy file %1 to album %2",
+                                    QDir::toNativeSeparators(srcInfo.path()),
                                     QDir::toNativeSeparators(dstDir.path())));
+
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
                 }
-            }
-        }
-        else
-        {
-            QFile srcFile(srcInfo.filePath());
 
-            if (!srcFile.rename(destenation))
-            {
-                emit error(i18n("Could not move file %1 to album %2",
-                                srcInfo.filePath(),
-                                QDir::toNativeSeparators(dstDir.path())));
             }
         }
-    }
-    else
-    {
-        if (srcInfo.isDir())
-        {
-            QDir srcDir(srcInfo.filePath());
 
-            if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
-            {
-                emit error(i18n("Could not copy folder %1 to album %2",
-                                QDir::toNativeSeparators(srcDir.path()),
-                                QDir::toNativeSeparators(dstDir.path())));
-            }
-        }
-        else
-        {
-            if (!QFile::copy(srcInfo.filePath(), destenation))
-            {
-                emit error(i18n("Could not copy file %1 to album %2",
-                                QDir::toNativeSeparators(srcInfo.path()),
-                                QDir::toNativeSeparators(dstDir.path())));
-            }
-        }
+        emit signalOneProccessed(m_data->operation());
+        m_data->addProcessedUrl(srcUrl);
     }
 
     emit signalDone();
@@ -157,113 +183,141 @@ void CopyJob::run()
 
 // --------------------------------------------
 
-DeleteJob::DeleteJob(const QUrl& srcToDelete, bool useTrash, bool markAsObsolete)
+DeleteJob::DeleteJob(IOJobData* const data)
 {
-    m_srcToDelete    = srcToDelete;
-    m_useTrash       = useTrash;
-    m_markAsObsolete = markAsObsolete;
+    m_data = data;
 }
 
 void DeleteJob::run()
 {
-    QFileInfo fileInfo(m_srcToDelete.toLocalFile());
-    qCDebug(DIGIKAM_IOJOB_LOG) << "Deleting:   " << fileInfo.filePath();
-    qCDebug(DIGIKAM_IOJOB_LOG) << "File exists?" << fileInfo.exists();
-    qCDebug(DIGIKAM_IOJOB_LOG) << "Is to trash?" << m_useTrash;
-
-    if (!fileInfo.exists())
+    while (m_data && !m_cancel)
     {
-        emit error(i18n("File/Folder %1 does not exist",
-                        QDir::toNativeSeparators(fileInfo.filePath())));
-        emit signalDone();
-        return;
-    }
+        QUrl deleteUrl = m_data->getNextUrl();
 
-    if (m_useTrash)
-    {
-        if (fileInfo.isDir())
+        if (deleteUrl.isEmpty())
         {
-            if (!DTrash::deleteDirRecursivley(m_srcToDelete.toLocalFile()))
+            break;
+        }
+
+        bool useTrash = (m_data->operation() == IOJobData::Trash);
+
+        QFileInfo fileInfo(deleteUrl.toLocalFile());
+        qCDebug(DIGIKAM_IOJOB_LOG) << "Deleting:   " << fileInfo.filePath();
+        qCDebug(DIGIKAM_IOJOB_LOG) << "File exists?" << fileInfo.exists();
+        qCDebug(DIGIKAM_IOJOB_LOG) << "Is to trash?" << useTrash;
+
+        if (!fileInfo.exists())
+        {
+            emit error(i18n("File/Folder %1 does not exist",
+                            QDir::toNativeSeparators(fileInfo.filePath())));
+
+            emit signalOneProccessed(m_data->operation());
+            continue;
+        }
+
+        if (useTrash)
+        {
+            if (fileInfo.isDir())
             {
-                emit error(i18n("Couldn't move folder %1 to collection trash",
-                                QDir::toNativeSeparators(fileInfo.path())));
+                if (!DTrash::deleteDirRecursivley(deleteUrl.toLocalFile()))
+                {
+                    emit error(i18n("Couldn't move folder %1 to collection trash",
+                                    QDir::toNativeSeparators(fileInfo.path())));
+
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
+                }
+            }
+            else
+            {
+                if (!DTrash::deleteImage(deleteUrl.toLocalFile()))
+                {
+                    emit error(i18n("Couldn't move image %1 to collection trash",
+                                QDir::toNativeSeparators(fileInfo.filePath())));
+
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
+                }
             }
         }
         else
         {
-            if (!DTrash::deleteImage(m_srcToDelete.toLocalFile()))
+            if (fileInfo.isDir())
             {
-                emit error(i18n("Couldn't move image %1 to collection trash",
-                                QDir::toNativeSeparators(fileInfo.filePath())));
-            }
-        }
-    }
-    else
-    {
-        if (fileInfo.isDir())
-        {
-            QDir dir(fileInfo.filePath());
+                QDir dir(fileInfo.filePath());
 
-            if (!dir.removeRecursively())
-            {
-                emit error(i18n("Album %1 could not be removed",
-                                QDir::toNativeSeparators(fileInfo.path())));
-            }
-            else if (m_markAsObsolete)
-            {
-                CoreDbAccess access;
-                // If the images in the directory should be marked as obsolete
-                // get all files recursively and remove all image information
-                // for which the file path leads to an image id.
-                QList<qlonglong> imageIds;
-                QDirIterator iter(dir);
-
-                while (iter.hasNext())
+                if (!dir.removeRecursively())
                 {
-                    // get the next path and advance the iterator
-                    QString filePath = iter.next();
-                    // Use the file info to get the file type
-                    QFileInfo info = iter.fileInfo();
+                    emit error(i18n("Album %1 could not be removed",
+                                    QDir::toNativeSeparators(fileInfo.path())));
 
-                    if (info.isFile())
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
+                }
+
+                if (m_data->operation() == IOJobData::Delete)
+                {
+                    CoreDbAccess access;
+                    // If the images in the directory should be marked as obsolete
+                    // get all files recursively and remove all image information
+                    // for which the file path leads to an image id.
+                    QList<qlonglong> imageIds;
+                    QDirIterator iter(dir);
+
+                    while (iter.hasNext())
                     {
-                        qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(filePath));
+                        // get the next path and advance the iterator
+                        QString filePath = iter.next();
+                        // Use the file info to get the file type
+                        QFileInfo info = iter.fileInfo();
 
-                        if (imageId != -1)
+                        if (info.isFile())
                         {
-                            imageIds << imageId;
+                            qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(filePath));
+
+                            if (imageId != -1)
+                            {
+                                imageIds << imageId;
+                            }
                         }
                     }
+
+                    // Mark all image ids as obsolete.
+                    foreach(qlonglong imageId, imageIds)
+                    {
+                        access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
+                    }
+                }
+            }
+            else
+            {
+                QFile file(fileInfo.filePath());
+
+                if (!file.remove())
+                {
+                    emit error(i18n("Image %1 could not be removed",
+                                    QDir::toNativeSeparators(fileInfo.filePath())));
+
+                    emit signalOneProccessed(m_data->operation());
+                    continue;
                 }
 
-                // Mark all image ids as obsolete.
-                foreach(qlonglong imageId, imageIds)
+                if (m_data->operation() == IOJobData::Delete)
                 {
-                    access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
+                    CoreDbAccess access;
+                    // Mark the image info of the removed file as obsolete
+                    qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(fileInfo.filePath()));
+
+                    if (imageId != -1)
+                    {
+                        access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
+                    }
                 }
             }
         }
-        else
-        {
-            QFile file(fileInfo.filePath());
 
-            if (!file.remove())
-            {
-                emit error(i18n("Image %1 could not be removed",
-                                QDir::toNativeSeparators(fileInfo.filePath())));
-            }
-            else if (m_markAsObsolete)
-            {
-                // Mark the image info of the removed file as obsolete
-                CoreDbAccess access;
-                qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(fileInfo.filePath()));
-
-                if (imageId != -1)
-                {
-                    access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
-                }
-            }
-        }
+        emit signalOneProccessed(m_data->operation());
+        m_data->addProcessedUrl(deleteUrl);
     }
 
     emit signalDone();
@@ -283,7 +337,7 @@ qlonglong DeleteJob::getItemFromUrl(const QUrl& url)
 
     if (pAlbum)
     {
-        imageId = CoreDbAccess().db()->getItemFromAlbum(pAlbum->id(),fileName);
+        imageId = CoreDbAccess().db()->getItemFromAlbum(pAlbum->id(), fileName);
     }
 
     return imageId;
@@ -291,50 +345,59 @@ qlonglong DeleteJob::getItemFromUrl(const QUrl& url)
 
 // --------------------------------------------
 
-RenameFileJob::RenameFileJob(const QUrl& srcToRename, const QUrl& newUrl)
+RenameFileJob::RenameFileJob(IOJobData* const data)
 {
-    m_srcToRename = srcToRename;
-    m_newUrl      = newUrl;
+    m_data = data;
 }
 
 void RenameFileJob::run()
 {
-    if (m_newUrl.isEmpty())
+    while (m_data && !m_cancel)
     {
-        emit signalRenameFailed(m_srcToRename);
-        emit signalDone();
-        return;
+        QUrl renameUrl = m_data->getNextUrl();
+
+        if (renameUrl.isEmpty())
+        {
+            break;
+        }
+
+        QUrl destUrl = m_data->destUrl(renameUrl);
+
+        qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url:" << destUrl;
+
+        if (QFileInfo(destUrl.toLocalFile()).exists())
+        {
+            qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
+            emit error(i18n("Image with the same name %1 already there",
+                            QDir::toNativeSeparators(destUrl.toLocalFile())));
+
+            emit signalOneProccessed(m_data->operation());
+            emit signalRenameFailed(renameUrl);
+            continue;
+        }
+
+        QFile file(renameUrl.toLocalFile());
+
+        qCDebug(DIGIKAM_IOJOB_LOG) << "Trying to rename"
+                                   << renameUrl.toLocalFile() << "to"
+                                   << destUrl.toLocalFile();
+
+        if (!file.rename(destUrl.toLocalFile()))
+        {
+            qCDebug(DIGIKAM_IOJOB_LOG) << "File couldn't be renamed!";
+            emit error(i18n("Image %1 could not be renamed",
+                            QDir::toNativeSeparators(renameUrl.toLocalFile())));
+
+            emit signalOneProccessed(m_data->operation());
+            emit signalRenameFailed(renameUrl);
+            continue;
+        }
+
+        emit signalOneProccessed(m_data->operation());
+        m_data->addProcessedUrl(renameUrl);
+        emit signalRenamed(renameUrl);
     }
 
-    qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url:" << m_newUrl;
-
-    if (QFileInfo(m_newUrl.toLocalFile()).exists())
-    {
-        qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
-        emit error(i18n("Image with the same name %1 already there",
-                        QDir::toNativeSeparators(m_newUrl.toLocalFile())));
-        emit signalRenameFailed(m_srcToRename);
-        emit signalDone();
-        return;
-    }
-
-    QFile file(m_srcToRename.toLocalFile());
-
-    qCDebug(DIGIKAM_IOJOB_LOG) << "Trying to rename"
-                               << m_srcToRename.toLocalFile() << "to"
-                               << m_newUrl.toLocalFile();
-
-    if (!file.rename(m_newUrl.toLocalFile()))
-    {
-        qCDebug(DIGIKAM_IOJOB_LOG) << "File couldn't be renamed!";
-        emit error(i18n("Image %1 could not be renamed",
-                        QDir::toNativeSeparators(m_srcToRename.toLocalFile())));
-        emit signalRenameFailed(m_srcToRename);
-        emit signalDone();
-        return;
-    }
-
-    emit signalRenamed(m_srcToRename, m_newUrl);
     emit signalDone();
 }
 
@@ -364,6 +427,62 @@ void DTrashItemsListingJob::run()
         DTrash::extractJsonForItem(m_collectionPath, fileInfo.baseName(), itemInfo);
 
         emit trashItemInfo(itemInfo);
+    }
+
+    emit signalDone();
+}
+
+// ----------------------------------------------
+
+RestoreDTrashItemsJob::RestoreDTrashItemsJob(const DTrashItemInfoList& infos)
+{
+    m_dtrashItemInfoList = infos;
+}
+
+void RestoreDTrashItemsJob::run()
+{
+    foreach (const DTrashItemInfo& item, m_dtrashItemInfoList)
+    {
+        QUrl srcToRename = QUrl::fromLocalFile(item.collectionPath);
+        QUrl newName     = DFileOperations::getUniqueFileUrl(srcToRename);
+
+        QFileInfo fi(item.collectionPath);
+
+        if (!fi.dir().exists())
+        {
+            fi.dir().mkpath(fi.dir().path());
+        }
+
+        if (!QFile::rename(item.trashPath, newName.toLocalFile()))
+        {
+            qCDebug(DIGIKAM_IOJOB_LOG) << "Trash file couldn't be renamed!";
+        }
+        else
+        {
+            QFile::remove(item.jsonFilePath);
+        }
+    }
+
+    emit signalDone();
+}
+
+// ----------------------------------------------
+
+DeleteDTrashItemsJob::DeleteDTrashItemsJob(const DTrashItemInfoList& infos)
+{
+    m_dtrashItemInfoList = infos;
+}
+
+void DeleteDTrashItemsJob::run()
+{
+    CoreDbAccess access;
+
+    foreach (const DTrashItemInfo& item, m_dtrashItemInfoList)
+    {
+        QFile::remove(item.trashPath);
+        QFile::remove(item.jsonFilePath);
+        // Set the status of the image id to obsolete, i.e. to remove.
+        access.db()->setItemStatus(item.imageId, DatabaseItem::Status::Obsolete);
     }
 
     emit signalDone();

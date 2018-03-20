@@ -3,7 +3,7 @@
  * This file is a part of digiKam
  *
  * Date        : 2010-06-16
- * Description : A convenience class for a standalone face detector
+ * Description : The recognition database wrapper
  *
  * Copyright (C)      2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C)      2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
@@ -68,6 +68,15 @@ public:
         /// Training is a computing intensive operation.
         /// By choice of the application, it may be manually triggered by the user.
         TrainingIsExpensive
+    };
+
+    // for recognize algorithm option
+    enum RecognizeAlgorithm
+    {
+        LBP,
+        EigenFace,
+        FisherFace,
+        DNN             // Default one as it must be the best and the most advanced : Deep Neural Networks.
     };
 
 public:
@@ -136,6 +145,11 @@ public:
      * Larger images can be passed, but may be downscaled.
      */
     int recommendedImageSize(const QSize& availableSize = QSize()) const;
+
+    /**
+     * Set the face recognition algorithm type
+     */
+    void activeFaceRecognizer(RecognizeAlgorithm algorithmType);
 
     /**
      * Performs recognition.

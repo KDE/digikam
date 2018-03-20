@@ -84,7 +84,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldAlbum* const field = new SearchFieldAlbum(parent, SearchFieldAlbum::TypeAlbum);
         field->setFieldName(name);
-        field->setText(i18n("Album"), i18n("Search pictures located in"));
+        field->setText(i18n("Album"), i18n("Search items located in"));
         return field;
     }
     else if (name == QLatin1String("albumname"))
@@ -128,14 +128,14 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldAlbum* const field = new SearchFieldAlbum(parent, SearchFieldAlbum::TypeTag);
         field->setFieldName(name);
-        field->setText(i18n("Tags"), i18n("Return pictures with tag"));
+        field->setText(i18n("Tags"), i18n("Return items with tag"));
         return field;
     }
     else if (name == QLatin1String("tagname"))
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Tags"), i18n("A tag of the picture contains"));
+        field->setText(i18n("Tags"), i18n("A tag of the item contains"));
         return field;
     }
     else if (name == QLatin1String("notag"))
@@ -146,7 +146,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         */
         SearchFieldCheckBox* const field = new SearchFieldCheckBox(parent);
         field->setFieldName(name);
-        field->setText(i18n("Tags"), i18n("Image has no tags"));
+        field->setText(i18n("Tags"), i18n("item has no tags"));
         field->setLabel(i18n("Not Tagged"));
         return field;
     }
@@ -154,15 +154,15 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("File Name"), i18n("Return pictures whose file name contains"));
+        field->setText(i18n("File Name"), i18n("Return items whose file name contains"));
         return field;
     }
     else if (name == QLatin1String("modificationdate"))
     {
         SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateTime);
         field->setFieldName(name);
-        field->setText(i18n("Modification"), i18n("Return pictures modified between"));
-        field->setBetweenText(i18nc("'Return pictures modified between...and...", "and"));
+        field->setText(i18n("Modification"), i18n("Return items modified between"));
+        field->setBetweenText(i18nc("'Return items modified between...and...", "and"));
         return field;
     }
     else if (name == QLatin1String("filesize"))
@@ -180,31 +180,31 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldLabels* const field = new SearchFieldLabels(parent);
         field->setFieldName(name);
-        field->setText(i18n("Labels"), i18n("Return pictures with labels"));
+        field->setText(i18n("Labels"), i18n("Return items with labels"));
         return field;
     }
     else if (name == QLatin1String("rating"))
     {
         SearchFieldRating* const field = new SearchFieldRating(parent);
         field->setFieldName(name);
-        field->setText(i18n("Rating"), i18n("Return pictures rated at least"));
-        field->setBetweenText(i18nc("Return pictures rated at least...at most...", "at most"));
+        field->setText(i18n("Rating"), i18n("Return items rated at least"));
+        field->setBetweenText(i18nc("Return items rated at least...at most...", "at most"));
         return field;
     }
     else if (name == QLatin1String("creationdate"))
     {
         SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateTime);
         field->setFieldName(name);
-        field->setText(i18n("Date"), i18n("Return pictures created between"));
-        field->setBetweenText(i18nc("'Return pictures created between...and...", "and"));
+        field->setText(i18n("Date"), i18n("Return items created between"));
+        field->setBetweenText(i18nc("'Return items created between...and...", "and"));
         return field;
     }
     else if (name == QLatin1String("digitizationdate"))
     {
         SearchFieldRangeDate* const field = new SearchFieldRangeDate(parent, SearchFieldRangeDate::DateTime);
         field->setFieldName(name);
-        field->setText(i18n("Digitization"), i18n("Return pictures digitized between"));
-        field->setBetweenText(i18nc("'Return pictures digitized between...and...", "and"));
+        field->setText(i18n("Digitization"), i18n("Return items digitized between"));
+        field->setBetweenText(i18nc("'Return items digitized between...and...", "and"));
         return field;
     }
     else if (name == QLatin1String("orientation"))
@@ -212,7 +212,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         //choice
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Exif Orientation"), i18n("Find pictures with orientation flag"));
+        field->setText(i18n("Exif Orientation"), i18n("Find items with orientation flag"));
         QMap<int, QString> map = DMetadata::possibleValuesForEnumField(MetadataInfo::Orientation);
         field->setChoice(map);
         return field;
@@ -225,8 +225,8 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
-        field->setText(i18n("Width"), i18n("Find pictures with a width between"));
-        field->setBetweenText(i18nc("Find pictures with a width between...and...", "and"));
+        field->setText(i18n("Width"), i18n("Find items with a width between"));
+        field->setBetweenText(i18nc("Find items with a width between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
         field->setBoundary(1, 1000000, 250);
         field->setSuggestedValues(QList<int>()
@@ -242,8 +242,8 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
-        field->setText(i18n("Height"), i18n("Find pictures with a height between"));
-        field->setBetweenText(i18nc("Find pictures with a height between...and...", "and"));
+        field->setText(i18n("Height"), i18n("Find items with a height between"));
+        field->setBetweenText(i18nc("Find items with a height between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Pixels", "px"));
         field->setBoundary(1, 1000000, 250);
         field->setSuggestedValues(QList<int>()
@@ -259,8 +259,8 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldPageOrientation* const field = new SearchFieldPageOrientation(parent);
         field->setFieldName(name);
-        field->setText(i18n("Orientation"), i18nc("Find pictures with any orientation / landscape / portrait orientation...",
-                                                  "Find pictures with"));
+        field->setText(i18n("Orientation"), i18nc("Find items with any orientation / landscape / portrait orientation...",
+                                                  "Find items with"));
         return field;
     }
     else if (name == QLatin1String("format"))
@@ -268,10 +268,26 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         //choice
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("File Format"), i18n("Return pictures with the image file format"));
-        QStringList formats = CoreDbAccess().db()->getFormatStatistics().keys();
-        formats += formats;
+        field->setText(i18n("File Format"), i18n("Return items with the file format"));
+        QStringList formats;
+
+        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Image).keys())
+            formats << fmt << i18n("%1 [Image]", fmt);
+
+        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Video).keys())
+            formats << fmt << i18n("%1 [Video]", fmt);
+
+        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Audio).keys())
+            formats << fmt << i18n("%1 [Audio]", fmt);
+
+/* FIXME: This can report 2 times JPG : one as image, one as other. Where is the problem ?
+        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Other).keys())
+            formats << fmt << i18n("%1 [Other]", fmt);
+*/
         formats.sort();
+        
+        qCDebug(DIGIKAM_GENERAL_LOG) << formats;
+
         field->setChoice(formats);
         return field;
     }
@@ -280,7 +296,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         //choice
         SearchFieldColorDepth* const field = new SearchFieldColorDepth(parent);
         field->setFieldName(name);
-        field->setText(i18n("Color Depth"), i18nc("Find pictures with any color depth / 8 bits per channel...", "Find pictures with"));
+        field->setText(i18n("Color Depth"), i18nc("Find items with any color depth / 8 bits per channel...", "Find items with"));
         return field;
     }
     else if (name == QLatin1String("colormodel"))
@@ -288,17 +304,23 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         //choice
         SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Color Model"), i18n("Find pictures with the color model"));
+        field->setText(i18n("Color Model"), i18n("Find items with the color model"));
         QMap<int, QString> map;
-        map.insert(DImg::COLORMODELUNKNOWN, DImg::colorModelToString(DImg::COLORMODELUNKNOWN));
-        map.insert(DImg::RGB,               DImg::colorModelToString(DImg::RGB));
-        map.insert(DImg::GRAYSCALE,         DImg::colorModelToString(DImg::GRAYSCALE));
-        map.insert(DImg::MONOCHROME,        DImg::colorModelToString(DImg::MONOCHROME));
-        map.insert(DImg::INDEXED,           DImg::colorModelToString(DImg::INDEXED));
-        map.insert(DImg::YCBCR,             DImg::colorModelToString(DImg::YCBCR));
-        map.insert(DImg::CMYK,              DImg::colorModelToString(DImg::CMYK));
-        map.insert(DImg::CIELAB,            DImg::colorModelToString(DImg::CIELAB));
-        map.insert(DImg::COLORMODELRAW,     DImg::colorModelToString(DImg::COLORMODELRAW));
+        // Images
+        map.insert(DImg::COLORMODELUNKNOWN,          i18n("%1 [Image]", DImg::colorModelToString(DImg::COLORMODELUNKNOWN)));
+        map.insert(DImg::RGB,                        i18n("%1 [Image]", DImg::colorModelToString(DImg::RGB)));
+        map.insert(DImg::GRAYSCALE,                  i18n("%1 [Image]", DImg::colorModelToString(DImg::GRAYSCALE)));
+        map.insert(DImg::MONOCHROME,                 i18n("%1 [Image]", DImg::colorModelToString(DImg::MONOCHROME)));
+        map.insert(DImg::INDEXED,                    i18n("%1 [Image]", DImg::colorModelToString(DImg::INDEXED)));
+        map.insert(DImg::YCBCR,                      i18n("%1 [Image]", DImg::colorModelToString(DImg::YCBCR)));
+        map.insert(DImg::CMYK,                       i18n("%1 [Image]", DImg::colorModelToString(DImg::CMYK)));
+        map.insert(DImg::CIELAB,                     i18n("%1 [Image]", DImg::colorModelToString(DImg::CIELAB)));
+        map.insert(DImg::COLORMODELRAW,              i18n("%1 [Image]", DImg::colorModelToString(DImg::COLORMODELRAW)));
+        // Video
+        map.insert(DMetadata::VIDEOCOLORMODEL_SRGB,  i18n("%1 [Video]", DMetadata::videoColorModelToString(DMetadata::VIDEOCOLORMODEL_SRGB)));
+        map.insert(DMetadata::VIDEOCOLORMODEL_BT709, i18n("%1 [Video]", DMetadata::videoColorModelToString(DMetadata::VIDEOCOLORMODEL_BT709)));
+        map.insert(DMetadata::VIDEOCOLORMODEL_BT601, i18n("%1 [Video]", DMetadata::videoColorModelToString(DMetadata::VIDEOCOLORMODEL_BT601)));
+        map.insert(DMetadata::VIDEOCOLORMODEL_OTHER, i18n("%1 [Video]", DMetadata::videoColorModelToString(DMetadata::VIDEOCOLORMODEL_OTHER)));
         field->setChoice(map);
         return field;
     }
@@ -573,7 +595,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldCheckBox* const field = new SearchFieldCheckBox(parent);
         field->setFieldName(name);
-        field->setText(i18n("GPS"), i18n("Image has no GPS info"));
+        field->setText(i18n("GPS"), i18n("Ttem has no GPS info"));
         field->setLabel(i18n("Not Geo-located"));
         return field;
     }
@@ -582,42 +604,42 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Caption"), i18n("Return pictures whose comment contains"));
+        field->setText(i18n("Caption"), i18n("Return items whose comment contains"));
         return field;
     }
     else if (name == QLatin1String("commentauthor"))
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Author"), i18n("Return pictures commented by"));
+        field->setText(i18n("Author"), i18n("Return items commented by"));
         return field;
     }
     else if (name == QLatin1String("headline"))
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Headline"), i18n("Return pictures with the IPTC headline"));
+        field->setText(i18n("Headline"), i18n("Return items with the IPTC headline"));
         return field;
     }
     else if (name == QLatin1String("title"))
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Title"), i18n("Return pictures with the IPTC title"));
+        field->setText(i18n("Title"), i18n("Return items with the IPTC title"));
         return field;
     }
     else if (name == QLatin1String("keyword"))
     {
         SearchFieldText* const field = new SearchFieldKeyword(parent);
         field->setFieldName(name);
-        field->setText(QString(), i18n("Find pictures that have associated all these words:"));
+        field->setText(QString(), i18n("Find items that have associated all these words:"));
         return field;
     }
     else if (name == QLatin1String("aspectratioimg"))
     {
         SearchFieldText* const field = new SearchFieldText(parent);
         field->setFieldName(name);
-        field->setText(i18n("Aspect Ratio"), i18n("Return pictures with the aspect ratio"));
+        field->setText(i18n("Aspect Ratio"), i18n("Return items with the aspect ratio"));
         return field;
     }
     else if (name == QLatin1String("pixelsize"))
@@ -630,11 +652,9 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setBoundary(1, 2000000000, 100);
         return field;
     }
-
-
     else if (name == QLatin1String("videoaspectratio"))
     {
-        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Aspect Ratio"), i18n("Return video with the frame aspect ratio"));
         QStringList ratio;
@@ -648,7 +668,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("videoduration"))
     {
-        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
+        SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Duration"), i18n("Length of the video"));
         field->setBetweenText(i18nc("Find video with a length between...and...", "and"));
@@ -665,7 +685,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("videoframerate"))
     {
-        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
+        SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Frame Rate"), i18n("Return video with the frame rate"));
         field->setBetweenText(i18nc("Find video with frame rate between...and...", "and"));
@@ -681,29 +701,77 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("videocodec"))
     {
-        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
         field->setText(i18n("Codec"), i18n("Return video codec"));
         QStringList codec;
-        codec << QLatin1String("avi")  << QLatin1String("Audio Video Interleave");
-        codec << QLatin1String("mov")  << QLatin1String("QuickTime");
-        codec << QLatin1String("mp4")  << QLatin1String("MPEG Layer 4");
-        codec << QLatin1String("3gp")  << QLatin1String("3GPP");
-        codec << QLatin1String("divx") << QLatin1String("DivX");
-        codec << QLatin1String("wma")  << QLatin1String("Windows Media Video");
-        codec << QLatin1String("mkv")  << QLatin1String("Matroska");
-        codec << QLatin1String("s263") << QLatin1String("H.263");
-        codec << QLatin1String("mjpg") << QLatin1String("Motion JPEG");
+
+        // List of most common video codecs supported by FFMpeg (see "ffpmpeg -codecs" for details)
+        //
+        //       FFMpeg codec name                 FFMpeg codec description
+        codec << QLatin1String("8bps")          << QLatin1String("QuickTime 8BPS video");
+        codec << QLatin1String("amv")           << QLatin1String("AMV Video");
+        codec << QLatin1String("avs")           << QLatin1String("AVS (Audio Video Standard) video");
+        codec << QLatin1String("cavs")          << QLatin1String("Chinese AVS (Audio Video Standard) (AVS1-P2, JiZhun profile)");
+        codec << QLatin1String("cinepak")       << QLatin1String("Cinepak");
+        codec << QLatin1String("dirac")         << QLatin1String("Dirac");
+        codec << QLatin1String("flv1")          << QLatin1String("FLV / Sorenson Spark / Sorenson H.263 (Flash Video)");
+        codec << QLatin1String("h261")          << QLatin1String("H.261");
+        codec << QLatin1String("h263")          << QLatin1String("H.263 / H.263-1996, H.263+ / H.263-1998 / H.263 version 2");
+        codec << QLatin1String("h263i")         << QLatin1String("Intel H.263");
+        codec << QLatin1String("h263p")         << QLatin1String("H.263+ / H.263-1998 / H.263 version 2");
+        codec << QLatin1String("h264")          << QLatin1String("H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10");
+        codec << QLatin1String("hevc")          << QLatin1String("H.265 / HEVC (High Efficiency Video Coding)");
+        codec << QLatin1String("jpeg2000")      << QLatin1String("JPEG 2000");
+        codec << QLatin1String("mjpeg")         << QLatin1String("Motion JPEG");
+        codec << QLatin1String("mjpegb")        << QLatin1String("Apple MJPEG-B");
+        codec << QLatin1String("mpeg1video")    << QLatin1String("MPEG-1 video");
+        codec << QLatin1String("mpeg2video")    << QLatin1String("MPEG-2 video");
+        codec << QLatin1String("mpeg4")         << QLatin1String("MPEG-4 part 2");
+        codec << QLatin1String("msmpeg4v1")     << QLatin1String("MPEG-4 part 2 Microsoft variant version 1");
+        codec << QLatin1String("msmpeg4v2")     << QLatin1String("MPEG-4 part 2 Microsoft variant version 2");
+        codec << QLatin1String("msmpeg4v3")     << QLatin1String("MPEG-4 part 2 Microsoft variant version 3");
+        codec << QLatin1String("msvideo1")      << QLatin1String("Microsoft Video 1");
+        codec << QLatin1String("msrle")         << QLatin1String("Microsoft RLE");
+        codec << QLatin1String("mvc1")          << QLatin1String("Silicon Graphics Motion Video Compressor 1");
+        codec << QLatin1String("mvc2")          << QLatin1String("Silicon Graphics Motion Video Compressor 2");
+        codec << QLatin1String("qtrle")         << QLatin1String("QuickTime Animation (RLE) video");
+        codec << QLatin1String("rawvideo")      << QLatin1String("Raw video");
+        codec << QLatin1String("rpza")          << QLatin1String("QuickTime video (RPZA)");
+        codec << QLatin1String("rv10")          << QLatin1String("RealVideo 1.0");
+        codec << QLatin1String("rv20")          << QLatin1String("RealVideo 2.0");
+        codec << QLatin1String("rv30")          << QLatin1String("RealVideo 3.0");
+        codec << QLatin1String("rv40")          << QLatin1String("RealVideo 4.0");
+        codec << QLatin1String("smc")           << QLatin1String("QuickTime Graphics (SMC)");
+        codec << QLatin1String("snow")          << QLatin1String("Snow");
+        codec << QLatin1String("svq1")          << QLatin1String("Sorenson Vector Quantizer 1 / Sorenson Video 1 / SVQ1");
+        codec << QLatin1String("svq3")          << QLatin1String("Sorenson Vector Quantizer 3 / Sorenson Video 3 / SVQ3");
+        codec << QLatin1String("theora")        << QLatin1String("Theora");
+        codec << QLatin1String("vc1")           << QLatin1String("SMPTE VC-1");
+        codec << QLatin1String("vc1image")      << QLatin1String("Windows Media Video 9 Image v2");
+        codec << QLatin1String("vp3")           << QLatin1String("On2 VP3");
+        codec << QLatin1String("vp5")           << QLatin1String("On2 VP5");
+        codec << QLatin1String("vp6")           << QLatin1String("On2 VP6");
+        codec << QLatin1String("vp6a")          << QLatin1String("On2 VP6 (Flash version, with alpha channel)");
+        codec << QLatin1String("vp6f")          << QLatin1String("On2 VP6 (Flash version)");
+        codec << QLatin1String("vp7")           << QLatin1String("On2 VP7");
+        codec << QLatin1String("vp8")           << QLatin1String("On2 VP8");
+        codec << QLatin1String("vp9")           << QLatin1String("Google VP9");
+        codec << QLatin1String("wmv1")          << QLatin1String("Windows Media Video 7");
+        codec << QLatin1String("wmv2")          << QLatin1String("Windows Media Video 8");
+        codec << QLatin1String("wmv3")          << QLatin1String("Windows Media Video 9");
+        codec << QLatin1String("wmv3image")     << QLatin1String("Windows Media Video 9 Image");
+
         // TODO: add more possible codec
         field->setChoice(codec);
         return field;
     }
     else if (name == QLatin1String("videoaudiobitrate"))
     {
-        SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
+        SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
-        field->setText(i18n("Audio Bit Rate"), i18n("Return video audio bits rate"));
-        field->setBetweenText(i18nc("Find video with audio bit rate between...and...", "and"));
+        field->setText(i18n("Audio Bit Rate"), i18n("Return Audio Bits Rate"));
+        field->setBetweenText(i18nc("Find files with audio bit rate between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Bits per Second", "bps"));
         field->setBoundary(1000, 100000, 1000);
         field->setSuggestedValues(QList<int>()
@@ -717,29 +785,114 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == QLatin1String("videoaudiochanneltype"))
     {
-        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Audio Channel Type"), i18n("Return video audio Channel Type"));
+        field->setText(i18n("Audio Channel Type"), i18n("Return Audio Channel Type"));
         QStringList type;
-        type << QLatin1String("1") << i18n("Mono");
-        type << QLatin1String("2") << i18n("Stereo");
+        type << QLatin1String("Mono")       << i18n("Mono");
+        type << QLatin1String("Stereo")     << i18n("Stereo");
+        type << QLatin1String("5.1")        << i18n("5.1 Surround Sound");
+        type << QLatin1String("7.1")        << i18n("7.1 Surround Sound");
+        type << QLatin1String("16 Channel") << i18n("16 Channels Sequence");
+        type << QLatin1String("Other")      << i18n("Other Channel Type");
+
         // TODO: add more possible audio channel type
         field->setChoice(type);
         return field;
     }
-    else if (name == QLatin1String("videoaudiocompressor"))
+    else if (name == QLatin1String("videoaudioCodec"))
     {
-        SearchFieldChoice* field = new SearchFieldChoice(parent);
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Audio Compressor"), i18n("Return video audio Compressor"));
+        field->setText(i18n("Audio Codec"), i18n("Return Audio Codec"));
         QStringList type;
-        type << QLatin1String("raw")           << QLatin1String("RAW");
-        type << QLatin1String("mp3")           << QLatin1String("MPEG Layer 3");
-        type << QLatin1String("mp4a")          << QLatin1String("MPEG4 Audio");
-        type << QLatin1String("samr")          << QLatin1String("Adaptive Multi-rate Audio");
-        type << QLatin1String("sowt")          << QLatin1String("Apple QuickTime SWOT Little Endian PCM Audio");
-        type << QLatin1String("Microsoft PCM") << QLatin1String("Microsoft PCM");
-        // TODO: add more possible audio compressor
+
+        // List of most common audio codecs supported by FFMpeg (see "ffpmpeg -codecs" for details)
+        //
+        //      FFMpeg codec name                      FFMpeg codec description
+        type << QLatin1String("aac")                << QLatin1String("AAC (Advanced Audio Coding)");
+        type << QLatin1String("aac_latm")           << QLatin1String("AAC LATM (Advanced Audio Coding LATM syntax)");
+        type << QLatin1String("ac3")                << QLatin1String("ATSC A/52A (AC-3)");
+        type << QLatin1String("adpcm_g722")         << QLatin1String("G.722 ADPCM");
+        type << QLatin1String("adpcm_g726")         << QLatin1String("G.726 ADPCM");
+        type << QLatin1String("adpcm_g726le")       << QLatin1String("G.726 ADPCM little-endian");
+        type << QLatin1String("adpcm_ima_wav")      << QLatin1String("ADPCM IMA WAV");
+        type << QLatin1String("adpcm_ima_qt")       << QLatin1String("ADPCM IMA QuickTime");
+        type << QLatin1String("adpcm_swf")          << QLatin1String("ADPCM Shockwave Flash");
+        type << QLatin1String("alac")               << QLatin1String("ALAC (Apple Lossless Audio Codec)");
+        type << QLatin1String("amr_nb")             << QLatin1String("AMR-NB (Adaptive Multi-Rate NarrowBand)");
+        type << QLatin1String("amr_wb")             << QLatin1String("AMR-WB (Adaptive Multi-Rate WideBand)");
+        type << QLatin1String("ape")                << QLatin1String("Monkey's Audio");
+        type << QLatin1String("atrac1")             << QLatin1String("ATRAC1 (Adaptive TRansform Acoustic Coding)");
+        type << QLatin1String("atrac3")             << QLatin1String("ATRAC3 (Adaptive TRansform Acoustic Coding 3)");
+        type << QLatin1String("atrac3al")           << QLatin1String("ATRAC3 AL (Adaptive TRansform Acoustic Coding 3 Advanced Lossless)");
+        type << QLatin1String("atrac3p")            << QLatin1String("ATRAC3+ (Adaptive TRansform Acoustic Coding 3+)");
+        type << QLatin1String("atrac3pal")          << QLatin1String("ATRAC3+ AL (Adaptive TRansform Acoustic Coding 3+ Advanced Lossless)");
+        type << QLatin1String("celt")               << QLatin1String("Constrained Energy Lapped Transform (CELT)");
+        type << QLatin1String("cook")               << QLatin1String("Cook / Cooker / Gecko (RealAudio G2)");
+        type << QLatin1String("dts")                << QLatin1String("DCA (DTS Coherent Acoustics)");
+        type << QLatin1String("eac3")               << QLatin1String("ATSC A/52B (AC-3, E-AC-3)");
+        type << QLatin1String("flac")               << QLatin1String("FLAC (Free Lossless Audio Codec)");
+        type << QLatin1String("g723_1")             << QLatin1String("G.723.1");
+        type << QLatin1String("g729")               << QLatin1String("G.729");
+        type << QLatin1String("mp1")                << QLatin1String("MP1 (MPEG audio layer 1)");
+        type << QLatin1String("mp2")                << QLatin1String("MP2 (MPEG audio layer 2)");
+        type << QLatin1String("mp3")                << QLatin1String("MP3 (MPEG audio layer 3)");
+        type << QLatin1String("mp3adu")             << QLatin1String("ADU (Application Data Unit) MP3 (MPEG audio layer 3)");
+        type << QLatin1String("mp3on4")             << QLatin1String("MP3 on MP4");
+        type << QLatin1String("mp4als")             << QLatin1String("MPEG-4 Audio Lossless Coding (ALS)");
+        type << QLatin1String("musepack7")          << QLatin1String("Musepack SV7");
+        type << QLatin1String("musepack8")          << QLatin1String("Musepack SV8");
+        type << QLatin1String("nellymoser")         << QLatin1String("Nellymoser Asao");
+        type << QLatin1String("opus")               << QLatin1String("Opus (Opus Interactive Audio Codec)");
+        type << QLatin1String("pcm_alaw")           << QLatin1String("PCM A-law / G.711 A-law");
+        type << QLatin1String("pcm_bluray")         << QLatin1String("PCM signed 16|20|24-bit big-endian for Blu-ray media");
+        type << QLatin1String("pcm_dvd")            << QLatin1String("PCM signed 20|24-bit big-endian");
+        type << QLatin1String("pcm_f16le")          << QLatin1String("PCM 16.8 floating point little-endian");
+        type << QLatin1String("pcm_f24le")          << QLatin1String("PCM 24.0 floating point little-endian");
+        type << QLatin1String("pcm_f32be")          << QLatin1String("PCM 32-bit floating point big-endian");
+        type << QLatin1String("pcm_f32le")          << QLatin1String("PCM 32-bit floating point little-endian");
+        type << QLatin1String("pcm_f64be")          << QLatin1String("PCM 64-bit floating point big-endian");
+        type << QLatin1String("pcm_f64le")          << QLatin1String("PCM 64-bit floating point little-endian");
+        type << QLatin1String("pcm_lxf")            << QLatin1String("PCM signed 20-bit little-endian planar");
+        type << QLatin1String("pcm_mulaw")          << QLatin1String("PCM mu-law / G.711 mu-law");
+        type << QLatin1String("pcm_s16be")          << QLatin1String("PCM signed 16-bit big-endian");
+        type << QLatin1String("pcm_s16be_planar")   << QLatin1String("PCM signed 16-bit big-endian planar");
+        type << QLatin1String("pcm_s16le")          << QLatin1String("PCM signed 16-bit little-endian");
+        type << QLatin1String("pcm_s16le_planar")   << QLatin1String("PCM signed 16-bit little-endian planar");
+        type << QLatin1String("pcm_s24be")          << QLatin1String("PCM signed 24-bit big-endian");
+        type << QLatin1String("pcm_s24daud")        << QLatin1String("PCM D-Cinema audio signed 24-bit");
+        type << QLatin1String("pcm_s24le")          << QLatin1String("PCM signed 24-bit little-endian");
+        type << QLatin1String("pcm_s24le_planar")   << QLatin1String("PCM signed 24-bit little-endian planar");
+        type << QLatin1String("pcm_s32be")          << QLatin1String("PCM signed 32-bit big-endian");
+        type << QLatin1String("pcm_s32le")          << QLatin1String("PCM signed 32-bit little-endian");
+        type << QLatin1String("pcm_s32le_planar")   << QLatin1String("PCM signed 32-bit little-endian planar");
+        type << QLatin1String("pcm_s64be")          << QLatin1String("PCM signed 64-bit big-endian");
+        type << QLatin1String("pcm_s64le")          << QLatin1String("PCM signed 64-bit little-endian");
+        type << QLatin1String("pcm_s8")             << QLatin1String("PCM signed 8-bit");
+        type << QLatin1String("pcm_s8_planar")      << QLatin1String("PCM signed 8-bit planar");
+        type << QLatin1String("pcm_u16be")          << QLatin1String("PCM unsigned 16-bit big-endian");
+        type << QLatin1String("pcm_u16le")          << QLatin1String("PCM unsigned 16-bit little-endian");
+        type << QLatin1String("pcm_u24be")          << QLatin1String("PCM unsigned 24-bit big-endian");
+        type << QLatin1String("pcm_u24le")          << QLatin1String("PCM unsigned 24-bit little-endian");
+        type << QLatin1String("pcm_u32be")          << QLatin1String("PCM unsigned 32-bit big-endian");
+        type << QLatin1String("pcm_u32le")          << QLatin1String("PCM unsigned 32-bit little-endian");
+        type << QLatin1String("pcm_u8")             << QLatin1String("PCM unsigned 8-bit");
+        type << QLatin1String("pcm_zork")           << QLatin1String("PCM Zork");
+        type << QLatin1String("ra_144")             << QLatin1String("RealAudio 1.0 (14.4K)");
+        type << QLatin1String("ra_288")             << QLatin1String("RealAudio 2.0 (28.8K)");
+        type << QLatin1String("ralf")               << QLatin1String("RealAudio Lossless");
+        type << QLatin1String("sipr")               << QLatin1String("RealAudio SIPR / ACELP.NET");
+        type << QLatin1String("speex")              << QLatin1String("Speex");
+        type << QLatin1String("tak")                << QLatin1String("TAK (Tom's lossless Audio Kompressor)");
+        type << QLatin1String("wavpack")            << QLatin1String("WavPack");
+        type << QLatin1String("wmalossless")        << QLatin1String("Windows Media Audio Lossless");
+        type << QLatin1String("wmapro")             << QLatin1String("Windows Media Audio 9 Professional");
+        type << QLatin1String("wmav1")              << QLatin1String("Windows Media Audio 1");
+        type << QLatin1String("wmav2")              << QLatin1String("Windows Media Audio 2");
+        type << QLatin1String("wmavoice")           << QLatin1String("Windows Media Audio Voice");
+
+        // TODO: add more possible audio Codec
         field->setChoice(type);
         return field;
     }
@@ -1853,7 +2006,8 @@ QList<QRect> SearchFieldRangeDouble::valueWidgetRects() const
 
 SearchFieldChoice::SearchFieldChoice(QObject* const parent)
     : SearchField(parent),
-      m_comboBox(0), m_type(QVariant::Invalid)
+      m_comboBox(0),
+      m_type(QVariant::Invalid)
 {
     m_model   = new ChoiceSearchModel(this);
     m_anyText = i18n("Any");

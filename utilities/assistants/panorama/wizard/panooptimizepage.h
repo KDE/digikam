@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANOPANO_OPTIMIZE_PAGE_H
-#define PANOPANO_OPTIMIZE_PAGE_H
+#ifndef PANO_OPTIMIZE_PAGE_H
+#define PANO_OPTIMIZE_PAGE_H
 
 // Local includes
 
@@ -39,7 +39,7 @@ class PanoOptimizePage : public DWizardPage
 
 public:
 
-    PanoOptimizePage(PanoManager* const mngr, QWizard* const dlg);
+    explicit PanoOptimizePage(PanoManager* const mngr, QWizard* const dlg);
     ~PanoOptimizePage();
 
 private:
@@ -61,10 +61,10 @@ private Q_SLOTS:
 
 private:
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* PANOPANO_OPTIMIZE_PAGE_H */
+#endif // PANO_OPTIMIZE_PAGE_H

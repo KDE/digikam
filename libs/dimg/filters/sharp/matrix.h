@@ -149,6 +149,6 @@ private:
     static double circle_intensity(const int x, const int y, const double radius);
 };
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace Digikam
 
 #endif /* MATRIX_H_INCLUDED */

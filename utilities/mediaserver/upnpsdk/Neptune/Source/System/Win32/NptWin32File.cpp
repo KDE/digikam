@@ -64,6 +64,7 @@ static LPSTR W2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars, UINT acp)
     if (ret == 0) {
         int error = GetLastError();
         assert(error);
+        (void)error;
         return NULL;
     }
     return lpa;

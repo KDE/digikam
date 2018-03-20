@@ -72,7 +72,8 @@ public:
           configValueRecognizedMarkedFaces(QLatin1String("Recognize Marked Faces")),
           configAlreadyScannedHandling(QLatin1String("Already Scanned Handling")),
           configUseFullCpu(QLatin1String("Use Full CPU")),
-          configSettingsVisible(QLatin1String("Settings Widget Visible"))
+          configSettingsVisible(QLatin1String("Settings Widget Visible")),
+          configRecognizeAlgorithm(QLatin1String("Recognize Algorithm")) 
     {
         buttons                    = 0;
         optionGroupBox             = 0;
@@ -85,6 +86,7 @@ public:
         accuracyInput              = 0;
         useFullCpuButton           = 0;
         retrainAllButton           = 0;
+        recognizeBox               = 0;
     }
 
     QDialogButtonBox*            buttons;
@@ -104,6 +106,8 @@ public:
     QCheckBox*                   useFullCpuButton;
     QCheckBox*                   retrainAllButton;
 
+    QComboBox*                   recognizeBox;
+
     const QString                configName;
     const QString                configMainTask;
     const QString                configValueDetect;
@@ -112,6 +116,7 @@ public:
     const QString                configAlreadyScannedHandling;
     const QString                configUseFullCpu;
     const QString                configSettingsVisible;
+    const QString                configRecognizeAlgorithm;
 };
 
 FaceScanDialog::FaceScanDialog(QWidget* const parent)
@@ -182,6 +187,11 @@ void FaceScanDialog::doLoadState()
 
     d->useFullCpuButton->setChecked(group.readEntry(entryName(d->configUseFullCpu), false));
 
+    RecognitionDatabase::RecognizeAlgorithm algo = (RecognitionDatabase::RecognizeAlgorithm)group.readEntry(entryName(d->configRecognizeAlgorithm),
+                                                                                                            (int)RecognitionDatabase::RecognizeAlgorithm::DNN);
+
+    d->recognizeBox->setCurrentIndex(d->recognizeBox->findData(algo));
+
     // do not load retrainAllButton state from config, dangerous
 
     d->tabWidget->setVisible(group.readEntry(entryName(d->configSettingsVisible), false));
@@ -233,8 +243,9 @@ void FaceScanDialog::doSaveState()
     ApplicationSettings::instance()->setFaceDetectionAccuracy(double(d->accuracyInput->value()) / 100);
     d->albumSelectors->saveState();
 
-    group.writeEntry(entryName(d->configUseFullCpu),      d->useFullCpuButton->isChecked());
-    group.writeEntry(entryName(d->configSettingsVisible), d->tabWidget->isVisible());
+    group.writeEntry(entryName(d->configUseFullCpu),         d->useFullCpuButton->isChecked());
+    group.writeEntry(entryName(d->configSettingsVisible),    d->tabWidget->isVisible());
+    group.writeEntry(entryName(d->configRecognizeAlgorithm), d->recognizeBox->itemData(d->recognizeBox->currentIndex()));
 }
 
 void FaceScanDialog::setupUi()
@@ -341,6 +352,15 @@ void FaceScanDialog::setupUi()
     d->useFullCpuButton = new QCheckBox(advancedTab);
     d->useFullCpuButton->setText(i18nc("@option:check", "Work on all processor cores (experimental)"));
 
+    // ---- Recognize algorithm ComboBox -----
+
+    d->recognizeBox        = new QComboBox;
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using LBP algorithm"),           RecognitionDatabase::RecognizeAlgorithm::LBP);
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using EigenFaces algorithm"),    RecognitionDatabase::RecognizeAlgorithm::EigenFace);
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"),   RecognitionDatabase::RecognizeAlgorithm::FisherFace);
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using Deep Learning algorithm"), RecognitionDatabase::RecognizeAlgorithm::DNN);
+    d->recognizeBox->setCurrentIndex(RecognitionDatabase::RecognizeAlgorithm::DNN);
+
     d->retrainAllButton = new QCheckBox(advancedTab);
     d->retrainAllButton->setText(i18nc("@option:check", "Clear and rebuild all training data"));
     d->retrainAllButton->setToolTip(i18nc("@info:tooltip",
@@ -351,7 +371,8 @@ void FaceScanDialog::setupUi()
     advancedLayout->addWidget(d->useFullCpuButton,             1, 0);
     advancedLayout->addWidget(new DLineWidget(Qt::Horizontal), 2, 0);
     advancedLayout->addWidget(d->retrainAllButton,             3, 0);
-    advancedLayout->setRowStretch(4, 10);
+    advancedLayout->addWidget(d->recognizeBox,                 4, 0);
+    advancedLayout->setRowStretch(5, 10);
 
     d->tabWidget->addTab(advancedTab, i18nc("@title:tab", "Advanced"));
 
@@ -409,6 +430,7 @@ void FaceScanDialog::retrainAllButtonToggled(bool on)
 {
     d->optionGroupBox->setEnabled(!on);
     d->albumSelectors->setEnabled(!on);
+    d->recognizeBox->setEnabled(!on);
 }
 
 FaceScanSettings FaceScanDialog::settings() const
@@ -443,6 +465,9 @@ FaceScanSettings FaceScanDialog::settings() const
     settings.albums << d->albumSelectors->selectedAlbumsAndTags();
 
     settings.useFullCpu             = d->useFullCpuButton->isChecked();
+
+    settings.recognizeAlgorithm     = (RecognitionDatabase::RecognizeAlgorithm)
+                                      d->recognizeBox->itemData(d->recognizeBox->currentIndex()).toInt();
 
     return settings;
 }

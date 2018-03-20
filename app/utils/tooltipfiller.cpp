@@ -315,12 +315,12 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         settings->getToolTipsShowVideoVideoCodec()         ||
         settings->getToolTipsShowVideoAudioBitRate()       ||
         settings->getToolTipsShowVideoAudioChannelType()   ||
-        settings->getToolTipsShowVideoAudioCompressor())
+        settings->getToolTipsShowVideoAudioCodec())
     {
         if (!videoInfo.allFieldsNull)
         {
             QString metaStr;
-            tip += cnt.headBeg + i18n("Video Properties") + cnt.headEnd;
+            tip += cnt.headBeg + i18n("Audio/Video Properties") + cnt.headEnd;
 
             if (settings->getToolTipsShowVideoAspectRatio())
             {
@@ -432,16 +432,16 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 metaStr += cnt.cellBeg + i18n("Audio Channel Type:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
-            if (settings->getToolTipsShowVideoAudioCompressor())
+            if (settings->getToolTipsShowVideoAudioCodec())
             {
-                str = videoInfo.audioCompressor.isEmpty() ? cnt.unavailable : videoInfo.audioCompressor;
+                str = videoInfo.audioCodec.isEmpty() ? cnt.unavailable : videoInfo.audioCodec;
 
                 if (str.length() > cnt.maxStringLength)
                 {
                     str = str.left(cnt.maxStringLength-3) + QLatin1String("...");
                 }
 
-                metaStr += cnt.cellBeg + i18n("Audio Compressor:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Audio Codec:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             tip += metaStr;

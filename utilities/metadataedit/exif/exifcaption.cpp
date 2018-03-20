@@ -388,12 +388,12 @@ void EXIFCaption::applyMetadata(QByteArray& exifData, QByteArray& iptcData, QByt
         if (meta.supportXmp() && syncXMPCaptionIsChecked())
         {
             meta.setXmpTagStringLangAlt("Xmp.dc.description",
-                                              d->userCommentEdit->toPlainText(),
-                                              QString(), false);
+                                        d->userCommentEdit->toPlainText(),
+                                        QString());
 
             meta.setXmpTagStringLangAlt("Xmp.exif.UserComment",
-                                              d->userCommentEdit->toPlainText(),
-                                              QString(), false);
+                                        d->userCommentEdit->toPlainText(),
+                                        QString());
         }
 
         if (syncIPTCCaptionIsChecked())

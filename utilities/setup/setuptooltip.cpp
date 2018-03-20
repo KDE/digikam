@@ -74,7 +74,7 @@ public:
         showVideoAspectRatio(0),
         showVideoAudioBitRate(0),
         showVideoAudioChannelType(0),
-        showVideoAudioCompressor(0),
+        showVideoAudioCodec(0),
         showVideoDuration(0),
         showVideoFrameRate(0),
         showVideoVideoCodec(0),
@@ -136,7 +136,7 @@ public:
     QCheckBox*   showVideoAspectRatio;
     QCheckBox*   showVideoAudioBitRate;
     QCheckBox*   showVideoAudioChannelType;
-    QCheckBox*   showVideoAudioCompressor;
+    QCheckBox*   showVideoAudioCodec;
     QCheckBox*   showVideoDuration;
     QCheckBox*   showVideoFrameRate;
     QCheckBox*   showVideoVideoCodec;
@@ -312,7 +312,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->videoSettingBox           = new QGroupBox(i18n("Video Information"), vbox);
+    d->videoSettingBox           = new QGroupBox(i18n("Audio/Video Information"), vbox);
     QGridLayout* const grid5     = new QGridLayout(d->videoSettingBox);
 
     d->showVideoAspectRatio      = new QCheckBox(i18n("Video Aspect Ratio"), d->videoSettingBox);
@@ -324,8 +324,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showVideoAudioChannelType = new QCheckBox(i18n("Audio Channel Type"), d->videoSettingBox);
     d->showVideoAudioChannelType->setWhatsThis(i18n("Set this option to display the Audio Channel Type of the Video."));
 
-    d->showVideoAudioCompressor  = new QCheckBox(i18n("Audio Compressor"), d->videoSettingBox);
-    d->showVideoAudioCompressor->setWhatsThis(i18n("Set this option to display the Audio Compressor of the Video."));
+    d->showVideoAudioCodec  = new QCheckBox(i18n("Audio Codec"), d->videoSettingBox);
+    d->showVideoAudioCodec->setWhatsThis(i18n("Set this option to display the Audio Codec of the Video."));
 
     d->showVideoDuration         = new QCheckBox(i18n("Video Duration"), d->videoSettingBox);
     d->showVideoDuration->setWhatsThis(i18n("Set this option to display the Duration of the Video."));
@@ -339,7 +339,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     grid5->addWidget(d->showVideoAspectRatio,      0, 0, 1, 1);
     grid5->addWidget(d->showVideoAudioBitRate,     1, 0, 1, 1);
     grid5->addWidget(d->showVideoAudioChannelType, 2, 0, 1, 1);
-    grid5->addWidget(d->showVideoAudioCompressor,  3, 0, 1, 1);
+    grid5->addWidget(d->showVideoAudioCodec,  3, 0, 1, 1);
     grid5->addWidget(d->showVideoDuration,         0, 1, 1, 1);
     grid5->addWidget(d->showVideoFrameRate,        1, 1, 1, 1);
     grid5->addWidget(d->showVideoVideoCodec,       2, 1, 1, 1);
@@ -539,7 +539,7 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowVideoAspectRatio(d->showVideoAspectRatio->isChecked());
     settings->setToolTipsShowVideoAudioBitRate(d->showVideoAudioBitRate->isChecked());
     settings->setToolTipsShowVideoAudioChannelType(d->showVideoAudioChannelType->isChecked());
-    settings->setToolTipsShowVideoAudioCompressor(d->showVideoAudioCompressor->isChecked());
+    settings->setToolTipsShowVideoAudioCodec(d->showVideoAudioCodec->isChecked());
     settings->setToolTipsShowVideoDuration(d->showVideoDuration->isChecked());
     settings->setToolTipsShowVideoFrameRate(d->showVideoFrameRate->isChecked());
     settings->setToolTipsShowVideoVideoCodec(d->showVideoVideoCodec->isChecked());
@@ -616,7 +616,7 @@ void SetupToolTip::readSettings()
     d->showVideoAspectRatio->setChecked(settings->getToolTipsShowVideoAspectRatio());
     d->showVideoAudioBitRate->setChecked(settings->getToolTipsShowVideoAudioBitRate());
     d->showVideoAudioChannelType->setChecked(settings->getToolTipsShowVideoAudioChannelType());
-    d->showVideoAudioCompressor->setChecked(settings->getToolTipsShowVideoAudioCompressor());
+    d->showVideoAudioCodec->setChecked(settings->getToolTipsShowVideoAudioCodec());
     d->showVideoDuration->setChecked(settings->getToolTipsShowVideoDuration());
     d->showVideoFrameRate->setChecked(settings->getToolTipsShowVideoFrameRate());
     d->showVideoVideoCodec->setChecked(settings->getToolTipsShowVideoVideoCodec());

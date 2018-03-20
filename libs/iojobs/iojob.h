@@ -7,6 +7,7 @@
  * Description : IO Jobs for file systems jobs
  *
  * Copyright (C) 2015 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2018 by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,13 +32,14 @@
 // Local includes
 
 #include "actionthreadbase.h"
+#include "dtrashiteminfo.h"
 #include "digikam_export.h"
+#include "iojobdata.h"
 
 namespace Digikam
 {
 
 class ImageInfo;
-class DTrashItemInfo;
 
 class DIGIKAM_EXPORT IOJob : public ActionJob
 {
@@ -49,6 +51,7 @@ protected:
 
 Q_SIGNALS:
 
+    void signalOneProccessed(int operation);
     void error(const QString& errMsg);
 };
 
@@ -60,7 +63,7 @@ class DIGIKAM_EXPORT CopyJob : public IOJob
 
 public:
 
-    CopyJob(const QUrl& src, const QUrl& dest, bool isMove);
+    CopyJob(IOJobData* const data);
 
 protected:
 
@@ -68,9 +71,7 @@ protected:
 
 private:
 
-    QUrl m_src;
-    QUrl m_dest;
-    bool m_isMove;
+    IOJobData* m_data;
 };
 
 // ---------------------------------------
@@ -81,7 +82,7 @@ class DIGIKAM_EXPORT DeleteJob : public IOJob
 
 public:
 
-    DeleteJob(const QUrl& srcToDelete, bool useTrash, bool markAsObsolete=false);
+    DeleteJob(IOJobData* const data);
 
 protected:
 
@@ -93,9 +94,7 @@ private:
 
 private:
 
-    QUrl m_srcToDelete;
-    bool m_useTrash;
-    bool m_markAsObsolete;
+    IOJobData* m_data;
 };
 
 // ---------------------------------------
@@ -106,11 +105,11 @@ class DIGIKAM_EXPORT RenameFileJob : public IOJob
 
 public:
 
-    RenameFileJob(const QUrl& srcToRename, const QUrl& newName);
+    RenameFileJob(IOJobData* const data);
 
 Q_SIGNALS:
 
-    void signalRenamed(const QUrl& oldUrl, const QUrl& newUrl);
+    void signalRenamed(const QUrl& oldUrl);
     void signalRenameFailed(const QUrl& oldUrl);
 
 protected:
@@ -119,8 +118,7 @@ protected:
 
 private:
 
-    QUrl m_srcToRename;
-    QUrl m_newUrl;
+    IOJobData* m_data;
 };
 
 // ----------------------------------------------
@@ -137,13 +135,51 @@ Q_SIGNALS:
 
     void trashItemInfo(const DTrashItemInfo& info);
 
-private:
+protected:
 
     void run();
 
 private:
 
     QString m_collectionPath;
+};
+
+// ----------------------------------------------
+
+class DIGIKAM_EXPORT RestoreDTrashItemsJob : public IOJob
+{
+    Q_OBJECT
+
+public:
+
+    RestoreDTrashItemsJob(const DTrashItemInfoList& infos);
+
+protected:
+
+    void run();
+
+private:
+
+    DTrashItemInfoList m_dtrashItemInfoList;
+};
+
+// ----------------------------------------------
+
+class DIGIKAM_EXPORT DeleteDTrashItemsJob : public IOJob
+{
+    Q_OBJECT
+
+public:
+
+    DeleteDTrashItemsJob(const DTrashItemInfoList& infos);
+
+protected:
+
+    void run();
+
+private:
+
+    DTrashItemInfoList m_dtrashItemInfoList;
 };
 
 } // namespace Digikam

@@ -435,14 +435,13 @@ bool MetadataHub::writeTags(const QString& filePath, WriteComponent writeMode,
     bool saveFaces = settings.saveFaceTags;
     bool saveTags  = settings.saveTags;
 
-
     if (saveFaces)
     {
-        metadata.setImageFacesMap(d->faceTagsList,true);
+        metadata.setImageFacesMap(d->faceTagsList, true);
     }
     else
     {
-        metadata.setImageFacesMap(d->faceTagsList,false);
+        metadata.setImageFacesMap(d->faceTagsList, false);
     }
 
     writeToBaloo(filePath);
@@ -664,6 +663,47 @@ void Digikam::MetadataHub::loadFaceTags(const ImageInfo& info, const QSize& size
             d->faceTagsList.insertMulti(faceName, QVariant(faceRect));
         }
 
+    }
+}
+
+QMultiMap<QString, QVariant> Digikam::MetadataHub::getFaceTags()
+{
+    return d->faceTagsList;
+}
+
+QMultiMap<QString, QVariant> Digikam::MetadataHub::loadIntegerFaceTags(const ImageInfo& info)
+{
+    FaceTagsEditor editor;
+    QMultiMap<QString, QVariant> faceTagsList;
+
+    QList<FaceTagsIface> facesList = editor.confirmedFaceTagsIfaces(info.id());
+    faceTagsList.clear();
+
+    if (!facesList.isEmpty())
+    {
+        foreach(const FaceTagsIface& dface, facesList)
+        {
+            QString faceName = FaceTags::faceNameForTag(dface.tagId());
+
+            if (faceName.isEmpty())
+                continue;
+
+            QRect  temprect  = dface.region().toRect();
+            faceTagsList.insertMulti(faceName, QVariant(temprect));
+        }
+    }
+    return faceTagsList;
+}
+
+void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags, QSize size)
+{
+    d->faceTagsList.clear();
+    QMultiMap<QString,QVariant>::const_iterator it;
+    for(it = newFaceTags.begin(); it != newFaceTags.end(); it++)
+    {
+        QRect  temprect  = it.value().toRect();
+        QRectF faceRect  = TagRegion::absoluteToRelative(temprect,size);
+        d->faceTagsList.insertMulti(it.key(), faceRect);
     }
 }
 

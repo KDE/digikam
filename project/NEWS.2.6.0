@@ -8,17 +8,17 @@ General        : New tool to run all maintenance process in background.
 General        : Lprof 3rd party library have been removed from core implementation.
 General        : Thumbs/Preview for read-only files (as RAW) can be rotated through a flag in thumbnails database.
 General        : Add a Progress Manager as into Kontact to drive process running in parallele.
-General        : KIPI JPEGLossLess tool is now disabled in digiKam. A dedicated solution is now implemented.
+General        : JPEGLossLess tool is now disabled in digiKam. A dedicated solution is now implemented.
                  in digiKam core to rotate/flip image using multithreading, parallelization, and image versioning.
-KipiInterface  : Handle progress events from kipi tools through digiKam Progress Manager.
-ImageEditor    : Template Superimpose feature have been moved to PhotoLayoutEditor kipi-plugin.
+ToolsInterface : Handle progress events from tools through digiKam Progress Manager.
+ImageEditor    : Template Superimpose feature have been moved to PhotoLayoutEditor.
 ImageEditor    : New film color negative inverter filter.
 
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 286730 : digiKam crash when tagging faces.
-002 ==> 290496 : digikam-2.5.0 core fails to build against libkipi from kde-4.7.95.
+002 ==> 290496 : digikam-2.5.0 core fails to build against kde-4.7.95.
 003 ==> 272980 : Crash while searching on a tag.
 004 ==> 290642 : Build failed with gcc-4.7.0 [patch].
 005 ==> 287772 : Build failed against boost-1.48 [patch].

@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : a plugin to create panorama by fusion of several images.
- * Acknowledge : based on the expoblending plugin
+ * Description : a tool to create panorama by fusion of several images.
+ * Acknowledge : based on the expoblending tool
  *
  * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PANOLAST_PAGE_H
-#define PANOLAST_PAGE_H
+#ifndef PANO_LAST_PAGE_H
+#define PANO_LAST_PAGE_H
 
 // Local includes
 
@@ -41,7 +41,7 @@ class PanoLastPage : public DWizardPage
 
 public:
 
-    PanoLastPage(PanoManager* const mngr, QWizard* const dlg);
+    explicit PanoLastPage(PanoManager* const mngr, QWizard* const dlg);
     ~PanoLastPage();
 
 private:
@@ -65,10 +65,10 @@ private Q_SLOTS:
 
 private:
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* PANOLAST_PAGE_H */
+#endif // PANO_LAST_PAGE_H

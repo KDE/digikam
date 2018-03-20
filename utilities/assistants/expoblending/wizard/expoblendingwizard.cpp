@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-13
- * Description : a plugin to blend bracketed images.
+ * Description : a tool to blend bracketed images.
  *
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
@@ -48,13 +48,13 @@ class ExpoBlendingWizard::Private
 {
 public:
 
-    Private()
-        : mngr(0),
-          introPage(0),
-          itemsPage(0),
-          preProcessingPage(0),
-          lastPage(0),
-          preProcessed(false)
+    explicit Private()
+      : mngr(0),
+        introPage(0),
+        itemsPage(0),
+        preProcessingPage(0),
+        lastPage(0),
+        preProcessed(false)
     {
     }
 

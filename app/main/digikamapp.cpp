@@ -130,6 +130,29 @@
 #include "dfiledialog.h"
 #include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
+#include "dbwindow.h"
+#include "fbwindow.h"
+#include "flickrwindow.h"
+#include "gswindow.h"
+#include "imageshackwindow.h"
+#include "imgurwindow.h"
+#include "piwigowindow.h"
+#include "rajcewindow.h"
+#include "smugwindow.h"
+#include "yfwindow.h"
+
+#ifdef HAVE_MEDIAWIKI
+#   include "mediawikiwindow.h"
+#endif
+
+#ifdef HAVE_VKONTAKTE
+#   include "vkwindow.h"
+#endif
+
+#ifdef HAVE_KIO
+#   include "ftexportwindow.h"
+#   include "ftimportwindow.h"
+#endif
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -149,10 +172,6 @@
 
 #ifdef HAVE_MEDIAPLAYER
 #   include "vidslidewizard.h"
-#endif
-
-#ifdef HAVE_KIPI
-#   include "kipipluginloader.h"
 #endif
 
 #ifdef HAVE_KFILEMETADATA
@@ -277,9 +296,10 @@ DigikamApp::DigikamApp()
     }
 
     AlbumManager::instance()->startScan();
-
-    // Load Plugins.
-    loadPlugins();
+    
+    // Setting the initial menu options after all tools have been loaded
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    d->view->slotAlbumSelected(albumList);
 
     // preload additional windows
     preloadWindows();
@@ -752,7 +772,9 @@ void DigikamApp::setupActions()
             d->view, SLOT(slotAlbumHistoryBack(int)));
 
     // connect action to mapper
-    connect(d->backwardActionMenu, SIGNAL(triggered()), d->backwardSignalMapper, SLOT(map()));
+    connect(d->backwardActionMenu, SIGNAL(triggered()),
+            d->backwardSignalMapper, SLOT(map()));
+
     // inform mapper about number of steps
     d->backwardSignalMapper->setMapping(d->backwardActionMenu, 1);
 
@@ -842,17 +864,17 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->writeAlbumMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Write Metadata to Images"), this);
-    d->writeAlbumMetadataAction->setWhatsThis(i18n("Updates metadata of images in the current "
+    d->writeAlbumMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Write Metadata to Files"), this);
+    d->writeAlbumMetadataAction->setWhatsThis(i18n("Updates metadata of files in the current "
                                                    "album with the contents of digiKam database "
-                                                   "(image metadata will be overwritten with data from "
+                                                   "(file metadata will be overwritten with data from "
                                                    "the database)."));
     connect(d->writeAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumWriteMetadata()));
     ac->addAction(QLatin1String("album_write_metadata"), d->writeAlbumMetadataAction);
 
     // -----------------------------------------------------------------
 
-    d->readAlbumMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("edit-redo")), i18n("Reread Metadata From Images"), this);
+    d->readAlbumMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("edit-redo")), i18n("Reread Metadata From Files"), this);
     d->readAlbumMetadataAction->setWhatsThis(i18n("Updates the digiKam database from the metadata "
                                                   "of the files in the current album "
                                                   "(information in the database will be overwritten with data from "
@@ -996,21 +1018,21 @@ void DigikamApp::setupActions()
     d->quickImportMenu->setIcon(QIcon::fromTheme(QLatin1String("camera-photo")));
     ac->addAction(QLatin1String("import_auto"), d->quickImportMenu->menuAction());
 
-    createKSaneAction();
-
     // -----------------------------------------------------------------
 
-    d->imageWriteMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Write Metadata to Selected Images"), this);
-    d->imageWriteMetadataAction->setWhatsThis(i18n("Updates metadata of images in the current "
+    d->imageWriteMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")),
+                                              i18n("Write Metadata to Selected Files"), this);
+    d->imageWriteMetadataAction->setWhatsThis(i18n("Updates metadata of files in the current "
                                                    "album with the contents of digiKam database "
-                                                   "(image metadata will be overwritten with data from "
+                                                   "(file metadata will be overwritten with data from "
                                                    "the database)."));
     connect(d->imageWriteMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotImageWriteMetadata()));
     ac->addAction(QLatin1String("image_write_metadata"), d->imageWriteMetadataAction);
 
     // -----------------------------------------------------------------
 
-    d->imageReadMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("edit-redo")), i18n("Reread Metadata From Selected Images"), this);
+    d->imageReadMetadataAction = new QAction(QIcon::fromTheme(QLatin1String("edit-redo")),
+                                             i18n("Reread Metadata From Selected Files"), this);
     d->imageReadMetadataAction->setWhatsThis(i18n("Updates the digiKam database from the metadata "
                                                   "of the files in the current album "
                                                   "(information in the database will be overwritten with data from "
@@ -1202,6 +1224,8 @@ void DigikamApp::setupActions()
     setupExifOrientationActions();
     createMetadataEditAction();
     createGeolocationEditAction();
+    createExportActions();
+    createImportActions();
 
     // -----------------------------------------------------------------
 
@@ -1692,10 +1716,10 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
 
     if (selectionCount > 0)
     {
-        d->imageWriteMetadataAction->setText(i18np("Write Metadata to Image",
-                                                   "Write Metadata to Selected Images", selectionCount));
-        d->imageReadMetadataAction->setText(i18np("Reread Metadata From Image",
-                                                  "Reread Metadata From Selected Images", selectionCount));
+        d->imageWriteMetadataAction->setText(i18np("Write Metadata to File",
+                                                   "Write Metadata to Selected Files", selectionCount));
+        d->imageReadMetadataAction->setText(i18np("Reread Metadata From File",
+                                                  "Reread Metadata From Selected Filess", selectionCount));
 
         slotResetExifOrientationActions();
     }
@@ -2560,35 +2584,12 @@ void DigikamApp::slotSetupChanged()
 
 void DigikamApp::slotEditKeys()
 {
-#ifdef HAVE_KIPI
-    editKeyboardShortcuts(KipiPluginLoader::instance()->pluginsActionCollection(),
-                          i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
-#else
     editKeyboardShortcuts();
-#endif /* HAVE_KIPI */
-}
-
-void DigikamApp::slotShowKipiHelp()
-{
-    DXmlGuiWindow::openHandbook();
 }
 
 void DigikamApp::slotDBStat()
 {
     showDigikamDatabaseStat();
-}
-
-void DigikamApp::loadPlugins()
-{
-#ifdef HAVE_KIPI
-    // Load KIPI plugins
-    new KipiPluginLoader(this, d->splashScreen);
-#endif /* HAVE_KIPI */
-
-    // Setting the initial menu options after all plugins have been loaded
-    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-
-    d->view->slotAlbumSelected(albumList);
 }
 
 void DigikamApp::populateThemes()
@@ -3440,31 +3441,19 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(m_geolocationEditAction,       postCategory);
 #endif
 
-    QString importCategory           = i18nc("@title Import Tools",          "Import");
-
-#ifdef HAVE_KIPI
-    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ToolsPlugin))
-    {
-        actionModel->addAction(ac,                        postCategory);
-    }
-
-    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ImagesPlugin))
-    {
-        actionModel->addAction(ac,                        postCategory);
-    }
-
     QString exportCategory           = i18nc("@title Export Tools",          "Export");
 
-    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ExportPlugin))
+    foreach(QAction* const ac, exportActions())
     {
         actionModel->addAction(ac,                        exportCategory);
     }
 
-    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ImportPlugin))
+    QString importCategory           = i18nc("@title Import Tools",          "Import");
+
+    foreach(QAction* const ac, importActions())
     {
         actionModel->addAction(ac,                        importCategory);
     }
-#endif
 
 #ifdef HAVE_KSANE
     actionModel->addAction(m_ksaneAction,                 importCategory);
@@ -3487,6 +3476,119 @@ void DigikamApp::setupSelectToolsAction()
 void DigikamApp::slotPresentation()
 {
     d->view->presentation();
+}
+
+void DigikamApp::slotExportTool()
+{
+    QAction* const tool = dynamic_cast<QAction*>(sender());
+
+    if (tool == m_exportDropboxAction)
+    {
+        DBWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportFacebookAction)
+    {
+        FbWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportFlickrAction)
+    {
+        FlickrWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportGdriveAction)
+    {
+        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+                   this, QLatin1String("googledriveexport"));
+        w.exec();
+    }
+    else if (tool == m_exportGphotoAction)
+    {
+        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+                   this, QLatin1String("googlephotoexport"));
+        w.exec();
+    }
+    else if (tool == m_exportImageshackAction)
+    {
+        ImageShackWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportImgurAction)
+    {
+        ImgurWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportPiwigoAction)
+    {
+        PiwigoWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportRajceAction)
+    {
+        RajceWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportSmugmugAction)
+    {
+        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportYandexfotkiAction)
+    {
+        YFWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+
+#ifdef HAVE_MEDIAWIKI
+    else if (tool == m_exportMediawikiAction)
+    {
+        MediaWikiWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
+
+#ifdef HAVE_VKONTAKTE
+    else if (tool == m_exportVkontakteAction)
+    {
+        VKWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
+
+#ifdef HAVE_KIO
+    else if (tool == m_exportFileTransferAction)
+    {
+        FTExportWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
+}
+
+void DigikamApp::slotImportTool()
+{
+    QAction* const tool = dynamic_cast<QAction*>(sender());
+
+    if (tool == m_importGphotoAction)
+    {
+        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+                   this, QLatin1String("googlephotoimport"));
+        w.exec();
+    }
+    else if (tool == m_importSmugmugAction)
+    {
+        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+                     this, true);
+        w.exec();
+    }
+
+#ifdef HAVE_KIO
+    else if (tool == m_importFileTransferAction)
+    {
+        FTImportWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
 }
 
 }  // namespace Digikam

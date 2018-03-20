@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-03-15
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef CREATEPREVIEWTASK_H
-#define CREATEPREVIEWTASK_H
+#ifndef CREATE_PREVIEW_TASK_H
+#define CREATE_PREVIEW_TASK_H
 
 // Qt includes
 
@@ -40,8 +40,10 @@ class CreatePreviewTask : public PanoTask
 {
 public:
 
-    CreatePreviewTask(const QString& workDirPath, QSharedPointer<const PTOType> inputPTO,
-                      QUrl& previewPtoUrl, const PanoramaItemUrlsMap& preProcessedUrlsMap);
+    explicit CreatePreviewTask(const QString& workDirPath,
+                               QSharedPointer<const PTOType> inputPTO,
+                               QUrl& previewPtoUrl,
+                               const PanoramaItemUrlsMap& preProcessedUrlsMap);
     ~CreatePreviewTask();
 
 protected:
@@ -50,12 +52,12 @@ protected:
 
 private:
 
-    QUrl&                               previewPtoUrl;
-    QSharedPointer<const PTOType>       ptoData;
-    const PanoramaItemUrlsMap           preProcessedUrlsMap;
-    MetaEngine                          m_meta;
+    QUrl&                         previewPtoUrl;
+    QSharedPointer<const PTOType> ptoData;
+    const PanoramaItemUrlsMap     preProcessedUrlsMap;
+    MetaEngine                    m_meta;
 };
 
 }  // namespace Digikam
 
-#endif /* CREATEPREVIEWTASK_H */
+#endif // CREATE_PREVIEW_TASK_H

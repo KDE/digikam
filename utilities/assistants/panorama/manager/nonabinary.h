@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef NONABINARY_H
-#define NONABINARY_H
+#ifndef NONA_BINARY_H
+#define NONA_BINARY_H
 
 // Local includes
 
@@ -37,7 +37,7 @@ class NonaBinary : public DBinaryIface
 
 public:
 
-    NonaBinary()
+    explicit NonaBinary()
         : DBinaryIface(QLatin1String("nona"),
                        QLatin1String("2010.4"),
                        QLatin1String("nona version "),
@@ -58,4 +58,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // NONABINARY_H
+#endif  // NONA_BINARY_H

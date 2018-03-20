@@ -6,6 +6,7 @@
  * Date        : 2003-01-17
  * Description : Haar Database interface
  *
+ * Copyright (C) 2016-2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  * Copyright (C) 2003      by Ricardo Niederberger Cabral <nieder at mail dot ru>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -52,8 +53,12 @@
 #include "coredbbackend.h"
 #include "coredbsearchxml.h"
 #include "dbenginesqlquery.h"
+#include "similaritydb.h"
+#include "similaritydbaccess.h"
 
 using namespace std;
+
+// TODO: Always store similarities in the similaritydb
 
 namespace Digikam
 {
@@ -78,9 +83,7 @@ public:
 
 public:
 
-    DatabaseBlob()
-    {
-    }
+    DatabaseBlob() = default;
 
     /** Read the QByteArray into the Haar::SignatureData.
      */
@@ -153,22 +156,13 @@ public:
 
     Private()
     {
-        data                       = 0;
-        bin                        = 0;
-        signatureCache             = 0;
-        albumCache                 = 0;
+        data                       = nullptr;
+        bin                        = nullptr;
+        signatureCache             = nullptr;
+        albumCache                 = nullptr;
         useSignatureCache          = false;
 
-        signatureQuery             = QString::fromUtf8("SELECT M.imageid, 0, M.matrix, Images.album "
-                                             " FROM ImageHaarMatrix AS M "
-                                             "    INNER JOIN Images ON Images.id=M.imageid "
-                                             " WHERE Images.status=1; ");
-
-        signatureByAlbumRootsQuery = QString::fromUtf8("SELECT M.imageid, Albums.albumRoot, M.matrix, Images.album "
-                                             " FROM ImageHaarMatrix AS M "
-                                             "    INNER JOIN Images ON Images.id=M.imageid "
-                                             "    INNER JOIN Albums ON Albums.id=Images.album"
-                                             " WHERE Images.status=1;");
+        signatureQuery             = QString::fromUtf8("SELECT M.imageid, M.matrix FROM ImageHaarMatrix AS M;");
     }
 
     ~Private()
@@ -224,9 +218,9 @@ public:
     void setSignatureCacheEnabled(bool cache)
     {
         delete signatureCache;
-        signatureCache = 0;
+        signatureCache = nullptr;
         delete albumCache;
-        albumCache     = 0;
+        albumCache     = nullptr;
 
         if (cache)
         {
@@ -242,7 +236,7 @@ public:
         }
 
         // Variables for data read from DB
-        CoreDbAccess      access;
+        SimilarityDbAccess  similarityDbAccess;
         DatabaseBlob        blob;
         qlonglong           imageid;
         int                 albumid;
@@ -252,9 +246,9 @@ public:
         SignatureCache& signatureCache = *this->signatureCache;
         AlbumCache&     albumCache     = *this->albumCache;
 
-        DbEngineSqlQuery query = access.backend()->prepareQuery(signatureQuery);
+        DbEngineSqlQuery query = similarityDbAccess.backend()->prepareQuery(signatureQuery);
 
-        if (!access.backend()->exec(query))
+        if (!similarityDbAccess.backend()->exec(query))
         {
             return;
         }
@@ -262,10 +256,16 @@ public:
         while (query.next())
         {
             imageid = query.value(0).toLongLong();
-            blob.read(query.value(2).toByteArray(), &targetSig);
-            albumid = query.value(3).toInt();
-            signatureCache[imageid] = targetSig;
-            albumCache[imageid]     = albumid;
+
+            // Get the album id and status of the item with the ImageInfo.
+            ImageInfo info(imageid);
+            if (!info.isNull() && info.isVisible())
+            {
+                blob.read(query.value(1).toByteArray(), &targetSig);
+                albumid = info.albumId();
+                signatureCache[imageid] = targetSig;
+                albumCache[imageid]     = albumid;
+            }
         }
     }
 
@@ -276,7 +276,6 @@ public:
     AlbumCache*      albumCache;
 
     QString          signatureQuery;
-    QString          signatureByAlbumRootsQuery;
     QSet<int>        albumRootsToSearch;
 };
 
@@ -376,7 +375,7 @@ bool HaarIface::indexImage(qlonglong imageid)
     Haar::SignatureData sig;
     haar.calcHaar(d->data, &sig);
 
-    CoreDbAccess access;
+    SimilarityDbAccess access;
 
     // Store main entry
     {
@@ -384,11 +383,15 @@ bool HaarIface::indexImage(qlonglong imageid)
         DatabaseBlob blob;
         QByteArray array = blob.write(&sig);
 
-        access.backend()->execSql(QString::fromUtf8("REPLACE INTO ImageHaarMatrix "
-                                          " (imageid, modificationDate, uniqueHash, matrix) "
-                                          " SELECT id, modificationDate, uniqueHash, ? "
-                                          "  FROM Images WHERE id=?; "),
-                                  array, imageid);
+        ImageInfo info(imageid);
+
+        if (!info.isNull() && info.isVisible()) {
+
+            access.backend()->execSql(QString::fromUtf8("REPLACE INTO ImageHaarMatrix "
+                                                                " (imageid, modificationDate, uniqueHash, matrix) "
+                                                                " VALUES(?, ?, ?, ?);"),
+                                      imageid, info.modDateTime(), info.uniqueHash(), array);
+        }
     }
 
     return true;
@@ -455,8 +458,7 @@ QPair<double,QMap<qlonglong,double>> HaarIface::bestMatchesForImageWithThreshold
     haar.calcHaar(d->data, &sig);
 
     // Remove all previous similarities from pictures
-    CoreDbAccess access;
-    access.db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(0));
+    SimilarityDbAccess().db()->removeImageSimilarity(0);
 
     // Apply duplicates search for the image. Use the image id 0 which cannot be present.
     return bestMatchesWithThreshold(0, &sig, requiredPercentage, maximumPercentage, targetAlbums, searchResultRestriction, type);
@@ -601,8 +603,8 @@ QPair<double,QMap<qlonglong,double>> HaarIface::bestMatchesWithThreshold(qlonglo
     QMap<qlonglong, double> bestMatches;
     double score, percentage, avgPercentage = 0.0;
     QPair<double,QMap<qlonglong,double>> result;
-    qlonglong         id;
-    CoreDbAccess      access;
+    qlonglong           id;
+    SimilarityDbAccess  access;
 
     for (QMap<qlonglong, double>::const_iterator it = scores.constBegin(); it != scores.constEnd(); ++it)
     {
@@ -624,7 +626,7 @@ QPair<double,QMap<qlonglong,double>> HaarIface::bestMatchesWithThreshold(qlonglo
                     // Store the similarity if the reference image has a valid image id
                     if (imageid > 0)
                     {
-                        access.db()->setImageProperty(id,QLatin1String("similarityTo_")+QString::number(imageid),QString::number(percentage));
+                        access.db()->setImageSimilarity(id,imageid,percentage);
                     }
                     avgPercentage += percentage;
                 }
@@ -661,22 +663,9 @@ bool HaarIface::fulfillsRestrictions(qlonglong imageId, int albumId, qlonglong o
     }
     else if (targetAlbums.isEmpty() || targetAlbums.contains(albumId))
     {
-        if (searchResultRestriction == None)
-        {
-            return true;
-        }
-        else if ( (searchResultRestriction == SameAlbum && originalAlbumId == albumId) )
-        {
-            return true;
-        }
-        else if ( (searchResultRestriction == DifferentAlbum && originalAlbumId != albumId) )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (searchResultRestriction == None) ||
+               (searchResultRestriction == SameAlbum && originalAlbumId == albumId) ||
+               (searchResultRestriction == DifferentAlbum && originalAlbumId != albumId);
     }
     else
     {
@@ -706,7 +695,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
     QMap<qlonglong, double> scores;
 
     // Variables for data read from DB
-    CoreDbAccess      access;
+    SimilarityDbAccess  access;
     DatabaseBlob        blob;
     qlonglong           imageid;
     int                 albumid;
@@ -721,25 +710,14 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
     // if no cache is used or the cache signature map is empty, query the database
     if (!d->useSignatureCache || (signatureCache.isEmpty() && d->useSignatureCache))
     {
-        QString queryText;
-
-        if (filterByAlbumRoots)
-        {
-            queryText = d->signatureByAlbumRootsQuery;
-        }
-        else
-        {
-            queryText = d->signatureQuery;
-        }
-
-        DbEngineSqlQuery query = access.backend()->prepareQuery(queryText);
+        DbEngineSqlQuery query = access.backend()->prepareQuery(d->signatureQuery);
 
         if (!access.backend()->exec(query))
         {
             return scores;
         }
 
-        // We don't use CoreDbBackend's convenience calls, as the result set is large
+        // We don't use SimilarityDb's convenience calls, as the result set is large
         // and we try to avoid copying in a temporary QList<QVariant>
         int albumRootId = 0;
 
@@ -747,38 +725,43 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
         {
             imageid = query.value(0).toLongLong();
 
-            if (filterByAlbumRoots)
+            // Get the album id, album root id and status of the item with the ImageInfo.
+            ImageInfo info(imageid);
+            if (!info.isNull() && info.isVisible())
             {
-                albumRootId = query.value(1).toInt();
-
-                if (!d->albumRootsToSearch.contains(albumRootId))
+                if (filterByAlbumRoots)
                 {
-                    continue;
+                    albumRootId = info.albumRootId();
+
+                    if (!d->albumRootsToSearch.contains(albumRootId))
+                    {
+                        continue;
+                    }
                 }
-            }
 
-            blob.read(query.value(2).toByteArray(), &targetSig);
-            albumid = query.value(3).toInt();
+                blob.read(query.value(1).toByteArray(), &targetSig);
+                albumid = info.albumId();
 
-            if (d->useSignatureCache)
-            {
-                signatureCache[imageid] = targetSig;
-                albumCache[imageid]     = albumid;
-            }
+                if (d->useSignatureCache)
+                {
+                    signatureCache[imageid] = targetSig;
+                    albumCache[imageid]     = albumid;
+                }
 
-            // If the image is the original one or
-            // No restrictions apply or
-            // SameAlbum restriction applies and the albums are equal or
-            // DifferentAlbum restriction applies and the albums differ
-            // then calculate the score.
-            // Also, restrict to target album
-            if ( fulfillsRestrictions(imageid, albumid, originalImageId, originalAlbumId, targetAlbums, searchResultRestriction) )
-            {
-                double&              score = scores[imageid];
-                Haar::SignatureData& qSig  = *querySig;
-                Haar::SignatureData& tSig  = targetSig;
+                // If the image is the original one or
+                // No restrictions apply or
+                // SameAlbum restriction applies and the albums are equal or
+                // DifferentAlbum restriction applies and the albums differ
+                // then calculate the score.
+                // Also, restrict to target album
+                if ( fulfillsRestrictions(imageid, albumid, originalImageId, originalAlbumId, targetAlbums, searchResultRestriction) )
+                {
+                    double&              score = scores[imageid];
+                    Haar::SignatureData& qSig  = *querySig;
+                    Haar::SignatureData& tSig  = targetSig;
 
-                score = calculateScore(qSig, tSig, weights, queryMaps);
+                    score = calculateScore(qSig, tSig, weights, queryMaps);
+                }
             }
         }
     }
@@ -841,7 +824,7 @@ QImage HaarIface::loadQImage(const QString& filename)
 bool HaarIface::retrieveSignatureFromDB(qlonglong imageid, Haar::SignatureData* const sig)
 {
     QList<QVariant> values;
-    CoreDbAccess().backend()->execSql(QString::fromUtf8("SELECT matrix FROM ImageHaarMatrix WHERE imageid=?"),
+    SimilarityDbAccess().backend()->execSql(QString::fromUtf8("SELECT matrix FROM ImageHaarMatrix WHERE imageid=?"),
                                         imageid, &values);
 
     if (values.isEmpty())
@@ -1168,8 +1151,8 @@ double HaarIface::calculateScore(Haar::SignatureData& querySig, Haar::SignatureD
     }
 
     // Step 2: Decrease the score if query and target have significant coefficients in common
-    Haar::Idx* sig               = 0;
-    Haar::SignatureMap* queryMap = 0;
+    Haar::Idx* sig               = nullptr;
+    Haar::SignatureMap* queryMap = nullptr;
     int x                        = 0;
 
     for (int channel = 0; channel < 3; ++channel)

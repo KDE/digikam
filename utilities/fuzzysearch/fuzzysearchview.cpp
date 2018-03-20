@@ -6,7 +6,7 @@
  * Date        : 2008-05-19
  * Description : Fuzzy search sidebar tab contents.
  *
- * Copyright (C) 2016-2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
+ * Copyright (C) 2016-2018 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
@@ -72,12 +72,13 @@
 #include "sketchwidget.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
-#include "fingerprintsgenerator.h"
 #include "dhuesaturationselect.h"
 #include "dcolorvalueselector.h"
 #include "dexpanderbox.h"
 #include "applicationsettings.h"
 #include "drangebox.h"
+#include "similaritydbaccess.h"
+#include "similaritydb.h"
 
 namespace Digikam
 {
@@ -692,21 +693,13 @@ void FuzzySearchView::setActive(bool val)
     // at first occasion, warn if no fingerprints are available
     if (val && !d->fingerprintsChecked && isVisible())
     {
-        if (!CoreDbAccess().db()->hasHaarFingerprints())
+        if (!SimilarityDbAccess().db()->hasFingerprints())
         {
             QString msg = i18n("Image fingerprints have not yet been generated for your collection. "
                                "The Similarity Search Tools will not be operational "
-                               "without pre-generated fingerprints.\n"
-                               "Do you want to build fingerprints now?\n"
-                               "Note: This process can take a while. You can run it "
-                               "any time later using 'Tools/Rebuild all Fingerprints'.");
-            int result = QMessageBox::question(this, i18n("No Fingerprints"), msg);
-
-            if (result == QMessageBox::Yes)
-            {
-                FingerPrintsGenerator* const tool = new FingerPrintsGenerator(true);
-                tool->start();
-            }
+                               "without pre-generated fingerprints. Please generate "
+                               "the fingerprints first.");
+            QMessageBox::information(this, i18n("No Fingerprints"), msg);
         }
 
         d->fingerprintsChecked = true;

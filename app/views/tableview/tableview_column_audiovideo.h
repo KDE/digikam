@@ -47,7 +47,7 @@ public:
     {
         SubColumnAudioBitRate = 0,
         SubColumnAudioChannelType = 1,
-        SubColumnAudioCompressor = 2,
+        SubColumnAudioCodec = 2,
         SubColumnDuration = 3,
         SubColumnFrameRate = 4,
         SubColumnVideoCodec = 5

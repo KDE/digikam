@@ -30,8 +30,6 @@ target_link_libraries(albummodeltest
                       digikamcore
                       digikamgui
 
-                      libdng
-
                       Qt5::Gui
                       Qt5::Test
                       Qt5::Sql

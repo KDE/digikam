@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
@@ -57,21 +57,23 @@
 namespace Digikam
 {
 
-struct PanoOptimizePage::Private
+class PanoOptimizePage::Private
 {
-    Private()
-        : progressCount(0),
-          progressLabel(0),
-          progressTimer(0),
-          optimisationDone(false),
-          canceled(false),
-          title(0),
-//        preprocessResults(0),
-          horizonCheckbox(0),
-//        projectionAndSizeCheckbox(0),
-          detailsText(0),
-          progressPix(DWorkingPixmap()),
-          mngr(0)
+public:
+
+    explicit Private()
+      : progressCount(0),
+        progressLabel(0),
+        progressTimer(0),
+        optimisationDone(false),
+        canceled(false),
+        title(0),
+//      preprocessResults(0),
+        horizonCheckbox(0),
+//      projectionAndSizeCheckbox(0),
+        detailsText(0),
+        progressPix(DWorkingPixmap()),
+        mngr(0)
     {
     }
 
@@ -356,4 +358,4 @@ void PanoOptimizePage::slotPanoAction(const Digikam::PanoActionData& ad)
     }
 }
 
-}   // namespace Digikam
+} // namespace Digikam

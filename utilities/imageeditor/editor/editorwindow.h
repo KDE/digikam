@@ -35,6 +35,9 @@
 #include <QProgressDialog>
 #include <QUrl>
 
+//std includes
+#include <queue>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -76,6 +79,14 @@ class DIGIKAM_EXPORT EditorWindow : public DXmlGuiWindow
     Q_OBJECT
 
 public:
+
+    enum TransformType
+    {
+        RotateLeft,
+        RotateRight,
+        FlipHorizontal,
+        FlipVertical
+    };
 
     explicit EditorWindow(const QString& name);
     ~EditorWindow();
@@ -151,6 +162,9 @@ protected:
 
     QString                   m_formatForRAWVersioning;
     QString                   m_formatForSubversions;
+
+    //using QVector to store transforms
+    QVector<TransformType>    m_transformQue;
 
 protected:
 
@@ -365,6 +379,10 @@ private Q_SLOTS:
     void slotContentAwareResizing();
     void slotResize();
     void slotRatioCrop();
+    void slotRotateLeftIntoQue();
+    void slotRotateRightIntoQue();
+    void slotFlipHIntoQue();
+    void slotFlipVIntoQue();
 
 private:
 

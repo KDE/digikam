@@ -67,7 +67,7 @@ public:
      *
      * @param rectangle This rectangle should have height and width of 1.0
      */
-    void setSelectionArea(const QRectF& rectangle);
+    void   setSelectionArea(const QRectF& rectangle);
     QRectF getSelectionArea() const;
 
 Q_SIGNALS:

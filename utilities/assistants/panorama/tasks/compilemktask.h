@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-03-15
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef COMPILEMKTASK_H
-#define COMPILEMKTASK_H
+#ifndef COMPILE_MK_TASK_H
+#define COMPILE_MK_TASK_H
 
 // Local includes
 
@@ -34,10 +34,13 @@ class CompileMKTask : public CommandTask
 {
 public:
 
-    CompileMKTask(const QString& workDirPath,
-                  const QUrl& mkUrl, const QUrl& panoUrl,
-                  const QString& nonaPath, const QString& enblendPath,
-                  const QString& makePath, bool preview);
+    explicit CompileMKTask(const QString& workDirPath,
+                           const QUrl& mkUrl,
+                           const QUrl& panoUrl,
+                           const QString& nonaPath,
+                           const QString& enblendPath,
+                           const QString& makePath,
+                           bool preview);
     ~CompileMKTask();
 
 protected:
@@ -46,12 +49,12 @@ protected:
 
 private:
 
-//    const QUrl* const                   panoUrl;
-    const QUrl&                         mkUrl;
-    const QString                       nonaPath;
-    const QString                       enblendPath;
+//  const QUrl* const panoUrl;
+    const QUrl&       mkUrl;
+    const QString     nonaPath;
+    const QString     enblendPath;
 };
 
 }  // namespace Digikam
 
-#endif /* COMPILEMKTASK_H */
+#endif // COMPILE_MK_TASK_H

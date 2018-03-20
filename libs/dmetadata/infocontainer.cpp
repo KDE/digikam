@@ -192,7 +192,7 @@ bool VideoInfoContainer::operator==(const VideoInfoContainer& t) const
     bool b4  = videoCodec         == t.videoCodec;
     bool b5  = audioBitRate       == t.audioBitRate;
     bool b6  = audioChannelType   == t.audioChannelType;
-    bool b7  = audioCompressor    == t.audioCompressor;
+    bool b7  = audioCodec    == t.audioCodec;
 
     return b1 && b2 && b3 && b4 && b5 && b6 && b7;
 }
@@ -205,7 +205,7 @@ bool VideoInfoContainer::isEmpty() const
         videoCodec.isEmpty()             &&
         audioBitRate.isEmpty()           &&
         audioChannelType.isEmpty()       &&
-        audioCompressor.isEmpty())
+        audioCodec.isEmpty())
     {
         return true;
     }
@@ -223,7 +223,7 @@ bool VideoInfoContainer::isNull() const
            videoCodec.isEmpty()             &&
            audioBitRate.isEmpty()           &&
            audioChannelType.isEmpty()       &&
-           audioCompressor.isEmpty());
+           audioCodec.isEmpty());
 }
 
 QDataStream& operator<<(QDataStream& ds, const VideoInfoContainer& info)
@@ -234,7 +234,7 @@ QDataStream& operator<<(QDataStream& ds, const VideoInfoContainer& info)
     ds << info.videoCodec;
     ds << info.audioBitRate;
     ds << info.audioChannelType;
-    ds << info.audioCompressor;
+    ds << info.audioCodec;
 
     return ds;
 }
@@ -247,7 +247,7 @@ QDataStream& operator>>(QDataStream& ds, VideoInfoContainer& info)
     ds >> info.videoCodec;
     ds >> info.audioBitRate;
     ds >> info.audioChannelType;
-    ds >> info.audioCompressor;
+    ds >> info.audioCodec;
 
     return ds;
 }
@@ -266,8 +266,8 @@ QDebug operator<<(QDebug dbg, const VideoInfoContainer& t)
                   << t.audioBitRate << ", ";
     dbg.nospace() << "PhotoInfoContainer::audioChannelType: "
                   << t.audioChannelType << ", ";
-    dbg.nospace() << "PhotoInfoContainer::audioCompressor: "
-                  << t.audioCompressor << ", ";
+    dbg.nospace() << "PhotoInfoContainer::audioCodec: "
+                  << t.audioCodec << ", ";
     return dbg.space();
 }
 

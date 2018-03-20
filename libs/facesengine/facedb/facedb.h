@@ -24,24 +24,36 @@
 #ifndef FACE_DATABASE_TRAINING_INTERFACE_H
 #define FACE_DATABASE_TRAINING_INTERFACE_H
 
+// C++ includes
+
+#include <vector>
+
 // Qt includes
 
 #include <QString>
+#include <QFile>
+#include <QDataStream>
+#include <QStandardPaths>
 
 // Local includes
 
 #include "identity.h"
 #include "facedbbackend.h"
+#include "opencvmatdata.h"
 
 namespace Digikam
 {
 
 class LBPHFaceModel;
+class EigenFaceModel;
+class FisherFaceModel;
+class DNNFaceModel;
 
 class FaceDb
 {
 public:
 
+    FaceDb();
     FaceDb(FaceDbBackend* const db);
     ~FaceDb();
 
@@ -51,7 +63,7 @@ public:
     int  addIdentity() const;
     void updateIdentity(const Identity& p);
     void deleteIdentity(int id);
-    void deleteIdentity(const QString & uuid);
+    void deleteIdentity(const QString& uuid);
     QList<Identity> identities()  const;
     QList<int>      identityIds() const;
 
@@ -61,6 +73,20 @@ public:
     LBPHFaceModel lbphFaceModel() const;
     void clearLBPHTraining(const QString& context = QString());
     void clearLBPHTraining(const QList<int>& identities, const QString& context = QString());
+
+    /// OpenCV EIGEN
+
+    void updateEIGENFaceModel(EigenFaceModel& model, const std::vector<cv::Mat>& images_rgb);
+    EigenFaceModel eigenFaceModel() const;
+    void clearEIGENTraining(const QString& context = QString());
+    void clearEIGENTraining(const QList<int>& identities, const QString& context = QString());
+
+    /// OpenCV FISHER
+    FisherFaceModel fisherFaceModel() const;
+
+    /// DNN
+    void getFaceVector(cv::Mat data, std::vector<float>& vecdata);
+    DNNFaceModel dnnFaceModel() const;
 
     // ----------- Database shrinking methods ----------
 

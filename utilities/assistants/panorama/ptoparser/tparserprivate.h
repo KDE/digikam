@@ -5,7 +5,7 @@
  *
  * Description : Helper functions for the Hugin API
  *
- * Copyright (C) 2007 Daniel M German <dmgerman at uvic doooot ca>
+ * Copyright (C) 2007 by Daniel M German <dmgerman at uvic doooot ca>
  * Copyright (C) 2012 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef TPARSERPRIVATE_H
-#define TPARSERPRIVATE_H
+#ifndef T_PARSER_PRIVATE_H
+#define T_PARSER_PRIVATE_H
 
 #include "tparser.h"
 
@@ -44,4 +44,4 @@ void panoScriptParserError(char const* errorstring, ...);
 void yyerror(char const* st);
 void* panoScriptReAlloc(void** ptr, size_t size, int* count);
 
-#endif // TPARSERPRIVATE_H
+#endif // T_PARSER_PRIVATE_H

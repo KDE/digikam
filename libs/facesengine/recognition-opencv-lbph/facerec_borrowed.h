@@ -4,35 +4,32 @@
  *
  * Date        : 2012-01-03
  * Description : http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms
- *          Ahonen T, Hadid A. and Pietikäinen M. "Face description with local binary
- *          patterns: Application to face recognition." IEEE Transactions on Pattern
- *          Analysis and Machine Intelligence, 28(12):2037-2041.
+ *               Ahonen T, Hadid A. and Pietikäinen M. "Face description with local binary
+ *               patterns: Application to face recognition." IEEE Transactions on Pattern
+ *               Analysis and Machine Intelligence, 28(12):2037-2041.
  *
  * Copyright (C) 2012-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2012 Philipp Wagner <bytefish at gmx dot de>
+ * Copyright (C) 2011-2012 by Philipp Wagner <bytefish at gmx dot de>
+ * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
- * Released to public domain under terms of the BSD Simplified license.
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *   * Neither the name of the organization nor the names of its contributors
- *     may be used to endorse or promote products derived from this software
- *     without specific prior written permission.
- *
- *   See http://www.opensource.org/licenses/bsd-license
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * ============================================================ */
 
-#include "libopencv.h"
+#ifndef FACEREC_BORROWED_H
+#define FACEREC_BORROWED_H
 
-#if !OPENCV_TEST_VERSION(3,0,0)
-#   include "face.hpp"
-#endif
+#include "libopencv.h"
+#include "face.hpp"
 
 // C++ includes
 
@@ -41,11 +38,7 @@
 namespace Digikam
 {
 
-#if OPENCV_TEST_VERSION(3,0,0)
-class LBPHFaceRecognizer : public cv::FaceRecognizer
-#else
 class LBPHFaceRecognizer : public cv::face::FaceRecognizer
-#endif
 {
 public:
 
@@ -101,10 +94,9 @@ public:
 
     ~LBPHFaceRecognizer() {}
 
-#if OPENCV_TEST_VERSION(3,0,0)
-    using cv::FaceRecognizer::save;
-    using cv::FaceRecognizer::load;
-#elif OPENCV_TEST_VERSION(3,4,0)
+    using cv::face::FaceRecognizer::predict;
+
+#if OPENCV_TEST_VERSION(3,4,0)
     using cv::face::FaceRecognizer::save;
     using cv::face::FaceRecognizer::load;
 #else
@@ -123,47 +115,23 @@ public:
      * Computes a LBPH model with images in src and
      * corresponding labels in labels.
      */
-#if OPENCV_TEST_VERSION(3,1,0)
-    void train(cv::InputArrayOfArrays src, cv::InputArray labels);
-#else
     void train(cv::InputArrayOfArrays src, cv::InputArray labels) override;
-#endif
 
     /**
      * Updates this LBPH model with images in src and
      * corresponding labels in labels.
      */
-#if OPENCV_TEST_VERSION(3,1,0)
-    void update(cv::InputArrayOfArrays src, cv::InputArray labels);
-#else
     void update(cv::InputArrayOfArrays src, cv::InputArray labels) override;
-#endif
 
-
-#if OPENCV_TEST_VERSION(3,1,0)
-    /**
-     * Predicts the label of a query image in src.
-     */
-    int predict(cv::InputArray src) const;
-
-    /**
-     * Predicts the label and confidence for a given sample.
-     */
-    void predict(cv::InputArray _src, int &label, double &dist) const;
-#else
-    using cv::face::FaceRecognizer::predict;
     /*
      * Predict
      */
     void predict(cv::InputArray src, cv::Ptr<cv::face::PredictCollector> collector) const override;
-#endif
 
     /**
      * See FaceRecognizer::load().
      */
-#if OPENCV_TEST_VERSION(3,1,0)
-    void load(const cv::FileStorage&) {}
-#elif OPENCV_TEST_VERSION(3,4,0)
+#if OPENCV_TEST_VERSION(3,4,0)
     void load(const cv::FileStorage&) override {}
 #else
     void read(const cv::FileStorage&) override {}
@@ -172,9 +140,7 @@ public:
     /**
      * See FaceRecognizer::save().
      */
-#if OPENCV_TEST_VERSION(3,1,0)
-    void save(cv::FileStorage&) const {}
-#elif OPENCV_TEST_VERSION(3,4,0)
+#if OPENCV_TEST_VERSION(3,4,0)
     void save(cv::FileStorage&) const override {}
 #else
     void write(cv::FileStorage&) const override {}
@@ -183,17 +149,6 @@ public:
     /**
      * Getter functions.
      */
-#if OPENCV_TEST_VERSION(3,0,0)
-
-    int neighbors() const { return m_neighbors; }
-    int radius()    const { return m_radius;    }
-    int grid_x()    const { return m_grid_x;    }
-    int grid_y()    const { return m_grid_y;    }
-
-    // NOTE: Implementation done through CV_INIT_ALGORITHM macro from OpenCV.
-    cv::AlgorithmInfo* info() const;
-
-#else
 
     int getNeighbors() const                             { return m_neighbors;            }
     void setNeighbors(int _neighbors)                    { m_neighbors = _neighbors;      }
@@ -219,8 +174,6 @@ public:
     void setStatistic(int _statistic)                    { m_statisticsMode = _statistic; }
     int getStatistic() const                             { return m_statisticsMode;       }
 
-#endif
-
 private:
 
     /** Computes a LBPH model with images in src and
@@ -244,3 +197,5 @@ private:
 };
 
 } // namespace Digikam
+
+#endif // FACEREC_BORROWED_H

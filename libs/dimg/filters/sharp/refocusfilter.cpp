@@ -370,4 +370,4 @@ int RefocusFilter::maxMatrixSize()
     return MAX_MATRIX_SIZE;
 }
 
-}  // namespace DigikamImagesPluginCore
+}  // namespace Digikam

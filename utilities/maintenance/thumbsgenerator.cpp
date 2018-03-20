@@ -171,7 +171,8 @@ void ThumbsGenerator::slotStart()
         ImageInfo info = ImageInfo::fromLocalFile(*it);
 
         if (info.category() != DatabaseItem::Image &&
-            info.category() != DatabaseItem::Video)
+            info.category() != DatabaseItem::Video &&
+            info.category() != DatabaseItem::Audio)
         {
             it = d->allPicturesPath.erase(it);
         }

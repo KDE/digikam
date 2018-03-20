@@ -19,9 +19,9 @@ include_directories(BEFORE
 
 include_directories(
     $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Network,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-
 )
 
 set(showfoto_SRCS
@@ -45,7 +45,6 @@ set(showfoto_SRCS
     thumbbar/showfotocategorizedview.cpp
     thumbbar/showfotothumbnailbar.cpp
 
-    main/showfotoinfoiface.cpp
     main/showfotosettings.cpp
     main/main.cpp
     main/showfoto.cpp
@@ -74,8 +73,6 @@ set_target_properties(showfoto PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRE
 target_link_libraries(showfoto
                       PRIVATE
                       digikamcore
-
-                      libdng
 
                       Qt5::Core
 

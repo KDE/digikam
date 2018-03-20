@@ -439,7 +439,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 002 ==> 118318 : Make (lib)gphoto support a configure flag.
 003 ==> 172269 : digiKam hangs for around 20-60 seconds when starting.
 004 ==> 172648 : Thumbnail click does not display embedded picture preview.
-005 ==> 172650 : No kipi plugins available.
+005 ==> 172650 : No external modules available.
 006 ==> 172651 : Send image by email missing.
 007 ==> 168005 : Week view broken in timeline.
 008 ==> 172295 : digiKam has a hard dependency on Jasper library.

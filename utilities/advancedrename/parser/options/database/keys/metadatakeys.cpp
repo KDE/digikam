@@ -54,7 +54,7 @@ static const QString KEY_SUBJECTDISTANCECATEGORY(QLatin1String("SubjectDistanceC
 static const QString KEY_ASPECTRATIO(QLatin1String("AspectRatio"));
 static const QString KEY_AUDIOBITRATE(QLatin1String("AudioBitRate"));
 static const QString KEY_AUDIOCHANNELTYPE(QLatin1String("AudioChannelType"));
-static const QString KEY_AUDIOCOMPRESSOR(QLatin1String("AudioCompressor"));
+static const QString KEY_AUDIOCodec(QLatin1String("AudioCodec"));
 static const QString KEY_DURATION(QLatin1String("Duration"));
 static const QString KEY_FRAMERATE(QLatin1String("FrameRate"));
 static const QString KEY_VIDEOCODEC(QLatin1String("VideoCodec"));
@@ -86,7 +86,7 @@ MetadataKeys::MetadataKeys()
     addId(KEY_ASPECTRATIO,                  i18n("Display Aspect Ratio"));
     addId(KEY_AUDIOBITRATE,                 i18n("Audio Bit Rate"));
     addId(KEY_AUDIOCHANNELTYPE,             i18n("Audio Channel Type"));
-    addId(KEY_AUDIOCOMPRESSOR,              i18n("Audio Compressor (Audio Codec)"));
+    addId(KEY_AUDIOCodec,              i18n("Audio Codec (Audio Codec)"));
     addId(KEY_DURATION,                     i18n("Duration of File"));
     addId(KEY_FRAMERATE,                    i18n("Frame Rate of Video"));
     addId(KEY_VIDEOCODEC,                   i18n("Video Codec"));
@@ -175,9 +175,9 @@ QString MetadataKeys::getDbValue(const QString& key, ParseSettings& settings)
     {
         result = videoContainer.audioChannelType;
     }
-    else if (key == KEY_AUDIOCOMPRESSOR)
+    else if (key == KEY_AUDIOCodec)
     {
-        result = videoContainer.audioCompressor;
+        result = videoContainer.audioCodec;
     }
     else if (key == KEY_DURATION)
     {

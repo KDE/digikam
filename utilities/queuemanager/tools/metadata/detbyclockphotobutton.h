@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DETBYCLOCKPHOTOBUTTON_H
-#define DETBYCLOCKPHOTOBUTTON_H
+#ifndef DET_BY_CLOCK_PHOTO_BUTTON_H
+#define DET_BY_CLOCK_PHOTO_BUTTON_H
 
 // Qt includes
 
@@ -35,7 +35,8 @@ class DetByClockPhotoButton : public QPushButton
 
 public:
 
-    DetByClockPhotoButton(const QString& text) : QPushButton(text)
+    DetByClockPhotoButton(const QString& text)
+        : QPushButton(text)
     {
         setAcceptDrops(true);
     };
@@ -48,4 +49,4 @@ Q_SIGNALS:
     void signalClockPhotoDropped(const QUrl&);
 };
 
-#endif // DETBYCLOCKPHOTOBUTTON_H
+#endif // DET_BY_CLOCK_PHOTO_BUTTON_H

@@ -7,6 +7,7 @@
  * Description : Manager for creating and starting IO jobs threads
  *
  * Copyright (C) 2015 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2018 by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,6 +23,10 @@
  * ============================================================ */
 
 #include "iojobsmanager.h"
+
+// Local includes
+
+#include "iojobdata.h"
 
 namespace Digikam
 {
@@ -46,10 +51,10 @@ IOJobsManager* IOJobsManager::instance()
     return& creator->object;
 }
 
-IOJobsThread* IOJobsManager::startCopy(const QList<QUrl>& srcsList, const QUrl& destAlbum)
+IOJobsThread* IOJobsManager::startCopy(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->copy(srcsList, destAlbum);
+    thread->copy(data);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -60,10 +65,10 @@ IOJobsThread* IOJobsManager::startCopy(const QList<QUrl>& srcsList, const QUrl& 
     return thread;
 }
 
-IOJobsThread* IOJobsManager::startMove(const QList<QUrl>& srcsList, const QUrl& destAlbum)
+IOJobsThread* IOJobsManager::startMove(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->move(srcsList, destAlbum);
+    thread->move(data);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -74,10 +79,10 @@ IOJobsThread* IOJobsManager::startMove(const QList<QUrl>& srcsList, const QUrl& 
     return thread;
 }
 
-IOJobsThread* IOJobsManager::startDelete(const QList<QUrl>& filesToDelete, bool useTrash)
+IOJobsThread* IOJobsManager::startDelete(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->deleteFiles(filesToDelete, useTrash);
+    thread->deleteFiles(data);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),
@@ -88,10 +93,10 @@ IOJobsThread* IOJobsManager::startDelete(const QList<QUrl>& filesToDelete, bool 
     return thread;
 }
 
-IOJobsThread* IOJobsManager::startRenameFile(const QUrl& srcToRename, const QUrl& newUrl)
+IOJobsThread* IOJobsManager::startRenameFile(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->renameFile(srcToRename, newUrl);
+    thread->renameFile(data);
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),

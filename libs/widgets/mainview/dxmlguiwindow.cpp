@@ -172,23 +172,58 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
-    m_expoBlendingAction    = 0;
-    m_panoramaAction        = 0;
-    m_videoslideshowAction  = 0;
-    m_htmlGalleryAction     = 0;
-    m_sendByMailAction      = 0;
-    m_printCreatorAction    = 0;
-    m_calendarAction        = 0;
-    m_presentationAction    = 0;
-    m_metadataEditAction    = 0;
-    m_geolocationEditAction = 0;
-    m_mediaServerAction     = 0;
-    m_animLogo              = 0;
+    m_expoBlendingAction       = 0;
+    m_panoramaAction           = 0;
+    m_videoslideshowAction     = 0;
+    m_htmlGalleryAction        = 0;
+    m_sendByMailAction         = 0;
+    m_printCreatorAction       = 0;
+    m_calendarAction           = 0;
+    m_presentationAction       = 0;
+    m_metadataEditAction       = 0;
+    m_geolocationEditAction    = 0;
+    m_mediaServerAction        = 0;
+    m_animLogo                 = 0;
 
-#ifdef HAVE_KSANE
-    m_ksaneAction           = 0;
+    // Export tools
+
+    m_exportDropboxAction      = 0;
+    m_exportFacebookAction     = 0;
+    m_exportFlickrAction       = 0;
+    m_exportGdriveAction       = 0;
+    m_exportGphotoAction       = 0;
+    m_exportImageshackAction   = 0;
+    m_exportImgurAction        = 0;
+    m_exportPiwigoAction       = 0;
+    m_exportRajceAction        = 0;
+    m_exportSmugmugAction      = 0;
+    m_exportYandexfotkiAction  = 0;
+
+#ifdef HAVE_MEDIAWIKI
+    m_exportMediawikiAction    = 0;
 #endif
 
+#ifdef HAVE_VKONTAKTE
+    m_exportVkontakteAction    = 0;
+#endif
+
+#ifdef HAVE_KIO
+    m_exportFileTransferAction = 0;
+#endif
+
+    // Import tools
+    
+    m_importGphotoAction       = 0;
+    m_importSmugmugAction      = 0;
+
+#ifdef HAVE_KIO
+    m_importFileTransferAction = 0;
+#endif
+
+#ifdef HAVE_KSANE
+    m_ksaneAction              = 0;
+#endif
+    
     installEventFilter(this);
 }
 
@@ -527,22 +562,11 @@ void DXmlGuiWindow::createMediaServerAction()
                                       i18n("Share with DLNA"),
                                       this);
 
-    
+
     actionCollection()->addAction(QLatin1String("mediaserver"), m_mediaServerAction);
 
     connect(m_mediaServerAction, SIGNAL(triggered(bool)),
             this, SLOT(slotMediaServer()));
-}
-
-void DXmlGuiWindow::createKSaneAction()
-{
-#ifdef HAVE_KSANE
-    m_ksaneAction = new KSaneAction(this);
-    actionCollection()->addAction(QLatin1String("import_scan"), m_ksaneAction);
-
-    connect(m_ksaneAction, SIGNAL(triggered(bool)),
-            this, SLOT(slotImportFromScanner()));
-#endif
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)
@@ -999,6 +1023,202 @@ void DXmlGuiWindow::setupIconTheme()
 
         cg.sync();
     }
+}
+
+void DXmlGuiWindow::createExportActions()
+{
+    m_exportDropboxAction = new QAction(i18n("Export to &Dropbox..."), this);
+    m_exportDropboxAction->setIcon(QIcon::fromTheme(QString::fromLatin1("dropbox")));
+    actionCollection()->addAction(QLatin1String("export_dropbox"), m_exportDropboxAction);
+    actionCollection()->setDefaultShortcut(m_exportDropboxAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_D);
+
+    connect(m_exportDropboxAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
+    m_exportFacebookAction->setIcon(QIcon::fromTheme(QString::fromLatin1("facebook")));
+    actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
+    actionCollection()->setDefaultShortcut(m_exportFacebookAction, Qt::ALT + Qt::SHIFT + Qt::Key_F);
+
+    connect(m_exportFacebookAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportFlickrAction = new QAction(i18n("Export to Flick&r..."), this);
+    m_exportFlickrAction->setIcon(QIcon::fromTheme(QString::fromLatin1("flickr")));
+    actionCollection()->addAction(QLatin1String("export_flickr"), m_exportFlickrAction);
+    actionCollection()->setDefaultShortcut(m_exportFlickrAction, Qt::ALT + Qt::SHIFT + Qt::Key_R);
+
+    connect(m_exportFlickrAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportGdriveAction = new QAction(i18n("Export to &Google Drive..."), this);
+    m_exportGdriveAction->setIcon(QIcon::fromTheme(QString::fromLatin1("googledrive")));
+    actionCollection()->addAction(QLatin1String("export_googledrive"), m_exportGdriveAction);
+    actionCollection()->setDefaultShortcut(m_exportGdriveAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_G);
+
+    connect(m_exportGdriveAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportGphotoAction = new QAction(i18n("Export to &Google Photos..."), this);
+    m_exportGphotoAction->setIcon(QIcon::fromTheme(QString::fromLatin1("googlephoto")));
+    actionCollection()->addAction(QLatin1String("export_googlephoto"), m_exportGphotoAction);
+    actionCollection()->setDefaultShortcut(m_exportGphotoAction, Qt::ALT + Qt::SHIFT + Qt::Key_P);
+
+    connect(m_exportGphotoAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportImageshackAction = new QAction(i18n("Export to &Imageshack..."), this);
+    m_exportImageshackAction->setIcon(QIcon::fromTheme(QString::fromLatin1("imageshack")));
+    actionCollection()->addAction(QLatin1String("export_imageshack"), m_exportImageshackAction);
+    actionCollection()->setDefaultShortcut(m_exportImageshackAction, Qt::ALT + Qt::SHIFT + Qt::Key_M);
+
+    connect(m_exportImageshackAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportImgurAction = new QAction(i18n("Export to &Imgur.."), this);
+    m_exportImgurAction->setIcon(QIcon::fromTheme(QString::fromLatin1("imgur")));
+    actionCollection()->addAction(QLatin1String("export_imgur"), m_exportImgurAction);
+
+    connect(m_exportImgurAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportPiwigoAction = new QAction(i18n("Export to &Piwigo..."), this);
+    m_exportPiwigoAction->setIcon(QIcon::fromTheme(QString::fromLatin1("piwigo")));
+    actionCollection()->addAction(QLatin1String("export_piwigo"), m_exportPiwigoAction);
+
+    connect(m_exportPiwigoAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportRajceAction = new QAction(i18n("Export to &Rajce.net..."), this);
+    m_exportRajceAction->setIcon(QIcon::fromTheme(QString::fromLatin1("rajce")));
+    actionCollection()->addAction(QLatin1String("export_rajce"), m_exportRajceAction);
+    actionCollection()->setDefaultShortcut(m_exportRajceAction, Qt::ALT + Qt::SHIFT + Qt::Key_J);
+
+    connect(m_exportRajceAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportSmugmugAction = new QAction(i18n("Export to &SmugMug..."), this);
+    m_exportSmugmugAction->setIcon(QIcon::fromTheme(QString::fromLatin1("smugmug")));
+    actionCollection()->addAction(QLatin1String("export_smugmug"), m_exportSmugmugAction);
+    actionCollection()->setDefaultShortcut(m_exportSmugmugAction, Qt::ALT + Qt::SHIFT +  Qt::Key_S);
+
+    connect(m_exportSmugmugAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+    m_exportYandexfotkiAction = new QAction(i18n("Export to &Yandex.Fotki..."), this);
+    m_exportYandexfotkiAction->setIcon(QIcon::fromTheme(QString::fromLatin1("internet-web-browser")));
+    actionCollection()->addAction(QLatin1String("export_yandexfotki"), m_exportYandexfotkiAction);
+    actionCollection()->setDefaultShortcut(m_exportYandexfotkiAction, Qt::ALT + Qt::SHIFT + Qt::Key_Y);
+
+    connect(m_exportYandexfotkiAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+
+#ifdef HAVE_MEDIAWIKI
+    m_exportMediawikiAction = new QAction(i18n("Export to MediaWiki..."), this);
+    m_exportMediawikiAction->setIcon(QIcon::fromTheme(QString::fromLatin1("mediawiki")));
+    actionCollection()->addAction(QLatin1String("export_mediawiki"), m_exportMediawikiAction);
+
+    connect(m_exportMediawikiAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+#endif
+
+#ifdef HAVE_VKONTAKTE
+    m_exportVkontakteAction = new QAction(i18n("Export to &VKontakte..."), this);
+    m_exportVkontakteAction->setIcon(QIcon::fromTheme(QString::fromLatin1("preferences-web-browser-shortcuts")));
+    actionCollection()->addAction(QLatin1String("export_vkontakte"), m_exportVkontakteAction);
+
+    connect(m_exportVkontakteAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+#endif
+
+#ifdef HAVE_KIO
+    m_exportFileTransferAction = new QAction(i18n("Export to remote storage..."), this);
+    m_exportFileTransferAction->setIcon(QIcon::fromTheme(QString::fromLatin1("folder-html")));
+    actionCollection()->addAction(QLatin1String("export_filetransfer"), m_exportFileTransferAction);
+    actionCollection()->setDefaultShortcut(m_exportYandexfotkiAction, Qt::ALT + Qt::SHIFT + Qt::Key_K);
+
+    connect(m_exportFileTransferAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExportTool()));
+#endif
+}
+
+void DXmlGuiWindow::createImportActions()
+{
+    m_importGphotoAction = new QAction(i18n("Import from &Google Photos..."), this);
+    m_importGphotoAction->setIcon(QIcon::fromTheme(QString::fromLatin1("googlephoto")));
+    actionCollection()->addAction(QLatin1String("import_googlephoto"), m_importGphotoAction);
+    actionCollection()->setDefaultShortcut(m_importGphotoAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_P);
+
+    connect(m_importGphotoAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotImportTool()));
+
+    m_importSmugmugAction = new QAction(i18n("Import from &SmugMug..."), this);
+    m_importSmugmugAction->setIcon(QIcon::fromTheme(QString::fromLatin1("smugmug")));
+    actionCollection()->addAction(QLatin1String("import_smugmug"), m_importSmugmugAction);
+    actionCollection()->setDefaultShortcut(m_importSmugmugAction, Qt::ALT + Qt::SHIFT + Qt::CTRL + Qt::Key_S);
+
+    connect(m_importSmugmugAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotImportTool()));
+
+#ifdef HAVE_KIO
+    m_importFileTransferAction = new QAction(i18n("Import from remote storage..."), this);
+    m_importFileTransferAction->setIcon(QIcon::fromTheme(QString::fromLatin1("folder-html")));
+    actionCollection()->addAction(QLatin1String("import_filetransfer"), m_importFileTransferAction);
+    actionCollection()->setDefaultShortcut(m_importFileTransferAction, Qt::ALT + Qt::SHIFT + Qt::Key_I);
+
+    connect(m_importFileTransferAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotImportTool()));
+#endif
+
+#ifdef HAVE_KSANE
+    m_ksaneAction = new KSaneAction(this);
+    actionCollection()->addAction(QLatin1String("import_scan"), m_ksaneAction);
+
+    connect(m_ksaneAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotImportFromScanner()));
+#endif
+}
+
+QList<QAction*> DXmlGuiWindow::exportActions() const
+{
+    return QList<QAction*>() << m_exportDropboxAction
+                             << m_exportFacebookAction
+                             << m_exportFlickrAction
+                             << m_exportGdriveAction
+                             << m_exportGphotoAction
+                             << m_exportImageshackAction
+                             << m_exportImgurAction
+                             << m_exportPiwigoAction
+                             << m_exportRajceAction
+                             << m_exportSmugmugAction
+                             << m_exportYandexfotkiAction
+#ifdef HAVE_MEDIAWIKI
+                             << m_exportMediawikiAction
+#endif
+
+#ifdef HAVE_VKONTAKTE
+                             << m_exportVkontakteAction
+#endif
+
+#ifdef HAVE_KIO
+                             << m_exportFileTransferAction;
+#endif
+                             ;
+}
+
+QList<QAction*> DXmlGuiWindow::importActions() const
+{
+    return QList<QAction*>() << m_importGphotoAction
+                             << m_importSmugmugAction
+
+#ifdef HAVE_KIO
+                             << m_importFileTransferAction
+#endif
+                       
+#ifdef HAVE_KSANE
+                             << m_ksaneAction
+#endif
+                             ;
 }
 
 } // namespace Digikam

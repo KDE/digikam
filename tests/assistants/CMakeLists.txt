@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
 # Copyright (c) 2011-2015, Benjamin Girault, <benjamin dot girault at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -28,12 +28,10 @@ add_executable(expoblending ${expoblending_SRCS})
 
 target_link_libraries(expoblending
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
 )
-
 
 # =======================================================
 # Stand alone version of Calendar tool
@@ -44,7 +42,6 @@ add_executable(calendar ${calendar_SRCS})
 
 target_link_libraries(calendar
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -60,7 +57,6 @@ if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
 
     target_link_libraries(panorama
                           digikamcore
-                          libdng
 
                           Qt5::Gui
                           Qt5::Xml
@@ -72,7 +68,6 @@ if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
 
     target_link_libraries(panoparser_test
                           digikamcore
-                          libdng
 
                           Qt5::Gui
                           Qt5::Xml
@@ -88,7 +83,6 @@ add_executable(sendbymail ${sendbymail_SRCS})
 
 target_link_libraries(sendbymail
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -103,7 +97,6 @@ add_executable(printcreator ${printcreator_SRCS})
 
 target_link_libraries(printcreator
                       digikamcore
-                      libdng
 
                       Qt5::Gui
                       Qt5::Xml
@@ -120,7 +113,6 @@ if(ENABLE_MEDIAPLAYER)
 
     target_link_libraries(videoslideshow
                           digikamcore
-                          libdng
 
                           Qt5::Gui
                           Qt5::Xml
@@ -138,7 +130,6 @@ if(LibXml2_FOUND AND LibXslt_FOUND)
 
     target_link_libraries(htmlgallery
                           digikamcore
-                          libdng
 
                           Qt5::Gui
                           Qt5::Xml

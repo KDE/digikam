@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-03-15
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_CPCLEANTASK_H
-#define PANO_CPCLEANTASK_H
+#ifndef PANO_CP_CLEAN_TASK_H
+#define PANO_CP_CLEAN_TASK_H
 
 // Local includes
 
@@ -33,8 +33,10 @@ class CpCleanTask : public CommandTask
 {
 public:
 
-    CpCleanTask(const QString& workDirPath, const QUrl& input,
-                QUrl& cpCleanPtoUrl, const QString& cpCleanPath);
+    explicit CpCleanTask(const QString& workDirPath,
+                         const QUrl& input,
+                         QUrl& cpCleanPtoUrl,
+                         const QString& cpCleanPath);
     ~CpCleanTask();
 
 protected:
@@ -43,10 +45,10 @@ protected:
 
 private:
 
-    QUrl&                               cpCleanPtoUrl;
-    const QUrl&                         cpFindPtoUrl;
+    QUrl&       cpCleanPtoUrl;
+    const QUrl& cpFindPtoUrl;
 };
 
 }  // namespace Digikam
 
-#endif /* PANO_CPCLEANTASK_H */
+#endif // PANO_CP_CLEAN_TASK_H

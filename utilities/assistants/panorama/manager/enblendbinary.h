@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef ENBLENDBINARY_H
-#define ENBLENDBINARY_H
+#ifndef ENBLEND_BINARY_H
+#define ENBLEND_BINARY_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class EnblendBinary : public DBinaryIface
 
 public:
 
-    EnblendBinary()
+    explicit EnblendBinary()
         : DBinaryIface(QLatin1String("enblend"),
                        QLatin1String("4.0"),
                        QLatin1String("enblend "),
@@ -56,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // ENBLENDBINARY_H
+#endif  // ENBLEND_BINARY_H

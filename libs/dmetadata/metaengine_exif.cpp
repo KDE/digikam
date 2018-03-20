@@ -304,11 +304,8 @@ static bool is7BitAscii(const QByteArray& s)
     return true;
 }
 
-bool MetaEngine::setExifComment(const QString& comment, bool setProgramName) const
+bool MetaEngine::setExifComment(const QString& comment) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         removeExifTag("Exif.Image.ImageDescription");
@@ -316,7 +313,7 @@ bool MetaEngine::setExifComment(const QString& comment, bool setProgramName) con
 
         if (!comment.isNull())
         {
-            setExifTagString("Exif.Image.ImageDescription", comment, setProgramName);
+            setExifTagString("Exif.Image.ImageDescription", comment);
 
             // Write as Unicode only when necessary.
             QTextCodec* latin1Codec = QTextCodec::codecForName("iso8859-1");
@@ -395,11 +392,8 @@ QString MetaEngine::getExifTagDescription(const char* exifTagName)
     return QString();
 }
 
-bool MetaEngine::removeExifTag(const char* exifTagName, bool setProgramName) const
+bool MetaEngine::removeExifTag(const char* exifTagName) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
@@ -451,11 +445,8 @@ bool MetaEngine::getExifTagRational(const char* exifTagName, long int& num, long
     return false;
 }
 
-bool MetaEngine::setExifTagLong(const char* exifTagName, long val, bool setProgramName) const
+bool MetaEngine::setExifTagLong(const char* exifTagName, long val) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         d->exifMetadata()[exifTagName] = static_cast<int32_t>(val);
@@ -473,11 +464,8 @@ bool MetaEngine::setExifTagLong(const char* exifTagName, long val, bool setProgr
     return false;
 }
 
-bool MetaEngine::setExifTagRational(const char* exifTagName, long int num, long int den, bool setProgramName) const
+bool MetaEngine::setExifTagRational(const char* exifTagName, long int num, long int den) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         d->exifMetadata()[exifTagName] = Exiv2::Rational(num, den);
@@ -495,12 +483,9 @@ bool MetaEngine::setExifTagRational(const char* exifTagName, long int num, long 
     return false;
 }
 
-bool MetaEngine::setExifTagData(const char* exifTagName, const QByteArray& data, bool setProgramName) const
+bool MetaEngine::setExifTagData(const char* exifTagName, const QByteArray& data) const
 {
     if (data.isEmpty())
-        return false;
-
-    if (!setProgramId(setProgramName))
         return false;
 
     try
@@ -522,7 +507,7 @@ bool MetaEngine::setExifTagData(const char* exifTagName, const QByteArray& data,
 }
 
 bool MetaEngine::setExifTagVariant(const char* exifTagName, const QVariant& val,
-                               bool rationalWantSmallDenominator, bool setProgramName) const
+                               bool rationalWantSmallDenominator) const
 {
     switch (val.type())
     {
@@ -531,7 +516,7 @@ bool MetaEngine::setExifTagVariant(const char* exifTagName, const QVariant& val,
         case QVariant::Bool:
         case QVariant::LongLong:
         case QVariant::ULongLong:
-            return setExifTagLong(exifTagName, val.toInt(), setProgramName);
+            return setExifTagLong(exifTagName, val.toInt());
 
         case QVariant::Double:
         {
@@ -542,7 +527,7 @@ bool MetaEngine::setExifTagVariant(const char* exifTagName, const QVariant& val,
             else
                 convertToRational(val.toDouble(), &num, &den, 4);
 
-            return setExifTagRational(exifTagName, num, den, setProgramName);
+            return setExifTagRational(exifTagName, num, den);
         }
         case QVariant::List:
         {
@@ -555,7 +540,7 @@ bool MetaEngine::setExifTagVariant(const char* exifTagName, const QVariant& val,
             if (list.size() >= 2)
                 den = list[1].toInt();
 
-            return setExifTagRational(exifTagName, num, den, setProgramName);
+            return setExifTagRational(exifTagName, num, den);
         }
 
         case QVariant::Date:
@@ -564,9 +549,6 @@ bool MetaEngine::setExifTagVariant(const char* exifTagName, const QVariant& val,
             QDateTime dateTime = val.toDateTime();
 
             if(!dateTime.isValid())
-                return false;
-
-            if (!setProgramId(setProgramName))
                 return false;
 
             try
@@ -588,10 +570,10 @@ bool MetaEngine::setExifTagVariant(const char* exifTagName, const QVariant& val,
 
         case QVariant::String:
         case QVariant::Char:
-            return setExifTagString(exifTagName, val.toString(), setProgramName);
+            return setExifTagString(exifTagName, val.toString());
 
         case QVariant::ByteArray:
-            return setExifTagData(exifTagName, val.toByteArray(), setProgramName);
+            return setExifTagData(exifTagName, val.toByteArray());
         default:
             break;
     }
@@ -874,11 +856,8 @@ QString MetaEngine::getExifTagString(const char* exifTagName, bool escapeCR) con
     return QString();
 }
 
-bool MetaEngine::setExifTagString(const char* exifTagName, const QString& value, bool setProgramName) const
+bool MetaEngine::setExifTagString(const char* exifTagName, const QString& value) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     try
     {
         d->exifMetadata()[exifTagName] = std::string(value.toLatin1().constData());
@@ -960,11 +939,8 @@ bool MetaEngine::rotateExifQImage(QImage& image, ImageOrientation orientation) c
     return false;
 }
 
-bool MetaEngine::setExifThumbnail(const QImage& thumbImage, bool setProgramName) const
+bool MetaEngine::setExifThumbnail(const QImage& thumbImage) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     if (thumbImage.isNull())
     {
         return removeExifThumbnail();
@@ -993,11 +969,8 @@ bool MetaEngine::setExifThumbnail(const QImage& thumbImage, bool setProgramName)
     return false;
 }
 
-bool MetaEngine::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) const
+bool MetaEngine::setTiffThumbnail(const QImage& thumbImage) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     removeExifThumbnail();
 
     try

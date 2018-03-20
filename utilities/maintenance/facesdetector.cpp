@@ -192,7 +192,9 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
         if (settings.task == FaceScanSettings::DetectAndRecognize)
         {
             //d->pipeline.plugRerecognizingDatabaseFilter();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "recognize algorithm: " << (int)settings.recognizeAlgorithm;
             d->pipeline.plugFaceRecognizer();
+            d->pipeline.activeFaceRecognizer(settings.recognizeAlgorithm);
         }
 
         d->pipeline.plugDatabaseWriter(writeMode);
@@ -203,6 +205,7 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
     {
         d->pipeline.plugRerecognizingDatabaseFilter();
         d->pipeline.plugFaceRecognizer();
+        d->pipeline.activeFaceRecognizer(settings.recognizeAlgorithm);
         d->pipeline.plugDatabaseWriter(FacePipeline::NormalWrite);
         d->pipeline.setDetectionAccuracy(settings.accuracy);
         d->pipeline.construct();
@@ -253,7 +256,7 @@ void FacesDetector::slotStart()
     bool hasPAlbums = false;
     bool hasTAlbums = false;
 
-    foreach(Album* const album, d->albumTodoList)
+    foreach (Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-02-04
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *               This parser is based on pto file format described here:
  *               http://hugin.sourceforge.net/docs/nona/nona.txt, and
  *               on pto files produced by Hugin's tools.
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef PTOPARSER_H
-#define PTOPARSER_H
+#ifndef PTO_PARSER_H
+#define PTO_PARSER_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT PTOFile
 {
 public:
 
-    PTOFile(const QString& huginVersion);
+    explicit PTOFile(const QString& huginVersion);
     ~PTOFile();
 
     bool     openFile(const QString& path);
@@ -50,10 +50,10 @@ public:
 
 private:
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 
 } // namespace Digikam
 
-#endif /* PTOPARSER_H */
+#endif // PTO_PARSER_H

@@ -46,6 +46,8 @@ public:
     explicit DWizardPage(QWizard* const dlg, const QString& title);
     ~DWizardPage();
 
+public:
+
     void setPageWidget(QWidget* const w);
     void removePageWidget(QWidget* const w);
     void setLeftBottomPix(const QPixmap& pix);

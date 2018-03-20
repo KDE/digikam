@@ -343,14 +343,14 @@ bool ApplicationSettings::getToolTipsShowVideoAudioChannelType() const
     return d->tooltipShowVideoAudioChannelType;
 }
 
-void ApplicationSettings::setToolTipsShowVideoAudioCompressor(bool val)
+void ApplicationSettings::setToolTipsShowVideoAudioCodec(bool val)
 {
-    d->tooltipShowVideoAudioCompressor = val;
+    d->tooltipShowVideoAudioCodec = val;
 }
 
-bool ApplicationSettings::getToolTipsShowVideoAudioCompressor() const
+bool ApplicationSettings::getToolTipsShowVideoAudioCodec() const
 {
-    return d->tooltipShowVideoAudioCompressor;
+    return d->tooltipShowVideoAudioCodec;
 }
 
 void ApplicationSettings::setToolTipsShowVideoDuration(bool val)

@@ -6,7 +6,7 @@
  * Date        : 2017-01-29
  * Description : Database cleaner.
  *
- * Copyright (C) 2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
+ * Copyright (C) 2017-2018 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,11 @@ class DbCleaner : public MaintenanceTool
 
 public:
 
-    explicit DbCleaner(bool cleanThumbsDb = false, bool cleanFacesDb = false, bool shrinkDatabases = false, ProgressItem* const parent = 0);
+    explicit DbCleaner(bool cleanThumbsDb = false,
+                       bool cleanFacesDb = false,
+                       bool cleanSimilarityDb = false,
+                       bool shrinkDatabases = false,
+                       ProgressItem* const parent = 0);
     virtual ~DbCleaner();
 
     void setUseMultiCoreCPU(bool b);
@@ -66,7 +70,8 @@ private Q_SLOTS:
 
     void slotFetchedData(const QList<qlonglong>& staleImageIds,
                          const QList<int>& staleThumbIds,
-                         const QList<Identity>& staleIdentities);
+                         const QList<Identity>& staleIdentities,
+                         const QList<qlonglong>& staleImageSimilarities);
 
     void slotAddItemsToProcess(int count);
 
@@ -74,6 +79,7 @@ private Q_SLOTS:
     void slotCleanedItems();
     void slotCleanedThumbnails();
     void slotCleanedFaces();
+    void slotCleanedSimilarity();
     void slotShrinkDatabases();
 
     void slotDone();

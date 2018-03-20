@@ -220,12 +220,12 @@ public:
     /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a byte array.
         Return true if metadata have been loaded successfully from image data.
      */
-    bool loadFromData(const QByteArray& imgData) const;
+    bool loadFromData(const QByteArray& imgData);
 
     /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG,
         DNG, etc...). Return true if metadata have been loaded successfully from file.
      */
-    virtual bool load(const QString& filePath) const;
+    virtual bool load(const QString& filePath);
 
     /** Save all metadata to a file. This one can be different than original picture to perform
         transfert operation Return true if metadata have been saved into file.
@@ -323,7 +323,7 @@ public:
     /** Set the size of image in pixels in Exif tags. Return true if size have been changed
         in metadata.
      */
-    bool setImageDimensions(const QSize& size, bool setProgramName=true) const;
+    bool setImageDimensions(const QSize& size) const;
 
     /** Return the image orientation set in Exif metadata. The makernotes of image are also parsed to
         get this information. See ImageOrientation values for details.
@@ -333,7 +333,7 @@ public:
     /** Set the Exif orientation tag of image. See ImageOrientation values for details
         Return true if orientation have been changed in metadata.
      */
-    bool setImageOrientation(ImageOrientation orientation, bool setProgramName=true) const;
+    bool setImageOrientation(ImageOrientation orientation) const;
 
     /** Return the image color-space set in Exif metadata. The makernotes of image are also parsed to
         get this information. See ImageColorWorkSpace values for details.
@@ -343,7 +343,7 @@ public:
     /** Set the Exif color-space tag of image. See ImageColorWorkSpace values for details
         Return true if work-space have been changed in metadata.
      */
-    bool setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgramName=true) const;
+    bool setImageColorWorkSpace(ImageColorWorkSpace workspace) const;
 
     /** Return the time stamp of image. Exif information are check in first, IPTC in second
         if image don't have Exif information. If no time stamp is found, a null date is returned.
@@ -353,8 +353,7 @@ public:
     /** Set the Exif and Iptc time stamp. If 'setDateTimeDigitized' parameter is true, the 'Digitalized'
         time stamp is set, else only 'Created' time stamp is set.
      */
-    bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized=false,
-                          bool setProgramName=true) const;
+    bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized=false) const;
 
     /** Return the digitization time stamp of the image. First Exif information is checked, then IPTC.
         If no digitization time stamp is found, getImageDateTime() is called if fallbackToCreationTime
@@ -373,7 +372,7 @@ public:
         Re-implemente this method if you want to use another image file format than JPEG to
         save preview.
     */
-    virtual bool setImagePreview(const QImage& preview, bool setProgramName=true) const;
+    virtual bool setImagePreview(const QImage& preview) const;
 
     //@}
 
@@ -470,13 +469,13 @@ public:
     /** Set the Exif Thumbnail image. The thumbnail image must have the right dimensions before.
         Look Exif specification for details. Return true if thumbnail have been changed in metadata.
      */
-    bool setExifThumbnail(const QImage& thumb, bool setProgramName=true) const;
+    bool setExifThumbnail(const QImage& thumb) const;
 
     /** Remove the Exif Thumbnail from the image */
     bool removeExifThumbnail() const;
 
     /** Adds a JPEG thumbnail to a TIFF images. Use this instead of setExifThumbnail for TIFF images. */
-    bool setTiffThumbnail(const QImage& thumb, bool setProgramName=true) const;
+    bool setTiffThumbnail(const QImage& thumb) const;
 
     /** Return a QString copy of Exif user comments. Return a null string if user comments cannot
         be found.
@@ -486,7 +485,7 @@ public:
     /** Set the Exif user comments from image. Look Exif specification for more details about this tag.
         Return true if Exif user comments have been changed in metadata.
      */
-    bool setExifComment(const QString& comment, bool setProgramName=true) const;
+    bool setExifComment(const QString& comment) const;
 
     /** Get an Exif tags content like a string. If 'escapeCR' parameter is true, the CR characters
         will be removed. If Exif tag cannot be found a null string is returned.
@@ -495,7 +494,7 @@ public:
 
     /** Set an Exif tag content using a string. Return true if tag is set successfully.
      */
-    bool setExifTagString(const char* exifTagName, const QString& value, bool setProgramName=true) const;
+    bool setExifTagString(const char* exifTagName, const QString& value) const;
 
     /** Get an Exif tag content like a long value. Return true if Exif tag be found.
      */
@@ -507,7 +506,7 @@ public:
 
     /** Set an Exif tag content using a long value. Return true if tag is set successfully.
      */
-    bool setExifTagLong(const char* exifTagName, long val, bool setProgramName=true) const;
+    bool setExifTagLong(const char* exifTagName, long val) const;
 
     /** Get the 'component' index of an Exif tags content like a rational value.
         'num' and 'den' are the numerator and the denominator of the rational value.
@@ -519,7 +518,7 @@ public:
         'num' and 'den' are the numerator and the denominator of the rational value.
         Return true if tag is set successfully.
      */
-    bool setExifTagRational(const char* exifTagName, long int num, long int den, bool setProgramName=true) const;
+    bool setExifTagRational(const char* exifTagName, long int num, long int den) const;
 
     /** Get an Exif tag content like a bytes array. Return an empty bytes array if Exif
         tag cannot be found.
@@ -528,7 +527,7 @@ public:
 
     /** Set an Exif tag content using a bytes array. Return true if tag is set successfully.
      */
-    bool setExifTagData(const char* exifTagName, const QByteArray& data, bool setProgramName=true) const;
+    bool setExifTagData(const char* exifTagName, const QByteArray& data) const;
 
     /** Get an Exif tags content as a QVariant. Returns a null QVariant if the Exif
         tag cannot be found.
@@ -547,12 +546,12 @@ public:
         Setting a value with multiple components is currently not supported.
      */
     bool setExifTagVariant(const char* exifTagName, const QVariant& data,
-                           bool rationalWantSmallDenominator=true, bool setProgramName=true) const;
+                           bool rationalWantSmallDenominator=true) const;
 
     /** Remove the Exif tag 'exifTagName' from Exif metadata. Return true if tag is
         removed successfully or if no tag was present.
      */
-    bool removeExifTag(const char* exifTagName, bool setProgramName=true) const;
+    bool removeExifTag(const char* exifTagName) const;
 
     /** Return the Exif Tag title or a null string.
      */
@@ -631,7 +630,7 @@ public:
 
     /** Set an Iptc tag content using a string. Return true if tag is set successfully.
      */
-    bool setIptcTagString(const char* iptcTagName, const QString& value, bool setProgramName=true) const;
+    bool setIptcTagString(const char* iptcTagName, const QString& value) const;
 
     /** Returns a strings list with of multiple Iptc tags from the image. Return an empty list if no tag is found. */
     /** Get the values of all IPTC tags with the given tag name in a string list.
@@ -646,8 +645,7 @@ public:
         of one entry. Return true if all tags have been set successfully.
      */
     bool setIptcTagsStringList(const char* iptcTagName, int maxSize,
-                               const QStringList& oldValues, const QStringList& newValues,
-                               bool setProgramName=true) const;
+                               const QStringList& oldValues, const QStringList& newValues) const;
 
     /** Get an Iptc tag content as a bytes array. Return an empty bytes array if Iptc
         tag cannot be found.
@@ -656,12 +654,12 @@ public:
 
     /** Set an Iptc tag content using a bytes array. Return true if tag is set successfully.
      */
-    bool setIptcTagData(const char* iptcTagName, const QByteArray& data, bool setProgramName=true) const;
+    bool setIptcTagData(const char* iptcTagName, const QByteArray& data) const;
 
     /** Remove the all instance of Iptc tags 'iptcTagName' from Iptc metadata. Return true if all
         tags have been removed successfully (or none were present).
      */
-    bool removeIptcTag(const char* iptcTagName, bool setProgramName=true) const;
+    bool removeIptcTag(const char* iptcTagName) const;
 
     /** Return the Iptc Tag title or a null string.
      */
@@ -700,8 +698,7 @@ public:
         all new keywords with all old keywords to prevent duplicate entries in image. Return true if keywords
         have been changed in metadata.
      */
-    bool setIptcKeywords(const QStringList& oldKeywords, const QStringList& newKeywords,
-                         bool setProgramName=true) const;
+    bool setIptcKeywords(const QStringList& oldKeywords, const QStringList& newKeywords) const;
 
     /** Return a strings list of Iptc subjects from image. Return an empty list if no subject are set.
      */
@@ -712,8 +709,7 @@ public:
         all new subjects with all old subjects to prevent duplicate entries in image. Return true if subjects
         have been changed in metadata.
      */
-    bool setIptcSubjects(const QStringList& oldSubjects, const QStringList& newSubjects,
-                         bool setProgramName=true) const;
+    bool setIptcSubjects(const QStringList& oldSubjects, const QStringList& newSubjects) const;
 
     /** Return a strings list of Iptc sub-categories from image. Return an empty list if no sub-category
         are set.
@@ -725,8 +721,7 @@ public:
         from image. The method will compare all new sub-categories with all old sub-categories to prevent
         duplicate entries in image. Return true if sub-categories have been changed in metadata.
      */
-    bool setIptcSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories,
-                              bool setProgramName=true) const;
+    bool setIptcSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories) const;
 
     //@}
 
@@ -767,15 +762,14 @@ public:
 
     /** Set a Xmp tag content using a string. Return true if tag is set successfully.
      */
-    bool setXmpTagString(const char* xmpTagName, const QString& value,
-                         bool setProgramName=true) const;
+    bool setXmpTagString(const char* xmpTagName, const QString& value) const;
 
     /** Set a Xmp tag with a specific type. Return true if tag is set successfully.
      *  This method only accept NormalTag, ArrayBagTag and StructureTag.
      *  Other XmpTagTypes do nothing
      */
     bool setXmpTagString(const char* xmpTagName, const QString& value,
-                         XmpTagType type,bool setProgramName=true) const;
+                         XmpTagType type) const;
 
     /** Return the Xmp Tag title or a null string.
      */
@@ -816,8 +810,7 @@ public:
         description for details. If tag already exist, it wil be removed before.
         Return true if tag is set successfully.
      */
-    bool setXmpTagStringListLangAlt(const char* xmpTagName, const MetaEngine::AltLangMap& values,
-                                    bool setProgramName) const;
+    bool setXmpTagStringListLangAlt(const char* xmpTagName, const MetaEngine::AltLangMap& values) const;
 
     /** Get a Xmp tag content like a string set with an alternative language
         header 'langAlt' (like "fr-FR" for French - RFC3066 notation)
@@ -832,7 +825,7 @@ public:
         Return true if tag is set successfully.
      */
     bool setXmpTagStringLangAlt(const char* xmpTagName, const QString& value,
-                                const QString& langAlt, bool setProgramName=true) const;
+                                const QString& langAlt) const;
 
     /** Get a Xmp tag content like a sequence of strings. If 'escapeCR' parameter is true, the CR characters
         will be removed from strings. If Xmp tag cannot be found a null string list is returned.
@@ -842,8 +835,7 @@ public:
     /** Set a Xmp tag content using the sequence of strings 'seq'.
         Return true if tag is set successfully.
      */
-    bool setXmpTagStringSeq(const char* xmpTagName, const QStringList& seq,
-                            bool setProgramName=true) const;
+    bool setXmpTagStringSeq(const char* xmpTagName, const QStringList& seq) const;
 
     /** Get a Xmp tag content like a bag of strings. If 'escapeCR' parameter is true, the CR characters
         will be removed from strings. If Xmp tag cannot be found a null string list is returned.
@@ -853,23 +845,20 @@ public:
     /** Set a Xmp tag content using the bag of strings 'bag'.
         Return true if tag is set successfully.
      */
-    bool setXmpTagStringBag(const char* xmpTagName, const QStringList& bag,
-                            bool setProgramName=true) const;
+    bool setXmpTagStringBag(const char* xmpTagName, const QStringList& bag) const;
 
     /** Set an Xmp tag content using a list of strings defined by the 'entriesToAdd' parameter.
         The existing entries are preserved. The method will compare
         all new with all already existing entries to prevent duplicates in the image.
         Return true if the entries have been added to metadata.
      */
-    bool addToXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToAdd,
-                              bool setProgramName) const;
+    bool addToXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToAdd) const;
 
     /** Remove those Xmp tag entries that are listed in entriesToRemove from the entries in metadata.
         Return true if tag entries are no longer contained in metadata.
         All other entries are preserved.
      */
-    bool removeFromXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToRemove,
-                                   bool setProgramName) const;
+    bool removeFromXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToRemove) const;
 
     /** Get an Xmp tag content as a QVariant. Returns a null QVariant if the Xmp
         tag cannot be found.
@@ -892,12 +881,12 @@ public:
         all new keywords with all already existing keywords to prevent duplicate entries in image.
         Return true if keywords have been changed in metadata.
      */
-    bool setXmpKeywords(const QStringList& newKeywords, bool setProgramName=true) const;
+    bool setXmpKeywords(const QStringList& newKeywords) const;
 
     /** Remove those Xmp keywords that are listed in keywordsToRemove from the keywords in metadata.
         Return true if keywords are no longer contained in metadata.
      */
-    bool removeXmpKeywords(const QStringList& keywordsToRemove, bool setProgramName=true);
+    bool removeXmpKeywords(const QStringList& keywordsToRemove);
 
     /** Return a strings list of Xmp subjects from image. Return an empty list if no subject are set.
      */
@@ -908,12 +897,12 @@ public:
         all new subject with all already existing subject to prevent duplicate entries in image.
         Return true if subjects have been changed in metadata.
      */
-    bool setXmpSubjects(const QStringList& newSubjects, bool setProgramName=true) const;
+    bool setXmpSubjects(const QStringList& newSubjects) const;
 
     /** Remove those Xmp subjects that are listed in subjectsToRemove from the subjects in metadata.
         Return true if subjects are no longer contained in metadata.
      */
-    bool removeXmpSubjects(const QStringList& subjectsToRemove, bool setProgramName=true);
+    bool removeXmpSubjects(const QStringList& subjectsToRemove);
 
     /** Return a strings list of Xmp sub-categories from image. Return an empty list if no sub-category
         are set.
@@ -925,17 +914,17 @@ public:
         all new sub-categories with all already existing sub-categories to prevent duplicate entries in image.
         Return true if sub-categories have been changed in metadata.
      */
-    bool setXmpSubCategories(const QStringList& newSubCategories, bool setProgramName=true) const;
+    bool setXmpSubCategories(const QStringList& newSubCategories) const;
 
     /** Remove those Xmp sub-categories that are listed in categoriesToRemove from the sub-categories in metadata.
         Return true if subjects are no longer contained in metadata.
      */
-    bool removeXmpSubCategories(const QStringList& categoriesToRemove, bool setProgramName=true);
+    bool removeXmpSubCategories(const QStringList& categoriesToRemove);
 
     /** Remove the Xmp tag 'xmpTagName' from Xmp metadata. Return true if tag is
         removed successfully or if no tag was present.
      */
-    bool removeXmpTag(const char* xmpTagName, bool setProgramName=true) const;
+    bool removeXmpTag(const char* xmpTagName) const;
 
 
     /** Register a namespace which Exiv2 doesn't know yet. This is only needed
@@ -957,7 +946,7 @@ public:
 
     /** Make sure all static required GPS EXIF and XMP tags exist
      */
-    bool initializeGPSInfo(const bool setProgramName);
+    bool initializeGPSInfo();
 
     /** Get all GPS location information set in image. Return true if all information can be found.
      */
@@ -983,22 +972,22 @@ public:
     /** Set all GPS location information into image. Return true if all information have been
         changed in metadata.
      */
-    bool setGPSInfo(const double altitude, const double latitude, const double longitude, const bool setProgramName=true);
+    bool setGPSInfo(const double altitude, const double latitude, const double longitude);
 
     /** Set all GPS location information into image. Return true if all information have been
         changed in metadata. If you do not want altitude to be set, pass a null pointer.
      */
-    bool setGPSInfo(const double* const altitude, const double latitude, const double longitude, const bool setProgramName=true);
+    bool setGPSInfo(const double* const altitude, const double latitude, const double longitude);
 
     /** Set all GPS location information into image. Return true if all information have been
         changed in metadata.
      */
-    bool setGPSInfo(const double altitude, const QString& latitude, const QString& longitude, const bool setProgramName=true);
+    bool setGPSInfo(const double altitude, const QString& latitude, const QString& longitude);
 
     /** Remove all Exif tags relevant of GPS location information. Return true if all tags have been
         removed successfully in metadata.
      */
-    bool removeGPSInfo(const bool setProgramName=true);
+    bool removeGPSInfo();
 
     /** This method converts 'number' to a rational value, returned in the 'numerator' and
         'denominator' parameters. Set the precision using 'rounding' parameter.
@@ -1067,22 +1056,10 @@ public:
 
 protected:
 
-    /** Re-implement this method to set automatically the Program Name and Program Version
-        information in Exif and Iptc metadata if 'on' argument is true. This method is called by all methods which
-        change tags in metadata. By default this method does nothing and returns true.
-
-        In digiKam this method is re-implementated like this:
-
-        if (on)
-        {
-            QString version(digikam_version);
-            QString software("digiKam");
-            return setImageProgramId(software, version);
-        }
-
-        return true;
+    /** Set the Program Name and Program Version
+        information in Exif and Iptc metadata
      */
-    virtual bool setProgramId(bool on=true) const;
+    bool setProgramId() const;
 
 private:
 
@@ -1096,4 +1073,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* META_ENGINE_H */
+#endif // META_ENGINE_H

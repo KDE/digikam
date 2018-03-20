@@ -38,8 +38,6 @@
 
 class QWidget;
 
-
-
 namespace Digikam
 {
 

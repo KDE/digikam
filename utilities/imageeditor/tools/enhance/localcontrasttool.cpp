@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-08-09
- * Description : a plugin to enhance image with local contrasts (as human eye does).
+ * Description : a tool to enhance image with local contrasts (as human eye does).
  *
  * Copyright (C) 2009      by Julien Pontabry <julien dot pontabry at gmail dot com>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>

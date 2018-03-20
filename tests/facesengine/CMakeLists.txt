@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -20,8 +20,6 @@ target_link_libraries(detect
                       digikamfacesengine
                       digikamdatabase
 
-                      libdng
-
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
@@ -38,8 +36,6 @@ target_link_libraries(recognize
                       digikamgui
                       digikamfacesengine
                       digikamdatabase
-
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -60,8 +56,6 @@ target_link_libraries(align
                       digikamfacesengine
                       digikamdatabase
 
-                      libdng
-
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
@@ -80,8 +74,6 @@ target_link_libraries(preprocess
                       digikamfacesengine
                       digikamdatabase
 
-                      libdng
-
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
@@ -98,8 +90,6 @@ target_link_libraries(traindb
                       digikamgui
                       digikamfacesengine
                       digikamdatabase
-
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui
@@ -126,8 +116,6 @@ target_link_libraries(facesenginedemo
                       digikamgui
                       digikamfacesengine
                       digikamdatabase
-
-                      libdng
 
                       Qt5::Core
                       Qt5::Gui

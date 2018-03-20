@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="580" name="digikam" translationDomain="digikam" >
+<gui version="601" name="digikam" translationDomain="digikam" >
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
 
  <MenuBar>
@@ -60,6 +60,7 @@
    <Separator />
      <Action name="image_write_metadata" />
      <Action name="image_read_metadata" />
+   <Separator />
      <Action name="metadata_edit" />
      <Action name="geolocation_edit" />
    <Separator />
@@ -67,8 +68,6 @@
      <Action name="image_flip" />
      <Action name="image_transform_exif" />
      <Action name="image_set_exif_orientation" />
-   <Separator />
-     <DefineGroup name="kipi_image_separation" append="kipi_image_separation" />
   </Menu>
 
   <Menu name="Edit" >
@@ -92,7 +91,6 @@
      <Separator/>
      <Action name="slideshow" />
      <Action name="presentation" />
-     <DefineGroup name="kipi_tool_group" append="kipi_tool_group" />
      <Action name="full_screen" />
      <Action name="view_refresh" />
      <Separator/>
@@ -123,9 +121,6 @@
         <Action name="find_duplicates" />
       <Separator/>
         <Action name="maintenance" />
-        <Action name="empty_tools_group" />
-      <Separator/>
-        <DefineGroup name="kipi_album_group" append="kipi_album_group" />
       <Separator/>
         <Action name="expoblending" />
         <Action name="panorama" />
@@ -135,10 +130,7 @@
         <Action name="sendbymail" />
         <Action name="printcreator" />
         <Action name="mediaserver" />
-
-        <DefineGroup name="kipi_tool_group" append="kipi_tool_group" />
       <Separator/>
-        <DefineGroup name="kipi_batch_group" append="kipi_batch_group" />
   </Menu>
 
   <Menu name="Import"><text>I&amp;mport</text>
@@ -150,13 +142,25 @@
       <Action name="import_addFolders" />
       <Action name="import_scan" />
       <Separator/>
-      <Action name="empty_import_group" />
-      <DefineGroup name="kipi_import_group" append="kipi_import_group" />
+      <Action name="import_googlephoto" />
+      <Action name="import_smugmug" />
+      <Action name="import_filetransfer" />
   </Menu>
 
   <Menu name="Export"><text>&amp;Export</text>
-      <Action name="empty_export_group" />
-      <DefineGroup name="kipi_export_group" append="kipi_export_group" />
+      <Action name="export_dropbox" />
+      <Action name="export_facebook" />
+      <Action name="export_flickr" />
+      <Action name="export_googledrive" />
+      <Action name="export_googlephoto" />
+      <Action name="export_imageshack" />
+      <Action name="export_imgur" />
+      <Action name="export_rajce" />
+      <Action name="export_smugmug" />
+      <Action name="export_yandexfotki" />
+      <Action name="export_mediawiki" />
+      <Action name="export_vkontakte" />
+      <Action name="export_filetransfer" />
   </Menu>
 
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>

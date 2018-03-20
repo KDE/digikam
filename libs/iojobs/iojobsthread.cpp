@@ -7,6 +7,7 @@
  * Description : IO Jobs thread for file system jobs
  *
  * Copyright (C) 2015 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2018 by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,6 +22,8 @@
  *
  * ============================================================ */
 
+#include "iojobsthread.h"
+
 // Qt includes
 
 #include <QFileInfo>
@@ -28,8 +31,8 @@
 
 // Local includes
 
-#include "iojobsthread.h"
 #include "iojob.h"
+#include "iojobdata.h"
 #include "digikam_debug.h"
 #include "coredb.h"
 #include "coredbaccess.h"
@@ -45,14 +48,15 @@ public:
     Private()
         : jobsCount(0),
           isCanceled(false),
-          keepErrors(true)
+          jobData(0)
     {
     }
 
     int            jobsCount;
     bool           isCanceled;
 
-    bool           keepErrors;
+    IOJobData*     jobData;
+
     QList<QString> errorsList;
 };
 
@@ -64,16 +68,19 @@ IOJobsThread::IOJobsThread(QObject* const parent)
 
 IOJobsThread::~IOJobsThread()
 {
+    delete d->jobData;
     delete d;
 }
 
-void IOJobsThread::copy(const QList<QUrl>& srcFiles, const QUrl destAlbum)
+void IOJobsThread::copy(IOJobData* const data)
 {
+    d->jobData = data;
+
     ActionJobCollection collection;
 
-    foreach (const QUrl& url, srcFiles)
+    for (int i = 0; i < maximumNumberOfThreads(); i++)
     {
-        CopyJob* const j = new CopyJob(url, destAlbum, false);
+        CopyJob* const j = new CopyJob(data);
 
         connectOneJob(j);
 
@@ -84,13 +91,15 @@ void IOJobsThread::copy(const QList<QUrl>& srcFiles, const QUrl destAlbum)
     appendJobs(collection);
 }
 
-void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
+void IOJobsThread::move(IOJobData* const data)
 {
+    d->jobData = data;
+
     ActionJobCollection collection;
 
-    foreach (const QUrl& url, srcFiles)
+    for (int i = 0; i < maximumNumberOfThreads(); i++)
     {
-        CopyJob* const j = new CopyJob(url, destAlbum, true);
+        CopyJob* const j = new CopyJob(data);
 
         connectOneJob(j);
 
@@ -101,19 +110,42 @@ void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
     appendJobs(collection);
 }
 
-void IOJobsThread::deleteFiles(const QList<QUrl>& srcsToDelete, bool useTrash)
+void IOJobsThread::deleteFiles(IOJobData* const data)
 {
+    d->jobData = data;
+
     ActionJobCollection collection;
 
-    foreach (const QUrl& url, srcsToDelete)
+    for (int i = 0; i < maximumNumberOfThreads(); i++)
     {
-        DeleteJob* const j = new DeleteJob(url, useTrash,true);
+        DeleteJob* const j = new DeleteJob(data);
 
         connectOneJob(j);
 
         collection.insert(j, 0);
         d->jobsCount++;
     }
+
+    appendJobs(collection);
+}
+
+void IOJobsThread::renameFile(IOJobData* const data)
+{
+    d->jobData = data;
+    ActionJobCollection collection;
+
+    RenameFileJob* const j = new RenameFileJob(data);
+
+    connectOneJob(j);
+
+    connect(j, SIGNAL(signalRenamed(QUrl)),
+            this, SIGNAL(signalRenamed(QUrl)));
+
+    connect(j, SIGNAL(signalRenameFailed(QUrl)),
+            this, SIGNAL(signalRenameFailed(QUrl)));
+
+    collection.insert(j, 0);
+    d->jobsCount++;
 
     appendJobs(collection);
 }
@@ -138,58 +170,12 @@ void IOJobsThread::listDTrashItems(const QString& collectionPath)
 
 void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
 {
-    QList<QUrl> listOfJsonFilesToRemove;
-    QList<QUrl> listOfUsedUrls;
-
-    foreach (const DTrashItemInfo& item, items)
-    {
-        QUrl srcToRename = QUrl::fromLocalFile(item.trashPath);
-        QUrl newName     = getAvailableQUrlToRestoreInCollection(item.collectionPath, listOfUsedUrls);
-
-        listOfUsedUrls << newName;
-
-        QFileInfo fi(item.collectionPath);
-
-        if (!fi.dir().exists())
-        {
-            fi.dir().mkpath(fi.dir().path());
-        }
-
-        renameFile(srcToRename, newName);
-        listOfJsonFilesToRemove << QUrl::fromLocalFile(item.jsonFilePath);
-    }
-
-    deleteFiles(listOfJsonFilesToRemove, false);
-}
-
-void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
-{
-    QList<QUrl> urlsToDelete;
-    CoreDbAccess access;
-
-    foreach (const DTrashItemInfo& item, items)
-    {
-        urlsToDelete << QUrl::fromLocalFile(item.trashPath);
-        urlsToDelete << QUrl::fromLocalFile(item.jsonFilePath);
-        // Set the status of the image id to obsolete, i.e. to remove.
-        access.db()->setItemStatus(item.imageId, DatabaseItem::Status::Obsolete);
-    }
-
-    deleteFiles(urlsToDelete, false);
-}
-
-void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
-{
     ActionJobCollection collection;
-    RenameFileJob* const j = new RenameFileJob(srcToRename, newName);
 
-    connectOneJob(j);
+    RestoreDTrashItemsJob* const j = new RestoreDTrashItemsJob(items);
 
-    connect(j, SIGNAL(signalRenamed(QUrl,QUrl)),
-            this, SIGNAL(renamed(QUrl,QUrl)));
-
-    connect(j, SIGNAL(signalRenameFailed(QUrl)),
-            this, SIGNAL(renameFailed(QUrl)));
+    connect(j, SIGNAL(signalDone()),
+            this, SIGNAL(finished()));
 
     collection.insert(j, 0);
     d->jobsCount++;
@@ -197,10 +183,19 @@ void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)
     appendJobs(collection);
 }
 
-void IOJobsThread::cancel()
+void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
 {
-    d->isCanceled = true;
-    ActionThreadBase::cancel();
+    ActionJobCollection collection;
+
+    DeleteDTrashItemsJob* const j = new DeleteDTrashItemsJob(items);
+
+    connect(j, SIGNAL(signalDone()),
+            this, SIGNAL(finished()));
+
+    collection.insert(j, 0);
+    d->jobsCount++;
+
+    appendJobs(collection);
 }
 
 bool IOJobsThread::isCanceled()
@@ -213,16 +208,6 @@ bool IOJobsThread::hasErrors()
     return !d->errorsList.isEmpty();
 }
 
-void IOJobsThread::setKeepErrors(bool keepErrors)
-{
-    d->keepErrors = keepErrors;
-}
-
-bool IOJobsThread::isKeepingErrors()
-{
-    return d->keepErrors;
-}
-
 QList<QString>& IOJobsThread::errorsList()
 {
     return d->errorsList;
@@ -231,38 +216,16 @@ QList<QString>& IOJobsThread::errorsList()
 void IOJobsThread::connectOneJob(IOJob* const j)
 {
     connect(j, SIGNAL(error(QString)),
-            this, SLOT(error(QString)));
+            this, SLOT(slotError(QString)));
 
     connect(j, SIGNAL(signalDone()),
-            this, SLOT(oneJobFinished()));
+            this, SLOT(slotOneJobFinished()));
+
+    connect(j, SIGNAL(signalOneProccessed(int)),
+            this, SIGNAL(signalOneProccessed(int)));
 }
 
-QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColPath, QList<QUrl>& usedUrls, int version)
-{
-    QFileInfo fileInfo(fileColPath);
-
-    if (version != 0)
-    {
-        QString dir      = fileInfo.dir().path() + QLatin1Char('/');
-        QString baseName = fileInfo.baseName()   + QString::number(version);
-        QString suffix   = QLatin1String(".")    + fileInfo.completeSuffix();
-        fileInfo.setFile(dir + baseName + suffix);
-    }
-
-    QUrl url = QUrl::fromLocalFile(fileInfo.filePath());
-    qCDebug(DIGIKAM_IOJOB_LOG) << "URL USED BEFORE: " << usedUrls.contains(url);
-
-    if (!fileInfo.exists() && !usedUrls.contains(url))
-    {
-        return url;
-    }
-    else
-    {
-        return getAvailableQUrlToRestoreInCollection(fileColPath, usedUrls, ++version);
-    }
-}
-
-void IOJobsThread::oneJobFinished()
+void IOJobsThread::slotOneJobFinished()
 {
     d->jobsCount--;
 
@@ -273,9 +236,20 @@ void IOJobsThread::oneJobFinished()
     }
 }
 
-void IOJobsThread::error(const QString& errString)
+void IOJobsThread::slotError(const QString& errString)
 {
     d->errorsList.append(errString);
+}
+
+void IOJobsThread::slotCancel()
+{
+    d->isCanceled = true;
+    ActionThreadBase::cancel();
+}
+
+IOJobData* IOJobsThread::jobData()
+{
+    return d->jobData;
 }
 
 } // namespace Digikam

@@ -7,6 +7,7 @@
  * Description : Manager for creating and starting IO jobs threads
  *
  * Copyright (C) 2015 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2018 by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +39,8 @@
 namespace Digikam
 {
 
+class IOJobData;
+
 class DIGIKAM_EXPORT IOJobsManager : public QObject
 {
 
@@ -51,35 +54,31 @@ public:
 
     /**
      * @brief startCopy: Starts a thread to copy items to destination
-     * @param srcsList: Sources urls to copy
-     * @param destAlbum: Destenation url of album folder
+     * @param data: IOJobData container with source and destination url
      * @return IOJobsThread pointer for signal/slot connection
      */
-    IOJobsThread* startCopy(const QList<QUrl>& srcsList, const QUrl& destAlbum);
+    IOJobsThread* startCopy(IOJobData* const data);
 
     /**
      * @brief startMove: Starts a thread to move items to destination
-     * @param srcsList: Sources urls to move
-     * @param destAlbum: Destenation url of album folder
+     * @param data: IOJobData container with source and destination url
      * @return IOJobsThread pointer for signal/slot connection
      */
-    IOJobsThread* startMove(const QList<QUrl>& srcsList, const QUrl& destAlbum);
+    IOJobsThread* startMove(IOJobData* const data);
 
     /**
      * @brief startDelete: Starts a thread to delete items
-     * @param filesToDelete: Sources urls to delete
-     * @param useTrash: a flag to specify if the deletion is to trash or permanent
+     * @param data: IOJobData container with source and destination url
      * @return IOJobsThread pointer for signal/slot connection
      */
-    IOJobsThread* startDelete(const QList<QUrl>& filesToDelete, bool useTrash = true);
+    IOJobsThread* startDelete(IOJobData* const data);
 
     /**
      * @brief startRenameFile: Starts a thread to rename a single file
-     * @param srcToRename: The url of the old file name
-     * @param newUrl: The url that represents the new file
+     * @param data: IOJobData container with source and destination url
      * @return IOJobsThread pointer for signal/slot connection
      */
-    IOJobsThread* startRenameFile(const QUrl& srcToRename, const QUrl& newUrl);
+    IOJobsThread* startRenameFile(IOJobData* const data);
 
     /**
      * @brief Starts a thread for listing items inside trash for specific collection

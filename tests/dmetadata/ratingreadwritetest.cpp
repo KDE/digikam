@@ -148,8 +148,8 @@ void RatingReadWriteTest::testReadFromDisabledNamespaces()
     for (int i = 0; i < 6; i++)
     {
 
-        dmeta.setXmpTagString("Xmp.acdsee.rating", QString::number(5-i), false);
-        dmeta.setXmpTagString("Xmp.MicrosoftPhoto.Rating", QString::number(microsoftMappings.at(i)), false);
+        dmeta.setXmpTagString("Xmp.acdsee.rating", QString::number(5-i));
+        dmeta.setXmpTagString("Xmp.MicrosoftPhoto.Rating", QString::number(microsoftMappings.at(i)));
 
         int rez = dmeta.getImageRating(dmsettings);
         QCOMPARE(rez, i);

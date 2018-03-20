@@ -211,7 +211,7 @@ void XMPStatus::applyMetadata(QByteArray& xmpData)
     DMetadata::AltLangMap oldAltLangMap, newAltLangMap;
 
     if (d->objectNameEdit->getValues(oldAltLangMap, newAltLangMap))
-        meta.setXmpTagStringListLangAlt("Xmp.dc.title", newAltLangMap, false);
+        meta.setXmpTagStringListLangAlt("Xmp.dc.title", newAltLangMap);
     else if (d->objectNameEdit->isValid())
         meta.removeXmpTag("Xmp.dc.title");
 

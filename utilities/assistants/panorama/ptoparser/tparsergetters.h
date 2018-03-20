@@ -5,7 +5,7 @@
  *
  * Description : Hugin parser API
  *
- * Copyright (C) 2007 Daniel M German <dmgerman at uvic doooot ca>
+ * Copyright (C) 2007 by Daniel M German <dmgerman at uvic doooot ca>
  * Copyright (C) 2012 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef TPARSERGETTERS_H
-#define TPARSERGETTERS_H
+#ifndef T_PARSER_GETTERS_H
+#define T_PARSER_GETTERS_H
 
 #include "tparser.h"
 
@@ -163,4 +163,4 @@ int     panoScriptGetMaskPointY(pt_script* script, int m, int p);
 int     panoScriptGetEndingCommentCount(pt_script* script);
 char*   panoScriptGetEndingComment(pt_script* script, int c);
 
-#endif // TPARSERGETTERS_H
+#endif // T_PARSER_GETTERS_H

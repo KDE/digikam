@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT Template
 {
 public:
 
-    Template();
+    explicit Template();
     ~Template();
 
     /** Return true is Template title is null

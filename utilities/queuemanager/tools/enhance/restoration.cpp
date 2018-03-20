@@ -40,8 +40,6 @@
 #include "dimg.h"
 #include "dactivelabel.h"
 
-
-
 namespace Digikam
 {
 

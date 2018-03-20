@@ -57,6 +57,7 @@ private:
     bool createIndices();
     bool createTriggers();
     bool updateV1ToV2();
+    bool updateV2ToV3();
 
 private:
 

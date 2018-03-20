@@ -8,6 +8,6 @@ General : new RAW cameras supported : Richon GR, Panasonic LF1, Canon EOS 70D, S
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 324349 : Removing tags limited to 250 selected pictures.
-002 ==> 323648 : Kipi-plugins cannot be deselected or digiKam not reading digikamrc.
+002 ==> 323648 : Tools cannot be deselected or digiKam not reading digikamrc.
 003 ==> 325111 : undo/redo does not take effect in the image.
 004 ==> 325264 : Feature request: Setting in digiKam to only detect faces, not trying to recognize them automatically.

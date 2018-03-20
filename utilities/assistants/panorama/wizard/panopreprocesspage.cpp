@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : a plugin to create panorama by fusion of several images.
- * Acknowledge : based on the expoblending plugin
+ * Description : a tool to create panorama by fusion of several images.
+ * Acknowledge : based on the expoblending tool
  *
  * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -62,20 +62,22 @@
 namespace Digikam
 {
 
-struct PanoPreProcessPage::Private
+class PanoPreProcessPage::Private
 {
-    Private()
-        : progressCount(0),
-          progressLabel(0),
-          progressTimer(0),
-          preprocessingDone(false),
-          canceled(false),
-          nbFilesProcessed(0),
-          title(0),
-          celesteCheckBox(0),
-          detailsText(0),
-          progressPix(DWorkingPixmap()),
-          mngr(0)
+public:
+
+    explicit Private()
+      : progressCount(0),
+        progressLabel(0),
+        progressTimer(0),
+        preprocessingDone(false),
+        canceled(false),
+        nbFilesProcessed(0),
+        title(0),
+        celesteCheckBox(0),
+        detailsText(0),
+        progressPix(DWorkingPixmap()),
+        mngr(0)
     {
     }
 
@@ -356,4 +358,4 @@ void PanoPreProcessPage::slotPanoAction(const Digikam::PanoActionData& ad)
     }
 }
 
-}   // namespace Digikam
+} // namespace Digikam

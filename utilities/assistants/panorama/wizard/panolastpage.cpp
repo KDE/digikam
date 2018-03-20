@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : a plugin to create panorama by fusion of several images.
- * Acknowledge : based on the expoblending plugin
+ * Description : a tool to create panorama by fusion of several images.
+ * Acknowledge : based on the expoblending tool
  *
  * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -53,31 +53,33 @@
 namespace Digikam
 {
 
-struct PanoLastPage::Private
+class PanoLastPage::Private
 {
-    Private()
-        : copyDone(false),
-          title(0),
-          saveSettingsGroupBox(0),
-          fileTemplateQLineEdit(0),
-          savePtoCheckBox(0),
-          warningLabel(0),
-          errorLabel(0),
-          mngr(0)
+public:
+
+    explicit Private()
+      : copyDone(false),
+        title(0),
+        saveSettingsGroupBox(0),
+        fileTemplateQLineEdit(0),
+        savePtoCheckBox(0),
+        warningLabel(0),
+        errorLabel(0),
+        mngr(0)
     {
     }
 
-    bool       copyDone;
+    bool         copyDone;
 
-    QLabel*    title;
+    QLabel*      title;
 
-    QGroupBox* saveSettingsGroupBox;
-    QLineEdit* fileTemplateQLineEdit;
-    QCheckBox* savePtoCheckBox;
-    QLabel*    warningLabel;
-    QLabel*    errorLabel;
+    QGroupBox*   saveSettingsGroupBox;
+    QLineEdit*   fileTemplateQLineEdit;
+    QCheckBox*   savePtoCheckBox;
+    QLabel*      warningLabel;
+    QLabel*      errorLabel;
 
-    PanoManager*   mngr;
+    PanoManager* mngr;
 };
 
 PanoLastPage::PanoLastPage(PanoManager* const mngr, QWizard* const dlg)
@@ -89,7 +91,7 @@ PanoLastPage::PanoLastPage(PanoManager* const mngr, QWizard* const dlg)
 
     d->mngr                   = mngr;
 
-    DVBox* const vbox        = new DVBox(this);
+    DVBox* const vbox         = new DVBox(this);
 
     d->title                  = new QLabel(vbox);
     d->title->setOpenExternalLinks(true);
@@ -329,4 +331,4 @@ void PanoLastPage::slotPanoAction(const Digikam::PanoActionData& ad)
     }
 }
 
-}   // namespace Digikam
+} // namespace Digikam

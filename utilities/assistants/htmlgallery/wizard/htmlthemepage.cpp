@@ -46,7 +46,7 @@ class HTMLThemePage::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : themeList(0),
         themeInfo(0)
     {

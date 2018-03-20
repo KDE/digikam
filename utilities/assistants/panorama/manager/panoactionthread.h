@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : a plugin to create panorama by fusion of several images.
- * Acknowledge : based on the expoblending plugin
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -23,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PANOACTIONTHREAD_H
-#define PANOACTIONTHREAD_H
+#ifndef PANO_ACTION_THREAD_H
+#define PANO_ACTION_THREAD_H
 
 // Qt includes
 
@@ -45,7 +44,7 @@ namespace Digikam
 
 struct PanoActionData;
 
-class PanoActionThread : public QObject // : public QThread
+class PanoActionThread : public QObject
 {
     Q_OBJECT
 
@@ -54,29 +53,60 @@ public:
     explicit PanoActionThread(QObject* const parent);
     ~PanoActionThread();
 
-    void preProcessFiles(const QList<QUrl>& urlList, Digikam::PanoramaItemUrlsMap& preProcessedMap,
-                         QUrl& baseUrl, QUrl& cpFindPtoUrl, QUrl& cpCleanPtoUrl,
-                         bool celeste, Digikam::PanoramaFileType fileType, bool gPano,
+public:
+
+    void preProcessFiles(const QList<QUrl>& urlList,
+                         PanoramaItemUrlsMap& preProcessedMap,
+                         QUrl& baseUrl,
+                         QUrl& cpFindPtoUrl,
+                         QUrl& cpCleanPtoUrl,
+                         bool celeste,
+                         PanoramaFileType fileType,
+                         bool gPano,
                          const QString& huginVersion,
-                         const QString& cpCleanPath, const QString& cpFindPath);
+                         const QString& cpCleanPath,
+                         const QString& cpFindPath);
 
-    void optimizeProject(QUrl& ptoUrl, QUrl& optimizePtoUrl, QUrl& viewCropPtoUrl,
-                         bool levelHorizon, bool buildGPano,
-                         const QString& autooptimiserPath, const QString& panoModifyPath);
+    void optimizeProject(QUrl& ptoUrl,
+                         QUrl& optimizePtoUrl,
+                         QUrl& viewCropPtoUrl,
+                         bool levelHorizon,
+                         bool buildGPano,
+                         const QString& autooptimiserPath,
+                         const QString& panoModifyPath);
 
-    void generatePanoramaPreview(QSharedPointer<const PTOType> ptoData, QUrl& previewPtoUrl, QUrl& previewMkUrl, QUrl& previewUrl,
+    void generatePanoramaPreview(QSharedPointer<const PTOType> ptoData,
+                                 QUrl& previewPtoUrl,
+                                 QUrl& previewMkUrl,
+                                 QUrl& previewUrl,
                                  const PanoramaItemUrlsMap& preProcessedUrlsMap,
-                                 const QString& makePath, const QString& pto2mkPath, const QString& huginExecutorPath, bool hugin2015,
-                                 const QString& enblendPath, const QString& nonaPath);
+                                 const QString& makePath,
+                                 const QString& pto2mkPath,
+                                 const QString& huginExecutorPath,
+                                 bool hugin2015,
+                                 const QString& enblendPath,
+                                 const QString& nonaPath);
 
-    void compileProject(QSharedPointer<const PTOType> basePtoData, QUrl& panoPtoUrl, QUrl& mkUrl, QUrl& panoUrl,
+    void compileProject(QSharedPointer<const PTOType> basePtoData,
+                        QUrl& panoPtoUrl,
+                        QUrl& mkUrl,
+                        QUrl& panoUrl,
                         const PanoramaItemUrlsMap& preProcessedUrlsMap,
-                        PanoramaFileType fileType, const QRect& crop,
-                        const QString& makePath, const QString& pto2mkPath, const QString& huginExecutorPath, bool hugin2015,
-                        const QString& enblendPath, const QString& nonaPath);
+                        PanoramaFileType fileType,
+                        const QRect& crop,
+                        const QString& makePath,
+                        const QString& pto2mkPath,
+                        const QString& huginExecutorPath,
+                        bool hugin2015,
+                        const QString& enblendPath,
+                        const QString& nonaPath);
 
-    void copyFiles(const QUrl& ptoUrl, const QUrl& panoUrl, const QUrl& finalPanoUrl,
-                   const PanoramaItemUrlsMap& preProcessedUrlsMap, bool savePTO, bool addGPlusMetadata);
+    void copyFiles(const QUrl& ptoUrl,
+                   const QUrl& panoUrl,
+                   const QUrl& finalPanoUrl,
+                   const PanoramaItemUrlsMap& preProcessedUrlsMap,
+                   bool savePTO,
+                   bool addGPlusMetadata);
 
     void cancel();
     void finish();
@@ -101,18 +131,24 @@ private Q_SLOTS:
 
 private:
 
-    void appendStitchingJobs(QSharedPointer<ThreadWeaver::Sequence>& js, const QUrl& ptoUrl, QUrl& mkUrl,
-                             QUrl& outputUrl, const PanoramaItemUrlsMap& preProcessedUrlsMap,
+    void appendStitchingJobs(QSharedPointer<ThreadWeaver::Sequence>& js,
+                             const QUrl& ptoUrl,
+                             QUrl& mkUrl,
+                             QUrl& outputUrl,
+                             const PanoramaItemUrlsMap& preProcessedUrlsMap,
                              PanoramaFileType fileType,
-                             const QString& makePath, const QString& pto2mkPath,
-                             const QString& enblendPath, const QString& nonaPath, bool preview);
+                             const QString& makePath,
+                             const QString& pto2mkPath,
+                             const QString& enblendPath,
+                             const QString& nonaPath,
+                             bool preview);
 
 private:
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 
 }  // namespace Digikam
 
-#endif /* PANOACTIONTHREAD_H */
+#endif // PANO_ACTION_THREAD_H

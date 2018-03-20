@@ -51,6 +51,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:sendbymail_src>
             $<TARGET_OBJECTS:printcreator_src>
             $<TARGET_OBJECTS:mediaserver_src>
+            $<TARGET_OBJECTS:webservices_src>
 
             utils/digikam_debug.cpp
 )
@@ -92,6 +93,7 @@ if(ENABLE_MEDIAPLAYER)
     )
 endif()
 
+
 include_directories($<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
@@ -99,6 +101,7 @@ include_directories($<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECT
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Network,INTERFACE_INCLUDE_DIRECTORIES>
 
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>
@@ -113,10 +116,6 @@ endif()
 
 if(HAVE_OPENGL)
     include_directories($<TARGET_PROPERTY:Qt5::OpenGL,INTERFACE_INCLUDE_DIRECTORIES>)
-endif()
-
-if(KF5Kipi_FOUND)
-    include_directories($<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 if(Gphoto2_FOUND)
@@ -138,6 +137,7 @@ target_link_libraries(digikamcore
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Xml
+                      Qt5::XmlPatterns
                       Qt5::Widgets
                       Qt5::Sql
                       Qt5::WebKitWidgets
@@ -162,6 +162,8 @@ target_link_libraries(digikamcore
                       PNG::PNG
                       ${EXIV2_LIBRARIES}
 
+                      ${FFMPEG_LIBRARIES}
+
                       libdng
                       libraw
 )
@@ -175,11 +177,8 @@ if(KF5IconThemes_FOUND)
 endif()
 
 if(KF5KIO_FOUND)
+    target_link_libraries(digikamcore PUBLIC KF5::KIOCore)
     target_link_libraries(digikamcore PUBLIC KF5::KIOWidgets)
-endif()
-
-if(KF5Kipi_FOUND)
-    target_link_libraries(digikamcore PUBLIC KF5::Kipi)
 endif()
 
 if(KF5Notifications_FOUND)
@@ -249,6 +248,14 @@ if(LibXml2_FOUND AND LibXslt_FOUND)
     target_link_libraries(digikamcore PUBLIC ${LIBXSLT_EXSLT_LIBRARIES}
                                              ${LIBXSLT_LIBRARIES}
                                              ${LIBXML2_LIBRARIES})
+endif()
+
+if(KF5MediaWiki_FOUND)
+    target_link_libraries(digikamcore PUBLIC ${LIBMEDIAWIKI_LIBRARIES})
+endif()
+
+if(KF5Vkontakte_FOUND)
+    target_link_libraries(digikamcore PUBLIC ${LIBKVKONTAKTE_LIBRARIES})
 endif()
 
 if(APPLE)
@@ -400,13 +407,6 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:advancedrename_src>
 )
 
-if(KF5Kipi_FOUND)
-    set(DIGIKAM_OBJECTS
-        ${DIGIKAM_OBJECTS}
-        $<TARGET_OBJECTS:kipiiface_src>
-    )
-endif()
-
 if(${Marble_FOUND})
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
@@ -453,10 +453,6 @@ endif()
 
 if(KF5KIO_FOUND)
     target_link_libraries(digikamgui PUBLIC KF5::KIOWidgets)
-endif()
-
-if(KF5Kipi_FOUND)
-    target_link_libraries(digikamgui PUBLIC KF5::Kipi)
 endif()
 
 if(${Marble_FOUND})

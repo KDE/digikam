@@ -39,6 +39,8 @@
 #include "coredburl.h"
 #include "coredbaccess.h"
 #include "coredb.h"
+#include "similaritydbaccess.h"
+#include "similaritydb.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "facetagseditor.h"
@@ -387,6 +389,8 @@ bool ImageScanner::scanFromIdenticalFile()
 void ImageScanner::commitCopyImageAttributes()
 {
     CoreDbAccess().db()->copyImageAttributes(d->commit.copyImageAttributesId, d->scanInfo.id);
+    // Also copy the similarity information
+    SimilarityDbAccess().db()->copySimilarityAttributes(d->commit.copyImageAttributesId, d->scanInfo.id);
     // Remove grouping for copied or identical images.
     CoreDbAccess().db()->removeAllImageRelationsFrom(d->scanInfo.id, DatabaseRelation::Grouped);
     CoreDbAccess().db()->removeAllImageRelationsTo(d->scanInfo.id, DatabaseRelation::Grouped);
@@ -471,7 +475,8 @@ void ImageScanner::scanFile(ScanMode mode)
             scanImageInformation();
             scanImageHistoryIfModified();
         }
-        else if (d->scanInfo.category == DatabaseItem::Video)
+        else if (d->scanInfo.category == DatabaseItem::Video ||
+                 d->scanInfo.category == DatabaseItem::Audio)
         {
             scanVideoInformation();
 
@@ -483,6 +488,10 @@ void ImageScanner::scanFile(ScanMode mode)
             {
                 scanVideoMetadata();
             }
+        }
+        else if (d->scanInfo.category == DatabaseItem::Other)
+        {
+            // unsupported
         }
     }
     else
@@ -504,7 +513,8 @@ void ImageScanner::scanFile(ScanMode mode)
                 scanBalooInfo();
             }
         }
-        else if (d->scanInfo.category == DatabaseItem::Video)
+        else if (d->scanInfo.category == DatabaseItem::Video ||
+                 d->scanInfo.category == DatabaseItem::Audio)
         {
             scanVideoInformation();
 
@@ -517,10 +527,6 @@ void ImageScanner::scanFile(ScanMode mode)
                 scanIPTCCore();
                 scanTags();
             }
-        }
-        else if (d->scanInfo.category == DatabaseItem::Audio)
-        {
-            scanAudioFile();
         }
         else if (d->scanInfo.category == DatabaseItem::Other)
         {
@@ -1470,7 +1476,7 @@ static MetadataFields allVideoMetadataFields()
     fields << MetadataInfo::AspectRatio
            << MetadataInfo::AudioBitRate
            << MetadataInfo::AudioChannelType
-           << MetadataInfo::AudioCompressor
+           << MetadataInfo::AudioCodec
            << MetadataInfo::Duration
            << MetadataInfo::FrameRate
            << MetadataInfo::VideoCodec;
@@ -1514,13 +1520,18 @@ void ImageScanner::scanVideoInformation()
     // TODO: Please check / improve / rewrite detectVideoFormat().
     // The format strings shall be uppercase, and a clearly defined set
     // (all format strings used in the database should be defined in advance)
-    d->commit.imageInformationInfos  << detectVideoFormat();
+    if (d->scanInfo.category == DatabaseItem::Video)
+        d->commit.imageInformationInfos << detectVideoFormat();
+    else
+        d->commit.imageInformationInfos << detectAudioFormat();
+
     d->commit.imageInformationFields |= DatabaseFields::Format;
 
-    // There is use of bit depth, but not ColorModel
-    // For bit depth - 8bit, 16bit with videos
-    d->commit.imageInformationInfos  << d->metadata.getMetadataField(MetadataInfo::VideoBitDepth);
+    d->commit.imageInformationInfos << d->metadata.getMetadataField(MetadataInfo::VideoBitDepth);
     d->commit.imageInformationFields |= DatabaseFields::ColorDepth;
+
+    d->commit.imageInformationInfos << d->metadata.getMetadataField(MetadataInfo::VideoColorSpace);
+    d->commit.imageInformationFields |= DatabaseFields::ColorModel;
 }
 
 // commitImageInformation method is reused
@@ -1543,25 +1554,6 @@ void ImageScanner::commitVideoMetadata()
 }
 
 // ---------------------------------------------------------------------------------------
-
-void ImageScanner::scanAudioFile()
-{
-    /**
-    * @todo
-    */
-
-    d->commit.commitImageInformation = true;
-
-    d->commit.imageInformationInfos
-          << -1
-          << creationDateFromFilesystem(d->fileInfo)
-          << detectAudioFormat();
-
-    d->commit.imageInformationFields =
-            DatabaseFields::Rating       |
-            DatabaseFields::CreationDate |
-            DatabaseFields::Format;
-}
 
 void ImageScanner::loadFromDisk()
 {
@@ -1897,7 +1889,7 @@ void ImageScanner::scanBalooInfo()
 
     if (!bInfo.comment.isEmpty())
     {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "+++++++++++++++++++++Comment " << bInfo.comment;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Comment " << bInfo.comment;
 
         if (!d->commit.captions.contains(QLatin1String("x-default")))
         {
@@ -1920,6 +1912,7 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
         CoreDbAccess access;
         imagesFields = access.db()->getImagesFields(imageid,
                                                     DatabaseFields::Name             |
+                                                    DatabaseFields::Category         |
                                                     DatabaseFields::ModificationDate |
                                                     DatabaseFields::FileSize);
 
@@ -1938,8 +1931,8 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
     if (!imagesFields.isEmpty())
     {
         container->fileName             = imagesFields.at(0).toString();
-        container->fileModificationDate = imagesFields.at(1).toDateTime();
-        container->fileSize             = imagesFields.at(2).toLongLong();
+        container->fileModificationDate = imagesFields.at(2).toDateTime();
+        container->fileSize             = imagesFields.at(3).toLongLong();
     }
 
     if (!imageInformationFields.isEmpty())
@@ -1952,7 +1945,10 @@ void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* 
         container->height           = imageInformationFields.at(5).toInt();
         container->format           = formatToString(imageInformationFields.at(6).toString());
         container->colorDepth       = imageInformationFields.at(7).toInt();
-        container->colorModel       = DImg::colorModelToString((DImg::COLORMODEL)imageInformationFields.at(8).toInt());
+
+        container->colorModel       = (imagesFields.at(1).toInt() == DatabaseItem::Video)                        ?
+            DMetadata::videoColorModelToString((DMetadata::VIDEOCOLORMODEL)imageInformationFields.at(8).toInt()) :
+            DImg::colorModelToString((DImg::COLORMODEL)imageInformationFields.at(8).toInt());
     }
 }
 
@@ -2008,7 +2004,7 @@ void ImageScanner::fillVideoMetadataContainer(qlonglong imageid, VideoMetadataCo
     container->aspectRatio                  = strings.at(0);
     container->audioBitRate                 = strings.at(1);
     container->audioChannelType             = strings.at(2);
-    container->audioCompressor              = strings.at(3);
+    container->audioCodec                   = strings.at(3);
     container->duration                     = strings.at(4);
     container->frameRate                    = strings.at(5);
     container->videoCodec                   = strings.at(6);

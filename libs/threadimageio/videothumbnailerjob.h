@@ -7,6 +7,7 @@
  * Description : a class to manage video thumbnails extraction
  *
  * Copyright (C) 2016-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2016-2018 by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VIDEOTHUMBNAILERJOB_H
-#define VIDEOTHUMBNAILERJOB_H
+#ifndef VIDEO_THUMBNAILER_JOB_H
+#define VIDEO_THUMBNAILER_JOB_H
 
 // Qt includes
 
@@ -49,13 +50,17 @@ public:
     explicit VideoThumbnailerJob(QObject* const parent);
     virtual ~VideoThumbnailerJob();
 
-    /** Add a film strip on the left side of video thumnails
-     */
-    void setCreateStrip(bool);
-
     /** Set size of thumbnails to generate
      */
-    void setThumbnailSize(int);
+    void setThumbnailSize(int size);
+
+    /** Add a film strip on the left side of video thumnails
+     */
+    void setCreateStrip(bool strip);
+
+    /** Set exif rotation of thumbnails to generate
+     */
+    void  setExifRotate(bool rotate);
 
     /** Add new video files to process on the pending list
      */
@@ -75,22 +80,13 @@ Q_SIGNALS:
      */
     void signalThumbnailJobFinished();
 
-    /// Internal use only.
-    void signalGetThumbnail(const QString&, int size, bool strip);
-
 public Q_SLOTS:
 
     void slotCancel();
 
-private Q_SLOTS:
-
-    void slotThumbnailDone(const QString&, const QImage&);
-    void slotThumbnailFailed(const QString&);
-
 private:
 
     void run();
-    void processOne();
 
 private:
 
@@ -100,4 +96,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* VIDEOTHUMBNAILERJOB_H */
+#endif // VIDEO_THUMBNAILER_JOB_H

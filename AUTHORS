@@ -1,5 +1,5 @@
-MAIN DEVELOPERS :
----------------
+MAIN DEVELOPERS:
+----------------
 
 Gilles Caulier <caulier dot gilles at gmail dot com>                      : Coordinator, lead developer, project management.
 Maik Qualmann <metzpinguin at gmail dot com>                              : Lead Developer.
@@ -7,8 +7,8 @@ Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                         : Lead
 Mario Frank <mario dot frank at uni-potsdam dot de>                       : Developer.
 Simon Frei <freisim93 at gmail dot com>                                   : Developer.
 
-CURRENT CONTRIBUTORS :
---------------------
+CONTRIBUTORS:
+-------------
 
 Nicolas Lecureuil <nlecureuil at mandriva dot com>                        : Release manager.
 Mohamed Anwer <m dot anwer at gmx dot com>                                : Developer.
@@ -20,17 +20,36 @@ Guillaume Castagnino <casta at xwing dot info>                            : Deve
 Teemu Rytilahti <tpr at iki dotfi>                                        : Developer.
 Julien Narboux <Julien at narboux dot fr>                                 : Developer.
 Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>         : Developer.
-
-FORMER MEMBERS :
---------------
-
-Renchi Raju <renchi dot raju at gmail dot com>                            : 0.1.0 to 0.8.0 : main coordinator and lead developer.
-Joern Ahrens <kde at jokele dot de>                                       : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
-Tom Albers <tomalbers at kde dot nl>                                      : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
-
-OLD CONTRIBUTORS :
-----------------
-
+Dodon Victor <dodonvictor at gmail dot com>                               : Developer, Webservices tool..
+Jens Muller <tschenser at gmx dot de>                                     : Developer.
+Martin Engelmann <murphi dot oss at googlemail dot com>                   : Developer.
+Orgad Shaneh <orgads at gmail dot com>                                    : Developer, Calendar tool.
+Seb Ruiz <ruiz at kde dot org>                                            : Developer, Webservices tool..
+Ruediger Bente <ruediger dot bente at gmx dot de>                         : Developer.
+Beth Marmorstein <purplegamba at cox dot net>                             : Developer.
+Robert Marmorstein <rmmarm at sdf dot lonestar dot org>                   : Developer.
+Markus Leuthold <kusi at forum dot titlis dot org>                        : Developer, Webservices tool..
+Frederic Coiffier <fcoiffie at gmail dot com>                             : Developer, Piwigo tool.
+Laurent Montel <montel at kde dot org>                                    : Developer, port to Qt5/KF5.
+Kare Sars <kare dot sars at iki dot fi>                                   : Developer, flat scanners support.
+Pau Garcia i Quiles <pgquiles at elpauer dot org>                         : Developer.
+Timothee Groleau <kde at timotheegroleau dot com>                         : Developer, Webservices tool.
+Roman Tsisyk <roman at tsisyk dot com>                                    : Developer.
+Alexandre Mendes <alex dot mendes1988 at gmail dot com>                   : Developer.
+Lukas Krejci <krejci dot l at centrum dot cz>                             : Developer.
+Alexander Potashev <aspotashev at gmail dot com>                          : Developer.
+Lukasz Spas <lukasz dot spas at gmail dot com>                            : Developer.
+Marius Orcsik <marius at habarnam dot ro>                                 : Developer.
+Valerio Fuoglio <valerio dot fuoglio at gmail dot com>                    : Developer, Presentation tool.
+Ralf Hoelzer <kde at ralfhoelzer dot com>                                 : Developer, initial Exif support.
+Andrea Diamantini <adjam7 at gmail dot com>                               : Developer, Webservices tool.
+Tudor Calin <tudor at 1xtech dot com>                                     : Developer, Webservices tool.
+Owen Hirst <n8rider at sbcglobal dot net>                                 : Developer.
+Todd Shoemaker <todd at theshoemakers dot net>                            : Developer, PrintWizard tool.
+Michael Hoechstetter <michael dot hoechstetter at gmx dot de>             : Developer.
+Vardhman Jain <vardhman at gmail.com>                                     : Developer, Webservices tool.
+Colin Guthrie <kde at colin dot guthr dot ie>                             : Developer, Webservices tool.
+Smit Mehta <smit dot meh at gmail dot com>                                : Developer, Webservices tool.
 Angelo Naselli <anaselli at linux dot it>                                 : Developer, Mandriva packages.
 Michael G. Hansen <mike at mghansen dot de>                               : Lead developer.
 Holger Foerster <hamsi2k at freenet dot de>                               : Developer.
@@ -65,9 +84,17 @@ Rune Laursen <runerl at skjoldhoej dot dk>                                : Dani
 Jasper van der Marel <jasper dot van dot der dot marel at wanadoo dot nl> : Dutch translations.
 Anna Sawicka <ania at kajak dot org dot pl>                               : Polish translations.
 
-DIGIKAM SPLASHSCREENS CREDITS :
------------------------------
+FORMER MEMBERS:
+---------------
 
+Renchi Raju <renchi dot raju at gmail dot com>                            : 0.1.0 to 0.8.0 : main coordinator and lead developer.
+Joern Ahrens <kde at jokele dot de>                                       : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
+Tom Albers <tomalbers at kde dot nl>                                      : Developer, digiKam webpage maintainer (0.7.x-0.8.x).
+
+DIGIKAM SPLASHSCREENS CREDITS:
+------------------------------
+
+6.0.0-beta1    : Petr Simacek            <petr dot simacek at gmail dot com>
 5.9.0          : Emanuele Feligioni      <212eyewear at gmail dot com>
 5.8.0          : Caulier Gilles          <caulier dot gilles at gmail dot com>
 5.7.0          : Ahmed Madi              <ahmed dot tarek dot mady at gmail dot com>
@@ -149,9 +176,10 @@ DIGIKAM SPLASHSCREENS CREDITS :
 0.5.0          : Renchi Raju             <renchi dot raju at gmail dot com>
 0.4.0          : NONE
 
-SHOWFOTO SPLASHSCREENS CREDITS :
-------------------------------
+SHOWFOTO SPLASHSCREENS CREDITS:
+-------------------------------
 
+6.0.0-beta1    : Petr Simacek            <petr dot simacek at gmail dot com>
 5.9.0          : Petr Simacek            <petr dot simacek at gmail dot com>
 5.8.0          : Mattia Verga            <mattia dot verga at tiscali dot it>
 5.7.0          : Ahmed Madi              <ahmed dot tarek dot mady at gmail dot com>
@@ -226,9 +254,10 @@ SHOWFOTO SPLASHSCREENS CREDITS :
 0.2.0          : Joern Ahrens            <kde at jokele dot de>
 0.1.0          : NONE
 
-ABOUT BACKGROUND IMAGE :
-----------------------
+ABOUT BACKGROUND IMAGE:
+-----------------------
 
+6.0.0-beta1    : Petr Simacek            <petr dot simacek at gmail dot com>
 5.9.0          : Petr Simacek            <petr dot simacek at gmail dot com>
 5.8.0          : Ahmed Madi              <ahmed dot tarek dot mady at gmail dot com>
 5.7.0          : Ahmed Madi              <ahmed dot tarek dot mady at gmail dot com>

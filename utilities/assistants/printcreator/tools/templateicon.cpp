@@ -37,7 +37,7 @@ class TemplateIcon::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         iconMargin  = 2;
         rotate      = false;

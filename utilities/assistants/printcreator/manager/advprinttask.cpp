@@ -56,7 +56,7 @@ class AdvPrintTask::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : settings(0),
         mode(AdvPrintTask::PRINT),
         sizeIndex(0)

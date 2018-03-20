@@ -22,7 +22,7 @@
 
 // Qt includes
 
-#include <QtDebug> 
+#include <QtDebug>
 #include <QMimeData>
 
 // local includes

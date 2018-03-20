@@ -24,7 +24,6 @@ ecm_mark_as_test(searchtextbartest)
 
 target_link_libraries(searchtextbartest
                       digikamcore
-                      libdng
 
                       Qt5::Test
 
@@ -41,7 +40,6 @@ add_executable(dimagelisttest ${dimagelisttest_SRCS})
 
 target_link_libraries(dimagelisttest
                       digikamcore
-                      libdng
 
                       Qt5::Test
 

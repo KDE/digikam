@@ -380,12 +380,9 @@ QString MetaEngine::getXmpTagString(const char* xmpTagName, bool escapeCR) const
     return QString();
 }
 
-bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value, bool setProgramName) const
+bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value) const
 {
 #ifdef _XMP_SUPPORT_
-
-    if (!setProgramId(setProgramName))
-        return false;
 
     try
     {
@@ -408,19 +405,15 @@ bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value, b
 
     Q_UNUSED(xmpTagName);
     Q_UNUSED(value);
-    Q_UNUSED(setProgramName);
 
 #endif // _XMP_SUPPORT_
 
     return false;
 }
 bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value,
-                             MetaEngine::XmpTagType type, bool setProgramName) const
+                                 MetaEngine::XmpTagType type) const
 {
 #ifdef _XMP_SUPPORT_
-
-    if (!setProgramId(setProgramName))
-        return false;
 
     try
     {
@@ -460,7 +453,6 @@ bool MetaEngine::setXmpTagString(const char* xmpTagName, const QString& value,
 
     Q_UNUSED(xmpTagName);
     Q_UNUSED(value);
-    Q_UNUSED(setProgramName);
 
 #endif // _XMP_SUPPORT_
 
@@ -516,13 +508,9 @@ MetaEngine::AltLangMap MetaEngine::getXmpTagStringListLangAlt(const char* xmpTag
     return AltLangMap();
 }
 
-bool MetaEngine::setXmpTagStringListLangAlt(const char* xmpTagName, const MetaEngine::AltLangMap& values,
-                                        bool setProgramName) const
+bool MetaEngine::setXmpTagStringListLangAlt(const char* xmpTagName, const MetaEngine::AltLangMap& values) const
 {
 #ifdef _XMP_SUPPORT_
-
-    if (!setProgramId(setProgramName))
-        return false;
 
     try
     {
@@ -560,7 +548,6 @@ bool MetaEngine::setXmpTagStringListLangAlt(const char* xmpTagName, const MetaEn
 
     Q_UNUSED(xmpTagName);
     Q_UNUSED(values);
-    Q_UNUSED(setProgramName);
 
 #endif // _XMP_SUPPORT_
 
@@ -620,12 +607,9 @@ QString MetaEngine::getXmpTagStringLangAlt(const char* xmpTagName, const QString
 }
 
 bool MetaEngine::setXmpTagStringLangAlt(const char* xmpTagName, const QString& value,
-                                        const QString& langAlt, bool setProgramName) const
+                                        const QString& langAlt) const
 {
 #ifdef _XMP_SUPPORT_
-
-    if (!setProgramId(setProgramName))
-        return false;
 
     try
     {
@@ -675,7 +659,6 @@ bool MetaEngine::setXmpTagStringLangAlt(const char* xmpTagName, const QString& v
     Q_UNUSED(xmpTagName);
     Q_UNUSED(value);
     Q_UNUSED(langAlt);
-    Q_UNUSED(setProgramName);
 
 #endif // _XMP_SUPPORT_
 
@@ -734,13 +717,9 @@ QStringList MetaEngine::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR
     return QStringList();
 }
 
-bool MetaEngine::setXmpTagStringSeq(const char* xmpTagName, const QStringList& seq,
-                                    bool setProgramName) const
+bool MetaEngine::setXmpTagStringSeq(const char* xmpTagName, const QStringList& seq) const
 {
 #ifdef _XMP_SUPPORT_
-
-    if (!setProgramId(setProgramName))
-        return false;
 
     try
     {
@@ -776,7 +755,6 @@ bool MetaEngine::setXmpTagStringSeq(const char* xmpTagName, const QStringList& s
 
     Q_UNUSED(xmpTagName);
     Q_UNUSED(seq);
-    Q_UNUSED(setProgramName);
 
 #endif // _XMP_SUPPORT_
 
@@ -834,13 +812,9 @@ QStringList MetaEngine::getXmpTagStringBag(const char* xmpTagName, bool escapeCR
     return QStringList();
 }
 
-bool MetaEngine::setXmpTagStringBag(const char* xmpTagName, const QStringList& bag,
-                                    bool setProgramName) const
+bool MetaEngine::setXmpTagStringBag(const char* xmpTagName, const QStringList& bag) const
 {
 #ifdef _XMP_SUPPORT_
-
-    if (!setProgramId(setProgramName))
-        return false;
 
     try
     {
@@ -876,19 +850,14 @@ bool MetaEngine::setXmpTagStringBag(const char* xmpTagName, const QStringList& b
 
     Q_UNUSED(xmpTagName);
     Q_UNUSED(bag);
-    Q_UNUSED(setProgramName);
 
 #endif // _XMP_SUPPORT_
 
     return false;
 }
 
-bool MetaEngine::addToXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToAdd,
-                                       bool setProgramName) const
+bool MetaEngine::addToXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToAdd) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     QStringList oldEntries = getXmpTagStringBag(xmpTagName, false);
     QStringList newEntries = entriesToAdd;
 
@@ -899,18 +868,14 @@ bool MetaEngine::addToXmpTagStringBag(const char* xmpTagName, const QStringList&
             newEntries.append(*it);
     }
 
-    if (setXmpTagStringBag(xmpTagName, newEntries, false))
+    if (setXmpTagStringBag(xmpTagName, newEntries))
         return true;
 
     return false;
 }
 
-bool MetaEngine::removeFromXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToRemove,
-                                       bool setProgramName) const
+bool MetaEngine::removeFromXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToRemove) const
 {
-    if (!setProgramId(setProgramName))
-        return false;
-
     QStringList currentEntries = getXmpTagStringBag(xmpTagName, false);
     QStringList newEntries;
 
@@ -921,7 +886,7 @@ bool MetaEngine::removeFromXmpTagStringBag(const char* xmpTagName, const QString
             newEntries.append(*it);
     }
 
-    if (setXmpTagStringBag(xmpTagName, newEntries, false))
+    if (setXmpTagStringBag(xmpTagName, newEntries))
         return true;
 
     return false;
@@ -1114,12 +1079,9 @@ bool MetaEngine::unregisterXmpNameSpace(const QString& uri)
     return false;
 }
 
-bool MetaEngine::removeXmpTag(const char* xmpTagName, bool setProgramName) const
+bool MetaEngine::removeXmpTag(const char* xmpTagName) const
 {
 #ifdef _XMP_SUPPORT_
-
-    if (!setProgramId(setProgramName))
-        return false;
 
     try
     {
@@ -1144,7 +1106,6 @@ bool MetaEngine::removeXmpTag(const char* xmpTagName, bool setProgramName) const
 #else
 
     Q_UNUSED(xmpTagName);
-    Q_UNUSED(setProgramName);
 
 #endif // _XMP_SUPPORT_
 
@@ -1156,14 +1117,14 @@ QStringList MetaEngine::getXmpKeywords() const
     return (getXmpTagStringBag("Xmp.dc.subject", false));
 }
 
-bool MetaEngine::setXmpKeywords(const QStringList& newKeywords, bool setProgramName) const
+bool MetaEngine::setXmpKeywords(const QStringList& newKeywords) const
 {
-    return addToXmpTagStringBag("Xmp.dc.subject", newKeywords, setProgramName);
+    return addToXmpTagStringBag("Xmp.dc.subject", newKeywords);
 }
 
-bool MetaEngine::removeXmpKeywords(const QStringList& keywordsToRemove, bool setProgramName)
+bool MetaEngine::removeXmpKeywords(const QStringList& keywordsToRemove)
 {
-    return removeFromXmpTagStringBag("Xmp.dc.subject", keywordsToRemove, setProgramName);
+    return removeFromXmpTagStringBag("Xmp.dc.subject", keywordsToRemove);
 }
 
 QStringList MetaEngine::getXmpSubCategories() const
@@ -1171,14 +1132,14 @@ QStringList MetaEngine::getXmpSubCategories() const
     return (getXmpTagStringBag("Xmp.photoshop.SupplementalCategories", false));
 }
 
-bool MetaEngine::setXmpSubCategories(const QStringList& newSubCategories, bool setProgramName) const
+bool MetaEngine::setXmpSubCategories(const QStringList& newSubCategories) const
 {
-    return addToXmpTagStringBag("Xmp.photoshop.SupplementalCategories", newSubCategories, setProgramName);
+    return addToXmpTagStringBag("Xmp.photoshop.SupplementalCategories", newSubCategories);
 }
 
-bool MetaEngine::removeXmpSubCategories(const QStringList& subCategoriesToRemove, bool setProgramName)
+bool MetaEngine::removeXmpSubCategories(const QStringList& subCategoriesToRemove)
 {
-    return removeFromXmpTagStringBag("Xmp.photoshop.SupplementalCategories", subCategoriesToRemove, setProgramName);
+    return removeFromXmpTagStringBag("Xmp.photoshop.SupplementalCategories", subCategoriesToRemove);
 }
 
 QStringList MetaEngine::getXmpSubjects() const
@@ -1186,14 +1147,14 @@ QStringList MetaEngine::getXmpSubjects() const
     return (getXmpTagStringBag("Xmp.iptc.SubjectCode", false));
 }
 
-bool MetaEngine::setXmpSubjects(const QStringList& newSubjects, bool setProgramName) const
+bool MetaEngine::setXmpSubjects(const QStringList& newSubjects) const
 {
-    return addToXmpTagStringBag("Xmp.iptc.SubjectCode", newSubjects, setProgramName);
+    return addToXmpTagStringBag("Xmp.iptc.SubjectCode", newSubjects);
 }
 
-bool MetaEngine::removeXmpSubjects(const QStringList& subjectsToRemove, bool setProgramName)
+bool MetaEngine::removeXmpSubjects(const QStringList& subjectsToRemove)
 {
-    return removeFromXmpTagStringBag("Xmp.iptc.SubjectCode", subjectsToRemove, setProgramName);
+    return removeFromXmpTagStringBag("Xmp.iptc.SubjectCode", subjectsToRemove);
 }
 
 MetaEngine::TagsMap MetaEngine::getXmpTagsList() const

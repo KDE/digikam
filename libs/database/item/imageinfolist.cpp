@@ -69,15 +69,18 @@ bool ImageInfoList::namefileLessThan(const ImageInfo& d1, const ImageInfo& d2)
 
 ImageInfo ImageInfoList::singleGroupMainItem() const
 {
-    if (length() == 1) {
+    if (length() == 1)
+    {
         return first();
     }
 
     ImageInfo mainItem;
     ImageInfoList grouped;
+
     if (first().isGrouped())
     {
         mainItem = first().groupImage();
+
         if (!this->contains(mainItem))
         {
             return ImageInfo();
@@ -91,6 +94,7 @@ ImageInfo ImageInfoList::singleGroupMainItem() const
     {
         return ImageInfo();
     }
+
     grouped << mainItem << mainItem.groupedImages();
 
     foreach(const ImageInfo& info, *this)
@@ -100,6 +104,7 @@ ImageInfo ImageInfoList::singleGroupMainItem() const
             return ImageInfo();
         }
     }
+
     return mainItem;
 }
 

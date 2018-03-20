@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -22,7 +22,6 @@ ecm_mark_as_test(geolocationedit_test_correlator)
 
 target_link_libraries(geolocationedit_test_correlator
                       digikamcore
-                      libdng
 
                       Qt5::Test
                       Qt5::Gui
@@ -39,7 +38,6 @@ if(NOT WIN32)
 
     target_link_libraries(geolocationedit_test_gpsrgparsing
                           digikamcore
-                          libdng
 
                           Qt5::Test
                           Qt5::Gui
@@ -55,7 +53,6 @@ ecm_mark_as_test(geolocationedit_test_gpsrgtagmodel)
 
 target_link_libraries(geolocationedit_test_gpsrgtagmodel
                       digikamcore
-                      libdng
 
                       Qt5::Test
                       Qt5::Gui
@@ -71,7 +68,6 @@ ecm_mark_as_test(geolocationedit_test_gpsimageitem)
 
 target_link_libraries(geolocationedit_test_gpsimageitem
                       digikamcore
-                      libdng
 
                       Qt5::Test
                       Qt5::Gui
@@ -87,7 +83,6 @@ ecm_mark_as_test(geolocationedit_test_simpletreemodel)
 
 target_link_libraries(geolocationedit_test_simpletreemodel
                       digikamcore
-                      libdng
 
                       Qt5::Test
                       Qt5::Gui

@@ -32,6 +32,7 @@
 
 namespace cv
 {
+
 namespace face
 {
 
@@ -115,5 +116,6 @@ void FaceRecognizer::predict(InputArray src, CV_OUT int &label, CV_OUT double &c
 }
 
 }
+
 }
 

@@ -52,7 +52,7 @@ BUGFIXES FROM BUGZILLA:
 041 ==> 384858 - Only last picture added to email.
 042 ==> 384898 - digiKam issue.
 043 ==> 385280 - digikam does not use the native Plasma file dialog under Plasma.
-044 ==> 385315 - kipi-plugins not available in digikam and gwenview menu.
+044 ==> 385315 - Tools not available in digikam menu.
 045 ==> 385433 - Error file numbering.
 046 ==> 385467 - Cannot Add Or Edit Bookmarks / No plugins loaded.
 047 ==> 385368 - digiKam causes my machine to blue screen (crash) during installation on Windows 10 while check process in memory.

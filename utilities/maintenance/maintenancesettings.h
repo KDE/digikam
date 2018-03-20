@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MAINTENANCESETTINGS_H
-#define MAINTENANCESETTINGS_H
+#ifndef MAINTENANCE_SETTINGS_H
+#define MAINTENANCE_SETTINGS_H
 
 // Qt includes
 
@@ -110,4 +110,4 @@ QDebug operator<<(QDebug dbg, const MaintenanceSettings& s);
 
 }  // namespace Digikam
 
-#endif  // MAINTENANCESETTINGS_H
+#endif  // MAINTENANCE_SETTINGS_H

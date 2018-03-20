@@ -67,9 +67,9 @@ public:
 
 public:
 
-    Private(QWizard* const dialog)
-        : settings(0),
-          iface(0)
+    explicit Private(QWizard* const dialog)
+      : settings(0),
+        iface(0)
     {
         captionUi = new CaptionUI(dialog);
         wizard    = dynamic_cast<AdvPrintWizard*>(dialog);

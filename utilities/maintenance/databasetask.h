@@ -6,7 +6,7 @@
  * Date        : 2017-01-29
  * Description : Thread actions task for database cleanup.
  *
- * Copyright (C) 2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
+ * Copyright (C) 2017-2018 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,6 +51,7 @@ public:
         CleanCoreDb,
         CleanThumbsDb,
         CleanRecognitionDb,
+        CleanSimilarityDb,
         ShrinkDatabases
     };
 
@@ -60,7 +61,7 @@ public:
     void setMode(Mode mode);
     void setMaintenanceData(MaintenanceData* const data=0);
 
-    void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false);
+    void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false, bool similarityDb=false);
 
 
 Q_SIGNALS:
@@ -70,7 +71,8 @@ Q_SIGNALS:
 
     void signalData(const QList<qlonglong>& staleImageIds,
                     const QList<int>& staleThumbIds,
-                    const QList<Identity>& staleIdentities);
+                    const QList<Identity>& staleIdentities,
+                    const QList<qlonglong>& staleSimilarityImageIds);
 
     void signalStarted();
 

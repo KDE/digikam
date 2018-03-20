@@ -54,7 +54,7 @@ class MailProcess::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : cancel(false),
         settings(0),
         iface(0),

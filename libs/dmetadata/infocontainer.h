@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT PhotoInfoContainer
 
 public:
 
-    PhotoInfoContainer();
+    explicit PhotoInfoContainer();
     ~PhotoInfoContainer();
 
     bool isEmpty() const;
@@ -80,7 +80,7 @@ class DIGIKAM_EXPORT VideoInfoContainer
 
 public:
 
-    VideoInfoContainer();
+    explicit VideoInfoContainer();
     ~VideoInfoContainer();
 
     bool isEmpty() const;
@@ -96,7 +96,7 @@ public:
     QString videoCodec;
     QString audioBitRate;
     QString audioChannelType;
-    QString audioCompressor;
+    QString audioCodec;
 };
 
 DIGIKAM_EXPORT QDataStream& operator<<(QDataStream& ds, const VideoInfoContainer& info);

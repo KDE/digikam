@@ -68,4 +68,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* CROP_H */
+#endif // CROP_H

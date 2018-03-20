@@ -64,7 +64,7 @@ protected:
 protected Q_SLOTS:
 
     void slotCancel();
-    void slotRenameSuccess(const QUrl&);
+    void slotRenameSuccessded(const QUrl&);
     void slotRenameFailed(const QUrl&);
 
 private Q_SLOTS:

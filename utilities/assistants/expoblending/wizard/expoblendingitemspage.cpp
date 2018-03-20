@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-13
- * Description : a plugin to blend bracketed images.
+ * Description : a tool to blend bracketed images.
  *
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2015      by Benjamin Girault, <benjamin dot girault at gmail dot com>
@@ -49,9 +49,9 @@ class ItemsPage::Private
 {
 public:
 
-    Private()
-        : list(0),
-          mngr(0)
+    explicit Private()
+      : list(0),
+        mngr(0)
     {
     }
 

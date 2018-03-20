@@ -108,6 +108,7 @@ private:
     DImageHistory resolvedImageHistory(const DImageHistory& history);
 
     void prepareImageToSave();
+    void saveFaceTagsToImage(const ImageInfo& info);
 
     void saveIsComplete();
     void saveAsIsComplete();
@@ -198,6 +199,9 @@ private Q_SLOTS:
     void slotSendByMail();
     void slotPrintCreator();
     void slotMediaServer();
+    
+    void slotExportTool();
+    void slotImportTool();
 
 private:
 

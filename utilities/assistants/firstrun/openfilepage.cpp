@@ -49,8 +49,8 @@ class OpenFilePage::Private
 {
 public:
 
-    Private() :
-        openAsPreview(0),
+    explicit Private()
+      : openAsPreview(0),
         openInEditor(0),
         openFileBehavior(0)
     {
@@ -58,7 +58,6 @@ public:
 
     QRadioButton* openAsPreview;
     QRadioButton* openInEditor;
-
     QButtonGroup* openFileBehavior;
 };
 

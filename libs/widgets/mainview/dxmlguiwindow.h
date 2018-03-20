@@ -105,6 +105,14 @@ public:
     void setConfigGroupName(const QString& name);
     QString configGroupName() const;
 
+    /** List of Webservices export actions
+     */
+    QList<QAction*> exportActions() const;
+
+    /** List of Webservices export actions
+     */
+    QList<QAction*> importActions() const;
+
     /** Create Geolocation Edit tool action.
      */
     void createGeolocationEditAction();
@@ -148,14 +156,18 @@ public:
     /** Create Media Server action to share through DLNA.
      */
     void createMediaServerAction();
-    
-    /** Create Ksane action to import from scanner.
-     */
-    void createKSaneAction();
 
     /** Create common actions to setup all digiKam main windows.
      */
     void createSettingsActions();
+
+    /** Create common actions from Export menu for all digiKam main windows.
+     */
+    void createExportActions();
+
+    /** Create common actions from Import menu for all digiKam main windows.
+     */
+    void createImportActions();
 
     /** Create common actions from Help menu for all digiKam main windows.
      */
@@ -203,6 +215,8 @@ public:
 
 protected:
 
+    DLogoAction* m_animLogo;
+
     QAction*     m_metadataEditAction;
     QAction*     m_geolocationEditAction;
     QAction*     m_presentationAction;
@@ -214,7 +228,37 @@ protected:
     QAction*     m_panoramaAction;
     QAction*     m_videoslideshowAction;
     QAction*     m_mediaServerAction;
-    DLogoAction* m_animLogo;
+
+    QAction*     m_exportDropboxAction;
+    QAction*     m_exportFacebookAction;
+    QAction*     m_exportFlickrAction;
+    QAction*     m_exportGdriveAction;
+    QAction*     m_exportGphotoAction;
+    QAction*     m_exportImageshackAction;
+    QAction*     m_exportImgurAction;
+    QAction*     m_exportPiwigoAction;
+    QAction*     m_exportRajceAction;
+    QAction*     m_exportSmugmugAction;
+    QAction*     m_exportYandexfotkiAction;
+
+#ifdef HAVE_MEDIAWIKI
+    QAction*     m_exportMediawikiAction;
+#endif
+
+#ifdef HAVE_VKONTAKTE
+    QAction*     m_exportVkontakteAction;
+#endif
+
+#ifdef HAVE_KIO
+    QAction*     m_exportFileTransferAction;
+#endif
+
+    QAction*     m_importGphotoAction;
+    QAction*     m_importSmugmugAction;
+
+#ifdef HAVE_KIO
+    QAction*     m_importFileTransferAction;
+#endif
 
 #ifdef HAVE_KSANE
     KSaneAction* m_ksaneAction;
@@ -320,7 +364,13 @@ private Q_SLOTS:
 
     // Called by Media Server tool.
     virtual void slotMediaServer()             {};
-    
+
+    // Called by Webservices Export tools.
+    virtual void slotExportTool()              {};
+
+    // Called by Webservices Import tools.
+    virtual void slotImportTool()              {};
+
 private:
 
     /** Used by slotToggleFullScreen() to switch tool-bar visibility in managed window

@@ -5,7 +5,7 @@
  *
  * Description : Hugin parser debug header
  *
- * Copyright (C) 2007 Daniel M German <dmgerman at uvic doooot ca>
+ * Copyright (C) 2007 by Daniel M German <dmgerman at uvic doooot ca>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,21 +22,21 @@
  *
  * ============================================================ */
 
-#ifndef TPARSERDEBUG_H
-#define TPARSERDEBUG_H
+#ifndef T_PARSER_DEBUG_H
+#define T_PARSER_DEBUG_H
 
 /* #define YYDEBUG 1 */
 
 #ifdef YYDEBUG
-#define DEBUG_1(a) fprintf(stderr, #a "\n");
-#define DEBUG_2(a,b) fprintf(stderr, #a "\n", b);
-#define DEBUG_3(a,b,c) fprintf(stderr, #a "\n", b, c);
-#define DEBUG_4(a,b,c,d) fprintf(stderr, #a "\n", b, c, d);
+#   define DEBUG_1(a) fprintf(stderr, #a "\n");
+#   define DEBUG_2(a,b) fprintf(stderr, #a "\n", b);
+#   define DEBUG_3(a,b,c) fprintf(stderr, #a "\n", b, c);
+#   define DEBUG_4(a,b,c,d) fprintf(stderr, #a "\n", b, c, d);
 #else
-#define DEBUG_1(a)
-#define DEBUG_2(a,b)
-#define DEBUG_3(a,b,c)
-#define DEBUG_4(a,b,c,d)
+#   define DEBUG_1(a)
+#   define DEBUG_2(a,b)
+#   define DEBUG_3(a,b,c)
+#   define DEBUG_4(a,b,c,d)
 #endif
 
-#endif
+#endif // T_PARSER_DEBUG_H

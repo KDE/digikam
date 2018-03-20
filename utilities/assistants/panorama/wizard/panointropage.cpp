@@ -4,8 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : a plugin to create panorama by fusion of several images.
- * Acknowledge : based on the expoblending plugin
+ * Description : a tool to create panorama by fusion of several images.
+ * Acknowledge : based on the expoblending tool
  *
  * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -56,9 +56,11 @@
 namespace Digikam
 {
 
-struct PanoIntroPage::Private
+class PanoIntroPage::Private
 {
-    Private(PanoManager* const m)
+public:
+
+    explicit Private(PanoManager* const m)
         : mngr(m),
 //        addGPlusMetadataCheckBox(0),
 

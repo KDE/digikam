@@ -34,7 +34,7 @@ class ClawsMailBinary : public DBinaryIface
 {
 public:
 
-    ClawsMailBinary()
+    explicit ClawsMailBinary()
         : DBinaryIface(
                        QLatin1String("claws-mail"),
                        QLatin1String("Claws Mail"),

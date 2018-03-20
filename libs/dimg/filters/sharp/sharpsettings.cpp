@@ -240,7 +240,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     d->radius->setRange(0.0, 5.0, 0.01);
     d->radius->setDefaultValue(1.0);
     d->radius->setWhatsThis(i18n("This is the radius of the circular convolution. It is the most important "
-                                 "parameter for using this plugin. For most images the default value of 1.0 "
+                                 "parameter for using this tool. For most images the default value of 1.0 "
                                  "should give good results. Select a higher value when your image is very blurred."));
 
     QLabel* const label6 = new QLabel(i18n("Correlation:"), refocusSettings);
@@ -251,7 +251,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     d->correlation->setWhatsThis(i18n("Increasing the correlation may help to reduce artifacts. The correlation can "
                                       "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
                                       "Using a high value for the correlation will reduce the sharpening effect of the "
-                                      "plugin."));
+                                      "tool."));
 
     QLabel* const label7 = new QLabel(i18n("Noise filter:"), refocusSettings);
     d->noise             = new DDoubleNumInput(refocusSettings);
@@ -262,7 +262,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
                                 "can range from 0-1 but values higher than 0.1 are rarely helpful. When the noise filter "
                                 "value is too low, e.g. 0.0 the image quality will be very poor. A useful value is 0.01. "
                                 "Using a high value for the noise filter will reduce the sharpening "
-                                "effect of the plugin."));
+                                "effect of the tool."));
 
     QLabel* const label8 = new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
     d->gauss             = new DDoubleNumInput(refocusSettings);

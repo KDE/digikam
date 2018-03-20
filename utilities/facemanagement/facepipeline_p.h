@@ -37,7 +37,6 @@
 // Local includes
 
 #include "facedetector.h"
-#include "recognitiondatabase.h"
 #include "faceutils.h"
 #include "previewloadthread.h"
 #include "thumbnailloadthread.h"
@@ -245,6 +244,11 @@ public:
         wait();    // protect database
     }
 
+    /**
+     * Set the face recognition algorithm type
+     */
+    void activeFaceRecognizer(RecognitionDatabase::RecognizeAlgorithm  algorithmType);
+
 public Q_SLOTS:
 
     void process(FacePipelineExtendedPackage::Ptr package);
@@ -389,10 +393,10 @@ protected:
         int correctlyRecognized;
     };
 
-    QMap<int, Statistics> results;
+    QMap<int, Statistics>        results;
 
-    FacePipeline::Private* const     d;
-    RecognitionDatabase database;
+    FacePipeline::Private* const d;
+    RecognitionDatabase          database;
 };
 
 // ----------------------------------------------------------------------------------------

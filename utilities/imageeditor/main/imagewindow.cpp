@@ -27,6 +27,8 @@
 // C++ includes
 
 #include <cstdio>
+#include <vector>
+#include <algorithm>
 
 // Qt includes
 
@@ -116,6 +118,7 @@
 #include "tagsactionmngr.h"
 #include "tagscache.h"
 #include "tagspopupmenu.h"
+#include "tagregion.h"
 #include "thememanager.h"
 #include "thumbbardock.h"
 #include "thumbnailloadthread.h"
@@ -129,6 +132,30 @@
 #include "mailwizard.h"
 #include "advprintwizard.h"
 #include "dmediaserverdlg.h"
+#include "facetagseditor.h"
+#include "dbwindow.h"
+#include "fbwindow.h"
+#include "flickrwindow.h"
+#include "gswindow.h"
+#include "imageshackwindow.h"
+#include "imgurwindow.h"
+#include "piwigowindow.h"
+#include "rajcewindow.h"
+#include "smugwindow.h"
+#include "yfwindow.h"
+
+#ifdef HAVE_MEDIAWIKI
+#   include "mediawikiwindow.h"
+#endif
+
+#ifdef HAVE_VKONTAKTE
+#   include "vkwindow.h"
+#endif
+
+#ifdef HAVE_KIO
+#   include "ftexportwindow.h"
+#   include "ftimportwindow.h"
+#endif
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -976,7 +1003,10 @@ void ImageWindow::saveIsComplete()
 
     // put image in cache, the LoadingCacheInterface cares for the details
     LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
-    ScanController::instance()->scannedInfo(m_savingContext.destinationURL.toLocalFile());
+    ImageInfo info = ScanController::instance()->scannedInfo(m_savingContext.destinationURL.toLocalFile());
+
+    // Save new face tags to the image
+    saveFaceTagsToImage(info);
 
     // reset the orientation flag in the database
     DMetadata meta(m_canvas->currentImage().getMetadata());
@@ -1040,7 +1070,7 @@ void ImageWindow::saveAsIsComplete()
     }
 
     QStringList derivedFilePaths;
-    
+
     if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
     {
         derivedFilePaths = m_savingContext.versionFileOperation.allFilePaths();
@@ -1055,6 +1085,9 @@ void ImageWindow::saveAsIsComplete()
 
     // The model updates asynchronously, so we need to force addition of the main entry
     d->ensureModelContains(d->currentImageInfo);
+
+    // Save new face tags to the image
+    saveFaceTagsToImage(d->currentImageInfo);
 
     // set origin of EditorCore: "As if" the last saved image was loaded directly
     resetOriginSwitchFile();
@@ -1091,11 +1124,62 @@ void ImageWindow::prepareImageToSave()
 {
     if (!d->currentImageInfo.isNull())
     {
-        // Write metadata from database to DImg
         MetadataHub hub;
         hub.load(d->currentImageInfo);
-        DImg image(m_canvas->currentImage());
-        hub.write(image, MetadataHub::WRITE_ALL);
+
+        // Get face tags
+        d->newFaceTags.clear();
+        QMultiMap<QString, QVariant> faceTags;
+        faceTags = hub.loadIntegerFaceTags(d->currentImageInfo);
+
+        if (!faceTags.isEmpty())
+        {
+            QSize tempS = d->currentImageInfo.dimensions();
+            QMap<QString, QVariant>::const_iterator it;
+
+            for (it = faceTags.begin() ; it != faceTags.end() ; it++)
+            {
+                // Start transform each face rect
+                QRect faceRect = it.value().toRect();
+                int   tempH    = tempS.height();
+                int   tempW    = tempS.width();
+
+                qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect before:"
+                                             << faceRect.x()     << faceRect.y()
+                                             << faceRect.width() << faceRect.height();
+
+                for (int i = 0 ; i < m_transformQue.size() ; i++)
+                {
+                    EditorWindow::TransformType type = m_transformQue[i];
+
+                    switch (type)
+                    {
+                        case EditorWindow::TransformType::RotateLeft:
+                            faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tempW, tempH), 1);
+                            std::swap(tempH, tempW);
+                            break;
+                        case EditorWindow::TransformType::RotateRight:
+                            faceRect = TagRegion::ajustToRotatedImg(faceRect, QSize(tempW, tempH), 0);
+                            std::swap(tempH, tempW);
+                            break;
+                        case EditorWindow::TransformType::FlipHorizontal:
+                            faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tempW, tempH), 0);
+                            break;
+                        case EditorWindow::TransformType::FlipVertical:
+                            faceRect = TagRegion::ajustToFlippedImg(faceRect, QSize(tempW, tempH), 1);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    qCDebug(DIGIKAM_GENERAL_LOG) << ">>>>>>>>>face rect transform:"
+                                                 << faceRect.x()     << faceRect.y()
+                                                 << faceRect.width() << faceRect.height();
+                }
+
+                d->newFaceTags.insertMulti(it.key(), QVariant(faceRect));
+            }
+        }
 
         // Ensure there is a UUID for the source image in the database,
         // even if not in the source image's metadata
@@ -1109,6 +1193,41 @@ void ImageWindow::prepareImageToSave()
             m_canvas->interface()->provideCurrentUuid(d->currentImageInfo.uuid());
         }
     }
+}
+
+void ImageWindow::saveFaceTagsToImage(const ImageInfo& info)
+{
+    if (!info.isNull() && !d->newFaceTags.isEmpty())
+    {
+        // Delete all old faces
+        FaceTagsEditor().removeAllFaces(info.id());
+
+        QMap<QString, QVariant>::const_iterator it;
+
+        for (it = d->newFaceTags.begin() ; it != d->newFaceTags.end() ; it++)
+        {
+            int tagId = FaceTags::getOrCreateTagForPerson(it.key());
+
+            if (tagId)
+            {
+                TagRegion region(it.value().toRect());
+                FaceTagsEditor().add(info.id(), tagId, region, false);
+            }
+            else
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to create a person tag for name" << it.key();
+            }
+        }
+
+        MetadataHub hub;
+        hub.load(info);
+        QSize tempS = info.dimensions();
+        hub.setFaceTags(d->newFaceTags, tempS);
+        hub.write(info.filePath(), MetadataHub::WRITE_ALL);
+    }
+
+    m_transformQue.clear();
+    d->newFaceTags.clear();
 }
 
 VersionManager* ImageWindow::versionManager() const
@@ -1866,6 +1985,134 @@ void ImageWindow::slotMediaServer()
 
     DMediaServerDlg w(this, iface);
     w.exec();
+}
+
+void ImageWindow::slotExportTool()
+{
+    QAction* const tool = dynamic_cast<QAction*>(sender());
+
+    if (tool == m_exportDropboxAction)
+    {
+        DBWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportFacebookAction)
+    {
+        FbWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportFlickrAction)
+    {
+        FlickrWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                       ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportGdriveAction)
+    {
+        GSWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport),
+                   this, QLatin1String("googledriveexport"));
+        w.exec();
+    }
+    else if (tool == m_exportGphotoAction)
+    {
+        GSWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport),
+                   this, QLatin1String("googlephotoexport"));
+        w.exec();
+    }
+    else if (tool == m_exportImageshackAction)
+    {
+        ImageShackWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                           ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportImgurAction)
+    {
+        ImgurWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                      ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportPiwigoAction)
+    {
+        PiwigoWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                       ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportRajceAction)
+    {
+        RajceWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                      ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportSmugmugAction)
+    {
+        SmugWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                     ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+    else if (tool == m_exportYandexfotkiAction)
+    {
+        YFWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+
+#ifdef HAVE_MEDIAWIKI
+    else if (tool == m_exportMediawikiAction)
+    {
+        MediaWikiWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                          ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
+
+#ifdef HAVE_VKONTAKTE
+    else if (tool == m_exportVkontakteAction)
+    {
+        VKWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
+
+#ifdef HAVE_KIO
+    else if (tool == m_exportFileTransferAction)
+    {
+        FTExportWindow w(new DBInfoIface(this, d->thumbBar->allUrls(),
+                                         ApplicationSettings::ImportExport), this);
+        w.exec();
+    }
+#endif
+}
+
+void ImageWindow::slotImportTool()
+{
+    QAction* const tool = dynamic_cast<QAction*>(sender());
+
+    if (tool == m_importGphotoAction)
+    {
+        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+                   this, QLatin1String("googlephotoimport"));
+        w.exec();
+    }
+    else if (tool == m_importSmugmugAction)
+    {
+        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+                     this, true);
+        w.exec();
+    }
+
+#ifdef HAVE_KIO
+    else if (tool == m_importFileTransferAction)
+    {
+        FTImportWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+                         this);
+        w.exec();
+    }
+#endif
 }
 
 } // namespace Digikam

@@ -7,6 +7,7 @@
  * Description : Thread actions manager for maintenance tools.
  *
  * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017-2018 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -166,13 +167,13 @@ void MaintenanceThread::sortByImageQuality(const QStringList& paths, const Image
     appendJobs(collection);
 }
 
-void MaintenanceThread::computeDatabaseJunk(bool thumbsDb, bool facesDb)
+void MaintenanceThread::computeDatabaseJunk(bool thumbsDb, bool facesDb, bool similarityDb)
 {
     ActionJobCollection collection;
 
     DatabaseTask* const t = new DatabaseTask();
     t->setMode(DatabaseTask::Mode::ComputeDatabaseJunk);
-    t->computeDatabaseJunk(thumbsDb, facesDb);
+    t->computeDatabaseJunk(thumbsDb, facesDb, similarityDb);
 
     connect(t, SIGNAL(signalFinished()),
             this, SIGNAL(signalAdvance()));
@@ -180,8 +181,8 @@ void MaintenanceThread::computeDatabaseJunk(bool thumbsDb, bool facesDb)
     connect(t,SIGNAL(signalAddItemsToProcess(int)),
             this, SIGNAL(signalAddItemsToProcess(int)));
 
-    connect(t,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<Identity>)),
-            this, SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<Identity>)));
+    connect(t,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<Identity>,QList<qlonglong>)),
+            this, SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<Identity>,QList<qlonglong>)));
 
     collection.insert(t, 0);
 
@@ -255,6 +256,33 @@ void MaintenanceThread::cleanFacesDb(const QList<Identity>& staleIdentities)
         collection.insert(t, 0);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a database task for removing stale identities.";
+    }
+
+    appendJobs(collection);
+}
+
+void MaintenanceThread::cleanSimilarityDb(const QList<qlonglong>& imageIds)
+{
+    ActionJobCollection collection;
+
+    data->setSimilarityImageIds(imageIds);
+
+    for (int i = 1; i <= maximumNumberOfThreads(); i++)
+    {
+        DatabaseTask* const t = new DatabaseTask();
+
+        t->setMaintenanceData(data);
+        t->setMode(DatabaseTask::Mode::CleanSimilarityDb);
+
+        connect(t, SIGNAL(signalFinished()),
+                this, SIGNAL(signalAdvance()));
+
+        connect(this, SIGNAL(signalCanceled()),
+                t, SLOT(slotCancel()), Qt::QueuedConnection);
+
+        collection.insert(t, 0);
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a database task for removing stale image id entries from similarity db.";
     }
 
     appendJobs(collection);

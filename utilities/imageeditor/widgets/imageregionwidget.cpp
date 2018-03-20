@@ -166,10 +166,10 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
     QRect r    = d_ptr->item->getImageRegion();
     image.resize(r.width(), r.height());
 
-    // Because image plugins are tool which only work on image data, the DImg container
+    // Because tool which only work on image data, the DImg container
     // do not contain metadata from original image. About Color Managed View, we need to
     // restore the embedded ICC color profile.
-    // However, some plugins may set a profile on the preview image, which we accept of course.
+    // However, some tools may set a profile on the preview image, which we accept of course.
     if (image.getIccProfile().isNull())
     {
         image.setIccProfile(d_ptr->item->image().getIccProfile());

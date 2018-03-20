@@ -51,7 +51,7 @@ class HTMLOutputPage::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : destUrl(0),
         openInBrowser(0),
         titleLabel(0),

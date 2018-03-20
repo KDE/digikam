@@ -39,10 +39,11 @@ public:
 
 public:
 
-    explicit ThumbsDbSchemaUpdater(ThumbsDbAccess* access);
+    explicit ThumbsDbSchemaUpdater(ThumbsDbAccess* const access);
+    ~ThumbsDbSchemaUpdater();
 
     bool update();
-    void setObserver(InitializationObserver* observer);
+    void setObserver(InitializationObserver* const observer);
 
 private:
 
@@ -57,14 +58,8 @@ private:
 
 private:
 
-    bool                     m_setError;
-
-    int                      m_currentVersion;
-    int                      m_currentRequiredVersion;
-
-    ThumbsDbAccess* m_access;
-
-    InitializationObserver*  m_observer;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

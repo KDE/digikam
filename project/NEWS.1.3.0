@@ -89,4 +89,4 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 075 ==> 233766 : Deadlock at changing from mysql to sqlite.
 076 ==> 240048 : Open images with double instead of single click.
 077 ==> 218633 : "Write Metadata to Selected Images" Very Slow for Large Number of Images.
-078 ==> 237565 : digiKam crash when unchecking KIPI external modules.
+078 ==> 237565 : digiKam crash when unchecking external modules.

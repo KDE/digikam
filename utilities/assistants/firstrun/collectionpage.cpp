@@ -57,8 +57,8 @@ class CollectionPage::Private
 {
 public:
 
-    Private() :
-        rootAlbumPathRequester(0)
+    explicit Private()
+      : rootAlbumPathRequester(0)
     {
     }
 

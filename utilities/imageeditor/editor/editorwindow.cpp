@@ -820,7 +820,6 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'Tools' menu actions ---------------------------------------------
 
-    createKSaneAction();
     createMetadataEditAction();
     createGeolocationEditAction();
     createHtmlGalleryAction();
@@ -831,6 +830,8 @@ void EditorWindow::setupStandardActions()
     createSendByMailAction();
     createPrintCreatorAction();
     createMediaServerAction();
+    createExportActions();
+    createImportActions();
 
     m_metadataEditAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);
@@ -854,6 +855,9 @@ void EditorWindow::setupStandardActions()
 #ifdef HAVE_MEDIAPLAYER
     m_videoslideshowAction->setEnabled(false);
 #endif
+
+    foreach (QAction* const ac, exportActions())
+        ac->setEnabled(false);
 
     // --------------------------------------------------------
 
@@ -981,12 +985,14 @@ void EditorWindow::setupStandardActions()
 
     d->flipHorizAction = new QAction(QIcon::fromTheme(QLatin1String("object-flip-horizontal")), i18n("Flip Horizontally"), this);
     connect(d->flipHorizAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipHoriz()));
+    connect(d->flipHorizAction, SIGNAL(triggered()), this, SLOT(slotFlipHIntoQue()));
     ac->addAction(QLatin1String("editorwindow_transform_fliphoriz"), d->flipHorizAction);
     ac->setDefaultShortcut(d->flipHorizAction, Qt::CTRL + Qt::Key_Asterisk);
     d->flipHorizAction->setEnabled(false);
 
     d->flipVertAction = new QAction(QIcon::fromTheme(QLatin1String("object-flip-vertical")), i18n("Flip Vertically"), this);
     connect(d->flipVertAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipVert()));
+    connect(d->flipVertAction, SIGNAL(triggered()), this, SLOT(slotFlipVIntoQue()));
     ac->addAction(QLatin1String("editorwindow_transform_flipvert"), d->flipVertAction);
     ac->setDefaultShortcut(d->flipVertAction, Qt::CTRL + Qt::Key_Slash);
     d->flipVertAction->setEnabled(false);
@@ -995,12 +1001,14 @@ void EditorWindow::setupStandardActions()
 
     d->rotateLeftAction = new QAction(QIcon::fromTheme(QLatin1String("object-rotate-left")), i18n("Rotate Left"), this);
     connect(d->rotateLeftAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate270()));
+    connect(d->rotateLeftAction, SIGNAL(triggered()), this, SLOT(slotRotateLeftIntoQue()));
     ac->addAction(QLatin1String("editorwindow_transform_rotateleft"), d->rotateLeftAction);
     ac->setDefaultShortcut(d->rotateLeftAction, Qt::SHIFT + Qt::CTRL + Qt::Key_Left);
     d->rotateLeftAction->setEnabled(false);
 
     d->rotateRightAction = new QAction(QIcon::fromTheme(QLatin1String("object-rotate-right")), i18n("Rotate Right"), this);
     connect(d->rotateRightAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate90()));
+    connect(d->rotateRightAction, SIGNAL(triggered()), this, SLOT(slotRotateRightIntoQue()));
     ac->addAction(QLatin1String("editorwindow_transform_rotateright"), d->rotateRightAction);
     ac->setDefaultShortcut(d->rotateRightAction, Qt::SHIFT + Qt::CTRL + Qt::Key_Right);
     d->rotateRightAction->setEnabled(false);
@@ -1434,6 +1442,9 @@ void EditorWindow::toggleStandardActions(bool val)
 #ifdef HAVE_MEDIAPLAYER
     m_videoslideshowAction->setEnabled(val);
 #endif
+
+    foreach (QAction* const ac, exportActions())
+        ac->setEnabled(val);
 
     // these actions are special: They are turned off if val is false,
     // but if val is true, they may be turned on or off.
@@ -2541,7 +2552,9 @@ VersionFileOperation EditorWindow::saveVersionFileOperation(const QUrl& url, boo
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history = m_canvas->interface()->getImageHistory();
 
-    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile(), url.fileName(), m_canvas->currentImageFileFormat());
+    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).toLocalFile(),
+                                url.fileName(), m_canvas->currentImageFileFormat());
+
     return versionManager()->operation(fork ? VersionManager::NewVersionName : VersionManager::CurrentVersionName,
                                        currentName, resolvedHistory, history);
 }
@@ -2551,8 +2564,12 @@ VersionFileOperation EditorWindow::saveAsVersionFileOperation(const QUrl& url, c
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history         = m_canvas->interface()->getImageHistory();
 
-    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile(), url.fileName(), m_canvas->currentImageFileFormat());
-    VersionFileInfo saveLocation(saveUrl.adjusted(QUrl::RemoveFilename).toLocalFile(), saveUrl.fileName(), format);
+    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).toLocalFile(),
+                                url.fileName(), m_canvas->currentImageFileFormat());
+
+    VersionFileInfo saveLocation(saveUrl.adjusted(QUrl::RemoveFilename).toLocalFile(),
+                                 saveUrl.fileName(), format);
+
     return versionManager()->operationNewVersionAs(currentName, saveLocation, resolvedHistory, history);
 }
 
@@ -2561,7 +2578,9 @@ VersionFileOperation EditorWindow::saveInFormatVersionFileOperation(const QUrl& 
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history         = m_canvas->interface()->getImageHistory();
 
-    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile(), url.fileName(), m_canvas->currentImageFileFormat());
+    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).toLocalFile(),
+                                url.fileName(), m_canvas->currentImageFileFormat());
+
     return versionManager()->operationNewVersionInFormat(currentName, format, resolvedHistory, history);
 }
 
@@ -3036,11 +3055,19 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_geolocationEditAction,       postCategory);
 #endif
 
+    QString exportCategory           = i18nc("@title Export Tools",          "Export");
+
+    foreach(QAction* const ac, exportActions())
+    {
+        actionModel->addAction(ac,                        exportCategory);
+    }
+
     QString importCategory           = i18nc("@title Import Tools",          "Import");
 
-#ifdef HAVE_KSANE
-    actionModel->addAction(m_ksaneAction,                 importCategory);
-#endif
+    foreach(QAction* const ac, importActions())
+    {
+        actionModel->addAction(ac,                        importCategory);
+    }
 
     // setup categorized view
     DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
@@ -3586,6 +3613,26 @@ void EditorWindow::slotFreeRotation()
             tool, SLOT(slotAutoAdjustClicked()));
 
     loadTool(tool);
+}
+
+void EditorWindow::slotRotateLeftIntoQue()
+{
+    m_transformQue.append(TransformType::RotateLeft);
+}
+
+void EditorWindow::slotRotateRightIntoQue()
+{
+    m_transformQue.append(TransformType::RotateRight);
+}
+
+void EditorWindow::slotFlipHIntoQue()
+{
+    m_transformQue.append(TransformType::FlipHorizontal);
+}
+
+void EditorWindow::slotFlipVIntoQue()
+{
+    m_transformQue.append(TransformType::FlipVertical);
 }
 
 }  // namespace Digikam

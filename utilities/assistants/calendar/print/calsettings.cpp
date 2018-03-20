@@ -51,7 +51,7 @@ class CalSettings::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

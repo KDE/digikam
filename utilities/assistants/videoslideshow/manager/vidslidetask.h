@@ -43,7 +43,7 @@ class VidSlideTask : public ActionJob
 
 public:
 
-    VidSlideTask(VidSlideSettings* const settings);
+    explicit VidSlideTask(VidSlideSettings* const settings);
     ~VidSlideTask();
 
 Q_SIGNALS:

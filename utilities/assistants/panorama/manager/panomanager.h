@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : a plugin to create panorama by fusion of several images.
- * Acknowledge : based on the expoblending plugin
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PANOMANAGER_H
-#define PANOMANAGER_H
+#ifndef PANO_MANAGER_H
+#define PANO_MANAGER_H
 
 // Qt includes
 
@@ -59,10 +58,14 @@ public:
     explicit PanoManager(QObject* const parent = 0);
     ~PanoManager();
 
+public:
+
     static QPointer<PanoManager> internalPtr;
     static PanoManager*          instance();
     static bool                  isCreated();
 
+public:
+    
     bool checkBinaries();
 
     void checkForHugin2015();
@@ -137,10 +140,10 @@ private:
 
 private:
 
-    struct Private;
+    class Private;
     Private* const d;
 };
 
 } // namespace Digikam
 
-#endif /* PANOMANAGER_H */
+#endif // PANO_MANAGER_H

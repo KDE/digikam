@@ -401,8 +401,8 @@ QString ApplicationSettings::operationTypeTitle(ApplicationSettings::OperationTy
         return i18n("Slideshow");
     case ApplicationSettings::Rename:
         return i18n("Renaming");
-    case ApplicationSettings::Kipi:
-        return i18n("Import/Export plugins");
+    case ApplicationSettings::ImportExport:
+        return i18n("Import/Export tools");
     case ApplicationSettings::Tools:
         return i18n("Tools (editor, panorama, stack blending, calendar, "
                     "external program)");
@@ -425,8 +425,8 @@ QString ApplicationSettings::operationTypeExplanation(ApplicationSettings::Opera
         return i18n("Opening items in the Slideshow");
     case ApplicationSettings::Rename:
         return i18n("Renaming items");
-    case ApplicationSettings::Kipi:
-        return i18n("Passing items to import/export plugins");
+    case ApplicationSettings::ImportExport:
+        return i18n("Passing items to import/export tools");
     case ApplicationSettings::Tools:
         return i18n("Several tools including the editor, panorama, stack blending, "
                     "calendar, html gallery and opening with external programs");

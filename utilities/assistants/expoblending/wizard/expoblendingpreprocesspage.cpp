@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-13
- * Description : a plugin to blend bracketed images.
+ * Description : a tool to blend bracketed images.
  *
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2015      by Benjamin Girault, <benjamin dot girault at gmail dot com>
@@ -58,7 +58,7 @@ class ExpoBlendingPreProcessPage::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         progressPix   = DWorkingPixmap();
         progressCount = 0;
@@ -70,19 +70,19 @@ public:
         detailsText   = 0;
     }
 
-    int                        progressCount;
-    QLabel*                    progressLabel;
-    QTimer*                    progressTimer;
+    int                  progressCount;
+    QLabel*              progressLabel;
+    QTimer*              progressTimer;
 
-    QLabel*                    title;
+    QLabel*              title;
 
-    QCheckBox*                 alignCheckBox;
+    QCheckBox*           alignCheckBox;
 
-    QTextBrowser*              detailsText;
+    QTextBrowser*        detailsText;
 
-    DWorkingPixmap             progressPix;
+    DWorkingPixmap       progressPix;
 
-    ExpoBlendingManager*       mngr;
+    ExpoBlendingManager* mngr;
 };
 
 ExpoBlendingPreProcessPage::ExpoBlendingPreProcessPage(ExpoBlendingManager* const mngr, QWizard* const dlg)

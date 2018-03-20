@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2007-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,6 +64,7 @@ public:
                        const QString& _password = QString(),
                        const QString& _databaseNameThumbnails = QString(),
                        const QString& _databaseNameFace = QString(),
+                       const QString& _databaseNameSimilarity = QString(),
                        const QString& _internalServerDBPath = QString(),
                        const QString& _internalServerMysqlServCmd = QString(),
                        const QString& _internalServerMysqlInitCmd = QString()
@@ -124,19 +126,23 @@ public:
     QString getCoreDatabaseNameOrDir()   const;
     QString getThumbsDatabaseNameOrDir() const;
     QString getFaceDatabaseNameOrDir()   const;
+    QString getSimilarityDatabaseNameOrDir()   const;
 
     /// Use these methods if you set a file or a folder.
     void setCoreDatabasePath(const QString& folderOrFileOrName);
     void setThumbsDatabasePath(const QString& folderOrFileOrName);
     void setFaceDatabasePath(const QString& folderOrFileOrName);
+    void setSimilarityDatabasePath(const QString& folderOrFileOrName);
 
     static QString coreDatabaseFileSQLite(const QString& folderOrFile);
     static QString thumbnailDatabaseFileSQLite(const QString& folderOrFile);
     static QString faceDatabaseFileSQLite(const QString& folderOrFile);
+    static QString similarityDatabaseFileSQLite(const QString& folderOrFile);
 
     static QString coreDatabaseDirectorySQLite(const QString& path);
     static QString thumbnailDatabaseDirectorySQLite(const QString& path);
     static QString faceDatabaseDirectorySQLite(const QString& path);
+    static QString similarityDatabaseDirectorySQLite(const QString& path);
 
     /**
      * For Mysql internal server: manage the database path to store database files.
@@ -153,6 +159,11 @@ public:
      * Replaces databaseName with databaseNameFace.
      */
     DbEngineParameters faceParameters() const;
+
+    /**
+     * Replaces databaseName with databaseNameFace.
+     */
+    DbEngineParameters similarityParameters() const;
 
     void legacyAndDefaultChecks(const QString& suggestedPath = QString(), KSharedConfig::Ptr config = KSharedConfig::openConfig());
     void removeLegacyConfig(KSharedConfig::Ptr config);
@@ -193,6 +204,7 @@ public:
 
     QString databaseNameThumbnails;
     QString databaseNameFace;
+    QString databaseNameSimilarity;
     QString internalServerDBPath;
 
     /// Settings stored in config file and used only with internal server at runtime to start server instance or init database tables.

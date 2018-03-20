@@ -242,7 +242,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 198 ==> 364009 - Cannot use batch processing to resize images.
 199 ==> 364035 - GPS correlation fails to save coordinates back to files.
 200 ==> 364065 - image editor doesn't open at double click.
-201 ==> 307337 - Add versioning support to libkipi interface.
+201 ==> 307337 - Add versioning support to tools interface.
 202 ==> 363505 - 4.x crash on start under Windows - Need a new 5.0 installer.
 203 ==> 364116 - Uninstaller doesn't remove C:\Program Files.
 204 ==> 351016 - Crash in Windows when building finger-prints.
@@ -319,7 +319,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 275 ==> 297022 - Crash digiKam.
 276 ==> 302776 - digiKam crashes at startup.
 277 ==> 294232 - digiKam crash after trying to send photo via KMail.
-278 ==> 307775 - libkipi1 apps crash with libkipi2 plugins installed.
+278 ==> 307775 - Apps crash with shared lib installed.
 279 ==> 302465 - Crash when closing digiKam.
 280 ==> 273795 - digiKam crashed almost every it is opened.
 281 ==> 357944 - Wrong encoded collection paths after upgrade from digikam v4.x.

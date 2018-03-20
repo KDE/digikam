@@ -1753,6 +1753,7 @@ PLT_CtrlPoint::ProcessActionResponse(NPT_Result                    res,
                           service->GetDevice()->GetUUID().GetChars(),
                           service->GetServiceName().GetChars(),
                           res);
+        (void)service;
         goto failure;
     }
 
@@ -1832,6 +1833,7 @@ cleanup:
     }
     
     delete xml;
+    (void)request;
     return res;
 }
 

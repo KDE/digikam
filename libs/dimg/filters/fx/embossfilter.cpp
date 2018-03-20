@@ -189,4 +189,4 @@ void EmbossFilter::readParameters(const Digikam::FilterAction& action)
     m_depth = action.parameter(QLatin1String("depth")).toInt();
 }
 
-}  // namespace DigikamEmbossImagesPlugin
+}  // namespace Digikam

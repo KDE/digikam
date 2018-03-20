@@ -54,12 +54,6 @@
 #include "importsettings.h"
 #include "dxmlguiwindow.h"
 
-#ifdef HAVE_KIPI
-
-#include "setupkipi.h"
-
-#endif /* HAVE_KIPI */
-
 namespace Digikam
 {
 
@@ -81,10 +75,6 @@ public:
         page_icc(0),
         page_camera(0),
 
-#ifdef HAVE_KIPI
-        page_plugins(0),
-#endif /* HAVE_KIPI */
-
         page_misc(0),
         databasePage(0),
         collectionsPage(0),
@@ -98,10 +88,6 @@ public:
         imageQualitySorterPage(0),
         iccPage(0),
         cameraPage(0),
-
-#ifdef HAVE_KIPI
-        pluginsPage(0),
-#endif /* HAVE_KIPI */
 
         miscPage(0)
     {
@@ -119,11 +105,6 @@ public:
     DConfigDlgWdgItem*       page_imagequalitysorter;
     DConfigDlgWdgItem*       page_icc;
     DConfigDlgWdgItem*       page_camera;
-
-#ifdef HAVE_KIPI
-    DConfigDlgWdgItem*       page_plugins;
-#endif /* HAVE_KIPI */
-
     DConfigDlgWdgItem*       page_misc;
     SetupDatabase*           databasePage;
     SetupCollections*        collectionsPage;
@@ -137,11 +118,6 @@ public:
     SetupImageQualitySorter* imageQualitySorterPage;
     SetupICC*                iccPage;
     SetupCamera*             cameraPage;
-
-#ifdef HAVE_KIPI
-    SetupKipi*               pluginsPage;
-#endif /* HAVE_KIPI */
-
     SetupMisc*               miscPage;
 
 public:
@@ -238,16 +214,6 @@ Setup::Setup(QWidget* const parent)
 
     connect(buttonBox()->button(QDialogButtonBox::Ok), &QPushButton::clicked,
             this, &Setup::slotOkClicked);
-
-#ifdef HAVE_KIPI
-
-    d->pluginsPage  = new SetupKipi();
-    d->page_plugins = addPage(d->pluginsPage, i18n("Plugins"));
-    d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
-                                    "<i>Set which plugins will be accessible from the main interface</i></qt>"));
-    d->page_plugins->setIcon(QIcon(QLatin1String(":/icons/kipi-icon.svg")));
-
-#endif /* HAVE_KIPI */
 
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
@@ -437,10 +403,6 @@ void Setup::slotOkClicked()
     d->iccPage->applySettings();
     d->miscPage->applySettings();
 
-#ifdef HAVE_KIPI
-    d->pluginsPage->applySettings();
-#endif /* HAVE_KIPI */
-
     ApplicationSettings::instance()->emitSetupChanged();
     ImportSettings::instance()->emitSetupChanged();
 
@@ -555,13 +517,6 @@ Setup::Page Setup::activePageIndex() const
         return MiscellaneousPage;
     }
 
-#ifdef HAVE_KIPI
-    if (cur == d->page_plugins)
-    {
-        return KipiPluginsPage;
-    }
-#endif /* HAVE_KIPI */
-
     return DatabasePage;
 }
 
@@ -607,11 +562,6 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
 
         case Setup::MiscellaneousPage:
             return page_misc;
-
-#ifdef HAVE_KIPI
-        case Setup::KipiPluginsPage:
-            return page_plugins;
-#endif /* HAVE_KIPI */
 
         default:
             return 0;

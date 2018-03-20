@@ -6,10 +6,6 @@
 
 add_subdirectory(akonadi)
 
-if(KF5Kipi_FOUND)
-    add_subdirectory(kipi)
-endif()
-
 if(KF5FileMetaData_FOUND)
     add_subdirectory(kfilemetadata)
 endif()

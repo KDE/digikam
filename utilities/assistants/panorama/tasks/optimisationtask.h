@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-03-15
- * Description : a plugin to create panorama by fusion of several images.
+ * Description : a tool to create panorama by fusion of several images.
  *
  * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef OPTIMISATIONTASK_H
-#define OPTIMISATIONTASK_H
+#ifndef OPTIMISATION_TASK_H
+#define OPTIMISATION_TASK_H
 
 // Local includes
 
@@ -34,9 +34,12 @@ class OptimisationTask : public CommandTask
 {
 public:
 
-    OptimisationTask(const QString& workDirPath, const QUrl& input,
-                     QUrl& autoOptimiserPtoUrl, bool levelHorizon, bool gPano,
-                     const QString& autooptimiserPath);
+    explicit OptimisationTask(const QString& workDirPath,
+                              const QUrl& input,
+                              QUrl& autoOptimiserPtoUrl,
+                              bool levelHorizon,
+                              bool gPano,
+                              const QString& autooptimiserPath);
     ~OptimisationTask();
 
 protected:
@@ -45,12 +48,12 @@ protected:
 
 private:
 
-    QUrl&                               autoOptimiserPtoUrl;
-    const QUrl&                         ptoUrl;
-    const bool                          levelHorizon;
-    const bool                          buildGPano;
+    QUrl&       autoOptimiserPtoUrl;
+    const QUrl& ptoUrl;
+    const bool  levelHorizon;
+    const bool  buildGPano;
 };
 
 }  // namespace Digikam
 
-#endif /* OPTIMISATIONTASK_H */
+#endif // OPTIMISATION_TASK_H

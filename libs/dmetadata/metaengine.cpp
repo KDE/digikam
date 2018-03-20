@@ -34,6 +34,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_version.h"
 
 namespace Digikam
 {
@@ -213,7 +214,7 @@ void MetaEngine::setData(const MetaEngineData& data)
     }
 }
 
-bool MetaEngine::loadFromData(const QByteArray& imgData) const
+bool MetaEngine::loadFromData(const QByteArray& imgData)
 {
     if (imgData.isEmpty())
         return false;
@@ -264,7 +265,7 @@ bool MetaEngine::loadFromData(const QByteArray& imgData) const
     return false;
 }
 
-bool MetaEngine::load(const QString& filePath) const
+bool MetaEngine::load(const QString& filePath)
 {
     if (filePath.isEmpty())
     {
@@ -355,6 +356,11 @@ bool MetaEngine::load(const QString& filePath) const
 
 bool MetaEngine::save(const QString& imageFilePath) const
 {
+    if (!setProgramId())
+    {
+        return false;
+    }
+
     // If our image is really a symlink, we should follow the symlink so that
     // when we delete the file and rewrite it, we are honoring the symlink
     // (rather than just deleting it and putting a file there).
@@ -520,9 +526,11 @@ bool MetaEngine::updateFileTimeStamp() const
     return d->updateFileTimeStamp;
 }
 
-bool MetaEngine::setProgramId(bool /*on*/) const
+bool MetaEngine::setProgramId() const
 {
-    return true;
+    QString version(digiKamVersion());
+    QLatin1String software("digiKam");
+    return setImageProgramId(software, version);
 }
 
 }  // namespace Digikam

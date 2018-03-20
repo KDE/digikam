@@ -80,7 +80,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 051 ==> 264976 : Face detection: "Clear results and rescan" doesn't clear results.
 052 ==> 201282 : Sort settings in status bar.
 053 ==> 210576 : Move tag filter to the bottom.
-054 ==> 262539 : CMake Warning "cycle in the constraint graph" with libkipi.
+054 ==> 262539 : CMake Warning "cycle in the constraint graph".
 055 ==> 231597 : Add XCF to the filter list in the album view.
 056 ==> 266788 : Showfoto crashes when opening a photo.
 057 ==> 266326 : Move digiKam documentation to git.

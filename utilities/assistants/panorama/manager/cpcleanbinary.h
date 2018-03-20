@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_CPCLEANBINARY_H
-#define PANO_CPCLEANBINARY_H
+#ifndef PANO_CPCLEAN_BINARY_H
+#define PANO_CPCLEAN_BINARY_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class CPCleanBinary : public DBinaryIface
 
 public:
 
-    CPCleanBinary()
+    explicit CPCleanBinary()
         : DBinaryIface(QLatin1String("cpclean"),
                        QLatin1String("2010.4"),
                        QLatin1String("cpclean version "),
@@ -52,4 +52,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // PANO_CPCLEANBINARY_H
+#endif  // PANO_CPCLEAN_BINARY_H

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2012-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2018      by Maik Qualmann <metzpinguin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +41,8 @@ namespace Digikam
 
 class PAlbum;
 class ImageInfo;
+class IOJobData;
+class ProgressItem;
 
 class DIGIKAM_EXPORT DIO : public QObject
 {
@@ -54,32 +57,32 @@ public:
      */
 
     /// Copy an album to another album
-    static void copy(const PAlbum* const src, const PAlbum* const dest);
+    static void copy(PAlbum* const src, PAlbum* const dest);
 
     /// Copy items to another album
-    static void copy(const QList<ImageInfo>& infos, const PAlbum* const dest);
+    static void copy(const QList<ImageInfo>& infos, PAlbum* const dest);
 
     /// Copy an external file to another album
-    static void copy(const QUrl& src, const PAlbum* const dest);
+    static void copy(const QUrl& src, PAlbum* const dest);
 
     /// Copy external files to another album
-    static void copy(const QList<QUrl>& srcList, const PAlbum* const dest);
+    static void copy(const QList<QUrl>& srcList, PAlbum* const dest);
 
     /// Move an album into another album
-    static void move(const PAlbum* src, const PAlbum* const dest);
+    static void move(PAlbum* const src, PAlbum* const dest);
 
     /// Move items to another album
-    static void move(const QList<ImageInfo>& infos, const PAlbum* const dest);
+    static void move(const QList<ImageInfo>& infos, PAlbum* const dest);
 
     /// Move external files another album
-    static void move(const QUrl& src, const PAlbum* const dest);
+    static void move(const QUrl& src, PAlbum* const dest);
 
     /// Move external files into another album
-    static void move(const QList<QUrl>& srcList, const PAlbum* const dest);
+    static void move(const QList<QUrl>& srcList, PAlbum* const dest);
 
     static void del(const QList<ImageInfo>& infos, bool useTrash);
     static void del(const ImageInfo& info, bool useTrash);
-    static void del(const PAlbum* const album, bool useTrash);
+    static void del(PAlbum* const album, bool useTrash);
 
     /// Rename item to new name
     static void rename(const ImageInfo& info, const QString& newName);
@@ -88,26 +91,54 @@ public:
 
 Q_SIGNALS:
 
-    void imageRenameSucceeded(const QUrl&);
-    void imageRenameFailed(const QUrl&);
+    void signalRenameSucceeded(const QUrl&);
+    void signalRenameFailed(const QUrl&);
 
 private:
 
     DIO();
     ~DIO();
 
+    void processJob(IOJobData* const data);
+    void createJob(IOJobData* const data);
+
+    ProgressItem* getProgressItem(int operation) const;
+    QString       getItemString(int operation)   const;
+
 private Q_SLOTS:
 
     void slotResult();
-    void slotRenamed(const QUrl& oldUrl, const QUrl& newUrl);
-    void createJob(int operation, const QList<QUrl>& src, const QUrl& dest);
+    void slotCancel(ProgressItem* item);
+    void slotOneProccessed(int operation);
 
 private:
 
-    class Private;
-    Private* const d;
-
     friend class DIOCreator;
+};
+
+// -----------------------------------------------------------------------------------------
+
+class SidecarFinder
+{
+
+public:
+
+    explicit SidecarFinder(const QList<QUrl>& files);
+
+    QList<QUrl>    localFiles;
+    QList<QString> localFileSuffixes;
+};
+
+// -----------------------------------------------------------------------------------------
+
+class GroupedImagesFinder
+{
+
+public:
+
+    explicit GroupedImagesFinder(const QList<ImageInfo>& source);
+
+    QList<ImageInfo> infos;
 };
 
 } // namespace Digikam

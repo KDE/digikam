@@ -1230,6 +1230,24 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status)
     return imageIds;
 }
 
+QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status, DatabaseItem::Category category)
+{
+    QList<QVariant> values;
+    d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
+                                             "WHERE status=? AND category=?;"),
+                   status, category,
+                   &values);
+
+    QList<qlonglong> imageIds;
+
+    foreach(QVariant object, values)
+    {
+        imageIds << object.toLongLong();
+    }
+
+    return imageIds;
+}
+
 qlonglong CoreDB::getImageId(int albumID, const QString& name,
                              DatabaseItem::Status status,
                              DatabaseItem::Category category,
@@ -2617,77 +2635,6 @@ QList<qlonglong> CoreDB::getOneRelatedImageEach(const QList<qlonglong>& ids, Dat
     return result.toList();
 }
 
-bool CoreDB::hasHaarFingerprints() const
-{
-    QList<QVariant> values;
-
-    d->db->execSql(QString::fromUtf8("SELECT imageid FROM ImageHaarMatrix "
-                           "WHERE matrix IS NOT NULL LIMIT 1;"),
-                   &values);
-
-    // return true if there is at least one fingerprint
-    return !values.isEmpty();
-}
-
-QList<qlonglong> CoreDB::getDirtyOrMissingFingerprints()
-{
-    QList<qlonglong> itemIDs;
-    QList<QVariant>  values;
-
-    d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                           "LEFT JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
-                           " WHERE Images.status=1 AND Images.category=1 AND "
-                           " ( ImageHaarMatrix.imageid IS NULL "
-                           "   OR Images.modificationDate != ImageHaarMatrix.modificationDate "
-                           "   OR Images.uniqueHash != ImageHaarMatrix.uniqueHash ); "),
-                   &values);
-
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
-    {
-        itemIDs << (*it).toLongLong();
-    }
-
-    return itemIDs;
-}
-
-QStringList CoreDB::getDirtyOrMissingFingerprintURLs()
-{
-    QList<QVariant> values;
-
-    d->db->execSql(QString::fromUtf8("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
-                           "LEFT JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
-                           "LEFT JOIN Albums ON Albums.id=Images.album "
-                           " WHERE Images.status=1 AND Images.category=1 AND "
-                           " ( ImageHaarMatrix.imageid IS NULL "
-                           "   OR Images.modificationDate != ImageHaarMatrix.modificationDate "
-                           "   OR Images.uniqueHash != ImageHaarMatrix.uniqueHash ); "),
-                   &values);
-
-    QStringList urls;
-    QString     albumRootPath, relativePath, name;
-
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
-    {
-        albumRootPath = CollectionManager::instance()->albumRootPath((*it).toInt());
-        ++it;
-        relativePath = (*it).toString();
-        ++it;
-        name = (*it).toString();
-        ++it;
-
-        if (relativePath == QLatin1String("/"))
-        {
-            urls << albumRootPath + relativePath + name;
-        }
-        else
-        {
-            urls << albumRootPath + relativePath + QLatin1Char('/') + name;
-        }
-    }
-
-    return urls;
-}
-
 QStringList CoreDB::getItemsURLsWithTag(int tagId)
 {
     QList<QVariant> values;
@@ -2955,7 +2902,7 @@ QStringList CoreDB::videoMetadataFieldList(DatabaseFields::VideoMetadata fields)
         list << QLatin1String("audioChannelType");
     }
 
-    if (fields & DatabaseFields::AudioCompressor)
+    if (fields & DatabaseFields::AudioCodec)
     {
         list << QLatin1String("audioCompressor");
     }
@@ -4764,12 +4711,6 @@ void CoreDB::copyImageAttributes(qlonglong srcId, qlonglong dstId)
     // Go through all image-specific tables and copy the entries
 
     DatabaseFields::Set fields;
-
-    d->db->execSql(QString::fromUtf8("INSERT INTO ImageHaarMatrix "
-                           " (imageid, modificationDate, uniqueHash, matrix) "
-                           "SELECT ?, modificationDate, uniqueHash, matrix "
-                           "FROM ImageHaarMatrix WHERE imageid=?;"),
-                   dstId, srcId);
 
     d->db->execSql(QString::fromUtf8("INSERT INTO ImageInformation "
                            " (imageid, rating, creationDate, digitizationDate, orientation, "

@@ -41,7 +41,7 @@ class IntThemeParameter::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : minValue(0),
         maxValue(99999)
     {

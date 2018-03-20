@@ -563,7 +563,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
                 m_propertiesTab->setPhotoDateTime(unavailable);
             }
 
-            m_propertiesTab->setPhotoLens(photoInfo.lens.isEmpty() ? unavailable : photoInfo.lens);
+            m_propertiesTab->setPhotoLens(photoInfo.lens.isEmpty()         ? unavailable : photoInfo.lens);
             m_propertiesTab->setPhotoAperture(photoInfo.aperture.isEmpty() ? unavailable : photoInfo.aperture);
 
             if (photoInfo.focalLength35.isEmpty())
@@ -577,7 +577,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             }
 
             m_propertiesTab->setPhotoExposureTime(photoInfo.exposureTime.isEmpty() ? unavailable : photoInfo.exposureTime);
-            m_propertiesTab->setPhotoSensitivity(photoInfo.sensitivity.isEmpty() ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
+            m_propertiesTab->setPhotoSensitivity(photoInfo.sensitivity.isEmpty()   ? unavailable : i18n("%1 ISO", photoInfo.sensitivity));
 
             if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
             {
@@ -600,7 +600,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             m_propertiesTab->setPhotoFlash(photoInfo.flashMode.isEmpty() ? unavailable : photoInfo.flashMode);
             m_propertiesTab->setPhotoWhiteBalance(photoInfo.whiteBalance.isEmpty() ? unavailable : photoInfo.whiteBalance);
 
-            // -- VideoMetadata information ------------------------------------------
+            // -- Audio/Video Metadata information ------------------------
 
             m_propertiesTab->setVideoInfoDisable(videoInfo.allFieldsNull);
 
@@ -610,7 +610,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             m_propertiesTab->setVideoVideoCodec(videoInfo.videoCodec.isEmpty()             ? unavailable : videoInfo.videoCodec);
             m_propertiesTab->setVideoAudioBitRate(videoInfo.audioBitRate.isEmpty()         ? unavailable : videoInfo.audioBitRate);
             m_propertiesTab->setVideoAudioChannelType(videoInfo.audioChannelType.isEmpty() ? unavailable : videoInfo.audioChannelType);
-            m_propertiesTab->setVideoAudioCompressor(videoInfo.audioCompressor.isEmpty()   ? unavailable : videoInfo.audioCompressor);
+            m_propertiesTab->setVideoAudioCodec(videoInfo.audioCodec.isEmpty()             ? unavailable : videoInfo.audioCodec);
 
             // -- Caption / Tags ------------------------------------------
 

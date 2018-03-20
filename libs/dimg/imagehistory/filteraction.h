@@ -94,7 +94,7 @@ public:
 
     /**
      * Returns the version (>= 1) of the filter used to produce this action.
-     * When a filter / plugin is found by the identifier, it can decide
+     * When a filter / tool is found by the identifier, it can decide
      * by the version if it supports this action and which parameters it expects.
      */
     int      version() const;

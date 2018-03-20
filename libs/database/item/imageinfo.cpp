@@ -78,8 +78,8 @@ MetadataInfo::Field DatabaseVideoMetadataFieldsToMetadataInfoField(const Databas
         case DatabaseFields::AudioChannelType:
             return MetadataInfo::AudioChannelType;
 
-        case DatabaseFields::AudioCompressor:
-            return MetadataInfo::AudioCompressor;
+        case DatabaseFields::AudioCodec:
+            return MetadataInfo::AudioCodec;
 
         case DatabaseFields::Duration:
             return MetadataInfo::Duration;
@@ -223,6 +223,7 @@ ImageInfoData::ImageInfoData()
     positionsCached        = false;
     groupedImagesCached    = false;
     groupImageCached       = false;
+    uniqueHashCached       = false;
 
     invalid                = false;
 
@@ -535,6 +536,20 @@ qlonglong ImageInfo::fileSize() const
     QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::FileSize);
 
     STORE_IN_CACHE_AND_RETURN(fileSize, values.first().toLongLong())
+}
+
+QString ImageInfo::uniqueHash() const
+{
+    if (!m_data)
+    {
+        return QString();
+    }
+
+    RETURN_IF_CACHED(uniqueHash)
+
+    QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::UniqueHash);
+
+    STORE_IN_CACHE_AND_RETURN(uniqueHash, values.first().toString())
 }
 
 QString ImageInfo::title() const
@@ -1450,8 +1465,8 @@ VideoMetadataContainer ImageInfo::videoMetadataContainer() const
                     container.audioChannelType = fieldString;
                     break;
 
-                case DatabaseFields::AudioCompressor:
-                    container.audioCompressor = fieldString;
+                case DatabaseFields::AudioCodec:
+                    container.audioCodec = fieldString;
                     break;
 
                 case DatabaseFields::Duration:
@@ -1518,7 +1533,7 @@ VideoInfoContainer ImageInfo::videoInfoContainer() const
     videoInfo.aspectRatio       = meta.aspectRatio;
     videoInfo.audioBitRate      = meta.audioBitRate;
     videoInfo.audioChannelType  = meta.audioChannelType;
-    videoInfo.audioCompressor   = meta.audioCompressor;
+    videoInfo.audioCodec   = meta.audioCodec;
     videoInfo.duration          = meta.duration;
     videoInfo.frameRate         = meta.frameRate;
     videoInfo.videoCodec        = meta.videoCodec;

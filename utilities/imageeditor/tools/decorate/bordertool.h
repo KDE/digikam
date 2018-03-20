@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-01-20
- * Description : a digiKam image plugin to add a border
+ * Description : a digiKam image tool to add a border
  *               around an image.
  *
  * Copyright 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
