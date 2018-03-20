@@ -76,6 +76,7 @@ extern "C"
 #include "album.h"
 #include "applicationsettings.h"
 #include "albumwatch.h"
+#include "imageattributeswatch.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "digikam_config.h"
@@ -327,7 +328,7 @@ AlbumManager::AlbumManager()
 
     // this operation is much more expensive than the other scan methods
     d->scanDAlbumsTimer = new QTimer(this);
-    d->scanDAlbumsTimer->setInterval(60 * 1000);
+    d->scanDAlbumsTimer->setInterval(30 * 1000);
     d->scanDAlbumsTimer->setSingleShot(true);
 
     connect(d->scanDAlbumsTimer, SIGNAL(timeout()),
@@ -1102,6 +1103,10 @@ void AlbumManager::startScan()
 
     connect(CoreDbAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
             this, SLOT(slotImageTagChange(ImageTagChangeset)));
+
+    // listen to image attribute changes
+    connect(ImageAttributesWatch::instance(), SIGNAL(signalImageDateChanged(qlonglong)),
+            d->scanDAlbumsTimer, SLOT(start()));
 
     emit signalAllAlbumsLoaded();
 }

@@ -138,8 +138,7 @@ BUGFIXES FROM BUGZILLA:
 125 ==> 181521 - NEF's in descending order, AVI in ascending order in import from SD-card.
 126 ==> 392019 - Two persons can point to the same face tag in pictures.
 127 ==> 392013 - Metadata explorer does not show XMP face rectangles.
-128 ==> 
-
-
+128 ==> 389508 - Dates Side Menu Is Not Updated Automatically After Exif Date Change [patch].
+129 ==> 
 
 
