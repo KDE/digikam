@@ -81,6 +81,7 @@ extern "C"
 #include "collectionmanager.h"
 #include "digikam_config.h"
 #include "coredbaccess.h"
+#include "coredboperationgroup.h"
 #include "dbengineguierrorhandler.h"
 #include "dbengineparameters.h"
 #include "databaseserverstarter.h"
@@ -90,6 +91,7 @@ extern "C"
 #include "coredbwatch.h"
 #include "dio.h"
 #include "facetags.h"
+#include "facetagseditor.h"
 #include "imagelister.h"
 #include "scancontroller.h"
 #include "setupcollections.h"
@@ -2595,9 +2597,64 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
 
     if (hasDirectChildAlbumWithTitle(newParent, album->title()))
     {
-        errMsg = i18n("Another tag with the same name already exists.\n"
-                      "Please rename the tag before moving it.");
-        return false;
+        QMessageBox msgBox(QMessageBox::Warning,
+                           qApp->applicationName(),
+                           i18n("Another tag with the same name already exists.\n"
+                                "Do you want to merge the tags?"),
+                           QMessageBox::Yes | QMessageBox::No,
+                           qApp->activeWindow());
+
+        if (msgBox.exec() == QMessageBox::Yes)
+        {
+            TAlbum* const mergeTag = findTAlbum(newParent->tagPath() +
+                                                QLatin1Char('/') +
+                                                album->title());
+            if (!mergeTag)
+            {
+                errMsg = i18n("No such album");
+                return false;
+            }
+
+            int oldId   = album->id();
+            int mergeId = mergeTag->id();
+
+            QApplication::setOverrideCursor(Qt::WaitCursor);
+            QList<qlonglong> imageIds = CoreDbAccess().db()->getItemIDsInTag(oldId);
+
+            CoreDbOperationGroup group;
+            group.setMaximumTime(200);
+
+            foreach(qlonglong imageId, imageIds)
+            {
+                QList<FaceTagsIface> facesList = FaceTagsEditor().databaseFaces(imageId);
+                bool foundFace                 = false;
+
+                foreach(const FaceTagsIface& face, facesList)
+                {
+                    if (face.tagId() == oldId)
+                    {
+                        foundFace = true;
+                        FaceTagsEditor().removeFace(face);
+                        FaceTagsEditor().add(imageId, mergeId, face.region(), false);
+                    }
+                }
+
+                if (!foundFace)
+                {
+                    ImageInfo info(imageId);
+                    info.removeTag(oldId);
+                    info.setTag(mergeId);
+                    group.allowLift();
+                }
+            }
+
+            QApplication::restoreOverrideCursor();
+            return deleteTAlbum(album, errMsg);
+        }
+        else
+        {
+            return true;
+        }
     }
 
     d->currentlyMovingAlbum = album;
