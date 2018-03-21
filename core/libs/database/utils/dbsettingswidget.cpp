@@ -331,7 +331,7 @@ void DatabaseSettingsWidget::setupMainArea()
     QLabel* const dbNameSimilarityLabel              = new QLabel(i18n("Similarity Db Name:"));
     d->dbNameSimilarity                              = new QLineEdit();
     d->dbNameSimilarity->setPlaceholderText(i18n("Set the similarity database name"));
-    d->dbNameSimilarity->setToolTip(i18n("The similarity database is used by digiKam to host image haar matrix datas for the similarity search."));
+    d->dbNameSimilarity->setToolTip(i18n("The similarity database is used by digiKam to host image Haar matrix data for the similarity search."));
     d->dbNameSimilarity->setValidator(asciiValidator);
 
     QPushButton* const defaultValuesBtn              = new QPushButton(i18n("Default Settings"));

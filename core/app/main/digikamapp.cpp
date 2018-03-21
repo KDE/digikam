@@ -1719,7 +1719,7 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
         d->imageWriteMetadataAction->setText(i18np("Write Metadata to File",
                                                    "Write Metadata to Selected Files", selectionCount));
         d->imageReadMetadataAction->setText(i18np("Reread Metadata From File",
-                                                  "Reread Metadata From Selected Filess", selectionCount));
+                                                  "Reread Metadata From Selected Files", selectionCount));
 
         slotResetExifOrientationActions();
     }

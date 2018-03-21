@@ -595,7 +595,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     {
         SearchFieldCheckBox* const field = new SearchFieldCheckBox(parent);
         field->setFieldName(name);
-        field->setText(i18n("GPS"), i18n("Ttem has no GPS info"));
+        field->setText(i18n("GPS"), i18n("Item has no GPS info"));
         field->setLabel(i18n("Not Geo-located"));
         return field;
     }
