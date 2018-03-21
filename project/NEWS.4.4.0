@@ -3,12 +3,14 @@ digiKam 4.4.0 - Release date: 2014-10-12
 
 NEW FEATURES:
 
-General   : Navigate between pictures using PageUp/PageDown is now possible while editing properties through captions/tags sidebar.
-General   : New keyboard shortcuts to improve usability while photo review (as to switch focus on text edit widget, or to toogle tags view).
-General   : New keyboard shortcut to switch on/off color managed view for thumbnails and preview.
-AlbumGUI  : Album preview can be displayed in tooltip.
-SlideShow : Labels and Tags keyboard shortcuts can be used while slideshow.
-SlideShow : Support multi-monitors computer.
+General     : Navigate between pictures using PageUp/PageDown is now possible while editing properties through captions/tags sidebar.
+General     : New keyboard shortcuts to improve usability while photo review (as to switch focus on text edit widget, or to toogle tags view).
+General     : New keyboard shortcut to switch on/off color managed view for thumbnails and preview.
+AlbumGUI    : Album preview can be displayed in tooltip.
+SlideShow   : Labels and Tags keyboard shortcuts can be used while slideshow.
+SlideShow   : Support multi-monitors computer.
+PiwigoExport: Allow to upload videos (OGG, MP4 and WEBM) if the Piwigo server accept them.
+PiwigoExport: Remove the support of old Piwigo API (version < 2.4).
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
@@ -62,3 +64,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 048 ==> 339440 - digiKam crashes when opening geolocation from sidebar or toolbar.
 049 ==> 313855 - Use single/double click setting from KDE control center to leave media player mode.
 050 ==> 339227 - Existing tags from image metadata are removed when adding new tags to multiple images.
+051 ==> 337943 - Crash when cancelling piwigo export.

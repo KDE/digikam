@@ -51,3 +51,9 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 041 ==> 323361 - Crash While Navigating Photos under Face Management feature.
 042 ==> 336235 - digiKam stopped responding and crashed downloading photos from a smart phone.
 043 ==> 297558 - Another crash when finding faces.
+044 ==> 323378 - digiKam crash when try to export to facebook.
+045 ==> 330684 - Advanced Slideshow.
+046 ==> 327415 - Crash after I interrupted the «create photo layout» task.
+047 ==> 333622 - Please add an option to display the GPS track loaded in the geolocation dialog [patch].
+048 ==> 336249 - Conflict between plugins keyboard shortcuts.
+049 ==> 334284 - digiKam crashes when attempting to stitch panorama.

@@ -51,3 +51,46 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 044 ==> 319921 - SCAN : Audio files are ignored [patch].
 045 ==> 253622 - digikam editor cannot use unsharp mask with radius smaller than one with Canon 7D RAW images.
 046 ==> 349157 - Album view have random invisible / empty / disappearing previews, messed up selection.
+047 ==> 274029 - Edit Metadata dialog doesn't honour settings for XMP sidecar [patch].
+048 ==> 345358 - digiKam crash when vkontakte plugin failed to upload images.
+049 ==> 320308 - "Failed to upload photo into Flickr" every time after first use.
+050 ==> 327069 - Missing translations.
+051 ==> 243106 - Flickr uploader uploads with wrong date.
+052 ==> 291449 - To check the file size and report to the user if the file size exceeds limits set by flickr.
+053 ==> 228010 - Let flickr export progress bar show progress of each image.
+054 ==> 240147 - Allow to change Advanced Slideshow delay with mouse as with keyboard.
+055 ==> 261862 - Advanced slideshow controls not visible during a slideshow.
+056 ==> 134525 - Impossible to use both transitions in slideshow.
+057 ==> 182345 - Missing slideshow effects with control by hand.
+058 ==> 238601 - Slideshow should support reordering pictures.
+059 ==> 144007 - Allow to drag and drop location link over map.
+060 ==> 280215 - Can't add geolocation info to videos.
+061 ==> 210458 - Allow to use NMEA format as imported track file.
+062 ==> 273520 - Geolocation not working reliably.
+063 ==> 319657 - Unable to save geotags in *.CR2 and *.DNG.
+064 ==> 304760 - OpenStreetMap shows only tiles from cache and does not download missing ones.
+065 ==> 328943 - Description EXIF information.
+066 ==> 274869 - Images without filename extension will not print.
+067 ==> 215705 - Save multiple account frobs, so we don't have to sign out and reauth each time.
+068 ==> 193890 - Allow to update "Modified" date from image.
+069 ==> 318661 - Export plugin does not convert to sRGB and strips existing ICC profile.
+070 ==> 233675 - Shared binary programs dngconverter and scangui do not provide man pages.
+071 ==> 316310 - Tools - resize images doesn' work.
+072 ==> 300458 - Imgur export is unusable from ksnapshot.
+073 ==> 339572 - Too much required information.
+074 ==> 264351 - KDE Global shortcuts do not work when using Advanced Slideshow.
+075 ==> 227978 - Problem with "image resize" when german umlaute in pathname.
+076 ==> 154076 - Corrupted image when use image viewer tool.
+077 ==> 264045 - Export to remote computer does not work with fish:// urls.
+078 ==> 160893 - Use UPNP server as image database.
+079 ==> 340847 - MediaWiki: {{Coord}} template does not exist on Commons.
+080 ==> 335493 - Fix issues when metadata are loaded by MediaWiki tool [patch].
+081 ==> 300629 - Print Assistant does not follow system localization.
+082 ==> 303167 - DNGConverter fails if folder of raw files contains special characters like german umlauts.
+083 ==> 122284 - Using mouse button to switch between next/previous item do not work with all effects.
+084 ==> 317920 - Time zone data of IPTC metadata Date Created is unavailable and deleted in MetadataEdit [patch].
+085 ==> 342687 - Panorama file time-stamps should be the same than the stitched pictures.
+086 ==> 311689 - Reverse Geocoding tags are sometimes not saved.
+087 ==> 292482 - FACTORING : permit to fill image list with current selected album when no item are selected [patch].
+088 ==> 348278 - Export to GDrive fails when photo description contains double quotes.
+089 ==> 330919 - Previews of dng images converted from dark cr2 images are too bright.

@@ -392,7 +392,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 335 ==> 177175 - Resize image prepare to print 9x13 results in wrong.
 336 ==> 213172 - Convert images: png conversion not deterministic.
 337 ==> 289181 - Raw processor rotates images without Orientation EXIF tag.
-338 ==> 211524 - Raw batch converter kipi can't get rid of scroll bar.
+338 ==> 211524 - Raw batch converter can't get rid of scroll bar.
 339 ==> 215037 - Batch RAW converter crashed after open with NEF file.
 340 ==> 246437 - digiKam crashes when loading a raw file.
 341 ==> 342687 - Panorama file time-stamps should be the same than the stitched pictures [patch].

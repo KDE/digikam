@@ -27,5 +27,8 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 019 ==> 342996 - Corrections for rename settings in images import [patch].
 020 ==> 314441 - Rename settings while importing ignored [patch].
 021 ==> 328541 - Cursor sometimes stays "busy".
-022 ==> 342430 - When selecting a subset of images instead of all images to download from camera,
+022 ==> 342046 - In the export menu, Google Drive and Dropbox icons are huge, filling almost all the screen.
+023 ==> 342857 - Changed files are not reported to host application [patch].
+024 ==> 310580 - DNG Converter cannot save image if path have non-ascii characters [patch].
+025 ==> 342430 - When selecting a subset of images instead of all images to download from camera,
                  the numbering of the renamed images adds the number of selected images to the sequence numbers.

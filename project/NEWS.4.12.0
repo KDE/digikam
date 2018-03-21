@@ -3,6 +3,8 @@ digiKam 4.12.0 - Release date: 2015-07-26
 
 NEW FEATURES:
 
+Google Tools ==> Implementations of PicasaWeb and Google Drive are now merged into one common Google Services tool. 
+
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
 001 ==> 349302 - Copy path to clipboard.
@@ -101,3 +103,54 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 094 ==> 338200 - Cancelling tags assigment in file metadata does not work [patch].
 095 ==> 239896 - digiKam hangs and/or crashes after adding tags.
 096 ==> 321680 - Crash / segmentation fault when trying to recognize faces.
+097 ==> 321446 - Export to Imgur just hang on 'loading' animation eternally.
+098 ==> 349208 - Cmake can't find external libkvkontakte.
+099 ==> 277898 - Does not compile, presumably because of missing directory in include path.
+100 ==> 315580 - digiKam crashed after I changed the DLNA implementation from "HUPnP API" to "miniDLNA".
+101 ==> 316126 - digiKam crashed when choosing dlna export.
+102 ==> 348519 - Auth Token 98 - Login failed - Picasa Import.
+103 ==> 215787 - Picasaweb updating photo or movie does not work,duplicate instead of replace.
+104 ==> 217546 - Picasaweb export does not point to the current album.
+105 ==> 223375 - PicasaWeb: videos won't be exported.
+106 ==> 272423 - [wish] picasaweb updating tags.
+107 ==> 272518 - Picasaweb updating photo not marked as uploaded.
+108 ==> 329350 - Exporting a second time mix two exports (test picasaweb).
+109 ==> 219773 - Attempted to use Picasaweb addon to upload an album of approximately 330 jpegs.
+110 ==> 221200 - Uploading photo to picasa web albums.
+111 ==> 221417 - Crash while export to Picasaweb.
+112 ==> 291701 - PicasaWeb Export removes deleted photos from album.
+113 ==> 304763 - Export of Picasaweb crashes.
+114 ==> 306165 - Crash while starting photo upload to picasa.
+115 ==> 308701 - digikam crash while export again the same image to picasaweb.
+116 ==> 321251 - Application crashs if close it while sending images to picasa.
+117 ==> 172427 - digiKam crashed.
+118 ==> 164908 - Private albums are not listed (and then not usable) with picasa export plugin.
+119 ==> 200091 - "remove EXIF data" crashes digiKam.
+120 ==> 265630 - Gallery export uploads to wrong directory.
+121 ==> 249842 - Blend bracketed images tool says it failed to save the blended image, but actually saves it.
+122 ==> 320749 - Panorama tool fails systematically when file names contain ':'.
+123 ==> 277994 - Missing dot in filename in "batch raw converter".
+124 ==> 167286 - Gps tagging fails with message titled "digikam3rdparty.free.fr" and text "unauthorized call of the API" when starting the gps tagger window.
+125 ==> 350167 - The browser to authenticate the plugin with flickr at the first export is never started.
+126 ==> 297455 - Thumbnails not refreshed on file list.
+127 ==> 343668 - Application crashed after upload movie to Rajce.net.
+128 ==> 341688 - Dropbox upload does not work due to developer API keys.
+129 ==> 337963 - Pictures moved from folders under copy.com sync control are re-downloaded again.
+130 ==> 347194 - Export to Facebook fails with "Facebook Call Failed".
+131 ==> 289256 - When an error occurs during session verification, the FB export dialog ends up in an unusable state.
+132 ==> 240254 - Using FB and Flickr tools at the same time, FB is completed but dialog cannot be closed until Flickr tool is done.
+133 ==> 319252 - FaceBook export doesn't work any more due to bad url given back to register to before photo uploading.
+134 ==> 297162 - Application does not have permission for this action.
+135 ==> 202898 - New Facebook Import Gui Mockup.
+136 ==> 250564 - digiKam import corrupted pictures with facebook plugin (read html files).
+137 ==> 317228 - Facebook tool seems to be hacked/redirected to a Japanese site.
+138 ==> 305281 - Import to Facebook.
+139 ==> 289272 - File upload to facebook fails digiKam.
+140 ==> 347117 - Crash when exporting pictures to facebook.
+141 ==> 297732 - digiKam crash when tried to export pics to facebook.
+142 ==> 223830 - digiKam crash on Export to Facebook.
+143 ==> 342300 - Export to facebook connect properly so i can post to my facebook account.
+144 ==> 346183 - Crash when exporting picture to facebook.
+145 ==> 328472 - Application crash on quit during Facebook upload.
+146 ==> 306144 - Application crashes with the Export to Facebook.
+147 ==> 299776 - Violation: Privacy Policy.

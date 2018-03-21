@@ -9,6 +9,8 @@ General      : New notification event when kioslave cannot be started.
 General      : OSX event notifier is now used to dispatch notifications.
 AlbumGui     : New Action To Exclude Items Without Rating with items filter.
                Details: http://mohamedanwer.wordpress.com/2014/08/28/new-action-to-exclude-items-without-rating/
+ExpoBlending : Remove OPenMP dependency. Ported to QtConcurrentRun.
+Panorama     : Support next hugin version (2014.0).
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -152,3 +154,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 138 ==> 318831 - Double-clicking on video thumbnail has no effect.
 139 ==> 275080 - Add keyboard shortcut for "Open With" default application.
 140 ==> 115597 - Add "Open With..." option in image editor.
+141 ==> 338037 - digiKam 4.2.0 compilation error: undefined reference to `cvFillImage'.
+142 ==> 335250 - Proposed minor fixes to MediaWiki plugin [patch].
+143 ==> 338871 - Selection of tools is set to default after each restart of digiKam.
+144 ==> 336667 - "Google Drive Export" ignoring digikamrc setting.

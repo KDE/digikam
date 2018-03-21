@@ -4,7 +4,7 @@ digiKam 5.1.0 - Release date: 2016-08-07
 NEW FEATURES:
 
 Imgur   : Remove libqtkoauth dependency
-General : Integrate liboauth2 in libkipiplugins. First tool to use it is Imgur.
+General : Integrate liboauth2. First tool to use it is Imgur.
 General : Fix broken Windows 64bits installer due to mix with 32 bits dlls.
 General : Internal Libraw updated to 0.18.0 beta (201604). New lead cameras supported:
           Canon 80D, 1300D, 1DX MkII

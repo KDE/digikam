@@ -27,6 +27,11 @@ Editor   : DistortionFx tool support zoomable preview.
 
 Showfoto : Port of Thumbbar to Qt Model/view.
 
+General  : New tool to export collection to Google Drive cloud service.
+General  : New tool to export collection to DropBox cloud service.
+
+MediaWiki: allow removal of metadata/GPS coordinates before uploading.
+MediaWiki: graphical interface improvements.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -196,3 +201,23 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 164 ==> 329697 - digiKam crash when browsing albums (qt-sqlite plugin broken due to BC issue with libsqlite).
 165 ==> 331597 - Tags are not sorted in UI [patch].
 166 ==> 334183 - Face recognition folder selection scans all available folders.
+167 ==> 319664 - 3.2.0-beta2 (and 3.1.0) installs a static archive /usr/lib64/libPropertyBrowser.a.
+168 ==> 324044 - MediaWiki: Fix bug, add feature, improve usability
+169 ==> 307689 - digiKam crashes during Export to Rajce service [patch].
+170 ==> 323118 - SmugMug API access fails after SmugMug relaunch [patch].
+171 ==> 324646 - digiKam hangs when producting "Video Slide Show" [patch].
+172 ==> 319611 - Invalid placement of TimeStamp element in kml export [patch].
+173 ==> 319612 - Update kml export to use KML 2.2 schema [patch].
+174 ==> 199978 - Can not email images on Windows [patch].
+175 ==> 320782 - Try to automatically guess new flickr set name from image folders [patch].
+176 ==> 326728 - Panorama Stitching crashes upon start.
+177 ==> 300445 - Integration with cloud storage (as Dropbox or GDrive) for quick sharing.
+178 ==> 328679 - Untranslated strings due to missing i18n().
+179 ==> 328981 - Cannot select between multiple scanner devices.
+180 ==> 296650 - digiKam crash while uploading to PicasaWeb.
+181 ==> 304809 - Crash when attempting to download Facebook photos.
+182 ==> 299038 - Crashes when Starting Geo-Tagging.
+183 ==> 290797 - Crash when exporting images to flickr.
+184 ==> 183014 - Png converter compressor unconsistent.
+185 ==> 305137 - Wish for integrated(?) clip-generator.
+186 ==> 332838 - String problems: word puzzle, exclamation marks.

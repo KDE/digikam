@@ -17,3 +17,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 009 ==> 344154 - digiKam sometimes shows the raw preview, sometimes the JPEG preview, depending on the position of the stars [patch].
 010 ==> 344156 - Use digiKam with your keyboard, delete the wrong photos [patch].
 011 ==> 344155 - Rotating raw image sometimes results in the preview showing the photo rotated in the opposite direction [patch].
+012 ==> 342194 - Geolocalisation not possible using google maps: "Malformated Url"
+013 ==> 343777 - FindQtSoap.cmake doesn't find latest qtsoap built from git code [patch].
+014 ==> 308021 - digiKam crashes when making panorama / boost.

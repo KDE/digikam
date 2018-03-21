@@ -29,3 +29,8 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 017 ==> 286373 - DNG don't get filtered as raw (group of items relevant).
 018 ==> 181813 - digiKam text decoration font size problem.
 019 ==> 353815 - Using Batch Queue Manager to extract preview images loses metadata.
+020 ==> 306442 - digiKam 2.8 crash when opening geolocation tool.
+021 ==> 352596 - Unable to upload large image to flickr even though I'm resizing it.
+022 ==> 352621 - Export to facebook crashes.
+023 ==> 352862 - Photos are compressed when exported to picasa.
+024 ==> 352750 - Facebook export: Filename is used as Description.

@@ -21,3 +21,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 012 ==> 347053 - BQM: "batched' files" are different from manually processed files [patch].
 013 ==> 186054 - FILEIO : add non-rgb TIFF files support [patch].
 014 ==> 329637 - Can't find Dutch translations of documentation in digikam tarball.
+015 ==> 280189 - SmugMug Call Failed: Invalid user/nick/password.
+016 ==> 334593 - Application fails with invalid method reading folders from Smug Mug.

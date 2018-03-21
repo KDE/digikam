@@ -40,3 +40,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 028 ==> 326796 - When returning from edit mode to preview mode, next image not always loaded.
 029 ==> 341868 - View->Fit to Selection no centering the new selection [patch].
 030 ==> 191494 - Support search in offline collections (e.g. removable medias).
+031 ==> 302306 - HTML export crashes digiKam with floating cards theme.
+032 ==> 341379 - Advanced slideshow crashes if it runs manually backwards [patch].

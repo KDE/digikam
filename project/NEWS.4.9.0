@@ -35,3 +35,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 027 ==> 340139 - digiKam hangs after selecting folder with pictures.
 028 ==> 341772 - Re-read metadata when image file timestamp has changed [patch].
 029 ==> 329433 - Manual adding of faces made easier [patch].
+030 ==> 310977 - Applying data (exif, iptc, xmp caption) in "Edit all Metadata" window inconsistent - results in data loss.
+031 ==> 340330 - Deselecting "Show tracks on map" crashes the dialog.
+032 ==> 283504 - QJSon not optional.
+033 ==> 345802 - Html export does not longer export the description tag to gallery.xml.

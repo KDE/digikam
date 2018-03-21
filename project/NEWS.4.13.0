@@ -36,3 +36,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 029 ==> 351679 - digiKam does not find album library.
 030 ==> 350885 - Grouping images via the thumbbar is possible, but they disappear in digikam [patch].
 031 ==> 352040 - Names for faces do not take non-ASCII characters.
+032 ==> 280058 - No coordinates shown in GPSSync window when using sidecar files.

@@ -77,7 +77,7 @@ cmake3 --build . --config RelWithDebInfo --target ext_kxmlgui             -- -j$
 cmake3 --build . --config RelWithDebInfo --target ext_kbookmarks          -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_kimageformats       -- -j$CPU_CORES
 
-# Extra support for Kipi-plugins and digiKam
+# Extra support for digiKam
 
 # libksane support
 cmake3 --build . --config RelWithDebInfo --target ext_kwallet             -- -j$CPU_CORES

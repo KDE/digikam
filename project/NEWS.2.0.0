@@ -112,7 +112,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 083 ==> 269903 : Libkdcraw no longer compiles due to a linking error [patch].
 084 ==> 269862 : Libkmap compilation fails because of changes in MarbleWidget [patch].
 085 ==> 269435 : digiKam does not display any picture from any source.
-086 ==> 246074 : Can't export photos to Picasaweb (with gwenview it's works fine).
+086 ==> 246074 : Can't export photos to Picasaweb.
 087 ==> 252700 : Font color for icons in toolbar does not change for darker Themes.
 088 ==> 168669 : Disabled entry menu seems more important and active in dark theme.
 089 ==> 241116 : [Themes] Cannot change text colour in menu bar.

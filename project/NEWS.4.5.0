@@ -31,3 +31,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 018 ==> 340581 - Ratings with rating == 0 cannot be selected on the left sidebar [patch].
 019 ==> 339154 - digiKam goes into infinite loop when working with tags/captions information tab templates.
 020 ==> 340487 - Add Album Category as a search criteria [patch].
+021 ==> 337422 - EXIF thumbnail date information not updated when writing metadata to image.
+022 ==> 340443 - Advanced slideshow shows not all pictures under certain conditions [patch].
+023 ==> 340476 - Floating Cards brings digiKam with non-English locales to crash and missing parameter text [patch].
