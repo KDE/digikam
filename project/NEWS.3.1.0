@@ -21,3 +21,10 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 012 ==> 257773 - Switch to full screen mode crash under MACOSX.
 013 ==> 315284 - digiKam crashes when quitting the program.
 014 ==> 314260 - Large .tif files are not loaded.
+015 ==> 314784 - imgurtalkerauth.cpp with digikam 3.0 breaks during build.
+016 ==> 295265 - Provide hicolor panoramagui icon.
+017 ==> 311005 - "Edit all Metadata" allows to edit unchecked fields - results in data loss.
+018 ==> 247108 - digiKam: setting file date/time stamp refused, with umlauts or prior file movements.
+019 ==> 315302 - TimeAdjust is not shown [patch].
+020 ==> 306482 - Wrong rotation for images after Piwigo Export.
+021 ==> 314836 - Panorama tool segfault with non-ascii characters in file paths.

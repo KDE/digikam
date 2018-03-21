@@ -45,3 +45,8 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 035 ==> 320121 - if running maintenance, "rebuild thumbnails", digiKam hangs endlessly.
 036 ==> 306282 - Improvements for maintenance tool.
 037 ==> 306246 - Add new maintainance option to update DB using image metadata.
+038 ==> 321274 - Geolocation edit bookmarks.....NOTHING happens.
+039 ==> 230360 - Not possible to add non-ascii characters in Byline-field.
+040 ==> 322071 - Installs wrong file into share/config.kcfg.
+041 ==> 322636 - GeoTag for MOV files canot be saved in the file.
+042 ==> 318307 - Detects enfuse and enblend versions wrong.

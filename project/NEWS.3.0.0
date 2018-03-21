@@ -37,6 +37,12 @@ BatchQueueManager : Add the capability to put target file processed from queue t
 BatchQueueManager : Add concept of Workflow dedicated to save and restore between sessions Queue Settings including Assigned Batch Tools list.
 BatchQueueManager : Add new tool to crop image.
 
+General           : New tool to export Collection to DLNA device.
+General           : New tool to make video slideshow.
+General           : Port all plugins to KDE XML-GUI framework.
+Panorama          : New parser using GNU Flex and GNU Bison instead of Boost::spirit
+Panorama          : Manual cropping of the final result
+
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 126149 - Camera stores both jpeg and raw (nef), handle both as one
@@ -162,3 +168,33 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 121 ==> 308310 - No thumbnails are created in the album view, rebuilding thumbnails doesn't work.
 122 ==> 291917 - digiKam 2.5.0 Crash on start up.
 123 ==> 265328 - digikam-2.0.0-beta2 core does not compile against kde-4.6.0 libkdcraw.
+124 ==> 305224 - Configure Shortcuts does not provide the option of config.
+125 ==> 306193 - Desktop-file-validate fails on kipiplugins.desktop.
+126 ==> 300723 - Crash when "Next" button clicked from "Set panorama images" window.
+127 ==> 303173 - Gallery export busyloop [patch].
+128 ==> 249066 - digiKam crashes when attempting to upload photo using gallery remote 2 protocol.
+129 ==> 147268 - Problem with unicode export.
+130 ==> 155980 - Cannot connect to remote galleries where apache has mod_security enabled.
+131 ==> 307291 - Improve usability and fix bugs [patch].
+132 ==> 307709 - photivo.png in 48x48 icon folder has a size of 64x64.
+133 ==> 306511 - digiKam crash during start.
+134 ==> 269929 - DLNA interface : Materialize searches using "virtual albums" containing images by links.
+135 ==> 304246 - Adjusting Date & Time adjusts wrong images.
+136 ==> 189998 - EXIF date information incorrect use of AM/PM.
+137 ==> 269869 - Option to import date from file name in annotate dialog.
+138 ==> 299191 - digiKam Advanced slideshow crash.
+139 ==> 308442 - Images are not associated to album if album name contains &amp;.
+140 ==> 308465 - Cannot change file modification timestamp with files having non ASCII characters.
+141 ==> 308834 - Display "Date and time" with seconds in geolocation.
+142 ==> 309997 - 3.0.0beta3 installs several static libraries.
+143 ==> 311310 - Don't build against libkdcraw 2.0.1.
+144 ==> 303980 - Batch DNG Conversion of files produces multiple files of last file in the queue.
+145 ==> 290652 - Segfaults when opening the OpenGL image viewer [patch].
+146 ==> 312453 - Panorama tool seems to always attempt 360 degree stitching.
+147 ==> 300206 - Bugzilla crash.
+148 ==> 309339 - Panorama stitching - minor quality of resolution 150.
+149 ==> 313672 - Object::connect: No such slot slotAnonymousToggled(bool).
+150 ==> 221202 - Export html exif IPTC name data.
+151 ==> 314117 - Segmentation fault on launching import from scanner.
+152 ==> 314244 - Crash while doing a panorama.
+153 ==> 305807 - digiKam crash while scanning.
