@@ -2606,6 +2606,12 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
 
         if (msgBox.exec() == QMessageBox::Yes)
         {
+            if (album->m_firstChild)
+            {
+                errMsg = i18n("Only a tag without children can be merged!");
+                return false;
+            }
+
             TAlbum* const mergeTag = findTAlbum(newParent->tagPath() +
                                                 QLatin1Char('/') +
                                                 album->title());
