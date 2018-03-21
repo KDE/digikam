@@ -1,5 +1,7 @@
 digiKam - Professional Photo Management with the Power of Open Source
 
+[![](https://scan.coverity.com/projects/285/badge.svg "Coverity Scan Build Status")](https://scan.coverity.com/projects/digikam)
+
 # About
 
 digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.
@@ -73,9 +75,7 @@ Extra Bugzilla servers for shared libs used by digiKam :
 
 # Dependencies
 
-See the complete list of dependencies at this url:
-
-https://cgit.kde.org/digikam.git/tree/DEPENDENCIES 
+See the complete list of dependencies [at this url](https://cgit.kde.org/digikam.git/tree/DEPENDENCIES)
 
 CMake compilation options to custom digiKam:
 
@@ -134,4 +134,4 @@ Note: To know KDE install path on your computer, use `kf5-config --prefix` comma
 If you love digiKam, you can help developers to buy new photo devices to test
 and implement new features. Thanks in advance for your generous donations.
 
-For more information, look at this url : https://www.digikam.org/donate/
+For more information, look (at this url)[https://www.digikam.org/donate/]
