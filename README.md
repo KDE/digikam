@@ -83,6 +83,7 @@ The current bugs and devel wishes reported to the bugzilla servers can be seen a
 Extra Bugzilla servers for shared libs used by digiKam :
 
 * [LibRaw library](https://github.com/LibRaw/LibRaw/issues)
+* [Lensfun library](https://sourceforge.net/p/lensfun/_list/tickets)
 * [GPhoto2 library](http://gphoto.org/bugs)
 * [Exiv2 library](http://dev.exiv2.org/projects/exiv2/issues)
 * [QtAV library](https://github.com/wang-bin/QtAV/issues)
