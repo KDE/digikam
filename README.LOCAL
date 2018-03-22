@@ -1,6 +1,4 @@
-This files describes how to install digiKam software compilation from
-the git repository, while keeping a system-wide digiKam software compilation
-install.
+This files describes how to install digiKam from the git repository, while keeping a system-wide digiKam install.
 
 This procedure is based on the boostrap script boostrap.local
 
