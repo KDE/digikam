@@ -70,8 +70,8 @@ IRC channel from irc.freenode.org server: [#digikam](http://webchat.freenode.net
 
 # Bug reports
 
-IMPORTANT : the bug reports and wishlist entries are hosted by the KDE bug report
-system which can be reached from the standard KDE help menu of digiKam.
+IMPORTANT : the bug reports and wishlist entries are hosted by the Bugzilla
+system which can be reached from the standard Help menu of digiKam.
 A mail will automatically be sent to the digiKam development mailing list.
 There is no need to contact directly the digiKam mailing list for a bug report
 or a devel wish.
