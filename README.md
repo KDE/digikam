@@ -22,6 +22,8 @@ the photo library by a wide range of criteria. You can search photos by tags, la
 and even specific EXIF, IPTC, or XMP metadata. You can also combine several criteria for more advanced searches.
 digiKam rely on Exiv2 library to handle metadata tag contents from files to populate the photo library.
 
+![Advanced Search Tool](https://c1.staticflickr.com/5/4795/40743725771_0b69dca743_c.jpg "Advanced search tool and video file result playing as preview")
+
 digiKam can handle RAW files, and the application uses the excellent LibRaw library for decoding raw files.
 The library is actively maintained and regularly updated to include support for the latest camera models.
 
