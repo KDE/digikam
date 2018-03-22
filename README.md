@@ -29,8 +29,10 @@ The application provides a comprehensive set of editing tools. This includes bas
 cropping, and sharpening as well as advanced tools for, curves adjustment, panorama stitching, and much more.
 A special tool based on Lensfun library permit to apply lens corrections automatically on images.
 
-Extended functionality in digiKam is implemented via a set of plugins. You can easily customize digiKam by enable
-and disable individual tools, dedicated especially to import and export contents to remote web-services.
+![Panorama Tool](https://c1.staticflickr.com/5/4649/40430534662_097b46a270_c.jpg "Panorama tool stiching photo")
+
+Extended functionality in digiKam is implemented via a set of tools, dedicated especially to import and export 
+contents to remote web-services.
 
 digiKam is based in part on the work of the Independent JPEG Group.
 
@@ -120,7 +122,7 @@ Compared to old autoconf options:
 * cmake . -DCMAKE_BUILD_TYPE=debugfull" is equivalent to "./configure --enable-debug=full
 * cmake . -DCMAKE_INSTALL_PREFIX=/usr"  is equivalent to "./configure --prefix=/usr
 
-More details can be found at this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
+More details can be found (at this url)[http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables]
 
 Note: To know KDE install path on your computer, use `kf5-config --prefix` command line like this (with full debug object enabled):
 
