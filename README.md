@@ -7,7 +7,7 @@ digiKam - Professional Photo Management with the Power of Open Source
 digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.
 The application provides a comprehensive set of tools for importing, managing, editing, and sharing photos and RAW files.
 
-[![](Albums View and Image Editor](https://c1.staticflickr.com/5/4216/35354951072_a034561b5e_c.jpg "Albums View and Image Editor")](https://www.flickr.com/photos/digikam/35354951072/)
+[![](https://c1.staticflickr.com/5/4216/35354951072_a034561b5e_c.jpg "Albums View and Image Editor")](https://www.flickr.com/photos/digikam/35354951072/)
 
 You can use digiKam's import capabilities to easily transfer photos, RAW files, and videos directly from your camera
 and external storage devices (SD cards, USB disks, etc.). The application allows you to configure import settings
