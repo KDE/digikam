@@ -13,6 +13,8 @@ You can use digiKam's import capabilities to easily transfer photos, RAW files, 
 and external storage devices (SD cards, USB disks, etc.). The application allows you to configure import settings
 and rules that process and organize imported items on-the-fly.
 
+[![](https://c1.staticflickr.com/1/703/32558229094_3d7ec01d3a_c.jpg "Map View displaying rated items and Batch Queue Manager in action")](https://www.flickr.com/photos/digikam/32558229094)
+
 digiKam organizes photos, RAW files, and videos into albums. But the application also features powerful tagging
 tools that allow you to assign tags, ratings, and labels to photos and raw files. You can then use filtering
 functionality to quickly find items that match specific criteria.
@@ -28,6 +30,8 @@ digiKam rely on Exiv2 library to handle metadata tag contents from files to popu
 
 digiKam can handle RAW files, and the application uses the excellent LibRaw library for decoding raw files.
 The library is actively maintained and regularly updated to include support for the latest camera models.
+
+[![](https://c1.staticflickr.com/1/300/31407487553_a14abd0418_c.jpg "Find by items similarity and Light Table in cation to compare side by side")](https://www.flickr.com/photos/digikam/31407487553)
 
 The application provides a comprehensive set of editing tools. This includes basic tools for adjusting colors,
 cropping, and sharpening as well as advanced tools for, curves adjustment, panorama stitching, and much more.
