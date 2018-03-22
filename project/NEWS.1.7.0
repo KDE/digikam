@@ -3,6 +3,8 @@ digiKam 1.7.0 - Release date: 2010-12-19
 
 NEW FEATURES:
 
+General : New tool to export images to Debian Screenshoots web service (http://screenshots.debian.net).
+General : New tool to export images to an instant messaging contact.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -41,3 +43,21 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 033 ==> 210353 : digiKam duplicates icons for TIFF files.
 034 ==> 260299 : X Axis Color Graduation in Curves Window mirrored.
 035 ==> 242021 : digiKam crashes during file save.
+036 ==> 225174 : Support new permission API for applications.
+037 ==> 254110 : Unable to upload photos to a selected album.
+038 ==> 254457 : Album target fails.
+039 ==> 247107 : Export to notes, export to pinboard, export to profile.
+040 ==> 219284 : digiKam facebook export album.
+041 ==> 241046 : Export Facebook.
+042 ==> 232015 : Facebook import tool.
+043 ==> 223601 : digiKam can't upload image to facebook.
+044 ==> 243381 : Signal: Segmentation fault.
+045 ==> 256714 : Add export to screenshots.debian.net.
+046 ==> 258953 : DngConverter changes luminosity of sony ARW files.
+047 ==> 255069 : Error with spaces in file names in send by email.
+048 ==> 251235 : Flash export tool does not install.
+049 ==> 244702 : Picasawebexport unable to select movie.
+050 ==> 258824 : After export images to Picasaweb cancel button should change to close.
+051 ==> 256713 : Send to contact tool.
+052 ==> 250449 : Slideshow does not work with compositing on.
+053 ==> 256284 : digiKam crash on start.
