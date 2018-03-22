@@ -26,13 +26,8 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 018 ==> 264631 : Deleteing last TAG on a picture does actually not remove the tag within the exif metadata.
 019 ==> 195648 : Quickfilter by tags: Exclude tags.
 020 ==> 265641 : digiKam crash at startup.
-
-
-
-
-
-
-
-
-
-
+021 ==> 264184 : png-1.5 compatibility fix.
+022 ==> 264655 : Crashing on "send to".
+023 ==> 243908 : Coordinates do not get retrieved.
+024 ==> 181319 : Provide a batch tool to add geolocation coordinates to a complete album.
+025 ==> 266771 : Unable to get GPS coordinates from map with Geolocation function of digiKam.
