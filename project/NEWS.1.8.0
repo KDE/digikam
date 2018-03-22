@@ -40,11 +40,12 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 031 ==> 239902 : digiKam seems to find images that are not in the collection directory.
 032 ==> 245958 : Some tags lost on batch color space conversion - import metadata does not work.
 033 ==> 246735 : Frame rate drops to around 5 fps when dragging & dropping.
-
-
-
-
-
-
-
+034 ==> 261275 : Fails to build [patch].
+035 ==> 253257 : Program uploads only part of file or smaller version of file and match error occurs.
+036 ==> 257514 : Scaling of Pictures for print.
+036 ==> 196855 : Remember last postition, remember last view mode, cache the last view.
+038 ==> 262125 : DNG Conversion can't be inverted. Embedded file is corrupted.
+039 ==> 245956 : Upload video from digiKam to Picasa.
+040 ==> 262642 : Better looking of "captions" during slideshow [patch].
+041 ==> 263545 : Crashed, when trying to import photo from picasaweb.
 
