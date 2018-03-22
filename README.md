@@ -1,4 +1,4 @@
-![](https://c1.staticflickr.com/9/8666/27876582973_1f149739b9_o.png) digiKam - Professional Photo Management with the Power of Open Source
+![](core/data/icons/apps/48-apps-digikam.png) digiKam - Professional Photo Management with the Power of Open Source
 
 [![](https://scan.coverity.com/projects/285/badge.svg "Coverity Scan Build Status")](https://scan.coverity.com/projects/digikam)
 
