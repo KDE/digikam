@@ -113,7 +113,7 @@ void SharedLoadingTask::execute()
 
         foreach(const QString& key, lookupKeys)
         {
-            if ( (cachedImg = cache->retrieveImage(key)) )
+            if ((cachedImg = cache->retrieveImage(key)))
             {
                 if (m_loadingDescription.needCheckRawDecoding())
                 {
@@ -150,9 +150,9 @@ void SharedLoadingTask::execute()
             // find possible running loading process
             m_usedProcess = 0;
 
-            for ( QStringList::const_iterator it = lookupKeys.constBegin(); it != lookupKeys.constEnd(); ++it )
+            for (QStringList::const_iterator it = lookupKeys.constBegin() ; it != lookupKeys.constEnd() ; ++it)
             {
-                if ( (m_usedProcess = cache->retrieveLoadingProcess(*it)) )
+                if ((m_usedProcess = cache->retrieveLoadingProcess(*it)))
                 {
                     break;
                 }
@@ -167,7 +167,7 @@ void SharedLoadingTask::execute()
                 m_usedProcess->addListener(this);
 
                 // break loop when either the loading has completed, or this task is being stopped
-                while ( m_loadingTaskStatus != LoadingTaskStatusStopping && m_usedProcess && !m_usedProcess->completed() )
+                while (m_loadingTaskStatus != LoadingTaskStatusStopping && m_usedProcess && !m_usedProcess->completed())
                 {
                     lock.timedWait();
                 }
@@ -235,7 +235,7 @@ void SharedLoadingTask::execute()
         m_completed = true;
 
         // dispatch image to all listeners, including this
-        for (int i=0; i<m_listeners.count(); ++i)
+        for (int i = 0 ; i < m_listeners.count() ; ++i)
         {
             LoadingProcessListener* l = m_listeners[i];
 
@@ -342,10 +342,11 @@ void SharedLoadingTask::progressInfo(const DImg* const, float progress)
         LoadingCache* cache = LoadingCache::cache();
         LoadingCache::CacheLock lock(cache);
 
-        for (int i=0; i<m_listeners.size(); ++i)
+        for (int i = 0 ; i < m_listeners.size() ; ++i)
         {
             LoadingProcessListener* l  = m_listeners[i];
             LoadSaveNotifier* notifier = l->loadSaveNotifier();
+
             if (notifier && l->querySendNotifyEvent())
             {
                 notifier->loadingProgress(m_loadingDescription, progress);
@@ -419,10 +420,9 @@ void SharedLoadingTask::notifyNewLoadingProcess(LoadingProcess* process, const L
     if (process != this                                              &&
         m_loadingDescription.isReducedVersion()                      &&
         m_loadingDescription.equalsIgnoreReducedVersion(description) &&
-        !description.isReducedVersion()
-       )
+        !description.isReducedVersion())
     {
-        for (int i=0; i<m_listeners.size(); ++i)
+        for (int i = 0 ; i < m_listeners.size() ; ++i)
         {
             m_listeners[i]->loadSaveNotifier()->moreCompleteLoadingAvailable(m_loadingDescription, description);
         }
