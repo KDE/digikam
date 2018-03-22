@@ -124,7 +124,7 @@ Compared to old autoconf options:
 * cmake . -DCMAKE_BUILD_TYPE=debugfull" is equivalent to "./configure --enable-debug=full
 * cmake . -DCMAKE_INSTALL_PREFIX=/usr"  is equivalent to "./configure --prefix=/usr
 
-More details can be found (at this url)[http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables]
+More details can be found [at this url](http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables)
 
 Note: To know KDE install path on your computer, use `kf5-config --prefix` command line like this (with full debug object enabled):
 
@@ -135,4 +135,4 @@ Note: To know KDE install path on your computer, use `kf5-config --prefix` comma
 If you love digiKam, you can help developers to buy new photo devices to test
 and implement new features. Thanks in advance for your generous donations.
 
-For more information, look (at this url)[https://www.digikam.org/donate/]
+For more information, look [at this url](https://www.digikam.org/donate/)
