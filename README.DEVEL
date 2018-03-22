@@ -2,7 +2,7 @@ This is the digiKam README for developpers
 
 - ABOUT --------------------------------------------------------------------
 
-digiKam is an advanced digital photo management application for KDE, which makes importing and organizing digital photos a 'snap'.
+digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.
 
 This is README will help you to download and compile digiKam with all extra components as documents and translations.
 
@@ -15,8 +15,8 @@ This is README will help you to download and compile digiKam with all extra comp
 
 * To process translations files (optional)
 
-- Ruby       <http://www.ruby-lang.org>             (to extract translations files from KDE repositories)
-- Subversion <https://subversion.apache.org/>       (to extract translations files from KDE repositories)
+- Ruby       <http://www.ruby-lang.org>             (to extract translations files from remote repositories)
+- Subversion <https://subversion.apache.org/>       (to extract translations files from remote repositories)
 - Gettext    <https://www.gnu.org/software/gettext> (including Msgfmt to compile po files to mo files)
 
 * To download all needed git repositories, execute download script like this: perl ./download-repos
@@ -51,10 +51,10 @@ digiKam DOC      : https://projects.kde.org/projects/extragear/graphics/digikam/
 If you are a developer with push access to the repositories, it is strongly recommended
 to use the "kde:" prefix and let git use the read-only mirrors for pulling.
 
-If you did not clone this repository (digikam-software-compilation) from "kde:", do it again:
+If you did not clone this repository from "kde:", do it again:
     git config --global url.git://anongit.kde.org/.insteadof kde:
     git config --global url.ssh://git@git.kde.org/.pushinsteadof kde:
-    git clone kde:digikam-software-compilation
+    git clone kde:digikam
 
 See below an example of .gitconfig file working with a developer account :
 
@@ -113,10 +113,10 @@ Packaging options:
 
 "-DDIGIKAMSC_COMPILE_DIGIKAM=ON"           Build digiKam core.
 
-"-DDIGIKAMSC_CHECKOUT_PO=ON"               Extract application translation files from KDE repositories.
-"-DDIGIKAMSC_CHECKOUT_DOC=ON"              Extract documentation translation files from KDE repositories.
-"-DDIGIKAMSC_COMPILE_DOC=ON"               Build handbook i18n files. It require to checkout documentation translations files before from KDE repositories.
-"-DDIGIKAMSC_COMPILE_PO=ON"                Build GUI i18n files. It require to checkout application translations files before from KDE repositories.
+"-DDIGIKAMSC_CHECKOUT_PO=ON"               Extract application translation files from remote repositories.
+"-DDIGIKAMSC_CHECKOUT_DOC=ON"              Extract documentation translation files from remote repositories.
+"-DDIGIKAMSC_COMPILE_DOC=ON"               Build handbook i18n files. It require to checkout documentation translations files before from remote repositories.
+"-DDIGIKAMSC_COMPILE_PO=ON"                Build GUI i18n files. It require to checkout application translations files before from remote repositories.
 
 Developers only options:
 
@@ -124,9 +124,6 @@ Developers only options:
 "-DDIGIKAMSC_COMPILE_LIBKSANE=OFF"         Force to use local libksane instead version installed on your computer.
 "-DDIGIKAMSC_COMPILE_LIBMEDIAWIKI=OFF"     Force to use local libmediawiki instead version installed on your computer.
 "-DDIGIKAMSC_COMPILE_LIBKVKONTAKE=OFF"     Force to use local libkvkontakte instead version installed on your computer.
-
-
-Look README files from sub-dirs for more options available to configure compilation environnement.
 
 To configure project with CMake, use dedicated "bootstrap" script for your platform.
 
