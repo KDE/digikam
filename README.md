@@ -22,7 +22,7 @@ the photo library by a wide range of criteria. You can search photos by tags, la
 and even specific EXIF, IPTC, or XMP metadata. You can also combine several criteria for more advanced searches.
 digiKam rely on Exiv2 library to handle metadata tag contents from files to populate the photo library.
 
-![Advanced Search Tool](https://c1.staticflickr.com/5/4795/40743725771_0b69dca743_c.jpg "Advanced search tool and video file result playing as preview")
+[![](https://c1.staticflickr.com/5/4795/40743725771_0b69dca743_c.jpg "Advanced search tool and video file result played as preview")](https://www.flickr.com/photos/digikam/40743725771)
 
 digiKam can handle RAW files, and the application uses the excellent LibRaw library for decoding raw files.
 The library is actively maintained and regularly updated to include support for the latest camera models.
@@ -31,9 +31,9 @@ The application provides a comprehensive set of editing tools. This includes bas
 cropping, and sharpening as well as advanced tools for, curves adjustment, panorama stitching, and much more.
 A special tool based on Lensfun library permit to apply lens corrections automatically on images.
 
-![Panorama Tool](https://c1.staticflickr.com/5/4649/40430534662_097b46a270_c.jpg "Panorama tool stiching photo")
+[![](https://c1.staticflickr.com/5/4649/40430534662_097b46a270_c.jpg "Panorama tool stiching photo")](https://www.flickr.com/photos/digikam/40474079731)
 
-Extended functionality in digiKam is implemented via a set of tools, dedicated especially to import and export 
+Extended functionality in digiKam is implemented via a set of tools, dedicated especially to import and export
 contents to remote web-services.
 
 digiKam is based in part on the work of the Independent JPEG Group.
