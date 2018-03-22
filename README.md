@@ -75,27 +75,24 @@ Extra Bugzilla servers for shared libs used by digiKam :
 
 # Dependencies
 
-See the complete list of dependencies [at this url](https://cgit.kde.org/digikam.git/tree/DEPENDENCIES)
+See [DEPENDENCIES](DEPENDENCIES) file for details.
 
 CMake compilation options to custom digiKam:
 
-Use CMake `-DENABLE_KFILEMETADATASUPPORT=on`  flag to compile digiKam with KDE files indexer support                                 (disabled by default).
-Use CMake `-DENABLE_AKONADICONTACTSUPPORT=on` flag to compile digiKam with KDE Mail Contacts support                                 (disabled by default).
-Use CMake `-DENABLE_DBUS=off`                 flag to compile digiKam without DBus support                                           (enabled by default - for Linux desktop only).
-Use CMake `-DENABLE_MEDIAPLAYER=on`           flag to compile digiKam with QtAV support                                              (disabled by default).
-Use Cmake `-DENABLE_APPSTYLES=on`             flag to compile digiKam with widget application style support                          (disabled by default).
-
-OpenCV3 support needs extra contrib modules package, especially 'face'
-and 'legacy' components.
+* Use CMake `-DENABLE_KFILEMETADATASUPPORT=on`  flag to compile digiKam with KDE files indexer support                                 (disabled by default - experimental).
+* Use CMake `-DENABLE_AKONADICONTACTSUPPORT=on` flag to compile digiKam with KDE Mail Contacts support                                 (disabled by default - experimental).
+* Use CMake `-DENABLE_DBUS=off`                 flag to compile digiKam without DBus support                                           (enabled by default - for Linux desktop only).
+* Use CMake `-DENABLE_MEDIAPLAYER=on`           flag to compile digiKam with QtAV support                                              (disabled by default but hight recomend to support video files).
+* Use Cmake `-DENABLE_APPSTYLES=on`             flag to compile digiKam with widget application style support                          (disabled by default).
 
 Mysql support options (experimental):
 
-Use CMake `-DENABLE_MYSQLSUPPORT=on`          flag to compile digiKam with MysSql support                                            (disabled by default).
-Use CMake `-DENABLE_INTERNALMYSQL=on`         flag to compile digiKam with internal MySQL server                                     (disabled by default).
+* Use CMake `-DENABLE_MYSQLSUPPORT=on`          flag to compile digiKam with MysSql support                                            (disabled by default).
+* Use CMake `-DENABLE_INTERNALMYSQL=on`         flag to compile digiKam with internal MySQL server                                     (disabled by default).
 
 Debug options:
 
-Use CMake `-DBUILD_TESTING=on`                flag to compile digiKam source code unit tests                                         (disabled by default).
+* Use CMake `-DBUILD_TESTING=on`                flag to compile digiKam source code unit tests                                         (disabled by default - for developpers only).
 
 # Installation
 
@@ -110,24 +107,24 @@ In order to compile, just use something like that:
 
 Usual CMake options :
 
-`-DCMAKE_INSTALL_PREFIX` : decide where the program will be install on your computer.
-`-DCMAKE_BUILD_TYPE`     : decide which type of build you want. You can chose between:
-                           `debugfull`.     : for hacking. Include all debug information.
-                           `debug`.
-                           `profile`.
-                           `relwithdebinfo` : default. use gcc `-O2` `-g` options.
-                           `release`        : generate stripped and optimized bin files. For packaging.
+* `-DCMAKE_INSTALL_PREFIX` : decide where the program will be install on your computer.
+* `-DCMAKE_BUILD_TYPE`     : decide which type of build you want. You can chose between:
+                             `debugfull`.     : for hacking. Include all debug information.
+                             `debug`.
+                             `profile`.
+                             `relwithdebinfo` : default. use gcc `-O2` `-g` options.
+                             `release`        : generate stripped and optimized bin files. For packaging.
 
 Compared to old autoconf options:
 
-    cmake . -DCMAKE_BUILD_TYPE=debugfull" is equivalent to "./configure --enable-debug=full
-    cmake . -DCMAKE_INSTALL_PREFIX=/usr"  is equivalent to "./configure --prefix=/usr
+* cmake . -DCMAKE_BUILD_TYPE=debugfull" is equivalent to "./configure --enable-debug=full
+* cmake . -DCMAKE_INSTALL_PREFIX=/usr"  is equivalent to "./configure --prefix=/usr
 
 More details can be found at this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
 
 Note: To know KDE install path on your computer, use `kf5-config --prefix` command line like this (with full debug object enabled):
 
-    cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=`kf5-config --prefix`
+* cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=`kf5-config --prefix`
 
 # Donate Money
 
