@@ -23,8 +23,12 @@ functionality to quickly find items that match specific criteria.
 
 In addition to filtering functionality, digiKam features powerful searching capabilities that let you search
 the photo library by a wide range of criteria. You can search photos by tags, labels, rating, data, location,
-and even specific EXIF, IPTC, or XMP metadata. You can also combine several criteria for more advanced searches.
-digiKam rely on Exiv2 library to handle metadata tag contents from files to populate the photo library.
+and even specific EXIF, IPTC, or XMP metadata.
+
+[![](https://c1.staticflickr.com/1/306/32217007615_db6f9d116a_c.jpg "Search by Tags with preview mode and Metadata Editor in action")](https://www.flickr.com/photos/digikam/32217007615)
+
+You can also combine several criteria for more advanced searches. digiKam rely on Exiv2 library to handle metadata
+tag contents from files to populate the photo library.
 
 [![](https://c1.staticflickr.com/5/4795/40743725771_0b69dca743_c.jpg "Advanced search tool and video file result played as preview")](https://www.flickr.com/photos/digikam/40743725771)
 
