@@ -17,6 +17,8 @@ digiKam organizes photos, RAW files, and videos into albums. But the application
 tools that allow you to assign tags, ratings, and labels to photos and raw files. You can then use filtering
 functionality to quickly find items that match specific criteria.
 
+[![](https://c2.staticflickr.com/4/3726/32557269024_ae870b0466_c.jpg "Search items by date rage and Geolocation editor")](https://www.flickr.com/photos/digikam/32557269024)
+
 In addition to filtering functionality, digiKam features powerful searching capabilities that let you search
 the photo library by a wide range of criteria. You can search photos by tags, labels, rating, data, location,
 and even specific EXIF, IPTC, or XMP metadata. You can also combine several criteria for more advanced searches.
