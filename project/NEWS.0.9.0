@@ -122,6 +122,7 @@ ImageEditor   : Fixed and improved Color Management View workflow.
 
 General       : About final release packaging, improve support of "./configure --enable-final" 
                 option everywhere.
+GPSSync       : Bookmark locations
 
 
 ----------------------------------------------------------------------------------------------------
@@ -393,5 +394,24 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (http://bugs.kde.org):
 239 ==> 138616 : Cannot compile: cannot verify exiv2 version.
 240 ==> 134999 : Crash in exiv2 when searching for new images.
 241 ==> 136771 : Image editor crashes when using undo.
+242 ==> 212118 : Rename images: sorting based on the exif date of an image.
+243 ==> 213681 : Batch RAW converter: Activating 16bit allows jpeg.
+244 ==> 213889 : Segmentation fault at splash screen.
+245 ==> 124357 : Output resolution of print wizard is very low.
+246 ==> 204707 : Printwizard should be able to print uncroped thumbnails.
+247 ==> 124357 : Output resolution of print wizard is very low.
+248 ==> 214744 : Advanced slideshow crash after pressing ok.
+249 ==> 135387 : Stickers of photos on the world map.
+250 ==> 215644 : Rotate image fails under windows.
+251 ==> 215646 : Export to flickr fails under windows.
+252 ==> 167279 : Add a list of favorite place to gps locater window (e.g. new drop down menu).
+253 ==> 135406 : History for last used GPS coordinates.
+254 ==> 206080 : Gpssync no map when entering.
+255 ==> 216622 : digiKam bug report data errors.
+256 ==> 214210 : Don't take the correct position from geolocation file.
+257 ==> 216790 : Configuration dialogue crashes getting icon for plugins not loaded.
+258 ==> 216803 : GPSSync ability to zoom with mouse wheel.
+259 ==> 215798 : slideshow crashes when starting.
+260 ==> 213164 : Convert images: 16 bit png from 8 bit bmp.
 
 ---------------------------------------------------------------------------------------------------- 
