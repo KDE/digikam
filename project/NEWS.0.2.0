@@ -3,11 +3,48 @@ v0.2.0
 
 NEW FEATURES:
 
-General        : SimpleViewer plugin has been renamed to FlashExport
-General        : New icons for all Export/import plugins.
+General        : SimpleViewer tool has been renamed to FlashExport
+General        : New icons for all Export/import tools.
 FlickrExport   : Add support for 23hq.com service which uses Flickr API
-PrintImages    : New plugin that allow to choose old print assistant
+PrintImages    : New tool that allow to choose old print assistant
                  or to print all the selected photos directly
+General        : All import/export tools now have keyboard shortcuts
+Facebook       : Facebook tool now support also import (download) of photos
+General        : Tools now use metadata settings shared with host application.
+Smug           : Import (download) of images from SmugMug web service.
+FbExport       : New tool to export images to a remote Facebook web service (http://www.facebook.com)
+FlickrExport   : Add support of Photosets.
+SmugExport     : Add support for Album Templates
+RemoveRedEyes  : Added an option to preview the correction of the currently selected image.
+SmugExport     : New tool to export images to a remote SmugMug web service (http://www.smugmug.com)
+RemoveRedEyes  : New tool to remove red eyes in batch. Tool is based on OpenCV library.
+Calendar       : Ported to QT4/KDE4.
+Calendar       : Support RAW images.
+AcquireImages  : Under Windows, TWAIN interface is used to scan image using flat scanner.
+SlideShow      : Normal effects are back.
+SlideShow      : New effect "Cubism".
+SlideShow      : Added support for RAW images.
+DNGConverter   : tool is now available as a stand alone application.
+SlideShow      : New effect "Mosaic"
+PrintWizard    : Ported to QT4/KDE4
+PrintWizard    : Added a new option to skip cropping, the image is scaled automatically.
+General        : all tools can be compiled natively under Microsoft Windows.
+DNGConverter   : New tool to convert RAW camera image to Digital NeGative (DNG)
+SlideShow      : Now you can play your favourite music during slideshow.
+General        : Port to CMake/KDE4/QT4.
+JPEGLossLess   : XMP metadata support.
+RAWConverter   : XMP metadata support.
+TimeAdjust     : XMP metadata support.
+MetadataEdit   : XMP metadata support with EXIF, IPTC, and Comments editor to sync XMP tags.
+MetadataEdit   : IPTC Editor dialog is more compliant with IPTC.org recommendations.
+MetadataEdit   : IPTC Editor add the capability to set multiple values for a tag.
+SendImages     : Complete re-write of emailing tool.
+GPSSync        : New tool to edit GPS track list using googlemaps.
+RAWConverter   : Raw files are decoded in 16 bits color depth using same auto-gamma and auto-white
+                 methods provided by dcraw with 8 bits color depth RAW image decoding.
+SlideShow      : Now filenames, captions and progress indicators can have transparent
+                 backgrounds with OpenGL SlideShow as well.
+SlideShow      : Added thumbnails into image list.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -21,160 +58,51 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 008 ==> 176367 : Crop stage does not allow rotation or selection.
 009 ==> 178983 : Next/back-buttons in print-assistant should be labeled.
 010 ==> 095404 : Printwizard print image with custom size, original size, autoscaled size to paper.
-011 ==> 183661 : Better action icons for export plugins
+011 ==> 183661 : Better action icons for export tools
 012 ==> 187203 : Batch raw converter crash digikam.
-
-v0.2.0-rc2
-------------------------------------------------------------------------
-
-NEW FEATURES:
-
-General        : All import/export plugins now have keyboard shortcuts
-Facebook       : Facebook plugin now support also import (download) of photos
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 175928 : digiKam crashing when trying to export to gallery2 web service.
-002 ==> 181694 : Edit caption should present current caption for easier modification.
-003 ==> 181973 : Raw batch converter loses exif information.
-004 ==> 181334 : The artwork API in libgpod-0.7.0 has changed slightly, IpodExport plugin needs updated.
-005 ==> 181853 : Entering new xmp meta data removes old one from the image file.
-006 ==> 133649 : Scale images instead of cropping.
-007 ==> 182838 : Change API authentication to Desktop application type.
-
-v0.2.0-rc1v
-------------------------------------------------------------------------
-
-NEW FEATURES:
-
-General        : Plugins now use metadata settings shared with kipi host application.
-Smug           : Import (download) of images from SmugMug web service.
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 179439 : Rotation or flip do not update internal thumbnail.
-002 ==> 180245 : Timeadjust is not building on mac os x leopard.
-003 ==> 180656 : Wrong file selection filter in export picasaweb.
-
-v0.2.0-beta6
-------------------------------------------------------------------------
-
-NEW FEATURES:
-
-FbExport       : New plugin to export images to a remote Facebook web service (http://www.facebook.com)
-FlickrExport   : Add support of Photosets.
-SmugExport     : Add support for Album Templates
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 177999 : Kipi-plugins Shortcuts are not listed in the shortcuts editor from Kipi host application.
-002 ==> 160236 : Image Magick convert operations return with errors.
-003 ==> 144183 : Path in RAW-converter broken with the letter "ß"
-004 ==> 178495 : Problem with metadata editor.
-005 ==> 175219 : Album creating wrong date in picasaweb.
-006 ==> 175222 : Unable to create non listed album.
-007 ==> 166672 : Export to Facebook.
-008 ==> 129623 : Option to upload to specific photoset.
-009 ==> 161775 : Photoset support.
-
-v0.2.0-beta5
-------------------------------------------------------------------------
-
-NEW FEATURES:
-
-RemoveRedEyes  : Added an option to preview the correction of the currently selected image.
-SmugExport     : New plugin to export images to a remote SmugMug web service (http://www.smugmug.com)
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 169637 : EXIF Data Editing Error.
-002 ==> 174954 : Support for remote urls.
-003 ==> 176640 : Wrong reference to website.
-004 ==> 176749 : Incorrect time/date setting with digiKam.
-005 ==> 165370 : crash when saving geocoordinates.
-006 ==> 165486 : Next and Previous photo button for editing geolocalization coordinates.
-007 ==> 175296 : Geolocalization a handy gui to manage all about geotagging.
-008 ==> 152520 : Unified entry of metadata.
-009 ==> 135320 : Calendar year do not match locale.
-010 ==> 116970 : New calendar generator plugin features.
-
-v0.2.0-beta4
-------------------------------------------------------------------------
-
-NEW FEATURES:
-
-RemoveRedEyes  : New plugin to remove red eyes in batch. Tool is based on OpenCV library.
-Calendar       : Ported to QT4/KDE4.
-Calendar       : Support RAW images.
-AcquireImages  : Under Windows, TWAIN interface is used to scan image using flat scanner.
-SlideShow      : Normal effects are back.
-SlideShow      : New effect "Cubism".
-SlideShow      : Added support for RAW images.
-DNGConverter   : plugin is now available as a stand alone application.
-SlideShow      : New effect "Mosaic"
-PrintWizard    : Ported to QT4/KDE4
-PrintWizard    : Added a new option to skip cropping, the image is scaled automatically.
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 172910 : Gallery crash (letting crash digiKam) with valid data and url.
-002 ==> 161855 : Remote Gallery Sync loses password.
-003 ==> 154752 : Export to Gallery2 seems to fail, but in fact works.
-004 ==> 157285 : digiKam advanced slideshow not working with Canon RAWs.
-005 ==> 175316 : digiKam crashes when trying to enter gps data.
-
-v0.2.0-beta3
-------------------------------------------------------------------------
-
-NEW FEATURES:
-
-General        : all plugins can be compiled natively under Microsoft Windows.
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 172283 : SlideShow crashes host application 
-002 ==> 172337 : Slideshow enhancements by ken-burns effects.
-003 ==> 173276 : digikam crashs after closing 
-
-v0.2.0-beta2
-------------------------------------------------------------------------
-
-NEW FEATURES:
-
-DNGConverter   : New plugin to convert RAW camera image to Digital NeGative (DNG)
-SlideShow      : Now you can play your favourite music during slideshow.
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 150076 : Playing music during a slideshow  
-
-v0.2.0-beta1
-------------------------------------------------------------------------
-
-NEW FEATURES:
-
-General        : Port to CMake/KDE4/QT4. 
-JPEGLossLess   : XMP metadata support. 
-RAWConverter   : XMP metadata support. 
-TimeAdjust     : XMP metadata support. 
-MetadataEdit   : XMP metadata support with EXIF, IPTC, and Comments editor to sync XMP tags.
-MetadataEdit   : IPTC Editor dialog is more compliant with IPTC.org recommendations.
-MetadataEdit   : IPTC Editor add the capability to set multiple values for a tag.
-SendImages     : Complete re-write of emailing tool.
-GPSSync        : New tool to edit GPS track list using googlemaps.
-RAWConverter   : Raw files are decoded in 16 bits color depth using same auto-gamma and auto-white 
-                 methods provided by dcraw with 8 bits color depth RAW image decoding. 
-SlideShow      : Now filenames, captions and progress indicators can have transparent
-                 backgrounds with OpenGL SlideShow as well.
-SlideShow      : Added thumbnails into image list.
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 135451 : Improve the gui of the gpssync plugin.
-002 ==> 135386 : Show track on the google map.
-003 ==> 149497 : Geolocalization kipi plugin does not work with non-jpeg file types.
-004 ==> 145746 : Do not recreate thumbs when geolocalizing images.
-005 ==> 134299 : Read orientation of image from EXIF.
-006 ==> 158792 : Plugin do not working with Canon RAW CR2.
-007 ==> 165078 : GPS correlator does not show thumbnails.
-008 ==> 165278 : Geotagging dialog doesn't display all thumbnails.
+013 ==> 181973 : Raw batch converter loses exif information.
+014 ==> 181334 : The artwork API in libgpod-0.7.0 has changed slightly, IpodExport tool needs updated.
+015 ==> 181853 : Entering new xmp meta data removes old one from the image file.
+016 ==> 133649 : Scale images instead of cropping.
+017 ==> 182838 : Change API authentication to Desktop application type.
+018 ==> 175928 : digiKam crashing when trying to export to gallery2 web service.
+019 ==> 181694 : Edit caption should present current caption for easier modification.
+020 ==> 179439 : Rotation or flip do not update internal thumbnail.
+021 ==> 180245 : Timeadjust is not building on mac os x leopard.
+022 ==> 180656 : Wrong file selection filter in export picasaweb.
+023 ==> 177999 : Shortcuts are not listed in the shortcuts editor from Kipi host application.
+024 ==> 160236 : Image Magick convert operations return with errors.
+025 ==> 144183 : Path in RAW-converter broken with the letter "ß"
+026 ==> 178495 : Problem with metadata editor.
+027 ==> 175219 : Album creating wrong date in picasaweb.
+028 ==> 175222 : Unable to create non listed album.
+029 ==> 166672 : Export to Facebook.
+030 ==> 129623 : Option to upload to specific photoset.
+031 ==> 161775 : Photoset support.
+032 ==> 169637 : EXIF Data Editing Error.
+033 ==> 174954 : Support for remote urls.
+034 ==> 176640 : Wrong reference to website.
+035 ==> 176749 : Incorrect time/date setting with digiKam.
+036 ==> 165370 : crash when saving geocoordinates.
+037 ==> 165486 : Next and Previous photo button for editing geolocalization coordinates.
+038 ==> 175296 : Geolocalization a handy gui to manage all about geotagging.
+039 ==> 152520 : Unified entry of metadata.
+040 ==> 135320 : Calendar year do not match locale.
+041 ==> 116970 : New calendar generator tool features.
+042 ==> 161855 : Remote Gallery Sync loses password.
+043 ==> 154752 : Export to Gallery2 seems to fail, but in fact works.
+044 ==> 157285 : digiKam advanced slideshow not working with Canon RAWs.
+045 ==> 175316 : digiKam crashes when trying to enter gps data.
+046 ==> 172910 : Gallery crash (letting crash digiKam) with valid data and url.
+047 ==> 172283 : SlideShow crashes host application 
+048 ==> 172337 : Slideshow enhancements by ken-burns effects.
+049 ==> 173276 : digikam crashs after closing 
+050 ==> 150076 : Playing music during a slideshow  
+051 ==> 135451 : Improve the gui of the gpssync tool.
+052 ==> 135386 : Show track on the google map.
+053 ==> 149497 : Geolocalization does not work with non-jpeg file types.
+054 ==> 145746 : Do not recreate thumbs when geolocalizing images.
+055 ==> 134299 : Read orientation of image from EXIF.
+056 ==> 158792 : Tool do not working with Canon RAW CR2.
+057 ==> 165078 : GPS correlator does not show thumbnails.
+058 ==> 165278 : Geotagging dialog doesn't display all thumbnails.
