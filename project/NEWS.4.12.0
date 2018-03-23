@@ -124,14 +124,14 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 115 ==> 308701 - digikam crash while export again the same image to picasaweb.
 116 ==> 321251 - Application crashs if close it while sending images to picasa.
 117 ==> 172427 - digiKam crashed.
-118 ==> 164908 - Private albums are not listed (and then not usable) with picasa export plugin.
+118 ==> 164908 - Private albums are not listed (and then not usable) with picasa export tool.
 119 ==> 200091 - "remove EXIF data" crashes digiKam.
 120 ==> 265630 - Gallery export uploads to wrong directory.
 121 ==> 249842 - Blend bracketed images tool says it failed to save the blended image, but actually saves it.
 122 ==> 320749 - Panorama tool fails systematically when file names contain ':'.
 123 ==> 277994 - Missing dot in filename in "batch raw converter".
 124 ==> 167286 - Gps tagging fails with message titled "digikam3rdparty.free.fr" and text "unauthorized call of the API" when starting the gps tagger window.
-125 ==> 350167 - The browser to authenticate the plugin with flickr at the first export is never started.
+125 ==> 350167 - The browser to authenticate the tool with flickr at the first export is never started.
 126 ==> 297455 - Thumbnails not refreshed on file list.
 127 ==> 343668 - Application crashed after upload movie to Rajce.net.
 128 ==> 341688 - Dropbox upload does not work due to developer API keys.
@@ -142,7 +142,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 133 ==> 319252 - FaceBook export doesn't work any more due to bad url given back to register to before photo uploading.
 134 ==> 297162 - Application does not have permission for this action.
 135 ==> 202898 - New Facebook Import Gui Mockup.
-136 ==> 250564 - digiKam import corrupted pictures with facebook plugin (read html files).
+136 ==> 250564 - digiKam import corrupted pictures with facebook tool (read html files).
 137 ==> 317228 - Facebook tool seems to be hacked/redirected to a Japanese site.
 138 ==> 305281 - Import to Facebook.
 139 ==> 289272 - File upload to facebook fails digiKam.

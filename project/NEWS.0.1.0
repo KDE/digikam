@@ -6,7 +6,7 @@ NEW FEATURES:
 General        : Moved Exiv2Iface class to a new MetadataEngine used by digiKam.
 Slideshow      : Show image comments (configurable)
 ImageViewer    : Initial import of new OpenGL based image viewer.
-RAWConverter   : Port tool to libkdcraw shared library.
+RAWConverter   : Port tool to RawEngine shared library.
 Printwizard    : Printwizard can print 8 photos per page (A4)
 MPEGEncoder    : Avoid to pass img2mpg script unmanaged file path.
 GPSSync        : New tool to export GPS locations from pictures to Google Maps / Google Earth.
@@ -233,7 +233,7 @@ BUGFIXES from B.K.O (http://bugs.kde.org):
 147 ==> 120868 : Failed to create PDF callendar
 148 ==> 118936 : calendar wizard should default to next year.
 149 ==> 109739 : yuvscaler error in digikam.
-150 ==> 114514 : Do not delete the temporary folder "~/tmp/kde-user/kipi-mpegencodertool-PID/" after each encoding process.
+150 ==> 114514 : Do not delete the temporary folder "~/tmp/kde-user/-mpegencodertool-PID/" after each encoding process.
 151 ==> 114515 : Verify the existence of the MPEG output file path and the existence of the audio input file before launching the encoding process.
 152 ==> 114519 : Crash when stopping a Final Scan.
 153 ==> 103763 : Rawconverter (single) should fill a default file name into the save as dialog.

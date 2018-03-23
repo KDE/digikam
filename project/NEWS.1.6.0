@@ -19,7 +19,7 @@ General        : Fix compilation under Mac OS-X through MacPorts project.
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 148434 : Cannot change rating in slideshow.
-002 ==> 253911 : libkdcraw access beyond array bounds (cameraXYZMatrix).
+002 ==> 253911 : RawEngine access beyond array bounds (cameraXYZMatrix).
 003 ==> 254135 : Pipette-tool des not work in image editor/showfoto.
 004 ==> 254182 : Can't create mysql-entries for new tags.
 005 ==> 253702 : Under/overexposure indicator doesn't work on big-endian processors.
@@ -29,7 +29,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 009 ==> 233438 : digiKam crash when editing raw images on OS X.
 010 ==> 248302 : Crash while jumping back and forth in preview.
 011 ==> 254315 : Please consider attached patch for build system.
-012 ==> 224245 : Each image editor plugin should remember the zoom ratio.
+012 ==> 224245 : Each image editor tool should remember the zoom ratio.
 013 ==> 220425 : Esc doesn't work for editor tools when lose focus.
 014 ==> 255271 : digiKam crashes on lens auto-correction function.
 015 ==> 254679 : Crash when closign digikam while filter active.
@@ -56,7 +56,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 036 ==> 255137 : Some exifdata lost when converting CR2.
 037 ==> 256303 : Quotation marks in caption appear as &quot; in picasaweb.
 038 ==> 244706 : PicasawebExport special symbol gui freeze.
-039 ==> 243877 : Picasaweb plugin crashes when active video upload removed.
+039 ==> 243877 : Picasaweb tool crashes when active video upload removed.
 040 ==> 240382 : Picasaweb: pressing of "-" while photo uploading causes crash.
 041 ==> 256471 : Add spell checking to text areas.
 042 ==> 248284 : After upload finishes Cancel button should turn into Close.

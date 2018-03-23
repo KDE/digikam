@@ -159,7 +159,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 114 ==> 224872 : Export for Piwigo.
 115 ==> 226916 : Get metadata from image files and new detailed theme.
 116 ==> 217539 : picasaweb ability to choose add or update photo.
-117 ==> 227920 : Cannot compile: opencv/highgui.h missing for removeredeyes plugin.
+117 ==> 227920 : Cannot compile: opencv/highgui.h missing for removeredeyes tool.
 118 ==> 219603 : Renaming images to send.
 119 ==> 229068 : digiKam repeatedly crashes when uploading several pictures to Picasaweb.
 120 ==> 229826 : PicasaWeb Export won't login with certain chars in password.

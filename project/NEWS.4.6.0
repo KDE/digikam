@@ -13,14 +13,14 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 001 ==> 340811 - Wrap album caption.
 002 ==> 340278 - Please provide a windows build of 4.4.
 003 ==> 341031 - LibLqr detected during build but shown as not supported in components information.
-004 ==> 340945 - libkgeomap, libmediawiki, libkvkontakte, libkface not found.
+004 ==> 340945 - Geolocation, libmediawiki, libkvkontakte, FacesEngine not found.
 005 ==> 338532 - Sidecar files are neither created nor updated under Windows.
 006 ==> 335661 - CANVAS : image is displayed with wrong magnification after crop.
 007 ==> 338996 - CANVAS : Selection coordinates/size do not show either during selection or update when using selection area adjust controls [patch].
 008 ==> 339053 - Allow the usage of arrows to move in the photo sequence when in preview [patch].
 009 ==> 205776 - Option to load full image size in preview mode does not only do what it says with RAW files [patch].
 010 ==> 341306 - CANVAS: no "Select All" for the second time and selection fixes after crop and auto crop [patch].
-011 ==> 341298 - libkexiv2-4.14.3/libkexiv2/kexiv2exif.cpp:934: bad if test ?
+011 ==> 341298 - MetadataEngine-4.14.3/MetadataEngine/kexiv2exif.cpp:934: bad if test ?
 012 ==> 341470 - Better speed after downloading many pictures with auto-rotation/flip option [patch].
 013 ==> 286611 - Tags are losts randomly when converting TIFF to PNG.
 014 ==> 320564 - CANVAS : full image dimensions not shown when not viewing at 100% zoom level.

@@ -38,5 +38,5 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 029 ==> 242624 : Wrong IPTC hyperlink.
 030 ==> 239841 : I18n bug - missing extraction of messages in expoblending, flickrexport, metadataedit, ...
 031 ==> 246266 : Search for location when adding geo coordinates.
-032 ==> 247106 : Google picassa plugin does not work anymore since google changed parts of the interface.
+032 ==> 247106 : Google picassa tool does not work anymore since google changed parts of the interface.
 033 ==> 246897 : GPSSync bad coordinate rounding.

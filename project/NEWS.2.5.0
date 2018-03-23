@@ -73,12 +73,12 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 063 ==> 171478 : Please add option to keep zoom ratio fixed when switching from image to image.
 064 ==> 208160 : After edition image has different colors in QT nad GTK+ applications.
 065 ==> 276330 : Keyboard Shortcut doubled, orientation change not saved in exif nor xmp.
-066 ==> 192124 : (auto correction plugin) Provide an up to date list of cameras and lenses.
+066 ==> 192124 : (auto correction tool) Provide an up to date list of cameras and lenses.
 067 ==> 280619 : Colour automatic correction doesn't work if an image was opened in editor for a longer time.
 068 ==> 283417 : Add an option to show image titles [patch].
 069 ==> 149786 : digiKam should try to reconnect to camera after the connection has expired.
 070 ==> 158402 : Create a duplicate of an image in the image editor.
-071 ==> 174070 : Enhancement plugins should be not in the menu, but in the toolbar on the right.
+071 ==> 174070 : Enhancement tools should be not in the menu, but in the toolbar on the right.
 072 ==> 225564 : Automatically assign parent tags.
 073 ==> 233547 : Adjusting exif orientation doesn't work for ORF images.
 074 ==> 285135 : digiKam crashes at launch.
@@ -122,7 +122,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 112 ==> 268760 : Facebook uploader crashed.
 113 ==> 171303 : Auto-rotate on advanced slideshow doesn't work.
 114 ==> 253862 : Compile fails can not find gdk-pixbuf/gdk-pixbuf.h: No such file or directory.
-115 ==> 197899 : In "Rename images" plugin photos are displayed in reverted order.
+115 ==> 197899 : In "Rename images" tool photos are displayed in reverted order.
 116 ==> 217546 : Picasaweb export does not point to the current album.
 117 ==> 265012 : Crashed while uploading to Smugmug.
 118 ==> 190293 : Export as html gallery has the forward button disabled before changing the selected folder.

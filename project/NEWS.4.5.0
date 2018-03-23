@@ -5,8 +5,8 @@ NEW FEATURES:
 
 General : Remove internal libpgf. Add external and mandatory dependency to libpgf >= 6.12.24.
 General : Extra tools dependency is now optional.
-General : libkgeomap is now an optional dependency to support geolocation maps.
-General : libkface is now an optional dependency to support faces detection and recocognition.
+General : Geolocation is now an optional dependency to support geolocation maps.
+General : FacesEngine is now an optional dependency to support faces detection and recocognition.
 General : libjasper is now an optional dependency to support JPEG200.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
@@ -27,7 +27,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 014 ==> 326718 - Clear text button on file rename does nothing [patch].
 015 ==> 267789 - Make face detection (kface) and geo tagging (kmap) optional features [patch].
 016 ==> 172295 - digiKam has a hard dependency on Jasper library.
-017 ==> 339180 - Cmake and/or compiler pick up libkgeomap header files from previous version.
+017 ==> 339180 - Cmake and/or compiler pick up Geolocation header files from previous version.
 018 ==> 340581 - Ratings with rating == 0 cannot be selected on the left sidebar [patch].
 019 ==> 339154 - digiKam goes into infinite loop when working with tags/captions information tab templates.
 020 ==> 340487 - Add Album Category as a search criteria [patch].

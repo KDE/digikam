@@ -12,8 +12,8 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 007 ==> 144155 : Wrong(?) histogram y-axis when blown-out over/underexposure.
 008 ==> 196917 : Problem with "sticky" tooltips in album view.
 009 ==> 216998 : Histogram color guide is not shown [patch].
-010 ==> 216967 : Marble plugin won't compile and subsequent crashes.
-011 ==> 217096 : Imageplugins lenscorrection: lens combobox not sorted by alphabetically order [patch].
+010 ==> 216967 : Marble tool won't compile and subsequent crashes.
+011 ==> 217096 : Imagetools lenscorrection: lens combobox not sorted by alphabetically order [patch].
 012 ==> 214707 : No "picture not saved" warning when some tool active.
 013 ==> 214718 : digiKam Crashed when trying to Edit photo.
 014 ==> 135845 : Scrolling thumb view is very slow.
@@ -101,7 +101,7 @@ ImageEditor    : New Local Contrast tool to simulate HDR images (Tone Mapping).
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 130942 : digiKam should display the default EXIF rotation currently used.
-002 ==> 145442 : Contrast mask image plugin.
+002 ==> 145442 : Contrast mask image tool.
 003 ==> 209225 : Crash when running batch queue in background.
 004 ==> 208598 : Thumbbar out of digiKam.
 005 ==> 197609 : When rotating an image via the overlay buttons thumbnail is not updated.
@@ -130,7 +130,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 028 ==> 132745 : Can not save image to fish:// protocol.
 029 ==> 210462 : digiKam crash select new download.
 030 ==> 151972 : Color Management shows repeatedly error messages on resizing.
-031 ==> 131948 : Broken "Open File" dialog in Color Management plugin.
+031 ==> 131948 : Broken "Open File" dialog in Color Management tool.
 032 ==> 210773 : Compiling error on solaris 10 with gcc.
 033 ==> 167242 : Thumbnails need a lot of space compared to the pictures.
 034 ==> 175923 : digiKam uses wrong album root path/wrong disk uuid.
@@ -292,7 +292,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 022 ==> 202779 : When pressing 'enter', thumbnails should be enlarged, also when a collection is selected.
 023 ==> 203574 : Showfoto crashes when opening jpeg file.
 024 ==> 203498 : No drop-down menu for export.
-025 ==> 203589 : Crash in the noise reduction plugin when 'Threshold' equals zero.
+025 ==> 203589 : Crash in the noise reduction tool when 'Threshold' equals zero.
 026 ==> 198006 : digiKam crash after assistant finished.
 027 ==> 203083 : Crash starting digiKam (after kde 4.3 upgrade).
 028 ==> 202954 : digiKam crashes on start while scaning picture directory.
@@ -500,7 +500,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 003 ==> 187523 : digiKam crashes on startup (undefined symbol).
 004 ==> 187569 : Crash on star removing when filtering by stars.
 005 ==> 186549 : digiKam crashes when hovering the bottom part of its.
-006 ==> 187641 : Error while loading shared libraries: libkdcraw.so.5.
+006 ==> 187641 : Error while loading shared libraries: RawEngine.so.5.
 007 ==> 187429 : Crash on Launch after disable rotate tool.
 008 ==> 187937 : Writing tags to files doesn't update modification timestamp.
 009 ==> 184687 : Crash after deleting an empty album.
@@ -534,7 +534,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 037 ==> 188755 : Strange behavior on selection.
 038 ==> 185884 : Empty view after clicking the left thumbnail image in Image Editor filter view.
 039 ==> 188062 : Synchronize Images with Database does not save Copyright, Credit, Source, By-line, By-line Title in IPTC.
-040 ==> 186823 : Several bugs in lens defect auto-correction plugin.
+040 ==> 186823 : Several bugs in lens defect auto-correction tool.
 041 ==> 190612 : digiKam and showFoto crash.
 042 ==> 191092 : No images shown in digiKam albums.
 043 ==> 191203 : digiKam crashed on first load, after being installed on Ubuntu 9.04.

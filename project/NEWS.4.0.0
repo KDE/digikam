@@ -164,7 +164,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 127 ==> 218023 - Albums tree does not remember sorting order (ascending/descending).
 128 ==> 126116 - Keep directory hierarchy when albums are view by category.
 129 ==> 225786 - Proposed digiKam Menu Changes.
-130 ==> 246903 - Editor Canvas : not updated when zoom level changes in plugins.
+130 ==> 246903 - Editor Canvas : not updated when zoom level changes in tools.
 131 ==> 129941 - Editor Canvas : Ability to Drag and Drop an image.
 132 ==> 224246 - Editor Canvas : displays useless scroll bars.
 133 ==> 233773 - Editor Canvas : ctrl + shift + e doesn't enable scrolling.
@@ -198,7 +198,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 161 ==> 333386 - Tags manager: '' shown in dialog box when removing a tag.
 162 ==> 333388 - Tag manager: Tags removed from images without confirmation dialog.
 163 ==> 333385 - Selecting a month in the tree view shows a different month in calendar and icon view.
-164 ==> 329697 - digiKam crash when browsing albums (qt-sqlite plugin broken due to BC issue with libsqlite).
+164 ==> 329697 - digiKam crash when browsing albums (qt-sqlite tool broken due to BC issue with libsqlite).
 165 ==> 331597 - Tags are not sorted in UI [patch].
 166 ==> 334183 - Face recognition folder selection scans all available folders.
 167 ==> 319664 - 3.2.0-beta2 (and 3.1.0) installs a static archive /usr/lib64/libPropertyBrowser.a.

@@ -20,15 +20,15 @@ BUGFIXES FROM BUGZILLA:
 008 ==> 179807 - Inpainting tool stuck at 0%.
 009 ==> 277739 - Showfoto crash.
 010 ==> 348344 - Crash when in Image Editor I select an image area and click Enhance->in-painting.
-011 ==> 131446 - Using inpainting plugin crashes digiKam.
+011 ==> 131446 - Using inpainting tool crashes digiKam.
 012 ==> 276962 - Inpainting tool crashed.
 013 ==> 184731 - Cannot apply inpainting, it just hangs.
 014 ==> 232926 - In-painting causes digikam to lock up.
 015 ==> 319632 - digiKam crashes when in-painting applied to photo.
 016 ==> 274199 - digiKam crashed when using "inpainting" tool.
 017 ==> 278941 - Crash when trying to perform "In-Painting".
-018 ==> 154829 - In-painting plugin doesn't use greycstoration threads.
-019 ==> 105632 - CImg plugins crashes digiKam.
+018 ==> 154829 - In-painting tool doesn't use greycstoration threads.
+019 ==> 105632 - CImg tools crashes digiKam.
 020 ==> 384366 - Configuration of different host port is not saved.
 021 ==> 375483 - Wrong history on images taken with Samsung S3 [patch].
 022 ==> 384399 - Getting dialog asking for "perform also on grouped images?" when no grouped images are selected.
@@ -55,7 +55,7 @@ BUGFIXES FROM BUGZILLA:
 043 ==> 385280 - digikam does not use the native Plasma file dialog under Plasma.
 044 ==> 385315 - Tools not available in digikam menu.
 045 ==> 385433 - Error file numbering.
-046 ==> 385467 - Cannot Add Or Edit Bookmarks / No plugins loaded.
+046 ==> 385467 - Cannot Add Or Edit Bookmarks / No tools loaded.
 047 ==> 385368 - digiKam causes my machine to blue screen (crash) during installation on Windows 10 while check process in memory.
 048 ==> 329391 - digiKam creates 'Document Name' metadata with unreadable characters (encoding problem of accents).
 049 ==> 382247 - Showfoto crashed.

@@ -155,6 +155,6 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 139 ==> 275080 - Add keyboard shortcut for "Open With" default application.
 140 ==> 115597 - Add "Open With..." option in image editor.
 141 ==> 338037 - digiKam 4.2.0 compilation error: undefined reference to `cvFillImage'.
-142 ==> 335250 - Proposed minor fixes to MediaWiki plugin [patch].
+142 ==> 335250 - Proposed minor fixes to MediaWiki tool [patch].
 143 ==> 338871 - Selection of tools is set to default after each restart of digiKam.
 144 ==> 336667 - "Google Drive Export" ignoring digikamrc setting.

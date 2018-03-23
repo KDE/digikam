@@ -32,13 +32,13 @@ Image Editor  : Iptc preview image are recomputed at saving pictures.
 
 Image Plugins : New powerfull Noise Reduction algorithm based on dcamnoise2 implementation.
 Image Plugins : New powerfull Black & White converter tool using curves adjustements.
-Image Plugins : New plugin to experiment ICC profiles to perform color corrections into images.
-Image Plugins : New preview rendering modes in all color correction image plugins dialogs.
-Image Plugins : Redesign/polishing of all image plugins dialogs. Histogram are available at all 
+Image Plugins : New tool to experiment ICC profiles to perform color corrections into images.
+Image Plugins : New preview rendering modes in all color correction image tools dialogs.
+Image Plugins : Redesign/polishing of all image tools dialogs. Histogram are available at all 
                 when it's necessary. All dialogs used in DigikamImagePlugins are common in digiKam 
                 core now.
-Image Plugins : New zooming capabilities in image plugins dialogs.
-Image Plugins : Ported all core image plugins to new DImg API. Support of 16 bits images.
+Image Plugins : New zooming capabilities in image tools dialogs.
+Image Plugins : Ported all core image tools to new DImg API. Support of 16 bits images.
 Image Plugins : Ported all DigikamImagePlugins tools to new DImg API. Support of 16 bits images.
 
 Setup         : Advanced settings to load RAW files in Image Editor using external dcraw instance.
@@ -134,7 +134,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (http://bugs.kde.org):
 002 ==> 91811  : Find pictures by meta tag info, date.
 003 ==> 91812  : Viewer/editor for IPTC meta data.
 004 ==> 96459  : EXIF for RAW camera images.
-005 ==> 116248 : Ask user which plugins should be enabled on first startup.
+005 ==> 116248 : Ask user which tools should be enabled on first startup.
 006 ==> 115441 : Resize EXIF-rotated images doesn't work.
 007 ==> 115460 : Opening and closing right pane with tag filter also changes width of left pane and vv.
 008 ==> 124688 : digiKam loading time is big because of : WARNING: Failed to find parent for Tag.
@@ -181,7 +181,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (http://bugs.kde.org):
 049 ==> 120479 : Search problem for not tagged or commented images.
 050 ==> 120775 : Search doesn't find pictures without rating.
 051 ==> 112063 : When viewing image in fullscreen there is an ugly frame at the border of the screen.
-052 ==> 120736 : Many imageplugins going busy for ever when not using rubber to change a value.
+052 ==> 120736 : Many imagetools going busy for ever when not using rubber to change a value.
 053 ==> 116154 : Show progress bar while saving large files.
 054 ==> 120521 : Untranslatable message in tagfilterview.cpp.
 055 ==> 119742 : Wish list -include move to trash in right click menu.
@@ -272,7 +272,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (http://bugs.kde.org):
 133 ==> 118535 : Add Border: use percent to designate border size.
 134 ==> 131686 : Crash when viewing/rollover of Sony Alpha 100 raw (.arw) images.
 135 ==> 132582 : Some pictures make digiKam crash (sample included).
-136 ==> 122693 : Improvement proposals for the "add border" plugin.
+136 ==> 122693 : Improvement proposals for the "add border" tool.
 137 ==> 124183 : Option to convert images when importing them from the camera.
 138 ==> 128673 : Add keyboard shortcut to refresh album view or auto-refresh when pictures are renamed.
 139 ==> 126427 : In "rename file" dialog, the 2nd picture is (and can't) not displayed.
@@ -359,7 +359,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (http://bugs.kde.org):
 208 ==> 135834 : Lowercasing camera filenames only works for first imported file.
 209 ==> 134391 : digiKam camera gui dialog crashes if there is a filename without extension.
 210 ==> 131947 : digiKam complains about invalid ICC profiles path.
-211 ==> 130176 : Typos in digiKam.po and one plugin.
+211 ==> 130176 : Typos in digiKam.po and one tool.
 212 ==> 138252 : Display is not updates when switching color managed view on/off.
 213 ==> 138253 : Keyboard shortcut for turning color managed display on/off.
 
@@ -409,7 +409,7 @@ digiKam and DigikamImagePlugins BUGFIX FROM KDE BUGZILLA (http://bugs.kde.org):
 254 ==> 206080 : Gpssync no map when entering.
 255 ==> 216622 : digiKam bug report data errors.
 256 ==> 214210 : Don't take the correct position from geolocation file.
-257 ==> 216790 : Configuration dialogue crashes getting icon for plugins not loaded.
+257 ==> 216790 : Configuration dialogue crashes getting icon for tools not loaded.
 258 ==> 216803 : GPSSync ability to zoom with mouse wheel.
 259 ==> 215798 : slideshow crashes when starting.
 260 ==> 213164 : Convert images: 16 bit png from 8 bit bmp.

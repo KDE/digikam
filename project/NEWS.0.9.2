@@ -71,10 +71,10 @@ digiKam 0.9.2-beta1 - Release date: 2007-05-04
 NEW FEATURES:
 
 General       : DigikamImagePlugins have been merged into digiKam. It more simple to release
-                on package for all. Image plugins translations are hosted to digikam.po file 
-                instead a .po file for each tool. All tools still available like plugins at 
-                the same place than image plugin core.   
-General       : New depency to libkdcraw shared library used to decode RAW file.
+                on package for all. Image tools translations are hosted to digikam.po file 
+                instead a .po file for each tool. All tools still available like tools at 
+                the same place than image tool core.   
+General       : New depency to RawEngine shared library used to decode RAW file.
                 This library is shared between digiKam and external modules. The internal 
                 dcraw version used is 8.60. digiKam support now all recent digital 
                 camera RAW files released at PMA 2007.    
@@ -82,7 +82,7 @@ General       : Make size of icons used in sidebars configurable in order to all
                 entries to be presented. 
 General       : Make size of icons used in album icon view more configurable using a slider 
                 in status bar. 
-General       : Removing direct Exiv2 library depency. libkexiv2 interface is used everywhere 
+General       : Removing direct Exiv2 library depency. MetadataEngine interface is used everywhere 
                 instead.  
 
 Album GUI     : Add Zoom/Scrooling functions with preview mode.
@@ -100,13 +100,13 @@ Image Plugins : Red Eyes Correction tool have been completly re-writen. There is
                 a preview of effect and the capability to taint the eye pupil with
                 a customized color. The new eye pupil can be blured to smooth the 
                 result. 
-Image Plugins : Solarize plugin is now a "Color Effects" pack including Solarize, Velvia (new
-                plugin), Neon, and Edge effects. 
+Image Plugins : Solarize tool is now a "Color Effects" pack including Solarize, Velvia (new
+                tool), Neon, and Edge effects. 
 Image Plugins : Black & White converter now support a lots of B&W analog camera film 
                 types (Agfa, Ilford, Kodak). A new 'strength' setting can simulate the 
                 amount of Lens filters effect.  
 Image Plugins : Update internal CImg library to 1.1.9. The Greycstoration algorithm used 
-                by Restoration, Inpainting and Blowup plugins is faster and optimized.
+                by Restoration, Inpainting and Blowup tools is faster and optimized.
 
 Showfoto      : The thumbbar is now resizable. The thumbnails contents can be redimensionned in live.
 Showfoto      : The thumbbar items can show a full configurable tool tip like digiKam album icon 
@@ -119,11 +119,11 @@ digiKam BUGFIX FROM KDE BUGZILLA (http://bugs.kde.org):
 001 ==> 142443 : Red eye correction should change eye colour to an alternate colour.
 002 ==> 138744 : Dcraw 8.45 supports Pentax K10D.
 003 ==> 142427 : Rotate image tool too complicated.
-004 ==> 141439 : A velvia similar plugin. AKA vivid saturation.
+004 ==> 141439 : A velvia similar tool. AKA vivid saturation.
 005 ==> 127583 : keywords, copyright, photographer info not saved to IPTC tags.
 006 ==> 142571 : Auto-exposure result is different from the preview.
 007 ==> 127377 : Restoration filter (CIMG) does not function properly.
-008 ==> 131446 : Using inpainting plugin crashes digiKam.
+008 ==> 131446 : Using inpainting tool crashes digiKam.
 009 ==> 103244 : Usability: Merge multiple similar menus into one.
 010 ==> 139790 : Image Editor: the center of the photo is moving when zooming in or out.
 011 ==> 106508 : Please change scaling behavior.
@@ -137,7 +137,7 @@ digiKam BUGFIX FROM KDE BUGZILLA (http://bugs.kde.org):
 019 ==> 131155 : Smooth increasing/decreasing size of thumbnails like in iPhoto.
 020 ==> 89365  : Reorganize menu structure in Image Editor.
 021 ==> 134037 : Respect current sort order when passing list to tools.
-022 ==> 139466 : Remove configuration of digikam image plugins.
+022 ==> 139466 : Remove configuration of digikam image tools.
 023 ==> 119418 : "set as album thumbnail" should work for different albums too.
 024 ==> 125916 : Problem with opening 16bit TIFF.
 025 ==> 143578 : New Pan Tool crash.

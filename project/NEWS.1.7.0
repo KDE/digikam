@@ -19,7 +19,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 009 ==> 257784 : Lens auto correction does not specify unit for "distance to the object".
 010 ==> 256050 : digiKam crashed after modifying tag name.
 011 ==> 250134 : digiKam crashed during search for duplicates.
-012 ==> 243988 : digiKam crashes trying to save plugin changes.
+012 ==> 243988 : digiKam crashes trying to save tool changes.
 013 ==> 257744 : digiKam crash on importing large collection.
 014 ==> 242439 : Crash when going to next picture in picture editor.
 015 ==> 235678 : No startup dialog but error dialogs(s).

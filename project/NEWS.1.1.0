@@ -99,7 +99,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 086 ==> 177827 : Add vignetting effect to digiKam.
 087 ==> 224136 : Show dialog with settings when saving image on Windows [patch].
 088 ==> 183108 : View mode: mouse zoom and pan.
-089 ==> 150533 : New plugin for correction of backlighting.
+089 ==> 150533 : New tool for correction of backlighting.
 090 ==> 105934 : Would like to use the arrow keys to pan an image.
 091 ==> 193708 : digiKam crash on startup.
 092 ==> 218376 : digiKam tagging crash metadata.
@@ -116,7 +116,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 103 ==> 224682 : Color Channel Mixer ui & usability.
 104 ==> 224841 : Search for duplicates in specific album only.
 105 ==> 199145 : Tags not exported to picasaweb [patch].
-106 ==> 215846 : PicasaWeb plugin crashes digiKam after start sending the pic [delete, KIPIPicasawebExportPlugin::PicasawebWindow::slotUploadImages] (double deletion)
+106 ==> 215846 : PicasaWeb tool crashes digiKam after start sending the pic [delete, KIPIPicasawebExportPlugin::PicasawebWindow::slotUploadImages] (double deletion)
 107 ==> 221056 : Expoblending.app causes digiKam compile to fail.
 108 ==> 205903 : accentuated chars are converted into a mess during picasa web export [patch]
 109 ==> 220433 : digiKam crash when has long time working on it.
@@ -133,7 +133,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 120 ==> 224205 : Geolocation correlator: GPX date/time format.
 121 ==> 222067 : GPSSync no more search field to fill with a town.
 122 ==> 224379 : digiKam doesn't compile (problem with advanced slideshow).
-123 ==> 144593 : New High Dynamic Range (HDR) plugin.
-124 ==> 219998 : Export to Gallery plugin crashes when adding files.
+123 ==> 144593 : New High Dynamic Range (HDR) tool.
+124 ==> 219998 : Export to Gallery tool crashes when adding files.
 125 ==> 215798 : Slideshow crashes when starting.
 126 ==> 200031 : Photo is rotated but not thumbnail.

@@ -19,7 +19,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 007 ==> 175221 : Photos are always rewritten to JPEG before upload (and not only for RAW and rescale).
 008 ==> 187536 : Support new type of albums (sign-in required to view).
 009 ==> 187809 : Crash on Start upload when no album selected (issue error instead).
-010 ==> 185909 : Crash on startup (KIPI plugin Advanced Slideshow).
+010 ==> 185909 : Crash on startup (KIPI tool Advanced Slideshow).
 011 ==> 141535 : Suggestion for photo layout algorithm.
 012 ==> 157173 : Crash by adding gps data to pictures.
 013 ==> 190964 : "send pictures" is modal in digiKam.

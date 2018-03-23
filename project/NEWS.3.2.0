@@ -58,9 +58,9 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 041 ==> 289262 - Hitting ESC in "fullscreen picture preview" messes up thumbbar-state in "thumbnail view".
 042 ==> 220739 - Image Editor shows sidebar after applying effect in full screen mode.
 043 ==> 164442 - Manage videos just like photos [patch].
-044 ==> 319267 - libkdcraw contains invalid icc profiles, applications fail to save png file with libpng-1.6.x.
+044 ==> 319267 - RawEngine contains invalid icc profiles, applications fail to save png file with libpng-1.6.x.
 045 ==> 319142 - digiKam complains it cannot find the database and then hangs forever.
-046 ==> 307885 - PreviewList not correctly aligned when starting an imageplugin [patch].
+046 ==> 307885 - PreviewList not correctly aligned when starting an imagetool [patch].
 047 ==> 316620 - HtmlExport doesn't build.
 048 ==> 304771 - Can't create private albums w/ digiKam [patch].
 049 ==> 255722 - Flickr exports digikam tags even if option is not enabled.

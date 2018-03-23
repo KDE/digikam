@@ -39,7 +39,7 @@ BatchQueueManager : Add new tool to crop image.
 
 General           : New tool to export Collection to DLNA device.
 General           : New tool to make video slideshow.
-General           : Port all plugins to KDE XML-GUI framework.
+General           : Port all tools to KDE XML-GUI framework.
 Panorama          : New parser using GNU Flex and GNU Bison instead of Boost::spirit
 Panorama          : Manual cropping of the final result
 
@@ -95,7 +95,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 048 ==> 307602 - Large TIFF files crash digiKam (>1Gb).
 049 ==> 304186 - XMP sidecar files are not moved with images.
 050 ==> 299960 - Deleting image in album GUI causes thumbnail regeneration of whole album.
-051 ==> 308534 - libkexiv2 fails to build when exiv2 is built without XMP support.
+051 ==> 308534 - MetadataEngine fails to build when exiv2 is built without XMP support.
 052 ==> 308078 - Caption in non-default language not saved to JPEG when x-default is empty.
 053 ==> 271531 - Cannot edit canon crw-pics.
 054 ==> 307313 - digiKam uses wrong darkness/saturation.
@@ -127,7 +127,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 080 ==> 150854 - Massive common crop feature.
 081 ==> 302024 - Batch image cropping tool.
 082 ==> 147428 - Batch resizing for several folders.
-083 ==> 112777 - New batch plugin to change image size.
+083 ==> 112777 - New batch tool to change image size.
 084 ==> 115473 - Missing Feature in Batch Section: Gamma factor.
 085 ==> 312332 - digiKam don't save rename pattern when using regex.
 086 ==> 312433 - Extension Based Subalbums are not created.
@@ -167,9 +167,9 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 120 ==> 310252 - digiKam crashes with medium to large sized collections under Microsoft Windows.
 121 ==> 308310 - No thumbnails are created in the album view, rebuilding thumbnails doesn't work.
 122 ==> 291917 - digiKam 2.5.0 Crash on start up.
-123 ==> 265328 - digikam-2.0.0-beta2 core does not compile against kde-4.6.0 libkdcraw.
+123 ==> 265328 - digikam-2.0.0-beta2 core does not compile against kde-4.6.0 RawEngine.
 124 ==> 305224 - Configure Shortcuts does not provide the option of config.
-125 ==> 306193 - Desktop-file-validate fails on kipiplugins.desktop.
+125 ==> 306193 - Desktop-file-validate fails on tools.desktop.
 126 ==> 300723 - Crash when "Next" button clicked from "Set panorama images" window.
 127 ==> 303173 - Gallery export busyloop [patch].
 128 ==> 249066 - digiKam crashes when attempting to upload photo using gallery remote 2 protocol.
@@ -187,7 +187,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 140 ==> 308465 - Cannot change file modification timestamp with files having non ASCII characters.
 141 ==> 308834 - Display "Date and time" with seconds in geolocation.
 142 ==> 309997 - 3.0.0beta3 installs several static libraries.
-143 ==> 311310 - Don't build against libkdcraw 2.0.1.
+143 ==> 311310 - Don't build against RawEngine 2.0.1.
 144 ==> 303980 - Batch DNG Conversion of files produces multiple files of last file in the queue.
 145 ==> 290652 - Segfaults when opening the OpenGL image viewer [patch].
 146 ==> 312453 - Panorama tool seems to always attempt 360 degree stitching.

@@ -47,7 +47,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 031 ==> 252521 : README incorrectly claims kdegraphics-4.4 is sufficient.
 032 ==> 249248 : Updating fingerprints metadata.
 033 ==> 125042 : Batch Rename Image from Album do not select all album images.
-034 ==> 237516 : Open in Terminal command doesn't take KDE systemsettings into account.
+034 ==> 237516 : Open in Terminal command doesn't take systemsettings into account.
 035 ==> 225552 : digiKam can't remember setting.
 036 ==> 248087 : Preview not toggling from video mode to image mode.
 037 ==> 209382 : Caption not being updated in image file.

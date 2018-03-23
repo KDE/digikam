@@ -34,5 +34,5 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 024 ==> 303188 - Adjust Time and Date keeps executing on previously selected images.
 025 ==> 303464 - Improve usability and fix bugs [patch].
 026 ==> 298022 - The 'Export To' PicasaWeb option shows account names as numbers.
-027 ==> 292223 - Export to picasa plugin don't save my gmail account password.
+027 ==> 292223 - Export to picasa tool don't save my gmail account password.
 028 ==> 304242 - Ricoh GRD 4 DNG file converted to DNG (recompress) has wrong colors.

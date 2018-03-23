@@ -9,7 +9,7 @@ DNGConverter  : Fix compilation under MacOS-X.
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 192289 : Using dots (.) as separators confuses the rename system.
-002 ==> 192165 : digiKam flash export plugin does not auto-rotate portrait images.
+002 ==> 192165 : digiKam flash export tool does not auto-rotate portrait images.
 003 ==> 192469 : Repeatedly crashes when doing batch resize or rename.
 004 ==> 192675 : digiKam Crashes after re-compressing images.
 005 ==> 190724 : digiKam crashes after resizing several pictures in a batch.
@@ -25,7 +25,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 015 ==> 192982 : Fit image to paper on printing.
 016 ==> 193433 : digiKam crashes when converting RAW (Canon cr2) to JPEG.
 017 ==> 195182 : Batch processing - Resize Images.
-018 ==> 187228 : Use the correct form for plurals in kipi advancedslideshow plugin. 
+018 ==> 187228 : Use the correct form for plurals in  advancedslideshow tool. 
 019 ==> 194245 : Exif information lost when exporting to Gallery.
 020 ==> 196166 : Crash after batch resize (klick on close).
 021 ==> 196271 : libraw_alloc.h: error: The function "bzero" must have a prototype.

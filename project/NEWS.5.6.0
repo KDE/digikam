@@ -50,7 +50,7 @@ BUGFIXES FROM BUGZILLA:
 029 ==> 156900 - Allow to use selected images instead full album contents in html gallery.
 030 ==> 373247 - No chronological ordering of tags anymore.
 031 ==> 379675 - Geolocation feature links to Multimap.com and MSN Maps.
-032 ==> 140177 - HTML export plugin should autorotate images.
+032 ==> 140177 - HTML export tool should autorotate images.
 033 ==> 378855 - Crashes on startup.
 034 ==> 379751 - I18N_ARGUMENT_MISSING in Edit Metadata.
 035 ==> 377197 - Customize grouping behaviour.
@@ -85,7 +85,7 @@ BUGFIXES FROM BUGZILLA:
 063 ==> 324646 - digiKam hangs when producting "Video Slide Show".
 064 ==> 316791 - Starting video slideshow tool twice, the procedure will not finish any more.
 065 ==> 318297 - Creating Videos does not work.
-066 ==> 334089 - VideoSlideshow plugin port to QtAv needed.
+066 ==> 334089 - VideoSlideshow tool port to QtAv needed.
 067 ==> 153061 - New tool to export image as video slideshow.
 068 ==> 176727 - Creation of video does not work.
 069 ==> 380507 - Menu items missing.
@@ -97,5 +97,5 @@ BUGFIXES FROM BUGZILLA:
 075 ==> 377842 - Export slide show as movie.
 076 ==> 379855 - QtAV is not detected but assumed present on MacOS [patch].
 077 ==> 349270 - Missing direct .png image URL.
-078 ==> 377837 - Crashed while using print assistant plugin.
+078 ==> 377837 - Crashed while using print assistant tool.
 079 ==> 381026 - Tool piwigo not sort albums.

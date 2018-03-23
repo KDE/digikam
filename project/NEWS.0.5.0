@@ -21,7 +21,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 009 ==> 188850 : Does not upload to picassaweb --- just hangs for hours.
 010 ==> 147366 : SIGABORT on Second Scan from HP 5200 scanner.
 011 ==> 190208 : Change image properties options should be grayed out when the check box is unchecked.
-012 ==> 146487 : kipi-plugins export to email fails when email too large.
+012 ==> 146487 : -tools export to email fails when email too large.
 013 ==> 189984 : Impossible to email images if the path contains characters such as éèà.
 014 ==> 161337 : Image rotation of converted RAW photos (portrait format) broken.
 015 ==> 196888 : Create Calender: Year formatted as 2,009 on last page of wizard.

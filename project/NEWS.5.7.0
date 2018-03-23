@@ -29,7 +29,7 @@ BUGFIXES FROM BUGZILLA:
 005 ==> 381510 - "open with" on multiple images only passes first image.
 006 ==> 378475 - digiKam crashed after connecting a Camera.
 007 ==> 381697 - Cannot remove an image whose file has already been deleted by another application.
-008 ==> 380189 - digiKam Import Menu doesn't show all plugins.
+008 ==> 380189 - digiKam Import Menu doesn't show all tools.
 009 ==> 376422 - Rotate crashes.
 010 ==> 314089 - Tagging faces is not working.
 011 ==> 367692 - digiKam crashed trying to save an edited image.
@@ -57,7 +57,7 @@ BUGFIXES FROM BUGZILLA:
 033 ==> 330274 - I downloaded showfoto photo program. Tried to open ShowFoto Handbook, got message could not find 'Khelpcenter'.
 034 ==> 240220 - Help button not working properly.
 035 ==> 110899 - All DigiKam ImagePlugins don't work in Showfoto.
-036 ==> 132162 - Load image plugins on demand.
+036 ==> 132162 - Load image tools on demand.
 037 ==> 240222 - ShowFoto Handbook menu item not working.
 038 ==> 211117 - Showfoto no filters or decorate menu.
 039 ==> 252796 - "Save as" doesn't reuse previously selected dialog.
@@ -94,7 +94,7 @@ BUGFIXES FROM BUGZILLA:
 070 ==> 118343 - Mjpeg slide stops with error.
 071 ==> 125413 - "create MPEG slideshow" tool fails.
 072 ==> 127532 - Images to mpg wrong directory error.
-073 ==> 112558 - Mpeg plugin framerate adjustment.
+073 ==> 112558 - Mpeg tool framerate adjustment.
 074 ==> 091547 - focus stealing when 'mpeg slideshow' is selected, but mp2enc is missing.
 075 ==> 131606 - Images 2 mpg with SVCD changes the proportion of the pictures.
 076 ==> 168266 - digiKam mpeg enconding failure.
@@ -104,7 +104,7 @@ BUGFIXES FROM BUGZILLA:
 080 ==> 119070 - Difficult behaviour of MPEG slide slide show.
 081 ==> 127219 - Creation of mpeg slide show fails.
 082 ==> 171242 - Encoding of mpeg slideshow does not work.
-083 ==> 145771 - Gnome Desktop crashes and restarts when select Cancel option for Mpeg Slideshow plugin.
+083 ==> 145771 - Gnome Desktop crashes and restarts when select Cancel option for Mpeg Slideshow tool.
 084 ==> 145536 - MPEG SlideShow creates color lines on the first image processed.
 085 ==> 119940 - Failed when trying to create MPEG Slide Show file from some jpg images.
 086 ==> 153962 - Dependency Error the package doesn't check for the presence of mpg123.
@@ -342,7 +342,7 @@ BUGFIXES FROM BUGZILLA:
 321 ==> 290421 - digiKam should inform users when kio-slave fail to load.
 322 ==> 127634 - Communication between digikam and its kioslaves broken if size_t != off_t.
 323 ==> 308734 - digikam/kioslave: a lot of "KIO::Slave::timeout: Houston, we lost our slave" and "slave died".
-324 ==> 337810 - Crashed after not install able libkgeomap1 depends.
+324 ==> 337810 - Crashed after not install able Geolocation depends.
 325 ==> 341451 - Will not find subdirectories with images in main collection directory.
 326 ==> 284577 - No images shown in albums.
 327 ==> 266735 - digiKam displays no images: "unable to create io-slave" (OS X).
@@ -362,7 +362,7 @@ BUGFIXES FROM BUGZILLA:
 341 ==> 232720 - All Digikam Albums show zero items even though pictures exist.
 342 ==> 195079 - digiKam albums appear empty.
 343 ==> 203031 - Album list doesn't show pictures even after tons of new pictures were imported.
-344 ==> 342557 - No rule to make target /opt/local/lib/libkgeomap.dylib in recent git distribution.
+344 ==> 342557 - No rule to make target in recent git distribution.
 345 ==> 267789 - Make face detection (kface) and geo tagging (kmap) optional features.
 346 ==> 171778 - digiKam does not load photos in its database.
 347 ==> 196545 - Images on digikam are not dispayed / visualized.
@@ -533,4 +533,4 @@ BUGFIXES FROM BUGZILLA:
 512 ==> 383912 - AppImage crashes when started in terminal with 'debug' option.
 513 ==> 381144 - SmugMug export max dimension limited to 5000 pixels.
 514 ==> 381664 - Plugin leads to the home page of Flickr and 'An error has occurred: Invalid Frob It can not be continued.'
-515 ==> 383988 - Imgur plugin does not provide authentication mechanism.
+515 ==> 383988 - Imgur tool does not provide authentication mechanism.

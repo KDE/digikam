@@ -36,7 +36,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 020 ==> 211792 : Preview of images is not shown [patch].
 021 ==> 206747 : DngConverter temp files not properly renamed.
 022 ==> 210371 : Converting a CRW file results in an unusable DNG.
-023 ==> 203959 : Fails to compile: plugin_dngconverter.o: file not recognized.
+023 ==> 203959 : Fails to compile: tool_dngconverter.o: file not recognized.
 024 ==> 210710 : digiKam error when open a dng image for edit after conversion from NEF.
 025 ==> 212116 : Rename images: sorting does not work [patch].
 026 ==> 212295 : Does not compile under Mac OS X.

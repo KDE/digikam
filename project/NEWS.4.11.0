@@ -23,10 +23,10 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 016 ==> 347628 - Can't remove "legend" field when updating metadata.
 017 ==> 290930 - Cannot resize gamut diagram vertically, only horizontally.
 018 ==> 266264 - Sidebar does not automatically resize to avoid horizontal scrollbar.
-019 ==> 347728 - Build crashes when compiling libkdcraw with libraw 0.16.1.-76.1-x86_64.
+019 ==> 347728 - Build crashes when compiling RawEngine with libraw 0.16.1.-76.1-x86_64.
 020 ==> 341266 - No preview available with Gphoto2 camera.
 021 ==> 309638 - Searching on technical images properties.
-022 ==> 342557 - No rule to make target /opt/local/lib/libkgeomap.dylib in recent git distribution.
+022 ==> 342557 - No rule to make target /opt/local/lib/Geolocation.dylib in recent git distribution.
 023 ==> 244097 - When importing .NEF files, if highlights are "rebuild", "auto-brightness" has no effect.
 024 ==> 339612 - When adding label it moves files.
 025 ==> 181736 - New tool for Image Editor to "delighting" photo.
@@ -52,7 +52,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 045 ==> 253622 - digikam editor cannot use unsharp mask with radius smaller than one with Canon 7D RAW images.
 046 ==> 349157 - Album view have random invisible / empty / disappearing previews, messed up selection.
 047 ==> 274029 - Edit Metadata dialog doesn't honour settings for XMP sidecar [patch].
-048 ==> 345358 - digiKam crash when vkontakte plugin failed to upload images.
+048 ==> 345358 - digiKam crash when vkontakte tool failed to upload images.
 049 ==> 320308 - "Failed to upload photo into Flickr" every time after first use.
 050 ==> 327069 - Missing translations.
 051 ==> 243106 - Flickr uploader uploads with wrong date.
@@ -73,12 +73,12 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 066 ==> 274869 - Images without filename extension will not print.
 067 ==> 215705 - Save multiple account frobs, so we don't have to sign out and reauth each time.
 068 ==> 193890 - Allow to update "Modified" date from image.
-069 ==> 318661 - Export plugin does not convert to sRGB and strips existing ICC profile.
+069 ==> 318661 - Export tool does not convert to sRGB and strips existing ICC profile.
 070 ==> 233675 - Shared binary programs dngconverter and scangui do not provide man pages.
 071 ==> 316310 - Tools - resize images doesn' work.
-072 ==> 300458 - Imgur export is unusable from ksnapshot.
+072 ==> 300458 - Imgur export is unusable.
 073 ==> 339572 - Too much required information.
-074 ==> 264351 - KDE Global shortcuts do not work when using Advanced Slideshow.
+074 ==> 264351 - Global shortcuts do not work when using Advanced Slideshow.
 075 ==> 227978 - Problem with "image resize" when german umlaute in pathname.
 076 ==> 154076 - Corrupted image when use image viewer tool.
 077 ==> 264045 - Export to remote computer does not work with fish:// urls.

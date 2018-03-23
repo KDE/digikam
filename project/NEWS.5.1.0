@@ -367,6 +367,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 341 ==> 365049 - Export to Piwigo not working - Dialog box not responding.
 342 ==> 365676 - Improper handling of temporary directory.
 343 ==> 308783 - No photo attachments when items are shared by e-mail.
-344 ==> 365571 - Flickr export plugin not freeing tmp space.
+344 ==> 365571 - Flickr export tool not freeing tmp space.
 345 ==> 360404 - Imgur autorization not work : Integrate Oauth2 library in core [patch].
 346 ==> 306207 - Application does not pass .desktop validation.

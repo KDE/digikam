@@ -30,7 +30,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 020 ==> 314033 - Crashed when attempting to vie images in folders.
 021 ==> 320763 - Build failed.
 022 ==> 204138 - Possibility to extract JPEG previews from RAW files during camera import.
-023 ==> 261907 - digiKam empty context menus (relevant of default KDE widget style for Windows set to CDE instead Oxygen).
+023 ==> 261907 - digiKam empty context menus (relevant of default widget style for Windows set to CDE instead Oxygen).
 024 ==> 249387 - Showfoto 1.1.0 crash when saving JPEG in WinVista64.
 025 ==> 262186 - "Save file is completed" notification cannot be turned off.
 026 ==> 321296 - opencv error message during face scan.

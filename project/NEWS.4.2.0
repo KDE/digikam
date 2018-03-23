@@ -28,6 +28,6 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 015 ==> 132827 - Create Tag from address-book entry.
 016 ==> 337993 - Switching to "tags" tab.
 017 ==> 313203 - Metadata editor doesn't recognize contact info written with digikam 2.6 and higher [patch].
-018 ==> 334089 - VideoSlideshow plugin port to QtGStreamer 1 (1.0-proposed) needed [patch].
+018 ==> 334089 - VideoSlideshow tool port to QtGStreamer 1 (1.0-proposed) needed [patch].
 019 ==> 336835 - Cannot export to flickr anymore.
 020 ==> 256466 - Shot info preservation from original files to target file.

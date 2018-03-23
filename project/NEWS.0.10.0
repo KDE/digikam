@@ -54,7 +54,7 @@ ImageEditor    : Ported print management to KDE4/Qt4.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
-001 ==> 176140 : Redeye plugin is not working fine.
+001 ==> 176140 : Redeye tool is not working fine.
 002 ==> 181610 : Discard button not working in "Apply changes?".
 003 ==> 173412 : Can't use a samba share for my collection?
 004 ==> 176873 : Database synchronisation segfaulted, albums disappeared.
@@ -64,7 +64,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 008 ==> 181721 : Right-click does nothing if not on or around an image in the top Light Table panel.
 009 ==> 181698 : Cannot delete fuzzy searches.
 010 ==> 181720 : Can't rename fuzzy searches.
-011 ==> 181889 : Resize image (plugin): click and drag the size slider does not work properly.
+011 ==> 181889 : Resize image (tool): click and drag the size slider does not work properly.
 012 ==> 181893 : Blur: dragging the preview image removes the target frame and leaves only the source frame.
 013 ==> 181913 : digiKam 0.10.0 RC1 unbootable.
 014 ==> 181930 : Slider for resizing does not work, i.e.shows either 1 or some extremely high number.
@@ -102,7 +102,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 046 ==> 181657 : Fatal error crash dump.
 047 ==> 103126 : Initial window size is too small.
 048 ==> 143955 : Images without filename extension are inaccessible.
-049 ==> 132162 : Load image plugins on demand.
+049 ==> 132162 : Load image tools on demand.
 050 ==> 183424 : Filter images by multiple tags.
 051 ==> 100770 : Create album from selected pictures. 
 052 ==> 129379 : Renamed Album is shown multiple times although there is only on related picture directory.
@@ -161,7 +161,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 026 ==> 180609 : Export menu items disabled by default.
 027 ==> 178251 : Crash (signal 6) when new user uses home dir.
 028 ==> 179898 : Dark theme: font in properties tab too dark.
-029 ==> 177009 : digiKam eats all CPU when Restore plugin is selected.
+029 ==> 177009 : digiKam eats all CPU when Restore tool is selected.
 030 ==> 179807 : Inpainting tool stuck at 0%.
 031 ==> 180926 : Image thumbnails in albums not showing.
 032 ==> 181000 : Crash on closing Camera GUI after download+delete all.
@@ -229,13 +229,13 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 029 ==> 178613 : Wording in mime-setup page.
 030 ==> 156836 : Preview zoom to 100 percent is not 100 percent viewing Canon RAW/CR2.
 031 ==> 178346 : Contextual menu is empty.
-032 ==> 175844 : digiKam crashes at startup loading plugins.
+032 ==> 175844 : digiKam crashes at startup loading tools.
 033 ==> 178881 : Identifying already copied pictures right from the transfert window.
 034 ==> 175630 : Setting panels of image editor effects should be fully visible.
 035 ==> 178583 : digiKam displays no images in album view.
 036 ==> 178190 : Sidepane's width not remembered.
 037 ==> 178800 : Possibility to move photo's via the thumbnail.
-038 ==> 178677 : Batch plugins missing from menu.
+038 ==> 178677 : Batch tools missing from menu.
 039 ==> 139017 : OS X 10.4.8 digiKam fails to detect libjpeg6b during compile. 
 040 ==> 154478 : showFoto does not sort pictures by name. 
 041 ==> 179139 : Filters not applied real-time.
@@ -323,8 +323,8 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 056 ==> 142774 : Moving pictures between albums.
 057 ==> 160664 : Protected file to camera.
 058 ==> 143864 : Tool to remove Chromatic Aberration from photos.
-059 ==> 125233 : "purple fringe" correction plugin.
-060 ==> 150161 : UFRaw as plugin for RAW.
+059 ==> 125233 : "purple fringe" correction tool.
+060 ==> 150161 : UFRaw as tool for RAW.
 061 ==> 147876 : Broken/renamed images after tagging.
 062 ==> 117629 : Do an OCR of an image and store result in Exif/jfif.
 063 ==> 172835 : The stars of the rating in the right panel are not refreshed when selecting different images.
@@ -339,8 +339,8 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 072 ==> 151719 : Non latin1 in IPTC keywords.
 073 ==> 132244 : Special Chars in Keywords decode wrong in IPTC.
 074 ==> 162490 : dcraw-8.86 adds newer canon dslr with digic III support.
-075 ==> 103149 : Printing wizard plugin is hard to find.
-076 ==> 149328 : Let libkdcraw use raw decoding options when generating thumbnails.
+075 ==> 103149 : Printing wizard tool is hard to find.
+076 ==> 149328 : Let RawEngine use raw decoding options when generating thumbnails.
 077 ==> 168012 : Thumbnails not shown in find similar items tool so they can't be used for drag and drop. 
 078 ==> 148861 : [CTRL] + scroll wheel doesn't resize thumbnails.
 079 ==> 154526 : Big screen size lead to small picture in main window and editor.
@@ -396,7 +396,7 @@ NEW FEATURES:
 General        : digiKam can be compiled under Microsoft Windows with MinGW or MSVC independently.
 General        : Usability improvements to be able to run digiKam on small screen (like EeePC).
 General        : New option to enable RAW metadata writing.
-General        : libkexiv2 dependency updated to 0.5.0.
+General        : MetadataEngine dependency updated to 0.5.0.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -429,7 +429,7 @@ digiKam 0.10.0-beta5 - Release date: 2008-10-26
 NEW FEATURES:
 
 General        : digiKam can be compiled natively under Microsoft Windows.
-General        : libkdcraw dependency updated to 0.4.0
+General        : RawEngine dependency updated to 0.4.0
 General        : libgphoto2 dependency is now optional to be able to compile digiKam under operating systems 
                  not supported by GPhoto2
 
@@ -483,13 +483,13 @@ digiKam 0.10.0-beta3 - Release date: 2008-09-03
 
 NEW FEATURES:
 
-General        : libkdcraw dependency updated to 0.3.0
+General        : RawEngine dependency updated to 0.3.0
 General        : Raw metadata can be edited, changed, added to TIFF/EP like RAW file formats (require Exiv2 >= 0.18).
                  Currently DNG, NEF, and PEF raw files are supported. More will be added in the future.
 
-Image Editor   : All image plugin tool settings provide default buttons to reset values.
+Image Editor   : All image tool tool settings provide default buttons to reset values.
 Image Editor   : New Raw import tool to handle Raw pictures with customized decoding settings.
-Image Editor   : All image plugin dialogs are removed. All tools are embedded in editor window.
+Image Editor   : All image tool dialogs are removed. All tools are embedded in editor window.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -529,7 +529,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 009 ==> 167124 : Timeline view not updated when changing selected time range.
 010 ==> 166564 : Display of *already* *created* thumbnails is slow.
 011 ==> 166483 : Error in "not enough disk space" error message.
-012 ==> 167379 : Image selection for export plugin.
+012 ==> 167379 : Image selection for export tool.
 013 ==> 166622 : Confusing Add Images use.
 014 ==> 166576 : digiKam quits when running "Rebuild all Thumbnail Images" twice.
 015 ==> 167562 : Image Editor Shortcut Keys under Edit redo/undo are missing in GUI.
@@ -552,7 +552,7 @@ General        : Hardware handling using KDE4 Solid interface.
 General        : Preview of Video and Audio files using KDE4 Phonon interface.
 General        : Database file can be stored on a customized place to support remote album library path.
 General        : New database schema to host more photo and collection information.
-General        : Database interface fully re-written using Qt4 SQL plugin.
+General        : Database interface fully re-written using Qt4 SQL tool.
 General        : Support of multiple roots album paths.
 General        : Physical root albums are managed as real album.
 General        : New option in Help menu to list all RAW file formats supported.
@@ -577,8 +577,8 @@ AlbumGUI       : New Search tools to find similar images against a reference ima
 AlbumGUI       : New Search tools to find duplicates images around whole collections. 
 
 ImageEditor    : Added Thumbbar to easy navigate between pictures.
-ImageEditor    : New plugin based on LensFun library (http://lensfun.berlios.de) to correct automaticaly lens aberrations.
-ImageEditor    : LensDistortion and AntiVignetting are now merged with LensFun plugin 
+ImageEditor    : New tool based on LensFun library (http://lensfun.berlios.de) to correct automaticaly lens aberrations.
+ImageEditor    : LensDistortion and AntiVignetting are now merged with LensFun tool 
 
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
@@ -596,7 +596,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 011 ==> 132697 : Metadata list has no scrollbar.
 012 ==> 148502 : Show rating in embedded preview / slideshow.
 013 ==> 155408 : Thumbbar in the album view.
-014 ==> 138290 : GPSSync plugin integration in the side bar.
+014 ==> 138290 : GPSSync tool integration in the side bar.
 015 ==> 098651 : Image Plugin filter based on clens.
 016 ==> 147426 : Search for non-voted pics
 017 ==> 149555 : Always present search box instead of search by right-clicking and selecting simple or advanced search.

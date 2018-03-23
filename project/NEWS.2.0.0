@@ -88,7 +88,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 055 ==> 231597 : Add XCF to the filter list in the album view.
 056 ==> 266788 : Showfoto crashes when opening a photo.
 057 ==> 266326 : Move digiKam documentation to git.
-058 ==> 266327 : Move libkexiv2 to git.
+058 ==> 266327 : Move MetadataEngine to git.
 059 ==> 267361 : When using the luminosity curve in the image editor on an initial import from NEF, all changes are irreversible and cumulative.
 060 ==> 266733 : digiKam crashes on startup on OS X.
 061 ==> 262574 : Add a face tag does not do anything.
@@ -142,7 +142,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 109 ==> 235928 : digiKam fails to open database at startup.
 110 ==> 271916 : digiKam crashed when opening editor.
 111 ==> 272133 : Crash editing Geo coordinates of several images.
-112 ==> 272216 : Compile error: No rule to make target /usr/lib/libm.so, required for lib/libkdcraw.so.20.0.0.
+112 ==> 272216 : Compile error: No rule to make target /usr/lib/libm.so, required for lib/RawEngine.so.20.0.0.
 113 ==> 272569 : Crashing in start.
 114 ==> 271651 : 2.0 beta4 can't use network shares.
 115 ==> 269320 : After initial database building thumbnails fail to rezise properly.
@@ -265,7 +265,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 232 ==> 278040 : Raw images disappear after being exported.
 233 ==> 255915 : Crash stopping slideshow.
 234 ==> 278329 : Using digiKam in Ubuntu 11.04 I cannot switch to another language.
-235 ==> 277935 : Rename libkmap to libkgeomap and move it to extragear/libs.
+235 ==> 277935 : Rename libkmap to Geolocation and move it to extragear/libs.
 236 ==> 273077 : Generate Fingerprints gets slower and slower.
 237 ==> 150981 : Usage of ws.geonames.org to associate place names with coordinates.
 238 ==> 185143 : Track List Editor: Make images in the List selectable.
@@ -274,7 +274,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 241 ==> 215989 : Multiple GPX files for one geotagging one album.
 242 ==> 206133 : Support for Open Street Map.
 243 ==> 265126 : compile failure.
-244 ==> 262412 : Request to setup git repo for kipi-plugins.
+244 ==> 262412 : Request to setup git repo for -tools.
 245 ==> 202226 : Yandex Fotki support export.
 246 ==> 266911 : Add space to suffix "MB" (" MB").
 247 ==> 260754 : DngConverter doesn't support sraw files.
@@ -290,13 +290,13 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 257 ==> 269991 : DngConverter doesn't compile on 64bits platforms due to linking error [patch].
 258 ==> 184763 : Edit Image Caption dialog - not populated with existing caption.
 259 ==> 203047 : Edit Exif does not allow editing of seconds.
-260 ==> 169230 : "Remove Metadata" plugin necessary.
+260 ==> 169230 : "Remove Metadata" tool necessary.
 261 ==> 208500 : XMP tags GUI incorrectly manages language.
 262 ==> 178660 : Quick navigation "disabled" in list of languages (XMP).
 263 ==> 242632 : The Subject classification reference code is not saved.
 264 ==> 138753 : Add new menu option for Batch Copyrighting of images using IPTC.
 265 ==> 198960 : Change exif date taken field of selected images.
-266 ==> 270579 : Images previously selected persist in the plugin window list [patch].
+266 ==> 270579 : Images previously selected persist in the tool window list [patch].
 267 ==> 270587 : Text fixes for the Commons export widget [patch].
 268 ==> 270593 : Acquireimages fail to link on amd64.
 269 ==> 270649 : Bad use of arguments for translation.

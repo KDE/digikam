@@ -5,8 +5,8 @@ NEW FEATURES:
 
 General        : New Database interface to support different database backend.
                  MySql and SQlite are supported. Internal and Remote MySql server are supported.
-General        : libkdcraw dependency set to 1.1.0 version.
-General        : libkexiv2 dependency set to 1.1.0 version.
+General        : RawEngine dependency set to 1.1.0 version.
+General        : MetadataEngine dependency set to 1.1.0 version.
 AdvancedRename : New option: database. Allows to rename files according to database values.
 QueueManager   : Add capability to apply an image waterwark over a photo.
 General        : MetadatEngine dependency set to 1.1.0 release.

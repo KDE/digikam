@@ -79,7 +79,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 047 ==> 237552 : Thumbnails generation process for selected images only.
 048 ==> 231777 : Scrolling in Albumview should be smoothed.
 049 ==> 282907 : No items are displayed when I enable 'Include Album Sub-Tree' in a folder containing one image and many folders.
-050 ==> 294458 : Std namespace issue in libkface [patch].
+050 ==> 294458 : Std namespace issue in FacesEngine [patch].
 051 ==> 286127 : Resize tool in digikam corrupt transparencies on png files.
 052 ==> 294423 : Build error under Solaris [patch].
 053 ==> 286437 : "No flag" filter doesn't work.
@@ -148,9 +148,9 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 116 ==> 276920 : digiKam shows wrong file size in thumbnail info for files >2Gb.
 117 ==> 205824 : EXIF UserComments with special characters get tagged as ASCII.
 118 ==> 277206 : Problems exporting RAW (CR2) from editor : original file disappear from icon view.
-119 ==> 149269 : Thumbnails are square (HTML Export plugin) [patch].
+119 ==> 149269 : Thumbnails are square (HTML Export tool) [patch].
 120 ==> 289283 : HTMLExport: add keyboard navigation and image preloading to floating_cards theme [patch].
-121 ==> 153249 : Photo arranging and printing plugin.
+121 ==> 153249 : Photo arranging and printing tool.
 122 ==> 209721 : Search field in digikam's coordinates editor uses black text on black background.
 123 ==> 279182 : Batch resize fails possibly due to timestamp in filename.
 124 ==> 290932 : Up to date website.
@@ -191,7 +191,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 169 ==> 163991 : Import images from Picasa WebAlbum.
 170 ==> 285070 : Change Date and Time dialog should warn when no tag to change is selected.
 171 ==> 143886 : Replace add and substract in "adjust time and date" menu with positive/negative times.
-172 ==> 296776 : Crash while trying to send pictures via default email software (kipi).
+172 ==> 296776 : Crash while trying to send pictures via default email software ().
 173 ==> 299071 : digiKam crashed on export of one image to picasaweb.
 174 ==> 288462 : Issues building with highgui [patch].
 175 ==> 299952 : Crash when closing ExpoBlending tool.
