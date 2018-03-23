@@ -4,31 +4,28 @@ v0.1.0
 NEW FEATURES:
 
 General        : Moved Exiv2Iface class to a new MetadataEngine used by digiKam.
-Slideshow      : Show image comments (configurable)
+General        : Added configure options to allow disabling tools.
+General        : Added the availability to disable tools we don't want to build.
+
 ImageViewer    : Initial import of new OpenGL based image viewer.
-RAWConverter   : Port tool to RawEngine shared library.
-Printwizard    : Printwizard can print 8 photos per page (A4)
+
 MPEGEncoder    : Avoid to pass img2mpg script unmanaged file path.
+
 GPSSync        : New tool to export GPS locations from pictures to Google Maps / Google Earth.
-General        : Added configure options to allow disabling tools (--disable-XXXX)
-                 provided by Matej Laitl (bug #149666)
-New Tool       : MetadataEdit : New tool to edit EXIF and IPTC pictures metadata (by Gilles Caulier).
-New tool       : GPSSync      : New tool to sync photo metadata with a GPS device (by Gilles Caulier).
-New tool       : IpodExport   : New tool to export pictures to an ipod device (by Seb Ruiz).
 
-GalleryExport  : Support for multiple galleries.
 
-HTMLExport     : New "s0" theme from Petr Vanek
+New Tool       : MetadataEdit : New tool to edit EXIF and IPTC pictures metadata.
+New tool       : GPSSync      : New tool to sync photo metadata with a GPS device.
+New tool       : IpodExport   : New tool to export pictures to an ipod device.
 New tool       : HTMLExport   : new images gallery export supporting XHTML and CSS (by Aurelien Gateau).
 New tool       : SimpleViewer : new tool to export to flash web page (by Joern Ahrens)
-JPEGLossLess   : Removed libmagic++ depency.
-JPEGLossLess   : Removed libkexif depency. Using Exiv2 instead.
 New tool       : FlickrExport : new tool to upload pictures on Flickr web service (by Vardhman Jain).
 
-SendImages     : support for Thunderbird and GmailAgent.
-Calendar       : The weekdays are now localized.
-HTMLExport     : Export multiple tags to an html-page.
+JPEGLossLess   : Removed libmagic++ depency.
+JPEGLossLess   : Removed libkexif depency. Using Exiv2 instead.
 JPEGLossLess   : Rotate or flip your images lossless, while preserving  the timestamp.
+
+RAWConverter   : Port tool to RawEngine shared library.
 RAWConverter   : Supports of dcraw>=6.x.
 RAWConverter   : New core to be compatible with recent dcraw release. A lot 
                  of RAW decoding settings have been added.
@@ -38,11 +35,21 @@ RAWConverter   : Removing external dcraw depency. Now tool include a full suppor
                  dcraw program in core.
 RAWConverter   : updated dcraw.c implementation to version 8.41.
 
+Calendar       : The weekdays are now localized.
+Calendar       : Fixed recurring events not showing (only first date was showed)
+                 Setting special events only once (before printing), instead of
+                 one for every page
+
 SendImages     : Added image size limit x mail (Michael H�hstetter)
- 
+SendImages     : support for Thunderbird and GmailAgent.
+
 TimeAdjust     : Removed libkexif depency. Using Exiv2 instead.
 TimeAdjust     : New option to customize Date and Time to a specific timestamp.
 TimeAdjust     : New options sync EXIF/IPTC Creation Date with timestamp.
+
+PrintWizard    : caption can contain more exif info 
+PrintWizard    : Added raw file management, now raw files can be printed.
+Printwizard    : Printwizard can print 8 photos per page (A4)
 PrintWizard    : Wizard GUI review
                  Added exif management.
                  Prints exif date-time info.
@@ -54,35 +61,38 @@ PrintWizard    : Wizard GUI review
                  Changed page size to real 10x15cm instead of A6 (need to set up right page size on kprinter)
                  Added a new page size 13x18cm (need to set up right page size on kprinter)
                  Each photo can be printed more than once
+
 PicasaWebExport: New tool to export pictures to Picasa web service (by Vardhman Jain).
-SlideShow      : Dropped imlib2 dependency
-General        : Added the availability to disable tools we don't want to build.
-               : This feature is very useful for source based distros (Matej Laitl)
-PrintWizard    : Added raw file management, now raw files can be printed.
-SlideShow      : Solved minor issue in filename printing (2D slideshow).
-SlideShow      : New caching mechanism
-SlideShow      : Added Ken Burns effect
-Calendar       : Fixed recurring events not showing (only first date was showed)
-                 Setting special events only once (before printing), instead of
-                 one for every page
-PrintWizard    : caption can contain more exif info 
+PicasaWebExport: Support RAW files format to upload as JPEG preview.
+
 FlickrExport   : dialog layout re-written to be more suitable.
 FlickrExport   : list of item to upload is now display in dialog.
 FlickrExport   : Support RAW files format to upload as JPEG preview.
-PicasaWebExport: Support RAW files format to upload as JPEG preview.
+
 FlashExport    : tool is now compatible with SimpleViewer version 1.8.x.
 FlashExport    : tool now support RAW files format.
+
 GalleryExport  : added Gallery 2 version support.
-ImageGallery   : removed is removed and replaced by HTML export tool.
+GalleryExport  : Support for multiple galleries.
+
+HTMLExport     : New "s0" theme from Petr Vanek
+HTMLExport     : Export multiple tags to an html-page.
+HTMLExport     : removed is removed and replaced by HTML export tool.
 HTMLExport     : Option to specify whether the original images should be included
 HTMLExport     : Support for theme variants
 HTMLExport     : New theme: "frames", by Rüdiger Bente
 HTMLExport     : New theme: "cleanframes", by Beth and Robert Marmorstein
 HTMLExport     : New theme: "classic", simulating the output of the old HTML Gallery tool
+
+Slideshow      : Show image comments (configurable)
+SlideShow      : Solved minor issue in filename printing (2D slideshow).
+SlideShow      : New caching mechanism
+SlideShow      : Added Ken Burns effect
 SlideShow      : Skip to next or previous image by a right or left click
 SlideShow      : Skip to next or previous image by mouse wheel scrolling
 SlideShow      : Images can be sorted/added/removed manually.
 SlideShow      : Progress indicator printing doesn't depend on file name printing anymore.
+SlideShow      : Dropped imlib2 dependency
 
 BUGFIXES from B.K.O (http://bugs.kde.org):
 
@@ -141,10 +151,10 @@ BUGFIXES from B.K.O (http://bugs.kde.org):
 053 ==> 111454 : Print photo's date into one corner like print assistant.
 054 ==> 140890 : The preview does not display date and time properly for Japanese locale.
 055 ==> 144185 : Adjust date-time tool should remember previous fixed date.
-056 ==> 146799 : digikam 0.9.2 crashes when exiting - slideshow error
+056 ==> 146799 : digikam crashes when exiting - slideshow error
 057 ==> 140477 : Ability to rename images being sent via email.
 058 ==> 143450 : Skip to next or previous image by a right or left click
-059 ==> 138880 : digiKam 0.9rc2 - 0.9.1rc1 setting file date to exif doesn't work.
+059 ==> 138880 : digiKam setting file date to exif doesn't work.
 060 ==> 137582 : Add preliminary support for Gallery 2.2 security features
 061 ==> 139264 : Prefer Exif DateTimeOriginal for image date/time (DateTimeDigitized and DateTime only used as fallback)
 062 ==> 139074 : Format missmatch at sendimages.cpp ('int' vs. 'size_t').
