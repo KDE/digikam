@@ -4,6 +4,8 @@ digiKam 2.2.0 - Release date: 2011-10-02
 NEW FEATURES:
 
 General : Add image title metadata support.
+General : Add image title support metadata provided by kipi host application.
+General : Add a new tool to assemble images together.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -43,3 +45,16 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 034 ==> 282925 : Not able to write Matadata to pictures.
 035 ==> 282948 : Face recognition crashes digiKam (again).
 036 ==> 283052 : Light table always displays reduced size preview.
+037 ==> 199317 : Support title/description as Facebook Photo Caption [patch].
+038 ==> 221195 : Comment sets Title does not set photo title in gallery export.
+039 ==> 155373 : Add different image titles when exporting to Flickr.
+040 ==> 261451 : Wish: vkontakte.ru (vk.com) export tool.
+041 ==> 281439 : libkvkontakte addition break parallel builds.
+042 ==> 279545 : Picasa import fetches scaled-down photos [patch].
+043 ==> 281316 : Add GPS info to gallery.xml in htmlexport tool [patch].
+044 ==> 212106 : Unable to export original file to Flickr [patch].
+045 ==> 282101 : Converting Canon CR2 images result in empty images.
+046 ==> 267309 : Translation of Add in timeadjust does not come from tool.
+047 ==> 282588 : Center portrait images [patch].
+048 ==> 240916 : Question for web authentification: Better button names [patch].
+049 ==> 282829 : Gettext should use standard plurals coding for strings 95 & 96.

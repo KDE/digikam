@@ -4,6 +4,7 @@ digiKam 2.8.0 - Release date: 2012-08-05
 NEW FEATURES:
 
 CameraGUI : Add option to execute script during items to download from camera.
+MediaWiki : GUI improvmenets and new features to export items.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -29,3 +30,9 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 020 ==> 303685 - Cannot set "toggle auto" back to "none" in tags filter.
 021 ==> 277169 - Face tag/tag region: only the last created face tag of multiple face tags is saved / no face tag is saved if cancel is hit on the last created face tag.
 022 ==> 269720 - digiKam SIGSEGV during face scannin.
+023 ==> 302755 - Improve usability and fix bugs [patch].
+024 ==> 303188 - Adjust Time and Date keeps executing on previously selected images.
+025 ==> 303464 - Improve usability and fix bugs [patch].
+026 ==> 298022 - The 'Export To' PicasaWeb option shows account names as numbers.
+027 ==> 292223 - Export to picasa plugin don't save my gmail account password.
+028 ==> 304242 - Ricoh GRD 4 DNG file converted to DNG (recompress) has wrong colors.

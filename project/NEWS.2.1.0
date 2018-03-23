@@ -10,6 +10,8 @@ CameraGUI : New option to download new items in just one click.
 CameraGUI : New option to filter icon-view by type mime.
 
 Preview   : New option to show/hide information over preview canvas.
+General   : New tool to export collection to VKontakte web service (http://www.vkontakte.ru).
+General   : New tool to stitch photos as panorama.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -70,3 +72,13 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 055 ==> 264412 : Crash when opening a directory.
 056 ==> 264638 : Stuck when cancelling rename/overwrite dialog in batch queue manager.
 057 ==> 276061 : "Save (as new version)" is not enabled right after importing a RAW picture.
+058 ==> 270419 : digiKam's tool can't import my photo from facebook.
+059 ==> 279078 : Yandex.Fotki tool causes digikam crash.
+060 ==> 141389 : Unpredictable image ordering in gallery.xml
+061 ==> 171794 : Display keywords by flash export.
+062 ==> 279515 : FlashExport's FirstRunDialog doesn't install simpleviewer's archive.
+063 ==> 279445 : Change the way progress is reported in the Geolocation Correlator.
+064 ==> 098693 : Easy stitcher and panorama tool.
+065 ==> 235766 : Panorama Tool as hugin, gimp-pandora.
+066 ==> 280860 : Compile fails due to DSO error with pthread.
+067 ==> 280736 : Wrong check for cpfind when using panorama tool.

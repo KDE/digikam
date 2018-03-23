@@ -3,8 +3,8 @@ digiKam 2.5.0 - Release date: 2012-01-01
 
 NEW FEATURES:
 
-Libkdcraw : use internal libraw 0.14.4 to support new RAW camera :
-            Canon S100, Fuji X10, Panasonic GX1, Samsung NX200, Sony NEX-7.
+General : use internal libraw 0.14.4 to support new RAW camera :
+          Canon S100, Fuji X10, Panasonic GX1, Samsung NX200, Sony NEX-7.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -107,5 +107,46 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 097 ==> 283416 : Configuration/MIME Types: List of supported types is in random order [patch].
 098 ==> 209721 : Search field in digikam's coordinates editor uses black text on black background.
 099 ==> 289644 : digiKam crashes while resizing pictures.
-100 ==> 290157 : Libkdcraw should support LCMS2 [patch].
+100 ==> 290157 : RawEngine should support LCMS2 [patch].
 101 ==> 290196 : PATCH: Improvements for Levels adjust tool.
+102 ==> 269482 : Picasa Upload.
+103 ==> 234865 : Crash Facebook tool.
+104 ==> 233263 : Crash when uploading to Flickr.
+105 ==> 263077 : Crashed when select convert tool.
+106 ==> 256974 : Application crashed when printing multiple images >1 per page.
+107 ==> 259370 : Crash when making a slideshow.
+108 ==> 235112 : Application crashed trying to save scan as TIFF.
+109 ==> 288674 : digiKam crashes when i close the export window (export to yandex-fotki).
+110 ==> 288465 : Spelling-error-in-binary flashexport Unkown Unknown.
+111 ==> 203603 : Country names in digikam should come from iso_3166 GNU package.
+112 ==> 268760 : Facebook uploader crashed.
+113 ==> 171303 : Auto-rotate on advanced slideshow doesn't work.
+114 ==> 253862 : Compile fails can not find gdk-pixbuf/gdk-pixbuf.h: No such file or directory.
+115 ==> 197899 : In "Rename images" plugin photos are displayed in reverted order.
+116 ==> 217546 : Picasaweb export does not point to the current album.
+117 ==> 265012 : Crashed while uploading to Smugmug.
+118 ==> 190293 : Export as html gallery has the forward button disabled before changing the selected folder.
+119 ==> 254105 : Please, split translations of string "Free" in different contexts.
+120 ==> 207157 : Regression: Can't transfer EXIF creation date to file date.
+121 ==> 256937 : Change word "locator" to something less geeky.
+122 ==> 228051 : Geotags are not saved when converting RAW to JPEG.
+123 ==> 242579 : Changing captions/GPS info only works on first image in a selection.
+124 ==> 121124 : Newbie friendly features wishlist.
+125 ==> 218777 : digiKam should remember the folder for scans.
+126 ==> 249841 : Add option to transfer metadata to final image in "blend bracketed images" tool.
+127 ==> 167494 : The Google Maps GPS Edit Screen shows satellite images only for a limited time in the GPS Sync.
+128 ==> 148427 : Adjust date/time tool sets date to current time instead of EXIF/IPTC time.
+129 ==> 203564 : Rotate jpg change date.
+130 ==> 192163 : Facebook photo does support max 60 photos pro album.
+131 ==> 271315 : GUI improvement for manual geotagging.
+132 ==> 249930 : Support for multi-monitor view [patch].
+133 ==> 275180 : Geolocation window unintuitive and "overloaded".
+134 ==> 209365 : Geolocation Max. number of API calls per day reached.
+135 ==> 289725 : Crash during upload on Picasaweb.
+136 ==> 212542 : Advanced slideshow doesn't respect exif orientation of ORF images.
+137 ==> 231600 : Uploading video files results in spurious warnings.
+138 ==> 281719 : Wizard -> Page Setup -> Paper Size: Use QPrinterInfo to get the printer's supported paper sizes instead of QPrinter defaults (or: cropping issues with photo paper).
+139 ==> 213340 : "rotate left" and "rotate right" actually rotate by 180 degrees.
+140 ==> 221175 : White screen with Ken Burns Effect or other OpenGL slideshow with full screen resolution.
+141 ==> 288159 : i18n done horribly in PhotoLayoutsEditor.
+142 ==> 286844 : digiKam crashes when close Export to VKontakte Web Service window.

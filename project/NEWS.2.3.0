@@ -5,6 +5,10 @@ NEW FEATURES:
 
 General        : My Tags section from Captions/Tags sidebar have been moved to a dedicated sub-tab for
                  better usability with small screen.
+FlashExport    : New interface for plugin: now  a wizard will guide you through exporting process.
+               : All plugins are stored locally, user will need to download once
+               : Posibility to always return and select a different plugin on first page(previous version requested restarting plugin)
+               : Different options and exporting settings for every plugin
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -51,3 +55,20 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 041 ==> 285840 : Batch queue manager resize tool have a bottom limit of 100.
 042 ==> 273122 : digiKam crashes while scanning faces.
 043 ==> 274487 : digiKam crashes after closing it.
+044 ==> 283509 : Crash on final step of stiching large panorama.
+045 ==> 283321 : Photolayoutseditor crashes on exit.
+046 ==> 283853 : The advanced slideshow "Ken Burns Effect" doesn't respect the setting of the loop checkbox.
+047 ==> 264423 : Export to KML drops significant figures in Lat/Long.
+048 ==> 220800 : Changing the ps output file name for create calendar tool does not work.
+049 ==> 252306 : Tools Calendar creator - print to PDF file size for 12 pages 80-110 MB = about 30x larger than a year ago.
+050 ==> 138585 : Calendar: Very low PDF/PS output quality.
+051 ==> 204663 : Calendar Output Starts pdftops process but never completes.
+052 ==> 154631 : Create Calendar function reduces photo resolution. 
+053 ==> 244258 : AdvancedSlideshow ignores "loop" settings when in KenBurns-Mode.
+054 ==> 168927 : Add support for PostcardViewer, AutoViewer and TiltViewer.
+055 ==> 285300 : Unable to blend bracketed images (enfuse missing).
+056 ==> 220793 : Create calendar tool: last week-row is cut off.
+057 ==> 221862 : Launching the flickr exporter with pic selected, or adding picture to exporter window.
+058 ==> 284215 : digiKam crashes when "Create photo layouts" used second time.
+059 ==> 243109 : Send image by mail, crash.
+

@@ -3,17 +3,30 @@ digiKam 2.6.0 - Release date: 2012-06-03
 
 NEW FEATURES:
 
-General        : Add support of Little CMS version 2.
-General        : New tool to run all maintenance process in background.
-General        : Lprof 3rd party library have been removed from core implementation.
-General        : Thumbs/Preview for read-only files (as RAW) can be rotated through a flag in thumbnails database.
-General        : Add a Progress Manager as into Kontact to drive process running in parallele.
-General        : JPEGLossLess tool is now disabled in digiKam. A dedicated solution is now implemented.
-                 in digiKam core to rotate/flip image using multithreading, parallelization, and image versioning.
-ToolsInterface : Handle progress events from tools through digiKam Progress Manager.
-ImageEditor    : Template Superimpose feature have been moved to PhotoLayoutEditor.
-ImageEditor    : New film color negative inverter filter.
+General           : Add support of Little CMS version 2.
+General           : New tool to run all maintenance process in background.
+General           : Lprof 3rd party library have been removed from core implementation.
+General           : Thumbs/Preview for read-only files (as RAW) can be rotated through a flag in thumbnails database.
+General           : Add a Progress Manager as into Kontact to drive process running in parallele.
+General           : JPEGLossLess tool is now disabled in digiKam. A dedicated solution is now implemented.
+                    in digiKam core to rotate/flip image using multithreading, parallelization, and image versioning.
+ToolsInterface    : Handle progress events from tools through digiKam Progress Manager.
+ImageEditor       : Template Superimpose feature have been moved to PhotoLayoutEditor.
+ImageEditor       : New film color negative inverter filter.
 
+RAWConverter      : Add progress management support, and parallelization of tasks using ThreadWeaver.
+DNGConverter      : Add progress management support, and parallelization of tasks using ThreadWeaver.
+RedEyesRemoval    : Add progress management support, and parallelization of tasks using ThreadWeaver.
+TimeAdjust        : Add items listview support, progress management support, multithreading, and parallelization of tasks using ThreadWeaver.
+SendImages        : Dialog Layout improvements, progress management support, and parallelization of tasks using ThreadWeaver.
+PhotoLayoutEditor : Add SuperImpose Template support to compose fun frame, post-card, etc... template file use SVG format.
+Panorama          : Bugfix for binary detection on OSes different than Linux (fixes the same issue with expoblending).
+                    Bugfix for the back button of the assistant.
+                    First steps towards a cropping for target panorama.
+                    Parallelization of tasks using ThreadWeaver.
+General           : New tool to export items to ImageShack web service (http://imageshack.us).
+General           : New tool to export items to MediaWiki web service (http://www.mediawiki.org).
+General           : New tool to export items to Imgur web service (http://imgur.com).
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -135,3 +148,52 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 116 ==> 276920 : digiKam shows wrong file size in thumbnail info for files >2Gb.
 117 ==> 205824 : EXIF UserComments with special characters get tagged as ASCII.
 118 ==> 277206 : Problems exporting RAW (CR2) from editor : original file disappear from icon view.
+119 ==> 149269 : Thumbnails are square (HTML Export plugin) [patch].
+120 ==> 289283 : HTMLExport: add keyboard navigation and image preloading to floating_cards theme [patch].
+121 ==> 153249 : Photo arranging and printing plugin.
+122 ==> 209721 : Search field in digikam's coordinates editor uses black text on black background.
+123 ==> 279182 : Batch resize fails possibly due to timestamp in filename.
+124 ==> 290932 : Up to date website.
+125 ==> 212785 : Cannot preserve rotation when exporting from raw to Facebook.
+126 ==> 291762 : Crash with export.
+127 ==> 286736 : PrintAssistant: If you step through multiple images in crop image, it adds pages 
+128 ==> 286735 : PrintAssistant: Custom paper size isn't retained
+129 ==> 257636 : PrintAssistant: add 35x45mm photo template for UK passports
+130 ==> 272336 : Picasaweb, album date -1.
+141 ==> 292537 : Dng tool segfaults.
+142 ==> 293301 : digiKam crashes when uploading to PicasaWeb.
+143 ==> 220798 : It is not possible to set the language in create calendar tool.
+144 ==> 293917 : Crash when exiting digikam.
+145 ==> 294133 : Expoblending cannot be compiled.
+146 ==> 233926 : New tool to export to Imageshack.
+147 ==> 294460 : Std namespace issue [patch].
+148 ==> 294461 : Build failure in picasawebexport - QString ambiguity [patch].
+149 ==> 294547 : The url in 'about' menu doesnt work.
+150 ==> 294751 : Unlisted dependancy (hugin).
+151 ==> 206842 : New tool to export to Wikimedia Commons.
+152 ==> 286018 : Pano Tool and ExpoBlend tool do not work on OS X [patch].
+153 ==> 286633 : Unable to find cpfind executable, but cpfind is installed and availabe within the path.
+154 ==> 286382 : Panorama stitcher doesn't run and asks for autooptimizer despite hugin is installed.
+155 ==> 296579 : Adjust Date & Time: Wrong date format shown
+156 ==> 193874 : When changing dates, change date-based filename as well.
+157 ==> 268317 : "Determine from clock photo" dialog: Allow zooming with +/- or ctrl+mousewheel in the preview.
+158 ==> 208291 : Lock zoom when switching photos.
+159 ==> 279444 : Missing progress information when updating date on several images.
+160 ==> 134222 : Gallery2 export doesn't respect items selections.
+161 ==> 154699 : Current item in the gallery export list view should be shown in preview.
+162 ==> 207390 : Gallery export shows regular file dialog instead of tags or folders.
+163 ==> 220319 : Gallery2 Export Plugin not allowing Maximum Dimension > 999 px.
+164 ==> 292268 : Coordinates into LineString not correct.
+165 ==> 268315 : xx MB field below "Mail program": Function unclear.
+166 ==> 220221 : Batch processing preview shows only the corner of images.
+167 ==> 294455 : Batch process preview doesn't show a preview.
+168 ==> 298118 : Crash when open Geo-location dialog.
+169 ==> 163991 : Import images from Picasa WebAlbum.
+170 ==> 285070 : Change Date and Time dialog should warn when no tag to change is selected.
+171 ==> 143886 : Replace add and substract in "adjust time and date" menu with positive/negative times.
+172 ==> 296776 : Crash while trying to send pictures via default email software (kipi).
+173 ==> 299071 : digiKam crashed on export of one image to picasaweb.
+174 ==> 288462 : Issues building with highgui [patch].
+175 ==> 299952 : Crash when closing ExpoBlending tool.
+176 ==> 224893 : New tool to export to Imgur.
+177 ==> 301027 : Fix fail to build on MIPS.

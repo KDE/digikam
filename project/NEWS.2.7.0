@@ -41,3 +41,8 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 027 ==> 295335 - Pasting a name in the "Who is this?" input field does not activate "Confirm" Button.
 028 ==> 295923 - File always changed even if no metadata should be written to it.
 029 ==> 278345 - Context menu > Assign Tags > Recently assigned tags not preserved between session and fixed size.
+030 ==> 295931 - digiKam / Geolocation segfault.
+031 ==> 302447 - DNG RAW file can't be added for conversion.
+032 ==> 291951 - Shows numeric ID instead of name of the Google.
+033 ==> 285831 - Picasa export: name is replaced by google userid.
+034 ==> 302121 - "Blend bracketed images" menu entry doesn't appear.

@@ -36,3 +36,8 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 023 ==> 213680 : Show warning or info message when not working with color management in Image Editor.
 024 ==> 277628 : Resize controls in editor are missing.
 025 ==> 160013 : Display RGB histograms in 3 separate diagrams.
+026 ==> 260649 : digiKam crashed rotate photo.
+027 ==> 285941 : digiKam crashes when launching batch proccessing tool.
+028 ==> 286155 : digiKam crashing.
+029 ==> 286661 : RemoteStorage folder browsing fix for Windows
+030 ==> 283650 : Panorama tool can't find cpfind version on OS X.

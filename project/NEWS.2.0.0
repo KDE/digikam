@@ -23,7 +23,11 @@ ImageEditor    : Foveon sensor based camera.
 ImageEditor    : New advanced RAW decoding settings backported from RawTherapee project.
 
 AdvancedRename : New datetime option "UnixTimeStamp" (requires Qt 4.7 or higher)
-
+GPSSync        : Complete rewrite of GUI, including reverse-geocoding feature.
+YandexFotki    : New tool to export collection to Yandex web service (http://fotki.yandex.ru).
+MediaWiki      : New tool to export collection to MediaWiki based web service (http://www.mediawiki.org).
+RajceExport    : New tool to export collection to Rajce web service (http://www.rajce.idnes.cz).
+MetadataEdit   : Factoring Exif/Iptc/Xmp editor to a common dialog.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -248,7 +252,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 219 ==> 276059 : Tags are not written to files on export or save when editing TIFF files.
 220 ==> 271710 : Crash when starting after adding 1500 pic + thumbnails.db is 3.9 GB with 4 GB storage capacity.
 221 ==> 244529 : Crash when writing metadata in files.
-222 ==> 267789 : Make face detection (kface) and geo tagging (kmap) optional features.
+222 ==> 267789 : Make face detection and geo tagging optional features.
 223 ==> 278323 : Wrong Ctrl+V shortcut for "Cut".
 224 ==> 278321 : Please sort "Themes" (color themes) sub menu.
 225 ==> 276827 : digiKam segfaults when autocompleting tags.
@@ -260,6 +264,54 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 231 ==> 226765 : Panning with arrow keys in preview mode is slow.
 232 ==> 278040 : Raw images disappear after being exported.
 233 ==> 255915 : Crash stopping slideshow.
-234 ==> 278329 : Using DigiKam in Ubuntu 11.04 I cannot switch to another language.
+234 ==> 278329 : Using digiKam in Ubuntu 11.04 I cannot switch to another language.
 235 ==> 277935 : Rename libkmap to libkgeomap and move it to extragear/libs.
 236 ==> 273077 : Generate Fingerprints gets slower and slower.
+237 ==> 150981 : Usage of ws.geonames.org to associate place names with coordinates.
+238 ==> 185143 : Track List Editor: Make images in the List selectable.
+239 ==> 195944 : Concentrate location manipulation functions in single dialog.
+240 ==> 209718 : Adding geolocation tag to a dozen pictures blocks digikam GUI for >10 seconds.
+241 ==> 215989 : Multiple GPX files for one geotagging one album.
+242 ==> 206133 : Support for Open Street Map.
+243 ==> 265126 : compile failure.
+244 ==> 262412 : Request to setup git repo for kipi-plugins.
+245 ==> 202226 : Yandex Fotki support export.
+246 ==> 266911 : Add space to suffix "MB" (" MB").
+247 ==> 260754 : DngConverter doesn't support sraw files.
+248 ==> 267775 : Import from facebook fails, no write permissions, no album selection.
+249 ==> 155030 : Meta information about picture dimension not updated after batch resize.
+250 ==> 258202 : Keep custom metadata (tags, rating) when converting.
+251 ==> 267650 : Resizing image causes digiKam caption to disappear in original.
+252 ==> 269121 : Failure to find libgpod.
+253 ==> 206842 : Export to Wikimedia Commons.
+254 ==> 269511 : Cmake install files include wrong path for libmediawiki/version.h.
+255 ==> 269220 : Move MediaWiki C++ interface to git.
+256 ==> 268316 : OK button not disabled on empty image list, following progress dialog never finishes [patch].
+257 ==> 269991 : DngConverter doesn't compile on 64bits platforms due to linking error [patch].
+258 ==> 184763 : Edit Image Caption dialog - not populated with existing caption.
+259 ==> 203047 : Edit Exif does not allow editing of seconds.
+260 ==> 169230 : "Remove Metadata" plugin necessary.
+261 ==> 208500 : XMP tags GUI incorrectly manages language.
+262 ==> 178660 : Quick navigation "disabled" in list of languages (XMP).
+263 ==> 242632 : The Subject classification reference code is not saved.
+264 ==> 138753 : Add new menu option for Batch Copyrighting of images using IPTC.
+265 ==> 198960 : Change exif date taken field of selected images.
+266 ==> 270579 : Images previously selected persist in the plugin window list [patch].
+267 ==> 270587 : Text fixes for the Commons export widget [patch].
+268 ==> 270593 : Acquireimages fail to link on amd64.
+269 ==> 270649 : Bad use of arguments for translation.
+270 ==> 270624 : No display on googlemap.
+271 ==> 266906 : A few widget titles should not be translatable.
+272 ==> 171727 : KML export asks for overwriting tempfile.
+273 ==> 271735 : HTML export of RAW images fails.
+274 ==> 275857 : Word puzzle in progressbar in rajceexport.
+275 ==> 215777 : Configuration to use HTTP instead of HTTPS.
+276 ==> 252437 : Empty album list fixed by switching to OAuth2 authentication
+277 ==> 226114 : Facebook Call Failed: Incorrect Signature.
+278 ==> 276609 : Facebook application is deleted. can't upload and previously uploaded pictures disappear.
+279 ==> 271838 : Segfault when trying to open Geo-Location.
+280 ==> 273781 : digiKam crashes when correlating images with GPX file created by Garmin GPS.
+281 ==> 277480 : Export Flash dose not work.
+282 ==> 226296 : FlashExport, unable to install simple viewer.
+283 ==> 277661 : Facebook exporter incompatible with Firefox 4 (solution: use .html extension not .php).
+284 ==> 278290 : GPS Correlator is disabled (grayed) after loading gpx files.
