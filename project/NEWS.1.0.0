@@ -44,6 +44,17 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 039 ==> 215486 : collection not found in location on disk with uuid (lvm volume).
 040 ==> 215662 : digiKam crash on close beta6.
 041 ==> 219477 : Import photos crashes after crash due to import of large number of fotos.
+042 ==> 165277 : Last gpx directory isn't remembered.
+043 ==> 174086 : GPX time parsing problems.
+044 ==> 162993 : picasa album list not refreshed.
+045 ==> 202045 : Facebook exports always to same album (the one initially selected).
+046 ==> 217710 : GPSSync unable to modify coordinates.
+047 ==> 217989 : GPSSync randomly no satellite view.
+048 ==> 217897 : DNGconverter produces invalid DNG files.
+049 ==> 218762 : Libraw is too old.
+050 ==> 219207 : Compilation error in PreviewWidget.
+051 ==> 192439 : Geolocation position not remembered or initialised consistently.
+052 ==> 199189 : GPS correlator does not allow offset in seconds.
 
 *********************************************************************************************************
 digiKam 1.0.0-rc - Release date: 2009-11-29
