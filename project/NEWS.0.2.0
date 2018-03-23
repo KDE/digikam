@@ -5,46 +5,62 @@ NEW FEATURES:
 
 General        : SimpleViewer tool has been renamed to FlashExport
 General        : New icons for all Export/import tools.
-FlickrExport   : Add support for 23hq.com service which uses Flickr API
-PrintImages    : New tool that allow to choose old print assistant
-                 or to print all the selected photos directly
 General        : All import/export tools now have keyboard shortcuts
-Facebook       : Facebook tool now support also import (download) of photos
 General        : Tools now use metadata settings shared with host application.
-Smug           : Import (download) of images from SmugMug web service.
-FbExport       : New tool to export images to a remote Facebook web service (http://www.facebook.com)
+General        : all tools can be compiled natively under Microsoft Windows.
+General        : Port to CMake/KDE4/QT4.
+
+FlickrExport   : Add support for 23hq.com service which uses Flickr API
 FlickrExport   : Add support of Photosets.
+
+PrintWizard    : Ported to QT4/KDE4
+PrintWizard    : Added a new option to skip cropping, the image is scaled automatically.
+PrintWizard    : New tool that allow to choose old print assistant
+                 or to print all the selected photos directly
+
+Facebook       : Facebook tool now support also import (download) of photos
+Facebook       : New tool to export images to a remote Facebook web service (http://www.facebook.com)
+
+SmugExport     : Import (download) of images from SmugMug web service.
 SmugExport     : Add support for Album Templates
-RemoveRedEyes  : Added an option to preview the correction of the currently selected image.
 SmugExport     : New tool to export images to a remote SmugMug web service (http://www.smugmug.com)
+
+RemoveRedEyes  : Added an option to preview the correction of the currently selected image.
 RemoveRedEyes  : New tool to remove red eyes in batch. Tool is based on OpenCV library.
+
 Calendar       : Ported to QT4/KDE4.
 Calendar       : Support RAW images.
+
 AcquireImages  : Under Windows, TWAIN interface is used to scan image using flat scanner.
+
 SlideShow      : Normal effects are back.
 SlideShow      : New effect "Cubism".
 SlideShow      : Added support for RAW images.
-DNGConverter   : tool is now available as a stand alone application.
-SlideShow      : New effect "Mosaic"
-PrintWizard    : Ported to QT4/KDE4
-PrintWizard    : Added a new option to skip cropping, the image is scaled automatically.
-General        : all tools can be compiled natively under Microsoft Windows.
-DNGConverter   : New tool to convert RAW camera image to Digital NeGative (DNG)
 SlideShow      : Now you can play your favourite music during slideshow.
-General        : Port to CMake/KDE4/QT4.
-JPEGLossLess   : XMP metadata support.
-RAWConverter   : XMP metadata support.
-TimeAdjust     : XMP metadata support.
-MetadataEdit   : XMP metadata support with EXIF, IPTC, and Comments editor to sync XMP tags.
-MetadataEdit   : IPTC Editor dialog is more compliant with IPTC.org recommendations.
-MetadataEdit   : IPTC Editor add the capability to set multiple values for a tag.
-SendImages     : Complete re-write of emailing tool.
-GPSSync        : New tool to edit GPS track list using googlemaps.
-RAWConverter   : Raw files are decoded in 16 bits color depth using same auto-gamma and auto-white
-                 methods provided by dcraw with 8 bits color depth RAW image decoding.
 SlideShow      : Now filenames, captions and progress indicators can have transparent
                  backgrounds with OpenGL SlideShow as well.
 SlideShow      : Added thumbnails into image list.
+SlideShow      : New effect "Mosaic"
+
+DNGConverter   : tool is now available as a stand alone application.
+DNGConverter   : New tool to convert RAW camera image to Digital NeGative (DNG)
+
+JPEGLossLess   : XMP metadata support.
+
+TimeAdjust     : XMP metadata support.
+
+MetadataEdit   : XMP metadata support with EXIF, IPTC, and Comments editor to sync XMP tags.
+MetadataEdit   : IPTC Editor dialog is more compliant with IPTC.org recommendations.
+MetadataEdit   : IPTC Editor add the capability to set multiple values for a tag.
+
+SendImages     : Complete re-write of emailing tool.
+
+GPSSync        : New tool to edit GPS track list using googlemaps.
+
+RAWConverter   : Raw files are decoded in 16 bits color depth using same auto-gamma and auto-white
+                 methods provided by dcraw with 8 bits color depth RAW image decoding.
+RAWConverter   : XMP metadata support.
+
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
