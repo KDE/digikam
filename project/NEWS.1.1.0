@@ -5,6 +5,9 @@ NEW FEATURES:
 
 AdvancedRename : The ReplaceModifier has regular expressions support now.
 ImageEditor    : Add an option to add vignetting over an image.
+ExpoBlending   : New tool to make pseudo HDR image with a stack of bracketed images.
+PrintAssistant : New custom grid layout
+PrintAssistant : Filling page with custom size images
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -112,3 +115,25 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 102 ==> 224697 : Crash with gimp xcf files with metadata.
 103 ==> 224682 : Color Channel Mixer ui & usability.
 104 ==> 224841 : Search for duplicates in specific album only.
+105 ==> 199145 : Tags not exported to picasaweb [patch].
+106 ==> 215846 : PicasaWeb plugin crashes digiKam after start sending the pic [delete, KIPIPicasawebExportPlugin::PicasawebWindow::slotUploadImages] (double deletion)
+107 ==> 221056 : Expoblending.app causes digiKam compile to fail.
+108 ==> 205903 : accentuated chars are converted into a mess during picasa web export [patch]
+109 ==> 220433 : digiKam crash when has long time working on it.
+110 ==> 208426 : Exporting images fails with : "Could not connect to host xxxx.xxxx.xxxx.xxxx: Unknown error."
+111 ==> 222297 : Overwriting on Windows and multiple saves fixes [patch].
+112 ==> 198045 : New albums don't appear in list
+113 ==> 200469 : Ampersand character in caption causes Picasa export to freeze
+114 ==> 222328 : In-place rotation converts 16 bit TIFF to 8 bit.
+115 ==> 219381 : fill page with images of certain size
+116 ==> 194946 : Simple Fix - extra " ' " in cleanframes/themes/template.xsl.
+117 ==> 182326 : Remember last position when geotagging images.
+118 ==> 165613 : Crash when GPS altitude is negative.
+119 ==> 167286 : GPS tagging fails with message titled "digikam3rdparty.free.fr" and text "unauthorized call of the API" when starting the gps tagger window.
+120 ==> 224205 : Geolocation correlator: GPX date/time format.
+121 ==> 222067 : GPSSync no more search field to fill with a town.
+122 ==> 224379 : digiKam doesn't compile (problem with advanced slideshow).
+123 ==> 144593 : New High Dynamic Range (HDR) plugin.
+124 ==> 219998 : Export to Gallery plugin crashes when adding files.
+125 ==> 215798 : Slideshow crashes when starting.
+126 ==> 200031 : Photo is rotated but not thumbnail.
