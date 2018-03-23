@@ -115,17 +115,22 @@ bool RemoveMetadata::toolOperations()
         return false;
     }
 
+    bool ret = true;
     DMetadata meta;
 
     if (image().isNull())
     {
-        if (!meta.load(inputUrl().toLocalFile()))
+        QFile::remove(outputUrl().toLocalFile());
+        ret = QFile::copy(inputUrl().toLocalFile(), outputUrl().toLocalFile());
+
+        if (!ret || !meta.load(outputUrl().toLocalFile()))
         {
-            return false;
+            return ret;
         }
     }
     else
     {
+        ret = savefromDImg();
         meta.setData(image().getMetadata());
     }
 
@@ -148,21 +153,9 @@ bool RemoveMetadata::toolOperations()
         meta.clearXmp();
     }
 
-    bool ret = true;
-
-    if (image().isNull())
-    {
-        QFile::remove(outputUrl().toLocalFile());
-        ret = QFile::copy(inputUrl().toLocalFile(), outputUrl().toLocalFile());
-    }
-    else
-    {
-        ret = savefromDImg();
-    }
-
     if (ret && (removeExif || removeIptc || removeXmp))
     {
-        ret = meta.save(outputUrl().toLocalFile());
+        ret = meta.save(outputUrl().toLocalFile(), false);
     }
 
     return ret;

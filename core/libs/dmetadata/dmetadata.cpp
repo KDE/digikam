@@ -108,10 +108,10 @@ bool DMetadata::load(const QString& filePath)
     return true;
 }
 
-bool DMetadata::save(const QString& filePath) const
+bool DMetadata::save(const QString& filePath, bool setVersion) const
 {
     FileWriteLocker lock(filePath);
-    return MetaEngine::save(filePath);
+    return MetaEngine::save(filePath, setVersion);
 }
 
 bool DMetadata::applyChanges() const

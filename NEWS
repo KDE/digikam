@@ -141,4 +141,5 @@ BUGFIXES FROM BUGZILLA:
 128 ==> 389508 - Dates Side Menu Is Not Updated Automatically After Exif Date Change [patch].
 129 ==> 331864 - Merge Tags with same name when moving to same hierarchy level.
 130 ==> 347302 - Reassign name to face.
-131 ==> 
+131 ==> 391747 - BQM Tool "Remove Metadata" doesn't remove all metadata from image.
+132 ==> 

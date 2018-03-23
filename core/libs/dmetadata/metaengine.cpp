@@ -354,9 +354,9 @@ bool MetaEngine::load(const QString& filePath)
     return hasLoaded;
 }
 
-bool MetaEngine::save(const QString& imageFilePath) const
+bool MetaEngine::save(const QString& imageFilePath, bool setVersion) const
 {
-    if (!setProgramId())
+    if (setVersion && !setProgramId())
     {
         return false;
     }

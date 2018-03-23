@@ -230,7 +230,7 @@ public:
     /** Save all metadata to a file. This one can be different than original picture to perform
         transfert operation Return true if metadata have been saved into file.
      */
-    bool save(const QString& filePath) const;
+    bool save(const QString& filePath, bool setVersion = true) const;
 
     /** The same than save() method, but it apply on current image. Return true if metadata
         have been saved into file.
