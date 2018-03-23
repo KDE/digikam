@@ -10,6 +10,7 @@ Image Editor        : Improvement of algorithm to convert 8 bits image to 16 and
 
 Batch Queue Manager : Add new tool to remove metadata from images.
 Batch Queue Manager : Add new tool to apply Lens corrections using LensFun library.
+General             : Fix compilation under windows with TDM-GCC and MSVC compilers.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -67,3 +68,15 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 052 ==> 223774 : digiKam crashed at liquid rescale preview generation.
 053 ==> 233997 : Crash while importing from usb device after exivdates are read.
 054 ==> 213576 : Thumbbar not updated after saveas in image editor.
+055 ==> 224043 : Rotating certain images results in zero length file.
+056 ==> 252799 : After successful export of photo it should not be exported again.
+057 ==> 238823 : Batch RAW Conversion should copy tags / captions / ratings to the converted file.
+058 ==> 211558 : Raw converter: copy tags and rating.
+059 ==> 199318 : RAW to JPG Export doesn't use digiKam description.
+060 ==> 152208 : Comments lost when converting from png to jpeg.
+061 ==> 231763 : Crash when closing opengl viewer.
+062 ==> 218169 : Less/More options buttons don't change label.
+063 ==> 249785 : DNG Converter adds 1 hour to timestamp of Sony .arw files.
+064 ==> 251391 : OpenCV not detected during configuration.
+065 ==> 252362 : digiKam crash when launching.
+
