@@ -14,6 +14,7 @@ ImageEditor    : New options to adjust the levels of over/under exposed pixels f
                  displayed by over/under exposure indicators.
 ImageEditor    : Aspect ratio crop tool is now able to deal with the aspect ratio of the current loaded image
                  in editor. You can keep the original proportions of the image after cropping.
+General        : Fix compilation under Mac OS-X through MacPorts project.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -48,3 +49,18 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 029 ==> 252737 : Direct capture bug 2 of 2.
 030 ==> 243497 : digikam does not exit when "quit", stuck in select.
 031 ==> 257329 : Build fails - openmp flags.
+032 ==> 254103 : "previous photo" and "next page" in the same context.
+033 ==> 254205 : Compiling fails on SPARC platform because "qDNGBigEndian" macro is not defined.
+034 ==> 232896 : Application crashed after restarting an upload to picassa with previous change of selected photos.
+035 ==> 212125 : DNG files do not have image contents.
+036 ==> 255137 : Some exifdata lost when converting CR2.
+037 ==> 256303 : Quotation marks in caption appear as &quot; in picasaweb.
+038 ==> 244706 : PicasawebExport special symbol gui freeze.
+039 ==> 243877 : Picasaweb plugin crashes when active video upload removed.
+040 ==> 240382 : Picasaweb: pressing of "-" while photo uploading causes crash.
+041 ==> 256471 : Add spell checking to text areas.
+042 ==> 248284 : After upload finishes Cancel button should turn into Close.
+043 ==> 251860 : [patch] Cancel button should change to close once photo upload is complete.
+044 ==> 256177 : Strange picture coloring and missing meta data when creating from CR2 file.
+045 ==> 253864 : digiKam crash when removing file from export to smugmug list.
+046 ==> 236385 : digiKam crash on red eye removing.
