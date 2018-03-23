@@ -18,6 +18,10 @@ ImageEditor       : Complete rewrite of the FilmGrain tool.
                     FilmGrain tool use now YCrCb color space to add noise. Graininess size can be adjusted
                     with an option to set-up photographic distribution of noise. 
                     Different amounts of noise can be added to highlights, shadows and midtones.
+PicasaWebExport   : Tool dialog redesigned with same layout than Flickr, Facebook, etc.
+HTMLExport        : Show screenshot alongside theme description.
+PiwigoExport      : New tool to export images to Piwigo server (aka PhpWebGallery).
+HTMLExport        : Get metadata from image files and new detailed theme.
 
 BatchQueueManager : New tool to fix Brightness/Contrast/gamma.
 BatchQueueManager : New tool to adjust Color Balance.
@@ -138,3 +142,29 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 097 ==> 230573 : digiKam crash with import from DSL Nikon D90.
 098 ==> 196470 : Update files with metadata from DB.
 099 ==> 224052 : Pressing Delete repeatedly is not cached.
+100 ==> 232339 : Wrong flash export url in digiKam.
+101 ==> 225001 : Google map is empty.
+102 ==> 225162 : Picasaweb export no progress bar.
+103 ==> 225164 : Picasaweb export waiting mouse cursor without ending.
+104 ==> 203541 : Select images to upload.
+105 ==> 225316 : ExpoBlend won't compile even with dependencies all right.
+106 ==> 225396 : "Mozilla" MUA option is broken.
+107 ==> 223492 : Show screenshot alongside theme description.
+108 ==> 225407 : Dngconverter fix endian detection [patch].
+109 ==> 225161 : Picasaweb export does not export photo geotag.
+110 ==> 225665 : digiKam crashed when cancelling transfer to Picasa.
+111 ==> 225646 : Picasaweb does not export movie.
+112 ==> 196593 : EXIF Geotags not recognised by Picasa.
+113 ==> 226799 : RawEngine should use all CPU cores when converting images.
+114 ==> 224872 : Export for Piwigo.
+115 ==> 226916 : Get metadata from image files and new detailed theme.
+116 ==> 217539 : picasaweb ability to choose add or update photo.
+117 ==> 227920 : Cannot compile: opencv/highgui.h missing for removeredeyes plugin.
+118 ==> 219603 : Renaming images to send.
+119 ==> 229068 : digiKam repeatedly crashes when uploading several pictures to Picasaweb.
+120 ==> 229826 : PicasaWeb Export won't login with certain chars in password.
+121 ==> 196236 : Facebook upload unreliable, and fails in unsafe fashion.
+122 ==> 229169 : Print Assistant on the page preview shows screen corruption.
+123 ==> 221298 : digiKam segfaults on Flickr export.
+124 ==> 213921 : DNG Converter lost exif info about ISO.
+125 ==> 228524 : Failed to rotate image [patch].
