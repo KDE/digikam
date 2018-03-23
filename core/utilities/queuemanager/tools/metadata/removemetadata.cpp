@@ -109,6 +109,12 @@ void RemoveMetadata::slotSettingsChanged()
 
 bool RemoveMetadata::toolOperations()
 {
+    if (!isLastChainedTool())
+    {
+        setErrorDescription(i18n("Remove Metadata: Not the last tool in the list."));
+        return false;
+    }
+
     DMetadata meta;
 
     if (image().isNull())
@@ -148,20 +154,15 @@ bool RemoveMetadata::toolOperations()
     {
         QFile::remove(outputUrl().toLocalFile());
         ret = QFile::copy(inputUrl().toLocalFile(), outputUrl().toLocalFile());
-
-        if (ret && (removeExif || removeIptc || removeXmp))
-        {
-            ret = meta.save(outputUrl().toLocalFile());
-        }
     }
     else
     {
-        if (removeExif || removeIptc || removeXmp)
-        {
-            image().setMetadata(meta.data());
-        }
-
         ret = savefromDImg();
+    }
+
+    if (ret && (removeExif || removeIptc || removeXmp))
+    {
+        ret = meta.save(outputUrl().toLocalFile());
     }
 
     return ret;
