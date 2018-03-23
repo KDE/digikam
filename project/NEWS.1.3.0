@@ -9,6 +9,13 @@ General        : libkdcraw dependency set to 1.1.0 version.
 General        : libkexiv2 dependency set to 1.1.0 version.
 AdvancedRename : New option: database. Allows to rename files according to database values.
 QueueManager   : Add capability to apply an image waterwark over a photo.
+General        : MetadatEngine dependency set to 1.1.0 release.
+General        : RawEngine dependency set to 1.1.0 release.
+DNGConverter   : Update Adobe DNG sdk to 1.3.0.
+                 Support non-square pixels.
+                 Support 4-color sensors.
+                 Support Fuji-sensors (experimental).
+SmugExport     : Support export of Captions.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -90,3 +97,31 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 076 ==> 240048 : Open images with double instead of single click.
 077 ==> 218633 : "Write Metadata to Selected Images" Very Slow for Large Number of Images.
 078 ==> 237565 : digiKam crash when unchecking external modules.
+079 ==> 225153 : digiKam advanced slide show crashes everytimes.
+080 ==> 234021 : digikam crash on loading.
+081 ==> 234073 : digiKam gpssync no altitude.
+082 ==> 233725 : digiKam gpssync unable to geolocalize a picture or movie.
+083 ==> 216604 : digiKam crashes on export to picasa.
+084 ==> 230201 : Error when trying export to picasa.
+085 ==> 216539 : Picasaweb can't select movie to export.
+086 ==> 226838 : "Auto Rotate/Flip Using EXIF Information" does not work.
+087 ==> 234099 : digiKam picasawebexport labels hierarchy disappears.
+088 ==> 210959 : Advanced Slideshow Crash.
+089 ==> 235555 : digiKam Plugins Export Piwigo fail.
+090 ==> 233393 : DNG converter doesn't work for Fuji Finepix S6500fd (= S6000fd).
+091 ==> 236846 : Geolocation does not work in gnome.
+092 ==> 237914 : Can't compile svn version.
+093 ==> 228483 : digiKam 1.1.0 with system libjpeg-8 breaks image rotation.
+094 ==> 215688 : Attempted uploading pics to picasaweb.
+095 ==> 238150 : Scangui is untranslated, because it loads no reqired translation catalog.
+096 ==> 240420 : Patch to export captions to smugmug.
+097 ==> 240749 : DNGConverter produces black files (Canon 5D mkII).
+098 ==> 221298 : digiKam segfaults on Flickr export.
+099 ==> 232382 : Setting custom page size is impossible.
+100 ==> 221542 : Build fails due to ambiguities.
+101 ==> 191907 : DNG Converter damages white balance metadata.
+102 ==> 233088 : Compile error on Win32 with MinGW4.
+103 ==> 232991 : DngConverter does not compile under OS X.
+104 ==> 233676 : Desktop-entry-contains-deprecated-key TerminalOptions.
+105 ==> 233673 : Spelling-error-in-binary metadataedit printimages rawconverter.
+106 ==> 233728 : digiKam picasawebexport unable to display my picasaweb.
