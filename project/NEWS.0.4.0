@@ -1,0 +1,40 @@
+v0.4.0v
+------------------------------------------------------------------------
+
+NEW FEATURES:
+
+GalleryExport : Raw images can be uploaded directly to remote server.
+DNGConverter  : Fix compilation under MacOS-X.
+
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+
+001 ==> 192289 : Using dots (.) as separators confuses the rename system.
+002 ==> 192165 : digiKam flash export plugin does not auto-rotate portrait images.
+003 ==> 192469 : Repeatedly crashes when doing batch resize or rename.
+004 ==> 192675 : digiKam Crashes after re-compressing images.
+005 ==> 190724 : digiKam crashes after resizing several pictures in a batch.
+006 ==> 191749 : digiKam crashes when closing the picture resize box.
+007 ==> 190273 : Crash after hitting ok after batch convert. 
+008 ==> 189786 : Batch Menu Border Images.
+009 ==> 191507 : Converting RAW (Canon) to JPG crash.
+010 ==> 189798 : digiKam crashes with SIGSEGV when converting .CR2 image to .jpg.
+011 ==> 192787 : RawConverter: Image rotated but EXIF tag not cleared.
+012 ==> 183639 : Can't upload photo without a PhotoSet.
+013 ==> 192862 : Spaces break tag into bits.
+014 ==> 191914 : Copy and paste of GPS-data in the correlator and the track list editor.
+015 ==> 192982 : Fit image to paper on printing.
+016 ==> 193433 : digiKam crashes when converting RAW (Canon cr2) to JPEG.
+017 ==> 195182 : Batch processing - Resize Images.
+018 ==> 187228 : Use the correct form for plurals in kipi advancedslideshow plugin. 
+019 ==> 194245 : Exif information lost when exporting to Gallery.
+020 ==> 196166 : Crash after batch resize (klick on close).
+021 ==> 196271 : libraw_alloc.h: error: The function "bzero" must have a prototype.
+022 ==> 137687 : Let the user decide the position where to print a photo.
+023 ==> 197218 : Plugin corrupts CRC information in PNGs.
+024 ==> 194341 : digiKam crashed with seg fault. 
+025 ==> 198039 : digiKam crashed after resizing several photos. 
+026 ==> 197764 : Batch resize crashes digiKam upon clicking the "close" option once resizing is done.
+027 ==> 193488 : Abort after batch processing.
+028 ==> 191955 : Turn off when resizing.
+029 ==> 198058 : EXIF information is lost on gallery export (only when resizing).
+030 ==> 198407 : Xmp comment language in afrikaans instead of french.

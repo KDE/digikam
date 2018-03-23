@@ -1,0 +1,43 @@
+v0.8.0
+------------------------------------------------------------------------
+
+NEW FEATURES:
+
+KioImportExport : New tool to import or export images via FTP, Samba, Fish (SSH) and many more using KIO slaves.
+AcquireImages   : Under windows, use Twain interface from libksane to factorize code.
+Shwup           : New tool to export images to Shwup web service (http://www.shwup.com).
+General         : All tools ported to Qt4/KDE4. Qt3 transition class support is now dropped.
+PrintAssistant  : New templates management.
+PrintAssistant  : Icon preview for photo size choice.
+PrintAssistant  : Caption per photo management.
+PrintAssistant  : Added new templates for passport photos (6 photos 3.5x4cm and 4 photos 4.5x5cm).
+
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+
+001 ==> 187291 : FTP tool for uploading a selection of images.
+002 ==> 098279 : Exporting photos organised in tags into external directories.
+003 ==> 151346 : Time Adjust change the wrong date, should be.
+004 ==> 204291 : Country of Korea impossible to translate in MetadataEngine.
+005 ==> 169543 : Additional docbook ID tags to make outputted docs consistent between compiles.
+006 ==> 192979 : Scanned images are placed in the wrong album.
+007 ==> 194276 : Click on a file name closes the "select pictures" window.
+008 ==> 195112 : It is not possible to use Module | Batch menu twice.
+009 ==> 126603 : Resize  2-dim. broken (creates just a 2k  file).
+010 ==> 194736 : Extent dngconvert to set filedate to the dates taken from exif [patch].
+011 ==> 186644 : digiKam crashes when exiting slideshow.
+012 ==> 158825 : Batch image resizing doesn't use the measures provided.
+013 ==> 209165 : PrintWizard does not print svgz images.
+014 ==> 208410 : Patch: Allow custom tags per image.
+015 ==> 154183 : Import tool does not recognize Fish KIO Slave.
+016 ==> 200032 : digiKam, inconsistency data about rotation.
+017 ==> 210611 : Add gps data crash after write.
+018 ==> 210874 : Wish for new option in resize-tool: fit into given dimensions.
+019 ==> 211532 : Batch raw converter doesn't clean file list.
+020 ==> 211792 : Preview of images is not shown [patch].
+021 ==> 206747 : DngConverter temp files not properly renamed.
+022 ==> 210371 : Converting a CRW file results in an unusable DNG.
+023 ==> 203959 : Fails to compile: plugin_dngconverter.o: file not recognized.
+024 ==> 210710 : digiKam error when open a dng image for edit after conversion from NEF.
+025 ==> 212116 : Rename images: sorting does not work [patch].
+026 ==> 212295 : Does not compile under Mac OS X.
+027 ==> 212328 : Rename images: use host application to render thumbnails [patch].

@@ -1,0 +1,28 @@
+v0.6.0v
+------------------------------------------------------------------------
+
+NEW FEATURES:
+
+AdvancedSlideshow : Soundtracks can be loaded / saved now.
+
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+
+001 ==> 142676 : Recursive slideshow option.
+002 ==> 195772 : Allow to load playlists rather than having to re-add the songs one by one.
+003 ==> 195699 : Ken Burns : it takes minutes before the slideshow actually starts.
+004 ==> 182743 : Renders system unresponsive on large image collections.
+005 ==> 202019 : [PATCH] : mpGallery not initialized, crash on destruction if setup not called.
+006 ==> 131619 : Blend transition in slideshow without OpenGL.
+007 ==> 147513 : It's non possible to send the file of photo because kmail don't start.
+008 ==> 202447 : digiKam crashes after recompressing one or several images.
+009 ==> 202706 : digiKam crashes after closing the batch resize window.
+010 ==> 172384 : digiKam crashes when exiting advanced slide show from kipi-plugins.
+011 ==> 203232 : Batch compress images crash.
+012 ==> 150479 : Provide export to pdf file.
+013 ==> 203379 : Error while converting RAW images to JPEG.
+014 ==> 203848 : Add ability to upload to flickr photo stream only.
+015 ==> 203849 : Add option to create a photo set from uploaded photos.
+016 ==> 199932 : Batch resize images produces images 1 pixel too short.
+017 ==> 196968 : Add link-tags to exported HTML-galleries to ease navigation.
+018 ==> 202480 : PrintWizard doesn't add comments properly but shows them in the preview.
+019 ==> 098617 : Drag and drop custom image sort in slide show.
