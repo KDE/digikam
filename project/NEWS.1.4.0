@@ -34,5 +34,9 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 025 ==> 246675 : Crash on startup/scanning folders.
 026 ==> 225471 : Change digiKam to follow usability guidelines.
 027 ==> 248549 : digiKam crash at startup (suse's backport repo).
-
-
+028 ==> 240469 : IpodExport fails to build with glib >= 2.25.
+029 ==> 242624 : Wrong IPTC hyperlink.
+030 ==> 239841 : I18n bug - missing extraction of messages in expoblending, flickrexport, metadataedit, ...
+031 ==> 246266 : Search for location when adding geo coordinates.
+032 ==> 247106 : Google picassa plugin does not work anymore since google changed parts of the interface.
+033 ==> 246897 : GPSSync bad coordinate rounding.
