@@ -1,0 +1,262 @@
+v0.1.0
+---------------------------------------------------------------------------
+
+NEW FEATURES:
+
+General        : Moved Exiv2Iface class to a new MetadataEngine used by digiKam.
+Slideshow      : Show image comments (configurable)
+ImageViewer    : Initial import of new OpenGL based image viewer.
+RAWConverter   : Port tool to libkdcraw shared library.
+Printwizard    : Printwizard can print 8 photos per page (A4)
+MPEGEncoder    : Avoid to pass img2mpg script unmanaged file path.
+GPSSync        : New tool to export GPS locations from pictures to Google Maps / Google Earth.
+General        : Added configure options to allow disabling tools (--disable-XXXX)
+                 provided by Matej Laitl (bug #149666)
+New Tool       : MetadataEdit : New tool to edit EXIF and IPTC pictures metadata (by Gilles Caulier).
+New tool       : GPSSync      : New tool to sync photo metadata with a GPS device (by Gilles Caulier).
+New tool       : IpodExport   : New tool to export pictures to an ipod device (by Seb Ruiz).
+
+GalleryExport  : Support for multiple galleries.
+
+HTMLExport     : New "s0" theme from Petr Vanek
+New tool       : HTMLExport   : new images gallery export supporting XHTML and CSS (by Aurelien Gateau).
+New tool       : SimpleViewer : new tool to export to flash web page (by Joern Ahrens)
+JPEGLossLess   : Removed libmagic++ depency.
+JPEGLossLess   : Removed libkexif depency. Using Exiv2 instead.
+New tool       : FlickrExport : new tool to upload pictures on Flickr web service (by Vardhman Jain).
+
+SendImages     : support for Thunderbird and GmailAgent.
+Calendar       : The weekdays are now localized.
+HTMLExport     : Export multiple tags to an html-page.
+JPEGLossLess   : Rotate or flip your images lossless, while preserving  the timestamp.
+RAWConverter   : Supports of dcraw>=6.x.
+RAWConverter   : New core to be compatible with recent dcraw release. A lot 
+                 of RAW decoding settings have been added.
+RAWConverter   : Embedding ouput color space in target image (JPEG/PNG/TIFF).
+RAWConverter   : Metadata preservation in target image during Raw conversion (JPEG/PNG).
+RAWConverter   : Removing external dcraw depency. Now tool include a full supported version of 
+                 dcraw program in core.
+RAWConverter   : updated dcraw.c implementation to version 8.41.
+
+SendImages     : Added image size limit x mail (Michael H�hstetter)
+ 
+TimeAdjust     : Removed libkexif depency. Using Exiv2 instead.
+TimeAdjust     : New option to customize Date and Time to a specific timestamp.
+TimeAdjust     : New options sync EXIF/IPTC Creation Date with timestamp.
+PrintWizard    : Wizard GUI review
+                 Added exif management.
+                 Prints exif date-time info.
+                 Font, color and size of captions.
+                 Added an option to to print without margins (full-bleed).
+                 Added 10x13.33cm into a4 (provided by Joerg Kuehne)
+                 Added full size A4 printing (one photo per A4 page)
+                 Added A6 size to get the old configuration for 10x15cm page
+                 Changed page size to real 10x15cm instead of A6 (need to set up right page size on kprinter)
+                 Added a new page size 13x18cm (need to set up right page size on kprinter)
+                 Each photo can be printed more than once
+PicasaWebExport: New tool to export pictures to Picasa web service (by Vardhman Jain).
+SlideShow      : Dropped imlib2 dependency
+General        : Added the availability to disable tools we don't want to build.
+               : This feature is very useful for source based distros (Matej Laitl)
+PrintWizard    : Added raw file management, now raw files can be printed.
+SlideShow      : Solved minor issue in filename printing (2D slideshow).
+SlideShow      : New caching mechanism
+SlideShow      : Added Ken Burns effect
+Calendar       : Fixed recurring events not showing (only first date was showed)
+                 Setting special events only once (before printing), instead of
+                 one for every page
+PrintWizard    : caption can contain more exif info 
+FlickrExport   : dialog layout re-written to be more suitable.
+FlickrExport   : list of item to upload is now display in dialog.
+FlickrExport   : Support RAW files format to upload as JPEG preview.
+PicasaWebExport: Support RAW files format to upload as JPEG preview.
+FlashExport    : tool is now compatible with SimpleViewer version 1.8.x.
+FlashExport    : tool now support RAW files format.
+GalleryExport  : added Gallery 2 version support.
+ImageGallery   : removed is removed and replaced by HTML export tool.
+HTMLExport     : Option to specify whether the original images should be included
+HTMLExport     : Support for theme variants
+HTMLExport     : New theme: "frames", by Rüdiger Bente
+HTMLExport     : New theme: "cleanframes", by Beth and Robert Marmorstein
+HTMLExport     : New theme: "classic", simulating the output of the old HTML Gallery tool
+SlideShow      : Skip to next or previous image by a right or left click
+SlideShow      : Skip to next or previous image by mouse wheel scrolling
+SlideShow      : Images can be sorted/added/removed manually.
+SlideShow      : Progress indicator printing doesn't depend on file name printing anymore.
+
+BUGFIXES from B.K.O (http://bugs.kde.org):
+
+001 ==> 162687 : Make Flickr Export screen non-modal.
+002 ==> 162683 : Export to picassaweb doesn't works.
+003 ==> 164152 : Geotagging when exporting to Flickr.
+004 ==> 166712 : Choosing the part which is cut off for printing only works for the first photo.
+005 ==> 162994 : Picasa album list does not contain "not listed" albums, contains only "public" albums.
+006 ==> 150912 : Uploader does not upload.
+007 ==> 164908 : Private albums are not listed (and then not usable).
+008 ==> 150979 : Picasa Export-tools does not work.
+009 ==> 155231 : Timezones are assumed to be only in hourly increments/decrements of GMT.
+010 ==> 154849 : Updates first find only, does not match other than GMT camera time.
+011 ==> 149890 : Adjust date and time from Exif does not work.
+012 ==> 154273 : Quality setting for jpegs saved by raw converter is insanely high.
+013 ==> 157190 : Misleading description for geotagging images.
+014 ==> 154289 : Cannot upload RAW images.
+015 ==> 153758 : FlickrUploader fails to upload photos whose caption contains accented characters or a trailing space.
+016 ==> 128211 : "Ok" Button in "Add Photos" shouldn't fire upload directly.
+017 ==> 159081 : Upload to Flickr not working.
+018 ==> 162096 : When selecting all photos reverses the order.
+019 ==> 158483 : tool cause Digikam crash.
+020 ==> 160453 : Crashes when exporting to Picasaweb.
+021 ==> 155270 : Tags with non-Latin characters dropped during image export.
+022 ==> 153207 : Without using application tags: Flickr still reads embedded metadata into tags.
+023 ==> 153206 : Provide option to remove spaces in tags during export.
+024 ==> 145149 : Flickr uploading from DigiKam does not cache auth data.
+025 ==> 158176 : Linking errors in slideshow tool (missing -lXrandr).
+026 ==> 150393 : XML file is corrupted if exif comment contains a "<".
+027 ==> 134774 : Exported simpleviewer gallery fails to load images due to wrong xml file name.
+028 ==> 144070 : Typing coordinates doesn't update the map.
+029 ==> 152526 : Remember last display options like zoom and map/sattelite/hybrid view.
+030 ==> 151578 : Popup window says "Cannot run properly 'convert' program from 'ImageMagick' package" but it seems fine.
+031 ==> 155084 : Printing comments and EXIF tags.
+032 ==> 155371 : Add search feature to the embedded GPS Sync Google Maps based editor.
+033 ==> 102021 : Pan and Zoom on Slideshow viewing (not a transition) a la iPhoto
+034 ==> 149666 : iPod Export tool cannot be disabled at compile time when libgpod is present on system.
+035 ==> 151604 : Print Wizard does not recognize raw images.
+036 ==> 102021 : Pan and Zoom on Slideshow viewing (not a transition) a la iPhoto.
+037 ==> 151578 : Popup window says "Cannot run properly 'convert' program from 'ImageMagick' package" but it seems fine.
+038 ==> 152210 : Metadata lost when converting from png to jpeg (IPTC thumbnail too big).
+039 ==> 152215 : GPS correlator starts too many kio_thumbnail processes.
+040 ==> 149491 : GPS correlator GPSSYNC do_not admit GMT+5h30 (India).
+041 ==> 150114 : Max time gap is limited to 999 or 2000 seconds.
+042 ==> 154244 : SHIFT triggers help dialog.
+043 ==> 146457 : Rotation is not done correctly Exif.
+044 ==> 138838 : Digikam Picasaweb export tool.
+045 ==> 103152 : Improvement suggestions for printing wizard.
+046 ==> 117085 : Have pictures fit a whole, single sheet.
+047 ==> 100471 : Can't print the same image more than once on the same page.
+048 ==> 148621 : Image rotation not working properly.
+049 ==> 144388 : Cache is not updated after rotating pictures.
+050 ==> 144604 : Rotation causes Exif data corruption.
+051 ==> 150063 : Rotating JPEG produces error and truncates original file.
+052 ==> 133193 : Data on the photo.
+053 ==> 111454 : Print photo's date into one corner like print assistant.
+054 ==> 140890 : The preview does not display date and time properly for Japanese locale.
+055 ==> 144185 : Adjust date-time tool should remember previous fixed date.
+056 ==> 146799 : digikam 0.9.2 crashes when exiting - slideshow error
+057 ==> 140477 : Ability to rename images being sent via email.
+058 ==> 143450 : Skip to next or previous image by a right or left click
+059 ==> 138880 : digiKam 0.9rc2 - 0.9.1rc1 setting file date to exif doesn't work.
+060 ==> 137582 : Add preliminary support for Gallery 2.2 security features
+061 ==> 139264 : Prefer Exif DateTimeOriginal for image date/time (DateTimeDigitized and DateTime only used as fallback)
+062 ==> 139074 : Format missmatch at sendimages.cpp ('int' vs. 'size_t').
+063 ==> 140132 : Comments should sync to IPTC Caption First.
+066 ==> 138241 : A patch that adds support for the Claws Mail MUA.
+067 ==> 140865 : tool does not work (image can not be converted).
+068 ==> 141528 : Remove confirmation dialog for image rotate.
+069 ==> 141530 : Use Rotate left/right instead of degrees.
+070 ==> 142848 : Timezone needs to go to GMT +13.
+071 ==> 140297 : GPS tool truncates input coordinates, introducing inacuracy.
+072 ==> 143594 : Bad Interpolation in correlate gpssync.
+073 ==> 132220 : Solved problems with filenames and commandline with thunderbird and mozilla
+074 ==> 139793 : KML google export import.
+075 ==> 142259 : Export to Gallery 2.2-RC-1 fails.
+076 ==> 135945 : Tags with spaces are exported as multible tags.
+077 ==> 146084 : Slide show interface suggestions.
+078 ==> 145771 : Gnome Desktop crashes and restarts when select Cancel option for Mpeg Slideshow tool.
+079 ==> 138410 : Requires latest shared libs.
+080 ==> 106133 : Show image comments in slideshow mode.
+081 ==> 124057 : Problems sending jpeg-pictures from digiKam using the "send picture"-feature.
+082 ==> 108147 : Interval below 1 second.
+083 ==> 127101 : expand sequence number start value in batch rename images.
+084 ==> 094494 : support for multiple galleries.
+085 ==> 128394 : convertion of RAW files fails with dcraw 8.21
+086 ==> 132659 : "Missing signature" - Flickr API changed and upload of images is no longer possible.
+087 ==> 107905 : copy exif data from raw to converted images.
+088 ==> 119537 : Exif width and height are not corrected after lossless rotation.
+089 ==> 091545 : tool does nothing if an album only contains subalbums, but no images directly or is empty.
+090 ==> 134749 : altitude shown is wrong.
+091 ==> 134298 : save settings / keep settings missing!
+092 ==> 134747 : not optimal correlation.
+093 ==> 135157 : warning about changes not applied always appear even when already applied.
+094 ==> 135237 : filenames with multiple periods in them do not show up in the file listing (incorrect extension identification).
+095 ==> 135484 : thumbnail generation for multible images can cause severe overload.
+096 ==> 135353 : the name of the tool is missleading.
+097 ==> 136257 : Editing the EXIF-data overwrites all the data for selected files.
+098 ==> 128341 : html export should not resize images if "resize target images" is not checked.
+099 ==> 127476 : Printing as very very slow (added a workaround running kjobviewer)
+100 ==> 136941 : graphical picture ordering and renaming.
+101 ==> 136855 : Editing metadata on a few selected imagefiles and clicking forward or apply crashes digiKam.
+102 ==> 135408 : Window does not fit on screen.
+103 ==> 117399 : Usability of Target folder.
+104 ==> 137921 : wrong country code in IPTC.
+105 ==> 096352 : Can not login into Gallery2.
+106 ==> 123141 : Gallery Export - manage several cookies.
+107 ==> 088887 : No Exif-rotation in HTML export.
+108 ==> 115474 : Web export creats duplicate extensions.
+109 ==> 120739 : Wrong thumbnail for album.
+110 ==> 089068 : Improvement for the HTML export tool.
+111 ==> 090943 : Add CSS functionality.
+112 ==> 095116 : Incremental local export or other easy web publishing method.
+113 ==> 096009 : Unnecessary deletion of directories in "export HTML" .
+114 ==> 096363 : Option to save full/different sized images in gallery.
+115 ==> 107380 : Split long html pages by number of images per page.
+116 ==> 108696 : Themable html export.
+117 ==> 109708 : Number of thumbnails per row should be in the same tab as size of thumbnail.
+118 ==> 109709 : Create target dir when it does not exist.
+119 ==> 109710 : Make clicking on image going to the next image.
+120 ==> 111136 : export to non-local directory (fish://) does not work.
+121 ==> 111509 : Subalbums not supported by HTML export.
+122 ==> 111880 : New option to add original image (as link in thumbnail).
+123 ==> 112107 : Avi files in html exports.
+124 ==> 113355 : Add auto-forwarding (slide show) to HTML-Export.
+125 ==> 127219 : Creation of mpeg slide show fails.
+126 ==> 127532 : 'image2mpg' wrong directory error.
+127 ==> 101455 : Make it possible to enter numbers with 2 digit precision in RAW converter dialog.
+128 ==> 117105 : Calendar tool should use internationalized country setting.
+129 ==> 101656 : Use irretating filenames foo.jpeg.jpeg for images.
+130 ==> 128125 : Album title from digikam are not converted into html entities.
+131 ==> 120242 : Bad sorting of images in html export.
+132 ==> 112025 : digiKam overwrites albums previously exported to HTML.
+133 ==> 106152 : Creates faulty links when choosing picture filenames derived from the EXIF info.
+134 ==> 119933 : Image gallery has problems with german umlauts in file-/directorynames.
+135 ==> 099418 : Help menu in progress dialog refers to batch process tool about instead of image gallery tools.
+136 ==> 103449 : Title and name of album are together and album with accents do not function.
+137 ==> 110596 : Apos entitity is not correct for HTML (it is XML entity).
+138 ==> 116605 : Crash when exporting to an existing dir an choosing no to overwrite.
+139 ==> 123499 : RAW images are rotated wrong.
+140 ==> 099157 : Some kameraklient source files miss copyright and license info.
+141 ==> 098286 : Print Wizard has wrong default paper size.
+142 ==> 101495 : Raster effect on printout.
+143 ==> 117670 : Printing is awfully slow.
+144 ==> 108945 : Batch image filtering overwrite mode: always overwrite doesn't work.
+145 ==> 117397 : batchtools 'start' not disabled when target folder is not writeable orwith no image in list.
+146 ==> 114512 : The checkbox "Remove original" is left disabled after a preview.
+147 ==> 120868 : Failed to create PDF callendar
+148 ==> 118936 : calendar wizard should default to next year.
+149 ==> 109739 : yuvscaler error in digikam.
+150 ==> 114514 : Do not delete the temporary folder "~/tmp/kde-user/kipi-mpegencodertool-PID/" after each encoding process.
+151 ==> 114515 : Verify the existence of the MPEG output file path and the existence of the audio input file before launching the encoding process.
+152 ==> 114519 : Crash when stopping a Final Scan.
+153 ==> 103763 : Rawconverter (single) should fill a default file name into the save as dialog.
+154 ==> 118407 : dcrawprocess.cpp does not compileon Solaris
+155 ==> 119562 : A patch that adds support for the Sylpheed-Claws mua.
+156 ==> 119867 : Different icon types used by slideshow for for backwards/forwards.
+157 ==> 123978 : "Invalid response" error when exporting images to Gallery 1.5.2.
+158 ==> 108537 : tool change file date/time. Could this be made optional since I want to keep the original file date/time.
+159 ==> 101110 : Cannot create MPEG from photos using transitions.
+160 ==> 103282 : No exif-rotation.
+161 ==> 108227 : Thunderbird will not open when sending emails in digiKam.
+162 ==> 098269 : Status bar in archive to CD/DVD goes to 100% while creating thumbs.
+163 ==> 089394 : Make CDArchiving tool work when ImageCollection!=Folder.
+164 ==> 091651 : Running cdarchiving tool sends all images to the cd, not just the selected images.
+165 ==> 100877 : Can not create temporary directories for CD-archive.
+166 ==> 110391 : Batch rename removes tags and comments.
+167 ==> 110659 : Batch rename function makes copies instead of renaming.
+168 ==> 110698 : Adjust time and date does not work.
+169 ==> 110575 : Crash when renaming images.
+170 ==> 099895 : Rename ordered by modification date sorts by name.
+171 ==> 104032 : Renaming images takes a lot memory and time.
+172 ==> 105727 : digiKam adds to the first picture an additional "_1".
+173 ==> 110508 : Umlauts-conversion error when renaming images.
+174 ==> 104511 : Why a destination path for a rename action ? "No valid URL" when blank.
+175 ==> 102219 : When you export html from a tags gallery links are incorrect.
+176 ==> 098199 : Missing whitespace in german html-export (headline).
