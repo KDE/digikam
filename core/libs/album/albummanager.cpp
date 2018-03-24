@@ -2630,7 +2630,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
             CoreDbOperationGroup group;
             group.setMaximumTime(200);
 
-            foreach(qlonglong imageId, imageIds)
+            foreach(const qlonglong& imageId, imageIds)
             {
                 QList<FaceTagsIface> facesList = FaceTagsEditor().databaseFaces(imageId);
                 bool foundFace                 = false;

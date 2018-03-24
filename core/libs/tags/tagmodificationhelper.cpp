@@ -562,7 +562,7 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
         MetadataHub metadataHub;
 
         // remove the face region from images and unassign the tag if wished
-        foreach (qlonglong imageId, allAssignedItems)
+        foreach(const qlonglong& imageId, allAssignedItems)
         {
             foreach (TAlbum* const tagToRemove, allPersonTagsToDelete)
             {

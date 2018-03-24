@@ -1183,7 +1183,7 @@ DImageHistory ImageScanner::resolvedImageHistory(const DImageHistory& history, b
             QList<qlonglong> imageIds = resolveHistoryImageId(id);
 
             // append each image found in collection to referredImages
-            foreach(qlonglong imageId, imageIds)
+            foreach(const qlonglong& imageId, imageIds)
             {
                 ImageInfo info(imageId);
 
@@ -1282,7 +1282,7 @@ static QList<qlonglong> mergedIdLists(const HistoryImageId& referenceId,
 
     // Add a candidate if it has the same UUID, or either reference or candidate  have a UUID
     // (other way round: do not add a candidate which positively has a different UUID)
-    foreach(qlonglong candidate, candidates)
+    foreach(const qlonglong& candidate, candidates)
     {
         if (results.contains(candidate))
         {

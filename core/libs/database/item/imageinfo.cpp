@@ -1063,7 +1063,7 @@ void ImageInfo::addToGroup(const ImageInfo& givenLeader)
     // and finally, this image needs to be grouped
     idsToBeGrouped << m_data->id;
 
-    foreach(qlonglong ids, idsToBeGrouped)
+    foreach(const qlonglong& ids, idsToBeGrouped)
     {
         // remove current grouping
         CoreDbAccess().db()->removeAllImageRelationsFrom(ids, DatabaseRelation::Grouped);

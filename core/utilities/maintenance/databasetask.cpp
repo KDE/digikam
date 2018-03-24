@@ -291,7 +291,7 @@ void DatabaseTask::run()
 
             FaceTagsEditor editor;
 
-            foreach(qlonglong item, coredbItems)
+            foreach(const qlonglong& item, coredbItems)
             {
                 if (m_cancel)
                 {

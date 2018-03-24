@@ -1017,7 +1017,7 @@ void ContextMenuHelper::setGroupsOpen(bool open)
 
     GroupImageFilterSettings settings = d->imageFilterModel->groupImageFilterSettings();
 
-    foreach(qlonglong id, d->selectedIds)
+    foreach(const qlonglong& id, d->selectedIds)
     {
         ImageInfo info(id);
 

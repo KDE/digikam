@@ -283,7 +283,7 @@ void DeleteJob::run()
                     }
 
                     // Mark all image ids as obsolete.
-                    foreach(qlonglong imageId, imageIds)
+                    foreach(const qlonglong& imageId, imageIds)
                     {
                         access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
                     }

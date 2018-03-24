@@ -32,7 +32,7 @@ namespace Digikam
 
 ImageInfoList::ImageInfoList(const QList<qlonglong>& idList)
 {
-    foreach(qlonglong id, idList)
+    foreach(const qlonglong& id, idList)
     {
         append(ImageInfo(id));
     }

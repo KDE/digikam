@@ -300,7 +300,7 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > 
     {
         cmh.addActionDeleteTags(tagModificationHelper(), albums);
         // If one of the selected tags is no face tag, add the action to mark them as face tags.
-        foreach (TAlbum * const tag, albums)
+        foreach (TAlbum* const tag, albums)
         {
             if (!FaceTags::isPerson(tag->id()))
             {

@@ -2605,7 +2605,7 @@ QList<qlonglong> CoreDB::getOneRelatedImageEach(const QList<qlonglong>& ids, Dat
     QSet<qlonglong> result;
     QList<QVariant> values;
 
-    foreach(qlonglong id, ids)
+    foreach(const qlonglong& id, ids)
     {
         if (type == DatabaseRelation::UndefinedType)
         {

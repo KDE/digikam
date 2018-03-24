@@ -242,7 +242,7 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const HistoryImageId& imag
     if (v.isNull())
     {
         // Resolve HistoryImageId, find by ImageInfo
-        foreach(qlonglong id, ImageScanner::resolveHistoryImageId(imageId))
+        foreach(const qlonglong& id, ImageScanner::resolveHistoryImageId(imageId))
         {
             ImageInfo info(id);
             //qCDebug(DIGIKAM_DATABASE_LOG) << "Found info id:" << info.id();

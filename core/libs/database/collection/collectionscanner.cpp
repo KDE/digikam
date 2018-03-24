@@ -598,7 +598,7 @@ void CollectionScanner::completeScanCleanupPart()
         // Only do this in a complete scan!
         CoreDbAccess access;
         QList<qlonglong> trashedItems = access.db()->getImageIds(DatabaseItem::Status::Trashed);
-        foreach(qlonglong item, trashedItems)
+        foreach(const qlonglong& item, trashedItems)
         {
             access.db()->setItemStatus(item, DatabaseItem::Status::Obsolete);
         }
@@ -1440,7 +1440,7 @@ void CollectionScanner::itemsWereRemoved(const QList<qlonglong> &removedIds)
 
     if (d->recordHistoryIds)
     {
-        foreach(qlonglong id, relatedImages)
+        foreach(const qlonglong& id, relatedImages)
         {
             d->needTaggingHistorySet << id;
         }
@@ -1491,7 +1491,7 @@ void CollectionScanner::finishHistoryScanning()
 
 void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
 {
-    foreach(qlonglong id, ids)
+    foreach(const qlonglong& id, ids)
     {
         if (!d->checkObserver())
         {
@@ -1505,7 +1505,7 @@ void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
             QList<qlonglong> needTaggingIds;
             ImageScanner::resolveImageHistory(id, &needTaggingIds);
 
-            foreach(qlonglong needTag, needTaggingIds)
+            foreach(const qlonglong& needTag, needTaggingIds)
             {
                 d->needTaggingHistorySet << needTag;
             }
@@ -1519,7 +1519,7 @@ void CollectionScanner::historyScanningStage2(const QList<qlonglong>& ids)
 
 void CollectionScanner::historyScanningStage3(const QList<qlonglong>& ids)
 {
-    foreach(qlonglong id, ids)
+    foreach(const qlonglong& id, ids)
     {
         if (!d->checkObserver())
         {
