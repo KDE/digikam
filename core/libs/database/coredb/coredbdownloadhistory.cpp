@@ -32,8 +32,8 @@
 namespace Digikam
 {
 
-CoreDbDownloadHistory::Status CoreDbDownloadHistory::status(const QString& identifier, const QString& name,
-                                                            qlonglong fileSize, const QDateTime& date)
+CamItemInfo::DownloadStatus CoreDbDownloadHistory::status(const QString& identifier, const QString& name,
+                                                          qlonglong fileSize, const QDateTime& date)
 {
     QList<qint64> seconds;
     seconds << 0 << 3600 << -3600;
@@ -44,11 +44,11 @@ CoreDbDownloadHistory::Status CoreDbDownloadHistory::status(const QString& ident
 
         if (CoreDbAccess().db()->findInDownloadHistory(identifier, name, fileSize, dt) != -1)
         {
-            return Downloaded;
+            return CamItemInfo::DownloadedYes;
         }
     }
 
-    return NotDownloaded;
+    return CamItemInfo::DownloadedNo;
 }
 
 void CoreDbDownloadHistory::setDownloaded(const QString& identifier, const QString& name,

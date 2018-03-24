@@ -1539,9 +1539,9 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
             d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
 
             CoreDbDownloadHistory::setDownloaded(QString::fromUtf8(d->controller->cameraMD5ID()),
-                                           info.name,
-                                           info.size,
-                                           info.ctime);
+                                                 info.name,
+                                                 info.size,
+                                                 info.ctime);
         }
     }
 
@@ -1603,9 +1603,9 @@ void ImportUI::slotMarkAsDownloaded()
         setDownloaded(d->view->camItemInfoRef(info.folder, info.name), CamItemInfo::DownloadedYes);
 
         CoreDbDownloadHistory::setDownloaded(QString::fromUtf8(d->controller->cameraMD5ID()),
-                                       info.name,
-                                       info.size,
-                                       info.ctime);
+                                             info.name,
+                                             info.size,
+                                             info.ctime);
     }
 }
 

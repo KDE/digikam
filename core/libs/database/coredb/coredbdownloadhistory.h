@@ -33,6 +33,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "camiteminfo.h"
 
 namespace Digikam
 {
@@ -41,22 +42,13 @@ class DIGIKAM_DATABASE_EXPORT CoreDbDownloadHistory
 {
 public:
 
-    enum Status
-    {
-        StatusUnknown = -1,
-        NotDownloaded = 0,
-        Downloaded    = 1
-    };
-
-public:
-
     /**
      * Queries the status of a download item that is uniquely described by the four parameters.
      * The identifier is recommended to be an MD5 hash of properties describing the camera,
      * if available, and the directory path (though you are free to use all four parameters as you want)
      */
-    static Status status(const QString& identifier, const QString& name,
-                         qlonglong fileSize, const QDateTime& date);
+    static CamItemInfo::DownloadStatus status(const QString& identifier, const QString& name,
+                                              qlonglong fileSize, const QDateTime& date);
 
     /**
      * Sets the status of the item to Downloaded

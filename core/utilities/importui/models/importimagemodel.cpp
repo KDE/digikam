@@ -631,14 +631,12 @@ void ImportImageModel::publiciseInfos(const CamItemInfoList& infos)
         CamItemInfo& info = d->infos[i];
 
         // TODO move this to a separate thread, see CameraHistoryUpdater
-        // TODO this is ugly, using different enums to point the similar status..
         // TODO can we/do we want to differentiate at all between whether the status is unknown and not downloaded?
-        CoreDbDownloadHistory::Status status = CoreDbDownloadHistory::status(QString::fromUtf8(d->controller->cameraMD5ID()), info.name, info.size, info.ctime);
-        info.downloaded  = status;
+        info.downloaded = CoreDbDownloadHistory::status(QString::fromUtf8(d->controller->cameraMD5ID()), info.name, info.size, info.ctime);
         // TODO is this safe? if so, is there a need to store this inside idHash separately?
-        info.id = i;
 
-        qlonglong id            = info.id;
+        info.id      = i;
+        qlonglong id = info.id;
         d->idHash.insertMulti(id, i);
 
         if (d->keepFileUrlCache)
