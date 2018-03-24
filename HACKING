@@ -287,7 +287,7 @@ Memory leak
 To check any memory leak problem in digiKam, valgrind is your friend (http://valgrind.org)
 Try this command line to use with valgrind :
 
-valgrind --tool=memcheck --leak-check=full --error-limit=no --suppressions=project/digikam.supp digikam
+valgrind --tool=memcheck --leak-check=full --error-limit=no --suppressions=project/reports/digikam.supp digikam
 
 NOTE: digikam.supp file is available in digikam/project sub-folder.
 
