@@ -106,7 +106,7 @@ QList<TAlbum*> TagModificationHelper::boundMultipleTags(QObject* sender)
 {
     QAction* action = 0;
 
-    if ( (action = qobject_cast<QAction*>(sender)) )
+    if ((action = qobject_cast<QAction*>(sender)))
     {
         return (action->data().value<QList<TAlbum*> >());
     }
@@ -262,8 +262,6 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
                                                 tag->title()),
                                           QMessageBox::Yes | QMessageBox::Cancel);
 
-
-
         if (result != QMessageBox::Yes || !tag)
         {
             return;
@@ -363,7 +361,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
             depth++;
         }
 
-        sortedTags.insert(depth,tag);
+        sortedTags.insert(depth, tag);
     }
 
     // ask for deletion of children
@@ -408,7 +406,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
          * QMultimap doesn't provide reverse iterator, -1 is required
          * because end() points after the last element
          */
-        for (it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
+        for (it = sortedTags.end()-1 ; it != sortedTags.begin()-1 ; --it)
         {
             emit aboutToDeleteTag(it.value());
             QString errMsg;
@@ -469,35 +467,39 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
         // If there is only one face tag, it is either the original tag,
         // or it is the only sub tag of the original tag.
         // Behave, like the face tag itself was selected.
-        if(personTagsToDelete.size() > 1)
+        if (personTagsToDelete.size() > 1)
         {
             if (tagsWithChildrenCount > 0)
             {
                 tagsWithChildren.append(QLatin1String(","));
             }
+
             tagsWithChildren.append(selectedTag->title());
             ++tagsWithChildrenCount;
         }
 
         // Get the assigned faces for all person tags to delete
-        foreach (TAlbum* const tAlbum, personTagsToDelete)
+        foreach(TAlbum* const tAlbum, personTagsToDelete)
         {
             // If the global set does not yet contain the tag
             if (!allPersonTagsToDelete.contains(tAlbum))
             {
                 QSet<qlonglong> assignedItems = CoreDbAccess().db()->getImagesWithImageTagProperty(
                     tAlbum->id(), Digikam::ImageTagPropertyName::tagRegion()).toSet();
+
                 assignedItems.unite(CoreDbAccess().db()->getImagesWithImageTagProperty(
                     tAlbum->id(), Digikam::ImageTagPropertyName::autodetectedFace()).toSet());
 
-                if(!assignedItems.isEmpty())
+                if (!assignedItems.isEmpty())
                 {
                     // Add the items to the global set for potential untagging
                     allAssignedItems.unite(assignedItems);
+
                     if (tagsWithImagesCount > 0)
                     {
                         tagsWithImages.append(QLatin1String(","));
                     }
+
                     tagsWithImages.append(tAlbum->title());
                     ++tagsWithImagesCount;
                 }
@@ -567,18 +569,22 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
             foreach (TAlbum* const tagToRemove, allPersonTagsToDelete)
             {
                 ImageTagPair imageTagAssociation(imageId,tagToRemove->id());
+
                 if (imageTagAssociation.isAssigned())
                 {
                     imageTagAssociation.removeProperties(ImageTagPropertyName::autodetectedFace());
                     imageTagAssociation.removeProperties(ImageTagPropertyName::tagRegion());
+
                     if (removeTagFromImages)
                     {
                         imageTagAssociation.unAssignTag();
                         // Load the current metadata and sync the tags
                         ImageInfo info(imageId);
+
                         if (!info.isNull())
                         {
                             metadataHub.load(info);
+
                             if (!metadataHub.writeToMetadata(info))
                             {
                                 qCWarning(DIGIKAM_GENERAL_LOG) << "Failed writing tags to image " << info.filePath();
@@ -589,7 +595,7 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
             }
         }
 
-        foreach (TAlbum * const tAlbum, allPersonTagsToDelete)
+        foreach(TAlbum* const tAlbum, allPersonTagsToDelete)
         {
             TagProperties props(tAlbum->id());
             // Delete TagPropertyName::person() and TagPropertyName::faceEngineName()
@@ -624,12 +630,11 @@ void TagModificationHelper::slotTagToFaceTag(TAlbum* tAlbum)
     {
         return;
     }
-    
+
     if (!FaceTags::isPerson(tAlbum->id()))
     {
         FaceTags::ensureIsPerson(tAlbum->id());
     }
-    
 }
 
 void TagModificationHelper::slotTagToFaceTag()
@@ -667,6 +672,7 @@ QList<TAlbum*> TagModificationHelper::getFaceTags(TAlbum* rootTag)
 QSet<TAlbum*> TagModificationHelper::getFaceTags(QList<TAlbum*> tags)
 {
     QSet<TAlbum*> faceTags;
+
     foreach(TAlbum* const tAlbum, tags)
     {
         if (FaceTags::isPerson(tAlbum->id()))
@@ -680,21 +686,24 @@ QSet<TAlbum*> TagModificationHelper::getFaceTags(QList<TAlbum*> tags)
         // Get all shild tags which have the person property.
         while (iter.current())
         {
-            Album * album = iter.current();
+            Album* const album = iter.current();
             // Make sure that no nullp pointer dereference is done.
             // though while(iter.current()) already tests for  the current
             // album being true, i.e. > 0 , i.e. non-null
             if (album)
             {
-                TAlbum * tAlbum = dynamic_cast<TAlbum*>(album);
+                TAlbum* const tAlbum = dynamic_cast<TAlbum*>(album);
+
                 if (tAlbum && FaceTags::isPerson(tAlbum->id()))
                 {
                     faceTags.insert(tAlbum);
                 }
+
                 ++iter;
             }
         }
     }
+
     return faceTags;
 }
 
