@@ -40,9 +40,9 @@ CoreDbDownloadHistory::Status CoreDbDownloadHistory::status(const QString& ident
 
     foreach(qint64 secound, seconds)
     {
-        QDateTime d = date.addSecs(secound);
+        QDateTime dt = date.addSecs(secound);
 
-        if (CoreDbAccess().db()->findInDownloadHistory(identifier, name, fileSize, d) != -1)
+        if (CoreDbAccess().db()->findInDownloadHistory(identifier, name, fileSize, dt) != -1)
         {
             return Downloaded;
         }
