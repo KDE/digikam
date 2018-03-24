@@ -6,7 +6,7 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
-001 ==> 343031 - Digikam won't start: *** Error in `digikam': realloc(): invalid pointer: 0x0000000000c14260 ***
+001 ==> 343031 - digiKam won't start: *** Error in `digikam': realloc(): invalid pointer: 0x0000000000c14260 ***
 002 ==> 343548 - Tag Manager crashes when adding a new tag.
 003 ==> 337011 - Image Quality Sorter doesn't apply labels [patch].
 004 ==> 318726 - Some BQM tools in a workflow don't restore (all) parameters properly [patch].

@@ -6,8 +6,8 @@ NEW FEATURES:
 AdvancedRename : The ReplaceModifier has regular expressions support now.
 ImageEditor    : Add an option to add vignetting over an image.
 ExpoBlending   : New tool to make pseudo HDR image with a stack of bracketed images.
-PrintAssistant : New custom grid layout
-PrintAssistant : Filling page with custom size images
+PrintCreator : New custom grid layout
+PrintCreator : Filling page with custom size images
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -25,7 +25,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 012 ==> 219908 : Drag and Drop photo to folder: let user choose to copy or move.
 013 ==> 220131 : Ctrl + Scroll Wheel triggers two different actions.
 014 ==> 198697 : Images are not sorted in the Import window.
-015 ==> 220398 : Downloaded/deleted all from SD card, went to other Digikam window, browsed two folders, closed windows, crashed.
+015 ==> 220398 : Downloaded/deleted all from SD card, went to other digiKam window, browsed two folders, closed windows, crashed.
 016 ==> 215473 : Remember openend albums after closing digikam.
 017 ==> 220423 : Ctrl + scrool doesn't work in editor when some tool open [patch].
 018 ==> 220399 : Crash in color space conversion.
@@ -47,7 +47,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 034 ==> 221397 : Batch processing auto levels.
 035 ==> 211238 : Scrolling (shift + mousewheel) through pictures in editor caused crash
 036 ==> 220444 : Auto lens correction does not recognize a listed camera and lens using exif data.
-037 ==> 220559 : Crash after select and unselect an item in batch window [QTreeWidgetItem::setIcon, Digikam::AssignedListViewItem::setDone, Digikam::QueueMgrWindow::slotAction]
+037 ==> 220559 : Crash after select and unselect an item in batch window [QTreeWidgetItem::setIcon, digiKam::AssignedListViewItem::setDone, digiKam::QueueMgrWindow::slotAction]
 038 ==> 221065 : Many Icons Don't Show Up in digikam Under Mac OS X (10.6.2).
 039 ==> 221188 : When system is set to Czech locale, there is "Aspect Ratio Crop" missing in transform menu.
 040 ==> 207392 : Crash after rebuild all thumbnails.
@@ -131,7 +131,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 118 ==> 165613 : Crash when GPS altitude is negative.
 119 ==> 167286 : GPS tagging fails with message titled "digikam3rdparty.free.fr" and text "unauthorized call of the API" when starting the gps tagger window.
 120 ==> 224205 : Geolocation correlator: GPX date/time format.
-121 ==> 222067 : GPSSync no more search field to fill with a town.
+121 ==> 222067 : Geolocation no more search field to fill with a town.
 122 ==> 224379 : digiKam doesn't compile (problem with advanced slideshow).
 123 ==> 144593 : New High Dynamic Range (HDR) tool.
 124 ==> 219998 : Export to Gallery tool crashes when adding files.

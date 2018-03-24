@@ -62,7 +62,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 025 ==> 321403 - digiKam Crashes When Trying to Start.
 026 ==> 327707 - Custom list of metadata cannot be customized.
 027 ==> 180322 - Compute 35mm equivalent focal length.
-028 ==> 320185 - Compatibility issue with hierarchical tags between Digikam and WLPG (and perhaps other software).
+028 ==> 320185 - Compatibility issue with hierarchical tags between digiKam and WLPG (and perhaps other software).
 029 ==> 327957 - Text Filter Returns All Videos Regardless of String.
 030 ==> 277928 - Database upgrade v4 to v5 failed : digiKam fails to start properly, lost albums.
 031 ==> 325112 - Hang when opening folder of images to view thumbs.
@@ -138,12 +138,12 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 101 ==> 322652 - Crashes on camera import.
 102 ==> 312285 - Crash in image editor when moving to the next image.
 103 ==> 299755 - After latest X upgrades the Level Tools upgrade is a solid color (black, white, gray).
-104 ==> 328835 - Crash when opening "Configure Digikam" settings.
+104 ==> 328835 - Crash when opening "Configure digiKam" settings.
 105 ==> 329127 - Remove Tag menu entry is enabled if a picture has no Tags.
 106 ==> 297804 - Saving an image loses portait orientation.
 107 ==> 279996 - Crash while running face detection.
-108 ==> 278049 - Crash during tagging while scanning run in background (Digikam::ImageModel::removeRowPairs).
-109 ==> 262596 - Crash when finding faces (Digikam::ImageModel::removeRowPairs).
+108 ==> 278049 - Crash during tagging while scanning run in background (digiKam::ImageModel::removeRowPairs).
+109 ==> 262596 - Crash when finding faces (digiKam::ImageModel::removeRowPairs).
 110 ==> 329323 - Compile time error: flandmark_detector.cpp: No such file or directory.
 111 ==> 308734 - digiKam/kioslave: a lot of "KIO::Slave::timeout: Houston, we lost our slave" and "slave died".
 112 ==> 304207 - Progress manager: more control on appearance/disappearance.

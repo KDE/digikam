@@ -3,18 +3,7 @@ digiKam 5.0.0 - Release date: 2016-07-03
 
 NEW FEATURES:
 
-General            : Tool obsolete/unmaintained and removed : BatchProcessImages, JPEGLossLess, Kopete, IpodExport, GalleryExport, RawConverter
-General            : KIOExportImport tool renamed as RemoteStorage.
-General            : FlickrExport toom renamed as Flickr.
-General            : ImageShackExport tool renamed as ImageShack.
-General            : PiwigoExport tool renamed as Piwigo.
-General            : GPSSync tool renamed as Geolocator.
-General            : DNGConverter moved to digiKam core.
-General            : AcquireImages moved to digiKam core.
-General            : MetadataEdit moved to digiKam core.
-General            : Geolocator moved to digiKam core.
-General            : ExpoBlending moved to digiKam core.
-General            : Calendar moved to digiKam core.
+General            : Tool obsolete/unmaintained and removed : Kopete, IpodExport, PiwigoExport, RawConverte
 General            : KIO support replaced by native Qt5::Network everywhere (excepted for RemoteStorage tool which is optional).
 General            : Implementations ported to Qt5 libraries and KF5 libraries.
 General            : Integer and double input value sliders use now PhotoShop/Krita/Gimp like widget.
@@ -68,7 +57,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 011 ==> 138200 - Display all pictures when root album (as "My Albums" and "My Tags") is selected instead of welcome page.
 012 ==> 348173 - digiKam crash during i was browsing photo in a directory.
 013 ==> 349925 - Fail cmake chek if -DENABLE_KFILEMETADATASUPPORT=ON is not set.
-014 ==> 333377 - Show warning messagebox when non-RAW file is added to DNGConverter instead of none.
+014 ==> 333377 - Show warning messagebox when non-RAW file is added to DNGWriter instead of none.
 015 ==> 122653 - File-dialogue claims that pictures are not on the local-storage, yet they are
 016 ==> 348347 - Can't create albums - menu is greyed out.
 017 ==> 164168 - Integration of image scanning into showfoto.
@@ -114,7 +103,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 057 ==> 339801 - Thumbnails are not displayed properly on 10-bit/channel monitors.
 058 ==> 353789 - Add new tool to apply Lut3D on image [patch].
 059 ==> 356672 - digiKam 4.14.0 failed to build against lensfun 0.3.2.
-060 ==> 355980 - Showfotosetup link errors - undefined reference to `Digikam::Setup*.
+060 ==> 355980 - Showfotosetup link errors - undefined reference to `digiKam::Setup*.
 061 ==> 262644 - When typing names to unconfirmed faces, only tags beginning with "name" are shown.
 062 ==> 356975 - Nikon 5300 12bit RAW/NEF: wrong white/black level.
 063 ==> 356639 - digiKam crash when i create a new folder.
@@ -139,14 +128,14 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 082 ==> 359088 - With "Show a count of items in Tree Views" Trash always shows count of 0 [patch].
 083 ==> 358913 - Using Versionning, after returning from edit mode wrong image is selected, image itself is not updated [patch].
 084 ==> 358144 - Moving images with special characters in the file name does not work.
-085 ==> 359196 - Digikam segfaults when tagging a face.
+085 ==> 359196 - digiKam segfaults when tagging a face.
 086 ==> 358081 - Tags Manager - selecting tags from tree-view do not focus tags title field in right sidebar.
 087 ==> 234546 - Preview fails for some images [patch].
 088 ==> 357224 - Add ability to change icon theme.
 089 ==> 359386 - Import from SD forgets downloaded images, but remembers marked as downloaded.
 090 ==> 359429 - Image history: original image's entry contains markup.
 091 ==> 355836 - Aspect ratio incorrect.
-092 ==> 359608 - Digikam does not decode 16 bit grayscale jp2.
+092 ==> 359608 - digiKam does not decode 16 bit grayscale jp2.
 093 ==> 276050 - Setting "string comparison type" is not evaluated in icon-view.
 094 ==> 351433 - pto2mk not found with Hugin 2015.0.
 095 ==> 325830 - Panorama Stitcher returns an error after pre-processing, as a result of attempting to invoke Hugin commands.
@@ -168,7 +157,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 111 ==> 355256 - Failed to load image if file path contains non-ascii characters.
 112 ==> 331261 - Import not using Date/Time Original or create date EXIF data.
 113 ==> 359516 - Trash not sortable by deletion time.
-114 ==> 360329 - Digikam 5 beta 4 build breaks.
+114 ==> 360329 - digiKam 5 beta 4 build breaks.
 115 ==> 360434 - Geolocation Editor messed up size and contents.
 116 ==> 360437 - Crash during the face detection.
 117 ==> 360460 - No date for pics during import but for movies.
@@ -197,7 +186,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 140 ==> 361955 - digiKam hangs after start.
 141 ==> 348760 - Old and not secure VLC version.
 142 ==> 342481 - Provide Build Instructions for Windows.
-143 ==> 351654 - Windows 7: Digikam (4.12) keeps hanging at startup (no crash or crash report).
+143 ==> 351654 - Windows 7: digiKam (4.12) keeps hanging at startup (no crash or crash report).
 144 ==> 327627 - version 2.9 dk I have added a tag...bring up pictures with the tag and adding a second tag and it crashes multiple times.
 145 ==> 305191 - digiKam closed when loading cameras.
 146 ==> 321338 - Work on win8 x64?

@@ -1,25 +1,25 @@
-v0.3.0
-------------------------------------------------------------------------
+*****************************************************************************************************
+digiKam 0.3.0
 
 NEW FEATURES:
 
-General         : Fix compilation under MSVC 9.
-PicasaWebExport : Support protected albums (sign-in required to view).
-PrintImages     : Added per photo print management.
-PrintImages     : Added Atkins page layout printing.
+General        : Fix compilation under MSVC 9.
+GoogleServices : Support protected albums (sign-in required to view).
+PrintCreator   : Added per photo print management.
+PrintCreator   : Added Atkins page layout printing.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 186981 : Flickr on plasma crashes on "next photo".
 002 ==> 187512 : Album list does not show proper titles.
-003 ==> 185010 : Export to facebook gone in KIPI.
+003 ==> 185010 : Export to facebook gone.
 004 ==> 150737 : Tool does not use correct album name if special characters present.
 005 ==> 169695 : digiKam crashes with cancel in Export to Picasaweb.
 006 ==> 187512 : PicasaWeb GUI shows no picasa album list.
 007 ==> 175221 : Photos are always rewritten to JPEG before upload (and not only for RAW and rescale).
 008 ==> 187536 : Support new type of albums (sign-in required to view).
 009 ==> 187809 : Crash on Start upload when no album selected (issue error instead).
-010 ==> 185909 : Crash on startup (KIPI tool Advanced Slideshow).
+010 ==> 185909 : Crash on startup (Advanced Slideshow).
 011 ==> 141535 : Suggestion for photo layout algorithm.
 012 ==> 157173 : Crash by adding gps data to pictures.
 013 ==> 190964 : "send pictures" is modal in digiKam.

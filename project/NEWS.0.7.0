@@ -1,9 +1,9 @@
-v0.7.0v
-------------------------------------------------------------------------
+*****************************************************************************************************
+digiKam 0.7.0
 
 NEW FEATURES:
 
-FlickrExport : Plugin is now able to export to Zooomr web service (www.zooomr.com).
+FlickrExport : Tool is now able to export to Zooomr web service (www.zooomr.com).
 FlickrExport : User can set photo visibility one by one if necessary (public, friends, family).
 TimeAdjust   : A dedicated photo time-stamp can be used to adjust difference of camera clock.
 
@@ -15,7 +15,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 004 ==> 205833 : Batch raw converter uses first dot in filename to determine file ending.
 005 ==> 199181 : Gps sync unable to use search field.
 006 ==> 197377 : Batch -> Image Filtering -> Unsharp Mask: Wrong Thresold.
-007 ==> 204437 : DNGConverter turns olympus ORF unusable.
+007 ==> 204437 : DNGWriter turns olympus ORF unusable.
 008 ==> 206714 : Can not select multiple images in list.
 009 ==> 188933 : Lossless rotate does not work for this image. Image does not rotate.
 010 ==> 193685 : Set permissions on a per-photo base [patch].

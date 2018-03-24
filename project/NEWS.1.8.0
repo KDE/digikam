@@ -31,7 +31,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 022 ==> 235597 : Disconnected usb passport external hard drive using "safely remove drive" option.
 023 ==> 237957 : Crash while looking at folder with 380 images for first time.
 024 ==> 253067 : Crash when viewing pictures.
-025 ==> 255054 : Crash during picture import [KDirWatch::contains, Digikam::AlbumManager::addAlbumRoot, Digikam::AlbumManager::slotCollectionLocationStatusChanged].
+025 ==> 255054 : Crash during picture import [KDirWatch::contains, digiKam::AlbumManager::addAlbumRoot, digiKam::AlbumManager::slotCollectionLocationStatusChanged].
 026 ==> 258106 : digiKam crahed on search Pictures on individal Album.
 027 ==> 261384 : Crash while scrolling the raw image preview.
 028 ==> 258922 : digiKam crashed while scrolling through images in folder.

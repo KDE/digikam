@@ -20,7 +20,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 004 ==> 245069 : File name not added for import files.
 005 ==> 250003 : Tool for xcf is needed.
 006 ==> 250081 : Lens-autocorrection does not recognize the lens automaticly for Canon EOS 450D.
-007 ==> 207710 : Crash while loading large file (Digikam::DImgScale::dimgScaleAARGB, Digikam::DImg::smoothScaleSection, Digikam::DImgInterface::paintOnDevice).
+007 ==> 207710 : Crash while loading large file (digiKam::DImgScale::dimgScaleAARGB, digiKam::DImg::smoothScaleSection, digiKam::DImgInterface::paintOnDevice).
 008 ==> 218256 : digiKam rc1 crashes while generating fingerprints.
 009 ==> 237786 : whitebalance doesn't work properly.
 010 ==> 250265 : Black background of short summary display.

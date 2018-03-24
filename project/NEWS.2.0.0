@@ -23,7 +23,7 @@ ImageEditor    : Foveon sensor based camera.
 ImageEditor    : New advanced RAW decoding settings backported from RawTherapee project.
 
 AdvancedRename : New datetime option "UnixTimeStamp" (requires Qt 4.7 or higher)
-GPSSync        : Complete rewrite of GUI, including reverse-geocoding feature.
+Geolocation        : Complete rewrite of GUI, including reverse-geocoding feature.
 YandexFotki    : New tool to export collection to Yandex web service (http://fotki.yandex.ru).
 MediaWiki      : New tool to export collection to MediaWiki based web service (http://www.mediawiki.org).
 RajceExport    : New tool to export collection to Rajce web service (http://www.rajce.idnes.cz).
@@ -58,7 +58,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 025 ==> 241015 : Unexpected behavior when deleting a file while several are selected.
 026 ==> 264093 : Preview zoom is set to 1:1, should be "fit to window".
 027 ==> 263994 : Left-hand side bar too big and cannot be made smaller.
-028 ==> 261779 : digiKam crashes in Digikam::DynamicThread::DynamicThreadPriv::transitionToRunning while scanning faces.
+028 ==> 261779 : digiKam crashes in digiKam::DynamicThread::DynamicThreadPriv::transitionToRunning while scanning faces.
 029 ==> 235666 : All tags no longer shown when the "Tags already assigned" button is clicked.
 030 ==> 114465 : Simpler entry of tags using keyboard shortcuts.
 031 ==> 229471 : Editor: forward when saving in progress.

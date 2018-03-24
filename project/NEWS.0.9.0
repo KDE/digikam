@@ -54,11 +54,11 @@ Image Editor  : New powerfull Black & White converter tool using curves adjustem
 Image Editor  : New tool to experiment ICC profiles to perform color corrections into images.
 Image Editor  : New preview rendering modes in all color correction image tools dialogs.
 Image Editor  : Redesign/polishing of all image tools dialogs. Histogram are available at all 
-                when it's necessary. All dialogs used in DigikamImagePlugins are common in digiKam 
+                when it's necessary. All dialogs used in digiKamImagePlugins are common in digiKam 
                 core now.
 Image Editor  : New zooming capabilities in image tools dialogs.
 Image Editor  : Ported all core image tools to new DImg API. Support of 16 bits images.
-Image Editor  : Ported all DigikamImagePlugins tools to new DImg API. Support of 16 bits images.
+Image Editor  : Ported all digiKamImagePlugins tools to new DImg API. Support of 16 bits images.
 Image Editor  : "Add Border" tool now respect aspect ratio of original image to render the decorative border.
 Image Editor  : "Add Border" tool now use a border size depending of a percent value of original image size.
 Image Editor  : Fixed and improved Color Management View workflow.
@@ -101,7 +101,7 @@ CameraGUI     : New option to auto-create files extension-based sub-albums.
 CameraGUI     : New advanced config dialog to set date/time format used to rename camera pictures
                 file name during download.
 
-GPSSync       : Bookmark locations
+Geolocation   : Bookmark locations
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -350,7 +350,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 243 ==> 213681 : Batch RAW converter: Activating 16bit allows jpeg.
 244 ==> 213889 : Segmentation fault at splash screen.
 245 ==> 124357 : Output resolution of print wizard is very low.
-246 ==> 204707 : Printwizard should be able to print uncroped thumbnails.
+246 ==> 204707 : PrintCreator should be able to print uncroped thumbnails.
 247 ==> 124357 : Output resolution of print wizard is very low.
 248 ==> 214744 : Advanced slideshow crash after pressing ok.
 249 ==> 135387 : Stickers of photos on the world map.
@@ -362,6 +362,6 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 255 ==> 216622 : digiKam bug report data errors.
 256 ==> 214210 : Don't take the correct position from geolocation file.
 257 ==> 216790 : Configuration dialogue crashes getting icon for tools not loaded.
-258 ==> 216803 : GPSSync ability to zoom with mouse wheel.
+258 ==> 216803 : Geolocation ability to zoom with mouse wheel.
 259 ==> 215798 : slideshow crashes when starting.
 260 ==> 213164 : Convert images: 16 bit png from 8 bit bmp.

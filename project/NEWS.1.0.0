@@ -48,8 +48,8 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 043 ==> 174086 : GPX time parsing problems.
 044 ==> 162993 : picasa album list not refreshed.
 045 ==> 202045 : Facebook exports always to same album (the one initially selected).
-046 ==> 217710 : GPSSync unable to modify coordinates.
-047 ==> 217989 : GPSSync randomly no satellite view.
+046 ==> 217710 : Geolocation unable to modify coordinates.
+047 ==> 217989 : Geolocation randomly no satellite view.
 048 ==> 217897 : DNGconverter produces invalid DNG files.
 049 ==> 218762 : Libraw is too old.
 050 ==> 219207 : Compilation error in PreviewWidget.
@@ -115,7 +115,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 013 ==> 183753 : digiKam crashes while detecting my camera.
 014 ==> 192426 : Tried to open a picture in Gimp  The Picture opens in Gimp and digiKam crashes.
 015 ==> 202029 : digiKam crash after downloading and deleting pictures from camera.
-016 ==> 204967 : Crash import photo SD (Digikam::IconGroupItem::firstItem, Digikam::CameraUI::slotFileList).
+016 ==> 204967 : Crash import photo SD (digiKam::IconGroupItem::firstItem, digiKam::CameraUI::slotFileList).
 017 ==> 209906 : Unportable test(1) construct in cleanup_digikamdb.
 018 ==> 209923 : Crash at right-click image while moving pics in background.
 019 ==> 202886 : digiKam crash unexpectedly segmentation fault.
@@ -342,7 +342,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 008 ==> 199497 : Open camera rejected with: "Fehler beim Auflisten der Dateien in /store_00010001/DCIM/100CANON.".
 009 ==> 199602 : Exif rotation not interpreted the same way in different tools.
 010 ==> 191522 : Crash on use default action "Download Photos with digiKam".
-011 ==> 196463 : Crash on device action Download Photos with Digikam.
+011 ==> 196463 : Crash on device action Download Photos with digiKam.
 012 ==> 199617 : When clicking on "My Tags", the view switches automatically after 2 seconds.
 013 ==> 199076 : Sudden crash of digiKam during work.
 014 ==> 195121 : digiKam crashes on view image (exiv2).
@@ -513,7 +513,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 016 ==> 178292 : AspectRatioCrop is slow and jumps around in first second.
 017 ==> 181892 : AspectRatioCrop: some properties should be disabled.
 018 ==> 188573 : RW2 converter broken for low light images.
-019 ==> 188642 : GPS data in Digikam shows the wrong places on the map.
+019 ==> 188642 : GPS data in digiKam shows the wrong places on the map.
 020 ==> 188907 : Album view should display subfolders, like tag view does.
 021 ==> 183038 : "Select All" action interrupts other widgets.
 022 ==> 189022 : Better guessing of proportions with 'inverse transformation' option.

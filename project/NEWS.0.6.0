@@ -1,5 +1,5 @@
-v0.6.0v
-------------------------------------------------------------------------
+*****************************************************************************************************
+digiKam 0.6.0
 
 NEW FEATURES:
 
@@ -24,5 +24,5 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 015 ==> 203849 : Add option to create a photo set from uploaded photos.
 016 ==> 199932 : Batch resize images produces images 1 pixel too short.
 017 ==> 196968 : Add link-tags to exported HTML-galleries to ease navigation.
-018 ==> 202480 : PrintWizard doesn't add comments properly but shows them in the preview.
+018 ==> 202480 : PrintCreator doesn't add comments properly but shows them in the preview.
 019 ==> 098617 : Drag and drop custom image sort in slide show.

@@ -12,7 +12,7 @@ General  : Add retina display support with preview and editor canvas under OSX.
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 336851 - Untranslatable strings in Tags Manager.
-002 ==> 336650 - Face Detection always(!) crashes after first and only successful run (Digikam 3.4.0 on Windows 7).
+002 ==> 336650 - Face Detection always(!) crashes after first and only successful run (digiKam 3.4.0 on Windows 7).
 003 ==> 326019 - digiKam crashes while face tagging.
 004 ==> 337231 - use high resolution pixmaps on retina displays [patch].
 005 ==> 337392 - Drag and drop tagging stopped working.

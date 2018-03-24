@@ -1,21 +1,21 @@
-v0.2.0
-------------------------------------------------------------------------
+*****************************************************************************************************
+digiKam 0.2.0
 
 NEW FEATURES:
 
-General        : SimpleViewer tool has been renamed to FlashExport
+General        : FlashExport tool has been renamed to FlashExport
 General        : New icons for all Export/import tools.
 General        : All import/export tools now have keyboard shortcuts
 General        : Tools now use metadata settings shared with host application.
 General        : all tools can be compiled natively under Microsoft Windows.
-General        : Port to CMake/KDE4/QT4.
+General        : Port to CMake/Qt4.
 
 FlickrExport   : Add support for 23hq.com service which uses Flickr API
 FlickrExport   : Add support of Photosets.
 
-PrintWizard    : Ported to QT4/KDE4
-PrintWizard    : Added a new option to skip cropping, the image is scaled automatically.
-PrintWizard    : New tool that allow to choose old print assistant
+PrintCreator   : Ported to Qt4
+PrintCreator   : Added a new option to skip cropping, the image is scaled automatically.
+PrintCreator   : New tool that allow to choose old print assistant
                  or to print all the selected photos directly
 
 Facebook       : Facebook tool now support also import (download) of photos
@@ -28,7 +28,7 @@ SmugExport     : New tool to export images to a remote SmugMug web service (http
 RemoveRedEyes  : Added an option to preview the correction of the currently selected image.
 RemoveRedEyes  : New tool to remove red eyes in batch. Tool is based on OpenCV library.
 
-Calendar       : Ported to QT4/KDE4.
+Calendar       : Ported to Qt4.
 Calendar       : Support RAW images.
 
 AcquireImages  : Under Windows, TWAIN interface is used to scan image using flat scanner.
@@ -42,10 +42,10 @@ SlideShow      : Now filenames, captions and progress indicators can have transp
 SlideShow      : Added thumbnails into image list.
 SlideShow      : New effect "Mosaic"
 
-DNGConverter   : tool is now available as a stand alone application.
-DNGConverter   : New tool to convert RAW camera image to Digital NeGative (DNG)
+DNGWriter      : tool is now available as a stand alone application.
+DNGWriter      : New tool to convert RAW camera image to Digital NeGative (DNG)
 
-JPEGLossLess   : XMP metadata support.
+JPEGEngine     : XMP metadata support.
 
 TimeAdjust     : XMP metadata support.
 
@@ -53,14 +53,13 @@ MetadataEdit   : XMP metadata support with EXIF, IPTC, and Comments editor to sy
 MetadataEdit   : IPTC Editor dialog is more compliant with IPTC.org recommendations.
 MetadataEdit   : IPTC Editor add the capability to set multiple values for a tag.
 
-SendImages     : Complete re-write of emailing tool.
+SendByMail     : Complete re-write of emailing tool.
 
-GPSSync        : New tool to edit GPS track list using googlemaps.
+Geolocation    : New tool to edit GPS track list using googlemaps.
 
-RAWConverter   : Raw files are decoded in 16 bits color depth using same auto-gamma and auto-white
+RAWEngine      : Raw files are decoded in 16 bits color depth using same auto-gamma and auto-white
                  methods provided by dcraw with 8 bits color depth RAW image decoding.
-RAWConverter   : XMP metadata support.
-
+RAWEngine      : XMP metadata support.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -73,7 +72,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 007 ==> 177137 : digiKam print assistant problems and ideas.
 008 ==> 176367 : Crop stage does not allow rotation or selection.
 009 ==> 178983 : Next/back-buttons in print-assistant should be labeled.
-010 ==> 095404 : Printwizard print image with custom size, original size, autoscaled size to paper.
+010 ==> 095404 : PrintCreator print image with custom size, original size, autoscaled size to paper.
 011 ==> 183661 : Better action icons for export tools
 012 ==> 187203 : Batch raw converter crash digikam.
 013 ==> 181973 : Raw batch converter loses exif information.

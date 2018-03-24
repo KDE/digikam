@@ -86,7 +86,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 079 ==> 340847 - MediaWiki: {{Coord}} template does not exist on Commons.
 080 ==> 335493 - Fix issues when metadata are loaded by MediaWiki tool [patch].
 081 ==> 300629 - Print Assistant does not follow system localization.
-082 ==> 303167 - DNGConverter fails if folder of raw files contains special characters like german umlauts.
+082 ==> 303167 - DNGWriter fails if folder of raw files contains special characters like german umlauts.
 083 ==> 122284 - Using mouse button to switch between next/previous item do not work with all effects.
 084 ==> 317920 - Time zone data of IPTC metadata Date Created is unavailable and deleted in MetadataEdit [patch].
 085 ==> 342687 - Panorama file time-stamps should be the same than the stitched pictures.

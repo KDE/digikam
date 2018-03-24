@@ -14,7 +14,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 002 ==> 261568 - ICONVIEW : scale overlay action icons accordingly with thumb size [patch].
 003 ==> 336331 - Thumbnails size can not be changed in MapView mode.
 004 ==> 339082 - Allow a simpler way to place a photo in full-screen using overlay [patch].
-005 ==> 352338 - Digikam doesn't match Nikon lenses 35mm f/1.8G and 50mm f/1.8G.
+005 ==> 352338 - digiKam doesn't match Nikon lenses 35mm f/1.8G and 50mm f/1.8G.
 006 ==> 126149 - Album icon view stores both jpeg and raw (nef), handle both as one [patch].
 007 ==> 352919 - Crash on delete into image editor [patch].
 008 ==> 341819 - Auto-creation of date-based sub-albums ignored.

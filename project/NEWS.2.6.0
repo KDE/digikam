@@ -8,17 +8,17 @@ General           : New tool to run all maintenance process in background.
 General           : Lprof 3rd party library have been removed from core implementation.
 General           : Thumbs/Preview for read-only files (as RAW) can be rotated through a flag in thumbnails database.
 General           : Add a Progress Manager as into Kontact to drive process running in parallele.
-General           : JPEGLossLess tool is now disabled in digiKam. A dedicated solution is now implemented.
+General           : JPEGEngine tool is now disabled in digiKam. A dedicated solution is now implemented.
                     in digiKam core to rotate/flip image using multithreading, parallelization, and image versioning.
 ToolsInterface    : Handle progress events from tools through digiKam Progress Manager.
 ImageEditor       : Template Superimpose feature have been moved to PhotoLayoutEditor.
 ImageEditor       : New film color negative inverter filter.
 
-RAWConverter      : Add progress management support, and parallelization of tasks using ThreadWeaver.
-DNGConverter      : Add progress management support, and parallelization of tasks using ThreadWeaver.
+RAWEngine      : Add progress management support, and parallelization of tasks using ThreadWeaver.
+DNGWriter      : Add progress management support, and parallelization of tasks using ThreadWeaver.
 RedEyesRemoval    : Add progress management support, and parallelization of tasks using ThreadWeaver.
 TimeAdjust        : Add items listview support, progress management support, multithreading, and parallelization of tasks using ThreadWeaver.
-SendImages        : Dialog Layout improvements, progress management support, and parallelization of tasks using ThreadWeaver.
+SendByMail        : Dialog Layout improvements, progress management support, and parallelization of tasks using ThreadWeaver.
 PhotoLayoutEditor : Add SuperImpose Template support to compose fun frame, post-card, etc... template file use SVG format.
 Panorama          : Bugfix for binary detection on OSes different than Linux (fixes the same issue with expoblending).
                     Bugfix for the back button of the assistant.
@@ -58,7 +58,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 026 ==> 240146 : If I press rotate on the thumbnail of a photo an error occurs.
 027 ==> 257772 : Image rotate/flip does not work.
 028 ==> 233585 : Rotate image fails with digikam on Archlinux and pictures on NTFS.
-029 ==> 247947 : Images rotated with JPEGLossLess are shifted.
+029 ==> 247947 : Images rotated with JPEGEngine are shifted.
 030 ==> 237808 : digiKam don't rotate JPEG images.
 031 ==> 207190 : Improve "rotate Image" overlay-buttons.
 032 ==> 212362 : Add support for instant rotate.
@@ -149,16 +149,16 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 117 ==> 205824 : EXIF UserComments with special characters get tagged as ASCII.
 118 ==> 277206 : Problems exporting RAW (CR2) from editor : original file disappear from icon view.
 119 ==> 149269 : Thumbnails are square (HTML Export tool) [patch].
-120 ==> 289283 : HTMLExport: add keyboard navigation and image preloading to floating_cards theme [patch].
+120 ==> 289283 : HTMLGallery: add keyboard navigation and image preloading to floating_cards theme [patch].
 121 ==> 153249 : Photo arranging and printing tool.
 122 ==> 209721 : Search field in digikam's coordinates editor uses black text on black background.
 123 ==> 279182 : Batch resize fails possibly due to timestamp in filename.
 124 ==> 290932 : Up to date website.
 125 ==> 212785 : Cannot preserve rotation when exporting from raw to Facebook.
 126 ==> 291762 : Crash with export.
-127 ==> 286736 : PrintAssistant: If you step through multiple images in crop image, it adds pages 
-128 ==> 286735 : PrintAssistant: Custom paper size isn't retained
-129 ==> 257636 : PrintAssistant: add 35x45mm photo template for UK passports
+127 ==> 286736 : PrintCreator: If you step through multiple images in crop image, it adds pages 
+128 ==> 286735 : PrintCreator: Custom paper size isn't retained
+129 ==> 257636 : PrintCreator: add 35x45mm photo template for UK passports
 130 ==> 272336 : Picasaweb, album date -1.
 141 ==> 292537 : Dng tool segfaults.
 142 ==> 293301 : digiKam crashes when uploading to PicasaWeb.

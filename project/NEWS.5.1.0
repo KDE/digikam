@@ -43,7 +43,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 017 ==> 215021 - Crash importing photos from SD card into digiKam.
 018 ==> 215648 - When I try to import the pictures from Memory Card to My compiture digiKam crashed.
 019 ==> 215854 - Download pictures to hd in digiKam.
-020 ==> 217532 - Crash while using Download Photos with Digikam link from Device Notifier.
+020 ==> 217532 - Crash while using Download Photos with digiKam link from Device Notifier.
 021 ==> 362108 - Crash when moving images to newly created album.
 022 ==> 354074 - Can't load most of pictures without further error messages or additional informations.
 023 ==> 361317 - digiKam crash when using face recognition.
@@ -75,7 +75,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 049 ==> 238598 - Advanced Slideshow Dialog too big for screen.
 050 ==> 299356 - Some pictures not editable in Image Editor as menu bar is not showing.
 051 ==> 365125 - Win64 version cannot start.
-052 ==> 365229 - Crash during close of Digikam5.
+052 ==> 365229 - Crash during close of digiKam5.
 053 ==> 302794 - Saving configuration takes 4-5 minutes.
 054 ==> 329976 - SCAN : digiKam does not update database after picture renaming.
 055 ==> 304959 - Advanced slideshow.
@@ -94,7 +94,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 068 ==> 223177 - digiKam crashes when selecting a picture immediately after showing slideshow.
 069 ==> 300463 - digiKam crashing after opening, possibly related to prior GIMP crash.
 070 ==> 234746 - digiKam crashes while looking a film in HD format .avi.
-071 ==> 333508 - Crash in Digikam::DigikamApp::slotRebuildAlbumThumbnails.
+071 ==> 333508 - Crash in digiKam::digiKamApp::slotRebuildAlbumThumbnails.
 072 ==> 328239 - Image scanning.
 073 ==> 329507 - Rename attemps leads digiKam to crash.
 074 ==> 282188 - Crash digiKam when I crop image and "save as"...
@@ -332,7 +332,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 306 ==> 338050 - MYSQL : nested set fields not updating when moving tag within hierarchy [patch].
 307 ==> 281959 - SCAN : digiKam unresponsive for >1min after startup.
 308 ==> 320359 - SCAN : digiKam should show which directories are scanned during start-up when adding collections after database deletion.
-309 ==> 283323 - MYSQL : a new label "_Digikam_root_tag_" is created every time.
+309 ==> 283323 - MYSQL : a new label "_digiKam_root_tag_" is created every time.
 310 ==> 285683 - Already imported pictures not recognized after daylight savings time.
 311 ==> 365876 - Adjust date/time menu entry missing (digikam 5).
 312 ==> 237878 - SCHEMA : add foreign keys support.

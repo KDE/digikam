@@ -18,7 +18,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 008 ==> 301530 - Group images by time puts multiple images in a progress queue, which never complete.
 009 ==> 303693 - Inability to remove orphaned thumbnails in album through GUI.
 010 ==> 301938 - OpenStreetMap does not refresh in Geo-location.
-011 ==> 289006 - Digikam crashed in import dialog when selecting filter on videos.
+011 ==> 289006 - digiKam crashed in import dialog when selecting filter on videos.
 012 ==> 302311 - Try to edit title whereas tags modification writing.
 013 ==> 290927 - Color management does not apply change and refresh the current preview image.
 014 ==> 244713 - Ability to execute a script when importing from camera.

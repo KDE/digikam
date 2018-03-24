@@ -38,7 +38,7 @@ BUGFIXES FROM BUGZILLA:
 029 ==> 377133 - Multiple tags don't display in video metadata.
 030 ==> 389619 - digiKam does not read from sidecars for video/mp4.
 031 ==> 375570 - XMP sidecar files are not read for videos when importing metadata.
-032 ==> 374684 - Crash in Digikam when importing from SD card via reader.
+032 ==> 374684 - Crash in digiKam when importing from SD card via reader.
 033 ==> 381586 - Crash after tagging ~5 images.
 034 ==> 339803 - digiKam crashes frequently on batch rename.
 035 ==> 346698 - Delete Duplicate on NAS - Crash.

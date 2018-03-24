@@ -144,7 +144,7 @@ BUGFIXES FROM BUGZILLA:
 121 ==> 195960 - Error printing A4 size miniatures.
 122 ==> 101495 - Raster effect on printout - using printwizard.
 123 ==> 171439 - Before printing more than 1 picture could be possible all of them cut to set size - only first can be.
-124 ==> 233970 - PrintWizard do not retaining settings.
+124 ==> 233970 - PrintCreator do not retaining settings.
 125 ==> 294563 - digiKam - DVD Slideshow.
 126 ==> 117073 - Album export to HTMLGallery would benefit from a treeview widget.
 128 ==> 251705 - Remove Red Eyes process wrong image regions, fill image parts with green color.
@@ -167,7 +167,7 @@ BUGFIXES FROM BUGZILLA:
 145 ==> 173203 - When sending images via email, tool fails to convert PNG to JPG.
 146 ==> 146487 - Export to email fails when email too large.
 147 ==> 128341 - Html export should not resize images if "resize target images" is not checked.
-148 ==> 089541 - Exporting to HTML from Digikam doesn't seem to work due to unsafe thread access.
+148 ==> 089541 - Exporting to HTML from digiKam doesn't seem to work due to unsafe thread access.
 149 ==> 116605 - HTML Gallery crashing when exporting to an existing dir an choosing no to overwrite [Patch].
 150 ==> 090943 - Html export tool: add css functionality.
 151 ==> 089068 - Improvement for the HTML export tool.
@@ -198,7 +198,7 @@ BUGFIXES FROM BUGZILLA:
 176 ==> 096191 - "Email Images" feature requires Thunderbird.
 177 ==> 189984 - Impossible to email images if the path contains characters such as éèà.
 178 ==> 148186 - "send by email" function does not attach images in Thunderbird.
-179 ==> 335163 - Digikam crashing when exporting to html with theme "floating frames".
+179 ==> 335163 - digiKam crashing when exporting to html with theme "floating frames".
 180 ==> 101925 - HTML Export stop to work.
 181 ==> 150479 - Provide export to pdf file.
 182 ==> 121589 - Generate web-album from digiKam.
@@ -206,9 +206,9 @@ BUGFIXES FROM BUGZILLA:
 184 ==> 167281 - Replace the Konqueror as the default external webbrowser by a system call.
 185 ==> 118831 - First image from avi as icon.
 186 ==> 141132 - digiKam is hung reading a file avi.
-187 ==> 362472 - Provide a way to install Digikam 4.14 in (K)Ubuntu 16.04 (Xenial).
+187 ==> 362472 - Provide a way to install digiKam 4.14 in (K)Ubuntu 16.04 (Xenial).
 188 ==> 151604 - Print Wizard does not recognize raw images.
-189 ==> 202480 - PrintWizard doesn't add comments properly but shows them in the preview.
+189 ==> 202480 - PrintCreator doesn't add comments properly but shows them in the preview.
 190 ==> 146457 - Rotation is not done correctly exif.
 191 ==> 188426 - Add support for different size printwizard templates.
 192 ==> 100471 - Can't print the same image more than once on the same page.
@@ -250,7 +250,7 @@ BUGFIXES FROM BUGZILLA:
 228 ==> 323993 - Crash while naming multiple people at the same time in one picture.
 229 ==> 203146 - digiKam crashed wile moving files in the background.
 230 ==> 107717 - Add trash to album treeview.
-231 ==> 093246 - PrintWizard tool is missing.
+231 ==> 093246 - PrintCreator tool is missing.
 232 ==> 176367 - Crop stage does not allow rotation or selection.
 233 ==> 166712 - Choosing the part which is cut off for printing only works for the first photo.
 234 ==> 133193 - Metadata over the photo to print.
@@ -359,7 +359,7 @@ BUGFIXES FROM BUGZILLA:
 338 ==> 181792 - Folders appear empty on first run after migrating from an old KDE version.
 339 ==> 224404 - No images of a album are shown.
 340 ==> 294835 - Albums are listed with (0) photos, but Database Statistics shows correct numbers of photos.
-341 ==> 232720 - All Digikam Albums show zero items even though pictures exist.
+341 ==> 232720 - All digiKam Albums show zero items even though pictures exist.
 342 ==> 195079 - digiKam albums appear empty.
 343 ==> 203031 - Album list doesn't show pictures even after tons of new pictures were imported.
 344 ==> 342557 - No rule to make target in recent git distribution.

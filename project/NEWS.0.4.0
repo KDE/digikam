@@ -1,10 +1,10 @@
-v0.4.0v
-------------------------------------------------------------------------
+*****************************************************************************************************
+digiKam 0.4.0
 
 NEW FEATURES:
 
-GalleryExport : Raw images can be uploaded directly to remote server.
-DNGConverter  : Fix compilation under MacOS-X.
+PiwigoExport : Raw images can be uploaded directly to remote server.
+DNGWriter    : Fix compilation under MacOS-X.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -30,7 +30,7 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 020 ==> 196166 : Crash after batch resize (klick on close).
 021 ==> 196271 : libraw_alloc.h: error: The function "bzero" must have a prototype.
 022 ==> 137687 : Let the user decide the position where to print a photo.
-023 ==> 197218 : Plugin corrupts CRC information in PNGs.
+023 ==> 197218 : Tools corrupts CRC information in PNGs.
 024 ==> 194341 : digiKam crashed with seg fault. 
 025 ==> 198039 : digiKam crashed after resizing several photos. 
 026 ==> 197764 : Batch resize crashes digiKam upon clicking the "close" option once resizing is done.
