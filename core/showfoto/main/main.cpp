@@ -51,6 +51,7 @@ using namespace Digikam;
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     // if we have some local breeze icon resource, prefer it
     DXmlGuiWindow::setupIconTheme();
@@ -91,7 +92,7 @@ int main(int argc, char* argv[])
     QList<QUrl> urlList;
     QStringList urls = parser.positionalArguments();
 
-    Q_FOREACH(const QString& url, urls)
+    foreach(const QString& url, urls)
     {
         urlList.append(QUrl::fromLocalFile(url));
     }
@@ -111,7 +112,7 @@ int main(int argc, char* argv[])
     {
         QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     }
-    
+
     // If application cache place in home directory to save cached files do not exist, create it.
     if (!QFile::exists(QStandardPaths::writableLocation(QStandardPaths::CacheLocation)))
     {
