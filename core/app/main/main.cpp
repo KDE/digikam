@@ -69,8 +69,8 @@ using namespace Digikam;
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
     // if we have some local breeze icon resource, prefer it
     DXmlGuiWindow::setupIconTheme();
 
@@ -165,8 +165,8 @@ int main(int argc, char* argv[])
         QString configFilename = parser.value(QLatin1String("config"));
         QFileInfo configFile(configFilename);
 
-        if (configFile.isDir() || !configFile.dir().exists()
-                || !configFile.isReadable() || !configFile.isWritable())
+        if (configFile.isDir() || !configFile.dir().exists() ||
+            !configFile.isReadable() || !configFile.isWritable())
         {
             QMessageBox::critical(qApp->activeWindow(),
                                   qApp->applicationName(),
@@ -282,8 +282,6 @@ int main(int argc, char* argv[])
     {
         digikam->autoDetect();
     }
-
-
 
     int ret = app.exec();
 
