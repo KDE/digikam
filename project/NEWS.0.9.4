@@ -1,204 +1,20 @@
-**********************************************************************************************
 digiKam 0.9.4 - Release date: 2008-07-16
 
+**********************************************************************************************
 NEW FEATURES:
 
 General        : for packaging, an external libsqlite3 dependency can be used instead internal version.
                  (see bug #160966)
 General        : Updated internal CImg library to last stable 1.2.9 (released at 2008/06/26).
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 164392 : Can't compile digikam with missing RawEngine.
-002 ==> 160617 : Same image gets opened to both sides of view when draggin image to right side.
-003 ==> 165823 : digiKam crashes if last picture is removed from lighttable.
-004 ==> 165921 : Translation bug: Missing german translation.
-005 ==> 130906 : Allow user to click text of tags to tag an image (not checkbox only).
-006 ==> 126871 : Click on parent folder in tree should generate a reaction.
-007 ==> 162812 : Sharpen slider enhancement refresh previews continuously.
-008 ==> 166274 : Rename files on download from camera.
-009 ==> 166472 : Thumbnail bar gone in image editor when switching back from fullscreen.
-010 ==> 166540 : Showfoto always prints filename.
-
-**********************************************************************************************
-digiKam 0.9.4-RC2 - Release date: 2008-07-06
-
-NEW FEATURES:
-
 General        : external libsqlite3 dependency removed. sqlite3 source code is now included in digiKam core.
                  (see bug #160966)
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 164301 : Filter Albums sub-tree names too, when using quickfilter on icon view.
-002 ==> 164482 : Place filename of image in klipper/paste buffer from thumbnail right mouse button context menu.
-003 ==> 164536 : Add adjust mid range color levels.
-004 ==> 164615 : Image detail info about geometry (X-pixel / Y-pixel) missed.
-005 ==> 149654 : Fullscreen icon changes image's zoom to 100% (should fit to screen).
-006 ==> 162688 : digiKam RC5, can't see scroll bar sliders in dark theme.
-007 ==> 161212 : Switch to full screen resets X11.
-008 ==> 164432 : Compilation fails with gcc 3.
-
-**********************************************************************************************
-digiKam 0.9.4-RC1 - Release date: 2008-06-17
-
-NEW FEATURES:
-
-General        : external libsqlite3 dependency removed. sqlite3 source code is now included in digiKam core.
-                 (see bug #160966)
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 162496 : When digiKam saves file as JPEG - JPG options are not always presented.
-002 ==> 160740 : Handbook says that libgphoto2 is required but does not say whether it should be compiled with exif support.
-003 ==> 148400 : Problem loading 16bit Grayscale TIFF image.
-004 ==> 160925 : digiKam crash, I don't know why, but I have the bugreport.
-005 ==> 162691 : 0.9.4 beta5 compile error imagehistogram.cpp.
-006 ==> 160966 : Some searches don't work properly with the new sqlite3-3.5.8.
-007 ==> 162245 : Assigned tag list not updated correctly when "show assigned tags" filter is active.
-008 ==> 158866 : Advanced Search on Tags a mess.
-009 ==> 162814 : digiKam crashes when using light table (page down).
-010 ==> 163151 : Red eye correction doesn't work fine.
-011 ==> 163227 : Searching for tag names in simple and advanced search doesn't work.
-012 ==> 163474 : Config UI using external media.
-013 ==> 156420 : Canon EOS 400D, no thumbnails displayed then digikam segfaults.
-014 ==> 163118 : digikam-0.9.4_beta5 compilation hangs with gcc 4.3.
-
-**********************************************************************************************
-
-digiKam 0.9.4-beta5 - Release date: 2008-05-25
-
-NEW FEATURES:
-
 General        : English words review in whole GUI by Oliver Doer
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 162132 : Crash while saving tiff (possibly caused by present alpha channel).
-002 ==> 155046 : light-table useability, possible improvements.
-003 ==> 161085 : Zoom steps in image editor
-004 ==> 162247 : The photos thumbnails list would be better if in the end of an album/date/tag start the next.
-005 ==> 160523 : Crash when saving picture as new nameafter resizing.
-006 ==> 162428 : debug info needed ?
-007 ==> 147597 : Typos in the digiKam KDE3 PO file.
-
-**********************************************************************************************
-
-digiKam 0.9.4-beta4 - Release date: 2008-04-27
-
-NEW FEATURES:
-
 General        : Updated internal CImg library to last stable 1.2.8 (released at 2008/04/18).
 General        : New search text filter for all metadata sidebar tabs.
 General        : New dialog to list all RAW camera supported. A search camera model tool is 
                  available to find easy a camera from list.
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 121309 : Camera list sorted by brand.
-002 ==> 137836 : Usability: Configure camera GUI add and auto-detect camera.
-003 ==> 160323 : Changing the album name from sth to #sth and then to zsth causes the album to be deleted along with the files.
-004 ==> 145083 : Space and Shift-Space isn't used for navigation between images.
-005 ==> 158696 : digiKam image viewer crashes when "Save As" is clicked.
-006 ==> 156564 : Light table crashes when choosing channel.
-007 ==> 147466 : digiKam crashes on termination if an audio file played.
-008 ==> 146973 : Crashes when clicking on preview image.
-009 ==> 148976 : digiKam Deleted 2.3 g of Pictures.
-010 ==> 145252 : Umask settings used for album directory, not for image files.
-011 ==> 125775 : digiKam way to save and delete "Searches".
-012 ==> 150908 : Canon g3 not recognized works version 0.9.1.
-013 ==> 152092 : Showfoto crashes ( signal 11 ) on exit.
-014 ==> 160840 : Wrong filtering on Album-Subtree-View.
-015 ==> 160846 : Blurred preview of pics.
-016 ==> 157314 : Zoom-slider has no steps.
-017 ==> 161047 : Shift and wheel mouse doesn't work.
-018 ==> 161087 : Conflicting directions of mouse scroll when zooming.
-019 ==> 161084 : Not properly updates status bar info.
-
-**********************************************************************************************
-
-digiKam 0.9.4-beta3 - Release date: 2008-04-07
-
-NEW FEATURES:
-
-AlbumGUI       : Auto-completion in all search text filter.
-
 General        : Creation of tags simplified everywhere. Multiple Tags hierarchy can be 
                  created at the same time. Tags creation dialog re-designed.
-		 
-Showfoto       : New open image file dialog with photo thumbnail/information.
-
-ImageEditor    : New saveas image file dialog with photo thumbnail/information.
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 159806 : Cannot display Nikon d3 raw files.
-002 ==> 148935 : digiKam hot pixel tool can not read canon RAW files.
-003 ==> 158776 : Confirm tag delete if tag assigned to photos.
-004 ==> 148520 : Change of rating causes high CPU load.
-005 ==> 140227 : Remove or modify D&D tags menu from icon view area.
-006 ==> 154421 : Live search doesn't search filenames.
-007 ==> 118209 : digiKam hotplug script kde user detection problem.
-008 ==> 138766 : JPEG Rotations: Give a warning when doing Lossy rotations (and offer to do lossless when applicable).
-009 ==> 156007 : Canon Raw+Jpg Locks up download image window during thumbnail retrieval.
-010 ==> 114465 : Simpler entry of tags.
-011 ==> 159236 : Corrupted file when downloading from CF card via digikam.
-
-**********************************************************************************************
-
-digiKam 0.9.4-beta2 - Release date: 2008-03-23
-
-NEW FEATURES:
-
-ImageEditor    : Raw files can be decoded in 16 bits color depth without to use Color Management.
-                 An auto-gamma and auto-white balance is processed using the same method than dcraw
-                 with 8 bits color depth RAW image decoding. This usefull to to have a speed-up RAW 
-                 workflow with suitable images.
-Showfoto       : Added support of color theme schemes.
-Showfoto       : Added 2 options to setup images ordering with "File/Open Folder" action.
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 146393 : No gamma adjustment when opening RAW file.
-002 ==> 158377 : digiKam duplicates downloaded images while overwriting existing ones.
-003 ==> 151122 : Opening Albums Has Become Very Slow.
-004 ==> 145252 : Umask settings used for album directory, not for image files
-005 ==> 144253 : Failed to update old Database to new Database format.
-006 ==> 159467 : Misleading error message with path change in digikamrc file.
-007 ==> 157237 : Connect the data when using the left tabs.
-008 ==> 157309 : digiKam mouse scroll direction on lighttable.
-009 ==> 158398 : Olympus raw images shown with wrong orientation.
-010 ==> 152257 : Crash on saving images after editing.
-011 ==> 153730 : Too many file format options when saving raw image from editor in digiKam.
-012 ==> 151157 : Right and left keys goes to first picture and last picture without shortcuts.
-013 ==> 151451 : Application crashed using edit.
-014 ==> 139657 : Blueish tint in low saturation images converted to CMYK.
-015 ==> 147600 : Showfoto Open folder - files shown in reverse order.
-016 ==> 149851 : Showfoto asks if you want to save changes when deleting photo, if changes have been made.
-017 ==> 138378 : Showfoto opens file browser window to last the folder used upon startup.
-018 ==> 148964 : images are blur only inside showFoto.
-019 ==> 146938 : Themes Don't Apply To All Panels.
-020 ==> 135378 : Single-click on picture open it in editor.
-021 ==> 142469 : Splash screen to be the very first thing.
-022 ==> 147619 : Crash when viewing video.
-023 ==> 136583 : Album icon does not show preview-image after selecting given image as preview.
-024 ==> 129357 : Thumbnails not rotated for (D200)-NEF.
-025 ==> 132047 : Faster display of images and/or prefetch wished for.
-026 ==> 150259 : media-gfx/digikam-0.9.2 error/typo in showfoto.desktop.
-027 ==> 150674 : Turn of live update of preview when moving points in curves dialog or in histogram.
-028 ==> 141703 : Show file creation date in tooltip.
-029 ==> 128377 : Adjust levels: histograms don't match, bad "auto level" function.
-030 ==> 141755 : Sidebar: Hide unused tabs, Add tooltips. 
-031 ==> 146068 : Mixer does not work for green and blue selected as main channel and monochrome mode.
-032 ==> 135931 : Reorganize Batch Processing tools from 'Image' and 'Tools' menus.
-033 ==> 159664 : Background color of live/quick filter not updated on folder/date change.
-
-**********************************************************************************************
-
-digiKam 0.9.4-beta1 - Release date: 2008-03-09
-
-NEW FEATURES:
-
 General        : Color theme scheme are now supported everywhere in graphical interfaces.
 General        : Color theme scheme can be changed from Editor and LightTable.
 General        : Updated internal CImg library to last stable 1.2.7 (released at 2008/01/23).
@@ -213,24 +29,131 @@ General        : Add capability to display count of items in all Album, Date, Ta
 AlbumGUI       : Add a new tool to perform Date search around whole albums collection: Time-Line.
 AlbumGUI       : In Calendar View, selecting Year album show all pictures relevant.
 AlbumGUI       : Add a new status-bar indicator to report album icon view filtering status.
+AlbumGUI       : Auto-completion in all search text filter.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
-001 ==>  96388 : Show number of images in the album.
-002 ==> 155271 : Configure suggests wrong parameter for libjasper.
-003 ==> 155105 : Broken png image present in albums folder causes digikam to crash when starting.
-004 ==> 146760 : Providing a Timeline-View for quickly narrowing down the date of photos.
-005 ==> 146635 : Ratio crop doesn't remember orientation.
-006 ==> 144337 : There should be no "empty folders".
-007 ==> 128293 : Aspect ratio crop does not respect aspect ratio.
-008 ==> 157149 : digiKam crash at startup.
-009 ==> 141037 : Search using Tag Name does not work
-010 ==> 158174 : Precise aspect ratio crop feature
-011 ==> 142055 : Which whitebalance is used
-012 ==> 158558 : Delete Function in Tag Filters panel needs to make sure that the tag is 
-                 unselected when the tag is deleted.
-013 ==> 120309 : Change screen backgroundcolor of image tools.
-014 ==> 153775 : Download from camera: Renaming because of already existing file does not work.
-015 ==> 154346 : Can't rename in digiKam.
-016 ==> 154625 : Image-files are not renamed before they are saved to disk.
-017 ==> 154746 : Album selection window's size is wrong.
+Showfoto       : New open image file dialog with photo thumbnail/information.
+
+ImageEditor    : New saveas image file dialog with photo thumbnail/information.
+ImageEditor    : Raw files can be decoded in 16 bits color depth without to use Color Management.
+                 An auto-gamma and auto-white balance is processed using the same method than dcraw
+                 with 8 bits color depth RAW image decoding. This usefull to to have a speed-up RAW 
+                 workflow with suitable images.
+
+Showfoto       : Added support of color theme schemes.
+Showfoto       : Added 2 options to setup images ordering with "File/Open Folder" action.
+
+**********************************************************************************************
+BUGFIXES:
+
+001 ==> 146393 - No gamma adjustment when opening RAW file.
+002 ==> 158377 - digiKam duplicates downloaded images while overwriting existing ones.
+003 ==> 151122 - Opening Albums Has Become Very Slow.
+004 ==> 145252 - Umask settings used for album directory, not for image files
+005 ==> 144253 - Failed to update old Database to new Database format.
+006 ==> 159467 - Misleading error message with path change in digikamrc file.
+007 ==> 157237 - Connect the data when using the left tabs.
+008 ==> 157309 - digiKam mouse scroll direction on lighttable.
+009 ==> 158398 - Olympus raw images shown with wrong orientation.
+010 ==> 152257 - Crash on saving images after editing.
+011 ==> 153730 - Too many file format options when saving raw image from editor in digiKam.
+012 ==> 151157 - Right and left keys goes to first picture and last picture without shortcuts.
+013 ==> 151451 - Application crashed using edit.
+014 ==> 139657 - Blueish tint in low saturation images converted to CMYK.
+015 ==> 147600 - Showfoto Open folder - files shown in reverse order.
+016 ==> 149851 - Showfoto asks if you want to save changes when deleting photo, if changes have been made.
+017 ==> 138378 - Showfoto opens file browser window to last the folder used upon startup.
+018 ==> 148964 - images are blur only inside showFoto.
+019 ==> 146938 - Themes Don't Apply To All Panels.
+020 ==> 135378 - Single-click on picture open it in editor.
+021 ==> 142469 - Splash screen to be the very first thing.
+022 ==> 147619 - Crash when viewing video.
+023 ==> 136583 - Album icon does not show preview-image after selecting given image as preview.
+024 ==> 129357 - Thumbnails not rotated for (D200)-NEF.
+025 ==> 132047 - Faster display of images and/or prefetch wished for.
+026 ==> 150259 - media-gfx/digikam-0.9.2 error/typo in showfoto.desktop.
+027 ==> 150674 - Turn of live update of preview when moving points in curves dialog or in histogram.
+028 ==> 141703 - Show file creation date in tooltip.
+029 ==> 128377 - Adjust levels: histograms don't match, bad "auto level" function.
+030 ==> 141755 - Sidebar: Hide unused tabs, Add tooltips. 
+031 ==> 146068 - Mixer does not work for green and blue selected as main channel and monochrome mode.
+032 ==> 135931 - Reorganize Batch Processing tools from 'Image' and 'Tools' menus.
+033 ==> 159664 - Background color of live/quick filter not updated on folder/date change.
+034 ==> 162132 - Crash while saving tiff (possibly caused by present alpha channel).
+035 ==> 155046 - light-table useability, possible improvements.
+036 ==> 161085 - Zoom steps in image editor
+037 ==> 162247 - The photos thumbnails list would be better if in the end of an album/date/tag start the next.
+038 ==> 160523 - Crash when saving picture as new nameafter resizing.
+039 ==> 162428 - debug info needed ?
+040 ==> 147597 - Typos in the digiKam KDE3 PO file.
+041 ==> 121309 - Camera list sorted by brand.
+042 ==> 137836 - Usability: Configure camera GUI add and auto-detect camera.
+043 ==> 160323 - Changing the album name from sth to #sth and then to zsth causes the album to be deleted along with the files.
+044 ==> 145083 - Space and Shift-Space isn't used for navigation between images.
+045 ==> 158696 - digiKam image viewer crashes when "Save As" is clicked.
+046 ==> 156564 - Light table crashes when choosing channel.
+047 ==> 147466 - digiKam crashes on termination if an audio file played.
+048 ==> 146973 - Crashes when clicking on preview image.
+049 ==> 148976 - digiKam Deleted 2.3 g of Pictures.
+050 ==> 145252 - Umask settings used for album directory, not for image files.
+051 ==> 125775 - digiKam way to save and delete "Searches".
+052 ==> 150908 - Canon g3 not recognized works version 0.9.1.
+053 ==> 152092 - Showfoto crashes ( signal 11 ) on exit.
+054 ==> 160840 - Wrong filtering on Album-Subtree-View.
+055 ==> 160846 - Blurred preview of pics.
+056 ==> 157314 - Zoom-slider has no steps.
+057 ==> 161047 - Shift and wheel mouse doesn't work.
+058 ==> 161087 - Conflicting directions of mouse scroll when zooming.
+059 ==> 161084 - Not properly updates status bar info.
+060 ==> 159236 - Corrupted file when downloading from CF card via digikam.
+061 ==> 164392 - Can't compile digikam with missing RawEngine.
+062 ==> 160617 - Same image gets opened to both sides of view when draggin image to right side.
+063 ==> 165823 - digiKam crashes if last picture is removed from lighttable.
+064 ==> 165921 - Translation bug: Missing german translation.
+065 ==> 130906 - Allow user to click text of tags to tag an image (not checkbox only).
+066 ==> 126871 - Click on parent folder in tree should generate a reaction.
+067 ==> 162812 - Sharpen slider enhancement refresh previews continuously.
+068 ==> 166274 - Rename files on download from camera.
+069 ==> 166472 - Thumbnail bar gone in image editor when switching back from fullscreen.
+070 ==> 166540 - Showfoto always prints filename.
+071 ==> 162496 - When digiKam saves file as JPEG - JPG options are not always presented.
+072 ==> 160740 - Handbook says that libgphoto2 is required but does not say whether it should be compiled with exif support.
+073 ==> 148400 - Problem loading 16bit Grayscale TIFF image.
+074 ==> 160925 - digiKam crash, I don't know why, but I have the bugreport.
+075 ==> 162691 - 0.9.4 beta5 compile error imagehistogram.cpp.
+076 ==> 160966 - Some searches don't work properly with the new sqlite3-3.5.8.
+077 ==> 162245 - Assigned tag list not updated correctly when "show assigned tags" filter is active.
+078 ==> 158866 - Advanced Search on Tags a mess.
+079 ==> 162814 - digiKam crashes when using light table (page down).
+080 ==> 163151 - Red eye correction doesn't work fine.
+081 ==> 163227 - Searching for tag names in simple and advanced search doesn't work.
+082 ==> 163474 - Config UI using external media.
+083 ==> 156420 - Canon EOS 400D, no thumbnails displayed then digikam segfaults.
+084 ==> 163118 - digikam-0.9.4_beta5 compilation hangs with gcc 4.3.
+085 ==> 159806 - Cannot display Nikon d3 raw files.
+086 ==> 148935 - digiKam hot pixel tool can not read canon RAW files.
+087 ==> 158776 - Confirm tag delete if tag assigned to photos.
+088 ==> 148520 - Change of rating causes high CPU load.
+089 ==> 140227 - Remove or modify D&D tags menu from icon view area.
+090 ==> 154421 - Live search doesn't search filenames.
+091 ==> 118209 - digiKam hotplug script kde user detection problem.
+092 ==> 138766 - JPEG Rotations: Give a warning when doing Lossy rotations (and offer to do lossless when applicable).
+093 ==> 156007 - Canon Raw+Jpg Locks up download image window during thumbnail retrieval.
+094 ==> 114465 - Simpler entry of tags.
+095 ==> 154346 - Can't rename in digiKam.
+096 ==> 154625 - Image-files are not renamed before they are saved to disk.
+097 ==> 154746 - Album selection window's size is wrong.
+098 ==> 158558 - Delete Function in Tag Filters panel needs to make sure that the tag is unselected when the tag is deleted.
+099 ==> 120309 - Change screen backgroundcolor of image tools.
+100 ==> 153775 - Download from camera: Renaming because of already existing file does not work.
+101 ==> 096388 - Show number of images in the album.
+102 ==> 155271 - Configure suggests wrong parameter for libjasper.
+103 ==> 155105 - Broken png image present in albums folder causes digikam to crash when starting.
+104 ==> 146760 - Providing a Timeline-View for quickly narrowing down the date of photos.
+105 ==> 146635 - Ratio crop doesn't remember orientation.
+106 ==> 144337 - There should be no "empty folders".
+107 ==> 128293 - Aspect ratio crop does not respect aspect ratio.
+108 ==> 157149 - digiKam crash at startup.
+109 ==> 141037 - Search using Tag Name does not work
+110 ==> 158174 - Precise aspect ratio crop feature
+111 ==> 142055 - Which whitebalance is used

@@ -1,103 +1,77 @@
-**********************************************************************************************
 digiKam 0.9.5 - Release date: 2009-03-15
 
+**********************************************************************************************
 NEW FEATURES: 
 
 General        : Internal CImg library updated to 1.3.0.
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 169037 : Crash when tagging photos.
-002 ==> 173314 : digiKam crashes while exiting the photo-editing mode in KDE 3.5.10.
-003 ==> 185279 : Raw pictures from Panasonic LX2 have totally wrong colours in digikam show modus.
-
-**********************************************************************************************
-digiKam 0.9.5-beta3 - Release date: 2009-01-27
-
-NEW FEATURES: 
+General        : RawEngine dependency updated to 0.1.5
+General        : TIFF/PNG/JPEG2000 metadata can be edited, changed (require Exiv2 >= 0.18).
 
 Image Editor   : New composition guide based on Diagonal Rules.
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 176477 : Files disappear while importing.
-002 ==> 179134 : Compile-error with RawEngine > 0.1.5.
-003 ==> 162535 : Startup is extremely slow when famd is running.
-004 ==> 179413 : Support restoring blown out highlights.
-005 ==> 157313 : Option to reposition lighttable slide-list.
-006 ==> 180671 : Scanner import does not work.
-007 ==> 175387 : digikam-doc 0.9.4 sf.net tarball is outdated.
-008 ==> 181712 : Ubuntu 8.10 - digiKam finds not the correct images.
-
-**********************************************************************************************
-digiKam 0.9.5-beta2 - Release date: 2008-12-14
-
-NEW FEATURES:
-
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 164573 : Better support for small screens.
-002 ==> 175970 : digitaglinktree merges tags with same name in different subfolders.
-003 ==> 108760 : Use collection image (or part of) as Tag/Album icon.
-004 ==> 144078 : very slow avi startup.
-005 ==> 146258 : Moving an album into waste basket didn't remove.
-006 ==> 149165 : cannot edit anymore - sqlite lock?
-007 ==> 146025 : Wrong image name when using info from EXIF.
-008 ==> 167056 : Updating tags is slow when thumbnails are visible.
-009 ==> 141960 : Problems with photos without EXIV data when updating me.
-010 ==> 129379 : Renamed Album is shown multiple times although there is only on related picture directory.
-011 ==> 171247 : Album creation error when name start by a number.
-012 ==> 150906 : digiKam unable to connect to Panasonic LUMIX DMC-TZ3.
-013 ==> 148812 : "Auto Rotate/Flip &Using Exif Orientation" fails with some images.
-014 ==> 150342 : Camera image window keeps scrolling to the currently downloaded picture.
-015 ==> 147475 : digiKam Slideshow - Pause button does not stay sticky / work.
-016 ==> 148899 : Image Editor does not get the focus after clicking on an image.
-017 ==> 148596 : Empty entries in the "back" drop-down when changing month (date view).
-018 ==> 161387 : Unable to import photos with digiKam even though it's detected.
-019 ==> 165229 : Thumbnail complete update does not work reliably, even for jpgs.
-
-**********************************************************************************************
-digiKam 0.9.5-beta1 - Release date: 2008-11-05
-
-NEW FEATURES:
-
-
 Image Editor   : All image tool tool settings provide default buttons to reset values.
 Image Editor   : New Raw import tool to handle Raw pictures with customized decoding settings.
 Image Editor   : All image tool dialogs are removed. All tools are embedded in editor window.
 
-General        : RawEngine dependency updated to 0.1.5
-General        : TIFF/PNG/JPEG2000 metadata can be edited, changed (require Exiv2 >= 0.18).
+**********************************************************************************************
+BUGFIXES:
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
-
-001 ==> 166867 : digiKam crashes when starting.
-002 ==> 167026 : Crash on startup Directory ImageSubIfd0 not valid.
-003 ==> 146870 : Don't reduce size of image when rotating.
-004 ==> 167528 : Remove hotlinking URL from tips.
-005 ==> 167343 : Albums view corrupted and unusable.
-006 ==> 146033 : When switching with Page* image jumps.
-007 ==> 127242 : Flashing 'histogram calculation in progress' is a bit annoying.
-008 ==> 150457 : More RAW controls in color management pop-up please.
-009 ==> 155074 : Edit Image should allow chance to adjust RAW conversion parameters.
-010 ==> 155076 : RAW Conversion UI Needs to be more generic.
-011 ==> 142975 : Better support for RAW photo handling.
-012 ==> 147136 : When selecting pictures from folder showfoto got closed.
-013 ==> 168780 : Loose the raw import.
-014 ==> 160564 : No refresh of the number of pictures assigned to a tag after removing the tag from some pictures.
-015 ==> 158144 : Showfoto crashes in settings window.
-016 ==> 162845 : 'Ctrl+F6' Conflict with KDE global shortcut.
-017 ==> 159523 : digiKam crashes while downloading images from Olympus MJU 810/Stylus 810 camera no xD card.
-018 ==> 161369 : Quick filter indicator lamp is not working properly in recursive image folder view mode.
-019 ==> 147314 : Renaming like crazy with F2 slows down my system.
-020 ==> 164622 : Crash using timeline when switching from month to week to month view.
-021 ==> 141951 : Blank empty context right-click menus.
-022 ==> 116886 : Proposal for adding a new destripe/denoise technique.
-023 ==> 163602 : Race condition during image download from Camera/ USB device: image corruption and/or loss.
-024 ==> 165857 : Unreliable import when photo root is on network share.
-025 ==> 147435 : Resize slider in sharpness dialog doesn't work correct.
-026 ==> 168844 : Make the selection rectangle draggable over the image (not only resizable).
-027 ==> 147151 : Compile error: multiple definition of `jpeg_suppress_tables'.
-028 ==> 170758 : High load when tagging.
-029 ==> 168003 : Drag&dropping a photo to a folder in Dolphin begins copying the whole system:/media.
-030 ==> 142457 : Temp files not cleaned up after crashes.
+001 ==> 166867 - digiKam crashes when starting.
+002 ==> 167026 - Crash on startup Directory ImageSubIfd0 not valid.
+003 ==> 146870 - Don't reduce size of image when rotating.
+004 ==> 167528 - Remove hotlinking URL from tips.
+005 ==> 167343 - Albums view corrupted and unusable.
+006 ==> 146033 - When switching with Page* image jumps.
+007 ==> 127242 - Flashing 'histogram calculation in progress' is a bit annoying.
+008 ==> 150457 - More RAW controls in color management pop-up please.
+009 ==> 155074 - Edit Image should allow chance to adjust RAW conversion parameters.
+010 ==> 155076 - RAW Conversion UI Needs to be more generic.
+011 ==> 142975 - Better support for RAW photo handling.
+012 ==> 147136 - When selecting pictures from folder showfoto got closed.
+013 ==> 168780 - Loose the raw import.
+014 ==> 160564 - No refresh of the number of pictures assigned to a tag after removing the tag from some pictures.
+015 ==> 158144 - Showfoto crashes in settings window.
+016 ==> 162845 - 'Ctrl+F6' Conflict with KDE global shortcut.
+017 ==> 159523 - digiKam crashes while downloading images from Olympus MJU 810/Stylus 810 camera no xD card.
+018 ==> 161369 - Quick filter indicator lamp is not working properly in recursive image folder view mode.
+019 ==> 147314 - Renaming like crazy with F2 slows down my system.
+020 ==> 164622 - Crash using timeline when switching from month to week to month view.
+021 ==> 141951 - Blank empty context right-click menus.
+022 ==> 116886 - Proposal for adding a new destripe/denoise technique.
+023 ==> 163602 - Race condition during image download from Camera/ USB device: image corruption and/or loss.
+024 ==> 165857 - Unreliable import when photo root is on network share.
+025 ==> 147435 - Resize slider in sharpness dialog doesn't work correct.
+026 ==> 168844 - Make the selection rectangle draggable over the image (not only resizable).
+027 ==> 147151 - Compile error: multiple definition of `jpeg_suppress_tables'.
+028 ==> 170758 - High load when tagging.
+029 ==> 168003 - Drag&dropping a photo to a folder in Dolphin begins copying the whole system:/media.
+030 ==> 142457 - Temp files not cleaned up after crashes.
+031 ==> 164573 - Better support for small screens.
+032 ==> 175970 - digitaglinktree merges tags with same name in different subfolders.
+033 ==> 108760 - Use collection image (or part of) as Tag/Album icon.
+034 ==> 144078 - very slow avi startup.
+035 ==> 146258 - Moving an album into waste basket didn't remove.
+036 ==> 149165 - cannot edit anymore - sqlite lock?
+037 ==> 146025 - Wrong image name when using info from EXIF.
+038 ==> 167056 - Updating tags is slow when thumbnails are visible.
+039 ==> 141960 - Problems with photos without EXIV data when updating me.
+040 ==> 129379 - Renamed Album is shown multiple times although there is only on related picture directory.
+041 ==> 171247 - Album creation error when name start by a number.
+042 ==> 150906 - digiKam unable to connect to Panasonic LUMIX DMC-TZ3.
+043 ==> 148812 - "Auto Rotate/Flip &Using Exif Orientation" fails with some images.
+044 ==> 150342 - Camera image window keeps scrolling to the currently downloaded picture.
+045 ==> 147475 - digiKam Slideshow - Pause button does not stay sticky / work.
+046 ==> 148899 - Image Editor does not get the focus after clicking on an image.
+047 ==> 148596 - Empty entries in the "back" drop-down when changing month (date view).
+048 ==> 161387 - Unable to import photos with digiKam even though it's detected.
+049 ==> 165229 - Thumbnail complete update does not work reliably, even for jpgs.
+050 ==> 169037 - Crash when tagging photos.
+051 ==> 176477 - Files disappear while importing.
+052 ==> 179134 - Compile-error with RawEngine > 0.1.5.
+053 ==> 162535 - Startup is extremely slow when famd is running.
+054 ==> 179413 - Support restoring blown out highlights.
+055 ==> 157313 - Option to reposition lighttable slide-list.
+056 ==> 180671 - Scanner import does not work.
+057 ==> 175387 - digikam-doc 0.9.4 sf.net tarball is outdated.
+058 ==> 181712 - Ubuntu 8.10 - digiKam finds not the correct images.
+059 ==> 173314 - digiKam crashes while exiting the photo-editing mode in KDE 3.5.10.
+060 ==> 185279 - Raw pictures from Panasonic LX2 have totally wrong colours in digikam show modus.
