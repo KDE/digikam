@@ -1,6 +1,6 @@
-*****************************************************************************************************
 digiKam 3.0.0 - Release date: 2013-01-27
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General           : All tool actions can be pluged to tools bar.
@@ -43,7 +43,8 @@ General           : Port all tools to KDE XML-GUI framework.
 Panorama          : New parser using GNU Flex and GNU Bison instead of Boost::spirit
 Panorama          : Manual cropping of the final result
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 126149 - Camera stores both jpeg and raw (nef), handle both as one
 002 ==> 122454 - Make tools available for toolbar.

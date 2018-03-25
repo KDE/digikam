@@ -1,6 +1,6 @@
-*********************************************************************************************************
 digiKam 0.10.0 - Release date: 2009-05-30
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General        : Internal CImg library updated to 1.3.0.
@@ -18,8 +18,7 @@ General        : New option to enable RAW metadata writing.
 General        : MetadataEngine dependency updated to 0.5.0.
 General        : digiKam can be compiled natively under Microsoft Windows.
 General        : RawEngine dependency updated to 0.4.0
-General        : libgphoto2 dependency is now optional to be able to compile digiKam under operating systems 
-                 not supported by GPhoto2
+General        : libgphoto2 dependency is now optional to be able to compile digiKam under operating systems not supported by GPhoto2
 General        : RawEngine dependency updated to 0.3.0
 General        : Raw metadata can be edited, changed, added to TIFF/EP like RAW file formats (require Exiv2 >= 0.18).
                  Currently DNG, NEF, and PEF raw files are supported. More will be added in the future.
@@ -70,7 +69,8 @@ CameraGUI      : Add Icon-View items Tooltip.
 CameraGUI      : List camera item in more suitable order: more recent items on the top, older one on the bottom.
 CameraGUI      : Animation over camera icon view during camera download.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 172680 : digiKam crashes when I try to download the photos from my camera.
 002 ==> 166578 : Default Keyboard zoom requires three fingers.

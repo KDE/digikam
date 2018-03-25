@@ -1,13 +1,15 @@
-*****************************************************************************************************
 digiKam 0.7.0 - Release date: 2005-05-21
 
+*****************************************************************************************************
 NEW FEATURES:
 
-FlickrExport : Tool is now able to export to Zooomr web service (www.zooomr.com).
-FlickrExport : User can set photo visibility one by one if necessary (public, friends, family).
-TimeAdjust   : A dedicated photo time-stamp can be used to adjust difference of camera clock.
+FlickrExport   : Tool is now able to export to Zooomr web service (www.zooomr.com).
+FlickrExport   : User can set photo visibility one by one if necessary (public, friends, family).
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+TimeAdjust     : A dedicated photo time-stamp can be used to adjust difference of camera clock.
+
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 205603 : Crash on finishing Batch Unsharp mask.
 002 ==> 199533 : Enable dateframes theme in -tools [patch].

@@ -1,15 +1,19 @@
-*****************************************************************************************************
 digiKam 6.0.0 - Release date: 2018-xx-xx
 
+*****************************************************************************************************
 NEW FEATURES:
 
-Image Editor : New clone tool to replace old CImg in-painting tool.
+ImageEditor  : New clone tool to replace old CImg in-painting tool.
 ImageEditor  : Add Web services Import and Export tools.
+
 Showfoto     : Add Web services Import and Export tools.
+
 LightTable   : Add Web services Import and Export tools.
+
 General      : New video metadata parser based on libav to populate database.
 
-BUGFIXES FROM BUGZILLA:
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 172650 - No export tools available.
 002 ==> 149591 - The export menu is blank.

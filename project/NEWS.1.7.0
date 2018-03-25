@@ -1,12 +1,13 @@
-*********************************************************************************************************
 digiKam 1.7.0 - Release date: 2010-12-19
 
+*********************************************************************************************************
 NEW FEATURES:
 
 General : New tool to export images to Debian Screenshoots web service (http://screenshots.debian.net).
 General : New tool to export images to an instant messaging contact.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 180224 : Memory leakage in image editor?
 002 ==> 257676 : Crash when I renane files.

@@ -1,7 +1,7 @@
-*********************************************************************************************************
 digiKam 1.0.0 - Release date: 2009-12-20
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 216791 : Select next instead of privious picture when deleting a picture.
 002 ==> 216726 : Turn off ratings on thumbnails in view mode.

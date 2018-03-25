@@ -1,6 +1,6 @@
-*****************************************************************************************************
 digiKam 4.0.0 - Release date: 2014-05-12
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General  : New Tags Manager window for easy tags management.
@@ -33,7 +33,8 @@ General  : New tool to export collection to DropBox cloud service.
 MediaWiki: allow removal of metadata/GPS coordinates before uploading.
 MediaWiki: graphical interface improvements.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 325702 - digiKam crashes when deleting photos.
 002 ==> 307146 - Build against shared LibRaw.

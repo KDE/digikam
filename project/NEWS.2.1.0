@@ -1,6 +1,6 @@
-*****************************************************************************************************
 digiKam 2.1.0 - Release date: 2011-09-04
 
+*****************************************************************************************************
 NEW FEATURES:
 
 CameraGUI : camera items thumbnails are processed on the fly. Connection to camera device is faster.
@@ -13,7 +13,8 @@ Preview   : New option to show/hide information over preview canvas.
 General   : New tool to export collection to VKontakte web service (http://www.vkontakte.ru).
 General   : New tool to stitch photos as panorama.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 218365 : Show icon thumbs when loaded and not only after all were read.
 002 ==> 278526 : No picture is displayed in the Album View.

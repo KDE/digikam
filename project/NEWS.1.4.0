@@ -1,11 +1,12 @@
-*********************************************************************************************************
 digiKam 1.4.0 - Release date: 2010-08-22
 
+*********************************************************************************************************
 NEW FEATURES:
 
 AdvancedRename : New modifier "Remove Doubles".
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 238285 : Nikkor 18-200mm not detected by lens autocorrection.
 002 ==> 232233 : Databaseext-branch does not compile on Windows with mingw4.

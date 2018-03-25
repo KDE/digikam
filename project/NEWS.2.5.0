@@ -1,12 +1,13 @@
-*****************************************************************************************************
 digiKam 2.5.0 - Release date: 2012-01-01
 
+*****************************************************************************************************
 NEW FEATURES:
 
-General : use internal libraw 0.14.4 to support new RAW camera :
-          Canon S100, Fuji X10, Panasonic GX1, Samsung NX200, Sony NEX-7.
+General        : Use internal libraw 0.14.4 to support new RAW camera :
+                 Canon S100, Fuji X10, Panasonic GX1, Samsung NX200, Sony NEX-7.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 279183 : Themes configuration dialogue does not open.
 002 ==> 284136 : After moving images the old thumbnails remain there.

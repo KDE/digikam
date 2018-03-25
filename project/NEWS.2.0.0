@@ -1,6 +1,6 @@
-*****************************************************************************************************
 digiKam 2.0.0 - Release date: 2011-07-24
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General        : XMP metadata sidecar support.
@@ -23,13 +23,19 @@ ImageEditor    : Foveon sensor based camera.
 ImageEditor    : New advanced RAW decoding settings backported from RawTherapee project.
 
 AdvancedRename : New datetime option "UnixTimeStamp" (requires Qt 4.7 or higher)
-Geolocation        : Complete rewrite of GUI, including reverse-geocoding feature.
+
+Geolocation    : Complete rewrite of GUI, including reverse-geocoding feature.
+
 YandexFotki    : New tool to export collection to Yandex web service (http://fotki.yandex.ru).
+
 MediaWiki      : New tool to export collection to MediaWiki based web service (http://www.mediawiki.org).
+
 RajceExport    : New tool to export collection to Rajce web service (http://www.rajce.idnes.cz).
+
 MetadataEdit   : Factoring Exif/Iptc/Xmp editor to a common dialog.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 253785 : GoogleMaps should be available in "Search Map".
 002 ==> 258436 : Traceability.

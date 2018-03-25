@@ -1,6 +1,6 @@
-**********************************************************************************************
 digiKam 0.9.0 - Release date: 2006-18-12
 
+**********************************************************************************************
 NEW FEATURES :
 
 General       : Sidebars are used at all to display metadata, comments & tags, and file properties.
@@ -8,54 +8,42 @@ General       : Removed imlib2 and libkexif dependencies. Add Exiv2 and LCMS dep
 General       : New API in digiKam core named DImg to manage image data in 8 and 16 bits colors depth.
 General       : New API in digiKam core named DMetadata to manage image metadata.
 General       : Ported all image filter algorithms to new DImg API. Support of 16 bits images.
-General       : New metadata viewers based on Exiv2 : Exif viewer, MakerNote viewer, IPTC viewer, 
-                and GPS locator.
+General       : New metadata viewers based on Exiv2 : Exif viewer, MakerNote viewer, IPTC viewer, and GPS locator.
 General       : New ICC profiles profile viewer based on LCMS.
 General       : New powerful widget to display CIE color space used by ICC profiles.
 General       : New implementation to load/save images file using a separate thread.
-General       : Tags/Rating/DateTime/Comments/PhotographersID/Copyrights are now stored in Exif 
-                and/or IPTC metadata tags.
-General       : digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags 
-                and Caption Iptc tags.
+General       : Tags/Rating/DateTime/Comments/PhotographersID/Copyrights are now stored in Exif and/or IPTC metadata tags.
+General       : digiKam comments are now store in JPEG file to JFIF section, Exif UserComments tags and Caption Iptc tags.
 General       : New fast preview pictures mode embedded into main interface.
 General       : New dcraw version detection at startup.
 General       : New option to force the refresh of Album contents.
 General       : Usability improvements of albums/pictures deletion.
 General       : New option to process a batch creation of all albums items thumbnails.
-General       : New option to "Select All", "Deselect", or "Invert Selection" of Tags in Tags Filter View and 
-                Comments and Tags side bar tabs.
+General       : New option to "Select All", "Deselect", or "Invert Selection" of Tags in Tags Filter View and Comments and Tags side bar tabs.
 General       : New option to set image as tag thumbnail on Tag Filters View using D&D.
-General       : New option to set a matching condition to use between tags in Tag Filters View 
-                (OR or AND condition).
+General       : New option to set a matching condition to use between tags in Tag Filters View (OR or AND condition).
 General       : Automatic image Tags creation/set using IPTC Keywords contents.
-General       : New tool to set pictures GPS information using a GPS device (available with 
-                next 0.1.3).
-General       : Removing external dcraw depency. Now digiKam include a full supported version of 
-                dcraw program in core.
+General       : New tool to set pictures GPS information using a GPS device.
+General       : Removing external dcraw depency. Now digiKam include a full supported version of dcraw program in core.
 General       : dcraw implementation updated to version 8.41.
 General       : New tool to edit EXIF and IPTC metadata (available with next 0.1.3).
-
 General       : Exiv2 depency fixed to 0.12 release.
 General       : Fix broken compilation using "./configure -enable-final" option.
-General       : About final release packaging, improve support of "./configure --enable-final" 
-                option everywhere.
+General       : About final release packaging, improve support of "./configure --enable-final" option everywhere.
 
 Image Editor  : Image Editor support 16 bits color depth images (RAW, TIFF, PNG, PNM).
-Image Editor  : Complete rewrite of image editor/showfoto gui implementation. Implementation 
-                is now common and is more easy to maintain!
+Image Editor  : Complete rewrite of image editor/showfoto gui implementation. Implementation is now common and is more easy to maintain!
 Image Editor  : Add a progress bar to Image editor/showfoto about IO image files access.
 Image Editor  : Support of ICC color profiles management using LCMS into Image editor/showfoto.
 Image Editor  : digiKam setup is now available from Image Editor menu.
 Image Editor  : TIFF and JPEG Exif thumbnail are recomputed at saving pictures.
 Image Editor  : Iptc preview image are recomputed at saving pictures.
-
 Image Editor  : New powerfull Noise Reduction algorithm based on dcamnoise2 implementation.
 Image Editor  : New powerfull Black & White converter tool using curves adjustements.
 Image Editor  : New tool to experiment ICC profiles to perform color corrections into images.
 Image Editor  : New preview rendering modes in all color correction image tools dialogs.
 Image Editor  : Redesign/polishing of all image tools dialogs. Histogram are available at all 
-                when it's necessary. All dialogs used in digiKamImagePlugins are common in digiKam 
-                core now.
+                when it's necessary. All dialogs used in digiKamImagePlugins are common in digiKam core now.
 Image Editor  : New zooming capabilities in image tools dialogs.
 Image Editor  : Ported all core image tools to new DImg API. Support of 16 bits images.
 Image Editor  : Ported all digiKamImagePlugins tools to new DImg API. Support of 16 bits images.
@@ -65,26 +53,21 @@ Image Editor  : Fixed and improved Color Management View workflow.
 
 Setup         : Advanced settings to load RAW files in Image Editor using external dcraw instance.
 Setup         : Setup implementation are now common between Showfoto and digiKam.
-Setup         : New Identity setup page to set default strings information about Photographer and 
-                copyright used when IPTC tags are updated.
-Setup         : The new batch thumbnail generator can be started when the Exif Auto-rotate option 
-                has been changed.
-Setup         : New Album Items Tool Tip setup tab to set witch information to show over the images 
-                using the pop-up window.
+Setup         : New Identity setup page to set default strings information about Photographer and copyright used when IPTC tags are updated.
+Setup         : The new batch thumbnail generator can be started when the Exif Auto-rotate option has been changed.
+Setup         : New Album Items Tool Tip setup tab to set witch information to show over the images using the pop-up window.
 Setup         : New color sheme theme 'Digikasa' from Sergio Di Rio Mare.
 Setup         : New dcraw options set compatible with dcraw release >= 8.16.
 
 Showfoto      : Image properties sidebar support
 Showfoto      : All images from a folder can be loaded at the same time.
 Showfoto      : Add 16 bits/color/pixel support (DImg API).
-Showfoto      : Thumbbar moved to the left by default in vertical mode. Image properties side bar to the 
-                right to make a consistant GUI with digiKam main interface.
+Showfoto      : Thumbbar moved to the left by default in vertical mode. Image properties side bar to the right to make a consistant GUI with digiKam main interface.
 Showfoto      : Thumbbar can be used to the bottom in horizontal mode.
 Showfoto      : New Exif Auto-rotate option like in digiKam ImageEditor.
 Showfoto      : New Set Orientation Exif flag to normal after Rotate/Flip like in digiKam ImageEditor.
 
-CameraGUI     : New option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags 
-                on the fly.
+CameraGUI     : New option to set metadata DateTime/PhotographerId/Copyright Exif and/or IPTC tags on the fly.
 CameraGUI     : JPEG Exif thumbnail and Iptc image preview are recomputed during Exif Auto-rotation.
 CameraGUI     : digiKam theme support.
 CameraGUI     : Custom prefix index depand of current images selection in the camera icon items
@@ -98,12 +81,12 @@ CameraGUI     : New option to lock/unlock pictures from camera to prevent unwant
 CameraGUI     : New option to convert JPEG files to lossless file format during download.
 CameraGUI     : New option to set date format of auto-created albums.
 CameraGUI     : New option to auto-create files extension-based sub-albums.
-CameraGUI     : New advanced config dialog to set date/time format used to rename camera pictures
-                file name during download.
+CameraGUI     : New advanced config dialog to set date/time format used to rename camera pictures file name during download.
 
 Geolocation   : Bookmark locations
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 087823 : Displaying images with ICC color profile when possible.
 002 ==> 091811 : Find pictures by meta tag info, date.

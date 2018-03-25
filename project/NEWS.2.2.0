@@ -1,13 +1,14 @@
-*****************************************************************************************************
 digiKam 2.2.0 - Release date: 2011-10-02
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General : Add image title metadata support.
 General : Add image title support metadata provided by  host application.
 General : Add a new tool to assemble images together.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 155374 : Allow setting Image titles different than image file name [patch].
 002 ==> 279581 : Can't compile digiKam with provided libpgf on PowerPC machine (BigEndian).

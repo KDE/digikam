@@ -1,12 +1,14 @@
-*****************************************************************************************************
 digiKam 4.1.0 - Release date: 2014-06-22
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General  : Add Gelocation indicator over thumbnails when image has GPS coordinateds.
+
 AlbumGUI : Thumbnails from icon-view now support large resolution monitor (WQHD or 4K). Thumbs size can be set until 512x512 px instead 256x256 px.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 334633 - Album metadata sorted in non-deterministic way in some cases.
 002 ==> 334631 - After editing album metadata album list is not re-sorted.

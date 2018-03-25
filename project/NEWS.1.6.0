@@ -1,22 +1,26 @@
-*********************************************************************************************************
 digiKam 1.6.0 - Release date: 2010-11-22
 
+*********************************************************************************************************
 NEW FEATURES:
 
 General        : Fix compilation under Mac OS-X through MacPorts project.
+General        : Fix compilation under Mac OS-X through MacPorts project.
 General        : External dependencies to libPGF and Clapack can use used now instead internal implementation
                  if available in host system dedicated to compile.
+
 AlbumGUI       : User can exclude tags in the tag-filter view.
+
 Slideshow      : User can change item rating during a slide.
+
 ImageEditor    : New option to display over/under exposure indicators if pure colors is detected
                  or if only one color component match the condition.
 ImageEditor    : New options to adjust the levels of over/under exposed pixels from histogram,
                  displayed by over/under exposure indicators.
 ImageEditor    : Aspect ratio crop tool is now able to deal with the aspect ratio of the current loaded image
                  in editor. You can keep the original proportions of the image after cropping.
-General        : Fix compilation under Mac OS-X through MacPorts project.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 148434 : Cannot change rating in slideshow.
 002 ==> 253911 : RawEngine access beyond array bounds (cameraXYZMatrix).

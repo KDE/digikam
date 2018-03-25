@@ -1,23 +1,28 @@
-*********************************************************************************************************
 digiKam 1.3.0 - Release date: 2010-06-07
 
+*********************************************************************************************************
 NEW FEATURES:
 
 General        : New Database interface to support different database backend.
                  MySql and SQlite are supported. Internal and Remote MySql server are supported.
 General        : RawEngine dependency set to 1.1.0 version.
 General        : MetadataEngine dependency set to 1.1.0 version.
-AdvancedRename : New option: database. Allows to rename files according to database values.
-QueueManager   : Add capability to apply an image waterwark over a photo.
 General        : MetadatEngine dependency set to 1.1.0 release.
 General        : RawEngine dependency set to 1.1.0 release.
-DNGWriter   : Update Adobe DNG sdk to 1.3.0.
+
+AdvancedRename : New option: database. Allows to rename files according to database values.
+
+QueueManager   : Add capability to apply an image waterwark over a photo.
+
+DNGWriter      : Update Adobe DNG sdk to 1.3.0.
                  Support non-square pixels.
                  Support 4-color sensors.
                  Support Fuji-sensors (experimental).
+
 SmugExport     : Support export of Captions.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 232632 : Tar will not compile DRawDecoding? has no member named DontStretchPixels.
 002 ==> 232628 : Crash on startup in RatingWidget.

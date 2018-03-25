@@ -1,16 +1,18 @@
-*****************************************************************************************************
 digiKam 2.3.0 - Release date: 2011-11-06
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General        : My Tags section from Captions/Tags sidebar have been moved to a dedicated sub-tab for
                  better usability with small screen.
-FlashExport    : New interface for tool: now  a wizard will guide you through exporting process.
+
+FlashExport    : New interface for tool: now a wizard will guide you through exporting process.
                : All tools are stored locally, user will need to download once
                : Posibility to always return and select a different tool on first page(previous version requested restarting tool)
                : Different options and exporting settings for every tool
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 262077 : Crash while trying to select a range of dates in timeline view.
 002 ==> 283304 : digiKam from git crashes after splash screen.

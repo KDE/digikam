@@ -1,14 +1,17 @@
-*****************************************************************************************************
 digiKam 0.3.0 - Release date: 2002-05-10
 
 NEW FEATURES:
+*****************************************************************************************************
 
 General        : Fix compilation under MSVC 9.
+
 GoogleServices : Support protected albums (sign-in required to view).
+
 PrintCreator   : Added per photo print management.
 PrintCreator   : Added Atkins page layout printing.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 186981 : Flickr on plasma crashes on "next photo".
 002 ==> 187512 : Album list does not show proper titles.

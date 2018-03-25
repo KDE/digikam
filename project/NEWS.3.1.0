@@ -1,11 +1,12 @@
-*****************************************************************************************************
 digiKam 3.1.0 - Release date: 2013-03-10
 
+*****************************************************************************************************
 NEW FEATURES:
 
-General           : Remove internal lqr-1 library code. Set only an optional and external dependency.
+General        : Remove internal lqr-1 library code. Set only an optional and external dependency.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 313902 - OSM maps not refreshing.
 002 ==> 308696 - No thumbnails on first start of geolocation module for newly imported images.

@@ -1,12 +1,14 @@
-*****************************************************************************************************
 digiKam 2.8.0 - Release date: 2012-08-05
 
+*****************************************************************************************************
 NEW FEATURES:
 
 CameraGUI : Add option to execute script during items to download from camera.
+
 MediaWiki : GUI improvmenets and new features to export items.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 296786 - Zoom to 100% pans to the top-left corner.
 002 ==> 299942 - Root Album Folders selection list does not expand to fill available space.

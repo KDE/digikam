@@ -1,15 +1,17 @@
-*****************************************************************************************************
 digiKam 3.5.0 - Release date: 2013-09-29
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General : New RAW cameras supported : Richon GR, Panasonic LF1, Canon EOS 70D, Sony RX100II, Sony RX1R, Olympus E-P5.
+
 Panorama: Autocrop. Cropping area defaults to the maximum inner rectangle of the panorama.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 324349 : Removing tags limited to 250 selected pictures.
 002 ==> 323648 : Tools cannot be deselected or digiKam not reading digikamrc.
 003 ==> 325111 : undo/redo does not take effect in the image.
 004 ==> 325264 : Feature request: Setting in digiKam to only detect faces, not trying to recognize them automatically.
-005 ==> 324239 - Panorama creation: give first and last (used) file name automatically.
+005 ==> 324239 : Panorama creation: give first and last (used) file name automatically.

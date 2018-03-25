@@ -1,11 +1,12 @@
-*****************************************************************************************************
 digiKam 0.6.0 - Release date: 2003-08-12
 
+*****************************************************************************************************
 NEW FEATURES:
 
-AdvancedSlideshow : Soundtracks can be loaded / saved now.
+AdvSlideshow   : Soundtracks can be loaded / saved now.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 142676 : Recursive slideshow option.
 002 ==> 195772 : Allow to load playlists rather than having to re-add the songs one by one.

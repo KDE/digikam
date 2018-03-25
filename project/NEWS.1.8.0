@@ -1,11 +1,12 @@
-*********************************************************************************************************
 digiKam 1.8.0 - Release date: 2011-01-23
 
+*********************************************************************************************************
 NEW FEATURES:
 
 General        : digiKam has now a stand alone installer for Microsoft Windows based on Null Soft Installer.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 256372 : Add a digiKam installer based on NSIS.
 002 ==> 261086 : Crash at startup.

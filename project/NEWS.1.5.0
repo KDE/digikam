@@ -1,18 +1,20 @@
-*********************************************************************************************************
 digiKam 1.5.0 - Release date: 2010-10-10
 
+*********************************************************************************************************
 NEW FEATURES:
 
-General             : Fix compilation under windows with TDM-GCC and MSVC compilers.
-General             : Including LensFun library source code as 3rd-party component, especially for windows target where
-                      this library is not available.
-Image Editor        : Improvement of algorithm to convert 8 bits image to 16 and limit histogram holes during conversion.
+General        : Fix compilation under windows with TDM-GCC and MSVC compilers.
+General        : Fix compilation under windows with TDM-GCC and MSVC compilers.
+General        : Including LensFun library source code as 3rd-party component, especially for windows target where
+                 this library is not available.
 
-Batch Queue Manager : Add new tool to remove metadata from images.
-Batch Queue Manager : Add new tool to apply Lens corrections using LensFun library.
-General             : Fix compilation under windows with TDM-GCC and MSVC compilers.
+Image Editor   : Improvement of algorithm to convert 8 bits image to 16 and limit histogram holes during conversion.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+Queue Manager  : Add new tool to remove metadata from images.
+Queue Manager  : Add new tool to apply Lens corrections using LensFun library.
+
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 247977 : Libpgf relevant : digiKam crash while scrolling the thumbnail view.
 002 ==> 249402 : Download window presents file in the opposite order than expected.

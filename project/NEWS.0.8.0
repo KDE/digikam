@@ -1,18 +1,23 @@
-*****************************************************************************************************
 digiKam 0.8.0 - Release date: 2006-07-10
 
+*****************************************************************************************************
 NEW FEATURES:
 
 FileTransfer   : New tool to import or export images via FTP, Samba, Fish (SSH) and many more using KIO slaves.
+
 AcquireImages  : Under windows, use Twain interface from libksane to factorize code.
+
 Shwup          : New tool to export images to Shwup web service (http://www.shwup.com).
+
 General        : All tools ported to Qt4. Qt3 transition class support is now dropped.
+
 PrintCreator   : New templates management.
 PrintCreator   : Icon preview for photo size choice.
 PrintCreator   : Caption per photo management.
 PrintCreator   : Added new templates for passport photos (6 photos 3.5x4cm and 4 photos 4.5x5cm).
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 187291 : FTP tool for uploading a selection of images.
 002 ==> 098279 : Exporting photos organised in tags into external directories.

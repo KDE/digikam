@@ -1,14 +1,16 @@
-*****************************************************************************************************
 digiKam 0.5.0 - Release date: 2002-10-03
 
+*****************************************************************************************************
 NEW FEATURES:
 
-DNGWriter    : Update internal XMP sdk from Adobe to version 4.4.
-PrintCreator : Added support for 2-1/3" x 3-1/3" pictures.
-PrintCreator : Added multiple pages printing.
-PrintCreator : Page layout into template.xml file, custom templates can be added now.
+DNGWriter      : Update internal XMP sdk from Adobe to version 4.4.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+PrintCreator   : Added support for 2-1/3" x 3-1/3" pictures.
+PrintCreator   : Added multiple pages printing.
+PrintCreator   : Page layout into template.xml file, custom templates can be added now.
+
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 162085 : digiKam freezes while printing.
 002 ==> 196890 : "Next" button on first wizard page is initially disabled.

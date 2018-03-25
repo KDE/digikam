@@ -1,15 +1,19 @@
-*********************************************************************************************************
 digiKam 1.1.0 - Release date: 2010-01-31
 
+*********************************************************************************************************
 NEW FEATURES:
 
 AdvancedRename : The ReplaceModifier has regular expressions support now.
-ImageEditor    : Add an option to add vignetting over an image.
-ExpoBlending   : New tool to make pseudo HDR image with a stack of bracketed images.
-PrintCreator : New custom grid layout
-PrintCreator : Filling page with custom size images
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+ImageEditor    : Add an option to add vignetting over an image.
+
+ExpoBlending   : New tool to make pseudo HDR image with a stack of bracketed images.
+
+PrintCreator   : New custom grid layout
+PrintCreator   : Filling page with custom size images
+
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 219559 : Crash when opening editor.
 002 ==> 217860 : Icon view movie thumbnail rotation overlay buttons.

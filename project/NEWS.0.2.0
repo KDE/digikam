@@ -1,13 +1,13 @@
-*****************************************************************************************************
 digiKam 0.2.0 - Release date: 2002-03-03
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General        : FlashExport tool has been renamed to FlashExport
 General        : New icons for all Export/import tools.
 General        : All import/export tools now have keyboard shortcuts
 General        : Tools now use metadata settings shared with host application.
-General        : all tools can be compiled natively under Microsoft Windows.
+General        : All tools can be compiled natively under Microsoft Windows.
 General        : Port to CMake/Qt4.
 
 FlickrExport   : Add support for 23hq.com service which uses Flickr API
@@ -37,8 +37,7 @@ SlideShow      : Normal effects are back.
 SlideShow      : New effect "Cubism".
 SlideShow      : Added support for RAW images.
 SlideShow      : Now you can play your favourite music during slideshow.
-SlideShow      : Now filenames, captions and progress indicators can have transparent
-                 backgrounds with OpenGL SlideShow as well.
+SlideShow      : Now filenames, captions and progress indicators can have transparent backgrounds with OpenGL SlideShow as well.
 SlideShow      : Added thumbnails into image list.
 SlideShow      : New effect "Mosaic"
 
@@ -61,7 +60,8 @@ RAWEngine      : Raw files are decoded in 16 bits color depth using same auto-ga
                  methods provided by dcraw with 8 bits color depth RAW image decoding.
 RAWEngine      : XMP metadata support.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 184312 : Use SmoothTransform for scaling images for export, calendar and slideshow
 002 ==> 140438 : 3 different viewers for diferents needs.

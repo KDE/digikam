@@ -1,6 +1,6 @@
-*****************************************************************************************************
 digiKam 2.7.0 - Release date: 2012-07-08
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General : Update internal Libraw library to last 0.14.7.
@@ -10,7 +10,8 @@ General : Update internal Libraw library to last 0.14.7.
 General : Update internal LensFun library to last 0.2.6 release.
 General : Update internal LibPGF library to last 6.12.24 release.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 301494 - Misspelling: "carreful".
 002 ==> 299988 - Using MySQL but on DB test got "Database connection test was not successful. Error was: Driver not loaded Driver not loaded".
