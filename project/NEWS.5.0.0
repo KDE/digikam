@@ -171,7 +171,7 @@ BUGFIXES:
 124 ==> 361275 - Compile time error: undefined reference while linking renamecustomizertest.
 125 ==> 361440 - Panorama Tool can`t find a pto2mk.
 126 ==> 361339 - Creates nameless subalbums and corrupts album hierarchy.
-127 ==> 361611 - Plugin 'Advanced Slide Show' - "Print Caption" does not work.
+127 ==> 361611 - 'Advanced Slide Show' and "Print Caption" does not work.
 128 ==> 361686 - When returning from full screen to preview mode the same image should be selected/shown.
 129 ==> 360922 - Unable to change or manage themes in digikam (and showfoto).
 130 ==> 354687 - Unable to search for GeoNames or OSM in Geolocation editor.
@@ -215,7 +215,7 @@ BUGFIXES:
 168 ==> 303992 - digiKam is closing after opening any file dialog.
 169 ==> 330509 - The "properties", "captions & tags" & "colors" sidebars all cause digikam to freeze when a picture is selected.
 170 ==> 262000 - Kioslave crashes during batch rename.
-171 ==> 308149 - digiKam - building with KDE fails due to link files not being supported by windows.
+171 ==> 308149 - digiKam - building fails due to link files not being supported by windows.
 172 ==> 240139 - If I press Cancel while attempting to Drag and drop of a file, the file is deleted from its original directory.
 173 ==> 363650 - I18N_ARGUMENT_MISSING in export dialog image type selection widget.
 174 ==> 359505 - Image deleted after applying tag.
@@ -370,15 +370,15 @@ BUGFIXES:
 323 ==> 264075 - Usability issues in batch resizing dialog.
 324 ==> 345198 - Batch rename is *extremely* slow.
 325 ==> 252181 - Resizing images: "Start" button hidden after non-existent folder has been selected.
-326 ==> 308019 - Application crash after using Plugins->Collections->Border images.
+326 ==> 308019 - Application crash after using Border images tool.
 327 ==> 125039 - Rename Images cancel button do not cancel but stop.
-328 ==> 126113 - schema of renaming images: resetting counter.
+328 ==> 126113 - Schema of renaming images: resetting counter.
 329 ==> 302714 - Crash when selecting Tools->Image Effects.
 330 ==> 144528 - in a batch process the resize images in 2d produces black images.
 331 ==> 152210 - Metadata lost when converting from png to jpeg (IPTC thumbnail too big).
 332 ==> 152905 - Batch processes does not work properly if target directory is outside Album Library Path.
 333 ==> 203379 - Error while converting RAW images to JPEG.
-334 ==> 161347 - Application doesn't clean properly ~/tmp/kde-username.
+334 ==> 161347 - Application doesn't clean properly ~/tmp.
 335 ==> 177175 - Resize image prepare to print 9x13 results in wrong.
 336 ==> 213172 - Convert images: png conversion not deterministic.
 337 ==> 289181 - Raw processor rotates images without Orientation EXIF tag.

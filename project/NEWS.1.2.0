@@ -118,7 +118,7 @@ BUGFIXES:
 069 ==> 229287 - Crash in digiKam when renaming with directory.
 070 ==> 148540 - Improvements of adding noise tool.
 071 ==> 229340 - digiKam Crashes When Saving PNG Files.
-072 ==> 229664 - Curves Widget not working anymore in BWSepia Plugin.
+072 ==> 229664 - Curves Widget not working anymore in BWSepia tool.
 073 ==> 229574 - Moving tags doesn't update the "tag counter" next to the tag name.
 074 ==> 229690 - No picture on thumb bar icon.
 075 ==> 229793 - Drop image file in digiKam.

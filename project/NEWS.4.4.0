@@ -34,7 +34,7 @@ BUGFIXES:
 014 ==> 290928 - Add keyboard shortcut to switch "Color managed view" from Preview mode.
 015 ==> 320304 - Aspect ratio not rounded and displays useless.
 016 ==> 325580 - digiKam crash running maintenance tool.
-017 ==> 338485 - Crash during Face recognition and detection about KFaceIface::Identity::isNull().
+017 ==> 338485 - Crash during Face recognition and detection about FaceEngine::Identity::isNull().
 018 ==> 275381 - GROUP : rating widget overlaps the grouping indicator over thumbnail.
 019 ==> 144168 - ICONVIEW : show only modification date if modification date is different than creation date.
 020 ==> 268284 - ZoomSlider from statubar tooltip looks inconsistent.
@@ -61,7 +61,7 @@ BUGFIXES:
 041 ==> 336333 - Map view in import tool is very slow.
 042 ==> 339173 - Album Tool-Tips: Incorrect parent collection shown.
 043 ==> 339052 - MANAGER: Sort order (ascending/descending) not saved when window is closed.
-044 ==> 171199 - Single-click behavior on tree-view do not respect settings from KDE control panel.
+044 ==> 171199 - Single-click behavior on tree-view do not respect settings from desktop control panel.
 045 ==> 257313 - Slideshow on different display (presentation mode).
 046 ==> 338783 - No EXIF/XMP info in "Metadata" right side-bar tabs.
 047 ==> 337507 - Face Detection gives no results, no matter the accuracy setting.

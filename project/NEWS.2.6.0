@@ -192,7 +192,7 @@ BUGFIXES:
 160 ==> 134222 - Gallery2 export doesn't respect items selections.
 161 ==> 154699 - Current item in the gallery export list view should be shown in preview.
 162 ==> 207390 - Gallery export shows regular file dialog instead of tags or folders.
-163 ==> 220319 - Gallery2 Export Plugin not allowing Maximum Dimension > 999 px.
+163 ==> 220319 - Gallery2 Export tool not allowing Maximum Dimension > 999 px.
 164 ==> 292268 - Coordinates into LineString not correct.
 165 ==> 268315 - xx MB field below "Mail program": Function unclear.
 166 ==> 220221 - Batch processing preview shows only the corner of images.

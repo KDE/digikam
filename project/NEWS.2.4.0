@@ -26,7 +26,7 @@ BUGFIXES:
 011 ==> 221188 - When system is set to Czech locale, there is "Aspect Ratio Crop" missing in transform menu.
 012 ==> 273433 - The size of the crop selection is not showed on the screen in aspect crop tool.
 013 ==> 237524 - Correct -> local contrast = program hangs.
-014 ==> 163166 - Plugin cannot be used on large photographs.
+014 ==> 163166 - Tools cannot be used on large photographs.
 015 ==> 284173 - Canceling face scan crashes digiKam.
 016 ==> 181813 - digiKam text decoration font size problem.
 017 ==> 265554 - Problem in colors between digiKam's theme and Gnome appearance.

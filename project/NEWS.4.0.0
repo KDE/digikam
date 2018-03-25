@@ -101,7 +101,7 @@ BUGFIXES:
 063 ==> 270159 - Tag replaced instead of added.
 064 ==> 273180 - Enable Fingerprints Rebuilding For Specific Albums....The Same As Reloading Thumbnails.
 065 ==> 328294 - bootstrap.local invokes wrong shell [patch].
-066 ==> 315881 - Cmake misplaces local KDE graphics components.
+066 ==> 315881 - Cmake misplaces local components.
 067 ==> 224038 - Thumbnails not shown on launch of digiKam.
 068 ==> 294835 - Albums are listed with (0) photos, but Database Statistics shows correct numbers of photos.
 069 ==> 186672 - Zoom slider should change amount of pictures, not picture size directly.
@@ -181,7 +181,7 @@ BUGFIXES:
 143 ==> 331700 - Some metadata are written with corrupted encoding of non-latin characters.
 144 ==> 331578 - digiKam deadlocks on batch renaming/moving images.
 145 ==> 257933 - digiKam zoom slider resets to minimum when returning from image preview [patch].
-146 ==> 311936 - FindKdcraw.cmake is outdated and causes digikam to fail building against KDE 4.10.
+146 ==> 311936 - RawEngine cmake script is outdated and causes digikam to fail building.
 147 ==> 331714 - Showfoto crash when opening RAW.
 148 ==> 332280 - freerotationfilter.cpp:92: (style) Same expression on both sides of '||'.
 149 ==> 332346 - Cannot delete (or Download & Delete) from the import dialog.

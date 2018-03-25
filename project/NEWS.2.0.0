@@ -9,7 +9,7 @@ General        : Face detection and recognition support.
 General        : Tag keyboard shortcuts support.
 General        : Color Labels support to improve photograph workfow.
 General        : Pick Labels support to improve photograph selection.
-General        : Color Theme engine is now ported to KDE color theme manager.
+General        : Color Theme engine is now ported to desktop color theme manager.
 General        : MySQl support improvements. Dependency is now optional.
 General        : Added JPEGTurbo library support.
 General        : Update internal LibPGF to 6.11.24 with OpenMP support.
@@ -42,9 +42,9 @@ BUGFIXES:
 003 ==> 258082 - FacesEngine doesn't increment ids' while saving hash database.
 004 ==> 259146 - FaceEngines doesn't learn new faces (patch).
 005 ==> 146288 - Face detection / recognition for digiKam.
-006 ==> 252964 - Please remove libs from kdegraphics and make independant.
+006 ==> 252964 - Please remove libs to be more independant.
 007 ==> 260619 - digiKam crash when raw format is being converted.
-008 ==> 261140 - FindKdcraw.cmake is installed both by kdelibs and kdegraphics.
+008 ==> 261140 - Find cmake script is installed both time.
 009 ==> 261946 - Unable to compile beta1 of digikam.
 010 ==> 262172 - The unknown tag should be plural.
 011 ==> 262067 - Crash when closing 2.0.0 beta1.
@@ -119,8 +119,8 @@ BUGFIXES:
 080 ==> 269378 - Not assigned face tags showing up.
 081 ==> 269458 - digiKam 2.0.0-beta3 crash while assigning face tags.
 082 ==> 269312 - Wish Rename file extension.
-083 ==> 269903 - Libkdcraw no longer compiles due to a linking error [patch].
-084 ==> 269862 - Libkmap compilation fails because of changes in MarbleWidget [patch].
+083 ==> 269903 - RawEngine no longer compiles due to a linking error [patch].
+084 ==> 269862 - Geolocation compilation fails because of changes in MarbleWidget [patch].
 085 ==> 269435 - digiKam does not display any picture from any source.
 086 ==> 246074 - Can't export photos to Picasaweb.
 087 ==> 252700 - Font color for icons in toolbar does not change for darker Themes.

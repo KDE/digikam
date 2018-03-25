@@ -242,7 +242,7 @@ BUGFIXES:
 147 ==> 120868 - Failed to create PDF callendar
 148 ==> 118936 - calendar wizard should default to next year.
 149 ==> 109739 - yuvscaler error in digikam.
-150 ==> 114514 - Do not delete the temporary folder "~/tmp/kde-user/-mpegencodertool-PID/" after each encoding process.
+150 ==> 114514 - Do not delete the temporary folder "~/tmp/.../-mpegencodertool-PID/" after each encoding process.
 151 ==> 114515 - Verify the existence of the MPEG output file path and the existence of the audio input file before launching the encoding process.
 152 ==> 114519 - Crash when stopping a Final Scan.
 153 ==> 103763 - Rawconverter (single) should fill a default file name into the save as dialog.

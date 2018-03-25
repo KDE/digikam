@@ -113,23 +113,23 @@ BUGFIXES:
 096 ==> 224094 - Modifying file (caption, keywords, EXIF) takes a very long time and 100 % CPU.
 097 ==> 216883 - digiKam crashed while browsing on picture editor (spacebar to next pic.).
 098 ==> 197483 - High resolution screen window narrow width.
-099 ==> 211814 - Raw import tool: annoying scrollbar
+099 ==> 211814 - Raw import tool: annoying scrollbar.
 100 ==> 156836 - Preview zoom to 100 percent is not 100 percent viewing Canon RAW/CR2.
 101 ==> 197316 - Two ways to do a simple zooming.
 102 ==> 224697 - Crash with gimp xcf files with metadata.
 103 ==> 224682 - Color Channel Mixer ui & usability.
 104 ==> 224841 - Search for duplicates in specific album only.
 105 ==> 199145 - Tags not exported to picasaweb [patch].
-106 ==> 215846 - PicasaWeb tool crashes digiKam after start sending the pic [delete, KIPIPicasawebExportPlugin::PicasawebWindow::slotUploadImages] (double deletion)
+106 ==> 215846 - PicasaWeb tool crashes digiKam after start sending the pic (double deletion)
 107 ==> 221056 - Expoblending.app causes digiKam compile to fail.
 108 ==> 205903 - accentuated chars are converted into a mess during picasa web export [patch]
 109 ==> 220433 - digiKam crash when has long time working on it.
 110 ==> 208426 - Exporting images fails with : "Could not connect to host xxxx.xxxx.xxxx.xxxx: Unknown error."
 111 ==> 222297 - Overwriting on Windows and multiple saves fixes [patch].
-112 ==> 198045 - New albums don't appear in list
-113 ==> 200469 - Ampersand character in caption causes Picasa export to freeze
+112 ==> 198045 - New albums don't appear in list.
+113 ==> 200469 - Ampersand character in caption causes Picasa export to freeze.
 114 ==> 222328 - In-place rotation converts 16 bit TIFF to 8 bit.
-115 ==> 219381 - fill page with images of certain size
+115 ==> 219381 - fill page with images of certain size.
 116 ==> 194946 - Simple Fix - extra " ' " in cleanframes/themes/template.xsl.
 117 ==> 182326 - Remember last position when geotagging images.
 118 ==> 165613 - Crash when GPS altitude is negative.

@@ -486,7 +486,7 @@ BUGFIXES:
 412 ==> 148502 - Show rating in embedded preview / slideshow.
 413 ==> 155408 - Thumbbar in the album view.
 414 ==> 138290 - Geolocation tool integration in the side bar.
-415 ==> 098651 - Image Plugin filter based on clens.
+415 ==> 098651 - Editor tool filter based on clens.
 416 ==> 147426 - Search for non-voted pics
 417 ==> 149555 - Always present search box instead of search by right-clicking and selecting simple or advanced search.
 418 ==> 139283 - IPTC Caption comment in search function.

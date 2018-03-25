@@ -24,7 +24,7 @@ BUGFIXES:
 008 ==> 339053 - Allow the usage of arrows to move in the photo sequence when in preview [patch].
 009 ==> 205776 - Option to load full image size in preview mode does not only do what it says with RAW files [patch].
 010 ==> 341306 - CANVAS: no "Select All" for the second time and selection fixes after crop and auto crop [patch].
-011 ==> 341298 - MetadataEngine-4.14.3/MetadataEngine/kexiv2exif.cpp:934: bad if test ?
+011 ==> 341298 - MetadataEngine bad if test ?
 012 ==> 341470 - Better speed after downloading many pictures with auto-rotation/flip option [patch].
 013 ==> 286611 - Tags are losts randomly when converting TIFF to PNG.
 014 ==> 320564 - CANVAS : full image dimensions not shown when not viewing at 100% zoom level.

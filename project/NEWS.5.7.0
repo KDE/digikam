@@ -63,7 +63,7 @@ BUGFIXES:
 032 ==> 191872 - Use the send image tool in showfoto.
 033 ==> 330274 - I downloaded showfoto photo program. Tried to open ShowFoto Handbook, got message could not find 'Khelpcenter'.
 034 ==> 240220 - Help button not working properly.
-035 ==> 110899 - All DigiKam ImagePlugins don't work in Showfoto.
+035 ==> 110899 - All DigiKam editor tool don't work in Showfoto.
 036 ==> 132162 - Load image tools on demand.
 037 ==> 240222 - ShowFoto Handbook menu item not working.
 038 ==> 211117 - Showfoto no filters or decorate menu.
@@ -370,7 +370,7 @@ BUGFIXES:
 342 ==> 195079 - digiKam albums appear empty.
 343 ==> 203031 - Album list doesn't show pictures even after tons of new pictures were imported.
 344 ==> 342557 - No rule to make target in recent git distribution.
-345 ==> 267789 - Make face detection (kface) and geo tagging (kmap) optional features.
+345 ==> 267789 - Make face detection  and geo tagging optional features.
 346 ==> 171778 - digiKam does not load photos in its database.
 347 ==> 196545 - Images on digikam are not dispayed / visualized.
 348 ==> 198067 - digiKam does not show any pictures.
@@ -539,5 +539,5 @@ BUGFIXES:
 511 ==> 383989 - Cannot create panoramas.
 512 ==> 383912 - AppImage crashes when started in terminal with 'debug' option.
 513 ==> 381144 - SmugMug export max dimension limited to 5000 pixels.
-514 ==> 381664 - Plugin leads to the home page of Flickr and 'An error has occurred: Invalid Frob It can not be continued.'
+514 ==> 381664 - Tool leads to the home page of Flickr and 'An error has occurred: Invalid Frob It can not be continued.'
 515 ==> 383988 - Imgur tool does not provide authentication mechanism.

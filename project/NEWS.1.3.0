@@ -112,7 +112,7 @@ BUGFIXES:
 086 ==> 226838 - "Auto Rotate/Flip Using EXIF Information" does not work.
 087 ==> 234099 - digiKam picasawebexport labels hierarchy disappears.
 088 ==> 210959 - Advanced Slideshow Crash.
-089 ==> 235555 - digiKam Plugins Export Piwigo fail.
+089 ==> 235555 - digiKam tool Export Piwigo fail.
 090 ==> 233393 - DNG converter doesn't work for Fuji Finepix S6500fd (= S6000fd).
 091 ==> 236846 - Geolocation does not work in gnome.
 092 ==> 237914 - Can't compile svn version.

@@ -384,7 +384,7 @@ BUGFIXES:
 336 ==> 196480 - Crash on starting digiKam.
 337 ==> 207053 - Replace current renaming in AlbumUI with AdvancedRename utility.
 338 ==> 206094 - Camera GUI: Selection with Shift+Pos1/End does not work.
-339 ==> 092098 - Plugin for automatically adding copyright marks to pictures.
+339 ==> 092098 - Tool for automatically adding copyright marks to pictures.
 340 ==> 192242 - Album rename sometimes doesn't show existing album name in dialog.
 341 ==> 208851 - Collections: Detection of duplicate collections too strict.
 342 ==> 179370 - Crashed while downloading a video file from camera.

@@ -26,7 +26,7 @@ BUGFIXES:
 012 ==> 340439 - No auto-rotation/flip Images after download [patch].
 013 ==> 338407 - Import not showing image thumbnails for certain Canon cameras [patch].
 014 ==> 326718 - Clear text button on file rename does nothing [patch].
-015 ==> 267789 - Make face detection (kface) and geo tagging (kmap) optional features [patch].
+015 ==> 267789 - Make face detection and geo tagging optional features [patch].
 016 ==> 172295 - digiKam has a hard dependency on Jasper library.
 017 ==> 339180 - Cmake and/or compiler pick up Geolocation header files from previous version.
 018 ==> 340581 - Ratings with rating == 0 cannot be selected on the left sidebar [patch].

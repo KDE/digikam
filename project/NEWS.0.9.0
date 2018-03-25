@@ -43,10 +43,10 @@ Image Editor  : New powerfull Black & White converter tool using curves adjustem
 Image Editor  : New tool to experiment ICC profiles to perform color corrections into images.
 Image Editor  : New preview rendering modes in all color correction image tools dialogs.
 Image Editor  : Redesign/polishing of all image tools dialogs. Histogram are available at all 
-                when it's necessary. All dialogs used in digiKamImagePlugins are common in digiKam core now.
+                when it's necessary. All dialogs used in editor tools are common in digiKam core now.
 Image Editor  : New zooming capabilities in image tools dialogs.
 Image Editor  : Ported all core image tools to new DImg API. Support of 16 bits images.
-Image Editor  : Ported all digiKamImagePlugins tools to new DImg API. Support of 16 bits images.
+Image Editor  : Ported all editor tools to new DImg API. Support of 16 bits images.
 Image Editor  : "Add Border" tool now respect aspect ratio of original image to render the decorative border.
 Image Editor  : "Add Border" tool now use a border size depending of a percent value of original image size.
 Image Editor  : Fixed and improved Color Management View workflow.
@@ -313,7 +313,7 @@ BUGFIXES:
 223 ==> 133276 - Make changing EXIF date of multiple files easier.
 224 ==> 133590 - Usability: walking through photos using image View (F3).
 225 ==> 122746 - Images are not shown anymore. black screen.
-226 ==> 132470 - Plugins not available unless logged in as superuser.
+226 ==> 132470 - Tools not available unless logged in as superuser.
 227 ==> 113801 - Little problem with image files extensions.
 228 ==> 127112 - Tools -> 'Gamma Adjustment...' fails silently when kgamma is not installed.
 229 ==> 136258 - User comments in the EXIF/IPTC-data aren't carried over to the "Comments".
