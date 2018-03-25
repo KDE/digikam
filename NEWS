@@ -147,4 +147,5 @@ BUGFIXES:
 130 ==> 347302 - Reassign name to face.
 131 ==> 391747 - BQM Tool "Remove Metadata" doesn't remove all metadata from image.
 132 ==> 285683 - Already imported pictures not recognized after daylight savings time.
-133 ==> 
+133 ==> 392309 - Icons are pixelated when my display scale factor is 1.2
+134 ==> 
