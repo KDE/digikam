@@ -139,7 +139,7 @@ TagsManager::TagsManager()
     connect(d->delAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteAction()));
 
-    d->tagMngrView->setCurrentIndex(d->tagMngrView->model()->index(0,0));
+    d->tagMngrView->setCurrentIndex(d->tagMngrView->model()->index(0, 0));
 
     StateSavingObject::loadState();
 
@@ -176,7 +176,7 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      d->tagPixmap = new QLabel();
      d->tagPixmap->setText(QLatin1String("Tag Pixmap"));
      d->tagPixmap->setMaximumWidth(40);
-     d->tagPixmap->setPixmap(QIcon::fromTheme(QLatin1String("tag")).pixmap(30,30));
+     d->tagPixmap->setPixmap(QIcon::fromTheme(QLatin1String("tag")).pixmap(30, 30));
 
      d->tagMngrView = new TagMngrTreeView(this, d->tagModel);
      d->tagMngrView->setConfigGroup(getConfigGroup());
@@ -208,9 +208,9 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      connect(d->tagPropWidget, SIGNAL(signalTitleEditReady()),
              this, SLOT(slotTitleEditReady()));
 
-     d->splitter->setStretchFactor(0,0);
-     d->splitter->setStretchFactor(1,1);
-     d->splitter->setStretchFactor(2,0);
+     d->splitter->setStretchFactor(0, 0);
+     d->splitter->setStretchFactor(1, 1);
+     d->splitter->setStretchFactor(2, 0);
      d->treeWindow->setCentralWidget(d->splitter);
 
      mainLayout->addWidget(d->treeWindow);
@@ -268,7 +268,7 @@ void TagsManager::slotAddAction()
 
     if (!parent)
     {
-        parent = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(d->tagMngrView->model()->index(0,0)));
+        parent = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(d->tagMngrView->model()->index(0, 0)));
     }
 
     if (!TagEditDlg::tagCreate(qApp->activeWindow(), parent, title, icon, ks))
@@ -345,7 +345,7 @@ void TagsManager::slotDeleteAction()
          * to root tag
          */
         Album* parent = t;
-        int depth = 0;
+        int depth     = 0;
 
         while (!parent->isRoot())
         {
@@ -383,25 +383,21 @@ void TagsManager::slotDeleteAction()
 
     if (!tagsWithImages.isEmpty())
     {
-        message = i18ncp(
-                "%2 is a comma separated list of tags to be deleted.",
-                "Tag %2 is assigned to one or more items. "
-                "Do you want to delete it?",
-                "Tags %2 are assigned to one or more items. "
-                "Do you want to delete them?",
-                tagsWithImages.count(),
-                JoinTagNamesToList(tagsWithImages)
-            );
+        message = i18ncp("%2 is a comma separated list of tags to be deleted.",
+                         "Tag %2 is assigned to one or more items. "
+                         "Do you want to delete it?",
+                         "Tags %2 are assigned to one or more items. "
+                         "Do you want to delete them?",
+                         tagsWithImages.count(),
+                         JoinTagNamesToList(tagsWithImages));
     }
     else
     {
-        message = i18ncp(
-                "%2 is a comma separated list of tags to be deleted.",
-                "Delete tag %2?",
-                "Delete tags %2?",
-                tagNames.count(),
-                JoinTagNamesToList(tagNames)
-            );
+        message = i18ncp("%2 is a comma separated list of tags to be deleted.",
+                         "Delete tag %2?",
+                         "Delete tags %2?",
+                         tagNames.count(),
+                         JoinTagNamesToList(tagNames));
     }
 
     const int result = QMessageBox::warning(this, i18np("Delete tag", "Delete tags", tagNames.count()),
@@ -415,7 +411,7 @@ void TagsManager::slotDeleteAction()
          * QMultimap doesn't provide reverse iterator, -1 is required
          * because end() points after the last element
          */
-        for (it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
+        for (it = sortedTags.end()-1 ; it != sortedTags.begin()-1 ; --it)
         {
             QString errMsg;
 
@@ -457,7 +453,7 @@ void TagsManager::slotResetTagIcon()
     const QList<TAlbum*> selected = d->tagMngrView->selectedTagAlbums();
     const QString icon = QLatin1String("tag");
 
-    for (QList<TAlbum*>::const_iterator it = selected.constBegin(); it != selected.constEnd(); ++it )
+    for (QList<TAlbum*>::const_iterator it = selected.constBegin() ; it != selected.constEnd() ; ++it )
     {
         TAlbum* const tag = *it;
 
@@ -477,7 +473,7 @@ void TagsManager::slotCreateTagAddr()
 
 void TagsManager::slotInvertSel()
 {
-    QModelIndex root                 = d->tagMngrView->model()->index(0,0);
+    QModelIndex root                 = d->tagMngrView->model()->index(0, 0);
     QItemSelectionModel* const model = d->tagMngrView->selectionModel();
     QModelIndexList selected         = model->selectedIndexes();
 
@@ -498,13 +494,13 @@ void TagsManager::slotInvertSel()
         }
 
         int it            = 0;
-        QModelIndex child = current.child(it++,0);
+        QModelIndex child = current.child(it++, 0);
 
         while (child.isValid())
         {
-            if(!selected.contains(child))
+            if (!selected.contains(child))
             {
-                if(!currentSet)
+                if (!currentSet)
                 {
                     /**
                      * Must set a new current item when inverting selection
@@ -522,7 +518,7 @@ void TagsManager::slotInvertSel()
                 greyNodes.enqueue(child);
             }
 
-            child = current.child(it++,0);
+            child = current.child(it++, 0);
         }
     }
 }
@@ -600,16 +596,16 @@ void TagsManager::slotWipeAll()
 
     if (backUpContainer.saveTags == true || backUpContainer.saveFaceTags == true)
     {
-        settingsChanged = true;
-        newContainer.saveTags = false;
+        settingsChanged           = true;
+        newContainer.saveTags     = false;
         newContainer.saveFaceTags = false;
         metaSettings->setSettings(newContainer);
     }
 
     AlbumPointerList<TAlbum> tagList;
-    const QModelIndex root  = d->tagMngrView->model()->index(0,0);
-    int iter          = 0;
-    QModelIndex child = root.child(iter++, 0);
+    const QModelIndex root  = d->tagMngrView->model()->index(0, 0);
+    int iter                = 0;
+    QModelIndex child       = root.child(iter++, 0);
 
     while (child.isValid())
     {
@@ -619,7 +615,7 @@ void TagsManager::slotWipeAll()
 
     AlbumPointerList<TAlbum>::iterator it;
 
-    for (it = tagList.begin(); it != tagList.end(); ++it)
+    for (it = tagList.begin() ; it != tagList.end() ; ++it)
     {
         QString errMsg;
 
@@ -830,7 +826,8 @@ void TagsManager::setupActions()
      * Right Toolbar with vertical properties button
      */
     d->rightToolBar = new DMultiTabBar(Qt::RightEdge);
-    d->rightToolBar->appendTab(QIcon::fromTheme(QLatin1String("tag-properties")).pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)), 0, i18n("Tag Properties"));
+    d->rightToolBar->appendTab(QIcon::fromTheme(QLatin1String("tag-properties"))
+                               .pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)), 0, i18n("Tag Properties"));
     d->rightToolBar->setStyle(DMultiTabBar::AllIconsText);
 
     connect(d->rightToolBar->tab(0), SIGNAL(clicked()),
@@ -893,7 +890,7 @@ void TagsManager::slotRemoveNotAssignedTags()
         return;
     }
 
-    QModelIndex root = d->tagMngrView->model()->index(0,0);
+    QModelIndex root = d->tagMngrView->model()->index(0, 0);
 
     QQueue<QModelIndex> greyNodes;
     QList<QModelIndex>  redNodes;
@@ -901,9 +898,9 @@ void TagsManager::slotRemoveNotAssignedTags()
 
     int iter = 0;
 
-    while (root.child(iter,0).isValid())
+    while (root.child(iter, 0).isValid())
     {
-        greyNodes.append(root.child(iter++,0));
+        greyNodes.append(root.child(iter++, 0));
     }
 
     while (!greyNodes.isEmpty())
@@ -915,14 +912,14 @@ void TagsManager::slotRemoveNotAssignedTags()
             continue;
         }
 
-        if (current.child(0,0).isValid())
+        if (current.child(0, 0).isValid())
         {
             // Add in the list
             int iterator = 0;
 
-            while (current.child(iterator,0).isValid())
+            while (current.child(iterator, 0).isValid())
             {
-                greyNodes.append(current.child(iterator++,0));
+                greyNodes.append(current.child(iterator++, 0));
             }
         }
         else

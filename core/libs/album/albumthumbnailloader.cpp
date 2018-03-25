@@ -140,7 +140,7 @@ QPixmap AlbumThumbnailLoader::getStandardTagIcon(RelativeSize relativeSize)
 
 QPixmap AlbumThumbnailLoader::getStandardTagRootIcon(RelativeSize relativeSize)
 {
-    return loadIcon(QLatin1String("tag-folder"), computeIconSize(relativeSize));
+    return loadIcon(QLatin1String("document-open"), computeIconSize(relativeSize));
 }
 
 QPixmap AlbumThumbnailLoader::getStandardTagIcon(TAlbum* const album, RelativeSize relativeSize)
