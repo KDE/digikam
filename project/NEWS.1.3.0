@@ -24,109 +24,109 @@ SmugExport     : Support export of Captions.
 *****************************************************************************************************
 BUGFIXES:
 
-001 ==> 232632 : Tar will not compile DRawDecoding? has no member named DontStretchPixels.
-002 ==> 232628 : Crash on startup in RatingWidget.
-003 ==> 232875 : Compile 1.2.0 from tar or 1.3.0 from SVN Decorate / Texture gives me a blank target and will not apply.
-004 ==> 233109 : digiKam fails pre-compile checks on win32.
-005 ==> 229951 : Crash while scrolling library.
-006 ==> 228979 : digiKam crashed after saving a photograph to PGF format.
-007 ==> 195652 : digiKam crashed after rebuilding fingerprints.
-008 ==> 233287 : Introduction of TagsCache has broken compilation on win32.
-009 ==> 215737 : digiKam crash when imported from usb flash drive.
-010 ==> 216327 : Crashed when scanning for new pictures.
-011 ==> 215528 : Crashed after importing removabale storage.
-012 ==> 229340 : digiKam Crashes When Saving PNG Files, now 1.2.0 also.
-013 ==> 233253 : no thumbnails are displayed in tags, timeline or search mode.
-014 ==> 233418 : Apparent slot typo in tagscache.cpp.
-015 ==> 232720 : All digiKam Albums show zero items even though pictures exist.
-016 ==> 195373 : Crash while closing after loading folder with large images.
-017 ==> 223383 : digiKam crashes when selecting another album after exporting an album to Picasa.
-018 ==> 233458 : digiKam lost collection identified by volume uuid but its still present.
-019 ==> 233739 : Color management is disabled when using "Aspect Ratio Crop".
-020 ==> 233927 : Olympus raw file crashes thumbnail view.
-021 ==> 183171 : Decode and encode metadata once only.
-022 ==> 233987 : digiKam crashes after renaming two files using the #-character.
-023 ==> 227911 : digiKam unable to assign movie thumbnail as album thumbnail.
-024 ==> 234102 : Images are not displayed into the virtual album.
-025 ==> 233879 : Templates for XMP and IPTC not working.
-026 ==> 214340 : Crash occured when removing tags.
-027 ==> 233094 : libpgf relevant : thumbnails blurry (when scaling) on PowerPC platform (big-endian).
-028 ==> 233549 : [database] Stuck at saving new image.
-029 ==> 231598 : Metadata on Albums are lost when album moved from one collection to another.
-030 ==> 234567 : Setting the rating causes reset of the zoom.
-031 ==> 234594 : digiKam crashes when scanning tags.
-032 ==> 234022 : Renaming tool "loose" original filename.
-033 ==> 234569 : BQM: Changes in "Queue Settings" does not enable the Run button.
-034 ==> 235158 : digiKam crashes when setting the rating [database relevant, DatabaseCoreBackend::execQuery].
-035 ==> 234545 : Red eye correction tool is missing from image editor.
-036 ==> 235368 : When right clic on RAW, the option "open with" is not there.
-037 ==> 235469 : digiKam Segmentation fault after 2 or 3 modifications.
-038 ==> 235491 : Regression in rev. 1115803, SIGSEGV or SIGABRT in image filters in editor.
-039 ==> 235589 : Build error String_literal_as_second_argument_to_i18n, databaseserver.cpp error.
-040 ==> 225533 : digiKam does not read metadata from Nepomuk.
-041 ==> 184444 : Customize Filename in Download window doesn't seem to work.
-042 ==> 188525 : Problem with same names on download from mass storage camera using file renaming.
-043 ==> 230515 : Cash of digikam on closing program.
-044 ==> 235171 : digiKam crashes when saving ratings to a raw (nef) file.
-045 ==> 235600 : Color auto corrections are broken.
-046 ==> 235902 : Preview of RAW image is nt updated if settings for import are changed.
-047 ==> 236002 : Photos not visible when starting in calendar view.
-048 ==> 151156 : Removing the metadata (EXIF) pannel while loading another picture shows blank black picture!
-049 ==> 236127 : digiKam crashes sometimes, when changing the rating of a rawfile.
-050 ==> 236523 : Auto-rotating of RW2 images is broken.
-051 ==> 237178 : digiKam confuses disk partitions.
-052 ==> 236425 : digiKam editor crashes when saving multiple images.
-053 ==> 237522 : Import doesn't rotate images according to exif orientation.
-054 ==> 237514 : digiKam fails to read the tag metadata when importing a digikam3.db database.
-055 ==> 237616 : Context menu "Move to Album" doesn't updated.
-056 ==> 237555 : digiKam crashed after moving two albums to the same destination album.
-057 ==> 219878 : Collection configuration: Configuration dialog is shown for 5 seconds after cancelling a scan for a new collection.
-058 ==> 232615 : Crash at closing image editor while importing raw.
-059 ==> 206127 : While saving data for multiple images, digikam blocks new changes.
-060 ==> 226239 : Clicking on windows ajust tool zoom the image but the view port does not correspond to the selection.
-061 ==> 211758 : Saving TIFF-16 compressed using exiv2 0.18 shows odd results.
-062 ==> 238338 : Sometimes digikam reads a wrong ICC profile from images.
-063 ==> 214669 : Stange duplicated images behavior after fingerprints rebuild.
-064 ==> 230442 : digiKam crashes when clicking directory button in rename pictures dialog.
-065 ==> 210612 : After rename in digiKam pictures preview are not possible.
-066 ==> 211804 : Curves adjust: hard to use when Gray theme.
-067 ==> 229370 : ICC profile in Colors tab incorrect for nef raw images, also crashes digikam for some profiles.
-068 ==> 221281 : Crash in Image Editor after editing multiple (100+) pictures.
-069 ==> 240269 : digiKam crash after update to 4.5 beta (4.4.80).
-070 ==> 233409 : Image watermark in batch queue manager.
-071 ==> 231585 : Empty date for mod files.
-072 ==> 238232 : Image rating widget in AlbumGUI is too sensitive.
-073 ==> 209281 : digiKam crashes when dragging image to light table.
-074 ==> 240828 : Crash after cancelling save operation that was stuck.
-075 ==> 233766 : Deadlock at changing from mysql to sqlite.
-076 ==> 240048 : Open images with double instead of single click.
-077 ==> 218633 : "Write Metadata to Selected Images" Very Slow for Large Number of Images.
-078 ==> 237565 : digiKam crash when unchecking external modules.
-079 ==> 225153 : digiKam advanced slide show crashes everytimes.
-080 ==> 234021 : digikam crash on loading.
-081 ==> 234073 : digiKam gpssync no altitude.
-082 ==> 233725 : digiKam gpssync unable to geolocalize a picture or movie.
-083 ==> 216604 : digiKam crashes on export to picasa.
-084 ==> 230201 : Error when trying export to picasa.
-085 ==> 216539 : Picasaweb can't select movie to export.
-086 ==> 226838 : "Auto Rotate/Flip Using EXIF Information" does not work.
-087 ==> 234099 : digiKam picasawebexport labels hierarchy disappears.
-088 ==> 210959 : Advanced Slideshow Crash.
-089 ==> 235555 : digiKam Plugins Export Piwigo fail.
-090 ==> 233393 : DNG converter doesn't work for Fuji Finepix S6500fd (= S6000fd).
-091 ==> 236846 : Geolocation does not work in gnome.
-092 ==> 237914 : Can't compile svn version.
-093 ==> 228483 : digiKam 1.1.0 with system libjpeg-8 breaks image rotation.
-094 ==> 215688 : Attempted uploading pics to picasaweb.
-095 ==> 238150 : Scangui is untranslated, because it loads no reqired translation catalog.
-096 ==> 240420 : Patch to export captions to smugmug.
-097 ==> 240749 : DNGWriter produces black files (Canon 5D mkII).
-098 ==> 221298 : digiKam segfaults on Flickr export.
-099 ==> 232382 : Setting custom page size is impossible.
-100 ==> 221542 : Build fails due to ambiguities.
-101 ==> 191907 : DNG Converter damages white balance metadata.
-102 ==> 233088 : Compile error on Win32 with MinGW4.
-103 ==> 232991 : DngConverter does not compile under OS X.
-104 ==> 233676 : Desktop-entry-contains-deprecated-key TerminalOptions.
-105 ==> 233673 : Spelling-error-in-binary metadataedit printimages rawconverter.
-106 ==> 233728 : digiKam picasawebexport unable to display my picasaweb.
+001 ==> 232632 - Tar will not compile DRawDecoding? has no member named DontStretchPixels.
+002 ==> 232628 - Crash on startup in RatingWidget.
+003 ==> 232875 - Compile 1.2.0 from tar or 1.3.0 from SVN Decorate / Texture gives me a blank target and will not apply.
+004 ==> 233109 - digiKam fails pre-compile checks on win32.
+005 ==> 229951 - Crash while scrolling library.
+006 ==> 228979 - digiKam crashed after saving a photograph to PGF format.
+007 ==> 195652 - digiKam crashed after rebuilding fingerprints.
+008 ==> 233287 - Introduction of TagsCache has broken compilation on win32.
+009 ==> 215737 - digiKam crash when imported from usb flash drive.
+010 ==> 216327 - Crashed when scanning for new pictures.
+011 ==> 215528 - Crashed after importing removabale storage.
+012 ==> 229340 - digiKam Crashes When Saving PNG Files, now 1.2.0 also.
+013 ==> 233253 - no thumbnails are displayed in tags, timeline or search mode.
+014 ==> 233418 - Apparent slot typo in tagscache.cpp.
+015 ==> 232720 - All digiKam Albums show zero items even though pictures exist.
+016 ==> 195373 - Crash while closing after loading folder with large images.
+017 ==> 223383 - digiKam crashes when selecting another album after exporting an album to Picasa.
+018 ==> 233458 - digiKam lost collection identified by volume uuid but its still present.
+019 ==> 233739 - Color management is disabled when using "Aspect Ratio Crop".
+020 ==> 233927 - Olympus raw file crashes thumbnail view.
+021 ==> 183171 - Decode and encode metadata once only.
+022 ==> 233987 - digiKam crashes after renaming two files using the #-character.
+023 ==> 227911 - digiKam unable to assign movie thumbnail as album thumbnail.
+024 ==> 234102 - Images are not displayed into the virtual album.
+025 ==> 233879 - Templates for XMP and IPTC not working.
+026 ==> 214340 - Crash occured when removing tags.
+027 ==> 233094 - libpgf relevant : thumbnails blurry (when scaling) on PowerPC platform (big-endian).
+028 ==> 233549 - [database] Stuck at saving new image.
+029 ==> 231598 - Metadata on Albums are lost when album moved from one collection to another.
+030 ==> 234567 - Setting the rating causes reset of the zoom.
+031 ==> 234594 - digiKam crashes when scanning tags.
+032 ==> 234022 - Renaming tool "loose" original filename.
+033 ==> 234569 - BQM: Changes in "Queue Settings" does not enable the Run button.
+034 ==> 235158 - digiKam crashes when setting the rating [database relevant, DatabaseCoreBackend::execQuery].
+035 ==> 234545 - Red eye correction tool is missing from image editor.
+036 ==> 235368 - When right clic on RAW, the option "open with" is not there.
+037 ==> 235469 - digiKam Segmentation fault after 2 or 3 modifications.
+038 ==> 235491 - Regression in rev. 1115803, SIGSEGV or SIGABRT in image filters in editor.
+039 ==> 235589 - Build error String_literal_as_second_argument_to_i18n, databaseserver.cpp error.
+040 ==> 225533 - digiKam does not read metadata from Nepomuk.
+041 ==> 184444 - Customize Filename in Download window doesn't seem to work.
+042 ==> 188525 - Problem with same names on download from mass storage camera using file renaming.
+043 ==> 230515 - Cash of digikam on closing program.
+044 ==> 235171 - digiKam crashes when saving ratings to a raw (nef) file.
+045 ==> 235600 - Color auto corrections are broken.
+046 ==> 235902 - Preview of RAW image is nt updated if settings for import are changed.
+047 ==> 236002 - Photos not visible when starting in calendar view.
+048 ==> 151156 - Removing the metadata (EXIF) pannel while loading another picture shows blank black picture!
+049 ==> 236127 - digiKam crashes sometimes, when changing the rating of a rawfile.
+050 ==> 236523 - Auto-rotating of RW2 images is broken.
+051 ==> 237178 - digiKam confuses disk partitions.
+052 ==> 236425 - digiKam editor crashes when saving multiple images.
+053 ==> 237522 - Import doesn't rotate images according to exif orientation.
+054 ==> 237514 - digiKam fails to read the tag metadata when importing a digikam3.db database.
+055 ==> 237616 - Context menu "Move to Album" doesn't updated.
+056 ==> 237555 - digiKam crashed after moving two albums to the same destination album.
+057 ==> 219878 - Collection configuration: Configuration dialog is shown for 5 seconds after cancelling a scan for a new collection.
+058 ==> 232615 - Crash at closing image editor while importing raw.
+059 ==> 206127 - While saving data for multiple images, digikam blocks new changes.
+060 ==> 226239 - Clicking on windows ajust tool zoom the image but the view port does not correspond to the selection.
+061 ==> 211758 - Saving TIFF-16 compressed using exiv2 0.18 shows odd results.
+062 ==> 238338 - Sometimes digikam reads a wrong ICC profile from images.
+063 ==> 214669 - Stange duplicated images behavior after fingerprints rebuild.
+064 ==> 230442 - digiKam crashes when clicking directory button in rename pictures dialog.
+065 ==> 210612 - After rename in digiKam pictures preview are not possible.
+066 ==> 211804 - Curves adjust: hard to use when Gray theme.
+067 ==> 229370 - ICC profile in Colors tab incorrect for nef raw images, also crashes digikam for some profiles.
+068 ==> 221281 - Crash in Image Editor after editing multiple (100+) pictures.
+069 ==> 240269 - digiKam crash after update to 4.5 beta (4.4.80).
+070 ==> 233409 - Image watermark in batch queue manager.
+071 ==> 231585 - Empty date for mod files.
+072 ==> 238232 - Image rating widget in AlbumGUI is too sensitive.
+073 ==> 209281 - digiKam crashes when dragging image to light table.
+074 ==> 240828 - Crash after cancelling save operation that was stuck.
+075 ==> 233766 - Deadlock at changing from mysql to sqlite.
+076 ==> 240048 - Open images with double instead of single click.
+077 ==> 218633 - "Write Metadata to Selected Images" Very Slow for Large Number of Images.
+078 ==> 237565 - digiKam crash when unchecking external modules.
+079 ==> 225153 - digiKam advanced slide show crashes everytimes.
+080 ==> 234021 - digikam crash on loading.
+081 ==> 234073 - digiKam gpssync no altitude.
+082 ==> 233725 - digiKam gpssync unable to geolocalize a picture or movie.
+083 ==> 216604 - digiKam crashes on export to picasa.
+084 ==> 230201 - Error when trying export to picasa.
+085 ==> 216539 - Picasaweb can't select movie to export.
+086 ==> 226838 - "Auto Rotate/Flip Using EXIF Information" does not work.
+087 ==> 234099 - digiKam picasawebexport labels hierarchy disappears.
+088 ==> 210959 - Advanced Slideshow Crash.
+089 ==> 235555 - digiKam Plugins Export Piwigo fail.
+090 ==> 233393 - DNG converter doesn't work for Fuji Finepix S6500fd (= S6000fd).
+091 ==> 236846 - Geolocation does not work in gnome.
+092 ==> 237914 - Can't compile svn version.
+093 ==> 228483 - digiKam 1.1.0 with system libjpeg-8 breaks image rotation.
+094 ==> 215688 - Attempted uploading pics to picasaweb.
+095 ==> 238150 - Scangui is untranslated, because it loads no reqired translation catalog.
+096 ==> 240420 - Patch to export captions to smugmug.
+097 ==> 240749 - DNGWriter produces black files (Canon 5D mkII).
+098 ==> 221298 - digiKam segfaults on Flickr export.
+099 ==> 232382 - Setting custom page size is impossible.
+100 ==> 221542 - Build fails due to ambiguities.
+101 ==> 191907 - DNG Converter damages white balance metadata.
+102 ==> 233088 - Compile error on Win32 with MinGW4.
+103 ==> 232991 - DngConverter does not compile under OS X.
+104 ==> 233676 - Desktop-entry-contains-deprecated-key TerminalOptions.
+105 ==> 233673 - Spelling-error-in-binary metadataedit printimages rawconverter.
+106 ==> 233728 - digiKam picasawebexport unable to display my picasaweb.

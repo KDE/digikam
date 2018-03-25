@@ -16,69 +16,69 @@ Queue Manager  : Add new tool to apply Lens corrections using LensFun library.
 *****************************************************************************************************
 BUGFIXES:
 
-001 ==> 247977 : Libpgf relevant : digiKam crash while scrolling the thumbnail view.
-002 ==> 249402 : Download window presents file in the opposite order than expected.
-003 ==> 249196 : Localization fails after upgrade !
-004 ==> 245069 : File name not added for import files.
-005 ==> 250003 : Tool for xcf is needed.
-006 ==> 250081 : Lens-autocorrection does not recognize the lens automaticly for Canon EOS 450D.
-007 ==> 207710 : Crash while loading large file (digiKam::DImgScale::dimgScaleAARGB, digiKam::DImg::smoothScaleSection, digiKam::DImgInterface::paintOnDevice).
-008 ==> 218256 : digiKam rc1 crashes while generating fingerprints.
-009 ==> 237786 : whitebalance doesn't work properly.
-010 ==> 250265 : Black background of short summary display.
-011 ==> 248889 : Notification name "save file complete" written in lowercase.
-012 ==> 249082 : digiKam crashes on startup leaving message of unknown symbol.
-013 ==> 249029 : Changing the parameters of a tool in the batch queue manager changes parameters of all instances of such tool.
-014 ==> 230515 : Crash of digikam on closing program.
-015 ==> 148721 : Remove serial numbers automatically.
-016 ==> 229092 : digiKam Scan for New images closes at 90%.
-017 ==> 248943 : Annoying and dangerous number input fields in editor.
-018 ==> 216353 : Make it possible to apply lens correction in batch.
-019 ==> 251920 : digiKam should match lenses on Exif.CanonCs.LensType, not ExifCanonCs.Lens.
-020 ==> 251118 : Sorting order is not remembered.
-021 ==> 170170 : High quality 8 to 16-bit conversion (histogram repair).
-022 ==> 252295 : "Fit to Window" button while using any tool does not permit panning.
-023 ==> 243179 : Wrong Taborder in Settings->Templates->Location|Contact.
-024 ==> 210198 : Copyright and Right Usage information in Settings are not saved in template file.
+001 ==> 247977 - Libpgf relevant : digiKam crash while scrolling the thumbnail view.
+002 ==> 249402 - Download window presents file in the opposite order than expected.
+003 ==> 249196 - Localization fails after upgrade !
+004 ==> 245069 - File name not added for import files.
+005 ==> 250003 - Tool for xcf is needed.
+006 ==> 250081 - Lens-autocorrection does not recognize the lens automaticly for Canon EOS 450D.
+007 ==> 207710 - Crash while loading large file (digiKam::DImgScale::dimgScaleAARGB, digiKam::DImg::smoothScaleSection, digiKam::DImgInterface::paintOnDevice).
+008 ==> 218256 - digiKam rc1 crashes while generating fingerprints.
+009 ==> 237786 - whitebalance doesn't work properly.
+010 ==> 250265 - Black background of short summary display.
+011 ==> 248889 - Notification name "save file complete" written in lowercase.
+012 ==> 249082 - digiKam crashes on startup leaving message of unknown symbol.
+013 ==> 249029 - Changing the parameters of a tool in the batch queue manager changes parameters of all instances of such tool.
+014 ==> 230515 - Crash of digikam on closing program.
+015 ==> 148721 - Remove serial numbers automatically.
+016 ==> 229092 - digiKam Scan for New images closes at 90%.
+017 ==> 248943 - Annoying and dangerous number input fields in editor.
+018 ==> 216353 - Make it possible to apply lens correction in batch.
+019 ==> 251920 - digiKam should match lenses on Exif.CanonCs.LensType, not ExifCanonCs.Lens.
+020 ==> 251118 - Sorting order is not remembered.
+021 ==> 170170 - High quality 8 to 16-bit conversion (histogram repair).
+022 ==> 252295 - "Fit to Window" button while using any tool does not permit panning.
+023 ==> 243179 - Wrong Taborder in Settings->Templates->Location|Contact.
+024 ==> 210198 - Copyright and Right Usage information in Settings are not saved in template file.
 025 ==> 228547 . Videos cannot return to thumbnail view.
-026 ==> 251899 : Can't rename files during import from camera.
-027 ==> 169264 : Color Management: Rendering Intents are mixed up.
-028 ==> 188335 : Slideshow shows movies as "cannot show picture "xyz.mov".
-029 ==> 252488 : digiKam incorrectly renders SD Card size.
-030 ==> 252489 : digiKam incorrectly detects SD Card name.
-031 ==> 252521 : README incorrectly claims kdegraphics-4.4 is sufficient.
-032 ==> 249248 : Updating fingerprints metadata.
-033 ==> 125042 : Batch Rename Image from Album do not select all album images.
-034 ==> 237516 : Open in Terminal command doesn't take systemsettings into account.
-035 ==> 225552 : digiKam can't remember setting.
-036 ==> 248087 : Preview not toggling from video mode to image mode.
-037 ==> 209382 : Caption not being updated in image file.
-038 ==> 253043 : digiKam requires both SQlite and MySql.
-039 ==> 252130 : Crash on adding things to batch queue.
-040 ==> 237961 : ICC Convert faulty in BQM.
-041 ==> 228833 : Rotate image in batch processing doesn't edit EXIF properly.
-042 ==> 213896 : After editing color, etc, i saved the jpg and it just crashed.
-043 ==> 232854 : Crashed while adding new tag.
-044 ==> 241770 : digiKam crashes.
-045 ==> 238045 : Random crashes of digiKam.
-046 ==> 188263 : Crash after tinkering with star rating widget in thumbbar.
-047 ==> 233549 : Database stuck at saving new image.
-048 ==> 221191 : Menu not disabled when decoding raw.
-049 ==> 237722 : Crash while applying Vivid color effect.
-050 ==> 207893 : Crash after undoing change in Image Editor.
-051 ==> 199801 : digiKam geolocation tool crash [exiv2].
-052 ==> 223774 : digiKam crashed at liquid rescale preview generation.
-053 ==> 233997 : Crash while importing from usb device after exivdates are read.
-054 ==> 213576 : Thumbbar not updated after saveas in image editor.
-055 ==> 224043 : Rotating certain images results in zero length file.
-056 ==> 252799 : After successful export of photo it should not be exported again.
-057 ==> 238823 : Batch RAW Conversion should copy tags / captions / ratings to the converted file.
-058 ==> 211558 : Raw converter: copy tags and rating.
-059 ==> 199318 : RAW to JPG Export doesn't use digiKam description.
-060 ==> 152208 : Comments lost when converting from png to jpeg.
-061 ==> 231763 : Crash when closing opengl viewer.
-062 ==> 218169 : Less/More options buttons don't change label.
-063 ==> 249785 : DNG Converter adds 1 hour to timestamp of Sony .arw files.
-064 ==> 251391 : OpenCV not detected during configuration.
-065 ==> 252362 : digiKam crash when launching.
+026 ==> 251899 - Can't rename files during import from camera.
+027 ==> 169264 - Color Management: Rendering Intents are mixed up.
+028 ==> 188335 - Slideshow shows movies as "cannot show picture "xyz.mov".
+029 ==> 252488 - digiKam incorrectly renders SD Card size.
+030 ==> 252489 - digiKam incorrectly detects SD Card name.
+031 ==> 252521 - README incorrectly claims kdegraphics-4.4 is sufficient.
+032 ==> 249248 - Updating fingerprints metadata.
+033 ==> 125042 - Batch Rename Image from Album do not select all album images.
+034 ==> 237516 - Open in Terminal command doesn't take systemsettings into account.
+035 ==> 225552 - digiKam can't remember setting.
+036 ==> 248087 - Preview not toggling from video mode to image mode.
+037 ==> 209382 - Caption not being updated in image file.
+038 ==> 253043 - digiKam requires both SQlite and MySql.
+039 ==> 252130 - Crash on adding things to batch queue.
+040 ==> 237961 - ICC Convert faulty in BQM.
+041 ==> 228833 - Rotate image in batch processing doesn't edit EXIF properly.
+042 ==> 213896 - After editing color, etc, i saved the jpg and it just crashed.
+043 ==> 232854 - Crashed while adding new tag.
+044 ==> 241770 - digiKam crashes.
+045 ==> 238045 - Random crashes of digiKam.
+046 ==> 188263 - Crash after tinkering with star rating widget in thumbbar.
+047 ==> 233549 - Database stuck at saving new image.
+048 ==> 221191 - Menu not disabled when decoding raw.
+049 ==> 237722 - Crash while applying Vivid color effect.
+050 ==> 207893 - Crash after undoing change in Image Editor.
+051 ==> 199801 - digiKam geolocation tool crash [exiv2].
+052 ==> 223774 - digiKam crashed at liquid rescale preview generation.
+053 ==> 233997 - Crash while importing from usb device after exivdates are read.
+054 ==> 213576 - Thumbbar not updated after saveas in image editor.
+055 ==> 224043 - Rotating certain images results in zero length file.
+056 ==> 252799 - After successful export of photo it should not be exported again.
+057 ==> 238823 - Batch RAW Conversion should copy tags / captions / ratings to the converted file.
+058 ==> 211558 - Raw converter: copy tags and rating.
+059 ==> 199318 - RAW to JPG Export doesn't use digiKam description.
+060 ==> 152208 - Comments lost when converting from png to jpeg.
+061 ==> 231763 - Crash when closing opengl viewer.
+062 ==> 218169 - Less/More options buttons don't change label.
+063 ==> 249785 - DNG Converter adds 1 hour to timestamp of Sony .arw files.
+064 ==> 251391 - OpenCV not detected during configuration.
+065 ==> 252362 - digiKam crash when launching.
 

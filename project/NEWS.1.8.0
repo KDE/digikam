@@ -8,45 +8,45 @@ General        : digiKam has now a stand alone installer for Microsoft Windows b
 *****************************************************************************************************
 BUGFIXES:
 
-001 ==> 256372 : Add a digiKam installer based on NSIS.
-002 ==> 261086 : Crash at startup.
-003 ==> 212947 : digiKan crashes upon import of large photo collection.
-004 ==> 261015 : digiKam Fingerprinter crashes.
-005 ==> 237639 : Wish: All thumbs created in a folder automatically.
-006 ==> 189585 : Thumbnails do not display.
-007 ==> 255852 : digiKam crashed when browsing/rating images.
-008 ==> 184635 : Empty menu when right clicking on an image.
-009 ==> 261868 : Provide a progress indicator for "rename".
-010 ==> 244560 : digiKam crash while viewing photos.
-011 ==> 261582 : Default filename for renamed imports: remove the colon character.
-012 ==> 262065 : Linking issue with Marble library.
-013 ==> 261879 : Ubuntu unity compatibility bugs: export menu disappeared.
-014 ==> 262296 : Camera GUI does not open [patch].
-015 ==> 201788 : Picture navigation problems and disambiguation.
-016 ==> 261415 : digiKam crashes when adding lens data to ~/.local.
-017 ==> 253062 : Database of 80,000+ images wiped out.
-018 ==> 263083 : digiKam editor crashes on "save" and "save as" (KFileDialog relevant).
-019 ==> 252404 : digiKam crashes when modifying caption.
-020 ==> 262720 : Rebuild thumbnails or 'scan for new images' should work on just current folder.
-021 ==> 242036 : digiKam crashed when pressing 'Album -> New'.
-022 ==> 235597 : Disconnected usb passport external hard drive using "safely remove drive" option.
-023 ==> 237957 : Crash while looking at folder with 380 images for first time.
-024 ==> 253067 : Crash when viewing pictures.
-025 ==> 255054 : Crash during picture import [KDirWatch::contains, digiKam::AlbumManager::addAlbumRoot, digiKam::AlbumManager::slotCollectionLocationStatusChanged].
-026 ==> 258106 : digiKam crahed on search Pictures on individal Album.
-027 ==> 261384 : Crash while scrolling the raw image preview.
-028 ==> 258922 : digiKam crashed while scrolling through images in folder.
-029 ==> 263726 : Metadata lost when decoding a raw file.
-030 ==> 224047 : Thumbnails incorrectly rotated on certain images.
-031 ==> 239902 : digiKam seems to find images that are not in the collection directory.
-032 ==> 245958 : Some tags lost on batch color space conversion - import metadata does not work.
-033 ==> 246735 : Frame rate drops to around 5 fps when dragging & dropping.
-034 ==> 261275 : Fails to build [patch].
-035 ==> 253257 : Program uploads only part of file or smaller version of file and match error occurs.
-036 ==> 257514 : Scaling of Pictures for print.
-036 ==> 196855 : Remember last postition, remember last view mode, cache the last view.
-038 ==> 262125 : DNG Conversion can't be inverted. Embedded file is corrupted.
-039 ==> 245956 : Upload video from digiKam to Picasa.
-040 ==> 262642 : Better looking of "captions" during slideshow [patch].
-041 ==> 263545 : Crashed, when trying to import photo from picasaweb.
+001 ==> 256372 - Add a digiKam installer based on NSIS.
+002 ==> 261086 - Crash at startup.
+003 ==> 212947 - digiKan crashes upon import of large photo collection.
+004 ==> 261015 - digiKam Fingerprinter crashes.
+005 ==> 237639 - Wish: All thumbs created in a folder automatically.
+006 ==> 189585 - Thumbnails do not display.
+007 ==> 255852 - digiKam crashed when browsing/rating images.
+008 ==> 184635 - Empty menu when right clicking on an image.
+009 ==> 261868 - Provide a progress indicator for "rename".
+010 ==> 244560 - digiKam crash while viewing photos.
+011 ==> 261582 - Default filename for renamed imports: remove the colon character.
+012 ==> 262065 - Linking issue with Marble library.
+013 ==> 261879 - Ubuntu unity compatibility bugs: export menu disappeared.
+014 ==> 262296 - Camera GUI does not open [patch].
+015 ==> 201788 - Picture navigation problems and disambiguation.
+016 ==> 261415 - digiKam crashes when adding lens data to ~/.local.
+017 ==> 253062 - Database of 80,000+ images wiped out.
+018 ==> 263083 - digiKam editor crashes on "save" and "save as" (KFileDialog relevant).
+019 ==> 252404 - digiKam crashes when modifying caption.
+020 ==> 262720 - Rebuild thumbnails or 'scan for new images' should work on just current folder.
+021 ==> 242036 - digiKam crashed when pressing 'Album -> New'.
+022 ==> 235597 - Disconnected usb passport external hard drive using "safely remove drive" option.
+023 ==> 237957 - Crash while looking at folder with 380 images for first time.
+024 ==> 253067 - Crash when viewing pictures.
+025 ==> 255054 - Crash during picture import [KDirWatch::contains, digiKam::AlbumManager::addAlbumRoot, digiKam::AlbumManager::slotCollectionLocationStatusChanged].
+026 ==> 258106 - digiKam crahed on search Pictures on individal Album.
+027 ==> 261384 - Crash while scrolling the raw image preview.
+028 ==> 258922 - digiKam crashed while scrolling through images in folder.
+029 ==> 263726 - Metadata lost when decoding a raw file.
+030 ==> 224047 - Thumbnails incorrectly rotated on certain images.
+031 ==> 239902 - digiKam seems to find images that are not in the collection directory.
+032 ==> 245958 - Some tags lost on batch color space conversion - import metadata does not work.
+033 ==> 246735 - Frame rate drops to around 5 fps when dragging & dropping.
+034 ==> 261275 - Fails to build [patch].
+035 ==> 253257 - Program uploads only part of file or smaller version of file and match error occurs.
+036 ==> 257514 - Scaling of Pictures for print.
+036 ==> 196855 - Remember last postition, remember last view mode, cache the last view.
+038 ==> 262125 - DNG Conversion can't be inverted. Embedded file is corrupted.
+039 ==> 245956 - Upload video from digiKam to Picasa.
+040 ==> 262642 - Better looking of "captions" during slideshow [patch].
+041 ==> 263545 - Crashed, when trying to import photo from picasaweb.
 

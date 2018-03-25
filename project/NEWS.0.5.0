@@ -12,33 +12,33 @@ PrintCreator   : Page layout into template.xml file, custom templates can be add
 *****************************************************************************************************
 BUGFIXES:
 
-001 ==> 162085 : digiKam freezes while printing.
-002 ==> 196890 : "Next" button on first wizard page is initially disabled.
-003 ==> 180055 : Can't create new photoset: Invalid primary photo id (n).
-004 ==> 192541 : Name based Flickr set selection is ambiguous [patch].
-005 ==> 180244 : Timeadjust is not building on mac os x leopard.
-006 ==> 169952 : Pictures on nfs-drive crashes digiKam when i send picture as mail.
-007 ==> 173664 : Menu: Can't resize image(s).
-008 ==> 199129 : xmp_sdk/common/LargeFileAccess.cpp: size of array ‘check_off_t_size’ is negative.
-009 ==> 188850 : Does not upload to picassaweb --- just hangs for hours.
-010 ==> 147366 : SIGABORT on Second Scan from HP 5200 scanner.
-011 ==> 190208 : Change image properties options should be grayed out when the check box is unchecked.
-012 ==> 146487 : -tools export to email fails when email too large.
-013 ==> 189984 : Impossible to email images if the path contains characters such as éèà.
-014 ==> 161337 : Image rotation of converted RAW photos (portrait format) broken.
-015 ==> 196888 : Create Calender: Year formatted as 2,009 on last page of wizard.
-016 ==> 111697 : I wish for the option to change the first day of week (sun / mon).
-017 ==> 187517 : Geolocation when entering no map.
-018 ==> 200483 : digiKam crashes after batch image-color-improvement on single picture.
-019 ==> 200558 : Crash when saving scanned image to .tiff.
-020 ==> 200217 : Crash after batch recompress.
-021 ==> 200722 : Crashes after successfull batch and closing resize dialog.
-022 ==> 200647 : Not all main settings are not restored correctly.
-023 ==> 168243 : Delete photo after not found imagemagick.
-024 ==> 149488 : After batch renaming pictures, the pictures appears as unkown images, and can't be removed from album nor can be viewed or edit
-025 ==> 146828 : Sendimages opera command line.
-026 ==> 186648 : Batch rename doesn't refresh view.
-027 ==> 188426 : Add support for different size  printwizard templates.
-028 ==> 200960 : Image / Metadata / Remove Captions does not remove caption from Xmp.tiff.ImageDescription.
-029 ==> 155179 : Slideshow ignores Rating Filter.
-030 ==> 201257 : digiKam crashes when batch resizing images.
+001 ==> 162085 - digiKam freezes while printing.
+002 ==> 196890 - "Next" button on first wizard page is initially disabled.
+003 ==> 180055 - Can't create new photoset: Invalid primary photo id (n).
+004 ==> 192541 - Name based Flickr set selection is ambiguous [patch].
+005 ==> 180244 - Timeadjust is not building on mac os x leopard.
+006 ==> 169952 - Pictures on nfs-drive crashes digiKam when i send picture as mail.
+007 ==> 173664 - Menu: Can't resize image(s).
+008 ==> 199129 - xmp_sdk/common/LargeFileAccess.cpp: size of array ‘check_off_t_size’ is negative.
+009 ==> 188850 - Does not upload to picassaweb --- just hangs for hours.
+010 ==> 147366 - SIGABORT on Second Scan from HP 5200 scanner.
+011 ==> 190208 - Change image properties options should be grayed out when the check box is unchecked.
+012 ==> 146487 - -tools export to email fails when email too large.
+013 ==> 189984 - Impossible to email images if the path contains characters such as éèà.
+014 ==> 161337 - Image rotation of converted RAW photos (portrait format) broken.
+015 ==> 196888 - Create Calender: Year formatted as 2,009 on last page of wizard.
+016 ==> 111697 - I wish for the option to change the first day of week (sun / mon).
+017 ==> 187517 - Geolocation when entering no map.
+018 ==> 200483 - digiKam crashes after batch image-color-improvement on single picture.
+019 ==> 200558 - Crash when saving scanned image to .tiff.
+020 ==> 200217 - Crash after batch recompress.
+021 ==> 200722 - Crashes after successfull batch and closing resize dialog.
+022 ==> 200647 - Not all main settings are not restored correctly.
+023 ==> 168243 - Delete photo after not found imagemagick.
+024 ==> 149488 - After batch renaming pictures, the pictures appears as unkown images, and can't be removed from album nor can be viewed or edit
+025 ==> 146828 - Sendimages opera command line.
+026 ==> 186648 - Batch rename doesn't refresh view.
+027 ==> 188426 - Add support for different size  printwizard templates.
+028 ==> 200960 - Image / Metadata / Remove Captions does not remove caption from Xmp.tiff.ImageDescription.
+029 ==> 155179 - Slideshow ignores Rating Filter.
+030 ==> 201257 - digiKam crashes when batch resizing images.

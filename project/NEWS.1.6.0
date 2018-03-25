@@ -22,49 +22,49 @@ ImageEditor    : Aspect ratio crop tool is now able to deal with the aspect rati
 *****************************************************************************************************
 BUGFIXES:
 
-001 ==> 148434 : Cannot change rating in slideshow.
-002 ==> 253911 : RawEngine access beyond array bounds (cameraXYZMatrix).
-003 ==> 254135 : Pipette-tool des not work in image editor/showfoto.
-004 ==> 254182 : Can't create mysql-entries for new tags.
-005 ==> 253702 : Under/overexposure indicator doesn't work on big-endian processors.
-006 ==> 254397 : Full stop at the end of checkbox label.
-007 ==> 254381 : Copy any pic to some place - only _move_ is available.
-008 ==> 148382 : Overexposure indication already when fully "saturated".
-009 ==> 233438 : digiKam crash when editing raw images on OS X.
-010 ==> 248302 : Crash while jumping back and forth in preview.
-011 ==> 254315 : Please consider attached patch for build system.
-012 ==> 224245 : Each image editor tool should remember the zoom ratio.
-013 ==> 220425 : Esc doesn't work for editor tools when lose focus.
-014 ==> 255271 : digiKam crashes on lens auto-correction function.
-015 ==> 254679 : Crash when closign digikam while filter active.
-016 ==> 254357 : digiKam crashes after selecting a month in calendarview.
-017 ==> 254203 : Libpgf relevant : digiKam crashes while displaying thumbnails on Ultra-SPARC platform.
-018 ==> 233005 : Sorting in thumb panel differs from tree.
-019 ==> 229282 : digiKam shutdown as I was sellecting crop to crop an image.
-020 ==> 241575 : digiKam crashes after saving several (>2) pictures.
-021 ==> 227901 : Can't search for Ratings in Advanced Search.
-022 ==> 141753 : Ability to exclude tags in tag filter.
-023 ==> 206866 : Moving / renaming files creates duplicates in the ThumbsDB.
-024 ==> 255478 : digiKam database tables only grow in size and get never cleaned.
-025 ==> 189454 : Preview images react strange to mouse movement.
-026 ==> 257134 : digiKam crashes when entering its settings.
-027 ==> 257103 : Can't save images modified with Image editor.
-028 ==> 247175 : digiKam doesn't exit after closing main window.
-029 ==> 252737 : Direct capture bug 2 of 2.
-030 ==> 243497 : digikam does not exit when "quit", stuck in select.
-031 ==> 257329 : Build fails - openmp flags.
-032 ==> 254103 : "previous photo" and "next page" in the same context.
-033 ==> 254205 : Compiling fails on SPARC platform because "qDNGBigEndian" macro is not defined.
-034 ==> 232896 : Application crashed after restarting an upload to picassa with previous change of selected photos.
-035 ==> 212125 : DNG files do not have image contents.
-036 ==> 255137 : Some exifdata lost when converting CR2.
-037 ==> 256303 : Quotation marks in caption appear as &quot; in picasaweb.
-038 ==> 244706 : PicasawebExport special symbol gui freeze.
-039 ==> 243877 : Picasaweb tool crashes when active video upload removed.
-040 ==> 240382 : Picasaweb: pressing of "-" while photo uploading causes crash.
-041 ==> 256471 : Add spell checking to text areas.
-042 ==> 248284 : After upload finishes Cancel button should turn into Close.
-043 ==> 251860 : [patch] Cancel button should change to close once photo upload is complete.
-044 ==> 256177 : Strange picture coloring and missing meta data when creating from CR2 file.
-045 ==> 253864 : digiKam crash when removing file from export to smugmug list.
-046 ==> 236385 : digiKam crash on red eye removing.
+001 ==> 148434 - Cannot change rating in slideshow.
+002 ==> 253911 - RawEngine access beyond array bounds (cameraXYZMatrix).
+003 ==> 254135 - Pipette-tool des not work in image editor/showfoto.
+004 ==> 254182 - Can't create mysql-entries for new tags.
+005 ==> 253702 - Under/overexposure indicator doesn't work on big-endian processors.
+006 ==> 254397 - Full stop at the end of checkbox label.
+007 ==> 254381 - Copy any pic to some place - only _move_ is available.
+008 ==> 148382 - Overexposure indication already when fully "saturated".
+009 ==> 233438 - digiKam crash when editing raw images on OS X.
+010 ==> 248302 - Crash while jumping back and forth in preview.
+011 ==> 254315 - Please consider attached patch for build system.
+012 ==> 224245 - Each image editor tool should remember the zoom ratio.
+013 ==> 220425 - Esc doesn't work for editor tools when lose focus.
+014 ==> 255271 - digiKam crashes on lens auto-correction function.
+015 ==> 254679 - Crash when closign digikam while filter active.
+016 ==> 254357 - digiKam crashes after selecting a month in calendarview.
+017 ==> 254203 - Libpgf relevant : digiKam crashes while displaying thumbnails on Ultra-SPARC platform.
+018 ==> 233005 - Sorting in thumb panel differs from tree.
+019 ==> 229282 - digiKam shutdown as I was sellecting crop to crop an image.
+020 ==> 241575 - digiKam crashes after saving several (>2) pictures.
+021 ==> 227901 - Can't search for Ratings in Advanced Search.
+022 ==> 141753 - Ability to exclude tags in tag filter.
+023 ==> 206866 - Moving / renaming files creates duplicates in the ThumbsDB.
+024 ==> 255478 - digiKam database tables only grow in size and get never cleaned.
+025 ==> 189454 - Preview images react strange to mouse movement.
+026 ==> 257134 - digiKam crashes when entering its settings.
+027 ==> 257103 - Can't save images modified with Image editor.
+028 ==> 247175 - digiKam doesn't exit after closing main window.
+029 ==> 252737 - Direct capture bug 2 of 2.
+030 ==> 243497 - digikam does not exit when "quit", stuck in select.
+031 ==> 257329 - Build fails - openmp flags.
+032 ==> 254103 - "previous photo" and "next page" in the same context.
+033 ==> 254205 - Compiling fails on SPARC platform because "qDNGBigEndian" macro is not defined.
+034 ==> 232896 - Application crashed after restarting an upload to picassa with previous change of selected photos.
+035 ==> 212125 - DNG files do not have image contents.
+036 ==> 255137 - Some exifdata lost when converting CR2.
+037 ==> 256303 - Quotation marks in caption appear as &quot; in picasaweb.
+038 ==> 244706 - PicasawebExport special symbol gui freeze.
+039 ==> 243877 - Picasaweb tool crashes when active video upload removed.
+040 ==> 240382 - Picasaweb: pressing of "-" while photo uploading causes crash.
+041 ==> 256471 - Add spell checking to text areas.
+042 ==> 248284 - After upload finishes Cancel button should turn into Close.
+043 ==> 251860 - [patch] Cancel button should change to close once photo upload is complete.
+044 ==> 256177 - Strange picture coloring and missing meta data when creating from CR2 file.
+045 ==> 253864 - digiKam crash when removing file from export to smugmug list.
+046 ==> 236385 - digiKam crash on red eye removing.

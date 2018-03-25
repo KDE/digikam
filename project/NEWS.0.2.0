@@ -63,61 +63,61 @@ RAWEngine      : XMP metadata support.
 *****************************************************************************************************
 BUGFIXES:
 
-001 ==> 184312 : Use SmoothTransform for scaling images for export, calendar and slideshow
-002 ==> 140438 : 3 different viewers for diferents needs.
-003 ==> 184553 : Encoding issue with gallery2.
-004 ==> 159794 : Cannot rotate .tif images in digiKam.
-005 ==> 184702 : Cannot rotate TIFFs in Album GUI.
-006 ==> 184332 : Compiling error with Qt4.5.
-007 ==> 177137 : digiKam print assistant problems and ideas.
-008 ==> 176367 : Crop stage does not allow rotation or selection.
-009 ==> 178983 : Next/back-buttons in print-assistant should be labeled.
-010 ==> 095404 : PrintCreator print image with custom size, original size, autoscaled size to paper.
-011 ==> 183661 : Better action icons for export tools
-012 ==> 187203 : Batch raw converter crash digikam.
-013 ==> 181973 : Raw batch converter loses exif information.
-014 ==> 181334 : The artwork API in libgpod-0.7.0 has changed slightly, IpodExport tool needs updated.
-015 ==> 181853 : Entering new xmp meta data removes old one from the image file.
-016 ==> 133649 : Scale images instead of cropping.
-017 ==> 182838 : Change API authentication to Desktop application type.
-018 ==> 175928 : digiKam crashing when trying to export to gallery2 web service.
-019 ==> 181694 : Edit caption should present current caption for easier modification.
-020 ==> 179439 : Rotation or flip do not update internal thumbnail.
-021 ==> 180245 : Timeadjust is not building on mac os x leopard.
-022 ==> 180656 : Wrong file selection filter in export picasaweb.
-023 ==> 177999 : Shortcuts are not listed in the shortcuts editor from Kipi host application.
-024 ==> 160236 : Image Magick convert operations return with errors.
-025 ==> 144183 : Path in RAW-converter broken with the letter "ß"
-026 ==> 178495 : Problem with metadata editor.
-027 ==> 175219 : Album creating wrong date in picasaweb.
-028 ==> 175222 : Unable to create non listed album.
-029 ==> 166672 : Export to Facebook.
-030 ==> 129623 : Option to upload to specific photoset.
-031 ==> 161775 : Photoset support.
-032 ==> 169637 : EXIF Data Editing Error.
-033 ==> 174954 : Support for remote urls.
-034 ==> 176640 : Wrong reference to website.
-035 ==> 176749 : Incorrect time/date setting with digiKam.
-036 ==> 165370 : crash when saving geocoordinates.
-037 ==> 165486 : Next and Previous photo button for editing geolocalization coordinates.
-038 ==> 175296 : Geolocalization a handy gui to manage all about geotagging.
-039 ==> 152520 : Unified entry of metadata.
-040 ==> 135320 : Calendar year do not match locale.
-041 ==> 116970 : New calendar generator tool features.
-042 ==> 161855 : Remote Gallery Sync loses password.
-043 ==> 154752 : Export to Gallery2 seems to fail, but in fact works.
-044 ==> 157285 : digiKam advanced slideshow not working with Canon RAWs.
-045 ==> 175316 : digiKam crashes when trying to enter gps data.
-046 ==> 172910 : Gallery crash (letting crash digiKam) with valid data and url.
-047 ==> 172283 : SlideShow crashes host application 
-048 ==> 172337 : Slideshow enhancements by ken-burns effects.
-049 ==> 173276 : digikam crashs after closing 
-050 ==> 150076 : Playing music during a slideshow  
-051 ==> 135451 : Improve the gui of the gpssync tool.
-052 ==> 135386 : Show track on the google map.
-053 ==> 149497 : Geolocalization does not work with non-jpeg file types.
-054 ==> 145746 : Do not recreate thumbs when geolocalizing images.
-055 ==> 134299 : Read orientation of image from EXIF.
-056 ==> 158792 : Tool do not working with Canon RAW CR2.
-057 ==> 165078 : GPS correlator does not show thumbnails.
-058 ==> 165278 : Geotagging dialog doesn't display all thumbnails.
+001 ==> 184312 - Use SmoothTransform for scaling images for export, calendar and slideshow
+002 ==> 140438 - 3 different viewers for diferents needs.
+003 ==> 184553 - Encoding issue with gallery2.
+004 ==> 159794 - Cannot rotate .tif images in digiKam.
+005 ==> 184702 - Cannot rotate TIFFs in Album GUI.
+006 ==> 184332 - Compiling error with Qt4.5.
+007 ==> 177137 - digiKam print assistant problems and ideas.
+008 ==> 176367 - Crop stage does not allow rotation or selection.
+009 ==> 178983 - Next/back-buttons in print-assistant should be labeled.
+010 ==> 095404 - PrintCreator print image with custom size, original size, autoscaled size to paper.
+011 ==> 183661 - Better action icons for export tools
+012 ==> 187203 - Batch raw converter crash digikam.
+013 ==> 181973 - Raw batch converter loses exif information.
+014 ==> 181334 - The artwork API in libgpod-0.7.0 has changed slightly, IpodExport tool needs updated.
+015 ==> 181853 - Entering new xmp meta data removes old one from the image file.
+016 ==> 133649 - Scale images instead of cropping.
+017 ==> 182838 - Change API authentication to Desktop application type.
+018 ==> 175928 - digiKam crashing when trying to export to gallery2 web service.
+019 ==> 181694 - Edit caption should present current caption for easier modification.
+020 ==> 179439 - Rotation or flip do not update internal thumbnail.
+021 ==> 180245 - Timeadjust is not building on mac os x leopard.
+022 ==> 180656 - Wrong file selection filter in export picasaweb.
+023 ==> 177999 - Shortcuts are not listed in the shortcuts editor from Kipi host application.
+024 ==> 160236 - Image Magick convert operations return with errors.
+025 ==> 144183 - Path in RAW-converter broken with the letter "ß"
+026 ==> 178495 - Problem with metadata editor.
+027 ==> 175219 - Album creating wrong date in picasaweb.
+028 ==> 175222 - Unable to create non listed album.
+029 ==> 166672 - Export to Facebook.
+030 ==> 129623 - Option to upload to specific photoset.
+031 ==> 161775 - Photoset support.
+032 ==> 169637 - EXIF Data Editing Error.
+033 ==> 174954 - Support for remote urls.
+034 ==> 176640 - Wrong reference to website.
+035 ==> 176749 - Incorrect time/date setting with digiKam.
+036 ==> 165370 - crash when saving geocoordinates.
+037 ==> 165486 - Next and Previous photo button for editing geolocalization coordinates.
+038 ==> 175296 - Geolocalization a handy gui to manage all about geotagging.
+039 ==> 152520 - Unified entry of metadata.
+040 ==> 135320 - Calendar year do not match locale.
+041 ==> 116970 - New calendar generator tool features.
+042 ==> 161855 - Remote Gallery Sync loses password.
+043 ==> 154752 - Export to Gallery2 seems to fail, but in fact works.
+044 ==> 157285 - digiKam advanced slideshow not working with Canon RAWs.
+045 ==> 175316 - digiKam crashes when trying to enter gps data.
+046 ==> 172910 - Gallery crash (letting crash digiKam) with valid data and url.
+047 ==> 172283 - SlideShow crashes host application 
+048 ==> 172337 - Slideshow enhancements by ken-burns effects.
+049 ==> 173276 - digikam crashs after closing 
+050 ==> 150076 - Playing music during a slideshow  
+051 ==> 135451 - Improve the gui of the gpssync tool.
+052 ==> 135386 - Show track on the google map.
+053 ==> 149497 - Geolocalization does not work with non-jpeg file types.
+054 ==> 145746 - Do not recreate thumbs when geolocalizing images.
+055 ==> 134299 - Read orientation of image from EXIF.
+056 ==> 158792 - Tool do not working with Canon RAW CR2.
+057 ==> 165078 - GPS correlator does not show thumbnails.
+058 ==> 165278 - Geotagging dialog doesn't display all thumbnails.

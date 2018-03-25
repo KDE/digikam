@@ -15,129 +15,129 @@ PrintCreator   : Filling page with custom size images
 *****************************************************************************************************
 BUGFIXES:
 
-001 ==> 219559 : Crash when opening editor.
-002 ==> 217860 : Icon view movie thumbnail rotation overlay buttons.
-003 ==> 217702 : GPS widget movie preview too big.
-004 ==> 147621 : Refocus needs to be available under Batch Operations for sharpening options.
-005 ==> 207710 : Crash while loading large file.
-006 ==> 186642 : Crashes in image restoration tool.
-007 ==> 212105 : Crash in MarkerClusterHolder destructor.
-008 ==> 197434 : Crash when trying to access camera card via USB. Menu Import/USB Storage/USB Flash Reader.
-009 ==> 220203 : ICC profile visualize widget does not resize [patch].
-010 ==> 220260 : Rename Tool filename with multiple ".".
-011 ==> 215986 : SegFault when syncing large database.
-012 ==> 219908 : Drag and Drop photo to folder: let user choose to copy or move.
-013 ==> 220131 : Ctrl + Scroll Wheel triggers two different actions.
-014 ==> 198697 : Images are not sorted in the Import window.
-015 ==> 220398 : Downloaded/deleted all from SD card, went to other digiKam window, browsed two folders, closed windows, crashed.
-016 ==> 215473 : Remember openend albums after closing digikam.
-017 ==> 220423 : Ctrl + scrool doesn't work in editor when some tool open [patch].
-018 ==> 220399 : Crash in color space conversion.
-019 ==> 192461 : 16-bit TIFF render as 3x3 black & white mosaic [patch].
-020 ==> 217442 : Crash add tag to photo.
-021 ==> 211681 : Raw import tool decoding twice.
-022 ==> 216134 : Batch Mode does not generate 16 bit tif [patch].
-023 ==> 220454 : Over-Exposure and Under-Exposure indicators do not work correctly in White Balance dialogue [patch].
-024 ==> 220708 : digiKam crashes on startup segmentation fault, glibc, invalid pointer on free()) [qFree, QString::free, QString::operator=].
-025 ==> 220889 : Problem with color management.
-026 ==> 200392 : Slideshow displays "Headline" field as "image caption" and has no way to display "Caption" field.
-027 ==> 220202 : "Write Metadata to images" only modifies the first 201 files in any directory (album).
-028 ==> 219149 : digiKam: Save window in editor lock main browse window.
-029 ==> 214620 : Crash when quitting the application.
-030 ==> 219430 : "Move to Trash"/"Move %1 Files to Trash" messages are not compatible with Russian plural forms.
-031 ==> 221159 : Batch queue manager generates duplicate target names if dots (.) are used in the file name
-032 ==> 160438 : Wish: Easy way to transform an image from one colorspace and bit-depth to another, like Krita's "Convert Image Type".
-033 ==> 211643 : Exposure indicators not working while raw import.
-034 ==> 221397 : Batch processing auto levels.
-035 ==> 211238 : Scrolling (shift + mousewheel) through pictures in editor caused crash
-036 ==> 220444 : Auto lens correction does not recognize a listed camera and lens using exif data.
-037 ==> 220559 : Crash after select and unselect an item in batch window [QTreeWidgetItem::setIcon, digiKam::AssignedListViewItem::setDone, digiKam::QueueMgrWindow::slotAction]
-038 ==> 221065 : Many Icons Don't Show Up in digikam Under Mac OS X (10.6.2).
-039 ==> 221188 : When system is set to Czech locale, there is "Aspect Ratio Crop" missing in transform menu.
-040 ==> 207392 : Crash after rebuild all thumbnails.
-041 ==> 213001 : Scrolling when under-exposure indicator.
-042 ==> 187188 : digiKam crashes when including a CIFS located album.
-043 ==> 221343 : [wish] Blank search field should not show all images
-044 ==> 221605 : digiKam crashed on startup, while scanning albuns [__libc_message, malloc_printerr, qFree].
-045 ==> 201654 : digiKam 1.0 crashes immediately on application start.
-046 ==> 190982 : Crashes when selecting album-- every time.
-047 ==> 194047 : digiKam crashes while atempting.
-048 ==> 191414 : Selecting "synchronize images with database" in album drop-down menu causes signal 6 (sigabrt).
-049 ==> 221440 : Crashes when adding album.
-050 ==> 214913 : digiKam crash scanning photos.
-051 ==> 221938 : Crash while clicked on lens->distortion
-052 ==> 221113 : RW2 images are not rotated anymore.
-053 ==> 216874 : File renaming in the queue settings don't manage tokens [date] and [cam].
-054 ==> 220292 : Red eyes tool crashs digikam with memory error.
-055 ==> 218873 : digiKam crashes while starting up [mem2chunk_check, free_check, Marble::GeoDataObject::~GeoDataObject].
-056 ==> 222490 : digiKam: fails to build with gcc-4.5.
-057 ==> 219776 : Crash after AutoContrast in Image Editor.
-058 ==> 222593 : Exif Focus Distance and Focus Position.
-059 ==> 221986 : Many panels lack the 'mouse over' preview mode.
-060 ==> 218184 : Preview and image navigation out of sync when opening the sharpen dialog in the editor.
-061 ==> 219745 : Zoom is ignored in the tools on 1. try.
-062 ==> 222748 : Editor preview mode buttons lack tooltip.
-063 ==> 222744 : Mouse-over preview mode with zoom removes ability to see whole image.
-064 ==> 220365 : digiKam crashes at startup.
-065 ==> 222975 : Wrong editorwindow zoom behaviour.
-066 ==> 163284 : Choose smart default zoom factor for each filter preview.
-067 ==> 148072 : zoom tool for sharpen tool is ankward.
-068 ==> 221987 : "zoom to 100%" not working.
-069 ==> 207888 : Resetting tool properties to Defaults should not reset options for showing original/target image.
-070 ==> 221569 : Crash when closing showfoto while a raw image is loading.
-071 ==> 221162 : Add collection with smb://xxx path should give better warning.
-072 ==> 221933 : menu disbabled when F4 in digikam and e.g. sharpening was previously open.
-073 ==> 220231 : button "last used tags" always empty.
-074 ==> 223050 : Unable to have directories with the same name case-insensitively.
-075 ==> 221988 : "fit to window" and zooming out not working.
-076 ==> 196469 : Zoom and pan should be available in all tools.
-077 ==> 220567 : Zooming, selecting picture part in editor tools.
-078 ==> 148235 : More comfortable panning and zooming of preview image.
-079 ==> 220122 : View 100% doesn't show real size (1:1).
-080 ==> 161338 : Too small images when "Embedded preview load full image size" deactivated.
-081 ==> 218179 : Add file name labels to the light table.
-082 ==> 210910 : Please allow locking image zoom on the light table [patch].
-083 ==> 222469 : Drag folders to Dolphin.
-084 ==> 219735 : digiKam unable to detect Camera.
-085 ==> 218906 : Camera obscura/pinhole camera/vignetting effect.
-086 ==> 177827 : Add vignetting effect to digiKam.
-087 ==> 224136 : Show dialog with settings when saving image on Windows [patch].
-088 ==> 183108 : View mode: mouse zoom and pan.
-089 ==> 150533 : New tool for correction of backlighting.
-090 ==> 105934 : Would like to use the arrow keys to pan an image.
-091 ==> 193708 : digiKam crash on startup.
-092 ==> 218376 : digiKam tagging crash metadata.
-093 ==> 224243 : Content aware rescaling should not allow "original" preview mode.
-094 ==> 224293 : Wavelets NR tool confuses red and blue.
-095 ==> 224404 : No images of a album are shown.
-096 ==> 224094 : Modifying file (caption, keywords, EXIF) takes a very long time and 100 % CPU.
-097 ==> 216883 : digiKam crashed while browsing on picture editor (spacebar to next pic.).
-098 ==> 197483 : High resolution screen window narrow width.
-099 ==> 211814 : Raw import tool: annoying scrollbar
-100 ==> 156836 : Preview zoom to 100 percent is not 100 percent viewing Canon RAW/CR2.
-101 ==> 197316 : Two ways to do a simple zooming.
-102 ==> 224697 : Crash with gimp xcf files with metadata.
-103 ==> 224682 : Color Channel Mixer ui & usability.
-104 ==> 224841 : Search for duplicates in specific album only.
-105 ==> 199145 : Tags not exported to picasaweb [patch].
-106 ==> 215846 : PicasaWeb tool crashes digiKam after start sending the pic [delete, KIPIPicasawebExportPlugin::PicasawebWindow::slotUploadImages] (double deletion)
-107 ==> 221056 : Expoblending.app causes digiKam compile to fail.
-108 ==> 205903 : accentuated chars are converted into a mess during picasa web export [patch]
-109 ==> 220433 : digiKam crash when has long time working on it.
-110 ==> 208426 : Exporting images fails with : "Could not connect to host xxxx.xxxx.xxxx.xxxx: Unknown error."
-111 ==> 222297 : Overwriting on Windows and multiple saves fixes [patch].
-112 ==> 198045 : New albums don't appear in list
-113 ==> 200469 : Ampersand character in caption causes Picasa export to freeze
-114 ==> 222328 : In-place rotation converts 16 bit TIFF to 8 bit.
-115 ==> 219381 : fill page with images of certain size
-116 ==> 194946 : Simple Fix - extra " ' " in cleanframes/themes/template.xsl.
-117 ==> 182326 : Remember last position when geotagging images.
-118 ==> 165613 : Crash when GPS altitude is negative.
-119 ==> 167286 : GPS tagging fails with message titled "digikam3rdparty.free.fr" and text "unauthorized call of the API" when starting the gps tagger window.
-120 ==> 224205 : Geolocation correlator: GPX date/time format.
-121 ==> 222067 : Geolocation no more search field to fill with a town.
-122 ==> 224379 : digiKam doesn't compile (problem with advanced slideshow).
-123 ==> 144593 : New High Dynamic Range (HDR) tool.
-124 ==> 219998 : Export to Gallery tool crashes when adding files.
-125 ==> 215798 : Slideshow crashes when starting.
-126 ==> 200031 : Photo is rotated but not thumbnail.
+001 ==> 219559 - Crash when opening editor.
+002 ==> 217860 - Icon view movie thumbnail rotation overlay buttons.
+003 ==> 217702 - GPS widget movie preview too big.
+004 ==> 147621 - Refocus needs to be available under Batch Operations for sharpening options.
+005 ==> 207710 - Crash while loading large file.
+006 ==> 186642 - Crashes in image restoration tool.
+007 ==> 212105 - Crash in MarkerClusterHolder destructor.
+008 ==> 197434 - Crash when trying to access camera card via USB. Menu Import/USB Storage/USB Flash Reader.
+009 ==> 220203 - ICC profile visualize widget does not resize [patch].
+010 ==> 220260 - Rename Tool filename with multiple ".".
+011 ==> 215986 - SegFault when syncing large database.
+012 ==> 219908 - Drag and Drop photo to folder: let user choose to copy or move.
+013 ==> 220131 - Ctrl + Scroll Wheel triggers two different actions.
+014 ==> 198697 - Images are not sorted in the Import window.
+015 ==> 220398 - Downloaded/deleted all from SD card, went to other digiKam window, browsed two folders, closed windows, crashed.
+016 ==> 215473 - Remember openend albums after closing digikam.
+017 ==> 220423 - Ctrl + scrool doesn't work in editor when some tool open [patch].
+018 ==> 220399 - Crash in color space conversion.
+019 ==> 192461 - 16-bit TIFF render as 3x3 black & white mosaic [patch].
+020 ==> 217442 - Crash add tag to photo.
+021 ==> 211681 - Raw import tool decoding twice.
+022 ==> 216134 - Batch Mode does not generate 16 bit tif [patch].
+023 ==> 220454 - Over-Exposure and Under-Exposure indicators do not work correctly in White Balance dialogue [patch].
+024 ==> 220708 - digiKam crashes on startup segmentation fault, glibc, invalid pointer on free()) [qFree, QString::free, QString::operator=].
+025 ==> 220889 - Problem with color management.
+026 ==> 200392 - Slideshow displays "Headline" field as "image caption" and has no way to display "Caption" field.
+027 ==> 220202 - "Write Metadata to images" only modifies the first 201 files in any directory (album).
+028 ==> 219149 - digiKam: Save window in editor lock main browse window.
+029 ==> 214620 - Crash when quitting the application.
+030 ==> 219430 - "Move to Trash"/"Move %1 Files to Trash" messages are not compatible with Russian plural forms.
+031 ==> 221159 - Batch queue manager generates duplicate target names if dots (.) are used in the file name
+032 ==> 160438 - Wish: Easy way to transform an image from one colorspace and bit-depth to another, like Krita's "Convert Image Type".
+033 ==> 211643 - Exposure indicators not working while raw import.
+034 ==> 221397 - Batch processing auto levels.
+035 ==> 211238 - Scrolling (shift + mousewheel) through pictures in editor caused crash
+036 ==> 220444 - Auto lens correction does not recognize a listed camera and lens using exif data.
+037 ==> 220559 - Crash after select and unselect an item in batch window [QTreeWidgetItem::setIcon, digiKam::AssignedListViewItem::setDone, digiKam::QueueMgrWindow::slotAction]
+038 ==> 221065 - Many Icons Don't Show Up in digikam Under Mac OS X (10.6.2).
+039 ==> 221188 - When system is set to Czech locale, there is "Aspect Ratio Crop" missing in transform menu.
+040 ==> 207392 - Crash after rebuild all thumbnails.
+041 ==> 213001 - Scrolling when under-exposure indicator.
+042 ==> 187188 - digiKam crashes when including a CIFS located album.
+043 ==> 221343 - [wish] Blank search field should not show all images
+044 ==> 221605 - digiKam crashed on startup, while scanning albuns [__libc_message, malloc_printerr, qFree].
+045 ==> 201654 - digiKam 1.0 crashes immediately on application start.
+046 ==> 190982 - Crashes when selecting album-- every time.
+047 ==> 194047 - digiKam crashes while atempting.
+048 ==> 191414 - Selecting "synchronize images with database" in album drop-down menu causes signal 6 (sigabrt).
+049 ==> 221440 - Crashes when adding album.
+050 ==> 214913 - digiKam crash scanning photos.
+051 ==> 221938 - Crash while clicked on lens->distortion
+052 ==> 221113 - RW2 images are not rotated anymore.
+053 ==> 216874 - File renaming in the queue settings don't manage tokens [date] and [cam].
+054 ==> 220292 - Red eyes tool crashs digikam with memory error.
+055 ==> 218873 - digiKam crashes while starting up [mem2chunk_check, free_check, Marble::GeoDataObject::~GeoDataObject].
+056 ==> 222490 - digiKam: fails to build with gcc-4.5.
+057 ==> 219776 - Crash after AutoContrast in Image Editor.
+058 ==> 222593 - Exif Focus Distance and Focus Position.
+059 ==> 221986 - Many panels lack the 'mouse over' preview mode.
+060 ==> 218184 - Preview and image navigation out of sync when opening the sharpen dialog in the editor.
+061 ==> 219745 - Zoom is ignored in the tools on 1. try.
+062 ==> 222748 - Editor preview mode buttons lack tooltip.
+063 ==> 222744 - Mouse-over preview mode with zoom removes ability to see whole image.
+064 ==> 220365 - digiKam crashes at startup.
+065 ==> 222975 - Wrong editorwindow zoom behaviour.
+066 ==> 163284 - Choose smart default zoom factor for each filter preview.
+067 ==> 148072 - zoom tool for sharpen tool is ankward.
+068 ==> 221987 - "zoom to 100%" not working.
+069 ==> 207888 - Resetting tool properties to Defaults should not reset options for showing original/target image.
+070 ==> 221569 - Crash when closing showfoto while a raw image is loading.
+071 ==> 221162 - Add collection with smb://xxx path should give better warning.
+072 ==> 221933 - menu disbabled when F4 in digikam and e.g. sharpening was previously open.
+073 ==> 220231 - button "last used tags" always empty.
+074 ==> 223050 - Unable to have directories with the same name case-insensitively.
+075 ==> 221988 - "fit to window" and zooming out not working.
+076 ==> 196469 - Zoom and pan should be available in all tools.
+077 ==> 220567 - Zooming, selecting picture part in editor tools.
+078 ==> 148235 - More comfortable panning and zooming of preview image.
+079 ==> 220122 - View 100% doesn't show real size (1:1).
+080 ==> 161338 - Too small images when "Embedded preview load full image size" deactivated.
+081 ==> 218179 - Add file name labels to the light table.
+082 ==> 210910 - Please allow locking image zoom on the light table [patch].
+083 ==> 222469 - Drag folders to Dolphin.
+084 ==> 219735 - digiKam unable to detect Camera.
+085 ==> 218906 - Camera obscura/pinhole camera/vignetting effect.
+086 ==> 177827 - Add vignetting effect to digiKam.
+087 ==> 224136 - Show dialog with settings when saving image on Windows [patch].
+088 ==> 183108 - View mode: mouse zoom and pan.
+089 ==> 150533 - New tool for correction of backlighting.
+090 ==> 105934 - Would like to use the arrow keys to pan an image.
+091 ==> 193708 - digiKam crash on startup.
+092 ==> 218376 - digiKam tagging crash metadata.
+093 ==> 224243 - Content aware rescaling should not allow "original" preview mode.
+094 ==> 224293 - Wavelets NR tool confuses red and blue.
+095 ==> 224404 - No images of a album are shown.
+096 ==> 224094 - Modifying file (caption, keywords, EXIF) takes a very long time and 100 % CPU.
+097 ==> 216883 - digiKam crashed while browsing on picture editor (spacebar to next pic.).
+098 ==> 197483 - High resolution screen window narrow width.
+099 ==> 211814 - Raw import tool: annoying scrollbar
+100 ==> 156836 - Preview zoom to 100 percent is not 100 percent viewing Canon RAW/CR2.
+101 ==> 197316 - Two ways to do a simple zooming.
+102 ==> 224697 - Crash with gimp xcf files with metadata.
+103 ==> 224682 - Color Channel Mixer ui & usability.
+104 ==> 224841 - Search for duplicates in specific album only.
+105 ==> 199145 - Tags not exported to picasaweb [patch].
+106 ==> 215846 - PicasaWeb tool crashes digiKam after start sending the pic [delete, KIPIPicasawebExportPlugin::PicasawebWindow::slotUploadImages] (double deletion)
+107 ==> 221056 - Expoblending.app causes digiKam compile to fail.
+108 ==> 205903 - accentuated chars are converted into a mess during picasa web export [patch]
+109 ==> 220433 - digiKam crash when has long time working on it.
+110 ==> 208426 - Exporting images fails with : "Could not connect to host xxxx.xxxx.xxxx.xxxx: Unknown error."
+111 ==> 222297 - Overwriting on Windows and multiple saves fixes [patch].
+112 ==> 198045 - New albums don't appear in list
+113 ==> 200469 - Ampersand character in caption causes Picasa export to freeze
+114 ==> 222328 - In-place rotation converts 16 bit TIFF to 8 bit.
+115 ==> 219381 - fill page with images of certain size
+116 ==> 194946 - Simple Fix - extra " ' " in cleanframes/themes/template.xsl.
+117 ==> 182326 - Remember last position when geotagging images.
+118 ==> 165613 - Crash when GPS altitude is negative.
+119 ==> 167286 - GPS tagging fails with message titled "digikam3rdparty.free.fr" and text "unauthorized call of the API" when starting the gps tagger window.
+120 ==> 224205 - Geolocation correlator: GPX date/time format.
+121 ==> 222067 - Geolocation no more search field to fill with a town.
+122 ==> 224379 - digiKam doesn't compile (problem with advanced slideshow).
+123 ==> 144593 - New High Dynamic Range (HDR) tool.
+124 ==> 219998 - Export to Gallery tool crashes when adding files.
+125 ==> 215798 - Slideshow crashes when starting.
+126 ==> 200031 - Photo is rotated but not thumbnail.

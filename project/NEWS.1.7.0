@@ -9,56 +9,56 @@ General : New tool to export images to an instant messaging contact.
 *****************************************************************************************************
 BUGFIXES:
 
-001 ==> 180224 : Memory leakage in image editor?
-002 ==> 257676 : Crash when I renane files.
-003 ==> 239862 : digiKam crashes when trying to edit a picture.
-004 ==> 224454 : Don't show raw files with metadata when searching or filtering.
-005 ==> 214837 : Crash while saving picture in pic editor.
-006 ==> 256951 : Showfoto crashes on color correction.
-007 ==> 217069 : Undo/Redo are greyed out in image editor under MacOSX.
-008 ==> 257769 : Crash on Enhance->Lens->Auto-Correction.
-009 ==> 257784 : Lens auto correction does not specify unit for "distance to the object".
-010 ==> 256050 : digiKam crashed after modifying tag name.
-011 ==> 250134 : digiKam crashed during search for duplicates.
-012 ==> 243988 : digiKam crashes trying to save tool changes.
-013 ==> 257744 : digiKam crash on importing large collection.
-014 ==> 242439 : Crash when going to next picture in picture editor.
-015 ==> 235678 : No startup dialog but error dialogs(s).
-016 ==> 257898 : Allow displaying folders recursively.
-017 ==> 257897 : Amount of duplicate images list is sorted the wrong way round.
-018 ==> 234534 : digiKam not synchronizing legacy tags with new nepomuk database.
-019 ==> 237642 : digiKam crashes while renaming several files.
-020 ==> 258308 : Crash when starting Free Rotation in Image Editor.
-021 ==> 248882 : digiKam crashes when renaming using date/time info.
-022 ==> 217555 : "Cannot display preview" error when browsing.
-023 ==> 258600 : "transupp.cpp" fails to compile on emerged KDE.
-024 ==> 233572 : Showfoto crashed on change hue value.
-025 ==> 258828 : Crash when I use auto-colors correction tool from image editor.
-026 ==> 195561 : Implement a selective saturation filter [patch].
-027 ==> 258931 : Linking broken when using -Wl, --no-copy-dt-needed-entries.
-028 ==> 258300 : digiKam won't build.
-029 ==> 256023 : Cannot work with Sigma-RAW-files (X3F).
-030 ==> 257904 : digiKam not reading metadata from foreign images.
-031 ==> 256897 : Crash upon unmounting of USB drive.
-032 ==> 259257 : Too small font size.
-033 ==> 210353 : digiKam duplicates icons for TIFF files.
-034 ==> 260299 : X Axis Color Graduation in Curves Window mirrored.
-035 ==> 242021 : digiKam crashes during file save.
-036 ==> 225174 : Support new permission API for applications.
-037 ==> 254110 : Unable to upload photos to a selected album.
-038 ==> 254457 : Album target fails.
-039 ==> 247107 : Export to notes, export to pinboard, export to profile.
-040 ==> 219284 : digiKam facebook export album.
-041 ==> 241046 : Export Facebook.
-042 ==> 232015 : Facebook import tool.
-043 ==> 223601 : digiKam can't upload image to facebook.
-044 ==> 243381 : Signal: Segmentation fault.
-045 ==> 256714 : Add export to screenshots.debian.net.
-046 ==> 258953 : DngConverter changes luminosity of sony ARW files.
-047 ==> 255069 : Error with spaces in file names in send by email.
-048 ==> 251235 : Flash export tool does not install.
-049 ==> 244702 : Picasawebexport unable to select movie.
-050 ==> 258824 : After export images to Picasaweb cancel button should change to close.
-051 ==> 256713 : Send to contact tool.
-052 ==> 250449 : Slideshow does not work with compositing on.
-053 ==> 256284 : digiKam crash on start.
+001 ==> 180224 - Memory leakage in image editor?
+002 ==> 257676 - Crash when I renane files.
+003 ==> 239862 - digiKam crashes when trying to edit a picture.
+004 ==> 224454 - Don't show raw files with metadata when searching or filtering.
+005 ==> 214837 - Crash while saving picture in pic editor.
+006 ==> 256951 - Showfoto crashes on color correction.
+007 ==> 217069 - Undo/Redo are greyed out in image editor under MacOSX.
+008 ==> 257769 - Crash on Enhance->Lens->Auto-Correction.
+009 ==> 257784 - Lens auto correction does not specify unit for "distance to the object".
+010 ==> 256050 - digiKam crashed after modifying tag name.
+011 ==> 250134 - digiKam crashed during search for duplicates.
+012 ==> 243988 - digiKam crashes trying to save tool changes.
+013 ==> 257744 - digiKam crash on importing large collection.
+014 ==> 242439 - Crash when going to next picture in picture editor.
+015 ==> 235678 - No startup dialog but error dialogs(s).
+016 ==> 257898 - Allow displaying folders recursively.
+017 ==> 257897 - Amount of duplicate images list is sorted the wrong way round.
+018 ==> 234534 - digiKam not synchronizing legacy tags with new nepomuk database.
+019 ==> 237642 - digiKam crashes while renaming several files.
+020 ==> 258308 - Crash when starting Free Rotation in Image Editor.
+021 ==> 248882 - digiKam crashes when renaming using date/time info.
+022 ==> 217555 - "Cannot display preview" error when browsing.
+023 ==> 258600 - "transupp.cpp" fails to compile on emerged KDE.
+024 ==> 233572 - Showfoto crashed on change hue value.
+025 ==> 258828 - Crash when I use auto-colors correction tool from image editor.
+026 ==> 195561 - Implement a selective saturation filter [patch].
+027 ==> 258931 - Linking broken when using -Wl, --no-copy-dt-needed-entries.
+028 ==> 258300 - digiKam won't build.
+029 ==> 256023 - Cannot work with Sigma-RAW-files (X3F).
+030 ==> 257904 - digiKam not reading metadata from foreign images.
+031 ==> 256897 - Crash upon unmounting of USB drive.
+032 ==> 259257 - Too small font size.
+033 ==> 210353 - digiKam duplicates icons for TIFF files.
+034 ==> 260299 - X Axis Color Graduation in Curves Window mirrored.
+035 ==> 242021 - digiKam crashes during file save.
+036 ==> 225174 - Support new permission API for applications.
+037 ==> 254110 - Unable to upload photos to a selected album.
+038 ==> 254457 - Album target fails.
+039 ==> 247107 - Export to notes, export to pinboard, export to profile.
+040 ==> 219284 - digiKam facebook export album.
+041 ==> 241046 - Export Facebook.
+042 ==> 232015 - Facebook import tool.
+043 ==> 223601 - digiKam can't upload image to facebook.
+044 ==> 243381 - Signal: Segmentation fault.
+045 ==> 256714 - Add export to screenshots.debian.net.
+046 ==> 258953 - DngConverter changes luminosity of sony ARW files.
+047 ==> 255069 - Error with spaces in file names in send by email.
+048 ==> 251235 - Flash export tool does not install.
+049 ==> 244702 - Picasawebexport unable to select movie.
+050 ==> 258824 - After export images to Picasaweb cancel button should change to close.
+051 ==> 256713 - Send to contact tool.
+052 ==> 250449 - Slideshow does not work with compositing on.
+053 ==> 256284 - digiKam crash on start.

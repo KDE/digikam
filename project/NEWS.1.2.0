@@ -47,128 +47,128 @@ BatchQueueManager : It's now possible to Stop and restart a processed queue.
 *****************************************************************************************************
 BUGFIXES:
 
-001 ==> 223936 : Moving photos between albums is slow.
-002 ==> 224698 : digiKam fails to rotate pefs via orientation tag.
-003 ==> 224021 : Zoom shortcuts inconsistent between editor and preview.
-004 ==> 225160 : digiKam built with Qt4 ver 4.5.3 does not display pictures in album view.
-005 ==> 225397 : Tip refers to "Print Wizard", it is now "Print Assistant".
-006 ==> 225555 : Crash when deleting tag.
-007 ==> 207244 : Image disappears when enlarging.
-008 ==> 221155 : Add collection fails on similarly named directories (seems that check is not strict enough).
-009 ==> 225731 : digiKam no preview icon for movie.
-010 ==> 222698 : digiKam 1.0.0 crashes when editing tags by drag-and-drop.
-011 ==> 225328 : Creating new album during import fails.
-012 ==> 216633 : Additional aspect ratios in crop tool.
-013 ==> 151406 : Filters in 'Enhance' dropdown menu lack mouse-over preview mode.
-014 ==> 225698 : When I export my Album to a Html Gallery then digiKam crashed at the End.
-015 ==> 225787 : Scroll wheel doesn't work while moving images.
-016 ==> 226081 : Trying to delete tags crashes digiKam.
-017 ==> 226118 : IPTC metadata tag delimiter is no longer stored (since 0.10).
-018 ==> 226235 : digiKam fails after upgrade - no albums - rh tag & captions bar frozen.
-019 ==> 225272 : digiKam destroy some exif data.
-020 ==> 226584 : digiKam crashes in the starting phase.
-021 ==> 226537 : hovering doesn't show sub-tags.
-022 ==> 225827 : Gpswidget inactive on default selected photo.
-023 ==> 226381 : Copy/Paste of images in Albums view selects wrong image.
-024 ==> 224999 : Thumbnails blury after upgrade to 1.0.0 from 0.10.
-025 ==> 226789 : Metadata settings only EXIF.
-026 ==> 185266 : digiKam shows unknown icon when moving images to other directory.
-027 ==> 226872 : Tag tree not expanded with "Tags already assigned" button.
-028 ==> 226858 : digiKam 1.2 My Tags window always blank.
-029 ==> 226568 : digiKam 1.1 crashes when renaming tag.
-030 ==> 226515 : My tags on Caption/Tags becomes empty after removing a single tag.
-031 ==> 227244 : Images on local disk not shown in middle pane.
-032 ==> 226853 : No images shown after upgrading from previous version.
-033 ==> 226932 : Batch Color Space Conversion Tool.
-034 ==> 207338 : Batch queue manager does not cancel processing.
-035 ==> 215657 : Raw import tool does not use general digiKam settings.
-036 ==> 226846 : Issues with color management and color profiles.
-037 ==> 227498 : digiKam no longer shows any fotos. opengl image viewer works. showFoto works.
-038 ==> 226537 : hovering doesn't show sub-tags.
-039 ==> 227550 : Tags already assigned looks messy.
-040 ==> 226962 : Applying tags to images requires extra work.
-041 ==> 226238 : Histogram never get completed in image editor after any change in the image.
-042 ==> 227545 : Toggle Auto/Parents does not work as expected.
-043 ==> 219772 : Opening the application causes crash.
-044 ==> 226382 : Curves Adjust dialog broken: No Histogram and no effect when changing the line.
-045 ==> 227555 : Preview image in digiKam is not displayed after saveas in editor.
-046 ==> 225728 : Adding vignette should not increase brightness in the center.
-047 ==> 227992 : Search field should not lost focus if nothing was found.
-048 ==> 228326 : Crash trying to create a new tag.
-049 ==> 227905 : ISO Album dates for 2009 2010 sort wrong.
-050 ==> 225443 : Fileview preview panning shortcut back to old.
-051 ==> 224094 : Modifying file (caption, keywords, EXIF) takes a very long time and 100 % CPU.
-052 ==> 228378 : Tag filtering is bugged.
-053 ==> 227668 : Not enough space to show alle tags.
-054 ==> 227640 : No Pictures visible in Collections.
-055 ==> 227075 : digikam3 database is not imported.
-056 ==> 225927 : Add white-balance to the batch base tools.
-057 ==> 225718 : Crash when having two tags with the same name in one folder.
-058 ==> 221918 : Wrong thumbnails after save as.
-059 ==> 226586 : digiKam 1.2 crashes after My Tags window goes blank.
-060 ==> 226885 : Not displayed thumbnails failed load kio_digikamalbums.
-061 ==> 226363 : Root album is not expansed after upgrade to model view port.
-062 ==> 224080 : Selected image thumbnails should be automatically added to the list of images for processing in Batch Queue Manager.
-063 ==> 225722 : Selection in editor should not darken image.
-064 ==> 228802 : Copy paste doesn't work.
-065 ==> 227064 : digiKam 1.1.0: crash on image download.
-066 ==> 228807 : Dancing thumbs in album view.
-067 ==> 214303 : Position of preview type buttons is inconsistent across different tools.
-068 ==> 163286 : Accurate histogram preview required.
-069 ==> 229287 : Crash in digiKam when renaming with directory.
-070 ==> 148540 : Improvements of adding noise tool.
-071 ==> 229340 : digiKam Crashes When Saving PNG Files.
-072 ==> 229664 : Curves Widget not working anymore in BWSepia Plugin.
-073 ==> 229574 : Moving tags doesn't update the "tag counter" next to the tag name.
-074 ==> 229690 : No picture on thumb bar icon.
-075 ==> 229793 : Drop image file in digiKam.
-076 ==> 228483 : digiKam 1.1.0 with system libjpeg-8 breaks image rotation.
-077 ==> 187431 : Gui too big for eeepc.
-078 ==> 230008 : digiKam Nikon fetching pictures.
-079 ==> 229470 : digiKam fails to start with QCursor: Cannot create bitmap cursor; invalid bitmap(s).
-080 ==> 221992 : "local contrast" settings make no difference.
-081 ==> 230003 : Zoombar slider adjustments below 100% are hard to archieve [patch].
-082 ==> 228810 : Need to roll over again on a thumb to correct the rating.
-083 ==> 210259 : Scan crashed on multi-layer TIFFs.
-084 ==> 229344 : digiKam starting up - loading tools.
-085 ==> 229578 : Metadata is not correctly updated when just assigning tags.
-086 ==> 230323 : ShowFoto and digiKam opening Olympus E-P2 ORF file will crash.
-087 ==> 229108 : digiKam doesn't display all images after and upgrade.
-088 ==> 201591 : Restart queue in Batch queue manager.
-089 ==> 223003 : Cancelling duplicate search doesn't remove waiting cursor.
-090 ==> 230358 : Selected album does not match containing items.
-091 ==> 231048 : Monochrome tool shows plain grey preview.
-092 ==> 222774 : Many (but not all) tags have been lost after multiple albums facility added.
-093 ==> 226504 : When moving assigned tag in the keywords hierachy it becomes unassigned.
-094 ==> 220415 : Clicking the + in the Album tree expands and just collapses subdirs again.
-095 ==> 207881 : Album order differs in import dialog.
-096 ==> 231361 : digiKam crash when trying to open NIKON NEF format photos from camera.
-097 ==> 230573 : digiKam crash with import from DSL Nikon D90.
-098 ==> 196470 : Update files with metadata from DB.
-099 ==> 224052 : Pressing Delete repeatedly is not cached.
-100 ==> 232339 : Wrong flash export url in digiKam.
-101 ==> 225001 : Google map is empty.
-102 ==> 225162 : Picasaweb export no progress bar.
-103 ==> 225164 : Picasaweb export waiting mouse cursor without ending.
-104 ==> 203541 : Select images to upload.
-105 ==> 225316 : ExpoBlend won't compile even with dependencies all right.
-106 ==> 225396 : "Mozilla" MUA option is broken.
-107 ==> 223492 : Show screenshot alongside theme description.
-108 ==> 225407 : Dngconverter fix endian detection [patch].
-109 ==> 225161 : Picasaweb export does not export photo geotag.
-110 ==> 225665 : digiKam crashed when cancelling transfer to Picasa.
-111 ==> 225646 : Picasaweb does not export movie.
-112 ==> 196593 : EXIF Geotags not recognised by Picasa.
-113 ==> 226799 : RawEngine should use all CPU cores when converting images.
-114 ==> 224872 : Export for Piwigo.
-115 ==> 226916 : Get metadata from image files and new detailed theme.
-116 ==> 217539 : picasaweb ability to choose add or update photo.
-117 ==> 227920 : Cannot compile: opencv/highgui.h missing for removeredeyes tool.
-118 ==> 219603 : Renaming images to send.
-119 ==> 229068 : digiKam repeatedly crashes when uploading several pictures to Picasaweb.
-120 ==> 229826 : PicasaWeb Export won't login with certain chars in password.
-121 ==> 196236 : Facebook upload unreliable, and fails in unsafe fashion.
-122 ==> 229169 : Print Assistant on the page preview shows screen corruption.
-123 ==> 221298 : digiKam segfaults on Flickr export.
-124 ==> 213921 : DNG Converter lost exif info about ISO.
-125 ==> 228524 : Failed to rotate image [patch].
+001 ==> 223936 - Moving photos between albums is slow.
+002 ==> 224698 - digiKam fails to rotate pefs via orientation tag.
+003 ==> 224021 - Zoom shortcuts inconsistent between editor and preview.
+004 ==> 225160 - digiKam built with Qt4 ver 4.5.3 does not display pictures in album view.
+005 ==> 225397 - Tip refers to "Print Wizard", it is now "Print Assistant".
+006 ==> 225555 - Crash when deleting tag.
+007 ==> 207244 - Image disappears when enlarging.
+008 ==> 221155 - Add collection fails on similarly named directories (seems that check is not strict enough).
+009 ==> 225731 - digiKam no preview icon for movie.
+010 ==> 222698 - digiKam 1.0.0 crashes when editing tags by drag-and-drop.
+011 ==> 225328 - Creating new album during import fails.
+012 ==> 216633 - Additional aspect ratios in crop tool.
+013 ==> 151406 - Filters in 'Enhance' dropdown menu lack mouse-over preview mode.
+014 ==> 225698 - When I export my Album to a Html Gallery then digiKam crashed at the End.
+015 ==> 225787 - Scroll wheel doesn't work while moving images.
+016 ==> 226081 - Trying to delete tags crashes digiKam.
+017 ==> 226118 - IPTC metadata tag delimiter is no longer stored (since 0.10).
+018 ==> 226235 - digiKam fails after upgrade - no albums - rh tag & captions bar frozen.
+019 ==> 225272 - digiKam destroy some exif data.
+020 ==> 226584 - digiKam crashes in the starting phase.
+021 ==> 226537 - hovering doesn't show sub-tags.
+022 ==> 225827 - Gpswidget inactive on default selected photo.
+023 ==> 226381 - Copy/Paste of images in Albums view selects wrong image.
+024 ==> 224999 - Thumbnails blury after upgrade to 1.0.0 from 0.10.
+025 ==> 226789 - Metadata settings only EXIF.
+026 ==> 185266 - digiKam shows unknown icon when moving images to other directory.
+027 ==> 226872 - Tag tree not expanded with "Tags already assigned" button.
+028 ==> 226858 - digiKam 1.2 My Tags window always blank.
+029 ==> 226568 - digiKam 1.1 crashes when renaming tag.
+030 ==> 226515 - My tags on Caption/Tags becomes empty after removing a single tag.
+031 ==> 227244 - Images on local disk not shown in middle pane.
+032 ==> 226853 - No images shown after upgrading from previous version.
+033 ==> 226932 - Batch Color Space Conversion Tool.
+034 ==> 207338 - Batch queue manager does not cancel processing.
+035 ==> 215657 - Raw import tool does not use general digiKam settings.
+036 ==> 226846 - Issues with color management and color profiles.
+037 ==> 227498 - digiKam no longer shows any fotos. opengl image viewer works. showFoto works.
+038 ==> 226537 - hovering doesn't show sub-tags.
+039 ==> 227550 - Tags already assigned looks messy.
+040 ==> 226962 - Applying tags to images requires extra work.
+041 ==> 226238 - Histogram never get completed in image editor after any change in the image.
+042 ==> 227545 - Toggle Auto/Parents does not work as expected.
+043 ==> 219772 - Opening the application causes crash.
+044 ==> 226382 - Curves Adjust dialog broken: No Histogram and no effect when changing the line.
+045 ==> 227555 - Preview image in digiKam is not displayed after saveas in editor.
+046 ==> 225728 - Adding vignette should not increase brightness in the center.
+047 ==> 227992 - Search field should not lost focus if nothing was found.
+048 ==> 228326 - Crash trying to create a new tag.
+049 ==> 227905 - ISO Album dates for 2009 2010 sort wrong.
+050 ==> 225443 - Fileview preview panning shortcut back to old.
+051 ==> 224094 - Modifying file (caption, keywords, EXIF) takes a very long time and 100 % CPU.
+052 ==> 228378 - Tag filtering is bugged.
+053 ==> 227668 - Not enough space to show alle tags.
+054 ==> 227640 - No Pictures visible in Collections.
+055 ==> 227075 - digikam3 database is not imported.
+056 ==> 225927 - Add white-balance to the batch base tools.
+057 ==> 225718 - Crash when having two tags with the same name in one folder.
+058 ==> 221918 - Wrong thumbnails after save as.
+059 ==> 226586 - digiKam 1.2 crashes after My Tags window goes blank.
+060 ==> 226885 - Not displayed thumbnails failed load kio_digikamalbums.
+061 ==> 226363 - Root album is not expansed after upgrade to model view port.
+062 ==> 224080 - Selected image thumbnails should be automatically added to the list of images for processing in Batch Queue Manager.
+063 ==> 225722 - Selection in editor should not darken image.
+064 ==> 228802 - Copy paste doesn't work.
+065 ==> 227064 - digiKam 1.1.0: crash on image download.
+066 ==> 228807 - Dancing thumbs in album view.
+067 ==> 214303 - Position of preview type buttons is inconsistent across different tools.
+068 ==> 163286 - Accurate histogram preview required.
+069 ==> 229287 - Crash in digiKam when renaming with directory.
+070 ==> 148540 - Improvements of adding noise tool.
+071 ==> 229340 - digiKam Crashes When Saving PNG Files.
+072 ==> 229664 - Curves Widget not working anymore in BWSepia Plugin.
+073 ==> 229574 - Moving tags doesn't update the "tag counter" next to the tag name.
+074 ==> 229690 - No picture on thumb bar icon.
+075 ==> 229793 - Drop image file in digiKam.
+076 ==> 228483 - digiKam 1.1.0 with system libjpeg-8 breaks image rotation.
+077 ==> 187431 - Gui too big for eeepc.
+078 ==> 230008 - digiKam Nikon fetching pictures.
+079 ==> 229470 - digiKam fails to start with QCursor: Cannot create bitmap cursor; invalid bitmap(s).
+080 ==> 221992 - "local contrast" settings make no difference.
+081 ==> 230003 - Zoombar slider adjustments below 100% are hard to archieve [patch].
+082 ==> 228810 - Need to roll over again on a thumb to correct the rating.
+083 ==> 210259 - Scan crashed on multi-layer TIFFs.
+084 ==> 229344 - digiKam starting up - loading tools.
+085 ==> 229578 - Metadata is not correctly updated when just assigning tags.
+086 ==> 230323 - ShowFoto and digiKam opening Olympus E-P2 ORF file will crash.
+087 ==> 229108 - digiKam doesn't display all images after and upgrade.
+088 ==> 201591 - Restart queue in Batch queue manager.
+089 ==> 223003 - Cancelling duplicate search doesn't remove waiting cursor.
+090 ==> 230358 - Selected album does not match containing items.
+091 ==> 231048 - Monochrome tool shows plain grey preview.
+092 ==> 222774 - Many (but not all) tags have been lost after multiple albums facility added.
+093 ==> 226504 - When moving assigned tag in the keywords hierachy it becomes unassigned.
+094 ==> 220415 - Clicking the + in the Album tree expands and just collapses subdirs again.
+095 ==> 207881 - Album order differs in import dialog.
+096 ==> 231361 - digiKam crash when trying to open NIKON NEF format photos from camera.
+097 ==> 230573 - digiKam crash with import from DSL Nikon D90.
+098 ==> 196470 - Update files with metadata from DB.
+099 ==> 224052 - Pressing Delete repeatedly is not cached.
+100 ==> 232339 - Wrong flash export url in digiKam.
+101 ==> 225001 - Google map is empty.
+102 ==> 225162 - Picasaweb export no progress bar.
+103 ==> 225164 - Picasaweb export waiting mouse cursor without ending.
+104 ==> 203541 - Select images to upload.
+105 ==> 225316 - ExpoBlend won't compile even with dependencies all right.
+106 ==> 225396 - "Mozilla" MUA option is broken.
+107 ==> 223492 - Show screenshot alongside theme description.
+108 ==> 225407 - Dngconverter fix endian detection [patch].
+109 ==> 225161 - Picasaweb export does not export photo geotag.
+110 ==> 225665 - digiKam crashed when cancelling transfer to Picasa.
+111 ==> 225646 - Picasaweb does not export movie.
+112 ==> 196593 - EXIF Geotags not recognised by Picasa.
+113 ==> 226799 - RawEngine should use all CPU cores when converting images.
+114 ==> 224872 - Export for Piwigo.
+115 ==> 226916 - Get metadata from image files and new detailed theme.
+116 ==> 217539 - picasaweb ability to choose add or update photo.
+117 ==> 227920 - Cannot compile: opencv/highgui.h missing for removeredeyes tool.
+118 ==> 219603 - Renaming images to send.
+119 ==> 229068 - digiKam repeatedly crashes when uploading several pictures to Picasaweb.
+120 ==> 229826 - PicasaWeb Export won't login with certain chars in password.
+121 ==> 196236 - Facebook upload unreliable, and fails in unsafe fashion.
+122 ==> 229169 - Print Assistant on the page preview shows screen corruption.
+123 ==> 221298 - digiKam segfaults on Flickr export.
+124 ==> 213921 - DNG Converter lost exif info about ISO.
+125 ==> 228524 - Failed to rotate image [patch].

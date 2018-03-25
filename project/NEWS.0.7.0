@@ -11,32 +11,32 @@ TimeAdjust     : A dedicated photo time-stamp can be used to adjust difference o
 *****************************************************************************************************
 BUGFIXES:
 
-001 ==> 205603 : Crash on finishing Batch Unsharp mask.
-002 ==> 199533 : Enable dateframes theme in -tools [patch].
-003 ==> 111509 : Subalbums not supported by HTML export.
-004 ==> 205833 : Batch raw converter uses first dot in filename to determine file ending.
-005 ==> 199181 : Gps sync unable to use search field.
-006 ==> 197377 : Batch -> Image Filtering -> Unsharp Mask: Wrong Thresold.
-007 ==> 204437 : DNGWriter turns olympus ORF unusable.
-008 ==> 206714 : Can not select multiple images in list.
-009 ==> 188933 : Lossless rotate does not work for this image. Image does not rotate.
-010 ==> 193685 : Set permissions on a per-photo base [patch].
-011 ==> 193734 : Closing geolocation correlator without saving shows two warning dialogs.
-012 ==> 194768 : Use a clock photo to work out the time difference of the camera clock.
-013 ==> 172359 : Set content type and safety level on flickr upload [patch].
-014 ==> 160272 : Raw images converter changes brightness or exposure of photos.
-015 ==> 206976 : Image display time in advanced slideshow.
-016 ==> 206995 : GPSCorrelator: "Remove" removes from all and does not update digikam-database.
-017 ==> 207108 : Plural used with a in front (wrong English).
-018 ==> 205602 : Picture can't be display top-bottom, it is always rotated to the left or right.
-019 ==> 139537 : Option to export to zooomr [patch for FlickrExport].
-020 ==> 183582 : Crash when trying to geolocate photographs after canceling empty map window.
-021 ==> 193508 : Crash when saving after editing XMP Metadata for a image.
-022 ==> 207620 : Adjust Time & Date: Example not updated when Adjustment Type changed.
-023 ==> 208107 : corrupted image when saving a scan.
-024 ==> 207997 : Let the exif import dialog remember its last location.
-025 ==> 200554 : Import metadata: More sensitive choice of directory in file-open dialog [patch].
-026 ==> 135411 : Batch resizing: Proportional (2-dim) is not proportional.
-027 ==> 206357 : Tools / Resize - two dimensions are not proportionately resized.
-028 ==> 208446 : Gwenview crash when click on CLOSE.
-029 ==> 204634 : "Date and Time (digitized)" is not adjusted.
+001 ==> 205603 - Crash on finishing Batch Unsharp mask.
+002 ==> 199533 - Enable dateframes theme in -tools [patch].
+003 ==> 111509 - Subalbums not supported by HTML export.
+004 ==> 205833 - Batch raw converter uses first dot in filename to determine file ending.
+005 ==> 199181 - Gps sync unable to use search field.
+006 ==> 197377 - Batch -> Image Filtering -> Unsharp Mask: Wrong Thresold.
+007 ==> 204437 - DNGWriter turns olympus ORF unusable.
+008 ==> 206714 - Can not select multiple images in list.
+009 ==> 188933 - Lossless rotate does not work for this image. Image does not rotate.
+010 ==> 193685 - Set permissions on a per-photo base [patch].
+011 ==> 193734 - Closing geolocation correlator without saving shows two warning dialogs.
+012 ==> 194768 - Use a clock photo to work out the time difference of the camera clock.
+013 ==> 172359 - Set content type and safety level on flickr upload [patch].
+014 ==> 160272 - Raw images converter changes brightness or exposure of photos.
+015 ==> 206976 - Image display time in advanced slideshow.
+016 ==> 206995 - GPSCorrelator: "Remove" removes from all and does not update digikam-database.
+017 ==> 207108 - Plural used with a in front (wrong English).
+018 ==> 205602 - Picture can't be display top-bottom, it is always rotated to the left or right.
+019 ==> 139537 - Option to export to zooomr [patch for FlickrExport].
+020 ==> 183582 - Crash when trying to geolocate photographs after canceling empty map window.
+021 ==> 193508 - Crash when saving after editing XMP Metadata for a image.
+022 ==> 207620 - Adjust Time & Date: Example not updated when Adjustment Type changed.
+023 ==> 208107 - corrupted image when saving a scan.
+024 ==> 207997 - Let the exif import dialog remember its last location.
+025 ==> 200554 - Import metadata: More sensitive choice of directory in file-open dialog [patch].
+026 ==> 135411 - Batch resizing: Proportional (2-dim) is not proportional.
+027 ==> 206357 - Tools / Resize - two dimensions are not proportionately resized.
+028 ==> 208446 - Crash when click on CLOSE.
+029 ==> 204634 - "Date and Time (digitized)" is not adjusted.
