@@ -195,7 +195,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
             this, SLOT(slotReturnPressed()));
 
     connect(d->resetIconButton, SIGNAL(clicked()),
-            this,SLOT(slotIconResetClicked()));
+            this, SLOT(slotIconResetClicked()));
 
     connect(d->keySeqWidget, SIGNAL(keySequenceChanged(QKeySequence)),
             this, SLOT(slotDataChanged()));
@@ -264,7 +264,7 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
         QList<Album*>::iterator it;
         bool containsRoot = false;
 
-        for (it = albums.begin(); it != albums.end(); ++it)
+        for (it = albums.begin() ; it != albums.end() ; ++it)
         {
             TAlbum* const temp = dynamic_cast<TAlbum*>(*it);
 
@@ -272,7 +272,7 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
             {
                 d->selectedAlbums.append(temp);
 
-                if(temp->isRoot())
+                if (temp->isRoot())
                     containsRoot = true;
             }
         }
@@ -372,7 +372,7 @@ void TagPropWidget::slotSaveChanges()
     {
         QList<TAlbum*>::iterator it;
 
-        for (it = d->selectedAlbums.begin(); it != d->selectedAlbums.end(); ++it)
+        for (it = d->selectedAlbums.begin() ; it != d->selectedAlbums.end() ; ++it)
         {
             TAlbum* const tag = *it;
 
