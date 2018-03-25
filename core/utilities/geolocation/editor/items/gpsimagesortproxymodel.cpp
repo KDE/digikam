@@ -113,7 +113,7 @@ public:
 
     bool assertSelectionValid(const QItemSelection& selection) const
     {
-        Q_FOREACH (const QItemSelectionRange& range, selection)
+        foreach(const QItemSelectionRange& range, selection)
         {
             if (!range.isValid())
             {
@@ -316,7 +316,7 @@ class GPSModelIndexProxyMapperPrivate
 
     bool assertSelectionValid(const QItemSelection& selection) const
     {
-        Q_FOREACH (const QItemSelectionRange& range, selection)
+        foreach(const QItemSelectionRange& range, selection)
         {
             if (!range.isValid())
             {
@@ -350,12 +350,12 @@ class GPSModelIndexProxyMapperPrivate
 */
 void GPSModelIndexProxyMapperPrivate::createProxyChain()
 {
-    Q_FOREACH (auto p, m_proxyChainUp)
+    foreach(auto p, m_proxyChainUp)
     {
         p->disconnect(q_ptr);
     }
 
-    Q_FOREACH (auto p, m_proxyChainDown)
+    foreach(auto p, m_proxyChainDown)
     {
         p->disconnect(q_ptr);
     }

@@ -156,7 +156,7 @@ void DAdjustableLabel::adjustTextToLabel()
     int lblW      = size().width();
     bool adjusted = false;
 
-    Q_FOREACH(const QString& line, d->ajdText.split(QLatin1Char('\n')))
+    foreach(const QString& line, d->ajdText.split(QLatin1Char('\n')))
     {
         int lineW = fm.width(line);
 

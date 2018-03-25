@@ -1872,7 +1872,7 @@ void BackendMarble::applyCacheToWidget()
 void BackendMarble::slotTracksChanged(const QList<TrackManager::TrackChanges> trackChanges)
 {
     // invalidate the cache for all changed tracks
-    Q_FOREACH(const TrackManager::TrackChanges& tc, trackChanges)
+    foreach(const TrackManager::TrackChanges& tc, trackChanges)
     {
         if (tc.second & (TrackManager::ChangeTrackPoints | TrackManager::ChangeRemoved))
         {

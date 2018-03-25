@@ -727,7 +727,7 @@ void DFontProperties::Private::_d_family_chosen_slot(const QString& family)
     qtStyles.clear();
     styleIDs.clear();
 
-    Q_FOREACH (const QString& style, styles)
+    foreach(const QString& style, styles)
     {
         // Sometimes the font database will report an invalid style,
         // that falls back to another when set.
@@ -1039,7 +1039,7 @@ qreal DFontProperties::Private::fillSizeList(const QList<qreal>& sizes_)
     sizeListBox->clear();
     std::sort(sizes.begin(), sizes.end());
 
-    Q_FOREACH (qreal size, sizes)
+    foreach(qreal size, sizes)
     {
         sizeListBox->addItem(formatFontSize(size));
     }
@@ -1073,7 +1073,7 @@ qreal DFontProperties::Private::setupSizeListBox(const QString& family, const QS
 
         QList<int> smoothSizes = dbase.smoothSizes(family, style);
 
-        Q_FOREACH (int size, smoothSizes)
+        foreach(int size, smoothSizes)
         {
             sizes.append(size);
         }
@@ -1386,7 +1386,7 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
     QStringList             trNames;
     QHash<QString, QString> trMap;
 
-    Q_FOREACH (const QString& name, names)
+    foreach(const QString& name, names)
     {
         QString trName = translateFontName(name);
 
@@ -1404,7 +1404,7 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
 
     // Prepend generic fonts, in the predefined order.
 
-    Q_FOREACH (const QString& genericName, genericNames)
+    foreach(const QString& genericName, genericNames)
     {
         QString trGenericName = translateFontName(genericName);
 

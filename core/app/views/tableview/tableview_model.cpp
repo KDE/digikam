@@ -92,7 +92,7 @@ TableViewModel::Item* TableViewModel::Item::findChildWithImageId(const qlonglong
         return this;
     }
 
-    Q_FOREACH(Item* const item, children)
+    foreach(Item* const item, children)
     {
         Item* const iItem = item->findChildWithImageId(searchImageId);
 
@@ -889,7 +889,7 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
             beginInsertRows(groupLeaderIndex, 0, groupedImages.count()-1);
         }
 
-        Q_FOREACH(const ImageInfo& groupedInfo, groupedImages)
+        foreach(const ImageInfo& groupedInfo, groupedImages)
         {
             d->cachedImageInfos.insert(groupedInfo.id(), groupedInfo);
 
@@ -1045,7 +1045,7 @@ QList<qlonglong> TableViewModel::imageIds(const QModelIndexList& indexList) cons
 {
     QList<qlonglong> idList;
 
-    Q_FOREACH(const QModelIndex& index, indexList)
+    foreach(const QModelIndex& index, indexList)
     {
         ASSERT_MODEL(index, this);
 
@@ -1071,7 +1071,7 @@ QList<ImageInfo> TableViewModel::imageInfos(const QModelIndexList& indexList) co
 {
     QList<ImageInfo> infoList;
 
-    Q_FOREACH(const QModelIndex& index, indexList)
+    foreach(const QModelIndex& index, indexList)
     {
         ASSERT_MODEL(index, this);
 
@@ -1166,7 +1166,7 @@ void TableViewModel::sort(int column, Qt::SortOrder order)
     {
         Item* const itemToSort = itemsRequiringSorting.takeFirst();
 
-        Q_FOREACH(Item* const itemToCheck, itemToSort->children)
+        foreach(Item* const itemToCheck, itemToSort->children)
         {
             if (!itemToCheck->children.isEmpty())
             {
@@ -1223,7 +1223,7 @@ QMimeData* TableViewModel::mimeData(const QModelIndexList& indexes) const
 
     QModelIndexList imageModelIndexList;
 
-    Q_FOREACH(const QModelIndex& i, indexes)
+    foreach(const QModelIndex& i, indexes)
     {
         if (i.column() > 0)
         {

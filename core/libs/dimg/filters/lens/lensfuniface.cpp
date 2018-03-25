@@ -353,7 +353,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                         qCDebug(DIGIKAM_DIMG_LOG) << "lens matches   : more than one...";
                         const lfLens* exact = 0;
 
-                        Q_FOREACH(const lfLens* const l, lensMatches)
+                        foreach(const lfLens* const l, lensMatches)
                         {
                             if(QLatin1String(l->Model) == d->lensDescription)
                             {

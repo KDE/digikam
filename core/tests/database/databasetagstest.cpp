@@ -107,7 +107,7 @@ void DatabaseTagsTest::initTestCase()
     AlbumList all = AlbumManager::instance()->allPAlbums();
     qDebug() << "PAlbum registered : " << all.size();
 
-    Q_FOREACH(Album* const a, all)
+    foreach(Album* const a, all)
     {
         if (a)
         {

@@ -817,7 +817,7 @@ void GPSMarkerTiler::onIndicesClicked(const ClickInfo& clickInfo)
 
     QList<qlonglong> clickedImagesId;
 
-    Q_FOREACH(const TileIndex & tileIndex, clickInfo.tileIndicesList)
+    foreach(const TileIndex & tileIndex, clickInfo.tileIndicesList)
     {
         clickedImagesId << getTileMarkerIds(tileIndex);
     }

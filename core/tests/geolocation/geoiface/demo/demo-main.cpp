@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
     // get the list of images to load on startup:
     QList<QUrl> imagesList;
 
-    Q_FOREACH(const QString& file, parser.positionalArguments())
+    foreach(const QString& file, parser.positionalArguments())
     {
         const QUrl argUrl = QUrl::fromLocalFile(file);
         qDebug() << argUrl;

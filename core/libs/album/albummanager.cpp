@@ -1936,7 +1936,7 @@ void AlbumManager::setCurrentAlbums(QList<Album*> albums)
     /**
      * Filter out the null pointers
     */
-    Q_FOREACH(Album* const album, albums)
+    foreach(Album* const album, albums)
     {
         if (album != 0)
         {

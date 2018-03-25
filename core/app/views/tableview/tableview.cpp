@@ -225,7 +225,7 @@ void TableView::setThumbnailSize(const ThumbnailSize& size)
     d->thumbnailSize                            = size;
     const QList<TableViewColumn*> columnObjects = s->tableViewModel->getColumnObjects();
 
-    Q_FOREACH(TableViewColumn* const iColumn, columnObjects)
+    foreach(TableViewColumn* const iColumn, columnObjects)
     {
         iColumn->updateThumbnailSize();
     }
@@ -350,7 +350,7 @@ QList<QUrl> TableView::allUrls(bool grouping) const
     const ImageInfoList infos = allInfo(grouping);
     QList<QUrl> resultList;
 
-    Q_FOREACH(const ImageInfo& info, infos)
+    foreach(const ImageInfo& info, infos)
     {
         resultList << info.fileUrl();
     }
@@ -543,7 +543,7 @@ void TableView::invertSelection()
 
     s->tableViewSelectionModel->clearSelection();
 
-    Q_FOREACH(const int i, rowsToSelect)
+    foreach(const int i, rowsToSelect)
     {
         const QModelIndex iIndex = s->tableViewModel->deepRowIndex(i);
         const QItemSelection is  = s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(iIndex);

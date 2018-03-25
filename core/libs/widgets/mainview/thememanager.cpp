@@ -212,7 +212,7 @@ void ThemeManager::populateThemeMenu()
 
     qCDebug(DIGIKAM_WIDGETS_LOG) << "Paths to color scheme : " << dirs;
 
-    Q_FOREACH (const QString& dir, dirs)
+    foreach(const QString& dir, dirs)
     {
         QDirIterator it(dir, QStringList() << QLatin1String("*.colors"));
 

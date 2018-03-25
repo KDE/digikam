@@ -659,7 +659,7 @@ void GPSImageListContextMenu::slotLookupMissingAltitudes()
     // find the indices which have coordinates but no altitude
     LookupAltitude::Request::List altitudeQueries;
 
-    Q_FOREACH (const QModelIndex& currentIndex, selectedIndices)
+    foreach(const QModelIndex& currentIndex, selectedIndices)
     {
         GPSImageItem* const gpsItem = imageModel->itemFromIndex(currentIndex);
 
@@ -711,7 +711,7 @@ void GPSImageListContextMenu::slotAltitudeLookupReady(const QList<int>& readyReq
 {
     GPSImageModel* const imageModel = d->imagesList->getModel();
 
-    Q_FOREACH(const int requestIndex, readyRequests)
+    foreach(const int requestIndex, readyRequests)
     {
         const LookupAltitude::Request myLookup = d->altitudeLookup->getRequest(requestIndex);
         const QPersistentModelIndex markerIndex          = myLookup.data.value<QPersistentModelIndex>();

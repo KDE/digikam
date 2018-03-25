@@ -84,7 +84,7 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
     bool jp2k = false;
 #endif // HAVE_JASPER
 
-    Q_FOREACH(const QByteArray& frm, supported)
+    foreach(const QByteArray& frm, supported)
     {
         if (QString::fromLatin1(frm).contains(QLatin1String("tif"),  Qt::CaseInsensitive) ||
             QString::fromLatin1(frm).contains(QLatin1String("tiff"), Qt::CaseInsensitive))
