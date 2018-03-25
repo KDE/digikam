@@ -1,14 +1,18 @@
-*****************************************************************************************************
 digiKam 4.6.0 - Release date: 2014-12-14
 
+*****************************************************************************************************
 NEW FEATURES:
 
 Editor : Several fixes to complete image editor canvas port to Qt4 model/view.
+
 General: Better support of removable media and unvavailable items.
+
 Import : Allow sub-subfolders auto creation while importing.
+
 BQM    : Allow to save/load Workflow from tools context menu.
 
-BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 340811 - Wrap album caption.
 002 ==> 340278 - Please provide a windows build of 4.4.

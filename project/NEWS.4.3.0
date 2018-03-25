@@ -1,18 +1,24 @@
-*****************************************************************************************************
 digiKam 4.3.0 - Release date: 2014-09-07
 
+*****************************************************************************************************
 NEW FEATURES:
 
 Database     : Nepomuk support have been replaced by Baloo support (https://community.kde.org/Baloo).
+
 Map Searches : New option to display all non geolocated images from collections.
+
 General      : New notification event when kioslave cannot be started.
 General      : OSX event notifier is now used to dispatch notifications.
+
 AlbumGui     : New Action To Exclude Items Without Rating with items filter.
                Details: http://mohamedanwer.wordpress.com/2014/08/28/new-action-to-exclude-items-without-rating/
+
 ExpoBlending : Remove OPenMP dependency. Ported to QtConcurrentRun.
+
 Panorama     : Support next hugin version (2014.0).
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 338048 - Separate Tags in Public and Private for Export.
 002 ==> 338055 - libkdepimlibs not found.

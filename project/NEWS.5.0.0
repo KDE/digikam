@@ -1,6 +1,6 @@
-*****************************************************************************************************
 digiKam 5.0.0 - Release date: 2016-07-03
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General            : Tool obsolete/unmaintained and removed : Kopete, IpodExport, PiwigoExport, RawConverte
@@ -42,7 +42,8 @@ Showfoto           : Add a new option to edit metadata.
 Showfoto           : Add a new option to edit geolocation.
 Showfoto           : Add a new option to run presentation tool.
 
-BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 284216 - Using slider widget from Krita.
 002 ==> 342010 - digiKam crash, apparently in xcb.

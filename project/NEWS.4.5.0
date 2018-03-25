@@ -1,6 +1,6 @@
-*****************************************************************************************************
 digiKam 4.5.0 - Release date: 2014-11-09
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General : Remove internal libpgf. Add external and mandatory dependency to libpgf >= 6.12.24.
@@ -9,7 +9,8 @@ General : Geolocation is now an optional dependency to support geolocation maps.
 General : FacesEngine is now an optional dependency to support faces detection and recocognition.
 General : libjasper is now an optional dependency to support JPEG200.
 
-BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 339806 - Compiler error: ambiguous reference to ratio variable.
 002 ==> 326945 - When build digikam from git and package libpgf is installed, no way to use internal digikam libpgf.

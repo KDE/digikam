@@ -1,6 +1,6 @@
-*****************************************************************************************************
 digiKam 5.4.0 - Release date: 2017-01-08
 
+*****************************************************************************************************
 NEW FEATURES:
 
 Searches     : Improvements of duplicate searches to introduce a range of similarity of items.
@@ -9,11 +9,15 @@ Searches     : Improvements of duplicate searches to permit multiple selection i
 Searches     : Improvements of fuzzy searches to permit fuzzy search on local images not present in the database via drag & drop.
 Searches     : Improvements of duplicate/fuzzy/sketch searches to permit sorting the resulting images in image view by similarity level.
 Searches     : Improvements of duplicate/fuzzy/sketch search results by showing the concrete similarity values in table view.
+
 AlbumGUI     : Improvements of grouped images to apply renaming, copying or metadata actions to all images.
+
+SlideShow    : Add video support.
+
+Presentation : Add video support.
+
 General      : Media player is now ported to QtAV instead Qt5Multimedia (http://www.qtav.org/).
 General      : Add support of animated GIF in preview mode.
-SlideShow    : Add video support.
-Presentation : Add video support.
 General      : Update internal Libraw to last 0.18. New camera supported:
                Apple: iPad Pro, iPhone SE, iPhone 6s, iPhone 6 plus, iPhone 7, iPhone 7 plus
                BlackMagic Micro Cinema Camera, URSA, URSA Mini
@@ -44,7 +48,8 @@ General      : Update internal Libraw to last 0.18. New camera supported:
                YUNEEC CGO4
                Xiaomi MI3, RedMi Note3 Pro
 
-BUGFIXES FROM BUGZILLA:
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 366624 - digiKam defaults to fullscreen with no menu and status bar.
 002 ==> 372027 - Adjust grouping behavior [patch].

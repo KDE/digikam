@@ -1,9 +1,10 @@
-*****************************************************************************************************
 digiKam 4.11.0 - Release date: 2015-06-14
 
+*****************************************************************************************************
 NEW FEATURES:
 
-BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 342791 - Quality sorter does not honor album selection, scans all albums instead.
 002 ==> 277024 - After running a batch process to change metadata, the files halved in size.

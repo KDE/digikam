@@ -1,30 +1,36 @@
-*****************************************************************************************************
 digiKam 5.5.0 - Release date: 2017-03-12
 
+*****************************************************************************************************
 NEW FEATURES:
 
 Database    : Add new options to ignore some kind of directories while scanning collections.
 Database    : We introduced garbage collection for databases as maintenance stage. This stage removes stale image,
               thumbnail and face entries gut does not shrink Databases automatically.
+
 Faces       : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
 Faces       : Recognised but unconfirmed faces are now visible both in the recognised face tag and also in a special tag called Unconfirmed.
 Faces       : The list of proposed names for name assignment in people sidebar can now be reduced to face tags with a setup option.
 Faces       : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
+
 Maintenance : The maintenance now does not generate massive amounts of threads anymore. Instead, we use a queue based approach to
               level the load on the CPUs more appropriate. This should improve the reactiveness during maintenance.
+
 Searches    : Improved the exactness of similarity recognition for external images dropped in fuzzy search.
 Searches    : Introduced a configurable lower bound for the minimum similarity in fuzzy and duplicates search.
 Searches    : The results of duplicates searches can now be restricted. It is now possible to restrict the duplicates to the ones that
               are in the same album as the reference image or in another album. This feature is also usable in maintenance.
 Searches    : In duplicates view, the reference image is more clearly identified by the description reference image in the image information.
+
 BQM         : Several usability improvements in Watermark tool.
+
 General     : Unsharp Mask filter can now reduce color noise to process image in HSL color space.
 General     : Update internal Libraw to 0.18.2 : new camera supported: Sigma Quattro H.
               Fixed bug in exposure computation for Fuji camera. Fix wrong black level in Sony A350.
               Fix Sony metadata parser. Fix Phase One decoding.
 General     : JAlbumExport tool renamed as JAlbum and porting to Qt5.
 
-BUGFIXES FROM BUGZILLA:
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 374787 : Release Notes are difficult to read because of color choices.
 002 ==> 374784 - Startup wizard displays path to album with forward slashes.

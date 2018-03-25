@@ -1,6 +1,6 @@
-*****************************************************************************************************
 digiKam 5.7.0 - Release date: 2017-08-27
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General     : Add online handbook reader not dependant of desktop.
@@ -11,16 +11,23 @@ General     : Replaced the minimum and maximum similarity selection boxes in fuz
               search, duplicates search and maintenance by a new, generic DIntRangeBox
               which makes the look, feel and behavious consistent in all places.
               Also, this makes redundant code obsolete and reduces the probability of bugs.
+
 PrintCreator: Add option to create printing from albums or images selection.
 PrintCreator: Add option to customize output image properties to render printing.
 PrintCreator: Tool is now multi-threaded to process images while preview and printing.
+
 ImageEditor : Add SendByMail and PrintCreator tools support.
+
 Showfoto    : Add SendByMail and PrintCreator tools support.
+
 LightTable  : Add SendByMail and PrintCreator tools support.
+
 Panorama    : Add Hugin 2017.0 support.
+
 Geolocation : Add new tool to export GPS trace to KML file from geolocation editor.
 
-BUGFIXES FROM BUGZILLA:
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 381143 - Camera not removed between invocations.
 002 ==> 381306 - Error with import from Fujifilm X-T10.

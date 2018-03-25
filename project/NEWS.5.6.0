@@ -1,23 +1,30 @@
-*****************************************************************************************************
 digiKam 5.6.0 - Release date: 2017-06-11
 
+*****************************************************************************************************
 NEW FEATURES:
 
 Database    : We activated database shrinking for MySQL as part of the maintenance since now we can test the affected tables for integrity.
+
 Searches    : Users can now restrict the results of fuzzy image/drop/sketch search to be in specific albums.
 Searches    : Users can now select both tags and albums in duplicates search and restrict the set of images in which duplicates are searched with logical operations (in selected albums or/and tags, in selected albums but not tags and vice versa and only in selected objects of current tab)
 Searches    : In extended search, the tags selection can also be restricted such that images must be either tagged with at least one of or with all selected tags.
+
 General     : New tool to export Albums to static HTML gallery.
 General     : New tool to export Albums to video diaporama.
+
 HTMLGallery : New "Elegant" theme using javascript to render image as slideshow in web browser.
 HTMLGallery : New "SimpleRounded" theme that uses flat shapes with rounded corners.
 HTMLGallery : New "BlueCurved" theme with a blue rubbon on the left and an area for navigation arrows.
 HTMLGallery : Add option to generate a Gallery from a selection of images instead an album list.
+
 ImageEditor : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
+
 Showfoto    : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
+
 LightTable  : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
 
-BUGFIXES FROM BUGZILLA:
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 377432 : Crash on browsing images.
 002 ==> 377565 - Problem importing Person tags which are also "normal" tags.

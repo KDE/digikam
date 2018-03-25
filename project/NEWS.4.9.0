@@ -1,10 +1,10 @@
-*****************************************************************************************************
 digiKam 4.9.0 - Release date: 2015-04-05
 
+*****************************************************************************************************
 NEW FEATURES:
 
-
-BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 344484 - digiKam 4.8.0 compilation error : undefined reference to `cv::Exception::Exception.
 002 ==> 203733 - Syncing EXIF Artist and Copyright fields with IPTC/XMP.

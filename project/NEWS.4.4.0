@@ -1,18 +1,22 @@
-*****************************************************************************************************
 digiKam 4.4.0 - Release date: 2014-10-12
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General     : Navigate between pictures using PageUp/PageDown is now possible while editing properties through captions/tags sidebar.
 General     : New keyboard shortcuts to improve usability while photo review (as to switch focus on text edit widget, or to toogle tags view).
 General     : New keyboard shortcut to switch on/off color managed view for thumbnails and preview.
+
 AlbumGUI    : Album preview can be displayed in tooltip.
+
 SlideShow   : Labels and Tags keyboard shortcuts can be used while slideshow.
 SlideShow   : Support multi-monitors computer.
+
 PiwigoExport: Allow to upload videos (OGG, MP4 and WEBM) if the Piwigo server accept them.
 PiwigoExport: Remove the support of old Piwigo API (version < 2.4).
 
-BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 147175 - CANVAS : fit only large images to window.
 002 ==> 282900 - Control click on thumb to deselect resets focus to first photo.

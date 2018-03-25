@@ -1,10 +1,10 @@
-*****************************************************************************************************
 digiKam 4.7.0 - Release date: 2015-01-25
 
+*****************************************************************************************************
 NEW FEATURES:
 
-
-BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 341054 - No way to filter only files of a specific extension.
 002 ==> 342073 - The creation of the selection has a dysfunction after a very fast mouse double click [patch].

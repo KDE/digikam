@@ -1,15 +1,17 @@
-*****************************************************************************************************
 digiKam 4.2.0 - Release date: 2014-08-03
 
+*****************************************************************************************************
 NEW FEATURES:
 
 AlbumGui : New view on left sidebar to search quickly items with assigned Labels.
            Details: http://mohamedanwer.wordpress.com/2014/07/17/the-great-merging-day/
 AlbumGui : Tags view: add a new option to show items with no tag.
            Details: http://mohamedanwer.wordpress.com/2014/07/11/tags-left-sidebar-supports-new-action-now/
+
 General  : Add retina display support with preview and editor canvas under OSX.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 336851 - Untranslatable strings in Tags Manager.
 002 ==> 336650 - Face Detection always(!) crashes after first and only successful run (digiKam 3.4.0 on Windows 7).

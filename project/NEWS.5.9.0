@@ -1,11 +1,12 @@
-*****************************************************************************************************
 digiKam 5.9.0 - Release date: 2018-03-18
 
+*****************************************************************************************************
 NEW FEATURES:
 
-General      : Libraw updated to last 0.18.8.
+General        : Libraw updated to last 0.18.8.
 
-BUGFIXES FROM BUGZILLA:
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 388977 - Error during upgrading core database schema from v8 to v9.
 002 ==> 388867 - problem migrating databaseschema from 8 to 9.

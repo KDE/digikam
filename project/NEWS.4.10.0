@@ -1,11 +1,12 @@
-*****************************************************************************************************
 digiKam 4.10.0 - Release date: 2015-05-10
 
+*****************************************************************************************************
 NEW FEATURES:
 
 General : add support of ACDSee and MediaPro metadata for interroperability purpose.
 
-BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 345954 - Recursive calls made into ProgressManager::slotTransactionCompletedDeferred [patch].
 002 ==> 329214 - Crash when moving tags by D&D.

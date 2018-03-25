@@ -1,9 +1,10 @@
-*****************************************************************************************************
 digiKam 5.1.0 - Release date: 2016-08-07
 
+*****************************************************************************************************
 NEW FEATURES:
 
 Imgur   : Remove libqtkoauth dependency
+
 General : Integrate liboauth2. First tool to use it is Imgur.
 General : Fix broken Windows 64bits installer due to mix with 32 bits dlls.
 General : Internal Libraw updated to 0.18.0 beta (201604). New lead cameras supported:
@@ -22,7 +23,8 @@ Database: Consolidation of Mysql database backend.
 Database: Startup up time improved. Scan for new items is always differed after that main gui is displayed.
 Database: New option "Scan for new item at startup" option to optimize database initialization time.
 
-BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+*****************************************************************************************************
+BUGFIXES:
 
 001 ==> 289680 - ICCProfile wastes a lot of memory (high memory footprint on startup).
 002 ==> 308063 - Sort images by file names is not always correct.
