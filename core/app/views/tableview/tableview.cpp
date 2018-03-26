@@ -33,6 +33,7 @@
 #include <QAction>
 #include <QIcon>
 #include <QApplication>
+#include <QMessageBox>
 #include <QPointer>
 
 // Local includes
@@ -692,25 +693,50 @@ void TableView::rename()
     QList<QUrl>  urls = selectedUrls(grouping);
     NewNamesList newNamesList;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Selected URLs to rename: " << urls;
-
-    QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);
-    dlg->slotAddImages(urls);
-
-    if (dlg->exec() == QDialog::Accepted)
+    do
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Selected URLs to rename: " << urls;
+
+        QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);
+        dlg->slotAddImages(urls);
+
+        if (dlg->exec() != QDialog::Accepted)
+        {
+            delete dlg;
+            break;
+        }
+
         newNamesList = dlg->newNames();
 
         slotAwayFromSelection();
-    }
 
-    delete dlg;
-
-    if (!newNamesList.isEmpty())
-    {
-        QPointer<AdvancedRenameProcessDialog> dlg = new AdvancedRenameProcessDialog(newNamesList);
-        dlg->exec();
         delete dlg;
+
+        if (!newNamesList.isEmpty())
+        {
+            QPointer<AdvancedRenameProcessDialog> dlg = new AdvancedRenameProcessDialog(newNamesList, this);
+            dlg->exec();
+
+            urls = dlg->failedUrls();
+
+            delete dlg;
+
+            if (!urls.isEmpty())
+            {
+                QMessageBox msgBox(QMessageBox::Warning,
+                                   i18n("Renaming images"),
+                                   i18n("An error occurred while renaming %1 item(s).\n"
+                                        "Do you want to rename this item(s) again?", urls.count()),
+                                   QMessageBox::Yes | QMessageBox::No, this);
+
+                if (msgBox.exec() != QMessageBox::Yes)
+                {
+                    break;
+                }
+            }
+        }
     }
+    while (!urls.isEmpty() && !newNamesList.isEmpty());
 }
+
 } // namespace Digikam

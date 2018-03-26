@@ -60,12 +60,13 @@ public:
     ImageViewUtilities*  utilities;
 
     NewNamesList         newNameList;
+    QList<QUrl>          failedUrls;
     QUrl                 currentUrl;
     bool                 cancel;
 };
 
-AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& list)
-    : DProgressDlg(0),
+AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& list, QWidget* const parent)
+    : DProgressDlg(parent),
       d(new Private)
 {
     d->newNameList     = list;
@@ -184,7 +185,9 @@ void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
     setLabel(i18n("<b>Renaming images has failed...</b>"));
     qApp->processEvents();
 
-    QThread::sleep(2);
+    d->failedUrls << src;
+
+    QThread::sleep(1);
 
     slotRenameSuccessded(src);
 }
@@ -197,7 +200,13 @@ void AdvancedRenameProcessDialog::closeEvent(QCloseEvent* e)
 
 void AdvancedRenameProcessDialog::abort()
 {
+    d->failedUrls.clear();
     d->cancel = true;
+}
+
+QList<QUrl> AdvancedRenameProcessDialog::failedUrls() const
+{
+    return d->failedUrls;
 }
 
 }  // namespace Digikam
