@@ -22,6 +22,9 @@
  *
  * ============================================================ */
 
+#ifndef MOVIE_DECODER_P_H
+#define MOVIE_DECODER_P_H
+
 #include "moviedecoder.h"
 
 // FFMpeg includes
@@ -110,3 +113,5 @@ private:
 };
 
 } // namespace Digikam
+
+#endif // MOVIE_DECODER_P_H
