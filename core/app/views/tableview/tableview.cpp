@@ -690,9 +690,8 @@ void TableView::rename()
 {
     bool grouping     = needGroupResolving(ApplicationSettings::Rename);
     QList<QUrl>  urls = selectedUrls(grouping);
+    bool loop         = false;
     NewNamesList newNamesList;
-
-    slotAwayFromSelection();
 
     do
     {
@@ -707,9 +706,15 @@ void TableView::rename()
             break;
         }
 
+        if (!loop)
+        {
+            slotAwayFromSelection();
+            loop = true;
+        }
+
         newNamesList = dlg->newNames();
         delete dlg;
-        raise();
+        setFocus();
 
         if (!newNamesList.isEmpty())
         {
@@ -718,7 +723,7 @@ void TableView::rename()
 
             urls = dlg->failedUrls();
             delete dlg;
-            raise();
+            setFocus();
         }
     }
     while (!urls.isEmpty() && !newNamesList.isEmpty());

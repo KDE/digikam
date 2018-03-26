@@ -391,10 +391,8 @@ void DigikamImageView::rename()
 {
     bool grouping     = needGroupResolving(ApplicationSettings::Rename);
     QList<QUrl>  urls = selectedUrls(grouping);
+    bool loop         = false;
     NewNamesList newNamesList;
-
-    QUrl nextUrl = nextInOrder(selectedImageInfos(grouping).last(), 1).fileUrl();
-    setCurrentUrl(nextUrl);
 
     do
     {
@@ -409,9 +407,16 @@ void DigikamImageView::rename()
             break;
         }
 
+        if (!loop)
+        {
+            QUrl nextUrl = nextInOrder(selectedImageInfos(grouping).last(), 1).fileUrl();
+            setCurrentUrl(nextUrl);
+            loop = true;
+        }
+
         newNamesList = dlg->newNames();
         delete dlg;
-        raise();
+        setFocus();
 
         if (!newNamesList.isEmpty())
         {
@@ -420,7 +425,7 @@ void DigikamImageView::rename()
 
             urls = dlg->failedUrls();
             delete dlg;
-            raise();
+            setFocus();
         }
     }
     while (!urls.isEmpty() && !newNamesList.isEmpty());
