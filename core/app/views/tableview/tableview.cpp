@@ -692,6 +692,8 @@ void TableView::rename()
     QList<QUrl>  urls = selectedUrls(grouping);
     NewNamesList newNamesList;
 
+    slotAwayFromSelection();
+
     do
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Selected URLs to rename: " << urls;
@@ -706,10 +708,8 @@ void TableView::rename()
         }
 
         newNamesList = dlg->newNames();
-
-        slotAwayFromSelection();
-
         delete dlg;
+        raise();
 
         if (!newNamesList.isEmpty())
         {
@@ -717,8 +717,8 @@ void TableView::rename()
             dlg->exec();
 
             urls = dlg->failedUrls();
-
             delete dlg;
+            raise();
         }
     }
     while (!urls.isEmpty() && !newNamesList.isEmpty());

@@ -393,6 +393,9 @@ void DigikamImageView::rename()
     QList<QUrl>  urls = selectedUrls(grouping);
     NewNamesList newNamesList;
 
+    QUrl nextUrl = nextInOrder(selectedImageInfos(grouping).last(), 1).fileUrl();
+    setCurrentUrl(nextUrl);
+
     do
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Selected URLs to rename: " << urls;
@@ -407,11 +410,8 @@ void DigikamImageView::rename()
         }
 
         newNamesList = dlg->newNames();
-
-        QUrl nextUrl = nextInOrder(selectedImageInfos(grouping).last(), 1).fileUrl();
-        setCurrentUrl(nextUrl);
-
         delete dlg;
+        raise();
 
         if (!newNamesList.isEmpty())
         {
@@ -419,8 +419,8 @@ void DigikamImageView::rename()
             dlg->exec();
 
             urls = dlg->failedUrls();
-
             delete dlg;
+            raise();
         }
     }
     while (!urls.isEmpty() && !newNamesList.isEmpty());
