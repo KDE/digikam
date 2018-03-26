@@ -31,7 +31,6 @@
 
 // Qt includes
 
-#include <QMessageBox>
 #include <QPointer>
 #include <QMenu>
 #include <QIcon>
@@ -422,20 +421,6 @@ void DigikamImageView::rename()
             urls = dlg->failedUrls();
 
             delete dlg;
-
-            if (!urls.isEmpty())
-            {
-                QMessageBox msgBox(QMessageBox::Warning,
-                                   i18n("Renaming images"),
-                                   i18n("An error occurred while renaming %1 image(s).\n"
-                                        "Do you want to rename this image(s) again?", urls.count()),
-                                   QMessageBox::Yes | QMessageBox::No, this);
-
-                if (msgBox.exec() != QMessageBox::Yes)
-                {
-                    break;
-                }
-            }
         }
     }
     while (!urls.isEmpty() && !newNamesList.isEmpty());
