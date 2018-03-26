@@ -134,7 +134,7 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     //       But in a regular KDE session, KNotify should be running already.
 
     if (detectKDEDesktopIsRunning() &&
-        QDBusConnection::sessionBus().interface()->isServiceRegistered(QLatin1String("org.kde.knotify")))
+        QDBusConnection::sessionBus().interface()->isServiceRegistered(QLatin1String("org.kde.StatusNotifierWatcher")).value())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched to KDE desktop notifier";
 
