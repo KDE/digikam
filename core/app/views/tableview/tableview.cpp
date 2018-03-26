@@ -725,8 +725,8 @@ void TableView::rename()
             {
                 QMessageBox msgBox(QMessageBox::Warning,
                                    i18n("Renaming images"),
-                                   i18n("An error occurred while renaming %1 item(s).\n"
-                                        "Do you want to rename this item(s) again?", urls.count()),
+                                   i18n("An error occurred while renaming %1 image(s).\n"
+                                        "Do you want to rename this image(s) again?", urls.count()),
                                    QMessageBox::Yes | QMessageBox::No, this);
 
                 if (msgBox.exec() != QMessageBox::Yes)
