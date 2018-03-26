@@ -20,6 +20,9 @@
  *
  * ============================================================ */
 
+#ifndef EFFECT_MNGR_P_H
+#define EFFECT_MNGR_P_H
+
 // C++ includes
 
 #include <cmath>
@@ -101,3 +104,5 @@ private:
 };
 
 }  // namespace Digikam
+
+#endif // EFFECT_MNGR_P_H
