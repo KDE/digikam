@@ -75,7 +75,7 @@ BUGFIXES:
 044 ==> 377306 - Optionally remove all metadata.
 045 ==> 204040 - Allow to share images by e-mail in message body instead as attachments.
 046 ==> 281269 - Allow to share a remote image by e-mail.
-047 ==> 346577 - digiKam does not show help when not running in KDE.
+047 ==> 346577 - digiKam does not show help.
 048 ==> 256262 - "Help / digiKam Handbook" menu item is misleading.
 049 ==> 099497 - Please add a dummy handbook until there's a real one.
 050 ==> 147865 - Image>email image>add image dialog does not show most thumbnails - but does show some.
@@ -363,7 +363,7 @@ BUGFIXES:
 335 ==> 196329 - Renaming album causes problems (until re-opening).
 336 ==> 198868 - pictures are not displayed in the main view i just can see them in the batch menu.
 337 ==> 185494 - No images in digiKam, possibly database problem, however they look fine in showfoto.
-338 ==> 181792 - Folders appear empty on first run after migrating from an old KDE version.
+338 ==> 181792 - Folders appear empty on first run after migrating from an old desktop version.
 339 ==> 224404 - No images of a album are shown.
 340 ==> 294835 - Albums are listed with (0) photos, but Database Statistics shows correct numbers of photos.
 341 ==> 232720 - All digiKam Albums show zero items even though pictures exist.

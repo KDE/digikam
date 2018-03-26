@@ -22,7 +22,7 @@ BUGFIXES:
 014 ==> 264769 - digiKam crash on startup.
 015 ==> 264830 - Raw importer broken. Not possible to revert changes.
 016 ==> 103371 - Only one digikam instance should run on the same image library path.
-017 ==> 265445 - digikam-1.8.0 fails to build against kde-4.6.x/gcc-4.6.
+017 ==> 265445 - digikam-1.8.0 fails to build against gcc-4.6.
 018 ==> 264631 - Deleteing last TAG on a picture does actually not remove the tag within the exif metadata.
 019 ==> 195648 - Quickfilter by tags: Exclude tags.
 020 ==> 265641 - digiKam crash at startup.

@@ -13,7 +13,7 @@ BUGFIXES:
 002 ==> 284136 - After moving images the old thumbnails remain there.
 003 ==> 288461 - digiKam: bashism in /bin/sh script [patch].
 004 ==> 274852 - Delete dialog does not show thumbnails; shows only filenames, even if these are not shown in album view.
-005 ==> 265197 - Please specify dependencies of digikam-2.0, and make digikam-2.0/core also build with stock kde.
+005 ==> 265197 - Please specify dependencies of digikam-2.0, and make digikam-2.0/core also build with stock desktop.
 006 ==> 188709 - Tag hierarchy not properly restored from files (IPTC).
 007 ==> 271707 - Crash when starting after sleeping mode - previous task: rebuild all fingerprints.
 008 ==> 269989 - Several crashes, unclear backround ( picsize "15GB"?, thumbnails-digikam.db 3, 5GB, memory 4GB? ).
@@ -66,7 +66,7 @@ BUGFIXES:
 055 ==> 288830 - Could not delete picture: trash full.
 056 ==> 199461 - Picture quickinfo doesn't show isospeed.
 057 ==> 279556 - Editing captions in metadata editor sets the exif image creation date to file modification date.
-058 ==> 224533 - digiKam acting weird on new qt 4.6.1/kde sc 4.3.95.
+058 ==> 224533 - digiKam acting weird on new qt 4.6.1.
 059 ==> 183627 - digiKam & showfoto logo's text in upper right corner looks jagged - could use scalable font or SVG.
 060 ==> 189990 - To set an IPTC caption with syncing EXIF => the image is no more displayed in the calendar view.
 061 ==> 288266 - digiKam crashed attempting to fix a shortcut conflict.

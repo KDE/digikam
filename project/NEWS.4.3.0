@@ -3,7 +3,7 @@ digiKam 4.3.0 - Release date: 2014-09-07
 *****************************************************************************************************
 NEW FEATURES:
 
-Database     : Nepomuk support have been replaced by Baloo support (https://community.kde.org/Baloo).
+Database     : Nepomuk support have been replaced by Baloo support.
 
 Map Searches : New option to display all non geolocated images from collections.
 
@@ -21,7 +21,7 @@ Panorama     : Support next hugin version (2014.0).
 BUGFIXES:
 
 001 ==> 338048 - Separate Tags in Public and Private for Export.
-002 ==> 338055 - libkdepimlibs not found.
+002 ==> 338055 - Desktop pim libs not found.
 003 ==> 317813 - SQLITE : digiKam do not accept previous DB Sqlite.
 004 ==> 198063 - SCAN : digiKam startup is extremely slow.
 005 ==> 262720 - SCAN : 'scan for new images' should work on just current Album.

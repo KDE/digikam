@@ -27,15 +27,15 @@ General        : Ported to CMake/Qt4.
 General        : Thumbs KIO-Slave removed. digiKam now use multi-threading to generate thumnails.
 General        : Removed all X11 library dependencies. Code is now portable under MACOS-X and Win32.
 General        : Support of XMP metadata (require >= Exiv2 0.16).
-General        : Hardware handling using KDE4 Solid interface.
-General        : Preview of Video and Audio files using KDE4 Phonon interface.
+General        : Hardware handling using Solid interface.
+General        : Preview of Video and Audio files using Phonon interface.
 General        : Database file can be stored on a customized place to support remote album library path.
 General        : New database schema to host more photo and collection information.
 General        : Database interface fully re-written using Qt4 SQL tool.
 General        : Support of multiple roots album paths.
 General        : Physical root albums are managed as real album.
 General        : New option in Help menu to list all RAW file formats supported.
-General        : Geolocation of pictures from sidebars is now delegate to KDE4 Marble widget.
+General        : Geolocation of pictures from sidebars is now delegate to Marble widget.
 
 CameraGUI      : New design for camera interface.
 CameraGUI      : New Capture tool.
@@ -90,13 +90,13 @@ BUGFIXES:
 016 ==> 165325 - Crash when trying to import pictures from a USB-Camera.
 017 ==> 174642 - Crashes when try to connect to Kodak Z812 IS.
 018 ==> 168514 - Minimum Screen Size Too Large.
-019 ==> 133058 - Kodak DC4800 can only be read if KDE did not try to mount it.
+019 ==> 133058 - Kodak DC4800 can only be read if desktop did not try to mount it.
 020 ==> 128783 - HP Instant Share to work with digiKam.
 021 ==> 132064 - Showing SVG / Vector Graphics.
 022 ==> 138548 - Error downloading or detecting camera when connected. 
 023 ==> 137233 - Proper input constraints in New Album dialog.
 024 ==> 176086 - Recursive slideshow only shows last album.
-025 ==> 171234 - Tag names imported from KDE3 digiKam are cut off in KDE4.
+025 ==> 171234 - Tag names imported from older digiKam are cut off in new version.
 026 ==> 173828 - Geolocation do not except Canon EOS 1D Mark III CR2-files.
 027 ==> 150938 - Album thumbnail view very slow on NFS.
 028 ==> 137707 - A new icon for the albums in digiKam.
@@ -153,7 +153,7 @@ BUGFIXES:
 079 ==> 154526 - Big screen size lead to small picture in main window and editor.
 080 ==> 177231 - Rotate context menu in view mode.
 081 ==> 125923 - Image tooltip contents not shown when albumview is scrolled up or down with cursor keys.
-082 ==> 174807 - digiKam does not use KDE's Trash.
+082 ==> 174807 - digiKam does not use desktop Trash.
 083 ==> 142058 - Icons for import should use proper mime type.
 084 ==> 176179 - Image editor - zoom +/- buttons alter predefined list of zoom factors.
 085 ==> 177270 - Making OpenStreetMap available in the GPS-Sidebar.
@@ -252,7 +252,7 @@ BUGFIXES:
 178 ==> 182096 - Download photos from memory card / camera to new album downloads photos to parent album.
 179 ==> 177241 - Buttons not aligned after adding of new collection. 
 180 ==> 182223 - After modifiyng an image, saving to another format crashes digiKam.
-181 ==> 181792 - Folders appear empty on first run after KDE 3 -> KDE 4 import.
+181 ==> 181792 - Folders appear empty on first run after older -> newer import.
 182 ==> 175746 - digiKam doesn't remove IPTC data.
 183 ==> 176140 - Redeye tool is not working fine.
 184 ==> 181610 - Discard button not working in "Apply changes?".
@@ -341,7 +341,7 @@ BUGFIXES:
 267 ==> 167139 - Crash if Exif.GPSInfo.GPSAltitude is empty.
 268 ==> 167778 - Assigning ratings in image editor via shortcuts or toolbar not working.
 269 ==> 168567 - Unable to edit or remove IPTC and XMP info.
-270 ==> 168846 - crash after playing with tags (seems to be rather a crash in Qt or kdelibs).
+270 ==> 168846 - Crash after playing with tags (seems to be rather a crash in Qt).
 271 ==> 166671 - Image filter dialog buttons are much too big.
 272 ==> 173691 - digiKam doesn't show pictures.
 273 ==> 091811 - Feature request: find pictures by meta tag info, date.

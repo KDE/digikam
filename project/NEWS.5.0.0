@@ -52,7 +52,7 @@ BUGFIXES:
 005 ==> 340933 - digiKam crash while tagging photos (Baloo database).
 006 ==> 343662 - Build Error regarding lensfuncameraselector.
 007 ==> 332665 - digiKam should use Baloo interface.
-008 ==> 345144 - Remove kdelibs4support not finished (frameworks branch).
+008 ==> 345144 - Remove oldersupport classes not finished (frameworks branch).
 009 ==> 345484 - Add Eclipse support to bootstrap.linux, fix QT_INSTALL_PREFIX detection.
 010 ==> 278577 - Display album thumbnails in welcome page.
 011 ==> 138200 - Display all pictures when root album (as "My Albums" and "My Tags") is selected instead of welcome page.

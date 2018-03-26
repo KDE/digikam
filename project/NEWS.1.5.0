@@ -46,7 +46,7 @@ BUGFIXES:
 028 ==> 188335 - Slideshow shows movies as "cannot show picture "xyz.mov".
 029 ==> 252488 - digiKam incorrectly renders SD Card size.
 030 ==> 252489 - digiKam incorrectly detects SD Card name.
-031 ==> 252521 - README incorrectly claims kdegraphics-4.4 is sufficient.
+031 ==> 252521 - README incorrectly claims 4.4 version is sufficient.
 032 ==> 249248 - Updating fingerprints metadata.
 033 ==> 125042 - Batch Rename Image from Album do not select all album images.
 034 ==> 237516 - Open in Terminal command doesn't take systemsettings into account.

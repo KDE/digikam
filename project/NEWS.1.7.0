@@ -31,7 +31,7 @@ BUGFIXES:
 020 ==> 258308 - Crash when starting Free Rotation in Image Editor.
 021 ==> 248882 - digiKam crashes when renaming using date/time info.
 022 ==> 217555 - "Cannot display preview" error when browsing.
-023 ==> 258600 - "transupp.cpp" fails to compile on emerged KDE.
+023 ==> 258600 - "transupp.cpp" fails to compile on emerged version.
 024 ==> 233572 - Showfoto crashed on change hue value.
 025 ==> 258828 - Crash when I use auto-colors correction tool from image editor.
 026 ==> 195561 - Implement a selective saturation filter [patch].

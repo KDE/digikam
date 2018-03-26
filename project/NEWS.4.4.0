@@ -66,6 +66,6 @@ BUGFIXES:
 046 ==> 338783 - No EXIF/XMP info in "Metadata" right side-bar tabs.
 047 ==> 337507 - Face Detection gives no results, no matter the accuracy setting.
 048 ==> 339440 - digiKam crashes when opening geolocation from sidebar or toolbar.
-049 ==> 313855 - Use single/double click setting from KDE control center to leave media player mode.
+049 ==> 313855 - Use single/double click setting from desktop control center to leave media player mode.
 050 ==> 339227 - Existing tags from image metadata are removed when adding new tags to multiple images.
 051 ==> 337943 - Crash when cancelling piwigo export.

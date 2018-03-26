@@ -21,7 +21,7 @@ JAlbumExport   : New too to export items to JAblum (http://www.jalbum.net)
 BUGFIXES:
 
 001 ==> 315098 - DNG Converter and DigiKam crashes when opening a .dng file.
-002 ==> 316556 - DIGIKAMSC_USE_PRIVATE_KDEGRAPHICS is set to ON.
+002 ==> 316556 - Cmake flag is set to ON by default.
 003 ==> 308418 - Some keyboard shortcuts not working in full screen mode.
 004 ==> 312549 - Showfoto does not correctly rotate images in the main view.
 005 ==> 316752 - Make the forward, back, first & last arrows cycle properly.

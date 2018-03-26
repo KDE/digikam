@@ -59,7 +59,7 @@ BUGFIXES:
 011 ==> 184953 - Zooming and panning in slideshow / without toolbars.
 012 ==> 187508 - Spontaneous crash whilst doing nothing in particular.
 013 ==> 188235 - Assigning a color profile to TIFF images does not work anymore with 0.10.0.
-014 ==> 187748 - Install application icons to right path for non-KDE desktops.
+014 ==> 187748 - Install application icons to right path.
 015 ==> 186255 - digiKam crashes when switching collection database.
 016 ==> 178292 - AspectRatioCrop is slow and jumps around in first second.
 017 ==> 181892 - AspectRatioCrop: some properties should be disabled.
@@ -111,7 +111,7 @@ BUGFIXES:
 063 ==> 193226 - Data loss on downloading photos from camera.
 064 ==> 189460 - digiKam crash when goelocating image in the marble tab.
 065 ==> 186046 - Crash after calling settings.
-066 ==> 193348 - Can't build digiKam on kde 4.2.3.
+066 ==> 193348 - Can't build digiKam.
 067 ==> 150072 - Download with digiKam doesn't work with the first start of digiKam.
 068 ==> 193738 - Have the image editor status bar show the current color depth.
 069 ==> 191678 - Exif rotation for Pentax Pef not working.
@@ -225,7 +225,7 @@ BUGFIXES:
 177 ==> 210580 - digiKam crashes on PPC Linux when changing thumbnail size.
 178 ==> 201717 - Changing rating filter when images are selected, select all images between first and last selected image.
 179 ==> 156146 - Reading data base, digikam don't start.
-180 ==> 210823 - digiKam does not respect KDE default toolbar style.
+180 ==> 210823 - digiKam does not respect desktop default toolbar style.
 181 ==> 212780 - digiKam crashes when opening large JPG.
 182 ==> 212748 - digiKam image editor crashes when browsing too fast.
 183 ==> 213111 - Crash on edit image.
@@ -243,7 +243,7 @@ BUGFIXES:
 195 ==> 185065 - Image editor loads new image without being asked to.
 196 ==> 188017 - Video colors inverted after digiKam started.
 197 ==> 194950 - digiKam endlessly spewing text to stderr.
-198 ==> 189080 - Comments not saved with digiKam 0.10.0 on KDE 4.2.2.
+198 ==> 189080 - Comments not saved with digiKam 0.10.0.
 199 ==> 198868 - Pictures are not displayed in the main view i just can see them in the batch menu.
 200 ==> 139361 - Templates for meta data.
 201 ==> 178189 - Do not create preview automatically for large pictures.
@@ -285,7 +285,7 @@ BUGFIXES:
 237 ==> 196726 - digiKam crashes while creating thumbnails.
 238 ==> 182852 - Timeline: click area small an unintuitive.
 239 ==> 173899 - Timeline does not show any photos.
-240 ==> 196994 - digiKam 1.0.0-0.1.beta1.f11 from kde-redhat crash on startup.
+240 ==> 196994 - digiKam 1.0.0-0.1.beta1.f11 from redhat crash on startup.
 241 ==> 180076 - Moving a big folder to another subfolder folder does ... nothing.
 242 ==> 191557 - Previous and next image is showing weird results.
 243 ==> 197360 - In the "edit captions" sidebar moving a tag to white space crashes digiKam.
@@ -335,7 +335,7 @@ BUGFIXES:
 287 ==> 197896 - When importing photos from a camera they are not diplayed in alphabetical order.
 288 ==> 200187 - Save and restore selected filter tags.
 289 ==> 196999 - Calendar is ignoring selection of date/week but respecting month.
-290 ==> 190795 - USB PTP Class does not work anymore with the KDE4 version.
+290 ==> 190795 - USB PTP Class does not work anymore with the newer version.
 291 ==> 188905 - Edit view goes 100% instead of fit window.
 292 ==> 187810 - In import window images are sorted in reverse order but folders are not.
 293 ==> 199619 - Deleting image and switching to next fastly seems to confuse album list.
@@ -522,7 +522,7 @@ BUGFIXES:
 474 ==> 203498 - No drop-down menu for export.
 475 ==> 203589 - Crash in the noise reduction tool when 'Threshold' equals zero.
 476 ==> 198006 - digiKam crash after assistant finished.
-477 ==> 203083 - Crash starting digiKam (after kde 4.3 upgrade).
+477 ==> 203083 - Crash starting digiKam (after upgrade).
 478 ==> 202954 - digiKam crashes on start while scaning picture directory.
 479 ==> 203031 - Album list doesn't show pictures even after tons of new pictures were imported.
 480 ==> 201810 - Segfault moving files to trash.

@@ -159,7 +159,7 @@ BUGFIXES:
 069 ==> 125926 - Directories with a '#' in their name are not properly detected when created outside digiKam.
 070 ==> 125733 - Enabling 'Always apply ICM profiles' can lead to suprising results.
 071 ==> 126326 - Camera download: auto-rotated images loose EXIF info when 'No EXIF information found.' is written to console.
-072 ==> 121242 - mimelnk/x-image-raw.desktop conflicts with kdegraphics-3.5.x.
+072 ==> 121242 - mimelnk/x-image-raw.desktop conflicts.
 073 ==> 127374 - Unsharp mask: max. radius way too small.
 074 ==> 116485 - Mimimize button missing on "Compaq Flash Reader" camera window.
 075 ==> 127577 - Raw display too dark and not rotated.
@@ -247,7 +247,7 @@ BUGFIXES:
 157 ==> 120050 - Assigning an image as icon for a tag entry in 'Tag View' does not update the icons of this tag in 'Tag Filters'.
 158 ==> 129365 - Keyword-List view still uses old description after renaming keyword.
 159 ==> 115154 - Tags filter misses 'deselect all Tags' in context menu.
-160 ==> 133525 - digiKam doesn't compile (KDE forces -fno-exception, digiKam needs it).
+160 ==> 133525 - digiKam doesn't compile (desktop forces -fno-exception, digiKam needs it).
 161 ==> 115160 - 'Tag Filters' should use 'and' not 'or' or maybe better label 'Show Tags'.
 162 ==> 120056 - Allow to assign via drag and drop tag thumbnails in 'Tag Filters'.
 163 ==> 132694 - RAW Thumbnailing very slower and resource intensive.
