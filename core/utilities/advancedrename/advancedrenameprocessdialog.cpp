@@ -180,6 +180,11 @@ void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& src)
 
 void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
 {
+    if (d->cancel || d->currentUrl != src)
+    {
+        return;
+    }
+
     QPixmap pix = QIcon::fromTheme(QLatin1String("emblem-error")).pixmap(32, 32);
     addedAction(pix, QDir::toNativeSeparators(src.toLocalFile()));
     setLabel(i18n("<b>Renaming images has failed...</b>"));
@@ -187,7 +192,7 @@ void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
 
     d->failedUrls << src;
 
-    QThread::sleep(1);
+    QThread::msleep(500);
 
     slotRenameSuccessded(src);
 }
