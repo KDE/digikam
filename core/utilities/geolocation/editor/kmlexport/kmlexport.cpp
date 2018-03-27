@@ -212,7 +212,7 @@ void KmlExport::generateImagesthumb(const QUrl& imageURL, QDomElement& kmlAlbum)
     }
     else
     {
-        logInfo(i18n("Creation of picture '%1'").arg(fullFileName));
+        logInfo(i18n("Creation of picture '%1'", fullFileName));
 
         double alt = 0.0, lat = 0.0, lng = 0.0;
 
@@ -321,7 +321,7 @@ void KmlExport::generateImagesthumb(const QUrl& imageURL, QDomElement& kmlAlbum)
         }
         else
         {
-            logInfo(i18n("Creation of icon '%1'").arg(iconFileName));
+            logInfo(i18n("Creation of icon '%1'", iconFileName));
             // style et icon
             QDomElement kmlStyle     = addKmlElement(kmlPlacemark, QLatin1String("Style"));
             QDomElement kmlIconStyle = addKmlElement(kmlStyle,     QLatin1String("IconStyle"));
