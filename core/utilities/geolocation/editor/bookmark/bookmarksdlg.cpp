@@ -100,7 +100,7 @@ AddBookmarkDialog::AddBookmarkDialog(const QString& url,
 
     QLabel* const label = new QLabel(this);
     label->setText(i18n("Type a name and a comment for the bookmark, "
-                        "and choose where to keep it.", 0));
+                        "and choose where to keep it."));
     label->setTextFormat(Qt::PlainText);
     label->setWordWrap(true);
 
