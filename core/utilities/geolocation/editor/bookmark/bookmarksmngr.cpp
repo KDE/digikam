@@ -822,16 +822,14 @@ void BookmarksManager::importBookmarks()
     }
 
     importRootNode->setType(BookmarkNode::Folder);
-    importRootNode->title = i18n("Imported %1")
-                            .arg(QDate::currentDate().toString(Qt::SystemLocaleShortDate));
+    importRootNode->title = i18n("Imported %1", QDate::currentDate().toString(Qt::SystemLocaleShortDate));
     addBookmark(bookmarks(), importRootNode);
 }
 
 void BookmarksManager::exportBookmarks()
 {
     QString fileName = DFileDialog::getSaveFileName(0, i18n("Save File"),
-                                                    i18n("%1 Bookmarks.xbel")
-                                                    .arg(QCoreApplication::applicationName()),
+                                                    i18n("%1 Bookmarks.xbel", QCoreApplication::applicationName()),
                                                     i18n("XBEL (*.xbel *.xml)"));
     if (fileName.isEmpty())
         return;
