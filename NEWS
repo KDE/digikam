@@ -149,4 +149,6 @@ BUGFIXES:
 132 ==> 285683 - Already imported pictures not recognized after daylight savings time.
 133 ==> 392309 - Icons are pixelated when my display scale factor is 1.2
 134 ==> 392405 - Function 'getImageIdsFromArea' argument order different.
-135 ==> 
+135 ==> 386224 - Metadata is not updated when moving tags.
+136 ==> 370245 - Be able to rename tags which have been setted in pictures.
+137 ==> 
