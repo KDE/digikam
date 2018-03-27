@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMIMAGEVIEW_P_H_
-#define DIGIKAMIMAGEVIEW_P_H_
+#ifndef DIGIKAM_IMAGE_VIEW_P_H_
+#define DIGIKAM_IMAGE_VIEW_P_H_
 
 // Qt includes
 
@@ -84,4 +84,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DIGIKAMIMAGEVIEW_P_H_ */
+#endif // DIGIKAM_IMAGE_VIEW_P_H_
