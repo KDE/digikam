@@ -749,8 +749,6 @@ private:
     void addAlbumRoot(const CollectionLocation& location);
     void removeAlbumRoot(const CollectionLocation& location);
 
-    void handleKioNotification(const QUrl& url);
-
     void addGuardedPointer(Album* a, Album** pointer);
     void removeGuardedPointer(Album* a, Album** pointer);
     void changeGuardedPointer(Album* oldAlbum, Album* a, Album** pointer);
