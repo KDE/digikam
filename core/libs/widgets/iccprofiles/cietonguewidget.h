@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CIETONGUEWIDGET_H
-#define CIETONGUEWIDGET_H
+#ifndef CIE_TONGUE_WIDGET_H
+#define CIE_TONGUE_WIDGET_H
 
 // Qt includes
 
@@ -96,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CIETONGUEWIDGET_H
+#endif // CIE_TONGUE_WIDGET_H
