@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-05-12
- * Description : Access to copyright info of an image in the database
+ * Description : Access to copy-right info of an image in the database
  *
  * Copyright (C) 2008-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGECOPYRIGHT_H
-#define IMAGECOPYRIGHT_H
+#ifndef IMAGE_COPYRIGHT_H
+#define IMAGE_COPYRIGHT_H
 
 // Qt includes
 
@@ -303,4 +303,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGECOPYRIGHT_H
+#endif // IMAGE_COPYRIGHT_H

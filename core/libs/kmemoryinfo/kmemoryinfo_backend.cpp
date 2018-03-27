@@ -1,7 +1,6 @@
 /*
  * i-scream libstatgrab
- * http://www.i-scream.org
- * Copyright (C) 2000-2004 i-scream
+ * Copyright (C) 2000-2004 i-scream <http://www.i-scream.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
