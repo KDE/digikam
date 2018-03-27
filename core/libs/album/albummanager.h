@@ -385,9 +385,10 @@ public:
      * @return true if the operation succeeds or false otherwise
      * @param album   the TAlbum to delete
      * @param errMsg  this will contain the error message describing why the
+     * @param askUser ask user to write metadata to images
      * operation failed
      */
-    bool deleteTAlbum(TAlbum* album, QString& errMsg);
+    bool deleteTAlbum(TAlbum* album, QString& errMsg, bool askUser = true);
 
     /**
      * Renames a TAlbum.
@@ -735,6 +736,9 @@ private:
      * @return <code>true</code> if there is a child with name, else
      *         <code>false</code>
      */
+    void askUserForWriteChangedTAlbumToFiles(TAlbum* const album);
+    void askUserForWriteChangedTAlbumToFiles(const QList<qlonglong>& imageIds);
+
     bool hasDirectChildAlbumWithTitle(Album* parent, const QString& title);
 
     bool handleCollectionStatusChange(const CollectionLocation& location, int oldStatus);
