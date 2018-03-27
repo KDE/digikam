@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMGQSORT_H
-#define IMGQSORT_H
+#ifndef IMG_QSORT_H
+#define IMG_QSORT_H
 
 // Local includes
 
@@ -75,4 +75,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* IMGQSORT_H */
+#endif // IMG_QSORT_H

@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-#include "libopencv.h"
 #include "imgqsort.h"
 
 // C++ includes
@@ -38,6 +37,7 @@
 
 // Local includes
 
+#include "libopencv.h"
 #include "digikam_debug.h"
 #include "mixerfilter.h"
 #include "nrfilter.h"
