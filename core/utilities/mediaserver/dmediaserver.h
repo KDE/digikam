@@ -39,6 +39,8 @@ typedef QMap<QString, QList<QUrl> > MediaServerMap;
 
 class DMediaServer : public QObject
 {
+    Q_OBJECT
+
 public:
 
     explicit DMediaServer(QObject* const parent = 0);
