@@ -698,10 +698,10 @@ void BookmarksManager::load()
     if (reader.error() != QXmlStreamReader::NoError)
     {
         QMessageBox::warning(0, i18n("Loading Bookmark"),
-                             i18n("Error when loading bookmarks on line %1, column %2:\n%3")
-                             .arg(reader.lineNumber())
-                             .arg(reader.columnNumber())
-                             .arg(reader.errorString()));
+                             i18n("Error when loading bookmarks on line %1, column %2:\n%3",
+                                  reader.lineNumber(),
+                                  reader.columnNumber(),
+                                  reader.errorString()));
     }
 }
 
@@ -815,10 +815,10 @@ void BookmarksManager::importBookmarks()
     if (reader.error() != QXmlStreamReader::NoError)
     {
         QMessageBox::warning(0, i18n("Loading Bookmark"),
-                             i18n("Error when loading bookmarks on line %1, column %2:\n%3")
-                             .arg(reader.lineNumber())
-                             .arg(reader.columnNumber())
-                             .arg(reader.errorString()));
+                             i18n("Error when loading bookmarks on line %1, column %2:\n%3",
+                                  reader.lineNumber(),
+                                  reader.columnNumber(),
+                                  reader.errorString()));
     }
 
     importRootNode->setType(BookmarkNode::Folder);
