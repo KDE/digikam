@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef COREDBSCHEMAUPDATER_H
-#define COREDBSCHEMAUPDATER_H
+#ifndef COREDB_SCHEMA_UPDATER_H
+#define COREDB_SCHEMA_UPDATER_H
 
 // Qt includes
 
@@ -104,4 +104,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COREDBSCHEMAUPDATER_H
+#endif // COREDB_SCHEMA_UPDATER_H
