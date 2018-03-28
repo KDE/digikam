@@ -460,7 +460,8 @@ bool MetadataHub::writeTags(const QString& filePath, WriteComponent writeMode,
 
 bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Writting tags";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Writing tags";
+
     bool dirty = false;
 
     if (saveTags)
