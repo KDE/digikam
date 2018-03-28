@@ -3674,8 +3674,8 @@ void AlbumManager::askUserForWriteChangedTAlbumToFiles(const QList<qlonglong>& i
     {
         QMessageBox msgBox(QMessageBox::Warning,
                            qApp->applicationName(),
-                           i18n("Do you want to write the changed\n"
-                                "metadata of %1 files now?",
+                           i18n("This operation can take a long time in the background.\n"
+                                "Do you want to write the metadata to %1 files now?",
                                 imageIds.count()),
                            QMessageBox::Yes | QMessageBox::No,
                            qApp->activeWindow());
