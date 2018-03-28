@@ -153,4 +153,6 @@ BUGFIXES:
 136 ==> 370245 - Be able to rename tags which have been setted in pictures.
 137 ==> 374470 - Deleted tags are not removed from file metadata.
 138 ==> 374516 - Persons metadata are not updated after a tag removed.
-139 ==> 
+139 ==> 392436 - Count Files in directory.
+140 ==> 
+
