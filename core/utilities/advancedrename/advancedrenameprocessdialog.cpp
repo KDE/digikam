@@ -175,8 +175,10 @@ void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& src)
         {
             QMessageBox msgBox(QMessageBox::Warning,
                                i18n("Renaming images"),
-                               i18n("An error occurred while renaming %1 image(s).\n"
-                                    "Do you want to rename this image(s) again?",
+                               i18np("An error occurred while renaming %1 image.\n"
+                                    "Do you want to rename this image again?",
+                                    "An error occurred while renaming %1 images.\n"
+                                    "Do you want to rename these images again?",
                                     d->failedUrls.count()),
                                QMessageBox::Yes | QMessageBox::No, this);
 
