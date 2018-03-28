@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IOJOBSMANAGER_H
-#define IOJOBSMANAGER_H
+#ifndef IO_JOBS_MANAGER_H
+#define IO_JOBS_MANAGER_H
 
 // Qt includes
 
@@ -88,14 +88,14 @@ public:
     IOJobsThread* startDTrashItemsListingForCollection(const QString& collectionPath);
 
     /**
-     * @brief Starts a thread to restore mutiple trash items
+     * @brief Starts a thread to restore multiple trash items
      * @param trashItemsList: list of selected trash items to restore
      * @return IOJobsThread pointer for signal/slot connection
      */
     IOJobsThread* startRestoringDTrashItems(const DTrashItemInfoList& trashItemsList);
 
     /**
-     * @brief Starts a thread to delete mutiple trash items
+     * @brief Starts a thread to delete multiple trash items
      * @param trashItemsList: list of selected trash items to delete
      * @return IOJobsThread pointer for signal/slot connection
      */
@@ -109,4 +109,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FILESYSTEMJOBSMANAGER_H
+#endif // IO_JOBS_MANAGER_H
