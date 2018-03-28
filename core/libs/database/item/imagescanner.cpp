@@ -483,7 +483,7 @@ void ImageScanner::scanFile(ScanMode mode)
             // NOTE: Here, we only scan fields which can be expected to have changed, when we detect a change of file data.
             // It seems to me that at the moment video metadata contains such fields (which may change after editing).
             // In contrast, with photos, ImageMetadata contains fields which describe the moment of taking the photo,
-            //  which means they dont change.
+            // which means they don't change.
             if (d->hasMetadata)
             {
                 scanVideoMetadata();
