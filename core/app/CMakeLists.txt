@@ -95,7 +95,6 @@ endif()
 
 
 include_directories($<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
@@ -109,6 +108,12 @@ include_directories($<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECT
                     $<TARGET_PROPERTY:KF5::WindowSystem,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::Service,INTERFACE_INCLUDE_DIRECTORIES>)
+
+if(ENABLE_QWEBENGINE)
+    include_directories($<TARGET_PROPERTY:Qt5::WebEngineWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+else()
+    include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
 
 if(KF5KIO_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
@@ -140,7 +145,6 @@ target_link_libraries(digikamcore
                       Qt5::XmlPatterns
                       Qt5::Widgets
                       Qt5::Sql
-                      Qt5::WebKitWidgets
                       Qt5::PrintSupport
                       Qt5::Concurrent
 
@@ -167,6 +171,12 @@ target_link_libraries(digikamcore
                       libdng
                       libraw
 )
+
+if(ENABLE_QWEBENGINE)
+    target_link_libraries(digikamcore PUBLIC Qt5::WebEngineWidgets)
+else()
+    target_link_libraries(digikamcore PUBLIC Qt5::WebKitWidgets)
+endif()
 
 if(ENABLE_DBUS)
     target_link_libraries(digikamcore PUBLIC Qt5::DBus)
@@ -351,7 +361,6 @@ set(libdigikamgui_SRCS
 
     views/imagepreviewviewitem.cpp
     views/imagepreviewview.cpp
-    views/welcomepageview.cpp
     views/leftsidebarwidgets.cpp
     views/digikamview.cpp
     views/trashview.cpp
@@ -359,6 +368,18 @@ set(libdigikamgui_SRCS
 
     ${digikamadaptor_SRCS}
 )
+
+if(ENABLE_QWEBENGINE)
+    set(libdigikamgui_SRCS
+        ${libdigikamgui_SRCS}
+        views/welcomepageview_qwebengine.cpp
+       )
+else()
+    set(libdigikamgui_SRCS
+        ${libdigikamgui_SRCS}
+        views/welcomepageview.cpp
+       )
+endif()
 
 if(${Marble_FOUND})
     set(libdigikamgui_SRCS
@@ -432,7 +453,6 @@ target_link_libraries(digikamgui
                       Qt5::Gui
                       Qt5::Widgets
                       Qt5::Sql
-                      Qt5::WebKitWidgets
                       Qt5::PrintSupport
 
                       KF5::Solid
@@ -442,6 +462,12 @@ target_link_libraries(digikamgui
 
                       ${OpenCV_LIBRARIES}
 )
+
+if(ENABLE_QWEBENGINE)
+    target_link_libraries(digikamgui PUBLIC Qt5::WebEngineWidgets)
+else()
+    target_link_libraries(digikamgui PUBLIC Qt5::WebKitWidgets)
+endif()
 
 if(ENABLE_DBUS)
     target_link_libraries(digikamgui PUBLIC Qt5::DBus)

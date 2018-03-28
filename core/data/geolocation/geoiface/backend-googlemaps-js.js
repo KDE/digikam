@@ -47,10 +47,15 @@ var projectionHelper = null;
 
 function kgeomapPostEventString(eventString)
 {
+    // We keep these 2 lines for backwards compatibility with QWebView
     eventBuffer.push(eventString);
     window.status = '(event)';
+
+    // We use this when porting to QWebEngineView
+    console.log('(event)'+eventString);
 }
 
+// We keep this function for backwards compatibility with QWebView
 function kgeomapReadEventStrings()
 {
     var eventBufferString = eventBuffer.join('|');
@@ -759,9 +764,10 @@ function kgeomapInitialize()
     //       google.maps.event.addListener(map, 'bounds_changed', function() {
     //           kgeomapPostEventString('MB');
     //       });
-    //       google.maps.event.addListener(map, 'zoom_changed', function() {
-    //           kgeomapPostEventString('ZC');
-    //       });
+    google.maps.event.addListener(map, 'zoom_changed', function()
+        {
+            kgeomapPostEventString('ZC');
+        });
     google.maps.event.addListener(map, 'idle', function()
         {
             kgeomapPostEventString('id');

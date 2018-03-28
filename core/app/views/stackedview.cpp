@@ -48,18 +48,23 @@
 #include "imagethumbnailbar.h"
 #include "loadingcacheinterface.h"
 #include "previewlayout.h"
-#include "welcomepageview.h"
 #include "thumbbardock.h"
 #include "tableview.h"
 #include "trashview.h"
 #include "dimg.h"
 
+#ifdef HAVE_QWEBENGINE
+#   include "welcomepageview_qwebengine.h"
+#else
+#   include "welcomepageview.h"
+#endif
+
 #ifdef HAVE_MEDIAPLAYER
-#include "mediaplayerview.h"
+#   include "mediaplayerview.h"
 #endif //HAVE_MEDIAPLAYER
 
 #ifdef HAVE_MARBLE
-#include "mapwidgetview.h"
+#   include "mapwidgetview.h"
 #endif // HAVE_MARBLE
 
 namespace Digikam

@@ -26,13 +26,23 @@ set(libgeoiface_SRCS backends/mapbackend.cpp
                      tiles/itemmarkertiler.cpp
                      tiles/tilegrouper.cpp
                      tiles/tileindex.cpp
-                     widgets/htmlwidget.cpp
                      widgets/mapwidget.cpp
                      widgets/placeholderwidget.cpp
 )
 
+if(ENABLE_QWEBENGINE)
+    set(libgeoiface_SRCS
+        ${libgeoiface_SRCS}
+        widgets/htmlwidget_qwebengine.cpp
+       )
+else()
+    set(libgeoiface_SRCS
+        ${libgeoiface_SRCS}
+        widgets/htmlwidget.cpp
+       )
+endif()
+
 include_directories($<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Network,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
@@ -43,6 +53,12 @@ include_directories($<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
 
                     ${MARBLE_INCLUDE_DIR}
 )
+
+if(ENABLE_QWEBENGINE)
+    include_directories($<TARGET_PROPERTY:Qt5::WebEngineWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+else()
+    include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
 
 # Marble translations need explicit loading
 ecm_create_qm_loader(libgeoiface_SRCS marble_qt)

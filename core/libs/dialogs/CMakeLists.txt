@@ -25,8 +25,19 @@ set(libdialogs_SRCS
     dconfigdlgwidgets.cpp
     dmessagebox.cpp
     dsplashscreen.cpp
-    webbrowserdlg.cpp
 )
+
+if(ENABLE_QWEBENGINE)
+    set(libdialogs_SRCS
+        ${libdialogs_SRCS}
+        webbrowserdlg_qwebengine.cpp
+       )
+else()
+    set(libdialogs_SRCS
+        ${libdialogs_SRCS}
+        webbrowserdlg.cpp
+       )
+endif()
 
 set(libdeletedialog_SRCS
     deletedialog.cpp
@@ -41,12 +52,17 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
+
+if(ENABLE_QWEBENGINE)
+    include_directories($<TARGET_PROPERTY:Qt5::WebEngineWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+else()
+    include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
 
 #used by digikamcore
 add_library(digikamdialogscore_src OBJECT ${libdialogs_SRCS})

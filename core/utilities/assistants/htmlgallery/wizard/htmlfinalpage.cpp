@@ -40,6 +40,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "htmlwizard.h"
 #include "abstractthemeparameter.h"
 #include "galleryinfo.h"
@@ -48,7 +49,12 @@
 #include "digikam_debug.h"
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
-#include "webbrowserdlg.h"
+
+#ifdef HAVE_QWEBENGINE
+#   include "webbrowserdlg_qwebengine.h"
+#else
+#   include "webbrowserdlg.h"
+#endif
 
 namespace Digikam
 {

@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "welcomepageview.h"
+#include "welcomepageview_qwebengine.h"
 
 // Qt includes
 
@@ -41,32 +41,49 @@
 
 // Local includes
 
-#include "digikam_config.h"
 #include "digikam_debug.h"
 #include "digikam_version.h"
 #include "daboutdata.h"
 #include "thememanager.h"
-
-#ifdef HAVE_QWEBENGINE
-#   include "webbrowserdlg_qwebengine.h"
-#else
-#   include "webbrowserdlg.h"
-#endif
+#include "webbrowserdlg.h"
 
 namespace Digikam
 {
 
+WelcomePageViewPage::WelcomePageViewPage(QObject* const parent)
+    : QWebEnginePage(parent)
+{
+}
+
+WelcomePageViewPage::~WelcomePageViewPage()
+{
+}
+
+bool WelcomePageViewPage::acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool)
+{
+    if (type == QWebEnginePage::NavigationTypeLinkClicked)
+    {
+        emit linkClicked(url);
+        return false;
+    }
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+
 WelcomePageView::WelcomePageView(QWidget* const parent)
-    : QWebView(parent)
+    : QWebEngineView(parent)
 {
     setFocusPolicy(Qt::WheelFocus);
-    page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-    setRenderHint(QPainter::TextAntialiasing);
     setContextMenuPolicy(Qt::NoContextMenu);
+
+    WelcomePageViewPage* const wpage = new WelcomePageViewPage(this);
+    setPage(wpage);
 
     // ------------------------------------------------------------
 
-    connect(this, SIGNAL(linkClicked(const QUrl&)),
+    connect(wpage, SIGNAL(linkClicked(const QUrl&)),
             this, SLOT(slotUrlOpen(const QUrl&)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),

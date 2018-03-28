@@ -23,12 +23,14 @@
  *
  * ============================================================ */
 
-#ifndef HTML_WIDGET_H
-#define HTML_WIDGET_H
+#ifndef HTML_WIDGET_QWEBENGINE_H
+#define HTML_WIDGET_QWEBENGINE_H
 
 // Qt includes
 
-#include <QWebView>
+#include <QTimer>
+#include <QWebEngineView>
+#include <QWebEnginePage>
 
 // Local includes
 
@@ -39,7 +41,38 @@
 namespace Digikam
 {
 
-class HTMLWidget : public QWebView
+class HTMLWidget;
+
+class HTMLWidgetPage : public QWebEnginePage
+{
+    Q_OBJECT
+
+public:
+
+    explicit HTMLWidgetPage(HTMLWidget* const parent = 0);
+    virtual ~HTMLWidgetPage();
+
+Q_SIGNALS:
+
+    void signalHTMLEvents(const QStringList& events);
+
+private Q_SLOTS:
+
+    void slotSendHTMLEvents();
+
+protected:
+
+    void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel, const QString&, int, const QString&);
+
+private:
+
+    QStringList m_events;
+    QTimer*     m_timer;
+};
+
+// -------------------------------------------------------------------
+
+class HTMLWidget : public QWebEngineView
 {
     Q_OBJECT
 
@@ -58,24 +91,20 @@ public:
                   const bool useSaneZoomLevel = true);
     void setSharedGeoIfaceObject(GeoIfaceSharedData* const sharedData);
 
-protected:
-
-    bool eventFilter(QObject* object, QEvent* event);
-    void mousePressEvent(QMouseEvent* e);
-    void mouseReleaseEvent(QMouseEvent* e);
-    void mouseMoveEvent(QMouseEvent* e);
-
-protected Q_SLOTS:
-
-    void slotHTMLCompleted(bool ok);
-    void slotScanForJSMessages(const QString& message);
-    void progress(int progress);
-
 Q_SIGNALS:
 
     void signalHTMLEvents(const QStringList& events);
     void signalJavaScriptReady();
     void selectionHasBeenMade(const Digikam::GeoCoordinates::Pair& coordinatesRect);
+
+protected:
+
+    bool eventFilter(QObject*, QEvent*);
+
+protected Q_SLOTS:
+
+    void slotHTMLCompleted(bool ok);
+    void progress(int progress);
 
 private:
 
@@ -87,4 +116,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HTML_WIDGET_H
+#endif // HTML_WIDGET_QWEBENGINE_H

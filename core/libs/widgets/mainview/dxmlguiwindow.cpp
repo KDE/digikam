@@ -69,7 +69,12 @@
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 #include "daboutdata.h"
-#include "webbrowserdlg.h"
+
+#ifdef HAVE_QWEBENGINE
+#   include "webbrowserdlg_qwebengine.h"
+#else
+#   include "webbrowserdlg.h"
+#endif
 
 namespace Digikam
 {

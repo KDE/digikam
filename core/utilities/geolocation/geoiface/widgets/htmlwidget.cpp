@@ -255,7 +255,7 @@ void HTMLWidget::slotScanForJSMessages(const QString& message)
 /**
  * @brief Wrapper around executeScript to catch more errors
  */
-QVariant HTMLWidget::runScript(const QString& scriptCode)
+QVariant HTMLWidget::runScript(const QString& scriptCode, bool)
 {
     GEOIFACE_ASSERT(d->isReady);
 

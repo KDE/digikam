@@ -111,6 +111,9 @@
 /* Define to 1 if changing application styles is supported */
 #cmakedefine HAVE_APPSTYLE_SUPPORT 1
 
+/* Define to 1 if system use QWebEngine instead of QWebKit */
+#cmakedefine HAVE_QWEBENGINE 1
+
 #define LIBEXEC_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${LIBEXEC_INSTALL_DIR}"
 
 /*

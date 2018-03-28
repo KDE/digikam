@@ -104,6 +104,7 @@ option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contacts suppor
 option(ENABLE_MEDIAPLAYER           "Build digiKam with Media Player support (default=OFF)"                              OFF)
 option(ENABLE_DBUS                  "Build digiKam with DBUS support (default=ON)"                                       ON)
 option(ENABLE_APPSTYLES             "Build digiKam with support for changing the widget application style (default=OFF)" OFF)
+option(ENABLE_QWEBENGINE            "Build digiKam with QWebEngine instead of QWebKit (default=OFF)"                     OFF)
 
 # Mysql support options (experimental):
 option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=ON)"                             ON)
@@ -124,9 +125,14 @@ find_package(Qt5 ${QT_MIN_VERSION}
              Xml
              XmlPatterns
              PrintSupport
-             WebKitWidgets
              Network
 )
+
+if(ENABLE_QWEBENGINE)
+    find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS WebEngineWidgets)
+else()
+    find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE COMPONENTS WebKitWidgets)
+endif()
 
 find_package(Qt5 ${QT_MIN_VERSION}
              OPTIONAL_COMPONENTS
@@ -419,6 +425,7 @@ MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL    HAVE_INTERNALMYSQL)
 MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER      HAVE_MEDIAPLAYER)
 MACRO_BOOL_TO_01(ENABLE_DBUS             HAVE_DBUS)
 MACRO_BOOL_TO_01(ENABLE_APPSTYLES        HAVE_APPSTYLE_SUPPORT)
+MACRO_BOOL_TO_01(ENABLE_QWEBENGINE       HAVE_QWEBENGINE)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -444,6 +451,7 @@ PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support" ENABLE_MYSQLSUPPORT)
 PRINT_COMPONENT_COMPILE_STATUS("MySQL Internal Support" ENABLE_INTERNALMYSQL)
 PRINT_COMPONENT_COMPILE_STATUS("DBUS Support"           ENABLE_DBUS)
 PRINT_COMPONENT_COMPILE_STATUS("App. Style Support"     ENABLE_APPSTYLES)
+PRINT_COMPONENT_COMPILE_STATUS("QWebEngine Support"     ENABLE_QWEBENGINE)
 
 # ==============================================================================
 
