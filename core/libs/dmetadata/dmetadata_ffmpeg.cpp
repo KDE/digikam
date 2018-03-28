@@ -80,7 +80,7 @@ extern "C"
 namespace Digikam
 {
 
-/** Search first occurence of string in 'map' with keys given by 'lst'.
+/** Search first occurrence of string in 'map' with keys given by 'lst'.
  *  Return the string match.
  *  If 'xmpTags' is not empty, register XMP tags value with string.
  */
