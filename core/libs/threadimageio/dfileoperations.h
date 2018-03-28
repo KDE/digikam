@@ -54,7 +54,7 @@ public:
                                 const QString& destPath,
                                 bool ignoreSettings = false);
 
-    /** Open file urls to default application relevant of file type-mimes desktop configration.
+    /** Open file urls to default application relevant of file type-mimes desktop configuration.
      */
     static void openFilesWithDefaultApplication(const QList<QUrl>& urls);
 
