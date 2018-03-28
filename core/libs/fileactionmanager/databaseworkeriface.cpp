@@ -333,7 +333,7 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
     if (hub->willWriteMetadata(DisjointMetadata::FullWriteIfChanged), Qt::DirectConnection)
     {
         int flags = hub->changedFlags();
-        // dont filter by shallSendForWriting here; we write from the hub, not from freshly loaded data
+        // don't filter by shallSendForWriting here; we write from the hub, not from freshly loaded data
         infos.schedulingForWrite(infos.size(), i18n("Writing metadata to files"), d->fileProgressCreator());
 
         for (ImageInfoTaskSplitter splitter(infos) ; splitter.hasNext() ; )

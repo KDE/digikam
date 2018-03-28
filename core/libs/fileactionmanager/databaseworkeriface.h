@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEWORKERIFACE_H
-#define DATABASEWORKERIFACE_H
+#ifndef DATABASE_WORKER_IFACE_H
+#define DATABASE_WORKER_IFACE_H
 
 // Qt includes
 
@@ -97,4 +97,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DATABASEWORKERIFACE_H */
+#endif // DATABASE_WORKER_IFACE_H
