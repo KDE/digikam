@@ -42,7 +42,7 @@ class DIGIKAM_DATABASE_EXPORT ImageGPS : public GPSImageItem
 
 public:
 
-    ImageGPS(const ImageInfo& info);
+    explicit ImageGPS(const ImageInfo& info);
     virtual ~ImageGPS();
 
     QString saveChanges();
@@ -55,6 +55,6 @@ private:
     ImageInfo m_info;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
-#endif /* IMAGE_GPS_H */
+#endif // IMAGE_GPS_H

@@ -6,7 +6,7 @@
  * Date        : 2010-03-21
  * Description : An item to hold information about an image.
  *
- * Copyright (C) 2010,2014 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,7 +66,7 @@ bool ImageGPS::loadImageData()
         return true;
     }
 
-    // If item do not have any GPS data in databse, we will try to load it from file using standar implementation from GPSImageItem.
+    // If item do not have any GPS data in databse, we will try to load it from file using standard implementation from GPSImageItem.
 
     return GPSImageItem::loadImageData();
 }
@@ -146,4 +146,4 @@ QList<GPSImageItem*> ImageGPS::infosToItems(const ImageInfoList& infos)
     return items;
 }
 
-} /* namespace Digikam */
+} // namespace Digikam
