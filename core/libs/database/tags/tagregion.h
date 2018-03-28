@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGREGION_H
-#define TAGREGION_H
+#ifndef TAG_REGION_H
+#define TAG_REGION_H
 
 // Qt includes
 
@@ -79,6 +79,7 @@ public:
 
     /// Returns an XML textual representation of this region
     QString toXml() const;
+
     /// If type is Rect, returns the contained rectangle
     QRect toRect() const;
 
@@ -110,7 +111,10 @@ public:
      * Takes a relative region and a full size and returns the absolute region
      */
     static QRect relativeToAbsolute(const QRectF& region, const QSize& fullSize);
-    /// Takes the original and reduced size from the DImg, maps to original size
+
+    /**
+     * Takes the original and reduced size from the DImg, maps to original size
+     */
     static QRect relativeToAbsolute(const QRectF& region, const DImg& reducedSizeImage);
 
     /**
@@ -119,13 +123,15 @@ public:
      */
     static QRectF absoluteToRelative(const QRect& region, const QSize& fullSize);
 
-    /** When images is rotated, rectangles are off-position, ajust them using
-     *  image's current size and rotation(left,right supported only)
+    /**
+     * When images is rotated, rectangles are off-position, adjust them using
+     * image's current size and rotation(left,right supported only)
      */
     static QRect ajustToRotatedImg(const QRect& region, const QSize& fullSize, int rotation);
 
-    /** When images is flipped, rectangles are off-position, ajust them using
-     *  image's current size and flip(horizon,vertical supported only)
+    /**
+     * When images is flipped, rectangles are off-position, adjust them using
+     * image's current size and flip(horizon,vertical supported only)
      */
     static QRect ajustToFlippedImg(const QRect& region, const QSize& fullSize, int flip);
 
@@ -139,4 +145,4 @@ QDebug DIGIKAM_EXPORT operator<<(QDebug dbg, const TagRegion& r);
 
 } // namespace Digikam
 
-#endif // TAGREGION_H
+#endif // TAG_REGION_H
