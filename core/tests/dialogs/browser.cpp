@@ -29,7 +29,13 @@
 
 // Local includes
 
-#include "webbrowserdlg.h"
+#include "digikam_config.h"
+
+#ifdef HAVE_QWEBENGINE
+#   include "webbrowserdlg_qwebengine.h"
+#else
+#   include "webbrowserdlg.h"
+#endif
 
 using namespace Digikam;
 
