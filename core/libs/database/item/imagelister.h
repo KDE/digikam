@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGELISTER_H
-#define IMAGELISTER_H
+#ifndef IMAGE_LISTER_H
+#define IMAGE_LISTER_H
 
 // Qt includes
 
@@ -50,7 +50,7 @@ class DIGIKAM_DATABASE_EXPORT ImageLister
 
 public:
 
-    ImageLister();
+    explicit ImageLister();
     ~ImageLister();
 
     /**
@@ -135,7 +135,7 @@ private:
 
     /**
      * This method generates image records for the reciever that contain the similarities.
-     * @param receiver receiver for the searches
+     * @param receiver reciever for the searches
      * @param imageSimilarityMap the map of image ids and their similarities in the HAAR search
      */
     void listFromHaarSearch(ImageListerReceiver* const receiver, const QMap<qlonglong,double>& imageSimilarityMap);
@@ -150,4 +150,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // IMAGELISTER_H
+#endif // IMAGE_LISTER_H
