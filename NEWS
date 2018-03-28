@@ -151,4 +151,6 @@ BUGFIXES:
 134 ==> 392405 - Function 'getImageIdsFromArea' argument order different.
 135 ==> 386224 - Metadata is not updated when moving tags.
 136 ==> 370245 - Be able to rename tags which have been setted in pictures.
-137 ==> 
+137 ==> 374470 - Deleted tags are not removed from file metadata.
+138 ==> 374516 - Persons metadata are not updated after a tag removed.
+139 ==> 
