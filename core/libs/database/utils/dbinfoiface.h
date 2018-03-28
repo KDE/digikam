@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2017-05-06
- * Description : interface to database informations for shared tools.
+ * Description : interface to database information for shared tools.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2017      by Mario Frank <mario dot frank at uni minus potsdam dot de>
