@@ -54,7 +54,7 @@ class ImageRegionWidget::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         capturePtMode(false),
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         oldRenderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
@@ -256,4 +256,4 @@ void ImageRegionWidget::emitCapturedPointFromOriginal(const QPointF& pt)
     emit signalCapturedPointFromOriginal(color, imgPt);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

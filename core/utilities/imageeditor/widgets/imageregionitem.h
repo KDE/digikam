@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEREGIONITEM_H
-#define IMAGEREGIONITEM_H
+#ifndef IMAGE_REGION_ITEM_H
+#define IMAGE_REGION_ITEM_H
 
 // Qt includes
 
@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT ImageRegionItem : public GraphicsDImgItem
 
 public:
 
-    ImageRegionItem(ImageRegionWidget* const view);
+    explicit ImageRegionItem(ImageRegionWidget* const view);
     virtual ~ImageRegionItem();
 
     void setTargetImage(DImg& img);
@@ -65,6 +65,6 @@ private:
     Private* const d_ptr;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif // IMAGEREGIONITEM_H
+#endif // IMAGE_REGION_ITEM_H

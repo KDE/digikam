@@ -52,7 +52,7 @@ class ImageRegionItem::Private
 {
 public:
 
-    Private():
+    explicit Private():
         onMouseMovePreviewToggled(true),
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         view(0),

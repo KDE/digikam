@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEREGIONWIDGET_H
-#define IMAGEREGIONWIDGET_H
+#ifndef IMAGE_REGION_WIDGET_H
+#define IMAGE_REGION_WIDGET_H
 
 // Qt includes
 
@@ -108,6 +108,6 @@ private:
     Private* const d_ptr;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* IMAGEREGIONWIDGET_H */
+#endif // IMAGE_REGION_WIDGET_H
