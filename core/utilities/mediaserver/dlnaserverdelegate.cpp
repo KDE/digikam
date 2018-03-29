@@ -493,8 +493,8 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
     if (filepath.Compare("/", true) == 0)
     {
         qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: New item is root";
-        object->m_ParentID = "-1";
-        object->m_ObjectID = "0";
+        object->m_ParentID = "-1";      // krazy:exclude=doublequote_chars
+        object->m_ObjectID = "0";       // krazy:exclude=doublequote_chars
     }
     else
     {
@@ -502,14 +502,14 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
 
         if (filepath.EndsWith("/"))
         {
-            object->m_ParentID = "0";
+            object->m_ParentID = "0";   // krazy:exclude=doublequote_chars
         }
         else
         {
-            object->m_ParentID = "0" + filepath.Left(filepath.Find("/?file:") + 1);
+            object->m_ParentID = "0" + filepath.Left(filepath.Find("/?file:") + 1);     // krazy:exclude=doublequote_chars
         }
 
-        object->m_ObjectID = "0" + filepath.SubString(0);
+        object->m_ObjectID = "0" + filepath.SubString(0);   // krazy:exclude=doublequote_chars
     }
 
     qCDebug(DIGIKAM_MEDIASRV_LOG) << "BuildFromFilePath() :: New item parent ID:"
@@ -534,7 +534,7 @@ NPT_Result DLNAMediaServerDelegate::GetFilePath(const char* object_id,
     if (!object_id)
         return NPT_ERROR_INVALID_PARAMETERS;
 
-    filepath = "/";
+    filepath = "/";     // krazy:exclude=doublequote_chars
 
     // object id is formatted as 0/<filepath>
 
@@ -626,7 +626,7 @@ NPT_String DLNAMediaServerDelegate::BuildSafeResourceUri(const NPT_HttpUrl& base
     NPT_String uri_path = uri.GetPath();
 
     if (!uri_path.EndsWith("/"))
-        uri_path += "/";
+        uri_path += "/";        // krazy:exclude=doublequote_chars
 
     // some controllers (like WMP) will call us with an already urldecoded version.
     // We're intentionally prepending a known urlencoded string
