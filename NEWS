@@ -158,4 +158,5 @@ BUGFIXES:
 141 ==> 392427 - Cannot add collection on network drive.
 142 ==> 392022 - Position of a face tag appears on top of bottom of the list, instead of being sorted alphabetically.
 143 ==> 372763 - Rename does not give options on Conflict.
-144 ==> 
+144 ==> 391533 - Feature request: add "NOT" tag matching condition in "Filters" panel.
+145 ==> 
