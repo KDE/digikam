@@ -44,12 +44,9 @@
 // Local includes
 
 #include "dlayoutbox.h"
-#include "digikam_debug.h"
 #include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
-
-
 
 namespace Digikam
 {
@@ -326,4 +323,4 @@ void AntiVignettingSettings::slotSettingsChanged()
     emit signalSettingsChanged();
 }
 
-}  // namespace Digikam
+} // namespace Digikam
