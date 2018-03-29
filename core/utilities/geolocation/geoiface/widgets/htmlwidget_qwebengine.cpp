@@ -196,7 +196,7 @@ QVariant HTMLWidget::runScript(const QString& scriptCode, bool async)
         return ret;
     }
 
-    return true;
+    return QVariant();
 }
 
 /**
@@ -306,7 +306,8 @@ bool HTMLWidget::eventFilter(QObject* object, QEvent* event)
 
                 d->intermediateSelectionScreenPoint = QPoint(e->x(), e->y());
 
-                qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1String(" ") << d->intermediateSelectionScreenPoint;
+                qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1String(" ")
+                                              << d->intermediateSelectionScreenPoint;
 
                 qreal lonWest, latNorth, lonEast, latSouth;
 

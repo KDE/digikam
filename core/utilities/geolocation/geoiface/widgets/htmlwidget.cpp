@@ -199,7 +199,8 @@ void HTMLWidget::mouseMoveEvent(QMouseEvent *e)
 
         d->intermediateSelectionScreenPoint = QPoint(e->x(), e->y());
 
-        qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1String(" ") << d->intermediateSelectionScreenPoint;
+        qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1String(" ")
+                                      << d->intermediateSelectionScreenPoint;
 
         qreal lonWest, latNorth, lonEast, latSouth;
 
@@ -240,7 +241,7 @@ void HTMLWidget::slotScanForJSMessages(const QString& message)
     if (message != QLatin1String("(event)"))
         return;
 
-//    qCDebug(DIGIKAM_GEOIFACE_LOG) << message;
+    //qCDebug(DIGIKAM_GEOIFACE_LOG) << message;
 
     const QString eventBufferString = runScript(QLatin1String("kgeomapReadEventStrings();")).toString();
 
@@ -255,14 +256,14 @@ void HTMLWidget::slotScanForJSMessages(const QString& message)
 /**
  * @brief Wrapper around executeScript to catch more errors
  */
-QVariant HTMLWidget::runScript(const QString& scriptCode, bool)
+QVariant HTMLWidget::runScript(const QString& scriptCode, bool /*async*/)
 {
     GEOIFACE_ASSERT(d->isReady);
 
     if (!d->isReady)
         return QVariant();
 
-//     qCDebug(DIGIKAM_GEOIFACE_LOG) << scriptCode;
+    //qCDebug(DIGIKAM_GEOIFACE_LOG) << scriptCode;
     return page()->mainFrame()->evaluateJavaScript(scriptCode);
 }
 
