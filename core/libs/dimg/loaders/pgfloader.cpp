@@ -24,7 +24,7 @@
  * ============================================================ */
 
 #include "digikam_config.h"
-#include "pgfloader.h"
+#include "pgfloader.h"       // krazy:exclude=includes
 
 // C Ansi includes
 
@@ -542,4 +542,4 @@ bool PGFLoader::isReadOnly() const
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

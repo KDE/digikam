@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PGFLOADER_H
-#define PGFLOADER_H
+#ifndef PGF_LOADER_H
+#define PGF_LOADER_H
 
 // Local includes
 
@@ -57,6 +57,6 @@ private:
     DImgLoaderObserver* m_observer;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* PGFLOADER_H */
+#endif // PGF_LOADER_H
