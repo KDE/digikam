@@ -48,7 +48,7 @@ class TemplateViewer::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         names                      = 0;
         position                   = 0;

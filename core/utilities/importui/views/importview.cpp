@@ -56,7 +56,7 @@ class ImportView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         needDispatchSelection(false),
         thumbSize(ThumbnailSize::Medium),
         dockArea(0),

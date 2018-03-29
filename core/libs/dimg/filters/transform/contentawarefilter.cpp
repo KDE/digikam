@@ -98,7 +98,7 @@ class ContentAwareFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         carver   = 0;
         progress = 0;

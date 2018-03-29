@@ -59,7 +59,7 @@ class RatingWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         tracking       = true;
         isHovered      = false;
@@ -475,7 +475,7 @@ class RatingBox::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         shortcut     = 0;
         ratingWidget = 0;

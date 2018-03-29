@@ -49,7 +49,7 @@ class BorderFilter::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         borderMainWidth(0),
         border2ndWidth(0),
         orgRatio(0.0f)

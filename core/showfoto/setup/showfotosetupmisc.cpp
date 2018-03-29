@@ -57,7 +57,7 @@ class SetupMisc::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         sidebarTypeLabel(0),
         applicationStyleLabel(0),
         iconThemeLabel(0),

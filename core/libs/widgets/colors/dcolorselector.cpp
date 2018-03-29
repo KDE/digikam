@@ -42,7 +42,7 @@ class Q_DECL_HIDDEN DColorSelector::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : alpha(false)
     {
     }

@@ -58,7 +58,7 @@ class CameraItem::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         hasThumb = false;
     }
@@ -121,7 +121,7 @@ class CameraItemList::Private
 
 public:
 
-    Private()
+    explicit Private()
         : iconSize(64)
     {
         ctrl = 0;

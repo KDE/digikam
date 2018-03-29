@@ -54,7 +54,7 @@ class CBSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         rInput(0),
         gInput(0),
         bInput(0)

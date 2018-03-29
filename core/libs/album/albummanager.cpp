@@ -164,7 +164,7 @@ class AlbumManager::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         changed(false),
         hasPriorizedDbPath(false),
         dbFakeConnection(false),

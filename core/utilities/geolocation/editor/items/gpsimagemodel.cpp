@@ -35,7 +35,7 @@ class GPSImageModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : items(),
         columnCount(0),
         thumbnailLoadThread(0)

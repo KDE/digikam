@@ -40,7 +40,7 @@ class ImportThumbnailModel::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         thumbsCtrl(0),
         thumbSize(0),
         lastGlobalThumbSize(0),

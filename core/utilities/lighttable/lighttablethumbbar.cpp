@@ -160,7 +160,7 @@ class LightTableThumbBar::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         navigateByPair   = false;
         imageInfoModel   = 0;

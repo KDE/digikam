@@ -49,7 +49,7 @@ class FaceItem::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : suggestionMode(false),
         sceneWidth(0),
         sceneHeight(0),

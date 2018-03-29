@@ -30,7 +30,7 @@ class ImageFiltersHistoryTreeItem::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         parentItem = 0;
         disabled   = false;

@@ -56,7 +56,7 @@ class VidSlideWizard::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : iface(0),
         introPage(0),
         albumsPage(0),

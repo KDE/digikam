@@ -30,7 +30,7 @@ class ImageGPSModelHelper::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         itemModel           = 0;
         itemSelectionModel  = 0;

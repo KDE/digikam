@@ -102,7 +102,7 @@ class Q_DECL_HIDDEN MapWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : loadedBackends(),
         currentBackend(0),
         currentBackendName(),

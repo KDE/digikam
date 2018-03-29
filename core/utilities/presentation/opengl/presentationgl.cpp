@@ -75,7 +75,7 @@ class PresentationGL::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         timer               = 0;
         fileIndex           = 0;

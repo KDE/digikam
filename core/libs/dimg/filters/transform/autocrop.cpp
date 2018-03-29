@@ -52,7 +52,7 @@ class AutoCrop::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

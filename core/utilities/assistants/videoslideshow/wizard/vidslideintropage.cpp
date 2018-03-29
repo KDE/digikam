@@ -47,7 +47,7 @@ class VidSlideIntroPage::Private
 {
 public:
 
-    Private(QWizard* const dialog)
+    explicit Private(QWizard* const dialog)
       : imageGetOption(0),
         hbox(0),
         wizard(0),

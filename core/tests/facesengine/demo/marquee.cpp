@@ -53,7 +53,7 @@ public:
         BottomRight
     };
 
-    Private()
+    explicit Private()
       : handleSize(10)
     {
         htl        = 0;

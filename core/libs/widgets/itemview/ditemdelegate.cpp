@@ -54,7 +54,7 @@ class DItemDelegate::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

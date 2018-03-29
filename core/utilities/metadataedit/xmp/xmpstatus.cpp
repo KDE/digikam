@@ -48,7 +48,7 @@ class XMPStatus::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         objectNameEdit          = 0;
         specialInstructionEdit  = 0;

@@ -45,7 +45,7 @@ class ImageInfoJob::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         jobThread(0)
     {
     }

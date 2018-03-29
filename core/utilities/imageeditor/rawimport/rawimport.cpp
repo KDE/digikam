@@ -51,7 +51,7 @@ class RawImport::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         settingsBox(0),
         previewWidget(0)
     {

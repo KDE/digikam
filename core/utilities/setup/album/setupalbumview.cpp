@@ -62,7 +62,7 @@ class SetupAlbumView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         useLargeThumbsOriginal(false),
         useLargeThumbsShowedInfo(false),
         iconTreeThumbLabel(0),

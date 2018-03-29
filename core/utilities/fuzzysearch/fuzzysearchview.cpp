@@ -97,7 +97,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         // initially be active to update sketch panel when the search list is restored
         active(false),
         fingerprintsChecked(false),

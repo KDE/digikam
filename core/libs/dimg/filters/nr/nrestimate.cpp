@@ -54,7 +54,7 @@ class NREstimate::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
        clusterCount(30),
        size(512)
     {

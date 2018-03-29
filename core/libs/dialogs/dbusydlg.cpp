@@ -51,7 +51,7 @@ class DBusyDlg::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         thread(0)
     {
     }

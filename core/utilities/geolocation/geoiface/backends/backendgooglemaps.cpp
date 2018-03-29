@@ -84,7 +84,7 @@ class BackendGoogleMaps::Private
 {
 public:
 
-    Private()
+    explicit Private()
     : htmlWidget(0),
       htmlWidgetWrapper(0),
       isReady(false),

@@ -61,7 +61,7 @@ class Canvas::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         rubber     = 0;
         wrapItem   = 0;

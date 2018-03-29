@@ -55,7 +55,7 @@ class ShearTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         newWidthLabel(0),
         newHeightLabel(0),
         antialiasInput(0),

@@ -69,7 +69,7 @@ class Q_DECL_HIDDEN LookupAltitudeGeonames::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : status(StatusSuccess),
         currentMergedRequestIndex(0),
         netReply(0)

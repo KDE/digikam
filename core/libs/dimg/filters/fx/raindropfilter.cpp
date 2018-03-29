@@ -51,7 +51,7 @@ class RainDropFilter::Private
 
 public:
 
-    Private()
+    explicit Private()
       : drop(80),
         amount(150),
         coeff(30),

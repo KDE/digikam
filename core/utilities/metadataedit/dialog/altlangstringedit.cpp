@@ -42,7 +42,7 @@ class AltLangStringsEdit::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         valueCheck = 0;
         editor     = 0;

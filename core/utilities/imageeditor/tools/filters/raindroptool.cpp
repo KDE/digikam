@@ -53,7 +53,7 @@ class RainDropTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         dropInput(0),
         amountInput(0),
         coeffInput(0),

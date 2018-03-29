@@ -86,7 +86,7 @@ class SlideVideo::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         videoWidget(0),
         player(0),
         //thread(0),

@@ -41,7 +41,7 @@ class CoreDbOperationGroup::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         access   = 0;
         acquired = false;

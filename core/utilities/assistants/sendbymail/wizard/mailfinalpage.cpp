@@ -54,7 +54,7 @@ class MailFinalPage::Private
 {
 public:
 
-    Private(QWizard* const dialog)
+    explicit Private(QWizard* const dialog)
       : progressView(0),
         progressBar(0),
         complete(false),

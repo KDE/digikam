@@ -46,7 +46,7 @@ class SaveImgThread::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         width        = 0;
         height       = 0;

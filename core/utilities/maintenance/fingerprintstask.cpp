@@ -42,7 +42,7 @@ class FingerprintsTask::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : data(0)
     {
     }

@@ -61,7 +61,7 @@ class HotPixelsTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         blackFrameButton(0),
         progressBar(0),
         filterMethodCombo(0),

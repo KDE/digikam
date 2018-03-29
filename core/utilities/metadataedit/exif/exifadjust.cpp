@@ -50,7 +50,7 @@ class EXIFAdjust::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         brightnessCheck     = 0;
         gainControlCheck    = 0;

@@ -75,7 +75,7 @@ class AlbumSelectionTreeView::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         enableToolTips(false),
         albumModificationHelper(0),
         toolTip(0),

@@ -48,7 +48,7 @@ class GraphicsDImgView::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         scene            = 0;
         item             = 0;

@@ -52,7 +52,7 @@ class TemplatePanel::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         authorsEdit               = 0;
         authorsPositionEdit       = 0;

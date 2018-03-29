@@ -52,7 +52,7 @@ class GeoIfaceGlobalObject::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : internalMapWidgetsPool(),
           markerPixmaps()
     {

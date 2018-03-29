@@ -56,7 +56,7 @@ class Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         preserveAspectRatio(0),
         labelBackground(0),
         labelBorderPercent(0),

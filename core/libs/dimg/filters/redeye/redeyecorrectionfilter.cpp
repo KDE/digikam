@@ -47,7 +47,7 @@ class RedEyeCorrectionFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

@@ -111,7 +111,7 @@ class TableViewModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : columnObjects(),
         rootItem(0),
         imageFilterSettings(),

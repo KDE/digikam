@@ -45,7 +45,7 @@ class TIFFSettings::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         TIFFGrid        = 0;
         TIFFcompression = 0;

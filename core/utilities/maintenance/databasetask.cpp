@@ -48,7 +48,7 @@ class DatabaseTask::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : scanThumbsDb(false),
           scanRecognitionDb(false),
           scanSimilarityDb(false),

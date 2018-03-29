@@ -49,7 +49,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         activeCursor     = NoCursor;
         parent           = 0;

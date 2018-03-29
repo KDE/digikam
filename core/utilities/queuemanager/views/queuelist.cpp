@@ -67,7 +67,7 @@ class QueueListViewItem::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         isBusy(false),
         done(false),
         hasThumb(false),
@@ -255,7 +255,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
         : iconSize(64)
     {
         showTips        = false;

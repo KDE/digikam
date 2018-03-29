@@ -36,7 +36,7 @@ class ColorGradientWidget::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         orientation = Qt::Horizontal;
     }

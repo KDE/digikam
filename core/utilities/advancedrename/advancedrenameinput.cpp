@@ -56,7 +56,7 @@ class AdvancedRenameLineEdit::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         allowDirectoryCreation(false),
         verticalSliderPosition(INVALID),
         parseTimer(0),
@@ -247,7 +247,7 @@ class AdvancedRenameInput::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         maxVisibleItems(10),
         maxHistoryItems(30),
         lineEdit(0),

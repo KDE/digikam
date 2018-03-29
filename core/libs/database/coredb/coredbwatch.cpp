@@ -50,7 +50,7 @@ class CoreDbWatch::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         mode(CoreDbWatch::DatabaseSlave)
 #ifdef HAVE_DBUS
         ,adaptor(0)

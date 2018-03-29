@@ -51,7 +51,7 @@ class DatabaseServerStarter::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : internalServer(0)
     {
     }

@@ -59,7 +59,7 @@ class PanIconFrame::Private
 {
 public:
 
-    Private(PanIconFrame* const qq);
+    explicit Private(PanIconFrame* const qq);
     ~Private();
 
 public:
@@ -255,7 +255,7 @@ class PanIconWidget::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         moveSelection(false),
         flicker(false),
         width(0),

@@ -43,7 +43,7 @@ class WBFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         // Obsolete in algorithm since over/under exposure indicators
         // are implemented directly with preview widget.

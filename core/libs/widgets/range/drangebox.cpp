@@ -37,7 +37,7 @@ class Q_DECL_HIDDEN DIntRangeBox::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         intervalLabel = 0;
         minValueBox   = 0;

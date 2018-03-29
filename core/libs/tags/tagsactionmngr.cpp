@@ -74,7 +74,7 @@ class TagsActionMngr::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : ratingShortcutPrefix(QLatin1String("rateshortcut")),
           tagShortcutPrefix(QLatin1String("tagshortcut")),
           pickShortcutPrefix(QLatin1String("pickshortcut")),

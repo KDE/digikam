@@ -50,7 +50,7 @@ class BlurTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         radiusInput(0),
         previewWidget(0),
         gboxSettings(0)

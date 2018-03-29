@@ -59,7 +59,7 @@ class SimilarityDbSchemaUpdater::Private
 
 public:
 
-    Private()
+    explicit Private()
       : setError(false),
         currentVersion(0),
         currentRequiredVersion(0),

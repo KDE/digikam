@@ -49,7 +49,7 @@ class IPTCCredits::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         copyrightCheck   = 0;
         creditCheck      = 0;

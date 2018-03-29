@@ -39,7 +39,7 @@ class DragHandle::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         parent(0),
         currentArea(Qt::LeftDockWidgetArea)
     {

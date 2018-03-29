@@ -60,7 +60,7 @@ class CameraList::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         modified(false)
     {
     }

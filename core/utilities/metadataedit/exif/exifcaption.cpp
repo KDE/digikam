@@ -48,7 +48,7 @@ class EXIFCaption::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         documentNameEdit     = 0;
         imageDescEdit        = 0;

@@ -54,7 +54,7 @@ class SearchTextBar::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         optionAutoCompletionModeEntry(QLatin1String("AutoCompletionMode")),
         optionCaseSensitiveEntry(QLatin1String("CaseSensitive")),
         textQueryCompletion(false),

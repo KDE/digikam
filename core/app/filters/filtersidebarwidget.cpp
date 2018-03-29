@@ -56,7 +56,7 @@ class FilterSideBarWidget::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         space(0),
         expanderVlay(0),
         tagFilterView(0),

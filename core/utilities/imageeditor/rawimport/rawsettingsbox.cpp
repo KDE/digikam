@@ -72,7 +72,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         optionGroupName(QLatin1String("RAW Import Settings")),
         optionHistogramChannelEntry(QLatin1String("Histogram Channel")),
         optionHistogramScaleEntry(QLatin1String("Histogram Scale")),

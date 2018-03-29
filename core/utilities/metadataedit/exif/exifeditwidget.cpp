@@ -57,7 +57,7 @@ class EXIFEditWidget::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         modified      = false;
         isReadOnly    = false;

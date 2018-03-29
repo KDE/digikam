@@ -44,7 +44,7 @@ class ImageFiltersHistoryModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : rootItem(0),
           disabledEntries(0)
     {

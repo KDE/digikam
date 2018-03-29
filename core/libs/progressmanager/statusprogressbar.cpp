@@ -53,7 +53,7 @@ public:
         ProgressBar
     };
 
-    Private() :
+    explicit Private() :
         notify(false),
         progressWidget(0),
         cancelButton(0),

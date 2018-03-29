@@ -36,7 +36,7 @@ class TrackCorrelator::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : trackManager(0),
         thread(0)
     {

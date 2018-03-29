@@ -72,7 +72,7 @@ class PresentationWidget::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         sharedData                   = 0;
         imageLoader                  = 0;

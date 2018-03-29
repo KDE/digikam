@@ -43,7 +43,7 @@ namespace Digikam
 class DSelector::Private
 {
 public:
-    Private()
+    explicit Private()
       : arrowsize(5)
     {
         arrowPE  = QStyle::PE_IndicatorArrowLeft;
@@ -345,7 +345,7 @@ class DColorValueSelector::Private
 {
 public:
 
-    Private(DColorValueSelector* const q)
+    explicit Private(DColorValueSelector* const q)
         : q(q),
           hue(0),
           saturation(0),

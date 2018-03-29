@@ -46,7 +46,7 @@ class NewItemsFinder::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : mode(CompleteCollectionScan),
           cancel(false)
     {

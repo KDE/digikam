@@ -50,7 +50,7 @@ class RGTagModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : tagModel(0),
         rootTag(0),
         startInsert(-1),

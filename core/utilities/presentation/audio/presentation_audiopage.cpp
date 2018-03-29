@@ -70,7 +70,7 @@ class PresentationAudioPage::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         tracksTime = 0;
         sharedData = 0;

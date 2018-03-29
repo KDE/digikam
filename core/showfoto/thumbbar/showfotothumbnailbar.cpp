@@ -48,7 +48,7 @@ class ShowfotoThumbnailBar::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         scrollPolicy     = Qt::ScrollBarAlwaysOn;
         duplicatesFilter = 0;

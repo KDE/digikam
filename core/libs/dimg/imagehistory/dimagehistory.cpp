@@ -44,7 +44,7 @@ class DImageHistory::Private : public QSharedData
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

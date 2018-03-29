@@ -30,7 +30,7 @@ class VisibilityController::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         status(VisibilityController::Unknown),
         containerWidget(0)
     {

@@ -41,7 +41,7 @@ class ImagePreviewViewItem::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         group = 0;
     }

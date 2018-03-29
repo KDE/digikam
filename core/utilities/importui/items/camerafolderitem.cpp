@@ -31,7 +31,7 @@ class CameraFolderItem::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         virtualFolder(true),
         count(0)
     {

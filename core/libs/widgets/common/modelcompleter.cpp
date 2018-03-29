@@ -42,7 +42,7 @@ class ModelCompleter::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         displayRole(Qt::DisplayRole),
         uniqueIdRole(Qt::DisplayRole),
         delayedModelTimer(0),

@@ -110,7 +110,7 @@ class RajceCommand::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 
@@ -431,7 +431,7 @@ class AddPhotoCommand::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         jpgQuality       = 90;
         desiredDimension = 0;

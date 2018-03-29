@@ -156,7 +156,7 @@ class GeolocationEdit::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         imageModel               = 0;
         selectionModel           = 0;

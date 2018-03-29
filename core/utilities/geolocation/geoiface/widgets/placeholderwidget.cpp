@@ -40,7 +40,7 @@ class PlaceholderWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         messageLabel = 0;
     }

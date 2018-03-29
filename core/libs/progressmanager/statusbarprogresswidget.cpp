@@ -65,7 +65,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         mode(None),
         bShowButton(true),
         pProgressBar(0),

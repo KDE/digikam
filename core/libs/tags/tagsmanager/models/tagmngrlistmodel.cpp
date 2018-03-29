@@ -46,7 +46,7 @@ class TagMngrListModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         rootItem = 0;
     }

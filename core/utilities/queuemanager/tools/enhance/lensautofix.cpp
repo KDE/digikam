@@ -51,7 +51,7 @@ class LensAutoFix::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : settingsView(0),
           cameraSelector(0),
           changeSettings(true)

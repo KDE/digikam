@@ -55,7 +55,7 @@ class DistortionFXFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         antiAlias      = true;
         level          = 0;

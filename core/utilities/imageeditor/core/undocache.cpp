@@ -48,7 +48,7 @@ class UndoCache::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

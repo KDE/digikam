@@ -62,7 +62,7 @@ class DLNAMediaServerDelegate::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         filterUnknownOut(false),
         useCache(false)
     {

@@ -42,7 +42,7 @@ class ShowfotoThumbnailModel::Private
 {
 public:
 
-        Private() :
+        explicit Private() :
         thread(0),
         preloadThread(0),
         thumbSize(0),

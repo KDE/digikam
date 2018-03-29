@@ -70,7 +70,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         mainTab(0),
         restorationTypeCB(0),
         settingsWidget(0),

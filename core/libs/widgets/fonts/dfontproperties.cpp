@@ -112,7 +112,7 @@ class DFontProperties::Private
 {
 public:
 
-    Private(DFontProperties* const qq)
+    explicit Private(DFontProperties* const qq)
         : q(qq)
     {
         palette.setColor(QPalette::Active, QPalette::Text, Qt::black);

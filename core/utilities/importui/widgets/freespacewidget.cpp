@@ -83,7 +83,7 @@ class FreeSpaceWidget::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         isValid(false),
         percentUsed(-1),
         dSizeKb(0),

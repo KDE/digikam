@@ -45,7 +45,7 @@ class HTMLWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : parent(0),
         isReady(false),
         selectionStatus(false),

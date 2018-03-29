@@ -61,7 +61,7 @@ class PresentationDlg::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         buttonBox   = 0;
         startButton = 0;

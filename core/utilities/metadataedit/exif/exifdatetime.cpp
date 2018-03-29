@@ -49,7 +49,7 @@ class EXIFDateTime::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         dateCreatedSel             = 0;
         dateOriginalSel            = 0;

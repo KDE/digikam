@@ -53,7 +53,7 @@ class RedEyeCorrectionSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         redtoavgratioInput(0)
     {
     }

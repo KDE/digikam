@@ -57,7 +57,7 @@ class XMPProperties::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         priorityCB           = 0;
         objectTypeCB         = 0;

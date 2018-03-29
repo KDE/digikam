@@ -35,7 +35,7 @@ class Q_DECL_HIDDEN GroupStateComputer::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : state(SelectedNone),
         stateMask(SelectedNone)
     {

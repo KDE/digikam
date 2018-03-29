@@ -38,7 +38,7 @@ class Q_DECL_HIDDEN DFileSelector::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         edit      = 0;
         btn       = 0;

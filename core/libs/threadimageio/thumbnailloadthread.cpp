@@ -113,7 +113,7 @@ class ThumbnailLoadThread::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         size               = ThumbnailSize::maxThumbsSize();
         wantPixmap         = true;
@@ -981,7 +981,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         state   = Inactive;
         thread  = 0;

@@ -52,7 +52,7 @@ class PrintHelper::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         parent(0)
     {
     }

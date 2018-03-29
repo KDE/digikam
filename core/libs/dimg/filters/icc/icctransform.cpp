@@ -87,7 +87,7 @@ class IccTransform::Private : public QSharedData
 {
 public:
 
-    Private()
+    explicit Private()
     {
         intent          = IccTransform::Perceptual;
         proofIntent     = IccTransform::AbsoluteColorimetric;
@@ -98,7 +98,7 @@ public:
         handle          = 0;
     }
 
-    Private(const Private& other)
+    explicit Private(const Private& other)
         : QSharedData(other)
     {
         handle = 0;

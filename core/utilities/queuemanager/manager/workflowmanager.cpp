@@ -46,7 +46,7 @@ class WorkflowManager::Private
 {
 public:
 
-    Private()
+    explicit Private()
         :mutex()
     {
         modified = false;

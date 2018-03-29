@@ -49,7 +49,7 @@ class EditorToolIface::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         toolsIconView(0),
         tool(0),
         editor(0),

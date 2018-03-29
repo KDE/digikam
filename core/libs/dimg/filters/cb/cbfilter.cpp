@@ -40,7 +40,7 @@ class CBFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         memset(&redMap,     0, sizeof(redMap));
         memset(&greenMap,   0, sizeof(greenMap));

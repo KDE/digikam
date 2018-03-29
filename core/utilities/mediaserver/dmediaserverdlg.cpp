@@ -57,7 +57,7 @@ class DMediaServerDlg::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         dirty(false),
         mngr(DMediaServerMngr::instance()),
         srvButton(0),

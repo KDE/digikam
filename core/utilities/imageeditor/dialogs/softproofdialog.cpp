@@ -58,7 +58,7 @@ class SoftProofDialog::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         switchOn(false),
         deviceProfileBox(0),
         infoProofProfiles(0),

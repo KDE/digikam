@@ -470,7 +470,7 @@ class PersistentWidgetDelegateOverlay::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : persistent(false),
         restoreFocus(false)
     {

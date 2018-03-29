@@ -39,7 +39,7 @@ class ImageVersionsModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         data      = 0;
         paintTree = false;

@@ -59,7 +59,7 @@ class TagModificationHelper::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         parentTag    = 0;
         dialogParent = 0;

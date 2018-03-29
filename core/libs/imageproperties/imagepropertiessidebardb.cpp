@@ -69,7 +69,7 @@ class ImagePropertiesSideBarDB::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         dirtyDesceditTab(false),
         hasPrevious(false),
         hasNext(false),

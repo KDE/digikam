@@ -52,7 +52,7 @@ class FunnelReal::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : isLoaded(false),
           numParams(4),          // similarity transforms - x translation, y translation, rotation, uniform scaling
           windowSize(4),

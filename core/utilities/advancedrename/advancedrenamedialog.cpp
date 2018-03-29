@@ -66,7 +66,7 @@ class AdvancedRenameListItem::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 
@@ -148,7 +148,7 @@ class AdvancedRenameDialog::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         singleFileMode(false),
         minSizeDialog(450),
         sortActionName(0),

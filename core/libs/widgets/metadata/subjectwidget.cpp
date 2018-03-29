@@ -64,7 +64,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         addSubjectButton = 0;
         delSubjectButton = 0;

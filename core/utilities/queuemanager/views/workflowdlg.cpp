@@ -59,7 +59,7 @@ class WorkflowDlg::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         buttons(0),
         titleEdit(0),
         descEdit(0)

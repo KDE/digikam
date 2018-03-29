@@ -52,7 +52,7 @@ class CharcoalTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         pencilInput(0),
         smoothInput(0),
         previewWidget(0),

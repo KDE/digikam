@@ -135,7 +135,7 @@ class AlbumHistory::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         moving(false),
         blockSelection(false)
     {

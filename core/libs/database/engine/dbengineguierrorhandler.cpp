@@ -53,7 +53,7 @@ class DbEngineConnectionChecker::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         stop    = false;
         success = false;
@@ -145,7 +145,7 @@ class DbEngineGuiErrorHandler::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         checker = 0;
     }

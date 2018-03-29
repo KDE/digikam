@@ -51,7 +51,7 @@ class DBInfoIface::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : albumManager(AlbumManager::instance()),
         albumsChooser(0),
         albumSelector(0),

@@ -79,7 +79,7 @@ class BatchToolsManager::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

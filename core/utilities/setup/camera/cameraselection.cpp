@@ -62,7 +62,7 @@ class CameraSelection::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         buttons(0),
         portButtonGroup(0),
         usbButton(0),

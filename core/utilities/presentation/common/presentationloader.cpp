@@ -100,7 +100,7 @@ class PresentationLoader::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         sharedData     = 0;
         loadingThreads = 0;

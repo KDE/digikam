@@ -68,7 +68,7 @@ class SetupMetadata::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         exifAutoRotateOriginal(false),
         exifAutoRotateShowedInfo(false),
         fieldsGroup(0),

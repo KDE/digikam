@@ -380,7 +380,7 @@ class TagsPopupMenu::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         addTagActions    = 0;
         toggleTagActions = 0;

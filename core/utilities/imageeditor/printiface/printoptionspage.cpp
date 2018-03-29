@@ -74,7 +74,7 @@ class PrintOptionsPage::Private : public Ui_PrintOptionsPage
 {
 public:
 
-    Private() :
+    explicit Private() :
         mParent(0),
         mConfigDialogManager(0),
         colorManaged(0),

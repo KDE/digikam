@@ -40,7 +40,7 @@ class TextFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         itemNameAction        = 0;
         itemTitleAction       = 0;

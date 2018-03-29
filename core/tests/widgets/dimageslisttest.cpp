@@ -181,7 +181,7 @@ class DImagesListTest::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         page        = 0;
         buttons     = 0;

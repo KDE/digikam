@@ -39,7 +39,7 @@ class GPSImageSortProxyModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         imageModel             = 0;
         sourceSelectionModel   = 0;

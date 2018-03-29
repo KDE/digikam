@@ -59,7 +59,7 @@ class WebBrowserDlg::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         browser     = 0;
         toolbar     = 0;

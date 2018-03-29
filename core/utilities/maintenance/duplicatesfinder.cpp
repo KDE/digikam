@@ -52,7 +52,7 @@ class DuplicatesFinder::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         minSimilarity(90),
         maxSimilarity(100),
         albumTagRelation(0),

@@ -55,7 +55,7 @@ class Rotate::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         CUSTOM_ANGLE(DImg::ROT270 + 1),
         label(0),
         useExif(0),

@@ -48,7 +48,7 @@ class XMPCategories::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         addSubCategoryButton = 0;
         delSubCategoryButton = 0;

@@ -74,7 +74,7 @@ class BackendGeonamesUSRG::Private
 
 public:
 
-    Private()
+    explicit Private()
       : itemCounter(0),
         itemCount(0),
         jobs(),

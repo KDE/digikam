@@ -76,7 +76,7 @@ class TagEditDlg::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         titleEdit       = 0;
         iconButton      = 0;

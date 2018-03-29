@@ -78,7 +78,7 @@ class DXmlGuiWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         fsOptions              = FS_NONE;
         fullScreenAction       = 0;

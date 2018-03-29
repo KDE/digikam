@@ -53,7 +53,7 @@ class RawPreview::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         currentFitWindowZoom(0.0),
         thread(0),
         item(0)

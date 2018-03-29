@@ -57,7 +57,7 @@ class ProfileConversionTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         profilesBox(0),
         previewWidget(0),
         gboxSettings(0)

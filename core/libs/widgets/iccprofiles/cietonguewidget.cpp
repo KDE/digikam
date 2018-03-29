@@ -157,7 +157,7 @@ class CIETongueWidget::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         profileDataAvailable(true),
         loadingImageMode(false),
         loadingImageSucess(false),

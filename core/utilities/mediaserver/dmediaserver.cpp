@@ -91,7 +91,7 @@ class DMediaServer::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : upnp(0),
         logHandler(NULL),
         serverHolder(new CDeviceHostReferenceHolder())

@@ -117,7 +117,7 @@ class ImportPreviewView::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         //peopleTagsShown    = false;
         fullSize             = 0;

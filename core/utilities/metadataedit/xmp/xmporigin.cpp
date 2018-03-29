@@ -55,7 +55,7 @@ class XMPOrigin::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         cityEdit               = 0;
         sublocationEdit        = 0;

@@ -41,7 +41,7 @@ class Q_DECL_HIDDEN SqueezedComboBox::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         timer = 0;
     }

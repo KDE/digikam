@@ -80,7 +80,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         rawLoadingLabel(0),
         renamingButtonGroup(0),
         rawLoadingButtonGroup(0),

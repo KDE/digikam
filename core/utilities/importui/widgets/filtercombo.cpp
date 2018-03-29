@@ -54,7 +54,7 @@ class FilterComboBox::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         KSharedConfig::Ptr config = KSharedConfig::openConfig();
         KConfigGroup group        = config->group(QLatin1String("Import Filters"));

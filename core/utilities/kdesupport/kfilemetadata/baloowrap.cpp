@@ -43,7 +43,7 @@ class BalooWrap::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         syncFromBalooToDigikam = false;
         syncFromDigikamToBaloo = false;

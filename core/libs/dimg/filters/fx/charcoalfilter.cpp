@@ -52,7 +52,7 @@ class CharcoalFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         globalProgress = 0;
         pencil         = 5.0;

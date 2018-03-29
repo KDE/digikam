@@ -53,7 +53,7 @@ class TagFolderView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         showFindDuplicateAction(true),
         showDeleteFaceTagsAction(false),
         resetIconAction(0),

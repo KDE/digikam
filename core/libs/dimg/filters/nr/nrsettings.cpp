@@ -56,7 +56,7 @@ class NRSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         luminanceBox(0),
         chrominanceRedBox(0),
         chrominanceBlueBox(0),

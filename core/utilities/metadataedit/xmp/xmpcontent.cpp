@@ -50,7 +50,7 @@ class XMPContent::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         writerCheck          = 0;
         headlineCheck        = 0;

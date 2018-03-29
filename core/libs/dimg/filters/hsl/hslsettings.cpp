@@ -51,7 +51,7 @@ class HSLSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         HSSelector(0),
         hInput(0),
         sInput(0),

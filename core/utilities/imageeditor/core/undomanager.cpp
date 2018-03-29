@@ -48,7 +48,7 @@ class UndoManager::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         origin(0),
         undoCache(0),
         core(0)

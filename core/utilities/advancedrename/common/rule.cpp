@@ -41,7 +41,7 @@ class Rule::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         useTokenMenu(false)
     {}
 

@@ -73,7 +73,7 @@ class ImagePreviewView::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         fullSize            = 0;
         scale               = 1.0;

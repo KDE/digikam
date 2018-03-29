@@ -85,7 +85,7 @@ class RGWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : currentlyAskingCancelQuestion(false),
           hideOptions(true),
           UIEnabled(true),

@@ -45,7 +45,7 @@ class ImageModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         preprocessor                = 0;
         keepFilePathCache           = false;

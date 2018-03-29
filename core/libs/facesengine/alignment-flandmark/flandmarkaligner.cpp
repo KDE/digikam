@@ -44,7 +44,7 @@ class FlandmarkAligner::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : model(0)
     {
     }

@@ -57,7 +57,7 @@ class MetadataHub::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         dateTimeStatus    = MetadataHub::MetadataInvalid;
         pickLabelStatus   = MetadataHub::MetadataInvalid;

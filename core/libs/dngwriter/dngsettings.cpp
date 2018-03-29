@@ -51,7 +51,7 @@ class DNGSettings::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         compressLossLess      = 0;
         previewModeCB         = 0;

@@ -60,7 +60,7 @@ class SearchResultModelHelper::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : model(0),
         selectionModel(0),
         imageModel(0),

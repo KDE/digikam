@@ -40,7 +40,7 @@ class VidPlayerDlg::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         player   = 0;
     }

@@ -39,7 +39,7 @@ class DProgressWdg::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

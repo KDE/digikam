@@ -50,7 +50,7 @@ class DSplashScreen::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         state               = 0;
         progressBarSize     = 3;

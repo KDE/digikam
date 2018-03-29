@@ -33,7 +33,7 @@ class DbEngineActionType::Private
 {
 
 public:
-    Private()
+    explicit Private()
         : isValue(false)
     {
     }

@@ -48,7 +48,7 @@ class DTrashItemModel::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         thumbSize(ThumbnailSize::Large),
         sortColumn(2),
         sortOrder(Qt::DescendingOrder),

@@ -54,7 +54,7 @@ class HealingCloneTool::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         radiusInput(0),
         blurPercent(0),
         previewWidget(0),

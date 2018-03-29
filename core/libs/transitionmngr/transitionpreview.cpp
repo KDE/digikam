@@ -41,7 +41,7 @@ class TransitionPreview::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         mngr          = 0;
         curTransition = TransitionMngr::None;

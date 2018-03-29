@@ -54,7 +54,7 @@ class AlbumSelectTreeView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         albumModificationHelper(0),
         newAlbumAction(0)
     {
@@ -119,7 +119,7 @@ class AlbumSelectWidget::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         albumModel(0),
         albumTreeView(0),
         albumModificationHelper(0),

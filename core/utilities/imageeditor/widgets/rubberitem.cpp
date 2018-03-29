@@ -31,7 +31,7 @@ class RubberItem::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         canvas = 0;
     }

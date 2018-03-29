@@ -68,7 +68,7 @@ class InsertTextTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         alignTextMode(0),
         defaultSizeFont(0),
         borderText(0),

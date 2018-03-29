@@ -39,7 +39,7 @@ class LoadSaveThread::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         running           = true;
         blockNotification = false;

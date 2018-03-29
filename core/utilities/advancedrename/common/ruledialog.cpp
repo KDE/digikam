@@ -46,7 +46,7 @@ class RuleDialog::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         buttons(0),
         container(0),
         dialogTitle(0),

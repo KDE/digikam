@@ -105,7 +105,7 @@ class DImgFilterManager::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : mutex(QMutex::Recursive)
     {
     }

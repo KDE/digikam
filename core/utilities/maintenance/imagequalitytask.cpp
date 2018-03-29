@@ -40,7 +40,7 @@ class ImageQualityTask::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : imgqsort(0),
           data(0)
     {

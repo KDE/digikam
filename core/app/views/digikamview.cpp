@@ -103,7 +103,7 @@ class DigikamView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         needDispatchSelection(false),
         useAlbumHistory(false),
         initialAlbumID(0),

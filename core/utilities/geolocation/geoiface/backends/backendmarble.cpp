@@ -83,7 +83,7 @@ class BackendMarble::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : marbleWidget(0),
         actionGroupMapTheme(0),
         actionGroupProjection(0),

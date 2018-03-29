@@ -76,7 +76,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         curves(0),
         lut(0),
         segmentMax(0),

@@ -59,7 +59,7 @@ class ScanDialog::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         progress   = 0;
         saneWidget = 0;

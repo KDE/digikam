@@ -46,7 +46,7 @@ class DCursorTracker::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         keepOpen      = false;
         enable        = true;

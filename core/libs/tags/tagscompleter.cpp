@@ -57,7 +57,7 @@ class TagCompleter::Private : public TaggingActionFactory::ConstraintInterface
 {
 public:
 
-    Private()
+    explicit Private()
         : model(0),
           supportingModel(0),
           filterModel(0)

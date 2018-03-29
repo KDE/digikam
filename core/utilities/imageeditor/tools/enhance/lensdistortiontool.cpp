@@ -59,7 +59,7 @@ class LensDistortionTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         maskPreviewLabel(0),
         mainInput(0),
         edgeInput(0),

@@ -40,7 +40,7 @@ class AbstractMarkerTiler::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : rootTile(0),
           isDirty(true)
     {
@@ -176,7 +176,7 @@ class Q_DECL_HIDDEN AbstractMarkerTiler::NonEmptyIterator::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : model(0),
           level(0),
           startIndex(),

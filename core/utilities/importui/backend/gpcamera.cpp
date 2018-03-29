@@ -151,7 +151,7 @@ class GPCamera::Private
 
 public:
 
-    Private()
+    explicit Private()
 #ifdef HAVE_GPHOTO2
         : cameraInitialized(false),
           camera(0),

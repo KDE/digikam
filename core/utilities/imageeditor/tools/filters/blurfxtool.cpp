@@ -55,7 +55,7 @@ class BlurFXTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         effectTypeLabel(0),
         distanceLabel(0),
         levelLabel(0),

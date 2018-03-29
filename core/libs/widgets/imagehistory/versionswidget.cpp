@@ -61,7 +61,7 @@ class VersionsWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : view(0),
           model(0),
           delegate(0),

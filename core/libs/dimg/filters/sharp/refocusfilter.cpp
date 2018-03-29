@@ -49,7 +49,7 @@ class RefocusFilter::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         matrixSize(5),
         radius(0.9),
         gauss(0.0),

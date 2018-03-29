@@ -67,7 +67,7 @@ class DMediaServerMngr::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         server = 0;
     }

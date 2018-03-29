@@ -66,7 +66,7 @@ class CurvesSettings::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         histoSegments(0),
         curvesBox(0)
     {}

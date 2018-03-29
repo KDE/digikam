@@ -51,7 +51,7 @@ class IPTCContent::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         headlineCheck        = 0;
         captionEdit          = 0;

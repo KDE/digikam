@@ -79,7 +79,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         buttons(0),
         logo(0),
         title(0),

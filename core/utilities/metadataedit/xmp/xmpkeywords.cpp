@@ -47,7 +47,7 @@ class XMPKeywords::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         addKeywordButton = 0;
         delKeywordButton = 0;

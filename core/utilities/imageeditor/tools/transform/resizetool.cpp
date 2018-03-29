@@ -81,7 +81,7 @@ class ResizeTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         orgWidth(0),
         orgHeight(0),
         prevW(0),

@@ -54,7 +54,7 @@ class FilmGrainSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         sizeLabel(0),
         label1(0),
         label2(0),

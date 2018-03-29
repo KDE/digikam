@@ -65,7 +65,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         correctionTools(0),
         previewWidget(0),
         gboxSettings(0)

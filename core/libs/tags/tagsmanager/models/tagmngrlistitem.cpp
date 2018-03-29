@@ -40,7 +40,7 @@ class ListItem::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         parentItem = 0;
     }

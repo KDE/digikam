@@ -40,7 +40,7 @@ class IOJobData::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : operation(Unknown),
           srcAlbum(0),
           destAlbum(0)

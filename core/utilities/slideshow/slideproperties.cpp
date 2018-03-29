@@ -49,7 +49,7 @@ class SlideProperties::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : maxStringLen(80)
     {
     }

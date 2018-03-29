@@ -46,7 +46,7 @@ class TagFilterView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         onRestoreTagFiltersAction(0),
         offRestoreTagFiltersAction(0),
         ignoreTagAction(0),

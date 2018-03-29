@@ -45,7 +45,7 @@ class TemplateManager::Private
 {
 public:
 
-    Private()
+    explicit Private()
         :mutex()
     {
         modified = false;

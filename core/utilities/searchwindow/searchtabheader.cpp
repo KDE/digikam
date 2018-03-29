@@ -129,7 +129,7 @@ class SearchTabHeader::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         newSearchWidget(0),
         saveAsWidget(0),
         editSimpleWidget(0),

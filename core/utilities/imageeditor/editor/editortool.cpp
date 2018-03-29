@@ -54,7 +54,7 @@ class EditorTool::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         initPreview(false),
         version(0),
         view(0),
@@ -370,7 +370,7 @@ class EditorToolThreaded::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         delFilter(true),
         currentRenderingMode(EditorToolThreaded::NoneRendering),
         threadedFilter(0),

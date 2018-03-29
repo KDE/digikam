@@ -56,7 +56,7 @@ class AdvancedMetadataTab::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         metadataType     = 0;
         operationType    = 0;

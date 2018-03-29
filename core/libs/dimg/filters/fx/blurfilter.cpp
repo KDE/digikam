@@ -42,7 +42,7 @@ class BlurFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         globalProgress = 0;
         radius         = 3;

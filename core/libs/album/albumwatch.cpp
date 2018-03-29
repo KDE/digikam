@@ -48,7 +48,7 @@ class AlbumWatch::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         dirWatch(0)
     {
     }

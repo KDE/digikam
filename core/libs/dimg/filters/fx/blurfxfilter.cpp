@@ -53,7 +53,7 @@ class BlurFXFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         blurFXType = ZoomBlur;
         distance   = 100;

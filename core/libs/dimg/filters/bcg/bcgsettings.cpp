@@ -52,7 +52,7 @@ class BCGSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         bInput(0),
         cInput(0),
         gInput(0)

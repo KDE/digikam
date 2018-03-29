@@ -158,7 +158,7 @@ class DbKeySelectorView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         selector(0),
         searchBar(0)
     {

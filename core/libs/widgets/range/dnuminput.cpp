@@ -53,7 +53,7 @@ class Q_DECL_HIDDEN DIntNumInput::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         defaultValue = 0;
         resetButton  = 0;
@@ -152,7 +152,7 @@ class Q_DECL_HIDDEN DDoubleNumInput::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         defaultValue = 0.0;
         resetButton  = 0;

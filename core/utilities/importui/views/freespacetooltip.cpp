@@ -36,7 +36,7 @@ class FreeSpaceToolTip::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         parent(0)
     {
     }

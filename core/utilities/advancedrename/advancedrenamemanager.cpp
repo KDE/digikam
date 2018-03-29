@@ -79,7 +79,7 @@ class AdvancedRenameManager::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         parser(0),
         widget(0),
         parserType(AdvancedRenameManager::DefaultParser),

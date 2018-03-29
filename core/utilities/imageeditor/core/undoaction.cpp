@@ -37,7 +37,7 @@ class UndoAction::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

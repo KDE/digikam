@@ -79,7 +79,7 @@ class Q_DECL_HIDDEN DAdjustableLabel::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         emode = Qt::ElideMiddle;
     }
@@ -442,7 +442,7 @@ class Q_DECL_HIDDEN DLabelExpander::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         clickLabel      = 0;
         containerWidget = 0;
@@ -646,7 +646,7 @@ class Q_DECL_HIDDEN DExpanderBox::Private
 {
 public:
 
-    Private(DExpanderBox* const box)
+    explicit Private(DExpanderBox* const box)
     {
         parent = box;
         vbox   = 0;

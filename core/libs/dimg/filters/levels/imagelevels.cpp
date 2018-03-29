@@ -85,7 +85,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         levels     = 0;
         lut        = 0;

@@ -96,7 +96,7 @@ class Q_DECL_HIDDEN DRawDecoderWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         autoBrightnessBox              = 0;
         sixteenBitsImage               = 0;

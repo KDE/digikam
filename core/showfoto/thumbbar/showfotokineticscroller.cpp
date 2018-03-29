@@ -64,7 +64,7 @@ class ShowfotoKineticScroller::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         scrollArea            = 0;
         isPressed             = false;

@@ -50,7 +50,7 @@ class JPEGSettings::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         JPEGGrid(0),
         labelJPEGcompression(0),
         labelWarning(0),

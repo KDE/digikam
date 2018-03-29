@@ -45,7 +45,7 @@ class IOJobsThread::Private
 
 public:
 
-    Private()
+    explicit Private()
         : jobsCount(0),
           isCanceled(false),
           jobData(0)

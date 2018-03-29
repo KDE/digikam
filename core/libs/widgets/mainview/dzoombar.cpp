@@ -57,7 +57,7 @@ class DZoomBar::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         zoomToFitButton = 0;
         zoomTo100Button = 0;

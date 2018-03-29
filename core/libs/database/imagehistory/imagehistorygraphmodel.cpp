@@ -243,7 +243,7 @@ class ImageHistoryGraphModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : mode(ImageHistoryGraphModel::CombinedTreeMode),
           rootItem(0)
     {

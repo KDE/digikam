@@ -48,7 +48,7 @@ class DbCleaner::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         thread(0),
         cleanThumbsDb(false),
         cleanFacesDb(false),

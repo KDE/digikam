@@ -66,7 +66,7 @@ class DConfigDlgWdgItem::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : checkable(false),
           checked(false),
           enabled(true)

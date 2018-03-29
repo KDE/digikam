@@ -41,7 +41,7 @@ class GPSImageItemDelegate::Private
 {
 public:
 
-    Private()
+    explicit Private()
     : imageList(0),
       thumbnailSize(60)
     {

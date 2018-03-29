@@ -272,7 +272,7 @@ class CollectionScanner::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         wantSignals(false),
         needTotalFiles(false),
         hints(0),

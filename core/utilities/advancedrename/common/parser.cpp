@@ -51,7 +51,7 @@ class Parser::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {}
 
     RulesList options;

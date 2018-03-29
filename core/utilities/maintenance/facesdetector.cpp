@@ -90,7 +90,7 @@ class FacesDetector::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         benchmark(false),
         total(0),
         progressValue(0),

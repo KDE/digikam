@@ -59,7 +59,7 @@ enum TrackColumns
 class TrackListModel::Private
 {
 public:
-    Private()
+    explicit Private()
       : trackManager(0)
     {
     }

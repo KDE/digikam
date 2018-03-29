@@ -38,7 +38,7 @@ class StateSavingObject::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         host(0),
         group(),
         prefix(),

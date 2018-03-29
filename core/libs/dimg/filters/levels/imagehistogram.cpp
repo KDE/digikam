@@ -61,7 +61,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         histogram     = 0;
         histoSegments = 0;

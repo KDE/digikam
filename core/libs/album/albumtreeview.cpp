@@ -140,7 +140,7 @@ class AbstractAlbumTreeView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         delegate(0),
         expandOnSingleClick(false),
         expandNewCurrent(false),
@@ -1276,7 +1276,7 @@ class AbstractCheckableAlbumTreeView::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

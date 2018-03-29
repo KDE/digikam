@@ -55,7 +55,7 @@ class AlbumSelectTabs::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         albumModel(0),
         albumTreeView(0),
         tagModel(0),

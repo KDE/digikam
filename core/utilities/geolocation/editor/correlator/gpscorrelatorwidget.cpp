@@ -72,7 +72,7 @@ class GPSCorrelatorWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : gpxLoadFilesButton(0),
         gpxFileList(0),
         offsetSign(0),

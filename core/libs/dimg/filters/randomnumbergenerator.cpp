@@ -134,7 +134,7 @@ public:
 
     enum { InitialSeed = 5489 }; // guaranteed constant initial seed, do not change
 
-    Private()
+    explicit Private()
         : seed(InitialSeed),
           engine(InitialSeed)
     {

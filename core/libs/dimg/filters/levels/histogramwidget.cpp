@@ -73,7 +73,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
         : sixteenBits(false),
           guideVisible(false),
           statisticsVisible(false),

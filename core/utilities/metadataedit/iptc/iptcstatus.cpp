@@ -48,7 +48,7 @@ class IPTCStatus::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         statusEdit              = 0;
         JobIDEdit               = 0;

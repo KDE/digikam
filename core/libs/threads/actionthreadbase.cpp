@@ -63,7 +63,7 @@ class Q_DECL_HIDDEN ActionThreadBase::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         running = false;
         pool    = 0;

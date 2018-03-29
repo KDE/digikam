@@ -98,7 +98,7 @@ class Q_DECL_HIDDEN ItemMarkerTiler::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : modelHelper(0),
         selectionModel(0),
         markerModel(0),

@@ -47,7 +47,7 @@ class KBImageLoader::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         sharedData    = 0;
         fileIndex     = 0;

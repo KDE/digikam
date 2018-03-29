@@ -42,7 +42,7 @@ class OpenCVEIGENFaceRecognizer::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : threshold(15000.0),
           loaded(false)
     {

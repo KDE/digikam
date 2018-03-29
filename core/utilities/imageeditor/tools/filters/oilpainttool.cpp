@@ -53,7 +53,7 @@ class OilPaintTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         brushSizeInput(0),
         smoothInput(0),
         previewWidget(0),

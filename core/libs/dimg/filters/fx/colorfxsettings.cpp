@@ -50,7 +50,7 @@ class ColorFXSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         stack(0),
         effectType(0),
         levelInput(0),

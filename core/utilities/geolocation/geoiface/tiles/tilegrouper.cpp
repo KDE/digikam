@@ -41,7 +41,7 @@ class TileGrouper::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : clustersDirty(true),
           currentBackend(0)
     {

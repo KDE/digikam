@@ -48,7 +48,7 @@ class SetupToolTip::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         showFileDateBox(0),
         showFileNameBox(0),
         showFileSizeBox(0),

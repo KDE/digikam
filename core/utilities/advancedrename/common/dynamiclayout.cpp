@@ -35,7 +35,7 @@ class DynamicLayout::Private
 {
 public:
 
-    Private(int hSpacing, int vSpacing)
+    explicit Private(int hSpacing, int vSpacing)
       : hSpace(hSpacing),
         vSpace(vSpacing),
         spaceX(0),

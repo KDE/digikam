@@ -48,7 +48,7 @@ class TagCheckView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         toggleAutoTags(TagCheckView::NoToggleAuto),
         checkNewTags(false),
         toggleAutoAction(0),

@@ -50,7 +50,7 @@ class SearchModificationHelper::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         dialogParent(0)
     {
     }

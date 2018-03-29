@@ -60,7 +60,7 @@ class TableView::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : columnProfiles(),
         thumbnailSize(),
         imageViewUtilities(0)

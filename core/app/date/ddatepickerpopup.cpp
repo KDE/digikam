@@ -78,7 +78,7 @@ class DDatePickerPopup::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         datePicker(0)
     {
     }

@@ -35,7 +35,7 @@ class Button::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         isPressed = false;
     }

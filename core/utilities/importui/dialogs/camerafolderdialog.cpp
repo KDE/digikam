@@ -53,7 +53,7 @@ class CameraFolderDialog::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         buttons(0),
         folderView(0)
     {

@@ -58,7 +58,7 @@ class SetupCategory::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         addCategoryButton(0),
         delCategoryButton(0),
         repCategoryButton(0),

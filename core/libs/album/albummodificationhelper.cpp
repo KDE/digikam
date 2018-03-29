@@ -56,7 +56,7 @@ namespace Digikam
 class AlbumModificationHelper::Private
 {
 public:
-    Private() :
+    explicit Private() :
         dialogParent(0)
     {
     }

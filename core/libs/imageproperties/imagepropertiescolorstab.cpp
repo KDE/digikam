@@ -79,7 +79,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         minInterv(0),
         maxInterv(0),
         labelMeanValue(0),

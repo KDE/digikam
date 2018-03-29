@@ -56,7 +56,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         waitingForKids(false),
         canceled(false),
         usesBusyIndicator(false),
@@ -336,7 +336,7 @@ class ProgressManager::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : uID(1000),
           waitingLoop(0)
     {

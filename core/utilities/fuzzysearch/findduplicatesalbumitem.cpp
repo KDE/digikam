@@ -43,7 +43,7 @@ class FindDuplicatesAlbumItem::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         hasThumb(false),
         album(0),
         itemCount(0)

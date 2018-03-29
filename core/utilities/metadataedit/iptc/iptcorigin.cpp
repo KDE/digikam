@@ -59,7 +59,7 @@ class IPTCOrigin::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         cityEdit               = 0;
         sublocationEdit        = 0;

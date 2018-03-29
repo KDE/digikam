@@ -49,7 +49,7 @@ class PGFSettings::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         PGFGrid             = 0;
         labelPGFcompression = 0;

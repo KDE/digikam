@@ -47,7 +47,7 @@ class MetadataSynchronizer::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         imageInfoJob(0),
         thread(0),
         direction(MetadataSynchronizer::WriteFromDatabaseToFile),

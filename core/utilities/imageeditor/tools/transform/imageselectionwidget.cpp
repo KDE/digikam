@@ -82,7 +82,7 @@ public:
         ResizingBottomRight
     };
 
-    Private() :
+    explicit Private() :
         drawGoldenSection(false),
         drawGoldenSpiralSection(false),
         drawGoldenSpiral(false),

@@ -94,7 +94,7 @@ class GreycstorationFilter::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         gfact(1.0),
         computationThreads(2),
         mode(GreycstorationFilter::Restore),

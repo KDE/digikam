@@ -49,7 +49,7 @@ class ImageIface::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         previewType(FullImage),
         originalWidth(0),
         originalHeight(0),

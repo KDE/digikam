@@ -58,7 +58,7 @@ class ImagePropertiesVersionsTab::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         versionsWidget       = 0;
         filtersHistoryWidget = 0;

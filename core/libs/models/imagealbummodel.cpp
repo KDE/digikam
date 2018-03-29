@@ -52,7 +52,7 @@ class ImageAlbumModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         jobThread               = 0;
         refreshTimer            = 0;

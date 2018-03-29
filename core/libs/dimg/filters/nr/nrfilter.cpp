@@ -79,7 +79,7 @@ class NRFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         for (int c = 0 ; c < 3; ++c)
         {

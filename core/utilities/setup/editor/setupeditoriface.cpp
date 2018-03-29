@@ -58,7 +58,7 @@ class SetupEditorIface::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         themebackgroundColor(0),
         expoIndicatorMode(0),
         expoPreview(0),

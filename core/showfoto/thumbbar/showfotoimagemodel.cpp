@@ -39,7 +39,7 @@ class ShowfotoImageModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         keepFileUrlCache            = false;
         refreshing                  = false;

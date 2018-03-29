@@ -43,7 +43,7 @@ class QueueToolTip::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         view(0),
         item(0)
     {

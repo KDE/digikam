@@ -66,7 +66,7 @@ class PresentationMainPage::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         sharedData         = 0;
         imagesFilesListBox = 0;

@@ -41,7 +41,7 @@ namespace Digikam
 
 struct DBinarySearch::Private
 {
-    Private()
+    explicit Private()
     {
         downloadLabel = 0;
     }

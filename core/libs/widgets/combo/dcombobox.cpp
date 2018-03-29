@@ -44,7 +44,7 @@ class Q_DECL_HIDDEN DComboBox::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         defaultIndex = 0;
         resetButton  = 0;

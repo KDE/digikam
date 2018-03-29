@@ -54,7 +54,7 @@ class SetupToolTip::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         cameraUseFileMetadata(false),
         showToolTipsBox(0),
         showFileNameBox(0),

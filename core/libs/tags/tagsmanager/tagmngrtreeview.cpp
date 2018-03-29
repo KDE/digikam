@@ -45,7 +45,7 @@ class TagMngrTreeView::Private
 {
 
 public:
-    Private()
+    explicit Private()
     {
         tagMngr = 0;
     }

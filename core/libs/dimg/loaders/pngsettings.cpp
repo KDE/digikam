@@ -48,7 +48,7 @@ class PNGSettings::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         PNGGrid             = 0;
         labelPNGcompression = 0;

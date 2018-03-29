@@ -90,7 +90,7 @@ class ScanController::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         running(false),
         needsInitialization(false),
         needsCompleteScan(false),

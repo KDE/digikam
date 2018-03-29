@@ -50,7 +50,7 @@ class IPTCCategories::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         addSubCategoryButton = 0;
         delSubCategoryButton = 0;

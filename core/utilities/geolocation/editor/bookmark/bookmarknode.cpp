@@ -43,7 +43,7 @@ class BookmarkNode::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         parent(0),
         type(BookmarkNode::Root)
     {

@@ -86,7 +86,7 @@ class HTMLWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : parent(0),
         child(0),
         hpage(0),

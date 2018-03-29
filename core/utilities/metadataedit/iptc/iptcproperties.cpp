@@ -56,7 +56,7 @@ class IPTCProperties::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         dateReleasedSel     = 0;
         dateExpiredSel      = 0;

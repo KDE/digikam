@@ -57,7 +57,7 @@ class ColorLabelWidget::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         colorBtns  = 0;
         btnNone    = 0;
@@ -464,7 +464,7 @@ class ColorLabelSelector::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         clw = 0;
     }

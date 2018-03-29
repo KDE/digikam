@@ -47,7 +47,7 @@ class VersioningPromptUserSaveDialog::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : clicked(QDialogButtonBox::NoButton),
           buttons(0)
     {

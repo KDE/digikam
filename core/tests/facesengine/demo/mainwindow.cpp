@@ -51,7 +51,7 @@ class MainWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         ui            = 0;
         myScene       = 0;

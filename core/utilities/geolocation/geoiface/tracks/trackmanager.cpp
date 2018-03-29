@@ -50,7 +50,7 @@ class Q_DECL_HIDDEN TrackManager::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : trackLoadFutureWatcher(0),
         trackLoadFuture(),
         trackList(),

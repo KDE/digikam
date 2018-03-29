@@ -42,7 +42,7 @@ namespace Digikam
 class DCategoryDrawer::Private
 {
 public:
-    Private(DCategorizedView* const view)
+    explicit Private(DCategorizedView* const view)
         : view(view)
     {
     }

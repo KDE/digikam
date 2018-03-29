@@ -52,7 +52,7 @@ class PreviewThreadWrapper::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
     }
 
@@ -156,7 +156,7 @@ class PreviewListItem::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         busy(false),
         id(0)
     {
@@ -217,7 +217,7 @@ class PreviewList::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         progressCount(0),
         progressTimer(0),
         wrapper(0)

@@ -77,7 +77,7 @@ class SketchWidget::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         isClear(true),
         drawing(false),
         penWidth(10),

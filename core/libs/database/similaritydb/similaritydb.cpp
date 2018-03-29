@@ -44,7 +44,7 @@ class SimilarityDb::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         db(0)
     {
     }

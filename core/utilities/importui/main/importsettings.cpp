@@ -45,7 +45,7 @@ class ImportSettings::Private
 {
 
 public:
-    Private() :
+    explicit Private() :
         iconShowName(true),
         iconShowSize(false),
         iconShowDate(true),

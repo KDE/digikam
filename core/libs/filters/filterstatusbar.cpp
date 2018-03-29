@@ -55,7 +55,7 @@ public:
 
 public:
 
-    Private()
+    explicit Private()
     {
         status      = None;
         info        = 0;

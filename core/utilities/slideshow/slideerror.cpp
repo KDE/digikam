@@ -43,7 +43,7 @@ class SlideError::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         errorMsg(0)
     {
     }

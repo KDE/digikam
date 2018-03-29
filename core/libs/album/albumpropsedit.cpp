@@ -92,7 +92,7 @@ class AlbumPropsEdit::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         buttons(0),
         categoryCombo(0),
         parentCombo(0),

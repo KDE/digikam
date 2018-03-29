@@ -63,7 +63,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         labelPreset(0),
         useCustom(0),
         customLength(0),

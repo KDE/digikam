@@ -58,7 +58,7 @@ class TimeAdjustSettings::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         useSettingsBox         = 0;
         adjustSettingsBox      = 0;

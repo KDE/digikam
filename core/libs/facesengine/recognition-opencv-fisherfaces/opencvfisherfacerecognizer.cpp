@@ -42,7 +42,7 @@ class OpenCVFISHERFaceRecognizer::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : threshold(25000.0),
           loaded(false)
     {

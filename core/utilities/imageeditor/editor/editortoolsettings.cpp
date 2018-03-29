@@ -62,7 +62,7 @@ class EditorToolSettings::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         scaleBG(0),
         linHistoButton(0),
         logHistoButton(0),

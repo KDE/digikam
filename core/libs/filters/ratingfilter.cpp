@@ -48,7 +48,7 @@ class RatingFilterWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         dirty          = false;
         ratingTracker  = 0;
@@ -194,7 +194,7 @@ class RatingFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         ratingWidget   = 0;
         optionsBtn     = 0;

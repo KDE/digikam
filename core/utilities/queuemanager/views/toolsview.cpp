@@ -48,7 +48,7 @@ class ToolsView::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         baseTools(0),
         historyView(0),
         workflow(0)

@@ -62,7 +62,7 @@ class PresentationAudioListItem::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         mediaObject = 0;
     }

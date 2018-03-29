@@ -77,7 +77,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         histoSegments(0),
         resetButton(0),
         pickWhitePoint(0),

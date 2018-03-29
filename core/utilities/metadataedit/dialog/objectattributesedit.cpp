@@ -50,7 +50,7 @@ class ObjectAttributesEdit::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         addValueButton = 0;
         delValueButton = 0;

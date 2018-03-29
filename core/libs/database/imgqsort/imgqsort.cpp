@@ -55,7 +55,7 @@ class ImgQSort::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         clusterCount(30),                   //used for k-means clustering algorithm in noise detection
         size(512)
     {

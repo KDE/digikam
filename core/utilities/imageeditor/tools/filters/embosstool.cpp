@@ -52,7 +52,7 @@ class EmbossTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         depthInput(0),
         previewWidget(0),
         gboxSettings(0)

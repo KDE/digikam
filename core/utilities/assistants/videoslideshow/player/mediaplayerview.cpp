@@ -123,7 +123,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         errorView(0),
         playerView(0),
         prevAction(0),

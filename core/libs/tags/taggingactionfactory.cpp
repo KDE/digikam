@@ -33,7 +33,7 @@ namespace Digikam
 class TaggingActionFactory::Private
 {
 public:
-    Private()
+    explicit Private()
         : parentTagId(0), // 0 means toplevel tag
           nameMatchMode(MatchStartingWithFragment),
           constraintInterface(0),

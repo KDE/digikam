@@ -45,7 +45,7 @@ class DFontSelect::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         space(0),
         label(0),
         chooseFontButton(0),

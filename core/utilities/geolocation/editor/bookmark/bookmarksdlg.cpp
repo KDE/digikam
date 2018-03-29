@@ -66,7 +66,7 @@ class AddBookmarkDialog::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         manager(0),
         proxyModel(0),
         location(0),
@@ -185,7 +185,7 @@ class BookmarksDialog::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         manager(0),
         bookmarksModel(0),
         proxyModel(0),

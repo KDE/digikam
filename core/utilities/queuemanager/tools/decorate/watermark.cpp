@@ -89,7 +89,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         textSettingsGroupBox(0),
         imageSettingsGroupBox(0),
         useAbsoluteImageSizeGroupBox(0),

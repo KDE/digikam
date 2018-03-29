@@ -53,7 +53,7 @@ class DLogoAction::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         alignOnright  = true;
         progressTimer = 0;

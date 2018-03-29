@@ -39,7 +39,7 @@ class ImageComments::Private : public QSharedData
 {
 public:
 
-    Private() :
+    explicit Private() :
         id(-1),
         unique(ImageComments::UniquePerLanguage)
     {

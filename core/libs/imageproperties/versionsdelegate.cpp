@@ -53,7 +53,7 @@ class VersionsDelegate::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : categoryExtraSpacing(6),
           filterItemExtraSpacing(4),
           animationState(0),

@@ -65,7 +65,7 @@ class ColorCorrectionDlg::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         imageProfileTitle(0),
         imageProfileDesc(0),
         previewTarget(0),

@@ -111,7 +111,7 @@ class ChangeBookmarkCommand::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         manager(0),
         type(Url),
         node(0)
@@ -201,7 +201,7 @@ class BookmarksModel::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         manager(0),
         endMacro(false)
     {
@@ -653,7 +653,7 @@ class BookmarksManager::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         loaded(false),
         bookmarkRootNode(0),
         bookmarkModel(0)

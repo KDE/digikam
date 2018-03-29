@@ -49,7 +49,7 @@ class SlideToolBar::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         playBtn(0),
         stopBtn(0),
         nextBtn(0),

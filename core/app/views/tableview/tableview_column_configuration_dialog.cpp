@@ -50,7 +50,7 @@ class TableViewConfigurationDialog::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : columnIndex(0),
         buttons(0),
         columnObject(0),

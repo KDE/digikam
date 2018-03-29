@@ -58,7 +58,7 @@ class VidSlideVideoPage::Private
 {
 public:
 
-    Private(QWizard* const dialog)
+    explicit Private(QWizard* const dialog)
       : framesVal(0),
         typeVal(0),
         bitrateVal(0),

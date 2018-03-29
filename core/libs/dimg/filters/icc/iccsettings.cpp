@@ -63,7 +63,7 @@ class IccSettings::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : configGroup(QLatin1String("Color Management"))
     {
     }

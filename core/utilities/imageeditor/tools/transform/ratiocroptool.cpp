@@ -69,7 +69,7 @@ class RatioCropTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         originalIsLandscape(false),
         customLabel(0),
         orientLabel(0),

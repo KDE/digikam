@@ -61,7 +61,7 @@ public:
         XMP
     };
 
-    Private() :
+    explicit Private() :
         exifWidget(0),
         makernoteWidget(0),
         iptcWidget(0),

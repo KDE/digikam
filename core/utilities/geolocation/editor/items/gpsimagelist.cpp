@@ -49,7 +49,7 @@ class GPSImageList::Private
 {
 public:
 
-    Private()
+    explicit Private()
     : editEnabled(true),
       dragEnabled(false),
       model(0),

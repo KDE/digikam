@@ -55,7 +55,7 @@ class EXIFDevice::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         makeCheck                = 0;
         modelCheck               = 0;

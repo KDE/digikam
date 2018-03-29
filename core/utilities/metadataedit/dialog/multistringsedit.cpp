@@ -43,7 +43,7 @@ class MultiStringsEdit::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         addValueButton = 0;
         delValueButton = 0;

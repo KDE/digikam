@@ -48,7 +48,7 @@ class FilmGrainFilter::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         div(0.0),
         leadLumaNoise(1.0),
         leadChromaBlueNoise(1.0),

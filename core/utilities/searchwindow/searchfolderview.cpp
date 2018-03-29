@@ -43,7 +43,7 @@ class NormalSearchTreeView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         newAction(0),
         editAction(0)
     {

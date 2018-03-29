@@ -49,7 +49,7 @@ class ImageQualitySorter::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         mode(ImageQualitySorter::NonAssignedItems),
         thread(0)
     {

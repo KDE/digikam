@@ -81,7 +81,7 @@ class CoreDbSchemaUpdater::Private
 
 public:
 
-    Private()
+    explicit Private()
       : setError(false),
         backend(0),
         albumDB(0),

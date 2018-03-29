@@ -53,7 +53,7 @@ class TrashView::Private
 
 public:
 
-    Private()
+    explicit Private()
         : model(0),
           thumbDelegate(0),
           mainLayout(0),

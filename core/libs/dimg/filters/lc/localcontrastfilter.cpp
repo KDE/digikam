@@ -44,7 +44,7 @@ class LocalContrastFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         current_process_power_value = 20.0;
     }

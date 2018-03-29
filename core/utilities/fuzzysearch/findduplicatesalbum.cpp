@@ -46,7 +46,7 @@ class FindDuplicatesAlbum::Private
 
 public:
 
-    Private()
+    explicit Private()
         : iconSize(64)
     {
         thumbLoadThread = 0;

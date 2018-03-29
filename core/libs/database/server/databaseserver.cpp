@@ -55,7 +55,7 @@ class DatabaseServer::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         app             = 0;
         databaseProcess = 0;

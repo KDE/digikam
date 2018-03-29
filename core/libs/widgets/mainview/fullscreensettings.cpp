@@ -45,7 +45,7 @@ class FullScreenSettings::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         options      = FS_NONE;
         hideToolBars = 0;

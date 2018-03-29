@@ -71,7 +71,7 @@ class TagsManager::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         tagPixmap        = 0;
         searchBar        = 0;

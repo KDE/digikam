@@ -45,7 +45,7 @@ class MetadataHubMngr::Private
 {
 public:
 
-    Private(): mutex()
+    explicit Private(): mutex()
     {
     }
 

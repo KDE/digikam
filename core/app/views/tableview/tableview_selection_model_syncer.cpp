@@ -40,7 +40,7 @@ class TableViewSelectionModelSyncer::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : syncing(false)
     {
     }

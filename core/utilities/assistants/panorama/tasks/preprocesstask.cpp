@@ -53,7 +53,7 @@ class PreProcessTask::Private
 {
 public:
 
-    Private(PanoramaPreprocessedUrls& urls, const QUrl& url)
+    explicit Private(PanoramaPreprocessedUrls& urls, const QUrl& url)
         : fileUrl(url),
           preProcessedUrl(urls),
           observer(0)

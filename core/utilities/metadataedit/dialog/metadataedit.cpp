@@ -62,7 +62,7 @@ class MetadataEditDialog::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         isReadOnly      = false;
         tabWidget       = 0;

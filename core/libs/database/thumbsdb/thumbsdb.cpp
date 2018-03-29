@@ -44,7 +44,7 @@ class ThumbsDb::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         db(0)
     {
     }

@@ -66,7 +66,7 @@ class AlbumThumbnailLoader::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         iconSize             = ApplicationSettings::instance()->getTreeViewIconSize();
         minBlendSize         = 20;

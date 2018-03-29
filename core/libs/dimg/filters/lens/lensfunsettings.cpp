@@ -46,7 +46,7 @@ class LensFunSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         filterCCA(0),
         filterVIG(0),
         filterDST(0),

@@ -46,7 +46,7 @@ class MaintenanceTool::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         notification = true;
     }

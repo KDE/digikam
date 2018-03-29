@@ -42,7 +42,7 @@ class SyncJob::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         waitingLoop(0),
         thumbnail(0),
         album(0)

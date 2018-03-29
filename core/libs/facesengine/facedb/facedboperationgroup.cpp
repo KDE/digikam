@@ -39,7 +39,7 @@ class FaceDbOperationGroup::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : access(0),
           acquired(false),
           maxTime(0)

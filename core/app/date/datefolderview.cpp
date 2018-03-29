@@ -46,7 +46,7 @@ class DateFolderView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         active(false),
         selected(),
         dateTreeView(0),

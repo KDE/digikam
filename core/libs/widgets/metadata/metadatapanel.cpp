@@ -168,7 +168,7 @@ class MetadataPanel::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         tab                = 0;
         exifViewerConfig   = 0;

@@ -614,7 +614,7 @@ class AbstractCountingAlbumModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         showCount = false;
     }
@@ -857,7 +857,7 @@ class AbstractCheckableAlbumModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : staticVectorContainingCheckStateRole(1, Qt::CheckStateRole)
     {
         extraFlags         = 0;

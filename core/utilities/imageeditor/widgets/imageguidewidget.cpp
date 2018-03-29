@@ -56,7 +56,7 @@ class ImageGuideWidget::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         sixteenBit(false),
         focus(false),
         spotVisible(false),

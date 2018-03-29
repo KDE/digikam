@@ -92,7 +92,7 @@ public:
         INFOS
     };
 
-    Private()
+    explicit Private()
     {
         modified                   = false;
         ignoreImageAttributesWatch = false;

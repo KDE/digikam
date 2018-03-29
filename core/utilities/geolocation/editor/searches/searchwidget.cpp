@@ -81,7 +81,7 @@ class SearchWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         gpsBookmarkOwner                              = 0;
         actionBookmark                                = 0;

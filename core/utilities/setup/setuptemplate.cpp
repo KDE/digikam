@@ -54,7 +54,7 @@ class SetupTemplate::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         addButton(0),
         delButton(0),
         repButton(0),

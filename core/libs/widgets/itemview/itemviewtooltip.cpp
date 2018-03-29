@@ -39,7 +39,7 @@ class ItemViewToolTip::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         view            = 0;
         filterInstalled = false;

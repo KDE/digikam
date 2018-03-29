@@ -63,7 +63,7 @@ class FreeRotationTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         configGroupName(QLatin1String("freerotation Tool")),
 
         newHeightLabel(0),

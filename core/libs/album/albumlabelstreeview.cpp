@@ -60,7 +60,7 @@ class AlbumLabelsTreeView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         ratings(0),
         picks(0),
         colors(0),
@@ -506,7 +506,7 @@ class AlbumLabelsSearchHandler::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         treeWidget(0),
         dbJobThread(0),
         restoringSelectionFromHistory(0),

@@ -40,7 +40,7 @@ class CameraFolderView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         cameraName(QLatin1String("Camera")),
         virtualFolder(0),
         rootFolder(0)

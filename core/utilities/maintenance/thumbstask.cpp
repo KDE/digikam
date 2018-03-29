@@ -40,7 +40,7 @@ class ThumbsTask::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : catcher(0),
           data(0)
     {

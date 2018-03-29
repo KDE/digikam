@@ -48,7 +48,7 @@ class DProgressDlg::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         logo(0),
         title(0),
         label(0),

@@ -55,7 +55,7 @@ class IPTCEnvelope::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         unoIDCheck       = 0;
         unoIDEdit        = 0;

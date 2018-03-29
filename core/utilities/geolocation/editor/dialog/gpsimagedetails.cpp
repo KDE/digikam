@@ -61,7 +61,7 @@ class GPSImageDetails::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : imageModel(0),
           previewManager(0),
           cbCoordinates(0),

@@ -38,7 +38,7 @@ class ActionThread::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

@@ -63,7 +63,7 @@ class DeleteItem::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         hasThumb = false;
     }
@@ -156,7 +156,7 @@ class DeleteItemList::Private
 
 public:
 
-    Private()
+    explicit Private()
         : iconSize(64)
     {
         thumbLoadThread = 0;
@@ -233,7 +233,7 @@ class DeleteWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         checkBoxStack   = 0;
         warningIcon     = 0;
@@ -466,7 +466,7 @@ class DeleteDialog::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         saveShouldDeleteUserPreference = true;
         saveDoNotShowAgainTrash        = false;

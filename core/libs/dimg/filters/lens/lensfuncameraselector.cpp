@@ -52,7 +52,7 @@ class LensFunCameraSelector::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : configUseMetadata(QLatin1String("UseMetadata")),
           configCameraModel(QLatin1String("CameraModel")),
           configCameraMake(QLatin1String("CameraMake")),

@@ -51,7 +51,7 @@ class ScriptingSettings::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : scriptLabel(0),
           script(0),
           tooltipDialog(0),

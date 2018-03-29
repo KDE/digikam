@@ -62,7 +62,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         messageView(0),
         settingsViewIcon(0),
         settingsViewTitle(0),

@@ -55,7 +55,7 @@ class AlbumCustomizer::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : autoAlbumDateCheck(0),
           autoAlbumExtCheck(0),
           folderDateLabel(0),

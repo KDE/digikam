@@ -50,7 +50,7 @@ class TableViewTreeView::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : headerContextMenuActiveColumn(-1),
         actionHeaderContextMenuRemoveColumn(0),
         actionHeaderContextMenuConfigureColumn(0),

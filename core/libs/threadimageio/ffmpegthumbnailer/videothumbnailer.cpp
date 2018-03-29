@@ -50,7 +50,7 @@ class VideoThumbnailer::Private
 {
 public:
 
-    Private()
+    explicit Private()
       :  SMART_FRAME_ATTEMPTS(25)
     {
         thumbnailSize       = 256;

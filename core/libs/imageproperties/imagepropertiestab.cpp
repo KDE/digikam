@@ -70,7 +70,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         file(0),
         folder(0),
         modifiedDate(0),

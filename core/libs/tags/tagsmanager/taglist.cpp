@@ -46,7 +46,7 @@ class TagList::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         addButton       = 0;
         tagList         = 0;

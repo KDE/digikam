@@ -152,7 +152,7 @@ class SearchView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         needAnimationForReadIn(false),
         layout(0),
         timeline(0),

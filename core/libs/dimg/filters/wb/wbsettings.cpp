@@ -84,7 +84,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         DefaultTemperature(DaylightD65),
         pickTemperature(0),
         autoAdjustExposure(0),

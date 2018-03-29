@@ -41,7 +41,7 @@ class MyTreeWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : dragStartPos()
     {
     }

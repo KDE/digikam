@@ -67,7 +67,7 @@ class BackendOsmRG::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : jobs(),
         errorMessage()
     {

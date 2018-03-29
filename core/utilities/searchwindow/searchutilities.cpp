@@ -176,7 +176,7 @@ class CustomStepsDoubleSpinBox::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
       beforeInitialValue(true),
       initialValue(0),
       smallerStep(0),
@@ -347,7 +347,7 @@ class CustomStepsIntSpinBox::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
       beforeInitialValue(true),
       initialValue(0),
       smallerStep(0),

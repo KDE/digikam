@@ -49,7 +49,7 @@ class XMPCredits::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         bylineEdit       = 0;
         bylineTitleEdit  = 0;

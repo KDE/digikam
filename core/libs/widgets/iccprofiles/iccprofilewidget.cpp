@@ -106,7 +106,7 @@ class ICCProfileWidget::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         cieTongue = 0;
     }

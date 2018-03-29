@@ -53,7 +53,7 @@ class IccProfilesSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         profilesBox(0)
     {
         favoriteProfiles.setMaxCost(10);

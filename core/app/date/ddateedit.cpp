@@ -100,7 +100,7 @@ class DDateEdit::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         readOnly(false),
         textChanged(false),
         discardNextMousePress(false),

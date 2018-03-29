@@ -54,7 +54,7 @@ class ImagePropertiesSideBarCamGui::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         dirtyMetadataTab(false),
         dirtyCameraItemTab(false),
         dirtyGpsTab(false),

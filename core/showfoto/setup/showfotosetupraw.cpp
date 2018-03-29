@@ -39,7 +39,7 @@ class SetupRaw::Private
 public:
 
 
-    Private() :
+    explicit Private() :
         tab(0),
         raw(0)
     {

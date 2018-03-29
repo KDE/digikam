@@ -57,7 +57,7 @@ class SetupMime::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         imageFileFilterLabel(0),
         movieFileFilterLabel(0),
         audioFileFilterLabel(0),

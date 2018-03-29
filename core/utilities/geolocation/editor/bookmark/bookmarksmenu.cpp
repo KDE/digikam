@@ -38,7 +38,7 @@ class ModelMenu::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         maxRows(7),
         firstSeparator(-1),
         maxWidth(-1),
@@ -276,7 +276,7 @@ class BookmarksMenu::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         manager(0)
     {
     }

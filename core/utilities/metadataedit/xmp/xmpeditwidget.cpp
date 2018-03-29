@@ -59,7 +59,7 @@ class XMPEditWidget::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         modified        = false;
         isReadOnly      = false;

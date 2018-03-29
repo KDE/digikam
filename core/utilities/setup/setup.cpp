@@ -61,7 +61,7 @@ class Setup::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         page_database(0),
         page_collections(0),
         page_albumView(0),

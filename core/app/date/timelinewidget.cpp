@@ -59,7 +59,7 @@ public :
 
 public:
 
-    Private() :
+    explicit Private() :
         validMouseEvent(false),
         selMouseEvent(false),
         maxCountByDay(1),

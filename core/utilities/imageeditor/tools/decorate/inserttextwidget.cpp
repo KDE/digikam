@@ -45,7 +45,7 @@ class InsertTextWidget::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         currentMoving(false),
         textBorder(false),
         textTransparent(false),

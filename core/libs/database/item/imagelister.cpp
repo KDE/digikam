@@ -95,7 +95,7 @@ class ImageLister::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         recursive               = true;
         listOnlyAvailableImages = true;

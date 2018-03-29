@@ -404,7 +404,7 @@ class SearchGroupLabel::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
       extended(false),
       groupOp(SearchXml::And),
       fieldOp(SearchXml::And),

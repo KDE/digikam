@@ -57,7 +57,7 @@ class PerspectiveTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         newWidthLabel(0),
         newHeightLabel(0),
         topLeftAngleLabel(0),

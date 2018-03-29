@@ -38,7 +38,7 @@ class MaintenanceData::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

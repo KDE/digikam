@@ -50,7 +50,7 @@ class Task::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         cancel = false;
         tool   = 0;

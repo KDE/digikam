@@ -39,7 +39,7 @@ class EditorStackView::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         toolView(0),
         canvas(0)
     {

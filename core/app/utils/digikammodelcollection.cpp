@@ -40,7 +40,7 @@ class DigikamModelCollection::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         albumModel        = 0;
         tagModel          = 0;

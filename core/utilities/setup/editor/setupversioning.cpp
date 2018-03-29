@@ -55,7 +55,7 @@ class SetupVersioning::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : tab(0),
           nonDestructivePanel(0),
           workspaceGB(0),

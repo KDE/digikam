@@ -55,7 +55,7 @@ class FreeRotationSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         antialiasInput(0),
         angleInput(0),
         fineAngleInput(0),

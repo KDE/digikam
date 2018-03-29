@@ -70,7 +70,7 @@ class StackedView::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         dockArea           = 0;
         splitter           = 0;

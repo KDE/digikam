@@ -37,7 +37,7 @@ class MetadataTask::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : tagsOnly(false),
           direction(MetadataSynchronizer::WriteFromDatabaseToFile),
           data(0)

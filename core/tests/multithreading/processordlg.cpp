@@ -49,7 +49,7 @@ class ProcessorDlg::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         count        = 0;
         page         = 0;

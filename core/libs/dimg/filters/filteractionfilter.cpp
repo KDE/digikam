@@ -47,7 +47,7 @@ class FilterActionFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         continueOnError = false;
     }

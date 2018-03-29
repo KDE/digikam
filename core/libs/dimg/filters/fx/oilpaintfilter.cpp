@@ -49,7 +49,7 @@ class OilPaintFilter::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         brushSize(1),
         smoothness(30),
         globalProgress(0)

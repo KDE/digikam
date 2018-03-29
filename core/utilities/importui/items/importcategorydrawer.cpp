@@ -46,7 +46,7 @@ class ImportCategoryDrawer::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         lowerSpacing = 0;
         view         = 0;

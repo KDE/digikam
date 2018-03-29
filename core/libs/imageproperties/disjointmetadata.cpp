@@ -127,12 +127,12 @@ class DisjointMetadata::Private : public DisjointMetadataDataFields
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 
     // use the automatic copy constructor
-    Private(const Private& other)
+    explicit Private(const Private& other)
         : DisjointMetadataDataFields(other)
     {
     }

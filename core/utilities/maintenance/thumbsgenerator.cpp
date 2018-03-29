@@ -56,7 +56,7 @@ class ThumbsGenerator::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         rebuildAll(true),
         thread(0)
     {

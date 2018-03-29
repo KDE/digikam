@@ -40,7 +40,7 @@ class LensFunFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         iface    = 0;
         modifier = 0;

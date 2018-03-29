@@ -41,7 +41,7 @@ class FaceDetector::Private : public QSharedData
 {
 public:
 
-    Private()
+    explicit Private()
         : m_backend(0)
     {
     }

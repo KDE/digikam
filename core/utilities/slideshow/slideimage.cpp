@@ -43,7 +43,7 @@ class SlideImage::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         deskSize(1024),
         previewThread(0),
         previewPreloadThread(0)

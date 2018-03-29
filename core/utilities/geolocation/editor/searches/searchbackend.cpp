@@ -45,7 +45,7 @@ class SearchBackend::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : results(),
         netReply(0),
         runningBackend(),

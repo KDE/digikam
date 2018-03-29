@@ -31,7 +31,7 @@ class SimpleTreeModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : rootItem(0),
           columnCount(1)
     {

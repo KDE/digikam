@@ -61,7 +61,7 @@ class FaceDb::Private
 {
 
 public:
-    Private()
+    explicit Private()
         : db(0)
     {
     }

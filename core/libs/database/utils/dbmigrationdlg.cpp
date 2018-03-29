@@ -63,7 +63,7 @@ class DatabaseCopyThread::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 
@@ -99,7 +99,7 @@ class DatabaseMigrationDialog::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         fromDatabaseSettingsWidget(0),
         toDatabaseSettingsWidget(0),
         migrateButton(0),

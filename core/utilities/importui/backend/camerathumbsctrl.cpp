@@ -69,7 +69,7 @@ class CameraThumbsCtrl::Private
 
 public:
 
-    Private()
+    explicit Private()
         :
 #ifdef HAVE_MEDIAPLAYER
           videoThumbs(0),

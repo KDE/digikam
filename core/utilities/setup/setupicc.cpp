@@ -73,7 +73,7 @@ class SetupICC::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         iccFolderLabel(0),
         enableColorManagement(0),
         defaultSRGBConvert(0),

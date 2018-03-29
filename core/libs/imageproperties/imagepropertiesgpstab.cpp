@@ -69,7 +69,7 @@ class ImagePropertiesGPSTab::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         altLabel(0),
         latLabel(0),
         lonLabel(0),

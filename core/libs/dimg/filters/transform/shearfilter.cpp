@@ -45,7 +45,7 @@ class ShearFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         antiAlias       = true;
         orgW            = 0;

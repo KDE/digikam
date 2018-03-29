@@ -57,7 +57,7 @@ class NamespaceEditDlg::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         buttons              = 0;
         create               = 0;

@@ -76,7 +76,7 @@ public:
 
 public:
 
-    Private():
+    explicit Private():
         textureType(0),
         blendGain(0),
         previewWidget(0),

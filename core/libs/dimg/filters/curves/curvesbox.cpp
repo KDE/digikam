@@ -60,7 +60,7 @@ class CurvesBox::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         sixteenBit(false),
         channel(LuminosityChannel),
         curveFree(0),

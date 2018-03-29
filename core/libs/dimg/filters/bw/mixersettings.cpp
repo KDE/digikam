@@ -58,7 +58,7 @@ class MixerSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         currentChannel(RedChannel),
         monochromeTips(0),
         totalPercents(0),

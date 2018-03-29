@@ -42,7 +42,7 @@ class BWSepiaFilter::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         redAttn(0.0),
         greenAttn(0.0),
         blueAttn(0.0),

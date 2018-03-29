@@ -51,7 +51,7 @@ class BorderTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         configGroupName(QLatin1String("border Tool")),
 
         gboxSettings(0),

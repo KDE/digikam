@@ -62,7 +62,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         comboBox(0),
         textEdit(0),
         changeSettings(true)

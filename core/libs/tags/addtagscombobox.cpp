@@ -48,7 +48,7 @@ class AddTagsComboBox::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         lineEdit   = 0;
     }

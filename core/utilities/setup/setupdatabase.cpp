@@ -72,7 +72,7 @@ class SetupDatabase::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         databaseWidget(0),
         updateBox(0),
         hashesButton(0),

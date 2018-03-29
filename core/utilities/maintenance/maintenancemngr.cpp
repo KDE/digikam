@@ -57,7 +57,7 @@ class MaintenanceMngr::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         running               = false;
         newItemsFinder        = 0;

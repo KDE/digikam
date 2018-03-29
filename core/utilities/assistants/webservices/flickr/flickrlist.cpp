@@ -424,7 +424,7 @@ class FlickrListViewItem::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         is23        = false;
         isPublic    = true;

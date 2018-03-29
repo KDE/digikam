@@ -50,7 +50,7 @@ class SearchResultModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         markerNormalUrl   = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                                 QString::fromLatin1("digikam/geolocationedit/searchmarker-normal.png")));

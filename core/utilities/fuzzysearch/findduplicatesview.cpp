@@ -66,7 +66,7 @@ class FindDuplicatesView::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         includeAlbumsLabel      = 0;
         listView                = 0;

@@ -61,7 +61,7 @@ class FileSaveOptionsBox::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         noneOptions(0),
         noneGrid(0),
         labelNone(0),

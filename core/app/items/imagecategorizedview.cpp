@@ -81,7 +81,7 @@ class ImageCategorizedView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         model(0),
         filterModel(0),
         delegate(0),

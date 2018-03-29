@@ -48,7 +48,7 @@ class DNGConvertSettings::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : convertDng(0),
           dngSettings(0)
     {

@@ -60,7 +60,7 @@ class RenameCustomizer::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         startIndex(1),
         buttonGroup(0),
         renameDefaultCase(0),

@@ -45,7 +45,7 @@ class Q_DECL_HIDDEN AltLangStrEdit::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         valueEdit       = 0;
         titleLabel      = 0;

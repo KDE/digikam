@@ -72,7 +72,7 @@ public:
 
 public:
 
-    Private() :
+    explicit Private() :
         bwFilters(0),
         bwFilm(0),
         bwTone(0),

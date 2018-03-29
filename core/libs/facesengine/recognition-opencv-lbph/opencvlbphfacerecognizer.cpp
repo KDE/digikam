@@ -38,7 +38,7 @@ class OpenCVLBPHFaceRecognizer::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : threshold(100),
           loaded(false)
     {

@@ -67,7 +67,7 @@ public:
         ResizingBottomRight
     };
 
-    Private() :
+    explicit Private() :
         antiAliasing(false),
         drawWhileMoving(true),
         drawGrid(false),

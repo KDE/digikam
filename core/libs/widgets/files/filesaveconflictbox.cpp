@@ -44,7 +44,7 @@ class FileSaveConflictBox::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         conflictLabel       = 0;
         conflictButtonGroup = 0;

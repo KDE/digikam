@@ -739,7 +739,7 @@ class Sidebar::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         minimizedDefault(false),
         minimized(false),
         isMinimized(false),

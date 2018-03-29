@@ -184,7 +184,7 @@ class MainWindow::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : splitter(0),
         mapWidget(0),
         lookupAltitudeList(),

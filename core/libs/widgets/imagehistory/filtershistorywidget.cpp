@@ -58,7 +58,7 @@ class FiltersHistoryWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         view        = 0;
         model       = 0;

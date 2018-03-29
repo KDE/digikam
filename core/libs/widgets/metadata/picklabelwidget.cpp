@@ -55,7 +55,7 @@ class PickLabelWidget::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         pickBtns = 0;
         btnNone  = 0;
@@ -302,7 +302,7 @@ class PickLabelSelector::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         plw = 0;
     }

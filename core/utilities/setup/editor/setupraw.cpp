@@ -50,7 +50,7 @@ class SetupRaw::Private
 public:
 
 
-    Private() :
+    explicit Private() :
         tab(0),
         behaviorPanel(0),
         settingsPanel(0),

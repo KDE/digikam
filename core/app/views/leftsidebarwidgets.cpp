@@ -76,7 +76,7 @@ class AlbumFolderViewSideBarWidget::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         albumModificationHelper(0),
         albumFolderView(0),
         searchTextBar(0)
@@ -183,7 +183,7 @@ public:
         ExistingTags
     };
 
-    Private() :
+    explicit Private() :
         openTagMngr(0),
         tagSearchBar(0),
         tagFolderView(0),
@@ -428,7 +428,7 @@ class LabelsSideBarWidget::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         labelsTree(0)
     {
     }
@@ -509,7 +509,7 @@ class DateFolderViewSideBarWidget::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         dateFolderView(0)
     {
     }
@@ -589,7 +589,7 @@ class TimelineSideBarWidget::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         scaleBG(0),
         cursorCountLabel(0),
         scrollBar(0),
@@ -1068,7 +1068,7 @@ class SearchSideBarWidget::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         searchSearchBar(0),
         searchTreeView(0),
         searchTabHeader(0)
@@ -1176,7 +1176,7 @@ void SearchSideBarWidget::newAdvancedSearch()
 class FuzzySearchSideBarWidget::Private
 {
 public:
-    Private() :
+    explicit Private() :
         fuzzySearchView(0),
         searchModificationHelper(0)
     {
@@ -1280,7 +1280,7 @@ void FuzzySearchSideBarWidget::newSimilarSearch(const ImageInfo& imageInfo)
 class GPSSearchSideBarWidget::Private
 {
 public:
-    Private() :
+    explicit Private() :
         gpsSearchView(0)
     {
     }
@@ -1358,7 +1358,7 @@ class PeopleSideBarWidget::Private : public TagViewSideBarWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         personIcon               = 0;
         textLabel                = 0;

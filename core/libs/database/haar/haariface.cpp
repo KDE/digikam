@@ -154,7 +154,7 @@ class HaarIface::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         data                       = nullptr;
         bin                        = nullptr;

@@ -51,7 +51,7 @@ class CameraItemPropertiesTab::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         file(0),
         folder(0),
         date(0),

@@ -116,7 +116,7 @@ class CameraAutoDetectThread::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         result = 0;
     }
@@ -165,7 +165,7 @@ class SetupCamera::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         addButton(0),
         removeButton(0),
         editButton(0),

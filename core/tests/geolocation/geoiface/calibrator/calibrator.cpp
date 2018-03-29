@@ -62,7 +62,7 @@ class CalibratorModelHelper::Private
 {
 public:
 
-    Private()
+    explicit Private()
      : model(0)
     {
     }
@@ -128,7 +128,7 @@ class Calibrator::Private
 {
 public:
 
-    Private()
+    explicit Private()
      : hBoxLayout(0),
        model(0),
        modelHelper(0),

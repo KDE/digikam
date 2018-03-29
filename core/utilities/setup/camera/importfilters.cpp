@@ -55,7 +55,7 @@ class ImportFilters::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         buttons          = 0;
         filterName       = 0;

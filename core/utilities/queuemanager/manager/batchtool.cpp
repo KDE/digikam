@@ -61,7 +61,7 @@ class BatchTool::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         exifResetOrientation(false),
         exifCanEditOrientation(true),
         branchHistory(true),

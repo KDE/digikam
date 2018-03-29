@@ -45,7 +45,7 @@ class TooltipDialog::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         buttons(0),
         textBrowser(0)
     {

@@ -42,7 +42,7 @@ class IccManager::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         profileMismatch = false;
         observer        = 0;

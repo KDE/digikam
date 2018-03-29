@@ -43,7 +43,7 @@ class DPointSelect::Private
 {
 public:
 
-    Private(DPointSelect* const q):
+    explicit Private(DPointSelect* const q):
         q(q),
         px(0),
         py(0),
@@ -265,7 +265,7 @@ class DHueSaturationSelector::Private
 {
 public:
 
-    Private(DHueSaturationSelector* const q)
+    explicit Private(DHueSaturationSelector* const q)
         : q(q),
           mode(ChooserClassic),
           hue(0),

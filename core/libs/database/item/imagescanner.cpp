@@ -135,7 +135,7 @@ class ImageScanner::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : hasImage(false),
           hasMetadata(false),
           loadedFromDisk(false),

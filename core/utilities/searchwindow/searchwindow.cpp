@@ -46,7 +46,7 @@ class SearchWindow::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         scrollArea(0),
         searchView(0),
         bottomBar(0),

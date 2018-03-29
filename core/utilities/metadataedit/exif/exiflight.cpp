@@ -69,7 +69,7 @@ class EXIFLight::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         lightSourceCheck     = 0;
         flashModeCheck       = 0;

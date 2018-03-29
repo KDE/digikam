@@ -45,7 +45,7 @@ class GPSBookmarkOwner::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : parent(0),
         bookmarkManager(0),
         bookmarkMenu(0),

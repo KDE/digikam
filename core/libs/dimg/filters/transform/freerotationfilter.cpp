@@ -43,7 +43,7 @@ class FreeRotationFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

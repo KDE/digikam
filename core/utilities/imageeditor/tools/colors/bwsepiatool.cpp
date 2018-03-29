@@ -54,7 +54,7 @@ class BWSepiaTool::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         bwsepiaSettings(0),
         previewWidget(0),
         gboxSettings(0)

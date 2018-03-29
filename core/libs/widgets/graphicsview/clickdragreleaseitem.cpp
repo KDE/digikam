@@ -51,7 +51,7 @@ class ClickDragReleaseItem::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : state(HoverState)
     {
     }

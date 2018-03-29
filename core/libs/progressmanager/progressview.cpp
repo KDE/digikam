@@ -149,7 +149,7 @@ class TransactionItem::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         maxLabelWidth(650),
         progress(0),
         cancelButton(0),
@@ -301,7 +301,7 @@ class ProgressView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         wasLastShown(false),
         scrollView(0),
         previousItem(0)

@@ -37,7 +37,7 @@ class LensFunIface::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         usedLens   = 0;
         usedCamera = 0;

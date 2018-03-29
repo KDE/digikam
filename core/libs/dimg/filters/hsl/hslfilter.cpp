@@ -41,7 +41,7 @@ class HSLFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         memset(&htransfer,   0, sizeof(htransfer));
         memset(&ltransfer,   0, sizeof(ltransfer));

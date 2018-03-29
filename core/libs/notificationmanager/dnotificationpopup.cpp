@@ -54,7 +54,7 @@ class DNotificationPopup::Private
 {
 public:
 
-    Private(DNotificationPopup* const q, WId winId)
+    explicit Private(DNotificationPopup* const q, WId winId)
         : q(q),
           popupStyle(DEFAULT_POPUP_TYPE),
           window(winId),

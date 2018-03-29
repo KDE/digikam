@@ -91,7 +91,7 @@ class CameraController::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         close(false),
         canceled(false),
         running(false),

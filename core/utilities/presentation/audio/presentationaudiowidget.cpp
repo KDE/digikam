@@ -51,7 +51,7 @@ class PresentationAudioWidget::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         sharedData  = 0;
         currIndex   = 0;

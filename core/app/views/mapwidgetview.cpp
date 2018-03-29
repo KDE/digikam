@@ -67,7 +67,7 @@ class MapWidgetView::Private
 {
 public:
 
-    Private()
+    explicit Private()
         :vbox(0),
          mapWidget(0),
          imageFilterModel(0),
@@ -204,7 +204,7 @@ bool MapWidgetView::getActiveState() const
 class MapViewModelHelper::Private
 {
 public:
-    Private()
+    explicit Private()
         : model(0),
           importModel(0),
           selectionModel(0),

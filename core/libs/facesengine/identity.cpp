@@ -32,7 +32,7 @@ class Identity::Private : public QSharedData
 {
 public:
 
-    Private()
+    explicit Private()
         : id(-1)
     {
     }

@@ -60,7 +60,7 @@ class GPSSearchView::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         saveBtn(0),
         nameEdit(0),
         imageInfoJob(),

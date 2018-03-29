@@ -43,7 +43,7 @@ class CaptionEdit::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         altLangStrEdit = 0;
         authorEdit     = 0;

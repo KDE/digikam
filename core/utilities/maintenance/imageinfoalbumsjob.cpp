@@ -39,7 +39,7 @@ class ImageInfoAlbumsJob::Private
 {
 public:
 
-    Private() {}
+    explicit Private() {}
 
     AlbumList           albumsList;
     AlbumList::Iterator albumIt;

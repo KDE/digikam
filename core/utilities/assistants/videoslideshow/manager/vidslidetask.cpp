@@ -66,7 +66,7 @@ class VidSlideTask::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         settings = 0;
         astream  = 0;

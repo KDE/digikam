@@ -55,7 +55,7 @@ class AntiVignettingSettings::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         addVignettingCheck(0),
         maskPreviewLabel(0),
         densityInput(0),

@@ -50,7 +50,7 @@ class EXIFLens::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         apertureCheck         = 0;
         maxApertureCheck      = 0;

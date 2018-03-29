@@ -47,7 +47,7 @@ class SlideShowBuilder::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         cancel(false),
         album(0),
         autoPlayEnabled(true)

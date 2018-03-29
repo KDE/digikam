@@ -39,7 +39,7 @@ class DDateTimeEdit::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         timePopUp(0),
         datePopUp(0)
     {

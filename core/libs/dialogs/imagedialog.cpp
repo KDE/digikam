@@ -58,7 +58,7 @@ class ImageDialogPreview::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         imageLabel(0),
         infoLabel(0),
         thumbLoadThread(0)
@@ -399,7 +399,7 @@ class ImageDialog::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

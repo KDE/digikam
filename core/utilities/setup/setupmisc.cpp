@@ -58,7 +58,7 @@ class SetupMisc::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         tab(0),
         sidebarTypeLabel(0),
         stringComparisonTypeLabel(0),

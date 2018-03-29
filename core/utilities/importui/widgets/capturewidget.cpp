@@ -41,7 +41,7 @@ class CaptureWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 

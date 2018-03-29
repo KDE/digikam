@@ -101,7 +101,7 @@ public:
         QList<GPSImageInfo> dataFromDatabase;
     };
 
-    Private()
+    explicit Private()
         : jobs(),
           thumbnailLoadThread(0),
           thumbnailMap(),

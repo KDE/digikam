@@ -42,7 +42,7 @@ class EditableSearchTreeView::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         searchModificationHelper(0),
         renameSearchAction(0),
         deleteSearchAction(0)

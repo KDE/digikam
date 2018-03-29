@@ -37,7 +37,7 @@ class Q_DECL_HIDDEN MetaEnginePreviews::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         manager = 0;
     }

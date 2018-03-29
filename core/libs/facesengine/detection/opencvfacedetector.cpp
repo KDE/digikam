@@ -249,7 +249,7 @@ class OpenCVFaceDetector::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         maxDistance              = 0;
         minDuplicates            = 0;

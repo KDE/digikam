@@ -57,7 +57,7 @@ class AssignNameOverlay::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : tagModel(AbstractAlbumModel::IgnoreRootAlbum)
     {
         assignNameWidget = 0;

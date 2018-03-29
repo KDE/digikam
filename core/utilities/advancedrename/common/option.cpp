@@ -30,7 +30,7 @@ class Option::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {}
 
     ParseResults parsedResults;

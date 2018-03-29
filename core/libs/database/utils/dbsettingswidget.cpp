@@ -75,7 +75,7 @@ class DatabaseSettingsWidget::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         mysqlCmdBox            = 0;
         dbType                 = 0;

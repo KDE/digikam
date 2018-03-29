@@ -45,7 +45,7 @@ class GPSImageInfoSorter::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : mapWidgets(),
         sortOrder(GPSImageInfoSorter::SortYoungestFirst),
         sortMenu(0),

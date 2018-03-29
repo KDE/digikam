@@ -59,7 +59,7 @@ class AdjustCurvesTool::Private
 {
 public:
 
-    Private() :
+    explicit Private() :
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)

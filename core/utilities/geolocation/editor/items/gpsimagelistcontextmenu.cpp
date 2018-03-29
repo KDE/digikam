@@ -58,7 +58,7 @@ class GPSImageListContextMenu::Private
 {
 public:
 
-    Private()
+    explicit Private()
       : enabled(true),
         actionBookmark(0),
         bookmarkOwner(0),

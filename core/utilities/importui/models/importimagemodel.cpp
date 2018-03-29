@@ -40,7 +40,7 @@ class ImportImageModel::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         keepFileUrlCache            = false;
         refreshing                  = false;

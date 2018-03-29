@@ -46,7 +46,7 @@ class DMetadataSettingsContainer::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         unifyReadWrite = false;
     }

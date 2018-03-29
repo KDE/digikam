@@ -71,7 +71,7 @@ class AlbumSelectors::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         albumSelectCB    = 0;
         tagSelectCB      = 0;

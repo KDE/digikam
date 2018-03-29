@@ -71,7 +71,7 @@ class MetadataWidget::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         view           = 0;
         mainLayout     = 0;

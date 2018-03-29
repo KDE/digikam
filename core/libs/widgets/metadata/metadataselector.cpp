@@ -244,7 +244,7 @@ class MetadataSelectorView::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         selectAllBtn        = 0;
         clearSelectionBtn   = 0;
