@@ -25,19 +25,8 @@ set(libdialogs_SRCS
     dconfigdlgwidgets.cpp
     dmessagebox.cpp
     dsplashscreen.cpp
+    webbrowserdlg.cpp
 )
-
-if(ENABLE_QWEBENGINE)
-    set(libdialogs_SRCS
-        ${libdialogs_SRCS}
-        webbrowserdlg_qwebengine.cpp
-       )
-else()
-    set(libdialogs_SRCS
-        ${libdialogs_SRCS}
-        webbrowserdlg.cpp
-       )
-endif()
 
 set(libdeletedialog_SRCS
     deletedialog.cpp

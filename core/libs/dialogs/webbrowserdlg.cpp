@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "webbrowserdlg.h"
+#include "digikam_config.h"
 
 // Qt includes
 
@@ -29,10 +30,16 @@
 #include <QApplication>
 #include <QStyle>
 #include <QIcon>
-#include <QWebView>
 #include <QToolBar>
 #include <QDesktopServices>
 #include <QDebug>
+
+#ifdef HAVE_QWEBENGINE
+#   include <QWebEngineView>
+#   include <QWebEnginePage>
+#else
+#   include <QWebView>
+#endif
 
 // KDE includes
 
@@ -63,7 +70,13 @@ public:
 public:
 
     QUrl               home;
+
+#ifdef HAVE_QWEBENGINE
+    QWebEngineView*    browser;
+#else
     QWebView*          browser;
+#endif
+
     QToolBar*          toolbar;
     StatusProgressBar* progressbar;
     SearchTextBar*     searchbar;
@@ -75,16 +88,29 @@ WebBrowserDlg::WebBrowserDlg(const QUrl& url, QWidget* const parent)
 {
     setModal(false);
     d->home    = url;
+
+#ifdef HAVE_QWEBENGINE
+    d->browser = new QWebEngineView(this);
+#else
     d->browser = new QWebView(this);
+#endif
 
     // --------------------------
 
     d->toolbar = new QToolBar(this);
     d->toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+
+#ifdef HAVE_QWEBENGINE
+    d->toolbar->addAction(d->browser->pageAction(QWebEnginePage::Back));
+    d->toolbar->addAction(d->browser->pageAction(QWebEnginePage::Forward));
+    d->toolbar->addAction(d->browser->pageAction(QWebEnginePage::Reload));
+    d->toolbar->addAction(d->browser->pageAction(QWebEnginePage::Stop));
+#else
     d->toolbar->addAction(d->browser->pageAction(QWebPage::Back));
     d->toolbar->addAction(d->browser->pageAction(QWebPage::Forward));
     d->toolbar->addAction(d->browser->pageAction(QWebPage::Reload));
     d->toolbar->addAction(d->browser->pageAction(QWebPage::Stop));
+#endif
 
     QAction* const gohome  = new QAction(QIcon::fromTheme(QLatin1String("go-home")),
                                          i18n("Home"), this);
@@ -208,11 +234,18 @@ void WebBrowserDlg::slotLoadingFinished(bool b)
 
 void WebBrowserDlg::slotSearchTextChanged(const SearchTextSettings& settings)
 {
+#ifdef HAVE_QWEBENGINE
+    d->browser->findText(settings.text,
+                         (settings.caseSensitive == Qt::CaseSensitive) ? QWebEnginePage::FindCaseSensitively
+                                                                       : QWebEnginePage::FindFlags(),
+                         [this](bool found) { d->searchbar->slotSearchResult(found); });
+#else
     bool found = d->browser->findText(
                     settings.text,
                     (settings.caseSensitive == Qt::CaseInsensitive) ? QWebPage::FindCaseSensitively 
                                                                     : QWebPage::FindFlags());
     d->searchbar->slotSearchResult(found);
+#endif
 }
 
 void WebBrowserDlg::slotGoHome()

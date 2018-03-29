@@ -41,17 +41,11 @@
 
 // Local includes
 
-#include "digikam_config.h"
 #include "digikam_debug.h"
 #include "digikam_version.h"
 #include "daboutdata.h"
 #include "thememanager.h"
-
-#ifdef HAVE_QWEBENGINE
-#   include "webbrowserdlg_qwebengine.h"
-#else
-#   include "webbrowserdlg.h"
-#endif
+#include  "webbrowserdlg.h"
 
 namespace Digikam
 {
