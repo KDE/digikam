@@ -156,4 +156,5 @@ BUGFIXES:
 139 ==> 392436 - Count Files in directory.
 140 ==> 363859 - digiKam core port from QWebKit to QWebEngine [patch].
 141 ==> 392427 - Cannot add collection on network drive.
-142 ==> 
+142 ==> 392022 - Position of a face tag appears on top of bottom of the list, instead of being sorted alphabetically.
+143 ==> 
