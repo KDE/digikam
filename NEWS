@@ -155,4 +155,5 @@ BUGFIXES:
 138 ==> 374516 - Persons metadata are not updated after a tag removed.
 139 ==> 392436 - Count Files in directory.
 140 ==> 363859 - digiKam core port from QWebKit to QWebEngine [patch].
-141 ==> 
+141 ==> 392427 - Cannot add collection on network drive.
+142 ==> 
