@@ -111,6 +111,7 @@ ${MXE_BUILD_TARGETS}-cmake -G "Unix Makefiles" . \
                            -DENABLE_DBUS=OFF \
                            -DENABLE_KIO=OFF \
                            -DENABLE_APPSTYLES=OFF \
+                           -DENABLE_QWEBENGINE=OFF \
                            ${PNG2ICO_PATH} \
                            ${OPTIONS} \
                            -Wno-dev \
