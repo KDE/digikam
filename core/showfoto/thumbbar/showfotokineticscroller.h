@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTOKINETICSCROLLER_H
-#define SHOWFOTOKINETICSCROLLER_H
+#ifndef SHOWFOTO_KINETIC_SCROLLER_H
+#define SHOWFOTO_KINETICS_CROLLER_H
 
 // Qt includes
 
@@ -43,7 +43,7 @@ class ShowfotoKineticScroller: public QObject
 
 public:
 
-    ShowfotoKineticScroller(QObject* const parent = 0);
+    explicit ShowfotoKineticScroller(QObject* const parent = 0);
     ~ShowfotoKineticScroller();
 
     //! enabled for one widget only, new calls remove previous association
@@ -66,4 +66,4 @@ private:
 
 } // namespace ShowFoto
 
-#endif // SHOWFOTOKINETICSCROLLER_H
+#endif // SHOWFOTO_KINETIC_SCROLLER_H

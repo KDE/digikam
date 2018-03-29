@@ -102,9 +102,11 @@ public:
 };
 
 ShowfotoKineticScroller::ShowfotoKineticScroller(QObject* const parent)
-    : QObject(parent), d(new Private())
+    : QObject(parent),
+      d(new Private())
 {
-    connect(&d->kineticTimer, &QTimer::timeout, this, &ShowfotoKineticScroller::onKineticTimerElapsed);
+    connect(&d->kineticTimer, &QTimer::timeout,
+            this, &ShowfotoKineticScroller::onKineticTimerElapsed);
 }
 
 ShowfotoKineticScroller::~ShowfotoKineticScroller()
@@ -271,6 +273,7 @@ void ShowfotoKineticScroller::onKineticTimerElapsed()
             d->velocity -= gFriction;
         else if( d->velocity < 0 )
             d->velocity += gFriction;
+
         if( qAbs(d->velocity) < qAbs(gFriction) )
             d->stopMotion();
 
