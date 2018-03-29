@@ -361,6 +361,7 @@ set(libdigikamgui_SRCS
 
     views/imagepreviewviewitem.cpp
     views/imagepreviewview.cpp
+    views/welcomepageview.cpp
     views/leftsidebarwidgets.cpp
     views/digikamview.cpp
     views/trashview.cpp
@@ -368,18 +369,6 @@ set(libdigikamgui_SRCS
 
     ${digikamadaptor_SRCS}
 )
-
-if(ENABLE_QWEBENGINE)
-    set(libdigikamgui_SRCS
-        ${libdigikamgui_SRCS}
-        views/welcomepageview_qwebengine.cpp
-       )
-else()
-    set(libdigikamgui_SRCS
-        ${libdigikamgui_SRCS}
-        views/welcomepageview.cpp
-       )
-endif()
 
 if(${Marble_FOUND})
     set(libdigikamgui_SRCS

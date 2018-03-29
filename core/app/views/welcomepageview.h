@@ -27,12 +27,20 @@
 #ifndef WELCOME_PAGE_VIEW_H
 #define WELCOME_PAGE_VIEW_H
 
+#include "digikam_config.h"
+
 // Qt includes
 
-#include <QString>
 #include <QByteArray>
+#include <QString>
 #include <QUrl>
-#include <QWebView>
+
+#ifdef HAVE_QWEBENGINE
+#   include <QWebEngineView>
+#   include <QWebEnginePage>
+#else
+#   include <QWebView>
+#endif
 
 // Local includes
 
@@ -40,8 +48,30 @@
 
 namespace Digikam
 {
+#ifdef HAVE_QWEBENGINE
+class WelcomePageViewPage : public QWebEnginePage
+{
+    Q_OBJECT
 
+public:
+
+    explicit WelcomePageViewPage(QObject* const parent = 0);
+    virtual ~WelcomePageViewPage();
+
+    bool acceptNavigationRequest(const QUrl&, QWebEnginePage::NavigationType, bool);
+
+Q_SIGNALS:
+
+    void linkClicked(const QUrl&);
+
+};
+
+// -------------------------------------------------------------------
+
+class WelcomePageView : public QWebEngineView
+#else
 class WelcomePageView : public QWebView
+#endif
 {
     Q_OBJECT
 
