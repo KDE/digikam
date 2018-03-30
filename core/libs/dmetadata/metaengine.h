@@ -141,11 +141,11 @@ public:
 
     /** Constructor to load from parsed data.
      */
-    MetaEngine(const MetaEngineData& data);
+    explicit MetaEngine(const MetaEngineData& data);
 
     /** Contructor to Load Metadata from image file.
      */
-    MetaEngine(const QString& filePath);
+    explicit MetaEngine(const QString& filePath);
 
     /** Standard destructor
      */

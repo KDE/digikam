@@ -47,12 +47,12 @@ public:
     /**
      * Open the given file and scan for embedded preview images
      */
-    MetaEnginePreviews(const QString& filePath);
+    explicit MetaEnginePreviews(const QString& filePath);
 
     /**
      * Open the given image data and scan the image for embedded preview images.
      */
-    MetaEnginePreviews(const QByteArray& imgData);
+    explicit MetaEnginePreviews(const QByteArray& imgData);
     ~MetaEnginePreviews();
 
     /// Returns the pixel size of the original image, as read from the file (not the metadata).

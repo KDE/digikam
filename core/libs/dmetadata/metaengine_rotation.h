@@ -64,9 +64,9 @@ public:
     /// Constructs the identity matrix (the matrix describing no transformation)
     MetaEngineRotation();
     /// Returns the matrix corresponding to the given TransformationAction
-    MetaEngineRotation(TransformationAction action);
+    explicit MetaEngineRotation(TransformationAction action);
     /// Returns the matrix corresponding to the given TransformationAction
-    MetaEngineRotation(MetaEngine::ImageOrientation exifOrientation);
+    explicit MetaEngineRotation(MetaEngine::ImageOrientation exifOrientation);
 
     bool operator==(const MetaEngineRotation& ma) const;
     bool operator!=(const MetaEngineRotation& ma) const;
