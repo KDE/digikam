@@ -190,7 +190,11 @@ DMetadata::MetaDataMap s_extractFFMpegMetadataEntriesFromDictionary(AVDictionary
 
         if (entry)
         {
-            meta.insert(QString::fromUtf8(entry->key), QString::fromUtf8(entry->value));
+            if (QString::fromUtf8(entry->key) != QLatin1String("creation_time") ||
+                QDateTime::fromString(QString::fromUtf8(entry->value), Qt::ISODate).toMSecsSinceEpoch() != 0)
+            {
+                meta.insert(QString::fromUtf8(entry->key), QString::fromUtf8(entry->value));
+            }
         }
     }
     while (entry);
