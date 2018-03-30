@@ -97,8 +97,10 @@ LoadingDescription::LoadingDescription(const QString& filePath, ColorManagementS
     postProcessingParameters.colorManagement = cm;
 }
 
-LoadingDescription::LoadingDescription(const QString& filePath, const DRawDecoding& settings,
-                                       RawDecodingHint hint, ColorManagementSettings cm)
+LoadingDescription::LoadingDescription(const QString& filePath,
+                                       const DRawDecoding& settings,
+                                       RawDecodingHint hint,
+                                       ColorManagementSettings cm)
     : filePath(filePath),
       rawDecodingSettings(settings),
       rawDecodingHint(hint)
@@ -107,7 +109,8 @@ LoadingDescription::LoadingDescription(const QString& filePath, const DRawDecodi
 }
 
 LoadingDescription::LoadingDescription(const QString& filePath,
-                                       const PreviewSettings& previewSettings, int size,
+                                       const PreviewSettings& previewSettings,
+                                       int size,
                                        ColorManagementSettings cm,
                                        LoadingDescription::PreviewParameters::PreviewType type)
     : filePath(filePath)
@@ -279,7 +282,7 @@ bool LoadingDescription::isReducedVersion() const
 {
     // return true if this loads anything but the full version
     return rawDecodingSettings.rawPrm.halfSizeColorImage ||
-           previewParameters.type != PreviewParameters::NoPreview;
+           (previewParameters.type != PreviewParameters::NoPreview);
 }
 
 bool LoadingDescription::operator==(const LoadingDescription& other) const
@@ -308,7 +311,7 @@ bool LoadingDescription::equalsOrBetterThan(const LoadingDescription& other) con
     return (filePath == other.filePath) &&
            (
                (rawDecodingSettings == other.rawDecodingSettings) ||
-               (fast == other.rawDecodingSettings)
+               (fast                == other.rawDecodingSettings)
            ) &&
            (
                (previewParameters.size == other.previewParameters.size) ||
@@ -353,7 +356,7 @@ QStringList LoadingDescription::possibleCacheKeys(const QString& filePath)
     keys << filePath + QLatin1String("-customraw");
     keys << filePath + QLatin1String("-globalraw");
 
-    for (int i = 1; i <= ThumbnailSize::HD; ++i)
+    for (int i = 1 ; i <= ThumbnailSize::HD ; ++i)
     {
         keys << filePath + QLatin1String("-previewImage-") + QString::number(i);
     }
@@ -368,7 +371,7 @@ QStringList LoadingDescription::possibleThumbnailCacheKeys(const QString& filePa
     // there are (ThumbnailSize::HD) possible keys...
     QString path = filePath + QLatin1String("-thumbnail-");
 
-    for (int i = 1; i <= ThumbnailSize::HD; ++i)
+    for (int i = 1 ; i <= ThumbnailSize::HD ; ++i)
     {
         keys << path + QString::number(i);
     }

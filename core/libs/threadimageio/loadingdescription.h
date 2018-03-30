@@ -90,7 +90,7 @@ public:
 
     public:
 
-        PreviewParameters();
+        explicit PreviewParameters();
 
         bool onlyPregenerate() const
         {
@@ -101,12 +101,12 @@ public:
 
     public:
 
-        PreviewType  type;
-        int          size;
-        PreviewFlags flags;
+        PreviewType     type;
+        int             size;
+        PreviewFlags    flags;
         PreviewSettings previewSettings;
-        QVariant     extraParameter;
-        QVariant     storageReference;
+        QVariant        extraParameter;
+        QVariant        storageReference;
     };
 
     // ---------------------------------------------------------------------
@@ -115,20 +115,20 @@ public:
     {
     public:
 
-        PostProcessingParameters()
+        explicit PostProcessingParameters()
         {
             colorManagement = NoColorConversion;
         }
 
-        bool needsProcessing() const;
+        bool needsProcessing()      const;
 
         void         setTransform(const IccTransform& transform);
         bool         hasTransform() const;
         IccTransform transform()    const;
 
-        void       setProfile(const IccProfile& profile);
-        bool       hasProfile() const;
-        IccProfile profile()    const;
+        void         setProfile(const IccProfile& profile);
+        bool         hasProfile()   const;
+        IccProfile   profile()      const;
 
         bool operator==(const PostProcessingParameters& other) const;
 
@@ -151,12 +151,13 @@ public:
     /**
      * Use this for full loading of non-raw files
      */
-    LoadingDescription(const QString& filePath, ColorManagementSettings = NoColorConversion);
+    explicit LoadingDescription(const QString& filePath, ColorManagementSettings = NoColorConversion);
 
     /**
      * Use this for full loading of raw files
      */
-    LoadingDescription(const QString& filePath, const DRawDecoding& settings,
+    LoadingDescription(const QString& filePath,
+                       const DRawDecoding& settings,
                        RawDecodingHint rawDecodingHint = RawDecodingCustomSettings,
                        ColorManagementSettings = NoColorConversion);
 
@@ -169,7 +170,8 @@ public:
      *    You can also adjust raw decoding settings and hint in this case.
      */
     LoadingDescription(const QString& filePath,
-                       const PreviewSettings& settings, int size,
+                       const PreviewSettings& settings,
+                       int size,
                        ColorManagementSettings = NoColorConversion,
                        PreviewParameters::PreviewType = PreviewParameters::PreviewImage);
 
@@ -248,7 +250,7 @@ public:
     PostProcessingParameters postProcessingParameters;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::LoadingDescription::PreviewParameters::PreviewFlags)
 
