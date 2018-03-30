@@ -159,5 +159,7 @@ BUGFIXES:
 142 ==> 392022 - Position of a face tag appears on top of bottom of the list, instead of being sorted alphabetically.
 143 ==> 372763 - Rename does not give options on Conflict.
 144 ==> 391533 - Feature request: add "NOT" tag matching condition in "Filters" panel.
-145 ==> 381222 - Digikam crash on fuzzy search.
-146 ==> 
+145 ==> 381222 - digiKam crash on fuzzy search.
+146 ==> 386275 - Crash caused by QtAV.
+147 ==> 
+
