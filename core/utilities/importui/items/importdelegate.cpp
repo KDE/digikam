@@ -648,7 +648,7 @@ void ImportThumbnailDelegate::updateContentWidth()
         maxSize = d->viewSize.width();
     }
 
-    d->thumbSize = thumbnailPixmapSize(true, maxSize - 2*d->radius - 2*d->margin);
+    d->thumbSize = ThumbnailSize(thumbnailPixmapSize(true, maxSize - 2*d->radius - 2*d->margin));
 
     ImportDelegate::updateContentWidth();
 }
