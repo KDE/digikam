@@ -164,5 +164,6 @@ BUGFIXES:
 147 ==> 372342 - Face tag area is very short [patch].
 148 ==> 391348 - People Side Menu Shows Only Faces Not People Tagged Images.
 149 ==> 385630 - Views Requiring Maps Takes ~30s to Launch.
-150 ==> 
+150 ==> 192908 - Allow to split icon-view in order to show multiple albums at the same time.
+151 ==> 
 
