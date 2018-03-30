@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2015 by Mohamed Anwer, <m dot anwer at gmx dot com>
+# Copyright (c) 2015 by Mohamed_Anwer, <m_dot_anwer at gmx dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
