@@ -54,7 +54,7 @@ ItemViewImportDelegatePrivate::ItemViewImportDelegatePrivate()
 {
     q             = 0;
     spacing       = 0;
-    thumbSize     = 0;
+    thumbSize     = ThumbnailSize(0);
 
     // painting constants
     radius        = 3;
