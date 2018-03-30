@@ -518,12 +518,12 @@ void ImportView::setThumbSize(int size)
 
 ThumbnailSize ImportView::thumbnailSize() const
 {
-    return d->thumbSize;
+    return ThumbailSize(d->thumbSize);
 }
 
 void ImportView::slotThumbSizeEffect()
 {
-    d->iconView->setThumbnailSize(d->thumbSize);
+    d->iconView->setThumbnailSize(ThumbnailSize(d->thumbSize));
     toggleZoomActions();
 
     ImportSettings::instance()->setDefaultIconSize(d->thumbSize);

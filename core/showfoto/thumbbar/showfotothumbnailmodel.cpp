@@ -42,13 +42,13 @@ class ShowfotoThumbnailModel::Private
 {
 public:
 
-        explicit Private() :
-        thread(0),
-        preloadThread(0),
-        thumbSize(0),
-        lastGlobalThumbSize(0),
-        preloadThumbSize(0),
-        emitDataChanged(true)
+        explicit Private()
+          : thread(0),
+            preloadThread(0),
+            thumbSize(0),
+            lastGlobalThumbSize(0),
+            preloadThumbSize(0),
+            emitDataChanged(true)
     {
         maxThumbSize = ThumbnailSize::Huge;
     }
@@ -79,7 +79,8 @@ ShowfotoThumbnailModel::ShowfotoThumbnailModel(QObject* const parent)
     : ShowfotoImageModel(parent),
       d(new Private)
 {
-    connect(this, &ShowfotoThumbnailModel::signalThumbInfo, this, &ShowfotoThumbnailModel::slotThumbInfoLoaded);
+    connect(this, &ShowfotoThumbnailModel::signalThumbInfo,
+            this, &ShowfotoThumbnailModel::slotThumbInfoLoaded);
 }
 
 ShowfotoThumbnailModel::~ShowfotoThumbnailModel()
@@ -180,11 +181,11 @@ bool ShowfotoThumbnailModel::setData(const QModelIndex& index, const QVariant& v
 
                 if (value.isNull())
                 {
-                    d->thumbSize = d->lastGlobalThumbSize;
+                    d->thumbSize = ThumnailSize(d->lastGlobalThumbSize);
                 }
                 else
                 {
-                    d->thumbSize = value.toInt();
+                    d->thumbSize = ThumbnailSize(value.toInt());
                 }
                 break;
 

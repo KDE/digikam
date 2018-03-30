@@ -67,7 +67,7 @@ ImportIconView::ImportIconView(QWidget* const parent)
 
     ImportSettings* const settings = ImportSettings::instance();
 
-    setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
+    setThumbnailSize(ThumbnailSize(settings->getDefaultIconSize()));
 
     importImageModel()->setDragDropHandler(new ImportDragDropHandler(importImageModel()));
     setDragEnabled(true);
