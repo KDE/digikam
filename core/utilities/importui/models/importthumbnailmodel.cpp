@@ -56,7 +56,8 @@ public:
 };
 
 ImportThumbnailModel::ImportThumbnailModel(QObject* const parent)
-    : ImportImageModel(parent), d(new Private)
+    : ImportImageModel(parent),
+      d(new Private)
 {
     setKeepsFileUrlCache(true);
 }
@@ -132,7 +133,7 @@ bool ImportThumbnailModel::setData(const QModelIndex& index, const QVariant& val
                 else
                 {
                     d->lastGlobalThumbSize = d->thumbSize;
-                    d->thumbSize           = value.toInt();
+                    d->thumbSize           = ThumbnailSize(value.toInt());
                 }
                 break;
 
