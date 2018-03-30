@@ -181,7 +181,7 @@ bool ShowfotoThumbnailModel::setData(const QModelIndex& index, const QVariant& v
 
                 if (value.isNull())
                 {
-                    d->thumbSize = ThumnailSize(d->lastGlobalThumbSize);
+                    d->thumbSize = ThumbnailSize(d->lastGlobalThumbSize);
                 }
                 else
                 {

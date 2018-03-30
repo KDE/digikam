@@ -518,7 +518,7 @@ void ImportView::setThumbSize(int size)
 
 ThumbnailSize ImportView::thumbnailSize() const
 {
-    return ThumbailSize(d->thumbSize);
+    return ThumbnailSize(d->thumbSize);
 }
 
 void ImportView::slotThumbSizeEffect()
