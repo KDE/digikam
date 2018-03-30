@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DTRASHITEMMODEL_H
-#define DTRASHITEMMODEL_H
+#ifndef DTRASH_ITEM_MODEL_H
+#define DTRASH_ITEM_MODEL_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@ class DTrashItemModel : public QAbstractTableModel
 
 public:
 
-    DTrashItemModel(QObject* parent = 0);
+    explicit DTrashItemModel(QObject* parent = 0);
     ~DTrashItemModel();
 
     /**
@@ -133,4 +133,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DTRASHITEMMODEL_H
+#endif // DTRASH_ITEM_MODEL_H

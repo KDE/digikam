@@ -100,8 +100,8 @@ int DTrashItemModel::columnCount(const QModelIndex&) const
 
 QVariant DTrashItemModel::data(const QModelIndex& index, int role) const
 {
-    if ( role != Qt::DisplayRole &&
-         role != Qt::DecorationRole &&
+    if ( role != Qt::DisplayRole       &&
+         role != Qt::DecorationRole    &&
          role != Qt::TextAlignmentRole &&
          role != Qt::ToolTipRole)
         return QVariant();
@@ -130,9 +130,12 @@ QVariant DTrashItemModel::data(const QModelIndex& index, int role) const
 
     switch (index.column())
     {
-        case 1: return item.collectionRelativePath;
-        case 2: return item.deletionTimestamp.toString();
-        default: return QVariant();
+        case 1:
+            return item.collectionRelativePath;
+        case 2:
+            return item.deletionTimestamp.toString();
+        default:
+            return QVariant();
     };
 }
 
@@ -190,10 +193,14 @@ QVariant DTrashItemModel::headerData(int section, Qt::Orientation orientation, i
 
     switch (section)
     {
-        case 0: return i18n("Thumbnail");
-        case 1: return i18n("Relative Path");
-        case 2: return i18n("Deletion Time");
-        default: return QVariant();
+        case 0:
+            return i18n("Thumbnail");
+        case 1:
+            return i18n("Relative Path");
+        case 2:
+            return i18n("Deletion Time");
+        default:
+            return QVariant();
     }
 }
 
