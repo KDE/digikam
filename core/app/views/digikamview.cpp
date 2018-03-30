@@ -1500,9 +1500,9 @@ void DigikamView::setThumbSize(int size)
 
 void DigikamView::slotThumbSizeEffect()
 {
-    d->iconView->setThumbnailSize(d->thumbSize);
-    d->tableView->setThumbnailSize(d->thumbSize);
-    d->trashView->setThumbnailSize(d->thumbSize);
+    d->iconView->setThumbnailSize(ThumbnailSize(d->thumbSize));
+    d->tableView->setThumbnailSize(ThumbnailSize(d->thumbSize));
+    d->trashView->setThumbnailSize(ThumbnailSize(d->thumbSize));
     toggleZoomActions();
 
     ApplicationSettings::instance()->setDefaultIconSize(d->thumbSize);
@@ -1525,8 +1525,8 @@ void DigikamView::toggleZoomActions()
             d->parent->enableZoomMinusAction(false);
         }
     }
-    else if (   (viewMode() == StackedView::IconViewMode)
-             || (viewMode() == StackedView::TableViewMode) )
+    else if ((viewMode() == StackedView::IconViewMode) ||
+             (viewMode() == StackedView::TableViewMode))
     {
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
