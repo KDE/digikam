@@ -260,7 +260,7 @@ bool ImageThumbnailModel::setData(const QModelIndex& index, const QVariant& valu
                 }
                 else
                 {
-                    d->thumbSize = value.toInt();
+                    d->thumbSize = ThumbnailSize(value.toInt());
                 }
                 break;
 
