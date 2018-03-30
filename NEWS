@@ -161,5 +161,5 @@ BUGFIXES:
 144 ==> 391533 - Feature request: add "NOT" tag matching condition in "Filters" panel.
 145 ==> 381222 - digiKam crash on fuzzy search.
 146 ==> 386275 - Crash caused by QtAV.
-147 ==> 
-
+147 ==> 372342 - Face tag area is very short [patch].
+148 ==> 
