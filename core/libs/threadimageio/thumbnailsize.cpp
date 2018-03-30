@@ -99,4 +99,4 @@ int ThumbnailSize::maxThumbsSize()
     return ThumbnailSize::Huge;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

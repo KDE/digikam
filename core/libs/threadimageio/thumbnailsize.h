@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBNAILSIZE_H
-#define THUMBNAILSIZE_H
+#ifndef THUMBNAIL_SIZE_H
+#define THUMBNAIL_SIZE_H
 
 // Qt includes
 
@@ -63,7 +63,7 @@ public:
 public:
 
     ThumbnailSize();
-    ThumbnailSize(int size);
+    explicit ThumbnailSize(int size);
     ThumbnailSize(const ThumbnailSize& thumbsize);
 
     ~ThumbnailSize();
@@ -87,6 +87,6 @@ private:
     int  m_Size;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif // THUMBNAILSIZE_H
+#endif // THUMBNAIL_SIZE_H
