@@ -7,7 +7,7 @@
  * Description : Kinetic Scroller for Thumbnail Bar
  *
  * Copyright (C) 2010 by Razvan Petru
- * Copyright (C) 2014 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2014 by Mohamed_Anwer <m_dot_anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
