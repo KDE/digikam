@@ -162,4 +162,7 @@ BUGFIXES:
 145 ==> 381222 - digiKam crash on fuzzy search.
 146 ==> 386275 - Crash caused by QtAV.
 147 ==> 372342 - Face tag area is very short [patch].
-148 ==> 
+148 ==> 391348 - People Side Menu Shows Only Faces Not People Tagged Images.
+149 ==> 385630 - Views Requiring Maps Takes ~30s to Launch.
+150 ==> 
+
