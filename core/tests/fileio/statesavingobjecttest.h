@@ -21,12 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef STATESAVINGOBJECTTEST_H
-#define STATESAVINGOBJECTTEST_H
+#ifndef STATE_SAVING_OBJECT_TEST_H
+#define STATE_SAVING_OBJECT_TEST_H
 
 // Qt includes
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 // Local includes
 
@@ -51,10 +51,13 @@ private Q_SLOTS:
 };
 
 class StubStateSaverPriv;
+
 class StubStateSaver: public QObject, public Digikam::StateSavingObject
 {
     Q_OBJECT
+
 public:
+
     explicit StubStateSaver(QObject* parent = 0);
     virtual ~StubStateSaver();
 
@@ -71,8 +74,9 @@ public:
     unsigned int numSaveCalls();
 
 private:
+
     StubStateSaverPriv* d;
 
 };
 
-#endif /* STATESAVINGOBJECTTEST_H */
+#endif // STATE_SAVING_OBJECT_TEST_H
