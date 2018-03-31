@@ -51,52 +51,33 @@ IOJobsManager* IOJobsManager::instance()
     return& creator->object;
 }
 
-IOJobsThread* IOJobsManager::startCopy(IOJobData* const data)
+IOJobsThread* IOJobsManager::startIOJob(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->copy(data);
 
-    connect(thread, SIGNAL(finished()),
-            thread, SLOT(deleteLater()),
-            Qt::QueuedConnection);
-
-    thread->start();
-
-    return thread;
-}
-
-IOJobsThread* IOJobsManager::startMove(IOJobData* const data)
-{
-    IOJobsThread* const thread = new IOJobsThread(this);
-    thread->move(data);
-
-    connect(thread, SIGNAL(finished()),
-            thread, SLOT(deleteLater()),
-            Qt::QueuedConnection);
-
-    thread->start();
-
-    return thread;
-}
-
-IOJobsThread* IOJobsManager::startDelete(IOJobData* const data)
-{
-    IOJobsThread* const thread = new IOJobsThread(this);
-    thread->deleteFiles(data);
-
-    connect(thread, SIGNAL(finished()),
-            thread, SLOT(deleteLater()),
-            Qt::QueuedConnection);
-
-    thread->start();
-
-    return thread;
-}
-
-IOJobsThread* IOJobsManager::startRenameFile(IOJobData* const data)
-{
-    IOJobsThread* const thread = new IOJobsThread(this);
-    thread->renameFile(data);
+    switch (data->operation())
+    {
+        case IOJobData::CopyAlbum:
+        case IOJobData::CopyImage:
+        case IOJobData::CopyFiles:
+            thread->copy(data);
+            break;
+        case IOJobData::MoveAlbum:
+        case IOJobData::MoveImage:
+        case IOJobData::MoveFiles:
+            thread->move(data);
+            break;
+        case IOJobData::Trash:
+        case IOJobData::Delete:
+        case IOJobData::DFiles:
+            thread->deleteFiles(data);
+            break;
+        case IOJobData::Rename:
+            thread->renameFile(data);
+            break;
+        default:
+            break;
+    }
 
     connect(thread, SIGNAL(finished()),
             thread, SLOT(deleteLater()),

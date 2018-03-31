@@ -334,77 +334,21 @@ void DIO::createJob(IOJobData* const data)
     IOJobsThread* jobThread = 0;
     const int operation     = data->operation();
 
-    if (operation == IOJobData::CopyAlbum ||
-        operation == IOJobData::CopyImage ||
-        operation == IOJobData::CopyFiles)
-    {
-        item = getProgressItem(operation);
+    item = getProgressItem(operation);
 
-        if (!item || item->totalCompleted())
+    if (!item || item->totalCompleted())
+    {
+        QPair<QString, QString> itemStrings = getItemStrings(operation);
+
+        if (!itemStrings.first.isEmpty())
         {
-            item = ProgressManager::instance()->createProgressItem(getItemString(operation),
-                                                                   i18n("Copy"), QString(), true, false);
+            item = ProgressManager::instance()->createProgressItem(itemStrings.first,
+                                                                   itemStrings.second,
+                                                                   QString(), true, false);
         }
-
-        item->setTotalItems(item->totalItems() + data->sourceUrls().count());
-        jobThread = IOJobsManager::instance()->startCopy(data);
     }
-    else if (operation == IOJobData::MoveAlbum ||
-             operation == IOJobData::MoveImage ||
-             operation == IOJobData::MoveFiles)
-    {
-        item = getProgressItem(operation);
 
-        if (!item || item->totalCompleted())
-        {
-            item = ProgressManager::instance()->createProgressItem(getItemString(operation),
-                                                                   i18n("Move"), QString(), true, false);
-        }
-
-        item->setTotalItems(item->totalItems() + data->sourceUrls().count());
-        jobThread = IOJobsManager::instance()->startMove(data);
-    }
-    else if (operation == IOJobData::Rename)
-    {
-        jobThread = IOJobsManager::instance()->startRenameFile(data);
-
-        connect(jobThread, SIGNAL(signalRenamed(QUrl)),
-                this, SIGNAL(signalRenameSucceeded(QUrl)));
-
-        connect(jobThread, SIGNAL(signalRenameFailed(QUrl)),
-                this, SIGNAL(signalRenameFailed(QUrl)));
-    }
-    else if (operation == IOJobData::Delete || operation == IOJobData::DFiles)
-    {
-        item = getProgressItem(operation);
-
-        if (!item || item->totalCompleted())
-        {
-            item = ProgressManager::instance()->createProgressItem(getItemString(operation),
-                                                                   i18n("Delete"), QString(), true, false);
-        }
-
-        item->setTotalItems(item->totalItems() + data->sourceUrls().count());
-        jobThread = IOJobsManager::instance()->startDelete(data);
-    }
-    else if (operation == IOJobData::Trash)
-    {
-        item = getProgressItem(operation);
-
-        if (!item || item->totalCompleted())
-        {
-            item = ProgressManager::instance()->createProgressItem(getItemString(operation),
-                                                                   i18n("Trash"), QString(), true, false);
-        }
-
-        item->setTotalItems(item->totalItems() + data->sourceUrls().count());
-        jobThread = IOJobsManager::instance()->startDelete(data);
-    }
-    else
-    {
-        qCDebug(DIGIKAM_DATABASE_LOG) << "Unknown IOJob operation:" << operation;
-        return;
-    }
+    jobThread = IOJobsManager::instance()->startIOJob(data);
 
     connect(jobThread, SIGNAL(signalOneProccessed(int)),
             this, SLOT(slotOneProccessed(int)));
@@ -412,8 +356,19 @@ void DIO::createJob(IOJobData* const data)
     connect(jobThread, SIGNAL(finished()),
             this, SLOT(slotResult()));
 
+    if (operation == IOJobData::Rename)
+    {
+        connect(jobThread, SIGNAL(signalRenamed(QUrl)),
+                this, SIGNAL(signalRenameSucceeded(QUrl)));
+
+        connect(jobThread, SIGNAL(signalRenameFailed(QUrl)),
+                this, SIGNAL(signalRenameFailed(QUrl)));
+    }
+
     if (item)
     {
+        item->setTotalItems(item->totalItems() + data->sourceUrls().count());
+
         connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
                 jobThread, SLOT(slotCancel()));
 
@@ -478,7 +433,7 @@ void DIO::slotResult()
 ProgressItem* DIO::getProgressItem(int operation) const
 {
     ProgressItem* item = 0;
-    QString itemString = getItemString(operation);
+    QString itemString = getItemStrings(operation).first;
 
     if (!itemString.isEmpty())
     {
@@ -488,34 +443,28 @@ ProgressItem* DIO::getProgressItem(int operation) const
     return item;
 }
 
-QString DIO::getItemString(int operation) const
+QPair<QString, QString> DIO::getItemStrings(int operation) const
 {
-    QString itemString;
-
     switch (operation)
     {
         case IOJobData::CopyAlbum:
         case IOJobData::CopyImage:
         case IOJobData::CopyFiles:
-            itemString = QLatin1String("DIOCopy");
-            break;
+            return qMakePair(QLatin1String("DIOCopy"), i18n("Copy"));
         case IOJobData::MoveAlbum:
         case IOJobData::MoveImage:
         case IOJobData::MoveFiles:
-            itemString = QLatin1String("DIOMove");
-            break;
+            return qMakePair(QLatin1String("DIOMove"), i18n("Move"));
         case IOJobData::Trash:
-            itemString = QLatin1String("DIOTrash");
-            break;
+            return qMakePair(QLatin1String("DIOTrash"), i18n("Trash"));
         case IOJobData::Delete:
         case IOJobData::DFiles:
-            itemString = QLatin1String("DIODelete");
-            break;
+            return qMakePair(QLatin1String("DIODelete"), i18n("Delete"));
         default:
             break;
     }
 
-    return itemString;
+    return qMakePair(QString(), QString());
 }
 
 void DIO::slotOneProccessed(int operation)

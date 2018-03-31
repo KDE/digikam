@@ -53,32 +53,11 @@ public:
     static IOJobsManager* instance();
 
     /**
-     * @brief startCopy: Starts a thread to copy items to destination
+     * @brief startIOJob: Starts a thread to copy, move, delete or rename items
      * @param data: IOJobData container with source and destination url
      * @return IOJobsThread pointer for signal/slot connection
      */
-    IOJobsThread* startCopy(IOJobData* const data);
-
-    /**
-     * @brief startMove: Starts a thread to move items to destination
-     * @param data: IOJobData container with source and destination url
-     * @return IOJobsThread pointer for signal/slot connection
-     */
-    IOJobsThread* startMove(IOJobData* const data);
-
-    /**
-     * @brief startDelete: Starts a thread to delete items
-     * @param data: IOJobData container with source and destination url
-     * @return IOJobsThread pointer for signal/slot connection
-     */
-    IOJobsThread* startDelete(IOJobData* const data);
-
-    /**
-     * @brief startRenameFile: Starts a thread to rename a single file
-     * @param data: IOJobData container with source and destination url
-     * @return IOJobsThread pointer for signal/slot connection
-     */
-    IOJobsThread* startRenameFile(IOJobData* const data);
+    IOJobsThread* startIOJob(IOJobData* const data);
 
     /**
      * @brief Starts a thread for listing items inside trash for specific collection
