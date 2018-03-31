@@ -74,14 +74,14 @@ void CopyJob::run()
 
         if (!srcInfo.exists())
         {
-            emit error(i18n("File/Folder %1 does not exist anymore", srcInfo.baseName()));
+            emit signalError(i18n("File/Folder %1 does not exist anymore", srcInfo.baseName()));
             emit signalOneProccessed(m_data->operation());
             continue;
         }
 
         if (!dstDir.exists())
         {
-            emit error(i18n("Album %1 does not exist anymore", dstDir.dirName()));
+            emit signalError(i18n("Album %1 does not exist anymore", dstDir.dirName()));
             emit signalOneProccessed(m_data->operation());
             continue;
         }
@@ -93,8 +93,8 @@ void CopyJob::run()
 
         if (fileInfoForDestination.exists())
         {
-            emit error(i18n("A file or folder named %1 already exists in %2",
-                            srcInfo.baseName(), QDir::toNativeSeparators(dstDir.path())));
+            emit signalError(i18n("A file or folder named %1 already exists in %2",
+                                  srcInfo.baseName(), QDir::toNativeSeparators(dstDir.path())));
             emit signalOneProccessed(m_data->operation());
             continue;
         }
@@ -112,19 +112,19 @@ void CopyJob::run()
                     // If QDir::rename fails, try copy and remove.
                     if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
                     {
-                        emit error(i18n("Could not move folder %1 to album %2",
-                                        QDir::toNativeSeparators(srcDir.path()),
-                                        QDir::toNativeSeparators(dstDir.path())));
+                        emit signalError(i18n("Could not move folder %1 to album %2",
+                                              QDir::toNativeSeparators(srcDir.path()),
+                                              QDir::toNativeSeparators(dstDir.path())));
 
                         emit signalOneProccessed(m_data->operation());
                         continue;
                     }
                     else if (!srcDir.removeRecursively())
                     {
-                        emit error(i18n("Could not move folder %1 to album %2. "
-                                        "The folder %1 was copied as well to album %2",
-                                        QDir::toNativeSeparators(srcDir.path()),
-                                        QDir::toNativeSeparators(dstDir.path())));
+                        emit signalError(i18n("Could not move folder %1 to album %2. "
+                                              "The folder %1 was copied as well to album %2",
+                                              QDir::toNativeSeparators(srcDir.path()),
+                                              QDir::toNativeSeparators(dstDir.path())));
                     }
                 }
             }
@@ -134,9 +134,9 @@ void CopyJob::run()
 
                 if (!srcFile.rename(destenation))
                 {
-                    emit error(i18n("Could not move file %1 to album %2",
-                                    srcInfo.filePath(),
-                                    QDir::toNativeSeparators(dstDir.path())));
+                    emit signalError(i18n("Could not move file %1 to album %2",
+                                          srcInfo.filePath(),
+                                          QDir::toNativeSeparators(dstDir.path())));
 
                     emit signalOneProccessed(m_data->operation());
                     continue;
@@ -151,9 +151,9 @@ void CopyJob::run()
 
                 if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
                 {
-                    emit error(i18n("Could not copy folder %1 to album %2",
-                                    QDir::toNativeSeparators(srcDir.path()),
-                                    QDir::toNativeSeparators(dstDir.path())));
+                    emit signalError(i18n("Could not copy folder %1 to album %2",
+                                          QDir::toNativeSeparators(srcDir.path()),
+                                          QDir::toNativeSeparators(dstDir.path())));
 
                     emit signalOneProccessed(m_data->operation());
                     continue;
@@ -163,9 +163,9 @@ void CopyJob::run()
             {
                 if (!QFile::copy(srcInfo.filePath(), destenation))
                 {
-                    emit error(i18n("Could not copy file %1 to album %2",
-                                    QDir::toNativeSeparators(srcInfo.path()),
-                                    QDir::toNativeSeparators(dstDir.path())));
+                    emit signalError(i18n("Could not copy file %1 to album %2",
+                                          QDir::toNativeSeparators(srcInfo.path()),
+                                          QDir::toNativeSeparators(dstDir.path())));
 
                     emit signalOneProccessed(m_data->operation());
                     continue;
@@ -208,8 +208,8 @@ void DeleteJob::run()
 
         if (!fileInfo.exists())
         {
-            emit error(i18n("File/Folder %1 does not exist",
-                            QDir::toNativeSeparators(fileInfo.filePath())));
+            emit signalError(i18n("File/Folder %1 does not exist",
+                                  QDir::toNativeSeparators(fileInfo.filePath())));
 
             emit signalOneProccessed(m_data->operation());
             continue;
@@ -221,8 +221,8 @@ void DeleteJob::run()
             {
                 if (!DTrash::deleteDirRecursivley(deleteUrl.toLocalFile()))
                 {
-                    emit error(i18n("Couldn't move folder %1 to collection trash",
-                                    QDir::toNativeSeparators(fileInfo.path())));
+                    emit signalError(i18n("Couldn't move folder %1 to collection trash",
+                                          QDir::toNativeSeparators(fileInfo.path())));
 
                     emit signalOneProccessed(m_data->operation());
                     continue;
@@ -232,8 +232,8 @@ void DeleteJob::run()
             {
                 if (!DTrash::deleteImage(deleteUrl.toLocalFile()))
                 {
-                    emit error(i18n("Couldn't move image %1 to collection trash",
-                                QDir::toNativeSeparators(fileInfo.filePath())));
+                    emit signalError(i18n("Couldn't move image %1 to collection trash",
+                                          QDir::toNativeSeparators(fileInfo.filePath())));
 
                     emit signalOneProccessed(m_data->operation());
                     continue;
@@ -248,8 +248,8 @@ void DeleteJob::run()
 
                 if (!dir.removeRecursively())
                 {
-                    emit error(i18n("Album %1 could not be removed",
-                                    QDir::toNativeSeparators(fileInfo.path())));
+                    emit signalError(i18n("Album %1 could not be removed",
+                                          QDir::toNativeSeparators(fileInfo.path())));
 
                     emit signalOneProccessed(m_data->operation());
                     continue;
@@ -295,8 +295,8 @@ void DeleteJob::run()
 
                 if (!file.remove())
                 {
-                    emit error(i18n("Image %1 could not be removed",
-                                    QDir::toNativeSeparators(fileInfo.filePath())));
+                    emit signalError(i18n("Image %1 could not be removed",
+                                          QDir::toNativeSeparators(fileInfo.filePath())));
 
                     emit signalOneProccessed(m_data->operation());
                     continue;
@@ -368,8 +368,8 @@ void RenameFileJob::run()
         if (QFileInfo(destUrl.toLocalFile()).exists())
         {
             qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
-            emit error(i18n("Image with the same name %1 already there",
-                            QDir::toNativeSeparators(destUrl.toLocalFile())));
+            emit signalError(i18n("Image with the same name %1 already there",
+                                  QDir::toNativeSeparators(destUrl.toLocalFile())));
 
             emit signalOneProccessed(m_data->operation());
             emit signalRenameFailed(renameUrl);
@@ -385,8 +385,8 @@ void RenameFileJob::run()
         if (!file.rename(destUrl.toLocalFile()))
         {
             qCDebug(DIGIKAM_IOJOB_LOG) << "File couldn't be renamed!";
-            emit error(i18n("Image %1 could not be renamed",
-                            QDir::toNativeSeparators(renameUrl.toLocalFile())));
+            emit signalError(i18n("Image %1 could not be renamed",
+                                  QDir::toNativeSeparators(renameUrl.toLocalFile())));
 
             emit signalOneProccessed(m_data->operation());
             emit signalRenameFailed(renameUrl);

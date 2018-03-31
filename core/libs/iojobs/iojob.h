@@ -52,7 +52,7 @@ protected:
 Q_SIGNALS:
 
     void signalOneProccessed(int operation);
-    void error(const QString& errMsg);
+    void signalError(const QString& errMsg);
 };
 
 // ---------------------------------------

@@ -78,7 +78,7 @@ void IOJobsThread::copy(IOJobData* const data)
 
     ActionJobCollection collection;
 
-    for (int i = 0; i < maximumNumberOfThreads(); i++)
+    for (int i = 0 ; i < maximumNumberOfThreads() ; i++)
     {
         CopyJob* const j = new CopyJob(data);
 
@@ -97,7 +97,7 @@ void IOJobsThread::move(IOJobData* const data)
 
     ActionJobCollection collection;
 
-    for (int i = 0; i < maximumNumberOfThreads(); i++)
+    for (int i = 0 ; i < maximumNumberOfThreads() ; i++)
     {
         CopyJob* const j = new CopyJob(data);
 
@@ -116,7 +116,7 @@ void IOJobsThread::deleteFiles(IOJobData* const data)
 
     ActionJobCollection collection;
 
-    for (int i = 0; i < maximumNumberOfThreads(); i++)
+    for (int i = 0 ; i < maximumNumberOfThreads() ; i++)
     {
         DeleteJob* const j = new DeleteJob(data);
 
@@ -215,7 +215,7 @@ QList<QString>& IOJobsThread::errorsList()
 
 void IOJobsThread::connectOneJob(IOJob* const j)
 {
-    connect(j, SIGNAL(error(QString)),
+    connect(j, SIGNAL(signalError(QString)),
             this, SLOT(slotError(QString)));
 
     connect(j, SIGNAL(signalDone()),
