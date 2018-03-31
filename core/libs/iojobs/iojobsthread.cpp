@@ -52,12 +52,12 @@ public:
     {
     }
 
-    int            jobsCount;
-    bool           isCanceled;
+    int         jobsCount;
+    bool        isCanceled;
 
-    IOJobData*     jobData;
+    IOJobData*  jobData;
 
-    QList<QString> errorsList;
+    QStringList errorsList;
 };
 
 IOJobsThread::IOJobsThread(QObject* const parent)
@@ -198,19 +198,24 @@ void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
     appendJobs(collection);
 }
 
-bool IOJobsThread::isCanceled()
+bool IOJobsThread::isCanceled() const
 {
     return d->isCanceled;
 }
 
-bool IOJobsThread::hasErrors()
+bool IOJobsThread::hasErrors() const
 {
     return !d->errorsList.isEmpty();
 }
 
-QList<QString>& IOJobsThread::errorsList()
+QStringList& IOJobsThread::errorsList() const
 {
     return d->errorsList;
+}
+
+IOJobData* IOJobsThread::jobData() const
+{
+    return d->jobData;
 }
 
 void IOJobsThread::connectOneJob(IOJob* const j)
@@ -245,11 +250,6 @@ void IOJobsThread::slotCancel()
 {
     d->isCanceled = true;
     ActionThreadBase::cancel();
-}
-
-IOJobData* IOJobsThread::jobData()
-{
-    return d->jobData;
 }
 
 } // namespace Digikam

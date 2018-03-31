@@ -422,7 +422,7 @@ void DIO::slotResult()
     if (jobThread->hasErrors() && operation != IOJobData::Rename)
     {
         // Pop-up a message about the error.
-        QString errors = QStringList(jobThread->errorsList()).join(QLatin1String("\n"));
+        QString errors = jobThread->errorsList().join(QLatin1String("\n"));
         DNotificationWrapper(QString(), errors, DigikamApp::instance(),
                              DigikamApp::instance()->windowTitle());
     }

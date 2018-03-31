@@ -92,25 +92,25 @@ public:
      * @brief isCanceled
      * @return true if the thread was inturrupted
      */
-    bool isCanceled();
+    bool isCanceled() const;
 
     /**
      * @brief hasErrors
      * @return true if string list was not empty
      */
-    bool hasErrors();
+    bool hasErrors() const;
 
     /**
      * @brief errorsList
      * @return
      */
-    QList<QString>& errorsList();
+    QStringList& errorsList() const;
 
     /**
      * @brief jobData
      * @return
      */
-    IOJobData* jobData();
+    IOJobData* jobData() const;
 
 public Q_SLOTS:
 
