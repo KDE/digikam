@@ -2260,7 +2260,7 @@ IccProfile DMetadata::getIccProfile() const
     if (!data.isNull())
     {
         qCDebug(DIGIKAM_METAENGINE_LOG) << "Found an ICC profile in Exif metadata";
-        return data;
+        return IccProfile(data);
     }
 
     // Else check the Exif color-space tag and use default profiles that we ship

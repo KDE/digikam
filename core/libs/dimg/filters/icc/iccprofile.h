@@ -69,12 +69,12 @@ public:
     /**
      * Creates a profile from the given data in memory
      */
-    IccProfile(const QByteArray& data);
+    explicit IccProfile(const QByteArray& data);
 
     /**
      * Creates a profile from the given file
      */
-    IccProfile(const QString& filePath);
+    explicit IccProfile(const QString& filePath);
 
     /**
      * Returns the profiles available with RawEngine. You still need to call open() on them.

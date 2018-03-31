@@ -210,7 +210,7 @@ void SoftProofDialog::updateOkButtonState()
 void SoftProofDialog::readSettings()
 {
     ICCSettingsContainer settings = IccSettings::instance()->settings();
-    d->deviceProfileBox->setCurrentProfile(settings.defaultProofProfile);
+    d->deviceProfileBox->setCurrentProfile(IccProfile(settings.defaultProofProfile));
     d->proofingIntentBox->setIntent(settings.proofingRenderingIntent);
     d->gamutCheckBox->setChecked(settings.doGamutCheck);
     d->maskColorBtn->setColor(settings.gamutCheckMaskColor);

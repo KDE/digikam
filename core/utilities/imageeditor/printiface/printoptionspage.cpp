@@ -326,7 +326,7 @@ void PrintOptionsPage::loadConfig()
 
     d->colorManaged->setChecked(PrintConfig::printColorManaged());
     ICCSettingsContainer settings = IccSettings::instance()->settings();
-    d->outputProfile              = settings.defaultProofProfile;
+    d->outputProfile              = IccProfile(settings.defaultProofProfile);
     d->cmEnabled                  = settings.enableCM;
 }
 

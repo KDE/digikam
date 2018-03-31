@@ -85,7 +85,7 @@ BatchToolSettings IccConvert::defaultSettings()
 void IccConvert::slotAssignSettings2Widget()
 {
     QString profPath = settings()[QLatin1String("ProfilePath")].toString();
-    m_settingsView->setCurrentProfile(profPath);
+    m_settingsView->setCurrentProfile(IccProfile(profPath));
 }
 
 void IccConvert::slotSettingsChanged()

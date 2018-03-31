@@ -125,7 +125,7 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
             if (doSoftProofing)
             {
-                monitorICCtrans = manager.displaySoftProofingTransform(iccSettings.defaultProofProfile, widget);
+                monitorICCtrans = manager.displaySoftProofingTransform(IccProfile(iccSettings.defaultProofProfile), widget);
             }
             else
             {

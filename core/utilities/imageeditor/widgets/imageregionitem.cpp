@@ -149,7 +149,7 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 
             if (doSoftProofing)
             {
-                monitorICCtrans = manager.displaySoftProofingTransform(iccSettings.defaultProofProfile, widget);
+                monitorICCtrans = manager.displaySoftProofingTransform(IccProfile(iccSettings.defaultProofProfile), widget);
             }
             else
             {

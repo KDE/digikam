@@ -142,7 +142,7 @@ IccProfile IccSettings::monitorProfile(QWidget* const widget)
 
     if (!d->settings.monitorProfile.isNull())
     {
-        return d->settings.monitorProfile;
+        return IccProfile(d->settings.monitorProfile);
     }
     else
     {
@@ -251,7 +251,7 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
 
         if (!bytes.isEmpty())
         {
-            profile = bytes;
+            profile = IccProfile(bytes);
         }
 
         qCDebug(DIGIKAM_DIMG_LOG) << "Found X.org XICC monitor profile " << profile.description();

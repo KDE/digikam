@@ -96,7 +96,7 @@ bool RAWLoader::load(const QString& filePath, DImgLoaderObserver* const observer
             {
                 // Specifying a custom output is broken somewhere. We use the extremely
                 // wide gamut pro photo profile for 16bit (sRGB for 8bit) and convert afterwards.
-                m_filter->setOutputProfile(m_decoderSettings.outputProfile);
+                m_filter->setOutputProfile(IccProfile(m_decoderSettings.outputProfile));
 
                 if (m_decoderSettings.sixteenBitsImage)
                 {
@@ -291,7 +291,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
         case DRawDecoderSettings::CUSTOMOUTPUTCS:
         {
-            imageSetIccProfile(m_decoderSettings.outputProfile);
+            imageSetIccProfile(IccProfile(m_decoderSettings.outputProfile));
             break;
         }
 

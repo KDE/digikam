@@ -522,7 +522,7 @@ QWidget* ColorCorrectionDlg::createAssumeOptions() const
 
         d->imageProfileBox = new IccProfilesComboBox;
         d->imageProfileBox->addProfilesSqueezed(IccSettings::instance()->inputProfiles());
-        d->imageProfileBox->setCurrentProfile(IccSettings::instance()->settings().defaultInputProfile);
+        d->imageProfileBox->setCurrentProfile(IccProfile(IccSettings::instance()->settings().defaultInputProfile));
         d->imageProfileBox->setNoProfileIfEmpty(i18n("No Input Profile Available"));
 
         grid->addWidget(label);
@@ -785,7 +785,7 @@ void ColorCorrectionDlg::readSettings()
 
         if (!settings.lastSpecifiedAssignProfile.isEmpty())
         {
-            d->otherProfileBox->setCurrentProfile(settings.lastSpecifiedAssignProfile);
+            d->otherProfileBox->setCurrentProfile(IccProfile(settings.lastSpecifiedAssignProfile));
         }
     }
     else if (d->mode == MissingProfile)
@@ -828,12 +828,12 @@ void ColorCorrectionDlg::readSettings()
 
         if (!settings.lastSpecifiedInputProfile.isEmpty())
         {
-            d->imageProfileBox->setCurrentProfile(settings.lastSpecifiedInputProfile);
+            d->imageProfileBox->setCurrentProfile(IccProfile(settings.lastSpecifiedInputProfile));
         }
     }
     else if (d->mode == UncalibratedColor)
     {
-        d->imageProfileBox->setCurrentProfile(settings.lastSpecifiedInputProfile);
+        d->imageProfileBox->setCurrentProfile(IccProfile(settings.lastSpecifiedInputProfile));
         d->imageProfileBox->setFocus();
     }
 }

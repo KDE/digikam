@@ -556,7 +556,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                         QByteArray profile_rawdata;
                         profile_rawdata.resize(blob->len_);
                         memcpy(profile_rawdata.data(), blob->buf_, blob->len_);
-                        imageSetIccProfile(profile_rawdata);
+                        imageSetIccProfile(IccProfile(profile_rawdata));
                         jas_stream_close(icc_stream);
                     }
                 }

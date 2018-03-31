@@ -843,7 +843,7 @@ QPixmap EditorCore::convertToPixmap(DImg& img) const
 
         if (d->doSoftProofing)
         {
-            transform = manager.displaySoftProofingTransform(d->cmSettings.defaultProofProfile);
+            transform = manager.displaySoftProofingTransform(IccProfile(d->cmSettings.defaultProofProfile));
         }
         else
         {

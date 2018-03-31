@@ -187,7 +187,7 @@ void ProfileConversionTool::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
-    d->profilesBox->setCurrentProfile(group.readPathEntry(d->configProfileEntry, d->currentProfile.filePath()));
+    d->profilesBox->setCurrentProfile(IccProfile(group.readPathEntry(d->configProfileEntry, d->currentProfile.filePath())));
     d->profilesBox->readSettings(group);
 }
 

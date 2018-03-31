@@ -3444,7 +3444,7 @@ void EditorWindow::slotUpdateColorSpaceMenu()
 
         foreach(const QString& path, favoriteProfilePaths)
         {
-            favoriteProfiles << path;
+            favoriteProfiles << IccProfile(path);
         }
 
         d->profileMenuAction->addProfiles(favoriteProfiles);

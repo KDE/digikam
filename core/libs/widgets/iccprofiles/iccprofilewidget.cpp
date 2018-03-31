@@ -258,7 +258,7 @@ bool ICCProfileWidget::loadFromURL(const QUrl& url)
 bool ICCProfileWidget::loadFromProfileData(const QString& fileName, const QByteArray& data)
 {
     setFileName(fileName);
-    return(setProfile(data));
+    return(setProfile(IccProfile(data)));
 }
 
 bool ICCProfileWidget::loadProfile(const QString& fileName, const IccProfile& profile)
