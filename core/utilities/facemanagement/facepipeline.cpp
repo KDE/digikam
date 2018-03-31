@@ -32,6 +32,8 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -1006,6 +1008,13 @@ Trainer::Trainer(FacePipeline::Private* const d)
     : imageRetriever(d),
       d(d)
 {
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(QLatin1String("Face Detection Dialog"));
+
+    RecognitionDatabase::RecognizeAlgorithm algo =
+            (RecognitionDatabase::RecognizeAlgorithm)group.readEntry(QLatin1String("Recognize Algorithm"),
+                                                                    (int)RecognitionDatabase::RecognizeAlgorithm::DNN);
+    database.activeFaceRecognizer(algo);
 }
 
 void Trainer::process(FacePipelineExtendedPackage::Ptr package)
