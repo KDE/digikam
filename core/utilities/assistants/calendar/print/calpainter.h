@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef CALPAINTER_H
-#define CALPAINTER_H
+#ifndef CAL_PAINTER_H
+#define CAL_PAINTER_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@ class CalPainter : public QObject, public QPainter
 
 public:
 
-    CalPainter(QPaintDevice* const pd);
+    explicit CalPainter(QPaintDevice* const pd);
     ~CalPainter();
 
     void setImage(const QUrl& imagePath);
@@ -66,4 +66,4 @@ private:
 
 }  // Namespace Digikam
 
-#endif // CALPAINTER_H
+#endif // CAL_PAINTER_H

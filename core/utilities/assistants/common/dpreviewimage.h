@@ -101,7 +101,7 @@ class DPreviewImage : public QGraphicsView
 
 public:
 
-    DPreviewImage(QWidget* const parent);
+    explicit DPreviewImage(QWidget* const parent);
     ~DPreviewImage();
 
 public:

@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT DIntNumInput : public QWidget
 
 public:
 
-    DIntNumInput(QWidget* const parent=0);
+    explicit DIntNumInput(QWidget* const parent=0);
     ~DIntNumInput();
 
     void setRange(int min, int max, int step);
@@ -82,7 +82,7 @@ class DIGIKAM_EXPORT DDoubleNumInput : public QWidget
 
 public:
 
-    DDoubleNumInput(QWidget* const parent=0);
+    explicit DDoubleNumInput(QWidget* const parent=0);
     ~DDoubleNumInput();
 
     void   setDecimals(int p);

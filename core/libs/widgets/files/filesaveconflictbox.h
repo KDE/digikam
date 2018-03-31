@@ -52,7 +52,7 @@ public:
 
 public:
 
-    FileSaveConflictBox(QWidget* const parent);
+    explicit FileSaveConflictBox(QWidget* const parent);
     ~FileSaveConflictBox();
 
     ConflictRule conflictRule() const;

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSIMAGEMODEL_H
-#define GPSIMAGEMODEL_H
+#ifndef GPS_IMAGE_MODEL_H
+#define GPS_IMAGE_MODEL_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class GPSImageModel : public QAbstractItemModel
 
 public:
 
-    GPSImageModel(QObject* const parent = 0);
+    explicit GPSImageModel(QObject* const parent = 0);
     ~GPSImageModel();
 
     // own functions:
@@ -90,4 +90,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSIMAGEMODEL_H
+#endif // GPS_IMAGE_MODEL_H

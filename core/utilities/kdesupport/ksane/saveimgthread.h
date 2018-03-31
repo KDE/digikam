@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef SAVEIMGTHREAD_H
-#define SAVEIMGTHREAD_H
+#ifndef SAVE_IMG_THREAD_H
+#define SAVE_IMG_THREAD_H
 
 // Qt includes
 
@@ -40,7 +40,7 @@ class SaveImgThread : public QThread
 
 public:
 
-    SaveImgThread(QObject* const parent);
+    explicit SaveImgThread(QObject* const parent);
     ~SaveImgThread();
 
     void setTargetFile(const QUrl& url, const QString& format);
@@ -63,6 +63,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif // SAVEIMGTHREAD_H
+#endif // SAVE_IMG_THREAD_H

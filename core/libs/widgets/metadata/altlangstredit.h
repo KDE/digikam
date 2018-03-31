@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ALTLANGSTREDIT_H
-#define ALTLANGSTREDIT_H
+#ifndef ALT_LANG_STR_EDIT_H
+#define ALT_LANG_STR_EDIT_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT AltLangStrEdit : public QWidget
 
 public:
 
-    AltLangStrEdit(QWidget* const parent);
+    explicit AltLangStrEdit(QWidget* const parent);
     ~AltLangStrEdit();
 
     void setTitle(const QString& title);
@@ -117,4 +117,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALTLANGSTREDIT_H
+#endif // ALT_LANG_STR_EDIT_H

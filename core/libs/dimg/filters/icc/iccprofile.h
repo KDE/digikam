@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCPROFILE_H
-#define ICCPROFILE_H
+#ifndef ICC_PROFILE_H
+#define ICC_PROFILE_H
 
 // Qt includes
 
@@ -38,7 +38,6 @@
 
 namespace Digikam
 {
-
 
 class DIGIKAM_EXPORT IccProfile
 {
@@ -196,8 +195,8 @@ public:
     ~LcmsLock();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::IccProfile)
 
-#endif   // ICCPROFILE_H
+#endif // ICC_PROFILE_H

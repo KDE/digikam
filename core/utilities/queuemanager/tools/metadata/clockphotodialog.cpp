@@ -298,4 +298,4 @@ void ClockPhotoDialog::slotCancel()
     reject();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

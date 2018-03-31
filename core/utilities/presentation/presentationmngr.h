@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT PresentationMngr : public QObject
 
 public:
 
-    PresentationMngr(QObject* const parent);
+    explicit PresentationMngr(QObject* const parent);
     ~PresentationMngr();
 
     void addFile(const QUrl& url, const QString& comment);
@@ -62,6 +62,6 @@ private:
     PresentationContainer* m_sharedData;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // PRESENTATION_MNGR_H
+#endif // PRESENTATION_MNGR_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MODELCOMPLETER_H
-#define MODELCOMPLETER_H
+#ifndef MODEL_COMPLETER_H
+#define MODEL_COMPLETER_H
 
 // QT includes
 
@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT ModelCompleter : public QCompleter
 
 public:
 
-    ModelCompleter(QObject* parent = 0);
+    explicit ModelCompleter(QObject* parent = 0);
     ~ModelCompleter();
 
     /**
@@ -83,4 +83,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MODELCOMPLETER_H
+#endif // MODEL_COMPLETER_H

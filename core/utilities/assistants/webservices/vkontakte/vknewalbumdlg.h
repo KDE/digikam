@@ -55,7 +55,7 @@ public:
      *
      * @param parent Parent widget
      */
-    VKNewAlbumDlg(QWidget* const parent);
+    explicit VKNewAlbumDlg(QWidget* const parent);
 
     /**
      * @brief Album editing dialog

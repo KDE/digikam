@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BALOOWRAP_H
-#define BALOOWRAP_H
+#ifndef BALOO_WRAP_H
+#define BALOO_WRAP_H
 
 // Qt includes
 
@@ -71,7 +71,7 @@ class DIGIKAM_DATABASE_EXPORT BalooWrap : public QObject
 
 public:
 
-    BalooWrap(QObject* const parent = 0);
+    explicit BalooWrap(QObject* const parent = 0);
     ~BalooWrap();
 
     /**
@@ -120,4 +120,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* BALOOWRAP_H */
+#endif // BALOO_WRAP_H

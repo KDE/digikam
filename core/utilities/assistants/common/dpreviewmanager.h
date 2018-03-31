@@ -50,7 +50,7 @@ public:
 
 public:
 
-    DPreviewManager(QWidget* const parent);
+    explicit DPreviewManager(QWidget* const parent);
     ~DPreviewManager();
 
     bool load(const QUrl& file, bool fit = true);

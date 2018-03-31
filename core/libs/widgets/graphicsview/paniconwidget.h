@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef PANICONWIDGET_H
-#define PANICONWIDGET_H
+#ifndef PAN_ICON_WIDGET_H
+#define PAN_ICON_WIDGET_H
 
 // Qt includes
 
@@ -59,7 +59,7 @@ class DIGIKAM_EXPORT PanIconFrame : public QFrame
 
 public:
 
-    PanIconFrame(QWidget* const parent=0);
+    explicit PanIconFrame(QWidget* const parent=0);
     ~PanIconFrame();
 
     /**
@@ -185,4 +185,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANICONWIDGET_H
+#endif // PAN_ICON_WIDGET_H

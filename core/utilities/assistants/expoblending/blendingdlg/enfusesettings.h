@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ENFUSESETTINGS_H
-#define ENFUSESETTINGS_H
+#ifndef ENFUSE_SETTINGS_H
+#define ENFUSE_SETTINGS_H
 
 // Qt includes
 
@@ -91,7 +91,7 @@ class EnfuseSettingsWidget : public QWidget
 
 public:
 
-    EnfuseSettingsWidget(QWidget* const parent);
+    explicit EnfuseSettingsWidget(QWidget* const parent);
     ~EnfuseSettingsWidget();
 
     void           setSettings(const EnfuseSettings& settings);
@@ -110,4 +110,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ENFUSESETTINGS_H
+#endif // ENFUSE_SETTINGS_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef QUEUEPOOL_H
-#define QUEUEPOOL_H
+#ifndef QUEUE_POOL_H
+#define QUEUE_POOL_H
 
 // Qt includes
 
@@ -52,7 +52,7 @@ class QueuePoolBar : public QTabBar
 
 public:
 
-    QueuePoolBar(QWidget* const parent);
+    explicit QueuePoolBar(QWidget* const parent);
     ~QueuePoolBar();
 
 Q_SIGNALS:
@@ -132,6 +132,6 @@ private Q_SLOTS:
     void slotTestCanDecode(const QDragMoveEvent*, bool&);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif // QUEUEPOOL_H
+#endif // QUEUE_POOL_H

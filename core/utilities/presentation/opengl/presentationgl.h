@@ -53,7 +53,7 @@ class PresentationGL : public QGLWidget
 
 public:
 
-    PresentationGL(PresentationContainer* const sharedData);
+    explicit PresentationGL(PresentationContainer* const sharedData);
     ~PresentationGL();
 
     void registerEffects();
@@ -120,6 +120,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* PRESENTATION_GL_H */
+#endif // PRESENTATION_GL_H

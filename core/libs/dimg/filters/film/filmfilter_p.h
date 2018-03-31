@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILMFILTER_P_H
-#define FILMFILTER_P_H
+#ifndef FILM_FILTER_P_H
+#define FILM_FILTER_P_H
 
 #include "filmfilter.h"
 
@@ -35,7 +35,7 @@ class FilmProfile
 {
 public:
 
-    FilmProfile(double rdm=0.0, double gdm=0.0, double bdm=0.0)
+    explicit FilmProfile(double rdm=0.0, double gdm=0.0, double bdm=0.0)
         : redDmax(rdm),
           greenDmax(gdm),
           blueDmax(bdm),
@@ -161,4 +161,4 @@ public:
 
 } // namespace Digikam
 
-#endif // FILMFILTER_P_H
+#endif // FILM_FILTER_P_H

@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT DProgressWdg : public QProgressBar
 
 public:
 
-    DProgressWdg(QWidget* const parent);
+    explicit DProgressWdg(QWidget* const parent);
     ~DProgressWdg();
 
     /** Call this method to start a new instance of progress notification into progress manager

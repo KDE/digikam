@@ -106,7 +106,7 @@ class DIGIKAM_EXPORT DClickLabel : public QLabel
 
 public:
 
-    DClickLabel(QWidget* const parent = 0);
+    explicit DClickLabel(QWidget* const parent = 0);
     explicit DClickLabel(const QString& text, QWidget* const parent = 0);
     ~DClickLabel();
 
@@ -132,7 +132,7 @@ class DIGIKAM_EXPORT DSqueezedClickLabel : public DAdjustableLabel
 
 public:
 
-    DSqueezedClickLabel(QWidget* const parent = 0);
+    explicit DSqueezedClickLabel(QWidget* const parent = 0);
     explicit DSqueezedClickLabel(const QString& text, QWidget* const parent = 0);
     ~DSqueezedClickLabel();
 
@@ -156,7 +156,7 @@ class DIGIKAM_EXPORT DArrowClickLabel : public QWidget
 
 public:
 
-    DArrowClickLabel(QWidget* const parent = 0);
+    explicit DArrowClickLabel(QWidget* const parent = 0);
     ~DArrowClickLabel();
 
     void setArrowType(Qt::ArrowType arrowType);
@@ -189,7 +189,7 @@ class DIGIKAM_EXPORT DLabelExpander : public QWidget
 
 public:
 
-    DLabelExpander(QWidget* const parent = 0);
+    explicit DLabelExpander(QWidget* const parent = 0);
     ~DLabelExpander();
 
     void setCheckBoxVisible(bool b);
@@ -243,7 +243,7 @@ class DIGIKAM_EXPORT DExpanderBox : public QScrollArea
 
 public:
 
-    DExpanderBox(QWidget* const parent = 0);
+    explicit DExpanderBox(QWidget* const parent = 0);
     ~DExpanderBox();
 
     /** Add DLabelExpander item at end of box layout with these settings :
@@ -328,7 +328,7 @@ class DIGIKAM_EXPORT DExpanderBoxExclusive : public DExpanderBox
 
 public:
 
-    DExpanderBoxExclusive(QWidget* const parent = 0);
+    explicit DExpanderBoxExclusive(QWidget* const parent = 0);
     ~DExpanderBoxExclusive();
 
     /** Show one expander open at most */

@@ -81,7 +81,7 @@ public:
     }
 
     // Construction and conversion operations
-    vlong ( unsigned x=0 );
+    vlong ( unsigned x = 0 );
     vlong ( const vlong& x ); // copy constructor
     ~vlong();
 

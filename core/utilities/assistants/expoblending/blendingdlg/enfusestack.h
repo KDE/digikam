@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ENFUSESTACK_H
-#define ENFUSESTACK_H
+#ifndef ENFUSE_STACK_H
+#define ENFUSE_STACK_H
 
 // Qt includes
 
@@ -77,7 +77,7 @@ class EnfuseStackList : public QTreeWidget
 
 public:
 
-    EnfuseStackList(QWidget* const parent);
+    explicit EnfuseStackList(QWidget* const parent);
     virtual ~EnfuseStackList();
 
     void setTemplateFileName(DSaveSettingsWidget::OutputFormat, const QString&);
@@ -115,4 +115,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* ENFUSESTACK_H */
+#endif // ENFUSE_STACK_H

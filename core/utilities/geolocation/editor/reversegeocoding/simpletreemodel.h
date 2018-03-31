@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SIMPLETREEMODEL_H
-#define SIMPLETREEMODEL_H
+#ifndef SIMPLE_TREE_MODEL_H
+#define SIMPLE_TREE_MODEL_H
 
 // Qt includes
 
@@ -69,7 +69,7 @@ public:
         friend class SimpleTreeModel;
     };
 
-    SimpleTreeModel(const int columnCount, QObject* const parent = 0);
+    explicit SimpleTreeModel(const int columnCount, QObject* const parent = 0);
     ~SimpleTreeModel();
 
     // QAbstractItemModel:
@@ -96,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SIMPLETREEMODEL_H
+#endif // SIMPLE_TREE_MODEL_H

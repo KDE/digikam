@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGTHREADEDANALYSER_H
-#define DIMGTHREADEDANALYSER_H
+#ifndef DIMG_THREADED_ANALYSER_H
+#define DIMG_THREADED_ANALYSER_H
 
 // Local includes
 
@@ -51,7 +51,7 @@ public:
      *  You need to call startFilter() to start the threaded computation.
      *  To run analyser without to use multithreading, call startFilterDirectly().
      */
-    DImgThreadedAnalyser(DImg* const orgImage, QObject* const parent=0,
+    explicit DImgThreadedAnalyser(DImg* const orgImage, QObject* const parent=0,
                          const QString& name = QString());
 
     ~DImgThreadedAnalyser();
@@ -100,6 +100,6 @@ protected:
     virtual void startAnalyse() = 0;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* DIMGTHREADEDANALYSER_H */
+#endif // DIMG_THREADED_ANALYSER_H

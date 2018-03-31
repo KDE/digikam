@@ -68,6 +68,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // CLOCK_PHOTO_DIALOG_H

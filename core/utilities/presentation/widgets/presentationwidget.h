@@ -57,7 +57,7 @@ public:
 
 public:
 
-    PresentationWidget(PresentationContainer* const sharedData);
+    explicit PresentationWidget(PresentationContainer* const sharedData);
     ~PresentationWidget();
 
     void registerEffects();
@@ -133,6 +133,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* PRESENTATION_WIDGET_H */
+#endif // PRESENTATION_WIDGET_H

@@ -30,6 +30,9 @@
 #include "detbyclockphotobutton.h"
 #include "digikam_debug.h"
 
+namespace Digikam
+{
+
 void DetByClockPhotoButton::dragEnterEvent(QDragEnterEvent* event)
 {
     event->acceptProposedAction();
@@ -47,3 +50,5 @@ void DetByClockPhotoButton::dropEvent(QDropEvent* event)
         emit signalClockPhotoDropped(url);
     }
 }
+
+} // namespace Digikam

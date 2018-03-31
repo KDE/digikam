@@ -29,13 +29,16 @@
 #include <QDragEnterEvent>
 #include <QPushButton>
 
+namespace Digikam
+{
+
 class DetByClockPhotoButton : public QPushButton
 {
     Q_OBJECT
 
 public:
 
-    DetByClockPhotoButton(const QString& text)
+    explicit DetByClockPhotoButton(const QString& text)
         : QPushButton(text)
     {
         setAcceptDrops(true);
@@ -48,5 +51,7 @@ Q_SIGNALS:
 
     void signalClockPhotoDropped(const QUrl&);
 };
+
+} // namespace Digikam
 
 #endif // DET_BY_CLOCK_PHOTO_BUTTON_H

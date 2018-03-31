@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILMFILTER_H_
-#define FILMFILTER_H_
+#ifndef FILM_FILTER_H
+#define FILM_FILTER_H
 
 // Qt includes
 
@@ -178,4 +178,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FILMFILTER_H_ */
+#endif // FILM_FILTER_H

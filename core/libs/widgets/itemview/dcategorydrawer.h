@@ -61,7 +61,7 @@ public:
      *
      * @since 5.0
      */
-    DCategoryDrawer(DCategorizedView* const view);
+    explicit DCategoryDrawer(DCategorizedView* const view);
     virtual ~DCategoryDrawer();
 
     /**

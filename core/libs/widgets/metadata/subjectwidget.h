@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SUBJECTWIDGET_H
-#define SUBJECTWIDGET_H
+#ifndef SUBJECT_WIDGET_H
+#define SUBJECT_WIDGET_H
 
 // Qt includes
 
@@ -67,7 +67,7 @@ class DIGIKAM_EXPORT SubjectWidget : public QWidget
 
 public:
 
-    SubjectWidget(QWidget* const parent);
+    explicit SubjectWidget(QWidget* const parent);
     ~SubjectWidget();
 
     void setSubjectsList(const QStringList& list);
@@ -112,4 +112,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SUBJECTWIDGET_H
+#endif // SUBJECT_WIDGET_H

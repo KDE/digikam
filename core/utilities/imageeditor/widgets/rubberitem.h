@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT RubberItem : public RegionFrameItem
 
 public:
 
-    RubberItem(ImagePreviewItem* const item);
+    explicit RubberItem(ImagePreviewItem* const item);
     virtual ~RubberItem();
 
     void setCanvas(Canvas* const canvas);
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* RUBBER_ITEM_H */
+#endif // RUBBER_ITEM_H

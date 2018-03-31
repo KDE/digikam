@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSIMAGEITEM_H
-#define GPSIMAGEITEM_H
+#ifndef GPS_IMAGE_ITEM_H
+#define GPS_IMAGE_ITEM_H
 
 // Qt includes
 
@@ -110,7 +110,7 @@ public:
 
 public:
 
-    GPSImageItem(const QUrl& url);
+    explicit GPSImageItem(const QUrl& url);
     virtual ~GPSImageItem();
 
     /// @name Loading and saving
@@ -197,4 +197,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // GPSIMAGEITEM_H
+#endif // GPS_IMAGE_ITEM_H

@@ -23,8 +23,8 @@
  * ============================================================ */
 
 
-#ifndef GPSUNDOCOMMAND_H
-#define GPSUNDOCOMMAND_H
+#ifndef GPS_UNDO_COMMAND_H
+#define GPS_UNDO_COMMAND_H
 
 // Qt includes
 
@@ -45,7 +45,7 @@ public:
     {
     public:
 
-        UndoInfo(QPersistentModelIndex pModelIndex)
+        explicit UndoInfo(QPersistentModelIndex pModelIndex)
             : modelIndex(pModelIndex)
         {
         }
@@ -83,4 +83,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSUNDOCOMMAND_H
+#endif // GPS_UNDO_COMMAND_H
