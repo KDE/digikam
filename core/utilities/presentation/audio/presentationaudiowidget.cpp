@@ -33,8 +33,8 @@
 
 // QtAV includes
 
-#include <QtAV/AVError.h>
-#include <QtAV/AVPlayer.h>
+#include <QtAV/AVError.h>  // krazy:exclude=includes
+#include <QtAV/AVPlayer.h> // krazy:exclude=includes
 
 // Local includes
 

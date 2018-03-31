@@ -39,8 +39,8 @@
 
 // QtAV includes
 
-#include <QtAV/AVPlayer.h>
-#include <QtAVWidgets/WidgetRenderer.h>
+#include <QtAV/AVPlayer.h>               // krazy:exclude=includes
+#include <QtAVWidgets/WidgetRenderer.h>  // krazy:exclude=includes
 
 // Local includes
 

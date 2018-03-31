@@ -25,12 +25,12 @@
 
 // QtAv includes
 
-#include <QtAV/VideoDecoder.h>
-#include <QtAV/VideoEncoder.h>
-#include <QtAV/AudioDecoder.h>
-#include <QtAV/AudioEncoder.h>
-#include <QtAV/AVMuxer.h>
-#include <QtAV/LibAVFilter.h>
+#include <QtAV/VideoDecoder.h> // krazy:exclude=includes
+#include <QtAV/VideoEncoder.h> // krazy:exclude=includes
+#include <QtAV/AudioDecoder.h> // krazy:exclude=includes
+#include <QtAV/AudioEncoder.h> // krazy:exclude=includes
+#include <QtAV/AVMuxer.h>      // krazy:exclude=includes
+#include <QtAV/LibAVFilter.h>  // krazy:exclude=includes
 
 using namespace QtAV;
 
