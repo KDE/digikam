@@ -36,7 +36,7 @@
 // Qt includes
 
 #include <QtMath>
-#include <QtConcurrent>
+#include <QtConcurrent>    // krazy:exclude=includes
 
 // Local includes
 

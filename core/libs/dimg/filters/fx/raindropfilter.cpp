@@ -37,7 +37,7 @@
 #include <QDateTime>
 #include <QRect>
 #include <QtMath>
-#include <QtConcurrent>
+#include <QtConcurrent>    // krazy:exclude=includes
 
 // Local includes
 

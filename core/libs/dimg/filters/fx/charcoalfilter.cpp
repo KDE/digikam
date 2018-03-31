@@ -33,7 +33,7 @@
 
 // Qt includes
 
-#include <QtConcurrent>
+#include <QtConcurrent>    // krazy:exclude=includes
 #include <QMutex>
 
 // Local includes

@@ -39,7 +39,7 @@
 #include <QDateTime>
 #include <QSize>
 #include <QMutex>
-#include <QtConcurrent>
+#include <QtConcurrent>    // krazy:exclude=includes
 #include <QtMath>
 
 // Local includes

@@ -50,7 +50,7 @@
 #include <QFileInfo>
 #include <QPointer>
 #include <QFuture>
-#include <QtConcurrent>
+#include <QtConcurrent>    // krazy:exclude=includes
 #include <QTemporaryDir>
 #include <QProcess>
 
