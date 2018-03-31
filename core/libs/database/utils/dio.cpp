@@ -508,6 +508,7 @@ QString DIO::getItemString(int operation) const
             itemString = QLatin1String("DIOTrash");
             break;
         case IOJobData::Delete:
+        case IOJobData::DFiles:
             itemString = QLatin1String("DIODelete");
             break;
         default:
