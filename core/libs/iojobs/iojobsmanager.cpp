@@ -51,7 +51,7 @@ IOJobsManager* IOJobsManager::instance()
     return& creator->object;
 }
 
-IOJobsThread* IOJobsManager::startIOJob(IOJobData* const data)
+IOJobsThread* IOJobsManager::startIOJobs(IOJobData* const data)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
 

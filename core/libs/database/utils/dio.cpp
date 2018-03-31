@@ -348,7 +348,7 @@ void DIO::createJob(IOJobData* const data)
         }
     }
 
-    jobThread = IOJobsManager::instance()->startIOJob(data);
+    jobThread = IOJobsManager::instance()->startIOJobs(data);
 
     connect(jobThread, SIGNAL(signalOneProccessed(int)),
             this, SLOT(slotOneProccessed(int)));
