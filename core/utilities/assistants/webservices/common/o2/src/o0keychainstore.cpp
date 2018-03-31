@@ -5,9 +5,9 @@
 
 #include <QDebug>
 #include <keychain.h>
-#include <QtCore/QDataStream>
-#include <QtCore/QBuffer>
-#include <QtCore/QEventLoop>
+#include <QDataStream>
+#include <QBuffer>
+#include <QEventLoop>
 
 using namespace QKeychain;
 

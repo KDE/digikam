@@ -26,9 +26,9 @@
 
 // Qt includes
 
-#include <QtCore/QString>
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QComboBox>
+#include <QString>
+#include <QWidget>
+#include <QComboBox>
 
 // Local includes
 

@@ -4,7 +4,7 @@
 #ifndef O2_O0KEYCHAINSTORE_H
 #define O2_O0KEYCHAINSTORE_H
 
-#include <QtCore/QMap>
+#include <QMap>
 #include "o0abstractstore.h"
 #include <QString>
 

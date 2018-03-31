@@ -27,14 +27,14 @@
 
 // Qt includes
 
-#include <QtCore/QByteArray>
-#include <QtCore/QMap>
-#include <QtCore/QStringList>
-#include <QtCore/QUrl>
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
+#include <QByteArray>
+#include <QMap>
+#include <QStringList>
+#include <QUrl>
+#include <QWidget>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLineEdit>
 
 // Local includes
 

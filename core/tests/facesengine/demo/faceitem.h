@@ -23,17 +23,17 @@
  *
  * ============================================================ */
 
-#ifndef FACEITEM_H
-#define FACEITEM_H
+#ifndef FACE_ITEM_H
+#define FACE_ITEM_H
 
 // Qt includes
 
-#include <QtCore/QtGlobal>
-#include <QtCore/QObject>
-#include <QtWidgets/QGraphicsObject>
-#include <QtWidgets/QGraphicsRectItem>
-#include <QtGui/QBrush>
-#include <QtGui/QFont>
+#include <QtGlobal>
+#include <QObject>
+#include <QGraphicsObject>
+#include <QGraphicsRectItem>
+#include <QBrush>
+#include <QFont>
 
 // Local includes
 
@@ -96,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACEITEM_H
+#endif // FACE_ITEM_H
