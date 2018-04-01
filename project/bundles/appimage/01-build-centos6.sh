@@ -41,7 +41,14 @@ ORIG_WD="`pwd`"
 echo -e "---------- Update Linux CentOS 6\n"
 
 if [[ "$(arch)" = "x86_64" ]] ; then
+
     yum upgrade ca-certificates --disablerepo=epel
+
+else
+
+    echo -e "---------- Arch not supported. Abort...\n"
+    exit -1
+
 fi
 
 if [[ ! -f /etc/yum.repos.d/epel.repo ]] ; then
@@ -119,25 +126,13 @@ yum -y install wget \
 
 #################################################################################################
 
-if [[ ! -f /opt/rh/devtoolset-3/enable ]] ; then
+if [[ ! -f /opt/rh/devtoolset-4/enable ]] ; then
 
     echo -e "---------- Install New Compiler Tools Set\n"
 
-    if [[ "$(arch)" = "x86_64" ]] ; then
-
-        # Newer compiler than what comes with offcial CentOS 6 (only 64 bits)
-        yum -y install centos-release-scl-rh
-        yum -y install devtoolset-3-gcc devtoolset-3-gcc-c++
-
-    else
-
-        # Newer compiler that come from Sienctifc Linux for CentOS 6 32 bits
-        cd /etc/yum.repos.d
-        wget http://linuxsoft.cern.ch/cern/scl/slc6-scl.repo
-        yum -y --nogpgcheck install devtoolset-3-gcc devtoolset-3-gcc-c++
-        rm -f /etc/yum.repos.d/slc6-scl.repo
-
-    fi
+    # Newer compiler than what comes with offcial CentOS 6 (only 64 bits)
+    yum -y install centos-release-scl-rh
+    yum -y install devtoolset-4-gcc devtoolset-4-gcc-c++
 
 fi
 
@@ -150,17 +145,8 @@ if [[ ! -f /etc/yum.repos.d/nux-dextop.repo ]] ; then
 
     echo -e "---------- Install Repository for ffmpeg packages\n"
 
-    if [[ "$(arch)" = "x86_64" ]] ; then
-
-        rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
-        rpm -Uvh http://li.nux.ro/download/nux/dextop/el6/x86_64/nux-dextop-release-0-2.el6.nux.noarch.rpm
-
-    else
-
-        rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
-        rpm -Uvh http://li.nux.ro/download/nux/dextop/el6/i386/nux-dextop-release-0-2.el6.nux.noarch.rpm
-
-    fi
+    rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+    rpm -Uvh http://li.nux.ro/download/nux/dextop/el6/x86_64/nux-dextop-release-0-2.el6.nux.noarch.rpm
 
 fi
 
@@ -195,7 +181,7 @@ if [ ! -d $DOWNLOAD_DIR ] ; then
 fi
 
 # enable new compiler
-. /opt/rh/devtoolset-3/enable
+. /opt/rh/devtoolset-4/enable
 
 #################################################################################################
 
@@ -228,4 +214,3 @@ cmake3 --build . --config RelWithDebInfo --target ext_qtav       -- -j$CPU_CORES
 #################################################################################################
 
 TerminateScript
-
