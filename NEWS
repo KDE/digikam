@@ -167,5 +167,7 @@ BUGFIXES:
 150 ==> 192908 - Allow to split icon-view in order to show multiple albums at the same time.
 151 ==> 339088 - GIT master: crash when clicking through images in preview, with face recognition running in background.
 152 ==> 341605 - Crash if I attempt to use left-sidebar tags tab.
-153 ==> 
+153 ==> 227266 - Handle Video Date from metadata.
+154 ==> 227259 - Needs to Edit Video Date.
+155 ==> 
 
