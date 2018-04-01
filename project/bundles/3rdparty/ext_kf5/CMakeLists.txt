@@ -192,11 +192,10 @@ function(InstallKF5Component
 
 endfunction()
 
-set(KD_VERSION 5.42)
+set(KD_VERSION 5.44)
 
 if(APPLE)
     set(MacosThreadWeaverPatch threadweaver-macports.patch)
-    set(MacosSolidPatch solid-iokitsupport-macports.patch)   # See https://phabricator.kde.org/D7401
     set(MacosKauthBackend -DKAUTH_BACKEND_NAME=Apple)
 endif()
 

@@ -8,14 +8,14 @@
 
 set(EXTPREFIX_kcalcore "${EXTPREFIX}" )
 
-set(KA_VERSION 17.12.1)
+set(KA_VERSION 17.12.3)
 
 if(MINGW)
     ExternalProject_Add(
         ext_kcalcore
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/kcalcore-${KA_VERSION}.tar.xz
-        URL_MD5 7379340b3d346ecb65aebc3f0663ff24
+        URL_MD5 3b95d38cd06f137e429fdda9699d2edd
         INSTALL_DIR ${EXTPREFIX_kcalcore}
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kcalcore-ecm.patch
 
@@ -36,7 +36,7 @@ elseif(APPLE)
         ext_kcalcore
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/kcalcore-${KA_VERSION}.tar.xz
-        URL_MD5 7379340b3d346ecb65aebc3f0663ff24
+        URL_MD5 3b95d38cd06f137e429fdda9699d2edd
         INSTALL_DIR ${EXTPREFIX_kcalcore}
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kcalcore-ecm.patch
 
@@ -58,7 +58,7 @@ else() # Linux
         ext_kcalcore
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/kcalcore-${KA_VERSION}.tar.xz
-        URL_MD5 7379340b3d346ecb65aebc3f0663ff24
+        URL_MD5 3b95d38cd06f137e429fdda9699d2edd
         INSTALL_DIR ${EXTPREFIX_kcalcore}
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kcalcore-centos6.patch
 
