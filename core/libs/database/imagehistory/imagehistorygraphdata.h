@@ -105,11 +105,13 @@ class ImageHistoryGraphData : public HistoryGraph, public QSharedData
 {
 public:
 
-    ImageHistoryGraphData() : HistoryGraph(ChildToParent)
+    ImageHistoryGraphData()
+      : HistoryGraph(ChildToParent)
     {
     }
 
-    ImageHistoryGraphData(const HistoryGraph& g) : HistoryGraph(g)
+    ImageHistoryGraphData(const HistoryGraph& g)    // krazy:exclude=explicit
+      : HistoryGraph(g)
     {
     }
 
@@ -120,7 +122,7 @@ public:
     }
 
     Vertex addVertex(const HistoryImageId& id);
-    ImageHistoryGraphData::Vertex addVertex(const QList<HistoryImageId>& imageIds);
+    Vertex addVertex(const QList<HistoryImageId>& imageIds);
     Vertex addVertex(qlonglong id);
     Vertex addVertexScanned(qlonglong id);
     Vertex addVertex(const ImageInfo& info);
@@ -132,10 +134,12 @@ public:
     inline QList<ImageInfo> toInfoList(const QList<Vertex>& vertices) const
     {
         QList<ImageInfo> infos;
+
         foreach(const HistoryGraph::Vertex& v, vertices)
         {
             infos << properties(v).infos;
         }
+
         return infos;
     }
 
