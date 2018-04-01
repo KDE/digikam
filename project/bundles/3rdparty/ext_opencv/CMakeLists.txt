@@ -56,8 +56,8 @@ if(MINGW)
 
     ExternalProject_Add(ext_opencv
 
-        URL https://github.com/Itseez/opencv/archive/3.4.0.zip
-        URL_MD5 ed60f8bbe7a448f325d0a0f58fcf2063
+        URL https://github.com/opencv/opencv/archive/3.4.1.tar.gz
+        URL_MD5 a0b7a47899e67b3490ea31edc4f6e8e6
 
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
                    -DCMAKE_TOOLCHAIN_FILE=${MXE_TOOLCHAIN}
@@ -74,7 +74,7 @@ if(MINGW)
 
         # Note : under MXE, in case of curl is not compiled with https support,
         # we cannot download the tarball as under Linux/MacOS.
-#        COMMAND wget -N https://github.com/Itseez/opencv/archive/3.2.0.zip -O ${EXTERNALS_DOWNLOAD_DIR}/3.2.0.zip
+#        COMMAND wget -N https://github.com/opencv/opencv/archive/3.4.1.tar.gz -O ${EXTERNALS_DOWNLOAD_DIR}/3.4.1.zip
 #        DEPENDERS download
     )
 
@@ -83,8 +83,8 @@ elseif(APPLE)
     ExternalProject_Add(ext_opencv
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        URL https://github.com/Itseez/opencv/archive/3.4.0.zip
-        URL_MD5 ed60f8bbe7a448f325d0a0f58fcf2063
+        URL https://github.com/opencv/opencv/archive/3.4.1.tar.gz
+        URL_MD5 a0b7a47899e67b3490ea31edc4f6e8e6
 
         CONFIGURE_COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.macports <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.macports ${EXTPREFIX_opencv} RelWithDebInfo x86_64 "${BASH_OPTIONS}"
@@ -104,8 +104,8 @@ else() #Linux
     ExternalProject_Add(ext_opencv
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        URL https://github.com/Itseez/opencv/archive/3.4.0.zip
-        URL_MD5 ed60f8bbe7a448f325d0a0f58fcf2063
+        URL https://github.com/opencv/opencv/archive/3.4.1.tar.gz
+        URL_MD5 a0b7a47899e67b3490ea31edc4f6e8e6
 
         INSTALL_DIR ${EXTPREFIX_opencv}
 
