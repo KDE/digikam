@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DNGSETTINGS_H
-#define DNGSETTINGS_H
+#ifndef DNG_SETTINGS_H
+#define DNG_SETTINGS_H
 
 // Qt includes
 
@@ -40,7 +40,7 @@ class DIGIKAM_EXPORT DNGSettings : public QWidget
 
 public:
 
-    DNGSettings(QWidget* const parent=0);
+    explicit DNGSettings(QWidget* const parent=0);
     ~DNGSettings();
 
     void setCompressLossLess(bool b);
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DNGSETTINGS_H
+#endif // DNG_SETTINGS_H

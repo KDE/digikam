@@ -158,7 +158,8 @@ protected:
 // --------------------------------------------------------------------------------------------------
 
 WorkerObjectRunnable::WorkerObjectRunnable(WorkerObject* const object, ParkingThread* const parkingThread)
-    : object(object), parkingThread(parkingThread)
+    : object(object),
+      parkingThread(parkingThread)
 {
     setAutoDelete(true);
 }
@@ -210,11 +211,11 @@ void WorkerObjectRunnable::run()
 
 // -------------------------------------------------------------------------------------------------
 
-class ThreadManager::ThreadManagerPriv
+class ThreadManager::Private
 {
 public:
 
-    ThreadManagerPriv()
+    Private()
     {
         parkingThread = 0;
         pool          = 0;
@@ -242,7 +243,7 @@ ThreadManager* ThreadManager::instance()
 }
 
 ThreadManager::ThreadManager()
-    : d(new ThreadManagerPriv)
+    : d(new Private)
 {
     d->parkingThread = new ParkingThread(this);
     d->pool          = new QThreadPool(this);

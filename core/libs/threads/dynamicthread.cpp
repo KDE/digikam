@@ -37,11 +37,11 @@
 namespace Digikam
 {
 
-class DynamicThread::DynamicThreadPriv : public QRunnable
+class DynamicThread::Private : public QRunnable
 {
 public:
 
-    explicit DynamicThreadPriv(DynamicThread* const q)
+    explicit Private(DynamicThread* const q)
         : q(q)
     {
         setAutoDelete(false);
@@ -57,9 +57,9 @@ public:
     };
 
     virtual void run();
-    void takingThread();
-    bool transitionToRunning();
-    void transitionToInactive();
+    void         takingThread();
+    bool         transitionToRunning();
+    void         transitionToInactive();
 
 public:
 
@@ -80,14 +80,14 @@ public:
     QWaitCondition                condVar;
 };
 
-void DynamicThread::DynamicThreadPriv::takingThread()
+void DynamicThread::Private::takingThread()
 {
     QMutexLocker locker(&mutex);
     // The thread we requested from the pool has now "arrived"
     threadRequested = false;
 }
 
-bool DynamicThread::DynamicThreadPriv::transitionToRunning()
+bool DynamicThread::Private::transitionToRunning()
 {
     QMutexLocker locker(&mutex);
 
@@ -136,7 +136,7 @@ bool DynamicThread::DynamicThreadPriv::transitionToRunning()
     }
 }
 
-void DynamicThread::DynamicThreadPriv::transitionToInactive()
+void DynamicThread::Private::transitionToInactive()
 {
     QMutexLocker locker(&mutex);
 
@@ -170,7 +170,7 @@ void DynamicThread::DynamicThreadPriv::transitionToInactive()
     }
 }
 
-void DynamicThread::DynamicThreadPriv::run()
+void DynamicThread::Private::run()
 {
     if (emitSignals)
     {
@@ -199,7 +199,8 @@ void DynamicThread::DynamicThreadPriv::run()
 // -----------------------------------------------------------------------------------------------
 
 DynamicThread::DynamicThread(QObject* const parent)
-    : QObject(parent), d(new DynamicThreadPriv(this))
+    : QObject(parent),
+      d(new Private(this))
 {
     setAutoDelete(false);
     ThreadManager::instance()->initialize(this);

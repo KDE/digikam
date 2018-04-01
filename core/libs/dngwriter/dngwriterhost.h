@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DNGWRITERHOST_H
-#define DNGWRITERHOST_H
+#ifndef DNG_WRITER_HOST_H
+#define DNG_WRITER_HOST_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class DNGWriterHost : public dng_host
 
 public:
 
-    DNGWriterHost(DNGWriter::Private* const priv, dng_memory_allocator* const allocator=0);
+    explicit DNGWriterHost(DNGWriter::Private* const priv, dng_memory_allocator* const allocator=0);
     ~DNGWriterHost();
 
 private:
@@ -49,4 +49,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DNGWRITERHOST_H
+#endif // DNG_WRITER_HOST_H

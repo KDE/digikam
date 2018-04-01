@@ -158,7 +158,7 @@ public:
         {
         }
 
-        QueryState(const QueryStateEnum value)
+        QueryState(const QueryStateEnum value)    // krazy:exclude=explicit
             : value(value)
         {
         }
@@ -187,12 +187,12 @@ public:
 
     bool isOpen() const
     {
-        return status() > Unavailable;
+        return (status() > Unavailable);
     }
 
     bool isReady() const
     {
-        return status() == OpenSchemaChecked;
+        return (status() == OpenSchemaChecked);
     }
 
     /**

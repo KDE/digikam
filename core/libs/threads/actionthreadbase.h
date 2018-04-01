@@ -95,7 +95,7 @@ class DIGIKAM_EXPORT ActionThreadBase : public QThread
 
 public:
 
-    ActionThreadBase(QObject* const parent=0);
+    explicit ActionThreadBase(QObject* const parent=0);
     virtual ~ActionThreadBase();
 
     /** Adjust maximum number of threads used to parallelize collection of job processing.

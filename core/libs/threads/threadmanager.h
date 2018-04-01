@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef THREADMANAGER_H
-#define THREADMANAGER_H
+#ifndef THREAD_MANAGER_H
+#define THREAD_MANAGER_H
 
 // Qt includes
 
@@ -68,10 +68,10 @@ private:
 
     friend class ThreadManagerCreator;
 
-    class ThreadManagerPriv;
-    ThreadManagerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
 
-#endif // THREADMANAGER_H
+#endif // THREAD_MANAGER_H

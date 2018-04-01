@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PARALLELWORKERS_H
-#define PARALLELWORKERS_H
+#ifndef PARALLEL_WORKERS_H
+#define PARALLEL_WORKERS_H
 
 // Qt includes
 
@@ -92,9 +92,9 @@ protected:
 
 protected:
 
-    QList<WorkerObject*> m_workers;
-    int                  m_currentIndex;
-    QMetaObject*         m_replacementMetaObject;
+    QList<WorkerObject*>   m_workers;
+    int                    m_currentIndex;
+    QMetaObject*           m_replacementMetaObject;
 
     StaticMetacallFunction m_originalStaticMetacall;
 };
@@ -154,4 +154,4 @@ public:
 
 } // namespace Digikam
 
-#endif // PARALLELWORKERS_H
+#endif // PARALLEL_WORKERS_H

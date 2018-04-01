@@ -39,11 +39,11 @@
 namespace Digikam
 {
 
-class WorkerObject::WorkerObjectPriv
+class WorkerObject::Private
 {
 public:
 
-    WorkerObjectPriv()
+    Private()
     {
         state         = WorkerObject::Inactive;
         eventLoop     = 0;
@@ -62,7 +62,7 @@ public:
 };
 
 WorkerObject::WorkerObject()
-    : d(new WorkerObjectPriv)
+    : d(new Private)
 {
     ThreadManager::instance()->initialize(this);
 }

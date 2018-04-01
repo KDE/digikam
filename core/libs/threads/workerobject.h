@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef WORKEROBJECT_H
-#define WORKEROBJECT_H
+#ifndef WORKER_OBJECT_H
+#define WORKER_OBJECT_H
 
 // Qt includes
 
@@ -183,10 +183,10 @@ private:
     friend class WorkerObjectRunnable;
     friend class ThreadManager;
 
-    class WorkerObjectPriv;
-    WorkerObjectPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
 
-#endif // WORKEROBJECT_H
+#endif // WORKER_OBJECT_H

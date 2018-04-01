@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DYNAMICTHREAD_H
-#define DYNAMICTHREAD_H
+#ifndef DYNAMIC_THREAD_H
+#define DYNAMIC_THREAD_H
 
 // Qt includes
 
@@ -141,10 +141,10 @@ private:
 
     friend class DynamicThreadPriv;
 
-    class DynamicThreadPriv;
-    DynamicThreadPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
 
-#endif // DYNAMICTHREAD_H
+#endif // DYNAMIC_THREAD_H
