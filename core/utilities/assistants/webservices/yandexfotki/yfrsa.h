@@ -46,6 +46,7 @@ class vlong // very long integer - can be used like long
 public:
 
     // Standard arithmetic operators
+
     friend vlong operator +( const vlong& x, const vlong& y );
     friend vlong operator -( const vlong& x, const vlong& y );
     friend vlong operator *( const vlong& x, const vlong& y );
@@ -54,41 +55,52 @@ public:
     vlong& operator +=( const vlong& x );
     vlong& operator -=( const vlong& x );
 
+public:
+
     // Standard comparison operators
+
     friend inline int operator !=( const vlong& x, const vlong& y )
     {
         return x.cf( y ) != 0;
     }
+
     friend inline int operator ==( const vlong& x, const vlong& y )
     {
         return x.cf( y ) == 0;
     }
+
     friend inline int operator >=( const vlong& x, const vlong& y )
     {
         return x.cf( y ) >= 0;
     }
+
     friend inline int operator <=( const vlong& x, const vlong& y )
     {
         return x.cf( y ) <= 0;
     }
+
     friend inline int operator > ( const vlong& x, const vlong& y )
     {
         return x.cf( y ) > 0;
     }
+
     friend inline int operator < ( const vlong& x, const vlong& y )
     {
         return x.cf( y ) < 0;
     }
 
+public:
+
     // Construction and conversion operations
-    vlong ( unsigned x = 0 );
-    vlong ( const vlong& x ); // copy constructor
+    vlong(unsigned x = 0);  // krazy:exclude=explicit
+    // copy constructor
+    vlong(const vlong& x);
     ~vlong();
 
     operator unsigned ();
     vlong& operator =(const vlong& x);
 
-    void     load( unsigned* a, unsigned n );  // load value, a[0] is lsw
+    void     load( unsigned* a, unsigned n );         // load value, a[0] is lsw
     void     store( unsigned* a, unsigned n ) const;  // low level save, a[0] is lsw
     unsigned get_nunits() const;
     unsigned bits() const;
