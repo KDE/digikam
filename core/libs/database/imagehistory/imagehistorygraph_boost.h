@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEHISTORYGRAPH_BOOST_H
-#define IMAGEHISTORYGRAPH_BOOST_H
+#ifndef IMAGE_HISTORYGRAPH_BOOST_H
+#define IMAGE_HISTORYGRAPH_BOOST_H
 
 // To include pragma directives for MSVC
 #include "digikam_config.h"
@@ -46,8 +46,13 @@
 // prohibit boost using deprecated header files
 #define BOOST_NO_HASH
 
+// C++ includes
+
 #include <utility>
 #include <algorithm>
+
+// Boost library includes
+
 #include <boost/graph/transitive_closure.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/topological_sort.hpp>
@@ -90,7 +95,9 @@ public:
     typedef Value data_type;
     typedef typename std::pair<const Key, Value> value_type;
 
-    QMapForAdaptors() {}
+    QMapForAdaptors()
+    {
+    }
 };
 
 enum MeaningOfDirection
@@ -115,16 +122,18 @@ class Graph
 public:
 
     typedef boost::adjacency_list<
-    boost::vecS, /// Standard storage. listS was desirable, but many algorithms work only with vecS
+          boost::vecS,                                                  /// Standard storage. listS was desirable, but many algorithms work only with vecS
           boost::vecS,
-          boost::bidirectionalS, /// directed graph
+          boost::bidirectionalS,                                        /// directed graph
           boost::property<boost::vertex_index_t, int,
           boost::property<vertex_properties_t, VertexProperties> >,
-          boost::property<edge_properties_t, EdgeProperties> /// One property for each edge: EdgeProperties
+          boost::property<edge_properties_t, EdgeProperties>            /// One property for each edge: EdgeProperties
           > GraphContainer;
 
 
-    /** a bunch of graph-specific typedefs that make the long boost types manageable */
+    /**
+     * a bunch of graph-specific typedefs that make the long boost types manageable
+     */
     typedef typename boost::graph_traits<GraphContainer> graph_traits;
 
     typedef typename graph_traits::vertex_descriptor vertex_t;
@@ -160,8 +169,15 @@ public:
     {
     public:
 
-        Vertex() : v(graph_traits::null_vertex()) {}
-        Vertex(const vertex_t& v) : v(v) {}
+        Vertex()
+          : v(graph_traits::null_vertex())
+        {
+        }
+        
+        Vertex(const vertex_t& v)    // krazy:exclude=explicit
+          : v(v)
+        {
+        }
 
         Vertex& operator=(const vertex_t& other)
         {
@@ -173,6 +189,7 @@ public:
         {
             return v;
         }
+
         operator vertex_t&()
         {
             return v;
@@ -197,8 +214,16 @@ public:
     {
     public:
 
-        Edge() : null(true) {}
-        Edge(const edge_t& e) : e(e), null(false) {}
+        Edge()
+          : null(true)
+        {
+        }
+
+        Edge(const edge_t& e)
+          : e(e),
+            null(false)
+        {
+        }
 
         Edge& operator=(const edge_t& other)
         {
@@ -211,6 +236,7 @@ public:
         {
             return e;
         }
+
         operator edge_t&()
         {
             return e;
@@ -257,7 +283,8 @@ public:
     }
 
     Graph(const Graph& g)
-        : graph(g.graph), direction(g.direction)
+      : graph(g.graph),
+        direction(g.direction)
     {
     }
 
@@ -302,7 +329,7 @@ public:
             return;
         }
 
-        boost::clear_vertex(v, graph);
+        boost::clear_vertex(v,  graph);
         boost::remove_vertex(v, graph);
     }
 
@@ -944,6 +971,7 @@ public:
         {
             bfs.removeOne(v);
         }
+
         vertices << bfs;
 
         if (vertices.size() == vertexCount())
@@ -1022,6 +1050,7 @@ public:
         {
             dfs.removeOne(v);
         }
+
         vertices << dfs;
 
         return search.vertices;
@@ -1426,7 +1455,10 @@ protected:
         public:
 
             lessThanMapEdgeToTarget(const GraphType& g, VertexLessThan vertexLessThan)
-                : g(g), vertexLessThan(vertexLessThan) {}
+              : g(g),
+                vertexLessThan(vertexLessThan)
+            {
+            }
 
             const GraphType& g;
             VertexLessThan vertexLessThan;
@@ -1461,6 +1493,7 @@ protected:
                 Vertex v = boost::target(e, g);
                 vis.examine_edge(e, g);
                 boost::default_color_type v_color = boost::get(color, v);
+
                 if (v_color == boost::white_color)
                 {
                     vis.tree_edge(e, g);
@@ -1475,6 +1508,7 @@ protected:
                     vis.forward_or_cross_edge(e, g);
                 }
             }
+
             put(color, u, boost::black_color);
             vis.finish_vertex(u, g);
         }
@@ -1502,12 +1536,12 @@ protected:
                 candidates << it.key();
             }
 
-            /*
+/*
             if (it.value() == -1)
                 qDebug() << id(it.key()) << "unreachable";
             else
                 qDebug() << "Distance to" << id(it.key()) << "is" << it.value();
-            */
+*/
         }
 
         return candidates;
@@ -1562,4 +1596,4 @@ protected:
 #pragma clang diagnostic pop
 #endif
 
-#endif // IMAGEHISTORYGRAPH_BOOST_H
+#endif // IMAGE_HISTORYGRAPH_BOOST_H
