@@ -70,7 +70,7 @@ public:
 public:
 
     FacePipelineFaceTagsIface();
-    FacePipelineFaceTagsIface(const FaceTagsIface& face);
+    FacePipelineFaceTagsIface(const FaceTagsIface& face);    // krazy:exclude=explicit
 
 public:
 
@@ -86,7 +86,7 @@ class FacePipelineFaceTagsIfaceList : public QList<FacePipelineFaceTagsIface>
 public:
 
     FacePipelineFaceTagsIfaceList();
-    FacePipelineFaceTagsIfaceList(const QList<FaceTagsIface>& faces);
+    FacePipelineFaceTagsIfaceList(const QList<FaceTagsIface>& faces);    // krazy:exclude=explicit
 
     FacePipelineFaceTagsIfaceList& operator=(const QList<FaceTagsIface>& faces);
 
