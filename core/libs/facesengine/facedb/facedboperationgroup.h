@@ -48,7 +48,7 @@ public:
     /**
      * Use an existing FaceDbAccess object, which must live as long as this object exists.
      */
-    FaceDbOperationGroup(FaceDbAccess* const access);
+    explicit FaceDbOperationGroup(FaceDbAccess* const access);
 
     ~FaceDbOperationGroup();
 

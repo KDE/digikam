@@ -63,7 +63,7 @@ class DIGIKAM_DATABASE_EXPORT QListImageListProvider : public ImageListProvider
 {
 public:
 
-    QListImageListProvider(const QList<QImage>& lst);
+    explicit QListImageListProvider(const QList<QImage>& lst);
     QListImageListProvider();
 
     void reset();

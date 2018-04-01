@@ -43,7 +43,7 @@ class EigenFaceRecognizer : public cv::face::FaceRecognizer
 public:
 
     // Initializes this Eigenfaces Model.
-    EigenFaceRecognizer(double threshold = DBL_MAX)
+    explicit EigenFaceRecognizer(double threshold = DBL_MAX)
         : m_threshold(threshold),
           m_num_components(0)
     {

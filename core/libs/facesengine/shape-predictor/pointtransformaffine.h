@@ -59,7 +59,7 @@ public:
     {
     }
 
-    PointTransformAffine(const std::vector<std::vector<float> >& m_)
+    explicit PointTransformAffine(const std::vector<std::vector<float> >& m_)
     {
         m = std::vector<std::vector<float> >(2, std::vector<float>(2, 0));
         b = std::vector<float >(2, 0);

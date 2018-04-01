@@ -56,7 +56,7 @@ class OpenCVFaceDetector
 {
 public:
 
-    OpenCVFaceDetector(const QStringList& cascadeDirs);
+    explicit OpenCVFaceDetector(const QStringList& cascadeDirs);
     ~OpenCVFaceDetector();
 
     cv::Mat prepareForDetection(const QImage& inputImage) const;
@@ -118,4 +118,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FACESENGINE_OPENCVFACEDETECTOR_H */
+#endif // FACESENGINE_OPENCVFACEDETECTOR_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef _FACE_DATABASE_BACKEND_H_
-#define _FACE_DATABASE_BACKEND_H_
+#ifndef FACE_DATABASE_BACKEND_H
+#define FACE_DATABASE_BACKEND_H
 
 // Local includes
 
@@ -42,7 +42,8 @@ class DIGIKAM_DATABASE_EXPORT FaceDbBackend : public BdEngineBackend
 
 public:
 
-    explicit FaceDbBackend(DbEngineLocking* const locking, const QString& backendName = QLatin1String("faceDatabase-"));
+    explicit FaceDbBackend(DbEngineLocking* const locking,
+                           const QString& backendName = QLatin1String("faceDatabase-"));
     ~FaceDbBackend();
 
     /**
@@ -59,4 +60,4 @@ private:
 
 } // namespace Digikam
 
-#endif // _FACE_DATABASE_BACKEND_H_
+#endif // FACE_DATABASE_BACKEND_H

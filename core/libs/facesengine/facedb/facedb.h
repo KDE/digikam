@@ -54,7 +54,7 @@ class FaceDb
 public:
 
     FaceDb();
-    FaceDb(FaceDbBackend* const db);
+    explicit FaceDb(FaceDbBackend* const db);
     ~FaceDb();
 
     BdEngineBackend::QueryState setSetting(const QString& keyword, const QString& value);

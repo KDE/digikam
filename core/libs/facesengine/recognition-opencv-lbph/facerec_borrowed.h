@@ -56,12 +56,12 @@ public:
     //
     // radius, neighbors are used in the local binary patterns creation.
     // grid_x, grid_y control the grid size of the spatial histograms.
-    LBPHFaceRecognizer(int radius_=1,
-                       int neighbors_=8,
-                       int gridx=8,
-                       int gridy=8,
-                       double threshold = DBL_MAX,
-                       PredictionStatistics statistics = NearestNeighbor) :
+    explicit LBPHFaceRecognizer(int radius_=1,
+                                int neighbors_=8,
+                                int gridx=8,
+                                int gridy=8,
+                                double threshold = DBL_MAX,
+                                PredictionStatistics statistics = NearestNeighbor) :
         m_grid_x(gridx),
         m_grid_y(gridy),
         m_radius(radius_),
@@ -92,7 +92,9 @@ public:
         train(src, labels);
     }
 
-    ~LBPHFaceRecognizer() {}
+    ~LBPHFaceRecognizer()
+    {
+    }
 
     using cv::face::FaceRecognizer::predict;
 

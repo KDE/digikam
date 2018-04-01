@@ -44,7 +44,7 @@ public:
 
     FullObjectDetection(const cv::Rect& rect_, const std::vector<std::vector<float> >& parts_);
     FullObjectDetection();
-    FullObjectDetection(const cv::Rect& rect_);
+    explicit FullObjectDetection(const cv::Rect& rect_);
 
     const cv::Rect& get_rect() const;
 

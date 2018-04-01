@@ -40,7 +40,7 @@ class DNNFaceRecognizer
 public:
 
     // Initializes this DNNFace Model.
-    DNNFaceRecognizer(double threshold = DBL_MAX)
+    explicit DNNFaceRecognizer(double threshold = DBL_MAX)
         : m_threshold(threshold)
     {
     }
@@ -60,7 +60,7 @@ public:
 
     static cv::Ptr<DNNFaceRecognizer> create(double threshold = DBL_MAX);
 
-    ///void getFaceVector(cv::Mat data, std::vector<float>& vecdata) const;
+    //void getFaceVector(cv::Mat data, std::vector<float>& vecdata) const;
 
     /**
      * Computes a DNNFace model with images in src and

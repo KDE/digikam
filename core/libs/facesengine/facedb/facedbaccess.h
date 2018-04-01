@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef _FACE_DATABASE_ACCESS_H_
-#define _FACE_DATABASE_ACCESS_H_
+#ifndef FACE_DATABASE_ACCESS_H
+#define FACE_DATABASE_ACCESS_H
 
 // Local includes
 
@@ -91,7 +91,7 @@ public:
      *  FaceDbAccess.
      */
     FaceDbAccessUnlock();
-    FaceDbAccessUnlock(FaceDbAccess* const access);
+    explicit FaceDbAccessUnlock(FaceDbAccess* const access);
     ~FaceDbAccessUnlock();
 
 private:
@@ -101,4 +101,4 @@ private:
 
 } // namespace Digikam
 
-#endif // _FACE_DATABASE_ACCESS_H_
+#endif // FACE_DATABASE_ACCESS_H
