@@ -14,6 +14,13 @@ set -eE
 trap 'PREVIOUS_COMMAND=$THIS_COMMAND; THIS_COMMAND=$BASH_COMMAND' DEBUG
 trap 'echo "FAILED COMMAND: $PREVIOUS_COMMAND"' ERR
 
+if [[ "$(arch)" != "x86_64" ]] ; then
+
+    echo -e "---------- Arch not supported. Abort...\n"
+    exit -1
+
+fi
+
 #################################################################################################
 # Manage script traces to log file
 
@@ -34,7 +41,7 @@ ChecksRunAsRoot
 StartScript
 ChecksCPUCores
 CentOS6Adjustments
-. /opt/rh/devtoolset-3/enable
+. /opt/rh/devtoolset-4/enable
 
 ORIG_WD="`pwd`"
 

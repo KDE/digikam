@@ -19,6 +19,17 @@ if [ "root" != "$USER" ]; then
     exit
 fi
 
+if [[ "$(arch)" = "x86_64" ]] ; then
+
+    LIB_PATH_ALT=lib64
+
+else
+
+    echo -e "---------- Arch not supported. Abort...\n"
+    exit -1
+
+fi
+
 #################################################################################################
 # Manage script traces to log file
 
@@ -39,13 +50,7 @@ ChecksRunAsRoot
 StartScript
 ChecksCPUCores
 CentOS6Adjustments
-. /opt/rh/devtoolset-3/enable
-
-if [[ "$(arch)" = "x86_64" ]] ; then
-    LIB_PATH_ALT=lib64
-else
-    LIB_PATH_ALT=lib
-fi
+. /opt/rh/devtoolset-4/enable
 
 #################################################################################################
 
