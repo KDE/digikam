@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IOJOB_H
-#define IOJOB_H
+#ifndef IO_JOB_H
+#define IO_JOB_H
 
 // Qt includes
 
@@ -63,7 +63,7 @@ class DIGIKAM_EXPORT CopyJob : public IOJob
 
 public:
 
-    CopyJob(IOJobData* const data);
+    explicit CopyJob(IOJobData* const data);
 
 protected:
 
@@ -82,7 +82,7 @@ class DIGIKAM_EXPORT DeleteJob : public IOJob
 
 public:
 
-    DeleteJob(IOJobData* const data);
+    explicit DeleteJob(IOJobData* const data);
 
 protected:
 
@@ -105,7 +105,7 @@ class DIGIKAM_EXPORT RenameFileJob : public IOJob
 
 public:
 
-    RenameFileJob(IOJobData* const data);
+    explicit RenameFileJob(IOJobData* const data);
 
 Q_SIGNALS:
 
@@ -129,7 +129,7 @@ class DIGIKAM_EXPORT DTrashItemsListingJob : public IOJob
 
 public:
 
-    DTrashItemsListingJob(const QString& collectionPath);
+    explicit DTrashItemsListingJob(const QString& collectionPath);
 
 Q_SIGNALS:
 
@@ -152,7 +152,7 @@ class DIGIKAM_EXPORT RestoreDTrashItemsJob : public IOJob
 
 public:
 
-    RestoreDTrashItemsJob(const DTrashItemInfoList& infos);
+    explicit RestoreDTrashItemsJob(const DTrashItemInfoList& infos);
 
 protected:
 
@@ -171,7 +171,7 @@ class DIGIKAM_EXPORT DeleteDTrashItemsJob : public IOJob
 
 public:
 
-    DeleteDTrashItemsJob(const DTrashItemInfoList& infos);
+    explicit DeleteDTrashItemsJob(const DTrashItemInfoList& infos);
 
 protected:
 
@@ -184,4 +184,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IOJOB_H
+#endif // IO_JOB_H

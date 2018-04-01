@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEINFOLIST_H
-#define IMAGEINFOLIST_H
+#ifndef IMAGE_INFO_LIST_H
+#define IMAGE_INFO_LIST_H
 
 // Qt includes
 
@@ -50,7 +50,7 @@ public:
 
     explicit ImageInfoList(const QList<qlonglong>& idList);
 
-    ImageInfoList(const QList<ImageInfo>& list)
+    ImageInfoList(const QList<ImageInfo>& list)         // krazy:exclude=explicit
         : QList<ImageInfo>(list)
     {
     }
@@ -77,4 +77,4 @@ typedef ImageInfoList::iterator ImageInfoListIterator;
 
 Q_DECLARE_METATYPE(Digikam::ImageInfoList)
 
-#endif // IMAGEINFOLIST_H
+#endif // IMAGE_INFO_LIST_H

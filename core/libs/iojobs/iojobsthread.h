@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IOJOBSTHREAD_H
-#define IOJOBSTHREAD_H
+#ifndef IO_JOBS_THREAD_H
+#define IO_JOBS_THREAD_H
 
 // Local includes
 
@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT IOJobsThread : public ActionThreadBase
 
 public:
 
-    IOJobsThread(QObject* const parent);
+    explicit IOJobsThread(QObject* const parent);
     ~IOJobsThread();
 
     /**
@@ -159,4 +159,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IOJOBSTHREAD_H
+#endif // IO_JOBS_THREAD_H

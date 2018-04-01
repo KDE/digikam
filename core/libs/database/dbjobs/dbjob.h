@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBJOB_H
-#define DBJOB_H
+#ifndef DB_JOB_H
+#define DB_JOB_H
 
 // Local includes
 
@@ -61,7 +61,7 @@ class DIGIKAM_DATABASE_EXPORT AlbumsJob : public DBJob
 
 public:
 
-    AlbumsJob(const AlbumsDBJobInfo& jobInfo);
+    explicit AlbumsJob(const AlbumsDBJobInfo& jobInfo);
     ~AlbumsJob();
 
 protected:
@@ -85,7 +85,7 @@ class DIGIKAM_DATABASE_EXPORT DatesJob : public DBJob
 
 public:
 
-    DatesJob(const DatesDBJobInfo& jobInfo);
+    explicit DatesJob(const DatesDBJobInfo& jobInfo);
     ~DatesJob();
 
 protected:
@@ -109,7 +109,7 @@ class DIGIKAM_DATABASE_EXPORT GPSJob : public DBJob
 
 public:
 
-    GPSJob(const GPSDBJobInfo& jobInfo);
+    explicit GPSJob(const GPSDBJobInfo& jobInfo);
     ~GPSJob();
 
 protected:
@@ -133,7 +133,7 @@ class DIGIKAM_DATABASE_EXPORT TagsJob : public DBJob
 
 public:
 
-    TagsJob(const TagsDBJobInfo& jobInfo);
+    explicit TagsJob(const TagsDBJobInfo& jobInfo);
     ~TagsJob();
 
 protected:
@@ -158,7 +158,7 @@ class DIGIKAM_DATABASE_EXPORT SearchesJob : public DBJob
 
 public:
 
-    SearchesJob(const SearchesDBJobInfo& jobInfo);
+    explicit SearchesJob(const SearchesDBJobInfo& jobInfo);
     ~SearchesJob();
 
     bool isCanceled();
@@ -179,4 +179,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DBJOB_H
+#endif // DB_JOB_H

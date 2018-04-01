@@ -60,7 +60,7 @@ public:
 
 public:
 
-    ImageCopyright(qlonglong imageid);
+    explicit ImageCopyright(qlonglong imageid);
 
     /** Create a null ImageCopyright object */
     ImageCopyright();

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DUPLICATESPROGRESSOBSERVER_H
-#define DUPLICATESPROGRESSOBSERVER_H
+#ifndef DUPLICATES_PROGRESS_OBSERVER_H
+#define DUPLICATES_PROGRESS_OBSERVER_H
 
 #include "haariface.h"
 #include "dbjob.h"
@@ -38,7 +38,7 @@ class DIGIKAM_DATABASE_EXPORT DuplicatesProgressObserver : public HaarProgressOb
 
 public:
 
-    DuplicatesProgressObserver(SearchesJob* const thread);
+    explicit DuplicatesProgressObserver(SearchesJob* const thread);
     ~DuplicatesProgressObserver();
 
     virtual void totalNumberToScan(int number);
@@ -52,4 +52,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DUPLICATESPROGRESSOBSERVER_H
+#endif // DUPLICATES_PROGRESS_OBSERVER_H

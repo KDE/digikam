@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGMNGRTREEVIEW_H
-#define TAGMNGRTREEVIEW_H
+#ifndef TAG_MNGR_TREE_VIEW_H
+#define TAG_MNGR_TREE_VIEW_H
 
 // Local includes
 
@@ -102,4 +102,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAGMNGRTREEVIEW_H
+#endif // TAG_MNGR_TREE_VIEW_H

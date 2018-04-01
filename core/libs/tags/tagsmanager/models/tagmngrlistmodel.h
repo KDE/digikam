@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef LISTMODEL_H
-#define LISTMODEL_H
+#ifndef TAG_MNGR_LIST_MODEL_H
+#define TAG_MNGR_LIST_MODEL_H
 
 // Qt includes
 
@@ -41,7 +41,7 @@ class TagMngrListModel : public QAbstractItemModel
 
 public:
 
-    TagMngrListModel(QObject* const parent = 0);
+    explicit TagMngrListModel(QObject* const parent = 0);
     ~TagMngrListModel();
 
     /**
@@ -98,4 +98,4 @@ private:
 
 } // namespace Digikam
 
-#endif // LISTMODEL_H
+#endif // TAG_MNGR_LIST_MODEL_H

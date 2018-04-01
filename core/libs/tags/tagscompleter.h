@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGSCOMPLETER_H
-#define TAGSCOMPLETER_H
+#ifndef TAGS_COMPLETER_H
+#define TAGS_COMPLETER_H
 
 // Qt includes
 
@@ -46,7 +46,7 @@ public:
 
     /** A completion object operating on a TagModel
      */
-    TagCompleter(QObject* const parent = 0);
+    explicit TagCompleter(QObject* const parent = 0);
     ~TagCompleter();
 
     // Update the completer for the given fragment
@@ -77,4 +77,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAGSCOMPLETER_H
+#endif // TAGS_COMPLETER_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IOJOB_DATA_H
-#define IOJOB_DATA_H
+#ifndef IO_JOB_DATA_H
+#define IO_JOB_DATA_H
 
 // Qt includes
 
@@ -113,4 +113,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IOJOB_DATA_H
+#endif // IO_JOB_DATA_H

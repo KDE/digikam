@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGPROPWIDGET_H
-#define TAGPROPWIDGET_H
+#ifndef TAG_PROP_WIDGET_H
+#define TAG_PROP_WIDGET_H
 
 // Qt includes
 
@@ -53,7 +53,7 @@ public:
 
 public:
 
-    TagPropWidget(QWidget* const parent);
+    explicit TagPropWidget(QWidget* const parent);
     ~TagPropWidget();
 
 Q_SIGNALS:
@@ -92,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAGPROPWIDGET
+#endif // TAG_PROP_WIDGET

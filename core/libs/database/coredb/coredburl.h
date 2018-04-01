@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COREDATABASEURL_H
-#define COREDATABASEURL_H
+#ifndef CORE_DATABASE_URL_H
+#define CORE_DATABASE_URL_H
 
 // Qt includes
 
@@ -259,4 +259,4 @@ public:
 
 }  // namespace Digikam
 
-#endif // COREDATABASEURL_H
+#endif // CORE_DATABASE_URL_H

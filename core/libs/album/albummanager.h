@@ -25,8 +25,8 @@
 
 /** @file albummanager.h */
 
-#ifndef ALBUMMANAGER_H
-#define ALBUMMANAGER_H
+#ifndef ALBUM_MANAGER_H
+#define ALBUM_MANAGER_H
 
 // Qt includes
 
@@ -791,13 +791,13 @@ public:
     {
     }
 
-    AlbumPointer(T* a)
+    AlbumPointer(T* const a)                          // krazy:exclude=explicit
         : album(a)
     {
         AlbumManager::instance()->addGuardedPointer(album, &album);
     }
 
-    AlbumPointer(const AlbumPointer<T>& p)
+    AlbumPointer(const AlbumPointer<T>& p)      // krazy:exclude=explicit
         : album(p.album)
     {
         AlbumManager::instance()->addGuardedPointer(album, &album);
@@ -808,7 +808,7 @@ public:
         AlbumManager::instance()->removeGuardedPointer(album, &album);
     }
 
-    AlbumPointer<T>& operator=(T* a)
+    AlbumPointer<T>& operator=(T* const a)
     {
         Album* const oldAlbum = album;
         album                 = a;
@@ -862,7 +862,7 @@ public:
     {
     }
 
-    AlbumPointerList(const AlbumPointerList<T>& list)
+    explicit AlbumPointerList(const AlbumPointerList<T>& list)
         : QList<AlbumPointer<T> >(list)
     {
     }
@@ -888,7 +888,7 @@ public:
     }
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::AlbumPointer<>)
 Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::PAlbum>)
@@ -897,4 +897,4 @@ Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::SAlbum>)
 Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::DAlbum>)
 Q_DECLARE_METATYPE(QList<Digikam::TAlbum*>)
 
-#endif /* ALBUMMANAGER_H */
+#endif // ALBUM_MANAGER_H

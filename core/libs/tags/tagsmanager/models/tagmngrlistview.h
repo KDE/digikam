@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGMNGRLISTVIEW_H
-#define TAGMNGRLISTVIEW_H
+#ifndef TAG_MNGR_LIST_VIEW_H
+#define TAG_MNGR_LIST_VIEW_H
 
 // Qt includes
 
@@ -41,6 +41,7 @@ class TagMngrListView : public QTreeView
 public:
 
     explicit TagMngrListView(QWidget* const parent = 0);
+
     QModelIndexList mySelectedIndexes();
 
 protected:
@@ -70,4 +71,4 @@ public Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // TAGMNGRLISTVIEW_H
+#endif // TAG_MNGR_LIST_VIEW_H

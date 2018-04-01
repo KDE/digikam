@@ -122,7 +122,7 @@ public:
      *
      * @param widget The widget that is shown as page in the DConfigDlgWdg.
      */
-    DConfigDlgWdgItem(QWidget* widget);
+    explicit DConfigDlgWdgItem(QWidget* widget);
 
     /**
      * Creates a new page widget item.

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGLIST_H
-#define TAGLIST_H
+#ifndef TAG_LIST_H
+#define TAG_LIST_H
 
 // Qt includes
 
@@ -79,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAGLIST_H
+#endif // TAG_LIST_H

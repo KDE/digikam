@@ -1423,13 +1423,13 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
 
     // Copyright info
     ImageCopyright copyrightDest(dest.id());
-    copyrightDest.replaceFrom(source.id());
+    copyrightDest.replaceFrom(ImageCopyright(source.id()));
 
     // Image Properties
     CoreDbAccess().db()->copyImageProperties(source.id(), dest.id());
 }
 
-void CollectionScanner::itemsWereRemoved(const QList<qlonglong> &removedIds)
+void CollectionScanner::itemsWereRemoved(const QList<qlonglong>& removedIds)
 {
     // set time stamp
     d->removedItems();
