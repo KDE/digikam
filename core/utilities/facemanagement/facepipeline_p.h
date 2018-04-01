@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FACEPIPELINE_P_H
-#define FACEPIPELINE_P_H
+#ifndef FACE_PIPELINE_P_H
+#define FACE_PIPELINE_P_H
 
 #include "facepipeline.h"
 
@@ -217,7 +217,7 @@ class FaceImageRetriever
 {
 public:
 
-    FaceImageRetriever(FacePipeline::Private* const d);
+    explicit FaceImageRetriever(FacePipeline::Private* const d);
     void cancel();
 
     ThumbnailImageCatcher* thumbnailCatcher();
@@ -474,4 +474,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACEPIPELINE_P_H
+#endif // FACE_PIPELINE_P_H

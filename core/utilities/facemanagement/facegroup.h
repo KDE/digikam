@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FACEGROUP_H
-#define FACEGROUP_H
+#ifndef FACE_GROUP_H
+#define FACE_GROUP_H
 
 // Qt includes
 
@@ -159,4 +159,4 @@ protected Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // FACEGROUP_H
+#endif // FACE_GROUP_H

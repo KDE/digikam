@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ASSIGNNAMEWIDGET_H
-#define ASSIGNNAMEWIDGET_H
+#ifndef ASSIGN_NAME_WIDGET_H
+#define ASSIGN_NAME_WIDGET_H
 
 // Qt includes
 
@@ -175,4 +175,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ASSIGNNAMEWIDGET_H
+#endif // ASSIGN_NAME_WIDGET_H
