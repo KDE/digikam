@@ -34,6 +34,7 @@ namespace Digikam
 AdvPrintThread::AdvPrintThread(QObject* const parent)
     : ActionThreadBase(parent)
 {
+    setObjectName(QLatin1String("AdvPrintThread"));
 }
 
 AdvPrintThread::~AdvPrintThread()

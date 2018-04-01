@@ -83,6 +83,7 @@ protected:
 MetaReaderThread::MetaReaderThread(QObject* const parent)
     : ActionThreadBase(parent)
 {
+    setObjectName(QLatin1String("MetaReaderThread"));
 }
 
 void MetaReaderThread::readMetadata(const QList<QUrl>& list, const QString& direction)

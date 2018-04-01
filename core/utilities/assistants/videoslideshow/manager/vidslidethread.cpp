@@ -34,6 +34,7 @@ namespace Digikam
 VidSlideThread::VidSlideThread(QObject* const parent)
     : ActionThreadBase(parent)
 {
+    setObjectName(QLatin1String("VidSlideThread"));
 }
 
 VidSlideThread::~VidSlideThread()

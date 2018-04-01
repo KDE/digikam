@@ -112,6 +112,7 @@ protected:
 ActionThread::ActionThread(QObject* const parent)
     : ActionThreadBase(parent)
 {
+    setObjectName(QLatin1String("ActionThread"));
 }
 
 ActionThread::~ActionThread()

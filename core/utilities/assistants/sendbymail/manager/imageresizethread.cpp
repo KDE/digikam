@@ -39,6 +39,7 @@ namespace Digikam
 ImageResizeThread::ImageResizeThread(QObject* const parent)
     : ActionThreadBase(parent)
 {
+    setObjectName(QLatin1String("ImageResizeThread"));
     m_count  = new int;
     *m_count = 0;
 }

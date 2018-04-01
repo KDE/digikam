@@ -103,6 +103,7 @@ protected:
 MyActionThread::MyActionThread(QObject* const parent)
     : ActionThreadBase(parent)
 {
+    setObjectName(QLatin1String("MyActionThread"));
 }
 
 MyActionThread::~MyActionThread()

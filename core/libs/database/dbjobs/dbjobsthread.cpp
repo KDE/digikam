@@ -34,6 +34,7 @@ namespace Digikam
 DBJobsThread::DBJobsThread(QObject* const parent)
     : ActionThreadBase(parent)
 {
+    setObjectName(QLatin1String("DBJobsThread"));
 }
 
 DBJobsThread::~DBJobsThread()

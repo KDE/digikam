@@ -50,6 +50,7 @@ public:
 ActionThread::ActionThread(QObject* const parent)
     : ActionThreadBase(parent), d(new Private)
 {
+    setObjectName(QLatin1String("QueueMngrThread"));
     qRegisterMetaType<ActionData>();
 
     connect(this, SIGNAL(finished()),

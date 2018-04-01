@@ -47,6 +47,8 @@ MaintenanceThread::MaintenanceThread(QObject* const parent)
     : ActionThreadBase(parent),
       data(new MaintenanceData)
 {
+    setObjectName(QLatin1String("MaintenanceThread"));
+
     connect(this, SIGNAL(finished()),
             this, SLOT(slotThreadFinished()));
 }

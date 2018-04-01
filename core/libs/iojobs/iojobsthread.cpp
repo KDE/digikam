@@ -64,6 +64,7 @@ IOJobsThread::IOJobsThread(QObject* const parent)
     : ActionThreadBase(parent),
       d(new Private)
 {
+    setObjectName(QLatin1String("IOJobsThread"));
 }
 
 IOJobsThread::~IOJobsThread()
