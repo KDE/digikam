@@ -169,5 +169,6 @@ BUGFIXES:
 152 ==> 341605 - Crash if I attempt to use left-sidebar tags tab.
 153 ==> 227266 - Handle Video Date from metadata.
 154 ==> 227259 - Needs to Edit Video Date.
-155 ==> 
+155 ==> 373284 - digiKam crashed with SIGSEGV in QSortFilterProxyModel::parent().
+156 ==> 
 
