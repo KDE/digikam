@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2017-05-06
- * Description : interface to item informations for shared tools
+ * Description : interface to item information for shared tools
  *               based on DMetadata.
  *
  * Copyright (C) 2017-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -60,6 +60,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DMETA_INFO_IFACE_H
