@@ -1008,17 +1008,17 @@ void DXmlGuiWindow::setupIconTheme()
         {
             QIcon::setThemeName(QLatin1String("breeze"));
             cg.writeEntry("Theme", "breeze");
-            qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze icons ressource file found";
+            qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze icons resource file found";
         }
         else if (hasBreezeDark)
         {
             QIcon::setThemeName(QLatin1String("breeze-dark"));
             cg.writeEntry("Theme", "breeze-dark");
-            qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze-dark icons ressource file found";
+            qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze-dark icons resource file found";
         }
         else
         {
-            qCDebug(DIGIKAM_WIDGETS_LOG) << "No icons ressource file found";
+            qCDebug(DIGIKAM_WIDGETS_LOG) << "No icons resource file found";
         }
 
         cg.sync();
@@ -1214,7 +1214,7 @@ QList<QAction*> DXmlGuiWindow::importActions() const
 #ifdef HAVE_KIO
                              << m_importFileTransferAction
 #endif
-                       
+
 #ifdef HAVE_KSANE
                              << m_ksaneAction
 #endif
