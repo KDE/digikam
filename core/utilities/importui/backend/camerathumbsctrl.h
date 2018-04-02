@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERATHUMBSCTRL_H
-#define CAMERATHUMBSCTRL_H
+#ifndef CAMERA_THUMBS_CTRL_H
+#define CAMERA_THUMBS_CTRL_H
 
 // Qt includes
 
@@ -50,12 +50,12 @@ class DIGIKAM_EXPORT CameraThumbsCtrl : public QObject
 
 public:
 
-    CameraThumbsCtrl(CameraController* const ctrl, QWidget* const parent);
+    explicit CameraThumbsCtrl(CameraController* const ctrl, QWidget* const parent);
     ~CameraThumbsCtrl();
 
     /** fill item with relevant information.
      *  if item is not in cache, return false and information will be dispatched later through signalThumbInfoReady(),
-     *  else return true and information is available immediatly.
+     *  else return true and information is available immediately.
      */
     bool getThumbInfo(const CamItemInfo& info, CachedItem& item) const;
 
@@ -98,6 +98,6 @@ private:
     const QScopedPointer<Private> d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* CAMERATHUMBSCTRL_H */
+#endif // CAMERA_THUMBS_CTRL_H

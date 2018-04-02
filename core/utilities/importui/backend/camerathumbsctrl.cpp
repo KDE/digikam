@@ -292,4 +292,4 @@ void CameraThumbsCtrl::setCacheSize(int numberOfItems)
                                          QPixmap(1, 1).depth() / 8) + (numberOfItems * sizeof(CamItemInfo)));
 }
 
-}  // namespace Digikam
+} // namespace Digikam
