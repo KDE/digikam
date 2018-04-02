@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CONTEXTMENUHELPER_H
-#define CONTEXTMENUHELPER_H
+#ifndef CONTEXT_MENU_HELPER_H
+#define CONTEXT_MENU_HELPER_H
 
 // Qt includes
 
@@ -211,7 +211,7 @@ public:
     /**
      * Add section for main views for opening and moving/going to albums.
      *
-     * This is a convenience function to ensure consistent menues and reduce
+     * This is a convenience function to ensure consistent menus and reduce
      * code duplication.
      *
      * @param imageIds the list of selected items
@@ -432,4 +432,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CONTEXTMENUHELPER_H */
+#endif // CONTEXT_MENU_HELPER_H
