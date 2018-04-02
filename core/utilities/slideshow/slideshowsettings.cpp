@@ -131,4 +131,4 @@ int SlideShowSettings::count() const
     return fileList.count();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

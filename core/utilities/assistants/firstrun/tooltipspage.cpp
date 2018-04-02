@@ -123,4 +123,4 @@ void TooltipsPage::saveSettings()
     config->sync();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

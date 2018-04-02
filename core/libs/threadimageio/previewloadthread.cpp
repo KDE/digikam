@@ -138,4 +138,4 @@ DImg PreviewLoadThread::loadSynchronously(const LoadingDescription& description)
     return task.img();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

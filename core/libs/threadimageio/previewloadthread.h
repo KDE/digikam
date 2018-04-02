@@ -103,6 +103,6 @@ protected:
     QWidget* m_displayingWidget;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
 #endif // SHARED_LOAD_SAVE_THREAD_H

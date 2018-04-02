@@ -252,4 +252,4 @@ void ExpoBlendingPreProcessPage::slotExpoBlendingAction(const Digikam::ExpoBlend
     }
 }
 
-}   // namespace Digikam
+} // namespace Digikam

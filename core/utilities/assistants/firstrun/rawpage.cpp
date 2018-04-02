@@ -117,4 +117,4 @@ void RawPage::saveSettings()
     config->sync();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

@@ -516,4 +516,4 @@ void LoadingCache::CacheLock::timedWait()
     m_cache->d->condVar.wait(&m_cache->d->mutex, 1000);
 }
 
-}   // namespace Digikam
+} // namespace Digikam

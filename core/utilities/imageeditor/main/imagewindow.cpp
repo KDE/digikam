@@ -1023,7 +1023,7 @@ void ImageWindow::prepareImageToSave()
             QSize tempS = d->currentImageInfo.dimensions();
             QMap<QString, QVariant>::const_iterator it;
 
-            for (it = faceTags.constBegin() ; it != faceTags.constEnd() ; it++)
+            for (it = faceTags.constBegin() ; it != faceTags.constEnd() ; ++it)
             {
                 // Start transform each face rect
                 QRect faceRect = it.value().toRect();
@@ -1090,7 +1090,7 @@ void ImageWindow::saveFaceTagsToImage(const ImageInfo& info)
 
         QMap<QString, QVariant>::const_iterator it;
 
-        for (it = d->newFaceTags.constBegin() ; it != d->newFaceTags.constEnd() ; it++)
+        for (it = d->newFaceTags.constBegin() ; it != d->newFaceTags.constEnd() ; ++it)
         {
             int tagId = FaceTags::getOrCreateTagForPerson(it.key());
 

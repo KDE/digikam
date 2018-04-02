@@ -87,4 +87,4 @@ ExpoBlendingLastPage::~ExpoBlendingLastPage()
     delete d;
 }
 
-}   // namespace Digikam
+} // namespace Digikam

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEIFACE_H
-#define IMAGEIFACE_H
+#ifndef IMAGE_IFACE_H
+#define IMAGE_IFACE_H
 
 // Qt includes
 
@@ -177,4 +177,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGEIFACE_H */
+#endif // IMAGE_IFACE_H

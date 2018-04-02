@@ -57,7 +57,7 @@ public:
 
 public:
 
-    PrintOptionsPage(QWidget* const parent, const QSize& imageSize);
+    explicit PrintOptionsPage(QWidget* const parent, const QSize& imageSize);
     ~PrintOptionsPage();
 
     void loadConfig();

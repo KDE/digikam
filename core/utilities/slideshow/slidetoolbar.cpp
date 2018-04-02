@@ -281,4 +281,4 @@ void SlideToolBar::slotScreenSelected(QAction* act)
     emit signalScreenSelected(act->data().toInt());
 }
 
-}   // namespace Digikam
+} // namespace Digikam

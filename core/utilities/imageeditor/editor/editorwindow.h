@@ -26,6 +26,10 @@
 #ifndef EDITOR_WINDOW_H
 #define EDITOR_WINDOW_H
 
+// C++ includes
+
+#include <queue>
+
 // Qt includes
 
 #include <QColor>
@@ -34,9 +38,6 @@
 #include <QString>
 #include <QProgressDialog>
 #include <QUrl>
-
-//std includes
-#include <queue>
 
 // Local includes
 

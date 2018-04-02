@@ -41,6 +41,6 @@ public:
     DImg cacheLookup(const QString& filePath, AccessMode mode);
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
 #endif // SHARED_LOAD_SAVE_THREAD_H

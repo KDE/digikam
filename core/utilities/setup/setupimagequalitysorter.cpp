@@ -295,4 +295,4 @@ void SetupImageQualitySorter::readSettings()
     d->optionsView->setEnabled(imq.enableSorter);
 }
 
-}   // namespace Digikam
+} // namespace Digikam

@@ -272,4 +272,4 @@ void SetupSlideShow::readSettings()
     }
 }
 
-}   // namespace Digikam
+} // namespace Digikam

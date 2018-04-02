@@ -44,6 +44,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
 #endif /* EXPOBLENDINGLAST_PAGE_H */

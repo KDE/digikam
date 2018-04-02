@@ -1196,4 +1196,4 @@ QList<QImage> ThumbnailImageCatcher::waitForThumbnails()
     return result;
 }
 
-}   // namespace Digikam
+} // namespace Digikam

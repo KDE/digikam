@@ -98,4 +98,4 @@ void LoadingCacheInterface::setCacheOptions(int cacheSize)
     cache->setCacheSize(cacheSize);
 }
 
-}   // namespace Digikam
+} // namespace Digikam

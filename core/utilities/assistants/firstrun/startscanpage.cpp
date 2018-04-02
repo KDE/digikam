@@ -71,4 +71,4 @@ StartScanPage::~StartScanPage()
 {
 }
 
-}   // namespace Digikam
+} // namespace Digikam

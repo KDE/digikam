@@ -121,4 +121,4 @@ void PreviewPage::saveSettings()
     config->sync();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

@@ -469,4 +469,4 @@ void ImageIface::setOriginal(const QString& caller, const FilterAction& action, 
     d->core->putImg(caller, action, img);
 }
 
-}   // namespace Digikam
+} // namespace Digikam

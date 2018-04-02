@@ -345,4 +345,4 @@ bool LoadSaveThread::reverseExifRotate(DImg& image, const QString& filePath)
     return rotatedOrFlipped;
 }
 
-}   // namespace Digikam
+} // namespace Digikam

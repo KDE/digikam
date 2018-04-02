@@ -228,6 +228,6 @@ private:
     SavingTaskStatus m_savingTaskStatus;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
 #endif // LOAD_SAVE_TASK_H

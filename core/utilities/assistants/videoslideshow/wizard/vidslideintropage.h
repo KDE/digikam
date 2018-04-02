@@ -51,6 +51,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
 #endif // VIDSLIDE_INTRO_PAGE_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef _PRINT_CONFIG_H_
-#define _PRINT_CONFIG_H_
+#ifndef PRINT_CONFIG_H
+#define PRINT_CONFIG_H
 
 // Qt includes
 
@@ -223,4 +223,4 @@ class DIGIKAM_EXPORT PrintConfig : public KConfigSkeleton
 
 } // namespace Digikam
 
-#endif // _PRINT_CONFIG_H_
+#endif // PRINT_CONFIG_H

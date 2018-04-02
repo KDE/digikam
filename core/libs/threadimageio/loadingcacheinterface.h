@@ -82,6 +82,6 @@ public:
     static void setCacheOptions(int cacheSize);
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
 #endif // LOADING_CACHE_INTERFACE_H

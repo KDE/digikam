@@ -50,6 +50,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
 #endif // HTML_INTRO_PAGE_H

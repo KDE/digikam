@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EDITORTOOLSETTINGS_H
-#define EDITORTOOLSETTINGS_H
+#ifndef EDITOR_TOOL_SETTINGS_H
+#define EDITOR_TOOL_SETTINGS_H
 
 // Qt includes
 
@@ -124,4 +124,4 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::EditorToolSettings::Buttons)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::EditorToolSettings::Tools)
 
-#endif // EDITORTOOLSETTINGS_H
+#endif // EDITOR_TOOL_SETTINGS_H

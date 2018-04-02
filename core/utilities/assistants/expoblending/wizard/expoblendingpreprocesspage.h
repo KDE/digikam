@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
 #endif /* EXPOBLENDINGPREPROCESS_PAGE_H */
