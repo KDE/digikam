@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FIRSTRUN_DLG_H
-#define FIRSTRUN_DLG_H
+#ifndef FIRST_RUN_DLG_H
+#define FIRST_RUN_DLG_H
 
 // Qt includes
 
@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* FIRSTRUN_DLG_H */
+#endif // FIRST_RUN_DLG_H

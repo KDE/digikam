@@ -174,7 +174,7 @@ void FirstRunDlg::slotFinishPressed()
 {
     if (d->migrateFromDigikam4Page && d->migrateFromDigikam4Page->isMigrationChecked())
     {
-       // The user choosed to do a migration from digikam4
+       // The user choose to do a migration from digikam4
        d->migrateFromDigikam4Page->doMigration();
     }
     else
@@ -190,4 +190,4 @@ void FirstRunDlg::slotFinishPressed()
     }
 }
 
-}   // namespace Digikam
+} // namespace Digikam
