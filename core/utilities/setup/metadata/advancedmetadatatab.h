@@ -21,6 +21,9 @@
  *
  * ============================================================ */
 
+#ifndef ADVANCED_METADATA_TAB_H
+#define ADVANCED_METADATA_TAB_H
+
 // Qt includes
 
 #include <QWidget>
@@ -41,7 +44,7 @@ class AdvancedMetadataTab : public QWidget
 
 public:
 
-    AdvancedMetadataTab(QWidget* const parent = 0);
+    explicit AdvancedMetadataTab(QWidget* const parent = 0);
     virtual ~AdvancedMetadataTab();
 
     void applySettings();
@@ -132,3 +135,5 @@ private:
 };
 
 } // namespace Digikam
+
+#endif // ADVANCED_METADATA_TAB_H

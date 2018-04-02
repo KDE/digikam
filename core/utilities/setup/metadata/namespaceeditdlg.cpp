@@ -141,7 +141,9 @@ public:
     NamespaceEntry::NamespaceType   nsType;
 };
 
-NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry& entry, QWidget* const parent)
+NamespaceEditDlg::NamespaceEditDlg(bool create,
+                                   NamespaceEntry& entry,
+                                   QWidget* const parent)
     : QDialog(parent),
       d(new Private())
 {
@@ -192,7 +194,9 @@ NamespaceEditDlg::NamespaceEditDlg(bool create, NamespaceEntry& entry, QWidget* 
         makeReadOnly();
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Entry type" << entry.nsType << "subspace" << entry.subspace << entry.isDefault;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Entry type" << entry.nsType
+                                 << "subspace" << entry.subspace
+                                 << entry.isDefault;
     adjustSize();
 }
 
@@ -206,7 +210,7 @@ bool NamespaceEditDlg::create(QWidget* const parent, NamespaceEntry& entry)
     QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(true,entry,parent);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Name before save: " << entry.namespaceName;
-    bool valRet = dlg->exec();
+    bool valRet                    = dlg->exec();
 
     if (valRet == QDialog::Accepted)
     {
@@ -224,7 +228,7 @@ bool NamespaceEditDlg::edit(QWidget* const parent, NamespaceEntry& entry)
     QPointer<NamespaceEditDlg> dlg = new NamespaceEditDlg(false, entry, parent);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Name before save: " << entry.namespaceName;
-    bool valRet = dlg->exec();
+    bool valRet                    = dlg->exec();
 
     if (valRet == QDialog::Accepted && !entry.isDefault)
     {

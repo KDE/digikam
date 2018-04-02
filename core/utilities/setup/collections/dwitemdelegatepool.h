@@ -58,7 +58,7 @@ public:
       *
       * @param delegate the ItemDelegate for this pool.
       */
-    DWItemDelegatePool(DWItemDelegate* const delegate);
+    explicit DWItemDelegatePool(DWItemDelegate* const delegate);
     ~DWItemDelegatePool();
 
     /**
@@ -90,7 +90,7 @@ class DWItemDelegatePoolPrivate
 {
 public:
 
-    DWItemDelegatePoolPrivate(DWItemDelegate* const d);
+    explicit DWItemDelegatePoolPrivate(DWItemDelegate* const d);
 
     DWItemDelegate*                                delegate;
     DWItemDelegateEventListener*                   eventListener;

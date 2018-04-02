@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGEDITDLG_H
-#define TAGEDITDLG_H
+#ifndef NAMESPACE_EDIT_DLG_H
+#define NAMESPACE_EDIT_DLG_H
 
 // Qt includes
 
@@ -44,7 +44,9 @@ class NamespaceEditDlg : public QDialog
 
 public:
 
-    NamespaceEditDlg(bool create, NamespaceEntry& entry, QWidget* const parent = 0);
+    explicit NamespaceEditDlg(bool create,
+                              NamespaceEntry& entry,
+                              QWidget* const parent = 0);
     ~NamespaceEditDlg();
 
     void saveData(NamespaceEntry& entry);
@@ -76,4 +78,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* TAGEDITDLG_H */
+#endif // NAMESPACE_EDIT_DLG_H

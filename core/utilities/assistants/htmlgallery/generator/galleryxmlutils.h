@@ -46,7 +46,7 @@ class CWrapper
 {
 public:
 
-    CWrapper(Ptr ptr)
+    CWrapper(Ptr ptr)        // krazy:exclude=explicit
         : m_ptr(ptr)
     {
     }

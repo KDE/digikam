@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 20013-08-22
- * Description : Reimplemented QListView for Tags Manager, with support for
+ * Date        : 2013-08-22
+ * Description : Reimplemented QListView for metadata setup, with support for
  *               drag-n-drop
  *
  * Copyright (C) 2013-2015 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>

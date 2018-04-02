@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPCOLLECTIONVIEW_H
-#define SETUPCOLLECTIONVIEW_H
+#ifndef SETUP_COLLECTION_VIEW_H
+#define SETUP_COLLECTION_VIEW_H
 
 // Qt includes
 
@@ -209,7 +209,7 @@ class SetupCollectionDelegate : public DWItemDelegate
 
 public:
 
-    SetupCollectionDelegate(QAbstractItemView* const view, QObject* const parent = 0);
+    explicit SetupCollectionDelegate(QAbstractItemView* const view, QObject* const parent = 0);
     ~SetupCollectionDelegate();
 
     virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
@@ -242,4 +242,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* SETUPCOLLECTIONVIEW_H */
+#endif // SETUP_COLLECTION_VIEW_H

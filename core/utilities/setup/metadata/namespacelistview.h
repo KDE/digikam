@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 20013-08-22
- * Description : Reimplemented QListView for Tags Manager, with support for
+ * Date        : 2013-08-22
+ * Description : Reimplemented QListView for metadata setup, with support for
  *               drag-n-drop
  *
  * Copyright (C) 2013-2015 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef NAMESPACELISTVIEW_H
-#define NAMESPACELISTVIEW_H
+#ifndef NAMESPACE_LISTVIEW_H
+#define NAMESPACE_LISTVIEW_H
 
 // Qt includes
 
@@ -77,4 +77,4 @@ public Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // NAMESPACELISTVIEW_H
+#endif // NAMESPACE_LISTVIEW_H

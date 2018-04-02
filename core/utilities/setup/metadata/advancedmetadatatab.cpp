@@ -292,7 +292,8 @@ void AdvancedMetadataTab::connectButtons()
             d->namespaceView, SLOT(slotMoveItemDown()));
 }
 
-void AdvancedMetadataTab::setModelData(QStandardItemModel* model, const QList<NamespaceEntry>& container)
+void AdvancedMetadataTab::setModelData(QStandardItemModel* model,
+                                       const QList<NamespaceEntry>& container)
 {
     QStandardItem* const root = model->invisibleRootItem();
 
@@ -480,7 +481,8 @@ void AdvancedMetadataTab::setModels()
     slotIndexChanged();
 }
 
-void AdvancedMetadataTab::saveModelData(QStandardItemModel* model, QList<NamespaceEntry>& container)
+void AdvancedMetadataTab::saveModelData(QStandardItemModel* model,
+                                        QList<NamespaceEntry>& container)
 {
     QStandardItem* const root = model->invisibleRootItem();
 
