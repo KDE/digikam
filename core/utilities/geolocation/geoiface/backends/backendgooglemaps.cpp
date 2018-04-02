@@ -1328,7 +1328,7 @@ void BackendGoogleMaps::slotTracksChanged(const QList<TrackManager::TrackChanges
     }
 
     /// @TODO We have to re-read the tracks after being inactive.
-    /// @TODO Tracks have to be cleared in JavaScript everytime the
+    /// @TODO Tracks have to be cleared in JavaScript every time the
     ///       htmlwidget is passed to another mapwidget.
     /// @TODO Clearing all tracks and re-adding them takes too long. We
     ///       have to see which track changed, and whether coordinates or only properties changed.
