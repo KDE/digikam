@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGTHREADEDFILTER_H
-#define DIMGTHREADEDFILTER_H
+#ifndef DIMG_THREADED_FILTER_H
+#define DIMG_THREADED_FILTER_H
 
 // KDE includes
 
@@ -90,7 +90,7 @@ public:
 
     /** This method return a list of steps to process parallelized operation in filter using QtConcurrents API.
      *  Ususally, start and stop are rows or columns from image to process. By defaut whole image will be processed
-     *  and start value is 0. In this case stop will be last row or colum to process.
+     *  and start value is 0. In this case stop will be last row or column to process.
      *  Between range [start,stop], this method will divide by egal steps depending of number of CPU cores available.
      *  To be sure that all vlaues will be processed, in case of CPU core division give rest, the last step compensate
      *  the difference.
@@ -295,6 +295,6 @@ protected:
     DImgThreadedFilter* m_master;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* DIMGTHREADEDFILTER_H */
+#endif // DIMG_THREADED_FILTER_H
