@@ -450,10 +450,10 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
 
     std::vector<cv::Rect> faces;
     cascade.detectMultiScale(inputImage, faces,
-                             params.searchIncrement,                // Increase search scale by this factor everytime
-                             params.grouping,                       // Drop groups of less than n detections
-                             params.flags,                          // Optionally, pre-test regions by edge detection
-                             params.minSize                         // Minimum face size to look for
+                             params.searchIncrement,                // Increase search scale by this factor every time.
+                             params.grouping,                       // Drop groups of less than n detections.
+                             params.flags,                          // Optionally, pre-test regions by edge detection.
+                             params.minSize                         // Minimum face size to look for.
                             );
 
     QList<QRect> results;
@@ -569,7 +569,7 @@ bool OpenCVFaceDetector::verifyFace(const cv::Mat& inputImage, const QRect& face
 
                 foundFaces = cascadeResult(extendedFaceImg, d->cascades[i], d->verifyingParams);
 
-                // We dont need to check the size of found regions, the minSize in verifyingParams is large enough
+                // We don't need to check the size of found regions, the minSize in verifyingParams is large enough
                 if (!foundFaces.empty())
                     frontalFaceVotes++;
             }
