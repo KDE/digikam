@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGGINGACTION_H
-#define TAGGINGACTION_H
+#ifndef TAGGING_ACTION_H
+#define TAGGING_ACTION_H
 
 // Qt includes
 
@@ -88,4 +88,4 @@ protected:
 
 Q_DECLARE_METATYPE(Digikam::TaggingAction)
 
-#endif // TAGGINGACTION_H
+#endif // TAGGING_ACTION_H

@@ -41,7 +41,7 @@ class TagMngrTreeView : public TagFolderView
 
 public:
 
-    TagMngrTreeView(TagsManager* const parent, TagModel* const model);
+    explicit TagMngrTreeView(TagsManager* const parent, TagModel* const model);
     virtual ~TagMngrTreeView();
 
     /**

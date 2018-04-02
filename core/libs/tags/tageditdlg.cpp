@@ -558,4 +558,4 @@ TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* const parent, 
     adjustSize();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

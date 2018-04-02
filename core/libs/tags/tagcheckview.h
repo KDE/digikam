@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGCHECKVIEW_H
-#define TAGCHECKVIEW_H
+#ifndef TAG_CHECK_VIEW_H
+#define TAG_CHECK_VIEW_H
 
 // Local includes
 
@@ -51,7 +51,7 @@ public:
 
 public:
 
-    TagCheckView(QWidget* const parent, TagModel* const tagModel);
+    explicit TagCheckView(QWidget* const parent, TagModel* const tagModel);
 
     QList<TAlbum*> getCheckedTags()          const;
     QList<TAlbum*> getPartiallyCheckedTags() const;
@@ -110,4 +110,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* TAGCHECKVIEW_H */
+#endif // TAG_CHECK_VIEW_H

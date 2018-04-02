@@ -48,7 +48,7 @@ class TagsManager : public KMainWindow, public StateSavingObject
 
 public:
 
-    TagsManager();
+    explicit TagsManager();
     ~TagsManager();
 
     /**

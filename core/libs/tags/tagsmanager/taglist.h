@@ -41,7 +41,7 @@ class TagList : public QWidget
 
 public:
 
-    TagList(TagMngrTreeView* const treeView, QWidget* const parent);
+    explicit TagList(TagMngrTreeView* const treeView, QWidget* const parent);
     ~TagList();
 
     /**

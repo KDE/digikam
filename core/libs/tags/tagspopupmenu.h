@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGSPOPUPMENU_H
-#define TAGSPOPUPMENU_H
+#ifndef TAGS_POPUP_MENU_H
+#define TAGS_POPUP_MENU_H
 
 // Qt includes
 
@@ -85,6 +85,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* TAGSPOPUPMENU_H */
+#endif // TAGS_POPUP_MENU_H

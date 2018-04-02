@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGMODIFICATIONHELPER_H
-#define TAGMODIFICATIONHELPER_H
+#ifndef TAG_MODIFICATION_HELPER_H
+#define TAG_MODIFICATION_HELPER_H
 
 // Qt includes
 
@@ -228,9 +228,8 @@ private:
      * This includes the root tags, if they have the property, too.
      */
     QSet<TAlbum*> getFaceTags(QList<TAlbum*> tags);
-
 };
 
 } // namespace Digikam
 
-#endif /* TAGMODIFICATIONHELPER_H */
+#endif // TAG_MODIFICATION_HELPER_H

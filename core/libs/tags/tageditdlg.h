@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGEDITDLG_H
-#define TAGEDITDLG_H
+#ifndef TAG_EDIT_DLG_H
+#define TAG_EDIT_DLG_H
 
 // Qt includes
 
@@ -46,7 +46,7 @@ class TagEditDlg : public QDialog
 
 public:
 
-    TagEditDlg(QWidget* const parent, TAlbum* const album, bool create=false);
+    explicit TagEditDlg(QWidget* const parent, TAlbum* const album, bool create=false);
     ~TagEditDlg();
 
     QString      title()    const;
@@ -81,6 +81,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* TAGEDITDLG_H */
+#endif // TAG_EDIT_DLG_H

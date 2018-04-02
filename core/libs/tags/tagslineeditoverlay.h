@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGSLINEEDITOVERLAY_H
-#define TAGSLINEEDITOVERLAY_H
+#ifndef TAGS_LINE_EDIT_OVERLAY_H
+#define TAGS_LINE_EDIT_OVERLAY_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* IMAGERATINGOVERLAY_H */
+#endif // TAGS_LINE_EDIT_OVERLAY_H

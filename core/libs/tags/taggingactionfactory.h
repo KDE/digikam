@@ -19,10 +19,14 @@
  *
  * ============================================================ */
 
-#ifndef TAGGINGACTIONFACTORY_H
-#define TAGGINGACTIONFACTORY_H
+#ifndef TAGGING_ACTION_FACTORY_H
+#define TAGGING_ACTION_FACTORY_H
+
+// Qt includes
 
 #include <QList>
+
+// Local includes
 
 #include "taggingaction.h"
 
@@ -36,9 +40,11 @@ public:
     class ConstraintInterface
     {
     public:
+
         virtual ~ConstraintInterface() {}
         virtual bool matches(int tagId) = 0;
     };
+
     enum NameMatchMode
     {
         // Default: use the "startingWith" method
@@ -47,29 +53,35 @@ public:
         MatchContainingFragment
     };
 
-    TaggingActionFactory();
+    explicit TaggingActionFactory();
     virtual ~TaggingActionFactory();
 
     // Set a fragment of a tag name to generate possible tags, as known from completers
     void setFragment(const QString& fragment);
     QString fragment() const;
+
     // Set a tag which may by the user be intended to be the parent of a newly created tag
     void setParentTag(int parentTagId);
     int parentTagId() const;
+
     // Allows to filter the scope of suggested tags. Pass an implementation of ConstraintInterface (reamins in your ownership).
     // actions() will then only suggest to assign tags for which matches() is true
     void setConstraintInterface(ConstraintInterface* iface);
     ConstraintInterface* constraintInterface() const;
+
     // Set the matching mode for the tag name
     void setNameMatchMode(NameMatchMode mode);
     NameMatchMode nameMatchMode() const;
+
     // reset all settings to the default (no fragment, no actions)
     void reset();
 
     // Returns the sorted list of suggested tagging actions, based on the above settings
     QList<TaggingAction> actions() const;
+
     // Returns one single action, which is decided to be the presumedly best action based on the settings.
     TaggingAction defaultTaggingAction() const;
+
     // Returns the index of the default action in the list returned by generate()
     int indexOfDefaultAction() const;
 
@@ -85,6 +97,6 @@ private:
     Q_DISABLE_COPY(TaggingActionFactory)
 };
 
-}
+} // namespace Digikam
 
-#endif // TAGGINGACTIONFACTORY_H
+#endif // TAGGING_ACTION_FACTORY_H

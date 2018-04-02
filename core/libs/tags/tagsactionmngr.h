@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGSACTIONMNGR_H
-#define TAGSACTIONMNGR_H
+#ifndef TAGS_ACTION_MNGR_H
+#define TAGS_ACTION_MNGR_H
 
 // Qt includes
 
@@ -117,4 +117,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAGSACTIONMNGR_H
+#endif // TAGS_ACTION_MNGR_H

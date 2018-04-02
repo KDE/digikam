@@ -19,8 +19,15 @@
  *
  * ============================================================ */
 
+// Qt includes
+
 #include <QDebug>
+
+// KDE includes
+
 #include <klocalizedstring.h>
+
+// Local includes
 
 #include "taggingactionfactory.h"
 #include "tagscache.h"
@@ -33,6 +40,7 @@ namespace Digikam
 class TaggingActionFactory::Private
 {
 public:
+
     explicit Private()
         : parentTagId(0), // 0 means toplevel tag
           nameMatchMode(MatchStartingWithFragment),
@@ -41,6 +49,8 @@ public:
           valid(false)
     {
     }
+
+public:
 
     QString              fragment;
     int                  parentTagId;
@@ -53,6 +63,7 @@ public:
 
     TaggingAction        defaultAction; // independent from valid
 
+public:
 
     void invalidate()
     {
@@ -65,7 +76,6 @@ public:
 TaggingActionFactory::TaggingActionFactory()
     : d(new Private)
 {
-
 }
 
 TaggingActionFactory::~TaggingActionFactory()
@@ -442,4 +452,4 @@ TaggingAction TaggingActionFactory::defaultTaggingAction(const QString& tagName,
     }
 }
 
-} // end of namespace
+} // namespace Digikam
