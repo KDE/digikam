@@ -150,4 +150,4 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     return thumb;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

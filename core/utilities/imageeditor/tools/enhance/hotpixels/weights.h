@@ -141,6 +141,6 @@ private:
     QList<QPoint> mPositions;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // WEIGHTS_H
+#endif // WEIGHTS_H

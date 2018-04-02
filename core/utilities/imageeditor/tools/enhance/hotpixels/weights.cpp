@@ -334,4 +334,4 @@ double Weights::polyTerm (const size_t i_coeff, const int x, const int y, const 
     return (double)result;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

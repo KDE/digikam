@@ -120,6 +120,6 @@ private:
     QList<HotPixel> m_hpList;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // HOTPIXELFIXER_H
+#endif // HOTPIXELFIXER_H

@@ -295,4 +295,4 @@ void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const QUrl& bl
     slotPreview();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

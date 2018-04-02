@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef BLACKFRAMELISTVIEW_H
-#define BLACKFRAMELISTVIEW_H
+#ifndef BLACK_FRAME_LIST_VIEW_H
+#define BLACK_FRAME_LIST_VIEW_H
 
 // Qt includes
 
@@ -113,6 +113,6 @@ private:
     BlackFrameListView* m_parent;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // BLACKFRAMELISTVIEW_H
+#endif // BLACK_FRAME_LIST_VIEW_H

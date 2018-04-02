@@ -11,7 +11,7 @@
  *
  * Part of the algorithm for finding the hot pixels was based on
  * the code of jpegpixi, which was released under the GPL license,
- * and is Copyright (C) 2003, 2004 Martin Dickopp
+ * written by Martin Dickopp
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,8 +26,8 @@
  *
  * ============================================================ */
 
-#ifndef BLACKFRAMEPARSER_H
-#define BLACKFRAMEPARSER_H
+#ifndef BLACK_FRAME_PARSER_H
+#define BLACK_FRAME_PARSER_H
 
 // Qt includes
 
@@ -91,6 +91,6 @@ private:
     LoadSaveThread* m_imageLoaderThread;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif // BLACKFRAMEPARSER_H
+#endif // BLACK_FRAME_PARSER_H

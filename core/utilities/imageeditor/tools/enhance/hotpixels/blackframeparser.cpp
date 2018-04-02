@@ -12,7 +12,7 @@
  *
  * Part of the algorithm for finding the hot pixels was based on
  * the code of jpegpixi, which was released under the GPL license,
- * and is Copyright (C) 2003, 2004 Martin Dickopp
+ * written by Martin Dickopp
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -239,4 +239,4 @@ void BlackFrameParser::validateAndConsolidate(HotPixel* const a, HotPixel* const
     a->luminosity = qMax(a->luminosity, b->luminosity);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

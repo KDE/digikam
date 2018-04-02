@@ -87,6 +87,6 @@ private:
     }
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // HOTPIXEL_H
+#endif // HOTPIXEL_H
