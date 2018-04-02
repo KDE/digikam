@@ -138,7 +138,7 @@ void DIntRangeBox::slotMinimumChanged(int newValue)
     // Set the new minimum value of the maximum similarity
     d->maxValueBox->setMinimum(newValue);
 
-    // If the new value of the mimimum is now higher than the maximum similarity,
+    // If the new value of the minimum is now higher than the maximum similarity,
     // set the maximum similarity to the new value.
     if (newValue > d->maxValueBox->value())
     {
