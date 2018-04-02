@@ -23,7 +23,7 @@
 
 /** Value returned : -1 : unsupported platform
  *                    0 : parse failure from supported platform
- *                    1 : parse done with sucess from supported platform
+ *                    1 : parse done with success from supported platform
  */
 static int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data);
 static int get_swap_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data);

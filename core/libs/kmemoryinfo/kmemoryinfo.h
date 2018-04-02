@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DIGIKAM_KMEMORYINFO_H
-#define DIGIKAM_KMEMORYINFO_H
+#ifndef DIGIKAM_KMEMORY_INFO_H
+#define DIGIKAM_KMEMORY_INFO_H
 
 // Qt includes
 
@@ -74,7 +74,7 @@ public:
      * Returns status if last update was successful and the data is valid.
      * -1 : not valid : unsupported platform
      *  0 : not valid : parse failure from supported platform
-     *  1 : valid     : parse done with sucess from supported platform
+     *  1 : valid     : parse done with success from supported platform
      */
     int isValid() const;
 
@@ -88,7 +88,7 @@ public:
      * @returns whether the update was successful :
      * -1 : unsupported platform
      *  0 : parse failure from supported platform
-     *  1 : parse done with sucess from supported platform
+     *  1 : parse done with success from supported platform
      */
     int update();
 
@@ -124,4 +124,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::KMemoryInfo::MemoryDetails)
 
-#endif // DIGIKAM_KMEMORYINFO_H
+#endif // DIGIKAM_KMEMORY_INFO_H
