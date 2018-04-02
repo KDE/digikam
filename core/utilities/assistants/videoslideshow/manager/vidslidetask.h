@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_TASK_H
-#define VIDSLIDE_TASK_H
+#ifndef VID_SLIDE_TASK_H
+#define VID_SLIDE_TASK_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_TASK_H
+#endif // VID_SLIDE_TASK_H

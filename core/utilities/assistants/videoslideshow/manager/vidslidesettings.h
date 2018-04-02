@@ -177,7 +177,7 @@ public:
     VidFormat                         vFormat;       // Encoded video container format.
     EffectMngr::EffectType            vEffect;       // Encoded video effect while displaying images.
 
-    FileSaveConflictBox::ConflictRule conflictRule;  // Rule to follow if video file alreay exists.
+    FileSaveConflictBox::ConflictRule conflictRule;  // Rule to follow if video file already exists.
     QUrl                              outputDir;     // Encoded video stream directory.
 
     // ---------------------
