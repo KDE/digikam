@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef AUTOCROP_H
-#define AUTOCROP_H
+#ifndef AUTO_CROP_H
+#define AUTO_CROP_H
 
 // Qt includes
 
@@ -74,6 +74,6 @@ private :
     Private* d;
 };
 
-}   //  namespace Digikam
+} //  namespace Digikam
 
-#endif /*AUTOCROP_H*/
+#endif // AUTO_CROP_H

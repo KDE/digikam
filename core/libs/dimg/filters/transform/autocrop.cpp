@@ -32,7 +32,7 @@
 #include <cmath>
 #include <cfloat>
 
-// Qt includes.
+// Qt includes
 
 #include <QTextStream>
 #include <QFile>
@@ -177,7 +177,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                 if(fixleftmargin == true)
                     travelright--;
 
-    //            qCDebug(DIGIKAM_DIMG_LOG) << "TRAVELLING RIGHT";
+    //            qCDebug(DIGIKAM_DIMG_LOG) << "TRAVELING RIGHT";
     //            qCDebug(DIGIKAM_DIMG_LOG) << "Endupi" << endupi;
                 startrighti = endupi;
                 startrightj = endupj;
