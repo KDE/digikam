@@ -21,8 +21,32 @@
  *
  * ============================================================ */
 
-#ifndef EDITORCORE_P_H
-#define EDITORCORE_P_H
+#ifndef EDITOR_CORE_P_H
+#define EDITOR_CORE_P_H
+
+// Local includes
+
+#include "digikam_debug.h"
+#include "dimgbuiltinfilter.h"
+#include "undomanager.h"
+#include "undoaction.h"
+#include "undostate.h"
+#include "iccmanager.h"
+#include "iccsettingscontainer.h"
+#include "icctransform.h"
+#include "exposurecontainer.h"
+#include "iofilesettings.h"
+#include "sharedloadsavethread.h"
+#include "dmetadata.h"
+#include "rawimport.h"
+#include "editortooliface.h"
+#include "dimg.h"
+#include "dimgfiltergenerator.h"
+#include "bcgfilter.h"
+#include "equalizefilter.h"
+#include "dimgfiltermanager.h"
+#include "versionmanager.h"
+#include "colorcorrectiondlg.h"
 
 namespace Digikam
 {
@@ -379,4 +403,4 @@ void EditorCore::Private::load(const LoadingDescription& description)
 
 } // namespace Digikam
 
-#endif // EDITORCORE_P_H
+#endif // EDITOR_CORE_P_H

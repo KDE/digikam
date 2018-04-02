@@ -23,6 +23,7 @@
  * ============================================================ */
 
 #include "imagewindow.h"
+#include "imagewindow_p.h"
 
 // C++ includes
 
@@ -57,121 +58,6 @@
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 #include <kwindowsystem.h>
-
-// Local includes
-
-#include "dlayoutbox.h"
-#include "album.h"
-#include "coredb.h"
-#include "albummanager.h"
-#include "albummodel.h"
-#include "albumfiltermodel.h"
-#include "applicationsettings.h"
-#include "canvas.h"
-#include "collectionlocation.h"
-#include "collectionmanager.h"
-#include "collectionscanner.h"
-#include "componentsinfo.h"
-#include "coredbaccess.h"
-#include "coredbwatch.h"
-#include "coredbchangesets.h"
-#include "ddragobjects.h"
-#include "deletedialog.h"
-#include "dimg.h"
-#include "editorcore.h"
-#include "dimagehistory.h"
-#include "digikamapp.h"
-#include "dio.h"
-#include "dmetadata.h"
-#include "editorstackview.h"
-#include "fileactionmngr.h"
-#include "dfileoperations.h"
-#include "digikam_globals.h"
-#include "iccsettingscontainer.h"
-#include "imageattributeswatch.h"
-#include "imagefiltermodel.h"
-#include "imagedragdrop.h"
-#include "imagedescedittab.h"
-#include "imageinfo.h"
-#include "imagegps.h"
-#include "imagelistmodel.h"
-#include "imagepropertiessidebardb.h"
-#include "imagepropertiesversionstab.h"
-#include "imagescanner.h"
-#include "imagethumbnailbar.h"
-#include "iofilesettings.h"
-#include "dnotificationwrapper.h"
-#include "loadingcacheinterface.h"
-#include "metadatahub.h"
-#include "metadatasettings.h"
-#include "metadataedit.h"
-#include "colorlabelwidget.h"
-#include "picklabelwidget.h"
-#include "presentationmngr.h"
-#include "ratingwidget.h"
-#include "savingcontext.h"
-#include "scancontroller.h"
-#include "setup.h"
-#include "slideshow.h"
-#include "statusprogressbar.h"
-#include "syncjob.h"
-#include "tagsactionmngr.h"
-#include "tagscache.h"
-#include "tagspopupmenu.h"
-#include "tagregion.h"
-#include "thememanager.h"
-#include "thumbbardock.h"
-#include "thumbnailloadthread.h"
-#include "undostate.h"
-#include "imagewindow_p.h"
-#include "digikam_debug.h"
-#include "dexpanderbox.h"
-#include "dbinfoiface.h"
-#include "calwizard.h"
-#include "expoblendingmanager.h"
-#include "mailwizard.h"
-#include "advprintwizard.h"
-#include "dmediaserverdlg.h"
-#include "facetagseditor.h"
-#include "dbwindow.h"
-#include "fbwindow.h"
-#include "flickrwindow.h"
-#include "gswindow.h"
-#include "imageshackwindow.h"
-#include "imgurwindow.h"
-#include "piwigowindow.h"
-#include "rajcewindow.h"
-#include "smugwindow.h"
-#include "yfwindow.h"
-
-#ifdef HAVE_MEDIAWIKI
-#   include "mediawikiwindow.h"
-#endif
-
-#ifdef HAVE_VKONTAKTE
-#   include "vkwindow.h"
-#endif
-
-#ifdef HAVE_KIO
-#   include "ftexportwindow.h"
-#   include "ftimportwindow.h"
-#endif
-
-#ifdef HAVE_MARBLE
-#   include "geolocationedit.h"
-#endif
-
-#ifdef HAVE_HTMLGALLERY
-#   include "htmlwizard.h"
-#endif
-
-#ifdef HAVE_PANORAMA
-#   include "panomanager.h"
-#endif
-
-#ifdef HAVE_MEDIAPLAYER
-#   include "vidslidewizard.h"
-#endif
 
 namespace Digikam
 {

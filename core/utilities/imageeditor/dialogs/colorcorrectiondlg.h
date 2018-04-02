@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef COLORCORRECTIONDLG_H
-#define COLORCORRECTIONDLG_H
+#ifndef COLOR_CORRECTION_DLG_H
+#define COLOR_CORRECTION_DLG_H
 
 // Qt includes
 
@@ -58,8 +58,8 @@ public:
 
 public:
 
-    ColorCorrectionDlg(Mode mode, const DImg& preview,
-                       const QString& file, QWidget* const parent = 0);
+    explicit ColorCorrectionDlg(Mode mode, const DImg& preview,
+                                const QString& file, QWidget* const parent = 0);
     ~ColorCorrectionDlg();
 
     ICCSettingsContainer::Behavior behavior() const;
@@ -105,4 +105,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* COLORCORRECTIONDLG_H */
+#endif // COLOR_CORRECTION_DLG_H

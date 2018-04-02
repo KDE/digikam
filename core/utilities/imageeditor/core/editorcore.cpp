@@ -23,6 +23,7 @@
  * ============================================================ */
 
 #include "editorcore.h"
+#include "editorcore_p.h"
 
 // C++ includes
 
@@ -42,31 +43,6 @@
 #include <QVariant>
 #include <QImageReader>
 #include <QPainter>
-
-// Local includes
-
-#include "digikam_debug.h"
-#include "colorcorrectiondlg.h"
-#include "dimgbuiltinfilter.h"
-#include "undomanager.h"
-#include "undoaction.h"
-#include "undostate.h"
-#include "iccmanager.h"
-#include "iccsettingscontainer.h"
-#include "icctransform.h"
-#include "exposurecontainer.h"
-#include "iofilesettings.h"
-#include "sharedloadsavethread.h"
-#include "dmetadata.h"
-#include "rawimport.h"
-#include "editortooliface.h"
-#include "dimg.h"
-#include "dimgfiltergenerator.h"
-#include "bcgfilter.h"
-#include "equalizefilter.h"
-#include "dimgfiltermanager.h"
-#include "versionmanager.h"
-#include "editorcore_p.h"
 
 namespace Digikam
 {

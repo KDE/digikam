@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SOFTPROOFDIALOG_H
-#define SOFTPROOFDIALOG_H
+#ifndef SOFT_PROOF_DIALOG_H
+#define SOFT_PROOF_DIALOG_H
 
 // Qt includes
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SOFTPROOFDIALOG_H
+#endif // SOFT_PROOF_DIALOG_H
