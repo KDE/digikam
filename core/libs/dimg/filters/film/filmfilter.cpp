@@ -207,14 +207,15 @@ int FilmContainer::whitePointForChannel(int ch) const
 {
     int max = d->sixteenBit ? 65535 : 255;
 
-    switch (ch) {
-    case RedChannel:    return d->whitePoint.red();
-    case GreenChannel:  return d->whitePoint.green();
-    case BlueChannel:   return d->whitePoint.blue();
-    default:            return max;
+    switch (ch)
+    {
+        case RedChannel:    return d->whitePoint.red();
+        case GreenChannel:  return d->whitePoint.green();
+        case BlueChannel:   return d->whitePoint.blue();
+        default:            return max;
     }
 
-    /* not reached */
+    // not reached
     return max;
 }
 
@@ -254,6 +255,7 @@ LevelsContainer FilmContainer::toLevels() const
         l.hInput[i]  = whitePointForChannel(i) * d->profile.wp(i);
         l.lOutput[i] = 0;
         l.hOutput[i] = max;
+
         if (d->applyBalance)
             l.gamma[i]   = gammaForChannel(i);
         else
@@ -267,10 +269,10 @@ CBContainer FilmContainer::toCB() const
 {
     CBContainer cb;
 
-    cb.red        = d->profile.balance(RedChannel);
-    cb.green      = d->profile.balance(GreenChannel);
-    cb.blue       = d->profile.balance(BlueChannel);
-    cb.gamma      = 1.0;
+    cb.red   = d->profile.balance(RedChannel);
+    cb.green = d->profile.balance(GreenChannel);
+    cb.blue  = d->profile.balance(BlueChannel);
+    cb.gamma = 1.0;
 
     return cb;
 }
@@ -280,7 +282,7 @@ QList<FilmContainer::ListItem*> FilmContainer::profileItemList(QListWidget* view
     QList<FilmContainer::ListItem*> itemList;
     QMap<int, QString>::ConstIterator it;
 
-    for (it = profileMap.constBegin(); it != profileMap.constEnd(); it++)
+    for (it = profileMap.constBegin() ; it != profileMap.constEnd() ; ++it)
         itemList << new ListItem(it.value(), view, (CNFilmProfile)it.key());
 
     return itemList;
@@ -358,7 +360,7 @@ void FilmFilter::filterImage()
     DImg tmpInv;
 
     LevelsContainer l = d->film.toLevels();
-    CBContainer cb  = d->film.toCB();
+    CBContainer cb    = d->film.toCB();
     CBContainer gamma;
 
     // level the image first, this removes the orange mask and corrects
