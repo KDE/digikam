@@ -408,7 +408,7 @@ RegionFrameItem::~RegionFrameItem()
 {
     if (d->hudWidget)
     {
-        // See bug #359196: hide or close the QGraphicsWidget befor delete it. Possible Qt bug?
+        // See bug #359196: hide or close the QGraphicsWidget before delete it. Possible Qt bug?
         d->hudWidget->hide();
         delete d->hudWidget;
     }
