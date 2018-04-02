@@ -368,7 +368,7 @@ void PresentationAudioWidget::slotPlayerError(const QtAV::AVError& err)
 {
     if (err.error() != AVError::NoError)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "An error as occured while playing (" << err.string() << ")";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "An error as occurred while playing (" << err.string() << ")";
         slotError();
     }
 }
