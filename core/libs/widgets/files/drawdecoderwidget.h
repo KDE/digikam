@@ -42,8 +42,6 @@
 #include "dfileselector.h"
 #include "digikam_export.h"
 
-
-
 namespace Digikam
 {
 
