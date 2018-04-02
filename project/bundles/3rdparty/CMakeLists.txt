@@ -61,4 +61,4 @@ add_subdirectory(ext_kf5)
 add_subdirectory(ext_marble)
 add_subdirectory(ext_libksane)
 add_subdirectory(ext_kcalcore)
-
+add_subdirectory(ext_ffmpeg)
