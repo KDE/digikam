@@ -199,7 +199,7 @@ private Q_SLOTS:
     void slotSendByMail();
     void slotPrintCreator();
     void slotMediaServer();
-    
+
     void slotExportTool();
     void slotImportTool();
 

@@ -810,7 +810,7 @@ void ImageWindow::slotChanged()
 
     d->rightSideBar->itemChanged(d->currentImageInfo, m_canvas->getSelectedArea(), img, redoHistory);
 
-    // Filters for redo will be greyed out
+    // Filters for redo will be turn in grey out
     d->rightSideBar->getFiltersHistoryTab()->setEnabledHistorySteps(history.actionCount());
 
 /*
