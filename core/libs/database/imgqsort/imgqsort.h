@@ -38,12 +38,12 @@ class ImgQSort
 {
 public:
 
-    /** Standard constructor with picklabel container to fill at end of analyse
+    /** Standard constructor with picklabel container to fill at end of analyze.
      */
     explicit ImgQSort(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label);
     ~ImgQSort();
 
-    /** Perform  quality estimation and fill Pick Label value accordingly.
+    /** Perform quality estimation and fill Pick Label value accordingly.
      */
     void startAnalyse();
     void cancelAnalyse();
@@ -73,6 +73,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IMG_QSORT_H
