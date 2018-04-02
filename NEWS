@@ -170,5 +170,5 @@ BUGFIXES:
 153 ==> 227266 - Handle Video Date from metadata.
 154 ==> 227259 - Needs to Edit Video Date.
 155 ==> 373284 - digiKam crashed with SIGSEGV in QSortFilterProxyModel::parent().
-156 ==> 
-
+156 ==> 384807 - digikam 5.7.0 AppImage bundle : provide a more recent ffmpeg version for video support.
+157 ==> 
