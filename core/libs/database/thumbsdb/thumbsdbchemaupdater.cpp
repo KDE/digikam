@@ -295,4 +295,4 @@ bool ThumbsDbSchemaUpdater::updateV2ToV3()
     return true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

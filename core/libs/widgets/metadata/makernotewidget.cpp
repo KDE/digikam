@@ -165,4 +165,4 @@ void MakerNoteWidget::slotSaveMetadataToFile()
     storeMetadataToFile(url, getMetadata().getExifEncoded());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -117,4 +117,4 @@ bool Convert2JP2::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

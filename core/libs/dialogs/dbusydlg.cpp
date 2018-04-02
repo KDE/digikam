@@ -99,4 +99,4 @@ void DBusyDlg::slotComplete()
     accept();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

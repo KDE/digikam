@@ -273,4 +273,4 @@ void NormalizeFilter::readParameters(const FilterAction& /*action*/)
     return;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

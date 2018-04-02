@@ -1178,4 +1178,4 @@ double HaarIface::calculateScore(Haar::SignatureData& querySig, Haar::SignatureD
     return score;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

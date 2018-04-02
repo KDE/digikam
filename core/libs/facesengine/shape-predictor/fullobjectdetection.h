@@ -66,6 +66,6 @@ private:
 
 std::vector<cv::Rect> geteyes(const FullObjectDetection& shape);
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // FULL_OBJECT_DETECTION_H

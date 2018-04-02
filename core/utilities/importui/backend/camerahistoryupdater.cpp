@@ -177,4 +177,4 @@ void CameraHistoryUpdater::proccessMap(const QByteArray& id, CHUpdateItemMap& ma
     emit signalHistoryMap(map);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

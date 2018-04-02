@@ -441,4 +441,4 @@ MdKeyListViewItem* MetadataListView::findMdKeyItem(const QString& key)
     return 0;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

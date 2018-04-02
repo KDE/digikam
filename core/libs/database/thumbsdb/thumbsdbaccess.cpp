@@ -279,4 +279,4 @@ void ThumbsDbAccess::cleanUpDatabase()
     d = 0;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -146,4 +146,4 @@ bool BWConvert::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

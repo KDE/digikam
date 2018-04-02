@@ -228,4 +228,4 @@ int DPopupFrame::exec(int x, int y)
     return exec(QPoint(x, y));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

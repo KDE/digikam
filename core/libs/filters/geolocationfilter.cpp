@@ -78,4 +78,4 @@ void GeolocationFilter::slotFilterChanged()
     emit signalFilterChanged(geolocationFilter());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

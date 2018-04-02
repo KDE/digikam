@@ -68,4 +68,4 @@ void CpFindTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     printDebug(QLatin1String("cpfind"));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

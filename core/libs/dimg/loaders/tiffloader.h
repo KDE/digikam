@@ -71,6 +71,6 @@ private:
     bool m_hasAlpha;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* TIFFLOADER_H */

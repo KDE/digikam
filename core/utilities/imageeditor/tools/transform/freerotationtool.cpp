@@ -582,4 +582,4 @@ QString FreeRotationTool::repeatString(const QString& str, int times) const
     return tmp;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

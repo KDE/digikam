@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif  // PANO_CPFIND_BINARY_H
+#endif // PANO_CPFIND_BINARY_H

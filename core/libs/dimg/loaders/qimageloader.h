@@ -52,6 +52,6 @@ private:
     bool m_hasAlpha;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // QIMAGELOADER_H

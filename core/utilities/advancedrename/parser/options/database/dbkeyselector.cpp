@@ -288,4 +288,4 @@ void DbKeySelectorView::removeChildlessHeaders()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

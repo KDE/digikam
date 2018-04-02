@@ -134,6 +134,6 @@ private:
     static QueueMgrWindow* m_instance;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* QUEUEMGRWINDOW_H */

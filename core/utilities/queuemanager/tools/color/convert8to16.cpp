@@ -60,4 +60,4 @@ bool Convert8to16::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

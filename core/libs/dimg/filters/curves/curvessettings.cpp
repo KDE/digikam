@@ -287,4 +287,4 @@ int CurvesSettings::curvesLeftOffset() const
     return d->curvesBox->curvesLeftOffset();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

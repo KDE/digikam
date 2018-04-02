@@ -120,4 +120,4 @@ QDebug operator<<(QDebug dbg, const ImageQualitySettings& s)
     return dbg.space();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

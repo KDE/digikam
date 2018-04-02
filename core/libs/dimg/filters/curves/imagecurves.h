@@ -179,6 +179,6 @@ private:
     QSharedDataPointer<Private> d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* IMAGECURVES_H */

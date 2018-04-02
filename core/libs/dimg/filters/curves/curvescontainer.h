@@ -91,6 +91,6 @@ public:
 };
 
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* CURVESCONTAINER_H */

@@ -291,6 +291,6 @@ Q_SIGNALS: // private
     void triggerUpdateVolumesList();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // COLLECTIONMANAGER_H

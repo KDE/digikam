@@ -145,4 +145,4 @@ void ICCSettingsContainer::writeManagedPreviewsToConfig(KConfigGroup& group) con
     group.writeEntry("ManagedPreviews", useManagedView);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

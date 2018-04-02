@@ -150,6 +150,6 @@ public:
     }
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // COREDATABASEBACKEND_P_H

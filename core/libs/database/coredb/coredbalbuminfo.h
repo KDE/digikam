@@ -440,6 +440,6 @@ public:
     QString   value;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* COREDB_ALBUMINFO_H */

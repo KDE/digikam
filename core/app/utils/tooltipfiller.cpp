@@ -760,4 +760,4 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
     return tip;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

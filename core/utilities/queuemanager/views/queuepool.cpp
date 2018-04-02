@@ -572,4 +572,4 @@ void QueuePool::applySettings()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -209,6 +209,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* DISTORTION_FX_FILTER_H */

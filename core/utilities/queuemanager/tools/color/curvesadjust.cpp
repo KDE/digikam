@@ -189,4 +189,4 @@ bool CurvesAdjust::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

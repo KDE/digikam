@@ -579,4 +579,4 @@ DImageHistory UndoManager::getImageHistoryOfFullRedo() const
     return d->core->getImageHistory();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

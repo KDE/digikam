@@ -90,6 +90,6 @@ private:
     int   m_tileMaxY[PixelAccessRegions];
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* PIXEL_ACCESS_H */

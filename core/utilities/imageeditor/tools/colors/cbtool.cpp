@@ -172,4 +172,4 @@ void CBTool::setFinalImage()
     iface.setOriginal(i18n("Color Balance"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

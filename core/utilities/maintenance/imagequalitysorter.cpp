@@ -164,4 +164,4 @@ void ImageQualitySorter::slotAdvance(const QImage& img)
     advance(1);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

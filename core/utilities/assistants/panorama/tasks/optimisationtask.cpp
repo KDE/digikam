@@ -76,4 +76,4 @@ void OptimisationTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     printDebug(QLatin1String("autooptimiser"));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -192,4 +192,4 @@ DownloadSettings AdvancedSettings::settings() const
     return settings;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

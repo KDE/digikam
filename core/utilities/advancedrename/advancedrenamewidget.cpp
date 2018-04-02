@@ -475,4 +475,4 @@ void AdvancedRenameWidget::writeSettings()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -405,4 +405,4 @@ void DHueSaturationSelector::drawPalette(QPixmap* pixmap)
     *pixmap = pix;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

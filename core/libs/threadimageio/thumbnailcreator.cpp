@@ -1160,4 +1160,4 @@ void ThumbnailCreator::deleteFromDiskFreedesktop(const QString& filePath) const
     largeThumb.remove();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

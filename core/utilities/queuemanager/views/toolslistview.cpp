@@ -356,4 +356,4 @@ void ToolsListView::slotContextMenu()
     popmenu.exec(QCursor::pos());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

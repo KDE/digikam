@@ -161,4 +161,4 @@ void LightTablePreview::dropEvent(QDropEvent* e)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

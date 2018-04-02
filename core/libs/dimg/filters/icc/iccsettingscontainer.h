@@ -129,8 +129,8 @@ public:
     QColor   gamutCheckMaskColor;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ICCSettingsContainer::Behavior)
 
-#endif  // ICCSETTINGSCONTAINER_H
+#endif // ICCSETTINGSCONTAINER_H

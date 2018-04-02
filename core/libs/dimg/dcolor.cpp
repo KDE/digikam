@@ -397,4 +397,4 @@ DColor& DColor::operator=(const DColor& color)
 }
 */
 
-}  // namespace Digikam
+} // namespace Digikam

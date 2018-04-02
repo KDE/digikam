@@ -234,6 +234,6 @@ private:
     static DigikamApp* m_instance;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // DIGIKAM_APP_H
+#endif // DIGIKAM_APP_H

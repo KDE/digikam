@@ -205,4 +205,4 @@ void FreeRotationSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configAntiAliasingEntry, d->antialiasInput->isChecked());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -169,6 +169,6 @@ private:
     void removeLoadingTasks(const LoadingDescription& description, LoadingTaskFilter filter);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // MANAGED_LOAD_SAVE_THREAD_H

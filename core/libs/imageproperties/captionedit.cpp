@@ -200,4 +200,4 @@ QTextEdit* CaptionEdit::textEdit() const
     return d->altLangStrEdit->textEdit();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

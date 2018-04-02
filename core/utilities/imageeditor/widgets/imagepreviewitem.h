@@ -47,6 +47,6 @@ public:
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* IMAGEPREVIEWITEM_H */

@@ -61,6 +61,6 @@ public:
     double gamma;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* BCGCONTAINER_H */

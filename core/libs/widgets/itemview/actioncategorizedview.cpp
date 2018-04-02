@@ -159,4 +159,4 @@ void ActionCategorizedView::leaveEvent(QEvent* e)
     m_verticalScrollAnimation->stop();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

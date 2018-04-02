@@ -95,4 +95,4 @@ void DbEngineActionType::setValue(bool isValue)
     d->isValue = isValue;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

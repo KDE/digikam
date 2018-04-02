@@ -136,6 +136,6 @@ public:
     const QString            VERTICAL_SPLITTER_CONFIG_KEY;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* QUEUEMGRWINDOWPRIVATE_H */

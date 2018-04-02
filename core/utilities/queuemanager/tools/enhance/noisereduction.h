@@ -62,6 +62,6 @@ private:
     NRSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* NOISEREDUCTION_H */

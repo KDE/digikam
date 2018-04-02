@@ -62,6 +62,6 @@ private:
     BCGSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // BCG_CORRECTION_H

@@ -82,6 +82,6 @@ private:
     friend class MetadataSettingsCreator;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // METADATA_SETTINGS_H

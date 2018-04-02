@@ -616,4 +616,4 @@ void SlideShow::slotScreenSelected(int screen)
                                  << " :: " << deskRect;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -67,4 +67,4 @@ void CompileMKStepTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     qCDebug(DIGIKAM_GENERAL_LOG) << "make job output (" << mkFile << "):" << endl << output;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

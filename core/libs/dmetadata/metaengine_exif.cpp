@@ -1172,4 +1172,4 @@ MetaEngine::TagsMap MetaEngine::getMakernoteTagsList() const
     return TagsMap();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

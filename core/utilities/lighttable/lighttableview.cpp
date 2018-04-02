@@ -475,4 +475,4 @@ void LightTableView::toggleFullScreen(bool set)
     d->rightPreview->toggleFullScreen(set);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

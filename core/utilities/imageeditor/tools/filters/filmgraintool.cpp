@@ -162,4 +162,4 @@ void FilmGrainTool::renderingFinished()
     toolSettings()->enableButton(EditorToolSettings::Ok, d->settingsView->settings().isDirty());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

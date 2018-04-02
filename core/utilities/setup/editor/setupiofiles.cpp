@@ -192,4 +192,4 @@ void SetupIOFiles::readSettings()
     d->showImageSettingsDialog->setChecked(group.readEntry(d->configShowImageSettingsDialog,   true));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

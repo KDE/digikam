@@ -74,6 +74,6 @@ public:
     virtual void error(const QString& errorMessage) = 0;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // COLLECTIONSCANNEROBSERVER_H

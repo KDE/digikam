@@ -53,6 +53,6 @@ private:
 //  const bool  buildGPano;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PANO_AUTOCROP_TASK_H

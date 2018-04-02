@@ -114,4 +114,4 @@ void ThumbsTask::run()
     d->catcher->setActive(false);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

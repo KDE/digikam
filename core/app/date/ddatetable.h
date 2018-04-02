@@ -190,6 +190,6 @@ private:
     Q_DISABLE_COPY(DDateTable)
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DDATE_TABLE_H

@@ -573,7 +573,7 @@ private:
     Album* m_root;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::Album*)
 

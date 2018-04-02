@@ -696,4 +696,4 @@ bool ImagePropertiesSideBarDB::GPSImageInfofromImageInfo(const ImageInfo& imageI
 
 #endif // HAVE_MARBLE
 
-}  // namespace Digikam
+} // namespace Digikam

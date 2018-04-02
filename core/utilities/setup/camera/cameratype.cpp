@@ -192,4 +192,4 @@ ImportUI* CameraType::currentImportUI() const
     return d->currentImportUI;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

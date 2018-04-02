@@ -113,4 +113,4 @@ QMap<EffectMngr::EffectType, QString> EffectMngr::effectNames()
     return eff;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -1696,4 +1696,4 @@ void BdEngineBackend::setForeignKeyChecks(bool check)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

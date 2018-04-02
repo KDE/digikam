@@ -304,6 +304,6 @@ private:
     static ApplicationSettings::OperationStrings createConfigGroupingOperateOnAll();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // APPLICATIONSETTINGS_P_H
+#endif // APPLICATIONSETTINGS_P_H

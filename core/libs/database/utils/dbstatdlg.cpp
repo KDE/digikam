@@ -149,4 +149,4 @@ int DBStatDlg::generateItemsList(DatabaseItem::Category category, const QString&
     return total;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

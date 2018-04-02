@@ -244,4 +244,4 @@ void ImportFilters::getData(Filter* const filter)
     filter->onlyNew    = d->newFilesCheckBox->isChecked();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

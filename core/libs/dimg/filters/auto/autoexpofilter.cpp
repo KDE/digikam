@@ -75,4 +75,4 @@ void AutoExpoFilter::readParameters(const FilterAction& action)
     Q_UNUSED(action);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

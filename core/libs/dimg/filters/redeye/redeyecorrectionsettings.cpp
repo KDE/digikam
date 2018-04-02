@@ -149,4 +149,4 @@ void RedEyeCorrectionSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configRedToAvgRatioAdjustmentEntry, prm.m_redToAvgRatio);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

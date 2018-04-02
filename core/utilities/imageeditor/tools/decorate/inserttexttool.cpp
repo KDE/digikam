@@ -451,4 +451,4 @@ void InsertTextTool::finalRendering()
     qApp->restoreOverrideCursor();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

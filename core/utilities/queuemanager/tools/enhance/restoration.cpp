@@ -171,4 +171,4 @@ void Restoration::cancel()
     BatchTool::cancel();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

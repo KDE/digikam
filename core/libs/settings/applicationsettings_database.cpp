@@ -65,4 +65,4 @@ void ApplicationSettings::setDbEngineParameters(const DbEngineParameters& params
     d->databaseParams = params;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

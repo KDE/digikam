@@ -58,4 +58,4 @@ CoreDbTransaction::~CoreDbTransaction()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

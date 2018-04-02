@@ -85,4 +85,4 @@ QString TimeZoneComboBox::getTimeZone() const
     return currentText();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

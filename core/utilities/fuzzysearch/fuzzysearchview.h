@@ -130,6 +130,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // FUZZY_SEARCH_VIEW_H

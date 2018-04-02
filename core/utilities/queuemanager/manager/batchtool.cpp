@@ -556,4 +556,4 @@ void BatchTool::registerSettingsWidget()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

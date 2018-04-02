@@ -62,6 +62,6 @@ private:
     LocalContrastSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* LOCALCONTRAST_H */

@@ -200,4 +200,4 @@ void DuplicatesFinder::slotCancel()
     MaintenanceTool::slotCancel();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

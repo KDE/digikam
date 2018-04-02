@@ -56,6 +56,6 @@ private:
     bool m_hasAlpha;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* PNGLOADER_H */

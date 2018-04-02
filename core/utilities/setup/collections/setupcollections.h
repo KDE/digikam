@@ -51,6 +51,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SETUP_COLLECTIONS_H

@@ -141,4 +141,4 @@ void MetadataStatusBar::slotSetPendingItems(int number)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

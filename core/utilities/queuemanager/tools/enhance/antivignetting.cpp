@@ -132,4 +132,4 @@ bool AntiVignetting::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

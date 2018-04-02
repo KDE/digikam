@@ -214,6 +214,6 @@ public:
 
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DbEngineParameters& t);
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DATABASE_ENGINE_PARAMETERS_H

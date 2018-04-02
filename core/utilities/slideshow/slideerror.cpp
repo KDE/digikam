@@ -88,4 +88,4 @@ void SlideError::setCurrentUrl(const QUrl& url)
     d->errorMsg->setText(i18n("An error has occurred to show item\n%1", url.fileName()));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

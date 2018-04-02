@@ -3440,4 +3440,4 @@ bool DMetadata::removeXmpTags(const QStringList& tagFilters)
     return true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

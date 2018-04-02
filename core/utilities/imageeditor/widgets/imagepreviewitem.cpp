@@ -159,4 +159,4 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

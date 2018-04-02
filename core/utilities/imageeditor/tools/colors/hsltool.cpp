@@ -175,4 +175,4 @@ void HSLTool::setFinalImage()
     iface.setOriginal(i18n("HSL Adjustments"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

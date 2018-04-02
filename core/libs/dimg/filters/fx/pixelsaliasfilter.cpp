@@ -156,4 +156,4 @@ inline int PixelsAliasFilter::setPositionAdjusted(int Width, int Height, int X, 
     return (Y * Width * 4 + 4 * X);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

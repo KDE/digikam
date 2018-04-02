@@ -240,4 +240,4 @@ void ColorFxTool::setFinalImage()
     iface.setOriginal(name, filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -73,6 +73,6 @@ public:
     int    maxb;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* WBCONTAINER_H*/

@@ -616,4 +616,4 @@ int RainDropFilter::pixelOffset(int Width, int X, int Y, int bytesDepth)
     return (Y * Width * bytesDepth + X * bytesDepth);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -1109,4 +1109,4 @@ void RatioCropTool::setBackgroundColor(const QColor& bg)
     d->imageSelectionWidget->setBackgroundColor(bg);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

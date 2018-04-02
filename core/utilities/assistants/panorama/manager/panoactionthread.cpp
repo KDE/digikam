@@ -552,4 +552,4 @@ void PanoActionThread::appendStitchingJobs(QSharedPointer<Sequence>& js,
     (*js) << jobs;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

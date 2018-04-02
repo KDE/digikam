@@ -178,4 +178,4 @@ void SlideImage::updatePixmap()
                  0, 0, pix.width(), pix.height());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

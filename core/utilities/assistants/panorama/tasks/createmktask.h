@@ -55,6 +55,6 @@ private:
     const PanoramaFileType fileType;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PANO_CREATE_MK_TASK_H

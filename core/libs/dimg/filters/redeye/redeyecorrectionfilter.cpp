@@ -258,4 +258,4 @@ void RedEyeCorrectionFilter::readParameters(const FilterAction& action)
     d->settings = RedEyeCorrectionContainer::fromFilterAction(action);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

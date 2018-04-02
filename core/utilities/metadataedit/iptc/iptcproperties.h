@@ -64,6 +64,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IPTC_PROPERTIES_H

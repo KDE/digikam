@@ -113,4 +113,4 @@ void ImageShackWidget::slotReloadGalleries()
     emit signalReloadGalleries();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

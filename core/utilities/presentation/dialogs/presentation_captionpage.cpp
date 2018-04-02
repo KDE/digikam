@@ -109,4 +109,4 @@ void PresentationCaptionPage::slotOpenFontDialog()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

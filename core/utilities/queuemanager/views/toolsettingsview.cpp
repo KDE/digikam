@@ -270,4 +270,4 @@ void ToolSettingsView::slotSettingsChanged(const BatchToolSettings& settings)
     emit signalSettingsChanged(d->set);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

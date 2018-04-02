@@ -283,4 +283,4 @@ void PerspectiveTool::setBackgroundColor(const QColor& bg)
     d->previewWidget->setBackgroundColor(bg);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

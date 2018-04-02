@@ -372,4 +372,4 @@ void MaintenanceMngr::cancel()
     emit signalComplete();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

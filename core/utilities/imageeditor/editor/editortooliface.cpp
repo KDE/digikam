@@ -329,4 +329,4 @@ void EditorToolIface::slotToolApplied()
     emit(d->editor->signalToolApplied());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

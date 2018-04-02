@@ -477,4 +477,4 @@ void LightTableThumbBar::slotSetupChanged()
     d->imageFilterModel->setStringTypeNatural(ApplicationSettings::instance()->isStringTypeNatural());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

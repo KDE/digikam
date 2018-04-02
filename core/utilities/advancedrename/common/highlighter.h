@@ -83,7 +83,7 @@ private:
     Parser* const parser;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 
 #endif /* HIGHLIGHTER_H */

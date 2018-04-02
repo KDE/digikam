@@ -45,6 +45,6 @@ public:
     virtual ~SlideEnd();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SLIDE_END_H

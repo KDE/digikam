@@ -90,4 +90,4 @@ QString FreeSpaceToolTip::tipContents()
     return d->tip;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

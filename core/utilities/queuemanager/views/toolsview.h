@@ -75,6 +75,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* QUEUE_SETTINGS_VIEW_H */

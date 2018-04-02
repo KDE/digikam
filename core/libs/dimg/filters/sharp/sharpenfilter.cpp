@@ -316,4 +316,4 @@ void SharpenFilter::readParameters(const Digikam::FilterAction& action)
     m_sigma  = action.parameter(QLatin1String("sigma")).toDouble();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

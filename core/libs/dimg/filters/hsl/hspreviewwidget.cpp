@@ -125,4 +125,4 @@ void HSPreviewWidget::updatePixmap()
     d->pixmap = image.convertToPixmap();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

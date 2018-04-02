@@ -225,7 +225,7 @@ public:
     inline void multiply(float factor);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 // Inline methods
 

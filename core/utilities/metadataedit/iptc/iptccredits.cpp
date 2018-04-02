@@ -306,4 +306,4 @@ void IPTCCredits::applyMetadata(QByteArray& iptcData)
     iptcData = meta.getIptc();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

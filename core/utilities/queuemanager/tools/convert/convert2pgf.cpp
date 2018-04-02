@@ -117,4 +117,4 @@ bool Convert2PGF::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

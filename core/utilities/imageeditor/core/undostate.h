@@ -51,6 +51,6 @@ public:
     bool hasUndoableChanges;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* UNDOSTATE_H */

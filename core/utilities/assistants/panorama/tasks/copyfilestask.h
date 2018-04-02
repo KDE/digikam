@@ -64,6 +64,6 @@ private:
     MetaEngine                       m_meta;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PANO_COPY_FILES_TASK_H

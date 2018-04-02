@@ -94,4 +94,4 @@ void DDateTimeEdit::slotDateTimeChanged()
     emit dateTimeChanged(dateTime());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

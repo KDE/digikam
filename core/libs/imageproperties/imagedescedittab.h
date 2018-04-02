@@ -160,4 +160,4 @@ private:
 
 } // namespace Digikam
 
-#endif  // IMAGE_DESC_EDIT_TAB_H
+#endif // IMAGE_DESC_EDIT_TAB_H

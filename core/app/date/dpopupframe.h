@@ -114,6 +114,6 @@ private:
     Q_DISABLE_COPY(DPopupFrame)
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DPOPUPFRAME_H

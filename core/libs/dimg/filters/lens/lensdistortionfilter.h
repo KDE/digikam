@@ -89,6 +89,6 @@ private:
     double m_brighten;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* LENS_DISTORTION_FILTER_H */

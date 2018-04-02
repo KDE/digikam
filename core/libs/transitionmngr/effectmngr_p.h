@@ -103,6 +103,6 @@ private:
     void updateCurrentFrame(const QRectF& area);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // EFFECT_MNGR_P_H

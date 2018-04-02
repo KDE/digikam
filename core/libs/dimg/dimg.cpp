@@ -3263,4 +3263,4 @@ bool DImg::isAnimatedImage(const QString& filePath)
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

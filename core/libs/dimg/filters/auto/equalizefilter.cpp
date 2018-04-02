@@ -255,4 +255,4 @@ void EqualizeFilter::readParameters(const FilterAction& /*action*/)
     return;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

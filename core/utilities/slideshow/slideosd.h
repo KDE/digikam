@@ -72,6 +72,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // SLIDE_OSD_H
+#endif // SLIDE_OSD_H

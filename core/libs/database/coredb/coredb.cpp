@@ -4935,4 +4935,4 @@ void CoreDB::writeSettings()
     group.writeEntry(d->configRecentlyUsedTags, d->recentlyAssignedTags);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

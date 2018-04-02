@@ -60,4 +60,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // MAKE_BINARY_H
+#endif // MAKE_BINARY_H

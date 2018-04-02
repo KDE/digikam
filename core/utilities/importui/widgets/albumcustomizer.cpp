@@ -264,4 +264,4 @@ void AlbumCustomizer::slotCustomizerChanged()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -146,6 +146,6 @@ public:
     DImageHistory           imageHistory;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DIMGPRIVATE_H

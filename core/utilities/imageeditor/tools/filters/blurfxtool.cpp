@@ -393,4 +393,4 @@ void BlurFXTool::blockWidgetSignals(bool b)
     d->levelInput->blockSignals(b);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

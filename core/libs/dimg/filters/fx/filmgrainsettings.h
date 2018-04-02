@@ -72,6 +72,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* FILMGRAINSETTINGS_H */

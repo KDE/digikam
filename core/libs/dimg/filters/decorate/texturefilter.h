@@ -88,6 +88,6 @@ private:
     QString m_texturePath;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* TEXTUREFILTER_H */

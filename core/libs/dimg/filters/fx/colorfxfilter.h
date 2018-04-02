@@ -136,6 +136,6 @@ private:
     int              m_lutTableSize; // all axis are of this size
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* COLORFXFILTER_H */

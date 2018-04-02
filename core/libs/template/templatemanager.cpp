@@ -576,4 +576,4 @@ Template TemplateManager::fromIndex(int index) const
     return Template();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

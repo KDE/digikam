@@ -120,6 +120,6 @@ private:
     void dropEvent(QDropEvent*);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // ASSIGNED_LIST_H

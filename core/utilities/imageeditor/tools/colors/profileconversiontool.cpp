@@ -268,4 +268,4 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
     iface.setOriginalMetadata(meta.data());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

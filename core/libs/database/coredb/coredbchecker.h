@@ -49,6 +49,6 @@ private:
     DbEngineParameters m_parameters;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // COREDATABASECHECKER_H

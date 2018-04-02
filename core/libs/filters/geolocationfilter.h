@@ -57,6 +57,6 @@ private Q_SLOTS:
     void slotFilterChanged();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // GEOLOCATIONFILTER_H

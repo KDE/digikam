@@ -91,4 +91,4 @@ void ImageResizeThread::cancel()
     ActionThreadBase::cancel();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

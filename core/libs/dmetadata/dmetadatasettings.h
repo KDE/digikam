@@ -79,6 +79,6 @@ private:
     friend class DMetadataSettingsCreator;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif   // METADATASETTINGS_H

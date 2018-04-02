@@ -257,6 +257,6 @@ public:
     bool operator==(const QUrl& digikamalbumsUrl) const;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // CORE_DATABASE_URL_H

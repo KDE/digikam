@@ -543,6 +543,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // APPLICATIONSETTINGS_H
+#endif // APPLICATIONSETTINGS_H

@@ -70,4 +70,4 @@ void AutoCropTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     printDebug(QLatin1String("pano_modify"));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

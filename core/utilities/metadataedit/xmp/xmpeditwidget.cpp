@@ -348,4 +348,4 @@ bool XMPEditWidget::isModified() const
     return d->modified;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

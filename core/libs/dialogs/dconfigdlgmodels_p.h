@@ -132,6 +132,6 @@ protected:
     PageItem* rootItem = 0;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DBCONFIGDLG_MODELS_P_H

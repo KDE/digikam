@@ -579,4 +579,4 @@ void AlbumHistory::slotAlbumsCleared()
     clearHistory();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

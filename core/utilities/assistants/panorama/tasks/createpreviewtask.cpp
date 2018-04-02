@@ -117,4 +117,4 @@ void CreatePreviewTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     successFlag = true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

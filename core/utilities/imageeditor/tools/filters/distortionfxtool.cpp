@@ -357,4 +357,4 @@ void DistortionFXTool::blockWidgetSignals(bool b)
     d->iterationInput->blockSignals(b);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

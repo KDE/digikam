@@ -87,4 +87,4 @@ void PresentationAdvPage::slotUseMillisecondsToggled()
     emit useMillisecondsToggled();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

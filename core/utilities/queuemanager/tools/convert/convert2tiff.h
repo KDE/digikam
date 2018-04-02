@@ -63,6 +63,6 @@ private:
     TIFFSettings* m_settings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* CONVERT2TIFF_H */

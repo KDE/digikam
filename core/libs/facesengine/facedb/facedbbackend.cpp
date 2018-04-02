@@ -63,4 +63,4 @@ bool FaceDbBackend::initSchema(FaceDbSchemaUpdater* const updater)
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

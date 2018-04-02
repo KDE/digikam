@@ -547,4 +547,4 @@ ColorLabelMenuAction::~ColorLabelMenuAction()
 {
 }
 
-}  // namespace Digikam
+} // namespace Digikam

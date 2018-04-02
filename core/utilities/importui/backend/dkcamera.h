@@ -139,6 +139,6 @@ Q_SIGNALS:
     void signalFolderList(const QStringList&);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* DKCAMERA_H */

@@ -161,4 +161,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::GeoDataContainer)
 
-#endif  // GEO_DATA_CONTAINER_H
+#endif // GEO_DATA_CONTAINER_H

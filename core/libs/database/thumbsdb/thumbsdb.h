@@ -152,6 +152,6 @@ private:
     friend class ThumbsDbAccess;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* THUMBNAILS_DATABASE_H */

@@ -63,6 +63,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // EXIF_CAPTION_H

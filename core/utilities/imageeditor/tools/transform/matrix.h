@@ -38,7 +38,7 @@ public:
      *
      * Initializes matrix to the identity matrix.
      */
-    Matrix();
+    explicit Matrix();
 
     /**
      * translate:
@@ -103,6 +103,6 @@ public:
     double coeff[3][3];
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IMAGEEFFECT_PERSPECTIVE_MATRIX_H

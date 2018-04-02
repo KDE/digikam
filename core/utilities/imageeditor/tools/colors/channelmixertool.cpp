@@ -224,4 +224,4 @@ void ChannelMixerTool::slotSaveAsSettings()
     d->settingsView->saveAsSettings();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

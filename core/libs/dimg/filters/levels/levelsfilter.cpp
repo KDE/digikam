@@ -118,4 +118,4 @@ void LevelsFilter::readParameters(const Digikam::FilterAction& action)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

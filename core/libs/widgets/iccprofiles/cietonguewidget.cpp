@@ -820,4 +820,4 @@ void CIETongueWidget::slotProgressTimerDone()
     d->progressTimer->start(200);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

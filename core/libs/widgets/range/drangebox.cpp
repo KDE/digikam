@@ -146,4 +146,4 @@ void DIntRangeBox::slotMinimumChanged(int newValue)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

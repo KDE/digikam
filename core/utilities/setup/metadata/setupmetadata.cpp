@@ -806,4 +806,4 @@ void SetupMetadata::slotExifAutoRotateToggled(bool b)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

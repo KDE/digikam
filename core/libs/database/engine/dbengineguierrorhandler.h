@@ -96,6 +96,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* DATABASE_ENGINE_GUI_ERROR_HANDLER_H */

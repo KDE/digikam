@@ -191,4 +191,4 @@ QDebug operator<<(QDebug dbg, const CamItemInfo& info)
     return dbg.space();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -225,4 +225,4 @@ void SetupRaw::readSettings()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

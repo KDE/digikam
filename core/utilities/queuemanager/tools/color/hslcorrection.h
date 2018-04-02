@@ -62,6 +62,6 @@ private:
     HSLSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* HSLCORRECTION_H */

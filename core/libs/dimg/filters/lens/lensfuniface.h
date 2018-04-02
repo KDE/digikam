@@ -106,7 +106,7 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE( Digikam::LensFunIface::DevicePtr )
 Q_DECLARE_METATYPE( Digikam::LensFunIface::LensPtr )

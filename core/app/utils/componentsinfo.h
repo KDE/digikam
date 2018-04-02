@@ -35,6 +35,6 @@ DIGIKAM_EXPORT void showDigikamComponentsInfo();
 
 DIGIKAM_EXPORT void showDigikamDatabaseStat();
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // COMPONENTS_INFO_H

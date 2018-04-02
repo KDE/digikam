@@ -101,4 +101,4 @@ void CurvesFilter::readParameters(const FilterAction& action)
     m_settings = CurvesContainer::fromFilterAction(action);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

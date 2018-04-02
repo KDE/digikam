@@ -41,4 +41,4 @@ DImgThreadedAnalyser::~DImgThreadedAnalyser()
 {
 }
 
-}  // namespace Digikam
+} // namespace Digikam

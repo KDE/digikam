@@ -400,4 +400,4 @@ void FreeSpaceWidget::slotTimeout()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

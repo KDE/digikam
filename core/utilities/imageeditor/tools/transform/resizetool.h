@@ -69,6 +69,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* RESIZE_TOOL_H */

@@ -678,4 +678,4 @@ void EditorToolThreaded::deleteFilterInstance(bool b)
     d->delFilter = b;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

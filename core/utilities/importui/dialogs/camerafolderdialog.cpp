@@ -201,4 +201,4 @@ void CameraFolderDialog::slotHelp()
     DXmlGuiWindow::openHandbook();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

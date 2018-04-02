@@ -250,4 +250,4 @@ float KBImageLoader::imageAspect() const
     return d->textureAspect;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

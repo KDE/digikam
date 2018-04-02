@@ -689,4 +689,4 @@ void UMSCamera::getUUIDFromSolid()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

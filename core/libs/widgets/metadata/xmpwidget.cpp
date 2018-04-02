@@ -179,4 +179,4 @@ void XmpWidget::slotSaveMetadataToFile()
     storeMetadataToFile(url, getMetadata().getXmp());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

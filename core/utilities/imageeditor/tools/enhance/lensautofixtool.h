@@ -58,6 +58,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* LENSAUTOFIXTOOL_H */

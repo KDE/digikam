@@ -269,4 +269,4 @@ void Task::run()
     emit signalDone();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

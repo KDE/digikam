@@ -332,4 +332,4 @@ bool EditorStackView::isZoomablePreview() const
     return previewWidget();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

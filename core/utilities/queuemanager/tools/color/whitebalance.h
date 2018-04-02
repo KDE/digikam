@@ -62,6 +62,6 @@ private:
     WBSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* WHITE_BALANCE_H */

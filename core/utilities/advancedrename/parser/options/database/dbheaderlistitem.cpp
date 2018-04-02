@@ -76,4 +76,4 @@ void DbHeaderListItem::slotThemeChanged()
     setForeground(1, QBrush(qApp->palette().color(QPalette::HighlightedText)));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

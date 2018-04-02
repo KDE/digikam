@@ -703,4 +703,4 @@ void IPTCEnvelope::applyMetadata(QByteArray& iptcData)
     iptcData = meta.getIptc();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

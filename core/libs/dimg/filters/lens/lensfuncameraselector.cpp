@@ -788,4 +788,4 @@ void LensFunCameraSelector::slotDistanceChanged()
     emit signalLensSettingsChanged();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

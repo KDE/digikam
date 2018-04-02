@@ -214,4 +214,4 @@ void CBSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configBlueAdjustmentEntry,  prm.blue);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

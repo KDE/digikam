@@ -747,4 +747,4 @@ void InsertTextWidget::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -56,6 +56,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // RAWCAMERADLG_H
+#endif // RAWCAMERADLG_H

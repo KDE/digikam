@@ -380,6 +380,6 @@ void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, 
     menuAction->addAction(action);
 }
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // EDITOR_WINDOW_PRIVATE_H

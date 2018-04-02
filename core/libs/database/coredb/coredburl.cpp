@@ -425,4 +425,4 @@ int CoreDbUrl::searchId() const
     return QUrlQuery(*this).queryItemValue(QLatin1String("searchId")).toInt();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

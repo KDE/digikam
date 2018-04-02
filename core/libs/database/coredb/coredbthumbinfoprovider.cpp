@@ -68,4 +68,4 @@ int DatabaseLoadSaveFileInfoProvider::orientationHint(const QString& path)
     return info.orientation();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

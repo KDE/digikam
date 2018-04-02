@@ -68,6 +68,6 @@ public:
     void applySettings();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // TEMPLATELIST_H

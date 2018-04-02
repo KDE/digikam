@@ -553,4 +553,4 @@ void GreycstorationFilter::readParameters(const FilterAction& action)
     d->settings.tile        = action.parameter(QLatin1String("tile")).toInt();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

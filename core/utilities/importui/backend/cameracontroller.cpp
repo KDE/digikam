@@ -1253,4 +1253,4 @@ void CameraController::openFile(const QString& folder, const QString& file)
     addCommand(cmd);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

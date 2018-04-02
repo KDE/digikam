@@ -97,6 +97,6 @@ public:
     PresentationAudioWidget* playbackWidget;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PRESENTATION_KB_P_H

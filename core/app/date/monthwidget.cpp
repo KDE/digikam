@@ -517,4 +517,4 @@ void MonthWidget::slotModelDestroyed()
     update();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

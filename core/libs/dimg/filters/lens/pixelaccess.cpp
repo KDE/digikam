@@ -330,4 +330,4 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

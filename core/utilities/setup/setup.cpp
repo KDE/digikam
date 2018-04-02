@@ -568,4 +568,4 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -227,4 +227,4 @@ void WorkflowDlg::slotHelp()
     DXmlGuiWindow::openHandbook();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

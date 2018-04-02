@@ -73,4 +73,4 @@ void CreateFinalPtoTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     return;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

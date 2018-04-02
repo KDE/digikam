@@ -215,4 +215,4 @@ void MetadataSynchronizer::slotAdvance()
     advance(1);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

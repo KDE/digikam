@@ -191,4 +191,4 @@ void DKCamera::printSupportedFeatures()
     qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Image capture preview (liveview):" << captureImagePreviewSupport();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -231,4 +231,4 @@ void ImagePropertiesSideBarCamGui::doSaveState()
     d->metadataTab->writeSettings(groupMetadataTab);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

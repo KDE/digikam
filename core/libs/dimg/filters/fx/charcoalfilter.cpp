@@ -361,4 +361,4 @@ void CharcoalFilter::readParameters(const Digikam::FilterAction& action)
     d->smooth = action.parameter(QLatin1String("smooth")).toDouble();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

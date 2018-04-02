@@ -89,4 +89,4 @@ IccTransform IccPostLoadingManager::postLoadingManage(QWidget* const parent)
     return IccTransform();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

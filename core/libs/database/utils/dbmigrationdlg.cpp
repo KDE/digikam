@@ -297,4 +297,4 @@ void DatabaseMigrationDialog::slotHandleSmallStepStarted(int currentValue, int m
     d->progressBarSmallStep->setValue(currentValue);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

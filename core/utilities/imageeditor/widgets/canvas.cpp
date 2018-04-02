@@ -722,4 +722,4 @@ void Canvas::dropEvent(QDropEvent* e)
     emit signalAddedDropedItems(e);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

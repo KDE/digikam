@@ -45,7 +45,7 @@ private:
     ImportRenameParser& operator=(const ImportRenameParser&);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 
 #endif /* IMPORTRENAMEPARSER_H */

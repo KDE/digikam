@@ -227,4 +227,4 @@ void AntiVignettingFilter::readParameters(const Digikam::FilterAction& action)
     m_settings.yshift        = action.parameter(QLatin1String("yshift")).toDouble();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

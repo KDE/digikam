@@ -161,6 +161,6 @@ private:
     friend class KBEffect;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PRESENTATION_KB_H

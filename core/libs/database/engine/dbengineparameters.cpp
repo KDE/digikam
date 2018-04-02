@@ -808,4 +808,4 @@ QDebug operator<<(QDebug dbg, const DbEngineParameters& p)
     return dbg.space();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

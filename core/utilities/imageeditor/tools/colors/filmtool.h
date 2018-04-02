@@ -79,6 +79,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* FILMTOOL_H_ */

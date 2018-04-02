@@ -141,4 +141,4 @@ void ActionThread::slotThreadFinished()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

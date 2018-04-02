@@ -396,4 +396,4 @@ void ApplicationSettings::Private::init()
                q, SLOT(applyBalooSettings()));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

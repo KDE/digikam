@@ -73,7 +73,7 @@ public:
 
 typedef ImageInfoList::iterator ImageInfoListIterator;
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::ImageInfoList)
 

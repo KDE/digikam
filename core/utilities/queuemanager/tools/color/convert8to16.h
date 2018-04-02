@@ -57,6 +57,6 @@ private Q_SLOTS:
     void slotSettingsChanged()       {};
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* CONVERT8TO16_H */

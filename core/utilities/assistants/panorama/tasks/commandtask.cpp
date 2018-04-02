@@ -103,4 +103,4 @@ void CommandTask::printDebug(const QString& binaryName)
     qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "output:" << endl << qPrintable(QLatin1String(" >>\t") + output.replace(QLatin1String("\n"), QLatin1String("\n >>\t")));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

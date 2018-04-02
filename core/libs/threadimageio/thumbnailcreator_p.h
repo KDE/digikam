@@ -105,6 +105,6 @@ public:
     int                             storageSize() const;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DIGIKAMTHUMBNAILCREATORPRIV_H

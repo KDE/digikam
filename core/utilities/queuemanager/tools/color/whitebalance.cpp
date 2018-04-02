@@ -140,4 +140,4 @@ bool WhiteBalance::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

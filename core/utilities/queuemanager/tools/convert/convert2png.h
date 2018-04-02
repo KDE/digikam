@@ -64,6 +64,6 @@ private:
     bool         m_changeSettings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* CONVERT2PNG_H */

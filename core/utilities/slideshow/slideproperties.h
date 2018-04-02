@@ -60,6 +60,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SLIDE_PROPERTIES_H

@@ -544,4 +544,4 @@ void EXIFDateTime::applyMetadata(QByteArray& exifData, QByteArray& iptcData, QBy
     xmpData  = meta.getXmp();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

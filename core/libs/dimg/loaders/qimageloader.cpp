@@ -203,4 +203,4 @@ bool QImageLoader::isReadOnly() const
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

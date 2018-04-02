@@ -221,6 +221,6 @@ public:
     DCategorizedSortFilterProxyModel* proxyModel;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DCATEGORIZED_VIEW_P_H

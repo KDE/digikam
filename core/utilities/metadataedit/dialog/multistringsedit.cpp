@@ -283,4 +283,4 @@ bool MultiStringsEdit::getValues(QStringList& oldValues, QStringList& newValues)
     return d->valueCheck->isChecked();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -493,4 +493,4 @@ void TimeAdjustSettings::slotDetAdjustmentByClockPhotoDialog()
 }
 
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -222,4 +222,4 @@ QDebug operator<<(QDebug dbg, const Template& t)
     return dbg.space();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

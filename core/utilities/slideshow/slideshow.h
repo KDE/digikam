@@ -120,6 +120,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SLIDE_SHOW_H

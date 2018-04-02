@@ -102,4 +102,4 @@ QString MetaEngine::detectLanguageAlt(const QString& value, QString& lang)
     return value;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

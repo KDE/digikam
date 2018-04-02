@@ -145,4 +145,4 @@ void PGFSettings::slotTogglePGFLossLess(bool b)
     d->labelPGFcompression->setEnabled(!b);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -97,4 +97,4 @@ bool TIFFSettings::getCompression() const
     return d->TIFFcompression->isChecked();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

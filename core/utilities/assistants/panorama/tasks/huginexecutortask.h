@@ -53,6 +53,6 @@ private:
     const PanoramaFileType fileType;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PANO_HUGIN_EXECUTOR_TASK_H

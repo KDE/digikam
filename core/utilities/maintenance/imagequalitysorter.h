@@ -78,6 +78,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* IMAGEQUALITYSORTER_H */

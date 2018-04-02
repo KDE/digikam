@@ -363,6 +363,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _k_itemToggled(bool))
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DBCONFIGDLG_MODELS_H

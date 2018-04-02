@@ -1710,4 +1710,4 @@ QPixmap PresentationGL::generateCustomOutlinedTextPixmap(const QString& text, QF
     return pix;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

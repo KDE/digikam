@@ -726,4 +726,4 @@ HistogramScale HistogramWidget::scaleType() const
     return d->scaleType;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

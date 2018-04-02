@@ -738,4 +738,4 @@ void ImagePropertiesColorsTab::getICCData()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

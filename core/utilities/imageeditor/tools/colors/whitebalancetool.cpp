@@ -264,4 +264,4 @@ void WhiteBalanceTool::slotSaveAsSettings()
     d->settingsView->saveAsSettings();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

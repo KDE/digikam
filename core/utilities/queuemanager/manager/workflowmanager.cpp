@@ -551,4 +551,4 @@ bool WorkflowManager::load(QStringList& failed)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

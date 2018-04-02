@@ -76,6 +76,6 @@ private:
     static ThumbsDbAccessStaticPriv* d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // THUMBNAILS_DATABASE_ACCESS_H

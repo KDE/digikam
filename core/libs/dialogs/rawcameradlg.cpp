@@ -155,4 +155,4 @@ void RawCameraDlg::updateHeader(int results)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -67,6 +67,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* AUTOCORRECTIONTOOL_H */

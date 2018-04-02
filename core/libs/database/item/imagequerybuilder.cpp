@@ -2267,4 +2267,4 @@ QString ImageQueryBuilder::possibleDate(const QString& str, bool& exact) const
     return QString();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

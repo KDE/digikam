@@ -435,4 +435,4 @@ void AdvancedRenameInput::writeSettings()
     group.writeEntry(d->configPatternHistoryListEntry, patternHistory);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

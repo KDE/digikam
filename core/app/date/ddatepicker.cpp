@@ -560,4 +560,4 @@ bool DDatePicker::hasCloseButton() const
     return (d->closeButton);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

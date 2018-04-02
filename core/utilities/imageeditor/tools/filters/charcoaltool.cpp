@@ -198,4 +198,4 @@ void CharcoalTool::setFinalImage()
     iface.setOriginal(i18n("Charcoal"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

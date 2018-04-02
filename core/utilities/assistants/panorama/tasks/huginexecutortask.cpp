@@ -82,4 +82,4 @@ void HuginExecutorTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     printDebug(QLatin1String("hugin_executor"));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

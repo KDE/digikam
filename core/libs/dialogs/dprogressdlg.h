@@ -75,6 +75,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // DPROGRESSDLG_H
+#endif // DPROGRESSDLG_H

@@ -201,4 +201,4 @@ bool ImageResizeJob::imageResize(MailSettings* const settings,
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

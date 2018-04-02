@@ -260,4 +260,4 @@ bool Rotate::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

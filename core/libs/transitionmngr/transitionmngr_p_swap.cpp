@@ -117,4 +117,4 @@ int TransitionMngr::Private::transitionSwapB2T(bool aInit)
     return -1;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

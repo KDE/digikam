@@ -854,4 +854,4 @@ MetaEngine::TagsMap MetaEngine::getIptcTagsList() const
     return TagsMap();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

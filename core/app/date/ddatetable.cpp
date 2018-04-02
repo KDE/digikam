@@ -701,4 +701,4 @@ void DDateTable::unsetCustomDatePainting(const QDate& date)
     update();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

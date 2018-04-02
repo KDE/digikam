@@ -283,6 +283,6 @@ private:
     T* d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DSHAREDDATA_H

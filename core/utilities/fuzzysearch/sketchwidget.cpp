@@ -640,4 +640,4 @@ void SketchWidget::updateDrawCursor()
     d->drawCursor = QCursor(pix);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -110,6 +110,6 @@ private:
     InfraredContainer m_settings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* INFRAREDFILTER_H */

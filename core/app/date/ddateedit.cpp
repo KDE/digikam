@@ -507,4 +507,4 @@ void DDateEdit::updateView()
     blockSignals(blocked);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

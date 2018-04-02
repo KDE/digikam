@@ -716,4 +716,4 @@ void PresentationKB::slotClose()
     close();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -133,6 +133,6 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DDatePickerPopup::Items)
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DDATEPICKERPOPUP_H

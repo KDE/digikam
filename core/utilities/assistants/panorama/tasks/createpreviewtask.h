@@ -58,6 +58,6 @@ private:
     MetaEngine                    m_meta;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // CREATE_PREVIEW_TASK_H

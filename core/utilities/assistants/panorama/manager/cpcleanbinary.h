@@ -52,4 +52,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // PANO_CPCLEAN_BINARY_H
+#endif // PANO_CPCLEAN_BINARY_H

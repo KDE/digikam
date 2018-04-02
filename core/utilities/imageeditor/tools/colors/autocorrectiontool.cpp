@@ -323,4 +323,4 @@ void AutoCorrectionTool::autoCorrection(DImg* const img, DImg* const ref, int ty
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

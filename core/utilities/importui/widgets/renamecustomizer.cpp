@@ -337,4 +337,4 @@ void RenameCustomizer::saveSettings()
     config->sync();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

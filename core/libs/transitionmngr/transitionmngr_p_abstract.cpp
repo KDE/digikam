@@ -216,4 +216,4 @@ int TransitionMngr::Private::transitionBlobs(bool aInit)
     return 10;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

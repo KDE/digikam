@@ -51,4 +51,4 @@ void PanoTask::requestAbort()
     isAbortedFlag = true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

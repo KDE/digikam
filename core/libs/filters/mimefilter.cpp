@@ -68,4 +68,4 @@ int MimeFilter::mimeFilter()
     return currentIndex();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

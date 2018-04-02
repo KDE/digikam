@@ -112,6 +112,6 @@ private:
     QMap<int, QString> itemsToMap(const QList<QTreeWidgetItem*> items) const;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // TOOLS_LIST_VIEW_H

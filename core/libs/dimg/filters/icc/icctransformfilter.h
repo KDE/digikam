@@ -84,6 +84,6 @@ private:
     IccTransform m_transform;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* DIMGREFOCUS_H */

@@ -207,6 +207,6 @@ private:
     static const QString         configSlideScreenEntry;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // SLIDESHOW_SETTINGS_H
+#endif // SLIDESHOW_SETTINGS_H

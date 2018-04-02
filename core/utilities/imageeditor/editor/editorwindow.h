@@ -439,6 +439,6 @@ private:
     friend class EditorToolIface;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // EDITOR_WINDOW_H

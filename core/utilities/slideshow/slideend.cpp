@@ -91,4 +91,4 @@ SlideEnd::~SlideEnd()
 {
 }
 
-}  // namespace Digikam
+} // namespace Digikam

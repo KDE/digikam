@@ -410,4 +410,4 @@ void EnfuseStackList::setTemplateFileName(DSaveSettingsWidget::OutputFormat frm,
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

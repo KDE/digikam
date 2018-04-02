@@ -56,6 +56,6 @@ public:
     double m_redToAvgRatio;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* REDEYECORRECTIONCONTAINER_H */

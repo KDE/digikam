@@ -1146,4 +1146,4 @@ QString ImageLister::tagSearchXml(int tagId, const QString& type, bool includeCh
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

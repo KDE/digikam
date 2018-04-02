@@ -239,4 +239,4 @@ void DbEngineGuiErrorHandler::consultUserForError(DbEngineErrorAnswer* answer, c
     answer->connectionErrorAbortQueries();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

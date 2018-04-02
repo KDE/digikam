@@ -73,6 +73,6 @@ private:
     RawProcessingFilter* m_filter;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* RAWLOADER_H */

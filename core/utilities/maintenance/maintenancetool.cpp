@@ -106,4 +106,4 @@ void MaintenanceTool::slotCancel()
     setComplete();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

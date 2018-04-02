@@ -284,4 +284,4 @@ void TemplateViewer::setTemplate(const Template& t)
     d->subjectsList->addItems(t.IptcSubjects());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

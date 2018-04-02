@@ -232,4 +232,4 @@ QList<QUrl> AdvancedRenameProcessDialog::failedUrls() const
     return d->failedUrls;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

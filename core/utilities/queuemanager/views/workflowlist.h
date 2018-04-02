@@ -91,6 +91,6 @@ private:
     void mouseDoubleClickEvent(QMouseEvent*);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // WORKFLOW_LIST_H

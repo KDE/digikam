@@ -229,4 +229,4 @@ void ActionThreadBase::run()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -56,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // ENBLEND_BINARY_H
+#endif // ENBLEND_BINARY_H

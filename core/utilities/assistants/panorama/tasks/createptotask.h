@@ -63,6 +63,6 @@ private:
     MetaEngine                       m_meta;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PANO_CREATE_PTO_TASK_H

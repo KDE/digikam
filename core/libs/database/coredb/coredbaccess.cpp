@@ -410,4 +410,4 @@ CoreDbAccessUnlock::~CoreDbAccessUnlock()
     CoreDbAccess::d->lock.lockCount += count;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

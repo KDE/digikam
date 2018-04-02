@@ -76,6 +76,6 @@ public:
     QColor overExposureColor;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // EXPOSURECONTAINER_H
+#endif // EXPOSURECONTAINER_H

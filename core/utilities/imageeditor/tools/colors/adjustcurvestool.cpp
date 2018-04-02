@@ -279,4 +279,4 @@ void AdjustCurvesTool::slotSaveAsSettings()
     d->settingsView->saveAsSettings();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

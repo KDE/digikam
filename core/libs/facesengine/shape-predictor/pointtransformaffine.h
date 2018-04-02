@@ -211,6 +211,6 @@ PointTransformAffine find_similarity_transform(const std::vector<std::vector<flo
     return PointTransformAffine(r * c, t);
 }
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // POINT_TRANSFORM_AFFINE_H

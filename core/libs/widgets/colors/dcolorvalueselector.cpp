@@ -484,4 +484,4 @@ void DColorValueSelector::drawPalette(QPixmap* pixmap)
     painter.fillRect(pixmap->rect(), gradient);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

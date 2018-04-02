@@ -54,6 +54,6 @@ private:
     bool m_valid;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // METADATA_CHECKBOX_H

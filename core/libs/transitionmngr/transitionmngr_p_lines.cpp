@@ -258,4 +258,4 @@ int TransitionMngr::Private::transitionCircleOut(bool aInit)
     return 20;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

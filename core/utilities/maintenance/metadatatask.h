@@ -66,6 +66,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* METADATA_TASK_H */

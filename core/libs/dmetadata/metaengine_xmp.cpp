@@ -1183,4 +1183,4 @@ MetaEngine::TagsMap MetaEngine::getXmpTagsList() const
     return tagsMap;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

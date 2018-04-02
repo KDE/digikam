@@ -620,4 +620,4 @@ void ResizeTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

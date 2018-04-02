@@ -707,4 +707,4 @@ void SelectionModel::select(const QItemSelection& selection, QItemSelectionModel
     QItemSelectionModel::select(selection, command);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

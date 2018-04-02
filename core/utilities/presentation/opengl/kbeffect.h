@@ -115,6 +115,6 @@ public:
     virtual bool done();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // KBEFFECT_H

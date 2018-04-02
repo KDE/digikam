@@ -107,4 +107,4 @@ void SetupEditor::readSettings()
     // Nothing todo. All is already processed in widget contructors
 }
 
-}  // namespace Digikam
+} // namespace Digikam

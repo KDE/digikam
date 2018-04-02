@@ -185,4 +185,4 @@ void BlendKBEffect::advanceTime(float step)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

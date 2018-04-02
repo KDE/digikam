@@ -200,4 +200,4 @@ void TemplateSelector::slotTemplateListChanged()
     populateTemplates();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

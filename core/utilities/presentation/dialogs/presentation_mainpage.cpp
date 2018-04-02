@@ -498,4 +498,4 @@ void PresentationMainPage::setupConnections()
             this, SLOT(slotImagesFilesSelected(QTreeWidgetItem*)));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

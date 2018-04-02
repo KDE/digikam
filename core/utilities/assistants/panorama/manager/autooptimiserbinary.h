@@ -56,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // AUTO_OPTIMISER_BINARY_H
+#endif // AUTO_OPTIMISER_BINARY_H

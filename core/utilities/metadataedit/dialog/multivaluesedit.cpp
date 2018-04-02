@@ -287,4 +287,4 @@ bool MultiValuesEdit::isValid() const
     return d->valueCheck->isValid();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

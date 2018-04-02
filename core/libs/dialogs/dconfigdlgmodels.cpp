@@ -701,6 +701,6 @@ QModelIndex DConfigDlgWdgModel::index(const DConfigDlgWdgItem* item) const
     return createIndex(pageItem->row(), 0, (void*)pageItem);
 }
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #include "moc_dconfigdlgmodels.cpp"

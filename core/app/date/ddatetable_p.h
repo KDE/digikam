@@ -119,6 +119,6 @@ public:
     int                           hoveredPos;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DDATE_TABLE_P_H

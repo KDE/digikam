@@ -170,6 +170,6 @@ private:
     int count;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // COREDATABASEACCESS_H

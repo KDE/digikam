@@ -96,4 +96,4 @@ void SubjectEdit::slotRefChanged()
     m_iprEdit->setText(QLatin1String("XMP"));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

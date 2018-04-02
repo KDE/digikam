@@ -496,4 +496,4 @@ QString ICCProfileWidget::getTagDescription(const QString& key)
     return key.section(QLatin1Char('.'), 2, 2);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

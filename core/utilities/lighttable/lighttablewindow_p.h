@@ -155,6 +155,6 @@ void LightTableWindow::Private::addPageUpDownActions(LightTableWindow* const q, 
     defineShortcut(w, Qt::Key_Left,  q, SLOT(slotBackward()));
 }
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* LIGHTTABLEWINDOWPRIVATE_H */

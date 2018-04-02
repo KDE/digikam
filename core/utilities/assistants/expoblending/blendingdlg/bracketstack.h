@@ -89,6 +89,6 @@ private Q_SLOTS:
     void slotThumbnail(const LoadingDescription&, const QPixmap& pix);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* BRACKETSTACK_H */

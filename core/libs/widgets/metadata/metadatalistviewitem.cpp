@@ -98,4 +98,4 @@ QString MetadataListViewItem::getValue()
     return text(1);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

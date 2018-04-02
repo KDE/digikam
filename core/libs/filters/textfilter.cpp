@@ -216,4 +216,4 @@ void TextFilter::reset()
     setsearchTextFields(SearchTextFilterSettings::All);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

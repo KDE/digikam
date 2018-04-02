@@ -45,7 +45,7 @@ private:
     DefaultRenameParser& operator=(const DefaultRenameParser&);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 
 #endif /* DEFAULTRENAMEPARSER_H */

@@ -519,4 +519,4 @@ QTextEdit* AltLangStrEdit::textEdit() const
     return d->valueEdit;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

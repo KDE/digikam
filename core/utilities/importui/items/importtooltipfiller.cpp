@@ -236,4 +236,4 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
     return tip;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

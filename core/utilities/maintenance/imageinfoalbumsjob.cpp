@@ -106,4 +106,4 @@ void ImageInfoAlbumsJob::slotComplete()
     parseAlbum();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -201,4 +201,4 @@ void OilPaintTool::setFinalImage()
     iface.setOriginal(i18n("Oil Paint"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

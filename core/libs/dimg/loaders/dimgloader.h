@@ -191,6 +191,6 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DImgLoader::LoadFlags)
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* DIMGLOADER_H */

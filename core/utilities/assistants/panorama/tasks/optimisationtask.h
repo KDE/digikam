@@ -54,6 +54,6 @@ private:
     const bool  buildGPano;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // OPTIMISATION_TASK_H

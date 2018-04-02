@@ -372,4 +372,4 @@ void MetadataEditDialog::slotSetReadOnly(bool state)
     d->isReadOnly = state;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

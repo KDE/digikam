@@ -68,6 +68,6 @@ private:
     bool         m_changeSettings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* CONVERT2DNG_H */

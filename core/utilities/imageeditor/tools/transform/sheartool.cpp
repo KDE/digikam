@@ -339,4 +339,4 @@ void ShearTool::setFinalImage()
     iface.setOriginal(i18n("Shear Tool"), filter()->filterAction(), targetImage);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

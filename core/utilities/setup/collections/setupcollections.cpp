@@ -139,4 +139,4 @@ void SetupCollections::readSettings()
     d->collectionModel->loadCollections();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

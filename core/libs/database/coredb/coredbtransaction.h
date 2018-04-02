@@ -58,6 +58,6 @@ private:
     CoreDbAccess* m_access;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // COREDATABASETRANSACTION_H

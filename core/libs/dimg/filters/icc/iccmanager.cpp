@@ -621,4 +621,4 @@ void IccManager::transformForOutput(const IccProfile& prof)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

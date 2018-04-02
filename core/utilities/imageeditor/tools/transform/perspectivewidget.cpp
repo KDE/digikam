@@ -43,7 +43,6 @@
 #include <QPixmap>
 #include <QPolygon>
 
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -1024,4 +1023,4 @@ void PerspectiveWidget::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

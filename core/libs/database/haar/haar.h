@@ -258,6 +258,6 @@ private:
 
 }  // namespace Haar
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // HAAR_H

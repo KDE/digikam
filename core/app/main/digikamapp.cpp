@@ -3591,4 +3591,4 @@ void DigikamApp::slotImportTool()
 #endif
 }
 
-}  // namespace Digikam
+} // namespace Digikam

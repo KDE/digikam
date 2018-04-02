@@ -49,6 +49,6 @@ private:
     QString checkTriState(int value) const;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // LIBSINFODLG_H
+#endif // LIBSINFODLG_H

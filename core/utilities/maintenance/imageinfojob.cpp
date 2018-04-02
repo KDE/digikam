@@ -180,4 +180,4 @@ void ImageInfoJob::slotData(const QList<ImageListerRecord>& records)
     emit signalItemsInfo(itemsList);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

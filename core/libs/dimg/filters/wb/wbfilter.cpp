@@ -537,4 +537,4 @@ void WBFilter::readParameters(const FilterAction& action)
     m_settings = WBContainer::fromFilterAction(action);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

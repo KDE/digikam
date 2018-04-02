@@ -209,4 +209,4 @@ BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchTool
     return 0;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -61,6 +61,6 @@ private:
     QString                  commandPath;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // COMMAND_TASK_H

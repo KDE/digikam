@@ -270,4 +270,4 @@ void BlurFilter::readParameters(const FilterAction& action)
     d->radius = action.parameter(QLatin1String("radius")).toInt();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

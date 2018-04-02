@@ -45,5 +45,5 @@ private:  // emphasize the following members are private
 
 };
 
-#endif  // DLIB_BOOST_NONCOPYABLE_HPP_INCLUDED
+#endif // DLIB_BOOST_NONCOPYABLE_HPP_INCLUDED
 

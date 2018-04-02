@@ -52,6 +52,6 @@ private:
     const QRect crop;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // CREATE_PFINAL_PTO_TASK_H

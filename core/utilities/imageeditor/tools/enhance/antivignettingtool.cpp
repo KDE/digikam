@@ -166,4 +166,4 @@ void AntiVignettingTool::setFinalImage()
     iface->setOriginal(i18n("Vignetting Correction"), filter()->filterAction(), finalImage);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

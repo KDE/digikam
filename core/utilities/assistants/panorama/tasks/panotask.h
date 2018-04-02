@@ -59,6 +59,6 @@ protected:
     const QUrl       tmpDir;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PANO_TASK_H

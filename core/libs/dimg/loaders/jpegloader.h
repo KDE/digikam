@@ -80,6 +80,6 @@ private:
     static void dimg_jpeg_output_message(j_common_ptr cinfo);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* JPEGLOADER_H */

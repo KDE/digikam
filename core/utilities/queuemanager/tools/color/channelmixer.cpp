@@ -184,4 +184,4 @@ bool ChannelMixer::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

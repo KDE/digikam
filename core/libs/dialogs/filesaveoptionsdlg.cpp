@@ -61,4 +61,4 @@ FileSaveOptionsDlg::~FileSaveOptionsDlg()
 {
 }
 
-}  // namespace Digikam
+} // namespace Digikam

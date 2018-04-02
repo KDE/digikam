@@ -227,4 +227,4 @@ void LensFunSettings::writeSettings(KConfigGroup& group)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

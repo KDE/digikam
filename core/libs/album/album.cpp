@@ -867,4 +867,4 @@ Album* AlbumIterator::current() const
     return m_current;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

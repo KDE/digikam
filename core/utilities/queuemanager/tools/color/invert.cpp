@@ -64,4 +64,4 @@ bool Invert::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

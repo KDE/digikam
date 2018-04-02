@@ -222,4 +222,4 @@ void FilterStatusBar::slotFilterSettingsChanged(const ImageFilterSettings& setti
     d->settings = settings;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

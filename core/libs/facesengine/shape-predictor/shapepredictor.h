@@ -594,6 +594,6 @@ QDataStream& operator >> (QDataStream& dataStream, ShapePredictor& shape)
 
 }  // namespace redeye
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SHAPE_PREDICTOR_H_

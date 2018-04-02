@@ -64,6 +64,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // INFODLG_H
+#endif // INFODLG_H

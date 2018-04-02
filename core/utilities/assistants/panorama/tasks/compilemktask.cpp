@@ -60,4 +60,4 @@ void CompileMKTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     qCDebug(DIGIKAM_GENERAL_LOG) << "make output:" << endl << output;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

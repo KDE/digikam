@@ -75,4 +75,4 @@ int EffectMngr::Private::effectKenBurnsZoomOut(bool aInit)
     return -1;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

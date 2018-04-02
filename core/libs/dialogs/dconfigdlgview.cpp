@@ -618,6 +618,6 @@ Qt::Alignment DConfigDlgView::viewPosition() const
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #include "moc_dconfigdlgview.cpp"

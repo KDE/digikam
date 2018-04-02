@@ -50,6 +50,6 @@ public:
     void readMetadata(QByteArray& iptcData);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IPTC_SUBJECTS_H

@@ -145,6 +145,6 @@ public:
     MessageType      messageType;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DBCONFIGDLG_WIDGETS_P_H

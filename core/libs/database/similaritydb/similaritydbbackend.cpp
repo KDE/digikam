@@ -64,4 +64,4 @@ bool SimilarityDbBackend::initSchema(SimilarityDbSchemaUpdater* const updater)
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

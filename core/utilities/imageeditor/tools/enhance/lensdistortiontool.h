@@ -63,6 +63,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* LENSDISTORTIONTOOL_H */

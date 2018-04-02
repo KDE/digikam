@@ -135,4 +135,4 @@ void ImageQualityTask::run()
     emit signalDone();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

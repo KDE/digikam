@@ -887,4 +887,4 @@ bool JP2KLoader::isReadOnly() const
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

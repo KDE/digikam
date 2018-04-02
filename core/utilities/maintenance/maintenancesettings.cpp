@@ -96,4 +96,4 @@ QDebug operator<<(QDebug dbg, const MaintenanceSettings& s)
     return dbg.space();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

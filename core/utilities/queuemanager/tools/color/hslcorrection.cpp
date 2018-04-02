@@ -119,4 +119,4 @@ bool HSLCorrection::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

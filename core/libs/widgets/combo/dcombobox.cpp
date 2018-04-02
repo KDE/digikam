@@ -149,4 +149,4 @@ void DComboBox::slotCurrentIndexChanged(int v)
     emit currentIndexChanged(v);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

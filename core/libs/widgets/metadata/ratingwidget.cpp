@@ -557,4 +557,4 @@ RatingMenuAction::~RatingMenuAction()
 {
 }
 
-}  // namespace Digikam
+} // namespace Digikam

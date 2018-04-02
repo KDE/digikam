@@ -62,6 +62,6 @@ private:
     MixerSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* CHANNELMIXER_H */

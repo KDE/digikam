@@ -117,6 +117,6 @@ public:
     ~UndoActionIrreversible();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* UNDOACTION_H */

@@ -52,6 +52,6 @@ private:
     const QUrl& ptoUrl;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PANO_CP_FIND_TASK_H

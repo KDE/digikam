@@ -91,4 +91,4 @@ WBContainer WBContainer::fromFilterAction(const FilterAction& action, const QStr
     return settings;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

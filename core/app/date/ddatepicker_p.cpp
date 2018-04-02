@@ -220,4 +220,4 @@ QDate DDatePicker::Private::validDateInYearMonth(int year, int month)
     return newDate;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

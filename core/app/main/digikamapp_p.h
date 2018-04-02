@@ -329,6 +329,6 @@ public:
     DigikamModelCollection*             modelCollection;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DIGIKAM_APP_PRIVATE_H

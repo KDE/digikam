@@ -527,4 +527,4 @@ bool DRawDecoder::isRawFile(const QUrl& url)
     return (rawFilesExt.toUpper().contains(fileInfo.suffix().toUpper()));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

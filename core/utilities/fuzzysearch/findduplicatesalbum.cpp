@@ -177,4 +177,4 @@ void FindDuplicatesAlbum::drawRow(QPainter* p,
     QTreeWidget::drawRow(p, opt, index);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

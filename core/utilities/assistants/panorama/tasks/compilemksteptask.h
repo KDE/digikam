@@ -58,6 +58,6 @@ private:
     const QString enblendPath;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // COMPILE_MK_STEP_TASK_H

@@ -397,4 +397,4 @@ void CBFilter::readParameters(const Digikam::FilterAction& action)
     d->settings.red   = action.parameter(QLatin1String("red")).toDouble();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

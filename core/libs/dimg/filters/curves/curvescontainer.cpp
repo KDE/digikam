@@ -168,4 +168,4 @@ CurvesContainer CurvesContainer::fromFilterAction(const FilterAction& action, co
     return curves.getContainer();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

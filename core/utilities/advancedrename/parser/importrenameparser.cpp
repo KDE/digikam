@@ -50,4 +50,4 @@ ImportRenameParser::ImportRenameParser()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

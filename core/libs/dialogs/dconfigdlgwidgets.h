@@ -336,6 +336,6 @@ private:
     Q_DISABLE_COPY(DConfigDlgTitle)
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DBCONFIGDLG_WIDGETS_H

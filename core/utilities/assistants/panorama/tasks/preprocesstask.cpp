@@ -241,4 +241,4 @@ bool PreProcessTask::convertRaw()
     return true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

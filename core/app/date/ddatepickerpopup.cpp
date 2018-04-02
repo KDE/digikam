@@ -246,4 +246,4 @@ void DDatePickerPopup::slotPrevMonth()
     emit dateChanged(QDate::currentDate().addMonths(-1));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

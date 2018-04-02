@@ -82,4 +82,4 @@ void ICCProfileInfoDlg::slotHelp()
     DXmlGuiWindow::openHandbook();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

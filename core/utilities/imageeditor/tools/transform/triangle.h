@@ -54,6 +54,6 @@ private:
     float m_c;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* TRIANGLE_H */

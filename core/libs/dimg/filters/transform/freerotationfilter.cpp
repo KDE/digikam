@@ -423,4 +423,4 @@ void FreeRotationFilter::readParameters(const FilterAction& action)
     d->settings.backgroundColor.setAlpha(action.parameter(QLatin1String("backgroundColorA")).toInt());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

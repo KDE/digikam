@@ -48,4 +48,4 @@ void DNGWriterHost::SniffForAbort()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

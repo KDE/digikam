@@ -222,4 +222,4 @@ bool PPMLoader::isReadOnly() const
     return true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

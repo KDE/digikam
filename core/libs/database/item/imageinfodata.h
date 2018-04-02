@@ -161,6 +161,6 @@ public:
     DatabaseFieldsHashRaw databaseFieldsHashRaw;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IMAGEINFODATA_H

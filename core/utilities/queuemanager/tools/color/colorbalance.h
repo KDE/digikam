@@ -62,6 +62,6 @@ private:
     CBSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* COLORBALANCE_H */

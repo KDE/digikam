@@ -1121,4 +1121,4 @@ bool TIFFLoader::isReadOnly() const
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

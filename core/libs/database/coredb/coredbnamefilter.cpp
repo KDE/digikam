@@ -77,4 +77,4 @@ bool CoreDbNameFilter::matches(const QString& name)
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

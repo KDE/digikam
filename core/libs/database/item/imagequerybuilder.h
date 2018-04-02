@@ -105,6 +105,6 @@ protected:
     bool    m_imageTagPropertiesJoined;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IMAGEQUERYBUILDER_H

@@ -178,4 +178,4 @@ void FingerPrintsGenerator::slotDone()
     MaintenanceTool::slotDone();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

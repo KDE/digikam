@@ -134,4 +134,4 @@ QMap<TransitionMngr::TransType, QString> TransitionMngr::transitionNames()
     return trans;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

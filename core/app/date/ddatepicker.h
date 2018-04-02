@@ -189,6 +189,6 @@ private:
 };
 
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DDATE_PICKER_H

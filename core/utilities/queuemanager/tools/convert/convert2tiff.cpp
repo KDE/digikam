@@ -106,4 +106,4 @@ bool Convert2TIFF::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

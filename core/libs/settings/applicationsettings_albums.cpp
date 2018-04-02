@@ -132,4 +132,4 @@ bool ApplicationSettings::delAlbumCategoryName(const QString& name) const
     return (count > 0) ? true : false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

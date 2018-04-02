@@ -289,4 +289,4 @@ void HSLSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configLighnessAdjustmentEntry,   prm.lightness);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -81,6 +81,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // FIND_DUPLICATES_ALBUM_ITEM_H

@@ -267,4 +267,4 @@ void OilPaintFilter::readParameters(const Digikam::FilterAction& action)
     d->smoothness = action.parameter(QLatin1String("smoothness")).toInt();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

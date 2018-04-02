@@ -201,6 +201,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _k_dataChanged(const QModelIndex&, const QModelIndex&))
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DBCONFIGDLG_VIEW_H

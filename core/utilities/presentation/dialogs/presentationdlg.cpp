@@ -309,4 +309,4 @@ void PresentationDlg::closeEvent(QCloseEvent* e)
     e->accept();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -270,4 +270,4 @@ AlbumLabelsSearchHandler* AlbumSelectTabs::albumLabelsHandler() const
     return d->labelsSearchHandler;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

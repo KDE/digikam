@@ -643,4 +643,4 @@ void ColorFXFilter::readParameters(const FilterAction& action)
     m_settings.intensity   = action.parameter(QLatin1String("intensity")).toInt();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

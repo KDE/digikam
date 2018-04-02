@@ -192,4 +192,4 @@ void BCGSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configGammaAdjustmentEntry,      prm.gamma);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

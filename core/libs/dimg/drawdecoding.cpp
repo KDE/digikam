@@ -728,4 +728,4 @@ void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, DRawDecoderSe
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

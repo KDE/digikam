@@ -2772,4 +2772,4 @@ void DigikamView::slotUngroupSelected()
     FileActionMngr::instance()->ungroup(selectedInfoList(false, true));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

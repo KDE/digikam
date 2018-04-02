@@ -289,4 +289,4 @@ QList<int> DImgThreadedFilter::multithreadedSteps(int stop, int start) const
     return vals;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

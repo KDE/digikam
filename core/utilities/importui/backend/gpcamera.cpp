@@ -1805,4 +1805,4 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
 #endif /* HAVE_GPHOTO2 */
 }
 
-}  // namespace Digikam
+} // namespace Digikam

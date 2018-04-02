@@ -108,6 +108,6 @@ public:
 //! qDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const MaintenanceSettings& s);
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // MAINTENANCE_SETTINGS_H
+#endif // MAINTENANCE_SETTINGS_H

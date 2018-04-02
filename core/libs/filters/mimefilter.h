@@ -61,6 +61,6 @@ public:
     int mimeFilter();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // MIMEFILTER_H

@@ -67,6 +67,6 @@ private:
     BWSepiaSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // BW_CONVERT_H

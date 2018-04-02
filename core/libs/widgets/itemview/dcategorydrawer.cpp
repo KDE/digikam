@@ -214,4 +214,4 @@ void DCategoryDrawer::mouseLeft(const QModelIndex&, const QRect&)
 {
 }
 
-}  // namespace Digikam
+} // namespace Digikam

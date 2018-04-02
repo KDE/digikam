@@ -62,6 +62,6 @@ private:
     AntiVignettingSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* ANTIVIGNETTING_H */

@@ -156,4 +156,4 @@ QStringList IccProfilesSettings::favoriteProfiles(KConfigGroup& group)
     return group.readPathEntry(d.configRecentlyUsedProfilesEntry, QStringList());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

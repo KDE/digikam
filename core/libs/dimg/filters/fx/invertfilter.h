@@ -82,6 +82,6 @@ private:
     void filterImage();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* INVERTFILTER_H */

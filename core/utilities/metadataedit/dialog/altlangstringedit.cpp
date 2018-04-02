@@ -142,4 +142,4 @@ void AltLangStringsEdit::slotSelectionChanged(const QString& lang)
     emit signalDefaultLanguageEnabled(lang == QLatin1String("x-default"));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

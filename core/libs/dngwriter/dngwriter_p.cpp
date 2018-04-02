@@ -101,4 +101,4 @@ bool DNGWriter::Private::fujiRotate(QByteArray& rawData, RawInfo& identify) cons
     return true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

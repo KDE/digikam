@@ -263,4 +263,4 @@ bool ApplicationSettings::getPreviewShowIcons() const
     return d->previewShowIcons;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

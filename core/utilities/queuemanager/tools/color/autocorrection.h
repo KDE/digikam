@@ -71,6 +71,6 @@ private:
     QComboBox* m_comboBox;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // AUTO_CORRECTION_H

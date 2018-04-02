@@ -141,6 +141,6 @@ public:
     static bool decode(const QMimeData* e, CameraType& ctype);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* DDRAGOBJECTS_H */

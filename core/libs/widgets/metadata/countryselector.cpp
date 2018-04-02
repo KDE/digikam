@@ -370,4 +370,4 @@ QString CountrySelector::countryForCode(const QString& countryCode)
     return (priv.countryCodeMap[countryCode]);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

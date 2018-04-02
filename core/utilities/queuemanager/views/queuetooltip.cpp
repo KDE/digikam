@@ -110,4 +110,4 @@ QString QueueToolTip::tipContents()
     return ToolTipFiller::imageInfoTipContents(info);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

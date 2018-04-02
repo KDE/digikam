@@ -347,4 +347,4 @@ void SlideProperties::printTags(QPainter& p, int& offset, QStringList& tags)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

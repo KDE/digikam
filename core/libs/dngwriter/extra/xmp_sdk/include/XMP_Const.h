@@ -1331,4 +1331,4 @@ typedef struct XMP_VersionInfo {
 
 } //namespace
 
-#endif  // __XMP_Const_h__
+#endif // __XMP_Const_h__

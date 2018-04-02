@@ -144,4 +144,4 @@ bool NoiseReduction::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

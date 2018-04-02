@@ -450,4 +450,4 @@ void StretchFilter::readParameters(const FilterAction& /*action*/)
     return;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

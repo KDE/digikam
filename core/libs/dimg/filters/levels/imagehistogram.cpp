@@ -690,4 +690,4 @@ double ImageHistogram::getMaximum(int channel, int start, int end) const
     return max;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

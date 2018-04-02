@@ -841,4 +841,4 @@ void EXIFDevice::applyMetadata(QByteArray& exifData)
     exifData = meta.getExifEncoded();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

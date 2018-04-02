@@ -94,4 +94,4 @@ public:
     DProgressWdg*      progressBar;
 };
 
-}  // namespace Digikam
+} // namespace Digikam

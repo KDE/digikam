@@ -179,4 +179,4 @@ void SlideShowBuilder::slotCancel()
     d->cancel = true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

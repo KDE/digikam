@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PERSPECTIVEWIDGET_H
-#define PERSPECTIVEWIDGET_H
+#ifndef PERSPECTIVE_WIDGET_H
+#define PERSPECTIVE_WIDGET_H
 
 // Qt includes
 
@@ -112,6 +112,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* PERSPECTIVEWIDGET_H */
+#endif // PERSPECTIVE_WIDGET_H

@@ -209,4 +209,4 @@ void ToolsView::slotHistoryEntryClicked(const QVariant& metadata)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

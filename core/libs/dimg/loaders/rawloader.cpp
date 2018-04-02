@@ -353,4 +353,4 @@ bool RAWLoader::sixteenBit() const
     return m_decoderSettings.sixteenBitsImage;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

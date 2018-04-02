@@ -704,4 +704,4 @@ void MixerSettings::saveAsSettings()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

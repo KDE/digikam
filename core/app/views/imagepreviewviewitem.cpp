@@ -92,4 +92,4 @@ void ImagePreviewViewItem::hoverMoveEvent(QGraphicsSceneHoverEvent* e)
     d->group->itemHoverMoveEvent(e);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

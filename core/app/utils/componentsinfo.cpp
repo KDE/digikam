@@ -150,4 +150,4 @@ void showDigikamDatabaseStat()
     dlg->show();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -267,6 +267,6 @@ protected:
     DConfigDlgPrivate* const d_ptr;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DBCONFIGDLG_DIALOG_H

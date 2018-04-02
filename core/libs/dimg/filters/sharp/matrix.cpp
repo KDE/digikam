@@ -655,4 +655,4 @@ void RefocusMatrix::make_circle_convolution(const double radius, CMat* const con
     fill_matrix(convolution, m, circle_intensity, radius);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

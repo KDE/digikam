@@ -109,6 +109,6 @@ private:
     QList<AlbumShortInfo>               m_albums;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IMAGEINFOCACHE_H

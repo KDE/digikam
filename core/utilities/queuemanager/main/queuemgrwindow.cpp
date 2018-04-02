@@ -1069,4 +1069,4 @@ void QueueMgrWindow::customizedFullScreenMode(bool set)
     showMenuBarAction()->setEnabled(!set);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

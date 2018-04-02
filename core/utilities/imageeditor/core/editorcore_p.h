@@ -377,6 +377,6 @@ void EditorCore::Private::load(const LoadingDescription& description)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // EDITORCORE_P_H

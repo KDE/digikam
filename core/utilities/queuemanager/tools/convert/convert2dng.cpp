@@ -119,4 +119,4 @@ bool Convert2DNG::toolOperations()
     return (ret == DNGWriter::PROCESSCOMPLETE);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

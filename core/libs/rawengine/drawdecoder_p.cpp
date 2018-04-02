@@ -684,4 +684,4 @@ bool DRawDecoder::Private::loadHalfPreview(QImage& image, LibRaw& raw)
     return true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -415,4 +415,4 @@ void RestorationTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

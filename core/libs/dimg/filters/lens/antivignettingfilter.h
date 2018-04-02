@@ -123,6 +123,6 @@ private:
     AntiVignettingContainer m_settings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* ANTIVIGNETTINGFILTER_H */

@@ -53,6 +53,6 @@ private:
     DbHeaderListItem& operator=(const DbHeaderListItem&);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* DBHEADERLISTITEM_H */

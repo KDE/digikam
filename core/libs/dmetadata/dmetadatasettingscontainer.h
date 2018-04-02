@@ -195,6 +195,6 @@ private:
     Private* d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // DMETADATASETTINGSCONTAINER_H
+#endif // DMETADATASETTINGSCONTAINER_H

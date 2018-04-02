@@ -246,4 +246,4 @@ void SaveImgThread::run()
     emit signalComplete(d->newUrl, success);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

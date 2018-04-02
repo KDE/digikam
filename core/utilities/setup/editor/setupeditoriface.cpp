@@ -339,4 +339,4 @@ void SetupEditorIface::applySettings()
     group.sync();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

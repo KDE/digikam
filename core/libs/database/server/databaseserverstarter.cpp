@@ -129,4 +129,4 @@ void DatabaseServerStarter::stopServerManagerProcess()
     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Internal database server stopped";
 }
 
-}  // namespace Digikam
+} // namespace Digikam

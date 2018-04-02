@@ -55,6 +55,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* QUEUETOOLTIP_H */

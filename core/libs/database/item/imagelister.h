@@ -148,6 +148,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IMAGE_LISTER_H

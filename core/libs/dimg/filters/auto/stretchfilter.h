@@ -99,6 +99,6 @@ private:
     DImg m_refImage;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* STRETCHFILTER_H */

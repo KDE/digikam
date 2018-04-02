@@ -478,4 +478,4 @@ void ApplicationSettings::saveSettings()
     config->sync();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

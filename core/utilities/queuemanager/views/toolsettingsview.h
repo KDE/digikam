@@ -72,6 +72,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* TOOL_SETTINGS_VIEW_H */

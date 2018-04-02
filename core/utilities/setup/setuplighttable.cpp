@@ -165,4 +165,4 @@ void SetupLightTable::applySettings()
     config->sync();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

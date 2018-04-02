@@ -50,6 +50,6 @@ public:
     void readMetadata(QByteArray& xmpData);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // XMP_SUBJECTS_H

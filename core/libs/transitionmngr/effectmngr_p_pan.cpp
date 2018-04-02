@@ -137,4 +137,4 @@ int EffectMngr::Private::effectKenBurnsPanBT(bool aInit)
     return -1;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

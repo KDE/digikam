@@ -326,4 +326,4 @@ void WorkflowList::slotAssignQueueSettings()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

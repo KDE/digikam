@@ -851,4 +851,4 @@ void CurvesWidget::setScaleType(HistogramScale scale)
     update();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

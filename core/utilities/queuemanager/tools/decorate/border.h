@@ -62,6 +62,6 @@ private:
     BorderSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* WATERMARK_H */

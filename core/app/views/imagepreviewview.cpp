@@ -573,4 +573,4 @@ void ImagePreviewView::mousePressEvent(QMouseEvent* e)
     GraphicsDImgView::mousePressEvent(e);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

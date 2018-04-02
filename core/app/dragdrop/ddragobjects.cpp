@@ -357,4 +357,4 @@ bool DCameraDragObject::decode(const QMimeData* e, CameraType& ctype)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

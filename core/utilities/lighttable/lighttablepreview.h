@@ -63,6 +63,6 @@ private:
     bool dragEventWrapper(const QMimeData*) const;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* LIGHTTABLEPREVIEW_H */

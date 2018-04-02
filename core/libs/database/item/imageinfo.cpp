@@ -1974,4 +1974,4 @@ QVariant ImageInfo::getDatabaseFieldRaw(const DatabaseFields::Set& requestedFiel
     return QVariant();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

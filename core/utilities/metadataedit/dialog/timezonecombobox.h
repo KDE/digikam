@@ -46,6 +46,6 @@ public:
     QString getTimeZone() const;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // TIMEZONE_COMBOBOX_H

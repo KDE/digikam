@@ -137,6 +137,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* FREE_ROTATION_FILTER_H */

@@ -48,6 +48,6 @@ public:
     virtual int orientationHint(const QString& path);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* COREDATABASETHUMBNAILINFOPROVIDER_H */

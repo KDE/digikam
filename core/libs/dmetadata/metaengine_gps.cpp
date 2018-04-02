@@ -966,4 +966,4 @@ void MetaEngine::convertToUserPresentableNumbers(const bool isLatitude, double c
     *seconds    = coordinate;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -160,4 +160,4 @@ void PresentationMngr::slotSlideShow()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

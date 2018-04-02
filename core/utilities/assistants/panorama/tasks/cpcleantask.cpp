@@ -64,4 +64,4 @@ void CpCleanTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     printDebug(QLatin1String("cpclean"));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

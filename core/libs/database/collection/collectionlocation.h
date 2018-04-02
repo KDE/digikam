@@ -139,7 +139,7 @@ protected:
     QString m_label;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 inline uint qHash(const Digikam::CollectionLocation& loc)
 {

@@ -91,6 +91,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* EDITORTOOLIFACE_H */

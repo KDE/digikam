@@ -144,4 +144,4 @@ bool Flip::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -210,4 +210,4 @@ AlbumPointer<DAlbum> DateFolderView::currentAlbum() const
     return AlbumPointer<DAlbum> (d->dateTreeView->currentAlbum());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -385,4 +385,4 @@ PickLabelMenuAction::~PickLabelMenuAction()
 {
 }
 
-}  // namespace Digikam
+} // namespace Digikam

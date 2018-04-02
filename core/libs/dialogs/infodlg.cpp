@@ -198,4 +198,4 @@ void InfoDlg::slotHelp()
     DXmlGuiWindow::openHandbook();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

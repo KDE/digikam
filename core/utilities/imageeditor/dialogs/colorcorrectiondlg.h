@@ -103,6 +103,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* COLORCORRECTIONDLG_H */

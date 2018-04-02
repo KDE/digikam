@@ -526,4 +526,4 @@ void ImportStackedView::slotPreviewLoaded(bool)
     previewLoaded();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

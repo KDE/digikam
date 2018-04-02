@@ -737,4 +737,4 @@ void LocalContrastSettings::saveAsSettings()
     file.close();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

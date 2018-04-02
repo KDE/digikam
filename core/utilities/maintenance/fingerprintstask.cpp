@@ -104,4 +104,4 @@ void FingerprintsTask::run()
     emit signalDone();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

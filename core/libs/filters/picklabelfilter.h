@@ -60,6 +60,6 @@ private Q_SLOTS:
     void slotPickLabelSelectionChanged();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PICKLABELFILTER_H

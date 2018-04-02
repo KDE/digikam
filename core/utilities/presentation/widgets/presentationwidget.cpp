@@ -1554,4 +1554,4 @@ int PresentationWidget::effectBlobs(bool aInit)
     return 10;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

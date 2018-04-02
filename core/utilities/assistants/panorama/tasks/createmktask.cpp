@@ -82,4 +82,4 @@ void CreateMKTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     qCDebug(DIGIKAM_GENERAL_LOG) << "pto2mk output:" << endl << output;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

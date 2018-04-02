@@ -68,6 +68,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IPTC_CATEGORIES_H

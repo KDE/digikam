@@ -74,6 +74,6 @@ private:
     friend class ImageShackWindow;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IMAGESHACK_WIDGET_H

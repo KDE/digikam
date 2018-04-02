@@ -545,4 +545,4 @@ void FindDuplicatesView::resetAlbumsAndTags()
     slotCheckForValidSettings();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

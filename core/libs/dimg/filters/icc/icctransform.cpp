@@ -785,4 +785,4 @@ void IccTransform::closeProfiles()
 }
 */
 
-}  // namespace Digikam
+} // namespace Digikam

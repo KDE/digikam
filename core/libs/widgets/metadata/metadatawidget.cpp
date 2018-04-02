@@ -521,4 +521,4 @@ void MetadataWidget::buildView()
     d->view->slotSearchTextChanged(d->searchBar->searchTextSettings());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

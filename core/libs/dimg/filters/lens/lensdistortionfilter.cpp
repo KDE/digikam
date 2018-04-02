@@ -177,4 +177,4 @@ void LensDistortionFilter::readParameters(const Digikam::FilterAction& action)
     m_rescale  = action.parameter(QLatin1String("rescale")).toDouble();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

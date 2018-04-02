@@ -58,4 +58,4 @@ QString CollectionLocation::label() const
     return m_label;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

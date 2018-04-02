@@ -209,4 +209,4 @@ int TransitionMngr::Private::transitionBlurOut(bool aInit)
 
 }
 
-}  // namespace Digikam
+} // namespace Digikam

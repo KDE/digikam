@@ -435,4 +435,4 @@ QString ApplicationSettings::operationTypeExplanation(ApplicationSettings::Opera
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

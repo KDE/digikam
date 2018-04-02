@@ -58,4 +58,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // NONA_BINARY_H
+#endif // NONA_BINARY_H

@@ -34,6 +34,6 @@ QStringList cleanUserFilterString(QString filterString,
                                   const bool caseSensitive = false,
                                   const bool useSemicolon  = false);
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // SETUPUTILS_H
+#endif // SETUPUTILS_H

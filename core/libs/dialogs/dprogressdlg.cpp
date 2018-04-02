@@ -190,4 +190,4 @@ void DProgressDlg::setTitle(const QString& text)
     d->title->setText(text);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

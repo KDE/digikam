@@ -113,4 +113,4 @@ void CoreDbBackend::recordChangeset(const SearchChangeset& changeset)
     d->searchChangesetContainer.recordChangeset(changeset);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

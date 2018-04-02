@@ -487,4 +487,4 @@ void MetadataSelectorView::selectDefault()
     slotDeflautSelection();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

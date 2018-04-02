@@ -111,6 +111,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* DBKEYSELECTOR_H */

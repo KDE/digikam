@@ -204,4 +204,4 @@ void DHistoryView::mouseMoveEvent(QMouseEvent* e)
     QTreeWidget::mouseMoveEvent(e);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

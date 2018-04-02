@@ -349,4 +349,4 @@ void IPTCCategories::enableWidgets(bool checked1, bool checked2)
     d->repSubCategoryButton->setEnabled(checked1 && checked2);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

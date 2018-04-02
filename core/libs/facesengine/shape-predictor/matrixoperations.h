@@ -574,6 +574,6 @@ float determinant(const std::vector<std::vector<float> >& u)
     return result;
 }
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // MATRIX_OPERATIONS_H

@@ -334,4 +334,4 @@ QMatrix MetaEngineRotation::toMatrix(MetaEngine::ImageOrientation orientation)
     return matrix;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

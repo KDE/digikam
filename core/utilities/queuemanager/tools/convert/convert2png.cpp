@@ -113,4 +113,4 @@ bool Convert2PNG::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

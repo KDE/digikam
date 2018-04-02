@@ -169,4 +169,4 @@ DImg UndoCache::getData(int level) const
     return img;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

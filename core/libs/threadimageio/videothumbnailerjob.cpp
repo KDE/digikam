@@ -172,4 +172,4 @@ void VideoThumbnailerJob::run()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

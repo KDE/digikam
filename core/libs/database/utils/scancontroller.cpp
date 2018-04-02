@@ -1105,4 +1105,4 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset&
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

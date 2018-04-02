@@ -511,4 +511,4 @@ DColorComposer* DColorComposer::getComposer(DColorComposer::CompositingOperation
     return 0;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

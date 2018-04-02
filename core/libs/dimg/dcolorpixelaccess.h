@@ -73,6 +73,6 @@ inline void DColor::setPixel(uchar* const data) const
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // DCOLORPIXELACCESS_H
+#endif // DCOLORPIXELACCESS_H

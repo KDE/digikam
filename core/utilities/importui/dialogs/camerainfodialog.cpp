@@ -102,4 +102,4 @@ void CameraInfoDialog::slotHelp()
     DXmlGuiWindow::openHandbook();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

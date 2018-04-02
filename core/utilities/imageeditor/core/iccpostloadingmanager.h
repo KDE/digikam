@@ -57,6 +57,6 @@ protected:
     QString m_filePath;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif   // ICCMANAGER_H

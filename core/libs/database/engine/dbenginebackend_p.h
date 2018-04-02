@@ -188,6 +188,6 @@ public :
     BdEngineBackend* const q;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DATABASE_ENGINE_BACKEND_P_H

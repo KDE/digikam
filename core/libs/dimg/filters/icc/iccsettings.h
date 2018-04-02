@@ -130,6 +130,6 @@ private:
     friend class IccSettingsCreator;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif   // ICCSETTINGS_H

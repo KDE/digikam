@@ -3714,4 +3714,4 @@ void AlbumManager::removeFakeConnection()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

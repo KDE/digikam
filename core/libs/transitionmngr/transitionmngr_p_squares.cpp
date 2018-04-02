@@ -170,4 +170,4 @@ int TransitionMngr::Private::transitionSpiralIn(bool aInit)
     return 8;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

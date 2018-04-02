@@ -178,4 +178,4 @@ void AlbumSelectDialog::slotHelp()
     DXmlGuiWindow::openHandbook();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

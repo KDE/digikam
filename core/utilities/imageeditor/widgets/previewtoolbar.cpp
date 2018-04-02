@@ -313,4 +313,4 @@ void PreviewToolBar::writeSettings(KConfigGroup& group)
     group.writeEntry("PreviewMode", (int)previewMode());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

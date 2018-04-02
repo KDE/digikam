@@ -202,4 +202,4 @@ void NewItemsFinder::slotPartialScanDone(const QString& path)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -1087,4 +1087,4 @@ bool MetaEngine::setImagePreview(const QImage& preview) const
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

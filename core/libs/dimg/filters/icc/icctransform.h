@@ -164,7 +164,7 @@ private:
     QSharedDataPointer<Private> d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::IccTransform)
 

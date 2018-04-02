@@ -70,6 +70,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* LENSFUNSETTINGS_H */

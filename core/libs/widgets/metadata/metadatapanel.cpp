@@ -366,4 +366,4 @@ QList<MetadataSelectorView*> MetadataPanel::viewers()
     return viewers;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

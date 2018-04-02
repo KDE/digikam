@@ -690,4 +690,4 @@ void SetupToolTip::refreshCameraOptions()
     d->showItemPhotoWBBox->setEnabled(b && d->cameraUseFileMetadata);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

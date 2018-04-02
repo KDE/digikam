@@ -247,4 +247,4 @@ void RainDropTool::blockWidgetSignals(bool b)
     d->coeffInput->blockSignals(b);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

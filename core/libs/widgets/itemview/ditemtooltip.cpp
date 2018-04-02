@@ -410,4 +410,4 @@ void DItemToolTip::paintEvent(QPaintEvent* e)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -1198,4 +1198,4 @@ void QueueListView::slotProgressTimerDone()
         d->progressTimer->stop();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -473,4 +473,4 @@ void AlbumPropsEdit::slotHelp()
     DXmlGuiWindow::openHandbook();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

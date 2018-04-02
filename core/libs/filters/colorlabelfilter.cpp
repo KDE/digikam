@@ -78,4 +78,4 @@ void ColorLabelFilter::slotColorLabelSelectionChanged()
     emit signalColorLabelSelectionChanged(colorLabels());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -133,4 +133,4 @@ QString ApplicationSettings::getAllFileFilter() const
     return wildcards.join(QLatin1String(" "));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

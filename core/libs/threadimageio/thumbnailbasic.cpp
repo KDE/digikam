@@ -312,4 +312,4 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
     return qimage;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

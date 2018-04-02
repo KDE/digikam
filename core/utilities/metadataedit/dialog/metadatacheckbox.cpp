@@ -56,4 +56,4 @@ void MetadataCheckBox::slotValid()
     setValid(true);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

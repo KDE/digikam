@@ -689,7 +689,7 @@ private:
     friend class DImgLoader;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DImg::PrepareMetadataFlags)
 

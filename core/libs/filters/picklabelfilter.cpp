@@ -77,4 +77,4 @@ void PickLabelFilter::slotPickLabelSelectionChanged()
     emit signalPickLabelSelectionChanged(colorLabels());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

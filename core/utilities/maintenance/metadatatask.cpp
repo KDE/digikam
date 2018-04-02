@@ -127,4 +127,4 @@ void MetadataTask::run()
     emit signalDone();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

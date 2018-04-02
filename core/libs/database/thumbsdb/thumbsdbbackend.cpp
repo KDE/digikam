@@ -63,4 +63,4 @@ bool ThumbsDbBackend::initSchema(ThumbsDbSchemaUpdater* const updater)
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

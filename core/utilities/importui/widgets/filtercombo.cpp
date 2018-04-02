@@ -174,4 +174,4 @@ void FilterComboBox::saveSettings()
     group.writeEntry(QLatin1String("CurrentFilter"), d->currentFilter);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

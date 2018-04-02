@@ -228,4 +228,4 @@ void MixerFilter::readParameters(const Digikam::FilterAction& action)
     m_settings.redRedGain = action.parameter(QLatin1String("redRedGain")).toDouble();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -115,4 +115,4 @@ bool BCGCorrection::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

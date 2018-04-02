@@ -115,6 +115,6 @@ protected:
     int m_increment;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // IMAGELISTERRECEIVER_H
+#endif // IMAGELISTERRECEIVER_H

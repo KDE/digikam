@@ -245,4 +245,4 @@ bool Crop::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -72,6 +72,6 @@ private:
     CurvesSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* CURVESADJUST_H */

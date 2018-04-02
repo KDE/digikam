@@ -615,4 +615,4 @@ void IccProfile::considerOriginalAdobeRGB(const QString& filePath)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

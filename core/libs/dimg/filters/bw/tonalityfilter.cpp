@@ -142,4 +142,4 @@ void TonalityFilter::readParameters(const Digikam::FilterAction& action)
     m_settings.redMask   = action.parameter(QLatin1String("redMask")).toInt();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

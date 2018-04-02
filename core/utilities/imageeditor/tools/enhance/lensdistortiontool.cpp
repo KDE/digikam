@@ -327,4 +327,4 @@ void LensDistortionTool::blockWidgetSignals(bool b)
     d->brightenInput->blockSignals(b);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

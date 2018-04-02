@@ -601,4 +601,4 @@ void PanIconWidget::slotFlickerTimer()
     update();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

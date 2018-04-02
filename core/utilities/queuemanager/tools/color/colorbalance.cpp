@@ -116,4 +116,4 @@ bool ColorBalance::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

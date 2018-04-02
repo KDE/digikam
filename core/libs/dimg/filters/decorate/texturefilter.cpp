@@ -229,4 +229,4 @@ void TextureFilter::readParameters(const Digikam::FilterAction& action)
     m_texturePath = action.parameter(QLatin1String("texturePath")).toString();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

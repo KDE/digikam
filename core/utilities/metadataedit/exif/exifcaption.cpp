@@ -407,4 +407,4 @@ void EXIFCaption::applyMetadata(QByteArray& exifData, QByteArray& iptcData, QByt
     xmpData  = meta.getXmp();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

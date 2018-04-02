@@ -88,6 +88,6 @@ private:
     int m_depth;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* EMBOSSFILTER_H */

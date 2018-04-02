@@ -211,4 +211,4 @@ bool FindDuplicatesAlbumItem::operator<(const QTreeWidgetItem& other) const
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -235,4 +235,4 @@ bool Resize::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -135,4 +135,4 @@ void DNGConvertSettings::settings(DownloadSettings* const settings)
     settings->convertDng  = d->convertDng->isChecked();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

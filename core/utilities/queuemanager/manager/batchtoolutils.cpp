@@ -112,4 +112,4 @@ QString AssignedBatchTools::targetSuffix(bool* const extSet) const
     return suffix;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -171,6 +171,6 @@ public:
 const QString ImageWindow::Private::configShowThumbbarEntry(QLatin1String("Show Thumbbar"));
 const QString ImageWindow::Private::configHorizontalThumbbarEntry(QLatin1String("HorizontalThumbbar"));
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IMAGEWINDOW_P_H

@@ -1511,4 +1511,4 @@ void ImageSelectionWidget::setIsDrawingSelection(bool draw)
     d->isDrawingSelection = draw;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

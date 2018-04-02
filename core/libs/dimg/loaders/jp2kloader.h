@@ -53,6 +53,6 @@ private:
     bool m_hasAlpha;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* JP2KLOADER_H */

@@ -866,4 +866,4 @@ void ColorCorrectionDlg::slotHelp()
     DXmlGuiWindow::openHandbook();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

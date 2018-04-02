@@ -934,4 +934,4 @@ void AdjustLevelsTool::slotSaveAsSettings()
     slotChannelChanged();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

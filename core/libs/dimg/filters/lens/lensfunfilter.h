@@ -124,6 +124,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* LENSFUNFILTER_H */

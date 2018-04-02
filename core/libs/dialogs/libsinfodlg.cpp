@@ -192,4 +192,4 @@ QString LibsInfoDlg::checkTriState(int value) const
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

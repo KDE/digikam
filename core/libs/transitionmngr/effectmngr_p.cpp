@@ -67,4 +67,4 @@ int EffectMngr::Private::effectNone(bool)
     return -1;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

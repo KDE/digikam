@@ -152,4 +152,4 @@ void CaptionsMap::setDatesList(const MetaEngine::AltLangMap& map)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

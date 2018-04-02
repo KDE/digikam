@@ -396,4 +396,4 @@ void ImagePropertiesSideBar::slotLoadMetadataFilters()
     m_metadataTab->loadFilters();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

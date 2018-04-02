@@ -108,4 +108,4 @@ bool DeltaTime::isNull() const
             deltaSeconds == 0);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

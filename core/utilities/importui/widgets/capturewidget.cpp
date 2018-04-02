@@ -110,4 +110,4 @@ void CaptureWidget::resizeEvent(QResizeEvent*)
     blockSignals(false);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

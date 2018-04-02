@@ -290,6 +290,6 @@ public Q_SLOTS:
 
 }  // namespace DConfigDlgInternal
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DBCONFIGDLG_VIEW_P_H

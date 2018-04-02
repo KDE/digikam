@@ -448,4 +448,4 @@ void NRSettings::saveAsSettings()
     file.close();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

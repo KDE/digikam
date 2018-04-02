@@ -254,6 +254,6 @@ const QString ImportUI::Private::configDefaultTargetAlbumId(QLatin1String("Defau
 const QString ImportUI::Private::configFileSaveConflictRule(QLatin1String("FileSaveConflictRule"));
 const QString ImportUI::Private::importFiltersConfigGroupName(QLatin1String("Import Filters"));
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IMPORTUI_P_H

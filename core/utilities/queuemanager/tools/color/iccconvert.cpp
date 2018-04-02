@@ -128,4 +128,4 @@ bool IccConvert::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

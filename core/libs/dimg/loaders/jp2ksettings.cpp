@@ -145,4 +145,4 @@ void JP2KSettings::slotToggleJPEG2000LossLess(bool b)
     d->labelJPEG2000compression->setEnabled(!b);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

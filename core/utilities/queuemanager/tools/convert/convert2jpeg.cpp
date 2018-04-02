@@ -118,4 +118,4 @@ bool Convert2JPEG::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

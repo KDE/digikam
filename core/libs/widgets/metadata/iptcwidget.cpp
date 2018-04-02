@@ -161,4 +161,4 @@ void IptcWidget::slotSaveMetadataToFile()
     storeMetadataToFile(url, getMetadata().getIptc());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

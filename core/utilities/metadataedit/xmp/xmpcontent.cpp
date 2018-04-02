@@ -306,4 +306,4 @@ void XMPContent::slotSyncOptionsEnabled(bool defaultLangAlt)
     d->syncEXIFCommentCheck->setEnabled(cond);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

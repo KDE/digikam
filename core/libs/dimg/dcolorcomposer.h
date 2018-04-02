@@ -130,6 +130,6 @@ public:
     };
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // DCOLORCOMPOSER_H
+#endif // DCOLORCOMPOSER_H

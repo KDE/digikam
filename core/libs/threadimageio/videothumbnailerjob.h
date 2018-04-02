@@ -94,6 +94,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // VIDEO_THUMBNAILER_JOB_H

@@ -305,4 +305,4 @@ void BCGFilter::applyBCG(uchar* const bits, uint width, uint height, bool sixtee
 
 }
 
-}  // namespace Digikam
+} // namespace Digikam

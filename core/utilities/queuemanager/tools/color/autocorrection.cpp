@@ -151,4 +151,4 @@ bool AutoCorrection::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

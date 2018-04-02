@@ -106,6 +106,6 @@ private:
     double m_sigma;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* SHARPENFILTER_H */

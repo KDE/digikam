@@ -604,4 +604,4 @@ void WBSettings::saveAsSettings()
     file.close();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

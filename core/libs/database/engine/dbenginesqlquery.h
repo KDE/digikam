@@ -55,6 +55,6 @@ private:
     QString m_query;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* DATABASE_ENGINE_SQL_QUERY_H */

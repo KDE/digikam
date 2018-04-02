@@ -66,6 +66,6 @@ private:
     RedEyeCorrectionSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // REDEYECORRECTION_H

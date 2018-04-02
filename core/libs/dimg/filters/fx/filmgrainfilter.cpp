@@ -440,4 +440,4 @@ void FilmGrainFilter::readParameters(const Digikam::FilterAction& action)
     d->settings.chromaRedHighlights     = action.parameter(QLatin1String("chromaRedHighlights")).toInt();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

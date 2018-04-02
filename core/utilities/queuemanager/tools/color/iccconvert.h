@@ -62,6 +62,6 @@ private:
     IccProfilesSettings* m_settingsView;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* ICCCONVERT_H */

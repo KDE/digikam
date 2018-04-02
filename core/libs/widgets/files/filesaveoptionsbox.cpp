@@ -244,4 +244,4 @@ void FileSaveOptionsBox::readSettings()
     d->PGFOptions->setLossLessCompression( group.readEntry(QLatin1String("PGFLossLess"),           true) );
 }
 
-}  // namespace Digikam
+} // namespace Digikam

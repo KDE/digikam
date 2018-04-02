@@ -434,4 +434,4 @@ unsigned short* DImgLoader::new_short_failureTolerant(quint64 w, quint64 h, uint
     return new_failureTolerant<unsigned short>(w, h, typesPerPixel);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

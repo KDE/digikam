@@ -533,4 +533,4 @@ bool MetaEngine::setProgramId() const
     return setImageProgramId(software, version);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -122,6 +122,6 @@ typedef QList<CamItemInfo> CamItemInfoList;
 //! qDebug() stream operator. Writes property @a info to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const CamItemInfo& info);
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* CamItemInfo_H */

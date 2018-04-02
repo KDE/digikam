@@ -111,7 +111,7 @@ public:
     CurvesContainer     curvesAdjust;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::DRawDecoding)
 

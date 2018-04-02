@@ -2445,4 +2445,4 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

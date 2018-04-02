@@ -80,4 +80,4 @@ int TransitionMngr::Private::transitionNone(bool)
     return -1;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

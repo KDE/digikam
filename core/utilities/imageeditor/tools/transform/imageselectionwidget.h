@@ -186,6 +186,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* IMAGESELECTIONWIDGET_H */

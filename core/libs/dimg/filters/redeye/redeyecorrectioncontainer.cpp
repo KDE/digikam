@@ -58,4 +58,4 @@ RedEyeCorrectionContainer RedEyeCorrectionContainer::fromFilterAction(const Filt
     return settings;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

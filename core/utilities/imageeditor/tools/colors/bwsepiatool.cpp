@@ -213,4 +213,4 @@ void BWSepiaTool::slotScaleChanged()
     d->bwsepiaSettings->setScaleType(d->gboxSettings->histogramBox()->scale());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

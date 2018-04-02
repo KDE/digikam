@@ -254,4 +254,4 @@ ProgressItem* StatusProgressBar::currentProgressItem() const
     return (ProgressManager::instance()->findItembyId(d->progressId));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

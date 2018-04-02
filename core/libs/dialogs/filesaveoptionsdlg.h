@@ -60,6 +60,6 @@ public:
     static DImg::FORMAT discoverFormat(const QString& filename, DImg::FORMAT fallback = DImg::NONE);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* FILESAVEOPTIONSDLG_H */

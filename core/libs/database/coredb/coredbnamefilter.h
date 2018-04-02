@@ -61,6 +61,6 @@ protected:
     QList<QRegExp> m_filterList;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // CORE_DATABASE_NAMEFILTER_H

@@ -56,5 +56,5 @@ bool CPFindBinary::parseHeader(const QString& output)
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam
 

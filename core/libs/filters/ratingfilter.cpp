@@ -333,4 +333,4 @@ int RatingFilter::rating() const
     return d->ratingWidget->rating();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

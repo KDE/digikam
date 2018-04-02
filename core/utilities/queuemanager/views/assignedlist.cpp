@@ -548,4 +548,4 @@ void AssignedListView::refreshIndex()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

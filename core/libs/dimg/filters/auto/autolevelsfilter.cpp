@@ -176,4 +176,4 @@ void AutoLevelsFilter::readParameters(const FilterAction& /*action*/)
     return;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

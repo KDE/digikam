@@ -54,6 +54,6 @@ private Q_SLOTS:
     void slotHelp();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* ICCPROFILEINFODLG_H */

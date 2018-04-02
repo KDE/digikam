@@ -619,4 +619,4 @@ QStringList SubjectWidget::subjectsList() const
     return newSubjects;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

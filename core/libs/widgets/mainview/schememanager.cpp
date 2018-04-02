@@ -1137,4 +1137,4 @@ QPalette SchemeManager::createApplicationPalette(const KSharedConfigPtr& config)
     return palette;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

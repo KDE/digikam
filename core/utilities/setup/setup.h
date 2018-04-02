@@ -103,6 +103,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // DIGIKAM_SETUP_H
+#endif // DIGIKAM_SETUP_H

@@ -105,4 +105,4 @@ void ImageListerJobGrowingPartsSendingReceiver::receive(const ImageListerRecord&
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

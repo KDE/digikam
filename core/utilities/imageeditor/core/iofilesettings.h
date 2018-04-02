@@ -87,6 +87,6 @@ public:
     DRawDecoding rawDecodingSettings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // IO_FILE_SETTINGS_H
+#endif // IO_FILE_SETTINGS_H

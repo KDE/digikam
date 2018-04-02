@@ -137,6 +137,6 @@ public:
     int                  fontsize;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DDATEPICKER_P_H

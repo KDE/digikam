@@ -66,4 +66,4 @@ QStringList cleanUserFilterString(QString filterString,
     return filterList;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -187,4 +187,4 @@ bool LocalContrast::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

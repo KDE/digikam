@@ -686,4 +686,4 @@ bool FilmTool::eventFilter(QObject* obj, QEvent* ev)
     return EditorToolThreaded::eventFilter(obj, ev);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

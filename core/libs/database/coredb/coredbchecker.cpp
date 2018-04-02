@@ -108,4 +108,4 @@ bool CoreDbPrivilegesChecker::checkPriv(CoreDbBackend& dbBackend, const QString&
     return true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

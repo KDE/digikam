@@ -150,4 +150,4 @@ UndoActionIrreversible::~UndoActionIrreversible()
 {
 }
 
-}  // namespace Digikam
+} // namespace Digikam

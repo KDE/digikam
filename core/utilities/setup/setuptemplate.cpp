@@ -288,4 +288,4 @@ void SetupTemplate::slotRepTemplate()
     item->setTemplate(t);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

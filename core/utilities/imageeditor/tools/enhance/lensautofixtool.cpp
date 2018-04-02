@@ -256,4 +256,4 @@ void LensAutoFixTool::setFinalImage()
     iface.setOriginalMetadata(data);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -141,4 +141,4 @@ void DMetadataSettings::readFromConfig()
     emit dmetadataSettingsChanged(s, old);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

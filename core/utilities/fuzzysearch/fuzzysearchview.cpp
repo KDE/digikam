@@ -1136,4 +1136,4 @@ void FuzzySearchView::slotSaveImageSAlbum()
     createNewFuzzySearchAlbumFromImage(d->nameEditImage->text());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

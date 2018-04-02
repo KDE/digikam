@@ -1341,4 +1341,4 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

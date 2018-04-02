@@ -108,4 +108,4 @@ void DDateTable::Private::setDate(const QDate& dt)
     numDayColumns       = 7;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -880,4 +880,4 @@ void ImageGuideWidget::setMaskCursor()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

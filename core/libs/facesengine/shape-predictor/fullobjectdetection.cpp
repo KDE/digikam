@@ -109,4 +109,4 @@ std::vector<cv::Rect> geteyes(const FullObjectDetection& shape)
     return eyes;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

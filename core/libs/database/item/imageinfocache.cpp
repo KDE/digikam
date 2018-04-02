@@ -372,4 +372,4 @@ void ImageInfoCache::slotAlbumChange(const AlbumChangeset& changeset)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

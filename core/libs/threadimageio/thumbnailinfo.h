@@ -98,6 +98,6 @@ public:
     virtual ThumbnailInfo thumbnailInfo(const ThumbnailIdentifier&)=0;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DIGIKAMTHUMBNAILINFO_H

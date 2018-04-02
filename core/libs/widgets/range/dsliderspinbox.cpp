@@ -1166,4 +1166,4 @@ void DDoubleSliderSpinBox::setInternalValue(int _value, bool blockUpdateSignal)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

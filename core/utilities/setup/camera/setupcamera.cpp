@@ -1011,4 +1011,4 @@ void SetupCamera::slotPreviewFullImageSizeClicked()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

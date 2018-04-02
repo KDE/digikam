@@ -189,4 +189,4 @@ QString SqueezedComboBox::item(int index) const
     return d->originalItems[index];
 }
 
-}  // namespace Digikam
+} // namespace Digikam

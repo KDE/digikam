@@ -392,4 +392,4 @@ void LensFunFilter::readParameters(const Digikam::FilterAction& action)
     d->iface->setSettings(prm);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

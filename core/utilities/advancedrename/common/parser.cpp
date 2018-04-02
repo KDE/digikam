@@ -382,4 +382,4 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
     return modifierResults;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

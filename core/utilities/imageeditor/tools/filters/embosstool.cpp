@@ -178,4 +178,4 @@ void EmbossTool::setFinalImage()
     iface.setOriginal(i18n("Emboss"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

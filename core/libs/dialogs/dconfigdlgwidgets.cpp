@@ -376,6 +376,6 @@ void DConfigDlgTitle::showEvent(QShowEvent* event)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #include "moc_dconfigdlgwidgets.cpp"

@@ -79,6 +79,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // DBUSYDLG_H
+#endif // DBUSYDLG_H

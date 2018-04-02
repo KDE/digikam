@@ -3635,4 +3635,4 @@ void EditorWindow::slotFlipVIntoQue()
     m_transformQue.append(TransformType::FlipVertical);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

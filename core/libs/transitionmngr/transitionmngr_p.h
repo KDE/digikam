@@ -185,7 +185,7 @@ private:
     QImage fastBlur(const QImage& img, int radius) const;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // TRANSITION_MNGR_P_H
 

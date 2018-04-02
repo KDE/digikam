@@ -173,4 +173,4 @@ void NoiseReductionTool::analyserCompleted()
     slotPreview();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

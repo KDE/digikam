@@ -88,6 +88,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* RATIOCROPTOOL_H */

@@ -570,4 +570,4 @@ void XMPOrigin::applyMetadata(QByteArray& exifData, QByteArray& xmpData)
     xmpData  = meta.getXmp();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

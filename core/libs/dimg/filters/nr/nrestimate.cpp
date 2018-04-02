@@ -514,4 +514,4 @@ void NREstimate::startAnalyse()
     postProgress(100);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

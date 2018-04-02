@@ -564,4 +564,4 @@ QUrl DBInfoIface::uploadUrl() const
     return url;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

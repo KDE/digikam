@@ -229,4 +229,4 @@ void InfraredFilter::readParameters(const FilterAction& action)
 }
 
 
-}  // namespace Digikam
+} // namespace Digikam

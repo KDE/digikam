@@ -109,6 +109,6 @@ public:
 
 typedef QList<DownloadSettings> DownloadSettingsList;
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // DownloadSettings_H
+#endif // DownloadSettings_H

@@ -172,4 +172,4 @@ bool Border::toolOperations()
     return (savefromDImg());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

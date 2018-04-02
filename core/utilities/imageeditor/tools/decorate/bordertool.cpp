@@ -171,4 +171,4 @@ void BorderTool::setFinalImage()
     iface.setOriginal(i18n("Add Border"), filter()->filterAction(), targetImage);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

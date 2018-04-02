@@ -75,4 +75,4 @@ void FileActionProgress::slotCancel()
     setComplete();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -60,6 +60,6 @@ private Q_SLOTS:
     void slotColorLabelSelectionChanged();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // COLORLABELFILTER_H

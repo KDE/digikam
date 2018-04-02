@@ -44,6 +44,6 @@ private Q_SLOTS:
     void slotRefChanged();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SUBJECTSEDIT_H

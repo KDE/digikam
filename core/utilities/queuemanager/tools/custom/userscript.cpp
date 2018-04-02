@@ -266,4 +266,4 @@ bool UserScript::toolOperations()
     return true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

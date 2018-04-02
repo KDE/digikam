@@ -53,4 +53,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // PANO_HUGIN_EXECUTOR_BINARY_H
+#endif // PANO_HUGIN_EXECUTOR_BINARY_H

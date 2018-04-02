@@ -335,4 +335,4 @@ bool CameraList::changeCameraStartIndex(const QString& cameraTitle, int startInd
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

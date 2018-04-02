@@ -49,6 +49,6 @@ private:
     const QUrl& cpFindPtoUrl;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PANO_CP_CLEAN_TASK_H

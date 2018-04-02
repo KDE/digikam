@@ -139,6 +139,6 @@ private:
     MixerContainer m_settings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* MIXERFILTER_H */

@@ -334,4 +334,4 @@ bool SlideOSD::isPaused() const
     return d->toolBar->isPaused();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

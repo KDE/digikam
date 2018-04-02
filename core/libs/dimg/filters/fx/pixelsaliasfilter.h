@@ -57,6 +57,6 @@ private:
     inline int setPositionAdjusted (int Width, int Height, int X, int Y);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* PIXELSALIASFILTERS_H */

@@ -253,4 +253,4 @@ void DConfigDlg::setButtonBox(QDialogButtonBox* box)
     d_func()->init();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

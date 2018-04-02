@@ -615,4 +615,4 @@ void IccSettings::loadAllProfilesProperties()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

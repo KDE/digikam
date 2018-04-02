@@ -245,4 +245,4 @@ void GPSBookmarkModelHelper::snapItemsTo(const QModelIndex& targetIndex,
     emit(signalUndoCommand(undoCommand));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

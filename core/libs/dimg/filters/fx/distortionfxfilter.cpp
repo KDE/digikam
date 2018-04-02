@@ -1276,4 +1276,4 @@ void DistortionFXFilter::readParameters(const FilterAction& action)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

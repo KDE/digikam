@@ -238,4 +238,4 @@ void BracketStackList::slotThumbnail(const LoadingDescription& desc, const QPixm
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

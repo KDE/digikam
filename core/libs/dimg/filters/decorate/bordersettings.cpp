@@ -552,4 +552,4 @@ void BorderSettings::toggleBorderSlider(bool b)
     d->labelBorderWidth->setEnabled(!b);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

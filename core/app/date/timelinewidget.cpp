@@ -2069,4 +2069,4 @@ void TimeLineWidget::handleSelectionRange(QDateTime& selEndDateTime)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

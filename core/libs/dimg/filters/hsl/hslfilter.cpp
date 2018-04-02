@@ -323,4 +323,4 @@ void HSLFilter::readParameters(const Digikam::FilterAction& action)
     d->settings.vibrance   = action.parameter(QLatin1String("vibrance")).toDouble();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

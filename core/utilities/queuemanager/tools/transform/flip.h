@@ -62,6 +62,6 @@ private:
     QComboBox* m_comboBox;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // FLIP_H

@@ -547,4 +547,4 @@ QString LensFunIface::lensFunVersion()
     return QString::fromLatin1("%1.%2.%3-%4").arg(LF_VERSION_MAJOR).arg(LF_VERSION_MINOR).arg(LF_VERSION_MICRO).arg(LF_VERSION_BUGFIX);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -565,4 +565,4 @@ void FilmGrainSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configHighlightsChromaRedAdjustmentEntry,  prm.chromaRedHighlights);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

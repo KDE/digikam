@@ -532,4 +532,4 @@ void BWSepiaFilter::readParameters(const FilterAction& action)
 }
 
 
-}  // namespace Digikam
+} // namespace Digikam

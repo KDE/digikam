@@ -319,4 +319,4 @@ void SearchTextBar::setIgnoreCase(bool ignore)
     emit signalSearchTextSettings(d->settings);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -512,4 +512,4 @@ void TemplatePanel::apply()
 {
 }
 
-}  // namespace Digikam
+} // namespace Digikam

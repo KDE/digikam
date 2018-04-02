@@ -280,4 +280,4 @@ void ModelCompleter::sync(QAbstractItemModel* const model, const QModelIndex& in
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

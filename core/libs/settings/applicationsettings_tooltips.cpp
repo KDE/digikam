@@ -432,4 +432,4 @@ bool ApplicationSettings::showAlbumToolTipsIsValid() const
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

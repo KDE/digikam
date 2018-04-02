@@ -421,4 +421,4 @@ QString ColorFXSettings::translateLuts(const QString& name) const
     return name;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

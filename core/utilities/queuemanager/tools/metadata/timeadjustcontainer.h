@@ -126,6 +126,6 @@ public:
     int  deltaSeconds;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // TIME_ADJUST_CONTAINER_H
+#endif // TIME_ADJUST_CONTAINER_H

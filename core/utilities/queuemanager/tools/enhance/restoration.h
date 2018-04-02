@@ -74,6 +74,6 @@ private:
     GreycstorationFilter* m_cimgIface;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* RESTORATION_H */

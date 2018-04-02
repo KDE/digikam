@@ -153,4 +153,4 @@ void CoreDbOperationGroup::allowLift()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

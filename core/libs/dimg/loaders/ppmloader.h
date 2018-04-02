@@ -49,6 +49,6 @@ public:
     virtual bool isReadOnly() const;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* PPMLOADER_H */

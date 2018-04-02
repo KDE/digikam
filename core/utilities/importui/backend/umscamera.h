@@ -90,6 +90,6 @@ private:
     bool m_cancel;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* UMSCAMERA_H */

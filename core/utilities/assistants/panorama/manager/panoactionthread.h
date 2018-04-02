@@ -149,6 +149,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // PANO_ACTION_THREAD_H

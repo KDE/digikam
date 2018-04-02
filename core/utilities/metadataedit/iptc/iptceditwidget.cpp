@@ -359,4 +359,4 @@ bool IPTCEditWidget::isModified() const
     return d->modified;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

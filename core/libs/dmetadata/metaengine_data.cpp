@@ -52,4 +52,4 @@ MetaEngineData& MetaEngineData::operator=(const MetaEngineData& other)
     return *this;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

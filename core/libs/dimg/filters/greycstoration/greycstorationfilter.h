@@ -234,6 +234,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* GREYCSTORATIONFILTER_H */

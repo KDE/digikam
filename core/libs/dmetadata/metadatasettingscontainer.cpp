@@ -138,4 +138,4 @@ void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
     group.writeEntry("Custom Sidecar Extensions",   sidecarExtensions);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

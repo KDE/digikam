@@ -250,4 +250,4 @@ void DDoubleNumInput::slotValueChanged(double v)
     emit valueChanged(v);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

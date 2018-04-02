@@ -579,4 +579,4 @@ void SharpSettings::saveAsSettings()
     file.close();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -525,7 +525,7 @@ inline uint qHash(const ImageInfo& info)
 //! qDebug() stream operator. Writes property @a info to the debug output in a nicely formatted way.
 DIGIKAM_DATABASE_EXPORT QDebug operator<<(QDebug stream, const ImageInfo& info);
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_TYPEINFO(Digikam::ImageInfo, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(Digikam::ImageInfo)

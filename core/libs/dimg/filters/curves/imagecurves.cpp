@@ -1530,4 +1530,4 @@ bool ImageCurves::setChannelFromBinary(int channel, const QByteArray& data)
     return true;
 }
 
-}  // namespace Digikam
+} // namespace Digikam
