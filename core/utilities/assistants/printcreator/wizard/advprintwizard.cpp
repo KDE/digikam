@@ -364,7 +364,7 @@ void AdvPrintWizard::previewPhotos()
 
 void AdvPrintWizard::slotPreview(const QImage& img)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Recieve Preview" << img.size();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Receive Preview" << img.size();
 
     d->photoPage->ui()->BmpFirstPagePreview->clear();
     d->photoPage->ui()->BmpFirstPagePreview->setPixmap(QPixmap::fromImage(img));
