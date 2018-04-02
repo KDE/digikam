@@ -141,9 +141,9 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                           QLatin1String("https://plus.google.com/114906808699351374523")
                         );
 
-    aboutData.addCredit ( ki18n("Mohamed Anwer").toString(),
+    aboutData.addCredit ( ki18n("Mohamed Anwer").toString(),                                    // krazy:exclude=spelling
                           ki18n("Model/View Port of Showfoto Thumbbar").toString(),
-                          QLatin1String("mohammed dot ahmed dot anwer at gmail dot com"),
+                          QLatin1String("mohammed dot ahmed dot anwer at gmail dot com"),       // krazy:exclude=spelling
                           QLatin1String("https://plus.google.com/106020792892118847381")
                         );
 

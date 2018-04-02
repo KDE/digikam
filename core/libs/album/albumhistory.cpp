@@ -217,9 +217,11 @@ void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget)
  *        A special overloaded function for handling AlbumHistory
  *        for the Labels tree-view
  *
- * @author Mohamed Anwer
+ * @author Mohamed_Anwer
  */
-void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget, QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels)
+void AlbumHistory::addAlbums(QList<Album*> const albums,
+                             QWidget* const widget,
+                             QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels)
 {
 
     if (albums.isEmpty() || !widget || d->moving)
