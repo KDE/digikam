@@ -210,8 +210,6 @@ cmake3 $ORIG_WD/../3rdparty \
 # NOTE: The order to compile each component here is very important.
 
 
-cmake3 --build . --config RelWithDebInfo --target ext_ffmpeg       -- -j$CPU_CORES
-exit
 cmake3 --build . --config RelWithDebInfo --target ext_jpeg       -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_jasper     -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_png        -- -j$CPU_CORES
@@ -224,6 +222,7 @@ cmake3 --build . --config RelWithDebInfo --target ext_lensfun    -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_qt         -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_qtwebkit   -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_exiv2      -- -j$CPU_CORES
+cmake3 --build . --config RelWithDebInfo --target ext_ffmpeg       -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_qtav       -- -j$CPU_CORES
 
 #################################################################################################
