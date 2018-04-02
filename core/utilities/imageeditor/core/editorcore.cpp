@@ -468,7 +468,7 @@ QString EditorCore::ensureHasCurrentUuid() const
 void EditorCore::provideCurrentUuid(const QString& uuid)
 {
     // If the (original) image did not yet have a UUID, one is provided by higher level
-    // Higher level decides how this UUID is stored; we dont touch the original here.
+    // Higher level decides how this UUID is stored; we don't touch the original here.
     if (!d->image.getImageHistory().currentReferredImage().hasUuid())
     {
         d->image.addCurrentUniqueImageId(uuid);
@@ -882,4 +882,4 @@ UndoState EditorCore::undoState() const
     return state;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

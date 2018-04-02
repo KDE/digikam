@@ -65,7 +65,7 @@ public:
 
 public:
 
-    EditorCore();
+    explicit EditorCore();
     ~EditorCore();
 
     void    load(const QString& filename, IOFileSettings* const iofileSettings);
@@ -202,6 +202,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* EDITOR_CORE_H */
+#endif // EDITOR_CORE_H
