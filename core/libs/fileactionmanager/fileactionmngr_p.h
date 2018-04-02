@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FILEACTIONMNGR_P_H
-#define FILEACTIONMNGR_P_H
+#ifndef FILE_ACTION_MNGR_P_H
+#define FILE_ACTION_MNGR_P_H
 
 // Qt includes
 
@@ -198,4 +198,4 @@ public:
 
 } // namespace Digikam
 
-#endif //FILEACTIONMNGR_P_H
+#endif // FILE_ACTION_MNGR_P_H

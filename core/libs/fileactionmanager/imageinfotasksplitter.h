@@ -21,11 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEINFOTASKSPLITTER_H
-#define IMAGEINFOTASKSPLITTER_H
-
-// Qt includes
-
+#ifndef IMAGE_INFO_TASK_SPLITTER_H
+#define IMAGE_INFO_TASK_SPLITTER_H
 
 // Local includes
 
@@ -51,4 +48,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* IMAGEINFOTASKSPLITTER_H */
+#endif // IMAGE_INFO_TASK_SPLITTER_H

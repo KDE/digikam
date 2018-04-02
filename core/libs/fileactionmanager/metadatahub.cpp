@@ -71,7 +71,6 @@ public:
         colorLabel        = -1;
         rating            = -1;
         count             = 0;
-
     }
 
 public:
@@ -701,7 +700,7 @@ void Digikam::MetadataHub::setFaceTags(QMultiMap<QString, QVariant> newFaceTags,
     d->faceTagsList.clear();
     QMultiMap<QString, QVariant>::iterator it;
 
-    for(it = newFaceTags.begin() ; it != newFaceTags.end() ; it++)
+    for(it = newFaceTags.begin() ; it != newFaceTags.end() ; ++it)
     {
         QRect  temprect  = it.value().toRect();
         QRectF faceRect  = TagRegion::absoluteToRelative(temprect,size);

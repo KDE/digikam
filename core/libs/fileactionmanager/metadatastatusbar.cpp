@@ -74,15 +74,14 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
       d(new Private)
 {
     QHBoxLayout* const vlay = new QHBoxLayout(this);
-
-    d->applyBtn    = new QToolButton(this);
+    d->applyBtn             = new QToolButton(this);
     d->applyBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
     d->applyBtn->setToolTip(i18n("Apply pending changes to metadata"));
     d->applyBtn->setFocusPolicy(Qt::NoFocus);
     d->applyBtn->setAutoRaise(true);
     d->applyBtn->setDisabled(true);
 
-    d->info        = new DAdjustableLabel(this);
+    d->info                 = new DAdjustableLabel(this);
     d->info->setContextMenuPolicy(Qt::NoContextMenu);
     d->info->setAutoFillBackground(true);
     d->info->setFocusPolicy(Qt::NoFocus);
@@ -97,8 +96,8 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
     vlay->setContentsMargins(QMargins());
     vlay->setStretchFactor(d->info, 10);
 
-    connect(MetadataSettings::instance(), SIGNAL(settingsChanged()), this,
-            SLOT(slotSettingsChanged()));
+    connect(MetadataSettings::instance(), SIGNAL(settingsChanged()),
+            this, SLOT(slotSettingsChanged()));
 
     connect(d->applyBtn, SIGNAL(released()),
             MetadataHubMngr::instance(), SLOT(slotApplyPending()));

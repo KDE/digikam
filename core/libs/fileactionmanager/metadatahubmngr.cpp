@@ -45,12 +45,13 @@ class MetadataHubMngr::Private
 {
 public:
 
-    explicit Private(): mutex()
+    explicit Private()
+        : mutex()
     {
     }
 
     ImageInfoList pendingItems;
-    QMutex mutex;
+    QMutex        mutex;
 };
 
 MetadataHubMngr::MetadataHubMngr()
@@ -98,7 +99,8 @@ void MetadataHubMngr::slotApplyPending()
 
     emit signalPendingMetadata(0);
 
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(infos, MetadataSynchronizer::WriteFromDatabaseToFile);
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(infos,
+                                           MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->start();
 }
 
@@ -120,7 +122,8 @@ void MetadataHubMngr::requestShutDown()
 
     emit signalPendingMetadata(0);
 
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(infos, MetadataSynchronizer::WriteFromDatabaseToFile);
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(infos,
+                                           MetadataSynchronizer::WriteFromDatabaseToFile);
 
     connect(tool, SIGNAL(signalComplete()),
             dialog, SLOT(accept()));

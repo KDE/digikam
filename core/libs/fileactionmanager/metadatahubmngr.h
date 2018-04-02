@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATAHUBMNGR_H
-#define METADATAHUBMNGR_H
+#ifndef METADATA_HUB_MNGR_H
+#define METADATA_HUB_MNGR_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif // METADATAHUBMNGR_H
+#endif // METADATA_HUB_MNGR_H
