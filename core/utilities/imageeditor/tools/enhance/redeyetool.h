@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef REDEYETOOL_H
-#define REDEYETOOL_H
+#ifndef RED_EYE_TOOL_H
+#define RED_EYE_TOOL_H
 
 // Local includes
 
@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* REDEYETOOL_H */
+#endif // RED_EYE_TOOL_H

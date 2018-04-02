@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef BLURTOOL_H
-#define BLURTOOL_H
+#ifndef BLUR_TOOL_H
+#define BLUR_TOOL_H
 
 // Local includes
 
@@ -60,6 +60,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* BLURTOOL_H */
+#endif // BLUR_TOOL_H

@@ -187,4 +187,4 @@ void RedEyeTool::setFinalImage()
     iface.setOriginal(i18n("Red Eyes Correction"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -167,4 +167,4 @@ void BlurTool::setFinalImage()
     iface.setOriginal(i18n("Gaussian Blur"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace Digikam
+} // namespace Digikam
