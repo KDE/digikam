@@ -25,11 +25,7 @@ ExternalProject_Add(ext_ffmpeg
                                              --disable-ffserver
                                              --disable-outdevs
                                              --enable-runtime-cpudetect
-                                             --extra-cflags=-I${CMAKE_BINARY_DIR}/include\
-                                             --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib
-                                             --extra-libs=-lstdc++\
-                                             -lexpat\
-                                             -ldl
+                                             --extra-libs=-lstdc++
                                              --enable-libopencore-amrnb
                                              --enable-libopencore-amrwb
                                              --enable-libfdk-aac
