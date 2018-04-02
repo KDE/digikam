@@ -38,7 +38,7 @@ class ListItem : public QObject
 
 public:
 
-    ListItem(QList<QVariant>& data, ListItem* const parent = 0);
+    explicit ListItem(QList<QVariant>& data, ListItem* const parent = 0);
     ~ListItem();
 
     void appendChild(ListItem* const child);

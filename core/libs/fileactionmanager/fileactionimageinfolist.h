@@ -21,22 +21,20 @@
  *
  * ============================================================ */
 
-#ifndef FILEACTIONIMAGEINFOLIST_H
-#define FILEACTIONIMAGEINFOLIST_H
+#ifndef FILE_ACTION_IMAGE_INFO_LIST_H
+#define FILE_ACTION_IMAGE_INFO_LIST_H
 
 // Qt includes
 
 #include <QAtomicPointer>
 #include <QList>
 #include <QExplicitlySharedDataPointer>
+#include <QDebug>
 
 // Local includes
 
 #include "imageinfo.h"
 #include "progressmanager.h"
-
-#include <QDebug>
-
 
 namespace Digikam
 {
@@ -72,7 +70,9 @@ protected:
 class FileActionProgressItemContainer :public QObject, public TwoProgressItemsContainer
 {
     Q_OBJECT
+
 public:
+
     FileActionProgressItemContainer();
     void schedulingForDB(int numberOfInfos, const QString& action, FileActionProgressItemCreator* const creator);
     void dbProcessed(int numberOfInfos);
@@ -82,8 +82,8 @@ public:
     void finishedWriting();
 
 Q_SIGNALS:
-    void signalWrittingDone();
 
+    void signalWrittingDone();
 };
 
 // -------------------------------------------------------------------------------------------------------------------
@@ -92,27 +92,43 @@ class FileActionImageInfoList : public QList<ImageInfo>
 {
 public:
 
-    FileActionImageInfoList() {}
+    FileActionImageInfoList()
+    {
+    }
 
-    FileActionImageInfoList(const FileActionImageInfoList& copy) : QList(copy)
+    FileActionImageInfoList(const FileActionImageInfoList& copy)
+        : QList(copy)
     {
         this->container = copy.container;
     }
 
-    ~FileActionImageInfoList() {}
+    ~FileActionImageInfoList()
+    {
+    }
 
 public:
 
     static FileActionImageInfoList create(const QList<ImageInfo>& list);
     static FileActionImageInfoList continueTask(const QList<ImageInfo>& list, FileActionProgressItemContainer* const container);
 
-    FileActionProgressItemContainer* progress() const { return container.data(); }
+    FileActionProgressItemContainer* progress() const
+    {
+        return container.data();
+    }
 
     /// before sending to db worker
-    void schedulingForDB(int numberOfInfos, const QString& action, FileActionProgressItemCreator* const creator)
-        { progress()->schedulingForDB(numberOfInfos, action, creator); }
-    void schedulingForDB(const QString& action, FileActionProgressItemCreator* const creator)
-        { schedulingForDB(size(), action, creator); }
+    void schedulingForDB(int numberOfInfos,
+                         const QString& action,
+                         FileActionProgressItemCreator* const creator)
+    {
+        progress()->schedulingForDB(numberOfInfos, action, creator);
+    }
+
+    void schedulingForDB(const QString& action,
+                         FileActionProgressItemCreator* const creator)
+    {
+        schedulingForDB(size(), action, creator);
+    }
 
     /// db worker progress info
     void dbProcessedOne()               { dbProcessed(1);                         }
@@ -120,10 +136,18 @@ public:
     void dbFinished()                   { progress()->dbFinished();               }
 
     /// db worker calls this before sending to file worker
-    void schedulingForWrite(int numberOfInfos, const QString& action, FileActionProgressItemCreator* const creator)
-        { progress()->schedulingForWrite(numberOfInfos, action, creator); }
-    void schedulingForWrite(const QString& action, FileActionProgressItemCreator* const creator)
-        { schedulingForWrite(size(), action, creator); }
+    void schedulingForWrite(int numberOfInfos,
+                            const QString& action,
+                            FileActionProgressItemCreator* const creator)
+    {
+        progress()->schedulingForWrite(numberOfInfos, action, creator);
+    }
+
+    void schedulingForWrite(const QString& action,
+                            FileActionProgressItemCreator* const creator)
+    {
+        schedulingForWrite(size(), action, creator);
+    }
 
     /// file worker calls this when finished
     void writtenToOne()             { written(1);                         }
@@ -131,14 +155,17 @@ public:
     void finishedWriting()          { progress()->finishedWriting();      }
 
     QExplicitlySharedDataPointer<FileActionProgressItemContainer> container;
+
 private:
 
-    FileActionImageInfoList(const QList<ImageInfo>& list) : QList<ImageInfo>(list) {}
-
+    explicit FileActionImageInfoList(const QList<ImageInfo>& list)
+        : QList<ImageInfo>(list)
+    {
+    }
 };
 
 } // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::FileActionImageInfoList)
 
-#endif // FILEACTIONIMAGEINFOLIST_H
+#endif // FILE_ACTION_IMAGE_INFO_LIST_H

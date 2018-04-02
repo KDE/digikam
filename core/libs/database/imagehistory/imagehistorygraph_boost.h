@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_HISTORYGRAPH_BOOST_H
-#define IMAGE_HISTORYGRAPH_BOOST_H
+#ifndef IMAGE_HISTORY_GRAPH_BOOST_H
+#define IMAGE_HISTORY_GRAPH_BOOST_H
 
 // To include pragma directives for MSVC
 #include "digikam_config.h"
@@ -219,7 +219,7 @@ public:
         {
         }
 
-        Edge(const edge_t& e)
+        Edge(const edge_t& e)    // krazy:exclude=explicit
           : e(e),
             null(false)
         {
@@ -1596,4 +1596,4 @@ protected:
 #pragma clang diagnostic pop
 #endif
 
-#endif // IMAGE_HISTORYGRAPH_BOOST_H
+#endif // IMAGE_HISTORY_GRAPH_BOOST_H

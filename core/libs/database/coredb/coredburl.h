@@ -140,7 +140,7 @@ public:
     /**
       * Create a CoreDbUrl object from a QUrl, to retrieve the information stored
       */
-    CoreDbUrl(const QUrl& digikamUrl);
+    explicit CoreDbUrl(const QUrl& digikamUrl);
 
     /**
      * Create an invalid database URL
