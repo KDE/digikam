@@ -125,10 +125,10 @@ EnfuseSettingsWidget::EnfuseSettingsWidget(QWidget* const parent)
 
     d->autoLevelsCB = new QCheckBox(i18nc("@option:check Enfuse setting", "Automatic Local/Global Image Features Balance (Levels)"), this);
     d->autoLevelsCB->setToolTip(i18nc("@info:tooltip",
-                                      "Optimise image features (contrast, saturation, . . .) to be as global as possible."));
+                                      "Optimize image features (contrast, saturation, . . .) to be as global as possible."));
     d->autoLevelsCB->setWhatsThis(i18nc("@info:whatsthis",
                                         "Set automatic level selection (maximized) for pyramid blending, "
-                                        "i.e. optimise image features (contrast, saturation, . . .) to be as global as possible."));
+                                        "i.e. optimize image features (contrast, saturation, . . .) to be as global as possible."));
 
     d->levelsLabel  = new QLabel(i18nc("@label:slider Enfuse settings", "Image Features Balance:"));
     d->levelsInput  = new QSpinBox(this);
