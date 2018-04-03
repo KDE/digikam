@@ -124,7 +124,7 @@ void ItemViewImageDelegate::setThumbnailSize(const ThumbnailSize& thumbSize)
 {
     Q_D(ItemViewImageDelegate);
 
-    if ( d->thumbSize != thumbSize)
+    if (d->thumbSize != thumbSize)
     {
         d->thumbSize = thumbSize;
         invalidatePaintingCache();
@@ -260,7 +260,7 @@ void ItemViewImageDelegate::invalidatePaintingCache()
     if (oldGridSize != d->gridSize)
     {
         emit gridSizeChanged(d->gridSize);
-        // emit sizeHintChanged(QModelIndex());
+        //emit sizeHintChanged(QModelIndex());
     }
 
     emit visualChange();
@@ -281,8 +281,8 @@ QRect ItemViewImageDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, 
     QRect r = thumbRect;
 /*
     p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
-                    r.y() + (r.height()-thumbnail.height())/2,
-                    thumbnail);
+                  r.y() + (r.height()-thumbnail.height())/2,
+                  thumbnail);
 */
 
     QRect actualPixmapRect(r.x() + (r.width()-thumbnail.width())/2,
@@ -382,7 +382,7 @@ void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QS
     p->drawText(nameRect, Qt::AlignCenter, squeezedTextCached(p, nameRect.width(), name));
 }
 
-void ItemViewImageDelegate::drawTitle(QPainter *p, const QRect& titleRect, const QString& title) const
+void ItemViewImageDelegate::drawTitle(QPainter* p, const QRect& titleRect, const QString& title) const
 {
     Q_D(const ItemViewImageDelegate);
 
@@ -405,7 +405,7 @@ void ItemViewImageDelegate::drawCreationDate(QPainter* p, const QRect& dateRect,
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
     //str         = i18nc("date of image creation", "created: %1", str);
-    p->drawText(dateRect, Qt::AlignCenter, str);//squeezedTextCached(p, dateRect.width(), str));
+    p->drawText(dateRect, Qt::AlignCenter, str); //squeezedTextCached(p, dateRect.width(), str));
 }
 
 void ItemViewImageDelegate::drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
@@ -415,7 +415,7 @@ void ItemViewImageDelegate::drawModificationDate(QPainter* p, const QRect& dateR
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
     str         = i18nc("date of last image modification", "Mod.: %1",str);
-    p->drawText(dateRect, Qt::AlignCenter, str);//squeezedTextCached(p, dateRect.width(), str));
+    p->drawText(dateRect, Qt::AlignCenter, str); //squeezedTextCached(p, dateRect.width(), str));
 }
 
 void ItemViewImageDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const
@@ -436,7 +436,7 @@ void ItemViewImageDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, co
             resolution = i18nc("unknown image resolution", "Unknown");
         }
 
-        p->drawText(dimsRect, Qt::AlignCenter, resolution);//squeezedTextCached(p, dimsRect.width(), resolution));
+        p->drawText(dimsRect, Qt::AlignCenter, resolution); //squeezedTextCached(p, dimsRect.width(), resolution));
     }
 }
 
@@ -601,7 +601,7 @@ void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
             icon = QIcon::fromTheme(QLatin1String("folder")); //image-stack
         }
 
-        qreal op     = p->opacity();
+        qreal op = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);
         p->setOpacity(op);
@@ -706,7 +706,7 @@ void ItemViewImageDelegate::prepareBackground()
 
 void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
 {
-    /// Please call this method after prepareBackground() and when d->ratingPixmap is set
+    // Please call this method after prepareBackground() and when d->ratingPixmap is set
 
     Q_D(ItemViewImageDelegate);
 
@@ -742,7 +742,7 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
             basePix.fill(Qt::transparent);
         }
 
-        for (int rating=1; rating<=5; ++rating)
+        for (int rating = 1 ; rating <= 5 ; ++rating)
         {
             // we store first the 5 regular, then the 5 selected pixmaps, for simplicity
             int index = (sel * 5 + rating) - 1;
@@ -763,7 +763,7 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
             // move painter while drawing polygons
             painter.translate( lround((d->ratingRect.width() - d->margin - rating*(d->starPolygonSize.width()+1))/2.0) + 2, 0);
 
-            for (int s=0; s<rating; ++s)
+            for (int s = 0 ; s < rating ; ++s)
             {
                 painter.drawPolygon(d->starPolygon, Qt::WindingFill);
                 painter.translate(d->starPolygonSize.width() + 1, 0);
