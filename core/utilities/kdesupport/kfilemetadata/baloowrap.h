@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-08-05
- * Description : KDE file indexer interface.
+ * Description : Plasma file indexer interface.
  *
  * Copyright (C) 2014 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *

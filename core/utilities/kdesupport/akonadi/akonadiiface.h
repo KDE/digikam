@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-02-15
- * Description : Akonadi Address Book contacts interface
+ * Description : Plasma Address Book contacts interface
  *
  * Copyright (C) 2010-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* AKONADI_IFACE_H */
+#endif // AKONADI_IFACE_H
