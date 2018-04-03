@@ -4,12 +4,12 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-add_subdirectory(akonadi)
+add_subdirectory(addressbook)
 
 if(KF5FileMetaData_FOUND)
-    add_subdirectory(kfilemetadata)
+    add_subdirectory(filesindexer)
 endif()
 
 if(KF5Sane_FOUND)
-    add_subdirectory(ksane)
+    add_subdirectory(dscanner)
 endif()
