@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef KSCAN_IFACE_H
-#define KSCAN_IFACE_H
+#ifndef KSCAN_ACTION_H
+#define KSCAN_ACTION_H
 
 // Qt includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* KSCAN_IFACE_H */
+#endif // KSCAN_ACTION_H

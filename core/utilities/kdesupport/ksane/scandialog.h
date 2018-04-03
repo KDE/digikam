@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef SCANDIALOG_H
-#define SCANDIALOG_H
+#ifndef SCAN_DIALOG_H
+#define SCAN_DIALOG_H
 
 // Qt includes
 
@@ -46,7 +46,7 @@ class ScanDialog : public QDialog
 
 public:
 
-    ScanDialog(KSaneWidget* const saneWdg, const QString& config, QWidget* const parent=0);
+    explicit ScanDialog(KSaneWidget* const saneWdg, const QString& config, QWidget* const parent=0);
     ~ScanDialog();
 
     void setTargetDir(const QString& targetDir);
@@ -79,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SCANDIALOG_H
+#endif // SCAN_DIALOG_H
