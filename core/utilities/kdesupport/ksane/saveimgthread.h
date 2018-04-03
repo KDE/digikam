@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-10-11
- * Description : save image thread
+ * Description : save image thread for scanned data
  *
  * Copyright (C) 2009-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
