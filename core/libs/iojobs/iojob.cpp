@@ -492,6 +492,7 @@ void DeleteDTrashItemsJob::run()
         QFile::remove(item.trashPath);
         QFile::remove(item.jsonFilePath);
         // Set the status of the image id to obsolete, i.e. to remove.
+        access.db()->removeAllImageRelationsFrom(item.imageId, DatabaseRelation::Grouped);
         access.db()->setItemStatus(item.imageId, DatabaseItem::Status::Obsolete);
     }
 

@@ -135,13 +135,16 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const Delet
     }
 
     const bool useTrash = !dialog.shouldDelete();
+
     if (!useTrash)
     {
         // If the images should be deleted permanently, mark the images as obsolete and remove them
-        // from their album
+        // from their album and from the group
         CoreDbAccess access;
+
         foreach(const ImageInfo& info, deleteInfos)
         {
+            access.db()->removeAllImageRelationsFrom(info.id(), DatabaseRelation::Grouped);
             access.db()->removeItemsPermanently(QList<qlonglong>() << info.id(), QList<int>() << info.albumId());
         }
     }
