@@ -79,7 +79,8 @@ public:
     /** Copy recursively a directory contents to another one.
      */
     static bool copyFolderRecursively(const QString& srcPath,
-                                      const QString& dstPath);
+                                      const QString& dstPath,
+                                      const bool* cancel = 0);
 
     /** Copy a list of files to another place.
      */

@@ -110,8 +110,13 @@ void CopyJob::run()
                 if (!srcDir.rename(srcDir.path(), destenation))
                 {
                     // If QDir::rename fails, try copy and remove.
-                    if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
+                    if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path(), &m_cancel))
                     {
+                        if (m_cancel)
+                        {
+                            break;
+                        }
+
                         emit signalError(i18n("Could not move folder %1 to album %2",
                                               QDir::toNativeSeparators(srcDir.path()),
                                               QDir::toNativeSeparators(dstDir.path())));
@@ -149,8 +154,13 @@ void CopyJob::run()
             {
                 QDir srcDir(srcInfo.filePath());
 
-                if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
+                if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path(), &m_cancel))
                 {
+                    if (m_cancel)
+                    {
+                        break;
+                    }
+
                     emit signalError(i18n("Could not copy folder %1 to album %2",
                                           QDir::toNativeSeparators(srcDir.path()),
                                           QDir::toNativeSeparators(dstDir.path())));
