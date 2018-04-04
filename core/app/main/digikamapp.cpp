@@ -3390,6 +3390,7 @@ void DigikamApp::slotEditMetadata()
     foreach(const QUrl& url, urls)
     {
         scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
+        ImageAttributesWatch::instance()->fileMetadataChanged(url);
     }
 }
 
