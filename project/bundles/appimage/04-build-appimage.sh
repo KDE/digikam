@@ -146,6 +146,9 @@ cp -r /usr/$LIB_PATH_ALT/libexec/kf5      ./usr/lib/libexec/
 find  /usr/lib/libgphoto2      -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2 \;      2>/dev/null
 find  /usr/lib/libgphoto2_port -name "*.so" -type f -exec cp {} ./usr/lib/libgphoto2_port \; 2>/dev/null
 
+# Copy missing FFMPEG dependencies
+cp -r /usr/$LIB_PATH_ALT/libpostproc*.so* ./usr/lib
+
 # copy sane backends
 
 cp -r /usr/lib/sane                       ./usr/lib
@@ -252,6 +255,13 @@ done
 
 # Copy in the indirect dependencies
 FILES=$(find . -type f -executable)
+
+for FILE in $FILES ; do
+    CopyReccursiveDependencies ${FILE} ./usr/lib
+done
+
+# Copy missing FFMPEG dependencies
+FILES=$(ls /usr/$LIB_PATH_ALT/libpostproc*.so*)
 
 for FILE in $FILES ; do
     CopyReccursiveDependencies ${FILE} ./usr/lib
