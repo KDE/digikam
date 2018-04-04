@@ -146,7 +146,7 @@ void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const QRect& rect, D
 void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const ImageInfo& info,
                                            const QRect& rect, DImg* const img, const DImageHistory& history)
 {
-    if ( !url.isValid() )
+    if (!url.isValid())
     {
         return;
     }
@@ -222,6 +222,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
     {
         m_propertiesTab->setCurrentURL(m_currentURL);
+
         if (d->currentInfos.isEmpty())
         {
             ImagePropertiesSideBar::setImagePropertiesInformation(m_currentURL);
@@ -230,6 +231,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             setImagePropertiesInformation(m_currentURL);
         }
+
         m_dirtyPropertiesTab = true;
     }
     else if (tab == m_metadataTab && !m_dirtyMetadataTab)
@@ -239,6 +241,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             // No multiple selection supported. Only if all items belong to
             // the same group display metadata of main item.
             ImageInfo mainItem = d->currentInfos.singleGroupMainItem();
+
             if (!mainItem.isNull())
             {
                 m_metadataTab->setCurrentURL(mainItem.fileUrl());
@@ -257,6 +260,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             m_metadataTab->setCurrentURL(m_currentURL);
         }
+
         m_dirtyMetadataTab = true;
     }
     else if (tab == m_colorTab && !m_dirtyColorTab)
@@ -266,6 +270,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             // No multiple selection supported. Only if all items belong to
             // the same group display metadata of main item.
             ImageInfo mainItem = d->currentInfos.singleGroupMainItem();
+
             if (!mainItem.isNull())
             {
                 m_colorTab->setData(mainItem.fileUrl());
@@ -279,11 +284,11 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             m_colorTab->setData(m_currentURL, m_currentRect, m_image);
         }
+
         m_dirtyColorTab = true;
     }
     else if (tab == d->desceditTab && !d->dirtyDesceditTab)
     {
-
         if (d->currentInfos.count() == 0)
         {
             // Do nothing here. We cannot get data from database !
@@ -297,12 +302,12 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             d->desceditTab->setItems(d->currentInfos);
         }
+
         d->dirtyDesceditTab = true;
     }
 #ifdef HAVE_MARBLE
     else if (tab == m_gpsTab && !m_dirtyGpsTab)
     {
-
         if (d->currentInfos.count() == 0)
         {
             m_gpsTab->setCurrentURL(m_currentURL);
@@ -347,6 +352,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         {
             d->versionsHistoryTab->setItem(d->currentInfos.first(), d->currentHistory);
         }
+
         m_dirtyHistoryTab = true;
     }
 
@@ -396,11 +402,11 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
                 // trigger an update, if changes touch the tab's information
                 DatabaseFields::Set set = changeset.changes();
 
-                if ( (set & DatabaseFields::ImagesAll)           ||
-                     (set & DatabaseFields::ImageInformationAll) ||
-                     (set & DatabaseFields::ImageMetadataAll)    ||
-                     (set & DatabaseFields::VideoMetadataAll)    ||
-                     (set & DatabaseFields::ImageCommentsAll) )
+                if ((set & DatabaseFields::ImagesAll)           ||
+                    (set & DatabaseFields::ImageInformationAll) ||
+                    (set & DatabaseFields::ImageMetadataAll)    ||
+                    (set & DatabaseFields::VideoMetadataAll)    ||
+                    (set & DatabaseFields::ImageCommentsAll))
                 {
                     m_dirtyPropertiesTab = false;
                 }
