@@ -2410,7 +2410,7 @@ bool AlbumManager::updatePAlbumIcon(PAlbum* album, qlonglong iconID, QString& er
 
 qlonglong AlbumManager::getItemFromAlbum(PAlbum* album, const QString& fileName)
 {
-    return CoreDbAccess().db()->getItemFromAlbum(album->id(),fileName);
+    return CoreDbAccess().db()->getItemFromAlbum(album->id(), fileName);
 }
 
 TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,

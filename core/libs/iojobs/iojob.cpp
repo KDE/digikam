@@ -40,7 +40,6 @@
 #include "dtrash.h"
 #include "coredb.h"
 #include "coredbaccess.h"
-#include "collectionmanager.h"
 #include "albummanager.h"
 #include "dfileoperations.h"
 
@@ -339,10 +338,9 @@ qlonglong DeleteJob::getItemFromUrl(const QUrl& url)
     // Get the album path, i.e. collection + album. For this,
     // get the n leftmost characters where n is the complete path without the size of the filename
     QString completePath = url.toLocalFile();
-    QString albumPath    = CollectionManager::instance()->album(completePath);
 
     qlonglong imageId    = -1;
-    // Get the album and with this the image id of the image to trash.
+    // Get the album and with this the image id of the image to delete.
     PAlbum* const pAlbum = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(completePath));
 
     if (pAlbum)
