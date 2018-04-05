@@ -90,10 +90,6 @@ protected:
 
 private:
 
-    qlonglong getItemFromUrl(const QUrl& url);
-
-private:
-
     IOJobData* m_data;
 };
 

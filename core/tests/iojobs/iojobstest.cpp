@@ -147,7 +147,7 @@ void IOJobsTest::permanentDel()
 
     QUrl fileUrl          = QUrl::fromLocalFile(fi.absoluteFilePath());
 
-    IOJobData* const data = new IOJobData(IOJobData::DFiles, QList<QUrl>() << fileUrl);
+    IOJobData* const data = new IOJobData(IOJobData::Delete, QList<QUrl>() << fileUrl);
     DeleteJob* job        = new DeleteJob(data);
 
     QThreadPool::globalInstance()->start(job);

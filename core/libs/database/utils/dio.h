@@ -39,6 +39,7 @@ class QUrl;
 namespace Digikam
 {
 
+class Album;
 class PAlbum;
 class ImageInfo;
 class IOJobData;
@@ -104,6 +105,7 @@ private:
 
     ProgressItem* getProgressItem(int operation) const;
     QPair<QString, QString> getItemStrings(int operation)   const;
+    void addAlbumChildrenToList(QList<int>& list, Album* const album);
 
 private Q_SLOTS:
 

@@ -46,7 +46,7 @@ public:
 
 enum Operation
 {
-    Unknown=0,
+    Unknown = 0,
     CopyAlbum,
     CopyImage,
     CopyFiles,
@@ -55,7 +55,6 @@ enum Operation
     MoveFiles,
     Rename,
     Delete,
-    DFiles, // not mark as obsolete in the database
     Trash
 };
 
@@ -69,7 +68,7 @@ enum Operation
 
     explicit IOJobData(int operation,
                        PAlbum* const src,
-                       PAlbum* const dest);
+                       PAlbum* const dest = 0);
 
     explicit IOJobData(int operation,
                        const QList<QUrl>& urls,

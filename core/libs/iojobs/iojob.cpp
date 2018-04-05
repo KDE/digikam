@@ -263,40 +263,6 @@ void DeleteJob::run()
                     emit signalOneProccessed(m_data->operation());
                     continue;
                 }
-
-                if (m_data->operation() == IOJobData::Delete)
-                {
-                    CoreDbAccess access;
-                    // If the images in the directory should be marked as obsolete
-                    // get all files recursively and remove all image information
-                    // for which the file path leads to an image id.
-                    QList<qlonglong> imageIds;
-                    QDirIterator iter(dir);
-
-                    while (iter.hasNext())
-                    {
-                        // get the next path and advance the iterator
-                        QString filePath = iter.next();
-                        // Use the file info to get the file type
-                        QFileInfo info = iter.fileInfo();
-
-                        if (info.isFile())
-                        {
-                            qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(filePath));
-
-                            if (imageId != -1)
-                            {
-                                imageIds << imageId;
-                            }
-                        }
-                    }
-
-                    // Mark all image ids as obsolete.
-                    foreach(const qlonglong& imageId, imageIds)
-                    {
-                        access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
-                    }
-                }
             }
             else
             {
@@ -318,25 +284,6 @@ void DeleteJob::run()
     }
 
     emit signalDone();
-}
-
-qlonglong DeleteJob::getItemFromUrl(const QUrl& url)
-{
-    QString fileName     = url.fileName();
-    // Get the album path, i.e. collection + album. For this,
-    // get the n leftmost characters where n is the complete path without the size of the filename
-    QString completePath = url.toLocalFile();
-
-    qlonglong imageId    = -1;
-    // Get the album and with this the image id of the image to delete.
-    PAlbum* const pAlbum = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(completePath));
-
-    if (pAlbum)
-    {
-        imageId = CoreDbAccess().db()->getItemFromAlbum(pAlbum->id(), fileName);
-    }
-
-    return imageId;
 }
 
 // --------------------------------------------

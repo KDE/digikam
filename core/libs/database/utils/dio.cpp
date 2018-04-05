@@ -260,8 +260,7 @@ void DIO::del(PAlbum* const album, bool useTrash)
 #endif
 
     instance()->createJob(new IOJobData(useTrash ? IOJobData::Trash 
-                                                 : IOJobData::Delete,
-                                        QList<QUrl>() << album->fileUrl()));
+                                                 : IOJobData::Delete, album));
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -404,18 +403,45 @@ void DIO::slotResult()
     }
     else if (operation == IOJobData::Delete)
     {
-        // remove the image infos
+        // Mark the images as obsolete and remove them
+        // from their album and from the grouped
+        PAlbum* const album = data->srcAlbum();
         CoreDbAccess access;
 
-        foreach(const ImageInfo& info, data->imageInfos())
+        if (album)
         {
-            if (data->processedUrls().contains(info.fileUrl()))
+            if (data->processedUrls().contains(album->fileUrl()))
             {
-                access.db()->removeAllImageRelationsFrom(info.id(), DatabaseRelation::Grouped);
-                access.db()->removeItemsPermanently(QList<qlonglong>() << info.id(), QList<int>() << info.albumId());
+                // get all deleted albums
+                QList<int> albumsToDelete;
+                QList<qlonglong> imagesToRemove;
+
+                addAlbumChildrenToList(albumsToDelete, album);
+
+                foreach(int albumId, albumsToDelete)
+                {
+                    imagesToRemove << access.db()->getItemIDsInAlbum(albumId);
+                }
+
+                foreach(const qlonglong& imageId, imagesToRemove)
+                {
+                    access.db()->removeAllImageRelationsFrom(imageId, DatabaseRelation::Grouped);
+                }
+
+                access.db()->removeItemsPermanently(imagesToRemove, albumsToDelete);
             }
         }
-
+        else
+        {
+            foreach(const ImageInfo& info, data->imageInfos())
+            {
+                if (data->processedUrls().contains(info.fileUrl()))
+                {
+                    access.db()->removeAllImageRelationsFrom(info.id(), DatabaseRelation::Grouped);
+                    access.db()->removeItemsPermanently(QList<qlonglong>() << info.id(), QList<int>() << info.albumId());
+                }
+            }
+        }
     }
     else if (operation == IOJobData::Rename)
     {
@@ -473,7 +499,6 @@ QPair<QString, QString> DIO::getItemStrings(int operation) const
         case IOJobData::Trash:
             return qMakePair(QLatin1String("DIOTrash"), i18n("Trash"));
         case IOJobData::Delete:
-        case IOJobData::DFiles:
             return qMakePair(QLatin1String("DIODelete"), i18n("Delete"));
         default:
             break;
@@ -497,6 +522,26 @@ void DIO::slotCancel(ProgressItem* item)
     if (item)
     {
         item->setComplete();
+    }
+}
+
+void DIO::addAlbumChildrenToList(QList<int>& list, Album* const album)
+{
+    // simple recursive helper function
+    if (album)
+    {
+        if (!list.contains(album->id()))
+        {
+            list.append(album->id());
+        }
+
+        AlbumIterator it(album);
+
+        while (it.current())
+        {
+            addAlbumChildrenToList(list, *it);
+            ++it;
+        }
     }
 }
 

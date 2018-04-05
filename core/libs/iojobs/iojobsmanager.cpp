@@ -69,7 +69,6 @@ IOJobsThread* IOJobsManager::startIOJobs(IOJobData* const data)
             break;
         case IOJobData::Trash:
         case IOJobData::Delete:
-        case IOJobData::DFiles:
             thread->deleteFiles(data);
             break;
         case IOJobData::Rename:
