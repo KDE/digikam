@@ -263,8 +263,8 @@
     }
     
     #content li a:hover {
-        border: 1px solid <xsl:value-of select="$selectedFrameColor"/>;
-        background-color: <xsl:value-of select="$selectedFrameBorderColor"/>;
+        border: 1px solid <xsl:value-of select="$selectedFrameBorderColor"/>;
+        background-color: <xsl:value-of select="$selectedFrameColor"/>;
     }
     
     /* PAGINATION */
@@ -276,8 +276,8 @@
     
     .pagination .current,
     .pagination li a:hover {
-        border: 1px solid <xsl:value-of select="$selectedFrameColor"/> !important;
-        background-color: <xsl:value-of select="$selectedFrameBorderColor"/> !important;
+        border: 1px solid <xsl:value-of select="$selectedFrameBorderColor"/> !important;
+        background-color: <xsl:value-of select="$selectedFrameColor"/> !important;
     }
     
     /* Image page */
