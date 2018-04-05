@@ -402,6 +402,21 @@ void DIO::slotResult()
             }
         }
     }
+    else if (operation == IOJobData::Delete)
+    {
+        // remove the image infos
+        CoreDbAccess access;
+
+        foreach(const ImageInfo& info, data->imageInfos())
+        {
+            if (data->processedUrls().contains(info.fileUrl()))
+            {
+                access.db()->removeAllImageRelationsFrom(info.id(), DatabaseRelation::Grouped);
+                access.db()->removeItemsPermanently(QList<qlonglong>() << info.id(), QList<int>() << info.albumId());
+            }
+        }
+
+    }
     else if (operation == IOJobData::Rename)
     {
         // If we rename a file, the name changes. This is equivalent to a move.

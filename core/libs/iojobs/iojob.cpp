@@ -310,18 +310,6 @@ void DeleteJob::run()
                     emit signalOneProccessed(m_data->operation());
                     continue;
                 }
-
-                if (m_data->operation() == IOJobData::Delete)
-                {
-                    CoreDbAccess access;
-                    // Mark the image info of the removed file as obsolete
-                    qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(fileInfo.filePath()));
-
-                    if (imageId != -1)
-                    {
-                        access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
-                    }
-                }
             }
         }
 
