@@ -172,4 +172,6 @@ BUGFIXES:
 155 ==> 373284 - digiKam crashed with SIGSEGV in QSortFilterProxyModel::parent().
 156 ==> 384807 - digikam 5.7.0 AppImage bundle : provide a more recent ffmpeg version for video support.
 157 ==> 391835 - Deleted pictures still appear in group.
-158 ==> 
+158 ==> 387483 - Elegant theme: Selected frame colors swapped [patch].
+159 ==> 
+
