@@ -139,20 +139,23 @@ if [[ ! -f /opt/rh/devtoolset-4/enable ]] ; then
 
     echo -e "---------- Install New Compiler Tools Set\n"
 
-    # Newer compiler than what comes with offcial CentOS 6 (only 64 bits)
-    yum -y install centos-release-scl-rh
-    yum -y install devtoolset-4-gcc devtoolset-4-gcc-c++
+    if [[ "$(arch)" = "x86_64" ]] ; then
 
- else
+        # Newer compiler than what comes with offcial CentOS 6 (only 64 bits)
+        yum -y install centos-release-scl-rh
+        yum -y install devtoolset-4-gcc devtoolset-4-gcc-c++
 
-    # Newer compiler for CentOS 6 32 bits
-    cd /etc/yum.repos.d
-    wget https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-4.1/repo/epel-6/mlampe-devtoolset-4.1-epel-6.repo
-    yum -y --nogpgcheck install devtoolset-3-gcc devtoolset-3-gcc-c++
-    rm -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo
+    else
+
+        # Newer compiler for CentOS 6 32 bits
+        cd /etc/yum.repos.d
+        wget https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-4.1/repo/epel-6/mlampe-devtoolset-4.1-epel-6.repo
+        yum -y --nogpgcheck install devtoolset-4-gcc devtoolset-4-gcc-c++
+        rm -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo
+
+    fi
 
 fi
-
 
 #################################################################################################
 
