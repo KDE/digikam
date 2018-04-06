@@ -44,6 +44,7 @@
 #include "dtrashitemmodel.h"
 #include "iojobsmanager.h"
 #include "thumbnailsize.h"
+#include "scancontroller.h"
 
 namespace Digikam
 {
@@ -186,7 +187,26 @@ void TrashView::slotRestoreSelectedItems()
     IOJobsThread* const thread = IOJobsManager::instance()->startRestoringDTrashItems(items);
 
     connect(thread, SIGNAL(finished()),
-            this, SLOT(slotRemoveItemsFromModel()));
+            this, SLOT(slotRestoreFinished()));
+}
+
+void TrashView::slotRestoreFinished()
+{
+    if (d->selectedIndexesToRemove.isEmpty())
+    {
+        return;
+    }
+
+    DTrashItemInfoList items = d->model->itemsForIndexes(d->selectedIndexesToRemove);
+
+    foreach(const DTrashItemInfo& item, items)
+    {
+        QUrl url     = QUrl::fromLocalFile(item.collectionPath);
+        QString path = url.adjusted(QUrl::RemoveFilename).toLocalFile();
+        ScanController::instance()->scheduleCollectionScanRelaxed(path);
+    }
+
+    slotRemoveItemsFromModel();
 }
 
 void TrashView::slotDeleteSelectedItems()

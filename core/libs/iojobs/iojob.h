@@ -51,7 +51,7 @@ protected:
 
 Q_SIGNALS:
 
-    void signalOneProccessed(int operation);
+    void signalOneProccessed();
     void signalError(const QString& errMsg);
 };
 

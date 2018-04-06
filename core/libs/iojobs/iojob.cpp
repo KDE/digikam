@@ -74,14 +74,14 @@ void CopyJob::run()
         if (!srcInfo.exists())
         {
             emit signalError(i18n("File/Folder %1 does not exist anymore", srcInfo.baseName()));
-            emit signalOneProccessed(m_data->operation());
+            emit signalOneProccessed();
             continue;
         }
 
         if (!dstDir.exists())
         {
             emit signalError(i18n("Album %1 does not exist anymore", dstDir.dirName()));
-            emit signalOneProccessed(m_data->operation());
+            emit signalOneProccessed();
             continue;
         }
 
@@ -94,7 +94,7 @@ void CopyJob::run()
         {
             emit signalError(i18n("A file or folder named %1 already exists in %2",
                                   srcInfo.baseName(), QDir::toNativeSeparators(dstDir.path())));
-            emit signalOneProccessed(m_data->operation());
+            emit signalOneProccessed();
             continue;
         }
 
@@ -120,7 +120,7 @@ void CopyJob::run()
                                               QDir::toNativeSeparators(srcDir.path()),
                                               QDir::toNativeSeparators(dstDir.path())));
 
-                        emit signalOneProccessed(m_data->operation());
+                        emit signalOneProccessed();
                         continue;
                     }
                     else if (!srcDir.removeRecursively())
@@ -142,7 +142,7 @@ void CopyJob::run()
                                           srcInfo.filePath(),
                                           QDir::toNativeSeparators(dstDir.path())));
 
-                    emit signalOneProccessed(m_data->operation());
+                    emit signalOneProccessed();
                     continue;
                 }
            }
@@ -164,7 +164,7 @@ void CopyJob::run()
                                           QDir::toNativeSeparators(srcDir.path()),
                                           QDir::toNativeSeparators(dstDir.path())));
 
-                    emit signalOneProccessed(m_data->operation());
+                    emit signalOneProccessed();
                     continue;
                 }
             }
@@ -176,14 +176,14 @@ void CopyJob::run()
                                           QDir::toNativeSeparators(srcInfo.path()),
                                           QDir::toNativeSeparators(dstDir.path())));
 
-                    emit signalOneProccessed(m_data->operation());
+                    emit signalOneProccessed();
                     continue;
                 }
 
             }
         }
 
-        emit signalOneProccessed(m_data->operation());
+        emit signalOneProccessed();
         m_data->addProcessedUrl(srcUrl);
     }
 
@@ -220,7 +220,7 @@ void DeleteJob::run()
             emit signalError(i18n("File/Folder %1 does not exist",
                                   QDir::toNativeSeparators(fileInfo.filePath())));
 
-            emit signalOneProccessed(m_data->operation());
+            emit signalOneProccessed();
             continue;
         }
 
@@ -233,7 +233,7 @@ void DeleteJob::run()
                     emit signalError(i18n("Couldn't move folder %1 to collection trash",
                                           QDir::toNativeSeparators(fileInfo.path())));
 
-                    emit signalOneProccessed(m_data->operation());
+                    emit signalOneProccessed();
                     continue;
                 }
             }
@@ -244,7 +244,7 @@ void DeleteJob::run()
                     emit signalError(i18n("Couldn't move image %1 to collection trash",
                                           QDir::toNativeSeparators(fileInfo.filePath())));
 
-                    emit signalOneProccessed(m_data->operation());
+                    emit signalOneProccessed();
                     continue;
                 }
             }
@@ -260,7 +260,7 @@ void DeleteJob::run()
                     emit signalError(i18n("Album %1 could not be removed",
                                           QDir::toNativeSeparators(fileInfo.path())));
 
-                    emit signalOneProccessed(m_data->operation());
+                    emit signalOneProccessed();
                     continue;
                 }
             }
@@ -273,13 +273,13 @@ void DeleteJob::run()
                     emit signalError(i18n("Image %1 could not be removed",
                                           QDir::toNativeSeparators(fileInfo.filePath())));
 
-                    emit signalOneProccessed(m_data->operation());
+                    emit signalOneProccessed();
                     continue;
                 }
             }
         }
 
-        emit signalOneProccessed(m_data->operation());
+        emit signalOneProccessed();
         m_data->addProcessedUrl(deleteUrl);
     }
 
@@ -314,7 +314,7 @@ void RenameFileJob::run()
             emit signalError(i18n("Image with the same name %1 already there",
                                   QDir::toNativeSeparators(destUrl.toLocalFile())));
 
-            emit signalOneProccessed(m_data->operation());
+            emit signalOneProccessed();
             emit signalRenameFailed(renameUrl);
             continue;
         }
@@ -331,12 +331,12 @@ void RenameFileJob::run()
             emit signalError(i18n("Image %1 could not be renamed",
                                   QDir::toNativeSeparators(renameUrl.toLocalFile())));
 
-            emit signalOneProccessed(m_data->operation());
+            emit signalOneProccessed();
             emit signalRenameFailed(renameUrl);
             continue;
         }
 
-        emit signalOneProccessed(m_data->operation());
+        emit signalOneProccessed();
         m_data->addProcessedUrl(renameUrl);
         emit signalRenamed(renameUrl);
     }

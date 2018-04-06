@@ -173,5 +173,5 @@ BUGFIXES:
 156 ==> 384807 - digikam 5.7.0 AppImage bundle : provide a more recent ffmpeg version for video support.
 157 ==> 391835 - Deleted pictures still appear in group.
 158 ==> 387483 - Elegant theme: Selected frame colors swapped [patch].
-159 ==> 
-
+159 ==> 375424 - Thumbnails are not being removed from AlbumsView after moving the images to Trash.
+160 ==> 
