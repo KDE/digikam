@@ -308,12 +308,14 @@ bool MetaEngine::setExifComment(const QString& comment) const
 {
     try
     {
-        removeExifTag("Exif.Image.ImageDescription");
         removeExifTag("Exif.Photo.UserComment");
 
         if (!comment.isNull())
         {
-            setExifTagString("Exif.Image.ImageDescription", comment);
+            if (getExifTagString("Exif.Image.ImageDescription", false).isNull())
+            {
+                setExifTagString("Exif.Image.ImageDescription", comment);
+            }
 
             // Write as Unicode only when necessary.
             QTextCodec* latin1Codec = QTextCodec::codecForName("iso8859-1");
