@@ -25,8 +25,7 @@ if [[ "$(arch)" = "x86_64" ]] ; then
 
 else
 
-    echo -e "---------- Arch not supported. Abort...\n"
-    exit -1
+    LIB_PATH_ALT=lib
 
 fi
 

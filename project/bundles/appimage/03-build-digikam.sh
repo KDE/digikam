@@ -19,13 +19,6 @@ if [ "root" != "$USER" ]; then
     exit
 fi
 
-if [[ "$(arch)" != "x86_64" ]] ; then
-
-    echo -e "---------- Arch not supported. Abort...\n"
-    exit -1
-
-fi
-
 #################################################################################################
 # Manage script traces to log file
 
