@@ -123,9 +123,9 @@ Q_SIGNALS:
 
     void finished();
 
+    void signalOneProccessed();
     void signalRenamed(const QUrl& oldUrl);
     void signalRenameFailed(const QUrl& oldUrl);
-    void signalOneProccessed(int operation);
 
     void collectionTrashItemInfo(const DTrashItemInfo& trashItemInfo);
 

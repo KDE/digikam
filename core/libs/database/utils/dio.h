@@ -110,8 +110,8 @@ private:
 private Q_SLOTS:
 
     void slotResult();
+    void slotOneProccessed();
     void slotCancel(ProgressItem* item);
-    void slotOneProccessed(int operation);
 
 private:
 

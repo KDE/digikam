@@ -349,8 +349,8 @@ void DIO::createJob(IOJobData* const data)
 
     jobThread = IOJobsManager::instance()->startIOJobs(data);
 
-    connect(jobThread, SIGNAL(signalOneProccessed(int)),
-            this, SLOT(slotOneProccessed(int)));
+    connect(jobThread, SIGNAL(signalOneProccessed()),
+            this, SLOT(slotOneProccessed()));
 
     connect(jobThread, SIGNAL(finished()),
             this, SLOT(slotResult()));
@@ -471,6 +471,59 @@ void DIO::slotResult()
     slotCancel(getProgressItem(operation));
 }
 
+void DIO::slotOneProccessed()
+{
+    IOJobsThread* const jobThread = dynamic_cast<IOJobsThread*>(sender());
+
+    if (!jobThread || !jobThread->jobData())
+    {
+        return;
+    }
+
+    IOJobData* const data = jobThread->jobData();
+    const int operation   = data->operation();
+
+    // Scan folders for changes
+
+    if (operation == IOJobData::CopyImage || operation == IOJobData::CopyAlbum ||
+        operation == IOJobData::CopyFiles || operation == IOJobData::MoveImage ||
+        operation == IOJobData::MoveAlbum || operation == IOJobData::MoveFiles)
+    {
+        QString path = data->destUrl().toLocalFile();
+        ScanController::instance()->scheduleCollectionScanRelaxed(path);
+    }
+    else if (operation == IOJobData::Delete || operation == IOJobData::Trash)
+    {
+        PAlbum* const album = data->srcAlbum();
+
+        if (album)
+        {
+            PAlbum* const parent = AlbumManager::instance()->findPAlbum(album->parent()->id());
+
+            if (parent)
+            {
+                QString path = parent->fileUrl().toLocalFile();
+                ScanController::instance()->scheduleCollectionScanRelaxed(path);
+            }
+        }
+        else
+        {
+            foreach(const ImageInfo& info, data->imageInfos())
+            {
+                QString path = info.fileUrl().adjusted(QUrl::RemoveFilename).toLocalFile();
+                ScanController::instance()->scheduleCollectionScanRelaxed(path);
+            }
+        }
+    }
+
+    ProgressItem* const item = getProgressItem(operation);
+
+    if (item)
+    {
+        item->advance(1);
+    }
+}
+
 ProgressItem* DIO::getProgressItem(int operation) const
 {
     ProgressItem* item = 0;
@@ -505,16 +558,6 @@ QPair<QString, QString> DIO::getItemStrings(int operation) const
     }
 
     return qMakePair(QString(), QString());
-}
-
-void DIO::slotOneProccessed(int operation)
-{
-    ProgressItem* const item = getProgressItem(operation);
-
-    if (item)
-    {
-        item->advance(1);
-    }
 }
 
 void DIO::slotCancel(ProgressItem* item)

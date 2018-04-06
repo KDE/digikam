@@ -227,8 +227,8 @@ void IOJobsThread::connectOneJob(IOJob* const j)
     connect(j, SIGNAL(signalDone()),
             this, SLOT(slotOneJobFinished()));
 
-    connect(j, SIGNAL(signalOneProccessed(int)),
-            this, SIGNAL(signalOneProccessed(int)));
+    connect(j, SIGNAL(signalOneProccessed()),
+            this, SIGNAL(signalOneProccessed()));
 }
 
 void IOJobsThread::slotOneJobFinished()

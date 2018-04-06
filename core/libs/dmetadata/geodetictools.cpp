@@ -5,12 +5,11 @@
  *
  * Date        : 2008-05-05
  * Description : Geodetic tools based from an implementation written by
- *               Institut de Recherche pour le Developpement
+ *               GeoTools Project Managment Committee (PMC), http://geotools.org
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2004-2006 by Daniele Franzoni
  * Copyright (C) 2004-2006 by Martin Desruisseaux
- * Copyright (C) 2003-2006 GeoTools Project Managment Committee (PMC), http://geotools.org
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
