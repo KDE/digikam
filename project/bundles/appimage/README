@@ -117,9 +117,27 @@ This include applications documentations and translations.
 Depending of configuration done in config.sh, this script is able to upload automatically
 the bundle file on files.kde.org digiKam area through ssh. A valid ssh key configured
 with remote KDE server need to be set previously with the account. You can load ssh key
-at startup following instruction give at this url:
+at startup following these instructions:
 
-https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-password-prompt
+1/ As root, mkdir /root/.ssh
+2/ Put your ssh keys in /root/.ssh
+3/ Edit /root/.bashrc and add these lines at end:
+
+# --- ssh key rules
+
+if [ ! -S ~/.ssh/ssh_auth_sock ]; then
+   eval `ssh-agent`
+   ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
+fi
+
+export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+ssh-add -l > /dev/null || ssh-add
+
+# ---
+
+4/ Re-login as root to setup password.
+
+Source : https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-password-prompt
 
 * makeall.sh
 
