@@ -117,21 +117,7 @@ yum -y install wget \
                openssl-devel \
                cups-devel \
                openal-soft-devel \
-               libical-devel \
-               libass-devel \
-               fdk-aac-devel \
-               lame-devel \
-               opencore-amr-devel \
-               opus-devel \
-               librtmp-devel \
-               speex-devel \
-               libtheora-devel \
-               libvorbis-devel \
-               libvpx-devel \
-               x264-devel \
-               x265-devel \
-               xvidcore-devel \
-               yasm
+               libical-devel
 
 #################################################################################################
 
@@ -179,6 +165,22 @@ if [[ ! -f /etc/yum.repos.d/nux-dextop.repo ]] ; then
 
 fi
 
+yum -y install libass-devel \
+               fdk-aac-devel \
+               faac-devel \
+               lame-devel \
+               opencore-amr-devel \
+               opus-devel \
+               librtmp-devel \
+               speex-devel \
+               libtheora-devel \
+               libvorbis-devel \
+               libvpx-devel \
+               x264-devel \
+               x265-devel \
+               xvidcore-devel \
+               yasm
+
 #################################################################################################
 
 echo -e "---------- Clean-up Old Packages\n"
@@ -223,7 +225,6 @@ cmake3 $ORIG_WD/../3rdparty \
 
 # Low level libraries and Qt5 dependencies
 # NOTE: The order to compile each component here is very important.
-
 
 cmake3 --build . --config RelWithDebInfo --target ext_jpeg       -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_jasper     -- -j$CPU_CORES
