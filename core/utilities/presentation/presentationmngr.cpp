@@ -25,19 +25,13 @@
 
 #include "presentationmngr.h"
 
-// C ANSI includes
-
-extern "C"
-{
-#include <sys/time.h>
-}
-
 // C++ includes
 
 #include <cstdlib>
 
 // Qt includes
 
+#include <QTime>
 #include <QList>
 #include <QPair>
 #include <QStringList>
@@ -110,9 +104,7 @@ void PresentationMngr::slotSlideShow()
 
     if (shuffle)
     {
-        struct timeval tv;
-        gettimeofday(&tv, 0);
-        srand(tv.tv_sec);
+        qsrand(QTime::currentTime().msec());
 
         QList<QUrl>::iterator it = m_sharedData->urlList.begin();
         QList<QUrl>::iterator it1;

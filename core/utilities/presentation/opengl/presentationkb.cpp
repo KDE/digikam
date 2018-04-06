@@ -241,7 +241,7 @@ PresentationKB::PresentationKB(PresentationContainer* const sharedData)
 
     d->sharedData   = sharedData;
 
-    srand(QTime::currentTime().msec());
+    qsrand(QTime::currentTime().msec());
     readSettings();
 
     unsigned frameRate;
