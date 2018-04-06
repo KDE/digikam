@@ -44,11 +44,6 @@ if [[ "$(arch)" = "x86_64" ]] ; then
 
     yum upgrade ca-certificates --disablerepo=epel
 
-else
-
-    echo -e "---------- Arch not supported. Abort...\n"
-    exit -1
-
 fi
 
 if [[ ! -f /etc/yum.repos.d/epel.repo ]] ; then
@@ -148,6 +143,14 @@ if [[ ! -f /opt/rh/devtoolset-4/enable ]] ; then
     yum -y install centos-release-scl-rh
     yum -y install devtoolset-4-gcc devtoolset-4-gcc-c++
 
+ else
+
+    # Newer compiler for CentOS 6 32 bits
+    cd /etc/yum.repos.d
+    wget https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-4.1/repo/epel-6/mlampe-devtoolset-4.1-epel-6.repo
+    yum -y --nogpgcheck install devtoolset-3-gcc devtoolset-3-gcc-c++
+    rm -f /etc/yum.repos.d/mlampe-devtoolset-4.1-epel-6.repo
+
 fi
 
 
@@ -159,8 +162,17 @@ if [[ ! -f /etc/yum.repos.d/nux-dextop.repo ]] ; then
 
     echo -e "---------- Install Repository for ffmpeg packages\n"
 
-    rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
-    rpm -Uvh http://li.nux.ro/download/nux/dextop/el6/x86_64/nux-dextop-release-0-2.el6.nux.noarch.rpm
+    if [[ "$(arch)" = "x86_64" ]] ; then
+
+        rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+        rpm -Uvh http://li.nux.ro/download/nux/dextop/el6/x86_64/nux-dextop-release-0-2.el6.nux.noarch.rpm
+
+    else
+
+        rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+        rpm -Uvh http://li.nux.ro/download/nux/dextop/el6/i386/nux-dextop-release-0-2.el6.nux.noarch.rpm
+
+    fi
 
 fi
 
