@@ -48,7 +48,8 @@ QSize ImageSelectionOverlayButton::sizeHint() const
 
 QIcon ImageSelectionOverlayButton::icon()
 {
-    return QIcon::fromTheme(isChecked() ? QLatin1String("list-remove") : QLatin1String("list-add"));
+    return QIcon::fromTheme(isChecked() ? QLatin1String("vcs-removed")
+                                        : QLatin1String("vcs-added"));
 }
 
 void ImageSelectionOverlayButton::updateToolTip()
