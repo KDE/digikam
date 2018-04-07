@@ -1600,6 +1600,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageIn
                                 numImagesWithoutGrouped);
                 break;
             }
+
             statusBarSelectionText
                         = i18np("No item selected (%1 [%2] item)",
                                 "No item selected (%1 [%2] items)",
@@ -1645,14 +1646,18 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageIn
 
                 break;
             }
+
+#if __GNUC__ >= 7
             // no break; is completely intentional, arriving here is equivalent to case 1:
             [[fallthrough]];
+#endif
         }
         case 1:
         {
             slotSetCheckedExifOrientationAction(selectionWithoutGrouped.first());
 
             int index = listAll.indexOf(selection.first()) + 1;
+
             if (numImagesWithGrouped == numImagesWithoutGrouped)
             {
                 statusBarSelectionText = selection.first().fileUrl().fileName()

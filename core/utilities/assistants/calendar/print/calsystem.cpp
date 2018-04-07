@@ -456,7 +456,9 @@ int CalSystemPrivate::quarter(int month) const
                 return 4;
             }
 
+#if __GNUC__ >= 7
             [[fallthrough]];
+#endif
         default:
             return (((month - 1) / 3) + 1);
     }

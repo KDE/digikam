@@ -287,7 +287,9 @@ bool CamItemSortSettings::lessThan(const QVariant& left, const QVariant& right) 
                 return result < 0;
             }
 
+#if __GNUC__ >= 7
             [[fallthrough]];
+#endif
         }
         default:
             return naturalCompare(left.toString(), right.toString(), currentSortOrder, sortCaseSensitivity, strTypeNatural);
