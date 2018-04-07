@@ -36,7 +36,6 @@
 #include <QRadioButton>
 #include <QApplication>
 #include <QStyle>
-#include <QIcon>
 #include <QComboBox>
 #include <QPushButton>
 #include <QLineEdit>
@@ -88,7 +87,8 @@ public:
     SearchTextBar*           searchTextBar;
 };
 
-AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* const parent, AlbumModel* const model,
+AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* const parent,
+                                                           AlbumModel* const model,
                                                            AlbumModificationHelper* const albumModificationHelper)
     : SidebarWidget(parent),
       d(new Private)
@@ -183,8 +183,10 @@ public:
         ExistingTags
     };
 
-    explicit Private() :
-        openTagMngr(0),
+public:
+
+    explicit Private()
+      : openTagMngr(0),
         tagSearchBar(0),
         tagFolderView(0),
         btnGroup(0),
@@ -195,17 +197,19 @@ public:
     {
     }
 
-    QPushButton*   openTagMngr;
-    SearchTextBar* tagSearchBar;
-    TagFolderView* tagFolderView;
-    QButtonGroup*  btnGroup;
-    QRadioButton*  noTagsBtn;
-    QRadioButton*  tagsBtn;
+public:
 
-    bool           noTagsWasChecked;
-    bool           ExistingTagsWasChecked;
+    QPushButton*         openTagMngr;
+    SearchTextBar*       tagSearchBar;
+    TagFolderView*       tagFolderView;
+    QButtonGroup*        btnGroup;
+    QRadioButton*        noTagsBtn;
+    QRadioButton*        tagsBtn;
 
-    QString        noTagsSearchXml;
+    bool                 noTagsWasChecked;
+    bool                 ExistingTagsWasChecked;
+
+    QString              noTagsSearchXml;
 
     static const QString configTagsSourceEntry;
 };
@@ -279,8 +283,7 @@ void TagViewSideBarWidget::setActive(bool active)
 
 void TagViewSideBarWidget::doLoadState()
 {
-    KConfigGroup group = getConfigGroup();
-
+    KConfigGroup group        = getConfigGroup();
     bool noTagsBtnWasChecked  = group.readEntry(d->configTagsSourceEntry, false);
     d->noTagsBtn->setChecked(noTagsBtnWasChecked);
     d->tagsBtn->setChecked(!noTagsBtnWasChecked);
@@ -308,7 +311,7 @@ void TagViewSideBarWidget::applySettings()
 
 void TagViewSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    if(album.first()->type() == Album::TAG)
+    if (album.first()->type() == Album::TAG)
     {
         d->tagsBtn->setChecked(true);
         d->tagFolderView->setEnabled(true);
@@ -332,7 +335,7 @@ AlbumPointer<TAlbum> TagViewSideBarWidget::currentAlbum() const
 
 void TagViewSideBarWidget::setNoTagsAlbum()
 {
-    if(d->noTagsSearchXml.isEmpty())
+    if (d->noTagsSearchXml.isEmpty())
     {
         SearchXmlWriter writer;
         writer.setFieldOperator((SearchXml::standardFieldOperator()));
@@ -428,17 +431,17 @@ class LabelsSideBarWidget::Private
 
 public:
 
-    explicit Private() :
-        labelsTree(0)
+    explicit Private()
+      : labelsTree(0)
     {
     }
 
     AlbumLabelsTreeView* labelsTree;
 };
 
-LabelsSideBarWidget::LabelsSideBarWidget(QWidget* const parent) :
-    SidebarWidget(parent),
-    d(new Private)
+LabelsSideBarWidget::LabelsSideBarWidget(QWidget* const parent)
+    : SidebarWidget(parent),
+      d(new Private)
 {
     setObjectName(QLatin1String("Labels Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F3);
@@ -509,15 +512,16 @@ class DateFolderViewSideBarWidget::Private
 {
 public:
 
-    explicit Private() :
-        dateFolderView(0)
+    explicit Private()
+      : dateFolderView(0)
     {
     }
 
     DateFolderView* dateFolderView;
 };
 
-DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent, DateAlbumModel* const model,
+DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent,
+                                                         DateAlbumModel* const model,
                                                          ImageAlbumFilterModel* const imageFilterModel)
     : SidebarWidget(parent),
       d(new Private)
@@ -589,8 +593,8 @@ class TimelineSideBarWidget::Private
 {
 public:
 
-    explicit Private() :
-        scaleBG(0),
+    explicit Private()
+      : scaleBG(0),
         cursorCountLabel(0),
         scrollBar(0),
         timer(0),
@@ -619,7 +623,7 @@ public:
 
     QComboBox*                timeUnitCB;
     QLineEdit*                nameEdit;
-    DAdjustableLabel*       cursorDateLabel;
+    DAdjustableLabel*         cursorDateLabel;
 
     SearchTextBar*            searchDateBar;
     EditableSearchTreeView*   timeLineFolderView;
@@ -636,9 +640,11 @@ const QString TimelineSideBarWidget::Private::configCursorPositionEntry(QLatin1S
 
 // --------------------------------------------------------
 
-TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent,
+                                             SearchModel* const searchModel,
                                              SearchModificationHelper* const searchModificationHelper)
-    : SidebarWidget(parent), d(new Private)
+    : SidebarWidget(parent),
+      d(new Private)
 {
     setObjectName(QLatin1String("TimeLine Sidebar"));
     setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F5);
@@ -647,7 +653,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     d->timer                    = new QTimer(this);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QVBoxLayout* const vlay = new QVBoxLayout(this);
     QFrame* const panel     = new QFrame(this);
@@ -866,9 +872,9 @@ void TimelineSideBarWidget::doLoadState()
 
     int id = group.readEntry(d->configHistogramScaleEntry, (int)TimeLineWidget::LinScale);
 
-    if ( d->scaleBG->button( id ) )
+    if (d->scaleBG->button(id))
     {
-        d->scaleBG->button( id )->setChecked(true);
+        d->scaleBG->button(id)->setChecked(true);
     }
 
     slotScaleChanged(d->scaleBG->checkedId());
@@ -941,7 +947,8 @@ void TimelineSideBarWidget::slotCursorPositionChanged()
     QString txt;
     int val = d->timeLineWidget->cursorInfo(txt);
     d->cursorDateLabel->setAdjustedText(txt);
-    d->cursorCountLabel->setText((val == 0) ? i18n("no item") : i18np("1 item", "%1 items", val));
+    d->cursorCountLabel->setText((val == 0) ? i18n("no item")
+                                            : i18np("1 item", "%1 items", val));
 }
 
 void TimelineSideBarWidget::slotSelectionChanged()
@@ -1068,8 +1075,8 @@ class SearchSideBarWidget::Private
 {
 public:
 
-    explicit Private() :
-        searchSearchBar(0),
+    explicit Private()
+      : searchSearchBar(0),
         searchTreeView(0),
         searchTabHeader(0)
     {
@@ -1080,7 +1087,8 @@ public:
     SearchTabHeader*      searchTabHeader;
 };
 
-SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent,
+                                         SearchModel* const searchModel,
                                          SearchModificationHelper* const searchModificationHelper)
     : SidebarWidget(parent),
       d(new Private)
@@ -1176,8 +1184,8 @@ void SearchSideBarWidget::newAdvancedSearch()
 class FuzzySearchSideBarWidget::Private
 {
 public:
-    explicit Private() :
-        fuzzySearchView(0),
+    explicit Private()
+      : fuzzySearchView(0),
         searchModificationHelper(0)
     {
     }
@@ -1186,7 +1194,8 @@ public:
     SearchModificationHelper* searchModificationHelper;
 };
 
-FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* const parent,
+                                                   SearchModel* const searchModel,
                                                    SearchModificationHelper* const searchModificationHelper)
     : SidebarWidget(parent),
       d(new Private)
@@ -1215,6 +1224,7 @@ void FuzzySearchSideBarWidget::setActive(bool active)
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << d->fuzzySearchView->currentAlbum());
     }
+
     emit signalActive(active);
 }
 
@@ -1280,17 +1290,20 @@ void FuzzySearchSideBarWidget::newSimilarSearch(const ImageInfo& imageInfo)
 class GPSSearchSideBarWidget::Private
 {
 public:
-    explicit Private() :
-        gpsSearchView(0)
+
+    explicit Private()
+      : gpsSearchView(0)
     {
     }
 
     GPSSearchView* gpsSearchView;
 };
 
-GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent,
+                                               SearchModel* const searchModel,
                                                SearchModificationHelper* const searchModificationHelper,
-                                               ImageFilterModel* const imageFilterModel,  QItemSelectionModel* const itemSelectionModel)
+                                               ImageFilterModel* const imageFilterModel,
+                                               QItemSelectionModel* const itemSelectionModel)
     : SidebarWidget(parent),
       d(new Private)
 {
@@ -1373,7 +1386,8 @@ public:
     SearchModificationHelper* searchModificationHelper;
 };
 
-PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const model,
+PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent,
+                                         TagModel* const model,
                                          SearchModificationHelper* const searchModificationHelper)
     : SidebarWidget(parent),
       d(new Private)
