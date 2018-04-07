@@ -19,6 +19,8 @@
  *
  * ============================================================ */
 
+#include "taggingactionfactory.h"
+
 // Qt includes
 
 #include <QDebug>
@@ -29,7 +31,6 @@
 
 // Local includes
 
-#include "taggingactionfactory.h"
 #include "tagscache.h"
 #include "coredbaccess.h"
 #include "coredb.h"
