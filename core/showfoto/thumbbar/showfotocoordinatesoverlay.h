@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTO_COORDINATES_OVERLAY_H
-#define SHOWFOTO_COORDINATES_OVERLAY_H
+#ifndef SHOW_FOTO_COORDINATES_OVERLAY_H
+#define SHOW_FOTO_COORDINATES_OVERLAY_H
 
 // Qt includes
 
@@ -82,4 +82,4 @@ protected:
 
 } // namespace ShowFoto
 
-#endif // SHOWFOTO_COORDINATES_OVERLAY_H
+#endif // SHOW_FOTO_COORDINATES_OVERLAY_H

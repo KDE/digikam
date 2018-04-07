@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTODELEGATEPRIV_H
-#define SHOWFOTODELEGATEPRIV_H
+#ifndef SHOW_FOTO_DELEGATE_PRIV_H
+#define SHOW_FOTO_DELEGATE_PRIV_H
 
 // Qt includes
 
@@ -119,4 +119,4 @@ public:
 } // namespace Digikam
 
 
-#endif // SHOWFOTODELEGATEPRIV_H
+#endif // SHOW_FOTO_DELEGATE_PRIV_H

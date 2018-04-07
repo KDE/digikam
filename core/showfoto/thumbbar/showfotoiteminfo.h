@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTOITEMINFO_H
-#define SHOWFOTOITEMINFO_H
+#ifndef SHOW_FOTO_ITEM_INFO_H
+#define SHOW_FOTO_ITEM_INFO_H
 
 // Qt includes
 
@@ -89,4 +89,4 @@ QDebug operator<<(QDebug dbg, const ShowfotoItemInfo& info);
 
 } // namespace Showfoto
 
-#endif // ShowfotoItemInfo_H
+#endif // SHOW_FOTO_ITEM_INFO_H

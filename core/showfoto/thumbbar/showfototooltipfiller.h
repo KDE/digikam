@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTOTOOLTIPFILLER_H
-#define SHOWFOTOTOOLTIPFILLER_H
+#ifndef SHOW_FOTO_TOOL_TIP_FILLER_H
+#define SHOW_FOTO_TOOL_TIP_FILLER_H
 
 // Qt include
 
@@ -41,4 +41,4 @@ namespace ShowfotoToolTipFiller
 
 } // namespace ShowFoto
 
-#endif // SHOWFOTOTOOLTIPFILLER_H
+#endif // SHOW_FOTO_TOOL_TIP_FILLER_H

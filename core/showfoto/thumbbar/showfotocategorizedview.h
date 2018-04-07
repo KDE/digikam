@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTOCATEGORIZEDVIEW_H
-#define SHOWFOTOCATEGORIZEDVIEW_H
+#ifndef SHOW_FOTO_CATEGORIZED_VIEW_H
+#define SHOW_FOTO_CATEGORIZED_VIEW_H
 
 // Local includes
 
@@ -190,4 +190,4 @@ private:
 
 } // namespace Showfoto
 
-#endif // SHOWFOTOCATEGORIZEDVIEW_H
+#endif // SHOW_FOTO_CATEGORIZED_VIEW_H

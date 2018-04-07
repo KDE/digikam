@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ITEMVIEWSHOWFOTODELEGATE_H
-#define ITEMVIEWSHOWFOTODELEGATE_H
+#ifndef ITEM_VIEW_SHOW_FOTO_DELEGATE_H
+#define ITEM_VIEW_SHOW_FOTO_DELEGATE_H
 
 // Local includes
 
@@ -124,6 +124,6 @@ private:
     Q_DECLARE_PRIVATE(ItemViewShowfotoDelegate)
 };
 
-}// namespace ShowFoto
+} // namespace ShowFoto
 
-#endif // ITEMVIEWSHOWFOTODELEGATE_H
+#endif // ITEM_VIEW_SHOW_FOTO_DELEGATE_H

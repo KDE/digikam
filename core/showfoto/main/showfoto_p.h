@@ -23,8 +23,14 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTO_P_H
-#define SHOWFOTO_P_H
+#ifndef SHOW_FOTO_P_H
+#define SHOW_FOTO_P_H
+
+// Qt includes
+
+#include <QSplitter>
+#include <QAction>
+#include <QUrl>
 
 // Local includes
 
@@ -36,6 +42,8 @@
 #include "showfotodelegate.h"
 #include "showfotosettings.h"
 #include "showfotodragdrophandler.h"
+#include "thumbnailloadthread.h"
+#include "dsplashscreen.h"
 
 namespace ShowFoto
 {
@@ -94,4 +102,4 @@ public:
 
 } // namespace Showfoto
 
-#endif // SHOWFOTO_P_H
+#endif // SHOW_FOTO_P_H

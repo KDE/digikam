@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTOTHUMBNAILBAR_H
-#define SHOWFOTOTHUMBNAILBAR_H
+#ifndef SHOW_FOTO_THUMB_NAIL_BAR_H
+#define SHOW_FOTO_THUMB_NAIL_BAR_H
 
 // Local Includes
 
@@ -79,4 +79,4 @@ private:
 
 } // namespace ShowFoto
 
-#endif // SHOWFOTOTHUMBNAILBAR_H
+#endif // SHOW_FOTO_THUMB_NAIL_BAR_H

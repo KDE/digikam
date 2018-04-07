@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTODELEGATE_H
-#define SHOWFOTODELEGATE_H
+#ifndef SHOW_FOTO_DELEGATE_H
+#define SHOW_FOTO_DELEGATE_H
 
 // Qt includes
 
@@ -185,6 +185,6 @@ private:
     Q_DECLARE_PRIVATE(ShowfotoNormalDelegate)
 };
 
-}// namespace ShowFoto
+} // namespace ShowFoto
 
-#endif // SHOWFOTODELEGATE_H
+#endif // SHOW_FOTO_DELEGATE_H

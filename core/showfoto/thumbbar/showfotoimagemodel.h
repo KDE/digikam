@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTOIMAGEMODEL_H
-#define SHOWFOTOIMAGEMODEL_H
+#ifndef SHOW_FOTO_IMAGE_MODEL_H
+#define SHOW_FOTO_IMAGE_MODEL_H
 
 // Qt includes
 
@@ -283,4 +283,4 @@ private:
 
 Q_DECLARE_METATYPE(ShowFoto::ShowfotoImageModel*)
 
-#endif // SHOWFOTOIMAGEMODEL_H
+#endif // SHOW_FOTO_IMAGE_MODEL_H

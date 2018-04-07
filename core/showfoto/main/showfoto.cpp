@@ -28,6 +28,7 @@
  * ============================================================ */
 
 #include "showfoto.h"
+#include "showfoto_p.h"
 
 // Qt includes
 
@@ -42,13 +43,11 @@
 #include <QList>
 #include <QPointer>
 #include <QProgressBar>
-#include <QSplitter>
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QStandardPaths>
 #include <QStyle>
 #include <QKeySequence>
-#include <QAction>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMimeDatabase>
@@ -74,7 +73,6 @@
 #include "dfileoperations.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
-#include "imagepropertiessidebar.h"
 #include "iofilesettings.h"
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
@@ -86,10 +84,8 @@
 #include "showfotosetupmisc.h"
 #include "setupicc.h"
 #include "slideshow.h"
-#include "dsplashscreen.h"
 #include "statusprogressbar.h"
 #include "thememanager.h"
-#include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "dnotificationwrapper.h"
 #include "showfotodelegate.h"
@@ -97,7 +93,6 @@
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
 #include "dmetainfoiface.h"
-#include "showfoto_p.h"
 #include "dexpanderbox.h"
 #include "dfiledialog.h"
 #include "calwizard.h"

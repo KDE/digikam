@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTODRAGDROPHANDLER_H
-#define SHOWFOTODRAGDROPHANDLER_H
+#ifndef SHOW_FOTO_DRAG_DROP_HANDLER_H
+#define SHOW_FOTO_DRAG_DROP_HANDLER_H
 
 // KDE includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SHOWFOTODRAGDROPHANDLER_H
+#endif // SHOW_FOTO_DRAG_DROP_HANDLER_H

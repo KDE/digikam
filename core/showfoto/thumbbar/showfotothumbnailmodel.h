@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTOTHUMBNAILMODEL_H
-#define SHOWFOTOTHUMBNAILMODEL_H
+#ifndef SHOW_FOTO_THUMB_NAIL_MODEL_H
+#define SHOW_FOTO_THUMB_NAIL_MODEL_H
 
 // Local Include
 
@@ -128,4 +128,4 @@ private:
 
 } // namespace ShowFoto
 
-#endif // SHOWFOTOTHUMBNAILMODEL_H
+#endif // SHOW_FOTO_THUMB_NAIL_MODEL_H

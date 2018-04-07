@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTOSETUPTOOLTIP_H
-#define SHOWFOTOSETUPTOOLTIP_H
+#ifndef SHOW_FOTO_SETUP_TOOL_TIP_H
+#define SHOW_FOTO_SETUP_TOOL_TIP_H
 
 // Qt includes
 
@@ -54,4 +54,4 @@ private:
 
 } // namespace ShowFoto
 
-#endif // SHOWFOTOSETUPTOOLTIP_H
+#endif // SHOW_FOTO_SETUP_TOOL_TIP_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ITEMVIEWSHOWFOTODELEGATEPRIV_H
-#define ITEMVIEWSHOWFOTODELEGATEPRIV_H
+#ifndef ITEM_VIEW_SHOW_FOTO_DELEGATE_PRIV_H
+#define ITEM_VIEW_SHOW_FOTO_DELEGATE_PRIV_H
 
 // Qt includes
 
@@ -48,7 +48,9 @@ class ItemViewShowfotoDelegatePrivate
 public:
 
     ItemViewShowfotoDelegatePrivate();
-    virtual ~ItemViewShowfotoDelegatePrivate() {}
+    virtual ~ItemViewShowfotoDelegatePrivate()
+    {
+    }
 
     void init(ItemViewShowfotoDelegate* const _q);
 
@@ -86,4 +88,4 @@ public:
 
 } // namespace ShowFoto
 
-#endif // ITEMVIEWSHOWFOTODELEGATEPRIVATE_H
+#endif // ITEM_VIEW_SHOW_FOTO_DELEGATE_PRIV_H

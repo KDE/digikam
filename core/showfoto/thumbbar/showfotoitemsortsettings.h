@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTO_ITEM_SORT_SETTINGS_H
-#define SHOWFOTO_ITEM_SORT_SETTINGS_H
+#ifndef SHOW_FOTO_ITEM_SORT_SETTINGS_H
+#define SHOW_FOTO_ITEM_SORT_SETTINGS_H
 
 // Qt includes
 
@@ -184,4 +184,4 @@ public:
 
 } // namespace ShowFoto
 
-#endif // SHOWFOTO_ITEM_SORT_SETTINGS_H
+#endif // SHOW_FOTO_ITEM_SORT_SETTINGS_H

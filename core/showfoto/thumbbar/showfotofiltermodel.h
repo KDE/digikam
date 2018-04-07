@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTOFILTERMODEL_H
-#define SHOWFOTOFILTERMODEL_H
+#ifndef SHOW_FOTO_FILTER_MODEL_H
+#define SHOW_FOTO_FILTER_MODEL_H
 
 // Qt includes
 
@@ -221,4 +221,4 @@ protected:
 
 Q_DECLARE_METATYPE(ShowFoto::ShowfotoFilterModel*)
 
-#endif // SHOWFOTOFILTERMODEL_H
+#endif // SHOW_FOTO_FILTER_MODEL_H
