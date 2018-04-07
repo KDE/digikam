@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTOSETTINGS_H
-#define SHOWFOTOSETTINGS_H
+#ifndef SHOW_FOTO_SETTINGS_H
+#define SHOW_FOTO_SETTINGS_H
 
 // Qt includes
 
@@ -150,4 +150,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SHOWFOTOSETTINGS_H
+#endif // SHOW_FOTO_SETTINGS_H

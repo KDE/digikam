@@ -50,8 +50,8 @@ class ShowfotoSettings::Private
 
 public:
 
-    explicit Private() :
-        deleteItem2Trash(true),
+    explicit Private()
+      : deleteItem2Trash(true),
         showFormatOverThumbnail(false),
         showCoordinates(false),
         showSplash(true),

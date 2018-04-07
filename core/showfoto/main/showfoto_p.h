@@ -44,8 +44,8 @@ class ShowFoto::Private
 {
 public:
 
-    Private() :
-        validIccPath(true),
+    explicit Private()
+      : validIccPath(true),
         droppedUrls(false),
         itemsNb(0),
         vSplitter(0),

@@ -48,16 +48,13 @@
 #include <QStandardPaths>
 #include <QStyle>
 #include <QKeySequence>
-#include <QApplication>
 #include <QAction>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMimeDatabase>
-#include <QMimeType>
 #include <QMessageBox>
 #include <QApplication>
 #include <QMimeType>
-#include <QMimeDatabase>
 #include <QTemporaryFile>
 
 // KDE includes
@@ -316,9 +313,9 @@ void ShowFoto::show()
             config->sync();
         }
     }
-    
+
     // Start the Media Server if necessary
-    
+
     Digikam::DMediaServerMngr::instance()->loadAtStartup();
 }
 
