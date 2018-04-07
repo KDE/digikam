@@ -233,8 +233,8 @@ if [[ $DK_UPLOAD = 1 ]] ; then
 
     echo -e "---------- Upload new Windows bundle files to files.kde.org repository \n"
 
-    scp -v $ORIG_WD/bundle/$TARGET_INSTALLER     $DK_UPLOADURL:$DK_UPLOADDIR
-    scp -v $ORIG_WD/bundle/$TARGET_INSTALLER.sum $DK_UPLOADURL:$DK_UPLOADDIR
+    scp $ORIG_WD/bundle/$TARGET_INSTALLER     $DK_UPLOADURL:$DK_UPLOADDIR
+    scp $ORIG_WD/bundle/$TARGET_INSTALLER.sum $DK_UPLOADURL:$DK_UPLOADDIR
 else
     echo -e "\n------------------------------------------------------------------"
     curl https://download.kde.org/README_UPLOAD
