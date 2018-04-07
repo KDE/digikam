@@ -11,7 +11,7 @@
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Sharpen algorithm copyright 2002
- * by Daniel M. Duley <mosfet@kde.org> from KImageEffect API.
+ * by Daniel M. Duley <mosfet at kde dot org> from KImageEffect API.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

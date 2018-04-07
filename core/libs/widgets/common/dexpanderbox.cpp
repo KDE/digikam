@@ -354,7 +354,7 @@ void DArrowClickLabel::mouseReleaseEvent(QMouseEvent* event)
 void DArrowClickLabel::paintEvent(QPaintEvent*)
 {
     // Inspired by karrowbutton.cpp,
-    //  Copyright (C) 2001 Frerich Raabe <raabe@kde.org>
+    //  Copyright (C) 2001 Frerich Raabe <raabe at kde dot org>
 
     QPainter p(this);
 

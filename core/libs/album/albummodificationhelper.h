@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMMODIFICATIONHELPER_H
-#define ALBUMMODIFICATIONHELPER_H
+#ifndef ALBUM_MODIFICATION_HELPER_H
+#define ALBUM_MODIFICATION_HELPER_H
 
 // Qt includes
 
@@ -54,7 +54,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param dialogParent parent widget for dialogs displayed by this object
      */
-    AlbumModificationHelper(QObject* const parent, QWidget* const dialogParent);
+    explicit AlbumModificationHelper(QObject* const parent, QWidget* const dialogParent);
 
     /**
      * Destructor.
@@ -128,4 +128,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ALBUMMODIFICATIONHELPER_H */
+#endif // ALBUM_MODIFICATION_HELPER_H

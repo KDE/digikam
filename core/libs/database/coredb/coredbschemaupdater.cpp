@@ -351,8 +351,8 @@ bool CoreDbSchemaUpdater::beginWrapSchemaUpdateStep()
         QString errorMsg = i18n("Failed to open a database transaction on your database file \"%1\". "
                                 "This is unusual. Please check that you can access the file and no "
                                 "other process has currently locked the file. "
-                                "If the problem persists you can get help from the digikam-devel@kde.org "
-                                "mailing list. As well, please have a look at what digiKam prints on the console. ",
+                                "If the problem persists you can get help from the digikam developers mailing list (see www.digikam.org/support). "
+                                "As well, please have a look at what digiKam prints on the console. ",
                                 QDir::toNativeSeparators(currentDBFile.filePath()));
         d->observer->error(errorMsg);
         d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
@@ -410,8 +410,8 @@ bool CoreDbSchemaUpdater::makeUpdates()
                                     "You can try to discard your old database and start with an empty one. "
                                     "(In this case, please move the database files "
                                     "\"%1\" and \"%2\" from the directory \"%3\"). "
-                                    "More probably you will want to report this error to the digikam-devel@kde.org "
-                                    "mailing list. As well, please have a look at what digiKam prints on the console. ",
+                                    "More probably you will want to report this error to the digikam developers mailing list (see www.digikam.org/support). "
+                                    "As well, please have a look at what digiKam prints on the console. ",
                                     QLatin1String("digikam3.db"),
                                     QLatin1String("digikam4.db"),
                                     QDir::toNativeSeparators(currentDBFile.dir().path()));
@@ -900,7 +900,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
                                    "with a storage volume of your system. "
                                    "This problem may indicate that there is a problem with your installation. "
                                    "If you are working on Linux, check that HAL is installed and running. "
-                                   "In any case, you can seek advice from the digikam-devel@kde.org mailing list. "
+                                   "In any case, you can seek advice from the digikam developers mailing list (see www.digikam.org/support). "
                                    "The database updating process will now be aborted because we do not want "
                                    "to create a new database based on false assumptions from a broken installation.",
                                    albumLibraryPath);

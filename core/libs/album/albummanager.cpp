@@ -57,7 +57,6 @@ extern "C"
 #include <QTextCodec>
 #include <QTimer>
 #include <QComboBox>
-#include <QMessageBox>
 #include <QIcon>
 #include <QDialog>
 #include <QDialogButtonBox>

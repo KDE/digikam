@@ -47,12 +47,10 @@ namespace Digikam
   are supported (in the native language): tomorrow, yesterday, today,
   Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.
 
-  @image html kdateedit.png "This is how it looks"
-
-  @author Cornelius Schumacher <schumacher@kde.org>
-  @author Mike Pilone <mpilone@slac.com>
-  @author David Jarvie <software@astrojar.org.uk>
-  @author Tobias Koenig <tokoe@kde.org>
+  @author Cornelius Schumacher <schumacher at kde dot org>
+  @author Mike Pilone <mpilone at slac dot com>
+  @author David Jarvie <software at astrojar dot org dot uk>
+  @author Tobias Koenig <tokoe at kde dot org>
 */
 class DDateEdit : public QComboBox
 {

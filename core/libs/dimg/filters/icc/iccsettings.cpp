@@ -181,11 +181,11 @@ bool IccSettings::monitorProfileFromSystem() const
 
 /*
  * From koffice/libs/pigment/colorprofiles/KoLcmsColorProfileContainer.cpp
- * Copyright (C) 2000 Matthias Elter <elter@kde.org>
+ * Copyright (C) 2000 Matthias Elter <elter at kde dot org>
  *               2001 John Califf
- *               2004 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Adrian Page <adrian@pagenet.plus.com>
+ *               2004 Boudewijn Rempt <boud at valdyas dot org>
+ * Copyright (C) 2007 Thomas Zander <zander at kde dot org>
+ * Copyright (C) 2007 Adrian Page <adrian at pagenet dot plus dot com>
 */
 IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
 {
