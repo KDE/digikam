@@ -478,7 +478,10 @@ void ScanController::scheduleCollectionScan(const QString& path)
 
 void ScanController::scheduleCollectionScanRelaxed(const QString& path)
 {
-    d->relaxedTimer->start();
+    if (!d->relaxedTimer->isActive())
+    {
+        d->relaxedTimer->start();
+    }
 
     QMutexLocker lock(&d->mutex);
 

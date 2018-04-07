@@ -482,6 +482,7 @@ void DIO::slotOneProccessed()
 
     IOJobData* const data = jobThread->jobData();
     const int operation   = data->operation();
+    QString path;
 
     // Scan folders for changes
 
@@ -489,8 +490,7 @@ void DIO::slotOneProccessed()
         operation == IOJobData::CopyFiles || operation == IOJobData::MoveImage ||
         operation == IOJobData::MoveAlbum || operation == IOJobData::MoveFiles)
     {
-        QString path = data->destUrl().toLocalFile();
-        ScanController::instance()->scheduleCollectionScanRelaxed(path);
+        path = data->destUrl().toLocalFile();
     }
     else if (operation == IOJobData::Delete || operation == IOJobData::Trash)
     {
@@ -498,22 +498,23 @@ void DIO::slotOneProccessed()
 
         if (album)
         {
-            PAlbum* const parent = AlbumManager::instance()->findPAlbum(album->parent()->id());
+            PAlbum* const parent = dynamic_cast<PAlbum*>(album->parent());
 
             if (parent)
             {
-                QString path = parent->fileUrl().toLocalFile();
-                ScanController::instance()->scheduleCollectionScanRelaxed(path);
+                path = parent->fileUrl().toLocalFile();
             }
         }
-        else
+        else if (!data->processedUrls().isEmpty())
         {
-            foreach(const ImageInfo& info, data->imageInfos())
-            {
-                QString path = info.fileUrl().adjusted(QUrl::RemoveFilename).toLocalFile();
-                ScanController::instance()->scheduleCollectionScanRelaxed(path);
-            }
+            QUrl url = data->processedUrls().last();
+            path     = url.adjusted(QUrl::RemoveFilename).toLocalFile();
         }
+    }
+
+    if (!path.isEmpty())
+    {
+        ScanController::instance()->scheduleCollectionScanRelaxed(path);
     }
 
     ProgressItem* const item = getProgressItem(operation);

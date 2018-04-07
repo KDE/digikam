@@ -183,8 +183,8 @@ void CopyJob::run()
             }
         }
 
-        emit signalOneProccessed();
         m_data->addProcessedUrl(srcUrl);
+        emit signalOneProccessed();
     }
 
     emit signalDone();
@@ -279,8 +279,8 @@ void DeleteJob::run()
             }
         }
 
-        emit signalOneProccessed();
         m_data->addProcessedUrl(deleteUrl);
+        emit signalOneProccessed();
     }
 
     emit signalDone();
@@ -314,7 +314,6 @@ void RenameFileJob::run()
             emit signalError(i18n("Image with the same name %1 already there",
                                   QDir::toNativeSeparators(destUrl.toLocalFile())));
 
-            emit signalOneProccessed();
             emit signalRenameFailed(renameUrl);
             continue;
         }
@@ -331,12 +330,10 @@ void RenameFileJob::run()
             emit signalError(i18n("Image %1 could not be renamed",
                                   QDir::toNativeSeparators(renameUrl.toLocalFile())));
 
-            emit signalOneProccessed();
             emit signalRenameFailed(renameUrl);
             continue;
         }
 
-        emit signalOneProccessed();
         m_data->addProcessedUrl(renameUrl);
         emit signalRenamed(renameUrl);
     }
