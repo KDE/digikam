@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "test_tracks.h"
+
 // Qt includes
 
 #include <QDateTime>
@@ -29,7 +31,6 @@
 
 // Local includes
 
-#include "test_tracks.h"
 #include "trackmanager.h"
 #include "trackreader.h"
 

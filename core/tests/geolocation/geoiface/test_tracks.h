@@ -44,4 +44,4 @@ private Q_SLOTS:
     void testFileLoading();
 };
 
-#endif /* TEST_TRACKS_H */
+#endif // TEST_TRACKS_H
