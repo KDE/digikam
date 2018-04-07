@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTOSETUP_H
-#define SHOWFOTOSETUP_H
+#ifndef SHOW_FOTO_SETUP_H
+#define SHOW_FOTO_SETUP_H
 
 // Local includes
 
@@ -78,6 +78,6 @@ private:
     Private* const d;
 };
 
-}   // namespace ShowFoto
+} // namespace ShowFoto
 
-#endif // SHOWFOTOSETUP_H
+#endif // SHOW_FOTO_SETUP_H

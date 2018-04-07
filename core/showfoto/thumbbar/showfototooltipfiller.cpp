@@ -279,4 +279,4 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
     return tip;
 }
 
-}  // namespace ShowFoto
+} // namespace ShowFoto

@@ -592,7 +592,7 @@ QDataStream& operator >> (QDataStream& dataStream, ShapePredictor& shape)
     return dataStream;
 }
 
-}  // namespace redeye
+} // namespace redeye
 
 } // namespace Digikam
 

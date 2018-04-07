@@ -256,7 +256,7 @@ private:
     inline void getmLargests(Unit* const cdata, Idx* const sig);
 };
 
-}  // namespace Haar
+} // namespace Haar
 
 } // namespace Digikam
 

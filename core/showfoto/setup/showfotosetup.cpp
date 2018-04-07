@@ -344,4 +344,4 @@ bool Setup::execMetadataFilters(QWidget* const parent, int tab)
     return success;
 }
 
-}   // namespace ShowFoto
+} // namespace ShowFoto

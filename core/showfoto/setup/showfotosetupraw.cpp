@@ -77,4 +77,4 @@ void SetupRaw::readSettings()
     d->raw->readSettings();
 }
 
-}  // namespace ShowFoto
+} // namespace ShowFoto

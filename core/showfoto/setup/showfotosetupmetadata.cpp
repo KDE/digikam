@@ -208,4 +208,4 @@ void SetupMetadata::setActiveTab(MetadataTab tab)
     d->tab->setCurrentIndex(tab);
 }
 
-}  // namespace ShowFoto
+} // namespace ShowFoto

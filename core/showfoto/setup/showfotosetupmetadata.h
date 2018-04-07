@@ -64,6 +64,6 @@ private:
     Private* const d;
 };
 
-}  // namespace ShowFoto
+} // namespace ShowFoto
 
 #endif // SHOWFOTOSETUPMETADATA_H

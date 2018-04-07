@@ -266,4 +266,4 @@ void SetupToolTip::applySettings()
     d->settings->syncConfig();
 }
 
-}  // namespace ShowFoto
+} // namespace ShowFoto

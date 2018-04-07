@@ -288,7 +288,7 @@ public Q_SLOTS:
     void select(const QItemSelection& selection, QItemSelectionModel::SelectionFlags command) Q_DECL_OVERRIDE;
 };
 
-}  // namespace DConfigDlgInternal
+} // namespace DConfigDlgInternal
 
 } // namespace Digikam
 
