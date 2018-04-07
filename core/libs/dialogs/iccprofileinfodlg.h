@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCPROFILEINFODLG_H
-#define ICCPROFILEINFODLG_H
+#ifndef ICC_PROFILE_INFO_DLG_H
+#define ICC_PROFILE_INFO_DLG_H
 
 // Qt includes
 
@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ICCProfileInfoDlg : public QDialog
 
 public:
 
-    ICCProfileInfoDlg(QWidget* const parent, const QString& profilePath, const IccProfile& profileData = IccProfile());
+    explicit ICCProfileInfoDlg(QWidget* const parent, const QString& profilePath, const IccProfile& profileData = IccProfile());
     ~ICCProfileInfoDlg();
 
 private Q_SLOTS:
@@ -56,4 +56,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* ICCPROFILEINFODLG_H */
+#endif // ICC_PROFILE_INFO_DLG_H

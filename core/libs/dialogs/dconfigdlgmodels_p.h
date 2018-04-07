@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DBCONFIGDLG_MODELS_P_H
-#define DBCONFIGDLG_MODELS_P_H
+#ifndef DCONFIG_DLG_MODELS_P_H
+#define DCONFIG_DLG_MODELS_P_H
 
 #include "dconfigdlgmodels.h"
 
@@ -134,4 +134,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DBCONFIGDLG_MODELS_P_H
+#endif // DCONFIG_DLG_MODELS_P_H

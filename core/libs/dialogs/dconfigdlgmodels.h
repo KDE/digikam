@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DBCONFIGDLG_MODELS_H
-#define DBCONFIGDLG_MODELS_H
+#ifndef DCONFIG_DLG_MODELS_H
+#define DCONFIG_DLG_MODELS_H
 
 // Qt includes
 
@@ -365,4 +365,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DBCONFIGDLG_MODELS_H
+#endif // DCONFIG_DLG_MODELS_H

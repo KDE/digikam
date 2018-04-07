@@ -26,8 +26,8 @@
  *
  * ============================================================ */
 
-#ifndef DBCONFIGDLG_DIALOG_H
-#define DBCONFIGDLG_DIALOG_H
+#ifndef DCONFIG_DLG_H
+#define DCONFIG_DLG_H
 
 // Qt includes
 
@@ -269,4 +269,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DBCONFIGDLG_DIALOG_H
+#endif // DCONFIG_DLG_H

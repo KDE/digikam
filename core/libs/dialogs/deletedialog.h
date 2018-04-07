@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef DELETEDIALOG_H
-#define DELETEDIALOG_H
+#ifndef DELETE_DIALOG_H
+#define DELETE_DIALOG_H
 
 // Qt includes
 
@@ -71,7 +71,7 @@ class DeleteItem : public QTreeWidgetItem
 
 public:
 
-    DeleteItem(QTreeWidget* const parent, const QUrl& url);
+    explicit DeleteItem(QTreeWidget* const parent, const QUrl& url);
     virtual ~DeleteItem();
 
     bool    hasValidThumbnail() const;
@@ -188,4 +188,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DELETEDIALOG_H
+#endif // DELETE_DIALOG_H

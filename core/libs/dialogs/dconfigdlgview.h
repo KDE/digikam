@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DBCONFIGDLG_VIEW_H
-#define DBCONFIGDLG_VIEW_H
+#ifndef DCONFIG_DLG_VIEW_H
+#define DCONFIG_DLG_VIEW_H
 
 // Qt includes
 
@@ -203,4 +203,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DBCONFIGDLG_VIEW_H
+#endif // DCONFIG_DLG_VIEW_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEDIALOG_H
-#define IMAGEDIALOG_H
+#ifndef IMAGE_DIALOG_H
+#define IMAGE_DIALOG_H
 
 // Qt includes
 
@@ -99,7 +99,7 @@ class DIGIKAM_EXPORT ImageDialog
 
 public:
 
-    ImageDialog(QWidget* const parent, const QUrl& url, bool singleSelect=false, const QString& caption=QString());
+    explicit ImageDialog(QWidget* const parent, const QUrl& url, bool singleSelect=false, const QString& caption=QString());
     ~ImageDialog();
 
     QUrl        url()         const;
@@ -117,4 +117,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGEDIALOG_H */
+#endif // IMAGE_DIALOG_H

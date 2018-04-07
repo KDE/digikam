@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DMESSAGEBOX_H
-#define DMESSAGEBOX_H
+#ifndef DMESSAGE_BOX_H
+#define DMESSAGE_BOX_H
 
 // Qt includes
 
@@ -166,4 +166,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DMESSAGEBOX_H
+#endif // DMESSAGE_BOX_H
