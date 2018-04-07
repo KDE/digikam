@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VIDEO_THUMBNAILER_JOB_H
-#define VIDEO_THUMBNAILER_JOB_H
+#ifndef VIDEO_THUMB_NAILER_JOB_H
+#define VIDEO_THUMB_NAILER_JOB_H
 
 // Qt includes
 
@@ -96,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VIDEO_THUMBNAILER_JOB_H
+#endif // VIDEO_THUMB_NAILER_JOB_H

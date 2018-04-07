@@ -33,7 +33,6 @@
 #include <QTextEdit>
 #include <QStyle>
 #include <QGridLayout>
-#include <QPushButton>
 #include <QScrollArea>
 #include <QSignalMapper>
 #include <QTimer>

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMTHUMBNAILINFO_H
-#define DIGIKAMTHUMBNAILINFO_H
+#ifndef DIGIKAM_THUMB_NAIL_INFO_H
+#define DIGIKAM_THUMB_NAIL_INFO_H
 
 // Qt includes
 
@@ -54,8 +54,10 @@ class DIGIKAM_EXPORT ThumbnailInfo : public ThumbnailIdentifier
 {
 public:
 
-    ThumbnailInfo();
-    ~ThumbnailInfo() {};
+    explicit ThumbnailInfo();
+    ~ThumbnailInfo()
+    {
+    };
 
     /** If available, the uniqueHash + fileSize pair for identification
      *  of the original file by content.
@@ -93,11 +95,17 @@ class DIGIKAM_EXPORT ThumbnailInfoProvider
 {
 public:
 
-    ThumbnailInfoProvider() {};
-    virtual ~ThumbnailInfoProvider() {};
+    explicit ThumbnailInfoProvider()
+    {
+    };
+
+    virtual ~ThumbnailInfoProvider()
+    {
+    };
+
     virtual ThumbnailInfo thumbnailInfo(const ThumbnailIdentifier&)=0;
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAMTHUMBNAILINFO_H
+#endif // DIGIKAM_THUMB_NAIL_INFO_H

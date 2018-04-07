@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBNAIL_TASK_H
-#define THUMBNAIL_TASK_H
+#ifndef THUMB_NAIL_TASK_H
+#define THUMB_NAIL_TASK_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@ class ThumbnailLoadingTask : public SharedLoadingTask
 {
 public:
 
-    ThumbnailLoadingTask(LoadSaveThread* const thread, const LoadingDescription& description);
+    explicit ThumbnailLoadingTask(LoadSaveThread* const thread, const LoadingDescription& description);
 
     virtual void execute();
     virtual void setResult(const LoadingDescription& loadingDescription, const QImage& qimage);
@@ -61,4 +61,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PREVIEW_TASK_H
+#endif // THUMB_NAIL_TASK_H

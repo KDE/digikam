@@ -105,4 +105,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // SHARED_LOAD_SAVE_THREAD_H
+#endif // PREVIEW_LOAD_THREAD_H

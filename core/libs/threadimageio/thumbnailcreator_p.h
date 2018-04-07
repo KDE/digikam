@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMTHUMBNAILCREATORPRIV_H
-#define DIGIKAMTHUMBNAILCREATORPRIV_H
+#ifndef DIGIKAM_THUMB_NAIL_CREATOR_PRIV_H
+#define DIGIKAM_THUMB_NAIL_CREATOR_PRIV_H
 
 // Local includes
 
@@ -37,7 +37,7 @@ class ThumbnailImage
 {
 public:
 
-    ThumbnailImage()
+    explicit ThumbnailImage()
     {
         exifOrientation = DMetadata::ORIENTATION_UNSPECIFIED;
     }
@@ -59,7 +59,7 @@ class ThumbnailCreator::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         thumbnailSize                             = 0;
         observer                                  = 0;
@@ -107,4 +107,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAMTHUMBNAILCREATORPRIV_H
+#endif // DIGIKAM_THUMB_NAIL_CREATOR_PRIV_H

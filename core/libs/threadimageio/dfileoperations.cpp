@@ -32,7 +32,6 @@
 
 // Qt includes
 
-#include <QFileInfo>
 #include <QByteArray>
 #include <QProcess>
 #include <QDir>

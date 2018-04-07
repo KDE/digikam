@@ -33,7 +33,6 @@
 #include <QPainter>
 #include <QBuffer>
 #include <QIODevice>
-#include <QFile>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QTemporaryFile>
@@ -64,7 +63,7 @@
 #include "thumbnailsize.h"
 
 #ifdef Q_OS_WIN
-#include "windows.h"
+#   include "windows.h"
 #endif
 
 namespace Digikam

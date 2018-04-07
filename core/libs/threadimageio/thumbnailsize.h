@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBNAIL_SIZE_H
-#define THUMBNAIL_SIZE_H
+#ifndef THUMB_NAIL_SIZE_H
+#define THUMB_NAIL_SIZE_H
 
 // Qt includes
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif // THUMBNAIL_SIZE_H
+#endif // THUMB_NAIL_SIZE_H
