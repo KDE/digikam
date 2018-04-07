@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef APPLICATIONSETTINGS_H
-#define APPLICATIONSETTINGS_H
+#ifndef APPLICATION_SETTINGS_H
+#define APPLICATION_SETTINGS_H
 
 // Qt includes
 
@@ -530,7 +530,7 @@ private Q_SLOTS:
 
 private:
 
-    ApplicationSettings();
+    explicit ApplicationSettings();
     ~ApplicationSettings();
 
     KConfigGroup generalConfigGroup() const;
@@ -545,4 +545,4 @@ private:
 
 } // namespace Digikam
 
-#endif // APPLICATIONSETTINGS_H
+#endif // APPLICATION_SETTINGS_H

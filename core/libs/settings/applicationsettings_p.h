@@ -23,14 +23,18 @@
  *
  * ============================================================ */
 
-#ifndef APPLICATIONSETTINGS_P_H
-#define APPLICATIONSETTINGS_P_H
+#ifndef APPLICATION_SETTINGS_P_H
+#define APPLICATION_SETTINGS_P_H
+
+#include <QString>
+#include <QStringList>
+#include <QFont>
 
 // Local includes
 
 #include "previewsettings.h"
-
-class QString;
+#include "dbengineparameters.h"
+#include "versionmanager.h"
 
 namespace Digikam
 {
@@ -41,7 +45,7 @@ class ApplicationSettings::Private
 {
 public:
 
-    Private(ApplicationSettings* const qq);
+    explicit Private(ApplicationSettings* const qq);
     ~Private();
 
     void init();
@@ -301,9 +305,11 @@ private:
 
     ApplicationSettings*                         q;
 
+private:
+
     static ApplicationSettings::OperationStrings createConfigGroupingOperateOnAll();
 };
 
 } // namespace Digikam
 
-#endif // APPLICATIONSETTINGS_P_H
+#endif // APPLICATION_SETTINGS_P_H

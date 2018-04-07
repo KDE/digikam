@@ -23,12 +23,13 @@
  *
  * ============================================================ */
 
+#include "applicationsettings.h"
+#include "applicationsettings_p.h"
+
 // Qt includes
 
 #include <QApplication>
-#include <QFont>
 #include <QFontDatabase>
-#include <QString>
 
 // KDE includes
 
@@ -39,10 +40,6 @@
 #include "imagefiltersettings.h"
 #include "imagesortsettings.h"
 #include "thumbnailsize.h"
-#include "dbengineparameters.h"
-#include "versionmanager.h"
-#include "applicationsettings.h"
-#include "applicationsettings_p.h"
 
 namespace Digikam
 {

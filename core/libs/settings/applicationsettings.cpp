@@ -27,6 +27,7 @@
  * ============================================================ */
 
 #include "applicationsettings.h"
+#include "applicationsettings_p.h"
 
 // Qt includes
 
@@ -41,10 +42,9 @@
 #include "mimefilter.h"
 #include "thumbnailsize.h"
 #include "thememanager.h"
-#include "applicationsettings_p.h"
 
 #ifdef HAVE_KFILEMETADATA
-#include "baloowrap.h"
+#   include "baloowrap.h"
 #endif
 
 namespace Digikam
