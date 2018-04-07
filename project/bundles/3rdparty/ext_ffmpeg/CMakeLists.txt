@@ -13,7 +13,7 @@ ExternalProject_Add(ext_ffmpeg
     URL https://ffmpeg.org/releases/ffmpeg-3.3.6.tar.xz
     URL_MD5 e7701ebfce77e44f7b4cc57dd001e7eb
 
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_jpeg}
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg}
                                              --datadir=${CMAKE_BINARY_DIR}/etc
                                              --enable-shared
                                              --enable-gpl
