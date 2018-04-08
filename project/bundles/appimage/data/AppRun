@@ -28,6 +28,12 @@ export KDE_FORK_SLAVES=1
 export CAMLIBS=$DIR/usr/lib/libgphoto2
 export IOLIBS=$DIR/usr/lib/libgphoto2_port
 
+# if no customized Qt debug loggin variable is set, turn on one for a better readability
+
+if [ -z "$QT_MESSAGE_PATTERN" ]
+    export QT_MESSAGE_PATTERN="`echo -e "\033[34m%{function}\033[0m: %{message}"`"
+fi
+
 export APPIMAGE_STARTUP_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 export APPIMAGE_STARTUP_QT_PLUGIN_PATH=$QT_PLUGIN_PATH
 export APPIMAGE_STARTUP_XDG_DATA_DIRS=$XDG_DATA_DIRS
