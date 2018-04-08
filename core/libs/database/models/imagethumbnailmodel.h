@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGETHUMBNAILMODEL_H
-#define IMAGETHUMBNAILMODEL_H
+#ifndef DIGIKAM_IMAGE_THUMBNAIL_MODEL_H
+#define DIGIKAM_IMAGE_THUMBNAIL_MODEL_H
 
 // Local includes
 
@@ -137,4 +137,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGETHUMBNAILMODEL_H */
+#endif // DIGIKAM_IMAGE_THUMBNAIL_MODEL_H

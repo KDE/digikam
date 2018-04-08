@@ -69,8 +69,8 @@ class CoreDB::Private
 
 public:
 
-    explicit Private() :
-        db(0),
+    explicit Private()
+      : db(0),
         uniqueHashVersion(-1)
     {
     }

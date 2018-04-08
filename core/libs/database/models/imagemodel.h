@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEMODEL_H
-#define IMAGEMODEL_H
+#ifndef DIGIKAM_IMAGE_MODEL_H
+#define DIGIKAM_IMAGE_MODEL_H
 
 // Qt includes
 
@@ -361,4 +361,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::ImageModel*)
 
-#endif // IMAGEMODEL_H
+#endif // DIGIKAM_IMAGE_MODEL_H

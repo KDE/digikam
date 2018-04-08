@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEFILTERMODELTHREADS_H
-#define IMAGEFILTERMODELTHREADS_H
+#ifndef DIGIKAM_IMAGE_FILTER_MODEL_THREADS_H
+#define DIGIKAM_IMAGE_FILTER_MODEL_THREADS_H
 
 // Qt includes
 
@@ -32,10 +32,13 @@
 
 #include "digikam_export.h"
 #include "workerobject.h"
+#include "imagefiltermodel.h"
 
 namespace Digikam
 {
 
+class ImageFilterModelTodoPackage;
+    
 class DIGIKAM_DATABASE_EXPORT ImageFilterModelWorker : public WorkerObject
 {
     Q_OBJECT
@@ -44,10 +47,7 @@ public:
 
     explicit ImageFilterModelWorker(ImageFilterModel::ImageFilterModelPrivate* const d);
 
-    bool checkVersion(const ImageFilterModelTodoPackage& package)
-    {
-        return d->version == package.version;
-    }
+    bool checkVersion(const ImageFilterModelTodoPackage& package);
 
 public Q_SLOTS:
 
@@ -97,4 +97,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMAGEFILTERMODELTHREADS_H
+#endif // DIGIKAM_IMAGE_FILTER_MODEL_THREADS_H

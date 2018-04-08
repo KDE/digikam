@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COREDATABASETRANSACTION_H
-#define COREDATABASETRANSACTION_H
+#ifndef DIGIKAM_CORE_DATABASE_TRANSACTION_H
+#define DIGIKAM_CORE_DATABASE_TRANSACTION_H
 
 // Local includes
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COREDATABASETRANSACTION_H
+#endif // DIGIKAM_CORE_DATABASE_TRANSACTION_H

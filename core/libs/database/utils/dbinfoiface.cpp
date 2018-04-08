@@ -22,6 +22,8 @@
  *
  * ============================================================ */
 
+#include "dbinfoiface.h"
+
 // Local includes
 
 #include "albumselecttabs.h"
@@ -31,7 +33,6 @@
 #include "albumselectwidget.h"
 #include "coredb.h"
 #include "coredbnamefilter.h"
-#include "dbinfoiface.h"
 #include "digikamapp.h"
 #include "digikam_debug.h"
 #include "digikamview.h"

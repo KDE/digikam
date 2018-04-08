@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef COREDATABASEFIELDS_H
-#define COREDATABASEFIELDS_H
+#ifndef DIGIKAM_CORE_DATABASE_FIELDS_H
+#define DIGIKAM_CORE_DATABASE_FIELDS_H
 
 #include "digikam_config.h"
 
@@ -381,7 +381,7 @@ class Set
 {
 public:
 
-    Set()
+    explicit Set()
     {
         initialize();
     }
@@ -589,4 +589,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageComments)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImagePositions)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DatabaseFields::ImageHistoryInfo)
 
-#endif // COREDATABASEFIELDS_H
+#endif // DIGIKAM_CORE_DATABASE_FIELDS_H

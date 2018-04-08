@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGELISTMODEL_H
-#define IMAGELISTMODEL_H
+#ifndef DIGIKAM_IMAGE_LIST_MODEL_H
+#define DIGIKAM_IMAGE_LIST_MODEL_H
 
 // Local includes
 
@@ -60,4 +60,4 @@ protected Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // IMAGELISTMODEL_H
+#endif // DIGIKAM_IMAGE_LIST_MODEL_H

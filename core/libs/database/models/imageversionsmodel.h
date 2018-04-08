@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEVERSIONSMODEL_H
-#define IMAGEVERSIONSMODEL_H
+#ifndef DIGIKAM_IMAGE_VERSIONS_MODEL_H
+#define DIGIKAM_IMAGE_VERSIONS_MODEL_H
 
 // Qt includes
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGEVERSIONSMODEL_H
+#endif // DIGIKAM_IMAGE_VERSIONS_MODEL_H

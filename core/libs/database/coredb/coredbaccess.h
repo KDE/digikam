@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef COREDATABASEACCESS_H
-#define COREDATABASEACCESS_H
+#ifndef DIGIKAM_CORE_DATABASE_ACCESS_H
+#define DIGIKAM_CORE_DATABASE_ACCESS_H
 
 // Local includes
 
@@ -71,7 +71,7 @@ public:
      * The schema will not be checked, use checkReadyForUse()
      * for a full opening process including schema update and error messages.
      */
-    CoreDbAccess();
+    explicit CoreDbAccess();
     ~CoreDbAccess();
 
     /**
@@ -172,4 +172,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COREDATABASEACCESS_H
+#endif // DIGIKAM_CORE_DATABASE_ACCESS_H

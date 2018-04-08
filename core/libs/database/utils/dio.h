@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef _DIGIKAM_IO_H_
-#define _DIGIKAM_IO_H_
+#ifndef DIGIKAM_DATABASE_IO_H
+#define DIGIKAM_DATABASE_IO_H
 
 // Qt includes
 
@@ -97,7 +97,7 @@ Q_SIGNALS:
 
 private:
 
-    DIO();
+    explicit DIO();
     ~DIO();
 
     void processJob(IOJobData* const data);
@@ -145,4 +145,4 @@ public:
 
 } // namespace Digikam
 
-#endif // _DIGIKAM_IO_H_
+#endif // DIGIKAM_DATABASE_IO_H

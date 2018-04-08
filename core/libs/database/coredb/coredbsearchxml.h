@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CORE_DATABASE_SEARCHXML_H
-#define CORE_DATABASE_SEARCHXML_H
+#ifndef DIGIKAM_CORE_DATABASE_SEARCH_XML_H
+#define DIGIKAM_CORE_DATABASE_SEARCH_XML_H
 
 // Qt includes
 
@@ -228,7 +228,7 @@ public:
      *  calling the methods following the restrictions set by the documentation;
      *  Otherwise you will not produce the desired output.
      */
-    SearchXmlWriter();
+    explicit SearchXmlWriter();
 
     /** Adds a group. Use the returned group writer to add fields.
      */
@@ -364,7 +364,7 @@ class DIGIKAM_DATABASE_EXPORT KeywordSearchWriter : public SearchXmlWriter
 {
 public:
 
-    KeywordSearchWriter();
+    explicit KeywordSearchWriter();
 
     QString xml(const QStringList& keywordList);
 };
@@ -420,4 +420,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // CORE_DATABASE_SEARCHXML_H
+#endif // DIGIKAM_CORE_DATABASE_SEARCH_XML_H

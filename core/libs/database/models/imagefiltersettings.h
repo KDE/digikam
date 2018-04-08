@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEFILTERSETTINGS_H
-#define IMAGEFILTERSETTINGS_H
+#ifndef DIGIKAM_IMAGE_FILTER_SETTINGS_H
+#define DIGIKAM_IMAGE_FILTER_SETTINGS_H
 
 // Qt includes
 
@@ -97,7 +97,7 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterSettings
 {
 public:
 
-    ImageFilterSettings();
+    explicit ImageFilterSettings();
 
     /**
      *  Returns true if the given ImageInfo matches the filter criteria.
@@ -310,7 +310,7 @@ class DIGIKAM_DATABASE_EXPORT GroupImageFilterSettings
 {
 public:
 
-    GroupImageFilterSettings();
+    explicit GroupImageFilterSettings();
 
     bool operator==(const GroupImageFilterSettings& other) const;
 
@@ -346,4 +346,4 @@ protected:
 
 Q_DECLARE_METATYPE(Digikam::ImageFilterSettings::GeolocationCondition)
 
-#endif // IMAGEFILTERSETTINGS_H
+#endif // DIGIKAM_IMAGE_FILTER_SETTINGS_H

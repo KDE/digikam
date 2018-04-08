@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef COREDATABASEWATCH_H
-#define COREDATABASEWATCH_H
+#ifndef DIGIKAM_CORE_DATABASE_WATCH_H
+#define DIGIKAM_CORE_DATABASE_WATCH_H
 
 #include "digikam_config.h"
 
@@ -192,4 +192,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COREDATABASEWATCH_H
+#endif // DIGIKAM_CORE_DATABASE_WATCH_H

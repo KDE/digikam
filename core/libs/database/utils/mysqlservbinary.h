@@ -40,7 +40,7 @@ class MysqlServBinary : public DBinaryIface
 
 public:
 
-    MysqlServBinary()
+    explicit MysqlServBinary()
         : DBinaryIface(DbEngineParameters::defaultMysqlServerCmd(),
                        QLatin1String("MariaDB"),
                        QLatin1String("https://mariadb.org/download/"),

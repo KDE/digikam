@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef COREDB_ALBUMINFO_H
-#define COREDB_ALBUMINFO_H
+#ifndef DIGIKAM_COREDB_ALBUM_INFO_H
+#define DIGIKAM_COREDB_ALBUM_INFO_H
 
 // Qt includes
 
@@ -48,7 +48,7 @@ class AlbumRootInfo
 {
 public:
 
-    AlbumRootInfo()
+    explicit AlbumRootInfo()
       : id(0),
         type(AlbumRoot::UndefinedType),
         status(0)
@@ -76,14 +76,16 @@ class AlbumInfo
 {
 public:
 
-    AlbumInfo()
+    typedef QList<AlbumInfo> List;
+
+public:
+
+    explicit AlbumInfo()
       : id(0),
         albumRootId(0),
         iconId(0)
     {
     };
-
-    typedef QList<AlbumInfo> List;
 
     bool isNull() const
     {
@@ -120,15 +122,17 @@ public:
 class TagInfo
 {
 public:
+    
+    typedef QList<TagInfo> List;
 
-    TagInfo()
+public:
+
+    explicit TagInfo()
       : id(0),
         pid(0),
         iconId(0)
     {
     };
-
-    typedef QList<TagInfo> List;
 
     bool isNull() const
     {
@@ -142,10 +146,10 @@ public:
 
 public:
 
-    int     id;
-    int     pid;
-    QString name;
-    QString icon;
+    int       id;
+    int       pid;
+    QString   name;
+    QString   icon;
     qlonglong iconId;
 };
 
@@ -159,14 +163,16 @@ public:
 class SearchInfo
 {
 public:
+    
+    typedef QList<SearchInfo> List;
 
-    SearchInfo()
+public:
+
+    explicit SearchInfo()
       : id(0),
         type(DatabaseSearch::UndefinedType)
     {
     };
-
-    typedef QList<SearchInfo> List;
 
     bool isNull() const
     {
@@ -195,7 +201,7 @@ class AlbumShortInfo
 {
 public:
 
-    AlbumShortInfo()
+    explicit AlbumShortInfo()
       : id(0),
         albumRootId(0)
     {
@@ -219,7 +225,7 @@ class TagShortInfo
 {
 public:
 
-    TagShortInfo()
+    explicit TagShortInfo()
       : id(0),
         pid(0)
     {
@@ -243,7 +249,7 @@ class ItemShortInfo
 {
 public:
 
-    ItemShortInfo()
+    explicit ItemShortInfo()
       : id(0),
         albumID(0),
         albumRootID(0)
@@ -270,7 +276,7 @@ class ItemScanInfo
 {
 public:
 
-    ItemScanInfo()
+    explicit ItemScanInfo()
       : id(0),
         albumID(0),
         status(DatabaseItem::UndefinedStatus),
@@ -302,7 +308,7 @@ class CommentInfo
 {
 public:
 
-    CommentInfo()
+    explicit CommentInfo()
       : id(-1),
         imageId(-1),
         type(DatabaseComment::UndefinedType)
@@ -331,7 +337,7 @@ class CopyrightInfo
 {
 public:
 
-    CopyrightInfo()
+    explicit CopyrightInfo()
       : id(-1)
     {
     };
@@ -355,7 +361,7 @@ class ImageHistoryEntry
 {
 public:
 
-    ImageHistoryEntry()
+    explicit ImageHistoryEntry()
       : imageId(0)
     {
     };
@@ -378,7 +384,7 @@ class ImageRelation
 {
 public:
 
-    ImageRelation()
+    explicit ImageRelation()
       : subjectId(0),
         objectId(0),
         type(DatabaseRelation::UndefinedType)
@@ -398,7 +404,7 @@ class TagProperty
 {
 public:
 
-    TagProperty()
+    explicit TagProperty()
       : tagId(-1)
     {
     };
@@ -421,7 +427,7 @@ class ImageTagProperty
 {
 public:
 
-    ImageTagProperty()
+    explicit ImageTagProperty()
       : imageId(-1),
         tagId(-1)
     {
@@ -442,4 +448,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* COREDB_ALBUMINFO_H */
+#endif // DIGIKAM_COREDB_ALBUM_INFO_H

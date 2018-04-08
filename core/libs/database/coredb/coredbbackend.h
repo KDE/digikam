@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef COREDATABASEBACKEND_H
-#define COREDATABASEBACKEND_H
+#ifndef DIGIKAM_CORE_DATABASE_BACKEND_H
+#define DIGIKAM_CORE_DATABASE_BACKEND_H
 
 // Local includes
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COREDATABASEBACKEND_H
+#endif // DIGIKAM_CORE_DATABASE_BACKEND_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CORE_DATABASE_COPY_MANAGER_H
-#define CORE_DATABASE_COPY_MANAGER_H
+#ifndef DIGIKAM_CORE_DATABASE_COPY_MANAGER_H
+#define DIGIKAM_CORE_DATABASE_COPY_MANAGER_H
 
 // Qt includes
 
@@ -52,7 +52,7 @@ public:
 
 public:
 
-    CoreDbCopyManager();
+    explicit CoreDbCopyManager();
     ~CoreDbCopyManager();
 
     void copyDatabases(const DbEngineParameters& fromDBParameters, DbEngineParameters& toDBParameters);
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CORE_DATABASE_COPY_MANAGER_H
+#endif // DIGIKAM_CORE_DATABASE_COPY_MANAGER_H

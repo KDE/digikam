@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEFILTERMODELPRIV_H
-#define IMAGEFILTERMODELPRIV_H
+#ifndef DIGIKAM_IMAGE_FILTER_MODEL_PRIV_H
+#define DIGIKAM_IMAGE_FILTER_MODEL_PRIV_H
 
 // Qt includes
 
@@ -38,9 +38,9 @@
 
 #include "imageinfo.h"
 #include "imagefiltermodel.h"
-
 #include "digikam_export.h"
-// Yes, we need the EXPORT macro in a private header because
+
+// NOTE: we need the EXPORT macro in a private header because
 // this private header is shared across binary objects.
 // This does NOT make this classes here any more public!
 
@@ -55,12 +55,16 @@ class ImageFilterModelTodoPackage
 public:
 
     ImageFilterModelTodoPackage()
-        : version(0), isForReAdd(false)
+        : version(0),
+          isForReAdd(false)
     {
     }
 
     ImageFilterModelTodoPackage(const QVector<ImageInfo>& infos, const QVector<QVariant>& extraValues, int version, bool isForReAdd)
-        : infos(infos), extraValues(extraValues), version(version), isForReAdd(isForReAdd)
+        : infos(infos),
+          extraValues(extraValues),
+          version(version),
+          isForReAdd(isForReAdd)
     {
     }
 
@@ -82,7 +86,7 @@ class DIGIKAM_DATABASE_EXPORT ImageFilterModel::ImageFilterModelPrivate : public
 
 public:
 
-    ImageFilterModelPrivate();
+    explicit ImageFilterModelPrivate();
     ~ImageFilterModelPrivate();
 
     void init(ImageFilterModel* q);
@@ -156,4 +160,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // IMAGEFILTERMODELPRIV_H
+#endif // DIGIKAM_IMAGE_FILTER_MODEL_PRIV_H

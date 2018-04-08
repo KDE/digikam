@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DB_INFO_IFACE_H
-#define DB_INFO_IFACE_H
+#ifndef DATABASE_INFO_IFACE_H
+#define DATABASE_INFO_IFACE_H
 
 // Local includes
 
@@ -73,4 +73,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DB_INFO_IFACE_H
+#endif // DATABASE_INFO_IFACE_H

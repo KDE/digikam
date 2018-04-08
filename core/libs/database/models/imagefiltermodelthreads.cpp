@@ -25,9 +25,8 @@
  *
  * ============================================================ */
 
-#include "imagefiltermodel.h"
-#include "imagefiltermodelpriv.h"
 #include "imagefiltermodelthreads.h"
+#include "imagefiltermodelpriv.h"
 
 namespace Digikam
 {
@@ -35,6 +34,11 @@ namespace Digikam
 ImageFilterModelWorker::ImageFilterModelWorker(ImageFilterModel::ImageFilterModelPrivate* const d)
     : d(d)
 {
+}
+
+bool ImageFilterModelWorker::checkVersion(const ImageFilterModelTodoPackage& package)
+{
+    return d->version == package.version;
 }
 
 } // namespace Digikam

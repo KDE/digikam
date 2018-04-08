@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SYNC_JOB_H
-#define SYNC_JOB_H
+#ifndef DATABASE_SYNC_JOB_H
+#define DATABASE_SYNC_JOB_H
 
 // Qt includes
 
@@ -53,7 +53,7 @@ public:
 
 private:
 
-    SyncJob();
+    explicit SyncJob();
     ~SyncJob();
 
     void enterWaitingLoop() const;
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SYNC_JOB_H
+#endif // DATABASE_SYNC_JOB_H

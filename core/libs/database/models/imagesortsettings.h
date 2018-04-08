@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGESORTSETTINGS_H
-#define IMAGESORTSETTINGS_H
+#ifndef DIGIKAM_IMAGE_SORT_SETTINGS_H
+#define DIGIKAM_IMAGE_SORT_SETTINGS_H
 
 // Qt includes
 
@@ -50,7 +50,7 @@ class DIGIKAM_DATABASE_EXPORT ImageSortSettings
 {
 public:
 
-    ImageSortSettings();
+    explicit ImageSortSettings();
 
     bool operator==(const ImageSortSettings& other) const;
 
@@ -222,4 +222,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMAGESORTSETTINGS_H
+#endif // DIGIKAM_IMAGE_SORT_SETTINGS_H

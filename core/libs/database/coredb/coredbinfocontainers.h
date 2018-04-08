@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COREDATABASEINFOCONTAINERS_H
-#define COREDATABASEINFOCONTAINERS_H
+#ifndef DIGIKAM_CORE_DATABASE_INFO_CONTAINERS_H
+#define DIGIKAM_CORE_DATABASE_INFO_CONTAINERS_H
 
 // Qt includes
 
@@ -36,7 +36,7 @@ class ImageCommonContainer
 {
 public:
 
-    ImageCommonContainer()
+    explicit ImageCommonContainer()
     {
         fileSize   = 0;
         rating     = -1;
@@ -66,7 +66,7 @@ class ImageMetadataContainer
 {
 public:
 
-    ImageMetadataContainer()
+    explicit ImageMetadataContainer()
     {
         allFieldsNull = true;
     }
@@ -97,7 +97,7 @@ class VideoMetadataContainer
 {
 public:
 
-    VideoMetadataContainer()
+    explicit VideoMetadataContainer()
     {
         allFieldsNull = true;
     }
@@ -115,4 +115,4 @@ public:
 
 } // namespace Digikam
 
-#endif // COREDATABASEINFOCONTAINERS_H
+#endif // DIGIKAM_CORE_DATABASE_INFO_CONTAINERS_H

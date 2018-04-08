@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEFILTERMODEL_H
-#define IMAGEFILTERMODEL_H
+#ifndef DIGIKAM_IMAGE_FILTER_MODEL_H
+#define DIGIKAM_IMAGE_FILTER_MODEL_H
 
 // Local includes
 
@@ -296,4 +296,4 @@ protected:
 
 Q_DECLARE_METATYPE(Digikam::ImageFilterModel*)
 
-#endif // IMAGEMODEL_H
+#endif // DIGIKAM_IMAGE_FILTER_MODEL_H
