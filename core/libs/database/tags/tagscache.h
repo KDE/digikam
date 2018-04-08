@@ -22,8 +22,10 @@
  *
  * ============================================================ */
 
-#ifndef TAGSCACHE_H
-#define TAGSCACHE_H
+#ifndef DIGIKAM_TAGS_CACHE_H
+#define DIGIKAM_TAGS_CACHE_H
+
+// Qt includes
 
 #include <QObject>
 
@@ -306,8 +308,9 @@ private Q_SLOTS:
 
 private:
 
-    TagsCache();
+    explicit TagsCache();
     ~TagsCache();
+
     void initialize();
     void invalidate();
 
@@ -317,10 +320,12 @@ private:
     friend class TagsCacheCreator;
     friend class ChangingDB;
 
+private:
+
     class Private;
     Private* const d;
 };
 
 } // namespace Digikam
 
-#endif // TAGSCACHE_H
+#endif // DIGIKAM_TAGS_CACHE_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGPROPERTIES_H
-#define TAGPROPERTIES_H
+#ifndef DIGIKAM_TAG_PROPERTIES_H
+#define DIGIKAM_TAG_PROPERTIES_H
 
 // Qt includes
 
@@ -105,4 +105,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAGPROPERTIES_H
+#endif // DIGIKAM_TAG_PROPERTIES_H

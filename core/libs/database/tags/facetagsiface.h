@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACE_TAGS_INTERFACE_H
-#define FACE_TAGS_INTERFACE_H
+#ifndef DIGIKAM_FACE_TAGS_INTERFACE_H
+#define DIGIKAM_FACE_TAGS_INTERFACE_H
 
 // Qt includes
 
@@ -146,4 +146,4 @@ DIGIKAM_DATABASE_EXPORT QDebug operator<<(QDebug dbg, const FaceTagsIface& f);
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FaceTagsIface::TypeFlags)
 
-#endif // FACE_TAGS_INTERFACE_H
+#endif // DIGIKAM_FACE_TAGS_INTERFACE_H
