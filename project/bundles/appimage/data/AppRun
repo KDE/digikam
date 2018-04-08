@@ -9,7 +9,7 @@
 #
 
 echo "-- digiKam AppImage Bundle"
-echo "-- Use 'help' as CLI argument to know all available options"
+echo "-- Use 'info' as CLI argument to know all available options for digiKam application"
 
 DIR="`dirname \"$0\"`"
 DIR="`( cd \"$DIR\" && pwd )`"
