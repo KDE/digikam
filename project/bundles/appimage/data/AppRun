@@ -33,6 +33,8 @@ export APPIMAGE_STARTUP_QT_PLUGIN_PATH=$QT_PLUGIN_PATH
 export APPIMAGE_STARTUP_XDG_DATA_DIRS=$XDG_DATA_DIRS
 export APPIMAGE_STARTUP_PATH=$PATH
 
+# Parse CLI options.
+
 if [[ $1 == "showfoto" ]] ; then
 
     # Run Showfoto as well.
@@ -42,12 +44,16 @@ elif [[ $1 == "debug" ]] ; then
 
     if [[ $2 == "showfoto" ]] ; then
 
+        # Showfoto in debug mode.
+
         echo "Starting Showfoto into GDB..."
         echo "Use 'bt' command on debugger prompt to get a crash backtrace."
         echo "Use 'q' command to quit debugger session."
         gdb -ex=r --args showfoto ${@:3}
 
     else
+
+        # digiKam in debug mode.
 
         echo "Starting digiKam into GDB..."
         echo "Use 'bt' command on debugger prompt to get a crash backtrace."
@@ -56,18 +62,39 @@ elif [[ $1 == "debug" ]] ; then
 
     fi
 
-elif [[ $1 == "help" ]] ; then
+elif [[ $1 == "info" ]] ; then
 
-        echo "digiKam AppImage bundle CLI options:"
-        echo " without option     : run digiKam."
-        echo " <showfoto>         : run Showfoto instead digiKam."
-        echo " <debug>            : run digiKam into GDB."
-        echo " <debug> <showfoto> : run Showfoto into GDB."
-        echo " <help>             : show this help."
+    # digiKam/Showfoto CLI help.
+
+    echo "digiKam AppImage bundle CLI options:"
+    echo " without option     : run digiKam."
+    echo " <showfoto>         : run Showfoto instead digiKam."
+    echo " <debug>            : run digiKam into GDB."
+    echo " <debug> <showfoto> : run Showfoto into GDB."
+    echo " <info>             : show these information."
+
+elif [[ ($1 == "-h") ||
+        ($1 == "-help") ||
+        ($1 == "install") ||
+        ($1 == "uninstall") ||
+        ($1 == "remove") ||
+        ($1 == "man") ||
+        ($1 == "manual") ||
+        ($1 == "manpage") ||
+        ($1 == "check-depends") ||
+        ($1 == "check-dependencies")
+     ]] ; then
+
+    # Native AppImage CLI options.
+
+    echo "Call native AppImage CLI tools..."
+
+    "${APPDIR}/bin/portable-utils" "$@"
 
 else
 
     # Run digiKam as well.
+
     digikam $@
 
 fi
