@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COLLECTIONMANAGER_H
-#define COLLECTIONMANAGER_H
+#ifndef DIGIKAM_COLLECTION_MANAGER_H
+#define DIGIKAM_COLLECTION_MANAGER_H
 
 // Qt includes
 
@@ -293,4 +293,4 @@ Q_SIGNALS: // private
 
 } // namespace Digikam
 
-#endif // COLLECTIONMANAGER_H
+#endif // DIGIKAM_COLLECTION_MANAGER_H

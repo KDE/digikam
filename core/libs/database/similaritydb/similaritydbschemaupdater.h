@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef SIMILARITY_DB_SCHEMA_UPDATER_H
-#define SIMILARITY_DB_SCHEMA_UPDATER_H
+#ifndef DIGIKAM_SIMILARITY_DB_SCHEMA_UPDATER_H
+#define DIGIKAM_SIMILARITY_DB_SCHEMA_UPDATER_H
 
 namespace Digikam
 {
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SIMILARITY_DB_SCHEMA_UPDATER_H
+#endif // DIGIKAM_SIMILARITY_DB_SCHEMA_UPDATER_H

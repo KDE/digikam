@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef COLLECTION_SCANNER_H
-#define COLLECTION_SCANNER_H
+#ifndef DIGIKAM_COLLECTION_SCANNER_H
+#define DIGIKAM_COLLECTION_SCANNER_H
 
 // Qt includes
 
@@ -282,4 +282,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COLLECTION_SCANNER_H
+#endif // DIGIKAM_COLLECTION_SCANNER_H

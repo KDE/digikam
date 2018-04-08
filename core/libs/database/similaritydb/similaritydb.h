@@ -8,7 +8,7 @@
  *
  * Copyright (C)      2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C)      2017 by Swati  Lodha   <swatilodha27 at gmail dot com>
+ * Copyright (C)      2017 by Swati Lodha    <swatilodha27 at gmail dot com>
  * Copyright (C)      2018 by Mario Frank    <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef SIMILARITY_DATABASE_H
-#define SIMILARITY_DATABASE_H
+#ifndef DIGIKAM_SIMILARITY_DATABASE_H
+#define DIGIKAM_SIMILARITY_DATABASE_H
 
 // Qt includes
 
@@ -52,8 +52,8 @@ namespace Digikam
 enum class FuzzyAlgorithm
 {
     Unknown = 0,
-    Haar = 1,
-    TfIdf = 2
+    Haar    = 1,
+    TfIdf   = 2
 };
 
 
@@ -241,4 +241,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SIMILARITY_DATABASE_H
+#endif // DIGIKAM_SIMILARITY_DATABASE_H
