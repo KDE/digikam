@@ -9,7 +9,7 @@
 #
 
 echo "-- digiKam AppImage Bundle"
-echo "-- Use 'info' as CLI argument to know all available options for digiKam application"
+echo "-- Use 'help' as CLI argument to know all available options for digiKam application"
 
 DIR="`dirname \"$0\"`"
 DIR="`( cd \"$DIR\" && pwd )`"
@@ -62,34 +62,25 @@ elif [[ $1 == "debug" ]] ; then
 
     fi
 
-elif [[ $1 == "info" ]] ; then
+elif [[ $1 == "help" ]] ; then
 
     # digiKam/Showfoto CLI help.
 
     echo "digiKam AppImage bundle CLI options:"
-    echo " without option     : run digiKam."
-    echo " <showfoto>         : run Showfoto instead digiKam."
-    echo " <debug>            : run digiKam into GDB."
-    echo " <debug> <showfoto> : run Showfoto into GDB."
-    echo " <info>             : show these information."
+    echo " without option       : run digiKam."
+    echo " <showfoto>           : run Showfoto instead digiKam."
+    echo " <debug>              : run digiKam into GDB."
+    echo " <debug> <showfoto>   : run Showfoto into GDB."
+    echo " <desktopintegration> : run native AppImage script for a desktop integration."
+    echo " <help>               : show these information."
 
-elif [[ ($1 == "-h") ||
-        ($1 == "-help") ||
-        ($1 == "install") ||
-        ($1 == "uninstall") ||
-        ($1 == "remove") ||
-        ($1 == "man") ||
-        ($1 == "manual") ||
-        ($1 == "manpage") ||
-        ($1 == "check-depends") ||
-        ($1 == "check-dependencies")
-     ]] ; then
+elif [[ ($1 == "desktopintegration") ]] ; then
 
     # Native AppImage CLI options.
 
-    echo "Call native AppImage CLI tools..."
+    echo "Call native AppImage CLI tools for desktop integration..."
 
-    "${APPDIR}/bin/portable-utils" "$@"
+    digikam.wrapper $@
 
 else
 
