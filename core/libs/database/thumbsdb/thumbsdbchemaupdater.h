@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBSDBCHEMAUPDATER_H
-#define THUMBSDBCHEMAUPDATER_H
+#ifndef DIGIKAM_THUMBS_DB_SCHEMA_UPDATER_H
+#define DIGIKAM_THUMBS_DB_SCHEMA_UPDATER_H
 
 namespace Digikam
 {
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif // THUMBSDBCHEMAUPDATER_H
+#endif // DIGIKAM_THUMBS_DB_SCHEMA_UPDATER_H

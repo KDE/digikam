@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBNAILS_DATABASE_H
-#define THUMBNAILS_DATABASE_H
+#ifndef DIGIKAM_THUMBNAILS_DATABASE_H
+#define DIGIKAM_THUMBNAILS_DATABASE_H
 
 // Qt includes
 
@@ -66,7 +66,7 @@ class DIGIKAM_EXPORT ThumbsDbInfo
 
 public:
 
-    ThumbsDbInfo()
+    explicit ThumbsDbInfo()
         : id(-1),
           type(DatabaseThumbnail::UndefinedType),
           orientationHint(0)
@@ -154,4 +154,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* THUMBNAILS_DATABASE_H */
+#endif // DIGIKAM_THUMBNAILS_DATABASE_H
