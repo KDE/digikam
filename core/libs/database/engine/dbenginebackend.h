@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_ENGINE_BACKEND_H
-#define DATABASE_ENGINE_BACKEND_H
+#ifndef DIGIKAM_DATABASE_ENGINE_BACKEND_H
+#define DIGIKAM_DATABASE_ENGINE_BACKEND_H
 
 // Qt includes
 
@@ -52,7 +52,7 @@ class DIGIKAM_EXPORT DbEngineLocking
 {
 public:
 
-    DbEngineLocking();
+    explicit DbEngineLocking();
 
 public:
 
@@ -126,7 +126,7 @@ public:
      *  shall be unique for this backend object.
      *  It will be used to create unique connection names per backend and thread.
      */
-    BdEngineBackend(const QString& backendName, DbEngineLocking* const locking);
+    explicit BdEngineBackend(const QString& backendName, DbEngineLocking* const locking);
     BdEngineBackend(const QString& backendName, DbEngineLocking* const locking, BdEngineBackendPrivate& dd);
     ~BdEngineBackend();
 
@@ -500,4 +500,4 @@ private:
 
 Q_DECLARE_METATYPE(QSqlError)
 
-#endif // DATABASE_ENGINE_BACKEND_H
+#endif // DIGIKAM_DATABASE_ENGINE_BACKEND_H

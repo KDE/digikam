@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEHISTORYGRAPHMODEL_H
-#define IMAGEHISTORYGRAPHMODEL_H
+#ifndef DIGIKAM_IMAGE_HISTORY_GRAPH_MODEL_H
+#define DIGIKAM_IMAGE_HISTORY_GRAPH_MODEL_H
 
 // Qt includes
 
@@ -126,4 +126,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGEHISTORYGRAPHMODEL_H
+#endif // DIGIKAM_IMAGE_HISTORY_GRAPH_MODEL_H

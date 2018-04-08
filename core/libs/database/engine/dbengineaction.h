@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef _DATABASE_ENGINE_ACTION_H_
-#define _DATABASE_ENGINE_ACTION_H_
+#ifndef DIGIKAM_DATABASE_ENGINE_ACTION_H
+#define DIGIKAM_DATABASE_ENGINE_ACTION_H
 
 // Qt includes
 
@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT DbEngineActionElement
 {
 public:
 
-    DbEngineActionElement()
+    explicit DbEngineActionElement()
         : order(0)
     {
     }
@@ -64,4 +64,4 @@ public:
 
 } // namespace Digikam
 
-#endif // _DATABASE_ENGINE_ACTION_H_
+#endif // DIGIKAM_DATABASE_ENGINE_ACTION_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_ENGINE_ERROR_HANDLER_H
-#define DATABASE_ENGINE_ERROR_HANDLER_H
+#ifndef DIGIKAM_DATABASE_ENGINE_ERROR_HANDLER_H
+#define DIGIKAM_DATABASE_ENGINE_ERROR_HANDLER_H
 
 // Qt includes
 
@@ -45,7 +45,7 @@ public:
 
     virtual ~DbEngineErrorAnswer();
     virtual void connectionErrorContinueQueries() = 0;
-    virtual void connectionErrorAbortQueries() = 0;
+    virtual void connectionErrorAbortQueries()    = 0;
 };
 
 // -----------------------------------------------------------------
@@ -56,7 +56,7 @@ class DIGIKAM_EXPORT DbEngineErrorHandler : public QObject
 
 public:
 
-    DbEngineErrorHandler();
+    explicit DbEngineErrorHandler();
     ~DbEngineErrorHandler();
 
 public Q_SLOTS:
@@ -91,4 +91,4 @@ public Q_SLOTS:
 
 Q_DECLARE_METATYPE(Digikam::DbEngineErrorAnswer*)
 
-#endif // DATABASE_ENGINE_ERROR_HANDLER_H
+#endif // DIGIKAM_DATABASE_ENGINE_ERROR_HANDLER_H

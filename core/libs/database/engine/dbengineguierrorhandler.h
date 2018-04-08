@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_ENGINE_GUI_ERROR_HANDLER_H
-#define DATABASE_ENGINE_GUI_ERROR_HANDLER_H
+#ifndef DIGIKAM_DATABASE_ENGINE_GUI_ERROR_HANDLER_H
+#define DIGIKAM_DATABASE_ENGINE_GUI_ERROR_HANDLER_H
 
 // Qt includes
 
@@ -98,4 +98,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DATABASE_ENGINE_GUI_ERROR_HANDLER_H */
+#endif // DIGIKAM_DATABASE_ENGINE_GUI_ERROR_HANDLER_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef _DATABASE_ENGINE_CONFIG_LOADER_H_
-#define _DATABASE_ENGINE_CONFIG_LOADER_H_
+#ifndef DIGIKAM_DATABASE_ENGINE_CONFIG_LOADER_H
+#define DIGIKAM_DATABASE_ENGINE_CONFIG_LOADER_H
 
 #include "dbengineconfigsettings.h"
 
@@ -44,11 +44,14 @@ class DIGIKAM_EXPORT DbEngineConfigSettingsLoader
 {
 public:
 
-    DbEngineConfigSettingsLoader(const QString& filepath, int xmlVersion);
+    explicit DbEngineConfigSettingsLoader(const QString& filepath, int xmlVersion);
 
-    bool                   readConfig(const QString& filepath, int xmlVersion);
+    bool                   readConfig(const QString& filepath,
+                                      int xmlVersion);
     DbEngineConfigSettings readDatabase(QDomElement& databaseElement);
-    void                   readDBActions(QDomElement& sqlStatementElements, DbEngineConfigSettings& configElement);
+
+    void                   readDBActions(QDomElement& sqlStatementElements,
+                                         DbEngineConfigSettings& configElement);
 
 public:
 
@@ -59,4 +62,4 @@ public:
 
 } // namespace Digikam
 
-#endif // _DATABASE_ENGINE_CONFIG_LOADER_H_
+#endif // DIGIKAM_DATABASE_ENGINE_CONFIG_LOADER_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef _DATABASE_ENGINE_CONFIG_H_
-#define _DATABASE_ENGINE_CONFIG_H_
+#ifndef DIGIKAM_DATABASE_ENGINE_CONFIG_H
+#define DIGIKAM_DATABASE_ENGINE_CONFIG_H
 
 // Local includes
 
@@ -44,4 +44,4 @@ public:
 
 } // namespace Digikam
 
-#endif // _DATABASE_ENGINE_CONFIG_H_
+#endif // DIGIKAM_DATABASE_ENGINE_CONFIG_H

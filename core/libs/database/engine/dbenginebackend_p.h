@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_ENGINE_BACKEND_P_H
-#define DATABASE_ENGINE_BACKEND_P_H
+#ifndef DIGIKAM_DATABASE_ENGINE_BACKEND_P_H
+#define DIGIKAM_DATABASE_ENGINE_BACKEND_P_H
 
 // Qt includes
 
@@ -46,7 +46,7 @@ class DbEngineThreadData
 {
 public:
 
-    DbEngineThreadData();
+    explicit DbEngineThreadData();
     ~DbEngineThreadData();
 
     void closeDatabase();
@@ -153,7 +153,7 @@ public:
     {
     public:
 
-        AbstractWaitingUnlocker(BdEngineBackendPrivate* const d, QMutex* const mutex, QWaitCondition* const condVar);
+        explicit AbstractWaitingUnlocker(BdEngineBackendPrivate* const d, QMutex* const mutex, QWaitCondition* const condVar);
         ~AbstractWaitingUnlocker();
 
         bool wait(unsigned long time = ULONG_MAX);
@@ -190,4 +190,4 @@ public :
 
 } // namespace Digikam
 
-#endif // DATABASE_ENGINE_BACKEND_P_H
+#endif // DIGIKAM_DATABASE_ENGINE_BACKEND_P_H

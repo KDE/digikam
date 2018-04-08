@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_HISTORY_GRAPH_H
-#define IMAGE_HISTORY_GRAPH_H
+#ifndef DIGIKAM_IMAGE_HISTORY_GRAPH_H
+#define DIGIKAM_IMAGE_HISTORY_GRAPH_H
 
 // Qt includes
 
@@ -190,4 +190,4 @@ QDebug DIGIKAM_DATABASE_EXPORT operator<<(QDebug dbg, const ImageHistoryGraph& g
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ImageHistoryGraph::HistoryLoadingMode)
 
-#endif // IMAGE_HISTORY_GRAPH_H
+#endif // DIGIKAM_IMAGE_HISTORY_GRAPH_H

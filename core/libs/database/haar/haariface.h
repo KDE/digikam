@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef HAARIFACE_H
-#define HAARIFACE_H
+#ifndef DIGIKAM_HAAR_IFACE_H
+#define DIGIKAM_HAAR_IFACE_H
 
 // Qt includes
 
@@ -92,7 +92,7 @@ public:
 
 public:
 
-    HaarIface();
+    explicit HaarIface();
     ~HaarIface();
 
     static int preferredSize();
@@ -247,4 +247,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HAARIFACE_H
+#endif // DIGIKAM_HAAR_IFACE_H

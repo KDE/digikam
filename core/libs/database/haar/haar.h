@@ -27,8 +27,8 @@
  *
  * ============================================================ */
 
-#ifndef HAAR_H
-#define HAAR_H
+#ifndef DIGIKAM_HAAR_H
+#define DIGIKAM_HAAR_H
 
 // C++ includes
 
@@ -167,7 +167,7 @@ public:
 private:
 
     // To prevent cppcheck warnings.
-    SignatureMap(const SignatureMap& other)
+    explicit SignatureMap(const SignatureMap& other)
     {
         m_indexList = new MapIndexType[2 * Haar::NumberOfPixelsSquared];
         memcpy(m_indexList, other.m_indexList, sizeof(MapIndexType[2 * Haar::NumberOfPixelsSquared]));
@@ -185,13 +185,7 @@ class WeightBin
 {
 public:
 
-    WeightBin();
-
-    /** Fixed weight mask for pixel positions (i,j).
-        Each entry x = i*NUM_PIXELS + j, gets value max(i,j) saturated at 5.
-        To be treated as a constant.
-    */
-    unsigned char m_bin[16384];
+    explicit WeightBin();
 
     unsigned char bin(int index)    const
     {
@@ -202,6 +196,14 @@ public:
     {
         return (index > 0) ? m_bin[index] : m_bin[-index];
     }
+    
+public:
+
+    /** Fixed weight mask for pixel positions (i,j).
+        Each entry x = i*NUM_PIXELS + j, gets value max(i,j) saturated at 5.
+        To be treated as a constant.
+    */
+    unsigned char m_bin[16384];
 };
 
 // ---------------------------------------------------------------------------------
@@ -215,6 +217,8 @@ public:
         ScannedSketch = 0,
         PaintedSketch = 1
     };
+
+public:
 
     explicit Weights(SketchType type = ScannedSketch)
         : m_type(type)
@@ -243,7 +247,7 @@ class Calculator
 
 public:
 
-    Calculator();
+    explicit Calculator();
     ~Calculator();
 
     int  calcHaar(ImageData* const imageData, SignatureData* const sigData);
@@ -260,4 +264,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HAAR_H
+#endif // DIGIKAM_HAAR_H

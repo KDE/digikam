@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_HISTORY_GRAPH_DATA_H
-#define IMAGE_HISTORY_GRAPH_DATA_H
+#ifndef DIGIKAM_IMAGE_HISTORY_GRAPH_DATA_H
+#define DIGIKAM_IMAGE_HISTORY_GRAPH_DATA_H
 
 // Qt includes
 
@@ -152,4 +152,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGE_HISTORY_GRAPH_DATA_H
+#endif // DIGIKAM_IMAGE_HISTORY_GRAPH_DATA_H
