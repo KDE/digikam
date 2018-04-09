@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FACESENGINE_IDENTITY_H
-#define FACESENGINE_IDENTITY_H
+#ifndef DIGIKAM_FACESENGINE_IDENTITY_H
+#define DIGIKAM_FACESENGINE_IDENTITY_H
 
 // Qt includes
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACESENGINE_IDENTITY_H
+#endif // DIGIKAM_FACESENGINE_IDENTITY_H

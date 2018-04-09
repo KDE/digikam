@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACESENGINE_RECOGNITIONDATABASE_H
-#define FACESENGINE_RECOGNITIONDATABASE_H
+#ifndef DIGIKAM_FACESENGINE_RECOGNITIONDATABASE_H
+#define DIGIKAM_FACESENGINE_RECOGNITIONDATABASE_H
 
 // Qt includes
 
@@ -81,7 +81,7 @@ public:
 
 public:
 
-    RecognitionDatabase();
+    explicit RecognitionDatabase();
     ~RecognitionDatabase();
 
     // ------------ Identity management --------------
@@ -234,4 +234,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACESENGINE_RECOGNITIONDATABASE_H
+#endif // DIGIKAM_FACESENGINE_RECOGNITIONDATABASE_H

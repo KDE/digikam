@@ -419,23 +419,24 @@ std::vector<float> FunnelReal::Private::computeTransform(const std::vector<std::
 
     getNewFeatsInvT(featureIDs, originalFeatures, v, centerX, centerY);
 
-    for(uint iter=0; iter<logDFSeq.size(); iter++)
+    for (uint iter = 0 ; iter < logDFSeq.size() ; iter++)
     {
         float oldL = computeLogLikelihood(logDFSeq[iter], featureIDs, numFeatureClusters);
 
-        for(int k=0; k<numParams; k++)
+        for (int k = 0 ; k < numParams ; k++)
         {
             float dn = ((qrand()%160)-80)/100.0f;
-            if(k>1)
+            if (k>1)
             {
                 dn /= 100.0f;
             }
+
             v[k] += (d[k] + dn);
 
             getNewFeatsInvT(newFIDs, originalFeatures, v, centerX, centerY);
             float newL = computeLogLikelihood(logDFSeq[iter], newFIDs, numFeatureClusters);
 
-            if(newL > oldL)
+            if (newL > oldL)
             {
                 featureIDs = newFIDs;
                 oldL       = newL;
@@ -446,7 +447,7 @@ std::vector<float> FunnelReal::Private::computeTransform(const std::vector<std::
                 getNewFeatsInvT(newFIDs, originalFeatures, v, centerX, centerY);
                 newL = computeLogLikelihood(logDFSeq[iter], newFIDs, numFeatureClusters);
 
-                if(newL > oldL)
+                if (newL > oldL)
                 {
                     oldL       = newL;
                     featureIDs = newFIDs;
@@ -511,7 +512,7 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
                                              int histDim, int bucketsDim,
                                              const std::vector<std::vector<float> > &Gaussian) const
 {
-    for(int i=0; i<(signed)descripter.size(); i++)
+    for (int i = 0 ; i < (signed)descripter.size() ; i++)
         descripter[i]=0;
 
     int histDimWidth = 2*windowSize/histDim;
@@ -521,9 +522,9 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
     std::vector<float> mtimesGRow(2*windowSize);
     std::vector<std::vector<float> > mtimesG(2*windowSize, mtimesGRow);
 
-    for(int i=0; i<2*windowSize; i++)
+    for (int i = 0 ; i < 2*windowSize ; i++)
     {
-        for(int j=0; j<2*windowSize; j++)
+        for (int j = 0 ; j < 2*windowSize ; j++)
         {
             int xx        = x+i-(windowSize-1);
             int yy        = y+j-(windowSize-1);
@@ -536,9 +537,9 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
     int histBin[2], histX[2], histY[2];
     float dX[2], dY[2], dBin[2];
 
-    for(int i=0; i<2*windowSize; i++)
+    for (int i = 0; i < 2*windowSize ; i++)
     {
-        for(int j=0; j<2*windowSize; j++)
+        for (int j = 0 ; j < 2*windowSize ; j++)
         {
             histX[0] = i/histDim; histX[1] = i/histDim;
             histY[0] = j/histDim; histY[1] = j/histDim;
@@ -549,25 +550,25 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
             int jModHD    = j % histDim;
             int histDimD2 = histDim/2;
 
-            if( iModHD >= histDimD2 && i < 2*windowSize - histDimD2 )
+            if ( iModHD >= histDimD2 && i < 2*windowSize - histDimD2 )
             {
                 histX[1] = histX[0] + 1;
                 dX[1] = (iModHD + 0.5f - histDimD2) / histDim;
             }
 
-            if( iModHD < histDimD2 && i >= histDimD2 )
+            if ( iModHD < histDimD2 && i >= histDimD2 )
             {
                 histX[1] = histX[0] - 1;
                 dX[1] = (histDimD2 + 0.5f - iModHD) / histDim;
             }
 
-            if( jModHD >= histDimD2 && j < 2*windowSize - histDimD2 )
+            if ( jModHD >= histDimD2 && j < 2*windowSize - histDimD2 )
             {
                 histY[1] = histY[0] + 1;
                 dY[1] = (jModHD + 0.5f - histDimD2) / histDim;
             }
 
-            if( jModHD < histDimD2 && j >= histDimD2)
+            if ( jModHD < histDimD2 && j >= histDimD2)
             {
                 histY[1] = histY[0] - 1;
                 dY[1] = (histDimD2 + 0.5f - jModHD) / histDim;
@@ -583,11 +584,11 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
             dBin[1]    = (histAngle - histBin[0]*degPerBin) / degPerBin;
             dBin[0]    = 1.0f-dBin[1];
 
-            for(int histBinIndex=0; histBinIndex<2; histBinIndex++)
+            for (int histBinIndex = 0 ; histBinIndex < 2 ; histBinIndex++)
             {
-                for(int histXIndex=0; histXIndex<2; histXIndex++)
+                for (int histXIndex = 0; histXIndex < 2 ; histXIndex++)
                 {
-                    for(int histYIndex=0; histYIndex<2; histYIndex++)
+                    for (int histYIndex = 0; histYIndex < 2 ; histYIndex++)
                     {
                         int histNum = histX[histXIndex]*histDimWidth + histY[histYIndex];
                         int bin = histBin[histBinIndex];
@@ -602,19 +603,19 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
     // threshold values at .2, renormalize
     float sum = 0;
 
-    for(int i=0; i<(signed)descripter.size(); i++)
+    for (int i = 0 ; i < (signed)descripter.size() ; i++)
         sum += descripter[i];
 
-    if(sum < .0000001f)
+    if (sum < .0000001f)
     {
         //float dn = 1.0f / (signed)descripter.size(); // is unused, don't know
-        for(int i=0; i<(signed)descripter.size(); i++)
+        for (int i = 0 ; i < (signed)descripter.size() ; i++)
             descripter[i] = 0;
 
         return;
     }
 
-    for(int i=0; i<(signed)descripter.size(); i++)
+    for (int i = 0 ; i < (signed)descripter.size() ; i++)
     {
         descripter[i] /= sum;
 
@@ -624,10 +625,10 @@ void FunnelReal::Private::getSIFTdescripter(std::vector<float> &descripter,
 
     sum = 0;
 
-    for(int i=0; i<(signed)descripter.size(); i++)
+    for (int i = 0 ; i < (signed)descripter.size() ; i++)
         sum += descripter[i];
 
-    for(int i=0; i<(signed)descripter.size(); i++)
+    for (int i = 0 ; i < (signed)descripter.size() ; i++)
         descripter[i] /= sum;
 }
 
@@ -662,14 +663,14 @@ void FunnelReal::Private::getNewFeatsInvT(std::vector<std::vector<float> > &newF
     int height = (signed)originalFeats.size();
     int width  = (signed)originalFeats[0].size();
 
-    for(int i=0; i<(signed)newFIDs.size(); i++)
+    for (int i = 0 ; i < (signed)newFIDs.size() ; i++)
     {
         int j  = randPxls[i].first;
         int k  = randPxls[i].second;
         int nx = (int)(xform.at<float>(0)*k + xform.at<float>(1)*j + xform.at<float>(2) + 0.5f);
         int ny = (int)(xform.at<float>(3)*k + xform.at<float>(4)*j + xform.at<float>(5) + 0.5f);
 
-        if(!(ny >= 0 && ny < height && nx >= 0 && nx < width))
+        if (!(ny >= 0 && ny < height && nx >= 0 && nx < width))
             newFIDs[i] = uniformDist;
         else
             newFIDs[i] = originalFeats[ny][nx];
@@ -682,9 +683,9 @@ float FunnelReal::Private::computeLogLikelihood(const std::vector<std::vector<fl
 {
     float l = 0;
 
-    for(int j=0; j<(signed)fids.size(); j++)
+    for(int j = 0 ; j < (signed)fids.size() ; j++)
     {
-        for(int i=0; i<numFeatureClusters; i++)
+        for(int i = 0 ; i < numFeatureClusters ; i++)
             l += fids[j][i] * logDistField[j][i];
     }
 

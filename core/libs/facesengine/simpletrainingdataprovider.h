@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SIMPLE_TRAINING_DATA_PROVIDER_H
-#define SIMPLE_TRAINING_DATA_PROVIDER_H
+#ifndef DIGIKAM_SIMPLE_TRAINING_DATA_PROVIDER_H
+#define DIGIKAM_SIMPLE_TRAINING_DATA_PROVIDER_H
 
 // Qt includes
 
@@ -60,4 +60,4 @@ public:
 
 } // namespace Digikam
 
-#endif // SIMPLE_TRAINING_DATA_PROVIDER_H
+#endif // DIGIKAM_SIMPLE_TRAINING_DATA_PROVIDER_H

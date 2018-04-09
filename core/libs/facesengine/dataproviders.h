@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FACESENGINE_DATAPROVIDERS_H
-#define FACESENGINE_DATAPROVIDERS_H
+#ifndef DIGIKAM_FACESENGINE_DATAPROVIDERS_H
+#define DIGIKAM_FACESENGINE_DATAPROVIDERS_H
 
 // Qt includes
 
@@ -123,4 +123,4 @@ public:
 
 } // namespace Digikam
 
-#endif // FACESENGINE_DATAPROVIDERS_H
+#endif // DIGIKAM_FACESENGINE_DATAPROVIDERS_H

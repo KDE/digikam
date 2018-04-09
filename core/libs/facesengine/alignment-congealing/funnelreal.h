@@ -26,8 +26,8 @@
  *
  * ============================================================ */
 
-#ifndef FACESENGINE_ALIGNMENT_CONGEALING_FUNNELREAL_H
-#define FACESENGINE_ALIGNMENT_CONGEALING_FUNNELREAL_H
+#ifndef DIGIKAM_FACESENGINE_ALIGNMENT_CONGEALING_FUNNELREAL_H
+#define DIGIKAM_FACESENGINE_ALIGNMENT_CONGEALING_FUNNELREAL_H
 
 // OpenCV includes
 
@@ -41,7 +41,7 @@ class FunnelReal
 
 public:
 
-    FunnelReal();
+    explicit FunnelReal();
     ~FunnelReal();
 
     cv::Mat align(const cv::Mat& inputImage);
@@ -54,4 +54,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACESENGINE_ALIGNMENT_CONGEALING_FUNNELREAL_H
+#endif // DIGIKAM_FACESENGINE_ALIGNMENT_CONGEALING_FUNNELREAL_H

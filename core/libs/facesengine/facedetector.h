@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACESENGINE_FACEDETECTOR_H
-#define FACESENGINE_FACEDETECTOR_H
+#ifndef DIGIKAM_FACESENGINE_FACEDETECTOR_H
+#define DIGIKAM_FACESENGINE_FACEDETECTOR_H
 
 // Qt includes
 
@@ -116,4 +116,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACESENGINE_FACEDETECTOR_H
+#endif // DIGIKAM_FACESENGINE_FACEDETECTOR_H
