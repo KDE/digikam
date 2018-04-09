@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2010 by Holger Foerster <Hamsi2k at freenet dot de>
  * Copyright (C) 2016 by Swati Lodha <swatilodha27 at gmail dot com>
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;

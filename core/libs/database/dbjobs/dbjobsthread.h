@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBJOBSTHREAD_H
-#define DBJOBSTHREAD_H
+#ifndef DIGIKAM_DATABASE_JOBS_THREAD_H
+#define DIGIKAM_DATABASE_JOBS_THREAD_H
 
 // Local includes
 
@@ -201,4 +201,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // DBJOBSTHREAD_H
+#endif // DIGIKAM_DATABASE_JOBS_THREAD_H

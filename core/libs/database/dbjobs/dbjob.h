@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DB_JOB_H
-#define DB_JOB_H
+#ifndef DIGIKAM_DATABASE_JOB_H
+#define DIGIKAM_DATABASE_JOB_H
 
 // Local includes
 
@@ -44,7 +44,7 @@ class DIGIKAM_DATABASE_EXPORT DBJob : public ActionJob
 
 protected:
 
-    DBJob();
+    explicit DBJob();
     ~DBJob();
 
 Q_SIGNALS:
@@ -179,4 +179,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DB_JOB_H
+#endif // DIGIKAM_DATABASE_JOB_H

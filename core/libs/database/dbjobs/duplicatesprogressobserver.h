@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DUPLICATES_PROGRESS_OBSERVER_H
-#define DUPLICATES_PROGRESS_OBSERVER_H
+#ifndef DIGIKAM_DUPLICATES_PROGRESS_OBSERVER_H
+#define DIGIKAM_DUPLICATES_PROGRESS_OBSERVER_H
 
 #include "haariface.h"
 #include "dbjob.h"
@@ -52,4 +52,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DUPLICATES_PROGRESS_OBSERVER_H
+#endif // DIGIKAM_DUPLICATES_PROGRESS_OBSERVER_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBJOBINFO_H
-#define DBJOBINFO_H
+#ifndef DIGIKAM_DATABASE_JOB_INFO_H
+#define DIGIKAM_DATABASE_JOB_INFO_H
 
 // Qt includes
 
@@ -51,7 +51,7 @@ public:
 
 protected:
 
-    DBJobInfo();
+    explicit DBJobInfo();
 
 private:
 
@@ -66,7 +66,7 @@ class DIGIKAM_DATABASE_EXPORT AlbumsDBJobInfo : public DBJobInfo
 {
 public:
 
-    AlbumsDBJobInfo();
+    explicit AlbumsDBJobInfo();
 
     void setAlbumRootId(int id);
     int  albumRootId();
@@ -86,7 +86,7 @@ class DIGIKAM_DATABASE_EXPORT TagsDBJobInfo : public DBJobInfo
 {
 public:
 
-    TagsDBJobInfo();
+    explicit TagsDBJobInfo();
 
     void setFaceFoldersJob();
     bool isFaceFoldersJob() const;
@@ -110,7 +110,7 @@ class DIGIKAM_DATABASE_EXPORT GPSDBJobInfo : public DBJobInfo
 {
 public:
 
-    GPSDBJobInfo();
+    explicit GPSDBJobInfo();
 
     void setDirectQuery();
     bool isDirectQuery() const;
@@ -142,7 +142,7 @@ class DIGIKAM_DATABASE_EXPORT SearchesDBJobInfo : public DBJobInfo
 {
 public:
 
-    SearchesDBJobInfo();
+    explicit SearchesDBJobInfo();
 
     void setDuplicatesJob();
     bool isDuplicatesJob() const;
@@ -195,7 +195,7 @@ class DIGIKAM_DATABASE_EXPORT DatesDBJobInfo : public DBJobInfo
 {
 public:
 
-    DatesDBJobInfo();
+    explicit DatesDBJobInfo();
 
     void setStartDate(const QDate& date);
     QDate startDate() const;
@@ -211,4 +211,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DBJOBINFO_H
+#endif // DIGIKAM_DATABASE_JOB_INFO_H

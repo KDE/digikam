@@ -7,7 +7,7 @@
  * Description : database server starter
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2016 by Swati Lodha <swatilodha27 at gmail dot com>
+ * Copyright (C) 2016      by Swati Lodha <swatilodha27 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_SERVER_STARTER_H_
-#define DATABASE_SERVER_STARTER_H_
+#ifndef DIGIKAM_DATABASE_SERVER_STARTER_H
+#define DIGIKAM_DATABASE_SERVER_STARTER_H
 
 // Qt includes
 
@@ -54,7 +54,7 @@ public:
 
 private:
 
-    DatabaseServerStarter();
+    explicit DatabaseServerStarter();
     ~DatabaseServerStarter();
 
 private:
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DATABASE_SERVER_STARTER_H_
+#endif // DIGIKAM_DATABASE_SERVER_STARTER_H

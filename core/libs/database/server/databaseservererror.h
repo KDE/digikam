@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_SERVER_ERROR_H_
-#define DATABASE_SERVER_ERROR_H_
+#ifndef DIGIKAM_DATABASE_SERVER_ERROR_H
+#define DIGIKAM_DATABASE_SERVER_ERROR_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DATABASE_SERVER_ERROR_H_ */
+#endif // DIGIKAM_DATABASE_SERVER_ERROR_H
