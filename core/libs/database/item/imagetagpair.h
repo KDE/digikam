@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGETAGPAIR_H
-#define IMAGETAGPAIR_H
+#ifndef DIGIKAM_IMAGE_TAG_PAIR_H
+#define DIGIKAM_IMAGE_TAG_PAIR_H
 
 // Qt includes
 
@@ -74,13 +74,16 @@ public:
     qlonglong imageId() const;
     int tagId() const;
 
-    /** Returns if the tag is assigned to the image */
+    /** Returns if the tag is assigned to the image
+     */
     bool isAssigned() const;
 
-    /** Assigns the tag to the image */
+    /** Assigns the tag to the image
+     */
     void assignTag();
 
-    /** Removes the tag from the image */
+    /** Removes the tag from the image
+     */
     void unAssignTag();
 
     /// Returns true if the property is set
@@ -102,10 +105,13 @@ public:
 
     /// Set the given property. Replaces all previous occurrences of this property.
     void setProperty(const QString& key, const QString& value);
+
     /** Adds the given property. Does not change any previous occurrences of this property,
      *  allowing multiple properties with the same key.
-     *  (duplicates of same key _and_ value are not added, though) */
+     *  (duplicates of same key _and_ value are not added, though)
+     */
     void addProperty(const QString& key, const QString& value);
+
     /// Remove all occurrences of the property
     void removeProperty(const QString& key, const QString& value);
     /// Remove all occurrences of the property
@@ -120,5 +126,5 @@ private:
 
 } // namespace
 
-#endif // IMAGETAGPAIR_H
+#endif // DIGIKAM_IMAGE_TAG_PAIR_H
 

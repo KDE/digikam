@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_COPYRIGHT_H
-#define IMAGE_COPYRIGHT_H
+#ifndef DIGIKAM_IMAGE_COPYRIGHT_H
+#define DIGIKAM_IMAGE_COPYRIGHT_H
 
 // Qt includes
 
@@ -303,4 +303,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGE_COPYRIGHT_H
+#endif // DIGIKAM_IMAGE_COPYRIGHT_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEXTENDEDPROPERTIES_H
-#define IMAGEEXTENDEDPROPERTIES_H
+#ifndef DIGIKAM_IMAGE_EXTENDED_PROPERTIES_H
+#define DIGIKAM_IMAGE_EXTENDED_PROPERTIES_H
 
 // Qt includes
 
@@ -130,4 +130,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGEEXTENDEDPROPERTIES_H
+#endif // DIGIKAM_IMAGE_EXTENDED_PROPERTIES_H

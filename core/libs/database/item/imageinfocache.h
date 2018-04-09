@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEINFOCACHE_H
-#define IMAGEINFOCACHE_H
+#ifndef DIGIKAM_IMAGE_INFO_CACHE_H
+#define DIGIKAM_IMAGE_INFO_CACHE_H
 
 // Qt includes
 
@@ -49,7 +49,7 @@ class ImageInfoCache : public QObject
 
 public:
 
-    ImageInfoCache();
+    explicit ImageInfoCache();
     ~ImageInfoCache();
 
     /**
@@ -111,4 +111,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGEINFOCACHE_H
+#endif // DIGIKAM_IMAGE_INFO_CACHE_H

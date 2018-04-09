@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_INFO_LIST_H
-#define IMAGE_INFO_LIST_H
+#ifndef DIGIKAM_IMAGE_INFO_LIST_H
+#define DIGIKAM_IMAGE_INFO_LIST_H
 
 // Qt includes
 
@@ -77,4 +77,4 @@ typedef ImageInfoList::iterator ImageInfoListIterator;
 
 Q_DECLARE_METATYPE(Digikam::ImageInfoList)
 
-#endif // IMAGE_INFO_LIST_H
+#endif // DIGIKAM_IMAGE_INFO_LIST_H

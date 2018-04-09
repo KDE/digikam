@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGECOMMENTS_H
-#define IMAGECOMMENTS_H
+#ifndef DIGIKAM_IMAGE_COMMENTS_H
+#define DIGIKAM_IMAGE_COMMENTS_H
 
 // Qt includes
 
@@ -242,4 +242,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGECOMMENTS_H
+#endif // DIGIKAM_IMAGE_COMMENTS_H

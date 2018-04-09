@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEQUERYBUILDER_H
-#define IMAGEQUERYBUILDER_H
+#ifndef DIGIKAM_IMAGE_QUERY_BUILDER_H
+#define DIGIKAM_IMAGE_QUERY_BUILDER_H
 
 // Qt includes
 
@@ -70,7 +70,7 @@ class DIGIKAM_DATABASE_EXPORT ImageQueryBuilder
 {
 public:
 
-    ImageQueryBuilder();
+    explicit ImageQueryBuilder();
 
     QString buildQuery(const QString& q, QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const;
     QString buildQueryFromUrl(const QUrl& url, QList<QVariant>* boundValues) const;
@@ -107,4 +107,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGEQUERYBUILDER_H
+#endif // DIGIKAM_IMAGE_QUERY_BUILDER_H

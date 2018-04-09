@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPOSITION_H
-#define IMAGEPOSITION_H
+#ifndef DIGIKAM_IMAGE_POSITION_H
+#define DIGIKAM_IMAGE_POSITION_H
 
 // Qt includes
 
@@ -52,6 +52,7 @@ public:
      * Creates a null ImagePosition object
      */
     ImagePosition();
+
     /**
      * Creates an ImagePosition object for the given image.
      * The information is read from the database.
@@ -181,4 +182,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGEPOSITION_H
+#endif // DIGIKAM_IMAGE_POSITION_H

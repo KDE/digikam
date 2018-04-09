@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGELISTERRECEIVER_H
-#define IMAGELISTERRECEIVER_H
+#ifndef DIGIKAM_IMAGE_LISTER_RECEIVER_H
+#define DIGIKAM_IMAGE_LISTER_RECEIVER_H
 
 // Qt includes
 
@@ -51,13 +51,15 @@ public:
     virtual void error(const QString& /*errMsg*/) {};
 };
 
+// ------------------------------------------------------------------------------------------------
+
 class DIGIKAM_DATABASE_EXPORT ImageListerValueListReceiver
     : public ImageListerReceiver
 {
 
 public:
 
-    ImageListerValueListReceiver();
+    explicit ImageListerValueListReceiver();
 
     QList<ImageListerRecord> records;
     bool                     hasError;
@@ -89,7 +91,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListerJobPartsSendingReceiver : public ImageL
 
 public:
 
-    ImageListerJobPartsSendingReceiver(DBJob *const job, int limit);
+    explicit ImageListerJobPartsSendingReceiver(DBJob *const job, int limit);
     virtual void receive(const ImageListerRecord &record);
 
 protected:
@@ -106,7 +108,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListerJobGrowingPartsSendingReceiver
 
 public:
 
-    ImageListerJobGrowingPartsSendingReceiver(DBJob* job, int start, int end, int increment);
+    explicit ImageListerJobGrowingPartsSendingReceiver(DBJob* job, int start, int end, int increment);
     virtual void receive(const ImageListerRecord& record);
 
 protected:
@@ -117,4 +119,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGELISTERRECEIVER_H
+#endif // DIGIKAM_IMAGE_LISTER_RECEIVER_H

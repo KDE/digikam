@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEINFODATA_H
-#define IMAGEINFODATA_H
+#ifndef DIGIKAM_IMAGE_INFO_DATA_H
+#define DIGIKAM_IMAGE_INFO_DATA_H
 
 // Qt includes
 
@@ -68,7 +68,7 @@ class ImageInfoReadLocker : public QReadLocker
 {
 public:
 
-    ImageInfoReadLocker()
+    explicit ImageInfoReadLocker()
         : QReadLocker(&ImageInfoStatic::m_instance->m_lock)
     {
     }
@@ -80,7 +80,7 @@ class ImageInfoWriteLocker : public QWriteLocker
 {
 public:
 
-    ImageInfoWriteLocker()
+    explicit ImageInfoWriteLocker()
         : QWriteLocker(&ImageInfoStatic::m_instance->m_lock)
     {
     }
@@ -92,7 +92,7 @@ class ImageInfoData : public DSharedData
 {
 public:
 
-    ImageInfoData();
+    explicit ImageInfoData();
     ~ImageInfoData();
 
 public:
@@ -163,4 +163,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMAGEINFODATA_H
+#endif // DIGIKAM_IMAGE_INFO_DATA_H

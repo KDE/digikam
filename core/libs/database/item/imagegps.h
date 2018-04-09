@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_GPS_H
-#define IMAGE_GPS_H
+#ifndef DIGIKAM_IMAGE_GPS_H
+#define DIGIKAM_IMAGE_GPS_H
 
 // Qt includes
 
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGE_GPS_H
+#endif // DIGIKAM_IMAGE_GPS_H

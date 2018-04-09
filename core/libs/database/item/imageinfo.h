@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_INFO_H
-#define IMAGE_INFO_H
+#ifndef DIGIKAM_IMAGE_INFO_H
+#define DIGIKAM_IMAGE_INFO_H
 
 // Qt includes
 
@@ -530,4 +530,4 @@ DIGIKAM_DATABASE_EXPORT QDebug operator<<(QDebug stream, const ImageInfo& info);
 Q_DECLARE_TYPEINFO(Digikam::ImageInfo, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(Digikam::ImageInfo)
 
-#endif /* IMAGE_INFO_H */
+#endif // DIGIKAM_IMAGE_INFO_H

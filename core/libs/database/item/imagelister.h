@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_LISTER_H
-#define IMAGE_LISTER_H
+#ifndef DIGIKAM_IMAGE_LISTER_H
+#define DIGIKAM_IMAGE_LISTER_H
 
 // Qt includes
 
@@ -150,4 +150,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGE_LISTER_H
+#endif // DIGIKAM_IMAGE_LISTER_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEATTRIBUTESWATCH_H
-#define IMAGEATTRIBUTESWATCH_H
+#ifndef DIGIKAM_IMAGE_ATTRIBUTES_WATCH_H
+#define DIGIKAM_IMAGE_ATTRIBUTES_WATCH_H
 
 // Qt includes
 
@@ -94,7 +94,7 @@ private Q_SLOTS:
 
 private:
 
-    ImageAttributesWatch();
+    explicit ImageAttributesWatch();
     ~ImageAttributesWatch();
 
     static ImageAttributesWatch* m_instance;
@@ -102,4 +102,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGEATTRIBUTESWATCH_H
+#endif // DIGIKAM_IMAGE_ATTRIBUTES_WATCH_H
