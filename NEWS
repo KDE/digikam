@@ -176,5 +176,5 @@ BUGFIXES:
 159 ==> 375424 - Thumbnails are not being removed from AlbumsView after moving the images to Trash.
 160 ==> 368796 - Problem with Exif-tags: ImageDescription and UserComment.
 161 ==> 392417 - AppImage (5.9.0-01-x86-64) does not support "--install" cli parameter.
-162 ==> 
-
+162 ==> 392922 - digikam-6.0.0 fail to start.
+163 ==> 
