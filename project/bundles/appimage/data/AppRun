@@ -30,7 +30,7 @@ export IOLIBS=$DIR/usr/lib/libgphoto2_port
 
 # if no customized Qt debug loggin variable is set, turn on one for a better readability
 
-if [ -z "$QT_MESSAGE_PATTERN" ]
+if [ -z "$QT_MESSAGE_PATTERN" ]; then
     export QT_MESSAGE_PATTERN="`echo -e "\033[34m%{function}\033[0m: %{message}"`"
 fi
 
