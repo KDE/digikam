@@ -152,7 +152,10 @@ BookmarkNode* XbelReader::read(const QString& fileName)
 
     if (!file.exists() || !file.open(QFile::ReadOnly))
     {
-        return new BookmarkNode(BookmarkNode::Root);
+        BookmarkNode* const root   = new BookmarkNode(BookmarkNode::Root);
+        BookmarkNode* const folder = new BookmarkNode(BookmarkNode::RootFolder, root);
+        folder->title = i18n("Bookmark folder");
+        return root;
     }
 
     return read(&file, true);
