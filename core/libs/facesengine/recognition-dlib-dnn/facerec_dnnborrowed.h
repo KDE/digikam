@@ -21,8 +21,10 @@
  *
  * ============================================================ */
 
-#ifndef FACE_REC_DNN_BORROWED_H
-#define FACE_REC_DNN_BORROWED_H
+#ifndef DIGIKAM_FACE_REC_DNN_BORROWED_H
+#define DIGIKAM_FACE_REC_DNN_BORROWED_H
+
+// Local includes
 
 #include "libopencv.h"
 #include "facedb.h"
@@ -116,4 +118,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACE_REC_DNN_BORROWED_H
+#endif // DIGIKAM_FACE_REC_DNN_BORROWED_H

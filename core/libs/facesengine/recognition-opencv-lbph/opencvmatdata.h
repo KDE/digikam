@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef OPENCV_MAT_DATA_H
-#define OPENCV_MAT_DATA_H
+#ifndef DIGIKAM_OPENCV_MAT_DATA_H
+#define DIGIKAM_OPENCV_MAT_DATA_H
 
 // OpenCV includes
 
@@ -61,4 +61,4 @@ public:
 
 } // namespace Digikam
 
-#endif // OPENCV_MAT_DATA_H
+#endif // DIGIKAM_OPENCV_MAT_DATA_H

@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef FACEREC_FISHERBORROWED_H
-#define FACEREC_FISHERBORROWED_H
+#ifndef DIGIKAM_FACE_REC_FISHER_BORROWED_H
+#define DIGIKAM_FACE_REC_FISHER_BORROWED_H
 
 #include "libopencv.h"
 #include "face.hpp"
@@ -158,4 +158,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACEREC_FISHERBORROWED_H
+#endif // DIGIKAM_FACE_REC_FISHER_BORROWED_H

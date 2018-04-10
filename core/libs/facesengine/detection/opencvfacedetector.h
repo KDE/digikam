@@ -28,8 +28,8 @@
  *
  * ============================================================ */
 
-#ifndef FACESENGINE_OPENCV_FACE_DETECTOR_H
-#define FACESENGINE_OPENCV_FACE_DETECTOR_H
+#ifndef DIGIKAM_FACESENGINE_OPENCV_FACE_DETECTOR_H
+#define DIGIKAM_FACESENGINE_OPENCV_FACE_DETECTOR_H
 
 // OpenCV library
 
@@ -118,4 +118,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACESENGINE_OPENCV_FACE_DETECTOR_H
+#endif // DIGIKAM_FACESENGINE_OPENCV_FACE_DETECTOR_H

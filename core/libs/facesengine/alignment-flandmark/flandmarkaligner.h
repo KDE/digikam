@@ -26,8 +26,8 @@
  *
  * ============================================================ */
 
-#ifndef FACESENGINE_ALIGNMENT_FLANDMARK_ALIGNER
-#define FACESENGINE_ALIGNMENT_FLANDMARK_ALIGNER
+#ifndef DIGIKAM_FACESENGINE_ALIGNMENT_FLANDMARK_ALIGNER
+#define DIGIKAM_FACESENGINE_ALIGNMENT_FLANDMARK_ALIGNER
 
 // OpenCV includes
 
@@ -41,7 +41,7 @@ class FlandmarkAligner
 
 public:
 
-    FlandmarkAligner();
+    explicit FlandmarkAligner();
     ~FlandmarkAligner();
 
     cv::Mat align(const cv::Mat& inputImage);
@@ -54,4 +54,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACESENGINE_ALIGNMENT_CONGEALING_FUNNELREAL_H
+#endif // DIGIKAM_FACESENGINE_ALIGNMENT_FLANDMARK_ALIGNER

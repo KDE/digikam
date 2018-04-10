@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef _DNN_FACE_H_
-#define _DNN_FACE_H_
+#ifndef DIGIKAM_DNN_FACE_H
+#define DIGIKAM_DNN_FACE_H
 
 // C++ includes
 
@@ -99,7 +99,7 @@ class DNNFaceKernel
 {
 public:
 
-    DNNFaceKernel()
+    explicit DNNFaceKernel()
     {
     };
 
@@ -207,4 +207,4 @@ public:
     };
 };
 
-#endif // _DNN_FACE_H_
+#endif // DIGIKAM_DNN_FACE_H

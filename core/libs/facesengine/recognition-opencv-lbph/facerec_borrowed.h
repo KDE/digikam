@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef FACEREC_BORROWED_H
-#define FACEREC_BORROWED_H
+#ifndef DIGIKAM_FACE_REC_BORROWED_H
+#define DIGIKAM_FACE_REC_BORROWED_H
 
 #include "libopencv.h"
 #include "face.hpp"
@@ -200,4 +200,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACEREC_BORROWED_H
+#endif // DIGIKAM_FACE_REC_BORROWED_H

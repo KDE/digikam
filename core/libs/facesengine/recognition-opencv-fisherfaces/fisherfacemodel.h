@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef FACESENGINE_FISHERFACESMODEL_H
-#define FACESENGINE_FISHERFACESMODEL_H
+#ifndef DIGIKAM_FACESENGINE_FISHER_FACES_MODEL_H
+#define DIGIKAM_FACESENGINE_FISHER_FACES_MODEL_H
 
 // OpenCV library
 
@@ -108,4 +108,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // FACESENGINE_FISHERFACESMODEL_H
+#endif // DIGIKAM_FACESENGINE_FISHER_FACES_MODEL_H

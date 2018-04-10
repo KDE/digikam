@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef TAN_TRIGGS_PREPROCESSOR_H
-#define TAN_TRIGGS_PREPROCESSOR_H
+#ifndef DIGIKAM_TAN_TRIGGS_PREPROCESSOR_H
+#define DIGIKAM_TAN_TRIGGS_PREPROCESSOR_H
 
 // OpenCV includes
 
@@ -39,7 +39,7 @@ class TanTriggsPreprocessor
 {
 public:
 
-    TanTriggsPreprocessor();
+    explicit TanTriggsPreprocessor();
 
     /**
      * Performs the Tan Triggs preprocessing to reduce the influence of lightning conditions.
@@ -69,4 +69,4 @@ public:
 
 } // namespace Digikam
 
-#endif // TAN_TRIGGS_PREPROCESSOR_H
+#endif // DIGIKAM_TAN_TRIGGS_PREPROCESSOR_H

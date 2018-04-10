@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef OPENCV_FISHERFACES_RECOGNIZER_H
-#define OPENCV_FISHERFACES_RECOGNIZER_H
+#ifndef DIGIKAM_OPENCV_FISHERFACES_RECOGNIZER_H
+#define DIGIKAM_OPENCV_FISHERFACES_RECOGNIZER_H
 
 // OpenCV library
 
@@ -77,4 +77,4 @@ private:
 
 } // namespace Digikam
 
-#endif // OPENCV_FISHERFACES_RECOGNIZER_H
+#endif // DIGIKAM_OPENCV_FISHERFACES_RECOGNIZER_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef OPENCV_LBPH_FACE_RECOGNIZER_H
-#define OPENCV_LBPH_FACE_RECOGNIZER_H
+#ifndef DIGIKAM_OPENCV_LBPH_FACE_RECOGNIZER_H
+#define DIGIKAM_OPENCV_LBPH_FACE_RECOGNIZER_H
 
 // OpenCV library
 
@@ -47,7 +47,7 @@ public:
     /**
      *  @brief FaceRecognizer:Master class to control entire recognition using LBPH algorithm
      */
-    OpenCVLBPHFaceRecognizer();
+    explicit OpenCVLBPHFaceRecognizer();
     ~OpenCVLBPHFaceRecognizer();
 
     void setThreshold(float threshold) const;
@@ -77,4 +77,4 @@ private:
 
 } // namespace Digikam
 
-#endif // OPENCV_LBPH_FACE_RECOGNIZER_H
+#endif // DIGIKAM_OPENCV_LBPH_FACE_RECOGNIZER_H

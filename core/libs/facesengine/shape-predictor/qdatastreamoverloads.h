@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef QDATASTREAM_OVERLOADS_H
-#define QDATASTREAM_OVERLOADS_H
+#ifndef DIGIKAM_QDATASTREAM_OVERLOADS_H
+#define DIGIKAM_QDATASTREAM_OVERLOADS_H
 
 // Qt includes
 
@@ -37,4 +37,4 @@ DIGIKAM_DATABASE_EXPORT QDataStream& operator >> (QDataStream& dataStream, unsig
 
 DIGIKAM_DATABASE_EXPORT QDataStream& operator << (QDataStream& dataStream, const unsigned long& in);
 
-#endif // QDATASTREAM_OVERLOADS_H
+#endif // DIGIKAM_QDATASTREAM_OVERLOADS_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MATRIX_OPERATIONS_H
-#define MATRIX_OPERATIONS_H
+#ifndef DIGIKAM_MATRIX_OPERATIONS_H
+#define DIGIKAM_MATRIX_OPERATIONS_H
 
 // C++ includes
 
@@ -576,4 +576,4 @@ float determinant(const std::vector<std::vector<float> >& u)
 
 } // namespace Digikam
 
-#endif // MATRIX_OPERATIONS_H
+#endif // DIGIKAM_MATRIX_OPERATIONS_H

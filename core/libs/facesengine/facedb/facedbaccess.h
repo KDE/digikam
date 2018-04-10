@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACE_DATABASE_ACCESS_H
-#define FACE_DATABASE_ACCESS_H
+#ifndef DIGIKAM_FACE_DATABASE_ACCESS_H
+#define DIGIKAM_FACE_DATABASE_ACCESS_H
 
 // Local includes
 
@@ -101,4 +101,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACE_DATABASE_ACCESS_H
+#endif // DIGIKAM_FACE_DATABASE_ACCESS_H

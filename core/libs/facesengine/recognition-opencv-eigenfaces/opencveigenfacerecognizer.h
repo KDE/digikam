@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef OPENCV_EIGENFACES_RECOGNIZER_H
-#define OPENCV_EIGENFACES_RECOGNIZER_H
+#ifndef DIGIKAM_OPENCV_EIGENFACES_RECOGNIZER_H
+#define DIGIKAM_OPENCV_EIGENFACES_RECOGNIZER_H
 
 // OpenCV library
 
@@ -79,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif // OPENCV_EIGENFACES_RECOGNIZER_H
+#endif // DIGIKAM_OPENCV_EIGENFACES_RECOGNIZER_H

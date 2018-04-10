@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef POINT_TRANSFORM_AFFINE_H
-#define POINT_TRANSFORM_AFFINE_H
+#ifndef DIGIKAM_POINT_TRANSFORM_AFFINE_H
+#define DIGIKAM_POINT_TRANSFORM_AFFINE_H
 
 // C++ includes
 
@@ -213,4 +213,4 @@ PointTransformAffine find_similarity_transform(const std::vector<std::vector<flo
 
 } // namespace Digikam
 
-#endif // POINT_TRANSFORM_AFFINE_H
+#endif // DIGIKAM_POINT_TRANSFORM_AFFINE_H

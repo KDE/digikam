@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FACESENGINE_LBPHFACEMODEL_H
-#define FACESENGINE_LBPHFACEMODEL_H
+#ifndef DIGIKAM_FACESENGINE_LBPH_FACE_MODEL_H
+#define DIGIKAM_FACESENGINE_LBPH_FACE_MODEL_H
 
 // OpenCV library
 
@@ -52,7 +52,7 @@ public:
 
 public:
 
-    LBPHistogramMetadata();
+    explicit LBPHistogramMetadata();
     ~LBPHistogramMetadata();
 
 public:
@@ -70,7 +70,7 @@ class LBPHFaceModel : public cv::Ptr<LBPHFaceRecognizer>
 {
 public:
 
-    LBPHFaceModel();
+    explicit LBPHFaceModel();
     ~LBPHFaceModel();
 
     LBPHFaceRecognizer*       ptr();
@@ -109,4 +109,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // FACESENGINE_LBPHFACEMODEL_H
+#endif // DIGIKAM_FACESENGINE_LBPH_FACE_MODEL_H

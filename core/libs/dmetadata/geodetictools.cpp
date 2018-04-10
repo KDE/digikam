@@ -5,11 +5,10 @@
  *
  * Date        : 2008-05-05
  * Description : Geodetic tools based from an implementation written by
+ *               Daniele Franzoni and Martin Desruisseaux from
  *               GeoTools Project Managment Committee (PMC), http://geotools.org
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2004-2006 by Daniele Franzoni
- * Copyright (C) 2004-2006 by Martin Desruisseaux
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,9 +37,14 @@ using namespace Coordinates;
 
 GeodeticCalculator::GeodeticCalculator(const Ellipsoid& e)
     : m_ellipsoid(e),
-      m_lat1(0), m_long1(0), m_lat2(0), m_long2(0),
-      m_distance(0), m_azimuth(0),
-      m_destinationValid(false), m_directionValid(false)
+      m_lat1(0),
+      m_long1(0),
+      m_lat2(0),
+      m_long2(0),
+      m_distance(0),
+      m_azimuth(0),
+      m_destinationValid(false),
+      m_directionValid(false)
 {
     m_semiMajorAxis = m_ellipsoid.semiMajorAxis();
     m_semiMinorAxis = m_ellipsoid.semiMinorAxis();

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACE_DATABASE_BACKEND_H
-#define FACE_DATABASE_BACKEND_H
+#ifndef DIGIKAM_FACE_DATABASE_BACKEND_H
+#define DIGIKAM_FACE_DATABASE_BACKEND_H
 
 // Local includes
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACE_DATABASE_BACKEND_H
+#endif // DIGIKAM_FACE_DATABASE_BACKEND_H

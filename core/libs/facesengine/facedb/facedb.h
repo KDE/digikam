@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FACE_DATABASE_TRAINING_INTERFACE_H
-#define FACE_DATABASE_TRAINING_INTERFACE_H
+#ifndef DIGIKAM_FACE_DATABASE_TRAINING_INTERFACE_H
+#define DIGIKAM_FACE_DATABASE_TRAINING_INTERFACE_H
 
 // C++ includes
 
@@ -108,4 +108,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACE_DATABASE_TRAINING_INTERFACE_H
+#endif // DIGIKAM_FACE_DATABASE_TRAINING_INTERFACE_H
