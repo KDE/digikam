@@ -432,7 +432,8 @@ bool BookmarksModel::hasChildren(const QModelIndex& parent) const
 
     const BookmarkNode* const parentNode = node(parent);
 
-    return (parentNode->type() == BookmarkNode::Folder);
+    return (parentNode->type() == BookmarkNode::Folder ||
+            parentNode->type() == BookmarkNode::RootFolder);
 }
 
 Qt::ItemFlags BookmarksModel::flags(const QModelIndex& index) const
@@ -443,10 +444,14 @@ Qt::ItemFlags BookmarksModel::flags(const QModelIndex& index) const
     Qt::ItemFlags flags              = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     BookmarkNode* const bookmarkNode = node(index);
 
-    flags |= Qt::ItemIsDragEnabled;
+    if (bookmarkNode->type() != BookmarkNode::RootFolder)
+        flags |= Qt::ItemIsDragEnabled;
 
-    if (bookmarkNode->type() != BookmarkNode::Separator)
+    if (bookmarkNode->type() != BookmarkNode::Separator &&
+        bookmarkNode->type() != BookmarkNode::RootFolder)
+    {
         flags |= Qt::ItemIsEditable;
+    }
 
     if (hasChildren(index))
         flags |= Qt::ItemIsDropEnabled;

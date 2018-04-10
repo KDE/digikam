@@ -177,4 +177,5 @@ BUGFIXES:
 160 ==> 368796 - Problem with Exif-tags: ImageDescription and UserComment.
 161 ==> 392417 - AppImage (5.9.0-01-x86-64) does not support "--install" cli parameter.
 162 ==> 392922 - digikam-6.0.0 fail to start.
-163 ==> 
+163 ==> 391399 - Not possible to add location bookmarks in Digikam >5.6.0.
+164 ==> 

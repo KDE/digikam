@@ -355,9 +355,15 @@ void BookmarksDialog::slotCustomContextMenuRequested(const QPoint& pos)
 
     if (index.isValid())
     {
-        QMenu menu;
-        menu.addAction(i18n("Remove"), this, SLOT(slotRemoveOne()));
-        menu.exec(QCursor::pos());
+        index                    = d->proxyModel->mapToSource(index);
+        BookmarkNode* const node = d->manager->bookmarksModel()->node(index);
+
+        if (node && node->type() != BookmarkNode::RootFolder)
+        {
+            QMenu menu;
+            menu.addAction(i18n("Remove"), this, SLOT(slotRemoveOne()));
+            menu.exec(QCursor::pos());
+        }
     }
 }
 
@@ -422,6 +428,11 @@ void BookmarksDialog::slotRemoveOne()
     {
         index                    = d->proxyModel->mapToSource(index);
         BookmarkNode* const node = d->manager->bookmarksModel()->node(index);
+
+        if (node->type() == BookmarkNode::RootFolder)
+        {
+            return;
+        }
 
         if (QMessageBox::question(this, qApp->applicationName(),
                                   i18nc("@info", "Do you want to remove \"%1\" "

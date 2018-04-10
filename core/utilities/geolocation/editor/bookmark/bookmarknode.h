@@ -45,7 +45,8 @@ public:
         Root,
         Folder,
         Bookmark,
-        Separator
+        Separator,
+        RootFolder
     };
 
 public:
@@ -87,7 +88,7 @@ public:
     explicit XbelReader();
 
     BookmarkNode* read(const QString& fileName);
-    BookmarkNode* read(QIODevice* const device);
+    BookmarkNode* read(QIODevice* const device, bool addRootFolder = false);
 
 private:
 
