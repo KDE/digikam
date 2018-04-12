@@ -496,6 +496,11 @@ void ImageScanner::scanFile(ScanMode mode)
     }
     else
     {
+        if (d->scanMode == Rescan && d->scanInfo.id != -1)
+        {
+            CoreDbAccess().db()->removeAttributesFromImage(d->scanInfo.id);
+        }
+
         if (d->scanInfo.category == DatabaseItem::Image)
         {
             scanImageInformation();
