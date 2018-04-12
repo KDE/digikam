@@ -69,15 +69,19 @@ public:
     DTrashItemInfoList   data;
 };
 
-DTrashItemModel::DTrashItemModel(QObject* parent)
-    : QAbstractTableModel(parent), d(new Private)
+DTrashItemModel::DTrashItemModel(QObject* const parent)
+    : QAbstractTableModel(parent),
+      d(new Private)
 {
     qRegisterMetaType<DTrashItemInfo>("DTrashItemInfo");
-    d->thumbnailThread = ThumbnailLoadThread::defaultThread();
+    d->thumbnailThread = new ThumbnailLoadThread;
 
-    d->timer = new QTimer();
+    d->timer = new QTimer(this);
     d->timer->setInterval(100);
     d->timer->setSingleShot(true);
+
+    connect(d->thumbnailThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(refreshThumbnails()));
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(refreshLayout()));
@@ -85,6 +89,7 @@ DTrashItemModel::DTrashItemModel(QObject* parent)
 
 DTrashItemModel::~DTrashItemModel()
 {
+    delete d->thumbnailThread;
     delete d;
 }
 
@@ -172,9 +177,9 @@ void DTrashItemModel::sort(int column, Qt::SortOrder order)
                     return a.collectionRelativePath < b.collectionRelativePath;
                 });
 
-    const QModelIndex topLeft     = index(0, 0, QModelIndex());
+    const QModelIndex topLeft     = index(0, 0);
     const QModelIndex bottomRight = index(rowCount(QModelIndex())-1,
-                                          columnCount(QModelIndex())-1, QModelIndex());
+                                          columnCount(QModelIndex())-1);
     dataChanged(topLeft, bottomRight);
 }
 
@@ -245,8 +250,18 @@ void DTrashItemModel::removeItems(const QModelIndexList& indexes)
 
 void DTrashItemModel::refreshLayout()
 {
+    const QModelIndex topLeft     = index(0, 0);
+    const QModelIndex bottomRight = index(rowCount(QModelIndex())-1, 0);
+    dataChanged(topLeft, bottomRight);
     layoutAboutToBeChanged();
     layoutChanged();
+}
+
+void DTrashItemModel::refreshThumbnails()
+{
+    const QModelIndex topLeft     = index(0, 0);
+    const QModelIndex bottomRight = index(rowCount(QModelIndex())-1, 0);
+    dataChanged(topLeft, bottomRight);
 }
 
 void DTrashItemModel::clearCurrentData()
@@ -308,10 +323,6 @@ void DTrashItemModel::changeThumbSize(int size)
 
     if (isEmpty())
         return;
-
-    const QModelIndex topLeft     = index(0, 0, QModelIndex());
-    const QModelIndex bottomRight = index(rowCount(QModelIndex())-1, 0, QModelIndex());
-    dataChanged(topLeft, bottomRight);
 
     d->timer->start();
 }

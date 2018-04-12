@@ -42,7 +42,7 @@ class DTrashItemModel : public QAbstractTableModel
 
 public:
 
-    explicit DTrashItemModel(QObject* parent = 0);
+    explicit DTrashItemModel(QObject* const parent = 0);
     ~DTrashItemModel();
 
     /**
@@ -120,6 +120,11 @@ public Q_SLOTS:
      * @brief refreshes the view layout
      */
     void refreshLayout();
+
+    /**
+     * @brief refreshes the thumbnails
+     */
+    void refreshThumbnails();
 
 Q_SIGNALS:
 
