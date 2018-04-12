@@ -43,7 +43,6 @@
 #include "showfotosettings.h"
 #include "showfotodragdrophandler.h"
 #include "thumbnailloadthread.h"
-#include "dsplashscreen.h"
 
 namespace ShowFoto
 {
