@@ -28,6 +28,7 @@
 #include <QCommandLineParser>
 #include <QUrl>
 #include <QIcon>
+#include <QPointer>
 
 // Local includes
 
@@ -55,11 +56,12 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    PanoManager mngr;
-    mngr.setItemsList(urlList);
-    mngr.run();
+    QPointer<PanoManager> mngr = new PanoManager;
+    mngr->setItemsList(urlList);
+    mngr->run();
 
     app.exec();
+    delete mngr;
     MetaEngine::cleanupExiv2();
 
     return 0;
