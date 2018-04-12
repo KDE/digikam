@@ -917,10 +917,9 @@ SearchInfo CoreDB::getSearchInfo(int searchId)
     return info;
 }
 
-void CoreDB::setSetting(const QString& keyword,
-                         const QString& value)
+void CoreDB::setSetting(const QString& keyword, const QString& value)
 {
-    d->db->execSql(QString::fromUtf8("REPLACE into Settings VALUES (?,?);"),
+    d->db->execSql(QString::fromUtf8("REPLACE INTO Settings VALUES (?,?);"),
                    keyword, value);
 }
 
