@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "filmfilter_p.h"
+
 // C++ includes
 
 #include <cmath>
@@ -31,7 +33,6 @@
 
 // Local includes
 
-#include "filmfilter_p.h"
 #include "invertfilter.h"
 
 namespace Digikam
