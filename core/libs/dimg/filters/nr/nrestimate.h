@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef NRESTIMATE_H
-#define NRESTIMATE_H
+#ifndef DIGIKAM_NR_ESTIMATE_H
+#define DIGIKAM_NR_ESTIMATE_H
 
 // Qt includes
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* NRESTIMATE_H */
+#endif // DIGIKAM_NR_ESTIMATE_H

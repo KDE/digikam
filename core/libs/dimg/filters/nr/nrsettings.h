@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef NRSETTINGS_H
-#define NRSETTINGS_H
+#ifndef DIGIKAM_NR_SETTINGS_H
+#define DIGIKAM_NR_SETTINGS_H
 
 // Local includes
 
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* NRSETTINGS_H */
+#endif // DIGIKAM_NR_SETTINGS_H

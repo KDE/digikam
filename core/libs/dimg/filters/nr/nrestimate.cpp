@@ -27,6 +27,8 @@
  *
  * ============================================================ */
 
+#include "nrestimate.h"
+
 // C++ includes
 
 #include <cmath>
@@ -44,7 +46,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "nrestimate.h"
 #include "nrfilter.h"
 
 namespace Digikam
@@ -54,11 +55,11 @@ class NREstimate::Private
 {
 public:
 
-    explicit Private() :
-       clusterCount(30),
-       size(512)
+    explicit Private()
+      : clusterCount(30),
+        size(512)
     {
-        for (int c = 0 ; c < 3; c++)
+        for (int c = 0 ; c < 3 ; c++)
         {
             fimg[c] = 0;
         }
@@ -98,16 +99,16 @@ void NREstimate::readImage() const
 {
     DColor col;
 
-    for (int c = 0; runningFlag() && (c < 3); c++)
+    for (int c = 0 ; runningFlag() && (c < 3) ; c++)
     {
         d->fimg[c] = new float[m_orgImage.numPixels()];
     }
 
     int j = 0;
 
-    for (uint y = 0; runningFlag() && (y < m_orgImage.height()); y++)
+    for (uint y = 0 ; runningFlag() && (y < m_orgImage.height()) ; y++)
     {
-        for (uint x = 0; runningFlag() && (x < m_orgImage.width()); x++)
+        for (uint x = 0 ; runningFlag() && (x < m_orgImage.width()) ; x++)
         {
             col           = m_orgImage.getPixelColor(x, y);
             d->fimg[0][j] = col.red();
@@ -142,9 +143,9 @@ void NREstimate::startAnalyse()
     // pointer variable to handle the CvMat* points (the image in CvMat format)
     float* pointsPtr = reinterpret_cast<float*>(points->data.ptr);
 
-    for (uint x=0 ; runningFlag() && (x < m_orgImage.numPixels()) ; x++)
+    for (uint x = 0 ; runningFlag() && (x < m_orgImage.numPixels()) ; x++)
     {
-        for (int y=0 ; runningFlag() && (y < 3) ; y++)
+        for (int y = 0 ; runningFlag() && (y < 3) ; y++)
         {
             *pointsPtr++ = (float)d->fimg[y][x];
         }
@@ -173,7 +174,7 @@ void NREstimate::startAnalyse()
 
     //the row position array would just make the hold the number of elements in each cluster
 
-    for (uint i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
+    for (uint i = 0 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
         //initializing the cluster count array
         rowPosition[i] = 0;
@@ -181,7 +182,7 @@ void NREstimate::startAnalyse()
 
     int rowIndex, columnIndex;
 
-    for (uint i=0 ; runningFlag() && (i < m_orgImage.numPixels()) ; i++)
+    for (uint i = 0 ; runningFlag() && (i < m_orgImage.numPixels()) ; i++)
     {
         columnIndex = clusters->data.i[i];
         rowPosition[columnIndex]++;
@@ -190,7 +191,7 @@ void NREstimate::startAnalyse()
 /*
     qCDebug(DIGIKAM_DIMG_LOG) << "Lets see what the rowPosition array looks like : ";
 
-    for(uint i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
+    for(uint i = 0 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
         qCDebug(DIGIKAM_DIMG_LOG) << "Cluster : "<< i << " the count is :" << rowPosition[i];
     }
@@ -203,7 +204,7 @@ void NREstimate::startAnalyse()
 
     int max = rowPosition[0];
 
-    for (uint i=1 ; runningFlag() && (i < d->clusterCount) ; i++)
+    for (uint i = 1 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
         if (rowPosition[i] > max)
         {
@@ -232,7 +233,7 @@ void NREstimate::startAnalyse()
 
     QScopedArrayPointer<int> rPosition(new int[d->clusterCount]);
 
-    for (uint i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
+    for (uint i = 0 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
         rPosition[i] = 0;
     }
@@ -251,15 +252,15 @@ void NREstimate::startAnalyse()
         ptr         = reinterpret_cast<float*>(sd->data.ptr + rowIndex*(sd->step));
 
         //moving to the right column
-        for (int j=0 ; runningFlag() && (j < columnIndex) ; j++)
+        for (int j = 0 ; runningFlag() && (j < columnIndex) ; j++)
         {
-            for(int z=0 ; runningFlag() && (z < (points->cols)) ; z++)
+            for (int z = 0 ; runningFlag() && (z < (points->cols)) ; z++)
             {
                 ptr++;
             }
         }
 
-        for (int z=0 ; runningFlag() && (z < (points->cols)) ; z++)
+        for (int z = 0 ; runningFlag() && (z < (points->cols)) ; z++)
         {
             *ptr++ = cvGet2D(points, i, z).val[0];
         }
@@ -288,14 +289,14 @@ void NREstimate::startAnalyse()
         stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
     }
 
-    for (int i=0 ; runningFlag() && (i < sd->cols) ; i++)
+    for (int i = 0 ; runningFlag() && (i < sd->cols) ; i++)
     {
         if (runningFlag() && (rowPosition[(i/points->cols)] >= 1))
         {
             CvMat* workingArr = cvCreateMat(rowPosition[(i / points->cols)], 1, CV_32FC1);
             ptr               = reinterpret_cast<float*>(workingArr->data.ptr);
 
-            for (int j=0 ; runningFlag() && (j < rowPosition[(i / (points->cols))]) ; j++)
+            for (int j = 0 ; runningFlag() && (j < rowPosition[(i / (points->cols))]) ; j++)
             {
                 *ptr++ = cvGet2D(sd, j, i).val[0];
             }
@@ -333,7 +334,7 @@ void NREstimate::startAnalyse()
             QTextStream oms(&filems);
             oms << "Mean Data\n";
 
-            for (int i=0 ; i < totalcount ; i++)
+            for (int i = 0 ; i < totalcount ; i++)
             {
                 oms << *meanStorePtr++;
                 oms << "\t";
@@ -346,7 +347,7 @@ void NREstimate::startAnalyse()
 
             oms << "\nStd Data\n";
 
-            for (int i=0 ; i < totalcount ; i++)
+            for (int i = 0 ; i < totalcount ; i++)
             {
                 oms << *stdStorePtr++;
                 oms << "\t";
@@ -388,18 +389,18 @@ void NREstimate::startAnalyse()
     float   weightedStd  = 0.0f;
     float   datasd[3]    = {0.0f, 0.0f, 0.0f};
 
-    for (int j=0 ; runningFlag() && (j < points->cols) ; j++)
+    for (int j = 0 ; runningFlag() && (j < points->cols) ; j++)
     {
         meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
         stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
 
-        for (int moveToChannel=0 ; moveToChannel <= j ; moveToChannel++)
+        for (int moveToChannel = 0 ; moveToChannel <= j ; moveToChannel++)
         {
             meanStorePtr++;
             stdStorePtr++;
         }
 
-        for (uint i=0 ; i < d->clusterCount ; i++)
+        for (uint i = 0 ; i < d->clusterCount ; i++)
         {
             if (rowPosition[i] >= 1)
             {
@@ -446,7 +447,7 @@ void NREstimate::startAnalyse()
         // for 16 bits images only
         if (m_orgImage.sixteenBit())
         {
-            for (int i=0 ; i < points->cols ; i++)
+            for (int i = 0 ; i < points->cols ; i++)
             {
                 datasd[i] = datasd[i] / 256;
             }
@@ -506,7 +507,7 @@ void NREstimate::startAnalyse()
     cvReleaseMat(&points);
     cvReleaseMat(&clusters);
 
-    for (uint i = 0; i < 3; i++)
+    for (uint i = 0 ; i < 3 ; i++)
     {
         delete [] d->fimg[i];
     }

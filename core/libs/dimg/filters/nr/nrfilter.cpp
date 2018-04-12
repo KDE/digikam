@@ -132,7 +132,7 @@ FilterAction NRFilter::filterAction()
 
 void NRFilter::readParameters(const FilterAction& action)
 {
-    for (int i = 0; i < 3; ++i)
+    for (int i = 0 ; i < 3 ; ++i)
     {
         d->settings.softness[i]   = action.parameter(QString::fromLatin1("softness[%1]").arg(i)).toDouble();
         d->settings.thresholds[i] = action.parameter(QString::fromLatin1("thresholds[%1]").arg(i)).toDouble();
@@ -175,7 +175,7 @@ void NRFilter::filterImage()
 
     // Allocate buffers.
 
-    for (int c = 0; c < 3; ++c)
+    for (int c = 0 ; c < 3 ; ++c)
     {
         d->fimg[c] = new float[width * height];
     }
@@ -187,9 +187,9 @@ void NRFilter::filterImage()
 
     int j = 0;
 
-    for (int y = 0; runningFlag() && (y < height); ++y)
+    for (int y = 0 ; runningFlag() && (y < height) ; ++y)
     {
-        for (int x = 0; runningFlag() && (x < width); ++x)
+        for (int x = 0 ; runningFlag() && (x < width) ; ++x)
         {
             col           = m_orgImage.getPixelColor(x, y);
             d->fimg[0][j] = col.red()   / clip;
@@ -212,7 +212,7 @@ void NRFilter::filterImage()
 
     // denoise the channels individually
 
-    for (int c = 0; runningFlag() && (c < 3); ++c)
+    for (int c = 0 ; runningFlag() && (c < 3) ; ++c)
     {
         d->buffer[0] = d->fimg[c];
 
@@ -240,9 +240,9 @@ void NRFilter::filterImage()
 
     // clip the values
 
-    for (int c = 0; runningFlag() && (c < 3); ++c)
+    for (int c = 0 ; runningFlag() && (c < 3) ; ++c)
     {
-        for (int i = 0; i < width * height; ++i)
+        for (int i = 0 ; i < width * height ; ++i)
         {
             d->fimg[c][i] = qBound(0.0F, d->fimg[c][i] * clip, clip);
         }
@@ -254,13 +254,13 @@ void NRFilter::filterImage()
 
     j = 0;
 
-    for (int y = 0; runningFlag() && (y < height); ++y)
+    for (int y = 0 ; runningFlag() && (y < height) ; ++y)
     {
-        for (int x = 0; x < width; ++x)
+        for (int x = 0 ; x < width ; ++x)
         {
-            col.setRed((int)(d->fimg[0][j] + 0.5));
+            col.setRed((int)(d->fimg[0][j]   + 0.5));
             col.setGreen((int)(d->fimg[1][j] + 0.5));
-            col.setBlue((int)(d->fimg[2][j] + 0.5));
+            col.setBlue((int)(d->fimg[2][j]  + 0.5));
             col.setAlpha(m_orgImage.getPixelColor(x, y).alpha());
             ++j;
 
@@ -272,7 +272,7 @@ void NRFilter::filterImage()
 
     // Free buffers.
 
-    for (int c = 0; c < 3; ++c)
+    for (int c = 0 ; c < 3 ; ++c)
     {
         delete [] d->fimg[c];
     }
@@ -285,7 +285,7 @@ void NRFilter::filterImage()
 
 void NRFilter::calculteStdevMultithreaded(const Args& prm)
 {
-    for (uint i = prm.start; runningFlag() && (i < prm.stop); ++i)
+    for (uint i = prm.start ; runningFlag() && (i < prm.stop) ; ++i)
     {
         prm.fimg[*prm.hpass][i] -= prm.fimg[*prm.lpass][i];
 
@@ -322,7 +322,7 @@ void NRFilter::calculteStdevMultithreaded(const Args& prm)
 
 void NRFilter::thresholdingMultithreaded(const Args& prm)
 {
-    for (uint i = prm.start; runningFlag() && (i < prm.stop); ++i)
+    for (uint i = prm.start ; runningFlag() && (i < prm.stop) ; ++i)
     {
         if (prm.fimg[*prm.lpass][i] > 0.8)
         {
@@ -389,25 +389,25 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
     prm.samples   = &samples[0];
     prm.fimg      = fimg;
 
-    for (uint lev = 0; runningFlag() && (lev < 5); ++lev)
+    for (uint lev = 0 ; runningFlag() && (lev < 5) ; ++lev)
     {
         lpass = ((lev & 1) + 1);
 
-        for (uint row = 0; runningFlag() && (row < height); ++row)
+        for (uint row = 0 ; runningFlag() && (row < height) ; ++row)
         {
             hatTransform(temp.data(), fimg[hpass] + row * width, 1, width, 1 << lev);
 
-            for (uint col = 0; col < width; ++col)
+            for (uint col = 0 ; col < width ; ++col)
             {
                 fimg[lpass][row * width + col] = temp[col] * 0.25;
             }
         }
 
-        for (uint col = 0; runningFlag() && (col < width); ++col)
+        for (uint col = 0 ; runningFlag() && (col < width) ; ++col)
         {
             hatTransform(temp.data(), fimg[lpass] + col, width, height, 1 << lev);
 
-            for (uint row = 0; row < height; ++row)
+            for (uint row = 0 ; row < height ; ++row)
             {
                 fimg[lpass][row * width + col] = temp[row] * 0.25;
             }
@@ -471,17 +471,17 @@ void NRFilter::hatTransform(float* const temp, float* const base, int st, int si
 {
     int i;
 
-    for (i = 0; i < sc; ++i)
+    for (i = 0 ; i < sc ; ++i)
     {
         temp[i] = 2 * base[st * i] + base[st * (sc - i)] + base[st * (i + sc)];
     }
 
-    for (; i + sc < size; ++i)
+    for (; i + sc < size ; ++i)
     {
         temp[i] = 2 * base[st * i] + base[st * (i - sc)] + base[st * (i + sc)];
     }
 
-    for (; i < size; ++i)
+    for (; i < size ; ++i)
     {
         temp[i] = 2 * base[st * i] + base[st * (i - sc)] + base[st * (2 * size - 2 - (i + sc))];
     }
@@ -493,7 +493,7 @@ void NRFilter::srgb2ycbcr(float** const fimg, int size)
 {
     float y, cb, cr;
 
-    for (int i = 0; i < size; ++i)
+    for (int i = 0 ; i < size ; ++i)
     {
         y          =  0.2990 * fimg[0][i] + 0.5870 * fimg[1][i] + 0.1140 * fimg[2][i];
         cb         = -0.1687 * fimg[0][i] - 0.3313 * fimg[1][i] + 0.5000 * fimg[2][i] + 0.5;
@@ -508,7 +508,7 @@ void NRFilter::ycbcr2srgb(float** const fimg, int size)
 {
     float r, g, b;
 
-    for (int i = 0; i < size; ++i)
+    for (int i = 0 ; i < size ; ++i)
     {
         r          = fimg[0][i] + 1.40200 * (fimg[2][i] - 0.5);
         g          = fimg[0][i] - 0.34414 * (fimg[1][i] - 0.5) - 0.71414 * (fimg[2][i] - 0.5);

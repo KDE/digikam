@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef NRFILTER_H
-#define NRFILTER_H
+#ifndef DIGIKAM_NR_FILTER_H
+#define DIGIKAM_NR_FILTER_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT NRContainer
 
 public:
 
-    NRContainer();
+    explicit NRContainer();
     ~NRContainer();
 
 public:
@@ -118,4 +118,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* NRFILTER_H */
+#endif // DIGIKAM_NR_FILTER_H */
