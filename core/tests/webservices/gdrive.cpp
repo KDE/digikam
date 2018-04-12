@@ -27,6 +27,7 @@
 #include <QCommandLineParser>
 #include <QUrl>
 #include <QIcon>
+#include <QPointer>
 
 // Local includes
 
@@ -55,8 +56,9 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    GSWindow dlg(new DMetaInfoIface(&app, urlList), 0, QLatin1String("googledriveexport"));
-    dlg.exec();
+    QPointer<GSWindow> dlg = new GSWindow(new DMetaInfoIface(&app, urlList), 0, QLatin1String("googledriveexport"));
+    dlg->exec();
+    delete dlg;
 
     MetaEngine::cleanupExiv2();
 

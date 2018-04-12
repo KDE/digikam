@@ -27,6 +27,7 @@
 #include <QCommandLineParser>
 #include <QUrl>
 #include <QIcon>
+#include <QPointer>
 
 // Local includes
 
@@ -61,15 +62,15 @@ int main(int argc, char* argv[])
 
     if (parser.isSet(QString::fromLatin1("import")))
     {
-        GSWindow dlg(new DMetaInfoIface(&app, QList<QUrl>()), 0,
-                     QLatin1String("googlephotoimport"));
-        dlg.exec();
+        QPointer<GSWindow> dlg = new GSWindow(new DMetaInfoIface(&app, QList<QUrl>()), 0, QLatin1String("googlephotoimport"));
+        dlg->exec();
+        delete dlg;
     }
     else
     {
-        GSWindow dlg(new DMetaInfoIface(&app, urlList), 0,
-                     QLatin1String("googlephotoexport"));
-        dlg.exec();
+        QPointer<GSWindow> dlg = new GSWindow(new DMetaInfoIface(&app, urlList), 0, QLatin1String("googlephotoexport"));
+        dlg->exec();
+        delete dlg;
     }
 
     MetaEngine::cleanupExiv2();

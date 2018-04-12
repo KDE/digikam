@@ -27,6 +27,7 @@
 #include <QCommandLineParser>
 #include <QUrl>
 #include <QIcon>
+#include <QPointer>
 
 // Local includes
 
@@ -50,9 +51,10 @@ int main(int argc, char* argv[])
     QList<QUrl> urlList;
     const QStringList args = parser.positionalArguments();
 
-    FlickrWindow dlg(new DMetaInfoIface(&app, urlList), 0);
-    dlg.exec();
-
+    QPointer<FlickrWindow> dlg = new FlickrWindow(new DMetaInfoIface(&app, urlList), 0);
+    dlg->exec();
+    delete dlg;
+    
     MetaEngine::cleanupExiv2();
 
     return 0;
