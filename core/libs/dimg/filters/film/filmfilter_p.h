@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILM_FILTER_P_H
-#define FILM_FILTER_P_H
+#ifndef DIGIKAM_FILM_FILTER_P_H
+#define DIGIKAM_FILM_FILTER_P_H
 
 #include "filmfilter.h"
 
@@ -118,7 +118,7 @@ class FilmContainer::Private
 {
 public:
 
-    Private()
+    explicit Private()
         : gamma(1.0),
           exposure(1.0),
           sixteenBit(false),
@@ -148,7 +148,7 @@ class FilmFilter::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
     }
 
@@ -161,4 +161,4 @@ public:
 
 } // namespace Digikam
 
-#endif // FILM_FILTER_P_H
+#endif // DIGIKAM_FILM_FILTER_P_H
