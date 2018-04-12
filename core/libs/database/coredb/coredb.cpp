@@ -71,17 +71,21 @@ public:
 
     explicit Private()
       : db(0),
-        uniqueHashVersion(-1)
+        uniqueHashVersion(-1),
+        removeAttributes(false)
     {
     }
 
     static const QString configGroupName;
     static const QString configRecentlyUsedTags;
+    static const QString configRemoveAttributes;
 
     CoreDbBackend*       db;
     QList<int>           recentlyAssignedTags;
 
     int                  uniqueHashVersion;
+
+    bool                 removeAttributes;
 
 public:
 
@@ -91,6 +95,7 @@ public:
 
 const QString CoreDB::Private::configGroupName(QLatin1String("CoreDB Settings"));
 const QString CoreDB::Private::configRecentlyUsedTags(QLatin1String("Recently Used Tags"));
+const QString CoreDB::Private::configRemoveAttributes(QLatin1String("Remove Attributes Before Rescan"));
 
 QString CoreDB::Private::constructRelatedImagesSQL(bool fromOrTo, DatabaseRelation::Type type, bool boolean)
 {
@@ -4868,10 +4873,56 @@ QList<QVariant> CoreDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1, 
     return values;
 }
 
+void CoreDB::removeAttributesFromImage(qlonglong imageID)
+{
+    if (!d->removeAttributes)
+    {
+        return;
+    }
+
+    DatabaseFields::Set fields;
+
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageInformation WHERE imageid=?;"),
+                   imageID);
+    fields |= DatabaseFields::ImageInformationAll;
+
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImagePositions WHERE imageid=?;"),
+                   imageID);
+    fields |= DatabaseFields::ImagePositionsAll;
+
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageCopyright WHERE imageid=?;"),
+                   imageID);
+
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageComments WHERE imageid=?;"),
+                   imageID);
+    fields |= DatabaseFields::ImageCommentsAll;
+
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageMetadata WHERE imageid=?;"),
+                   imageID);
+    fields |= DatabaseFields::ImageMetadataAll;
+
+    d->db->execSql(QString::fromUtf8("DELETE FROM VideoMetadata WHERE imageid=?;"),
+                   imageID);
+    fields |= DatabaseFields::VideoMetadataAll;
+
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageHistory WHERE imageid=?;"),
+                   imageID);
+    fields |= DatabaseFields::ImageHistoryInfoAll;
+
+    QList<int> tagIds = getItemTagIDs(imageID);
+
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageTags WHERE imageid=?;"),
+                   imageID);
+
+    d->db->recordChangeset(ImageTagChangeset(imageID, tagIds, ImageTagChangeset::RemovedAll));
+    d->db->recordChangeset(ImageChangeset(imageID, fields));
+}
+
 bool CoreDB::integrityCheck()
 {
     QList<QVariant> values;
     d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("checkCoreDbIntegrity")), &values);
+
     switch (d->db->databaseType())
     {
         case BdEngineBackend::DbType::SQLite:
@@ -4881,12 +4932,12 @@ bool CoreDB::integrityCheck()
             // For MySQL, for every checked table, the table name, operation (check), message type (status) and the message text (ok on success)
             // are returned. So we check if there are four elements and if yes, whether the fourth element is "ok".
             //qCDebug(DIGIKAM_DATABASE_LOG) << "MySQL check returned " << values.size() << " rows";
-            if ( (values.size() % 4) != 0)
+            if ((values.size() % 4) != 0)
             {
                 return false;
             }
 
-            for (QList<QVariant>::iterator it = values.begin(); it != values.end(); )
+            for (QList<QVariant>::iterator it = values.begin() ; it != values.end() ;)
             {
                 QString tableName   = (*it).toString();
                 ++it;
@@ -4925,6 +4976,7 @@ void CoreDB::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->recentlyAssignedTags = group.readEntry(d->configRecentlyUsedTags, QList<int>());
+    d->removeAttributes     = group.readEntry(d->configRemoveAttributes, false);
 }
 
 void CoreDB::writeSettings()

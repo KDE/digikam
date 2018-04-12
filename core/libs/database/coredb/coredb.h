@@ -1114,7 +1114,7 @@ public:
      * Returns a list of all images where tagId is assigned
      * Return item URLs.
      */
-     QStringList getItemsURLsWithTag(int tagId);
+    QStringList getItemsURLsWithTag(int tagId);
 
     // ----------- Items and their tags -----------
 
@@ -1289,10 +1289,19 @@ public:
      */
     void copyImageAttributes(qlonglong srcId, qlonglong destId);
 
-    /// Copies all entries in the ImageProperties table
+    // Copies all entries in the ImageProperties table
     void copyImageProperties(qlonglong srcId, qlonglong dstId);
-    /// Copies all entries in the ImageTags table
+    // Copies all entries in the ImageTags table
     void copyImageTags(qlonglong srcId, qlonglong dstId);
+
+    // ---------- Remove all Item Attributes ----------
+
+    /**
+     * Remove all attributes of an item if
+     * this option enabled in the config file
+     * @param  imageID the ID of the item
+     */
+    void removeAttributesFromImage(qlonglong imageID);
 
     // ----------- Download history methods -----------
 
