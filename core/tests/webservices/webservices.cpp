@@ -27,6 +27,7 @@
 #include <QCommandLineParser>
 #include <QUrl>
 #include <QIcon>
+#include <QPointer>
 
 // Local includes
 
@@ -55,10 +56,10 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    WSWizard wzrd(0, new DMetaInfoIface(&app, urlList));
-    wzrd.setItemsList(urlList);
-    wzrd.exec();
-
+    QPointer<WSWizard> dlg = new WSWizard(0, new DMetaInfoIface(&app, urlList));
+    dlg->exec();
+    delete dlg;
+    
     MetaEngine::cleanupExiv2();
 
     return 0;

@@ -27,6 +27,7 @@
 #include <QCommandLineParser>
 #include <QUrl>
 #include <QIcon>
+#include <QPointer>
 
 // Local includes
 
@@ -54,9 +55,10 @@ int main(int argc, char* argv[])
     {
         urlList.append(QUrl::fromLocalFile(arg));
     }
-
-    VKWindow dlg(new DMetaInfoIface(&app, urlList), 0);
-    dlg.exec();
+    
+    QPointer<VKWindow> dlg = new VKWindow(new DMetaInfoIface(&app, urlList), 0);
+    dlg->exec();
+    delete dlg;
 
     MetaEngine::cleanupExiv2();
 

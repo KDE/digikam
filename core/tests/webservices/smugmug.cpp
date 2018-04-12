@@ -27,6 +27,7 @@
 #include <QCommandLineParser>
 #include <QUrl>
 #include <QIcon>
+#include <QPointer>
 
 // Local includes
 
@@ -61,13 +62,15 @@ int main(int argc, char* argv[])
 
     if (parser.isSet(QString::fromLatin1("import")))
     {
-        SmugWindow dlg(new DMetaInfoIface(&app, QList<QUrl>()), 0, true);
-        dlg.exec();
+        QPointer<SmugWindow> dlg = new SmugWindow(new DMetaInfoIface(&app, QList<QUrl>()), 0, true);
+        dlg->exec();
+        delete dlg;
     }
     else
     {
-        SmugWindow dlg(new DMetaInfoIface(&app, urlList), 0);
-        dlg.exec();
+        QPointer<SmugWindow> dlg = new SmugWindow(new DMetaInfoIface(&app, QList<QUrl>()), 0);
+        dlg->exec();
+        delete dlg;
     }
 
     MetaEngine::cleanupExiv2();
