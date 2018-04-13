@@ -25,6 +25,12 @@
 #ifndef DIGIKAM_LCMS_H
 #define DIGIKAM_LCMS_H
 
+// Qt includes
+
+#include <QString>
+
+// Local includes
+
 #include "digikam_export.h"
 
 #if defined (__MINGW32__)

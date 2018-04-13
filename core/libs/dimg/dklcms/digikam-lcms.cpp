@@ -22,17 +22,15 @@
  *
  * ============================================================ */
 
-// Qt includes
+#include "digikam-lcms.h"
 
-#include <QString>
+// Lcms includes
+
+#include <lcms2_plugin.h>
 
 // Local includes
 
 #include "digikam_debug.h"
-
-#include "digikam-lcms.h"
-
-#include <lcms2_plugin.h>
 
 ///////////////////////////////////////////////////////////////////////
 

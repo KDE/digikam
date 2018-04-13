@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef REDEYECORRECTIONFILTER_H
-#define REDEYECORRECTIONFILTER_H
+#ifndef DIGIKAM_RED_EYE_CORRECTION_FILTER_H
+#define DIGIKAM_RED_EYE_CORRECTION_FILTER_H
 
 // Local includes
 
@@ -95,4 +95,4 @@ private:
 
 } // namespace Digikam
 
-#endif // REDEYECORRECTIONFILTER_H
+#endif // DIGIKAM_RED_EYE_CORRECTION_FILTER_H

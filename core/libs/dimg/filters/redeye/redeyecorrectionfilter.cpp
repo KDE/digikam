@@ -22,6 +22,8 @@
  *
  * ============================================================ */
 
+#include "redeyecorrectionfilter.h"
+
 // C++ includes
 
 #include <iterator>
@@ -37,7 +39,6 @@
 
 #include "digikam_debug.h"
 #include "facedetector.h"
-#include "redeyecorrectionfilter.h"
 #include "shapepredictor.h"
 
 namespace Digikam

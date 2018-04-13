@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef REDEYECORRECTIONCONTAINER_H
-#define REDEYECORRECTIONCONTAINER_H
+#ifndef DIGIKAM_RED_EYE_CORRECTION_CONTAINER_H
+#define DIGIKAM_RED_EYE_CORRECTION_CONTAINER_H
 
 // Qt includes
 
@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT RedEyeCorrectionContainer
 
 public:
 
-    RedEyeCorrectionContainer();
+    explicit RedEyeCorrectionContainer();
 
     bool isDefault() const;
     bool operator==(const RedEyeCorrectionContainer& other) const;
@@ -58,4 +58,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* REDEYECORRECTIONCONTAINER_H */
+#endif // DIGIKAM_RED_EYE_CORRECTION_CONTAINER_H
