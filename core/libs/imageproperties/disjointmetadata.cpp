@@ -80,47 +80,47 @@ public:
     {
     }
 
-    bool                                   dateTimeChanged;
-    bool                                   titlesChanged;
-    bool                                   commentsChanged;
-    bool                                   pickLabelChanged;
-    bool                                   colorLabelChanged;
-    bool                                   ratingChanged;
-    bool                                   templateChanged;
-    bool                                   tagsChanged;
+    bool                                dateTimeChanged;
+    bool                                titlesChanged;
+    bool                                commentsChanged;
+    bool                                pickLabelChanged;
+    bool                                colorLabelChanged;
+    bool                                ratingChanged;
+    bool                                templateChanged;
+    bool                                tagsChanged;
 
-    int                                    pickLabel;
-    int                                    highestPickLabel;
-    int                                    colorLabel;
-    int                                    highestColorLabel;
-    int                                    rating;
-    int                                    highestRating;
-    int                                    count;
+    int                                 pickLabel;
+    int                                 highestPickLabel;
+    int                                 colorLabel;
+    int                                 highestColorLabel;
+    int                                 rating;
+    int                                 highestRating;
+    int                                 count;
 
-    QDateTime                              dateTime;
-    QDateTime                              lastDateTime;
+    QDateTime                           dateTime;
+    QDateTime                           lastDateTime;
 
-    CaptionsMap                            titles;
-    CaptionsMap                            comments;
+    CaptionsMap                         titles;
+    CaptionsMap                         comments;
 
-    Template                               metadataTemplate;
+    Template                            metadataTemplate;
 
-    QMap<int, DisjointMetadata::Status>    tags;
+    QMap<int, DisjointMetadata::Status> tags;
 
-    QStringList                            tagList;
+    QStringList                         tagList;
 
-    QMultiMap<QString, QVariant>           faceTagsList;
+    QMultiMap<QString, QVariant>        faceTagsList;
 
-    DisjointMetadata::Status               dateTimeStatus;
-    DisjointMetadata::Status               titlesStatus;
-    DisjointMetadata::Status               commentsStatus;
-    DisjointMetadata::Status               pickLabelStatus;
-    DisjointMetadata::Status               colorLabelStatus;
-    DisjointMetadata::Status               ratingStatus;
-    DisjointMetadata::Status               templateStatus;
+    DisjointMetadata::Status            dateTimeStatus;
+    DisjointMetadata::Status            titlesStatus;
+    DisjointMetadata::Status            commentsStatus;
+    DisjointMetadata::Status            pickLabelStatus;
+    DisjointMetadata::Status            colorLabelStatus;
+    DisjointMetadata::Status            ratingStatus;
+    DisjointMetadata::Status            templateStatus;
 
-    QList<int> tagIds;
-    bool       invalid;
+    QList<int>                          tagIds;
+    bool                                invalid;
 };
 
 class DisjointMetadata::Private : public DisjointMetadataDataFields
@@ -137,7 +137,7 @@ public:
     {
     }
 
-    QMutex     mutex;
+    QMutex mutex;
 
 public:
 
@@ -154,7 +154,7 @@ void DisjointMetadata::Private::makeConnections(DisjointMetadata *q)
                      Qt::DirectConnection);
 
     QObject::connect(CoreDbAccess::databaseWatch(), SIGNAL(databaseChanged()),
-                      q, SLOT(slotInvalidate()));
+                     q, SLOT(slotInvalidate()));
 }
 
 DisjointMetadata::DisjointMetadata(QObject *parent)
@@ -164,7 +164,7 @@ DisjointMetadata::DisjointMetadata(QObject *parent)
     d->makeConnections(this);
 }
 
-DisjointMetadata::DisjointMetadata(const DisjointMetadata &other)
+DisjointMetadata::DisjointMetadata(const DisjointMetadata& other)
     : QObject(other.parent()),
       d(new Private(*other.d))
 {
@@ -176,7 +176,7 @@ DisjointMetadata::~DisjointMetadata()
     delete d;
 }
 
-DisjointMetadata& DisjointMetadata::operator=(const DisjointMetadata &other)
+DisjointMetadata& DisjointMetadata::operator=(const DisjointMetadata& other)
 {
     delete d;
     d = new Private(*other.d);
@@ -213,8 +213,7 @@ void DisjointMetadata::load(const ImageInfo& info)
          info.rating(),
          t.isNull() ? tref : t);
 
-    QList<int> tagIds = info.tagIds();
-    loadTags(tagIds);
+    loadTags(info.tagIds());
 }
 
 //-----------------------------Status -------------------------
@@ -306,21 +305,21 @@ bool DisjointMetadata::tagsChanged() const
     return d->tagsChanged;
 }
 
-void DisjointMetadata::setDateTime(const QDateTime &dateTime, DisjointMetadata::Status status)
+void DisjointMetadata::setDateTime(const QDateTime& dateTime, DisjointMetadata::Status status)
 {
     d->dateTimeStatus  = status;
     d->dateTime        = dateTime;
     d->dateTimeChanged = true;
 }
 
-void DisjointMetadata::setTitles(const CaptionsMap &titles, DisjointMetadata::Status status)
+void DisjointMetadata::setTitles(const CaptionsMap& titles, DisjointMetadata::Status status)
 {
     d->titlesStatus  = status;
     d->titles        = titles;
     d->titlesChanged = true;
 }
 
-void DisjointMetadata::setComments(const CaptionsMap &comments, DisjointMetadata::Status status)
+void DisjointMetadata::setComments(const CaptionsMap& comments, DisjointMetadata::Status status)
 {
     d->commentsStatus  = status;
     d->comments        = comments;
@@ -348,7 +347,7 @@ void DisjointMetadata::setRating(int rating, DisjointMetadata::Status status)
     d->ratingChanged  = true;
 }
 
-void DisjointMetadata::setMetadataTemplate(const Template &t, DisjointMetadata::Status status)
+void DisjointMetadata::setMetadataTemplate(const Template& t, DisjointMetadata::Status status)
 {
     d->templateStatus   = status;
     d->metadataTemplate = t;
@@ -477,14 +476,16 @@ bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
     if (writeAllFields || d->tagsChanged)
     {
         QList<int> keys = d->tags.keys();
-        foreach (int key, keys)
+
+        foreach(int key, keys)
         {
             if (d->tags.value(key) == DisjointMetadata::MetadataAvailable)
             {
                 info.setTag(key);
                 changed = true;
             }
-            if(d->tags.value(key) == DisjointMetadata::MetadataInvalid)
+
+            if (d->tags.value(key) == DisjointMetadata::MetadataInvalid)
             {
                 info.removeTag(key);
                 changed = true;
@@ -495,7 +496,7 @@ bool DisjointMetadata::write(ImageInfo info, WriteMode writeMode)
     return changed;
 }
 
-bool DisjointMetadata::willWriteMetadata(DisjointMetadata::WriteMode writeMode, const MetadataSettingsContainer &settings) const
+bool DisjointMetadata::willWriteMetadata(DisjointMetadata::WriteMode writeMode, const MetadataSettingsContainer& settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
     // Adapt if the method above changes
@@ -541,36 +542,36 @@ bool DisjointMetadata::willWriteMetadata(DisjointMetadata::WriteMode writeMode, 
                (saveRating     && (writeAllFields || d->ratingChanged))     ||
                (saveTags       && (writeAllFields || d->tagsChanged))       ||
                (saveTemplate   && (writeAllFields || d->templateChanged))
-                );
+           );
 }
 
 int DisjointMetadata::changedFlags()
 {
     int value = 0;
 
-    if(d->titlesChanged)
+    if (d->titlesChanged)
         value |= MetadataHub::WRITE_TITLE;
-    if(d->commentsChanged)
+    if (d->commentsChanged)
         value |= MetadataHub::WRITE_COMMENTS;
-    if(d->dateTimeChanged)
+    if (d->dateTimeChanged)
         value |= MetadataHub::WRITE_DATETIME;
-    if(d->pickLabelChanged)
+    if (d->pickLabelChanged)
         value |= MetadataHub::WRITE_PICKLABEL;
-    if(d->colorLabelChanged)
+    if (d->colorLabelChanged)
         value |= MetadataHub::WRITE_COLORLABEL;
-    if(d->ratingChanged)
+    if (d->ratingChanged)
         value |= MetadataHub::WRITE_RATING;
-    if(d->tagsChanged)
+    if (d->tagsChanged)
         value |= MetadataHub::WRITE_TAGS;
-    if(d->templateChanged)
+    if (d->templateChanged)
         value |= MetadataHub::WRITE_TEMPLATE;
 
     return value;
 }
 
-void DisjointMetadata::load(const QDateTime &dateTime,const CaptionsMap &titles,
-                            const CaptionsMap &comment, int colorLabel,
-                            int pickLabel, int rating, const Template &t)
+void DisjointMetadata::load(const QDateTime& dateTime,const CaptionsMap& titles,
+                            const CaptionsMap& comment, int colorLabel,
+                            int pickLabel, int rating, const Template& t)
 {
     if (dateTime.isValid())
     {
@@ -795,7 +796,7 @@ QStringList DisjointMetadata::keywords() const
 
     QList<int> keys = d->tags.keys();
 
-    foreach (int key, keys)
+    foreach(int key, keys)
     {
         if (d->tags.value(key) == MetadataAvailable)
         {

@@ -182,41 +182,41 @@ public:
         If status is MetadataDisjoint, the first loaded template is returned.
         If status is MetadataInvalid, 0 is returned.
      */
-    Template metadataTemplate() const;
+    Template    metadataTemplate() const;
 
     /**
         Returns the earliest and latest date.
         If status is MetadataAvailable, the values are the same.
         If status is MetadataInvalid, invalid dates are returned.
      */
-    void                dateTimeInterval(QDateTime& lowest, QDateTime& highest) const;
+    void        dateTimeInterval(QDateTime& lowest, QDateTime& highest) const;
 
     /**
         Returns the lowest and highest Pick Label id (see PickLabel values from globals.h).
         If status is MetadataAvailable, the values are the same.
         If status is MetadataInvalid, -1 is returned.
      */
-    void                pickLabelInterval(int& lowest, int& highest) const;
+    void        pickLabelInterval(int& lowest, int& highest) const;
 
     /**
         Returns the lowest and highest Color Label id (see ColorLabel values from globals.h).
         If status is MetadataAvailable, the values are the same.
         If status is MetadataInvalid, -1 is returned.
      */
-    void                colorLabelInterval(int& lowest, int& highest) const;
+    void        colorLabelInterval(int& lowest, int& highest) const;
 
     /**
         Returns the lowest and highest rating.
         If status is MetadataAvailable, the values are the same.
         If status is MetadataInvalid, -1 is returned.
     */
-    void                ratingInterval(int& lowest, int& highest) const;
+    void        ratingInterval(int& lowest, int& highest) const;
 
     /**
         Returns a QStringList with all tags with status MetadataAvailable.
         (i.e., the intersection of tags from all loaded metadata sets)
      */
-    QStringList         keywords() const;
+    QStringList keywords() const;
 
     /**
         Returns a map with the status for each tag.
