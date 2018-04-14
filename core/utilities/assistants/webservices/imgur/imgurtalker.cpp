@@ -32,6 +32,7 @@
 #include <QTimerEvent>
 #include <QUrlQuery>
 #include <QNetworkAccessManager>
+#include <QQueue>
 
 // KDE includes
 
@@ -65,27 +66,27 @@ public:
 
     /* Handler for OAuth 2 related requests.
      */
-    O2                            auth;
+    O2                        auth;
 
     /* Work queue.
      */
-    std::queue<ImgurTalkerAction> workQueue;
+    QQueue<ImgurTalkerAction> workQueue;
 
     /* ID of timer triggering on idle (0ms).
      */
-    int                           workTimer;
+    int                       workTimer;
 
     /* Current QNetworkReply instance.
      */
-    QNetworkReply*                reply;
+    QNetworkReply*            reply;
 
     /* Current image being uploaded.
      */
-    QFile*                        image;
+    QFile*                    image;
 
     /* The QNetworkAccessManager instance used for connections.
      */
-    QNetworkAccessManager         net;
+    QNetworkAccessManager     net;
 };
 
 ImgurTalker::ImgurTalker(const QString& client_id,
@@ -139,7 +140,7 @@ unsigned int ImgurTalker::workQueueLength()
 
 void ImgurTalker::queueWork(const ImgurTalkerAction& action)
 {
-    d->workQueue.push(action);
+    d->workQueue.enqueue(action);
     startWorkTimer();
 }
 
@@ -151,8 +152,8 @@ void ImgurTalker::cancelAllWork()
         d->reply->abort();
 
     // Should signalError be emitted for those actions?
-    while (!d->workQueue.empty())
-        d->workQueue.pop();
+    while (!d->workQueue.isEmpty())
+        d->workQueue.dequeue();
 }
 
 QUrl ImgurTalker::urlForDeletehash(const QString& deletehash)
@@ -190,7 +191,7 @@ void ImgurTalker::slotUploadProgress(qint64 sent, qint64 total)
     // Don't divide by 0
     if (total > 0)
     {
-        emit signalProgress((sent * 100) / total, d->workQueue.front());
+        emit signalProgress((sent * 100) / total, d->workQueue.first());
     }
 }
 
@@ -206,7 +207,7 @@ void ImgurTalker::slotReplyFinished()
         d->image = nullptr;
     }
 
-    if (d->workQueue.empty())
+    if (d->workQueue.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Received result without request";
         return;
@@ -220,7 +221,7 @@ void ImgurTalker::slotReplyFinished()
     {
         // Success!
         ImgurTalkerResult result;
-        result.action = &d->workQueue.front();
+        result.action = &d->workQueue.first();
         auto data     = response.object()[QLatin1String("data")].toObject();
 
         switch (result.action->type)
@@ -272,12 +273,12 @@ void ImgurTalker::slotReplyFinished()
                        .toObject()[QLatin1String("error")]
                        .toString(QLatin1String("Could not read response."));
 
-            emit signalError(msg, d->workQueue.front());
+            emit signalError(msg, d->workQueue.first());
         }
     }
 
     // Next work item.
-    d->workQueue.pop();
+    d->workQueue.dequeue();
     startWorkTimer();
 }
 
@@ -297,7 +298,7 @@ void ImgurTalker::timerEvent(QTimerEvent* event)
 
 void ImgurTalker::startWorkTimer()
 {
-    if (!d->workQueue.empty() && d->workTimer == 0)
+    if (!d->workQueue.isEmpty() && d->workTimer == 0)
     {
         d->workTimer = QObject::startTimer(0);
         emit signalBusy(true);
@@ -331,10 +332,10 @@ void ImgurTalker::addAnonToken(QNetworkRequest* request)
 
 void ImgurTalker::doWork()
 {
-    if (d->workQueue.empty() || d->reply != nullptr)
+    if (d->workQueue.isEmpty() || d->reply != nullptr)
         return;
 
-    auto &work = d->workQueue.front();
+    auto &work = d->workQueue.first();
 
     if (work.type != ImgurTalkerActionType::ANON_IMG_UPLOAD && !d->auth.linked())
     {
@@ -364,9 +365,9 @@ void ImgurTalker::doWork()
                 d->image = nullptr;
 
                 // Failed.
-                emit signalError(i18n("Could not open file"), d->workQueue.front());
+                emit signalError(i18n("Could not open file"), d->workQueue.first());
 
-                d->workQueue.pop();
+                d->workQueue.dequeue();
                 return doWork();
             }
 
