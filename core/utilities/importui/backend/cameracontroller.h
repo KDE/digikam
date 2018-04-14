@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERACONTROLLER_H
-#define CAMERACONTROLLER_H
+#ifndef DIGIKAM_CAMERA_CONTROLLER_H
+#define DIGIKAM_CAMERA_CONTROLLER_H
 
 // Qt includes
 
@@ -53,8 +53,8 @@ class DIGIKAM_EXPORT CameraController : public QThread
 
 public:
 
-    CameraController(QWidget* const parent, const QString& title, const QString& model,
-                     const QString& port, const QString& path);
+    explicit CameraController(QWidget* const parent, const QString& title, const QString& model,
+                              const QString& port, const QString& path);
     ~CameraController();
 
     bool cameraThumbnailSupport() const;
@@ -161,4 +161,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CAMERACONTROLLER_H */
+#endif // DIGIKAM_CAMERA_CONTROLLER_H

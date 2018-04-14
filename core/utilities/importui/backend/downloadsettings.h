@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DOWNLOADSETTINGS_H
-#define DOWNLOADSETTINGS_H
+#ifndef DIGIKAM_DOWNLOAD_SETTINGS_H
+#define DIGIKAM_DOWNLOAD_SETTINGS_H
 
 // Qt includes
 
@@ -111,4 +111,4 @@ typedef QList<DownloadSettings> DownloadSettingsList;
 
 } // namespace Digikam
 
-#endif // DownloadSettings_H
+#endif // DIGIKAM_DOWNLOAD_SETTINGS_H

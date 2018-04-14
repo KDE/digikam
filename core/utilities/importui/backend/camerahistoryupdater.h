@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERAHISTORYUPDATER_H
-#define CAMERAHISTORYUPDATER_H
+#ifndef DIGIKAM_CAMERA_HISTORY_UPDATER_H
+#define DIGIKAM_CAMERA_HISTORY_UPDATER_H
 
 // Qt includes
 
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CAMERAHISTORYUPDATER_H */
+#endif // DIGIKAM_CAMERA_HISTORY_UPDATER_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CamItemInfo_H
-#define CamItemInfo_H
+#ifndef DIGIKAM_CAMITEM_INFO_H
+#define DIGIKAM_CAMITEM_INFO_H
 
 // Qt includes
 
@@ -60,7 +60,7 @@ public:
 
 public:
 
-    CamItemInfo();
+    explicit CamItemInfo();
     ~CamItemInfo();
 
     /** Return true if all member in this container are null.
@@ -124,4 +124,4 @@ QDebug operator<<(QDebug dbg, const CamItemInfo& info);
 
 } // namespace Digikam
 
-#endif /* CamItemInfo_H */
+#endif // DIGIKAM_CAMITEM_INFO_H

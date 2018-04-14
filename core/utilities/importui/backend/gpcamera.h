@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef GPCAMERA_H
-#define GPCAMERA_H
+#ifndef DIGIKAM_GP_CAMERA_H
+#define DIGIKAM_GP_CAMERA_H
 
 // Local includes
 
@@ -45,8 +45,8 @@ class GPCamera : public DKCamera
 
 public:
 
-    GPCamera(const QString& title, const QString& model,
-             const QString& port, const QString& path);
+    explicit GPCamera(const QString& title, const QString& model,
+                      const QString& port, const QString& path);
     ~GPCamera();
 
     QByteArray                 cameraMD5ID();
@@ -106,4 +106,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* GPCAMERA_H */
+#endif // DIGIKAM_GP_CAMERA_H

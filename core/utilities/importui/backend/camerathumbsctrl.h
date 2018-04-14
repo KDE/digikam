@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERA_THUMBS_CTRL_H
-#define CAMERA_THUMBS_CTRL_H
+#ifndef DIGIKAM_CAMERA_THUMBS_CTRL_H
+#define DIGIKAM_CAMERA_THUMBS_CTRL_H
 
 // Qt includes
 
@@ -100,4 +100,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CAMERA_THUMBS_CTRL_H
+#endif // DIGIKAM_CAMERA_THUMBS_CTRL_H

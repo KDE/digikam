@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef UMSCAMERA_H
-#define UMSCAMERA_H
+#ifndef DIGIKAM_UMS_CAMERA_H
+#define DIGIKAM_UMS_CAMERA_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class UMSCamera : public DKCamera
 {
 public:
 
-    UMSCamera(const QString& title, const QString& model, const QString& port, const QString& path);
+    explicit UMSCamera(const QString& title, const QString& model, const QString& port, const QString& path);
     ~UMSCamera();
 
     QByteArray                 cameraMD5ID();
@@ -92,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* UMSCAMERA_H */
+#endif // DIGIKAM_UMS_CAMERA_H

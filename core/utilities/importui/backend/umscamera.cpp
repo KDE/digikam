@@ -44,6 +44,7 @@ extern "C"
 #include <QTextDocument>
 #include <QtGlobal>
 #include <QCryptographicHash>
+#include <qplatformdefs.h>
 
 // KDE includes
 
@@ -415,9 +416,9 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
     // Set the file modification time of the downloaded file to the original file.
     // NOTE: this behavior don't need to be managed through Setup/Metadata settings.
-    struct stat st;
+    QT_STATBUF st;
 
-    if (::stat(QFile::encodeName(src).constData(), &st) == 0)
+    if (QT_STAT(QFile::encodeName(src).constData(), &st) == 0)
     {
         struct utimbuf ut;
         ut.modtime = st.st_mtime;
@@ -522,9 +523,9 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     // Set the file modification time of the uploaded file to original file.
     // NOTE: this behavior don't need to be managed through Setup/Metadata settings.
-    struct stat st;
+    QT_STATBUF st;
 
-    if (::stat(QFile::encodeName(src).constData(), &st) == 0)
+    if (QT_STAT(QFile::encodeName(src).constData(), &st) == 0)
     {
         struct utimbuf ut;
         ut.modtime = st.st_mtime;

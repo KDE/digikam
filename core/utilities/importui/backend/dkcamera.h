@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DKCAMERA_H
-#define DKCAMERA_H
+#ifndef DIGIKAM_DKCAMERA_H
+#define DIGIKAM_DKCAMERA_H
 
 // Qt includes
 
@@ -56,7 +56,7 @@ public:
 
 public:
 
-    DKCamera(const QString& title, const QString& model, const QString& port, const QString& path);
+    explicit DKCamera(const QString& title, const QString& model, const QString& port, const QString& path);
     virtual ~DKCamera();
 
 public:
@@ -141,4 +141,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif /* DKCAMERA_H */
+#endif // DIGIKAM_DKCAMERA_H
