@@ -63,7 +63,7 @@ public:
       : setError(false),
         currentVersion(0),
         currentRequiredVersion(0),
-        access(0),
+        dbAccess(0),
         observer(0)
     {
     }
@@ -75,15 +75,15 @@ public:
     int                     currentVersion;
     int                     currentRequiredVersion;
 
-    SimilarityDbAccess*     access;
+    SimilarityDbAccess*     dbAccess;
 
     InitializationObserver* observer;
 };
 
-SimilarityDbSchemaUpdater::SimilarityDbSchemaUpdater(SimilarityDbAccess* const access)
+SimilarityDbSchemaUpdater::SimilarityDbSchemaUpdater(SimilarityDbAccess* const dbAccess)
     : d(new Private)
 {
-    d->access = access;
+    d->dbAccess = dbAccess;
 }
 
 SimilarityDbSchemaUpdater::~SimilarityDbSchemaUpdater()
@@ -98,14 +98,14 @@ bool SimilarityDbSchemaUpdater::update()
     // even on failure, try to set current version - it may have incremented
     if (d->currentVersion)
     {
-        d->access->db()->setSetting(QLatin1String("DBSimilarityVersion"),
-                                    QString::number(d->currentVersion));
+        d->dbAccess->db()->setSetting(QLatin1String("DBSimilarityVersion"),
+                                      QString::number(d->currentVersion));
     }
 
     if (d->currentRequiredVersion)
     {
-        d->access->db()->setSetting(QLatin1String("DBSimilarityVersionRequired"),
-                                    QString::number(d->currentRequiredVersion));
+        d->dbAccess->db()->setSetting(QLatin1String("DBSimilarityVersionRequired"),
+                                      QString::number(d->currentRequiredVersion));
     }
 
     return success;
@@ -119,27 +119,27 @@ void SimilarityDbSchemaUpdater::setObserver(InitializationObserver* const observ
 bool SimilarityDbSchemaUpdater::startUpdates()
 {
     // First step: do we have an empty database?
-    QStringList tables = d->access->backend()->tables();
+    QStringList tables = d->dbAccess->backend()->tables();
 
     if (tables.contains(QLatin1String("SimilaritySettings"), Qt::CaseInsensitive))
     {
         // Find out schema version of db file
-        QString version         = d->access->db()->getSetting(QLatin1String("DBSimilarityVersion"));
-        QString versionRequired = d->access->db()->getSetting(QLatin1String("DBSimilarityVersionRequired"));
+        QString version         = d->dbAccess->db()->getSetting(QLatin1String("DBSimilarityVersion"));
+        QString versionRequired = d->dbAccess->db()->getSetting(QLatin1String("DBSimilarityVersionRequired"));
 
         qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "Similarity database: have a structure version "
                                           << version;
 
         // mini schema update
-        if (version.isEmpty() && d->access->parameters().isSQLite())
+        if (version.isEmpty() && d->dbAccess->parameters().isSQLite())
         {
-            version = d->access->db()->getSetting(QLatin1String("DBVersion"));
+            version = d->dbAccess->db()->getSetting(QLatin1String("DBVersion"));
         }
 
-        if (version.isEmpty() && d->access->parameters().isMySQL())
+        if (version.isEmpty() && d->dbAccess->parameters().isMySQL())
         {
-            version         = d->access->db()->getLegacySetting(QLatin1String("DBSimilarityVersion"));
-            versionRequired = d->access->db()->getLegacySetting(QLatin1String("DBSimilarityVersionRequired"));
+            version         = d->dbAccess->db()->getLegacySetting(QLatin1String("DBSimilarityVersion"));
+            versionRequired = d->dbAccess->db()->getLegacySetting(QLatin1String("DBSimilarityVersionRequired"));
         }
 
         // We absolutely require the DBSimilarityVersion setting
@@ -154,7 +154,7 @@ bool SimilarityDbSchemaUpdater::startUpdates()
                                     "The current database schema version cannot be verified. "
                                     "Try to start with an empty database. ");
 
-            d->access->setLastError(errorMsg);
+            d->dbAccess->setLastError(errorMsg);
 
             if (d->observer)
             {
@@ -183,7 +183,7 @@ bool SimilarityDbSchemaUpdater::startUpdates()
                                         "and has been updated to a database schema which cannot be used with this version. "
                                         "(This means this digiKam version is too old, or the database format is to recent) "
                                         "Please use the more recent version of digikam that you used before. ");
-                d->access->setLastError(errorMsg);
+                d->dbAccess->setLastError(errorMsg);
 
                 if (d->observer)
                 {
@@ -203,14 +203,14 @@ bool SimilarityDbSchemaUpdater::startUpdates()
     {
         qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "Similarity database: no database file available";
 
-        DbEngineParameters parameters = d->access->parameters();
+        DbEngineParameters parameters = d->dbAccess->parameters();
 
         // No legacy handling: start with a fresh db
         if (!createDatabase())
         {
             QString errorMsg = i18n("Failed to create tables in database.\n ") +
-                               d->access->backend()->lastError();
-            d->access->setLastError(errorMsg);
+                               d->dbAccess->backend()->lastError();
+            d->dbAccess->setLastError(errorMsg);
 
             if (d->observer)
             {
@@ -244,17 +244,17 @@ bool SimilarityDbSchemaUpdater::createDatabase()
 
 bool SimilarityDbSchemaUpdater::createTables()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QLatin1String("CreateSimilarityDB")));
+    return d->dbAccess->backend()->execDBAction(d->dbAccess->backend()->getDBAction(QLatin1String("CreateSimilarityDB")));
 }
 
 bool SimilarityDbSchemaUpdater::createIndices()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QLatin1String("CreateSimilarityDBIndices")));
+    return d->dbAccess->backend()->execDBAction(d->dbAccess->backend()->getDBAction(QLatin1String("CreateSimilarityDBIndices")));
 }
 
 bool SimilarityDbSchemaUpdater::createTriggers()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QLatin1String("CreateSimilarityDBTriggers")));
+    return d->dbAccess->backend()->execDBAction(d->dbAccess->backend()->getDBAction(QLatin1String("CreateSimilarityDBTriggers")));
 }
 
 bool SimilarityDbSchemaUpdater::makeUpdates()

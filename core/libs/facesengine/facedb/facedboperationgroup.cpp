@@ -40,7 +40,7 @@ class FaceDbOperationGroup::Private
 public:
 
     explicit Private()
-        : access(0),
+        : dbAccess(0),
           acquired(false),
           maxTime(0)
     {
@@ -48,7 +48,7 @@ public:
 
 public:
 
-    FaceDbAccess* access;
+    FaceDbAccess* dbAccess;
     bool          acquired;
     QTime         timeAcquired;
     int           maxTime;
@@ -62,14 +62,14 @@ public:
 
     void acquire()
     {
-        if (access)
+        if (dbAccess)
         {
-            acquired = access->backend()->beginTransaction();
+            acquired = dbAccess->backend()->beginTransaction();
         }
         else
         {
-            FaceDbAccess access;
-            acquired = access.backend()->beginTransaction();
+            FaceDbAccess dbAccess;
+            acquired = dbAccess.backend()->beginTransaction();
         }
 
         timeAcquired.start();
@@ -79,18 +79,20 @@ public:
     {
         if (acquired)
         {
-            if (access)
+            if (dbAccess)
             {
-                access->backend()->commitTransaction();
+                dbAccess->backend()->commitTransaction();
             }
             else
             {
-                FaceDbAccess access;
-                access.backend()->commitTransaction();
+                FaceDbAccess dbAccess;
+                dbAccess.backend()->commitTransaction();
             }
         }
     }
 };
+
+// -----------------------------------------------------------------------
 
 FaceDbOperationGroup::FaceDbOperationGroup()
     : d(new Private)
@@ -101,10 +103,10 @@ FaceDbOperationGroup::FaceDbOperationGroup()
     }
 }
 
-FaceDbOperationGroup::FaceDbOperationGroup(FaceDbAccess* const access)
+FaceDbOperationGroup::FaceDbOperationGroup(FaceDbAccess* const dbAccess)
     : d(new Private)
 {
-    d->access = access;
+    d->dbAccess = dbAccess;
 
     if (d->needsTransaction())
     {
@@ -124,9 +126,9 @@ void FaceDbOperationGroup::lift()
     {
         d->release();
 
-        if (d->access)
+        if (d->dbAccess)
         {
-            FaceDbAccessUnlock unlock(d->access);
+            FaceDbAccessUnlock unlock(d->dbAccess);
         }
 
         d->acquire();

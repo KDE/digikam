@@ -41,7 +41,7 @@ public:
 
 public:
 
-    explicit SimilarityDbSchemaUpdater(SimilarityDbAccess* const access);
+    explicit SimilarityDbSchemaUpdater(SimilarityDbAccess* const dbAccess);
     ~SimilarityDbSchemaUpdater();
 
     bool update();

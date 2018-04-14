@@ -42,7 +42,7 @@ public:
 
 public:
 
-    explicit FaceDbSchemaUpdater(FaceDbAccess* const access);
+    explicit FaceDbSchemaUpdater(FaceDbAccess* const dbAccess);
     ~FaceDbSchemaUpdater();
 
     bool update();

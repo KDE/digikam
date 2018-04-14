@@ -54,14 +54,16 @@ public:
 
 public:
 
-    explicit CoreDbSchemaUpdater(CoreDB* const albumDB, CoreDbBackend* const backend, DbEngineParameters parameters);
+    explicit CoreDbSchemaUpdater(CoreDB* const albumDB,
+                                 CoreDbBackend* const backend,
+                                 DbEngineParameters parameters);
     virtual ~CoreDbSchemaUpdater();
 
     bool  update();
     bool  updateUniqueHash();
     void  setObserver(InitializationObserver* const observer);
     const QString getLastErrorMessage();
-    void  setCoreDbAccess(CoreDbAccess* const access);
+    void  setCoreDbAccess(CoreDbAccess* const dbAccess);
 
 private:
 

@@ -41,7 +41,8 @@ class DIGIKAM_DATABASE_EXPORT ThumbsDbBackend : public BdEngineBackend
 
 public:
 
-    explicit ThumbsDbBackend(DbEngineLocking* const locking, const QString& backendName = QLatin1String("thumbnailDatabase-"));
+    explicit ThumbsDbBackend(DbEngineLocking* const locking,
+                             const QString& backendName = QLatin1String("thumbnailDatabase-"));
     ~ThumbsDbBackend();
 
     /**

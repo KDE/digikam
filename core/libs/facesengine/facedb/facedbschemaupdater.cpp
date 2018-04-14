@@ -53,7 +53,7 @@ public:
         : setError(false),
           currentVersion(0),
           currentRequiredVersion(0),
-          access(0),
+          dbAccess(0),
           observer(0)
     {
     }
@@ -63,15 +63,15 @@ public:
     int                     currentVersion;
     int                     currentRequiredVersion;
 
-    FaceDbAccess*           access;
+    FaceDbAccess*           dbAccess;
 
     InitializationObserver* observer;
 };
 
-FaceDbSchemaUpdater::FaceDbSchemaUpdater(FaceDbAccess* const access)
+FaceDbSchemaUpdater::FaceDbSchemaUpdater(FaceDbAccess* const dbAccess)
     : d(new Private)
 {
-    d->access = access;
+    d->dbAccess = dbAccess;
 }
 
 FaceDbSchemaUpdater::~FaceDbSchemaUpdater()
@@ -91,12 +91,12 @@ bool FaceDbSchemaUpdater::update()
     // even on failure, try to set current version - it may have incremented
     if (d->currentVersion)
     {
-        d->access->db()->setSetting(QString::fromLatin1("DBFaceVersion"), QString::number(d->currentVersion));
+        d->dbAccess->db()->setSetting(QString::fromLatin1("DBFaceVersion"), QString::number(d->currentVersion));
     }
 
     if (d->currentRequiredVersion)
     {
-        d->access->db()->setSetting(QString::fromLatin1("DBFaceVersionRequired"), QString::number(d->currentRequiredVersion));
+        d->dbAccess->db()->setSetting(QString::fromLatin1("DBFaceVersionRequired"), QString::number(d->currentRequiredVersion));
     }
 
     return success;
@@ -105,19 +105,19 @@ bool FaceDbSchemaUpdater::update()
 bool FaceDbSchemaUpdater::startUpdates()
 {
     // First step: do we have an empty database?
-    QStringList tables = d->access->backend()->tables();
+    QStringList tables = d->dbAccess->backend()->tables();
 
     if (tables.contains(QString::fromLatin1("Identities"), Qt::CaseInsensitive))
     {
         // Find out schema version of db file
-        QString version         = d->access->db()->setting(QString::fromLatin1("DBFaceVersion"));
-        QString versionRequired = d->access->db()->setting(QString::fromLatin1("DBFaceVersionRequired"));
+        QString version         = d->dbAccess->db()->setting(QString::fromLatin1("DBFaceVersion"));
+        QString versionRequired = d->dbAccess->db()->setting(QString::fromLatin1("DBFaceVersionRequired"));
         qCDebug(DIGIKAM_FACEDB_LOG) << "Face database: have a structure version " << version;
 
         // mini schema update
-        if (version.isEmpty() && d->access->parameters().isSQLite())
+        if (version.isEmpty() && d->dbAccess->parameters().isSQLite())
         {
-            version = d->access->db()->setting(QString::fromLatin1("DBVersion"));
+            version = d->dbAccess->db()->setting(QString::fromLatin1("DBVersion"));
         }
 
         // We absolutely require the DBFaceVersion setting
@@ -131,7 +131,7 @@ bool FaceDbSchemaUpdater::startUpdates()
                                     "The current database schema version cannot be verified. "
                                     "Try to start with an empty database. ");
 
-            d->access->setLastError(errorMsg);
+            d->dbAccess->setLastError(errorMsg);
 
             if (d->observer)
             {
@@ -161,7 +161,7 @@ bool FaceDbSchemaUpdater::startUpdates()
                                         "(This means this digiKam version is too old, or the database format is to recent.) "
                                         "Please use the more recent version of digiKam that you used before.");
 
-                d->access->setLastError(errorMsg);
+                d->dbAccess->setLastError(errorMsg);
 
                 if (d->observer)
                 {
@@ -181,14 +181,14 @@ bool FaceDbSchemaUpdater::startUpdates()
     {
         qCDebug(DIGIKAM_FACEDB_LOG) << "Face database: no database file available";
 
-        DbEngineParameters parameters = d->access->parameters();
+        DbEngineParameters parameters = d->dbAccess->parameters();
 
         // No legacy handling: start with a fresh db
         if (!createDatabase())
         {
             QString errorMsg = i18n("Failed to create tables in database.\n%1",
-                                    d->access->backend()->lastError());
-            d->access->setLastError(errorMsg);
+                                    d->dbAccess->backend()->lastError());
+            d->dbAccess->setLastError(errorMsg);
 
             if (d->observer)
             {
@@ -237,25 +237,25 @@ bool FaceDbSchemaUpdater::createDatabase()
 
 bool FaceDbSchemaUpdater::createTables()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDB"))) &&
-           d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBOpenCVLBPH"))) &&
-           d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBFaceMatrices")));
+    return d->dbAccess->backend()->execDBAction(d->dbAccess->backend()->getDBAction(QString::fromLatin1("CreateFaceDB"))) &&
+           d->dbAccess->backend()->execDBAction(d->dbAccess->backend()->getDBAction(QString::fromLatin1("CreateFaceDBOpenCVLBPH"))) &&
+           d->dbAccess->backend()->execDBAction(d->dbAccess->backend()->getDBAction(QString::fromLatin1("CreateFaceDBFaceMatrices")));
 }
 
 bool FaceDbSchemaUpdater::createIndices()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceIndices")));
+    return d->dbAccess->backend()->execDBAction(d->dbAccess->backend()->getDBAction(QString::fromLatin1("CreateFaceIndices")));
 }
 
 bool FaceDbSchemaUpdater::createTriggers()
 {
-    return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceTriggers")));
+    return d->dbAccess->backend()->execDBAction(d->dbAccess->backend()->getDBAction(QString::fromLatin1("CreateFaceTriggers")));
 }
 
 bool FaceDbSchemaUpdater::updateV1ToV2()
 {
 /*
-    if (!d->access->backend()->execDBAction(d->access->backend()->getDBAction("UpdateDBSchemaFromV1ToV2")))
+    if (!d->dbAccess->backend()->execDBAction(d->dbAccess->backend()->getDBAction("UpdateDBSchemaFromV1ToV2")))
     {
         qError() << "Schema upgrade in DB from V1 to V2 failed!";
         return false;
@@ -271,7 +271,8 @@ bool FaceDbSchemaUpdater::updateV2ToV3()
 {
     d->currentVersion         = 3;
     d->currentRequiredVersion = 3;
-    d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBFaceMatrices")));
+    d->dbAccess->backend()->execDBAction(d->dbAccess->backend()->getDBAction(QString::fromLatin1("CreateFaceDBFaceMatrices")));
+
     return true;
 }
 

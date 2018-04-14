@@ -39,7 +39,7 @@ public:
 
 public:
 
-    explicit ThumbsDbSchemaUpdater(ThumbsDbAccess* const access);
+    explicit ThumbsDbSchemaUpdater(ThumbsDbAccess* const dbAccess);
     ~ThumbsDbSchemaUpdater();
 
     bool update();

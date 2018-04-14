@@ -85,7 +85,7 @@ public:
       : setError(false),
         backend(0),
         albumDB(0),
-        access(0),
+        dbAccess(0),
         observer(0)
     {
     }
@@ -100,13 +100,15 @@ public:
     DbEngineParameters      parameters;
 
     // legacy
-    CoreDbAccess*           access;
+    CoreDbAccess*           dbAccess;
 
     QString                 lastErrorMessage;
     InitializationObserver* observer;
 };
 
-CoreDbSchemaUpdater::CoreDbSchemaUpdater(CoreDB* const albumDB, CoreDbBackend* const backend, DbEngineParameters parameters)
+CoreDbSchemaUpdater::CoreDbSchemaUpdater(CoreDB* const albumDB,
+                                         CoreDbBackend* const backend,
+                                         DbEngineParameters parameters)
     : d(new Private)
 {
     d->backend    = backend;
@@ -119,9 +121,9 @@ CoreDbSchemaUpdater::~CoreDbSchemaUpdater()
     delete d;
 }
 
-void CoreDbSchemaUpdater::setCoreDbAccess(CoreDbAccess* const access)
+void CoreDbSchemaUpdater::setCoreDbAccess(CoreDbAccess* const dbAccess)
 {
-    d->access = access;
+    d->dbAccess = dbAccess;
 }
 
 const QString CoreDbSchemaUpdater::getLastErrorMessage()
@@ -968,7 +970,7 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         return false;
     }
 
-    if (!d->access->backend()->execSql(QString::fromUtf8(
+    if (!d->dbAccess->backend()->execSql(QString::fromUtf8(
                                           "REPLACE INTO ImageInformation (imageId) SELECT id FROM Images;"))
        )
     {
