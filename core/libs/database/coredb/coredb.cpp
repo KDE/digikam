@@ -3195,11 +3195,11 @@ void CoreDB::addItemTag(qlonglong imageID, int tagID)
 
     //move current tag to front
     d->recentlyAssignedTags.removeAll(tagID);
-    d->recentlyAssignedTags.push_front(tagID);
+    d->recentlyAssignedTags.prepend(tagID);
 
     if (d->recentlyAssignedTags.size() > 10)
     {
-        d->recentlyAssignedTags.pop_back();
+        d->recentlyAssignedTags.removeLast();
     }
 
     writeSettings();
