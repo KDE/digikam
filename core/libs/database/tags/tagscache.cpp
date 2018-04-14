@@ -177,7 +177,7 @@ public:
         // increment iterator until the next tagid is reached
         int currentId = it->tagId;
 
-        for (++it; it != tagProperties.end(); ++it)
+        for (++it ; it != tagProperties.end() ; ++it)
         {
             if (it->tagId != currentId)
             {
@@ -373,7 +373,7 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy) const
     QReadLocker locker(&d->lock);
     QList<TagShortInfo>::const_iterator it;
 
-    for (it = d->find(id); it != d->infos.constEnd(); it = d->find(it->pid))
+    for (it = d->find(id) ; it != d->infos.constEnd() ; it = d->find(it->pid))
     {
         if (path.isNull())
         {
@@ -429,7 +429,7 @@ QList<int> TagsCache::tagsForName(const QString& tagName, HiddenTagsPolicy hidde
         QList<int> ids;
         QMultiHash<QString, int>::const_iterator it;
 
-        for (it = d->nameHash.constFind(tagName); it != d->nameHash.constEnd() && it.key() == tagName; ++it)
+        for (it = d->nameHash.constFind(tagName) ; it != d->nameHash.constEnd() && it.key() == tagName ; ++it)
         {
             if (!d->internalTags.contains(it.value()))
             {
@@ -503,7 +503,7 @@ QList<int> TagsCache::parentTags(int id) const
          it != d->infos.constEnd() && it->pid;
          it = d->find(it->pid))
     {
-        if((it->pid)!= 0)
+        if ((it->pid) != 0)
             ids.prepend(it->pid);
     }
 
@@ -555,8 +555,8 @@ int TagsCache::tagForPath(const QString& tagPath) const
             parentTag = d->find(parentID);
 
             // check if the parent is found and has the name we need
-            if ( parentTag != d->infos.constEnd() &&
-                 parentTag->name == (*parentTagName) )
+            if (parentTag != d->infos.constEnd() &&
+                parentTag->name == (*parentTagName))
             {
                 parentID       = parentTag->pid;
                 foundParentTag = true;
@@ -755,7 +755,7 @@ bool TagsCache::hasProperty(int tagId, const QString& property, const QString& v
     QReadLocker locker(&d->lock);
     TagPropertiesRange range = d->findProperties(tagId);
 
-    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+    for (TagPropertiesConstIterator it = range.first ; it != range.second ; ++it)
     {
         if (d->compareProperty(it, property, value))
         {
@@ -772,7 +772,7 @@ QString TagsCache::propertyValue(int tagId, const QString& property) const
     QReadLocker locker(&d->lock);
     TagPropertiesRange range = d->findProperties(tagId);
 
-    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+    for (TagPropertiesConstIterator it = range.first ; it != range.second ; ++it)
     {
         if (it->property == property)
         {
@@ -790,12 +790,12 @@ QStringList TagsCache::propertyValues(int tagId, const QString& property) const
     TagPropertiesRange range = d->findProperties(tagId);
     QStringList values;
 
-    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+    for (TagPropertiesConstIterator it = range.first ; it != range.second ; ++it)
     {
         if (it->property == property)
         {
             // the list is ordered by property, after id
-            for (; it != range.second && it->property == property; ++it)
+            for (; it != range.second && it->property == property ; ++it)
             {
                 values << it->value;
             }
@@ -815,7 +815,7 @@ QMap<QString, QString> TagsCache::properties(int tagId) const
     TagPropertiesRange range = d->findProperties(tagId);
     QStringList values;
 
-    for (TagPropertiesConstIterator it = range.first; it != range.second; ++it)
+    for (TagPropertiesConstIterator it = range.first ; it != range.second ; ++it)
     {
         map[it->property] = it->value;
     }
@@ -829,7 +829,7 @@ QList<int> TagsCache::tagsWithProperty(const QString& property, const QString& v
     QReadLocker locker(&d->lock);
     QList<int>  ids;
 
-    for (TagPropertiesConstIterator it = d->tagProperties.constBegin(); it != d->tagProperties.constEnd(); )
+    for (TagPropertiesConstIterator it = d->tagProperties.constBegin() ; it != d->tagProperties.constEnd() ;)
     {
         // sort out invalid entries, see bug #277169
         if (it->tagId <= 0)
@@ -890,7 +890,7 @@ QList<int> TagsCache::publicTags(const QList<int>& tagIds) const
 
     QList<int>::const_iterator it, it2;
 
-    for (it = tagIds.begin(); it != tagIds.end(); ++it)
+    for (it = tagIds.begin() ; it != tagIds.end() ; ++it)
     {
         if (d->internalTags.contains(*it))
         {
@@ -907,13 +907,13 @@ QList<int> TagsCache::publicTags(const QList<int>& tagIds) const
     publicIds.reserve(it - tagIds.begin());
 
     // copy to the point of the first internal tag
-    for (it2 = tagIds.begin(); it2 != it; ++it2)
+    for (it2 = tagIds.begin() ; it2 != it ; ++it2)
     {
         publicIds << *it2;
     }
 
     // continue filtering
-    for (; it2 != tagIds.end(); ++it2)
+    for (; it2 != tagIds.end() ; ++it2)
     {
         if (!d->internalTags.contains(*it2))
         {
@@ -968,7 +968,7 @@ int TagsCache::getOrCreateInternalTag(const QString& tagName)
 
 void TagsCache::slotTagChanged(const TagChangeset& changeset)
 {
-    if(changeset.operation() == TagChangeset::Deleted)
+    if (changeset.operation() == TagChangeset::Deleted)
     {
         QString name = this->tagName(changeset.tagId());
         emit tagAboutToBeDeleted(name);
@@ -1020,7 +1020,7 @@ int TagsCache::colorLabelFromTags(QList<int> tagIds)
 
     foreach(int tagId, tagIds)
     {
-        for (int i=FirstColorLabel; i<=LastColorLabel; i++)
+        for (int i = FirstColorLabel ; i <= LastColorLabel ; i++)
         {
             if (d->colorLabelsTags[i] == tagId)
             {
@@ -1063,7 +1063,7 @@ int TagsCache::pickLabelFromTags(QList<int> tagIds)
 
     foreach(int tagId, tagIds)
     {
-        for (int i=FirstPickLabel; i<=LastPickLabel; i++)
+        for (int i = FirstPickLabel ; i <= LastPickLabel ; i++)
         {
             if (d->pickLabelsTags[i] == tagId)
             {
@@ -1125,9 +1125,9 @@ QList<int> TagsCache::Private::tagsForFragment(bool (QString::*stringFunction)(c
 
     QReadLocker locker(&lock);
 
-    for (it = nameHash.constBegin(); it != nameHash.constEnd(); ++it)
+    for (it = nameHash.constBegin() ; it != nameHash.constEnd() ; ++it)
     {
-        if ( (!excludeHiddenTags || !internalTags.contains(it.value())) && (it.key().*stringFunction)(fragment, caseSensitivity))
+        if ((!excludeHiddenTags || !internalTags.contains(it.value())) && (it.key().*stringFunction)(fragment, caseSensitivity))
         {
             ids << it.value();
         }

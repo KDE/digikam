@@ -3189,15 +3189,14 @@ void CoreDB::addItemTag(qlonglong imageID, int tagID)
 
     d->db->recordChangeset(ImageTagChangeset(imageID, tagID, ImageTagChangeset::Added));
 
-    TagsCache * tc = TagsCache::instance();
-
     //don't save pick or color tags
-    if (tc->isInternalTag(tagID))
+    if (TagsCache::instance()->isInternalTag(tagID))
         return;
 
     //move current tag to front
     d->recentlyAssignedTags.removeAll(tagID);
     d->recentlyAssignedTags.push_front(tagID);
+
     if (d->recentlyAssignedTags.size() > 10)
     {
         d->recentlyAssignedTags.pop_back();
