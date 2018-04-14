@@ -49,6 +49,7 @@ extern "C"
 #include <QByteArray>
 #include <QTextStream>
 #include <QDataStream>
+#include <qplatformdefs.h>
 
 // Windows includes
 
@@ -147,7 +148,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
 #else
 
-    int fd = open(QFile::encodeName(filePath).constData(), O_RDONLY);
+    int fd = QT_OPEN(QFile::encodeName(filePath).constData(), O_RDONLY);
 
     if (fd == -1)
     {
@@ -379,7 +380,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
     }
 
 #elif defined(__POSIX__)
-    int fd = open(QFile::encodeName(filePath).constData(), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    int fd = QT_OPEN(QFile::encodeName(filePath).constData(), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
     if (fd == -1)
     {
