@@ -80,11 +80,11 @@ extern "C"
 #include "digikam_debug.h"
 
 #ifdef HAVE_JASPER
-#include "jp2kloader.h"
+#   include "jp2kloader.h"
 #endif // HAVE_JASPER
 
-typedef uint64_t ullong;
-typedef int64_t  llong;
+typedef uint64_t ullong;    // krazy:exclude=typedefs
+typedef int64_t  llong;     // krazy:exclude=typedefs
 
 namespace Digikam
 {
@@ -94,14 +94,16 @@ DImg::DImg()
 {
 }
 
-DImg::DImg(const QByteArray& filePath, DImgLoaderObserver* const observer,
+DImg::DImg(const QByteArray& filePath,
+           DImgLoaderObserver* const observer,
            const DRawDecoding& rawDecodingSettings)
     : m_priv(new Private)
 {
     load(QString::fromUtf8(filePath), observer, rawDecodingSettings);
 }
 
-DImg::DImg(const QString& filePath, DImgLoaderObserver* const observer,
+DImg::DImg(const QString& filePath,
+           DImgLoaderObserver* const observer,
            const DRawDecoding& rawDecodingSettings)
     : m_priv(new Private)
 {
@@ -696,7 +698,11 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
     }
 
 #ifdef HAVE_JASPER
-    else if (frm == QLatin1String("JP2") || frm == QLatin1String("J2K") || frm == QLatin1String("JPX") || frm == QLatin1String("JPC") || frm == QLatin1String("PGX"))
+    else if (frm == QLatin1String("JP2") ||
+             frm == QLatin1String("J2K") ||
+             frm == QLatin1String("JPX") ||
+             frm == QLatin1String("JPC") ||
+             frm == QLatin1String("PGX"))
     {
         JP2KLoader loader(this);
         setAttribute(QLatin1String("savedformat-isreadonly"), loader.isReadOnly());
@@ -2930,6 +2936,7 @@ QByteArray DImg::getUniqueHashV2() const
     }
 
     FileReadLocker lock(filePath);
+
     return DImgLoader::uniqueHashV2(filePath, this);
 }
 
@@ -2943,6 +2950,7 @@ QByteArray DImg::createImageUniqueId() const
     NonDeterministicRandomData randomData(16);
     QByteArray imageUUID = randomData.toHex();
     imageUUID           += getUniqueHashV2();
+
     return imageUUID;
 }
 
@@ -3123,6 +3131,7 @@ HistoryImageId DImg::createHistoryImageId(const QString& filePath, HistoryImageI
 {
     HistoryImageId id = DImgLoader::createHistoryImageId(filePath, *this, DMetadata(getMetadata()));
     id.setType(type);
+
     return id;
 }
 
@@ -3131,6 +3140,7 @@ HistoryImageId DImg::addAsReferredImage(const QString& filePath, HistoryImageId:
     HistoryImageId id = createHistoryImageId(filePath, type);
     m_priv->imageHistory.purgePathFromReferredImages(id.path(), id.fileName());
     addAsReferredImage(id);
+
     return id;
 }
 

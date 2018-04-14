@@ -451,7 +451,7 @@ bool MetaEngine::setExifTagLong(const char* exifTagName, long val) const
 {
     try
     {
-        d->exifMetadata()[exifTagName] = static_cast<int32_t>(val);
+        d->exifMetadata()[exifTagName] = static_cast<int32_t>(val);     // krazy:exclude=typedefs
         return true;
     }
     catch( Exiv2::Error& e )

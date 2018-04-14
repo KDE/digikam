@@ -53,8 +53,8 @@ extern "C"
 #include "dimg.h"
 #include "dimg_p.h"
 
-typedef uint64_t ullong;
-typedef int64_t  llong;
+typedef uint64_t ullong;    // krazy:exclude=typedefs
+typedef int64_t  llong;     // krazy:exclude=typedefs
 
 namespace Digikam
 {
@@ -68,8 +68,8 @@ public:
 
     DImgScaleInfo()
     {
-        xpoints = 0;
-        ypoints = 0;
+        xpoints   = 0;
+        ypoints   = 0;
         ypoints16 = 0;
         xapoints  = 0;
         yapoints  = 0;
@@ -404,8 +404,7 @@ uint** DImgScale::dimgCalcYPoints(uint* const src, int sw, int sh, int dh)
     int i, j = 0;
     ullong val, inc;
 
-    p = new uint* [dh+1];
-
+    p   = new uint* [dh+1];
     val = 0;
     inc = (((ullong)sh) << 16) / dh;
 
@@ -424,8 +423,7 @@ ullong** DImgScale::dimgCalcYPoints16(ullong* const src, int sw, int sh, int dh)
     int i, j   = 0;
     ullong val, inc;
 
-    p = new ullong*[(dh+1)];
-
+    p   = new ullong*[(dh+1)];
     val = 0;
     inc = (((ullong)sh) << 16) / dh;
 
@@ -443,8 +441,7 @@ int* DImgScale::dimgCalcXPoints(int sw, int dw)
     int* p=0, i, j = 0;
     ullong val, inc;
 
-    p = new int[dw+1];
-
+    p   = new int[dw+1];
     val = 0;
     inc = (((ullong)sw) << 16) / dw;
 
@@ -574,8 +571,8 @@ void DImgScale::dimgSampleRGBA(DImgScaleInfo* const isi, uint* const dest,
     uint* sptr=0;
     uint* dptr=0;
     int x, y;
-    uint** ypoints = isi->ypoints;
-    int* xpoints   = isi->xpoints;
+    uint** ypoints    = isi->ypoints;
+    int* xpoints      = isi->xpoints;
 
     const int x_begin = dxx + clip_dx;     // no clip set = dxx
     const int x_end   = x_begin + clip_dw; // no clip set = dxx + dw
@@ -614,8 +611,8 @@ void DImgScale::dimgSampleRGBA16(DImgScaleInfo* const isi, ullong* const dest,
     ullong* sptr=0;
     ullong* dptr=0;
     int x, y;
-    ullong** ypoints = isi->ypoints16;
-    int* xpoints   = isi->xpoints;
+    ullong** ypoints  = isi->ypoints16;
+    int* xpoints      = isi->xpoints;
 
     const int x_begin = dxx + clip_dx;     // no clip set = dxx
     const int x_end   = x_begin + clip_dw; // no clip set = dxx + dw
@@ -643,7 +640,7 @@ void DImgScale::dimgSampleRGBA16(DImgScaleInfo* const isi, ullong* const dest,
 /**
 dimgScaleAARGBA : scale by area sampling. Arguments:
   DImgScaleInfo* isi,              // scaleinfo
-  uint*  dest,             // destination img data
+  uint*  dest,                     // destination img data
   int            dxx,              // destination x location corresponding to start x of src section
   int            dyy,              // destination y location corresponding to start y of src section
   int            dw,               // destination width
@@ -675,10 +672,10 @@ void DImgScale::dimgScaleAARGBA(DImgScaleInfo* const isi, uint* const dest,
     uint* sptr=0;
     uint* dptr=0;
     int x, y;
-    uint** ypoints = isi->ypoints;
-    int* xpoints           = isi->xpoints;
-    int* xapoints          = isi->xapoints;
-    int* yapoints          = isi->yapoints;
+    uint** ypoints    = isi->ypoints;
+    int* xpoints      = isi->xpoints;
+    int* xapoints     = isi->xapoints;
+    int* yapoints     = isi->yapoints;
 
     const int x_begin = dxx + clip_dx;     // no clip set = dxx
     const int x_end   = x_begin + clip_dw; // no clip set = dxx + dw
@@ -1146,10 +1143,10 @@ void DImgScale::dimgScaleAARGB(DImgScaleInfo* const isi, uint* const dest,
     uint* sptr=0;
     uint* dptr=0;
     int x, y;
-    uint** ypoints = isi->ypoints;
-    int* xpoints           = isi->xpoints;
-    int* xapoints          = isi->xapoints;
-    int* yapoints          = isi->yapoints;
+    uint** ypoints    = isi->ypoints;
+    int* xpoints      = isi->xpoints;
+    int* xapoints     = isi->xapoints;
+    int* yapoints     = isi->yapoints;
 
     const int x_begin = dxx + clip_dx;     // no clip set = dxx
     const int x_end   = x_begin + clip_dw; // no clip set = dxx + dw
@@ -1999,10 +1996,10 @@ void DImgScale::dimgScaleAARGBA16(DImgScaleInfo* const isi, ullong* const dest,
     ullong* sptr=0;
     ullong* dptr=0;
     int x, y;
-    ullong** ypoints = isi->ypoints16;
-    int* xpoints     = isi->xpoints;
-    int* xapoints    = isi->xapoints;
-    int* yapoints    = isi->yapoints;
+    ullong** ypoints  = isi->ypoints16;
+    int* xpoints      = isi->xpoints;
+    int* xapoints     = isi->xapoints;
+    int* yapoints     = isi->yapoints;
 
     const int x_begin = dxx + clip_dx;     // no clip set = dxx
     const int x_end   = x_begin + clip_dw; // no clip set = dxx + dw
