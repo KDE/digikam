@@ -181,4 +181,5 @@ BUGFIXES:
 164 ==> 380876 - Tags in Digikam DB maintained after being removed from file and file re-scanned.
 165 ==> 392017 - Merging, renaming and removing face tags.
 166 ==> 352711 - Externally removed tags are not removed from digiKam.
-167 ==> 
+167 ==> 393108 - Tags not always visible when selecting multiple pictures in a group.
+168 ==> 

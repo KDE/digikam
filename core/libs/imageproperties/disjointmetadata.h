@@ -258,7 +258,7 @@ protected:
               int colorLabel, int pickLabel,
               int rating, const Template& t);
 
-    void loadTags( QList<int>& loadedTagIds);
+    void loadTags(const QList<int>& tagIds);
     void notifyTagDeleted(int id);
 
 // Former MetadataHubOnTheRoad implementation

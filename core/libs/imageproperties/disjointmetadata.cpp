@@ -590,19 +590,29 @@ void DisjointMetadata::load(const QDateTime &dateTime,const CaptionsMap &titles,
     d->loadSingleValue<Template>(t, d->metadataTemplate, d->templateStatus);
 }
 
-void DisjointMetadata::loadTags( QList<int> &loadedTagIds)
+void DisjointMetadata::loadTags(const QList<int>& tagIds)
 {
+    QList<int> loadedTagIds;
+
+    foreach(int tagId, tagIds)
+    {
+        if (!TagsCache::instance()->isInternalTag(tagId))
+        {
+            loadedTagIds << tagId;
+        }
+    }
+
+    if (loadedTagIds.isEmpty())
+    {
+        return;
+    }
+
     // If tags map is empty, set them all as Available
 
     if (d->tags.isEmpty())
     {
-        foreach (int tagId, loadedTagIds)
+        foreach(int tagId, loadedTagIds)
         {
-            if (TagsCache::instance()->isInternalTag(tagId))
-            {
-                continue;
-            }
-
             d->tags[tagId] = MetadataAvailable;
         }
 
@@ -615,11 +625,12 @@ void DisjointMetadata::loadTags( QList<int> &loadedTagIds)
     // disjoint
 
     QMap<int, DisjointMetadata::Status>::iterator it;
-    for(it = d->tags.begin(); it != d->tags.end(); ++it)
+
+    for (it = d->tags.begin() ; it != d->tags.end() ; ++it)
     {
         if (it.value() == MetadataAvailable)
         {
-            if (qBinaryFind(loadedTagIds.begin(),loadedTagIds.end(),it.key()) == loadedTagIds.end())
+            if (qBinaryFind(loadedTagIds.begin(), loadedTagIds.end(), it.key()) == loadedTagIds.end())
             {
                 it.value() = MetadataDisjoint;
             }
@@ -628,13 +639,8 @@ void DisjointMetadata::loadTags( QList<int> &loadedTagIds)
 
     // new tags which are not yet in the set,
     // are added as Disjoint
-    foreach (int tagId, loadedTagIds)
+    foreach(int tagId, loadedTagIds)
     {
-        if (TagsCache::instance()->isInternalTag(tagId))
-        {
-            continue;
-        }
-
         if (!d->tags.contains(tagId))
         {
             d->tags[tagId] = MetadataDisjoint;
