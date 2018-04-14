@@ -3201,8 +3201,6 @@ void CoreDB::addItemTag(qlonglong imageID, int tagID)
     {
         d->recentlyAssignedTags.removeLast();
     }
-
-    writeSettings();
 }
 
 void CoreDB::addItemTag(int albumID, const QString& name, int tagID)
