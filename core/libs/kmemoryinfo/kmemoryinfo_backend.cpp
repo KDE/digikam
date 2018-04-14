@@ -22,6 +22,7 @@
  * $Id: memory_stats.c,v 1.36 2010/02/21 10:04:26 tdb Exp $
  */
 
+//krazy:skip
 
 /** Value returned : -1 : unsupported platform
  *                    0 : parse failure from supported platform
