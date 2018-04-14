@@ -151,7 +151,7 @@ QList<qlonglong> CoreDB::Private::execRelatedImagesQuery(DbEngineSqlQuery& query
         return imageIds;
     }
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         imageIds << (*it).toInt();
     }
@@ -181,7 +181,7 @@ QList<AlbumRootInfo> CoreDB::getAlbumRoots()
 
     d->db->execSql(QString::fromUtf8("SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;"), &values);
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         AlbumRootInfo info;
         info.id           = (*it).toInt();
@@ -261,7 +261,7 @@ AlbumInfo::List CoreDB::scanAlbums()
 
     QString iconAlbumUrl, iconName;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         AlbumInfo info;
 
@@ -293,7 +293,7 @@ TagInfo::List CoreDB::scanTags()
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT id, pid, name, icon, iconkde FROM Tags;"), &values);
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         TagInfo info;
 
@@ -347,7 +347,7 @@ SearchInfo::List CoreDB::scanSearches()
 
     d->db->execSql(QString::fromUtf8("SELECT id, type, name, query FROM Searches;"), &values);
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         SearchInfo info;
 
@@ -375,7 +375,7 @@ QList<AlbumShortInfo> CoreDB::getAlbumShortInfos()
 
     QList<AlbumShortInfo> albumList;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         AlbumShortInfo info;
 
@@ -400,7 +400,7 @@ QList<TagShortInfo> CoreDB::getTagShortInfos()
 
     QList<TagShortInfo> tagList;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         TagShortInfo info;
 
@@ -708,7 +708,7 @@ QList<TagProperty> CoreDB::getTagProperties(int tagId)
         return properties;
     }
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         TagProperty property;
 
@@ -739,7 +739,7 @@ QList<TagProperty> CoreDB::getTagProperties(const QString& property)
         return properties;
     }
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         TagProperty property;
 
@@ -769,7 +769,7 @@ QList<TagProperty> CoreDB::getTagProperties()
         return properties;
     }
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         TagProperty property;
 
@@ -1204,7 +1204,7 @@ QList<qlonglong> CoreDB::getImageIds(int albumID, const QString& name, DatabaseI
 
     QList<qlonglong> items;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         items << it->toLongLong();
     }
@@ -1286,7 +1286,7 @@ qlonglong CoreDB::getImageId(int albumID, const QString& name,
                                          &values);
     }
 
-    if ( values.isEmpty() || ( values.size() > 1 ) )
+    if (values.isEmpty() || ( values.size() > 1 ))
     {
         return -1;
     }
@@ -1309,7 +1309,7 @@ QStringList CoreDB::getItemTagNames(qlonglong imageID)
 
     QStringList names;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         names << it->toString();
     }
@@ -1332,7 +1332,7 @@ QList<int> CoreDB::getItemTagIDs(qlonglong imageID)
         return ids;
     }
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         ids << it->toInt();
     }
@@ -1351,7 +1351,7 @@ QVector<QList<int> > CoreDB::getItemsTagIDs(const QList<qlonglong> imageIds)
     DbEngineSqlQuery query = d->db->prepareQuery(QString::fromUtf8("SELECT tagid FROM ImageTags WHERE imageID=?;"));
     QVariantList values;
 
-    for (int i = 0; i < imageIds.size(); i++)
+    for (int i = 0 ; i < imageIds.size() ; i++)
     {
         d->db->execSql(query, imageIds[i], &values);
         QList<int>& tagIds = results[i];
@@ -1391,7 +1391,7 @@ QList<ImageTagProperty> CoreDB::getImageTagProperties(qlonglong imageId, int tag
         return properties;
     }
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         ImageTagProperty property;
 
@@ -1420,7 +1420,7 @@ QList<int> CoreDB::getTagIdsWithProperties(qlonglong imageId)
 
     QList<int> tagIds;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         tagIds << (*it).toInt();
     }
@@ -1537,7 +1537,7 @@ bool CoreDB::hasTags(const QList<qlonglong>& imageIDList)
     QList<qlonglong>::const_iterator it = imageIDList.constBegin();
     ++it;
 
-    for (; it != imageIDList.constEnd(); ++it)
+    for (; it != imageIDList.constEnd() ; ++it)
     {
         sql += QString::fromUtf8(" OR imageid=? ");
         boundValues << (*it);
@@ -1575,7 +1575,7 @@ QList<int> CoreDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList)
     QList<qlonglong>::const_iterator it = imageIDList.constBegin();
     ++it;
 
-    for (; it != imageIDList.constEnd(); ++it)
+    for (; it != imageIDList.constEnd() ; ++it)
     {
         sql += QString::fromUtf8(" OR imageid=? ");
         boundValues << (*it);
@@ -1589,7 +1589,7 @@ QList<int> CoreDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList)
         return ids;
     }
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         ids << it->toInt();
     }
@@ -1695,7 +1695,7 @@ QVariantList CoreDB::getVideoMetadata(qlonglong imageID, DatabaseFields::VideoMe
              (fields & DatabaseFields::SubjectDistance))
            )
         {
-            for (int i = 0; i < values.size(); ++i)
+            for (int i = 0 ; i < values.size() ; ++i)
             {
                 if (values.at(i).type() == QVariant::String             &&
                     (fieldNames.at(i) == QLatin1String("aperture")      ||
@@ -1738,7 +1738,7 @@ QVariantList CoreDB::getImagePosition(qlonglong imageID, DatabaseFields::ImagePo
              (fields & DatabaseFields::PositionAccuracy))
            )
         {
-            for (int i = 0; i < values.size(); ++i)
+            for (int i = 0 ; i < values.size() ; ++i)
             {
                 if (values.at(i).type() == QVariant::String &&
                     (fieldNames.at(i) == QLatin1String("latitudeNumber")  ||
@@ -1791,7 +1791,7 @@ QVariantList CoreDB::getImagePositions(QList<qlonglong> imageIDs, DatabaseFields
              fields & DatabaseFields::PositionAccuracy)
            )
         {
-            for (int i = 0; i < values.size(); ++i)
+            for (int i = 0 ; i < values.size() ; ++i)
             {
                 if (values.at(i).type() == QVariant::String &&
                     (fieldNames.at(i) == QLatin1String("latitudeNumber")  ||
@@ -1873,7 +1873,7 @@ void CoreDB::changeImageInformation(qlonglong imageId, const QVariantList& infos
     // Convert dateTime values to the appropriate string format
     if (fields & DatabaseFields::CreationDate || fields & DatabaseFields::DigitizationDate)
     {
-        for (QVariantList::iterator it = checkedValues.begin(); it != checkedValues.end(); ++it)
+        for (QVariantList::iterator it = checkedValues.begin() ; it != checkedValues.end() ; ++it)
         {
             if (it->type() == QVariant::DateTime || it->type() == QVariant::Date)
             {
@@ -2054,7 +2054,7 @@ QList<CommentInfo> CoreDB::getImageComments(qlonglong imageID)
                            "FROM ImageComments WHERE imageid=?;"),
                    imageID, &values);
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         CommentInfo info;
         info.imageId  = imageID;
@@ -2181,7 +2181,7 @@ QList<CopyrightInfo> CoreDB::getImageCopyright(qlonglong imageID, const QString&
                        imageID, property, &values);
     }
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         CopyrightInfo info;
         info.id = imageID;
@@ -2338,7 +2338,7 @@ QList<qlonglong> CoreDB::getItemsForUuid(const QString& uuid)
         return imageIds;
     }
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         imageIds << (*it).toInt();
     }
@@ -2393,7 +2393,7 @@ void CoreDB::addImageRelations(const QList<qlonglong>& subjectIds, const QList<q
 
     QVariantList subjects, objects, types;
 
-    for (int i = 0; i < subjectIds.size(); ++i)
+    for (int i = 0 ; i < subjectIds.size() ; ++i)
     {
         subjects << subjectIds.at(i);
         objects  << objectIds.at(i);
@@ -2509,7 +2509,7 @@ QVector<QList<qlonglong> > CoreDB::getRelatedImages(QList<qlonglong> ids,
     QString sql = d->constructRelatedImagesSQL(fromOrTo, type, boolean);
     DbEngineSqlQuery query = d->db->prepareQuery(sql);
 
-    for (int i = 0; i < ids.size(); i++)
+    for (int i = 0 ; i < ids.size() ; i++)
     {
         result[i] = d->execRelatedImagesQuery(query, ids[i], type);
     }
@@ -2558,7 +2558,7 @@ QList<QPair<qlonglong, qlonglong> > CoreDB::getRelationCloud(qlonglong imageId, 
             d->db->execSql(query, id, id, type, &values);
         }
 
-        for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+        for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
         {
             subject = (*it).toLongLong();
             ++it;
@@ -2648,7 +2648,7 @@ QStringList CoreDB::getItemsURLsWithTag(int tagId)
     QStringList urls;
     QString     albumRootPath, relativePath, name;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         albumRootPath = CollectionManager::instance()->albumRootPath((*it).toInt());
         ++it;
@@ -2686,7 +2686,7 @@ QStringList CoreDB::getDirtyOrMissingFaceImageUrls()
     QStringList urls;
     QString     albumRootPath, relativePath, name;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         albumRootPath = CollectionManager::instance()->albumRootPath((*it).toInt());
         ++it;
@@ -2751,7 +2751,7 @@ QList<ItemScanInfo> CoreDB::getIdenticalFiles(const QString& uniqueHash, qlonglo
 
     QList<ItemScanInfo> list;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         ItemScanInfo info;
 
@@ -3111,7 +3111,7 @@ void CoreDB::addBoundValuePlaceholders(QString& query, int count)
     questionMarks.reserve(count * 2);
     QString questionMark(QString::fromUtf8("?,"));
 
-    for (int i = 0; i < count; ++i)
+    for (int i = 0 ; i < count ; ++i)
     {
         questionMarks += questionMark;
     }
@@ -3319,7 +3319,7 @@ QStringList CoreDB::getItemNamesInAlbum(int albumID, bool recursive)
 
     QStringList names;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         names << it->toString();
     }
@@ -3432,7 +3432,7 @@ QMap<int, int> CoreDB::getNumberOfImagesInAlbums()
     // wrong album image counters
     d->db->execSql(QString::fromUtf8("SELECT id from Albums"), &allAbumIDs);
 
-    for (QList<QVariant>::const_iterator it = allAbumIDs.constBegin(); it != allAbumIDs.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = allAbumIDs.constBegin() ; it != allAbumIDs.constEnd() ; ++it)
     {
         albumID = (*it).toInt();
         albumsStatMap.insert(albumID, 0);
@@ -3440,7 +3440,7 @@ QMap<int, int> CoreDB::getNumberOfImagesInAlbums()
 
     d->db->execSql(QString::fromUtf8("SELECT album FROM Images WHERE Images.status=1;"), &values);
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         albumID = (*it).toInt();
         ++it;
@@ -3480,7 +3480,7 @@ QMap<int, int> CoreDB::getNumberOfImagesInTags()
                    " LEFT JOIN Images ON Images.id=ImageTags.imageid "
                    " WHERE Images.status=1;"), &values);
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         tagID = (*it).toInt();
         ++it;
@@ -3512,7 +3512,7 @@ QMap<int, int> CoreDB::getNumberOfImagesInTagProperties(const QString& property)
                    " GROUP BY tagid;"),
                    property, &values);
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         tagID = (*it).toInt();
         ++it;
@@ -3548,7 +3548,7 @@ QList<qlonglong> CoreDB::getImagesWithImageTagProperty(int tagId, const QString&
                    " AND ImageTagProperties.tagid=? ;"),
                    property, tagId, &values);
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         imageIds.append((*it).toInt());
     }
@@ -3617,7 +3617,7 @@ QStringList CoreDB::getListFromImageMetadata(DatabaseFields::ImageMetadata field
     sql = sql.arg(fieldName.first());
     d->db->execSql(sql, &values);
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         if (!it->isNull())
         {
@@ -3700,7 +3700,7 @@ QList<int> CoreDB::getAlbumAndSubalbumsForPath(int albumRootId, const QString& r
     int id;
     QString albumRelativePath;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         id = (*it).toInt();
         ++it;
@@ -3725,7 +3725,7 @@ QList<int> CoreDB::getAlbumsOnAlbumRoot(int albumRootId)
 
     QList<int> albumIds;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         albumIds << (*it).toInt();
     }
@@ -4117,7 +4117,7 @@ QStringList CoreDB::getItemURLsInAlbum(int albumID, ItemSortOrder sortOrder)
     QStringList urls;
     QString     relativePath, name;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         relativePath = (*it).toString();
         ++it;
@@ -4145,7 +4145,7 @@ QList<qlonglong> CoreDB::getItemIDsInAlbum(int albumID)
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images WHERE album=?;"),
                    albumID, &values);
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         itemIDs << (*it).toLongLong();
     }
@@ -4181,7 +4181,7 @@ QMap<qlonglong, QString> CoreDB::getItemIDsAndURLsInAlbum(int albumID)
     qlonglong id;
     QString   relativePath, name;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         id = (*it).toLongLong();
         ++it;
@@ -4232,7 +4232,7 @@ QList<ItemScanInfo> CoreDB::getItemScanInfos(int albumID)
 
     QList<ItemScanInfo> list;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         ItemScanInfo info;
 
@@ -4318,7 +4318,7 @@ QStringList CoreDB::getItemURLsInTag(int tagID, bool recursive)
     QStringList urls;
     QString     albumRootPath, relativePath, name;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         albumRootPath = CollectionManager::instance()->albumRootPath((*it).toInt());
         ++it;
@@ -4358,7 +4358,7 @@ QList<qlonglong> CoreDB::getItemIDsInTag(int tagID, bool recursive)
         d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("getItemIDsInTag")), parameters, &values);
     }
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         itemIDs << (*it).toLongLong();
     }
@@ -4458,7 +4458,7 @@ QDate CoreDB::getAlbumAverageDate(int albumID)
 
     QList<QDate> dates;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ; ++it)
     {
         QDateTime itemDateTime = (*it).isNull() ? QDateTime()
                                  : QDateTime::fromString((*it).toString(), Qt::ISODate);
