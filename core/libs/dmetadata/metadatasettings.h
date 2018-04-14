@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATA_SETTINGS_H
-#define METADATA_SETTINGS_H
+#ifndef DIGIKAM_META_DATA_SETTINGS_H
+#define DIGIKAM_META_DATA_SETTINGS_H
 
 // Qt includes
 
@@ -69,7 +69,7 @@ Q_SIGNALS:
 
 private:
 
-    MetadataSettings();
+    explicit MetadataSettings();
     ~MetadataSettings();
 
     void readFromConfig();
@@ -84,4 +84,4 @@ private:
 
 } // namespace Digikam
 
-#endif // METADATA_SETTINGS_H
+#endif // DIGIKAM_META_DATA_SETTINGS_H

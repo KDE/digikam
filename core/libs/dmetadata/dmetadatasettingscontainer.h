@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DMETADATASETTINGSCONTAINER_H
-#define DMETADATASETTINGSCONTAINER_H
+#ifndef DIGIKAM_DMETADATA_SETTINGS_CONTAINER_H
+#define DIGIKAM_DMETADATA_SETTINGS_CONTAINER_H
 
 // Qt includes
 
@@ -93,7 +93,7 @@ public:
 
 public:
 
-    NamespaceEntry()
+    explicit NamespaceEntry()
     {
         specialOpts    = NO_OPTS;
         secondNameOpts = NO_OPTS;
@@ -157,7 +157,7 @@ class DIGIKAM_EXPORT DMetadataSettingsContainer
 {
 public:
 
-    DMetadataSettingsContainer();
+    explicit DMetadataSettingsContainer();
     DMetadataSettingsContainer(const DMetadataSettingsContainer& other);
     ~DMetadataSettingsContainer();
     DMetadataSettingsContainer& operator=(const DMetadataSettingsContainer& other);
@@ -197,4 +197,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DMETADATASETTINGSCONTAINER_H
+#endif // DIGIKAM_DMETADATA_SETTINGS_CONTAINER_H

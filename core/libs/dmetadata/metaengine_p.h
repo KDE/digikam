@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef META_ENGINE_PRIVATE_H
-#define META_ENGINE_PRIVATE_H
+#ifndef DIGIKAM_META_ENGINE_PRIVATE_H
+#define DIGIKAM_META_ENGINE_PRIVATE_H
 
 #include "metaengine.h"
 
@@ -319,4 +319,4 @@ class XmpMergeHelper : public MergeHelper<Exiv2::XmpData, Exiv2::XmpKey, QLatin1
 
 } // namespace Digikam
 
-#endif // META_ENGINE_PRIVATE_H
+#endif // DIGIKAM_META_ENGINE_PRIVATE_H

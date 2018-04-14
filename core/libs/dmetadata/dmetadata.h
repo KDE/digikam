@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DMETADATA_H
-#define DMETADATA_H
+#ifndef DIGIKAM_META_DATA_H
+#define DIGIKAM_META_DATA_H
 
 // Qt includes
 
@@ -299,4 +299,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DMETADATA_H
+#endif // DIGIKAM_META_DATA_H

@@ -41,6 +41,7 @@ extern "C"
 // Qt includes
 
 #include <QTextCodec>
+#include <qplatformdefs.h>
 
 // Local includes
 
@@ -326,9 +327,9 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
         if (!updateFileTimeStamp)
         {
             // Don't touch access and modification timestamp of file.
-            struct stat    st;
+            QT_STATBUF     st;
             struct utimbuf ut;
-            int ret = ::stat(QFile::encodeName(filePath).constData(), &st);
+            int ret = QT_STAT(QFile::encodeName(filePath).constData(), &st);
 
             if (ret == 0)
             {

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATA_SETTINGS_CONTAINER_H
-#define METADATA_SETTINGS_CONTAINER_H
+#ifndef DIGIKAM_META_DATA_SETTINGS_CONTAINER_H
+#define DIGIKAM_META_DATA_SETTINGS_CONTAINER_H
 
 // Qt includes
 
@@ -113,4 +113,4 @@ public:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetadataSettingsContainer::RotationBehaviorFlags)
 
-#endif // METADATA_SETTINGS_CONTAINER_H
+#endif // DIGIKAM_META_DATA_SETTINGS_CONTAINER_H

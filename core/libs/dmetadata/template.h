@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEMPLATE_H
-#define TEMPLATE_H
+#ifndef DIGIKAM_TEMPLATE_H
+#define DIGIKAM_TEMPLATE_H
 
 // Qt includes
 
@@ -145,4 +145,4 @@ DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const Template& t);
 
 Q_DECLARE_METATYPE(Digikam::Template)
 
-#endif // TEMPLATE_H
+#endif // DIGIKAM_TEMPLATE_H

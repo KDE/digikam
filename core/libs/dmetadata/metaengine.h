@@ -28,8 +28,8 @@
  *
  * ============================================================ */
 
-#ifndef META_ENGINE_H
-#define META_ENGINE_H
+#ifndef DIGIKAM_META_ENGINE_H
+#define DIGIKAM_META_ENGINE_H
 
 // QT includes
 
@@ -1073,4 +1073,4 @@ private:
 
 } // namespace Digikam
 
-#endif // META_ENGINE_H
+#endif // DIGIKAM_META_ENGINE_H

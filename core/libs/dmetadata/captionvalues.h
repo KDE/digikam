@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CAPTION_VALUES_H
-#define CAPTION_VALUES_H
+#ifndef DIGIKAM_CAPTION_VALUES_H
+#define DIGIKAM_CAPTION_VALUES_H
 
 // Qt includes
 
@@ -92,4 +92,4 @@ public:
 Q_DECLARE_METATYPE(Digikam::CaptionValues)
 Q_DECLARE_METATYPE(Digikam::CaptionsMap)
 
-#endif // CAPTION_VALUES_H
+#endif // DIGIKAM_CAPTION_VALUES_H
