@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DNG_WRITER_P_H
-#define DNG_WRITER_P_H
+#ifndef DIGIKAM_DNG_WRITER_P_H
+#define DIGIKAM_DNG_WRITER_P_H
 
 // Qt includes
 
@@ -80,7 +80,7 @@ public:
 
 public:
 
-    Private();
+    explicit Private();
     ~Private();
 
 public:
@@ -106,4 +106,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DNG_WRITER_P_H
+#endif // DIGIKAM_DNG_WRITER_P_H

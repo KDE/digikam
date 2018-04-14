@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DNG_WRITER_HOST_H
-#define DNG_WRITER_HOST_H
+#ifndef DIGIKAM_DNG_WRITER_HOST_H
+#define DIGIKAM_DNG_WRITER_HOST_H
 
 // Local includes
 
@@ -49,4 +49,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DNG_WRITER_HOST_H
+#endif // DIGIKAM_DNG_WRITER_HOST_H

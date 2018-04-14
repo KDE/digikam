@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DNG_WRITER_H
-#define DNG_WRITER_H
+#ifndef DIGIKAM_DNG_WRITER_H
+#define DIGIKAM_DNG_WRITER_H
 
 // Qt includes
 
@@ -61,7 +61,7 @@ public:
 
 public:
 
-    DNGWriter();
+    explicit DNGWriter();
     ~DNGWriter();
 
     void setInputFile(const QString& filePath);
@@ -98,4 +98,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DNG_WRITER_H
+#endif // DIGIKAM_DNG_WRITER_H

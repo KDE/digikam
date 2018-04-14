@@ -96,7 +96,7 @@ bool DNGWriter::Private::fujiRotate(QByteArray& rawData, RawInfo& identify) cons
     identify.orientation = RawInfo::ORIENTATION_Mirror90CCW;
     identify.outputSize  = QSize(height, width);
 
-    //TODO: rotate margins
+    // TODO: rotate margins
 
     return true;
 }
