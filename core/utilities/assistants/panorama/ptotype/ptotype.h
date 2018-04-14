@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef PTO_TYPE_H
-#define PTO_TYPE_H
+#ifndef DIGIKAM_PTO_TYPE_H
+#define DIGIKAM_PTO_TYPE_H
 
 // Qt includes
 
@@ -179,7 +179,7 @@ struct PTOType
 
     // --------------------------------------------------------------------------------------
 
-    struct Optimisation
+    struct Optimization
     {
         typedef enum
         {
@@ -267,7 +267,7 @@ struct PTOType
         QSize                         size;
         int                           id;
         QList<Mask>                   masks;
-        QList<Optimisation>           optimisationParameters;
+        QList<Optimization>           optimizationParameters;
         LensProjection                lensProjection;
         LensParameter<double>         fieldOfView;
         double                        yaw;
@@ -398,4 +398,4 @@ struct PTOType
 
 } // namespace Digikam
 
-#endif // PTO_TYPE_H
+#endif // DIGIKAM_PTO_TYPE_H

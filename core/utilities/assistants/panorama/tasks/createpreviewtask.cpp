@@ -97,7 +97,7 @@ void CreatePreviewTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         image.fileName = it.value().previewUrl.toLocalFile();
         m_meta.load(image.fileName);
         image.size     = m_meta.getPixelSize();
-        image.optimisationParameters.clear();
+        image.optimizationParameters.clear();
     }
 
     // Remove unncessary stuff

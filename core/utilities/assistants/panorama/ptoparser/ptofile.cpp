@@ -509,15 +509,15 @@ PTOType* PTOFile::getPTO()
     for (int v = 0; v < panoScriptGetVarsToOptimizeCount(d->script); v++)
     {
         int image                = panoScriptGetVarsToOptimizeImageId(d->script, v);
-        out->images[image].optimisationParameters.push_back(PTOType::Optimisation());
-        PTOType::Optimisation& o = out->images[image].optimisationParameters.last();
+        out->images[image].optimizationParameters.push_back(PTOType::Optimization());
+        PTOType::Optimization& o = out->images[image].optimizationParameters.last();
 
         for (int c = 0; c < panoScriptGetVarsToOptimizePrevCommentCount(d->script, v); c++)
         {
             o.previousComments << QString::fromLocal8Bit(panoScriptGetVarsToOptimizeComment(d->script, v, c));
         }
 
-        o.parameter = PTOType::Optimisation::Parameter(panoScriptGetVarsToOptimizeName(d->script, v));
+        o.parameter = PTOType::Optimization::Parameter(panoScriptGetVarsToOptimizeName(d->script, v));
     }
 
     // Control Points

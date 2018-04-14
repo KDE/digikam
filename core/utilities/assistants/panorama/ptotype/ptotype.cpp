@@ -243,7 +243,7 @@ bool PTOType::createFile(const QString& filepath)
     {
         const Image& image = images[id];
 
-        foreach (Optimisation optim, image.optimisationParameters)
+        foreach (Optimization optim, image.optimizationParameters)
         {
             if (optim.previousComments.size() > 0)
                 out << optim.previousComments.join(QChar::fromLatin1('\n')) << endl;
@@ -252,76 +252,76 @@ bool PTOType::createFile(const QString& filepath)
 
             switch (optim.parameter)
             {
-                case Optimisation::LENSA:
+                case Optimization::LENSA:
                     out << 'a';
                     break;
-                case Optimisation::LENSB:
+                case Optimization::LENSB:
                     out << 'b';
                     break;
-                case Optimisation::LENSC:
+                case Optimization::LENSC:
                     out << 'c';
                     break;
-                case Optimisation::LENSD:
+                case Optimization::LENSD:
                     out << 'd';
                     break;
-                case Optimisation::LENSE:
+                case Optimization::LENSE:
                     out << 'e';
                     break;
-                case Optimisation::LENSHFOV:
+                case Optimization::LENSHFOV:
                     out << 'v';
                     break;
-                case Optimisation::LENSYAW:
+                case Optimization::LENSYAW:
                     out << 'y';
                     break;
-                case Optimisation::LENSPITCH:
+                case Optimization::LENSPITCH:
                     out << 'p';
                     break;
-                case Optimisation::LENSROLL:
+                case Optimization::LENSROLL:
                     out << 'r';
                     break;
-                case Optimisation::EXPOSURE:
+                case Optimization::EXPOSURE:
                     out << "Eev";
                     break;
-                case Optimisation::WBR:
+                case Optimization::WBR:
                     out << "Er";
                     break;
-                case Optimisation::WBB:
+                case Optimization::WBB:
                     out << "Eb";
                     break;
-                case Optimisation::VA:
+                case Optimization::VA:
                     out << "Va";
                     break;
-                case Optimisation::VB:
+                case Optimization::VB:
                     out << "Vb";
                     break;
-                case Optimisation::VC:
+                case Optimization::VC:
                     out << "Vc";
                     break;
-                case Optimisation::VD:
+                case Optimization::VD:
                     out << "Vd";
                     break;
-                case Optimisation::VX:
+                case Optimization::VX:
                     out << "Vx";
                     break;
-                case Optimisation::VY:
+                case Optimization::VY:
                     out << "Vy";
                     break;
-                case Optimisation::RA:
+                case Optimization::RA:
                     out << "Ra";
                     break;
-                case Optimisation::RB:
+                case Optimization::RB:
                     out << "Rb";
                     break;
-                case Optimisation::RC:
+                case Optimization::RC:
                     out << "Rc";
                     break;
-                case Optimisation::RD:
+                case Optimization::RD:
                     out << "Rd";
                     break;
-                case Optimisation::RE:
+                case Optimization::RE:
                     out << "Re";
                     break;
-                case Optimisation::UNKNOWN:
+                case Optimization::UNKNOWN:
                     qCCritical(DIGIKAM_GENERAL_LOG) << "Unknown optimisation parameter!";
                     file.close();
                     return false;
