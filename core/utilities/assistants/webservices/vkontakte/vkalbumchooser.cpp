@@ -395,12 +395,12 @@ void VKAlbumChooser::slotStartAlbumsReload()
 void VKAlbumChooser::slotAlbumsReloadDone(KJob* kjob)
 {
     Vkontakte::AlbumListJob* const job = dynamic_cast<Vkontakte::AlbumListJob*>(kjob);
-    Q_ASSERT(job);                                      
+    Q_ASSERT(job);
 
-    if (job && job->error())                            
-    {                                                   
-        handleVkError(job);                             
-        return;                                         
+    if (job && job->error())
+    {
+        handleVkError(job);
+        return;
     }
 
     if (!job)
@@ -420,7 +420,7 @@ void VKAlbumChooser::slotAlbumsReloadDone(KJob* kjob)
 
     d->albumsCombo->setEnabled(true);
 
-    if (!d->albums.empty())
+    if (!d->albums.isEmpty())
     {
         d->editAlbumButton->setEnabled(true);
         d->deleteAlbumButton->setEnabled(true);

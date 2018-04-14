@@ -399,7 +399,7 @@ void BookmarksDialog::slotOpenInMap(const QModelIndex& index)
     }
 
     d->mapView->setGPSInfoList(GPSImageInfo::List() << ilst);
-    d->mapView->setActive(!ilst.empty());
+    d->mapView->setActive(!ilst.isEmpty());
 }
 
 void BookmarksDialog::slotNewFolder()

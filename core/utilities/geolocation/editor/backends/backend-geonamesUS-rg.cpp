@@ -265,7 +265,7 @@ void BackendGeonamesUSRG::slotFinished(QNetworkReply* reply)
 
             d->jobs.removeAt(i);
 
-            if (!d->jobs.empty())
+            if (!d->jobs.isEmpty())
             {
                 QTimer::singleShot(500, this, SLOT(nextPhoto()));
             }

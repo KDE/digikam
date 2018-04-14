@@ -128,7 +128,7 @@ void CameraHistoryUpdater::sendBusy(bool val)
 
 void CameraHistoryUpdater::addItems(const QByteArray& id, CHUpdateItemMap& map)
 {
-    if (map.empty())
+    if (map.isEmpty())
     {
         return;
     }

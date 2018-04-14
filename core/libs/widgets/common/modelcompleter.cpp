@@ -204,7 +204,7 @@ void ModelCompleter::slotRowsAboutToBeRemoved(const QModelIndex& parent, int sta
             d->idToTextMap.remove(id);
             // only delete an item in the completion object if there is no other
             // item with the same display name
-            if (d->idToTextMap.keys(itemName).empty())
+            if (d->idToTextMap.keys(itemName).isEmpty())
             {
                 d->delayedModelTimer->start();
             }

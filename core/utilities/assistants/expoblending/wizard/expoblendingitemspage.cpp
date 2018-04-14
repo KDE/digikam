@@ -112,7 +112,7 @@ void ItemsPage::slotSetupList()
 
 void ItemsPage::slotAddItems(const QList<QUrl>& urls)
 {
-    if (!urls.empty())
+    if (!urls.isEmpty())
     {
         d->mngr->thread()->identifyFiles(urls);
 

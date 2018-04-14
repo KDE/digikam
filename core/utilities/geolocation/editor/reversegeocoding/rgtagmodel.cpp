@@ -286,7 +286,7 @@ void RGTagModel::addSpacerTag(const QModelIndex& parent, const QString& spacerNa
     TreeBranch* const parentBranch = branchFromIndex(parent);
     bool found                     = false;
 
-    if (!parentBranch->spacerChildren.empty())
+    if (!parentBranch->spacerChildren.isEmpty())
     {
         for ( int i = 0; i < parentBranch->spacerChildren.count(); ++i)
         {
@@ -322,7 +322,7 @@ QPersistentModelIndex RGTagModel::addNewTag(const QModelIndex& parent, const QSt
     bool found                     = false;
     QPersistentModelIndex retIndex;
 
-    if (!parentBranch->newChildren.empty())
+    if (!parentBranch->newChildren.isEmpty())
     {
         for ( int i = 0; i < parentBranch->newChildren.count(); ++i)
         {

@@ -514,7 +514,7 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
     {
         QPersistentModelIndex currentImageIndex = returnedRGList[i].id;
 
-        if (!returnedRGList[i].rgData.empty())
+        if (!returnedRGList[i].rgData.isEmpty())
         {
             QString addressElementsWantedFormat;
 

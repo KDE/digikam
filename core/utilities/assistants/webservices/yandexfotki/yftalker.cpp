@@ -904,7 +904,7 @@ void YFTalker::slotParseResponseListAlbums()
     // TODO: pagination like listPhotos
 
     // if an error has occurred and we didn't find anything => notify user
-    if (errorOccurred && d->albums.empty())
+    if (errorOccurred && d->albums.isEmpty())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "No result and errors have occurred";
         return setErrorState(STATE_LISTALBUMS_ERROR);

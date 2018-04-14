@@ -326,7 +326,7 @@ void ExpoBlendingDlg::loadItems(const QList<QUrl>& urls)
 
 void ExpoBlendingDlg::slotAddItems(const QList<QUrl>& urls)
 {
-    if (!urls.empty())
+    if (!urls.isEmpty())
     {
         d->mngr->thread()->identifyFiles(urls);
 

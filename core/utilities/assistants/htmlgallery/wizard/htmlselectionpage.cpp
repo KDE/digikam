@@ -134,7 +134,7 @@ bool HTMLSelectionPage::validatePage()
     {
         if (d->albumSupport)
         {
-            if (d->iface->albumChooserItems().empty())
+            if (d->iface->albumChooserItems().isEmpty())
                 return false;
 
             d->info->m_albumList = d->iface->albumChooserItems();
@@ -146,7 +146,7 @@ bool HTMLSelectionPage::validatePage()
     }
     else
     {
-        if (d->imageList->imageUrls().empty())
+        if (d->imageList->imageUrls().isEmpty())
             return false;
 
         d->info->m_imageList = d->imageList->imageUrls();
@@ -162,10 +162,10 @@ bool HTMLSelectionPage::isComplete() const
         if (!d->albumSupport)
             return false;
 
-        return (!d->iface->albumChooserItems().empty());
+        return (!d->iface->albumChooserItems().isEmpty());
     }
 
-    return (!d->imageList->imageUrls().empty());
+    return (!d->imageList->imageUrls().isEmpty());
 }
 
 } // namespace Digikam

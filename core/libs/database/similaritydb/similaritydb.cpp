@@ -189,7 +189,7 @@ QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints(QList<ImageInfo> im
                                                      "WHERE imageid=?;"),
                            info.id(), &values);
 
-            if (values.empty())
+            if (values.isEmpty())
             {
                 // The image id does not exist -> missing fingerprint
                 itemIDs << info.id();
@@ -226,7 +226,7 @@ QStringList SimilarityDb::getDirtyOrMissingFingerprintURLs(QList<ImageInfo> imag
                                                      "WHERE imageid=?;"),
                            info.id(), &values);
 
-            if (values.empty())
+            if (values.isEmpty())
             {
                 // The image id does not exist -> missing fingerprint
                 urls << info.filePath();

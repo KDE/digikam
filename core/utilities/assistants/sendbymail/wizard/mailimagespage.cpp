@@ -108,7 +108,7 @@ void MailImagesPage::initializePage()
 
 bool MailImagesPage::validatePage()
 {
-    if (d->imageList->imageUrls().empty())
+    if (d->imageList->imageUrls().isEmpty())
         return false;
 
     d->wizard->settings()->inputImages = d->imageList->imageUrls();
@@ -118,7 +118,7 @@ bool MailImagesPage::validatePage()
 
 bool MailImagesPage::isComplete() const
 {
-    return (!d->imageList->imageUrls().empty());
+    return (!d->imageList->imageUrls().isEmpty());
 }
 
 } // namespace Digikam

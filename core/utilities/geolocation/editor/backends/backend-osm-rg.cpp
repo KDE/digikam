@@ -164,7 +164,7 @@ void BackendOsmRG::callRGBackend(const QList<RGInfo>& rgList, const QString& lan
         }
     }
 
-    if (!d->jobs.empty())
+    if (!d->jobs.isEmpty())
         nextPhoto();
 }
 
@@ -270,7 +270,7 @@ void BackendOsmRG::slotFinished(QNetworkReply* reply)
 
             d->jobs.removeAt(i);
 
-            if (!d->jobs.empty())
+            if (!d->jobs.isEmpty())
             {
                 QTimer::singleShot(500, this, SLOT(nextPhoto()));
             }

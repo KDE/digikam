@@ -357,7 +357,7 @@ void ImageShackWindow::slotGetGalleriesDone(int errCode, const QString &errMsg)
 
 void ImageShackWindow::uploadNextItem()
 {
-    if (d->transferQueue.empty())
+    if (d->transferQueue.isEmpty())
     {
         d->widget->d->progressBar->hide();
         return;

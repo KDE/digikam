@@ -168,7 +168,7 @@ void FTExportWindow::slotTargetUrlChanged(const QUrl & target)
 
 void FTExportWindow::updateUploadButton()
 {
-    bool listNotEmpty = !d->exportWidget->imagesList()->imageUrls().empty();
+    bool listNotEmpty = !d->exportWidget->imagesList()->imageUrls().isEmpty();
     startButton()->setEnabled(listNotEmpty && d->exportWidget->targetUrl().isValid());
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Updated upload button with listNotEmpty = "
@@ -196,7 +196,7 @@ void FTExportWindow::slotCopyingFinished(KJob* job)
 
     setEnabled(true);
 
-    if (!d->exportWidget->imagesList()->imageUrls().empty())
+    if (!d->exportWidget->imagesList()->imageUrls().isEmpty())
     {
         QMessageBox::information(this, i18n("Upload not completed"),
                                  i18n("Some of the images have not been transferred "

@@ -103,7 +103,7 @@ PresentationAudioWidget::PresentationAudioWidget(QWidget* const parent, const QL
     connect(m_stopButton, SIGNAL(clicked()),
             this, SLOT(slotStop()));
 
-    if (urls.empty())
+    if (urls.isEmpty())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Tracks list is empty...";
         setEnabled(false);
@@ -138,7 +138,7 @@ PresentationAudioWidget::PresentationAudioWidget(QWidget* const parent, const QL
 
 PresentationAudioWidget::~PresentationAudioWidget()
 {
-    if (!d->urlList.empty())
+    if (!d->urlList.isEmpty())
     {
         d->mediaObject->stop();
     }

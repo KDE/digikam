@@ -398,7 +398,7 @@ void ProgressView::slotTransactionAdded(ProgressItem* item)
     }
     else
     {
-        const bool first          = d->transactionsToListviewItems.empty();
+        const bool first          = d->transactionsToListviewItems.isEmpty();
         TransactionItem* const ti = d->scrollView->addTransactionItem( item, first );
 
         if ( ti )
@@ -436,7 +436,7 @@ void ProgressView::slotTransactionCompleted(ProgressItem* item)
     }
 
     // This was the last item, hide.
-    if ( d->transactionsToListviewItems.empty() )
+    if ( d->transactionsToListviewItems.isEmpty() )
     {
         QTimer::singleShot( 3000, this, SLOT(slotHide()) );
     }

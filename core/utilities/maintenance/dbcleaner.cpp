@@ -242,7 +242,7 @@ void DbCleaner::slotCleanedItems()
 
     if (d->cleanThumbsDb)
     {
-        if (!d->staleThumbnails.empty())
+        if (!d->staleThumbnails.isEmpty())
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << d->staleThumbnails.size() << " stale thumbnails.";
             setLabel(i18n("Clean up the databases : ") + i18n("cleaning thumbnails db"));
@@ -305,7 +305,7 @@ void DbCleaner::slotCleanedFaces()
     if (d->cleanSimilarityDb)
     {
         // TODO: implement similarity db cleanup
-        if (!d->staleImageSimilarities.empty())
+        if (!d->staleImageSimilarities.isEmpty())
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << d->staleImageSimilarities.size() << " image ids that are referenced in similarity db but not used.";
             setLabel(i18n("Clean up the databases : ") + i18n("cleaning similarity db"));

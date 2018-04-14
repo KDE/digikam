@@ -206,7 +206,7 @@ void CalWizard::slotPageSelected(int curr)
             }
         }
 
-        if (d->months.empty())
+        if (d->months.isEmpty())
         {
             d->wPrintLabel->setText(QString::fromLatin1("<qt>") +
                                   i18n("No valid images selected for months<br/>"

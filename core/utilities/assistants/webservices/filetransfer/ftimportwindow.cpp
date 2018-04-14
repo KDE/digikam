@@ -136,7 +136,7 @@ void FTImportWindow::slotCopyingFinished(KJob* job)
 
     setEnabled(true);
 
-    if (!d->importWidget->imagesList()->imageUrls().empty())
+    if (!d->importWidget->imagesList()->imageUrls().isEmpty())
     {
         QMessageBox::information(this, i18n("Import not completed"),
                                  i18n("Some of the images have not been transferred "
@@ -147,7 +147,7 @@ void FTImportWindow::slotCopyingFinished(KJob* job)
 
 void FTImportWindow::slotSourceAndTargetUpdated()
 {
-    bool hasUrlToImport = !d->importWidget->sourceUrls().empty();
+    bool hasUrlToImport = !d->importWidget->sourceUrls().isEmpty();
     bool hasTarget      = !d->iface->uploadUrl().isEmpty();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "switching import button activity with: hasUrlToImport = "

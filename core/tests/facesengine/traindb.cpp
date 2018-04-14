@@ -127,7 +127,7 @@ int main(int argc, char** argv)
     QImage image(256, 256, QImage::Format_ARGB32);
     QList<Identity> list = db.recognizeFaces(QList<QImage>() << image);
 
-    if (!list.empty())
+    if (!list.isEmpty())
     {
         foreach(Identity id, list)
         {

@@ -940,7 +940,7 @@ void FuzzySearchView::dragEnterEvent(QDragEnterEvent* e)
         QList<QUrl> urls = e->mimeData()->urls();
 
         // If there is at least one URL and the URL is a local file.
-        if (!urls.empty())
+        if (!urls.isEmpty())
         {
             if (urls.first().isLocalFile())
             {
@@ -987,7 +987,7 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
         QList<QUrl> urls = e->mimeData()->urls();
 
         // If there is at least one URL and the URL is a local file.
-        if (!urls.empty())
+        if (!urls.isEmpty())
         {
             if (urls.first().isLocalFile())
             {

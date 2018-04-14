@@ -112,7 +112,7 @@ void VidSlideImagesPage::initializePage()
 
 bool VidSlideImagesPage::validatePage()
 {
-    if (d->imageList->imageUrls().empty())
+    if (d->imageList->imageUrls().isEmpty())
         return false;
 
     d->wizard->settings()->inputImages = d->imageList->imageUrls();
@@ -122,7 +122,7 @@ bool VidSlideImagesPage::validatePage()
 
 bool VidSlideImagesPage::isComplete() const
 {
-    return (!d->imageList->imageUrls().empty());
+    return (!d->imageList->imageUrls().isEmpty());
 }
 
 } // namespace Digikam

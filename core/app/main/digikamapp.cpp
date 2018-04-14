@@ -2815,7 +2815,7 @@ void DigikamApp::slotImportAddFolders()
     QList<QUrl> urls = dlg->selectedUrls();
     delete dlg;
 
-    if (urls.empty())
+    if (urls.isEmpty())
     {
         return;
     }

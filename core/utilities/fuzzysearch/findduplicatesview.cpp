@@ -479,7 +479,7 @@ void FindDuplicatesView::slotDuplicatesAlbumActived()
         }
     }
 
-    if (!albums.empty())
+    if (!albums.isEmpty())
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << albums);
     }
