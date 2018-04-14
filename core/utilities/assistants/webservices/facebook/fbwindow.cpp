@@ -680,7 +680,7 @@ void FbWindow::slotAddPhotoDone(int errCode, const QString& errMsg)
 
     if (errCode == 0)
     {
-        d->transferQueue.pop_front();
+        d->transferQueue.removeFirst();
         d->imagesCount++;
     }
     else

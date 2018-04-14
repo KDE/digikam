@@ -346,7 +346,7 @@ void DBWindow::slotAddPhotoFailed(const QString& msg)
     }
     else
     {
-        d->transferQueue.pop_front();
+        d->transferQueue.removeFirst();
         d->imagesTotal--;
         d->widget->progressBar()->setMaximum(d->imagesTotal);
         d->widget->progressBar()->setValue(d->imagesCount);
@@ -358,7 +358,7 @@ void DBWindow::slotAddPhotoSucceeded()
 {
     // Remove photo uploaded from the list
     d->widget->imagesList()->removeItemByUrl(d->transferQueue.first());
-    d->transferQueue.pop_front();
+    d->transferQueue.removeFirst();
     d->imagesCount++;
     d->widget->progressBar()->setMaximum(d->imagesTotal);
     d->widget->progressBar()->setValue(d->imagesCount);

@@ -65,7 +65,7 @@ void PreviewLoadingTask::execute()
 
         // lookupCacheKeys returns "best first". Prepend the cache key to make the list "fastest first":
         // Scaling a full version takes longer!
-        lookupKeys.push_front(m_loadingDescription.cacheKey());
+        lookupKeys.prepend(m_loadingDescription.cacheKey());
 
         foreach(const QString& key, lookupKeys)
         {

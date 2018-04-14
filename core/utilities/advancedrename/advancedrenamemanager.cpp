@@ -423,7 +423,7 @@ bool AdvancedRenameManager::initialize()
                     dirMap[path] = QList<QString>();
                 }
 
-                dirMap[path].push_back(file);
+                dirMap[path].append(file);
             }
         }
 

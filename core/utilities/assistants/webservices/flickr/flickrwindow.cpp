@@ -806,7 +806,7 @@ void FlickrWindow::slotAddPhotoSucceeded()
 {
     // Remove photo uploaded from the list
     d->imglst->removeItemByUrl(d->uploadQueue.first().first);
-    d->uploadQueue.pop_front();
+    d->uploadQueue.removeFirst();
     d->uploadCount++;
     d->widget->progressBar()->setMaximum(d->uploadTotal);
     d->widget->progressBar()->setValue(d->uploadCount);
@@ -836,7 +836,7 @@ void FlickrWindow::slotAddPhotoFailed(const QString& msg)
     }
     else
     {
-        d->uploadQueue.pop_front();
+        d->uploadQueue.removeFirst();
         d->uploadTotal--;
         d->widget->progressBar()->setMaximum(d->uploadTotal);
         d->widget->progressBar()->setValue(d->uploadCount);

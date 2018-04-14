@@ -348,7 +348,7 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
     foreach(const QModelIndex& mIndex, selectedItems)
     {
         TAlbum* const temp = static_cast<TAlbum*>(albumForIndex(mIndex));
-        items.push_back(temp);
+        items.append(temp);
     }
 
     /**

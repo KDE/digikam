@@ -480,7 +480,7 @@ void SmugWindow::slotListPhotosDone(int errCode, const QString &errMsg,
 
     for (int i = 0; i < photosList.size(); ++i)
     {
-        d->transferQueue.push_back(QUrl::fromLocalFile(photosList.at(i).originalURL));
+        d->transferQueue.append(QUrl::fromLocalFile(photosList.at(i).originalURL));
     }
 
     if (d->transferQueue.isEmpty())
@@ -838,7 +838,7 @@ void SmugWindow::slotAddPhotoDone(int errCode, const QString& errMsg)
 
     if (errCode == 0)
     {
-        d->transferQueue.pop_front();
+        d->transferQueue.removeFirst();
         d->imagesCount++;
     }
     else
@@ -901,7 +901,7 @@ void SmugWindow::slotGetPhotoDone(int errCode,
 
         if (errText.isEmpty())
         {
-            d->transferQueue.pop_front();
+            d->transferQueue.removeFirst();
             d->imagesCount++;
         }
         else

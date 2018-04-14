@@ -1987,7 +1987,7 @@ QList<TAlbum*> AlbumManager::currentTAlbums() const
         TAlbum* const temp = dynamic_cast<TAlbum*>(*it);
 
         if (temp)
-            talbums.push_back(temp);
+            talbums.append(temp);
     }
 
     return talbums;

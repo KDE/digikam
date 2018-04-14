@@ -194,7 +194,7 @@ void UndoManager::rollbackToOrigin()
 
 void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
 {
-    UndoAction* const action                   = d->undoActions.back();
+    UndoAction* const action                   = d->undoActions.last();
     UndoMetadataContainer dataBeforeStep       = action->getMetadata();
     UndoMetadataContainer dataAfterStep        = UndoMetadataContainer::fromImage(*d->core->getImg());
     UndoActionIrreversible* const irreversible = dynamic_cast<UndoActionIrreversible*>(action);
@@ -295,7 +295,7 @@ void UndoManager::undoStep(bool saveRedo, bool execute, bool flyingRollback)
 
 void UndoManager::redoStep(bool execute, bool flyingRollback)
 {
-    UndoAction* const action                   = d->redoActions.back();
+    UndoAction* const action                   = d->redoActions.last();
     UndoMetadataContainer dataBeforeStep       = UndoMetadataContainer::fromImage(*d->core->getImg());
     UndoMetadataContainer dataAfterStep        = action->getMetadata();
     QVariant originDataBeforeStep              = d->core->getImg()->fileOriginData();

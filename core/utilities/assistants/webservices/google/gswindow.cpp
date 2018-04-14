@@ -423,7 +423,7 @@ void GSWindow::slotListPhotosDoneForDownload(int errCode,
 
     for (itPWP = photosList.begin(); itPWP != photosList.end(); ++itPWP)
     {
-        d->transferQueue.push_back(Pair((*itPWP).originalURL, (*itPWP)));
+        d->transferQueue.append(Pair((*itPWP).originalURL, (*itPWP)));
     }
 
     if (d->transferQueue.isEmpty())
@@ -995,7 +995,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
                 d->meta.save(tmpUrl.toLocalFile());
             }
 
-            d->transferQueue.pop_front();
+            d->transferQueue.removeFirst();
             d->imagesCount++;
         }
         else
@@ -1107,7 +1107,7 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
         }
         else
         {
-            d->transferQueue.pop_front();
+            d->transferQueue.removeFirst();
             d->imagesTotal--;
             d->widget->progressBar()->setMaximum(d->imagesTotal);
             d->widget->progressBar()->setValue(d->imagesCount);
@@ -1130,7 +1130,7 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
 
         // Remove photo uploaded from the list
         d->widget->imagesList()->removeItemByUrl(d->transferQueue.first().first);
-        d->transferQueue.pop_front();
+        d->transferQueue.removeFirst();
         d->imagesCount++;
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In slotAddPhotoSucceeded" << d->imagesCount;
         d->widget->progressBar()->setMaximum(d->imagesTotal);

@@ -369,7 +369,7 @@ void AlbumHistory::getBackwardHistory(QStringList& list) const
                 }
             }
 
-            list.push_front(name);
+            list.prepend(name);
         }
     }
 }

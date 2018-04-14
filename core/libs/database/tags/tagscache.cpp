@@ -524,8 +524,8 @@ int TagsCache::tagForPath(const QString& tagPath) const
 
     // last entry in list is the actual tag name
     int tagID       = 0;
-    QString tagName = tagHierarchy.back();
-    tagHierarchy.pop_back();
+    QString tagName = tagHierarchy.last();
+    tagHierarchy.removeLast();
     QList<TagShortInfo>::const_iterator tag, parentTag;
 
     QReadLocker locker(&d->lock);

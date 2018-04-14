@@ -487,7 +487,7 @@ PTOType* PTOFile::getPTO()
     for (int m = 0; m < panoScriptGetMaskCount(d->script); m++)
     {
         int image           = panoScriptGetMaskImage(d->script, m);
-        out->images[image].masks.push_back(PTOType::Mask());
+        out->images[image].masks.append(PTOType::Mask());
         PTOType::Mask& mask = out->images[image].masks.last();
 
         for (int c = 0; c < panoScriptGetMaskPrevCommentCount(d->script, m); c++)
@@ -509,7 +509,7 @@ PTOType* PTOFile::getPTO()
     for (int v = 0; v < panoScriptGetVarsToOptimizeCount(d->script); v++)
     {
         int image                = panoScriptGetVarsToOptimizeImageId(d->script, v);
-        out->images[image].optimizationParameters.push_back(PTOType::Optimization());
+        out->images[image].optimizationParameters.append(PTOType::Optimization());
         PTOType::Optimization& o = out->images[image].optimizationParameters.last();
 
         for (int c = 0; c < panoScriptGetVarsToOptimizePrevCommentCount(d->script, v); c++)
@@ -523,7 +523,7 @@ PTOType* PTOFile::getPTO()
     // Control Points
     for (int cp = 0; cp < panoScriptGetCtrlPointCount(d->script); cp++)
     {
-        out->controlPoints.push_back(PTOType::ControlPoint());
+        out->controlPoints.append(PTOType::ControlPoint());
         PTOType::ControlPoint& ctrlPoint = out->controlPoints.last();
 
         for (int c = 0; c < panoScriptGetCtrlPointPrevCommentCount(d->script, cp); c++)

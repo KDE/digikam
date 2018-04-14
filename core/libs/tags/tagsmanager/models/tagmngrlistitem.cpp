@@ -58,7 +58,7 @@ ListItem::ListItem(QList<QVariant>& data, ListItem* const parent)
     d->parentItem = parent;
     d->itemData.append(data);
 
-    data.pop_front();
+    data.removeFirst();
 
     foreach(const QVariant& val, data)
     {

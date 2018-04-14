@@ -236,9 +236,9 @@ void PanoLastPage::checkFiles()
 
 void PanoLastPage::initializePage()
 {
-    QString first = d->mngr->itemsList().front().fileName();
-    QString last = d->mngr->itemsList().back().fileName();
-    QString file = QString::fromLatin1("%1-%2")
+    QString first = d->mngr->itemsList().first().fileName();
+    QString last  = d->mngr->itemsList().last().fileName();
+    QString file  = QString::fromLatin1("%1-%2")
         .arg(first.left(first.lastIndexOf(QChar::fromLatin1('.'))))
         .arg(last.left(last.lastIndexOf(QChar::fromLatin1('.'))));
     d->fileTemplateQLineEdit->setText(file);

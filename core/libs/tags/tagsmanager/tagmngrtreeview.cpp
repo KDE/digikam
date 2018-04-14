@@ -77,13 +77,13 @@ void TagMngrTreeView::contextMenuEvent(QContextMenuEvent* event)
     foreach(const QModelIndex& mIndex, selectedItems)
     {
         TAlbum* const temp = static_cast<TAlbum*>(albumForIndex(mIndex));
-        items.push_back(temp);
+        items.append(temp);
     }
 
     /**
      * Append root tag if no nodes are selected
      */
-    if(items.isEmpty())
+    if (items.isEmpty())
     {
         QModelIndex root = this->model()->index(0, 0);
         items.append(static_cast<TAlbum*>(albumForIndex(root)));

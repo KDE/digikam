@@ -148,51 +148,51 @@ void CreatePtoTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         }
         else
         {
-            panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+            panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
             panoBase.images[i].optimizationParameters.last().parameter = PTOType::Optimization::LENSA;
-            panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+            panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
             panoBase.images[i].optimizationParameters.last().parameter = PTOType::Optimization::LENSB;
-            panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+            panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
             panoBase.images[i].optimizationParameters.last().parameter = PTOType::Optimization::LENSC;
-            panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+            panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
             panoBase.images[i].optimizationParameters.last().parameter = PTOType::Optimization::LENSD;
-            panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+            panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
             panoBase.images[i].optimizationParameters.last().parameter = PTOType::Optimization::LENSE;
-            panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+            panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
             panoBase.images[i].optimizationParameters.last().parameter = PTOType::Optimization::VA;
-            panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+            panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
             panoBase.images[i].optimizationParameters.last().parameter = PTOType::Optimization::VB;
-            panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+            panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
             panoBase.images[i].optimizationParameters.last().parameter = PTOType::Optimization::VC;
-            panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+            panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
             panoBase.images[i].optimizationParameters.last().parameter = PTOType::Optimization::VD;
-            panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+            panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
             panoBase.images[i].optimizationParameters.last().parameter = PTOType::Optimization::VX;
-            panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+            panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
             panoBase.images[i].optimizationParameters.last().parameter = PTOType::Optimization::VY;
         }
 
-        panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+        panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
         panoBase.images[i].optimizationParameters.last().parameter =  PTOType::Optimization::RA;
-        panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+        panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
         panoBase.images[i].optimizationParameters.last().parameter =  PTOType::Optimization::RB;
-        panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+        panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
         panoBase.images[i].optimizationParameters.last().parameter =  PTOType::Optimization::RC;
-        panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+        panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
         panoBase.images[i].optimizationParameters.last().parameter =  PTOType::Optimization::RD;
-        panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+        panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
         panoBase.images[i].optimizationParameters.last().parameter =  PTOType::Optimization::RE;
-        panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+        panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
         panoBase.images[i].optimizationParameters.last().parameter =  PTOType::Optimization::EXPOSURE;
-        panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+        panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
         panoBase.images[i].optimizationParameters.last().parameter =  PTOType::Optimization::WBR;
-        panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+        panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
         panoBase.images[i].optimizationParameters.last().parameter =  PTOType::Optimization::WBB;
-        panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+        panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
         panoBase.images[i].optimizationParameters.last().parameter =  PTOType::Optimization::LENSYAW;
-        panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+        panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
         panoBase.images[i].optimizationParameters.last().parameter =  PTOType::Optimization::LENSPITCH;
-        panoBase.images[i].optimizationParameters.push_back(PTOType::Optimization());
+        panoBase.images[i].optimizationParameters.append(PTOType::Optimization());
         panoBase.images[i].optimizationParameters.last().parameter =  PTOType::Optimization::LENSROLL;
         panoBase.images[i].fileName = preprocessedUrl.toLocalFile();
     }
