@@ -178,4 +178,7 @@ BUGFIXES:
 161 ==> 392417 - AppImage (5.9.0-01-x86-64) does not support "--install" cli parameter.
 162 ==> 392922 - digikam-6.0.0 fail to start.
 163 ==> 391399 - Not possible to add location bookmarks in Digikam >5.6.0.
-164 ==> 
+164 ==> 380876 - Tags in Digikam DB maintained after being removed from file and file re-scanned.
+165 ==> 392017 - Merging, renaming and removing face tags.
+166 ==> 352711 - Externally removed tags are not removed from digiKam.
+167 ==> 

@@ -58,6 +58,7 @@ extern "C"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "dbengineactiontype.h"
+#include "metadatasettings.h"
 #include "tagscache.h"
 #include "album.h"
 
@@ -71,21 +72,17 @@ public:
 
     explicit Private()
       : db(0),
-        uniqueHashVersion(-1),
-        removeAttributes(false)
+        uniqueHashVersion(-1)
     {
     }
 
     static const QString configGroupName;
     static const QString configRecentlyUsedTags;
-    static const QString configRemoveAttributes;
 
     CoreDbBackend*       db;
     QList<int>           recentlyAssignedTags;
 
     int                  uniqueHashVersion;
-
-    bool                 removeAttributes;
 
 public:
 
@@ -95,7 +92,6 @@ public:
 
 const QString CoreDB::Private::configGroupName(QLatin1String("CoreDB Settings"));
 const QString CoreDB::Private::configRecentlyUsedTags(QLatin1String("Recently Used Tags"));
-const QString CoreDB::Private::configRemoveAttributes(QLatin1String("Remove Attributes Before Rescan"));
 
 QString CoreDB::Private::constructRelatedImagesSQL(bool fromOrTo, DatabaseRelation::Type type, bool boolean)
 {
@@ -4874,7 +4870,16 @@ QList<QVariant> CoreDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1, 
 
 void CoreDB::removeAttributesFromImage(qlonglong imageID)
 {
-    if (!d->removeAttributes)
+    MetadataSettingsContainer settings = MetadataSettings::instance()->settings();
+
+    if (!settings.saveTags       ||
+        !settings.saveComments   ||
+        !settings.saveRating     ||
+        !settings.savePickLabel  ||
+        !settings.saveColorLabel ||
+        !settings.saveDateTime   ||
+        !settings.saveTemplate   ||
+        !settings.saveFaceTags)
     {
         return;
     }
@@ -4908,13 +4913,32 @@ void CoreDB::removeAttributesFromImage(qlonglong imageID)
                    imageID);
     fields |= DatabaseFields::ImageHistoryInfoAll;
 
+    d->db->recordChangeset(ImageChangeset(imageID, fields));
+
     QList<int> tagIds = getItemTagIDs(imageID);
 
-    d->db->execSql(QString::fromUtf8("DELETE FROM ImageTags WHERE imageid=?;"),
-                   imageID);
+    if (!tagIds.isEmpty())
+    {
+        d->db->execSql(QString::fromUtf8("DELETE FROM ImageTags WHERE imageid=?;"),
+                       imageID);
+        d->db->recordChangeset(ImageTagChangeset(imageID, tagIds, ImageTagChangeset::RemovedAll));
+    }
 
-    d->db->recordChangeset(ImageTagChangeset(imageID, tagIds, ImageTagChangeset::RemovedAll));
-    d->db->recordChangeset(ImageChangeset(imageID, fields));
+    QList<ImageTagProperty> properties = getImageTagProperties(imageID);
+
+    if (!properties.isEmpty())
+    {
+        QList<int> tagIds;
+
+        foreach(const ImageTagProperty& property, properties)
+        {
+            tagIds << property.imageId;
+        }
+
+        d->db->execSql(QString::fromUtf8("DELETE FROM ImageTagProperties WHERE imageid=?;"),
+                       imageID);
+        d->db->recordChangeset(ImageTagChangeset(imageID, tagIds, ImageTagChangeset::PropertiesChanged));
+    }
 }
 
 bool CoreDB::integrityCheck()
@@ -4975,7 +4999,6 @@ void CoreDB::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->recentlyAssignedTags = group.readEntry(d->configRecentlyUsedTags, QList<int>());
-    d->removeAttributes     = group.readEntry(d->configRemoveAttributes, false);
 }
 
 void CoreDB::writeSettings()
