@@ -40,6 +40,7 @@
 #include <QMimeDatabase>
 #include <QDesktopServices>
 #include <QFileInfo>
+#include <qplatformdefs.h>
 
 // KDE includes
 
@@ -88,18 +89,18 @@ bool DFileOperations::localFileRename(const QString& source,
     mode_t filePermissions = (S_IREAD | S_IWRITE | S_IROTH | S_IWOTH | S_IRGRP | S_IWGRP) & ~curr_umask;
 
     // For existing files, use the mode of the original file.
-    struct stat stbuf;
+    QT_STATBUF stbuf;
 
-    if (::stat(dstFileName.constData(), &stbuf) == 0)
+    if (QT_STAT(dstFileName.constData(), &stbuf) == 0)
     {
         filePermissions = stbuf.st_mode;
     }
 
 #endif // Q_OS_WIN
 
-    struct stat st;
+    QT_STATBUF st;
 
-    if (::stat(QFile::encodeName(source).constData(), &st) == 0)
+    if (QT_STAT(QFile::encodeName(source).constData(), &st) == 0)
     {
         // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 

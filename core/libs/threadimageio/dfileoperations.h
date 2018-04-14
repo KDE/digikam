@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DFILE_OPERATIONS_H
-#define DFILE_OPERATIONS_H
+#ifndef DIGIKAM_FILE_OPERATIONS_H
+#define DIGIKAM_FILE_OPERATIONS_H
 
 // Qt includes
 
@@ -90,4 +90,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DFILE_OPERATIONS_H
+#endif // DIGIKAM_FILE_OPERATIONS_H
