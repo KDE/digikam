@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ICC_PROFILE_H
-#define ICC_PROFILE_H
+#ifndef DIGIKAM_ICC_PROFILE_H
+#define DIGIKAM_ICC_PROFILE_H
 
 // Qt includes
 
@@ -191,7 +191,7 @@ public:
     /**
      * Obtain an LcmsLock if you access not clearly thread-safe LittleCMS methods
      */
-    LcmsLock();
+    explicit LcmsLock();
     ~LcmsLock();
 };
 
@@ -199,4 +199,4 @@ public:
 
 Q_DECLARE_METATYPE(Digikam::IccProfile)
 
-#endif // ICC_PROFILE_H
+#endif // DIGIKAM_ICC_PROFILE_H

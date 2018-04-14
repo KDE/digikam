@@ -507,7 +507,7 @@ QStringList IccProfile::defaultSearchPaths()
     candidates << QDir::homePath() + QLatin1String("/Library/ColorSync/Profiles");
 
     // MacPorts installs for KDE, so we include the XDG data dirs, including /usr/share/color/icc
-    QStringList dataDirs = QString::fromLocal8Bit(getenv("XDG_DATA_DIRS")).split(QLatin1Char(':'), QString::SkipEmptyParts);
+    QStringList dataDirs = QString::fromLocal8Bit(qgetenv("XDG_DATA_DIRS")).split(QLatin1Char(':'), QString::SkipEmptyParts);
 
     if (!dataDirs.contains(QLatin1String("/opt/local/share")))
     {
@@ -525,7 +525,7 @@ QStringList IccProfile::defaultSearchPaths()
     }
 
     // XDG_DATA_HOME
-    QString dataHomeDir = QString::fromLocal8Bit(getenv("XDG_DATA_HOME"));
+    QString dataHomeDir = QString::fromLocal8Bit(qgetenv("XDG_DATA_HOME"));
 
     if (!dataHomeDir.isEmpty())
     {
@@ -541,7 +541,7 @@ QStringList IccProfile::defaultSearchPaths()
 #else // LINUX
 
     // XDG data dirs, including /usr/share/color/icc
-    QStringList dataDirs = QString::fromLocal8Bit(getenv("XDG_DATA_DIRS")).split(QLatin1Char(':'), QString::SkipEmptyParts);
+    QStringList dataDirs = QString::fromLocal8Bit(qgetenv("XDG_DATA_DIRS")).split(QLatin1Char(':'), QString::SkipEmptyParts);
 
     if (!dataDirs.contains(QLatin1String("/usr/share")))
     {
@@ -559,7 +559,7 @@ QStringList IccProfile::defaultSearchPaths()
     }
 
     // XDG_DATA_HOME
-    QString dataHomeDir = QString::fromLocal8Bit(getenv("XDG_DATA_HOME"));
+    QString dataHomeDir = QString::fromLocal8Bit(qgetenv("XDG_DATA_HOME"));
 
     if (!dataHomeDir.isEmpty())
     {
