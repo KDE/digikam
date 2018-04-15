@@ -509,7 +509,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     balooGrid->addWidget(balooLogoLabel,   0, 0, 1, 1);
     balooGrid->addWidget(balooExplanation, 0, 1, 1, 2);
     balooGrid->setColumnStretch(1, 10);
-    balooGrid->setRowStretch(1, 10);
     balooGrid->setSpacing(0);
 
     // --------------------------------------------------------
