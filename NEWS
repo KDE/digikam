@@ -185,4 +185,5 @@ BUGFIXES:
 168 ==> 392656 - Selecting a root album for face scan doesn't include subfolders, but rather scans an unexpected album set.
 169 ==> 329438 - Rename function with Date & Time does not work with NTFS.
 170 ==> 376473 - Can"t set empty IPTC country code when using metadata templates.
-171 ==> 
+171 ==> 380289 - Cannot write to Albums residing on NFS.
+172 ==> 
