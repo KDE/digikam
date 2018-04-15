@@ -165,11 +165,19 @@ QUrl DFileOperations::getUniqueFileUrl(const QUrl& orgUrl,
     if (newurl)
         *newurl = false;
 
+    int counter = 0;
     QFileInfo fi(destUrl.toLocalFile());
+    QRegExp version(QLatin1String("(.+)_v(\\d+)"));
+    QString completeBaseName = fi.completeBaseName();
+
+    if (version.exactMatch(completeBaseName))
+    {
+        completeBaseName = version.cap(1);
+        counter          = version.cap(2).toInt();
+    }
 
     if (fi.exists())
     {
-        int i          = 0;
         bool fileFound = false;
 
         do
@@ -186,7 +194,7 @@ QUrl DFileOperations::getUniqueFileUrl(const QUrl& orgUrl,
             else
             {
                 destUrl = destUrl.adjusted(QUrl::RemoveFilename);
-                destUrl.setPath(destUrl.path() + fi.completeBaseName() + QString::fromUtf8(" (%1).").arg(++i) + fi.completeSuffix());
+                destUrl.setPath(destUrl.path() + completeBaseName + QString::fromUtf8("_v%1.").arg(++counter) + fi.completeSuffix());
                 fileFound = true;
             }
         }
