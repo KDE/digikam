@@ -418,7 +418,8 @@ QHash<HistoryGraph::Vertex, HistoryImageId::Types> ImageHistoryGraphData::catego
                     continue; // unclear situation, ignore
                 }
 
-                if (!(props.actions.first().flags() & FilterAction::ExplicitBranch))
+                // See bug 277502
+                if ((props.actions.first().flags() & FilterAction::ExplicitBranch))
                 {
                     allBranches = false;
                     break;
