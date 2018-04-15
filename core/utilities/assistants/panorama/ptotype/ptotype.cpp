@@ -322,7 +322,7 @@ bool PTOType::createFile(const QString& filepath)
                     out << "Re";
                     break;
                 case Optimization::UNKNOWN:
-                    qCCritical(DIGIKAM_GENERAL_LOG) << "Unknown optimisation parameter!";
+                    qCCritical(DIGIKAM_GENERAL_LOG) << "Unknown optimization parameter!";
                     file.close();
                     return false;
             }
