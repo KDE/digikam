@@ -403,13 +403,13 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->rotationAdvGroup                  = new QGroupBox;
     QGridLayout* const rotationAdvLayout = new QGridLayout;
 
-    QLabel* const rotationAdvExpl  = new QLabel(i18nc("@label", "Rotate actions"));
-    QLabel* const rotationAdvIcon  = new QLabel;
+    QLabel* const rotationAdvExpl        = new QLabel(i18nc("@label", "Rotate actions"));
+    QLabel* const rotationAdvIcon        = new QLabel;
     rotationAdvIcon->setPixmap(QIcon::fromTheme(QLatin1String("configure")).pixmap(32));
 
-    d->exifRotateBox         = new QCheckBox;
+    d->exifRotateBox                     = new QCheckBox;
     d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
-    d->exifSetOrientationBox = new QCheckBox;
+    d->exifSetOrientationBox             = new QCheckBox;
     d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip."));
 
     rotationAdvLayout->addWidget(rotationAdvIcon,          0, 0, 1, 1);
@@ -421,8 +421,17 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    QLabel* const rotationNote = new QLabel(i18n("<b>Note: These settings affect the album view "
+                                                 "and not the image editor. The image editor always "
+                                                 "changes the image data during the rotation.</b>"));
+    rotationNote->setWordWrap(true);
+    rotationNote->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+
+    // --------------------------------------------------------
+
     rotationLayout->addWidget(d->rotationGroup);
     rotationLayout->addWidget(d->rotationAdvGroup);
+    rotationLayout->addWidget(rotationNote);
     rotationLayout->addStretch();
     rotationPanel->setLayout(rotationLayout);
 
@@ -459,12 +468,12 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QGroupBox* const balooGroup    = new QGroupBox(i18n("Baloo Desktop Search"), balooPanel);
     QVBoxLayout* const gLayout3    = new QVBoxLayout(balooGroup);
 
-    d->saveToBalooBox           = new QCheckBox;
+    d->saveToBalooBox              = new QCheckBox;
     d->saveToBalooBox->setText(i18n("Store metadata from digiKam in Baloo"));
     d->saveToBalooBox->setWhatsThis(i18n("Turn on this option to push rating, comments and tags "
                                            "from digiKam into the Baloo storage"));
 
-    d->readFromBalooBox         = new QCheckBox;
+    d->readFromBalooBox            = new QCheckBox;
     d->readFromBalooBox->setText(i18n("Read metadata from Baloo"));
     d->readFromBalooBox->setWhatsThis(i18n("Turn on this option if you want to apply changes to "
                                            "rating, comments and tags made in Baloo to digiKam's metadata storage. "
