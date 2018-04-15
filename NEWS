@@ -187,4 +187,5 @@ BUGFIXES:
 170 ==> 376473 - Can"t set empty IPTC country code when using metadata templates.
 171 ==> 380289 - Cannot write to Albums residing on NFS.
 172 ==> 384465 - With Compact Flash Card Created date in thumbnails is wrong.
-173 ==> 
+173 ==> 381958 - Cannot add additional collection.
+174 ==> 
