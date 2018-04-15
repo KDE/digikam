@@ -221,7 +221,7 @@ FilmTool::FilmTool(QObject* const parent)
     QList<FilmContainer::ListItem*> profiles = d->filmContainer.profileItemList(d->cnType);
     QList<FilmContainer::ListItem*>::ConstIterator it;
 
-    for (it = profiles.constBegin(); it != profiles.constEnd(); it++)
+    for (it = profiles.constBegin(); it != profiles.constEnd(); ++it)
         d->cnType->addItem(*it);
 
     // -------------------------------------------------------------
@@ -360,14 +360,14 @@ void FilmTool::slotResetSettings()
     QList<QListWidgetItem*> matchingItems = d->cnType->findItems(profileName, Qt::MatchExactly);
     d->cnType->setCurrentItem(matchingItems.first());
 
-    double gamma      = 1.8;
+    double gamma     = 1.8;
     d->gammaInput->setValue(gamma);
     gammaInputChanged(gamma);
 
-    double exposure = 1.0;
+    double exposure  = 1.0;
     d->exposureInput->setValue(exposure);
 
-    d->filmContainer  = FilmContainer(cnType, gamma, d->originalImage->sixteenBit());
+    d->filmContainer = FilmContainer(cnType, gamma, d->originalImage->sixteenBit());
     d->filmContainer.setExposure(exposure);
 
     int red   = max;
@@ -512,7 +512,7 @@ void FilmTool::slotAutoWhitePoint()
 
         for (int i = (sixteenBit ? 65535 : 255) ; i > 0 ; --i)
         {
-            new_count       += hist->getValue(channel, i);
+            new_count      += hist->getValue(channel, i);
             percentage      = new_count / count;
             next_percentage = (new_count + hist->getValue(channel, i - 1)) / count;
 
