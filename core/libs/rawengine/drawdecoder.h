@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DRAW_DECODER_H
-#define DRAW_DECODER_H
+#ifndef DIGIKAM_RAW_DECODER_H
+#define DIGIKAM_RAW_DECODER_H
 
 // C++ includes
 
@@ -54,7 +54,7 @@ public:
 
     /** Standard constructor.
      */
-    DRawDecoder();
+    explicit DRawDecoder();
 
     /** Standard destructor.
      */
@@ -241,4 +241,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DRAW_DECODER_H
+#endif // DIGIKAM_RAW_DECODER_H

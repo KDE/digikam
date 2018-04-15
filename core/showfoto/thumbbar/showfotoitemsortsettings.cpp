@@ -243,7 +243,7 @@ bool ShowfotoItemSortSettings::lessThan(const QVariant& left, const QVariant& ri
                 return result < 0;
             }
 
-#if __GNUC__ >= 7
+#if __GNUC__ >= 7   // krazy:exclude=cpp
             [[fallthrough]];
 #endif
         }

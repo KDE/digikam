@@ -1647,7 +1647,7 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageIn
                 break;
             }
 
-#if __GNUC__ >= 7
+#if __GNUC__ >= 7   // krazy:exclude=cpp
             // no break; is completely intentional, arriving here is equivalent to case 1:
             [[fallthrough]];
 #endif

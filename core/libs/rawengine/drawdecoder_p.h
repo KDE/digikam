@@ -21,20 +21,20 @@
  *
  * ============================================================ */
 
-#ifndef DRAW_DECODER_PRIVATE_H
-#define DRAW_DECODER_PRIVATE_H
+#ifndef DIGIKAM_RAW_DECODER_PRIVATE_H
+#define DIGIKAM_RAW_DECODER_PRIVATE_H
 
 // Qt includes
 
 #include <QByteArray>
 
 // Pragma directives to reduce warnings from LibRaw header files.
-#if !defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)    // krazy:exclude=cpp
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(__APPLE__) && defined(__clang__)    // krazy:exclude=cpp
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
@@ -44,11 +44,11 @@
 #include <libraw.h>
 
 // Restore warnings
-#if !defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)    // krazy:exclude=cpp
 #pragma GCC diagnostic pop
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(__APPLE__) && defined(__clang__)    // krazy:exclude=cpp
 #pragma clang diagnostic pop
 #endif
 
@@ -70,7 +70,7 @@ class Q_DECL_HIDDEN DRawDecoder::Private
 
 public:
 
-    Private(DRawDecoder* const p);
+    explicit Private(DRawDecoder* const p);
     ~Private();
 
 public:
@@ -104,4 +104,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DRAW_DECODER_PRIVATE_H
+#endif // DIGIKAM_RAW_DECODER_PRIVATE_H

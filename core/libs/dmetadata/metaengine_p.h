@@ -55,7 +55,8 @@
 // The pragmas are required to be able to catch exceptions thrown by libexiv2:
 // See http://gcc.gnu.org/wiki/Visibility, the section about c++ exceptions.
 // They are needed for all libexiv2 versions that do not care about visibility.
-#ifdef __GNUC__
+
+#ifdef __GNUC__     // krazy:exclude=cpp
 #   pragma GCC visibility push(default)
 #endif
 
@@ -92,7 +93,7 @@
 // See Exiv2 bugzilla entry http://dev.exiv2.org/issues/719
 // and wiki topic           http://dev.exiv2.org/boards/3/topics/583
 
-#ifdef __GNUC__
+#ifdef __GNUC__     // krazy:exclude=cpp
 #   pragma GCC visibility pop
 #endif
 

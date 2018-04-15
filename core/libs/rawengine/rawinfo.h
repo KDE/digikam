@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef _RAW_INFO_H_
-#define _RAW_INFO_H_
+#ifndef DIGIKAM_RAW_INFO_H
+#define DIGIKAM_RAW_INFO_H
 
 // Qt includes
 
@@ -153,4 +153,4 @@ QDebug operator<<(QDebug dbg, const RawInfo& c);
 
 } // namespace Digikam
 
-#endif // _RAW_INFO_H_
+#endif // DIGIKAM_RAW_INFO_H
