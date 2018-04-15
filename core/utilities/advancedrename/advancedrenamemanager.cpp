@@ -36,7 +36,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "digikam_config.h"
 #include "advancedrenamewidget.h"
 #include "parsesettings.h"
 #include "parser.h"
@@ -468,12 +467,9 @@ int AdvancedRenameManager::indexOfFileGroup(const QString& filename)
 
 QString AdvancedRenameManager::newName(const QString& filename) const
 {
-    QString newName = d->renamedFiles.value(filename, filename);
-
-#ifdef Q_OS_WIN
     // For the Windows file system, we need to replace unsupported characters.
+    QString newName = d->renamedFiles.value(filename, filename);
     newName.replace(QLatin1Char(':'), QLatin1Char('-'));
-#endif
 
     return newName;
 }

@@ -183,4 +183,5 @@ BUGFIXES:
 166 ==> 352711 - Externally removed tags are not removed from digiKam.
 167 ==> 393108 - Tags not always visible when selecting multiple pictures in a group.
 168 ==> 392656 - Selecting a root album for face scan doesn't include subfolders, but rather scans an unexpected album set.
-169 ==> 
+169 ==> 329438 - Rename function with Date & Time does not work with NTFS.
+170 ==> 
