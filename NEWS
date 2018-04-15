@@ -189,4 +189,5 @@ BUGFIXES:
 172 ==> 384465 - With Compact Flash Card Created date in thumbnails is wrong.
 173 ==> 381958 - Cannot add additional collection.
 174 ==> 383747 - "Rotate only by setting a flag" Changes Image Instead.
-175 ==> 
+175 ==> 387977 - No icon only view of "Extras sidebar": sidebar taking up a lot of space.
+176 ==> 
