@@ -34,14 +34,14 @@
 
 // Boost includes
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wundef"
 #endif
 
 #include <boost/graph/graph_concepts.hpp>
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #   pragma clang diagnostic pop
 #endif
 

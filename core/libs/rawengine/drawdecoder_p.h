@@ -29,12 +29,12 @@
 #include <QByteArray>
 
 // Pragma directives to reduce warnings from LibRaw header files.
-#if !defined(__APPLE__) && defined(__GNUC__)    // krazy:exclude=cpp
+#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)    // krazy:exclude=cpp
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
@@ -44,11 +44,11 @@
 #include <libraw.h>
 
 // Restore warnings
-#if !defined(__APPLE__) && defined(__GNUC__)    // krazy:exclude=cpp
+#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
 #pragma GCC diagnostic pop
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)    // krazy:exclude=cpp
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic pop
 #endif
 

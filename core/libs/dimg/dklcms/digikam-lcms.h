@@ -33,7 +33,7 @@
 
 #include "digikam_export.h"
 
-#if defined (__MINGW32__)
+#if defined (__MINGW32__)   // krazy:exclude=cpp
 #  define CMS_IS_WINDOWS_ 1
 #else
 #   ifndef CMS_DLL
@@ -43,14 +43,14 @@
 
 // Turn off the specific compiler warnings with LCMS header.
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #    pragma clang diagnostic push
 #    pragma clang diagnostic ignored "-Wundef"
 #endif
 
 #include <lcms2.h>
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #    pragma clang diagnostic pop
 #endif
 

@@ -28,12 +28,12 @@
 #include "digikam_config.h"
 
 // Pragma directives to reduce warnings from Boost header files.
-#if !defined(__APPLE__) && defined(__GNUC__)
+#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundef"
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -1588,11 +1588,11 @@ protected:
 } // namespace Digikam
 
 // Restore warnings
-#if !defined(__APPLE__) && defined(__GNUC__)
+#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
 #pragma GCC diagnostic pop
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic pop
 #endif
 

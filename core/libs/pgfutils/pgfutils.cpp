@@ -42,7 +42,7 @@ extern "C"
 
 // Windows includes
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
 #include <windows.h>
 #endif
 
@@ -126,7 +126,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
 
 bool writePGFImageFile(const QImage& image, const QString& filePath, int quality, bool verbose)
 {
-#ifdef WIN32
+#ifdef Q_OS_WIN32
 #ifdef UNICODE
     HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #else
@@ -163,7 +163,7 @@ bool writePGFImageFile(const QImage& image, const QString& filePath, int quality
         if (verbose) qCDebug(DIGIKAM_GENERAL_LOG) << "PGFUtils: file size written : " << nWrittenBytes;
     }
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
     CloseHandle(fd);
 #else
     close(fd);
@@ -359,7 +359,7 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
     // -------------------------------------------------------------------
     // Initialize PGF API.
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
 #ifdef UNICODE
     HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(path).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #else

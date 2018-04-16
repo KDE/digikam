@@ -29,11 +29,11 @@
 #include <cmath>
 
 // Under Win32, log2f is not defined...
-#ifdef _WIN32
-#define log2f(x) (logf(x)*1.4426950408889634f)
+#ifdef Q_OS_WIN32
+#   define log2f(x) (logf(x)*1.4426950408889634f)
 #endif
 
-#ifdef __FreeBSD__
+#ifdef Q_OS_FREEBSD
 #include <osreldate.h>
 #    if __FreeBSD_version < 802502
 #        define log2f(x) (logf(x)*1.4426950408889634f)

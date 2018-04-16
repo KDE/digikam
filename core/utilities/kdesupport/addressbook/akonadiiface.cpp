@@ -37,7 +37,7 @@
 
 #ifdef HAVE_AKONADICONTACT
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundef"
 #endif
@@ -47,7 +47,7 @@
 #include <Akonadi/Contact/ContactSearchJob>
 #include <KContacts/Addressee>
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic pop
 #endif
 

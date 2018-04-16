@@ -31,7 +31,7 @@ extern "C"
 {
 #include <sys/stat.h>
 
-#ifndef _MSC_VER    // krazy:exclude=cpp
+#ifndef Q_CC_MSVC
 #   include <utime.h>
 #else
 #   include <sys/utime.h>
@@ -48,12 +48,12 @@ extern "C"
 #include "digikam_debug.h"
 
 // Pragma directives to reduce warnings from Exiv2.
-#if !defined(__APPLE__) && defined(__GNUC__)    // krazy:exclude=cpp
+#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)    // krazy:exclude=cpp
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
@@ -744,10 +744,10 @@ void MetaEngine::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
 } // namespace Digikam
 
 // Restore warnings
-#if !defined(__APPLE__) && defined(__GNUC__)    // krazy:exclude=cpp
+#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
 #   pragma GCC diagnostic pop
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)    // krazy:exclude=cpp
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #   pragma clang diagnostic pop
 #endif

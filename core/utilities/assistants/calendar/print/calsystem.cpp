@@ -456,7 +456,7 @@ int CalSystemPrivate::quarter(int month) const
                 return 4;
             }
 
-#if __GNUC__ >= 7
+#if __GNUC__ >= 7   // krazy:exclude=cpp
             [[fallthrough]];
 #endif
         default:

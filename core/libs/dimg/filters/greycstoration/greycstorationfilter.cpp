@@ -52,13 +52,13 @@
 #define GREYSTORATION_USING_GFACT 1
 
 // Pragma directives to reduce warnings from CImg header files.
-#if !defined(__APPLE__) && defined(__GNUC__)
+#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
 #pragma clang diagnostic ignored "-Wcast-align"
@@ -71,11 +71,11 @@
 #include "cimg/CImg.h"
 
 // Restore warnings
-#if !defined(__APPLE__) && defined(__GNUC__)
+#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
 #pragma GCC diagnostic pop
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic pop
 #endif
 

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef T_PARSER_PRIVATE_H
-#define T_PARSER_PRIVATE_H
+#ifndef DIGIKAM_T_PARSER_PRIVATE_H
+#define DIGIKAM_T_PARSER_PRIVATE_H
 
 #include "tparser.h"
 
@@ -36,7 +36,7 @@ void panoScriptParserClose(void);
 
 int  panoScriptScannerGetNextChar(char* b, int maxBuffer);
 void panoScriptScannerTokenBegin(char* t);
-#ifndef _MSC_VER
+#ifndef Q_CC_MSVC
 void panoScriptParserError(char const* errorstring, ...) __attribute__ ((format (printf, 1, 2)));
 #else
 void panoScriptParserError(char const* errorstring, ...);
@@ -44,4 +44,4 @@ void panoScriptParserError(char const* errorstring, ...);
 void yyerror(char const* st);
 void* panoScriptReAlloc(void** ptr, size_t size, int* count);
 
-#endif // T_PARSER_PRIVATE_H
+#endif // DIGIKAM_T_PARSER_PRIVATE_H

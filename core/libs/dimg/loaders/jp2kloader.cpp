@@ -54,14 +54,14 @@ extern "C"
 {
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wshift-negative-value"
 #endif
 
 #include <jasper/jasper.h>
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic pop
 #endif
 

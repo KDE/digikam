@@ -25,12 +25,12 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_KB_H
-#define PRESENTATION_KB_H
+#ifndef DIGIKAM_PRESENTATION_KB_H
+#define DIGIKAM_PRESENTATION_KB_H
 
 // C++ includes
 
-#ifndef _MSC_VER
+#ifndef Q_CC_MSVC
 #include <cstdlib>
 #else
 #include <winsock2.h>
@@ -163,4 +163,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRESENTATION_KB_H
+#endif // DIGIKAM_PRESENTATION_KB_H

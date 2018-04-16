@@ -53,12 +53,12 @@ extern "C"
 }
 
 // Pragma directives to reduce warnings from libjpeg transupp header file.
-#if !defined(__APPLE__) && defined(__GNUC__)
+#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
 #endif
@@ -69,11 +69,11 @@ extern "C"
 }
 
 // Restore warnings
-#if !defined(__APPLE__) && defined(__GNUC__)
+#if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
 #pragma GCC diagnostic pop
 #endif
 
-#if defined(__APPLE__) && defined(__clang__)
+#if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #pragma clang diagnostic pop
 #endif
 

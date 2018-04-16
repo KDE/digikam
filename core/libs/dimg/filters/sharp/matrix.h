@@ -21,12 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef MATRIX_H_INCLUDED
-#define MATRIX_H_INCLUDED
+#ifndef DIGIKAM_MATRIX_H
+#define DIGIKAM_MATRIX_H
 
 // C ++ includes
 
-#ifndef _MSC_VER
+#ifndef Q_CC_MSVC
 #include <cstdio>
 #endif
 
@@ -151,4 +151,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* MATRIX_H_INCLUDED */
+#endif // DIGIKAM_MATRIX_H

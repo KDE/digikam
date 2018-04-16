@@ -53,7 +53,7 @@ extern "C"
 
 // Windows includes
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
 #include <windows.h>
 #endif
 
@@ -133,7 +133,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     // -------------------------------------------------------------------
     // Initialize PGF API.
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
 #ifdef UNICODE
     HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #else
@@ -318,7 +318,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         imageSetAttribute(QLatin1String("originalBitDepth"),   bitDepth);
         imageSetAttribute(QLatin1String("originalSize"),       originalSize);
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
         CloseHandle(fd);
 #else
         close(fd);
@@ -337,7 +337,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
         qCWarning(DIGIKAM_DIMG_LOG_PGF) << "Error: Opening and reading PGF image failed (" << err << ")!";
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
         CloseHandle(fd);
 #else
         close(fd);
@@ -350,7 +350,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     {
         qCWarning(DIGIKAM_DIMG_LOG_PGF) << "Failed to allocate memory for loading" << filePath << e.what();
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
         CloseHandle(fd);
 #else
         close(fd);
@@ -366,7 +366,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 {
     m_observer = observer;
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
 #ifdef UNICODE
     HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #else
@@ -473,7 +473,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
         qCDebug(DIGIKAM_DIMG_LOG_PGF) << "PGF mode      = " << header.mode;
         qCDebug(DIGIKAM_DIMG_LOG_PGF) << "Bytes Written = " << nWrittenBytes;
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
         CloseHandle(fd);
 #else
         close(fd);
@@ -502,7 +502,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
         qCWarning(DIGIKAM_DIMG_LOG_PGF) << "Error: Opening and saving PGF image failed (" << err << ")!";
 
-#ifdef WIN32
+#ifdef Q_OS_WIN32
         CloseHandle(fd);
 #else
         close(fd);

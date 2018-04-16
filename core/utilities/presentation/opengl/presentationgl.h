@@ -23,10 +23,10 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_GL_H
-#define PRESENTATION_GL_H
+#ifndef DIGIKAM_PRESENTATION_GL_H
+#define DIGIKAM_PRESENTATION_GL_H
 
-#ifdef _MSC_VER
+#ifdef Q_CC_MSVC
 #   include <winsock2.h>
 #endif
 
@@ -122,4 +122,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRESENTATION_GL_H
+#endif // DIGIKAM_PRESENTATION_GL_H
