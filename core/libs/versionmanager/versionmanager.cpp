@@ -89,10 +89,10 @@ void VersionManagerSettings::readFromConfig(KConfigGroup& group)
 
     showInViewFlags             = OnlyShowCurrent;
 
-    if (group.readEntry(VersionManagerSettingsConfig::configViewShowOriginal, false))
+    if (group.readEntry(VersionManagerSettingsConfig::configViewShowOriginal, true))
         showInViewFlags |= ShowOriginal;
 
-    if (group.readEntry(VersionManagerSettingsConfig::configViewShowIntermediates, false))
+    if (group.readEntry(VersionManagerSettingsConfig::configViewShowIntermediates, true))
         showInViewFlags |= ShowIntermediates;
 
     bool autoSave               = group.readEntry(VersionManagerSettingsConfig::configAutoSaveWhenClosingEditor, false);
