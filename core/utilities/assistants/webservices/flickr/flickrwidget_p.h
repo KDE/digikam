@@ -22,6 +22,9 @@
  *
  * ============================================================ */
 
+#ifndef FLICKR_WIDGET_P_H
+#define FLICKR_WIDGET_P_H
+
 #include "flickrwidget.h"
 
 // Qt includes
@@ -53,7 +56,7 @@ class FlickrWidget::Private
 {
 public:
 
-    Private()
+    explicit Private()
     {
         removeAccount             = 0;
         extendedTagsButton        = 0;
@@ -96,3 +99,5 @@ public:
 };
 
 } // namespace Digikam
+
+#endif // FLICKR_WIDGET_P_H
