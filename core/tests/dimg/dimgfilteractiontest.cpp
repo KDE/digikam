@@ -35,12 +35,9 @@
 // Local includes
 
 #include "metaengine.h"
-#include "dimg.h"
 #include "dimagehistory.h"
 #include "drawdecoding.h"
 #include "filteractionfilter.h"
-
-using namespace Digikam;
 
 QTEST_MAIN(DImgFilterActionTest)
 
@@ -127,8 +124,8 @@ void DImgFilterActionTest::testActions()
     }
 }
 
-void DImgFilterActionTest::showDiff(const Digikam::DImg& orig, const Digikam::DImg& ref,
-                                      const Digikam::DImg& result, const DImg& diff)
+void DImgFilterActionTest::showDiff(const DImg& orig, const DImg& ref,
+                                    const DImg& result, const DImg& diff)
 {
     QDialog d;
     QLabel l1, l2, l3, l4;

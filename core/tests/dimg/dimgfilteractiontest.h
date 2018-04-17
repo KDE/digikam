@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGFILTERACTIONTEST_H
-#define DIMGFILTERACTIONTEST_H
+#ifndef DIMG_FILTER_ACTION_TEST_H
+#define DIMG_FILTER_ACTION_TEST_H
 
 // Qt includes
 
@@ -32,10 +32,9 @@
 
 // Local includes
 
-namespace Digikam
-{
-class DImg;
-}
+#include "dimg.h"
+
+using namespace Digikam;
 
 class DImgFilterActionTest : public QObject
 {
@@ -46,7 +45,7 @@ public:
     QDir    imageDir();
     QString originalImage();
 
-    void showDiff(const Digikam::DImg& orig, const Digikam::DImg& ref, const Digikam::DImg& result, const Digikam::DImg& diff);
+    void showDiff(const DImg& orig, const DImg& ref, const DImg& result, const DImg& diff);
 
 private Q_SLOTS:
 
@@ -57,4 +56,4 @@ private Q_SLOTS:
     void cleanupTestCase();
 };
 
-#endif // DIMGFILTERACTIONTEST_H
+#endif // DIMG_FILTER_ACTION_TEST_H

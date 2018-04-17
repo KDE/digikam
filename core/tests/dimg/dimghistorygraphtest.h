@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGHISTORYGRAPHTEST_H
-#define DIMGHISTORYGRAPHTEST_H
+#ifndef DIMG_HISTORY_GRAPH_TEST_H
+#define DIMG_HISTORY_GRAPH_TEST_H
 
 // Qt includes
 
@@ -56,10 +56,12 @@ private:
     void rescan();
     void testEditing();
 
-    QDir        collectionDir;
-    QString     dbFile;
-    QStringList readOnlyImages;
+private:
+
+    QDir             collectionDir;
+    QString          dbFile;
+    QStringList      readOnlyImages;
     QList<qlonglong> ids;
 };
 
-#endif // DIMGHISTORYGRAPHTEST_H
+#endif // DIMG_HISTORY_GRAPH_TEST_H

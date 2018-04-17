@@ -197,12 +197,12 @@ void DImgHistoryGraphTest::testEditing()
     QVERIFY(graph2.data().vertexCount() == 5);
     QVERIFY(graph3.data().vertexCount() == 5);
 
-    QList<IdPair> cloud = graph3.relationCloud();
+    QList<IdPair> cloud        = graph3.relationCloud();
     std::sort(cloud.begin(), cloud.end());
     QVERIFY(cloud == controlCloud);
 
-    int needResolvingTag = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needResolvingHistory());
-    int needTaggingTag   = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needTaggingHistoryGraph());
+    int needResolvingTag       = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needResolvingHistory());
+    int needTaggingTag         = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::needTaggingHistoryGraph());
 
     int originalVersionTag     = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::originalVersion());
     int currentVersionTag      = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::currentVersion());

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGABSTRACTHISTORYTEST_H
-#define DIMGABSTRACTHISTORYTEST_H
+#ifndef DIMG_ABSTRACT_HISTORY_TEST_H
+#define DIMG_ABSTRACT_HISTORY_TEST_H
 
 // Qt includes
 
@@ -73,9 +73,11 @@ protected:
     void initBaseTestCase();
     void cleanupBaseTestCase();
 
-    QEventLoop m_loop;
-    Digikam::EditorCore* m_im;
-    QString m_tempFile;
+protected:
+
+    QEventLoop  m_loop;
+    EditorCore* m_im;
+    QString     m_tempFile;
 };
 
-#endif // DIMGABSTRACTHISTORYTEST_H
+#endif // DIMG_ABSTRACT_HISTORY_TEST_H

@@ -49,8 +49,6 @@
 #include "imageiface.h"
 #include "iofilesettings.h"
 
-using namespace Digikam;
-
 QString DImgAbstractHistoryTest::imagePath()
 {
     // NOTE: We will use same daya dir than album model tests.
@@ -201,7 +199,7 @@ void DImgAbstractHistoryTest::initBaseTestCase()
     MetaEngine::initializeExiv2();
 
     ICCSettingsContainer c = IccSettings::instance()->settings();
-    c.enableCM = false;
+    c.enableCM             = false;
     IccSettings::instance()->setSettings(c);
 
     m_im = new EditorCore();
