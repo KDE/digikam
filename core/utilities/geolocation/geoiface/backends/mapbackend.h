@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MAP_BACKEND_H
-#define MAP_BACKEND_H
+#ifndef DIGIKAM_MAP_BACKEND_H
+#define DIGIKAM_MAP_BACKEND_H
 
 // Qt includes
 
@@ -54,7 +54,7 @@ Q_OBJECT
 
 public:
 
-    MapBackend(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData, QObject* const parent);
+    explicit MapBackend(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData, QObject* const parent);
     virtual ~MapBackend();
 
     virtual QString backendName() const = 0;
@@ -120,4 +120,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // MAP_BACKEND_H
+#endif // DIGIKAM_MAP_BACKEND_H

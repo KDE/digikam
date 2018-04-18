@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSIMAGELISTCONTEXTMENU_H
-#define GPSIMAGELISTCONTEXTMENU_H
+#ifndef DIGIKAM_GPS_IMAGE_LIST_CONTEXT_MENU_H
+#define DIGIKAM_GPS_IMAGE_LIST_CONTEXT_MENU_H
 
 // Qt includes:
 
@@ -96,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSIMAGELISTCONTEXTMENU_H
+#endif // DIGIKAM_GPS_IMAGE_LIST_CONTEXT_MENU_H

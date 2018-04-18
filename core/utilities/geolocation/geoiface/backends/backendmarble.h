@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef BACKEND_MAP_MARBLE_H
-#define BACKEND_MAP_MARBLE_H
+#ifndef DIGIKAM_BACKEND_MARBLE_H
+#define DIGIKAM_BACKEND_MARBLE_H
 
 // Local includes
 
@@ -141,4 +141,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BACKEND_MAP_MARBLE_H
+#endif // DIGIKAM_BACKEND_MARBLE_H

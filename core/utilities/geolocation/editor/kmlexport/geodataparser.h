@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GEO_DATA_PARSER_H
-#define GEO_DATA_PARSER_H
+#ifndef DIGIKAM_GEO_DATA_PARSER_H
+#define DIGIKAM_GEO_DATA_PARSER_H
 
 // Qt includes
 
@@ -69,4 +69,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // GEO_DATA_PARSER_H
+#endif // DIGIKAM_GEO_DATA_PARSER_H

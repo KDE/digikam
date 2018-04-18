@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef KML_GPS_DATA_PARSER_H
-#define KML_GPS_DATA_PARSER_H
+#ifndef DIGIKAM_KML_GPS_DATA_PARSER_H
+#define DIGIKAM_KML_GPS_DATA_PARSER_H
 
 // Local includes
 
@@ -43,7 +43,7 @@ class KMLGeoDataParser : public GeoDataParser
 
 public:
 
-    KMLGeoDataParser();
+    explicit KMLGeoDataParser();
     ~KMLGeoDataParser();
 
     /*! KMLGeoDataParser::KMLGeoDataParser::lineString()
@@ -106,4 +106,4 @@ private:
 
 } // namespace Digikam
 
-#endif // KML_GPS_DATA_PARSER_H
+#endif // DIGIKAM_KML_GPS_DATA_PARSER_H

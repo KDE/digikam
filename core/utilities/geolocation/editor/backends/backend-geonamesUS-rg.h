@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef BACKEND_GEONAMESUS_RG_H
-#define BACKEND_GEONAMESUS_RG_H
+#ifndef DIGIKAM_BACKEND_GEONAMESUS_RG_H
+#define DIGIKAM_BACKEND_GEONAMESUS_RG_H
 
 // Qt includes
 
@@ -69,4 +69,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BACKEND_GEONAMESUS_RG_H
+#endif // DIGIKAM_BACKEND_GEONAMESUS_RG_H

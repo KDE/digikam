@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef BACKEND_MAP_MARBLE_LAYER_H
-#define BACKEND_MAP_MARBLE_LAYER_H
+#ifndef DIGIKAM_BACKEND_MARBLE_LAYER_H
+#define DIGIKAM_BACKEND_MARBLE_LAYER_H
 
 // Qt includes
 
@@ -56,7 +56,7 @@ public:
 
     virtual bool render(Marble::GeoPainter* painter,
                         Marble::ViewportParams* viewport,
-                        const QString& renderPos = QLatin1String( "NONE"),
+                        const QString& renderPos = QLatin1String("NONE"),
                         Marble::GeoSceneLayer* layer = 0);
     virtual QStringList renderPosition () const;
 
@@ -69,4 +69,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BACKEND_MAP_MARBLE_LAYER_H
+#endif // DIGIKAM_BACKEND_MARBLE_LAYER_H

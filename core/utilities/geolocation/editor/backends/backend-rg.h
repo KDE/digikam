@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef BACKEND_RG_H
-#define BACKEND_RG_H
+#ifndef DIGIKAM_BACKEND_RG_H
+#define DIGIKAM_BACKEND_RG_H
 
 // local includes
 
@@ -57,4 +57,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // BACKEND_RG_H
+#endif // DIGIKAM_BACKEND_RG_H

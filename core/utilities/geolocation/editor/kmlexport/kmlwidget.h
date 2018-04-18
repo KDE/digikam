@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef KML_WIDGET_H
-#define KML_WIDGET_H
+#ifndef DIGIKAM_KML_WIDGET_H
+#define DIGIKAM_KML_WIDGET_H
 
 #include <QWidget>
 #include <QList>
@@ -144,4 +144,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // KML_WIDGET_H
+#endif // DIGIKAM_KML_WIDGET_H

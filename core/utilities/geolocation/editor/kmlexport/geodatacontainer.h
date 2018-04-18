@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef GEO_DATA_CONTAINER_H
-#define GEO_DATA_CONTAINER_H
+#ifndef DIGIKAM_GEO_DATA_CONTAINER_H
+#define DIGIKAM_GEO_DATA_CONTAINER_H
 
 #include <QStringList>
 #include <QMetaType>
@@ -161,4 +161,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::GeoDataContainer)
 
-#endif // GEO_DATA_CONTAINER_H
+#endif // DIGIKAM_GEO_DATA_CONTAINER_H

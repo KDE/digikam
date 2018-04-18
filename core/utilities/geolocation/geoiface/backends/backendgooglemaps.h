@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef BACKEND_MAP_GOOGLEMAPS_H
-#define BACKEND_MAP_GOOGLEMAPS_H
+#ifndef DIGIKAM_BACKEND_GOOGLE_MAPS_H
+#define DIGIKAM_BACKEND_GOOGLE_MAPS_H
 
 // Local includes
 
@@ -133,4 +133,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BACKEND_MAP_GOOGLEMAPS_H
+#endif // DIGIKAM_BACKEND_GOOGLE_MAPS_H

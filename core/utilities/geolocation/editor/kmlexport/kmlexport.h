@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef KML_EXPORT_H
-#define KML_EXPORT_H
+#ifndef DIGIKAM_KML_EXPORT_H
+#define DIGIKAM_KML_EXPORT_H
 
 // Qt includes
 
@@ -186,4 +186,4 @@ private:
 
 } // namespace Digikam
 
-#endif // KML_EXPORT_H
+#endif // DIGIKAM_KML_EXPORT_H

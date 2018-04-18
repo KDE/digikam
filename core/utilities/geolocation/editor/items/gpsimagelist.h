@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSIMAGELIST_H
-#define GPSIMAGELIST_H
+#ifndef DIGIKAM_GPS_IMAGE_LIST_H
+#define DIGIKAM_GPS_IMAGE_LIST_H
 
 // Qt includes
 
@@ -93,4 +93,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSIMAGELIST_H
+#endif // DIGIKAM_GPS_IMAGE_LIST_H

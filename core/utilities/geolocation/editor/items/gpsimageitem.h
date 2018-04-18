@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPS_IMAGE_ITEM_H
-#define GPS_IMAGE_ITEM_H
+#ifndef DIGIKAM_GPS_IMAGE_ITEM_H
+#define DIGIKAM_GPS_IMAGE_ITEM_H
 
 // Qt includes
 
@@ -64,7 +64,7 @@ class SaveProperties
 {
 public:
 
-    SaveProperties()
+    explicit SaveProperties()
     {
         shouldRemoveCoordinates = false;
         shouldRemoveAltitude    = false;
@@ -197,4 +197,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // GPS_IMAGE_ITEM_H
+#endif // DIGIKAM_GPS_IMAGE_ITEM_H

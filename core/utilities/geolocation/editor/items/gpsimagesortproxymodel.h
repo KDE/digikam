@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSIMAGEPROXYMODEL_H
-#define GPSIMAGEPROXYMODEL_H
+#ifndef DIGIKAM_GPS_IMAGE_SORT_PROXY_MODEL_H
+#define DIGIKAM_GPS_IMAGE_SORT_PROXY_MODEL_H
 
 // Qt includes
 
@@ -46,7 +46,7 @@ class GPSImageSortProxyModel : public QSortFilterProxyModel
 
 public:
 
-    GPSImageSortProxyModel(GPSImageModel* const imageModel, QItemSelectionModel* const sourceSelectionModel);
+    explicit GPSImageSortProxyModel(GPSImageModel* const imageModel, QItemSelectionModel* const sourceSelectionModel);
     ~GPSImageSortProxyModel();
 
     QItemSelectionModel* mappedSelectionModel() const;
@@ -147,9 +147,9 @@ class GPSModelIndexProxyMapper : public QObject
 
 public:
 
-    GPSModelIndexProxyMapper(const QAbstractItemModel* const leftModel,
-                             const QAbstractItemModel* const rightModel,
-                             QObject* const parent = 0);
+    explicit GPSModelIndexProxyMapper(const QAbstractItemModel* const leftModel,
+                                      const QAbstractItemModel* const rightModel,
+                                      QObject* const parent = 0);
     ~GPSModelIndexProxyMapper();
 
     /**
@@ -186,4 +186,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSIMAGEPROXYMODEL_H
+#endif // DIGIKAM_GPS_IMAGE_SORT_PROXY_MODEL_H
