@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef REMOVE_METADATA_H
-#define REMOVE_METADATA_H
+#ifndef DIGIKAM_REMOVE_METADATA_H
+#define DIGIKAM_REMOVE_METADATA_H
 
 // Local includes
 
@@ -44,7 +44,10 @@ public:
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new RemoveMetadata(parent); };
+    BatchTool* clone(QObject* const parent=0) const
+    {
+        return new RemoveMetadata(parent);
+    };
 
     void registerSettingsWidget();
 
@@ -76,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif // REMOVE_METADATA_H
+#endif // DIGIKAM_REMOVE_METADATA_H

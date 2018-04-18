@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef AKONADI_IFACE_H
-#define AKONADI_IFACE_H
+#ifndef DIGIKAM_AKONADI_IFACE_H
+#define DIGIKAM_AKONADI_IFACE_H
 
 // Qt includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // AKONADI_IFACE_H
+#endif // DIGIKAM_AKONADI_IFACE_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BALOO_WRAP_H
-#define BALOO_WRAP_H
+#ifndef DIGIKAM_BALOO_WRAP_H
+#define DIGIKAM_BALOO_WRAP_H
 
 // Qt includes
 
@@ -120,4 +120,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BALOO_WRAP_H
+#endif // DIGIKAM_BALOO_WRAP_H

@@ -38,8 +38,8 @@
 #ifdef HAVE_AKONADICONTACT
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundef"
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wundef"
 #endif
 
 #include <kjob.h>
@@ -48,7 +48,7 @@
 #include <KContacts/Addressee>
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic pop
+#   pragma clang diagnostic pop
 #endif
 
 #endif // HAVE_AKONADICONTACT

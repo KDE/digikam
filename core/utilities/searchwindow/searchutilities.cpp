@@ -41,7 +41,6 @@
 #include <QPropertyAnimation>
 #include <QStyle>
 #include <QStyleOption>
-#include <QTextEdit>
 #include <QTimeLine>
 #include <QVBoxLayout>
 #include <QPushButton>

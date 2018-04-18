@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TIME_ADJUST_H
-#define TIME_ADJUST_H
+#ifndef DIGIKAM_TIME_ADJUST_H
+#define DIGIKAM_TIME_ADJUST_H
 
 // Local includes
 
@@ -43,7 +43,10 @@ public:
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new TimeAdjust(parent); };
+    BatchTool* clone(QObject* const parent=0) const
+    {
+        return new TimeAdjust(parent);
+    };
 
     void registerSettingsWidget();
 
@@ -64,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TIME_ADJUST_H
+#endif // DIGIKAM_TIME_ADJUST_H

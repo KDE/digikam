@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef SAVE_IMG_THREAD_H
-#define SAVE_IMG_THREAD_H
+#ifndef DIGIKAM_SAVE_IMG_THREAD_H
+#define DIGIKAM_SAVE_IMG_THREAD_H
 
 // Qt includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SAVE_IMG_THREAD_H
+#endif // DIGIKAM_SAVE_IMG_THREAD_H

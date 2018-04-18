@@ -96,7 +96,10 @@ void BalooWrap::setRating(const QUrl& url, int rating)
     setAllData(url, NULL, NULL, rating);
 }
 
-void BalooWrap::setAllData(const QUrl& url, QStringList* const tags, QString* const comment, int rating)
+void BalooWrap::setAllData(const QUrl& url,
+                           QStringList* const tags,
+                           QString* const comment,
+                           int rating)
 {
     if (!d->syncFromDigikamToBaloo)
     {
@@ -146,7 +149,6 @@ BalooInfo BalooWrap::getSemanticInfo(const QUrl& url) const
 
     return bInfo;
 }
-
 
 void BalooWrap::setSyncToBaloo(bool value)
 {

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef KSCAN_ACTION_H
-#define KSCAN_ACTION_H
+#ifndef DIGIKAM_KSANE_ACTION_H
+#define DIGIKAM_KSANE_ACTION_H
 
 // Qt includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // KSCAN_ACTION_H
+#endif // DIGIKAM_KSANE_ACTION_H

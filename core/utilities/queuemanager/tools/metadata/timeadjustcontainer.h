@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TIME_ADJUST_CONTAINER_H
-#define TIME_ADJUST_CONTAINER_H
+#ifndef DIGIKAM_TIME_ADJUST_CONTAINER_H
+#define DIGIKAM_TIME_ADJUST_CONTAINER_H
 
 // Qt includes
 
@@ -128,4 +128,4 @@ public:
 
 } // namespace Digikam
 
-#endif // TIME_ADJUST_CONTAINER_H
+#endif // DIGIKAM_TIME_ADJUST_CONTAINER_H

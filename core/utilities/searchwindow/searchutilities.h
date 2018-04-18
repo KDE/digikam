@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHUTILITIES_H
-#define SEARCHUTILITIES_H
+#ifndef DIGIKAM_SEARCH_UTILITIES_H
+#define DIGIKAM_SEARCH_UTILITIES_H
 
 // Qt includes
 
@@ -251,4 +251,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // SEARCHUTILITIES_H
+#endif // DIGIKAM_SEARCH_UTILITIES_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ASSIGN_TEMPLATE_H
-#define ASSIGN_TEMPLATE_H
+#ifndef DIGIKAM_ASSIGN_TEMPLATE_H
+#define DIGIKAM_ASSIGN_TEMPLATE_H
 
 // Local includes
 
@@ -44,7 +44,10 @@ public:
 
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new AssignTemplate(parent); };
+    BatchTool* clone(QObject* const parent=0) const
+    { 
+        return new AssignTemplate(parent);
+    };
 
     void registerSettingsWidget();
 
@@ -65,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ASSIGN_TEMPLATE_H
+#endif // DIGIKAM_ASSIGN_TEMPLATE_H

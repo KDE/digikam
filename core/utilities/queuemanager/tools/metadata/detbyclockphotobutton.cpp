@@ -20,14 +20,14 @@
  *
  * ============================================================ */
 
+#include "detbyclockphotobutton.h"
+
 // Qt includes
 
-#include <QtDebug>
 #include <QMimeData>
 
 // local includes
 
-#include "detbyclockphotobutton.h"
 #include "digikam_debug.h"
 
 namespace Digikam

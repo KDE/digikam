@@ -36,7 +36,6 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
 #include <QSortFilterProxyModel>
 #include <QSpinBox>
 #include <QTimeEdit>

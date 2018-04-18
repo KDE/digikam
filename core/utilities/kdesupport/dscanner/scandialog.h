@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef SCAN_DIALOG_H
-#define SCAN_DIALOG_H
+#ifndef DIGIKAM_SCAN_DIALOG_H
+#define DIGIKAM_SCAN_DIALOG_H
 
 // Qt includes
 
@@ -79,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SCAN_DIALOG_H
+#endif // DIGIKAM_SCAN_DIALOG_H
