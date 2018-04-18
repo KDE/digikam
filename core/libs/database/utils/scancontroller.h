@@ -115,6 +115,16 @@ public:
     void scheduleCollectionScanRelaxed(const QString& path);
 
     /**
+     * Schedules a scan of the specified part of the collection.
+     * Asynchronous, returns immediately.
+     * A very long delay with timmer restart may be introduced
+     * before the actual scanning starts, so that you can call
+     * this often without checking for duplicates.
+     * This method is only for the QFileSystemWatcher.
+     */
+    void scheduleCollectionScanExternal(const QString& path);
+
+    /**
      * If necessary (modified or newly created, scans the file directly
      * Returns the up-to-date ImageInfo.
      */

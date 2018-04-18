@@ -106,6 +106,7 @@ public:
         eventLoop(0),
         showTimer(0),
         relaxedTimer(0),
+        externalTimer(0),
         hints(CollectionScanner::createHintContainer()),
         progressDialog(0),
         advice(ScanController::Success),
@@ -141,6 +142,7 @@ public:
 
     QTimer*                         showTimer;
     QTimer*                         relaxedTimer;
+    QTimer*                         externalTimer;
 
     QPixmap                         albumPix;
     QPixmap                         rootPix;
@@ -277,6 +279,14 @@ ScanController::ScanController()
     d->relaxedTimer->setInterval(500);
 
     connect(d->relaxedTimer, &QTimer::timeout,
+            this, &ScanController::slotRelaxedScanning);
+
+    // create timer for external scheduling
+    d->externalTimer = new QTimer(this);
+    d->externalTimer->setSingleShot(true);
+    d->externalTimer->setInterval(2000);
+
+    connect(d->externalTimer, &QTimer::timeout,
             this, &ScanController::slotRelaxedScanning);
 
     // interthread connections
@@ -491,9 +501,23 @@ void ScanController::scheduleCollectionScanRelaxed(const QString& path)
     }
 }
 
+void ScanController::scheduleCollectionScanExternal(const QString& path)
+{
+    d->externalTimer->start();
+
+    QMutexLocker lock(&d->mutex);
+
+    if (!d->scanTasks.contains(path))
+    {
+        d->scanTasks << path;
+    }
+}
+
 void ScanController::slotRelaxedScanning()
 {
     qCDebug(DIGIKAM_DATABASE_LOG) << "Starting scan!";
+    d->externalTimer->stop();
+    d->relaxedTimer->stop();
 
     QMutexLocker lock(&d->mutex);
     d->condVar.wakeAll();

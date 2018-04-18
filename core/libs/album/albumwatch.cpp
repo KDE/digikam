@@ -266,7 +266,7 @@ void AlbumWatch::rescanDirectory(const QString& dir)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of" << dir;
 
-    ScanController::instance()->scheduleCollectionScanRelaxed(dir);
+    ScanController::instance()->scheduleCollectionScanExternal(dir);
 }
 
 void AlbumWatch::slotQFSWatcherDirty(const QString& path)
