@@ -72,7 +72,7 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
 {
     d->newNameList     = list;
     d->utilities       = new ImageViewUtilities(this);
-    d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
+    d->thumbLoadThread = new ThumbnailLoadThread;
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
@@ -94,6 +94,7 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
 
 AdvancedRenameProcessDialog::~AdvancedRenameProcessDialog()
 {
+    delete d->thumbLoadThread;
     delete d->utilities;
     delete d;
 }
@@ -120,8 +121,11 @@ void AdvancedRenameProcessDialog::processOne()
         return;
     }
 
-    d->currentUrl.clear();
-    d->thumbLoadThread->find(ThumbnailIdentifier(d->newNameList.first().first.toLocalFile()));
+    NewNameInfo info = d->newNameList.takeFirst();
+    d->currentUrl    = info.first;
+
+    d->thumbLoadThread->find(ThumbnailIdentifier(info.first.toLocalFile()));
+    d->utilities->rename(info.first, info.second);
 }
 
 void AdvancedRenameProcessDialog::complete()
@@ -131,17 +135,7 @@ void AdvancedRenameProcessDialog::complete()
 
 void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (d->cancel || d->newNameList.isEmpty())
-    {
-        return;
-    }
-
-    if (d->newNameList.first().first.toLocalFile() != desc.filePath)
-    {
-        return;
-    }
-
-    if (d->currentUrl.toLocalFile() == desc.filePath)
+    if (d->cancel)
     {
         return;
     }
@@ -149,11 +143,6 @@ void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& des
     addedAction(pix, QDir::toNativeSeparators(desc.filePath));
     setLabel(i18n("<b>Renaming images. Please wait...</b>"));
     advance(1);
-
-    NewNameInfo info = d->newNameList.takeFirst();
-    d->currentUrl    = info.first;
-
-    d->utilities->rename(info.first, info.second);
 }
 
 void AdvancedRenameProcessDialog::slotCancel()
