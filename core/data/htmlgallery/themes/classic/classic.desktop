@@ -116,6 +116,7 @@ Name[sv]=Miniatyrbilder per rad
 Name[tr]=Satır başına küçük resimler
 Name[uk]=Мініатюр на ряд
 Name[x-test]=xxThumbnails per rowxx
+Name[zh_CN]=每行缩略图
 Type=int
 Default=4
 Min=1

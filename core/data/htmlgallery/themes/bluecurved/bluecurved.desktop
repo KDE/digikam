@@ -18,6 +18,7 @@ Name[sv]=Blå kurvor
 Name[tr]=Mavi eğriler
 Name[uk]=Сині криві
 Name[x-test]=xxBlue curvesxx
+Name[zh_CN]=蓝色曲线
 Comment=A stylised theme
 Comment[ca]=Un tema estilitzat
 Comment[ca@valencia]=Un tema estilitzat
@@ -57,6 +58,7 @@ Name[sv]=Blå kurvor
 Name[tr]=Mavi eğriler
 Name[uk]=Сині криві
 Name[x-test]=xxBlue curvesxx
+Name[zh_CN]=蓝色曲线
 Url=preview.png
 
 [X-HTMLExport Author]
@@ -131,6 +133,7 @@ Name[sv]=Miniatyrbilder per rad
 Name[tr]=Satır başına küçük resimler
 Name[uk]=Мініатюр на ряд
 Name[x-test]=xxThumbnails per rowxx
+Name[zh_CN]=每行缩略图
 Type=int
 Default=4
 Min=1
