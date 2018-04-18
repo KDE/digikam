@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_CREATE_MK_TASK_H
-#define PANO_CREATE_MK_TASK_H
+#ifndef DIGIKAM_CREATE_MK_TASK_H
+#define DIGIKAM_CREATE_MK_TASK_H
 
 // Local includes
 
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANO_CREATE_MK_TASK_H
+#endif // DIGIKAM_CREATE_MK_TASK_H

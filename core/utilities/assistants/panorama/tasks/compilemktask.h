@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef COMPILE_MK_TASK_H
-#define COMPILE_MK_TASK_H
+#ifndef DIGIKAM_COMPILE_MK_TASK_H
+#define DIGIKAM_COMPILE_MK_TASK_H
 
 // Local includes
 
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COMPILE_MK_TASK_H
+#endif // DIGIKAM_COMPILE_MK_TASK_H

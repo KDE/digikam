@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PRE_PROCESS_TASK_H
-#define PRE_PROCESS_TASK_H
+#ifndef DIGIKAM_PRE_PROCESS_TASK_H
+#define DIGIKAM_PRE_PROCESS_TASK_H
 
 // Qt includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRE_PROCESS_TASK_H
+#endif // DIGIKAM_PRE_PROCESS_TASK_H

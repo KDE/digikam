@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_COPY_FILES_TASK_H
-#define PANO_COPY_FILES_TASK_H
+#ifndef DIGIKAM_COPY_FILES_TASK_H
+#define DIGIKAM_COPY_FILES_TASK_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANO_COPY_FILES_TASK_H
+#endif // DIGIKAM_COPY_FILES_TASK_H

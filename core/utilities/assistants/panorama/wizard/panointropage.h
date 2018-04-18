@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_INTRO_PAGE_H
-#define PANO_INTRO_PAGE_H
+#ifndef DIGIKAM_PANO_INTRO_PAGE_H
+#define DIGIKAM_PANO_INTRO_PAGE_H
 
 // Qt includes
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANO_INTRO_PAGE_H
+#endif // DIGIKAM_PANO_INTRO_PAGE_H

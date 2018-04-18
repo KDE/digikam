@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_PRE_PROCESS_PAGE_H
-#define PANO_PRE_PROCESS_PAGE_H
+#ifndef DIGIKAM_PANO_PRE_PROCESS_PAGE_H
+#define DIGIKAM_PANO_PRE_PROCESS_PAGE_H
 
 // Local includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANO_PRE_PROCESS_PAGE_H
+#endif // DIGIKAM_PANO_PRE_PROCESS_PAGE_H

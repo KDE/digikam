@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PTO_2MK_BINARY_H
-#define PTO_2MK_BINARY_H
+#ifndef DIGIKAM_PTO_2MK_BINARY_H
+#define DIGIKAM_PTO_2MK_BINARY_H
 
 // Local includes
 
@@ -56,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif // PTO_2MK_BINARY_H
+#endif // DIGIKAM_PTO_2MK_BINARY_H

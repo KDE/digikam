@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef MAKE_BINARY_H
-#define MAKE_BINARY_H
+#ifndef DIGIKAM_MAKE_BINARY_H
+#define DIGIKAM_MAKE_BINARY_H
 
 // Local includes
 
@@ -60,4 +60,4 @@ public:
 
 } // namespace Digikam
 
-#endif // MAKE_BINARY_H
+#endif // DIGIKAM_MAKE_BINARY_H

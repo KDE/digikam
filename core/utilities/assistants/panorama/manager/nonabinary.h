@@ -20,14 +20,12 @@
  *
  * ============================================================ */
 
-#ifndef NONA_BINARY_H
-#define NONA_BINARY_H
+#ifndef DIGIKAM_NONA_BINARY_H
+#define DIGIKAM_NONA_BINARY_H
 
 // Local includes
 
 #include "dbinaryiface.h"
-
-
 
 namespace Digikam
 {
@@ -58,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif // NONA_BINARY_H
+#endif // DIGIKAM_NONA_BINARY_H

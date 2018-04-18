@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef ENBLEND_BINARY_H
-#define ENBLEND_BINARY_H
+#ifndef DIGIKAM_ENBLEND_BINARY_H
+#define DIGIKAM_ENBLEND_BINARY_H
 
 // Local includes
 
@@ -56,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif // ENBLEND_BINARY_H
+#endif // DIGIKAM_ENBLEND_BINARY_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef OPTIMISATION_TASK_H
-#define OPTIMISATION_TASK_H
+#ifndef DIGIKAM_OPTIMISATION_TASK_H
+#define DIGIKAM_OPTIMISATION_TASK_H
 
 // Local includes
 
@@ -56,4 +56,4 @@ private:
 
 } // namespace Digikam
 
-#endif // OPTIMISATION_TASK_H
+#endif // DIGIKAM_OPTIMISATION_TASK_H

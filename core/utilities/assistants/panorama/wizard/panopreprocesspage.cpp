@@ -28,7 +28,6 @@
 
 #include <QDir>
 #include <QLabel>
-#include <QVBoxLayout>
 #include <QTimer>
 #include <QPixmap>
 #include <QPushButton>

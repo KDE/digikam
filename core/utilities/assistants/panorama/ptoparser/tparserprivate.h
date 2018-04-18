@@ -26,22 +26,31 @@
 #ifndef DIGIKAM_T_PARSER_PRIVATE_H
 #define DIGIKAM_T_PARSER_PRIVATE_H
 
+// C includes
+
+#include <ctype.h>
+#include <stdlib.h>
+
+// Local includes
+
 #include "tparser.h"
 
 /* void TokenBegin(char *t); */
 
-int panoScriptDataReset(void);
-int panoScriptParserInit(const char* const filename);
+int  panoScriptDataReset(void);
+int  panoScriptParserInit(const char* const filename);
 void panoScriptParserClose(void);
 
 int  panoScriptScannerGetNextChar(char* b, int maxBuffer);
 void panoScriptScannerTokenBegin(char* t);
+
 #ifndef Q_CC_MSVC
 void panoScriptParserError(char const* errorstring, ...) __attribute__ ((format (printf, 1, 2)));
 #else
 void panoScriptParserError(char const* errorstring, ...);
 #endif
-void yyerror(char const* st);
+
+void  yyerror(char const* st);
 void* panoScriptReAlloc(void** ptr, size_t size, int* count);
 
 #endif // DIGIKAM_T_PARSER_PRIVATE_H

@@ -23,6 +23,10 @@
  *
  * ============================================================ */
 
+#include "tparser.h"
+
+// C includes
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -30,7 +34,8 @@
 #include <stdio.h>
 #include <locale.h>
 
-#include "tparser.h"
+// Local includes
+
 #include "tparserprivate.h"
 #include "tparserdebug.h"
 #include "panoParser.h"

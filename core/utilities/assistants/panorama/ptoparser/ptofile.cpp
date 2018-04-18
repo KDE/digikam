@@ -23,6 +23,8 @@
  *
  * ============================================================ */
 
+#include "ptofile.h"
+
 // C++ includes
 
 #include <string>
@@ -35,7 +37,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "ptofile.h"
 
 extern "C"
 {

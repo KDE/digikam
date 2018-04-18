@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_CP_CLEAN_TASK_H
-#define PANO_CP_CLEAN_TASK_H
+#ifndef DIGIKAM_CP_CLEAN_TASK_H
+#define DIGIKAM_CP_CLEAN_TASK_H
 
 // Local includes
 
@@ -51,4 +51,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANO_CP_CLEAN_TASK_H
+#endif // DIGIKAM_CP_CLEAN_TASK_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef AUTO_OPTIMISER_BINARY_H
-#define AUTO_OPTIMISER_BINARY_H
+#ifndef DIGIKAM_AUTO_OPTIMISER_BINARY_H
+#define DIGIKAM_AUTO_OPTIMISER_BINARY_H
 
 // Local includes
 
@@ -56,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif // AUTO_OPTIMISER_BINARY_H
+#endif // DIGIKAM_AUTO_OPTIMISER_BINARY_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_AUTOCROP_TASK_H
-#define PANO_AUTOCROP_TASK_H
+#ifndef DIGIKAM_AUTO_CROP_TASK_H
+#define DIGIKAM_AUTO_CROP_TASK_H
 
 // Local includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANO_AUTOCROP_TASK_H
+#endif // DIGIKAM_AUTO_CROP_TASK_H

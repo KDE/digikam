@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef COMMAND_TASK_H
-#define COMMAND_TASK_H
+#ifndef DIGIKAM_COMMAND_TASK_H
+#define DIGIKAM_COMMAND_TASK_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COMMAND_TASK_H
+#endif // DIGIKAM_COMMAND_TASK_H

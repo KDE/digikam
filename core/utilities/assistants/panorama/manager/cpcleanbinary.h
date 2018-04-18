@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_CPCLEAN_BINARY_H
-#define PANO_CPCLEAN_BINARY_H
+#ifndef DIGIKAM_CPCLEAN_BINARY_H
+#define DIGIKAM_CPCLEAN_BINARY_H
 
 // Local includes
 
@@ -52,4 +52,4 @@ public:
 
 } // namespace Digikam
 
-#endif // PANO_CPCLEAN_BINARY_H
+#endif // DIGIKAM_CPCLEAN_BINARY_H

@@ -23,13 +23,14 @@
  *
  * ============================================================ */
 
+#include "tparsergetters.h"
+
+// C includes
+
 #include <assert.h>
 #include <stddef.h>
 #include <string.h>
 #include <stdlib.h>
-
-#include "tparsergetters.h"
-
 
 int panoScriptGetImagesCount(pt_script* script)
 {

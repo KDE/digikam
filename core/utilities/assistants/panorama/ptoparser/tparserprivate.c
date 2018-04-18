@@ -23,13 +23,16 @@
  *
  * ============================================================ */
 
+#include "tparserprivate.h"
+
+// C includes
+
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdarg.h>
-#include <ctype.h>
 
-#include "tparserprivate.h"
+// Local include
+
 #include "tparserdebug.h"
 
 int g_debug = 0;

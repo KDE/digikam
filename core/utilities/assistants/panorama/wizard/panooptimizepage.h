@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_OPTIMIZE_PAGE_H
-#define PANO_OPTIMIZE_PAGE_H
+#ifndef DIGIKAM_PANO_OPTIMIZE_PAGE_H
+#define DIGIKAM_PANO_OPTIMIZE_PAGE_H
 
 // Local includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANO_OPTIMIZE_PAGE_H
+#endif // DIGIKAM_PANO_OPTIMIZE_PAGE_H

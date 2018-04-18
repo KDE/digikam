@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_TASK_H
-#define PANO_TASK_H
+#ifndef DIGIKAM_PANO_TASK_H
+#define DIGIKAM_PANO_TASK_H
 
 // KDE includes
 
@@ -61,4 +61,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // PANO_TASK_H
+#endif // DIGIKAM_PANO_TASK_H

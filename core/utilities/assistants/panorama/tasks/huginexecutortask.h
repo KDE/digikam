@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_HUGIN_EXECUTOR_TASK_H
-#define PANO_HUGIN_EXECUTOR_TASK_H
+#ifndef DIGIKAM_HUGIN_EXECUTOR_TASK_H
+#define DIGIKAM_HUGIN_EXECUTOR_TASK_H
 
 // Local includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANO_HUGIN_EXECUTOR_TASK_H
+#endif // DIGIKAM_HUGIN_EXECUTOR_TASK_H

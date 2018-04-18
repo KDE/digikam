@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_CPFIND_BINARY_H
-#define PANO_CPFIND_BINARY_H
+#ifndef DIGIKAM_CPFIND_BINARY_H
+#define DIGIKAM_CPFIND_BINARY_H
 
 // Local includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANO_CPFIND_BINARY_H
+#endif // DIGIKAM_CPFIND_BINARY_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_HUGIN_EXECUTOR_BINARY_H
-#define PANO_HUGIN_EXECUTOR_BINARY_H
+#ifndef DIGIKAM_HUGIN_EXECUTOR_BINARY_H
+#define DIGIKAM_HUGIN_EXECUTOR_BINARY_H
 
 // Local includes
 
@@ -53,4 +53,4 @@ public:
 
 } // namespace Digikam
 
-#endif // PANO_HUGIN_EXECUTOR_BINARY_H
+#endif // DIGIKAM_HUGIN_EXECUTOR_BINARY_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_ACTION_THREAD_H
-#define PANO_ACTION_THREAD_H
+#ifndef DIGIKAM_PANO_ACTION_THREAD_H
+#define DIGIKAM_PANO_ACTION_THREAD_H
 
 // Qt includes
 
@@ -151,4 +151,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANO_ACTION_THREAD_H
+#endif // DIGIKAM_PANO_ACTION_THREAD_H

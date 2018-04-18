@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_ACTIONS_H
-#define PANO_ACTIONS_H
+#ifndef DIGIKAM_PANO_ACTIONS_H
+#define DIGIKAM_PANO_ACTIONS_H
 
 // Qt includes
 
@@ -114,4 +114,4 @@ struct PanoActionData
 Q_DECLARE_METATYPE(Digikam::PanoActionData)
 Q_DECLARE_METATYPE(Digikam::PanoramaPreprocessedUrls)
 
-#endif // PANO_ACTIONS_H
+#endif // DIGIKAM_PANO_ACTIONS_H

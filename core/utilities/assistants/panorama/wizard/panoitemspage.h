@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PANO_ITEMS_PAGE_H
-#define PANO_ITEMS_PAGE_H
+#ifndef DIGIKAM_PANO_ITEMS_PAGE_H
+#define DIGIKAM_PANO_ITEMS_PAGE_H
 
 // Local includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PANO_ITEMS_PAGE_H
+#endif // DIGIKAM_PANO_ITEMS_PAGE_H
