@@ -665,7 +665,7 @@ void ThumbnailLoadThread::pregenerateGroup(const QList<ThumbnailIdentifier>& ide
 
     QList<LoadingDescription> descriptions = d->makeDescriptions(identifiers, size);
 
-    for (int i=0; i<descriptions.size(); ++i)
+    for (int i = 0 ; i < descriptions.size() ; ++i)
     {
         descriptions[i].previewParameters.flags |= LoadingDescription::PreviewParameters::OnlyPregenerate;
     }
