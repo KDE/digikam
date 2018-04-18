@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef CREATE_PFINAL_PTO_TASK_H
-#define CREATE_PFINAL_PTO_TASK_H
+#ifndef DIGIKAM_CREATE_FINAL_PTO_TASK_H
+#define DIGIKAM_CREATE_FINAL_PTO_TASK_H
 
 // Local includes
 
@@ -54,4 +54,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CREATE_PFINAL_PTO_TASK_H
+#endif // DIGIKAM_CREATE_FINAL_PTO_TASK_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef PTO_PARSER_H
-#define PTO_PARSER_H
+#ifndef DIGIKAM_PTO_FILE_H
+#define DIGIKAM_PTO_FILE_H
 
 // Qt includes
 
@@ -56,4 +56,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PTO_PARSER_H
+#endif // DIGIKAM_PTO_FILE_H

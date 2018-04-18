@@ -23,8 +23,8 @@
  *
 //  * ============================================================ */
 
-#ifndef T_PARSER_H
-#define T_PARSER_H
+#ifndef DIGIKAM_T_PARSER_H
+#define DIGIKAM_T_PARSER_H
 
 /* Maximum size for an input token */
 #define PARSER_MAX_LINE 1000
@@ -225,4 +225,4 @@ void    panoScriptParserSetDefaults(pt_script* ptr);
 int     panoScriptParse(const char* const filename, pt_script* scriptOut);
 void    panoScriptFree(pt_script* ptr);
 
-#endif // T_PARSER_H
+#endif // DIGIKAM_T_PARSER_H
