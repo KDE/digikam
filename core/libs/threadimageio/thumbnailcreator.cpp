@@ -62,10 +62,6 @@
 #include "thumbsdbbackend.h"
 #include "thumbnailsize.h"
 
-#ifdef Q_OS_WIN
-#   include "windows.h"
-#endif
-
 namespace Digikam
 {
 
@@ -1131,7 +1127,6 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 
             temp.close();
 
-#ifndef Q_OS_WIN
             // remove thumbPath file if it exist
             if (tempFileName != thumbPath && QFile::exists(tempFileName) && QFile::exists(thumbPath))
             {
@@ -1139,9 +1134,6 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
             }
 
             if (!QFile::rename(tempFileName, thumbPath))
-#else
-            if(::MoveFileEx((LPCWSTR)tempFileName.utf16(), (LPCWSTR)thumbPath.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
-#endif
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot rename thumb file (" << tempFileName << ")";
                 qCDebug(DIGIKAM_GENERAL_LOG) << "to (" << thumbPath << ")...";
