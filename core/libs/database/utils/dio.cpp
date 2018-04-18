@@ -456,7 +456,7 @@ void DIO::slotResult()
 
             // delete thumbnail
             ThumbnailLoadThread::deleteThumbnail(data->srcUrl().toLocalFile());
-            LoadingCacheInterface::fileChanged(data->destUrl(data->srcUrl()).toLocalFile());
+            //LoadingCacheInterface::fileChanged(data->srcUrl().toLocalFile());
         }
     }
 

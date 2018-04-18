@@ -125,7 +125,9 @@ void AdvancedRenameProcessDialog::processOne()
     d->currentUrl    = info.first;
 
     d->thumbLoadThread->find(ThumbnailIdentifier(info.first.toLocalFile()));
+    setLabel(i18n("<b>Renaming images. Please wait...</b>"));
     d->utilities->rename(info.first, info.second);
+    advance(1);
 }
 
 void AdvancedRenameProcessDialog::complete()
@@ -141,8 +143,6 @@ void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& des
     }
 
     addedAction(pix, QDir::toNativeSeparators(desc.filePath));
-    setLabel(i18n("<b>Renaming images. Please wait...</b>"));
-    advance(1);
 }
 
 void AdvancedRenameProcessDialog::slotCancel()
