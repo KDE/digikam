@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_MNGR_H
-#define PRESENTATION_MNGR_H
+#ifndef DIGIKAM_PRESENTATION_MNGR_H
+#define DIGIKAM_PRESENTATION_MNGR_H
 
 // Qt includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRESENTATION_MNGR_H
+#endif // DIGIKAM_PRESENTATION_MNGR_H

@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef KB_IMAGELOADER_H
-#define KB_IMAGELOADER_H
+#ifndef DIGIKAM_KB_IMAGE_LOADER_H
+#define DIGIKAM_KB_IMAGE_LOADER_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // KB_IMAGELOADER_H
+#endif // DIGIKAM_KB_IMAGE_LOADER_H

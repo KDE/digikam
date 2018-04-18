@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_AUDIO_PAGE_H
-#define PRESENTATION_AUDIO_PAGE_H
+#ifndef DIGIKAM_PRESENTATION_AUDIO_PAGE_H
+#define DIGIKAM_PRESENTATION_AUDIO_PAGE_H
 
 // Qt includes
 
@@ -48,7 +48,7 @@ class SoundtrackPreview : public QDialog
 
 public :
 
-    SoundtrackPreview(QWidget* const, const QList<QUrl>&, PresentationContainer* const);
+    explicit SoundtrackPreview(QWidget* const, const QList<QUrl>&, PresentationContainer* const);
     ~SoundtrackPreview();
 
 private :
@@ -64,7 +64,7 @@ class PresentationAudioPage : public QWidget, public Ui::PresentationAudioPage
 
 public:
 
-    PresentationAudioPage(QWidget* const parent, PresentationContainer* const sharedData);
+    explicit PresentationAudioPage(QWidget* const parent, PresentationContainer* const sharedData);
     ~PresentationAudioPage();
 
     void readSettings();
@@ -100,4 +100,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRESENTATION_AUDIO_PAGE_H
+#endif // DIGIKAM_PRESENTATION_AUDIO_PAGE_H

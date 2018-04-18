@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_AUDIO_WIDGET_H
-#define PRESENTATION_AUDIO_WIDGET_H
+#ifndef DIGIKAM_PRESENTATION_AUDIO_WIDGET_H
+#define DIGIKAM_PRESENTATION_AUDIO_WIDGET_H
 
 // Qt includes
 
@@ -50,7 +50,7 @@ class PresentationAudioWidget : public QWidget, public Ui::PresentationAudioWidg
 
 public:
 
-    PresentationAudioWidget(QWidget* const, const QList<QUrl>&, PresentationContainer* const);
+    explicit PresentationAudioWidget(QWidget* const, const QList<QUrl>&, PresentationContainer* const);
     ~PresentationAudioWidget();
 
     void enqueue(const QList<QUrl>&);
@@ -90,4 +90,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRESENTATION_AUDIO_WIDGET_H
+#endif // DIGIKAM_PRESENTATION_AUDIO_WIDGET_H

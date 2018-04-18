@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PRENSENTATION_CTRL_WIDGET_H
-#define PRENSENTATION_CTRL_WIDGET_H
+#ifndef DIGIKAM_PRESENTATION_CTRL_WIDGET_H
+#define DIGIKAM_PRESENTATION_CTRL_WIDGET_H
 
 // Qt includes
 
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRENSENTATION_CTRL_WIDGET_H
+#endif // DIGIKAM_PRESENTATION_CTRL_WIDGET_H

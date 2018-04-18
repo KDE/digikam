@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_DLG_H
-#define PRESENTATION_DLG_H
+#ifndef DIGIKAM_PRESENTATION_DLG_H
+#define DIGIKAM_PRESENTATION_DLG_H
 
 // Local includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRESENTATION_DLG_H
+#endif // DIGIKAM_PRESENTATION_DLG_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PRENSENTION_ADVANCED_PAGE_H
-#define PRENSENTION_ADVANCED_PAGE_H
+#ifndef DIGIKAM_PRESENTION_ADVANCED_PAGE_H
+#define DIGIKAM_PRESENTION_ADVANCED_PAGE_H
 
 // Local includes
 
@@ -39,7 +39,7 @@ class PresentationAdvPage : public QWidget,
 
 public:
 
-    PresentationAdvPage(QWidget* const parent, PresentationContainer* const sharedData);
+    explicit PresentationAdvPage(QWidget* const parent, PresentationContainer* const sharedData);
     ~PresentationAdvPage();
 
     void readSettings();
@@ -60,4 +60,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRENSENTION_ADVANCED_PAGE_H
+#endif // DIGIKAM_PRESENTION_ADVANCED_PAGE_H

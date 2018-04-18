@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_CAPTION_PAGE_H
-#define PRESENTATION_CAPTION_PAGE_H
+#ifndef DIGIKAM_PRESENTATION_CAPTION_PAGE_H
+#define DIGIKAM_PRESENTATION_CAPTION_PAGE_H
 
 // Local includes
 
@@ -39,7 +39,7 @@ class PresentationCaptionPage : public QWidget, Ui::PresentationCaptionPage
 
 public:
 
-    PresentationCaptionPage(QWidget* const parent, PresentationContainer* const sharedData);
+    explicit PresentationCaptionPage(QWidget* const parent, PresentationContainer* const sharedData);
     ~PresentationCaptionPage();
 
     void readSettings();
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRESENTATION_CAPTION_PAGE_H
+#endif // DIGIKAM_PRESENTATION_CAPTION_PAGE_H

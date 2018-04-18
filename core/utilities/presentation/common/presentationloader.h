@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATIONLOADER_H
-#define PRESENTATIONLOADER_H
+#ifndef DIGIKAM_PRESENTATION_LOADER_H
+#define DIGIKAM_PRESENTATION_LOADER_H
 
 // Qt includes
 
@@ -40,8 +40,10 @@ class PresentationLoader
 {
 public:
 
-    PresentationLoader(PresentationContainer* const sharedData, int width, int height,
-                       int beginAtIndex = 0);
+    explicit PresentationLoader(PresentationContainer* const sharedData,
+                                int width,
+                                int height,
+                                int beginAtIndex = 0);
 
     ~PresentationLoader();
 
@@ -64,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRESENTATIONLOADER_H
+#endif // DIGIKAM_PRESENTATION_LOADER_H

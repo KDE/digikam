@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_MAIN_PAGE_H
-#define PRESENTATION_MAIN_PAGE_H
+#ifndef DIGIKAM_PRESENTATION_MAIN_PAGE_H
+#define DIGIKAM_PRESENTATION_MAIN_PAGE_H
 
 // Qt includes
 
@@ -47,7 +47,7 @@ class PresentationMainPage : public QWidget, Ui::PresentationMainPage
 
 public:
 
-    PresentationMainPage(QWidget* const parent, PresentationContainer* const sharedData);
+    explicit PresentationMainPage(QWidget* const parent, PresentationContainer* const sharedData);
     ~PresentationMainPage();
 
     void readSettings();
@@ -88,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRESENTATION_MAIN_PAGE_H
+#endif // DIGIKAM_PRESENTATION_MAIN_PAGE_H

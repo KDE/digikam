@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef KBEFFECT_H
-#define KBEFFECT_H
+#ifndef DIGIKAM_KB_EFFECT_H
+#define DIGIKAM_KB_EFFECT_H
 
 namespace Digikam
 {
@@ -117,4 +117,4 @@ public:
 
 } // namespace Digikam
 
-#endif // KBEFFECT_H
+#endif // DIGIKAM°KB_EFFECT_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_AUDIO_LIST_H
-#define PRESENTATION_AUDIO_LIST_H
+#ifndef DIGIKAM_PRESENTATION_AUDIO_LIST_H
+#define DIGIKAM_PRESENTATION_AUDIO_LIST_H
 
 // Qt includes
 
@@ -50,7 +50,7 @@ class PresentationAudioListItem : public QObject, public QListWidgetItem
 
 public:
 
-    PresentationAudioListItem(QListWidget* const parent, const QUrl& url);
+    explicit PresentationAudioListItem(QListWidget* const parent, const QUrl& url);
     ~PresentationAudioListItem();
 
     QUrl    url()       const;
@@ -105,4 +105,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // PRESENTATION_AUDIO_LIST_H
+#endif // DIGIKAM_PRESENTATION_AUDIO_LIST_H

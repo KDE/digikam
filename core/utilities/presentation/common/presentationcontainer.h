@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATIONCONTAINER_H
-#define PRESENTATIONCONTAINER_H
+#ifndef DIGIKAM_PRESENTATION_CONTAINER_H
+#define DIGIKAM_PRESENTATION_CONTAINER_H
 
 // Qt includes
 
@@ -50,7 +50,7 @@ class PresentationContainer
 
 public:
 
-    PresentationContainer();
+    explicit PresentationContainer();
     ~PresentationContainer();
 
 public:
@@ -111,4 +111,4 @@ public:
 
 } // namespace Digikam
 
-#endif // PRESENTATIONCONTAINER_H
+#endif // DIGIKAM_PRESENTATION_CONTAINER_H

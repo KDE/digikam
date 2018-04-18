@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_KB_P_H
-#define PRESENTATION_KB_P_H
+#ifndef DIGIKAM_PRESENTATION_KB_P_H
+#define DIGIKAM_PRESENTATION_KB_P_H
 
 namespace Digikam
 {
@@ -40,7 +40,7 @@ class PresentationKB::Private
 
 public:
 
-    Private()
+    explicit Private()
     {
         zoomIn              = qrand() < RAND_MAX / 2;
         effect              = 0;
@@ -99,4 +99,4 @@ public:
 
 } // namespace Digikam
 
-#endif // PRESENTATION_KB_P_H
+#endif // DIGIKAM_PRESENTATION_KB_P_H

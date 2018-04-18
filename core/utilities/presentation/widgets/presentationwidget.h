@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_WIDGET_H
-#define PRESENTATION_WIDGET_H
+#ifndef DIGIKAM_PRESENTATION_WIDGET_H
+#define DIGIKAM_PRESENTATION_WIDGET_H
 
 // Qt includes
 
@@ -135,4 +135,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRESENTATION_WIDGET_H
+#endif // DIGIKAM_PRESENTATION_WIDGET_H
