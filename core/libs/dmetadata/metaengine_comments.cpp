@@ -80,12 +80,13 @@ QString MetaEngine::getCommentsDecoded() const
 bool MetaEngine::setComments(const QByteArray& data) const
 {
     d->imageComments() = std::string(data.data(), data.size());
+
     return true;
 }
 
 QString MetaEngine::detectLanguageAlt(const QString& value, QString& lang)
 {
-    // Ex. from an Xmp tag Xmp.tiff.copyright: "lang="x-default" (c) Gilles Caulier 2007"
+    // Ex. from an Xmp tag Xmp.tiff.copyright: "lang="x-default"
 
     if (value.size() > 6 && value.startsWith(QString::fromLatin1("lang=\"")))
     {
@@ -99,6 +100,7 @@ QString MetaEngine::detectLanguageAlt(const QString& value, QString& lang)
     }
 
     lang.clear();
+
     return value;
 }
 
