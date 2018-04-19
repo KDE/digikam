@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_SYNC_JOB_H
-#define DATABASE_SYNC_JOB_H
+#ifndef DIGIKAM_SYNC_JOB_H
+#define DIGIKAM_SYNC_JOB_H
 
 // Qt includes
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DATABASE_SYNC_JOB_H
+#endif // DIGIKAM_SYNC_JOB_H

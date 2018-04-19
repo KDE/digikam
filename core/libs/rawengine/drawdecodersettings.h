@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_RAW_DECODER_SETTINGS_H
-#define DIGIKAM_RAW_DECODER_SETTINGS_H
+#ifndef DIGIKAM_DRAW_DECODER_SETTINGS_H
+#define DIGIKAM_DRAW_DECODER_SETTINGS_H
 
 // Qt includes
 
@@ -356,4 +356,4 @@ QDebug operator<<(QDebug dbg, const DRawDecoderSettings& s);
 
 } // namespace Digikam
 
-#endif // DIGIKAM_RAW_DECODER_SETTINGS_H
+#endif // DIGIKAM_DRAW_DECODER_SETTINGS_H

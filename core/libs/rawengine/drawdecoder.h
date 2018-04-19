@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_RAW_DECODER_H
-#define DIGIKAM_RAW_DECODER_H
+#ifndef DIGIKAM_DRAW_DECODER_H
+#define DIGIKAM_DRAW_DECODER_H
 
 // C++ includes
 
@@ -241,4 +241,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_RAW_DECODER_H
+#endif // DIGIKAM_DRAW_DECODER_H

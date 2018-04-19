@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DATABASE_IO_H
-#define DIGIKAM_DATABASE_IO_H
+#ifndef DIGIKAM_DIO_H
+#define DIGIKAM_DIO_H
 
 // Qt includes
 
@@ -145,4 +145,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DATABASE_IO_H
+#endif // DIGIKAM_DIO_H

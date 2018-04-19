@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_MIGRATION_DIALOG_H
-#define DATABASE_MIGRATION_DIALOG_H
+#ifndef DIGIKAM_DD_MIGRATION_DLG_H
+#define DIGIKAM_DB_MIGRATION_DLG_H
 
 // QT includes
 
@@ -97,4 +97,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DATABASE_MIGRATION_DIALOG_H
+#endif // DIGIKAM_DB_MIGRATION_DLG_H

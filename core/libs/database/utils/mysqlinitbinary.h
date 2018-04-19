@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef MYSQL_INIT_BINARY_H
-#define MYSQL_INIT_BINARY_H
+#ifndef DIGIKAM_MYSQL_INIT_BINARY_H
+#define DIGIKAM_MYSQL_INIT_BINARY_H
 
 // KDE includes
 
@@ -59,4 +59,4 @@ public:
 
 } // namespace Digikam
 
-#endif // MYSQL_INIT_BINARY_H
+#endif // DIGIKAM_MYSQL_INIT_BINARY_H

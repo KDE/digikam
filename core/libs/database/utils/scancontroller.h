@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef SCAN_CONTROLLER_H
-#define SCAN_CONTROLLER_H
+#ifndef DIGIKAM_SCAN_CONTROLLER_H
+#define DIGIKAM_SCAN_CONTROLLER_H
 
 // Qt includes
 
@@ -306,4 +306,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // SCAN_CONTROLLER_H
+#endif // DIGIKAM_SCAN_CONTROLLER_H

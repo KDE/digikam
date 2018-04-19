@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_SETTINGS_WIDGET_H
-#define DATABASE_SETTINGS_WIDGET_H
+#ifndef DIGIKAM_DB_SETTINGS_WIDGET_H
+#define DIGIKAM_DB_SETTINGS_WIDGET_H
 
 // Qt includes
 
@@ -108,4 +108,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DATABASE_SETTINGS_WIDGET_H
+#endif // DIGIKAM_DB_SETTINGS_WIDGET_H

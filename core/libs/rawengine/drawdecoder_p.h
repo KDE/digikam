@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_RAW_DECODER_PRIVATE_H
-#define DIGIKAM_RAW_DECODER_PRIVATE_H
+#ifndef DIGIKAM_DRAW_DECODER_P_H
+#define DIGIKAM_DRAW_DECODER_P_H
 
 // Qt includes
 
@@ -104,4 +104,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_RAW_DECODER_PRIVATE_H
+#endif // DIGIKAM_DRAW_DECODER_P_H
