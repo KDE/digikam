@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-#include "applicationsettings.h"
 #include "applicationsettings_p.h"
 
 // Qt includes
