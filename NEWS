@@ -191,4 +191,5 @@ BUGFIXES:
 174 ==> 383747 - "Rotate only by setting a flag" Changes Image Instead.
 175 ==> 387977 - No icon only view of "Extras sidebar": sidebar taking up a lot of space.
 176 ==> 277502 - All versions of version set always displayed in Album view [patch].
-177 ==> 
+177 ==> 393283 - Caption not updating Exif.Image.ImageDescription field.
+178 ==> 
