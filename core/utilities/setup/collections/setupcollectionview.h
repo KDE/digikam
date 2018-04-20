@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_COLLECTION_VIEW_H
-#define SETUP_COLLECTION_VIEW_H
+#ifndef DIGIKAM_SETUP_COLLECTION_VIEW_H
+#define DIGIKAM_SETUP_COLLECTION_VIEW_H
 
 // Qt includes
 
@@ -221,7 +221,9 @@ public:
     virtual void     updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
     virtual QList<QWidget*> createItemWidgets(const QModelIndex& index) const;
-    virtual void            updateItemWidgets(const QList<QWidget*> widgets, const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const;
+    virtual void            updateItemWidgets(const QList<QWidget*> widgets,
+                                              const QStyleOptionViewItem& option,
+                                              const QPersistentModelIndex& index) const;
 
 Q_SIGNALS:
 
@@ -242,4 +244,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // SETUP_COLLECTION_VIEW_H
+#endif // DIGIKAM_SETUP_COLLECTION_VIEW_H

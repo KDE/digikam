@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_COLLECTIONS_H
-#define SETUP_COLLECTIONS_H
+#ifndef DIGIKAM_SETUP_COLLECTIONS_H
+#define DIGIKAM_SETUP_COLLECTIONS_H
 
 // Qt includes
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUP_COLLECTIONS_H
+#endif // DIGIKAM_SETUP_COLLECTIONS_H

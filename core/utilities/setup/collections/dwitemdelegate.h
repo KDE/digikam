@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DW_ITEM_DELEGATE_H
-#define DW_ITEM_DELEGATE_H
+#ifndef DIGIKAM_DW_ITEM_DELEGATE_H
+#define DIGIKAM_DW_ITEM_DELEGATE_H
 
 // Qt includes
 
@@ -161,4 +161,4 @@ private:
 
 Q_DECLARE_METATYPE(QList<QEvent::Type>)
 
-#endif // Digikam
+#endif // DIGIKAM_DW_ITEM_DELEGATE_H
