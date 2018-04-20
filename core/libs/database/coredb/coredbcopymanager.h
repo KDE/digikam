@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CORE_DATABASE_COPY_MANAGER_H
-#define DIGIKAM_CORE_DATABASE_COPY_MANAGER_H
+#ifndef DIGIKAM_CORE_DB_COPY_MANAGER_H
+#define DIGIKAM_CORE_DB_COPY_MANAGER_H
 
 // Qt includes
 
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_CORE_DATABASE_COPY_MANAGER_H
+#endif // DIGIKAM_CORE_DB_COPY_MANAGER_H

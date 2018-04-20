@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_THUMBNAILS_DATABASE_BACKEND_H
-#define DIGIKAM_THUMBNAILS_DATABASE_BACKEND_H
+#ifndef DIGIKAM_THUMBS_DB_BACKEND_H
+#define DIGIKAM_THUMBS_DB_BACKEND_H
 
 // Local includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_THUMBNAILS_DATABASE_BACKEND_H
+#endif // DIGIKAM_THUMBS_DB_BACKEND_H

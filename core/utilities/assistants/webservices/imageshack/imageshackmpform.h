@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGESHACK_MPFORM_H
-#define IMAGESHACK_MPFORM_H
+#ifndef DIGIKAM_IMAGE_SHACK_MPFORM_H
+#define DIGIKAM_IMAGE_SHACK_MPFORM_H
 
 // Qt includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGESHACK_MPFORM_H
+#endif // DIGIKAM_IMAGE_SHACK_MPFORM_H

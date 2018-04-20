@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CORE_DATABASE_INFO_CONTAINERS_H
-#define DIGIKAM_CORE_DATABASE_INFO_CONTAINERS_H
+#ifndef DIGIKAM_CORE_DB_INFO_CONTAINERS_H
+#define DIGIKAM_CORE_DB_INFO_CONTAINERS_H
 
 // Qt includes
 
@@ -115,4 +115,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_CORE_DATABASE_INFO_CONTAINERS_H
+#endif // DIGIKAM_CORE_DB_INFO_CONTAINERS_H

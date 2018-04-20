@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPICC_H
-#define SETUPICC_H
+#ifndef DIGIKAM_SETUP_ICC_H
+#define DIGIKAM_SETUP_ICC_H
 
 // Qt includes
 
@@ -84,4 +84,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPICC_H
+#endif // DIGIKAM_SETUP_ICC_H

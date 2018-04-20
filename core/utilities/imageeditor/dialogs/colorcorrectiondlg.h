@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef COLOR_CORRECTION_DLG_H
-#define COLOR_CORRECTION_DLG_H
+#ifndef DIGIKAM_COLOR_CORRECTION_DLG_H
+#define DIGIKAM_COLOR_CORRECTION_DLG_H
 
 // Qt includes
 
@@ -105,4 +105,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COLOR_CORRECTION_DLG_H
+#endif // DIGIKAM_COLOR_CORRECTION_DLG_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CORE_DATABASE_WATCH_ADAPTOR_H
-#define DIGIKAM_CORE_DATABASE_WATCH_ADAPTOR_H
+#ifndef DIGIKAM_CORE_DB_WATCH_ADAPTOR_H
+#define DIGIKAM_CORE_DB_WATCH_ADAPTOR_H
 
 // Qt includes
 
@@ -84,4 +84,4 @@ Q_SIGNALS:
                       const Digikam::SearchChangeset& changeset);
 };
 
-#endif // DIGIKAM_CORE_DATABASE_WATCH_ADAPTOR_H
+#endif // DIGIKAM_CORE_DB_WATCH_ADAPTOR_H

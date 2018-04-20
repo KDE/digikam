@@ -21,6 +21,9 @@
  *
  * ============================================================ */
 
+#ifndef DIGIKAM_IMAGE_SHACK_WIDGET_P_H
+#define DIGIKAM_IMAGE_SHACK_WIDGET_P_H
+
 #include "imageshackwidget.h"
 
 // Qt includes
@@ -95,3 +98,5 @@ public:
 };
 
 } // namespace Digikam
+
+#endif // DIGIKAM_IMAGE_SHACK_WIDGET_P_H

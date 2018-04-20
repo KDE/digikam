@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_RAW_DECODER_WIDGET_H
-#define DIGIKAM_RAW_DECODER_WIDGET_H
+#ifndef DIGIKAM_DRAW_DECODER_WIDGET_H
+#define DIGIKAM_DRAW_DECODER_WIDGET_H
 
 // Qt includes
 
@@ -123,4 +123,4 @@ private:
 
 } // NameSpace Digikam
 
-#endif // DIGIKAM_RAW_DECODER_WIDGET_H
+#endif // DIGIKAM_DRAW_DECODER_WIDGET_H

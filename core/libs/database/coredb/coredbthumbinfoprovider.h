@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CORE_DATABASE_THUMBNAIL_INFO_PROVIDER_H
-#define DIGIKAM_CORE_DATABASE_THUMBNAIL_INFO_PROVIDER_H
+#ifndef DIGIKAM_CORE_DB_THUMBNAIL_INFO_PROVIDER_H
+#define DIGIKAM_CORE_DB_THUMBNAIL_INFO_PROVIDER_H
 
 // Local includes
 
@@ -50,4 +50,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_CORE_DATABASE_THUMBNAIL_INFO_PROVIDER_H
+#endif // DIGIKAM_CORE_DB_THUMBNAIL_INFO_PROVIDER_H

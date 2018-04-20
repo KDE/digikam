@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DATABASE_JOBS_MANAGER_H
-#define DIGIKAM_DATABASE_JOBS_MANAGER_H
+#ifndef DIGIKAM_DB_JOBS_MANAGER_H
+#define DIGIKAM_DB_JOBS_MANAGER_H
 
 // Qt includes
 
@@ -92,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DATABASE_JOBS_MANAGER_H
+#endif // DIGIKAM_DB_JOBS_MANAGER_H

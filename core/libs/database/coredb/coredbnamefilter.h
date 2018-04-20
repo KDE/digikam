@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CORE_DATABASE_NAME_FILTER_H
-#define DIGIKAM_CORE_DATABASE_NAME_FILTER_H
+#ifndef DIGIKAM_CORE_DB_NAME_FILTER_H
+#define DIGIKAM_CORE_DB_NAME_FILTER_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_CORE_DATABASE_NAME_FILTER_H
+#endif // DIGIKAM_CORE_DB_NAME_FILTER_H

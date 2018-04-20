@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DATABASE_ENGINE_ERROR_HANDLER_H
-#define DIGIKAM_DATABASE_ENGINE_ERROR_HANDLER_H
+#ifndef DIGIKAM_DB_ENGINE_ERROR_HANDLER_H
+#define DIGIKAM_DB_ENGINE_ERROR_HANDLER_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ public Q_SLOTS:
 
 Q_DECLARE_METATYPE(Digikam::DbEngineErrorAnswer*)
 
-#endif // DIGIKAM_DATABASE_ENGINE_ERROR_HANDLER_H
+#endif // DIGIKAM_DB_ENGINE_ERROR_HANDLER_H

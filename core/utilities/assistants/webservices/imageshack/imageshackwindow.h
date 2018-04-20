@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGESHACK_WINDOW_H
-#define IMAGESHACK_WINDOW_H
+#ifndef DIGIKAM_IMAGE_SHACK_WINDOW_H
+#define DIGIKAM_IMAGE_SHACK_WINDOW_H
 
 // Qt includes
 
@@ -97,4 +97,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGESHACK_WINDOW_H
+#endif // DIGIKAM_IMAGE_SHACK_WINDOW_H

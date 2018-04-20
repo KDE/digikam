@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FACE_DATABASE_OPERATION_GROUP_H
-#define DIGIKAM_FACE_DATABASE_OPERATION_GROUP_H
+#ifndef DIGIKAM_FACE_DB_OPERATION_GROUP_H
+#define DIGIKAM_FACE_DB_OPERATION_GROUP_H
 
 namespace Digikam
 {
@@ -79,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FACE_DATABASE_OPERATION_GROUP_H
+#endif // DIGIKAM_FACE_DB_OPERATION_GROUP_H

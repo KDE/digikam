@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DATABASE_ENGINE_BACKEND_H
-#define DIGIKAM_DATABASE_ENGINE_BACKEND_H
+#ifndef DIGIKAM_DB_ENGINE_BACKEND_H
+#define DIGIKAM_DB_ENGINE_BACKEND_H
 
 // Qt includes
 
@@ -500,4 +500,4 @@ private:
 
 Q_DECLARE_METATYPE(QSqlError)
 
-#endif // DIGIKAM_DATABASE_ENGINE_BACKEND_H
+#endif // DIGIKAM_DB_ENGINE_BACKEND_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CORE_DATABASE_OPERATION_GROUP_H
-#define DIGIKAM_CORE_DATABASE_OPERATION_GROUP_H
+#ifndef DIGIKAM_CORE_DB_OPERATION_GROUP_H
+#define DIGIKAM_CORE_DB_OPERATION_GROUP_H
 
 // Qt includes
 
@@ -86,4 +86,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_CORE_DATABASE_OPERATION_GROUP_H
+#endif // DIGIKAM_CORE_DB_OPERATION_GROUP_H

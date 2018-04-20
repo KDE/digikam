@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DATABASE_JOB_INFO_H
-#define DIGIKAM_DATABASE_JOB_INFO_H
+#ifndef DIGIKAM_DB_JOB_INFO_H
+#define DIGIKAM_DB_JOB_INFO_H
 
 // Qt includes
 
@@ -211,4 +211,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DATABASE_JOB_INFO_H
+#endif // DIGIKAM_DB_JOB_INFO_H

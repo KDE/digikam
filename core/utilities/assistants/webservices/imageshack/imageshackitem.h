@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGESHACK_ITEM_H
-#define IMAGESHACK_ITEM_H
+#ifndef DIGIKAM_IMAGE_SHACK_ITEM_H
+#define DIGIKAM_IMAGE_SHACK_ITEM_H
 
 namespace Digikam
 {
@@ -61,4 +61,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMAGESHACK_ITEM_H
+#endif // DIGIKAM_IMAGE_SHACK_ITEM_H

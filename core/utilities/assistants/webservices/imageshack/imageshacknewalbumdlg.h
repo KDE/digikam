@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGESHACK_NEWALBUMDLG_H
-#define IMAGESHACK_NEWALBUMDLG_H
+#ifndef DIGIKAM_IMAGE_SHACK_NEWALBUMDLG_H
+#define DIGIKAM_IMAGE_SHACK_NEWALBUMDLG_H
 
 // Qt includes
 
@@ -55,4 +55,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMAGESHACK_NEWALBUMDLG_H
+#endif // DIGIKAM_IMAGE_SHACK_NEWALBUMDLG_H

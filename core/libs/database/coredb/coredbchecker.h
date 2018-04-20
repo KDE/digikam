@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CORE_DATABASE_CHECKER_H
-#define DIGIKAM_CORE_DATABASE_CHECKER_H
+#ifndef DIGIKAM_CORE_DB_CHECKER_H
+#define DIGIKAM_CORE_DB_CHECKER_H
 
 // Local includes
 
@@ -51,4 +51,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_CORE_DATABASE_CHECKER_H
+#endif // DIGIKAM_CORE_DB_CHECKER_H

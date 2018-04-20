@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_SIMILARITY_DATABASE_H
-#define DIGIKAM_SIMILARITY_DATABASE_H
+#ifndef DIGIKAM_SIMILARITY_DB_H
+#define DIGIKAM_SIMILARITY_DB_H
 
 // Qt includes
 
@@ -241,4 +241,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_SIMILARITY_DATABASE_H
+#endif // DIGIKAM_SIMILARITY_DB_H

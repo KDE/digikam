@@ -45,7 +45,6 @@
 #include <QApplication>
 #include <QStyle>
 #include <QStandardPaths>
-#include <QIcon>
 #include <QMessageBox>
 #include <QDialogButtonBox>
 

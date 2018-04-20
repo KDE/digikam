@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONING_PROMPT_USER_SAVE_DIALOG_H
-#define VERSIONING_PROMPT_USER_SAVE_DIALOG_H
+#ifndef DIGIKAM_VERSIONING_PROMPT_USER_SAVE_DLG_H
+#define DIGIKAM_VERSIONING_PROMPT_USER_SAVE_DLG_H
 
 // Qt includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VERSIONING_PROMPT_USER_SAVE_DIALOG_H
+#endif // DIGIKAM_VERSIONING_PROMPT_USER_SAVE_DLG_H

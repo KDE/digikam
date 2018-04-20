@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_COREDB_ALBUM_INFO_H
-#define DIGIKAM_COREDB_ALBUM_INFO_H
+#ifndef DIGIKAM_CORE_DB_ALBUM_INFO_H
+#define DIGIKAM_CORE_DB_ALBUM_INFO_H
 
 // Qt includes
 
@@ -448,4 +448,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_COREDB_ALBUM_INFO_H
+#endif // DIGIKAM_CORE_DB_ALBUM_INFO_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGESHACK_TALKER_H
-#define IMAGESHACK_TALKER_H
+#ifndef DIGIKAM_IMAGE_SHACK_TALKER_H
+#define DIGIKAM_IMAGE_SHACK_TALKER_H
 
 // Qt includes
 
@@ -100,4 +100,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGESHACK_TALKER_H
+#endif // DIGIKAM_IMAGE_SHACK_TALKER_H

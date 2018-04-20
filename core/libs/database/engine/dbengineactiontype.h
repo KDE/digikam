@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DATABASE_ENGINE_ACTION_TYPE_H
-#define DIGIKAM_DATABASE_ENGINE_ACTION_TYPE_H
+#ifndef DIGIKAM_DB_ENGINE_ACTION_TYPE_H
+#define DIGIKAM_DB_ENGINE_ACTION_TYPE_H
 
 // Qt includes
 
@@ -85,4 +85,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::DbEngineActionType)
 
-#endif // DIGIKAM_DATABASE_ENGINE_ACTION_TYPE_H
+#endif // DIGIKAM_DB_ENGINE_ACTION_TYPE_H

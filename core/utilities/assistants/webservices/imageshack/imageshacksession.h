@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGESHACK_SESSION_H
-#define IMAGESHACK_SESSION_H
+#ifndef DIGIKAM_IMAGE_SHACK_SESSION_H
+#define DIGIKAM_IMAGE_SHACK_SESSION_H
 
 // Qt includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGESHACK_SESSION_H
+#endif // DIGIKAM_IMAGE_SHACK_SESSION_H

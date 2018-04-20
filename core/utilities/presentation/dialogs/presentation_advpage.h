@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_PRESENTION_ADVANCED_PAGE_H
-#define DIGIKAM_PRESENTION_ADVANCED_PAGE_H
+#ifndef DIGIKAM_PRESENTION_ADV_PAGE_H
+#define DIGIKAM_PRESENTION_ADV_PAGE_H
 
 // Local includes
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_PRESENTION_ADVANCED_PAGE_H
+#endif // DIGIKAM_PRESENTION_ADV_PAGE_H

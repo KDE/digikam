@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_THUMBNAILS_DATABASE_H
-#define DIGIKAM_THUMBNAILS_DATABASE_H
+#ifndef DIGIKAM_THUMBS_DB_H
+#define DIGIKAM_THUMBS_DB_H
 
 // Qt includes
 
@@ -154,4 +154,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_THUMBNAILS_DATABASE_H
+#endif // DIGIKAM_THUMBS_DB_H

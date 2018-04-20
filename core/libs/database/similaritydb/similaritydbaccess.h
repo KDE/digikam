@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_SIMILARITY_DATABASE_ACCESS_H
-#define DIGIKAM_SIMILARITY_DATABASE_ACCESS_H
+#ifndef DIGIKAM_SIMILARITY_DB_ACCESS_H
+#define DIGIKAM_SIMILARITY_DB_ACCESS_H
 
 // Local includes
 
@@ -111,4 +111,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_SIMILARITY_DATABASE_ACCESS_H
+#endif // DIGIKAM_SIMILARITY_DB_ACCESS_H

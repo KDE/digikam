@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_SIMILARITY_DATABASE_BACKEND_H
-#define DIGIKAM_SIMILARITY_DATABASE_BACKEND_H
+#ifndef DIGIKAM_SIMILARITY_DB_BACKEND_H
+#define DIGIKAM_SIMILARITY_DB_BACKEND_H
 
 // Local includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_SIMILARITY_DATABASE_BACKEND_H
+#endif // DIGIKAM_SIMILARITY_DB_BACKEND_H

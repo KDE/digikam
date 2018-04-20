@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CORE_DATABASE_H
-#define DIGIKAM_CORE_DATABASE_H
+#ifndef DIGIKAM_CORE_DB_H
+#define DIGIKAM_CORE_DB_H
 
 // Qt includes
 
@@ -1373,4 +1373,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_CORE_DATABASE_H
+#endif // DIGIKAM_CORE_DB_H

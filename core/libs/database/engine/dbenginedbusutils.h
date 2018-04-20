@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DATABASE_ENGINE_DBUS_UTILITIES_H
-#define DIGIKAM_DATABASE_ENGINE_DBUS_UTILITIES_H
+#ifndef DIGIKAM_DB_ENGINE_DBUS_UTILITIES_H
+#define DIGIKAM_DB_ENGINE_DBUS_UTILITIES_H
 
 class QDBusArgument;
 
@@ -41,4 +41,4 @@ inline const QDBusArgument& operator>>(const QDBusArgument& argument, x& changes
     return argument;                                                                \
 }
 
-#endif // DIGIKAM_DATABASE_ENGINE_DBUS_UTILITIES_H
+#endif // DIGIKAM_DB_ENGINE_DBUS_UTILITIES_H

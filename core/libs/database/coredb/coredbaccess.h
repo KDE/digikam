@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CORE_DATABASE_ACCESS_H
-#define DIGIKAM_CORE_DATABASE_ACCESS_H
+#ifndef DIGIKAM_CORE_DB_ACCESS_H
+#define DIGIKAM_CORE_DB_ACCESS_H
 
 // Local includes
 
@@ -172,4 +172,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_CORE_DATABASE_ACCESS_H
+#endif // DIGIKAM_CORE_DB_ACCESS_H

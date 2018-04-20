@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGESHACK_WIDGET_H
-#define IMAGESHACK_WIDGET_H
+#ifndef DIGIKAM_IMAGE_SHACK_WIDGET_H
+#define DIGIKAM_IMAGE_SHACK_WIDGET_H
 
 // Qt includes
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGESHACK_WIDGET_H
+#endif // DIGIKAM_IMAGE_SHACK_WIDGET_H
