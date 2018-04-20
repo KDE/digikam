@@ -30,7 +30,6 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QPushButton>
 #include <QRadioButton>
 #include <QTreeWidget>
 #include <QUrl>
@@ -62,8 +61,8 @@ class CameraSelection::Private
 {
 public:
 
-    explicit Private() :
-        buttons(0),
+    explicit Private()
+      : buttons(0),
         portButtonGroup(0),
         usbButton(0),
         serialButton(0),

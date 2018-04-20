@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef RENAMECUSTOMIZER_H
-#define RENAMECUSTOMIZER_H
+#ifndef DIGIKAM_RENAME_CUSTOMIZER_H
+#define DIGIKAM_RENAME_CUSTOMIZER_H
 
 // Qt includes
 
@@ -55,7 +55,9 @@ public:
         LOWER
     };
 
-    RenameCustomizer(QWidget* const parent, const QString& cameraTitle);
+public:
+    
+    explicit RenameCustomizer(QWidget* const parent, const QString& cameraTitle);
     ~RenameCustomizer();
 
     void    setUseDefault(bool val);
@@ -94,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* RENAMECUSTOMIZER_H */
+#endif // DIGIKAM_RENAME_CUSTOMIZER_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERATYPE_H
-#define CAMERATYPE_H
+#ifndef DIGIKAM_CAMERA_TYPE_H
+#define DIGIKAM_CAMERA_TYPE_H
 
 // Qt includes
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CAMERATYPE_H */
+#endif // DIGIKAM_CAMERA_TYPE_H

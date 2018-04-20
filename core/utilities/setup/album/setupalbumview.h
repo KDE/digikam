@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPALBUMVIEW_H
-#define SETUPALBUMVIEW_H
+#ifndef DIGIKAM_SETUP_ALBUM_VIEW_H
+#define DIGIKAM_SETUP_ALBUM_VIEW_H
 
 // Qt includes
 
@@ -73,4 +73,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPALBUMVIEW_H
+#endif // DIGIKAM_SETUP_ALBUM_VIEW_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DNGCONVERTSETTINGS_H
-#define DNGCONVERTSETTINGS_H
+#ifndef DIGIKAM_DNG_CONVERT_SETTINGS_H
+#define DIGIKAM_DNG_CONVERT_SETTINGS_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DNGCONVERTSETTINGS_H */
+#endif // DIGIKAM_DNG_CONVERT_SETTINGS_H

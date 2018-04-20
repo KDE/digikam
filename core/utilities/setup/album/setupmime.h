@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPMIME_H
-#define SETUPMIME_H
+#ifndef DIGIKAM_SETUP_MIME_H
+#define DIGIKAM_SETUP_MIME_H
 
 // Qt includes
 
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPMIME_H
+#endif // DIGIKAM_SETUP_MIME_H

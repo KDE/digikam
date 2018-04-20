@@ -33,7 +33,6 @@
 #include <QLabel>
 #include <QRadioButton>
 #include <QVBoxLayout>
-#include <QApplication>
 #include <QStyle>
 #include <QComboBox>
 #include <QApplication>

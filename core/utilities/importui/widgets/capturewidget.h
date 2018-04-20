@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CAPTUREWIDGET_H
-#define CAPTUREWIDGET_H
+#ifndef DIGIKAM_CAPTURE_WIDGET_H
+#define DIGIKAM_CAPTURE_WIDGET_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CAPTUREWIDGET_H */
+#endif // DIGIKAM_CAPTURE_WIDGET_H

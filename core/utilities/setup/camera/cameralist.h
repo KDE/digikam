@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERALIST_H
-#define CAMERALIST_H
+#ifndef DIGIKAM_CAMERA_LIST_H
+#define DIGIKAM_CAMERA_LIST_H
 
 // Qt includes
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CAMERALIST_H */
+#endif // DIGIKAM_CAMERA_LIST_H 

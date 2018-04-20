@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERASELECTION_H
-#define CAMERASELECTION_H
+#ifndef DIGIKAM_CAMERA_SELECTION_H
+#define DIGIKAM_CAMERA_SELECTION_H
 
 // Qt includes
 
@@ -87,4 +87,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CAMERASELECTION_H
+#endif // DIGIKAM_CAMERA_SELECTION_H

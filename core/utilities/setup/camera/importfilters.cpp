@@ -28,7 +28,6 @@
 
 #include <QCheckBox>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QLineEdit>
 #include <QLabel>
 #include <QToolButton>
@@ -93,11 +92,11 @@ ImportFilters::ImportFilters(QWidget* const parent)
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
-    QWidget* const page = new QWidget(this);
-    QVBoxLayout* const verticalLayout   = new QVBoxLayout(page);
-    QLabel* label                       = 0;
-    QHBoxLayout* horizontalLayout       = 0;
-    QSpacerItem* spacer                 = 0;
+    QWidget* const page               = new QWidget(this);
+    QVBoxLayout* const verticalLayout = new QVBoxLayout(page);
+    QLabel* label                     = 0;
+    QHBoxLayout* horizontalLayout     = 0;
+    QSpacerItem* spacer               = 0;
 
     label            = new QLabel(page);
     label->setText(i18n("Name:"));

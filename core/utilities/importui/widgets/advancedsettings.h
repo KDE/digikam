@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ADVANCEDSETTINGS_H
-#define ADVANCEDSETTINGS_H
+#ifndef DIGIKAM_ADVANCED_SETTINGS_H
+#define DIGIKAM_ADVANCED_SETTINGS_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ADVANCEDSETTINGS_H */
+#endif // DIGIKAM_ADVANCED_SETTINGS_H

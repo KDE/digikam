@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMCUSTOMIZER_H
-#define ALBUMCUSTOMIZER_H
+#ifndef DIGIKAM_ALBUM_CUSTOMIZER_H
+#define DIGIKAM_ALBUM_CUSTOMIZER_H
 
 // Qt includes
 
@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ALBUMCUSTOMIZER_H */
+#endif // DIGIKAM_ALBUM_CUSTOMIZER_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTCONTEXTMENU_H
-#define IMPORTCONTEXTMENU_H
+#ifndef DIGIKAM_IMPORT_CONTEXT_MENU_H
+#define DIGIKAM_IMPORT_CONTEXT_MENU_H
 
 // Qt includes
 
@@ -251,4 +251,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTIMPORTCONTEXTMENU_H
+#endif // DIGIKAM_IMPORT_CONTEXT_MENU_H

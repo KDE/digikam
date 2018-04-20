@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FREESPACEWIDGET_H
-#define FREESPACEWIDGET_H
+#ifndef DIGIKAM_FREE_SPACE_WIDGET_H
+#define DIGIKAM_FREE_SPACE_WIDGET_H
 
 // Qt includes
 
@@ -47,7 +47,7 @@ public:
 
 public:
 
-    FreeSpaceWidget(QWidget* const parent, int width);
+    explicit FreeSpaceWidget(QWidget* const parent, int width);
     ~FreeSpaceWidget();
 
     void          setEstimatedDSizeKb(unsigned long dSize);
@@ -88,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FREESPACEWIDGET_H */
+#endif // DIGIKAM_FREE_SPACE_WIDGET_H

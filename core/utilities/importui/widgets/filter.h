@@ -22,25 +22,29 @@
  *
  * ============================================================ */
 
-#ifndef FILTER_H
-#define FILTER_H
+#ifndef DIGIKAM_FILTER_H
+#define DIGIKAM_FILTER_H
 
 // Qt includes
 
+#include <QHash>
 #include <QString>
+#include <QList>
 #include <QStringList>
 #include <QRegExp>
 
+// Local includes
+
+#include "camiteminfo.h"
+
 namespace Digikam
 {
-
-class CamItemInfo;
 
 class Filter
 {
 public:
 
-    Filter();
+    explicit Filter();
     ~Filter();
 
     QString toString();
@@ -67,4 +71,4 @@ typedef QList<Filter*> FilterList;
 
 Q_DECLARE_METATYPE(Digikam::Filter*)
 
-#endif /* FILTER_H */
+#endif // DIGIKAM_FILTER_H

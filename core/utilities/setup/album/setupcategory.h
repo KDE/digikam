@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPCATEGORY_H
-#define SETUPCATEGORY_H
+#ifndef DIGIKAM_SETUP_CATEGORY_H
+#define DIGIKAM_SETUP_CATEGORY_H
 
 // Qt includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPCATEGORY_H
+#endif // DIGIKAM_SETUP_CATEGORY_H

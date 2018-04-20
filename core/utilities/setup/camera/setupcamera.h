@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPCAMERA_H
-#define SETUPCAMERA_H
+#ifndef DIGIKAM_SETUP_CAMERA_H
+#define DIGIKAM_SETUP_CAMERA_H
 
 // Qt includes
 
@@ -121,4 +121,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SETUPCAMERA_H
+#endif // DIGIKAM_SETUP_CAMERA_H

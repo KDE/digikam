@@ -22,15 +22,12 @@
  *
  * ============================================================ */
 
+#include "filter.h"
+
 // Qt includes
 
 #include <QMimeType>
 #include <QMimeDatabase>
-
-// Local includes
-
-#include "camiteminfo.h"
-#include "filter.h"
 
 namespace Digikam
 {

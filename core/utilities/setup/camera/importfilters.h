@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTFILTERS_H
-#define IMPORTFILTERS_H
+#ifndef DIGIKAM_IMPORT_FILTERS_H
+#define DIGIKAM_IMPORT_FILTERS_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMPORTFILTERS_H */
+#endif // DIGIKAM_IMPORT_FILTERS_H

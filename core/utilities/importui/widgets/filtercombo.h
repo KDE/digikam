@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILTERCOMBOBOX_H
-#define FILTERCOMBOBOX_H
+#ifndef DIGIKAM_FILTER_COMBO_H
+#define DIGIKAM_FILTER_COMBO_H
 
 // Qt includes
 
@@ -73,4 +73,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FILTERCOMBOBOX_H */
+#endif // DIGIKAM_FILTER_COMBO_H
