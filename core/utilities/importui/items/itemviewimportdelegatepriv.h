@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ITEMVIEWIMPORTDELEGATEPRIV_H
-#define ITEMVIEWIMPORTDELEGATEPRIV_H
+#ifndef DIGIKAM_ITEM_VIEW_IMPORT_DELEGATE_PRIV_H
+#define DIGIKAM_ITEM_VIEW_IMPORT_DELEGATE_PRIV_H
 
 // Qt includes
 
@@ -47,7 +47,7 @@ class ItemViewImportDelegatePrivate
 {
 public:
 
-    ItemViewImportDelegatePrivate();
+    explicit ItemViewImportDelegatePrivate();
     virtual ~ItemViewImportDelegatePrivate() {}
 
     void init(ItemViewImportDelegate* const _q);
@@ -94,4 +94,4 @@ public:
 
 } // namespace Digikam
 
-#endif // ITEMVIEWIMPORTDELEGATEPRIV_H
+#endif // DIGIKAM_ITEM_VIEW_IMPORT_DELEGATE_PRIV_H

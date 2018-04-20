@@ -31,7 +31,6 @@
 
 // Qt includes
 
-#include <QApplication>
 #include <QCache>
 #include <QPainter>
 #include <QRect>

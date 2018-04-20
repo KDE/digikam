@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERAFOLDERITEM_H
-#define CAMERAFOLDERITEM_H
+#ifndef DIGIKAM_CAMERA_FOLDER_ITEM_H
+#define DIGIKAM_CAMERA_FOLDER_ITEM_H
 
 // Qt includes
 
@@ -40,10 +40,12 @@ class CameraFolderItem : public QTreeWidgetItem
 
 public:
 
-    CameraFolderItem(QTreeWidget* const parent, const QString& name,
+    CameraFolderItem(QTreeWidget* const parent,
+                     const QString& name,
                      const QIcon &icon = QIcon::fromTheme(QLatin1String("folder")));
 
-    CameraFolderItem(QTreeWidgetItem* const parent, const QString& folderName,
+    CameraFolderItem(QTreeWidgetItem* const parent,
+                     const QString& folderName,
                      const QString& folderPath,
                      const QIcon& icon = QIcon::fromTheme(QLatin1String("folder")));
 
@@ -64,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CAMERAFOLDERITEM_H */
+#endif // DIGIKAM_CAMERA_FOLDER_ITEM_H

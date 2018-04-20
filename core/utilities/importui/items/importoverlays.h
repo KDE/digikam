@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTOVERLAYS_H
-#define IMPORTOVERLAYS_H
+#ifndef DIGIKAM_IMPORT_OVERLAYS_H
+#define DIGIKAM_IMPORT_OVERLAYS_H
 
 // Qt includes
 
@@ -183,7 +183,7 @@ class ImportRotateOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    ImportRotateOverlayButton(ImportRotateOverlayDirection dir, QAbstractItemView* const parentView);
+    explicit ImportRotateOverlayButton(ImportRotateOverlayDirection dir, QAbstractItemView* const parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -204,7 +204,7 @@ class ImportRotateOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    ImportRotateOverlay(ImportRotateOverlayDirection dir, QObject* const parent);
+    explicit ImportRotateOverlay(ImportRotateOverlayDirection dir, QObject* const parent);
     virtual void setActive(bool active);
 
     ImportRotateOverlayDirection direction() const     { return m_direction;                                               }
@@ -237,4 +237,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTOVERLAYS_H
+#endif // DIGIKAM_IMPORT_OVERLAYS_H

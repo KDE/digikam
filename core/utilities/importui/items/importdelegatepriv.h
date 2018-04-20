@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTDELEGATEPRIV_H
-#define IMPORTDELEGATEPRIV_H
+#ifndef DIGIKAM_IMPORT_DELEGATE_PRIV_H
+#define DIGIKAM_IMPORT_DELEGATE_PRIV_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class ImportDelegate::ImportDelegatePrivate : public ItemViewImportDelegatePriva
 {
 public:
 
-    ImportDelegatePrivate()
+    explicit ImportDelegatePrivate()
     {
         categoryDrawer      = 0;
         contentWidth        = 0;
@@ -99,7 +99,7 @@ class ImportThumbnailDelegatePrivate : public ImportDelegate::ImportDelegatePriv
 {
 public:
 
-    ImportThumbnailDelegatePrivate()
+    explicit ImportThumbnailDelegatePrivate()
     {
         flow                = QListView::LeftToRight;
 
@@ -125,9 +125,7 @@ class ImportNormalDelegatePrivate : public ImportDelegate::ImportDelegatePrivate
 {
 public:
 
-    ImportNormalDelegatePrivate()
-    {
-    }
+    explicit ImportNormalDelegatePrivate() {};
     virtual ~ImportNormalDelegatePrivate();
 
     void init(ImportNormalDelegate* const q, ImportCategorizedView* const parent);
@@ -135,4 +133,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMPORTDELEGATEPRIV_H
+#endif // DIGIKAM_IMPORT_DELEGATE_PRIV_H

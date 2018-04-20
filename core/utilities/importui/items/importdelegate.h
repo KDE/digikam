@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTDELEGATE_H
-#define IMPORTDELEGATE_H
+#ifndef DIGIKAM_IMPORT_DELEGATE_H
+#define DIGIKAM_IMPORT_DELEGATE_H
 
 #include <QtGlobal>
 #include <QListView>
@@ -188,4 +188,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTDELEGATE_H
+#endif // DIGIKAM_IMPORT_DELEGATE_H

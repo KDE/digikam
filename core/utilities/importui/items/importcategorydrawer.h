@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTCATEGORYDRAWER_H
-#define IMPORTCATEGORYDRAWER_H
+#ifndef DIGIKAM_IMPORT_CATEGORY_DRAWER_H
+#define DIGIKAM_IMPORT_CATEGORY_DRAWER_H
 
 // Qt includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTCATEGORYDRAWER_H
+#endif // DIGIKAM_IMPORT_CATEGORY_DRAWER_H
