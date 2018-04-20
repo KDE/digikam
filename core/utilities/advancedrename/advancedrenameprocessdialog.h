@@ -58,6 +58,7 @@ private:
     void abort();
     void complete();
     void processOne();
+    void getNextThumbnail();
 
 protected:
 
