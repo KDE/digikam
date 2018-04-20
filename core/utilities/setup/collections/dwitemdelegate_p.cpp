@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-#include "dwitemdelegate.h"
 #include "dwitemdelegate_p.h"
 
 // Qt includes

@@ -31,6 +31,10 @@
 #include <QObject>
 #include <QItemSelectionModel>
 
+// Local includes
+
+#include "dwitemdelegate.h"
+
 namespace Digikam
 {
 

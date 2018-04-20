@@ -44,6 +44,7 @@
 // Local includes
 
 #include "dwitemdelegatepool.h"
+#include "dwitemdelegate_p.h"
 
 namespace Digikam
 {
