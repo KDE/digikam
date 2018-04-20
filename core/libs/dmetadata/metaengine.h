@@ -480,7 +480,7 @@ public:
     /** Return a QString copy of Exif user comments. Return a null string if user comments cannot
         be found.
      */
-    QString getExifComment() const;
+    QString getExifComment(bool readDescription = true) const;
 
     /** Set the Exif user comments from image. Look Exif specification for more details about this tag.
         Return true if Exif user comments have been changed in metadata.

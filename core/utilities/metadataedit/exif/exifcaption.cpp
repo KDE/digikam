@@ -335,7 +335,7 @@ void EXIFCaption::readMetadata(QByteArray& exifData)
 
     d->userCommentEdit->clear();
     d->userCommentCheck->setChecked(false);
-    data = meta.getExifComment();
+    data = meta.getExifComment(false);
 
     if (!data.isNull())
     {

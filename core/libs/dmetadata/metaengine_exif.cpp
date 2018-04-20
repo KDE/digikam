@@ -237,7 +237,7 @@ MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifK
     return MetaDataMap();
 }
 
-QString MetaEngine::getExifComment() const
+QString MetaEngine::getExifComment(bool readDescription) const
 {
     try
     {
@@ -256,24 +256,27 @@ QString MetaEngine::getExifComment() const
                     return exifComment;
             }
 
-            Exiv2::ExifKey key2("Exif.Image.ImageDescription");
-            Exiv2::ExifData::const_iterator it2 = exifData.findKey(key2);
-
-            if (it2 != exifData.end())
+            if (readDescription)
             {
-                QString exifComment = d->convertCommentValue(*it2);
+                Exiv2::ExifKey key2("Exif.Image.ImageDescription");
+                Exiv2::ExifData::const_iterator it2 = exifData.findKey(key2);
 
-                // Some cameras fill in nonsense default values
-                QStringList blackList;
-                blackList << QString::fromLatin1("SONY DSC"); // + whitespace
-                blackList << QString::fromLatin1("OLYMPUS DIGITAL CAMERA");
-                blackList << QString::fromLatin1("MINOLTA DIGITAL CAMERA");
+                if (it2 != exifData.end())
+                {
+                    QString exifComment = d->convertCommentValue(*it2);
 
-                QString trimmedComment = exifComment.trimmed();
+                    // Some cameras fill in nonsense default values
+                    QStringList blackList;
+                    blackList << QString::fromLatin1("SONY DSC"); // + whitespace
+                    blackList << QString::fromLatin1("OLYMPUS DIGITAL CAMERA");
+                    blackList << QString::fromLatin1("MINOLTA DIGITAL CAMERA");
 
-                // some cameras fill the UserComment with whitespace
-                if (!exifComment.isEmpty() && !trimmedComment.isEmpty() && !blackList.contains(trimmedComment))
-                    return exifComment;
+                    QString trimmedComment = exifComment.trimmed();
+
+                    // some cameras fill the UserComment with whitespace
+                    if (!exifComment.isEmpty() && !trimmedComment.isEmpty() && !blackList.contains(trimmedComment))
+                        return exifComment;
+                }
             }
         }
     }
