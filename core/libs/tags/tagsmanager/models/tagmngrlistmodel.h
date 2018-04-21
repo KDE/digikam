@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAG_MNGR_LIST_MODEL_H
-#define TAG_MNGR_LIST_MODEL_H
+#ifndef DIGIKAM_TAG_MNGR_LIST_MODEL_H
+#define DIGIKAM_TAG_MNGR_LIST_MODEL_H
 
 // Qt includes
 
@@ -98,4 +98,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAG_MNGR_LIST_MODEL_H
+#endif // DIGIKAM_TAG_MNGR_LIST_MODEL_H

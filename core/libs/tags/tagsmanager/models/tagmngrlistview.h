@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TAG_MNGR_LIST_VIEW_H
-#define TAG_MNGR_LIST_VIEW_H
+#ifndef DIGIKAM_TAG_MNGR_LIST_VIEW_H
+#define DIGIKAM_TAG_MNGR_LIST_VIEW_H
 
 // Qt includes
 
@@ -71,4 +71,4 @@ public Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // TAG_MNGR_LIST_VIEW_H
+#endif // DIGIKAM_TAG_MNGR_LIST_VIEW_H

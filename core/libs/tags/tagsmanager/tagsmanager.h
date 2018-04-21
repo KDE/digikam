@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGS_MANAGER_H
-#define TAGS_MANAGER_H
+#ifndef DIGIKAM_TAGS_MANAGER_H
+#define DIGIKAM_TAGS_MANAGER_H
 
 // Qt includes
 
@@ -178,4 +178,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAGS_MANAGER_H
+#endif // DIGIKAM_TAGS_MANAGER_H

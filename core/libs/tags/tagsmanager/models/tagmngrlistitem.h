@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAG_MNGR_LIST_ITEM_H
-#define TAG_MNGR_LIST_ITEM_H
+#ifndef DIGIKAM_TAG_MNGR_LIST_ITEM_H
+#define DIGIKAM_TAG_MNGR_LIST_ITEM_H
 
 // Qt includes
 
@@ -77,4 +77,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAG_MNGR_LIST_ITEM_H
+#endif // DIGIKAM_TAG_MNGR_LIST_ITEM_H

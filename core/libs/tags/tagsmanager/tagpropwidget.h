@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TAG_PROP_WIDGET_H
-#define TAG_PROP_WIDGET_H
+#ifndef DIGIKAM_TAG_PROP_WIDGET_H
+#define DIGIKAM_TAG_PROP_WIDGET_H
 
 // Qt includes
 
@@ -92,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAG_PROP_WIDGET
+#endif // DIGIKAM_TAG_PROP_WIDGET_H

@@ -370,8 +370,8 @@ void TagsManager::slotDeleteAction()
                                                        "the subtags. "
                                                        "Do you want to continue?",
                                                        tagsWithChildren.count(),
-                                                       JoinTagNamesToList(tagsWithChildren),
-                                                QMessageBox::Yes | QMessageBox::Cancel));
+                                                       JoinTagNamesToList(tagsWithChildren)),
+                                                QMessageBox::Yes | QMessageBox::Cancel);
 
         if (result != QMessageBox::Yes)
         {
