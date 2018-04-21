@@ -9,7 +9,3 @@ add_subdirectory(addressbook)
 if(KF5FileMetaData_FOUND)
     add_subdirectory(filesindexer)
 endif()
-
-if(KF5Sane_FOUND)
-    add_subdirectory(dscanner)
-endif()
