@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FT_EXPORT_WINDOW_H
-#define FT_EXPORT_WINDOW_H
+#ifndef DIGIKAM_FT_EXPORT_WINDOW_H
+#define DIGIKAM_FT_EXPORT_WINDOW_H
 
 // Qt includes
 
@@ -137,4 +137,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FT_EXPORT_WINDOW_H
+#endif // DIGIKAM_FT_EXPORT_WINDOW_H

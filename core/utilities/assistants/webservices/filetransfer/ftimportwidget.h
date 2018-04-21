@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FT_IMPORT_WIDGET_H
-#define FT_IMPORT_WIDGET_H
+#ifndef DIGIKAM_FT_IMPORT_WIDGET_H
+#define DIGIKAM_FT_IMPORT_WIDGET_H
 
 // Qt includes
 
@@ -94,4 +94,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FT_IMPORT_WIDGET_H
+#endif // DIGIKAM_FT_IMPORT_WIDGET_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_WIDGET_H
-#define MEDIAWIKI_WIDGET_H
+#ifndef DIGIKAM_MEDIAWIKI_WIDGET_H
+#define DIGIKAM_MEDIAWIKI_WIDGET_H
 
 // Qt includes
 
@@ -132,4 +132,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MEDIAWIKI_WIDGET_H
+#endif // DIGIKAM_MEDIAWIKI_WIDGET_H

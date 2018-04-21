@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FLICKR_WIDGET_H
-#define FLICKR_WIDGET_H
+#ifndef DIGIKAM_FLICKR_WIDGET_H
+#define DIGIKAM_FLICKR_WIDGET_H
 
 // Qt includes
 
@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FLICKR_WIDGET_H
+#endif // DIGIKAM_FLICKR_WIDGET_H

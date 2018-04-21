@@ -25,8 +25,8 @@
  * for details
  */
 
-#ifndef YF_AUTH_H
-#define YF_AUTH_H
+#ifndef DIGIKAM_YF_AUTH_H
+#define DIGIKAM_YF_AUTH_H
 
 // Qt includes
 
@@ -41,4 +41,4 @@ QString makeCredentials(const QString& publicKey,
 
 } // namespace YFAuth
 
-#endif // YF_AUTH_H
+#endif // DIGIKAM_YF_AUTH_H

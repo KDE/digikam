@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef YF_NEW_ALBUM_DLG_H
-#define YF_NEW_ALBUM_DLG_H
+#ifndef DIGIKAM_YF_NEW_ALBUM_DLG_H
+#define DIGIKAM_YF_NEW_ALBUM_DLG_H
 
 // Local includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif // YF_NEW_ALBUM_DLG_H
+#endif // DIGIKAM_YF_NEW_ALBUM_DLG_H

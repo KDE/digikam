@@ -31,9 +31,7 @@
 
 #include <QButtonGroup>
 #include <QCheckBox>
-#include <QComboBox>
 #include <QGridLayout>
-#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMap>
@@ -48,7 +46,6 @@
 #include <QPushButton>
 #include <QTextEdit>
 #include <QLineEdit>
-#include <QComboBox>
 #include <QGroupBox>
 
 // KDE includes

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef YF_PHOTO_H
-#define YF_PHOTO_H
+#ifndef DIGIKAM_YF_PHOTO_H
+#define DIGIKAM_YF_PHOTO_H
 
 // Qt includes
 
@@ -231,4 +231,4 @@ QDebug operator<<(QDebug d, const YFPhoto& p);
 
 } // namespace Digikam
 
-#endif // YF_PHOTO_H
+#endif // DIGIKAM_YF_PHOTO_H

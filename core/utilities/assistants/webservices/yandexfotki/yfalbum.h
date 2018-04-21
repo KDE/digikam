@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef YF_ALBUM_H
-#define YF_ALBUM_H
+#ifndef DIGIKAM_YF_ALBUM_H
+#define DIGIKAM_YF_ALBUM_H
 
 // Qt includes
 
@@ -146,4 +146,4 @@ QDebug operator<<(QDebug d, const YandexFotkiAlbum& p);
 
 } // namespace Digikam
 
-#endif // YF_ALBUM_H
+#endif // DIGIKAM_YF_ALBUM_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAJCE_SESSION_H
-#define RAJCE_SESSION_H
+#ifndef DIGIKAM_RAJCE_SESSION_H
+#define DIGIKAM_RAJCE_SESSION_H
 
 // Qt includes
 
@@ -126,4 +126,4 @@ private:
 
 QDebug operator<<(QDebug d, const Digikam::RajceSession& s);
 
-#endif // RAJCE_SESSION_H
+#endif // DIGIKAM_RAJCE_SESSION_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FLICKR_NEW_ALBUM_DLG_H
-#define FLICKR_NEW_ALBUM_DLG_H
+#ifndef DIGIKAM_FLICKR_NEW_ALBUM_DLG_H
+#define DIGIKAM_FLICKR_NEW_ALBUM_DLG_H
 
 // Local includes
 
@@ -48,4 +48,4 @@ public:
 
 } // namespace Digikam
 
-#endif // FLICKR_NEW_ALBUM_DLG_H
+#endif // DIGIKAM_FLICKR_NEW_ALBUM_DLG_H

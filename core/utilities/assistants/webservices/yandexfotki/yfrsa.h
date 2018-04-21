@@ -30,8 +30,8 @@
  *
  * ============================================================ */
 
-#ifndef YF_RSA_H
-#define YF_RSA_H
+#ifndef DIGIKAM_YF_RSA_H
+#define DIGIKAM_YF_RSA_H
 
 // C++ includes
 
@@ -154,4 +154,4 @@ public:
 
 } // namespace YFAuth
 
-#endif // YF_RSA_H
+#endif // DIGIKAM_YF_RSA_H

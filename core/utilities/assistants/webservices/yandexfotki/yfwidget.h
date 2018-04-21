@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef YF_WIDGET_H
-#define YF_WIDGET_H
+#ifndef DIGIKAM_YF_WIDGET_H
+#define DIGIKAM_YF_WIDGET_H
 
 // Qt includes
 
@@ -77,4 +77,4 @@ private:
 
 } // namespace Digikam
 
-#endif // YF_WIDGET_H
+#endif // DIGIKAM_YF_WIDGET_H

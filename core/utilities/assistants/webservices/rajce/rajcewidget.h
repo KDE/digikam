@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAJCE_WIDGET_H
-#define RAJCE_WIDGET_H
+#ifndef DIGIKAM_RAJCE_WIDGET_H
+#define DIGIKAM_RAJCE_WIDGET_H
 
 // Qt includes
 
@@ -95,4 +95,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAJCE_WIDGET_H
+#endif // DIGIKAM_RAJCE_WIDGET_H

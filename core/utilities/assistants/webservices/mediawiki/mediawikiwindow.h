@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_WINDOW_H
-#define MEDIAWIKI_WINDOW_H
+#ifndef DIGIKAM_MEDIAWIKI_WINDOW_H
+#define DIGIKAM_MEDIAWIKI_WINDOW_H
 
 // Local includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MEDIAWIKI_WINDOW_H
+#endif // DIGIKAM_MEDIAWIKI_WINDOW_H

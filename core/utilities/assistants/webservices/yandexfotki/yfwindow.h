@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef YF_WINDOW_H
-#define YF_WINDOW_H
+#ifndef DIGIKAM_YF_WINDOW_H
+#define DIGIKAM_YF_WINDOW_H
 
 // Qt includes
 
@@ -109,4 +109,4 @@ private:
 
 } // namespace Digikam
 
-#endif // YF_WINDOW_H
+#endif // DIGIKAM_YF_WINDOW_H

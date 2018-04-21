@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAJCE_TALKER_H
-#define RAJCE_TALKER_H
+#ifndef DIGIKAM_RAJCE_TALKER_H
+#define DIGIKAM_RAJCE_TALKER_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAJCE_TALKER_H
+#endif // DIGIKAM_RAJCE_TALKER_H

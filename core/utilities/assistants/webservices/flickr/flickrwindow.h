@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FLICKR_WINDOW_H
-#define FLICKR_WINDOW_H
+#ifndef DIGIKAM_FLICKR_WINDOW_H
+#define DIGIKAM_FLICKR_WINDOW_H
 
 // Qt includes
 
@@ -106,4 +106,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FLICKR_WINDOW_H
+#endif // DIGIKAM_FLICKR_WINDOW_H

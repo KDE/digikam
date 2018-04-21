@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAJCE_WINDOW_H
-#define RAJCE_WINDOW_H
+#ifndef DIGIKAM_RAJCE_WINDOW_H
+#define DIGIKAM_RAJCE_WINDOW_H
 
 // Local includes
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAJCE_WINDOW_H
+#endif // DIGIKAM_RAJCE_WINDOW_H

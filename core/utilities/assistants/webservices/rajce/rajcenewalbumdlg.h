@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAJCE_NEW_ALBUM_DLG_H
-#define RAJCE_NEW_ALBUM_DLG_H
+#ifndef DIGIKAM_RAJCE_NEW_ALBUM_DLG_H
+#define DIGIKAM_RAJCE_NEW_ALBUM_DLG_H
 
 // Local includes
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAJCE_NEW_ALBUM_DLG_H
+#endif // DIGIKAM_RAJCE_NEW_ALBUM_DLG_H

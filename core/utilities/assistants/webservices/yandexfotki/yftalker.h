@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef YF_TALKER_H
-#define YF_TALKER_H
+#ifndef DIGIKAM_YF_TALKER_H
+#define DIGIKAM_YF_TALKER_H
 
 // Qt includes
 
@@ -195,4 +195,4 @@ private:
 
 } // namespace Digikam
 
-#endif // YF_TALKER_H
+#endif // DIGIKAM_YF_TALKER_H

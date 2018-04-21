@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FLICKR_LIST_H
-#define FLICKR_LIST_H
+#ifndef DIGIKAM_FLICKR_LIST_H
+#define DIGIKAM_FLICKR_LIST_H
 
 // Qt includes
 
@@ -162,4 +162,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FLICKR_LIST_H
+#endif // DIGIKAM_FLICKR_LIST_H

@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QFile>
-#include <QUrl>
 #include <QApplication>
 #include <QUrl>
 #include <QMimeDatabase>

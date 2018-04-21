@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAWIKI_TALKER_H
-#define MEDIAWIKI_TALKER_H
+#ifndef DIGIKAM_MEDIAWIKI_TALKER_H
+#define DIGIKAM_MEDIAWIKI_TALKER_H
 
 // Qt includes
 
@@ -84,4 +84,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MEDIAWIKI_TALKER_H
+#endif // DIGIKAM_MEDIAWIKI_TALKER_H

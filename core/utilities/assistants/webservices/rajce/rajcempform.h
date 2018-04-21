@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAJCE_MPFORM_H
-#define RAJCE_MPFORM_H
+#ifndef DIGIKAM_RAJCE_MPFORM_H
+#define DIGIKAM_RAJCE_MPFORM_H
 
 // Qt includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAJCE_MPFORM_H
+#endif // DIGIKAM_RAJCE_MPFORM_H

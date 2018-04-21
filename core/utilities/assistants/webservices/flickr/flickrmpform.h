@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FLICKR_MPFORM_H
-#define FLICKR_MPFORM_H
+#ifndef DIGIKAM_FLICKR_MPFORM_H
+#define DIGIKAM_FLICKR_MPFORM_H
 
 // Qt includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FLICKR_MPFORM_H
+#endif // DIGIKAM_FLICKR_MPFORM_H

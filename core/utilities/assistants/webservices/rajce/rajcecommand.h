@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAJCE_COMMAND_H
-#define RAJCE_COMMAND_H
+#ifndef DIGIKAM_RAJCE_COMMAND_H
+#define DIGIKAM_RAJCE_COMMAND_H
 
 // Qt includes
 
@@ -181,4 +181,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAJCE_COMMAND_H
+#endif // DIGIKAM_RAJCE_COMMAND_H

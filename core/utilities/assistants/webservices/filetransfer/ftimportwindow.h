@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FT_IMPORT_WINDOW_H
-#define FT_IMPORT_WINDOW_H
+#ifndef DIGIKAM_FT_IMPORT_WINDOW_H
+#define DIGIKAM_FT_IMPORT_WINDOW_H
 
 // Qt includes
 
@@ -30,7 +30,6 @@
 
 // Local includes
 
-#include "dinfointerface.h"
 #include "wstooldialog.h"
 #include "dinfointerface.h"
 #include "digikam_export.h"
@@ -99,4 +98,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FT_IMPORT_WINDOW_H
+#endif // DIGIKAM_FT_IMPORT_WINDOW_H

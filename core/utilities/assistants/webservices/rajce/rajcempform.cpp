@@ -27,7 +27,6 @@
 
 #include <QByteArray>
 #include <QFile>
-#include <QUrl>
 #include <QApplication>
 #include <QMimeDatabase>
 #include <QMimeType>

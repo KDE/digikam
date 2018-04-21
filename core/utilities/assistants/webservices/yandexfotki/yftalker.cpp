@@ -29,7 +29,6 @@
 #include <QByteArray>
 #include <QDomDocument>
 #include <QDomNode>
-#include <QPointer>
 #include <QFile>
 #include <QFileInfo>
 #include <QPointer>

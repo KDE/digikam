@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAJCE_ALBUM_H
-#define RAJCE_ALBUM_H
+#ifndef DIGIKAM_RAJCE_ALBUM_H
+#define DIGIKAM_RAJCE_ALBUM_H
 
 // Qt includes
 
@@ -69,4 +69,4 @@ QDebug operator<<(QDebug d, const Digikam::RajceAlbum& a);
 
 Q_DECLARE_METATYPE(Digikam::RajceAlbum)
 
-#endif // RAJCE_ALBUM_H
+#endif // DIGIKAM_RAJCE_ALBUM_H

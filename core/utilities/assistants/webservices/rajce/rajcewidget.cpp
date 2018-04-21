@@ -48,7 +48,6 @@
 // Local includes
 
 #include "rajcetalker.h"
-#include "rajcesession.h"
 #include "rajcenewalbumdlg.h"
 #include "rajcesession.h"
 #include "dimageslist.h"
