@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATASYNCHRONIZER_H
-#define METADATASYNCHRONIZER_H
+#ifndef DIGIKAM_METADATA_SYNCHRONIZER_H
+#define DIGIKAM_METADATA_SYNCHRONIZER_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* METADATASYNCHRONIZER_H */
+#endif // DIGIKAM_METADATA_SYNCHRONIZER_H

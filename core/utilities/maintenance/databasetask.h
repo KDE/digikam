@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASE_TASK_H
-#define DATABASE_TASK_H
+#ifndef DIGIKAM_DATABASE_TASK_H
+#define DIGIKAM_DATABASE_TASK_H
 
 // Local includes
 
@@ -45,7 +45,8 @@ class DatabaseTask : public ActionJob
 
 public:
 
-    enum Mode{
+    enum Mode
+    {
         Unknown,
         ComputeDatabaseJunk,
         CleanCoreDb,
@@ -93,4 +94,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DATABASE_TASK_H
+#endif // DIGIKAM_DATABASE_TASK_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MAINTENANCE_THREAD_H
-#define MAINTENANCE_THREAD_H
+#ifndef DIGIKAM_MAINTENANCE_THREAD_H
+#define DIGIKAM_MAINTENANCE_THREAD_H
 
 // Local includes
 
@@ -159,4 +159,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MAINTENANCE_THREAD_H
+#endif // DIGIKAM_MAINTENANCE_THREAD_H

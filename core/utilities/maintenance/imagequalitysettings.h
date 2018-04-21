@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEQUALITYSETTINGS_H
-#define IMAGEQUALITYSETTINGS_H
+#ifndef DIGIKAM_IMAGE_QUALITY_SETTINGS_H
+#define DIGIKAM_IMAGE_QUALITY_SETTINGS_H
 
 // Qt includes
 
@@ -35,7 +35,7 @@ class ImageQualitySettings
 {
 public:
 
-    ImageQualitySettings();
+    explicit ImageQualitySettings();
     virtual ~ImageQualitySettings();
 
 public:
@@ -69,4 +69,4 @@ QDebug operator<<(QDebug dbg, const ImageQualitySettings& s);
 
 } // namespace Digikam
 
-#endif // IMAGEQUALITYSETTINGS_H
+#endif // DIGIKAM_IMAGE_QUALITY_SETTINGS_H

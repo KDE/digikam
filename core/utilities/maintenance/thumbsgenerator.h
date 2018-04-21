@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBSGENERATOR_H
-#define THUMBSGENERATOR_H
+#ifndef DIGIKAM_THUMBS_GENERATOR_H
+#define DIGIKAM_THUMBS_GENERATOR_H
 
 // Qt includes
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* THUMBSGENERATOR_H */
+#endif // DIGIKAM_THUMBS_GENERATOR_H

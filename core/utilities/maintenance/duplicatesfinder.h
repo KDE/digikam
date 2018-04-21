@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DUPLICATES_FINDER_H
-#define DUPLICATES_FINDER_H
+#ifndef DIGIKAM_DUPLICATES_FINDER_H
+#define DIGIKAM_DUPLICATES_FINDER_H
 
 // Qt includes
 
@@ -86,4 +86,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DUPLICATES_FINDER_H
+#endif // DIGIKAM_DUPLICATES_FINDER_H

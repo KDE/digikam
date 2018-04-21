@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FINGERPRINTS_TASK_H
-#define FINGERPRINTS_TASK_H
+#ifndef DIGIKAM_FINGERPRINTS_TASK_H
+#define DIGIKAM_FINGERPRINTS_TASK_H
 
 // Qt includes
 
@@ -46,7 +46,7 @@ class FingerprintsTask : public ActionJob
 
 public:
 
-    FingerprintsTask();
+    explicit FingerprintsTask();
     ~FingerprintsTask();
 
     void setMaintenanceData(MaintenanceData* const data=0);
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FINGERPRINTS_TASK_H */
+#endif // DIGIKAM_FINGERPRINTS_TASK_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MAINTENANCE_DATA_H
-#define MAINTENANCE_DATA_H
+#ifndef DIGIKAM_MAINTENANCE_DATA_H
+#define DIGIKAM_MAINTENANCE_DATA_H
 
 // Local includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MAINTENANCE_DATA_H
+#endif // DIGIKAM_MAINTENANCE_DATA_H

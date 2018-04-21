@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMBS_TASK_H
-#define THUMBS_TASK_H
+#ifndef DIGIKAM_THUMBS_TASK_H
+#define DIGIKAM_THUMBS_TASK_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class ThumbsTask : public ActionJob
 
 public:
 
-    ThumbsTask();
+    explicit ThumbsTask();
     ~ThumbsTask();
 
     void setMaintenanceData(MaintenanceData* const data=0);
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* THUMBS_TASK_H */
+#endif // DIGIKAM_THUMBS_TASK_H

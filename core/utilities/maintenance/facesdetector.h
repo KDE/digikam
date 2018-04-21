@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef BATCH_FACES_DETECTOR_H
-#define BATCH_FACES_DETECTOR_H
+#ifndef DIGIKAM_FACES_DETECTOR_H
+#define DIGIKAM_FACES_DETECTOR_H
 
 // Qt includes
 
@@ -69,4 +69,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BATCH_FACES_DETECTOR_H
+#endif // DIGIKAM_FACES_DETECTOR_H

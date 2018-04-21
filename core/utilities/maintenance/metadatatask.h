@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATA_TASK_H
-#define METADATA_TASK_H
+#ifndef DIGIKAM_METADATA_TASK_H
+#define DIGIKAM_METADATA_TASK_H
 
 // Qt includes
 
@@ -45,7 +45,7 @@ class MetadataTask : public ActionJob
 
 public:
 
-    MetadataTask();
+    explicit MetadataTask();
     ~MetadataTask();
 
     void setTagsOnly(bool value);
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* METADATA_TASK_H */
+#endif // DIGIKAM_METADATA_TASK_H

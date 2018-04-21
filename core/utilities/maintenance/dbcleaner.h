@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBCLEANER_H
-#define DBCLEANER_H
+#ifndef DIGIKAM_DB_CLEANER_H
+#define DIGIKAM_DB_CLEANER_H
 
 // Qt includes
 
@@ -90,6 +90,8 @@ private:
     Private* const d;
 };
 
+// -----------------------------------------------------
+
 class DbShrinkDialog : public QDialog
 {
     Q_OBJECT
@@ -121,4 +123,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DBCLEANER_H
+#endif // DIGIKAM_DB_CLEANER_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef NEWITEMSFINDER_H
-#define NEWITEMSFINDER_H
+#ifndef DIGIKAM_NEW_ITEMS_FINDER_H
+#define DIGIKAM_NEW_ITEMS_FINDER_H
 
 // Qt includes
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* NEWITEMSFINDER_H */
+#endif // DIGIKAM_NEW_ITEMS_FINDER_H

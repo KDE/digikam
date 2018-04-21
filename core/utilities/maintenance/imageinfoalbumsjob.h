@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEINFOALBUMSJOB_H
-#define IMAGEINFOALBUMSJOB_H
+#ifndef DIGIKAM_IMAGE_INFO_ALBUMS_JOB_H
+#define DIGIKAM_IMAGE_INFO_ALBUMS_JOB_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@ class ImageInfoAlbumsJob : public QObject
 
 public:
 
-    ImageInfoAlbumsJob();
+    explicit ImageInfoAlbumsJob();
     ~ImageInfoAlbumsJob();
 
     void allItemsFromAlbums(const AlbumList& albumsList);
@@ -69,4 +69,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGEINFOALBUMSJOB_H */
+#endif // DIGIKAM_IMAGE_INFO_ALBUMS_JOB_H

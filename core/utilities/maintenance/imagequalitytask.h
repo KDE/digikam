@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEQUALITYTASK_H
-#define IMAGEQUALITYTASK_H
+#ifndef DIGIKAM_IMAGE_QUALITY_TASK_H
+#define DIGIKAM_IMAGE_QUALITY_TASK_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class ImageQualityTask : public ActionJob
 
 public:
 
-    ImageQualityTask();
+    explicit ImageQualityTask();
     ~ImageQualityTask();
 
     void setQuality(const ImageQualitySettings& quality);
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGEQUALITYTASK_H */
+#endif // DIGIKAM_IMAGE_QUALITY_TASK_H

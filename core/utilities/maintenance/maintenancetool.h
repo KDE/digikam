@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MAINTENANCETOOL_H
-#define MAINTENANCETOOL_H
+#ifndef DIGIKAM_MAINTENANCE_TOOL_H
+#define DIGIKAM_MAINTENANCE_TOOL_H
 
 // Qt includes
 
@@ -79,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* MAINTENANCETOOL_H */
+#endif // DIGIKAM_MAINTENANCE_TOOL_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEQUALITYSORTER_H
-#define IMAGEQUALITYSORTER_H
+#ifndef DIGIKAM_IMAGE_QUALITY_SORTER_H
+#define DIGIKAM_IMAGE_QUALITY_SORTER_H
 
 // Qt includes
 
@@ -80,4 +80,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGEQUALITYSORTER_H */
+#endif // DIGIKAM_IMAGE_QUALITY_SORTER_H

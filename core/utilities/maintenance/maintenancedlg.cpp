@@ -35,7 +35,6 @@
 #include <QStandardPaths>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
-#include <QPushButton>
 
 // KDE includes
 
@@ -79,8 +78,8 @@ public:
 
 public:
 
-    explicit Private() :
-        buttons(0),
+    explicit Private()
+      : buttons(0),
         logo(0),
         title(0),
         scanThumbs(0),
