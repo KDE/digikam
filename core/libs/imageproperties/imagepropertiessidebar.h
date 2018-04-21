@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_PROPERTIES_SIDEBAR_H
-#define IMAGE_PROPERTIES_SIDEBAR_H
+#ifndef DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_H
+#define DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_H
 
 // Qt includes
 
@@ -118,4 +118,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGE_PROPERTIES_SIDEBAR_H
+#endif // DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_H

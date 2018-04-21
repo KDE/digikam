@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONS_OVERLAYS_H
-#define VERSIONS_OVERLAYS_H
+#ifndef DIGIKAM_VERSIONS_OVERLAYS_H
+#define DIGIKAM_VERSIONS_OVERLAYS_H
 
 #include <QString>
 #include <QIcon>
@@ -113,4 +113,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // VERSIONS_OVERLAYS_H
+#endif // DIGIKAM_VERSIONS_OVERLAYS_H

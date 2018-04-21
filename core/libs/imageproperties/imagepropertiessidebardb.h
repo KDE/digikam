@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_PROPERTIES_SIDEBAR_DB_H
-#define IMAGE_PROPERTIES_SIDEBAR_DB_H
+#ifndef DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_DB_H
+#define DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_DB_H
 
 // Qt includes
 
@@ -139,4 +139,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGE_PROPERTIES_SIDEBAR_DB_H
+#endif // DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_DB_H

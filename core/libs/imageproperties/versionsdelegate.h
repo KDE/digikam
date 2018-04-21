@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONS_DELEGATE_H
-#define VERSIONS_DELEGATE_H
+#ifndef DIGIKAM_VERSIONS_DELEGATE_H
+#define DIGIKAM_VERSIONS_DELEGATE_H
 
 // Qt includes
 
@@ -92,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VERSIONS_DELEGATE_H
+#endif // DIGIKAM_VERSIONS_DELEGATE_H

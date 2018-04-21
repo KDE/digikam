@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DISJOINT_METADATA_H
-#define DISJOINT_METADATA_H
+#ifndef DIGIKAM_DISJOINT_METADATA_H
+#define DIGIKAM_DISJOINT_METADATA_H
 
 // Qt includes
 
@@ -279,4 +279,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DISJOINT_METADATA_H
+#endif // DIGIKAM_DISJOINT_METADATA_H

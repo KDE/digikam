@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONS_TREEVIEW_H
-#define VERSIONS_TREEVIEW_H
+#ifndef DIGIKAM_VERSIONS_TREEVIEW_H
+#define DIGIKAM_VERSIONS_TREEVIEW_H
 
 // Qt includes
 
@@ -81,4 +81,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // VERSIONS_TREEVIEW_H
+#endif // DIGIKAM_VERSIONS_TREEVIEW_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_DESC_EDIT_TAB_H
-#define IMAGE_DESC_EDIT_TAB_H
+#ifndef DIGIKAM_IMAGE_DESC_EDIT_TAB_H
+#define DIGIKAM_IMAGE_DESC_EDIT_TAB_H
 
 // Qt includes
 
@@ -160,4 +160,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGE_DESC_EDIT_TAB_H
+#endif // DIGIKAM_IMAGE_DESC_EDIT_TAB_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_PROPERTIES_METADATA_TAB_H
-#define IMAGE_PROPERTIES_METADATA_TAB_H
+#ifndef DIGIKAM_IMAGE_PROPERTIES_METADATA_TAB_H
+#define DIGIKAM_IMAGE_PROPERTIES_METADATA_TAB_H
 
 // Qt includes
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGE_PROPERTIES_METADATA_TAB_H
+#endif // DIGIKAM_IMAGE_PROPERTIES_METADATA_TAB_H

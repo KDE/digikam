@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H
-#define IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H
+#ifndef DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H
+#define DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H
 
 // Qt includes
 
@@ -96,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H
+#endif // DIGIKAM_IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H

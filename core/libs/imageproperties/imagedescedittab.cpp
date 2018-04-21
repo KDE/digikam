@@ -11,7 +11,7 @@
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2015 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2015      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,6 +43,7 @@
 #include <QIcon>
 #include <QCheckBox>
 #include <QMessageBox>
+#include <QPointer>
 
 // Local includes
 
@@ -670,21 +671,22 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Disj
 
     QCheckBox* const alwaysCBox = new QCheckBox(i18n("Always apply changes without confirmation"));
 
-    QMessageBox msgBox(QMessageBox::Information,
-                       i18n("Apply changes?"),
-                       text,
-                       QMessageBox::Yes | QMessageBox::No,
-                       qApp->activeWindow());
-    msgBox.setCheckBox(alwaysCBox);
-    msgBox.setDefaultButton(QMessageBox::No);
-    msgBox.setEscapeButton(QMessageBox::No);
+    QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Information,
+                                                   i18n("Apply changes?"),
+                                                   text,
+                                                   QMessageBox::Yes | QMessageBox::No,
+                                                   qApp->activeWindow());
+    msgBox->setCheckBox(alwaysCBox);
+    msgBox->setDefaultButton(QMessageBox::No);
+    msgBox->setEscapeButton(QMessageBox::No);
 
     // Pop-up a message in desktop notification manager
     DNotificationWrapper(QString(), i18n("Apply changes?"),
                          DigikamApp::instance(), DigikamApp::instance()->windowTitle());
 
-    int returnCode   = msgBox.exec();
-    bool alwaysApply = msgBox.checkBox()->isChecked();
+    int returnCode   = msgBox->exec();
+    bool alwaysApply = msgBox->checkBox()->isChecked();
+    delete msgBox;
 
     if (alwaysApply)
     {
