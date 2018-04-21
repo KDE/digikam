@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef HSLTOOL_H
-#define HSLTOOL_H
+#ifndef DIGIKAM_HSL_TOOL_H
+#define DIGIKAM_HSL_TOOL_H
 
 // Local includes
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* HSLTOOL_H */
+#endif // DIGIKAM_HSL_TOOL_H

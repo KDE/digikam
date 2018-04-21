@@ -32,7 +32,6 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QIcon>
-#include <QStandardPaths>
 #include <QApplication>
 #include <QComboBox>
 #include <QStandardPaths>

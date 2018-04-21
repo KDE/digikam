@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEEFFECT_PERSPECTIVE_MATRIX_H
-#define IMAGEEFFECT_PERSPECTIVE_MATRIX_H
+#ifndef DIGIKAM_MATRIX_H
+#define DIGIKAM_MATRIX_H
 
 namespace Digikam
 {
@@ -105,4 +105,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMAGEEFFECT_PERSPECTIVE_MATRIX_H
+#endif // DIGIKAM_MATRIX_H

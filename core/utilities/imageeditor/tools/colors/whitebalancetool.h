@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef WHITEBALANCETOOL_H
-#define WHITEBALANCETOOL_H
+#ifndef DIGIKAM_WHITE_BALANCE_TOOL_H
+#define DIGIKAM_WHITE_BALANCE_TOOL_H
 
 // Local includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* WHITEBALANCETOOL_H */
+#endif // DIGIKAM_WHITE_BALANCE_TOOL_H

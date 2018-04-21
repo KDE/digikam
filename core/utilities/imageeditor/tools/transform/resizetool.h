@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RESIZE_TOOL_H
-#define RESIZE_TOOL_H
+#ifndef DIGIKAM_RESIZE_TOOL_H
+#define DIGIKAM_RESIZE_TOOL_H
 
 // Qt includes
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* RESIZE_TOOL_H */
+#endif // DIGIKAM_RESIZE_TOOL_H

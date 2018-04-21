@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CONTENT_AWARE_RESIZE_TOOL_H
-#define CONTENT_AWARE_RESIZE_TOOL_H
+#ifndef DIGIKAM_CONTENT_AWARE_RESIZE_TOOL_H
+#define DIGIKAM_CONTENT_AWARE_RESIZE_TOOL_H
 
 // Local includes
 
@@ -75,4 +75,4 @@ private:
 
 } // namespace Digikam
 
-#endif /*CONTENT_AWARE_RESIZE_TOOL_H*/
+#endif // DIGIKAM_CONTENT_AWARE_RESIZE_TOOL_H

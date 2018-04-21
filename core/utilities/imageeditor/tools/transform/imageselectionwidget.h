@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGESELECTIONWIDGET_H
-#define IMAGESELECTIONWIDGET_H
+#ifndef DIGIKAM_IMAGE_SELECTION_WIDGET_H
+#define DIGIKAM_IMAGE_SELECTION_WIDGET_H
 
 // Qt includes
 
@@ -188,4 +188,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGESELECTIONWIDGET_H */
+#endif // DIGIKAM_IMAGE_SELECTION_WIDGET_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef HOTPIXELSTOOL_H
-#define HOTPIXELSTOOL_H
+#ifndef DIGIKAM_HOT_PIXEL_TOOL_H
+#define DIGIKAM_HOT_PIXEL_TOOL_H
 
 #define MAX_PIXEL_DEPTH 4
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* HOTPIXELSTOOL_H */
+#endif // DIGIKAM_HOT_PIXEL_TOOL_H

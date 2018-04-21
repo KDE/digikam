@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_EDITOR_FILMTOOL_H
-#define DIGIKAM_EDITOR_FILMTOOL_H
+#ifndef DIGIKAM_EDITOR_FILM_TOOL_H
+#define DIGIKAM_EDITOR_FILM_TOOL_H
 
 // Local includes
 
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_EDITOR_FILMTOOL_H
+#endif // DIGIKAM_EDITOR_FILM_TOOL_H

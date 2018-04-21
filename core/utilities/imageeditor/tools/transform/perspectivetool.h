@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PERSPECTIVE_TOOL_H
-#define PERSPECTIVE_TOOL_H
+#ifndef DIGIKAM_PERSPECTIVE_TOOL_H
+#define DIGIKAM_PERSPECTIVE_TOOL_H
 
 // Local includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PERSPECTIVE_TOOL_H
+#endif // DIGIKAM_PERSPECTIVE_TOOL_H

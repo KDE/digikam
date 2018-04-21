@@ -54,7 +54,6 @@
 #include "freerotationsettings.h"
 #include "imageiface.h"
 #include "imageguidewidget.h"
-#include "dexpanderbox.h"
 
 namespace Digikam
 {

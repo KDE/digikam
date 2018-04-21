@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef BCGTOOL_H
-#define BCGTOOL_H
+#ifndef DIGIKAM_BCG_TOOL_H
+#define DIGIKAM_BCG_TOOL_H
 
 // Local includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* BCGTOOL_H */
+#endif // DIGIKAM_BCG_TOOL_H

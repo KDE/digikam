@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef HEALING_CLONE_TOOL_H
-#define HEALING_CLONE_TOOL_H
+#ifndef DIGIKAM_HEALING_CLONE_TOOL_H
+#define DIGIKAM_HEALING_CLONE_TOOL_H
 
 // Local includes
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HEALING_CLONE_TOOL_H
+#endif // DIGIKAM_HEALING_CLONE_TOOL_H

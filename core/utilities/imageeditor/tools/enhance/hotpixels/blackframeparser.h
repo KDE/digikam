@@ -26,8 +26,8 @@
  *
  * ============================================================ */
 
-#ifndef BLACK_FRAME_PARSER_H
-#define BLACK_FRAME_PARSER_H
+#ifndef DIGIKAM_BLACK_FRAME_PARSER_H
+#define DIGIKAM_BLACK_FRAME_PARSER_H
 
 // Qt includes
 
@@ -93,4 +93,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BLACK_FRAME_PARSER_H
+#endif // DIGIKAM_BLACK_FRAME_PARSER_H

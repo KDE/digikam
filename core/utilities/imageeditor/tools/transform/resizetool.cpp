@@ -45,7 +45,6 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QIcon>
-#include <QStandardPaths>
 #include <QApplication>
 #include <QStandardPaths>
 #include <QMessageBox>

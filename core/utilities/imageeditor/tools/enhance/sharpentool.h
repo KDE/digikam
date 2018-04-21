@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHARPENTOOL_H
-#define SHARPENTOOL_H
+#ifndef DIGIKAM_SHARPEN_TOOL_H
+#define DIGIKAM_SHARPEN_TOOL_H
 
 // Local includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SHARPENTOOL_H
+#endif // DIGIKAM_SHARPEN_TOOL_H

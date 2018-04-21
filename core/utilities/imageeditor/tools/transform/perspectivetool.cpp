@@ -34,7 +34,6 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QVBoxLayout>
-#include <QPushButton>
 #include <QApplication>
 
 // KDE includes

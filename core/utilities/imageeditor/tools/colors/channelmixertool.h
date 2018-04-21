@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CHANNELMIXERTOOL_H
-#define CHANNELMIXERTOOL_H
+#ifndef DIGIKAM_CHANNEL_MIXER_TOOL_H
+#define DIGIKAM_CHANNEL_MIXER_TOOL_H
 
 // Local includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CHANNELMIXERTOOL_H */
+#endif // DIGIKAM_CHANNEL_MIXER_TOOL_H

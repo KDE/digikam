@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EDITOR_TOOL_IFACE_H
-#define EDITOR_TOOL_IFACE_H
+#ifndef DIGIKAM_EDITOR_TOOL_IFACE_H
+#define DIGIKAM_EDITOR_TOOL_IFACE_H
 
 // Qt includes
 
@@ -93,4 +93,4 @@ private:
 
 } // namespace Digikam
 
-#endif // EDITOR_TOOL_IFACE_H
+#endif // DIGIKAM_EDITOR_TOOL_IFACE_H

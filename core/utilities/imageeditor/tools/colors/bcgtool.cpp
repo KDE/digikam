@@ -29,7 +29,6 @@
 
 #include <QLabel>
 #include <QIcon>
-#include <QIcon>
 
 // KDE includes
 

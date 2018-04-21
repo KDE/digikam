@@ -28,6 +28,18 @@
 #ifndef DIGIKAM_PRESENTATION_KB_P_H
 #define DIGIKAM_PRESENTATION_KB_P_H
 
+// Local includes
+
+#include "digikam_config.h"
+#include "digikam_debug.h"
+#include "presentationcontainer.h"
+#include "kbimageloader.h"
+#include "kbeffect.h"
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "presentationaudiowidget.h"
+#endif
+
 namespace Digikam
 {
 

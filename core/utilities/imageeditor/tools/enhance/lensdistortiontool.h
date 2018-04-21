@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef LENSDISTORTIONTOOL_H
-#define LENSDISTORTIONTOOL_H
+#ifndef DIGIKAM_LENS_DISTORTION_TOOL_H
+#define DIGIKAM_LENS_DISTORTION_TOOL_H
 
 // Local includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* LENSDISTORTIONTOOL_H */
+#endif // DIGIKAM_LENS_DISTORTION_TOOL_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef HOTPIXELFIXER_H
-#define HOTPIXELFIXER_H
+#ifndef DIGIKAM_HOT_PIXEL_FIXER_H
+#define DIGIKAM_HOT_PIXEL_FIXER_H
 
 // Qt includes
 
@@ -122,4 +122,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HOTPIXELFIXER_H
+#endif // DIGIKAM_HOT_PIXEL_FIXER_H

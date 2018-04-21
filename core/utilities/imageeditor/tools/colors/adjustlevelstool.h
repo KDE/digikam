@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ADJUSTLEVELSTOOL_H
-#define ADJUSTLEVELSTOOL_H
+#ifndef DIGIKAM_ADJUST_LEVELS_TOOL_H
+#define DIGIKAM_ADJUST_LEVELS_TOOL_H
 
 // Local includes
 
@@ -84,4 +84,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ADJUSTLEVELSTOOL_H */
+#endif // DIGIKAM_ADJUST_LEVELS_TOOL_H

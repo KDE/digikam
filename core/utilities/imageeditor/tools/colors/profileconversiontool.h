@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PROFILECONVERSIONTOOL_H
-#define PROFILECONVERSIONTOOL_H
+#ifndef DIGIKAM_PROFILE_CONVERSION_TOOL_H
+#define DIGIKAM_PROFILE_CONVERSION_TOOL_H
 
 // Local includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* PROFILECONVERSIONTOOL_H */
+#endif // DIGIKAM_PROFILE_CONVERSION_TOOL_H

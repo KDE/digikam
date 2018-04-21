@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef RESTORATIONTOOL_H
-#define RESTORATIONTOOL_H
+#ifndef DIGIKAM_RESTORATION_TOOL_H
+#define DIGIKAM_RESTORATION_TOOL_H
 
 // Local includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* RESTORATIONTOOL_H */
+#endif // DIGIKAM_RESTORATION_TOOL_H

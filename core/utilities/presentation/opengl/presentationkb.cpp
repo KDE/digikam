@@ -26,6 +26,7 @@
  * ============================================================ */
 
 #include "presentationkb.h"
+#include "presentationkb_p.h"
 
 // C++ includes
 
@@ -35,7 +36,6 @@
 // Qt includes
 
 #include <QList>
-#include <QApplication>
 #include <QImage>
 #include <QPainter>
 #include <QFont>
@@ -52,19 +52,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-
-// Local includes
-
-#include "digikam_config.h"
-#include "digikam_debug.h"
-#include "presentationcontainer.h"
-#include "kbimageloader.h"
-#include "kbeffect.h"
-#include "presentationkb_p.h"
-
-#ifdef HAVE_MEDIAPLAYER
-#   include "presentationaudiowidget.h"
-#endif
 
 namespace Digikam
 {

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#include "editorwindow_p.h"
 #include "editorwindow.h"
+#include "editorwindow_p.h"
 
 // C++ includes
 
@@ -142,7 +142,6 @@
 #include "invertfilter.h"
 #include "imageiface.h"
 #include "iccprofilescombobox.h"
-#include "iccsettings.h"
 #include "autocorrectiontool.h"
 #include "bcgtool.h"
 #include "bwsepiatool.h"
@@ -161,7 +160,6 @@
 #include "noisereductiontool.h"
 #include "localcontrasttool.h"
 #include "redeyetool.h"
-#include "imageiface.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
 #include "hotpixelstool.h"
