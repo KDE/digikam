@@ -57,7 +57,7 @@ WelcomePage::WelcomePage(QWizard* const dlg)
 
 #if defined Q_OS_WIN || defined Q_OS_OSX
     text.append(i18n(
-                     "<br/>"
+                     "<br/>"                                                    // krazy:exclude=i18ncheckarg
                      "<p>You can ignore the following if you use digiKam "
                      "for the first time:</p>"
                      "<p><b>Transition from digiKam 4</b></p>"
