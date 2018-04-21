@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef BORDERTOOL_H
-#define BORDERTOOL_H
+#ifndef DIGIKAM_EDITOR_BORDER_TOOL_H
+#define DIGIKAM_EDITOR_BORDER_TOOL_H
 
 // Qt includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* BORDERTOOL_H */
+#endif // DIGIKAM_EDITOR_BORDER_TOOL_H

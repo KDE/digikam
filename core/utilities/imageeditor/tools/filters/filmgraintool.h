@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef FILMGRAINTOOL_H
-#define FILMGRAINTOOL_H
+#ifndef DIGIKAM_EDITOR_FILM_GRAIN_TOOL_H
+#define DIGIKAM_EDITOR_FILM_GRAIN_TOOL_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FILMGRAINTOOL_H */
+#endif // DIGIKAM_EDITOR_FILM_GRAIN_TOOL_H

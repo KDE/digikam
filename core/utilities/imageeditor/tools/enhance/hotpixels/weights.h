@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_WEIGHTS_H
-#define DIGIKAM_WEIGHTS_H
+#ifndef DIGIKAM_EDITOR_WEIGHTS_H
+#define DIGIKAM_EDITOR_WEIGHTS_H
 
 // Qt includes
 
@@ -143,4 +143,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_WEIGHTS_H
+#endif // DIGIKAM_EDITOR_WEIGHTS_H

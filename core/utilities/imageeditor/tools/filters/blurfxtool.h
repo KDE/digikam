@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef BLURFXTOOL_H
-#define BLURFXTOOL_H
+#ifndef DIGIKAM_EDITOR_BLUR_FX_TOOL_H
+#define DIGIKAM_EDITOR_BLUR_FX_TOOL_H
 
 // Local includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* BLURFXTOOL_H */
+#endif // DIGIKAM_EDITOR_BLUR_FX_TOOL_H

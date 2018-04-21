@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef COLORFXTOOL_H
-#define COLORFXTOOL_H
+#ifndef DIGIKAM_EDITOR_COLOR_FX_TOOL_H
+#define DIGIKAM_EDITOR_COLOR_FX_TOOL_H
 
 // Local includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* COLORFXTOOL_H */
+#endif // DIGIKAM_EDITOR_COLOR_FX_TOOL_H

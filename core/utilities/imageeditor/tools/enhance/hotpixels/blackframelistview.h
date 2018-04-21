@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_BLACK_FRAME_LIST_VIEW_H
-#define DIGIKAM_BLACK_FRAME_LIST_VIEW_H
+#ifndef DIGIKAM_EDITOR_BLACK_FRAME_LIST_VIEW_H
+#define DIGIKAM_EDITOR_BLACK_FRAME_LIST_VIEW_H
 
 // Qt includes
 
@@ -115,4 +115,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_BLACK_FRAME_LIST_VIEW_H
+#endif // DIGIKAM_EDITOR_BLACK_FRAME_LIST_VIEW_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef EMBOSSTOOL_H
-#define EMBOSSTOOL_H
+#ifndef DIGIKAM_EDITOR_EMBOSS_TOOL_H
+#define DIGIKAM_EDITOR_EMBOSS_TOOL_H
 
 // Local includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* EMBOSSTOOL_H */
+#endif // DIGIKAM_EDITOR_EMBOSS_TOOL_H

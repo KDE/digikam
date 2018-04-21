@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_MATRIX_H
-#define DIGIKAM_MATRIX_H
+#ifndef DIGIKAM_EDITOR_MATRIX_H
+#define DIGIKAM_EDITOR_MATRIX_H
 
 namespace Digikam
 {
@@ -105,4 +105,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_MATRIX_H
+#endif // DIGIKAM_EDITOR_MATRIX_H

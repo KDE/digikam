@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef OILPAINTTOOL_H
-#define OILPAINTTOOL_H
+#ifndef DIGIKAM_EDITOR_OIL_PAINT_TOOL_H
+#define DIGIKAM_EDITOR_OIL_PAINT_TOOL_H
 
 // Local includes
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* OILPAINTTOOL_H */
+#endif // DIGIKAM_EDITOR_OIL_PAINT_TOOL_H

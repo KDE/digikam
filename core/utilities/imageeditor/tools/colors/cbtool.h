@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CB_TOOL_H
-#define DIGIKAM_CB_TOOL_H
+#ifndef DIGIKAM_EDITOR_CB_TOOL_H
+#define DIGIKAM_EDITOR_CB_TOOL_H
 
 #include <QObject>
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_CB_TOOL_H
+#endif // DIGIKAM_EDITOR_CB_TOOL_H

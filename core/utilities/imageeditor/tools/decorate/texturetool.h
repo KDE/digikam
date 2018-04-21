@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TEXTURETOOL_H
-#define TEXTURETOOL_H
+#ifndef DIGIKAM_EDITOR_TEXTURE_TOOL_H
+#define DIGIKAM_EDITOR_TEXTURE_TOOL_H
 
 // Qt includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* TEXTURETOOL_H */
+#endif // DIGIKAM_EDITOR_TEXTURE_TOOL_H

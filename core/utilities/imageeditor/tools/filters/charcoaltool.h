@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CHARCOALTOOL_H
-#define CHARCOALTOOL_H
+#ifndef DIGIKAM_EDITOR_CHARCOAL_TOOL_H
+#define DIGIKAM_EDITOR_CHARCOAL_TOOL_H
 
 // Local includes
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CHARCOALTOOL_H */
+#endif // DIGIKAM_EDITOR_CHARCOAL_TOOL_H

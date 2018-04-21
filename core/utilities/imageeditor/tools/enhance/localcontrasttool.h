@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_LOCAL_CONTRAST_TOOL_H
-#define DIGIKAM_LOCAL_CONTRAST_TOOL_H
+#ifndef DIGIKAM_EDITOR_LOCAL_CONTRAST_TOOL_H
+#define DIGIKAM_EDITOR_LOCAL_CONTRAST_TOOL_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_LOCAL_CONTRAST_TOOL_H
+#endif // DIGIKAM_EDITOR_LOCAL_CONTRAST_TOOL_H

@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_LENS_AUTO_FIX_TOOL_H
-#define DIGIKAM_HEALING_CLONE_TOOL_H
+#ifndef DIGIKAM_EDITOR_LENS_AUTO_FIX_TOOL_H
+#define DIGIKAM_EDITOR_HEALING_CLONE_TOOL_H
 
 // Local includes
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_HEALING_CLONE_TOOL_H
+#endif // DIGIKAM_EDITOR_HEALING_CLONE_TOOL_H

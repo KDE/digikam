@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_RATIO_CROP_TOOL_H
-#define DIGIKAM_RATIO_CROP_TOOL_H
+#ifndef DIGIKAM_EDITOR_RATIO_CROP_TOOL_H
+#define DIGIKAM_EDITOR_RATIO_CROP_TOOL_H
 
 // Qt includes
 
@@ -90,4 +90,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_RATIO_CROP_TOOL_H
+#endif // DIGIKAM_EDITOR_RATIO_CROP_TOOL_H

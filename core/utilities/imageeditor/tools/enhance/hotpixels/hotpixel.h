@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_HOT_PIXEL_H
-#define DIGIKAM_HOT_PIXEL_H
+#ifndef DIGIKAM_EDITOR_HOT_PIXEL_H
+#define DIGIKAM_EDITOR_HOT_PIXEL_H
 
 // Qt includes
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_HOT_PIXEL_H
+#endif // DIGIKAM_EDITOR_HOT_PIXEL_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef INSERTTEXTWIDGET_H
-#define INSERTTEXTWIDGET_H
+#ifndef DIGIKAM_EDITOR_INSERT_TEXT_WIDGET_H
+#define DIGIKAM_EDITOR_INSERT_TEXT_WIDGET_H
 
 // Qt includes
 
@@ -84,7 +84,7 @@ public:
 
 public:
 
-    InsertTextWidget(int w, int h, QWidget* const parent=0);
+    explicit InsertTextWidget(int w, int h, QWidget* const parent=0);
     ~InsertTextWidget();
 
     ImageIface* imageIface() const;
@@ -126,4 +126,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* INSERTTEXTWIDGET_H */
+#endif // DIGIKAM_EDITOR_INSERT_TEXT_WIDGET_H
