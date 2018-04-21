@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DD_MIGRATION_DLG_H
+#ifndef DIGIKAM_DB_MIGRATION_DLG_H
 #define DIGIKAM_DB_MIGRATION_DLG_H
 
 // QT includes

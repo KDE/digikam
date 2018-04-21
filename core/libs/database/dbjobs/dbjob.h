@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DATABASE_JOB_H
-#define DIGIKAM_DATABASE_JOB_H
+#ifndef DIGIKAM_DB_JOB_H
+#define DIGIKAM_DB_JOB_H
 
 // Local includes
 
@@ -179,4 +179,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DATABASE_JOB_H
+#endif // DIGIKAM_DB_JOB_H

@@ -38,7 +38,7 @@
 #include "digikam_debug.h"
 #include "thumbsdbbackend.h"
 #include "thumbsdb.h"
-#include "thumbsdbchemaupdater.h"
+#include "thumbsdbschemaupdater.h"
 #include "dbengineparameters.h"
 #include "dbengineaccess.h"
 
@@ -49,7 +49,7 @@ class ThumbsDbAccessStaticPriv
 {
 public:
 
-    ThumbsDbAccessStaticPriv()
+    explicit ThumbsDbAccessStaticPriv()
         : backend(0),
           db(0),
           initializing(false)

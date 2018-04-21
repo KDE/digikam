@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "thumbsdbchemaupdater.h"
+#include "thumbsdbschemaupdater.h"
 
 // Qt includes
 

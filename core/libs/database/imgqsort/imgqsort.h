@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_QSORT_H
-#define DIGIKAM_IMAGE_QSORT_H
+#ifndef DIGIKAM_IMG_QSORT_H
+#define DIGIKAM_IMG_QSORT_H
 
 // Local includes
 
@@ -75,4 +75,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_QSORT_H
+#endif // DIGIKAM_IMG_QSORT_H

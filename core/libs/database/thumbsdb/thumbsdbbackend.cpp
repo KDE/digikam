@@ -26,7 +26,7 @@
 
 #include "thumbsdbbackend.h"
 #include "dbenginebackend_p.h"
-#include "thumbsdbchemaupdater.h"
+#include "thumbsdbschemaupdater.h"
 
 namespace Digikam
 {
