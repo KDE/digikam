@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILM_GRAIN_H_
-#define FILM_GRAIN_H_
+#ifndef DIGIKAM_BQM_FILM_GRAIN_H
+#define DIGIKAM_BQM_FILM_GRAIN_H
 
 #include "batchtool.h"
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FILM_GRAIN_H_
+#endif // DIGIKAM_BQM_FILM_GRAIN_H

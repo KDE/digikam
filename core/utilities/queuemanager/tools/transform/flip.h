@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FLIP_H
-#define FLIP_H
+#ifndef DIGIKAM_BQM_FLIP_H
+#define DIGIKAM_BQM_FLIP_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FLIP_H
+#endif // DIGIKAM_BQM_FLIP_H

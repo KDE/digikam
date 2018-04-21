@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CONVERT2JPEG_H
-#define CONVERT2JPEG_H
+#ifndef DIGIKAM_BQM_CONVERT2_JPEG_H
+#define DIGIKAM_BQM_CONVERT2_JPEG_H
 
 // Local includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CONVERT2JPEG_H */
+#endif // DIGIKAM_BQM_CONVERT2_JPEG_H

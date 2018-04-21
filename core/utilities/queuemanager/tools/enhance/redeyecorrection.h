@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef REDEYECORRECTION_H
-#define REDEYECORRECTION_H
+#ifndef DIGIKAM_BQM_RED_EYE_CORRECTION_H
+#define DIGIKAM_BQM_RED_EYE_CORRECTION_H
 
 // Local includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // REDEYECORRECTION_H
+#endif // DIGIKAM_BQM_RED_EYE_CORRECTION_H

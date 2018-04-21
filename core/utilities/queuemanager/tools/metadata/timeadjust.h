@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_TIME_ADJUST_H
-#define DIGIKAM_TIME_ADJUST_H
+#ifndef DIGIKAM_BQM_TIME_ADJUST_H
+#define DIGIKAM_BQM_TIME_ADJUST_H
 
 // Local includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_TIME_ADJUST_H
+#endif // DIGIKAM_BQM_TIME_ADJUST_H

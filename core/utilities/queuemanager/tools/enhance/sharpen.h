@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SHARPEN_H_
-#define SHARPEN_H_
+#ifndef DIGIKAM_BQM_SHARPEN_H
+#define DIGIKAM_BQM_SHARPEN_H
 
 #include "batchtool.h"
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SHARPEN_H_
+#endif // DIGIKAM_BQM_SHARPEN_H

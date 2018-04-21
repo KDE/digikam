@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DET_BY_CLOCK_PHOTO_BUTTON_H
-#define DET_BY_CLOCK_PHOTO_BUTTON_H
+#ifndef DIGIKAM_BQM_DET_BY_CLOCK_PHOTO_BUTTON_H
+#define DIGIKAM_BQM_DET_BY_CLOCK_PHOTO_BUTTON_H
 
 // Qt includes
 
@@ -54,4 +54,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // DET_BY_CLOCK_PHOTO_BUTTON_H
+#endif // DIGIKAM_BQM_DET_BY_CLOCK_PHOTO_BUTTON_H

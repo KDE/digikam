@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef HSLCORRECTION_H
-#define HSLCORRECTION_H
+#ifndef DIGIKAM_BQM_HSL_CORRECTION_H
+#define DIGIKAM_BQM_HSL_CORRECTION_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* HSLCORRECTION_H */
+#endif // DIGIKAM_BQM_HSL_CORRECTION_H

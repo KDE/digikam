@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_ASSIGN_TEMPLATE_H
-#define DIGIKAM_ASSIGN_TEMPLATE_H
+#ifndef DIGIKAM_BQM_ASSIGN_TEMPLATE_H
+#define DIGIKAM_BQM_ASSIGN_TEMPLATE_H
 
 // Local includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_ASSIGN_TEMPLATE_H
+#endif // DIGIKAM_BQM_ASSIGN_TEMPLATE_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef WHITE_BALANCE_H
-#define WHITE_BALANCE_H
+#ifndef DIGIKAM_BQM_WHITE_BALANCE_H
+#define DIGIKAM_BQM_WHITE_BALANCE_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* WHITE_BALANCE_H */
+#endif // DIGIKAM_BQM_WHITE_BALANCE_H

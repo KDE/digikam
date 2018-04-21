@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef AUTO_CORRECTION_H
-#define AUTO_CORRECTION_H
+#ifndef DIGIKAM_BQM_AUTO_CORRECTION_H
+#define DIGIKAM_BQM_AUTO_CORRECTION_H
 
 // Local includes
 
@@ -73,4 +73,4 @@ private:
 
 } // namespace Digikam
 
-#endif // AUTO_CORRECTION_H
+#endif // DIGIKAM_BQM_AUTO_CORRECTION_H

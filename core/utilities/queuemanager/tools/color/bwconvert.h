@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BW_CONVERT_H
-#define BW_CONVERT_H
+#ifndef DIGIKAM_BQM_BW_CONVERT_H
+#define DIGIKAM_BQM_BW_CONVERT_H
 
 // Local includes
 
@@ -69,4 +69,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BW_CONVERT_H
+#endif // DIGIKAM_BQM_BW_CONVERT_H

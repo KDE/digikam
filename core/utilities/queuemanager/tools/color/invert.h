@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef INVERT_H
-#define INVERT_H
+#ifndef DIGIKAM_BQM_INVERT_H
+#define DIGIKAM_BQM_INVERT_H
 
 // Local includes
 
@@ -59,4 +59,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* INVERT_H */
+#endif // DIGIKAM_BQM_INVERT_H

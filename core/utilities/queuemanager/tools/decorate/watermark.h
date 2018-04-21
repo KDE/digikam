@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef WATERMARK_H
-#define WATERMARK_H
+#ifndef DIGIKAM_BQM_WATERMARK_H
+#define DIGIKAM_BQM_WATERMARK_H
 
 // Qt includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WATERMARK_H
+#endif // DIGIKAM_BQM_WATERMARK_H

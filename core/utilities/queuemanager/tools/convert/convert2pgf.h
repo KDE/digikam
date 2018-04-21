@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CONVERT2PGF_H
-#define CONVERT2PGF_H
+#ifndef DIGIKAM_BQM_CONVERT2_PGF_H
+#define DIGIKAM_BQM_CONVERT2_PGF_H
 
 // Local includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CONVERT2PGF_H */
+#endif // DIGIKAM_BQM_CONVERT2_PGF_H

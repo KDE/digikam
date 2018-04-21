@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CURVESADJUST_H
-#define CURVESADJUST_H
+#ifndef DIGIKAM_BQM_CURVES_ADJUST_H
+#define DIGIKAM_BQM_CURVES_ADJUST_H
 
 // Local includes
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CURVESADJUST_H */
+#endif // DIGIKAM_BQM_CURVES_ADJUST_H

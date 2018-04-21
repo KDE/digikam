@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CONVERT2DNG_H
-#define CONVERT2DNG_H
+#ifndef DIGIKAM_BQM_CONVERT2_DNG_H
+#define DIGIKAM_BQM_CONVERT2_DNG_H
 
 // Local includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CONVERT2DNG_H */
+#endif // DIGIKAM_BQM_CONVERT2_DNG_H

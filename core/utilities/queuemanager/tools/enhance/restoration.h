@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RESTORATION_H
-#define RESTORATION_H
+#ifndef DIGIKAM_BQM_RESTORATION_H
+#define DIGIKAM_BQM_RESTORATION_H
 
 // Local includes
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* RESTORATION_H */
+#endif // DIGIKAM_BQM_RESTORATION_H

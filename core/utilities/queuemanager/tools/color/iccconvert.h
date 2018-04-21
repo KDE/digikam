@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCCONVERT_H
-#define ICCCONVERT_H
+#ifndef DIGIKAM_BQM_ICC_CONVERT_H
+#define DIGIKAM_BQM_ICC_CONVERT_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ICCCONVERT_H */
+#endif // DIGIKAM_BQM_ICC_CONVERT_H

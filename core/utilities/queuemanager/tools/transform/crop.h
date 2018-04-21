@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CROP_H
-#define CROP_H
+#ifndef DIGIKAM_BQM_CROP_H
+#define DIGIKAM_BQM_CROP_H
 
 // Local includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CROP_H
+#endif // DIGIKAM_BQM_CROP_H

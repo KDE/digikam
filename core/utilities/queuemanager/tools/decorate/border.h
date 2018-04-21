@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BORDER_H
-#define BORDER_H
+#ifndef DIGIKAM_BQM_BORDER_H
+#define DIGIKAM_BQM_BORDER_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* WATERMARK_H */
+#endif // DIGIKAM_BQM_BORDER_H

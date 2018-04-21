@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CONVERT2TIFF_H
-#define CONVERT2TIFF_H
+#ifndef DIGIKAM_BQM_CONVERT2_TIFF_H
+#define DIGIKAM_BQM_CONVERT2_TIFF_H
 
 // Local includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CONVERT2TIFF_H */
+#endif // DIGIKAM_BQM_CONVERT2_TIFF_H

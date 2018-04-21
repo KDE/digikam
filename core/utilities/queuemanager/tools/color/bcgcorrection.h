@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BCG_CORRECTION_H
-#define BCG_CORRECTION_H
+#ifndef DIGIKAM_BQM_BCG_CORRECTION_H
+#define DIGIKAM_BQM_BCG_CORRECTION_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BCG_CORRECTION_H
+#endif // DIGIKAM_BQM_BCG_CORRECTION_H

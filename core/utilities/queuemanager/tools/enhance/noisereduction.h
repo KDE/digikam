@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef NOISEREDUCTION_H
-#define NOISEREDUCTION_H
+#ifndef DIGIKAM_BQM_NOISE_REDUCTION_H
+#define DIGIKAM_BQM_NOISE_REDUCTION_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* NOISEREDUCTION_H */
+#endif // DIGIKAM_BQM_NOISE_REDUCTION_H

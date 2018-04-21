@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_REMOVE_METADATA_H
-#define DIGIKAM_REMOVE_METADATA_H
+#ifndef DIGIKAM_BQM_REMOVE_METADATA_H
+#define DIGIKAM_BQM_REMOVE_METADATA_H
 
 // Local includes
 
@@ -79,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_REMOVE_METADATA_H
+#endif // DIGIKAM_BQM_REMOVE_METADATA_H

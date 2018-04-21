@@ -21,14 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef ROTATE_H
-#define ROTATE_H
+#ifndef DIGIKAM_BQM_ROTATE_H
+#define DIGIKAM_BQM_ROTATE_H
 
 // Local includes
 
 #include "batchtool.h"
-
-
 
 namespace Digikam
 {
@@ -65,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ROTATE_H
+#endif // DIGIKAM_BQM_ROTATE_H

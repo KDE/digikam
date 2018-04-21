@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ANTIVIGNETTING_H
-#define ANTIVIGNETTING_H
+#ifndef DIGIKAM_BQM_ANTI_VIGNETTING_H
+#define DIGIKAM_BQM_ANTI_VIGNETTING_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ANTIVIGNETTING_H */
+#endif // DIGIKAM_BQM_ANTI_VIGNETTING_H

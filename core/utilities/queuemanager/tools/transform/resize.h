@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RESIZE_H
-#define RESIZE_H
+#ifndef DIGIKAM_BQM_RESIZE_H
+#define DIGIKAM_BQM_RESIZE_H
 
 // Local includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RESIZE_H
+#endif // DIGIKAM_BQM_RESIZE_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CONVERT8TO16_H
-#define CONVERT8TO16_H
+#ifndef DIGIKAM_BQM_CONVERT_8TO16_H
+#define DIGIKAM_BQM_CONVERT_8TO16_H
 
 // Local includes
 
@@ -59,4 +59,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* CONVERT8TO16_H */
+#endif // DIGIKAM_BQM_CONVERT_8TO16_H

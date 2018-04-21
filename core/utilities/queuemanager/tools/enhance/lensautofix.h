@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef LENS_AUTO_FIX_H_
-#define LENS_AUTO_FIX_H_
+#ifndef DIGIKAM_BQM_LENS_AUTO_FIX_H
+#define DIGIKAM_BQM_LENS_AUTO_FIX_H
 
 #include "batchtool.h"
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* LENS_AUTO_FIX_H_ */
+#endif // DIGIKAM_BQM_LENS_AUTO_FIX_H

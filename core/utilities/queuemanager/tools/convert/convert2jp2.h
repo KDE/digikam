@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CONVERT2JP2_H
-#define CONVERT2JP2_H
+#ifndef DIGIKAM_BQM_CONVERT2_JP2_H
+#define DIGIKAM_BQM_CONVERT2_JP2_H
 
 // Local includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CONVERT2JP2_H */
+#endif // DIGIKAM_BQM_CONVERT2_JP2_H

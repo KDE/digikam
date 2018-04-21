@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef USERSCRIPT_H
-#define USERSCRIPT_H
+#ifndef DIGIKAM_BQM_USER_SCRIPT_H
+#define DIGIKAM_BQM_USER_SCRIPT_H
 
 // Local includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* USERSCRIPT_H */
+#endif // DIGIKAM_BQM_USER_SCRIPT_H

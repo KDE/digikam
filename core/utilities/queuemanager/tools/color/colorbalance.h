@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COLORBALANCE_H
-#define COLORBALANCE_H
+#ifndef DIGIKAM_BQM_COLOR_BALANCE_H
+#define DIGIKAM_BQM_COLOR_BALANCE_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* COLORBALANCE_H */
+#endif // DIGIKAM_BQM_COLOR_BALANCE_H

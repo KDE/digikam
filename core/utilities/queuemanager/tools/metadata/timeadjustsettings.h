@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_TIME_ADJUST_SETTINGS_H
-#define DIGIKAM_TIME_ADJUST_SETTINGS_H
+#ifndef DIGIKAM_BQM_TIME_ADJUST_SETTINGS_H
+#define DIGIKAM_BQM_TIME_ADJUST_SETTINGS_H
 
 // Qt includes
 
@@ -73,4 +73,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_TIME_ADJUST_SETTINGS_H
+#endif // DIGIKAM_BQM_TIME_ADJUST_SETTINGS_H

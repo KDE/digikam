@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef LOCALCONTRAST_H
-#define LOCALCONTRAST_H
+#ifndef DIGIKAM_BQM_LOCAL_CONTRAST_H
+#define DIGIKAM_BQM_LOCAL_CONTRAST_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* LOCALCONTRAST_H */
+#endif // DIGIKAM_BQM_LOCAL_CONTRAST_H
