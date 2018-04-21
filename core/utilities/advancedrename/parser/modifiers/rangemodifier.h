@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RANGEMODIFIER_H
-#define RANGEMODIFIER_H
+#ifndef DIGIKAM_RANGE_MODIFIER_H
+#define DIGIKAM_RANGE_MODIFIER_H
 
 // Local includes
 
@@ -66,7 +66,7 @@ class RangeModifier : public Modifier
 
 public:
 
-    RangeModifier();
+    explicit RangeModifier();
     virtual QString parseOperation(ParseSettings& settings);
 
 private Q_SLOTS:
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* RANGEMODIFIER_H */
+#endif // DIGIKAM_RANGE_MODIFIER_H

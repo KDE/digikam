@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DEFAULTVALUEMODIFIER_H
-#define DEFAULTVALUEMODIFIER_H
+#ifndef DIGIKAM_DEFAULT_VALUE_MODIFIER_H
+#define DIGIKAM_DEFAULT_VALUE_MODIFIER_H
 
 // Local includes
 
@@ -59,7 +59,7 @@ class DefaultValueModifier : public Modifier
 
 public:
 
-    DefaultValueModifier();
+    explicit DefaultValueModifier();
     virtual QString parseOperation(ParseSettings& settings);
 
 private Q_SLOTS:
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DEFAULTVALUEMODIFIER_H */
+#endif // DIGIKAM_DEFAULT_VALUE_MODIFIER_H

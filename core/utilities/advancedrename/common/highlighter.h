@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef HIGHLIGHTER_H
-#define HIGHLIGHTER_H
+#ifndef DIGIKAM_HIGH_LIGHTER_H
+#define DIGIKAM_HIGH_LIGHTER_H
 
 // Qt includes
 
@@ -85,5 +85,4 @@ private:
 
 } // namespace Digikam
 
-
-#endif /* HIGHLIGHTER_H */
+#endif // DIGIKAM_HIGH_LIGHTER_H

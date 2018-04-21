@@ -30,7 +30,6 @@
 #include <QEvent>
 #include <QFileInfo>
 #include <QGridLayout>
-#include <QHeaderView>
 #include <QMoveEvent>
 #include <QSet>
 #include <QString>

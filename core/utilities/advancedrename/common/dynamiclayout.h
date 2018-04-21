@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DYNAMICLAYOUT_H
-#define DYNAMICLAYOUT_H
+#ifndef DIGIKAM_DYNAMIC_LAYOUT_H
+#define DIGIKAM_DYNAMIC_LAYOUT_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DYNAMICLAYOUT_H
+#endif // DIGIKAM_DYNAMIC_LAYOUT_H

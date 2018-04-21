@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTRENAMEPARSER_H
-#define IMPORTRENAMEPARSER_H
+#ifndef DIGIKAM_IMPORT_RENAME_PARSER_H
+#define DIGIKAM_IMPORT_RENAME_PARSER_H
 
 // Local includes
 
@@ -37,7 +37,7 @@ class ImportRenameParser : public Parser
 
 public:
 
-    ImportRenameParser();
+    explicit ImportRenameParser();
 
 private:
 
@@ -47,5 +47,4 @@ private:
 
 } // namespace Digikam
 
-
-#endif /* IMPORTRENAMEPARSER_H */
+#endif // DIGIKAM_IMPORT_RENAME_PARSER_H

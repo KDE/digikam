@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef DIGIKAM_PARSER_H
+#define DIGIKAM_PARSER_H
 
 // Qt includes
 
@@ -46,7 +46,7 @@ class Parser
 
 public:
 
-    Parser();
+    explicit Parser();
     virtual ~Parser();
 
     void          reset();
@@ -99,4 +99,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* PARSER_H */
+#endif // DIGIKAM_PARSER_H

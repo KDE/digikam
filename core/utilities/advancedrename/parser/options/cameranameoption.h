@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERANAMEOPTION_H
-#define CAMERANAMEOPTION_H
+#ifndef DIGIKAM_CAMERA_NAME_OPTION_H
+#define DIGIKAM_CAMERA_NAME_OPTION_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@ class CameraNameOption : public Option
 
 public:
 
-    CameraNameOption();
+    explicit CameraNameOption();
     ~CameraNameOption() {};
 
 protected:
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CAMERANAMEOPTION_H */
+#endif // DIGIKAM_CAMERA_NAME_OPTION_H

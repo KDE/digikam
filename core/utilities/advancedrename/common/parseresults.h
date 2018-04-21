@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PARSERESULTS_H
-#define PARSERESULTS_H
+#ifndef DIGIKAM_PARSE_RESULTS_H
+#define DIGIKAM_PARSE_RESULTS_H
 
 // Qt includes
 
@@ -43,7 +43,7 @@ public:
 
 public:
 
-    ParseResults()  {};
+    explicit ParseResults()  {};
     ~ParseResults() {};
 
     void addEntry(const ResultsKey& key, const ResultsValue& value);
@@ -84,5 +84,4 @@ private:
 
 } // namespace Digikam
 
-
-#endif /* PARSERESULTS_H */
+#endif // DIGIKAM_PARSE_RESULTS_H

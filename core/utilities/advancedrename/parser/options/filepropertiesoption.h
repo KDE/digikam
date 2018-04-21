@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILEPROPERTIESOPTION_H
-#define FILEPROPERTIESOPTION_H
+#ifndef DIGIKAM_FILE_PROPERTIES_OPTION_H
+#define DIGIKAM_FILE_PROPERTIES_OPTION_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@ class FilePropertiesOption : public Option
 
 public:
 
-    FilePropertiesOption();
+    explicit FilePropertiesOption();
     ~FilePropertiesOption() {};
 
 protected:
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FILEPROPERTIESOPTION_H */
+#endif // DIGIKAM_FILE_PROPERTIES_OPTION_H

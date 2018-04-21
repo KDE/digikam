@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PARSESETTINGS_H
-#define PARSESETTINGS_H
+#ifndef DIGIKAM_PARSE_SETTINGS_H
+#define DIGIKAM_PARSE_SETTINGS_H
 
 // Qt includes
 
@@ -48,6 +48,7 @@ public:
     {
         init();
     };
+
     explicit ParseSettings(const QString& _parseString) :
         parseString(_parseString)
     {
@@ -59,6 +60,7 @@ public:
     {
         init(info);
     };
+
     ParseSettings(const QString& _parseString, const ImageInfo& info) :
         parseString(_parseString)
     {
@@ -106,4 +108,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* PARSESETTINGS_H */
+#endif // DIGIKAM_PARSE_SETTINGS_H

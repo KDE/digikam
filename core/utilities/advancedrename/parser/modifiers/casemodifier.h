@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CASEMODIFIER_H
-#define CASEMODIFIER_H
+#ifndef DIGIKAM_CASE_MODIFIER_H
+#define DIGIKAM_CASE_MODIFIER_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class CaseModifier : public Modifier
 {
 public:
 
-    CaseModifier();
+    explicit CaseModifier();
     virtual QString parseOperation(ParseSettings& settings);
 
 private:
@@ -48,5 +48,4 @@ private:
 
 } // namespace Digikam
 
-
-#endif /* CASEMODIFIER_H */
+#endif // DIGIKAM_CASE_MODIFIER_H

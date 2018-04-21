@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef OPTION_H
-#define OPTION_H
+#ifndef DIGIKAM_OPTION_H
+#define DIGIKAM_OPTION_H
 
 // Local includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* OPTION_H */
+#endif // DIGIKAM_OPTION_H

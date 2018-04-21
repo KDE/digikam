@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBHEADERLISTITEM_H
-#define DBHEADERLISTITEM_H
+#ifndef DIGIKAM_DB_HEADER_LIST_ITEM_H
+#define DIGIKAM_DB_HEADER_LIST_ITEM_H
 
 // Qt includes
 
@@ -40,7 +40,7 @@ class DbHeaderListItem : public QObject, public QTreeWidgetItem
 
 public:
 
-    DbHeaderListItem(QTreeWidget* parent, const QString& key);
+    explicit DbHeaderListItem(QTreeWidget* parent, const QString& key);
     ~DbHeaderListItem();
 
 private Q_SLOTS:
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DBHEADERLISTITEM_H */
+#endif // DIGIKAM_DB_HEADER_LIST_ITEM_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIRECTORYNAMEOPTION_H
-#define DIRECTORYNAMEOPTION_H
+#ifndef DIGIKAM_DIRECTORY_NAME_OPTION_H
+#define DIGIKAM_DIRECTORY_NAME_OPTION_H
 
 // Qt includes
 
@@ -43,7 +43,7 @@ class DirectoryNameOption : public Option
 
 public:
 
-    DirectoryNameOption();
+    explicit DirectoryNameOption();
     ~DirectoryNameOption() {};
 
 protected:
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DIRECTORYNAMEOPTION_H */
+#endif // DIGIKAM_DIRECTORY_NAME_OPTION_H

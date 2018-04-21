@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef REPLACEMODIFIER_H
-#define REPLACEMODIFIER_H
+#ifndef DIGIKAM_REPLACE_MODIFIER_H
+#define DIGIKAM_REPLACE_MODIFIER_H
 
 // Local includes
 
@@ -64,7 +64,7 @@ class ReplaceModifier : public Modifier
 
 public:
 
-    ReplaceModifier();
+    explicit ReplaceModifier();
     virtual QString parseOperation(ParseSettings& settings);
 
 private Q_SLOTS:
@@ -79,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* REPLACEMODIFIER_H */
+#endif // DIGIKAM_REPLACE_MODIFIER_H

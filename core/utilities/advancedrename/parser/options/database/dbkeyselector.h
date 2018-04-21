@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBKEYSELECTOR_H
-#define DBKEYSELECTOR_H
+#ifndef DIGIKAM_DB_KEY_SELECTOR_H
+#define DIGIKAM_DB_KEY_SELECTOR_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class DbKeySelectorItem : public QTreeWidgetItem
 
 public:
 
-    DbKeySelectorItem(DbHeaderListItem* const parent, const QString& title, const QString& desc);
+    explicit DbKeySelectorItem(DbHeaderListItem* const parent, const QString& title, const QString& desc);
     virtual ~DbKeySelectorItem();
 
     QString key()         const;
@@ -113,4 +113,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DBKEYSELECTOR_H */
+#endif // DIGIKAM_DB_KEY_SELECTOR_H

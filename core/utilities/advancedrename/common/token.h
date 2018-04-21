@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TOKEN_H
-#define TOKEN_H
+#ifndef DIGIKAM_TOKEN_H
+#define DIGIKAM_TOKEN_H
 
 // Qt includes
 
@@ -66,7 +66,7 @@ class Token : public QObject
 
 public:
 
-    Token(const QString& id, const QString& description);
+    explicit Token(const QString& id, const QString& description);
     ~Token();
 
     /**
@@ -128,4 +128,4 @@ typedef QList<Token*> TokenList;
 
 } // namespace Digikam
 
-#endif /* TOKEN_H */
+#endif // DIGIKAM_TOKEN_H

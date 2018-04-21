@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COMMONKEYS_H
-#define COMMONKEYS_H
+#ifndef DIGIKAM_COMMON_KEYS_H
+#define DIGIKAM_COMMON_KEYS_H
 
 // Local includes
 
@@ -36,7 +36,7 @@ class CommonKeys : public DbKeysCollection
 {
 public:
 
-    CommonKeys();
+    explicit CommonKeys();
     virtual ~CommonKeys() {};
 
 protected:
@@ -51,4 +51,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* COMMONKEYS_H */
+#endif // DIGIKAM_COMMON_KEYS_H

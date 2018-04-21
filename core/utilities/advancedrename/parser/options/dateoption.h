@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATEOPTION_H
-#define DATEOPTION_H
+#ifndef DIGIKAM_DATE_OPTION_H
+#define DIGIKAM_DATE_OPTION_H
 
 // Qt includes
 
@@ -63,7 +63,7 @@ public:
 
 public:
 
-    DateFormat();
+    explicit DateFormat();
     ~DateFormat() {};
 
     Type     type(const QString& identifier);
@@ -135,7 +135,7 @@ class DateOption : public Option
 
 public:
 
-    DateOption();
+    explicit DateOption();
     ~DateOption() {};
 
 protected:
@@ -154,4 +154,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* DATEOPTION_H */
+#endif // DIGIKAM_DATE_OPTION_H

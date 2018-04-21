@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef UNIQUEMODIFIER_H
-#define UNIQUEMODIFIER_H
+#ifndef DIGIKAM_UNIQUE_MODIFIER_H
+#define DIGIKAM_UNIQUE_MODIFIER_H
 
 // Qt includes
 
@@ -43,7 +43,7 @@ class UniqueModifier : public Modifier
 
 public:
 
-    UniqueModifier();
+    explicit UniqueModifier();
     virtual QString parseOperation(ParseSettings& settings);
     virtual void    reset();
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* UNIQUEMODIFIER_H */
+#endif // DIGIKAM_UNIQUE_MODIFIER_H

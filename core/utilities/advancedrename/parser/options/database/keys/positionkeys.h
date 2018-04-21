@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef POSITIONKEYS_H
-#define POSITIONKEYS_H
+#ifndef DIGIKAM_POSITION_KEYS_H
+#define DIGIKAM_POSITION_KEYS_H
 
 // Local includes
 
@@ -37,7 +37,7 @@ class PositionKeys : public DbKeysCollection
 
 public:
 
-    PositionKeys();
+    explicit PositionKeys();
     virtual ~PositionKeys() {};
 
 protected:
@@ -52,4 +52,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* POSITIONKEYS_H */
+#endif // DIGIKAM_POSITION_KEYS_H

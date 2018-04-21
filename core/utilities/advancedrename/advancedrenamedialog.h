@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ADVANCEDRENAMEDIALOG_H
-#define ADVANCEDRENAMEDIALOG_H
+#ifndef DIGIKAM_ADVANCED_RENAME_DIALOG_H
+#define DIGIKAM_ADVANCED_RENAME_DIALOG_H
 
 // Qt includes
 
@@ -141,4 +141,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ADVANCEDRENAMEDIALOG_H */
+#endif // DIGIKAM_ADVANCED_RENAME_DIALOG_H

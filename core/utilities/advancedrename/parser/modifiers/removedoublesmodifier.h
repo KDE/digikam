@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef REMOVEDOUBLESMODIFIER_H
-#define REMOVEDOUBLESMODIFIER_H
+#ifndef DIGIKAM_REMOVE_DOUBLES_MODIFIER_H
+#define DIGIKAM_REMOVE_DOUBLES_MODIFIER_H
 
 // Local includes
 
@@ -38,7 +38,7 @@ class RemoveDoublesModifier : public Modifier
 
 public:
 
-    RemoveDoublesModifier();
+    explicit RemoveDoublesModifier();
     virtual QString parseOperation(ParseSettings& settings);
 
 private:
@@ -49,5 +49,4 @@ private:
 
 } // namespace Digikam
 
-
-#endif /* REMOVEDOUBLESMODIFIER_H */
+#endif // DIGIKAM_REMOVE_DOUBLES_MODIFIER_H

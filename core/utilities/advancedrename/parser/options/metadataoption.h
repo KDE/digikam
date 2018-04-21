@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATAOPTION_H
-#define METADATAOPTION_H
+#ifndef DIGIKAM_METADATA_OPTION_H
+#define DIGIKAM_METADATA_OPTION_H
 
 // Qt includes
 
@@ -68,7 +68,7 @@ class MetadataOption : public Option
 
 public:
 
-    MetadataOption();
+    explicit MetadataOption();
     ~MetadataOption() {};
 
 protected:
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* METADATAOPTION_H */
+#endif // DIGIKAM_METADATA_OPTION_H

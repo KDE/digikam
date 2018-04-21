@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DEFAULTRENAMEPARSER_H
-#define DEFAULTRENAMEPARSER_H
+#ifndef DIGIKAM_DEFAULT_RENAME_PARSER_H
+#define DIGIKAM_DEFAULT_RENAME_PARSER_H
 
 // Local includes
 
@@ -37,7 +37,7 @@ class DefaultRenameParser : public Parser
 
 public:
 
-    DefaultRenameParser();
+    explicit DefaultRenameParser();
 
 private:
 
@@ -48,4 +48,4 @@ private:
 } // namespace Digikam
 
 
-#endif /* DEFAULTRENAMEPARSER_H */
+#endif // DIGIKAM_DEFAULT_RENAME_PARSER_H

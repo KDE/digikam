@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATAKEYS_H
-#define METADATAKEYS_H
+#ifndef DIGIKAM_METADATA_KEYS_H
+#define DIGIKAM_METADATA_KEYS_H
 
 // Local includes
 
@@ -37,7 +37,7 @@ class MetadataKeys : public DbKeysCollection
 
 public:
 
-    MetadataKeys();
+    explicit MetadataKeys();
     virtual ~MetadataKeys() {};
 
 protected:
@@ -52,4 +52,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* METADATAKEYS_H */
+#endif // DIGIKAM_METADATA_KEYS_H

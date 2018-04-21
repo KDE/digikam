@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASEOPTION_H
-#define DATABASEOPTION_H
+#ifndef DIGIKAM_DATABASE_OPTION_H
+#define DIGIKAM_DATABASE_OPTION_H
 
 // Qt includes
 
@@ -71,7 +71,7 @@ class DatabaseOption : public Option
 
 public:
 
-    DatabaseOption();
+    explicit DatabaseOption();
     ~DatabaseOption();
 
 protected:
@@ -100,4 +100,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DATABASEOPTION_H */
+#endif // DIGIKAM_DATABASE_OPTION_H

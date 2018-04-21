@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TOOLTIPDIALOG_H
-#define TOOLTIPDIALOG_H
+#ifndef DIGIKAM_TOOL_TIP_DIALOG_H
+#define DIGIKAM_TOOL_TIP_DIALOG_H
 
 // Qt includes
 
@@ -56,4 +56,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* TOOLTIPDIALOG_H */
+#endif // DIGIKAM_TOOL_TIP_DIALOG_H

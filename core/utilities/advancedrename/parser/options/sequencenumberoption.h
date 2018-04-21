@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SEQUENCENUMBEROPTION_H
-#define SEQUENCENUMBEROPTION_H
+#ifndef DIGIKAM_SEQUENCE_NUMBER_OPTION_H
+#define DIGIKAM_SEQUENCE_NUMBER_OPTION_H
 
 // Local includes
 
@@ -62,7 +62,7 @@ class SequenceNumberOption : public Option
 
 public:
 
-    SequenceNumberOption();
+    explicit SequenceNumberOption();
     ~SequenceNumberOption();
 
 protected:
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* SEQUENCENUMBEROPTION_H */
+#endif // DIGIKAM_SEQUENCE_NUMBER_OPTION_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef RULEDIALOG_H
-#define RULEDIALOG_H
+#ifndef DIGIKAM_RULE_DIALOG_H
+#define DIGIKAM_RULE_DIALOG_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* RULEDIALOG_H */
+#endif // DIGIKAM_RULE_DIALOG_H

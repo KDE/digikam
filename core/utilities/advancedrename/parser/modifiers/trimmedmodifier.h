@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TRIMMEDMODIFIER_H
-#define TRIMMEDMODIFIER_H
+#ifndef DIGIKAM_TRIMMED_MODIFIER_H
+#define DIGIKAM_TRIMMED_MODIFIER_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class TrimmedModifier : public Modifier
 {
 public:
 
-    TrimmedModifier();
+    explicit TrimmedModifier();
     virtual QString parseOperation(ParseSettings& settings);
 
 private:
@@ -46,5 +46,4 @@ private:
 
 } // namespace Digikam
 
-
-#endif /* TRIMMEDMODIFIER_H */
+#endif // DIGIKAM_TRIMMED_MODIFIER_H

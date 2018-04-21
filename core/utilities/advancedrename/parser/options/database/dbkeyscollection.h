@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBKEYSCOLLECTION_H
-#define DBKEYSCOLLECTION_H
+#ifndef DIGIKAM_DB_KEYS_COLLECTION_H
+#define DIGIKAM_DB_KEYS_COLLECTION_H
 
 // Qt includes
 
@@ -114,4 +114,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DBKEYSCOLLECTION_H */
+#endif // DIGIKAM_DB_KEYS_COLLECTION_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ADVANCEDRENAMEMANAGER_H
-#define ADVANCEDRENAMEMANAGER_H
+#ifndef DIGIKAM_ADVANCED_RENAME_MANAGER_H
+#define DIGIKAM_ADVANCED_RENAME_MANAGER_H
 
 // Qt includes
 
@@ -131,4 +131,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ADVANCEDRENAMEMANAGER_H */
+#endif // DIGIKAM_ADVANCED_RENAME_MANAGER_H

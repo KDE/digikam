@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ADVANCEDRENAMEINPUT_H
-#define ADVANCEDRENAMEINPUT_H
+#ifndef DIGIKAM_ADVANCED_RENAME_INPUT_H
+#define DIGIKAM_ADVANCED_RENAME_INPUT_H
 
 // Qt includes
 
@@ -155,4 +155,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ADVANCEDRENAMEINPUT_H */
+#endif // DIGIKAM_ADVANCED_RENAME_INPUT_H
