@@ -66,6 +66,7 @@ public:
     bool                 cancel;
 
     QPixmap              thumbPixmap;
+    QString              thumbPath;
 };
 
 AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& list, QWidget* const parent)
@@ -125,7 +126,7 @@ void AdvancedRenameProcessDialog::processOne()
     NewNameInfo info = d->newNameList.takeFirst();
     d->currentUrl    = info.first;
 
-    addedAction(d->thumbPixmap, QDir::toNativeSeparators(info.first.toLocalFile()));
+    addedAction(d->thumbPixmap, QDir::toNativeSeparators(d->thumbPath));
     setLabel(i18n("<b>Renaming images. Please wait...</b>"));
     d->utilities->rename(info.first, info.second);
     getNextThumbnail();
@@ -136,9 +137,10 @@ void AdvancedRenameProcessDialog::complete()
     done(QDialogButtonBox::Cancel);
 }
 
-void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& /*desc*/, const QPixmap& pix)
+void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
     d->thumbPixmap = pix;
+    d->thumbPath   = desc.filePath;
 }
 
 void AdvancedRenameProcessDialog::slotCancel()
@@ -197,7 +199,7 @@ void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
 
     d->failedUrls << src;
 
-    QThread::msleep(500);
+    QThread::msleep(250);
 
     slotRenameSuccessded(src);
 }
