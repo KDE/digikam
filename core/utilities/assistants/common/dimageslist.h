@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMAGES_LIST_H
-#define DIMAGES_LIST_H
+#ifndef DIGIKAM_DIMAGES_LIST_H
+#define DIGIKAM_DIMAGES_LIST_H
 
 // Qt includes
 
@@ -301,4 +301,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::DImagesList::ControlButtons)
 
-#endif // DIMAGES_LIST_H
+#endif // DIGIKAM_DIMAGES_LIST_H

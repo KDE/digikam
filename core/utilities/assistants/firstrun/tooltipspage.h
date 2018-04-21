@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TOOL_TIPS_PAGE_H
-#define TOOL_TIPS_PAGE_H
+#ifndef DIGIKAM_TOOL_TIPS_PAGE_H
+#define DIGIKAM_TOOL_TIPS_PAGE_H
 
 // Local includes
 
@@ -50,4 +50,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TOOL_TIPS_PAGE_H
+#endif // DIGIKAM_TOOL_TIPS_PAGE_H

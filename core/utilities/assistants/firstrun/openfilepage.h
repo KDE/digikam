@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef OPEN_FILE_PAGE_H
-#define OPEN_FILE_PAGE_H
+#ifndef DIGIKAM_OPEN_FILE_PAGE_H
+#define DIGIKAM_OPEN_FILE_PAGE_H
 
 // Local includes
 
@@ -50,4 +50,4 @@ private:
 
 } // namespace Digikam
 
-#endif // OPEN_FILE_PAGE_H
+#endif // DIGIKAM_OPEN_FILE_PAGE_H

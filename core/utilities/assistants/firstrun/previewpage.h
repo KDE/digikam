@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PREVIEW_PAGE_H
-#define PREVIEW_PAGE_H
+#ifndef DIGIKAM_PREVIEW_PAGE_H
+#define DIGIKAM_PREVIEW_PAGE_H
 
 // Local includes
 
@@ -50,4 +50,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* PREVIEW_PAGE_H */
+#endif // DIGIKAM_PREVIEW_PAGE_H

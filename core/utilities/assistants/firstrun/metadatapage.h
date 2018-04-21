@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATA_PAGE_H
-#define METADATA_PAGE_H
+#ifndef DIGIKAM_METADATA_PAGE_H
+#define DIGIKAM_METADATA_PAGE_H
 
 // Local includes
 
@@ -50,4 +50,4 @@ private:
 
 } // namespace Digikam
 
-#endif // METADATA_PAGE_H
+#endif // DIGIKAM_METADATA_PAGE_H

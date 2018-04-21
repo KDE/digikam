@@ -25,7 +25,6 @@
 
 // Qt includes
 
-#include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
 #include <QLabel>

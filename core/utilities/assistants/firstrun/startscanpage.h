@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef START_SCAN_PAGE_H
-#define START_SCAN_PAGE_H
+#ifndef DIGIKAM_START_SCAN_PAGE_H
+#define DIGIKAM_START_SCAN_PAGE_H
 
 // Local includes
 
@@ -41,4 +41,4 @@ public:
 
 } // namespace Digikam
 
-#endif // START_SCAN_PAGE_H
+#endif // DIGIKAM_START_SCAN_PAGE_H

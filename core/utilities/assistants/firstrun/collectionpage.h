@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COLLECTION_PAGE_H
-#define COLLECTION_PAGE_H
+#ifndef DIGIKAM_COLLECTION_PAGE_H
+#define DIGIKAM_COLLECTION_PAGE_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COLLECTION_PAGE_H
+#endif // DIGIKAM_COLLECTION_PAGE_H

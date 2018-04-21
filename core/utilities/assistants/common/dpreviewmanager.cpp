@@ -31,7 +31,6 @@
 #include <QTimer>
 #include <QImage>
 #include <QPixmap>
-#include <QFrame>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>

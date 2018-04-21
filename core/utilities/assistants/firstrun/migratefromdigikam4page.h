@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MIGRATE_FROM_DIGIKAM4_PAGE_H
-#define MIGRATE_FROM_DIGIKAM4_PAGE_H
+#ifndef DIGIKAM_MIGRATE_FROM_DIGIKAM4_PAGE_H
+#define DIGIKAM_MIGRATE_FROM_DIGIKAM4_PAGE_H
 
 // Local includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MIGRATE_FROM_DIGIKAM4_PAGE_H
+#endif // DIGIKAM_MIGRATE_FROM_DIGIKAM4_PAGE_H

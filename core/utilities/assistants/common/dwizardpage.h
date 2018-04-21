@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DWIZARD_PAGE_H
-#define DWIZARD_PAGE_H
+#ifndef DIGIKAM_DWIZARD_PAGE_H
+#define DIGIKAM_DWIZARD_PAGE_H
 
 // Qt includes
 
@@ -69,4 +69,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DWIZARD_PAGE_H
+#endif // DIGIKAM_DWIZARD_PAGE_H

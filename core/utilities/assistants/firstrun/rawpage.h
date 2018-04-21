@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAW_PAGE_H
-#define RAW_PAGE_H
+#ifndef DIGIKAM_RAW_PAGE_H
+#define DIGIKAM_RAW_PAGE_H
 
 // Local includes
 
@@ -50,4 +50,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAW_PAGE_H
+#endif // DIGIKAM_RAW_PAGE_H

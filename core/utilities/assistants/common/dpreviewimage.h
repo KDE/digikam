@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DPREVIEW_IMAGE_H
-#define DPREVIEW_IMAGE_H
+#ifndef DIGIKAM_DPREVIEW_IMAGE_H
+#define DIGIKAM_DPREVIEW_IMAGE_H
 
 // Qt includes
 
@@ -183,4 +183,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DPREVIEW_IMAGE_H
+#endif // DIGIKAM_DPREVIEW_IMAGE_H

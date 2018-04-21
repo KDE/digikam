@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DSAVE_SETTINGS_WIDGET_H
-#define DSAVE_SETTINGS_WIDGET_H
+#ifndef DIGIKAM_DSAVE_SETTINGS_WIDGET_H
+#define DIGIKAM_DSAVE_SETTINGS_WIDGET_H
 
 // Qt includes
 
@@ -94,4 +94,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DSAVE_SETTINGS_WIDGET_H
+#endif // DIGIKAM_DSAVE_SETTINGS_WIDGET_H

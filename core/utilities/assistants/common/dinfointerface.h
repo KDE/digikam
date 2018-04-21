@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DINFO_INTERFACE_H
-#define DINFO_INTERFACE_H
+#ifndef DIGIKAM_DINFO_INTERFACE_H
+#define DIGIKAM_DINFO_INTERFACE_H
 
 // Qt includes
 
@@ -164,4 +164,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DINFO_INTERFACE_H
+#endif // DIGIKAM_DINFO_INTERFACE_H

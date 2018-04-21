@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DPREVIEW_MANAGER_H
-#define DPREVIEW_MANAGER_H
+#ifndef DIGIKAM_DPREVIEW_MANAGER_H
+#define DIGIKAM_DPREVIEW_MANAGER_H
 
 // Qt includes
 
@@ -90,4 +90,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DPREVIEW_MANAGER_H
+#endif // DIGIKAM_DPREVIEW_MANAGER_H
