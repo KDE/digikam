@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FB_MPFORM_H
-#define FB_MPFORM_H
+#ifndef DIGIKAM_FB_MPFORM_H
+#define DIGIKAM_FB_MPFORM_H
 
 // Qt includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FB_MPFORM_H
+#endif // DIGIKAM_FB_MPFORM_H

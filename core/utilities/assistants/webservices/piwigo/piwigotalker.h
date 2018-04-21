@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef PIWIGO_TALKER_H
-#define PIWIGO_TALKER_H
+#ifndef DIGIKAM_PIWIGO_TALKER_H
+#define DIGIKAM_PIWIGO_TALKER_H
 
 // Qt includes
 

@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef VK_WINDOW_H
-#define VK_WINDOW_H
+#ifndef DIGIKAM_VK_WINDOW_H
+#define DIGIKAM_VK_WINDOW_H
 
 // Local includes
 
@@ -98,4 +98,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VK_WINDOW_H
+#endif // DIGIKAM_VK_WINDOW_H

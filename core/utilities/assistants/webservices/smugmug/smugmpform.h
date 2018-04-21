@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SMUG_MPFORM_H
-#define SMUG_MPFORM_H
+#ifndef DIGIKAM_SMUG_MPFORM_H
+#define DIGIKAM_SMUG_MPFORM_H
 
 // Qt includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SMUG_MPFORM_H
+#endif // DIGIKAM_SMUG_MPFORM_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FB_WIDGET_H
-#define FB_WIDGET_H
+#ifndef DIGIKAM_FB_WIDGET_H
+#define DIGIKAM_FB_WIDGET_H
 
 // Qt includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FB_WIDGET_H
+#endif // DIGIKAM_FB_WIDGET_H

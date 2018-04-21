@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VK_AUTH_WIDGET_H
-#define VK_AUTH_WIDGET_H
+#ifndef DIGIKAM_VK_AUTH_WIDGET_H
+#define DIGIKAM_VK_AUTH_WIDGET_H
 
 // Qt includes
 
@@ -79,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VK_AUTH_WIDGET_H
+#endif // DIGIKAM_VK_AUTH_WIDGET_H

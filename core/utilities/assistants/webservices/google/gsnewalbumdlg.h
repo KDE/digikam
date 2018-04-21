@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GS_NEW_ALBUM_DLG_H
-#define GS_NEW_ALBUM_DLG_H
+#ifndef DIGIKAM_GS_NEW_ALBUM_DLG_H
+#define DIGIKAM_GS_NEW_ALBUM_DLG_H
 
 // Qt includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GS_NEW_ALBUM_DLG_H
+#endif // DIGIKAM_GS_NEW_ALBUM_DLG_H

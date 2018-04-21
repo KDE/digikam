@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VK_ALBUM_CHOOSER_H
-#define VK_ALBUM_CHOOSER_H
+#ifndef DIGIKAM_VK_ALBUM_CHOOSER_H
+#define DIGIKAM_VK_ALBUM_CHOOSER_H
 
 // Qt includes
 
@@ -94,4 +94,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VK_ALBUM_CHOOSER_H
+#endif // DIGIKAM_VK_ALBUM_CHOOSER_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef WS_IMAGES_PAGE_H
-#define WS_IMAGES_PAGE_H
+#ifndef DIGIKAM_WS_IMAGES_PAGE_H
+#define DIGIKAM_WS_IMAGES_PAGE_H
 
 // Qt includes
 
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WS_IMAGES_PAGE_H
+#endif // DIGIKAM_WS_IMAGES_PAGE_H

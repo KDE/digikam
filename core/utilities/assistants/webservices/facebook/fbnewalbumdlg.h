@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FB_NEW_ALBUM_DLG_H
-#define FB_NEW_ALBUM_DLG_H
+#ifndef DIGIKAM_FB_NEW_ALBUM_DLG_H
+#define DIGIKAM_FB_NEW_ALBUM_DLG_H
 
 // Qt includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FB_NEW_ALBUM_DLG_H
+#endif // DIGIKAM_FB_NEW_ALBUM_DLG_H

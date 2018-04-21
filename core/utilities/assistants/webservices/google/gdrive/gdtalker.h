@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GD_TALKER_H
-#define GD_TALKER_H
+#ifndef DIGIKAM_GD_TALKER_H
+#define DIGIKAM_GD_TALKER_H
 
 // Qt includes
 
@@ -87,4 +87,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GD_TALKER_H
+#endif // DIGIKAM_GD_TALKER_H

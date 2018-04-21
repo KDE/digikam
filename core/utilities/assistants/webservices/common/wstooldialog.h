@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef WS_TOOL_DIALOG_H
-#define WS_TOOL_DIALOG_H
+#ifndef DIGIKAM_WS_TOOL_DIALOG_H
+#define DIGIKAM_WS_TOOL_DIALOG_H
 
 // KDE includes
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WS_TOOL_DIALOG_H
+#endif // DIGIKAM_WS_TOOL_DIALOG_H

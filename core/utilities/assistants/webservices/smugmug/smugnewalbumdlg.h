@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SMUG_NEW_ALBUM_DLG_H
-#define SMUG_NEW_ALBUM_DLG_H
+#ifndef DIGIKAM_SMUG_NEW_ALBUM_DLG_H
+#define DIGIKAM_SMUG_NEW_ALBUM_DLG_H
 
 // Qt includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SMUG_NEW_ALBUM_DLG_H
+#endif // DIGIKAM_SMUG_NEW_ALBUM_DLG_H

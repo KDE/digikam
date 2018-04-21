@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef PIWIGO_SESSION_H
-#define PIWIGO_SESSION_H
+#ifndef DIGIKAM_PIWIGO_SESSION_H
+#define DIGIKAM_PIWIGO_SESSION_H
 
 // Qt includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PIWIGO_SESSION_H
+#endif // DIGIKAM_PIWIGO_SESSION_H

@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef PIWIGO_ITEM_H
-#define PIWIGO_ITEM_H
+#ifndef DIGIKAM_PIWIGO_ITEM_H
+#define DIGIKAM_PIWIGO_ITEM_H
 
 // Qt includes
 
@@ -64,4 +64,4 @@ public:
 
 } // namespace Digikam
 
-#endif // PIWIGO_ITEM_H
+#endif // DIGIKAM_PIWIGO_ITEM_H

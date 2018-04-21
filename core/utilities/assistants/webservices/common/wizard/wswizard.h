@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef WS_WIZARD_H
-#define WS_WIZARD_H
+#ifndef DIGIKAM_WS_WIZARD_H
+#define DIGIKAM_WS_WIZARD_H
 
 // Qt includes
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WS_WIZARD_H
+#endif // DIGIKAM_WS_WIZARD_H

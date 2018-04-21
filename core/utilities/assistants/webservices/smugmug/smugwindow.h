@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SMUG_WINDOW_H
-#define SMUG_WINDOW_H
+#ifndef DIGIKAM_SMUG_WINDOW_H
+#define DIGIKAM_SMUG_WINDOW_H
 
 // Qt includes
 
@@ -135,4 +135,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SMUG_WINDOW_H
+#endif // DIGIKAM_SMUG_WINDOW_H

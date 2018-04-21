@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GS_TALKER_BASE_H
-#define GS_TALKER_BASE_H
+#ifndef DIGIKAM_GS_TALKER_BASE_H
+#define DIGIKAM_GS_TALKER_BASE_H
 
 // Qt includes
 
@@ -95,4 +95,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GS_TALKER_BASE_H
+#endif // DIGIKAM_GS_TALKER_BASE_H

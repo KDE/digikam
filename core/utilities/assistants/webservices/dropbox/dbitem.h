@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DB_ITEM_H
-#define DB_ITEM_H
+#ifndef DIGIKAM_DB_ITEM_H
+#define DIGIKAM_DB_ITEM_H
 
 // Qt includes
 
@@ -57,4 +57,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DB_ITEM_H
+#endif // DIGIKAM_DB_ITEM_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMGUR_IMAGES_LIST_H
-#define IMGUR_IMAGES_LIST_H
+#ifndef DIGIKAM_IMGUR_IMAGES_LIST_H
+#define DIGIKAM_IMGUR_IMAGES_LIST_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMGUR_IMAGES_LIST_H
+#endif // DIGIKAM_IMGUR_IMAGES_LIST_H

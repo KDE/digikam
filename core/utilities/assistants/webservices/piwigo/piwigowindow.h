@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef PIWIGO_WINDOW_H
-#define PIWIGO_WINDOW_H
+#ifndef DIGIKAM_PIWIGO_WINDOW_H
+#define DIGIKAM_PIWIGO_WINDOW_H
 
 // Qt includes
 
@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PIWIGO_WINDOW_H
+#endif // DIGIKAM_PIWIGO_WINDOW_H

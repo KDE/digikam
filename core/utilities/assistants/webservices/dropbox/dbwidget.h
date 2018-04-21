@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DB_WIDGET_H
-#define DB_WIDGET_H
+#ifndef DIGIKAM_DB_WIDGET_H
+#define DIGIKAM_DB_WIDGET_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DB_WIDGET_H
+#endif // DIGIKAM_DB_WIDGET_H

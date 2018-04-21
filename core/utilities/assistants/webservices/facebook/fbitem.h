@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FB_ITEM_H
-#define FB_ITEM_H
+#ifndef DIGIKAM_FB_ITEM_H
+#define DIGIKAM_FB_ITEM_H
 
 // Qt includes
 
@@ -107,4 +107,4 @@ public:
 
 } // namespace Digikam
 
-#endif // FB_ITEM_H
+#endif // DIGIKAM_FB_ITEM_H

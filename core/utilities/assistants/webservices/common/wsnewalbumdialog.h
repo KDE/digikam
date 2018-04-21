@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef WS_NEW_ALBUM_DIALOG_H
-#define WS_NEW_ALBUM_DIALOG_H
+#ifndef DIGIKAM_WS_NEW_ALBUM_DIALOG_H
+#define DIGIKAM_WS_NEW_ALBUM_DIALOG_H
 
 // Qt includes
 
@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WS_NEW_ALBUM_DIALOG_H
+#endif // DIGIKAM_WS_NEW_ALBUM_DIALOG_H

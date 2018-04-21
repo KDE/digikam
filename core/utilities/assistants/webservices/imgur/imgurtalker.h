@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMGUR_TALKER_H
-#define IMGUR_TALKER_H
+#ifndef DIGIKAM_IMGUR_TALKER_H
+#define DIGIKAM_IMGUR_TALKER_H
 
 // C++ includes
 
@@ -198,4 +198,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMGUR_TALKER_H
+#endif // DIGIKAM_IMGUR_TALKER_H

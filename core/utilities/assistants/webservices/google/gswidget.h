@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GS_WIDGET_H
-#define GS_WIDGET_H
+#ifndef DIGIKAM_GS_WIDGET_H
+#define DIGIKAM_GS_WIDGET_H
 
 // Qt includes
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GS_WIDGET_H
+#endif // DIGIKAM_GS_WIDGET_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef COMBO_BOX_DELEGATE_H
-#define COMBO_BOX_DELEGATE_H
+#ifndef DIGIKAM_WS_COMBO_BOX_DELEGATE_H
+#define DIGIKAM_WS_COMBO_BOX_DELEGATE_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COMBO_BOX_DELEGATE_H
+#endif // DIGIKAM_WS_COMBO_BOX_DELEGATE_H

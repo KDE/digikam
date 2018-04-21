@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DB_TALKER_H
-#define DB_TALKER_H
+#ifndef DIGIKAM_DB_TALKER_H
+#define DIGIKAM_DB_TALKER_H
 
 // Qt includes
 
@@ -97,4 +97,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DB_TALKER_H
+#endif // DIGIKAM_DB_TALKER_H

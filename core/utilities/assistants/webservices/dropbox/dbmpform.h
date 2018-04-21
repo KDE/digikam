@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DB_MPFORM_H
-#define DB_MPFORM_H
+#ifndef DIGIKAM_DB_MPFORM_H
+#define DIGIKAM_DB_MPFORM_H
 
 // Qt includes
 
@@ -49,4 +49,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DB_MPFORM_H
+#endif // DIGIKAM_DB_MPFORM_H

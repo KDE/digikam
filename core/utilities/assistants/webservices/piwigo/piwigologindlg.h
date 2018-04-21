@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef PIWIGO_LOGIN_DLG_H
-#define PIWIGO_LOGIN_DLG_H
+#ifndef DIGIKAM_PIWIGO_LOGIN_DLG_H
+#define DIGIKAM_PIWIGO_LOGIN_DLG_H
 
 // Qt includes
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PIWIGO_LOGIN_DLG_H
+#endif // DIGIKAM_PIWIGO_LOGIN_DLG_H

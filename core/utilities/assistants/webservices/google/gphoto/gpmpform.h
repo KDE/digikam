@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GP_MPFORM_H
-#define GP_MPFORM_H
+#ifndef DIGIKAM_GP_MPFORM_H
+#define DIGIKAM_GP_MPFORM_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GP_MPFORM_H
+#endif // DIGIKAM_GP_MPFORM_H

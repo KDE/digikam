@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GS_WINDOW_H
-#define GS_WINDOW_H
+#ifndef DIGIKAM_GS_WINDOW_H
+#define DIGIKAM_GS_WINDOW_H
 
 // Qt includes
 
@@ -108,4 +108,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GS_WINDOW_H
+#endif // DIGIKAM_GS_WINDOW_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DB_WINDOW_H
-#define DB_WINDOW_H
+#ifndef DIGIKAM_DB_WINDOW_H
+#define DIGIKAM_DB_WINDOW_H
 
 // Qt includes
 
@@ -95,4 +95,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DB_WINDOW_H
+#endif // DIGIKAM_DB_WINDOW_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef WS_SELECT_USER_DLG_H
-#define WS_SELECT_USER_DLG_H
+#ifndef DIGIKAM_WS_SELECT_USER_DLG_H
+#define DIGIKAM_WS_SELECT_USER_DLG_H
 
 // Qt includes
 
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WS_SELECT_USER_DLG_H
+#endif // DIGIKAM_WS_SELECT_USER_DLG_H

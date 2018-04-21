@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef WS_LOGIN_DIALOG_H
-#define WS_LOGIN_DIALOG_H
+#ifndef DIGIKAM_WS_LOGIN_DIALOG_H
+#define DIGIKAM_WS_LOGIN_DIALOG_H
 
 #include <QDialog>
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WS_LOGIN_DIALOG_H
+#endif // DIGIKAM_WS_LOGIN_DIALOG_H
