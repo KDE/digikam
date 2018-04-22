@@ -1300,9 +1300,9 @@ QStringList CoreDB::getItemTagNames(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString::fromUtf8("SELECT name FROM Tags \n "
-                                     "WHERE id IN (SELECT tagid FROM ImageTags \n "
-                                     "             WHERE imageid=?) \n "
+    d->db->execSql(QString::fromUtf8("SELECT name FROM Tags "
+                                     "WHERE id IN (SELECT tagid FROM ImageTags "
+                                     "WHERE imageid=?) "
                                      "ORDER BY name;"),
                                      imageID,
                                      &values);
