@@ -68,7 +68,8 @@ bool ThumbsDb::setSetting(const QString& keyword, const QString& value )
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":keyword"), keyword);
     parameters.insert(QLatin1String(":value"), value);
-    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("ReplaceThumbnailSetting")), parameters);
+    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("ReplaceThumbnailSetting")),
+                                                                       parameters);
 
     return (queryStateResult == BdEngineBackend::NoErrors);
 }
@@ -79,8 +80,11 @@ QString ThumbsDb::getSetting(const QString& keyword)
     parameters.insert(QLatin1String(":keyword"), keyword);
     QList<QVariant> values;
     // TODO Should really check return status here
-    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailSetting")), parameters, &values);
-    qCDebug(DIGIKAM_THUMBSDB_LOG) << "ThumbDB SelectThumbnailSetting val ret = " << (BdEngineBackend::QueryStateEnum)queryStateResult;
+    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailSetting")),
+                                                                       parameters, &values);
+
+    qCDebug(DIGIKAM_THUMBSDB_LOG) << "ThumbDB SelectThumbnailSetting val ret = "
+                                  << (BdEngineBackend::QueryStateEnum)queryStateResult;
 
     if (values.isEmpty())
     {
@@ -98,8 +102,11 @@ QString ThumbsDb::getLegacySetting(const QString& keyword)
     parameters.insert(QLatin1String(":keyword"), keyword);
     QList<QVariant> values;
     // TODO Should really check return status here
-    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailLegacySetting")), parameters, &values);
-    qCDebug(DIGIKAM_THUMBSDB_LOG) << "ThumbDB SelectThumbnailLegacySetting val ret = " << (BdEngineBackend::QueryStateEnum)queryStateResult;
+    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailLegacySetting")),
+                                                                       parameters, &values);
+
+    qCDebug(DIGIKAM_THUMBSDB_LOG) << "ThumbDB SelectThumbnailLegacySetting val ret = "
+                                  << (BdEngineBackend::QueryStateEnum)queryStateResult;
 
     if (values.isEmpty())
     {
@@ -132,8 +139,7 @@ ThumbsDbInfo ThumbsDb::findByHash(const QString& uniqueHash, qlonglong fileSize)
                                  "FROM UniqueHashes "
                                  "   INNER JOIN Thumbnails ON thumbId = id "
                                  "WHERE uniqueHash=? AND fileSize=?;"),
-                   uniqueHash, fileSize,
-                   &values );
+                   uniqueHash, fileSize, &values);
 
     ThumbsDbInfo info;
     fillThumbnailInfo(values, info);
@@ -147,8 +153,7 @@ ThumbsDbInfo ThumbsDb::findByFilePath(const QString& path)
                                  "FROM FilePaths "
                                  "   INNER JOIN Thumbnails ON thumbId = id "
                                  "WHERE path=?;"),
-                   path,
-                   &values );
+                   path, &values);
 
     ThumbsDbInfo info;
     fillThumbnailInfo(values, info);
@@ -200,8 +205,7 @@ ThumbsDbInfo ThumbsDb::findByCustomIdentifier(const QString& id)
                                  "FROM CustomIdentifiers "
                                  "   INNER JOIN Thumbnails ON thumbId = id "
                                  "WHERE identifier=?;"),
-                   id,
-                   &values);
+                   id, &values);
 
     ThumbsDbInfo info;
     fillThumbnailInfo(values, info);
@@ -211,13 +215,16 @@ ThumbsDbInfo ThumbsDb::findByCustomIdentifier(const QString& id)
 QList<int> ThumbsDb::findAll()
 {
     QList<QVariant> values;
-    d->db->execSql(QLatin1String("SELECT id FROM Thumbnails;"),&values);
+    d->db->execSql(QLatin1String("SELECT id FROM Thumbnails;"),
+                   &values);
 
     QList<int> thumbIds;
-    foreach (QVariant object, values)
+
+    foreach(const QVariant& object, values)
     {
         thumbIds << object.toInt();
     }
+
     return thumbIds;
 }
 
@@ -227,8 +234,8 @@ QHash<QString, int> ThumbsDb::getFilePathsWithThumbnail()
                                                              "FROM FilePaths "
                                                              "   INNER JOIN Thumbnails ON FilePaths.thumbId=Thumbnails.id "
                                                              "WHERE type BETWEEN %1 AND %2;")
-                                         .arg(DatabaseThumbnail::PGF)
-                                         .arg(DatabaseThumbnail::PNG));
+                                                 .arg(DatabaseThumbnail::PGF)
+                                                 .arg(DatabaseThumbnail::PNG));
 
     if (!d->db->exec(query))
     {
@@ -275,7 +282,8 @@ BdEngineBackend::QueryState ThumbsDb::removeByUniqueHash(const QString& uniqueHa
     parameters.insert(QLatin1String(":uniqueHash"), uniqueHash);
     parameters.insert(QLatin1String(":filesize"),   fileSize);
 
-    return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByUniqueHashId")), parameters);
+    return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByUniqueHashId")),
+                               parameters);
 }
 
 BdEngineBackend::QueryState ThumbsDb::removeByFilePath(const QString& path)
@@ -284,7 +292,8 @@ BdEngineBackend::QueryState ThumbsDb::removeByFilePath(const QString& path)
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":path"), path);
 
-    return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByPath")), parameters);
+    return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByPath")),
+                               parameters);
 }
 
 BdEngineBackend::QueryState ThumbsDb::removeByCustomIdentifier(const QString& id)
@@ -293,7 +302,8 @@ BdEngineBackend::QueryState ThumbsDb::removeByCustomIdentifier(const QString& id
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":identifier"), id);
 
-    return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByCustomIdentifier")), parameters);
+    return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByCustomIdentifier")),
+                               parameters);
 }
 
 BdEngineBackend::QueryState ThumbsDb::insertThumbnail(const ThumbsDbInfo& info, QVariant* const lastInsertId)
@@ -301,16 +311,15 @@ BdEngineBackend::QueryState ThumbsDb::insertThumbnail(const ThumbsDbInfo& info, 
     QVariant id;
     BdEngineBackend::QueryState lastQueryState;
     lastQueryState = d->db->execSql(QLatin1String("INSERT INTO Thumbnails (type, modificationDate, orientationHint, data) VALUES (?, ?, ?, ?);"),
-                                    info.type, info.modificationDate, info.orientationHint, info.data,
-                                    0, &id);
+                                    info.type, info.modificationDate, info.orientationHint, info.data, 0, &id);
 
     if (BdEngineBackend::NoErrors == lastQueryState)
     {
-        *lastInsertId=id.toInt();
+        *lastInsertId = id.toInt();
     }
     else
     {
-        *lastInsertId=-1;
+        *lastInsertId = -1;
     }
 
     return lastQueryState;
@@ -324,7 +333,8 @@ BdEngineBackend::QueryState ThumbsDb::replaceThumbnail(const ThumbsDbInfo& info)
 
 BdEngineBackend::QueryState ThumbsDb::updateModificationDate(int thumbId, const QDateTime& modificationDate)
 {
-    return d->db->execSql(QLatin1String("UPDATE Thumbnails SET modificationDate=? WHERE id=?;"), modificationDate, thumbId);
+    return d->db->execSql(QLatin1String("UPDATE Thumbnails SET modificationDate=? WHERE id=?;"),
+                          modificationDate, thumbId);
 }
 
 void ThumbsDb::replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize,
@@ -337,7 +347,9 @@ void ThumbsDb::replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize,
 bool ThumbsDb::integrityCheck()
 {
     QList<QVariant> values;
-    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("checkThumbnailsDbIntegrity")), &values);
+    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("checkThumbnailsDbIntegrity")),
+                        &values);
+
     switch (d->db->databaseType())
     {
         case BdEngineBackend::DbType::SQLite:
@@ -347,12 +359,12 @@ bool ThumbsDb::integrityCheck()
             // For MySQL, for every checked table, the table name, operation (check), message type (status) and the message text (ok on success)
             // are returned. So we check if there are four elements and if yes, whether the fourth element is "ok".
             //qCDebug(DIGIKAM_DATABASE_LOG) << "MySQL check returned " << values.size() << " rows";
-            if ( (values.size() % 4) != 0)
+            if ((values.size() % 4) != 0)
             {
                 return false;
             }
 
-            for (QList<QVariant>::iterator it = values.begin(); it != values.end(); )
+            for (QList<QVariant>::iterator it = values.begin() ; it != values.end() ;)
             {
                 QString tableName   = (*it).toString();
                 ++it;
@@ -365,7 +377,8 @@ bool ThumbsDb::integrityCheck()
 
                 if (messageText.toLower().compare(QLatin1String("ok")) != 0)
                 {
-                    qCDebug(DIGIKAM_DATABASE_LOG) << "Failed integrity check for table " << tableName << ". Reason:" << messageText;
+                    qCDebug(DIGIKAM_DATABASE_LOG) << "Failed integrity check for table " << tableName
+                                                  << ". Reason:" << messageText;
                     return false;
                 }
                 else
