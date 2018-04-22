@@ -440,7 +440,9 @@ void ImageScanner::commitAddImage()
         qCDebug(DIGIKAM_DATABASE_LOG) << "Detected identical image info with id" << imageId
                                       << "and album id NULL of a removed image for image" << d->scanInfo.itemName;
         qCDebug(DIGIKAM_DATABASE_LOG) << "Will reuse this image info and set the status to visible and the album id to" << d->scanInfo.albumID;
-        CoreDbAccess().db()->setItemAlbum(imageId,d->scanInfo.albumID);
+
+        d->scanInfo.id = imageId;
+        CoreDbAccess().db()->setItemAlbum(imageId, d->scanInfo.albumID);
         CoreDbAccess().db()->setItemStatus(imageId, DatabaseItem::Status::Visible);
     }
     else
