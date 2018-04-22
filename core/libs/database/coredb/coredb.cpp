@@ -854,21 +854,21 @@ int CoreDB::addSearch(DatabaseSearch::Type type, const QString& name, const QStr
 void CoreDB::updateSearch(int searchID, DatabaseSearch::Type type,
                            const QString& name, const QString& query)
 {
-    d->db->execSql(QString::fromUtf8("UPDATE Searches SET type=?, name=?, query=? WHERE id=?"),
+    d->db->execSql(QString::fromUtf8("UPDATE Searches SET type=?, name=?, query=? WHERE id=?;"),
                    type, name, query, searchID);
     d->db->recordChangeset(SearchChangeset(searchID, SearchChangeset::Changed));
 }
 
 void CoreDB::deleteSearch(int searchID)
 {
-    d->db->execSql(QString::fromUtf8("DELETE FROM Searches WHERE id=?"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM Searches WHERE id=?;"),
                    searchID);
     d->db->recordChangeset(SearchChangeset(searchID, SearchChangeset::Deleted));
 }
 
 void CoreDB::deleteSearches(DatabaseSearch::Type type)
 {
-    d->db->execSql(QString::fromUtf8("DELETE FROM Searches WHERE type=?"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM Searches WHERE type=?;"),
                    type);
     d->db->recordChangeset(SearchChangeset(0, SearchChangeset::Deleted));
 }
@@ -1222,7 +1222,7 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status)
 
     QList<qlonglong> imageIds;
 
-    foreach(QVariant object, values)
+    foreach(const QVariant& object, values)
     {
         imageIds << object.toLongLong();
     }
@@ -1234,13 +1234,13 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status, DatabaseItem::
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                                             "WHERE status=? AND category=?;"),
+                                     "WHERE status=? AND category=?;"),
                    status, category,
                    &values);
 
     QList<qlonglong> imageIds;
 
-    foreach(QVariant object, values)
+    foreach(const QVariant& object, values)
     {
         imageIds << object.toLongLong();
     }
@@ -1280,7 +1280,7 @@ qlonglong CoreDB::getImageId(int albumID, const QString& name,
         d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
                                          "WHERE name=? AND status=? "
                                          "AND category=? AND modificationDate=? "
-                                         "AND fileSize=? AND uniqueHash=?; "
+                                         "AND fileSize=? AND uniqueHash=? "
                                          "AND album=?;"),
                                          boundValues,
                                          &values);
@@ -1300,9 +1300,9 @@ QStringList CoreDB::getItemTagNames(qlonglong imageID)
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString::fromUtf8("SELECT name FROM Tags \n "
-                                     "WHERE id IN (SELECT tagid FROM ImageTags \n "
-                                     "             WHERE imageid=?) \n "
+    d->db->execSql(QString::fromUtf8("SELECT name FROM Tags "
+                                     "WHERE id IN (SELECT tagid FROM ImageTags "
+                                     "WHERE imageid=?) "
                                      "ORDER BY name;"),
                                      imageID,
                                      &values);
@@ -2642,7 +2642,7 @@ QStringList CoreDB::getItemsURLsWithTag(int tagId)
     d->db->execSql(QString::fromUtf8("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
                                      "LEFT JOIN ImageTags ON Images.id=ImageTags.imageid "
                                      "LEFT JOIN Albums ON Albums.id=Images.album "
-                                     " WHERE Images.status=1 AND Images.category=1 AND ImageTags.tagid=?; "),
+                                     " WHERE Images.status=1 AND Images.category=1 AND ImageTags.tagid=?;"),
                    tagId, &values);
 
     QStringList urls;
@@ -2718,7 +2718,7 @@ QList<ItemScanInfo> CoreDB::getIdenticalFiles(qlonglong id)
     QList<QVariant> values;
 
     // retrieve unique hash and file size
-    d->db->execSql(QString::fromUtf8("SELECT uniqueHash, fileSize FROM Images WHERE id=?; "),
+    d->db->execSql(QString::fromUtf8("SELECT uniqueHash, fileSize FROM Images WHERE id=?;"),
                    id,
                    &values);
 
@@ -3313,7 +3313,7 @@ QStringList CoreDB::getItemNamesInAlbum(int albumID, bool recursive)
     {
         d->db->execSql(QString::fromUtf8("SELECT Images.name "
                                "FROM Images "
-                               "WHERE Images.album=?"),
+                               "WHERE Images.album=?;"),
                        albumID, &values);
     }
 
@@ -3333,8 +3333,8 @@ qlonglong CoreDB::getItemFromAlbum(int albumID, const QString& fileName)
 
     d->db->execSql(QString::fromUtf8("SELECT Images.id "
                                "FROM Images "
-                               "WHERE Images.album=? AND Images.name=?"),
-                       albumID,fileName, &values);
+                               "WHERE Images.album=? AND Images.name=?;"),
+                   albumID, fileName, &values);
 
     if (values.isEmpty())
     {
@@ -4213,7 +4213,8 @@ QList<qlonglong> CoreDB::getAllItems()
                     &values);
 
     QList<qlonglong> items;
-    foreach(QVariant item, values)
+
+    foreach(const QVariant& item, values)
     {
         items << item.toLongLong();
     }
@@ -4383,7 +4384,7 @@ QString CoreDB::getAlbumPath(int albumID)
 QString CoreDB::getAlbumRelativePath(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql(QString::fromUtf8("SELECT relativePath from Albums WHERE id=?"),
+    d->db->execSql(QString::fromUtf8("SELECT relativePath from Albums WHERE id=?;"),
                    albumID, &values);
 
     if (!values.isEmpty())
@@ -4399,7 +4400,7 @@ QString CoreDB::getAlbumRelativePath(int albumID)
 int CoreDB::getAlbumRootId(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql(QString::fromUtf8("SELECT albumRoot FROM Albums WHERE id=?; "),
+    d->db->execSql(QString::fromUtf8("SELECT albumRoot FROM Albums WHERE id=?;"),
                    albumID, &values);
 
     if (!values.isEmpty())
@@ -4839,9 +4840,8 @@ bool CoreDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
     boundValues << values.at(0) << values.at(1) << values.at(2) << values.at(3);
     boundValues << dstAlbumID;
 
-    //shouldn't we have a ; at the end of the query?
     d->db->execSql(QString::fromUtf8("UPDATE Albums SET date=?, caption=?, "
-                           "collection=?, icon=? WHERE id=?"),
+                           "collection=?, icon=? WHERE id=?;"),
                    boundValues);
     return true;
 }
