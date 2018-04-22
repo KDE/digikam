@@ -1280,7 +1280,7 @@ qlonglong CoreDB::getImageId(int albumID, const QString& name,
         d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
                                          "WHERE name=? AND status=? "
                                          "AND category=? AND modificationDate=? "
-                                         "AND fileSize=? AND uniqueHash=?; "
+                                         "AND fileSize=? AND uniqueHash=? "
                                          "AND album=?;"),
                                          boundValues,
                                          &values);
