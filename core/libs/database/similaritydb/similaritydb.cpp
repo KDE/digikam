@@ -70,7 +70,8 @@ bool SimilarityDb::setSetting(const QString& keyword, const QString& value )
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":keyword"), keyword);
     parameters.insert(QLatin1String(":value"), value);
-    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("ReplaceSimilaritySetting")), parameters);
+    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("ReplaceSimilaritySetting")),
+                                                                       parameters);
 
     return (queryStateResult == BdEngineBackend::NoErrors);
 }
@@ -81,8 +82,10 @@ QString SimilarityDb::getSetting(const QString& keyword)
     parameters.insert(QLatin1String(":keyword"), keyword);
     QList<QVariant> values;
     // TODO Should really check return status here
-    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectSimilaritySetting")), parameters, &values);
-    qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "SimilarityDb SelectSimilaritySetting val ret = " << (BdEngineBackend::QueryStateEnum)queryStateResult;
+    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectSimilaritySetting")),
+                                                                       parameters, &values);
+    qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "SimilarityDb SelectSimilaritySetting val ret = "
+                                      << (BdEngineBackend::QueryStateEnum)queryStateResult;
 
     if (values.isEmpty())
     {
@@ -100,8 +103,10 @@ QString SimilarityDb::getLegacySetting(const QString& keyword)
     parameters.insert(QLatin1String(":keyword"), keyword);
     QList<QVariant> values;
     // TODO Should really check return status here
-    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectSimilarityLegacySetting")), parameters, &values);
-    qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "SimilarityDb SelectSimilaritySetting val ret = " << (BdEngineBackend::QueryStateEnum)queryStateResult;
+    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectSimilarityLegacySetting")),
+                                                                       parameters, &values);
+    qCDebug(DIGIKAM_SIMILARITYDB_LOG) << "SimilarityDb SelectSimilaritySetting val ret = "
+                                      << (BdEngineBackend::QueryStateEnum)queryStateResult;
 
     if (values.isEmpty())
     {
@@ -186,7 +191,7 @@ QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints(QList<ImageInfo> im
         {
             QList<QVariant> values;
             d->db->execSql(QString::fromUtf8("SELECT ImageHaarMatrix.modificationDate, ImageHaarMatrix.uniqueHash FROM ImageHaarMatrix "
-                                                     "WHERE imageid=?;"),
+                                             "WHERE imageid=?;"),
                            info.id(), &values);
 
             if (values.isEmpty())
@@ -223,7 +228,7 @@ QStringList SimilarityDb::getDirtyOrMissingFingerprintURLs(QList<ImageInfo> imag
         {
             QList<QVariant> values;
             d->db->execSql(QString::fromUtf8("SELECT ImageHaarMatrix.modificationDate, ImageHaarMatrix.uniqueHash FROM ImageHaarMatrix "
-                                                     "WHERE imageid=?;"),
+                                             "WHERE imageid=?;"),
                            info.id(), &values);
 
             if (values.isEmpty())
@@ -254,9 +259,9 @@ void SimilarityDb::copySimilarityAttributes(qlonglong srcId, qlonglong dstId)
     // Go through ImageHaarMatrix table and copy the entries
 
     d->db->execSql(QString::fromUtf8("INSERT INTO ImageHaarMatrix "
-                                             " (imageid, modificationDate, uniqueHash, matrix) "
-                                             "SELECT ?, modificationDate, uniqueHash, matrix "
-                                             "FROM ImageHaarMatrix WHERE imageid=?;"),
+                                     " (imageid, modificationDate, uniqueHash, matrix) "
+                                     "SELECT ?, modificationDate, uniqueHash, matrix "
+                                     "FROM ImageHaarMatrix WHERE imageid=?;"),
                    dstId, srcId);
 }
 
@@ -266,7 +271,8 @@ void SimilarityDb::removeImageFingerprint(qlonglong imageID,
 {
     if (algorithm == FuzzyAlgorithm::Haar)
     {
-        d->db->execSql(QString::fromUtf8("DELETE FROM ImageHaarMatrix WHERE imageid=?;"), imageID);
+        d->db->execSql(QString::fromUtf8("DELETE FROM ImageHaarMatrix WHERE imageid=?;"),
+                       imageID);
     }
     else if (algorithm == FuzzyAlgorithm::TfIdf)
     {
@@ -344,8 +350,8 @@ void SimilarityDb::setImageSimilarity(qlonglong imageID1, qlonglong imageID2, do
     if (res.isEmpty())
     {
         d->db->execSql(QString::fromUtf8("REPLACE INTO ImageSimilarity "
-                                                  "(imageid1, imageid2, value, algorithm) "
-                                                  "VALUES(?, ?, ?, ?);"),
+                                         "(imageid1, imageid2, value, algorithm) "
+                                         "VALUES(?, ?, ?, ?);"),
                        orderedIds.first, orderedIds.second, value, (int)algorithm);
     }
 }
@@ -353,7 +359,7 @@ void SimilarityDb::setImageSimilarity(qlonglong imageID1, qlonglong imageID2, do
 void SimilarityDb::removeImageSimilarity(qlonglong imageID, FuzzyAlgorithm algorithm)
 {
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageSimilarity "
-                                             "WHERE ( imageid1=? OR imageid2=? ) AND algorithm=?;"),
+                                     "WHERE ( imageid1=? OR imageid2=? ) AND algorithm=?;"),
                    imageID, imageID, (int)algorithm);
 }
 
@@ -362,7 +368,7 @@ void SimilarityDb::removeImageSimilarity(qlonglong imageID1, qlonglong imageID2,
     QPair<qlonglong, qlonglong> orderedIds = orderIds(imageID1, imageID2);
 
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageSimilarity "
-                                             "WHERE imageid1=? AND imageid2=? AND algorithm=?;"),
+                                     "WHERE imageid1=? AND imageid2=? AND algorithm=?;"),
                    orderedIds.first, orderedIds.second, (int)algorithm);
 }
 
@@ -373,7 +379,7 @@ QList<FuzzyAlgorithm> SimilarityDb::getImageSimilarityAlgorithms(qlonglong image
 
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT algorithm FROM ImageSimilarity "
-                           "WHERE imageid1=? AND imageid2=?;"),
+                                     "WHERE imageid1=? AND imageid2=?;"),
                    orderedIds.first, orderedIds.second,
                    &values);
 
@@ -483,7 +489,7 @@ QString SimilarityDb::getImageSimilarityOrdered(qlonglong imageID1, qlonglong im
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT value FROM ImageSimilarity "
-                                             "WHERE ( imageid1=? OR imageid2=? ) AND algorithm=?;"),
+                                     "WHERE ( imageid1=? OR imageid2=? ) AND algorithm=?;"),
                    imageID1, imageID2, (int)algorithm,
                    &values);
 
