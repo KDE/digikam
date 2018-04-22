@@ -47,7 +47,7 @@ the use of this software, even if advised of the possibility of such damage.
 
 */
 
-#include "libopencv.h"
+#include "digikam_opencv.h"
 #include "digikam_export.h"
 #include "opencv2/core.hpp"
 #include "predict_collector.hpp"
