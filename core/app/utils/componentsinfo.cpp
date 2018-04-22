@@ -39,7 +39,7 @@
 #include "digikam_config.h"
 #include "libsinfodlg.h"
 #include "dbstatdlg.h"
-#include "libopencv.h"
+#include "digikam_opencv.h"
 
 // LibGphoto2 includes
 

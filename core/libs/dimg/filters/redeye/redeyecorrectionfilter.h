@@ -30,7 +30,7 @@
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 #include "digikam_globals.h"
-#include "libopencv.h"
+#include "digikam_opencv.h"
 #include "redeyecorrectioncontainer.h"
 
 namespace Digikam

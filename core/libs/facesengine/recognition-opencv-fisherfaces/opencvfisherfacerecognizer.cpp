@@ -29,7 +29,7 @@
 
 // local includes
 
-#include "libopencv.h"
+#include "digikam_opencv.h"
 #include "facedbaccess.h"
 #include "facedb.h"
 #include "fisherfacemodel.h"

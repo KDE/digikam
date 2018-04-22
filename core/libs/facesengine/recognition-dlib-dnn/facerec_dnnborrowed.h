@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "libopencv.h"
+#include "digikam_opencv.h"
 #include "facedb.h"
 #include "face.hpp"
 

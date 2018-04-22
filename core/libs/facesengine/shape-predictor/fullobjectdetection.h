@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "libopencv.h"
+#include "digikam_opencv.h"
 #include "digikam_export.h"
 
 namespace Digikam

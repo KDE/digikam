@@ -23,7 +23,7 @@
 
 // OpenCV includes
 
-#include "libopencv.h"
+#include "digikam_opencv.h"
 #include "asmopencv.h"
 
 // Qt includes

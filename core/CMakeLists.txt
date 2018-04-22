@@ -279,8 +279,8 @@ if(${OpenCV_FOUND})
     endif()
 endif()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/app/utils/libopencv.h.cmake.in
-               ${CMAKE_CURRENT_BINARY_DIR}/app/utils/libopencv.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/app/utils/digikam_opencv.h.cmake.in
+               ${CMAKE_CURRENT_BINARY_DIR}/app/utils/digikam_opencv.h)
 
 # -- optionals -----------------------------------------------------------------
 
@@ -613,7 +613,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     include_directories(${DK_LOCAL_INCLUDES})
 
     # for config headers digikam_version.h gitversion.h digikam_config.h
-    # digikam_dbconfig.h libopencv.h
+    # digikam_dbconfig.h digikam_opencv.h
     include_directories(${CMAKE_CURRENT_BINARY_DIR}/app/utils)
 
     include_directories(${OpenCV_INCLUDE_DIRS})

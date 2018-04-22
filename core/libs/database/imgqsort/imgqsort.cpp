@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "libopencv.h"
+#include "digikam_opencv.h"
 #include "digikam_debug.h"
 #include "mixerfilter.h"
 #include "nrfilter.h"

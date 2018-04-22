@@ -24,7 +24,7 @@
 
 // OpenCV includes
 
-#include "libopencv.h"
+#include "digikam_opencv.h"
 #include "../../facesengine/asmopencv.h"
 
 // C++ includes

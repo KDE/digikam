@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "libopencv.h"
+#include "digikam_opencv.h"
 #include "pointtransformaffine.h"
 #include "vectoroperations.h"
 #include "matrixoperations.h"

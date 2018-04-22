@@ -28,7 +28,7 @@
 #ifndef DIGIKAM_FACE_REC_FISHER_BORROWED_H
 #define DIGIKAM_FACE_REC_FISHER_BORROWED_H
 
-#include "libopencv.h"
+#include "digikam_opencv.h"
 #include "face.hpp"
 
 // C++ includes

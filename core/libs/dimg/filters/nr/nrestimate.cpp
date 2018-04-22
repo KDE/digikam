@@ -36,7 +36,7 @@
 
 // OpenCV includes
 
-#include "libopencv.h"
+#include "digikam_opencv.h"
 
 // Qt includes.
 
