@@ -1222,7 +1222,7 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status)
 
     QList<qlonglong> imageIds;
 
-    foreach(QVariant object, values)
+    foreach(const QVariant& object, values)
     {
         imageIds << object.toLongLong();
     }
@@ -1234,13 +1234,13 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status, DatabaseItem::
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                                             "WHERE status=? AND category=?;"),
+                                     "WHERE status=? AND category=?;"),
                    status, category,
                    &values);
 
     QList<qlonglong> imageIds;
 
-    foreach(QVariant object, values)
+    foreach(const QVariant& object, values)
     {
         imageIds << object.toLongLong();
     }
@@ -4213,7 +4213,8 @@ QList<qlonglong> CoreDB::getAllItems()
                     &values);
 
     QList<qlonglong> items;
-    foreach(QVariant item, values)
+
+    foreach(const QVariant& item, values)
     {
         items << item.toLongLong();
     }
