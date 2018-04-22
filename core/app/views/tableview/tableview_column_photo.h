@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_COLUMN_PHOTO_H
-#define TABLEVIEW_COLUMN_PHOTO_H
+#ifndef DIGIKAM_TABLE_VIEW_COLUMN_PHOTO_H
+#define DIGIKAM_TABLE_VIEW_COLUMN_PHOTO_H
 
 // Qt includes
 
@@ -108,8 +108,8 @@ private:
     QComboBox*                       selectorExposureTimeUnit;
 };
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam
 
-#endif // TABLEVIEW_COLUMN_PHOTO_H
+#endif // DIGIKAM_TABLE_VIEW_COLUMN_PHOTO_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_COLUMN_THUMBNAIL_H
-#define TABLEVIEW_COLUMN_THUMBNAIL_H
+#ifndef DIGIKAM_TABLE_VIEW_COLUMN_THUMBNAIL_H
+#define DIGIKAM_TABLE_VIEW_COLUMN_THUMBNAIL_H
 
 // Local includes
 
@@ -71,8 +71,8 @@ private:
     int m_thumbnailSize;
 };
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam
 
-#endif // TABLEVIEW_COLUMN_THUMBNAIL_H
+#endif // DIGIKAM_TABLE_VIEW_COLUMN_THUMBNAIL_H

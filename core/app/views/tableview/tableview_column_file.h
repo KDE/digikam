@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_COLUMN_FILE_H
-#define TABLEVIEW_COLUMN_FILE_H
+#ifndef DIGIKAM_TABLE_VIEW_COLUMN_FILE_H
+#define DIGIKAM_TABLE_VIEW_COLUMN_FILE_H
 
 // Qt includes
 
@@ -99,8 +99,8 @@ private:
     QComboBox*                      selectorSizeType;
 };
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam
 
-#endif // TABLEVIEW_COLUMN_FILE_H
+#endif // DIGIKAM_TABLE_VIEW_COLUMN_FILE_H

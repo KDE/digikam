@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGETHUMBNAILDELEGATE_H
-#define IMAGETHUMBNAILDELEGATE_H
+#ifndef DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_H
+#define DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_H
 
 // Qt includes
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGETHUMBNAILDELEGATE_H */
+#endif // DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_H

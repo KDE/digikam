@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMIMAGEDELEGATEPRIV_H
-#define DIGIKAMIMAGEDELEGATEPRIV_H
+#ifndef DIGIKAM_IMAGE_DELEGATE_P_H
+#define DIGIKAM_IMAGE_DELEGATE_P_H
 
 // Qt includes
 
@@ -42,9 +42,10 @@ class DigikamImageDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
 {
 public:
 
-    DigikamImageDelegatePrivate()
+    explicit DigikamImageDelegatePrivate()
     {
     }
+
     virtual ~DigikamImageDelegatePrivate();
 
     void init(DigikamImageDelegate* const q, ImageCategorizedView* const parent);
@@ -56,11 +57,11 @@ class DigikamImageFaceDelegatePrivate : public DigikamImageDelegatePrivate
 {
 public:
 
-    DigikamImageFaceDelegatePrivate()
+    explicit DigikamImageFaceDelegatePrivate()
     {
     }
 };
 
 } // namespace Digikam
 
-#endif // DIGIKAMIMAGEDELEGATEPRIV_H
+#endif // DIGIKAM_IMAGE_DELEGATE_P_H

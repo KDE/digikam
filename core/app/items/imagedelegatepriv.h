@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEDELEGATEPRIV_H
-#define IMAGEDELEGATEPRIV_H
+#ifndef DIGIKAM_ITEMS_IMAGE_DELEGATE_PRIV_H
+#define DIGIKAM_ITEMS_IMAGE_DELEGATE_PRIV_H
 
 // Qt includes
 
@@ -97,5 +97,5 @@ public:
 
 } // namespace Digikam
 
-#endif // IMAGEDELEGATEPRIV_H
+#endif // DIGIKAM_ITEMS_IMAGE_DELEGATE_PRIV_H
 

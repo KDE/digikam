@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGFILTERVIEW_H
-#define TAGFILTERVIEW_H
+#ifndef DIGIKAM_TAG_FILTER_VIEW_H
+#define DIGIKAM_TAG_FILTER_VIEW_H
 
 // Qt includes
 
@@ -56,7 +56,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param tagFilterModel tag model to work on
      */
-    TagFilterView(QWidget* const parent, TagModel* const tagFilterModel);
+    explicit TagFilterView(QWidget* const parent, TagModel* const tagFilterModel);
 
     /**
      * Destructor.
@@ -76,4 +76,4 @@ private:
 
 } // nameSpace Digikam
 
-#endif /* TAGFILTERVIEW_H*/
+#endif // DIGIKAM_TAG_FILTER_VIEW_H

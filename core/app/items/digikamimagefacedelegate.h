@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMIMAGEFACEDELEGATE_H
-#define DIGIKAMIMAGEFACEDELEGATE_H
+#ifndef DIGIKAM_IMAGE_FACE_DELEGATE_H
+#define DIGIKAM_IMAGE_FACE_DELEGATE_H
 
 // Local includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DIGIKAMIMAGEFACEDELEGATE_H */
+#endif // DIGIKAM_IMAGE_FACE_DELEGATE_H

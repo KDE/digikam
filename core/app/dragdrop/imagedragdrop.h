@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEDRAGDROP_H
-#define IMAGEDRAGDROP_H
+#ifndef DIGIKAM_IMAGE_DRAG_DROP_H
+#define DIGIKAM_IMAGE_DRAG_DROP_H
 
 // Qt includes
 
@@ -74,4 +74,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* IMAGEDRAGDROP_H */
+#endif // DIGIKAM_IMAGE_DRAG_DROP_H

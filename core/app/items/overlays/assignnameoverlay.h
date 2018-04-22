@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ASSIGNNAMEOVERLAY_H
-#define ASSIGNNAMEOVERLAY_H
+#ifndef DIGIKAM_ASSIGN_NAME_OVERLAY_H
+#define DIGIKAM_ASSIGN_NAME_OVERLAY_H
 
 // Qt includes
 
@@ -90,4 +90,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGERATINGOVERLAY_H */
+#endif // DIGIKAM_ASSIGN_NAME_OVERLAY_H

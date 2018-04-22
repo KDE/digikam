@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MONTHWIDGET_H
-#define MONTHWIDGET_H
+#ifndef DIGIKAM_MONTH_WIDGET_H
+#define DIGIKAM_MONTH_WIDGET_H
 
 // Qt includes
 
@@ -86,4 +86,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* MONTHWIDGET_H */
+#endif // DIGIKAM_MONTH_WIDGET_H

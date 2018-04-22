@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef DDATEEDIT_H
-#define DDATEEDIT_H
+#ifndef DIGIKAM_DDATE_EDIT_H
+#define DIGIKAM_DDATE_EDIT_H
 
 // Qt includes
 
@@ -144,4 +144,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DDATEEDIT_H
+#endif // DIGIKAM_DDATE_EDIT_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGETHUMBNAILDELEGATEPRIV_H
-#define IMAGETHUMBNAILDELEGATEPRIV_H
+#ifndef DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_PRIV_H
+#define DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_PRIV_H
 
 // Qt includes
 
@@ -41,7 +41,7 @@ class ImageThumbnailDelegatePrivate : public ImageDelegate::ImageDelegatePrivate
 {
 public:
 
-    ImageThumbnailDelegatePrivate()
+    explicit ImageThumbnailDelegatePrivate()
     {
         flow                = QListView::LeftToRight;
 
@@ -58,9 +58,9 @@ public:
 
 public:
 
-    void init(ImageThumbnailDelegate* q);
+    void init(ImageThumbnailDelegate* const q);
 };
 
 } // namespace Digikam
 
-#endif // IMAGETHUMBNAILDELEGATEPRIV_H
+#endif // DIGIKAM_ITEMS_IMAGE_THUMBNAIL_DELEGATE_PRIV_H

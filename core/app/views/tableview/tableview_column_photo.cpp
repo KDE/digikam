@@ -437,6 +437,6 @@ void ColumnPhotoConfigurationWidget::slotUpdateUI()
     }
 }
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam

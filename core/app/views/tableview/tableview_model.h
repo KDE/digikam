@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_MODEL_H
-#define TABLEVIEW_MODEL_H
+#ifndef DIGIKAM_TABLE_VIEW_MODEL_H
+#define DIGIKAM_TABLE_VIEW_MODEL_H
 
 // Qt includes
 
@@ -205,4 +205,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::TableViewModel::GroupingMode)
 
-#endif // TABLEVIEW_MODEL_H
+#endif // DIGIKAM_TABLE_VIEW_MODEL_H

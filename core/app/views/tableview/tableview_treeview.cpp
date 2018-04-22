@@ -335,4 +335,4 @@ void TableViewTreeView::slotModelGroupingModeChanged()
     setRootIsDecorated(s->tableViewModel->groupingMode()==TableViewModel::GroupingShowSubItems);
 }
 
-} /* namespace Digikam */
+} // namespace Digikam

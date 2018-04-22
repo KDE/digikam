@@ -6,8 +6,8 @@
  * Date        : 2010-07-15
  * Description : central Map view
  *
- * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
- * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010      by Gabriel Voicu <ping dot gabi at gmail dot com>
+ * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2014-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MAP_WIDGET_VIEW_H
-#define MAP_WIDGET_VIEW_H
+#ifndef DIGIKAM_MAP_WIDGET_VIEW_H
+#define DIGIKAM_MAP_WIDGET_VIEW_H
 
 // Qt includes
 
@@ -57,6 +57,8 @@ public:
         ApplicationDigikam  = 1,
         ApplicationImportUI = 2
     };
+
+public:
 
     explicit MapWidgetView(QItemSelectionModel* const selectionModel,
                            DCategorizedSortFilterProxyModel* const imageFilterModel,
@@ -96,8 +98,8 @@ public:
                                 const MapWidgetView::Application application);
     virtual ~MapViewModelHelper();
 
-    virtual QAbstractItemModel* model()                                                                const;
-    virtual QItemSelectionModel* selectionModel()                                                      const;
+    virtual QAbstractItemModel* model()                             const;
+    virtual QItemSelectionModel* selectionModel()                   const;
     virtual bool itemCoordinates(const QModelIndex& index,
                                  GeoCoordinates* const coordinates) const;
 
@@ -126,4 +128,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MAP_WIDGET_VIEW_H
+#endif // DIGIKAM_MAP_WIDGET_VIEW_H

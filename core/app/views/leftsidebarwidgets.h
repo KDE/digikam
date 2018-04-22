@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef LEFT_SIDEBAR_WIDGETS_H
-#define LEFT_SIDEBAR_WIDGETS_H
+#ifndef DIGIKAM_LEFT_SIDE_BAR_WIDGETS_H
+#define DIGIKAM_LEFT_SIDE_BAR_WIDGETS_H
 
 // KDE includes
 
@@ -422,4 +422,4 @@ private:
 
 } // namespace Digikam
 
-#endif // LEFT_SIDEBAR_WIDGETS_H
+#endif // DIGIKAM_LEFT_SIDE_BAR_WIDGETS_H

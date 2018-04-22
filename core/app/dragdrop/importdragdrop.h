@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTDRAGDROP_H
-#define IMPORTDRAGDROP_H
+#ifndef DIGIKAM_IMPORT_DRAG_DROP_H
+#define DIGIKAM_IMPORT_DRAG_DROP_H
 
 // Qt includes
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTDRAGDROP_H
+#endif // DIGIKAM_IMPORT_DRAG_DROP_H

@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef FILTERSIDEBARWIDGET_H
-#define FILTERSIDEBARWIDGET_H
+#ifndef DIGIKAM_FILTER_SIDE_BAR_WIDGET_H
+#define DIGIKAM_FILTER_SIDE_BAR_WIDGET_H
 
 // Qt includes
 
@@ -71,7 +71,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param tagFilterModel tag model to work on
      */
-    FilterSideBarWidget(QWidget* const parent, TagModel* const tagFilterModel);
+    explicit FilterSideBarWidget(QWidget* const parent, TagModel* const tagFilterModel);
 
     /**
      * Destructor.
@@ -136,4 +136,4 @@ private:
 
 } // nameSpace Digikam
 
-#endif /* FILTERSIDEBARWIDGET_H*/
+#endif // DIGIKAM_FILTER_SIDE_BAR_WIDGET_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_SHARED_H
-#define TABLEVIEW_SHARED_H
+#ifndef DIGIKAM_TABLE_VIEW_SHARED_H
+#define DIGIKAM_TABLE_VIEW_SHARED_H
 
 class QItemSelectionModel;
 
@@ -62,4 +62,4 @@ public:
 
 } // namespace Digikam
 
-#endif // TABLEVIEW_SHARED_H
+#endif // DIGIKAM_TABLE_VIEW_SHARED_H

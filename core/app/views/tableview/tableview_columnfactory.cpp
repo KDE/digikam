@@ -337,4 +337,4 @@ TableViewColumnConfigurationWidget::~TableViewColumnConfigurationWidget()
 {
 }
 
-} /* namespace Digikam */
+} // namespace Digikam

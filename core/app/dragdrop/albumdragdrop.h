@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMDRAGDROP_H
-#define ALBUMDRAGDROP_H
+#ifndef DIGIKAM_ALBUM_DRAG_DROP_H
+#define DIGIKAM_ALBUM_DRAG_DROP_H
 
 // Local includes
 
@@ -50,4 +50,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* ALBUMDRAGDROP_H */
+#endif // DIGIKAM_ALBUM_DRAG_DROP_H

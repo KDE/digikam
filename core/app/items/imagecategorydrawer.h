@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGECATEGORYDRAWER_H
-#define IMAGECATEGORYDRAWER_H
+#ifndef DIGIKAM_ITEMS_IMAGE_CATEGORY_DRAWER_H
+#define DIGIKAM_ITEMS_IMAGE_CATEGORY_DRAWER_H
 
 // Local includes
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGECATEGORYDRAWER_H */
+#endif // DIGIKAM_ITEMS_IMAGE_CATEGORY_DRAWER_H

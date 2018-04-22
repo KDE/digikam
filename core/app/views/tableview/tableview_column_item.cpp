@@ -396,6 +396,6 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(TableViewMode
     }
 }
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam

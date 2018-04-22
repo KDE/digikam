@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_TREEVIEW_DELEGATE_H
-#define TABLEVIEW_TREEVIEW_DELEGATE_H
+#ifndef DIGIKAM_TABLE_VIEW_TREEVIEW_DELEGATE_H
+#define DIGIKAM_TABLE_VIEW_TREEVIEW_DELEGATE_H
 
 // Qt includes
 
@@ -61,6 +61,6 @@ private:
     TableViewShared* const s;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
-#endif // TABLEVIEW_TREEVIEW_DELEGATE_H
+#endif // DIGIKAM_TABLE_VIEW_TREEVIEW_DELEGATE_H

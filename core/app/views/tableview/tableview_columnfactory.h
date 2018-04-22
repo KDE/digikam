@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_COLUMNFACTORY_H
-#define TABLEVIEW_COLUMNFACTORY_H
+#ifndef DIGIKAM_TABLE_VIEW_COLUMNFACTORY_H
+#define DIGIKAM_TABLE_VIEW_COLUMNFACTORY_H
 
 // Qt includes
 
@@ -329,12 +329,12 @@ public:
     QByteArray                          headerState;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::TableViewColumnDescription)
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::TableViewColumn::ColumnFlags)
 
-#endif // TABLEVIEW_COLUMNFACTORY_H
+#endif // DIGIKAM_TABLE_VIEW_COLUMNFACTORY_H
 
 

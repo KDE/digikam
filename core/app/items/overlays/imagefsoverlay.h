@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEFSOVERLAY_H
-#define IMAGEFSOVERLAY_H
+#ifndef DIGIKAM_IMAGE_FS_OVERLAY_H
+#define DIGIKAM_IMAGE_FS_OVERLAY_H
 
 // Qt includes
 
@@ -83,4 +83,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // IMAGEFSOVERLAY_H
+#endif // DIGIKAM_IMAGE_FS_OVERLAY_H

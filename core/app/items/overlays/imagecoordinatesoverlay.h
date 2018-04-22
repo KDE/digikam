@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_COORDINATES_OVERLAY_H
-#define IMAGE_COORDINATES_OVERLAY_H
+#ifndef DIGIKAM_IMAGE_COORDINATES_OVERLAY_H
+#define DIGIKAM_IMAGE_COORDINATES_OVERLAY_H
 
 // Qt includes
 
@@ -80,4 +80,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGE_COORDINATES_OVERLAY_H
+#endif // DIGIKAM_IMAGE_COORDINATES_OVERLAY_H

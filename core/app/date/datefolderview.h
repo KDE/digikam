@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DATEFOLDERVIEW_H
-#define DATEFOLDERVIEW_H
+#ifndef DIGIKAM_DATE_FOLDER_VIEW_H
+#define DIGIKAM_DATE_FOLDER_VIEW_H
 
 // Qt includes
 
@@ -54,7 +54,7 @@ class DateFolderView: public DVBox, public StateSavingObject
 
 public:
 
-    DateFolderView(QWidget* const parent, DateAlbumModel* const dateAlbumModel);
+    explicit DateFolderView(QWidget* const parent, DateAlbumModel* const dateAlbumModel);
     ~DateFolderView();
 
     void setImageModel(ImageFilterModel* const model);
@@ -85,4 +85,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DATEFOLDERVIEW_H */
+#endif // DIGIKAM_DATE_FOLDER_VIEW_H

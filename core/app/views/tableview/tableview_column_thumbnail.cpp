@@ -194,6 +194,6 @@ void ColumnThumbnail::updateThumbnailSize()
     emit(signalAllDataChanged());
 }
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam

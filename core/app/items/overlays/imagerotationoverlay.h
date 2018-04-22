@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEROTATIONOVERLAY_H
-#define IMAGEROTATIONOVERLAY_H
+#ifndef DIGIKAM_IMAGE_ROTATION_OVERLAY_H
+#define DIGIKAM_IMAGE_ROTATION_OVERLAY_H
 
 // Qt includes
 
@@ -100,4 +100,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGEROTATIONOVERLAY_H */
+#endif // DIGIKAM_IMAGE_ROTATION_OVERLAY_H

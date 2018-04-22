@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGETHUMBNAILBAR_H
-#define IMAGETHUMBNAILBAR_H
+#ifndef DIGIKAM_ITEMS_IMAGE_THUMBNAIL_BAR_H
+#define DIGIKAM_ITEMS_IMAGE_THUMBNAIL_BAR_H
 
 // Local includes
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGETHUMBNAILBAR_H */
+#endif // DIGIKAM_ITEMS_IMAGE_THUMBNAIL_BAR_H

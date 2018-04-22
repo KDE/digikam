@@ -278,6 +278,6 @@ void ColumnGeoProperties::setConfiguration(const TableViewColumnConfiguration& n
     emit(signalAllDataChanged());
 }
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam

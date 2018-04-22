@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_SELECTION_MODEL_SYNCER_H
-#define TABLEVIEW_SELECTION_MODEL_SYNCER_H
+#ifndef DIGIKAM_TABLE_VIEW_SELECTION_MODEL_SYNCER_H
+#define DIGIKAM_TABLE_VIEW_SELECTION_MODEL_SYNCER_H
 
 // Qt includes
 
@@ -77,6 +77,6 @@ private:
     TableViewShared* const        s;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
-#endif // TABLEVIEW_SELECTION_MODEL_SYNCER_H
+#endif // DIGIKAM_TABLE_VIEW_SELECTION_MODEL_SYNCER_H

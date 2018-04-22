@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGESELECTIONOVERLAY_H
-#define IMAGESELECTIONOVERLAY_H
+#ifndef DIGIKAM_IMAGE_SELECTION_OVERLAY_H
+#define DIGIKAM_IMAGE_SELECTION_OVERLAY_H
 
 // Qt includes
 
@@ -73,4 +73,4 @@ protected Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* IMAGESELECTIONOVERLAY_H */
+#endif // DIGIKAM_IMAGE_SELECTION_OVERLAY_H

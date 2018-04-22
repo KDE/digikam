@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_COLUMN_GEO_H
-#define TABLEVIEW_COLUMN_GEO_H
+#ifndef DIGIKAM_TABLE_VIEW_COLUMN_GEO_H
+#define DIGIKAM_TABLE_VIEW_COLUMN_GEO_H
 
 // Qt includes
 
@@ -91,9 +91,9 @@ private:
     QComboBox*                     selectorAltitudeUnit;
 };
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam
 
-#endif // TABLEVIEW_COLUMN_GEO_H
+#endif // DIGIKAM_TABLE_VIEW_COLUMN_GEO_H
 

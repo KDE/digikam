@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEDELEGATE_H
-#define IMAGEDELEGATE_H
+#ifndef DIGIKAM_ITEMS_IMAGE_DELEGATE_H
+#define DIGIKAM_ITEMS_IMAGE_DELEGATE_H
 
 // Local includes
 
@@ -134,4 +134,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGEDELEGATE_H */
+#endif // DIGIKAM_ITEMS_IMAGE_DELEGATE_H

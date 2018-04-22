@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_TREEVIEW_H
-#define TABLEVIEW_TREEVIEW_H
+#ifndef DIGIKAM_TABLE_VIEW_TREEVIEW_H
+#define DIGIKAM_TABLE_VIEW_TREEVIEW_H
 
 // Qt includes
 
@@ -98,4 +98,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TABLEVIEW_TREEVIEW_H
+#endif // DIGIKAM_TABLE_VIEW_TREEVIEW_H

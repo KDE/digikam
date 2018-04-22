@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DDRAGOBJECTS_H
-#define DDRAGOBJECTS_H
+#ifndef DIGIKAM_DDRAG_OBJECTS_H
+#define DIGIKAM_DDRAG_OBJECTS_H
 
 // Qt includes
 
@@ -143,4 +143,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* DDRAGOBJECTS_H */
+#endif // DIGIKAM_DDRAG_OBJECTS_H

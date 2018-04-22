@@ -424,6 +424,6 @@ bool Digikam::TableViewColumns::ColumnDigikamProperties::columnAffectedByChanges
     return false;
 }
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FACEREJECTIONOVERLAY_H
-#define FACEREJECTIONOVERLAY_H
+#ifndef DIGIKAM_FACE_REJECTION_OVERLAY_H
+#define DIGIKAM_FACE_REJECTION_OVERLAY_H
 
 // Qt includes
 
@@ -80,4 +80,4 @@ protected Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* IMAGESELECTIONOVERLAY_H */
+#endif // DIGIKAM_FACE_REJECTION_OVERLAY_H

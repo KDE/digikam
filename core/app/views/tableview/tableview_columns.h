@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_COLUMNS_H
-#define TABLEVIEW_COLUMNS_H
+#ifndef DIGIKAM_TABLE_VIEW_COLUMNS_H
+#define DIGIKAM_TABLE_VIEW_COLUMNS_H
 
 // Local includes
 
@@ -33,4 +33,4 @@
 #include "tableview_column_photo.h"
 #include "tableview_column_thumbnail.h"
 
-#endif // TABLEVIEW_COLUMNS_H
+#endif // DIGIKAM_TABLE_VIEW_COLUMNS_H

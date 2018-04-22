@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEVIEWUTILITIES_H
-#define IMAGEVIEWUTILITIES_H
+#ifndef DIGIKAM_ITEMS_IMAGE_VIEW_UTILITIES_H
+#define DIGIKAM_ITEMS_IMAGE_VIEW_UTILITIES_H
 
 // Qt includes
 
@@ -93,4 +93,4 @@ protected:
 
 Q_DECLARE_METATYPE(Digikam::ImageViewUtilities::DeleteMode)
 
-#endif /* IMAGEVIEWUTILITIES_H */
+#endif // DIGIKAM_ITEMS_IMAGE_VIEW_UTILITIES_H

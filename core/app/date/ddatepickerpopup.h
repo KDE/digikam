@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DDATEPICKERPOPUP_H
-#define DDATEPICKERPOPUP_H
+#ifndef DIGIKAM_DDATE_PICKER_POP_UP_H
+#define DIGIKAM_DDATE_PICKER_POP_UP_H
 
 // Qt includes
 
@@ -135,4 +135,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(DDatePickerPopup::Items)
 
 } // namespace Digikam
 
-#endif // DDATEPICKERPOPUP_H
+#endif // DIGIKAM_DDATE_PICKER_POP_UP_H

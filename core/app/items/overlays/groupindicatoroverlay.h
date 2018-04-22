@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GROUPINDICATOROVERLAY_H
-#define GROUPINDICATOROVERLAY_H
+#ifndef DIGIKAM_GROUP_INDICATOR_OVERLAY_H
+#define DIGIKAM_GROUP_INDICATOR_OVERLAY_H
 
 // Qt includes
 
@@ -97,4 +97,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* GROUPINDICATOROVERLAY_H */
+#endif // DIGIKAM_GROUP_INDICATOR_OVERLAY_H

@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DDATE_TABLE_P_H
-#define DDATE_TABLE_P_H
+#ifndef DIGIKAM_DDATE_TABLE_P_H
+#define DIGIKAM_DDATE_TABLE_P_H
 
 #include "ddatetable.h"
 
@@ -121,4 +121,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DDATE_TABLE_P_H
+#endif // DIGIKAM_DDATE_TABLE_P_H

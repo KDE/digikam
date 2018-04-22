@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_H
-#define TABLEVIEW_H
+#ifndef DIGIKAM_TABLE_VIEW_H
+#define DIGIKAM_TABLE_VIEW_H
 
 // Qt includes
 
@@ -139,4 +139,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TABLEVIEW_H
+#endif // DIGIKAM_TABLE_VIEW_H

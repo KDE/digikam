@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TABLEVIEW_COLUMN_ITEM_H
-#define TABLEVIEW_COLUMN_ITEM_H
+#ifndef DIGIKAM_TABLE_VIEW_COLUMN_ITEM_H
+#define DIGIKAM_TABLE_VIEW_COLUMN_ITEM_H
 
 // Qt includes
 
@@ -79,8 +79,8 @@ private:
     SubColumn subColumn;
 };
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam
 
-#endif // TABLEVIEW_COLUMN_ITEM_H
+#endif // DIGIKAM_TABLE_VIEW_COLUMN_ITEM_H

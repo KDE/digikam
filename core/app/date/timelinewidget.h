@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TIMELINEWIDGET_H
-#define TIMELINEWIDGET_H
+#ifndef DIGIKAM_TIME_LINE_WIDGET_H
+#define DIGIKAM_TIME_LINE_WIDGET_H
 
 // Qt includes
 
@@ -161,4 +161,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TIMELINEWIDGET_H
+#endif // DIGIKAM_TIME_LINE_WIDGET_H

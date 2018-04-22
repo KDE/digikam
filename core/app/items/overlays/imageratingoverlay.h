@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGERATINGOVERLAY_H
-#define IMAGERATINGOVERLAY_H
+#ifndef DIGIKAM_IMAGE_RATING_OVERLAY_H
+#define DIGIKAM_IMAGE_RATING_OVERLAY_H
 
 // Qt includes
 
@@ -81,4 +81,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* IMAGERATINGOVERLAY_H */
+#endif // DIGIKAM_IMAGE_RATING_OVERLAY_H

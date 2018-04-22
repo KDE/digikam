@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DDATE_TABLE_H
-#define DDATE_TABLE_H
+#ifndef DIGIKAM_DDATE_TABLE_H
+#define DIGIKAM_DDATE_TABLE_H
 
 // Qt includes
 
@@ -192,4 +192,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DDATE_TABLE_H
+#endif // DIGIKAM_DDATE_TABLE_H

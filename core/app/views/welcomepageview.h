@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef WELCOME_PAGE_VIEW_H
-#define WELCOME_PAGE_VIEW_H
+#ifndef DIGIKAM_WELCOME_PAGE_VIEW_H
+#define DIGIKAM_WELCOME_PAGE_VIEW_H
 
 #include "digikam_config.h"
 
@@ -94,4 +94,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // WELCOME_PAGE_VIEW_H
+#endif // DIGIKAM_WELCOME_PAGE_VIEW_H

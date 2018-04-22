@@ -253,7 +253,7 @@ TableViewColumnConfigurationWidget* ColumnFileProperties::getConfigurationWidget
     return new ColumnFileConfigurationWidget(s, configuration, parentWidget);
 }
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam
 

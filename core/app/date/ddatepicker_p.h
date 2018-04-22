@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DDATEPICKER_P_H
-#define DDATEPICKER_P_H
+#ifndef DIGIKAM_DDATE_PICKER_P_H
+#define DIGIKAM_DDATE_PICKER_P_H
 
 // Qt includes
 
@@ -139,4 +139,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DDATEPICKER_P_H
+#endif // DIGIKAM_DDATE_PICKER_P_H
