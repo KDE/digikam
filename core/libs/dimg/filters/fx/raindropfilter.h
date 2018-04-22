@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef RAINDROPFILTER_H
-#define RAINDROPFILTER_H
+#ifndef DIGIKAM_RAIN_DROP_FILTER_H
+#define DIGIKAM_RAIN_DROP_FILTER_H
 
 // Local includes
 
@@ -128,4 +128,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* RAINDROPFILTER_H */
+#endif // DIGIKAM_RAIN_DROP_FILTER_H

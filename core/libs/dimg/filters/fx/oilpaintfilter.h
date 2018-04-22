@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef OILPAINTFILTER_H
-#define OILPAINTFILTER_H
+#ifndef DIGIKAM_OIL_PAINT_FILTER_H
+#define DIGIKAM_OIL_PAINT_FILTER_H
 
 // Local includes
 
@@ -88,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* OILPAINTFILTER_H */
+#endif // DIGIKAM_OIL_PAINT_FILTER_H

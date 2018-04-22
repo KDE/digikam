@@ -449,17 +449,17 @@ void ColorFXFilter::loadLut3D(const QString& path)
             int iRow        = 0, iCol;
             const int zSize = w / m_lutTableSize;
 
-            for (oz = 0; oz < m_lutTableSize; oz++)
+            for (oz = 0 ; oz < m_lutTableSize ; ++oz)
             {
                 xOff = oz * m_lutTableSize;
 
-                for (y1 = 0; y1 < zSize; y1++)
+                for (y1 = 0 ; y1 < zSize ; ++y1)
                 {
                     iCol = 0;
 
-                    for (y2 = 0; y2 < zSize; y2++)
+                    for (y2 = 0 ; y2 < zSize ; ++y2)
                     {
-                        for (x = 0; x < m_lutTableSize; x++, iCol++)
+                        for (x = 0 ; x < m_lutTableSize ; ++x, ++iCol)
                         {
                             QRgb p = img.pixel(iCol, iRow);
                             Lut3DSetPixel(m_lutTable,
@@ -470,7 +470,7 @@ void ColorFXFilter::loadLut3D(const QString& path)
                         }
                     }
 
-                    iRow++;
+                    ++iRow;
                 }
             }
         }
@@ -482,9 +482,9 @@ void ColorFXFilter::loadLut3D(const QString& path)
             m_lutTable     = new quint16[img.width() * img.height() * 4];
             w              = img.width();
 
-            for (y = 0; y < m_lutTableSize; y++)
+            for (y = 0 ; y < m_lutTableSize ; ++y)
             {
-                for (x = 0; x < w; x++)
+                for (x = 0 ; x < w ; ++x)
                 {
                     QRgb p = img.pixel(x, y);
                     Lut3DSetPixel(m_lutTable, w, x, y, p);
@@ -538,7 +538,7 @@ static void ImageFilterFx(const quint16* lutrgb, int lutTableSize,
     int STEP      = 4;
     const int RED = 2, GREEN = 1, BLUE = 0;
 
-    int off[8] =
+    int off[8]    =
     {
             0,
             STEP*1,
@@ -553,15 +553,13 @@ static void ImageFilterFx(const quint16* lutrgb, int lutTableSize,
     float scale_R = (lutdim_r-1.f)/(maxVal + 1);
     float scale_G = (lutdim_g-1.f)/(maxVal + 1);
     float scale_B = (lutdim_b-1.f)/(maxVal + 1);
+    rgb          += 4 * start;
 
-    uint i;
-    rgb += 4 * start;
-
-    for (i = start; i < end; i++)
+    for (uint i = start ; i < end ; ++i)
     {
-        int r      = rgb[RED], rn;
+        int r      = rgb[RED],   rn;
         int g      = rgb[GREEN], gn;
-        int b      = rgb[BLUE], bn;
+        int b      = rgb[BLUE],  bn;
 
         float fb   = b*scale_B;
         float fg   = g*scale_G;
@@ -599,8 +597,8 @@ void ColorFXFilter::applyLut3D()
     maxI  = m_orgImage.width() * m_orgImage.height();
     stepI = maxI / steps;
 
-    for (progress = 0, i = 0;
-         runningFlag() && (i < maxI);
+    for (progress = 0, i = 0 ;
+         runningFlag() && (i < maxI) ;
          i += stepI, progress += (100 / steps))
     {
         if (!m_orgImage.sixteenBit())

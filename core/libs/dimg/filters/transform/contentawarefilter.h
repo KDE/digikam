@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef CONTENT_AWARE_FILTER_H
-#define CONTENT_AWARE_FILTER_H
+#ifndef DIGIKAM_CONTENT_AWARE_FILTER_H
+#define DIGIKAM_CONTENT_AWARE_FILTER_H
 
 // Qt includes
 
@@ -148,4 +148,4 @@ private:
 
 } // namespace Digikam
 
-#endif /*CONTENT_AWARE_FILTER_H*/
+#endif // DIGIKAM_CONTENT_AWARE_FILTER_H

@@ -9,7 +9,7 @@
  * Algorithm based on black point detection on the basis of spiral
  * traversal
  *
- * Copyright (C) 2013 by Sayantan Datta <sayantan dot knz at gmail dot com>
+ * Copyright (C) 2013      by Sayantan Datta <sayantan dot knz at gmail dot com>
  * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -75,12 +75,12 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 {
     int i, j, ni;
 
-    if(topCrop == -1)
+    if (topCrop == -1)
     {
         topCrop=0;
     }
 
-    if(bottomCrop == -1)
+    if (bottomCrop == -1)
     {
         bottomCrop=source.height();
     }
@@ -88,9 +88,9 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
     QSize resultsize = QSize(source.width(),(source.height()-topCrop-(source.height()-bottomCrop)));
     QImage threshold = QImage(resultsize, QImage::Format_RGB888);
 
-    for(i=topCrop, ni=0; i<bottomCrop ; i++, ni++)
+    for (i = topCrop, ni = 0 ; i < bottomCrop ; ++i, ++ni)
     {
-        for(j=0; j<source.width(); j++)
+        for (j = 0 ; j < source.width() ; ++j)
         {
             threshold.setPixel(j,ni,source.pixel(j,i));
         }
@@ -136,28 +136,30 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
     bool topEdge         = false;
     bool bottomEdge      = false;
 
-    endupi      = centeri;
-    endupj      = centerj;
-    travelright = traveldown = -1;
-    travelleft  = travelup   = 0;
+    endupi               = centeri;
+    endupj               = centerj;
+    travelright          = -1;
+    traveldown           = -1;
+    travelleft           = 0;
+    travelup             = 0;
 
-    qCDebug(DIGIKAM_DIMG_LOG) << "Center pixel : "<<centerj<<" , "<< centeri;
+    qCDebug(DIGIKAM_DIMG_LOG) << "Center pixel : " << centerj << " , " << centeri;
 
     while(true)
     {
 //        qCDebug(DIGIKAM_DIMG_LOG) << "count = "<<count;
 
-        switch((counter%4))
+        switch (counter % 4)
         {
-            case 0 :    //traveling right
+            case 0 :    // traveling right
             {
-                if(fixtopmargin == true)
+                if (fixtopmargin == true)
                 {
-                    if(fixrightmargin == false)
+                    if (fixrightmargin == false)
                     {
                         endrightj++;
 
-                        if(endrightj >= threshold.width())
+                        if (endrightj >= threshold.width())
                         {
                             qCDebug(DIGIKAM_DIMG_LOG) << "We cannot go right anymore";
                             fixrightmargin = true;
@@ -171,20 +173,20 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 
                 travelright += 2;
 
-                if(fixrightmargin == true)
+                if (fixrightmargin == true)
                     travelright--;
 
-                if(fixleftmargin == true)
+                if (fixleftmargin == true)
                     travelright--;
 
-    //            qCDebug(DIGIKAM_DIMG_LOG) << "TRAVELING RIGHT";
-    //            qCDebug(DIGIKAM_DIMG_LOG) << "Endupi" << endupi;
+//                qCDebug(DIGIKAM_DIMG_LOG) << "TRAVELING RIGHT";
+//                qCDebug(DIGIKAM_DIMG_LOG) << "Endupi" << endupi;
                 startrighti = endupi;
                 startrightj = endupj;
                 endrightj   = startrightj+travelright;
                 //            qCDebug(DIGIKAM_DIMG_LOG) << "Moving Right EndRight = " << endrightj;
 
-                if(endrightj >= limitcolumn)
+                if (endrightj >= limitcolumn)
                 {
                     qCDebug(DIGIKAM_DIMG_LOG) << "We have reached limitcolumn, i.e. width";
                     endrightj      = limitcolumn-1;
@@ -198,12 +200,12 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                 i = startrighti;
                 j = startrightj;
 
-                for(j=startrightj+1;j<=endrightj;j++)
+                for (j = startrightj + 1 ; j <= endrightj ; ++j)
                 {
-    //                qCDebug(DIGIKAM_DIMG_LOG) << "At pixel "<< j << " , " << i;
+//                    qCDebug(DIGIKAM_DIMG_LOG) << "At pixel "<< j << " , " << i;
                     c = QColor::fromRgb(threshold.pixel(j,i));
 
-                    if(c == Qt::black)
+                    if (c == Qt::black)
                     {
                         //we have found an empty space
                         fixtopmargin = true;
@@ -218,15 +220,15 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 
                 break;
             }
-            case 1 :    //traveling down
+            case 1 :    // traveling down
             {
-                if(fixrightmargin == true)
+                if (fixrightmargin == true)
                 {
-                    if(fixbottommargin == false)
+                    if (fixbottommargin == false)
                     {
                         enddowni++;
 
-                        if(enddowni >= limitrow)
+                        if (enddowni >= limitrow)
                         {
                             fixbottommargin = true;
                             bottommargin    = limitrow-1;
@@ -238,12 +240,13 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                     // qCDebug(DIGIKAM_DIMG_LOG) << "Traveling down : Case Skipped\n";
                     break;
                 }
+
                 traveldown += 2;
 
-                if(fixbottommargin==true)
+                if (fixbottommargin==true)
                     traveldown--;
 
-                if(fixtopmargin==true)
+                if (fixtopmargin==true)
                     traveldown--;
 
                 startdowni = endrighti;
@@ -251,7 +254,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                 enddowni   = startdowni + traveldown;
                 //            qCDebug(DIGIKAM_DIMG_LOG) << "Moving Down EndDown = " << enddowni;
 
-                if(enddowni >= limitrow)
+                if (enddowni >= limitrow)
                 {
                     qCDebug(DIGIKAM_DIMG_LOG) << "We have reached limitrow, i.e. Height";
                     enddowni        = limitrow-1;
@@ -265,12 +268,12 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                 i = startdowni;
                 j = startdownj;
 
-                for(i=startdowni+1; i<=enddowni; i++)
+                for (i = startdowni + 1 ; i <= enddowni ; ++i)
                 {
-    //                qCDebug(DIGIKAM_DIMG_LOG) << "At pixel "<< j << " , " << i;
+//                    qCDebug(DIGIKAM_DIMG_LOG) << "At pixel "<< j << " , " << i;
                     c = QColor::fromRgb(threshold.pixel(j,i));
 
-                    if(c == Qt::black)
+                    if (c == Qt::black)
                     {
                         //we have found an empty space
                         fixrightmargin = true;
@@ -287,13 +290,13 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
             }
             case 2 :    //traveling left
             {
-                if(fixbottommargin == true)
+                if (fixbottommargin == true)
                 {
-                    if(fixleftmargin == false)
+                    if (fixleftmargin == false)
                     {
                         endleftj--;
 
-                        if(endleftj < 0)
+                        if (endleftj < 0)
                         {
                             fixleftmargin = true;
                             leftmargin    = 0;
@@ -306,10 +309,10 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 
                 travelleft += 2;
 
-                if(fixleftmargin == true)
+                if (fixleftmargin == true)
                     travelleft--;
 
-                if(fixrightmargin == true)
+                if (fixrightmargin == true)
                     travelleft--;
 
                 startlefti = enddowni;
@@ -317,7 +320,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                 endleftj   = startleftj - travelleft;
                 //            qCDebug(DIGIKAM_DIMG_LOG) << "Moving Left Endleft = " << endleftj;
 
-                if(endleftj < 0)
+                if (endleftj < 0)
                 {
                     qCDebug(DIGIKAM_DIMG_LOG) << "We have gone too left";
                     endleftj      = 0;
@@ -331,12 +334,12 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                 i = startlefti;
                 j = startleftj;
 
-                for(j=startleftj-1;j>=endleftj;j--)
+                for (j = startleftj - 1 ; j >= endleftj ; j--)
                 {
-    //                qCDebug(DIGIKAM_DIMG_LOG) << "At pixel "<< j << " , " << i;
+//                    qCDebug(DIGIKAM_DIMG_LOG) << "At pixel "<< j << " , " << i;
                     c = QColor::fromRgb(threshold.pixel(j,i));
 
-                    if(c == Qt::black)
+                    if (c == Qt::black)
                     {
                         //we have found an empty space
                         fixbottommargin = true;
@@ -353,14 +356,14 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
             }
             case 3 :    //traveling up
             {
-                if(fixleftmargin == true)
+                if (fixleftmargin == true)
                 {
-                    if(fixtopmargin == false)
+                    if (fixtopmargin == false)
                     {
                         endupi--;
                         endupj = leftmargin;
 
-                        if(endupi < 0)
+                        if (endupi < 0)
                         {
                             fixtopmargin = true;
                             topmargin    = 0;
@@ -373,10 +376,10 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 
                 travelup += 2;
 
-                if(fixbottommargin == true)
+                if (fixbottommargin == true)
                     travelup--;
 
-                if(fixtopmargin == true)
+                if (fixtopmargin == true)
                     travelup--;
 
                 startupi = endlefti;
@@ -384,7 +387,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                 endupi   = startupi - travelup;
                 //            qCDebug(DIGIKAM_DIMG_LOG) << "Moving Up Endup = " << endupi;
 
-                if(endupi < 0)
+                if (endupi < 0)
                 {
                     qCDebug(DIGIKAM_DIMG_LOG) << "We have gone too right";
                     endupi       = 0;
@@ -398,12 +401,12 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                 i = startupi;
                 j = startupj;
 
-                for(i=startupi-1; i>=endupi; i--)
+                for (i = startupi - 1 ; i >= endupi ; --i)
                 {
-    //                qCDebug(DIGIKAM_DIMG_LOG) << "At pixel "<< j << " , " << i;
-                    c = QColor::fromRgb(threshold.pixel(j,i));
+//                    qCDebug(DIGIKAM_DIMG_LOG) << "At pixel "<< j << " , " << i;
+                    c = QColor::fromRgb(threshold.pixel(j, i));
 
-                    if(c == Qt::black)
+                    if (c == Qt::black)
                     {
                         //we have found an empty space
                         fixleftmargin = true;
@@ -414,7 +417,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                     }
                 }
 
-                endupj=startupj;
+                endupj = startupj;
 
                 break;
             }
@@ -422,7 +425,10 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 
         counter++;
 
-        if ( fixbottommargin == true && fixtopmargin == true && fixleftmargin == true && fixrightmargin == true)
+        if (fixbottommargin == true &&
+            fixtopmargin    == true &&
+            fixleftmargin   == true &&
+            fixrightmargin  == true)
             break;
     }
 
@@ -449,27 +455,28 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
     qCDebug(DIGIKAM_DIMG_LOG) << "Bottom Edge : " << bottomEdge;
     qCDebug(DIGIKAM_DIMG_LOG) << "Done\n";
 
-    if(bottomEdge)
+    if (bottomEdge)
     {
         bottommargin++;
     }
 
-    if(topEdge)
+    if (topEdge)
     {
         topmargin--;
     }
 
-    if(leftEdge)
+    if (leftEdge)
     {
         leftmargin--;
     }
 
-    if(rightEdge)
+    if (rightEdge)
     {
         rightmargin++;
     }
 
     //----------------------releasing images
+
     QPoint icp1;
     icp1.setX(leftmargin+1);
     icp1.setY(topCrop+topmargin+1);
@@ -479,6 +486,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
     QRect cropArea;
     cropArea.setTopLeft(icp1);
     cropArea.setBottomRight(icp2);
+
     return cropArea;
 }
 
@@ -516,13 +524,13 @@ void AutoCrop::startAnalyse()
     int width  = img.width();
     int height = img.height();
 
-    for(i=0; i < width; i++)
+    for (i = 0 ; i < width ; ++i)
     {
-        for(j=0; j < height; j++)
+        for(j = 0 ; j < height ; ++j)
         {
             c = QColor::fromRgb(img.pixel(i, j));
 
-            if( c == Qt::black || !c.isValid())
+            if (c == Qt::black || !c.isValid())
             {
                 // Nothing to do.
             }
@@ -536,7 +544,7 @@ void AutoCrop::startAnalyse()
             }
         }
 
-        if(breakflag == 1)
+        if (breakflag == 1)
             break;
     }
 
@@ -547,13 +555,13 @@ void AutoCrop::startAnalyse()
 
     breakflag = 0;
 
-    for(i=0; i < width; i++)
+    for (i = 0 ; i < width ; ++i)
     {
-        for(j=0; j < height; j++)
+        for(j = 0 ; j < height ; ++j)
         {
             c = QColor::fromRgb(img.pixel(i, j));
 
-            if(c == Qt::black || !c.isValid())
+            if (c == Qt::black || !c.isValid())
             {
                 // Nothing to do.
             }
@@ -574,13 +582,13 @@ void AutoCrop::startAnalyse()
 
     breakflag = 0;
 
-    for(i=0; i < height; i++)
+    for (i = 0 ; i < height ; i++)
     {
-        for(j=0; j < width; j++)
+        for (j = 0 ; j < width ; j++)
         {
             c = QColor::fromRgb(img.pixel(j, i));
 
-            if(c == Qt::black || !c.isValid())
+            if (c == Qt::black || !c.isValid())
             {
                 // Nothing to do.
             }
@@ -594,7 +602,7 @@ void AutoCrop::startAnalyse()
             }
         }
 
-        if(breakflag == 1)
+        if (breakflag == 1)
             break;
     }
 
@@ -605,13 +613,13 @@ void AutoCrop::startAnalyse()
 
     breakflag = 0;
 
-    for(i=height-1; i >= 0; i--)
+    for (i = height - 1 ; i >= 0 ; --i)
     {
-        for(j=0; j < width; j++)
+        for(j = 0 ; j < width ; ++j)
         {
             c = QColor::fromRgb(img.pixel(j,i));
 
-            if(c == Qt::black || !c.isValid())
+            if (c == Qt::black || !c.isValid())
             {
                 // Nothing to do.
             }
@@ -625,7 +633,7 @@ void AutoCrop::startAnalyse()
             }
         }
 
-        if(breakflag == 1)
+        if (breakflag == 1)
             break;
     }
 
@@ -674,11 +682,11 @@ void AutoCrop::startAnalyse()
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Outer Crop area:";
     qCDebug(DIGIKAM_DIMG_LOG) << "From "<< crop.top()  << " to " << crop.bottom()
-             << " & "  << crop.left() << " to " << crop.right();
+                              << " & "  << crop.left() << " to " << crop.right();
 
-    for(i=crop.top(), ni=0; i <= crop.bottom(); i++, ni++)
+    for (i = crop.top(), ni = 0 ; i <= crop.bottom() ; ++i, ++ni)
     {
-        for(j=crop.left(), nj=0; j <= crop.right(); j++, nj++)
+        for (j = crop.left(), nj = 0 ; j <= crop.right() ; ++j, ++nj)
         {
             result.setPixel(nj, ni, img.pixel(j, i));
         }
@@ -692,106 +700,107 @@ void AutoCrop::startAnalyse()
 
     //-----initialize
 
-    for(i=0;i<result.height();i++)
+    for (i = 0 ; i < result.height() ; ++i)
     {
-        for(j=0;j<result.width();j++)
+        for (j = 0 ; j < result.width() ; ++j)
         {
-            threshold.setPixel(j,i,Qt::black);
+            threshold.setPixel(j, i, Qt::black);
         }
     }
 
     //----------mark points on horizontal scan
-    for(i=0;i<result.height();i++)
+
+    for (i = 0 ; i < result.height() ; ++i)
     {
         toggleflag1 = -1;
         toggleflag2 = -1;
 
-        for(j=0;j<result.width();j++)
+        for (j = 0 ; j < result.width() ; ++j)
         {
-            c = QColor::fromRgb (result.pixel(j,i) );
+            c = QColor::fromRgb(result.pixel(j, i));
 
-            if(c != Qt::black)
+            if (c != Qt::black)
             {
-                toggleflag1=j;
+                toggleflag1 = j;
                 break;
             }
         }
 
-        for(j=(result.width()-1);j>=0;j--)
+        for (j = (result.width()-1) ; j >= 0 ; --j)
         {
-            c = QColor::fromRgb (result.pixel(j,i) );
+            c = QColor::fromRgb(result.pixel(j, i));
 
-            if(c != Qt::black)
+            if (c != Qt::black)
             {
                 toggleflag2=j;
                 break;
             }
         }
 
-        if(toggleflag1 >= 0)
+        if (toggleflag1 >= 0)
         {
-            for(j=toggleflag1;j<=toggleflag2;j++)
+            for (j = toggleflag1 ; j <= toggleflag2 ; ++j)
             {
-                threshold.setPixel(j,i,qRgb(255,255,255));
+                threshold.setPixel(j, i, qRgb(255, 255, 255));
             }
         }
     }
 
     //----------fill black points on vertical scan
 
-    for(j=0;j<result.width();j++)
+    for(j = 0 ; j < result.width() ; ++j)
     {
         toggleflag1 = -1;
         toggleflag2 = -2;
 
-        for(i=0;i<result.height();i++)
+        for(i = 0 ; i < result.height() ; ++i)
         {
-            c = QColor::fromRgb (result.pixel(j,i) );
+            c = QColor::fromRgb(result.pixel(j, i));
 
-            if(c != Qt::black)
+            if (c != Qt::black)
             {
                 toggleflag1 = i;
                 break;
             }
         }
 
-        for(i=(result.height()-1);i>=0;i--)
+        for (i = (result.height()-1) ; i >= 0 ; --i)
         {
-            c = QColor::fromRgb (result.pixel(j,i) );
+            c = QColor::fromRgb(result.pixel(j,i));
 
-            if(c != Qt::black)
+            if (c != Qt::black)
             {
                 toggleflag2 = i;
                 break;
             }
         }
 
-        if(toggleflag1>=0)
+        if (toggleflag1 >= 0)
         {
-            for(i=0;i<toggleflag1;i++)
+            for (i = 0 ; i < toggleflag1 ; ++i)
             {
-                threshold.setPixel(j,i,qRgb(0,0,0));
+                threshold.setPixel(j, i, qRgb(0, 0, 0));
             }
         }
 
-        if(toggleflag2>=0)
+        if (toggleflag2 >= 0)
         {
-            for(i=(toggleflag2+1);i<(result.height());i++)
+            for (i = (toggleflag2+1) ; i < (result.height()) ; ++i)
             {
-                threshold.setPixel(j,i,qRgb(0,0,0));
+                threshold.setPixel(j, i, qRgb(0, 0, 0));
             }
         }
     }
 
     // ---count of white pixel in threshold
 
-    for(i = 0; i <threshold.height(); i++)
+    for (i = 0 ; i < threshold.height() ; ++i)
     {
-        for (j = 0; j<threshold.width(); j++)
+        for (j = 0 ; j < threshold.width() ; ++j)
         {
-            c = QColor::fromRgb(threshold.pixel(j,i));
+            c = QColor::fromRgb(threshold.pixel(j, i));
 
-            if( c == Qt::white)
+            if ( c == Qt::white)
             {
                 whitepixelCount++;
             }
@@ -823,7 +832,7 @@ void AutoCrop::startAnalyse()
 
     int area = cropArea.height() * cropArea.width();
 
-    if(area > (whitepixelCount/1.43))
+    if (area > (whitepixelCount / 1.43))
     {
         d->cropArea.setTopLeft(icp1);
         d->cropArea.setBottomRight(icp2);
@@ -839,29 +848,29 @@ void AutoCrop::startAnalyse()
         qCDebug(DIGIKAM_DIMG_LOG) << "In local minima function";
         //We need to find the maxima between the first two local minima from either side
         int* const blackpointCount = new int[threshold.width()];
-        int leftminima     = 0;
-        int rightminima    = (threshold.width()-1);
-        int topCropLine    = 0;
-        int bottomCropLine = threshold.height()-1;
+        int leftminima             = 0;
+        int rightminima            = (threshold.width()-1);
+        int topCropLine            = 0;
+        int bottomCropLine         = threshold.height()-1;
         int temp;
         int temppos;
         int count;
 
         //initialize black point count
-        for(i=0; i<threshold.width(); i++)
+        for(i = 0 ; i < threshold.width() ; ++i)
         {
             blackpointCount[i] = 0;
         }
 
-        for(j=0; j<threshold.width(); j++)
+        for(j = 0 ; j < threshold.width() ; ++j)
         {
             count = 0;
 
-            for(i=0; i<threshold.height(); i++)
+            for(i = 0 ; i < threshold.height(); ++i)
             {
-                c = QColor::fromRgb(threshold.pixel(j,i));
+                c = QColor::fromRgb(threshold.pixel(j, i));
 
-                if ( c == Qt::black)
+                if (c == Qt::black)
                 {
                     count++;
                 }
@@ -878,18 +887,20 @@ void AutoCrop::startAnalyse()
 
         // --- Searching left minima
 
-        for(j=1;j<threshold.width();j++)
+        for(j = 1 ; j < threshold.width() ; ++j)
         {
-            if((blackpointCount[j]>blackpointCount[j-1]) && (blackpointCount[j]<(0.2*threshold.height())))
+            if ((blackpointCount[j] > blackpointCount[j-1]) &&
+                (blackpointCount[j] < (0.2*threshold.height())))
             {
                 leftminima = j-1;
                 break;
             }
         }
 
-        for(j=(threshold.width()-2); j>=0; j--)
+        for (j = (threshold.width()-2) ; j >= 0 ; --j)
         {
-            if((blackpointCount[j]>blackpointCount[j+1]) && (blackpointCount[j]<(0.2*threshold.height())))
+            if ((blackpointCount[j] > blackpointCount[j+1]) &&
+                (blackpointCount[j] < (0.2*threshold.height())))
             {
                 rightminima = j+1;
                 break;
@@ -903,9 +914,9 @@ void AutoCrop::startAnalyse()
         temp    = blackpointCount[leftminima];
         temppos = leftminima;
 
-        for(j=leftminima+1; j<=rightminima; j++)
+        for (j = leftminima+1 ; j <= rightminima ; ++j)
         {
-            if(temp < blackpointCount[j])
+            if (temp < blackpointCount[j])
             {
                 temp    = blackpointCount[j];
                 temppos = j;
@@ -920,20 +931,20 @@ void AutoCrop::startAnalyse()
         //-----For the bottom of the image
 
         //initialize black point count
-        for(i=0; i<threshold.width(); i++)
+        for (i = 0 ; i < threshold.width() ; ++i)
         {
             blackpointCount[i] = 0;
         }
 
-        for(j=0; j<threshold.width(); j++)
+        for (j = 0 ; j < threshold.width() ; ++j)
         {
             count = 0;
 
-            for(i=(threshold.height()-1); i>=0; i--)
+            for (i = (threshold.height()-1) ; i >= 0; --i)
             {
-                c = QColor::fromRgb(result.pixel(j,i));
+                c = QColor::fromRgb(result.pixel(j, i));
 
-                if ( c == Qt::black)
+                if (c == Qt::black)
                 {
                     count++;
                 }
@@ -950,18 +961,20 @@ void AutoCrop::startAnalyse()
 
         // --- Searching left minima
 
-        for(j=1;j<threshold.width();j++)
+        for (j = 1 ; j < threshold.width() ; ++j)
         {
-            if((blackpointCount[j]>blackpointCount[j-1]) && (blackpointCount[j]<(0.2*threshold.height())))
+            if ((blackpointCount[j] > blackpointCount[j-1]) &&
+                (blackpointCount[j] < (0.2*threshold.height())))
             {
                 leftminima = j-1;
                 break;
             }
         }
 
-        for(j=(threshold.width()-2); j>=0; j--)
+        for (j = (threshold.width()-2) ; j >= 0 ; --j)
         {
-            if((blackpointCount[j]>blackpointCount[j+1]) && (blackpointCount[j]<(0.2*threshold.height())))
+            if ((blackpointCount[j] > blackpointCount[j+1]) &&
+                (blackpointCount[j] < (0.2*threshold.height())))
             {
                 rightminima = j+1;
                 break;
@@ -973,9 +986,9 @@ void AutoCrop::startAnalyse()
         temp    = blackpointCount[leftminima];
         temppos = leftminima;
 
-        for(j=leftminima+1; j<=rightminima; j++)
+        for (j = leftminima+1 ; j <= rightminima ; ++j)
         {
-            if(temp < blackpointCount[j])
+            if (temp < blackpointCount[j])
             {
                 temp    = blackpointCount[j];
                 temppos = j;
@@ -985,9 +998,9 @@ void AutoCrop::startAnalyse()
         bottomCropLine = temp;
         qCDebug(DIGIKAM_DIMG_LOG) << "Found top crop line";
         qCDebug(DIGIKAM_DIMG_LOG) << "Found in column = " << temppos;
-        QRect newCrop = spiralClockwiseTraversal(threshold,topCropLine,(threshold.height()-bottomCropLine));
+        QRect newCrop  = spiralClockwiseTraversal(threshold,topCropLine,(threshold.height()-bottomCropLine));
 
-        if(newCrop != crop)
+        if (newCrop != crop)
         {
             icp1.setX(newCrop.topLeft().x()+leftColumn);
             icp1.setY(newCrop.topLeft().y()+topRow);

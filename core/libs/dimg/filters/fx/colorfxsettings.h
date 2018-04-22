@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COLORFXSETTINGS_H
-#define COLORFXSETTINGS_H
+#ifndef DIGIKAM_COLOR_FX_SETTINGS_H
+#define DIGIKAM_COLOR_FX_SETTINGS_H
 
 // Local includes
 
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* COLORFXSETTINGS_H */
+#endif // DIGIKAM_COLOR_FX_SETTINGS_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef INVERTFILTER_H
-#define INVERTFILTER_H
+#ifndef DIGIKAM_INVERT_FILTER_H
+#define DIGIKAM_INVERT_FILTER_H
 
 // Local includes
 
@@ -84,4 +84,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* INVERTFILTER_H */
+#endif // DIGIKAM_INVERT_FILTER_H

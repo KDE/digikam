@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef EFFECT_MNGR_H
-#define EFFECT_MNGR_H
+#ifndef DIGIKAM_EFFECT_MNGR_H
+#define DIGIKAM_EFFECT_MNGR_H
 
 // Qt includes
 
@@ -75,4 +75,4 @@ private:
 
 } // namespace Digikam
 
-#endif // EFFECT_MNGR_H
+#endif // DIGIKAM_EFFECT_MNGR_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TRANSITION_MNGR_P_H
-#define TRANSITION_MNGR_P_H
+#ifndef DIGIKAM_TRANSITION_MNGR_P_H
+#define DIGIKAM_TRANSITION_MNGR_P_H
 
 // C++ includes
 
@@ -187,5 +187,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TRANSITION_MNGR_P_H
-
+#endif // DIGIKAM_TRANSITION_MNGR_P_H

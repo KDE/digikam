@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SHEARFILTER_H
-#define SHEARFILTER_H
+#ifndef DIGIKAM_SHEAR_FILTER_H
+#define DIGIKAM_SHEAR_FILTER_H
 
 // Qt includes
 
@@ -104,4 +104,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* SHEARFILTER_H */
+#endif // DIGIKAM_SHEAR_FILTER_H

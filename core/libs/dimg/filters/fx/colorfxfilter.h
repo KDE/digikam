@@ -27,8 +27,8 @@
  *
  * ============================================================ */
 
-#ifndef COLORFXFILTER_H
-#define COLORFXFILTER_H
+#ifndef DIGIKAM_COLOR_FX_FILTER_H
+#define DIGIKAM_COLOR_FX_FILTER_H
 
 // Local includes
 
@@ -138,4 +138,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* COLORFXFILTER_H */
+#endif // DIGIKAM_COLOR_FX_FILTER_H

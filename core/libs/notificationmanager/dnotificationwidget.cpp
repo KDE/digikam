@@ -37,14 +37,14 @@
 namespace Digikam
 {
 
-DNotificationWidget::DNotificationWidget(QWidget* parent)
+DNotificationWidget::DNotificationWidget(QWidget* const parent)
     : QFrame(parent),
       d(new Private(this))
 {
     d->init();
 }
 
-DNotificationWidget::DNotificationWidget(const QString& text, QWidget* parent)
+DNotificationWidget::DNotificationWidget(const QString& text, QWidget* const parent)
     : QFrame(parent),
       d(new Private(this))
 {
@@ -75,7 +75,7 @@ DNotificationWidget::MessageType DNotificationWidget::messageType() const
 
 static QColor darkShade(QColor c)
 {
-    qreal contrast = 0.7; // taken from kcolorscheme for the dark shade
+    qreal contrast = 0.7; // taken from color scheme for the dark shade
     qreal darkAmount;
 
     if (c.lightnessF() < 0.006)
@@ -94,8 +94,9 @@ static QColor darkShade(QColor c)
     }
 
     qreal v = c.lightnessF() + darkAmount;
-    v       = v > 0.0 ? (v < 1.0 ? v : 1.0) : 0.0;
+    v       = (v > 0.0) ? (v < 1.0 ? v : 1.0) : 0.0;
     c.setHsvF(c.hslHueF(), c.hslSaturationF(), v);
+
     return c;
 }
 
@@ -142,7 +143,8 @@ void DNotificationWidget::setMessageType(DNotificationWidget::MessageType type)
         .arg(bg1.name())
         .arg(bg2.name())
         .arg(border.name())
-        // DefaultFrameWidth returns the size of the external margin + border width. We know our border is 1px, so we subtract this from the frame normal QStyle FrameWidth to get our margin
+        // DefaultFrameWidth returns the size of the external margin + border width.
+        //  We know our border is 1px, so we subtract this from the frame normal QStyle FrameWidth to get our margin.
         .arg(style()->pixelMetric(QStyle::PM_DefaultFrameWidth, 0, this) - 1)
         .arg(fg.name())
     );
@@ -183,6 +185,7 @@ void DNotificationWidget::resizeEvent(QResizeEvent* event)
 int DNotificationWidget::heightForWidth(int width) const
 {
     ensurePolished();
+
     return d->content->heightForWidth(width);
 }
 
@@ -205,7 +208,7 @@ bool DNotificationWidget::wordWrap() const
 
 void DNotificationWidget::setWordWrap(bool wordWrap)
 {
-    d->wordWrap = wordWrap;
+    d->wordWrap        = wordWrap;
     d->textLabel->setWordWrap(wordWrap);
     QSizePolicy policy = sizePolicy();
     policy.setHeightForWidth(wordWrap);

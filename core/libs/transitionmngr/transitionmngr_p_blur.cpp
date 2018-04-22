@@ -48,7 +48,9 @@ QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
     int a, r, g, b;
 
     if (radius < 1 || img.isNull() || img.width() < (radius << 1))
+    {
         return img;
+    }
 
     w = img.width();
     h = img.height();
@@ -61,7 +63,7 @@ QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
     gs = new int[w];
     bs = new int[w];
 
-    for (y = 0 ; y < h ; y++)
+    for (y = 0 ; y < h ; ++y)
     {
         my = y - radius;
         mh = (radius << 1) + 1;
@@ -73,7 +75,9 @@ QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
         }
 
         if ((my + mh) > h)
+        {
             mh = h - my;
+        }
 
         p1 = (QRgb*)buffer.scanLine(y);
         memset(as, 0, w*sizeof(int));
@@ -83,11 +87,11 @@ QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
 
         QRgb pixel;
 
-        for (yy = 0 ; yy < mh ; yy++)
+        for (yy = 0 ; yy < mh ; ++yy)
         {
             p2 = (QRgb*)img.scanLine(yy + my);
 
-            for (x = 0 ; x < w ; x++, p2++)
+            for (x = 0 ; x < w ; ++x, ++p2)
             {
                 pixel  = convertFromPremult(*p2);
                 as[x] += qAlpha(pixel);
@@ -97,7 +101,7 @@ QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
             }
         }
 
-        for (x = 0 ; x < w ; x++)
+        for (x = 0 ; x < w ; ++x)
         {
             a  = 0;
             r  = 0;
@@ -113,11 +117,13 @@ QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
             }
 
             if ((mx + mw) > w)
+            {
                 mw = w - mx;
+            }
 
             mt = mw * mh;
 
-            for (xx = mx ; xx < (mw + mx) ; xx++)
+            for (xx = mx ; xx < (mw + mx) ; ++xx)
             {
                 a += as[xx];
                 r += rs[xx];
@@ -158,8 +164,10 @@ int TransitionMngr::Private::transitionFade(bool aInit)
     eff_fd = eff_fd - 0.1;
 
     if (eff_fd > 0.0)
+    {
         return 15;
-
+    }
+ 
     eff_curFrame = eff_outImage;
 
     return -1;
@@ -179,12 +187,13 @@ int TransitionMngr::Private::transitionBlurIn(bool aInit)
     eff_fd = eff_fd - 1.0;
 
     if (eff_fd >= 1.0)
+    {
         return 15;
+    }
 
     eff_curFrame = eff_outImage;
 
     return -1;
-
 }
 
 int TransitionMngr::Private::transitionBlurOut(bool aInit)
@@ -201,12 +210,13 @@ int TransitionMngr::Private::transitionBlurOut(bool aInit)
     eff_fd = eff_fd + 1.0;
 
     if (eff_fd <= 25.0)
+    {
         return 15;
+    }
 
     eff_curFrame = eff_outImage;
 
     return -1;
-
 }
 
 } // namespace Digikam

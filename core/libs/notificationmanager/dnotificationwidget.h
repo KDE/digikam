@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DNOTIFICATION_WIDGET_H
-#define DNOTIFICATION_WIDGET_H
+#ifndef DIGIKAM_DNOTIFICATION_WIDGET_H
+#define DIGIKAM_DNOTIFICATION_WIDGET_H
 
 // Qt includes
 
@@ -74,13 +74,13 @@ public:
     /**
      * Constructs a DNotificationWidget with the specified @p parent.
      */
-    explicit DNotificationWidget(QWidget* parent = 0);
+    explicit DNotificationWidget(QWidget* const parent = 0);
 
     /**
      * Constructs a DNotificationWidget with the specified @p parent and
      * contents @p text.
      */
-    explicit DNotificationWidget(const QString& text, QWidget* parent = 0);
+    explicit DNotificationWidget(const QString& text, QWidget* const parent = 0);
 
     /**
      * Destructor.
@@ -289,4 +289,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DNOTIFICATION_WIDGET_H
+#endif // DIGIKAM_DNOTIFICATION_WIDGET_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PIXELSALIASFILTERS_H
-#define PIXELSALIASFILTERS_H
+#ifndef DIGIKAM_PIXELS_ALIAS_FILTERS_H
+#define DIGIKAM_PIXELS_ALIAS_FILTERS_H
 
 // C++ includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* PIXELSALIASFILTERS_H */
+#endif // DIGIKAM_PIXELS_ALIAS_FILTERS_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FREEROTATIONSETTINGS_H
-#define FREEROTATIONSETTINGS_H
+#ifndef DIGIKAM_FREE_ROTATION_SETTINGS_H
+#define DIGIKAM_FREE_ROTATION_SETTINGS_H
 
 // Local includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FREEROTATIONSETTINGS_H */
+#endif // DIGIKAM_FREE_ROTATION_SETTINGS_H

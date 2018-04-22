@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef FREE_ROTATION_FILTER_H
-#define FREE_ROTATION_FILTER_H
+#ifndef DIGIKAM_FREE_ROTATION_FILTER_H
+#define DIGIKAM_FREE_ROTATION_FILTER_H
 
 // Qt includes
 
@@ -139,4 +139,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FREE_ROTATION_FILTER_H */
+#endif // DIGIKAM_FREE_ROTATION_FILTER_H

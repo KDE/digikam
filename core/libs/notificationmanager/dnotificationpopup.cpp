@@ -151,7 +151,7 @@ public:
 
         int i = 0, z = 0;
 
-        for (; i < 4; ++i)
+        for ( ; i < 4 ; ++i)
         {
             QPainterPath path;
             path.moveTo(corners[i].x(), corners[i].y());
@@ -160,7 +160,7 @@ public:
 
             surround.resize(z + corner.count() - 1);
 
-            for (int s = 1; s < corner.count() - 1; s++, z++)
+            for (int s = 1 ; s < corner.count() - 1 ; s++, z++)   // krazy:exclude=postfixop
             {
                 surround.setPoint(z, corner[s]);
             }
@@ -206,8 +206,8 @@ public:
         p.drawPolygon(surround);
         q->setMask(mask);
 
-        q->move(right ? anchor.x() - width + 20 : (anchor.x() < 11 ? 11 : anchor.x() - 20),
-                bottom ? anchor.y() - height : (anchor.y() < 11 ? 11 : anchor.y()));
+        q->move(right  ? anchor.x() - width + 20 : (anchor.x() < 11 ? 11 : anchor.x() - 20),
+                bottom ? anchor.y() - height     : (anchor.y() < 11 ? 11 : anchor.y()     ));
 
         q->update();
     }
@@ -222,7 +222,6 @@ public:
         int y      = pos.y();
         int w      = q->minimumSizeHint().width();
         int h      = q->minimumSizeHint().height();
-
         QRect r    = desktopRectForPoint(QPoint(x + w / 2, y + h / 2));
 
         if (popupStyle == Balloon)
@@ -291,7 +290,7 @@ public:
     }
 };
 
-DNotificationPopup::DNotificationPopup(QWidget* parent, Qt::WindowFlags f)
+DNotificationPopup::DNotificationPopup(QWidget* const parent, Qt::WindowFlags f)
     : QFrame(0, f ? f : POPUP_FLAGS),
       d(new Private(this, parent ? parent->effectiveWinId() : 0L))
 {
@@ -331,7 +330,7 @@ void DNotificationPopup::setPopupStyle(int popupstyle)
 void DNotificationPopup::setView(QWidget* child)
 {
     delete d->msgView;
-    d->msgView = child;
+    d->msgView   = child;
 
     delete d->topLayout;
     d->topLayout = new QVBoxLayout(this);
@@ -346,7 +345,8 @@ void DNotificationPopup::setView(QWidget* child)
     d->topLayout->activate();
 }
 
-void DNotificationPopup::setView(const QString& caption, const QString& text,
+void DNotificationPopup::setView(const QString& caption,
+                                 const QString& text,
                                  const QPixmap& icon)
 {
     // qCDebug(LOG_KNOTIFICATIONS) << "DNotificationPopup::setView " << caption << ", " << text;
@@ -358,8 +358,8 @@ QWidget* DNotificationPopup::standardView(const QString& caption,
                                           const QPixmap& icon,
                                           QWidget* parent)
 {
-    QWidget* top = new QWidget(parent ? parent : this);
-    QVBoxLayout *vb = new QVBoxLayout(top);
+    QWidget* const top    = new QWidget(parent ? parent : this);
+    QVBoxLayout* const vb = new QVBoxLayout(top);
     vb->setMargin(0);
     top->setLayout(vb);
 
@@ -367,7 +367,7 @@ QWidget* DNotificationPopup::standardView(const QString& caption,
 
     if (!icon.isNull())
     {
-        hb = new QHBoxLayout(top);
+        hb         = new QHBoxLayout(top);
         hb->setMargin(0);
         vb->addLayout(hb);
         d->ttlIcon = new QLabel(top);
@@ -424,7 +424,7 @@ int DNotificationPopup::timeout() const
 
 void DNotificationPopup::setTimeout(int delay)
 {
-    d->hideDelay = delay < 0 ? DEFAULT_POPUP_TIME : delay;
+    d->hideDelay = (delay < 0) ? DEFAULT_POPUP_TIME : delay;
 
     if (d->hideTimer->isActive())
     {
@@ -457,7 +457,7 @@ void DNotificationPopup::mouseReleaseEvent(QMouseEvent* e)
 
 void DNotificationPopup::setVisible(bool visible)
 {
-    if (! visible)
+    if (!visible)
     {
         QFrame::setVisible(visible);
         return;
@@ -635,7 +635,7 @@ DNotificationPopup* DNotificationPopup::message(int popupStyle, const QString& c
     pop->setPopupStyle(popupStyle);
     pop->setAutoDelete(true);
     pop->setView(caption, text, icon);
-    pop->d->hideDelay = timeout < 0 ? DEFAULT_POPUP_TIME : timeout;
+    pop->d->hideDelay             = (timeout < 0) ? DEFAULT_POPUP_TIME : timeout;
 
     if (p.isNull())
     {
@@ -667,7 +667,7 @@ DNotificationPopup* DNotificationPopup::message(int popupStyle, const QString& c
     pop->setPopupStyle(popupStyle);
     pop->setAutoDelete(true);
     pop->setView(caption, text, icon);
-    pop->d->hideDelay = timeout < 0 ? DEFAULT_POPUP_TIME : timeout;
+    pop->d->hideDelay             = (timeout < 0) ? DEFAULT_POPUP_TIME : timeout;
 
     if (p.isNull())
     {
@@ -688,8 +688,8 @@ DNotificationPopup* DNotificationPopup::message(int popupStyle, const QString& c
     pop->setPopupStyle(popupStyle);
     pop->setAutoDelete(true);
     pop->setView(caption, text, icon);
-    pop->d->hideDelay = timeout < 0 ? DEFAULT_POPUP_TIME : timeout;
-    QPoint pos = pop->d->calculateNearbyPoint(parent->geometry());
+    pop->d->hideDelay             = (timeout < 0) ? DEFAULT_POPUP_TIME : timeout;
+    QPoint pos                    = pop->d->calculateNearbyPoint(parent->geometry());
     pop->show(pos);
     pop->moveNear(parent->geometry());
 

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EFFECT_PREVIEW_H
-#define EFFECT_PREVIEW_H
+#ifndef DIGIKAM_EFFECT_PREVIEW_H
+#define DIGIKAM_EFFECT_PREVIEW_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif // EFFECT_PREVIEW_H
+#endif // DIGIKAM_EFFECT_PREVIEW_H

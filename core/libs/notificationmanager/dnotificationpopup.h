@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DNOTIFICATION_POPUP_H
-#define DNOTIFICATION_POPUP_H
+#ifndef DIGIKAM_DNOTIFICATION_POPUP_H
+#define DIGIKAM_DNOTIFICATION_POPUP_H
 
 // Qt includes
 
@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT DNotificationPopup : public QFrame
 {
     Q_OBJECT
     Q_PROPERTY(bool autoDelete READ autoDelete WRITE setAutoDelete)
-    Q_PROPERTY(int timeout READ timeout WRITE setTimeout)
+    Q_PROPERTY(int timeout     READ timeout    WRITE setTimeout)
 
 public:
 
@@ -68,7 +68,7 @@ public:
     /**
      * Creates a popup for the specified widget.
      */
-    explicit DNotificationPopup(QWidget* parent = 0, Qt::WindowFlags f = 0);
+    explicit DNotificationPopup(QWidget* const parent = 0, Qt::WindowFlags f = 0);
 
     /**
      * Creates a popup for the specified window.
@@ -375,4 +375,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DNOTIFICATION_POPUP_H
+#endif // DIGIKAM_DNOTIFICATION_POPUP_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILMGRAINSETTINGS_H
-#define FILMGRAINSETTINGS_H
+#ifndef DIGIKAM_FILM_GRAIN_SETTINGS_H
+#define DIGIKAM_FILM_GRAIN_SETTINGS_H
 
 // Local includes
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FILMGRAINSETTINGS_H */
+#endif // DIGIKAM_FILM_GRAIN_SETTINGS_H

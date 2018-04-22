@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DNOTIFICATIONWRAPPER_H
-#define DNOTIFICATIONWRAPPER_H
+#ifndef DIGIKAM_DNOTIFICATION_WRAPPER_H
+#define DIGIKAM_DNOTIFICATION_WRAPPER_H
 
 #include <QString>
 #include <QPixmap>
@@ -58,5 +58,4 @@ bool MacNativeDispatchNotify(const QString& summary, const QString& message);
 
 #endif
 
-#endif /* DNOTIFICATIONWRAPPER_H */
-
+#endif // DIGIKAM_DNOTIFICATION_WRAPPER_H

@@ -26,8 +26,8 @@
  *
  * ============================================================ */
 
-#ifndef EMBOSSFILTER_H
-#define EMBOSSFILTER_H
+#ifndef DIGIKAM_EMBOSS_FILTER_H
+#define DIGIKAM_EMBOSS_FILTER_H
 
 // Local includes
 
@@ -90,4 +90,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* EMBOSSFILTER_H */
+#endif // DIGIKAM_EMBOSS_FILTER_H

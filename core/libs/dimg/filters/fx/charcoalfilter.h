@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CHARCOALFILTER_H
-#define CHARCOALFILTER_H
+#ifndef DIGIKAM_CHARCOAL_FILTER_H
+#define DIGIKAM_CHARCOAL_FILTER_H
 
 // Local includes
 
@@ -86,4 +86,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CHARCOALFILTER_H */
+#endif // DIGIKAM_CHARCOAL_FILTER_H

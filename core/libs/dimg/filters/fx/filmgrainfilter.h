@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef FILMGRAINFILTER_H
-#define FILMGRAINFILTER_H
+#ifndef DIGIKAM_FILM_GRAIN_FILTER_H
+#define DIGIKAM_FILM_GRAIN_FILTER_H
 
 // Local includes
 
@@ -166,4 +166,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FILMGRAINFILTER_H */
+#endif // DIGIKAM_FILM_GRAIN_FILTER_H

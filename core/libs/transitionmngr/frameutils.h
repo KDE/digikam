@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef FRAME_UTILS_H
-#define FRAME_UTILS_H
+#ifndef DIGIKAM_FRAME_UTILS_H
+#define DIGIKAM_FRAME_UTILS_H
 
 // Qt includes
 
@@ -47,4 +47,4 @@ public:
 
 } // namespace Digikam
 
-#endif // FRAME_UTILS_H
+#endif // DIGIKAM_FRAME_UTILS_H

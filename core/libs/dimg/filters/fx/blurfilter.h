@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef BLURFILTER_H
-#define BLURFILTER_H
+#ifndef DIGIKAM_BLUR_FILTER_H
+#define DIGIKAM_BLUR_FILTER_H
 
 // Local includes
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* BLURFILTER_H */
+#endif // DIGIKAM_BLUR_FILTER_H

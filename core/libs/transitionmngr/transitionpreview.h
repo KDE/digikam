@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TRANSITION_PREVIEW_H
-#define TRANSITION_PREVIEW_H
+#ifndef DIGIKAM_TRANSITION_PREVIEW_H
+#define DIGIKAM_TRANSITION_PREVIEW_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TRANSITION_PREVIEW_H
+#endif // DIGIKAM_TRANSITION_PREVIEW_H

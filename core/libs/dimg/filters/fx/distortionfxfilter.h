@@ -26,8 +26,8 @@
  *
  * ============================================================ */
 
-#ifndef DISTORTION_FX_FILTER_H
-#define DISTORTION_FX_FILTER_H
+#ifndef DIGIKAM_DISTORTION_FX_FILTER_H
+#define DIGIKAM_DISTORTION_FX_FILTER_H
 
 // Local includes
 
@@ -211,4 +211,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DISTORTION_FX_FILTER_H */
+#endif // DIGIKAM_DISTORTION_FX_FILTER_H

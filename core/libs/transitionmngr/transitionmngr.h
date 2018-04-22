@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TRANSITION_MNGR_H
-#define TRANSITION_MNGR_H
+#ifndef DIGIKAM_TRANSITION_MNGR_H
+#define DIGIKAM_TRANSITION_MNGR_H
 
 // Qt includes
 
@@ -95,4 +95,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TRANSITION_MNGR_H
+#endif // DIGIKAM_TRANSITION_MNGR_H
