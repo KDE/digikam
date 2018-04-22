@@ -1,7 +1,7 @@
 ![](https://c1.staticflickr.com/1/822/26082076957_5ff0796a99_o.png) digiKam - Professional Photo Management with the Power of Open Source
 
-[![](https://scan.coverity.com/projects/285/badge.svg "Coverity Scan Build Status")](https://scan.coverity.com/projects/digikam)
-[![Build Status](https://build.kde.org/buildStatus/icon?job=Extragear digikam kf5-qt5 SUSEQt5.9)](https://build.kde.org/job/Extragear%20digikam%20kf5-qt5%20SUSEQt5.9/)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/285/badge.svg)](https://scan.coverity.com/projects/digikam)
+[![Phabricator Build Status](https://build.kde.org/job/Extragear%20digikam%20kf5-qt5%20SUSEQt5.9/badge/icon)](https://build.kde.org/job/Extragear%20digikam%20kf5-qt5%20SUSEQt5.9/)
 
 # About
 
