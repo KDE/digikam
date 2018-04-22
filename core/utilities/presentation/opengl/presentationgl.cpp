@@ -32,7 +32,6 @@
 
 // Qt includes
 
-#include <QApplication>
 #include <QCursor>
 #include <QDesktopWidget>
 #include <QEvent>

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_EDITOR_HOT_PIXEL_TOOL_H
-#define DIGIKAM_EDITOR_HOT_PIXEL_TOOL_H
+#ifndef DIGIKAM_EDITOR_HOT_PIXELS_TOOL_H
+#define DIGIKAM_EDITOR_HOT_PIXELS_TOOL_H
 
 #define MAX_PIXEL_DEPTH 4
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_EDITOR_HOT_PIXEL_TOOL_H
+#endif // DIGIKAM_EDITOR_HOT_PIXELS_TOOL_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_WS_SETTING_H
-#define DIGIKAM_WS_SETTING_H
+#ifndef DIGIKAM_WS_SETTINGS_H
+#define DIGIKAM_WS_SETTINGS_H
 
 // Qt includes
 
@@ -108,4 +108,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_WS_SETTING_H
+#endif // DIGIKAM_WS_SETTINGS_H
