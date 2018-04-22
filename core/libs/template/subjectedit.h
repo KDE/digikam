@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef SUBJECTEDIT_H
-#define SUBJECTEDIT_H
+#ifndef DIGIKAM_SUBJECT_EDIT_H
+#define DIGIKAM_SUBJECT_EDIT_H
 
 // Local includes
 
@@ -46,4 +46,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // SUBJECTSEDIT_H
+#endif // DIGIKAM_SUBJECT_EDIT_H

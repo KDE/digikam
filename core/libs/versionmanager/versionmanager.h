@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONMANAGER_H
-#define VERSIONMANAGER_H
+#ifndef DIGIKAM_VERSION_MANAGER_H
+#define DIGIKAM_VERSION_MANAGER_H
 
 // Qt includes
 
@@ -54,7 +54,7 @@ public:
 
 public:
 
-    VersionManager();
+    explicit VersionManager();
     virtual ~VersionManager();
 
     void setSettings(const VersionManagerSettings& settings);
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VERSIONMANAGER_H
+#endif // DIGIKAM_VERSION_MANAGER_H

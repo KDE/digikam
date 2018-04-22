@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONFILEOPERATION_H
-#define VERSIONFILEOPERATION_H
+#ifndef DIGIKAM_VERSION_FILE_OPERATION_H
+#define DIGIKAM_VERSION_FILE_OPERATION_H
 
 // Qt includes
 
@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT VersionFileInfo
 {
 public:
 
-    VersionFileInfo()
+    explicit VersionFileInfo()
     {
     }
 
@@ -83,7 +83,7 @@ public:
      *  (initialResolvedHistory.size() <= i < currentHistory.size() - 1).
      */
 
-    VersionFileOperation()
+    explicit VersionFileOperation()
     {
     }
 
@@ -126,4 +126,4 @@ public:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::VersionFileOperation::Tasks)
 
-#endif // VERSIONFILEOPERATION_H
+#endif // DIGIKAM_VERSION_FILE_OPERATION_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEMPLATE_PANEL_H
-#define TEMPLATE_PANEL_H
+#ifndef DIGIKAM_TEMPLATE_PANEL_H
+#define DIGIKAM_TEMPLATE_PANEL_H
 
 // Qt includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TEMPLATE_PANEL_H
+#endif // DIGIKAM_TEMPLATE_PANEL_H

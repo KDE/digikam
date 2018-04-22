@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEMPLATELIST_H
-#define TEMPLATELIST_H
+#ifndef DIGIKAM_TEMPLATE_LIST_H
+#define DIGIKAM_TEMPLATE_LIST_H
 
 // Qt includes
 
@@ -40,7 +40,7 @@ class TemplateListItem : public QTreeWidgetItem
 
 public:
 
-    TemplateListItem(QTreeWidget* const parent, const Template& t);
+    explicit TemplateListItem(QTreeWidget* const parent, const Template& t);
     ~TemplateListItem();
 
     void     setTemplate(const Template& t);
@@ -70,4 +70,4 @@ public:
 
 } // namespace Digikam
 
-#endif // TEMPLATELIST_H
+#endif // DIGIKAM_TEMPLATE_LIST_H

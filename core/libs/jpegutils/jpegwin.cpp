@@ -6,7 +6,7 @@
  * Date        : 2008-11-22
  * Description : some workaround functions to read jpeg files without relying on libjpeg
  *
- * Copyright (C) 2008 Patrick Spendrin <ps_ml@gmx.de>
+ * Copyright (C) 2008 Patrick Spendrin <ps_ml_at_gmx_dot_de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

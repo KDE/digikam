@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONNAMINGSCHEME_H
-#define VERSIONNAMINGSCHEME_H
+#ifndef DIGIKAM_VERSION_NAMING_SCHEME_H
+#define DIGIKAM_VERSION_NAMING_SCHEME_H
 
 // Qt includes
 
@@ -105,4 +105,4 @@ public:
 
 } // namespace Digikam
 
-#endif // VERSIONNAMINGSCHEME_H
+#endif // DIGIKAM_VERSION_NAMING_SCHEME_H

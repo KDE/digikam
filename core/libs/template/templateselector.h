@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEMPLATESELECTOR_H
-#define TEMPLATESELECTOR_H
+#ifndef DIGIKAM_TEMPLATE_SELECTOR_H
+#define DIGIKAM_TEMPLATE_SELECTOR_H
 
 // Local includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TEMPLATESELECTOR_H
+#endif // DIGIKAM_TEMPLATE_SELECTOR_H

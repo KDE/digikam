@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEMPLATEVIEWER_H
-#define TEMPLATEVIEWER_H
+#ifndef DIGIKAM_TEMPLATE_VIEWER_H
+#define DIGIKAM_TEMPLATE_VIEWER_H
 
 // Qt includes
 
@@ -56,4 +56,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TEMPLATEVIEWER_H
+#endif // DIGIKAM_TEMPLATE_VIEWER_H

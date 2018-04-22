@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TEMPLATEMANAGER_H
-#define TEMPLATEMANAGER_H
+#ifndef DIGIKAM_TEMPLATE_MANAGER_H
+#define DIGIKAM_TEMPLATE_MANAGER_H
 
 // Qt includes
 
@@ -68,7 +68,7 @@ private:
 
 private:
 
-    TemplateManager();
+    explicit TemplateManager();
     ~TemplateManager();
 
 private:
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* TEMPLATEMANAGER_H */
+#endif // DIGIKAM_TEMPLATE_MANAGER_H
