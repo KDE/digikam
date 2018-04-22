@@ -121,31 +121,11 @@ void WelcomePageView::slotUrlOpen(const QUrl& url)
 QStringList WelcomePageView::featuresTabContent() const
 {
     QStringList newFeatures;
-    newFeatures << i18n("Port to Qt5 and KF5;");
-    newFeatures << i18n("Replacing digiKam KIOSlaves by a multi-threaded interface to query the database;");
-    newFeatures << i18n("Replacing Qt5::Multimedia dependency by QtAV framework to handle video files;");
-    newFeatures << i18n("Add embedded trash support for each collection instead desktop trash;");
-    newFeatures << i18n("Thumbs and preview video support is now delegate to QT5Multimedia framework;");
-    newFeatures << i18n("Mysql internal server is now configurable as Sqlite to store database files at a customized place;");
-    newFeatures << i18n("Mysql internal/remote server is now configurable with first run assistant;");
-    newFeatures << i18n("Add a new garbage collector tool to cleanup database;");
-    newFeatures << i18n("Add a new batch queue manager tool to convert RAW files to DNG;");
-    newFeatures << i18n("Add a new tool to export contents in html gallery;");
-    newFeatures << i18n("Add a new tool to export contents as a video slideshow;");
-    newFeatures << i18n("Add a new tool to export contents by email;");
-    newFeatures << i18n("Add a new batch queue manager tool to adjust time and date metadata;");
-    newFeatures << i18n("Add a new batch queue manager tool to detect and fix red-eyes automatically;");
-    newFeatures << i18n("Add a new option in editor and light table to import images from a digital scanner;");
-    newFeatures << i18n("Add a new option in editor and light table to edit metadata;");
-    newFeatures << i18n("Add a new option in editor and light table to edit geolocation;");
-    newFeatures << i18n("Add a new option in editor and light table to run presentation tool;");
-    newFeatures << i18n("Add a new editor tool to detect and fix red-eyes automatically;");
-    newFeatures << i18n("Add a new editor tool to perform color change based on Lut3D;");
-    newFeatures << i18n("Add a new tool in camera import interface to convert RAW files to DNG;");
-    newFeatures << i18n("Add a new tool to export items on local network through UPNP/DLNA;");
-    newFeatures << i18n("Consolidation of Mysql database backend;");
-    newFeatures << i18n("Improved startup time with differed scan for new items stage.");
-    newFeatures << i18n("Presentation and Slideshow tools now support video.");
+    newFeatures << i18n("Image Editor: Add Web services Import and Export tools;");
+    newFeatures << i18n("Showfoto: Add Web services Import and Export tools;");
+    newFeatures << i18n("Light Table: Add Web services Import and Export tools;");
+    newFeatures << i18n("New video metadata parser based on ffmpeg to populate database;");
+    newFeatures << i18n("Add video support to find files based on properties registered on database.");
     // Add new features here...
     newFeatures << i18n("...and much more.");
 
@@ -159,7 +139,7 @@ QStringList WelcomePageView::featuresTabContent() const
     QString tabHeader = i18n("New Features");
     QString tabContent =
         i18n("<h3>%1</h3><ul>%2</ul>",
-             i18n("Some of the new features in this release of digiKam include (compared to digiKam 4.x):"),
+             i18n("Some of the new features in this release of digiKam include (compared to digiKam 5.x):"),
              featureItems
             );
 

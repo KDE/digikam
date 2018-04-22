@@ -13,6 +13,8 @@ LightTable   : Add Web services Import and Export tools.
 Database     : New video metadata parser based on ffmpeg to populate database.
 Search       : Add video support to find files based on properties registered on database.
 
+General      : Add QWebEngine support.
+
 *****************************************************************************************************
 BUGFIXES:
 
