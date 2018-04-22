@@ -55,12 +55,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-#ifdef HAVE_AKONADICONTACT
-
     void slotABCSearchResult(KJob*);
     void slotABCMenuTriggered(QAction*);
-
-#endif // HAVE_AKONADICONTACT
 
 private:
 

@@ -40,6 +40,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "digikam_debug.h"
 #include "albummanager.h"
 #include "contextmenuhelper.h"
@@ -111,7 +112,9 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
     }
 
     cmh.addActionNewTag(tagModificationHelper(), tag);
+#ifdef HAVE_AKONADICONTACT
     cmh.addCreateTagFromAddressbookMenu();
+#endif
     cmh.addAction(d->resetIconAction);
     cmh.addSeparator();
 

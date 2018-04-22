@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CONTEXT_MENU_HELPER_H
-#define CONTEXT_MENU_HELPER_H
+#ifndef DIGIKAM_CONTEXT_MENU_HELPER_H
+#define DIGIKAM_CONTEXT_MENU_HELPER_H
 
 // Qt includes
 
@@ -432,4 +432,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CONTEXT_MENU_HELPER_H
+#endif // DIGIKAM_CONTEXT_MENU_HELPER_H
