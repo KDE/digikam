@@ -4,7 +4,9 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-add_subdirectory(addressbook)
+if(KF5AkonadiContact_FOUND)
+    add_subdirectory(addressbook)
+endif()
 
 if(KF5FileMetaData_FOUND)
     add_subdirectory(filesindexer)

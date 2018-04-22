@@ -70,7 +70,10 @@
 #include "tagscache.h"
 #include "dimg.h"
 #include "dxmlguiwindow.h"
-#include "akonadiiface.h"
+
+#ifdef HAVE_AKONADICONTACT
+#   include "akonadiiface.h"
+#endif
 
 namespace Digikam
 {
@@ -569,12 +572,14 @@ void ContextMenuHelper::addLabelsAction()
 
 void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 {
+#ifdef HAVE_AKONADICONTACT
     AkonadiIface* const abc = new AkonadiIface(d->parent);
 
     connect(abc, SIGNAL(signalContactTriggered(QString)),
             this, SIGNAL(signalAddNewTagFromABCMenu(QString)));
 
     // AkonadiIface instance will be deleted with d->parent.
+#endif    
 }
 
 void ContextMenuHelper::slotDeselectAllAlbumItems()

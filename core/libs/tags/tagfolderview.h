@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TAG_FOLDER_VIEW_H
-#define TAG_FOLDER_VIEW_H
+#ifndef DIGIKAM_TAG_FOLDER_VIEW_H
+#define DIGIKAM_TAG_FOLDER_VIEW_H
 
 // Qt includes
 
@@ -148,4 +148,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAG_FOLDER_VIEW_H
+#endif // DIGIKAM_TAG_FOLDER_VIEW_H

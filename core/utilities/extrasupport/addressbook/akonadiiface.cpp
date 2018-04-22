@@ -35,8 +35,6 @@
 
 #include <klocalizedstring.h>
 
-#ifdef HAVE_AKONADICONTACT
-
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wundef"
@@ -50,8 +48,6 @@
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
 #   pragma clang diagnostic pop
 #endif
-
-#endif // HAVE_AKONADICONTACT
 
 // Local includes
 
@@ -69,8 +65,6 @@ AkonadiIface::AkonadiIface(QMenu* const parent)
     m_parent  = parent;
     m_ABCmenu = 0;
 
-#ifdef HAVE_AKONADICONTACT
-
     m_ABCmenu = new QMenu(m_parent);
 
     QAction* const abcAction = m_ABCmenu->menuAction();
@@ -86,16 +80,12 @@ AkonadiIface::AkonadiIface(QMenu* const parent)
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotABCSearchResult(KJob*)));
-
-#endif // HAVE_AKONADICONTACT
 }
 
 AkonadiIface::~AkonadiIface()
 {
     delete m_ABCmenu;
 }
-
-#ifdef HAVE_AKONADICONTACT
 
 void AkonadiIface::slotABCSearchResult(KJob* job)
 {
@@ -149,7 +139,5 @@ void AkonadiIface::slotABCMenuTriggered(QAction* action)
     QString name = action->iconText();
     emit signalContactTriggered(name);
 }
-
-#endif // HAVE_AKONADICONTACT
 
 } // namespace Digikam
