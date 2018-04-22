@@ -10,7 +10,8 @@ Showfoto     : Add Web services Import and Export tools.
 
 LightTable   : Add Web services Import and Export tools.
 
-General      : New video metadata parser based on libav to populate database.
+Database     : New video metadata parser based on ffmpeg to populate database.
+Search       : Add video support to find files based on properties registered on database.
 
 *****************************************************************************************************
 BUGFIXES:
