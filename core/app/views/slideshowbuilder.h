@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDESHOWBUILDER_H
-#define SLIDESHOWBUILDER_H
+#ifndef DIGIKAM_SLIDE_SHOW_BUILDER_H
+#define DIGIKAM_SLIDE_SHOW_BUILDER_H
 
 // Local includes
 
@@ -80,4 +80,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* SLIDESHOWBUILDER_H */
+#endif // DIGIKAM_SLIDE_SHOW_BUILDER_H

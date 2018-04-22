@@ -19,7 +19,7 @@ BUILDING_DIR="`pwd`/temp.build"
 
 #------------
 # IMPORTANT: Target Windows architecture to build installer. Possible values: 32 or 64 bits.
-MXE_ARCHBITS=32
+MXE_ARCHBITS=64
 #------------
 
 if [[ $MXE_ARCHBITS == 32 ]]; then

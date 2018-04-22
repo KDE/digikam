@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASES_CONFIG_DIGIKAM_H
-#define DATABASES_CONFIG_DIGIKAM_H
+#ifndef DIGIKAM_DB_CONFIG_H
+#define DIGIKAM_DB_CONFIG_H
 
 namespace Digikam
 {
@@ -31,4 +31,4 @@ static const int dbcoreconfig_xml_version = @DBCORECONFIG_XML_VERSION@;
 
 } // namespace Digikam
 
-#endif // DATABASES_CONFIG_DIGIKAM_H
+#endif // DIGIKAM_DB_CONFIG_H

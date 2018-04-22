@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SIDEBARWIDGET_H
-#define SIDEBARWIDGET_H
+#ifndef DIGIKAM_SIDE_BAR_WIDGET_H
+#define DIGIKAM_SIDE_BAR_WIDGET_H
 
 // QT includes
 
@@ -111,4 +111,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif /* SIDEBARWIDGET_H */
+#endif // DIGIKAM_SIDE_BAR_WIDGET_H

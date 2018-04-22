@@ -20,6 +20,8 @@ set(libsearchwindow_SRCS
     choicesearchutilities.cpp
     searchfolderview.cpp
     searchtabheader.cpp
+    searchmodificationhelper.cpp
+    editablesearchtreeview.cpp
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>

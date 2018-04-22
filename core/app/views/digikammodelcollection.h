@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMMODELCOLLECTION_H
-#define DIGIKAMMODELCOLLECTION_H
+#ifndef DIGIKAM_MODEL_COLLECTION_H
+#define DIGIKAM_MODEL_COLLECTION_H
 
 // Qt includes
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DIGIKAMMODELCOLLECTION_H */
+#endif // DIGIKAM_MODEL_COLLECTION_H

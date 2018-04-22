@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef EDITABLESEARCHTREEVIEW_H
-#define EDITABLESEARCHTREEVIEW_H
+#ifndef DIGIKAM_EDITABLE_SEARCH_TREE_VIEW_H
+#define DIGIKAM_EDITABLE_SEARCH_TREE_VIEW_H
 
 // Local includes
 
@@ -85,4 +85,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* EDITABLESEARCHTREEVIEW_H */
+#endif // DIGIKAM_EDITABLE_SEARCH_TREE_VIEW_H

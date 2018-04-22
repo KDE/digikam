@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CONFIG_DIGIKAM_H
-#define CONFIG_DIGIKAM_H
+#ifndef DIGIKAM_CONFIG__H
+#define DIGIKAM_CONFIG__H
 
 /* Define to 1 if you have KDEPIM shared library installed */
 #cmakedefine HAVE_AKONADICONTACT 1
@@ -128,4 +128,4 @@
 #pragma warning(disable : 4181)
 #endif
 
-#endif /* CONFIG_DIGIKAM_H */
+#endif // DIGIKAM_CONFIG__H

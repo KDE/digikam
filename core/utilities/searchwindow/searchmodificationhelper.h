@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHMODIFICATIONHELPER_H
-#define SEARCHMODIFICATIONHELPER_H
+#ifndef DIGIKAM_SEARCH_MODIFICATION_HELPER_H
+#define DIGIKAM_SEARCH_MODIFICATION_HELPER_H
 
 // Qt includes
 
@@ -210,4 +210,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* SEARCHMODIFICATIONHELPER_H */
+#endif // DIGIKAM_SEARCH_MODIFICATION_HELPER_H

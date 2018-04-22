@@ -320,6 +320,7 @@ set(libdigikamgui_SRCS
     filters/filtersidebarwidget.cpp
     filters/tagfilterview.cpp
 
+    items/tooltipfiller.cpp
     items/digikamimageview.cpp
     items/digikamimageview_p.cpp
     items/digikamimagedelegate.cpp
@@ -340,12 +341,6 @@ set(libdigikamgui_SRCS
     items/overlays/imageselectionoverlay.cpp
 
     utils/contextmenuhelper.cpp
-    utils/tooltipfiller.cpp
-    utils/searchmodificationhelper.cpp
-    utils/editablesearchtreeview.cpp
-    utils/sidebarwidget.cpp
-    utils/slideshowbuilder.cpp
-    utils/digikammodelcollection.cpp
     utils/digikam_debug.cpp
     utils/componentsinfo.cpp
 
@@ -372,6 +367,9 @@ set(libdigikamgui_SRCS
     views/digikamview.cpp
     views/trashview.cpp
     views/stackedview.cpp
+    views/sidebarwidget.cpp
+    views/digikammodelcollection.cpp
+    views/slideshowbuilder.cpp
 
     ${digikamadaptor_SRCS}
 )

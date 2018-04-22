@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef LIB_OPEN_CV_H
-#define LIB_OPEN_CV_H
+#ifndef DIGIKAM_LIB_OPEN_CV_H
+#define DIGIKAM_LIB_OPEN_CV_H
 
 // Pragma directives to reduce warnings from OpenCV header files.
 #if !defined(__APPLE__) && defined(__GNUC__)
@@ -88,4 +88,4 @@
 #pragma clang diagnostic pop
 #endif
 
-#endif // LIB_OPEN_CV_H
+#endif // DIGIKAM_LIB_OPEN_CV_H
