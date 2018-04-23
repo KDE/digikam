@@ -125,8 +125,8 @@ MediaWikiWindow::MediaWikiWindow(DInfoInterface* const iface, QWidget* const /*p
     connect(d->widget, SIGNAL(signalChangeUserRequest()),
             this, SLOT(slotChangeUserClicked()));
 
-    connect(d->widget, SIGNAL(signalLoginRequest(QString, QString, QString, QUrl)),
-            this, SLOT(slotDoLogin(QString, QString, QString, QUrl)));
+    connect(d->widget, SIGNAL(signalLoginRequest(QString,QString,QString,QUrl)),
+            this, SLOT(slotDoLogin(QString,QString,QString,QUrl)));
 
     connect(d->widget->progressBar(), SIGNAL(signalProgressCanceled()),
             this, SLOT(slotProgressCanceled()));

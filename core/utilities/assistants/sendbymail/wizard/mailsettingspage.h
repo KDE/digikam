@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef MAIL_SETTINGS_PAGE_H
-#define MAIL_SETTINGS_PAGE_H
+#ifndef DIGIKAM_MAIL_SETTINGS_PAGE_H
+#define DIGIKAM_MAIL_SETTINGS_PAGE_H
 
 // Qt includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MAIL_SETTINGS_PAGE_H
+#endif // DIGIKAM_MAIL_SETTINGS_PAGE_H

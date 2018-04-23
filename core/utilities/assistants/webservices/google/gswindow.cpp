@@ -159,8 +159,8 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->talker,SIGNAL(signalTextBoxEmpty()),
                     this,SLOT(slotTextBoxEmpty()));
 
-            connect(d->talker,SIGNAL(signalAccessTokenFailed(int, QString)),
-                    this,SLOT(slotAccessTokenFailed(int, QString)));
+            connect(d->talker,SIGNAL(signalAccessTokenFailed(int,QString)),
+                    this,SLOT(slotAccessTokenFailed(int,QString)));
 
             connect(d->talker,SIGNAL(signalAccessTokenObtained()),
                     this,SLOT(slotAccessTokenObtained()));
@@ -171,14 +171,14 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->talker,SIGNAL(signalSetUserName(QString)),
                     this,SLOT(slotSetUserName(QString)));
 
-            connect(d->talker,SIGNAL(signalListAlbumsDone(int, QString, QList<GSFolder>)),
-                    this,SLOT(slotListAlbumsDone(int, QString, QList<GSFolder>)));
+            connect(d->talker,SIGNAL(signalListAlbumsDone(int,QString,QList<GSFolder>)),
+                    this,SLOT(slotListAlbumsDone(int,QString,QList<GSFolder>)));
 
-            connect(d->talker,SIGNAL(signalCreateFolderDone(int, QString)),
-                    this,SLOT(slotCreateFolderDone(int, QString)));
+            connect(d->talker,SIGNAL(signalCreateFolderDone(int,QString)),
+                    this,SLOT(slotCreateFolderDone(int,QString)));
 
-            connect(d->talker,SIGNAL(signalAddPhotoDone(int, QString, QString)),
-                    this,SLOT(slotAddPhotoDone(int, QString, QString)));
+            connect(d->talker,SIGNAL(signalAddPhotoDone(int,QString,QString)),
+                    this,SLOT(slotAddPhotoDone(int,QString,QString)));
 
             readSettings();
             buttonStateChange(false);
@@ -225,8 +225,8 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->gphotoTalker, SIGNAL(signalTextBoxEmpty()),
                     this, SLOT(slotTextBoxEmpty()));
 
-            connect(d->gphotoTalker, SIGNAL(signalAccessTokenFailed(int, QString)),
-                    this, SLOT(slotAccessTokenFailed(int, QString)));
+            connect(d->gphotoTalker, SIGNAL(signalAccessTokenFailed(int,QString)),
+                    this, SLOT(slotAccessTokenFailed(int,QString)));
 
             connect(d->gphotoTalker, SIGNAL(signalAccessTokenObtained()),
                     this, SLOT(slotAccessTokenObtained()));
@@ -234,17 +234,17 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->gphotoTalker, SIGNAL(signalRefreshTokenObtained(QString)),
                     this, SLOT(slotRefreshTokenObtained(QString)));
 
-            connect(d->gphotoTalker, SIGNAL(signalListAlbumsDone(int, QString, QList<GSFolder>)),
-                    this, SLOT(slotListAlbumsDone(int, QString, QList<GSFolder>)));
+            connect(d->gphotoTalker, SIGNAL(signalListAlbumsDone(int,QString,QList<GSFolder>)),
+                    this, SLOT(slotListAlbumsDone(int QString,QList<GSFolder>)));
 
-            connect(d->gphotoTalker, SIGNAL(signalCreateAlbumDone(int, QString, QString)),
-                    this, SLOT(slotCreateFolderDone(int, QString, QString)));
+            connect(d->gphotoTalker, SIGNAL(signalCreateAlbumDone(int,QString,QString)),
+                    this, SLOT(slotCreateFolderDone(int,QString,QString)));
 
-            connect(d->gphotoTalker, SIGNAL(signalAddPhotoDone(int, QString, QString)),
+            connect(d->gphotoTalker, SIGNAL(signalAddPhotoDone(int,QString,QString)),
                     this, SLOT(slotAddPhotoDone(int,QString,QString)));
 
-            connect(d->gphotoTalker, SIGNAL(signalGetPhotoDone(int, QString, QByteArray)),
-                    this, SLOT(slotGetPhotoDone(int, QString, QByteArray)));
+            connect(d->gphotoTalker, SIGNAL(signalGetPhotoDone(int,QString,QByteArray)),
+                    this, SLOT(slotGetPhotoDone(int,QString,QByteArray)));
 
             readSettings();
             buttonStateChange(false);
@@ -407,8 +407,8 @@ void GSWindow::slotListPhotosDoneForDownload(int errCode,
                                              const QString& errMsg,
                                              const QList <GSPhoto>& photosList)
 {
-    disconnect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
-               this, SLOT(slotListPhotosDoneForDownload(int, QString, QList<GSPhoto>)));
+    disconnect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int,QString,QList<GSPhoto>)),
+               this, SLOT(slotListPhotosDoneForDownload(int,QString,QList<GSPhoto>)));
 
     if (errCode == 0)
     {
@@ -448,8 +448,8 @@ void GSWindow::slotListPhotosDoneForUpload(int errCode,
 {
     qCCritical(DIGIKAM_WEBSERVICES_LOG)<< "err Code is "<< errCode <<" Err Message is "<< errMsg;
 
-    disconnect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
-               this, SLOT(slotListPhotosDoneForUpload(int, QString, QList<GSPhoto>)));
+    disconnect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int,QString,QList<GSPhoto>)),
+               this, SLOT(slotListPhotosDoneForUpload(int,QString,QList<GSPhoto>)));
 
     if (errCode == 0)
     {
@@ -617,8 +617,8 @@ void GSWindow::googlePhotoTransferHandler()
     {
         case GoogleService::GPhotoImport:
             // list photos of the album, then start download
-            connect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
-                    this, SLOT(slotListPhotosDoneForDownload(int, QString, QList<GSPhoto>)));
+            connect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int,QString,QList<GSPhoto>)),
+                    this, SLOT(slotListPhotosDoneForDownload(int,QString,QList<GSPhoto>)));
 
             d->gphotoTalker->listPhotos(
                 d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString(),
@@ -627,8 +627,8 @@ void GSWindow::googlePhotoTransferHandler()
 
         default:
             // list photos of the album, then start upload with add/update items
-            connect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int, QString, QList<GSPhoto>)),
-                    this, SLOT(slotListPhotosDoneForUpload(int, QString, QList<GSPhoto>)));
+            connect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int,QString,QList<GSPhoto>)),
+                    this, SLOT(slotListPhotosDoneForUpload(int,QString,QList<GSPhoto>)));
 
             d->gphotoTalker->listPhotos(
                 d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString());

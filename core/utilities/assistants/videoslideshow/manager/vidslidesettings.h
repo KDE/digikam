@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef VID_SLIDE_SETTINGS_H
-#define VID_SLIDE_SETTINGS_H
+#ifndef DIGIKAM_VIDSLIDE_SETTINGS_H
+#define DIGIKAM_VIDSLIDE_SETTINGS_H
 
 // Qt includes
 
@@ -188,4 +188,4 @@ public:
 
 } // namespace Digikam
 
-#endif // VID_SLIDE_SETTINGS_H
+#endif // DIGIKAM_VIDSLIDE_SETTINGS_H

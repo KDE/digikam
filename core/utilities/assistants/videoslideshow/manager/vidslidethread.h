@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VID_SLIDE_THREAD_H
-#define VID_SLIDE_THREAD_H
+#ifndef DIGIKAM_VIDSLIDE_THREAD_H
+#define DIGIKAM_VIDSLIDE_THREAD_H
 
 // Local includes
 
@@ -54,4 +54,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // VID_SLIDE_THREAD_H
+#endif // DIGIKAM_VIDSLIDE_THREAD_H

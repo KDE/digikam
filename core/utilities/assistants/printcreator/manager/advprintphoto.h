@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ADV_PRINT_PHOTO_H
-#define ADV_PRINT_PHOTO_H
+#ifndef DIGIKAM_ADV_PRINT_PHOTO_H
+#define DIGIKAM_ADV_PRINT_PHOTO_H
 
 // Qt includes
 
@@ -164,4 +164,4 @@ private:
 
 } // Namespace Digikam
 
-#endif // ADV_PRINT_PHOTO_H
+#endif // DIGIKAM_ADV_PRINT_PHOTO_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ADV_PRINT_THREAD_H
-#define ADV_PRINT_THREAD_H
+#ifndef DIGIKAM_ADV_PRINT_THREAD_H
+#define DIGIKAM_ADV_PRINT_THREAD_H
 
 // Local includes
 
@@ -57,4 +57,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // ADV_PRINT_THREAD_H
+#endif // DIGIKAM_ADV_PRINT_THREAD_H

@@ -176,8 +176,12 @@ void FTExportWindow::updateUploadButton()
                                  << d->exportWidget->targetUrl().isValid();
 }
 
-void FTExportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl& to,
-                                      const QDateTime& mtime, bool directory, bool renamed)
+void FTExportWindow::slotCopyingDone(KIO::Job* job,
+                                     const QUrl& from,
+                                     const QUrl& to,
+                                     const QDateTime& mtime,
+                                     bool directory,
+                                     bool renamed)
 {
     Q_UNUSED(job);
     Q_UNUSED(to);
@@ -214,8 +218,8 @@ void FTExportWindow::slotUpload()
     KIO::CopyJob* const copyJob = KIO::copy(d->exportWidget->imagesList()->imageUrls(),
                                             d->exportWidget->targetUrl());
 
-    connect(copyJob, SIGNAL(copyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)),
-            this, SLOT(slotCopyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)));
+    connect(copyJob, SIGNAL(copyingDone(KIO::Job*,QUrl,QUrl,QDateTime,bool,bool)),
+            this, SLOT(slotCopyingDone(KIO::Job*,QUrl,QUrl,QDateTime,bool,bool)));
 
     connect(copyJob, SIGNAL(result(KJob*)),
             this, SLOT(slotCopyingFinished(KJob*)));

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ADV_PRINT_CROP_FRAME_H
-#define ADV_PRINT_CROP_FRAME_H
+#ifndef DIGIKAM_ADV_PRINT_CROP_FRAME_H
+#define DIGIKAM_ADV_PRINT_CROP_FRAME_H
 
 // Qt includes
 
@@ -79,4 +79,4 @@ private:
 
 } // Namespace Digikam
 
-#endif // ADV_PRINT_CROP_FRAME_H
+#endif // DIGIKAM_ADV_PRINT_CROP_FRAME_H

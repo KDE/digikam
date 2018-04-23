@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef MAIL_WIZARD_H
-#define MAIL_WIZARD_H
+#ifndef DIGIKAM_MAIL_WIZARD_H
+#define DIGIKAM_MAIL_WIZARD_H
 
 // Qt includes
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MAIL_WIZARD_H
+#endif // DIGIKAM_MAIL_WIZARD_H

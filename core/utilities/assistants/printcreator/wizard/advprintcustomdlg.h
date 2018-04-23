@@ -21,8 +21,8 @@
  *
  * ============================================================== */
 
-#ifndef ADV_PRINT_CUSTOM_DLG_H
-#define ADV_PRINT_CUSTOM_DLG_H
+#ifndef DIGIKAM_ADV_PRINT_CUSTOM_DLG_H
+#define DIGIKAM_ADV_PRINT_CUSTOM_DLG_H
 
 // Qt includes
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ADV_PRINT_CUSTOM_DLG_H
+#endif // DIGIKAM_ADV_PRINT_CUSTOM_DLG_H

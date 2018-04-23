@@ -68,7 +68,9 @@ public:
     QMap <QString, QMap <QString, QString> > imageDesc;
 };
 
-MediaWikiTalker::MediaWikiTalker(DInfoInterface* const iface, MediaWiki* const mediawiki, QObject* const parent)
+MediaWikiTalker::MediaWikiTalker(DInfoInterface* const iface,
+                                 MediaWiki* const mediawiki,
+                                 QObject* const parent)
     : KJob(parent),
       d(new Private)
 {
@@ -107,8 +109,8 @@ void MediaWikiTalker::slotUploadHandle(KJob* j)
         disconnect(j, SIGNAL(result(KJob*)),
                    this, SLOT(slotUploadHandle(KJob*)));
 
-        disconnect(j, SIGNAL(percent(KJob*, ulong)),
-                   this, SLOT(slotUploadProgress(KJob*, ulong)));
+        disconnect(j, SIGNAL(percent(KJob*,ulong)),
+                   this, SLOT(slotUploadProgress(KJob*,ulong)));
 
         // Error from previous upload
 
@@ -169,8 +171,8 @@ void MediaWikiTalker::slotUploadHandle(KJob* j)
         connect(e1, SIGNAL(result(KJob*)),
                 this, SLOT(slotUploadHandle(KJob*)));
 
-        connect(e1, SIGNAL(percent(KJob*, ulong)),
-                this, SLOT(slotUploadProgress(KJob*, ulong)));
+        connect(e1, SIGNAL(percent(KJob*,ulong)),
+                this, SLOT(slotUploadProgress(KJob*,ulong)));
 
         emit signalUploadProgress(0);
         e1->start();

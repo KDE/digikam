@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef MAIL_IMAGES_PAGE_H
-#define MAIL_IMAGES_PAGE_H
+#ifndef DIGIKAM_MAIL_IMAGES_PAGE_H
+#define DIGIKAM_MAIL_IMAGES_PAGE_H
 
 // Qt includes
 
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MAIL_IMAGES_PAGE_H
+#endif // DIGIKAM_MAIL_IMAGES_PAGE_H

@@ -108,16 +108,20 @@ void FTImportWindow::slotImport()
 
         KIO::CopyJob* const copyJob = KIO::copy(d->importWidget->imagesList()->imageUrls(), url);
 
-        connect(copyJob, SIGNAL(copyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)),
-                this, SLOT(slotCopyingDone(KIO::Job*, QUrl, QUrl, QDateTime, bool, bool)));
+        connect(copyJob, SIGNAL(copyingDone(KIO::Job*,QUrl,QUrl,QDateTime,bool,bool)),
+                this, SLOT(slotCopyingDone(KIO::Job*,QUrl,QUrl,QDateTime,bool,bool)));
 
         connect(copyJob, SIGNAL(result(KJob*)),
                 this, SLOT(slotCopyingFinished(KJob*)));
     }
 }
 
-void FTImportWindow::slotCopyingDone(KIO::Job* job, const QUrl& from, const QUrl& to,
-                                     const QDateTime& mtime, bool directory, bool renamed)
+void FTImportWindow::slotCopyingDone(KIO::Job* job,
+                                     const QUrl& from,
+                                     const QUrl& to,
+                                     const QDateTime& mtime,
+                                     bool directory,
+                                     bool renamed)
 {
     Q_UNUSED(job);
     Q_UNUSED(to);

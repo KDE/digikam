@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef ADV_PRINT_FINAL_PAGE_H
-#define ADV_PRINT_FINAL_PAGE_H
+#ifndef DIGIKAM_ADV_PRINT_FINAL_PAGE_H
+#define DIGIKAM_ADV_PRINT_FINAL_PAGE_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ADV_PRINT_FINAL_PAGE_H
+#endif // DIGIKAM_ADV_PRINT_FINAL_PAGE_H

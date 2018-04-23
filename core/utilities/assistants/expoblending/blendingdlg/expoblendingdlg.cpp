@@ -254,8 +254,8 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
     connect(d->mngr->thread(), SIGNAL(finished(Digikam::ExpoBlendingActionData)),
             this, SLOT(slotExpoBlendingAction(Digikam::ExpoBlendingActionData)));
 
-    connect(d->bracketStack, SIGNAL(signalAddItems(const QList<QUrl>&)),
-            this, SLOT(slotAddItems(const QList<QUrl>&)));
+    connect(d->bracketStack, SIGNAL(signalAddItems(QList<QUrl>)),
+            this, SLOT(slotAddItems(QList<QUrl>)));
 
     connect(d->previewWidget, SIGNAL(signalButtonClicked()),
             this, SLOT(slotPreviewButtonClicked()));

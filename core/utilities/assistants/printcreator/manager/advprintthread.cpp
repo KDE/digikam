@@ -58,8 +58,8 @@ void AdvPrintThread::preparePrint(AdvPrintSettings* const settings, int sizeInde
     connect(t, SIGNAL(signalDone(bool)),
             this, SIGNAL(signalDone(bool)));
 
-    connect(t, SIGNAL(signalMessage(QString, bool)),
-            this, SIGNAL(signalMessage(QString, bool)));
+    connect(t, SIGNAL(signalMessage(QString,bool)),
+            this, SIGNAL(signalMessage(QString,bool)));
 
     collection.insert(t, 0);
 
@@ -79,8 +79,8 @@ void AdvPrintThread::print(AdvPrintSettings* const settings)
     connect(t, SIGNAL(signalDone(bool)),
             this, SIGNAL(signalDone(bool)));
 
-    connect(t, SIGNAL(signalMessage(QString, bool)),
-            this, SIGNAL(signalMessage(QString, bool)));
+    connect(t, SIGNAL(signalMessage(QString,bool)),
+            this, SIGNAL(signalMessage(QString,bool)));
 
     collection.insert(t, 0);
 
@@ -101,8 +101,8 @@ void AdvPrintThread::preview(AdvPrintSettings* const settings, const QSize& size
     connect(t, SIGNAL(signalDone(bool)),
             this, SIGNAL(signalDone(bool)));
 
-    connect(t, SIGNAL(signalMessage(QString, bool)),
-            this, SIGNAL(signalMessage(QString, bool)));
+    connect(t, SIGNAL(signalMessage(QString,bool)),
+            this, SIGNAL(signalMessage(QString,bool)));
 
     connect(t, SIGNAL(signalPreview(QImage)),
             this, SIGNAL(signalPreview(QImage)));

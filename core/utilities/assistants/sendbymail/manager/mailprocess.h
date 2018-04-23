@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef MAIL_PROCESS_H
-#define MAIL_PROCESS_H
+#ifndef DIGIKAM_MAIL_PROCESS_H
+#define DIGIKAM_MAIL_PROCESS_H
 
 // Qt includes
 
@@ -100,4 +100,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MAIL_PROCESS_H
+#endif // DIGIKAM_MAIL_PROCESS_H

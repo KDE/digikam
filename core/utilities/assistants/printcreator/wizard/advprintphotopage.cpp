@@ -191,8 +191,8 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     connect(d->photoUi->mPrintList, SIGNAL(signalContextMenuRequested()),
             this, SLOT(slotContextMenuRequested()));
 
-    connect(d->photoUi->mPrintList, SIGNAL(signalXMLSaveItem(QXmlStreamWriter&, int)),
-            this, SLOT(slotXMLSaveItem(QXmlStreamWriter&, int)));
+    connect(d->photoUi->mPrintList, SIGNAL(signalXMLSaveItem(QXmlStreamWriter&,int)),
+            this, SLOT(slotXMLSaveItem(QXmlStreamWriter&,int)));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalXMLCustomElements(QXmlStreamWriter&)),
             this, SLOT(slotXMLCustomElement(QXmlStreamWriter&)));

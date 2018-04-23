@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef ADV_PRINT_SETTING_H
-#define ADV_PRINT_SETTING_H
+#ifndef DIGIKAM_ADV_PRINT_SETTING_H
+#define DIGIKAM_ADV_PRINT_SETTING_H
 
 // Qt includes
 
@@ -153,4 +153,4 @@ public:
 
 } // namespace Digikam
 
-#endif // ADV_PRINT_SETTING_H
+#endif // DIGIKAM_ADV_PRINT_SETTING_H

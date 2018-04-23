@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ADV_PRINT_WIZARD_H
-#define ADV_PRINT_WIZARD_H
+#ifndef DIGIKAM_ADV_PRINT_WIZARD_H
+#define DIGIKAM_ADV_PRINT_WIZARD_H
 
 // Qt incudes
 
@@ -80,4 +80,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ADV_PRINT_WIZARD_H
+#endif // DIGIKAM_ADV_PRINT_WIZARD_H

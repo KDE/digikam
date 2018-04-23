@@ -167,8 +167,8 @@ void AdvPrintFinalPage::slotProcess()
     connect(d->printThread, SIGNAL(signalProgress(int)),
             d->progressBar, SLOT(setValue(int)));
 
-    connect(d->printThread, SIGNAL(signalMessage(QString, bool)),
-            this, SLOT(slotMessage(QString, bool)));
+    connect(d->printThread, SIGNAL(signalMessage(QString,bool)),
+            this, SLOT(slotMessage(QString,bool)));
 
     connect(d->printThread, SIGNAL(signalDone(bool)),
             this, SLOT(slotPrint(bool)));

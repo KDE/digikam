@@ -157,7 +157,7 @@ QWidget* DMetaInfoIface::uploadWidget(QWidget* const parent) const
         d->dirSelector->setFileDlgTitle(i18n("Destination Folder"));
         d->dirSelector->lineEdit()->setPlaceholderText(i18n("Output Destination Path"));
 
-        connect(d->dirSelector, SIGNAL(signalUrlSelected(const QUrl&)),
+        connect(d->dirSelector, SIGNAL(signalUrlSelected(QUrl)),
                 this, SIGNAL(signalUploadUrlChanged()));
     }
 

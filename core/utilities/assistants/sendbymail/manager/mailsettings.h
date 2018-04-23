@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MAIL_SETTING_H
-#define MAIL_SETTING_H
+#ifndef DIGIKAM_MAIL_SETTING_H
+#define DIGIKAM_MAIL_SETTING_H
 
 // Qt includes
 
@@ -119,4 +119,4 @@ public:
 
 } // namespace Digikam
 
-#endif // MAIL_SETTING_H
+#endif // DIGIKAM_MAIL_SETTING_H
