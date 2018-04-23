@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BOOKMARK_NODE_H
-#define BOOKMARK_NODE_H
+#ifndef DIGIKAM_BOOKMARK_NODE_H
+#define DIGIKAM_BOOKMARK_NODE_H
 
 // Qt includes
 
@@ -118,4 +118,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BOOKMARK_NODE_H
+#endif // DIGIKAM_BOOKMARK_NODE_H

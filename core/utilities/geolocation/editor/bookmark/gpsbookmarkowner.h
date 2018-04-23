@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPS_BOOK_MARK_OWNER_H
-#define GPS_BOOK_MARK_OWNER_H
+#ifndef DIGIKAM_GPS_BOOK_MARK_OWNER_H
+#define DIGIKAM_GPS_BOOK_MARK_OWNER_H
 
 // Qt includes
 
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPS_BOOK_MARK_OWNER_H
+#endif // DIGIKAM_GPS_BOOK_MARK_OWNER_H

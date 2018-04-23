@@ -123,7 +123,7 @@ GPSBookmarkModelHelper::GPSBookmarkModelHelper(BookmarksManager* const bookmarkM
     connect(d->bookmarkManager, SIGNAL(entryAdded(BookmarkNode*)),
             this, SLOT(slotUpdateBookmarksModel()));
 
-    connect(d->bookmarkManager, SIGNAL(entryRemoved(BookmarkNode*, int, BookmarkNode*)),
+    connect(d->bookmarkManager, SIGNAL(entryRemoved(BookmarkNode*,int,BookmarkNode*)),
             this, SLOT(slotUpdateBookmarksModel()));
 
     slotUpdateBookmarksModel();

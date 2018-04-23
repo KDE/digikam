@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BOOKMARKS_MENU_H
-#define BOOKMARKS_MENU_H
+#ifndef DIGIKAM_BOOKMARKS_MENU_H
+#define DIGIKAM_BOOKMARKS_MENU_H
 
 // Qt includes
 
@@ -138,4 +138,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BOOKMARKS_MENU_H
+#endif // DIGIKAM_BOOKMARKS_MENU_H

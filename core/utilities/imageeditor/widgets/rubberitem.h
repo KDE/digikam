@@ -21,8 +21,8 @@
 *
 * ============================================================ */
 
-#ifndef RUBBER_ITEM_H
-#define RUBBER_ITEM_H
+#ifndef DIGIKAM_RUBBER_ITEM_H
+#define DIGIKAM_RUBBER_ITEM_H
 
 // Qt includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RUBBER_ITEM_H
+#endif // DIGIKAM_RUBBER_ITEM_H

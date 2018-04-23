@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_PREVIEW_ITEM_H
-#define IMAGE_PREVIEW_ITEM_H
+#ifndef DIGIKAM_IMAGE_PREVIEW_ITEM_H
+#define DIGIKAM_IMAGE_PREVIEW_ITEM_H
 
 // Local includes
 
@@ -49,4 +49,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMAGE_PREVIEW_ITEM_H
+#endif // DIGIKAM_IMAGE_PREVIEW_ITEM_H

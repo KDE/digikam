@@ -54,8 +54,8 @@ GPSImageModel::GPSImageModel(QObject* const parent)
 {
     d->thumbnailLoadThread = new ThumbnailLoadThread(this);
 
-    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-            this, SLOT(slotThumbnailLoaded(LoadingDescription, QPixmap)));
+    connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 }
 
 GPSImageModel::~GPSImageModel()

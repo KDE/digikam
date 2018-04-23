@@ -74,6 +74,6 @@ private :
     Private* d;
 };
 
-} //  namespace Digikam
+} // namespace Digikam
 
 #endif // DIGIKAM_AUTO_CROP_H

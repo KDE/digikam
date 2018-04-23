@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PREVIEW_LIST_H
-#define PREVIEW_LIST_H
+#ifndef DIGIKAM_PREVIEW_LIST_H
+#define DIGIKAM_PREVIEW_LIST_H
 
 // Qt includes
 
@@ -133,4 +133,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PREVIEW_LIST_H
+#endif // DIGIKAM_PREVIEW_LIST_H

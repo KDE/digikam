@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_BRUSH_GUIDE_WIDGET_H
-#define IMAGE_BRUSH_GUIDE_WIDGET_H
+#ifndef DIGIKAM_IMAGE_BRUSH_GUIDE_WIDGET_H
+#define DIGIKAM_IMAGE_BRUSH_GUIDE_WIDGET_H
 
 // Local includes
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGE_BRUSH_GUIDE_WIDGET_H
+#endif // DIGIKAM_IMAGE_BRUSH_GUIDE_WIDGET_H

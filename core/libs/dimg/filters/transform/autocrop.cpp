@@ -5,9 +5,8 @@
  *
  * Date        : 2012-10-18
  * Description : Auto Crop analyzer
- *
- * Algorithm based on black point detection on the basis of spiral
- * traversal
+ *               Algorithm based on black point detection on
+ *               the basis of spiral traversal
  *
  * Copyright (C) 2013      by Sayantan Datta <sayantan dot knz at gmail dot com>
  * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -145,7 +144,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Center pixel : " << centerj << " , " << centeri;
 
-    while(true)
+    while (true)
     {
 //        qCDebug(DIGIKAM_DIMG_LOG) << "count = "<<count;
 
@@ -207,7 +206,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 
                     if (c == Qt::black)
                     {
-                        //we have found an empty space
+                        // we have found an empty space
                         fixtopmargin = true;
                         topmargin    = i;
                         endupi++;
@@ -334,7 +333,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                 i = startlefti;
                 j = startleftj;
 
-                for (j = startleftj - 1 ; j >= endleftj ; j--)
+                for (j = startleftj - 1 ; j >= endleftj ; --j)
                 {
 //                    qCDebug(DIGIKAM_DIMG_LOG) << "At pixel "<< j << " , " << i;
                     c = QColor::fromRgb(threshold.pixel(j,i));
@@ -526,7 +525,7 @@ void AutoCrop::startAnalyse()
 
     for (i = 0 ; i < width ; ++i)
     {
-        for(j = 0 ; j < height ; ++j)
+        for (j = 0 ; j < height ; ++j)
         {
             c = QColor::fromRgb(img.pixel(i, j));
 
@@ -557,7 +556,7 @@ void AutoCrop::startAnalyse()
 
     for (i = 0 ; i < width ; ++i)
     {
-        for(j = 0 ; j < height ; ++j)
+        for (j = 0 ; j < height ; ++j)
         {
             c = QColor::fromRgb(img.pixel(i, j));
 
@@ -582,9 +581,9 @@ void AutoCrop::startAnalyse()
 
     breakflag = 0;
 
-    for (i = 0 ; i < height ; i++)
+    for (i = 0 ; i < height ; ++i)
     {
-        for (j = 0 ; j < width ; j++)
+        for (j = 0 ; j < width ; ++j)
         {
             c = QColor::fromRgb(img.pixel(j, i));
 
@@ -615,7 +614,7 @@ void AutoCrop::startAnalyse()
 
     for (i = height - 1 ; i >= 0 ; --i)
     {
-        for(j = 0 ; j < width ; ++j)
+        for (j = 0 ; j < width ; ++j)
         {
             c = QColor::fromRgb(img.pixel(j,i));
 
@@ -748,12 +747,12 @@ void AutoCrop::startAnalyse()
 
     //----------fill black points on vertical scan
 
-    for(j = 0 ; j < result.width() ; ++j)
+    for (j = 0 ; j < result.width() ; ++j)
     {
         toggleflag1 = -1;
         toggleflag2 = -2;
 
-        for(i = 0 ; i < result.height() ; ++i)
+        for (i = 0 ; i < result.height() ; ++i)
         {
             c = QColor::fromRgb(result.pixel(j, i));
 
@@ -800,7 +799,7 @@ void AutoCrop::startAnalyse()
         {
             c = QColor::fromRgb(threshold.pixel(j, i));
 
-            if ( c == Qt::white)
+            if (c == Qt::white)
             {
                 whitepixelCount++;
             }
@@ -844,9 +843,11 @@ void AutoCrop::startAnalyse()
 //         threshold.save("ThresholdedImage.jpg",0,100);
         qCDebug(DIGIKAM_DIMG_LOG) << "Area not adequate!";
         qCDebug(DIGIKAM_DIMG_LOG) << "Extra Cropping Required";
+
         // --- Step 2 -- Search between local minima
         qCDebug(DIGIKAM_DIMG_LOG) << "In local minima function";
-        //We need to find the maxima between the first two local minima from either side
+
+        // We need to find the maxima between the first two local minima from either side
         int* const blackpointCount = new int[threshold.width()];
         int leftminima             = 0;
         int rightminima            = (threshold.width()-1);
@@ -856,17 +857,17 @@ void AutoCrop::startAnalyse()
         int temppos;
         int count;
 
-        //initialize black point count
-        for(i = 0 ; i < threshold.width() ; ++i)
+        // initialize black point count
+        for (i = 0 ; i < threshold.width() ; ++i)
         {
             blackpointCount[i] = 0;
         }
 
-        for(j = 0 ; j < threshold.width() ; ++j)
+        for (j = 0 ; j < threshold.width() ; ++j)
         {
             count = 0;
 
-            for(i = 0 ; i < threshold.height(); ++i)
+            for (i = 0 ; i < threshold.height(); ++i)
             {
                 c = QColor::fromRgb(threshold.pixel(j, i));
 
@@ -887,7 +888,7 @@ void AutoCrop::startAnalyse()
 
         // --- Searching left minima
 
-        for(j = 1 ; j < threshold.width() ; ++j)
+        for (j = 1 ; j < threshold.width() ; ++j)
         {
             if ((blackpointCount[j] > blackpointCount[j-1]) &&
                 (blackpointCount[j] < (0.2*threshold.height())))

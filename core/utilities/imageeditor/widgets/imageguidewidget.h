@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_GUIDE_WIDGET_H
-#define IMAGE_GUIDE_WIDGET_H
+#ifndef DIGIKAM_IMAGE_GUIDE_WIDGET_H
+#define DIGIKAM_IMAGE_GUIDE_WIDGET_H
 
 // Qt includes
 
@@ -139,4 +139,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGE_GUIDE_WIDGET_H
+#endif // DIGIKAM_IMAGE_GUIDE_WIDGET_H

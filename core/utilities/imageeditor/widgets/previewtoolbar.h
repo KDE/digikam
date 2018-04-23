@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PREVIEW_TOOL_BAR_H
-#define PREVIEW_TOOL_BAR_H
+#ifndef DIGIKAM_PREVIEW_TOOL_BAR_H
+#define DIGIKAM_PREVIEW_TOOL_BAR_H
 
 // Qt includes
 
@@ -104,4 +104,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PREVIEW_TOOL_BAR_H
+#endif // DIGIKAM_PREVIEW_TOOL_BAR_H
