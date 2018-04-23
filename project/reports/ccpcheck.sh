@@ -6,4 +6,15 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-cppcheck --enable=warning --force . | grep "]:" | awk '!/libraw/ && !/greycstoration/ && !/xmp_sdk/'
+cppcheck --enable=warning \
+         --quiet \
+         --force \
+         --template=edit \
+         --suppress=*:*CImg.h* \
+         -i../../core/libs/dimg/filters/greycstoration/cimg \
+         -i../../core/libs/rawengine/libraw \
+         -i../../core/libs/dngwriter/extra \
+         -i../../core/libs/facesengine/dnnface \
+         -i../../core/libs/kmemoryinfo \
+         -i../../core/utilities/mediaserver/upnpsdk \
+         ../../core \
