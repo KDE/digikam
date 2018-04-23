@@ -81,8 +81,8 @@ class ImageCategorizedView::Private
 {
 public:
 
-    explicit Private() :
-        model(0),
+    explicit Private()
+      : model(0),
         filterModel(0),
         delegate(0),
         showToolTip(false),
@@ -110,15 +110,16 @@ public:
 // -------------------------------------------------------------------------------
 
 ImageCategorizedView::ImageCategorizedView(QWidget* const parent)
-    : ItemViewCategorized(parent), d(new Private)
+    : ItemViewCategorized(parent),
+      d(new Private)
 {
     setToolTip(new ImageItemViewToolTip(this));
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
             SLOT(slotFileChanged(QString)));
 
-    connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer, ICCSettingsContainer)),
-            this, SLOT(slotIccSettingsChanged(ICCSettingsContainer, ICCSettingsContainer)));
+    connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer,ICCSettingsContainer)),
+            this, SLOT(slotIccSettingsChanged(ICCSettingsContainer,ICCSettingsContainer)));
 
     d->delayedEnterTimer = new QTimer(this);
     d->delayedEnterTimer->setInterval(10);

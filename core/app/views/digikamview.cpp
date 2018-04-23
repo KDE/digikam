@@ -504,19 +504,14 @@ void DigikamView::setupConnections()
     connect(d->iconView, SIGNAL(zoomInStep()),
             this, SLOT(slotZoomIn()));
 
-    connect(d->iconView, SIGNAL(signalShowContextMenu(QContextMenuEvent*,
-                                                      QList<QAction*>)),
+    connect(d->iconView, SIGNAL(signalShowContextMenu(QContextMenuEvent*,QList<QAction*>)),
             this, SLOT(slotShowContextMenu(QContextMenuEvent*,QList<QAction*>)));
 
-    connect(d->iconView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,
-                                                            QList<QAction*>,ImageFilterModel*)),
-            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,
-                                                 QList<QAction*>,ImageFilterModel*)));
+    connect(d->iconView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,QList<QAction*>,ImageFilterModel*)),
+            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,QList<QAction*>,ImageFilterModel*)));
 
-    connect(d->iconView, SIGNAL(signalShowGroupContextMenu(QContextMenuEvent*,QList<ImageInfo>,
-                                                           ImageFilterModel*)),
-            this, SLOT(slotShowGroupContextMenu(QContextMenuEvent*,QList<ImageInfo>,
-                                                ImageFilterModel*)));
+    connect(d->iconView, SIGNAL(signalShowGroupContextMenu(QContextMenuEvent*,QList<ImageInfo>,ImageFilterModel*)),
+            this, SLOT(slotShowGroupContextMenu(QContextMenuEvent*,QList<ImageInfo>,ImageFilterModel*)));
 
     // -- TableView Connections -----------------------------------
 
@@ -529,14 +524,11 @@ void DigikamView::setupConnections()
     connect(d->tableView, SIGNAL(signalZoomInStep()),
             this, SLOT(slotZoomIn()));
 
-    connect(d->tableView, SIGNAL(signalShowContextMenu(QContextMenuEvent*,
-                                                       QList<QAction*>)),
+    connect(d->tableView, SIGNAL(signalShowContextMenu(QContextMenuEvent*,QList<QAction*>)),
             this, SLOT(slotShowContextMenu(QContextMenuEvent*,QList<QAction*>)));
 
-    connect(d->tableView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,
-                                                             QList<QAction*>,ImageFilterModel*)),
-            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,
-                                                 QList<QAction*>,ImageFilterModel*)));
+    connect(d->tableView, SIGNAL(signalShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,QList<QAction*>,ImageFilterModel*)),
+            this, SLOT(slotShowContextMenuOnInfo(QContextMenuEvent*,ImageInfo,QList<QAction*>,ImageFilterModel*)));
 
     // TableView::signalItemsChanged is emitted when something changes in the model that
     // DigikamView should care about, not only the selection.
@@ -579,8 +571,7 @@ void DigikamView::setupConnections()
 
     connect(d->filterWidget,
             SIGNAL(signalTagFilterChanged(QList<int>,QList<int>,ImageFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)),
-            d->iconView->imageFilterModel(),
-            SLOT(setTagFilter(QList<int>,QList<int>,ImageFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)));
+            d->iconView->imageFilterModel(), SLOT(setTagFilter(QList<int>,QList<int>,ImageFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)));
 
     connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)),
             model, SLOT(setRatingFilter(int,ImageFilterSettings::RatingCondition,bool)));

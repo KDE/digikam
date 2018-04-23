@@ -63,8 +63,8 @@ ImageViewUtilities::ImageViewUtilities(QWidget* const parentWidget)
 {
     m_widget = parentWidget;
 
-    connect(this, SIGNAL(signalImagesDeleted(const QList<qlonglong>&)),
-            AlbumManager::instance(), SLOT(slotImagesDeleted(const QList<qlonglong>&)));
+    connect(this, SIGNAL(signalImagesDeleted(QList<qlonglong>)),
+            AlbumManager::instance(), SLOT(slotImagesDeleted(QList<qlonglong>)));
 }
 
 void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo)
@@ -248,8 +248,6 @@ void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list, const 
 void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, const ImageInfo& current, bool newQueue)
 {
     Q_UNUSED(current);
-
-
 
     QueueMgrWindow* const bqmview = QueueMgrWindow::queueManagerWindow();
 

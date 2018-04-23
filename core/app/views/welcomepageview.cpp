@@ -96,11 +96,12 @@ WelcomePageView::WelcomePageView(QWidget* const parent)
     // ------------------------------------------------------------
 
 #ifdef HAVE_QWEBENGINE
-    connect(wpage, SIGNAL(linkClicked(const QUrl&)),
+    connect(wpage, SIGNAL(linkClicked(QUrl)),
+            this, SLOT(slotUrlOpen(QUrl)));
 #else
-    connect(this, SIGNAL(linkClicked(const QUrl&)),
+    connect(this, SIGNAL(linkClicked(QUrl)),
+            this, SLOT(slotUrlOpen(QUrl)));
 #endif
-            this, SLOT(slotUrlOpen(const QUrl&)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
