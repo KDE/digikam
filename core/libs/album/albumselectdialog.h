@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMSELECTDIALOG_H
-#define ALBUMSELECTDIALOG_H
+#ifndef DIGIKAM_ALBUM_SELECT_DIALOG_H
+#define DIGIKAM_ALBUM_SELECT_DIALOG_H
 
 // Qt includes
 
@@ -46,7 +46,7 @@ class AlbumSelectDialog : public QDialog
 
 public:
 
-    AlbumSelectDialog(QWidget* const parent, PAlbum* const albumToSelect, const QString& header=QString());
+    explicit AlbumSelectDialog(QWidget* const parent, PAlbum* const albumToSelect, const QString& header=QString());
     ~AlbumSelectDialog();
 
     static PAlbum* selectAlbum(QWidget* const parent, PAlbum* const albumToSelect, const QString& header=QString());
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ALBUMSELECTDIALOG_H */
+#endif // DIGIKAM_ALBUM_SELECT_DIALOG_H

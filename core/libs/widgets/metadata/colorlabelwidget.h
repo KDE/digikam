@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COLORLABELWIDGET_H
-#define COLORLABELWIDGET_H
+#ifndef DIGIKAM_COLOR_LABEL_WIDGET_H
+#define DIGIKAM_COLOR_LABEL_WIDGET_H
 
 // Qt includes
 
@@ -145,4 +145,4 @@ Q_SIGNALS:
 
 Q_DECLARE_METATYPE(QList<Digikam::ColorLabel>)
 
-#endif // COLORLABELWIDGET_H
+#endif // DIGIKAM_COLOR_LABEL_WIDGET_H

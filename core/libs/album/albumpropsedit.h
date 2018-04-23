@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUM_PROPS_EDIT_H
-#define ALBUM_PROPS_EDIT_H
+#ifndef DIGIKAM_ALBUM_PROPS_EDIT_H
+#define DIGIKAM_ALBUM_PROPS_EDIT_H
 
 // Qt includes
 
@@ -84,4 +84,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALBUM_PROPS_EDIT_H
+#endif // DIGIKAM_ALBUM_PROPS_EDIT_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUM_HISTORY_H
-#define ALBUM_HISTORY_H
+#ifndef DIGIKAM_ALBUM_HISTORY_H
+#define DIGIKAM_ALBUM_HISTORY_H
 
 /** @file albumhistory.h */
 
@@ -102,4 +102,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALBUM_HISTORY_H
+#endif // DIGIKAM_ALBUM_HISTORY_H

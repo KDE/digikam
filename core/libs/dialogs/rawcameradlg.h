@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAW_CAMERA_DLG_H
-#define RAW_CAMERA_DLG_H
+#ifndef DIGIKAM_RAW_CAMERA_DLG_H
+#define DIGIKAM_RAW_CAMERA_DLG_H
 
 // Local includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAW_CAMERA_DLG_H
+#endif // DIGIKAM_RAW_CAMERA_DLG_H

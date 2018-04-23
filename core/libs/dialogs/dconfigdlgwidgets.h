@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DCONFIG_DLG_WIDGETS_H
-#define DCONFIG_DLG_WIDGETS_H
+#ifndef DIGIKAM_DCONFIG_DLG_WIDGETS_H
+#define DIGIKAM_DCONFIG_DLG_WIDGETS_H
 
 // Qt includes
 
@@ -338,4 +338,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DCONFIG_DLG_WIDGETS_H
+#endif // DIGIKAM_DCONFIG_DLG_WIDGETS_H

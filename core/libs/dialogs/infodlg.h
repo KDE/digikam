@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef INFO_DLG_H
-#define INFO_DLG_H
+#ifndef DIGIKAM_INFO_DLG_H
+#define DIGIKAM_INFO_DLG_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif // INFO_DLG_H
+#endif // DIGIKAM_INFO_DLG_H

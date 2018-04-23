@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DCONFIG_DLG_VIEW_P_H
-#define DCONFIG_DLG_VIEW_P_H
+#ifndef DIGIKAM_DCONFIG_DLG_VIEW_P_H
+#define DIGIKAM_DCONFIG_DLG_VIEW_P_H
 
 #include "dconfigdlgview.h"
 
@@ -292,4 +292,4 @@ public Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // DCONFIG_DLG_VIEW_P_H
+#endif // DIGIKAM_DCONFIG_DLG_VIEW_P_H

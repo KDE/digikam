@@ -25,8 +25,8 @@
 
 /** @file albummanager.h */
 
-#ifndef ALBUM_MANAGER_H
-#define ALBUM_MANAGER_H
+#ifndef DIGIKAM_ALBUM_MANAGER_H
+#define DIGIKAM_ALBUM_MANAGER_H
 
 // Qt includes
 
@@ -897,4 +897,4 @@ Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::SAlbum>)
 Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::DAlbum>)
 Q_DECLARE_METATYPE(QList<Digikam::TAlbum*>)
 
-#endif // ALBUM_MANAGER_H
+#endif // DIGIKAM_ALBUM_MANAGER_H

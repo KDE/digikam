@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATALISTVIEW_H
-#define METADATALISTVIEW_H
+#ifndef DIGIKAM_META_DATA_LIST_VIEW_H
+#define DIGIKAM_META_DATA_LIST_VIEW_H
 
 // Qt includes
 
@@ -85,4 +85,4 @@ private:
 
 } // namespace Digikam
 
-#endif // METADATALISTVIEW_H
+#endif // DIGIKAM_META_DATA_LIST_VIEW_H

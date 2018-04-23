@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FILE_SAVE_OPTIONS_DLG_H
-#define FILE_SAVE_OPTIONS_DLG_H
+#ifndef DIGIKAM_FILE_SAVE_OPTIONS_DLG_H
+#define DIGIKAM_FILE_SAVE_OPTIONS_DLG_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ public:
 
 } // namespace Digikam
 
-#endif // FILE_SAVE_OPTIONS_DLG_H
+#endif // DIGIKAM_FILE_SAVE_OPTIONS_DLG_H

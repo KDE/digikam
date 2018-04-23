@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUM_LABELS_TREEVIEW_H
-#define ALBUM_LABELS_TREEVIEW_H
+#ifndef DIGIKAM_ALBUM_LABELS_TREEVIEW_H
+#define DIGIKAM_ALBUM_LABELS_TREEVIEW_H
 
 // Qt includes
 
@@ -245,4 +245,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALBUM_LABELS_TREEVIEW_H
+#endif // DIGIKAM_ALBUM_LABELS_TREEVIEW_H

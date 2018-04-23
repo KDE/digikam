@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DCONFIG_DLG_VIEW_H
-#define DCONFIG_DLG_VIEW_H
+#ifndef DIGIKAM_DCONFIG_DLG_VIEW_H
+#define DIGIKAM_DCONFIG_DLG_VIEW_H
 
 // Qt includes
 
@@ -203,4 +203,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DCONFIG_DLG_VIEW_H
+#endif // DIGIKAM_DCONFIG_DLG_VIEW_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef XMPWIDGET_H
-#define XMPWIDGET_H
+#ifndef DIGIKAM_XMP_WIDGET_H
+#define DIGIKAM_XMP_WIDGET_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IPTCWIDGET_H
+#endif // DIGIKAM_XMP_WIDGET_H

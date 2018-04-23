@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PICKLABELWIDGET_H
-#define PICKLABELWIDGET_H
+#ifndef DIGIKAM_PICK_LABEL_WIDGET_H
+#define DIGIKAM_PICK_LABEL_WIDGET_H
 
 // Qt includes
 
@@ -144,4 +144,4 @@ Q_SIGNALS:
 
 Q_DECLARE_METATYPE(QList<Digikam::PickLabel>)
 
-#endif // PICKLABELWIDGET_H
+#endif // DIGIKAM_PICK_LABEL_WIDGET_H

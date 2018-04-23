@@ -42,7 +42,7 @@ class DConfigDlgPrivate
 
 protected:
 
-    DConfigDlgPrivate(DConfigDlg* const parent)
+    explicit DConfigDlgPrivate(DConfigDlg* const parent)
         : q_ptr(parent),
           mPageWidget(0),
           mButtonBox(0)
@@ -63,8 +63,8 @@ protected:
 
         if (mPageWidget)
         {
-            q->connect(mPageWidget, SIGNAL(currentPageChanged(DConfigDlgWdgItem*, DConfigDlgWdgItem*)),
-                       q, SIGNAL(currentPageChanged(DConfigDlgWdgItem*, DConfigDlgWdgItem*)));
+            q->connect(mPageWidget, SIGNAL(currentPageChanged(DConfigDlgWdgItem*,DConfigDlgWdgItem*)),
+                       q, SIGNAL(currentPageChanged(DConfigDlgWdgItem*,DConfigDlgWdgItem*)));
 
             q->connect(mPageWidget, &DConfigDlgWdg::pageRemoved,
                        q, &DConfigDlg::pageRemoved);

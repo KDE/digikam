@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUM_MODIFICATION_HELPER_H
-#define ALBUM_MODIFICATION_HELPER_H
+#ifndef DIGIKAM_ALBUM_MODIFICATION_HELPER_H
+#define DIGIKAM_ALBUM_MODIFICATION_HELPER_H
 
 // Qt includes
 
@@ -128,4 +128,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALBUM_MODIFICATION_HELPER_H
+#endif // DIGIKAM_ALBUM_MODIFICATION_HELPER_H

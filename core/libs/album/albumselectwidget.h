@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUM_SELECT_WIDGET_H
-#define ALBUM_SELECT_WIDGET_H
+#ifndef DIGIKAM_ALBUM_SELECT_WIDGET_H
+#define DIGIKAM_ALBUM_SELECT_WIDGET_H
 
 // Qt includes
 
@@ -118,4 +118,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALBUM_SELECT_WIDGET_H
+#endif // DIGIKAM_ALBUM_SELECT_WIDGET_H

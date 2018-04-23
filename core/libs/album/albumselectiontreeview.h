@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMSELECTIONTREEVIEW_H
-#define ALBUMSELECTIONTREEVIEW_H
+#ifndef DIGIKAM_ALBUM_SELECTION_TREE_VIEW_H
+#define DIGIKAM_ALBUM_SELECTION_TREE_VIEW_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALBUMSELECTIONTREEVIEW_H
+#endif // DIGIKAM_ALBUM_SELECTION_TREE_VIEW_H

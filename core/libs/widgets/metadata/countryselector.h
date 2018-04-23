@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COUNTRY_SELECTOR_H
-#define COUNTRY_SELECTOR_H
+#ifndef DIGIKAM_COUNTRY_SELECTOR_H
+#define DIGIKAM_COUNTRY_SELECTOR_H
 
 // Qt includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // COUNTRY_SELECTOR_H
+#endif // DIGIKAM_COUNTRY_SELECTOR_H

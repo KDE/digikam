@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMTREEVIEW_H
-#define ALBUMTREEVIEW_H
+#ifndef DIGIKAM_ALBUM_TREE_VIEW_H
+#define DIGIKAM_ALBUM_TREE_VIEW_H
 
 // Qt includes
 
@@ -635,4 +635,4 @@ public Q_SLOTS:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::AbstractAlbumTreeView::Flags)
 
-#endif // ALBUMTREEVIEW_H
+#endif // DIGIKAM_ALBUM_TREE_VIEW_H

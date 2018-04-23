@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATAPANEL_H
-#define METADATAPANEL_H
+#ifndef DIGIKAM_META_DATA_PANEL_H
+#define DIGIKAM_META_DATA_PANEL_H
 
 // Qt includes
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif // METADATAPANEL_H
+#endif // DIGIKAM_META_DATA_PANEL_H

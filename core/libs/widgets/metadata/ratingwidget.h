@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef RATINGWIDGET_H
-#define RATINGWIDGET_H
+#ifndef DIGIKAM_RATING_WIDGET_H
+#define DIGIKAM_RATING_WIDGET_H
 
 // Qt includes
 
@@ -151,4 +151,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // RATINGWIDGET_H
+#endif // DIGIKAM_RATING_WIDGET_H

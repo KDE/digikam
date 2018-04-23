@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATA_SELECTOR_H
-#define METADATA_SELECTOR_H
+#ifndef DIGIKAM_META_DATA_SELECTOR_H
+#define DIGIKAM_META_DATA_SELECTOR_H
 
 // Qt includes
 
@@ -94,6 +94,8 @@ public:
     };
     Q_DECLARE_FLAGS(ControlElements, ControlElement)
 
+public:
+
     explicit MetadataSelectorView(QWidget* const parent);
     virtual ~MetadataSelectorView();
 
@@ -135,4 +137,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetadataSelectorView::ControlElements)
 
-#endif // METADATA_SELECTOR_H
+#endif // DIGIKAM_META_DATA_SELECTOR_H

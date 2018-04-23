@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SUBJECT_WIDGET_H
-#define SUBJECT_WIDGET_H
+#ifndef DIGIKAM_SUBJECT_WIDGET_H
+#define DIGIKAM_SUBJECT_WIDGET_H
 
 // Qt includes
 
@@ -112,4 +112,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SUBJECT_WIDGET_H
+#endif // DIGIKAM_SUBJECT_WIDGET_H

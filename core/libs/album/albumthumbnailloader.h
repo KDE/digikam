@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMTHUMBNAILLOADER_H
-#define ALBUMTHUMBNAILLOADER_H
+#ifndef DIGIKAM_ALBUM_THUMBNAIL_LOADER_H
+#define DIGIKAM_ALBUM_THUMBNAIL_LOADER_H
 
 // Qt includes
 
@@ -203,4 +203,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALBUMTHUMBNAILLOADER_H
+#endif // DIGIKAM_ALBUM_THUMBNAIL_LOADER_H

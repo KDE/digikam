@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ALT_LANG_STR_EDIT_H
-#define ALT_LANG_STR_EDIT_H
+#ifndef DIGIKAM_ALT_LANG_STR_EDIT_H
+#define DIGIKAM_ALT_LANG_STR_EDIT_H
 
 // Qt includes
 
@@ -117,4 +117,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALT_LANG_STR_EDIT_H
+#endif // DIGIKAM_ALT_LANG_STR_EDIT_H

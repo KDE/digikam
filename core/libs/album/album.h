@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUM_H
-#define ALBUM_H
+#ifndef DIGIKAM_ALBUM_H
+#define DIGIKAM_ALBUM_H
 
 // Qt includes
 
@@ -577,4 +577,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::Album*)
 
-#endif // ALBUM_H
+#endif // DIGIKAM_ALBUM_H

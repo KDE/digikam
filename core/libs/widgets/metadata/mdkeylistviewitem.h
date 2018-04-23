@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MDKEYLISTVIEWITEM_H
-#define MDKEYLISTVIEWITEM_H
+#ifndef DIGIKAM_MD_KEY_LIST_VIEW_ITEM_H
+#define DIGIKAM_MD_KEY_LIST_VIEW_ITEM_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MDKEYLISTVIEWITEM_H
+#endif // DIGIKAM_MD_KEY_LIST_VIEW_ITEM_H

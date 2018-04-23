@@ -151,11 +151,11 @@ WebBrowserDlg::WebBrowserDlg(const QUrl& url, QWidget* const parent)
             this, SLOT(slotIconChanged(const QIcon&)));
 #endif
 */
-    connect(d->browser, SIGNAL(titleChanged(const QString&)),
-            this, SLOT(slotTitleChanged(const QString&)));
+    connect(d->browser, SIGNAL(titleChanged(QString)),
+            this, SLOT(slotTitleChanged(QString)));
 
-    connect(d->browser, SIGNAL(urlChanged(const QUrl&)),
-            this, SLOT(slotUrlChanged(const QUrl&)));
+    connect(d->browser, SIGNAL(urlChanged(QUrl)),
+            this, SLOT(slotUrlChanged(QUrl)));
 
     connect(d->browser, SIGNAL(loadStarted()),
             this, SLOT(slotLoadingStarted()));
@@ -163,8 +163,8 @@ WebBrowserDlg::WebBrowserDlg(const QUrl& url, QWidget* const parent)
     connect(d->browser, SIGNAL(loadFinished(bool)),
             this, SLOT(slotLoadingFinished(bool)));
 
-    connect(d->searchbar, SIGNAL(signalSearchTextSettings(const SearchTextSettings&)),
-            this, SLOT(slotSearchTextChanged(const SearchTextSettings&)));
+    connect(d->searchbar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
+            this, SLOT(slotSearchTextChanged(SearchTextSettings)));
 
     connect(d->browser, SIGNAL(loadProgress(int)),
             d->progressbar, SLOT(setProgressValue(int)));

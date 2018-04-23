@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef WEB_BROWSER_DLG_H
-#define WEB_BROWSER_DLG_H
+#ifndef DIGIKAM_WEB_BROWSER_DLG_H
+#define DIGIKAM_WEB_BROWSER_DLG_H
 
 // Qt include
 
@@ -73,4 +73,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WEB_BROWSER_DLG_H
+#endif // DIGIKAM_WEB_BROWSER_DLG_H

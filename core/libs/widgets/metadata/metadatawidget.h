@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATAWIDGET_H
-#define METADATAWIDGET_H
+#ifndef DIGIKAM_META_DATA_WIDGET_H
+#define DIGIKAM_META_DATA_WIDGET_H
 
 // Qt includes
 
@@ -124,4 +124,4 @@ private:
 
 } // namespace Digikam
 
-#endif // METADATAWIDGET_H
+#endif // DIGIKAM_META_DATA_WIDGET_H

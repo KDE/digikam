@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMSELECTORS_H
-#define ALBUMSELECTORS_H
+#ifndef DIGIKAM_ALBUM_SELECTORS_H
+#define DIGIKAM_ALBUM_SELECTORS_H
 
 // Qt includes
 
@@ -141,4 +141,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALBUMSELECTORS_H
+#endif // DIGIKAM_ALBUM_SELECTORS_H

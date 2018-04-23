@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DCONFIG_DLG_WIDGETS_P_H
-#define DCONFIG_DLG_WIDGETS_P_H
+#ifndef DIGIKAM_DCONFIG_DLG_WIDGETS_P_H
+#define DIGIKAM_DCONFIG_DLG_WIDGETS_P_H
 
 #include "dconfigdlgwidgets.h"
 #include "dconfigdlgview_p.h"
@@ -147,4 +147,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DCONFIG_DLG_WIDGETS_P_H
+#endif // DIGIKAM_DCONFIG_DLG_WIDGETS_P_H

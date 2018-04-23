@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MAKERNOTEWIDGET_H
-#define MAKERNOTEWIDGET_H
+#ifndef DIGIKAM_MAKER_NOTE_WIDGET_H
+#define DIGIKAM_MAKER_NOTE_WIDGET_H
 
 // Local includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MAKERNOTEWIDGET_H
+#endif // DIGIKAM_MAKER_NOTE_WIDGET_H

@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef DELETE_DIALOG_H
-#define DELETE_DIALOG_H
+#ifndef DIGIKAM_DELETE_DIALOG_H
+#define DIGIKAM_DELETE_DIALOG_H
 
 // Qt includes
 
@@ -188,4 +188,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DELETE_DIALOG_H
+#endif // DIGIKAM_DELETE_DIALOG_H
