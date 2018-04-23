@@ -11,12 +11,12 @@ endif (POLICY CMP0063)
 
 set(libpgfutils_SRCS
     pgfutils.cpp
-    Decoder.cpp
-    Encoder.cpp
-    PGFimage.cpp
-    PGFstream.cpp
-    Subband.cpp
-    WaveletTransform.cpp
+    libpgf/Decoder.cpp
+    libpgf/Encoder.cpp
+    libpgf/PGFimage.cpp
+    libpgf/PGFstream.cpp
+    libpgf/Subband.cpp
+    libpgf/WaveletTransform.cpp
 )
 
 include_directories(

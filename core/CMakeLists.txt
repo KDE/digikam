@@ -210,7 +210,8 @@ endif()
 # mandatory
 
 DETECT_JPEG()
-set(DIGIKAM_LIBJPEG_DIR libjpeg-${JPEG_LIB_VERSION})
+set(DIGIKAM_LIBJPEG_DIR libjpeg/${JPEG_LIB_VERSION})
+message(STATUS "Using libjpeg sub-directory: ${DIGIKAM_LIBJPEG_DIR}")
 
 find_package(TIFF)
 find_package(PNG)
@@ -601,7 +602,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # We will add later the directory we need
 
     foreach(var ${DK_LOCAL_INCLUDES_RAW})
-        string(REGEX MATCH "libjpeg-" item ${var})
+        string(REGEX MATCH "libjpeg/" item ${var})
         if(item STREQUAL "")
             list(APPEND DK_LOCAL_INCLUDES ${var})
         endif()

@@ -6,15 +6,22 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-cppcheck --enable=warning \
-         --quiet \
-         --force \
+cppcheck -j4 \
+         --verbose \
+         --platform=unix64 \
+         --enable=warning \
+         --report-progress \
          --template=edit \
          --suppress=*:*CImg.h* \
          -i../../core/libs/dimg/filters/greycstoration/cimg \
          -i../../core/libs/rawengine/libraw \
          -i../../core/libs/dngwriter/extra \
          -i../../core/libs/facesengine/dnnface \
+         -i../../core/libs/facesengine/opencv3-face \
          -i../../core/libs/kmemoryinfo \
+         -i../../core/libs/pgfutils/libpgf \
+         -i../../core/libs/jpegutils/libjpeg \
          -i../../core/utilities/mediaserver/upnpsdk \
+         -i../../core/utilities/assistants/webservices/common/o2 \
          ../../core \
+         2> report.cppcheck
