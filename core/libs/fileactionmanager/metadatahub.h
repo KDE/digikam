@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATA_HUB_H
-#define METADATA_HUB_H
+#ifndef DIGIKAM_METADATA_HUB_H
+#define DIGIKAM_METADATA_HUB_H
 
 // Qt includes
 
@@ -283,4 +283,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetadataHub::WriteComponent)
 
-#endif // METADATA_HUB_H
+#endif // DIGIKAM_METADATA_HUB_H

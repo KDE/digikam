@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TAG_MODIFICATION_HELPER_H
-#define TAG_MODIFICATION_HELPER_H
+#ifndef DIGIKAM_TAG_MODIFICATION_HELPER_H
+#define DIGIKAM_TAG_MODIFICATION_HELPER_H
 
 // Qt includes
 
@@ -60,7 +60,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param dialogParent paret widget for dialogs displayed by this object
      */
-    TagModificationHelper(QObject* const parent, QWidget* const dialogParent);
+    explicit TagModificationHelper(QObject* const parent, QWidget* const dialogParent);
 
     /**
      * Destructor.
@@ -214,9 +214,6 @@ Q_SIGNALS:
 
 private:
 
-    class Private;
-    Private* const d;
-
     /**
      * Returns all sub-tags of the given one which have the person property.
      * This includes the root tag, if it has the property, too.
@@ -228,8 +225,13 @@ private:
      * This includes the root tags, if they have the property, too.
      */
     QSet<TAlbum*> getFaceTags(QList<TAlbum*> tags);
+    
+private:
+
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
 
-#endif // TAG_MODIFICATION_HELPER_H
+#endif // DIGIKAM_TAG_MODIFICATION_HELPER_H

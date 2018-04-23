@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEALBUMFILTERMODEL_H
-#define IMAGEALBUMFILTERMODEL_H
+#ifndef DIGIKAM_IMAGE_ALBUM_FILTER_MODEL_H
+#define DIGIKAM_IMAGE_ALBUM_FILTER_MODEL_H
 
 // Local includes
 
@@ -79,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGEALBUMFILTERMODEL_H
+#endif // DIGIKAM_IMAGE_ALBUM_FILTER_MODEL_H

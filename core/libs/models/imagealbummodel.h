@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEALBUMMODEL_H
-#define IMAGEALBUMMODEL_H
+#ifndef DIGIKAM_IMAGE_ALBUM_MODEL_H
+#define DIGIKAM_IMAGE_ALBUM_MODEL_H
 
 // Local includes
 
@@ -111,4 +111,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGEALBUMMODEL_H
+#endif // DIGIKAM_IMAGE_ALBUM_MODEL_H

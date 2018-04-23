@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PREVIEW_LOAD_THREAD_H
-#define PREVIEW_LOAD_THREAD_H
+#ifndef DIGIKAM_PREVIEW_LOAD_THREAD_H
+#define DIGIKAM_PREVIEW_LOAD_THREAD_H
 
 // Local includes
 
@@ -105,4 +105,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // PREVIEW_LOAD_THREAD_H
+#endif // DIGIKAM_PREVIEW_LOAD_THREAD_H

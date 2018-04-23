@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILE_READ_WRITE_LOCK_H
-#define FILE_READ_WRITE_LOCK_H
+#ifndef DIGIKAM_FILE_READ_WRITE_LOCK_H
+#define DIGIKAM_FILE_READ_WRITE_LOCK_H
 
 // Qt includes
 
@@ -107,4 +107,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // FILE_READ_WRITE_LOCK_H
+#endif // DIGIKAM_FILE_READ_WRITE_LOCK_H

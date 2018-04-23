@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TAG_EDIT_DLG_H
-#define TAG_EDIT_DLG_H
+#ifndef DIGIKAM_TAG_EDIT_DLG_H
+#define DIGIKAM_TAG_EDIT_DLG_H
 
 // Qt includes
 
@@ -83,4 +83,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAG_EDIT_DLG_H
+#endif // DIGIKAM_TAG_EDIT_DLG_H

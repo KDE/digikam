@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATA_STATUS_BAR_H
-#define METADATA_STATUS_BAR_H
+#ifndef DIGIKAM_METADATA_STATUS_BAR_H
+#define DIGIKAM_METADATA_STATUS_BAR_H
 
 // Qt includes
 
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif // METADATA_STATUS_BAR_H
+#endif // DIGIKAM_METADATA_STATUS_BAR_H

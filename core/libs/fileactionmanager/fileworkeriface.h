@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILE_WORKER_IFACE_H
-#define FILE_WORKER_IFACE_H
+#ifndef DIGIKAM_FILE_WORKER_IFACE_H
+#define DIGIKAM_FILE_WORKER_IFACE_H
 
 // Local includes
 
@@ -80,4 +80,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FILE_WORKER_IFACE_H
+#endif // DIGIKAM_FILE_WORKER_IFACE_H

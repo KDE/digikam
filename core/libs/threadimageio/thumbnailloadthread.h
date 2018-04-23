@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMB_NAIL_LOAD_THREAD_H
-#define THUMB_NAIL_LOAD_THREAD_H
+#ifndef DIGIKAM_THUMB_NAIL_LOAD_THREAD_H
+#define DIGIKAM_THUMB_NAIL_LOAD_THREAD_H
 
 // Qt includes
 
@@ -336,4 +336,4 @@ private:
 
 } // namespace Digikam
 
-#endif // THUMB_NAIL_LOAD_THREAD_H
+#endif // DIGIKAM_THUMB_NAIL_LOAD_THREAD_H

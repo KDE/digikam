@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGS_COMPLETER_H
-#define TAGS_COMPLETER_H
+#ifndef DIGIKAM_TAGS_COMPLETER_H
+#define DIGIKAM_TAGS_COMPLETER_H
 
 // Qt includes
 
@@ -77,4 +77,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAGS_COMPLETER_H
+#endif // DIGIKAM_TAGS_COMPLETER_H

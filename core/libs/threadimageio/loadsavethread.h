@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef LOAD_SAVE_THREAD_H
-#define LOAD_SAVE_THREAD_H
+#ifndef DIGIKAM_LOAD_SAVE_THREAD_H
+#define DIGIKAM_LOAD_SAVE_THREAD_H
 
 // Qt includes
 
@@ -229,4 +229,4 @@ private:
 
 } // namespace Digikam
 
-#endif // LOAD_SAVE_THREAD_H
+#endif // DIGIKAM_LOAD_SAVE_THREAD_H

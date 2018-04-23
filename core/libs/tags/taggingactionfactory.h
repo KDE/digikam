@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGGING_ACTION_FACTORY_H
-#define TAGGING_ACTION_FACTORY_H
+#ifndef DIGIKAM_TAGGING_ACTION_FACTORY_H
+#define DIGIKAM_TAGGING_ACTION_FACTORY_H
 
 // Qt includes
 
@@ -45,6 +45,8 @@ public:
         virtual bool matches(int tagId) = 0;
     };
 
+public:
+
     enum NameMatchMode
     {
         // Default: use the "startingWith" method
@@ -53,6 +55,8 @@ public:
         MatchContainingFragment
     };
 
+public:
+    
     explicit TaggingActionFactory();
     virtual ~TaggingActionFactory();
 
@@ -99,4 +103,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAGGING_ACTION_FACTORY_H
+#endif // DIGIKAM_TAGGING_ACTION_FACTORY_H

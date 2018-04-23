@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PREVIEW_TASK_H
-#define PREVIEW_TASK_H
+#ifndef DIGIKAM_PREVIEW_TASK_H
+#define DIGIKAM_PREVIEW_TASK_H
 
 // Qt includes
 
@@ -41,7 +41,7 @@ class PreviewLoadingTask : public SharedLoadingTask
 {
 public:
 
-    PreviewLoadingTask(LoadSaveThread* const thread, const LoadingDescription& description)
+    explicit PreviewLoadingTask(LoadSaveThread* const thread, const LoadingDescription& description)
         : SharedLoadingTask(thread, description, LoadSaveThread::AccessModeRead, LoadingTaskStatusLoading),
           m_fromRawEmbeddedPreview(false)
     {
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PREVIEW_TASK_H
+#endif // DIGIKAM_PREVIEW_TASK_H

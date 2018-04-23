@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_THUMB_NAIL_CREATOR_PRIV_H
-#define DIGIKAM_THUMB_NAIL_CREATOR_PRIV_H
+#ifndef DIGIKAM_THUMB_NAIL_CREATOR_P_H
+#define DIGIKAM_THUMB_NAIL_CREATOR_P_H
 
 // Local includes
 
@@ -107,4 +107,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_THUMB_NAIL_CREATOR_PRIV_H
+#endif // DIGIKAM_THUMB_NAIL_CREATOR_P_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMB_NAIL_SIZE_H
-#define THUMB_NAIL_SIZE_H
+#ifndef DIGIKAM_THUMB_NAIL_SIZE_H
+#define DIGIKAM_THUMB_NAIL_SIZE_H
 
 // Qt includes
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif // THUMB_NAIL_SIZE_H
+#endif // DIGIKAM_THUMB_NAIL_SIZE_H

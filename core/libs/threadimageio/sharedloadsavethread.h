@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHARED_LOAD_SAVE_THREAD_H
-#define SHARED_LOAD_SAVE_THREAD_H
+#ifndef DIGIKAM_SHARED_LOAD_SAVE_THREAD_H
+#define DIGIKAM_SHARED_LOAD_SAVE_THREAD_H
 
 // Local includes
 
@@ -43,4 +43,4 @@ public:
 
 } // namespace Digikam
 
-#endif // SHARED_LOAD_SAVE_THREAD_H
+#endif // DIGIKAM_SHARED_LOAD_SAVE_THREAD_H

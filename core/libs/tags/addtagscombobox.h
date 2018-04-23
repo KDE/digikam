@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ADD_TAGS_COMBO_BOX_H
-#define ADD_TAGS_COMBO_BOX_H
+#ifndef DIGIKAM_ADD_TAGS_COMBO_BOX_H
+#define DIGIKAM_ADD_TAGS_COMBO_BOX_H
 
 // Qt includes
 
@@ -116,4 +116,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ADD_TAGS_COMBO_BOX_H
+#endif // DIGIKAM_ADD_TAGS_COMBO_BOX_H

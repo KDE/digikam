@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MOVIE_DECODER_H
-#define MOVIE_DECODER_H
+#ifndef DIGIKAM_MOVIE_DECODER_H
+#define DIGIKAM_MOVIE_DECODER_H
 
 // Qt includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MOVIE_DECODER_H
+#endif // DIGIKAM_MOVIE_DECODER_H

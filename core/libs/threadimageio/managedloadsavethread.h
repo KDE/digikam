@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MANAGED_LOAD_SAVE_THREAD_H
-#define MANAGED_LOAD_SAVE_THREAD_H
+#ifndef DIGIKAM_MANAGED_LOAD_SAVE_THREAD_H
+#define DIGIKAM_MANAGED_LOAD_SAVE_THREAD_H
 
 // Local includes
 
@@ -171,4 +171,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MANAGED_LOAD_SAVE_THREAD_H
+#endif // DIGIKAM_MANAGED_LOAD_SAVE_THREAD_H

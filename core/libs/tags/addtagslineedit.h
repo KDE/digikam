@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ADD_TAGS_LINE_EDIT_H
-#define ADD_TAGS_LINE_EDIT_H
+#ifndef DIGIKAM_ADD_TAGS_LINE_EDIT_H
+#define DIGIKAM_ADD_TAGS_LINE_EDIT_H
 
 // Qt includes
 
@@ -111,4 +111,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ADD_TAGS_LINE_EDIT_H
+#endif // DIGIKAM_ADD_TAGS_LINE_EDIT_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILE_ACTION_IMAGE_INFO_LIST_H
-#define FILE_ACTION_IMAGE_INFO_LIST_H
+#ifndef DIGIKAM_FILE_ACTION_IMAGE_INFO_LIST_H
+#define DIGIKAM_FILE_ACTION_IMAGE_INFO_LIST_H
 
 // Qt includes
 
@@ -168,4 +168,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::FileActionImageInfoList)
 
-#endif // FILE_ACTION_IMAGE_INFO_LIST_H
+#endif // DIGIKAM_FILE_ACTION_IMAGE_INFO_LIST_H

@@ -55,8 +55,8 @@ class AlbumSelectTabs::Private
 {
 public:
 
-    explicit Private() :
-        albumModel(0),
+    explicit Private()
+      : albumModel(0),
         albumTreeView(0),
         tagModel(0),
         tagTreeView(0),
@@ -195,16 +195,16 @@ AlbumSelectTabs::AlbumSelectTabs(const QString& name, QWidget* const parent)
 
     // ------------------------------------------------------------------------------------
 
-    connect(d->albumModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(d->albumModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SIGNAL(signalAlbumSelectionChanged()));
 
-    connect(d->tagModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(d->tagModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SIGNAL(signalAlbumSelectionChanged()));
 
-    connect(d->searchModel, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(d->searchModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SIGNAL(signalAlbumSelectionChanged()));
 
-    connect(d->labelsSearchHandler, SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(d->labelsSearchHandler, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SIGNAL(signalAlbumSelectionChanged()));
 
     // ------------------------------------------------------------------------------------

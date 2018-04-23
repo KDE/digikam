@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef LOAD_SAVE_TASK_H
-#define LOAD_SAVE_TASK_H
+#ifndef DIGIKAM_LOAD_SAVE_TASK_H
+#define DIGIKAM_LOAD_SAVE_TASK_H
 
 // Qt includes
 
@@ -87,8 +87,8 @@ public:
 
 public:
 
-    LoadingTask(LoadSaveThread* const thread, const LoadingDescription& description,
-                LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading)
+    explicit LoadingTask(LoadSaveThread* const thread, const LoadingDescription& description,
+                         LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading)
         : LoadSaveTask(thread),
           m_loadingDescription(description),
           m_loadingTaskStatus(loadingTaskStatus)
@@ -136,9 +136,9 @@ class SharedLoadingTask : public LoadingTask,
 {
 public:
 
-    SharedLoadingTask(LoadSaveThread* const thread, const LoadingDescription& description,
-                      LoadSaveThread::AccessMode mode = LoadSaveThread::AccessModeReadWrite,
-                      LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading);
+    explicit SharedLoadingTask(LoadSaveThread* const thread, const LoadingDescription& description,
+                               LoadSaveThread::AccessMode mode = LoadSaveThread::AccessModeReadWrite,
+                               LoadingTaskStatus loadingTaskStatus = LoadingTaskStatusLoading);
 
     virtual void execute();
     virtual void progressInfo(const DImg* const, float progress);
@@ -191,7 +191,7 @@ public:
 
 public:
 
-    SavingTask(LoadSaveThread* const thread, DImg& img, const QString& filePath, const QString& format)
+    explicit SavingTask(LoadSaveThread* const thread, DImg& img, const QString& filePath, const QString& format)
         : LoadSaveTask(thread),
           m_filePath(filePath),
           m_format(format),
@@ -230,4 +230,4 @@ private:
 
 } // namespace Digikam
 
-#endif // LOAD_SAVE_TASK_H
+#endif // DIGIKAM_LOAD_SAVE_TASK_H

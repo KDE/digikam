@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMFILTERMODEL_H
-#define ALBUMFILTERMODEL_H
+#ifndef DIGIKAM_ALBUM_FILTER_MODEL_H
+#define DIGIKAM_ALBUM_FILTER_MODEL_H
 
 // Qt includes
 
@@ -406,4 +406,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // ALBUMFILTERMODEL_H
+#endif // DIGIKAM_ALBUM_FILTER_MODEL_H

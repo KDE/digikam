@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ABSTRACTALBUMMODELPRIVATE_H
-#define ABSTRACTALBUMMODELPRIVATE_H
+#ifndef DIGIKAM_ABSTRACT_ALBUM_MODEL_PRIV_H
+#define DIGIKAM_ABSTRACT_ALBUM_MODEL_PRIV_H
 
 namespace Digikam
 {
@@ -123,4 +123,4 @@ public:
 
 } // namespace Digikam
 
-#endif // ABSTRACTALBUMMODELPRIVATE_H
+#endif // DIGIKAM_ABSTRACT_ALBUM_MODEL_PRIV_H

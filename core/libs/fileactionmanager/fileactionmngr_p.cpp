@@ -65,7 +65,8 @@ FileActionMngr::Private::Private(FileActionMngr* const qq)
     //        this, SIGNAL(signalTransformFinished()));
 
     connect(this, SIGNAL(signalTransform(FileActionImageInfoList,int)),
-            fileWorker, SLOT(transform(FileActionImageInfoList,int)), Qt::DirectConnection);
+            fileWorker, SLOT(transform(FileActionImageInfoList,int)),
+            Qt::DirectConnection);
 
     connect(fileWorker, SIGNAL(imageDataChanged(QString,bool,bool)),
             this, SLOT(slotImageDataChanged(QString,bool,bool)));
@@ -114,13 +115,16 @@ void FileActionMngr::Private::connectToDatabaseWorker()
 void FileActionMngr::Private::connectDatabaseToFileWorker()
 {
     connect(dbWorker, SIGNAL(writeMetadataToFiles(FileActionImageInfoList)),
-            fileWorker, SLOT(writeMetadataToFiles(FileActionImageInfoList)), Qt::DirectConnection);
+            fileWorker, SLOT(writeMetadataToFiles(FileActionImageInfoList)),
+            Qt::DirectConnection);
 
-    connect(dbWorker, SIGNAL(writeMetadata(FileActionImageInfoList, int)),
-            fileWorker, SLOT(writeMetadata(FileActionImageInfoList, int)), Qt::DirectConnection);
+    connect(dbWorker, SIGNAL(writeMetadata(FileActionImageInfoList,int)),
+            fileWorker, SLOT(writeMetadata(FileActionImageInfoList,int)),
+            Qt::DirectConnection);
 
     connect(dbWorker, SIGNAL(writeOrientationToFiles(FileActionImageInfoList,int)),
-            fileWorker, SLOT(writeOrientationToFiles(FileActionImageInfoList,int)), Qt::DirectConnection);
+            fileWorker, SLOT(writeOrientationToFiles(FileActionImageInfoList,int)),
+            Qt::DirectConnection);
 
 }
 

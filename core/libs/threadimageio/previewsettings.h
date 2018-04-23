@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PREVIEW_SETTINGS_H
-#define PREVIEW_SETTINGS_H
+#ifndef DIGIKAM_PREVIEW_SETTINGS_H
+#define DIGIKAM_PREVIEW_SETTINGS_H
 
 // Local includes
 
@@ -81,4 +81,4 @@ public:
 
 } // namespace Digikam
 
-#endif // PREVIEW_SETTINGS_H
+#endif // DIGIKAM_PREVIEW_SETTINGS_H

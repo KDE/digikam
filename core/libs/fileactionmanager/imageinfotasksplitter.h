@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_INFO_TASK_SPLITTER_H
-#define IMAGE_INFO_TASK_SPLITTER_H
+#ifndef DIGIKAM_IMAGE_INFO_TASK_SPLITTER_H
+#define DIGIKAM_IMAGE_INFO_TASK_SPLITTER_H
 
 // Local includes
 
@@ -48,4 +48,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGE_INFO_TASK_SPLITTER_H
+#endif // DIGIKAM_IMAGE_INFO_TASK_SPLITTER_H

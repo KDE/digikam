@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_WRITER_H
-#define IMAGE_WRITER_H
+#ifndef DIGIKAM_IMAGE_WRITER_H
+#define DIGIKAM_IMAGE_WRITER_H
 
 // Qt includes
 
@@ -64,4 +64,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMAGE_WRITER_H
+#endif // DIGIKAM_IMAGE_WRITER_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILE_ACTION_PROGRESS_H
-#define FILE_ACTION_PROGRESS_H
+#ifndef DIGIKAM_FILE_ACTION_PROGRESS_H
+#define DIGIKAM_FILE_ACTION_PROGRESS_H
 
 // Qt includes
 
@@ -58,4 +58,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // FILE_ACTION_PROGRESS_H
+#endif // DIGIKAM_FILE_ACTION_PROGRESS_H

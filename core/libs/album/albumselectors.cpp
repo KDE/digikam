@@ -183,13 +183,12 @@ void AlbumSelectors::initAlbumWidget()
     connect(d->wholeAlbums, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSelectionChanged()));
 
-    connect(d->albumSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(d->albumSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SLOT(slotUpdateClearButtons()));
 
     d->albumSelectCB->view()->setObjectName(d->configName);
     d->albumSelectCB->view()->setEntryPrefix(QLatin1String("AlbumComboBox-"));
     d->albumSelectCB->view()->setRestoreCheckState(true);
-
 }
 
 void AlbumSelectors::initTagWidget()
@@ -217,7 +216,7 @@ void AlbumSelectors::initTagWidget()
     connect(d->wholeTags, SIGNAL(toggled(bool)),
             this, SLOT(slotWholeTags(bool)));
 
-    connect(d->tagSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+    connect(d->tagSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SLOT(slotUpdateClearButtons()));
 
     d->tagSelectCB->view()->setObjectName(d->configName);

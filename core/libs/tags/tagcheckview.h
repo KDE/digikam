@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef TAG_CHECK_VIEW_H
-#define TAG_CHECK_VIEW_H
+#ifndef DIGIKAM_TAG_CHECK_VIEW_H
+#define DIGIKAM_TAG_CHECK_VIEW_H
 
 // Local includes
 
@@ -110,4 +110,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TAG_CHECK_VIEW_H
+#endif // DIGIKAM_TAG_CHECK_VIEW_H
