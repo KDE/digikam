@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_ALBUMS_PAGE_H
-#define VIDSLIDE_ALBUMS_PAGE_H
+#ifndef DIGIKAM_VIDSLIDE_ALBUMS_PAGE_H
+#define DIGIKAM_VIDSLIDE_ALBUMS_PAGE_H
 
 // Qt includes
 
@@ -54,4 +54,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_ALBUMS_PAGE_H
+#endif // DIGIKAM_VIDSLIDE_ALBUMS_PAGE_H

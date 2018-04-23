@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_WIZARD_H
-#define VIDSLIDE_WIZARD_H
+#ifndef DIGIKAM_VIDSLIDE_WIZARD_H
+#define DIGIKAM_VIDSLIDE_WIZARD_H
 
 // Qt includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_WIZARD_H
+#endif // DIGIKAM_VIDSLIDE_WIZARD_H

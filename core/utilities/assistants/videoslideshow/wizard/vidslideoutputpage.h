@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_OUTPUT_PAGE_H
-#define VIDSLIDE_OUTPUT_PAGE_H
+#ifndef DIGIKAM_VIDSLIDE_OUTPUT_PAGE_H
+#define DIGIKAM_VIDSLIDE_OUTPUT_PAGE_H
 
 // Qt includes
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_OUTPUT_PAGE_H
+#endif // DIGIKAM_VIDSLIDE_OUTPUT_PAGE_H

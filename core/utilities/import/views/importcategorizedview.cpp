@@ -70,8 +70,8 @@ class ImportCategorizedView::Private
 {
 public:
 
-    explicit Private() :
-        model(0),
+    explicit Private()
+      : model(0),
         filterModel(0),
         delegate(0),
         showToolTip(false),
@@ -95,7 +95,8 @@ public:
 };
 
 ImportCategorizedView::ImportCategorizedView(QWidget* const parent)
-    : ItemViewCategorized(parent), d(new Private)
+    : ItemViewCategorized(parent),
+      d(new Private)
 {
     setToolTip(new ImportItemViewToolTip(this));
 
@@ -109,8 +110,8 @@ ImportCategorizedView::ImportCategorizedView(QWidget* const parent)
     connect(d->delayedEnterTimer, SIGNAL(timeout()),
             this, SLOT(slotDelayedEnter()));
 
-    connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer, ICCSettingsContainer)),
-            this, SLOT(slotIccSettingsChanged(ICCSettingsContainer, ICCSettingsContainer)));
+    connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer,ICCSettingsContainer)),
+            this, SLOT(slotIccSettingsChanged(ICCSettingsContainer,ICCSettingsContainer)));
 }
 
 ImportCategorizedView::~ImportCategorizedView()

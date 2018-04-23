@@ -48,8 +48,8 @@ class DbCleaner::Private
 {
 public:
 
-    explicit Private() :
-        thread(0),
+    explicit Private()
+      : thread(0),
         cleanThumbsDb(false),
         cleanFacesDb(false),
         cleanSimilarityDb(false),
@@ -65,21 +65,21 @@ public:
         delete shrinkDlg;
     }
 
-    MaintenanceThread*           thread;
-    bool                         cleanThumbsDb;
-    bool                         cleanFacesDb;
-    bool                         cleanSimilarityDb;
-    bool                         shrinkDatabases;
+    MaintenanceThread* thread;
+    bool               cleanThumbsDb;
+    bool               cleanFacesDb;
+    bool               cleanSimilarityDb;
+    bool               shrinkDatabases;
 
-    QList<qlonglong>             imagesToRemove;
-    QList<int>                   staleThumbnails;
-    QList<Identity>              staleIdentities;
-    QList<qlonglong>             staleImageSimilarities;
+    QList<qlonglong>   imagesToRemove;
+    QList<int>         staleThumbnails;
+    QList<Identity>    staleIdentities;
+    QList<qlonglong>   staleImageSimilarities;
 
-    int                          databasesToAnalyseCount;
-    int                          databasesToShrinkCount;
+    int                databasesToAnalyseCount;
+    int                databasesToShrinkCount;
 
-    DbShrinkDialog*              shrinkDlg;
+    DbShrinkDialog*    shrinkDlg;
 };
 
 DbCleaner::DbCleaner(bool cleanThumbsDb,
@@ -185,8 +185,8 @@ void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
 
         if (d->shrinkDatabases)
         {
-            disconnect(d->thread, SIGNAL(signalData(QList<qlonglong>, QList<int>, QList<Identity>)),
-                       this, SLOT(slotFetchedData(QList<qlonglong>, QList<int>, QList<Identity>)));
+            disconnect(d->thread, SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<Identity>)),
+                       this, SLOT(slotFetchedData(QList<qlonglong>,QList<int>,QList<Identity>)));
 
             disconnect(d->thread, SIGNAL(signalCompleted()),
                         this, SLOT(slotCleanItems()));
@@ -354,7 +354,7 @@ void DbCleaner::slotShrinkDatabases()
             d->shrinkDlg, SLOT(exec()));
 
     connect(d->thread, SIGNAL(signalFinished(bool,bool)),
-            this, SLOT(slotShrinkNextDBInfo(bool, bool)));
+            this, SLOT(slotShrinkNextDBInfo(bool,bool)));
 
     connect(d->thread, SIGNAL(signalCompleted()),
             this, SLOT(slotDone()));
