@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-11-24
- * Description : Batch Tools Manager.
+ * Description : Batch Tools Factory.
  *
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "batchtoolsmanager.h"
+#include "batchtoolsfactory.h"
 
 // Local includes
 
@@ -64,17 +64,17 @@
 #include "timeadjust.h"
 
 #ifdef HAVE_JASPER
-#include "convert2jp2.h"
+#   include "convert2jp2.h"
 #endif // HAVE_JASPER
 
 #ifdef HAVE_LENSFUN
-#include "lensautofix.h"
+#   include "lensautofix.h"
 #endif // HAVE_LENSFUN
 
 namespace Digikam
 {
 
-class BatchToolsManager::Private
+class BatchToolsFactory::Private
 {
 
 public:
@@ -88,23 +88,23 @@ public:
 
 // --------------------------------------------------------------------------------
 
-class BatchToolsManagerCreator
+class BatchToolsFactoryCreator
 {
 public:
 
-    BatchToolsManager object;
+    BatchToolsFactory object;
 };
 
-Q_GLOBAL_STATIC(BatchToolsManagerCreator, batchToolsManagerCreator)
+Q_GLOBAL_STATIC(BatchToolsFactoryCreator, batchToolsManagerCreator)
 
 // --------------------------------------------------------------------------------
 
-BatchToolsManager* BatchToolsManager::instance()
+BatchToolsFactory* BatchToolsFactory::instance()
 {
     return &batchToolsManagerCreator->object;
 }
 
-BatchToolsManager::BatchToolsManager()
+BatchToolsFactory::BatchToolsFactory()
     : d(new Private)
 {
     // Convert
@@ -166,7 +166,7 @@ BatchToolsManager::BatchToolsManager()
     registerTool(new UserScript(this));
 }
 
-BatchToolsManager::~BatchToolsManager()
+BatchToolsFactory::~BatchToolsFactory()
 {
     for (BatchToolsList::iterator it = d->toolsList.begin(); it != d->toolsList.end();)
     {
@@ -180,12 +180,12 @@ BatchToolsManager::~BatchToolsManager()
     delete d;
 }
 
-BatchToolsList BatchToolsManager::toolsList() const
+BatchToolsList BatchToolsFactory::toolsList() const
 {
     return d->toolsList;
 }
 
-void BatchToolsManager::registerTool(BatchTool* const tool)
+void BatchToolsFactory::registerTool(BatchTool* const tool)
 {
     if (!tool)
     {
@@ -196,7 +196,7 @@ void BatchToolsManager::registerTool(BatchTool* const tool)
     d->toolsList.append(tool);
 }
 
-BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchToolGroup group) const
+BatchTool* BatchToolsFactory::findTool(const QString& name, BatchTool::BatchToolGroup group) const
 {
     foreach(BatchTool* const tool, d->toolsList)
     {

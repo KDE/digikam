@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-11-24
- * Description : Batch Tools Manager.
+ * Description : Batch Tools Factory.
  *
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BATCH_TOOLS_MANAGER_H
-#define BATCH_TOOLS_MANAGER_H
+#ifndef DIGIKAM_BATCH_TOOLS_FACTORY_H
+#define DIGIKAM_BATCH_TOOLS_FACTORY_H
 
 // Qt includes
 
@@ -36,13 +36,13 @@
 namespace Digikam
 {
 
-class BatchToolsManager : public QObject
+class BatchToolsFactory : public QObject
 {
     Q_OBJECT
 
 public:
 
-    static BatchToolsManager* instance();
+    static BatchToolsFactory* instance();
 
 public:
 
@@ -52,17 +52,17 @@ public:
 
 private:
 
-    BatchToolsManager();
-    ~BatchToolsManager();
+    BatchToolsFactory();
+    ~BatchToolsFactory();
 
 private:
 
     class Private;
     Private* const d;
 
-    friend class BatchToolsManagerCreator;
+    friend class BatchToolsFactoryCreator;
 };
 
 } // namespace Digikam
 
-#endif // BATCH_TOOLS_MANAGER_H
+#endif // DIGIKAM_BATCH_TOOLS_FACTORY_H

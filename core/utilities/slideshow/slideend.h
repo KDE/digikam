@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDE_END_H
-#define SLIDE_END_H
+#ifndef DIGIKAM_SLIDE_END_H
+#define DIGIKAM_SLIDE_END_H
 
 // Qt includes
 
@@ -47,4 +47,4 @@ public:
 
 } // namespace Digikam
 
-#endif // SLIDE_END_H
+#endif // DIGIKAM_SLIDE_END_H

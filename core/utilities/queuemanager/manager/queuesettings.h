@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef QUEUE_SETTINGS_H
-#define QUEUE_SETTINGS_H
+#ifndef DIGIKAM_QUEUE_SETTINGS_H
+#define DIGIKAM_QUEUE_SETTINGS_H
 
 // Qt includes
 
@@ -93,4 +93,4 @@ public:
 
 } // namespace Digikam
 
-#endif // QUEUE_SETTINGS_H
+#endif // DIGIKAM_QUEUE_SETTINGS_H

@@ -47,7 +47,7 @@
 #include "queuemgrwindow.h"
 #include "queuesettingsview.h"
 #include "toolslistview.h"
-#include "batchtoolsmanager.h"
+#include "batchtoolsfactory.h"
 
 namespace Digikam
 {
@@ -73,7 +73,7 @@ void AssignedListViewItem::setToolSet(const BatchToolSet& set)
     m_set = set;
     setIndex(m_set.index);
 
-    BatchTool* const tool = BatchToolsManager::instance()->findTool(m_set.name, m_set.group);
+    BatchTool* const tool = BatchToolsFactory::instance()->findTool(m_set.name, m_set.group);
 
     if (tool)
     {
@@ -229,7 +229,7 @@ void AssignedListView::slotMoveCurrentToolDown()
 
 AssignedListViewItem* AssignedListView::moveTool(AssignedListViewItem* const preceding, const BatchToolSet& set)
 {
-    BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
+    BatchTool* const tool = BatchToolsFactory::instance()->findTool(set.name, set.group);
 
     if (!tool)
     {
@@ -502,7 +502,7 @@ void AssignedListView::assignTools(const QMap<int, QString>& map, AssignedListVi
         it.previous();
         BatchTool::BatchToolGroup group  = (BatchTool::BatchToolGroup)(it.key());
         QString name                     = it.value();
-        BatchTool* const tool            = BatchToolsManager::instance()->findTool(name, group);
+        BatchTool* const tool            = BatchToolsFactory::instance()->findTool(name, group);
         BatchToolSet set;
         set.name                         = tool->objectName();
         set.group                        = tool->toolGroup();

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef WORKFLOW_LIST_H
-#define WORKFLOW_LIST_H
+#ifndef DIGIKAM_WORK_FLOW_LIST_H
+#define DIGIKAM_WORK_FLOW_LIST_H
 
 // Qt includes
 
@@ -36,7 +36,7 @@
 // Local includes
 
 #include "batchtool.h"
-#include "batchtoolsmanager.h"
+#include "batchtoolsfactory.h"
 
 namespace Digikam
 {
@@ -93,4 +93,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WORKFLOW_LIST_H
+#endif // DIGIKAM_WORK_FLOW_LIST_H

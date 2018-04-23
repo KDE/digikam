@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TASK_H
-#define TASK_H
+#ifndef DIGIKAM_TASK_H
+#define DIGIKAM_TASK_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TASK_H
+#endif // DIGIKAM_TASK_H

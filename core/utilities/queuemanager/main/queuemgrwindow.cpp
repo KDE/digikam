@@ -52,7 +52,7 @@
 #include "digikam_debug.h"
 #include "actions.h"
 #include "album.h"
-#include "batchtoolsmanager.h"
+#include "batchtoolsfactory.h"
 #include "actionthread.h"
 #include "queuepool.h"
 #include "workflowmanager.h"
@@ -104,7 +104,7 @@ QueueMgrWindow::QueueMgrWindow()
     qRegisterMetaType<BatchToolSet>("BatchToolSet");
 
     m_instance = this;
-    BatchToolsManager::instance();        // Create first instance here
+    BatchToolsFactory::instance();        // Create first instance here
     WorkflowManager::instance();             // Create first instance here
     d->thread  = new ActionThread(this);
 
@@ -646,7 +646,7 @@ void QueueMgrWindow::slotItemSelectionChanged()
 
 void QueueMgrWindow::populateToolsList()
 {
-    BatchToolsList list = BatchToolsManager::instance()->toolsList();
+    BatchToolsList list = BatchToolsFactory::instance()->toolsList();
 
     foreach(BatchTool* const tool, list)
     {

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef QUEUE_LIST_H
-#define QUEUE_LIST_H
+#ifndef DIGIKAM_QUEUE_LIST_H
+#define DIGIKAM_QUEUE_LIST_H
 
 // Qt includes
 
@@ -182,4 +182,4 @@ private:
 
 } // namespace Digikam
 
-#endif // QUEUE_LIST_H
+#endif // DIGIKAM_QUEUE_LIST_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ASSIGNED_LIST_H
-#define ASSIGNED_LIST_H
+#ifndef DIGIKAM_ASSIGNED_LIST_H
+#define DIGIKAM_ASSIGNED_LIST_H
 
 // Qt includes
 
@@ -122,4 +122,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ASSIGNED_LIST_H
+#endif // DIGIKAM_ASSIGNED_LIST_H

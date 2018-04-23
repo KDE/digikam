@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TOOLS_LIST_VIEW_H
-#define TOOLS_LIST_VIEW_H
+#ifndef DIGIKAM_TOOLS_LIST_VIEW_H
+#define DIGIKAM_TOOLS_LIST_VIEW_H
 
 // Qt includes
 
@@ -36,7 +36,7 @@
 // Local includes
 
 #include "batchtool.h"
-#include "batchtoolsmanager.h"
+#include "batchtoolsfactory.h"
 
 namespace Digikam
 {
@@ -114,4 +114,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TOOLS_LIST_VIEW_H
+#endif // DIGIKAM_TOOLS_LIST_VIEW_H

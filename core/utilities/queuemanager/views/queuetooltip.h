@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef QUEUETOOLTIP_H
-#define QUEUETOOLTIP_H
+#ifndef DIGIKAM_QUEUE_TOOL_TIP_H
+#define DIGIKAM_QUEUE_TOOL_TIP_H
 
 // Local includes
 
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* QUEUETOOLTIP_H */
+#endif // DIGIKAM_QUEUE_TOOL_TIP_H

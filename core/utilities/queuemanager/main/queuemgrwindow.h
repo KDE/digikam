@@ -44,7 +44,7 @@ namespace Digikam
 {
 
 class ActionData;
-class BatchToolsManager;
+class BatchToolsFactory;
 class AssignedBatchTools;
 class QueueListViewItem;
 

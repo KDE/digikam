@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDE_TOOL_BAR_H
-#define SLIDE_TOOL_BAR_H
+#ifndef DIGIKAM_SLIDE_TOOL_BAR_H
+#define DIGIKAM_SLIDE_TOOL_BAR_H
 
 // Qt includes
 
@@ -87,4 +87,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SLIDE_TOOL_BAR_H
+#endif // DIGIKAM_SLIDE_TOOL_BAR_H

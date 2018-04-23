@@ -30,7 +30,7 @@
 // Local includes
 
 #include "batchtool.h"
-#include "batchtoolsmanager.h"
+#include "batchtoolsfactory.h"
 
 namespace Digikam
 {
@@ -82,7 +82,7 @@ QString AssignedBatchTools::targetSuffix(bool* const extSet) const
 
     foreach(const BatchToolSet& set, m_toolsList)
     {
-        BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
+        BatchTool* const tool = BatchToolsFactory::instance()->findTool(set.name, set.group);
         if (tool)
         {
             QString s = tool->outputSuffix();

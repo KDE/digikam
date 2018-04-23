@@ -43,8 +43,8 @@ class SlideImage::Private
 
 public:
 
-    explicit Private() :
-        deskSize(1024),
+    explicit Private()
+      : deskSize(1024),
         previewThread(0),
         previewPreloadThread(0)
     {
@@ -74,8 +74,8 @@ SlideImage::SlideImage(QWidget* const parent)
     d->previewThread        = new PreviewLoadThread();
     d->previewPreloadThread = new PreviewLoadThread();
 
-    connect(d->previewThread, SIGNAL(signalImageLoaded(LoadingDescription, DImg)),
-            this, SLOT(slotGotImagePreview(LoadingDescription, DImg)));
+    connect(d->previewThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
+            this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 }
 
 SlideImage::~SlideImage()

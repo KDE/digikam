@@ -40,7 +40,7 @@
 #include "dmetadata.h"
 #include "imageinfo.h"
 #include "batchtool.h"
-#include "batchtoolsmanager.h"
+#include "batchtoolsfactory.h"
 #include "dfileoperations.h"
 
 namespace Digikam
@@ -133,7 +133,7 @@ void Task::run()
 
     foreach (const BatchToolSet& set, d->tools.m_toolsList)
     {
-        d->tool     = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
+        d->tool     = BatchToolsFactory::instance()->findTool(set.name, set.group)->clone();
         timeAdjust |= (set.name == QLatin1String("TimeAdjust"));
         inUrl       = outUrl;
         index       = set.index + 1;

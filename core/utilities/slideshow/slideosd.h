@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDE_OSD_H
-#define SLIDE_OSD_H
+#ifndef DIGIKAM_SLIDE_OSD_H
+#define DIGIKAM_SLIDE_OSD_H
 
 // Qt includes
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SLIDE_OSD_H
+#endif // DIGIKAM_SLIDE_OSD_H

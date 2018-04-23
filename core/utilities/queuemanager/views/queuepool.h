@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef QUEUE_POOL_H
-#define QUEUE_POOL_H
+#ifndef DIGIKAM_QUEUE_POOL_H
+#define DIGIKAM_QUEUE_POOL_H
 
 // Qt includes
 
@@ -134,4 +134,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // QUEUE_POOL_H
+#endif // DIGIKAM_QUEUE_POOL_H

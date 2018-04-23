@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef FIND_DUPLICATES_VIEW_H
-#define FIND_DUPLICATES_VIEW_H
+#ifndef DIGIKAM_FIND_DUPLICATES_VIEW_H
+#define DIGIKAM_FIND_DUPLICATES_VIEW_H
 
 // Qt includes
 
@@ -92,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FIND_DUPLICATES_VIEW_H
+#endif // DIGIKAM_FIND_DUPLICATES_VIEW_H

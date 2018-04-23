@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class BatchToolsManager;
+class BatchToolsFactory;
 
 class QueueMgrWindow::Private
 {
@@ -119,7 +119,7 @@ public:
     SidebarSplitter*         bottomSplitter;
     SidebarSplitter*         verticalSplitter;
 
-    BatchToolsManager*       batchToolsMgr;
+    BatchToolsFactory*       batchToolsMgr;
 
     StatusProgressBar*       statusProgressBar;
 

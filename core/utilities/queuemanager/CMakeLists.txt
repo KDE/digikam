@@ -54,7 +54,7 @@ set(libqueuemanager_SRCS
     manager/task.cpp
     manager/batchtool.cpp
     manager/batchtoolutils.cpp
-    manager/batchtoolsmanager.cpp
+    manager/batchtoolsfactory.cpp
     manager/workflowmanager.cpp
     views/workflowdlg.cpp
     views/assignedlist.cpp

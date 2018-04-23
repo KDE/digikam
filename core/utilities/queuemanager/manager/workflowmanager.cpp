@@ -37,7 +37,7 @@
 
 #include "digikam_debug.h"
 #include "queuesettings.h"
-#include "batchtoolsmanager.h"
+#include "batchtoolsfactory.h"
 
 namespace Digikam
 {
@@ -515,7 +515,7 @@ bool WorkflowManager::load(QStringList& failed)
                         }
                     }
 
-                    BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
+                    BatchTool* const tool = BatchToolsFactory::instance()->findTool(set.name, set.group);
 
                     if (tool)
                     {

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef FUZZY_SEARCH_VIEW_H
-#define FUZZY_SEARCH_VIEW_H
+#ifndef DIGIKAM_FUZZY_SEARCH_VIEW_H
+#define DIGIKAM_FUZZY_SEARCH_VIEW_H
 
 // Qt includes
 
@@ -132,4 +132,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FUZZY_SEARCH_VIEW_H
+#endif // DIGIKAM_FUZZY_SEARCH_VIEW_H

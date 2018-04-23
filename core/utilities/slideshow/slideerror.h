@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDE_ERROR_H
-#define SLIDE_ERROR_H
+#ifndef DIGIKAM_SLIDE_ERROR_H
+#define DIGIKAM_SLIDE_ERROR_H
 
 // Qt includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SLIDE_ERROR_H
+#endif // DIGIKAM_SLIDE_ERROR_H

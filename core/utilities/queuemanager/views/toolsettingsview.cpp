@@ -42,7 +42,7 @@
 
 #include "dlayoutbox.h"
 #include "thememanager.h"
-#include "batchtoolsmanager.h"
+#include "batchtoolsfactory.h"
 
 
 
@@ -236,7 +236,7 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
                    d->tool, SLOT(slotResetSettingsToDefault()));
     }
 
-    d->tool = BatchToolsManager::instance()->findTool(d->set.name, d->set.group);
+    d->tool = BatchToolsFactory::instance()->findTool(d->set.name, d->set.group);
 
     if (d->tool)
     {
