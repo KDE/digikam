@@ -473,22 +473,24 @@ void FbWindow::slotUserChangeRequest()
     if (d->talker->loggedIn())
     {
         d->talker->logout();
-        QMessageBox warn(QMessageBox::Warning,
+        QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
                      i18n("Warning"),
                      i18n("After you have been logged out in the browser, "
                           "click \"Continue\" to authenticate for another account"),
                      QMessageBox::Yes | QMessageBox::No);
 
-        (warn.button(QMessageBox::Yes))->setText(i18n("Continue"));
-        (warn.button(QMessageBox::No))->setText(i18n("Cancel"));
+        (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
+        (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
 
-        if (warn.exec() == QMessageBox::Yes)
+        if (warn->exec() == QMessageBox::Yes)
         {
             d->accessToken.clear();
             d->sessionExpires = 0;
+            delete warn;
         }
         else
         {
+            delete warn;
             return;
         }
     }
