@@ -56,8 +56,20 @@ WelcomePage::WelcomePage(QWizard* const dlg)
                                QLatin1String(digikam_version_short));
 
 #if defined Q_OS_WIN || defined Q_OS_OSX
+
+    // Windows settings place.
+    QString newPlace = QLatin1String("~/Local Settings/");
+    QString oldPlace = QLatin1String("~/AppData/Local/");
+
+#if defined Q_OS_OSX
+
+    // MacOS settings place.
+    newPlace         = QLatin1String("~/Library/Preferences/");
+    oldPlace         = QLatin1String("~/Library/Preferences/KDE/share/config/");
+#endif
+
     text.append(i18n(
-                     "<br/>"                                                    // krazy:exclude=i18ncheckarg
+                     "<qt><br/>"
                      "<p>You can ignore the following if you use digiKam "
                      "for the first time:</p>"
                      "<p><b>Transition from digiKam 4</b></p>"
@@ -73,15 +85,8 @@ WelcomePage::WelcomePage(QWizard* const dlg)
                      "configuration files, so it is not recommended to do it "
                      "for the moment, and at your own risk.</p>"
                      "</qt>",
-#if defined Q_OS_WIN
-                     // Windows settings place.
-                     QLatin1String("~/Local Settings/"),
-                     QLatin1String("~/AppData/Local/")
-#elif defined Q_OS_OSX
-                     // MacOS settings place.
-                     QLatin1String("~/Library/Preferences/"),
-                     QLatin1String("~/Library/Preferences/KDE/share/config/")
-#endif
+                     newPlace,
+                     oldPlace
                 ));
 #endif
 
