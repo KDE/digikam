@@ -47,8 +47,8 @@ public:
     explicit VidSlideWizard(QWidget* const parent, DInfoInterface* const iface = 0);
     ~VidSlideWizard();
 
-    bool validateCurrentPage();
-    int  nextId() const;
+    bool validateCurrentPage() override;
+    int  nextId() const override;
 
     DInfoInterface*   iface()    const;
     VidSlideSettings* settings() const;

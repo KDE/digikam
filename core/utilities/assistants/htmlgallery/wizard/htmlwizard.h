@@ -56,8 +56,8 @@ public:
     GalleryInfo*      galleryInfo()  const;
     GalleryTheme::Ptr galleryTheme() const;
 
-    bool validateCurrentPage();
-    int  nextId()                    const;
+    bool validateCurrentPage() override;
+    int  nextId()                    const override;
 
     void setItemsList(const QList<QUrl>& urls);
 

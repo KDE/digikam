@@ -60,7 +60,7 @@ public:
 
     void updateCropFrame(AdvPrintPhoto* const, int);
 
-    int  nextId() const;
+    int  nextId() const override;
 
     static int normalizedInt(double n);
 

@@ -45,8 +45,8 @@ public:
     explicit WSWizard(QWidget* const parent, DInfoInterface* const iface = 0);
     ~WSWizard();
 
-    bool validateCurrentPage();
-    int  nextId() const;
+    bool validateCurrentPage() override;
+    int  nextId() const override;
 
     DInfoInterface* iface()  const;
     WSSettings*   settings() const;
