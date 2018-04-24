@@ -276,6 +276,10 @@ void SetupMime::applySettings()
 
     CoreDbAccess().db()->getUserFilterSettings(&imageFilterString, &movieFilterString, &audioFilterString);
 
+    imageFilterString.replace(QLatin1Char(';'), QLatin1Char(' '));
+    movieFilterString.replace(QLatin1Char(';'), QLatin1Char(' '));
+    audioFilterString.replace(QLatin1Char(';'), QLatin1Char(' '));
+
     if (d->imageFileFilterEdit->text() != imageFilterString ||
         d->movieFileFilterEdit->text() != movieFilterString ||
         d->audioFileFilterEdit->text() != audioFilterString)
