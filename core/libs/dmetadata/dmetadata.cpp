@@ -2948,7 +2948,7 @@ QString DMetadata::valueToString(const QVariant& value, MetadataInfo::Field fiel
         {
             QString meters = QString::fromLatin1("%L1").arg(value.toDouble(), 0, 'f', 2);
             // xgettext: no-c-format
-            return i18nc("Height in meters", "%L1m", meters);           // krazy:exclude=i18ncheckarg
+            return i18nc("Height in meters", "%1m", meters);
         }
 
         case MetadataInfo::PositionOrientation:
