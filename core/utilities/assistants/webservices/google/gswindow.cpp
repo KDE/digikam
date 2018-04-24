@@ -235,7 +235,7 @@ GSWindow::GSWindow(DInfoInterface* const iface,
                     this, SLOT(slotRefreshTokenObtained(QString)));
 
             connect(d->gphotoTalker, SIGNAL(signalListAlbumsDone(int,QString,QList<GSFolder>)),
-                    this, SLOT(slotListAlbumsDone(int QString,QList<GSFolder>)));
+                    this, SLOT(slotListAlbumsDone(int,QString,QList<GSFolder>)));
 
             connect(d->gphotoTalker, SIGNAL(signalCreateAlbumDone(int,QString,QString)),
                     this, SLOT(slotCreateFolderDone(int,QString,QString)));
