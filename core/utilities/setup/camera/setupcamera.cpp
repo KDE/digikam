@@ -31,6 +31,7 @@
 #include <QGroupBox>
 #include <QHeaderView>
 #include <QPixmap>
+#include <QPointer>
 #include <QCheckBox>
 #include <QPushButton>
 #include <QRadioButton>
@@ -165,8 +166,8 @@ class SetupCamera::Private
 {
 public:
 
-    explicit Private() :
-        addButton(0),
+    explicit Private()
+      : addButton(0),
         removeButton(0),
         editButton(0),
         autoDetectButton(0),
@@ -936,17 +937,19 @@ void SetupCamera::slotImportSelectionChanged()
 void SetupCamera::slotAddFilter()
 {
     Filter filter;
-    filter.name = i18n("Untitled");
-    ImportFilters dlg(this);
-    dlg.setData(filter);
+    filter.name                 = i18n("Untitled");
+    QPointer<ImportFilters> dlg = new ImportFilters(this);
+    dlg->setData(filter);
 
-    if (dlg.exec() == QDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
         Filter* const f = new Filter;
-        dlg.getData(f);
+        dlg->getData(f);
         d->filters.append(f);
         new QListWidgetItem(f->name, d->importListView);
     }
+
+    delete dlg;
 
     slotImportSelectionChanged();
 }
@@ -976,17 +979,18 @@ void SetupCamera::slotEditFilter()
     {
         if (d->filters.at(i)->name == item->text())
         {
-            Filter filter = *d->filters.at(i);
-            ImportFilters dlg(this);
-            dlg.setData(filter);
+            Filter filter               = *d->filters.at(i);
+            QPointer<ImportFilters> dlg = new ImportFilters(this);
+            dlg->setData(filter);
 
-            if (dlg.exec() == QDialog::Accepted)
+            if (dlg->exec() == QDialog::Accepted)
             {
                 Filter* const f = d->filters.at(i);
-                dlg.getData(f);
+                dlg->getData(f);
                 item->setText(f->name);
             }
 
+            delete dlg;
             break;
         }
     }

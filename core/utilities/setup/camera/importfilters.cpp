@@ -30,6 +30,7 @@
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QLabel>
+#include <QPointer>
 #include <QToolButton>
 #include <QPainter>
 #include <QDialogButtonBox>
@@ -211,12 +212,15 @@ void ImportFilters::mimeButtonClicked()
 {
     QString text     = i18n("Select the MimeTypes you want for this filter.");
     QStringList list = d->mimeLabel->adjustedText().split(QLatin1Char(';'), QString::SkipEmptyParts);
-    KMimeTypeChooserDialog dlg(i18n("Select Mime Types"), text, list, QLatin1String("image"), this);
+    QPointer<KMimeTypeChooserDialog> dlg = new KMimeTypeChooserDialog(i18n("Select Mime Types"), text,
+                                                                      list, QLatin1String("image"), this);
 
-    if (dlg.exec() == QDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
-        d->mimeLabel->setAdjustedText(dlg.chooser()->mimeTypes().join(QLatin1String(";")));
+        d->mimeLabel->setAdjustedText(dlg->chooser()->mimeTypes().join(QLatin1String(";")));
     }
+
+    delete dlg;
 }
 
 void ImportFilters::setData(const Filter& filter)
