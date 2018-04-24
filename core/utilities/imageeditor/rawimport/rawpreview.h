@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAW_PREVIEW_H
-#define RAW_PREVIEW_H
+#ifndef DIGIKAM_RAW_PREVIEW_H
+#define DIGIKAM_RAW_PREVIEW_H
 
 // Qt includes
 
@@ -95,4 +95,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAW_PREVIEW_H
+#endif // DIGIKAM_RAW_PREVIEW_H

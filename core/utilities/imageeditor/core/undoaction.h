@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef UNDOACTION_H
-#define UNDOACTION_H
+#ifndef DIGIKAM_UNDO_ACTION_H
+#define DIGIKAM_UNDO_ACTION_H
 
 // KDE includes
 
@@ -96,7 +96,7 @@ class DIGIKAM_EXPORT UndoActionReversible : public UndoAction
 
 public:
 
-    UndoActionReversible(EditorCore* const core, const DImgBuiltinFilter& reversibleFilter);
+    explicit UndoActionReversible(EditorCore* const core, const DImgBuiltinFilter& reversibleFilter);
 
     DImgBuiltinFilter getFilter()        const;
     DImgBuiltinFilter getReverseFilter() const;
@@ -119,4 +119,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* UNDOACTION_H */
+#endif // DIGIKAM_UNDOACTION_H

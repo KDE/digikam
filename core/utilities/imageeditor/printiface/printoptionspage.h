@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PRINT_OPTIONS_PAGE_H
-#define PRINT_OPTIONS_PAGE_H
+#ifndef DIGIKAM_PRINT_OPTIONS_PAGE_H
+#define DIGIKAM_PRINT_OPTIONS_PAGE_H
 
 // Qt includes
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRINT_OPTIONS_PAGE_H
+#endif // DIGIKAM_PRINT_OPTIONS_PAGE_H

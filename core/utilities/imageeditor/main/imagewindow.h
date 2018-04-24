@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_WINDOW_H
-#define IMAGE_WINDOW_H
+#ifndef DIGIKAM_IMAGE_WINDOW_H
+#define DIGIKAM_IMAGE_WINDOW_H
 
 // Qt includes
 
@@ -213,4 +213,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGE_WINDOW_H
+#endif // DIGIKAM_IMAGE_WINDOW_H

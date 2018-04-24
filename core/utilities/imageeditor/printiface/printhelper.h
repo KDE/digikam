@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PRINT_HELPER_H
-#define PRINT_HELPER_H
+#ifndef DIGIKAM_PRINT_HELPER_H
+#define DIGIKAM_PRINT_HELPER_H
 
 // Local includes
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PRINT_HELPER_H
+#endif // DIGIKAM_PRINT_HELPER_H

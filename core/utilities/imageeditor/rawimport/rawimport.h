@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef RAW_IMPORT_DLG_H
-#define RAW_IMPORT_DLG_H
+#ifndef DIGIKAM_RAW_IMPORT_DLG_H
+#define DIGIKAM_RAW_IMPORT_DLG_H
 
 // Qt includes
 
@@ -85,4 +85,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAW_IMPORT_DLG_H
+#endif // DIGIKAM_RAW_IMPORT_DLG_H

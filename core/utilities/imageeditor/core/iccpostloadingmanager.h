@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCPOSTLOADINGMANAGER_H
-#define ICCPOSTLOADINGMANAGER_H
+#ifndef DIGIKAM_ICC_POST_LOADING_MANAGER_H
+#define DIGIKAM_ICC_POST_LOADING_MANAGER_H
 
 // Local includes
 
@@ -59,4 +59,4 @@ protected:
 
 } // namespace Digikam
 
-#endif   // ICCMANAGER_H
+#endif // DIGIKAM_ICC_POST_LOADING_MANAGER_H

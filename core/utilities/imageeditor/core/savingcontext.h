@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SAVING_CONTEXT_H
-#define SAVING_CONTEXT_H
+#ifndef DIGIKAM_SAVING_CONTEXT_H
+#define DIGIKAM_SAVING_CONTEXT_H
 
 // Qt includes
 
@@ -94,4 +94,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* SAVING_CONTEXT_H */
+#endif // DIGIKAM_SAVING_CONTEXT_H

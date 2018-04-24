@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef RAW_SETTINGS_BOX_H
-#define RAW_SETTINGS_BOX_H
+#ifndef DIGIKAM_RAW_SETTINGS_BOX_H
+#define DIGIKAM_RAW_SETTINGS_BOX_H
 
 // Qt includes
 
@@ -83,4 +83,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAW_SETTINGS_BOX_H
+#endif // DIGIKAM_RAW_SETTINGS_BOX_H

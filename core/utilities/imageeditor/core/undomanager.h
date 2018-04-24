@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef UNDOMANAGER_H
-#define UNDOMANAGER_H
+#ifndef DIGIKAM_UNDO_MANAGER_H
+#define DIGIKAM_UNDO_MANAGER_H
 
 // Qt includes
 
@@ -92,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* UNDOMANAGER_H */
+#endif // DIGIKAM_UNDO_MANAGER_H

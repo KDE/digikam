@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SIGNAL_BLOCKER_H
-#define SIGNAL_BLOCKER_H
+#ifndef DIGIKAM_SIGNAL_BLOCKER_H
+#define DIGIKAM_SIGNAL_BLOCKER_H
 
 // Qt includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SIGNAL_BLOCKER_H
+#endif // DIGIKAM_SIGNAL_BLOCKER_H

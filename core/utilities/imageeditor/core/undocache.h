@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef UNDOCACHE_H
-#define UNDOCACHE_H
+#ifndef DIGIKAM_UNDO_CACHE_H
+#define DIGIKAM_UNDO_CACHE_H
 
 // Local includes
 
@@ -39,7 +39,7 @@ class DIGIKAM_EXPORT UndoCache
 
 public:
 
-    UndoCache();
+    explicit UndoCache();
     ~UndoCache();
 
     /**
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* UNDOCACHE_H */
+#endif // DIGIKAM_UNDO_CACHE_H

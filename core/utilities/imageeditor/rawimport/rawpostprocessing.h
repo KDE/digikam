@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAW_POST_PROCESSING_H
-#define RAW_POST_PROCESSING_H
+#ifndef DIGIKAM_RAW_POST_PROCESSING_H
+#define DIGIKAM_RAW_POST_PROCESSING_H
 
 // Local includes
 
@@ -37,11 +37,16 @@ class DIGIKAM_EXPORT RawPostProcessing : public DImgThreadedFilter
 
 public:
 
-    explicit RawPostProcessing(DImg* const orgImage, QObject* const parent = 0, const DRawDecoding& settings = DRawDecoding());
+    explicit RawPostProcessing(DImg* const orgImage,
+                               QObject* const parent = 0,
+                               const DRawDecoding& settings = DRawDecoding());
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    RawPostProcessing(DImgThreadedFilter* const parentFilter, const DImg& orgImage, const DImg& destImage,
-                      int progressBegin = 0, int progressEnd = 100, const DRawDecoding& settings = DRawDecoding());
+    RawPostProcessing(DImgThreadedFilter* const parentFilter,
+                      const DImg& orgImage, const DImg& destImage,
+                      int progressBegin = 0,
+                      int progressEnd = 100,
+                      const DRawDecoding& settings = DRawDecoding());
 
     ~RawPostProcessing();
 
@@ -75,4 +80,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAW_POST_PROCESSING_H
+#endif // DIGIKAM_RAW_POST_PROCESSING_H

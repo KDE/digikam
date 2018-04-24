@@ -6,7 +6,7 @@
  * Date        : 2013-07-25
  * Description : image region widget item for image editor.
  *
- * Copyright (C) 2013-2014 Yiou Wang <geow812 at gmail dot com>
+ * Copyright (C) 2013-2014 by Yiou Wang <geow812 at gmail dot com>
  * Copyright (C) 2013-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef UNDOSTATE_H
-#define UNDOSTATE_H
+#ifndef DIGIKAM_UNDO_STATE_H
+#define DIGIKAM_UNDO_STATE_H
 
 namespace Digikam
 {
@@ -31,11 +31,11 @@ class UndoState
 {
 public:
 
-    UndoState()
-        : hasUndo(false),
-          hasRedo(false),
-          hasChanges(false),
-          hasUndoableChanges(false)
+    explicit UndoState()
+      : hasUndo(false),
+        hasRedo(false),
+        hasChanges(false),
+        hasUndoableChanges(false)
     {
     }
 
@@ -53,4 +53,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* UNDOSTATE_H */
+#endif // DIGIKAM_UNDO_STATE_H
