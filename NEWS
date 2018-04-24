@@ -10,6 +10,8 @@ Showfoto     : Add Web services Import and Export tools.
 
 LightTable   : Add Web services Import and Export tools.
 
+Database     : Similarity database has been moved to a dedicated file to not bloat core database with computed
+               finger-prints. This will speed-up query in core database in case of Similarity feature is used.
 Database     : New video metadata parser based on ffmpeg to populate database.
 Search       : Add video support to find files based on properties registered on database.
 
