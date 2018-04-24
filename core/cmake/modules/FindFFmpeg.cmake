@@ -43,13 +43,14 @@ ENDIF()
 
 # Macro to marks the given component as found if both *_LIBRARIES AND *_INCLUDE_DIRS is present.
 #
-MACRO(set_component_found _component )
+MACRO(set_component_found _component)
 
     IF(${_component}_LIBRARIES AND ${_component}_INCLUDE_DIRS)
         # message(STATUS "  - ${_component} found.")
         SET(${_component}_FOUND TRUE)
     ELSE()
         # message(STATUS "  - ${_component} not found.")
+        SET(${_component}_FOUND FALSE)
     ENDIF()
 
 ENDMACRO()
@@ -96,7 +97,8 @@ MACRO(find_component _component _pkgconfig _library _header)
         ${_component}_INCLUDE_DIRS
         ${_component}_LIBRARIES
         ${_component}_DEFINITIONS
-        ${_component}_VERSION)
+        ${_component}_VERSION
+    )
 
 ENDMACRO()
 
@@ -115,7 +117,7 @@ if(NOT FFMPEG_LIBRARIES)
     # Check if the required components were found and add their stuff to the FFMPEG_* vars.
     FOREACH(_component ${FFmpeg_FIND_COMPONENTS})
 
-        IF (${_component}_FOUND)
+        IF(${_component}_FOUND)
             # message(STATUS "Required component ${_component} present.")
             SET(FFMPEG_LIBRARIES   ${FFMPEG_LIBRARIES}   ${${_component}_LIBRARIES})
             SET(FFMPEG_DEFINITIONS ${FFMPEG_DEFINITIONS} ${${_component}_DEFINITIONS})
@@ -138,7 +140,8 @@ if(NOT FFMPEG_LIBRARIES)
 
     MARK_AS_ADVANCED(FFMPEG_INCLUDE_DIRS
                      FFMPEG_LIBRARIES
-                     FFMPEG_DEFINITIONS)
+                     FFMPEG_DEFINITIONS
+    )
 
 ENDIF()
 
