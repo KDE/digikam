@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHVIEW_H
-#define SEARCHVIEW_H
+#ifndef DIGIKAM_SEARCH_VIEW_H
+#define DIGIKAM_SEARCH_VIEW_H
 
 // Qt includes
 
@@ -191,4 +191,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // SEARCHVIEW_H
+#endif // DIGIKAM_SEARCH_VIEW_H

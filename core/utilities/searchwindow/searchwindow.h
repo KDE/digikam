@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHWINDOW_H
-#define SEARCHWINDOW_H
+#ifndef DIGIKAM_SEARCH_WINDOW_H
+#define DIGIKAM_SEARCH_WINDOW_H
 
 // Qt includes
 
@@ -87,4 +87,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SEARCHWINDOW_H
+#endif // DIGIKAM_SEARCH_WINDOW_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CHOICESEARCHUTILITIES_H
-#define CHOICESEARCHUTILITIES_H
+#ifndef DIGIKAM_CHOICE_SEARCH_UTILITIES_H
+#define DIGIKAM_CHOICE_SEARCH_UTILITIES_H
 
 // Qt includes
 
@@ -231,4 +231,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // CHOICESEARCHUTILITIES_H
+#endif // DIGIKAM_CHOICE_SEARCH_UTILITIES_H

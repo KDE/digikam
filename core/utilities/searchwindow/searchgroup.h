@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHGROUP_H
-#define SEARCHGROUP_H
+#ifndef DIGIKAM_SEARCH_GROUP_H
+#define DIGIKAM_SEARCH_GROUP_H
 
 // Qt includes
 
@@ -137,4 +137,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SEARCHGROUP_H
+#endif // DIGIKAM_SEARCH_GROUP_H

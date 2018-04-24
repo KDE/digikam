@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHFOLDERVIEW_H
-#define SEARCHFOLDERVIEW_H
+#ifndef DIGIKAM_SEARCH_FOLDER_VIEW_H
+#define DIGIKAM_SEARCH_FOLDER_VIEW_H
 
 // Local includes
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* SEARCHFOLDERVIEW_H */
+#endif //  DIGIKAM_SEARCH_FOLDER_VIEW_H

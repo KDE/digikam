@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHTABHEADER_H
-#define SEARCHTABHEADER_H
+#ifndef DIGIKAM_SEARCH_TAB_HEADER_H
+#define DIGIKAM_SEARCH_TAB_HEADER_H
 
 // Qt includes
 
@@ -83,4 +83,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SEARCHTABHEADER_H
+#endif // DIGIKAM_SEARCH_TAB_HEADER_H

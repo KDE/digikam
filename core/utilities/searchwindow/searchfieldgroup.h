@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHFIELDGROUP_H
-#define SEARCHFIELDGROUP_H
+#ifndef DIGIKAM_SEARCH_FIELD_GROUP_H
+#define DIGIKAM_SEARCH_FIELD_GROUP_H
 
 // Qt includes
 
@@ -115,4 +115,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // SEARCHFIELDGROUP_H
+#endif // DIGIKAM_SEARCH_FIELD_GROUP_H
