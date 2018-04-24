@@ -30,6 +30,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QPixmap>
+#include <QPointer>
 #include <QTimer>
 #include <QDir>
 
@@ -50,8 +51,8 @@ class AdvancedRenameProcessDialog::Private
 {
 public:
 
-    explicit Private() :
-        thumbLoadThread(0),
+    explicit Private()
+      : thumbLoadThread(0),
         utilities(0),
         cancel(false)
     {
@@ -162,7 +163,7 @@ void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& src)
     {
         if (!d->failedUrls.isEmpty())
         {
-            QMessageBox msgBox(QMessageBox::Warning,
+            QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
                                i18n("Renaming images"),
                                i18np("An error occurred while renaming %1 image.\n"
                                     "Do you want to rename this image again?",
@@ -171,10 +172,12 @@ void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& src)
                                     d->failedUrls.count()),
                                QMessageBox::Yes | QMessageBox::No, this);
 
-            if (msgBox.exec() != QMessageBox::Yes)
+            if (msgBox->exec() != QMessageBox::Yes)
             {
                 d->failedUrls.clear();
             }
+
+            delete msgBox;
         }
 
         complete();
