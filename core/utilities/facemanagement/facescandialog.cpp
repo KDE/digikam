@@ -262,7 +262,7 @@ void FaceScanDialog::setupUi()
     QLabel* const introduction = new QLabel;
     introduction->setTextFormat(Qt::RichText);
     introduction->setText(i18nc("@info",
-                                "<qt>digiKam can search for faces in your photos.<br> "
+                                "<qt>digiKam can search for faces in your photos.<br/> "
                                 "When you have identified your friends on a number of photos,<br> "
                                 "it can also recognize the people shown on your photos.</qt>"));
 

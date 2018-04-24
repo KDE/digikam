@@ -1704,7 +1704,7 @@ bool EditorWindow::promptUserSave(const QUrl& url, SaveAskMode mode, bool allowC
             {
                 QString boxMessage;
                 boxMessage = i18nc("@info",
-                                   "<qt>The image <b>%1</b> has been modified.<br>"
+                                   "<qt>The image <b>%1</b> has been modified.<br/>"
                                    "Do you want to save it?</qt>", url.fileName());
 
                 int result;
@@ -1847,7 +1847,7 @@ bool EditorWindow::promptUserDelete(const QUrl& url)
         }
 
         QString boxMessage = i18nc("@info",
-                                   "The image <b>%1</b> has been modified.<br>"
+                                   "The image <b>%1</b> has been modified.<br/>"
                                    "All changes will be lost.", url.fileName());
 
         int result = DMessageBox::showContinueCancel(QMessageBox::Warning,

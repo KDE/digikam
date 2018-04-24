@@ -57,8 +57,8 @@ class DMediaServerDlg::Private
 {
 public:
 
-    explicit Private() :
-        dirty(false),
+    explicit Private()
+      : dirty(false),
         mngr(DMediaServerMngr::instance()),
         srvButton(0),
         srvStatus(0),
@@ -165,7 +165,7 @@ DMediaServerDlg::DMediaServerDlg(QObject* const /*parent*/,
                               "using <a href='https://en.wikipedia.org/wiki/Digital_Living_Network_Alliance'>DLNA</a> "
                               "standard and <a href='https://en.wikipedia.org/wiki/Universal_Plug_and_Play'>UPNP</a> "
                               "protocol. Many kind of electronic devices can support DLNA, as tablets, cellulars, TV, etc."
-                              "<br>Note: depending of the network features and the configuration, "
+                              "<br/>Note: depending of the network features and the configuration, "
                               "the delay to discover the server on client devices can take a while."));
 
     grid->addWidget(d->startOnStartup, 1, 0, 1, 6);

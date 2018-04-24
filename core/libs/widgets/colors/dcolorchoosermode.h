@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DCOLORCHOOSERMODE_H_
-#define DCOLORCHOOSERMODE_H_
+#ifndef DIGIKAM_DCOLOR_CHOOSER_MODE_H
+#define DIGIKAM_DCOLOR_CHOOSER_MODE_H
 
 namespace Digikam
 {
@@ -41,4 +41,4 @@ enum DColorChooserMode
 
 } // namespace Digikam
 
-#endif // DCOLORCHOOSERMODE_H_
+#endif // DIGIKAM_DCOLOR_CHOOSER_MODE_H

@@ -260,7 +260,7 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 
     d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
                                              photoIndex + 1,
-                                             QString::number(d->settings->photos.count())));
+                                             d->settings->photos.count()));
 }
 
 void AdvPrintWizard::previewPhotos()

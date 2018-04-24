@@ -208,7 +208,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    d->expanderBox->insertItem(Private::NewItems, new QLabel(i18n("<qt>No option<br>"
+    d->expanderBox->insertItem(Private::NewItems, new QLabel(i18n("<qt>No option<br/>"
                                "<i>Note: only Albums Collection are processed by this tool.</i></qt>")),
                                QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Scan for new items"), QLatin1String("NewItems"), false);
     d->expanderBox->setCheckBoxVisible(Private::NewItems, true);

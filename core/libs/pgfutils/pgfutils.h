@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_PGF_UTIL_H
-#define DIGIKAM_PGF_UTIL_H
+#ifndef DIGIKAM_PGF_UTILS_H
+#define DIGIKAM_PGF_UTILS_H
 
 // Qt includes
 
@@ -73,4 +73,4 @@ DIGIKAM_EXPORT QString libPGFVersion();
 
 } // namespace Digikam
 
-#endif // DIGIKAM_PGF_UTIL_H
+#endif // DIGIKAM_PGF_UTILS_H

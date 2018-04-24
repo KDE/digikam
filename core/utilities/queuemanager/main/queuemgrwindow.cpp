@@ -500,7 +500,7 @@ void QueueMgrWindow::refreshStatusBar()
             break;
     }
 
-    message.append(i18n(" - Total: "));
+    message.append(QLatin1String(" - ") + i18n("Total: "));
 
     switch (totalItems)
     {
@@ -530,7 +530,7 @@ void QueueMgrWindow::refreshStatusBar()
 
     if (!d->busy)
     {
-        d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
+        d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode, i18nc("batch queue manager is ready to use", "Ready"));
         d->removeItemsSelAction->setEnabled(items > 0);
         d->removeItemsDoneAction->setEnabled((items - pendingItems) > 0);
         d->clearQueueAction->setEnabled(items > 0);

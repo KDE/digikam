@@ -320,7 +320,7 @@ void AdvancedMetadataTab::setUi()
     tipLabel->setTextFormat(Qt::RichText);
     tipLabel->setWordWrap(true);
     tipLabel->setText(i18n("Advanced configuration menu allow you to manage metadata namespaces"
-                           " used by digiKam to store and retrieve tags, rating and comments.<br>"
+                           " used by digiKam to store and retrieve tags, rating and comments.<br/>"
                            "<b>Note: </b>Order is important when reading metadata"
                           ));
 

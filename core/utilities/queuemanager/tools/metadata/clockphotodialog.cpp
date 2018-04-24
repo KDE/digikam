@@ -173,7 +173,7 @@ DeltaTime ClockPhotoDialog::deltaValues() const
 bool ClockPhotoDialog::setImage(const QUrl& imageFile)
 {
     bool success = false;
-    QString msg = i18n("<font color=\"red\"><b>Could not load<br>"
+    QString msg = i18n("<font color=\"red\"><b>Could not load<br/>"
                        "image %1.</b></font>",
                        imageFile.fileName());
 

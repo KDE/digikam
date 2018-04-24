@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef _DB_ENGINE_CONFIG_SETTINGS_H_
-#define _DB_ENGINE_CONFIG_SETTINGS_H_
+#ifndef DIGIKAM_DB_ENGINE_CONFIG_SETTINGS_H
+#define DIGIKAM_DB_ENGINE_CONFIG_SETTINGS_H
 
 // Qt includes
 
@@ -53,4 +53,4 @@ public:
 
 } // namespace Digikam
 
-#endif // _DB_ENGINE_CONFIG_SETTINGS_H_
+#endif // DIGIKAM_DB_ENGINE_CONFIG_SETTINGS_H
