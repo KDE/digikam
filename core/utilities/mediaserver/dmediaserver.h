@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DMEDIA_SERVER_H
-#define DMEDIA_SERVER_H
+#ifndef DIGIKAM_DMEDIA_SERVER_H
+#define DIGIKAM_DMEDIA_SERVER_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DMEDIA_SERVER_H
+#endif // DIGIKAM_DMEDIA_SERVER_H

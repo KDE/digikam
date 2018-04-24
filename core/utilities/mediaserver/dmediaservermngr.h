@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DMEDIA_SERVER_MNGR_H
-#define DMEDIA_SERVER_MNGR_H
+#ifndef DIGIKAM_DMEDIA_SERVER_MNGR_H
+#define DIGIKAM_DMEDIA_SERVER_MNGR_H
 
 // Qt includes
 
@@ -107,4 +107,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DMEDIA_SERVER_MNGR_H
+#endif // DIGIKAM_DMEDIA_SERVER_MNGR_H

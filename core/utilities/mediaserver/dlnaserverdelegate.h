@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef _DLNA_SERVER_DELEGATE_H_
-#define _DLNA_SERVER_DELEGATE_H_
+#ifndef DIGIKAM_DLNA_SERVER_DELEGATE_H
+#define DIGIKAM_DLNA_SERVER_DELEGATE_H
 
 // Platinum includes
 
@@ -130,4 +130,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // _DLNA_SERVER_DELEGATE_H_
+#endif // DIGIKAM_DLNA_SERVER_DELEGATE_H

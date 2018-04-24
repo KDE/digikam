@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef _DLNA_SERVER_H_
-#define _DLNA_SERVER_H_
+#ifndef DIGIKAM_DLNA_SERVER_H
+#define DIGIKAM_DLNA_SERVER_H
 
 // Platinum includes
 
@@ -62,7 +62,7 @@ public:
 
     void addAlbumsOnServer(const MediaServerMap& map);
 
-    NPT_Result SetupIcons();
+    NPT_Result SetupIcons() override;
 
 protected:
 
@@ -75,4 +75,4 @@ private:
 
 } // namespace Digikam
 
-#endif // _DLNA_SERVER_H_
+#endif // DIGIKAM_DLNA_SERVER_H
