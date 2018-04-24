@@ -1,6 +1,6 @@
 /*
  * Little cms
- * Copyright (C) 1998-2004 Marti Maria
+ * Copyright (C) 1998-2004 Marti Maria <info at littlecms dot com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -39,8 +39,8 @@
  * for details.
  */
 
-#ifndef ICCJPEG_H
-#define ICCJPEG_H
+#ifndef DIGIKAM_ICC_JPEG_H
+#define DIGIKAM_ICC_JPEG_H
 
 #include <stdio.h>    /* needed to define "FILE", "NULL" */
 #include <jpeglib.h>
@@ -95,4 +95,4 @@ extern boolean read_icc_profile JPP((j_decompress_ptr cinfo,
                                      JOCTET** icc_data_ptr,
                                      unsigned int* icc_data_len));
 
-#endif /* ICCJPEG_H */
+#endif /* DIGIKAM_ICC_JPEG_H */

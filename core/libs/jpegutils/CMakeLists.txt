@@ -10,7 +10,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 # Define libjpeg_EXPORTS: kde-win emerged libjpeg uses this define to
-# decide wether to make dllimport (by default) or dllexport. So, we need to export.
+# decide whether to make dllimport (by default) or dllexport. So, we need to export.
 add_definitions(-Dlibjpeg_EXPORTS)
 
 set(libjpegutils_SRCS

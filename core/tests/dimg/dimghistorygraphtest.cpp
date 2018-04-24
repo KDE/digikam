@@ -143,26 +143,26 @@ void DImgHistoryGraphTest::testEditing()
 
     IOFileSettings container;
     m_im->load(readOnlyImages.first(), &container);
-    m_loop.exec();    // krazy:exclude=includes
+    m_loop.exec();    // krazy:exclude=crashy
 
     applyFilters1();
     m_im->saveAs(collectionDir.filePath(QLatin1String("1.jpg")), &container, true, QString(), QString());
-    m_loop.exec();    // krazy:exclude=includes
+    m_loop.exec();    // krazy:exclude=crashy
 
     applyFilters2();
     m_im->saveAs(collectionDir.filePath(QLatin1String("2.jpg")), &container, true, QString(), QString());
-    m_loop.exec();    // krazy:exclude=includes
+    m_loop.exec();    // krazy:exclude=crashy
 
     applyFilters3();
     m_im->saveAs(collectionDir.filePath(QLatin1String("3.jpg")), &container, true, QString(), QString());
-    m_loop.exec();    // krazy:exclude=includes
+    m_loop.exec();    // krazy:exclude=crashy
 
     m_im->load(collectionDir.filePath(QLatin1String("2.jpg")), &container);
-    m_loop.exec();    // krazy:exclude=includes
+    m_loop.exec();    // krazy:exclude=crashy
 
     applyFilters4();
     m_im->saveAs(collectionDir.filePath(QLatin1String("4.jpg")), &container, true, QString(), QString());
-    m_loop.exec();    // krazy:exclude=includes
+    m_loop.exec();    // krazy:exclude=crashy
 
     CollectionScanner().completeScan();
 
@@ -176,8 +176,8 @@ void DImgHistoryGraphTest::testEditing()
     QList<IdPair> controlCloud;
     controlCloud << IdPair(one.id(),   orig.id()); //X
     controlCloud << IdPair(two.id(),   one.id());  //X
-    controlCloud << IdPair(three.id(), two.id());//X
-    controlCloud << IdPair(four.id(),  two.id()); //X
+    controlCloud << IdPair(three.id(), two.id());  //X
+    controlCloud << IdPair(four.id(),  two.id());  //X
     controlCloud << IdPair(three.id(), one.id());
     controlCloud << IdPair(four.id(),  one.id());
     controlCloud << IdPair(two.id(),   orig.id());
@@ -366,8 +366,8 @@ void DImgHistoryGraphTest::testGraph()
     pairs << IdPair(22,1);
     pairs << IdPair(23,1);
     pairs << IdPair(24,1);
-    pairs << IdPair(8,2); //X
-    pairs << IdPair(9,2); //X
+    pairs << IdPair(8,2);  //X
+    pairs << IdPair(9,2);  //X
     pairs << IdPair(10,2); //X
     //pairs << IdPair(19,2);
     //pairs << IdPair(20,2);

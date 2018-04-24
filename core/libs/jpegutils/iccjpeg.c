@@ -1,6 +1,6 @@
 /*
  * Little cms
- * Copyright (C) 1998-2004 Marti Maria
+ * Copyright (C) 1998-2004 Marti Maria <info at littlecms dot com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
