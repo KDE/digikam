@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TAGSREADWRITETEST_H
-#define TAGSREADWRITETEST_H
+#ifndef DIGIKAM_TAGS_READ_WRITE_TEST_H
+#define DIGIKAM_TAGS_READ_WRITE_TEST_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private:
     QStringList tagSet3;
 };
 
-#endif /* TAGSREADWRITETEST_H */
+#endif // DIGIKAM_TAGS_READ_WRITE_TEST_H

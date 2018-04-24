@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PROCESSOR_DLG_H
-#define PROCESSOR_DLG_H
+#ifndef DIGIKAM_PROCESSOR_DLG_H
+#define DIGIKAM_PROCESSOR_DLG_H
 
 // Qt includes
 
@@ -39,7 +39,7 @@ class ProcessorDlg : public QDialog
 
 public:
 
-    ProcessorDlg(const QList<QUrl>& list);
+    explicit ProcessorDlg(const QList<QUrl>& list);
     ~ProcessorDlg();
 
 private :
@@ -62,4 +62,4 @@ private:
     Private* const d;
 };
 
-#endif // PROCESSOR_DLG_H
+#endif // DIGIKAM_PROCESSOR_DLG_H

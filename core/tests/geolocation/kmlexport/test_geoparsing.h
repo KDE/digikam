@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEST_GEOPARSING_H
-#define TEST_GEOPARSING_H
+#ifndef DIGIKAM_TEST_GEOPARSING_H
+#define DIGIKAM_TEST_GEOPARSING_H
 
 // Qt includes
 
@@ -38,4 +38,4 @@ private Q_SLOTS:
     void testCustomParsing();
 };
 
-#endif // TEST_GEOPARSING_H
+#endif // DIGIKAM_TEST_GEOPARSING_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CALIBRATOR_H
-#define CALIBRATOR_H
+#ifndef DIGIKAM_CALIBRATOR_H
+#define DIGIKAM_CALIBRATOR_H
 
 // Qt includes
 
@@ -94,4 +94,4 @@ private:
     Q_DISABLE_COPY(Calibrator)
 };
 
-#endif // CALIBRATOR_H
+#endif // DIGIKAM_CALIBRATOR_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MY_IMAGE_ITEM_H
-#define MY_IMAGE_ITEM_H
+#ifndef DIGIKAM_GEO_MY_IMAGE_ITEM_H
+#define DIGIKAM_GEO_MY_IMAGE_ITEM_H
 
 // Qt includes
 
@@ -56,4 +56,4 @@ private:
     QUrl           imageUrl;
 };
 
-#endif // MY_IMAGE_ITEM_H
+#endif // DIGIKAM_GEO_MY_IMAGE_ITEM_H

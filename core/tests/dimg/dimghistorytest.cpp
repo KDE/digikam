@@ -56,12 +56,12 @@ void DImgHistoryTest::cleanupTestCase()
 
 void DImgHistoryTest::testXml()
 {
-    DImageHistory history = history1();
+    DImageHistory history  = history1();
 
-    QString xml = history.toXml();
+    QString xml            = history.toXml();
 
     DImageHistory history2 = DImageHistory::fromXml(xml);
-    QString xml2 = history2.toXml();
+    QString xml2           = history2.toXml();
 
     QCOMPARE(xml, xml2);
 
@@ -78,7 +78,7 @@ void DImgHistoryTest::testDImg()
     IOFileSettings container;
     m_im->load(imageFiles.first().filePath(), &container);
 
-    m_loop.exec();
+    m_loop.exec();   // krazy:exclude=crashy
 
     DImageHistory history = m_im->getImg()->getImageHistory();
     QCOMPARE(history.size(), 3);
@@ -88,7 +88,7 @@ void DImgHistoryTest::testDImg()
 
     m_im->saveAs(m_tempFile, &container, true, QString(), QString());
 
-    m_loop.exec();
+    m_loop.exec();   // krazy:exclude=crashy
 
     history = m_im->getImg()->getImageHistory();
     QCOMPARE(history.size(), 3);

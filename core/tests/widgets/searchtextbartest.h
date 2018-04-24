@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHTEXTBARTEST_H
-#define SEARCHTEXTBARTEST_H
+#ifndef DIGIKAM_SEARCH_TEXT_BAR_TEST_H
+#define DIGIKAM_SEARCH_TEXT_BAR_TEST_H
 
 // Qt includes
 
@@ -51,4 +51,4 @@ private:
     int                callCount;
 };
 
-#endif /* SEARCHTEXTBARTEST_H_ */
+#endif // DIGIKAM_SEARCH_TEXT_BAR_TEST_H

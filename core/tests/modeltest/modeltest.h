@@ -39,8 +39,8 @@
 **
 ****************************************************************************/
 
-#ifndef MODELTEST_H
-#define MODELTEST_H
+#ifndef DIGIKAM_MODEL_TEST_H
+#define DIGIKAM_MODEL_TEST_H
 
 #include <QObject>
 #include <QAbstractItemModel>
@@ -98,4 +98,4 @@ private:
   QList<QPersistentModelIndex> changing;
 };
 
-#endif // MODELTEST_H
+#endif // DIGIKAM_MODEL_TEST_H

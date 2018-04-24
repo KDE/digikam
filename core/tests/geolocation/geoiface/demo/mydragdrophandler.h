@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MY_DRAG_DROP_HANDLER_H
-#define MY_DRAG_DROP_HANDLER_H
+#ifndef DIGIKAM_GEO_MY_DRAG_DROP_HANDLER_H
+#define DIGIKAM_GEO_MY_DRAG_DROP_HANDLER_H
 
 // Qt includes
 
@@ -69,4 +69,4 @@ private:
     QAbstractItemModel* const model;
 };
 
-#endif // MY_DRAG_DROP_HANDLER_H
+#endif // DIGIKAM_GEO_MY_DRAG_DROP_HANDLER_H

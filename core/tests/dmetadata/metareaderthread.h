@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef META_READER_THREAD_H
-#define META_READER_THREAD_H
+#ifndef DIGIKAM_META_READER_THREAD_H
+#define DIGIKAM_META_READER_THREAD_H
 
 // Qt includes
 
@@ -41,7 +41,7 @@ class MetaReaderThread : public ActionThreadBase
 
 public:
 
-    MetaReaderThread(QObject* const parent);
+    explicit MetaReaderThread(QObject* const parent);
     ~MetaReaderThread() {};
 
     void readMetadata(const QList<QUrl>& list, const QString& direction);
@@ -55,4 +55,4 @@ Q_SIGNALS:
     void done();
 };
 
-#endif // META_READER_THREAD_H
+#endif // DIGIKAM_META_READER_THREAD_H

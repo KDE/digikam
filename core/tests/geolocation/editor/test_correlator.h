@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEST_CORRELATOR_H
-#define TEST_CORRELATOR_H
+#ifndef DIGIKAM_TEST_CORRELATOR_H
+#define DIGIKAM_TEST_CORRELATOR_H
 
 // Qt includes
 
@@ -40,4 +40,4 @@ private Q_SLOTS:
 
 };
 
-#endif /* TEST_CORRELATOR_H */
+#endif /* DIGIKAM_TEST_CORRELATOR_H */

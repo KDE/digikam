@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ADVANCEDRENAMETEST_H
-#define ADVANCEDRENAMETEST_H
+#ifndef DIGIKAM_ADVANCED_RENAME_TEST_H
+#define DIGIKAM_ADVANCED_RENAME_TEST_H
 
 // Qt includes
 
@@ -126,4 +126,4 @@ private Q_SLOTS:
     void testEmptyParseString();
 };
 
-#endif // ADVANCEDRENAMETEST_H
+#endif // DIGIKAM_ADVANCED_RENAME_TEST_H

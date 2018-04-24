@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEST_TILEINDEX_H
-#define TEST_TILEINDEX_H
+#ifndef DIGIKAM_TEST_TILEINDEX_H
+#define DIGIKAM_TEST_TILEINDEX_H
 
 // Qt includes
 
@@ -41,4 +41,4 @@ private Q_SLOTS:
     void testMovable();
 };
 
-#endif /* TEST_TILEINDEX_H */
+#endif /* DIGIKAM_TEST_TILEINDEX_H */

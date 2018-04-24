@@ -24,8 +24,8 @@
  * ============================================================ */
 
 
-#ifndef FANCYRECT_H
-#define FANCYRECT_H
+#ifndef DIGIKAM_DEMO_FANCY_RECT_H
+#define DIGIKAM_DEMO_FANCY_RECT_H
 
 // Qt includes
 
@@ -46,6 +46,7 @@ public:
 
     explicit FancyRect(QGraphicsItem* const parent = 0);
     explicit FancyRect(const QRectF& rect, QGraphicsItem* const parent = 0);
+
     FancyRect(qreal x, qreal y, qreal w, qreal h, QGraphicsItem* const parent = 0);
     FancyRect(QGraphicsRectItem* const other, QGraphicsItem* const parent);
 
@@ -54,4 +55,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* FANCYRECT_H */
+#endif // DIGIKAM_DEMO_FANCY_RECT_H

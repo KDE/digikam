@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMG_HISTORY_TEST_H
-#define DIMG_HISTORY_TEST_H
+#ifndef DIGIKAM_DIMG_HISTORY_TEST_H
+#define DIGIKAM_DIMG_HISTORY_TEST_H
 
 // Qt includes
 
@@ -52,4 +52,4 @@ private Q_SLOTS:
     void cleanupTestCase();
 };
 
-#endif // DIMG_HISTORY_TEST_H
+#endif // DIGIKAM_DIMG_HISTORY_TEST_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MAIN_WINDOW_H
-#define MAIN_WINDOW_H
+#ifndef DIGIKAM_GEO_MAIN_WINDOW_H
+#define DIGIKAM_GEO_MAIN_WINDOW_H
 
 // Qt includes
 
@@ -132,4 +132,4 @@ private:
     Private* const d;
 };
 
-#endif // MAIN_WINDOW_H
+#endif // DIGIKAM_GEO_MAIN_WINDOW_H

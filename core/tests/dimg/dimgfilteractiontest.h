@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMG_FILTER_ACTION_TEST_H
-#define DIMG_FILTER_ACTION_TEST_H
+#ifndef DIGIKAM_DIMG_FILTER_ACTION_TEST_H
+#define DIGIKAM_DIMG_FILTER_ACTION_TEST_H
 
 // Qt includes
 
@@ -56,4 +56,4 @@ private Q_SLOTS:
     void cleanupTestCase();
 };
 
-#endif // DIMG_FILTER_ACTION_TEST_H
+#endif // DIGIKAM_DIMG_FILTER_ACTION_TEST_H

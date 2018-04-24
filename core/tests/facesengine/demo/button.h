@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef BUTTON_H
-#define BUTTON_H
+#ifndef DIGIKAM_DEMO_BUTTON_H
+#define DIGIKAM_DEMO_BUTTON_H
 
 // Qt includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BUTTON_H
+#endif // DIGIKAM_DEMO_BUTTON_H

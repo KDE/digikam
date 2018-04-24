@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEST_GEOCOORDINATES_H
-#define TEST_GEOCOORDINATES_H
+#ifndef DIGIKAM_TEST_GEOCOORDINATES_H
+#define DIGIKAM_TEST_GEOCOORDINATES_H
 
 // Qt includes
 
@@ -39,4 +39,4 @@ private Q_SLOTS:
     void testMovable();
 };
 
-#endif /* TEST_GEOCOORDINATES_H */
+#endif /* DIGIKAM_TEST_GEOCOORDINATES_H */

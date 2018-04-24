@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MY_ACTION_THREAD_H
-#define MY_ACTION_THREAD_H
+#ifndef DIGIKAM_MY_ACTION_THREAD_H
+#define DIGIKAM_MY_ACTION_THREAD_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@ class MyActionThread : public ActionThreadBase
 
 public:
 
-    MyActionThread(QObject* const parent);
+    explicit MyActionThread(QObject* const parent);
     ~MyActionThread();
 
     void convertRAWtoPNG(const QList<QUrl>& list, const DRawDecoderSettings& settings, int priority=0);
@@ -61,4 +61,4 @@ private Q_SLOTS:
     void slotJobStarted();
 };
 
-#endif // MY_ACTION_THREAD_H
+#endif // DIGIKAM_MY_ACTION_THREAD_H

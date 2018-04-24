@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMG_HISTORY_GRAPH_TEST_H
-#define DIMG_HISTORY_GRAPH_TEST_H
+#ifndef DIGIKAM_DIMG_HISTORY_GRAPH_TEST_H
+#define DIGIKAM_DIMG_HISTORY_GRAPH_TEST_H
 
 // Qt includes
 
@@ -64,4 +64,4 @@ private:
     QList<qlonglong> ids;
 };
 
-#endif // DIMG_HISTORY_GRAPH_TEST_H
+#endif // DIGIKAM_DIMG_HISTORY_GRAPH_TEST_H

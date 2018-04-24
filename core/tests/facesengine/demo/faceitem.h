@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef FACE_ITEM_H
-#define FACE_ITEM_H
+#ifndef DIGIKAM_DEMO_FACE_ITEM_H
+#define DIGIKAM_DEMO_FACE_ITEM_H
 
 // Qt includes
 
@@ -96,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACE_ITEM_H
+#endif // DIGIKAM_DEMO_FACE_ITEM_H

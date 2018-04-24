@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef LOADSAVETHREADTEST_H
-#define LOADSAVETHREADTEST_H
+#ifndef DIGIKAM_LOAD_SAVE_THREAD_TEST_H
+#define DIGIKAM_LOAD_SAVE_THREAD_TEST_H
 
 // Qt includes
 
@@ -42,7 +42,7 @@ class LoadSaveThreadTest : public QApplication
 
 public:
 
-    LoadSaveThreadTest(int& argc, char** argv);
+    explicit LoadSaveThreadTest(int& argc, char** argv);
 
 private Q_SLOTS:
 
@@ -56,4 +56,4 @@ private:
     LoadSaveThread* m_thread;
 };
 
-#endif /* LOADSAVETHREADTEST_H */
+#endif // DIGIKAM_LOAD_SAVE_THREAD_TEST_H

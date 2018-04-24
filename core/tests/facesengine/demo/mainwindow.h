@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef DIGIKAM_DEMO_MAIN_WINDOW_H
+#define DIGIKAM_DEMO_MAIN_WINDOW_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ private:
     Private* const d;
 };
 
-#endif // MAINWINDOW_H
+#endif // DIGIKAM_DEMO_MAIN_WINDOW_H

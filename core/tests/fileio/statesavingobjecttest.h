@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef STATE_SAVING_OBJECT_TEST_H
-#define STATE_SAVING_OBJECT_TEST_H
+#ifndef DIGIKAM_STATE_SAVING_OBJECT_TEST_H
+#define DIGIKAM_STATE_SAVING_OBJECT_TEST_H
 
 // Qt includes
 
@@ -47,7 +47,6 @@ private Q_SLOTS:
     void testDirectChildrenSaving();
     void testRecursiveChildrenLoading();
     void testRecursiveChildrenSaving();
-
 };
 
 class StubStateSaverPriv;
@@ -79,4 +78,4 @@ private:
 
 };
 
-#endif // STATE_SAVING_OBJECT_TEST_H
+#endif // DIGIKAM_STATE_SAVING_OBJECT_TEST_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IOJOBSTEST_H
-#define IOJOBSTEST_H
+#ifndef DIGIKAM_IO_JOBS_TEST_H
+#define DIGIKAM_IO_JOBS_TEST_H
 
 // Qt includes
 
@@ -45,4 +45,4 @@ private Q_SLOTS:
 //    void rename();
 };
 
-#endif // IOJOBSTEST_H
+#endif // DIGIKAM_IO_JOBS_TEST_H

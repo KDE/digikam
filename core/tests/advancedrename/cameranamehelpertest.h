@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERANAMEHELPERTEST_H
-#define CAMERANAMEHELPERTEST_H
+#ifndef DIGIKAM_CAMERA_NAME_HELPER_TEST_H
+#define DIGIKAM_CAMERA_NAME_HELPER_TEST_H
 
 // Qt includes
 
@@ -47,4 +47,4 @@ private Q_SLOTS:
     void testCameraNameAutoDetected();
 };
 
-#endif /* CAMERANAMEHELPERTEST_H */
+#endif // DIGIKAM_CAMERA_NAME_HELPER_TEST_H

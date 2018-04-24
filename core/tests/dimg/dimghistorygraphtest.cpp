@@ -143,26 +143,26 @@ void DImgHistoryGraphTest::testEditing()
 
     IOFileSettings container;
     m_im->load(readOnlyImages.first(), &container);
-    m_loop.exec();
+    m_loop.exec();    // krazy:exclude=includes
 
     applyFilters1();
     m_im->saveAs(collectionDir.filePath(QLatin1String("1.jpg")), &container, true, QString(), QString());
-    m_loop.exec();
+    m_loop.exec();    // krazy:exclude=includes
 
     applyFilters2();
     m_im->saveAs(collectionDir.filePath(QLatin1String("2.jpg")), &container, true, QString(), QString());
-    m_loop.exec();
+    m_loop.exec();    // krazy:exclude=includes
 
     applyFilters3();
     m_im->saveAs(collectionDir.filePath(QLatin1String("3.jpg")), &container, true, QString(), QString());
-    m_loop.exec();
+    m_loop.exec();    // krazy:exclude=includes
 
     m_im->load(collectionDir.filePath(QLatin1String("2.jpg")), &container);
-    m_loop.exec();
+    m_loop.exec();    // krazy:exclude=includes
 
     applyFilters4();
     m_im->saveAs(collectionDir.filePath(QLatin1String("4.jpg")), &container, true, QString(), QString());
-    m_loop.exec();
+    m_loop.exec();    // krazy:exclude=includes
 
     CollectionScanner().completeScan();
 
@@ -174,15 +174,15 @@ void DImgHistoryGraphTest::testEditing()
 
     typedef QPair<qlonglong, qlonglong> IdPair;
     QList<IdPair> controlCloud;
-    controlCloud << IdPair(one.id(), orig.id()); //X
-    controlCloud << IdPair(two.id(), one.id());  //X
+    controlCloud << IdPair(one.id(),   orig.id()); //X
+    controlCloud << IdPair(two.id(),   one.id());  //X
     controlCloud << IdPair(three.id(), two.id());//X
-    controlCloud << IdPair(four.id(), two.id()); //X
+    controlCloud << IdPair(four.id(),  two.id()); //X
     controlCloud << IdPair(three.id(), one.id());
-    controlCloud << IdPair(four.id(), one.id());
-    controlCloud << IdPair(two.id(), orig.id());
+    controlCloud << IdPair(four.id(),  one.id());
+    controlCloud << IdPair(two.id(),   orig.id());
     controlCloud << IdPair(three.id(), orig.id());
-    controlCloud << IdPair(four.id(), orig.id());
+    controlCloud << IdPair(four.id(),  orig.id());
     std::sort(controlCloud.begin(), controlCloud.end());
 
     ImageHistoryGraph graph1 = ImageHistoryGraph::fromInfo(three);

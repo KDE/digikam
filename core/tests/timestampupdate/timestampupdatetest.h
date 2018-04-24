@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TIMESTAMPUPDATETEST_H
-#define TIMESTAMPUPDATETEST_H
+#ifndef DIGIKAM_TIME_STAMP_UPDATE_TEST_H
+#define DIGIKAM_TIME_STAMP_UPDATE_TEST_H
 
 // Qt includes
 
@@ -49,4 +49,4 @@ private:
     QList<qlonglong> ids;
 };
 
-#endif // TIMESTAMPUPDATETEST_H
+#endif // DIGIKAM_TIME_STAMP_UPDATE_TEST_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DATABASETAGSTEST_H
-#define DATABASETAGSTEST_H
+#ifndef DIGIKAM_DATABASE_TAGS_TEST_H
+#define DIGIKAM_DATABASE_TAGS_TEST_H
 
 // Qt includes
 
@@ -101,4 +101,4 @@ private:
     QList<int>           addedIds;
 };
 
-#endif /* DATABASETAGSTEST_H */
+#endif // DIGIKAM_DATABASE_TAGS_TEST_H

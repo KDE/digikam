@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMAGES_LIST_TEST_H
-#define DIMAGES_LIST_TEST_H
+#ifndef DIGIKAM_DIMAGES_LIST_TEST_H
+#define DIGIKAM_DIMAGES_LIST_TEST_H
 
 // Qt includes
 
@@ -84,4 +84,4 @@ private:
     Private* const d;
 };
 
-#endif // DIMAGES_LIST_TEST_H
+#endif // DIGIKAM_DIMAGES_LIST_TEST_H

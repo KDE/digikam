@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEST_TRACKS_H
-#define TEST_TRACKS_H
+#ifndef DIGIKAM_TEST_TRACKS_H
+#define DIGIKAM_TEST_TRACKS_H
 
 // Qt includes
 
@@ -44,4 +44,4 @@ private Q_SLOTS:
     void testFileLoading();
 };
 
-#endif // TEST_TRACKS_H
+#endif // DIGIKAM_TEST_TRACKS_H

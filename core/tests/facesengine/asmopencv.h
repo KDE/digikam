@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ASM_OPENCV_H
-#define ASM_OPENCV_H
+#ifndef DIGIKAM_ASM_OPENCV_H
+#define DIGIKAM_ASM_OPENCV_H
 
 // Qt includes
 
@@ -175,4 +175,4 @@ namespace ASM
    }
 }
 
-#endif // ASM_OPENCV_H
+#endif // DIGIKAM_ASM_OPENCV_H

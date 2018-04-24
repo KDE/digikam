@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEST_PRIMITIVES_H
-#define TEST_PRIMITIVES_H
+#ifndef DIGIKAM_TEST_PRIMITIVES_H
+#define DIGIKAM_TEST_PRIMITIVES_H
 
 // Qt includes
 
@@ -43,4 +43,4 @@ private Q_SLOTS:
     void testGroupStateComputer();
 };
 
-#endif /* TEST_PRIMITIVES_H */
+#endif /* DIGIKAM_TEST_PRIMITIVES_H */

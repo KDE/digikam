@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEST_LOOKUP_ALTITUDE_GEONAMES_H
-#define TEST_LOOKUP_ALTITUDE_GEONAMES_H
+#ifndef DIGIKAM_TEST_LOOKUP_ALTITUDE_GEONAMES_H
+#define DIGIKAM_TEST_LOOKUP_ALTITUDE_GEONAMES_H
 
 // Qt includes
 
@@ -38,4 +38,4 @@ private Q_SLOTS:
     void testSimpleLookup();
 };
 
-#endif /* TEST_LOOKUP_ALTITUDE_GEONAMES_H */
+#endif /* DIGIKAM_TEST_LOOKUP_ALTITUDE_GEONAMES_H */

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEST_GPSIMAGEITEM_H
-#define TEST_GPSIMAGEITEM_H
+#ifndef DIGIKAM_TEST_GPSIMAGEITEM_H
+#define DIGIKAM_TEST_GPSIMAGEITEM_H
 
 // Qt includes
 
@@ -42,4 +42,4 @@ private Q_SLOTS:
     void testBasicLoading();
 };
 
-#endif // TEST_GPSIMAGEITEM_H
+#endif // DIGIKAM_TEST_GPSIMAGEITEM_H

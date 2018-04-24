@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TEST_RGPARSING_H
-#define TEST_RGPARSING_H
+#ifndef DIGIKAM_TEST_RGPARSING_H
+#define DIGIKAM_TEST_RGPARSING_H
 
 // Qt includes
 
@@ -39,4 +39,4 @@ private Q_SLOTS:
     void testVerifyRG();
 };
 
-#endif /* TEST_RGPARSING_H */
+#endif /* DIGIKAM_TEST_RGPARSING_H */

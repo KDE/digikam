@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COMMENTREADWRITETEST_H
-#define COMMENTREADWRITETEST_H
+#ifndef DIGIKAM_COMMENT_READ_WRITE_TEST_H
+#define DIGIKAM_COMMENT_READ_WRITE_TEST_H
 
 // Qt includes
 
@@ -74,4 +74,4 @@ private:
     Digikam::CaptionsMap commentSet2;
 };
 
-#endif /* COMMENTREADWRITETEST_H */
+#endif // DIGIKAM_COMMENT_READ_WRITE_TEST_H

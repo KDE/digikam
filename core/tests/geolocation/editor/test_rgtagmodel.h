@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TEST_RGTAGMODEL_H
-#define TEST_RGTAGMODEL_H
+#ifndef DIGIKAM_TEST_RGTAGMODEL_H
+#define DIGIKAM_TEST_RGTAGMODEL_H
 
 // Qt includes
 
@@ -44,4 +44,4 @@ private Q_SLOTS:
     void testModelSpacerTags();
 };
 
-#endif /* TEST_RGTAGMODEL_H */
+#endif /* DIGIKAM_TEST_RGTAGMODEL_H */
