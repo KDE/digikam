@@ -1427,15 +1427,17 @@ void ShowFoto::slotEditMetadata()
 void ShowFoto::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
-    HTMLWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
-    w.exec();
+    QPointer<HTMLWizard> w = new HTMLWizard(this, new DMetaInfoIface(this, d->thumbBar->urls()));
+    w->exec();
+    delete w;
 #endif
 }
 
 void ShowFoto::slotCalendar()
 {
-    CalWizard w(d->thumbBar->urls(), this);
-    w.exec();
+    QPointer<CalWizard> w = new CalWizard(d->thumbBar->urls(), this);
+    w->exec();
+    delete w;
 }
 
 void ShowFoto::slotPanorama()
@@ -1457,27 +1459,31 @@ void ShowFoto::slotExpoBlending()
 void ShowFoto::slotVideoSlideshow()
 {
 #ifdef HAVE_MEDIAPLAYER
-    VidSlideWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
-    w.exec();
+    QPointer<VidSlideWizard> w = new VidSlideWizard(this, new DMetaInfoIface(this, d->thumbBar->urls()));
+    w->exec();
+    delete w;
 #endif
 }
 
 void ShowFoto::slotSendByMail()
 {
-    MailWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
-    w.exec();
+    QPointer<MailWizard> w = new MailWizard(this, new DMetaInfoIface(this, d->thumbBar->urls()));
+    w->exec();
+    delete w;
 }
 
 void ShowFoto::slotPrintCreator()
 {
-    AdvPrintWizard w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
-    w.exec();
+    QPointer<AdvPrintWizard> w = new AdvPrintWizard(this, new DMetaInfoIface(this, d->thumbBar->urls()));
+    w->exec();
+    delete w;
 }
 
 void ShowFoto::slotMediaServer()
 {
-    DMediaServerDlg w(this, new DMetaInfoIface(this, d->thumbBar->urls()));
-    w.exec();
+    QPointer<DMediaServerDlg> w = new DMediaServerDlg(this, new DMetaInfoIface(this, d->thumbBar->urls()));
+    w->exec();
+    delete w;
 }
 
 void ShowFoto::slotExportTool()
@@ -1486,83 +1492,97 @@ void ShowFoto::slotExportTool()
 
     if (tool == m_exportDropboxAction)
     {
-        DBWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<DBWindow> w = new DBWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportFacebookAction)
     {
-        FbWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<FbWindow> w = new FbWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportFlickrAction)
     {
-        FlickrWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<FlickrWindow> w = new FlickrWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportGdriveAction)
     {
-        GSWindow w(new DMetaInfoIface(this, d->thumbBar->urls()),
+        QPointer<GSWindow> w = new GSWindow(new DMetaInfoIface(this, d->thumbBar->urls()),
                    this, QLatin1String("googledriveexport"));
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportGphotoAction)
     {
-        GSWindow w(new DMetaInfoIface(this, d->thumbBar->urls()),
+        QPointer<GSWindow> w = new GSWindow(new DMetaInfoIface(this, d->thumbBar->urls()),
                    this, QLatin1String("googlephotoexport"));
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportImageshackAction)
     {
-        ImageShackWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<ImageShackWindow> w = new ImageShackWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportImgurAction)
     {
-        ImgurWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<ImgurWindow> w = new ImgurWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportPiwigoAction)
     {
-        PiwigoWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<PiwigoWindow> w = new PiwigoWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportRajceAction)
     {
-        RajceWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<RajceWindow> w = new RajceWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportSmugmugAction)
     {
-        SmugWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<SmugWindow> w = new SmugWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportYandexfotkiAction)
     {
-        YFWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<YFWindow> w = new YFWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
 
 #ifdef HAVE_MEDIAWIKI
     else if (tool == m_exportMediawikiAction)
     {
-        MediaWikiWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<MediaWikiWindow> w = new MediaWikiWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
 #endif
 
 #ifdef HAVE_VKONTAKTE
     else if (tool == m_exportVkontakteAction)
     {
-        VKWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<VKWindow> w = new VKWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
 #endif
 
 #ifdef HAVE_KIO
     else if (tool == m_exportFileTransferAction)
     {
-        FTExportWindow w(new DMetaInfoIface(this, d->thumbBar->urls()), this);
-        w.exec();
+        QPointer<FTExportWindow> w = new FTExportWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
     }
 #endif
 }
@@ -1573,23 +1593,26 @@ void ShowFoto::slotImportTool()
 
     if (tool == m_importGphotoAction)
     {
-        GSWindow w(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
+        QPointer<GSWindow> w = new GSWindow(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
                    this, QLatin1String("googlephotoimport"));
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_importSmugmugAction)
     {
-        SmugWindow w(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
+        QPointer<SmugWindow> w = new SmugWindow(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
                      this, true);
-        w.exec();
+        w->exec();
+        delete w;
     }
 
 #ifdef HAVE_KIO
     else if (tool == m_importFileTransferAction)
     {
-        FTImportWindow w(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
+        QPointer<FTImportWindow> w = new FTImportWindow(new DMetaInfoIface(this, QList<QUrl>() << d->thumbBar->currentUrl()),
                          this);
-        w.exec();
+        w->exec();
+        delete w;
     }
 #endif
 }
