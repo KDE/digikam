@@ -58,6 +58,7 @@ extern "C"
 #include <QTimer>
 #include <QComboBox>
 #include <QIcon>
+#include <QPointer>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
@@ -163,8 +164,8 @@ class AlbumManager::Private
 {
 public:
 
-    explicit Private() :
-        changed(false),
+    explicit Private()
+      : changed(false),
         hasPriorizedDbPath(false),
         dbFakeConnection(false),
         showOnlyAvailableAlbums(false),
@@ -462,7 +463,7 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
 
         if (digikam3DB.exists() || digikamVeryOldDB.exists())
         {
-            QMessageBox msgBox(QMessageBox::Warning,
+            QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
                                i18n("Database Folder"),
                                i18n("<p>You have chosen the folder \"%1\" as the place to store the database. "
                                     "A database file from an older version of digiKam is found in this folder.</p> "
@@ -474,13 +475,13 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
                                QMessageBox::Yes | QMessageBox::No,
                                qApp->activeWindow());
 
-            msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
-            msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
-            msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
-            msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
-            msgBox.setDefaultButton(QMessageBox::Yes);
+            msgBox->button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
+            msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
+            msgBox->button(QMessageBox::No)->setText(i18n("Create New Database"));
+            msgBox->button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
+            msgBox->setDefaultButton(QMessageBox::Yes);
 
-            int result = msgBox.exec();
+            int result = msgBox->exec();
 
             if (result == QMessageBox::Yes)
             {
@@ -496,6 +497,8 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
                 moveToBackup(digikam3DB);
                 moveToBackup(digikamVeryOldDB);
             }
+
+            delete msgBox;
         }
     }
 }
@@ -524,7 +527,7 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
 
                 if (params.isSQLite())
                 {
-                    QMessageBox msgBox(QMessageBox::Warning,
+                    QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
                                        i18n("New database folder"),
                                        i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
                                             "A database file from an older version of digiKam is found in this folder.</p> "
@@ -534,19 +537,20 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                                        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                                        qApp->activeWindow());
 
-                    msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
-                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
-                    msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
-                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
-                    msgBox.button(QMessageBox::Cancel)->setText(i18n("Copy Current Database"));
-                    msgBox.button(QMessageBox::Cancel)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
-                    msgBox.setDefaultButton(QMessageBox::Yes);
+                    msgBox->button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
+                    msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
+                    msgBox->button(QMessageBox::No)->setText(i18n("Create New Database"));
+                    msgBox->button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
+                    msgBox->button(QMessageBox::Cancel)->setText(i18n("Copy Current Database"));
+                    msgBox->button(QMessageBox::Cancel)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
+                    msgBox->setDefaultButton(QMessageBox::Yes);
 
-                    result = msgBox.exec();
+                    result = msgBox->exec();
+                    delete msgBox;
                 }
                 else
                 {
-                    QMessageBox msgBox(QMessageBox::Warning,
+                    QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
                                        i18n("New database folder"),
                                        i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
                                             "A database file from an older version of digiKam is found in this folder.</p> "
@@ -555,13 +559,14 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                                        QMessageBox::Yes | QMessageBox::No,
                                        qApp->activeWindow());
 
-                    msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
-                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
-                    msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
-                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
-                    msgBox.setDefaultButton(QMessageBox::Yes);
+                    msgBox->button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
+                    msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
+                    msgBox->button(QMessageBox::No)->setText(i18n("Create New Database"));
+                    msgBox->button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
+                    msgBox->setDefaultButton(QMessageBox::Yes);
 
-                    result = msgBox.exec();
+                    result = msgBox->exec();
+                    delete msgBox;
                 }
 
                 if (result == QMessageBox::Yes)
@@ -569,7 +574,7 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                     // CoreDbSchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
                     // Restore this situation.
                     KSharedConfigPtr config = KSharedConfig::openConfig();
-                    KConfigGroup group = config->group(QLatin1String("Album Settings"));
+                    KConfigGroup group      = config->group(QLatin1String("Album Settings"));
                     group.writeEntry(QLatin1String("Album Path"), newDir.path());
                     group.sync();
                 }
@@ -594,7 +599,7 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
 
                 if (params.isSQLite())
                 {
-                    QMessageBox msgBox(QMessageBox::Warning,
+                    QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
                                        i18n("New database folder"),
                                        i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
                                             "<p>Would you like to copy the current database to this location "
@@ -603,13 +608,14 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                                        QMessageBox::Yes | QMessageBox::No,
                                        qApp->activeWindow());
 
-                    msgBox.button(QMessageBox::Yes)->setText(i18n("Create New Database"));
-                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
-                    msgBox.button(QMessageBox::No)->setText(i18n("Copy Current Database"));
-                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
-                    msgBox.setDefaultButton(QMessageBox::Yes);
+                    msgBox->button(QMessageBox::Yes)->setText(i18n("Create New Database"));
+                    msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
+                    msgBox->button(QMessageBox::No)->setText(i18n("Copy Current Database"));
+                    msgBox->button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
+                    msgBox->setDefaultButton(QMessageBox::Yes);
 
-                    result = msgBox.exec();
+                    result = msgBox->exec();
+                    delete msgBox;
                 }
 
                 if (result == QMessageBox::No)
@@ -625,7 +631,7 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
 
             if (params.isSQLite())
             {
-                QMessageBox msgBox(QMessageBox::Warning,
+                QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
                                    i18n("New database folder"),
                                    i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
                                         "There is already a database file in this location.</p> "
@@ -635,13 +641,14 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                                    QMessageBox::Yes | QMessageBox::No,
                                    qApp->activeWindow());
 
-                msgBox.button(QMessageBox::Yes)->setText(i18n("Copy Current Database"));
-                msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
-                msgBox.button(QMessageBox::No)->setText(i18n("Use Existing File"));
-                msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
-                msgBox.setDefaultButton(QMessageBox::Yes);
+                msgBox->button(QMessageBox::Yes)->setText(i18n("Copy Current Database"));
+                msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
+                msgBox->button(QMessageBox::No)->setText(i18n("Use Existing File"));
+                msgBox->button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
+                msgBox->setDefaultButton(QMessageBox::Yes);
 
-                result = msgBox.exec();
+                result = msgBox->exec();
+                delete msgBox;
             }
 
             if (result == QMessageBox::Yes)
@@ -2612,15 +2619,17 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
 
     if (hasDirectChildAlbumWithTitle(newParent, album->title()))
     {
-        QMessageBox msgBox(QMessageBox::Warning,
+        QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
                            qApp->applicationName(),
                            i18n("Another tag with the same name already exists.\n"
                                 "Do you want to merge the tags?"),
                            QMessageBox::Yes | QMessageBox::No,
                            qApp->activeWindow());
 
-        if (msgBox.exec() == QMessageBox::Yes)
+        if (msgBox->exec() == QMessageBox::Yes)
         {
+            delete msgBox;
+
             if (album->m_firstChild)
             {
                 errMsg = i18n("Only a tag without children can be merged!");
@@ -2687,6 +2696,7 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
         }
         else
         {
+            delete msgBox;
             return true;
         }
     }
@@ -3671,7 +3681,7 @@ void AlbumManager::askUserForWriteChangedTAlbumToFiles(const QList<qlonglong>& i
 
     if (imageIds.count() > 100)
     {
-        QMessageBox msgBox(QMessageBox::Warning,
+        QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
                            qApp->applicationName(),
                            i18n("This operation can take a long time in the background.\n"
                                 "Do you want to write the metadata to %1 files now?",
@@ -3679,10 +3689,13 @@ void AlbumManager::askUserForWriteChangedTAlbumToFiles(const QList<qlonglong>& i
                            QMessageBox::Yes | QMessageBox::No,
                            qApp->activeWindow());
 
-        if (msgBox.exec() != QMessageBox::Yes)
+        if (msgBox->exec() != QMessageBox::Yes)
         {
+            delete msgBox;
             return;
         }
+        
+        delete msgBox;
     }
 
     ImageInfoList infos(imageIds);
