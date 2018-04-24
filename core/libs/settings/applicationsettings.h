@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef APPLICATION_SETTINGS_H
-#define APPLICATION_SETTINGS_H
+#ifndef DIGIKAM_APPLICATION_SETTINGS_H
+#define DIGIKAM_APPLICATION_SETTINGS_H
 
 // Qt includes
 
@@ -545,4 +545,4 @@ private:
 
 } // namespace Digikam
 
-#endif // APPLICATION_SETTINGS_H
+#endif // DIGIKAM_APPLICATION_SETTINGS_H

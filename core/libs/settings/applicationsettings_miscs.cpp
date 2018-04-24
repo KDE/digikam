@@ -32,6 +32,7 @@
 
 #include <QApplication>
 #include <QCheckBox>
+#include <QPointer>
 #include <QMessageBox>
 
 // KDE includes
@@ -360,16 +361,16 @@ bool ApplicationSettings::askGroupingOperateOnAll(ApplicationSettings::Operation
         return false;
     }
 
-    QMessageBox msgBox(qApp->activeWindow());
-    msgBox.setWindowTitle(qApp->applicationName());
-    msgBox.setStandardButtons(QMessageBox::No | QMessageBox::Yes);
-    msgBox.setText(QLatin1String("<p>") + ApplicationSettings::operationTypeTitle(type) +
-                   QLatin1String("</p>") + i18n("Do you want to do this operation on all group items?"));
+    QPointer<QMessageBox> msgBox = new QMessageBox(qApp->activeWindow());
+    msgBox->setWindowTitle(qApp->applicationName());
+    msgBox->setStandardButtons(QMessageBox::No | QMessageBox::Yes);
+    msgBox->setText(QLatin1String("<p>") + ApplicationSettings::operationTypeTitle(type) +
+                    QLatin1String("</p>") + i18n("Do you want to do this operation on all group items?"));
 
-    QCheckBox* const chkBox = new QCheckBox(i18n("Remember choice for this operation"), &msgBox);
-    msgBox.setCheckBox(chkBox);
+    QCheckBox* const chkBox = new QCheckBox(i18n("Remember choice for this operation"), msgBox);
+    msgBox->setCheckBox(chkBox);
 
-    if (msgBox.exec() == QMessageBox::No)
+    if (msgBox->exec() == QMessageBox::No)
     {
         if (chkBox->isChecked())
         {
@@ -383,6 +384,8 @@ bool ApplicationSettings::askGroupingOperateOnAll(ApplicationSettings::Operation
     {
         setGroupingOperateOnAll(type, ApplicationSettings::Yes);
     }
+
+    delete msgBox;
 
     return true;
 }
