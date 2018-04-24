@@ -23,7 +23,7 @@
  * ============================================================ */
 
 #ifndef SHOW_FOTO_KINETIC_SCROLLER_H
-#define SHOW_FOTO_KINETICS_CROLLER_H
+#define SHOW_FOTO_KINETIC_SCROLLER_H
 
 // Qt includes
 
