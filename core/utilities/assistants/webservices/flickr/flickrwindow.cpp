@@ -820,15 +820,15 @@ void FlickrWindow::slotListPhotoSetsFailed(const QString& msg)
 
 void FlickrWindow::slotAddPhotoFailed(const QString& msg)
 {
-    QMessageBox warn(QMessageBox::Warning,
+    QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
                      i18n("Warning"),
                      i18n("Failed to upload photo into %1. %2\nDo you want to continue?", d->serviceName, msg),
                      QMessageBox::Yes | QMessageBox::No);
 
-    (warn.button(QMessageBox::Yes))->setText(i18n("Continue"));
-    (warn.button(QMessageBox::No))->setText(i18n("Cancel"));
+    (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
+    (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
 
-    if (warn.exec() != QMessageBox::Yes)
+    if (warn->exec() != QMessageBox::Yes)
     {
         d->uploadQueue.clear();
         d->widget->progressBar()->reset();
@@ -842,6 +842,8 @@ void FlickrWindow::slotAddPhotoFailed(const QString& msg)
         d->widget->progressBar()->setValue(d->uploadCount);
         slotAddPhotoNext();
     }
+
+    delete warn;
 }
 
 /* Method called when a photo set has been successfully created on Flickr.
