@@ -210,7 +210,7 @@ void MovieDecoder::seek(int timeInSeconds)
     }
 }
 
-void MovieDecoder::decodeVideoFrame()
+bool MovieDecoder::decodeVideoFrame() const
 {
     bool frameFinished = false;
 
@@ -222,8 +222,9 @@ void MovieDecoder::decodeVideoFrame()
     if (!frameFinished)
     {
         qDebug(DIGIKAM_GENERAL_LOG) << "decodeVideoFrame() failed: frame not finished";
-        return;
     }
+
+    return frameFinished;
 }
 
 void MovieDecoder::getScaledVideoFrame(int scaledSize,

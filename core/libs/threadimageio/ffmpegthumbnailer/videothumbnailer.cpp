@@ -139,7 +139,11 @@ void VideoThumbnailer::generateThumbnail(const QString& videoFile,
 
     if (movieDecoder.getInitialized())
     {
-        movieDecoder.decodeVideoFrame(); // before seeking, a frame has to be decoded
+        // before seeking, a frame has to be decoded
+        if (!movieDecoder.decodeVideoFrame())
+        {
+            return;
+        }
 
         if ((!d->workAroundIssues) || (movieDecoder.getCodec() != QLatin1String("h264")))
         {

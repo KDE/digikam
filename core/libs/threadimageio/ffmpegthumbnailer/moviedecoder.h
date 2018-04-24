@@ -52,7 +52,7 @@ public:
     bool    getInitialized() const;
 
     void seek(int timeInSeconds);
-    void decodeVideoFrame();
+    bool decodeVideoFrame()  const;
     void getScaledVideoFrame(int scaledSize,
                              bool maintainAspectRatio,
                              VideoFrame& videoFrame);
