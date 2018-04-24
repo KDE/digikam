@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QPointer>
 #include <QString>
 #include <QWidget>
 #include <QEvent>
@@ -161,14 +162,14 @@ void PresentationAudioListItem::slotMediaStateChanged(QtAV::MediaStatus status)
 
 void PresentationAudioListItem::showErrorDialog(const QString& err)
 {
-    QMessageBox msgBox(QApplication::activeWindow());
-    msgBox.setWindowTitle(i18n("Error"));
-    msgBox.setText(i18n("%1 may not be playable.", d->url.fileName()));
-    msgBox.setDetailedText(err);
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.setIcon(QMessageBox::Critical);
-    msgBox.exec();
+    QPointer<QMessageBox> msgBox = new QMessageBox(QApplication::activeWindow());
+    msgBox->setWindowTitle(i18n("Error"));
+    msgBox->setText(i18n("%1 may not be playable.", d->url.fileName()));
+    msgBox->setDetailedText(err);
+    msgBox->setStandardButtons(QMessageBox::Ok);
+    msgBox->setDefaultButton(QMessageBox::Ok);
+    msgBox->setIcon(QMessageBox::Critical);
+    msgBox->exec();
 
     d->artist = d->url.fileName();
     d->title  = i18n("This file may not be playable.");
@@ -179,6 +180,7 @@ void PresentationAudioListItem::showErrorDialog(const QString& err)
     errorFont.setBold(true);
     errorFont.setItalic(true);
     setFont(errorFont);
+    delete msgBox;
 }
 
 // ------------------------------------------------------------------
