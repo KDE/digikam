@@ -67,7 +67,7 @@ public:
 
 public:
 
-    explicit Private()
+    explicit Private(QWidget* p)
     {
         apikey   = QLatin1String("mv2pk07ym9bx3r8");
         secret   = QLatin1String("f33sflc8jhiozqu");
@@ -80,6 +80,7 @@ public:
         netMngr  = 0;
         reply    = 0;
         o2       = 0;
+        parent   = p;
     }
 
 public:
@@ -106,9 +107,8 @@ public:
 };
 
 DBTalker::DBTalker(QWidget* const parent)
-    : d(new Private)
+    : d(new Private(parent))
 {
-    d->parent  = parent;
     d->netMngr = new QNetworkAccessManager(this);
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),

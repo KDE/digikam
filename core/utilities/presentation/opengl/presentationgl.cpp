@@ -132,7 +132,7 @@ public:
 
     int                               i;
     int                               dir;
-    float                             points[40][40][3];
+    float                             points[40][40][3] = {{{0.0}}};
 
     PresentationCtrlWidget*           slideCtrlWidget;
 

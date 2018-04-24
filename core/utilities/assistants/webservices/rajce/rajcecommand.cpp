@@ -112,6 +112,7 @@ public:
 
     explicit Private()
     {
+        commandType = Logout;
     }
 
     QString                name;

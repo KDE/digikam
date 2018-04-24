@@ -65,6 +65,7 @@ public:
         showFileType(false),
         showFileDim(true),
         showPhotoMake(true),
+        showPhotoLens(true),
         showPhotoFocal(true),
         showPhotoExpo(true),
         showPhotoFlash(false),
