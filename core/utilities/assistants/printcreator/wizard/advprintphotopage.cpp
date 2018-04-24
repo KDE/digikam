@@ -27,6 +27,7 @@
 #include <QFile>
 #include <QDir>
 #include <QIcon>
+#include <QPointer>
 #include <QPrinter>
 #include <QPrinterInfo>
 #include <QWidget>
@@ -862,43 +863,42 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
             s = NULL;
         }
 
-        AdvPrintCustomLayoutDlg custDlg(this);
-        custDlg.readSettings();
-        custDlg.exec();
-        custDlg.saveSettings();
+        QPointer<AdvPrintCustomLayoutDlg> custDlg = new AdvPrintCustomLayoutDlg(this);
+        custDlg->readSettings();
+        custDlg->exec();
+        custDlg->saveSettings();
 
         // get parameters from dialog
         size           = d->settings->pageSize;
         int scaleValue = 10; // 0.1 mm
 
         // convert to mm
-        if (custDlg.m_photoUnits->currentText() == i18n("inches"))
+        if (custDlg->m_photoUnits->currentText() == i18n("inches"))
         {
             size       /= 25.4;
             scaleValue  = 1000;
         }
-        else if (custDlg.m_photoUnits->currentText() == i18n("cm"))
+        else if (custDlg->m_photoUnits->currentText() == i18n("cm"))
         {
             size       /= 10;
             scaleValue  = 100;
         }
 
         sizeManaged = size * scaleValue;
-
-        s = new AdvPrintPhotoSize;
+        s           = new AdvPrintPhotoSize;
         TemplateIcon iconpreview(80, sizeManaged.toSize());
         iconpreview.begin();
 
-        if (custDlg.m_photoGridCheck->isChecked())
+        if (custDlg->m_photoGridCheck->isChecked())
         {
             // custom photo grid
-            int rows         = custDlg.m_gridRows->value();
-            int columns      = custDlg.m_gridColumns->value();
+            int rows         = custDlg->m_gridRows->value();
+            int columns      = custDlg->m_gridColumns->value();
 
             s->m_layouts.append(new QRect(0, 0,
                                           (int)sizeManaged.width(),
                                           (int)sizeManaged.height()));
-            s->m_autoRotate  = custDlg.m_autorotate->isChecked();
+            s->m_autoRotate  = custDlg->m_autorotate->isChecked();
             s->m_label       = item->text();
             s->m_dpi         = 0;
 
@@ -907,10 +907,10 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
             createPhotoGrid(s, pageWidth, pageHeight,
                             rows, columns, &iconpreview);
         }
-        else if (custDlg.m_fitAsManyCheck->isChecked())
+        else if (custDlg->m_fitAsManyCheck->isChecked())
         {
-            int width  = custDlg.m_photoWidth->value();
-            int height = custDlg.m_photoHeight->value();
+            int width  = custDlg->m_photoWidth->value();
+            int height = custDlg->m_photoHeight->value();
 
             //photo size must be less than page size
             static const float round_value = 0.01F;
@@ -929,8 +929,8 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
             {
                 // fit as many photos of given size as possible
                 s->m_layouts.append(new QRect(0, 0, (int)sizeManaged.width(),
-                                            (int)sizeManaged.height()));
-                s->m_autoRotate  = custDlg.m_autorotate->isChecked();
+                                              (int)sizeManaged.height()));
+                s->m_autoRotate  = custDlg->m_autorotate->isChecked();
                 s->m_label       = item->text();
                 s->m_dpi         = 0;
                 int nColumns     = int(size.width()  / width);
@@ -1011,6 +1011,8 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
             s->m_icon = iconpreview.getIcon();
             d->settings->photosizes.append(s);
         }
+
+        delete custDlg;
     }
     else
     {

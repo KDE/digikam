@@ -30,6 +30,7 @@
 #include <QDir>
 #include <QFile>
 #include <QProcess>
+#include <QPointer>
 #include <QStringList>
 #include <QTextCodec>
 #include <QTextStream>
@@ -301,16 +302,16 @@ bool MailProcess::showFailedResizedImages() const
             list.append((*it).fileName());
         }
 
-        QMessageBox mbox(QApplication::activeWindow());
-        mbox.setIcon(QMessageBox::Warning);
-        mbox.setWindowTitle(i18n("Processing Failed"));
-        mbox.setText(i18n("Some images cannot be resized.\n"
-                          "Do you want them to be added as attachments without resizing?"));
-        mbox.setStandardButtons(QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel));
-        mbox.setDefaultButton(QMessageBox::No);
-        mbox.setDetailedText(list.join(QLatin1String("\n")));
+        QPointer<QMessageBox> mbox = new QMessageBox(QApplication::activeWindow());
+        mbox->setIcon(QMessageBox::Warning);
+        mbox->setWindowTitle(i18n("Processing Failed"));
+        mbox->setText(i18n("Some images cannot be resized.\n"
+                           "Do you want them to be added as attachments without resizing?"));
+        mbox->setStandardButtons(QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel));
+        mbox->setDefaultButton(QMessageBox::No);
+        mbox->setDetailedText(list.join(QLatin1String("\n")));
 
-        int valRet = mbox.exec();
+        int valRet = mbox->exec();
 
         switch (valRet)
         {
@@ -338,6 +339,8 @@ bool MailProcess::showFailedResizedImages() const
                 break;
             }
         }
+
+        delete mbox;
     }
 
     return true;
