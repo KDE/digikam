@@ -82,7 +82,8 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         }
 
         QMenu popMenu(view);
-        QAction* const gotoAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("go-jump")), i18n("&Move Here"));
+        QAction* const gotoAction  = popMenu.addAction(QIcon::fromTheme(QLatin1String("go-jump")), i18n("&Move Here"));
+        QAction* const mergeAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("merge")),   i18n("M&erge Here"));
         popMenu.addSeparator();
         popMenu.addAction(QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
@@ -120,6 +121,25 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                 QString errMsg;
 
                 if (!AlbumManager::instance()->moveTAlbum(talbum, newParentTag, errMsg))
+                {
+                    QMessageBox::critical(view, qApp->applicationName(), errMsg);
+                }
+
+                if (view && !view->isVisible())
+                {
+                    view->setVisible(true);
+                }
+            }
+            else if (choice == mergeAction)
+            {
+                if (!destAlbum)
+                {
+                    return false;
+                }
+
+                QString errMsg;
+
+                if (!AlbumManager::instance()->mergeTAlbum(talbum, destAlbum, true, errMsg))
                 {
                     QMessageBox::critical(view, qApp->applicationName(), errMsg);
                 }

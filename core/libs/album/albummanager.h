@@ -413,6 +413,19 @@ public:
     bool moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg);
 
     /**
+     * Merge a TAlbum to a TAlbum.
+     * This updates the image tags in the database
+     * @return true if the operation succeeds, false otherwise
+     * @param album the Album which should be merged
+     * @param destAlbum the Album to which album should be merged
+     * @param dialog show dialog to ask the user if he wants to merge
+     * @param errMsg this will contain the error message describing why the
+     * operation failed
+     */
+
+    bool mergeTAlbum(TAlbum* album, TAlbum* destAlbum, bool dialog, QString& errMsg);
+
+    /**
      * Update the icon for a TAlbum.
      * @return true if the operation succeeds, false otherwise
      * @param album the album for which icon should be changed
