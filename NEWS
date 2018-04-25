@@ -18,6 +18,8 @@ Search       : Add video support to find files based on properties registered on
 General      : Add QWebEngine support.
 General      : Update internal Libraw to last 0.18.9.
 
+Tags         : Add possibility to merge tags by drag & drop
+
 *****************************************************************************************************
 BUGFIXES:
 
