@@ -93,6 +93,7 @@ public:
          * opened yet or because of an error condition.
          */
         Unavailable,
+
         /**
          * The database is open. It has not been verified that
          * the schema is up to date.
@@ -101,6 +102,7 @@ public:
          * by a master process.
          */
         Open,
+
         /**
          * The database is open, and it has been verified that the schema is up to
          * date, or the schema has been updated.
@@ -115,16 +117,18 @@ public:
         AbortQueries
     };
 
-    enum DbType{
+    enum DbType
+    {
         SQLite,
         MySQL
     };
 
 public:
 
-    /** Creates a database backend. The backend name is an arbitrary string that
-     *  shall be unique for this backend object.
-     *  It will be used to create unique connection names per backend and thread.
+    /**
+     * Creates a database backend. The backend name is an arbitrary string that
+     * shall be unique for this backend object.
+     * It will be used to create unique connection names per backend and thread.
      */
     explicit BdEngineBackend(const QString& backendName, DbEngineLocking* const locking);
     BdEngineBackend(const QString& backendName, DbEngineLocking* const locking, BdEngineBackendPrivate& dd);
@@ -423,6 +427,7 @@ public:
      * Rollback the current database transaction
      */
     void rollbackTransaction();
+
     /**
      * Returns if the database is in a different thread in a transaction.
      * Note that a transaction does not require holding CoreDbAccess.

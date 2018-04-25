@@ -153,7 +153,9 @@ public:
     {
     public:
 
-        explicit AbstractWaitingUnlocker(BdEngineBackendPrivate* const d, QMutex* const mutex, QWaitCondition* const condVar);
+        explicit AbstractWaitingUnlocker(BdEngineBackendPrivate* const d,
+                                         QMutex* const mutex,
+                                         QWaitCondition* const condVar);
         ~AbstractWaitingUnlocker();
 
         bool wait(unsigned long time = ULONG_MAX);
@@ -183,7 +185,7 @@ public:
         explicit BusyWaiter(BdEngineBackendPrivate* const d);
     };
 
-public :
+public:
 
     BdEngineBackend* const q;
 };

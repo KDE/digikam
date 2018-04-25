@@ -277,7 +277,8 @@ bool BdEngineBackendPrivate::reconnectOnError() const
 bool BdEngineBackendPrivate::isSQLiteLockError(const DbEngineSqlQuery& query) const
 {
     return parameters.isSQLite() &&
-           (query.lastError().number() == 5 /*SQLITE_BUSY*/ || query.lastError().number() == 6/*SQLITE_LOCKED*/);
+           (query.lastError().number() == 5 /*SQLITE_BUSY*/  ||
+            query.lastError().number() == 6 /*SQLITE_LOCKED*/);
 }
 
 bool BdEngineBackendPrivate::isSQLiteLockTransactionError(const QSqlError& lastError) const
@@ -498,7 +499,7 @@ BdEngineBackendPrivate::AbstractUnlocker::AbstractUnlocker(BdEngineBackendPrivat
     d->lock->lockCount = 0;
 
     // unlock
-    for (int i=0; i<count; ++i)
+    for (int i = 0 ; i < count ; ++i)
     {
         d->lock->mutex.unlock();
     }
@@ -840,7 +841,7 @@ QList<QVariant> BdEngineBackend::readToList(DbEngineSqlQuery& query)
 
     while (query.next())
     {
-        for (int i=0; i<count; ++i)
+        for (int i = 0 ; i < count ; ++i)
         {
             list << query.value(i);
         }
@@ -994,7 +995,8 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql, const QVariant& 
 }
 
 DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql,
-                                        const QVariant& boundValue1, const QVariant& boundValue2)
+                                            const QVariant& boundValue1,
+                                            const QVariant& boundValue2)
 {
     DbEngineSqlQuery query = prepareQuery(sql);
     execQuery(query, boundValue1, boundValue2);
@@ -1002,7 +1004,9 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql,
 }
 
 DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql,
-                                        const QVariant& boundValue1, const QVariant& boundValue2, const QVariant& boundValue3)
+                                            const QVariant& boundValue1,
+                                            const QVariant& boundValue2,
+                                            const QVariant& boundValue3)
 {
     DbEngineSqlQuery query = prepareQuery(sql);
     execQuery(query, boundValue1, boundValue2, boundValue3);
@@ -1010,15 +1014,18 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql,
 }
 
 DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql,
-                                        const QVariant& boundValue1, const QVariant& boundValue2,
-                                        const QVariant& boundValue3, const QVariant& boundValue4)
+                                            const QVariant& boundValue1,
+                                            const QVariant& boundValue2,
+                                            const QVariant& boundValue3,
+                                            const QVariant& boundValue4)
 {
     DbEngineSqlQuery query = prepareQuery(sql);
     execQuery(query, boundValue1, boundValue2, boundValue3, boundValue4);
     return query;
 }
 
-DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql, const QList<QVariant>& boundValues)
+DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql,
+                                            const QList<QVariant>& boundValues)
 {
     DbEngineSqlQuery query = prepareQuery(sql);
     execQuery(query, boundValues);
@@ -1044,7 +1051,8 @@ void BdEngineBackend::execQuery(DbEngineSqlQuery& query, const QVariant& boundVa
 }
 
 void BdEngineBackend::execQuery(DbEngineSqlQuery& query,
-                                    const QVariant& boundValue1, const QVariant& boundValue2)
+                                const QVariant& boundValue1,
+                                const QVariant& boundValue2)
 {
     query.bindValue(0, boundValue1);
     query.bindValue(1, boundValue2);
@@ -1052,8 +1060,9 @@ void BdEngineBackend::execQuery(DbEngineSqlQuery& query,
 }
 
 void BdEngineBackend::execQuery(DbEngineSqlQuery& query,
-                                    const QVariant& boundValue1, const QVariant& boundValue2,
-                                    const QVariant& boundValue3)
+                                const QVariant& boundValue1,
+                                const QVariant& boundValue2,
+                                const QVariant& boundValue3)
 {
     query.bindValue(0, boundValue1);
     query.bindValue(1, boundValue2);
@@ -1062,8 +1071,10 @@ void BdEngineBackend::execQuery(DbEngineSqlQuery& query,
 }
 
 void BdEngineBackend::execQuery(DbEngineSqlQuery& query,
-                                    const QVariant& boundValue1, const QVariant& boundValue2,
-                                    const QVariant& boundValue3, const QVariant& boundValue4)
+                                const QVariant& boundValue1,
+                                const QVariant& boundValue2,
+                                const QVariant& boundValue3,
+                                const QVariant& boundValue4)
 {
     query.bindValue(0, boundValue1);
     query.bindValue(1, boundValue2);
@@ -1072,9 +1083,10 @@ void BdEngineBackend::execQuery(DbEngineSqlQuery& query,
     exec(query);
 }
 
-void BdEngineBackend::execQuery(DbEngineSqlQuery& query, const QList<QVariant>& boundValues)
+void BdEngineBackend::execQuery(DbEngineSqlQuery& query,
+                                const QList<QVariant>& boundValues)
 {
-    for (int i=0; i<boundValues.size(); ++i)
+    for (int i = 0 ; i < boundValues.size() ; ++i)
     {
         query.bindValue(i, boundValues.at(i));
     }
@@ -1213,7 +1225,7 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql, const QMap<QStri
             }
 
             preparedString = preparedString.replace(pos, identifierRegExp.matchedLength(), replaceStr);
-            pos=0; // reset pos
+            pos            = 0; // reset pos
         }
     }
 
@@ -1221,7 +1233,7 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql, const QMap<QStri
 
     DbEngineSqlQuery query = prepareQuery(preparedString);
 
-    for (int i=0; i < valuesToBind.size(); ++i)
+    for (int i = 0 ; i < valuesToBind.size() ; ++i)
     {
         query.bindValue(i, valuesToBind.at(i));
     }
@@ -1230,13 +1242,15 @@ DbEngineSqlQuery BdEngineBackend::execQuery(const QString& sql, const QMap<QStri
     return query;
 }
 
-BdEngineBackend::QueryState BdEngineBackend::execUpsertDBAction(const DbEngineAction& action, const QVariant& id,
-                                                                        const QStringList fieldNames, const QList<QVariant>& values)
+BdEngineBackend::QueryState BdEngineBackend::execUpsertDBAction(const DbEngineAction& action,
+                                                                const QVariant& id,
+                                                                const QStringList fieldNames,
+                                                                const QList<QVariant>& values)
 {
     QMap<QString, QVariant> parameters;
     QMap<QString, QVariant> fieldValueMap;
 
-    for (int i = 0; i < fieldNames.size(); ++i)
+    for (int i = 0 ; i < fieldNames.size() ; ++i)
     {
         fieldValueMap.insert(fieldNames.at(i), values.at(i));
     }
@@ -1253,8 +1267,10 @@ BdEngineBackend::QueryState BdEngineBackend::execUpsertDBAction(const DbEngineAc
     return execDBAction(action, parameters);
 }
 
-BdEngineBackend::QueryState BdEngineBackend::execUpsertDBAction(const QString& action, const QVariant& id,
-                                                                        const QStringList fieldNames, const QList<QVariant>& values)
+BdEngineBackend::QueryState BdEngineBackend::execUpsertDBAction(const QString& action,
+                                                                const QVariant& id,
+                                                                const QStringList fieldNames,
+                                                                const QList<QVariant>& values)
 {
     return execUpsertDBAction(getDBAction(action), id, fieldNames, values);
 }
@@ -1355,7 +1371,7 @@ BdEngineBackend::QueryState BdEngineBackend::execDirectSql(const QString& sql)
     }
 
     DbEngineSqlQuery query = getQuery();
-    int retries    = 0;
+    int retries            = 0;
 
     forever
     {
@@ -1379,7 +1395,9 @@ BdEngineBackend::QueryState BdEngineBackend::execDirectSql(const QString& sql)
     return BdEngineBackend::NoErrors;
 }
 
-BdEngineBackend::QueryState BdEngineBackend::execDirectSqlWithResult(const QString& sql, QList<QVariant>* const values, QVariant* const lastInsertId)
+BdEngineBackend::QueryState BdEngineBackend::execDirectSqlWithResult(const QString& sql,
+                                                                     QList<QVariant>* const values,
+                                                                     QVariant* const lastInsertId)
 {
     Q_D(BdEngineBackend);
 
@@ -1389,7 +1407,7 @@ BdEngineBackend::QueryState BdEngineBackend::execDirectSqlWithResult(const QStri
     }
 
     DbEngineSqlQuery query = getQuery();
-    int retries    = 0;
+    int retries            = 0;
 
     forever
     {
@@ -1427,9 +1445,15 @@ bool BdEngineBackend::exec(DbEngineSqlQuery& query)
 
     forever
     {
-//        qCDebug(DIGIKAM_DBENGINE_LOG) << "Trying to query [" << query.lastQuery() << "] values [" << query.boundValues() << "]";
+/*
+        qCDebug(DIGIKAM_DBENGINE_LOG) << "Trying to query ["
+                                      << query.lastQuery()
+                                      << "] values ["
+                                      << query.boundValues()
+                                      << "]";
+*/
 
-        if (query.exec())
+        if (query.exec())   // krazy:exclude=crashy
         {
             break;
         }
@@ -1522,7 +1546,7 @@ DbEngineSqlQuery BdEngineBackend::copyQuery(const DbEngineSqlQuery& old)
     // only for positional binding
     QList<QVariant> boundValues = old.boundValues().values();
 
-    foreach(const QVariant& value, boundValues)
+    foreach (const QVariant& value, boundValues)
     {
 //        qCDebug(DIGIKAM_DBENGINE_LOG) << "Bind value to query ["<<value<<"]";
 
@@ -1539,6 +1563,7 @@ DbEngineSqlQuery BdEngineBackend::getQuery()
 
     DbEngineSqlQuery query(db);
     query.setForwardOnly(true);
+
     return query;
 }
 
