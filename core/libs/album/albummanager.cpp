@@ -1740,8 +1740,8 @@ void AlbumManager::personItemsCount()
     connect(d->personListJob, SIGNAL(finished()),
             this, SLOT(slotPeopleJobResult()));
 
-    connect(d->personListJob, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),
-            this, SLOT(slotPeopleJobData(QMap<QString,QMap<int,int> >)));
+    connect(d->personListJob, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),    // krazy:exclude=normalize
+            this, SLOT(slotPeopleJobData(QMap<QString,QMap<int,int> >)));               // krazy:exclude=normalize
 }
 
 void AlbumManager::scanSAlbums()

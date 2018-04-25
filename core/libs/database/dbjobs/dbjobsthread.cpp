@@ -123,8 +123,8 @@ void TagsDBJobsThread::tagsListing(const TagsDBJobInfo& info)
     }
     else if (info.isFaceFoldersJob())
     {
-        connect(j, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),
-                this, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)));
+        connect(j, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),       // krazy:exclude=normalize
+                this, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)));   // krazy:exclude=normalize
     }
     else
     {
