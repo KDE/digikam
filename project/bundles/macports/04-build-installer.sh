@@ -99,7 +99,7 @@ Applications/KF5 \
 OTHER_APPS="\
 Applications/KF5/digikam.app/Contents/MacOS/digikam \
 Applications/KF5/showfoto.app/Contents/MacOS/showfoto \
-lib/plugins/*.so \
+lib/plugins/imageformats/*.so \
 lib/sane/*.so \
 bin/kbuildsycoca5 \
 libexec/qt5/plugins/imageformats/*.dylib \
