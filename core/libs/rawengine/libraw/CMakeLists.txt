@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -160,8 +160,8 @@ endif()
 
 # Registration of Libraw configuration to a dedicated header
 
-MACRO_BOOL_TO_01(JPEG8_FOUND                      LIBRAW_USE_DNGLOSSYCODEC)
-MACRO_BOOL_TO_01(OPENMP_FOUND                     LIBRAW_USE_OPENMP)
-MACRO_BOOL_TO_01(Jasper_FOUND                     LIBRAW_USE_REDCINECODEC)
+MACRO_BOOL_TO_01(JPEG8_FOUND  LIBRAW_USE_DNGLOSSYCODEC)
+MACRO_BOOL_TO_01(OPENMP_FOUND LIBRAW_USE_OPENMP)
+MACRO_BOOL_TO_01(Jasper_FOUND LIBRAW_USE_REDCINECODEC)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libraw_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw/libraw_config.h)

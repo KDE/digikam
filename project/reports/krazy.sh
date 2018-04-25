@@ -6,7 +6,7 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-krazy2all --check crashy \
+krazy2all --check normalize \
           --export textedit \
           --title digiKam \
           --no-brief \
