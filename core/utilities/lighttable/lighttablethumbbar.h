@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef LIGHTTABLETHUMBBAR_H
-#define LIGHTTABLETHUMBBAR_H
+#ifndef DIGIKAM_LIGHT_TABLE_THUMB_BAR_H
+#define DIGIKAM_LIGHT_TABLE_THUMB_BAR_H
 
 // Local includes
 
@@ -100,4 +100,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* LIGHTTABLETHUMBBAR_H */
+#endif // DIGIKAM_LIGHT_TABLE_THUMB_BAR_H

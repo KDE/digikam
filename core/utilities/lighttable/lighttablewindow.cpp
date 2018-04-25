@@ -1871,15 +1871,17 @@ void LightTableWindow::slotImportedImagefromScanner(const QUrl& url)
 void LightTableWindow::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
-    HTMLWizard w(this, new DBInfoIface(this, d->thumbView->allUrls()));
-    w.exec();
+    QPointer<HTMLWizard> w = new HTMLWizard(this, new DBInfoIface(this, d->thumbView->allUrls()));
+    w->exec();
+    delete w;
 #endif
 }
 
 void LightTableWindow::slotCalendar()
 {
-    CalWizard w(d->thumbView->allUrls(), this);
-    w.exec();
+    QPointer<CalWizard> w = new CalWizard(d->thumbView->allUrls(), this);
+    w->exec();
+    delete w;
 }
 
 void LightTableWindow::slotPanorama()
@@ -1901,21 +1903,24 @@ void LightTableWindow::slotExpoBlending()
 void LightTableWindow::slotVideoSlideshow()
 {
 #ifdef HAVE_MEDIAPLAYER
-    VidSlideWizard w(this, new DBInfoIface(this, d->thumbView->allUrls()));
-    w.exec();
+    QPointer<VidSlideWizard> w = new VidSlideWizard(this, new DBInfoIface(this, d->thumbView->allUrls()));
+    w->exec();
+    delete w;
 #endif
 }
 
 void LightTableWindow::slotSendByMail()
 {
-    MailWizard w(this, new DBInfoIface(this, d->thumbView->allUrls()));
-    w.exec();
+    QPointer<MailWizard> w = new MailWizard(this, new DBInfoIface(this, d->thumbView->allUrls()));
+    w->exec();
+    delete w;
 }
 
 void LightTableWindow::slotPrintCreator()
 {
-    AdvPrintWizard w(this, new DBInfoIface(this, d->thumbView->allUrls()));
-    w.exec();
+    QPointer<AdvPrintWizard> w = new AdvPrintWizard(this, new DBInfoIface(this, d->thumbView->allUrls()));
+    w->exec();
+    delete w;
 }
 
 void LightTableWindow::slotMediaServer()
@@ -1925,8 +1930,9 @@ void LightTableWindow::slotMediaServer()
     // The goal is not mix these settings with other export tools.
     iface->setObjectName(QLatin1String("SetupMediaServerIface"));
 
-    DMediaServerDlg w(this, iface);
-    w.exec();
+    QPointer<DMediaServerDlg> w = new DMediaServerDlg(this, iface);
+    w->exec();
+    delete w;
 }
 
 void LightTableWindow::slotExportTool()
@@ -1935,96 +1941,110 @@ void LightTableWindow::slotExportTool()
 
     if (tool == m_exportDropboxAction)
     {
-        DBWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<DBWindow> w = new DBWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                    ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportFacebookAction)
     {
-        FbWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<FbWindow> w = new FbWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                    ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportFlickrAction)
     {
-        FlickrWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<FlickrWindow> w = new FlickrWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                        ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportGdriveAction)
     {
-        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+        QPointer<GSWindow> w = new GSWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
                    this, QLatin1String("googledriveexport"));
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportGphotoAction)
     {
-        GSWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<GSWindow> w = new GSWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                    ApplicationSettings::ImportExport),
                    this, QLatin1String("googlephotoexport"));
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportImageshackAction)
     {
-        ImageShackWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<ImageShackWindow> w = new ImageShackWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                            ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportImgurAction)
     {
-        ImgurWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<ImgurWindow> w = new ImgurWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                       ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportPiwigoAction)
     {
-        PiwigoWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<PiwigoWindow> w = new PiwigoWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                        ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportRajceAction)
     {
-        RajceWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<RajceWindow> w = new RajceWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                       ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportSmugmugAction)
     {
-        SmugWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<SmugWindow> w = new SmugWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                      ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_exportYandexfotkiAction)
     {
-        YFWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<YFWindow> w = new YFWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                    ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
 
 #ifdef HAVE_MEDIAWIKI
     else if (tool == m_exportMediawikiAction)
     {
-        MediaWikiWindow w(new DBInfoIface(this, d->thumbView->allUrls(), 
+        QPointer<MediaWikiWindow> w = new MediaWikiWindow(new DBInfoIface(this, d->thumbView->allUrls(), 
                                           ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
 #endif
 
 #ifdef HAVE_VKONTAKTE
     else if (tool == m_exportVkontakteAction)
     {
-        VKWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<VKWindow> w = new VKWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                    ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
 #endif
 
 #ifdef HAVE_KIO
     else if (tool == m_exportFileTransferAction)
     {
-        FTExportWindow w(new DBInfoIface(this, d->thumbView->allUrls(),
+        QPointer<FTExportWindow> w = new FTExportWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                          ApplicationSettings::ImportExport), this);
-        w.exec();
+        w->exec();
+        delete w;
     }
 #endif
 }
@@ -2035,22 +2055,25 @@ void LightTableWindow::slotImportTool()
 
     if (tool == m_importGphotoAction)
     {
-        GSWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+        QPointer<GSWindow> w = new GSWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
                    this, QLatin1String("googlephotoimport"));
-        w.exec();
+        w->exec();
+        delete w;
     }
     else if (tool == m_importSmugmugAction)
     {
-        SmugWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
+        QPointer<SmugWindow> w = new SmugWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
                      this, true);
-        w.exec();
+        w->exec();
+        delete w;
     }
 
 #ifdef HAVE_KIO
     else if (tool == m_importFileTransferAction)
     {
-        FTImportWindow w(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
-        w.exec();
+        QPointer<FTImportWindow> w = new FTImportWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
+        w->exec();
+        delete w;
     }
 #endif
 }

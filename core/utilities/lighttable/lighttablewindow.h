@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef LIGHT_TABLE_WINDOW_H
-#define LIGHT_TABLE_WINDOW_H
+#ifndef DIGIKAM_LIGHT_TABLE_WINDOW_H
+#define DIGIKAM_LIGHT_TABLE_WINDOW_H
 
 // Qt includes
 
@@ -198,4 +198,4 @@ private:
 
 } // namespace Digikam
 
-#endif // LIGHT_TABLE_WINDOW_H
+#endif // DIGIKAM_LIGHT_TABLE_WINDOW_H

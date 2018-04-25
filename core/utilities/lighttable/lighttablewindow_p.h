@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef LIGHTTABLEWINDOWPRIVATE_H
-#define LIGHTTABLEWINDOWPRIVATE_H
+#ifndef DIGIKAM_LIGHT_TABLE_WINDOW_P_H
+#define DIGIKAM_LIGHT_TABLE_WINDOW_P_H
 
 // Qt includes
 
@@ -147,7 +147,8 @@ public:
     ImagePropertiesSideBarDB* rightSideBar;
 };
 
-void LightTableWindow::Private::addPageUpDownActions(LightTableWindow* const q, QWidget* const w)
+void LightTableWindow::Private::addPageUpDownActions(LightTableWindow* const q,
+                                                     QWidget* const w)
 {
     defineShortcut(w, Qt::Key_Down,  q, SLOT(slotForward()));
     defineShortcut(w, Qt::Key_Right, q, SLOT(slotForward()));
@@ -157,4 +158,4 @@ void LightTableWindow::Private::addPageUpDownActions(LightTableWindow* const q, 
 
 } // namespace Digikam
 
-#endif /* LIGHTTABLEWINDOWPRIVATE_H */
+#endif // DIGIKAM_LIGHT_TABLE_WINDOW_P_H

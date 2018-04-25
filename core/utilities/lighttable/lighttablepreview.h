@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef LIGHTTABLEPREVIEW_H
-#define LIGHTTABLEPREVIEW_H
+#ifndef DIGIKAM_LIGHT_TABLE_PREVIEW_H
+#define DIGIKAM_LIGHT_TABLE_PREVIEW_H
 
 // Qt includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* LIGHTTABLEPREVIEW_H */
+#endif // DIGIKAM_LIGHT_TABLE_PREVIEW_H
