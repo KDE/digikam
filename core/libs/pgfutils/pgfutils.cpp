@@ -21,7 +21,6 @@
  *
  * ============================================================ */
 
-#include "digikam_config.h"
 #include "pgfutils.h"
 
 // C Ansi includes
@@ -43,7 +42,7 @@ extern "C"
 // Windows includes
 
 #ifdef Q_OS_WIN32
-#include <windows.h>
+#   include <windows.h>
 #endif
 
 // LibPGF includes

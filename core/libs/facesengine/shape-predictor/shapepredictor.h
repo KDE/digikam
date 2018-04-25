@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_SHAPE_PREDICTOR_H_
-#define DIGIKAM_SHAPE_PREDICTOR_H_
+#ifndef DIGIKAM_SHAPE_PREDICTOR_H
+#define DIGIKAM_SHAPE_PREDICTOR_H
 
 // C++ includes
 
@@ -596,4 +596,4 @@ QDataStream& operator >> (QDataStream& dataStream, ShapePredictor& shape)
 
 } // namespace Digikam
 
-#endif // DIGIKAM_SHAPE_PREDICTOR_H_
+#endif // DIGIKAM_SHAPE_PREDICTOR_H

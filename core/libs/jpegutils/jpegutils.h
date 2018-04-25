@@ -33,8 +33,9 @@
 
 // Local includes
 
-#include "dmetadata.h"
+#include "digikam_config.h"
 #include "digikam_export.h"
+#include "dmetadata.h"
 #include "metaengine_rotation.h"
 
 namespace Digikam

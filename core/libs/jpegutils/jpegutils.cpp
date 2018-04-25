@@ -37,11 +37,6 @@
 #include <cstdio>
 #include <cstdlib>
 
-// Digikam includes
-
-#include <dimg.h>
-#include <dmetadata.h>
-
 // C ANSI includes
 
 extern "C"
@@ -56,13 +51,13 @@ extern "C"
 
 // Pragma directives to reduce warnings from libjpeg transupp header file.
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wunused-parameter"
 #endif
 
 extern "C"
@@ -72,11 +67,11 @@ extern "C"
 
 // Restore warnings
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
-#pragma GCC diagnostic pop
+#   pragma GCC diagnostic pop
 #endif
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic pop
+#   pragma clang diagnostic pop
 #endif
 
 // Qt includes
@@ -89,14 +84,13 @@ extern "C"
 // Local includes
 
 #include "digikam_debug.h"
-#include "digikam_config.h"
-#include "dmetadata.h"
+#include "dimg.h"
 #include "metadatasettings.h"
 #include "filereadwritelock.h"
 
 #ifdef Q_OS_WIN
-#include "windows.h"
-#include "jpegwin.h"
+#   include "windows.h"
+#   include "jpegwin.h"
 #endif
 
 namespace Digikam
