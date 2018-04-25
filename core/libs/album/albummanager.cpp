@@ -2620,16 +2620,17 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
     if (hasDirectChildAlbumWithTitle(newParent, album->title()))
     {
         QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
-                           qApp->applicationName(),
-                           i18n("Another tag with the same name already exists.\n"
-                                "Do you want to merge the tags?"),
-                           QMessageBox::Yes | QMessageBox::No,
-                           qApp->activeWindow());
+                 qApp->applicationName(),
+                 i18n("Another tag with the same name already exists.\n"
+                      "Do you want to merge the tags?"),
+                 QMessageBox::Yes | QMessageBox::No,
+                 qApp->activeWindow());
 
-        if (msgBox->exec() == QMessageBox::Yes)
+        int result = msgBox->exec();
+        delete msgBox;
+
+        if (result == QMessageBox::Yes)
         {
-            delete msgBox;
-
             if (album->m_firstChild)
             {
                 errMsg = i18n("Only a tag without children can be merged!");
@@ -2696,7 +2697,6 @@ bool AlbumManager::moveTAlbum(TAlbum* album, TAlbum* newParent, QString& errMsg)
         }
         else
         {
-            delete msgBox;
             return true;
         }
     }
@@ -3682,20 +3682,20 @@ void AlbumManager::askUserForWriteChangedTAlbumToFiles(const QList<qlonglong>& i
     if (imageIds.count() > 100)
     {
         QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
-                           qApp->applicationName(),
-                           i18n("This operation can take a long time in the background.\n"
-                                "Do you want to write the metadata to %1 files now?",
-                                imageIds.count()),
-                           QMessageBox::Yes | QMessageBox::No,
-                           qApp->activeWindow());
+                 qApp->applicationName(),
+                 i18n("This operation can take a long time in the background.\n"
+                      "Do you want to write the metadata to %1 files now?",
+                      imageIds.count()),
+                 QMessageBox::Yes | QMessageBox::No,
+                 qApp->activeWindow());
 
-        if (msgBox->exec() != QMessageBox::Yes)
+        int result = msgBox->exec();
+        delete msgBox;
+
+        if (result != QMessageBox::Yes)
         {
-            delete msgBox;
             return;
         }
-        
-        delete msgBox;
     }
 
     ImageInfoList infos(imageIds);
