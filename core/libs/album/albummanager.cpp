@@ -2703,7 +2703,7 @@ bool AlbumManager::mergeTAlbum(TAlbum* album, TAlbum* destAlbum, bool dialog, QS
     {
         QPointer<QMessageBox> msgBox = new QMessageBox(QMessageBox::Warning,
                  qApp->applicationName(),
-                 i18n("Do you want to merge tag \"%1\" into tag \"%2\"?",
+                 i18n("Do you want to merge tag '%1' into tag '%2'?",
                       album->title(), destAlbum->title()),
                  QMessageBox::Yes | QMessageBox::No,
                  qApp->activeWindow());

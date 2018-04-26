@@ -77,8 +77,8 @@ public:
 
 protected:
 
+    FaceTagsIface       m_face;
     AssignNameWidget*   m_widget;
-    FaceTagsIface        m_face;
     HidingStateChanger* m_changer;
 };
 
@@ -666,7 +666,8 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
     FaceTagsIface face      = item->face();
     TagRegion currentRegion = TagRegion(item->originalRect());
 
-    if (!face.isConfirmedName() || face.region() != currentRegion || action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()))
+    if (!face.isConfirmedName() || face.region() != currentRegion ||
+        action.shallCreateNewTag() || (action.shallAssignTag() && action.tagId() != face.tagId()))
     {
         int tagId = 0;
 
@@ -830,11 +831,9 @@ void ImagePreviewView::trainFaces()
         d->faceIface->markFacesAsTrained(getImageInfo().id(), trainList);
     }
 }
-* /
 
 void ImagePreviewView::suggestFaces()
 {
-    / *
     // Assign tentative names to the face list
     QList<Face> recogList;
 
@@ -869,7 +868,6 @@ void ImagePreviewView::suggestFaces()
             }
         }
     }
-    * /
 }
 */
 
