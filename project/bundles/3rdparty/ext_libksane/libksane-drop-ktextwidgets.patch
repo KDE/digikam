@@ -1,29 +1,39 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index ee35783..d680102 100644
+index 086b1b7..a9331f0 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -43,7 +43,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} NO_MODULE REQUIRED Core Widgets)
- find_package(KF5I18n ${KF5_VERSION} REQUIRED)
- find_package(KF5Wallet ${KF5_VERSION} REQUIRED)
- find_package(KF5WidgetsAddons ${KF5_VERSION} REQUIRED)
--find_package(KF5TextWidgets ${KF5_VERSION} REQUIRED)
-+#find_package(KF5TextWidgets ${KF5_VERSION} REQUIRED)
- # ...
+@@ -46,13 +46,13 @@ find_package(KF5I18n ${KF5_VERSION} REQUIRED)
  
- # Check if sane API is available.
+ if (NOT WIN32)
+     find_package(KF5WidgetsAddons ${KF5_VERSION} REQUIRED)
+-    find_package(KF5TextWidgets ${KF5_VERSION} REQUIRED)
++#    find_package(KF5TextWidgets ${KF5_VERSION} REQUIRED)
+ 
+     # Optional KF5 frameworks
+-    find_package(KF5Wallet ${KF5_VERSION})
+-    set_package_properties(KF5Wallet PROPERTIES DESCRIPTION "Safe desktop-wide storage for passwords" TYPE OPTIONAL
+-        PURPOSE "Required to have permanent storage of passwords for scanners"
+-    )
++#    find_package(KF5Wallet ${KF5_VERSION})
++#    set_package_properties(KF5Wallet PROPERTIES DESCRIPTION "Safe desktop-wide storage for passwords" TYPE OPTIONAL
++#        PURPOSE "Required to have permanent storage of passwords for scanners"
++#    )
+ 
+     # Check if sane API is available.
+     find_package(Sane)
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index e650bb8..03c308e 100644
+index f5d1101..022dc92 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -51,7 +51,7 @@ target_link_libraries(KF5Sane
+@@ -54,7 +54,7 @@ target_link_libraries(KF5Sane
+ 
          KF5::I18n
-         KF5::Wallet
          KF5::WidgetsAddons
 -        KF5::TextWidgets
-+#       KF5::TextWidgets
++#        KF5::TextWidgets
+         ${WALLET_LIB}
  )
  
- set_target_properties(KF5Sane
 diff --git a/src/widgets/labeledslider.cpp b/src/widgets/labeledslider.cpp
 index 8ce9ddc..48c43e0 100644
 --- a/src/widgets/labeledslider.cpp

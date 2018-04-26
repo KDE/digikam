@@ -192,7 +192,7 @@ function(InstallKF5Component
 
 endfunction()
 
-set(KD_VERSION 5.44)
+set(KD_VERSION 5.45)
 
 if(APPLE)
     set(MacosThreadWeaverPatch threadweaver-macports.patch)
@@ -202,7 +202,7 @@ endif()
 InstallKF5Component(extra-cmake-modules ${KD_VERSION} ""                                                                   "")
 InstallKF5Component(kconfig             ${KD_VERSION} ""                                                                   "")
 InstallKF5Component(breeze-icons        ${KD_VERSION} "-DBINARY_ICONS_RESOURCE=OFF"                                        "${MacosBreezePatch}")
-InstallKF5Component(solid               ${KD_VERSION} ""                                                                   "${MacosSolidPatch}")
+InstallKF5Component(solid               ${KD_VERSION} ""                                                                   "")
 InstallKF5Component(kcoreaddons         ${KD_VERSION} ""                                                                   "")
 InstallKF5Component(threadweaver        ${KD_VERSION} ""                                                                   "${MacosThreadWeaverPatch}")
 InstallKF5Component(kwindowsystem       ${KD_VERSION} ""                                                                   "")
@@ -231,4 +231,3 @@ InstallKF5Component(ktextwidgets        ${KD_VERSION} ""                        
 InstallKF5Component(kio                 ${KD_VERSION} ""                                                                   "kio-drop-ktextwidgets.patch")
 InstallKF5Component(kinit               ${KD_VERSION} ""                                                                   "")
 InstallKF5Component(kdewebkit           ${KD_VERSION} ""                                                                   "")
-InstallKF5Component(kwallet             ${KD_VERSION} ""                                                                   "kwallet-minimal.patch")

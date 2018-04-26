@@ -7,7 +7,7 @@
 #
 
 set(EXTPREFIX_marble "${EXTPREFIX}" )
-set(KA_VERSION 17.12.3)
+set(KA_VERSION 18.04.0)
 
 
 if(MINGW)
@@ -15,7 +15,7 @@ if(MINGW)
     ExternalProject_Add(ext_marble
                         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
                         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/marble-${KA_VERSION}.tar.xz
-                        URL_MD5 c878d04b3145caf2f4fec66b700ec481
+                        URL_MD5 571cb31746a0eaa4aa9c9b0363b12d25
 
                         INSTALL_DIR ${EXTPREFIX_marble}
                         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/marble-libs-install-mxe.patch
@@ -51,7 +51,7 @@ elseif(APPLE)
     ExternalProject_Add(ext_marble
                         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
                         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/marble-${KA_VERSION}.tar.xz
-                        URL_MD5 c878d04b3145caf2f4fec66b700ec481
+                        URL_MD5 571cb31746a0eaa4aa9c9b0363b12d25
 
                         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/marble-libs-install-macports.patch &&
                                       cp ${CMAKE_CURRENT_SOURCE_DIR}/../../macports/fixbundledatapath.sh <SOURCE_DIR>/. &&
@@ -75,7 +75,7 @@ else() # Linux
     ExternalProject_Add(ext_marble
                         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
                         URL http://download.kde.org/stable/applications/${KA_VERSION}/src/marble-${KA_VERSION}.tar.xz
-                        URL_MD5 c878d04b3145caf2f4fec66b700ec481
+                        URL_MD5 571cb31746a0eaa4aa9c9b0363b12d25
 
                         INSTALL_DIR ${EXTPREFIX_marble}
                         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/marble-libs-install-appimage.patch
