@@ -458,7 +458,7 @@ void ImagePreviewView::slotSetupChanged()
 
 void ImagePreviewView::slotRotateLeft()
 {
-    if(d->rotationLock)
+    if (d->rotationLock)
         return;
 
     d->rotationLock = true;
@@ -478,7 +478,7 @@ void ImagePreviewView::slotRotateLeft()
 
 void ImagePreviewView::slotRotateRight()
 {
-    if(d->rotationLock)
+    if (d->rotationLock)
         return;
 
     d->rotationLock = true;
@@ -526,7 +526,7 @@ void ImagePreviewView::dragMoveEvent(QDragMoveEvent* e)
 
 void ImagePreviewView::dragEnterEvent(QDragEnterEvent* e)
 {
-  if (DTagListDrag::canDecode(e->mimeData()))
+    if (DTagListDrag::canDecode(e->mimeData()))
     {
         e->accept();
         return;
@@ -553,9 +553,9 @@ void ImagePreviewView::dropEvent(QDropEvent* e)
         popMenu.setMouseTracking(true);
         QAction* const choice             = popMenu.exec(this->mapToGlobal(e->pos()));
 
-        if(choice == assignToThisAction)
+        if (choice == assignToThisAction)
         {
-            FileActionMngr::instance()->assignTags(d->item->imageInfo(),tagIDs);
+            FileActionMngr::instance()->assignTags(d->item->imageInfo(), tagIDs);
         }
     }
 

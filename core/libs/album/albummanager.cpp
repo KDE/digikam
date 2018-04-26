@@ -2755,7 +2755,6 @@ bool AlbumManager::mergeTAlbum(TAlbum* album, TAlbum* destAlbum, bool dialog, QS
         }
     }
 
-    emit signalAlbumsUpdated(Album::TAG);
     QApplication::restoreOverrideCursor();
 
     if (!deleteTAlbum(album, errMsg, false))
