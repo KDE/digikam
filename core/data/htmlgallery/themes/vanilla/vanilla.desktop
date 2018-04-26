@@ -1,0 +1,111 @@
+[Desktop Entry]
+Name=Vanilla
+Type=Theme
+Comment=This theme is based on the look of Adobe Lightroom's HTML export. It has a simple but usable grid layout and comes with various color presets.
+
+[X-HTMLExport Author]
+Name=Wojciech Jarosz
+Url=mailto:wjarosz@ucsd.edu
+
+[X-HTMLExport Parameter author]
+Name=Author
+Type=string
+Default=
+
+[X-HTMLExport Parameter authorEmail]
+Name=Author Email
+Type=string
+Default=
+
+[X-HTMLExport Parameter numRows]
+Name=Rows per page
+Type=int
+Default=3
+
+[X-HTMLExport Parameter numCols]
+Name=Columns per page
+Type=int
+Default=3
+
+[X-HTMLExport Parameter style]
+Name=Style
+Name[br]=Giz
+Name[de]=Stil
+Name[el]=Στυλ
+Name[es]=Estilo
+Name[et]=Stiil
+Name[is]=Stíll
+Name[it]=Stile
+Name[ja]=スタイル
+Name[nds]=Stil
+Name[nl]=Stijl
+Name[pt]=Estilo
+Name[pt_BR]=Estilo
+Name[sv]=Stil
+Name[xh]=Uhlobo
+Name[zu]=Uhlobo
+Type=list
+Default=graphite.css
+Value-0=charcoal.css
+Caption-0=Charcoal
+Value-1=dusk.css
+Caption-1=Dusk
+Value-2=graphite.css
+Caption-2=Graphite
+Value-3=ice_blue.css
+Caption-3=Ice Blue
+Value-4=ivory.css
+Caption-4=Ivory
+Value-5=light_grey.css
+Caption-5=Light Grey
+Value-6=midnight.css
+Caption-6=Midnight
+Value-7=white_on_black.css
+Caption-7=White on Black
+
+[X-HTMLExport Parameter displayNumbers]
+Name=Show image numbers
+Type=list
+Default=inherit
+Value-0=inherit
+Caption-0=Yes
+Value-1=none
+Caption-1=No
+
+[X-HTMLExport Parameter dropShadow]
+Name=Add drop shadow
+Type=list
+Default=true
+Value-0=true
+Caption-0=Yes
+Value-1=false
+Caption-1=No
+
+[X-HTMLExport Parameter thumbMargin]
+Name=Thumbnail margin
+Type=int
+Default=25
+
+[X-HTMLExport Parameter useLyteBox]
+Name=Use LyteBox
+Type=list
+Default=true
+Value-0=true
+Caption-0=Yes
+Value-1=false
+Caption-1=No
+
+[X-HTMLExport Parameter slideInterval]
+Name=LyteBox Slideshow Interval
+Type=list
+Default=6000
+Value-0=2000
+Caption-0=2 seconds
+Value-1=4000
+Caption-1=4 seconds
+Value-2=6000
+Caption-2=6 seconds
+Value-3=8000
+Caption-3=8 seconds
+Value-4=10000
+Caption-4=10 seconds

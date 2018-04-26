@@ -1,0 +1,133 @@
+body {
+    background-color: #FFFFFF; /*background behind thumbnails, outside boxes*/
+    color: #000055; /*default text color*/
+    font-size: 14pt; /*title font size*/
+    text-align: center;
+    margin: 0in;
+    padding: 0in;
+    margin-left: 0in;
+}
+
+#content { /*affects text with thumbnails*/
+	font-size: 8pt;
+	text-align: left;
+	left-margin: 0em;
+	padding-top: 0.5em;
+	margin: 0;
+	margin-left: 0in;
+	width: 95%;
+}
+
+a {
+    color: #2f5d2c;
+	text-decoration: none;
+}
+
+a:hover {
+    color: #456ff3;
+	text-decoration: underline;
+}
+
+
+h1 {
+	padding: 0;
+	margin: 0;
+	padding-top: 0.1em;
+	padding-bottom: 0.5em;
+	color: #000055;  /*album title color above thumbnails*/
+    	font-size: 14pt;  /*title font size*/
+	font-family: Bitstream Vera Serif, serif;
+	text-align: center;
+}
+
+
+
+/* Collection page */
+#collectionPage ul {
+	padding: 0;
+	padding-left: 2em;
+	text-align: left;
+}
+
+#collectionPage li {
+        display: block;
+        float: left;
+        text-align: left;
+        margin: 6px;
+	padding: 5px;
+        color: #FFFFFF; /*text in boxes with thumbnails*/
+	background-color: #000055; /*thumbnail background in box*/
+	border: 1px solid #000000;
+}
+
+
+#collectionPage img {
+	border: 0;
+	text-align: left;
+}
+
+#collectionPage .image {
+	float: left;
+    text-align: left;
+    margin: 6px;
+}
+
+/*  Blank Page */
+#blankPage {
+
+	background-color: #000055;
+}
+
+/*  Collect Page */
+
+#collectPage {
+	/*background-image: url(swirl.png);*/
+    	background-color: #000011; /*background behind collection titles at top*/
+	font-size: 20pt;
+	font-family: Bitstream Vera Serif, serif;
+}
+
+#collectPage a:hover {
+	padding-top: 0.1em;
+	margin: 0 auto;
+	width: 95%;
+	text-align: center;
+    color: #5555FF; /*highlighted links (titles)*/
+
+    text-decoration: underline;
+}
+#collectPage a {
+	padding-top: 0.1em;
+	margin: 0 auto;
+	width: 95%;
+	text-align: center;
+    color: #FFFFFF; /*title of each collection (links)*/
+    text-decoration: none;
+}
+#CollectPageContent {
+	padding-top: 0.1em;
+	margin: 0 auto;
+	width: 95%;
+	text-align: center;
+        color: #AAAAAA; /*number of pics in collection*/
+}
+
+
+/* Image page */
+#imagePage {
+	padding-top: 0.3em;
+	padding-left: 0.3em;
+	background-color:#000055; /*background color behind the big image*/
+}
+
+
+#caption {
+	background-color:#000055;
+	color: #FFFFFF;
+	font-size: 16pt;
+}
+
+#imagePage img {
+	text-align: right;
+	border: 1px solid #CECECE; /*border around picture*/
+}

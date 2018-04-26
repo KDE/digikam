@@ -1,0 +1,75 @@
+#previewFull {
+  background-color: #FEFEFE !important;
+  color: inherit;
+}
+
+#content {
+  background-color: #DDDDDD !important;
+  color: inherit;
+}
+
+#stage, #stage2 {
+  border-bottom: 1px dotted #7F7F7F !important;
+}
+
+body {
+  background-color: #DDDDDD !important;
+  color: inherit;
+}
+
+.thumbnail:hover {
+  background-color: #FDFDFD !important;
+  color: inherit;
+}
+
+#sitetitle {
+  border-bottom: 1px dotted #7F7F7F !important;
+}
+
+.thumbnail {
+  background-color: #D0D0D0 !important;
+  color: inherit;
+}
+
+.itemNumber {
+  color: #DFDFDF !important;
+/*   background-color: inherit; */
+}
+
+.borderTopLeft {
+  border-top: 1px solid #787878 !important;
+  border-left: 1px solid #787878 !important;
+}
+
+.emptyThumbnail {
+  background-color: #D0D0D0 !important;
+  color: inherit;
+}
+
+.borderBottomRight {
+  border-right: 1px solid #787878 !important;
+  border-bottom: 1px solid #787878 !important;
+}
+
+.paginationLinks, .pagination {
+  color: #282828 !important;
+  background-color: inherit;
+}
+
+#liveUpdateSiteTitle {
+  color: #282828 !important;
+  background-color: inherit;
+}
+
+.borderBottom {
+  border-bottom: 1px solid #787878 !important;
+}
+
+.borderRight {
+  border-right: 1px solid #787878 !important;
+}
+
+.detailNav, .detailLinks, #detailCaption {
+  color: #B3B3B3 !important;
+  background-color: inherit;
+}

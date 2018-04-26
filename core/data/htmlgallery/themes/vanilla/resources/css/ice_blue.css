@@ -1,0 +1,75 @@
+#previewFull {
+  background-color: #E1E5F5 !important;
+  color: inherit;
+}
+
+#content {
+  background-color: #F9FAFE !important;
+  color: inherit;
+}
+
+#stage, #stage2 {
+  border-bottom: 1px dotted #7F7F7F !important;
+}
+
+body {
+  background-color: #F9FAFE !important;
+  color: inherit;
+}
+
+.thumbnail:hover {
+  background-color: #E9EEFE !important;
+  color: inherit;
+}
+
+#sitetitle {
+  border-bottom: 1px dotted #7F7F7F !important;
+}
+
+.thumbnail {
+  background-color: #E5E5E5 !important;
+  color: inherit;
+}
+
+.itemNumber {
+  color: #B7BED9 !important;
+/*   background-color: inherit; */
+}
+
+.borderTopLeft {
+  border-top: 1px solid #FFFFFF !important;
+  border-left: 1px solid #FFFFFF !important;
+}
+
+.emptyThumbnail {
+  background-color: #E5E5E5 !important;
+  color: inherit;
+}
+
+.borderBottomRight {
+  border-right: 1px solid #FFFFFF !important;
+  border-bottom: 1px solid #FFFFFF !important;
+}
+
+.paginationLinks, .pagination {
+  color: #0D3C96 !important;
+  background-color: inherit;
+}
+
+#liveUpdateSiteTitle {
+  color: #0D3C96 !important;
+  background-color: inherit;
+}
+
+.borderBottom {
+  border-bottom: 1px solid #FFFFFF !important;
+}
+
+.borderRight {
+  border-right: 1px solid #FFFFFF !important;
+}
+
+.detailNav, .detailLinks, #detailCaption {
+  color: #2F4174 !important;
+  background-color: inherit;
+}
