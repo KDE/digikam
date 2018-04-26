@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GALLERY_GENERATOR_H
-#define GALLERY_GENERATOR_H
+#ifndef DIGIKAM_GALLERY_GENERATOR_H
+#define DIGIKAM_GALLERY_GENERATOR_H
 
 // Qt includes
 
@@ -84,4 +84,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GALLERY_GENERATOR_H
+#endif // DIGIKAM_GALLERY_GENERATOR_H

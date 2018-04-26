@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef HTML_INTRO_PAGE_H
-#define HTML_INTRO_PAGE_H
+#ifndef DIGIKAM_HTML_INTRO_PAGE_H
+#define DIGIKAM_HTML_INTRO_PAGE_H
 
 // Qt includes
 
@@ -52,4 +52,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HTML_INTRO_PAGE_H
+#endif // DIGIKAM_HTML_INTRO_PAGE_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef HTML_THEME_PAGE_H
-#define HTML_THEME_PAGE_H
+#ifndef DIGIKAM_HTML_THEME_PAGE_H
+#define DIGIKAM_HTML_THEME_PAGE_H
 
 // Qt includes
 
@@ -43,7 +43,7 @@ class ThemeListBoxItem : public QListWidgetItem
 {
 public:
 
-    ThemeListBoxItem(QListWidget* const list, GalleryTheme::Ptr theme)
+    explicit ThemeListBoxItem(QListWidget* const list, GalleryTheme::Ptr theme)
         : QListWidgetItem(theme->name(), list),
           m_theme(theme)
     {
@@ -80,4 +80,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HTML_THEME_PAGE_H
+#endif // DIGIKAM_HTML_THEME_PAGE_H

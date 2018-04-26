@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef GALLERY_CONFIG_H
-#define GALLERY_CONFIG_H
+#ifndef DIGIKAM_GALLERY_CONFIG_H
+#define DIGIKAM_GALLERY_CONFIG_H
 
 // Qt includes
 
@@ -42,6 +42,7 @@ public:
     class EnumFullFormat
     {
     public:
+
         enum type
         {
             JPEG,
@@ -138,4 +139,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // GALLERY_CONFIG_H
+#endif // DIGIKAM_GALLERY_CONFIG_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef INVISIBLE_BUTTON_GROUP_H
-#define INVISIBLE_BUTTON_GROUP_H
+#ifndef DIGIKAM_INVISIBLE_BUTTON_GROUP_H
+#define DIGIKAM_INVISIBLE_BUTTON_GROUP_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // INVISIBLE_BUTTON_GROUP_H
+#endif // DIGIKAM_INVISIBLE_BUTTON_GROUP_H

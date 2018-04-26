@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef HTML_IMAGE_SETTINGS_PAGE_H
-#define HTML_IMAGE_SETTINGS_PAGE_H
+#ifndef DIGIKAM_HTML_IMAGE_SETTINGS_PAGE_H
+#define DIGIKAM_HTML_IMAGE_SETTINGS_PAGE_H
 
 // Qt includes
 
@@ -51,4 +51,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HTML_IMAGE_SETTINGS_PAGE_H
+#endif // DIGIKAM_HTML_IMAGE_SETTINGS_PAGE_H

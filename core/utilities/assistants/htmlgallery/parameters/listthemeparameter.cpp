@@ -34,13 +34,13 @@
 namespace Digikam
 {
 
-static const char* ITEM_VALUE_KEY   = "Value_";
-static const char* ITEM_CAPTION_KEY = "Caption_";
+static const char* ITEM_VALUE_KEY   = "Value-";
+static const char* ITEM_CAPTION_KEY = "Caption-";
 
 class ListThemeParameter::Private
 {
 public:
-    
+
     explicit Private()
     {
     }

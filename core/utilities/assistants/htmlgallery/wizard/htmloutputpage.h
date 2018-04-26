@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef HTML_OUTPUT_PAGE_H
-#define HTML_OUTPUT_PAGE_H
+#ifndef DIGIKAM_HTML_OUTPUT_PAGE_H
+#define DIGIKAM_HTML_OUTPUT_PAGE_H
 
 // Qt includes
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HTML_OUTPUT_PAGE_H
+#endif // DIGIKAM_HTML_OUTPUT_PAGE_H

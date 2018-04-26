@@ -155,12 +155,12 @@ Name[x-test]=xxPage links locationxx
 Name[zh_CN]=页面链接位置
 Type=list
 Default=top
-Value_0=bottom
-Caption_0=Bottom
-Value_1=top
-Caption_1=Top
-Value_2=both
-Caption_2=Both
+Value-0=bottom
+Caption-0=Bottom
+Value-1=top
+Caption-1=Top
+Value-2=both
+Caption-2=Both
 
 [X-HTMLExport Parameter useLyteBox]
 Name=Use LyteBox
@@ -185,10 +185,10 @@ Name[x-test]=xxUse LyteBoxxx
 Name[zh_CN]=使用 LyteBox
 Type=list
 Default=true
-Value_0=true
-Caption_0=Yes
-Value_1=false
-Caption_1=No
+Value-0=true
+Caption-0=Yes
+Value-1=false
+Caption-1=No
 
 [X-HTMLExport Parameter slideInterval]
 Name=LyteBox Slideshow Interval
@@ -212,16 +212,16 @@ Name[x-test]=xxLyteBox Slideshow Intervalxx
 Name[zh_CN]=LyteBox 幻灯片间隔
 Type=list
 Default=6000
-Value_0=2000
-Caption_0=2 seconds
-Value_1=4000
-Caption_1=4 seconds
-Value_2=6000
-Caption_2=6 seconds
-Value_3=8000
-Caption_3=8 seconds
-Value_4=10000
-Caption_4=10 seconds
+Value-0=2000
+Caption-0=2 seconds
+Value-1=4000
+Caption-1=4 seconds
+Value-2=6000
+Caption-2=6 seconds
+Value-3=8000
+Caption-3=8 seconds
+Value-4=10000
+Caption-4=10 seconds
 
 [X-HTMLExport Parameter style]
 Name=Style
@@ -250,12 +250,12 @@ Name[x-test]=xxStylexx
 Name[zh_CN]=样式
 Type=list
 Default=dark.css
-Value_0=natural.css
-Caption_0=Natural
-Value_1=dark.css
-Caption_1=Dark
-Value_2=custom
-Caption_2=Custom
+Value-0=natural.css
+Caption-0=Natural
+Value-1=dark.css
+Caption-1=Dark
+Value-2=custom
+Caption-2=Custom
 
 [X-HTMLExport Parameter bgColor]
 Name=Custom Background Color

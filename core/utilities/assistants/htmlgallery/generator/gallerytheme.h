@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GALLERY_THEME_H
-#define GALLERY_THEME_H
+#ifndef DIGIKAM_GALLERY_THEME_H
+#define DIGIKAM_GALLERY_THEME_H
 
 // Qt includes
 
@@ -86,4 +86,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GALLERY_THEME_H
+#endif // DIGIKAM_GALLERY_THEME_H

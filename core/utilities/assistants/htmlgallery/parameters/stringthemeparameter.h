@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef STRING_THEME_PARAMETER_H
-#define STRING_THEME_PARAMETER_H
+#ifndef DIGIKAM_STRING_THEME_PARAMETER_H
+#define DIGIKAM_STRING_THEME_PARAMETER_H
 
 // Local includes
 
@@ -47,4 +47,4 @@ public:
 
 } // namespace Digikam
 
-#endif // STRING_THEME_PARAMETER_H
+#endif // DIGIKAM_STRING_THEME_PARAMETER_H

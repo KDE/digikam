@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GALLERY_XML_UTILS_H
-#define GALLERY_XML_UTILS_H
+#ifndef DIGIKAM_GALLERY_XML_UTILS_H
+#define DIGIKAM_GALLERY_XML_UTILS_H
 
 // Qt includes
 
@@ -129,7 +129,9 @@ class XMLElement
 {
 public:
 
-    explicit XMLElement(XMLWriter& writer, const QString& element, const XMLAttributeList* attributeList=0);
+    explicit XMLElement(XMLWriter& writer,
+                        const QString& element,
+                        const XMLAttributeList* attributeList=0);
     ~XMLElement();
 
 private:
@@ -139,4 +141,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GALLERY_XML_UTILS_H
+#endif // DIGIKAM_GALLERY_XML_UTILS_H

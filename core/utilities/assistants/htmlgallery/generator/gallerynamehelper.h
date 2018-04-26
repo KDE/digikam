@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GALLERY_NAME_HELPER_H
-#define GALLERY_NAME_HELPER_H
+#ifndef DIGIKAM_GALLERY_NAME_HELPER_H
+#define DIGIKAM_GALLERY_NAME_HELPER_H
 
 // Qt includes
 
@@ -50,4 +50,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GALLERY_NAME_HELPER_H
+#endif // DIGIKAM_GALLERY_NAME_HELPER_H

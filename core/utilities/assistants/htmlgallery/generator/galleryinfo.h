@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GALLERY_INFO_H
-#define GALLERY_INFO_H
+#ifndef DIGIKAM_GALLERY_INFO_H
+#define DIGIKAM_GALLERY_INFO_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ QDebug operator<<(QDebug dbg, const GalleryInfo& t);
 
 } // namespace Digikam
 
-#endif // GALLERY_INFO_H
+#endif // DIGIKAM_GALLERY_INFO_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GALLERY_ELEMENT_H
-#define GALLERY_ELEMENT_H
+#ifndef DIGIKAM_GALLERY_ELEMENT_H
+#define DIGIKAM_GALLERY_ELEMENT_H
 
 // Qt includes
 
@@ -98,4 +98,4 @@ public:
 
 } // namespace Digikam
 
-#endif // GALLERY_ELEMENT_H
+#endif // DIGIKAM_GALLERY_ELEMENT_H

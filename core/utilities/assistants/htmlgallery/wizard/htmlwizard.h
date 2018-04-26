@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef HTML_WIZARD_H
-#define HTML_WIZARD_H
+#ifndef DIGIKAM_HTML_WIZARD_H
+#define DIGIKAM_HTML_WIZARD_H
 
 // Qt includes
 
@@ -69,4 +69,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HTML_WIZARD_H
+#endif // DIGIKAM_HTML_WIZARD_H

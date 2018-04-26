@@ -294,13 +294,13 @@ of this writing it can be one of:
 #### List parameter keys
 
 A list parameter lets the user select an item from a list. To declare the
-available items, you must use two sets of keys: `Value_N` and `Caption_N`,
+available items, you must use two sets of keys: `Value-N` and `Caption-N`,
 where N is the position of the item, starting from 0.
 
-`Value_N` is the internal value of the item. This is the value which will be
+`Value-N` is the internal value of the item. This is the value which will be
 set to the parameter.
 
-`Caption_N` is the displayed value of the item. This is the text which will
+`Caption-N` is the displayed value of the item. This is the text which will
 be shown in the list.
 
 Here is an example: the "style" parameter from the "Simple" theme:
@@ -309,10 +309,10 @@ Here is an example: the "style" parameter from the "Simple" theme:
      Name=Style
      Type=list
      Default=natural.css
-     Value_0=natural.css
-     Caption_0=Natural
-     Value_1=dark.css
-     Caption_1=Dark
+     Value-0=natural.css
+     Caption-0=Natural
+     Value-1=dark.css
+     Caption-1=Dark
 
 As you can see, the user will be able to choose either "Natural" or "Dark".
 Depending on the user choice, `<xsl:value-of select='$style'/>` will expand to

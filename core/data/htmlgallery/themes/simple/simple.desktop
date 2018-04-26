@@ -97,10 +97,10 @@ Name[x-test]=xxStylexx
 Name[zh_CN]=样式
 Type=list
 Default=natural.css
-Value_0=natural.css
-Caption_0=Natural
-Value_1=dark.css
-Caption_1=Dark
+Value-0=natural.css
+Caption-0=Natural
+Value-1=dark.css
+Caption-1=Dark
 
 [X-HTMLExport Preview]
 Name=Simple

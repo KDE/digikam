@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GALLERY_ELEMENT_FUNCTOR_H
-#define GALLERY_ELEMENT_FUNCTOR_H
+#ifndef DIGIKAM_GALLERY_ELEMENT_FUNCTOR_H
+#define DIGIKAM_GALLERY_ELEMENT_FUNCTOR_H
 
 // Local includes
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GALLERY_ELEMENT_FUNCTOR_H
+#endif // DIGIKAM_GALLERY_ELEMENT_FUNCTOR_H

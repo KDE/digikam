@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef LIST_THEME_PARAMETER_H
-#define LIST_THEME_PARAMETER_H
+#ifndef DIGIKAM_LIST_THEME_PARAMETER_H
+#define DIGIKAM_LIST_THEME_PARAMETER_H
 
 // Local includes
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace Digikam
 
-#endif // LIST_THEME_PARAMETER_H
+#endif // DIGIKAM_LIST_THEME_PARAMETER_H

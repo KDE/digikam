@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ABSTRACT_THEME_PARAMETER_H
-#define ABSTRACT_THEME_PARAMETER_H
+#ifndef DIGIKAM_ABSTRACT_THEME_PARAMETER_H
+#define DIGIKAM_ABSTRACT_THEME_PARAMETER_H
 
 class QByteArray;
 class QString;
@@ -77,4 +77,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ABSTRACT_THEME_PARAMETER_H
+#endif // DIGIKAM_ABSTRACT_THEME_PARAMETER_H
