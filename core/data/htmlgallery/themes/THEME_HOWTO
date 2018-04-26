@@ -32,6 +32,7 @@ theme selection page of the tool.
 It's a .ini-style file and looks like this:
 
     [Desktop Entry]
+    Type=Theme
     Name=Hello World
     Comment=A demonstration theme
 
