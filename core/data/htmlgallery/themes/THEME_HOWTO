@@ -213,7 +213,7 @@ them in the theme folder and the tool will copy them in the output folder.
 
 As explained before, if the user selects the option "include original images",
 the gallery.xml file will contain `<original />` tags. If this tag is present,
-the image page should contain a link to download the original image. 
+the image page should contain a link to download the original image.
 
 Here is an example:
 
@@ -232,10 +232,10 @@ However, if your theme is ready to cope with thumbnails of different sizes,
 add this snippet to your desktop file:
 
     [X-HTMLExport Options]
-    Allow non-square thumbnails=true
+    Allow-non-square-thumbnails=true
 
 The user will then be able to select whether squares should or should not be
-square.  For non-square thumbnails, the specified thumbnail size becomes the
+square. For non-square thumbnails, the specified thumbnail size becomes the
 size of the larger side of the thumbnail.
 
 

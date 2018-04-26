@@ -282,7 +282,7 @@ QString GalleryTheme::previewUrl() const
 
 bool GalleryTheme::allowNonsquareThumbnails() const
 {
-    return d->desktopFile->group(OPTIONS_GROUP).readEntry("Allow non-square thumbnails", false);
+    return d->desktopFile->group(OPTIONS_GROUP).readEntry("Allow-non-square-thumbnails", false);
 }
 
 GalleryTheme::ParameterList GalleryTheme::parameterList() const

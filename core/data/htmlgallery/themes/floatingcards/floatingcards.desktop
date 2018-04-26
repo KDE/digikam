@@ -95,7 +95,7 @@ Name[zh_CN]=浮动卡片
 Url=preview.png
 
 [X-HTMLExport Options]
-Allow non-square thumbnails=true
+Allow-non-square-thumbnails=true
 
 [X-HTMLExport Parameter keyboard_navigation]
 Name=Keyboard & swipe navigation
