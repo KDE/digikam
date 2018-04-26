@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPS_COMMON_H
-#define GPS_COMMON_H
+#ifndef DIGIKAM_GPS_COMMON_H
+#define DIGIKAM_GPS_COMMON_H
 
 // Qt includes
 
@@ -56,4 +56,4 @@ bool checkSidecarSettings();
 
 Q_DECLARE_METATYPE(Digikam::MapLayout)
 
-#endif // GPS_COMMON_H
+#endif // DIGIKAM_GPS_COMMON_H

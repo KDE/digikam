@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCH_BACKEND_H
-#define SEARCH_BACKEND_H
+#ifndef DIGIKAM_SEARCH_BACKEND_H
+#define DIGIKAM_SEARCH_BACKEND_H
 
 // Qt includes
 
@@ -51,16 +51,18 @@ public:
     {
     public:
 
-        SearchResult()
+        explicit SearchResult()
         {
         }
 
-        typedef QList<SearchResult>    List;
-        GeoCoordinates                 coordinates;
-        QString                        name;
-        GeoCoordinates::Pair           boundingBox;
-        QString                        internalId;
+        typedef QList<SearchResult> List;
+        GeoCoordinates              coordinates;
+        QString                     name;
+        GeoCoordinates::Pair        boundingBox;
+        QString                     internalId;
     };
+    
+public:
 
     explicit SearchBackend(QObject* const parent);
     ~SearchBackend();
@@ -86,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SEARCH_BACKEND_H
+#endif // DIGIKAM_SEARCH_BACKEND_H

@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef GPS_SEARCH_VIEW_H
-#define GPS_SEARCH_VIEW_H
+#ifndef DIGIKAM_GPS_SEARCH_VIEW_H
+#define DIGIKAM_GPS_SEARCH_VIEW_H
 
 // Qt includes
 
@@ -55,7 +55,7 @@ class GPSSearchView : public QWidget, public StateSavingObject
 
 public:
 
-    GPSSearchView(QWidget* const parent,
+    explicit GPSSearchView(QWidget* const parent,
                   SearchModel* const searchModel,
                   SearchModificationHelper* const searchModificationHelper,
                   ImageFilterModel* const imageFilterModel,
@@ -108,4 +108,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPS_SEARCH_VIEW_H
+#endif // DIGIKAM_GPS_SEARCH_VIEW_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PARSETAGSTRING_H
-#define PARSETAGSTRING_H
+#ifndef DIGIKAM_PARSE_TAG_STRING_H
+#define DIGIKAM_PARSE_TAG_STRING_H
 
 // local includes
 
@@ -276,4 +276,4 @@ QStringList makeTagString(const RGInfo& info,const QString& inputFormat,const QS
 
 } // namespace Digikam
 
-#endif // PARSETAGSTRING_H
+#endif // DIGIKAM_PARSE_TAG_STRING_H

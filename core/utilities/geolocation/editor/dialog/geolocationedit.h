@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef GEOLOCATIONEDIT_H
-#define GEOLOCATIONEDIT_H
+#ifndef DIGIKAM_GEO_LOCATION_EDIT_H
+#define DIGIKAM_GEO_LOCATION_EDIT_H
 
 // Qt includes
 
@@ -109,4 +109,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GEOLOCATIONEDIT_H
+#endif // DIGIKAM_GEO_LOCATION_EDIT_H

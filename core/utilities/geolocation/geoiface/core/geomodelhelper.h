@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GEO_MODEL_HELPER_H
-#define GEO_MODEL_HELPER_H
+#ifndef DIGIKAM_GEO_MODEL_HELPER_H
+#define DIGIKAM_GEO_MODEL_HELPER_H
 
 // Qt includes
 
@@ -107,4 +107,4 @@ Q_SIGNALS:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GeoModelHelper::PropertyFlags)
 
-#endif // GEO_MODEL_HELPER_H
+#endif // DIGIKAM_GEO_MODEL_HELPER_H

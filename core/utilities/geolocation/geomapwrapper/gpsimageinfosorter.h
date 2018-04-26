@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GPS_IMAGE_INFO_SORTER_H
-#define GPS_IMAGE_INFO_SORTER_H
+#ifndef DIGIKAM_GPS_IMAGE_INFO_SORTER_H
+#define DIGIKAM_GPS_IMAGE_INFO_SORTER_H
 
 // Qt includes
 
@@ -88,4 +88,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSImageInfoSorter::SortOptions)
 
-#endif // GPS_IMAGE_INFO_SORTER_H
+#endif // DIGIKAM_GPS_IMAGE_INFO_SORTER_H

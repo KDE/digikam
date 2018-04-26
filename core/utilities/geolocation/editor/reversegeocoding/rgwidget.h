@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef RG_WIDGET_H
-#define RG_WIDGET_H
+#ifndef DIGIKAM_RG_WIDGET_H
+#define DIGIKAM_RG_WIDGET_H
 
 // Qt includes
 
@@ -54,8 +54,10 @@ class RGWidget : public QWidget
 
 public:
 
-    RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const selectionModel,
-             QAbstractItemModel* externTagModel, QWidget* const parent = 0);
+    explicit RGWidget(GPSImageModel* const imageModel,
+                      QItemSelectionModel* const selectionModel,
+                      QAbstractItemModel* externTagModel,
+                      QWidget* const parent = 0);
     ~RGWidget();
 
     void setUIEnabled(const bool state);
@@ -84,7 +86,9 @@ Q_SIGNALS:
      * @param enabledState If true, the containing widgets will be enabled. Else, they will be disabled.
      */
     void signalSetUIEnabled(const bool enabledState);
-    void signalSetUIEnabled(const bool enabledState, QObject* const cancelObject, const QString& cancelSlot);
+    void signalSetUIEnabled(const bool enabledState,
+                            QObject* const cancelObject,
+                            const QString& cancelSlot);
 
     /**
      * Update the progress bar.
@@ -115,4 +119,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RG_WIDGET_H
+#endif // DIGIKAM_RG_WIDGET_H

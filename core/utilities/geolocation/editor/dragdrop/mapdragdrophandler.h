@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MAP_DRAG_DROP_HANDLER_H
-#define MAP_DRAG_DROP_HANDLER_H
+#ifndef DIGIKAM_MAP_DRAG_DROP_HANDLER_H
+#define DIGIKAM_MAP_DRAG_DROP_HANDLER_H
 
 // Qt includes
 
@@ -45,7 +45,7 @@ class MapDragData : public QMimeData
 
 public:
 
-    MapDragData()
+    explicit MapDragData()
       : QMimeData(),
         draggedIndices()
     {
@@ -60,7 +60,8 @@ class MapDragDropHandler : public GeoDragDropHandler
 
 public:
 
-    MapDragDropHandler(QAbstractItemModel* const /*pModel*/, GPSGeoIfaceModelHelper* const parent);
+    explicit MapDragDropHandler(QAbstractItemModel* const /*pModel*/,
+                                GPSGeoIfaceModelHelper* const parent);
     virtual ~MapDragDropHandler();
 
     virtual Qt::DropAction accepts(const QDropEvent* e);
@@ -74,4 +75,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MAP_DRAG_DROP_HANDLER_H
+#endif // DIGIKAM_MAP_DRAG_DROP_HANDLER_H

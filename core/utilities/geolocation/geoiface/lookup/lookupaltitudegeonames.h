@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef LOOKUP_ALTITUDE_GEONAMES_H
-#define LOOKUP_ALTITUDE_GEONAMES_H
+#ifndef DIGIKAM_LOOKUP_ALTITUDE_GEONAMES_H
+#define DIGIKAM_LOOKUP_ALTITUDE_GEONAMES_H
 
 // Qt includes
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif // LOOKUP_ALTITUDE_GEONAMES_H
+#endif // DIGIKAM_LOOKUP_ALTITUDE_GEONAMES_H

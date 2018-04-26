@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TRACK_LISTMODEL_H
-#define TRACK_LISTMODEL_H
+#ifndef DIGIKAM_TRACK_LISTMODEL_H
+#define DIGIKAM_TRACK_LISTMODEL_H
 
 // Qt includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TRACK_LISTMODEL_H
+#endif // DIGIKAM_TRACK_LISTMODEL_H

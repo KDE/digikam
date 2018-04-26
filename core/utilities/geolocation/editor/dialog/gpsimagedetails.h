@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSIMAGEDETAILS_H
-#define GPSIMAGEDETAILS_H
+#ifndef DIGIKAM_GPS_IMAGE_DETAILS_H
+#define DIGIKAM_GPS_IMAGE_DETAILS_H
 
 // Qt includes
 
@@ -48,7 +48,8 @@ class GPSImageDetails : public QWidget
 
 public:
 
-    GPSImageDetails(QWidget* const parent, GPSImageModel* const imageModel);
+    explicit GPSImageDetails(QWidget* const parent,
+                             GPSImageModel* const imageModel);
     ~GPSImageDetails();
 
     void setUIEnabledExternal(const bool state);
@@ -82,4 +83,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSIMAGEDETAILS_H
+#endif // DIGIKAM_GPS_IMAGE_DETAILS_H

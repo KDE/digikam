@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCH_RESULT_MODEL_HELPER_H
-#define SEARCH_RESULT_MODEL_HELPER_H
+#ifndef DIGIKAM_SEARCH_RESULT_MODEL_HELPER_H
+#define DIGIKAM_SEARCH_RESULT_MODEL_HELPER_H
 
 // Qt includes
 
@@ -46,10 +46,10 @@ class SearchResultModelHelper : public GeoModelHelper
 
 public:
 
-    SearchResultModelHelper(SearchResultModel* const resultModel,
-                            QItemSelectionModel* const selectionModel,
-                            GPSImageModel* const imageModel,
-                            QObject* const parent = 0);
+    explicit SearchResultModelHelper(SearchResultModel* const resultModel,
+                                     QItemSelectionModel* const selectionModel,
+                                     GPSImageModel* const imageModel,
+                                     QObject* const parent = 0);
     ~SearchResultModelHelper();
 
     void setVisibility(const bool state);
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SEARCH_RESULT_MODEL_HELPER_H
+#endif // DIGIKAM_SEARCH_RESULT_MODEL_HELPER_H

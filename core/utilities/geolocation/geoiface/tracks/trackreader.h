@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TRACK_READER_H
-#define TRACK_READER_H
+#ifndef DIGIKAM_TRACK_READER_H
+#define DIGIKAM_TRACK_READER_H
 
 // Qt includes
 
@@ -47,7 +47,7 @@ public:
     {
     public:
 
-        TrackReadResult()
+        explicit TrackReadResult()
           : track(),
             isValid(false),
             loadError()
@@ -87,4 +87,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TRACK_READER_H
+#endif // DIGIKAM_TRACK_READER_H

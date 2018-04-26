@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSIMAGELISTDRAGDROPHANDLER_H
-#define GPSIMAGELISTDRAGDROPHANDLER_H
+#ifndef DIGIKAM_GPS_IMAGE_LIST_DRAG_DROP_HANDLER_H
+#define DIGIKAM_GPS_IMAGE_LIST_DRAG_DROP_HANDLER_H
 
 // Qt includes
 
@@ -64,4 +64,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* GPSIMAGELISTDRAGDROPHANDLER_H */
+#endif // DIGIKAM_GPS_IMAGE_LIST_DRAG_DROP_HANDLER_H

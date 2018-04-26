@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TRACK_CORRELATOR_H
-#define TRACK_CORRELATOR_H
+#ifndef DIGIKAM_TRACK_CORRELATOR_H
+#define DIGIKAM_TRACK_CORRELATOR_H
 
 // Local includes
 
@@ -52,7 +52,7 @@ public:
     {
     public:
 
-        Correlation()
+        explicit Correlation()
           : dateTime(),
             userData(),
             nSatellites(-1),
@@ -84,11 +84,11 @@ public:
     {
     public:
 
-        CorrelationOptions()
-        : interpolate(false),
-          interpolationDstTime(0),
-          maxGapTime(0),
-          secondsOffset(0)
+        explicit CorrelationOptions()
+          : interpolate(false),
+            interpolationDstTime(0),
+            maxGapTime(0),
+            secondsOffset(0)
         {
         }
 
@@ -127,4 +127,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::TrackCorrelator::Correlation::List)
 
-#endif // TRACK_CORRELATOR_H
+#endif // DIGIKAM_TRACK_CORRELATOR_H

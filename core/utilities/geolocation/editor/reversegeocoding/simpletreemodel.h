@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SIMPLE_TREE_MODEL_H
-#define SIMPLE_TREE_MODEL_H
+#ifndef DIGIKAM_SIMPLE_TREE_MODEL_H
+#define DIGIKAM_SIMPLE_TREE_MODEL_H
 
 // Qt includes
 
@@ -46,10 +46,10 @@ public:
     {
     public:
 
-        Item()
-            : dataColumns(),
-              parent(0),
-              children()
+        explicit Item()
+          : dataColumns(),
+            parent(0),
+            children()
         {
         }
 
@@ -96,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SIMPLE_TREE_MODEL_H
+#endif // DIGIKAM_SIMPLE_TREE_MODEL_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCH_WIDGET_H
-#define SEARCH_WIDGET_H
+#ifndef DIGIKAM_SEARCH_WIDGET_H
+#define DIGIKAM_SEARCH_WIDGET_H
 
 // Qt includes
 
@@ -53,11 +53,10 @@ class SearchWidget : public QWidget
 
 public:
 
-    SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
-                 GPSImageModel* const gpsImageModel,
-                 QItemSelectionModel* const gpsImageSelectionModel,
-                 QWidget* const parent
-                );
+    explicit SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
+                          GPSImageModel* const gpsImageModel,
+                          QItemSelectionModel* const gpsImageSelectionModel,
+                          QWidget* const parent);
     ~SearchWidget();
 
     GeoModelHelper* getModelHelper() const;
@@ -70,7 +69,8 @@ private Q_SLOTS:
 
     void slotSearchCompleted();
     void slotTriggerSearch();
-    void slotCurrentlySelectedResultChanged(const QModelIndex& current, const QModelIndex& previous);
+    void slotCurrentlySelectedResultChanged(const QModelIndex& current,
+                                            const QModelIndex& previous);
     void slotClearSearchResults();
     void slotVisibilityChanged(bool state);
     void slotCopyCoordinates();
@@ -94,4 +94,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SEARCH_WIDGET_H
+#endif // DIGIKAM_SEARCH_WIDGET_H

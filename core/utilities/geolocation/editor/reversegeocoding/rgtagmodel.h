@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef RGTAGMODEL_H
-#define RGTAGMODEL_H
+#ifndef DIGIKAM_RG_TAG_MODEL_H
+#define DIGIKAM_RG_TAG_MODEL_H
 
 // Qt includes
 
@@ -45,7 +45,8 @@ class DIGIKAM_EXPORT RGTagModel : public QAbstractItemModel
 
 public:
 
-    explicit RGTagModel(QAbstractItemModel* const externalTagModel, QObject* const parent = 0);
+    explicit RGTagModel(QAbstractItemModel* const externalTagModel,
+                        QObject* const parent = 0);
     ~RGTagModel();
 
     // QAbstractItemModel:
@@ -110,4 +111,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RGTAGMODEL_H
+#endif // DIGIKAM_RG_TAG_MODEL_H

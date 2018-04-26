@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSGEOIFACEMODELHELPER_H
-#define GPSGEOIFACEMODELHELPER_H
+#ifndef DIGIKAM_GPS_GEOIFACE_MODEL_HELPER_H
+#define DIGIKAM_GPS_GEOIFACE_MODEL_HELPER_H
 
 // Qt includes
 
@@ -48,9 +48,9 @@ class GPSGeoIfaceModelHelper : public GeoModelHelper
 
 public:
 
-    GPSGeoIfaceModelHelper(GPSImageModel* const model,
-                           QItemSelectionModel* const selectionModel,
-                           QObject* const parent = 0);
+    explicit GPSGeoIfaceModelHelper(GPSImageModel* const model,
+                                    QItemSelectionModel* const selectionModel,
+                                    QObject* const parent = 0);
     virtual ~GPSGeoIfaceModelHelper();
 
     virtual QAbstractItemModel*  model()          const;
@@ -86,4 +86,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSGEOIFACEMODELHELPER_H
+#endif // DIGIKAM_GPS_GEOIFACE_MODEL_HELPER_H

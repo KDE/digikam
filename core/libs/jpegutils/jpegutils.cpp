@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-09-29
- * Description : perform lossless rotation/flip to JPEG file
+ * Description : helper methods for JPEG image format.
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -80,6 +80,7 @@ extern "C"
 #include <QByteArray>
 #include <QFile>
 #include <QFileInfo>
+#include <qplatformdefs.h>
 
 // Local includes
 
@@ -535,9 +536,9 @@ void JpegRotator::updateMetadata(const QString& fileName, const MetaEngineRotati
 
     // File properties restoration.
 
-    struct stat st;
+    QT_STATBUF st;
 
-    if (::stat(QFile::encodeName(m_file).constData(), &st) == 0)
+    if (QT_STAT(QFile::encodeName(m_file).constData(), &st) == 0)
     {
         // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 

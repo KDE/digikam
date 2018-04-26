@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GROUP_STATE_COMPUTER_H
-#define GROUP_STATE_COMPUTER_H
+#ifndef DIGIKAM_GROUP_STATE_COMPUTER_H
+#define DIGIKAM_GROUP_STATE_COMPUTER_H
 
 #include "geogroupstate.h"
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GROUP_STATE_COMPUTER_H
+#endif // DIGIKAM_GROUP_STATE_COMPUTER_H

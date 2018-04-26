@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TREEBRANCH_H
-#define TREEBRANCH_H
+#ifndef DIGIKAM_TREE_BRANCH_H
+#define DIGIKAM_TREE_BRANCH_H
 
 // Qt includes
 
@@ -37,13 +37,13 @@ class TreeBranch
 {
 public:
 
-    TreeBranch()
-        : sourceIndex(),
-          parent(0),
-          data(),
-          type(),
-          oldChildren(),
-          spacerChildren()
+    explicit TreeBranch()
+      : sourceIndex(),
+        parent(0),
+        data(),
+        type(),
+        oldChildren(),
+        spacerChildren()
     {
     }
 
@@ -65,4 +65,4 @@ public:
 
 } // namespace Digikam
 
-#endif // TREEBRANCH_H
+#endif // DIGIKAM_TREE_BRANCH_H

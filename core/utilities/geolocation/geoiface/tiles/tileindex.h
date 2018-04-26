@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TILE_INDEX_H
-#define TILE_INDEX_H
+#ifndef DIGIKAM_TILE_INDEX_H
+#define DIGIKAM_TILE_INDEX_H
 
 // Qt includes
 
@@ -63,7 +63,7 @@ public:
 
 public:
 
-    TileIndex();
+    explicit TileIndex();
     virtual ~TileIndex();
 
     int indexCount()                    const;
@@ -111,4 +111,4 @@ QDebug operator<<(QDebug debugOut, const Digikam::TileIndex& tileIndex);
 
 Q_DECLARE_TYPEINFO(Digikam::TileIndex, Q_MOVABLE_TYPE);
 
-#endif // TILE_INDEX_H
+#endif // DIGIKAM_TILE_INDEX_H

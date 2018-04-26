@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHRESULTMODEL_H
-#define SEARCHRESULTMODEL_H
+#ifndef DIGIKAM_SEARCH_RESULT_MODEL_H
+#define DIGIKAM_SEARCH_RESULT_MODEL_H
 
 // Qt includes
 
@@ -86,4 +86,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SEARCHRESULTMODEL_H
+#endif // DIGIKAM_SEARCH_RESULT_MODEL_H

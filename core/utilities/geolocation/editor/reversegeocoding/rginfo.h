@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef RG_INFO_H
-#define RG_INFO_H
+#ifndef DIGIKAM_RG_INFO_H
+#define DIGIKAM_RG_INFO_H
 
 // Qt includes
 
@@ -52,7 +52,7 @@ public:
     /**
      * Constructor
      */
-    RGInfo();
+    explicit RGInfo();
 
     /**
      * Destructor
@@ -78,4 +78,4 @@ public:
 
 } // namespace Digikam
 
-#endif // RG_INFO_H
+#endif // DIGIKAM_RG_INFO_H

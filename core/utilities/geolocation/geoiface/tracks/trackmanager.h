@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TRACK_MANAGER_H
-#define TRACK_MANAGER_H
+#ifndef DIGIKAM_TRACK_MANAGER_H
+#define DIGIKAM_TRACK_MANAGER_H
 
 // Qt includes
 
@@ -52,7 +52,7 @@ public:
     {
     public:
 
-        TrackPoint()
+        explicit TrackPoint()
           : dateTime(),
             coordinates(),
             nSatellites(-1),
@@ -95,7 +95,7 @@ public:
 
     public:
 
-        Track()
+        explicit Track()
           : url(),
             points(),
             id(0),
@@ -166,4 +166,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TRACK_MANAGER_H
+#endif // DIGIKAM_TRACK_MANAGER_H

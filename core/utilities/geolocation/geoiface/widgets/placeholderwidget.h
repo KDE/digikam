@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PLACE_HOLDER_WIDGET_H
-#define PLACE_HOLDER_WIDGET_H
+#ifndef DIGIKAM_PLACE_HOLDER_WIDGET_H
+#define DIGIKAM_PLACE_HOLDER_WIDGET_H
 
 // Qt includes
 
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PLACE_HOLDER_WIDGET_H
+#endif // DIGIKAM_PLACE_HOLDER_WIDGET_H

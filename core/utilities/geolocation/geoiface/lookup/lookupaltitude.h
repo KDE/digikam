@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef LOOKUP_ALTITUDE_H
-#define LOOKUP_ALTITUDE_H
+#ifndef DIGIKAM_LOOKUP_ALTITUDE_H
+#define DIGIKAM_LOOKUP_ALTITUDE_H
 
 // Qt includes
 
@@ -47,10 +47,10 @@ public:
     {
     public:
 
-        Request()
-            : coordinates(),
-              success(false),
-              data()
+        explicit Request()
+          : coordinates(),
+            success(false),
+            data()
         {
         }
 
@@ -99,4 +99,4 @@ Q_SIGNALS:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::LookupAltitude::StatusAltitude)
 
-#endif // LOOKUP_ALTITUDE_H
+#endif // DIGIKAM_LOOKUP_ALTITUDE_H

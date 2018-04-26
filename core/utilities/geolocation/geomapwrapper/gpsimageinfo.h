@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GPS_IMAGE_INFO_H
-#define GPS_IMAGE_INFO_H
+#ifndef DIGIKAM_GPS_IMAGE_INFO_H
+#define DIGIKAM_GPS_IMAGE_INFO_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ public:
 
 Q_DECLARE_METATYPE(Digikam::GPSImageInfo)
 
-#endif // GPS_IMAGE_INFO_H
+#endif // DIGIKAM_GPS_IMAGE_INFO_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GEO_DRAG_DROP_HANDLER_H
-#define GEO_DRAG_DROP_HANDLER_H
+#ifndef DIGIKAM_GEO_DRAG_DROP_HANDLER_H
+#define DIGIKAM_GEO_DRAG_DROP_HANDLER_H
 
 // Local includes
 
@@ -52,4 +52,4 @@ public:
 
 } // namespace Digikam
 
-#endif // GEO_DRAG_DROP_HANDLER_H
+#endif // DIGIKAM_GEO_DRAG_DROP_HANDLER_H

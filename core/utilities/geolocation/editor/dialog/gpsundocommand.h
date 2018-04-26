@@ -22,9 +22,8 @@
  *
  * ============================================================ */
 
-
-#ifndef GPS_UNDO_COMMAND_H
-#define GPS_UNDO_COMMAND_H
+#ifndef DIGIKAM_GPS_UNDO_COMMAND_H
+#define DIGIKAM_GPS_UNDO_COMMAND_H
 
 // Qt includes
 
@@ -83,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPS_UNDO_COMMAND_H
+#endif // DIGIKAM_GPS_UNDO_COMMAND_H

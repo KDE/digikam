@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef GPS_CORRELATOR_WIDGET_H
-#define GPS_CORRELATOR_WIDGET_H
+#ifndef DIGIKAM_GPS_CORRELATOR_WIDGET_H
+#define DIGIKAM_GPS_CORRELATOR_WIDGET_H
 
 // Qt includes
 
@@ -94,4 +94,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPS_CORRELATOR_WIDGET_H
+#endif // DIGIKAM_GPS_CORRELATOR_WIDGET_H

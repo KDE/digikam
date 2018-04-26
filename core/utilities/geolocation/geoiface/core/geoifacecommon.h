@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef GEO_IFACE_COMMON_H
-#define GEO_IFACE_COMMON_H
+#ifndef DIGIKAM_GEO_IFACE_COMMON_H
+#define DIGIKAM_GEO_IFACE_COMMON_H
 
 // Qt includes
 
@@ -300,4 +300,4 @@ DIGIKAM_EXPORT void GeoIface_assert(const char* const condition,
 
 #define GEOIFACE_ASSERT(cond) ((!(cond)) ? Digikam::GeoIface_assert(#cond,__FILE__,__LINE__) : qt_noop())
 
-#endif // GEO_IFACE_COMMON_H
+#endif // DIGIKAM_GEO_IFACE_COMMON_H

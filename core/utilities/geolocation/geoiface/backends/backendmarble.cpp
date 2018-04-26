@@ -64,7 +64,7 @@ class BMInternalWidgetInfo
 {
 public:
 
-    BMInternalWidgetInfo()
+    explicit BMInternalWidgetInfo()
     {
         bmLayer = 0;
     }
@@ -437,6 +437,7 @@ void BackendMarble::setMapTheme(const QString& newMapTheme)
 
     // Changing the map theme changes the zoom - we want to try to keep the zoom constant
     d->blockingZoomWhileChangingTheme = true;
+
     // Remember the zoom from the cache. The zoom of the widget may not have been set yet!
     const int oldMarbleZoom           = d->cacheZoom;
 
@@ -612,7 +613,7 @@ void BackendMarble::GeoPainter_drawPixmapAtCoordinates(Marble::GeoPainter* const
     // therefore we calculate the pixel position of the center of the image if its offsetPoint
     // is to be at pointOnScreen:
     const QSize pixmapSize      = pixmap.size();
-    const QPoint pixmapHalfSize = QPoint(pixmapSize.width()/2, pixmapSize.height()/2);
+    const QPoint pixmapHalfSize = QPoint(pixmapSize.width() / 2, pixmapSize.height() / 2);
     const QPoint drawPoint      = pointOnScreen + pixmapHalfSize - offsetPoint;
 
     // now re-calculate the coordinates of the new pixel coordinates:
@@ -659,7 +660,7 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
         {
             TrackManager::Track::List const& tracks = s->trackManager->getTrackList();
 
-            for (int trackIdx = 0; trackIdx < tracks.count(); ++trackIdx)
+            for (int trackIdx = 0 ; trackIdx < tracks.count() ; ++trackIdx)
             {
                 TrackManager::Track const& track = tracks.at(trackIdx);
 
@@ -676,7 +677,7 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
                 }
                 else
                 {
-                    for (int coordIdx = 0; coordIdx < track.points.count(); ++coordIdx)
+                    for (int coordIdx = 0 ; coordIdx < track.points.count() ; ++coordIdx)
                     {
                         GeoCoordinates const& coordinates                  = track.points.at(coordIdx).coordinates;
                         const Marble::GeoDataCoordinates marbleCoordinates = coordinates.toMarbleCoordinates();
@@ -837,7 +838,7 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
             }
 
             const QPixmap& markerPixmap = GeoIfaceGlobalObject::instance()->getMarkerPixmap(pixmapName);
-            painter->drawPixmap(clusterPoint.x() - markerPixmap.width() / 2,
+            painter->drawPixmap(clusterPoint.x() - markerPixmap.width()  / 2,
                                 clusterPoint.y() - markerPixmap.height() - 1,
                                 markerPixmap);
         }
@@ -860,7 +861,7 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
         pixmapName                 += QLatin1String("-selected");
         const QPixmap& markerPixmap = GeoIfaceGlobalObject::instance()->getMarkerPixmap(pixmapName);
 
-        painter->drawPixmap(d->dragDropMarkerPos.x() - markerPixmap.width() / 2,
+        painter->drawPixmap(d->dragDropMarkerPos.x() - markerPixmap.width()  / 2,
                             d->dragDropMarkerPos.y() - markerPixmap.height() - 1,
                             markerPixmap);
     }
@@ -1159,7 +1160,7 @@ GeoCoordinates::PairList BackendMarble::getNormalizedBounds()
     return GeoIfaceHelperNormalizeBounds(boundsPair);
 }
 
-bool BackendMarble::eventFilter(QObject *object, QEvent *event)
+bool BackendMarble::eventFilter(QObject* object, QEvent* event)
 {
     if (object != d->marbleWidget)
     {
@@ -1186,8 +1187,8 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
 
     if (s->currentMouseMode == MouseModeRegionSelection)
     {
-        if ((event->type() == QEvent::MouseButtonPress) &&
-            (mouseEvent->button()==Qt::LeftButton))
+        if ((event->type()        == QEvent::MouseButtonPress) &&
+            (mouseEvent->button() == Qt::LeftButton))
         {
             // we need to filter this event because otherwise Marble displays
             // a left click context menu
@@ -1240,7 +1241,7 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
 
             doFilterEvent = true;
         }
-        else if ((event->type() == QEvent::MouseButtonRelease) &&
+        else if ((event->type()        == QEvent::MouseButtonRelease) &&
                  (mouseEvent->button() == Qt::LeftButton))
         {
             if (!d->firstSelectionPoint.hasCoordinates())
@@ -1295,8 +1296,8 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
     }
     else
     {
-        if ((event->type() == QEvent::MouseButtonPress) &&
-            (mouseEvent->button()==Qt::LeftButton))
+        if ((event->type()        == QEvent::MouseButtonPress) &&
+            (mouseEvent->button() == Qt::LeftButton))
         {
             // check whether the user clicked on one of our items:
             // scan in reverse order, because the user would expect
@@ -1334,7 +1335,7 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
     //             }
     //         }
 
-            if (/*s->inEditMode&&*/!doFilterEvent)
+            if (/*s->inEditMode &&*/ !doFilterEvent)
             {
                 // scan in reverse order of painting!
                 for (int clusterIndex = s->clusterList.count()-1 ;
@@ -1377,7 +1378,7 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
         else if ((event->type() == QEvent::MouseMove) &&
                  (d->havePotentiallyMouseMovingObject || d->haveMouseMovingObject))
         {
-            if ((!s->modificationsAllowed) ||
+            if ((!s->modificationsAllowed)                                                 ||
                 (!s->markerModel->tilerFlags().testFlag(AbstractMarkerTiler::FlagMovable)) ||
                 ((d->mouseMoveClusterIndex >= 0) && s->showThumbnails))
             {
@@ -1396,7 +1397,7 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
                 d->haveMouseMovingObject            = true;
 
                 // a cluster or marker is being moved. update its position:
-                QPoint newMarkerPoint = mouseEvent->pos() - d->mouseMoveCenterOffset;
+                QPoint newMarkerPoint               = mouseEvent->pos() - d->mouseMoveCenterOffset;
                 QPoint snapPoint;
 
                 if (findSnapPoint(newMarkerPoint, &snapPoint, 0, 0))
@@ -1597,7 +1598,7 @@ void BackendMarble::slotTrackManagerChanged()
     if (s->trackManager)
     {
         connect(s->trackManager, SIGNAL(signalTracksChanged(QList<TrackManager::TrackChanges>)),
-                this, SLOT(slotTracksChanged( QList<TrackManager::TrackChanges>)));
+                this, SLOT(slotTracksChanged(QList<TrackManager::TrackChanges>)));
 
         // when the visibility of the tracks is changed, we simple schedule a redraw
         connect(s->trackManager, SIGNAL(signalVisibilityChanged(bool)),
@@ -1607,9 +1608,9 @@ void BackendMarble::slotTrackManagerChanged()
     slotScheduleUpdate();
 }
 
-bool BackendMarble::findSnapPoint(const QPoint& actualPoint, 
-                                  QPoint* const snapPoint, 
-                                  GeoCoordinates* const snapCoordinates, 
+bool BackendMarble::findSnapPoint(const QPoint& actualPoint,
+                                  QPoint* const snapPoint,
+                                  GeoCoordinates* const snapCoordinates,
                                   QPair<int, QModelIndex>* const snapTargetIndex)
 {
     QPoint bestSnapPoint;
@@ -1768,7 +1769,8 @@ void BackendMarble::setActive(const bool state)
             info.widget                    = d->marbleWidget;
             info.currentOwner              = this;
             info.backendName               = backendName();
-            info.state                     = d->widgetIsDocked ? GeoIfaceInternalWidgetInfo::InternalWidgetStillDocked : GeoIfaceInternalWidgetInfo::InternalWidgetUndocked;
+            info.state                     = d->widgetIsDocked ? GeoIfaceInternalWidgetInfo::InternalWidgetStillDocked
+                                                               : GeoIfaceInternalWidgetInfo::InternalWidgetUndocked;
 
             BMInternalWidgetInfo intInfo;
             intInfo.bmLayer                = d->bmLayer;
@@ -1875,7 +1877,7 @@ void BackendMarble::applyCacheToWidget()
 void BackendMarble::slotTracksChanged(const QList<TrackManager::TrackChanges> trackChanges)
 {
     // invalidate the cache for all changed tracks
-    foreach(const TrackManager::TrackChanges& tc, trackChanges)
+    foreach (const TrackManager::TrackChanges& tc, trackChanges)
     {
         if (tc.second & (TrackManager::ChangeTrackPoints | TrackManager::ChangeRemoved))
         {

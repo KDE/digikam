@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MAP_WIDGET_H
-#define MAP_WIDGET_H
+#ifndef DIGIKAM_MAP_WIDGET_H
+#define DIGIKAM_MAP_WIDGET_H
 
 // Qt includes
 
@@ -230,4 +230,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MAP_WIDGET_H
+#endif // DIGIKAM_MAP_WIDGET_H

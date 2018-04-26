@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TILE_GROUPER_H
-#define TILE_GROUPER_H
+#ifndef DIGIKAM_TILE_GROUPER_H
+#define DIGIKAM_TILE_GROUPER_H
 
 // Local includes
 
@@ -40,7 +40,8 @@ class DIGIKAM_EXPORT TileGrouper : public QObject
 
 public:
 
-    TileGrouper(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData, QObject* const parent);
+    explicit TileGrouper(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData,
+                         QObject* const parent);
     ~TileGrouper();
 
     void setClustersDirty();
@@ -62,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TILE_GROUPER_H
+#endif // DIGIKAM_TILE_GROUPER_H

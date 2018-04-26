@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ABSTRACT_MARKER_TILER_H
-#define ABSTRACT_MARKER_TILER_H
+#ifndef DIGIKAM_ABSTRACT_MARKER_TILER_H
+#define DIGIKAM_ABSTRACT_MARKER_TILER_H
 
 // Qt includes
 
@@ -73,7 +73,7 @@ public:
     {
     public:
 
-        Tile();
+        explicit Tile();
 
         /**
          * NOTE: Tile is only deleted by AbstractMarkerTiler::tileDelete.
@@ -205,4 +205,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::AbstractMarkerTiler::TilerFlags)
 
-#endif // ABSTRACT_MARKER_TILER_H
+#endif // DIGIKAM_ABSTRACT_MARKER_TILER_H

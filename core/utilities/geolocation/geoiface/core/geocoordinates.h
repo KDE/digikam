@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GEO_COORDINATES_H
-#define GEO_COORDINATES_H
+#ifndef DIGIKAM_GEO_COORDINATES_H
+#define DIGIKAM_GEO_COORDINATES_H
 
 // Qt includes
 
@@ -121,4 +121,4 @@ Q_DECLARE_METATYPE(Digikam::GeoCoordinates::PairList)
 
 DIGIKAM_EXPORT QDebug operator<<(QDebug debug, const Digikam::GeoCoordinates& coordinate);
 
-#endif // GEO_COORDINATES_H
+#endif // DIGIKAM_GEO_COORDINATES_H
