@@ -80,7 +80,6 @@ cmake3 --build . --config RelWithDebInfo --target ext_kimageformats       -- -j$
 # Extra support for digiKam
 
 # libksane support
-cmake3 --build . --config RelWithDebInfo --target ext_kwallet             -- -j$CPU_CORES
 cmake3 --build . --config RelWithDebInfo --target ext_libksane            -- -j$CPU_CORES
 
 # Desktop integration support
