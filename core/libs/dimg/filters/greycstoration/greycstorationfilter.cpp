@@ -94,8 +94,8 @@ class GreycstorationFilter::Private
 
 public:
 
-    explicit Private() :
-        gfact(1.0),
+    explicit Private()
+      : gfact(1.0),
         computationThreads(2),
         mode(GreycstorationFilter::Restore),
         threadManager(new CImg<>::GreycstorationThreadManager)

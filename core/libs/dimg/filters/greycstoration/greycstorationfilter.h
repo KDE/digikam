@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GREYCSTORATIONFILTER_H
-#define GREYCSTORATIONFILTER_H
+#ifndef DIGIKAM_GREY_CSTORATION_FILTER_H
+#define DIGIKAM_GREY_CSTORATION_FILTER_H
 
 // Qt includes
 
@@ -54,7 +54,7 @@ public:
 
 public:
 
-    GreycstorationContainer()
+    explicit GreycstorationContainer()
     {
         setRestorationDefaultSettings();
     };
@@ -229,11 +229,10 @@ private:
 
 private:
 
-
     class Private;
     Private* const d;
 };
 
 } // namespace Digikam
 
-#endif /* GREYCSTORATIONFILTER_H */
+#endif // DIGIKAM_GREY_CSTORATION_FILTER_H
