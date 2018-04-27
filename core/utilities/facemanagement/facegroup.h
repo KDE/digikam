@@ -38,6 +38,7 @@ class QGraphicsSceneHoverEvent;
 namespace Digikam
 {
 
+class Album;
 class ImageInfo;
 class GraphicsDImgView;
 class RegionFrameItem;
@@ -126,6 +127,8 @@ protected Q_SLOTS:
 
     void itemStateChanged(int);
     void startAutoSuggest();
+    void slotAlbumsUpdated(int type);
+    void slotAlbumRenamed(Album* album);
     void slotAssigned(const TaggingAction& action, const ImageInfo& info, const QVariant& faceIdentifier);
     void slotRejected(const ImageInfo& info, const QVariant& faceIdentifier);
     void slotLabelClicked(const ImageInfo& info, const QVariant& faceIdentifier);

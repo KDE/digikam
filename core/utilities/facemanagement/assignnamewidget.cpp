@@ -226,7 +226,7 @@ void AssignNameWidget::Private::checkWidgets()
                     if (!comboBox)
                     {
                         comboBox = new AddTagsComboBox(q);
-                        comboBox->setMinimumWidth(250);
+                        comboBox->setMinimumWidth(230);
                         setupAddTagsWidget(comboBox);
                     }
 
@@ -527,7 +527,8 @@ void AssignNameWidget::Private::updateContents()
 
     if (clickLabel)
     {
-        clickLabel->setText(currentTag ? currentTag->title() : QString());
+        clickLabel->setText(currentTag ? currentTag->title()
+                                       : QString());
     }
 }
 
@@ -711,6 +712,12 @@ void AssignNameWidget::setCurrentTag(TAlbum* album)
 {
     if (d->currentTag == album)
     {
+        if (d->clickLabel)
+        {
+            d->clickLabel->setText(d->currentTag ? d->currentTag->title()
+                                                 : QString());
+        }
+
         return;
     }
 

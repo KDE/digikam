@@ -225,6 +225,12 @@ FaceGroup::FaceGroup(GraphicsDImgView* const view)
     d->visibilityController = new ItemVisibilityController(this);
     d->visibilityController->setShallBeShown(false);
 
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
+            this, SLOT(slotAlbumRenamed(Album*)));
+
+    connect(AlbumManager::instance(), SIGNAL(signalAlbumsUpdated(int)),
+            this, SLOT(slotAlbumsUpdated(int)));
+
     connect(view->previewItem(), SIGNAL(stateChanged(int)),
             this, SLOT(itemStateChanged(int)));
 
@@ -658,6 +664,39 @@ void FaceGroup::rejectAll()
     }
 
     clear();
+}
+
+void FaceGroup::slotAlbumsUpdated(int type)
+{
+    if (type != Album::TAG)
+    {
+        return;
+    }
+
+    if (d->items.isEmpty())
+    {
+        return;
+    }
+
+    clear();
+    load();
+}
+
+void FaceGroup::slotAlbumRenamed(Album* album)
+{
+    if (!album || album->type() != Album::TAG)
+    {
+        return;
+    }
+
+    foreach(FaceItem* const item, d->items)
+    {
+        if (!item->face().isNull() &&
+             item->face().tagId() == album->id())
+        {
+            item->updateCurrentTag();
+        }
+    }
 }
 
 void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, const QVariant& faceIdentifier)
