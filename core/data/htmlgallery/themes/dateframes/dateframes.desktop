@@ -45,7 +45,7 @@ Comment[uk]=Тема рамок на основі теми Ruediger Bente
 Comment[x-test]=xxA frame theme based on Ruediger Bente's frame themexx
 Comment[zh_CN]=基于 Ruediger Bente 边框主题的边框主题
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Elizabeth Marmorstein
 Name[ca]=Elizabeth Marmorstein
 Name[ca@valencia]=Elizabeth Marmorstein
@@ -69,7 +69,7 @@ Name[uk]=Elizabeth Marmorstein
 Name[x-test]=xxElizabeth Marmorsteinxx
 Url=mailto:purplegamba@cox.net
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=Date Frames
 Name[ca]=Marcs de la data
 Name[ca@valencia]=Marcs de la data
@@ -94,7 +94,7 @@ Name[x-test]=xxDate Framesxx
 Name[zh_CN]=日期框
 Url=preview.png
 
-[X-HTMLExport Parameter color1]
+[X-HTMLGallery Parameter color1]
 Name=Thumbnail Background
 Name[ca]=Fons de les miniatures
 Name[ca@valencia]=Fons de les miniatures
@@ -120,7 +120,7 @@ Name[zh_CN]=缩略图背景
 Type=color
 Default=#FFFFFF
 
-[X-HTMLExport Parameter color2]
+[X-HTMLGallery Parameter color2]
 Name=Image Background (contrasting)
 Name[ca]=Fons de les imatges (amb contrast)
 Name[ca@valencia]=Fons de les imatges (amb contrast)
@@ -146,7 +146,7 @@ Name[zh_CN]=图像背景 (对比)
 Type=color
 Default=#000055
 
-[X-HTMLExport Parameter color3]
+[X-HTMLGallery Parameter color3]
 Name=Nav Bar Background (dark)
 Name[ca]=Fons de la barra de navegació (fosc)
 Name[ca@valencia]=Fons de la barra de navegació (fosc)
@@ -172,7 +172,7 @@ Name[zh_CN]=导航栏背景 (深色)
 Type=color
 Default=#000011
 
-[X-HTMLExport Parameter intro]
+[X-HTMLGallery Parameter intro]
 Name=Gallery Introduction
 Name[ca]=Introducció a galeries
 Name[ca@valencia]=Introducció a galeries
@@ -198,7 +198,7 @@ Name[zh_CN]=相册介绍
 Type=string
 Default=Welcome to my web gallery!
 
-[X-HTMLExport Parameter longformat]
+[X-HTMLGallery Parameter longformat]
 Name=Caption Date Format (see http://xsltsl.sourceforge.net/date-time.html)
 Name[ca]=Format de la data del comentari (vegeu http://xsltsl.sourceforge.net/date-time.html)
 Name[ca@valencia]=Format de la data del comentari (vegeu http://xsltsl.sourceforge.net/date-time.html)
@@ -246,7 +246,7 @@ Comment[uk]=Рядок форматування дати XSL: використо
 Comment[x-test]=xxXSL Date Format String: Use the syntax given at http://xsltsl.sourceforge.net/date-time.htmlxx
 Comment[zh_CN]=XSL 日期格式字符串：使用 http://xsltsl.sourceforge.net/date-time.html 给出的语法
 
-[X-HTMLExport Parameter shortformat]
+[X-HTMLGallery Parameter shortformat]
 Name=Image List Date Format
 Name[ca]=Format de la data per a la llista d'imatges
 Name[ca@valencia]=Format de la data per a la llista d'imatges

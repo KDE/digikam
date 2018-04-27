@@ -46,7 +46,7 @@ Comment[uk]=Прекрасно пасує до вашої відпустки в 
 Comment[x-test]=xxA perfect match for your mountain holidaysxx
 Comment[zh_CN]=完美呈现您的游山玩水
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Aurélien Gâteau
 Name[ca]=Aurélien Gâteau
 Name[ca@valencia]=Aurélien Gâteau
@@ -72,7 +72,7 @@ Name[x-test]=xxAurélien Gâteauxx
 Name[zh_CN]=Aurélien Gâteau
 Url=mailto:aurelien.gateau@free.fr
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=Snow
 Name[ca]=Neu
 Name[ca@valencia]=Neu

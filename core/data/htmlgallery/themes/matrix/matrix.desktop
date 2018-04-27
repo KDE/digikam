@@ -45,7 +45,7 @@ Comment[tr]=Fotoğraflarınızı Matris stilinde göster
 Comment[uk]=Показує фотографії в стилі Матриці
 Comment[x-test]=xxShow your photos with Matrix stylexx
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Aurélien Gâteau
 Name[ca]=Aurélien Gâteau
 Name[ca@valencia]=Aurélien Gâteau
@@ -71,7 +71,7 @@ Name[x-test]=xxAurélien Gâteauxx
 Name[zh_CN]=Aurélien Gâteau
 Url=mailto:aurelien.gateau@free.fr
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=Matrix
 Name[ca]=Matrix
 Name[ca@valencia]=Matrix

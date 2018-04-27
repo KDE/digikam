@@ -45,7 +45,7 @@ Comment[uk]=Портування старої теми додатка експо
 Comment[x-test]=xxA port of the old HTML Export plugin themexx
 Comment[zh_CN]=旧版 HTML 导出插件主题的移植
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=Classic
 Name[ca]=Clàssic
 Name[ca@valencia]=Clàssic
@@ -70,7 +70,7 @@ Name[x-test]=xxClassicxx
 Name[zh_CN]=经典
 Url=preview.png
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Aurélien Gâteau
 Name[ca]=Aurélien Gâteau
 Name[ca@valencia]=Aurélien Gâteau
@@ -96,7 +96,7 @@ Name[x-test]=xxAurélien Gâteauxx
 Name[zh_CN]=Aurélien Gâteau
 Url=mailto:aurelien.gateau@free.fr
 
-[X-HTMLExport Parameter thumbnailPerRow]
+[X-HTMLGallery Parameter thumbnailPerRow]
 Name=Thumbnails per row
 Name[ca]=Miniatures per fila
 Name[ca@valencia]=Miniatures per fila
@@ -124,7 +124,7 @@ Default=4
 Min=1
 Max=100
 
-[X-HTMLExport Parameter bgColor]
+[X-HTMLGallery Parameter bgColor]
 Name=Background Color
 Name[ca]=Color de fons
 Name[ca@valencia]=Color de fons
@@ -150,7 +150,7 @@ Name[zh_CN]=背景颜色
 Type=color
 Default=#333333
 
-[X-HTMLExport Parameter fgColor]
+[X-HTMLGallery Parameter fgColor]
 Name=Foreground Color
 Name[ca]=Color de primer pla
 Name[ca@valencia]=Color de primer pla
@@ -176,7 +176,7 @@ Name[zh_CN]=前景颜色
 Type=color
 Default=#d0ffd0
 
-[X-HTMLExport Parameter fontSize]
+[X-HTMLGallery Parameter fontSize]
 Name=Font Size
 Name[ca]=Mida del tipus de lletra
 Name[ca@valencia]=Mida del tipus de lletra
@@ -204,7 +204,7 @@ Default=14
 Min=1
 Max=100
 
-[X-HTMLExport Parameter imgBorderSize]
+[X-HTMLGallery Parameter imgBorderSize]
 Name=Image Border Size
 Name[ca]=Mida de la vora de la imatge
 Name[ca@valencia]=Mida de la vora de la imatge
@@ -232,7 +232,7 @@ Default=1
 Min=1
 Max=50
 
-[X-HTMLExport Parameter imgBorderColor]
+[X-HTMLGallery Parameter imgBorderColor]
 Name=Image Border Color
 Name[ca]=Color de la vora de la imatge
 Name[ca@valencia]=Color de la vora de la imatge
@@ -258,7 +258,7 @@ Name[zh_CN]=图片边框颜色
 Type=color
 Default=#d0ffd0
 
-[X-HTMLExport Parameter linkColor]
+[X-HTMLGallery Parameter linkColor]
 Name=Link Color
 Name[ca]=Color de l'enllaç
 Name[ca@valencia]=Color de l'enllaç
@@ -284,7 +284,7 @@ Name[zh_CN]=链接颜色
 Type=color
 Default=#b3b3b3
 
-[X-HTMLExport Parameter visitedLinkColor]
+[X-HTMLGallery Parameter visitedLinkColor]
 Name=Visited Link Color
 Name[ca]=Color de l'enllaç visitat
 Name[ca@valencia]=Color de l'enllaç visitat

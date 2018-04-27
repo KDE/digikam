@@ -45,7 +45,7 @@ Comment[uk]=Тема рамок на основі теми Ruediger Bente
 Comment[x-test]=xxA frame theme based on Ruediger Bente's frame themexx
 Comment[zh_CN]=基于 Ruediger Bente 边框主题的边框主题
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Elizabeth Marmorstein
 Name[ca]=Elizabeth Marmorstein
 Name[ca@valencia]=Elizabeth Marmorstein
@@ -69,7 +69,7 @@ Name[uk]=Elizabeth Marmorstein
 Name[x-test]=xxElizabeth Marmorsteinxx
 Url=mailto:purplegamba@cox.net
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=Clean Frames
 Name[ca]=Marcs nets
 Name[ca@valencia]=Marcs nets
@@ -94,7 +94,7 @@ Name[x-test]=xxClean Framesxx
 Name[zh_CN]=简洁边框
 Url=preview.png
 
-[X-HTMLExport Parameter style]
+[X-HTMLGallery Parameter style]
 Name=Style
 Name[ca]=Estil
 Name[ca@valencia]=Estil

@@ -24,7 +24,7 @@ Comment[uk]=Тема рамок на основі теми Ruediger Bente
 Comment[x-test]=xxA frame theme based on Ruediger Bente's frame themexx
 Comment[zh_CN]=基于 Ruediger Bente 边框主题的边框主题
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Elizabeth Marmorstein
 Name[ca]=Elizabeth Marmorstein
 Name[ca@valencia]=Elizabeth Marmorstein
@@ -48,7 +48,7 @@ Name[uk]=Elizabeth Marmorstein
 Name[x-test]=xxElizabeth Marmorsteinxx
 Url=mailto:purplegamba@cox.net
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=Blue Frames
 Name[x-test]=xxBlue Framesxx
 Url=preview.png

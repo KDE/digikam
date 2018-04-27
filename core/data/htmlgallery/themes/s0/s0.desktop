@@ -46,7 +46,7 @@ Name[uk]=S0
 Name[x-test]=xxS0xx
 Name[zh_CN]=S0
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Petr Vaněk
 Name[ca]=Petr Vaněk
 Name[ca@valencia]=Petr Vaněk
@@ -70,7 +70,7 @@ Name[uk]=Petr Vaněk
 Name[x-test]=xxPetr Vaněkxx
 Url=mailto:petr@scribus.info
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=S0
 Name[ca]=S0
 Name[ca@valencia]=S0

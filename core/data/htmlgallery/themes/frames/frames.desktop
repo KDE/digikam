@@ -45,7 +45,7 @@ Comment[uk]=Тема рамок
 Comment[x-test]=xxA frame themexx
 Comment[zh_CN]=一个相框主题
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Ruediger Bente
 Name[ca]=Ruediger Bente
 Name[ca@valencia]=Ruediger Bente
@@ -69,7 +69,7 @@ Name[uk]=Ruediger Bente
 Name[x-test]=xxRuediger Bentexx
 Url=mailto:ruediger.bente@gmx.de
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=Frames
 Name[ca]=Marcs
 Name[ca@valencia]=Marcs

@@ -40,7 +40,7 @@ Comment[tr]=Büyük galerilerde sayfa desteği ve yuvarlanmış kenarları olan 
 Comment[uk]=Тема із заокругленими кутами і підтримкою сторінки у великих галереях
 Comment[x-test]=xxA theme with rounded corners and page support on big galeriesxx
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Franz Dietrich
 Name[ca]=Franz Dietrich
 Name[ca@valencia]=Franz Dietrich
@@ -63,7 +63,7 @@ Name[uk]=Franz Dietrich
 Name[x-test]=xxFranz Dietrichxx
 Url=mailto:enaut.w@googlemail.com
 
-[X-HTMLExport Parameter titlebar]
+[X-HTMLGallery Parameter titlebar]
 Name=Title Bar
 Name[ca]=Barra de títol
 Name[ca@valencia]=Barra de títol
@@ -89,7 +89,7 @@ Type=string
 Default=Gallery
 Default[de]=Galerie
 
-[X-HTMLExport Parameter thumbnailsPerPage]
+[X-HTMLGallery Parameter thumbnailsPerPage]
 Name=Images per page
 Name[ca]=Imatges per pàgina
 Name[ca@valencia]=Imatges per pàgina
@@ -116,7 +116,7 @@ Default= 15
 Min=1
 Max=75
 
-[X-HTMLExport Parameter homepage]
+[X-HTMLGallery Parameter homepage]
 Name=Name of the Homepage
 Name[ca]=Nom de la pàgina web
 Name[ca@valencia]=Nom de la pàgina web
@@ -140,7 +140,7 @@ Type=string
 Default=
 Default[de]=
 
-[X-HTMLExport Parameter homepageUrl]
+[X-HTMLGallery Parameter homepageUrl]
 Name=Url to the Homepage
 Name[ca]=URL de la pàgina web
 Name[ca@valencia]=URL de la pàgina web
@@ -165,7 +165,7 @@ Type=string
 Default=
 Default[de]=
 
-[X-HTMLExport Parameter background]
+[X-HTMLGallery Parameter background]
 Name=Background
 Name[ca]=Fons
 Name[ca@valencia]=Fons
@@ -190,7 +190,7 @@ Name[zh_CN]=背景色
 Type=color
 Default=#3e674c
 
-[X-HTMLExport Parameter content-bgc]
+[X-HTMLGallery Parameter content-bgc]
 Name=Content background
 Name[ca]=Fons pel contingut
 Name[ca@valencia]=Fons pel contingut
@@ -214,7 +214,7 @@ Name[zh_CN]=内容背景
 Type=color
 Default=#d8ffd3
 
-[X-HTMLExport Parameter listBackground]
+[X-HTMLGallery Parameter listBackground]
 Name=Icon background
 Name[ca]=Fons per a les icones
 Name[ca@valencia]=Fons per a les icones
@@ -238,7 +238,7 @@ Name[zh_CN]=图标背景
 Type=color
 Default=#78ca97
 
-[X-HTMLExport Parameter navigationColor]
+[X-HTMLGallery Parameter navigationColor]
 Name= Background of the navigation
 Name[ca]=Fons per a la navegació
 Name[ca@valencia]=Fons per a la navegació
@@ -260,7 +260,7 @@ Name[x-test]=xx Background of the navigationxx
 Type=color
 Default=#a7dccf
 
-[X-HTMLExport Parameter thumbBorderColor]
+[X-HTMLGallery Parameter thumbBorderColor]
 Name=Thumbnail border
 Name[ca]=Vora per a les miniatures
 Name[ca@valencia]=Vora per a les miniatures
@@ -284,7 +284,7 @@ Name[zh_CN]=缩略图边框
 Type=color
 Default=#41696d
 
-[X-HTMLExport Parameter urlColor]
+[X-HTMLGallery Parameter urlColor]
 Name=Links
 Name[ca]=Enllaços
 Name[ca@valencia]=Enllaços
@@ -309,7 +309,7 @@ Name[zh_CN]=链接
 Type=color
 Default=#519e64
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=Simple Rounded Shapes
 Name[ca]=Formes arrodonides senzilles
 Name[ca@valencia]=Formes arrodonides senzilles

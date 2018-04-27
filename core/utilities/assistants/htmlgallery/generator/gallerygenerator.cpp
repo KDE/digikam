@@ -403,7 +403,7 @@ public:
             }
 
             QTemporaryFile tempFile;
-            tempFile.setFileTemplate(QLatin1String("htmlexport-"));
+            tempFile.setFileTemplate(QLatin1String("htmlgallery-"));
 
             if (!tempFile.open())
             {

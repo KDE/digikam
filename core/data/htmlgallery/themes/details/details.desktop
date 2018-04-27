@@ -48,7 +48,7 @@ Name[uk]=Подробиці
 Name[x-test]=xxDetailsxx
 Name[zh_CN]=细节
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Gianluca Urgese
 Name[ca]=Gianluca Urgese
 Name[ca@valencia]=Gianluca Urgese
@@ -72,7 +72,7 @@ Name[uk]=Gianluca Urgese
 Name[x-test]=xxGianluca Urgesexx
 Url=mailto:g.urgese@jaone.it
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=Details screenshot
 Name[ca]=Captura de pantalla dels detalls
 Name[ca@valencia]=Captura de pantalla dels detalls
@@ -97,7 +97,7 @@ Name[x-test]=xxDetails screenshotxx
 Name[zh_CN]=细节信息截图
 Url=preview.png
 
-[X-HTMLExport Parameter footer]
+[X-HTMLGallery Parameter footer]
 Name=Footer information
 Name[ca]=Informació del peu
 Name[ca@valencia]=Informació del peu

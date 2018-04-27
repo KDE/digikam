@@ -3,7 +3,7 @@ Name=Vanilla
 Type=Theme
 Comment=This theme is based on the look of Adobe Lightroom's HTML export. It has a simple but usable grid layout and comes with various color presets.
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Wojciech Jarosz
 Name[ca]=Wojciech Jarosz
 Name[ca@valencia]=Wojciech Jarosz
@@ -26,7 +26,7 @@ Name[uk]=Wojciech Jarosz
 Name[x-test]=xxWojciech Jaroszxx
 Url=mailto:wjarosz@ucsd.edu
 
-[X-HTMLExport Parameter author]
+[X-HTMLGallery Parameter author]
 Name=Author
 Name[ca]=Autor
 Name[ca@valencia]=Autor
@@ -51,22 +51,22 @@ Name[zh_CN]=作者
 Type=string
 Default=
 
-[X-HTMLExport Parameter authorEmail]
+[X-HTMLGallery Parameter authorEmail]
 Name=Author Email
 Type=string
 Default=
 
-[X-HTMLExport Parameter numRows]
+[X-HTMLGallery Parameter numRows]
 Name=Rows per page
 Type=int
 Default=3
 
-[X-HTMLExport Parameter numCols]
+[X-HTMLGallery Parameter numCols]
 Name=Columns per page
 Type=int
 Default=3
 
-[X-HTMLExport Parameter style]
+[X-HTMLGallery Parameter style]
 Name=Style
 Name[ca]=Estil
 Name[ca@valencia]=Estil
@@ -110,7 +110,7 @@ Caption-6=Midnight
 Value-7=white_on_black.css
 Caption-7=White on Black
 
-[X-HTMLExport Parameter displayNumbers]
+[X-HTMLGallery Parameter displayNumbers]
 Name=Show image numbers
 Type=list
 Default=inherit
@@ -119,7 +119,7 @@ Caption-0=Yes
 Value-1=none
 Caption-1=No
 
-[X-HTMLExport Parameter dropShadow]
+[X-HTMLGallery Parameter dropShadow]
 Name=Add drop shadow
 Type=list
 Default=true
@@ -128,12 +128,12 @@ Caption-0=Yes
 Value-1=false
 Caption-1=No
 
-[X-HTMLExport Parameter thumbMargin]
+[X-HTMLGallery Parameter thumbMargin]
 Name=Thumbnail margin
 Type=int
 Default=25
 
-[X-HTMLExport Parameter useLyteBox]
+[X-HTMLGallery Parameter useLyteBox]
 Name=Use LyteBox
 Name[ca]=Usa el LyteBox
 Name[ca@valencia]=Usa el LyteBox
@@ -161,7 +161,7 @@ Caption-0=Yes
 Value-1=false
 Caption-1=No
 
-[X-HTMLExport Parameter slideInterval]
+[X-HTMLGallery Parameter slideInterval]
 Name=LyteBox Slideshow Interval
 Name[ca]=Interval entre diapositives del LyteBox
 Name[ca@valencia]=Interval entre diapositives del LyteBox
@@ -194,7 +194,7 @@ Caption-3=8 seconds
 Value-4=10000
 Caption-4=10 seconds
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=Vanilla
 Name[x-test]=xxVanillaxx
 Url=preview.png

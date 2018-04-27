@@ -47,11 +47,11 @@
 namespace Digikam
 {
 
-static const char* AUTHOR_GROUP           = "X-HTMLExport Author";
-static const char* PARAMETER_GROUP_PREFIX = "X-HTMLExport Parameter ";
+static const char* AUTHOR_GROUP           = "X-HTMLGallery Author";
+static const char* PARAMETER_GROUP_PREFIX = "X-HTMLGallery Parameter ";
 static const char* PARAMETER_TYPE_KEY     = "Type";
-static const char* PREVIEW_GROUP          = "X-HTMLExport Preview";
-static const char* OPTIONS_GROUP          = "X-HTMLExport Options";
+static const char* PREVIEW_GROUP          = "X-HTMLGallery Preview";
+static const char* OPTIONS_GROUP          = "X-HTMLGallery Options";
 static const char* STRING_PARAMETER_TYPE  = "string";
 static const char* LIST_PARAMETER_TYPE    = "list";
 static const char* COLOR_PARAMETER_TYPE   = "color";

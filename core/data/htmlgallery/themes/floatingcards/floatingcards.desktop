@@ -45,7 +45,7 @@ Comment[uk]=Темна тема з картками мініатюр або оп
 Comment[x-test]=xxA dark theme with floating thumbnail/description cards. Fast navigation through the gallery.xx
 Comment[zh_CN]=带有浮动缩略图/描述卡片的暗色调主题。快速导航画册。
 
-[X-HTMLExport Author]
+[X-HTMLGallery Author]
 Name=Jiří Boháč
 Name[ca]=Jiří Boháč
 Name[ca@valencia]=Jiří Boháč
@@ -69,7 +69,7 @@ Name[uk]=Jiří Boháč
 Name[x-test]=xxJiří Boháčxx
 Url=mailto:jiri@boha.cz
 
-[X-HTMLExport Preview]
+[X-HTMLGallery Preview]
 Name=Floating Cards
 Name[ca]=Targetes flotants
 Name[ca@valencia]=Targetes flotants
@@ -94,10 +94,10 @@ Name[x-test]=xxFloating Cardsxx
 Name[zh_CN]=浮动卡片
 Url=preview.png
 
-[X-HTMLExport Options]
+[X-HTMLGallery Options]
 Allow-non-square-thumbnails=true
 
-[X-HTMLExport Parameter keyboard_navigation]
+[X-HTMLGallery Parameter keyboard_navigation]
 Name=Keyboard & swipe navigation
 Name[ca]=Navegació amb el teclat i lliscament
 Name[ca@valencia]=Navegació amb el teclat i lliscament
@@ -132,7 +132,7 @@ Caption-1[en_US]=Off
 Caption-1[cz]=Vypnuto
 Caption-1[de]=Aus
 
-[X-HTMLExport Parameter preload]
+[X-HTMLGallery Parameter preload]
 Name=Preload
 Name[ca]=Càrrega prèvia
 Name[ca@valencia]=Càrrega prèvia
