@@ -193,3 +193,8 @@ Value-3=8000
 Caption-3=8 seconds
 Value-4=10000
 Caption-4=10 seconds
+
+[X-HTMLExport Preview]
+Name=Vanilla
+Name[x-test]=xxVanillaxx
+Url=preview.png
