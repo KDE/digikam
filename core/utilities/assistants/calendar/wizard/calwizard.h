@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef CAL_WIZARD_H
-#define CAL_WIZARD_H
+#ifndef DIGIKAM_CAL_WIZARD_H
+#define DIGIKAM_CAL_WIZARD_H
 
 // Qt includes
 
@@ -67,4 +67,4 @@ private:
 
 } // Namespace Digikam
 
-#endif // CAL_WIZARD_H
+#endif // DIGIKAM_CAL_WIZARD_H

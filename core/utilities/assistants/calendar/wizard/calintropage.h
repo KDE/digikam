@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef CAL_INTRO_PAGE_H
-#define CAL_INTRO_PAGE_H
+#ifndef DIGIKAM_CAL_INTRO_PAGE_H
+#define DIGIKAM_CAL_INTRO_PAGE_H
 
 // Qt includes
 
@@ -45,4 +45,4 @@ public:
 
 } // namespace Digikam
 
-#endif // CAL_INTRO_PAGE_H
+#endif // DIGIKAM_CAL_INTRO_PAGE_H

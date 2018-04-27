@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef CAL_PAINTER_H
-#define CAL_PAINTER_H
+#ifndef DIGIKAM_CAL_PAINTER_H
+#define DIGIKAM_CAL_PAINTER_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 }  // Namespace Digikam
 
-#endif // CAL_PAINTER_H
+#endif // DIGIKAM_CAL_PAINTER_H

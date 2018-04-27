@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CALSYSTEM_H
-#define CALSYSTEM_H
+#ifndef DIGIKAM_CAL_SYSTEM_H
+#define DIGIKAM_CAL_SYSTEM_H
 
 // Qt includes
 
@@ -147,4 +147,4 @@ private:
 
 } // Namespace Digikam
 
-#endif // CALSYSTEM_H
+#endif // DIGIKAM_CAL_SYSTEM_H

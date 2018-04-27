@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CALPRINTER_H
-#define CALPRINTER_H
+#ifndef DIGIKAM_CAL_PRINTER_H
+#define DIGIKAM_CAL_PRINTER_H
 
 // Qt includes
 
@@ -43,9 +43,9 @@ class CalPrinter : public QThread
 
 public:
 
-    CalPrinter(QPrinter* const printer,
-               QMap<int, QUrl>& months,
-               QObject* const parent);
+    explicit CalPrinter(QPrinter* const printer,
+                        QMap<int, QUrl>& months,
+                        QObject* const parent);
 
     virtual ~CalPrinter();
 
@@ -71,4 +71,4 @@ private:
 
 }  // Namespace Digikam
 
-#endif // CALPRINTER_H
+#endif // DIGIKAM_CAL_PRINTER_H

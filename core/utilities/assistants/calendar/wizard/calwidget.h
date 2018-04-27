@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CAL_WIDGET_H
-#define CAL_WIDGET_H
+#ifndef DIGIKAM_CAL_WIDGET_H
+#define DIGIKAM_CAL_WIDGET_H
 
 // Qt includes
 
@@ -61,4 +61,4 @@ protected:
 
 } // Namespace Digikam
 
-#endif // CAL_WIDGET_H
+#endif // DIGIKAM_CAL_WIDGET_H

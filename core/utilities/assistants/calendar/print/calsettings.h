@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef CALSETTINGS_H
-#define CALSETTINGS_H
+#ifndef DIGIKAM_CAL_SETTINGS_H
+#define DIGIKAM_CAL_SETTINGS_H
 
 // Qt includes
 
@@ -140,4 +140,4 @@ private:
 
 }  // Namespace Digikam
 
-#endif // CALSETTINGS_H
+#endif // DIGIKAM_CAL_SETTINGS_H
