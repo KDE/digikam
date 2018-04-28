@@ -206,7 +206,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
             }
         }
 
-        ajustFaceRectangles(info,action);
+        ajustFaceRectangles(info, action);
 
         MetaEngineRotation matrix;
         matrix                                        *= currentOrientation;
@@ -313,6 +313,11 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
      *  Get all faces from database and rotate them
      */
     QList<FaceTagsIface> facesList = FaceTagsEditor().databaseFaces(info.id());
+
+    if (facesList.isEmpty())
+    {
+        return;
+    }
 
     QMultiMap<QString, QRect> ajustedFaces;
 
