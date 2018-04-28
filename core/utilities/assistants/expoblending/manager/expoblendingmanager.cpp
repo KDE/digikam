@@ -168,7 +168,7 @@ void ExpoBlendingManager::startWizard()
     }
     else if (d->dlg && (d->dlg->isMinimized() || !d->dlg->isHidden()))
     {
-        d->dlg->showNormal();
+        d->dlg->showNormal();          // krazy:exclude=qmethods
         d->dlg->activateWindow();
         d->dlg->raise();
     }
