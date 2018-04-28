@@ -12,5 +12,5 @@ krazy2all --export textedit \
           --strict all \
           --priority all \
           --verbose \
-          --topdir ../../project \
+          --topdir ../../ \
           --outfile report.krazy
