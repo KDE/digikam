@@ -203,4 +203,5 @@ BUGFIXES:
 175 ==> 387977 - No icon only view of "Extras sidebar": sidebar taking up a lot of space.
 176 ==> 277502 - All versions of version set always displayed in Album view [patch].
 177 ==> 393283 - Caption not updating Exif.Image.ImageDescription field.
-178 ==> 
+178 ==> 391060 - Crashes on undo of very large tif.
+179 ==> 

@@ -27,7 +27,6 @@
 
 // Qt includes
 
-#include <QByteArray>
 #include <QCoreApplication>
 #include <QDataStream>
 #include <QDir>
@@ -40,6 +39,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "dimgloader.h"
 
 namespace Digikam
 {
@@ -129,8 +129,7 @@ bool UndoCache::putData(int level, const DImg& img) const
     ds << img.sixteenBit();
     ds << img.hasAlpha();
 
-    QByteArray ba((const char*)img.bits(), img.numBytes());
-    ds << ba;
+    ds.writeBytes((char*)img.bits(), img.numBytes());
 
     file.close();
 
@@ -159,10 +158,18 @@ DImg UndoCache::getData(int level) const
     ds >> sixteenBit;
     ds >> hasAlpha;
 
-    QByteArray ba;
-    ds >> ba;
+    uint size  = w * h * (sixteenBit ? 8 : 4);
+    char* data = (char*)DImgLoader::new_failureTolerant(size);
 
-    DImg img(w, h, sixteenBit, hasAlpha, (uchar*)ba.data(), true);
+    if (!data)
+    {
+        file.close();
+        return DImg();
+    }
+
+    ds.readBytes(data, size);
+
+    DImg img(w, h, sixteenBit, hasAlpha, (uchar*)data, false);
 
     file.close();
 
