@@ -24,13 +24,13 @@
 #include "qcurhandler.h"
 #include "qanihandler.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QFile>
-#include <QtCore/QHash>
-#include <QtCore/QList>
-#include <QtCore/QTextStream>
-#include <QtGui/QImage>
-#include <QtGui/QPainter>
+#include <QCoreApplication>
+#include <QFile>
+#include <QHash>
+#include <QList>
+#include <QTextStream>
+#include <QImage>
+#include <QPainter>
 
 static void usage ( const QString &errMsg )
 {
@@ -144,7 +144,7 @@ int main ( int argc, char **argv )
       continue;
     }
 
-    if (icoFileName.endsWith(".ico", Qt::CaseInsensitive)) {
+    if (icoFileName.endsWith(QLatin1String(".ico"), Qt::CaseInsensitive)) {
         images += img;
         if ( img.size() == size16 ) {
         if ( imagesToUse.contains ( 16 ) ) {
@@ -177,7 +177,7 @@ int main ( int argc, char **argv )
   }
   if ( images.count() == 0 )
     usage ( "No valid images found!" );
-  if (icoFileName.endsWith(".ico", Qt::CaseInsensitive)) {
+  if (icoFileName.endsWith(QLatin1String(".ico"), Qt::CaseInsensitive)) {
     qSort ( images.begin(), images.end(), sortQImageForSize );
     // 48x48 available -> if not create one
     if ( !imagesToUse.contains ( 48 ) ) {
@@ -242,7 +242,7 @@ int main ( int argc, char **argv )
     return 2;
   }
 
-  if (icoFileName.endsWith(".cur", Qt::CaseInsensitive)) {
+  if (icoFileName.endsWith(QLatin1String(".cur"), Qt::CaseInsensitive)) {
     QtCurHandler ico ( &f );
     if ( !ico.write ( images, hotspotx, hotspoty ) ) {
         fatal ( "Can not create cur data" );
@@ -250,14 +250,14 @@ int main ( int argc, char **argv )
     }
     f.close();
 
-  } else if (icoFileName.endsWith(".ani", Qt::CaseInsensitive)) {
+  } else if (icoFileName.endsWith(QLatin1String(".ani"), Qt::CaseInsensitive)) {
     QtAniHandler ico ( &f );
     if ( !ico.write ( images, hotspotx, hotspoty, framerate ) ) {
         fatal ( "Can not create ani data" );
         return 2;
     }
     f.close();
-  } else if(icoFileName.endsWith(".ico", Qt::CaseInsensitive)) {
+  } else if(icoFileName.endsWith(QLatin1String(".ico"), Qt::CaseInsensitive)) {
     QtIcoHandler ico ( &f );
     if ( !ico.write ( images ) ) {
         fatal ( "Can not create ico data" );

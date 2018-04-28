@@ -40,16 +40,18 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef QTICOHANDLER_H
-#define QTICOHANDLER_H
 
-#include <QtGui/QImageIOHandler>
+#ifndef QICO_HANDLER_H
+#define QICO_HANDLER_H
+
+#include <QImageIOHandler>
 
 class ICOReader;
 class QtIcoHandler: public QImageIOHandler
 {
 public:
-    QtIcoHandler(QIODevice *device);
+
+    explicit QtIcoHandler(QIODevice *device);
     virtual ~QtIcoHandler();
 
     bool canRead() const;
@@ -58,18 +60,17 @@ public:
     bool write(const QList<QImage> &images);
 
     QByteArray name() const;
-    
+
     int imageCount() const;
     bool jumpToImage(int imageNumber);
     bool jumpToNextImage();
-    
-    static bool canRead(QIODevice *device);
-    
-private:
-    int m_currentIconIndex;
-    ICOReader *m_pICOReader;
 
+    static bool canRead(QIODevice *device);
+
+private:
+
+    int        m_currentIconIndex;
+    ICOReader* m_pICOReader;
 };
 
-#endif /* QTICOHANDLER_H */
-
+#endif // QICO_HANDLER_H

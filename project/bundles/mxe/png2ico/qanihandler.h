@@ -40,36 +40,38 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef QTANIHANDLER_H
-#define QTANIHANDLER_H
 
-#include <QtGui/QImageIOHandler>
+#ifndef QANI_HANDLER_H
+#define QANI_HANDLER_H
+
+#include <QImageIOHandler>
 
 class ANIReader;
+
 class QtAniHandler: public QImageIOHandler
 {
 public:
-    QtAniHandler(QIODevice *device);
+
+    explicit QtAniHandler(QIODevice* device);
     virtual ~QtAniHandler();
 
     bool canRead() const;
-    bool read(QImage *image);
-    bool write(const QImage &image, int hotspotx, int hotspoty, int framerate);
-    bool write(const QList<QImage> &images, int hotspotx, int hotspoty, int framerate);
+    bool read(QImage* image);
+    bool write(const QImage& image, int hotspotx, int hotspoty, int framerate);
+    bool write(const QList<QImage>& images, int hotspotx, int hotspoty, int framerate);
 
     QByteArray name() const;
-    
-    int imageCount() const;
+
+    int  imageCount() const;
     bool jumpToImage(int imageNumber);
     bool jumpToNextImage();
-    
-    static bool canRead(QIODevice *device);
-    
-private:
-    int m_currentIconIndex;
-    ANIReader *m_pANIReader;
 
+    static bool canRead(QIODevice* device);
+
+private:
+
+    int        m_currentIconIndex;
+    ANIReader* m_pANIReader;
 };
 
-#endif /* QTANIHANDLER_H */
-
+#endif // QANI_HANDLER_H

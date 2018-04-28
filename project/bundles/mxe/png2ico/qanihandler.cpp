@@ -49,11 +49,11 @@
 
 
 #include "qanihandler.h"
-#include <QtCore/qendian.h>
-#include <QtGui/QImage>
-#include <QtCore/QFile>
-#include <QtCore/QBuffer>
-#include <QtCore/QDebug>
+#include <qendian.h>
+#include <QImage>
+#include <QFile>
+#include <QBuffer>
+#include <QDebug>
 // These next two structs represent how the icon information is stored
 // in an ICO file.
 typedef struct
@@ -757,7 +757,7 @@ bool ANIReader::write(QIODevice * device, const QList<QImage> & images, int hots
 
             maskImage.invertPixels();   // seems as though it needs this
             // NOTE! !! The mask is only flipped vertically - not horizontally !!
-            for (y=maskImage.height()-1; y>=0; y--)
+            for (y=maskImage.height()-1; y>=0; --y)
                 buffer.write((char*)maskImage.scanLine(y), maskImage.bytesPerLine());
 
         }

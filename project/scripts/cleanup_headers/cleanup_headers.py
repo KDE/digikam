@@ -38,7 +38,7 @@ filelist     = list()
 # PATTERNS
 pfile       = re.compile("^.*\.(cpp)$")                   # filename pattern
 pic         = re.compile("^\s*\/\/\s*.*includes?\.*\s*$") # old include comments
-pch         = re.compile(".*={10,}.*")                    # copyright header boundries
+pch         = re.compile(".*={10,}.*")                    # copyright header boundaries
 plocal      = re.compile("\"[a-zA-Z].*\.h\"")             # local includes
 pqt         = re.compile("<[Qq].*(.h)?>")                 # Qt includes
 pkde        = re.compile("<k.*\.h>")                      # KDE includes

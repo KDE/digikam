@@ -39,7 +39,7 @@ import subprocess
 
 # ---------------------------------------------------
 
-# if neccessary, enter the absolute path to the astyle executable
+# if necessary, enter the absolute path to the astyle executable
 astyle = "astyle"
 
 # the file type that should be formatted (defined by its extension)
@@ -111,7 +111,7 @@ def format_path(path, verbose=False):
 
     for f in files2check:
         if format_file(f, verbose) != 0:
-            print("An error occured while formatting '%s'" % f)
+            print("An error occurred while formatting '%s'" % f)
             errors += 1
 
     if (verbose):

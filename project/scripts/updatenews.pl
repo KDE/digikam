@@ -1,9 +1,16 @@
+#!/usr/bin/perl
+
+# Copyright (c) 2008-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 use strict;
 use LWP::UserAgent;
 use File::Slurp;
 
 my $NEWS_FILE = "NEWS";
-my $version = "4.0.0";
+my $version = "6.0.0";
 
 my $header = 'BUGFIXES FROM KDE BUGZILLA';
 my $url = "https://bugs.kde.org/buglist.cgi?f1=cf_versionfixedin&order=Last%20Changed&o1=equals&query_format=advanced&bug_status=RESOLVED&bug_status=CLOSED&v1=$version&product=digikam&columnlist=short_desc&ctype=csv";
