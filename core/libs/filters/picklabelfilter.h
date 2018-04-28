@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PICKLABELFILTER_H
-#define PICKLABELFILTER_H
+#ifndef DIGIKAM_PICK_LABEL_FILTER_H
+#define DIGIKAM_PICK_LABEL_FILTER_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // PICKLABELFILTER_H
+#endif // DIGIKAM_PICK_LABEL_FILTER_H

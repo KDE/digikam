@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef RATINGFILTER_H
-#define RATINGFILTER_H
+#ifndef DIGIKAM_RATING_FILTER_H
+#define DIGIKAM_RATING_FILTER_H
 
 // Local includes
 
@@ -113,4 +113,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RATINGFILTER_H
+#endif // DIGIKAM_RATING_FILTER_H

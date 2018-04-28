@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TEXTFILTER_H
-#define TEXTFILTER_H
+#ifndef DIGIKAM_TEXT_FILTER_H
+#define DIGIKAM_TEXT_FILTER_H
 
 // Local includes
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TEXTFILTER_H
+#endif // DIGIKAM_TEXT_FILTER_H

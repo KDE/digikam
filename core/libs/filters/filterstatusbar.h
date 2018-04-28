@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILTERSTATUSBAR_H
-#define FILTERSTATUSBAR_H
+#ifndef DIGIKAM_FILTER_STATUS_BAR_H
+#define DIGIKAM_FILTER_STATUS_BAR_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FILTERSTATUSBAR_H
+#endif // DIGIKAM_FILTER_STATUS_BAR_H
