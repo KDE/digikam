@@ -273,7 +273,8 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
             // reset for DB. Metadata is already edited.
             finalOrientation = MetaEngine::ORIENTATION_NORMAL;
         }
-        else if (rotateByMetadata)
+
+        if (rotateByMetadata)
         {
             // Setting the rotation flag on Raws with embedded JPEG is a mess
             // Can apply to the RAW data, or to the embedded JPEG, or to both.
