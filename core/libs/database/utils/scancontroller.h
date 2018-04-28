@@ -117,7 +117,7 @@ public:
     /**
      * Schedules a scan of the specified part of the collection.
      * Asynchronous, returns immediately.
-     * A very long delay with timmer restart may be introduced
+     * A very long delay with timer restart may be introduced
      * before the actual scanning starts, so that you can call
      * this often without checking for duplicates.
      * This method is only for the QFileSystemWatcher.
