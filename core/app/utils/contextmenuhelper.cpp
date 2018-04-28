@@ -406,7 +406,7 @@ void ContextMenuHelper::addActionTagToFaceTag(TagModificationHelper* helper, TAl
     connect(tagToFaceTagAction, SIGNAL(triggered()),
             helper, SLOT(slotTagToFaceTag()));
 }
-    
+
 void ContextMenuHelper::addActionTagsToFaceTags(TagModificationHelper* helper, QList< TAlbum* > tags)
 {
     QAction* const tagToFaceTagsAction = new QAction(QIcon::fromTheme(QLatin1String("tag-properties")), i18n("Mark As Face Tags"), this);
