@@ -357,12 +357,11 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     if (d->drawImageFormat)
     {
         QString frm  = info.format();
-        bool drawTop = actualPixmapRect.intersects(d->ratingRect);
 
         if (frm.contains(QLatin1String("-")))
             frm = frm.section(QLatin1Char('-'), -1);   // For RAW format annoted as "RAW-xxx" => "xxx"
 
-        drawImageFormat(p, actualPixmapRect, frm, drawTop);
+        drawImageFormat(p, actualPixmapRect, frm, d->drawImageFormatTop);
     }
 
     if (info.id() == info.currentReferenceImage())

@@ -47,15 +47,16 @@ public:
 
     ImageDelegatePrivate()
     {
-        categoryDrawer      = 0;
         contentWidth        = 0;
-        drawImageFormat     = false;
-        drawCoordinates     = false;
-        drawMouseOverFrame  = true;
         drawFocusFrame      = true;
+        drawCoordinates     = false;
+        drawImageFormat     = false;
+        drawImageFormatTop  = false;
+        drawMouseOverFrame  = true;
         ratingOverThumbnail = false;
-        currentModel        = 0;
+        categoryDrawer      = 0;
         currentView         = 0;
+        currentModel        = 0;
 
         actualPixmapRectCache.setMaxCost(250);
     }
@@ -78,9 +79,10 @@ public:
     QRect                 pickLabelRect;
     QRect                 groupRect;
 
-    bool                  drawImageFormat;
-    bool                  drawCoordinates;
     bool                  drawFocusFrame;
+    bool                  drawCoordinates;
+    bool                  drawImageFormat;
+    bool                  drawImageFormatTop;
     bool                  drawMouseOverFrame;
     bool                  ratingOverThumbnail;
 
