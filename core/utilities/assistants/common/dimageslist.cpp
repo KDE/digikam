@@ -188,12 +188,12 @@ void DImagesListViewItem::setThumb(const QPixmap& pix, bool hasThumb)
 {
 /*
     qCDebug(DIGIKAM_GENERAL_LOG) << "Received new thumbnail for url " << d->url
-                             << ". My view is " << d->view;
+                                 << ". My view is " << d->view;
 */
     if (!d->view)
     {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "This item doesn't have a tree view. "
-                                    << "This should never happen!";
+        qCCritical(DIGIKAM_GENERAL_LOG) << "This item do not have a tree view. "
+                                        << "This should never happen!";
         return;
     }
 

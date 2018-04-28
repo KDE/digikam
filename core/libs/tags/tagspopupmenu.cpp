@@ -544,7 +544,8 @@ void TagsPopupMenu::slotAboutToShow()
                     }
                     else
                     {
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "Tag" << album << "doesn't have a valid parent";
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "Tag" << album
+                                                     << "do not have a valid parent";
                     }
                 }
             }

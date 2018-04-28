@@ -989,7 +989,7 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
                 }
                 else
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "I can't go on, rows "
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "I cannot go on, rows "
                                                  << nRows
                                                  << "> columns "
                                                  << nColumns;

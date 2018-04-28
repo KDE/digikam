@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FACE_PIPELINE_H
-#define FACE_PIPELINE_H
+#ifndef DIGIKAM_FACE_PIPELINE_H
+#define DIGIKAM_FACE_PIPELINE_H
 
 // Qt includes
 
@@ -326,4 +326,4 @@ Q_DECLARE_METATYPE(Digikam::FacePipelinePackage)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FacePipelineFaceTagsIface::Roles)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FacePipelinePackage::ProcessFlags)
 
-#endif // FACE_PIPELINE_H
+#endif // DIGIKAM_FACE_PIPELINE_H

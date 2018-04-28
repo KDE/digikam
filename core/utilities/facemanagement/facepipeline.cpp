@@ -1582,7 +1582,7 @@ void FacePipeline::construct()
 
     if (d->pipeline.isEmpty())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Nothing plugged in. It's a noop.";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Nothing plugged in. It is a noop.";
         return;
     }
 

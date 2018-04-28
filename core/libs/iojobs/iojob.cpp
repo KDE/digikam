@@ -230,7 +230,7 @@ void DeleteJob::run()
             {
                 if (!DTrash::deleteDirRecursivley(deleteUrl.toLocalFile()))
                 {
-                    emit signalError(i18n("Couldn't move folder %1 to collection trash",
+                    emit signalError(i18n("Could not move folder %1 to collection trash",
                                           QDir::toNativeSeparators(fileInfo.path())));
 
                     emit signalOneProccessed();
@@ -241,7 +241,7 @@ void DeleteJob::run()
             {
                 if (!DTrash::deleteImage(deleteUrl.toLocalFile()))
                 {
-                    emit signalError(i18n("Couldn't move image %1 to collection trash",
+                    emit signalError(i18n("Could not move image %1 to collection trash",
                                           QDir::toNativeSeparators(fileInfo.filePath())));
 
                     emit signalOneProccessed();
@@ -326,7 +326,7 @@ void RenameFileJob::run()
 
         if (!file.rename(destUrl.toLocalFile()))
         {
-            qCDebug(DIGIKAM_IOJOB_LOG) << "File couldn't be renamed!";
+            qCDebug(DIGIKAM_IOJOB_LOG) << "File could not be renamed!";
             emit signalError(i18n("Image %1 could not be renamed",
                                   QDir::toNativeSeparators(renameUrl.toLocalFile())));
 
@@ -395,7 +395,7 @@ void RestoreDTrashItemsJob::run()
 
         if (!QFile::rename(item.trashPath, newName.toLocalFile()))
         {
-            qCDebug(DIGIKAM_IOJOB_LOG) << "Trash file couldn't be renamed!";
+            qCDebug(DIGIKAM_IOJOB_LOG) << "Trash file could not be renamed!";
         }
         else
         {

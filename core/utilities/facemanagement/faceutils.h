@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACE_UTILS_H
-#define FACE_UTILS_H
+#ifndef DIGIKAM_FACE_UTILS_H
+#define DIGIKAM_FACE_UTILS_H
 
 // Qt includes
 
@@ -135,4 +135,4 @@ protected:
 
 }  // Namespace Digikam
 
-#endif // FACE_UTILS_H
+#endif // DIGIKAM_FACE_UTILS_H

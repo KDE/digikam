@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT ColorFXContainer
 
 public:
 
-    ColorFXContainer()
+    explicit ColorFXContainer()
     {
         colorFXType = 0; // ColorFXFilter::Solarize
         level       = 0;

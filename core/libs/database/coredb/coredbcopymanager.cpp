@@ -59,7 +59,8 @@ void CoreDbCopyManager::stopProcessing()
     m_isStopProcessing = true;
 }
 
-void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters, DbEngineParameters& toDBParameters)
+void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters,
+                                      DbEngineParameters& toDBParameters)
 {
     m_isStopProcessing = false;
     DbEngineLocking fromLocking;
@@ -177,8 +178,10 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
     emit finished(CoreDbCopyManager::success, QString());
 }
 
-bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& fromActionName,
-                                  CoreDbBackend& toDBbackend, const QString& toActionName)
+bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend,
+                                  const QString& fromActionName,
+                                  CoreDbBackend& toDBbackend,
+                                  const QString& toActionName)
 {
     qCDebug(DIGIKAM_COREDB_LOG) << "Core database: trying to copy contents from DB with ActionName: [" << fromActionName
                                 << "] to DB with ActionName [" << toActionName << "]";
@@ -197,7 +200,7 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
     }
     else
     {
-        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: driver doesn't support query size. "
+        qCDebug(DIGIKAM_COREDB_LOG) << "Core database: driver do not support query size. "
                                        "We try to go to the last row and back to the current.";
 
         result.last();
@@ -285,7 +288,9 @@ bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& f
     return true;
 }
 
-void CoreDbCopyManager::handleClosing(bool isStopThread, CoreDbBackend& fromDBbackend, CoreDbBackend& toDBbackend)
+void CoreDbCopyManager::handleClosing(bool isStopThread,
+                                      CoreDbBackend& fromDBbackend,
+                                      CoreDbBackend& toDBbackend)
 {
     if (isStopThread)
     {

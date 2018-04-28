@@ -55,7 +55,9 @@ ColorFXFilter::ColorFXFilter(QObject* const parent)
     initFilter();
 }
 
-ColorFXFilter::ColorFXFilter(DImg* const orgImage, QObject* const parent, const ColorFXContainer& settings)
+ColorFXFilter::ColorFXFilter(DImg* const orgImage,
+                             QObject* const parent,
+                             const ColorFXContainer& settings)
     : DImgThreadedFilter(orgImage, parent, QLatin1String("ColorFX")),
       m_lutTable(0),
       m_lutTableSize(0)
@@ -401,7 +403,7 @@ void ColorFXFilter::loadLut3D(const QString& path)
 
     if (fi.suffix().toLower() == QLatin1String("cube"))
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "Can't yet process Cube LUTs";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Ca not yet process Cube LUTs";
         // TODO: Adobe Cube LUT http://wwwimages.adobe.com/content/dam/Adobe/en/products/speedgrade/cc/pdfs/cube-lut-specification-1.0.pdf
     }
     else

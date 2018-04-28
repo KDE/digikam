@@ -62,8 +62,8 @@ class DLNAMediaServerDelegate::Private
 {
 public:
 
-    explicit Private() :
-        filterUnknownOut(false),
+    explicit Private()
+      : filterUnknownOut(false),
         useCache(false)
     {
     }
@@ -424,7 +424,7 @@ PLT_MediaObject* DLNAMediaServerDelegate::BuildFromFilePath(const NPT_String&   
         }
         else if (!allip)
         {
-            NPT_LOG_WARNING("Couldn't determine local interface IP so we might return an unreachable IP");
+            NPT_LOG_WARNING("Could not determine local interface IP so we might return an unreachable IP");
         }
 
         object->m_ObjectClass.type = PLT_MediaItem::GetUPnPClass(filepath, &context);

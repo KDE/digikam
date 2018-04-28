@@ -61,8 +61,8 @@ class SetupAlbumView::Private
 {
 public:
 
-    explicit Private() :
-        useLargeThumbsOriginal(false),
+    explicit Private()
+      : useLargeThumbsOriginal(false),
         useLargeThumbsShowedInfo(false),
         iconTreeThumbLabel(0),
         iconShowNameBox(0),
@@ -167,7 +167,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     d->iconShowModDateBox     = new QCheckBox(i18n("Show file &modification date"), iwpanel);
     d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
-                                             "below the image thumbnail if it's different than camera creation date. "
+                                             "below the image thumbnail if it is different than camera creation date. "
                                              "This option is useful to identify quickly which items have been modified."));
 
     d->iconShowResolutionBox  = new QCheckBox(i18n("Show ima&ge dimensions"), iwpanel);

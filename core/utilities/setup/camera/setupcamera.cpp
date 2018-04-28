@@ -75,7 +75,7 @@ class SetupCameraItem : public QTreeWidgetItem
 
 public:
 
-    SetupCameraItem(QTreeWidget* const parent, CameraType* const ctype)
+    explicit SetupCameraItem(QTreeWidget* const parent, CameraType* const ctype)
         : QTreeWidgetItem(parent), m_ctype(0)
     {
         setCameraType(ctype);
@@ -535,7 +535,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->previewItemsWhileDownload->setWhatsThis(i18n("<p>Set this option to preview each item while downloading.</p>"));
 
     d->previewShowIcons          = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
-    d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you don't want to see icons and text in the image preview."));
+    d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you do not want to see icons and text in the image preview."));
 
     grid3->setContentsMargins(spacing, spacing, spacing, spacing);
     grid3->setSpacing(spacing);

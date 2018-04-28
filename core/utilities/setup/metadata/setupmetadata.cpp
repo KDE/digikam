@@ -68,8 +68,8 @@ class SetupMetadata::Private
 {
 public:
 
-    explicit Private() :
-        exifAutoRotateOriginal(false),
+    explicit Private()
+      : exifAutoRotateOriginal(false),
         exifAutoRotateShowedInfo(false),
         fieldsGroup(0),
         readWriteGroup(0),
@@ -266,7 +266,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->rescanImageIfModifiedBox->setText(i18nc("@option:check", "&Rescan file when files are modified"));
     d->rescanImageIfModifiedBox->setWhatsThis(i18nc("@info:whatsthis",
                                                   "Turning this option on, will force digiKam to rescan files that has been modified outside digiKam. "
-                                                  "If a file has changed it's file size or if the last modified timestamp has changed, a rescan of that "
+                                                  "If a file has changed it is file size or if the last modified timestamp has changed, a rescan of that "
                                                   "file will be performed when digiKam starts."));
 
     readWriteLayout->addWidget(readWriteIconLabel,          0, 0, 2, 3);
@@ -590,7 +590,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->extensionsEdit = new QLineEdit(extensionsGroup);
     d->extensionsEdit->setWhatsThis(i18n("<p>Here you can add extra extensions "
                                          "of sidecars files to be processed alongside "
-                                         "regular items. These files won't be visible, "
+                                         "regular items. These files will not be visible, "
                                          "but regarded as an extension of the main file. "
                                          "Just write \"xyz abc\" to support files with "
                                          "the *.xyz and *.abc extensions. The internally "

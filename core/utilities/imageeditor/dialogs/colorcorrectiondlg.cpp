@@ -65,8 +65,8 @@ class ColorCorrectionDlg::Private
 {
 public:
 
-    explicit Private() :
-        imageProfileTitle(0),
+    explicit Private()
+      : imageProfileTitle(0),
         imageProfileDesc(0),
         previewTarget(0),
         keepProfile(0),
@@ -111,8 +111,10 @@ public:
     IccProfile               outputProfile;
 };
 
-ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
-                                       const QString& file, QWidget* const parent)
+ColorCorrectionDlg::ColorCorrectionDlg(Mode mode,
+                                       const DImg& preview,
+                                       const QString& file,
+                                       QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
@@ -120,7 +122,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
 
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
-    d->buttons->button(QDialogButtonBox::Cancel)->setText(i18n("Don't know"));
+    d->buttons->button(QDialogButtonBox::Cancel)->setText(i18n("Do not know"));
     d->buttons->button(QDialogButtonBox::Cancel)->setToolTip(i18n("Take the safest and most appropriate action"));
 
     d->mode                          = mode;

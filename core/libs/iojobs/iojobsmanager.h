@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IO_JOBS_MANAGER_H
-#define IO_JOBS_MANAGER_H
+#ifndef DIGIKAM_IO_JOBS_MANAGER_H
+#define DIGIKAM_IO_JOBS_MANAGER_H
 
 // Qt includes
 
@@ -88,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IO_JOBS_MANAGER_H
+#endif // DIGIKAM_IO_JOBS_MANAGER_H
