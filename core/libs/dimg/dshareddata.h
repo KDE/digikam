@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DSHAREDDATA_H
-#define DSHAREDDATA_H
+#ifndef DIGIKAM_DSHARED_DATA_H
+#define DIGIKAM_DSHARED_DATA_H
 
 // Qt includes
 
@@ -285,4 +285,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DSHAREDDATA_H
+#endif // DIGIKAM_DSHARED_DATA_H

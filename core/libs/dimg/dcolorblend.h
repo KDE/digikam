@@ -36,8 +36,8 @@
               Claudio Ciccani <klan@users.sf.net>.
 */
 
-#ifndef DCOLORBLEND_H
-#define DCOLORBLEND_H
+#ifndef DIGIKAM_DCOLOR_BLEND_H
+#define DIGIKAM_DCOLOR_BLEND_H
 
 namespace Digikam
 {
@@ -216,4 +216,4 @@ inline void DColor::multiply(float factor)
 
 } // namespace Digikam
 
-#endif // DCOLORBLEND_H
+#endif // DIGIKAM_DCOLOR_BLEND_H

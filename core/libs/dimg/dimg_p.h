@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGPRIVATE_H
-#define DIMGPRIVATE_H
+#ifndef DIGIKAM_DIMG_P_H
+#define DIGIKAM_DIMG_P_H
 
 // Qt includes
 
@@ -71,7 +71,7 @@ class DIGIKAM_EXPORT DImg::Private : public DSharedData
 {
 public:
 
-    Private()
+    explicit Private()
     {
         null         = true;
         width        = 0;
@@ -148,4 +148,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIMGPRIVATE_H
+#endif // DIGIKAM_DIMG_P_H

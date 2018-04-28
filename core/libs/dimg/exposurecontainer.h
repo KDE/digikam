@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPOSURECONTAINER_H
-#define EXPOSURECONTAINER_H
+#ifndef DIGIKAM_EXPOSURE_CONTAINER_H
+#define DIGIKAM_EXPOSURE_CONTAINER_H
 
 // Qt includes
 
@@ -40,7 +40,7 @@ class DIGIKAM_EXPORT ExposureSettingsContainer
 
 public:
 
-    ExposureSettingsContainer()
+    explicit ExposureSettingsContainer()
     {
         underExposureIndicator = false;
         overExposureIndicator  = false;
@@ -78,4 +78,4 @@ public:
 
 } // namespace Digikam
 
-#endif // EXPOSURECONTAINER_H
+#endif // DIGIKAM_EXPOSURE_CONTAINER_H

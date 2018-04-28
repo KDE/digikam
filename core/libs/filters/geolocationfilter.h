@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GEOLOCATIONFILTER_H
-#define GEOLOCATIONFILTER_H
+#ifndef DIGIKAM_GEO_LOCATION_FILTER_H
+#define DIGIKAM_GEO_LOCATION_FILTER_H
 
 // Qt includes
 
@@ -59,4 +59,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // GEOLOCATIONFILTER_H
+#endif // DIGIKAM_GEO_LOCATION_FILTER_H
