@@ -27,14 +27,14 @@
 
 // Pragma directives to reduce warnings from Boost header files.
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wundef"
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wundef"
 #endif
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundef"
-#pragma clang diagnostic ignored "-Wunnamed-type-template-args"
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wundef"
+#   pragma clang diagnostic ignored "-Wunnamed-type-template-args"
 #endif
 
 #include <boost/random/bernoulli_distribution.hpp>
@@ -45,11 +45,11 @@
 
 // Restore warnings
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
-#pragma GCC diagnostic pop
+#   pragma GCC diagnostic pop
 #endif
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic pop
+#   pragma clang diagnostic pop
 #endif
 
 // Qt includes
@@ -84,14 +84,22 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
     }
 #endif
 
-    /* Fallback, mostly for Windows, where UUID generation is supposed to be very good. */
+    /* Fallback, mostly for Windows, where UUID generation
+     * is supposed to be very good.
+     */
     if (isEmpty())
     {
         reserve(s);
 
         while (size() < s)
         {
-            append(QByteArray::fromHex(QUuid::createUuid().toString().remove(QLatin1Char('{')).remove(QLatin1Char('}')).remove(QLatin1Char('-')).toLatin1()));
+            append(QByteArray::fromHex(QUuid::createUuid()
+                        .toString()
+                        .remove(QLatin1Char('{'))
+                        .remove(QLatin1Char('}'))
+                        .remove(QLatin1Char('-'))
+                        .toLatin1())
+                  );
         }
 
         resize(s);
@@ -126,17 +134,23 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
 #endif
 }
 
-// --------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------
 
 class RandomNumberGenerator::Private
 {
 public:
 
-    enum { InitialSeed = 5489 }; // guaranteed constant initial seed, do not change
+    enum
+    {
+        // guaranteed constant initial seed, do not change
+        InitialSeed = 5489
+    };
+
+public:
 
     explicit Private()
-        : seed(InitialSeed),
-          engine(InitialSeed)
+      : seed(InitialSeed),
+        engine(InitialSeed)
     {
     }
 

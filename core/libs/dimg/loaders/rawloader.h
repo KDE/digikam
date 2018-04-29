@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef RAWLOADER_H
-#define RAWLOADER_H
+#ifndef DIGIKAM_RAW_LOADER_H
+#define DIGIKAM_RAW_LOADER_H
 
 // Local includes
 
@@ -32,7 +32,7 @@
 #include "dimgloader.h"
 #include "drawdecoding.h"
 #include "digikam_export.h"
-#include "filters/rawprocessingfilter.h"
+#include "rawprocessingfilter.h"
 
 namespace Digikam
 {
@@ -75,4 +75,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* RAWLOADER_H */
+#endif // DIGIKAM_RAW_LOADER_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef QIMAGELOADER_H
-#define QIMAGELOADER_H
+#ifndef DIGIKAM_QIMAGE_LOADER_H
+#define DIGIKAM_QIMAGE_LOADER_H
 
 // Local includes
 
@@ -54,4 +54,4 @@ private:
 
 } // namespace Digikam
 
-#endif // QIMAGELOADER_H
+#endif // DIGIKAM_QIMAGE_LOADER_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAWPROCESSINGFILTERS_H
-#define RAWPROCESSINGFILTERS_H
+#ifndef DIGIKAM_RAW_PROCESSING_FILTERS_H
+#define DIGIKAM_RAW_PROCESSING_FILTERS_H
 
 // KDE includes
 
@@ -61,15 +61,21 @@ public:
     /**
      * Traditional constructor
      */
-    RawProcessingFilter(DImg* const orgImage, QObject* const parent, const DRawDecoding& settings,
+    RawProcessingFilter(DImg* const orgImage,
+                        QObject* const parent,
+                        const DRawDecoding& settings,
                         const QString& name = QString());
 
     /**
      * For use with a master filter. Computation is started immediately.
      */
     RawProcessingFilter(const DRawDecoding& settings,
-                        DImgThreadedFilter* const master, const DImg& orgImage, const DImg& destImage,
-                        int progressBegin=0, int progressEnd=100, const QString& name=QString());
+                        DImgThreadedFilter* const master,
+                        const DImg& orgImage,
+                        const DImg& destImage,
+                        int progressBegin=0,
+                        int progressEnd=100,
+                        const QString& name=QString());
 
     ~RawProcessingFilter();
 
@@ -138,4 +144,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // RAWPROCESSINGFILTERS_H
+#endif // DIGIKAM_RAW_PROCESSING_FILTERS_H
