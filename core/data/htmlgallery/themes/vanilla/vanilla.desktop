@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Vanilla
 Name[ca]=Vainilla
+Name[en_GB]=Vanilla
 Name[nl]=Vanilla
 Name[pt]=Limpo
 Name[uk]=Ванілла
@@ -8,6 +9,7 @@ Name[x-test]=xxVanillaxx
 Type=Theme
 Comment=This theme is based on the look of Adobe Lightroom's HTML export. It has a simple but usable grid layout and comes with various color presets.
 Comment[ca]=Aquest tema està basat en l'aparença de l'exportació HTML del Lightroom de l'Adobe. Té una disposició de quadrícula senzilla però útil i es distribueix amb diverses predefinicions de colors.
+Comment[en_GB]=This theme is based on the look of Adobe Lightroom's HTML export. It has a simple but usable grid layout and comes with various colour presets.
 Comment[nl]=Dit thema is gebaseerd oo het uiterlijk van Adobe Lightroom's HTML export. Het heeft een eenvoudige maar bruikbare rasterindeling en komt met van te voren ingestelde verschillende kleuren.
 Comment[pt]=Este tema é baseado na aparência da exportação para HTML do Adobe Lightroom. Tem uma disposição em grelha simples mas útil e vem com diversas predefinições de cores.
 Comment[uk]=Цю тему засновано на вигляді експортованих даних Adobe Lightroom у форматі HTML. Вона проста, але має зручне табличне компонування і містить різноманітні попередньо визначені набори кольорів.
@@ -64,6 +66,7 @@ Default=
 [X-HTMLGallery Parameter authorEmail]
 Name=Author Email
 Name[ca]=Correu de l'autor
+Name[en_GB]=Author Email
 Name[nl]=E-mailadres van de auteur
 Name[pt]=E-Mail do Autor
 Name[uk]=Адреса ел. пошти автора
@@ -74,6 +77,7 @@ Default=
 [X-HTMLGallery Parameter numRows]
 Name=Rows per page
 Name[ca]=Files per pàgina
+Name[en_GB]=Rows per page
 Name[nl]=Rijen per pagina
 Name[pt]=Linhas por página
 Name[uk]=Кількість рядків на сторінку
@@ -84,6 +88,7 @@ Default=3
 [X-HTMLGallery Parameter numCols]
 Name=Columns per page
 Name[ca]=Columnes per pàgina
+Name[en_GB]=Columns per page
 Name[nl]=Kolommen per pagina
 Name[pt]=Colunas por página
 Name[uk]=Кількість стовпчиків на сторінку
@@ -138,6 +143,7 @@ Caption-7=White on Black
 [X-HTMLGallery Parameter displayNumbers]
 Name=Show image numbers
 Name[ca]=Mostra els números de les imatges
+Name[en_GB]=Show image numbers
 Name[nl]=Afbeeldingsnummers tonen
 Name[pt]=Mostrar os números das imagens
 Name[uk]=Показувати номери зображень
@@ -152,6 +158,7 @@ Caption-1=No
 [X-HTMLGallery Parameter dropShadow]
 Name=Add drop shadow
 Name[ca]=Afegeix una ombra difusa
+Name[en_GB]=Add drop shadow
 Name[nl]=Slagschaduw toevoegen
 Name[pt]=Adicionar um sombreado
 Name[uk]=Додати відкидання тіні
@@ -166,6 +173,7 @@ Caption-1=No
 [X-HTMLGallery Parameter thumbMargin]
 Name=Thumbnail margin
 Name[ca]=Marge de les miniatures
+Name[en_GB]=Thumbnail margin
 Name[nl]=Marge van miniaturen
 Name[pt]=Margem das miniaturas
 Name[uk]=Поле мініатюр
@@ -237,6 +245,7 @@ Caption-4=10 seconds
 [X-HTMLGallery Preview]
 Name=Vanilla
 Name[ca]=Vainilla
+Name[en_GB]=Vanilla
 Name[nl]=Vanilla
 Name[pt]=Limpo
 Name[uk]=Ванілла
