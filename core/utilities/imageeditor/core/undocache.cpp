@@ -160,7 +160,7 @@ bool UndoCache::putData(int level, const DImg& img) const
     ds << img.hasAlpha();
     ds << img.sixteenBit();
 
-    ds.writeBytes((const char*)img.bits(), img.numBytes());
+    ds.writeRawData((const char*)img.bits(), img.numBytes());
 
     file.close();
 
@@ -216,7 +216,7 @@ DImg UndoCache::getData(int level) const
         return DImg();
     }
 
-    ds.readBytes(data, size);
+    ds.readRawData(data, size);
 
     file.close();
 
