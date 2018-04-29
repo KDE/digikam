@@ -126,7 +126,7 @@ bool UndoCache::putData(int level, const DImg& img) const
     QStorageInfo info(d->cacheDir);
 
     qint64 fspace = (info.bytesAvailable() / 1024.0 / 1024.0);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes: " << fspace;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes:" << fspace;
 
     if (fspace < 2048) // Check if free space is over 2 Gb to put data in cache.
     {
@@ -134,7 +134,7 @@ bool UndoCache::putData(int level, const DImg& img) const
 
         QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                               i18n("The free disk space in the path \"%1\" for the undo "
-                                   "cache file is < 2 GBytes! Undo cache is now disabled!",
+                                   "cache file is < 2 GiB! Undo cache is now disabled!",
                                    QDir::toNativeSeparators(d->cacheDir)));
         d->cacheError = true;
 
