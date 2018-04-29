@@ -204,4 +204,5 @@ BUGFIXES:
 176 ==> 277502 - All versions of version set always displayed in Album view [patch].
 177 ==> 393283 - Caption not updating Exif.Image.ImageDescription field.
 178 ==> 391060 - Crashes on undo of very large tif.
-179 ==> 
+179 ==> 366305 - Add a message at startup about the lack of temporary space to perform Undo operations.
+180 ==> 
