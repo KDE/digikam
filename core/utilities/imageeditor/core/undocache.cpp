@@ -128,13 +128,13 @@ bool UndoCache::putData(int level, const DImg& img) const
     qint64 fspace = (info.bytesAvailable() / 1024 / 1024);
     qCDebug(DIGIKAM_GENERAL_LOG) << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes:" << fspace;
 
-    if (fspace == 0) // Special case for the Jenkins Build Server when dimghistorytest is executed.
-    {
-        return false;
-    }
-
     if (fspace < 2048) // Check if free space is over 2 GiB to put data in cache.
     {
+        if (!qApp->activeWindow()) // Special case for the Jenkins build server.
+        {
+            return false;
+        }
+
         QApplication::restoreOverrideCursor();
 
         QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
