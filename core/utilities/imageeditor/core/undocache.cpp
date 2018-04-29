@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <QCoreApplication>
+#include <QApplication>
 #include <QDataStream>
 #include <QDir>
 #include <QFile>
@@ -35,6 +35,11 @@
 #include <QStringList>
 #include <QStandardPaths>
 #include <QStorageInfo>
+#include <QMessageBox>
+
+// KDE includes
+
+#include <klocalizedstring.h>
 
 // Local includes
 
@@ -50,6 +55,7 @@ public:
 
     explicit Private()
     {
+        cacheError = false;
     }
 
     QString cacheFile(int level) const
@@ -60,6 +66,8 @@ public:
     QString   cacheDir;
     QString   cachePrefix;
     QSet<int> cachedLevels;
+
+    bool      cacheError;
 };
 
 UndoCache::UndoCache()
@@ -110,15 +118,32 @@ void UndoCache::clearFrom(int fromLevel)
 
 bool UndoCache::putData(int level, const DImg& img) const
 {
-    QFile file(d->cacheFile(level));
+    if (d->cacheError)
+    {
+        return false;
+    }
+
     QStorageInfo info(d->cacheDir);
 
-    qint64 fspace = (info.bytesAvailable()/1024.0/1024.0);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes: " << fspace;
+    qint64 fspace = (info.bytesAvailable() / 1024.0 / 1024.0);
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes:" << fspace;
 
-    if (file.exists() ||
-        !file.open(QIODevice::WriteOnly) ||
-        fspace < 1024) // Check if free space is over 1 Gb to put data in cache.
+    if (fspace < 2048) // Check if free space is over 2 Gb to put data in cache.
+    {
+        QApplication::restoreOverrideCursor();
+
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("The free disk space in the path \"%1\" for the undo "
+                                   "cache file is < 2 GiB! Undo cache is now disabled!",
+                                   QDir::toNativeSeparators(d->cacheDir)));
+        d->cacheError = true;
+
+        return false;
+    }
+
+    QFile file(d->cacheFile(level));
+
+    if (file.exists() || !file.open(QIODevice::WriteOnly))
     {
         return false;
     }
