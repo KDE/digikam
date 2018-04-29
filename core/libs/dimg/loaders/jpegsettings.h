@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef JPEGSETTINGS_H
-#define JPEGSETTINGS_H
+#ifndef DIGIKAM_JPEG_SETTINGS_H
+#define DIGIKAM_JPEG_SETTINGS_H
 
 // Qt includes
 
@@ -64,4 +64,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* JPEGSETTINGS_H */
+#endif // DIGIKAM_JPEG_SETTINGS_H

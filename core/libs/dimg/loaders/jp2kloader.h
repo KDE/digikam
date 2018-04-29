@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef JP2KLOADER_H
-#define JP2KLOADER_H
+#ifndef DIGIKAM_JP2K_LOADER_H
+#define DIGIKAM_JP2K_LOADER_H
 
 // Local includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* JP2KLOADER_H */
+#endif // DIGIKAM_JP2K_LOADER_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PGFSETTINGS_H
-#define PGFSETTINGS_H
+#ifndef DIGIKAM_PGF_SETTINGS_H
+#define DIGIKAM_PGF_SETTINGS_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* PGFSETTINGS_H */
+#endif // DIGIKAM_PGF_SETTINGS_H

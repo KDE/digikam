@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RANDOMNUMBERGENERATOR_H
-#define RANDOMNUMBERGENERATOR_H
+#ifndef DIGIKAM_RANDOM_NUMBER_GENERATOR_H
+#define DIGIKAM_RANDOM_NUMBER_GENERATOR_H
 
 // Qt includes
 
@@ -69,7 +69,7 @@ public:
      * with a constant value. It is recommended to call a seed method
      * after construction.
      */
-    RandomNumberGenerator();
+    explicit RandomNumberGenerator();
     ~RandomNumberGenerator();
 
     /**
@@ -150,4 +150,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RANDOMNUMBERGENERATOR_H
+#endif // DIGIKAM_RANDOM_NUMBER_GENERATOR_H

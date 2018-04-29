@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGFILTERMANAGER_H
-#define DIMGFILTERMANAGER_H
+#ifndef DIGIKAM_DIMG_FILTER_MANAGER_H
+#define DIGIKAM_DIMG_FILTER_MANAGER_H
 
 // Qt includes
 
@@ -115,4 +115,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIMGFILTERMANAGER_H
+#endif // DIGIKAM_DIMG_FILTER_MANAGER_H

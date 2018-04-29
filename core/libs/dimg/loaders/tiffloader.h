@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TIFFLOADER_H
-#define TIFFLOADER_H
+#ifndef DIGIKAM_TIFF_LOADER_H
+#define DIGIKAM_TIFF_LOADER_H
 
 // C ANSI includes
 
@@ -73,4 +73,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* TIFFLOADER_H */
+#endif // DIGIKAM_TIFF_LOADER_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef PPMLOADER_H
-#define PPMLOADER_H
+#ifndef DIGIKAM_PPM_LOADER_H
+#define DIGIKAM_PPM_LOADER_H
 
 // Local includes
 
@@ -51,4 +51,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* PPMLOADER_H */
+#endif // DIGIKAM_PPM_LOADER_H

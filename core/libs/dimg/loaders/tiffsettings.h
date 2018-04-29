@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TIFFSETTINGS_H
-#define TIFFSETTINGS_H
+#ifndef DIGIKAM_TIFF_SETTINGS_H
+#define DIGIKAM_TIFF_SETTINGS_H
 
 // Qt includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* TIFFSETTINGS_H */
+#endif // DIGIKAM_TIFF_SETTINGS_H

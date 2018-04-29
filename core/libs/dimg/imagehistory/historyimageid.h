@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef HISTORY_IMAGE_ID_H
-#define HISTORY_IMAGE_ID_H
+#ifndef DIGIKAM_HISTORY_IMAGE_ID_H
+#define DIGIKAM_HISTORY_IMAGE_ID_H
 
 // Qt includes
 
@@ -179,4 +179,4 @@ public:
 Q_DECLARE_METATYPE(Digikam::HistoryImageId)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::HistoryImageId::Types)
 
-#endif // HISTORY_IMAGE_ID_H
+#endif // DIGIKAM_HISTORY_IMAGE_ID_H

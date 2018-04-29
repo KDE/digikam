@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FILTERACTION_H
-#define FILTERACTION_H
+#ifndef DIGIKAM_FILTER_ACTION_H
+#define DIGIKAM_FILTER_ACTION_H
 
 // Qt includes
 
@@ -183,4 +183,4 @@ protected:
 Q_DECLARE_METATYPE(Digikam::FilterAction)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::FilterAction::Flags)
 
-#endif // FILTERACTION_H
+#endif // DIGIKAM_FILTER_ACTION_H

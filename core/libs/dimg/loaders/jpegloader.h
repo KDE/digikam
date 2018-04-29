@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef JPEGLOADER_H
-#define JPEGLOADER_H
+#ifndef DIGIKAM_JPEG_LOADER_H
+#define DIGIKAM_JPEG_LOADER_H
 
 // C++ includes
 
@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* JPEGLOADER_H */
+#endif // DIGIKAM_JPEG_LOADER_H
