@@ -126,8 +126,9 @@ bool UndoCache::putData(int level, const DImg& img) const
     QDataStream ds(&file);
     ds << img.width();
     ds << img.height();
-    ds << img.sixteenBit();
+    ds << img.numBytes();
     ds << img.hasAlpha();
+    ds << img.sixteenBit();
 
     ds.writeBytes((char*)img.bits(), img.numBytes());
 
@@ -140,10 +141,11 @@ bool UndoCache::putData(int level, const DImg& img) const
 
 DImg UndoCache::getData(int level) const
 {
-    int  w          = 0;
-    int  h          = 0;
-    bool sixteenBit = false;
+    uint w          = 0;
+    uint h          = 0;
+    uint numBytes   = 0;
     bool hasAlpha   = false;
+    bool sixteenBit = false;
 
     QFile file(d->cacheFile(level));
 
@@ -155,10 +157,20 @@ DImg UndoCache::getData(int level) const
     QDataStream ds(&file);
     ds >> w;
     ds >> h;
-    ds >> sixteenBit;
+    ds >> numBytes;
     ds >> hasAlpha;
+    ds >> sixteenBit;
 
     uint size  = w * h * (sixteenBit ? 8 : 4);
+
+    if (numBytes != size || size == 0 || ds.atEnd())
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "The undo cache file is corrupt";
+
+        file.close();
+        return DImg();
+    }
+
     char* data = (char*)DImgLoader::new_failureTolerant(size);
 
     if (!data)
