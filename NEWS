@@ -206,4 +206,5 @@ BUGFIXES:
 178 ==> 391060 - Crashes on undo of very large tif.
 179 ==> 366305 - Add a message at startup about the lack of temporary space to perform Undo operations.
 180 ==> 366391 - Rotating an image seems to forget to reset the orientation flag.
-181 ==> 
+181 ==> 393654 - Not able to select gpx file.
+182 ==> 

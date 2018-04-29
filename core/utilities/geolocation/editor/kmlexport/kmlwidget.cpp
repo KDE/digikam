@@ -158,7 +158,7 @@ KmlWidget::KmlWidget(GeolocationEdit* const dlg,
     GPXFileLabel_ = new QLabel(i18n("GPX file:"), GPXTracksGroupBox);
 
     GPXFileUrlRequester_ = new DFileSelector(GPXTracksGroupBox);
-    GPXFileUrlRequester_->setFileDlgFilter(i18n("%1|GPS Exchange Format", QLatin1String("*.gpx")));
+    GPXFileUrlRequester_->setFileDlgFilter(i18n("GPS Exchange Format (*.gpx)"));
     GPXFileUrlRequester_->setFileDlgTitle(i18n("Select GPX File to Load"));
     GPXFileUrlRequester_->setFileDlgMode(QFileDialog::ExistingFile);
 
