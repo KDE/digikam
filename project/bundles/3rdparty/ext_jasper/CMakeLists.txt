@@ -14,6 +14,21 @@ ExternalProject_Add(ext_jasper
     URL_MD5 9ef0e943d5b2c364ae84974a753841b8
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_jasper} ${GLOBAL_AUTOMAKE_PROFILE} --disable-opengl
+
+    INSTALL_DIR ${EXTPREFIX_jasper}
+
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_jasper}
+               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
+               ${GLOBAL_PROFILE}
+               -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX_jasper}
+               -DJAS_ENABLE_SHARED=ON
+               -DJAS_ENABLE_LIBJPEG=ON
+               -DJAS_ENABLE_OPENGL=OFF
+               -DJAS_LOCAL=OFF
+               -DJAS_ENABLE_DOC=OFF
+               -DJAS_ENABLE_PROGRAMS=OFF
+               -Wno-dev
+
     UPDATE_COMMAND ""
     ALWAYS 0
 )
