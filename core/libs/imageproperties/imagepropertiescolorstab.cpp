@@ -79,8 +79,8 @@ public:
 
 public:
 
-    explicit Private() :
-        minInterv(0),
+    explicit Private()
+      : minInterv(0),
         maxInterv(0),
         labelMeanValue(0),
         labelPixelsValue(0),
@@ -135,31 +135,32 @@ public:
 };
 
 ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
-    : QTabWidget(parent), d(new Private)
+    : QTabWidget(parent),
+      d(new Private)
 {
     // Histogram tab area -----------------------------------------------------
 
-    QScrollArea* sv = new QScrollArea(this);
+    QScrollArea* const sv = new QScrollArea(this);
     sv->setFrameStyle(QFrame::NoFrame);
     sv->setWidgetResizable(true);
 
-    QWidget* histogramPage = new QWidget(sv->viewport());
-    QGridLayout* topLayout = new QGridLayout(histogramPage);
+    QWidget* const histogramPage = new QWidget(sv->viewport());
+    QGridLayout* const topLayout = new QGridLayout(histogramPage);
     sv->setWidget(histogramPage);
 
     // -------------------------------------------------------------
 
-    DVBox* histoBox    = new DVBox(histogramPage);
-    d->histogramBox    = new HistogramBox(histoBox, LRGBAC, true);
+    DVBox* const histoBox = new DVBox(histogramPage);
+    d->histogramBox       = new HistogramBox(histoBox, LRGBAC, true);
     d->histogramBox->setStatisticsVisible(false);
 
-    QLabel* space = new QLabel(histoBox);
+    QLabel* const space   = new QLabel(histoBox);
     space->setFixedHeight(1);
 
     // -------------------------------------------------------------
 
-    QHBoxLayout* hlay3 = new QHBoxLayout();
-    QLabel* label3     = new QLabel(i18n("Range:"), histogramPage);
+    QHBoxLayout* const hlay3 = new QHBoxLayout();
+    QLabel* const label3     = new QLabel(i18n("Range:"), histogramPage);
     label3->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     d->minInterv = new QSpinBox(histogramPage);
@@ -180,38 +181,38 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QGroupBox* gbox         = new QGroupBox(i18n("Statistics"), histogramPage);
+    QGroupBox* const gbox        = new QGroupBox(i18n("Statistics"), histogramPage);
     gbox->setWhatsThis(i18n("Here you can see the statistical results calculated from the "
                             "selected histogram part. These values are available for all "
                             "channels."));
-    QGridLayout* grid       = new QGridLayout(gbox);
+    QGridLayout* const grid      = new QGridLayout(gbox);
 
-    DTextLabelName* label5  = new DTextLabelName(i18n("Pixels: "), gbox);
-    d->labelPixelsValue     = new DTextLabelValue(QString(), gbox);
+    DTextLabelName* const label5 = new DTextLabelName(i18n("Pixels: "), gbox);
+    d->labelPixelsValue          = new DTextLabelValue(QString(), gbox);
 
-    DTextLabelName* label7  = new DTextLabelName(i18n("Count: "), gbox);
-    d->labelCountValue      = new DTextLabelValue(QString(), gbox);
+    DTextLabelName* const label7  = new DTextLabelName(i18n("Count: "), gbox);
+    d->labelCountValue            = new DTextLabelValue(QString(), gbox);
 
-    DTextLabelName* label4  = new DTextLabelName(i18n("Mean: "), gbox);
-    d->labelMeanValue       = new DTextLabelValue(QString(), gbox);
+    DTextLabelName* const label4  = new DTextLabelName(i18n("Mean: "), gbox);
+    d->labelMeanValue             = new DTextLabelValue(QString(), gbox);
 
-    DTextLabelName* label6  = new DTextLabelName(i18n("Std. deviation: "), gbox);
-    d->labelStdDevValue     = new DTextLabelValue(QString(), gbox);
+    DTextLabelName* const label6  = new DTextLabelName(i18n("Std. deviation: "), gbox);
+    d->labelStdDevValue           = new DTextLabelValue(QString(), gbox);
 
-    DTextLabelName* label8  = new DTextLabelName(i18n("Median: "), gbox);
-    d->labelMedianValue     = new DTextLabelValue(QString(), gbox);
+    DTextLabelName* const label8  = new DTextLabelName(i18n("Median: "), gbox);
+    d->labelMedianValue           = new DTextLabelValue(QString(), gbox);
 
-    DTextLabelName* label9  = new DTextLabelName(i18n("Percentile: "), gbox);
-    d->labelPercentileValue = new DTextLabelValue(QString(), gbox);
+    DTextLabelName* const label9  = new DTextLabelName(i18n("Percentile: "), gbox);
+    d->labelPercentileValue       = new DTextLabelValue(QString(), gbox);
 
-    DTextLabelName* label10 = new DTextLabelName(i18n("Color depth: "), gbox);
-    d->labelColorDepth      = new DTextLabelValue(QString(), gbox);
+    DTextLabelName* const label10 = new DTextLabelName(i18n("Color depth: "), gbox);
+    d->labelColorDepth            = new DTextLabelValue(QString(), gbox);
 
-    DTextLabelName* label11 = new DTextLabelName(i18n("Alpha Channel: "), gbox);
-    d->labelAlphaChannel    = new DTextLabelValue(QString(), gbox);
+    DTextLabelName* const label11 = new DTextLabelName(i18n("Alpha Channel: "), gbox);
+    d->labelAlphaChannel          = new DTextLabelValue(QString(), gbox);
 
-    DTextLabelName* label12 = new DTextLabelName(i18n("Source: "), gbox);
-    d->labelImageRegion     = new DTextLabelValue(QString(), gbox);
+    DTextLabelName* const label12 = new DTextLabelName(i18n("Source: "), gbox);
+    d->labelImageRegion           = new DTextLabelValue(QString(), gbox);
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -235,6 +236,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
     grid->addWidget(d->labelImageRegion,     8, 1, 1, 1);
     grid->setContentsMargins(spacing, spacing, spacing, spacing);
     grid->setSpacing(0);
+    grid->setColumnStretch(0, 10);
+    grid->setColumnStretch(1, 10);
 
     // -------------------------------------------------------------
 
@@ -266,11 +269,11 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
 
     // ICC Profiles tab area ---------------------------------------
 
-    QScrollArea* sv2 = new QScrollArea(this);
+    QScrollArea* const sv2 = new QScrollArea(this);
     sv2->setFrameStyle(QFrame::NoFrame);
     sv2->setWidgetResizable(true);
 
-    d->iccProfileWidget = new ICCProfileWidget(sv2->viewport());
+    d->iccProfileWidget    = new ICCProfileWidget(sv2->viewport());
     sv2->setWidget(d->iccProfileWidget);
     insertTab(Private::ICCPROFILE, sv2, i18n("ICC profile"));
 
@@ -462,7 +465,9 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const QUrl& url)
 
         DRawDecoding rawDecodingSettings = DRawDecoding();
         rawDecodingSettings.optimizeTimeLoading();
-        desc = LoadingDescription(desc.filePath, rawDecodingSettings, LoadingDescription::RawDecodingTimeOptimized);
+        desc                             = LoadingDescription(desc.filePath,
+                                                              rawDecodingSettings,
+                                                              LoadingDescription::RawDecodingTimeOptimized);
     }
 
     if (d->currentLoadingDescription.equalsOrBetterThan(desc))
@@ -484,7 +489,8 @@ void ImagePropertiesColorsTab::loadImageFromUrl(const QUrl& url)
     d->iccProfileWidget->setDataLoading();
 }
 
-void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescription& loadingDescription, const DImg& img)
+void ImagePropertiesColorsTab::slotLoadImageFromUrlComplete(const LoadingDescription& loadingDescription,
+                                                            const DImg& img)
 {
     // Discard any leftover messages from previous, possibly aborted loads
     if ( !loadingDescription.equalsOrBetterThan(d->currentLoadingDescription) )
@@ -700,25 +706,26 @@ void ImagePropertiesColorsTab::updateStatistics()
         channel = LuminosityChannel;
     }
 
-    double mean = renderedHistogram->getMean(channel, min, max);
+    double mean       = renderedHistogram->getMean(channel, min, max);
     d->labelMeanValue->setAdjustedText(value.setNum(mean, 'f', 1));
 
-    double pixels = renderedHistogram->getPixels();
+    double pixels     = renderedHistogram->getPixels();
     d->labelPixelsValue->setAdjustedText(value.setNum((float)pixels, 'f', 0));
 
-    double stddev = renderedHistogram->getStdDev(channel, min, max);
+    double stddev     = renderedHistogram->getStdDev(channel, min, max);
     d->labelStdDevValue->setAdjustedText(value.setNum(stddev, 'f', 1));
 
-    double counts = renderedHistogram->getCount(channel, min, max);
+    double counts     = renderedHistogram->getCount(channel, min, max);
     d->labelCountValue->setAdjustedText(value.setNum((float)counts, 'f', 0));
 
-    double median = renderedHistogram->getMedian(channel, min, max);
+    double median     = renderedHistogram->getMedian(channel, min, max);
     d->labelMedianValue->setAdjustedText(value.setNum(median, 'f', 1));
 
     double percentile = (pixels > 0 ? (100.0 * counts / pixels) : 0.0);
     d->labelPercentileValue->setAdjustedText(value.setNum(percentile, 'f', 1));
 
-    d->labelImageRegion->setAdjustedText( (type == FullImageHistogram) ? i18n("Full Image") : i18n("Image Region") );
+    d->labelImageRegion->setAdjustedText((type == FullImageHistogram) ? i18n("Full Image")
+                                                                      : i18n("Image Region"));
 }
 
 void ImagePropertiesColorsTab::getICCData()
