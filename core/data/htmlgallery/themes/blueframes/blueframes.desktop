@@ -2,15 +2,20 @@
 Type=Theme
 Name=Blue Frames
 Name[ca]=Marcs blaus
+Name[ca@valencia]=Marcs blaus
 Name[en_GB]=Blue Frames
 Name[nl]=Blauwe frames
 Name[pt]=Molduras Azuis
+Name[sv]=Blåa ramar
 Name[uk]=Сині рамки
 Name[x-test]=xxBlue Framesxx
 Comment=A theme variation based Frames theme
 Comment[ca]=Una variació del tema basat en el tema Marcs
+Comment[ca@valencia]=Una variació del tema basat en el tema Marcs
 Comment[en_GB]=A theme variation based Frames theme
 Comment[nl]=Een themavariatie gebaseerd op Frames-thema
+Comment[pt]=Uma variação de temas, baseado no tema Molduras
+Comment[sv]=En temavariant baserad på temat Ramar
 Comment[uk]=Варіант теми на основі теми «Рамки»
 Comment[x-test]=xxA theme variation based Frames themexx
 
@@ -41,9 +46,11 @@ Url=mailto:purplegamba@cox.net
 [X-HTMLGallery Preview]
 Name=Blue Frames
 Name[ca]=Marcs blaus
+Name[ca@valencia]=Marcs blaus
 Name[en_GB]=Blue Frames
 Name[nl]=Blauwe frames
 Name[pt]=Molduras Azuis
+Name[sv]=Blåa ramar
 Name[uk]=Сині рамки
 Name[x-test]=xxBlue Framesxx
 Url=preview.png
