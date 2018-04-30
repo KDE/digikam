@@ -427,7 +427,7 @@ elif [[ "$ARCH" = "i686" ]] ; then
 fi
 
 if [[ ! -s ./$APPIMGBIN ]] ; then
-    wget -q https://github.com/probonopd/AppImageKit/releases/download/10/$APPIMGBIN -O ./$APPIMGBIN
+    wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/$APPIMGBIN -O ./$APPIMGBIN
 fi
 
 chmod a+x ./$APPIMGBIN
