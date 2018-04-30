@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef TEXTUREFILTER_H
-#define TEXTUREFILTER_H
+#ifndef DIGIKAM_TEXTURE_FILTER_H
+#define DIGIKAM_TEXTURE_FILTER_H
 
 // Qt includes
 
@@ -90,4 +90,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* TEXTUREFILTER_H */
+#endif // DIGIKAM_TEXTURE_FILTER_H

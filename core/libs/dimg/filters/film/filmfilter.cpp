@@ -38,8 +38,8 @@
 namespace Digikam
 {
 
-FilmContainer::FilmContainer() :
-    d(QSharedPointer<Private>(new Private))
+FilmContainer::FilmContainer()
+    : d(QSharedPointer<Private>(new Private))
 {
 }
 
@@ -250,7 +250,7 @@ LevelsContainer FilmContainer::toLevels() const
     LevelsContainer l;
     int max = d->sixteenBit ? 65535 : 255;
 
-    for (int i = LuminosityChannel; i <= AlphaChannel; i++)
+    for (int i = LuminosityChannel ; i <= AlphaChannel ; i++)
     {
         l.lInput[i]  = blackPointForChannel(i) * max * d->exposure;
         l.hInput[i]  = whitePointForChannel(i) * d->profile.wp(i);

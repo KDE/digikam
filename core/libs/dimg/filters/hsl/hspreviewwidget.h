@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef HSPREVIEWWIDGET_H
-#define HSPREVIEWWIDGET_H
+#ifndef DIGIKAM_HS_PREVIEW_WIDGET_H
+#define DIGIKAM_HS_PREVIEW_WIDGET_H
 
 // Qt includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* HSPREVIEWWIDGET_H */
+#endif // DIGIKAM_HS_PREVIEW_WIDGET_H

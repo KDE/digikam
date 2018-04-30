@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef LOCALCONTRASTCONTAINER_H
-#define LOCALCONTRASTCONTAINER_H
+#ifndef DIGIKAM_LOCAL_CONTRAST_CONTAINER_H
+#define DIGIKAM_LOCAL_CONTRAST_CONTAINER_H
 
 #define TONEMAPPING_MAX_STAGES 4
 
@@ -40,7 +40,7 @@ class DIGIKAM_EXPORT LocalContrastContainer
 
 public:
 
-    LocalContrastContainer();
+    explicit LocalContrastContainer();
     ~LocalContrastContainer();
 
     double getPower(int nstage)  const;
@@ -65,4 +65,4 @@ public:
 
 } // namespace Digikam
 
-#endif // LOCALCONTRASTCONTAINER_H
+#endif // DIGIKAM_LOCAL_CONTRAST_CONTAINER_H

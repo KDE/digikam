@@ -52,12 +52,12 @@
 namespace Digikam
 {
 
-class Private
+class BorderSettings::Private
 {
 public:
 
-    explicit Private() :
-        preserveAspectRatio(0),
+    explicit Private()
+      : preserveAspectRatio(0),
         labelBackground(0),
         labelBorderPercent(0),
         labelBorderWidth(0),
@@ -67,7 +67,8 @@ public:
         borderType(0),
         borderPercent(0),
         borderWidth(0)
-    {}
+    {
+    }
 
     static const QString configBorderTypeEntry;
     static const QString configBorderPercentEntry;
@@ -104,17 +105,17 @@ public:
     DIntNumInput*        borderWidth;
 };
 
-const QString Private::configBorderTypeEntry(QLatin1String("Border Type"));
-const QString Private::configBorderPercentEntry(QLatin1String("Border Percent"));
-const QString Private::configBorderWidthEntry(QLatin1String("Border Width"));
-const QString Private::configPreserveAspectRatioEntry(QLatin1String("Preserve Aspect Ratio"));
-const QString Private::configSolidColorEntry(QLatin1String("Solid Color"));
-const QString Private::configNiepceBorderColorEntry(QLatin1String("Niepce Border Color"));
-const QString Private::configNiepceLineColorEntry(QLatin1String("Niepce Line Color"));
-const QString Private::configBevelUpperLeftColorEntry(QLatin1String("Bevel Upper Left Color"));
-const QString Private::configBevelLowerRightColorEntry(QLatin1String("Bevel Lower Right Color"));
-const QString Private::configDecorativeFirstColorEntry(QLatin1String("Decorative First Color"));
-const QString Private::configDecorativeSecondColorEntry(QLatin1String("Decorative Second Color"));
+const QString BorderSettings::Private::configBorderTypeEntry(QLatin1String("Border Type"));
+const QString BorderSettings::Private::configBorderPercentEntry(QLatin1String("Border Percent"));
+const QString BorderSettings::Private::configBorderWidthEntry(QLatin1String("Border Width"));
+const QString BorderSettings::Private::configPreserveAspectRatioEntry(QLatin1String("Preserve Aspect Ratio"));
+const QString BorderSettings::Private::configSolidColorEntry(QLatin1String("Solid Color"));
+const QString BorderSettings::Private::configNiepceBorderColorEntry(QLatin1String("Niepce Border Color"));
+const QString BorderSettings::Private::configNiepceLineColorEntry(QLatin1String("Niepce Line Color"));
+const QString BorderSettings::Private::configBevelUpperLeftColorEntry(QLatin1String("Bevel Upper Left Color"));
+const QString BorderSettings::Private::configBevelLowerRightColorEntry(QLatin1String("Bevel Lower Right Color"));
+const QString BorderSettings::Private::configDecorativeFirstColorEntry(QLatin1String("Decorative First Color"));
+const QString BorderSettings::Private::configDecorativeSecondColorEntry(QLatin1String("Decorative Second Color"));
 
 // --------------------------------------------------------
 
@@ -122,12 +123,12 @@ BorderSettings::BorderSettings(QWidget* parent)
     : QWidget(parent),
       d(new Private)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    QGridLayout* grid = new QGridLayout(parent);
+    QGridLayout* const grid = new QGridLayout(parent);
 
-    QLabel* label1 = new QLabel(i18n("Type:"));
-    d->borderType  = new DComboBox();
+    QLabel* const label1    = new QLabel(i18n("Type:"));
+    d->borderType           = new DComboBox();
     d->borderType->addItem(i18nc("solid border type", "Solid"));
     // NOTE: Niepce is a real name. This is the first guy in the world to have built a camera.
     d->borderType->addItem(QLatin1String("Niepce"));
@@ -151,7 +152,7 @@ BorderSettings::BorderSettings(QWidget* parent)
     d->borderType->setDefaultIndex(BorderContainer::SolidBorder);
     d->borderType->setWhatsThis(i18n("Select the border type to add around the image here."));
 
-    DLineWidget* line1 = new DLineWidget(Qt::Horizontal);
+    DLineWidget* const line1 = new DLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------------
 
@@ -174,7 +175,7 @@ BorderSettings::BorderSettings(QWidget* parent)
     d->borderWidth->setDefaultValue(100);
     d->borderWidth->setWhatsThis(i18n("Set here the border width in pixels to add around the image."));
 
-    DLineWidget* line2 = new DLineWidget(Qt::Horizontal);
+    DLineWidget* const line2 = new DLineWidget(Qt::Horizontal);
 
     // -------------------------------------------------------------------
 
