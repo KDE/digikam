@@ -44,7 +44,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dimgloader.h"
 
 namespace Digikam
 {
@@ -166,12 +165,14 @@ bool UndoCache::putData(int level, const DImg& img) const
     {
         file.close();
         file.remove();
+
         return false;
     }
 
     d->cachedLevels << level;
 
     file.close();
+
     return true;
 }
 
@@ -197,38 +198,35 @@ DImg UndoCache::getData(int level) const
     ds >> hasAlpha;
     ds >> sixteenBit;
 
-    qint64 size  = w * h * (sixteenBit ? 8 : 4);
-
-    if (ds.status() != QDataStream::Ok ||
-        ds.atEnd() || numBytes != size || size == 0)
+    if (ds.status() != QDataStream::Ok || ds.atEnd())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "The undo cache file is corrupt";
 
         file.close();
+
         return DImg();
     }
 
-    char* data = (char*)DImgLoader::new_failureTolerant(size);
+    DImg img(w, h, sixteenBit, hasAlpha);
 
-    if (!data)
+    if (img.isNull() || numBytes != img.numBytes())
     {
         file.close();
+
         return DImg();
     }
 
-    qint64 readSize = file.read(data, size);
+    qint64 readBytes = file.read((char*)img.bits(), numBytes);
 
-    if (file.error() != QFileDevice::NoError || readSize != size)
+    if (file.error() != QFileDevice::NoError || readBytes != numBytes)
     {
-        delete [] data;
-
         file.close();
+
         return DImg();
     }
-
-    DImg img(w, h, sixteenBit, hasAlpha, (uchar*)data, false);
 
     file.close();
+
     return img;
 }
 
