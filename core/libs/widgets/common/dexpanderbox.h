@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DEXPANDER_BOX_H
-#define DEXPANDER_BOX_H
+#ifndef DIGIKAM_DEXPANDER_BOX_H
+#define DIGIKAM_DEXPANDER_BOX_H
 
 // Qt includes
 
@@ -346,4 +346,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DEXPANDER_BOX_H
+#endif // DIGIKAM_DEXPANDER_BOX_H

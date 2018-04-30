@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CIE_TONGUE_WIDGET_H
-#define CIE_TONGUE_WIDGET_H
+#ifndef DIGIKAM_CIE_TONGUE_WIDGET_H
+#define DIGIKAM_CIE_TONGUE_WIDGET_H
 
 // Qt includes
 
@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT CIETongueWidget : public QWidget
 
 public:
 
-    CIETongueWidget(int w, int h, QWidget* const parent=0, cmsHPROFILE hMonitor=0);
+    explicit CIETongueWidget(int w, int h, QWidget* const parent=0, cmsHPROFILE hMonitor=0);
     ~CIETongueWidget();
 
     bool setProfileData(const QByteArray& profileData=QByteArray());
@@ -96,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CIE_TONGUE_WIDGET_H
+#endif // DIGIKAM_CIE_TONGUE_WIDGET_H

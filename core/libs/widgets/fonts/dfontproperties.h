@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DFONT_PROPERTIES_H
-#define DFONT_PROPERTIES_H
+#ifndef DIGIKAM_DFONT_PROPERTIES_H
+#define DIGIKAM_DFONT_PROPERTIES_H
 
 // Qt includes
 
@@ -293,4 +293,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(DFontProperties::DisplayFlags)
 
 } // namespace Digikam
 
-#endif // DFONT_PROPERTIES_H
+#endif // DIGIKAM_DFONT_PROPERTIES_H

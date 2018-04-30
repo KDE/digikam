@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DFILE_SELECTOR_H
-#define DFILE_SELECTOR_H
+#ifndef DIGIKAM_DFILE_SELECTOR_H
+#define DIGIKAM_DFILE_SELECTOR_H
 
 // Qt includes
 
@@ -79,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DFILE_SELECTOR_H
+#endif // DIGIKAM_DFILE_SELECTOR_H

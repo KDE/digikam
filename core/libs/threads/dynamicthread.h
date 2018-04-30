@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DYNAMIC_THREAD_H
-#define DYNAMIC_THREAD_H
+#ifndef DIGIKAM_DYNAMIC_THREAD_H
+#define DIGIKAM_DYNAMIC_THREAD_H
 
 // Qt includes
 
@@ -147,4 +147,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DYNAMIC_THREAD_H
+#endif // DIGIKAM_DYNAMIC_THREAD_H

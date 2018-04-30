@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ABSTRACTITEMDRAGDROPHANDLER_H
-#define ABSTRACTITEMDRAGDROPHANDLER_H
+#ifndef DIGIKAM_ABSTRACT_ITEM_DRAG_DROP_HANDLER_H
+#define DIGIKAM_ABSTRACT_ITEM_DRAG_DROP_HANDLER_H
 
 // Qt includes
 
@@ -79,4 +79,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // ABSTRACTITEMDRAGDROPHANDLER_H
+#endif // DIGIKAM_ABSTRACT_ITEM_DRAG_DROP_HANDLER_H

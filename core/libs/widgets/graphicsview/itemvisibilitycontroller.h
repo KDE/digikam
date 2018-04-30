@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ITEMVISIBILITYCONTROLLER_H
-#define ITEMVISIBILITYCONTROLLER_H
+#ifndef DIGIKAM_ITEM_VISIBILITY_CONTROLLER_H
+#define DIGIKAM_ITEM_VISIBILITY_CONTROLLER_H
 
 // Qt includes
 
@@ -311,4 +311,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // ITEMVISIBILITYCONTROLLER_H
+#endif // DIGIKAM_ITEM_VISIBILITY_CONTROLLER_H

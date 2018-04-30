@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DHISTORY_VIEW_H
-#define DHISTORY_VIEW_H
+#ifndef DIGIKAM_DHISTORY_VIEW_H
+#define DIGIKAM_DHISTORY_VIEW_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DHISTORY_VIEW_H
+#endif // DIGIKAM_DHISTORY_VIEW_H

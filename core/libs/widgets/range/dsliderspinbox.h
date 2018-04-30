@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DSLIDER_SPINBOX_H
-#define DSLIDER_SPINBOX_H
+#ifndef DIGIKAM_DSLIDER_SPINBOX_H
+#define DIGIKAM_DSLIDER_SPINBOX_H
 
 // Qt includes
 
@@ -207,4 +207,4 @@ Q_SIGNALS:
 
 } // namespace Digikam
 
-#endif // DSLIDER_SPINBOX_H
+#endif // DIGIKAM_DSLIDER_SPINBOX_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGPREVIEWITEM_H
-#define DIMGPREVIEWITEM_H
+#ifndef DIGIKAM_DIMG_PREVIEW_ITEM_H
+#define DIGIKAM_DIMG_PREVIEW_ITEM_H
 
 // Qt includes
 
@@ -101,4 +101,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIMGPREVIEWITEM_H
+#endif // DIGIKAM_DIMG_PREVIEW_ITEM_H

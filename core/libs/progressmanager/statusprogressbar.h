@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef STATUS_PROGRESS_BAR_H
-#define STATUS_PROGRESS_BAR_H
+#ifndef DIGIKAM_STATUS_PROGRESS_BAR_H
+#define DIGIKAM_STATUS_PROGRESS_BAR_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace Digikam
 
-#endif // STATUS_PROGRESS_BAR_H
+#endif // DIGIKAM_STATUS_PROGRESS_BAR_H

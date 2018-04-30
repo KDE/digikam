@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef OVERLAY_WIDGET_H
-#define OVERLAY_WIDGET_H
+#ifndef DIGIKAM_OVERLAY_WIDGET_H
+#define DIGIKAM_OVERLAY_WIDGET_H
 
 // Local includes
 
@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT OverlayWidget : public DHBox
 
 public:
 
-    OverlayWidget(QWidget* const alignWidget, QWidget* const parent, const QString& name = QString());
+    explicit OverlayWidget(QWidget* const alignWidget, QWidget* const parent, const QString& name = QString());
     ~OverlayWidget();
 
     QWidget* alignWidget() const;
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif // OVERLAY_WIDGET_H
+#endif // DIGIKAM_OVERLAY_WIDGET_H

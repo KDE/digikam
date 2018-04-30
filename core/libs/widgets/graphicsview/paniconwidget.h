@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef PAN_ICON_WIDGET_H
-#define PAN_ICON_WIDGET_H
+#ifndef DIGIKAM_PAN_ICON_WIDGET_H
+#define DIGIKAM_PAN_ICON_WIDGET_H
 
 // Qt includes
 
@@ -185,4 +185,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PAN_ICON_WIDGET_H
+#endif // DIGIKAM_PAN_ICON_WIDGET_H

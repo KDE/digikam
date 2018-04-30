@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCH_TEXT_BAR_H
-#define SEARCH_TEXT_BAR_H
+#ifndef DIGIKAM_SEARCH_TEXT_BAR_H
+#define DIGIKAM_SEARCH_TEXT_BAR_H
 
 // Qt includes
 
@@ -205,4 +205,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SEARCH_TEXT_BAR_H
+#endif // DIGIKAM_SEARCH_TEXT_BAR_H

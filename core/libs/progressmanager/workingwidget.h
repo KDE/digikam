@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef WORKING_WIDGET_H
-#define WORKING_WIDGET_H
+#ifndef DIGIKAM_WORKING_WIDGET_H
+#define DIGIKAM_WORKING_WIDGET_H
 
 // Qt includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WORKING_WIDGET_H
+#endif // DIGIKAM_WORKING_WIDGET_H

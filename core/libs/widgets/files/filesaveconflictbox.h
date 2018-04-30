@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef FILE_SAVE_CONFLICT_BOX_H
-#define FILE_SAVE_CONFLICT_BOX_H
+#ifndef DIGIKAM_FILE_SAVE_CONFLICT_BOX_H
+#define DIGIKAM_FILE_SAVE_CONFLICT_BOX_H
 
 // Qt includes
 
@@ -75,4 +75,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FILE_SAVE_CONFLICT_BOX_H
+#endif // DIGIKAM_FILE_SAVE_CONFLICT_BOX_H

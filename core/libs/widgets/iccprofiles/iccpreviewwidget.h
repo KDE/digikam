@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCPREVIEWWIDGET_H
-#define ICCPREVIEWWIDGET_H
+#ifndef DIGIKAM_ICC_PREVIEW_WIDGET_H
+#define DIGIKAM_ICC_PREVIEW_WIDGET_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ private :
 
 } // namespace Digikam
 
-#endif // ICCPREVIEWWIDGET_H
+#endif // DIGIKAM_ICC_PREVIEW_WIDGET_H

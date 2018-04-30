@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILTERSHISTORYWIDGET_H
-#define FILTERSHISTORYWIDGET_H
+#ifndef DIGIKAM_FILTERS_HISTORY_WIDGET_H
+#define DIGIKAM_FILTERS_HISTORY_WIDGET_H
 
 // Qt includes
 
@@ -47,7 +47,7 @@ class RemoveFilterAction : public QAction
 
 public:
 
-    RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* const parent = 0);
+    explicit RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* const parent = 0);
     ~RemoveFilterAction()
     {
     }
@@ -103,4 +103,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FILTERSHISTORYWIDGET_H
+#endif // DIGIKAM_FILTERS_HISTORY_WIDGET_H

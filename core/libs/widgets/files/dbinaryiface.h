@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DBINARYIFACE_H
-#define DBINARYIFACE_H
+#ifndef DIGIKAM_DBINARY_IFACE_H
+#define DIGIKAM_DBINARY_IFACE_H
 
 // Qt includes
 
@@ -143,4 +143,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DBINARYIFACE_H
+#endif // DIGIKAM_DBINARY_IFACE_H

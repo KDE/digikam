@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GRAPHICSDIMGITEM_H
-#define GRAPHICSDIMGITEM_H
+#ifndef DIGIKAM_GRAPHICS_DIMG_ITEM_H
+#define DIGIKAM_GRAPHICS_DIMG_ITEM_H
 
 // Qt includes
 
@@ -94,4 +94,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // GRAPHICSDIMGITEM_H
+#endif // DIGIKAM_GRAPHICS_DIMG_ITEM_H

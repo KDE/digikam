@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PARALLEL_WORKERS_H
-#define PARALLEL_WORKERS_H
+#ifndef DIGIKAM_PARALLEL_WORKERS_H
+#define DIGIKAM_PARALLEL_WORKERS_H
 
 // Qt includes
 
@@ -41,11 +41,12 @@ class DIGIKAM_EXPORT ParallelWorkers
 
 public:
 
-    /** ParallelWorkers is a helper class to distribute work over
-     *  several identical workers objects.
-     *  See ParallelAdapter for guidance how to use it.
+    /**
+     * ParallelWorkers is a helper class to distribute work over
+     * several identical workers objects.
+     * See ParallelAdapter for guidance how to use it.
      */
-    ParallelWorkers();
+    explicit ParallelWorkers();
     virtual ~ParallelWorkers();
 
     /// The corresponding methods of all added worker objects will be called
@@ -59,15 +60,19 @@ public:
     /// Returns true if the current number of added workers has reached the optimalWorkerCount()
     bool optimalWorkerCountReached() const;
 
-    /** Regarding the number of logical CPUs on the current machine,
-        returns the optimal count of concurrent workers */
-    static int  optimalWorkerCount();
+    /**
+     * Regarding the number of logical CPUs on the current machine,
+     * returns the optimal count of concurrent workers
+     */
+    static int optimalWorkerCount();
 
 public:
 
     /// Connects signals outbound from all workers to a given receiver
 
-    bool connect(const char* signal, const QObject* receiver, const char* method,
+    bool connect(const char* signal,
+                 const QObject* receiver,
+                 const char* method,
                  Qt::ConnectionType type = Qt::AutoConnection) const;
 
 protected:
@@ -78,16 +83,19 @@ protected:
 
     // Replaces slot call distribution of the target QObject
     int replacementQtMetacall(QMetaObject::Call _c, int _id, void** _a);
-    const QMetaObject *replacementMetaObject() const;
+    const QMetaObject* replacementMetaObject() const;
+
     // Return the target QObject (double inheritance)
     virtual QObject* asQObject() = 0;
+
     // The qt_metacall of WorkerObject, one level above the target QObject
     virtual int WorkerObjectQtMetacall(QMetaObject::Call _c, int _id, void** _a) = 0;
-    // The moc-generated metaObject of the target object
-    virtual const QMetaObject *mocMetaObject() const = 0;
 
-    int replacementStaticQtMetacall(QMetaObject::Call _c, int _id, void **_a);
-    typedef void (*StaticMetacallFunction)(QObject *, QMetaObject::Call, int, void **);
+    // The moc-generated metaObject of the target object
+    virtual const QMetaObject* mocMetaObject() const = 0;
+
+    int replacementStaticQtMetacall(QMetaObject::Call _c, int _id, void** _a);
+    typedef void (*StaticMetacallFunction)(QObject*, QMetaObject::Call, int, void**);
     virtual StaticMetacallFunction staticMetacallPointer() = 0;
 
 protected:
@@ -117,41 +125,76 @@ public:
      * For outbound connections (signals emitted from the WorkerObject),
      * use ParallelAdapter's connect to have a connection from all added WorkerObjects.
      */
+    explicit ParallelAdapter() {}
+    ~ParallelAdapter()         {}
 
-    ParallelAdapter() {}
-    ~ParallelAdapter() {}
-
-    void add(A* const worker) { ParallelWorkers::add(worker); }
+    void add(A* const worker)
+    {
+        ParallelWorkers::add(worker);
+    }
 
     // Internal Implentation
     // I know this is a hack
 
     int WorkerObjectQtMetacall(QMetaObject::Call _c, int _id, void** _a)
-        { return WorkerObject::qt_metacall(_c, _id, _a); }
-    const QMetaObject *mocMetaObject() const
-        { return A::metaObject(); }
-    static void qt_static_metacall(QObject* o, QMetaObject::Call _c, int _id, void **_a)
-        { static_cast<ParallelAdapter*>(o)->replacementStaticQtMetacall(_c, _id, _a); }
-    virtual StaticMetacallFunction staticMetacallPointer() { return qt_static_metacall; }
+    {
+        return WorkerObject::qt_metacall(_c, _id, _a);
+    }
+    
+    const QMetaObject* mocMetaObject() const
+    {
+        return A::metaObject();
+    }
+    
+    static void qt_static_metacall(QObject* o, QMetaObject::Call _c, int _id, void** _a)
+    {
+        static_cast<ParallelAdapter*>(o)->replacementStaticQtMetacall(_c, _id, _a);
+    }
+    
+    virtual StaticMetacallFunction staticMetacallPointer()
+    {
+        return qt_static_metacall;
+    }
 
-
-    virtual const QMetaObject *metaObject() const
-        { return ParallelWorkers::replacementMetaObject(); }
+    virtual const QMetaObject* metaObject() const
+    {
+        return ParallelWorkers::replacementMetaObject();
+    }
+    
     virtual int qt_metacall(QMetaObject::Call _c, int _id, void** _a)
-        { return ParallelWorkers::replacementQtMetacall(_c, _id, _a); }
+    {
+        return ParallelWorkers::replacementQtMetacall(_c, _id, _a);
+    }
 
-    virtual QObject* asQObject() { return this; }
+    virtual QObject* asQObject()
+    {
+        return this;
+    }
 
-    void schedule() { ParallelWorkers::schedule(); }
+    void schedule()
+    {
+        ParallelWorkers::schedule();
+    }
+    
     void deactivate(WorkerObject::DeactivatingMode mode = WorkerObject::FlushSignals)
-        { ParallelWorkers::deactivate(mode); }
-    void wait() { ParallelWorkers::wait(); }
+    {
+        ParallelWorkers::deactivate(mode);
+    }
+    
+    void wait()
+    {
+        ParallelWorkers::wait();
+    }
 
-    bool connect(const char* signal, const QObject* receiver, const char* method,
+    bool connect(const char* signal,
+                 const QObject* receiver,
+                 const char* method,
                  Qt::ConnectionType type = Qt::AutoConnection) const
-        { return ParallelWorkers::connect(signal, receiver, method, type); }
+    {
+        return ParallelWorkers::connect(signal, receiver, method, type);
+    }
 };
 
 } // namespace Digikam
 
-#endif // PARALLEL_WORKERS_H
+#endif // DIGIKAM_PARALLEL_WORKERS_H

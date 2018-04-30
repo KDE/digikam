@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PREVIEWLAYOUT_H
-#define PREVIEWLAYOUT_H
+#ifndef DIGIKAM_PREVIEW_LAYOUT_H
+#define DIGIKAM_PREVIEW_LAYOUT_H
 
 // Qt includes
 
@@ -112,4 +112,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(SinglePhotoPreviewLayout::SetZoomFlags)
 
 } // namespace Digikam
 
-#endif // PREVIEWLAYOUT_H
+#endif // DIGIKAM_PREVIEW_LAYOUT_H

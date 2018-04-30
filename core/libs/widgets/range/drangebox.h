@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DRANGE_BOX_H
-#define DRANGE_BOX_H
+#ifndef DIGIKAM_DRANGE_BOX_H
+#define DIGIKAM_DRANGE_BOX_H
 
 // Qt includes
 
@@ -99,4 +99,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DRANGE_BOX_H
+#endif // DIGIKAM_DRANGE_BOX_H

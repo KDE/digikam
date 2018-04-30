@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef WORKER_OBJECT_H
-#define WORKER_OBJECT_H
+#ifndef DIGIKAM_WORKER_OBJECT_H
+#define DIGIKAM_WORKER_OBJECT_H
 
 // Qt includes
 
@@ -79,7 +79,7 @@ public:
      * Please check if you need to call shutDown from your destructor (see below).
      */
 
-    WorkerObject();
+    explicit WorkerObject();
     ~WorkerObject();
 
     State state() const;
@@ -189,4 +189,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WORKER_OBJECT_H
+#endif // DIGIKAM_WORKER_OBJECT_H

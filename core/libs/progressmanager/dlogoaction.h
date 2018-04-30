@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DLOGO_ACTION_H
-#define DLOGO_ACTION_H
+#ifndef DIGIKAM_DLOGO_ACTION_H
+#define DIGIKAM_DLOGO_ACTION_H
 
 // Qt includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DLOGO_ACTION_H
+#endif // DIGIKAM_DLOGO_ACTION_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef PROGRESS_MANAGER_H
-#define PROGRESS_MANAGER_H
+#ifndef DIGIKAM_PROGRESS_MANAGER_H
+#define DIGIKAM_PROGRESS_MANAGER_H
 
 // Qt includes
 
@@ -467,4 +467,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PROGRESS_MANAGER_H
+#endif // DIGIKAM_PROGRESS_MANAGER_H
