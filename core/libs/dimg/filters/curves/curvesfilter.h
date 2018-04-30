@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CURVESFILTER_H
-#define CURVESFILTER_H
+#ifndef DIGIKAM_CURVES_FILTER_H
+#define DIGIKAM_CURVES_FILTER_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CURVESFILTER_H
+#endif // DIGIKAM_CURVES_FILTER_H

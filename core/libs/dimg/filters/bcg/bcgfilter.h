@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef BCGFILTER_H
-#define BCGFILTER_H
+#ifndef DIGIKAM_BCG_FILTER_H
+#define DIGIKAM_BCG_FILTER_H
 
 // Local includes
 
@@ -97,4 +97,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* BCGFILTER_H */
+#endif // DIGIKAM_BCG_FILTER_H

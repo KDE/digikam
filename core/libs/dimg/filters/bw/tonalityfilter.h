@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TONALITYFILTER_H
-#define TONALITYFILTER_H
+#ifndef DIGIKAM_TONALITY_FILTER_H
+#define DIGIKAM_TONALITY_FILTER_H
 
 // Local includes
 
@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT TonalityContainer
 
 public:
 
-    TonalityContainer()
+    explicit TonalityContainer()
     {
         redMask   = 0;
         greenMask = 0;
@@ -109,4 +109,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TONALITYFILTER_H
+#endif // DIGIKAM_TONALITY_FILTER_H

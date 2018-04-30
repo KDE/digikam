@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SCHEME_MANAGER_H
-#define SCHEME_MANAGER_H
+#ifndef DIGIKAM_SCHEME_MANAGER_H
+#define DIGIKAM_SCHEME_MANAGER_H
 
 // Qt includes
 
@@ -468,4 +468,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SCHEME_MANAGER_H
+#endif // DIGIKAM_SCHEME_MANAGER_H

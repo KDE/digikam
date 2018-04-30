@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CURVESWIDGET_H
-#define CURVESWIDGET_H
+#ifndef DIGIKAM_CURVES_WIDGET_H
+#define DIGIKAM_CURVES_WIDGET_H
 
 // Qt includes
 
@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT CurvesWidget : public QWidget
 
 public:
 
-    CurvesWidget(int w, int h, QWidget* const parent, bool readOnly=false);
+    explicit CurvesWidget(int w, int h, QWidget* const parent, bool readOnly=false);
     ~CurvesWidget();
 
     void setup(int w, int h, bool readOnly);
@@ -137,4 +137,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CURVESWIDGET_H */
+#endif // DIGIKAM_CURVES_WIDGET_H

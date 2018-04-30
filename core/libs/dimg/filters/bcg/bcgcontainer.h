@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef BCGCONTAINER_H
-#define BCGCONTAINER_H
+#ifndef DIGIKAM_BCG_CONTAINER_H
+#define DIGIKAM_BCG_CONTAINER_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT BCGContainer
 
 public:
 
-    BCGContainer();
+    explicit BCGContainer();
 
     bool isDefault() const;
     bool operator==(const BCGContainer& other) const;
@@ -63,4 +63,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* BCGCONTAINER_H */
+#endif // DIGIKAM_BCG_CONTAINER_H

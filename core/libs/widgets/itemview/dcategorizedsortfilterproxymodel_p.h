@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DCATEGORIZED_SORT_FILTER_PROXY_MODEL_P_H
-#define DCATEGORIZED_SORT_FILTER_PROXY_MODEL_P_H
+#ifndef DIGIKAM_DCATEGORIZED_SORT_FILTER_PROXY_MODEL_P_H
+#define DIGIKAM_DCATEGORIZED_SORT_FILTER_PROXY_MODEL_P_H
 
 // Qt includes
 
@@ -40,11 +40,11 @@ class DCategorizedSortFilterProxyModel::Private
 {
 public:
 
-    Private()
-        : sortColumn(0),
-          sortOrder(Qt::AscendingOrder),
-          categorizedModel(false),
-          sortCategoriesByNaturalComparison(true)
+    explicit Private()
+      : sortColumn(0),
+        sortOrder(Qt::AscendingOrder),
+        categorizedModel(false),
+        sortCategoriesByNaturalComparison(true)
     {
         collator.setNumericMode(true);
         collator.setCaseSensitivity(Qt::CaseSensitive);
@@ -65,4 +65,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DCATEGORIZED_SORT_FILTER_PROXY_MODEL_P_H
+#endif // DIGIKAM_DCATEGORIZED_SORT_FILTER_PROXY_MODEL_P_H

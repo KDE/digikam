@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MIXERSETTINGS_H
-#define MIXERSETTINGS_H
+#ifndef DIGIKAM_MIXER_SETTINGS_H
+#define DIGIKAM_MIXER_SETTINGS_H
 
 // Local includes
 
@@ -92,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* MIXERSETTINGS_H */
+#endif // DIGIKAM_MIXER_SETTINGS_H

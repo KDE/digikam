@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ITEMVIEWCATEGORIZED_H
-#define ITEMVIEWCATEGORIZED_H
+#ifndef DIGIKAM_ITEM_VIEW_CATEGORIZED_H
+#define DIGIKAM_ITEM_VIEW_CATEGORIZED_H
 
 // Local includes
 
@@ -201,4 +201,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ITEMVIEWCATEGORIZED_H
+#endif // DIGIKAM_ITEM_VIEW_CATEGORIZED_H

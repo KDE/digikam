@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ITEMVIEWHOVERBUTTON_H
-#define ITEMVIEWHOVERBUTTON_H
+#ifndef DIGIKAM_ITEM_VIEW_HOVER_BUTTON_H
+#define DIGIKAM_ITEM_VIEW_HOVER_BUTTON_H
 
 // Qt includes
 
@@ -84,4 +84,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // ITEMVIEWHOVERBUTTON_H
+#endif // DIGIKAM_ITEM_VIEW_HOVER_BUTTON_H

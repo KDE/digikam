@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ITEMVIEWTOOLTIP_H
-#define ITEMVIEWTOOLTIP_H
+#ifndef DIGIKAM_ITEM_VIEW_TOOL_TIP_H
+#define DIGIKAM_ITEM_VIEW_TOOL_TIP_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ITEMVIEWTOOLTIP_H
+#endif // DIGIKAM_ITEM_VIEW_TOOL_TIP_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef STRETCHFILTER_H
-#define STRETCHFILTER_H
+#ifndef DIGIKAM_STRETCH_FILTER_H
+#define DIGIKAM_STRETCH_FILTER_H
 
 // Local includes
 
@@ -101,4 +101,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* STRETCHFILTER_H */
+#endif // DIGIKAM_STRETCH_FILTER_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef INFRAREDFILTER_H
-#define INFRAREDFILTER_H
+#ifndef DIGIKAM_INFRARED_FILTER_H
+#define DIGIKAM_INFRARED_FILTER_H
 
 // Local includes
 
@@ -112,4 +112,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* INFRAREDFILTER_H */
+#endif // DIGIKAM_INFRARED_FILTER_H

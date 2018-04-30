@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CBSETTINGS_H
-#define CBSETTINGS_H
+#ifndef DIGIKAM_CB_SETTINGS_H
+#define DIGIKAM_CB_SETTINGS_H
 
 // Local includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CBSETTINGS_H */
+#endif // DIGIKAM_CB_SETTINGS_H

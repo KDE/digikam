@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BCGSETTINGS_H
-#define BCGSETTINGS_H
+#ifndef DIGIKAM_BCG_SETTINGS_H
+#define DIGIKAM_BCG_SETTINGS_H
 
 // Local includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* BCGSETTINGS_H */
+#endif // DIGIKAM_BCG_SETTINGS_H

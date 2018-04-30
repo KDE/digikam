@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef AUTOEXPOFILTER_H
-#define AUTOEXPOFILTER_H
+#ifndef DIGIKAM_AUTO_EXPO_FILTER_H
+#define DIGIKAM_AUTO_EXPO_FILTER_H
 
 // Local includes
 
@@ -85,4 +85,4 @@ private:
 
 } // namespace Digikam
 
-#endif // AUTOEXPOFILTER_H
+#endif // DIGIKAM_AUTO_EXPO_FILTER_H

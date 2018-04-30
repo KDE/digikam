@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef SIDE_BAR_H
-#define SIDE_BAR_H
+#ifndef DIGIKAM_SIDE_BAR_H
+#define DIGIKAM_SIDE_BAR_H
 
 // Qt includes
 
@@ -527,4 +527,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SIDE_BAR_H
+#endif // DIGIKAM_SIDE_BAR_H

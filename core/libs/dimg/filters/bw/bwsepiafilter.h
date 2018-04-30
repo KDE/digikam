@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef BWSEPIAFILTER_H
-#define BWSEPIAFILTER_H
+#ifndef DIGIKAM_BW_SEPIA_FILTER_H
+#define DIGIKAM_BW_SEPIA_FILTER_H
 
 // Qt includes
 
@@ -199,4 +199,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BWSEPIAFILTER_H
+#endif // DIGIKAM_BW_SEPIA_FILTER_H

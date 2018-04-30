@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DCATEGORIZED_VIEW_H
-#define DCATEGORIZED_VIEW_H
+#ifndef DIGIKAM_DCATEGORIZED_VIEW_H
+#define DIGIKAM_DCATEGORIZED_VIEW_H
 
 // Qt includes
 
@@ -153,4 +153,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DCATEGORIZED_VIEW_H
+#endif // DIGIKAM_DCATEGORIZED_VIEW_H
