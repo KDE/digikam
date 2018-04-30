@@ -267,7 +267,6 @@ rm -f usr/lib/libcom_err.so.2 || true
 rm -f usr/lib/libcrypt.so.1 || true
 rm -f usr/lib/libdl.so.2 || true
 rm -f usr/lib/libexpat.so.1 || true
-#rm -f usr/lib/libfontconfig.so.1 || true
 rm -f usr/lib/libgcc_s.so.1 || true
 rm -f usr/lib/libglib-2.0.so.0 || true
 rm -f usr/lib/libgpg-error.so.0 || true
