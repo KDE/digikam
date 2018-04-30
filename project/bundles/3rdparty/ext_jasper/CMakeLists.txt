@@ -13,12 +13,12 @@ ExternalProject_Add(ext_jasper
     URL https://github.com/mdadams/jasper/archive/version-2.0.14.tar.gz
     URL_MD5 9ef0e943d5b2c364ae84974a753841b8
 
-    INSTALL_DIR ${EXTPREFIX_jasper}
+    INSTALL_DIR ${PREFIX_ext_jasper}
 
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_jasper}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_jasper}
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
                ${GLOBAL_PROFILE}
-               -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX_jasper}
+               -DCMAKE_SYSTEM_PREFIX_PATH=${PREFIX_ext_jasper}
                -DJAS_ENABLE_SHARED=ON
                -DJAS_ENABLE_LIBJPEG=ON
                -DJAS_ENABLE_OPENGL=OFF
