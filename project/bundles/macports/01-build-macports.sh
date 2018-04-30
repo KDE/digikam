@@ -231,7 +231,7 @@ port install cmake \
              jpeg \
              tiff \
              boost \
-             eigen3 +gcc5 \
+             eigen3 \
              gettext \
              libusb \
              libgphoto2 \
