@@ -208,5 +208,5 @@ BUGFIXES:
 180 ==> 366391 - Rotating an image seems to forget to reset the orientation flag.
 181 ==> 393654 - Not able to select gpx file.
 182 ==> 367596 - Sub-folder count images but don't show them (unsupported JPEG file?).
-183 ==> 
-
+183 ==> 379922 - Digikam won't remove tags set by Windows Explorer.
+184 ==> 
