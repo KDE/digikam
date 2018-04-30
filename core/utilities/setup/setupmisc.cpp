@@ -58,8 +58,8 @@ class SetupMisc::Private
 {
 public:
 
-    explicit Private() :
-        tab(0),
+    explicit Private()
+      : tab(0),
         sidebarTypeLabel(0),
         stringComparisonTypeLabel(0),
         applicationStyleLabel(0),
@@ -154,7 +154,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
                                     "the progress manager available in the statusbar\n when digiKam main interface\n"
                                     "is loaded. If your computer is fast enough, this will have no effect on usability\n"
                                     "of digiKam while scanning. If your collections are huge or if you use a remote database,\n"
-                                    "this can introduce low latency, and it's recommended to disable this option and to plan\n"
+                                    "this can introduce low latency, and it is recommended to disable this option and to plan\n"
                                     "a manual scan through the maintenance tool at the right moment."));
 
     // ---------------------------------------------------------

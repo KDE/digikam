@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGLOADER_H
-#define DIMGLOADER_H
+#ifndef DIGIKAM_DIMG_LOADER_H
+#define DIGIKAM_DIMG_LOADER_H
 
 // C++ includes
 
@@ -193,4 +193,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(DImgLoader::LoadFlags)
 
 } // namespace Digikam
 
-#endif /* DIMGLOADER_H */
+#endif // DIGIKAM_DIMG_LOADER_H

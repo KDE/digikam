@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMG_THREADED_ANALYSER_H
-#define DIMG_THREADED_ANALYSER_H
+#ifndef DIGIKAM_DIMG_THREADED_ANALYSER_H
+#define DIGIKAM_DIMG_THREADED_ANALYSER_H
 
 // Local includes
 
@@ -102,4 +102,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIMG_THREADED_ANALYSER_H
+#endif // DIGIKAM_DIMG_THREADED_ANALYSER_H

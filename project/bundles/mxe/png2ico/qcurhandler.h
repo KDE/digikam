@@ -40,36 +40,38 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef QTCURHANDLER_H
-#define QTCURHANDLEr_H
 
-#include <QtGui/QImageIOHandler>
+#ifndef QCUR_HANDLER_H
+#define QCUR_HANDLER_H
+
+#include <QImageIOHandler>
 
 class CURReader;
 class QtCurHandler: public QImageIOHandler
 {
 public:
-    QtCurHandler(QIODevice *device);
+
+    explicit QtCurHandler(QIODevice* device);
     virtual ~QtCurHandler();
 
     bool canRead() const;
-    bool read(QImage *image);
-    bool write(const QImage &image, int hotspotx, int hotspoty);
-    bool write(const QList<QImage> &images, int hotspotx, int hotspoty);
+    bool read(QImage* image);
+    bool write(const QImage& image, int hotspotx, int hotspoty);
+    bool write(const QList<QImage>& images, int hotspotx, int hotspoty);
 
     QByteArray name() const;
-    
-    int imageCount() const;
+
+    int  imageCount() const;
     bool jumpToImage(int imageNumber);
     bool jumpToNextImage();
-    
-    static bool canRead(QIODevice *device);
-    
-private:
-    int m_currentIconIndex;
-    CURReader *m_pCURReader;
 
+    static bool canRead(QIODevice *device);
+
+private:
+
+    int        m_currentIconIndex;
+    CURReader* m_pCURReader;
 };
 
-#endif /* QTCURHANDLER_H */
+#endif // QCUR_HANDLER_H
 

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DTRASH_H
-#define DTRASH_H
+#ifndef DIGIKAM_DTRASH_H
+#define DIGIKAM_DTRASH_H
 
 // Qt includes
 
@@ -116,4 +116,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DTRASH_H
+#endif // DIGIKAM_DTRASH_H

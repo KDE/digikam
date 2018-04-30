@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCPROFILEWIDGET_H
-#define ICCPROFILEWIDGET_H
+#ifndef DIGIKAM_ICC_PROFILE_WIDGET_H
+#define DIGIKAM_ICC_PROFILE_WIDGET_H
 
 // Qt includes
 
@@ -81,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ICCPROFILEWIDGET_H
+#endif // DIGIKAM_ICC_PROFILE_WIDGET_H

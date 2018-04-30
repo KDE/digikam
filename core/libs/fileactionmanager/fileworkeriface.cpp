@@ -206,7 +206,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
             }
         }
 
-        ajustFaceRectangles(info,action);
+        ajustFaceRectangles(info, action);
 
         MetaEngineRotation matrix;
         matrix                                        *= currentOrientation;
@@ -273,7 +273,8 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
             // reset for DB. Metadata is already edited.
             finalOrientation = MetaEngine::ORIENTATION_NORMAL;
         }
-        else if (rotateByMetadata)
+
+        if (rotateByMetadata)
         {
             // Setting the rotation flag on Raws with embedded JPEG is a mess
             // Can apply to the RAW data, or to the embedded JPEG, or to both.
@@ -313,6 +314,11 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
      *  Get all faces from database and rotate them
      */
     QList<FaceTagsIface> facesList = FaceTagsEditor().databaseFaces(info.id());
+
+    if (facesList.isEmpty())
+    {
+        return;
+    }
 
     QMultiMap<QString, QRect> ajustedFaces;
 

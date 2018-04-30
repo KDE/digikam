@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGFILTERGENERATOR_H
-#define DIMGFILTERGENERATOR_H
+#ifndef DIGIKAM_DIMG_FILTER_GENERATOR_H
+#define DIGIKAM_DIMG_FILTER_GENERATOR_H
 
 // Qt includes
 
@@ -63,7 +63,7 @@ public:
     virtual DImgThreadedFilter* createFilter(const QString& filterIdentifier, int version) = 0;
 };
 
-// ------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
 
 template <class T>
 
@@ -120,4 +120,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIMGFILTERGENERATOR_H
+#endif // DIGIKAM_DIMG_FILTER_GENERATOR_H

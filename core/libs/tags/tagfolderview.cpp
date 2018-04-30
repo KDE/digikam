@@ -147,7 +147,7 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
         cmh.addActionDeleteTag(tagModificationHelper(), tag);
         cmh.addSeparator();
         // If the tag is no face tag, add the option to set it as face tag.
-        if (!FaceTags::isPerson(tag->id()))
+        if (!FaceTags::isPerson(tag->id()) && !tag->isRoot())
         {
             cmh.addActionTagToFaceTag(tagModificationHelper(), tag);
         }
@@ -357,7 +357,7 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
     /**
      * If no item is selected append root tag
      */
-    if(items.isEmpty())
+    if (items.isEmpty())
     {
         QModelIndex root = this->model()->index(0, 0);
         items.append(static_cast<TAlbum*>(albumForIndex(root)));

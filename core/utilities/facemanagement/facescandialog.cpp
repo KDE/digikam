@@ -346,7 +346,7 @@ void FaceScanDialog::setupUi()
                                   "Face detection is a time-consuming task. "
                                   "You can choose if you wish to employ all processor cores "
                                   "on your system, or work in the background only on one core. "
-                                  "Warning: this features still experimental and it's disabled by default."));
+                                  "Warning: this features still experimental and it is disabled by default."));
     cpuExplanation->setWordWrap(true);
 
     d->useFullCpuButton = new QCheckBox(advancedTab);

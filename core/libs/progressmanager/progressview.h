@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef PROGRESS_VIEW_H
-#define PROGRESS_VIEW_H
+#ifndef DIGIKAM_PROGRESS_VIEW_H
+#define DIGIKAM_PROGRESS_VIEW_H
 
 // Qt includes
 
@@ -45,7 +45,7 @@ class TransactionItem : public DVBox
 
 public:
 
-    TransactionItem(QWidget* const parent, ProgressItem* const item, bool first);
+    explicit TransactionItem(QWidget* const parent, ProgressItem* const item, bool first);
     ~TransactionItem();
 
     void hideHLine();
@@ -119,7 +119,7 @@ class DIGIKAM_EXPORT ProgressView : public OverlayWidget
 
 public:
 
-    ProgressView(QWidget* const alignWidget, QWidget* const parent, const QString& name = QString());
+    explicit ProgressView(QWidget* const alignWidget, QWidget* const parent, const QString& name = QString());
     ~ProgressView();
 
     void setVisible(bool b);
@@ -158,4 +158,4 @@ private:
 
 } // namespace Digikam
 
-#endif // PROGRESS_VIEW_H
+#endif // DIGIKAM_PROGRESS_VIEW_H

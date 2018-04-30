@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACE_SCAN_DIALOG_H
-#define FACE_SCAN_DIALOG_H
+#ifndef DIGIKAM_FACE_SCAN_DIALOG_H
+#define DIGIKAM_FACE_SCAN_DIALOG_H
 
 // Qt includes
 
@@ -77,4 +77,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FACE_SCAN_DIALOG_H
+#endif // DIGIKAM_FACE_SCAN_DIALOG_H

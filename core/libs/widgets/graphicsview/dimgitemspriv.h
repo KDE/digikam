@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGITEMSPRIV_H
-#define DIMGITEMSPRIV_H
+#ifndef DIGIKAM_DIMG_ITEMS_PRIV_H
+#define DIGIKAM_DIMG_ITEMS_PRIV_H
 
 // Qt includes
 
@@ -75,7 +75,7 @@ class DIGIKAM_EXPORT GraphicsDImgItem::GraphicsDImgItemPrivate
 {
 public:
 
-    GraphicsDImgItemPrivate()
+    explicit GraphicsDImgItemPrivate()
     {
     }
 
@@ -97,7 +97,7 @@ class DIGIKAM_EXPORT DImgPreviewItem::DImgPreviewItemPrivate : public GraphicsDI
 {
 public:
 
-    DImgPreviewItemPrivate();
+    explicit DImgPreviewItemPrivate();
     void init(DImgPreviewItem* const q);
 
 public:
@@ -115,4 +115,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIMGITEMSPRIV_H
+#endif // DIGIKAM_DIMG_ITEMS_PRIV_H

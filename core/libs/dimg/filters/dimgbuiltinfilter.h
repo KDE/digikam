@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGBUILTINFILTERS_H
-#define DIMGBUILTINFILTERS_H
+#ifndef DIGIKAM_DIMG_BUILT_IN_FILTERS_H
+#define DIGIKAM_DIMG_BUILT_IN_FILTERS_H
 
 // Qt includes
 
@@ -135,4 +135,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIMGFILTERMANAGER_H
+#endif // DIGIKAM_DIMG_BUILT_IN_FILTERS_H

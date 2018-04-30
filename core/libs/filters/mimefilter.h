@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MIMEFILTER_H
-#define MIMEFILTER_H
+#ifndef DIGIKAM_MIME_FILTER_H
+#define DIGIKAM_MIME_FILTER_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ public:
 
 } // namespace Digikam
 
-#endif // MIMEFILTER_H
+#endif // DIGIKAM_MIME_FILTER_H

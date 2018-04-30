@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGCHILDITEM_H
-#define DIMGCHILDITEM_H
+#ifndef DIGIKAM_DIMG_CHILD_ITEM_H
+#define DIGIKAM_DIMG_CHILD_ITEM_H
 
 // Qt includes
 
@@ -212,4 +212,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIMGCHILDITEM_H
+#endif // DIGIKAM_DIMG_CHILD_ITEM_H

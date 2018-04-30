@@ -52,8 +52,8 @@ class SetupSlideShow::Private
 {
 public:
 
-    explicit Private() :
-        startWithCurrent(0),
+    explicit Private()
+      : startWithCurrent(0),
         loopMode(0),
         showName(0),
         showDate(0),
@@ -145,7 +145,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     d->showTitle           = new QCheckBox(i18n("Show image title"), panel);
     d->showTitle->setWhatsThis(i18n("Show the image title at the bottom of the screen."));
 
-    d->showCapIfNoTitle    = new QCheckBox(i18n("Show image caption if it hasn't title"), panel);
+    d->showCapIfNoTitle    = new QCheckBox(i18n("Show image caption if it has not title"), panel);
     d->showCapIfNoTitle->setWhatsThis(i18n("Show the image caption at the bottom of the screen if no titles existed."));
 
     d->showTags            = new QCheckBox(i18n("Show image tags"), panel);

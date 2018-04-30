@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMG_THREADED_FILTER_H
-#define DIMG_THREADED_FILTER_H
+#ifndef DIGIKAM_DIMG_THREADED_FILTER_H
+#define DIGIKAM_DIMG_THREADED_FILTER_H
 
 // KDE includes
 
@@ -297,4 +297,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIMG_THREADED_FILTER_H
+#endif // DIGIKAM_DIMG_THREADED_FILTER_H

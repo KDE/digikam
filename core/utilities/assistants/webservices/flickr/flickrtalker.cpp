@@ -558,7 +558,7 @@ bool FlickrTalker::addPhoto(const QString& photoPath, const FPhotoInfo& info,
             }
             else
             {
-                qCWarning(DIGIKAM_WEBSERVICES_LOG) << "Flickr::Image doesn't have metadata";
+                qCWarning(DIGIKAM_WEBSERVICES_LOG) << "Flickr::Image do not have metadata";
             }
 
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Resizing and saving to temp file: " << path;

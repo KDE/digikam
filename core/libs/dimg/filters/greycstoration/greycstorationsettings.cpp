@@ -46,13 +46,13 @@
 namespace Digikam
 {
 
-class GreycstorationSettings::GreycstorationSettingsPriv
+class GreycstorationSettings::Private
 {
 
 public:
 
-    GreycstorationSettingsPriv() :
-        alphaLabel(0),
+    explicit Private()
+      : alphaLabel(0),
         amplitudeLabel(0),
         anisotropyLabel(0),
         btileLabel(0),
@@ -121,7 +121,7 @@ public:
 
 GreycstorationSettings::GreycstorationSettings(QTabWidget* parent)
     : QObject(static_cast<QObject*>(parent)),
-      d(new GreycstorationSettingsPriv)
+      d(new Private)
 {
     d->parent = parent;
 
@@ -129,8 +129,8 @@ GreycstorationSettings::GreycstorationSettings(QTabWidget* parent)
 
     // -------------------------------------------------------------
 
-    d->generalPage     = new QWidget(parent);
-    QGridLayout* grid1 = new QGridLayout(d->generalPage);
+    d->generalPage           = new QWidget(parent);
+    QGridLayout* const grid1 = new QGridLayout(d->generalPage);
     parent->addTab(d->generalPage, i18n("General"));
 
     d->sharpnessLabel = new QLabel(i18n("Detail preservation:"), d->generalPage);
@@ -193,8 +193,8 @@ GreycstorationSettings::GreycstorationSettings(QTabWidget* parent)
 
     // -------------------------------------------------------------
 
-    d->advancedPage    = new QWidget(parent);
-    QGridLayout* grid2 = new QGridLayout(d->advancedPage);
+    d->advancedPage          = new QWidget(parent);
+    QGridLayout* const grid2 = new QGridLayout(d->advancedPage);
     parent->addTab(d->advancedPage, i18n("Advanced Settings"));
 
     d->daLabel = new QLabel(i18n("Angular step:"), d->advancedPage);

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DHUESATURATIONSELECT_H
-#define DHUESATURATIONSELECT_H
+#ifndef DIGIKAM_DHUE_SATURATION_SELECT_H
+#define DIGIKAM_DHUE_SATURATION_SELECT_H
 
 // Qt includes
 
@@ -259,4 +259,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DHUESATURATIONSELECT_H
+#endif // DIGIKAM_DHUE_SATURATION_SELECT_H

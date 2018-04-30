@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FILTERACTIONFILTER_H
-#define FILTERACTIONFILTER_H
+#ifndef DIGIKAM_FILTER_ACTION_FILTER_H
+#define DIGIKAM_FILTER_ACTION_FILTER_H
 
 // Local includes
 
@@ -134,4 +134,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FILTERACTIONFILTER_H
+#endif // DIGIKAM_FILTER_ACTION_FILTER_H

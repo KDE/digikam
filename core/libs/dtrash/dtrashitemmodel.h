@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DTRASH_ITEM_MODEL_H
-#define DTRASH_ITEM_MODEL_H
+#ifndef DIGIKAM_DTRASH_ITEM_MODEL_H
+#define DIGIKAM_DTRASH_ITEM_MODEL_H
 
 // Qt includes
 
@@ -138,4 +138,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DTRASH_ITEM_MODEL_H
+#endif // DIGIKAM_DTRASH_ITEM_MODEL_H

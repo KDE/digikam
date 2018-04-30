@@ -727,7 +727,7 @@ void TagsManager::setupActions()
 
     setHelpText(d->delAction, i18n("Delete selected items. "
                                    "Also work with multiple items, "
-                                   "but won't delete the root tag."));
+                                   "but will not delete the root tag."));
 
     setHelpText(d->titleEdit, i18n("Edit title from selected tag."));
 
@@ -797,7 +797,7 @@ void TagsManager::setupActions()
     setHelpText(wrDbImg, i18n("Write Tags Metadata to Image."));
 
     setHelpText(readTags, i18n("Read tags from Images into Database. "
-                              "Existing tags won't be affected"));
+                               "Existing tags will not be affected"));
 
     setHelpText(wipeAll, i18n("Delete all tags from database only. Will not sync with files. "
                               "Proceed with caution."));

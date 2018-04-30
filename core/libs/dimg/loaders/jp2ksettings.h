@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef JP2KSETTINGS_H
-#define JP2KSETTINGS_H
+#ifndef DIGIKAM_JP2K_SETTINGS_H
+#define DIGIKAM_JP2K_SETTINGS_H
 
 // Qt includes
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* JP2KSETTINGS_H */
+#endif // DIGIKAM_JP2K_SETTINGS_H

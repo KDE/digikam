@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef THREAD_MANAGER_H
-#define THREAD_MANAGER_H
+#ifndef DIGIKAM_THREAD_MANAGER_H
+#define DIGIKAM_THREAD_MANAGER_H
 
 // Qt includes
 
@@ -61,7 +61,7 @@ protected Q_SLOTS:
 
 protected:
 
-    ThreadManager();
+    explicit ThreadManager();
     ~ThreadManager();
 
 private:
@@ -74,4 +74,4 @@ private:
 
 } // namespace Digikam
 
-#endif // THREAD_MANAGER_H
+#endif // DIGIKAM_THREAD_MANAGER_H

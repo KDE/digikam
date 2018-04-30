@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef STATESAVINGOBJECT_H
-#define STATESAVINGOBJECT_H
+#ifndef DIGIKAM_STATE_SAVING_OBJECT_H
+#define DIGIKAM_STATE_SAVING_OBJECT_H
 
 // Qt includes
 
@@ -202,4 +202,4 @@ private:
 
 } // namespace Digikam
 
-#endif // STATESAVINGOBJECT_H
+#endif // DIGIKAM_STATE_SAVING_OBJECT_H

@@ -139,7 +139,8 @@ bool ParallelWorkers::connect(const QObject* sender, const char* signal,
 */
 
 bool ParallelWorkers::connect(const char* const signal,
-                              const QObject* const receiver, const char* const method,
+                              const QObject* const receiver,
+                              const char* const method,
                               Qt::ConnectionType type) const
 {
     foreach(WorkerObject* const object, m_workers)
@@ -195,6 +196,7 @@ int ParallelWorkers::replacementStaticQtMetacall(QMetaObject::Call _c, int _id, 
         {
             m_currentIndex = 0;
         }
+
         obj->schedule();
 
         // Invoke across-thread
@@ -237,7 +239,7 @@ int ParallelWorkers::replacementQtMetacall(QMetaObject::Call _c, int _id, void *
     return _id;
 }
 
-const QMetaObject *ParallelWorkers::replacementMetaObject() const
+const QMetaObject* ParallelWorkers::replacementMetaObject() const
 {
     if (!m_replacementMetaObject)
     {

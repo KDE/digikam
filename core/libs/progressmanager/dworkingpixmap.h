@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DWORKING_PIXMAP_H
-#define DWORKING_PIXMAP_H
+#ifndef DIGIKAM_DWORKING_PIXMAP_H
+#define DIGIKAM_DWORKING_PIXMAP_H
 
 // Qt includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DWORKING_PIXMAP_H
+#endif // DIGIKAM_DWORKING_PIXMAP_H

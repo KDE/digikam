@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DGRADIENTSLIDER_H
-#define DGRADIENTSLIDER_H
+#ifndef DIGIKAM_DGRADIENT_SLIDER_H
+#define DIGIKAM_DGRADIENT_SLIDER_H
 
 // Qt includes
 
@@ -88,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DGRADIENTSLIDER_H
+#endif // DIGIKAM_DGRADIENT_SLIDER_H

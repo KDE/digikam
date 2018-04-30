@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONMANAGERSETTINGS_H
-#define VERSIONMANAGERSETTINGS_H
+#ifndef DIGIKAM_VERSION_MANAGER_SETTINGS_H
+#define DIGIKAM_VERSION_MANAGER_SETTINGS_H
 
 // Qt includes
 
@@ -90,4 +90,4 @@ public:
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::VersionManagerSettings::IntermediateBehavior)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::VersionManagerSettings::ShowInViewFlags)
 
-#endif // VERSIONMANAGERSETTINGS_H
+#endif // DIGIKAM_VERSION_MANAGER_SETTINGS_H

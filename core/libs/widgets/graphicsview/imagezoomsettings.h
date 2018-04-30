@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEZOOMSETTINGS_H
-#define IMAGEZOOMSETTINGS_H
+#ifndef DIGIKAM_IMAGE_ZOOM_SETTINGS_H
+#define DIGIKAM_IMAGE_ZOOM_SETTINGS_H
 
 // Qt includes
 
@@ -148,4 +148,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGEZOOMSETTINGS_H
+#endif // DIGIKAM_IMAGE_ZOOM_SETTINGS_H

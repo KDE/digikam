@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMGLOADEROBSERVER_H
-#define DIMGLOADEROBSERVER_H
+#ifndef DIGIKAM_DIMG_LOADER_OBSERVER_H
+#define DIGIKAM_DIMG_LOADER_OBSERVER_H
 
 // Local includes
 
@@ -68,4 +68,4 @@ public:
 
 }      // namespace Digikam
 
-#endif // DIMGLOADEROBSERVER_H
+#endif // DIGIKAM_DIMG_LOADER_OBSERVER_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCPROFILESCOMBOBOX_H
-#define ICCPROFILESCOMBOBOX_H
+#ifndef DIGIKAM_ICC_PROFILES_COMBOBOX_H
+#define DIGIKAM_ICC_PROFILES_COMBOBOX_H
 
 // Qt includes
 
@@ -142,4 +142,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // ICCPROFILESCOMBOBOX_H
+#endif // DIGIKAM_ICC_PROFILES_COMBOBOX_H

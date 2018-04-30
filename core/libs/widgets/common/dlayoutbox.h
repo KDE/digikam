@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DLAYOUT_BOX_H
-#define DLAYOUT_BOX_H
+#ifndef DIGIKAM_DLAYOUT_BOX_H
+#define DIGIKAM_DLAYOUT_BOX_H
 
 // Qt includes
 
@@ -82,4 +82,4 @@ class DIGIKAM_EXPORT DVBox : public DHBox
 
 } // namespace Digikam
 
-#endif // DLAYOUT_BOX_H
+#endif // DIGIKAM_DLAYOUT_BOX_H

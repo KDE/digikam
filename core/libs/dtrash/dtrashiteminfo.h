@@ -21,8 +21,10 @@
  *
  * ============================================================ */
 
-#ifndef DTRASHITEMINFO_H
-#define DTRASHITEMINFO_H
+#ifndef DIGIKAM_DTRASH_ITEM_INFO_H
+#define DIGIKAM_DTRASH_ITEM_INFO_H
+
+// Qt includes
 
 #include <QList>
 #include <QDateTime>
@@ -35,7 +37,7 @@ class DTrashItemInfo
 
 public:
 
-    DTrashItemInfo();
+    explicit DTrashItemInfo();
     bool isNull() const;
 
 public:
@@ -55,4 +57,4 @@ QDebug operator<<(QDebug dbg, const DTrashItemInfo& info);
 
 } // namespace Digikam
 
-#endif // DTRASHITEMINFO_H
+#endif // DIGIKAM_DTRASH_ITEM_INFO_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IO_JOB_DATA_H
-#define IO_JOB_DATA_H
+#ifndef DIGIKAM_IO_JOB_DATA_H
+#define DIGIKAM_IO_JOB_DATA_H
 
 // Qt includes
 
@@ -44,19 +44,21 @@ class DIGIKAM_EXPORT IOJobData
 
 public:
 
-enum Operation
-{
-    Unknown = 0,
-    CopyAlbum,
-    CopyImage,
-    CopyFiles,
-    MoveAlbum,
-    MoveImage,
-    MoveFiles,
-    Rename,
-    Delete,
-    Trash
-};
+    enum Operation
+    {
+        Unknown = 0,
+        CopyAlbum,
+        CopyImage,
+        CopyFiles,
+        MoveAlbum,
+        MoveImage,
+        MoveFiles,
+        Rename,
+        Delete,
+        Trash
+    };
+
+public:
 
     explicit IOJobData(int operation,
                        const QList<ImageInfo>& infos,
@@ -112,4 +114,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IO_JOB_DATA_H
+#endif // DIGIKAM_IO_JOB_DATA_H

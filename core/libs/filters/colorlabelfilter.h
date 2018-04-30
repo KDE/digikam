@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COLORLABELFILTER_H
-#define COLORLABELFILTER_H
+#ifndef DIGIKAM_COLOR_LABEL_FILTER_H
+#define DIGIKAM_COLOR_LABEL_FILTER_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif // COLORLABELFILTER_H
+#endif // DIGIKAM_COLOR_LABEL_FILTER_H

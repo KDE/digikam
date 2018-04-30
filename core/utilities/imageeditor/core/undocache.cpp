@@ -27,8 +27,7 @@
 
 // Qt includes
 
-#include <QByteArray>
-#include <QCoreApplication>
+#include <QApplication>
 #include <QDataStream>
 #include <QDir>
 #include <QFile>
@@ -36,10 +35,16 @@
 #include <QStringList>
 #include <QStandardPaths>
 #include <QStorageInfo>
+#include <QMessageBox>
+
+// KDE includes
+
+#include <klocalizedstring.h>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "dimgloader.h"
 
 namespace Digikam
 {
@@ -50,6 +55,7 @@ public:
 
     explicit Private()
     {
+        cacheError = false;
     }
 
     QString cacheFile(int level) const
@@ -60,6 +66,8 @@ public:
     QString   cacheDir;
     QString   cachePrefix;
     QSet<int> cachedLevels;
+
+    bool      cacheError;
 };
 
 UndoCache::UndoCache()
@@ -110,15 +118,37 @@ void UndoCache::clearFrom(int fromLevel)
 
 bool UndoCache::putData(int level, const DImg& img) const
 {
-    QFile file(d->cacheFile(level));
+    if (d->cacheError)
+    {
+        return false;
+    }
+
     QStorageInfo info(d->cacheDir);
 
-    qint64 fspace = (info.bytesAvailable()/1024.0/1024.0);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes: " << fspace;
+    qint64 fspace = (info.bytesAvailable() / 1024 / 1024);
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes:" << fspace;
 
-    if (file.exists() ||
-        !file.open(QIODevice::WriteOnly) ||
-        fspace < 1024) // Check if free space is over 1 Gb to put data in cache.
+    if (fspace < 2048) // Check if free space is over 2 GiB to put data in cache.
+    {
+        if (!qApp->activeWindow()) // Special case for the Jenkins build server.
+        {
+            return false;
+        }
+
+        QApplication::restoreOverrideCursor();
+
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("The free disk space in the path \"%1\" for the undo "
+                                   "cache file is < 2 GiB! Undo cache is now disabled!",
+                                   QDir::toNativeSeparators(d->cacheDir)));
+        d->cacheError = true;
+
+        return false;
+    }
+
+    QFile file(d->cacheFile(level));
+
+    if (file.exists() || !file.open(QIODevice::WriteOnly))
     {
         return false;
     }
@@ -126,13 +156,19 @@ bool UndoCache::putData(int level, const DImg& img) const
     QDataStream ds(&file);
     ds << img.width();
     ds << img.height();
-    ds << img.sixteenBit();
+    ds << img.numBytes();
     ds << img.hasAlpha();
+    ds << img.sixteenBit();
 
-    QByteArray ba((const char*)img.bits(), img.numBytes());
-    ds << ba;
+    ds.writeRawData((const char*)img.bits(), img.numBytes());
 
     file.close();
+
+    if (ds.status() != QDataStream::Ok)
+    {
+        file.remove();
+        return false;
+    }
 
     d->cachedLevels << level;
 
@@ -141,10 +177,11 @@ bool UndoCache::putData(int level, const DImg& img) const
 
 DImg UndoCache::getData(int level) const
 {
-    int  w          = 0;
-    int  h          = 0;
-    bool sixteenBit = false;
+    uint w          = 0;
+    uint h          = 0;
+    uint numBytes   = 0;
     bool hasAlpha   = false;
+    bool sixteenBit = false;
 
     QFile file(d->cacheFile(level));
 
@@ -156,15 +193,40 @@ DImg UndoCache::getData(int level) const
     QDataStream ds(&file);
     ds >> w;
     ds >> h;
-    ds >> sixteenBit;
+    ds >> numBytes;
     ds >> hasAlpha;
+    ds >> sixteenBit;
 
-    QByteArray ba;
-    ds >> ba;
+    uint size  = w * h * (sixteenBit ? 8 : 4);
 
-    DImg img(w, h, sixteenBit, hasAlpha, (uchar*)ba.data(), true);
+    if (ds.status() != QDataStream::Ok ||
+        ds.atEnd() || numBytes != size || size == 0)
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "The undo cache file is corrupt";
+
+        file.close();
+        return DImg();
+    }
+
+    char* data = (char*)DImgLoader::new_failureTolerant(size);
+
+    if (!data)
+    {
+        file.close();
+        return DImg();
+    }
+
+    ds.readRawData(data, size);
 
     file.close();
+
+    if (ds.status() != QDataStream::Ok)
+    {
+        delete [] data;
+        return DImg();
+    }
+
+    DImg img(w, h, sixteenBit, hasAlpha, (uchar*)data, false);
 
     return img;
 }

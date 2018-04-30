@@ -1,28 +1,23 @@
 [Desktop Entry]
 Type=Theme
 Name=Blue Frames
+Name[ca]=Marcs blaus
+Name[ca@valencia]=Marcs blaus
+Name[en_GB]=Blue Frames
+Name[nl]=Blauwe frames
+Name[pt]=Molduras Azuis
+Name[sv]=Blåa ramar
+Name[uk]=Сині рамки
+Name[x-test]=xxBlue Framesxx
 Comment=A theme variation based Frames theme
-Comment[ca]=Un tema de marcs basat en el tema de marcs del Ruediger Bente
-Comment[ca@valencia]=Un tema de marcs basat en el tema de marcs del Ruediger Bente
-Comment[cs]=Motiv rámce založený na motivu Ruediger Bente
-Comment[de]=Ein Rahmendesign, das auf Rüdiger Bentes Rahmendesign basiert
-Comment[el]=Ένα θέμα πλαισίου με βάση το θέμα πλαισίου του Ruediger Bente
-Comment[en_GB]=A frame theme based on Ruediger Bente's frame theme
-Comment[es]=Un tema de marcos basado en el tema de Ruediger Bente
-Comment[fr]=Un thème de cadre utilisant celui de Ruediger Bente
-Comment[is]=Rammaþema byggt á þema eftir Ruediger Bente
-Comment[it]=Tema di cornici basato sul tema analogo di Ruediger Bente
-Comment[nb]=Et rammetema bygget på Ruediger Bebtes rammetema
-Comment[nl]=Een framethema gebaseerd op het framethema van Ruediger Bente'
-Comment[nn]=Eit rammetema basert på rammetemaet til Rüdiger Bente
-Comment[pl]=Wystrój ramki oparty na wystroju ramki autorstwa Ruediger Bente
-Comment[pt]=Um tema de moldura baseado no tema de Ruediger Bente
-Comment[ru]=Оформление, основанное на оформлении от Ruediger Bente
-Comment[sv]=Ett ramtema baserat på Ruediger Bentes ramtema.
-Comment[tr]=Ruediger Bente'nin çerçeve teması tabanlı bir çerçeve temeası
-Comment[uk]=Тема рамок на основі теми Ruediger Bente
-Comment[x-test]=xxA frame theme based on Ruediger Bente's frame themexx
-Comment[zh_CN]=基于 Ruediger Bente 边框主题的边框主题
+Comment[ca]=Una variació del tema basat en el tema Marcs
+Comment[ca@valencia]=Una variació del tema basat en el tema Marcs
+Comment[en_GB]=A theme variation based Frames theme
+Comment[nl]=Een themavariatie gebaseerd op Frames-thema
+Comment[pt]=Uma variação de temas, baseado no tema Molduras
+Comment[sv]=En temavariant baserad på temat Ramar
+Comment[uk]=Варіант теми на основі теми «Рамки»
+Comment[x-test]=xxA theme variation based Frames themexx
 
 [X-HTMLGallery Author]
 Name=Elizabeth Marmorstein
@@ -50,5 +45,12 @@ Url=mailto:purplegamba@cox.net
 
 [X-HTMLGallery Preview]
 Name=Blue Frames
+Name[ca]=Marcs blaus
+Name[ca@valencia]=Marcs blaus
+Name[en_GB]=Blue Frames
+Name[nl]=Blauwe frames
+Name[pt]=Molduras Azuis
+Name[sv]=Blåa ramar
+Name[uk]=Сині рамки
 Name[x-test]=xxBlue Framesxx
 Url=preview.png

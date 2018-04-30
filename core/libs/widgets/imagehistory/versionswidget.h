@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONSWIDGET_H
-#define VERSIONSWIDGET_H
+#ifndef DIGIKAM_VERSIONS_WIDGET_H
+#define DIGIKAM_VERSIONS_WIDGET_H
 
 // Qt includes
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VERSIONSWIDGET_H
+#endif // DIGIKAM_VERSIONS_WIDGET_H

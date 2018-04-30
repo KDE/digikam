@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FACE_SCAN_SETTINGS_H
-#define FACE_SCAN_SETTINGS_H
+#ifndef DIGIKAM_FACE_SCAN_SETTINGS_H
+#define DIGIKAM_FACE_SCAN_SETTINGS_H
 
 // Local includes
 
@@ -59,7 +59,7 @@ public:
 
 public:
 
-    FaceScanSettings()
+    explicit FaceScanSettings()
     {
         useFullCpu             = false;
         accuracy               = 80;
@@ -86,4 +86,4 @@ public:
 
 } // namespace Digikam
 
-#endif // FACE_SCAN_SETTINGS_H
+#endif // DIGIKAM_FACE_SCAN_SETTINGS_H

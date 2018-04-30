@@ -47,13 +47,11 @@
 
 */
 
-
-
 #include "qicohandler.h"
-#include <QtCore/qendian.h>
-#include <QtGui/QImage>
-#include <QtCore/QFile>
-#include <QtCore/QBuffer>
+#include <qendian.h>
+#include <QImage>
+#include <QFile>
+#include <QBuffer>
 // These next two structs represent how the icon information is stored
 // in an ICO file.
 typedef struct
@@ -718,7 +716,7 @@ bool ICOReader::write(QIODevice * device, const QList<QImage> & images)
 
             maskImage.invertPixels();   // seems as though it needs this
             // NOTE! !! The mask is only flipped vertically - not horizontally !!
-            for (y=maskImage.height()-1; y>=0; y--)
+            for (y=maskImage.height()-1; y>=0; --y)
                 buffer.write((char*)maskImage.scanLine(y), maskImage.bytesPerLine());
 
         }
@@ -728,11 +726,11 @@ bool ICOReader::write(QIODevice * device, const QList<QImage> & images)
         if (writeIconDir(device, id)) {
             int i;
             bool bOK = true;
-            for (i = 0; i < id.idCount && bOK; i++) {
+            for (i = 0; i < id.idCount && bOK; ++i) {
                 bOK = writeIconDirEntry(device, entries[i]);
             }
             if (bOK) {
-                for (i=0; i<id.idCount && bOK; i++) {
+                for (i=0; i<id.idCount && bOK; ++i) {
                     bOK = writeBMPInfoHeader(device, bmpHeaders[i]);
                     bOK &= (device->write(imageData[i]) == (int) imageData[i].size());
                 }

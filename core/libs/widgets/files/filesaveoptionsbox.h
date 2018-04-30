@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef FILESAVEOPTIONSBOX_H
-#define FILESAVEOPTIONSBOX_H
+#ifndef DIGIKAM_FILE_SAVE_OPTIONS_BOX_H
+#define DIGIKAM_FILE_SAVE_OPTIONS_BOX_H
 
 // Qt includes
 
@@ -83,4 +83,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FILESAVEOPTIONSBOX_H
+#endif // DIGIKAM_FILE_SAVE_OPTIONS_BOX_H

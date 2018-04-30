@@ -211,7 +211,7 @@ void DatabaseSettingsWidget::setupMainArea()
                                      "<p>Databases are digiKam core engines. Take care to use a place hosted by fast "
                                      "hardware (as SSD) with enough free space especially for thumbnails database.</p>"
                                      "<p>Note: a remote file system such as NFS, cannot be used here. "
-                                     "For performance reasons, it's also recommended not to use removable media.</p>"
+                                     "For performance reasons, it is also recommended not to use removable media.</p>"
                                      "<p></p>"), dbConfigBox);
     d->dbPathLabel->setWordWrap(true);
     d->dbPathEdit  = new DFileSelector(dbConfigBox);
@@ -380,7 +380,7 @@ void DatabaseSettingsWidget::setupMainArea()
                                                "<p>Enter SQL code to Mysql prompt in order to init digiKam databases with grant privileges (see behind)</p>"
                                                "<p>...</p>"
                                                "<p>quit</p>"
-                                               "<p>NOTE: If you've an enormous collection, you should start MySQL server with "
+                                               "<p>NOTE: If you have an enormous collection, you should start MySQL server with "
                                                "mysql --max_allowed_packet=128M OR in my.ini or ~/.my.cnf, change the settings</p>"),
                                           d->dbNoticeBox);
     notice2->setWordWrap(true);
@@ -410,7 +410,7 @@ void DatabaseSettingsWidget::setupMainArea()
                                                "database names to simplify your backups.</p>"
                                                "<p>Databases are digiKam core engines. To prevent performance issues, "
                                                "take a care to use a fast network link between the client and the server "
-                                               "computers. It's also recommended to host database files on "
+                                               "computers. It is also recommended to host database files on "
                                                "fast hardware (as <a href=\"https://en.wikipedia.org/wiki/Solid-state_drive\">SSD</a>) "
                                                "with enough free space, especially for thumbnails database, even if data are compressed using wavelets image format <a href=\"https://en.wikipedia.org/wiki/Progressive_Graphics_File\">"
                                                "PGF</a>.</p>"

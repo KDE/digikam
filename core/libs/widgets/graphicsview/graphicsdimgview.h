@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GRAPHICSDIMGVIEW_H
-#define GRAPHICSDIMGVIEW_H
+#ifndef DIGIKAM_GRAPHICS_DIMG_VIEW_H
+#define DIGIKAM_GRAPHICS_DIMG_VIEW_H
 
 // Qt includes
 
@@ -136,4 +136,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GRAPHICSDIMGVIEW_H
+#endif // DIGIKAM_GRAPHICS_DIMG_VIEW_H

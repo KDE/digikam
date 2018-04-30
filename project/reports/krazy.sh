@@ -6,13 +6,11 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-krazy2all --check includes \
-          --export textedit \
+krazy2all --export textedit \
           --title digiKam \
           --no-brief \
           --strict all \
           --priority all \
           --verbose \
-          --topdir ../../core \
-          --exclude-types perl,python \
+          --topdir ../../ \
           --outfile report.krazy

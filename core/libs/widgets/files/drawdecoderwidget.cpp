@@ -616,15 +616,15 @@ void DRawDecoderWidget::setup(int advSettings)
                                 "<para><list><item><emphasis strong='true'>None</emphasis>: no "
                                 "noise reduction.</item>"
                                 "<item><emphasis strong='true'>Wavelets</emphasis>: wavelets "
-                                "correction to erase noise while preserving real detail. It's "
+                                "correction to erase noise while preserving real detail. It is "
                                 "applied after interpolation.</item>"
                                 "<item><emphasis strong='true'>FBDD</emphasis>: Fake Before "
-                                "Demosaicing Denoising noise reduction. It's applied before "
+                                "Demosaicing Denoising noise reduction. It is applied before "
                                 "interpolation.</item>"
                                 "<item><emphasis strong='true'>CFA Line Denoise</emphasis>: Banding "
-                                "noise suppression. It's applied after interpolation.</item>"
+                                "noise suppression. It is applied after interpolation.</item>"
                                 "<item><emphasis strong='true'>Impulse Denoise</emphasis>: Impulse "
-                                "noise suppression. It's applied after interpolation.</item></list></para>"));
+                                "noise suppression. It is applied after interpolation.</item></list></para>"));
 
     d->NRSpinBox1 = new DIntNumInput(d->correctionsSettings);
     d->NRSpinBox1->setRange(100, 1000, 1);

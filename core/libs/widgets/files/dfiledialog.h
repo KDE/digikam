@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DFILE_DIALOG_H
-#define DFILE_DIALOG_H
+#ifndef DIGIKAM_DFILE_DIALOG_H
+#define DIGIKAM_DFILE_DIALOG_H
 
 // Qt includes
 
@@ -103,4 +103,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DFILE_DIALOG_H
+#endif // DIGIKAM_DFILE_DIALOG_H

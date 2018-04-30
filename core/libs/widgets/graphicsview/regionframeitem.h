@@ -22,8 +22,8 @@
 *
 * ============================================================ */
 
-#ifndef REGION_FRAME_ITEM_H
-#define REGION_FRAME_ITEM_H
+#ifndef DIGIKAM_REGION_FRAME_ITEM_H
+#define DIGIKAM_REGION_FRAME_ITEM_H
 
 // Qt includes
 
@@ -126,4 +126,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::RegionFrameItem::Flags)
 
-#endif // REGION_FRAME_ITEM_H
+#endif // DIGIKAM_REGION_FRAME_ITEM_H

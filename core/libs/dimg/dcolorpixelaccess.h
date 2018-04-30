@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DCOLORPIXELACCESS_H
-#define DCOLORPIXELACCESS_H
+#ifndef DIGIKAM_DCOLOR_PIXEL_ACCESS_H
+#define DIGIKAM_DCOLOR_PIXEL_ACCESS_H
 
 namespace Digikam
 {
@@ -75,4 +75,4 @@ inline void DColor::setPixel(uchar* const data) const
 
 } // namespace Digikam
 
-#endif // DCOLORPIXELACCESS_H
+#endif // DIGIKAM_DCOLOR_PIXEL_ACCESS_H

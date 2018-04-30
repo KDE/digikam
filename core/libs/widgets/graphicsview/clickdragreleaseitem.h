@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CLICKDRAGRELEASEITEM_H
-#define CLICKDRAGRELEASEITEM_H
+#ifndef DIGIKAM_CLICK_DRAG_RELEASE_ITEM_H
+#define DIGIKAM_CLICK_DRAG_RELEASE_ITEM_H
 
 // Qt includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CLICKDRAGRELEASEITEM_H
+#endif // DIGIKAM_CLICK_DRAG_RELEASE_ITEM_H

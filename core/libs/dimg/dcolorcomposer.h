@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DCOLORCOMPOSER_H
-#define DCOLORCOMPOSER_H
+#ifndef DIGIKAM_DCOLOR_COMPOSER_H
+#define DIGIKAM_DCOLOR_COMPOSER_H
 
 // Local includes
 
@@ -132,4 +132,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DCOLORCOMPOSER_H
+#endif // DIGIKAM_DCOLOR_COMPOSER_H

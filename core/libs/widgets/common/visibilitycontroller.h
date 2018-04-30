@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VISIBILITYCONTROLLER_H
-#define VISIBILITYCONTROLLER_H
+#ifndef DIGIKAM_VISIBILITY_CONTROLLER_H
+#define DIGIKAM_VISIBILITY_CONTROLLER_H
 
 // Qt includes
 
@@ -105,4 +105,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VISIBILITYCONTROLLER_H
+#endif // DIGIKAM_VISIBILITY_CONTROLLER_H

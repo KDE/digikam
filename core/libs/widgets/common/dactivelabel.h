@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DACTIVE_LABEL_H
-#define DACTIVE_LABEL_H
+#ifndef DIGIKAM_DACTIVE_LABEL_H
+#define DIGIKAM_DACTIVE_LABEL_H
 
 // Qt includes
 
@@ -38,8 +38,9 @@
 namespace Digikam
 {
 
-/** A widget to host an image into a label with an active url which can be
- *  open to default web browser using simple mouse click.
+/**
+ * A widget to host an image into a label with an active url which can be
+ * open to default web browser using simple mouse click.
  */
 class DIGIKAM_EXPORT DActiveLabel : public QLabel
 {
@@ -55,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DACTIVE_LABEL_H
+#endif // DIGIKAM_DACTIVE_LABEL_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIMAGEHISTORY_H
-#define DIMAGEHISTORY_H
+#ifndef DIGIKAM_DIMAGE_HISTORY_H
+#define DIGIKAM_DIMAGE_HISTORY_H
 
 // Qt includes
 
@@ -217,4 +217,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::DImageHistory)
 
-#endif // DIMAGEHISTORY_H
+#endif // DIGIKAM_DIMAGE_HISTORY_H

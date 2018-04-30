@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PNGLOADER_H
-#define PNGLOADER_H
+#ifndef DIGIKAM_PNG_LOADER_H
+#define DIGIKAM_PNG_LOADER_H
 
 // C++ includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* PNGLOADER_H */
+#endif // DIGIKAM_PNG_LOADER_H

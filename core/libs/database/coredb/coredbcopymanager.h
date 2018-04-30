@@ -55,7 +55,8 @@ public:
     explicit CoreDbCopyManager();
     ~CoreDbCopyManager();
 
-    void copyDatabases(const DbEngineParameters& fromDBParameters, DbEngineParameters& toDBParameters);
+    void copyDatabases(const DbEngineParameters& fromDBParameters,
+                       DbEngineParameters& toDBParameters);
 
 Q_SIGNALS:
 
@@ -69,10 +70,14 @@ public Q_SLOTS:
 
 private:
 
-    bool copyTable(CoreDbBackend& fromDBbackend, const QString& fromActionName,
-                   CoreDbBackend& toDBbackend, const QString& toActionName);
+    bool copyTable(CoreDbBackend& fromDBbackend,
+                   const QString& fromActionName,
+                   CoreDbBackend& toDBbackend,
+                   const QString& toActionName);
 
-    void handleClosing(bool isstopThread, CoreDbBackend& fromDBbackend, CoreDbBackend& toDBbackend);
+    void handleClosing(bool isstopThread,
+                       CoreDbBackend& fromDBbackend,
+                       CoreDbBackend& toDBbackend);
 
 private:
 
