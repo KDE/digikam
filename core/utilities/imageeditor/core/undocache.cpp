@@ -160,18 +160,18 @@ bool UndoCache::putData(int level, const DImg& img) const
     ds << img.hasAlpha();
     ds << img.sixteenBit();
 
-    ds.writeRawData((const char*)img.bits(), img.numBytes());
+    file.write((const char*)img.bits(), img.numBytes());
 
-    file.close();
-
-    if (ds.status() != QDataStream::Ok)
+    if (file.error() != QFileDevice::NoError)
     {
+        file.close();
         file.remove();
         return false;
     }
 
     d->cachedLevels << level;
 
+    file.close();
     return true;
 }
 
@@ -197,7 +197,7 @@ DImg UndoCache::getData(int level) const
     ds >> hasAlpha;
     ds >> sixteenBit;
 
-    uint size  = w * h * (sixteenBit ? 8 : 4);
+    qint64 size  = w * h * (sixteenBit ? 8 : 4);
 
     if (ds.status() != QDataStream::Ok ||
         ds.atEnd() || numBytes != size || size == 0)
@@ -216,18 +216,19 @@ DImg UndoCache::getData(int level) const
         return DImg();
     }
 
-    ds.readRawData(data, size);
+    qint64 readSize = file.read(data, size);
 
-    file.close();
-
-    if (ds.status() != QDataStream::Ok)
+    if (file.error() != QFileDevice::NoError || readSize != size)
     {
         delete [] data;
+
+        file.close();
         return DImg();
     }
 
     DImg img(w, h, sixteenBit, hasAlpha, (uchar*)data, false);
 
+    file.close();
     return img;
 }
 
