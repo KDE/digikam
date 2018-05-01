@@ -163,16 +163,6 @@ private Q_SLOTS:
 
     void slotMaintenance();
     void slotMaintenanceDone();
-    void slotExpoBlending();
-    void slotPanorama();
-    void slotVideoSlideshow();
-    void slotSendByMail();
-    void slotPrintCreator();
-    void slotHtmlGallery();
-    void slotCalendar();
-    void slotPresentation();
-    void slotMediaServer();
-
     void slotDatabaseMigration();
 
     void slotZoomSliderChanged(int);
@@ -190,6 +180,19 @@ private Q_SLOTS:
     void slotEditMetadata();
     void slotEditGeolocation();
 
+// -- Export tools methods implemented in digikamapp_export.cpp -------------------------------------
+
+private Q_SLOTS:
+
+    void slotExpoBlending();
+    void slotPanorama();
+    void slotVideoSlideshow();
+    void slotSendByMail();
+    void slotPrintCreator();
+    void slotHtmlGallery();
+    void slotCalendar();
+    void slotPresentation();
+    void slotMediaServer();
     void slotExportTool();
 
 // -- Import tools methods implemented in digikamapp_import.cpp -------------------------------------

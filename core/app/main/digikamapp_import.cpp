@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2002-16-10
- * Description : main digiKam interface implementation - Camera management
+ * Description : main digiKam interface implementation - Import tools
  *
  * Copyright (C) 2002-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
