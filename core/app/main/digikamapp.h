@@ -74,9 +74,6 @@ public:
 
     QMenu* slideShowMenu() const;
 
-    void autoDetect();
-    void downloadFrom(const QString& cameraGuiPath);
-    void downloadFromUdi(const QString& udi);
     void enableZoomPlusAction(bool val);
     void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
@@ -105,9 +102,6 @@ Q_SIGNALS:
 
     void signalWindowHasMoved();
 
-    void queuedOpenCameraUiFromPath(const QString& path);
-    void queuedOpenSolidDevice(const QString& udi);
-
 protected:
 
     bool queryClose();
@@ -116,27 +110,25 @@ protected:
 
 private:
 
-    bool    setup();
-    bool    setupICC();
-    void    setupView();
-    void    setupViewConnections();
-    void    setupStatusBar();
-    void    setupActions();
-    void    setupAccelerators();
-    void    setupExifOrientationActions();
-    void    setupImageTransformActions();
-    void    setupSelectToolsAction();
-    void    loadCameras();
-    void    populateThemes();
-    void    preloadWindows();
-    void    updateCameraMenu();
-    void    updateQuickImportAction();
-    void    initGui();
-    void    showThumbBar(bool visible);
-    void    showSideBars(bool visible);
-    bool    thumbbarVisibility() const;
-    void    customizedFullScreenMode(bool set);
-    void    toggleShowBar();
+    bool setup();
+    bool setupICC();
+    void setupView();
+    void setupViewConnections();
+    void setupStatusBar();
+    void setupActions();
+    void setupAccelerators();
+    void setupExifOrientationActions();
+    void setupImageTransformActions();
+    void setupSelectToolsAction();
+    void populateThemes();
+    void preloadWindows();
+    void initGui();
+    void showThumbBar(bool visible);
+    void showSideBars(bool visible);
+    bool thumbbarVisibility() const;
+    void customizedFullScreenMode(bool set);
+    void toggleShowBar();
+    void updateQuickImportAction();
 
 private Q_SLOTS:
 
@@ -154,20 +146,12 @@ private Q_SLOTS:
     void slotAboutToShowBackwardMenu();
 
     void slotSetup();
-    void slotSetupCamera();
     void slotSetupChanged();
     void slotColorManagementOptionsChanged();
     void slotToggleColorManagedView();
     void slotSetCheckedExifOrientationAction(const ImageInfo& info);
     void slotResetExifOrientationActions();
     void slotTransformAction();
-
-    void slotOpenManualCamera(QAction*);
-    void slotCameraAdded(CameraType*);
-    void slotCameraRemoved(QAction*);
-    void slotCameraAutoDetect();
-    void downloadImages(const QString& folder);
-    void cameraAutoDetect();
 
     void slotToggleLeftSideBar();
     void slotToggleRightSideBar();
@@ -203,7 +187,6 @@ private Q_SLOTS:
     void slotSwitchedToTableView();
     void slotSwitchedToTrashView();
 
-    void slotOpenCameraUiFromPath(const QString& path);
     void slotImportAddImages();
     void slotImportAddFolders();
     void slotThemeChanged();
@@ -215,7 +198,39 @@ private Q_SLOTS:
     void slotExportTool();
     void slotImportTool();
 
-// Solid based methods implemented in digikamapp_solid.cpp
+// -- Camera management methods implemented in digikamapp_camera.cpp --------------------------------
+
+public:
+
+    void autoDetect();
+    void downloadFrom(const QString& cameraGuiPath);
+    void downloadFromUdi(const QString& udi);
+
+Q_SIGNALS:
+
+    void queuedOpenCameraUiFromPath(const QString& path);
+    
+private:
+    
+    void loadCameras();
+    void updateCameraMenu();
+
+private Q_SLOTS:
+
+    void slotSetupCamera();
+    void slotOpenManualCamera(QAction*);
+    void slotCameraAdded(CameraType*);
+    void slotCameraRemoved(QAction*);
+    void slotCameraAutoDetect();
+    void slotOpenCameraUiFromPath(const QString& path);
+    void downloadImages(const QString& folder);
+    void cameraAutoDetect();
+    
+// -- Solid based methods implemented in digikamapp_solid.cpp ---------------------------------------
+    
+Q_SIGNALS:
+
+    void queuedOpenSolidDevice(const QString& udi);
 
 private:
 
@@ -233,6 +248,8 @@ private Q_SLOTS:
     void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString& udi);
     void slotSolidDeviceChanged(const QString& udi);
 
+// -- Internal private container --------------------------------------------------------------------
+    
 private:
 
     class Private;

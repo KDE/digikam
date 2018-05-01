@@ -62,6 +62,7 @@
 #include "albummanager.h"
 #include "applicationsettings.h"
 #include "cameralist.h"
+#include "cameratype.h"
 #include "cameranamehelper.h"
 #include "dsplashscreen.h"
 #include "dzoombar.h"
@@ -69,6 +70,7 @@
 #include "metadatastatusbar.h"
 #include "imagepropertiestab.h"
 #include "importui.h"
+#include "setup.h"
 
 class KToolBarPopupAction;
 
