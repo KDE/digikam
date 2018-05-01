@@ -29,115 +29,6 @@
 #include "digikamapp.h"
 #include "digikamapp_p.h"
 
-// Local includes
-
-#include "actioncategorizedview.h"
-#include "drawdecoder.h"
-#include "dlayoutbox.h"
-#include "album.h"
-#include "coredb.h"
-#include "albummodel.h"
-#include "albumselectdialog.h"
-#include "albumthumbnailloader.h"
-#include "dbinfoiface.h"
-#include "imagegps.h"
-#include "categorizeditemmodel.h"
-#include "collectionscanner.h"
-#include "collectionmanager.h"
-#include "componentsinfo.h"
-#include "coredbthumbinfoprovider.h"
-#include "dio.h"
-#include "dlogoaction.h"
-#include "fileactionmngr.h"
-#include "filterstatusbar.h"
-#include "iccsettings.h"
-#include "imageattributeswatch.h"
-#include "imageinfo.h"
-#include "imagewindow.h"
-#include "lighttablewindow.h"
-#include "queuemgrwindow.h"
-#include "loadingcache.h"
-#include "loadingcacheinterface.h"
-#include "loadsavethread.h"
-#include "metaengine_rotation.h"
-#include "scancontroller.h"
-#include "setupeditor.h"
-#include "setupicc.h"
-#include "thememanager.h"
-#include "thumbnailloadthread.h"
-#include "thumbnailsize.h"
-#include "dmetadata.h"
-#include "tagscache.h"
-#include "tagsactionmngr.h"
-#include "databaseserverstarter.h"
-#include "metadatasettings.h"
-#include "statusbarprogresswidget.h"
-#include "dbmigrationdlg.h"
-#include "progressmanager.h"
-#include "progressview.h"
-#include "maintenancedlg.h"
-#include "maintenancemngr.h"
-#include "newitemsfinder.h"
-#include "dbcleaner.h"
-#include "tagsmanager.h"
-#include "imagesortsettings.h"
-#include "metadatahubmngr.h"
-#include "metadataedit.h"
-#include "expoblendingmanager.h"
-#include "calwizard.h"
-#include "mailwizard.h"
-#include "advprintwizard.h"
-#include "dfiledialog.h"
-#include "dmediaservermngr.h"
-#include "dmediaserverdlg.h"
-#include "dbwindow.h"
-#include "fbwindow.h"
-#include "flickrwindow.h"
-#include "gswindow.h"
-#include "imageshackwindow.h"
-#include "imgurwindow.h"
-#include "piwigowindow.h"
-#include "rajcewindow.h"
-#include "smugwindow.h"
-#include "yfwindow.h"
-
-#ifdef HAVE_MEDIAWIKI
-#   include "mediawikiwindow.h"
-#endif
-
-#ifdef HAVE_VKONTAKTE
-#   include "vkwindow.h"
-#endif
-
-#ifdef HAVE_KIO
-#   include "ftexportwindow.h"
-#   include "ftimportwindow.h"
-#endif
-
-#ifdef HAVE_MARBLE
-#   include "geolocationedit.h"
-#endif
-
-#ifdef HAVE_HTMLGALLERY
-#   include "htmlwizard.h"
-#endif
-
-#ifdef HAVE_DBUS
-#   include "digikamadaptor.h"
-#endif
-
-#ifdef HAVE_PANORAMA
-#   include "panomanager.h"
-#endif
-
-#ifdef HAVE_MEDIAPLAYER
-#   include "vidslidewizard.h"
-#endif
-
-#ifdef HAVE_KFILEMETADATA
-#   include "baloowrap.h"
-#endif
-
 namespace Digikam
 {
 
@@ -1897,92 +1788,6 @@ void DigikamApp::slotZoomChanged(double zoom)
     }
 }
 
-void DigikamApp::slotImportAddImages()
-{
-    QString startingPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-    QUrl url             = DFileDialog::getExistingDirectoryUrl(this, i18n("Select folder to parse"),
-                                                                QUrl::fromLocalFile(startingPath));
-
-    if (url.isEmpty() || !url.isLocalFile())
-    {
-        return;
-    }
-
-    // The folder contents will be parsed by Camera interface in "Directory Browse" mode.
-    downloadFrom(url.toLocalFile());
-}
-
-void DigikamApp::slotImportAddFolders()
-{
-    // NOTE: QFileDialog don't have an option to permit multiple selection of directories.
-    // This work around is inspired from http://www.qtcentre.org/threads/34226-QFileDialog-select-multiple-directories
-    // Check Later Qt 5.4 if a new native Qt way have been introduced.
-
-    QPointer<DFileDialog> dlg = new DFileDialog(this);
-    dlg->setWindowTitle(i18n("Select folders to import into album"));
-    dlg->setFileMode(DFileDialog::DirectoryOnly);
-
-    QListView* const l = dlg->findChild<QListView*>(QLatin1String("listView"));
-
-    if (l)
-    {
-        l->setSelectionMode(QAbstractItemView::MultiSelection);
-    }
-
-    QTreeView* const t = dlg->findChild<QTreeView*>();
-
-    if (t)
-    {
-        t->setSelectionMode(QAbstractItemView::MultiSelection);
-    }
-
-    if (dlg->exec() != QDialog::Accepted)
-    {
-        delete dlg;
-        return;
-    }
-
-    QList<QUrl> urls = dlg->selectedUrls();
-    delete dlg;
-
-    if (urls.isEmpty())
-    {
-        return;
-    }
-
-    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* album = 0;
-
-    if (!albumList.isEmpty())
-    {
-        album = albumList.first();
-    }
-
-    if (album && album->type() != Album::PHYSICAL)
-    {
-        album = 0;
-    }
-
-    QString header(i18n("<p>Please select the destination album from the digiKam library to "
-                        "import folders into.</p>"));
-
-    album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
-
-    if (!album)
-    {
-        return;
-    }
-
-    PAlbum* const pAlbum = dynamic_cast<PAlbum*>(album);
-
-    if (!pAlbum)
-    {
-        return;
-    }
-
-    DIO::copy(urls, pAlbum);
-}
-
 void DigikamApp::slotToggleShowBar()
 {
     d->view->toggleShowBar(d->showBarAction->isChecked());
@@ -1991,59 +1796,6 @@ void DigikamApp::slotToggleShowBar()
 void DigikamApp::moveEvent(QMoveEvent*)
 {
     emit signalWindowHasMoved();
-}
-
-void DigikamApp::updateQuickImportAction()
-{
-    d->quickImportMenu->clear();
-
-    foreach(QAction* const action, d->solidCameraActionGroup->actions())
-    {
-        d->quickImportMenu->addAction(action);
-    }
-
-    foreach(QAction* const action, d->solidUsmActionGroup->actions())
-    {
-        d->quickImportMenu->addAction(action);
-    }
-
-    foreach(QAction* const action, d->manualCameraActionGroup->actions())
-    {
-        d->quickImportMenu->addAction(action);
-    }
-
-    if (d->quickImportMenu->actions().isEmpty())
-    {
-        d->quickImportMenu->setEnabled(false);
-    }
-    else
-    {
-        disconnect(d->quickImportMenu->menuAction(), SIGNAL(triggered()), 0, 0);
-
-        QAction*  primaryAction = 0;
-        QDateTime latest;
-
-        foreach(QAction* const action, d->quickImportMenu->actions())
-        {
-            QDateTime appearanceTime = d->cameraAppearanceTimes.value(action->data().toString());
-
-            if (latest.isNull() || appearanceTime > latest)
-            {
-                primaryAction = action;
-                latest        = appearanceTime;
-            }
-        }
-
-        if (!primaryAction)
-        {
-            primaryAction = d->quickImportMenu->actions().first();
-        }
-
-        connect(d->quickImportMenu->menuAction(), SIGNAL(triggered()),
-                primaryAction, SLOT(trigger()));
-
-        d->quickImportMenu->setEnabled(true);
-    }
 }
 
 void DigikamApp::setupExifOrientationActions()
@@ -2417,36 +2169,6 @@ void DigikamApp::slotColorManagementOptionsChanged()
     d->viewCMViewAction->blockSignals(false);
 }
 
-QString DigikamApp::scannerTargetPlace()
-{
-    QString place    = QDir::homePath();
-    QStringList pics = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
-
-    if (!pics.isEmpty())
-        place = pics.first();
-
-    Album* const album = AlbumManager::instance()->currentAlbums().first();
-
-    if (album->type() == Album::PHYSICAL)
-    {
-        PAlbum* const p = dynamic_cast<PAlbum*>(album);
-
-        if (p)
-        {
-            place = p->folderPath();
-        }
-    }
-    else
-    {
-        QStringList cols = CollectionManager::instance()->allAvailableAlbumRootPaths();
-
-        if (!cols.isEmpty())
-            place = cols.first();
-    }
-
-    return place;
-}
-
 void DigikamApp::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
@@ -2496,13 +2218,6 @@ void DigikamApp::slotEditMetadata()
         scanner.scanFile(url.toLocalFile(), CollectionScanner::Rescan);
         ImageAttributesWatch::instance()->fileMetadataChanged(url);
     }
-}
-
-void DigikamApp::slotImportFromScanner()
-{
-#ifdef HAVE_KSANE
-    m_ksaneAction->activate(scannerTargetPlace(), configGroupName());
-#endif
 }
 
 void DigikamApp::setupSelectToolsAction()
@@ -2678,35 +2393,6 @@ void DigikamApp::slotExportTool()
     else if (tool == m_exportFileTransferAction)
     {
         QPointer<FTExportWindow> w = new FTExportWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
-        w->exec();
-        delete w;
-    }
-#endif
-}
-
-void DigikamApp::slotImportTool()
-{
-    QAction* const tool = dynamic_cast<QAction*>(sender());
-
-    if (tool == m_importGphotoAction)
-    {
-        QPointer<GSWindow> w = new GSWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
-                                            this, QLatin1String("googlephotoimport"));
-        w->exec();
-        delete w;
-    }
-    else if (tool == m_importSmugmugAction)
-    {
-        QPointer<SmugWindow> w = new SmugWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport),
-                                                this, true);
-        w->exec();
-        delete w;
-    }
-
-#ifdef HAVE_KIO
-    else if (tool == m_importFileTransferAction)
-    {
-        QPointer<FTImportWindow> w = new FTImportWindow(new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::ImportExport), this);
         w->exec();
         delete w;
     }

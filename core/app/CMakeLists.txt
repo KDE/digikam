@@ -300,6 +300,7 @@ set(libdigikamgui_SRCS
     main/digikamapp.cpp
     main/digikamapp_solid.cpp
     main/digikamapp_camera.cpp
+    main/digikamapp_import.cpp
 
     date/dpopupframe.cpp
     date/ddateedit.cpp

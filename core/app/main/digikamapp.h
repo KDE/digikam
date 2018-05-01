@@ -87,7 +87,6 @@ public:
     DigikamView* view() const;
 
     static DigikamApp* instance();
-    static QString scannerTargetPlace();
 
 Q_SIGNALS:
 
@@ -128,7 +127,6 @@ private:
     bool thumbbarVisibility() const;
     void customizedFullScreenMode(bool set);
     void toggleShowBar();
-    void updateQuickImportAction();
 
 private Q_SLOTS:
 
@@ -187,15 +185,28 @@ private Q_SLOTS:
     void slotSwitchedToTableView();
     void slotSwitchedToTrashView();
 
-    void slotImportAddImages();
-    void slotImportAddFolders();
     void slotThemeChanged();
 
-    void slotImportFromScanner();
     void slotEditMetadata();
     void slotEditGeolocation();
 
     void slotExportTool();
+
+// -- Import tools methods implemented in digikamapp_import.cpp -------------------------------------
+
+public:
+
+    static QString scannerTargetPlace();
+
+private:
+
+    void updateQuickImportAction();
+
+private Q_SLOTS:
+
+    void slotImportAddImages();
+    void slotImportAddFolders();
+    void slotImportFromScanner();
     void slotImportTool();
 
 // -- Camera management methods implemented in digikamapp_camera.cpp --------------------------------
@@ -209,9 +220,9 @@ public:
 Q_SIGNALS:
 
     void queuedOpenCameraUiFromPath(const QString& path);
-    
+
 private:
-    
+
     void loadCameras();
     void updateCameraMenu();
 
@@ -225,9 +236,9 @@ private Q_SLOTS:
     void slotOpenCameraUiFromPath(const QString& path);
     void downloadImages(const QString& folder);
     void cameraAutoDetect();
-    
+
 // -- Solid based methods implemented in digikamapp_solid.cpp ---------------------------------------
-    
+
 Q_SIGNALS:
 
     void queuedOpenSolidDevice(const QString& udi);
@@ -249,7 +260,7 @@ private Q_SLOTS:
     void slotSolidDeviceChanged(const QString& udi);
 
 // -- Internal private container --------------------------------------------------------------------
-    
+
 private:
 
     class Private;

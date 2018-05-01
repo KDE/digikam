@@ -71,13 +71,118 @@
 #include "imagepropertiestab.h"
 #include "importui.h"
 #include "setup.h"
+#include "actioncategorizedview.h"
+#include "drawdecoder.h"
+#include "dlayoutbox.h"
+#include "album.h"
+#include "coredb.h"
+#include "albummodel.h"
+#include "albumselectdialog.h"
+#include "albumthumbnailloader.h"
+#include "dbinfoiface.h"
+#include "imagegps.h"
+#include "categorizeditemmodel.h"
+#include "collectionscanner.h"
+#include "collectionmanager.h"
+#include "componentsinfo.h"
+#include "coredbthumbinfoprovider.h"
+#include "dio.h"
+#include "dlogoaction.h"
+#include "fileactionmngr.h"
+#include "filterstatusbar.h"
+#include "iccsettings.h"
+#include "imageattributeswatch.h"
+#include "imageinfo.h"
+#include "imagewindow.h"
+#include "lighttablewindow.h"
+#include "queuemgrwindow.h"
+#include "loadingcache.h"
+#include "loadingcacheinterface.h"
+#include "loadsavethread.h"
+#include "metaengine_rotation.h"
+#include "scancontroller.h"
+#include "setupeditor.h"
+#include "setupicc.h"
+#include "thememanager.h"
+#include "thumbnailloadthread.h"
+#include "thumbnailsize.h"
+#include "dmetadata.h"
+#include "tagscache.h"
+#include "tagsactionmngr.h"
+#include "databaseserverstarter.h"
+#include "metadatasettings.h"
+#include "statusbarprogresswidget.h"
+#include "dbmigrationdlg.h"
+#include "progressmanager.h"
+#include "progressview.h"
+#include "maintenancedlg.h"
+#include "maintenancemngr.h"
+#include "newitemsfinder.h"
+#include "dbcleaner.h"
+#include "tagsmanager.h"
+#include "imagesortsettings.h"
+#include "metadatahubmngr.h"
+#include "metadataedit.h"
+#include "expoblendingmanager.h"
+#include "calwizard.h"
+#include "mailwizard.h"
+#include "advprintwizard.h"
+#include "dfiledialog.h"
+#include "dmediaservermngr.h"
+#include "dmediaserverdlg.h"
+#include "dbwindow.h"
+#include "fbwindow.h"
+#include "flickrwindow.h"
+#include "gswindow.h"
+#include "imageshackwindow.h"
+#include "imgurwindow.h"
+#include "piwigowindow.h"
+#include "rajcewindow.h"
+#include "smugwindow.h"
+#include "yfwindow.h"
+
+#ifdef HAVE_MEDIAWIKI
+#   include "mediawikiwindow.h"
+#endif
+
+#ifdef HAVE_VKONTAKTE
+#   include "vkwindow.h"
+#endif
+
+#ifdef HAVE_KIO
+#   include "ftexportwindow.h"
+#   include "ftimportwindow.h"
+#endif
+
+#ifdef HAVE_MARBLE
+#   include "geolocationedit.h"
+#endif
+
+#ifdef HAVE_HTMLGALLERY
+#   include "htmlwizard.h"
+#endif
+
+#ifdef HAVE_DBUS
+#   include "digikamadaptor.h"
+#endif
+
+#ifdef HAVE_PANORAMA
+#   include "panomanager.h"
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
+#endif
+
+#ifdef HAVE_KFILEMETADATA
+#   include "baloowrap.h"
+#endif
 
 class KToolBarPopupAction;
 
 namespace Digikam
 {
 
-class ImportUI;
 class SearchTextBar;
 class FilterStatusBar;
 class TagsActionMngr;
