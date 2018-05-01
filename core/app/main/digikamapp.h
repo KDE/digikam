@@ -72,16 +72,13 @@ public:
     virtual void show();
     void restoreSession();
 
-    QMenu* slideShowMenu() const;
-
     void enableZoomPlusAction(bool val);
     void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
 
-    void rebuild();
-
-    DigikamView* view() const;
+    DigikamView* view()    const;
+    QMenu* slideShowMenu() const;
 
     static DigikamApp* instance();
 
@@ -106,16 +103,6 @@ protected:
 
 private:
 
-    void setupView();
-    void setupViewConnections();
-    void setupStatusBar();
-    void setupActions();
-    void setupAccelerators();
-    void setupExifOrientationActions();
-    void setupImageTransformActions();
-    void populateThemes();
-    void preloadWindows();
-    void initGui();
     void showThumbBar(bool visible);
     void showSideBars(bool visible);
     bool thumbbarVisibility() const;
@@ -162,7 +149,24 @@ private Q_SLOTS:
     void slotSwitchedToTableView();
     void slotSwitchedToTrashView();
 
-    void slotThemeChanged();
+// -- Internal setup methods implemented in digikamapp_setup.cpp ----------------------------------------
+
+public:
+
+    void rebuild();
+
+private:
+
+    void setupView();
+    void setupViewConnections();
+    void setupStatusBar();
+    void setupActions();
+    void setupAccelerators();
+    void setupExifOrientationActions();
+    void setupImageTransformActions();
+    void populateThemes();
+    void preloadWindows();
+    void initGui();
 
 // -- Extra tool methods implemented in digikamapp_tools.cpp ----------------------------------------
 
@@ -190,6 +194,7 @@ private Q_SLOTS:
     void slotSetup();
     void slotSetupChanged();
     void slotEditKeys();
+    void slotThemeChanged();
     
 // -- Export tools methods implemented in digikamapp_export.cpp -------------------------------------
 

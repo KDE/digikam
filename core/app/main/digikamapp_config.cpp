@@ -89,4 +89,9 @@ void DigikamApp::slotEditKeys()
     editKeyboardShortcuts();
 }
 
+void DigikamApp::slotThemeChanged()
+{
+    ApplicationSettings::instance()->setCurrentTheme(ThemeManager::instance()->currentThemeName());
+}
+
 } // namespace Digikam
