@@ -270,21 +270,21 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setText(i18n("File Format"), i18n("Return items with the file format"));
         QStringList formats;
 
-        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Image).keys())
+        foreach(const QString& fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Image).keys())
             formats << fmt << i18n("%1 [Image]", fmt);
 
-        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Video).keys())
+        foreach(const QString& fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Video).keys())
             formats << fmt << i18n("%1 [Video]", fmt);
 
-        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Audio).keys())
+        foreach(const QString& fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Audio).keys())
             formats << fmt << i18n("%1 [Audio]", fmt);
 
 /* FIXME: This can report 2 times JPG : one as image, one as other. Where is the problem ?
-        foreach(QString fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Other).keys())
+        foreach(const QString& fmt, CoreDbAccess().db()->getFormatStatistics(DatabaseItem::Other).keys())
             formats << fmt << i18n("%1 [Other]", fmt);
 */
         formats.sort();
-        
+
         qCDebug(DIGIKAM_GENERAL_LOG) << formats;
 
         field->setChoice(formats);
