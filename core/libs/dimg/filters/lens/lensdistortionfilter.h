@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef LENS_DISTORTION_FILTER_H
-#define LENS_DISTORTION_FILTER_H
+#ifndef DIGIKAM_LENS_DISTORTION_FILTER_H
+#define DIGIKAM_LENS_DISTORTION_FILTER_H
 
 // Local includes
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* LENS_DISTORTION_FILTER_H */
+#endif // DIGIKAM_LENS_DISTORTION_FILTER_H

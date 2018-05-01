@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ANTIVIGNETTINGFILTER_H
-#define ANTIVIGNETTINGFILTER_H
+#ifndef DIGIKAM_ANTI_VIGNETTING_FILTER_H
+#define DIGIKAM_ANTI_VIGNETTING_FILTER_H
 
 // Local includes
 
@@ -38,7 +38,7 @@ class DIGIKAM_EXPORT AntiVignettingContainer
 
 public:
 
-    AntiVignettingContainer()
+    explicit AntiVignettingContainer()
     {
         addvignetting = true;
         density       = 2.0;
@@ -125,4 +125,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ANTIVIGNETTINGFILTER_H */
+#endif // DIGIKAM_ANTI_VIGNETTING_FILTER_H

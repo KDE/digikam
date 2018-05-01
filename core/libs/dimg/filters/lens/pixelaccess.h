@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PIXEL_ACCESS_H
-#define PIXEL_ACCESS_H
+#ifndef DIGIKAM_PIXEL_ACCESS_H
+#define DIGIKAM_PIXEL_ACCESS_H
 
 #define PixelAccessRegions 20
 #define PixelAccessWidth   40
@@ -92,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* PIXEL_ACCESS_H */
+#endif // DIGIKAM_PIXEL_ACCESS_H

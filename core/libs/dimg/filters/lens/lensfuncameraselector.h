@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-#ifndef LENSFUNCAMERASELECTOR_H
-#define LENSFUNCAMERASELECTOR_H
+#ifndef DIGIKAM_LENS_FUN_CAMERA_SELECTOR_H
+#define DIGIKAM_LENS_FUN_CAMERA_SELECTOR_H
 
 // Qt includes
 
@@ -100,4 +100,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* LENSFUNCAMERASELECTOR_H */
+#endif // DIGIKAM_LENS_FUN_CAMERA_SELECTOR_H
