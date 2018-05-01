@@ -40,10 +40,12 @@ class DIGIKAM_EXPORT VisibilityObject
 {
 public:
 
-    virtual ~VisibilityObject() {}
+    virtual ~VisibilityObject()
+    {
+    }
 
     virtual void setVisible(bool visible) = 0;
-    virtual bool isVisible() = 0;
+    virtual bool isVisible()              = 0;
 };
 
 // -----------------------------------------------------------------------------------
@@ -71,14 +73,20 @@ public:
     /** Set the widget containing the widgets added to this controller */
     void setContainerWidget(QWidget* const widget);
 
-    /** Add a widget to this controller */
+    /**
+     * Add a widget to this controller.
+     */
     void addWidget(QWidget* const widget);
 
-    /** Add an object implementing the VisibilityObject interface.
-     *  You can use this if you have your widgets grouped in intermediate objects. */
+    /**
+     * Add an object implementing the VisibilityObject interface.
+     * You can use this if you have your widgets grouped in intermediate objects.
+     */
     void addObject(VisibilityObject* const object);
 
-    /** Returns true if the contained objects are visible or becoming visible */
+    /**
+     * Returns true if the contained objects are visible or becoming visible.
+     */
     bool isVisible() const;
 
 public Q_SLOTS:
@@ -93,9 +101,10 @@ public Q_SLOTS:
 
 protected:
 
-    virtual void beginStatusChange();
     void step();
     void allSteps();
+
+    virtual void beginStatusChange();
 
 private:
 

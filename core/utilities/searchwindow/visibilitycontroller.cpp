@@ -30,8 +30,8 @@ class VisibilityController::Private
 {
 public:
 
-    explicit Private() :
-        status(VisibilityController::Unknown),
+    explicit Private()
+      : status(VisibilityController::Unknown),
         containerWidget(0)
     {
     }
@@ -46,7 +46,8 @@ class VisibilityWidgetWrapper : public QObject, public VisibilityObject
 public:
 
     VisibilityWidgetWrapper(VisibilityController* const parent, QWidget* const widget)
-        : QObject(parent), m_widget(widget)
+        : QObject(parent),
+          m_widget(widget)
     {
     }
 
@@ -66,7 +67,8 @@ public:
 // -------------------------------------------------------------------------------------
 
 VisibilityController::VisibilityController(QObject* const parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
 }
 

@@ -17,7 +17,6 @@ set(libcommonwidgets_SRCS
     common/modelcompleter.cpp
     common/searchtextbar.cpp
     common/statesavingobject.cpp
-    common/visibilitycontroller.cpp
     common/dlayoutbox.cpp
 )
 
