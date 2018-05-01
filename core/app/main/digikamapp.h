@@ -113,7 +113,6 @@ private:
     void setupAccelerators();
     void setupExifOrientationActions();
     void setupImageTransformActions();
-    void setupSelectToolsAction();
     void populateThemes();
     void preloadWindows();
     void initGui();
@@ -164,6 +163,14 @@ private Q_SLOTS:
     void slotSwitchedToTrashView();
 
     void slotThemeChanged();
+
+// -- Extra tool methods implemented in digikamapp_tools.cpp ----------------------------------------
+
+private:
+
+    void setupSelectToolsAction();
+
+private Q_SLOTS:
 
     void slotMaintenance();
     void slotMaintenanceDone();

@@ -303,6 +303,7 @@ set(libdigikamgui_SRCS
     main/digikamapp_import.cpp
     main/digikamapp_export.cpp
     main/digikamapp_config.cpp
+    main/digikamapp_tools.cpp
 
     date/dpopupframe.cpp
     date/ddateedit.cpp
