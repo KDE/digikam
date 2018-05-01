@@ -258,7 +258,7 @@ void SimilarityDb::copySimilarityAttributes(qlonglong srcId, qlonglong dstId)
 {
     // Go through ImageHaarMatrix table and copy the entries
 
-    d->db->execSql(QString::fromUtf8("INSERT INTO ImageHaarMatrix "
+    d->db->execSql(QString::fromUtf8("REPLACE INTO ImageHaarMatrix "
                                      " (imageid, modificationDate, uniqueHash, matrix) "
                                      "SELECT ?, modificationDate, uniqueHash, matrix "
                                      "FROM ImageHaarMatrix WHERE imageid=?;"),
