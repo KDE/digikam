@@ -1544,68 +1544,6 @@ void DigikamApp::slotExit()
     close();
 }
 
-void DigikamApp::slotSetup()
-{
-    setup();
-}
-
-bool DigikamApp::setup()
-{
-    return Setup::execDialog(this, Setup::LastPageUsed);
-}
-
-bool DigikamApp::setupICC()
-{
-    return Setup::execSinglePage(this, Setup::ICCPage);
-}
-
-void DigikamApp::slotSetupChanged()
-{
-    // raw loading options might have changed
-    LoadingCacheInterface::cleanCache();
-
-    // TODO: clear history when location changed
-    //if(ApplicationSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
-    //  d->view->clearHistory();
-
-    const DbEngineParameters prm = ApplicationSettings::instance()->getDbEngineParameters();
-
-    if (!AlbumManager::instance()->databaseEqual(prm))
-    {
-        AlbumManager::instance()->changeDatabase(ApplicationSettings::instance()->getDbEngineParameters());
-    }
-
-    if (ApplicationSettings::instance()->getShowFolderTreeViewItemsCount())
-    {
-        AlbumManager::instance()->prepareItemCounts();
-    }
-
-    // Load full-screen options
-    KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
-    readFullScreenSettings(group);
-
-    d->view->applySettings();
-
-    AlbumThumbnailLoader::instance()->setThumbnailSize(ApplicationSettings::instance()->getTreeViewIconSize());
-
-    if (LightTableWindow::lightTableWindowCreated())
-    {
-        LightTableWindow::lightTableWindow()->applySettings();
-    }
-
-    if (QueueMgrWindow::queueManagerWindowCreated())
-    {
-        QueueMgrWindow::queueManagerWindow()->applySettings();
-    }
-
-    d->config->sync();
-}
-
-void DigikamApp::slotEditKeys()
-{
-    editKeyboardShortcuts();
-}
-
 void DigikamApp::slotDBStat()
 {
     showDigikamDatabaseStat();
