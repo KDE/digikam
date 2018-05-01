@@ -2295,7 +2295,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
         d->currentWindowModalDialog = 0;
     }
 
-    if (result != DFileDialog::Accepted || !imageFileSaveDialog)
+    if (result != QDialog::Accepted || !imageFileSaveDialog)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "File Save Dialog rejected";
         return false;
