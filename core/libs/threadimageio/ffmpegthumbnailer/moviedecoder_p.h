@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_MOVIE_DECODER_P_H
-#define DIGIKAM_MOVIE_DECODER_P_H
+#ifndef DIGIKAM_MOVIE_DECODER_PRIVATE_H
+#define DIGIKAM_MOVIE_DECODER_PRIVATE_H
 
 #include "moviedecoder.h"
 
@@ -114,4 +114,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_MOVIE_DECODER_P_H
+#endif // DIGIKAM_MOVIE_DECODER_PRIVATE_H

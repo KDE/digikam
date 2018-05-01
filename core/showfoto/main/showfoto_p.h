@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOW_FOTO_P_H
-#define SHOW_FOTO_P_H
+#ifndef SHOW_FOTO_PRIVATE_H
+#define SHOW_FOTO_PRIVATE_H
 
 // Qt includes
 
@@ -101,4 +101,4 @@ public:
 
 } // namespace Showfoto
 
-#endif // SHOW_FOTO_P_H
+#endif // SHOW_FOTO_PRIVATE_H

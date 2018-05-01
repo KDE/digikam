@@ -66,7 +66,7 @@ class DIGIKAM_EXPORT DigikamApp : public DXmlGuiWindow
 
 public:
 
-    DigikamApp();
+    explicit DigikamApp();
     ~DigikamApp();
 
     virtual void show();
@@ -129,11 +129,6 @@ private:
     void    loadCameras();
     void    populateThemes();
     void    preloadWindows();
-    void    fillSolidMenus();
-    bool    checkSolidCamera(const Solid::Device& cameraDevice);
-    QString labelForSolidCamera(const Solid::Device& cameraDevice);
-    void    openSolidCamera(const QString& udi, const QString& label = QString());
-    void    openSolidUsmDevice(const QString& udi, const QString& label = QString());
     void    updateCameraMenu();
     void    updateQuickImportAction();
     void    initGui();
@@ -167,13 +162,7 @@ private Q_SLOTS:
     void slotResetExifOrientationActions();
     void slotTransformAction();
 
-    void slotOpenSolidCamera(QAction*);
     void slotOpenManualCamera(QAction*);
-    void slotOpenSolidUsmDevice(QAction*);
-    void slotOpenSolidDevice(const QString& udi);
-    void slotOpenCameraUiFromPath(const QString& path);
-    void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString& udi);
-    void slotSolidDeviceChanged(const QString& udi);
     void slotCameraAdded(CameraType*);
     void slotCameraRemoved(QAction*);
     void slotCameraAutoDetect();
@@ -214,6 +203,7 @@ private Q_SLOTS:
     void slotSwitchedToTableView();
     void slotSwitchedToTrashView();
 
+    void slotOpenCameraUiFromPath(const QString& path);
     void slotImportAddImages();
     void slotImportAddFolders();
     void slotThemeChanged();
@@ -224,6 +214,24 @@ private Q_SLOTS:
 
     void slotExportTool();
     void slotImportTool();
+
+// Solid based methods implemented in digikamapp_solid.cpp
+
+private:
+
+    void    fillSolidMenus();
+    bool    checkSolidCamera(const Solid::Device& cameraDevice);
+    QString labelForSolidCamera(const Solid::Device& cameraDevice);
+    void    openSolidCamera(const QString& udi, const QString& label = QString());
+    void    openSolidUsmDevice(const QString& udi, const QString& label = QString());
+
+private Q_SLOTS:
+
+    void slotOpenSolidCamera(QAction*);
+    void slotOpenSolidUsmDevice(QAction*);
+    void slotOpenSolidDevice(const QString& udi);
+    void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString& udi);
+    void slotSolidDeviceChanged(const QString& udi);
 
 private:
 

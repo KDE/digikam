@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_CORE_DB_BACKEND_P_H
-#define DIGIKAM_CORE_DB_BACKEND_P_H
+#ifndef DIGIKAM_CORE_DB_BACKEND_PRIVATE_H
+#define DIGIKAM_CORE_DB_BACKEND_PRIVATE_H
 
 // Local includes
 
@@ -152,4 +152,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_CORE_DB_BACKEND_P_H
+#endif // DIGIKAM_CORE_DB_BACKEND_PRIVATE_H

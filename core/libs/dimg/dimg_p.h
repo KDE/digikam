@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DIMG_P_H
-#define DIGIKAM_DIMG_P_H
+#ifndef DIGIKAM_DIMG_PRIVATE_H
+#define DIGIKAM_DIMG_PRIVATE_H
 
 // Qt includes
 
@@ -148,4 +148,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DIMG_P_H
+#endif // DIGIKAM_DIMG_PRIVATE_H

@@ -34,21 +34,41 @@
 #include <QString>
 #include <QAction>
 #include <QMenu>
+#include <QApplication>
+#include <QStringList>
+#include <QDomDocument>
+#include <QStandardPaths>
+#include <QKeySequence>
+#include <QMenuBar>
+#include <QTimer>
+#include <QIcon>
+#include <QMessageBox>
+#include <QStatusBar>
+#include <QDir>
 
 // KDE includes
 
+#include <klocalizedstring.h>
+#include <kactioncollection.h>
+#include <ktoolbar.h>
+#include <ktoolbarpopupaction.h>
+#include <kwindowsystem.h>
 #include <kselectaction.h>
 
 // Local includes
 
 #include "digikam_config.h"
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "applicationsettings.h"
 #include "cameralist.h"
+#include "cameranamehelper.h"
 #include "dsplashscreen.h"
 #include "dzoombar.h"
 #include "digikamview.h"
 #include "metadatastatusbar.h"
+#include "imagepropertiestab.h"
+#include "importui.h"
 
 class KToolBarPopupAction;
 
@@ -65,9 +85,9 @@ class ProgressEntry
 {
 public:
 
-    ProgressEntry()
-        : progress(0),
-          canCancel(false)
+    explicit ProgressEntry()
+      : progress(0),
+        canCancel(false)
     {
     }
 
@@ -82,8 +102,8 @@ class DigikamApp::Private
 {
 public:
 
-    Private() :
-        autoShowZoomToolTip(false),
+    explicit Private()
+      : autoShowZoomToolTip(false),
         validIccPath(true),
         cameraMenu(0),
         usbMediaMenu(0),

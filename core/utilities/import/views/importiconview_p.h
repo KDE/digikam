@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTICONVIEW_P_H
-#define IMPORTICONVIEW_P_H
+#ifndef IMPORTICONVIEW_PRIVATE_H
+#define IMPORTICONVIEW_PRIVATE_H
 
 // Qt includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTICONVIEW_P_H
+#endif // IMPORTICONVIEW_PRIVATE_H

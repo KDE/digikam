@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_EFFECT_MNGR_P_H
-#define DIGIKAM_EFFECT_MNGR_P_H
+#ifndef DIGIKAM_EFFECT_MNGR_PRIVATE_H
+#define DIGIKAM_EFFECT_MNGR_PRIVATE_H
 
 // C++ includes
 
@@ -105,4 +105,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_EFFECT_MNGR_P_H
+#endif // DIGIKAM_EFFECT_MNGR_PRIVATE_H

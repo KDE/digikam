@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FILM_FILTER_P_H
-#define DIGIKAM_FILM_FILTER_P_H
+#ifndef DIGIKAM_FILM_FILTER_PRIVATE_H
+#define DIGIKAM_FILM_FILTER_PRIVATE_H
 
 #include "filmfilter.h"
 
@@ -161,4 +161,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FILM_FILTER_P_H
+#endif // DIGIKAM_FILM_FILTER_PRIVATE_H

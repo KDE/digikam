@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTUI_P_H
-#define IMPORTUI_P_H
+#ifndef IMPORTUI_PRIVATE_H
+#define IMPORTUI_PRIVATE_H
 
 // Qt includes
 
@@ -256,4 +256,4 @@ const QString ImportUI::Private::importFiltersConfigGroupName(QLatin1String("Imp
 
 } // namespace Digikam
 
-#endif // IMPORTUI_P_H
+#endif // IMPORTUI_PRIVATE_H

@@ -298,6 +298,7 @@ endif()
 
 set(libdigikamgui_SRCS
     main/digikamapp.cpp
+    main/digikamapp_solid.cpp
 
     date/dpopupframe.cpp
     date/ddateedit.cpp
