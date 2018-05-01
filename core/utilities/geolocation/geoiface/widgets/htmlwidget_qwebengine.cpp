@@ -185,11 +185,18 @@ QVariant HTMLWidget::runScript(const QString& scriptCode, bool async)
     }
     else
     {
-        QVariant ret;
+        QVariant   ret;
         QEventLoop loop;
-        // lambda c11 function capturing value returned by java script code which is not synchro with QWebEngineView.
+
+        // Lambda c++11 function capturing value returned by java script code which is not synchro with QWebEngineView.
         // See https://wiki.qt.io/Porting_from_QtWebKit_to_QtWebEngine.
-        page()->runJavaScript(scriptCode, [&ret, &loop](const QVariant& result){ ret.setValue(result); loop.quit(); });
+        page()->runJavaScript(scriptCode,
+                              [&ret, &loop](const QVariant& result)
+                                {
+                                    ret.setValue(result);
+                                    loop.quit();
+                                }
+                             );
 
         loop.exec();
 
