@@ -119,8 +119,9 @@ void DFileSelector::slotBtnClicked()
     DFileDialog* const fileDlg = new DFileDialog;
 
     fileDlg->setDirectory(QFileInfo(fileDlgPath()).filePath());
-    fileDlg->setOptions(d->fdOptions);
+    // It is important to set up the mode first and then the options
     fileDlg->setFileMode(d->fdMode);
+    fileDlg->setOptions(d->fdOptions);
 
     if (!d->fdFilter.isNull())
     {
