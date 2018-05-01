@@ -21,11 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEHISTOGRAM_H
-#define IMAGEHISTOGRAM_H
+#ifndef DIGIKAM_IMAGE_HISTOGRAM_H
+#define DIGIKAM_IMAGE_HISTOGRAM_H
 
 // Qt includes
 
+#include <QObject>
 #include <QEvent>
 #include <QThread>
 
@@ -33,8 +34,6 @@
 
 #include "digikam_export.h"
 #include "dynamicthread.h"
-
-class QObject;
 
 namespace Digikam
 {
@@ -93,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGEHISTOGRAM_H */
+#endif // DIGIKAM_IMAGE_HISTOGRAM_H

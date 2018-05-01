@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef WBCONTAINER_H
-#define WBCONTAINER_H
+#ifndef DIGIKAM_WB_CONTAINER_H
+#define DIGIKAM_WB_CONTAINER_H
 
 // Qt includes
 
@@ -75,4 +75,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* WBCONTAINER_H*/
+#endif // DIGIKAM_WB_CONTAINER_H

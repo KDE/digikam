@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef HISTOGRAMBOX_H
-#define HISTOGRAMBOX_H
+#ifndef DIGIKAM_HISTOGRAM_BOX_H
+#define DIGIKAM_HISTOGRAM_BOX_H
 
 // Qt includes
 
@@ -89,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* HISTOGRAMBOX_H */
+#endif // DIGIKAM_HISTOGRAM_BOX_H

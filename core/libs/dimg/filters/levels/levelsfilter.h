@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef LEVELSFILTER_H
-#define LEVELSFILTER_H
+#ifndef DIGIKAM_LEVELS_FILTER_H
+#define DIGIKAM_LEVELS_FILTER_H
 
 // Local includes
 
@@ -41,9 +41,9 @@ class DIGIKAM_EXPORT LevelsContainer
 
 public:
 
-    LevelsContainer()
+    explicit LevelsContainer()
     {
-        for (int i=0 ; i<5 ; ++i)
+        for (int i = 0 ; i < 5 ; ++i)
         {
             lInput[i]  = 0;
             hInput[i]  = 65535;
@@ -117,4 +117,4 @@ private:
 
 } // namespace Digikam
 
-#endif // LEVELSFILTER_H
+#endif // DIGIKAM_LEVELS_FILTER_H

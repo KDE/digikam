@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef REFOCUSFILTER_H
-#define REFOCUSFILTER_H
+#ifndef DIGIKAM_REFOCUS_FILTER_H
+#define DIGIKAM_REFOCUS_FILTER_H
 
 // Local includes
 
@@ -109,4 +109,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* REFOCUSFILTER_H */
+#endif // DIGIKAM_REFOCUS_FILTER_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef UNSHARPMASKFILTER_H
-#define UNSHARPMASKFILTER_H
+#ifndef DIGIKAM_UNSHARP_MASK_FILTER_H
+#define DIGIKAM_UNSHARP_MASK_FILTER_H
 
 // Local includes
 
@@ -94,4 +94,4 @@ private:
 
 } // namespace Digikam
 
-#endif // UNSHARPMASKFILTER_H
+#endif // DIGIKAM_UNSHARP_MASK_FILTER_H

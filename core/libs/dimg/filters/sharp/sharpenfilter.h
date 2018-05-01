@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SHARPENFILTER_H
-#define SHARPENFILTER_H
+#ifndef DIGIKAM_SHARPEN_FILTER_H
+#define DIGIKAM_SHARPEN_FILTER_H
 
 // Local includes
 
@@ -108,4 +108,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* SHARPENFILTER_H */
+#endif // DIGIKAM_SHARPEN_FILTER_H

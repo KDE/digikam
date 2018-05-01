@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef WBFILTER_H
-#define WBFILTER_H
+#ifndef DIGIKAM_WB_FILTER_H
+#define DIGIKAM_WB_FILTER_H
 
 // Qt includes
 
@@ -115,4 +115,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WBFILTER_H
+#endif // DIGIKAM_WB_FILTER_H
