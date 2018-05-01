@@ -57,10 +57,10 @@ public:
     void setFileDlgPath(const QString& path);
     QString fileDlgPath() const;
 
-    void setFileDlgMode(DFileDialog::FileMode mode);
+    void setFileDlgMode(QFileDialog::FileMode mode);
     void setFileDlgFilter(const QString& filter);
     void setFileDlgTitle(const QString& title);
-    void setFileDlgOptions(DFileDialog::Options opts);
+    void setFileDlgOptions(QFileDialog::Options opts);
 
 Q_SIGNALS:
 

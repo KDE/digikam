@@ -174,7 +174,7 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
     QLatin1String defaultFileName("image.png");
 
     QPointer<DFileDialog> imageFileSaveDialog = new DFileDialog(0, i18n("New Image File Name"), d->targetDir);
-    imageFileSaveDialog->setAcceptMode(DFileDialog::AcceptSave);
+    imageFileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
     imageFileSaveDialog->setMimeTypeFilters(writableMimetypes);
     imageFileSaveDialog->selectMimeTypeFilter(defaultMimeType);
     imageFileSaveDialog->selectFile(defaultFileName);

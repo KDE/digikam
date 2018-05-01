@@ -421,8 +421,8 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     dlg->setIconProvider(provider);
     dlg->setNameFilters(d->fileFormats);
     dlg->selectNameFilter(d->fileFormats.last());
-    dlg->setAcceptMode(DFileDialog::AcceptOpen);
-    dlg->setFileMode(singleSelect ? DFileDialog::ExistingFile : DFileDialog::ExistingFiles);
+    dlg->setAcceptMode(QFileDialog::AcceptOpen);
+    dlg->setFileMode(singleSelect ? QFileDialog::ExistingFile : QFileDialog::ExistingFiles);
 
     dlg->exec();
     d->urls = dlg->selectedUrls();
