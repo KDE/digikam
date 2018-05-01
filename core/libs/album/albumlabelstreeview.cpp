@@ -391,7 +391,7 @@ void AlbumLabelsTreeView::initPicksTree()
                  << QLatin1String("flag-yellow")
                  << QLatin1String("flag-green");
 
-    foreach (QString pick, pickSetNames)
+    foreach(const QString& pick, pickSetNames)
     {
         QTreeWidgetItem* const pickWidgetItem = new QTreeWidgetItem(d->picks);
         pickWidgetItem->setText(0, pick);
@@ -426,7 +426,7 @@ void AlbumLabelsTreeView::initColorsTree()
                   << i18n("Gray")   << i18n("Black")
                   << i18n("White");
 
-    foreach (QString color, colorSet)
+    foreach(const QString& color, colorSet)
     {
         QTreeWidgetItem* const colorWidgetItem = new QTreeWidgetItem(d->colors);
         colorWidgetItem->setText(0, colorSetNames.at(colorSet.indexOf(color)));

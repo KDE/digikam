@@ -89,7 +89,7 @@ QString s_setXmpTagStringFromEntry(DMetadata* const meta,
                                    const DMetadata::MetaDataMap& map,
                                    const QStringList& xmpTags=QStringList())
 {
-    foreach (QString tag, lst)
+    foreach (const QString& tag, lst)
     {
         DMetadata::MetaDataMap::const_iterator it = map.find(tag);
 
