@@ -26,7 +26,7 @@
 
 namespace Digikam
 {
-    
+
 QString DigikamApp::scannerTargetPlace()
 {
     QString place    = QDir::homePath();

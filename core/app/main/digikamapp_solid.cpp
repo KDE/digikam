@@ -342,7 +342,7 @@ void DigikamApp::fillSolidMenus()
 
     updateCameraMenu();
     updateQuickImportAction();
-    
+
     connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
             this, SLOT(slotSolidDeviceChanged(QString)));
 
@@ -654,5 +654,5 @@ void DigikamApp::slotSolidDeviceChanged(const QString& udi)
     Q_UNUSED(udi)
     fillSolidMenus();
 }
-    
+
 } // namespace Digikam

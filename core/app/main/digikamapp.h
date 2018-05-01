@@ -79,9 +79,6 @@ public:
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
 
-    void startInternalDatabase();
-    void stopInternalDatabase();
-
     void rebuild();
 
     DigikamView* view() const;
@@ -109,8 +106,6 @@ protected:
 
 private:
 
-    bool setup();
-    bool setupICC();
     void setupView();
     void setupViewConnections();
     void setupStatusBar();
@@ -143,8 +138,6 @@ private Q_SLOTS:
     void slotAboutToShowForwardMenu();
     void slotAboutToShowBackwardMenu();
 
-    void slotSetup();
-    void slotSetupChanged();
     void slotColorManagementOptionsChanged();
     void slotToggleColorManagedView();
     void slotSetCheckedExifOrientationAction(const ImageInfo& info);
@@ -159,11 +152,6 @@ private Q_SLOTS:
     void slotNextRightSideBarTab();
 
     void slotToggleShowBar();
-    void slotEditKeys();
-
-    void slotMaintenance();
-    void slotMaintenanceDone();
-    void slotDatabaseMigration();
 
     void slotZoomSliderChanged(int);
     void slotThumbSizeChanged(int);
@@ -177,9 +165,25 @@ private Q_SLOTS:
 
     void slotThemeChanged();
 
+    void slotMaintenance();
+    void slotMaintenanceDone();
+    void slotDatabaseMigration();
     void slotEditMetadata();
     void slotEditGeolocation();
 
+// -- Configure methods implemented in digikamapp_config.cpp ----------------------------------------
+
+private:
+
+    bool setup();
+    bool setupICC();
+
+private Q_SLOTS:
+
+    void slotSetup();
+    void slotSetupChanged();
+    void slotEditKeys();
+    
 // -- Export tools methods implemented in digikamapp_export.cpp -------------------------------------
 
 private Q_SLOTS:
