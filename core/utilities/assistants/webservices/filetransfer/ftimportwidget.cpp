@@ -27,7 +27,6 @@
 
 #include <QBoxLayout>
 #include <QApplication>
-#include <QFileDialog>
 #include <QPushButton>
 
 // KDE includes
@@ -37,6 +36,7 @@
 // Local includes
 
 #include "dimageslist.h"
+#include "dfiledialog.h"
 
 namespace Digikam
 {
@@ -55,7 +55,7 @@ public:
 
     DImagesList* imageList;
     QWidget*     uploadWidget;
-    QFileDialog* importDlg;
+    DFileDialog* importDlg;
     QPushButton* importSearchBtn;
 };
 
@@ -99,7 +99,7 @@ void FTImportWidget::slotShowImportDialogClicked(bool checked)
 {
     Q_UNUSED(checked);
 
-    d->importDlg = new QFileDialog(this, i18n("Select items to import..."),
+    d->importDlg = new DFileDialog(this, i18n("Select items to import..."),
                                    QString(),  // TODO : store and restore previous session url from rc file
                                    i18n("All Files (*)"));
     d->importDlg->setAcceptMode(QFileDialog::AcceptOpen);
