@@ -282,7 +282,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                                     "contained in the database before the file is rescanned. WARNING: "
                                                     "if your metadata has been written to the database only and not "
                                                     "to the file or sidecar, you will be able to lose inserted "
-                                                    "metadata such as tags, keywords or geographic coordinates."));
+                                                    "metadata such as tags, keywords, or geographic coordinates."));
 
     readWriteLayout->addWidget(readWriteIconLabel,          0, 0, 2, 3);
     readWriteLayout->addWidget(readWriteLabel,              0, 1, 2, 3);
@@ -845,7 +845,7 @@ void SetupMetadata::slotClearMetadataToggled(bool b)
                                  i18nc("@info",
                                        "Switching on this option and your metadata has been written to the "
                                        "database only and not to the file or sidecar, you will be able to "
-                                       "lose inserted metadata such as tags, keywords or geographic "
+                                       "lose inserted metadata such as tags, keywords, or geographic "
                                        "coordinates."));
     }
 }
