@@ -226,7 +226,9 @@ fi
 
 echo -e "\n"
 
-port install cmake \
+port install \
+             ld64 +ld64_xcode \
+             cmake \
              libpng \
              jpeg \
              tiff \
@@ -243,8 +245,8 @@ port install cmake \
              libical \
              lensfun \
              bison \
-             ffmpeg \
              sane-backends \
+             ffmpeg \
              qt58 \
              qt58-qtimageformats \
              qt58-qtwebkit \
