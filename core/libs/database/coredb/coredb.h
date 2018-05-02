@@ -1294,14 +1294,13 @@ public:
     // Copies all entries in the ImageTags table
     void copyImageTags(qlonglong srcId, qlonglong dstId);
 
-    // ---------- Remove all Item Attributes ----------
+    // ------------ Clear all Item Metadata -----------
 
     /**
-     * Remove all attributes of an item if
-     * this option enabled in the config file
+     * Clear all metadata of an item
      * @param  imageID the ID of the item
      */
-    void removeAttributesFromImage(qlonglong imageID);
+    void clearMetadataFromImage(qlonglong imageID);
 
     // ----------- Download history methods -----------
 

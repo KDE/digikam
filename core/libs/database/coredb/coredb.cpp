@@ -4864,7 +4864,7 @@ QList<QVariant> CoreDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1, 
     return values;
 }
 
-void CoreDB::removeAttributesFromImage(qlonglong imageID)
+void CoreDB::clearMetadataFromImage(qlonglong imageID)
 {
     DatabaseFields::Set fields;
 

@@ -501,7 +501,7 @@ void ImageScanner::scanFile(ScanMode mode)
         if (d->scanMode == Rescan && d->scanInfo.id != -1 &&
             MetadataSettings::instance()->settings().clearMetadataIfRescan)
         {
-            CoreDbAccess().db()->removeAttributesFromImage(d->scanInfo.id);
+            CoreDbAccess().db()->clearMetadataFromImage(d->scanInfo.id);
         }
 
         if (d->scanInfo.category == DatabaseItem::Image)
