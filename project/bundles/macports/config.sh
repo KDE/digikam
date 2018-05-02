@@ -25,12 +25,14 @@ BUILDING_DIR="`pwd`/temp.build"
 # and adjust the property "MinimumSDKVersion" from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Info.plist
 
 # Possible values:
-# 10.11 : El Capitan   (tested)
-# 10.10 : Yosemite     (tested)
-# 10.9  : Mavericks    (tested)
-# 10.8  : MountainLion (tested)
-# 10.7  : Lion         (untested)
-# 10.6  : SnowLeopard  (untested)
+# 10.13 : High Sierra  : tested   : Qt                          5.10
+# 10.12 : Sierra       : tested   : Qt                5.8, 5.9, 5.10
+# 10.11 : El Capitan   : tested   : Qt 5.5, 5.6, 5.7, 5.8, 5.9, 5.10
+# 10.10 : Yosemite     : tested   : Qt 5.5, 5.6, 5.7, 5.8, 5.9
+# 10.9  : Mavericks    : tested   : Qt 5.5, 5.6, 5.7, 5.8
+# 10.8  : MountainLion : tested   : Qt 5.5, 5.6, 5.7
+# 10.7  : Lion         : untested : Qt 5.5, 5.6
+# 10.6  : SnowLeopard  : untested : ???
 # Older values cannot be set as it do no support x86_64.
 OSX_MIN_TARGET="10.8"
 

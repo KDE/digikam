@@ -117,7 +117,9 @@ OsxCodeName()
 
 MAJOR_OSX_VERSION=$(sw_vers -productVersion | awk -F '.' '{print $1 "." $2}'| cut -d . -f 2)
 
-if [[ $MAJOR_OSX_VERSION == "12" ]]
+if   [[ $MAJOR_OSX_VERSION == "13" ]]
+    then OSX_CODE_NAME="HighSierra"
+elif [[ $MAJOR_OSX_VERSION == "12" ]]
     then OSX_CODE_NAME="Sierra"
 elif [[ $MAJOR_OSX_VERSION == "11" ]]
     then OSX_CODE_NAME="ElCapitan"
