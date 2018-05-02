@@ -71,6 +71,7 @@ public:
     explicit Private()
       : exifAutoRotateOriginal(false),
         exifAutoRotateShowedInfo(false),
+        clearMetadataShowedInfo(false),
         fieldsGroup(0),
         readWriteGroup(0),
         rotationGroup(0),
@@ -89,6 +90,7 @@ public:
         readXMPSidecarBox(0),
         updateFileTimeStampBox(0),
         rescanImageIfModifiedBox(0),
+        clearMetadataIfRescanBox(0),
         writingModeCombo(0),
         rotateByFlag(0),
         rotateByContents(0),
@@ -108,6 +110,7 @@ public:
 
     bool                 exifAutoRotateOriginal;
     bool                 exifAutoRotateShowedInfo;
+    bool                 clearMetadataShowedInfo;
 
     QGroupBox*           fieldsGroup;
     QGroupBox*           readWriteGroup;
@@ -129,6 +132,7 @@ public:
     QCheckBox*           readXMPSidecarBox;
     QCheckBox*           updateFileTimeStampBox;
     QCheckBox*           rescanImageIfModifiedBox;
+    QCheckBox*           clearMetadataIfRescanBox;
     QComboBox*           writingModeCombo;
 
     QRadioButton*        rotateByFlag;
@@ -167,12 +171,12 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QGridLayout* const fieldsLayout = new QGridLayout;
 
     d->fieldsGroup->setWhatsThis(xi18nc("@info:whatsthis",
-                                       "<para>In addition to the pixel content, image files usually "
-                                       "contain a variety of metadata. A lot of the parameters you can use "
-                                       "in digiKam to manage files, such as rating or comment, can be written "
-                                       "to the files' metadata.</para> "
-                                       "<para>Storing in metadata allows one to preserve this information "
-                                       "when moving or sending the files to different systems.</para>"));
+                                        "<para>In addition to the pixel content, image files usually "
+                                        "contain a variety of metadata. A lot of the parameters you can use "
+                                        "in digiKam to manage files, such as rating or comment, can be written "
+                                        "to the files' metadata.</para> "
+                                        "<para>Storing in metadata allows one to preserve this information "
+                                        "when moving or sending the files to different systems.</para>"));
 
     QLabel* const fieldsIconLabel = new QLabel;
     fieldsIconLabel->setPixmap(QIcon::fromTheme(QLatin1String("format-list-unordered")).pixmap(32));
@@ -218,7 +222,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->saveFaceTags = new QCheckBox;
     d->saveFaceTags->setText(i18nc("@option:check", "Face Tags (including face areas)"));
     d->saveFaceTags->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store face tags "
-                                           "with face rectangles in the XMP tags."));
+                                        "with face rectangles in the XMP tags."));
 
     fieldsLayout->addWidget(fieldsIconLabel,       0, 0, 2, 3);
     fieldsLayout->addWidget(fieldsLabel,           0, 1, 2, 3);
@@ -246,8 +250,8 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->useLazySync        = new QCheckBox;
     d->useLazySync->setText(i18nc("@option:check", "Use lazy synchronization"));
     d->useLazySync->setWhatsThis(i18nc("@info:whatsthis",
-                                             "Instead of synchronizing metadata, just schedule it for synchronization."
-                                             "Synchronization can be done later by triggering the apply pending, or at digikam exit"));
+                                       "Instead of synchronizing metadata, just schedule it for synchronization."
+                                       "Synchronization can be done later by triggering the apply pending, or at digikam exit"));
     d->writeRawFilesBox = new QCheckBox;
     d->writeRawFilesBox->setText(i18nc("@option:check", "If possible write Metadata to RAW files (experimental)"));
     d->writeRawFilesBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to write metadata into RAW TIFF/EP files. "
@@ -258,16 +262,27 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->updateFileTimeStampBox = new QCheckBox;
     d->updateFileTimeStampBox->setText(i18nc("@option:check", "&Update file timestamp when files are modified"));
     d->updateFileTimeStampBox->setWhatsThis(i18nc("@info:whatsthis",
-                                                  "Turn off this option to not update file timestamps when files are changed as when you update metadata or image data. "
-                                                  "Note: disabling this option can introduce some dysfunctions with applications which use file timestamps properties to "
-                                                  "detect file modifications automatically."));
+                                                  "Turn off this option to not update file timestamps when files are changed as "
+                                                  "when you update metadata or image data. Note: disabling this option can "
+                                                  "introduce some dysfunctions with applications which use file timestamps "
+                                                  "properties to detect file modifications automatically."));
 
     d->rescanImageIfModifiedBox = new QCheckBox;
     d->rescanImageIfModifiedBox->setText(i18nc("@option:check", "&Rescan file when files are modified"));
     d->rescanImageIfModifiedBox->setWhatsThis(i18nc("@info:whatsthis",
-                                                  "Turning this option on, will force digiKam to rescan files that has been modified outside digiKam. "
-                                                  "If a file has changed it is file size or if the last modified timestamp has changed, a rescan of that "
-                                                  "file will be performed when digiKam starts."));
+                                                    "Turning this option on, will force digiKam to rescan files that has been "
+                                                    "modified outside digiKam. If a file has changed it is file size or if "
+                                                    "the last modified timestamp has changed, a rescan of that "
+                                                    "file will be performed when digiKam starts."));
+
+    d->clearMetadataIfRescanBox    = new QCheckBox;
+    d->clearMetadataIfRescanBox->setText(i18nc("@option:check", "&Delete file metadata from the database before rescan the file"));
+    d->clearMetadataIfRescanBox->setWhatsThis(i18nc("@info:whatsthis",
+                                                    "Turning this option on, will force digiKam to delete the file metadata "
+                                                    "contained in the database before the file is rescanned. WARNING: "
+                                                    "if your metadata has been written to the database only and not "
+                                                    "to the file or sidecar, you will be able to lose inserted "
+                                                    "metadata such as tags, keywords or geographic coordinates."));
 
     readWriteLayout->addWidget(readWriteIconLabel,          0, 0, 2, 3);
     readWriteLayout->addWidget(readWriteLabel,              0, 1, 2, 3);
@@ -275,6 +290,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     readWriteLayout->addWidget(d->writeRawFilesBox,         3, 0, 1, 3);
     readWriteLayout->addWidget(d->updateFileTimeStampBox,   4, 0, 1, 3);
     readWriteLayout->addWidget(d->rescanImageIfModifiedBox, 5, 0, 1, 3);
+    readWriteLayout->addWidget(d->clearMetadataIfRescanBox, 6, 0, 1, 3);
     readWriteLayout->setColumnStretch(3, 10);
     d->readWriteGroup->setLayout(readWriteLayout);
 
@@ -336,10 +352,10 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QLabel* const rotationIcon        = new QLabel;
     rotationIcon->setPixmap(QIcon::fromTheme(QLatin1String("transform-rotate")).pixmap(32));
 
-    d->rotateByFlag             = new QRadioButton(i18nc("@option:radio", "Rotate by only setting a flag"));
-    d->rotateByContents         = new QRadioButton(i18nc("@option:radio", "Rotate by changing the content if possible"));
-    d->allowLossyRotate         = new QCheckBox(i18nc("@option:check", "Even allow lossy rotation if necessary"));
-    d->allowRotateByMetadata    = new QCheckBox(i18nc("@option:check", "Write flag to metadata if possible"));
+    d->rotateByFlag          = new QRadioButton(i18nc("@option:radio", "Rotate by only setting a flag"));
+    d->rotateByContents      = new QRadioButton(i18nc("@option:radio", "Rotate by changing the content if possible"));
+    d->allowLossyRotate      = new QCheckBox(i18nc("@option:check", "Even allow lossy rotation if necessary"));
+    d->allowRotateByMetadata = new QCheckBox(i18nc("@option:check", "Write flag to metadata if possible"));
 
     connect(d->rotateByContents, SIGNAL(toggled(bool)),
             d->allowLossyRotate, SLOT(setEnabled(bool)));
@@ -353,25 +369,25 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->rotateByFlag->setToolTip(i18nc("@info:tooltip",
                                       "Rotate files only by changing a flag, not touching the pixel data"));
     d->rotateByFlag->setWhatsThis(xi18nc("@info:whatsthis",
-                                        "<para>A file can be rotated in two ways:<nl/> "
-                                        "You can change the contents, rearranging the individual pixels of the image data.<nl/> "
-                                        "Or you can set a flag that the file is to be rotated before it is shown.</para> "
-                                        "<para>Select this option if you always want to set only a flag. "
-                                        "This is less obtrusive, but requires support if the file is accessed with another software. "
-                                        "Ensure to allow setting the flag in the metadata if you want to share your files "
-                                        "outside digiKam.</para>"));
+                                         "<para>A file can be rotated in two ways:<nl/> "
+                                         "You can change the contents, rearranging the individual pixels of the image data.<nl/> "
+                                         "Or you can set a flag that the file is to be rotated before it is shown.</para> "
+                                         "<para>Select this option if you always want to set only a flag. "
+                                         "This is less obtrusive, but requires support if the file is accessed with another software. "
+                                         "Ensure to allow setting the flag in the metadata if you want to share your files "
+                                         "outside digiKam.</para>"));
 
     d->rotateByContents->setToolTip(i18nc("@info:tooltip",
                                           "If possible rotate files by changing the pixel data"));
     d->rotateByContents->setWhatsThis(xi18nc("@info:whatsthis",
-                                            "<para>A file can be rotated in two ways:<nl/> "
-                                            "You can change the contents, rearranging the individual pixels of the image data.<nl/> "
-                                            "Or you can set a flag that the file is to be rotated before it is shown.</para> "
-                                            "<para>Select this option if you want the file to be rotated by changing the content. "
-                                            "This is a lossless operation for JPEG files. For other formats it is a lossy operation, "
-                                            "which you need to enable explicitly. "
-                                            "It is not support for RAW and other read-only formats, "
-                                            "which will be rotated by flag only.</para>"));
+                                             "<para>A file can be rotated in two ways:<nl/> "
+                                             "You can change the contents, rearranging the individual pixels of the image data.<nl/> "
+                                             "Or you can set a flag that the file is to be rotated before it is shown.</para> "
+                                             "<para>Select this option if you want the file to be rotated by changing the content. "
+                                             "This is a lossless operation for JPEG files. For other formats it is a lossy operation, "
+                                             "which you need to enable explicitly. "
+                                             "It is not support for RAW and other read-only formats, "
+                                             "which will be rotated by flag only.</para>"));
 
     d->allowLossyRotate->setToolTip(i18nc("@info:tooltip",
                                           "Rotate files by changing the pixel data even if the operation will incur quality loss"));
@@ -471,7 +487,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->saveToBalooBox              = new QCheckBox;
     d->saveToBalooBox->setText(i18n("Store metadata from digiKam in Baloo"));
     d->saveToBalooBox->setWhatsThis(i18n("Turn on this option to push rating, comments and tags "
-                                           "from digiKam into the Baloo storage"));
+                                         "from digiKam into the Baloo storage"));
 
     d->readFromBalooBox            = new QCheckBox;
     d->readFromBalooBox->setText(i18n("Read metadata from Baloo"));
@@ -551,8 +567,8 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     d->writingModeCombo   = new QComboBox;
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only item only"), MetaEngine::WRITETOSIDECARONLY4READONLYFILES);
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     MetaEngine::WRITETOSIDECARONLY);
-    d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                MetaEngine::WRITETOSIDECARANDIMAGE);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                    MetaEngine::WRITETOSIDECARONLY);
+    d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),               MetaEngine::WRITETOSIDECARANDIMAGE);
     d->writingModeCombo->setToolTip(i18nc("@info:tooltip", "Specify the exact mode of XMP sidecar writing"));
     d->writingModeCombo->setEnabled(false);
 
@@ -622,6 +638,9 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     connect(d->exifRotateBox, SIGNAL(toggled(bool)),
             this, SLOT(slotExifAutoRotateToggled(bool)));
+
+    connect(d->clearMetadataIfRescanBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotClearMetadataToggled(bool)));
 }
 
 SetupMetadata::~SetupMetadata()
@@ -695,6 +714,7 @@ void SetupMetadata::applySettings()
 
     set.updateFileTimeStamp   = d->updateFileTimeStampBox->isChecked();
     set.rescanImageIfModified = d->rescanImageIfModifiedBox->isChecked();
+    set.clearMetadataIfRescan = d->clearMetadataIfRescanBox->isChecked();
 
     set.sidecarExtensions = cleanUserFilterString(d->extensionsEdit->text());
     set.sidecarExtensions.removeAll(QLatin1String("xmp"));
@@ -765,6 +785,7 @@ void SetupMetadata::readSettings()
     d->readXMPSidecarBox->setChecked(set.useXMPSidecar4Reading);
     d->updateFileTimeStampBox->setChecked(set.updateFileTimeStamp);
     d->rescanImageIfModifiedBox->setChecked(set.rescanImageIfModified);
+    d->clearMetadataIfRescanBox->setChecked(set.clearMetadataIfRescan);
 
     if (set.metadataWritingMode == MetaEngine::WRITETOIMAGEONLY)
     {
@@ -802,15 +823,30 @@ bool SetupMetadata::exifAutoRotateHasChanged() const
 void SetupMetadata::slotExifAutoRotateToggled(bool b)
 {
     // Show info if rotation was switched off, and only once.
-    if (!b && d->exifAutoRotateShowedInfo && exifAutoRotateHasChanged())
+    if (!b && !d->exifAutoRotateShowedInfo && exifAutoRotateHasChanged())
     {
         d->exifAutoRotateShowedInfo = true;
         QMessageBox::information(this, qApp->applicationName(),
                                  i18nc("@info",
-                                 "Switching off exif auto rotation will most probably show your images in a wrong orientation, "
-                                 "so only change this option if you explicitly require this. "
-                                 "Furthermore, you need to regenerate all already stored thumbnails via "
-                                 "the <interface>Tools / Maintenance</interface> menu."));
+                                       "Switching off exif auto rotation will most probably show your images "
+                                       "in a wrong orientation, so only change this option if you explicitly "
+                                       "require this. Furthermore, you need to regenerate all already stored "
+                                       "thumbnails via the <interface>Tools | Maintenance...</interface> menu."));
+    }
+}
+
+void SetupMetadata::slotClearMetadataToggled(bool b)
+{
+    // Show info if delete metadata from the database was switched on, and only once.
+    if (b && !d->clearMetadataShowedInfo)
+    {
+        d->clearMetadataShowedInfo = true;
+        QMessageBox::information(this, qApp->applicationName(),
+                                 i18nc("@info",
+                                       "Switching on this option and your metadata has been written to the "
+                                       "database only and not to the file or sidecar, you will be able to "
+                                       "lose inserted metadata such as tags, keywords or geographic "
+                                       "coordinates."));
     }
 }
 

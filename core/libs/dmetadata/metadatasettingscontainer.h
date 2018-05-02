@@ -99,6 +99,7 @@ public:
     bool                            writeRawFiles;
     bool                            updateFileTimeStamp;
     bool                            rescanImageIfModified;
+    bool                            clearMetadataIfRescan;
     bool                            useXMPSidecar4Reading;
     bool                            useLazySync;
 

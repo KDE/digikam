@@ -55,6 +55,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     metadataWritingMode   = MetaEngine::WRITETOIMAGEONLY;
     updateFileTimeStamp   = true;
     rescanImageIfModified = false;
+    clearMetadataIfRescan = false;
     rotationBehavior      = RotatingFlags | RotateByLosslessRotation;
     useLazySync           = false;
     sidecarExtensions     = QStringList();
@@ -81,6 +82,7 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
                             group.readEntry("Metadata Writing Mode",       (int)MetaEngine::WRITETOIMAGEONLY);
     updateFileTimeStamp   = group.readEntry("Update File Timestamp",       true);
     rescanImageIfModified = group.readEntry("Rescan File If Modified",     false);
+    clearMetadataIfRescan = group.readEntry("Clear Metadata If Rescan",    false);
     useLazySync           = group.readEntry("Use Lazy Synchronization",    false);
 
     rotationBehavior      = NoRotation;
@@ -128,6 +130,7 @@ void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
     group.writeEntry("Metadata Writing Mode",       (int)metadataWritingMode);
     group.writeEntry("Update File Timestamp",       updateFileTimeStamp);
     group.writeEntry("Rescan File If Modified",     rescanImageIfModified);
+    group.writeEntry("Clear Metadata If Rescan",    clearMetadataIfRescan);
 
     group.writeEntry("Rotate By Internal Flag",     bool(rotationBehavior & RotateByInternalFlag));
     group.writeEntry("Rotate By Metadata Flag",     bool(rotationBehavior & RotateByMetadataFlag));

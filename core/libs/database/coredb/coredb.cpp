@@ -58,7 +58,6 @@ extern "C"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "dbengineactiontype.h"
-#include "metadatasettings.h"
 #include "tagscache.h"
 #include "album.h"
 
@@ -4867,20 +4866,6 @@ QList<QVariant> CoreDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1, 
 
 void CoreDB::removeAttributesFromImage(qlonglong imageID)
 {
-    MetadataSettingsContainer settings = MetadataSettings::instance()->settings();
-
-    if (!settings.saveTags       ||
-        !settings.saveComments   ||
-        !settings.saveRating     ||
-        !settings.savePickLabel  ||
-        !settings.saveColorLabel ||
-        !settings.saveDateTime   ||
-        !settings.saveTemplate   ||
-        !settings.saveFaceTags)
-    {
-        return;
-    }
-
     DatabaseFields::Set fields;
 
     d->db->execSql(QString::fromUtf8("DELETE FROM ImageInformation WHERE imageid=?;"),
