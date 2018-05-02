@@ -42,17 +42,17 @@ public:
     {
         edit      = 0;
         btn       = 0;
-        fdMode    = DFileDialog::ExistingFile;
-        fdOptions = DFileDialog::Options();
+        fdMode    = QFileDialog::ExistingFile;
+        fdOptions = QFileDialog::Options();
     }
 
     QLineEdit*            edit;
     QPushButton*          btn;
 
-    DFileDialog::FileMode fdMode;
+    QFileDialog::FileMode fdMode;
     QString               fdFilter;
     QString               fdTitle;
-    DFileDialog::Options  fdOptions;
+    QFileDialog::Options  fdOptions;
 };
 
 DFileSelector::DFileSelector(QWidget* const parent)
@@ -87,7 +87,7 @@ QString DFileSelector::fileDlgPath() const
     return QDir::fromNativeSeparators(d->edit->text());
 }
 
-void DFileSelector::setFileDlgMode(DFileDialog::FileMode mode)
+void DFileSelector::setFileDlgMode(QFileDialog::FileMode mode)
 {
     d->fdMode = mode;
 }
@@ -102,14 +102,14 @@ void DFileSelector::setFileDlgTitle(const QString& title)
     d->fdTitle = title;
 }
 
-void DFileSelector::setFileDlgOptions(DFileDialog::Options opts)
+void DFileSelector::setFileDlgOptions(QFileDialog::Options opts)
 {
     d->fdOptions = opts;
 }
 
 void DFileSelector::slotBtnClicked()
 {
-    if (d->fdMode == DFileDialog::ExistingFiles)
+    if (d->fdMode == QFileDialog::ExistingFiles)
     {
         qCDebug(DIGIKAM_WIDGETS_LOG) << "Multiple selection is not supported";
         return;
@@ -119,8 +119,9 @@ void DFileSelector::slotBtnClicked()
     DFileDialog* const fileDlg = new DFileDialog;
 
     fileDlg->setDirectory(QFileInfo(fileDlgPath()).filePath());
-    fileDlg->setOptions(d->fdOptions);
+    // It is important to set up the mode first and then the options
     fileDlg->setFileMode(d->fdMode);
+    fileDlg->setOptions(d->fdOptions);
 
     if (!d->fdFilter.isNull())
     {

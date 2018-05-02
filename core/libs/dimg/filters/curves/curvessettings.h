@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CURVESSETTINGS_H
-#define CURVESSETTINGS_H
+#ifndef DIGIKAM_CURVES_SETTINGS_H
+#define DIGIKAM_CURVES_SETTINGS_H
 
 // Local includes
 
@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT CurvesSettings : public QWidget
 
 public:
 
-    CurvesSettings(QWidget* const parent, DImg* const img);
+    explicit CurvesSettings(QWidget* const parent, DImg* const img);
     ~CurvesSettings();
 
     CurvesContainer defaultSettings() const;
@@ -88,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CURVESSETTINGS_H */
+#endif // DIGIKAM_CURVES_SETTINGS_H

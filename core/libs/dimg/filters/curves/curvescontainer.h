@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CURVESCONTAINER_H
-#define CURVESCONTAINER_H
+#ifndef DIGIKAM_CURVES_CONTAINER_H
+#define DIGIKAM_CURVES_CONTAINER_H
 
 // Qt includes
 
@@ -90,7 +90,6 @@ public:
     bool                    sixteenBit;
 };
 
-
 } // namespace Digikam
 
-#endif /* CURVESCONTAINER_H */
+#endif // DIGIKAM_CURVES_CONTAINER_H

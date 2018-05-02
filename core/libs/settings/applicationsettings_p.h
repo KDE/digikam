@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_APPLICATION_SETTINGS_P_H
-#define DIGIKAM_APPLICATION_SETTINGS_P_H
+#ifndef DIGIKAM_APPLICATION_SETTINGS_PRIVATE_H
+#define DIGIKAM_APPLICATION_SETTINGS_PRIVATE_H
 
 #include <QString>
 #include <QStringList>
@@ -313,4 +313,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_APPLICATION_SETTINGS_P_H
+#endif // DIGIKAM_APPLICATION_SETTINGS_PRIVATE_H

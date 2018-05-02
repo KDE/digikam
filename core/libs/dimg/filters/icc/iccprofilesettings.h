@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCPROFILESETTINGS_H
-#define ICCPROFILESETTINGS_H
+#ifndef DIGIKAM_ICC_PROFILE_SETTINGS_H
+#define DIGIKAM_ICC_PROFILE_SETTINGS_H
 
 // Local includes
 
@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ICCPROFILESETTINGS_H */
+#endif // DIGIKAM_ICC_PROFILE_SETTINGS_H

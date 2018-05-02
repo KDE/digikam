@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DCATEGORIZED_SORT_FILTER_PROXY_MODEL_H
-#define DCATEGORIZED_SORT_FILTER_PROXY_MODEL_H
+#ifndef DIGIKAM_DCATEGORIZED_SORT_FILTER_PROXY_MODEL_H
+#define DIGIKAM_DCATEGORIZED_SORT_FILTER_PROXY_MODEL_H
 
 // Qt includes
 
@@ -182,4 +182,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DCATEGORIZED_SORT_FILTER_PROXY_MODEL_H
+#endif // DIGIKAM_DCATEGORIZED_SORT_FILTER_PROXY_MODEL_H

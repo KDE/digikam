@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DCURSOR_TRACKER_H
-#define DCURSOR_TRACKER_H
+#ifndef DIGIKAM_DCURSOR_TRACKER_H
+#define DIGIKAM_DCURSOR_TRACKER_H
 
 // Qt includes
 
@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DCURSOR_TRACKER_H
+#endif // DIGIKAM_DCURSOR_TRACKER_H

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCTRANSFORM_H
-#define ICCTRANSFORM_H
+#ifndef DIGIKAM_ICC_TRANSFORM_H
+#define DIGIKAM_ICC_TRANSFORM_H
 
 // Qt includes
 
@@ -59,7 +59,7 @@ public:
 
 public:
 
-    IccTransform();
+    explicit IccTransform();
     ~IccTransform();
 
     IccTransform(const IccTransform& other);
@@ -168,4 +168,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::IccTransform)
 
-#endif   // ICCTRANSFORM_H
+#endif // DIGIKAM_ICC_TRANSFORM_H

@@ -22,6 +22,7 @@ set(libsearchwindow_SRCS
     searchtabheader.cpp
     searchmodificationhelper.cpp
     editablesearchtreeview.cpp
+    visibilitycontroller.cpp
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>

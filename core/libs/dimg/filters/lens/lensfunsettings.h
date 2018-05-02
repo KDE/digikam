@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-#ifndef LENSFUNSETTINGS_H
-#define LENSFUNSETTINGS_H
+#ifndef DIGIKAM_LENS_FUN_SETTINGS_H
+#define DIGIKAM_LENS_FUN_SETTINGS_H
 
 // Qt includes
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* LENSFUNSETTINGS_H */
+#endif // DIGIKAM_LENS_FUN_SETTINGS_H

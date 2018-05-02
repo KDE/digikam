@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_WINDOW_P_H
-#define DIGIKAM_IMAGE_WINDOW_P_H
+#ifndef DIGIKAM_IMAGE_WINDOW_PRIVATE_H
+#define DIGIKAM_IMAGE_WINDOW_PRIVATE_H
 
 // Local includes
 
@@ -284,4 +284,4 @@ const QString ImageWindow::Private::configHorizontalThumbbarEntry(QLatin1String(
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_WINDOW_P_H
+#endif // DIGIKAM_IMAGE_WINDOW_PRIVATE_H

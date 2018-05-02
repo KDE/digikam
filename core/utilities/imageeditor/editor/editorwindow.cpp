@@ -2244,8 +2244,8 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     DFileDialog* const imageFileSaveDialog = new DFileDialog(this);
     imageFileSaveDialog->setWindowTitle(i18n("New Image File Name"));
     imageFileSaveDialog->setDirectoryUrl(initialUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash));
-    imageFileSaveDialog->setAcceptMode(DFileDialog::AcceptSave);
-    imageFileSaveDialog->setFileMode(DFileDialog::AnyFile);
+    imageFileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
+    imageFileSaveDialog->setFileMode(QFileDialog::AnyFile);
     imageFileSaveDialog->setNameFilters(list);
 
     // restore old settings for the dialog
@@ -2295,7 +2295,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
         d->currentWindowModalDialog = 0;
     }
 
-    if (result != DFileDialog::Accepted || !imageFileSaveDialog)
+    if (result != QDialog::Accepted || !imageFileSaveDialog)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "File Save Dialog rejected";
         return false;

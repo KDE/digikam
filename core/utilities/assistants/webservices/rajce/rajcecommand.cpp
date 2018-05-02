@@ -529,7 +529,7 @@ QString AddPhotoCommand::additionalXml() const
     QString ret(QString::fromLatin1("  <objectInfo>\n    <Item id=\""));
     ret.append(id).append(QString::fromLatin1("\">\n"));
 
-    foreach(QString key, metadata.keys())
+    foreach(const QString& key, metadata.keys())
     {
         ret.append(QString::fromLatin1("      <")).append(key);
         QString value = metadata[key];

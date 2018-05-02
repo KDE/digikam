@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BWSEPIASETTINGS_H
-#define BWSEPIASETTINGS_H
+#ifndef DIGIKAM_BW_SEPIA_SETTINGS_H
+#define DIGIKAM_BW_SEPIA_SETTINGS_H
 
 // Local includes
 
@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT BWSepiaSettings : public QWidget
 
 public:
 
-    BWSepiaSettings(QWidget* const parent, DImg* const img);
+    explicit BWSepiaSettings(QWidget* const parent, DImg* const img);
     ~BWSepiaSettings();
 
     BWSepiaContainer defaultSettings() const;
@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* BWSEPIASETTINGS_H */
+#endif // DIGIKAM_BW_SEPIA_SETTINGS_H

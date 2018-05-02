@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_IMAGE_SHACK_WIDGET_P_H
-#define DIGIKAM_IMAGE_SHACK_WIDGET_P_H
+#ifndef DIGIKAM_IMAGE_SHACK_WIDGET_PRIVATE_H
+#define DIGIKAM_IMAGE_SHACK_WIDGET_PRIVATE_H
 
 #include "imageshackwidget.h"
 
@@ -99,4 +99,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_IMAGE_SHACK_WIDGET_P_H
+#endif // DIGIKAM_IMAGE_SHACK_WIDGET_PRIVATE_H

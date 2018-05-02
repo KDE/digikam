@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DCATEGORIZED_VIEW_P_H
-#define DCATEGORIZED_VIEW_P_H
+#ifndef DIGIKAM_DCATEGORIZED_VIEW_PRIVATE_H
+#define DIGIKAM_DCATEGORIZED_VIEW_PRIVATE_H
 
 // Qt includes
 
@@ -41,7 +41,7 @@ class SparseModelIndexVector : public QVector<QModelIndex>
 {
 public:
 
-    SparseModelIndexVector(int rowCount, QAbstractItemModel* const model_, int column_)
+    explicit SparseModelIndexVector(int rowCount, QAbstractItemModel* const model_, int column_)
         : QVector<QModelIndex>(rowCount),
           model(model_),
           column(column_)
@@ -223,4 +223,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DCATEGORIZED_VIEW_P_H
+#endif // DIGIKAM_DCATEGORIZED_VIEW_PRIVATE_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DITEM_TOOL_TIP_H
-#define DITEM_TOOL_TIP_H
+#ifndef DIGIKAM_DITEM_TOOL_TIP_H
+#define DIGIKAM_DITEM_TOOL_TIP_H
 
 // Qt includes
 
@@ -102,4 +102,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DITEM_TOOL_TIP_H
+#endif // DIGIKAM_DITEM_TOOL_TIP_H

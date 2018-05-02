@@ -142,7 +142,7 @@ BalooInfo BalooWrap::getSemanticInfo(const QUrl& url) const
     bInfo.rating  = md.rating() / 2;
     bInfo.comment = md.userComment();
 
-    foreach(QString tag, md.tags().toSet())
+    foreach(const QString& tag, md.tags().toSet())
     {
         bInfo.tags.append(i18n("BalooTags/") + tag);
     }

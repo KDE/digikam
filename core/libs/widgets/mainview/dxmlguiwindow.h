@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DXML_GUI_WINDOW_H
-#define DXML_GUI_WINDOW_H
+#ifndef DIGIKAM_DXML_GUI_WINDOW_H
+#define DIGIKAM_DXML_GUI_WINDOW_H
 
 // Qt includes
 
@@ -389,4 +389,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DXML_GUI_WINDOW_H
+#endif // DIGIKAM_DXML_GUI_WINDOW_H

@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-#ifndef LENSFUNIFACE_H
-#define LENSFUNIFACE_H
+#ifndef DIGIKAM_LENS_FUN_IFACE_H
+#define DIGIKAM_LENS_FUN_IFACE_H
 
 // Lib LensFun includes
 
@@ -53,7 +53,7 @@ public:
 
 public:
 
-    LensFunIface();
+    explicit LensFunIface();
     virtual ~LensFunIface();
 
     void setFilterSettings(const LensFunContainer& other);
@@ -111,4 +111,4 @@ private:
 Q_DECLARE_METATYPE( Digikam::LensFunIface::DevicePtr )
 Q_DECLARE_METATYPE( Digikam::LensFunIface::LensPtr )
 
-#endif /* LENSFUNIFACE_H */
+#endif // DIGIKAM_LENS_FUN_IFACE_H

@@ -21,8 +21,8 @@
  * GNU General Public License for more details.
  * ============================================================ */
 
-#ifndef HSLFILTER_H
-#define HSLFILTER_H
+#ifndef DIGIKAM_HSL_FILTER_H
+#define DIGIKAM_HSL_FILTER_H
 
 // Local includes
 
@@ -40,7 +40,7 @@ class DIGIKAM_EXPORT HSLContainer
 
 public:
 
-    HSLContainer()
+    explicit HSLContainer()
     {
         hue        = 0.0;
         saturation = 0.0;
@@ -48,7 +48,9 @@ public:
         lightness  = 0.0;
     };
 
-    ~HSLContainer() {};
+    ~HSLContainer()
+    {
+    };
 
 public:
 
@@ -117,4 +119,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HSLFILTER_H
+#endif // DIGIKAM_HSL_FILTER_H

@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef THUMB_BAR_DOCK_H
-#define THUMB_BAR_DOCK_H
+#ifndef DIGIKAM_THUMB_BAR_DOCK_H
+#define DIGIKAM_THUMB_BAR_DOCK_H
 
 // Qt includes
 
@@ -137,4 +137,4 @@ private:
 
 } // namespace Digikam
 
-#endif // THUMB_BAR_DOCK_H
+#endif // DIGIKAM_THUMB_BAR_DOCK_H

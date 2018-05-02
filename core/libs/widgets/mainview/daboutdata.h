@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DABOUT_DATA_H
-#define DABOUT_DATA_H
+#ifndef DIGIKAM_DABOUT_DATA_H
+#define DIGIKAM_DABOUT_DATA_H
 
 // Qt includes
 
@@ -56,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DABOUT_DATA_H
+#endif // DIGIKAM_DABOUT_DATA_H

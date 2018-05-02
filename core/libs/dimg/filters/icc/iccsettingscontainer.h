@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCSETTINGSCONTAINER_H
-#define ICCSETTINGSCONTAINER_H
+#ifndef DIGIKAM_ICC_SETTINGS_CONTAINER_H
+#define DIGIKAM_ICC_SETTINGS_CONTAINER_H
 
 // Qt includes
 
@@ -87,7 +87,7 @@ public:
 
 public:
 
-    ICCSettingsContainer();
+    explicit ICCSettingsContainer();
     ~ICCSettingsContainer() {};
 
     void readFromConfig(KConfigGroup& group);
@@ -133,4 +133,4 @@ public:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ICCSettingsContainer::Behavior)
 
-#endif // ICCSETTINGSCONTAINER_H
+#endif // DIGIKAM_ICC_SETTINGS_CONTAINER_H

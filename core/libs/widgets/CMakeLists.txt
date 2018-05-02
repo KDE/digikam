@@ -11,14 +11,16 @@ endif (POLICY CMP0063)
 
 set(libcommonwidgets_SRCS
     common/abstractitemdragdrophandler.cpp
-    common/dexpanderbox.cpp
     common/dactivelabel.cpp
     common/dragdropimplementations.cpp
     common/modelcompleter.cpp
     common/searchtextbar.cpp
-    common/statesavingobject.cpp
-    common/visibilitycontroller.cpp
-    common/dlayoutbox.cpp
+)
+
+set(liblayouttools_SRCS
+    layout/dexpanderbox.cpp
+    layout/statesavingobject.cpp
+    layout/dlayoutbox.cpp
 )
 
 set(librangetools_SRCS
@@ -156,6 +158,7 @@ add_library(digikamwidgetscore_src OBJECT
     ${libfilestools_SRCS}
     ${libcombotools_SRCS}
     ${librangetools_SRCS}
+    ${liblayouttools_SRCS}
 )
 
 #############################################################"

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCMANAGER_H
-#define ICCMANAGER_H
+#ifndef DIGIKAM_ICC_MANAGER_H
+#define DIGIKAM_ICC_MANAGER_H
 
 // Local includes
 
@@ -144,4 +144,4 @@ private:
 
 } // namespace Digikam
 
-#endif   // ICCMANAGER_H
+#endif // DIGIKAM_ICC_MANAGER_H

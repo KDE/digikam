@@ -207,4 +207,7 @@ BUGFIXES:
 179 ==> 366305 - Add a message at startup about the lack of temporary space to perform Undo operations.
 180 ==> 366391 - Rotating an image seems to forget to reset the orientation flag.
 181 ==> 393654 - Not able to select gpx file.
-182 ==> 
+182 ==> 367596 - Sub-folder count images but don't show them (unsupported JPEG file?).
+183 ==> 379922 - Digikam won't remove tags set by Windows Explorer.
+184 ==> 379081 - GPS data are in file but geolocation indicator is not shown and map view empty.
+185 ==> 

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCSETTINGS_H
-#define ICCSETTINGS_H
+#ifndef DIGIKAM_ICC_SETTINGS_H
+#define DIGIKAM_ICC_SETTINGS_H
 
 // Qt includes
 
@@ -132,4 +132,4 @@ private:
 
 } // namespace Digikam
 
-#endif   // ICCSETTINGS_H
+#endif // DIGIKAM_ICC_SETTINGS_H

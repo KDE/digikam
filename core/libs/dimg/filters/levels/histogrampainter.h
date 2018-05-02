@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef HISTOGRAMPAINTER_H
-#define HISTOGRAMPAINTER_H
+#ifndef DIGIKAM_HISTOGRAM_PAINTER_H
+#define DIGIKAM_HISTOGRAM_PAINTER_H
 
 // Qt includes
 
@@ -154,4 +154,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* HISTOGRAMPAINTER_H */
+#endif // DIGIKAM_HISTOGRAM_PAINTER_H

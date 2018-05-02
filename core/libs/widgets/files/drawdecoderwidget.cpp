@@ -706,7 +706,7 @@ void DRawDecoderWidget::setup(int advSettings)
                                 "input color space profile.</item></list></para>"));
 
     d->inIccUrlEdit = new DFileSelector(d->colormanSettings);
-    d->inIccUrlEdit->setFileDlgMode(DFileDialog::ExistingFile);
+    d->inIccUrlEdit->setFileDlgMode(QFileDialog::ExistingFile);
     d->inIccUrlEdit->setFileDlgFilter(i18n("ICC Files (*.icc *.icm)"));
 
     d->outputColorSpaceLabel    = new QLabel(i18nc("@label:listbox", "Workspace:"), d->colormanSettings);
@@ -740,7 +740,7 @@ void DRawDecoderWidget::setup(int advSettings)
                                 "output color space profile.</item></list></para>"));
 
     d->outIccUrlEdit = new DFileSelector(d->colormanSettings);
-    d->outIccUrlEdit->setFileDlgMode(DFileDialog::ExistingFile);
+    d->outIccUrlEdit->setFileDlgMode(QFileDialog::ExistingFile);
     d->outIccUrlEdit->setFileDlgFilter(i18n("ICC Files (*.icc *.icm)"));
 
     colormanLayout->addWidget(d->inputColorSpaceLabel,     0, 0, 1, 1);

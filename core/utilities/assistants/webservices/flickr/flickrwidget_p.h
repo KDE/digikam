@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FLICKR_WIDGET_P_H
-#define DIGIKAM_FLICKR_WIDGET_P_H
+#ifndef DIGIKAM_FLICKR_WIDGET_PRIVATE_H
+#define DIGIKAM_FLICKR_WIDGET_PRIVATE_H
 
 #include "flickrwidget.h"
 
@@ -100,4 +100,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FLICKR_WIDGET_P_H
+#endif // DIGIKAM_FLICKR_WIDGET_PRIVATE_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DCONFIG_DLG_MODELS_P_H
-#define DIGIKAM_DCONFIG_DLG_MODELS_P_H
+#ifndef DIGIKAM_DCONFIG_DLG_MODELS_PRIVATE_H
+#define DIGIKAM_DCONFIG_DLG_MODELS_PRIVATE_H
 
 #include "dconfigdlgmodels.h"
 
@@ -134,4 +134,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DCONFIG_DLG_MODELS_P_H
+#endif // DIGIKAM_DCONFIG_DLG_MODELS_PRIVATE_H

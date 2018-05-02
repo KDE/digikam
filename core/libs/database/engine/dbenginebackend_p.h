@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DB_ENGINE_BACKEND_P_H
-#define DIGIKAM_DB_ENGINE_BACKEND_P_H
+#ifndef DIGIKAM_DB_ENGINE_BACKEND_PRIVATE_H
+#define DIGIKAM_DB_ENGINE_BACKEND_PRIVATE_H
 
 // Qt includes
 
@@ -192,4 +192,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DB_ENGINE_BACKEND_P_H
+#endif // DIGIKAM_DB_ENGINE_BACKEND_PRIVATE_H

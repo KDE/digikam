@@ -359,8 +359,8 @@ void PresentationAudioPage::slotSoundFilesButtonAdd()
     atm << QLatin1String("audio/ogg");
     atm << QLatin1String("audio/flac");
     dlg->setMimeTypeFilters(atm);
-    dlg->setAcceptMode(DFileDialog::AcceptOpen);
-    dlg->setFileMode(DFileDialog::ExistingFiles);
+    dlg->setAcceptMode(QFileDialog::AcceptOpen);
+    dlg->setFileMode(QFileDialog::ExistingFiles);
     dlg->exec();
 
     QList<QUrl> urls = dlg->selectedUrls();
@@ -473,8 +473,8 @@ void PresentationAudioPage::slotSoundFilesButtonLoad()
 {
     QPointer<DFileDialog> dlg = new DFileDialog(this, i18n("Load playlist"),
                                                 QString(), i18n("Playlist (*.m3u)"));
-    dlg->setAcceptMode(DFileDialog::AcceptOpen);
-    dlg->setFileMode(DFileDialog::ExistingFile);
+    dlg->setAcceptMode(QFileDialog::AcceptOpen);
+    dlg->setFileMode(QFileDialog::ExistingFile);
 
     if (dlg->exec() != QDialog::Accepted)
     {
@@ -525,8 +525,8 @@ void PresentationAudioPage::slotSoundFilesButtonSave()
 {
     QPointer<DFileDialog> dlg = new DFileDialog(this, i18n("Save playlist"),
                                                 QString(), i18n("Playlist (*.m3u)"));
-    dlg->setAcceptMode(DFileDialog::AcceptSave);
-    dlg->setFileMode(DFileDialog::AnyFile);
+    dlg->setAcceptMode(QFileDialog::AcceptSave);
+    dlg->setFileMode(QFileDialog::AnyFile);
 
     if (dlg->exec() != QDialog::Accepted)
     {

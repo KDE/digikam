@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef NORMALIZEFILTER_H
-#define NORMALIZEFILTER_H
+#ifndef DIGIKAM_NORMALIZE_FILTER_H
+#define DIGIKAM_NORMALIZE_FILTER_H
 
 // Local includes
 
@@ -39,6 +39,7 @@ class DIGIKAM_EXPORT NormalizeFilter : public DImgThreadedFilter
 {
 
 public:
+
     explicit NormalizeFilter(QObject* const parent = 0);
     NormalizeFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent=0);
     virtual ~NormalizeFilter();
@@ -91,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif // NORMALIZEFILTER_H
+#endif // DIGIKAM_NORMALIZE_FILTER_H

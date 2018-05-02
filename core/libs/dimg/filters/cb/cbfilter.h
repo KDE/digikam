@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CBFILTER_H
-#define CBFILTER_H
+#ifndef DIGIKAM_CB_FILTER_H
+#define DIGIKAM_CB_FILTER_H
 
 // Local includes
 
@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT CBContainer
 
 public:
 
-    CBContainer()
+    explicit CBContainer()
     {
         red   = 1.0;
         green = 1.0;
@@ -50,7 +50,9 @@ public:
         gamma = 1.0;
     };
 
-    ~CBContainer() {};
+    ~CBContainer()
+    {
+    };
 
 public:
 
@@ -122,4 +124,4 @@ private:
 
 } // namespace Digikam
 
-#endif // CBFILTER_H
+#endif // DIGIKAM_CB_FILTER_H

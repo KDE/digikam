@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MIXERFILTER_H
-#define MIXERFILTER_H
+#ifndef DIGIKAM_MIXER_FILTER_H
+#define DIGIKAM_MIXER_FILTER_H
 
 // Local includes
 
@@ -41,7 +41,7 @@ class DIGIKAM_EXPORT MixerContainer
 
 public:
 
-    MixerContainer()
+    explicit MixerContainer()
     {
         bPreserveLum   = true;
         bMonochrome    = false;
@@ -141,4 +141,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* MIXERFILTER_H */
+#endif // DIGIKAM_MIXER_FILTER_H

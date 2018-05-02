@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGELEVELS_H
-#define IMAGELEVELS_H
+#ifndef DIGIKAM_IMAGE_LEVELS_H
+#define DIGIKAM_IMAGE_LEVELS_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGELEVELS_H */
+#endif // DIGIKAM_IMAGE_LEVELS_H

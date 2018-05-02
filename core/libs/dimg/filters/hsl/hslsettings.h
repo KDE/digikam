@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef HSLSETTINGS_H
-#define HSLSETTINGS_H
+#ifndef DIGIKAM_HSL_SETTINGS_H
+#define DIGIKAM_HSL_SETTINGS_H
 
 // Local includes
 
@@ -76,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* HSLSETTINGS_H */
+#endif // DIGIKAM_HSL_SETTINGS_H

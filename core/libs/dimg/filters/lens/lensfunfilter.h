@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-#ifndef LENSFUNFILTER_H
-#define LENSFUNFILTER_H
+#ifndef DIGIKAM_LENS_FUN_FILTER_H
+#define DIGIKAM_LENS_FUN_FILTER_H
 
 // Local includes
 
@@ -36,7 +36,7 @@ class DIGIKAM_EXPORT LensFunContainer
 
 public:
 
-    LensFunContainer()
+    explicit LensFunContainer()
     {
         filterCCA       = true;
         filterVIG       = true;
@@ -126,4 +126,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* LENSFUNFILTER_H */
+#endif // DIGIKAM_LENS_FUN_FILTER_H

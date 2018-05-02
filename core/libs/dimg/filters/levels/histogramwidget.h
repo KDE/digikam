@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef HISTOGRAMWIDGET_H
-#define HISTOGRAMWIDGET_H
+#ifndef DIGIKAM_HISTOGRAM_WIDGET_H
+#define DIGIKAM_HISTOGRAM_WIDGET_H
 
 // Qt includes
 
@@ -138,4 +138,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* HISTOGRAMWIDGET_H */
+#endif // DIGIKAM_HISTOGRAM_WIDGET_H

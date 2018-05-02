@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ICCTRANSFORMFILTER_H
-#define ICCTRANSFORMFILTER_H
+#ifndef DIGIKAM_ICC_TRANSFORM_FILTER_H
+#define DIGIKAM_ICC_TRANSFORM_FILTER_H
 
 // Local includes
 
@@ -86,4 +86,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DIMGREFOCUS_H */
+#endif // DIGIKAM_ICC_TRANSFORM_FILTER_H

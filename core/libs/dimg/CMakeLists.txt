@@ -26,7 +26,6 @@ set(libdimg_SRCS
 )
 
 set(libdimgfilters_SRCS
-    dklcms/digikam-lcms.cpp
     filters/dimgbuiltinfilter.cpp
     filters/dimgthreadedfilter.cpp
     filters/dimgthreadedanalyser.cpp
@@ -77,6 +76,7 @@ set(libdimgfilters_SRCS
     filters/icc/icctransformfilter.cpp
     filters/icc/iccsettingscontainer.cpp
     filters/icc/iccsettings.cpp
+    filters/icc/digikam-lcms.cpp
     filters/lc/localcontrastfilter.cpp
     filters/lc/localcontrastsettings.cpp
     filters/lc/localcontrastcontainer.cpp

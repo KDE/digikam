@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ACTIONCATEGORIZEDVIEW_H
-#define ACTIONCATEGORIZEDVIEW_H
+#ifndef DIGIKAM_ACTION_CATEGORIZED_VIEW_H
+#define DIGIKAM_ACTION_CATEGORIZED_VIEW_H
 
 // Local includes
 
@@ -64,4 +64,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // ACTIONCATEGORIZEDVIEW_H
+#endif // DIGIKAM_ACTION_CATEGORIZED_VIEW_H

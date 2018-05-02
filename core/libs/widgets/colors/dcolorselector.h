@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DCOLOR_SELECT_H
-#define DIGIKAM_DCOLOR_SELECT_H
+#ifndef DIGIKAM_DCOLOR_SELECTOR_H
+#define DIGIKAM_DCOLOR_SELECTOR_H
 
 // Qt includes
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DCOLOR_SELECT_H
+#endif // DIGIKAM_DCOLOR_SELECTOR_H

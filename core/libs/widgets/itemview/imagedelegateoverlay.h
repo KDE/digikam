@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEDELEGATEOVERLAY_H
-#define IMAGEDELEGATEOVERLAY_H
+#ifndef DIGIKAM_IMAGE_DELEGATE_OVERLAY_H
+#define DIGIKAM_IMAGE_DELEGATE_OVERLAY_H
 
 // Qt includes
 
@@ -337,4 +337,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGEDELEGATEOVERLAY_H
+#endif // DIGIKAM_IMAGE_DELEGATE_OVERLAY_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BORDERSETTINGS_H
-#define BORDERSETTINGS_H
+#ifndef DIGIKAM_BORDER_SETTINGS_H
+#define DIGIKAM_BORDER_SETTINGS_H
 
 // Local includes
 
@@ -40,8 +40,6 @@
 
 namespace Digikam
 {
-
-class Private;
 
 class DIGIKAM_EXPORT BorderSettings : public QWidget
 {
@@ -80,9 +78,10 @@ private:
 
 private:
 
+    class Private;
     Private* const d;
 };
 
 } // namespace Digikam
 
-#endif /* BORDERSETTINGS_H */
+#endif // DIGIKAM_BORDER_SETTINGS_H

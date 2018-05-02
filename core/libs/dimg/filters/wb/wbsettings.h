@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef WBSETTINGS_H
-#define WBSETTINGS_H
+#ifndef DIGIKAM_WB_SETTINGS_H
+#define DIGIKAM_WB_SETTINGS_H
 
 // Local includes
 
@@ -85,4 +85,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* WBSETTINGS_H */
+#endif // DIGIKAM_WB_SETTINGS_H

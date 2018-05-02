@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_PRESENTATION_KB_P_H
-#define DIGIKAM_PRESENTATION_KB_P_H
+#ifndef DIGIKAM_PRESENTATION_KB_PRIVATE_H
+#define DIGIKAM_PRESENTATION_KB_PRIVATE_H
 
 // Local includes
 
@@ -111,4 +111,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_PRESENTATION_KB_P_H
+#endif // DIGIKAM_PRESENTATION_KB_PRIVATE_H

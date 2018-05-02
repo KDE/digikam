@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef ITEMVIEWIMAGEDELEGATEPRIV_H
-#define ITEMVIEWIMAGEDELEGATEPRIV_H
+#ifndef DIGIKAM_ITEM_VIEW_IMAGE_DELEGATE_PRIV_H
+#define DIGIKAM_ITEM_VIEW_IMAGE_DELEGATE_PRIV_H
 
 // Qt includes
 
@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT ItemViewImageDelegatePrivate
 {
 public:
 
-    ItemViewImageDelegatePrivate();
+    explicit ItemViewImageDelegatePrivate();
     virtual ~ItemViewImageDelegatePrivate()
     {
     }
@@ -97,4 +97,4 @@ public:
 
 } // namespace Digikam
 
-#endif // ITEMVIEWIMAGEDELEGATEPRIV_H
+#endif // DIGIKAM_ITEM_VIEW_IMAGE_DELEGATE_PRIV_H

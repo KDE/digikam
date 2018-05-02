@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SHARPSETTINGS_H
-#define SHARPSETTINGS_H
+#ifndef DIGIKAM_SHARP_SETTINGS_H
+#define DIGIKAM_SHARP_SETTINGS_H
 
 // Local includes
 
@@ -132,4 +132,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SHARPSETTINGS_H
+#endif // DIGIKAM_SHARP_SETTINGS_H

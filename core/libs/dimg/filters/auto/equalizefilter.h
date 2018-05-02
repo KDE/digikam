@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EQUALIZEFILTER_H
-#define EQUALIZEFILTER_H
+#ifndef DIGIKAM_EQUALIZE_FILTER_H
+#define DIGIKAM_EQUALIZE_FILTER_H
 
 // Local includes
 
@@ -39,6 +39,7 @@ class DIGIKAM_EXPORT EqualizeFilter : public DImgThreadedFilter
 {
 
 public:
+
     explicit EqualizeFilter(QObject* const parent = 0);
     EqualizeFilter(DImg* const orgImage, const DImg* const refImage, QObject* const parent=0);
     virtual ~EqualizeFilter();
@@ -100,4 +101,4 @@ private:
 
 } // namespace Digikam
 
-#endif // EQUALIZEFILTER_H
+#endif // DIGIKAM_EQUALIZE_FILTER_H

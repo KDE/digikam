@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef AUTOLEVELSFILTER_H
-#define AUTOLEVELSFILTER_H
+#ifndef DIGIKAM_AUTO_LEVELS_FILTER_H
+#define DIGIKAM_AUTO_LEVELS_FILTER_H
 
 // Local includes
 
@@ -84,4 +84,4 @@ private:
 
 } // namespace Digikam
 
-#endif // AUTOLEVELSFILTER_H
+#endif // DIGIKAM_AUTO_LEVELS_FILTER_H

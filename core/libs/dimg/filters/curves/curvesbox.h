@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef CURVESBOX_H
-#define CURVESBOX_H
+#ifndef DIGIKAM_CURVES_BOX_H
+#define DIGIKAM_CURVES_BOX_H
 
 // Qt includes
 
@@ -126,4 +126,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* CURVESBOX_H */
+#endif // DIGIKAM_CURVES_BOX_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_FACE_PIPELINE_P_H
-#define DIGIKAM_FACE_PIPELINE_P_H
+#ifndef DIGIKAM_FACE_PIPELINE_PRIVATE_H
+#define DIGIKAM_FACE_PIPELINE_PRIVATE_H
 
 #include "facepipeline.h"
 
@@ -474,4 +474,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_FACE_PIPELINE_P_H
+#endif // DIGIKAM_FACE_PIPELINE_PRIVATE_H

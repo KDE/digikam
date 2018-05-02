@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef THEME_MANAGER_H
-#define THEME_MANAGER_H
+#ifndef DIGIKAM_THEME_MANAGER_H
+#define DIGIKAM_THEME_MANAGER_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace Digikam
 
-#endif // THEME_MANAGER_H
+#endif // DIGIKAM_THEME_MANAGER_H

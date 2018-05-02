@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGECURVES_H
-#define IMAGECURVES_H
+#ifndef DIGIKAM_IMAGE_CURVES_H
+#define DIGIKAM_IMAGE_CURVES_H
 
 // Qt includes
 
@@ -181,4 +181,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGECURVES_H */
+#endif // DIGIKAM_IMAGE_CURVES_H

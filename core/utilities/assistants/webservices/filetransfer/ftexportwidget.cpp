@@ -29,7 +29,6 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QApplication>
-#include <QFileDialog>
 #include <QPushButton>
 
 // KDE includes
@@ -41,6 +40,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "dfiledialog.h"
 #include "dimageslist.h"
 #include "wstoolutils.h"
 #include "dlayoutbox.h"
@@ -62,7 +62,7 @@ public:
     }
 
     KUrlComboRequester* targetLabel;
-    QFileDialog*        targetDialog;
+    DFileDialog*        targetDialog;
     QPushButton*        targetSearchButton;
     QUrl                targetUrl;
     DImagesList*        imageList;
@@ -145,7 +145,7 @@ void FTExportWidget::setHistory(const QList<QUrl>& urls)
 {
     d->targetLabel->comboBox()->clear();
 
-    foreach (QUrl url, urls)
+    foreach(const QUrl& url, urls)
         d->targetLabel->comboBox()->addUrl(url);
 }
 
@@ -159,10 +159,11 @@ void FTExportWidget::slotShowTargetDialogClicked(bool checked)
 {
     Q_UNUSED(checked);
 
-    d->targetDialog = new QFileDialog(this, i18n("Select target..."),
+    d->targetDialog = new DFileDialog(this, i18n("Select target..."),
                                       d->targetUrl.toString(), i18n("All Files (*)"));
     d->targetDialog->setAcceptMode(QFileDialog::AcceptSave);
-    d->targetDialog->setFileMode(QFileDialog::DirectoryOnly);
+    d->targetDialog->setFileMode(QFileDialog::Directory);
+    d->targetDialog->setOptions(QFileDialog::ShowDirsOnly);
 
     if (d->targetDialog->exec() == QDialog::Accepted)
     {

@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_DW_ITEM_DELEGATE_P_H
-#define DIGIKAM_DW_ITEM_DELEGATE_P_H
+#ifndef DIGIKAM_DW_ITEM_DELEGATE_PRIVATE_H
+#define DIGIKAM_DW_ITEM_DELEGATE_PRIVATE_H
 
 // Qt includes
 
@@ -81,4 +81,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_DW_ITEM_DELEGATE_P_H
+#endif // DIGIKAM_DW_ITEM_DELEGATE_PRIVATE_H

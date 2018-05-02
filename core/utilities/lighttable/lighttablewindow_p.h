@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_LIGHT_TABLE_WINDOW_P_H
-#define DIGIKAM_LIGHT_TABLE_WINDOW_P_H
+#ifndef DIGIKAM_LIGHT_TABLE_WINDOW_PRIVATE_H
+#define DIGIKAM_LIGHT_TABLE_WINDOW_PRIVATE_H
 
 // Qt includes
 
@@ -158,4 +158,4 @@ void LightTableWindow::Private::addPageUpDownActions(LightTableWindow* const q,
 
 } // namespace Digikam
 
-#endif // DIGIKAM_LIGHT_TABLE_WINDOW_P_H
+#endif // DIGIKAM_LIGHT_TABLE_WINDOW_PRIVATE_H

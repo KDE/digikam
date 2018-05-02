@@ -66,31 +66,21 @@ class DIGIKAM_EXPORT DigikamApp : public DXmlGuiWindow
 
 public:
 
-    DigikamApp();
+    explicit DigikamApp();
     ~DigikamApp();
 
     virtual void show();
     void restoreSession();
 
-    QMenu* slideShowMenu() const;
-
-    void autoDetect();
-    void downloadFrom(const QString& cameraGuiPath);
-    void downloadFromUdi(const QString& udi);
     void enableZoomPlusAction(bool val);
     void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);
     void enableAlbumForwardHistory(bool enable);
 
-    void startInternalDatabase();
-    void stopInternalDatabase();
-
-    void rebuild();
-
-    DigikamView* view() const;
+    DigikamView* view()    const;
+    QMenu* slideShowMenu() const;
 
     static DigikamApp* instance();
-    static QString scannerTargetPlace();
 
 Q_SIGNALS:
 
@@ -105,9 +95,6 @@ Q_SIGNALS:
 
     void signalWindowHasMoved();
 
-    void queuedOpenCameraUiFromPath(const QString& path);
-    void queuedOpenSolidDevice(const QString& udi);
-
 protected:
 
     bool queryClose();
@@ -116,32 +103,11 @@ protected:
 
 private:
 
-    bool    setup();
-    bool    setupICC();
-    void    setupView();
-    void    setupViewConnections();
-    void    setupStatusBar();
-    void    setupActions();
-    void    setupAccelerators();
-    void    setupExifOrientationActions();
-    void    setupImageTransformActions();
-    void    setupSelectToolsAction();
-    void    loadCameras();
-    void    populateThemes();
-    void    preloadWindows();
-    void    fillSolidMenus();
-    bool    checkSolidCamera(const Solid::Device& cameraDevice);
-    QString labelForSolidCamera(const Solid::Device& cameraDevice);
-    void    openSolidCamera(const QString& udi, const QString& label = QString());
-    void    openSolidUsmDevice(const QString& udi, const QString& label = QString());
-    void    updateCameraMenu();
-    void    updateQuickImportAction();
-    void    initGui();
-    void    showThumbBar(bool visible);
-    void    showSideBars(bool visible);
-    bool    thumbbarVisibility() const;
-    void    customizedFullScreenMode(bool set);
-    void    toggleShowBar();
+    void showThumbBar(bool visible);
+    void showSideBars(bool visible);
+    bool thumbbarVisibility() const;
+    void customizedFullScreenMode(bool set);
+    void toggleShowBar();
 
 private Q_SLOTS:
 
@@ -158,27 +124,11 @@ private Q_SLOTS:
     void slotAboutToShowForwardMenu();
     void slotAboutToShowBackwardMenu();
 
-    void slotSetup();
-    void slotSetupCamera();
-    void slotSetupChanged();
     void slotColorManagementOptionsChanged();
     void slotToggleColorManagedView();
     void slotSetCheckedExifOrientationAction(const ImageInfo& info);
     void slotResetExifOrientationActions();
     void slotTransformAction();
-
-    void slotOpenSolidCamera(QAction*);
-    void slotOpenManualCamera(QAction*);
-    void slotOpenSolidUsmDevice(QAction*);
-    void slotOpenSolidDevice(const QString& udi);
-    void slotOpenCameraUiFromPath(const QString& path);
-    void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString& udi);
-    void slotSolidDeviceChanged(const QString& udi);
-    void slotCameraAdded(CameraType*);
-    void slotCameraRemoved(QAction*);
-    void slotCameraAutoDetect();
-    void downloadImages(const QString& folder);
-    void cameraAutoDetect();
 
     void slotToggleLeftSideBar();
     void slotToggleRightSideBar();
@@ -188,21 +138,6 @@ private Q_SLOTS:
     void slotNextRightSideBarTab();
 
     void slotToggleShowBar();
-    void slotEditKeys();
-
-    void slotMaintenance();
-    void slotMaintenanceDone();
-    void slotExpoBlending();
-    void slotPanorama();
-    void slotVideoSlideshow();
-    void slotSendByMail();
-    void slotPrintCreator();
-    void slotHtmlGallery();
-    void slotCalendar();
-    void slotPresentation();
-    void slotMediaServer();
-
-    void slotDatabaseMigration();
 
     void slotZoomSliderChanged(int);
     void slotThumbSizeChanged(int);
@@ -214,16 +149,136 @@ private Q_SLOTS:
     void slotSwitchedToTableView();
     void slotSwitchedToTrashView();
 
-    void slotImportAddImages();
-    void slotImportAddFolders();
-    void slotThemeChanged();
+// -- Internal setup methods implemented in digikamapp_setup.cpp ----------------------------------------
 
-    void slotImportFromScanner();
+public:
+
+    void rebuild();
+
+private:
+
+    void setupView();
+    void setupViewConnections();
+    void setupStatusBar();
+    void setupActions();
+    void setupAccelerators();
+    void setupExifOrientationActions();
+    void setupImageTransformActions();
+    void populateThemes();
+    void preloadWindows();
+    void initGui();
+
+// -- Extra tool methods implemented in digikamapp_tools.cpp ----------------------------------------
+
+private:
+
+    void setupSelectToolsAction();
+
+private Q_SLOTS:
+
+    void slotMaintenance();
+    void slotMaintenanceDone();
+    void slotDatabaseMigration();
     void slotEditMetadata();
     void slotEditGeolocation();
 
+// -- Configure methods implemented in digikamapp_config.cpp ----------------------------------------
+
+private:
+
+    bool setup();
+    bool setupICC();
+
+private Q_SLOTS:
+
+    void slotSetup();
+    void slotSetupChanged();
+    void slotEditKeys();
+    void slotThemeChanged();
+    
+// -- Export tools methods implemented in digikamapp_export.cpp -------------------------------------
+
+private Q_SLOTS:
+
+    void slotExpoBlending();
+    void slotPanorama();
+    void slotVideoSlideshow();
+    void slotSendByMail();
+    void slotPrintCreator();
+    void slotHtmlGallery();
+    void slotCalendar();
+    void slotPresentation();
+    void slotMediaServer();
     void slotExportTool();
+
+// -- Import tools methods implemented in digikamapp_import.cpp -------------------------------------
+
+public:
+
+    static QString scannerTargetPlace();
+
+private:
+
+    void updateQuickImportAction();
+
+private Q_SLOTS:
+
+    void slotImportAddImages();
+    void slotImportAddFolders();
+    void slotImportFromScanner();
     void slotImportTool();
+
+// -- Camera management methods implemented in digikamapp_camera.cpp --------------------------------
+
+public:
+
+    void autoDetect();
+    void downloadFrom(const QString& cameraGuiPath);
+    void downloadFromUdi(const QString& udi);
+
+Q_SIGNALS:
+
+    void queuedOpenCameraUiFromPath(const QString& path);
+
+private:
+
+    void loadCameras();
+    void updateCameraMenu();
+
+private Q_SLOTS:
+
+    void slotSetupCamera();
+    void slotOpenManualCamera(QAction*);
+    void slotCameraAdded(CameraType*);
+    void slotCameraRemoved(QAction*);
+    void slotCameraAutoDetect();
+    void slotOpenCameraUiFromPath(const QString& path);
+    void downloadImages(const QString& folder);
+    void cameraAutoDetect();
+
+// -- Solid based methods implemented in digikamapp_solid.cpp ---------------------------------------
+
+Q_SIGNALS:
+
+    void queuedOpenSolidDevice(const QString& udi);
+
+private:
+
+    void    fillSolidMenus();
+    bool    checkSolidCamera(const Solid::Device& cameraDevice);
+    QString labelForSolidCamera(const Solid::Device& cameraDevice);
+    void    openSolidCamera(const QString& udi, const QString& label = QString());
+    void    openSolidUsmDevice(const QString& udi, const QString& label = QString());
+
+private Q_SLOTS:
+
+    void slotOpenSolidCamera(QAction*);
+    void slotOpenSolidUsmDevice(QAction*);
+    void slotOpenSolidDevice(const QString& udi);
+    void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString& udi);
+    void slotSolidDeviceChanged(const QString& udi);
+
+// -- Internal private container --------------------------------------------------------------------
 
 private:
 
