@@ -133,14 +133,14 @@ Usual CMake options :
 
 Compared to old autoconf options:
 
-* cmake . -DCMAKE_BUILD_TYPE=debugfull" is equivalent to "./configure --enable-debug=full
-* cmake . -DCMAKE_INSTALL_PREFIX=/usr"  is equivalent to "./configure --prefix=/usr
+* `cmake . -DCMAKE_BUILD_TYPE=debugfull` is equivalent to `./configure --enable-debug=full`
+* `cmake . -DCMAKE_INSTALL_PREFIX=/usr`  is equivalent to `./configure --prefix=/usr`
 
 More details can be found [at this url](http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables)
 
 Note: To know KDE install path on your computer, use `kf5-config --prefix` command line like this (with full debug object enabled):
 
-* cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=`kf5-config --prefix`
+* `cmake . -DCMAKE_BUILD_TYPE=debugfull -DCMAKE_INSTALL_PREFIX=$(kf5-config --prefix)`
 
 # Donate Money
 
