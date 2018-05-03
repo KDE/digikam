@@ -165,7 +165,7 @@ void DigikamApp::slotImportAddFolders()
     }
 
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* album = 0;
+    Album* album            = 0;
 
     if (!albumList.isEmpty())
     {

@@ -49,10 +49,12 @@ void DigikamApp::fillSolidMenus()
     delete d->solidCameraActionGroup;
 
     d->solidCameraActionGroup = new QActionGroup(this);
+
     connect(d->solidCameraActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotOpenSolidCamera(QAction*)));
 
     d->solidUsmActionGroup = new QActionGroup(this);
+
     connect(d->solidUsmActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotOpenSolidUsmDevice(QAction*)));
 
@@ -93,7 +95,8 @@ void DigikamApp::fillSolidMenus()
         // set data to identify device in action slot slotSolidSetupDevice
         action->setData(cameraDevice.udi());
         newAppearanceTimes[cameraDevice.udi()] = d->cameraAppearanceTimes.contains(cameraDevice.udi()) ?
-                                                 d->cameraAppearanceTimes.value(cameraDevice.udi()) : QDateTime::currentDateTime();
+                                                 d->cameraAppearanceTimes.value(cameraDevice.udi())    :
+                                                 QDateTime::currentDateTime();
 
         d->cameraMenu->addAction(action);
     }
@@ -111,7 +114,9 @@ void DigikamApp::fillSolidMenus()
         // check for StorageDrive
         Solid::Device driveDevice;
 
-        for (Solid::Device currentDevice = accessDevice; currentDevice.isValid(); currentDevice = currentDevice.parent())
+        for (Solid::Device currentDevice = accessDevice ;
+             currentDevice.isValid() ;
+             currentDevice = currentDevice.parent())
         {
             if (currentDevice.is<Solid::StorageDrive>())
             {
@@ -183,7 +188,9 @@ void DigikamApp::fillSolidMenus()
         // check for StorageVolume
         Solid::Device volumeDevice;
 
-        for (Solid::Device currentDevice = accessDevice; currentDevice.isValid(); currentDevice = currentDevice.parent())
+        for (Solid::Device currentDevice = accessDevice ;
+             currentDevice.isValid() ;
+             currentDevice = currentDevice.parent())
         {
             if (currentDevice.is<Solid::StorageVolume>())
             {
@@ -238,7 +245,8 @@ void DigikamApp::fillSolidMenus()
                 if (!access->filePath().isEmpty())
                 {
                     label += i18nc("<drive type> \"<device name or label>\" at <mount path>",
-                                   "%1 \"%2\" at %3", driveType, labelOrProduct, QDir::toNativeSeparators(access->filePath()));
+                                   "%1 \"%2\" at %3", driveType, labelOrProduct,
+                                   QDir::toNativeSeparators(access->filePath()));
                 }
                 else
                 {
@@ -251,7 +259,8 @@ void DigikamApp::fillSolidMenus()
                 if (!access->filePath().isEmpty())
                 {
                     label += i18nc("<drive type> at <mount path>",
-                                   "%1 at %2", driveType, QDir::toNativeSeparators(access->filePath()));
+                                   "%1 at %2", driveType,
+                                   QDir::toNativeSeparators(access->filePath()));
                 }
                 else
                 {
@@ -291,7 +300,8 @@ void DigikamApp::fillSolidMenus()
         // set data to identify device in action slot slotSolidSetupDevice
         action->setData(accessDevice.udi());
         newAppearanceTimes[accessDevice.udi()] = d->cameraAppearanceTimes.contains(accessDevice.udi()) ?
-                                                 d->cameraAppearanceTimes.value(accessDevice.udi()) : QDateTime::currentDateTime();
+                                                 d->cameraAppearanceTimes.value(accessDevice.udi())    :
+                                                 QDateTime::currentDateTime();
 
         if (isCamera)
         {
@@ -317,11 +327,13 @@ void DigikamApp::fillSolidMenus()
         QAction* const action = d->cameraSolidMenu->addAction(i18n("No Camera Connected"));
         action->setEnabled(false);
     }
+
     if (d->usbMediaMenu->isEmpty())
     {
         QAction* const action = d->usbMediaMenu->addAction(i18n("No Storage Devices Found"));
         action->setEnabled(false);
     }
+
     if (d->cardReaderMenu->isEmpty())
     {
         QAction* const action = d->cardReaderMenu->addAction(i18n("No Card Readers Available"));
@@ -367,7 +379,9 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
                                  << " drivers " << camera->supportedDrivers(QLatin1String("ptp"));
 
     // We handle gphoto2 cameras in this loop
-    if (! (camera->supportedDrivers().contains(QLatin1String("gphoto")) || camera->supportedProtocols().contains(QLatin1String("ptp"))) )
+    if (!(camera->supportedDrivers().contains(QLatin1String("gphoto")) ||
+        camera->supportedProtocols().contains(QLatin1String("ptp")))
+       )
     {
         return false;
     }
@@ -382,9 +396,10 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     QList<QVariant> driverHandleList = driverHandle.toList();
 
-    if (driverHandleList.size() < 3 || driverHandleList.at(0).toString() != QLatin1String("usb")
-        || !driverHandleList.at(1).canConvert(QVariant::Int)
-        || !driverHandleList.at(2).canConvert(QVariant::Int)
+    if ((driverHandleList.size() < 3)                               ||
+        (driverHandleList.at(0).toString() != QLatin1String("usb")) ||
+        !driverHandleList.at(1).canConvert(QVariant::Int)           ||
+        !driverHandleList.at(2).canConvert(QVariant::Int)
        )
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Solid returns unsupported driver handle for gphoto2";
@@ -393,6 +408,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     return true;
 }
+
 void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
 {
     // if there is already an open ImportUI for the device, show and raise it, and be done
@@ -423,7 +439,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         }
 
         Solid::Camera* const camera = device.as<Solid::Camera>();
-        QList<QVariant> list = camera->driverHandle(QLatin1String("gphoto")).toList();
+        QList<QVariant> list        = camera->driverHandle(QLatin1String("gphoto")).toList();
 
         // all sanity checks have already been done when creating the action
         if (list.size() < 3)
@@ -464,7 +480,8 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
     QString vendor  = cameraDevice.vendor();
     QString product = cameraDevice.product();
 
-    if (product == QLatin1String("USB Imaging Interface") || product == QLatin1String("USB Vendor Specific Interface"))
+    if (product == QLatin1String("USB Imaging Interface") ||
+        product == QLatin1String("USB Vendor Specific Interface"))
     {
         Solid::Device parentUsbDevice = cameraDevice.parent();
 
@@ -580,7 +597,8 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
 
         // the ImportUI will delete itself when it has finished
         ImportUI* const cgui = new ImportUI(i18n("Images on %1", mediaLabel),
-                                            QLatin1String("directory browse"), QLatin1String("Fixed"), path, 1);
+                                            QLatin1String("directory browse"),
+                                            QLatin1String("Fixed"), path, 1);
         d->cameraUIMap[udi]  = cgui;
 
         cgui->show();
@@ -610,7 +628,8 @@ void DigikamApp::slotOpenSolidDevice(const QString& udi)
 
     if (!device.isValid())
     {
-        QMessageBox::critical(this, qApp->applicationName(), i18n("The specified device (\"%1\") is not valid.", udi));
+        QMessageBox::critical(this, qApp->applicationName(),
+                              i18n("The specified device (\"%1\") is not valid.", udi));
         return;
     }
 
@@ -622,7 +641,8 @@ void DigikamApp::slotOpenSolidDevice(const QString& udi)
     {
         if (!checkSolidCamera(device))
         {
-            QMessageBox::critical(this, qApp->applicationName(), i18n("The specified camera (\"%1\") is not supported.", udi));
+            QMessageBox::critical(this, qApp->applicationName(),
+                                  i18n("The specified camera (\"%1\") is not supported.", udi));
             return;
         }
 
@@ -643,7 +663,7 @@ void DigikamApp::slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorDa
     }
     else
     {
-        d->solidErrorMessage = i18n("Cannot access the storage device.\n");
+        d->solidErrorMessage  = i18n("Cannot access the storage device.\n");
         d->solidErrorMessage += errorData.toString();
         d->eventLoop->exit(1);
     }

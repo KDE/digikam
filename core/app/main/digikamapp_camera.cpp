@@ -71,7 +71,7 @@ void DigikamApp::downloadFromUdi(const QString& udi)
 
 void DigikamApp::loadCameras()
 {
-    KActionCollection *ac = actionCollection();
+    KActionCollection* const ac = actionCollection();
 
     d->cameraMenu->setTitle(i18n("Cameras"));
     d->cameraMenu->setIcon(QIcon::fromTheme(QLatin1String("camera-photo")));
@@ -193,7 +193,8 @@ void DigikamApp::slotCameraAdded(CameraType* ctype)
         return;
     }
 
-    QAction* const cAction = new QAction(QIcon::fromTheme(QLatin1String("camera-photo")), ctype->title(), d->manualCameraActionGroup);
+    QAction* const cAction = new QAction(QIcon::fromTheme(QLatin1String("camera-photo")),
+                                         ctype->title(), d->manualCameraActionGroup);
     cAction->setData(ctype->title());
     actionCollection()->addAction(ctype->title(), cAction);
 
@@ -215,8 +216,7 @@ void DigikamApp::slotCameraRemoved(QAction* cAction)
 
 void DigikamApp::slotCameraAutoDetect()
 {
-    bool retry = false;
-
+    bool retry              = false;
     CameraType* const ctype = d->cameraList->autoDetect(retry);
 
     if (!ctype && retry)
@@ -240,7 +240,8 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
 
     // the ImportUI will delete itself when it has finished
     ImportUI* const cgui = new ImportUI(i18n("Images found in %1", path),
-                                        QLatin1String("directory browse"), QLatin1String("Fixed"), path, 1);
+                                        QLatin1String("directory browse"),
+                                        QLatin1String("Fixed"), path, 1);
     cgui->show();
 
     connect(cgui, SIGNAL(signalLastDestination(QUrl)),
