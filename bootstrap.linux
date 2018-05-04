@@ -63,6 +63,7 @@ export PKG_CONFIG_PATH=$DIGIKAM_INSTALL_PREFIX/$LIBPATH/pkgconfig:$PKG_CONFIG_PA
 echo "Qt5     Install Path : $QT_INSTALL_PREFIX"
 echo "digiKam Install Path : $DIGIKAM_INSTALL_PREFIX"
 echo "CMake binary         : $CMAKE_BINARY"
+echo "Build Directory      : $BUILDDIR"
 
 mkdir -p $DIGIKAM_INSTALL_PREFIX
 mkdir -p $BUILDDIR
