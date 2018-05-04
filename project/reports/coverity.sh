@@ -5,6 +5,9 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
+# Run Coverity Scan static analyzer on whole digiKam source code.
+# https://scan.coverity.com/
+#
 # before to run this script you must set these sheel variable :
 # $DKCoverityToken with token of digiKam project given by Coverity SCAN.
 # $DKCoverityEmail with email adress to send SCAN result.
