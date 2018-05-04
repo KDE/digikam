@@ -276,7 +276,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                                     "file will be performed when digiKam starts."));
 
     d->clearMetadataIfRescanBox    = new QCheckBox;
-    d->clearMetadataIfRescanBox->setText(i18nc("@option:check", "&Delete file metadata from the database before rescan the file"));
+    d->clearMetadataIfRescanBox->setText(i18nc("@option:check", "&Clean up the metadata from the database when rescan files"));
     d->clearMetadataIfRescanBox->setWhatsThis(i18nc("@info:whatsthis",
                                                     "Turning this option on, will force digiKam to delete the file metadata "
                                                     "contained in the database before the file is rescanned. WARNING: "

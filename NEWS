@@ -210,4 +210,5 @@ BUGFIXES:
 182 ==> 367596 - Sub-folder count images but don't show them (unsupported JPEG file?).
 183 ==> 379922 - Digikam won't remove tags set by Windows Explorer.
 184 ==> 379081 - GPS data are in file but geolocation indicator is not shown and map view empty.
-185 ==> 
+185 ==> 354819 - Specific pictures not showing up in digikam.
+186 ==> 
