@@ -127,7 +127,7 @@ static void fillThumbnailInfo(const QList<QVariant> &values, ThumbsDbInfo& info)
 
     info.id               = values.at(0).toInt();
     info.type             = (DatabaseThumbnail::Type)values.at(1).toInt();
-    info.modificationDate = values.at(2).isNull() ? QDateTime() : QDateTime::fromString(values.at(2).toString(), Qt::ISODate);
+    info.modificationDate = values.at(2).toDateTime();
     info.orientationHint  = values.at(3).toInt();
     info.data             = values.at(4).toByteArray();
 }
