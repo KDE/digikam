@@ -121,7 +121,8 @@ public:
     * @param semiMinorAxis The polar radius.
     */
     static Ellipsoid createEllipsoid(const QString& name,
-                                     double semiMajorAxis, double semiMinorAxis);
+                                     double semiMajorAxis,
+                                     double semiMinorAxis);
 
     /**
     * Constructs a new ellipsoid using the specified axis length and inverse flattening value.
@@ -132,7 +133,8 @@ public:
     *                          values.
     */
     static Ellipsoid createFlattenedSphere(const QString& name,
-                                           double semiMajorAxis, double inverseFlattening);
+                                           double semiMajorAxis,
+                                           double inverseFlattening);
 
     /**
     * Length of the semi-major axis of the ellipsoid. This is the
@@ -216,6 +218,7 @@ public:
     double radiusOfCurvature(double latitude);
 
 protected:
+
     /**
     * Constructs a new ellipsoid using the specified axis length. The properties map is
     * given unchanged to the AbstractIdentifiedObjectAbstractIdentifiedObject(Map)
@@ -229,9 +232,16 @@ protected:
     * @see createEllipsoid
     * @see createFlattenedSphere
     */
-    Ellipsoid(const QString& name, double semiMajorAxis, double  semiMinorAxis,
-              double inverseFlattening, bool ivfDefinitive);
-    Ellipsoid(const QString& name, double radius, bool ivfDefinitive);
+    Ellipsoid(const QString& name,
+              double semiMajorAxis,
+              double  semiMinorAxis,
+              double inverseFlattening,
+              bool ivfDefinitive);
+    Ellipsoid(const QString& name,
+              double radius,
+              bool ivfDefinitive);
+
+protected:
 
     QString name;
 
@@ -260,9 +270,9 @@ protected:
     *
     * @see isIvfDefinitive
     */
-    bool m_ivfDefinitive;
+    bool   m_ivfDefinitive;
 
-    bool m_isSphere;
+    bool   m_isSphere;
 };
 
 // ------------------------------------------------------------------------------------------------

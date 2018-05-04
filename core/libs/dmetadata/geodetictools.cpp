@@ -185,16 +185,19 @@ bool GeodeticCalculator::destinationGeographicPoint(double* longitude, double* l
 
     *longitude = toDegrees(m_long2);
     *latitude  = toDegrees(m_lat2);
+
     return true;
 }
 
 QPointF GeodeticCalculator::destinationGeographicPoint()
 {
-    double x, y;
+    double x = 0.0;
+    double y = 0.0;
     destinationGeographicPoint(&x, &y);
     QPointF point;
     point.setX(x);
     point.setY(y);
+
     return point;
 }
 
@@ -242,10 +245,10 @@ double GeodeticCalculator::orthodromicDistance()
 
 bool GeodeticCalculator::checkOrthodromicDistance()
 {
-    double check;
-    check = m_ellipsoid.orthodromicDistance(toDegrees(m_long1), toDegrees(m_lat1),
-                                            toDegrees(m_long2), toDegrees(m_lat2));
+    double check = m_ellipsoid.orthodromicDistance(toDegrees(m_long1), toDegrees(m_lat1),
+                                                   toDegrees(m_long2), toDegrees(m_lat2));
     check = fabs(m_distance - check);
+
     return (check <= (m_distance+1) * TOLERANCE_CHECK);
 }
 
@@ -317,6 +320,7 @@ bool GeodeticCalculator::computeDestinationPoint()
     m_long2            = long1+X - (1.0-C)*D*f;
     m_long2            = castToAngleRange(m_long2);
     m_destinationValid = true;
+
     return true;
 }
 
@@ -348,7 +352,7 @@ double GeodeticCalculator::meridianArcLengthRadians(double P1, double P2)
     double DA = (P2-P1);
 
     // Check for a 90 degree lookup
-    if (S1>TOLERANCE_0 || S2<=(M_PI/2-TOLERANCE_0) || S2>=(M_PI/2+TOLERANCE_0))
+    if (S1 > TOLERANCE_0 || S2 <= (M_PI/2-TOLERANCE_0) || S2 >= (M_PI/2+TOLERANCE_0))
     {
         const double DB = sin(P2* 2.0) - sin(P1* 2.0);
         const double DC = sin(P2* 4.0) - sin(P1* 4.0);
@@ -419,9 +423,9 @@ bool GeodeticCalculator::computeDirection()
     const double ESQP   = m_eccentricitySquared / (1.0-m_eccentricitySquared);
     const double alimit = M_PI*fo;
 
-    if (ss>=alimit &&
-        lat1<TOLERANCE_3 && lat1>-TOLERANCE_3 &&
-        lat2<TOLERANCE_3 && lat2>-TOLERANCE_3)
+    if (ss >= alimit                              &&
+        lat1 < TOLERANCE_3 && lat1 > -TOLERANCE_3 &&
+        lat2 < TOLERANCE_3 && lat2 > -TOLERANCE_3)
     {
         // Computes an approximate AZ
         const double CONS = (M_PI-ss)/(M_PI*f);
@@ -467,6 +471,7 @@ bool GeodeticCalculator::computeDirection()
         const double SMS = m_semiMajorAxis*M_PI*(1.0 - f*fabs(S)*AO - BO*fo);
         m_distance       = m_semiMajorAxis*ss - SMS;
         m_directionValid = true;
+
         return true;
     }
 
@@ -478,7 +483,7 @@ bool GeodeticCalculator::computeDirection()
     const double su2 = sin(u2);
     const double cu2 = cos(u2);
     double xy, w, q2, q4, q6, r2, r3, sig, ssig, slon, clon, sinalf, ab=dlon;
-    int kcount = 0;
+    int kcount       = 0;
 
     do
     {
@@ -499,13 +504,13 @@ bool GeodeticCalculator::computeDirection()
         const double t6   = w*t4;
 
         // the coefficents of type a
-        const double ao = f+a01*w+a02*t4+a03*t6;
-        const double a2 =   a21*w+a22*t4+a23*t6;
-        const double a4 =         a42*t4+a43*t6;
-        const double a6 =                a63*t6;
+        const double ao   = f+a01*w+a02*t4+a03*t6;
+        const double a2   =   a21*w+a22*t4+a23*t6;
+        const double a4   =         a42*t4+a43*t6;
+        const double a6   =                a63*t6;
 
         // the multiple angle functions
-        double qo  = 0.0;
+        double qo         = 0.0;
 
         if (w > TOLERANCE_0)
         {
@@ -548,6 +553,7 @@ bool GeodeticCalculator::computeDirection()
 
     m_azimuth = castToAngleRange(az1);
     m_directionValid = true;
+
     return true;
 }
 
@@ -642,21 +648,35 @@ Ellipsoid Ellipsoid::SPHERE()
     return createEllipsoid(QLatin1String("SPHERE"), 6371000, 6371000);
 }
 
-Ellipsoid::Ellipsoid(const QString& name, double semiMajorAxis, double  semiMinorAxis,
-                     double inverseFlattening, bool ivfDefinitive)
-    : name(name), m_semiMajorAxis(semiMajorAxis), m_semiMinorAxis(semiMinorAxis),
-      m_inverseFlattening(inverseFlattening), m_ivfDefinitive(ivfDefinitive), m_isSphere(false)
+Ellipsoid::Ellipsoid(const QString& name,
+                     double semiMajorAxis,
+                     double  semiMinorAxis,
+                     double inverseFlattening,
+                     bool ivfDefinitive)
+    : name(name),
+      m_semiMajorAxis(semiMajorAxis),
+      m_semiMinorAxis(semiMinorAxis),
+      m_inverseFlattening(inverseFlattening),
+      m_ivfDefinitive(ivfDefinitive),
+      m_isSphere(false)
 {
 }
 
-Ellipsoid::Ellipsoid(const QString& name, double radius, bool ivfDefinitive)
-    : name(name), m_semiMajorAxis(radius), m_semiMinorAxis(radius),
-      m_inverseFlattening(DBL_MAX), m_ivfDefinitive(ivfDefinitive), m_isSphere(true)
+Ellipsoid::Ellipsoid(const QString& name,
+                     double radius,
+                     bool ivfDefinitive)
+    : name(name),
+      m_semiMajorAxis(radius),
+      m_semiMinorAxis(radius),
+      m_inverseFlattening(DBL_MAX),
+      m_ivfDefinitive(ivfDefinitive),
+      m_isSphere(true)
 {
 }
 
 Ellipsoid Ellipsoid::createEllipsoid(const QString& name,
-                                     double m_semiMajorAxis, double m_semiMinorAxis)
+                                     double m_semiMajorAxis,
+                                     double m_semiMinorAxis)
 {
     if (m_semiMajorAxis == m_semiMinorAxis)
     {
@@ -670,7 +690,8 @@ Ellipsoid Ellipsoid::createEllipsoid(const QString& name,
 }
 
 Ellipsoid Ellipsoid::createFlattenedSphere(const QString& name,
-                                           double m_semiMajorAxis, double m_inverseFlattening)
+                                           double m_semiMajorAxis,
+                                           double m_inverseFlattening)
 {
     if (m_inverseFlattening == DBL_MAX)
     {
@@ -757,7 +778,7 @@ double Ellipsoid::orthodromicDistance(double x1, double y1, double x2, double y2
     double faz = baz*tu1;
     double x   = x2-x1;
 
-    for (int i=0; i<MAX_ITERATIONS; ++i)
+    for (int i = 0 ; i < MAX_ITERATIONS ; ++i)
     {
         const double sx  = sin(x);
         const double cx  = cos(x);
@@ -800,6 +821,7 @@ double Ellipsoid::orthodromicDistance(double x1, double y1, double x2, double y2
             x = e*cy;
             s = 1-2*e;
             s = ((((sy*sy*4 - 3)*s*cz*d/6-x)*d/4+cz)*sy*d+y)*c*R*m_semiMajorAxis;
+
             return s;
         }
     }
