@@ -85,7 +85,9 @@ private:
     void         updateLayout();
     void         updateVisualStyle();
 
-    QToolButton* createToolButton(const QIcon& icon, const QString& text, const QString& tip = QString()) const;
+    QToolButton* createToolButton(const QIcon& icon,
+                                  const QString& text,
+                                  const QString& tip = QString()) const;
 
     QWidget* addTagsWidget() const
     {
@@ -552,14 +554,16 @@ void AssignNameWidget::setDefaultModel()
     setModel(0, 0, 0);
 }
 
-void AssignNameWidget::setModel(TagModel* const model, TagPropertiesFilterModel* const filteredModel, CheckableAlbumFilterModel* const filterModel)
+void AssignNameWidget::setModel(TagModel* const model,
+                                TagPropertiesFilterModel* const filteredModel,
+                                CheckableAlbumFilterModel* const filterModel)
 {
     // Restrict the tag properties filter model to people if configured.
     ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (settings)
     {
-        if (settings->showOnlyPersonTagsInPeopleSidebar())
+        if (filteredModel && settings->showOnlyPersonTagsInPeopleSidebar())
         {
             filteredModel->listOnlyTagsWithProperty(TagPropertyName::person());
         }
