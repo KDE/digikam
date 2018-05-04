@@ -168,7 +168,7 @@ bool SimilarityDb::hasFingerprints(FuzzyAlgorithm algorithm) const
         QList<QVariant> values;
 
         d->db->execSql(QString::fromUtf8("SELECT imageid FROM ImageHaarMatrix "
-                                                 "WHERE matrix IS NOT NULL LIMIT 1;"),
+                                         "WHERE matrix IS NOT NULL LIMIT 1;"),
                        &values);
 
         // return true if there is at least one fingerprint

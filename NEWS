@@ -211,4 +211,5 @@ BUGFIXES:
 183 ==> 379922 - Digikam won't remove tags set by Windows Explorer.
 184 ==> 379081 - GPS data are in file but geolocation indicator is not shown and map view empty.
 185 ==> 354819 - Specific pictures not showing up in digikam.
-186 ==> 
+186 ==> 393855 - MySQL/MariaDB upgrade fails.
+187 ==> 

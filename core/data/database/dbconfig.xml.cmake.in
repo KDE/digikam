@@ -2190,12 +2190,18 @@
                         IF EXISTS(
                             SELECT * FROM information_schema.table_constraints
                             WHERE
-                                table_schema    = DATABASE()     AND
-                                table_name      = tableName      AND
-                                constraint_name = constraintName AND
+                                table_schema    = DATABASE()                           AND
+                                table_name      = CONVERT(tableName USING latin1)      AND
+                                constraint_name = CONVERT(constraintName USING latin1) AND
                                 constraint_type = 'FOREIGN KEY')
                         THEN
-                            SET @query = CONCAT('ALTER TABLE ', tableName, ' DROP FOREIGN KEY ', constraintName, ';');
+                            SET @query = CONCAT(
+                                CONVERT('ALTER TABLE ' USING latin1),
+                                CONVERT(tableName USING latin1),
+                                CONVERT(' DROP FOREIGN KEY ' USING latin1),
+                                CONVERT(constraintName USING latin1),
+                                CONVERT(';'USING latin1)
+                            );
                             PREPARE stmt FROM @query;
                             EXECUTE stmt;
                             DEALLOCATE PREPARE stmt;
@@ -2209,9 +2215,14 @@
                     CREATE PROCEDURE drop_index_if_exists(in tableName varchar(64), in indexName varchar(64))
                     BEGIN
                         IF((SELECT COUNT(*) AS index_exists FROM information_schema.statistics
-                            WHERE TABLE_SCHEMA = DATABASE() and table_name = tableName AND index_name = indexName) > 0)
+                            WHERE TABLE_SCHEMA = DATABASE() and table_name = CONVERT(tableName USING latin1) AND index_name = CONVERT(indexName USING latin1)) > 0)
                         THEN
-                            SET @query = CONCAT('DROP INDEX ' , indexName , ' ON ' , tableName);
+                            SET @query = CONCAT(
+                                CONVERT('DROP INDEX ' USING latin1),
+                                CONVERT(indexName USING latin1),
+                                CONVERT(' ON ' USING latin1),
+                                CONVERT(tableName USING latin1)
+                            );
                             PREPARE stmt FROM @query;
                             EXECUTE stmt;
                         END IF;
