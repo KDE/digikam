@@ -38,5 +38,12 @@ scan-build cmake -G "Unix Makefiles" . \
       -Wno-dev \
       ..
 
-scan-build -o $ORIG_WD --html-title $TITLE -v -k make -j4
+scan-build -o $ORIG_WD \
+           -no-failure-reports \
+           -analyze-headers \
+           --keep-empty \
+           --html-title $TITLE \
+           -v \
+           -k \
+           make -j4
 
