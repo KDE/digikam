@@ -6,14 +6,37 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
+ORIG_WD="`pwd`"
+
 PDIR="`dirname $(dirname $PWD)`"
 TITLE="`basename $PDIR`"
 
 cd ../..
 
-export CMAKE_BINARY="scan-build cmake"
-./bootstrap.linux
+mkdir -p build.scan
+cd build.scan
 
-cd build
-scan-build -o ./ --html-title $TITLE -v -k make -j4
+scan-build cmake -G "Unix Makefiles" . \
+      -DCMAKE_BUILD_TYPE=debug \
+      -DBUILD_TESTING=ON \
+      -DDIGIKAMSC_CHECKOUT_PO=OFF \
+      -DDIGIKAMSC_CHECKOUT_DOC=OFF \
+      -DDIGIKAMSC_COMPILE_PO=OFF \
+      -DDIGIKAMSC_COMPILE_DOC=OFF \
+      -DDIGIKAMSC_COMPILE_DIGIKAM=ON \
+      -DDIGIKAMSC_COMPILE_LIBKSANE=ON \
+      -DDIGIKAMSC_COMPILE_LIBMEDIAWIKI=ON \
+      -DDIGIKAMSC_COMPILE_LIBKVKONTAKTE=ON \
+      -DENABLE_KFILEMETADATASUPPORT=ON \
+      -DENABLE_AKONADICONTACTSUPPORT=ON \
+      -DENABLE_MYSQLSUPPORT=ON \
+      -DENABLE_INTERNALMYSQL=ON \
+      -DENABLE_MEDIAPLAYER=ON \
+      -DENABLE_DBUS=ON \
+      -DENABLE_APPSTYLES=ON \
+      -DENABLE_QWEBENGINE=OFF \
+      -Wno-dev \
+      ..
+
+scan-build -o $ORIG_WD --html-title $TITLE -v -k make -j4
 
