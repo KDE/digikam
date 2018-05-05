@@ -81,7 +81,7 @@ scan-build -o $REPORT_DIR \
            --html-title $TITLE \
            -v \
            -k \
-           make -j$CPU_CORE
+           make -j$CPU_CORES
 
 SCANBUILD_DIR=$(find ${REPORT_DIR} -maxdepth 1 -not -empty -not -name `basename ${REPORT_DIR}`)
 echo "Clang Report $TITLE to publish is located to $SCANBUILD_DIR"
