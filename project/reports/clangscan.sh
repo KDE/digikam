@@ -49,6 +49,7 @@ rm -fr $WEBSITE_DIR
 
 cd ../..
 
+rm -fr build.scan
 mkdir -p build.scan
 cd build.scan
 
@@ -83,7 +84,7 @@ scan-build -o $REPORT_DIR \
            make -j$CPU_CORE
 
 SCANBUILD_DIR=$(find ${REPORT_DIR} -maxdepth 1 -not -empty -not -name `basename ${REPORT_DIR}`)
-echo "Clang Report to publish is located to $SCANBUILD_DIR"
+echo "Clang Report $TITLE to publish is located to $SCANBUILD_DIR"
 
 git clone git@git.kde.org:websites/digikam-org $WEBSITE_DIR
 
@@ -96,15 +97,15 @@ cp -r $SCANBUILD_DIR/* $WEBSITE_DIR/static/report/
 
 # Add new report contents in dev branch
 git add $WEBSITE_DIR/static/report/*
-git commit . -m"update Clang static analizer report"
+git commit . -m"update Clang static analyzer report $TITLE"
 git push
 
 # update master branch
 git checkout master
-git merge dev -m"update Clang static analizer report"
+git merge dev -m"update Clang static analyzer report $TITLE"
 git push
 
 cd $ORIG_DIR
 
-echo "Clang Report published to https://www.digikam.org/report/"
+echo "Clang Report $TITLE published to https://www.digikam.org/report/"
 echo "Web site will be synchronized in few minutes..."
