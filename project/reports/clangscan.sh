@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (c) 2013-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
@@ -9,10 +9,37 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-ORIG_WD="`pwd`"
+# --- Functions definitions --------------------------------
 
-PDIR="`dirname $(dirname $PWD)`"
-TITLE="`basename $PDIR`"
+# checks if branch has something pending
+function parseGitDirty()
+{
+  git diff --quiet --ignore-submodules HEAD 2>/dev/null; [ $? -eq 1 ] && echo "M"
+}
+
+# gets the current git branch
+function parseGitBranch()
+{
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parseGitDirty)/"
+}
+
+# get last commit hash prepended with @ (i.e. @8a323d0)
+function parseGitHash()
+{
+  git rev-parse --short HEAD 2> /dev/null | sed "s/\(.*\)/@\1/"
+}
+
+# ----------------------------------------------------------
+
+ORIG_WD="`pwd`"
+REPORT_DIR="report.scan"
+
+# Get active git branches to create report description string
+TITLE="digiKam-$(parseGitBranch)$(parseGitHash)"
+echo "Clang Static Analyzer task name: $TITLE"
+
+CPU_CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || sysctl -n hw.ncpu)
+echo "CPU cores detected to compile : $CPU_CORES."
 
 cd ../..
 
@@ -41,15 +68,16 @@ scan-build cmake -G "Unix Makefiles" . \
       -Wno-dev \
       ..
 
-scan-build -o $ORIG_WD \
+scan-build -o $ORIG_WD/$REPORT_DIR \
            -no-failure-reports \
            --keep-empty \
            --html-title $TITLE \
            -v \
            -k \
-           make -j4
+           make -j$CPU_CORE
 
-SCAN_BUILD_REPORT=$(find ${ORIG_WD} -maxdepth 1 -not -empty -not -name `basename ${ORIG_WD}`)
-DATE_EPOCH="-`date "+%Y%m%dT%H%M%S"`"
+SCANBUILD_DIR=$(find ${ORIG_WD}/$REPORT_DIR -maxdepth 1 -not -empty -not -name `basename ${ORIG_WD}/$REPORT_DIR`)
+echo $SCANBUILD_DIR
 
-mv $SCAN_BUILD_REPORT digikam$DATE_EPOCH
+mv $SCANBUILD_DIR ./$TITLE
+rm -fr $REPORT_DIR

@@ -1,9 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (c) 2013-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
-#
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 # Run Coverity Scan static analyzer on whole digiKam source code.
 # https://scan.coverity.com/
@@ -14,6 +11,10 @@
 #
 # See this url to see how to prepare your computer with Coverity SCAN tool:
 # http://scan.coverity.com/projects/285/upload_form
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 
 cd ../..
 
@@ -31,7 +32,7 @@ else
     exit -1
 fi
 
-# Get active git branches to create SCAN import description string
+# Get active git branches to create report description string
 ./gits branch | sed -e "s/*/#/g" | sed -e "s/On:/#On:/g" | grep "#" | sed -e "s/#On:/On:/g" | sed -e "s/#/BRANCH:/g" > ./build/git_branches.txt
 desc=$(<build/git_branches.txt)
 

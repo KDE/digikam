@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (c) 2013-2018, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
