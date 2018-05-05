@@ -32,7 +32,8 @@ function parseGitHash()
 # ----------------------------------------------------------
 
 ORIG_WD="`pwd`"
-REPORT_DIR="report.scan"
+REPORT_DIR="${ORIG_WD}/report.scan"
+WEBSITE_DIR="${ORIG_WD}/site"
 
 # Get active git branches to create report description string
 TITLE="digiKam-$(parseGitBranch)$(parseGitHash)"
@@ -40,6 +41,11 @@ echo "Clang Static Analyzer task name: $TITLE"
 
 CPU_CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || sysctl -n hw.ncpu)
 echo "CPU cores detected to compile : $CPU_CORES."
+
+# Clean up and prepare to scan.
+
+rm -fr $REPORT_DIR
+rm -fr $WEBSITE_DIR
 
 cd ../..
 
@@ -68,7 +74,7 @@ scan-build cmake -G "Unix Makefiles" . \
       -Wno-dev \
       ..
 
-scan-build -o $ORIG_WD/$REPORT_DIR \
+scan-build -o $REPORT_DIR \
            -no-failure-reports \
            --keep-empty \
            --html-title $TITLE \
@@ -76,8 +82,29 @@ scan-build -o $ORIG_WD/$REPORT_DIR \
            -k \
            make -j$CPU_CORE
 
-SCANBUILD_DIR=$(find ${ORIG_WD}/$REPORT_DIR -maxdepth 1 -not -empty -not -name `basename ${ORIG_WD}/$REPORT_DIR`)
-echo $SCANBUILD_DIR
+SCANBUILD_DIR=$(find ${REPORT_DIR} -maxdepth 1 -not -empty -not -name `basename ${REPORT_DIR}`)
+echo "Clang Report to publish is located to $SCANBUILD_DIR"
 
-mv $SCANBUILD_DIR ./$TITLE
-rm -fr $REPORT_DIR
+git clone git@git.kde.org:websites/digikam-org $WEBSITE_DIR
+
+cd $WEBSITE_DIR
+
+git checkout -b dev remotes/origin/dev
+
+rm -r $WEBSITE_DIR/static/report/*
+cp -r $SCANBUILD_DIR/* $WEBSITE_DIR/static/report/
+
+# Add new report contents in dev branch
+git add $WEBSITE_DIR/static/report/*
+git commit . -m"update Clang static analizer report"
+git push
+
+# update master branch
+git checkout master
+git merge dev -m"update Clang static analizer report"
+git push
+
+cd $ORIG_DIR
+
+echo "Clang Report published to https://www.digikam.org/report/"
+echo "Web site will be synchronized in few minutes..."
