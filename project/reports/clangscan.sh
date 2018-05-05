@@ -94,9 +94,9 @@ echo "Drop reports from unwanted sub-directories: $FILTERS"
 for DROP_ITEM in $FILTERS ; do
     echo "drop $DROP_ITEM from $SCANBUILD_DIR/index.html"
     grep -v "$DROP_ITEM" $SCANBUILD_DIR/index.html > $SCANBUILD_DIR/temp && mv $SCANBUILD_DIR/temp $SCANBUILD_DIR/index.html
- done
+done
 
-exit
+# update www.digikam.org report section.
 
 git clone git@git.kde.org:websites/digikam-org $WEBSITE_DIR
 
@@ -108,13 +108,15 @@ rm -r $WEBSITE_DIR/static/report/*
 cp -r $SCANBUILD_DIR/* $WEBSITE_DIR/static/report/
 
 # Add new report contents in dev branch
+
 git add $WEBSITE_DIR/static/report/*
-git commit . -m"update Clang static analyzer report $TITLE"
+git commit . -m"update Clang static analyzer report $TITLE. See https://www.digikam.org/report/ for details."
 git push
 
 # update master branch
+
 git checkout master
-git merge dev -m"update Clang static analyzer report $TITLE"
+git merge dev -m"update Clang static analyzer report $TITLE. See https://www.digikam.org/report/ for details."
 git push
 
 cd $ORIG_DIR
