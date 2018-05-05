@@ -42,6 +42,8 @@ echo "Clang Static Analyzer task name: $TITLE"
 CPU_CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || sysctl -n hw.ncpu)
 echo "CPU cores detected to compile : $CPU_CORES."
 
+if [ ] ; then
+
 # Clean up and prepare to scan.
 
 rm -fr $REPORT_DIR
@@ -83,8 +85,22 @@ scan-build -o $REPORT_DIR \
            -k \
            make -j$CPU_CORES
 
+fi
+
 SCANBUILD_DIR=$(find ${REPORT_DIR} -maxdepth 1 -not -empty -not -name `basename ${REPORT_DIR}`)
 echo "Clang Report $TITLE to publish is located to $SCANBUILD_DIR"
+
+# remove unwanted lines in report accordingly with Krazy configuration.
+# Note: Clang do not have an option to ignore directories to scan at compilation time.
+FILTERS=$(sed -n '/SKIP/p' ${ORIG_WD}/../../.krazy | sed -e 's/SKIP //g' | sed -e 's/|/\n/g' | sed 's/^.\(.*\).$/\1/')
+echo "Drop reports from unwanted sub-directories: $FILTERS"
+
+for DROP_ITEM in $FILTERS ; do
+    echo "drop $DROP_ITEM from $SCANBUILD_DIR/index.html"
+    grep -v "$DROP_ITEM" $SCANBUILD_DIR/index.html > $SCANBUILD_DIR/temp && mv $SCANBUILD_DIR/temp $SCANBUILD_DIR/index.html
+ done
+
+exit
 
 git clone git@git.kde.org:websites/digikam-org $WEBSITE_DIR
 
