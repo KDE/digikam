@@ -518,14 +518,16 @@ cmsBool GetProfileRGBPrimaries(cmsHPROFILE hProfile, cmsCIEXYZTRIPLE* const resu
 LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
 {
     MAT3 result;
-    LCMSBOOL ret;
 
     // See README @ Monday, July 27, 2009 @ Less is more
     // return static_cast<LCMSBOOL>( GetProfileRGBPrimaries(hProfile, r, INTENT_RELATIVE_COLORIMETRIC) );
 
-    ret = GetProfileRGBPrimaries(hProfile, &result, INTENT_RELATIVE_COLORIMETRIC);
+    LCMSBOOL ret = GetProfileRGBPrimaries(hProfile, &result, INTENT_RELATIVE_COLORIMETRIC);
 
-    _l2tol1MAT3(&result, r);
+    if (ret)
+    {
+        _l2tol1MAT3(&result, r);
+    }
 
     return ret;
 }
