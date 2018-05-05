@@ -110,13 +110,13 @@ cp -r $SCANBUILD_DIR/* $WEBSITE_DIR/static/report/
 # Add new report contents in dev branch
 
 git add $WEBSITE_DIR/static/report/*
-git commit . -m"update Clang static analyzer report $TITLE"
+git commit . -m"update Clang static analyzer report $TITLE. See https://www.digikam.org/report/ for details."
 git push
 
 # update master branch
 
 git checkout master
-git merge dev -m"update Clang static analyzer report $TITLE"
+git merge dev -m"update Clang static analyzer report $TITLE. See https://www.digikam.org/report/ for details."
 git push
 
 cd $ORIG_DIR
