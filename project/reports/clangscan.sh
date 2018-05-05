@@ -42,8 +42,6 @@ echo "Clang Static Analyzer task name: $TITLE"
 CPU_CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || sysctl -n hw.ncpu)
 echo "CPU cores detected to compile : $CPU_CORES."
 
-if [ ] ; then
-
 # Clean up and prepare to scan.
 
 rm -fr $REPORT_DIR
@@ -84,8 +82,6 @@ scan-build -o $REPORT_DIR \
            -v \
            -k \
            make -j$CPU_CORES
-
-fi
 
 SCANBUILD_DIR=$(find ${REPORT_DIR} -maxdepth 1 -not -empty -not -name `basename ${REPORT_DIR}`)
 echo "Clang Report $TITLE to publish is located to $SCANBUILD_DIR"
