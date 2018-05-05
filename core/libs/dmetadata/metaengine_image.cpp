@@ -542,10 +542,9 @@ QDateTime MetaEngine::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
                     dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                    if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                    if (dateTime.isValid())
                     {
                         qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => Exif.Photo.DateTimeOriginal => " << dateTime;
-                        return dateTime;
                     }
                 }
             }
@@ -974,10 +973,9 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
                 QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
                 dateMap.insert(dateTime, dateMap.value(dateTime, 0) + 1);
 
-                if (dateTime.isValid() && dateMap.value(dateTime) > 1)
+                if (dateTime.isValid())
                 {
                     qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime (Exif digitalized): " << dateTime;
-                    return dateTime;
                 }
             }
         }
