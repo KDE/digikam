@@ -1053,7 +1053,7 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
 
                     if (dateTime.isValid() && dateMap.value(dateTime) > 1)
                     {
-                        qCDebug(DIGIKAM_METAENGINE_LOG) << "Date (IPTC digitalized): " << dateTime;
+                        qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime (IPTC digitalized): " << dateTime;
                         return dateTime;
                     }
                 }
@@ -1084,7 +1084,7 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
 
             if (dateTime.isValid())
             {
-                qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime => digitization date => " << dateTime;
+                qCDebug(DIGIKAM_METAENGINE_LOG) << "DateTime (digitization date): " << dateTime;
                 return dateTime;
             }
         }
