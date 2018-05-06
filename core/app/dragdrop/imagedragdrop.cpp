@@ -255,8 +255,10 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
     {
         Album* currentAlbum = 0;
 
-        if(albumModel() && !(albumModel()->currentAlbums().isEmpty()))
+        if (albumModel() && !(albumModel()->currentAlbums().isEmpty()))
+        {
             currentAlbum = albumModel()->currentAlbums().first();
+        }
 
         if (album->type() == Album::PHYSICAL)
         {
@@ -493,7 +495,13 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         if (!isDecoded)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Deconding failed!";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Decoding failed!";
+            return false;
+        }
+
+        if (!view)
+        {
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Error: View is null!";
             return false;
         }
 
@@ -554,7 +562,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             return false;
         }
 
-        QMenu popMenu(view);
+        QMenu popMenu(iconView);
         popMenu.addSection(QIcon::fromTheme(QLatin1String("digikam")), i18n("Importing"));
         QAction* const downAction    = popMenu.addAction(QIcon::fromTheme(QLatin1String("get-hot-new-stuff")),
                                                          i18n("Download From Camera"));
@@ -563,7 +571,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         popMenu.addSeparator();
         popMenu.addAction(QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
-        QAction* const choice        = popMenu.exec(view->mapToGlobal(e->pos()));
+        QAction* const choice        = popMenu.exec(iconView->mapToGlobal(e->pos()));
 
         if (choice)
         {

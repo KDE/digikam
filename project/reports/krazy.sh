@@ -9,11 +9,12 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-krazy2all --export textedit \
+krazy2all --export xml \
           --title digiKam \
           --no-brief \
           --strict all \
           --priority all \
           --verbose \
           --topdir ../../ \
+          --check defines \
           --outfile report.krazy
