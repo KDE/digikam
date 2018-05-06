@@ -1640,7 +1640,7 @@ void TagTreeView::setAlbumModel(TagModel* const model)
                 FileActionMngr::instance(), SLOT(assignTags(QList<qlonglong>,QList<int>)));
     }
 
-    if (m_albumModel->rootAlbumBehavior() == AbstractAlbumModel::IncludeRootAlbum)
+    if (m_albumModel && (m_albumModel->rootAlbumBehavior() == AbstractAlbumModel::IncludeRootAlbum))
     {
         setRootIsDecorated(false);
     }
