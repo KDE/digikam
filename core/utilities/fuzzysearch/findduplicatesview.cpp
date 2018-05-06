@@ -169,13 +169,17 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
                                                 "reference image of the search."));
 
     // Load the last choice from application settings.
-    HaarIface::DuplicatesSearchRestrictions restrictions = (HaarIface::DuplicatesSearchRestrictions) d->settings->getDuplicatesSearchRestrictions();
+
+    HaarIface::DuplicatesSearchRestrictions restrictions
+        = d->settings ? (HaarIface::DuplicatesSearchRestrictions) d->settings->getDuplicatesSearchRestrictions()
+                      : HaarIface::DuplicatesSearchRestrictions::None;
+
     d->searchResultRestriction->setCurrentIndex(d->searchResultRestriction->findData(restrictions));
 
-    d->albumTagRelationLabel    = new QLabel(i18n("Restrict to:"));
+    d->albumTagRelationLabel = new QLabel(i18n("Restrict to:"));
     d->albumTagRelationLabel->setBuddy(d->albumTagRelation);
 
-    d->albumTagRelation = new SqueezedComboBox();
+    d->albumTagRelation      = new SqueezedComboBox();
     d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "Only selected tab") ,  HaarIface::AlbumTagRelation::NoMix);
     d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "One of"),              HaarIface::AlbumTagRelation::Union);
     d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "Both"),                HaarIface::AlbumTagRelation::Intersection);
@@ -191,7 +195,10 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
                                          "<i>Only selected tab</i> means that only the selected tab is used."));
 
     // Load the last choice from application settings.
-    HaarIface::AlbumTagRelation relation = (HaarIface::AlbumTagRelation) d->settings->getDuplicatesAlbumTagRelation();
+    HaarIface::AlbumTagRelation relation
+        = d->settings ? (HaarIface::AlbumTagRelation) d->settings->getDuplicatesAlbumTagRelation()
+                      : HaarIface::AlbumTagRelation::NoMix;
+
     d->albumTagRelation->setCurrentIndex(d->albumTagRelation->findData(relation));
 
     // ---------------------------------------------------------------
