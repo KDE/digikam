@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef EXIF_ADJUST_H
-#define EXIF_ADJUST_H
+#ifndef DIGIKAM_EXIF_ADJUST_H
+#define DIGIKAM_EXIF_ADJUST_H
 
 // Qt includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif // EXIF_ADJUST_H
+#endif // DIGIKAM_EXIF_ADJUST_H

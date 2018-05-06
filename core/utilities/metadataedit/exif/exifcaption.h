@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef EXIF_CAPTION_H
-#define EXIF_CAPTION_H
+#ifndef DIGIKAM_EXIF_CAPTION_H
+#define DIGIKAM_EXIF_CAPTION_H
 
 // Qt includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // EXIF_CAPTION_H
+#endif // DIGIKAM_EXIF_CAPTION_H

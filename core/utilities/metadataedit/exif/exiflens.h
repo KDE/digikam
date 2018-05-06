@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef EXIF_LENS_H
-#define EXIF_LENS_H
+#ifndef DIGIKAM_EXIF_LENS_H
+#define DIGIKAM_EXIF_LENS_H
 
 // Qt includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif // EXIF_LENS_H
+#endif // DIGIKAM_EXIF_LENS_H

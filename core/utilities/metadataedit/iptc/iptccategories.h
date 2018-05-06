@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IPTC_CATEGORIES_H
-#define IPTC_CATEGORIES_H
+#ifndef DIGIKAM_IPTC_CATEGORIES_H
+#define DIGIKAM_IPTC_CATEGORIES_H
 
 // Qt includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IPTC_CATEGORIES_H
+#endif // DIGIKAM_IPTC_CATEGORIES_H

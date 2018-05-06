@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef MULTI_STRINGS_EDIT_H
-#define MULTI_STRINGS_EDIT_H
+#ifndef DIGIKAM_MULTI_STRINGS_EDIT_H
+#define DIGIKAM_MULTI_STRINGS_EDIT_H
 
 // Qt includes
 
@@ -36,8 +36,8 @@ class MultiStringsEdit : public QWidget
 
 public:
 
-    MultiStringsEdit(QWidget* const parent, const QString& title,
-                     const QString& desc, bool ascii=true, int size=-1);
+    explicit MultiStringsEdit(QWidget* const parent, const QString& title,
+                              const QString& desc, bool ascii=true, int size=-1);
     ~MultiStringsEdit();
 
     void setValues(const QStringList& values);
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MULTI_STRINGS_EDIT_H
+#endif // DIGIKAM_MULTI_STRINGS_EDIT_H

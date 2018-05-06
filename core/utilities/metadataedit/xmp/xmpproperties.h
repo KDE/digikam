@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef XMP_PROPERTIES_H
-#define XMP_PROPERTIES_H
+#ifndef DIGIKAM_XMP_PROPERTIES_H
+#define DIGIKAM_XMP_PROPERTIES_H
 
 // Qt includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif // XMP_PROPERTIES_H
+#endif // DIGIKAM_XMP_PROPERTIES_H

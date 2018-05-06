@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef XMP_KEYWORDS_H
-#define XMP_KEYWORDS_H
+#ifndef DIGIKAM_XMP_KEYWORDS_H
+#define DIGIKAM_XMP_KEYWORDS_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif // XMP_KEYWORDS_H
+#endif // DIGIKAM_XMP_KEYWORDS_H

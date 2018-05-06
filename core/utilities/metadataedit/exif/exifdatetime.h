@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef EXIF_DATETIME_H
-#define EXIF_DATETIME_H
+#ifndef DIGIKAM_EXIF_DATETIME_H
+#define DIGIKAM_EXIF_DATETIME_H
 
 // Qt includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // EXIF_DATETIME_H
+#endif // DIGIKAM_EXIF_DATETIME_H

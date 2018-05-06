@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef TIMEZONE_COMBOBOX_H
-#define TIMEZONE_COMBOBOX_H
+#ifndef DIGIKAM_TIMEZONE_COMBOBOX_H
+#define DIGIKAM_TIMEZONE_COMBOBOX_H
 
 // Qt includes
 
@@ -48,4 +48,4 @@ public:
 
 } // namespace Digikam
 
-#endif // TIMEZONE_COMBOBOX_H
+#endif // DIGIKAM_TIMEZONE_COMBOBOX_H

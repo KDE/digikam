@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IPTC_SUBJECTS_H
-#define IPTC_SUBJECTS_H
+#ifndef DIGIKAM_IPTC_SUBJECTS_H
+#define DIGIKAM_IPTC_SUBJECTS_H
 
 // Qt includes
 
@@ -52,4 +52,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IPTC_SUBJECTS_H
+#endif // DIGIKAM_IPTC_SUBJECTS_H

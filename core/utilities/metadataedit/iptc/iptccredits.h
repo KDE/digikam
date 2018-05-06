@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef IPTC_CREDITS_H
-#define IPTC_CREDITS_H
+#ifndef DIGIKAM_IPTC_CREDITS_H
+#define DIGIKAM_IPTC_CREDITS_H
 
 // Qt includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IPTC_CREDITS_H
+#endif // DIGIKAM_IPTC_CREDITS_H

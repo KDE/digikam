@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef XMP_ORIGIN_H
-#define XMP_ORIGIN_H
+#ifndef DIGIKAM_XMP_ORIGIN_H
+#define DIGIKAM_XMP_ORIGIN_H
 
 // Qt includes
 
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif // XMP_ORIGIN_H
+#endif // DIGIKAM_XMP_ORIGIN_H

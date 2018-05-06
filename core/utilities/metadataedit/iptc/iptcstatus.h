@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef IPTC_STATUS_H
-#define IPTC_STATUS_H
+#ifndef DIGIKAM_IPTC_STATUS_H
+#define DIGIKAM_IPTC_STATUS_H
 
 // Qt includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IPTC_STATUS_H
+#endif // DIGIKAM_IPTC_STATUS_H

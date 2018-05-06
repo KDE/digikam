@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef IPTC_ENVELOPE_H
-#define IPTC_ENVELOPE_H
+#ifndef DIGIKAM_IPTC_ENVELOPE_H
+#define DIGIKAM_IPTC_ENVELOPE_H
 
 // Qt includes
 
@@ -59,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IPTC_ENVELOPE_H
+#endif // DIGIKAM_IPTC_ENVELOPE_H

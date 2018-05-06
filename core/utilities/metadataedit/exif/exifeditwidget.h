@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EXIFEDITWIDGET_H
-#define EXIFEDITWIDGET_H
+#ifndef DIGIKAM_EXIF_EDIT_WIDGET_H
+#define DIGIKAM_EXIF_EDIT_WIDGET_H
 
 // Local includes
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* EXIFEDITDIALOG_H */
+#endif // DIGIKAM_EXIF_EDIT_WIDGET_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef XMP_SUBJECTS_H
-#define XMP_SUBJECTS_H
+#ifndef DIGIKAM_XMP_SUBJECTS_H
+#define DIGIKAM_XMP_SUBJECTS_H
 
 // Qt includes
 
@@ -52,4 +52,4 @@ public:
 
 } // namespace Digikam
 
-#endif // XMP_SUBJECTS_H
+#endif // DIGIKAM_XMP_SUBJECTS_H

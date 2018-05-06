@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATA_CHECKBOX_H
-#define METADATA_CHECKBOX_H
+#ifndef DIGIKAM_METADATA_CHECKBOX_H
+#define DIGIKAM_METADATA_CHECKBOX_H
 
 // Qt includes
 
@@ -39,7 +39,7 @@ class MetadataCheckBox : public QCheckBox
 
 public:
 
-    MetadataCheckBox(const QString& text, QWidget* const parent);
+    explicit MetadataCheckBox(const QString& text, QWidget* const parent);
     ~MetadataCheckBox();
 
     void setValid(bool v);
@@ -56,4 +56,4 @@ private:
 
 } // namespace Digikam
 
-#endif // METADATA_CHECKBOX_H
+#endif // DIGIKAM_METADATA_CHECKBOX_H

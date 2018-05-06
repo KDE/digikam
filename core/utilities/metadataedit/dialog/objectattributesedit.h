@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef OBJECT_ATTRIBUTES_EDIT_H
-#define OBJECT_ATTRIBUTES_EDIT_H
+#ifndef DIGIKAM_OBJECT_ATTRIBUTES_EDIT_H
+#define DIGIKAM_OBJECT_ATTRIBUTES_EDIT_H
 
 // Qt includes
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // OBJECT_ATTRIBUTES_EDIT_H
+#endif // DIGIKAM_OBJECT_ATTRIBUTES_EDIT_H

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef MULTI_VALUES_EDIT_H
-#define MULTI_VALUES_EDIT_H
+#ifndef DIGIKAM_MULTI_VALUES_EDIT_H
+#define DIGIKAM_MULTI_VALUES_EDIT_H
 
 // Qt includes
 
@@ -36,7 +36,7 @@ class MultiValuesEdit : public QWidget
 
 public:
 
-    MultiValuesEdit(QWidget* const parent, const QString& title, const QString& desc);
+    explicit MultiValuesEdit(QWidget* const parent, const QString& title, const QString& desc);
     ~MultiValuesEdit();
 
     void setValid(bool v);
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MULTI_VALUES_EDIT_H
+#endif // DIGIKAM_MULTI_VALUES_EDIT_H

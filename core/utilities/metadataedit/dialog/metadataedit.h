@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef METADATAEDIT_H
-#define METADATAEDIT_H
+#ifndef DIGIKAM_META_DATA_EDIT_H
+#define DIGIKAM_META_DATA_EDIT_H
 
 // Qt includes
 
@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT MetadataEditDialog : public QDialog
 
 public:
 
-    MetadataEditDialog(QWidget* const parent, const QList<QUrl>& urls);
+    explicit MetadataEditDialog(QWidget* const parent, const QList<QUrl>& urls);
     ~MetadataEditDialog();
 
     QList<QUrl>::iterator currentItem() const;
@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif // METADATAEDIT_H
+#endif // DIGIKAM_META_DATA_EDIT_H

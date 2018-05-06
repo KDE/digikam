@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef XMP_CATEGORIES_H
-#define XMP_CATEGORIES_H
+#ifndef DIGIKAM_XMP_CATEGORIES_H
+#define DIGIKAM_XMP_CATEGORIES_H
 
 // Qt includes
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace Digikam
 
-#endif // XMP_CATEGORIES_H
+#endif // DIGIKAM_XMP_CATEGORIES_H

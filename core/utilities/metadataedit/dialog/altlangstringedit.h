@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ALTLANGSTRINGEDIT_H
-#define ALTLANGSTRINGEDIT_H
+#ifndef DIGIKAM_ALT_LANG_STRING_EDIT_H
+#define DIGIKAM_ALT_LANG_STRING_EDIT_H
 
 // Qt includes
 
@@ -41,7 +41,7 @@ class AltLangStringsEdit : public QWidget
 
 public:
 
-    AltLangStringsEdit(QWidget* const parent, const QString& title, const QString& desc);
+    explicit AltLangStringsEdit(QWidget* const parent, const QString& title, const QString& desc);
     ~AltLangStringsEdit();
 
     void setValues(const DMetadata::AltLangMap& values);
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ALTLANGSTRINGEDIT_H
+#endif // DIGIKAM_ALT_LANG_STRING_EDIT_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ALLXMPEDITWIDGET_H
-#define ALLXMPEDITWIDGET_H
+#ifndef DIGIKAM_XMP_EDIT_WIDGET_H
+#define DIGIKAM_XMP_EDIT_WIDGET_H
 
 // Local includes
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ALLXMPEDITWIDGET_H */
+#endif // DIGIKAM_XMP_EDIT_WIDGET_H

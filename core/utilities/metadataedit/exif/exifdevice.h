@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef EXIF_DEVICE_H
-#define EXIF_DEVICE_H
+#ifndef DIGIKAM_EXIF_DEVICE_H
+#define DIGIKAM_EXIF_DEVICE_H
 
 // Qt includes
 
@@ -55,4 +55,4 @@ private:
 
 } // namespace Digikam
 
-#endif // EXIF_DEVICE_H
+#endif // DIGIKAM_EXIF_DEVICE_H

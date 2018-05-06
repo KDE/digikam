@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IPTCEDITWIDGET_H
-#define IPTCEDITWIDGET_H
+#ifndef DIGIKAM_IPTC_EDIT_WIDGET_H
+#define DIGIKAM_IPTC_EDIT_WIDGET_H
 
 // Local includes
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IPTCEDITWIDGET_H */
+#endif // DIGIKAM_IPTC_EDIT_WIDGET_H
