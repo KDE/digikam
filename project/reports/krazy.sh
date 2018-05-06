@@ -16,5 +16,4 @@ krazy2all --export xml \
           --priority all \
           --verbose \
           --topdir ../../ \
-          --check defines \
           --outfile report.krazy
