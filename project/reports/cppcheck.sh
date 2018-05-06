@@ -69,7 +69,7 @@ git push
 # update master branch
 
 git checkout master
-git merge dev -m"update CppCheck static analyzer report $TITLE. See https://www.digikam.org/reports/ccppcheck for details."
+git merge dev -m"update CppCheck static analyzer report $TITLE. See https://www.digikam.org/reports/cppcheck for details."
 git push
 
 cd $ORIG_DIR
