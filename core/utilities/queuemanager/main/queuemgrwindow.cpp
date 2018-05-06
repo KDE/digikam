@@ -670,8 +670,8 @@ void QueueMgrWindow::slotRun()
         msg = i18n("There is no item to process in the current queue (%1).",
                    d->queuePool->currentTitle());
     }
-    else if (queue->settings().renamingRule == QueueSettings::CUSTOMIZE
-             && queue->settings().renamingParser.isEmpty())
+    else if (queue->settings().renamingRule == QueueSettings::CUSTOMIZE &&
+             queue->settings().renamingParser.isEmpty())
     {
         msg = i18n("Custom renaming rule is invalid for current queue (%1). "
                    "Please fix it.", d->queuePool->currentTitle());
@@ -692,7 +692,7 @@ void QueueMgrWindow::slotRun()
     // Take a look if general settings are changed, as we cannot do it when BQM is busy.
     applySettings();
 
-    d->statusProgressBar->setProgressTotalSteps(queue->pendingTasksCount());
+    d->statusProgressBar->setProgressTotalSteps(queue ? queue->pendingTasksCount() : 0);
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
     d->toolsView->showTab(ToolsView::HISTORY);
