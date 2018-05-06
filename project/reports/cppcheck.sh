@@ -13,6 +13,7 @@
 
 checksCPUCores
 
+ORIG_WD="`pwd`"
 REPORT_DIR="${ORIG_WD}/report.cppcheck"
 WEBSITE_DIR="${ORIG_WD}/site"
 
