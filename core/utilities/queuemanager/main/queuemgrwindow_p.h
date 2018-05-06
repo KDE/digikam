@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef QUEUEMGRWINDOWPRIVATE_H
-#define QUEUEMGRWINDOWPRIVATE_H
+#ifndef DIGIKAM_QUEUE_MGR_WINDOW_PRIVATE_H
+#define DIGIKAM_QUEUE_MGR_WINDOW_PRIVATE_H
 
 // Qt includes
 
@@ -52,10 +52,10 @@ class QueueMgrWindow::Private
 
 public:
 
-    Private() :
-        TOP_SPLITTER_CONFIG_KEY(QLatin1String("BqmTopSplitter")),
-        BOTTOM_SPLITTER_CONFIG_KEY(QLatin1String("BqmBottomSplitter")),
-        VERTICAL_SPLITTER_CONFIG_KEY(QLatin1String("BqmVerticalSplitter"))
+    explicit Private()
+        : TOP_SPLITTER_CONFIG_KEY(QLatin1String("BqmTopSplitter")),
+          BOTTOM_SPLITTER_CONFIG_KEY(QLatin1String("BqmBottomSplitter")),
+          VERTICAL_SPLITTER_CONFIG_KEY(QLatin1String("BqmVerticalSplitter"))
     {
         busy                   = false;
         processingAllQueues    = false;
@@ -138,4 +138,4 @@ public:
 
 } // namespace Digikam
 
-#endif /* QUEUEMGRWINDOWPRIVATE_H */
+#endif // QUEUEMGRWINDOWPRIVATE_H
