@@ -9,27 +9,9 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-# --- Functions definitions --------------------------------
+. ./common.sh
 
-# checks if branch has something pending
-function parseGitDirty()
-{
-    git diff --quiet --ignore-submodules HEAD 2>/dev/null; [ $? -eq 1 ] && echo "M"
-}
-
-# gets the current git branch
-function parseGitBranch()
-{
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/"
-}
-
-# get last commit hash prepended with @ (i.e. @8a323d0)
-function parseGitHash()
-{
-    git rev-parse --short HEAD 2> /dev/null | sed "s/\(.*\)/-rev-\1/"
-}
-
-# ----------------------------------------------------------
+checksCPUCores
 
 ORIG_WD="`pwd`"
 REPORT_DIR="${ORIG_WD}/report.scan"
@@ -38,9 +20,6 @@ WEBSITE_DIR="${ORIG_WD}/site"
 # Get active git branches to create report description string
 TITLE="digiKam-$(parseGitBranch)$(parseGitHash)"
 echo "Clang Static Analyzer task name: $TITLE"
-
-CPU_CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || sysctl -n hw.ncpu)
-echo "CPU cores detected to compile : $CPU_CORES."
 
 # Clean up and prepare to scan.
 
@@ -104,22 +83,22 @@ cd $WEBSITE_DIR
 
 git checkout -b dev remotes/origin/dev
 
-rm -r $WEBSITE_DIR/static/report/*
-cp -r $SCANBUILD_DIR/* $WEBSITE_DIR/static/report/
+rm -r $WEBSITE_DIR/static/reports/clang/*
+cp -r $SCANBUILD_DIR/* $WEBSITE_DIR/static/reports/clang
 
 # Add new report contents in dev branch
 
-git add $WEBSITE_DIR/static/report/*
-git commit . -m"update Clang static analyzer report $TITLE. See https://www.digikam.org/report/ for details."
+git add $WEBSITE_DIR/static/reports/clang/*
+git commit . -m"update Clang static analyzer report $TITLE. See https://www.digikam.org/reports/clang for details."
 git push
 
 # update master branch
 
 git checkout master
-git merge dev -m"update Clang static analyzer report $TITLE. See https://www.digikam.org/report/ for details."
+git merge dev -m"update Clang static analyzer report $TITLE. See https://www.digikam.org/reports/clang for details."
 git push
 
 cd $ORIG_DIR
 
-echo "Clang Report $TITLE published to https://www.digikam.org/report/"
+echo "Clang Report $TITLE published to https://www.digikam.org/reports/clang"
 echo "Web site will be synchronized in few minutes..."
