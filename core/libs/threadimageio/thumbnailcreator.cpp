@@ -596,7 +596,10 @@ QImage ThumbnailCreator::loadWithDImg(const QString& path, IccProfile* const pro
     DImg img;
     img.setAttribute(QLatin1String("scaledLoadingSize"), d->storageSize());
     img.load(path, false, profile ? true : false, false, false, d->observer, d->rawSettings);
-    *profile = img.getIccProfile();
+
+    if (profile)
+        *profile = img.getIccProfile();
+
     return img.copyQImage();
 }
 
@@ -626,7 +629,9 @@ QImage ThumbnailCreator::loadImageDetail(const ThumbnailInfo& info, const DMetad
     //TODO: scaledLoading if detailRect is large
     //TODO: use code from PreviewTask, including cache storage
     img.load(path, false, profile ? true : false, false, false, d->observer, d->fastRawSettings);
-    *profile = img.getIccProfile();
+
+    if (profile)
+        *profile = img.getIccProfile();
 
     // We must rotate before clipping because the rect refers to the oriented image.
     // I do not know currently how to back-rotate the rect for clipping before rotation.
