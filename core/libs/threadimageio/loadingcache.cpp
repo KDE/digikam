@@ -28,7 +28,7 @@
 #include <QCoreApplication>
 #include <QEvent>
 #include <QCache>
-#include <QHash>
+#include <QMap>
 
 // Local includes
 
@@ -63,9 +63,9 @@ public:
     QCache<QString, DImg>           imageCache;
     QCache<QString, QImage>         thumbnailImageCache;
     QCache<QString, QPixmap>        thumbnailPixmapCache;
-    QMultiHash<QString, QString>    imageFilePathHash;
-    QMultiHash<QString, QString>    thumbnailFilePathHash;
-    QHash<QString, LoadingProcess*> loadingDict;
+    QMultiMap<QString, QString>     imageFilePathHash;
+    QMultiMap<QString, QString>     thumbnailFilePathHash;
+    QMap<QString, LoadingProcess*>  loadingDict;
     QMutex                          mutex;
     QWaitCondition                  condVar;
     LoadingCacheFileWatch*          watch;
@@ -107,7 +107,7 @@ void LoadingCache::Private::cleanUpImageFilePathHash()
 {
     // Remove all entries from hash whose value is no longer a key in the cache
     QSet<QString> keys = imageCache.keys().toSet();
-    QMultiHash<QString, QString>::iterator it;
+    QMultiMap<QString, QString>::iterator it;
 
     for (it = imageFilePathHash.begin(); it != imageFilePathHash.end(); )
     {
@@ -127,7 +127,7 @@ void LoadingCache::Private::cleanUpThumbnailFilePathHash()
     QSet<QString> keys;
     keys += thumbnailImageCache.keys().toSet();
     keys += thumbnailPixmapCache.keys().toSet();
-    QMultiHash<QString, QString>::iterator it;
+    QMultiMap<QString, QString>::iterator it;
 
     for (it = thumbnailFilePathHash.begin(); it != thumbnailFilePathHash.end(); )
     {
@@ -237,7 +237,7 @@ void LoadingCache::removeLoadingProcess(LoadingProcess* process)
 
 void LoadingCache::notifyNewLoadingProcess(LoadingProcess* process, const LoadingDescription& description)
 {
-    for (QHash<QString, LoadingProcess*>::const_iterator it = d->loadingDict.constBegin();
+    for (QMap<QString, LoadingProcess*>::const_iterator it = d->loadingDict.constBegin();
          it != d->loadingDict.constEnd(); ++it)
     {
         it.value()->notifyNewLoadingProcess(process, description);
