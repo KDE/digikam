@@ -1,0 +1,392 @@
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+#title {
+	background: #FFF0D2;
+	width: 100%;
+	margin-bottom: 0px;
+	padding: 10px 0px;
+	border-bottom: 2px solid #FFE1AD;
+}
+
+#title .logo {
+	float: left;
+	background: url(img/logo.png);
+	background-repeat: no-repeat;
+	background-position: 16px 0px;
+	width: 64px;
+	height: 64px;
+}
+
+#title .header {
+	margin: 0;
+	padding: 0;
+	padding-left: 130px;
+}
+
+#title .header a {
+	font-weight: normal;
+	text-decoration: none;
+}
+#title .header a:hover {
+	text-decoration: none;
+}
+
+#title .header h1 {
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	font-family: Georgia, 'Times New Roman', serif;
+	font-size: xx-large;
+	font-weight: normal;
+}
+
+#title .header p {
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	font-family: Georgia, 'Times New Roman', serif;
+	font-size: medium;
+	font-weight: bold;
+}
+
+#content {
+	width: 70%;
+	margin: 0;
+	margin-left: 100px;
+	padding: 0;
+	padding-left: 20px;
+	border: none;
+	border-left: 6px solid #FFE1AD;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+}
+
+#content p {
+	margin-top: 1ex;
+}
+
+.right {
+	float: right;
+	clear: both;
+	margin: 1ex 1em;
+}
+
+#content ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#content ul li {
+	background-image: url(img/slick.png);
+	background-repeat: no-repeat;
+	margin-top: 1ex;
+	padding-left: 16px;
+}
+
+#content ul li li {
+	background-image: none;
+	padding-left: 0px;
+}
+
+#content ul.compact li {
+	margin-top: 0px;
+}
+
+#content h1, #content h2 {
+	width: 100%;
+	margin-top: 2ex;
+	padding-top: 0.3ex;
+	border-top: 2px solid  #FFE1AD;
+	text-align: left;
+	font-family: Georgia, 'Times New Roman', serif;
+	font-size: x-large;
+	font-weight: normal;
+}
+
+#content h2 {
+	width: auto;
+	margin-left: 35px;
+	padding-left: 0.5em;
+	border-left: 2px solid #FFE1AD;
+	font-size: large;
+}
+
+#footer {
+	background: #FFF0D2;
+	width: 100%;
+	margin-bottom: 0px;
+	padding: 10px 0px;
+	border-top: 2px solid #FFE1AD;
+	text-align: right;
+	color: #777;
+	font-size: small;
+}
+
+#footer p {
+	margin: 0;
+	padding-right: 10px;
+}
+
+
+#pointers {
+	float: right;
+	clear: both;
+	margin: 1ex 1em;
+	text-align: center;
+}
+
+#pointers .items {
+	width: 100%;
+	border: 3px solid #FFE1AD;
+}
+
+#pointers a {
+	color: inherit;
+}
+
+#pointers .items div {
+	width: 100%;
+	padding: 3px 0px;
+	font-size: x-small;
+	font-weight: bold;
+	color: white;
+}
+
+div.abstract {
+	background-image: url(img/frame.png);
+	background-position: bottom left;
+	background-repeat: no-repeat;
+	min-height: 40px;
+	margin-left: 2em;
+	margin-right: 2em;
+	margin-bottom: 20px;
+}
+
+.abstract p, p.abstract {
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-bottom: 0px;
+	font-size: x-small;
+	font-shape: italic;
+}
+
+.abstract p em {
+	font-weight: bold;
+}
+
+.error {
+	color: red;
+}
+
+.success {
+	color: green;
+}
+
+.trow {
+	padding-left: 0.2cm;
+	border-bottom:1px dashed #C9AF83;
+}
+
+
+div.figure, div.note, div.dox , div.warn, div.build {
+	background-color: #FFF0D2;
+	background-position: 8px 8px;
+	background-repeat: no-repeat;
+	min-height: 40px;
+	margin: 1ex 35px 2ex 35px;
+	padding: 6px 0.5em 6px 55px;
+	border: 2px solid #FFE1AD;
+	font-size: x-small;
+}
+
+div.note {
+	background-image: url(img/info.png);
+}
+div.dox {
+	background-image: url(img/example.png);
+}
+div.warn {
+	background-image: url(img/warning.png);
+}
+div.build {
+	background-image: url(img/build.png); margin-top: 2ex;
+}
+
+li div.figure, li div.note, li div.dox ,li  div.warn, li div.build {
+	margin-left: 0px;
+}
+
+div.dox div.credit {
+	float: right;
+	font-size: xx-small;
+	font-style: italic;
+}
+
+div.figure {
+	margin-right: 0px;
+	padding-left: 0.5em;
+}
+
+div.clear {
+	clear: both;
+	height: 1px;
+}
+
+.note img {
+	float: left;
+	margin: 0px 0px 0px -60px;
+}
+
+a {
+	text-decoration: underline;
+	color: inherit;
+	font-weight: bold;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+th {
+	background: #FFF0D2;
+}
+
+
+
+.underline {
+	border-bottom: 2px solid #FFE1AD;
+}
+.leftline {
+	border-left: 2px solid #FFE1AD;
+	padding-left: 1em;
+}
+.rightline {
+	border-right: 2px solid #FFE1AD;
+	padding-right: 1em;
+}
+.overline {
+	border-top: 2px solid #FFE1AD;
+}
+
+/* Stuff which is special to the DocBook Sanitizer */
+.lineno {
+	color: blue;
+	font-family: sans-serif;
+}
+
+.markup {
+	font-family: monospace;
+	background: #F8F4F8;
+	color: black;
+}
+
+.dbexcerpt {
+	font-family: monospace;
+	background: #F8F4F8;
+	color: black;
+	border-style: dashed;
+	border-width: 0px 1px;
+	padding-left: 8px;
+}
+
+p.explanation:before {
+	color: black;
+	content: "Why should I care? ";
+	font-weight: bolder;
+}
+
+p.explanation {
+	margin-top: 36px;
+	margin-left: 32px;
+	padding: 18px;
+	font-size: small;
+	border-width: 1px;
+	border-color: #000030;
+	border-style: dashed;
+	background-color: #FAFAD2;
+	text-align: justify;
+}
+
+.toolmsg {
+	border-style: dotted;
+	border-width: 1px 0px;
+	font-family: sans-serif;
+	color: #565330;
+	background: #FFF68F;
+	display: block;
+	padding-left: 8px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.toolresult {
+	margin-left: 1cm;
+}
+
+p.breadcrumbs, p.crosslinks {
+	font-size: x-small;
+	font-style: sans-serif;
+}
+
+/* kdetestscripts styles */
+
+div.title {
+	background: #FFF0D2;
+	border: 1px solid black;
+	margin: 1.5em 0 0 0em;
+	padding: .25em;
+	z-index:-10;
+	font-weight: bold;
+}
+div.todo {
+	padding: 1em;
+	background: #d5e6fd;
+	border: 1px solid black;
+	margin-top: 2px;
+}
+
+div.test {
+	margin: 1ex 35px 2ex 35px;
+	padding: 6px 0.5em 6px 55px;
+	border: 2px solid #FFE1AD;
+}
+
+div.list {
+	clear: both;
+	border: 1px solid black;
+	margin: -1px 0 .5em 0;
+	padding: 0.5ex 1em;
+}
+div.resolution {
+	margin: -.75em -.75em .3em -.75em;
+	padding: .25em;
+	background: red;
+	border: 1px solid black;
+}
+div.list ul li{
+	border: 1px solid green;
+	border-width: 0 0 1px 0;
+	padding-top: .5em;
+}
+div.list ul {
+	padding: .25em;
+	list-style-type: none;
+	margin: .5em;
+}
+
+.boxed {
+	border: 1px solid #FFE1AD;
+}
+
+th.numresult, td.numresult {
+	width: 8em;
+	min-width: 8em;
+	text-align: right;
+}
+

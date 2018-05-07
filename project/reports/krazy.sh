@@ -46,7 +46,11 @@ java -jar /usr/share/java/saxon/saxon.jar \
      module=graphics \
      submodule=digikam \
      component=extragear
+
+cp ./style.css $REPORT_DIR/
+
 exit
+
 # update www.digikam.org report section.
 
 git clone git@git.kde.org:websites/digikam-org $WEBSITE_DIR
