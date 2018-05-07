@@ -24,6 +24,8 @@ echo "Krazy Static Analyzer task name: $TITLE"
 rm -fr $REPORT_DIR
 rm -fr $WEBSITE_DIR
 
+# Compute static analyzer output as XML
+
 krazy2all --export xml \
           --title $TITLE \
           --no-brief \
@@ -31,12 +33,19 @@ krazy2all --export xml \
           --priority all \
           --verbose \
           --topdir ../../ \
-          --check camelcase,multiclasses \
+          --check multiclasses \
           --outfile ./report.krazy.xml
 
-# TODO : clean up xml file
+# Clean up XML file
+
+sed -i "s/repo-rev value=\"unknown\"/repo-rev value=\"$(parseGitBranch)$(parseGitHash)\"/g" ./report.krazy.xml
+
+DROP_PATH=$(echo $ORIG_WD | rev | cut -d'/' -f3- | rev | sed 's_/_\\/_g')
+sed -i "s/$DROP_PATH//g" ./report.krazy.xml
 
 mkdir -p $REPORT_DIR
+
+# Process XML file to generate HTML
 
 java -jar /usr/share/java/saxon/saxon.jar \
      -o:$REPORT_DIR/index.html \
