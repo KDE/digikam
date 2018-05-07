@@ -59,7 +59,7 @@ public:
 
 public:
 
-    HistoryTreeItem();
+    explicit HistoryTreeItem();
     virtual ~HistoryTreeItem();
 
     virtual HistoryTreeItemType type() const
@@ -96,8 +96,15 @@ class VertexItem : public HistoryTreeItem
 {
 public:
 
-    VertexItem() {}
-    explicit VertexItem(const HistoryGraph::Vertex& v) : vertex(v), category(HistoryImageId::InvalidType) {}
+    VertexItem()
+    {
+    }
+
+    explicit VertexItem(const HistoryGraph::Vertex& v)
+        : vertex(v),
+          category(HistoryImageId::InvalidType) 
+    {
+    }
 
     HistoryTreeItemType type() const
     {
@@ -117,8 +124,14 @@ class FilterActionItem : public HistoryTreeItem
 {
 public:
 
-    FilterActionItem() {}
-    explicit FilterActionItem(const FilterAction& action) : action(action) {}
+    FilterActionItem()
+    {
+    }
+    
+    explicit FilterActionItem(const FilterAction& action)
+        : action(action)
+    {
+    }
 
     HistoryTreeItemType type() const
     {
@@ -136,7 +149,10 @@ class HeaderItem : public HistoryTreeItem
 {
 public:
 
-    explicit HeaderItem(const QString& title) : title(title) {}
+    explicit HeaderItem(const QString& title)
+        : title(title)
+    {
+    }
 
     HistoryTreeItemType type() const
     {
@@ -154,7 +170,10 @@ class CategoryItem : public HistoryTreeItem
 {
 public:
 
-    explicit CategoryItem(const QString& title) : title(title) {}
+    explicit CategoryItem(const QString& title)
+        : title(title)
+    {
+    }
 
     HistoryTreeItemType type() const
     {
@@ -180,9 +199,9 @@ public:
 
 // ------------------------------------------------------------------------
 
-#define if_isItem(class, name, pointer) \
+#define if_isItem(class, name, pointer)                                                             \
     if (pointer && static_cast<HistoryTreeItem*>(pointer)->type() == HistoryTreeItem:: class##Type) \
-        for (class *name = static_cast<class*>(pointer); name; name=0)
+        for (class* name = static_cast<class*>(pointer) ; name ; name=0)
 
 // ------------------------------------------------------------------------
 
@@ -214,7 +233,8 @@ class LessThanOnVertexImageInfo
 public:
 
     LessThanOnVertexImageInfo(const HistoryGraph& graph, ImageInfoLessThan imageInfoLessThan)
-        : graph(graph), imageInfoLessThan(imageInfoLessThan)
+        : graph(graph),
+          imageInfoLessThan(imageInfoLessThan)
     {
     }
 
@@ -297,7 +317,7 @@ public:
 // ------------------------------------------------------------------------
 
 VertexItem* ImageHistoryGraphModel::Private::createVertexItem(const HistoryGraph::Vertex& v,
-                                                                                 const ImageInfo& givenInfo)
+                                                              const ImageInfo& givenInfo)
 {
     const HistoryVertexProperties& props = graph().properties(v);
     ImageInfo info                       = givenInfo.isNull() ? props.firstImageInfo() : givenInfo;
@@ -429,16 +449,17 @@ void ImageHistoryGraphModel::Private::buildCombinedTree(const HistoryGraph::Vert
     QList<HistoryGraph::Vertex> currentVersions = categories.keys(HistoryImageId::Current);
     QList<HistoryGraph::Vertex> leavesFromRef   = graph().leavesFrom(ref);
 
-    bool onePath = leavesFromRef.size() <= 1;
+    bool onePath = (leavesFromRef.size() <= 1);
 
-    for (int i=0; i<path.size(); ++i)
+    for (int i = 0 ; i < path.size() ; ++i)
     {
-        const HistoryGraph::Vertex& v = path.at(i);
-        HistoryGraph::Vertex previous = i ? path.at(i-1) : HistoryGraph::Vertex();
-//        HistoryGraph::Vertex next     = i < path.size() - 1 ? path[i+1] : HistoryGraph::Vertex();
-        //qCDebug(DIGIKAM_DATABASE_LOG) << "Vertex on path" << path[i];
+        const HistoryGraph::Vertex& v       = path.at(i);
+        HistoryGraph::Vertex previous       = i ? path.at(i-1) : HistoryGraph::Vertex();
+//        HistoryGraph::Vertex next           = i < path.size() - 1 ? path[i+1] : HistoryGraph::Vertex();
+//        qCDebug(DIGIKAM_DATABASE_LOG) << "Vertex on path" << path[i];
+
         // create new item
-        item = createVertexItem(v);
+        item                                = createVertexItem(v);
 
         QList<HistoryGraph::Vertex> vertices;
 
@@ -514,10 +535,11 @@ void ImageHistoryGraphModel::Private::buildCombinedTree(const HistoryGraph::Vert
     }
 }
 
-void ImageHistoryGraphModel::Private::
-     addCombinedItemCategory(HistoryTreeItem* parentItem, QList<HistoryGraph::Vertex>& vertices,
-                             const QString& title, const HistoryGraph::Vertex& showActionsFrom,
-                             QList<HistoryGraph::Vertex>& added)
+void ImageHistoryGraphModel::Private::addCombinedItemCategory(HistoryTreeItem* parentItem,
+                                                              QList<HistoryGraph::Vertex>& vertices,
+                                                              const QString& title,
+                                                              const HistoryGraph::Vertex& showActionsFrom,
+                                                              QList<HistoryGraph::Vertex>& added)
 {
     parentItem->addItem(new CategoryItem(title));
 
@@ -540,7 +562,7 @@ void ImageHistoryGraphModel::Private::
         QList<HistoryGraph::Vertex> shortestPath = graph().shortestPath(showActionsFrom, v);
 
         // add all filter actions showActionsFrom -> v above item
-        for (int i=1; i<shortestPath.size(); ++i)
+        for (int i = 1 ; i < shortestPath.size() ; ++i)
         {
             HistoryEdgeProperties props = graph().properties(shortestPath.at(i), shortestPath.at(i-1));
 
@@ -566,8 +588,10 @@ void ImageHistoryGraphModel::Private::
     }
 }
 
-void ImageHistoryGraphModel::Private::
-     addItemSubgroup(VertexItem* parent, const QList<HistoryGraph::Vertex>& vertices, const QString& title, bool flat)
+void ImageHistoryGraphModel::Private::addItemSubgroup(VertexItem* parent,
+                                                      const QList<HistoryGraph::Vertex>& vertices,
+                                                      const QString& title,
+                                                      bool flat)
 {
     if (vertices.isEmpty())
         return;
@@ -582,9 +606,10 @@ void ImageHistoryGraphModel::Private::
     }
 }
 
-void ImageHistoryGraphModel::Private::
-     addIdenticalItems(HistoryTreeItem* parentItem, const HistoryGraph::Vertex& vertex,
-                       const QList<ImageInfo>& infos, const QString& title)
+void ImageHistoryGraphModel::Private::addIdenticalItems(HistoryTreeItem* parentItem,
+                                                        const HistoryGraph::Vertex& vertex,
+                                                        const QList<ImageInfo>& infos,
+                                                        const QString& title)
 {
     parentItem->addItem(new CategoryItem(title));
 
@@ -592,7 +617,7 @@ void ImageHistoryGraphModel::Private::
     VertexItem* item = 0;
     bool isFirst     = true;
 
-    for (int i=1; i<infos.size(); ++i)
+    for (int i = 1 ; i < infos.size() ; ++i)
     {
         if (isFirst)
         {
@@ -611,7 +636,8 @@ void ImageHistoryGraphModel::Private::
 // ------------------------------------------------------------------------
 
 ImageHistoryGraphModel::ImageHistoryGraphModel(QObject* const parent)
-    : QAbstractItemModel(parent), d(new Private)
+    : QAbstractItemModel(parent),
+      d(new Private)
 {
     d->rootItem = new HistoryTreeItem;
 }
@@ -670,14 +696,14 @@ bool ImageHistoryGraphModel::isImage(const QModelIndex& index) const
 {
     HistoryTreeItem* const item = d->item(index);
 
-    return item && item->isType(HistoryTreeItem::VertexItemType);
+    return (item && item->isType(HistoryTreeItem::VertexItemType));
 }
 
 bool ImageHistoryGraphModel::isFilterAction(const QModelIndex& index) const
 {
     HistoryTreeItem* const item = d->item(index);
 
-    return item && item->isType(HistoryTreeItem::FilterActionItemType);
+    return (item && item->isType(HistoryTreeItem::FilterActionItemType));
 }
 
 FilterAction ImageHistoryGraphModel::filterAction(const QModelIndex& index) const
