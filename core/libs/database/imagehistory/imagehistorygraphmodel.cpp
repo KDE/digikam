@@ -942,15 +942,18 @@ Qt::ItemFlags ImageHistoryGraphModel::flags(const QModelIndex& index) const
         return d->imageModel.flags(vertexItem->index);
     }
 
-    switch (item->type())
+    if (item)
     {
-        case HistoryTreeItem::FilterActionItemType:
-            return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-        case HistoryTreeItem::HeaderItemType:
-        case HistoryTreeItem::CategoryItemType:
-        case HistoryTreeItem::SeparatorItemType:
-        default:
-            return Qt::ItemIsEnabled;
+        switch (item->type())
+        {
+            case HistoryTreeItem::FilterActionItemType:
+                return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+            case HistoryTreeItem::HeaderItemType:
+            case HistoryTreeItem::CategoryItemType:
+            case HistoryTreeItem::SeparatorItemType:
+            default:
+                return Qt::ItemIsEnabled;
+        }
     }
 }
 
