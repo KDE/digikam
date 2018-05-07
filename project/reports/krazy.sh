@@ -23,7 +23,7 @@ echo "Krazy Static Analyzer task name: $TITLE"
 
 rm -fr $REPORT_DIR
 rm -fr $WEBSITE_DIR
-if [ ] ; then
+
 krazy2all --export xml \
           --title $TITLE \
           --no-brief \
@@ -31,9 +31,9 @@ krazy2all --export xml \
           --priority all \
           --verbose \
           --topdir ../../ \
-          --check multiclasses \
+          --check camelcase,multiclasses \
           --outfile ./report.krazy.xml
-fi
+
 # TODO : clean up xml file
 
 mkdir -p $REPORT_DIR
@@ -42,14 +42,12 @@ java -jar /usr/share/java/saxon/saxon.jar \
      -o:$REPORT_DIR/index.html \
      -im:krazy2ebn \
      ./report.krazy.xml \
-     ./krazy-main.xsl \
+     ./krazy/krazy-main.xsl \
      module=graphics \
      submodule=digikam \
      component=extragear
 
-cp ./style.css $REPORT_DIR/
-
-exit
+cp ./krazy/style.css $REPORT_DIR/
 
 # update www.digikam.org report section.
 
