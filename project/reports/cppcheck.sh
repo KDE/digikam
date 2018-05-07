@@ -58,7 +58,7 @@ cd $WEBSITE_DIR
 git checkout -b dev remotes/origin/dev
 
 rm -r $WEBSITE_DIR/static/reports/cppcheck/*
-cp -r $REPORT_DIR/* $WEBSITE_DIR/static/reports/cppcheck
+cp -r $REPORT_DIR/* $WEBSITE_DIR/static/reports/cppcheck/
 
 # Add new report contents in dev branch
 

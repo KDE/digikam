@@ -4,8 +4,8 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   exclude-result-prefixes="xsl xsd">
   
-  <!-- Mode: digikam -->
-  <xsl:import href="digikam.xsl" />
+  <!-- Mode: krazy2ebn -->
+  <xsl:import href="krazy2ebn.xsl" />
   
   <xsl:template match="/krazy">
     <error>unsupported mode!</error>

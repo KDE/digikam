@@ -154,13 +154,13 @@
     </li>
   </xsl:template>
 
-  <xsl:template match="file-types" mode="digikam" >
+  <xsl:template match="file-types" mode="krazy2ebn" >
     <xsl:for-each select="file-type">
       <xsl:call-template name="file-type"/>
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="global" mode="digikam" >
+  <xsl:template match="global" mode="krazy2ebn" >
     <h1>Krazy2 Analysis of
     <xsl:value-of select="$module" />/<xsl:value-of select="$submodule" />
     (Revision = <xsl:value-of select="ebn:repoRev()" />)
@@ -172,7 +172,7 @@
     ...as of <xsl:value-of select="ebn:dateOfRun()" /></p>
   </xsl:template>
 
-  <xsl:template match="/tool-result" mode="digikam">
+  <xsl:template match="/tool-result" mode="krazy2ebn">
     <html xml:lang="en" lang="en">
       <head>
         <title>krazy2 Analysis</title>
@@ -180,11 +180,22 @@
           href="http://ebn.kde.org/style.css" />
       </head>
       <body>
+        <div id="title">
+        </div>
         <div id="content">
           <div class="inside">
-            <xsl:apply-templates select="global" mode="digikam" />
+            <p style="font-size: x-small;font-style: sans-serif;">
+              <xsl:variable name="compurl" select="concat('/krazy/index.php?component=',$component)" />
+              <a href="/index.php">Home</a>&nbsp;&gt;&nbsp;
+              <a href="/krazy/index.php">Krazy Code Checker</a>&nbsp;&gt;&nbsp;
+              <a href="{$compurl}"><xsl:value-of select="$component" /></a>&nbsp;&gt;&nbsp;
+              <a href="{concat($compurl, '&amp;module=', $module)}">
+              <xsl:value-of select="$module" /></a>&nbsp;&gt;&nbsp;
+              <b><xsl:value-of select="$submodule" /></b>
+            </p>
+            <xsl:apply-templates select="global" mode="krazy2ebn" />
             <ul>
-              <xsl:apply-templates select="file-types" mode="digikam" />
+              <xsl:apply-templates select="file-types" mode="krazy2ebn" />
             </ul>
           </div>
         </div>

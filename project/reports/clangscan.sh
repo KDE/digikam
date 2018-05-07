@@ -84,7 +84,7 @@ cd $WEBSITE_DIR
 git checkout -b dev remotes/origin/dev
 
 rm -r $WEBSITE_DIR/static/reports/clang/*
-cp -r $SCANBUILD_DIR/* $WEBSITE_DIR/static/reports/clang
+cp -r $SCANBUILD_DIR/* $WEBSITE_DIR/static/reports/clang/
 
 # Add new report contents in dev branch
 

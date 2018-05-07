@@ -23,7 +23,7 @@ echo "Krazy Static Analyzer task name: $TITLE"
 
 rm -fr $REPORT_DIR
 rm -fr $WEBSITE_DIR
-
+if [ ] ; then
 krazy2all --export xml \
           --title $TITLE \
           --no-brief \
@@ -31,22 +31,22 @@ krazy2all --export xml \
           --priority all \
           --verbose \
           --topdir ../../ \
-          --check multiclasses,tipsandthis \
+          --check multiclasses \
           --outfile ./report.krazy.xml
-
+fi
 # TODO : clean up xml file
 
 mkdir -p $REPORT_DIR
 
 java -jar /usr/share/java/saxon/saxon.jar \
      -o:$REPORT_DIR/index.html \
-     -im:digikam \
+     -im:krazy2ebn \
      ./report.krazy.xml \
      ./krazy-main.xsl \
      module=graphics \
      submodule=digikam \
      component=extragear
-
+exit
 # update www.digikam.org report section.
 
 git clone git@git.kde.org:websites/digikam-org $WEBSITE_DIR
@@ -56,7 +56,7 @@ cd $WEBSITE_DIR
 git checkout -b dev remotes/origin/dev
 
 rm -r $WEBSITE_DIR/static/reports/krazy/*
-cp -r $REPORT_DIR/* $WEBSITE_DIR/static/reports/krazy
+cp -r $REPORT_DIR/* $WEBSITE_DIR/static/reports/krazy/
 
 # Add new report contents in dev branch
 
