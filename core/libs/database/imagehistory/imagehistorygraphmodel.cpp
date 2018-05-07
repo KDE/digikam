@@ -955,6 +955,8 @@ Qt::ItemFlags ImageHistoryGraphModel::flags(const QModelIndex& index) const
                 return Qt::ItemIsEnabled;
         }
     }
+
+    return Qt::ItemIsEnabled;
 }
 
 QModelIndex ImageHistoryGraphModel::index(int row, int column , const QModelIndex& parent) const
