@@ -5484,17 +5484,19 @@ void x3f_clear(void *p)
   x3f_delete((x3f_t*)p);
 }
 
-static char *utf2char(utf16_t *str, char *buffer)
+void utf2char(utf16_t *str, char *buffer, unsigned bufsz)
 {
+ if(bufsz<1) return;
+ buffer[bufsz-1] = 0;
   char *b = buffer;
 
-  while (*str != 0x00) {
+  while (*str != 0x00 && --bufsz>0)
+  {
     char *chr = (char *)str;
     *b++ = *chr;
     str++;
   }
   *b = 0;
-  return buffer;
 }
 
 static void *lr_memmem(const void *l, size_t l_len, const void *s, size_t s_len)
@@ -5550,13 +5552,21 @@ void LibRaw::parse_x3f()
 	  // Parse property list
 	  DEH = &DE->header;
 	  x3f_property_list_t *PL = &DEH->data_subsection.property_list;
+          utf16_t *datap = (utf16_t*) PL->data;
+          uint32_t maxitems = PL->data_size/sizeof(utf16_t);
 	  if (PL->property_table.size != 0) {
 		  int i;
 		  x3f_property_t *P = PL->property_table.element;
 		  for (i=0; i<PL->num_properties; i++) {
 			  char name[100], value[100];
-			  utf2char(P[i].name,name);
-			  utf2char(P[i].value,value);
+			  int noffset = (P[i].name - datap);
+                          int voffset = (P[i].value - datap);
+                          if(noffset < 0 || noffset>maxitems || voffset<0 || voffset>maxitems)
+                              throw LIBRAW_EXCEPTION_IO_CORRUPT;
+                          int maxnsize = maxitems - (P[i].name - datap);
+                          int maxvsize = maxitems - (P[i].value - datap);
+                          utf2char(P[i].name, name,MIN(maxnsize,sizeof(name)));
+                          utf2char(P[i].value, value,MIN(maxvsize,sizeof(value)));
 			  if (!strcmp (name, "ISO"))
 				  imgdata.other.iso_speed = atoi(value);
 			  if (!strcmp (name, "CAMMANUF"))

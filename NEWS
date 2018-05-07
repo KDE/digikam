@@ -16,7 +16,8 @@ Database     : New video metadata parser based on ffmpeg to populate database.
 Search       : Add video support to find files based on properties registered on database.
 
 General      : Add QWebEngine support.
-General      : Update internal Libraw to last 0.18.9.
+General      : Update internal Libraw to last 0.18.10.
+General      : Fix all Krazy static analyzer reports.
 
 Tags         : Add possibility to merge tags by drag & drop.
 
