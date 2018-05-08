@@ -215,4 +215,6 @@ BUGFIXES:
 186 ==> 393855 - MySQL/MariaDB upgrade fails.
 187 ==> 384603 - Camera Creation Date not set from EXIF data.
 188 ==> 386959 - Properties view: wrong creation date [patch].
-189 ==> 
+189 ==> 393970 - No mts video thumbnails.
+190 ==> 
+
