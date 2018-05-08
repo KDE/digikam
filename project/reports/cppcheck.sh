@@ -50,31 +50,7 @@ cppcheck-htmlreport --file=report.cppcheck.xml \
                     --title=$TITLE
 
 # update www.digikam.org report section.
-
-git clone git@git.kde.org:websites/digikam-org $WEBSITE_DIR
-
-cd $WEBSITE_DIR
-
-git checkout -b dev remotes/origin/dev
-
-rm -r $WEBSITE_DIR/static/reports/cppcheck/*
-mkdir $WEBSITE_DIR/static/reports/cppcheck
-cp -r $REPORT_DIR/* $WEBSITE_DIR/static/reports/cppcheck/
-
-# Add new report contents in dev branch
-
-git add $WEBSITE_DIR/static/reports/cppcheck/*
-git commit . -m"update CppCheck static analyzer report $TITLE. See https://www.digikam.org/reports/cppcheck for details."
-git push
-
-# update master branch
-
-git checkout master
-git merge dev -m"update CppCheck static analyzer report $TITLE. See https://www.digikam.org/reports/cppcheck for details."
-git push
+updateReportToWebsite "cppcheck" $REPORT_DIR $TITLE
 
 cd $ORIG_DIR
-
-echo "Clang Report $TITLE published to https://www.digikam.org/reports/cppcheck"
-echo "Web site will be synchronized in few minutes..."
 

@@ -75,30 +75,6 @@ for DROP_ITEM in $KRAZY_FILTERS ; do
 done
 
 # update www.digikam.org report section.
-
-git clone git@git.kde.org:websites/digikam-org $WEBSITE_DIR
-
-cd $WEBSITE_DIR
-
-git checkout -b dev remotes/origin/dev
-
-rm -r $WEBSITE_DIR/static/reports/clang/*
-mkdir $WEBSITE_DIR/static/reports/clang
-cp -r $SCANBUILD_DIR/* $WEBSITE_DIR/static/reports/clang/
-
-# Add new report contents in dev branch
-
-git add $WEBSITE_DIR/static/reports/clang/*
-git commit . -m"update Clang static analyzer report $TITLE. See https://www.digikam.org/reports/clang for details."
-git push
-
-# update master branch
-
-git checkout master
-git merge dev -m"update Clang static analyzer report $TITLE. See https://www.digikam.org/reports/clang for details."
-git push
+updateReportToWebsite "clang" $SCANBUILD_DIR $TITLE
 
 cd $ORIG_DIR
-
-echo "Clang Report $TITLE published to https://www.digikam.org/reports/clang"
-echo "Web site will be synchronized in few minutes..."

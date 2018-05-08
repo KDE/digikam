@@ -27,6 +27,46 @@ function parseGitHash()
 }
 
 ########################################################################
+# Update www.digikam.org static analyze report section.
+# arg1: static analyzer name (clang, cppcheck, krazy, ...).
+# arg2: static analyzer report directory with html contents.
+# arg3: static analyzer report title.
+#
+function updateReportToWebsite()
+{
+    WEBSITE_DIR="`pwd`/site"
+
+    rm -fr $WEBSITE_DIR
+
+    git clone git@git.kde.org:websites/digikam-org $WEBSITE_DIR
+
+    cd $WEBSITE_DIR
+
+    git checkout -b dev remotes/origin/dev
+
+    rm -r $WEBSITE_DIR/static/reports/$1/*
+    mkdir $WEBSITE_DIR/static/reports/$1
+    cp -r $2/* $WEBSITE_DIR/static/reports/$1/
+
+    # Add new report contents in dev branch
+
+    git add $WEBSITE_DIR/static/reports/$1/*
+    git commit . -m"update $1 static analyzer report $3."
+    git push
+
+    # update master branch
+
+    git checkout master
+    git merge dev -m"Update $1 static analyzer report $3.
+See https://www.digikam.org/reports/$1 for details.
+CCMAIL: digikam-devel@kde.org"
+    git push
+
+    echo "$1 Report $3 published to https://www.digikam.org/reports/$1"
+    echo "Web site will be synchronized in few minutes..."
+}
+
+########################################################################
 # Extract Krazy configuration about unwanted directory to parse with static analyzer
 function krazySkipConfig()
 {

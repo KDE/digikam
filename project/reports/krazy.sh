@@ -59,30 +59,6 @@ java -jar /usr/share/java/saxon/saxon.jar \
 cp ./krazy/style.css $REPORT_DIR/
 
 # update www.digikam.org report section.
-
-git clone git@git.kde.org:websites/digikam-org $WEBSITE_DIR
-
-cd $WEBSITE_DIR
-
-git checkout -b dev remotes/origin/dev
-
-rm -r $WEBSITE_DIR/static/reports/krazy/*
-mkdir $WEBSITE_DIR/static/reports/krazy
-cp -r $REPORT_DIR/* $WEBSITE_DIR/static/reports/krazy/
-
-# Add new report contents in dev branch
-
-git add $WEBSITE_DIR/static/reports/krazy/*
-git commit . -m"update Krazy static analyzer report $TITLE. See https://www.digikam.org/reports/krazy for details."
-git push
-
-# update master branch
-
-git checkout master
-git merge dev -m"update Krazy static analyzer report $TITLE. See https://www.digikam.org/reports/krazy for details."
-git push
+updateReportToWebsite "krazy" $REPORT_DIR $TITLE
 
 cd $ORIG_DIR
-
-echo "Krazy Report $TITLE published to https://www.digikam.org/reports/krazy"
-echo "Web site will be synchronized in few minutes..."
