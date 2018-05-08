@@ -67,6 +67,7 @@ cd $WEBSITE_DIR
 git checkout -b dev remotes/origin/dev
 
 rm -r $WEBSITE_DIR/static/reports/krazy/*
+mkdir $WEBSITE_DIR/static/reports/krazy
 cp -r $REPORT_DIR/* $WEBSITE_DIR/static/reports/krazy/
 
 # Add new report contents in dev branch

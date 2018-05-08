@@ -37,7 +37,7 @@ cppcheck -j$CPU_CORES \
          --verbose \
          --xml \
          --platform=unix64 \
-         --enable=warning \
+         --enable=all \
          --report-progress \
          --suppress=*:*CImg.h* \
          $IGNORE_DIRS \
@@ -58,6 +58,7 @@ cd $WEBSITE_DIR
 git checkout -b dev remotes/origin/dev
 
 rm -r $WEBSITE_DIR/static/reports/cppcheck/*
+mkdir $WEBSITE_DIR/static/reports/cppcheck
 cp -r $REPORT_DIR/* $WEBSITE_DIR/static/reports/cppcheck/
 
 # Add new report contents in dev branch
