@@ -194,4 +194,4 @@ int KMemoryInfo::update()
 
 } // namespace Digikam
 
-#include "kmemoryinfo_backend.cpp"
+#include "libstatgrab/kmemoryinfo_backend.cpp"

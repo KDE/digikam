@@ -27,6 +27,15 @@ function parseGitHash()
 }
 
 ########################################################################
+# Extract Krazy configuration about unwanted directory to parse with static analyzer
+function krazySkipConfig()
+{
+    KRAZY_FILE="`pwd`/../../.krazy"
+    KRAZY_FILTERS=$(sed -n '/SKIP/p' ${KRAZY_FILE} | sed -e 's/SKIP //g' | sed -e 's/|/\n/g' | sed 's/^.\(.*\).$/\1/')
+    echo "Directories to ignore from Krazy configuration: $KRAZY_FILTERS"
+}
+
+########################################################################
 # Check CPU core available (Linux or MacOS)
 function checksCPUCores()
 {

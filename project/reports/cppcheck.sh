@@ -24,6 +24,15 @@ echo "CppCheck Static Analyzer task name: $TITLE"
 rm -fr $REPORT_DIR
 rm -fr $WEBSITE_DIR
 
+# Do not parse unwanted directories accordingly with Krazy configuration.
+krazySkipConfig
+
+IGNORE_DIRS=""
+
+for DROP_ITEM in $KRAZY_FILTERS ; do
+    IGNORE_DIRS+="-i../../$DROP_ITEM/ " 
+done
+
 cppcheck -j$CPU_CORES \
          --verbose \
          --xml \
@@ -31,16 +40,7 @@ cppcheck -j$CPU_CORES \
          --enable=warning \
          --report-progress \
          --suppress=*:*CImg.h* \
-         -i../../core/libs/dimg/filters/greycstoration/cimg \
-         -i../../core/libs/rawengine/libraw \
-         -i../../core/libs/dngwriter/extra \
-         -i../../core/libs/facesengine/dnnface \
-         -i../../core/libs/facesengine/opencv3-face \
-         -i../../core/libs/kmemoryinfo \
-         -i../../core/libs/pgfutils/libpgf \
-         -i../../core/libs/jpegutils/libjpeg \
-         -i../../core/utilities/mediaserver/upnpsdk \
-         -i../../core/utilities/assistants/webservices/common/o2 \
+         $IGNORE_DIRS \
          ../../core \
          2> report.cppcheck.xml
 
