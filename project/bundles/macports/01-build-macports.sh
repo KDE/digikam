@@ -47,7 +47,7 @@ ORIG_PATH="$PATH"
 ORIG_WD="`pwd`"
 
 export PATH=$INSTALL_PREFIX/bin:/$INSTALL_PREFIX/sbin:/$INSTALL_PREFIX/libexec/qt5/bin:$ORIG_PATH
-if [ ]; then
+
 #################################################################################################
 # Check if /opt exists and standard Macports install path
 
@@ -262,7 +262,7 @@ find $INSTALL_PREFIX/var/macports/logs/ -name main.log
 echo -e "\n----------"
 
 echo -e "\n"
-fi
+
 #################################################################################################
 
 # Create the build dir for the 3rdparty deps
@@ -283,8 +283,8 @@ cmake $ORIG_WD/../3rdparty \
        -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOAD_DIR \
        -Wno-dev
 
-#cmake --build . --config RelWithDebInfo --target ext_opencv -- -j$CPU_CORES
-#cmake --build . --config RelWithDebInfo --target ext_exiv2  -- -j$CPU_CORES
+cmake --build . --config RelWithDebInfo --target ext_opencv -- -j$CPU_CORES
+cmake --build . --config RelWithDebInfo --target ext_exiv2  -- -j$CPU_CORES
 cmake --build . --config RelWithDebInfo --target ext_qtav   -- -j$CPU_CORES
 
 #################################################################################################
