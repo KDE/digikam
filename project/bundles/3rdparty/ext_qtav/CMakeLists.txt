@@ -7,7 +7,8 @@
 #
 
 set(PREFIX_ext_qtav "${EXTPREFIX}")
-set(QTAV_VERSION v1.12.0)
+#set(QTAV_VERSION v1.12.0)
+set(QTAV_VERSION master)
 
 if(MINGW)
 

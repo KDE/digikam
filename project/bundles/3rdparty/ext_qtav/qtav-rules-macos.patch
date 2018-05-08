@@ -11,16 +11,3 @@ index 08c6279..4878ce4 100644
 +INCLUDEPATH += /opt/digikam/include/
 +LIBS += -L/opt/digikam/lib/
 +
-diff --git a/src/libQtAV.pro b/src/libQtAV.pro
-index 27c1570..d80771e 100644
---- a/src/libQtAV.pro
-+++ b/src/libQtAV.pro
-@@ -323,7 +323,7 @@ mac {
-   ios {
-     OBJECTIVE_SOURCES *= codec/video/SurfaceInteropCVOpenGLES.mm
-   } else {
--    CONFIG += config_vda
-+#    CONFIG += config_vda
-     SOURCES *= codec/video/SurfaceInteropIOSurface.cpp
-     #SOURCES *= codec/video/SurfaceInteropCVOpenGL.cpp
-     LIBS += -framework IOSurface
