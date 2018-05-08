@@ -57,18 +57,18 @@ public:
 
     explicit Private()
     {
-        list             = 0;
-        api              = 0;
-        forgetButton     = 0;
-        uploadAnonButton = 0;
-        userLabel        = 0;
+        list             = nullptr;
+        api              = nullptr;
+        forgetButton     = nullptr;
+        uploadAnonButton = nullptr;
+        userLabel        = nullptr;
     }
 
-    ImgurImagesList* list             = nullptr;
-    ImgurTalker*     api              = nullptr;
-    QPushButton*     forgetButton     = nullptr;
-    QPushButton*     uploadAnonButton = nullptr;
-    QLabel*          userLabel        = nullptr;
+    ImgurImagesList* list;
+    ImgurTalker*     api;
+    QPushButton*     forgetButton;
+    QPushButton*     uploadAnonButton;
+    QLabel*          userLabel;
 
     // Contains the imgur username if API authorized, else is null.
     QString          username;
@@ -123,7 +123,7 @@ ImgurWindow::ImgurWindow(DInfoInterface* const iface, QWidget* const /*parent*/)
     userLabelLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
     // Label set in readSettings().
-    d->userLabel               = new QLabel; 
+    d->userLabel               = new QLabel;
     d->userLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     d->userLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
@@ -312,8 +312,8 @@ void ImgurWindow::closeEvent(QCloseEvent* e)
 void ImgurWindow::readSettings()
 {
     KConfig config;
-    KConfigGroup groupAuth = config.group("Imgur Auth");
-    d->username            = groupAuth.readEntry("username", QString());
+    KConfigGroup groupAuth   = config.group("Imgur Auth");
+    d->username              = groupAuth.readEntry("username", QString());
     slotApiAuthorized(!d->username.isEmpty(), d->username);
 
     winId();

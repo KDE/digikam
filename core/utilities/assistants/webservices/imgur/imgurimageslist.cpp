@@ -100,11 +100,10 @@ void ImgurImagesList::slotAddImages(const QList<QUrl>& list)
         // Already in the list?
         if (listView()->findItem(*it) == nullptr)
         {
-            auto* const item = new ImgurImageListViewItem(listView(), *it);
-
             // Load URLs from meta data, if possible
             if (meta.load((*it).toLocalFile()))
             {
+                auto* const item = new ImgurImageListViewItem(listView(), *it);
                 item->setImgurUrl(meta.getXmpTagString("Xmp.digiKam.ImgurId"));
                 item->setImgurDeleteUrl(meta.getXmpTagString("Xmp.digiKam.ImgurDeleteHash"));
             }

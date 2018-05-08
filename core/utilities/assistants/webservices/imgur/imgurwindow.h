@@ -83,7 +83,7 @@ private:
     void saveSettings();
 
 private:
-   
+
     class Private;
     Private* const d;
 };
