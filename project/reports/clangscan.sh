@@ -67,6 +67,7 @@ echo "Clang Report $TITLE to publish is located to $SCANBUILD_DIR"
 
 # Remove unwanted lines in report accordingly with Krazy configuration.
 # Note: Clang do not have an option to ignore directories to scan at compilation time.
+# Se this entry in Clang bugzilla: https://bugs.llvm.org/show_bug.cgi?id=22594
 krazySkipConfig
 
 for DROP_ITEM in $KRAZY_FILTERS ; do
