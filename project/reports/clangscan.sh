@@ -71,7 +71,46 @@ echo "Clang Report $TITLE to publish is located to $SCANBUILD_DIR"
 krazySkipConfig
 
 for DROP_ITEM in $KRAZY_FILTERS ; do
-    echo "drop $DROP_ITEM from $SCANBUILD_DIR/index.html"
+    echo -e "--- drop $DROP_ITEM from index.html with statistics adjustements"
+
+    # List all report types including current pattern to drop.
+    REPORT_ENTRIES=( $(grep $DROP_ITEM $SCANBUILD_DIR/index.html) )
+
+    # STAT_ENTRIES array contains the multi-entries list of statistic types to remove.
+    STAT_ENTRIES=()   # clear array
+
+    for RITEM in "${REPORT_ENTRIES[@]}" ; do
+        if [[ $RITEM = *bt_* ]]; then
+            STAT_ENTRIES[${#STAT_ENTRIES[*]}]=$(echo $RITEM | awk -F "\"" '{print $2}')
+        fi
+    done
+
+    # to update total statistic with current pattern to drop
+    TOTAL_COUNT=0
+
+    # update report statistics values.
+    for SITEM in "${STAT_ENTRIES[@]}" ; do
+        ORG_STAT_LINE=$(grep "ToggleDisplay(this," $SCANBUILD_DIR/index.html | grep "${SITEM}")
+        STAT_VAL=$(echo $ORG_STAT_LINE | grep -o -P '(?<=class=\"Q\">).*(?=<\/td><td>)')
+        ORG_STR="class=\"Q\">$STAT_VAL<\/td><td>"
+        STAT_VAL=$((STAT_VAL-1))
+        NEW_STR="class=\"Q\">$STAT_VAL<\/td><td>"
+        NEW_STAT_LINE=${ORG_STAT_LINE/$ORG_STR/$NEW_STR}
+        sed -i "s|$ORG_STAT_LINE|$NEW_STAT_LINE|" $SCANBUILD_DIR/index.html
+        TOTAL_COUNT=$((TOTAL_COUNT+1))
+    done
+
+    # decrease total statistics with current TOTOAL_COUNT
+
+    TOTAL_ORG_STAT_LINE=$(grep "CopyCheckedStateToCheckButtons(this)" $SCANBUILD_DIR/index.html | grep "AllBugsCheck")
+    TOTAL_STAT_VAL=$(echo $TOTAL_ORG_STAT_LINE | grep -o -P '(?<=class=\"Q\">).*(?=<\/td><td>)')
+    TOTAL_ORG_STR="class=\"Q\">$TOTAL_STAT_VAL<\/td><td>"
+    TOTAL_STAT_VAL=$((TOTAL_STAT_VAL-TOTAL_COUNT))
+    TOTAL_NEW_STR="class=\"Q\">$TOTAL_STAT_VAL<\/td><td>"
+    TOTAL_NEW_STAT_LINE=${TOTAL_ORG_STAT_LINE/$TOTAL_ORG_STR/$TOTAL_NEW_STR}
+    sed -i "s|$TOTAL_ORG_STAT_LINE|$TOTAL_NEW_STAT_LINE|" $SCANBUILD_DIR/index.html
+
+    # Remove the lines including current pattern to drop.
     grep -v "$DROP_ITEM" $SCANBUILD_DIR/index.html > $SCANBUILD_DIR/temp && mv $SCANBUILD_DIR/temp $SCANBUILD_DIR/index.html
 done
 
