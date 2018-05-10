@@ -220,4 +220,5 @@ BUGFIXES:
 191 ==> 393925 - UpdateSchemaFromV7ToV9 fails due to duplicate key in album_2.
 192 ==> 393773 - showfoto crashes when geotagging.
 193 ==> 388199 - No context menu to copy coordinates from map.
-194 ==> 
+194 ==> 393399 - Windows defender freaks out in windows 10 and Edge.
+195 ==> 
