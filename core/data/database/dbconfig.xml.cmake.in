@@ -2236,6 +2236,8 @@
                 <statement mode="plain">CALL drop_index_if_exists('Albums', 'albumRoot');</statement>
                 <statement mode="plain">CALL drop_foreign_key('Images', 'Images_Albums');</statement>
                 <statement mode="plain">CALL drop_index_if_exists('Images', 'album');</statement>
+                <statement mode="plain">CALL drop_index_if_exists('Images', 'album_2');</statement>
+                <statement mode="plain">CALL drop_index_if_exists('Images', 'album_3');</statement>
                 <statement mode="plain">CALL drop_foreign_key('Albums', 'Albums_Images');</statement>
                 <statement mode="plain">CALL drop_foreign_key('ImageHaarMatrix', 'ImageHaarMatrix_Images');</statement>
                 <statement mode="plain">CALL drop_foreign_key('ImageInformation', 'ImageInformation_Images');</statement>
