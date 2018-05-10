@@ -46,7 +46,7 @@
 #include <marble/MarbleWidget.h>
 #include <marble/ViewportParams.h>
 #include <marble/AbstractFloatItem.h>
-#include <marble/MarbleWidgetInputHandler.h>
+#include <marble/MarbleWidgetPopupMenu.h>
 
 // Local includes
 
@@ -221,8 +221,16 @@ QWidget* BackendMarble::mapWidget()
 
             d->marbleWidget->addLayer(d->bmLayer);
         }
-        // hide Marble widget right button context menu
-        d->marbleWidget->inputHandler()->setMouseButtonPopupEnabled(Qt::RightButton, false);
+
+        // hide Marble bookmark action in the right button context menu
+        // TODO: check with a new Marble version if the bookmark action position is still valid
+        if (d->marbleWidget->popupMenu())
+        {
+            QList<QAction*> actions = d->marbleWidget->popupMenu()->findChildren<QAction*>();
+
+            if (actions.count() > 4 && actions[4])
+                actions[4]->setVisible(false);
+        }
 
         d->marbleWidget->installEventFilter(this);
 
