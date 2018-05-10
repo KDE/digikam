@@ -218,4 +218,5 @@ BUGFIXES:
 189 ==> 393970 - No mts video thumbnails.
 190 ==> 393728 - Reread metadata from Video uses sidecar only.
 191 ==> 393925 - UpdateSchemaFromV7ToV9 fails due to duplicate key in album_2.
-192 ==> 
+192 ==> 393773 - showfoto crashes when geotagging.
+193 ==> 
