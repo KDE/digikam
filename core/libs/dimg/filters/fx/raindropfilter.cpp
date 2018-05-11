@@ -226,7 +226,7 @@ void RainDropFilter::rainDropsImage(DImg* const orgImage, DImg* const destImage,
     prm.bLimitRange = bLimitRange;
     prm.pStatusBits = pStatusBits.data();
 
-    for (int i = 0; runningFlag() && (i < Amount); ++i)
+    for (int i = 0 ; runningFlag() && (i < Amount) ; ++i)
     {
         QList <QFuture<void> > tasks;
 
@@ -255,19 +255,19 @@ bool RainDropFilter::CreateRainDrop(uchar* const pBits, int Width, int Height, b
 {
     if (CanBeDropped(Width, Height, pStatusBits, X, Y, DropSize, bLimitRange))
     {
-       int w, h, nw1, nh1, nw2, nh2;
+        int w, h, nw1, nh1, nw2, nh2;
         int          nBright;
         double       lfRadius, lfOldRadius, lfAngle;
         DColor       imageData;
         uint         nTotalR, nTotalG, nTotalB, offset;
         int          nBlurPixels, nBlurRadius;
-        Coeff         *= 0.01;
+        Coeff        *= 0.01;
         int nHalfSize =  DropSize / 2;
         double lfDiv  =  (double)nHalfSize / log(Coeff * (double)nHalfSize + 1.0);
 
-        for (h = -nHalfSize; runningFlag() && (h <= nHalfSize); ++h)
+        for (h = -nHalfSize ; runningFlag() && (h <= nHalfSize) ; ++h)
         {
-            for (w = -nHalfSize; runningFlag() && (w <= nHalfSize); ++w)
+            for (w = -nHalfSize ; runningFlag() && (w <= nHalfSize) ; ++w)
             {
                 lfRadius = qSqrt(h * h + w * w);
                 lfAngle  = qAtan2((double)h, (double)w);
@@ -420,9 +420,9 @@ bool RainDropFilter::CreateRainDrop(uchar* const pBits, int Width, int Height, b
 
         nBlurRadius = DropSize / 25 + 1;
 
-        for (h = -nHalfSize - nBlurRadius; runningFlag() && (h <= nHalfSize + nBlurRadius); ++h)
+        for (h = -nHalfSize - nBlurRadius ; runningFlag() && (h <= nHalfSize + nBlurRadius) ; ++h)
         {
-            for (w = -nHalfSize - nBlurRadius; runningFlag() && (w <= nHalfSize + nBlurRadius); ++w)
+            for (w = -nHalfSize - nBlurRadius ; runningFlag() && (w <= nHalfSize + nBlurRadius) ; ++w)
             {
                 lfRadius = qSqrt(h * h + w * w);
 
@@ -431,9 +431,9 @@ bool RainDropFilter::CreateRainDrop(uchar* const pBits, int Width, int Height, b
                     nTotalR     = nTotalG = nTotalB = 0;
                     nBlurPixels = 0;
 
-                    for (nh1 = -nBlurRadius; runningFlag() && (nh1 <= nBlurRadius); ++nh1)
+                    for (nh1 = -nBlurRadius ; runningFlag() && (nh1 <= nBlurRadius) ; ++nh1)
                     {
-                        for (nw1 = -nBlurRadius; runningFlag() && (nw1 <= nBlurRadius); ++nw1)
+                        for (nw1 = -nBlurRadius ; runningFlag() && (nw1 <= nBlurRadius) ; ++nw1)
                         {
                             nw2 = X + w + nw1;
                             nh2 = Y + h + nh1;
@@ -453,7 +453,7 @@ bool RainDropFilter::CreateRainDrop(uchar* const pBits, int Width, int Height, b
                     nw1 = X + w;
                     nh1 = Y + h;
 
-                    if (isInside(Width, Height, nw1, nh1))
+                    if (isInside(Width, Height, nw1, nh1) && (nBlurPixels != 0))
                     {
                         offset = pixelOffset(Width, nw1, nh1, bytesDepth);
 
@@ -483,7 +483,7 @@ bool RainDropFilter::CreateRainDrop(uchar* const pBits, int Width, int Height, b
 bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* const pStatusBits, int X, int Y,
                                   int DropSize, bool bLimitRange)
 {
-   int w, h, i = 0;
+    int w, h, i = 0;
     int          nHalfSize = DropSize / 2;
 
     if (!pStatusBits)
@@ -491,9 +491,9 @@ bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* const pStatusBit
         return true;
     }
 
-    for (h = Y - nHalfSize; h <= Y + nHalfSize; ++h)
+    for (h = Y - nHalfSize ; h <= Y + nHalfSize ; ++h)
     {
-        for (w = X - nHalfSize; w <= X + nHalfSize; ++w)
+        for (w = X - nHalfSize ; w <= X + nHalfSize ; ++w)
         {
             if (isInside(Width, Height, w, h))
             {
@@ -520,7 +520,7 @@ bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* const pStatusBit
 bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* const pStatusBits,
                                        int X, int Y, int DropSize)
 {
-   int w, h, i = 0;
+    int w, h, i = 0;
     int nHalfSize = DropSize / 2;
 
     if (!pStatusBits)
@@ -528,9 +528,9 @@ bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* const pStat
         return false;
     }
 
-    for (h = Y - nHalfSize; h <= Y + nHalfSize; ++h)
+    for (h = Y - nHalfSize ; h <= Y + nHalfSize ; ++h)
     {
-        for (w = X - nHalfSize; w <= X + nHalfSize; ++w)
+        for (w = X - nHalfSize ; w <= X + nHalfSize ; ++w)
         {
             if (isInside(Width, Height, w, h))
             {
