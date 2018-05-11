@@ -140,8 +140,8 @@ void MailProcess::firstStage()
     {
         // Add all original files to the attachments list.
 
-        for (QMap<QUrl, QUrl>::const_iterator it = d->settings->itemsList.constBegin();
-             it != d->settings->itemsList.constEnd(); ++it)
+        for (QMap<QUrl, QUrl>::const_iterator it = d->settings->itemsList.constBegin() ;
+             it != d->settings->itemsList.constEnd() ; ++it)
         {
             d->attachementFiles.append(it.key());
             d->settings->setMailUrl(it.key(), it.key());
@@ -242,8 +242,8 @@ void MailProcess::buildPropertiesFile()
 
         QString propertiesText;
 
-        for (QMap<QUrl, QUrl>::const_iterator it = d->settings->itemsList.constBegin();
-             it != d->settings->itemsList.constEnd(); ++it)
+        for (QMap<QUrl, QUrl>::const_iterator it = d->settings->itemsList.constBegin() ;
+             it != d->settings->itemsList.constEnd() ; ++it)
         {
             DItemInfo info(d->iface->itemInfo(it.key()));
             QString comments  = info.comment();
@@ -292,12 +292,14 @@ void MailProcess::buildPropertiesFile()
 
 bool MailProcess::showFailedResizedImages() const
 {
+    bool ret = true;
+
     if (!d->failedResizedImages.isEmpty())
     {
         QStringList list;
 
-        for (QList<QUrl>::const_iterator it = d->failedResizedImages.constBegin();
-            it != d->failedResizedImages.constEnd(); ++it)
+        for (QList<QUrl>::const_iterator it = d->failedResizedImages.constBegin() ;
+            it != d->failedResizedImages.constEnd() ; ++it)
         {
             list.append((*it).fileName());
         }
@@ -318,8 +320,8 @@ bool MailProcess::showFailedResizedImages() const
             case QMessageBox::Yes:
             {
                 // Added source image files instead resized images...
-                for (QList<QUrl>::const_iterator it = d->failedResizedImages.constBegin();
-                    it != d->failedResizedImages.constEnd(); ++it)
+                for (QList<QUrl>::const_iterator it = d->failedResizedImages.constBegin() ;
+                    it != d->failedResizedImages.constEnd() ; ++it)
                 {
                     d->attachementFiles.append(*it);
                     d->settings->setMailUrl(*it, *it);
@@ -335,7 +337,7 @@ bool MailProcess::showFailedResizedImages() const
             case QMessageBox::Cancel:
             {
                 // Stop process...
-                return false;
+                ret = false;
                 break;
             }
         }
@@ -343,7 +345,7 @@ bool MailProcess::showFailedResizedImages() const
         delete mbox;
     }
 
-    return true;
+    return ret;
 }
 
 QList<QUrl> MailProcess::divideEmails()
@@ -355,8 +357,8 @@ QList<QUrl> MailProcess::divideEmails()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Attachment limit: " << d->settings->attachementLimit();
 
-    for (QList<QUrl>::const_iterator it = d->attachementFiles.constBegin();
-        it != d->attachementFiles.constEnd(); ++it)
+    for (QList<QUrl>::const_iterator it = d->attachementFiles.constBegin() ;
+        it != d->attachementFiles.constEnd() ; ++it)
     {
         QFile file((*it).toLocalFile());
         qCDebug(DIGIKAM_GENERAL_LOG) << "File: " << file.fileName() << " Size: " << file.size();
@@ -570,7 +572,7 @@ bool MailProcess::invokeMailAgent()
             }
         }
     }
-    while(!fileList.isEmpty());
+    while (!fileList.isEmpty());
 
     return agentInvoked;
 }
