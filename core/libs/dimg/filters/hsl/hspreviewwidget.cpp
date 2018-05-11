@@ -45,8 +45,8 @@ class HSPreviewWidget::Private
 
 public:
 
-    explicit Private() :
-        xBorder(0),
+    explicit Private()
+      : xBorder(0),
         hue(0.0),
         sat(0.0)
     {
@@ -108,9 +108,12 @@ void HSPreviewWidget::updatePixmap()
 
         for (int h = 0 ; h < xSize ; ++h)
         {
-            col.setHsv(359 * h / (xSize - 1), 255, 192);
-            *p = col.rgb();
-            ++p;
+            if ((xSize - 1) != 0)
+            {
+                col.setHsv(359 * h / (xSize - 1), 255, 192);
+                *p = col.rgb();
+                ++p;
+            }
         }
     }
 
@@ -122,7 +125,7 @@ void HSPreviewWidget::updatePixmap()
     hsl.startFilterDirectly();
     image.putImageData(hsl.getTargetImage().bits());
 
-    d->pixmap = image.convertToPixmap();
+    d->pixmap           = image.convertToPixmap();
 }
 
 } // namespace Digikam
