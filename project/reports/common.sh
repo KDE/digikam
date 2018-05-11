@@ -59,7 +59,7 @@ function updateReportToWebsite()
     git checkout master
     git merge dev -m"Update $1 static analyzer report $3.
 See https://www.digikam.org/reports/$1 for details.
-CCMAIL: digikam-devel@kde.org"
+CCMAIL: digikam-bugs-null@kde.org"
     git push
 
     echo "$1 Report $3 published to https://www.digikam.org/reports/$1"
