@@ -285,10 +285,8 @@ int CalSystemPrivate::maxMonthsInYear() const
     }
 }
 
-int CalSystemPrivate::monthsInYear(int year) const
+int CalSystemPrivate::monthsInYear(int /*year*/) const
 {
-    year = year + yearOffset();
-
     switch (calendarSystem())
     {
         case CalSystem::CopticCalendar:
@@ -1039,9 +1037,9 @@ int CalSystem::weekNumber(int year, int month, int day, int* yearNum) const
         wday = 0;
     }
 
-    int w;
+    int w = 0;
 
-    for (;;)
+    for (; ;)
     {
         int len = d->daysInYear(year);
 
@@ -1358,7 +1356,7 @@ int CalSystem::monthsDifference(const QDate& fromDate, const QDate& toDate) cons
     {
         my = 0;
 
-        for (int y = y1; y < y2; y = d->addYears(y, 1))
+        for (int y = y1 ; y < y2 ; y = d->addYears(y, 1))
         {
             my = my + monthsInYear(y);
         }
