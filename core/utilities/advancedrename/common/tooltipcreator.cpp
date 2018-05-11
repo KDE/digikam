@@ -156,10 +156,11 @@ QString TooltipCreator::createHeader(const QString& str)
                           .arg(qApp->palette().color(QPalette::HighlightedText).name());
 
     result += templateStr.arg(str);
+
     return result;
 }
 
-QString TooltipCreator::createEntries(const RulesList &data)
+QString TooltipCreator::createEntries(const RulesList& data)
 {
     QString result;
 
@@ -181,7 +182,7 @@ QString TooltipCreator::createEntries(const RulesList &data)
     return result;
 }
 
-QString TooltipCreator::createSection(const QString& sectionName, const RulesList &data, bool lastSection)
+QString TooltipCreator::createSection(const QString& sectionName, const RulesList& data, bool lastSection)
 {
     if (data.isEmpty())
     {

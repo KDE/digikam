@@ -46,8 +46,8 @@ class RuleDialog::Private
 {
 public:
 
-    explicit Private() :
-        buttons(0),
+    explicit Private()
+      : buttons(0),
         container(0),
         dialogTitle(0),
         dialogDescription(0),
@@ -68,7 +68,7 @@ RuleDialog::RuleDialog(Rule* const parent)
     : QDialog(0),
       d(new Private)
 {
-    d->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons           = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
     d->dialogTitle       = new QLabel(this);

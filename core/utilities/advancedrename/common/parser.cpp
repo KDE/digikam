@@ -52,7 +52,8 @@ class Parser::Private
 public:
 
     explicit Private()
-    {}
+    {
+    }
 
     RulesList options;
     RulesList modifiers;
@@ -95,11 +96,11 @@ Parser::~Parser()
 
 void Parser::reset()
 {
-    foreach(Rule* option, d->options)
+    foreach(Rule* const option, d->options)
     {
         option->reset();
     }
-    foreach(Rule* modifier, d->modifiers)
+    foreach(Rule* const modifier, d->modifiers)
     {
         modifier->reset();
     }
@@ -138,8 +139,8 @@ void Parser::unregisterOption(Rule* option)
         return;
     }
 
-    for (RulesList::iterator it = d->options.begin();
-         it != d->options.end();)
+    for (RulesList::iterator it = d->options.begin() ;
+         it != d->options.end() ; )
     {
         if (*it == option)
         {
@@ -170,8 +171,8 @@ void Parser::unregisterModifier(Rule* modifier)
         return;
     }
 
-    for (RulesList::iterator it = d->modifiers.begin();
-         it != d->modifiers.end();)
+    for (RulesList::iterator it = d->modifiers.begin() ;
+         it != d->modifiers.end() ; )
     {
         if (*it == modifier)
         {
@@ -324,7 +325,7 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
         int off  = results.offset(key);
         int diff = 0;
 
-        for (int pos = off; pos < parseString.count();)
+        for (int pos = off ; pos < parseString.count() ; )
         {
             if (modifierResults.hasKeyAtPosition(pos))
             {
@@ -357,7 +358,7 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
 
                 // update modifier map
                 ParseResults::ResultsKey modifierKey = key;
-                modifierKey.second += diff;
+                modifierKey.second                  += diff;
                 ParseResults::ResultsValue modifierValue(modToken, modResult);
 
                 appliedModifiers.deleteEntry(modifierKey);
@@ -377,6 +378,7 @@ ParseResults Parser::applyModifiers(const QString& parseString, ParseResults& re
             }
         }
     }
+ 
     results = appliedModifiers;
 
     return modifierResults;

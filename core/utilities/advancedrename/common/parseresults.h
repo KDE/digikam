@@ -43,8 +43,13 @@ public:
 
 public:
 
-    explicit ParseResults()  {};
-    ~ParseResults() {};
+    explicit ParseResults()
+    {
+    };
+    
+    ~ParseResults()
+    {
+    };
 
     void addEntry(const ResultsKey& key, const ResultsValue& value);
     void deleteEntry(const ResultsKey& key);
@@ -78,6 +83,8 @@ private:
 
     ResultsKey createInvalidKey() const;
     bool       keyIsValid(const ResultsKey& key) const;
+
+private:
 
     ResultsMap  m_results;
 };

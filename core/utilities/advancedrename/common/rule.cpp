@@ -41,9 +41,10 @@ class Rule::Private
 {
 public:
 
-    explicit Private() :
-        useTokenMenu(false)
-    {}
+    explicit Private()
+        : useTokenMenu(false)
+    {
+    }
 
     bool         useTokenMenu;
 
@@ -122,8 +123,7 @@ void Rule::setRegExp(const QRegExp& regExp)
 
 QPushButton* Rule::createButton(const QString& name, const QIcon& icon)
 {
-    const int maxHeight = 28;
-
+    const int maxHeight       = 28;
     QPushButton* const button = new QPushButton;
     button->setText(name);
     button->setIcon(icon);
@@ -157,7 +157,6 @@ QPushButton* Rule::registerButton(QWidget* parent)
 
         connect(button, SIGNAL(clicked()),
                 token, SLOT(slotTriggered()));
-
     }
 
     button->setParent(parent);
@@ -281,7 +280,7 @@ ParseResults Rule::parse(ParseSettings &settings)
             ParseResults::ResultsKey   k(pos, reg.cap(0).count());
             ParseResults::ResultsValue v(reg.cap(0), result);
             parsedResults.addEntry(k, v);
-            pos += reg.matchedLength();
+            pos           += reg.matchedLength();
         }
     }
 

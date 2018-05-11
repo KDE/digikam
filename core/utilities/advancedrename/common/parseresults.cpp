@@ -29,7 +29,7 @@
 
 namespace
 {
-static const quint8 INVALID_KEY_ID = -1;
+    static const quint8 INVALID_KEY_ID = -1;
 }
 
 namespace Digikam
@@ -131,6 +131,7 @@ ParseResults::ResultsKey ParseResults::keyAtApproximatePosition(int pos) const
             return key;
         }
     }
+
     return createInvalidKey();
 }
 
@@ -169,14 +170,14 @@ QString ParseResults::replaceTokens(const QString& markedString) const
 {
     QString result;
 
-    for (int i = 0; i < markedString.count();)
+    for (int i = 0 ; i < markedString.count() ; )
     {
         if (hasKeyAtPosition(i))
         {
             ResultsKey key     = keyAtPosition(i);
             ResultsValue value = m_results.value(key);
             result.append(value.second);
-            i += key.second;
+            i                 += key.second;
         }
         else
         {
@@ -196,7 +197,7 @@ void ParseResults::debug() const
         QString _result = result(key);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "(" << key.first << ":" << key.second << ") => "
-                 << "(" << _token    << ":" << _result    << ")";
+                                     << "(" << _token    << ":" << _result    << ")";
     }
 }
 

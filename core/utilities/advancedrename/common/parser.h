@@ -70,11 +70,11 @@ public:
 
 protected:
 
-    void registerOption(Rule *option);
-    void unregisterOption(Rule *option);
+    void registerOption(Rule* option);
+    void unregisterOption(Rule* option);
 
-    void registerModifier(Rule *modifier);
-    void unregisterModifier(Rule *modifier);
+    void registerModifier(Rule* modifier);
+    void unregisterModifier(Rule* modifier);
 
 private:
 

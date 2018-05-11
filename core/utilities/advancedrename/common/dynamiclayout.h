@@ -39,8 +39,10 @@ class DynamicLayout : public QLayout
 {
 public:
 
-    explicit DynamicLayout(QWidget* parent, int margin = -1,   int hSpacing = 0, int vSpacing = 0);
-    explicit DynamicLayout(int margin = -1, int hSpacing = 0,  int vSpacing = 0);
+    explicit DynamicLayout(QWidget* const parent, int margin = -1,
+                           int hSpacing = 0, int vSpacing = 0);
+    explicit DynamicLayout(int margin = -1, int hSpacing = 0,
+                           int vSpacing = 0);
     ~DynamicLayout();
 
     void addItem(QLayoutItem* item);

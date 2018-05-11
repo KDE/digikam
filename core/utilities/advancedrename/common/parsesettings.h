@@ -49,8 +49,8 @@ public:
         init();
     };
 
-    explicit ParseSettings(const QString& _parseString) :
-        parseString(_parseString)
+    explicit ParseSettings(const QString& _parseString)
+        : parseString(_parseString)
     {
         init();
     };
@@ -61,8 +61,8 @@ public:
         init(info);
     };
 
-    ParseSettings(const QString& _parseString, const ImageInfo& info) :
-        parseString(_parseString)
+    ParseSettings(const QString& _parseString, const ImageInfo& info)
+        : parseString(_parseString)
     {
         init(info);
     };

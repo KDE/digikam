@@ -41,7 +41,10 @@ class TooltipCreator
 {
 public:
 
-    ~TooltipCreator() {};
+    ~TooltipCreator()
+    {
+    };
+
     static TooltipCreator& getInstance();
 
     QString tooltip(Parser* parser);
@@ -51,7 +54,10 @@ public:
 
 private:
 
-    explicit TooltipCreator() {};
+    explicit TooltipCreator()
+    {
+    };
+    
     TooltipCreator(const TooltipCreator&);
     TooltipCreator& operator=(const TooltipCreator&);
 
@@ -65,8 +71,8 @@ private:
 
 
     // parse object related methods
-    QString createEntries(const RulesList &data);
-    QString createSection(const QString& sectionName, const RulesList &data, bool lastSection = false);
+    QString createEntries(const RulesList& data);
+    QString createSection(const QString& sectionName, const RulesList& data, bool lastSection = false);
     QString createHeader(const QString& str);
 };
 

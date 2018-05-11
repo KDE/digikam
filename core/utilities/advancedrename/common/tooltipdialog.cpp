@@ -45,8 +45,8 @@ class TooltipDialog::Private
 {
 public:
 
-    explicit Private() :
-        buttons(0),
+    explicit Private()
+      : buttons(0),
         textBrowser(0)
     {
     }
@@ -56,11 +56,12 @@ public:
 };
 
 TooltipDialog::TooltipDialog(QWidget* const parent)
-    : QDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
     setWindowTitle(i18n("Information"));
 
-    d->buttons = new QDialogButtonBox(QDialogButtonBox::Close, this);
+    d->buttons     = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->buttons->button(QDialogButtonBox::Close)->setDefault(true);
 
     d->textBrowser = new QTextBrowser(this);

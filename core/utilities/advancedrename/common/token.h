@@ -76,7 +76,7 @@ public:
      * @endcode
      * This id will be emitted as a signal by slotTriggered().
      */
-    QString  id()
+    QString id()
     {
         return m_id;
     };
@@ -84,7 +84,7 @@ public:
     /**
      * @return The description of the token. It can be used for example in the tooltip of the AdvancedRenameWidget.
      */
-    QString  description()
+    QString description()
     {
         return m_description;
     };

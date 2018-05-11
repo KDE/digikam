@@ -34,7 +34,7 @@
 namespace Digikam
 {
 
-Highlighter::Highlighter(QTextDocument *document, Parser* _parser)
+Highlighter::Highlighter(QTextDocument* const document, Parser* const _parser)
     : QSyntaxHighlighter(document), parser(_parser)
 
 {
@@ -63,7 +63,7 @@ void Highlighter::highlightBlock(const QString& text)
                 case ModifierPattern:
                 {
                     // highlight parameters in options and modifiers
-                    if (expression.captureCount() > 0 && !expression.cap(1).isEmpty())
+                    if ((expression.captureCount() > 0) && !expression.cap(1).isEmpty())
                     {
                         QString fullmatched  = expression.cap(0);
                         QString parameters   = expression.cap(1);
@@ -80,7 +80,7 @@ void Highlighter::highlightBlock(const QString& text)
                                 {
                                     int plength = parameters.length();
                                     setFormat(index + pindex, plength, parameterFormat);
-                                    pindex = fullmatched.indexOf(parameters, pindex + plength);
+                                    pindex      = fullmatched.indexOf(parameters, pindex + plength);
                                 }
                             }
                         }
@@ -101,6 +101,7 @@ void Highlighter::highlightBlock(const QString& text)
     ParseSettings settings;
     settings.parseString = text;
     ParseResults invalid = parser->invalidModifiers(settings);
+
     foreach(const ParseResults::ResultsKey& key, invalid.keys())
     {
         setFormat(key.first, key.second, errorFormat);
@@ -113,10 +114,10 @@ void Highlighter::highlightBlock(const QString& text)
 
         while (index >= 0)
         {
-            QString fullmatched  = expression.cap(0);
-            int qlength = expression.matchedLength();
+            QString fullmatched = expression.cap(0);
+            int qlength         = expression.matchedLength();
             setFormat(index, qlength, quotationFormat);
-            index = expression.indexIn(text, index + qlength);
+            index               = expression.indexIn(text, index + qlength);
         }
     }
 }
@@ -134,7 +135,7 @@ void Highlighter::setupHighlightingGrammar()
 
     optionFormat.setForeground(Qt::red);
 
-    foreach(Rule* option, parser->options())
+    foreach(Rule* const option, parser->options())
     {
         QRegExp r    = option->regExp();
         rule.type    = OptionPattern;
@@ -147,7 +148,7 @@ void Highlighter::setupHighlightingGrammar()
 
     modifierFormat.setForeground(Qt::darkGreen);
 
-    foreach(Rule* modifier, parser->modifiers())
+    foreach(Rule* const modifier, parser->modifiers())
     {
         QRegExp r    = modifier->regExp();
         rule.type    = ModifierPattern;
@@ -162,8 +163,8 @@ void Highlighter::setupHighlightingGrammar()
     quotationFormat.setFontItalic(true);
     quotationRule.pattern = QRegExp(QLatin1String("\".*\""));
     quotationRule.pattern.setMinimal(true);
-    quotationRule.format = quotationFormat;
-    quotationRule.type   = QuotedTextPattern;
+    quotationRule.format  = quotationFormat;
+    quotationRule.type    = QuotedTextPattern;
 
     // --------------------------------------------------------
 

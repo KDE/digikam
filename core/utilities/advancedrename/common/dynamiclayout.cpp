@@ -42,7 +42,8 @@ public:
         spaceY(0),
         minItemWidth(0),
         minColumns(2)
-    {}
+    {
+    }
 
     int                 hSpace;
     int                 vSpace;
@@ -56,8 +57,9 @@ public:
 
 // --------------------------------------------------------
 
-DynamicLayout::DynamicLayout(QWidget* parent, int margin, int hSpacing, int vSpacing)
-    : QLayout(parent), d(new Private(hSpacing, vSpacing))
+DynamicLayout::DynamicLayout(QWidget* const parent, int margin, int hSpacing, int vSpacing)
+    : QLayout(parent),
+      d(new Private(hSpacing, vSpacing))
 {
     setContentsMargins(margin, margin, margin, margin);
 }
@@ -173,6 +175,7 @@ QSize DynamicLayout::minimumSize() const
     size += QSize(2 * contentsMargins().left(), 2 * contentsMargins().top());
     int w = (size.width() * d->minColumns) + (d->minColumns * d->spaceX);
     size.setWidth(w);
+
     return size;
 }
 
@@ -192,7 +195,11 @@ int DynamicLayout::reLayout(const QRect& rect, bool testOnly) const
     // --------------------------------------------------------
 
     int buttonWidth     = d->minItemWidth + d->spaceX;
-    buttonWidth         = (buttonWidth == 0) ? 1 : buttonWidth;
+    
+    if (buttonWidth == 0)
+    {
+        buttonWidth = 1;
+    }
 
     int maxButtonsInRow = (effectiveRect.width() - d->spaceX) / buttonWidth;
 
@@ -201,7 +208,11 @@ int DynamicLayout::reLayout(const QRect& rect, bool testOnly) const
         maxButtonsInRow = d->minColumns;
     }
 
-    maxButtonsInRow     = (maxButtonsInRow == 0) ? d->minColumns : maxButtonsInRow;
+    if (maxButtonsInRow == 0) 
+    {
+        maxButtonsInRow = d->minColumns;
+    }
+
     int maxButtonWidth  = d->minItemWidth + ((effectiveRect.width() - (maxButtonsInRow * buttonWidth)) / maxButtonsInRow);
 
     int currentBtnWidth = (maxButtonsInRow >= d->itemList.count()) ? buttonWidth : maxButtonWidth;

@@ -40,7 +40,7 @@ class Highlighter : public QSyntaxHighlighter
 
 public:
 
-    Highlighter(QTextDocument* document, Parser* parser);
+    Highlighter(QTextDocument* const document, Parser* const _parser);
     virtual ~Highlighter();
 
 protected:
@@ -71,16 +71,18 @@ private:
         QTextCharFormat format;
     };
 
+private:
+
     QVector<HighlightingRule> highlightingRules;
     HighlightingRule          quotationRule;
 
-    QTextCharFormat optionFormat;
-    QTextCharFormat parameterFormat;
-    QTextCharFormat modifierFormat;
-    QTextCharFormat quotationFormat;
-    QTextCharFormat errorFormat;
+    QTextCharFormat           optionFormat;
+    QTextCharFormat           parameterFormat;
+    QTextCharFormat           modifierFormat;
+    QTextCharFormat           quotationFormat;
+    QTextCharFormat           errorFormat;
 
-    Parser* const parser;
+    Parser* const             parser;
 };
 
 } // namespace Digikam
