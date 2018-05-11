@@ -21,6 +21,7 @@ WEBSITE_DIR="${ORIG_WD}/site"
 TITLE="digiKam-$(parseGitBranch)$(parseGitHash)"
 echo "Clang Static Analyzer task name: $TITLE"
 
+if [ ]; then 
 # Clean up and prepare to scan.
 
 rm -fr $REPORT_DIR
@@ -61,7 +62,7 @@ scan-build -o $REPORT_DIR \
            -v \
            -k \
            make -j$CPU_CORES
-
+fi
 cd $ORIG_WD
 
 SCANBUILD_DIR=$(find ${REPORT_DIR} -maxdepth 1 -not -empty -not -name `basename ${REPORT_DIR}`)
@@ -96,9 +97,16 @@ for DROP_ITEM in $KRAZY_FILTERS ; do
         STAT_VAL=$(echo $ORG_STAT_LINE | grep -o -P '(?<=class=\"Q\">).*(?=<\/td><td>)')
         ORG_STR="class=\"Q\">$STAT_VAL<\/td><td>"
         STAT_VAL=$((STAT_VAL-1))
-        NEW_STR="class=\"Q\">$STAT_VAL<\/td><td>"
-        NEW_STAT_LINE=${ORG_STAT_LINE/$ORG_STR/$NEW_STR}
-        sed -i "s|$ORG_STAT_LINE|$NEW_STAT_LINE|" $SCANBUILD_DIR/index.html
+
+        if (( $STAT_VAL == 0 )); then 
+            # if counter is zero, the line can be removed from HTML report.
+            sed -i '/$ORG_STAT_LINE/d' $SCANBUILD_DIR/index.html
+        else
+            NEW_STR="class=\"Q\">$STAT_VAL<\/td><td>"
+            NEW_STAT_LINE=${ORG_STAT_LINE/$ORG_STR/$NEW_STR}
+            sed -i "s|$ORG_STAT_LINE|$NEW_STAT_LINE|" $SCANBUILD_DIR/index.html
+        fi
+
         TOTAL_COUNT=$((TOTAL_COUNT+1))
     done
 
@@ -115,7 +123,7 @@ for DROP_ITEM in $KRAZY_FILTERS ; do
     # Remove the lines including current pattern to drop.
     grep -v "$DROP_ITEM" $SCANBUILD_DIR/index.html > $SCANBUILD_DIR/temp && mv $SCANBUILD_DIR/temp $SCANBUILD_DIR/index.html
 done
-
+exit
 # update www.digikam.org report section.
 updateReportToWebsite "clang" $SCANBUILD_DIR $TITLE
 
