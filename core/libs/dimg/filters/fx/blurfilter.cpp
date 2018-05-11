@@ -129,12 +129,12 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
         memset(gs, 0, width * sizeof(int));
         memset(bs, 0, width * sizeof(int));
 
-        for (int yy = 0; yy < mh; yy++)
+        for (int yy = 0 ; yy < mh ; ++yy)
         {
             uchar* pSrc8           = m_orgImage.scanLine(yy + my);
             unsigned short* pSrc16 = reinterpret_cast<unsigned short*>(m_orgImage.scanLine(yy + my));
 
-            for (int x = 0; x < width; x++)
+            for (int x = 0 ; x < width ; ++x)
             {
                 if (sixteenBit)
                 {
@@ -157,9 +157,12 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
 
         if (width > ((radius << 1) + 1))
         {
-            for (int x = 0; x < width; x++)
+            for (int x = 0 ; x < width ; ++x)
             {
-                a  = r = g = b = 0;
+                a  = 0;
+                r  = 0;
+                g  = 0;
+                b  = 0;
                 mx = x - radius;
                 mw = (radius << 1) + 1;
 
@@ -176,7 +179,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
 
                 mt = mw * mh;
 
-                for (int xx = mx; xx < (mw + mx); xx++)
+                for (int xx = mx ; xx < (mw + mx) ; ++xx)
                 {
                     a += as[xx];
                     r += rs[xx];
@@ -184,10 +187,13 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
                     b += bs[xx];
                 }
 
-                a = a / mt;
-                r = r / mt;
-                g = g / mt;
-                b = b / mt;
+                if (mt != 0)
+                {
+                    a = a / mt;
+                    r = r / mt;
+                    g = g / mt;
+                    b = b / mt;
+                }
 
                 if (sixteenBit)
                 {
@@ -212,12 +218,12 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
             qCDebug(DIGIKAM_DIMG_LOG) << "Radius too small...";
         }
 
-        progress = (int)( ( (double)y * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (stop-start));
+        progress = (int)(((double)y * (100.0 / QThreadPool::globalInstance()->maxThreadCount())) / (stop-start));
 
         if ((progress % 5 == 0) && (progress > oldProgress))
         {
             d->lock.lock();
-            oldProgress       = progress;
+            oldProgress        = progress;
             d->globalProgress += 5;
             postProgress(d->globalProgress);
             d->lock.unlock();
