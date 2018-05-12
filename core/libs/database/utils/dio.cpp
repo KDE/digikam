@@ -350,7 +350,8 @@ void DIO::createJob(IOJobData* const data)
     jobThread = IOJobsManager::instance()->startIOJobs(data);
 
     connect(jobThread, SIGNAL(signalOneProccessed()),
-            this, SLOT(slotOneProccessed()));
+            this, SLOT(slotOneProccessed()),
+            Qt::QueuedConnection);
 
     connect(jobThread, SIGNAL(finished()),
             this, SLOT(slotResult()));

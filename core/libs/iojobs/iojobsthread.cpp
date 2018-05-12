@@ -215,7 +215,8 @@ void IOJobsThread::connectOneJob(IOJob* const j)
             this, SLOT(slotOneJobFinished()));
 
     connect(j, SIGNAL(signalOneProccessed()),
-            this, SIGNAL(signalOneProccessed()));
+            this, SIGNAL(signalOneProccessed()),
+            Qt::QueuedConnection);
 }
 
 void IOJobsThread::slotOneJobFinished()
