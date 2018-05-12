@@ -187,6 +187,7 @@ void SetupDatabase::applySettings()
 
     QString ignoreDirectory;
     CoreDbAccess().db()->getUserIgnoreDirectoryFilterSettings(&ignoreDirectory);
+
     if (d->ignoreEdit->text() != ignoreDirectory)
     {
         CoreDbAccess().db()->setUserIgnoreDirectoryFilterSettings(

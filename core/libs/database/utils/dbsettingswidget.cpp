@@ -416,7 +416,7 @@ void DatabaseSettingsWidget::setupMainArea()
                                                "PGF</a>.</p>"
                                                "<p>The databases must be created previously on the remote server by the administrator. "
                                                "Look in <b>Requirements</b> tab for details.</p>"),
-                                               d->dbDetailsBox);
+                                          d->dbDetailsBox);
     details->setWordWrap(true);
 
     vlay3->addWidget(details);
@@ -587,13 +587,13 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
                                       .arg(d->userName->text());
 
     sql += QString::fromLatin1("GRANT ALL ON *.* TO \'%1\'@\'%\' IDENTIFIED BY \'<b>password</b>\';<br>")
-                                      .arg(d->userName->text());
+                               .arg(d->userName->text());
 
     sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
                                "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
-                                      .arg(d->dbNameCore->text())
-                                      .arg(d->dbNameCore->text())
-                                      .arg(d->userName->text());
+                               .arg(d->dbNameCore->text())
+                               .arg(d->dbNameCore->text())
+                               .arg(d->userName->text());
 
     if (d->dbNameThumbs->text() != d->dbNameCore->text())
     {
@@ -743,13 +743,14 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
         d->dbPathEdit->setFileDlgPath(d->orgPrms.getCoreDatabaseNameOrDir());
         d->dbType->setCurrentIndex(d->dbTypeMap[SQlite]);
         slotResetMysqlServerDBNames();
+
         if (settings->getDatabaseDirSetAtCmd() && !migration)
         {
             d->dbType->setEnabled(false);
             d->dbPathEdit->setEnabled(false);
-            d->dbPathLabel->setText(d->dbPathLabel->text()
-                                    + i18n("This path was set as a command line"
-                                           "option (--database-directory)."));
+            d->dbPathLabel->setText(d->dbPathLabel->text() +
+                                    i18n("This path was set as a command line"
+                                         "option (--database-directory)."));
         }
     }
 #ifdef HAVE_MYSQLSUPPORT
