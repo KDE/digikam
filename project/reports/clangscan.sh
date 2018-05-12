@@ -133,10 +133,11 @@ for DROP_ITEM in $KRAZY_FILTERS ; do
 
     for UITEM in "${URL_ENTRIES[@]}" ; do
         rm -f $SCANBUILD_DIR/$UITEM
+
+        # Remove the lines from index.html including current pattern to drop.
+        grep -v "$UITEM" $SCANBUILD_DIR/index.html > $SCANBUILD_DIR/temp && mv $SCANBUILD_DIR/temp $SCANBUILD_DIR/index.html
     done
 
-    # Remove the lines from index.html including current pattern to drop.
-    grep -v "$DROP_ITEM" $SCANBUILD_DIR/index.html > $SCANBUILD_DIR/temp && mv $SCANBUILD_DIR/temp $SCANBUILD_DIR/index.html
 done
 
 # update www.digikam.org report section.
