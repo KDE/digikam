@@ -374,11 +374,11 @@ QLayout* ColorCorrectionDlg::createPreviews() const
 
 QWidget* ColorCorrectionDlg::createOptions() const
 {
-    QGroupBox* const box    = new QGroupBox;
-    QVBoxLayout* const vbox = new QVBoxLayout(box);
+    QGroupBox* const box = new QGroupBox;
 
     if (d->mode == ProfileMismatch)
     {
+        QVBoxLayout* const vbox  = new QVBoxLayout(box);
         d->keepProfile           = new QRadioButton(i18n("Keep the embedded profile, do not convert"));
         d->convertToWorkingSpace = new QRadioButton(i18n("Convert to working color space"));
         d->thirdOption           = new QRadioButton(i18n("Ignore embedded profile, assign this profile:"));
@@ -424,6 +424,7 @@ QWidget* ColorCorrectionDlg::createOptions() const
     }
     else if (d->mode == MissingProfile)
     {
+        QVBoxLayout* const vbox  = new QVBoxLayout(box);
         d->convertToWorkingSpace = new QRadioButton(i18n("Assign profile and convert to working color space"));
         d->keepProfile           = new QRadioButton(i18n("Assign and keep color profile"));
         d->thirdOption           = new QRadioButton(i18n("Leave the file untagged, do not color manage"));
@@ -447,8 +448,9 @@ QWidget* ColorCorrectionDlg::createOptions() const
     {
         // empty
 /*
+        QVBoxLayout* const vbox  = new QVBoxLayout(box);
         d->convertToWorkingSpace = new QRadioButton(i18n("Convert to working color space"));
-        d->thirdOption         = new QRadioButton(i18n("Convert to this profile:"));
+        d->thirdOption           = new QRadioButton(i18n("Convert to this profile:"));
         d->otherProfileBox       = new IccProfilesComboBox;
         d->otherProfileBox->addProfilesSqueezed(IccSettings::instance()->workspaceProfiles());
 
@@ -464,7 +466,6 @@ QWidget* ColorCorrectionDlg::createOptions() const
 QWidget* ColorCorrectionDlg::createAssumeOptions() const
 {
     QGroupBox* const box    = new QGroupBox;
-    QGridLayout* const grid = new QGridLayout(box);
 
     if (d->mode == ProfileMismatch)
     {
@@ -472,7 +473,8 @@ QWidget* ColorCorrectionDlg::createAssumeOptions() const
     }
     else if (d->mode == MissingProfile)
     {
-        QLabel* const label = new QLabel(i18n("Which color space shall be used to interpret the colors of this image?"));
+        QGridLayout* const grid = new QGridLayout(box);
+        QLabel* const label     = new QLabel(i18n("Which color space shall be used to interpret the colors of this image?"));
         label->setWordWrap(true);
 
         d->imageSRGB         = new QRadioButton(i18n("sRGB (Internet standard)"));
@@ -519,7 +521,9 @@ QWidget* ColorCorrectionDlg::createAssumeOptions() const
     }
     else if (d->mode == UncalibratedColor)
     {
-        QLabel* const label = new QLabel(i18n("Please select the input color profile of the device (camera) used to create this image:"));
+        QGridLayout* const grid = new QGridLayout(box);
+        QLabel* const label     = new QLabel(i18n("Please select the input color profile of the device (camera) "
+                                                  "used to create this image:"));
         label->setWordWrap(true);
 
         d->imageProfileBox = new IccProfilesComboBox;

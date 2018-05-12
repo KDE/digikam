@@ -58,8 +58,10 @@ public:
 
 public:
 
-    explicit ColorCorrectionDlg(Mode mode, const DImg& preview,
-                                const QString& file, QWidget* const parent = 0);
+    explicit ColorCorrectionDlg(Mode mode,
+                                const DImg& preview,
+                                const QString& file,
+                                QWidget* const parent = 0);
     ~ColorCorrectionDlg();
 
     ICCSettingsContainer::Behavior behavior() const;
