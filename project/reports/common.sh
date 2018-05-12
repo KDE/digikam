@@ -31,6 +31,7 @@ function parseGitHash()
 # arg1: static analyzer name (clang, cppcheck, krazy, ...).
 # arg2: static analyzer report directory with html contents.
 # arg3: static analyzer report title.
+# arg4: git branch name.
 #
 function updateReportToWebsite()
 {
@@ -44,13 +45,13 @@ function updateReportToWebsite()
 
     git checkout -b dev remotes/origin/dev
 
-    rm -r $WEBSITE_DIR/static/reports/$1/*
-    mkdir $WEBSITE_DIR/static/reports/$1
-    cp -r $2/* $WEBSITE_DIR/static/reports/$1/
+    rm -r $WEBSITE_DIR/static/reports/$1/$4/*
+    mkdir $WEBSITE_DIR/static/reports/$1/$4
+    cp -r $2/* $WEBSITE_DIR/static/reports/$1/$4/
 
     # Add new report contents in dev branch
 
-    git add $WEBSITE_DIR/static/reports/$1/*
+    git add $WEBSITE_DIR/static/reports/$1/$4/*
     git commit . -m"update $1 static analyzer report $3."
     git push
 
@@ -58,11 +59,11 @@ function updateReportToWebsite()
 
     git checkout master
     git merge dev -m"Update $1 static analyzer report $3.
-See https://www.digikam.org/reports/$1 for details.
+See https://www.digikam.org/reports/$1/$4 for details.
 CCMAIL: digikam-bugs-null@kde.org"
     git push
 
-    echo "$1 Report $3 published to https://www.digikam.org/reports/$1"
+    echo "$1 Report $3 published to https://www.digikam.org/reports/$1/$4"
     echo "Web site will be synchronized in few minutes..."
 }
 

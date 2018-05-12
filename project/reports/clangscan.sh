@@ -4,6 +4,7 @@
 #
 # Run Clang static analyzer on whole digiKam source code.
 # https://clang-analyzer.llvm.org/
+# Dependencies : clang static analyzer version 3.9.0 (no need clang compiler).
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -139,6 +140,6 @@ for DROP_ITEM in $KRAZY_FILTERS ; do
 done
 
 # update www.digikam.org report section.
-updateReportToWebsite "clang" $SCANBUILD_DIR $TITLE
+updateReportToWebsite "clang" $SCANBUILD_DIR $TITLE $(parseGitBranch)
 
 cd $ORIG_DIR

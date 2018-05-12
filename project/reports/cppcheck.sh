@@ -4,6 +4,7 @@
 #
 # Run CppCheck static analyzer on whole digiKam source code.
 # http://cppcheck.sourceforge.net/
+# Dependencies : Python::pygments module to export report as HTML.
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -50,7 +51,7 @@ cppcheck-htmlreport --file=report.cppcheck.xml \
                     --title=$TITLE
 
 # update www.digikam.org report section.
-updateReportToWebsite "cppcheck" $REPORT_DIR $TITLE
+updateReportToWebsite "cppcheck" $REPORT_DIR $TITLE $(parseGitBranch)
 
 cd $ORIG_DIR
 

@@ -4,6 +4,9 @@
 #
 # Run Krazy static analyzer on whole digiKam source code.
 # https://github.com/Krazy-collection/krazy
+# Dependencies:
+#  - Perl:Tie::IxHash and Perl:XML::LibXML modules at run-time.
+#  - Saxon java xml parser to export report as HTML.
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -25,6 +28,9 @@ rm -fr $REPORT_DIR
 rm -fr $WEBSITE_DIR
 
 # Compute static analyzer output as XML
+TITLE_EXT=$TITLE+"
+This is the static analyzis processed with Extra checkers.
+See <a href=\"http://ebn.kde.org/krazy/reports/extragear/graphics/digikam/\">EBN</a> for standard analyzis."
 
 krazy2all --export xml \
           --title $TITLE \
@@ -59,6 +65,6 @@ java -jar /usr/share/java/saxon/saxon.jar \
 cp ./krazy/style.css $REPORT_DIR/
 
 # update www.digikam.org report section.
-updateReportToWebsite "krazy" $REPORT_DIR $TITLE
+updateReportToWebsite "krazy" $REPORT_DIR $TITLE $(parseGitBranch)
 
 cd $ORIG_DIR
