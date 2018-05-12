@@ -41,6 +41,9 @@ cppcheck -j$CPU_CORES \
          --enable=all \
          --report-progress \
          --suppress=*:*CImg.h* \
+         --suppress=variableScope \
+         --suppress=purgedConfiguration \
+         --suppress=toomanyconfigs \
          $IGNORE_DIRS \
          ../../core \
          2> report.cppcheck.xml
