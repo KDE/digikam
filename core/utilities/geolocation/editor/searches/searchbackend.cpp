@@ -87,7 +87,7 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
     {
         d->runningBackend = backendName;
 
-        QUrl netUrl(QLatin1String("http://nominatim.openstreetmap.org/search"));
+        QUrl netUrl(QLatin1String("https://nominatim.openstreetmap.org/search"));
 
         QUrlQuery q(netUrl);
         q.addQueryItem(QLatin1String("format"), QLatin1String("xml"));

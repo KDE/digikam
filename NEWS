@@ -222,4 +222,5 @@ BUGFIXES:
 193 ==> 388199 - No context menu to copy coordinates from map.
 194 ==> 393399 - Windows defender freaks out in windows 10 and Edge.
 195 ==> 392134 - SIGSEGV While Scanning Faces [patch].
-196 ==> 
+196 ==> 394168 - OSM Search Yields No Results.
+197 ==> 
