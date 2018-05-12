@@ -57,13 +57,13 @@ Q_SIGNALS:
 
 // ---------------------------------------
 
-class DIGIKAM_EXPORT CopyJob : public IOJob
+class DIGIKAM_EXPORT CopyOrMoveJob : public IOJob
 {
     Q_OBJECT
 
 public:
 
-    explicit CopyJob(IOJobData* const data);
+    explicit CopyOrMoveJob(IOJobData* const data);
 
 protected:
 

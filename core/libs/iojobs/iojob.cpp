@@ -52,12 +52,12 @@ IOJob::IOJob()
 
 // --------------------------------------------
 
-CopyJob::CopyJob(IOJobData* const data)
+CopyOrMoveJob::CopyOrMoveJob(IOJobData* const data)
 {
     m_data = data;
 }
 
-void CopyJob::run()
+void CopyOrMoveJob::run()
 {
     while (m_data && !m_cancel)
     {
