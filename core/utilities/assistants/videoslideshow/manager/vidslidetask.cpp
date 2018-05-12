@@ -78,12 +78,12 @@ public:
         adec->close();
     }
 
-    bool          encodeFrame(VideoFrame& vframe,
-                              VideoEncoder* const venc,
-                              AudioEncoder* const aenc,
-                              AVMuxer& mux);
+    bool       encodeFrame(VideoFrame& vframe,
+                           VideoEncoder* const venc,
+                           AudioEncoder* const aenc,
+                           AVMuxer& mux);
 
-    AudioFrame    nextAudioFrame(const AudioFormat& afmt);
+    AudioFrame nextAudioFrame(const AudioFormat& afmt);
 
 public:
 
@@ -159,7 +159,7 @@ AudioFrame VidSlideTask::Private::nextAudioFrame(const AudioFormat& afmt)
         }
         else
         {
-            curAudioFile++;
+            ++curAudioFile;
         }
 
         if (curAudioFile != settings->inputAudio.constEnd())
@@ -338,15 +338,19 @@ void VidSlideTask::run()
     effmngr.setOutputSize(osize);
     effmngr.setFrames(d->settings->imgFrames);
 
-    for (int i = 0 ; i < d->settings->inputImages.count()+1 && !m_cancel ; i++)
+    for (int i = 0 ; i < d->settings->inputImages.count()+1 && !m_cancel ; ++i)
     {
         if (i == 0)
+        {
             qiimg = FrameUtils::makeFramedImage(QString(), osize);
+        }
 
         QString ofile;
 
         if (i < d->settings->inputImages.count())
+        {
             ofile = d->settings->inputImages[i].toLocalFile();
+        }
 
         QImage qoimg = FrameUtils::makeFramedImage(ofile, osize);
 
@@ -387,7 +391,7 @@ void VidSlideTask::run()
                 if (d->encodeFrame(frame, venc, aenc, mux))
                 {
 
-                    count++;
+                    ++count;
 /*
                     qCDebug(DIGIKAM_GENERAL_LOG) << ofile
                                                  << " => encode count:" << count
