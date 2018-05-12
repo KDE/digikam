@@ -766,7 +766,7 @@ DbEngineParameters DbEngineParameters::parametersForSQLite(const QString& databa
     params.setCoreDatabasePath(databaseFile);
     params.setThumbsDatabasePath(params.getCoreDatabaseNameOrDir());
     params.setFaceDatabasePath(params.getCoreDatabaseNameOrDir());
-    params.setSimilarityDatabasePath(params.getSimilarityDatabaseNameOrDir());
+    params.setSimilarityDatabasePath(params.getCoreDatabaseNameOrDir());
     return params;
 }
 
