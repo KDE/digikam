@@ -79,7 +79,10 @@ void IOJobsThread::copy(IOJobData* const data)
 
     ActionJobCollection collection;
 
-    for (int i = 0 ; i < maximumNumberOfThreads() ; i++)
+    int threads = qMin(maximumNumberOfThreads(),
+                       data->sourceUrls().count());
+
+    for (int i = 0 ; i < threads ; i++)
     {
         CopyJob* const j = new CopyJob(data);
 
@@ -98,7 +101,10 @@ void IOJobsThread::move(IOJobData* const data)
 
     ActionJobCollection collection;
 
-    for (int i = 0 ; i < maximumNumberOfThreads() ; i++)
+    int threads = qMin(maximumNumberOfThreads(),
+                       data->sourceUrls().count());
+
+    for (int i = 0 ; i < threads ; i++)
     {
         CopyJob* const j = new CopyJob(data);
 
@@ -117,7 +123,10 @@ void IOJobsThread::deleteFiles(IOJobData* const data)
 
     ActionJobCollection collection;
 
-    for (int i = 0 ; i < maximumNumberOfThreads() ; i++)
+    int threads = qMin(maximumNumberOfThreads(),
+                       data->sourceUrls().count());
+
+    for (int i = 0 ; i < threads ; i++)
     {
         DeleteJob* const j = new DeleteJob(data);
 
