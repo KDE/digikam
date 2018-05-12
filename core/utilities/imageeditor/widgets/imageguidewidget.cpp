@@ -800,10 +800,10 @@ QImage ImageGuideWidget::getMask() const
 
 QPoint ImageGuideWidget::translatePointPosition(const QPoint& point) const
 {
-    int x = d->rect.left() + (int)(point.x() * (float)d->preview.width()  /
-                                               (float)d->iface->originalSize().width());
-    int y = d->rect.top()  + (int)(point.y() * (float)d->preview.height() /
-                                               (float)d->iface->originalSize().height());
+    int x = d->rect.x() + 1 + (int)(point.x() * (float)d->preview.width()  /
+                                                (float)d->iface->originalSize().width());
+    int y = d->rect.y() + 1 + (int)(point.y() * (float)d->preview.height() /
+                                                (float)d->iface->originalSize().height());
 
     return (QPoint(x, y));
 }
