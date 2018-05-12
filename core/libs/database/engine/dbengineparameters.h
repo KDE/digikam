@@ -180,7 +180,7 @@ public:
      * data used by internal Mysql server.
      */
     static QString internalServerPrivatePath();
-    
+
     /**
      * Return the default Mysql server command name (Internal server only).
      */
@@ -190,7 +190,7 @@ public:
      * Return the default Mysql initialization command name (Internal server only).
      */
     static QString defaultMysqlInitCmd();
-    
+
 public:
 
     QString databaseType;
