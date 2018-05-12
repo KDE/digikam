@@ -84,7 +84,7 @@ public:
     SearchTextBar*              searchGPSBar;
     EditableSearchTreeView*     searchTreeView;
     QSplitter*                  splitter;
-    MapWidget*        mapSearchWidget;
+    MapWidget*                  mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
     ImageAlbumModel*            imageAlbumModel;
     ImageFilterModel*           imageFilterModel;
@@ -614,7 +614,7 @@ void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
 
 void GPSSearchView::showNonGeolocatedItems()
 {
-    if(d->nonGeonlocatedItemsXml.isEmpty())
+    if (d->nonGeonlocatedItemsXml.isEmpty())
     {
         SearchXmlWriter writer;
         writer.setFieldOperator((SearchXml::standardFieldOperator()));
@@ -635,12 +635,12 @@ void GPSSearchView::showNonGeolocatedItems()
     {
         id = album->id();
         CoreDbAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
-                                            SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), d->nonGeonlocatedItemsXml);
+                                          SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), d->nonGeonlocatedItemsXml);
     }
     else
     {
         id = CoreDbAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
-                                              SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), d->nonGeonlocatedItemsXml);
+                                            SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), d->nonGeonlocatedItemsXml);
     }
 
     album = new SAlbum(i18n("Non Geo-located Items"), id);
