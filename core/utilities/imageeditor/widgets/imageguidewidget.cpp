@@ -800,10 +800,10 @@ QImage ImageGuideWidget::getMask() const
 
 QPoint ImageGuideWidget::translatePointPosition(const QPoint& point) const
 {
-    int x  = d->rect.left() + (int)(point.x() * (float)d->preview.width()  /
-                                                (float)d->iface->originalSize().width());
-    int y  = d->rect.top()  + (int)(point.y() * (float)d->preview.height() /
-                                                (float)d->iface->originalSize().height());
+    int x = d->rect.left() + (int)(point.x() * (float)d->preview.width()  /
+                                               (float)d->iface->originalSize().width());
+    int y = d->rect.top()  + (int)(point.y() * (float)d->preview.height() /
+                                               (float)d->iface->originalSize().height());
 
     return (QPoint(x, y));
 }
@@ -839,7 +839,7 @@ void ImageGuideWidget::updateMaskCursor()
     d->maskCursor = QCursor(pix);
 }
 
-void ImageGuideWidget::setSpotPosition(QPoint &point)
+void ImageGuideWidget::setSpotPosition(const QPoint& point)
 {
     d->spot.setX(point.x());
     d->spot.setY(point.y());
