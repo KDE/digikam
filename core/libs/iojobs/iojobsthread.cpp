@@ -73,7 +73,7 @@ IOJobsThread::~IOJobsThread()
     delete d;
 }
 
-void IOJobsThread::copy(IOJobData* const data)
+void IOJobsThread::copyOrMove(IOJobData* const data)
 {
     d->jobData = data;
 
@@ -84,29 +84,7 @@ void IOJobsThread::copy(IOJobData* const data)
 
     for (int i = 0 ; i < threads ; i++)
     {
-        CopyJob* const j = new CopyJob(data);
-
-        connectOneJob(j);
-
-        collection.insert(j, 0);
-        d->jobsCount++;
-    }
-
-    appendJobs(collection);
-}
-
-void IOJobsThread::move(IOJobData* const data)
-{
-    d->jobData = data;
-
-    ActionJobCollection collection;
-
-    int threads = qMin(maximumNumberOfThreads(),
-                       data->sourceUrls().count());
-
-    for (int i = 0 ; i < threads ; i++)
-    {
-        CopyJob* const j = new CopyJob(data);
+        CopyOrMoveJob* const j = new CopyOrMoveJob(data);
 
         connectOneJob(j);
 

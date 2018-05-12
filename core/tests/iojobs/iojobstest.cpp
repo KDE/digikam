@@ -86,8 +86,8 @@ void IOJobsTest::copyAndMove()
     QUrl dstUrl           = QUrl::fromLocalFile(dstFi.absoluteFilePath());
     int operation         = (isMove ? IOJobData::MoveFiles : IOJobData::CopyFiles);
 
-    IOJobData* const data = new IOJobData(operation, QList<QUrl>() << srcUrl, dstUrl);
-    CopyJob* const job    = new CopyJob(data);
+    IOJobData* const data    = new IOJobData(operation, QList<QUrl>() << srcUrl, dstUrl);
+    CopyOrMoveJob* const job = new CopyOrMoveJob(data);
 
     QThreadPool::globalInstance()->start(job);
     QThreadPool::globalInstance()->waitForDone();
