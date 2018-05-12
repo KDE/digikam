@@ -800,8 +800,10 @@ QImage ImageGuideWidget::getMask() const
 
 QPoint ImageGuideWidget::translatePointPosition(const QPoint& point) const
 {
-    int x  = (int)(point.x() * (float)(d->preview.width())  / (float) d->iface->originalSize().width());
-    int y  = (int)(point.y() * (float)(d->preview.height()) / (float) d->iface->originalSize().height());
+    int x  = d->rect.left() + (int)(point.x() * (float)d->preview.width()  /
+                                                (float)d->iface->originalSize().width());
+    int y  = d->rect.top()  + (int)(point.y() * (float)d->preview.height() /
+                                                (float)d->iface->originalSize().height());
 
     return (QPoint(x, y));
 }
@@ -856,8 +858,10 @@ void ImageGuideWidget::updateSpotPosition(int x, int y)
 
 QPoint ImageGuideWidget::translateImagePosition(const QPoint& point, bool src) const
 {
-    int x = (int)(point.x() * (float)(d->preview.width())  / (float) d->iface->originalSize().width());
-    int y = (int)(point.y() * (float)(d->preview.height()) / (float) d->iface->originalSize().height());
+    int x = (int)(point.x() * (float)d->preview.width()  /
+                              (float) d->iface->originalSize().width());
+    int y = (int)(point.y() * (float)d->preview.height() /
+                              (float) d->iface->originalSize().height());
 
     if (!src)
     {
