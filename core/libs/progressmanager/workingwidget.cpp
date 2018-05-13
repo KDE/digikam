@@ -46,9 +46,9 @@ class WorkingWidget::Private
 public:
 
     explicit Private()
+        : pixmaps(DWorkingPixmap()),
+          currentPixmap(0)          
     {
-        currentPixmap = 0;
-        pixmaps       = DWorkingPixmap();
     }
 
     DWorkingPixmap pixmaps;
