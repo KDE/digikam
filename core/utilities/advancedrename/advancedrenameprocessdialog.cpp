@@ -203,8 +203,7 @@ void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& src)
                 setValue(0);
                 getNextThumbnail();
                 setMaximum(d->newNameList.count());
-
-                processOne();
+                QTimer::singleShot(500, this, SLOT(slotRenameImages()));
             }
             else
             {
