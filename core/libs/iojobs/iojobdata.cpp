@@ -202,16 +202,6 @@ QUrl IOJobData::getNextUrl() const
     return url;
 }
 
-ImageInfo IOJobData::imageInfo() const
-{
-    if (d->imageInfoList.isEmpty())
-    {
-        return ImageInfo();
-    }
-
-    return d->imageInfoList.first();
-}
-
 ImageInfo IOJobData::findImageInfo(const QUrl& url) const
 {
     foreach(const ImageInfo& info, d->imageInfoList)
