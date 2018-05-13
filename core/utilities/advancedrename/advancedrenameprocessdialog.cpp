@@ -182,7 +182,9 @@ void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& src)
                                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, this);
 
                     msgBox->button(QMessageBox::Yes)->setText(i18n("Rename Again"));
+                    msgBox->button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
                     msgBox->button(QMessageBox::No)->setText(i18n("Overwrite"));
+                    msgBox->button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
 
             int result = msgBox->exec();
             delete msgBox;
