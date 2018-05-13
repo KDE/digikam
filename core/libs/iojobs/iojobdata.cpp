@@ -131,7 +131,7 @@ IOJobData::IOJobData(int operation,
 
     setImageInfos(QList<ImageInfo>() << info);
 
-    d->destUrl = srcUrl().adjusted(QUrl::RemoveFilename);
+    d->destUrl = info.fileUrl().adjusted(QUrl::RemoveFilename);
     d->destUrl.setPath(d->destUrl.path() + newName);
 }
 
@@ -176,20 +176,6 @@ PAlbum* IOJobData::srcAlbum() const
 PAlbum* IOJobData::destAlbum() const
 {
     return d->destAlbum;
-}
-
-QUrl IOJobData::srcUrl() const
-{
-    if (!d->imageInfoList.isEmpty())
-    {
-        return d->imageInfoList.first().fileUrl();
-    }
-    else if (d->sourceUrlList.isEmpty())
-    {
-        return QUrl();
-    }
-
-    return d->sourceUrlList.first();
 }
 
 QUrl IOJobData::destUrl(const QUrl& srcUrl) const

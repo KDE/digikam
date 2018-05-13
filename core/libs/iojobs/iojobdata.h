@@ -93,7 +93,6 @@ public:
     PAlbum*          srcAlbum()                           const;
     PAlbum*          destAlbum()                          const;
 
-    QUrl             srcUrl()                             const;
     QUrl             destUrl(const QUrl& srcUrl = QUrl()) const;
     QUrl             getNextUrl()                         const;
 

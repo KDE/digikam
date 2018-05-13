@@ -412,7 +412,7 @@ void DIO::slotOneProccessed(const QUrl& url)
     {
         ImageInfo info = data->findImageInfo(url);
 
-        if (!info.isNull())
+        if (!info.isNull() && data->destAlbum())
         {
             CoreDbAccess().db()->moveItem(info.albumId(), info.name(),
                                           data->destAlbum()->id(), info.name());
@@ -425,28 +425,25 @@ void DIO::slotOneProccessed(const QUrl& url)
         PAlbum* const album = data->srcAlbum();
         CoreDbAccess access;
 
-        if (album)
+        if (album && album->fileUrl() == url)
         {
-            if (album->fileUrl() == url)
+            // get all deleted albums
+            QList<int> albumsToDelete;
+            QList<qlonglong> imagesToRemove;
+
+            addAlbumChildrenToList(albumsToDelete, album);
+
+            foreach(int albumId, albumsToDelete)
             {
-                // get all deleted albums
-                QList<int> albumsToDelete;
-                QList<qlonglong> imagesToRemove;
-
-                addAlbumChildrenToList(albumsToDelete, album);
-
-                foreach(int albumId, albumsToDelete)
-                {
-                    imagesToRemove << access.db()->getItemIDsInAlbum(albumId);
-                }
-
-                foreach(const qlonglong& imageId, imagesToRemove)
-                {
-                    access.db()->removeAllImageRelationsFrom(imageId, DatabaseRelation::Grouped);
-                }
-
-                access.db()->removeItemsPermanently(imagesToRemove, albumsToDelete);
+                imagesToRemove << access.db()->getItemIDsInAlbum(albumId);
             }
+
+            foreach(const qlonglong& imageId, imagesToRemove)
+            {
+                access.db()->removeAllImageRelationsFrom(imageId, DatabaseRelation::Grouped);
+            }
+
+            access.db()->removeItemsPermanently(imagesToRemove, albumsToDelete);
         }
         else
         {
@@ -479,9 +476,9 @@ void DIO::slotOneProccessed(const QUrl& url)
         emit signalRenameSucceeded(url);
     }
 
-    QString scanPath;
-
     // Scan folders for changes
+
+    QString scanPath;
 
     if (operation == IOJobData::CopyImage || operation == IOJobData::CopyAlbum ||
         operation == IOJobData::CopyFiles || operation == IOJobData::MoveImage ||
