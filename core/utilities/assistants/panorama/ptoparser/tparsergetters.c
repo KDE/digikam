@@ -453,7 +453,7 @@ int panoScriptGetPanoPrevCommentsCount(pt_script* script)
 
 char* panoScriptGetPanoComment(pt_script* script, int c)
 {
-    assert(script != NULL && c >= 0 && c >= 0 && c < panoScriptGetPanoPrevCommentsCount(script));
+    assert(script != NULL && c >= 0 && c < panoScriptGetPanoPrevCommentsCount(script));
     return script->pano_prevComments[c];
 }
 
