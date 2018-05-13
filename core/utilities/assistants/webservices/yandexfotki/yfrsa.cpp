@@ -701,21 +701,28 @@ static vlong modinv( const vlong& a, const vlong& m ) // modular inverse
 
 class monty // class for montgomery modular exponentiation
 {
-    vlong R,R1,m,n1;
-    vlong T,k;   // work registers
-    unsigned N;  // bits for R
-    void mul( vlong& x, const vlong& y );
+
 public:
+
+    explicit monty( const vlong& M );
     vlong exp( const vlong& x, const vlong& e );
-    monty( const vlong& M );
+
+private:
+
+    vlong    R, R1, m, n1;
+    vlong    T, k;         // work registers
+    unsigned N;            // bits for R
+
+private:
+
+    void mul( vlong& x, const vlong& y );
 };
 
 monty::monty( const vlong& M )
+    : R(1),
+      m(M),
+      N(0)
 {
-    m = M;
-    N = 0;
-    R = 1;
-
     while ( R < M )
     {
         R += R;
