@@ -302,19 +302,23 @@ void DIO::processJob(IOJobData* const data)
 
     if (operation == IOJobData::Rename)
     {
-        PAlbum* const album = AlbumManager::instance()->findPAlbum(data->imageInfo().albumId());
-
-        if (album)
+        if (!data->imageInfos().isEmpty())
         {
-            ScanController::instance()->hintAtMoveOrCopyOfItem(data->imageInfo().id(),
-                                                               album, data->destUrl().fileName());
-        }
+            ImageInfo info      = data->imageInfos().first();
+            PAlbum* const album = AlbumManager::instance()->findPAlbum(info.albumId());
 
-        for (int i = 0 ; i < finder.localFiles.length() ; ++i)
-        {
-            data->setDestUrl(finder.localFiles.at(i),
-                             QUrl::fromLocalFile(data->destUrl().toLocalFile() +
-                                                 finder.localFileSuffixes.at(i)));
+            if (album)
+            {
+                ScanController::instance()->hintAtMoveOrCopyOfItem(info.id(), album,
+                                                                   data->destUrl().fileName());
+            }
+
+            for (int i = 0 ; i < finder.localFiles.length() ; ++i)
+            {
+                data->setDestUrl(finder.localFiles.at(i),
+                                 QUrl::fromLocalFile(data->destUrl().toLocalFile() +
+                                                     finder.localFileSuffixes.at(i)));
+            }
         }
     }
 

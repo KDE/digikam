@@ -96,7 +96,6 @@ public:
     QUrl             destUrl(const QUrl& srcUrl = QUrl()) const;
     QUrl             getNextUrl()                         const;
 
-    ImageInfo        imageInfo()                          const;
     ImageInfo        findImageInfo(const QUrl& url)       const;
 
     QList<QUrl>      sourceUrls()                         const;
