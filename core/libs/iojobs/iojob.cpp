@@ -74,14 +74,12 @@ void CopyOrMoveJob::run()
         if (!srcInfo.exists())
         {
             emit signalError(i18n("File/Folder %1 does not exist anymore", srcInfo.baseName()));
-            emit signalOneProccessed();
             continue;
         }
 
         if (!dstDir.exists())
         {
             emit signalError(i18n("Album %1 does not exist anymore", dstDir.dirName()));
-            emit signalOneProccessed();
             continue;
         }
 
@@ -94,7 +92,6 @@ void CopyOrMoveJob::run()
         {
             emit signalError(i18n("A file or folder named %1 already exists in %2",
                                   srcInfo.baseName(), QDir::toNativeSeparators(dstDir.path())));
-            emit signalOneProccessed();
             continue;
         }
 
@@ -120,7 +117,6 @@ void CopyOrMoveJob::run()
                                               QDir::toNativeSeparators(srcDir.path()),
                                               QDir::toNativeSeparators(dstDir.path())));
 
-                        emit signalOneProccessed();
                         continue;
                     }
                     else if (!srcDir.removeRecursively())
@@ -142,7 +138,6 @@ void CopyOrMoveJob::run()
                                           srcInfo.filePath(),
                                           QDir::toNativeSeparators(dstDir.path())));
 
-                    emit signalOneProccessed();
                     continue;
                 }
            }
@@ -164,7 +159,6 @@ void CopyOrMoveJob::run()
                                           QDir::toNativeSeparators(srcDir.path()),
                                           QDir::toNativeSeparators(dstDir.path())));
 
-                    emit signalOneProccessed();
                     continue;
                 }
             }
@@ -176,15 +170,13 @@ void CopyOrMoveJob::run()
                                           QDir::toNativeSeparators(srcInfo.path()),
                                           QDir::toNativeSeparators(dstDir.path())));
 
-                    emit signalOneProccessed();
                     continue;
                 }
 
             }
         }
 
-        m_data->addProcessedUrl(srcUrl);
-        emit signalOneProccessed();
+        emit signalOneProccessed(srcUrl);
     }
 
     emit signalDone();
@@ -220,7 +212,6 @@ void DeleteJob::run()
             emit signalError(i18n("File/Folder %1 does not exist",
                                   QDir::toNativeSeparators(fileInfo.filePath())));
 
-            emit signalOneProccessed();
             continue;
         }
 
@@ -233,7 +224,6 @@ void DeleteJob::run()
                     emit signalError(i18n("Could not move folder %1 to collection trash",
                                           QDir::toNativeSeparators(fileInfo.path())));
 
-                    emit signalOneProccessed();
                     continue;
                 }
             }
@@ -244,7 +234,6 @@ void DeleteJob::run()
                     emit signalError(i18n("Could not move image %1 to collection trash",
                                           QDir::toNativeSeparators(fileInfo.filePath())));
 
-                    emit signalOneProccessed();
                     continue;
                 }
             }
@@ -260,7 +249,6 @@ void DeleteJob::run()
                     emit signalError(i18n("Album %1 could not be removed",
                                           QDir::toNativeSeparators(fileInfo.path())));
 
-                    emit signalOneProccessed();
                     continue;
                 }
             }
@@ -273,14 +261,12 @@ void DeleteJob::run()
                     emit signalError(i18n("Image %1 could not be removed",
                                           QDir::toNativeSeparators(fileInfo.filePath())));
 
-                    emit signalOneProccessed();
                     continue;
                 }
             }
         }
 
-        m_data->addProcessedUrl(deleteUrl);
-        emit signalOneProccessed();
+        emit signalOneProccessed(deleteUrl);
     }
 
     emit signalDone();
@@ -334,8 +320,7 @@ void RenameFileJob::run()
             continue;
         }
 
-        m_data->addProcessedUrl(renameUrl);
-        emit signalRenamed(renameUrl);
+        emit signalOneProccessed(renameUrl);
     }
 
     emit signalDone();

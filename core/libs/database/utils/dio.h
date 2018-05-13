@@ -110,7 +110,7 @@ private:
 private Q_SLOTS:
 
     void slotResult();
-    void slotOneProccessed();
+    void slotOneProccessed(const QUrl& url);
     void slotCancel(ProgressItem* item);
 
 private:

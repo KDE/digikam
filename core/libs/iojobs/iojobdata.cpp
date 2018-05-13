@@ -55,7 +55,6 @@ public:
     QMap<QUrl, QUrl> changeDestMap;
     QList<ImageInfo> imageInfoList;
     QList<QUrl>      sourceUrlList;
-    QList<QUrl>      processedList;
 
     QUrl             destUrl;
 
@@ -164,11 +163,6 @@ void IOJobData::setDestUrl(const QUrl& srcUrl,
     d->changeDestMap.insert(srcUrl, destUrl);
 }
 
-void IOJobData::addProcessedUrl(const QUrl& url)
-{
-    d->processedList << url;
-}
-
 int IOJobData::operation() const
 {
     return d->operation;
@@ -232,6 +226,19 @@ ImageInfo IOJobData::imageInfo() const
     return d->imageInfoList.first();
 }
 
+ImageInfo IOJobData::findImageInfo(const QUrl& url) const
+{
+    foreach(const ImageInfo& info, d->imageInfoList)
+    {
+        if (info.fileUrl() == url)
+        {
+            return info;
+        }
+    }
+
+    return ImageInfo();
+}
+
 QList<QUrl> IOJobData::sourceUrls() const
 {
     return d->sourceUrlList;
@@ -240,11 +247,6 @@ QList<QUrl> IOJobData::sourceUrls() const
 QList<ImageInfo> IOJobData::imageInfos() const
 {
     return d->imageInfoList;
-}
-
-QList<QUrl> IOJobData::processedUrls() const
-{
-    return d->processedList;
 }
 
 } // namespace Digikam
