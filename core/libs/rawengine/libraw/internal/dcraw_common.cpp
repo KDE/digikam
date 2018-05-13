@@ -2271,6 +2271,7 @@ void CLASS packed_load_raw()
 	fseek (ifp, ftell(ifp) >> 3 << 2, SEEK_SET);
       }
     }
+    if(feof(ifp)) throw LIBRAW_EXCEPTION_IO_EOF;
     for (col=0; col < raw_width; col++) {
       for (vbits -= tiff_bps; vbits < 0; vbits += bite) {
 	bitbuf <<= bite;
@@ -2778,7 +2779,8 @@ void CLASS kodak_radc_load_raw()
 	      nreps = (col > 2) ? radc_token(9) + 1 : 1;
 	      for (rep=0; rep < 8 && rep < nreps && col > 0; rep++) {
 		col -= 2;
-		FORYX buf[c][y][x] = PREDICTOR;
+                if(col>=0)
+		  FORYX buf[c][y][x] = PREDICTOR;
 		if (rep & 1) {
 		  step = radc_token(10) << 4;
 		  FORYX buf[c][y][x] += step;
@@ -11630,10 +11632,16 @@ void CLASS parse_minolta (int base)
   if (fgetc(ifp) || fgetc(ifp)-'M' || fgetc(ifp)-'R') return;
   order = fgetc(ifp) * 0x101;
   offset = base + get4() + 8;
+#ifdef LIBRAW_LIBRARY_BUILD
+  if(offset>ifp->size()-8) // At least 8 bytes for tag/len
+    offset = ifp->size()-8;
+#endif
   while ((save=ftell(ifp)) < offset) {
     for (tag=i=0; i < 4; i++)
       tag = tag << 8 | fgetc(ifp);
     len = get4();
+    if(len < 0)
+      return; // just ignore wrong len?? or raise bad file exception?
     switch (tag) {
       case 0x505244:				/* PRD */
 	fseek (ifp, 8, SEEK_CUR);
@@ -11920,7 +11928,11 @@ void CLASS parse_ciff (int offset, int length, int depth)
     if (type == 0x0032) {
       if (len == 768) {			/* EOS D30 */
 	fseek (ifp, 72, SEEK_CUR);
-	FORC4 cam_mul[c ^ (c >> 1)] = 1024.0 / get2();
+        FORC4
+        {
+          ushort q = get2();
+          cam_mul[c ^ (c >> 1)] = q? 1024.0 / get2() : 1024;
+        }
 	if (!wbi) cam_mul[0] = -1;	/* use my auto white balance */
       } else if (!cam_mul[0]) {
 	if (get2() == key[0])		/* Pro1, G6, S60, S70 */
