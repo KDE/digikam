@@ -42,12 +42,15 @@ public:
 
     explicit Private()
       : operation(Unknown),
+        overwrite(false),
         srcAlbum(0),
         destAlbum(0)
     {
     }
 
     int              operation;
+
+    bool             overwrite;
 
     PAlbum*          srcAlbum;
     PAlbum*          destAlbum;
@@ -124,10 +127,12 @@ IOJobData::IOJobData(int operation,
 
 IOJobData::IOJobData(int operation,
                      const ImageInfo& info,
-                     const QString& newName)
+                     const QString& newName,
+                     bool overwrite)
     : d(new Private)
 {
     d->operation = operation;
+    d->overwrite = overwrite;
 
     setImageInfos(QList<ImageInfo>() << info);
 
@@ -166,6 +171,11 @@ void IOJobData::setDestUrl(const QUrl& srcUrl,
 int IOJobData::operation() const
 {
     return d->operation;
+}
+
+bool IOJobData::overwrite() const
+{
+    return d->overwrite;
 }
 
 PAlbum* IOJobData::srcAlbum() const

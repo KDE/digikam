@@ -86,7 +86,7 @@ public:
     static void del(PAlbum* const album, bool useTrash);
 
     /// Rename item to new name
-    static void rename(const ImageInfo& info, const QString& newName);
+    static void rename(const ImageInfo& info, const QString& newName, bool overwrite = false);
 
     static DIO* instance();
 

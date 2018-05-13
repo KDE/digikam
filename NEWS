@@ -223,4 +223,5 @@ BUGFIXES:
 194 ==> 393399 - Windows defender freaks out in windows 10 and Edge.
 195 ==> 392134 - SIGSEGV While Scanning Faces [patch].
 196 ==> 394168 - OSM Search Yields No Results.
-197 ==> 
+197 ==> 377719 - Cannot rename file with overwrite [patch].
+198 ==> 

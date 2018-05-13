@@ -230,9 +230,9 @@ void DIO::move(const QList<QUrl>& srcList, PAlbum* const dest)
 
 // Rename --------------------------------------------------------------
 
-void DIO::rename(const ImageInfo& info, const QString& newName)
+void DIO::rename(const ImageInfo& info, const QString& newName, bool overwrite)
 {
-    instance()->processJob(new IOJobData(IOJobData::Rename, info, newName));
+    instance()->processJob(new IOJobData(IOJobData::Rename, info, newName, overwrite));
 }
 
 // Delete --------------------------------------------------------------
@@ -474,7 +474,15 @@ void DIO::slotOneProccessed(const QUrl& url)
 
             // delete thumbnail
             ThumbnailLoadThread::deleteThumbnail(url.toLocalFile());
-            LoadingCacheInterface::fileChanged(data->destUrl(url).toLocalFile());
+
+            QString destPath = data->destUrl(url).toLocalFile();
+
+            if (data->overwrite())
+            {
+                ThumbnailLoadThread::deleteThumbnail(destPath);
+            }
+
+            LoadingCacheInterface::fileChanged(destPath);
         }
 
         emit signalRenameSucceeded(url);

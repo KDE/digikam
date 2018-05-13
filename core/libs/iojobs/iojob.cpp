@@ -296,12 +296,19 @@ void RenameFileJob::run()
 
         if (QFileInfo(destUrl.toLocalFile()).exists())
         {
-            qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
-            emit signalError(i18n("Image with the same name %1 already there",
-                                  QDir::toNativeSeparators(destUrl.toLocalFile())));
+            if (m_data->overwrite())
+            {
+                QFile::remove(destUrl.toLocalFile());
+            }
+            else
+            {
+                qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
+                emit signalError(i18n("Image with the same name %1 already there",
+                                      QDir::toNativeSeparators(destUrl.toLocalFile())));
 
-            emit signalRenameFailed(renameUrl);
-            continue;
+                emit signalRenameFailed(renameUrl);
+                continue;
+            }
         }
 
         QFile file(renameUrl.toLocalFile());

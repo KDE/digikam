@@ -78,7 +78,8 @@ public:
 
     explicit IOJobData(int operation,
                        const ImageInfo& info,
-                       const QString& newName);
+                       const QString& newName,
+                       bool overwrite = false);
 
     ~IOJobData();
 
@@ -89,6 +90,8 @@ public:
                                 const QUrl& destUrl);
 
     int              operation()                          const;
+
+    bool             overwrite()                          const;
 
     PAlbum*          srcAlbum()                           const;
     PAlbum*          destAlbum()                          const;

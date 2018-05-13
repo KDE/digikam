@@ -90,7 +90,7 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imag
     }
 }
 
-void ImageViewUtilities::rename(const QUrl& imageUrl, const QString& newName)
+void ImageViewUtilities::rename(const QUrl& imageUrl, const QString& newName, bool overwrite)
 {
     if (imageUrl.isEmpty() || !imageUrl.isLocalFile() || newName.isEmpty())
     {
@@ -98,7 +98,7 @@ void ImageViewUtilities::rename(const QUrl& imageUrl, const QString& newName)
     }
 
     ImageInfo info = ImageInfo::fromUrl(imageUrl);
-    DIO::rename(info, newName);
+    DIO::rename(info, newName, overwrite);
 }
 
 bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const DeleteMode deleteMode)
