@@ -468,14 +468,12 @@ void DIO::slotOneProccessed(const QUrl& url)
 
         if (!info.isNull())
         {
-            CoreDbAccess().db()->moveItem(info.albumId(),
-                                          data->srcUrl().fileName(),
-                                          info.albumId(),
-                                          data->destUrl(data->srcUrl()).fileName());
+            CoreDbAccess().db()->moveItem(info.albumId(), info.name(),
+                                          info.albumId(), data->destUrl(url).fileName());
 
             // delete thumbnail
-            ThumbnailLoadThread::deleteThumbnail(data->srcUrl().toLocalFile());
-            //LoadingCacheInterface::fileChanged(data->srcUrl().toLocalFile());
+            ThumbnailLoadThread::deleteThumbnail(url.toLocalFile());
+            LoadingCacheInterface::fileChanged(data->destUrl(url).toLocalFile());
         }
 
         emit signalRenameSucceeded(url);
