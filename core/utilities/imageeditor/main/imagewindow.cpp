@@ -1481,9 +1481,8 @@ void ImageWindow::dragMoveEvent(QDragMoveEvent* e)
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
     QList<QUrl>      urls;
-    QList<QUrl>      kioURLs;
 
-    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
+    if (DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs) ||
         DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
         DTagListDrag::canDecode(e->mimeData()))
     {
@@ -1500,9 +1499,8 @@ void ImageWindow::dropEvent(QDropEvent* e)
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
     QList<QUrl>      urls;
-    QList<QUrl>      kioURLs;
 
-    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+    if (DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs))
     {
         ImageInfoList imageInfoList(imageIDs);
 
@@ -1680,10 +1678,10 @@ void ImageWindow::slotAddedDropedItems(QDropEvent* e)
     int              albumID;
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
-    QList<QUrl>      urls, kioURLs;
+    QList<QUrl>      urls;
     ImageInfoList    imgList;
 
-    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+    if (DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs))
     {
         imgList = ImageInfoList(imageIDs);
     }

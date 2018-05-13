@@ -429,9 +429,8 @@ void QueuePool::slotTestCanDecode(const QDragMoveEvent* e, bool& accept)
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
     QList<QUrl>      urls;
-    QList<QUrl>      kioURLs;
 
-    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
+    if (DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs) ||
         DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
         DTagListDrag::canDecode(e->mimeData()))
     {

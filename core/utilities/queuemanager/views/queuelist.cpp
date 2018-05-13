@@ -363,7 +363,6 @@ Qt::DropActions QueueListView::supportedDropActions() const
 QMimeData* QueueListView::mimeData(const QList<QTreeWidgetItem*> items) const
 {
     QList<QUrl> urls;
-    QList<QUrl> kioURLs;
     QList<int> albumIDs;
     QList<qlonglong> imageIDs;
 
@@ -374,13 +373,12 @@ QMimeData* QueueListView::mimeData(const QList<QTreeWidgetItem*> items) const
         if (vitem)
         {
             urls.append(vitem->info().fileUrl());
-            kioURLs.append(vitem->info().databaseUrl());
             albumIDs.append(vitem->info().albumId());
             imageIDs.append(vitem->info().id());
         }
     }
 
-    DItemDrag* const mimeData = new DItemDrag(urls, kioURLs, albumIDs, imageIDs);
+    DItemDrag* const mimeData = new DItemDrag(urls, albumIDs, imageIDs);
     return mimeData;
 }
 
@@ -434,13 +432,12 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
     QList<QUrl>      urls;
-    QList<QUrl>      kioURLs;
 
-    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
+    if (DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs) ||
         DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
         DTagListDrag::canDecode(e->mimeData()))
     {
-        if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+        if (DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs))
         {
             ImageInfoList imageInfoList;
 
@@ -479,9 +476,8 @@ void QueueListView::dropEvent(QDropEvent* e)
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
     QList<QUrl>      urls;
-    QList<QUrl>      kioURLs;
 
-    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+    if (DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs))
     {
         ImageInfoList imageInfoList;
 

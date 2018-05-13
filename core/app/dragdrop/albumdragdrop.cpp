@@ -115,16 +115,15 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
     {
 
         QList<QUrl>      urls;
-        QList<QUrl>      kioURLs;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
 
-        if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+        if (!DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs))
         {
             return false;
         }
 
-        if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+        if (urls.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
         {
             return false;
         }

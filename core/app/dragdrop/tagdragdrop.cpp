@@ -156,16 +156,15 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
     else if (DItemDrag::canDecode(e->mimeData()))
     {
         QList<QUrl>      urls;
-        QList<QUrl>      kioURLs;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
 
-        if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+        if (!DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs))
         {
             return false;
         }
 
-        if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+        if (urls.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
         {
             return false;
         }

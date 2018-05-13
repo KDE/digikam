@@ -283,16 +283,15 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
     {
         // Drag & drop inside of digiKam
         QList<QUrl>      urls;
-        QList<QUrl>      kioURLs;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
 
-        if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+        if (!DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs))
         {
             return false;
         }
 
-        if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+        if (urls.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
         {
             return false;
         }
@@ -640,14 +639,12 @@ QMimeData* ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexe
     QList<ImageInfo> infos = model()->imageInfos(indexes);
 
     QList<QUrl>      urls;
-    QList<QUrl>      kioURLs;
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
 
     foreach(const ImageInfo& info, infos)
     {
         urls.append(info.fileUrl());
-        kioURLs.append(info.databaseUrl());
         albumIDs.append(info.albumId());
         imageIDs.append(info.id());
     }
@@ -657,7 +654,7 @@ QMimeData* ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexe
         return 0;
     }
 
-    return new DItemDrag(urls, kioURLs, albumIDs, imageIDs);
+    return new DItemDrag(urls, albumIDs, imageIDs);
 }
 
 } // namespace Digikam
