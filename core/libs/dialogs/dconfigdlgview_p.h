@@ -77,7 +77,7 @@ class DConfigDlgViewPrivate
 
 protected:
 
-    DConfigDlgViewPrivate(DConfigDlgView* const);
+    explicit DConfigDlgViewPrivate(DConfigDlgView* const);
 
     void updateTitleWidget(const QModelIndex& index);
 

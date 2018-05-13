@@ -87,7 +87,7 @@ class PanIconFrame::Private::OutsideClickCatcher
 {
 public:
 
-    OutsideClickCatcher(QObject* const parent = 0)
+    explicit OutsideClickCatcher(QObject* const parent = 0)
         : QObject(parent),
           m_popup(0)
     {
@@ -157,7 +157,7 @@ PanIconFrame::~PanIconFrame()
 
 void PanIconFrame::keyPressEvent(QKeyEvent* e)
 {
-    if( e->key() == Qt::Key_Escape )
+    if (e->key() == Qt::Key_Escape)
     {
         d->result = 0; // rejected
         emit leaveModality();
@@ -174,17 +174,17 @@ void PanIconFrame::setMainWidget(QWidget* const main)
 {
     d->main = main;
 
-    if( d->main )
+    if (d->main)
     {
-        resize( d->main->width() + 2 * frameWidth(), d->main->height() + 2 * frameWidth() );
+        resize(d->main->width() + 2 * frameWidth(), d->main->height() + 2 * frameWidth());
     }
 }
 
 void PanIconFrame::resizeEvent(QResizeEvent* e)
 {
-    Q_UNUSED( e );
+    Q_UNUSED(e);
 
-    if( d->main )
+    if (d->main)
     {
         d->main->setGeometry(frameWidth(), frameWidth(),
                              width() - 2 * frameWidth(), height() - 2 * frameWidth());
@@ -201,22 +201,22 @@ void PanIconFrame::popup(const QPoint& pos)
     int w = width();
     int h = height();
 
-    if ( x + w > desktopGeometry.x() + desktopGeometry.width() )
+    if (x + w > desktopGeometry.x() + desktopGeometry.width())
     {
         x = desktopGeometry.width() - w;
     }
 
-    if ( y + h > desktopGeometry.y() + desktopGeometry.height() )
+    if (y + h > desktopGeometry.y() + desktopGeometry.height())
     {
         y = desktopGeometry.height() - h;
     }
 
-    if ( x < desktopGeometry.x() )
+    if (x < desktopGeometry.x())
     {
         x = 0;
     }
 
-    if ( y < desktopGeometry.y() )
+    if (y < desktopGeometry.y())
     {
         y = 0;
     }
@@ -255,8 +255,8 @@ class PanIconWidget::Private
 
 public:
 
-    explicit Private() :
-        moveSelection(false),
+    explicit Private()
+      : moveSelection(false),
         flicker(false),
         width(0),
         height(0),
@@ -375,17 +375,17 @@ void PanIconWidget::slotZoomFactorChanged(double factor)
 void PanIconWidget::setRegionSelection(const QRect& regionSelection)
 {
     d->regionSelection = regionSelection;
-    d->localRegionSelection.setX( d->rect.x() + (int)((float)d->regionSelection.x() *
-                                  ((float)d->width / (float)d->zoomedOrgWidth)) );
+    d->localRegionSelection.setX(d->rect.x() + (int)((float)d->regionSelection.x() *
+                                 ((float)d->width / (float)d->zoomedOrgWidth)));
 
-    d->localRegionSelection.setY( d->rect.y() + (int)((float)d->regionSelection.y() *
-                                  ((float)d->height / (float)d->zoomedOrgHeight)) );
+    d->localRegionSelection.setY(d->rect.y() + (int)((float)d->regionSelection.y() *
+                                 ((float)d->height / (float)d->zoomedOrgHeight)));
 
-    d->localRegionSelection.setWidth( (int)((float)d->regionSelection.width() *
-                                            ((float)d->width / (float)d->zoomedOrgWidth)) );
+    d->localRegionSelection.setWidth((int)((float)d->regionSelection.width() *
+                                           ((float)d->width / (float)d->zoomedOrgWidth)));
 
-    d->localRegionSelection.setHeight( (int)((float)d->regionSelection.height() *
-                                       ((float)d->height / (float)d->zoomedOrgHeight)) );
+    d->localRegionSelection.setHeight((int)((float)d->regionSelection.height() *
+                                      ((float)d->height / (float)d->zoomedOrgHeight)));
 
     update();
 }
@@ -415,17 +415,17 @@ void PanIconWidget::regionSelectionMoved(bool targetDone)
         update();
     }
 
-    int x = (int)lround( ((float)d->localRegionSelection.x() - (float)d->rect.x() ) *
-                         ((float)d->zoomedOrgWidth / (float)d->width) );
+    int x = (int)lround(((float)d->localRegionSelection.x() - (float)d->rect.x() ) *
+                        ((float)d->zoomedOrgWidth / (float)d->width));
 
-    int y = (int)lround( ((float)d->localRegionSelection.y() - (float)d->rect.y() ) *
-                         ((float)d->zoomedOrgHeight / (float)d->height) );
+    int y = (int)lround(((float)d->localRegionSelection.y() - (float)d->rect.y() ) *
+                        ((float)d->zoomedOrgHeight / (float)d->height));
 
-    int w = (int)lround( (float)d->localRegionSelection.width() *
-                         ((float)d->zoomedOrgWidth / (float)d->width) );
+    int w = (int)lround((float)d->localRegionSelection.width() *
+                        ((float)d->zoomedOrgWidth / (float)d->width));
 
-    int h = (int)lround( (float)d->localRegionSelection.height() *
-                         ((float)d->zoomedOrgHeight / (float)d->height) );
+    int h = (int)lround((float)d->localRegionSelection.height() *
+                        ((float)d->zoomedOrgHeight / (float)d->height));
 
     d->regionSelection.setX(x);
     d->regionSelection.setY(y);
@@ -512,7 +512,7 @@ void PanIconWidget::hideEvent(QHideEvent* e)
 
     d->timer->stop();
 
-    if ( d->moveSelection )
+    if (d->moveSelection)
     {
         d->moveSelection = false;
         setCursor(Qt::ArrowCursor);
@@ -522,8 +522,8 @@ void PanIconWidget::hideEvent(QHideEvent* e)
 
 void PanIconWidget::mousePressEvent(QMouseEvent* e)
 {
-    if ( (e->button() == Qt::LeftButton || e->button() == Qt::MidButton) &&
-         d->localRegionSelection.contains( e->x(), e->y() ) )
+    if ((e->button() == Qt::LeftButton || e->button() == Qt::MidButton) &&
+         d->localRegionSelection.contains(e->x(), e->y()))
     {
         d->xpos          = e->x();
         d->ypos          = e->y();
@@ -535,8 +535,8 @@ void PanIconWidget::mousePressEvent(QMouseEvent* e)
 
 void PanIconWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    if ( d->moveSelection &&
-         (e->buttons() == Qt::LeftButton || e->buttons() == Qt::MidButton) )
+    if (d->moveSelection &&
+        (e->buttons() == Qt::LeftButton || e->buttons() == Qt::MidButton))
     {
         int newxpos = e->x();
         int newypos = e->y();

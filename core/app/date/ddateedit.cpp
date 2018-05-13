@@ -100,8 +100,8 @@ class DDateEdit::Private
 {
 public:
 
-    explicit Private() :
-        readOnly(false),
+    explicit Private()
+      : readOnly(false),
         textChanged(false),
         discardNextMousePress(false),
         popup(0)

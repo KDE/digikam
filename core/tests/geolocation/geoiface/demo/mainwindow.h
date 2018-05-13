@@ -77,7 +77,7 @@ class MyTrackModelHelper : public QObject
 
 public:
 
-    MyTrackModelHelper(QAbstractItemModel* const imageItemsModel);
+    explicit MyTrackModelHelper(QAbstractItemModel* const imageItemsModel);
 
     virtual TrackManager::Track::List getTracks() const;
 

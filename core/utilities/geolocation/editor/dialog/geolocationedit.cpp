@@ -100,7 +100,7 @@ struct SaveChangedImagesHelper
 {
 public:
 
-    SaveChangedImagesHelper(GPSImageModel* const model)
+    explicit SaveChangedImagesHelper(GPSImageModel* const model)
         : imageModel(model)
     {
     }
@@ -127,7 +127,7 @@ struct LoadFileMetadataHelper
 {
 public:
 
-    LoadFileMetadataHelper(GPSImageModel* const model)
+    explicit LoadFileMetadataHelper(GPSImageModel* const model)
         : imageModel(model)
     {
     }

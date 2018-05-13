@@ -44,7 +44,7 @@ class DConfigDlgWdgPrivate : public DConfigDlgViewPrivate
 
 protected:
 
-    DConfigDlgWdgPrivate(DConfigDlgWdg* const q);
+    explicit DConfigDlgWdgPrivate(DConfigDlgWdg* const q);
 
     DConfigDlgWdgModel* model() const
     {
@@ -60,7 +60,7 @@ class DConfigDlgTitle::Private
 {
 public:
 
-    Private(DConfigDlgTitle* const parent)
+    explicit Private(DConfigDlgTitle* const parent)
         : q(parent),
           headerLayout(0),
           imageLabel(0),

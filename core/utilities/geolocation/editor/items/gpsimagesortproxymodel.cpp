@@ -93,7 +93,7 @@ class GPSLinkItemSelectionModelPrivate
 {
 public:
 
-    GPSLinkItemSelectionModelPrivate(GPSLinkItemSelectionModel* const proxySelectionModel)
+    explicit GPSLinkItemSelectionModelPrivate(GPSLinkItemSelectionModel* const proxySelectionModel)
         : q_ptr(proxySelectionModel),
           m_linkedItemSelectionModel(0),
           m_ignoreCurrentChanged(false),

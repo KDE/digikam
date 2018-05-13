@@ -66,7 +66,7 @@ class ThumbnailResult
 
 public:
 
-    ThumbnailResult(const LoadingDescription& description, const QImage& image)
+    explicit ThumbnailResult(const LoadingDescription& description, const QImage& image)
         : loadingDescription(description),
           image(image)
     {
@@ -82,7 +82,7 @@ class ThumbnailLoadThreadStaticPriv
 {
 public:
 
-    ThumbnailLoadThreadStaticPriv()
+    explicit ThumbnailLoadThreadStaticPriv()
       : firstThreadCreated(false),
         storageMethod(ThumbnailCreator::FreeDesktopStandard),
         provider(0),

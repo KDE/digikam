@@ -59,7 +59,7 @@ public:
 
 public:
 
-    Private(DDateTable* const qq);
+    explicit Private(DDateTable* const qq);
     ~Private();
 
 public Q_SLOTS:

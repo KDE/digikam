@@ -49,7 +49,7 @@ class FaceDbAccessStaticPriv
 {
 public:
 
-    FaceDbAccessStaticPriv()
+    explicit FaceDbAccessStaticPriv()
         : backend(0),
           db(0),
           initializing(false)
@@ -78,7 +78,7 @@ class FaceDbAccessMutexLocker : public QMutexLocker
 {
 public:
 
-    FaceDbAccessMutexLocker(FaceDbAccessStaticPriv* const d)
+    explicit FaceDbAccessMutexLocker(FaceDbAccessStaticPriv* const d)
         : QMutexLocker(&d->lock.mutex),
           d(d)
     {
@@ -293,7 +293,7 @@ FaceDbAccessUnlock::FaceDbAccessUnlock()
     FaceDbAccess::d->lock.lockCount = 0;
 
     // unlock
-    for (int i = 0; i < count; ++i)
+    for (int i = 0 ; i < count ; ++i)
     {
         FaceDbAccess::d->lock.mutex.unlock();
     }
@@ -311,7 +311,7 @@ FaceDbAccessUnlock::FaceDbAccessUnlock(FaceDbAccess* const)
     FaceDbAccess::d->lock.lockCount = 0;
 
     // unlock
-    for (int i = 0; i < count; ++i)
+    for (int i = 0 ; i < count ; ++i)
     {
         FaceDbAccess::d->lock.mutex.unlock();
     }
@@ -322,7 +322,7 @@ FaceDbAccessUnlock::FaceDbAccessUnlock(FaceDbAccess* const)
 FaceDbAccessUnlock::~FaceDbAccessUnlock()
 {
     // lock as often as it was locked before
-    for (int i = 0; i < count; ++i)
+    for (int i = 0 ; i < count ; ++i)
     {
         FaceDbAccess::d->lock.mutex.lock();
     }

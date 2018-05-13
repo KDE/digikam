@@ -126,7 +126,7 @@ protected:
 
 private:
 
-    CalSettings(QObject* const parent);
+    explicit CalSettings(QObject* const parent);
     CalSettings(CalSettings const&);
     CalSettings& operator=(CalSettings const&);
 

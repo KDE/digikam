@@ -55,7 +55,7 @@ public:
     {
     public:
 
-        WizardUI(QWidget* const parent)
+        explicit WizardUI(QWidget* const parent)
             : QWidget(parent)
         {
             this->setupUi(this);

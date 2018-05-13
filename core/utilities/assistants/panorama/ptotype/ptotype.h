@@ -225,7 +225,7 @@ struct PTOType
             {
             }
 
-            LensParameter(T v)
+            explicit LensParameter(T v)
               : value(v),
                 referenceId(-1)
             {
@@ -369,7 +369,7 @@ struct PTOType
     {
     }
 
-    PTOType(const QString& version)
+    explicit PTOType(const QString& version)
       : version(version.split(QChar::fromLatin1('.'))[0].toInt() >= 2014 ? V2014 : PRE_V2014)
     {
     }
