@@ -343,7 +343,8 @@ int DMessageBox::createMessageBox(QDialog* const dialog,
         *checkboxReturn = checkbox->isChecked();
     }
 
-    delete(QDialog*) guardedDialog;
+    delete guardedDialog;
+
     return result;
 }
 
