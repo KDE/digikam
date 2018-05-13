@@ -51,8 +51,8 @@ protected:
 
 Q_SIGNALS:
 
-    void signalOneProccessed();
     void signalError(const QString& errMsg);
+    void signalOneProccessed(const QUrl& url);
 };
 
 // ---------------------------------------

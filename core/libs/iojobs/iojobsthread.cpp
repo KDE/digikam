@@ -126,9 +126,6 @@ void IOJobsThread::renameFile(IOJobData* const data)
 
     connectOneJob(j);
 
-    connect(j, SIGNAL(signalRenamed(QUrl)),
-            this, SIGNAL(signalRenamed(QUrl)));
-
     connect(j, SIGNAL(signalRenameFailed(QUrl)),
             this, SIGNAL(signalRenameFailed(QUrl)));
 
@@ -214,8 +211,8 @@ void IOJobsThread::connectOneJob(IOJob* const j)
     connect(j, SIGNAL(signalDone()),
             this, SLOT(slotOneJobFinished()));
 
-    connect(j, SIGNAL(signalOneProccessed()),
-            this, SIGNAL(signalOneProccessed()),
+    connect(j, SIGNAL(signalOneProccessed(QUrl)),
+            this, SIGNAL(signalOneProccessed(QUrl)),
             Qt::QueuedConnection);
 }
 

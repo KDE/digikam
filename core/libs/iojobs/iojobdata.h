@@ -88,8 +88,6 @@ public:
     void             setDestUrl(const QUrl& srcUrl,
                                 const QUrl& destUrl);
 
-    void             addProcessedUrl(const QUrl& url);
-
     int              operation()                          const;
 
     PAlbum*          srcAlbum()                           const;
@@ -100,11 +98,10 @@ public:
     QUrl             getNextUrl()                         const;
 
     ImageInfo        imageInfo()                          const;
+    ImageInfo        findImageInfo(const QUrl& url)       const;
 
     QList<QUrl>      sourceUrls()                         const;
     QList<ImageInfo> imageInfos()                         const;
-
-    QList<QUrl>      processedUrls()                      const;
 
 private:
 
