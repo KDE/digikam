@@ -506,16 +506,15 @@ class ItemVisibilityController::Private
 public:
 
     explicit Private(ItemVisibilityController* const qq)
-        : q(qq)
+        : visible(false),
+          shallBeShown(true),
+          itemShallBeShown(0),
+          animationDuration(75),
+          easingCurve(QEasingCurve::InOutQuad),
+          control(0),
+          q(qq)          
     {
-        visible          = false;
-        shallBeShown     = true;
-        itemShallBeShown = 0;
-        animationDuration= 75;
-        easingCurve      = QEasingCurve::InOutQuad;
-        control          = 0;
     }
-
 
 public:
 
