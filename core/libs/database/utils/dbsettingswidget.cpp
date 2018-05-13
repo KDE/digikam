@@ -847,7 +847,6 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
         case SQlite:
         {
             return checkDatabasePath();
-            break;
         }
 
         case MysqlInternal:
@@ -859,8 +858,6 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
                 return false;
 
             return true;
-
-            break;
         }
 
         default:  // MysqlServer
@@ -884,8 +881,6 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
                                            error));
                 return false;
             }
-
-            break;
         }
     }
 
