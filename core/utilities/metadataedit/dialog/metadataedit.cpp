@@ -276,14 +276,14 @@ void MetadataEditDialog::slotApply()
 void MetadataEditDialog::slotNext()
 {
     slotApply();
-    d->currItem++;
+    ++d->currItem;
     slotItemChanged();
 }
 
 void MetadataEditDialog::slotPrevious()
 {
     slotApply();
-    d->currItem--;
+    --d->currItem;
     slotItemChanged();
 }
 
