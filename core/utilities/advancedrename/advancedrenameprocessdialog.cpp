@@ -67,8 +67,6 @@ public:
     NewNamesList         newNameList;
     NewNamesList         failedList;
 
-    QList<QUrl>          failedUrls;
-
     bool                 overwrite;
     bool                 cancel;
 
