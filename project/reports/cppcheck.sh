@@ -44,6 +44,8 @@ cppcheck -j$CPU_CORES \
          --suppress=variableScope \
          --suppress=purgedConfiguration \
          --suppress=toomanyconfigs \
+         --suppress=unreadVariable \
+         --suppress=class_X_Y \
          $IGNORE_DIRS \
          ../../core \
          2> report.cppcheck.xml
