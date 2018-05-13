@@ -35,19 +35,19 @@
 
 #include "tparserdebug.h"
 
-int g_debug = 0;
+int g_debug                  = 0;
 
-static FILE* g_file = NULL;
+static FILE* g_file          = NULL;
 
-static int g_eof = 0;
-static int g_nRow = 0;
-static int g_nBuffer = 0;
-static int g_lBuffer = 0;
-static int g_nTokenStart = 0;
-static int g_nTokenLength = 0;
+static int g_eof             = 0;
+static int g_nRow            = 0;
+static int g_nBuffer         = 0;
+static int g_lBuffer         = 0;
+static int g_nTokenStart     = 0;
+static int g_nTokenLength    = 0;
 static int g_nTokenNextStart = 0;
 static char g_buffer[PARSER_MAX_LINE + 1];
-static int g_lMaxBuffer = PARSER_MAX_LINE;
+static int g_lMaxBuffer      = PARSER_MAX_LINE;
 
 extern char* yytext;
 
@@ -56,12 +56,12 @@ int panoScriptScannerGetNextLine(void)
     char* p;
 
     /* Reset line counters */
-    g_nBuffer = 0;
-    g_nTokenStart = -1;
+    g_nBuffer         = 0;
+    g_nTokenStart     = -1;
     g_nTokenNextStart = 1;
     /* Reset marker for end of file */
 
-    p = fgets(g_buffer, g_lMaxBuffer, g_file);
+    p                 = fgets(g_buffer, g_lMaxBuffer, g_file);
 
     if (p == NULL)
     {
@@ -69,15 +69,15 @@ int panoScriptScannerGetNextLine(void)
             return -1;
 
         g_eof = TRUE;
+
         return 1;
     }
 
-    g_nRow += 1;
+    g_nRow   += 1;
     g_lBuffer = strlen(g_buffer);
+
     return 0;
 }
-
-
 
 int panoScriptDataReset(void)
 {
@@ -145,7 +145,7 @@ int panoScriptScannerGetNextChar(char* b, int maxBuffer)
     }
 
     /* ok, return character */
-    b[0] = g_buffer[g_nBuffer];
+    b[0]       = g_buffer[g_nBuffer];
     g_nBuffer += 1;
 
     if (g_debug)
@@ -160,8 +160,8 @@ int panoScriptScannerGetNextChar(char* b, int maxBuffer)
 void panoScriptScannerTokenBegin(char* t)
 {
     /* Record where a token begins */
-    g_nTokenStart = g_nTokenNextStart;
-    g_nTokenLength = strlen(t);
+    g_nTokenStart     = g_nTokenNextStart;
+    g_nTokenLength    = strlen(t);
     g_nTokenNextStart = g_nTokenStart + g_nTokenLength;
     DEBUG_4("Scanner token begin start[%d]len[%d]nextstart[%d]", g_nTokenStart, g_nTokenLength, g_nTokenNextStart);
 }
@@ -172,7 +172,7 @@ void panoScriptParserError(char const* errorstring, ...)
     va_list args;
 
     int start = g_nTokenNextStart;
-    int end = start + g_nTokenLength - 1;
+    int end   = start + g_nTokenLength - 1;
     int i;
 
     DEBUG_1("Entering panoscriptparserror\n");
@@ -236,12 +236,13 @@ void* panoScriptReAlloc(void** ptr, size_t size, int* count)
     }
 
     (*count)++;
-    *ptr = new_ptr;
+    *ptr  = new_ptr;
 
     /* point to the newly allocated record */
-    temp = (char*) *ptr;
+    temp  = (char*) *ptr;
     temp += size * ((*count) - 1);
     /* clear the area */
     memset(temp, 0, size);
+
     return (void*) temp;
 }

@@ -440,11 +440,6 @@ int panoScriptGetImageStackRef(pt_script* script, int i)
     return script->inputImageSpec[i].stackRef;
 }
 
-
-
-
-
-
 int panoScriptGetPanoPrevCommentsCount(pt_script* script)
 {
     assert(script != NULL);
@@ -524,32 +519,46 @@ int panoScriptGetPanoOutputFormat(pt_script* script)
     assert(script != NULL);
 
     str = script->pano.outputFormat;
-    if (str == 0) {
+
+    if (str == 0)
+    {
         return 4;
     }
 
-    switch (str[0]) {
+    switch (str[0])
+    {
         case 'P':
             if (strncmp("NG", str + 1, 2) == 0)
                 return 0;
+
             break;
+
         case 'T':
-            if (strncmp("IFF", str + 1, 3) == 0) {
-                if (strncmp("_m", str + 4, 2) == 0) {
+            if (strncmp("IFF", str + 1, 3) == 0)
+            {
+                if (strncmp("_m", str + 4, 2) == 0)
+                {
                     if (strncmp("ultilayer", str + 6, 9) == 0)
                         return 3;
+
                     return 2;
                 }
+
                 return 1;
             }
+
             break;
+
         case 'J':
             if (strncmp("PEG", str + 1, 3) == 0)
                 return 4;
+
             break;
+
         default:
             break;
     }
+
     return -1;
 }
 
@@ -560,32 +569,48 @@ int panoScriptGetPanoOutputCompression(pt_script* script)
     assert(script != NULL && panoScriptGetPanoOutputFormat(script) > 0 && panoScriptGetPanoOutputFormat(script) < 4);
 
     str = script->pano.outputFormat;
-    while (str != NULL) {
+
+    while (str != NULL)
+    {
         str = strchr(str, ' ');
-        if (str != NULL) {
-            if (str[1] == 'c' && str[2] == ':') {
+
+        if (str != NULL)
+        {
+            if (str[1] == 'c' && str[2] == ':')
+            {
                 str += 3;
-                switch (str[0]) {
+
+                switch (str[0])
+                {
                     case 'N':
                         if (strncmp("ONE", str + 1, 3) == 0)
                             return 0;
+
                         break;
+
                     case 'L':
                         if (strncmp("ZW", str + 1, 2) == 0)
                             return 1;
+
                         break;
+
                     case 'D':
                         if (strncmp("EFLATE", str + 1, 6) == 0)
                             return 2;
+
                         break;
+
                     default:
                         break;
                 }
+
                 return -1;
             }
+
             str++;
         }
     }
+
     return -1;
 }
 
@@ -596,17 +621,24 @@ int panoScriptGetPanoOutputSaveCoordinates(pt_script* script)
     assert(script != NULL && panoScriptGetPanoOutputFormat(script) > 1 && panoScriptGetPanoOutputFormat(script) < 4);
 
     str = script->pano.outputFormat;
-    while (str != NULL) {
+    while (str != NULL)
+    {
         str = strchr(str, ' ');
-        if (str != NULL) {
-            if (str[1] == 'p') {
+
+        if (str != NULL)
+        {
+            if (str[1] == 'p')
+            {
                 if (str[2] == '1')
                     return 1;
+
                 return 0;
             }
+
             str++;
         }
     }
+
     return 0;
 }
 
@@ -617,17 +649,25 @@ int panoScriptGetPanoOutputCropped(pt_script* script)
     assert(script != NULL && panoScriptGetPanoOutputFormat(script) > 1 && panoScriptGetPanoOutputFormat(script) < 4);
 
     str = script->pano.outputFormat;
-    while (str != NULL) {
+
+    while (str != NULL)
+    {
         str = strchr(str, ' ');
-        if (str != NULL) {
-            if (str[1] == 'r') {
+
+        if (str != NULL)
+        {
+            if (str[1] == 'r')
+            {
                 if (strncmp(":CROP", str + 2, 5) == 0)
                     return 1;
+
                 return 0;
             }
+
             str++;
         }
     }
+
     return 0;
 }
 
@@ -638,20 +678,28 @@ int panoScriptGetPanoOutputQuality(pt_script* script)
     assert(script != NULL && panoScriptGetPanoOutputFormat(script) == 4);
 
     str = script->pano.outputFormat;
-    while (str != NULL) {
+
+    while (str != NULL)
+    {
         str = strchr(str, ' ');
-        if (str != NULL) {
-            if (str[1] == 'q') {
-                char* last;
-                int q = strtol(str + 3, &last, 10);
+
+        if (str != NULL)
+        {
+            if (str[1] == 'q')
+            {
+                char* last = 0;
+                int q      = strtol(str + 3, &last, 10);
+
                 if (last != str + 3)
                     return q;
                 else
                     return -1;
             }
+
             str++;
         }
     }
+
     return -1;
 }
 
@@ -678,14 +726,6 @@ int panoScriptGetPanoImageReference(pt_script* script)
     assert(script != NULL);
     return script->pano.iImagePhotometricReference;
 }
-
-
-
-
-
-
-
-
 
 int panoScriptGetOptimizePrevCommentsCount(pt_script* script)
 {
@@ -729,9 +769,6 @@ double panoScriptGetOptimizePhotometricHuberSigma(pt_script* script)
     return script->optimize.photometricHuberSigma;
 }
 
-
-
-
 int panoScriptGetVarsToOptimizeCount(pt_script* script)
 {
     assert(script != NULL);
@@ -763,24 +800,32 @@ int panoScriptGetVarsToOptimizeName(pt_script* script, int v)
     assert(script != NULL && v >= 0 && v < script->iVarsToOptimizeCount);
 
     var = script->varsToOptimize[v].varName;
-    switch (var[0]) {
+
+    switch (var[0])
+    {
         case 'a':
         case 'b':
         case 'c':
         case 'd':
         case 'e':
             return var[0] - 'a';
+
         case 'v':
             return 5;
+
         case 'y':
             return 6;
+
         case 'p':
             return 7;
+
         case 'r':
             return 8;
+
         case 'E':
         {
-            switch (var[1]) {
+            switch (var[1])
+            {
                 case 'e':
                     return 9;
                 case 'r':
@@ -791,9 +836,11 @@ int panoScriptGetVarsToOptimizeName(pt_script* script, int v)
                     return 23;
             }
         }
+
         case 'V':
         {
-            switch(var[1]) {
+            switch(var[1])
+            {
                 case 'a':
                 case 'b':
                 case 'c':
@@ -806,9 +853,11 @@ int panoScriptGetVarsToOptimizeName(pt_script* script, int v)
                     return 23;
             }
         }
+
         case 'R':
         {
-            switch (var[1]) {
+            switch (var[1])
+            {
                 case 'a':
                 case 'b':
                 case 'c':
@@ -819,16 +868,11 @@ int panoScriptGetVarsToOptimizeName(pt_script* script, int v)
                     return 23;
             }
         }
+
         default:
             return 23;
     }
 }
-
-
-
-
-
-
 
 int panoScriptGetCtrlPointCount(pt_script* script)
 {
@@ -890,12 +934,6 @@ int panoScriptGetCtrlPointType(pt_script* script, int cp)
     return script->ctrlPointsSpec[cp].type;
 }
 
-
-
-
-
-
-
 int panoScriptGetMaskCount(pt_script* script)
 {
     assert(script != NULL);
@@ -943,15 +981,6 @@ int panoScriptGetMaskPointY(pt_script* script, int m, int p)
     assert(script != NULL && m >= 0 && m < script->iMasksCount);
     return script->masks[m]->points[p].y;
 }
-
-
-
-
-
-
-
-
-
 
 int panoScriptGetEndingCommentCount(pt_script* script)
 {
