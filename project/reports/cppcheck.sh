@@ -46,6 +46,7 @@ cppcheck -j$CPU_CORES \
          --suppress=toomanyconfigs \
          --suppress=unreadVariable \
          --suppress=class_X_Y \
+         --suppress=ConfigurationNotChecked \
          $IGNORE_DIRS \
          ../../core \
          2> report.cppcheck.xml
