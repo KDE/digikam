@@ -67,13 +67,13 @@ protected:
 protected Q_SLOTS:
 
     void slotCancel();
-    void slotRenameSuccessded(const QUrl&);
-    void slotRenameFailed(const QUrl&);
+    void slotRenameSuccessded(const QUrl& url);
+    void slotRenameFailed(const QUrl& url);
 
 private Q_SLOTS:
 
     void slotRenameImages();
-    void slotGotThumbnail(const LoadingDescription&, const QPixmap&);
+    void slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix);
 
 private:
 

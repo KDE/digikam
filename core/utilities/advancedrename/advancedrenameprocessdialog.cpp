@@ -155,9 +155,9 @@ void AdvancedRenameProcessDialog::slotCancel()
     done(QDialogButtonBox::Cancel);
 }
 
-void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& src)
+void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& url)
 {
-    if (d->cancel || d->currentInfo.first != src)
+    if (d->cancel || d->currentInfo.first != url)
     {
         return;
     }
@@ -219,15 +219,15 @@ void AdvancedRenameProcessDialog::slotRenameSuccessded(const QUrl& src)
     }
 }
 
-void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
+void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& url)
 {
-    if (d->cancel || d->currentInfo.first != src)
+    if (d->cancel || d->currentInfo.first != url)
     {
         return;
     }
 
     QPixmap pix = QIcon::fromTheme(QLatin1String("emblem-error")).pixmap(32, 32);
-    addedAction(pix, QDir::toNativeSeparators(src.toLocalFile()));
+    addedAction(pix, QDir::toNativeSeparators(url.toLocalFile()));
     setLabel(i18n("<b>Renaming images has failed...</b>"));
     qApp->processEvents();
 
@@ -235,7 +235,7 @@ void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl& src)
 
     QThread::msleep(250);
 
-    slotRenameSuccessded(src);
+    slotRenameSuccessded(url);
 }
 
 void AdvancedRenameProcessDialog::closeEvent(QCloseEvent* e)

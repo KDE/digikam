@@ -92,8 +92,8 @@ public:
 
 Q_SIGNALS:
 
-    void signalRenameSucceeded(const QUrl&);
-    void signalRenameFailed(const QUrl&);
+    void signalRenameSucceeded(const QUrl& url);
+    void signalRenameFailed(const QUrl& url);
 
 private:
 

@@ -105,8 +105,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalRenamed(const QUrl& oldUrl);
-    void signalRenameFailed(const QUrl& oldUrl);
+    void signalRenameFailed(const QUrl& url);
 
 protected:
 
