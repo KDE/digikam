@@ -225,4 +225,5 @@ BUGFIXES:
 196 ==> 394168 - OSM Search Yields No Results.
 197 ==> 377719 - Cannot rename file with overwrite [patch].
 198 ==> 388002 - remove kio related legacy [patch]
-199 ==>
+199 ==> 394242 - Import settings unneccesarily asks to overwrite image database, and crashes when I decline.
+200 ==> 
