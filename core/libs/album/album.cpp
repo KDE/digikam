@@ -591,11 +591,10 @@ QMap<QString, QString> TAlbum::properties() const
 int DAlbum::m_uniqueID = 0;
 
 DAlbum::DAlbum(const QDate& date, bool root, Range range)
-    : Album(Album::DATE, root ? 0 : ++m_uniqueID, root)
+    : Album(Album::DATE, root ? 0 : ++m_uniqueID, root),
+      m_date(date),
+      m_range(range)
 {
-    m_date  = date;
-    m_range = range;
-
     // Set the name of the date album
     QString dateTitle;
 

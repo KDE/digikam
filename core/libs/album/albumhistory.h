@@ -59,7 +59,7 @@ class AlbumHistory : public QObject
 
 public:
 
-    AlbumHistory();
+    explicit AlbumHistory();
     ~AlbumHistory();
 
     void addAlbums(QList<Album*> const albums, QWidget* const widget = 0);
