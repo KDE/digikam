@@ -7,6 +7,7 @@
  * Description : Loading parameters for multithreaded loading
  *
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2012-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -89,12 +90,25 @@ IccProfile LoadingDescription::PostProcessingParameters::profile() const
     return iccData.value<IccProfile>();
 }
 
-LoadingDescription::LoadingDescription(const QString& filePath, ColorManagementSettings cm)
-    : filePath(filePath)
+// ----------------------------------------------------------------------------
+
+LoadingDescription::LoadingDescription()
+    : filePath(QString()),
+      rawDecodingSettings(DRawDecoding()),
+      rawDecodingHint(RawDecodingDefaultSettings),
+      previewParameters(PreviewParameters()),
+      postProcessingParameters(PostProcessingParameters())
 {
-    rawDecodingSettings                      = DRawDecoding();
-    rawDecodingHint                          = RawDecodingDefaultSettings;
-    postProcessingParameters.colorManagement = cm;
+}
+
+LoadingDescription::LoadingDescription(const QString& filePath,
+                                       ColorManagementSettings cm)
+    : filePath(filePath),
+      rawDecodingSettings(DRawDecoding()),
+      rawDecodingHint(RawDecodingDefaultSettings),
+      previewParameters(PreviewParameters())
+{
+      postProcessingParameters.colorManagement = cm;
 }
 
 LoadingDescription::LoadingDescription(const QString& filePath,
@@ -103,7 +117,8 @@ LoadingDescription::LoadingDescription(const QString& filePath,
                                        ColorManagementSettings cm)
     : filePath(filePath),
       rawDecodingSettings(settings),
-      rawDecodingHint(hint)
+      rawDecodingHint(hint),
+      previewParameters(PreviewParameters())
 {
       postProcessingParameters.colorManagement = cm;
 }
@@ -113,10 +128,10 @@ LoadingDescription::LoadingDescription(const QString& filePath,
                                        int size,
                                        ColorManagementSettings cm,
                                        LoadingDescription::PreviewParameters::PreviewType type)
-    : filePath(filePath)
+    : filePath(filePath),
+      rawDecodingSettings(DRawDecoding()),
+      rawDecodingHint(RawDecodingDefaultSettings)
 {
-    rawDecodingSettings                      = DRawDecoding();
-    rawDecodingHint                          = RawDecodingDefaultSettings;
     previewParameters.type                   = type;
     previewParameters.size                   = size;
     previewParameters.previewSettings        = previewSettings;

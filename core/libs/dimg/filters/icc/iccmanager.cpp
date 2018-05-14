@@ -43,9 +43,10 @@ class IccManager::Private
 public:
 
     explicit Private()
+        : profileMismatch(false),
+          settings(ICCSettingsContainer()),
+          observer(0)
     {
-        profileMismatch = false;
-        observer        = 0;
     }
 
     DImg                 image;

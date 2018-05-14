@@ -54,7 +54,7 @@
 #   include <X11/Xlib.h>
 #   include <X11/Xatom.h>
 #   include <QX11Info>
-#endif /* HAVE_X11 */
+#endif // HAVE_X11
 
 namespace Digikam
 {
@@ -64,7 +64,8 @@ class IccSettings::Private
 public:
 
     explicit Private()
-        : configGroup(QLatin1String("Color Management"))
+        : settings(ICCSettingsContainer()),
+          configGroup(QLatin1String("Color Management"))
     {
     }
 

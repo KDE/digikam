@@ -116,7 +116,7 @@ Q_SIGNALS:
 
 private:
 
-    IccSettings();
+    explicit IccSettings();
     ~IccSettings();
 
     void readFromConfig();
