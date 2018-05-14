@@ -45,9 +45,8 @@ class DDateTable;
 
 /**
  * Provides a widget for calendar date input.
- *
  */
-class DIGIKAM_EXPORT DDatePicker: public QFrame
+class DIGIKAM_EXPORT DDatePicker : public QFrame
 {
     Q_OBJECT
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged USER true)
@@ -71,18 +70,19 @@ public:
      */
     virtual ~DDatePicker();
 
-    /** The size hint for date pickers. The size hint recommends the
-     *  minimum size of the widget so that all elements may be placed
-     *  without clipping. This sometimes looks ugly, so when using the
-     *  size hint, try adding 28 to each of the reported numbers of
-     *  pixels.
+    /**
+     * The size hint for date pickers. The size hint recommends the
+     * minimum size of the widget so that all elements may be placed
+     * without clipping. This sometimes looks ugly, so when using the
+     * size hint, try adding 28 to each of the reported numbers of
+     * pixels.
      */
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
     /**
      * Sets the date.
      *
-     *  @returns @p false and does not change anything if the date given is invalid.
+     * @returns @p false and does not change anything if the date given is invalid.
      */
     bool setDate(const QDate& date);
 
@@ -99,7 +99,7 @@ public:
 
     /**
      * Sets the font size of the widgets elements.
-     **/
+     */
     void setFontSize(int);
 
     /**
@@ -149,30 +149,34 @@ protected Q_SLOTS:
 
 Q_SIGNALS:
 
-    /** This signal is emitted each time the selected date is changed.
-     *  Usually, this does not mean that the date has been entered,
-     *  since the date also changes, for example, when another month is
-     *  selected.
-     *  @see dateSelected
+    /**
+     * This signal is emitted each time the selected date is changed.
+     * Usually, this does not mean that the date has been entered,
+     * since the date also changes, for example, when another month is
+     * selected.
+     * @see dateSelected
      */
     void dateChanged(const QDate& date);
 
-    /** This signal is emitted each time a day has been selected by
-     *  clicking on the table (hitting a day in the current month). It
-     *  has the same meaning as dateSelected() in older versions of
-     *  DDatePicker.
+    /**
+     * This signal is emitted each time a day has been selected by
+     * clicking on the table (hitting a day in the current month). It
+     * has the same meaning as dateSelected() in older versions of
+     * DDatePicker.
      */
     void dateSelected(const QDate& date);
 
-    /** This signal is emitted when enter is pressed and a VALID date
-     *  has been entered before into the line edit. Connect to both
-     *  dateEntered() and dateSelected() to receive all events where the
-     *  user really enters a date.
+    /**
+     * This signal is emitted when enter is pressed and a VALID date
+     * has been entered before into the line edit. Connect to both
+     * dateEntered() and dateSelected() to receive all events where the
+     * user really enters a date.
      */
     void dateEntered(const QDate& date);
 
-    /** This signal is emitted when the day has been selected by
-     *  clicking on it in the table.
+    /**
+     * This signal is emitted when the day has been selected by
+     * clicking on it in the table.
      */
     void tableClicked();
 

@@ -48,7 +48,7 @@ class ImageFilterModel;
 template <class T>
 class AlbumPointer;
 
-class DateFolderView: public DVBox, public StateSavingObject
+class DateFolderView : public DVBox, public StateSavingObject
 {
     Q_OBJECT
 

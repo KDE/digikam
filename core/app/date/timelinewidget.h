@@ -83,7 +83,9 @@ public:
     QDateTime cursorDateTime() const;
     int       cursorInfo(QString& infoDate) const;
 
-    /** Return a list of Date-Range based on selection performed on days-map */
+    /**
+     * Return a list of Date-Range based on selection performed on days-map
+     */
     DateRangeList selectedDateRange(int& totalCount) const;
     void          setSelectedDateRange(const DateRangeList& list);
 

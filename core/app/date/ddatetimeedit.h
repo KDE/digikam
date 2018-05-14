@@ -53,7 +53,7 @@ public:
      * @param parent the parent widget
      * @param name the name of the widget
      */
-    DDateTimeEdit(QWidget* const parent, const QString& name);
+    explicit DDateTimeEdit(QWidget* const parent, const QString& name);
 
     /**
      * destructor
@@ -74,8 +74,8 @@ public:
 Q_SIGNALS:
 
     /**
-     *  This signal is emitted whenever the user modifies the date or time.
-     *  The passed date and time can be invalid.
+     * This signal is emitted whenever the user modifies the date or time.
+     * The passed date and time can be invalid.
      */
     void dateTimeChanged(const QDateTime& dateTime);
 
