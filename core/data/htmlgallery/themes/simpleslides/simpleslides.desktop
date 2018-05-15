@@ -1,0 +1,29 @@
+[Desktop Entry]
+Name=Simple Slideshow
+Comment=A slideshow designed for a kiosk-mode display. Generated from a simple template with javascript and css embedded into a single index.html file.
+
+[X-HTMLGallery Author]
+Name=Simon Kuss
+Url=mailto:sjk281@iinet.net.au
+
+[X-HTMLGallery Parameter delay]
+Name=Time between slides (seconds)
+Type=int
+Default=5
+Min=1
+Max=300
+
+[X-HTMLGallery Parameter controls]
+Name=Location of controls
+Type=list
+Default=top
+Value-0=top
+Caption-0=Top
+Value-1=bottom
+Caption-1=Bottom
+Value-2=none
+Caption-2=None
+
+[X-HTMLGallery Preview]
+Name=Simple Slideshow
+Url=preview.png
