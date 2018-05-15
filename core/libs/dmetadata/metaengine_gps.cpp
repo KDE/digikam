@@ -608,6 +608,7 @@ void MetaEngine::convertToRational(const double number, long int* const numerato
     {
         // Divide both by Denominator.
         numTemp /= denTemp;
+        // cppcheck-suppress duplicateExpression
         denTemp /= denTemp;
     }
 

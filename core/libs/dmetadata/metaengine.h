@@ -57,7 +57,8 @@ class DIGIKAM_EXPORT MetaEngine
 
 public:
 
-    /** The image metadata writing mode, between image file metadata and XMP sidecar file, depending on the context.
+    /**
+     * The image metadata writing mode, between image file metadata and XMP sidecar file, depending on the context.
      * @sa MetadataWritingMode(), metadataWritingMode()
      */
     enum MetadataWritingMode
@@ -75,7 +76,8 @@ public:
         WRITETOSIDECARONLY4READONLYFILES = 3
     };
 
-    /** The image color workspace values given by Exif metadata.
+    /**
+     * The image color workspace values given by Exif metadata.
      */
     enum ImageColorWorkSpace
     {
@@ -85,7 +87,8 @@ public:
         WORKSPACE_UNCALIBRATED = 65535
     };
 
-    /** The image orientation values given by Exif metadata.
+    /**
+     * The image orientation values given by Exif metadata.
      */
     enum ImageOrientation
     {
@@ -112,46 +115,55 @@ public:
         ArraySeqTag             = 4
     };
 
-    /** A map used to store Tags Key and Tags Value.
+    /**
+     * A map used to store Tags Key and Tags Value.
      */
     typedef QMap<QString, QString> MetaDataMap;
 
-    /** A map used to store a list of Alternative Language values.
-        The map key is the language code following RFC3066 notation
-        (like "fr-FR" for French), and the map value the text.
+    /**
+     * A map used to store a list of Alternative Language values.
+     * The map key is the language code following RFC3066 notation
+     * (like "fr-FR" for French), and the map value the text.
      */
     typedef QMap<QString, QString> AltLangMap;
 
-    /** A map used to store Tags Key and a list of Tags properties :
-        - name,
-        - title,
-        - description.
+    /**
+     * A map used to store Tags Key and a list of Tags properties :
+     *  - name,
+     *  - title,
+     *  - description.
      */
     typedef QMap<QString, QStringList> TagsMap;
 
 public:
 
-    /** Standard constructor.
+    /**
+     * Standard constructor.
      */
     MetaEngine();
 
-    /** Copy constructor.
+    /**
+     * Copy constructor.
      */
     MetaEngine(const MetaEngine& metadata);
 
-    /** Constructor to load from parsed data.
+    /**
+     * Constructor to load from parsed data.
      */
     explicit MetaEngine(const MetaEngineData& data);
 
-    /** Contructor to Load Metadata from image file.
+    /**
+     * Contructor to Load Metadata from image file.
      */
     explicit MetaEngine(const QString& filePath);
 
-    /** Standard destructor
+    /**
+     * Standard destructor
      */
     virtual ~MetaEngine();
 
-    /** Create a copy of container
+    /**
+     * Create a copy of container
      */
     MetaEngine& operator=(const MetaEngine& metadata);
 

@@ -52,8 +52,9 @@ class DIGIKAM_EXPORT DMetadata : public MetaEngine
 
 public:
 
-    /** Video color model reported by FFMPEG following XMP DM Spec from Adobe.
-     *  These value are stored in DB as Image color model properties (extension of DImg::ColorModel)
+    /**
+     * Video color model reported by FFMPEG following XMP DM Spec from Adobe.
+     * These values are stored in DB as Image color model properties (extension of DImg::ColorModel)
      */
     enum VIDEOCOLORMODEL
     {
@@ -74,22 +75,27 @@ public:
     void registerMetadataSettings();
     void setSettings(const MetadataSettingsContainer& settings);
 
-    /** Re-implemented from libMetaEngine to use libraw identify and 
-     *  ffmpeg probe methods if Exiv2 failed.
+    /**
+     * Re-implemented from libMetaEngine to use libraw identify and 
+     * ffmpeg probe methods if Exiv2 failed.
      */
     bool load(const QString& filePath);
     bool save(const QString& filePath, bool setVersion = true) const;
     bool applyChanges() const;
 
-    /** Try to extract metadata using Raw Engine identify method (libraw)
+    /**
+     * Try to extract metadata using Raw Engine identify method (libraw).
      */
     bool loadUsingRawEngine(const QString& filePath);
 
-    /** Try to extract metadata using FFMpeg probe method (libav)
+    /**
+     * Try to extract metadata using FFMpeg probe method (libav).
      */
     bool loadUsingFFmpeg(const QString& filePath);
 
-    /** Metadata manipulation methods */
+    /**
+     * Metadata manipulation methods.
+     */
 
     CaptionsMap getImageComments(const DMetadataSettingsContainer& settings = DMetadataSettings::instance()->settings()) const;
     bool setImageComments(const CaptionsMap& comments,
@@ -117,15 +123,17 @@ public:
 
     bool setACDSeeTagsPath(const QStringList& tagsPath) const;
 
-    /** Get Images Face Map based on tags stored in Picassa/Metadatagroup
+    /**
+     * Get Images Face Map based on tags stored in Picassa/Metadatagroup
      * format. Use $ exiv2 -pa image to see the tag structure
      */
     bool getImageFacesMap(QMultiMap<QString,QVariant>& facesPath) const;
 
-    /** Set Images Face Map tags in Picassa/Metadatagroup format
-     *  Use exiv2 -pa image to check for face tags,
-     *  @param write    - if true all faces will be written, else update mode:
-     *                    search if at least a face tag exist and write if true
+    /**
+     * Set Images Face Map tags in Picassa/Metadatagroup format
+     * Use exiv2 -pa image to check for face tags,
+     * @param write    - if true all faces will be written, else update mode:
+     *                   search if at least a face tag exist and write if true
      */
     bool setImageFacesMap(QMultiMap<QString,QVariant>& facesPath, bool write) const;
 
@@ -152,56 +160,68 @@ public:
 
     QStringList getIptcCoreSubjects() const;
 
-    /** Return a string with Lens mounted on the front of camera.
-        There no standard Exif tag for Lens information.
-        Camera makernotes and Xmp tags are parsed.
-        Take a care : lens information are not standardized and string content is not homogeneous between
-        camera model/maker.
+    /**
+     * Return a string with Lens mounted on the front of camera.
+     * There no standard Exif tag for Lens information.
+     * Camera makernotes and Xmp tags are parsed.
+     * Take a care : lens information are not standardized and string content is not homogeneous between
+     * camera model/maker.
      */
     QString getLensDescription() const;
 
-    /** Reads an IccProfile that is described or embedded in the metadata.
-        This method does not retrieve profiles embedded in the image but not the metadata,
-        e.g. embedded profiles in JPEG images.
-        Returns a null profile if no profile is found.
+    /**
+     * Reads an IccProfile that is described or embedded in the metadata.
+     * This method does not retrieve profiles embedded in the image but not the metadata,
+     * e.g. embedded profiles in JPEG images.
+     * Returns a null profile if no profile is found.
      */
     IccProfile getIccProfile() const;
 
-    /** Sets the IccProfile embedded in the Exif metadata. */
+    /**
+     * Sets the IccProfile embedded in the Exif metadata.
+     */
     bool setIccProfile(const IccProfile& profile);
 
-    /** Remove the Exif color space identification from the image */
+    /**
+     * Remove the Exif color space identification from the image.
+     */
     bool removeExifColorSpace() const;
 
     PhotoInfoContainer getPhotographInformation() const;
 
-    /** Returns video metadata from Xmp tags.
+    /**
+     * Returns video metadata from Xmp tags.
      */
     VideoInfoContainer getVideoInformation() const;
 
-    /** Returns millisecond time-stamp from Exif tags or 0 if not found.
+    /**
+     * Returns millisecond time-stamp from Exif tags or 0 if not found.
      */
     int  getMSecsInfo() const;
 
-    /** Extract milliseconds time-stamp of photo from an Exif tag and store it to 'ms'.
-     *  Returns true if data are extracted.
+    /**
+     * Extract milliseconds time-stamp of photo from an Exif tag and store it to 'ms'.
+     * Returns true if data are extracted.
      */
     bool mSecTimeStamp(const char* const exifTagName, int& ms) const;
 
-    /** Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
-        of the format of the QVariant.
+    /**
+     * Returns the requested metadata field as a QVariant. See metadatainfo.h for a specification
+     * of the format of the QVariant.
      */
     QVariant     getMetadataField(MetadataInfo::Field field) const;
     QVariantList getMetadataFields(const MetadataFields& fields) const;
 
-    /** Convert a QVariant value of the specified field to a user-presentable, i18n'ed string.
-        The QVariant must be of the type as specified in metadatainfo.h and as obtained by getMetadataField.
+    /**
+     * Convert a QVariant value of the specified field to a user-presentable, i18n'ed string.
+     * The QVariant must be of the type as specified in metadatainfo.h and as obtained by getMetadataField.
      */
     static QString     valueToString (const QVariant& value, MetadataInfo::Field field);
     static QStringList valuesToString(const QVariantList& list, const MetadataFields& fields);
 
-    /** Returns a map of possible enum values and their user-presentable, i18n'ed representation.
-        Valid fields are those which are described as "enum from" or "bit mask from" in metadatainfo.h.
+    /**
+     * Returns a map of possible enum values and their user-presentable, i18n'ed representation.
+     * Valid fields are those which are described as "enum from" or "bit mask from" in metadatainfo.h.
      */
     static QMap<int, QString> possibleValuesForEnumField(MetadataInfo::Field field);
 
@@ -212,65 +232,76 @@ public:
 
     // These methods have been factored to libMetaEngine 2.3.0. Remove it after KDE 4.8.2
 
-    /** Set an Xmp tag content using a list of strings defined by the 'entriesToAdd' parameter.
-        The existing entries are preserved. The method will compare
-        all new with all already existing entries to prevent duplicates in the image.
-        Return true if the entries have been added to metadata.
+    /**
+     * Set an Xmp tag content using a list of strings defined by the 'entriesToAdd' parameter.
+     * The existing entries are preserved. The method will compare
+     * all new with all already existing entries to prevent duplicates in the image.
+     * Return true if the entries have been added to metadata.
      */
     bool addToXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToAdd) const;
 
-    /** Remove those Xmp tag entries that are listed in entriesToRemove from the entries in metadata.
-        Return true if tag entries are no longer contained in metadata.
-        All other entries are preserved.
+    /**
+     * Remove those Xmp tag entries that are listed in entriesToRemove from the entries in metadata.
+     * Return true if tag entries are no longer contained in metadata.
+     * All other entries are preserved.
      */
     bool removeFromXmpTagStringBag(const char* const xmpTagName, const QStringList& entriesToRemove) const;
 
-    /** Return a strings list of Xmp keywords from image. Return an empty list if no keyword are set.
+    /**
+     * Return a strings list of Xmp keywords from image. Return an empty list if no keyword are set.
      */
     QStringList getXmpKeywords() const;
 
-    /** Set Xmp keywords using a list of strings defined by 'newKeywords' parameter.
-        The existing keywords from image are preserved. The method will compare
-        all new keywords with all already existing keywords to prevent duplicate entries in image.
-        Return true if keywords have been changed in metadata.
+    /**
+     * Set Xmp keywords using a list of strings defined by 'newKeywords' parameter.
+     * The existing keywords from image are preserved. The method will compare
+     * all new keywords with all already existing keywords to prevent duplicate entries in image.
+     * Return true if keywords have been changed in metadata.
      */
     bool setXmpKeywords(const QStringList& newKeywords) const;
 
-    /** Remove those Xmp keywords that are listed in keywordsToRemove from the keywords in metadata.
-        Return true if keywords are no longer contained in metadata.
+    /**
+     * Remove those Xmp keywords that are listed in keywordsToRemove from the keywords in metadata.
+     * Return true if keywords are no longer contained in metadata.
      */
     bool removeXmpKeywords(const QStringList& keywordsToRemove);
 
-    /** Return a strings list of Xmp subjects from image. Return an empty list if no subject are set.
+    /**
+     * Return a strings list of Xmp subjects from image. Return an empty list if no subject are set.
      */
     QStringList getXmpSubjects() const;
 
-    /** Set Xmp subjects using a list of strings defined by 'newSubjects' parameter.
-        The existing subjects from image are preserved. The method will compare
-        all new subject with all already existing subject to prevent duplicate entries in image.
-        Return true if subjects have been changed in metadata.
+    /**
+     * Set Xmp subjects using a list of strings defined by 'newSubjects' parameter.
+     * The existing subjects from image are preserved. The method will compare
+     * all new subject with all already existing subject to prevent duplicate entries in image.
+     * Return true if subjects have been changed in metadata.
      */
     bool setXmpSubjects(const QStringList& newSubjects) const;
 
-    /** Remove those Xmp subjects that are listed in subjectsToRemove from the subjects in metadata.
-        Return true if subjects are no longer contained in metadata.
+    /**
+     * Remove those Xmp subjects that are listed in subjectsToRemove from the subjects in metadata.
+     * Return true if subjects are no longer contained in metadata.
      */
     bool removeXmpSubjects(const QStringList& subjectsToRemove);
 
-    /** Return a strings list of Xmp sub-categories from image. Return an empty list if no sub-category
-        are set.
+    /**
+     * Return a strings list of Xmp sub-categories from image. Return an empty list if no sub-category
+     * are set.
      */
     QStringList getXmpSubCategories() const;
 
-    /** Set Xmp sub-categories using a list of strings defined by 'newSubCategories' parameter.
-        The existing sub-categories from image are preserved. The method will compare
-        all new sub-categories with all already existing sub-categories to prevent duplicate entries in image.
-        Return true if sub-categories have been changed in metadata.
+    /**
+     * Set Xmp sub-categories using a list of strings defined by 'newSubCategories' parameter.
+     * The existing sub-categories from image are preserved. The method will compare
+     * all new sub-categories with all already existing sub-categories to prevent duplicate entries in image.
+     *  Return true if sub-categories have been changed in metadata.
      */
     bool setXmpSubCategories(const QStringList& newSubCategories) const;
 
-    /** Remove those Xmp sub-categories that are listed in categoriesToRemove from the sub-categories in metadata.
-        Return true if subjects are no longer contained in metadata.
+    /**
+     * Remove those Xmp sub-categories that are listed in categoriesToRemove from the sub-categories in metadata.
+     * Return true if subjects are no longer contained in metadata.
      */
     bool removeXmpSubCategories(const QStringList& categoriesToRemove);
 
