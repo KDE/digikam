@@ -36,7 +36,7 @@ done
 
 cppcheck -j$CPU_CORES \
          --verbose \
-         --xml \
+         --xml-version=2 \
          --platform=unix64 \
          --enable=all \
          --report-progress \
