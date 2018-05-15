@@ -263,7 +263,7 @@ bool RainDropFilter::CreateRainDrop(uchar* const pBits, int Width, int Height, b
         int          nBlurPixels, nBlurRadius;
         Coeff        *= 0.01;
         int nHalfSize =  DropSize / 2;
-        double lfDiv  =  (double)nHalfSize / log(Coeff * (double)nHalfSize + 1.0);
+        double lfDiv  =  (double)nHalfSize / log1p(Coeff * (double)nHalfSize);
 
         for (h = -nHalfSize ; runningFlag() && (h <= nHalfSize) ; ++h)
         {
@@ -608,6 +608,7 @@ bool RainDropFilter::isInside (int Width, int Height, int X, int Y)
 {
     bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
     bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
+
     return (bIsWOk && bIsHOk);
 }
 

@@ -41,14 +41,14 @@ class DNNFaceRecognizer
 {
 public:
 
-    // Initializes this DNNFace Model.
+    /// Initializes this DNNFace Model.
     explicit DNNFaceRecognizer(double threshold = DBL_MAX)
         : m_threshold(threshold)
     {
     }
 
-    // Initializes and computes this DNNFace Model.
-    DNNFaceRecognizer(std::vector<std::vector<float>> src,
+    /// Initializes and computes this DNNFace Model.
+    DNNFaceRecognizer(const std::vector<std::vector<float>>& src,
                       cv::InputArray labels,
                       double threshold = DBL_MAX)
         : m_threshold(threshold)
@@ -87,9 +87,8 @@ public:
     void predict(cv::InputArray _src, int& label, double& dist) const;
 
     /**
-     * Getter functions.
+     * Getter and setter functions.
      */
-
     double getThreshold() const                            { return m_threshold;                  }
     void   setThreshold(double _threshold)                 { m_threshold = _threshold;            }
 
@@ -101,15 +100,16 @@ public:
 
 private:
 
-    /** Computes a DNNFace model with images in src and
-     *  corresponding labels in labels, possibly preserving
-     *  old training data.
+    /**
+     * Computes a DNNFace model with images in src and
+     * corresponding labels in labels, possibly preserving
+     * old training data.
      */
     void train(std::vector<std::vector<float>> src, cv::InputArray labels, bool preserveData);
 
 private:
 
-    // NOTE: Do not use a d private internal container, this will crash OpenCV in cv::Algorithm::set()
+    // NOTE: Do not use a d private internal container here, this will crash OpenCV in cv::Algorithm::set()
     double                          m_threshold;
 
     std::vector<std::vector<float>> m_src;

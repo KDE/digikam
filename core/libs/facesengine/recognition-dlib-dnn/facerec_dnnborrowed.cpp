@@ -54,7 +54,9 @@ void DNNFaceRecognizer::update(std::vector<std::vector<float>> _in_src, InputArr
 {
     // got no data, just return
     if (_in_src.size() == 0)
+    {
         return;
+    }
 
     this->train(_in_src, _inm_labels, true);
 }
@@ -84,7 +86,7 @@ void DNNFaceRecognizer::train(std::vector<std::vector<float>> _in_src, InputArra
     }
 
     // append labels to m_labels matrix
-    for (size_t labelIdx = 0; labelIdx < labels.total(); labelIdx++)
+    for (size_t labelIdx = 0 ; labelIdx < labels.total() ; labelIdx++)
     {
         m_labels.push_back(labels.at<int>((int)labelIdx));
         m_src.push_back(src[(int)labelIdx]);
@@ -182,7 +184,7 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minD
 {
     qCWarning(DIGIKAM_FACESENGINE_LOG) << "Predicting face image";
 
-    cv::Mat src = _src.getMat();//254*254
+    cv::Mat src        = _src.getMat();//254*254
     std::vector<float> vecdata;
     FaceDb *tmp_facedb = new FaceDb();
     tmp_facedb->getFaceVector(src, vecdata);
@@ -193,13 +195,15 @@ void DNNFaceRecognizer::predict(cv::InputArray _src, int& minClass, double& minD
 
     // find nearest neighbor
 
-    for (size_t sampleIdx = 0; sampleIdx < m_src.size(); sampleIdx++)
+    for (size_t sampleIdx = 0 ; sampleIdx < m_src.size() ; sampleIdx++)
     {
         double dist = 0;
-        for(size_t i = 0; i < m_src[sampleIdx].size(); i++)
+
+        for(size_t i = 0 ; i < m_src[sampleIdx].size() ; i++)
         {
             dist += (vecdata[i]-m_src[sampleIdx][i])*(vecdata[i]-m_src[sampleIdx][i]);
         }
+
         dist = std::sqrt(dist);
 
         if ((dist < minDist) && (dist < m_threshold))
