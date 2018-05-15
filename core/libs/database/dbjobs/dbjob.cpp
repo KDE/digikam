@@ -49,9 +49,9 @@ DBJob::~DBJob()
 // ----------------------------------------------
 
 AlbumsJob::AlbumsJob(const AlbumsDBJobInfo& jobInfo)
-    : DBJob()
+    : DBJob(),
+      m_jobInfo(jobInfo)
 {
-    m_jobInfo = jobInfo;
 }
 
 AlbumsJob::~AlbumsJob()
@@ -83,9 +83,9 @@ void AlbumsJob::run()
 // ----------------------------------------------
 
 DatesJob::DatesJob(const DatesDBJobInfo& jobInfo)
-    : DBJob()
+    : DBJob(),
+      m_jobInfo(jobInfo)
 {
-    m_jobInfo = jobInfo;
 }
 
 DatesJob::~DatesJob()
@@ -118,9 +118,9 @@ void DatesJob::run()
 // ----------------------------------------------
 
 GPSJob::GPSJob(const GPSDBJobInfo& jobInfo)
-    : DBJob()
+    : DBJob(),
+      m_jobInfo(jobInfo)
 {
-    m_jobInfo = jobInfo;
 }
 
 GPSJob::~GPSJob()
@@ -164,9 +164,9 @@ void GPSJob::run()
 // ----------------------------------------------
 
 TagsJob::TagsJob(const TagsDBJobInfo& jobInfo)
-    : DBJob()
+    : DBJob(),
+      m_jobInfo(jobInfo)
 {
-    m_jobInfo = jobInfo;
 }
 
 TagsJob::~TagsJob()
@@ -229,9 +229,9 @@ void TagsJob::run()
 // ----------------------------------------------
 
 SearchesJob::SearchesJob(const SearchesDBJobInfo& jobInfo)
-    : DBJob()
+    : DBJob(),
+      m_jobInfo(jobInfo)
 {
-    m_jobInfo = jobInfo;
 }
 
 SearchesJob::~SearchesJob()
