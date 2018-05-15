@@ -39,18 +39,18 @@ class ImageComments::Private : public QSharedData
 {
 public:
 
-    explicit Private() :
-        id(-1),
+    explicit Private()
+      : id(-1),
         unique(ImageComments::UniquePerLanguage)
     {
     }
 
     void init(CoreDbAccess& access, qlonglong imageId)
     {
-        id = imageId;
+        id    = imageId;
         infos = access.db()->getImageComments(id);
 
-        for (int i=0; i<infos.size(); ++i)
+        for (int i = 0 ; i < infos.size() ; ++i)
         {
             CommentInfo& info = infos[i];
 
@@ -61,8 +61,12 @@ public:
         }
     }
 
-    void languageMatch(const QString& fullCode, const QString& langCode,
-                       int& fullCodeMatch, int& langCodeMatch, int& defaultCodeMatch, int& firstMatch,
+    void languageMatch(const QString& fullCode,
+                       const QString& langCode,
+                       int& fullCodeMatch,
+                       int& langCodeMatch,
+                       int& defaultCodeMatch,
+                       int& firstMatch,
                        DatabaseComment::Type type = DatabaseComment::Comment) const
     {
         // if you change the algorithm, please take a look at ImageCopyright as well
@@ -83,7 +87,7 @@ public:
 
         QLatin1String defaultCode("x-default");
 
-        for (int i=0; i<infos.size(); ++i)
+        for (int i = 0 ; i < infos.size() ; ++i)
         {
             const CommentInfo& info = infos.at(i);
 
@@ -233,7 +237,8 @@ QString ImageComments::defaultComment(int* const index, DatabaseComment::Type ty
     }
 }
 
-QString ImageComments::commentForLanguage(const QString& languageCode, int* const index,
+QString ImageComments::commentForLanguage(const QString& languageCode,
+                                          int* const index,
                                           LanguageChoiceBehavior behavior) const
 {
     if (!d)
@@ -359,8 +364,11 @@ void ImageComments::setUniqueBehavior(UniqueBehavior behavior)
     d->unique = behavior;
 }
 
-void ImageComments::addComment(const QString& comment, const QString& lang, const QString& author_,
-                               const QDateTime& date, DatabaseComment::Type type)
+void ImageComments::addComment(const QString& comment,
+                               const QString& lang,
+                               const QString& author_,
+                               const QDateTime& date,
+                               DatabaseComment::Type type)
 {
     if (!d)
     {
@@ -383,14 +391,14 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
         author = QString();
     }
 
-    for (int i=0; i < d->infos.size(); ++i)
+    for (int i = 0 ; i < d->infos.size() ; ++i)
     {
         CommentInfo& info = d->infos[i];
 
         // some extra considerations on replacing
         if (info.type == type && info.type == DatabaseComment::Comment && info.language == language)
         {
-            if ( !multipleCommentsPerLanguage || (multipleCommentsPerLanguage && info.author == author) )
+            if (!multipleCommentsPerLanguage || (info.author == author))
             {
                 info.comment = comment;
                 info.date    = date;
@@ -402,8 +410,9 @@ void ImageComments::addComment(const QString& comment, const QString& lang, cons
 
         // simulate unique restrictions of db.
         // There is a problem that a NULL value is never unique, see #189080
-        if (info.type == type && info.language == language &&
-            (info.author == author || (info.author.isEmpty() && author.isEmpty())) )
+        if ((info.type == type) &&
+            (info.language == language) &&
+            ((info.author == author) || (info.author.isEmpty() && author.isEmpty())))
         {
             info.comment = comment;
             info.date    = date;
@@ -443,7 +452,7 @@ void ImageComments::replaceComments(const CaptionsMap& map, DatabaseComment::Typ
     }
 
     // remove all comments of this type that have not been touched above
-    for (int i = 0 ; i < d->infos.size() /* changing! */; )
+    for (int i = 0 ; i < d->infos.size() /* changing! */ ; )
     {
         if (!d->dirtyIndices.contains(i) && !d->newIndices.contains(i) && d->infos[i].type == type)
         {
@@ -475,7 +484,7 @@ void ImageComments::replaceFrom(const ImageComments& source)
     }
 
     // remove all that have not been touched above
-    for (int i=0; i<d->infos.size() /* changing! */; )
+    for (int i = 0 ; i < d->infos.size() /* changing! */ ; )
     {
         if (!d->dirtyIndices.contains(i) && !d->newIndices.contains(i))
         {
@@ -488,8 +497,11 @@ void ImageComments::replaceFrom(const ImageComments& source)
     }
 }
 
-void ImageComments::addCommentDirectly(const QString& comment, const QString& language, const QString& author,
-                                       DatabaseComment::Type type, const QDateTime& date)
+void ImageComments::addCommentDirectly(const QString& comment,
+                                       const QString& language,
+                                       const QString& author,
+                                       DatabaseComment::Type type,
+                                       const QDateTime& date)
 {
     CommentInfo info;
     info.comment  = comment;
@@ -521,7 +533,7 @@ void ImageComments::removeAll(DatabaseComment::Type type)
         return;
     }
 
-    for (int i = 0 ; i < d->infos.size() /* changing! */; )
+    for (int i = 0 ; i < d->infos.size() /* changing! */ ; )
     {
         if (d->infos.at(i).type == type)
         {
