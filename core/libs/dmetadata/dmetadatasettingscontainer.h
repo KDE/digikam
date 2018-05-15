@@ -151,8 +151,8 @@ public:
 };
 
 /**
-    The class DMetadataSettingsContainer is designed to dynamically add namespaces.
-*/
+ * The class DMetadataSettingsContainer is designed to dynamically add namespaces.
+ */
 class DIGIKAM_EXPORT DMetadataSettingsContainer
 {
 public:

@@ -39,26 +39,26 @@ namespace Digikam
 {
 
 MetadataSettingsContainer::MetadataSettingsContainer()
+    : exifRotate(true),
+      exifSetOrientation(true),
+      saveComments(false),
+      saveDateTime(false),
+      savePickLabel(false),
+      saveColorLabel(false),
+      saveRating(false),
+      saveTemplate(false),
+      saveTags(false),
+      saveFaceTags(false),
+      writeRawFiles(false),
+      updateFileTimeStamp(true),
+      rescanImageIfModified(false),
+      clearMetadataIfRescan(false),
+      useXMPSidecar4Reading(false),
+      useLazySync(false),
+      metadataWritingMode(MetaEngine::WRITETOIMAGEONLY),
+      rotationBehavior(RotatingFlags | RotateByLosslessRotation),
+      sidecarExtensions(QStringList())
 {
-    exifRotate            = true;
-    exifSetOrientation    = true;
-    saveComments          = false;
-    saveDateTime          = false;
-    savePickLabel         = false;
-    saveColorLabel        = false;
-    saveRating            = false;
-    saveTemplate          = false;
-    saveFaceTags          = false;
-    saveTags              = false;
-    writeRawFiles         = false;
-    useXMPSidecar4Reading = false;
-    metadataWritingMode   = MetaEngine::WRITETOIMAGEONLY;
-    updateFileTimeStamp   = true;
-    rescanImageIfModified = false;
-    clearMetadataIfRescan = false;
-    rotationBehavior      = RotatingFlags | RotateByLosslessRotation;
-    useLazySync           = false;
-    sidecarExtensions     = QStringList();
 }
 
 void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)

@@ -41,9 +41,9 @@ namespace Digikam
 {
 
 /**
-    The class MetadataSettingsContainer encapsulates all metadata related settings.
-    NOTE: this allows supply changed arguments to MetadataHub without changing the global settings.
-*/
+ * The class MetadataSettingsContainer encapsulates all metadata related settings.
+ * NOTE: this allows supply changed arguments to MetadataHub without changing the global settings.
+ */
 class DIGIKAM_EXPORT MetadataSettingsContainer
 {
 public:

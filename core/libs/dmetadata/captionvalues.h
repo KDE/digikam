@@ -58,9 +58,10 @@ DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const CaptionValues& val);
 
 // --------------------------------------------------------------------
 
-/** A map used to store a list of Alternative Language values + author and date properties
-    The map key is the language code following RFC3066 notation
-    (like "fr-FR" for French), and the CaptionsMap value all caption properties.
+/**
+ * A map used to store a list of Alternative Language values + author and date properties
+ * The map key is the language code following RFC3066 notation
+ * (like "fr-FR" for French), and the CaptionsMap value all caption properties.
  */
 class DIGIKAM_EXPORT CaptionsMap : public QMap<QString, CaptionValues>
 {
@@ -79,7 +80,8 @@ public:
 
     /** Sets the author for the comments in the specified languages.
      *  If commonAuthor is not null, it will be used to set the author of all comments
-     *  for which the author is not specified in the map. */
+     *  for which the author is not specified in the map.
+     */
     void setAuthorsList(const MetaEngine::AltLangMap& map, const QString& commonAuthor = QString());
     MetaEngine::AltLangMap authorsList() const;
 

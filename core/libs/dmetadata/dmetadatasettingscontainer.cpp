@@ -290,9 +290,9 @@ void DMetadataSettingsContainer::defaultRatingValues()
     QList<int> microsoftMappings;
     QList<int> iptcMappings;
 
-    defaultVal        << 0 << 1 << 2 << 3 << 4 << 5;
+    defaultVal        << 0 << 1 << 2  << 3  << 4  << 5;
     microsoftMappings << 0 << 1 << 25 << 50 << 75 << 99;
-    iptcMappings      << 8 << 6 << 5 << 4 << 2 << 1;
+    iptcMappings      << 8 << 6 << 5  << 4  << 2  << 1;
 
     NamespaceEntry ratingNs1;
     ratingNs1.namespaceName = QLatin1String("Xmp.xmp.Rating");

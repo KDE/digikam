@@ -49,15 +49,18 @@ public:
     explicit Template();
     ~Template();
 
-    /** Return true is Template title is null
+    /**
+     * Return true if Template title is null
      */
     bool isNull() const;
 
-    /** Return true is Template contents is empty
+    /**
+     * Return true if Template contents is empty
      */
     bool isEmpty() const;
 
-    /** Compare for metadata equality, not including "templateTitle" value.
+    /**
+     * Compare for metadata equality, not including "templateTitle" value.
      */
     bool operator==(const Template& t) const;
 
@@ -93,47 +96,58 @@ public:
 
 protected:
 
-    /** Template title used internaly. This value always exist and cannot be empty.
+    /**
+     * Template title used internaly. This value always exist and cannot be empty.
      */
     QString                  m_templateTitle;
 
-    /** List of author names.
+    /**
+     * List of author names.
      */
     QStringList              m_authors;
 
-    /** Description of authors position.
+    /**
+     * Description of authors position.
      */
     QString                  m_authorsPosition;
 
-    /** Credit description.
+    /**
+     * Credit description.
      */
     QString                  m_credit;
 
-    /** Language alternative copyright notices.
+    /**
+     * Language alternative copyright notices.
      */
     MetaEngine::AltLangMap   m_copyright;
 
-    /** Language alternative right term usages.
+    /**
+     * Language alternative right term usages.
      */
     MetaEngine::AltLangMap   m_rightUsageTerms;
 
-    /** Descriptions of contents source.
+    /**
+     * Descriptions of contents source.
      */
     QString                  m_source;
 
-    /** Special instructions to process with contents.
+    /**
+     * Special instructions to process with contents.
      */
     QString                  m_instructions;
 
-    /** IPTC Location Information.
+    /**
+     * IPTC Location Information.
      */
     IptcCoreLocationInfo     m_locationInfo;
 
-    /** IPTC Contact Information.
+    /**
+     * IPTC Contact Information.
      */
     IptcCoreContactInfo      m_contactInfo;
 
-    /** IPTC Subjects Information.
+    /**
+     * IPTC Subjects Information.
      */
     QStringList              m_subjects;
 };
