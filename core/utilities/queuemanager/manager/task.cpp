@@ -96,6 +96,20 @@ void Task::slotCancel()
     d->cancel = true;
 }
 
+void Task::removeTempFiles(const QList<QUrl>& tmpList)
+{
+    foreach (const QUrl& url, tmpList)
+    {
+        QString tmpPath(url.toLocalFile());
+        QFile::remove(tmpPath);
+
+        tmpPath = DMetadata::sidecarPath(tmpPath);
+
+        if (QFile::exists(tmpPath))
+            QFile::remove(tmpPath);
+    }
+}
+
 void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, const QUrl& dest)
 {
     ActionData ad;
@@ -177,12 +191,14 @@ void Task::run()
         errMsg   = d->tool->errorDescription();
         tmp2del.append(outUrl);
 
+        delete d->tool;
+        d->tool = 0;
+
         if (d->cancel)
         {
             emitActionData(ActionData::BatchCanceled);
+            removeTempFiles(tmp2del);
             emit signalDone();
-            delete d->tool;
-            d->tool = 0;
             return;
         }
         else if (!success)
@@ -190,9 +206,6 @@ void Task::run()
             emitActionData(ActionData::BatchFailed, errMsg);
             break;
         }
-
-        delete d->tool;
-        d->tool = 0;
     }
 
     // Clean up all tmp url.
@@ -200,16 +213,7 @@ void Task::run()
     // We don't remove last output tmp url.
     tmp2del.removeAll(outUrl);
 
-    foreach (const QUrl& url, tmp2del)
-    {
-        QString tmpPath(url.toLocalFile());
-        QFile::remove(tmpPath);
-
-        tmpPath = DMetadata::sidecarPath(tmpPath);
-
-        if (QFile::exists(tmpPath))
-            QFile::remove(tmpPath);
-    }
+    removeTempFiles(tmp2del);
 
     // Move processed temp file to target
 
