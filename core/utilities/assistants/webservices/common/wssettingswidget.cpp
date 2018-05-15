@@ -51,42 +51,40 @@ class WSSettingsWidget::Private
 {
 public:
 
-    explicit Private(QWidget* const widget,
-                     DInfoInterface* const interface,
-                     const QString& name)
-    {
-        iface              = interface;
-        toolName           = name;
-        mainLayout         = new QHBoxLayout(widget);
-        imgList            = new DImagesList(widget);
-        settingsScrollArea = new QScrollArea(widget);
-        settingsBox        = new QWidget(settingsScrollArea);
-        settingsBoxLayout  = new QVBoxLayout(settingsBox);
-        headerLbl          = new QLabel(widget);
-        accountBox         = new QGroupBox(i18n("Account"), settingsBox);
-        accountBoxLayout   = new QGridLayout(accountBox);
-        userNameDisplayLbl = new QLabel(accountBox);
-        changeUserBtn      = new QPushButton(accountBox);
-        albBox             = new QGroupBox(i18n("Album"), settingsBox);
-        albumsBoxLayout    = new QGridLayout(albBox);
-        albumsCoB          = new QComboBox(albBox);
-        newAlbumBtn        = new QPushButton(accountBox);
-        reloadAlbumsBtn    = new QPushButton(accountBox);
-        sizeBox            = new QGroupBox(i18n("Max Dimension"), settingsBox);
-        sizeBoxLayout      = new QVBoxLayout(sizeBox);
-        dlDimensionCoB     = new QComboBox(sizeBox);
-        uploadBox          = new QGroupBox(i18n("Destination"), settingsBox);
-        uploadWidget       = iface->uploadWidget(uploadBox);
-        uploadBoxLayout    = new QVBoxLayout(uploadBox);
-        optionsBox         = new QGroupBox(i18n("Options"), settingsBox);
-        optionsBoxLayout   = new QGridLayout(optionsBox);
-        originalChB        = new QCheckBox(optionsBox);
-        resizeChB          = new QCheckBox(optionsBox);
-        dimensionSpB       = new QSpinBox(optionsBox);
-        imageQualitySpB    = new QSpinBox(optionsBox);
-        progressBar        = new DProgressWdg(settingsBox);
+    explicit Private(DInfoInterface* const interface, const QString& name)
+        : imgList(0),
+          uploadWidget(0),
+          toolName(name),
+          headerLbl(0),
+          userNameDisplayLbl(0),
+          changeUserBtn(0),
+          dlDimensionCoB(0),
+          settingsScrollArea(0),
+          albumsCoB(0),
+          newAlbumBtn(0),
+          reloadAlbumsBtn(0),   
+          originalChB(0),
+          resizeChB(0),
+          dimensionSpB(0),
+          imageQualitySpB(0),
+          mainLayout(0),
+          settingsBox(0),
+          settingsBoxLayout(0),
+          albBox(0),
+          albumsBoxLayout(0),
+          optionsBox(0),
+          optionsBoxLayout(0),
+          uploadBox(0),
+          uploadBoxLayout(0),
+          sizeBox(0),
+          sizeBoxLayout(0),
+          accountBox(0),
+          accountBoxLayout(0),
+          iface(interface),
+          progressBar(0)
+    {        
     }
-
+          
     DImagesList*                   imgList;
     QWidget*                       uploadWidget;
     QString                        toolName;
@@ -134,9 +132,38 @@ WSSettingsWidget::WSSettingsWidget(QWidget* const parent,
                                    DInfoInterface* const iface,
                                    const QString& toolName)
     : QWidget(parent),
-      d(new Private(this, iface, toolName))
+      d(new Private(iface, toolName))
 {
     setObjectName(d->toolName + QString::fromLatin1(" Widget"));
+
+    d->mainLayout         = new QHBoxLayout(this);
+    d->imgList            = new DImagesList(this);
+    d->settingsScrollArea = new QScrollArea(this);
+    d->settingsBox        = new QWidget(d->settingsScrollArea);
+    d->settingsBoxLayout  = new QVBoxLayout(d->settingsBox);
+    d->headerLbl          = new QLabel(this);
+    d->accountBox         = new QGroupBox(i18n("Account"), d->settingsBox);
+    d->accountBoxLayout   = new QGridLayout(d->accountBox);
+    d->userNameDisplayLbl = new QLabel(d->accountBox);
+    d->changeUserBtn      = new QPushButton(d->accountBox);
+    d->albBox             = new QGroupBox(i18n("Album"), d->settingsBox);
+    d->albumsBoxLayout    = new QGridLayout(d->albBox);
+    d->albumsCoB          = new QComboBox(d->albBox);
+    d->newAlbumBtn        = new QPushButton(d->accountBox);
+    d->reloadAlbumsBtn    = new QPushButton(d->accountBox);
+    d->sizeBox            = new QGroupBox(i18n("Max Dimension"), d->settingsBox);
+    d->sizeBoxLayout      = new QVBoxLayout(d->sizeBox);
+    d->dlDimensionCoB     = new QComboBox(d->sizeBox);
+    d->uploadBox          = new QGroupBox(i18n("Destination"), d->settingsBox);
+    d->uploadWidget       = iface->uploadWidget(d->uploadBox);
+    d->uploadBoxLayout    = new QVBoxLayout(d->uploadBox);
+    d->optionsBox         = new QGroupBox(i18n("Options"), d->settingsBox);
+    d->optionsBoxLayout   = new QGridLayout(d->optionsBox);
+    d->originalChB        = new QCheckBox(d->optionsBox);
+    d->resizeChB          = new QCheckBox(d->optionsBox);
+    d->dimensionSpB       = new QSpinBox(d->optionsBox);
+    d->imageQualitySpB    = new QSpinBox(d->optionsBox);
+    d->progressBar        = new DProgressWdg(d->settingsBox);
 
     //----------------------------------------------------------
 
