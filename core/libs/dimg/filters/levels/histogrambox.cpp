@@ -83,7 +83,8 @@ public:
 };
 
 HistogramBox::HistogramBox(QWidget* const parent, HistogramBoxType type, bool selectMode)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     d->channelCB               = new QComboBox(this);
     QLabel* const channelLabel = new QLabel(i18n("Channel:"), this);
@@ -272,24 +273,24 @@ void HistogramBox::setHistogramType(HistogramBoxType type)
     typedef QPair<QString, QString> ChannelPair;
 
     ChannelPair luminosityPair(i18nc("The luminosity channel", "Luminosity"), i18n(
-                                   "<b>Luminosity</b>: display the image's luminosity values."));
+                                     "<b>Luminosity</b>: display the image's luminosity values."));
 
     ChannelPair redPair(i18nc("The red channel", "Red"), i18n(
-                            "<b>Red</b>: display the red image-channel values."));
+                              "<b>Red</b>: display the red image-channel values."));
 
     ChannelPair greenPair(i18nc("The green channel", "Green"), i18n(
-                              "<b>Green</b>: display the green image-channel values."));
+                                "<b>Green</b>: display the green image-channel values."));
 
     ChannelPair bluePair(i18nc("The blue channel", "Blue"), i18n(
-                             "<b>Blue</b>: display the blue image-channel values."));
+                               "<b>Blue</b>: display the blue image-channel values."));
 
     ChannelPair colorsPair(i18nc("The colors channel", "Colors"), i18n(
-                               "<b>Colors</b>: Display all color channel values at the same time."));
+                                 "<b>Colors</b>: Display all color channel values at the same time."));
 
     ChannelPair alphaPair(i18nc("The alpha channel", "Alpha"), i18n(
-                              "<b>Alpha</b>: display the alpha image-channel values. "
-                              "This channel corresponds to the transparency value and "
-                              "is supported by some image formats, such as PNG or TIF."));
+                                "<b>Alpha</b>: display the alpha image-channel values. "
+                                "This channel corresponds to the transparency value and "
+                                "is supported by some image formats, such as PNG or TIF."));
 
     channelDescMap.insert(LuminosityChannel, luminosityPair);
     channelDescMap.insert(RedChannel, redPair);

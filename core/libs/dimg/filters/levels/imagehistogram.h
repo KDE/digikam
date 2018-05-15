@@ -49,15 +49,21 @@ public:
     explicit ImageHistogram(const DImg& img, QObject* const parent = 0);
     ~ImageHistogram();
 
-    /** Started computation: synchronous or threaded */
+    /**
+     * Started computation: synchronous or threaded.
+     */
     void calculate();
     void calculateInThread();
 
-    /** Stop threaded computation. */
+    /**
+     * Stop threaded computation.
+     */
     void stopCalculation();
     bool isCalculating()  const;
 
-    /** Methods to access the histogram data.*/
+    /**
+     * Methods to access the histogram data.
+     */
     bool   isSixteenBit() const;
     bool   isValid()      const;
 

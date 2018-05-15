@@ -81,7 +81,8 @@ public:
 };
 
 ImageHistogram::ImageHistogram(const DImg& img, QObject* const parent)
-    : DynamicThread(parent), d(new Private)
+    : DynamicThread(parent),
+      d(new Private)
 {
     // A simple copy of reference must be enough instead a deep copy. See this BKO comment for details:
     // https://bugs.kde.org/show_bug.cgi?id=274555#c40
@@ -197,6 +198,7 @@ void ImageHistogram::calculate()
 
         // count here instead of inside the loop, because d is not optimized because it's not defined in the header
         const uint count = d->img.width() * d->img.height() * 4;
+
         for (i = 0 ; runningFlag() && (i < count) ; i += 4)
         {
             blue  = data[i    ];
@@ -228,6 +230,7 @@ void ImageHistogram::calculate()
 
         // count here instead of inside the loop, because d is not optimized because it's not defined in the header
         const uint count = d->img.width() * d->img.height() * 4;
+
         for (i = 0 ; runningFlag() && (i < count) ; i += 4)
         {
             blue  = data[i    ];

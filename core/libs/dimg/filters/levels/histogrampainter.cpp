@@ -51,8 +51,8 @@ class HistogramPainter::Private
 
 public:
 
-    explicit Private() :
-        histogram(0),
+    explicit Private()
+      : histogram(0),
         widgetToInitFrom(0),
         scale(LogScaleHistogram),
         channelType(LuminosityChannel),
@@ -514,7 +514,8 @@ public:
 };
 
 HistogramPainter::HistogramPainter(QObject* const parent)
-    : QObject(parent), d(new Private())
+    : QObject(parent),
+      d(new Private())
 {
 }
 

@@ -51,7 +51,7 @@ LevelsFilter::LevelsFilter(const LevelsContainer& settings, DImgThreadedFilter* 
 {
     m_settings = settings;
     initFilter();
-    destImage = m_destImage;
+    destImage  = m_destImage;
 }
 
 LevelsFilter::~LevelsFilter()
@@ -94,7 +94,7 @@ FilterAction LevelsFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0 ; i < 5 ; ++i)
     {
         action.addParameter(QString::fromLatin1("gamma[%1]").arg(i),   m_settings.gamma[i]);
         action.addParameter(QString::fromLatin1("hInput[%1]").arg(i),  m_settings.hInput[i]);
@@ -108,7 +108,7 @@ FilterAction LevelsFilter::filterAction()
 
 void LevelsFilter::readParameters(const Digikam::FilterAction& action)
 {
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0 ; i < 5 ; ++i)
     {
         m_settings.gamma[i]   = action.parameter(QString::fromLatin1("gamma[%1]").arg(i)).toDouble();
         m_settings.hInput[i]  = action.parameter(QString::fromLatin1("hInput[%1]").arg(i)).toInt();

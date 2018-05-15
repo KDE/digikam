@@ -123,7 +123,7 @@ public:
 
     int                              animationState;
     QPropertyAnimation*              animation;
-    DWorkingPixmap       progressPix;
+    DWorkingPixmap                   progressPix;
 
     DColor                           colorGuide;
 
@@ -133,7 +133,8 @@ public:
 HistogramWidget::HistogramWidget(int w, int h,
                                  QWidget* const parent, bool selectMode,
                                  bool showProgress, bool statisticsVisible)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     setup(w, h, selectMode, statisticsVisible);
     d->showProgress = showProgress;
@@ -187,7 +188,7 @@ void HistogramWidget::updateData(const DImg& img, const DImg& sel, bool showProg
 
     emit signalMaximumValueChanged(d->range);
 
-    if (!img.isNull() || (img.isNull() && sel.isNull()))
+    if (!img.isNull() || sel.isNull())
     {
         // do not delete main histogram if only the selection is reset
         delete d->imageHistogram;
@@ -253,7 +254,7 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
     {
         d->renderingType = type;
 
-        ImageHistogram* nowUsedHistogram = currentHistogram();
+        ImageHistogram* const nowUsedHistogram = currentHistogram();
 
         if (!nowUsedHistogram)
         {

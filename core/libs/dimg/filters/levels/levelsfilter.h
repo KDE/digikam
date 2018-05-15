@@ -53,7 +53,9 @@ public:
         }
     };
 
-    ~LevelsContainer() {};
+    ~LevelsContainer()
+    {
+    };
 
 public:
 
