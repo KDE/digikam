@@ -31,11 +31,12 @@ krazySkipConfig
 IGNORE_DIRS=""
 
 for DROP_ITEM in $KRAZY_FILTERS ; do
-    IGNORE_DIRS+="-i../../$DROP_ITEM/ " 
+    IGNORE_DIRS+="-i../../$DROP_ITEM/ "
 done
 
 cppcheck -j$CPU_CORES \
          --verbose \
+         --inline-suppr \
          --xml-version=2 \
          --platform=unix64 \
          --enable=all \
