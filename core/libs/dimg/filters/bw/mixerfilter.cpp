@@ -44,9 +44,9 @@ MixerFilter::MixerFilter(QObject* const parent)
 }
 
 MixerFilter::MixerFilter(DImg* const orgImage, QObject* const parent, const MixerContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, QLatin1String("MixerFilter"))
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("MixerFilter")),
+      m_settings(settings)
 {
-    m_settings = settings;
     initFilter();
 }
 
@@ -64,12 +64,12 @@ void MixerFilter::filterImage()
     uint height     = m_destImage.height();
     bool sixteenBit = m_destImage.sixteenBit();
 
-    uint size = width * height;
+    uint size       = width * height;
     int  progress;
 
    uint i;
-    double   rnorm = 1;    // red channel normalizer use in RGB mode.
-    double   mnorm = 1;    // monochrome normalizer used in Monochrome mode.
+    double   rnorm  = 1;    // red channel normalizer use in RGB mode.
+    double   mnorm  = 1;    // monochrome normalizer used in Monochrome mode.
 
     if (m_settings.bMonochrome)
     {
@@ -100,9 +100,9 @@ void MixerFilter::filterImage()
 
             if (m_settings.bMonochrome)
             {
-                nGray = MixPixel(m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
-                                 (unsigned short)red, (unsigned short)green, (unsigned short)blue,
-                                 sixteenBit, mnorm);
+                nGray  = MixPixel(m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
+                                  (unsigned short)red, (unsigned short)green, (unsigned short)blue,
+                                  sixteenBit, mnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
@@ -118,7 +118,7 @@ void MixerFilter::filterImage()
                                          sixteenBit, rnorm);
             }
 
-            ptr += 4;
+            ptr     += 4;
 
             progress = (int)(((double)i * 100.0) / size);
 
@@ -141,8 +141,8 @@ void MixerFilter::filterImage()
 
             if (m_settings.bMonochrome)
             {
-                nGray = MixPixel(m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
-                                 red, green, blue, sixteenBit, mnorm);
+                nGray  = MixPixel(m_settings.blackRedGain, m_settings.blackGreenGain, m_settings.blackBlueGain,
+                                  red, green, blue, sixteenBit, mnorm);
                 ptr[0] = ptr[1] = ptr[2] = nGray;
             }
             else
@@ -155,7 +155,7 @@ void MixerFilter::filterImage()
                                   red, green, blue, sixteenBit, rnorm);
             }
 
-            ptr += 4;
+            ptr     += 4;
 
             progress = (int)(((double)i * 100.0) / size);
 
@@ -176,7 +176,7 @@ double MixerFilter::CalculateNorm(double RedGain, double GreenGain, double BlueG
         return (1.0);
     }
 
-    return(fabs(1.0 / lfSum));
+    return (fabs(1.0 / lfSum));
 }
 
 unsigned short MixerFilter::MixPixel(double RedGain, double GreenGain, double BlueGain,
@@ -184,7 +184,7 @@ unsigned short MixerFilter::MixPixel(double RedGain, double GreenGain, double Bl
                                      double Norm)
 {
     double lfMix = Norm * (RedGain * (double)R + GreenGain * (double)G + BlueGain * (double)B);
-    return((unsigned short)CLAMP((int)lfMix, 0, sixteenBit ? 65535 : 255));
+    return ((unsigned short)CLAMP((int)lfMix, 0, sixteenBit ? 65535 : 255));
 }
 
 FilterAction MixerFilter::filterAction()
@@ -212,20 +212,20 @@ FilterAction MixerFilter::filterAction()
 
 void MixerFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_settings.blackBlueGain = action.parameter(QLatin1String("blackBlueGain")).toDouble();
+    m_settings.blackBlueGain  = action.parameter(QLatin1String("blackBlueGain")).toDouble();
     m_settings.blackGreenGain = action.parameter(QLatin1String("blackGreenGain")).toDouble();
-    m_settings.blackRedGain = action.parameter(QLatin1String("blackRedGain")).toDouble();
-    m_settings.blueBlueGain = action.parameter(QLatin1String("blueBlueGain")).toDouble();
-    m_settings.blueGreenGain = action.parameter(QLatin1String("blueGreenGain")).toDouble();
-    m_settings.blueRedGain = action.parameter(QLatin1String("blueRedGain")).toDouble();
-    m_settings.bMonochrome = action.parameter(QLatin1String("bMonochrome")).toBool();
-    m_settings.bPreserveLum = action.parameter(QLatin1String("bPreserveLum")).toBool();
-    m_settings.greenBlueGain = action.parameter(QLatin1String("greenBlueGain")).toDouble();
+    m_settings.blackRedGain   = action.parameter(QLatin1String("blackRedGain")).toDouble();
+    m_settings.blueBlueGain   = action.parameter(QLatin1String("blueBlueGain")).toDouble();
+    m_settings.blueGreenGain  = action.parameter(QLatin1String("blueGreenGain")).toDouble();
+    m_settings.blueRedGain    = action.parameter(QLatin1String("blueRedGain")).toDouble();
+    m_settings.bMonochrome    = action.parameter(QLatin1String("bMonochrome")).toBool();
+    m_settings.bPreserveLum   = action.parameter(QLatin1String("bPreserveLum")).toBool();
+    m_settings.greenBlueGain  = action.parameter(QLatin1String("greenBlueGain")).toDouble();
     m_settings.greenGreenGain = action.parameter(QLatin1String("greenGreenGain")).toDouble();
-    m_settings.greenRedGain = action.parameter(QLatin1String("greenRedGain")).toDouble();
-    m_settings.redBlueGain = action.parameter(QLatin1String("redBlueGain")).toDouble();
-    m_settings.redGreenGain = action.parameter(QLatin1String("redGreenGain")).toDouble();
-    m_settings.redRedGain = action.parameter(QLatin1String("redRedGain")).toDouble();
+    m_settings.greenRedGain   = action.parameter(QLatin1String("greenRedGain")).toDouble();
+    m_settings.redBlueGain    = action.parameter(QLatin1String("redBlueGain")).toDouble();
+    m_settings.redGreenGain   = action.parameter(QLatin1String("redGreenGain")).toDouble();
+    m_settings.redRedGain     = action.parameter(QLatin1String("redRedGain")).toDouble();
 }
 
 } // namespace Digikam
