@@ -75,9 +75,15 @@ class DIGIKAM_EXPORT LevelsFilter : public DImgThreadedFilter
 public:
 
     explicit LevelsFilter(QObject* const parent = 0);
-    explicit LevelsFilter(DImg* const orgImage, QObject* const parent=0, const LevelsContainer& settings=LevelsContainer());
-    explicit LevelsFilter(const LevelsContainer& settings, DImgThreadedFilter* const master,
-                          const DImg& orgImage, DImg& destImage, int progressBegin=0, int progressEnd=100);
+    explicit LevelsFilter(DImg* const orgImage,
+                          QObject* const parent=0,
+                          const LevelsContainer& settings=LevelsContainer());
+    explicit LevelsFilter(const LevelsContainer& settings,
+                          DImgThreadedFilter* const master,
+                          const DImg& orgImage,
+                          DImg& destImage,
+                          int progressBegin=0,
+                          int progressEnd=100);
     virtual ~LevelsFilter();
 
     static QString          FilterIdentifier()
