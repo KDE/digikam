@@ -49,7 +49,7 @@ public:
     QList<Identity>               identitiesList;
     QList<qlonglong>              similarityImageIdList;
 
-    QMutex                        lock;
+    QMutex                        mutex;
 };
 
 MaintenanceData::MaintenanceData()
@@ -94,7 +94,7 @@ void MaintenanceData::setIdentities(const QList<Identity>& identities)
 
 qlonglong MaintenanceData::getImageId() const
 {
-    d->lock.lock();
+    d->mutex.lock();
     qlonglong id = -1;
 
     if (!d->imageIdList.isEmpty())
@@ -102,13 +102,13 @@ qlonglong MaintenanceData::getImageId() const
         id = d->imageIdList.takeFirst();
     }
 
-    d->lock.unlock();
+    d->mutex.unlock();
     return id;
 }
 
 int MaintenanceData::getThumbnailId() const
 {
-    d->lock.lock();
+    d->mutex.lock();
     int id = -1;
 
     if (!d->thumbnailIdList.isEmpty())
@@ -116,13 +116,13 @@ int MaintenanceData::getThumbnailId() const
         id = d->thumbnailIdList.takeFirst();
     }
 
-    d->lock.unlock();
+    d->mutex.unlock();
     return id;
 }
 
 QString MaintenanceData::getImagePath() const
 {
-    d->lock.lock();
+    d->mutex.lock();
     QString path;
 
     if (!d->imagePathList.isEmpty())
@@ -130,13 +130,13 @@ QString MaintenanceData::getImagePath() const
         path = d->imagePathList.takeFirst();
     }
 
-    d->lock.unlock();
+    d->mutex.unlock();
     return path;
 }
 
 ImageInfo MaintenanceData::getImageInfo() const
 {
-    d->lock.lock();
+    d->mutex.lock();
     ImageInfo info;
 
     if (!d->imageInfoList.isEmpty())
@@ -144,13 +144,13 @@ ImageInfo MaintenanceData::getImageInfo() const
         info = d->imageInfoList.takeFirst();
     }
 
-    d->lock.unlock();
+    d->mutex.unlock();
     return info;
 }
 
 Identity MaintenanceData::getIdentity() const
 {
-    d->lock.lock();
+    d->mutex.lock();
     Identity identity;
 
     if (!d->identitiesList.isEmpty())
@@ -158,13 +158,13 @@ Identity MaintenanceData::getIdentity() const
         identity = d->identitiesList.takeFirst();
     }
 
-    d->lock.unlock();
+    d->mutex.unlock();
     return identity;
 }
 
 qlonglong MaintenanceData::getSimilarityImageId() const
 {
-    d->lock.lock();
+    d->mutex.lock();
     qlonglong id = -1;
 
     if (!d->similarityImageIdList.isEmpty())
@@ -172,7 +172,7 @@ qlonglong MaintenanceData::getSimilarityImageId() const
         id = d->similarityImageIdList.takeFirst();
     }
 
-    d->lock.unlock();
+    d->mutex.unlock();
     return id;
 }
 
