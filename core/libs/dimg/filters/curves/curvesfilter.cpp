@@ -38,19 +38,31 @@ CurvesFilter::CurvesFilter(QObject* const parent)
     initFilter();
 }
 
-CurvesFilter::CurvesFilter(DImg* const orgImage, QObject* const parent, const CurvesContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, QLatin1String("CurvesFilter"))
+CurvesFilter::CurvesFilter(DImg* const orgImage,
+                           QObject* const parent,
+                           const CurvesContainer& settings)
+    : DImgThreadedFilter(orgImage,
+                         parent,
+                         QLatin1String("CurvesFilter")),
+      m_settings(settings)
 {
-    m_settings = settings;
     initFilter();
 }
 
-CurvesFilter::CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* const master,
-                           const DImg& orgImage, DImg& destImage, int progressBegin, int progressEnd)
-    : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, QLatin1String("CurvesFilter"))
+CurvesFilter::CurvesFilter(const CurvesContainer& settings,
+                           DImgThreadedFilter* const master,
+                           const DImg& orgImage,
+                           DImg& destImage,
+                           int progressBegin,
+                           int progressEnd)
+    : DImgThreadedFilter(master,
+                         orgImage,
+                         destImage,
+                         progressBegin,
+                         progressEnd,
+                         QLatin1String("CurvesFilter")),
+      m_settings(settings)
 {
-    m_settings = settings;
-
     // cannot operate in-place, so allocate dest image
     initFilter();
     destImage = m_destImage;

@@ -47,9 +47,15 @@ class DIGIKAM_EXPORT CurvesFilter : public DImgThreadedFilter
 public:
 
     explicit CurvesFilter(QObject* const parent = 0);
-    explicit CurvesFilter(DImg* const orgImage, QObject* const parent=0, const CurvesContainer& settings=CurvesContainer());
-    explicit CurvesFilter(const CurvesContainer& settings, DImgThreadedFilter* const master,
-                          const DImg& orgImage, DImg& destImage, int progressBegin=0, int progressEnd=100);
+    explicit CurvesFilter(DImg* const orgImage,
+                          QObject* const parent=0,
+                          const CurvesContainer& settings=CurvesContainer());
+    explicit CurvesFilter(const CurvesContainer& settings,
+                           DImgThreadedFilter* const master,
+                          const DImg& orgImage,
+                          DImg& destImage,
+                          int progressBegin=0,
+                          int progressEnd=100);
     virtual ~CurvesFilter();
 
     static QString          FilterIdentifier()
