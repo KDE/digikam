@@ -112,6 +112,7 @@ bool FilterActionFilter::isReproducible() const
             return false;
         }
     }
+
     return true;
 }
 

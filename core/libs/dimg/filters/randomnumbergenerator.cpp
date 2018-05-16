@@ -84,7 +84,8 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
     }
 #endif
 
-    /* Fallback, mostly for Windows, where UUID generation
+    /*
+     * Fallback, mostly for Windows, where UUID generation
      * is supposed to be very good.
      */
     if (isEmpty())
@@ -125,7 +126,7 @@ NonDeterministicRandomData::NonDeterministicRandomData(int s)
     boost::random_device device;
     boost::random_device::result_type* ptr = reinterpret_cast<boost::random_device::result_type*>(data());
 
-    for (int i = 0; i < stepSize; ++i)
+    for (int i = 0 ; i < stepSize ; ++i)
     {
         *ptr++ = device();
     }
@@ -215,6 +216,7 @@ int RandomNumberGenerator::number(int min, int max)
 {
     boost::uniform_smallint<> distribution(min, max);
     boost::variate_generator<boost::mt19937&, boost::uniform_smallint<> > generator(d->engine, distribution);
+
     return generator();
 }
 
@@ -222,6 +224,7 @@ double RandomNumberGenerator::number(double min, double max)
 {
     boost::uniform_real<> distribution(min, max);
     boost::variate_generator<boost::mt19937&, boost::uniform_real<> > generator(d->engine, distribution);
+
     return generator();
 }
 
@@ -229,6 +232,7 @@ bool RandomNumberGenerator::yesOrNo(double p)
 {
     boost::bernoulli_distribution<> distribution(p);
     boost::variate_generator<boost::mt19937&, boost::bernoulli_distribution<> > generator(d->engine, distribution);
+
     return generator();
 }
 
