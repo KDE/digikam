@@ -83,7 +83,7 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* const parent,
 
 void BlackFrameListViewItem::activate()
 {
-    m_parent->setToolTip( m_blackFrameDesc);
+    m_parent->setToolTip(m_blackFrameDesc);
     emit signalParsed(m_hotPixels, m_blackFrameURL);
 }
 
@@ -131,7 +131,7 @@ QPixmap BlackFrameListViewItem::thumb(const QSize& size)
     //Draw hot pixels one by one
     QList<HotPixel>::const_iterator it;
 
-    for (it = m_hotPixels.constBegin(); it != m_hotPixels.constEnd(); ++it)
+    for (it = m_hotPixels.constBegin() ; it != m_hotPixels.constEnd() ; ++it)
     {
         hpRect   = (*it).rect;
         hpThumbX = (hpRect.x() + hpRect.width()  / 2) * xRatio;

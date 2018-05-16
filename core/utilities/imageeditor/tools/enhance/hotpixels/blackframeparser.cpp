@@ -137,11 +137,11 @@ void BlackFrameParser::blackFrameParsing()
 
             // Find maximum component value.
             int       maxValue;
-            int       threshold = DENOM/10;
+            int       threshold       = DENOM / 10;
             const int threshold_value = REL_TO_ABS(threshold,255);
-            maxValue = (color.red()>color.blue()) ? color.red() : color.blue();
+            maxValue                  = (color.red()>color.blue()) ? color.red() : color.blue();
 
-            if (color.green()>maxValue)
+            if (color.green() > maxValue)
             {
                 maxValue = color.green();
             }
@@ -150,7 +150,7 @@ void BlackFrameParser::blackFrameParsing()
             if (maxValue > threshold_value)
             {
                 HotPixel point;
-                point.rect = QRect (x, y, 1, 1);
+                point.rect       = QRect (x, y, 1, 1);
                 //TODO:check this
                 point.luminosity = ((2 * DENOM) / 255 ) * maxValue / 2;
 
@@ -192,7 +192,7 @@ void BlackFrameParser::consolidatePixels(QList<HotPixel>& list)
     HotPixel point;
     HotPixel point_below;
 
-    for (; it != list.end(); ++it )
+    for ( ; it != list.end() ; ++it )
     {
         while (1)
         {

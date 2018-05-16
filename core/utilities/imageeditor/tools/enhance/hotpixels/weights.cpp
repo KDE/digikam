@@ -35,8 +35,8 @@
 namespace Digikam
 {
 
-Weights::Weights() :
-    mHeight(0),
+Weights::Weights()
+  : mHeight(0),
     mWidth(0),
     mCoefficientNumber(0),
     mTwoDim(false),
@@ -46,8 +46,8 @@ Weights::Weights() :
 {
 }
 
-Weights::Weights(const Weights& w) :
-    mHeight(0),
+Weights::Weights(const Weights& w)
+  : mHeight(0),
     mWidth(0),
     mCoefficientNumber(0),
     mTwoDim(false),
@@ -86,17 +86,17 @@ Weights& Weights::operator=(const Weights& w)
         // Allocate mPositions.count() matrices
         mWeightMatrices               = new double** [mPositions.count()];
 
-        for (int i=0 ; i < mPositions.count() ; ++i)
+        for (int i = 0 ; i < mPositions.count() ; ++i)
         {
             // Allocate mHeight rows on each position
             mWeightMatrices[i] = new double*[mHeight];
 
-            for (uint j=0 ; j < mHeight ; ++j)
+            for (uint j = 0 ; j < mHeight ; ++j)
             {
                 // Allocate mWidth columns on each row
                 mWeightMatrices[i][j] = new double[mWidth];
 
-                for (uint k=0 ; k < mWidth ; ++k)
+                for (uint k = 0 ; k < mWidth ; ++k)
                 {
                     mWeightMatrices[i][j][k] = origMatrices[i][j][k];
                 }
@@ -127,12 +127,12 @@ void Weights::calculateWeights()
         {
             for (x = -iPolynomeOrder ; x < iWidth + iPolynomeOrder ; ++x)
             {
-                if ((x < 0 && y < 0 && -x - y < iPolynomeOrder + 2)                             ||
-                    (x < 0 && y >= iHeight && -x + y - iHeight < iPolynomeOrder + 1)            ||
-                    (x >= iWidth && y < 0 && x - y - iWidth < iPolynomeOrder + 1)               ||
-                    (x >= iWidth && y >= iHeight && x + y - iWidth - iHeight < iPolynomeOrder)  ||
-                    (x < 0 && y >= 0 && y < iHeight) || (x >= iWidth  && y >= 0 && y < iHeight) ||
-                    (y < 0 && x >= 0 && x < iWidth ) || (y >= iHeight && x >= 0 && x < iWidth))
+                if (((x < 0)       && (y < 0)        && (-x - y < iPolynomeOrder + 2))                                  ||
+                    ((x < 0)       && (y >= iHeight) && (-x + y - iHeight < iPolynomeOrder + 1))                        ||
+                    ((x >= iWidth) && (y < 0)        && (x - y - iWidth < iPolynomeOrder + 1))                          ||
+                    ((x >= iWidth) && (y >= iHeight) && (x + y - iWidth - iHeight < iPolynomeOrder))                    ||
+                    ((x < 0)       && (y >= 0)       && (y < iHeight) || ((x >= iWidth)  && (y >= 0) && (y < iHeight))) ||
+                    ((y < 0)       && (x >= 0)       && (x < iWidth ) || ((y >= iHeight) && (x >= 0) && (x < iWidth))))
                 {
                     QPoint position(x,y);
                     mPositions.append(position);
@@ -144,7 +144,7 @@ void Weights::calculateWeights()
     {
         // In the one-dimensional case, only the y coordinate and y size is used.  */
 
-        for (y = (-1)*mPolynomeOrder ; y < 0 ; ++y)
+        for (y = -mPolynomeOrder ; y < 0 ; ++y)
         {
             QPoint position(0,y);
             mPositions.append(position);

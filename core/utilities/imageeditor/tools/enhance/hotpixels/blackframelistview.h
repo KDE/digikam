@@ -73,7 +73,7 @@ class BlackFrameListViewItem : public QObject, QTreeWidgetItem
 
 public:
 
-    BlackFrameListViewItem(BlackFrameListView* const parent, const QUrl& url);
+    explicit BlackFrameListViewItem(BlackFrameListView* const parent, const QUrl& url);
     ~BlackFrameListViewItem() {};
 
 Q_SIGNALS:

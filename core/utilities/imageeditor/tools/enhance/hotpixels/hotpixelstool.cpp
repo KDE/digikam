@@ -61,8 +61,8 @@ class HotPixelsTool::Private
 {
 public:
 
-    explicit Private() :
-        blackFrameButton(0),
+    explicit Private()
+      : blackFrameButton(0),
         progressBar(0),
         filterMethodCombo(0),
         blackFrameListView(0),
@@ -93,11 +93,6 @@ const QString HotPixelsTool::Private::configLastBlackFrameFileEntry(QLatin1Strin
 const QString HotPixelsTool::Private::configFilterMethodEntry(QLatin1String("Filter Method"));
 
 // --------------------------------------------------------
-
-void HotPixelsTool::registerFilter()
-{
-    Digikam::DImgFilterManager::instance()->addGenerator(new Digikam::BasicDImgFilterGenerator<HotPixelFixer>());
-}
 
 HotPixelsTool::HotPixelsTool(QObject* const parent)
     : EditorToolThreaded(parent),
@@ -167,6 +162,11 @@ HotPixelsTool::HotPixelsTool(QObject* const parent)
 HotPixelsTool::~HotPixelsTool()
 {
     delete d;
+}
+
+void HotPixelsTool::registerFilter()
+{
+    DImgFilterManager::instance()->addGenerator(new BasicDImgFilterGenerator<HotPixelFixer>());
 }
 
 void HotPixelsTool::readSettings()
