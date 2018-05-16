@@ -58,7 +58,7 @@ public:
         WP      = 0;
         rgbMax  = 0;
 
-        for (int i = 0; i < 65536; ++i)
+        for (int i = 0 ; i < 65536 ; ++i)
         {
             curve[i] = 0.0;
         }
@@ -88,18 +88,18 @@ WBFilter::WBFilter(QObject* const parent)
 
 WBFilter::WBFilter(DImg* const orgImage, QObject* const parent, const WBContainer& settings)
     : DImgThreadedFilter(orgImage, parent, QLatin1String("WBFilter")),
+      m_settings(settings),
       d(new Private)
 {
-    m_settings = settings;
     initFilter();
 }
 
 WBFilter::WBFilter(const WBContainer& settings, DImgThreadedFilter* const master,
                    const DImg& orgImage, const DImg& destImage, int progressBegin, int progressEnd)
     : DImgThreadedFilter(master, orgImage, destImage, progressBegin, progressEnd, QLatin1String("WBFilter")),
+      m_settings(settings),
       d(new Private)
 {
-    m_settings = settings;
     filterImage();
 }
 
@@ -116,7 +116,8 @@ void WBFilter::filterImage()
 
     // Set final lut.
     setRGBmult();
-    d->mr = d->mb = 1.0;
+    d->mr = 1.0;
+    d->mb = 1.0;
 
     if (d->clipSat)
     {
@@ -127,7 +128,7 @@ void WBFilter::filterImage()
     setRGBmult();
 
     // See bug #259223 : scaling down the rgb multipliers just enough to prevent clipping
-    if (m_settings.maxr == -1 && m_settings.maxg == -1 && m_settings.maxb == -1)
+    if ((m_settings.maxr == -1) && (m_settings.maxg == -1) && (m_settings.maxb == -1))
     {
         findChanelsMax((const DImg*) &m_orgImage,
                        m_settings.maxr,
@@ -146,7 +147,9 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
 {
     // Calculate Temperature and Green component from color picked.
 
-    float mr=0.0, mg=0.0, mb=0.0;
+    float mr = 0.0;
+    float mg = 0.0;
+    float mb = 0.0;
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Sums:  R:" << tc.red() << " G:" << tc.green() << " B:" << tc.blue();
 
@@ -159,7 +162,7 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
     double mBR   = (double)tc.blue() / (double)tc.red();
     green        = 1.0;
 
-    for (temperature = (tmin + tmax) / 2; tmax - tmin > 10; temperature = (tmin + tmax) / 2)
+    for (temperature = (tmin + tmax) / 2 ; tmax - tmin > 10 ; temperature = (tmin + tmax) / 2)
     {
         qCDebug(DIGIKAM_DIMG_LOG) << "Intermediate Temperature (K):" << temperature;
         setRGBmult(temperature, green, mr, mg, mb);
@@ -198,7 +201,7 @@ void WBFilter::autoExposureAdjustement(const DImg* const img, double& black, dou
 
     stop = img->width() * img->height() / 200;
 
-    for (i = rgbMax, sum = 0; (i >= 0) && (sum < stop); --i)
+    for (i = rgbMax, sum = 0 ; (i >= 0) && (sum < stop) ; --i)
     {
         sum += histogram->getValue(LuminosityChannel, i);
     }
@@ -206,12 +209,12 @@ void WBFilter::autoExposureAdjustement(const DImg* const img, double& black, dou
     expo = -log((float)(i + 1) / rgbMax) / log(2);
     qCDebug(DIGIKAM_DIMG_LOG) << "White level at:" << i;
 
-    for (i = 1, sum = 0; (i < (int)rgbMax) && (sum < stop); ++i)
+    for (i = 1, sum = 0 ; (i < (int)rgbMax) && (sum < stop) ; ++i)
     {
         sum += histogram->getValue(LuminosityChannel, i);
     }
 
-    black = (double)i / rgbMax;
+    black  = (double)i / rgbMax;
     black /= 2;
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Black:" << black << "  Exposition:" << expo;
@@ -312,7 +315,7 @@ void WBFilter::findChanelsMax(const DImg* const img, int& maxr, int& maxg, int& 
 
     if (!sixteenBit)        // 8 bits image.
     {
-        for (uint j = 0 ; j < size; ++j)
+        for (uint j = 0 ; j < size ; ++j)
         {
             if (maxb < data[0])
             {
@@ -336,7 +339,7 @@ void WBFilter::findChanelsMax(const DImg* const img, int& maxr, int& maxg, int& 
     {
         const unsigned short* ptr = reinterpret_cast<const unsigned short*>(data);
 
-        for (uint j = 0 ; j < size; ++j)
+        for (uint j = 0 ; j < size ; ++j)
         {
             if (maxb < ptr[0])
             {
@@ -408,7 +411,7 @@ void WBFilter::setLUTv()
         gamma = 1.8 * (2.0 - m_settings.gamma) - 0.8;
     }
 
-    for (int i = 1; i < (int)d->rgbMax; ++i)
+    for (int i = 1 ; i < (int)d->rgbMax ; ++i)
     {
         float x      = (float)(i - d->BP) / (d->WP - d->BP);
         d->curve[i]  = (i < d->BP) ? 0 : (d->rgbMax - 1) * pow((double)x, gamma);
@@ -452,7 +455,7 @@ void WBFilter::adjustWhiteBalance(uchar* const data, int width, int height, bool
             ptr[0] = (uchar)pixelColor(rv[0], i, v);
             ptr[1] = (uchar)pixelColor(rv[1], i, v);
             ptr[2] = (uchar)pixelColor(rv[2], i, v);
-            ptr    += 4;
+            ptr   += 4;
 
             progress = (int)(((double)j * 100.0) / size);
 
@@ -491,7 +494,7 @@ void WBFilter::adjustWhiteBalance(uchar* const data, int width, int height, bool
             ptr[0] = pixelColor(rv[0], i, v);
             ptr[1] = pixelColor(rv[1], i, v);
             ptr[2] = pixelColor(rv[2], i, v);
-            ptr    += 4;
+            ptr   += 4;
 
             progress = (int)(((double)j * 100.0) / size);
 
