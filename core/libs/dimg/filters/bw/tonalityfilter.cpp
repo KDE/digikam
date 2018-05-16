@@ -43,10 +43,12 @@ TonalityFilter::TonalityFilter(QObject* const parent)
     initFilter();
 }
 
-TonalityFilter::TonalityFilter(DImg* const orgImage, QObject* const parent, const TonalityContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, QLatin1String("TonalityFilter"))
+TonalityFilter::TonalityFilter(DImg* const orgImage,
+                               QObject* const parent,
+                               const TonalityContainer& settings)
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("TonalityFilter")),
+    m_settings(settings)
 {
-    m_settings = settings;
     initFilter();
 }
 
@@ -79,14 +81,14 @@ void TonalityFilter::filterImage()
         {
             // Convert to grayscale using tonal mask
 
-            lig = lround(0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
+            lig    = lround(0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
 
             mask.setHSL(hue, sat, lig, sixteenBit);
 
             ptr[0] = (uchar)mask.blue();
             ptr[1] = (uchar)mask.green();
             ptr[2] = (uchar)mask.red();
-            ptr += 4;
+            ptr   += 4;
 
             progress = (int)(((double)i * 100.0) / size);
 
@@ -104,14 +106,14 @@ void TonalityFilter::filterImage()
         {
             // Convert to grayscale using tonal mask
 
-            lig = lround(0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
+            lig    = lround(0.3 * ptr[2] + 0.59 * ptr[1] + 0.11 * ptr[0]);
 
             mask.setHSL(hue, sat, lig, sixteenBit);
 
             ptr[0] = (unsigned short)mask.blue();
             ptr[1] = (unsigned short)mask.green();
             ptr[2] = (unsigned short)mask.red();
-            ptr += 4;
+            ptr   += 4;
 
             progress = (int)(((double)i * 100.0) / size);
 
