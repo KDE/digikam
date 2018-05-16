@@ -61,7 +61,7 @@ public:
 
     QUrl             destUrl;
 
-    QMutex           lock;
+    QMutex           mutex;
 };
 
 IOJobData::IOJobData(int operation,
@@ -200,7 +200,7 @@ QUrl IOJobData::destUrl(const QUrl& srcUrl) const
 
 QUrl IOJobData::getNextUrl() const
 {
-    d->lock.lock();
+    d->mutex.lock();
     QUrl url;
 
     if (!d->sourceUrlList.isEmpty())
@@ -208,7 +208,7 @@ QUrl IOJobData::getNextUrl() const
         url = d->sourceUrlList.takeFirst();
     }
 
-    d->lock.unlock();
+    d->mutex.unlock();
     return url;
 }
 
