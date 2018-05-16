@@ -94,7 +94,7 @@ public:
     explicit Private()
       : upnp(0),
         logHandler(NULL),
-        serverHolder(new CDeviceHostReferenceHolder())
+        serverHolder(NULL)
     {
         NPT_LogManager::GetDefault().Configure("plist:.level=INFO;.handlers=CustomHandler;");
         NPT_LogHandler::Create("digiKam", "CustomHandler", logHandler);
@@ -110,35 +110,9 @@ DMediaServer::DMediaServer(QObject* const parent)
     : QObject(parent),
       d(new Private)
 {
-    d->upnp = new PLT_UPnP();
+    d->serverHolder = new CDeviceHostReferenceHolder();
+    d->upnp         = new PLT_UPnP();
     d->upnp->Start();
-}
-
-bool DMediaServer::init(int port)
-{
-    QString devDesc = i18n("%1 Media Server", qApp->applicationName());
-
-    DLNAMediaServer* const device = new DLNAMediaServer(
-                                    devDesc.toUtf8().data(),
-                                    false,
-                                    NULL,
-                                    port);
-
-    device->m_ModelName        = "digiKam";
-    device->m_ModelNumber      = digikam_version;
-    device->m_ModelDescription = DAboutData::digiKamSlogan().toUtf8().data();
-    device->m_ModelURL         = DAboutData::webProjectUrl().toString().toUtf8().data();
-    device->m_Manufacturer     = "digiKam.org";
-    device->m_ManufacturerURL  = DAboutData::webProjectUrl().toString().toUtf8().data();
-    device->SetDelegate(device);
-
-    d->serverHolder->m_device  = device;
-
-    NPT_Result res = d->upnp->AddDevice(d->serverHolder->m_device);
-
-    qCDebug(DIGIKAM_MEDIASRV_LOG) << "Upnp device created:" << res;
-
-    return true;
 }
 
 DMediaServer::~DMediaServer()
@@ -150,6 +124,32 @@ DMediaServer::~DMediaServer()
     delete d->logHandler;
     delete d->serverHolder;
     delete d;
+}
+
+bool DMediaServer::init(int port)
+{
+    QString devDesc               = i18n("%1 Media Server", qApp->applicationName());
+
+    DLNAMediaServer* const device = new DLNAMediaServer(devDesc.toUtf8().data(),
+                                                        false,
+                                                        NULL,
+                                                        port);
+
+    device->m_ModelName           = "digiKam";
+    device->m_ModelNumber         = digikam_version;
+    device->m_ModelDescription    = DAboutData::digiKamSlogan().toUtf8().data();
+    device->m_ModelURL            = DAboutData::webProjectUrl().toString().toUtf8().data();
+    device->m_Manufacturer        = "digiKam.org";
+    device->m_ManufacturerURL     = DAboutData::webProjectUrl().toString().toUtf8().data();
+    device->SetDelegate(device);
+
+    d->serverHolder->m_device     = device;
+
+    NPT_Result res                = d->upnp->AddDevice(d->serverHolder->m_device);
+
+    qCDebug(DIGIKAM_MEDIASRV_LOG) << "Upnp device created:" << res;
+
+    return true;
 }
 
 void DMediaServer::addAlbumsOnServer(const MediaServerMap& map)
