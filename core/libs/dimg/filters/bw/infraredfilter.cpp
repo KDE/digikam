@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2005-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,16 +44,16 @@
 namespace Digikam
 {
 
-InfraredFilter::InfraredFilter(QObject* parent)
+InfraredFilter::InfraredFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-InfraredFilter::InfraredFilter(DImg* orgImage, QObject* parent, const InfraredContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, QLatin1String("Infrared"))
+InfraredFilter::InfraredFilter(DImg* const orgImage, QObject* const parent, const InfraredContainer& settings)
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("Infrared")),
+      m_settings(settings)
 {
-    m_settings = settings;
     initFilter();
 }
 
@@ -93,7 +93,7 @@ void InfraredFilter::filterImage()
     // This film have a sensibility escursion from 200 to 800 ISO.
     // Over 800 ISO, we reproduce The Kodak HIE high speed infrared film.
 
-    int    blurRadius = (int)((m_settings.sensibility / 200.0) + 1.0);   // Gaussian blur infrared highlight effect [2 to 5].
+    int    blurRadius   = (int)((m_settings.sensibility / 200.0) + 1.0);   // Gaussian blur infrared highlight effect [2 to 5].
     int    offset, progress;
 
     uchar* pOverlayBits = 0;                  // Overlay to merge with original converted in gray scale.
@@ -159,9 +159,9 @@ void InfraredFilter::filterImage()
 
     outData.setSixteenBit(sixteenBit);
 
-    for (int x = 0; runningFlag() && x < Width; ++x)
+    for (int x = 0 ; runningFlag() && x < Width ; ++x)
     {
-        for (int y = 0; runningFlag() && y < Height; ++y)
+        for (int y = 0 ; runningFlag() && y < Height ; ++y)
         {
             offset = x * bytesDepth + (y * Width * bytesDepth);
 
@@ -170,15 +170,15 @@ void InfraredFilter::filterImage()
 
             if (sixteenBit)
             {
-                outData.setRed(intMult16(bwData.red(),   bwData.red()   + intMult16(2 * overData.red(),   65535 - bwData.red())));
+                outData.setRed(intMult16(bwData.red(),     bwData.red()   + intMult16(2 * overData.red(),   65535 - bwData.red())));
                 outData.setGreen(intMult16(bwData.green(), bwData.green() + intMult16(2 * overData.green(), 65535 - bwData.green())));
-                outData.setBlue(intMult16(bwData.blue(),  bwData.blue()  + intMult16(2 * overData.blue(),  65535 - bwData.blue())));
+                outData.setBlue(intMult16(bwData.blue(),   bwData.blue()  + intMult16(2 * overData.blue(),  65535 - bwData.blue())));
             }
             else
             {
-                outData.setRed(intMult8(bwData.red(),   bwData.red()   + intMult8(2 * overData.red(),    255 - bwData.red())));
+                outData.setRed(intMult8(bwData.red(),     bwData.red()   + intMult8(2 * overData.red(),    255 - bwData.red())));
                 outData.setGreen(intMult8(bwData.green(), bwData.green() + intMult8(2 * overData.green(),  255 - bwData.green())));
-                outData.setBlue(intMult8(bwData.blue(),  bwData.blue()  + intMult8(2 * overData.blue(),   255 - bwData.blue())));
+                outData.setBlue(intMult8(bwData.blue(),   bwData.blue()  + intMult8(2 * overData.blue(),   255 - bwData.blue())));
             }
 
             outData.setAlpha(bwData.alpha());
@@ -222,11 +222,10 @@ FilterAction InfraredFilter::filterAction()
 
 void InfraredFilter::readParameters(const FilterAction& action)
 {
-    m_settings.blueGain = action.parameter(QLatin1String("blueGain")).toDouble();
-    m_settings.greenGain = action.parameter(QLatin1String("greenGain")).toDouble();
-    m_settings.redGain = action.parameter(QLatin1String("redGain")).toDouble();
+    m_settings.blueGain    = action.parameter(QLatin1String("blueGain")).toDouble();
+    m_settings.greenGain   = action.parameter(QLatin1String("greenGain")).toDouble();
+    m_settings.redGain     = action.parameter(QLatin1String("redGain")).toDouble();
     m_settings.sensibility = action.parameter(QLatin1String("sensibility")).toInt();
 }
-
 
 } // namespace Digikam

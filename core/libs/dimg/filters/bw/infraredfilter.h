@@ -39,15 +39,17 @@ class DIGIKAM_EXPORT InfraredContainer
 
 public:
 
-    InfraredContainer()
+    explicit InfraredContainer()
     {
+        sensibility = 200;
         redGain     = 0.4;
         greenGain   = 2.1;
         blueGain    = -0.8;
-        sensibility = 200;
     };
 
-    ~InfraredContainer() {};
+    ~InfraredContainer()
+    {
+    };
 
 public:
 
@@ -66,8 +68,10 @@ class DIGIKAM_EXPORT InfraredFilter : public DImgThreadedFilter
 
 public:
 
-    explicit InfraredFilter(QObject* parent = 0);
-    explicit InfraredFilter(DImg* orgImage, QObject* parent=0, const InfraredContainer& settings=InfraredContainer());
+    explicit InfraredFilter(QObject* const parent = 0);
+    explicit InfraredFilter(DImg* const orgImage,
+                            QObject* const parent=0, 
+                            const InfraredContainer& settings=InfraredContainer());
     ~InfraredFilter();
 
     static QString          FilterIdentifier()
