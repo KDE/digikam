@@ -67,12 +67,13 @@ void AutoLevelsFilter::filterImage()
     m_destImage = m_orgImage;
 }
 
-/** Performs histogram auto correction of levels.
-    This method maximizes the tonal range in the Red,
-    Green, and Blue channels. It search the image shadow and highlight
-    limit values and adjust the Red, Green, and Blue channels
-    to a full histogram range.
-*/
+/**
+ * Performs histogram auto correction of levels.
+ * This method maximizes the tonal range in the Red,
+ * Green, and Blue channels. It search the image shadow and highlight
+ * limit values and adjust the Red, Green, and Blue channels
+ * to a full histogram range.
+ */
 void AutoLevelsFilter::autoLevelsCorrectionImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())

@@ -82,6 +82,14 @@ private:
 
     struct double_packet
     {
+        double_packet()
+            : red(0.0),
+              green(0.0),
+              blue(0.0),
+              alpha(0.0)
+        {
+        }
+
         double red;
         double green;
         double blue;
@@ -90,6 +98,14 @@ private:
 
     struct int_packet
     {
+       int_packet()
+            : red(0),
+              green(0),
+              blue(0),
+              alpha(0)
+        {
+        }
+
         unsigned int red;
         unsigned int green;
         unsigned int blue;

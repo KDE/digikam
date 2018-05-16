@@ -66,16 +66,17 @@ void EqualizeFilter::filterImage()
     m_destImage = m_orgImage;
 }
 
-/** Performs an histogram equalization of the image.
-    this method adjusts the brightness of colors across the
-    active image so that the histogram for the value channel
-    is as nearly as possible flat, that is, so that each possible
-    brightness value appears at about the same number of pixels
-    as each other value. Sometimes Equalize works wonderfully at
-    enhancing the contrasts in an image. Other times it gives
-    garbage. It is a very powerful operation, which can either work
-    miracles on an image or destroy it.
-*/
+/**
+ * Performs an histogram equalization of the image.
+ * this method adjusts the brightness of colors across the
+ * active image so that the histogram for the value channel
+ * is as nearly as possible flat, that is, so that each possible
+ * brightness value appears at about the same number of pixels
+ * as each other value. Sometimes Equalize works wonderfully at
+ * enhancing the contrasts in an image. Other times it gives
+ * garbage. It is a very powerful operation, which can either work
+ * miracles on an image or destroy it.
+ */
 void EqualizeFilter::equalizeImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
@@ -85,7 +86,7 @@ void EqualizeFilter::equalizeImage()
     }
 
     struct double_packet  high, low, intensity;
-   int          i;
+    int                   i;
     int                   progress;
 
     // Create an histogram of the reference image.
@@ -104,15 +105,11 @@ void EqualizeFilter::equalizeImage()
 
     // Integrate the histogram to get the equalization map.
 
-    memset(&intensity, 0, sizeof(struct double_packet));
-    memset(&high,      0, sizeof(struct double_packet));
-    memset(&low,       0, sizeof(struct double_packet));
-
     for (i = 0 ; runningFlag() && (i < histogram->getHistogramSegments()) ; ++i)
     {
-        intensity.red   += histogram->getValue(RedChannel, i);
+        intensity.red   += histogram->getValue(RedChannel,   i);
         intensity.green += histogram->getValue(GreenChannel, i);
-        intensity.blue  += histogram->getValue(BlueChannel, i);
+        intensity.blue  += histogram->getValue(BlueChannel,  i);
         intensity.alpha += histogram->getValue(AlphaChannel, i);
         map[i]           = intensity;
     }
@@ -121,7 +118,6 @@ void EqualizeFilter::equalizeImage()
 
     low  = map[0];
     high = map[histogram->getHistogramSegments() - 1];
-    memset(equalize_map.data(), 0, histogram->getHistogramSegments()*sizeof(int_packet));
 
     // TODO magic number 256
     for (i = 0 ; runningFlag() && (i < histogram->getHistogramSegments()) ; ++i)

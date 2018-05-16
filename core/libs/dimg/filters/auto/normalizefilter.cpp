@@ -65,12 +65,13 @@ void NormalizeFilter::filterImage()
     m_destImage = m_orgImage;
 }
 
-/** This method scales brightness values across the active
-    image so that the darkest point becomes black, and the
-    brightest point becomes as bright as possible without
-    altering its hue. This is often a magic fix for
-    images that are dim or washed out.
-*/
+/**
+ * This method scales brightness values across the active
+ * image so that the darkest point becomes black, and the
+ * brightest point becomes as bright as possible without
+ * altering its hue. This is often a magic fix for
+ * images that are dim or washed out.
+ */
 void NormalizeFilter::normalizeImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())

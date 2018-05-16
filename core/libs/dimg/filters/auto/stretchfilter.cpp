@@ -65,10 +65,11 @@ void StretchFilter::filterImage()
     m_destImage = m_orgImage;
 }
 
-/** Performs histogram normalization of the image. The algorithm normalizes
-    the pixel values from an image for to span the full range
-    of color values. This is a contrast enhancement technique.
-*/
+/**
+ * Performs histogram normalization of the image. The algorithm normalizes
+ * the pixel values from an image for to span the full range
+ *  of color values. This is a contrast enhancement technique.
+ */
 void StretchFilter::stretchContrastImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
@@ -79,17 +80,19 @@ void StretchFilter::stretchContrastImage()
 
     struct double_packet high, low, intensity;
     long long            number_pixels;
-   long        i;
+    long                 i;
     int                  progress;
     unsigned long        threshold_intensity;
 
     // Create an histogram of the reference image.
     QScopedPointer<ImageHistogram> histogram(new ImageHistogram(m_refImage));
+
     if (histogram.isNull())
     {
         qCWarning(DIGIKAM_DIMG_LOG) << ("Unable to allocate memory!");
         return;
     }
+
     histogram->calculate();
 
     // Memory allocation.
@@ -106,12 +109,9 @@ void StretchFilter::stretchContrastImage()
     number_pixels       = (long long)m_refImage.width() * (long long)m_refImage.height();
     threshold_intensity = number_pixels / 1000;
 
-    memset(&high, 0, sizeof(struct double_packet));
-    memset(&low,  0, sizeof(struct double_packet));
-
     // Red.
 
-    memset(&intensity, 0, sizeof(struct double_packet));
+    intensity = double_packet();
 
     for (high.red = histogram->getMaxSegmentIndex() ; high.red != 0 ; --high.red)
     {
@@ -126,7 +126,7 @@ void StretchFilter::stretchContrastImage()
     if (low.red == high.red)
     {
         threshold_intensity = 0;
-        memset(&intensity, 0, sizeof(struct double_packet));
+        intensity           = double_packet();
 
         for (low.red = 0 ; low.red < histogram->getMaxSegmentIndex() ; ++low.red)
         {
@@ -138,7 +138,7 @@ void StretchFilter::stretchContrastImage()
             }
         }
 
-        memset(&intensity, 0, sizeof(struct double_packet));
+        intensity = double_packet();
 
         for (high.red = histogram->getMaxSegmentIndex() ; high.red != 0 ; --high.red)
         {
@@ -153,7 +153,7 @@ void StretchFilter::stretchContrastImage()
 
     // Green.
 
-    memset(&intensity, 0, sizeof(struct double_packet));
+    intensity = double_packet();
 
     for (high.green = histogram->getMaxSegmentIndex() ; high.green != 0 ; --high.green)
     {
@@ -168,7 +168,7 @@ void StretchFilter::stretchContrastImage()
     if (low.green == high.green)
     {
         threshold_intensity = 0;
-        memset(&intensity, 0, sizeof(struct double_packet));
+        intensity           = double_packet();
 
         for (low.green = 0 ; low.green < histogram->getMaxSegmentIndex() ; ++low.green)
         {
@@ -180,7 +180,7 @@ void StretchFilter::stretchContrastImage()
             }
         }
 
-        memset(&intensity, 0, sizeof(struct double_packet));
+        intensity = double_packet();
 
         for (high.green = histogram->getMaxSegmentIndex() ; high.green != 0 ; --high.green)
         {
@@ -195,7 +195,7 @@ void StretchFilter::stretchContrastImage()
 
     // Blue.
 
-    memset(&intensity, 0, sizeof(struct double_packet));
+    intensity = double_packet();
 
     for (high.blue = histogram->getMaxSegmentIndex() ; high.blue != 0 ; --high.blue)
     {
@@ -210,7 +210,7 @@ void StretchFilter::stretchContrastImage()
     if (low.blue == high.blue)
     {
         threshold_intensity = 0;
-        memset(&intensity, 0, sizeof(struct double_packet));
+        intensity           = double_packet();
 
         for (low.blue = 0 ; low.blue < histogram->getMaxSegmentIndex() ; ++low.blue)
         {
@@ -222,7 +222,7 @@ void StretchFilter::stretchContrastImage()
             }
         }
 
-        memset(&intensity, 0, sizeof(struct double_packet));
+        intensity = double_packet();
 
         for (high.blue = histogram->getMaxSegmentIndex() ; high.blue != 0 ; --high.blue)
         {
@@ -237,7 +237,7 @@ void StretchFilter::stretchContrastImage()
 
     // Alpha.
 
-    memset(&intensity, 0, sizeof(struct double_packet));
+    intensity = double_packet();
 
     for (high.alpha = histogram->getMaxSegmentIndex() ; high.alpha != 0 ; --high.alpha)
     {
@@ -252,7 +252,7 @@ void StretchFilter::stretchContrastImage()
     if (low.alpha == high.alpha)
     {
         threshold_intensity = 0;
-        memset(&intensity, 0, sizeof(struct double_packet));
+        intensity           = double_packet();
 
         for (low.alpha = 0 ; low.alpha < histogram->getMaxSegmentIndex() ; ++low.alpha)
         {
@@ -264,7 +264,7 @@ void StretchFilter::stretchContrastImage()
             }
         }
 
-        memset(&intensity, 0, sizeof(struct double_packet));
+        intensity = double_packet();
 
         for (high.alpha = histogram->getMaxSegmentIndex() ; high.alpha != 0 ; --high.alpha)
         {
@@ -278,8 +278,6 @@ void StretchFilter::stretchContrastImage()
     }
 
     // Stretch the histogram to create the normalized image mapping.
-
-    memset(normalize_map.data(), 0, histogram->getHistogramSegments()*sizeof(struct int_packet));
 
     // TODO magic number 256
     for (i = 0 ; runningFlag() && (i <= (long)histogram->getMaxSegmentIndex()) ; ++i)
