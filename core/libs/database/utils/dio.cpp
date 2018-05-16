@@ -337,18 +337,13 @@ void DIO::createJob(IOJobData* const data)
     IOJobsThread* jobThread = 0;
     const int operation     = data->operation();
 
-    item = getProgressItem(operation);
+    QPair<QString, QString> itemStrings = getItemStrings(operation, data);
 
-    if (!item || item->totalCompleted())
+    if (!itemStrings.first.isEmpty())
     {
-        QPair<QString, QString> itemStrings = getItemStrings(operation);
-
-        if (!itemStrings.first.isEmpty())
-        {
-            item = ProgressManager::instance()->createProgressItem(itemStrings.first,
-                                                                   itemStrings.second,
-                                                                   QString(), true, false);
-        }
+        item = ProgressManager::instance()->createProgressItem(itemStrings.first,
+                                                               itemStrings.second,
+                                                               QString(), true, false);
     }
 
     jobThread = IOJobsManager::instance()->startIOJobs(data);
@@ -368,7 +363,7 @@ void DIO::createJob(IOJobData* const data)
 
     if (item)
     {
-        item->setTotalItems(item->totalItems() + data->sourceUrls().count());
+        item->setTotalItems(data->sourceUrls().count());
 
         connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
                 jobThread, SLOT(slotCancel()));
@@ -387,7 +382,8 @@ void DIO::slotResult()
         return;
     }
 
-    const int operation = jobThread->jobData()->operation();
+    IOJobData* const data = jobThread->jobData();
+    const int operation   = data->operation();
 
     if (jobThread->hasErrors() && operation != IOJobData::Rename)
     {
@@ -397,7 +393,7 @@ void DIO::slotResult()
                              DigikamApp::instance()->windowTitle());
     }
 
-    slotCancel(getProgressItem(operation));
+    slotCancel(getProgressItem(operation, data));
 }
 
 void DIO::slotOneProccessed(const QUrl& url)
@@ -522,7 +518,7 @@ void DIO::slotOneProccessed(const QUrl& url)
         ScanController::instance()->scheduleCollectionScanRelaxed(scanPath);
     }
 
-    ProgressItem* const item = getProgressItem(operation);
+    ProgressItem* const item = getProgressItem(operation, data);
 
     if (item)
     {
@@ -530,40 +526,41 @@ void DIO::slotOneProccessed(const QUrl& url)
     }
 }
 
-ProgressItem* DIO::getProgressItem(int operation) const
+QPair<QString, QString> DIO::getItemStrings(int operation, IOJobData* const data) const
 {
-    ProgressItem* item = 0;
-    QString itemString = getItemStrings(operation).first;
+    QString ds = QString::number(reinterpret_cast<qint64>(data));
 
-    if (!itemString.isEmpty())
-    {
-        item = ProgressManager::instance()->findItembyId(itemString);
-    }
-
-    return item;
-}
-
-QPair<QString, QString> DIO::getItemStrings(int operation) const
-{
     switch (operation)
     {
         case IOJobData::CopyAlbum:
         case IOJobData::CopyImage:
         case IOJobData::CopyFiles:
-            return qMakePair(QLatin1String("DIOCopy"), i18n("Copy"));
+            return qMakePair(QLatin1String("DIOCopy")   + ds, i18n("Copy"));
         case IOJobData::MoveAlbum:
         case IOJobData::MoveImage:
         case IOJobData::MoveFiles:
-            return qMakePair(QLatin1String("DIOMove"), i18n("Move"));
+            return qMakePair(QLatin1String("DIOMove")   + ds, i18n("Move"));
         case IOJobData::Trash:
-            return qMakePair(QLatin1String("DIOTrash"), i18n("Trash"));
+            return qMakePair(QLatin1String("DIOTrash")  + ds, i18n("Trash"));
         case IOJobData::Delete:
-            return qMakePair(QLatin1String("DIODelete"), i18n("Delete"));
+            return qMakePair(QLatin1String("DIODelete") + ds, i18n("Delete"));
         default:
             break;
     }
 
     return qMakePair(QString(), QString());
+}
+
+ProgressItem* DIO::getProgressItem(int operation, IOJobData* const data) const
+{
+    QString itemString = getItemStrings(operation, data).first;
+
+    if (itemString.isEmpty())
+    {
+        return 0;
+    }
+
+    return (ProgressManager::instance()->findItembyId(itemString));
 }
 
 void DIO::slotCancel(ProgressItem* item)
