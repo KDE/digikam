@@ -119,12 +119,11 @@ public:
     DIntNumInput*    tileInput;
 };
 
-GreycstorationSettings::GreycstorationSettings(QTabWidget* parent)
+GreycstorationSettings::GreycstorationSettings(QTabWidget* const parent)
     : QObject(static_cast<QObject*>(parent)),
       d(new Private)
 {
-    d->parent = parent;
-
+    d->parent         = parent;
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     // -------------------------------------------------------------

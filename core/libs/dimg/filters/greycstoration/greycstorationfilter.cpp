@@ -22,10 +22,9 @@
  *
  * ============================================================ */
 
-
-/** Don't use CImg interface (keyboard/mouse interaction) */
+// Don't use CImg interface (keyboard/mouse interaction).
 #define cimg_display 0
-/** Only print debug information on the console */
+// Only print debug information on the console.
 #define cimg_debug 1
 
 #include "greycstorationfilter.h"
@@ -47,23 +46,22 @@
 
 #define cimg_plugin "cimg/greycstoration.h"
 
-/** Uncomment this line if you use future GreycStoration implementation with GFact parameter
- */
+// Uncomment this line if you use future GreycStoration implementation with GFact parameter.
 #define GREYSTORATION_USING_GFACT 1
 
 // Pragma directives to reduce warnings from CImg header files.
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#   pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
-#pragma clang diagnostic ignored "-Wcast-align"
-#pragma clang diagnostic ignored "-Wshift-negative-value"
-#pragma clang diagnostic ignored "-Wunused-local-typedef"
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wunused-parameter"
+#   pragma clang diagnostic ignored "-Wcast-align"
+#   pragma clang diagnostic ignored "-Wshift-negative-value"
+#   pragma clang diagnostic ignored "-Wunused-local-typedef"
 #endif
 
 // CImg includes
@@ -72,11 +70,11 @@
 
 // Restore warnings
 #if !defined(Q_OS_DARWIN) && defined(Q_CC_GNU)
-#pragma GCC diagnostic pop
+#   pragma GCC diagnostic pop
 #endif
 
 #if defined(Q_OS_DARWIN) && defined(Q_CC_CLANG)
-#pragma clang diagnostic pop
+#   pragma clang diagnostic pop
 #endif
 
 extern "C"
@@ -238,7 +236,7 @@ void GreycstorationFilter::cancelFilter()
 
 void GreycstorationFilter::filterImage()
 {
-   int x, y;
+    int x, y;
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Initialization...";
 
@@ -308,9 +306,9 @@ void GreycstorationFilter::filterImage()
     {
         uchar* ptr = newData;
 
-        for (y = 0; y < newHeight; ++y)
+        for (y = 0 ; y < newHeight ; ++y)
         {
-            for (x = 0; x < newWidth; ++x)
+            for (x = 0 ; x < newWidth ; ++x)
             {
                 // Overwrite RGB values to destination.
                 ptr[0] = static_cast<uchar>(d->img(x, y, 0));        // Blue
@@ -325,9 +323,9 @@ void GreycstorationFilter::filterImage()
     {
         unsigned short* ptr = reinterpret_cast<unsigned short*>(newData);
 
-        for (y = 0; y < newHeight; ++y)
+        for (y = 0 ; y < newHeight ; ++y)
         {
-            for (x = 0; x < newWidth; ++x)
+            for (x = 0 ; x < newWidth ; ++x)
             {
                 // Overwrite RGB values to destination.
                 ptr[0] = static_cast<unsigned short>(d->img(x, y, 0));        // Blue
@@ -379,9 +377,9 @@ void GreycstorationFilter::inpainting()
         d->mask    = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 3);
         uchar* ptr = d->inPaintingMask.bits();
 
-        for (y = 0; y < d->inPaintingMask.height(); ++y)
+        for (y = 0 ; y < d->inPaintingMask.height() ; ++y)
         {
-            for (x = 0; x < d->inPaintingMask.width(); ++x)
+            for (x = 0 ; x < d->inPaintingMask.width() ; ++x)
             {
                 d->mask(x, y, 0) = ptr[2];        // blue.
                 d->mask(x, y, 1) = ptr[1];        // green.
@@ -433,6 +431,7 @@ void GreycstorationFilter::resize()
 
     d->mask.assign(d->img.dimx(), d->img.dimy(), 1, 1, 255);
 
+    // cppcheck-suppress knownConditionTrueFalse
     if (!anchor)
     {
         d->mask.resize(w, h, 1, 1, 1);
@@ -477,7 +476,7 @@ void GreycstorationFilter::simpleResize()
     int w                     = m_destImage.width();
     int h                     = m_destImage.height();
 
-    while (d->img.dimx() > 2 * w && d->img.dimy() > 2 * h)
+    while ((d->img.dimx() > 2 * w) && (d->img.dimy() > 2 * h))
     {
         d->img.resize_halfXY();
     }

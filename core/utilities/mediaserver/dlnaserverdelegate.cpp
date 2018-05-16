@@ -82,9 +82,8 @@ DLNAMediaServerDelegate::DLNAMediaServerDelegate(const char* url_root,
                                                  bool        use_cache)
     : d(new Private)
 {
-      d->urlRoot          = url_root;
-      d->filterUnknownOut = false;
-      d->useCache         = use_cache;
+      d->urlRoot  = url_root;
+      d->useCache = use_cache;
 }
 
 DLNAMediaServerDelegate::~DLNAMediaServerDelegate()
@@ -640,7 +639,9 @@ NPT_String DLNAMediaServerDelegate::BuildSafeResourceUri(const NPT_HttpUrl& base
     NPT_HttpUrl uri = base_uri;
 
     if (host)
+    {
         uri.SetHost(host);
+    }
 
     NPT_String uri_path = uri.GetPath();
 
