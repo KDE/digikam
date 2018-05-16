@@ -59,11 +59,10 @@ ColorFXFilter::ColorFXFilter(DImg* const orgImage,
                              QObject* const parent,
                              const ColorFXContainer& settings)
     : DImgThreadedFilter(orgImage, parent, QLatin1String("ColorFX")),
+      m_settings(settings),
       m_lutTable(0),
       m_lutTableSize(0)
 {
-    m_settings = settings;
-
     loadLut3D(m_settings.path);
 
     initFilter();
@@ -324,7 +323,7 @@ void ColorFXFilter::neonFindEdges(DImg* const orgImage, DImg* const destImage, b
     Intensity = (Intensity < 0) ? 0 : (Intensity > 5) ? 5 : Intensity;
     BW        = (BW < 1) ? 1 : (BW > 5) ? 5 : BW;
 
-    uchar* ptr, *ptr1, *ptr2;
+    uchar* ptr=0, *ptr1=0, *ptr2=0;
 
     // these must be uint, we need full 2^32 range for 16 bit
     uint color_1, color_2, colorPoint, colorOther1, colorOther2;
@@ -334,9 +333,9 @@ void ColorFXFilter::neonFindEdges(DImg* const orgImage, DImg* const destImage, b
 
     double intensityFactor = qSqrt(1 << Intensity);
 
-    for (int h = 0; h < Height; ++h)
+    for (int h = 0 ; h < Height ; ++h)
     {
-        for (int w = 0; w < Width; ++w)
+        for (int w = 0 ; w < Width ; ++w)
         {
             ptr  = pResBits + getOffset(Width, w, h, bytesDepth);
             ptr1 = pResBits + getOffset(Width, w + Lim_Max(w, BW, Width), h, bytesDepth);
@@ -344,7 +343,7 @@ void ColorFXFilter::neonFindEdges(DImg* const orgImage, DImg* const destImage, b
 
             if (sixteenBit)
             {
-                for (int k = 0; k <= 2; ++k)
+                for (int k = 0 ; k <= 2 ; ++k)
                 {
                     colorPoint  = reinterpret_cast<unsigned short*>(ptr)[k];
                     colorOther1 = reinterpret_cast<unsigned short*>(ptr1)[k];
@@ -368,7 +367,7 @@ void ColorFXFilter::neonFindEdges(DImg* const orgImage, DImg* const destImage, b
             }
             else
             {
-                for (int k = 0; k <= 2; ++k)
+                for (int k = 0 ; k <= 2 ; ++k)
                 {
                     colorPoint  = ptr[k];
                     colorOther1 = ptr1[k];
@@ -390,7 +389,7 @@ void ColorFXFilter::neonFindEdges(DImg* const orgImage, DImg* const destImage, b
     }
 }
 
-#define Lut3DSetPixel(table, w, x, y, p) \
+#define Lut3DSetPixel(table, w, x, y, p)                        \
     table[((y) * (w) + (x)) * 4 + 0] = qRed(p)   * 65535 / 255; \
     table[((y) * (w) + (x)) * 4 + 1] = qGreen(p) * 65535 / 255; \
     table[((y) * (w) + (x)) * 4 + 2] = qBlue(p)  * 65535 / 255;
@@ -419,7 +418,7 @@ void ColorFXFilter::loadLut3D(const QString& path)
         if (img.width() == img.height())
         {
             // HALD LUT (Like imagemagick creates)
-            int w = img.width();
+            int w          = img.width();
 
             m_lutTableSize = int(pow(pow(w, 1 / 3.0), 2) + 0.1);
 
