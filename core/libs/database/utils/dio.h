@@ -103,8 +103,8 @@ private:
     void processJob(IOJobData* const data);
     void createJob(IOJobData* const data);
 
-    QPair<QString, QString> getItemStrings(int operation, IOJobData* const data) const;
-    ProgressItem* getProgressItem(int operation, IOJobData* const data)          const;
+    ProgressItem* getProgressItem(IOJobData* const data)          const;
+    QPair<QString, QString> getItemStrings(IOJobData* const data) const;
     void addAlbumChildrenToList(QList<int>& list, Album* const album);
 
 private Q_SLOTS:

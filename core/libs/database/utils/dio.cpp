@@ -333,11 +333,8 @@ void DIO::createJob(IOJobData* const data)
         return;
     }
 
-    ProgressItem* item      = 0;
-    IOJobsThread* jobThread = 0;
-    const int operation     = data->operation();
-
-    QPair<QString, QString> itemStrings = getItemStrings(operation, data);
+    ProgressItem* item                  = 0;
+    QPair<QString, QString> itemStrings = getItemStrings(data);
 
     if (!itemStrings.first.isEmpty())
     {
@@ -346,7 +343,7 @@ void DIO::createJob(IOJobData* const data)
                                                                QString(), true, false);
     }
 
-    jobThread = IOJobsManager::instance()->startIOJobs(data);
+    IOJobsThread* const jobThread = IOJobsManager::instance()->startIOJobs(data);
 
     connect(jobThread, SIGNAL(signalOneProccessed(QUrl)),
             this, SLOT(slotOneProccessed(QUrl)),
@@ -355,7 +352,7 @@ void DIO::createJob(IOJobData* const data)
     connect(jobThread, SIGNAL(finished()),
             this, SLOT(slotResult()));
 
-    if (operation == IOJobData::Rename)
+    if (data->operation() == IOJobData::Rename)
     {
         connect(jobThread, SIGNAL(signalRenameFailed(QUrl)),
                 this, SIGNAL(signalRenameFailed(QUrl)));
@@ -383,9 +380,8 @@ void DIO::slotResult()
     }
 
     IOJobData* const data = jobThread->jobData();
-    const int operation   = data->operation();
 
-    if (jobThread->hasErrors() && operation != IOJobData::Rename)
+    if (jobThread->hasErrors() && data->operation() != IOJobData::Rename)
     {
         // Pop-up a message about the error.
         QString errors = jobThread->errorsList().join(QLatin1String("\n"));
@@ -393,7 +389,7 @@ void DIO::slotResult()
                              DigikamApp::instance()->windowTitle());
     }
 
-    slotCancel(getProgressItem(operation, data));
+    slotCancel(getProgressItem(data));
 }
 
 void DIO::slotOneProccessed(const QUrl& url)
@@ -518,7 +514,7 @@ void DIO::slotOneProccessed(const QUrl& url)
         ScanController::instance()->scheduleCollectionScanRelaxed(scanPath);
     }
 
-    ProgressItem* const item = getProgressItem(operation, data);
+    ProgressItem* const item = getProgressItem(data);
 
     if (item)
     {
@@ -526,11 +522,23 @@ void DIO::slotOneProccessed(const QUrl& url)
     }
 }
 
-QPair<QString, QString> DIO::getItemStrings(int operation, IOJobData* const data) const
+ProgressItem* DIO::getProgressItem(IOJobData* const data) const
+{
+    QString itemString = getItemStrings(data).first;
+
+    if (itemString.isEmpty())
+    {
+        return 0;
+    }
+
+    return (ProgressManager::instance()->findItembyId(itemString));
+}
+
+QPair<QString, QString> DIO::getItemStrings(IOJobData* const data) const
 {
     QString ds = QString::number(reinterpret_cast<qint64>(data));
 
-    switch (operation)
+    switch (data->operation())
     {
         case IOJobData::CopyAlbum:
         case IOJobData::CopyImage:
@@ -549,18 +557,6 @@ QPair<QString, QString> DIO::getItemStrings(int operation, IOJobData* const data
     }
 
     return qMakePair(QString(), QString());
-}
-
-ProgressItem* DIO::getProgressItem(int operation, IOJobData* const data) const
-{
-    QString itemString = getItemStrings(operation, data).first;
-
-    if (itemString.isEmpty())
-    {
-        return 0;
-    }
-
-    return (ProgressManager::instance()->findItembyId(itemString));
 }
 
 void DIO::slotCancel(ProgressItem* item)
