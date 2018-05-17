@@ -248,12 +248,12 @@ void DatabaseSettingsWidget::setupMainArea()
     // Std Macports install
     d->dbBinariesWidget->addDirectory(QLatin1String("/opt/local/bin"));
     d->dbBinariesWidget->addDirectory(QLatin1String("/opt/local/sbin"));
-    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/local/lib/mysql56/bin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/local/lib/mariadb/bin"));
 
     // digiKam Bundle PKG install
     d->dbBinariesWidget->addDirectory(QLatin1String("/opt/digikam/bin"));
     d->dbBinariesWidget->addDirectory(QLatin1String("/opt/digikam/sbin"));
-    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/digikam/lib/mysql56/bin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/digikam/lib/mariadb/bin"));
 #endif
 
 #ifdef Q_OS_WIN
