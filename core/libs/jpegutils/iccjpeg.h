@@ -21,9 +21,6 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- *
- * iccprofile.h
- *
  * This file provides code to read and write International Color Consortium
  * (ICC) device profiles embedded in JFIF JPEG image files.  The ICC has
  * defined a standard format for including such data in JPEG "APP2" markers.
@@ -35,7 +32,7 @@
  * IJG release 6b; it will not compile or work with older IJG versions.
  *
  * NOTE: this code would need surgery to work on 16-bit-int machines
- * with ICC profiles exceeding 64K bytes in size.  See iccprofile.c
+ * with ICC profiles exceeding 64K bytes in size. See iccjpeg.c
  * for details.
  */
 
@@ -44,7 +41,6 @@
 
 #include <stdio.h>    /* needed to define "FILE", "NULL" */
 #include <jpeglib.h>
-
 
 /**
  * This routine writes the given ICC profile data into a JPEG file.
@@ -57,7 +53,6 @@ extern void write_icc_profile JPP((j_compress_ptr cinfo,
                                    const JOCTET* icc_data_ptr,
                                    unsigned int icc_data_len));
 
-
 /**
  * Reading a JPEG file that may contain an ICC profile requires two steps:
  *
@@ -69,12 +64,10 @@ extern void write_icc_profile JPP((j_compress_ptr cinfo,
  *    whether there was a profile and obtain it if so.
  */
 
-
 /**
  * Prepare for reading an ICC profile
  */
 extern void setup_read_icc_profile JPP((j_decompress_ptr cinfo));
-
 
 /**
  * See if there was an ICC profile in the JPEG file being read;
