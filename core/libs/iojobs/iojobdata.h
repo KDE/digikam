@@ -89,6 +89,8 @@ public:
     void             setDestUrl(const QUrl& srcUrl,
                                 const QUrl& destUrl);
 
+    void             setProgressId(const QString& id);
+
     int              operation()                          const;
 
     bool             overwrite()                          const;
@@ -98,6 +100,8 @@ public:
 
     QUrl             destUrl(const QUrl& srcUrl = QUrl()) const;
     QUrl             getNextUrl()                         const;
+
+    QString          getProgressId()                      const;
 
     ImageInfo        findImageInfo(const QUrl& url)       const;
 
