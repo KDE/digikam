@@ -41,8 +41,10 @@ public:
     {
     };
 
-    GeoDataContainer(double altitude, double latitude,
-                     double longitude, bool interpolated)
+    GeoDataContainer(double altitude,
+                     double latitude,
+                     double longitude,
+                     bool interpolated)
         : m_interpolated(interpolated),
           m_altitude(altitude),
           m_latitude(latitude),
@@ -60,6 +62,7 @@ public:
         m_altitude     = data.altitude();
         m_latitude     = data.latitude();
         m_longitude    = data.longitude();
+
         return *this;
     };
 
@@ -67,8 +70,8 @@ public:
     // same value for m_interpolated
     bool sameCoordinatesAs(const GeoDataContainer& a) const
     {
-        return ( a.m_altitude == m_altitude ) &&
-               ( a.m_latitude == m_latitude ) &&
+        return ( a.m_altitude  == m_altitude ) &&
+               ( a.m_latitude  == m_latitude ) &&
                ( a.m_longitude == m_longitude);
     }
 
@@ -116,9 +119,8 @@ public:
         {
             bool okay          = true;
             double ptLongitude = 0.0;
-            double ptLatitude  = 0.0;
             double ptAltitude  = 0.0;
-            ptLatitude         = parts[0].toDouble(&okay);
+            double ptLatitude  = parts[0].toDouble(&okay);
 
             if (okay)
                 ptLongitude = parts[1].toDouble(&okay);
