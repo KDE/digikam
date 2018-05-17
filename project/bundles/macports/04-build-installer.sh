@@ -101,6 +101,7 @@ Applications/KF5/digikam.app/Contents/MacOS/digikam \
 Applications/KF5/showfoto.app/Contents/MacOS/showfoto \
 lib/plugins/imageformats/*.so \
 lib/sane/*.so \
+lib/mariadb \
 bin/kbuildsycoca5 \
 libexec/qt5/plugins/imageformats/*.dylib \
 libexec/qt5/plugins/sqldrivers/*.dylib \
