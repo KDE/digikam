@@ -98,7 +98,7 @@ for DROP_ITEM in $KRAZY_FILTERS ; do
         ORG_STR="class=\"Q\">$STAT_VAL<\/td><td>"
         STAT_VAL=$((STAT_VAL-1))
 
-        if (( $STAT_VAL == 0 )); then 
+        if (( $STAT_VAL == 0 )); then
             # if counter is zero, the line can be removed from HTML report.
             sed -i '/$ORG_STAT_LINE/d' $SCANBUILD_DIR/index.html
         else
@@ -110,7 +110,7 @@ for DROP_ITEM in $KRAZY_FILTERS ; do
         TOTAL_COUNT=$((TOTAL_COUNT+1))
     done
 
-    # decrease total statistics with current TOTOAL_COUNT
+    # decrease total statistics with current TOTAL_COUNT
 
     TOTAL_ORG_STAT_LINE=$(grep "CopyCheckedStateToCheckButtons(this)" $SCANBUILD_DIR/index.html | grep "AllBugsCheck")
     TOTAL_STAT_VAL=$(echo $TOTAL_ORG_STAT_LINE | grep -o -P '(?<=class=\"Q\">).*(?=<\/td><td>)')
