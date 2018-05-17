@@ -436,11 +436,9 @@ void ExpoBlendingThread::run()
                     ad1.enfuseSettings = t->enfuseSettings;
                     emit starting(ad1);
 
-                    QUrl    destUrl = t->outputUrl;
-                    bool    result  = false;
                     QString errors;
-
-                    result = startEnfuse(t->urls, destUrl, t->enfuseSettings, t->binaryPath, errors);
+                    QUrl destUrl = t->outputUrl;
+                    bool result  = startEnfuse(t->urls, destUrl, t->enfuseSettings, t->binaryPath, errors);
 
                     // We will take first image metadata from stack to restore Exif, Iptc, and Xmp.
 
@@ -484,7 +482,7 @@ void ExpoBlendingThread::run()
 
                 default:
                 {
-                    qCritical() << "Unknown action specified" << endl;
+                    qCritical(DIGIKAM_GENERAL_LOG) << "Unknown action specified" << endl;
                     break;
                 }
             }
@@ -563,7 +561,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
 
     QList <QFuture<void> > tasks;
 
-    for (int i = 0; i < inUrls.size(); ++i)
+    for (int i = 0 ; i < inUrls.size() ; ++i)
     {
         QUrl url = inUrls.at(i);
 
@@ -597,6 +595,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
         args << QLatin1String("-v");
         args << QLatin1String("-a");
         args << QLatin1String("aligned");
+
         foreach(const QUrl& url, d->mixedUrls)
         {
             args << url.toLocalFile();
@@ -616,19 +615,18 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
             return false;
         }
 
-        uint    i=0;
+        uint    i = 0;
         QString temp;
         d->preProcessedUrlsMap.clear();
 
-        foreach(const QUrl& url, inUrls)
+        foreach (const QUrl& url, inUrls)
         {
             QUrl previewUrl;
-            QUrl alignedUrl = QUrl::fromLocalFile(
-                d->preprocessingTmpDir->path()
-                + QChar::fromLatin1('/')
-                + QLatin1String("aligned")
-                + QString::number(i).rightJustified(4, QChar::fromLatin1('0'))
-                + QLatin1String(".tif"));
+            QUrl alignedUrl = QUrl::fromLocalFile(d->preprocessingTmpDir->path()                               +
+                                                  QChar::fromLatin1('/')                                       +
+                                                  QLatin1String("aligned")                                     +
+                                                  QString::number(i).rightJustified(4, QChar::fromLatin1('0')) +
+                                                  QLatin1String(".tif"));
 
             if (!computePreview(alignedUrl, previewUrl))
             {
@@ -681,12 +679,11 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
 
 bool ExpoBlendingThread::computePreview(const QUrl& inUrl, QUrl& outUrl)
 {
-    outUrl = QUrl::fromLocalFile(
-        d->preprocessingTmpDir->path()
-        + QChar::fromLatin1('/')
-        + QChar::fromLatin1('.')
-        + inUrl.fileName().replace(QChar::fromLatin1('.'), QChar::fromLatin1('_'))
-        + QLatin1String("-preview.jpg"));
+    outUrl = QUrl::fromLocalFile(d->preprocessingTmpDir->path()                                           +
+                                 QChar::fromLatin1('/')                                                   +
+                                 QChar::fromLatin1('.')                                                   +
+                                 inUrl.fileName().replace(QChar::fromLatin1('.'), QChar::fromLatin1('_')) +
+                                 QLatin1String("-preview.jpg"));
 
     DImg img;
 
@@ -741,12 +738,11 @@ bool ExpoBlendingThread::convertRaw(const QUrl& inUrl, QUrl& outUrl)
             d->meta.setImageOrientation(MetaEngine::ORIENTATION_NORMAL);
 
             QFileInfo fi(inUrl.toLocalFile());
-            outUrl = QUrl::fromLocalFile(
-                d->preprocessingTmpDir->path()
-                + QChar::fromLatin1('/')
-                + QChar::fromLatin1('.')
-                + fi.completeBaseName().replace(QChar::fromLatin1('.'), QChar::fromLatin1('_'))
-                + QLatin1String(".tif"));
+            outUrl = QUrl::fromLocalFile(d->preprocessingTmpDir->path()                                                +
+                                         QChar::fromLatin1('/')                                                        +
+                                         QChar::fromLatin1('.')                                                        +
+                                         fi.completeBaseName().replace(QChar::fromLatin1('.'), QChar::fromLatin1('_')) +
+                                         QLatin1String(".tif"));
 
             if (!img.save(outUrl.toLocalFile(), QLatin1String("TIF")))
             {
@@ -767,8 +763,8 @@ bool ExpoBlendingThread::convertRaw(const QUrl& inUrl, QUrl& outUrl)
 }
 
 bool ExpoBlendingThread::startEnfuse(const QList<QUrl>& inUrls, QUrl& outUrl,
-                               const EnfuseSettings& settings,
-                               const QString& enfusePath, QString& errors)
+                                     const EnfuseSettings& settings,
+                                     const QString& enfusePath, QString& errors)
 {
     QString comp;
     QString ext = DSaveSettingsWidget::extensionForFormat(settings.outputFormat);
@@ -829,7 +825,7 @@ bool ExpoBlendingThread::startEnfuse(const QList<QUrl>& inUrls, QUrl& outUrl,
     args << QLatin1String("-o");
     args << outUrl.toLocalFile();
 
-    foreach(const QUrl& url, inUrls)
+    foreach (const QUrl& url, inUrls)
     {
         args << url.toLocalFile();
     }
