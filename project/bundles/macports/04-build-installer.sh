@@ -101,7 +101,7 @@ Applications/KF5/digikam.app/Contents/MacOS/digikam \
 Applications/KF5/showfoto.app/Contents/MacOS/showfoto \
 lib/plugins/imageformats/*.so \
 lib/sane/*.so \
-lib/mariadb \
+lib/mariadb/bin/mysqld \
 bin/kbuildsycoca5 \
 libexec/qt5/plugins/imageformats/*.dylib \
 libexec/qt5/plugins/sqldrivers/*.dylib \
@@ -121,6 +121,7 @@ OTHER_DIRS="\
 lib/plugins \
 lib/libgphoto2 \
 lib/libgphoto2_port \
+lib/mariadb \
 etc/xdg \
 etc/sane.d \
 "
