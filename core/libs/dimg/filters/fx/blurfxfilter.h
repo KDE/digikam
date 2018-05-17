@@ -99,6 +99,35 @@ private:
 
     struct Args
     {
+        explicit Args()
+        {
+            start           = 0;
+            stop            = 0;
+            h               = 0;
+            w               = 0;
+            orgImage        = 0;
+            destImage       = 0;
+            X               = 0;
+            Y               = 0;
+            Distance        = 0;
+            nCount          = 0;
+            lpXArray        = 0;
+            lpYArray        = 0;
+            BlendRadius     = 0;
+            bInversed       = 0;
+            layer1          = 0;
+            layer2          = 0;
+            layer3          = 0;
+            layer4          = 0;
+            SizeW           = 0;
+            SizeH           = 0;
+            StrengthRange   = 0;
+            Radius          = 0;
+            Kernel          = 0;
+            arrMult         = 0;
+            pBlur           = 0;
+        }
+
         uint   start;
         uint   stop;
         uint   h;
@@ -201,13 +230,11 @@ private:
     // function to allocate a 2d array
     inline int** Alloc2DArray (int Columns, int Rows)
     {
-        // First, we declare our future 2d array to be returned
-        int** lpcArray = NULL;
+        // We declare our future 2d array to be returned
+        // and we alloc the main pointer with Columns
+        int** lpcArray = new int*[Columns];
 
-        // Now, we alloc the main pointer with Columns
-        lpcArray = new int*[Columns];
-
-        for (int i = 0; i < Columns; ++i)
+        for (int i = 0 ; i < Columns ; ++i)
         {
             lpcArray[i] = new int[Rows];
         }
@@ -219,7 +246,7 @@ private:
     inline void Free2DArray (int** lpcArray, int Columns)
     {
         // loop to deallocate the columns
-        for (int i = 0; i < Columns; ++i)
+        for (int i = 0 ; i < Columns ; ++i)
         {
             delete [] lpcArray[i];
         }
