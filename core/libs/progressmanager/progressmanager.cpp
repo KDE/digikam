@@ -119,14 +119,14 @@ bool ProgressItem::showAtStart() const
 
 void ProgressItem::setComplete()
 {
-    if ( d->children.isEmpty() )
+    if (d->children.isEmpty())
     {
-        if ( !d->canceled )
+        if (!d->canceled)
         {
-            setProgress( 100 );
+            setProgress(100);
         }
 
-        emit progressItemCompleted( this );
+        emit progressItemCompleted(this);
     }
     else
     {
@@ -152,7 +152,7 @@ void ProgressItem::removeChild(ProgressItem* const kiddo)
 
 void ProgressItem::cancel()
 {
-    if ( d->canceled || !d->canBeCanceled )
+    if (d->canceled || !d->canBeCanceled)
     {
         return;
     }
@@ -161,29 +161,29 @@ void ProgressItem::cancel()
 
     // Cancel all children.
     QList<ProgressItem*> kids = d->children.keys();
-    QList<ProgressItem*>::Iterator it( kids.begin() );
-    QList<ProgressItem*>::Iterator end( kids.end() );
+    QList<ProgressItem*>::Iterator it(kids.begin());
+    QList<ProgressItem*>::Iterator end(kids.end());
 
-    for ( ; it != end; it++ )
+    for ( ; it != end ; ++it)
     {
         ProgressItem* const kid = *it;
 
-        if ( kid->canBeCanceled() )
+        if (kid->canBeCanceled())
         {
             kid->cancel();
         }
     }
 
-    setStatus( i18n( "Aborting..." ) );
+    setStatus(i18n("Aborting..."));
 
-    emit progressItemCanceled( this );
-    emit progressItemCanceled( this->id() );
+    emit progressItemCanceled(this);
+    emit progressItemCanceled(this->id());
 }
 
 void ProgressItem::setLabel(const QString& v)
 {
     d->label = v;
-    emit progressItemLabel( this, d->label );
+    emit progressItemLabel(this, d->label);
 }
 
 void ProgressItem::setStatus(const QString& v)
@@ -200,7 +200,10 @@ void ProgressItem::setUsesBusyIndicator(bool useBusyIndicator)
 
 void ProgressItem::setThumbnail(const QIcon& icon)
 {
-    if (!hasThumbnail()) return;
+    if (!hasThumbnail())
+    {
+        return;
+    }
 
     int iconSize = qApp->style()->pixelMetric(QStyle::PM_SmallIconSize);
 
@@ -418,7 +421,9 @@ bool ProgressManager::isEmpty() const
 ProgressItem* ProgressManager::findItembyId(const QString& id) const
 {
     if (id.isEmpty())
+    {
         return 0;
+    }
 
     QMutexLocker lock(&d->mutex);
     return d->transactions.value(id);
@@ -426,7 +431,7 @@ ProgressItem* ProgressManager::findItembyId(const QString& id) const
 
 QString ProgressManager::getUniqueID()
 {
-    return QString::number( d->uID.fetchAndAddOrdered(1) );
+    return QString::number(d->uID.fetchAndAddOrdered(1));
 }
 
 ProgressManager* ProgressManager::instance()
@@ -439,8 +444,7 @@ ProgressItem* ProgressManager::createProgressItemImpl(ProgressItem* const parent
                                                       const QString& label,
                                                       const QString& status,
                                                       bool  cancellable,
-                                                      bool  hasThumb
-                                                     )
+                                                      bool  hasThumb)
 {
     ProgressItem* t = findItembyId(id);
 
@@ -458,8 +462,7 @@ ProgressItem* ProgressManager::createProgressItemImpl(const QString& parent,
                                                       const QString& label,
                                                       const QString& status,
                                                       bool  canBeCanceled,
-                                                      bool  hasThumb
-                                                     )
+                                                      bool  hasThumb)
 {
     ProgressItem* const p = findItembyId(parent);
     return createProgressItemImpl(p, id, label, status, canBeCanceled, hasThumb);
@@ -554,7 +557,8 @@ void ProgressManager::slotStandardCancelHandler(ProgressItem* item)
 
 ProgressItem* ProgressManager::singleItem() const
 {
-    QHash<QString,ProgressItem*> hash;
+    QHash<QString, ProgressItem*> hash;
+
     {
         QMutexLocker lock(&d->mutex);
         hash = d->transactions;
@@ -563,15 +567,18 @@ ProgressItem* ProgressManager::singleItem() const
     ProgressItem* item = 0;
     QHash<QString, ProgressItem*>::const_iterator it = hash.constBegin();
 
-    while ( it != hash.constEnd() )
+    while (it != hash.constEnd())
     {
         // No single item for progress possible, as one of them is a busy indicator one.
-        if ( (*it)->usesBusyIndicator() )
+        if ((*it)->usesBusyIndicator())
+        {
             return 0;
+        }
 
-        if ( !(*it)->parent() )
-        {             // if it's a top level one, only those count
-            if ( item )
+        // If it's a top level one, only those count.
+        if (!(*it)->parent())
+        {
+            if (item)
             {
                 return 0; // we found more than one
             }
@@ -589,7 +596,8 @@ ProgressItem* ProgressManager::singleItem() const
 
 void ProgressManager::slotAbortAll()
 {
-    QHash<QString,ProgressItem*> hash;
+    QHash<QString, ProgressItem*> hash;
+
     {
         QMutexLocker lock(&d->mutex);
 
