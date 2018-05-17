@@ -51,7 +51,8 @@ public:
     GPSLinkItemSelectionModel* linkItemSelectionModel;
 };
 
-GPSImageSortProxyModel::GPSImageSortProxyModel(GPSImageModel* const imageModel, QItemSelectionModel* const sourceSelectionModel)
+GPSImageSortProxyModel::GPSImageSortProxyModel(GPSImageModel* const imageModel,
+                                               QItemSelectionModel* const sourceSelectionModel)
     : QSortFilterProxyModel(imageModel),
       d(new Private())
 {
@@ -74,7 +75,7 @@ bool GPSImageSortProxyModel::lessThan(const QModelIndex& left, const QModelIndex
         return false;
     }
 
-    const int column                     = left.column();
+    const int column                    = left.column();
     const GPSImageItem* const itemLeft  = d->imageModel->itemFromIndex(left);
     const GPSImageItem* const itemRight = d->imageModel->itemFromIndex(right);
 
@@ -108,12 +109,16 @@ public:
 #endif
     }
 
+public:
+
     Q_DECLARE_PUBLIC(GPSLinkItemSelectionModel)
     GPSLinkItemSelectionModel* const q_ptr;
 
+public:
+
     bool assertSelectionValid(const QItemSelection& selection) const
     {
-        foreach(const QItemSelectionRange& range, selection)
+        foreach (const QItemSelectionRange& range, selection)
         {
             if (!range.isValid())
             {
@@ -145,6 +150,8 @@ public:
     void sourceCurrentChanged(const QModelIndex& current);
     void slotCurrentChanged(const QModelIndex& current);
 
+public:
+    
     QItemSelectionModel*      m_linkedItemSelectionModel;
     bool                      m_ignoreCurrentChanged;
     GPSModelIndexProxyMapper* m_indexMapper;
@@ -173,6 +180,7 @@ GPSLinkItemSelectionModel::~GPSLinkItemSelectionModel()
 QItemSelectionModel* GPSLinkItemSelectionModel::linkedItemSelectionModel() const
 {
     Q_D(const GPSLinkItemSelectionModel);
+
     return d->m_linkedItemSelectionModel;
 }
 
@@ -211,11 +219,14 @@ void GPSLinkItemSelectionModel::setLinkedItemSelectionModel(QItemSelectionModel*
 void GPSLinkItemSelectionModel::select(const QModelIndex& index, QItemSelectionModel::SelectionFlags command)
 {
     Q_D(GPSLinkItemSelectionModel);
+
     // When an item is removed, the current index is set to the top index in the model.
     // That causes a selectionChanged signal with a selection which we do not want.
-    if (d->m_ignoreCurrentChanged) {
+    if (d->m_ignoreCurrentChanged)
+    {
         return;
     }
+
     // Do *not* replace next line with: QItemSelectionModel::select(index, command)
     //
     // Doing so would end up calling GPSLinkItemSelectionModel::select(QItemSelection, QItemSelectionModel::SelectionFlags)
@@ -246,14 +257,14 @@ void GPSLinkItemSelectionModel::select(const QModelIndex& index, QItemSelectionM
 void GPSLinkItemSelectionModel::select(const QItemSelection& selection, QItemSelectionModel::SelectionFlags command)
 {
     Q_D(GPSLinkItemSelectionModel);
-    d->m_ignoreCurrentChanged = true;
-    QItemSelection _selection = selection;
+    d->m_ignoreCurrentChanged      = true;
+    QItemSelection _selection      = selection;
     QItemSelectionModel::select(_selection, command);
     Q_ASSERT(d->assertSelectionValid(_selection));
     QItemSelection mappedSelection = d->m_indexMapper->mapSelectionLeftToRight(_selection);
     Q_ASSERT(d->assertSelectionValid(mappedSelection));
     d->m_linkedItemSelectionModel->select(mappedSelection, command);
-    d->m_ignoreCurrentChanged = false;
+    d->m_ignoreCurrentChanged      = false;
 }
 
 void GPSLinkItemSelectionModelPrivate::slotCurrentChanged(const QModelIndex& current)
@@ -271,8 +282,8 @@ void GPSLinkItemSelectionModelPrivate::slotCurrentChanged(const QModelIndex& cur
 void GPSLinkItemSelectionModelPrivate::sourceSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_Q(GPSLinkItemSelectionModel);
-    QItemSelection _selected = selected;
-    QItemSelection _deselected = deselected;
+    QItemSelection _selected               = selected;
+    QItemSelection _deselected             = deselected;
     Q_ASSERT(assertSelectionValid(_selected));
     Q_ASSERT(assertSelectionValid(_deselected));
     const QItemSelection mappedDeselection = m_indexMapper->mapSelectionRightToLeft(_deselected);
@@ -299,9 +310,11 @@ void GPSLinkItemSelectionModelPrivate::sourceCurrentChanged(const QModelIndex& c
 
 class GPSModelIndexProxyMapperPrivate
 {
-    GPSModelIndexProxyMapperPrivate(const QAbstractItemModel* const leftModel,
-                                    const QAbstractItemModel* const rightModel,
-                                    GPSModelIndexProxyMapper* const qq)
+public:
+
+    explicit GPSModelIndexProxyMapperPrivate(const QAbstractItemModel* const leftModel,
+                                             const QAbstractItemModel* const rightModel,
+                                             GPSModelIndexProxyMapper* const qq)
         : q_ptr(qq),
           m_leftModel(leftModel),
           m_rightModel(rightModel),
@@ -314,6 +327,7 @@ class GPSModelIndexProxyMapperPrivate
     void checkConnected();
     void setConnected(bool connected);
 
+    // cppcheck-suppress unusedPrivateFunction 
     bool assertSelectionValid(const QItemSelection& selection) const
     {
         foreach(const QItemSelectionRange& range, selection)
@@ -328,6 +342,8 @@ class GPSModelIndexProxyMapperPrivate
 
         return true;
     }
+
+public:
 
     Q_DECLARE_PUBLIC(GPSModelIndexProxyMapper)
     GPSModelIndexProxyMapper* const             q_ptr;
@@ -350,19 +366,19 @@ class GPSModelIndexProxyMapperPrivate
 */
 void GPSModelIndexProxyMapperPrivate::createProxyChain()
 {
-    foreach(auto p, m_proxyChainUp)
+    foreach (auto p, m_proxyChainUp)
     {
         p->disconnect(q_ptr);
     }
 
-    foreach(auto p, m_proxyChainDown)
+    foreach (auto p, m_proxyChainDown)
     {
         p->disconnect(q_ptr);
     }
 
     m_proxyChainUp.clear();
     m_proxyChainDown.clear();
-    QPointer<const QAbstractItemModel> targetModel = m_rightModel;
+    QPointer<const QAbstractItemModel> targetModel                = m_rightModel;
 
     QList<QPointer<const QAbstractProxyModel> > proxyChainDown;
     QPointer<const QAbstractProxyModel> selectionTargetProxyModel = qobject_cast<const QAbstractProxyModel *>(targetModel);
@@ -372,7 +388,11 @@ void GPSModelIndexProxyMapperPrivate::createProxyChain()
         proxyChainDown.prepend(selectionTargetProxyModel);
 
         QObject::connect(selectionTargetProxyModel.data(), &QAbstractProxyModel::sourceModelChanged,
-                         q_ptr, [this]{ createProxyChain(); } );
+                         q_ptr, [this]
+                         {
+                             createProxyChain(); 
+                         }
+                        );
 
         selectionTargetProxyModel = qobject_cast<const QAbstractProxyModel*>(selectionTargetProxyModel->sourceModel());
 
@@ -390,8 +410,14 @@ void GPSModelIndexProxyMapperPrivate::createProxyChain()
     while (sourceProxyModel)
     {
         m_proxyChainUp.append(sourceProxyModel);
+
         QObject::connect(sourceProxyModel.data(), &QAbstractProxyModel::sourceModelChanged,
-                         q_ptr, [this]{ createProxyChain(); } );
+                         q_ptr, [this]
+                         {
+                             createProxyChain();
+                             
+                         } 
+                        );
 
         sourceProxyModel      = qobject_cast<const QAbstractProxyModel *>(sourceProxyModel->sourceModel());
         const int targetIndex = proxyChainDown.indexOf(sourceProxyModel);

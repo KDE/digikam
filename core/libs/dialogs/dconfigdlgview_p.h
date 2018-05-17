@@ -110,6 +110,7 @@ protected:
 
 private:
 
+    // cppcheck-suppress redundantAssignment
     void init();
 };
 

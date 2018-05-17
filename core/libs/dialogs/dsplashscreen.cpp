@@ -91,7 +91,7 @@ DSplashScreen::DSplashScreen()
     }
 
     // Under Linux, only test versions has Beta stage.
-    
+
     // cppcheck-suppress redundantAssignment
     bool isBeta = !QString::fromUtf8(digikam_version_suffix).isEmpty();
 
