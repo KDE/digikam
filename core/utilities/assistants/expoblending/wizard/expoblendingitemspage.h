@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPO_BLENDING_ITEMS_PAGE_H
-#define EXPO_BLENDING_ITEMS_PAGE_H
+#ifndef DIGIKAM_EXPO_BLENDING_ITEMS_PAGE_H
+#define DIGIKAM_EXPO_BLENDING_ITEMS_PAGE_H
 
 // Local includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // EXPO_BLENDING_ITEMS_PAGE_H
+#endif // DIGIKAM_EXPO_BLENDING_ITEMS_PAGE_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ENFUSE_STACK_H
-#define ENFUSE_STACK_H
+#ifndef DIGIKAM_ENFUSE_STACK_H
+#define DIGIKAM_ENFUSE_STACK_H
 
 // Qt includes
 
@@ -115,4 +115,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ENFUSE_STACK_H
+#endif // DIGIKAM_ENFUSE_STACK_H

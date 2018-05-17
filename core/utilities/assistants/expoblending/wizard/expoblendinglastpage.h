@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPOBLENDINGLAST_PAGE_H
-#define EXPOBLENDINGLAST_PAGE_H
+#ifndef DIGIKAM_EXPO_BLENDING_LAST_PAGE_H
+#define DIGIKAM_EXPO_BLENDING_LAST_PAGE_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class ExpoBlendingLastPage : public DWizardPage
 {
 public:
 
-    ExpoBlendingLastPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
+    explicit ExpoBlendingLastPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
     ~ExpoBlendingLastPage();
 
 private:
@@ -46,4 +46,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* EXPOBLENDINGLAST_PAGE_H */
+#endif // DIGIKAM_EXPO_BLENDING_LAST_PAGE_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ALIGN_BINARY_H
-#define ALIGN_BINARY_H
+#ifndef DIGIKAM_ALIGN_BINARY_H
+#define DIGIKAM_ALIGN_BINARY_H
 
 // Local includes
 
@@ -35,7 +35,7 @@ class AlignBinary : public DBinaryIface
 {
 public:
 
-    AlignBinary()
+    explicit AlignBinary()
         : DBinaryIface(QLatin1String("align_image_stack"),
                        QLatin1String("0.8"),
                        QLatin1String("align_image_stack version "),
@@ -56,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif // ALIGN_BINARY_H
+#endif // DIGIKAM_ALIGN_BINARY_H

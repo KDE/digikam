@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPOBLENDINGPREPROCESS_PAGE_H
-#define EXPOBLENDINGPREPROCESS_PAGE_H
+#ifndef DIGIKAM_EXPO_BLENDING_PREPROCESS_PAGE_H
+#define DIGIKAM_EXPO_BLENDING_PREPROCESS_PAGE_H
 
 // Local includes
 
@@ -40,7 +40,7 @@ class ExpoBlendingPreProcessPage : public DWizardPage
 
 public:
 
-    ExpoBlendingPreProcessPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
+    explicit ExpoBlendingPreProcessPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
     ~ExpoBlendingPreProcessPage();
 
     void process();
@@ -67,4 +67,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* EXPOBLENDINGPREPROCESS_PAGE_H */
+#endif // DIGIKAM_EXPO_BLENDING_PREPROCESS_PAGE_H

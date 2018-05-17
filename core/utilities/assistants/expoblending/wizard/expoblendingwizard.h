@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPOBLENDINGWIZARD_H
-#define EXPOBLENDINGWIZARD_H
+#ifndef DIGIKAM_EXPO_BLENDING_WIZARD_H
+#define DIGIKAM_EXPO_BLENDING_WIZARD_H
 
 // Qt includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* EXPOBLENDINGWIZARD_H */
+#endif // DIGIKAM_EXPO_BLENDING_WIZARD_H

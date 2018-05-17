@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ENFUSE_SETTINGS_H
-#define ENFUSE_SETTINGS_H
+#ifndef DIGIKAM_ENFUSE_SETTINGS_H
+#define DIGIKAM_ENFUSE_SETTINGS_H
 
 // Qt includes
 
@@ -110,4 +110,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ENFUSE_SETTINGS_H
+#endif // DIGIKAM_ENFUSE_SETTINGS_H

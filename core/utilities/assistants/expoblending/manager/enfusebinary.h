@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ENFUSE_BINARY_H
-#define ENFUSE_BINARY_H
+#ifndef DIGIKAM_ENFUSE_BINARY_H
+#define DIGIKAM_ENFUSE_BINARY_H
 
 // Local includes
 
@@ -37,16 +37,16 @@ class EnfuseBinary : public DBinaryIface
 
 public:
 
-    EnfuseBinary()
-    : DBinaryIface(QLatin1String("enfuse"),
-                   QLatin1String("3.2"),
-                   QLatin1String("enfuse "),
-                   0,
-                   QLatin1String("Enblend"),
-                   QLatin1String("http://enblend.sourceforge.net/download/"),
-                   QLatin1String("ExpoBlending"),
-                   QStringList(QLatin1String("-V"))),
-                   versionDouble(0)
+    explicit EnfuseBinary()
+        : DBinaryIface(QLatin1String("enfuse"),
+                       QLatin1String("3.2"),
+                       QLatin1String("enfuse "),
+                       0,
+                       QLatin1String("Enblend"),
+                       QLatin1String("http://enblend.sourceforge.net/download/"),
+                       QLatin1String("ExpoBlending"),
+                       QStringList(QLatin1String("-V"))),
+                       versionDouble(0)
     {
         setup();
     }
@@ -72,4 +72,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ENFUSE_BINARY_H
+#endif // DIGIKAM_ENFUSE_BINARY_H

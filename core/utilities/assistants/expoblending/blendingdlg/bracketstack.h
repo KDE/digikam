@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef BRACKETSTACK_H
-#define BRACKETSTACK_H
+#ifndef DIGIKAM_BRACKET_STACK_H
+#define DIGIKAM_BRACKET_STACK_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private Q_SLOTS:
 
 } // namespace Digikam
 
-#endif /* BRACKETSTACK_H */
+#endif // DIGIKAM_BRACKET_STACK_H

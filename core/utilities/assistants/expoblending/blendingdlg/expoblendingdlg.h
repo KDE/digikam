@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPOBLENDINGDLG_H
-#define EXPOBLENDINGDLG_H
+#ifndef DIGIKAM_EXPO_BLENDING_DLG_H
+#define DIGIKAM_EXPO_BLENDING_DLG_H
 
 // Qt includes
 
@@ -97,4 +97,4 @@ private:
 
 } // namespace Digikam
 
-#endif // EXPOBLENDINGDLG_H
+#endif // DIGIKAM_EXPO_BLENDING_DLG_H
