@@ -52,8 +52,8 @@ class DuplicatesFinder::Private
 {
 public:
 
-    explicit Private() :
-        minSimilarity(90),
+    explicit Private()
+      : minSimilarity(90),
         maxSimilarity(100),
         albumTagRelation(0),
         searchResultRestriction(0),
@@ -73,7 +73,8 @@ public:
     SearchesDBJobsThread* job;
 };
 
-DuplicatesFinder::DuplicatesFinder(const QList<qlonglong>& imageIds, int minSimilarity, int maxSimilarity, int searchResultRestriction, ProgressItem* const parent)
+DuplicatesFinder::DuplicatesFinder(const QList<qlonglong>& imageIds, int minSimilarity, int maxSimilarity,
+                                   int searchResultRestriction, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
       d(new Private)
 {
@@ -85,7 +86,8 @@ DuplicatesFinder::DuplicatesFinder(const QList<qlonglong>& imageIds, int minSimi
     d->searchResultRestriction  = searchResultRestriction;
 }
 
-DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int albumTagRelation,int minSimilarity, int maxSimilarity, int searchResultRestriction, ProgressItem* const parent)
+DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int albumTagRelation,int minSimilarity,
+                                   int maxSimilarity, int searchResultRestriction, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
       d(new Private)
 {
@@ -101,7 +103,8 @@ DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tag
         d->tagsIdList << a->id();
 }
 
-DuplicatesFinder::DuplicatesFinder(const int minSimilarity, int maxSimilarity, int searchResultRestriction, ProgressItem* const parent)
+DuplicatesFinder::DuplicatesFinder(const int minSimilarity, int maxSimilarity,
+                                   int searchResultRestriction, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
       d(new Private)
 {

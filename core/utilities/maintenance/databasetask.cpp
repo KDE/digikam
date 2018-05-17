@@ -113,6 +113,7 @@ void DatabaseTask::run()
     if (d->mode == Mode::ShrinkDatabases)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Shrinking databases";
+
         if (CoreDbAccess().db()->integrityCheck())
         {
             CoreDbAccess().db()->vacuum();
@@ -241,16 +242,16 @@ void DatabaseTask::run()
     }
     else if (d->mode == Mode::ComputeDatabaseJunk)
     {
-        QList<qlonglong>              staleImageIds;
-        QList<int>                    staleThumbIds;
-        QList<Identity>               staleIdentities;
-        QList<qlonglong>              staleSimilarityImageIds;
+        QList<qlonglong> staleImageIds;
+        QList<int>       staleThumbIds;
+        QList<Identity>  staleIdentities;
+        QList<qlonglong> staleSimilarityImageIds;
         int additionalItemsToProcess = 0;
 
         QList<qlonglong> coredbItems = CoreDbAccess().db()->getAllItems();
 
         // Get the count of image entries in DB to delete.
-        staleImageIds   = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Obsolete);
+        staleImageIds                = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Obsolete);
 
         // get the count of items to process for thumbnails cleanup it enabled.
         if (d->scanThumbsDb && ThumbsDbAccess::isInitialized())
@@ -287,11 +288,11 @@ void DatabaseTask::run()
             // OR
             // The thumbnail is stale, i.e. no thumbs db table references it.
 
-            QSet<int> thumbIds     = ThumbsDbAccess().db()->findAll().toSet();
+            QSet<int> thumbIds = ThumbsDbAccess().db()->findAll().toSet();
 
             FaceTagsEditor editor;
 
-            foreach(const qlonglong& item, coredbItems)
+            foreach (const qlonglong& item, coredbItems)
             {
                 if (m_cancel)
                 {
@@ -304,10 +305,9 @@ void DatabaseTask::run()
                 {
                     QString hash       = CoreDbAccess().db()->getImagesFields(item,DatabaseFields::ImagesField::UniqueHash).first().toString();
                     qlonglong fileSize = info.fileSize();
-                    bool removed       = false;
 
                     // Remove the id that is found by the file path. Finding the id -1 does no harm
-                    removed            = thumbIds.remove(ThumbsDbAccess().db()->findByFilePath(info.filePath()).id);
+                    bool removed       = thumbIds.remove(ThumbsDbAccess().db()->findByFilePath(info.filePath()).id);
 
                     if (!removed)
                     {
@@ -362,7 +362,7 @@ void DatabaseTask::run()
             QList<TagProperty> properties = CoreDbAccess().db()->getTagProperties(TagPropertyName::faceEngineUuid());
             QSet<QString> uuidSet;
 
-            foreach(TagProperty prop, properties)
+            foreach (TagProperty prop, properties)
             {
                 uuidSet << prop.value;
             }
@@ -399,7 +399,7 @@ void DatabaseTask::run()
             QSet<qlonglong> similarityDbItems = SimilarityDbAccess().db()->registeredImageIds();
 
             // Remove all image ids that are existent in the core db
-            foreach(const qlonglong& imageId, coredbItems)
+            foreach (const qlonglong& imageId, coredbItems)
             {
                 similarityDbItems.remove(imageId);
 

@@ -30,6 +30,8 @@
 #include <QMessageBox>
 #include <QThread>
 #include <QVBoxLayout>
+#include <QTimer>
+#include <QListWidget>
 
 // KDE includes
 
@@ -58,11 +60,6 @@ public:
         databasesToShrinkCount(0),
         shrinkDlg(0)
     {
-    }
-
-    ~Private()
-    {
-        delete shrinkDlg;
     }
 
     MaintenanceThread* thread;
@@ -130,6 +127,7 @@ DbCleaner::DbCleaner(bool cleanThumbsDb,
 
 DbCleaner::~DbCleaner()
 {
+    delete d->shrinkDlg;
     delete d;
 }
 
@@ -443,107 +441,128 @@ void DbCleaner::slotDone()
 
 //----------------------------------------------------------------------------
 
+class DbShrinkDialog::Private
+{
+public:
+
+    explicit Private()
+      : active(-1),
+        progressTimer(0),
+        progressIndex(1),
+        statusList(0)
+    {
+    }
+
+    int            active;
+    DWorkingPixmap progressPix;
+    QTimer*        progressTimer;
+    int            progressIndex;
+    QListWidget*   statusList;
+};
+    
 DbShrinkDialog::DbShrinkDialog(QWidget* const parent)
     : QDialog(parent),
-      active(-1),
-      progressPix(DWorkingPixmap()),
-      progressTimer(new QTimer(parent)),
-      progressIndex(1),
-      statusList(new QListWidget(this))
+      d(new Private)
 {
-    QVBoxLayout* statusLayout = new QVBoxLayout(this);
+    d->progressPix   = DWorkingPixmap();
+    d->progressTimer = new QTimer(parent);
+    d->statusList    = new QListWidget(this);
 
-    QLabel* infos = new QLabel(i18n("<p>Database shrinking in progress.</p>"
-                                    "<p>Currently, your databases are being shrunk. "
-                                    "This will take some time - depending on "
-                                    "your databases size.</p>"
-                                    "<p>We have to freeze digiKam in order to "
-                                    "prevent database corruption. This info box "
-                                    "will vanish when the shrinking process is "
-                                    "finished.</p>"
-                                    "Current Status:"),
-                               this);
+    QVBoxLayout* const statusLayout = new QVBoxLayout(this);
+
+    QLabel* const infos = new QLabel(i18n("<p>Database shrinking in progress.</p>"
+                                          "<p>Currently, your databases are being shrunk. "
+                                          "This will take some time - depending on "
+                                          "your databases size.</p>"
+                                          "<p>We have to freeze digiKam in order to "
+                                          "prevent database corruption. This info box "
+                                          "will vanish when the shrinking process is "
+                                          "finished.</p>"
+                                          "Current Status:"),
+                                     this);
     infos->setWordWrap(true);
     statusLayout->addWidget(infos);
 
-    statusList->addItem(i18n("Core DB"));
-    statusList->addItem(i18n("Thumbnails DB"));
-    statusList->addItem(i18n("Face Recognition DB"));
-    statusList->addItem(i18n("Similarity DB"));
+    d->statusList->addItem(i18n("Core DB"));
+    d->statusList->addItem(i18n("Thumbnails DB"));
+    d->statusList->addItem(i18n("Face Recognition DB"));
+    d->statusList->addItem(i18n("Similarity DB"));
 
     for (int i = 0 ; i < 4 ; ++i)
     {
-        statusList->item(i)->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
+        d->statusList->item(i)->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
     }
-//    statusList->setMinimumSize(0, 0);
-//    statusList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-//    statusList->adjustSize();
-    statusList->setMaximumHeight(4 * statusList->sizeHintForRow(0)
-                                 + 2 * statusList->frameWidth());
-    statusLayout->addWidget(statusList);
+//    d->statusList->setMinimumSize(0, 0);
+//    d->statusList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+//    d->statusList->adjustSize();
+    d->statusList->setMaximumHeight(4 * d->statusList->sizeHintForRow(0) +
+                                    2 * d->statusList->frameWidth());
+    statusLayout->addWidget(d->statusList);
 
-    connect(progressTimer, SIGNAL(timeout()),
+    connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
 }
 
 DbShrinkDialog::~DbShrinkDialog()
 {
-    progressTimer->stop();
+    d->progressTimer->stop();
+    delete d;
 }
 
 void DbShrinkDialog::setActive(const int pos)
 {
-    active = pos;
+    d->active = pos;
 
-    if (progressTimer->isActive())
+    if (d->progressTimer->isActive())
     {
-        if (active < 0)
+        if (d->active < 0)
         {
-            progressTimer->stop();
+            d->progressTimer->stop();
         }
     }
     else
     {
-        if (active >= 0)
+        if (d->active >= 0)
         {
-            statusList->item(active)->setIcon(progressPix.frameAt(0));
-            progressTimer->start(300);
-            progressIndex = 1;
+            d->statusList->item(d->active)->setIcon(d->progressPix.frameAt(0));
+            d->progressTimer->start(300);
+            d->progressIndex = 1;
         }
     }
 }
 
 void DbShrinkDialog::setIcon(const int pos, const QIcon& icon)
 {
-    if (active == pos)
+    if (d->active == pos)
     {
-        active = -1;
+        d->active = -1;
     }
 
-    statusList->item(pos)->setIcon(icon);
+    d->statusList->item(pos)->setIcon(icon);
 }
 
 int DbShrinkDialog::exec()
 {
-    active = 0;
-    progressTimer->start(300);
+    d->active = 0;
+    d->progressTimer->start(300);
+
     return QDialog::exec();
 }
 
 void DbShrinkDialog::slotProgressTimerDone()
 {
-    if (active < 0)
+    if (d->active < 0)
     {
         return;
     }
 
-    if (progressIndex == progressPix.frameCount())
+    if (d->progressIndex == d->progressPix.frameCount())
     {
-        progressIndex = 0;
+        d->progressIndex = 0;
     }
 
-    statusList->item(active)->setIcon(progressPix.frameAt(progressIndex));
-    ++progressIndex;
+    d->statusList->item(d->active)->setIcon(d->progressPix.frameAt(d->progressIndex));
+    ++d->progressIndex;
 }
 
 } // namespace Digikam
