@@ -73,7 +73,10 @@ CharcoalFilter::CharcoalFilter(QObject* const parent)
     initFilter();
 }
 
-CharcoalFilter::CharcoalFilter(DImg* const orgImage, QObject* const parent, double pencil, double smooth)
+CharcoalFilter::CharcoalFilter(DImg* const orgImage,
+                               QObject* const parent,
+                               double pencil,
+                               double smooth)
     : DImgThreadedFilter(orgImage, parent, QLatin1String("Charcoal")),
       d(new Private)
 {
@@ -105,7 +108,7 @@ void CharcoalFilter::filterImage()
 
     // -- Applying Edge effect -----------------------------------------------
 
-   long i = 0;
+    long i          = 0;
     int kernelWidth = getOptimalKernelWidth(d->pencil, d->smooth);
 
     if ((int)m_orgImage.width() < kernelWidth)
@@ -132,6 +135,7 @@ void CharcoalFilter::filterImage()
 
     // -- Applying Gaussian blur effect ---------------------------------------
 
+    // cppcheck-suppress unusedScopedObject
     BlurFilter(this, m_destImage, m_destImage, 80, 85, (int)(d->smooth / 10.0));
 
     if (!runningFlag())
@@ -203,24 +207,24 @@ void CharcoalFilter::convolveImageMultithreaded(uint start, uint stop, double* n
     {
         sy = y - (kernelWidth / 2);
 
-        for (uint x = 0; runningFlag() && (x < width); ++x)
+        for (uint x = 0 ; runningFlag() && (x < width) ; ++x)
         {
             k   = normal_kernel;
             red = green = blue = alpha = 0;
             sy  = y - (kernelWidth / 2);
 
-            for (mcy = 0; runningFlag() && (mcy < kernelWidth); ++mcy, ++sy)
+            for (mcy = 0 ; runningFlag() && (mcy < kernelWidth) ; ++mcy, ++sy)
             {
                 my = sy < 0 ? 0 : sy > (int) height - 1 ? height - 1 : sy;
                 sx = x + (-kernelWidth / 2);
 
-                for (mcx = 0; runningFlag() && (mcx < kernelWidth); ++mcx, ++sx)
+                for (mcx = 0 ; runningFlag() && (mcx < kernelWidth) ; ++mcx, ++sx)
                 {
-                    mx = sx < 0 ? 0 : sx > (int) width - 1 ? width - 1 : sx;
+                    mx     = sx < 0 ? 0 : sx > (int) width - 1 ? width - 1 : sx;
                     DColor color(sdata + mx * sdepth + (width * my * sdepth), sixteenBit);
-                    red += (*k) * (color.red() * 257.0);
+                    red   += (*k) * (color.red()   * 257.0);
                     green += (*k) * (color.green() * 257.0);
-                    blue += (*k) * (color.blue() * 257.0);
+                    blue  += (*k) * (color.blue()  * 257.0);
                     alpha += (*k) * (color.alpha() * 257.0);
                     ++k;
                 }
@@ -231,7 +235,7 @@ void CharcoalFilter::convolveImageMultithreaded(uint start, uint stop, double* n
             blue  =  blue < 0.0 ? 0.0 :  blue > maxClamp ? maxClamp :  blue + 0.5;
             alpha = alpha < 0.0 ? 0.0 : alpha > maxClamp ? maxClamp : alpha + 0.5;
 
-            DColor color((int)(red / 257UL), (int)(green / 257UL),
+            DColor color((int)(red  / 257UL), (int)(green / 257UL),
                          (int)(blue / 257UL), (int)(alpha / 257UL), sixteenBit);
             color.setPixel((ddata + x * ddepth + (width * y * ddepth)));
         }
@@ -312,9 +316,9 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
 
 int CharcoalFilter::getOptimalKernelWidth(double radius, double sigma)
 {
-    double        normalize, value;
-    long          kernelWidth;
-   long u;
+    double normalize, value;
+    long   kernelWidth;
+    long   u;
 
     if (radius > 0.0)
     {
@@ -341,7 +345,7 @@ int CharcoalFilter::getOptimalKernelWidth(double radius, double sigma)
         kernelWidth += 2;
     }
 
-    return((int)kernelWidth - 2);
+    return ((int)kernelWidth - 2);
 }
 
 FilterAction CharcoalFilter::filterAction()

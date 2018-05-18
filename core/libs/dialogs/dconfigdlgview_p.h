@@ -110,7 +110,7 @@ protected:
 
 private:
 
-    // cppcheck-suppress redundantAssignment
+    // cppcheck-suppress unusedPrivateFunction
     void init();
 };
 

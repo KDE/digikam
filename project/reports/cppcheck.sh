@@ -35,6 +35,7 @@ for DROP_ITEM in $KRAZY_FILTERS ; do
 done
 
 cppcheck -j$CPU_CORES \
+         -DQ_OS_LINUX \
          --verbose \
          --inline-suppr \
          --xml-version=2 \

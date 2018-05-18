@@ -1062,6 +1062,7 @@ void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
         int yMaxBlur = yMax + BlurRadius;
         DImg areaImage = orgImage->copy(xMinBlur, yMaxBlur, xMaxBlur - xMinBlur, yMaxBlur - yMinBlur);
 
+        // cppcheck-suppress unusedScopedObject
         BlurFilter(this, *orgImage, *destImage, 10, 75, BlurRadius);
 
         // I am unsure about differences of 1 pixel
@@ -1097,7 +1098,7 @@ void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
 
     // we have reached the main loop
 
-    for (int h = yMin; runningFlag() && (h < yMax); ++h)
+    for (int h = yMin ; runningFlag() && (h < yMax) ; ++h)
     {
         for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
@@ -1135,7 +1136,7 @@ void BlurFXFilter::smartBlurStage1Multithreaded(const Args& prm)
     DColor color, radiusColor, radiusColorBlur;
     int offset, loopOffset;
 
-    for (uint w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    for (uint w = prm.start ; runningFlag() && (w < prm.stop) ; ++w)
     {
         // we initialize the variables
         sumR = sumG = sumB = nCount = 0;
@@ -1145,7 +1146,7 @@ void BlurFXFilter::smartBlurStage1Multithreaded(const Args& prm)
         color.setColor(data + offset, sixteenBit);
 
         // ...we enter this loop to sum the bits
-        for (int a = -prm.Radius; runningFlag() && (a <= prm.Radius); ++a)
+        for (int a = -prm.Radius ; runningFlag() && (a <= prm.Radius) ; ++a)
         {
             // verify if is inside the rect
             if (IsInside(Width, Height, w + a, prm.h))
@@ -1205,7 +1206,7 @@ void BlurFXFilter::smartBlurStage2Multithreaded(const Args& prm)
     DColor color, radiusColor, radiusColorBlur;
     int offset, loopOffset;
 
-    for (uint h = prm.start; runningFlag() && (h < prm.stop); ++h)
+    for (uint h = prm.start ; runningFlag() && (h < prm.stop) ; ++h)
     {
         // we initialize the variables
         sumR = sumG = sumB = nCount = 0;
@@ -1215,7 +1216,7 @@ void BlurFXFilter::smartBlurStage2Multithreaded(const Args& prm)
         color.setColor(data + offset, sixteenBit);
 
         // ...we enter this loop to sum the bits
-        for (int a = -prm.Radius; runningFlag() && (a <= prm.Radius); ++a)
+        for (int a = -prm.Radius ; runningFlag() && (a <= prm.Radius) ; ++a)
         {
             // verify if is inside the rect
             if (IsInside(Width, Height, prm.w, h + a))
@@ -1312,7 +1313,7 @@ void BlurFXFilter::smartBlur(DImg* const orgImage, DImg* const destImage, int Ra
 
     // we have reached the main loop
 
-    for (uint h = 0; runningFlag() && (h < orgImage->height()); ++h)
+    for (uint h = 0 ; runningFlag() && (h < orgImage->height()) ; ++h)
     {
         for (int j = 0 ; runningFlag() && (j < valsw.count()-1) ; ++j)
         {
@@ -1341,7 +1342,7 @@ void BlurFXFilter::smartBlur(DImg* const orgImage, DImg* const destImage, int Ra
 
     tasks.clear();
 
-    for (uint w = 0; runningFlag() && (w < orgImage->width()); ++w)
+    for (uint w = 0 ; runningFlag() && (w < orgImage->width()) ; ++w)
     {
         for (int j = 0 ; runningFlag() && (j < valsh.count()-1) ; ++j)
         {
