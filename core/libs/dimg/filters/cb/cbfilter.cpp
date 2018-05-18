@@ -323,11 +323,11 @@ void CBFilter::setGamma(double val)
 
 void CBFilter::adjustRGB(double r, double g, double b, double a, bool sixteenBit)
 {
-    int r_table[65536];
-    int g_table[65536];
-    int b_table[65536];
-    int a_table[65536];
-    int dummy_table[65536];
+    int* r_table     = new int[65536];
+    int* g_table     = new int[65536];
+    int* b_table     = new int[65536];
+    int* a_table     = new int[65536];
+    int* dummy_table = new int[65536];
 
     if (r == 1.0 && g == 1.0 && b == 1.0 && a == 1.0)
     {
@@ -372,6 +372,12 @@ void CBFilter::adjustRGB(double r, double g, double b, double a, bool sixteenBit
 
         setTables(r_table, g_table, b_table, a_table, sixteenBit);
     }
+
+    delete [] r_table;
+    delete [] g_table;
+    delete [] b_table;
+    delete [] a_table;
+    delete [] dummy_table;
 }
 
 FilterAction CBFilter::filterAction()
