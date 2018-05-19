@@ -316,7 +316,7 @@ DatabaseServerError DatabaseServer::initMysqlConfig() const
 
     if (!globalConfig.isEmpty())
     {
-        bool confUpdate = false;
+        bool confUpdate       = false;
         bool confShouldUpdate = false;
         QFile actualFile(d->actualConfig);
 
@@ -334,7 +334,7 @@ DatabaseServerError DatabaseServer::initMysqlConfig() const
                                                 << "will be updated.";
 
             QFile globalFile(globalConfig);
-            QFile localFile (localConfig);
+            QFile localFile(localConfig);
 
             if (globalFile.open(QFile::ReadOnly) && actualFile.open(QFile::WriteOnly))
             {
@@ -550,7 +550,7 @@ DatabaseServerError DatabaseServer::initMysqlDatabase() const
         bool opened = false;
         bool exited = false;
 
-        for (int i = 0; i < 120; ++i)
+        for (int i = 0 ; i < 120 ; ++i)
         {
             opened = db.open();
 

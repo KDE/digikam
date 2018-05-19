@@ -60,7 +60,8 @@ public:
 
 public:
 
-    explicit DatabaseServer(const DbEngineParameters& params, DatabaseServerStarter* const parent = DatabaseServerStarter::instance());
+    explicit DatabaseServer(const DbEngineParameters& params,
+                            DatabaseServerStarter* const parent = DatabaseServerStarter::instance());
     virtual ~DatabaseServer();
 
     /**
