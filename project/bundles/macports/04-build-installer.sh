@@ -122,6 +122,7 @@ lib/plugins \
 lib/libgphoto2 \
 lib/libgphoto2_port \
 lib/mariadb \
+share/mariadb \
 etc/xdg \
 etc/sane.d \
 "

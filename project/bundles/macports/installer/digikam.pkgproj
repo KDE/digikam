@@ -453,6 +453,22 @@
 											<key>UID</key>
 											<integer>0</integer>
 										</dict>
+										<dict>
+											<key>CHILDREN</key>
+											<array/>
+											<key>GID</key>
+											<integer>0</integer>
+											<key>PATH</key>
+											<string>../opt/digikam/share</string>
+											<key>PATH_TYPE</key>
+											<integer>1</integer>
+											<key>PERMISSIONS</key>
+											<integer>493</integer>
+											<key>TYPE</key>
+											<integer>3</integer>
+											<key>UID</key>
+											<integer>0</integer>
+										</dict>
 									</array>
 									<key>EXPANDED</key>
 									<true/>
@@ -635,7 +651,7 @@
 				<key>USE_HFS+_COMPRESSION</key>
 				<true/>
 				<key>VERSION</key>
-				<string>5.8.0</string>
+				<string>6.0.0</string>
 			</dict>
 			<key>TYPE</key>
 			<integer>0</integer>
