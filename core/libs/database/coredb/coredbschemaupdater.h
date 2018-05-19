@@ -91,11 +91,17 @@ private:
 
 private:
 
+    // cppcheck-suppress unusedPrivateFunction
     bool createTablesV3();
+    // cppcheck-suppress unusedPrivateFunction
     void preAlpha010Update1();
+    // cppcheck-suppress unusedPrivateFunction
     void preAlpha010Update2();
+    // cppcheck-suppress unusedPrivateFunction
     void preAlpha010Update3();
+    // cppcheck-suppress unusedPrivateFunction
     void beta010Update1();
+    // cppcheck-suppress unusedPrivateFunction
     void beta010Update2();
 
 private:

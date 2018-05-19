@@ -514,11 +514,9 @@ double panoScriptGetPanoHFOV(pt_script* script)
 
 int panoScriptGetPanoOutputFormat(pt_script* script)
 {
-    char* str = NULL;
-
     assert(script != NULL);
 
-    str = script->pano.outputFormat;
+    char* str = script->pano.outputFormat;
 
     if (str == 0)
     {
@@ -528,12 +526,14 @@ int panoScriptGetPanoOutputFormat(pt_script* script)
     switch (str[0])
     {
         case 'P':
+
             if (strncmp("NG", str + 1, 2) == 0)
                 return 0;
 
             break;
 
         case 'T':
+
             if (strncmp("IFF", str + 1, 3) == 0)
             {
                 if (strncmp("_m", str + 4, 2) == 0)
@@ -550,6 +550,7 @@ int panoScriptGetPanoOutputFormat(pt_script* script)
             break;
 
         case 'J':
+
             if (strncmp("PEG", str + 1, 3) == 0)
                 return 4;
 
@@ -564,11 +565,9 @@ int panoScriptGetPanoOutputFormat(pt_script* script)
 
 int panoScriptGetPanoOutputCompression(pt_script* script)
 {
-    char* str = NULL;
-
     assert(script != NULL && panoScriptGetPanoOutputFormat(script) > 0 && panoScriptGetPanoOutputFormat(script) < 4);
 
-    str = script->pano.outputFormat;
+    char* str = script->pano.outputFormat;
 
     while (str != NULL)
     {
@@ -583,18 +582,21 @@ int panoScriptGetPanoOutputCompression(pt_script* script)
                 switch (str[0])
                 {
                     case 'N':
+
                         if (strncmp("ONE", str + 1, 3) == 0)
                             return 0;
 
                         break;
 
                     case 'L':
+
                         if (strncmp("ZW", str + 1, 2) == 0)
                             return 1;
 
                         break;
 
                     case 'D':
+
                         if (strncmp("EFLATE", str + 1, 6) == 0)
                             return 2;
 
@@ -616,11 +618,10 @@ int panoScriptGetPanoOutputCompression(pt_script* script)
 
 int panoScriptGetPanoOutputSaveCoordinates(pt_script* script)
 {
-    char* str = NULL;
-
     assert(script != NULL && panoScriptGetPanoOutputFormat(script) > 1 && panoScriptGetPanoOutputFormat(script) < 4);
 
-    str = script->pano.outputFormat;
+    char* str = script->pano.outputFormat;
+
     while (str != NULL)
     {
         str = strchr(str, ' ');
@@ -644,11 +645,9 @@ int panoScriptGetPanoOutputSaveCoordinates(pt_script* script)
 
 int panoScriptGetPanoOutputCropped(pt_script* script)
 {
-    char* str = NULL;
-
     assert(script != NULL && panoScriptGetPanoOutputFormat(script) > 1 && panoScriptGetPanoOutputFormat(script) < 4);
 
-    str = script->pano.outputFormat;
+    char* str = script->pano.outputFormat;
 
     while (str != NULL)
     {
@@ -673,11 +672,9 @@ int panoScriptGetPanoOutputCropped(pt_script* script)
 
 int panoScriptGetPanoOutputQuality(pt_script* script)
 {
-    char* str = NULL;
-
     assert(script != NULL && panoScriptGetPanoOutputFormat(script) == 4);
 
-    str = script->pano.outputFormat;
+    char* str = script->pano.outputFormat;
 
     while (str != NULL)
     {
@@ -795,11 +792,9 @@ int panoScriptGetVarsToOptimizeImageId(pt_script* script, int v)
 
 int panoScriptGetVarsToOptimizeName(pt_script* script, int v)
 {
-    char* var = NULL;
-
     assert(script != NULL && v >= 0 && v < script->iVarsToOptimizeCount);
 
-    var = script->varsToOptimize[v].varName;
+    char* var = script->varsToOptimize[v].varName;
 
     switch (var[0])
     {

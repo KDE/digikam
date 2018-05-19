@@ -333,14 +333,15 @@ void DIO::createJob(IOJobData* const data)
         return;
     }
 
-    ProgressItem* item                  = 0;
-    QPair<QString, QString> itemStrings = getItemStrings(data);
+    ProgressItem* item = 0;
+    QString itemString = getItemString(data);
 
-    if (!itemStrings.first.isEmpty())
+    if (!itemString.isEmpty())
     {
-        item = ProgressManager::instance()->createProgressItem(itemStrings.first,
-                                                               itemStrings.second,
+        item = ProgressManager::instance()->createProgressItem(itemString,
                                                                QString(), true, false);
+        item->setTotalItems(data->sourceUrls().count());
+        data->setProgressId(item->id());
     }
 
     IOJobsThread* const jobThread = IOJobsManager::instance()->startIOJobs(data);
@@ -360,8 +361,6 @@ void DIO::createJob(IOJobData* const data)
 
     if (item)
     {
-        item->setTotalItems(data->sourceUrls().count());
-
         connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
                 jobThread, SLOT(slotCancel()));
 
@@ -522,41 +521,43 @@ void DIO::slotOneProccessed(const QUrl& url)
     }
 }
 
-ProgressItem* DIO::getProgressItem(IOJobData* const data) const
+QString DIO::getItemString(IOJobData* const data) const
 {
-    QString itemString = getItemStrings(data).first;
-
-    if (itemString.isEmpty())
-    {
-        return 0;
-    }
-
-    return (ProgressManager::instance()->findItembyId(itemString));
-}
-
-QPair<QString, QString> DIO::getItemStrings(IOJobData* const data) const
-{
-    QString ds = QString::number(reinterpret_cast<qint64>(data));
-
     switch (data->operation())
     {
         case IOJobData::CopyAlbum:
+            return i18n("Copy Album");
         case IOJobData::CopyImage:
+            return i18n("Copy Images");
         case IOJobData::CopyFiles:
-            return qMakePair(QLatin1String("DIOCopy")   + ds, i18n("Copy"));
+            return i18n("Copy Files");
         case IOJobData::MoveAlbum:
+            return i18n("Move Album");
         case IOJobData::MoveImage:
+            return i18n("Move Images");
         case IOJobData::MoveFiles:
-            return qMakePair(QLatin1String("DIOMove")   + ds, i18n("Move"));
+            return i18n("Move Files");
         case IOJobData::Trash:
-            return qMakePair(QLatin1String("DIOTrash")  + ds, i18n("Trash"));
+            return i18n("Trash");
         case IOJobData::Delete:
-            return qMakePair(QLatin1String("DIODelete") + ds, i18n("Delete"));
+            return i18n("Delete");
         default:
             break;
     }
 
-    return qMakePair(QString(), QString());
+    return QString();
+}
+
+ProgressItem* DIO::getProgressItem(IOJobData* const data) const
+{
+    QString itemId = data->getProgressId();
+
+    if (itemId.isEmpty())
+    {
+        return 0;
+    }
+
+    return ProgressManager::instance()->findItembyId(itemId);
 }
 
 void DIO::slotCancel(ProgressItem* item)

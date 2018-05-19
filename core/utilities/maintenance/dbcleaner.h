@@ -27,9 +27,7 @@
 // Qt includes
 
 #include <QDialog>
-#include <QListWidget>
 #include <QString>
-#include <QTimer>
 #include <QWidget>
 
 // Local includes
@@ -114,11 +112,8 @@ private Q_SLOTS:
 
 private:
 
-    int            active;
-    DWorkingPixmap progressPix;
-    QTimer*        progressTimer;
-    int            progressIndex;
-    QListWidget*   statusList;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

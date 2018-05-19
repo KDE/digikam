@@ -106,6 +106,7 @@ private:
                        int height,
                        AVPixelFormat format);
 
+    // cppcheck-suppress unusedPrivateFunction 
     int  decodeVideoNew(AVCodecContext* const avContext,
                         AVFrame* const avFrame,
                         int* gotFrame,
