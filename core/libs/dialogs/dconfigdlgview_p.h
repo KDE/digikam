@@ -110,6 +110,7 @@ protected:
 
 private:
 
+    // cppcheck-suppress unusedPrivateFunction
     void init();
 };
 

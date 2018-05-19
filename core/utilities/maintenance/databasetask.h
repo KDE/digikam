@@ -64,7 +64,6 @@ public:
 
     void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false, bool similarityDb=false);
 
-
 Q_SIGNALS:
 
     void signalFinished();

@@ -146,7 +146,7 @@ Name[sv]=Bakgrundsfärg
 Name[tr]=Artalan Rengi
 Name[uk]=Колір тла
 Name[x-test]=xxBackground Colorxx
-Name[zh_CN]=背景颜色
+Name[zh_CN]=背景色
 Type=color
 Default=#333333
 

@@ -24,6 +24,10 @@
 
 #include "imagebrushguidewidget.h"
 
+// Local includes
+
+#include "digikam_debug.h"
+
 namespace Digikam
 {
 
@@ -31,7 +35,7 @@ void ImageBrushGuideWidget::mouseMoveEvent(QMouseEvent* e)
 {
     if ((e->buttons() & Qt::LeftButton) && !srcSet)
     {
-        qDebug() << "MOOOOOVE The location is: " << e->x() << ", "<< e->y();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Move The location is: " << e->x() << ", "<< e->y();
 
         QPoint currentDst = QPoint(e->x(), e->y());
 

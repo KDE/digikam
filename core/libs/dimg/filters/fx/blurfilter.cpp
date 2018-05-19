@@ -113,7 +113,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
         if (my < 0)
         {
             mh += my;
-            my = 0;
+            my  = 0;
         }
 
         if ((my + mh) > height)
@@ -169,7 +169,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
                 if (mx < 0)
                 {
                     mw += mx;
-                    mx = 0;
+                    mx  = 0;
                 }
 
                 if ((mx + mw) > width)

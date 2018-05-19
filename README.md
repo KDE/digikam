@@ -3,6 +3,8 @@
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/285/badge.svg)](https://scan.coverity.com/projects/digikam)
 [![Phabricator Build Status](https://build.kde.org/job/Extragear%20digikam%20kf5-qt5%20SUSEQt5.9/badge/icon)](https://build.kde.org/job/Extragear%20digikam%20kf5-qt5%20SUSEQt5.9/)
 
+If you are reading this on Github, be aware that this is just a mirror. Our real code repository [is located here](https://phabricator.kde.org/source/digikam/) 
+
 # About
 
 digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.

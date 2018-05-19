@@ -66,13 +66,14 @@ private:
 class GPSLinkItemSelectionModelPrivate;
 
 /**
-  Makes it possible to share a selection in multiple views which do not have the same source model
-
-  Although <a href="http://doc.trolltech.com/4.6/model-view-view.html#sharing-selections-between-views">multiple views can share the same QItemSelectionModel</a>, the views then need to have the same source model.
-
-  If there is a proxy model between the model and one of the views, or different proxy models in each, this class makes
-  it possible to share the selection between the views.
-*/
+ * Makes it possible to share a selection in multiple views which do not have the same source model
+ *
+ * Although <a href="http://doc.trolltech.com/4.6/model-view-view.html#sharing-selections-between-views">multiple views can share the same QItemSelectionModel</a>,
+ * the views then need to have the same source model.
+ *
+ * If there is a proxy model between the model and one of the views, or different proxy models in each, this class makes
+ * it possible to share the selection between the views.
+ */
 class GPSLinkItemSelectionModel : public QItemSelectionModel
 {
     Q_OBJECT

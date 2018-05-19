@@ -61,6 +61,8 @@ public:
 
     QUrl             destUrl;
 
+    QString          progressId;
+
     QMutex           mutex;
 };
 
@@ -168,6 +170,11 @@ void IOJobData::setDestUrl(const QUrl& srcUrl,
     d->changeDestMap.insert(srcUrl, destUrl);
 }
 
+void IOJobData::setProgressId(const QString& id)
+{
+    d->progressId = id;
+}
+
 int IOJobData::operation() const
 {
     return d->operation;
@@ -210,6 +217,11 @@ QUrl IOJobData::getNextUrl() const
 
     d->mutex.unlock();
     return url;
+}
+
+QString IOJobData::getProgressId() const
+{
+    return d->progressId;
 }
 
 ImageInfo IOJobData::findImageInfo(const QUrl& url) const

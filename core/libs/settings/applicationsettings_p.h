@@ -308,6 +308,7 @@ private:
 
 private:
 
+    // cppcheck-suppress unusedPrivateFunction 
     static ApplicationSettings::OperationStrings createConfigGroupingOperateOnAll();
 };
 
