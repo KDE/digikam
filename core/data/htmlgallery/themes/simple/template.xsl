@@ -9,7 +9,7 @@
  * Date        : 2007-07-05
  * Description : A Simple theme for the digiKam html gallery tool.
  *
- * Copyright (C) 2012 by Aurélien Gâteau <aurelien dot gateau at free.fr>
+ * Copyright (C) 2007 by Aurélien Gâteau <aurelien dot gateau at free.fr>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
