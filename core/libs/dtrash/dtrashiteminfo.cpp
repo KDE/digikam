@@ -46,13 +46,13 @@ bool DTrashItemInfo::isNull() const
 
 QDebug operator<<(QDebug dbg, const DTrashItemInfo& info)
 {
-    dbg.nospace() << "DTrashItemInfo:\n ";
-    dbg.nospace() << "trashPath: " << info.trashPath << "\n ";
-    dbg.nospace() << "jsonFilePath: " << info.jsonFilePath << "\n ";
-    dbg.nospace() << "CollectionPath: "<< info.collectionPath << "\n ";
-    dbg.nospace() << "RelativePath: " << info.collectionRelativePath << "\n ";
-    dbg.nospace() << "DeletionTimestamp: " << info.deletionTimestamp.toString() << "\n";
-    dbg.nospace() << "Image id: " << QString::number(info.imageId) << "\n";
+    dbg.nospace() << "DTrashItemInfo:";
+    dbg.nospace() << "\ntrashPath: "         << info.trashPath;
+    dbg.nospace() << "\njsonFilePath: "      << info.jsonFilePath;
+    dbg.nospace() << "\nCollectionPath: "    << info.collectionPath;
+    dbg.nospace() << "\nRelativePath: "      << info.collectionRelativePath;
+    dbg.nospace() << "\nDeletionTimestamp: " << info.deletionTimestamp.toString();
+    dbg.nospace() << "\nImage id: "          << QString::number(info.imageId);
     return dbg.space();
 }
 
