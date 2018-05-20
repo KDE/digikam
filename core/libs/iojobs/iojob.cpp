@@ -409,7 +409,7 @@ DeleteDTrashItemsJob::DeleteDTrashItemsJob(const DTrashItemInfoList& infos)
 void DeleteDTrashItemsJob::run()
 {
     CoreDbAccess access;
-    QList<int> albumsToDelete;
+    QList<int> albumsFromImages;
     QList<qlonglong> imagesToRemove;
 
     foreach (const DTrashItemInfo& item, m_dtrashItemInfoList)
@@ -418,13 +418,13 @@ void DeleteDTrashItemsJob::run()
         QFile::remove(item.trashPath);
         QFile::remove(item.jsonFilePath);
 
-        imagesToRemove << item.imageId;
-        albumsToDelete << ImageInfo(item.imageId).albumId();
+        imagesToRemove   << item.imageId;
+        albumsFromImages << ImageInfo(item.imageId).albumId();
 
         access.db()->removeAllImageRelationsFrom(item.imageId, DatabaseRelation::Grouped);
     }
 
-    access.db()->removeItemsPermanently(imagesToRemove, albumsToDelete);
+    access.db()->removeItemsPermanently(imagesToRemove, albumsFromImages);
 
     emit signalDone();
 }
