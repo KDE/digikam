@@ -409,16 +409,22 @@ DeleteDTrashItemsJob::DeleteDTrashItemsJob(const DTrashItemInfoList& infos)
 void DeleteDTrashItemsJob::run()
 {
     CoreDbAccess access;
+    QList<int> albumsToDelete;
+    QList<qlonglong> imagesToRemove;
 
     foreach (const DTrashItemInfo& item, m_dtrashItemInfoList)
     {
+
         QFile::remove(item.trashPath);
         QFile::remove(item.jsonFilePath);
-        // Set the status of the image id to obsolete, i.e. to remove.
+
+        imagesToRemove << item.imageId;
+        albumsToDelete << ImageInfo(item.imageId).albumId();
+
         access.db()->removeAllImageRelationsFrom(item.imageId, DatabaseRelation::Grouped);
-        access.db()->removeItemsPermanently(QList<qlonglong>() << item.imageId,
-                                            QList<int>() << ImageInfo(item.imageId).albumId());
     }
+
+    access.db()->removeItemsPermanently(imagesToRemove, albumsToDelete);
 
     emit signalDone();
 }
