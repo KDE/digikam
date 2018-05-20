@@ -452,6 +452,15 @@ void DIO::slotOneProccessed(const QUrl& url)
             }
         }
     }
+    else if (operation == IOJobData::Trash)
+    {
+        ImageInfo info = data->findImageInfo(url);
+
+        if (!info.isNull())
+        {
+            CoreDbAccess().db()->removeItems(QList<qlonglong>() << info.id(), QList<int>() << info.albumId());
+        }
+    }
     else if (operation == IOJobData::Rename)
     {
         // If we rename a file, the name changes. This is equivalent to a move.
@@ -527,20 +536,28 @@ QString DIO::getItemString(IOJobData* const data) const
     {
         case IOJobData::CopyAlbum:
             return i18n("Copy Album");
+
         case IOJobData::CopyImage:
             return i18n("Copy Images");
+
         case IOJobData::CopyFiles:
             return i18n("Copy Files");
+
         case IOJobData::MoveAlbum:
             return i18n("Move Album");
+
         case IOJobData::MoveImage:
             return i18n("Move Images");
+
         case IOJobData::MoveFiles:
             return i18n("Move Files");
+
         case IOJobData::Trash:
             return i18n("Trash");
+
         case IOJobData::Delete:
             return i18n("Delete");
+
         default:
             break;
     }
