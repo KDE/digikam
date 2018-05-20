@@ -435,7 +435,8 @@ void DIO::slotOneProccessed(const QUrl& url)
 
             foreach(const qlonglong& imageId, imagesToRemove)
             {
-                access.db()->removeAllImageRelationsFrom(imageId, DatabaseRelation::Grouped);
+                access.db()->removeAllImageRelationsFrom(imageId,
+                                                         DatabaseRelation::Grouped);
             }
 
             access.db()->removeItemsPermanently(imagesToRemove, albumsToDelete);
@@ -447,8 +448,11 @@ void DIO::slotOneProccessed(const QUrl& url)
             if (!info.isNull())
             {
                 CoreDbAccess access;
-                access.db()->removeAllImageRelationsFrom(info.id(), DatabaseRelation::Grouped);
-                access.db()->removeItemsPermanently(QList<qlonglong>() << info.id(), QList<int>() << info.albumId());
+                access.db()->removeAllImageRelationsFrom(info.id(),
+                                                         DatabaseRelation::Grouped);
+
+                access.db()->removeItemsPermanently(QList<qlonglong>() << info.id(),
+                                                    QList<int>() << info.albumId());
             }
         }
     }
@@ -458,7 +462,8 @@ void DIO::slotOneProccessed(const QUrl& url)
 
         if (!info.isNull())
         {
-            CoreDbAccess().db()->removeItems(QList<qlonglong>() << info.id(), QList<int>() << info.albumId());
+            CoreDbAccess().db()->removeItems(QList<qlonglong>() << info.id(),
+                                             QList<int>() << info.albumId());
         }
     }
     else if (operation == IOJobData::Rename)
