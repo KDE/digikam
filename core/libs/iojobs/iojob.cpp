@@ -414,7 +414,6 @@ void DeleteDTrashItemsJob::run()
 
     foreach (const DTrashItemInfo& item, m_dtrashItemInfoList)
     {
-
         QFile::remove(item.trashPath);
         QFile::remove(item.jsonFilePath);
 
