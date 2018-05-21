@@ -50,6 +50,7 @@ class AssignNameOverlay : public PersistentWidgetDelegateOverlay
 
 public:
 
+    AssignNameOverlay();
     explicit AssignNameOverlay(QObject* const parent);
     ~AssignNameOverlay();
 
@@ -81,6 +82,10 @@ protected:
 
     void updatePosition();
     void updateFace();
+
+private:
+
+    void setup();
 
 private:
 
