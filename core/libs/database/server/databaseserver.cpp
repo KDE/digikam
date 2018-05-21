@@ -590,7 +590,7 @@ DatabaseServerError DatabaseServer::initMysqlDatabase() const
 
         QSqlQuery query(db);
 
-        if (!query.exec(QString::fromLatin1("USE %1").arg(d->internalDBName)))
+        if (!query.exec(QString::fromLatin1("USE %1;").arg(d->internalDBName)))
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Failed to use database"
                                                 << d->internalDBName;
@@ -600,7 +600,7 @@ DatabaseServerError DatabaseServer::initMysqlDatabase() const
                                                 << db.lastError().text();
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Trying to create database now";
 
-            if (query.exec(QLatin1String("CREATE DATABASE digikam")))
+            if (query.exec(QString::fromLatin1("CREATE DATABASE %1;").arg(d->internalDBName)))
             {
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database was successfully created";
             }
