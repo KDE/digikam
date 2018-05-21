@@ -1,4 +1,4 @@
 {
-  "phabricator.uri" : "https://phabricator.kde.org/"
+  "phabricator.uri" : "https://phabricator.kde.org/",
   "project.name"    : "digiKam"
 }

@@ -228,5 +228,6 @@ BUGFIXES:
 198 ==> 388002 - remove kio related legacy [patch]
 199 ==> 394242 - Import settings unneccesarily asks to overwrite image database, and crashes when I decline.
 200 ==> 394278 - A slideshow theme for kiosk mode.
-201 ==> 
-
+201 ==> 340389 - digiKam crashes while editing pictures for color balancing on OSX [patch].
+202 ==> Unify group handling [patch]
+203 ==> 

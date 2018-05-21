@@ -27,7 +27,6 @@
 
 // Local includes
 
-#include "applicationsettings.h"
 #include "imageinfo.h"
 #include "itemviewcategorized.h"
 #include "thumbnailsize.h"
@@ -78,23 +77,10 @@ public:
     ImageInfo              currentInfo()           const;
     QUrl                   currentUrl()            const;
 
-    ImageInfo              imageInfo(const QModelIndex& index) const;
-    ImageInfoList          imageInfos(const QList<QModelIndex>& indexes,
-                                      bool grouping = false) const;
-    ImageInfoList          imageInfos(const QList<QModelIndex>& indexes,
-                                      ApplicationSettings::OperationType type) const;
-
-    ImageInfoList          selectedImageInfos(bool grouping = false) const;
-    ImageInfoList          selectedImageInfos(ApplicationSettings::OperationType type) const;
-    ImageInfoList          selectedImageInfosCurrentFirst(bool grouping = false) const;
-    QList<QUrl>            selectedUrls(bool grouping = false) const;
-    QList<QUrl>            selectedUrls(ApplicationSettings::OperationType type) const;
-
-    ImageInfoList          allImageInfos(bool grouping = false) const;
-    QList<QUrl>            allUrls(bool grouping = false) const;
-
-    bool                   needGroupResolving(ApplicationSettings::OperationType type,
-                                              bool all = false) const;
+    ImageInfoList          allImageInfos() const;
+    QList<QUrl>            allUrls() const;
+    ImageInfoList          selectedImageInfos() const;
+    ImageInfoList          selectedImageInfosCurrentFirst() const;
 
     /** Selects the index as current and scrolls to it.
      */
@@ -218,13 +204,8 @@ protected:
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
     virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
 
-    // Adds group members when appropriate
-    ImageInfoList resolveGrouping(const QModelIndexList& indexes) const;
-    ImageInfoList resolveGrouping(const ImageInfoList& infos) const;
-    bool          needGroupResolving(ApplicationSettings::OperationType type,
-                                     const QList<QModelIndex>& indexes) const;
-    bool          needGroupResolving(ApplicationSettings::OperationType type,
-                                     const ImageInfoList& infos) const;
+    ImageInfo     imageInfo(const QModelIndex& index) const;
+    ImageInfoList imageInfos(const QList<QModelIndex>& indexes) const;
 
 private Q_SLOTS:
 

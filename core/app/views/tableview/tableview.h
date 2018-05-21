@@ -67,8 +67,6 @@ public:
     ThumbnailSize getThumbnailSize()                                     const;
     ImageInfo currentInfo()                                              const;
     Album* currentAlbum()                                                const;
-    ImageInfoList allInfo(bool grouping = false)                         const;
-    QList<QUrl> allUrls(bool grouping = false)                           const;
     int numberOfSelectedItems()                                          const;
     ImageInfo nextInfo()                                                 const;
     ImageInfo previousInfo()                                             const;
@@ -78,15 +76,11 @@ public:
     void clearSelection();
     void invertSelection();
 
-    QModelIndexList  selectedIndexesCurrentFirst()                               const;
-    ImageInfoList    selectedImageInfos(bool grouping = false)                   const;
-    ImageInfoList    selectedImageInfos(ApplicationSettings::OperationType type) const;
-    ImageInfoList    selectedImageInfosCurrentFirst(bool grouping = false)       const;
-    QList<qlonglong> selectedImageIdsCurrentFirst(bool grouping = false)         const;
-    QList<QUrl>      selectedUrls(bool grouping = false)                         const;
-
-    bool             needGroupResolving(ApplicationSettings::OperationType type,
-                                        bool all = false) const;
+    ImageInfoList allImageInfos(bool grouping = false)                        const;
+    ImageInfoList selectedImageInfos(bool grouping = false)             const;
+    ImageInfoList selectedImageInfosCurrentFirst(bool grouping = false) const;
+    bool          allNeedGroupResolving(const ApplicationSettings::OperationType type) const;
+    bool          selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const;
 
 protected:
 
@@ -95,10 +89,6 @@ protected:
 
     virtual bool eventFilter(QObject* watched, QEvent* event);
     QList<QAction*> getExtraGroupingActions();
-
-    // Adds group members when appropriate
-    ImageInfoList resolveGrouping(const QList<QModelIndex>& indexes) const;
-    ImageInfoList resolveGrouping(const ImageInfoList& infos) const;
 
 public Q_SLOTS:
 

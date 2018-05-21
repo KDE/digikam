@@ -89,7 +89,7 @@ public:
      * If you give 0 for model, call setAlbumModel afterwards.
      * If you supply 0 for filterModel, call setAlbumFilterModel afterwards.
      */
-    explicit AbstractAlbumTreeView(QWidget* const parent, Flags flags);
+    AbstractAlbumTreeView(QWidget* const parent, Flags flags);
     ~AbstractAlbumTreeView();
 
     AbstractSpecificAlbumModel* albumModel() const;

@@ -435,7 +435,8 @@ void DIO::slotOneProccessed(const QUrl& url)
 
             foreach(const qlonglong& imageId, imagesToRemove)
             {
-                access.db()->removeAllImageRelationsFrom(imageId, DatabaseRelation::Grouped);
+                access.db()->removeAllImageRelationsFrom(imageId,
+                                                         DatabaseRelation::Grouped);
             }
 
             access.db()->removeItemsPermanently(imagesToRemove, albumsToDelete);
@@ -447,9 +448,22 @@ void DIO::slotOneProccessed(const QUrl& url)
             if (!info.isNull())
             {
                 CoreDbAccess access;
-                access.db()->removeAllImageRelationsFrom(info.id(), DatabaseRelation::Grouped);
-                access.db()->removeItemsPermanently(QList<qlonglong>() << info.id(), QList<int>() << info.albumId());
+                access.db()->removeAllImageRelationsFrom(info.id(),
+                                                         DatabaseRelation::Grouped);
+
+                access.db()->removeItemsPermanently(QList<qlonglong>() << info.id(),
+                                                    QList<int>() << info.albumId());
             }
+        }
+    }
+    else if (operation == IOJobData::Trash)
+    {
+        ImageInfo info = data->findImageInfo(url);
+
+        if (!info.isNull())
+        {
+            CoreDbAccess().db()->removeItems(QList<qlonglong>() << info.id(),
+                                             QList<int>() << info.albumId());
         }
     }
     else if (operation == IOJobData::Rename)
@@ -527,20 +541,28 @@ QString DIO::getItemString(IOJobData* const data) const
     {
         case IOJobData::CopyAlbum:
             return i18n("Copy Album");
+
         case IOJobData::CopyImage:
             return i18n("Copy Images");
+
         case IOJobData::CopyFiles:
             return i18n("Copy Files");
+
         case IOJobData::MoveAlbum:
             return i18n("Move Album");
+
         case IOJobData::MoveImage:
             return i18n("Move Images");
+
         case IOJobData::MoveFiles:
             return i18n("Move Files");
+
         case IOJobData::Trash:
             return i18n("Trash");
+
         case IOJobData::Delete:
             return i18n("Delete");
+
         default:
             break;
     }

@@ -54,7 +54,7 @@ class DigikamImageView::Private : public QObject
 public:
 
     explicit Private(DigikamImageView* const qq);
-    virtual ~Private();
+    ~Private();
 
     void updateOverlays();
     void triggerRotateAction(const char* actionName);
@@ -80,6 +80,10 @@ public:
 private:
 
     DigikamImageView*         q_ptr;
+
+private:
+    
+    Private() {};  // disable default constuctor.
 };
 
 } // namespace Digikam

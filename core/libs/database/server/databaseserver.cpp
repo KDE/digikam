@@ -73,6 +73,7 @@ public:
     QString                miscDir;
     QString                fileDataDir;
     QString                actualConfig;
+    QString                globalConfig;
 };
 
 DatabaseServer::DatabaseServer(const DbEngineParameters& params, DatabaseServerStarter* const parent)
@@ -106,6 +107,8 @@ DatabaseServer::DatabaseServer(const DbEngineParameters& params, DatabaseServerS
     d->miscDir              = QDir(defaultAkDir).absoluteFilePath(QLatin1String("db_misc"));
     d->fileDataDir          = QDir(defaultAkDir).absoluteFilePath(QLatin1String("file_db_data"));
     d->actualConfig         = QDir(defaultAkDir).absoluteFilePath(QLatin1String("mysql.conf"));
+    d->globalConfig         = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                     QLatin1String("digikam/database/mysql-global.conf"));
     databaseServerStateEnum = started;
 }
 
@@ -309,14 +312,12 @@ DatabaseServerError DatabaseServer::initMysqlConfig() const
 {
     DatabaseServerError result;
 
-    QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                  QLatin1String("digikam/database/mysql-global.conf"));
     QString localConfig  = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                                   QLatin1String("digikam/database/mysql-local.conf"));
 
-    if (!globalConfig.isEmpty())
+    if (!d->globalConfig.isEmpty())
     {
-        bool confUpdate = false;
+        bool confUpdate       = false;
         bool confShouldUpdate = false;
         QFile actualFile(d->actualConfig);
 
@@ -324,7 +325,7 @@ DatabaseServerError DatabaseServer::initMysqlConfig() const
         // If actual does not yet exist it was initialised with datetime 0
         // so it will get updated too
 
-        if ((QFileInfo(globalConfig).lastModified() > QFileInfo(actualFile).lastModified()) ||
+        if ((QFileInfo(d->globalConfig).lastModified() > QFileInfo(actualFile).lastModified()) ||
             (QFileInfo(localConfig).lastModified()  > QFileInfo(actualFile).lastModified()))
         {
             confShouldUpdate = true;
@@ -333,13 +334,13 @@ DatabaseServerError DatabaseServer::initMysqlConfig() const
                                                 << d->actualConfig
                                                 << "will be updated.";
 
-            QFile globalFile(globalConfig);
-            QFile localFile (localConfig);
+            QFile globalFile(d->globalConfig);
+            QFile localFile(localConfig);
 
             if (globalFile.open(QFile::ReadOnly) && actualFile.open(QFile::WriteOnly))
             {
                 actualFile.write(globalFile.readAll());
-                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Updated mysql configuration with" << globalConfig;
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Updated mysql configuration with" << d->globalConfig;
 
                 if (!localConfig.isEmpty() && localFile.open(QFile::ReadOnly))
                 {
@@ -376,7 +377,7 @@ DatabaseServerError DatabaseServer::initMysqlConfig() const
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Unable to create MySQL server configuration file."
                                                 << "This means that either the default configuration file"
-                                                << globalConfig
+                                                << d->globalConfig
                                                 << "was not readable or the target file"
                                                 << d->actualConfig
                                                 << "could not be written.";
@@ -387,7 +388,7 @@ DatabaseServerError DatabaseServer::initMysqlConfig() const
                                     "<p>was not readable or the target file</p>"
                                     "<p>%2</p>"
                                     "<p>could not be written.</p>",
-                                    globalConfig, d->actualConfig);
+                                    d->globalConfig, d->actualConfig);
 
             return DatabaseServerError(DatabaseServerError::StartError, errorMsg);
         }
@@ -454,7 +455,7 @@ DatabaseServerError DatabaseServer::createMysqlFiles() const
         mysqlInitCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--datadir=%1").arg(d->dataDir));
 
 #ifndef Q_OS_WIN
-        mysqlInitCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--defaults-file=%1").arg(d->actualConfig));
+        mysqlInitCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--defaults-file=%1").arg(d->globalConfig));
 #endif
 
         QProcess initProcess;
@@ -550,7 +551,7 @@ DatabaseServerError DatabaseServer::initMysqlDatabase() const
         bool opened = false;
         bool exited = false;
 
-        for (int i = 0; i < 120; ++i)
+        for (int i = 0 ; i < 120 ; ++i)
         {
             opened = db.open();
 
@@ -589,7 +590,7 @@ DatabaseServerError DatabaseServer::initMysqlDatabase() const
 
         QSqlQuery query(db);
 
-        if (!query.exec(QString::fromLatin1("USE %1").arg(d->internalDBName)))
+        if (!query.exec(QString::fromLatin1("USE %1;").arg(d->internalDBName)))
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Failed to use database"
                                                 << d->internalDBName;
@@ -599,7 +600,7 @@ DatabaseServerError DatabaseServer::initMysqlDatabase() const
                                                 << db.lastError().text();
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Trying to create database now";
 
-            if (query.exec(QLatin1String("CREATE DATABASE digikam")))
+            if (query.exec(QString::fromLatin1("CREATE DATABASE %1;").arg(d->internalDBName)))
             {
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database was successfully created";
             }

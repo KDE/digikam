@@ -38,6 +38,7 @@
 #include "tableview_columnfactory.h"
 #include "tableview_shared.h"
 #include "thumbnailloadthread.h"
+#include "groupingviewimplementation.h"
 
 class QMenu;
 class QContextMenuEvent;
@@ -49,7 +50,7 @@ namespace Digikam
 ///       of DragDropModelImplementation's functions in the TableViewModel or
 ///       in the sort model. Subclassing DragDropModelImplementation would not
 ///       work there, because we want to re-use ImageDragDropHandler...
-class TableViewTreeView : public QTreeView, public DragDropViewImplementation
+class TableViewTreeView : public QTreeView, public DragDropViewImplementation, public GroupingViewImplementation
 {
     Q_OBJECT
 
@@ -70,6 +71,8 @@ protected:
     virtual QModelIndex mapIndexForDragDrop(const QModelIndex& index) const;
     virtual QPixmap     pixmapForDrag(const QList<QModelIndex>& indexes) const;
     virtual void wheelEvent(QWheelEvent* event);
+
+    virtual bool hasHiddenGroupedImages(const ImageInfo& info) const;
 
 private:
 

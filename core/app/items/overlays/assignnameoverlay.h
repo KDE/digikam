@@ -81,7 +81,11 @@ protected:
 
     void updatePosition();
     void updateFace();
+/*
+private:
 
+    AssignNameOverlay() {}; // Disable default constructor.
+*/
 private:
 
     class Private;

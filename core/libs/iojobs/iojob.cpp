@@ -37,6 +37,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "imageinfo.h"
 #include "dtrash.h"
 #include "coredb.h"
 #include "coredbaccess.h"
@@ -408,15 +409,21 @@ DeleteDTrashItemsJob::DeleteDTrashItemsJob(const DTrashItemInfoList& infos)
 void DeleteDTrashItemsJob::run()
 {
     CoreDbAccess access;
+    QList<int> albumsFromImages;
+    QList<qlonglong> imagesToRemove;
 
     foreach (const DTrashItemInfo& item, m_dtrashItemInfoList)
     {
         QFile::remove(item.trashPath);
         QFile::remove(item.jsonFilePath);
-        // Set the status of the image id to obsolete, i.e. to remove.
+
+        imagesToRemove   << item.imageId;
+        albumsFromImages << ImageInfo(item.imageId).albumId();
+
         access.db()->removeAllImageRelationsFrom(item.imageId, DatabaseRelation::Grouped);
-        access.db()->setItemStatus(item.imageId, DatabaseItem::Status::Obsolete);
     }
+
+    access.db()->removeItemsPermanently(imagesToRemove, albumsFromImages);
 
     emit signalDone();
 }

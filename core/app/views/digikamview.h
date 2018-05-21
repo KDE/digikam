@@ -119,17 +119,12 @@ public:
     ImageInfoList allInfo(const ApplicationSettings::OperationType type) const;
 
     /**
-     * Query whether the operation to be performed on currently selected items
-     * (all=false, default) or all items in the currently active view (all=true)
-     * should be performed on all grouped items or just the first.
-     *
-     * @brief needGroupResolving
-     * @param type Type of operation to be performed.
-     * @param all Whether to apply to all items in the current view or just selected
-     * @return Whether to perform operation on all grouped items or just the first
+     * Query whether the operation to be performed on currently selected or all
+     * all items in the currently active view should be performed on all
+     * grouped items or just the first.
      */
-    bool needGroupResolving(const ApplicationSettings::OperationType type,
-                            const bool all = false) const;
+    bool allNeedGroupResolving(const ApplicationSettings::OperationType type)      const;
+    bool selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const;
 
     double zoomMin() const;
     double zoomMax() const;

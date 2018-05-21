@@ -39,6 +39,7 @@
 
 #include "advancedrenamedialog.h"
 #include "advancedrenameprocessdialog.h"
+#include "applicationsettings.h"
 #include "contextmenuhelper.h"
 #include "digikam_debug.h"
 #include "fileactionmngr.h"
@@ -183,7 +184,7 @@ void TableView::slotItemActivated(const QModelIndex& tableViewIndex)
         }
         else
         {
-            d->imageViewUtilities->openInfos(info, allInfo(), currentAlbum());
+            d->imageViewUtilities->openInfos(info, allImageInfos(), currentAlbum());
         }
     }
     else
@@ -264,14 +265,24 @@ ImageInfo TableView::currentInfo() const
     return s->tableViewModel->imageInfo(s->tableViewSelectionModel->currentIndex());
 }
 
-ImageInfoList TableView::allInfo(bool grouping) const
+ImageInfoList TableView::allImageInfos(bool grouping) const
 {
     if (grouping)
     {
-        return resolveGrouping(s->tableViewModel->allImageInfo());
+        return s->treeView->resolveGrouping(s->tableViewModel->allImageInfo());
     }
 
     return s->tableViewModel->allImageInfo();
+}
+
+bool TableView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
+{
+    return s->treeView->needGroupResolving(type, allImageInfos());
+}
+
+bool TableView::selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const
+{
+    return s->treeView->needGroupResolving(type, selectedImageInfos());
 }
 
 void TableView::slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMode)
@@ -343,19 +354,6 @@ void TableView::slotGroupingModeActionTriggered()
 
     const TableViewModel::GroupingMode newGroupingMode = senderAction->data().value<TableViewModel::GroupingMode>();
     s->tableViewModel->setGroupingMode(newGroupingMode);
-}
-
-QList<QUrl> TableView::allUrls(bool grouping) const
-{
-    const ImageInfoList infos = allInfo(grouping);
-    QList<QUrl> resultList;
-
-    foreach(const ImageInfo& info, infos)
-    {
-        resultList << info.fileUrl();
-    }
-
-    return resultList;
 }
 
 int TableView::numberOfSelectedItems() const
@@ -569,18 +567,14 @@ void TableView::slotSetActive(const bool isActive)
 
 ImageInfoList TableView::selectedImageInfos(bool grouping) const
 {
+    ImageInfoList infos = s->tableViewModel->imageInfos(s->tableViewSelectionModel->selectedRows());
     if (grouping) {
-        return resolveGrouping(s->tableViewSelectionModel->selectedRows());
+        return s->treeView->resolveGrouping(infos);
     }
-    return s->tableViewModel->imageInfos(s->tableViewSelectionModel->selectedRows());
+    return infos;
 }
 
-ImageInfoList TableView::selectedImageInfos(ApplicationSettings::OperationType type) const
-{
-    return selectedImageInfos(needGroupResolving(type));
-}
-
-QModelIndexList TableView::selectedIndexesCurrentFirst() const
+ImageInfoList TableView::selectedImageInfosCurrentFirst(bool grouping) const
 {
     QModelIndexList indexes   = s->tableViewSelectionModel->selectedRows();
     const QModelIndex current = s->tableViewModel->toCol0(s->tableViewSelectionModel->currentIndex());
@@ -596,100 +590,22 @@ QModelIndexList TableView::selectedIndexesCurrentFirst() const
         }
     }
 
-    return indexes;
-}
-
-ImageInfoList TableView::selectedImageInfosCurrentFirst(bool grouping) const
-{
     if (grouping) {
-        return resolveGrouping(selectedIndexesCurrentFirst());
+        return s->treeView->resolveGrouping(s->tableViewModel->imageInfos(indexes));
     }
-    return s->tableViewModel->imageInfos(selectedIndexesCurrentFirst());
-}
-
-QList<qlonglong> TableView::selectedImageIdsCurrentFirst(bool grouping) const
-{
-    return selectedImageInfosCurrentFirst(grouping).toImageIdList();
-}
-
-QList<QUrl> TableView::selectedUrls(bool grouping) const
-{
-    return selectedImageInfos(grouping).toImageUrlList();
-}
-
-ImageInfoList TableView::resolveGrouping(const QList<QModelIndex>& indexes) const
-{
-    return resolveGrouping(s->tableViewModel->imageInfos(indexes));
-}
-
-ImageInfoList TableView::resolveGrouping(const ImageInfoList& infos) const
-{
-    ImageInfoList out;
-
-    foreach(const ImageInfo& info, infos)
-    {
-        QModelIndex index = s->tableViewModel->indexFromImageId(info.id(), 0);
-
-        out << info;
-
-        if (info.hasGroupedImages()
-            && (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingHideGrouped
-                || (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingShowSubItems
-                    && !s->treeView->isExpanded(index))))
-        {
-            out << info.groupedImages();
-        }
-    }
-
-    return out;
-}
-
-bool TableView::needGroupResolving(ApplicationSettings::OperationType type, bool all) const
-{
-    ApplicationSettings::ApplyToEntireGroup applyAll =
-            ApplicationSettings::instance()->getGroupingOperateOnAll(type);
-
-    if (applyAll == ApplicationSettings::No)
-    {
-        return false;
-    }
-    else if (applyAll == ApplicationSettings::Yes)
-    {
-        return true;
-    }
-
-    ImageInfoList infos;
-
-    if (all)
-    {
-        infos = s->tableViewModel->allImageInfo();
-    }
-    else
-    {
-        infos = s->tableViewModel->imageInfos(s->tableViewSelectionModel->selectedRows());
-    }
-
-    foreach(const ImageInfo& info, infos)
-    {
-        QModelIndex index = s->tableViewModel->indexFromImageId(info.id(), 0);
-
-        if (info.hasGroupedImages()
-            && (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingHideGrouped
-                || (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingShowSubItems
-                    && !s->treeView->isExpanded(index))))
-        {
-            // Ask whether should be performed on all and return info if no
-            return ApplicationSettings::instance()->askGroupingOperateOnAll(type);
-        }
-    }
-
-    return false;
+    return s->tableViewModel->imageInfos(indexes);
 }
 
 void TableView::rename()
 {
-    bool grouping     = needGroupResolving(ApplicationSettings::Rename);
-    QList<QUrl>  urls = selectedUrls(grouping);
+    ImageInfoList infos = selectedImageInfos();
+    if (s->treeView->needGroupResolving(ApplicationSettings::Rename, infos))
+    {
+        infos = s->treeView->resolveGrouping(infos);
+    }
+
+    QList<QUrl>  urls = infos.toImageUrlList();
+
     bool loop         = false;
     NewNamesList newNamesList;
 
