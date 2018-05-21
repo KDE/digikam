@@ -52,7 +52,7 @@ QDebug operator<<(QDebug dbg, const DTrashItemInfo& info)
     dbg.nospace() << "\nCollectionPath: "    << info.collectionPath;
     dbg.nospace() << "\nRelativePath: "      << info.collectionRelativePath;
     dbg.nospace() << "\nDeletionTimestamp: " << info.deletionTimestamp.toString();
-    dbg.nospace() << "\nImage id: "          << QString::number(info.imageId);
+    dbg.nospace() << "\nImage id: "          << QString::number(info.imageId) << "\n";
     return dbg.space();
 }
 
