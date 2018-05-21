@@ -50,7 +50,6 @@ class AssignNameOverlay : public PersistentWidgetDelegateOverlay
 
 public:
 
-    AssignNameOverlay();
     explicit AssignNameOverlay(QObject* const parent);
     ~AssignNameOverlay();
 
@@ -85,7 +84,7 @@ protected:
 
 private:
 
-    void setup();
+    AssignNameOverlay() {}; // Disable default constructor.
 
 private:
 

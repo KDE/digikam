@@ -94,21 +94,9 @@ public:
     QPersistentModelIndex     index;
 };
 
-AssignNameOverlay::AssignNameOverlay()
-    : PersistentWidgetDelegateOverlay(0),
-      d(new Private)
-{
-    setup();
-}
-
 AssignNameOverlay::AssignNameOverlay(QObject* const parent)
     : PersistentWidgetDelegateOverlay(parent),
       d(new Private)
-{
-    setup();
-}
-
-void AssignNameOverlay::setup()
 {
     d->filteredModel.setSourceAlbumModel(&d->tagModel);
     d->filterModel.setSourceFilterModel(&d->filteredModel);
