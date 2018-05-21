@@ -303,32 +303,27 @@ ImageInfo ImageCategorizedView::imageInfo(const QModelIndex& index) const
     return d->filterModel->imageInfo(index);
 }
 
-ImageInfoList ImageCategorizedView::imageInfos(const QList<QModelIndex>& indexes,
-                                               ApplicationSettings::OperationType type) const
+ImageInfoList ImageCategorizedView::imageInfos(const QList<QModelIndex>& indexes) const
 {
-    return imageInfos(indexes, needGroupResolving(type, indexes));
-}
-
-ImageInfoList ImageCategorizedView::imageInfos(const QList<QModelIndex>& indexes, bool grouping) const
-{
-    if (grouping) {
-        return resolveGrouping(indexes);
-    }
     return d->filterModel->imageInfos(indexes);
 }
 
-ImageInfoList ImageCategorizedView::selectedImageInfos(bool grouping) const
+ImageInfoList ImageCategorizedView::allImageInfos() const
 {
-    return imageInfos(selectedIndexes(), grouping);
+    return d->filterModel->imageInfosSorted();
 }
 
-ImageInfoList ImageCategorizedView::selectedImageInfos(
-        ApplicationSettings::OperationType type) const
+QList<QUrl> ImageCategorizedView::allUrls() const
 {
-    return selectedImageInfos(needGroupResolving(type));
+    return allImageInfos().toImageUrlList();
 }
 
-ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst(bool grouping) const
+ImageInfoList ImageCategorizedView::selectedImageInfos() const
+{
+    return imageInfos(selectedIndexes());
+}
+
+ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst() const
 {
     QModelIndexList indexes   = selectedIndexes();
     const QModelIndex current = currentIndex();
@@ -344,59 +339,7 @@ ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst(bool grouping
         }
     }
 
-    if (grouping) {
-        return resolveGrouping(indexes);
-    }
     return imageInfos(indexes);
-}
-
-ImageInfoList ImageCategorizedView::allImageInfos(bool grouping) const
-{
-    if (grouping) {
-        return resolveGrouping(d->filterModel->imageInfosSorted());
-    }
-    return d->filterModel->imageInfosSorted();
-}
-
-QList<QUrl> ImageCategorizedView::allUrls(bool grouping) const
-{
-    ImageInfoList infos = allImageInfos(grouping);
-    QList<QUrl>   urls;
-
-    foreach(const ImageInfo& info, infos)
-    {
-        urls << info.fileUrl();
-    }
-
-    return urls;
-}
-
-bool ImageCategorizedView::needGroupResolving(ApplicationSettings::OperationType type, bool all) const
-{
-    if (all)
-    {
-        return needGroupResolving(type, allImageInfos());
-    }
-
-    return needGroupResolving(type, selectedIndexes());
-}
-
-QList<QUrl> ImageCategorizedView::selectedUrls(bool grouping) const
-{
-    ImageInfoList infos = selectedImageInfos(grouping);
-    QList<QUrl>   urls;
-
-    foreach(const ImageInfo& info, infos)
-    {
-        urls << info.fileUrl();
-    }
-
-    return urls;
-}
-
-QList<QUrl> ImageCategorizedView::selectedUrls(ApplicationSettings::OperationType type) const
-{
-    return selectedUrls(needGroupResolving(type));
 }
 
 void ImageCategorizedView::toIndex(const QUrl& url)
@@ -763,61 +706,6 @@ void ImageCategorizedView::showContextMenuOnIndex(QContextMenuEvent* event, cons
 void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const ImageInfo&)
 {
     // implemented in subclass
-}
-
-ImageInfoList ImageCategorizedView::resolveGrouping(const QModelIndexList& indexes) const
-{
-    return resolveGrouping(imageInfos(indexes));
-}
-
-ImageInfoList ImageCategorizedView::resolveGrouping(const ImageInfoList& infos) const
-{
-    ImageInfoList outInfos;
-
-    foreach(const ImageInfo& info, infos)
-    {
-        outInfos << info;
-
-        if (info.hasGroupedImages() && !imageFilterModel()->isGroupOpen(info.id()))
-        {
-            outInfos << info.groupedImages();
-        }
-    }
-
-    return outInfos;
-}
-
-bool ImageCategorizedView::needGroupResolving(ApplicationSettings::OperationType type,
-                                              const QList<QModelIndex>& indexes) const
-{
-    return needGroupResolving(type, imageInfos(indexes));
-}
-
-bool ImageCategorizedView::needGroupResolving(ApplicationSettings::OperationType type,
-                                              const ImageInfoList& infos) const
-{
-    ApplicationSettings::ApplyToEntireGroup applyAll =
-            ApplicationSettings::instance()->getGroupingOperateOnAll(type);
-
-    if (applyAll == ApplicationSettings::No)
-    {
-        return false;
-    }
-    else if (applyAll == ApplicationSettings::Yes)
-    {
-        return true;
-    }
-
-    foreach(const ImageInfo& info, infos)
-    {
-        if (info.hasGroupedImages() && !imageFilterModel()->isGroupOpen(info.id()))
-        {
-            // Ask whether should be performed on all and return info if no
-            return ApplicationSettings::instance()->askGroupingOperateOnAll(type);
-        }
-    }
-
-    return false;
 }
 
 void ImageCategorizedView::paintEvent(QPaintEvent* e)

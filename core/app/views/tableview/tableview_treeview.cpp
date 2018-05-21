@@ -330,6 +330,14 @@ void TableViewTreeView::wheelEvent(QWheelEvent* event)
     QTreeView::wheelEvent(event);
 }
 
+bool TableViewTreeView::hasHiddenGroupedImages(const ImageInfo& info) const
+{
+        return (info.hasGroupedImages()
+            && (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingHideGrouped
+                || (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingShowSubItems
+                    && !s->treeView->isExpanded(s->tableViewModel->indexFromImageId(info.id(), 0)))));
+}
+
 void TableViewTreeView::slotModelGroupingModeChanged()
 {
     setRootIsDecorated(s->tableViewModel->groupingMode()==TableViewModel::GroupingShowSubItems);

@@ -179,6 +179,46 @@ void DigikamImageView::setThumbnailSize(const ThumbnailSize& size)
     ImageCategorizedView::setThumbnailSize(size);
 }
 
+ImageInfoList DigikamImageView::allImageInfos(bool grouping) const
+{
+    if (grouping)
+    {
+        return resolveGrouping(ImageCategorizedView::allImageInfos());
+    }
+
+    return ImageCategorizedView::allImageInfos();
+}
+
+ImageInfoList DigikamImageView::selectedImageInfos(bool grouping) const
+{
+    if (grouping)
+    {
+        return resolveGrouping(ImageCategorizedView::selectedImageInfos());
+    }
+
+    return ImageCategorizedView::selectedImageInfos();
+}
+
+ImageInfoList DigikamImageView::selectedImageInfosCurrentFirst(bool grouping) const
+{
+    if (grouping)
+    {
+        return resolveGrouping(ImageCategorizedView::selectedImageInfosCurrentFirst());
+    }
+
+    return ImageCategorizedView::selectedImageInfosCurrentFirst();
+}
+
+bool DigikamImageView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
+{
+    return needGroupResolving(type, allImageInfos());
+}
+
+bool DigikamImageView::selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const
+{
+    return needGroupResolving(type, selectedImageInfos());
+}
+
 int DigikamImageView::fitToWidthIcons()
 {
     return delegate()->calculatethumbSizeToFit(viewport()->size().width());
@@ -193,6 +233,24 @@ void DigikamImageView::slotSetupChanged()
     d->updateOverlays();
 
     ImageCategorizedView::slotSetupChanged();
+}
+
+bool DigikamImageView::hasHiddenGroupedImages(const ImageInfo& info) const
+{
+    return info.hasGroupedImages() && !imageFilterModel()->isGroupOpen(info.id());
+}
+
+ImageInfoList DigikamImageView::imageInfos(const QList<QModelIndex>& indexes,
+                                           ApplicationSettings::OperationType type) const
+{
+    ImageInfoList infos = ImageCategorizedView::imageInfos(indexes);
+
+    if (needGroupResolving(type, infos))
+    {
+        return resolveGrouping(infos);
+    }
+
+    return infos;
 }
 
 void DigikamImageView::setFaceMode(bool on)
@@ -389,8 +447,12 @@ void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 
 void DigikamImageView::rename()
 {
-    bool grouping     = needGroupResolving(ApplicationSettings::Rename);
-    QList<QUrl>  urls = selectedUrls(grouping);
+    ImageInfoList infos = selectedImageInfos();
+    if (needGroupResolving(ApplicationSettings::Rename, infos))
+    {
+        infos = resolveGrouping(infos);
+    }
+    QList<QUrl>  urls = infos.toImageUrlList();
     bool loop         = false;
     NewNamesList newNamesList;
 
@@ -409,7 +471,7 @@ void DigikamImageView::rename()
 
         if (!loop)
         {
-            QUrl nextUrl = nextInOrder(selectedImageInfos(grouping).last(), 1).fileUrl();
+            QUrl nextUrl = nextInOrder(infos.last(),1).fileUrl();
             setCurrentUrl(nextUrl);
             loop = true;
         }
