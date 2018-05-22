@@ -109,7 +109,7 @@ void BackendOsmRG::nextPhoto()
     if (d->jobs.isEmpty())
         return;
 
-    QUrl netUrl(QLatin1String("http://nominatim.openstreetmap.org/reverse"));
+    QUrl netUrl(QLatin1String("https://nominatim.openstreetmap.org/reverse"));
 
     QUrlQuery q(netUrl);
     q.addQueryItem(QLatin1String("format"), QLatin1String("xml"));
