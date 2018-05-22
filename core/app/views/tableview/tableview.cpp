@@ -599,6 +599,7 @@ ImageInfoList TableView::selectedImageInfosCurrentFirst(bool grouping) const
 void TableView::rename()
 {
     ImageInfoList infos = selectedImageInfos();
+
     if (s->treeView->needGroupResolving(ApplicationSettings::Rename, infos))
     {
         infos = s->treeView->resolveGrouping(infos);

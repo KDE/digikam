@@ -448,10 +448,12 @@ void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 void DigikamImageView::rename()
 {
     ImageInfoList infos = selectedImageInfos();
+
     if (needGroupResolving(ApplicationSettings::Rename, infos))
     {
         infos = resolveGrouping(infos);
     }
+
     QList<QUrl>  urls = infos.toImageUrlList();
     bool loop         = false;
     NewNamesList newNamesList;
@@ -471,7 +473,7 @@ void DigikamImageView::rename()
 
         if (!loop)
         {
-            QUrl nextUrl = nextInOrder(infos.last(),1).fileUrl();
+            QUrl nextUrl = nextInOrder(infos.last(), 1).fileUrl();
             setCurrentUrl(nextUrl);
             loop = true;
         }

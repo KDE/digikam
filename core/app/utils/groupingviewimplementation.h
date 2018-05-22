@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VIEWGROUPINGIMPLEMENTATION_H
-#define VIEWGROUPINGIMPLEMENTATION_H
+#ifndef DIGIKAM_VIEW_GROUPING_IMPLEMENTATION_H
+#define DIGIKAM_VIEW_GROUPING_IMPLEMENTATION_H
 
 // Local includes
 
@@ -37,6 +37,7 @@ class ImageInfoList;
 
 class DIGIKAM_EXPORT GroupingViewImplementation
 {
+
 public:
 
     virtual ~GroupingViewImplementation() {}
@@ -45,11 +46,12 @@ public:
     virtual bool hasHiddenGroupedImages(const ImageInfo&) const {return false;}
 
     bool          needGroupResolving(ApplicationSettings::OperationType type,
-                                     const ImageInfoList& infos) const;
-    ImageInfoList resolveGrouping(const ImageInfoList& infos) const;
+                                     const ImageInfoList& infos)    const;
+
+    ImageInfoList resolveGrouping(const ImageInfoList& infos)       const;
     ImageInfoList getHiddenGroupedInfos(const ImageInfoList& infos) const;
 };
 
 } // namespace Digikam
 
-#endif /* VIEWGROUPINGIMPLEMENTATION_H */
+#endif // DIGIKAM_VIEW_GROUPING_IMPLEMENTATION_H

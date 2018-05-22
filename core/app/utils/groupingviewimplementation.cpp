@@ -23,13 +23,13 @@
 
 #include "groupingviewimplementation.h"
 
-// Local includes
-
-#include "imageinfolist.h"
-
 // Qt includes
 
 #include <QMimeData>
+
+// Local includes
+
+#include "imageinfolist.h"
 
 namespace Digikam
 {
