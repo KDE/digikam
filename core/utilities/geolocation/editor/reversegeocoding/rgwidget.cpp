@@ -210,7 +210,7 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
     d->tagTreeView->setHeaderHidden(true);
     vBoxLayout->addWidget(d->tagTreeView);
 
-    Q_ASSERT(d->tagTreeView!=0);
+    Q_ASSERT(d->tagTreeView != 0);
 
     if (!externTagModel)
         externTagModel = new SimpleTreeModel(1, this);
@@ -269,9 +269,8 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
 
     IPTCProperties::CountryCodeMap map = IPTCProperties::countryCodeMap();
 
-    for (IPTCProperties::CountryCodeMap::Iterator it = map.begin(); it != map.end(); ++it)
+    for (IPTCProperties::CountryCodeMap::Iterator it = map.begin() ; it != map.end() ; ++it)
     {
-
         d->languageEdit->addItem(QString::fromUtf8("%1 - %2").arg(it.key()).arg(it.value()), it.key().toLower());
     }
 
@@ -282,13 +281,10 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
     d->serviceComboBox->addItem(i18n("Geonames.org place name (non-US)"));
     d->serviceComboBox->addItem(i18n("Geonames.org full address (US only)"));
 
-    int row = 0;
-    gridLayout->addWidget(d->serviceLabel,row,0,1,2);
-    row++;
-    gridLayout->addWidget(d->serviceComboBox,row,0,1,2);
-    row++;
-    gridLayout->addWidget(d->languageLabel,row,0,1,1);
-    gridLayout->addWidget(d->languageEdit,row,1,1,1);
+    gridLayout->addWidget(d->serviceLabel,    0, 0, 1, 2);
+    gridLayout->addWidget(d->serviceComboBox, 1, 0, 1, 2);
+    gridLayout->addWidget(d->languageLabel,   2, 0, 1, 1);
+    gridLayout->addWidget(d->languageEdit,    2, 1, 1, 1);
 
     d->UGridContainer->setLayout(gridLayout);
 
@@ -303,8 +299,8 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
     QGridLayout* const LGridLayout = new QGridLayout(d->LGridContainer);
 
     d->xmpLoc = new QCheckBox( i18n("Write tags to XMP"), d->LGridContainer);
-    row       = 0;
-    LGridLayout->addWidget(d->xmpLoc,row,0,1,3);
+
+    LGridLayout->addWidget(d->xmpLoc, 0, 0, 1, 3);
 
     d->LGridContainer->setLayout(LGridLayout);
 
@@ -388,7 +384,7 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
     connect(d->actionRemoveAllSpacers, SIGNAL(triggered(bool)),
             this, SLOT(slotRemoveAllSpacers()));
 
-    for (int i = 0; i < d->backendRGList.count(); ++i)
+    for (int i = 0 ; i < d->backendRGList.count() ; ++i)
     {
         connect(d->backendRGList[i], SIGNAL(signalRGReady(QList<RGInfo>&)),
                 this, SLOT(slotRGReady(QList<RGInfo>&)));
@@ -438,7 +434,7 @@ void RGWidget::slotButtonRGSelected()
     QString wantedLanguage                 = d->languageEdit->itemData(d->languageEdit->currentIndex()).toString();
     QList<QList<TagData> > returnedSpacers = d->tagModel->getSpacers();
 
-    for ( int i = 0; i < selectedItems.count(); ++i)
+    for ( int i = 0 ; i < selectedItems.count() ; ++i)
     {
         const QPersistentModelIndex itemIndex = selectedItems.at(i);
         GPSImageItem* const selectedItem      = d->imageModel->itemFromIndex(itemIndex);
@@ -510,7 +506,7 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
 
     QString address;
 
-    for (int i = 0; i < returnedRGList.count(); ++i)
+    for (int i = 0 ; i < returnedRGList.count() ; ++i)
     {
         QPersistentModelIndex currentImageIndex = returnedRGList[i].id;
 
@@ -536,16 +532,16 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
             QString addressElements    = combinedResult[1];
 
             //removes first "/" from tag addresses
-            addressFormat.remove(0,1);
-            addressElements.remove(0,1);
-            addressElementsWantedFormat.remove(0,1);
+            addressFormat.remove(0, 1);
+            addressElements.remove(0, 1);
+            addressElementsWantedFormat.remove(0, 1);
 
             const QStringList listAddressElementsWantedFormat = addressElementsWantedFormat.split(QLatin1Char('/'));
             const QStringList listAddressElements             = addressElements.split(QLatin1Char('/'));
             const QStringList listAddressFormat               = addressFormat.split(QLatin1Char('/'));
             QStringList elements, resultedData;
 
-            for (int i = 0; i < listAddressElementsWantedFormat.count(); ++i)
+            for (int i = 0 ; i < listAddressElementsWantedFormat.count() ; ++i)
             {
                 QString currentAddressFormat = listAddressElementsWantedFormat.at(i);
                 int currentIndexFormat       = listAddressFormat.indexOf(currentAddressFormat,0);
@@ -577,19 +573,19 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
         if (d->currentlyAskingCancelQuestion)
         {
             // if the user is currently answering the cancel question, do nothing, only report progress
-            emit(signalProgressChanged(d->receivedRGCount));
+            emit signalProgressChanged(d->receivedRGCount);
         }
         else
         {
-            emit(signalUndoCommand(d->undoCommand));
+            emit signalUndoCommand(d->undoCommand);
             d->undoCommand = 0;
 
-            emit(signalSetUIEnabled(true));
+            emit signalSetUIEnabled(true);
         }
     }
     else
     {
-        emit(signalProgressChanged(d->receivedRGCount));
+        emit signalProgressChanged(d->receivedRGCount);
     }
 }
 
@@ -637,13 +633,13 @@ bool RGWidget::eventFilter(QObject* watched, QEvent* event)
                 menu->addAction(d->actionAddStreet);
                 menu->addAction(d->actionAddHouseNumber);
             }
-            else if ( backendName == QString::fromLatin1("Geonames"))
+            else if (backendName == QString::fromLatin1("Geonames"))
             {
                 menu->addAction(d->actionAddAllAddressElementsToTag);
                 menu->addAction(d->actionAddCountry);
                 menu->addAction(d->actionAddPlace);
             }
-            else if ( backendName == QString::fromLatin1("GeonamesUS"))
+            else if (backendName == QString::fromLatin1("GeonamesUS"))
             {
                 menu->addAction(d->actionAddAllAddressElementsToTag);
                 menu->addAction(d->actionAddLAU2);
@@ -684,7 +680,7 @@ void RGWidget::saveSettingsToGroup(KConfigGroup* const group)
     const int spacerCount                    = currentSpacerList.count();
     group->writeEntry("Spacers count", spacerCount);
 
-    for (int i = 0; i < currentSpacerList.count(); ++i)
+    for (int i = 0 ; i < currentSpacerList.count() ; ++i)
     {
         QString spacerName;
         spacerName.append(QString::fromLatin1("Spacerlistname %1").arg(i));
@@ -694,7 +690,7 @@ void RGWidget::saveSettingsToGroup(KConfigGroup* const group)
         QStringList spacerTagNames;
         QStringList spacerTypes;
 
-        for (int j = 0; j < currentSpacerList[i].count(); ++j)
+        for (int j = 0 ; j < currentSpacerList[i].count() ; ++j)
         {
             spacerTagNames.append(currentSpacerList[i].at(j).tagName);
 
@@ -726,13 +722,13 @@ void RGWidget::readSettingsFromGroup(const KConfigGroup* const group)
     const int spacerCount = group->readEntry("Spacers count", 0);
     QList<QList<TagData> > spacersList;
 
-    for (int i = 0; i < spacerCount; ++i)
+    for (int i = 0 ; i < spacerCount ; ++i)
     {
         QStringList spacerTagNames = group->readEntry(QString::fromLatin1("Spacerlistname %1").arg(i), QStringList());
         QStringList spacerTypes    = group->readEntry(QString::fromLatin1("Spacerlisttype %1").arg(i), QStringList());
         QList<TagData> currentSpacerAddress;
 
-        for (int j = 0; j < spacerTagNames.count(); ++j)
+        for (int j = 0 ; j < spacerTagNames.count() ; ++j)
         {
             TagData currentTagData;
             currentTagData.tagName = spacerTagNames.at(j);
@@ -804,7 +800,7 @@ void RGWidget::slotAddCustomizedSpacer()
                                                i18n("Select a name for the new tag:"),
                                                QLineEdit::Normal, QString(), &ok);
 
-    if ( ok && !textString.isEmpty() )
+    if (ok && !textString.isEmpty())
     {
         d->tagModel->addSpacerTag(baseIndex, textString);
     }
@@ -845,7 +841,7 @@ void RGWidget::slotRemoveAllSpacers()
  */
 void RGWidget::slotReaddNewTags()
 {
-    for (int row = 0; row < d->imageModel->rowCount(); ++row)
+    for (int row = 0 ; row < d->imageModel->rowCount() ; ++row)
     {
         GPSImageItem* const currentItem     = d->imageModel->itemFromIndex(d->imageModel->index(row, 0));
         QList<QList<TagData> > tagAddresses = currentItem->getTagList();
@@ -927,7 +923,7 @@ void RGWidget::slotRGCanceled()
         return;
     }
 
-    if (d->receivedRGCount>0)
+    if (d->receivedRGCount > 0)
     {
         // Before we abort, ask the user whether he wants to discard
         // the information obtained so far.
@@ -937,14 +933,14 @@ void RGWidget::slotRGCanceled()
         //            This means that RG might finish while we ask the question!!!
         d->currentlyAskingCancelQuestion = true;
 
-        const QString question = i18n("%1 out of %2 images have been reverse geocoded. Would you like to keep the tags which were already obtained or discard them?",
+        const QString question = i18n("%1 out of %2 images have been reverse geocoded. "
+                                      "Would you like to keep the tags which were "
+                                      "already obtained or discard them?",
                                       d->receivedRGCount, d->requestedRGCount);
 
-        const int result = DMessageBox::showYesNo(QMessageBox::Warning,
-                                                  this,
+        const int result = DMessageBox::showYesNo(QMessageBox::Warning, this,
                                                   i18n("Abort reverse geocoding?"),
-                                                  question
-                                                 );
+                                                  question);
 
         d->currentlyAskingCancelQuestion = false;
 
@@ -979,7 +975,7 @@ void RGWidget::slotRGCanceled()
         {
             if (d->undoCommand)
             {
-                emit(signalUndoCommand(d->undoCommand));
+                emit signalUndoCommand(d->undoCommand);
                 d->undoCommand = 0;
             }
         }
@@ -994,7 +990,7 @@ void RGWidget::slotRGCanceled()
         d->undoCommand = 0;
     }
 
-    emit(signalSetUIEnabled(true));
+    emit signalSetUIEnabled(true);
 }
 
 } // namespace Digikam

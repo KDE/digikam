@@ -140,11 +140,11 @@ void BackendOsmRG::callRGBackend(const QList<RGInfo>& rgList, const QString& lan
 {
     d->errorMessage.clear();
 
-    for ( int i = 0; i < rgList.count(); ++i)
+    for ( int i = 0 ; i < rgList.count() ; ++i)
     {
         bool foundIt = false;
 
-        for ( int j = 0; j < d->jobs.count(); ++j)
+        for ( int j = 0 ; j < d->jobs.count() ; ++j)
         {
             if (d->jobs[j].request.first().coordinates.sameLonLatAs(rgList[i].coordinates))
             {
@@ -235,13 +235,13 @@ void BackendOsmRG::slotFinished(QNetworkReply* reply)
     if (reply->error() != QNetworkReply::NoError)
     {
         d->errorMessage = reply->errorString();
-        emit(signalRGReady(d->jobs.first().request));
+        emit signalRGReady(d->jobs.first().request);
         d->jobs.clear();
 
         return;
     }
 
-    for (int i = 0; i < d->jobs.count(); ++i)
+    for (int i = 0 ; i < d->jobs.count() ; ++i)
     {
         if (d->jobs.at(i).netReply == reply)
         {
@@ -250,23 +250,23 @@ void BackendOsmRG::slotFinished(QNetworkReply* reply)
         }
     }
 
-    for (int i = 0; i < d->jobs.count(); ++i)
+    for (int i = 0 ; i < d->jobs.count() ; ++i)
     {
         if (d->jobs.at(i).netReply == reply)
         {
             QString dataString;
-            dataString = QString::fromUtf8(d->jobs[i].data.constData(),qstrlen(d->jobs[i].data.constData()));
+            dataString = QString::fromUtf8(d->jobs[i].data.constData(), qstrlen(d->jobs[i].data.constData()));
             int pos    = dataString.indexOf(QLatin1String("<reversegeocode"));
-            dataString.remove(0,pos);
+            dataString.remove(0, pos);
 
             QMap<QString, QString> resultMap = makeQMapFromXML(dataString);
 
-            for (int j = 0; j < d->jobs[i].request.count(); ++j)
+            for (int j = 0 ; j < d->jobs[i].request.count() ; ++j)
             {
                 d->jobs[i].request[j].rgData = resultMap;
             }
 
-            emit(signalRGReady(d->jobs[i].request));
+            emit signalRGReady(d->jobs[i].request);
 
             d->jobs.removeAt(i);
 
