@@ -87,9 +87,8 @@ void CopyOrMoveJob::run()
         // Checking if there is a file with the same name in destination folder
         QString destenationName = srcInfo.isFile() ? srcInfo.fileName() : srcInfo.dir().dirName();
         QString destenation     = dstDir.path() + QLatin1Char('/') + destenationName;
-        QFileInfo fileInfoForDestination(destenation);
 
-        if (fileInfoForDestination.exists())
+        if (QFileInfo::exists(destenation))
         {
             emit signalError(i18n("A file or folder named %1 already exists in %2",
                                   srcInfo.baseName(), QDir::toNativeSeparators(dstDir.path())));
@@ -295,7 +294,7 @@ void RenameFileJob::run()
 
         qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url:" << destUrl;
 
-        if (QFileInfo(destUrl.toLocalFile()).exists())
+        if (QFileInfo::exists(destUrl.toLocalFile()))
         {
             if (m_data->overwrite())
             {
