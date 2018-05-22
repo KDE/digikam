@@ -454,8 +454,8 @@ void DigikamImageView::rename()
         infos = resolveGrouping(infos);
     }
 
-    QList<QUrl>  urls = infos.toImageUrlList();
-    bool loop         = false;
+    QList<QUrl> urls = infos.toImageUrlList();
+    bool loop        = false;
     NewNamesList newNamesList;
 
     do
