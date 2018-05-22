@@ -2,6 +2,7 @@
 Type=Theme
 Name=Simple Slideshow
 Name[ca]=Passi de diapositives senzill
+Name[ca@valencia]=Passe de diapositives senzill
 Name[es]=Presentación sencilla
 Name[nl]=Eenvoudige diavoorstelling
 Name[pt]=Apresentação Simples
@@ -10,6 +11,7 @@ Name[uk]=Простий показ слайдів
 Name[x-test]=xxSimple Slideshowxx
 Comment=A slideshow designed for a kiosk-mode display. Generated from a simple template with javascript and css embedded into a single index.html file.
 Comment[ca]=Un passi de diapositives dissenyat per a una pantalla en mode kiosk. Generat des d'una plantilla senzilla amb Javascript i CSS incrustat en un únic fitxer «index.html».
+Comment[ca@valencia]=Un passe de diapositives dissenyat per a una pantalla en mode kiosk. Generat des d'una plantilla senzilla amb Javascript i CSS incrustat en un únic fitxer «index.html».
 Comment[es]=Una presentación diseñada para una pantalla en modo kiosko. Generada a partir de una sencilla plantilla con JavaScript y CSS integrados en un único archivo index.html.
 Comment[nl]=Een diavoorstelling ontworpen voor een weergave in modus kiosk. Gegenereerd uit een eenvoudig sjabloon met javascript en css, ingebed in een enkel index.html bestand.
 Comment[pt]=Uma apresentação desenhada para uma visualização em modo quiosque. Gerada a partir de um modelo simples com JavaScript e CSS incorporados num único ficheiro 'index.html'.
@@ -20,6 +22,7 @@ Comment[x-test]=xxA slideshow designed for a kiosk-mode display. Generated from 
 [X-HTMLGallery Author]
 Name=Simon Kuss
 Name[ca]=Simon Kuss
+Name[ca@valencia]=Simon Kuss
 Name[es]=Simon Kuss
 Name[nl]=Simon Kuss
 Name[pt]=Simon Kuss
@@ -31,6 +34,7 @@ Url=mailto:sjk281@iinet.net.au
 [X-HTMLGallery Parameter delay]
 Name=Time between slides (seconds)
 Name[ca]=Temps entre diapositives (segons)
+Name[ca@valencia]=Temps entre diapositives (segons)
 Name[es]=Tiempo entre diapositivas (segundos)
 Name[nl]=Tijd tussen dia's (seconden)
 Name[pt]=Tempo entre 'slides' (segundos)
@@ -45,6 +49,7 @@ Max=300
 [X-HTMLGallery Parameter controls]
 Name=Location of controls
 Name[ca]=Ubicació dels controls
+Name[ca@valencia]=Ubicació dels controls
 Name[es]=Ubicación de los controles
 Name[nl]=Locatie van besturing
 Name[pt]=Localização dos controlos
@@ -63,6 +68,7 @@ Caption-2=None
 [X-HTMLGallery Preview]
 Name=Simple Slideshow
 Name[ca]=Passi de diapositives senzill
+Name[ca@valencia]=Passe de diapositives senzill
 Name[es]=Presentación sencilla
 Name[nl]=Eenvoudige diavoorstelling
 Name[pt]=Apresentação Simples
