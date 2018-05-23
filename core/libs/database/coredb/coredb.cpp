@@ -369,7 +369,7 @@ QList<AlbumShortInfo> CoreDB::getAlbumShortInfos()
 {
     QList<QVariant> values;
 
-    d->db->execSql(QString::fromUtf8("SELECT Albums.id, Albums.relativePath, Albums.albumRoot from Albums ORDER BY Albums.id; "),
+    d->db->execSql(QString::fromUtf8("SELECT Albums.id, Albums.relativePath, Albums.albumRoot from Albums ORDER BY Albums.id;"),
                    &values);
 
     QList<AlbumShortInfo> albumList;
@@ -2041,7 +2041,7 @@ QList<CommentInfo> CoreDB::getImageComments(qlonglong imageID)
 }
 
 int CoreDB::setImageComment(qlonglong imageID, const QString& comment, DatabaseComment::Type type,
-                             const QString& language, const QString& author, const QDateTime& date)
+                            const QString& language, const QString& author, const QDateTime& date)
 {
     QVariantList boundValues;
     boundValues << imageID << (int)type << language << author << date << comment;
@@ -2162,8 +2162,8 @@ QList<CopyrightInfo> CoreDB::getImageCopyright(qlonglong imageID, const QString&
 }
 
 void CoreDB::setImageCopyrightProperty(qlonglong imageID, const QString& property,
-                                        const QString& value, const QString& extraValue,
-                                        CopyrightPropertyUnique uniqueness)
+                                       const QString& value, const QString& extraValue,
+                                       CopyrightPropertyUnique uniqueness)
 {
     if (uniqueness == PropertyUnique)
     {
@@ -2185,7 +2185,7 @@ void CoreDB::setImageCopyrightProperty(qlonglong imageID, const QString& propert
 }
 
 void CoreDB::removeImageCopyrightProperties(qlonglong imageID, const QString& property,
-                                             const QString& extraValue, const QString& value)
+                                            const QString& extraValue, const QString& value)
 {
     int removeBy = 0;
 
@@ -2642,7 +2642,7 @@ QStringList CoreDB::getDirtyOrMissingFaceImageUrls()
                                      " WHERE Images.status=1 AND Images.category=1 AND "
                                      " ( ImageScannedMatrix.imageid IS NULL "
                                      "   OR Images.modificationDate != ImageScannedMatrix.modificationDate "
-                                     "   OR Images.uniqueHash != ImageScannedMatrix.uniqueHash ); "),
+                                     "   OR Images.uniqueHash != ImageScannedMatrix.uniqueHash );"),
                    &values);
 
     QStringList urls;
@@ -2707,7 +2707,7 @@ QList<ItemScanInfo> CoreDB::getIdenticalFiles(const QString& uniqueHash, qlonglo
 
     // find items with same fingerprint
     d->db->execSql(QString::fromUtf8("SELECT id, album, name, status, category, modificationDate, fileSize FROM Images "
-                           " WHERE fileSize=? AND uniqueHash=? AND album IS NOT NULL; "),
+                           " WHERE fileSize=? AND uniqueHash=? AND album IS NOT NULL;"),
                    fileSize, uniqueHash,
                    &values);
 
@@ -4449,6 +4449,11 @@ void CoreDB::deleteItem(int albumID, const QString& file)
 {
     qlonglong imageId = getImageId(albumID, file);
 
+    if (imageId == -1)
+    {
+        return;
+    }
+
     d->db->execSql(QString::fromUtf8("DELETE FROM Images WHERE id=?;"),
                    imageId);
 
@@ -4621,7 +4626,7 @@ void CoreDB::moveItem(int srcAlbumID, const QString& srcName,
 }
 
 int CoreDB::copyItem(int srcAlbumID, const QString& srcName,
-                      int dstAlbumID, const QString& dstName)
+                     int dstAlbumID, const QString& dstName)
 {
     // find id of src image
     qlonglong srcId = getImageId(srcAlbumID, srcName);
