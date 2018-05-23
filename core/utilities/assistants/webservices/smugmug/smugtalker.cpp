@@ -33,6 +33,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QApplication>
+#include <QDesktopServices>
 #include <QCryptographicHash>
 #include <QUrlQuery>
 #include <QNetworkReply>
@@ -44,6 +45,9 @@
 #include "digikam_version.h"
 #include "smugmpform.h"
 #include "smugitem.h"
+
+// O2 includes
+#include "wstoolutils.h"
 
 namespace Digikam
 {
@@ -77,13 +81,19 @@ public:
         //userAgent  = QString::fromLatin1("KIPI-Plugin-Smug/%1 (lure@kubuntu.org)").arg(kipipluginsVersion());
         userAgent  = QString::fromLatin1("digiKam/%1 (digikamdeveloper@gmail.com)").arg(digiKamVersion());
 
-        apiVersion = QString::fromLatin1("1.2.2");
-        apiURL     = QString::fromLatin1("https://api.smugmug.com/services/api/rest/%1/").arg(apiVersion);
-        apiKey     = QString::fromLatin1("R83lTcD4TvMsIiXqpdrA9OdIJ22uA4Wi");
-        iface      = 0;
-        netMngr    = 0;
-        reply      = 0;
-        state      = SMUG_LOGOUT;
+        apiVersion   = QString::fromLatin1("1.2.2");
+        apiURL       = QString::fromLatin1("https://api.smugmug.com/services/api/rest/%1/").arg(apiVersion);
+        apiKey       = QString::fromLatin1("P3GR322MB4rf3dZRxDZNFv8cbK6sLPdV");
+        clientSecret = QString::fromLatin1("trJrZT3pHQRpZB8Z3LMGCL39g9q7nWJPBzZTQSWhzCnmTmtqqW5xxXdBn6fVhM3p");
+        iface        = 0;
+        netMngr      = 0;
+        reply        = 0;
+        state        = SMUG_LOGOUT;
+        
+        // TODO: Port to O2
+        store        = 0;
+        requestor    = 0;
+        o1           = 0;
     }
 
 public:
@@ -96,6 +106,7 @@ public:
     QString                apiURL;
     QString                apiVersion;
     QString                apiKey;
+    QString                clientSecret;
     QString                sessionID;
 
     SmugUser               user;
@@ -106,6 +117,12 @@ public:
     QNetworkReply*         reply;
 
     State                  state;
+    
+    // TODO: Port Smugmug to O2
+    QSettings*             settings;    
+    O0SettingsStore*       store;
+    O1Requestor*           requestor;
+    O1SmugMug*             o1;
 };
 
 SmugTalker::SmugTalker(DInfoInterface* const iface, QWidget* const parent)
@@ -117,6 +134,35 @@ SmugTalker::SmugTalker(DInfoInterface* const iface, QWidget* const parent)
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
+    
+            //TODO: Init O1Smugmug
+            d->o1 = new O1SmugMug(this, d->netMngr);
+            d->o1->setClientId(d->apiKey);
+            d->o1->setClientSecret(d->clientSecret);
+
+            // Setting to store oauth config
+            d->settings = WSToolUtils::getOauthSettings(this);
+            d->store    = new O0SettingsStore(d->settings, QLatin1String(O2_ENCRYPTION_KEY), this);
+            d->store->setGroupKey(QLatin1String("Smugmug"));
+            d->o1->setStore(d->store);
+            
+            // Set local port for callbackUrl
+            //d->o1->setLocalPort(8000);
+            
+            // Connect signaux slots
+            connect(d->o1, SIGNAL(linkingFailed()),
+                    this, SLOT(slotLinkingFailed()));
+            
+            connect(d->o1, SIGNAL(linkingSucceeded()),
+                    this, SLOT(slotLinkingSucceeded()));
+            
+            connect(d->o1, SIGNAL(openBrowser(QUrl)),
+                    this, SLOT(slotOpenBrowser(QUrl)));
+            
+            connect(d->o1, SIGNAL(closeBrowser()),
+                    this, SLOT(slotCloseBrowser()));
+            
+            d->requestor = new O1Requestor(d->netMngr, d->o1, this);
 }
 
 SmugTalker::~SmugTalker()
@@ -137,10 +183,67 @@ SmugTalker::~SmugTalker()
     delete d;
 }
 
-bool SmugTalker::loggedIn() const
-{
-    return !d->sessionID.isEmpty();
-}
+//TODO: Porting to O2
+        void SmugTalker::link()
+        {
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Smug ";
+            d->o1->link();
+        }
+        
+        void SmugTalker::unlink()
+        {
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Smug ";
+            d->o1->unlink();
+            
+            removeUserName(d->user.displayName);
+        }
+        
+        void SmugTalker::removeUserName(const QString& userName)
+        {
+//             if (userName.startsWith(d->serviceName))
+//             {
+//                 d->settings->beginGroup(userName);
+//                 d->settings->remove(QString());
+//                 d->settings->endGroup();
+//             }
+        }
+
+        bool SmugTalker::loggedIn() const
+        {
+            //return !d->sessionID.isEmpty();
+            return d->o1->linked();
+        }
+        
+        void SmugTalker::slotLinkingFailed()
+        {
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Smug fail";
+            emit signalBusy(false);
+        }
+        
+        void SmugTalker::slotLinkingSucceeded()
+        {
+            if (!d->o1->linked())
+            {
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Smug ok";
+                emit signalBusy(false);
+                return;
+            }
+            
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Smug ok";
+            //emit signalLinkingSucceeded();
+        }
+        
+        void SmugTalker::slotOpenBrowser(const QUrl& url)
+        {
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Open Browser...";
+            QDesktopServices::openUrl(url);
+        }
+        
+        void SmugTalker::slotCloseBrowser()
+        {
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Close Browser...";
+        }
+        
 
 SmugUser SmugTalker::getUser() const
 {
@@ -158,72 +261,75 @@ void SmugTalker::cancel()
     emit signalBusy(false);
 }
 
-void SmugTalker::login(const QString& email, const QString& password)
-{
-    if (d->reply)
-    {
-        d->reply->abort();
-        d->reply = 0;
-    }
+//TODO: Port to O2 here
+        void SmugTalker::login(const QString& email, const QString& password)
+        {
+            if (d->reply)
+            {
+                d->reply->abort();
+                d->reply = 0;
+            }
 
-    emit signalBusy(true);
-    emit signalLoginProgress(1, 4, i18n("Logging in to SmugMug service..."));
+            emit signalBusy(true);
+            emit signalLoginProgress(1, 4, i18n("Logging in to SmugMug service..."));
 
-    QUrl url(d->apiURL);
-    QUrlQuery q;
+            //d->initAuthorizationUrl()
+            
+            QUrl url(d->apiURL);
+            QUrlQuery q;
 
-    if (email.isEmpty())
-    {
-        q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.login.anonymously"));
-        q.addQueryItem(QString::fromLatin1("APIKey"),       d->apiKey);
-    }
-    else
-    {
-        q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.login.withPassword"));
-        q.addQueryItem(QString::fromLatin1("APIKey"),       d->apiKey);
-        q.addQueryItem(QString::fromLatin1("EmailAddress"), email);
-        q.addQueryItem(QString::fromLatin1("Password"),     password);
-    }
+            if (email.isEmpty())
+            {
+                q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.login.anonymously"));
+                q.addQueryItem(QString::fromLatin1("APIKey"),       d->apiKey);
+            }
+            else
+            {
+                q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.login.withPassword"));
+                q.addQueryItem(QString::fromLatin1("APIKey"),       d->apiKey);
+                q.addQueryItem(QString::fromLatin1("EmailAddress"), email);
+                q.addQueryItem(QString::fromLatin1("Password"),     password);
+            }
 
-    url.setQuery(q);
+            url.setQuery(q);
 
-    QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
+            QNetworkRequest netRequest(url);
+            netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
+            netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    d->reply = d->netMngr->get(netRequest);
+            d->reply = d->netMngr->get(netRequest);
 
-    d->state = Private::SMUG_LOGIN;
-    d->buffer.resize(0);
+            d->state = Private::SMUG_LOGIN;
+            d->buffer.resize(0);
 
-    d->user.email = email;
-}
+            d->user.email = email;
+        }
 
-void SmugTalker::logout()
-{
-    if (d->reply)
-    {
-        d->reply->abort();
-        d->reply = 0;
-    }
+        void SmugTalker::logout()
+        {
+            if (d->reply)
+            {
+                d->reply->abort();
+                d->reply = 0;
+            }
 
-    emit signalBusy(true);
+            emit signalBusy(true);
 
-    QUrl url(d->apiURL);
-    QUrlQuery q;
-    q.addQueryItem(QString::fromLatin1("method"),    QString::fromLatin1("smugmug.logout"));
-    q.addQueryItem(QString::fromLatin1("SessionID"), d->sessionID);
-    url.setQuery(q);
+            QUrl url(d->apiURL);
+            QUrlQuery q;
+            q.addQueryItem(QString::fromLatin1("method"),    QString::fromLatin1("smugmug.logout"));
+            q.addQueryItem(QString::fromLatin1("SessionID"), d->sessionID);
+            url.setQuery(q);
 
-    QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
+            QNetworkRequest netRequest(url);
+            netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
+            netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    d->reply = d->netMngr->get(netRequest);
+            d->reply = d->netMngr->get(netRequest);
 
-    d->state = Private::SMUG_LOGOUT;
-    d->buffer.resize(0);
-}
+            d->state = Private::SMUG_LOGOUT;
+            d->buffer.resize(0);
+        }
 
 void SmugTalker::listAlbums(const QString& nickName)
 {
@@ -536,86 +642,87 @@ QString SmugTalker::errorToText(int errCode, const QString& errMsg) const
     return transError;
 }
 
-void SmugTalker::slotFinished(QNetworkReply* reply)
-{
-    if (reply != d->reply)
-    {
-        return;
-    }
-
-    d->reply = 0;
-
-    if (reply->error() != QNetworkReply::NoError)
-    {
-        if (d->state == Private::SMUG_LOGIN)
+//TODO: Ported to O2 here
+        void SmugTalker::slotFinished(QNetworkReply* reply)
         {
-            d->sessionID.clear();
-            d->user.clear();
+            if (reply != d->reply)
+            {
+                return;
+            }
 
-            emit signalBusy(false);
-            emit signalLoginDone(reply->error(), reply->errorString());
+            d->reply = 0;
+
+            if (reply->error() != QNetworkReply::NoError)
+            {
+                if (d->state == Private::SMUG_LOGIN)
+                {
+                    d->sessionID.clear();
+                    d->user.clear();
+
+                    emit signalBusy(false);
+                    emit signalLoginDone(reply->error(), reply->errorString());
+                }
+                else if (d->state == Private::SMUG_ADDPHOTO)
+                {
+                    emit signalBusy(false);
+                    emit signalAddPhotoDone(reply->error(), reply->errorString());
+                }
+                else if (d->state == Private::SMUG_GETPHOTO)
+                {
+                    emit signalBusy(false);
+                    emit signalGetPhotoDone(reply->error(), reply->errorString(), QByteArray());
+                }
+                else
+                {
+                    emit signalBusy(false);
+                    QMessageBox::critical(QApplication::activeWindow(),
+                                        i18n("Error"), reply->errorString());
+                }
+
+                reply->deleteLater();
+                return;
+            }
+
+            d->buffer.append(reply->readAll());
+
+            switch(d->state)
+            {
+                case (Private::SMUG_LOGIN):
+                    parseResponseLogin(d->buffer);
+                    break;
+                case (Private::SMUG_LOGOUT):
+                    parseResponseLogout(d->buffer);
+                    break;
+                case (Private::SMUG_LISTALBUMS):
+                    parseResponseListAlbums(d->buffer);
+                    break;
+                case (Private::SMUG_LISTPHOTOS):
+                    parseResponseListPhotos(d->buffer);
+                    break;
+                case (Private::SMUG_LISTALBUMTEMPLATES):
+                    parseResponseListAlbumTmpl(d->buffer);
+                    break;
+                case (Private::SMUG_LISTCATEGORIES):
+                    parseResponseListCategories(d->buffer);
+                    break;
+                case (Private::SMUG_LISTSUBCATEGORIES):
+                    parseResponseListSubCategories(d->buffer);
+                    break;
+                case (Private::SMUG_CREATEALBUM):
+                    parseResponseCreateAlbum(d->buffer);
+                    break;
+                case (Private::SMUG_ADDPHOTO):
+                    parseResponseAddPhoto(d->buffer);
+                    break;
+                case (Private::SMUG_GETPHOTO):
+                    // all we get is data of the image
+                    emit signalBusy(false);
+                    emit signalGetPhotoDone(0, QString(), d->buffer);
+                    break;
+            }
+
+            reply->deleteLater();
         }
-        else if (d->state == Private::SMUG_ADDPHOTO)
-        {
-            emit signalBusy(false);
-            emit signalAddPhotoDone(reply->error(), reply->errorString());
-        }
-        else if (d->state == Private::SMUG_GETPHOTO)
-        {
-            emit signalBusy(false);
-            emit signalGetPhotoDone(reply->error(), reply->errorString(), QByteArray());
-        }
-        else
-        {
-            emit signalBusy(false);
-            QMessageBox::critical(QApplication::activeWindow(),
-                                  i18n("Error"), reply->errorString());
-        }
-
-        reply->deleteLater();
-        return;
-    }
-
-    d->buffer.append(reply->readAll());
-
-    switch(d->state)
-    {
-        case (Private::SMUG_LOGIN):
-            parseResponseLogin(d->buffer);
-            break;
-        case (Private::SMUG_LOGOUT):
-            parseResponseLogout(d->buffer);
-            break;
-        case (Private::SMUG_LISTALBUMS):
-            parseResponseListAlbums(d->buffer);
-            break;
-        case (Private::SMUG_LISTPHOTOS):
-            parseResponseListPhotos(d->buffer);
-            break;
-        case (Private::SMUG_LISTALBUMTEMPLATES):
-            parseResponseListAlbumTmpl(d->buffer);
-            break;
-        case (Private::SMUG_LISTCATEGORIES):
-            parseResponseListCategories(d->buffer);
-            break;
-        case (Private::SMUG_LISTSUBCATEGORIES):
-            parseResponseListSubCategories(d->buffer);
-            break;
-        case (Private::SMUG_CREATEALBUM):
-            parseResponseCreateAlbum(d->buffer);
-            break;
-        case (Private::SMUG_ADDPHOTO):
-            parseResponseAddPhoto(d->buffer);
-            break;
-        case (Private::SMUG_GETPHOTO):
-            // all we get is data of the image
-            emit signalBusy(false);
-            emit signalGetPhotoDone(0, QString(), d->buffer);
-            break;
-    }
-
-    reply->deleteLater();
-}
 
 void SmugTalker::parseResponseLogin(const QByteArray& data)
 {

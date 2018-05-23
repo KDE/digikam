@@ -225,26 +225,28 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
     buttonStateChange(d->talker->loggedIn());
 
-    if (d->import)
-    {
-        // if no e-mail, switch to anonymous login
-        if (d->anonymousImport || d->email.isEmpty())
-        {
-            d->anonymousImport = true;
-            authenticate();
-        }
-        else
-            authenticate(d->email, d->password);
-        d->widget->setAnonymous(d->anonymousImport);
-    }
-    else
-    {
-        // export cannot login anonymously: pop-up login window`
-        if (d->email.isEmpty())
-            slotUserChangeRequest(false);
-        else
-            authenticate(d->email, d->password);
-    }
+    d->talker->link();
+    
+//     if (d->import)
+//     {
+//         // if no e-mail, switch to anonymous login
+//         if (d->anonymousImport || d->email.isEmpty())
+//         {
+//             d->anonymousImport = true;
+//             authenticate();
+//         }
+//         else
+//             authenticate(d->email, d->password);
+//         d->widget->setAnonymous(d->anonymousImport);
+//     }
+//     else
+//     {
+//         // export cannot login anonymously: pop-up login window`
+//         if (d->email.isEmpty())
+//             slotUserChangeRequest(false);
+//         else
+//             authenticate(d->email, d->password);
+//     }
 }
 
 SmugWindow::~SmugWindow()
@@ -318,7 +320,8 @@ void SmugWindow::authenticate(const QString& email, const QString& password)
     setUiInProgressState(true);
     d->widget->progressBar()->setFormat(QString());
 
-    d->talker->login(email, password);
+    //d->talker->login(email, password);
+    d->talker->link();
 }
 
 void SmugWindow::readSettings()

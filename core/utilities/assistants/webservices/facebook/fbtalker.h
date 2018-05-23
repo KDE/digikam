@@ -38,6 +38,11 @@
 
 #include "fbitem.h"
 
+// O2 include
+
+#include "o2.h"
+#include "o0globals.h"
+
 class QDomElement;
 
 namespace Digikam
@@ -59,9 +64,11 @@ public:
 
     bool    loggedIn() const;
     void    cancel();
-    void    authenticate(const QString& accessToken,  unsigned int sessionExpires);
+    void    authenticate();
     void    exchangeSession(const QString& sessionKey);
     void    logout();
+    void    link();
+    void    unlink();
 
     void    listAlbums(long long userID = 0);
 
@@ -72,34 +79,37 @@ public:
 
 Q_SIGNALS:
 
-    void signalBusy(bool val);
-    void signalLoginProgress(int step, int maxStep = 0, const QString& label = QString());
-    void signalLoginDone(int errCode, const QString& errMsg);
-    void signalAddPhotoDone(int errCode, const QString& errMsg);
-    void signalCreateAlbumDone(int errCode, const QString& errMsg, const QString &newAlbumID);
-    void signalListAlbumsDone(int errCode, const QString& errMsg, const QList <FbAlbum>& albumsList);
+    void    signalBusy(bool val);
+    void    signalLoginProgress(int step, int maxStep = 0, const QString& label = QString());
+    void    signalLoginDone(int errCode, const QString& errMsg);
+    void    signalAddPhotoDone(int errCode, const QString& errMsg);
+    void    signalCreateAlbumDone(int errCode, const QString& errMsg, const QString &newAlbumID);
+    void    signalListAlbumsDone(int errCode, const QString& errMsg, const QList <FbAlbum>& albumsList);
 
 private:
 
     //QString getApiSig(const QMap<QString, QString>& args);
-    QString getCallString(const QMap<QString, QString>& args);
     void    authenticationDone(int errCode, const QString& errMsg);
     void    doOAuth();
     void    getLoggedInUser();
 
     QString errorToText(int errCode, const QString& errMsg);
-    int parseErrorResponse(const QDomElement& e, QString& errMsg);
-    void parseExchangeSession(const QByteArray& data);
-    void parseResponseGetLoggedInUser(const QByteArray& data);
-    void parseResponseAddPhoto(const QByteArray& data);
-    void parseResponseCreateAlbum(const QByteArray& data);
-    void parseResponseListAlbums(const QByteArray& data);
+    int     parseErrorResponse(const QDomElement& e, QString& errMsg);
+    void    parseExchangeSession(const QByteArray& data);
+    void    parseResponseGetLoggedInUser(const QByteArray& data);
+    void    parseResponseAddPhoto(const QByteArray& data);
+    void    parseResponseCreateAlbum(const QByteArray& data);
+    void    parseResponseListAlbums(const QByteArray& data);
 
 private Q_SLOTS:
-
-    void slotFinished(QNetworkReply* reply);
-    void slotAccept();
-    void slotReject();
+    
+    void    slotFinished(QNetworkReply* reply);
+    void    slotAccept();
+    void    slotReject();
+    void    slotLinkingFailed();
+    void    slotLinkingSucceeded();
+    void    slotOpenBrowser(const QUrl& url);
+//     void    slotCloseBrowser();
 
 private:
 

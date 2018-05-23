@@ -130,70 +130,70 @@ bool GSTalkerBase::authenticated() const
 
     return true;
 }
+        //TODO: Port to O2
+        /**
+        * Starts authentication by opening the browser
+        */
+        void GSTalkerBase::doOAuth()
+        {
+            QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/auth"));
+            QUrlQuery urlQuery;
+            urlQuery.addQueryItem(QString::fromLatin1("scope"),         m_scope);
+            urlQuery.addQueryItem(QString::fromLatin1("redirect_uri"),  d->redirectUri);
+            urlQuery.addQueryItem(QString::fromLatin1("response_type"), d->responseType);
+            urlQuery.addQueryItem(QString::fromLatin1("client_id"),     d->clientId);
+            urlQuery.addQueryItem(QString::fromLatin1("access_type"),   QString::fromLatin1("offline"));
+            url.setQuery(urlQuery);
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "OAuth URL: " << url;
+            QDesktopServices::openUrl(url);
 
-/**
- * Starts authentication by opening the browser
- */
-void GSTalkerBase::doOAuth()
-{
-    QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/auth"));
-    QUrlQuery urlQuery;
-    urlQuery.addQueryItem(QString::fromLatin1("scope"),         m_scope);
-    urlQuery.addQueryItem(QString::fromLatin1("redirect_uri"),  d->redirectUri);
-    urlQuery.addQueryItem(QString::fromLatin1("response_type"), d->responseType);
-    urlQuery.addQueryItem(QString::fromLatin1("client_id"),     d->clientId);
-    urlQuery.addQueryItem(QString::fromLatin1("access_type"),   QString::fromLatin1("offline"));
-    url.setQuery(urlQuery);
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "OAuth URL: " << url;
-    QDesktopServices::openUrl(url);
+            emit signalBusy(false);
 
-    emit signalBusy(false);
+            d->window = new QDialog(QApplication::activeWindow(),0);
+            d->window->setModal(true);
+            d->window->setWindowTitle(i18n("Google Drive Authorization"));
 
-    d->window = new QDialog(QApplication::activeWindow(),0);
-    d->window->setModal(true);
-    d->window->setWindowTitle(i18n("Google Drive Authorization"));
+            QDialogButtonBox* const buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+            QPushButton* const okButton       = buttonBox->button(QDialogButtonBox::Ok);
+            okButton->setDefault(true);
 
-    QDialogButtonBox* const buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
-    QPushButton* const okButton       = buttonBox->button(QDialogButtonBox::Ok);
-    okButton->setDefault(true);
+            d->window->connect(buttonBox, SIGNAL(accepted()),
+                            this, SLOT(slotAccept()));
 
-    d->window->connect(buttonBox, SIGNAL(accepted()),
-                      this, SLOT(slotAccept()));
+            d->window->connect(buttonBox, SIGNAL(rejected()),
+                            this, SLOT(slotReject()));
 
-    d->window->connect(buttonBox, SIGNAL(rejected()),
-                      this, SLOT(slotReject()));
+            QLineEdit* const textbox      = new QLineEdit();
+            QPlainTextEdit* const infobox = new QPlainTextEdit(i18n("Please follow the instructions in the browser. "
+                                                                    "After logging in and authorizing the application, "
+                                                                    "copy the code from the browser, paste it in the "
+                                                                    "textbox below, and click OK."));
+            QVBoxLayout* const layout = new QVBoxLayout;
+            d->window->setLayout(layout);
+            infobox->setReadOnly(true);
+            layout->addWidget(infobox);
+            layout->addWidget(textbox);
+            layout->addWidget(buttonBox);
 
-    QLineEdit* const textbox      = new QLineEdit();
-    QPlainTextEdit* const infobox = new QPlainTextEdit(i18n("Please follow the instructions in the browser. "
-                                                            "After logging in and authorizing the application, "
-                                                            "copy the code from the browser, paste it in the "
-                                                            "textbox below, and click OK."));
-    QVBoxLayout* const layout = new QVBoxLayout;
-    d->window->setLayout(layout);
-    infobox->setReadOnly(true);
-    layout->addWidget(infobox);
-    layout->addWidget(textbox);
-    layout->addWidget(buttonBox);
+            d->window->exec();
 
-    d->window->exec();
+            if (d->window->result() == QDialog::Accepted && !(textbox->text().isEmpty()))
+            {
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "1";
+                d->code = textbox->text();
+            }
 
-    if (d->window->result() == QDialog::Accepted && !(textbox->text().isEmpty()))
-    {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "1";
-        d->code = textbox->text();
-    }
+            if (textbox->text().isEmpty())
+            {
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "3";
+                emit signalTextBoxEmpty();
+            }
 
-    if (textbox->text().isEmpty())
-    {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "3";
-        emit signalTextBoxEmpty();
-    }
-
-    if (d->code != QString::fromLatin1("0"))
-    {
-        getAccessToken();
-    }
-}
+            if (d->code != QString::fromLatin1("0"))
+            {
+                getAccessToken();
+            }
+        }
 
 void GSTalkerBase::slotAccept()
 {
@@ -206,64 +206,64 @@ void GSTalkerBase::slotReject()
     d->window->close();
     d->window->setResult(QDialog::Rejected);
 }
+        //TODO: Port to O2
+        /**
+        * Gets access token from googledrive after authentication by user
+        */
+        void GSTalkerBase::getAccessToken()
+        {
+            QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/token?"));
+            QUrlQuery urlQuery;
+            urlQuery.addQueryItem(QString::fromLatin1("scope"),         m_scope);
+            urlQuery.addQueryItem(QString::fromLatin1("response_type"), d->responseType);
+            urlQuery.addQueryItem(QString::fromLatin1("token_uri"),     d->tokenUri);
+            url.setQuery(urlQuery);
+            QByteArray postData;
+            postData = "code=";
+            postData += d->code.toLatin1();
+            postData += "&client_id=";
+            postData += d->clientId.toLatin1();
+            postData += "&client_secret=";
+            postData += d->clientSecret.toLatin1();
+            postData += "&redirect_uri=";
+            postData += d->redirectUri.toLatin1();
+            postData += "&grant_type=authorization_code";
 
-/**
- * Gets access token from googledrive after authentication by user
- */
-void GSTalkerBase::getAccessToken()
-{
-    QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/token?"));
-    QUrlQuery urlQuery;
-    urlQuery.addQueryItem(QString::fromLatin1("scope"),         m_scope);
-    urlQuery.addQueryItem(QString::fromLatin1("response_type"), d->responseType);
-    urlQuery.addQueryItem(QString::fromLatin1("token_uri"),     d->tokenUri);
-    url.setQuery(urlQuery);
-    QByteArray postData;
-    postData = "code=";
-    postData += d->code.toLatin1();
-    postData += "&client_id=";
-    postData += d->clientId.toLatin1();
-    postData += "&client_secret=";
-    postData += d->clientSecret.toLatin1();
-    postData += "&redirect_uri=";
-    postData += d->redirectUri.toLatin1();
-    postData += "&grant_type=authorization_code";
+            QNetworkRequest netRequest(url);
+            netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
 
-    QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
+            m_reply = d->netMngr->post(netRequest, postData);
 
-    m_reply = d->netMngr->post(netRequest, postData);
+            d->authState = Private::GS_ACCESSTOKEN;
+            m_buffer.resize(0);
+            emit signalBusy(true);
+        }
 
-    d->authState = Private::GS_ACCESSTOKEN;
-    m_buffer.resize(0);
-    emit signalBusy(true);
-}
+        /**
+        * Gets access token from refresh token for handling login of user across digikam sessions
+        */
+        void GSTalkerBase::getAccessTokenFromRefreshToken(const QString& msg)
+        {
+            QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/token"));
 
-/**
- * Gets access token from refresh token for handling login of user across digikam sessions
- */
-void GSTalkerBase::getAccessTokenFromRefreshToken(const QString& msg)
-{
-    QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/token"));
+            QByteArray postData;
+            postData = "&client_id=";
+            postData += d->clientId.toLatin1();
+            postData += "&client_secret=";
+            postData += d->clientSecret.toLatin1();
+            postData += "&refresh_token=";
+            postData += msg.toLatin1();
+            postData += "&grant_type=refresh_token";
 
-    QByteArray postData;
-    postData = "&client_id=";
-    postData += d->clientId.toLatin1();
-    postData += "&client_secret=";
-    postData += d->clientSecret.toLatin1();
-    postData += "&refresh_token=";
-    postData += msg.toLatin1();
-    postData += "&grant_type=refresh_token";
+            QNetworkRequest netRequest(url);
+            netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
 
-    QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
+            m_reply = d->netMngr->post(netRequest, postData);
 
-    m_reply = d->netMngr->post(netRequest, postData);
-
-    d->authState = Private::GS_REFRESHTOKEN;
-    m_buffer.resize(0);
-    emit signalBusy(true);
-}
+            d->authState = Private::GS_REFRESHTOKEN;
+            m_buffer.resize(0);
+            emit signalBusy(true);
+        }
 
 void GSTalkerBase::slotAuthFinished(QNetworkReply* reply)
 {

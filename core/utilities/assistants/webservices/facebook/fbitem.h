@@ -63,7 +63,7 @@ enum FbPrivacy
     FB_ME = 0,
     FB_FRIENDS = 1,
     FB_FRIENDS_OF_FRIENDS,
-    FB_NETWORKS,
+    FB_NETWORKS, /*not exist following https://developers.facebook.com/docs/graph-api/using-graph-api/common-scenarios ???*/
     FB_EVERYONE,
     FB_CUSTOM
 };

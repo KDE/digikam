@@ -35,6 +35,12 @@
 #include "smugitem.h"
 #include "dinfointerface.h"
 
+// O2 include
+#include "o0globals.h"
+#include "o0settingsstore.h"
+#include "o1smugmug.h"
+#include "o1requestor.h"
+
 class QNetworkReply;
 
 namespace Digikam
@@ -51,14 +57,21 @@ public:
 
 public:
 
+            
     SmugUser getUser() const;
-
+            
     bool    loggedIn() const;
     void    cancel();
-    void    login(const QString& email = QString(),
-                  const QString& password = QString());
-    void    logout();
+    
+            //TODO: Port to O2
+            void    link();
+            void    unlink();
+            void    removeUserName(const QString& userName);
+            void    login(const QString& email = QString(),
+                        const QString& password = QString());
+            void    logout();
 
+    
     void    listAlbums(const QString& nickName = QString());
     void    listPhotos(qint64 albumID,
                        const QString& albumKey,
@@ -81,9 +94,11 @@ Q_SIGNALS:
 
     void signalBusy(bool val);
     void signalLoginProgress(int step,
-                             int maxStep = 0,
-                             const QString& label = QString());
+                            int maxStep = 0,
+                            const QString& label = QString());
     void signalLoginDone(int errCode, const QString& errMsg);
+    
+    
     void signalAddPhotoDone(int errCode, const QString& errMsg);
     void signalGetPhotoDone(int errCode, const QString& errMsg,
                             const QByteArray& photoData);
@@ -115,8 +130,12 @@ private:
     void parseResponseListSubCategories(const QByteArray& data);
 
 private Q_SLOTS:
-
-    void slotFinished(QNetworkReply* reply);
+            //TODO: Port to O2
+            void slotFinished(QNetworkReply* reply);
+            void slotLinkingFailed();
+            void slotLinkingSucceeded();
+            void slotOpenBrowser(const QUrl& url);
+            void slotCloseBrowser();
 
 private:
 

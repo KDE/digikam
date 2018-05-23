@@ -185,11 +185,11 @@ FbWindow::FbWindow(DInfoInterface* const iface,
             this, SLOT(slotStopAndCloseProgressBar()));
 
     // ------------------------------------------------------------------------
-
     readSettings();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
     buttonStateChange(d->talker->loggedIn());
+    
     authenticate();
 }
 
@@ -329,8 +329,8 @@ void FbWindow::authenticate()
     }
     else
     {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
-        d->talker->authenticate(d->accessToken, d->sessionExpires);
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method ";
+        d->talker->authenticate();
     }
 }
 
