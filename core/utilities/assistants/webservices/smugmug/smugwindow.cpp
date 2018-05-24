@@ -224,7 +224,7 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
     buttonStateChange(d->talker->loggedIn());
-
+    
     d->talker->link();
     
 //     if (d->import)
@@ -320,8 +320,8 @@ void SmugWindow::authenticate(const QString& email, const QString& password)
     setUiInProgressState(true);
     d->widget->progressBar()->setFormat(QString());
 
-    //d->talker->login(email, password);
-    d->talker->link();
+//     d->talker->login(email, password);
+//     d->talker->link();
 }
 
 void SmugWindow::readSettings()

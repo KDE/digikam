@@ -34,6 +34,10 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 
+// O2 includes
+
+#include "o2.h"
+
 namespace Digikam
 {
 
@@ -43,11 +47,13 @@ class GSTalkerBase : public QObject
 
 public:
 
-    explicit GSTalkerBase(QWidget* const parent, const QString& scope);
+    explicit GSTalkerBase(QWidget* const parent, const QString& scope, const QString& serviceName);
     ~GSTalkerBase();
 
 public:
 
+    void        link();
+    void        unlink();
     void        doOAuth();
     void        getAccessToken();
     void        getAccessTokenFromRefreshToken(const QString& msg);
@@ -64,12 +70,16 @@ Q_SIGNALS:
     void signalAccessTokenObtained();
     void signalTextBoxEmpty();
     void signalRefreshTokenObtained(const QString& msg);
+    void signalLinkingSucceeded();
 
 private Q_SLOTS:
 
     void slotAuthFinished(QNetworkReply* reply);
     void slotAccept();
     void slotReject();
+    void slotLinkingSucceeded();
+    void slotLinkingFailed();
+    void slotOpenBrowser(const QUrl&);
 
 protected:
 
@@ -81,6 +91,7 @@ protected:
     QByteArray     m_buffer;
 
     QNetworkReply* m_reply;
+    QString        m_serviceName;
 
 private:
 

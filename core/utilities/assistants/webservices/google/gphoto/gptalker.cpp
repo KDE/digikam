@@ -101,7 +101,7 @@ public:
 };
 
 GPTalker::GPTalker(QWidget* const parent)
-    : GSTalkerBase(parent, QString::fromLatin1("https://picasaweb.google.com/data/")),
+: GSTalkerBase(parent, QString::fromLatin1("https://picasaweb.google.com/data/"), QLatin1String("GooglePhotos")),
       d(new Private)
 {
     m_reply   = 0;

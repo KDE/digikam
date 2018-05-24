@@ -37,7 +37,6 @@
 
 // O2 include
 #include "o0globals.h"
-#include "o0settingsstore.h"
 #include "o1smugmug.h"
 #include "o1requestor.h"
 

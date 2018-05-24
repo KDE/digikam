@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2015      by Shourya Singh Gupta <shouryasgupta at gmail dot com>
  * Copyright (C) 2015-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,6 +44,7 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QUrlQuery>
+#include <QSettings>
 
 // KDE includes
 
@@ -53,6 +55,12 @@
 
 #include "gdmpform.h"
 #include "digikam_debug.h"
+
+// O2 includes
+
+#include "o0globals.h"
+#include "o0settingsstore.h"
+#include "wstoolutils.h"
 
 namespace Digikam
 {
@@ -73,11 +81,16 @@ public:
     {
         parent       = 0;
         netMngr      = 0;
+        
         redirectUri  = QString::fromLatin1("urn:ietf:wg:oauth:2.0:oob");
         responseType = QString::fromLatin1("code");
-        clientId     = QString::fromLatin1("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
-        tokenUri     = QString::fromLatin1("https://accounts.google.com/o/oauth2/token");
+        apikey       = QString::fromLatin1("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
         clientSecret = QString::fromLatin1("4MJOS0u1-_AUEKJ0ObA-j22U");
+        
+        authUrl      = QLatin1String("https://accounts.google.com/o/oauth2/auth");
+        tokenUrl     = QLatin1String("https://accounts.google.com/o/oauth2/token");
+        refreshUrl   = QLatin1String("https://accounts.google.com/o/oauth2/token");
+        
         code         = QString::fromLatin1("0");
         continuePos  = 0;
         authState    = GS_ACCESSTOKEN;
@@ -89,9 +102,14 @@ public:
     QWidget*               parent;
 
     AuthState              authState;
-    QString                tokenUri;
+    
+    QString                authUrl;
+    QString                tokenUrl;
+    QString                refreshUrl;
+    
+    QString                apikey;
     QString                clientSecret;
-    QString                clientId;
+    
     QString                responseType;
     QString                redirectUri;
     QString                code;
@@ -99,99 +117,203 @@ public:
     QDialog*               window;
 
     QNetworkAccessManager* netMngr;
+    O2*                    o2;
+    QSettings*             settings;
 };
 
-GSTalkerBase::GSTalkerBase(QWidget* const parent, const QString & scope)
+GSTalkerBase::GSTalkerBase(QWidget* const parent, const QString & scope, const QString& serviceName)
     : d(new Private)
 {
-    m_reply    = 0;
-    m_scope    = scope;
-    d->parent  = parent;
-    d->netMngr = new QNetworkAccessManager(this);
+    m_reply         = 0;
+    m_scope         = scope;
+    m_serviceName   = serviceName;
+    d->parent       = parent;
+    d->netMngr      = new QNetworkAccessManager(this);
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotAuthFinished(QNetworkReply*)));
+    
+    //Ported to O2
+    
+    d->o2 = new O2(this);
+    d->o2->setClientId(d->apikey);
+    d->o2->setClientSecret(d->clientSecret);
+    
+    // OAuth2 flow control 
+    d->o2->setRequestUrl(d->authUrl);
+    d->o2->setTokenUrl(d->tokenUrl);
+    d->o2->setRefreshTokenUrl(d->refreshUrl);
+    d->o2->setLocalPort(8000);
+    d->o2->setGrantFlow(O2::GrantFlow::GrantFlowAuthorizationCode);
+    d->o2->setScope(m_scope);
+    
+    // OAuth configuration saved to between dk sessions
+    d->settings                  = WSToolUtils::getOauthSettings(this);
+    O0SettingsStore* const store = new O0SettingsStore(d->settings, QLatin1String(O2_ENCRYPTION_KEY), this);
+    store->setGroupKey(m_serviceName);
+    d->o2->setStore(store);
+    
+    // Refresh token permission when offline
+    QMap<QString, QVariant> extraParams;
+    extraParams.insert("access_type", "offline");
+    d->o2->setExtraRequestParams(extraParams);
+    
+    connect(d->o2, SIGNAL(linkingSucceeded()),
+            this, SLOT(slotLinkingSucceeded()));
+    connect(this, SIGNAL(signalLinkingSucceeded()),
+            this, SLOT(slotLinkingSucceeded()));
+    connect(d->o2, SIGNAL(linkingFailed()),
+            this, SLOT(slotLinkingFailed()));
+    connect(d->o2, SIGNAL(openBrowser(QUrl)),
+            this, SLOT(slotOpenBrowser(QUrl)));
+
 }
 
 GSTalkerBase::~GSTalkerBase()
-{
+{  
     if (m_reply)
         m_reply->abort();
 
     delete d;
 }
 
+void GSTalkerBase::link()
+{
+    emit signalBusy(true);
+    d->o2->link();                
+}
+
+void GSTalkerBase::unlink()
+{
+    emit signalBusy(true);
+    
+    d->o2->unlink();
+    
+    d->settings->beginGroup(m_serviceName);
+    d->settings->remove("");
+    d->settings->endGroup();
+}
+
+void GSTalkerBase::slotLinkingSucceeded()
+{
+    if (!d->o2->linked())
+    {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to " << m_serviceName << " ok";
+        emit signalBusy(false);
+        return;
+    }
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to " << m_serviceName << " ok";
+    
+    m_accessToken = d->o2->token();
+    m_refreshToken = d->o2->refreshToken();
+    m_bearerAccessToken = QString::fromLatin1("Bearer ") + m_accessToken;
+    
+    emit signalAccessTokenObtained();
+}
+
+void GSTalkerBase::slotLinkingFailed()
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to " << m_serviceName << " fail";
+    
+    emit signalBusy(false);
+}
+
+void GSTalkerBase::slotOpenBrowser(const QUrl& url)
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Open browser...";
+    QDesktopServices::openUrl(url);;
+}
+
 bool GSTalkerBase::authenticated() const
 {
-    if (m_accessToken.isEmpty())
-    {
-        return false;
-    }
-
-    return true;
+    return d->o2->linked();
 }
         //TODO: Port to O2
         /**
         * Starts authentication by opening the browser
         */
         void GSTalkerBase::doOAuth()
-        {
-            QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/auth"));
-            QUrlQuery urlQuery;
-            urlQuery.addQueryItem(QString::fromLatin1("scope"),         m_scope);
-            urlQuery.addQueryItem(QString::fromLatin1("redirect_uri"),  d->redirectUri);
-            urlQuery.addQueryItem(QString::fromLatin1("response_type"), d->responseType);
-            urlQuery.addQueryItem(QString::fromLatin1("client_id"),     d->clientId);
-            urlQuery.addQueryItem(QString::fromLatin1("access_type"),   QString::fromLatin1("offline"));
-            url.setQuery(urlQuery);
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "OAuth URL: " << url;
-            QDesktopServices::openUrl(url);
-
-            emit signalBusy(false);
-
-            d->window = new QDialog(QApplication::activeWindow(),0);
-            d->window->setModal(true);
-            d->window->setWindowTitle(i18n("Google Drive Authorization"));
-
-            QDialogButtonBox* const buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
-            QPushButton* const okButton       = buttonBox->button(QDialogButtonBox::Ok);
-            okButton->setDefault(true);
-
-            d->window->connect(buttonBox, SIGNAL(accepted()),
-                            this, SLOT(slotAccept()));
-
-            d->window->connect(buttonBox, SIGNAL(rejected()),
-                            this, SLOT(slotReject()));
-
-            QLineEdit* const textbox      = new QLineEdit();
-            QPlainTextEdit* const infobox = new QPlainTextEdit(i18n("Please follow the instructions in the browser. "
-                                                                    "After logging in and authorizing the application, "
-                                                                    "copy the code from the browser, paste it in the "
-                                                                    "textbox below, and click OK."));
-            QVBoxLayout* const layout = new QVBoxLayout;
-            d->window->setLayout(layout);
-            infobox->setReadOnly(true);
-            layout->addWidget(infobox);
-            layout->addWidget(textbox);
-            layout->addWidget(buttonBox);
-
-            d->window->exec();
-
-            if (d->window->result() == QDialog::Accepted && !(textbox->text().isEmpty()))
+        {            
+//             QUrl url(QString::fromLatin1("https://accounts.google.com/o/oauth2/auth"));
+//             QUrlQuery urlQuery;
+//             urlQuery.addQueryItem(QString::fromLatin1("scope"),         m_scope);
+//             urlQuery.addQueryItem(QString::fromLatin1("redirect_uri"),  d->redirectUri);
+//             urlQuery.addQueryItem(QString::fromLatin1("response_type"), d->responseType);
+//             urlQuery.addQueryItem(QString::fromLatin1("client_id"),     d->apikey);
+//             urlQuery.addQueryItem(QString::fromLatin1("access_type"),   QString::fromLatin1("offline"));
+//             url.setQuery(urlQuery);
+//             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "OAuth URL: " << url;
+//             QDesktopServices::openUrl(url);
+// 
+//             emit signalBusy(false);
+// 
+//             d->window = new QDialog(QApplication::activeWindow(),0);
+//             d->window->setModal(true);
+//             d->window->setWindowTitle(i18n("Google Drive Authorization"));
+// 
+//             QDialogButtonBox* const buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+//             QPushButton* const okButton       = buttonBox->button(QDialogButtonBox::Ok);
+//             okButton->setDefault(true);
+// 
+//             d->window->connect(buttonBox, SIGNAL(accepted()),
+//                             this, SLOT(slotAccept()));
+// 
+//             d->window->connect(buttonBox, SIGNAL(rejected()),
+//                             this, SLOT(slotReject()));
+// 
+//             QLineEdit* const textbox      = new QLineEdit();
+//             QPlainTextEdit* const infobox = new QPlainTextEdit(i18n("Please follow the instructions in the browser. "
+//                                                                     "After logging in and authorizing the application, "
+//                                                                     "copy the code from the browser, paste it in the "
+//                                                                     "textbox below, and click OK."));
+//             QVBoxLayout* const layout = new QVBoxLayout;
+//             d->window->setLayout(layout);
+//             infobox->setReadOnly(true);
+//             layout->addWidget(infobox);
+//             layout->addWidget(textbox);
+//             layout->addWidget(buttonBox);
+// 
+//             d->window->exec();
+// 
+//             if (d->window->result() == QDialog::Accepted && !(textbox->text().isEmpty()))
+//             {
+//                 qCDebug(DIGIKAM_WEBSERVICES_LOG) << "1";
+//                 d->code = textbox->text();
+//             }
+// 
+//             if (textbox->text().isEmpty())
+//             {
+//                 qCDebug(DIGIKAM_WEBSERVICES_LOG) << "3";
+//                 emit signalTextBoxEmpty();
+//             }
+// 
+//             if (d->code != QString::fromLatin1("0"))
+//             {
+//                 getAccessToken();
+//             }
+            
+            // for test
+            unlink();
+            
+            int sessionExpires = d->o2->expires();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "current time " << QDateTime::currentMSecsSinceEpoch() / 1000;
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "expires at : " << sessionExpires;
+            
+            // If user has not logined yet (sessionExpires == 0), link
+            // If access token has expired yet, refresh
+            // Otherwise, provoke slotLinkingSucceeded
+            if(sessionExpires == 0)
             {
-                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "1";
-                d->code = textbox->text();
+                link();
             }
-
-            if (textbox->text().isEmpty())
+            else if(sessionExpires == QDateTime::currentMSecsSinceEpoch() / 1000)
             {
-                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "3";
-                emit signalTextBoxEmpty();
+                d->o2->refresh();
             }
-
-            if (d->code != QString::fromLatin1("0"))
+            else 
             {
-                getAccessToken();
+                emit signalLinkingSucceeded();
             }
         }
 
@@ -216,13 +338,13 @@ void GSTalkerBase::slotReject()
             QUrlQuery urlQuery;
             urlQuery.addQueryItem(QString::fromLatin1("scope"),         m_scope);
             urlQuery.addQueryItem(QString::fromLatin1("response_type"), d->responseType);
-            urlQuery.addQueryItem(QString::fromLatin1("token_uri"),     d->tokenUri);
+            urlQuery.addQueryItem(QString::fromLatin1("token_uri"),     d->tokenUrl);
             url.setQuery(urlQuery);
             QByteArray postData;
             postData = "code=";
             postData += d->code.toLatin1();
             postData += "&client_id=";
-            postData += d->clientId.toLatin1();
+            postData += d->apikey.toLatin1();
             postData += "&client_secret=";
             postData += d->clientSecret.toLatin1();
             postData += "&redirect_uri=";
@@ -248,7 +370,7 @@ void GSTalkerBase::slotReject()
 
             QByteArray postData;
             postData = "&client_id=";
-            postData += d->clientId.toLatin1();
+            postData += d->apikey.toLatin1();
             postData += "&client_secret=";
             postData += d->clientSecret.toLatin1();
             postData += "&refresh_token=";
