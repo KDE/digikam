@@ -352,8 +352,8 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
 
         DatesDBJobInfo jobInfo;
 
-        jobInfo.setStartDate( url.startDate() );
-        jobInfo.setEndDate( url.endDate() );
+        jobInfo.setStartDate(url.startDate());
+        jobInfo.setEndDate(url.endDate());
 
         if (d->recurseAlbums)
             jobInfo.setRecursive();
@@ -396,7 +396,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         if (d->listOnlyAvailableImages)
             jobInfo.setListAvailableImagesOnly();
 
-        jobInfo.setAlbumRootId( url.albumRootId() );
+        jobInfo.setAlbumRootId(url.albumRootId());
         jobInfo.setAlbum( url.album() );
 
         d->jobThread = DBJobsManager::instance()->startAlbumsJobThread(jobInfo);
@@ -450,7 +450,9 @@ void ImageAlbumModel::slotResult()
 void ImageAlbumModel::slotData(const QList<ImageListerRecord> &records)
 {
     if (d->jobThread != sender())
+    {
         return;
+    }
 
     if (records.isEmpty())
     {
@@ -464,7 +466,7 @@ void ImageAlbumModel::slotData(const QList<ImageListerRecord> &records)
     {
         QList<QVariant> extraValues;
 
-        foreach (const ImageListerRecord &record, records)
+        foreach(const ImageListerRecord& record, records)
         {
             ImageInfo info(record);
             newItemsList << info;
@@ -496,7 +498,7 @@ void ImageAlbumModel::slotData(const QList<ImageListerRecord> &records)
     }
     else
     {
-        foreach (const ImageListerRecord &record, records)
+        foreach(const ImageListerRecord& record, records)
         {
             ImageInfo info(record);
             newItemsList << info;

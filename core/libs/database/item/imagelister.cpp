@@ -337,7 +337,7 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, const QList<int>&
         }
     }
 
-    for (QSet<ImageListerRecord>::iterator it = records.begin(); it != records.end(); ++it)
+    for (QSet<ImageListerRecord>::iterator it = records.begin() ; it != records.end() ; ++it)
     {
         receiver->receive(*it);
     }
@@ -609,7 +609,8 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
         lon                      = (*it).toDouble();
         ++it;
 
-        record.currentSimilarity                 = SimilarityDbAccess().db()->getImageSimilarity(record.imageID, referenceImageId);
+        record.currentSimilarity = SimilarityDbAccess().db()->getImageSimilarity(record.imageID, referenceImageId);
+
         if (record.currentSimilarity < 0)
         {
             // Ignore nonexistence and invalid db entry.
@@ -853,7 +854,8 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
 
-        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(id, threshold, maxThreshold, targetAlbums, HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
+        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(id, threshold, maxThreshold, targetAlbums,
+                                                                    HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
     }
     else if (type == QLatin1String("image"))
     {
@@ -866,7 +868,8 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
 
-        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(path, threshold,maxThreshold, targetAlbums, HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
+        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(path, threshold,maxThreshold, targetAlbums,
+                                                                    HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
     }
 
     listFromHaarSearch(receiver, imageSimilarityMap);
