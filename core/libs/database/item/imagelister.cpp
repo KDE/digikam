@@ -251,11 +251,9 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;
@@ -317,11 +315,9 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, const QList<int>&
             ++it;
             record.format            = (*it).toString();
             ++it;
-            record.creationDate      = (*it).isNull() ? QDateTime()
-                                       : QDateTime::fromString((*it).toString(), Qt::ISODate);
+            record.creationDate      = (*it).toDateTime();
             ++it;
-            record.modificationDate  = (*it).isNull() ? QDateTime()
-                                       : QDateTime::fromString((*it).toString(), Qt::ISODate);
+            record.modificationDate  = (*it).toDateTime();
             ++it;
             record.fileSize          = toInt32BitSafe(it);
             ++it;
@@ -403,8 +399,8 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
                                           "   AND ImageInformation.creationDate < ? "
                                           "   AND ImageInformation.creationDate >= ? "
                                           " ORDER BY Images.album;"),
-                                  QDateTime(endDate).toString(Qt::ISODate),
-                                  QDateTime(startDate).toString(Qt::ISODate),
+                                  QDateTime(endDate),
+                                  QDateTime(startDate),
                                   &values);
     }
 
@@ -429,11 +425,9 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;
@@ -600,11 +594,9 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;
@@ -722,11 +714,9 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;
@@ -956,11 +946,9 @@ void ImageLister::listFromHaarSearch(ImageListerReceiver* const receiver, const 
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;
@@ -1063,11 +1051,9 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;
