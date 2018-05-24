@@ -52,6 +52,7 @@ bool GroupingViewImplementation::needGroupResolving(ApplicationSettings::Operati
             {
                 return true;
             }
+
             return ApplicationSettings::instance()->askGroupingOperateOnAll(type);
         }
     }
