@@ -83,7 +83,7 @@ private:
 
 private:
     
-    Private() {};  // disable default constuctor.
+    Private() {};  // disable default constructor.
 };
 
 } // namespace Digikam
