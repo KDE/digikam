@@ -85,7 +85,7 @@ public:
      * List the images which have assigned the tags specified by tagIds
      * Updated to support multiple tags
      */
-    void listTag(ImageListerReceiver* receiver, QList<int> tagIds);
+    void listTag(ImageListerReceiver* const receiver, const QList<int>& tagIds);
 
     /**
      * List the images which have faces. An image with n faces will be listed n times.
@@ -138,7 +138,7 @@ private:
      * @param receiver for the searches
      * @param imageSimilarityMap the map of image ids and their similarities in the HAAR search
      */
-    void listFromHaarSearch(ImageListerReceiver* const receiver, const QMap<qlonglong,double>& imageSimilarityMap);
+    void listFromHaarSearch(ImageListerReceiver* const receiver, const QMap<qlonglong, double>& imageSimilarityMap);
     void listFromIdList(ImageListerReceiver* const receiver, const QList<qlonglong>& imageIds);
     QSet<int> albumRootsToList() const;
 

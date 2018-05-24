@@ -75,7 +75,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListerJobReceiver : public ImageListerValueLi
 
 public:
 
-    explicit ImageListerJobReceiver(DBJob *const job);
+    explicit ImageListerJobReceiver(DBJob* const job);
     virtual void error(const QString& errMsg);
     void sendData();
 
@@ -91,7 +91,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListerJobPartsSendingReceiver : public ImageL
 
 public:
 
-    explicit ImageListerJobPartsSendingReceiver(DBJob *const job, int limit);
+    explicit ImageListerJobPartsSendingReceiver(DBJob* const job, int limit);
     virtual void receive(const ImageListerRecord &record);
 
 protected:
@@ -108,7 +108,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListerJobGrowingPartsSendingReceiver
 
 public:
 
-    explicit ImageListerJobGrowingPartsSendingReceiver(DBJob* job, int start, int end, int increment);
+    explicit ImageListerJobGrowingPartsSendingReceiver(DBJob* const job, int start, int end, int increment);
     virtual void receive(const ImageListerRecord& record);
 
 protected:

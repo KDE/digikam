@@ -48,7 +48,7 @@ void ImageListerValueListReceiver::receive(const ImageListerRecord& record)
 
 // ----------------------------------------------
 
-ImageListerJobReceiver::ImageListerJobReceiver(DBJob *const job)
+ImageListerJobReceiver::ImageListerJobReceiver(DBJob* const job)
     : m_job(job)
 {
 }
@@ -68,7 +68,7 @@ void ImageListerJobReceiver::error(const QString& errMsg)
 
 // ----------------------------------------------
 
-ImageListerJobPartsSendingReceiver::ImageListerJobPartsSendingReceiver(DBJob *const job, int limit)
+ImageListerJobPartsSendingReceiver::ImageListerJobPartsSendingReceiver(DBJob* const job, int limit)
     : ImageListerJobReceiver(job), m_limit(limit), m_count(0)
 {
 
@@ -89,7 +89,7 @@ void ImageListerJobPartsSendingReceiver::receive(const ImageListerRecord &record
 // ----------------------------------------------
 
 ImageListerJobGrowingPartsSendingReceiver::
-    ImageListerJobGrowingPartsSendingReceiver(DBJob* job, int start, int end, int increment)
+    ImageListerJobGrowingPartsSendingReceiver(DBJob* const job, int start, int end, int increment)
     : ImageListerJobPartsSendingReceiver(job, start),
       m_maxLimit(end), m_increment(increment)
 {
