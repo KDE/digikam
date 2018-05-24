@@ -161,7 +161,7 @@ public:
                     d->o2->setRefreshTokenUrl(d->tokenUrl);
                     d->o2->setLocalPort(8000);
                     d->o2->setGrantFlow(O2::GrantFlow::GrantFlowAuthorizationCode);
-                    d->o2->setScope(QLatin1String("user_photos,user_friends,publish_pages,manage_pages"));
+                    d->o2->setScope(QLatin1String("user_photos,user_friends,publish_pages,manage_pages,publish_to_groups"));
                     
                     d->settings                  = WSToolUtils::getOauthSettings(this);
                     O0SettingsStore* const store = new O0SettingsStore(d->settings, QLatin1String(O2_ENCRYPTION_KEY), this);
@@ -625,14 +625,9 @@ void FbTalker::logout()
 
             emit signalBusy(true);
 
-            QUrlQuery params;
-            QUrl paramUrl;
-            
+            QUrlQuery params;            
             params.addQueryItem("access_token", getAccessToken());
-            paramUrl.setQuery(params);
-            
             params.addQueryItem("name", album.title);
-            paramUrl.setQuery(params);
             
             if (!album.location.isEmpty())
                 params.addQueryItem("location", album.location);
@@ -666,15 +661,13 @@ void FbTalker::logout()
             QUrl url(QUrl(d->apiURL.arg(d->user.id)
                                    .arg("albums")));
             
-//             paramUrl.setQuery(params);
-            
             QNetworkRequest netRequest(url);
             netRequest.setHeader(QNetworkRequest::ContentTypeHeader, 
                                 QLatin1String("application/x-www-form-urlencoded"));
 
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url to create new album " << netRequest.url() << paramUrl.query(); 
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url to create new album " << netRequest.url() << params.query(); 
             
-            d->reply = d->netMngr->post(netRequest, paramUrl.query().toUtf8());
+            d->reply = d->netMngr->post(netRequest, params.query().toUtf8());
             d->state = Private::FB_CREATEALBUM;
             d->buffer.resize(0);
         }
@@ -717,20 +710,20 @@ void FbTalker::logout()
 
             form.finish();
 
-            QString arg_2;
+            QVariant arg_1;
             if(albumID.isEmpty())
             {
-                arg_2 = QLatin1String("feed");
+                arg_1 = d->user.id;
             }
             else
             {
-                arg_2 = QString::fromLatin1("albums/%1/%2/").arg(albumID)
-                                                            .arg("photos");
+                arg_1 = albumID; /*QString::fromLatin1("albums/%1/%2/").arg(albumID)
+                                                            .arg("photos");*/
             }
 
 
-            QNetworkRequest netRequest(QUrl(d->apiURL.arg(d->user.id)
-                                                     .arg(arg_2)));
+            QNetworkRequest netRequest(QUrl(d->apiURL.arg(arg_1.toString())
+                                                     .arg("photos")));
             netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
 
             d->reply = d->netMngr->post(netRequest, form.formData());
@@ -982,7 +975,7 @@ void FbTalker::parseResponseAddPhoto(const QByteArray& data)
         errMsg          = obj[QString::fromLatin1("message")].toString();
     }
     
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error add photo : " << doc;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "add photo : " << doc;
 
     emit signalBusy(false);
     emit signalAddPhotoDone(errCode, errorToText(errCode, errMsg));

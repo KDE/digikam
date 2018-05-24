@@ -101,6 +101,8 @@ bool FbMPForm::addFile(const QString& name, const QString& path)
     if (mime.isEmpty())
         return false;
 
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "mime = " << mime.toLatin1(); 
+    
     QFile imageFile(path);
 
     if (!imageFile.open(QIODevice::ReadOnly))
@@ -124,6 +126,8 @@ bool FbMPForm::addFile(const QString& name, const QString& path)
     str += "Content-Type: ";
     str += mime.toLatin1();
     str += "\r\n\r\n";
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << str;
 
     m_buffer.append(str);
     m_buffer.append(imageData);
