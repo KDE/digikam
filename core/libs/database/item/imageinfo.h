@@ -157,14 +157,22 @@ public:
     QSize dimensions() const;
 
     /**
+     * Returns the digikamalbums:// URL.
+     * The returned object can be used as a QUrl.
+     * Always use this for KIO operations
+     */
+    CoreDbUrl databaseUrl() const;
+
+    /**
      * Returns the file:// url.
-     * This is equivalent to QUrl::fromLocalFile(filePath())
+     * This is equivalent to databaseUrl().fileUrl()
      */
     QUrl fileUrl() const;
 
     /**
-     * Returns the file path to the image
+     * Equivalent to fileUrl().path()
      */
+    // Deprecate?
     QString filePath() const;
 
     /**
@@ -455,6 +463,11 @@ public:
      * Set the rating for the item
      */
     void setRating(int value);
+
+    /**
+     * Set the manul sorting order for the item
+     */
+    void setManualOrder(int value);
 
     /**
      * Set the orientation for the item

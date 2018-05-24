@@ -154,6 +154,9 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     connect(imageModel()->dragDropHandler(), SIGNAL(addToGroup(ImageInfo,QList<ImageInfo>)),
             FileActionMngr::instance(), SLOT(addToGroup(ImageInfo,QList<ImageInfo>)));
 
+    connect(imageModel()->dragDropHandler(), SIGNAL(dragDropSort(ImageInfo,QList<ImageInfo>)),
+            this, SLOT(dragDropSort(ImageInfo,QList<ImageInfo>)));
+
     connect(d->utilities, SIGNAL(editorCurrentUrlChanged(QUrl)),
             this, SLOT(setCurrentUrlWhenAvailable(QUrl)));
 
@@ -168,6 +171,24 @@ DigikamImageView::~DigikamImageView()
     delete d;
 }
 
+void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos)
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "---lyj--- drag drop sort slot in digikam imageview";
+    ImageInfoList info_list = this->allImageInfos(false);
+    for(auto iinfo: info_list)
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << iinfo.name();
+        iinfo.setManualOrder(1);
+    }
+    qCDebug(DIGIKAM_GENERAL_LOG) << "---lyj--- picked image";
+    qCDebug(DIGIKAM_GENERAL_LOG) << pick.name();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "---lyj--- infos image";
+    for(auto iinfo: infos)
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << iinfo.name();
+    }
+}
+
 ImageViewUtilities* DigikamImageView::utilities() const
 {
     return d->utilities;
@@ -177,46 +198,6 @@ void DigikamImageView::setThumbnailSize(const ThumbnailSize& size)
 {
     imageThumbnailModel()->setPreloadThumbnailSize(size);
     ImageCategorizedView::setThumbnailSize(size);
-}
-
-ImageInfoList DigikamImageView::allImageInfos(bool grouping) const
-{
-    if (grouping)
-    {
-        return resolveGrouping(ImageCategorizedView::allImageInfos());
-    }
-
-    return ImageCategorizedView::allImageInfos();
-}
-
-ImageInfoList DigikamImageView::selectedImageInfos(bool grouping) const
-{
-    if (grouping)
-    {
-        return resolveGrouping(ImageCategorizedView::selectedImageInfos());
-    }
-
-    return ImageCategorizedView::selectedImageInfos();
-}
-
-ImageInfoList DigikamImageView::selectedImageInfosCurrentFirst(bool grouping) const
-{
-    if (grouping)
-    {
-        return resolveGrouping(ImageCategorizedView::selectedImageInfosCurrentFirst());
-    }
-
-    return ImageCategorizedView::selectedImageInfosCurrentFirst();
-}
-
-bool DigikamImageView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
-{
-    return needGroupResolving(type, allImageInfos());
-}
-
-bool DigikamImageView::selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const
-{
-    return needGroupResolving(type, selectedImageInfos());
 }
 
 int DigikamImageView::fitToWidthIcons()
@@ -233,24 +214,6 @@ void DigikamImageView::slotSetupChanged()
     d->updateOverlays();
 
     ImageCategorizedView::slotSetupChanged();
-}
-
-bool DigikamImageView::hasHiddenGroupedImages(const ImageInfo& info) const
-{
-    return info.hasGroupedImages() && !imageFilterModel()->isGroupOpen(info.id());
-}
-
-ImageInfoList DigikamImageView::imageInfos(const QList<QModelIndex>& indexes,
-                                           ApplicationSettings::OperationType type) const
-{
-    ImageInfoList infos = ImageCategorizedView::imageInfos(indexes);
-
-    if (needGroupResolving(type, infos))
-    {
-        return resolveGrouping(infos);
-    }
-
-    return infos;
 }
 
 void DigikamImageView::setFaceMode(bool on)
@@ -447,15 +410,9 @@ void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 
 void DigikamImageView::rename()
 {
-    ImageInfoList infos = selectedImageInfos();
-
-    if (needGroupResolving(ApplicationSettings::Rename, infos))
-    {
-        infos = resolveGrouping(infos);
-    }
-
-    QList<QUrl> urls = infos.toImageUrlList();
-    bool loop        = false;
+    bool grouping     = needGroupResolving(ApplicationSettings::Rename);
+    QList<QUrl>  urls = selectedUrls(grouping);
+    bool loop         = false;
     NewNamesList newNamesList;
 
     do
@@ -473,7 +430,7 @@ void DigikamImageView::rename()
 
         if (!loop)
         {
-            QUrl nextUrl = nextInOrder(infos.last(), 1).fileUrl();
+            QUrl nextUrl = nextInOrder(selectedImageInfos(grouping).last(), 1).fileUrl();
             setCurrentUrl(nextUrl);
             loop = true;
         }

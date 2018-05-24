@@ -41,7 +41,7 @@
 #include <kconfiggroup.h>
 
 // Local includes
-
+#include "digikam_debug.h"
 #include "albumhistory.h"
 #include "albumlabelstreeview.h"
 #include "coredbsearchxml.h"
@@ -803,17 +803,31 @@ QList<QUrl> DigikamView::allUrls(bool grouping) const
 {
     /// @todo This functions seems not to be used anywhere right now
 
-    return allInfo(grouping).toImageUrlList();
+    switch (viewMode())
+    {
+        case StackedView::TableViewMode:
+            return d->tableView->allUrls(grouping);
+
+        default:
+            return d->iconView->allUrls(grouping);
+    }
 }
 
 QList<QUrl> DigikamView::selectedUrls(bool grouping) const
 {
-    return selectedInfoList(grouping).toImageUrlList();
+    switch (viewMode())
+    {
+        case StackedView::TableViewMode:
+            return d->tableView->selectedUrls(grouping);
+
+        default:
+            return d->iconView->selectedUrls(grouping);
+    }
 }
 
 QList<QUrl> DigikamView::selectedUrls(const ApplicationSettings::OperationType type) const
 {
-    return selectedInfoList(type).toImageUrlList();
+    return selectedUrls(needGroupResolving(type));
 }
 
 void DigikamView::showSideBars()
@@ -1780,12 +1794,12 @@ void DigikamView::slotFileWithDefaultApplication()
 
 void DigikamView::slotLightTable()
 {
-    bool grouping = selectedNeedGroupResolving(ApplicationSettings::LightTable);
+    bool grouping = needGroupResolving(ApplicationSettings::LightTable);
     const ImageInfoList selectedList = selectedInfoList(false, grouping);
 
     if (selectedList.isEmpty())
     {
-        grouping = allNeedGroupResolving(ApplicationSettings::LightTable);
+        grouping = needGroupResolving(ApplicationSettings::LightTable, true);
     }
 
     const ImageInfoList allInfoList  = allInfo(grouping);
@@ -1796,7 +1810,7 @@ void DigikamView::slotLightTable()
 
 void DigikamView::slotQueueMgr()
 {
-    bool grouping = selectedNeedGroupResolving(ApplicationSettings::BQM);
+    bool grouping = needGroupResolving(ApplicationSettings::BQM);
     ImageInfoList imageInfoList = selectedInfoList(false, grouping);
     ImageInfo     singleInfo    = currentInfo();
 
@@ -1807,7 +1821,7 @@ void DigikamView::slotQueueMgr()
 
     if (singleInfo.isNull())
     {
-        grouping = allNeedGroupResolving(ApplicationSettings::BQM);
+        grouping = needGroupResolving(ApplicationSettings::BQM, true);
         const ImageInfoList allItems = allInfo(grouping);
 
         if (!allItems.isEmpty())
@@ -2107,6 +2121,12 @@ void DigikamView::slotRemoveTag(int tagID)
 
 void DigikamView::slotSlideShowAll()
 {
+    qCDebug(DIGIKAM_GENERAL_LOG) << "slot slide show all";
+    ImageInfoList info_list = allInfo(ApplicationSettings::Slideshow);
+    for(auto iinfo: info_list)
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << iinfo.name();
+    }
     slideShow(allInfo(ApplicationSettings::Slideshow));
 }
 
@@ -2430,7 +2450,7 @@ ImageInfoList DigikamView::selectedInfoList(const bool currentFirst,
 ImageInfoList DigikamView::selectedInfoList(const ApplicationSettings::OperationType type,
                                             const bool currentFirst) const
 {
-    return selectedInfoList(currentFirst, selectedNeedGroupResolving(type));
+    return selectedInfoList(currentFirst, needGroupResolving(type));
 }
 
 ImageInfoList DigikamView::allInfo(const bool grouping) const
@@ -2438,7 +2458,7 @@ ImageInfoList DigikamView::allInfo(const bool grouping) const
     switch (viewMode())
     {
         case StackedView::TableViewMode:
-            return d->tableView->allImageInfos(grouping);
+            return d->tableView->allInfo(grouping);
 
         case StackedView::MapWidgetMode:
         case StackedView::PreviewImageMode:
@@ -2454,38 +2474,23 @@ ImageInfoList DigikamView::allInfo(const bool grouping) const
 
 ImageInfoList DigikamView::allInfo(const ApplicationSettings::OperationType type) const
 {
-    return allInfo(allNeedGroupResolving(type));
+    return allInfo(needGroupResolving(type, true));
 }
 
-bool DigikamView::allNeedGroupResolving(const ApplicationSettings::OperationType type) const
+bool DigikamView::needGroupResolving(const ApplicationSettings::OperationType type,
+                                     const bool all) const
 {
     switch (viewMode())
     {
         case StackedView::TableViewMode:
-            return d->tableView->allNeedGroupResolving(type);
+            return d->tableView->needGroupResolving(type, all);
         case StackedView::MapWidgetMode:
         case StackedView::PreviewImageMode:
         case StackedView::MediaPlayerMode:
         case StackedView::IconViewMode:
             // all of these modes use the same selection model and data as the IconViewMode
-            return d->iconView->allNeedGroupResolving(type);
-        default:
-            return false;
-    }
-}
+            return d->iconView->needGroupResolving(type, all);
 
-bool DigikamView::selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const
-{
-    switch (viewMode())
-    {
-        case StackedView::TableViewMode:
-            return d->tableView->selectedNeedGroupResolving(type);
-        case StackedView::MapWidgetMode:
-        case StackedView::PreviewImageMode:
-        case StackedView::MediaPlayerMode:
-        case StackedView::IconViewMode:
-            // all of these modes use the same selection model and data as the IconViewMode
-            return d->iconView->selectedNeedGroupResolving(type);
         default:
             return false;
     }

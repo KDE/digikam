@@ -27,18 +27,15 @@
 
 // Local includes
 
-#include "applicationsettings.h"
 #include "imagecategorizedview.h"
 #include "imageviewutilities.h"
-#include "groupingviewimplementation.h"
 
 namespace Digikam
 {
 
 class ImageViewUtilities;
-class ImageInfoList;
 
-class DigikamImageView : public ImageCategorizedView, public GroupingViewImplementation
+class DigikamImageView : public ImageCategorizedView
 {
     Q_OBJECT
 
@@ -52,12 +49,6 @@ public:
     int  fitToWidthIcons();
 
     virtual void setThumbnailSize(const ThumbnailSize& size);
-
-    ImageInfoList allImageInfos(bool grouping = false) const;
-    ImageInfoList selectedImageInfos(bool grouping = false) const;
-    ImageInfoList selectedImageInfosCurrentFirst(bool grouping = false) const;
-    bool          allNeedGroupResolving(const ApplicationSettings::OperationType type) const;
-    bool          selectedNeedGroupResolving(const ApplicationSettings::OperationType type) const;
 
 public Q_SLOTS:
 
@@ -73,6 +64,8 @@ public Q_SLOTS:
     void setFaceMode(bool on);
     void confirmFaces(const QList<QModelIndex>& indexes, int tagId);
     void removeFaces(const QList<QModelIndex>& indexes);
+
+    void dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos);
 
 Q_SIGNALS:
 
@@ -103,12 +96,6 @@ protected:
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
     virtual void showContextMenu(QContextMenuEvent* event);
     virtual void slotSetupChanged();
-
-    virtual bool hasHiddenGroupedImages(const ImageInfo& info) const;
-
-    ImageInfoList imageInfos(const QList<QModelIndex>& indexes,
-                             ApplicationSettings::OperationType type
-                             = ApplicationSettings::Unspecified) const;
 
 private Q_SLOTS:
 
