@@ -225,7 +225,6 @@ void SearchesDBJobsThread::searchesListing(const SearchesDBJobInfo& info)
 
     if (info.isDuplicatesJob())
     {
-
         connect(j, SIGNAL(totalSize(int)),
                 this, SIGNAL(totalSize(int)));
 
