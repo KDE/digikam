@@ -229,6 +229,8 @@ BUGFIXES:
 199 ==> 394242 - Import settings unneccesarily asks to overwrite image database, and crashes when I decline.
 200 ==> 394278 - A slideshow theme for kiosk mode.
 201 ==> 340389 - digiKam crashes while editing pictures for color balancing on OSX [patch].
-202 ==> Unify group handling [patch]
+202 ==> 394413 - Unify group handling [patch].
 203 ==> 394573 - Revers geodata from open street map does not work.
-204 ==> 
+204 ==> 394590 - Feature request: being able to filter on all metadatas fields.
+205 ==> 
+
