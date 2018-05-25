@@ -72,7 +72,7 @@ static QAction* addGroupAction(QMenu* const menu)
 
 static QAction* addSortAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Put image behind this image", "Put back"));
+    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Put dragged image behind dropped image", "Put back"));
 }
 
 static QAction* addGroupAndMoveAction(QMenu* const menu)
@@ -201,6 +201,7 @@ static DropAction groupAction(const QDropEvent* const, QWidget* const view)
     {
         return GroupAction;
     }
+
     if (sortAction && choice == sortAction)
     {
         return SortAction;
@@ -295,16 +296,15 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
     {
         // Drag & drop inside of digiKam
         QList<QUrl>      urls;
-        QList<QUrl>      kioURLs;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
 
-        if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+        if (!DItemDrag::decode(e->mimeData(), urls, albumIDs, imageIDs))
         {
             return false;
         }
 
-        if (urls.isEmpty() || kioURLs.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
+        if (urls.isEmpty() || albumIDs.isEmpty() || imageIDs.isEmpty())
         {
             return false;
         }
@@ -457,7 +457,8 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         }
 
         if (action == SortAction)
-        {qCDebug(DIGIKAM_GENERAL_LOG) << "---lyj--- sort action";
+        {
+            qCDebug(DIGIKAM_GENERAL_LOG) << "---lyj--- sort action";
             if(droppedOnInfo.isNull())
             {
                 return false;
@@ -663,14 +664,12 @@ QMimeData* ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexe
     QList<ImageInfo> infos = model()->imageInfos(indexes);
 
     QList<QUrl>      urls;
-    QList<QUrl>      kioURLs;
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
 
     foreach(const ImageInfo& info, infos)
     {
         urls.append(info.fileUrl());
-        kioURLs.append(info.databaseUrl());
         albumIDs.append(info.albumId());
         imageIDs.append(info.id());
     }
@@ -680,7 +679,7 @@ QMimeData* ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexe
         return 0;
     }
 
-    return new DItemDrag(urls, kioURLs, albumIDs, imageIDs);
+    return new DItemDrag(urls, albumIDs, imageIDs);
 }
 
 } // namespace Digikam

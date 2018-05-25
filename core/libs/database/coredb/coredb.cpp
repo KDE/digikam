@@ -1849,6 +1849,21 @@ void CoreDB::changeImageInformation(qlonglong imageId, const QVariantList& infos
     d->db->recordChangeset(ImageChangeset(imageId, fields));
 }
 
+void CoreDB::changeImages(qlonglong imageId, const QVariantList& infos,
+                                     DatabaseFields::Images fields)
+{
+    qCDebug(DIGIKAM_DATABASE_LOG) << "---lyj--- change images " << imageId;
+    if (fields == DatabaseFields::ImagesNone)
+    {
+        return;
+    }
+
+    QStringList fieldNames = imagesFieldList(fields);
+
+    d->db->execUpsertDBAction(QLatin1String("changeImages"), imageId, fieldNames, infos);
+    d->db->recordChangeset(ImageChangeset(imageId, fields));
+}
+
 void CoreDB::addImageMetadata(qlonglong imageID, const QVariantList& infos, DatabaseFields::ImageMetadata fields)
 {
     if (fields == DatabaseFields::ImageMetadataNone)
@@ -2785,6 +2800,11 @@ QStringList CoreDB::imagesFieldList(DatabaseFields::Images fields)
     if (fields & DatabaseFields::UniqueHash)
     {
         list << QLatin1String("uniqueHash");
+    }
+
+    if (fields & DatabaseFields::ManualOrder)
+    {
+        list << QLatin1String("manualOrder");
     }
 
     return list;

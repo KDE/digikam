@@ -61,13 +61,15 @@ enum ImagesField
     ModificationDate   = 1 << 4,
     FileSize           = 1 << 5,
     UniqueHash         = 1 << 6,
+    ManualOrder        = 1 << 7,
     ImagesAll          = Album            |
                          Name             |
                          Status           |
                          Category         |
                          ModificationDate |
                          FileSize         |
-                         UniqueHash,
+                         UniqueHash       |
+                         ManualOrder,
     ImagesFirst        = Album,
     ImagesLast         = UniqueHash
 };

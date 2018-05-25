@@ -777,20 +777,6 @@ int ImageInfo::orientation() const
     return values.first().toInt();
 }
 
-CoreDbUrl ImageInfo::databaseUrl() const
-{
-    if (!m_data)
-    {
-        return CoreDbUrl();
-    }
-
-    QString album     = ImageInfoStatic::cache()->albumRelativePath(m_data->albumId);
-    QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
-
-    ImageInfoReadLocker lock;
-    return CoreDbUrl::fromAlbumAndName(m_data->name, album, QUrl::fromLocalFile(albumRoot), m_data->albumRootId);
-}
-
 QUrl ImageInfo::fileUrl() const
 {
     return QUrl::fromLocalFile(filePath());
@@ -1664,13 +1650,13 @@ void ImageInfo::setRating(int value)
 
 void ImageInfo::setManualOrder(int value)
 {
-    return ;
-    // if (!m_data)
-    // {
-    //     return;
-    // }
+    // return ;
+    if (!m_data)
+    {
+        return;
+    }
 
-    // CoreDbAccess().db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::ManualOrder);
+    CoreDbAccess().db()->changeImages(m_data->id, QVariantList() << value, DatabaseFields::ManualOrder);
 
     // ImageInfoWriteLocker lock;
     // m_data->manualOrder  = value;
@@ -1873,8 +1859,8 @@ ThumbnailIdentifier ImageInfo::thumbnailIdentifier(qlonglong id)
 
 QDebug operator<<(QDebug stream, const ImageInfo& info)
 {
-    return stream << "ImageInfo [id = " << info.id() << ", databaseurl = "
-                  << info.databaseUrl() << "]";
+    return stream << "ImageInfo [id = " << info.id() << ", path = "
+                  << info.filePath() << "]";
 }
 
 ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseFields::Set& requestedSet) const
