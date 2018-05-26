@@ -142,7 +142,7 @@ protected:
 
 Q_SIGNALS:
 
-    void foldersData(const QMap<int, int> & data);
+    void foldersData(const QMap<int, int>& data);
     void faceFoldersData(const QMap<QString, QMap<int, int> >& data);
 
 private:
