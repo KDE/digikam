@@ -227,7 +227,7 @@ void ImageInfoCache::invalidate()
         if ((*it)->isReferenced())
         {
             (*it)->invalid = true;
-            (*it)->id = -1;
+            (*it)->id      = -1;
         }
         else
         {
