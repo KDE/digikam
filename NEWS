@@ -232,5 +232,5 @@ BUGFIXES:
 202 ==> 394413 - Unify group handling [patch].
 203 ==> 394573 - Revers geodata from open street map does not work.
 204 ==> 394590 - Feature request: being able to filter on all metadatas fields.
-205 ==> 
-
+205 ==> 394671 - Distortion on Panasonic DMC-LX15.
+206 ==> 
