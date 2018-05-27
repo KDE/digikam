@@ -64,12 +64,13 @@ public:
 
     bool    loggedIn() const;
     void    cancel();
-    void    authenticate();
-    void    exchangeSession(const QString& sessionKey);
+    void    authenticate(bool imposed);
     void    logout();
     void    link();
     void    unlink();
 
+    void    removeUserAccount(const QString& account);
+    
     void    listAlbums(long long userID = 0);
 
     void    createAlbum(const FbAlbum& album);
@@ -85,17 +86,17 @@ Q_SIGNALS:
     void    signalAddPhotoDone(int errCode, const QString& errMsg);
     void    signalCreateAlbumDone(int errCode, const QString& errMsg, const QString &newAlbumID);
     void    signalListAlbumsDone(int errCode, const QString& errMsg, const QList <FbAlbum>& albumsList);
+    void    signalLinkingSucceeded();
 
 private:
 
     //QString getApiSig(const QMap<QString, QString>& args);
     void    authenticationDone(int errCode, const QString& errMsg);
-    void    doOAuth();
     void    getLoggedInUser();
 
+    void    doOAuth();
     QString errorToText(int errCode, const QString& errMsg);
     int     parseErrorResponse(const QDomElement& e, QString& errMsg);
-    void    parseExchangeSession(const QByteArray& data);
     void    parseResponseGetLoggedInUser(const QByteArray& data);
     void    parseResponseAddPhoto(const QByteArray& data);
     void    parseResponseCreateAlbum(const QByteArray& data);

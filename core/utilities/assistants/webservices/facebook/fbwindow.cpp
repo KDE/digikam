@@ -315,23 +315,14 @@ void FbWindow::writeSettings()
     config.sync();
 }
 
-void FbWindow::authenticate()
+void FbWindow::authenticate(bool imposed)
 {
     setRejectButtonMode(QDialogButtonBox::Cancel);
     d->progressBar->show();
     d->progressBar->setFormat(QString::fromLatin1(""));
 
-    // Converting old world session keys into OAuth2 tokens
-    if (! d->sessionKey.isEmpty() && d->accessToken.isEmpty())
-    {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Exchanging session tokens to OAuth";
-        d->talker->exchangeSession(d->sessionKey);
-    }
-    else
-    {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method ";
-        d->talker->authenticate();
-    }
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method ";
+    d->talker->authenticate(imposed);
 }
 
 void FbWindow::slotLoginProgress(int step, int maxStep, const QString& label)
@@ -466,22 +457,25 @@ void FbWindow::slotBusy(bool val)
     }
 }
 
-void FbWindow::slotUserChangeRequest()
+/* Maybe we don't really want to logout but just change user
+ * The logout should be an explicit button rather than change account
+ */
+void FbWindow::slotUserLogout()
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request";
-
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot User Logout";
+    
     if (d->talker->loggedIn())
     {
         d->talker->logout();
         QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
-                     i18n("Warning"),
-                     i18n("After you have been logged out in the browser, "
-                          "click \"Continue\" to authenticate for another account"),
-                     QMessageBox::Yes | QMessageBox::No);
-
+                                                     i18n("Warning"),
+                                                     i18n("After you have been logged out in the browser, "
+                                                     "click \"Continue\" to authenticate for another account"),
+                                                     QMessageBox::Yes | QMessageBox::No);
+        
         (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
         (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
-
+        
         if (warn->exec() == QMessageBox::Yes)
         {
             d->accessToken.clear();
@@ -494,8 +488,13 @@ void FbWindow::slotUserChangeRequest()
             return;
         }
     }
+}
 
-    authenticate();
+void FbWindow::slotUserChangeRequest()
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request";
+    slotUserLogout();
+    authenticate(true);
 }
 
 void FbWindow::slotReloadAlbumsRequest(long long userID)
