@@ -83,6 +83,8 @@ public:
 
     explicit Private()
     {
+        apiUrl         = QString::fromLatin1("https://www.googleapis.com/drive/v2/%1");
+        uploadUrl      = QLatin1String("https://www.googleapis.com/upload/drive/v2/files");
         state          = GD_LOGOUT;
         netMngr        = 0;
         rootid         = QString::fromLatin1("root");
@@ -91,6 +93,8 @@ public:
 
 public:
 
+    QString                apiUrl;
+    QString                uploadUrl;
     QString                rootid;
     QString                rootfoldername;
     QString                username;
@@ -121,7 +125,7 @@ void GDTalker::getUserName()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getUserName with access_token: " << m_accessToken;
     
-    QUrl url(QString::fromLatin1("https://www.googleapis.com/drive/v2/about"));
+    QUrl url(d->apiUrl.arg("about"));
     QUrlQuery urlQuery;
     urlQuery.addQueryItem(QString::fromLatin1("scope"),        m_scope);
     urlQuery.addQueryItem(QString::fromLatin1("access_token"), m_accessToken);
@@ -143,7 +147,12 @@ void GDTalker::getUserName()
  */
 void GDTalker::listFolders()
 {
-    QUrl url(QString::fromLatin1("https://www.googleapis.com/drive/v2/files?q=mimeType = 'application/vnd.google-apps.folder'"));
+    QUrl url(d->apiUrl.arg("files"));
+    
+    QUrlQuery q;
+    q.addQueryItem(QLatin1String("q"), QLatin1String("mimeType = 'application/vnd.google-apps.folder'"));
+    
+    url.setQuery(q);
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
@@ -167,7 +176,7 @@ void GDTalker::createFolder(const QString& title, const QString& id)
         m_reply = 0;
     }
 
-    QUrl url(QString::fromLatin1("https://www.googleapis.com/drive/v2/files"));
+    QUrl url(d->apiUrl.arg("files"));
     QByteArray data;
     data += "{\"title\":\"";
     data += title.toLatin1();
@@ -224,10 +233,9 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
             return false;
         }
 
-        path                  = WSToolUtils::makeTemporaryDir("google")
-                                             .filePath(QFileInfo(imgPath)
-                                             .baseName().trimmed() +
-                                             QLatin1String(".jpg"));
+        path = WSToolUtils::makeTemporaryDir("google")
+                            .filePath(QFileInfo(imgPath)
+                            .baseName().trimmed() + QLatin1String(".jpg"));
         int imgQualityToApply = 100;
 
         if (rescale)
@@ -260,8 +268,13 @@ bool GDTalker::addPhoto(const QString& imgPath, const GSPhoto& info,
 
     form.finish();
 
-    QUrl url(QString::fromLatin1("https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart"));
+    QUrl url(d->uploadUrl);
+    
+    QUrlQuery q;
+    q.addQueryItem(QLatin1String("uploadType"), QLatin1String("multipart"));
 
+    url.setQuery(q);
+    
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, form.contentType());
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
