@@ -325,6 +325,13 @@ BdEngineBackend::QueryState ThumbsDb::insertThumbnail(const ThumbsDbInfo& info, 
     return lastQueryState;
 }
 
+BdEngineBackend::QueryState ThumbsDb::renameByFilePath(const QString& oldPath, const QString& newPath)
+{
+    return d->db->execSql(QLatin1String("UPDATE FilePaths SET path=? "
+                                        "WHERE path=?;"),
+                          newPath, oldPath);
+}
+
 BdEngineBackend::QueryState ThumbsDb::replaceThumbnail(const ThumbsDbInfo& info)
 {
     return d->db->execSql(QLatin1String("REPLACE INTO Thumbnails (id, type, modificationDate, orientationHint, data) VALUES(?, ?, ?, ?, ?);"),
