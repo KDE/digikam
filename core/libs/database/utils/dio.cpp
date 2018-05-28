@@ -473,9 +473,16 @@ void DIO::slotOneProccessed(const QUrl& url)
         if (!info.isNull())
         {
             QString oldPath = url.toLocalFile();
+            QString newName = data->destUrl(url).fileName();
             QString newPath = data->destUrl(url).toLocalFile();
 
-            info.setName(data->destUrl(url).fileName());
+            if (data->overwrite())
+            {
+                ThumbsDbAccess().db()->removeByFilePath(newPath);
+                CoreDbAccess().db()->deleteItem(info.albumId(), newName);
+            }
+
+            info.setName(newName);
             ThumbsDbAccess().db()->renameByFilePath(oldPath, newPath);
 
             // Remove old thumbnails and images from the cache

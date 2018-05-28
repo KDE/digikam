@@ -761,7 +761,7 @@ public:
      * Rename the item.
      * Note: we not use here ImageChangeset.
      */
-    void renameItem(qlonglong imageID, const QString& newName);
+    void renameItem(qlonglong imageID, int albumID, const QString& newName);
 
     /**
      * Returns the requested fields from the Images table.

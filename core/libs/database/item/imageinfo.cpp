@@ -1665,7 +1665,7 @@ void ImageInfo::setName(const QString& newName)
         return;
     }
 
-    CoreDbAccess().db()->renameItem(m_data->id, newName);
+    CoreDbAccess().db()->renameItem(m_data->id, m_data->albumId, newName);
 
     ImageInfoWriteLocker lock;
     m_data->name = newName;
