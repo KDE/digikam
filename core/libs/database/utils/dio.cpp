@@ -480,19 +480,15 @@ void DIO::slotOneProccessed(const QUrl& url)
             if (data->overwrite())
             {
                 ThumbsDbAccess().db()->removeByFilePath(newPath);
+                LoadingCacheInterface::fileChanged(newPath, false);
                 CoreDbAccess().db()->deleteItem(info.albumId(), newName);
             }
 
             ThumbsDbAccess().db()->renameByFilePath(oldPath, newPath);
-            info.setName(newName);
-
             // Remove old thumbnails and images from the cache
             LoadingCacheInterface::fileChanged(oldPath, false);
-
-            if (data->overwrite())
-            {
-                LoadingCacheInterface::fileChanged(newPath, false);
-            }
+            // Rename in ImageInfo and database
+            info.setName(newName);
         }
 
         emit signalRenameSucceeded(url);
