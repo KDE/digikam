@@ -46,6 +46,7 @@
 #include "iojobsmanager.h"
 #include "collectionmanager.h"
 #include "dnotificationwrapper.h"
+#include "loadingcacheinterface.h"
 #include "progressmanager.h"
 #include "digikamapp.h"
 #include "iojobdata.h"
@@ -486,32 +487,11 @@ void DIO::slotOneProccessed(const QUrl& url)
             info.setName(newName);
 
             // Remove old thumbnails and images from the cache
+            LoadingCacheInterface::fileChanged(oldPath, false);
+
+            if (data->overwrite())
             {
-                LoadingCache* const cache = LoadingCache::cache();
-                LoadingCache::CacheLock lock(cache);
-                QStringList possibleKeys  = LoadingDescription::possibleThumbnailCacheKeys(oldPath);
-
-                if (data->overwrite())
-                {
-                    possibleKeys         << LoadingDescription::possibleThumbnailCacheKeys(newPath);
-                }
-
-                foreach(const QString& cacheKey, possibleKeys)
-                {
-                    cache->removeThumbnail(cacheKey);
-                }
-
-                possibleKeys              = LoadingDescription::possibleCacheKeys(oldPath);
-
-                if (data->overwrite())
-                {
-                    possibleKeys         << LoadingDescription::possibleCacheKeys(newPath);
-                }
-
-                foreach(const QString& cacheKey, possibleKeys)
-                {
-                    cache->removeImage(cacheKey);
-                }
+                LoadingCacheInterface::fileChanged(newPath, false);
             }
         }
 
