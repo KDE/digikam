@@ -3599,6 +3599,7 @@ void AlbumManager::slotCollectionImageChange(const CollectionImageChangeset& cha
     switch (changeset.operation())
     {
         case CollectionImageChangeset::Added:
+        case CollectionImageChangeset::Deleted:
         case CollectionImageChangeset::Removed:
         case CollectionImageChangeset::RemovedAll:
 

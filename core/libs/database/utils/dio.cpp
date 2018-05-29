@@ -482,8 +482,8 @@ void DIO::slotOneProccessed(const QUrl& url)
                 CoreDbAccess().db()->deleteItem(info.albumId(), newName);
             }
 
-            info.setName(newName);
             ThumbsDbAccess().db()->renameByFilePath(oldPath, newPath);
+            info.setName(newName);
 
             // Remove old thumbnails and images from the cache
             {
@@ -491,12 +491,22 @@ void DIO::slotOneProccessed(const QUrl& url)
                 LoadingCache::CacheLock lock(cache);
                 QStringList possibleKeys  = LoadingDescription::possibleThumbnailCacheKeys(oldPath);
 
+                if (data->overwrite())
+                {
+                    possibleKeys         << LoadingDescription::possibleThumbnailCacheKeys(newPath);
+                }
+
                 foreach(const QString& cacheKey, possibleKeys)
                 {
                     cache->removeThumbnail(cacheKey);
                 }
 
                 possibleKeys              = LoadingDescription::possibleCacheKeys(oldPath);
+
+                if (data->overwrite())
+                {
+                    possibleKeys         << LoadingDescription::possibleCacheKeys(newPath);
+                }
 
                 foreach(const QString& cacheKey, possibleKeys)
                 {

@@ -676,6 +676,7 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
                 }
                 break;
             }
+            case CollectionImageChangeset::Deleted:
             case CollectionImageChangeset::Removed:
             case CollectionImageChangeset::RemovedAll:
                 // is one of our images affected?
