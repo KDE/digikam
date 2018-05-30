@@ -63,7 +63,7 @@ enum FbPrivacy
     FB_ME = 0,
     FB_FRIENDS = 1,
     FB_FRIENDS_OF_FRIENDS,
-    FB_NETWORKS, //NETWORK is deprecated in latest version of Graph API
+//     FB_NETWORKS, //NETWORK is deprecated in latest version of Graph API
     FB_EVERYONE,
     FB_CUSTOM
 };

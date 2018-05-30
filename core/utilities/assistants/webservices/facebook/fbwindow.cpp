@@ -409,9 +409,9 @@ void FbWindow::slotListAlbumsDone(int errCode,
                 albumIcon = QString::fromLatin1("system-users");
                 break;
 
-            case FB_NETWORKS:
-                albumIcon = QString::fromLatin1("network-workgroup");
-                break;
+//             case FB_NETWORKS:
+//                 albumIcon = QString::fromLatin1("network-workgroup");
+//                 break;
 
             case FB_EVERYONE:
                 albumIcon = QString::fromLatin1("folder-html");

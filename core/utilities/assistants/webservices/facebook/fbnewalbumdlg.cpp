@@ -57,8 +57,8 @@ FbNewAlbumDlg::FbNewAlbumDlg(QWidget* const parent, const QString& toolName)
                           i18n("Only Friends"),            FB_FRIENDS);
     m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("system-users")),
                           i18n("Friends of Friends"),      FB_FRIENDS_OF_FRIENDS);
-    m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("network-workgroup")),
-                          i18n("My Networks and Friends"), FB_NETWORKS);
+//     m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("network-workgroup")),
+//                           i18n("My Networks and Friends"), FB_NETWORKS);
     m_privacyCoB->addItem(QIcon::fromTheme(QString::fromLatin1("folder-html")),
                           i18n("Everyone"),                FB_EVERYONE);
     m_privacyCoB->setCurrentIndex(1);
