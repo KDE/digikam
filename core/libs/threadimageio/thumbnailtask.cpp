@@ -173,6 +173,11 @@ void ThumbnailLoadingTask::execute()
             break;
     }
 
+    if (m_loadingTaskStatus == LoadingTaskStatusStopping)
+    {
+        return;
+    }
+
     {
         LoadingCache::CacheLock lock(cache);
 

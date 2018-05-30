@@ -235,4 +235,5 @@ BUGFIXES:
 205 ==> 394671 - Distortion on Panasonic DMC-LX15.
 206 ==> 393205 - Advanced rename very slow.
 207 ==> 382474 - Thumbnail regeneration.
-208 ==> 
+208 ==> 394865 - digikam suspicious crash on exit.
+209 ==> 
