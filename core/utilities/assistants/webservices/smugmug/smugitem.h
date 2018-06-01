@@ -85,7 +85,9 @@ public:
 public:
 
     qint64  id;
+    QString nodeID;
 
+    QString name;
     QString key;
     QString title;
     QString description;
@@ -99,6 +101,7 @@ public:
 
     bool    isPublic;
     QString password;
+    bool canShare;
     QString passwordHint;
 
     int     imageCount;
