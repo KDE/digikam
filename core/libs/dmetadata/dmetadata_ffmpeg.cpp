@@ -46,8 +46,6 @@
 
 // Qt includes
 
-#include <QDate>
-#include <QTime>
 #include <QDateTime>
 #include <QFileInfo>
 #include <QMimeDatabase>
