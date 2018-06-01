@@ -344,7 +344,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             if (!data.isEmpty())
             {
-                QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+                QDateTime dt = QDateTime::fromString(data, Qt::ISODate).toLocalTime();
                 setXmpTagString("Xmp.audio.TrackCreateDate",
                                 QString::number(s_secondsSinceJanuary1904(dt)));
             }
@@ -591,7 +591,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             if (!data.isEmpty())
             {
-                QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+                QDateTime dt = QDateTime::fromString(data, Qt::ISODate).toLocalTime();
                 setXmpTagString("Xmp.video.TrackCreateDate",
                                 QString::number(s_secondsSinceJanuary1904(dt)));
 
@@ -1438,7 +1438,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     if (!data.isEmpty())
     {
         // Backport date in Exif and Iptc.
-        QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+        QDateTime dt = QDateTime::fromString(data, Qt::ISODate).toLocalTime();
         setImageDateTime(dt, true);
     }
 
@@ -1459,7 +1459,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (!data.isEmpty())
     {
-        QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+        QDateTime dt = QDateTime::fromString(data, Qt::ISODate).toLocalTime();
         setXmpTagString("Xmp.video.MediaCreateDate",
                         QString::number(s_secondsSinceJanuary1904(dt)));
     }
