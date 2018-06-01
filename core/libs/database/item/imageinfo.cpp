@@ -1673,6 +1673,20 @@ void ImageInfo::setOrientation(int value)
     CoreDbAccess().db()->changeImageInformation(m_data->id, QVariantList() << value, DatabaseFields::Orientation);
 }
 
+void ImageInfo::setName(const QString& newName)
+{
+    if (!m_data || newName.isEmpty())
+    {
+        return;
+    }
+
+    CoreDbAccess().db()->renameItem(m_data->id, newName);
+
+    ImageInfoWriteLocker lock;
+    m_data->name = newName;
+    ImageInfoStatic::cache()->cacheByName(m_data);
+}
+
 void ImageInfo::setDateTime(const QDateTime& dateTime)
 {
     if (!m_data || !dateTime.isValid())

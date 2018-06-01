@@ -39,13 +39,14 @@
 #include "coredbaccess.h"
 #include "album.h"
 #include "dmetadata.h"
-#include "loadingcacheinterface.h"
 #include "metadatasettings.h"
 #include "scancontroller.h"
-#include "thumbnailloadthread.h"
+#include "thumbsdb.h"
+#include "thumbsdbaccess.h"
 #include "iojobsmanager.h"
 #include "collectionmanager.h"
 #include "dnotificationwrapper.h"
+#include "loadingcacheinterface.h"
 #include "progressmanager.h"
 #include "digikamapp.h"
 #include "iojobdata.h"
@@ -468,26 +469,26 @@ void DIO::slotOneProccessed(const QUrl& url)
     }
     else if (operation == IOJobData::Rename)
     {
-        // If we rename a file, the name changes. This is equivalent to a move.
-        // Do this in database, too.
         ImageInfo info = data->findImageInfo(url);
 
         if (!info.isNull())
         {
-            CoreDbAccess().db()->moveItem(info.albumId(), info.name(),
-                                          info.albumId(), data->destUrl(url).fileName());
-
-            // delete thumbnail
-            ThumbnailLoadThread::deleteThumbnail(url.toLocalFile());
-
-            QString destPath = data->destUrl(url).toLocalFile();
+            QString oldPath = url.toLocalFile();
+            QString newName = data->destUrl(url).fileName();
+            QString newPath = data->destUrl(url).toLocalFile();
 
             if (data->overwrite())
             {
-                ThumbnailLoadThread::deleteThumbnail(destPath);
+                ThumbsDbAccess().db()->removeByFilePath(newPath);
+                LoadingCacheInterface::fileChanged(newPath, false);
+                CoreDbAccess().db()->deleteItem(info.albumId(), newName);
             }
 
-            LoadingCacheInterface::fileChanged(destPath);
+            ThumbsDbAccess().db()->renameByFilePath(oldPath, newPath);
+            // Remove old thumbnails and images from the cache
+            LoadingCacheInterface::fileChanged(oldPath, false);
+            // Rename in ImageInfo and database
+            info.setName(newName);
         }
 
         emit signalRenameSucceeded(url);

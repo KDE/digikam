@@ -186,7 +186,7 @@ void ImageAlbumModel::setSpecialTagListing(const QString& specialListing)
     }
 }
 
-void ImageAlbumModel::openAlbum(QList<Album*> albums)
+void ImageAlbumModel::openAlbum(const QList<Album*>& albums)
 {
     if (d->currentAlbums == albums)
     {
@@ -308,7 +308,7 @@ void ImageAlbumModel::slotNextIncrementalRefresh()
     }
 }
 
-void ImageAlbumModel::startListJob(QList<Album*> albums)
+void ImageAlbumModel::startListJob(const QList<Album*>& albums)
 {
     if (albums.isEmpty())
     {
@@ -331,7 +331,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
 
     if (albums.first()->type() == Album::TAG || albums.first()->type() == Album::SEARCH)
     {
-        for (QList<Album*>::iterator it = albums.begin() ; it != albums.end() ; ++it)
+        for (QList<Album*>::const_iterator it = albums.constBegin() ; it != albums.constEnd() ; ++it)
         {
             ids << (*it)->id();
         }
@@ -447,7 +447,7 @@ void ImageAlbumModel::slotResult()
     finishIncrementalRefresh();
 }
 
-void ImageAlbumModel::slotData(const QList<ImageListerRecord> &records)
+void ImageAlbumModel::slotData(const QList<ImageListerRecord>& records)
 {
     if (d->jobThread != sender())
     {
@@ -538,9 +538,9 @@ void ImageAlbumModel::slotImageChange(const ImageChangeset& changeset)
     {
         if ((*it)->type() == Album::SEARCH)
         {
-            SAlbum* const salbum = static_cast<SAlbum*>(*it);
-
+            SAlbum* const salbum  = static_cast<SAlbum*>(*it);
             bool needCheckRefresh = false;
+
             if (salbum->isNormalSearch())
             {
                 // For searches any touched field can require a refresh.
@@ -642,7 +642,7 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
 
     QList<Album*>::iterator it;
 
-    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
+    for (it = d->currentAlbums.begin() ; it != d->currentAlbums.end() ; ++it)
     {
         switch (changeset.operation())
         {
@@ -676,6 +676,7 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
                 }
                 break;
             }
+            case CollectionImageChangeset::Deleted:
             case CollectionImageChangeset::Removed:
             case CollectionImageChangeset::RemovedAll:
                 // is one of our images affected?
@@ -694,7 +695,7 @@ void ImageAlbumModel::slotCollectionImageChange(const CollectionImageChangeset& 
                 break;
         }
 
-        if(doRefresh)
+        if (doRefresh)
             break;
     }
 

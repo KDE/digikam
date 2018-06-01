@@ -116,7 +116,7 @@ void ThumbnailLoadingTask::execute()
                 m_usedProcess->addListener(this);
 
                 // break loop when either the loading has completed, or this task is being stopped
-                while ( !m_usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping )
+                while (!m_usedProcess->completed() && m_loadingTaskStatus != LoadingTaskStatusStopping)
                 {
                     lock.timedWait();
                 }
@@ -173,6 +173,11 @@ void ThumbnailLoadingTask::execute()
             break;
     }
 
+    if (m_loadingTaskStatus == LoadingTaskStatusStopping)
+    {
+        return;
+    }
+
     {
         LoadingCache::CacheLock lock(cache);
 
@@ -192,7 +197,7 @@ void ThumbnailLoadingTask::execute()
         m_completed = true;
 
         // dispatch image to all listeners, including this
-        for (int i=0; i<m_listeners.count(); ++i)
+        for (int i = 0 ; i < m_listeners.count() ; ++i)
         {
             ThumbnailLoadingTask* const task = dynamic_cast<ThumbnailLoadingTask*>(m_listeners.at(i));
 
@@ -263,7 +268,7 @@ void ThumbnailLoadingTask::postProcess()
         default:
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Unsupported postprocessing parameter for thumbnail loading:"
-                     << m_loadingDescription.postProcessingParameters.colorManagement;
+                                         << m_loadingDescription.postProcessingParameters.colorManagement;
             break;
         }
     }

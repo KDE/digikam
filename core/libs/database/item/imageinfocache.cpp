@@ -133,7 +133,7 @@ DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForId(qlonglong id)
     return DSharedDataPointer<ImageInfoData>(data);
 }
 
-void ImageInfoCache::cacheByName(ImageInfoData* data)
+void ImageInfoCache::cacheByName(ImageInfoData* const data)
 {
     // Called with Write lock
 
@@ -154,7 +154,7 @@ DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForPath(int albumRootId, c
     // We check all entries in the multi hash with matching file name
     QMultiHash<QString, ImageInfoData*>::const_iterator it;
 
-    for (it = m_nameHash.constFind(name); it != m_nameHash.constEnd() && it.key() == name; ++it)
+    for (it = m_nameHash.constFind(name) ; it != m_nameHash.constEnd() && it.key() == name ; ++it)
     {
         // first check that album root matches
         if (it.value()->albumRootId != albumRootId)
@@ -177,7 +177,7 @@ DSharedDataPointer<ImageInfoData> ImageInfoCache::infoForPath(int albumRootId, c
     return DSharedDataPointer<ImageInfoData>();
 }
 
-void ImageInfoCache::dropInfo(ImageInfoData* infodata)
+void ImageInfoCache::dropInfo(ImageInfoData* const infodata)
 {
     if (!infodata)
     {
@@ -222,12 +222,12 @@ void ImageInfoCache::invalidate()
     ImageInfoWriteLocker lock;
     QHash<qlonglong, ImageInfoData*>::iterator it;
 
-    for (it = m_infos.begin(); it != m_infos.end(); ++it)
+    for (it = m_infos.begin() ; it != m_infos.end() ; ++it)
     {
         if ((*it)->isReferenced())
         {
             (*it)->invalid = true;
-            (*it)->id = -1;
+            (*it)->id      = -1;
         }
         else
         {
