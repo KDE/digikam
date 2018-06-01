@@ -9,6 +9,7 @@
  * Copyright (C) 2005-2008 by Vardhman Jain <vardhman at gmail dot com>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -250,14 +251,18 @@ void FbWindow::readSettings()
 {
     KConfig config;
     KConfigGroup grp  = config.group("Facebook Settings");
-    d->accessToken    = grp.readEntry("Access Token");
-    d->sessionExpires = grp.readEntry("Session Expires", 0);
-
-    if (d->accessToken.isEmpty())
-    {
-        d->sessionKey     = grp.readEntry("Session Key");
-        d->sessionSecret  = grp.readEntry("Session Secret");
-    }
+    
+    /* 
+     * Access token and session expire now handled in fbtalker.cpp by O2
+     */
+//     d->accessToken    = grp.readEntry("Access Token");
+//     d->sessionExpires = grp.readEntry("Session Expires", 0);
+// 
+//     if (d->accessToken.isEmpty())
+//     {
+//         d->sessionKey     = grp.readEntry("Session Key");
+//         d->sessionSecret  = grp.readEntry("Session Secret");
+//     }
 
     d->currentAlbumID = grp.readEntry("Current Album", QString());
 
@@ -287,23 +292,28 @@ void FbWindow::writeSettings()
 {
     KConfig config;
     KConfigGroup grp = config.group("Facebook Settings");
-    grp.writeEntry("Access Token",    d->accessToken);
+    
+    /* 
+     * Access token and session expire now handled in fbtalker.cpp by O2
+     */
+//     grp.writeEntry("Access Token",    d->accessToken);
 
     /* If we have both access token and session key, then we have just converted one into the other. */
-    if (! d->accessToken.isEmpty())
-    {
-        if (! d->sessionKey.isEmpty())
-        {
-            grp.deleteEntry("Session Key");
-        }
+//     if (! d->accessToken.isEmpty())
+//     {
+//         if (! d->sessionKey.isEmpty())
+//         {
+//             grp.deleteEntry("Session Key");
+//         }
+// 
+//         if (! d->sessionSecret.isEmpty())
+//         {
+//             grp.deleteEntry("Session Secret");
+//         }
+//     }
+// 
+//     grp.writeEntry("Session Expires", d->sessionExpires);
 
-        if (! d->sessionSecret.isEmpty())
-        {
-            grp.deleteEntry("Session Secret");
-        }
-    }
-
-    grp.writeEntry("Session Expires", d->sessionExpires);
     grp.writeEntry("Current Album",   d->currentAlbumID);
     grp.writeEntry("Resize",          d->resizeChB->isChecked());
     grp.writeEntry("Maximum Width",   d->dimensionSpB->value());
@@ -355,8 +365,11 @@ void FbWindow::slotLoginDone(int errCode, const QString& errMsg)
 
     d->albumsCoB->addItem(i18n("<auto create>"), QString());
 
-    d->accessToken    = d->talker->getAccessToken();
-    d->sessionExpires = d->talker->getSessionExpires();
+    /* 
+     * Access token and session expire now handled in fbtalker.cpp by O2
+     */
+//     d->accessToken    = d->talker->getAccessToken();
+//     d->sessionExpires = d->talker->getSessionExpires();
 
     if (errCode == 0 && d->talker->loggedIn())
     {
@@ -478,8 +491,11 @@ void FbWindow::slotUserLogout()
         
         if (warn->exec() == QMessageBox::Yes)
         {
-            d->accessToken.clear();
-            d->sessionExpires = 0;
+            /* 
+             * Access token and session expire now handled in fbtalker.cpp by O2
+             */
+//             d->accessToken.clear();
+//             d->sessionExpires = 0;
             delete warn;
         }
         else

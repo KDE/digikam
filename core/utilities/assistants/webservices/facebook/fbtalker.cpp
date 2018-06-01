@@ -9,6 +9,7 @@
  * Copyright (C) 2008-2010 by Luka Renko <lure at kubuntu dot org>
  * Copyright (c) 2011      by Dirk Tilger <dirk dot kde at miriup dot de>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -182,9 +183,6 @@ FbTalker::FbTalker(QWidget* const parent)
 
 FbTalker::~FbTalker()
 {
-    // do not logout - may reuse session for next upload
-//     unlink(); // just for various tests, delete when finishing
-
     if (d->reply)
     {
         d->reply->abort();
@@ -260,7 +258,7 @@ QString FbTalker::getAccessToken() const
 
 unsigned int FbTalker::getSessionExpires() const
 {
-    return d->o2->expires(); //d->sessionExpires;
+    return d->o2->expires();
 }
 
 FbUser FbTalker::getUser() const
@@ -294,7 +292,7 @@ void FbTalker::authenticate(bool imposed)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "current time :" << QDateTime::currentMSecsSinceEpoch() / 1000;
     
     // If user does not login yet (sessionExpires == 0), access token is expired or imposed to login, doOAuth
-    // Otherwise, skip authentication
+    // Otherwise, skip authentication by sending signalLinkingSucceeded
     if(d->sessionExpires == 0 || 
        d->sessionExpires == QDateTime::currentMSecsSinceEpoch() / 1000)
     {
@@ -415,6 +413,11 @@ void FbTalker::listAlbums(long long userID)
     emit signalBusy(true);
     
     QUrl url;
+    
+    /*
+     * If userID is specified, load albums of that user,
+     * else load albums of current user
+     */
     if(!userID)
     {
         url = QUrl(d->apiURL.arg(d->user.id)
@@ -692,7 +695,7 @@ int FbTalker::parseErrorResponse(const QDomElement& e, QString& errMsg)
     return errCode;
 }
 
-//TODO: Part to O2
+//TODO: Port to O2
 void FbTalker::parseResponseGetLoggedInUser(const QByteArray& data)
 {
     QString errMsg;
