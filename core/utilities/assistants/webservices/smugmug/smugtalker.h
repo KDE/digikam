@@ -67,7 +67,9 @@ public:
             void    unlink();
             void    removeUserName(const QString& userName);
             void    login(const QString& email = QString(),
-                        const QString& password = QString());
+                          const QString& password = QString());
+            void    loginWithNickName(const QString& nickName);
+            void    getLoginedUser();
             void    logout();
 
     
@@ -92,6 +94,7 @@ public:
 Q_SIGNALS:
 
     void signalBusy(bool val);
+    void signalLinkingSucceeded();
     void signalLoginProgress(int step,
                             int maxStep = 0,
                             const QString& label = QString());

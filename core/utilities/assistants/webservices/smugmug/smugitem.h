@@ -47,6 +47,9 @@ public:
         nickName.clear();
         displayName.clear();
         accountType.clear();
+        userUri.clear();
+        nodeUri.clear();
+        folderUri.clear();
         fileSizeLimit = 0;
     }
 
@@ -56,6 +59,9 @@ public:
     QString nickName;
     QString displayName;
     QString accountType;
+    QString userUri;
+    QString nodeUri;
+    QString folderUri;
     int     fileSizeLimit;
 };
 

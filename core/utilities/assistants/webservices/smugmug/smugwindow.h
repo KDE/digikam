@@ -50,7 +50,8 @@ public:
 
     explicit SmugWindow(DInfoInterface* const iface,
                         QWidget* const parent,
-                        bool import=false);
+                        bool import=false,
+                        QString nickName = QString());
     ~SmugWindow();
 
     /**
@@ -123,6 +124,7 @@ private:
 
     void authenticate(const QString& email = QString(),
                       const QString& password = QString());
+    void authenticateWithNickName(const QString& nickName);
 
     void buttonStateChange(bool state);
     void setUiInProgressState(bool inProgress);

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +29,11 @@
 #include <QByteArray>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QJsonArray>
 #include <QTextDocument>
 #include <QFile>
 #include <QFileInfo>
@@ -84,15 +90,16 @@ public:
         //userAgent  = QString::fromLatin1("KIPI-Plugin-Smug/%1 (lure@kubuntu.org)").arg(kipipluginsVersion());
         userAgent       = QString::fromLatin1("digiKam/%1 (digikamdeveloper@gmail.com)").arg(digiKamVersion());
 
-        apiVersion      = QString::fromLatin1("api/v2%1");
-        //         apiVersion      = QLatin1String("services/api/rest/1.3.0/");
-        apiURL          = QString::fromLatin1("https://api.smugmug.com/%1").arg(apiVersion);
+        apiVersion      = QLatin1String("v2");
+        apiURL          = QString::fromLatin1("https://api.smugmug.com/%1");
         requestTokenUrl = QLatin1String("https://api.smugmug.com/services/oauth/1.0a/getRequestToken");
         authUrl         = QLatin1String("https://api.smugmug.com/services/oauth/1.0a/authorize");
         accessTokenUrl  = QLatin1String("https://api.smugmug.com/services/oauth/1.0a/getAccessToken");
         
-        apikey          = QString::fromLatin1("P3GR322MB4rf3dZRxDZNFv8cbK6sLPdV");
-        clientSecret    = QString::fromLatin1("trJrZT3pHQRpZB8Z3LMGCL39g9q7nWJPBzZTQSWhzCnmTmtqqW5xxXdBn6fVhM3p");
+        apikey          = QLatin1String("66NGWpNDWmnsW6qZKLp6hNMTDZ9C24pN");
+        clientSecret    = QLatin1String("GbtsCvH3GMGnQ6Lf4XmGXwMQs2pm5SpSvVJdPsQDpHMRbsPQSWqzhxXKRRXhMwP5");
+//         apikey          = QString::fromLatin1("P3GR322MB4rf3dZRxDZNFv8cbK6sLPdV");
+//         clientSecret    = QString::fromLatin1("trJrZT3pHQRpZB8Z3LMGCL39g9q7nWJPBzZTQSWhzCnmTmtqqW5xxXdBn6fVhM3p");
         iface           = 0;
         netMngr         = 0;
         reply           = 0;
@@ -101,6 +108,7 @@ public:
         // TODO: Port to O2
         requestor       = 0;
         o1              = 0;
+        settings        = 0;
     }
 
 public:
@@ -153,13 +161,13 @@ SmugTalker::SmugTalker(DInfoInterface* const iface, QWidget* const parent)
             d->o1->setAccessTokenUrl(d->accessTokenUrl);
             d->o1->setLocalPort(8000);
             
-            // Application related
+            // Application credentials
             d->o1->setClientId(d->apikey);
             d->o1->setClientSecret(d->clientSecret);
             // Set userAgent to work around error :
             // O1::onTokenRequestError: 201 "Error transferring requestTokenUrl() - server replied: Forbidden" "Bad bot"
             d->o1->setUserAgent(d->userAgent.toUtf8());
-            
+                       
             // Setting to store oauth config
             d->settings = WSToolUtils::getOauthSettings(this);
             O0SettingsStore* const store   = new O0SettingsStore(d->settings, QLatin1String(O2_ENCRYPTION_KEY), this);
@@ -169,15 +177,12 @@ SmugTalker::SmugTalker(DInfoInterface* const iface, QWidget* const parent)
             // Connect signaux slots
             connect(d->o1, SIGNAL(linkingFailed()),
                     this, SLOT(slotLinkingFailed()));
-            
+            connect(this, SIGNAL(signalLinkingSucceeded()),
+                    this, SLOT(slotLinkingSucceeded()));
             connect(d->o1, SIGNAL(linkingSucceeded()),
                     this, SLOT(slotLinkingSucceeded()));
-            
             connect(d->o1, SIGNAL(openBrowser(QUrl)),
                     this, SLOT(slotOpenBrowser(QUrl)));
-            
-            connect(d->o1, SIGNAL(closeBrowser()),
-                    this, SLOT(slotCloseBrowser()));
             
             d->requestor = new O1Requestor(d->netMngr, d->o1, this);
 }
@@ -238,6 +243,7 @@ SmugTalker::~SmugTalker()
         {
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Smug fail";
             emit signalBusy(false);
+            getLoginedUser();
         }
         
         void SmugTalker::slotLinkingSucceeded()
@@ -250,9 +256,8 @@ SmugTalker::~SmugTalker()
             }
             
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Smug ok";
-            //emit signalLinkingSucceeded();
             
-            login();
+            getLoginedUser();
         }
         
         void SmugTalker::slotOpenBrowser(const QUrl& url)
@@ -284,6 +289,73 @@ void SmugTalker::cancel()
 }
 
 //TODO: Port to O2 here
+        void SmugTalker::loginWithNickName(const QString& nickName)
+        {
+            if (d->reply)
+            {
+                d->reply->abort();
+                d->reply = 0;
+            }
+            
+            emit signalBusy(true);
+            emit signalLoginProgress(1, 4, i18n("Logging in to SmugMug service..."));
+            
+            d->user.nickName = nickName;
+            d->user.userUri  = QString::fromLatin1("api/v2/user/%1!albums").arg(d->user.nickName);
+//             d->user.userUri  = QString::fromLatin1("api/v2!authuser");
+            
+            // Builde for authentication url
+            O1SmugMug::AuthorizationUrlBuilder builder;
+            builder.setAccess(O1SmugMug::AccessFull);
+            builder.setPermissions(O1SmugMug::PermissionsModify);
+            builder.setPrepopulatedUsername(nickName);
+            d->o1->initAuthorizationUrl(builder);
+            
+            if(!d->o1->linked())
+            {
+                link();
+            }
+            else
+            {
+                emit signalLinkingSucceeded();
+            }
+        }
+        
+        void SmugTalker::getLoginedUser()
+        {            
+            QUrl url(d->apiURL.arg(d->user.userUri));
+            
+//             QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
+//             reqParams << O0RequestParameter("APIKey", d->apikey.toLatin1());
+//             reqParams << O0RequestParameter("_filter", "Name,NickName,ResponseLevel");
+//             reqParams << O0RequestParameter("_filteruri", "Node,Folder");
+            
+//             QByteArray postData = O1::createQueryParameters(reqParams);
+            
+            
+            QUrlQuery q;
+            q.addQueryItem(QString::fromLatin1("APIKey"), d->apikey);
+//             q.addQueryItem(QString::fromLatin1("access_token"), d->o1->token());
+//             q.addQueryItem(QString::fromLatin1("access_token_secret"), d->o1->tokenSecret());
+            q.addQueryItem(QString::fromLatin1("_filter"), QLatin1String("Name,NickName,ResponseLevel"));
+            q.addQueryItem(QString::fromLatin1("_filteruri"), QLatin1String("Node,Folder"));
+            
+            url.setQuery(q);
+            
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url = " << url.url();
+            
+            QNetworkRequest netRequest(url);
+            netRequest.setRawHeader("Accept", "application/json");
+            netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String(O2_MIME_TYPE_JSON));
+            netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
+            
+            d->reply = d->netMngr->get(netRequest);
+//             d->reply = d->requestor->get(netRequest, reqParams);
+            
+            d->state = Private::SMUG_LOGIN;
+            d->buffer.resize(0);
+        }
+        
         void SmugTalker::login(const QString& email, const QString& password)
         {
             if (d->reply)
@@ -291,59 +363,37 @@ void SmugTalker::cancel()
                 d->reply->abort();
                 d->reply = 0;
             }
-
+            
             emit signalBusy(true);
             emit signalLoginProgress(1, 4, i18n("Logging in to SmugMug service..."));
             
-            O1Requestor *requestor = new O1Requestor(d->netMngr, d->o1, this);
-            
-            QList<O0RequestParameter> requestParams = QList<O0RequestParameter>();
-//             requestParams << O0RequestParameter(QString("method").toUtf8(), QString("smugmug.auth.getAccessToken").toUtf8());
-//             requestParams << O0RequestParameter(QString("APIKey").toUtf8(), QString(d->apikey).toUtf8());
-            
-            QUrl url(d->apiURL.arg("/api/v2/folder/user/trungdinh/SmugMug"));
+            QUrl url(d->apiURL);
             QUrlQuery q;
-
-//             q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.auth.getAccessToken"));
-//             q.addQueryItem(QString::fromLatin1("APIKey"),       d->apikey);
             
-//             if (email.isEmpty())
-//             {
-//                 q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.albums.get"));
-//                 q.addQueryItem(QString::fromLatin1("APIKey"),       d->apikey);
-//             }
-//             else
-//             {
-//                 q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.login.withPassword"));
-//                 q.addQueryItem(QString::fromLatin1("APIKey"),       d->apikey);
-//                 q.addQueryItem(QString::fromLatin1("EmailAddress"), email);
-//                 q.addQueryItem(QString::fromLatin1("Password"),     password);
-//             }
-
-//             q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.users.getInfo"));
-//             q.addQueryItem(QString::fromLatin1("APIKey"),       d->apikey);
-//             q.addQueryItem(QLatin1String("oauth_token"),        d->o1->token());
-//             q.addQueryItem(QLatin1String("oauth_token_secret"), d->o1->tokenSecret());
-//             q.addQueryItem(QLatin1String("NickName"),           QLatin1String("trungdinh"));
-//             q.addQueryItem(QString::fromLatin1("EmailAddress"), email);
-//             q.addQueryItem(QString::fromLatin1("Password"),     password);
+            if (email.isEmpty())
+            {
+                q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.login.anonymously"));
+                q.addQueryItem(QString::fromLatin1("APIKey"),       d->apikey);
+            }
+            else
+            {
+                q.addQueryItem(QString::fromLatin1("method"),       QString::fromLatin1("smugmug.login.withPassword"));
+                q.addQueryItem(QString::fromLatin1("APIKey"),       d->apikey);
+                q.addQueryItem(QString::fromLatin1("EmailAddress"), email);
+                q.addQueryItem(QString::fromLatin1("Password"),     password);
+            }
             
             url.setQuery(q);
-
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "extra tokens " << d->o1->extraTokens() << "token" << d->o1->token().toUtf8();
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url = " << url.url();
-//             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "rp = " << QStringList(requestParams);
             
             QNetworkRequest netRequest(url);
             netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
             netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
-
+            
             d->reply = d->netMngr->get(netRequest);
-//             d->reply = requestor->get(netRequest, requestParams);
-
+            
             d->state = Private::SMUG_LOGIN;
             d->buffer.resize(0);
-
+            
             d->user.email = email;
         }
 
@@ -705,6 +755,7 @@ QString SmugTalker::errorToText(int errCode, const QString& errMsg) const
 
                     emit signalBusy(false);
                     emit signalLoginDone(reply->error(), reply->errorString());
+                    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error code : " << reply->error() << "error text " << reply->errorString(); 
                 }
                 else if (d->state == Private::SMUG_ADDPHOTO)
                 {
@@ -768,76 +819,111 @@ QString SmugTalker::errorToText(int errCode, const QString& errMsg) const
             reply->deleteLater();
         }
 
+// void SmugTalker::parseResponseLogin(const QByteArray& data)
+// {
+//     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Login response:" << endl << data;
+//     int errCode = -1;
+//     QString errMsg;
+// 
+//     emit signalLoginProgress(3);
+// 
+//     QDomDocument doc(QString::fromLatin1("login"));
+// 
+//     if (!doc.setContent(data))
+//         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "fail to set content";
+//         return;
+// 
+// //     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Login response:" << endl << data;
+// 
+//     QDomElement e = doc.documentElement();
+// 
+//     for (QDomNode node = e.firstChild();
+//          !node.isNull();
+//          node = node.nextSibling())
+//     {
+//         if (!node.isElement())
+//             continue;
+// 
+//         e = node.toElement();
+// 
+//         if (e.tagName() == QString::fromLatin1("Login"))
+//         {
+//             d->user.accountType   = e.attribute(QString::fromLatin1("AccountType"));
+//             d->user.fileSizeLimit = e.attribute(QString::fromLatin1("FileSizeLimit")).toInt();
+// 
+//             for (QDomNode nodeL = e.firstChild(); !nodeL.isNull(); nodeL = nodeL.nextSibling())
+//             {
+//                 if (!nodeL.isElement())
+//                     continue;
+// 
+//                 e = nodeL.toElement();
+// 
+//                 if (e.tagName() == QString::fromLatin1("Session"))
+//                 {
+//                     d->sessionID = e.attribute(QString::fromLatin1("id"));
+//                 }
+//                 else if (e.tagName() == QString::fromLatin1("User"))
+//                 {
+//                     d->user.nickName    = e.attribute(QString::fromLatin1("NickName"));
+//                     d->user.displayName = e.attribute(QString::fromLatin1("DisplayName"));
+//                 }
+//             }
+// 
+//             errCode = 0;
+//         }
+//         else if (e.tagName() == QString::fromLatin1("err"))
+//         {
+//             errCode = e.attribute(QString::fromLatin1("code")).toInt();
+//             errMsg  = e.attribute(QString::fromLatin1("msg"));
+//             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
+//         }
+//     }
+// 
+//     emit signalLoginProgress(4);
+// 
+//     if (errCode != 0) // if login failed, reset user properties
+//     {
+//         d->sessionID.clear();
+//         d->user.clear();
+//     }
+// 
+//     emit signalBusy(false);
+//     emit signalLoginDone(errCode, errorToText(errCode, errMsg));
+// }
+
 void SmugTalker::parseResponseLogin(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Login response:" << endl << data;
-    int errCode = -1;
-    QString errMsg;
-
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseReponseLogin";
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data " << doc;
+    
     emit signalLoginProgress(3);
-
-    QDomDocument doc(QString::fromLatin1("login"));
-
-    if (!doc.setContent(data))
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "fail to set content";
+    
+    if (err.error != QJsonParseError::NoError)
+    {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "failed to parse to json";
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "errCode " << err.error;
+        emit signalLoginDone(err.error, errorToText(err.error, err.errorString()));
+        emit signalBusy(false);
         return;
-
-//     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Login response:" << endl << data;
-
-    QDomElement e = doc.documentElement();
-
-    for (QDomNode node = e.firstChild();
-         !node.isNull();
-         node = node.nextSibling())
-    {
-        if (!node.isElement())
-            continue;
-
-        e = node.toElement();
-
-        if (e.tagName() == QString::fromLatin1("Login"))
-        {
-            d->user.accountType   = e.attribute(QString::fromLatin1("AccountType"));
-            d->user.fileSizeLimit = e.attribute(QString::fromLatin1("FileSizeLimit")).toInt();
-
-            for (QDomNode nodeL = e.firstChild(); !nodeL.isNull(); nodeL = nodeL.nextSibling())
-            {
-                if (!nodeL.isElement())
-                    continue;
-
-                e = nodeL.toElement();
-
-                if (e.tagName() == QString::fromLatin1("Session"))
-                {
-                    d->sessionID = e.attribute(QString::fromLatin1("id"));
-                }
-                else if (e.tagName() == QString::fromLatin1("User"))
-                {
-                    d->user.nickName    = e.attribute(QString::fromLatin1("NickName"));
-                    d->user.displayName = e.attribute(QString::fromLatin1("DisplayName"));
-                }
-            }
-
-            errCode = 0;
-        }
-        else if (e.tagName() == QString::fromLatin1("err"))
-        {
-            errCode = e.attribute(QString::fromLatin1("code")).toInt();
-            errMsg  = e.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
-        }
     }
-
+    
+    QJsonObject userObject  = doc[QLatin1String("Response")][QLatin1String("User")].toObject();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json object " << userObject; 
+    
+    d->user.displayName     = userObject[QLatin1String("Name")].toString();
+    
+    QJsonObject Uris        = userObject[QLatin1String("Uris")].toObject();
+    d->user.nodeUri         = QJsonValue(Uris[QLatin1String("Node")])[QLatin1String("Uri")].toString();
+    d->user.folderUri       = QJsonValue(Uris[QLatin1String("Folder")])[QLatin1String("Uri")].toString();       
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data parse : " << d->user.displayName << "+ " << d->user.nodeUri;
+    
     emit signalLoginProgress(4);
-
-    if (errCode != 0) // if login failed, reset user properties
-    {
-        d->sessionID.clear();
-        d->user.clear();
-    }
-
     emit signalBusy(false);
-    emit signalLoginDone(errCode, errorToText(errCode, errMsg));
+    emit signalLoginDone(0, QString(""));
 }
 
 void SmugTalker::parseResponseLogout(const QByteArray& data)

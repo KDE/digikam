@@ -28,6 +28,7 @@
 #include <QUrl>
 #include <QIcon>
 #include <QPointer>
+#include <QDebug>
 
 // Local includes
 
@@ -43,13 +44,23 @@ int main(int argc, char* argv[])
 
     QCommandLineParser parser;
     parser.addHelpOption();
+    
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("import"),
                                         QLatin1String("Import files instead to export")));
+    
+    QCommandLineOption loginOption(QStringList() << QLatin1String("l") << QLatin1String("login"),
+                                   QLatin1String("Login with username (nickname)"),
+                                   QLatin1String("nickname"),
+                                   QLatin1String("digiKam"));
+    parser.addOption(loginOption);
+    
     parser.addPositionalArgument(QLatin1String("files"),
                                  QLatin1String("File(s) to open"),
                                  QLatin1String("+[file(s)]"));
     parser.process(app);
 
+    qDebug() << parser.value(loginOption);
+    
     MetaEngine::initializeExiv2();
 
     QList<QUrl> urlList;
@@ -58,11 +69,20 @@ int main(int argc, char* argv[])
     for (auto& arg : args)
     {
         urlList.append(QUrl::fromLocalFile(arg));
+        qDebug() << arg;
     }
 
     if (parser.isSet(QString::fromLatin1("import")))
     {
+        qDebug() << "inside import";
         QPointer<SmugWindow> dlg = new SmugWindow(new DMetaInfoIface(&app, QList<QUrl>()), 0, true);
+        dlg->exec();
+        delete dlg;
+    }
+    else if(parser.isSet(QString::fromLatin1("l")))
+    {
+        qDebug() << "inside login" << parser.value(loginOption);
+        QPointer<SmugWindow> dlg = new SmugWindow(new DMetaInfoIface(&app, QList<QUrl>()), 0, false, parser.value(loginOption));
         dlg->exec();
         delete dlg;
     }

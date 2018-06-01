@@ -109,15 +109,16 @@ public:
 
 SmugWindow::SmugWindow(DInfoInterface* const iface,
                        QWidget* const /*parent*/,
-                       bool import)
+                       bool import,
+                       QString nickName)
     : WSToolDialog(0),
       d(new Private)
 {
     d->tmpPath.clear();
-    d->tmpDir = WSToolUtils::makeTemporaryDir("smug").absolutePath() + QLatin1Char('/');;
-    d->import = import;
-    d->iface  = iface;
-    d->widget = new SmugWidget(this, iface, import);
+    d->tmpDir        = WSToolUtils::makeTemporaryDir("smug").absolutePath() + QLatin1Char('/');;
+    d->import        = import;
+    d->iface         = iface;
+    d->widget        = new SmugWidget(this, iface, import);
 
     setMainWidget(d->widget);
     setModal(false);
@@ -164,10 +165,13 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
 
     // ------------------------------------------------------------------------
 
-    d->loginDlg  = new WSLoginDialog(this,
-                                     i18n("<qt>Enter the <b>email address</b> and <b>password</b> for your "
+    if(nickName.isEmpty())
+    {
+        d->loginDlg  = new WSLoginDialog(this,
+                                         i18n("<qt>Enter the <b>email address</b> and <b>password</b> for your "
                                           "<a href=\"http://www.smugmug.com\">SmugMug</a> account</qt>"));
-
+    }
+    
     // ------------------------------------------------------------------------
 
     d->albumDlg  = new SmugNewAlbumDlg(this);
@@ -225,28 +229,37 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
     buttonStateChange(d->talker->loggedIn());
     
-    d->talker->link();
-    
-//     if (d->import)
-//     {
-//         // if no e-mail, switch to anonymous login
-//         if (d->anonymousImport || d->email.isEmpty())
-//         {
-//             d->anonymousImport = true;
-//             authenticate();
-//         }
-//         else
-//             authenticate(d->email, d->password);
-//         d->widget->setAnonymous(d->anonymousImport);
-//     }
-//     else
-//     {
-//         // export cannot login anonymously: pop-up login window`
-//         if (d->email.isEmpty())
-//             slotUserChangeRequest(false);
-//         else
-//             authenticate(d->email, d->password);
-//     }
+    if(!nickName.isEmpty())
+    {
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "login with nickname";
+        authenticateWithNickName(nickName);
+    }
+    else
+    {
+        if (d->import)
+        {
+            // if no e-mail, switch to anonymous login
+            if (d->anonymousImport || d->email.isEmpty())
+            {
+                d->anonymousImport = true;
+                authenticate();
+            }
+            else
+            {
+                authenticate(d->email, d->password);
+            }
+            
+            d->widget->setAnonymous(d->anonymousImport);
+        }
+        else
+        {
+            // export cannot login anonymously: pop-up login window`
+            if (d->email.isEmpty())
+                slotUserChangeRequest(false);
+            else
+                authenticate(d->email, d->password);
+        }
+    }
 }
 
 SmugWindow::~SmugWindow()
@@ -319,9 +332,16 @@ void SmugWindow::authenticate(const QString& email, const QString& password)
 {
     setUiInProgressState(true);
     d->widget->progressBar()->setFormat(QString());
+    
+    d->talker->login(email, password); 
+}
 
-//     d->talker->login(email, password);
-//     d->talker->link();
+void SmugWindow::authenticateWithNickName(const QString& nickName)
+{
+    setUiInProgressState(true);
+    d->widget->progressBar()->setFormat(QString());
+    
+    d->talker->loginWithNickName(nickName);
 }
 
 void SmugWindow::readSettings()
