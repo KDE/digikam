@@ -632,12 +632,6 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
         return;
     }
 
-    if (!QFileInfo::exists(albumRoot))
-    {
-        qCWarning(DIGIKAM_DATABASE_LOG) << "The album root path does not exist - scan are canceled";
-        return;
-    }
-
 /*
     if (CoreDbAccess().backend()->isInTransaction())
     {

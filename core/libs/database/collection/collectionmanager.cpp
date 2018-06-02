@@ -1353,12 +1353,19 @@ CollectionLocation CollectionManager::locationForAlbumRoot(const QUrl& fileUrl)
 
 CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& albumRootPath)
 {
+    if (!QFileInfo::exists(albumRootPath))
+    {
+        qCWarning(DIGIKAM_DATABASE_LOG) << "Album root path not exist" << albumRootPath;
+        qCWarning(DIGIKAM_DATABASE_LOG) << "Drive or network connection broken?";
+
+        updateLocations();
+    }
+
     CoreDbAccess access;
-    QString path = albumRootPath;
 
     foreach(AlbumRootLocation* const location, d->locations)
     {
-        if (location->albumRootPath() == path)
+        if (location->albumRootPath() == albumRootPath)
         {
             return *location;
         }

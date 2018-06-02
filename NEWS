@@ -238,4 +238,5 @@ BUGFIXES:
 208 ==> 394865 - digikam suspicious crash on exit.
 209 ==> 390541 - Tooltip background cannot be changed.
 210 ==> 391521 - "Tool-tip" box difficult to read due to default color scheme.
-211 ==> 
+211 ==> 377849 - Albums disappear when the network is interrupted.
+212 ==> 
