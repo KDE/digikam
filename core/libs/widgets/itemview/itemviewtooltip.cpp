@@ -58,8 +58,8 @@ ItemViewToolTip::ItemViewToolTip(QAbstractItemView* const view)
 {
     d->view = view;
 
+    setForegroundRole(QPalette::ToolTipText);
     setBackgroundRole(QPalette::ToolTipBase);
-    setPalette(QToolTip::palette());
     setMouseTracking(true);
 }
 

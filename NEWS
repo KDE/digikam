@@ -236,4 +236,6 @@ BUGFIXES:
 206 ==> 393205 - Advanced rename very slow.
 207 ==> 382474 - Thumbnail regeneration.
 208 ==> 394865 - digikam suspicious crash on exit.
-209 ==> 
+209 ==> 390541 - Tooltip background cannot be changed.
+210 ==> 391521 - "Tool-tip" box difficult to read due to default color scheme.
+211 ==> 
