@@ -52,8 +52,9 @@ public:
     bool               filterInstalled;
 };
 
-ItemViewToolTip::ItemViewToolTip(QAbstractItemView* view)
-    : DItemToolTip(view), d(new Private)
+ItemViewToolTip::ItemViewToolTip(QAbstractItemView* const view)
+    : DItemToolTip(view),
+      d(new Private)
 {
     d->view = view;
 
