@@ -480,7 +480,6 @@ void DigikamImageView::rename()
 
         newNamesList = dlg->newNames();
         delete dlg;
-        setFocus();
 
         if (!newNamesList.isEmpty())
         {
@@ -489,7 +488,6 @@ void DigikamImageView::rename()
 
             urls = dlg->failedUrls();
             delete dlg;
-            setFocus();
         }
     }
     while (!urls.isEmpty() && !newNamesList.isEmpty());
