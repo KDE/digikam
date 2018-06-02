@@ -509,7 +509,7 @@ void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 
 void DigikamImageView::slotFullscreen(const QList<QModelIndex>& indexes)
 {
-   QList<ImageInfo> infos = imageInfos(indexes);
+   QList<ImageInfo> infos = imageInfos(indexes, ApplicationSettings::Slideshow);
 
    if (infos.isEmpty())
    {
