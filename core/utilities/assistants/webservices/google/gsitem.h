@@ -80,6 +80,7 @@ public:
     GSFolder()
     {
         id         = QLatin1String("-1");
+        title      = QLatin1String("<auto-create>");
         canComment = true;
     }
 
@@ -93,6 +94,7 @@ public:
     QString     access;
     bool        canComment;
     QStringList tags;
+    QString     url;
 };
 
 } // namespace Digikam

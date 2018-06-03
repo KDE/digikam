@@ -95,7 +95,7 @@ GSWidget::GSWidget(QWidget* const parent,
             m_LeafBox->hide();
             break;
         default:
-            getNewAlbmBtn()->hide();    // Google has removed this function in the current API V3.
+//             getNewAlbmBtn()->hide();    // Google has removed this function in the current API V3.
             getUploadBox()->hide();
             getSizeBox()->hide();
             m_LeafBox->hide();    // Google has removed this function in the current API V3.

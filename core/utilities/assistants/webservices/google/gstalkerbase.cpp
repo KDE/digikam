@@ -84,8 +84,13 @@ public:
         
         redirectUri  = QString::fromLatin1("urn:ietf:wg:oauth:2.0:oob");
         responseType = QString::fromLatin1("code");
-        apikey       = QString::fromLatin1("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
-        clientSecret = QString::fromLatin1("4MJOS0u1-_AUEKJ0ObA-j22U");
+        apikey       = QString::fromLatin1("258540448336-hgdegpohibcjasvk1p595fpvjor15pbc.apps.googleusercontent.com");
+        clientSecret = QString::fromLatin1("iiIKTNM4ggBXiTdquAzbs2xw");     
+        /* Old api key and secret below only work for gdrive, not gphoto
+         * Switch to new api key and secret above
+         * apikey       = QString::fromLatin1("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
+         * clientSecret = QString::fromLatin1("4MJOS0u1-_AUEKJ0ObA-j22U");
+         */
         
         authUrl      = QLatin1String("https://accounts.google.com/o/oauth2/auth");
         tokenUrl     = QLatin1String("https://accounts.google.com/o/oauth2/token");
@@ -134,7 +139,6 @@ GSTalkerBase::GSTalkerBase(QWidget* const parent, const QString & scope, const Q
             this, SLOT(slotAuthFinished(QNetworkReply*)));
     
     //Ported to O2
-    
     d->o2 = new O2(this);
     d->o2->setClientId(d->apikey);
     d->o2->setClientSecret(d->clientSecret);
