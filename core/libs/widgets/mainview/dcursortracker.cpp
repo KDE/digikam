@@ -67,7 +67,6 @@ DCursorTracker::DCursorTracker(const QString& txt, QWidget* const parent, Qt::Al
 {
     setForegroundRole(QPalette::ToolTipText);
     setBackgroundRole(QPalette::ToolTipBase);
-    setPalette(QToolTip::palette());
     ensurePolished();
     const int fwidth = 1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, this);
     setContentsMargins(fwidth, fwidth, fwidth, fwidth);

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAM_VIEW_GROUPING_IMPLEMENTATION_H
-#define DIGIKAM_VIEW_GROUPING_IMPLEMENTATION_H
+#ifndef DIGIKAM_GROUPING_VIEW_IMPLEMENTATION_H
+#define DIGIKAM_GROUPING_VIEW_IMPLEMENTATION_H
 
 // Local includes
 
@@ -40,10 +40,15 @@ class DIGIKAM_EXPORT GroupingViewImplementation
 
 public:
 
-    virtual ~GroupingViewImplementation() {}
+    virtual ~GroupingViewImplementation()
+    {
+    }
 
     // must be implemented by parent view
-    virtual bool hasHiddenGroupedImages(const ImageInfo&) const {return false;}
+    virtual bool  hasHiddenGroupedImages(const ImageInfo&) const
+    {
+        return false;
+    }
 
     bool          needGroupResolving(ApplicationSettings::OperationType type,
                                      const ImageInfoList& infos)    const;
@@ -54,4 +59,4 @@ public:
 
 } // namespace Digikam
 
-#endif // DIGIKAM_VIEW_GROUPING_IMPLEMENTATION_H
+#endif // DIGIKAM_GROUPING_VIEW_IMPLEMENTATION_H

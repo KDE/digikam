@@ -52,13 +52,14 @@ public:
     bool               filterInstalled;
 };
 
-ItemViewToolTip::ItemViewToolTip(QAbstractItemView* view)
-    : DItemToolTip(view), d(new Private)
+ItemViewToolTip::ItemViewToolTip(QAbstractItemView* const view)
+    : DItemToolTip(view),
+      d(new Private)
 {
     d->view = view;
 
+    setForegroundRole(QPalette::ToolTipText);
     setBackgroundRole(QPalette::ToolTipBase);
-    setPalette(QToolTip::palette());
     setMouseTracking(true);
 }
 
@@ -164,7 +165,6 @@ bool ItemViewToolTip::eventFilter(QObject* o, QEvent* e)
         case QEvent::WindowActivate:
         case QEvent::WindowDeactivate:
         case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
         case QEvent::MouseButtonDblClick:
         case QEvent::FocusIn:
         case QEvent::FocusOut:

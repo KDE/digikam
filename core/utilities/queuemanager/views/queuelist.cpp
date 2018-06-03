@@ -1140,6 +1140,7 @@ void QueueListView::slotCollectionImageChange(const CollectionImageChangeset& ch
 
     switch (changeset.operation())
     {
+        case CollectionImageChangeset::Deleted:
         case CollectionImageChangeset::Removed:
         case CollectionImageChangeset::RemovedAll:
         {

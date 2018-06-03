@@ -39,7 +39,6 @@ krazy2all --export xml \
           --priority all \
           --verbose \
           --topdir ../../ \
-          --check multiclasses \
           --outfile ./report.krazy.xml
 
 # Clean up XML file

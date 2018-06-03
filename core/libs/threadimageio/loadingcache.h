@@ -269,9 +269,9 @@ public:
 
     /**
      * Remove all entries from cache that were loaded from filePath.
-     * Emits relevant signals.
+     * Emits relevant signals if notify = true.
      */
-    void notifyFileChanged(const QString& filePath);
+    void notifyFileChanged(const QString& filePath, bool notify = true);
 
 Q_SIGNALS:
 

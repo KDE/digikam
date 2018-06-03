@@ -61,7 +61,7 @@ public Q_SLOTS:
      * If called with 0, the model will be empty.
      * Opening the same album again is a no-op.
      */
-    void openAlbum(QList<Album*> album);
+    void openAlbum(const QList<Album*>& albums);
     /** Reloads the current album */
     void refresh();
 
@@ -81,7 +81,7 @@ protected Q_SLOTS:
     void scheduleIncrementalRefresh();
 
     void slotResult();
-    void slotData(const QList<ImageListerRecord> &records);
+    void slotData(const QList<ImageListerRecord>& records);
 
     void slotNextRefresh();
     void slotNextIncrementalRefresh();
@@ -101,7 +101,7 @@ protected Q_SLOTS:
 
 protected:
 
-    void startListJob(QList<Album*> album);
+    void startListJob(const QList<Album*>& albums);
 
 private:
 

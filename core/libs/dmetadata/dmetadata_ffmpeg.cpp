@@ -46,8 +46,6 @@
 
 // Qt includes
 
-#include <QDate>
-#include <QTime>
 #include <QDateTime>
 #include <QFileInfo>
 #include <QMimeDatabase>
@@ -344,7 +342,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             if (!data.isEmpty())
             {
-                QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+                QDateTime dt = QDateTime::fromString(data, Qt::ISODate).toLocalTime();
                 setXmpTagString("Xmp.audio.TrackCreateDate",
                                 QString::number(s_secondsSinceJanuary1904(dt)));
             }
@@ -364,7 +362,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         if (!vstream && codec->codec_type == AVMEDIA_TYPE_VIDEO)
         {
             vstream           = true;
-            const char* cname = avcodec_get_name(codec->codec_id); 
+            const char* cname = avcodec_get_name(codec->codec_id);
 
             setXmpTagString("Xmp.video.Codec",
                  QString::fromUtf8(cname));
@@ -503,9 +501,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                 // See XMP Dynamic Media properties from Adobe.
                 // Video Color Space is a limited untranslated string choice depending of video frame rate.
                 // https://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=D%26section=4%26tasks=true
-                
+
                 data = QLatin1String("Other");
-                
+
                 if (frameRate == 24.0)
                     data = QLatin1String("24");
                 else if (frameRate == 23.98 || frameRate == 29.97 ||
@@ -513,12 +511,12 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
                     data = QLatin1String("NTSC");
                 else if (frameRate == 25 || frameRate == 50)
                     data = QLatin1String("PAL");
-                
+
                 setXmpTagString("Xmp.xmpDM.videoFrameRate", data);
             }
 
             setXmpTagString("Xmp.video.BitDepth", QString::number(codec->bits_per_coded_sample));
-            
+
             // See XMP Dynamic Media properties from Adobe.
             // Video Pixel Depth is a limited untranslated string choice depending of amount of samples format.
 
@@ -591,7 +589,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
             if (!data.isEmpty())
             {
-                QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+                QDateTime dt = QDateTime::fromString(data, Qt::ISODate).toLocalTime();
                 setXmpTagString("Xmp.video.TrackCreateDate",
                                 QString::number(s_secondsSinceJanuary1904(dt)));
 
@@ -621,7 +619,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
         if (!sstream && codec->codec_type == AVMEDIA_TYPE_SUBTITLE)
         {
             sstream           = true;
-            const char* cname = avcodec_get_name(codec->codec_id); 
+            const char* cname = avcodec_get_name(codec->codec_id);
 
             setXmpTagString("Xmp.video.SubTCodec",
                 QString::fromUtf8(cname));
@@ -1438,7 +1436,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
     if (!data.isEmpty())
     {
         // Backport date in Exif and Iptc.
-        QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+        QDateTime dt = QDateTime::fromString(data, Qt::ISODate).toLocalTime();
         setImageDateTime(dt, true);
     }
 
@@ -1459,7 +1457,7 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     if (!data.isEmpty())
     {
-        QDateTime dt = QDateTime::fromString(data, Qt::ISODate);
+        QDateTime dt = QDateTime::fromString(data, Qt::ISODate).toLocalTime();
         setXmpTagString("Xmp.video.MediaCreateDate",
                         QString::number(s_secondsSinceJanuary1904(dt)));
     }

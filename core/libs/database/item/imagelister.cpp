@@ -251,11 +251,9 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;
@@ -272,12 +270,12 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
     }
 }
 
-void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds)
+void ImageLister::listTag(ImageListerReceiver* const receiver, const QList<int>& tagIds)
 {
     QSet<ImageListerRecord> records;
-    QList<int>::iterator it;
+    QList<int>::const_iterator it;
 
-    for(it = tagIds.begin() ; it != tagIds.end() ; ++it)
+    for (it = tagIds.constBegin() ; it != tagIds.constEnd() ; ++it)
     {
         QList<QVariant>         values;
         QMap<QString, QVariant> parameters;
@@ -299,7 +297,7 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds
 
         int width, height;
 
-        for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+        for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
         {
             ImageListerRecord record;
 
@@ -317,11 +315,9 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds
             ++it;
             record.format            = (*it).toString();
             ++it;
-            record.creationDate      = (*it).isNull() ? QDateTime()
-                                       : QDateTime::fromString((*it).toString(), Qt::ISODate);
+            record.creationDate      = (*it).toDateTime();
             ++it;
-            record.modificationDate  = (*it).isNull() ? QDateTime()
-                                       : QDateTime::fromString((*it).toString(), Qt::ISODate);
+            record.modificationDate  = (*it).toDateTime();
             ++it;
             record.fileSize          = toInt32BitSafe(it);
             ++it;
@@ -341,7 +337,7 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds
         }
     }
 
-    for(QSet<ImageListerRecord>::iterator it = records.begin(); it != records.end(); ++it)
+    for (QSet<ImageListerRecord>::iterator it = records.begin() ; it != records.end() ; ++it)
     {
         receiver->receive(*it);
     }
@@ -375,7 +371,7 @@ void ImageLister::listFaces(ImageListerReceiver* const receiver, int personId)
         // push the image into the list every time a face with the name is found in the image
         int count = nameList.count(cache->tagName(personId));
 
-        for (int i = 0; i < count; ++i)
+        for (int i = 0 ; i < count ; ++i)
         {
             list += it.next().toLongLong();
         }
@@ -403,15 +399,15 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
                                           "   AND ImageInformation.creationDate < ? "
                                           "   AND ImageInformation.creationDate >= ? "
                                           " ORDER BY Images.album;"),
-                                  QDateTime(endDate).toString(Qt::ISODate),
-                                  QDateTime(startDate).toString(Qt::ISODate),
+                                  QDateTime(endDate),
+                                  QDateTime(startDate),
                                   &values);
     }
 
     QSet<int> albumRoots = albumRootsToList();
     int       width, height;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         ImageListerRecord record;
 
@@ -429,11 +425,9 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;
@@ -482,7 +476,7 @@ void ImageLister::listAreaRange(ImageListerReceiver* const receiver, double lat1
     QSet<int> albumRoots = albumRootsToList();
     double    lat, lon;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         ImageListerRecord record(d->allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
 
@@ -582,7 +576,7 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
 
     CoreDbAccess access;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         ImageListerRecord record;
 
@@ -600,11 +594,9 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;
@@ -617,7 +609,8 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
         lon                      = (*it).toDouble();
         ++it;
 
-        record.currentSimilarity                 = SimilarityDbAccess().db()->getImageSimilarity(record.imageID, referenceImageId);
+        record.currentSimilarity = SimilarityDbAccess().db()->getImageSimilarity(record.imageID, referenceImageId);
+
         if (record.currentSimilarity < 0)
         {
             // Ignore nonexistence and invalid db entry.
@@ -704,7 +697,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
 
     int width, height;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         ImageListerRecord record(d->allowExtraValues ? ImageListerRecord::ExtraValueFormat : ImageListerRecord::TraditionalFormat);
 
@@ -722,11 +715,9 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;
@@ -863,7 +854,8 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
 
-        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(id, threshold, maxThreshold, targetAlbums, HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
+        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(id, threshold, maxThreshold, targetAlbums,
+                                                                    HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
     }
     else if (type == QLatin1String("image"))
     {
@@ -876,7 +868,8 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
 
-        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(path, threshold,maxThreshold, targetAlbums, HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
+        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(path, threshold,maxThreshold, targetAlbums,
+                                                                    HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
     }
 
     listFromHaarSearch(receiver, imageSimilarityMap);
@@ -907,7 +900,7 @@ void ImageLister::listFromHaarSearch(ImageListerReceiver* const receiver, const 
         double similarity;
 
         // Iterate over the image similarity map and bind the image id and similarity to the query.
-        for (QMap<qlonglong, double>::const_iterator it = imageSimilarityMap.constBegin(); it != imageSimilarityMap.constEnd(); ++it)
+        for (QMap<qlonglong, double>::const_iterator it = imageSimilarityMap.constBegin() ; it != imageSimilarityMap.constEnd() ; ++it)
         {
             similarity = it.value();
             imageId    = it.key();
@@ -938,7 +931,7 @@ void ImageLister::listFromHaarSearch(ImageListerReceiver* const receiver, const 
 
     int width, height;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         ImageListerRecord record;
 
@@ -956,11 +949,9 @@ void ImageLister::listFromHaarSearch(ImageListerReceiver* const receiver, const 
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;
@@ -1045,7 +1036,7 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
 
     int width, height;
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    for (QList<QVariant>::const_iterator it = values.constBegin() ; it != values.constEnd() ;)
     {
         ImageListerRecord record;
 
@@ -1063,11 +1054,9 @@ void ImageLister::listFromIdList(ImageListerReceiver* const receiver, const QLis
         ++it;
         record.format            = (*it).toString();
         ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.creationDate      = (*it).toDateTime();
         ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
+        record.modificationDate  = (*it).toDateTime();
         ++it;
         record.fileSize          = toInt32BitSafe(it);
         ++it;

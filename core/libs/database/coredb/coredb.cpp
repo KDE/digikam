@@ -3760,6 +3760,13 @@ void CoreDB::setItemAlbum(qlonglong imageID, qlonglong album)
     d->db->recordChangeset(CollectionImageChangeset(imageID, album, CollectionImageChangeset::Added));
 }
 
+void CoreDB::renameItem(qlonglong imageID, const QString& newName)
+{
+    d->db->execSql(QString::fromUtf8("UPDATE Images SET name=? "
+                                     "WHERE id=?;"),
+                   newName, imageID);
+}
+
 /*
 QList<int> CoreDB::getTagsFromTagPaths(const QStringList& keywordsList, bool create)
 {
