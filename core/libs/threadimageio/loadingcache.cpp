@@ -326,13 +326,13 @@ QStringList LoadingCache::thumbnailFilePathsInCache() const
     return d->thumbnailFilePathHash.uniqueKeys();
 }
 
-void LoadingCache::notifyFileChanged(const QString& filePath)
+void LoadingCache::notifyFileChanged(const QString& filePath, bool notify)
 {
     QList<QString> keys = d->imageFilePathHash.values(filePath);
 
     foreach(const QString& cacheKey, keys)
     {
-        if (d->imageCache.remove(cacheKey))
+        if (d->imageCache.remove(cacheKey) && notify)
         {
             emit fileChanged(filePath, cacheKey);
         }
@@ -345,13 +345,16 @@ void LoadingCache::notifyFileChanged(const QString& filePath)
         bool removedImage  = d->thumbnailImageCache.remove(cacheKey);
         bool removedPixmap = d->thumbnailPixmapCache.remove(cacheKey);
 
-        if (removedImage || removedPixmap)
+        if ((removedImage || removedPixmap) && notify)
         {
             emit fileChanged(filePath, cacheKey);
         }
     }
 
-    emit fileChanged(filePath);
+    if (notify)
+    {
+        emit fileChanged(filePath);
+    }
 }
 
 void LoadingCache::iccSettingsChanged(const ICCSettingsContainer& current, const ICCSettingsContainer& previous)

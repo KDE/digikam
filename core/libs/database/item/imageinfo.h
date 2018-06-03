@@ -414,6 +414,12 @@ public:
     void removeMetadataTemplate();
 
     /**
+     * Set the name (write it to database)
+     * @param newName the new name.
+     */
+    void setName(const QString& newName);
+
+    /**
      * Set the date and time (write it to database)
      * @param dateTime the new date and time.
      */

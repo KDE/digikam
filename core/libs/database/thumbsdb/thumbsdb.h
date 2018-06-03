@@ -117,6 +117,8 @@ public:
     BdEngineBackend::QueryState removeByFilePath(const QString& path);
     BdEngineBackend::QueryState removeByCustomIdentifier(const QString& id);
 
+    BdEngineBackend::QueryState renameByFilePath(const QString& oldPath, const QString& newPath);
+
     BdEngineBackend::QueryState insertThumbnail(const ThumbsDbInfo& info, QVariant* const lastInsertId = 0);
     BdEngineBackend::QueryState replaceThumbnail(const ThumbsDbInfo& info);
 

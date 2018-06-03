@@ -63,14 +63,14 @@ public:
      * Call this when the data has been dereferenced,
      * before deletion.
      */
-    void dropInfo(ImageInfoData* infodata);
+    void dropInfo(ImageInfoData* const infodata);
 
     /**
      * Call this to put data in the hash by file name if you have newly created data
      * and the name is filled.
      * Call under write lock.
      */
-    void cacheByName(ImageInfoData* data);
+    void cacheByName(ImageInfoData* const data);
 
     /**
      * Return an ImageInfoData object for the given album root, relativePath and file name triple.

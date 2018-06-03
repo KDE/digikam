@@ -758,6 +758,12 @@ public:
     void setItemAlbum(qlonglong imageID, qlonglong albumId);
 
     /**
+     * Rename the item.
+     * Note: we not use here ImageChangeset.
+     */
+    void renameItem(qlonglong imageID, const QString& newName);
+
+    /**
      * Returns the requested fields from the Images table.
      * Choose the fields with the mask.
      * The fields will be returned in the following order and type:

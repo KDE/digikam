@@ -630,7 +630,6 @@ void TableView::rename()
 
         newNamesList = dlg->newNames();
         delete dlg;
-        setFocus();
 
         if (!newNamesList.isEmpty())
         {
@@ -639,7 +638,6 @@ void TableView::rename()
 
             urls = dlg->failedUrls();
             delete dlg;
-            setFocus();
         }
     }
     while (!urls.isEmpty() && !newNamesList.isEmpty());

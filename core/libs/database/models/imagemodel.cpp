@@ -311,7 +311,7 @@ int ImageModel::numberOfIndexesForImageId(qlonglong id) const
     }
 
     int count = 0;
-    QHash<qlonglong,int>::const_iterator it;
+    QHash<qlonglong, int>::const_iterator it;
 
     for (it = d->idHash.constFind(id) ; it != d->idHash.constEnd() && it.key() == id ; ++it)
     {
@@ -1089,7 +1089,7 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
     {
         foreach(const ImageInfo& info, infos)
         {
-            QHash<qlonglong,int>::iterator it = oldIds.find(info.id());
+            QHash<qlonglong, int>::iterator it = oldIds.find(info.id());
 
             if (it != oldIds.end())
             {
@@ -1107,7 +1107,7 @@ void ImageModelIncrementalUpdater::appendInfos(const QList<ImageInfo>& infos, co
         {
             const ImageInfo& info = infos.at(i);
             bool found            = false;
-            QHash<qlonglong,int>::iterator it;
+            QHash<qlonglong, int>::iterator it;
 
             for (it = oldIds.find(info.id()) ; it != oldIds.end() && it.key() == info.id() ; ++it)
             {
