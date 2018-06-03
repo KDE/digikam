@@ -63,20 +63,21 @@ public:
                   bool rescale,
                   int maxDim,
                   int imageQuality);
-
     bool updatePhoto(const QString& photoPath,
                      GSPhoto& info,
                      //const QString& albumId,
                      bool rescale,
                      int maxDim,
                      int imageQuality);
-
+    
     void getPhoto(const QString& imgPath);
 
     QString getLoginName()   const;
     QString getUserName()    const;
     QString getUserEmailId() const;
     QString token()          const;
+    
+    QStringList getUploadTokenList();
 
     void cancel();
 
@@ -89,6 +90,7 @@ Q_SIGNALS:
     void signalAddPhotoDone(int, const QString&, const QString&);
     void signalGetPhotoDone(int errCode, const QString& errMsg,
                             const QByteArray& photoData);
+    void signalReadyToUpload();
 
 private:
 
@@ -96,11 +98,13 @@ private:
     void parseResponseListPhotos(const QByteArray& data);
     void parseResponseCreateAlbum(const QByteArray& data);
     void parseResponseAddPhoto(const QByteArray& data);
+    void parseResponseUploadPhoto(const QByteArray& data);
 
 private Q_SLOTS:
 
     void slotError(const QString& msg);
     void slotFinished(QNetworkReply* reply);
+    void slotUploadPhoto();
 
 private:
 

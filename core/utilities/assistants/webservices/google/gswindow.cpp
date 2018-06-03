@@ -715,8 +715,8 @@ void GSWindow::slotStartTransfer()
                 }
             }
 
-            googlePhotoTransferHandler();
-            return;
+//             googlePhotoTransferHandler();
+//             return;
     }
 
     typedef QPair<QUrl, GSPhoto> Pair;
@@ -767,6 +767,13 @@ void GSWindow::uploadNextPhoto()
     {
         //d->widget->progressBar()->hide();
         d->widget->progressBar()->progressCompleted();
+        
+        // Now all raw photos have been added, prepare to upload on user account 
+        if(d->service == GoogleService::GPhotoExport)
+        {
+            emit d->gphotoTalker->signalReadyToUpload();
+        }
+        
         return;
     }
 
@@ -1131,15 +1138,18 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
     }
     else
     {
+        /**
+         * (Trung) google photo now don't get id immediately after addPhoto()
+         */
         QUrl fileUrl = d->transferQueue.first().first;
 
         if (d->meta.supportXmp()                       &&
             d->meta.canWriteXmp(fileUrl.toLocalFile()) &&
-            d->meta.load(fileUrl.toLocalFile())        &&
-            !photoId.isEmpty()
+            d->meta.load(fileUrl.toLocalFile())        
+//             && !photoId.isEmpty()
            )
         {
-            d->meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", photoId);
+//             d->meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", photoId);
             d->meta.save(fileUrl.toLocalFile());
         }
 
