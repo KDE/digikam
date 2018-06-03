@@ -40,19 +40,12 @@ void LoadingCacheInterface::cleanUp()
     LoadingCache::cleanUp();
 }
 
-void LoadingCacheInterface::fileChanged(const QString& filePath)
+void LoadingCacheInterface::fileChanged(const QString& filePath, bool notify)
 {
     LoadingCache* cache = LoadingCache::cache();
     LoadingCache::CacheLock lock(cache);
-    cache->notifyFileChanged(filePath);
 
-/*  NOTE: old implementation
-    QStringList possibleCacheKeys = LoadingDescription::possibleCacheKeys(filePath);
-    for (QStringList::iterator it = possibleCacheKeys.begin(); it != possibleCacheKeys.end(); ++it)
-    {
-        cache->removeImage(*it);
-    }
-*/
+    cache->notifyFileChanged(filePath, notify);
 }
 
 void LoadingCacheInterface::connectToSignalFileChanged(QObject* object, const char* slot)

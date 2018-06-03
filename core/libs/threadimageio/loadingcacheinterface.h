@@ -49,7 +49,7 @@ public:
      * Remove an image from the cache
      * because it may have changed on disk
      */
-    static void fileChanged(const QString& filePath);
+    static void fileChanged(const QString& filePath, bool notify = true);
 
     /**
      * Connect the given object/slot to the signal
