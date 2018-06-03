@@ -165,7 +165,6 @@ bool ItemViewToolTip::eventFilter(QObject* o, QEvent* e)
         case QEvent::WindowActivate:
         case QEvent::WindowDeactivate:
         case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
         case QEvent::MouseButtonDblClick:
         case QEvent::FocusIn:
         case QEvent::FocusOut:
