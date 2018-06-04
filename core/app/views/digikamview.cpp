@@ -378,10 +378,9 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
                 this, SLOT(slotLeftSideBarActivate(SidebarWidget*)));
     }
 
-    // To the right.
-   // NOTE: by Veaceslav, currently if you register these actions in Tags/Caption window,
-   // the arrow up and down are not handled correctly by QCompleter
-   // d->addPageUpDownActions(this, d->rightSideBar->imageDescEditTab());
+    // add only page up and down to work correctly with QCompleter
+    defineShortcut(d->rightSideBar->imageDescEditTab(), Qt::Key_PageDown, this, SLOT(slotNextItem()));
+    defineShortcut(d->rightSideBar->imageDescEditTab(), Qt::Key_PageUp,   this, SLOT(slotPrevItem()));
 
     // Tags Filter sidebar tab contents.
     d->filterWidget   = new FilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
