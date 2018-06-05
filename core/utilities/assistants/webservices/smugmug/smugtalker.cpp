@@ -948,63 +948,30 @@ void SmugTalker::parseResponseAddPhoto(const QByteArray& data)
     emit signalAddPhotoDone(errCode, errorToText(errCode, errMsg));
 }
 
-    void SmugTalker::parseResponseCreateAlbum(const QByteArray& data)
-    {
-//         int errCode = -1;
-//         QString errMsg;
-//         QDomDocument doc(QString::fromLatin1("createalbum"));
-// 
-//         if (!doc.setContent(data))
-//             return;
-// 
-//         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Create Album response:" << endl << data;
-// 
-//         int newAlbumID = -1;
-//         QString newAlbumKey;
-//         QDomElement e  = doc.documentElement();
-// 
-//         for (QDomNode node = e.firstChild(); !node.isNull(); node = node.nextSibling())
-//         {
-//             if (!node.isElement())
-//                 continue;
-// 
-//             e = node.toElement();
-// 
-//             if (e.tagName() == QString::fromLatin1("Album"))
-//             {
-//                 newAlbumID  = e.attribute(QString::fromLatin1("id")).toLongLong();
-//                 newAlbumKey = e.attribute(QString::fromLatin1("Key"));
-//                 qCDebug(DIGIKAM_WEBSERVICES_LOG) << "AlbumID: " << newAlbumID;
-//                 qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Key: "     << newAlbumKey;
-//                 errCode = 0;
-//             }
-//             else if (e.tagName() == QString::fromLatin1("err"))
-//             {
-//                 errCode = e.attribute(QString::fromLatin1("code")).toInt();
-//                 errMsg  = e.attribute(QString::fromLatin1("msg"));
-//                 qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
-//             }
-//         }
-// 
-//         emit signalBusy(false);
-//         emit signalCreateAlbumDone(errCode, errorToText(errCode, errMsg),
-//                                 newAlbumID, newAlbumKey);
-        
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseCreateAlbum";
-        
-        QJsonParseError err;
-        QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-        
-        if(err.error != QJsonParseError::NoError)
-        {
+        void SmugTalker::parseResponseCreateAlbum(const QByteArray& data)
+        {        
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseCreateAlbum";
+            
+            QJsonParseError err;
+            QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+            
+            if(err.error != QJsonParseError::NoError)
+            {
+                emit signalBusy(false);
+                emit signalCreateAlbumDone(err.error, err.errorString(),0,0);
+                return;
+            }
+            
+            QJsonObject jsonObject = doc[QLatin1String("Response")][QLatin1String("Album")].toObject();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data : " << doc; 
+            
+            QString newAlbumKey    = jsonObject[QLatin1String("AlbumKey")].toString();
+
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "newAlbumKey " << newAlbumKey;
+            
             emit signalBusy(false);
-            emit signalCreateAlbumDone(err.error, err.errorString(),0,0);
-            return;
+            emit signalCreateAlbumDone(0, errorToText(0, QString("")), 0, newAlbumKey);
         }
-        
-        QJsonObject jsonObject = doc[QLatin1String("Response")].toObject();
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data : " << doc; 
-    }
 
         void SmugTalker::parseResponseListAlbums(const QByteArray& data)
         {
