@@ -107,8 +107,7 @@ protected:
     virtual bool hasHiddenGroupedImages(const ImageInfo& info) const;
 
     ImageInfoList imageInfos(const QList<QModelIndex>& indexes,
-                             ApplicationSettings::OperationType type
-                             = ApplicationSettings::Unspecified) const;
+                             ApplicationSettings::OperationType type) const;
 
 private Q_SLOTS:
 
