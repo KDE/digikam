@@ -91,15 +91,16 @@ public:
         userAgent       = QString::fromLatin1("digiKam/%1 (digikamdeveloper@gmail.com)").arg(digiKamVersion());
 
         apiVersion      = QLatin1String("v2");
-        apiURL          = QString::fromLatin1("https://api.smugmug.com/%1");
+        apiURL          = QString::fromLatin1("https://api.smugmug.com%1");
+        currentUserUrl  = apiURL.arg("/api/v2!authuser");
         requestTokenUrl = QLatin1String("https://api.smugmug.com/services/oauth/1.0a/getRequestToken");
         authUrl         = QLatin1String("https://api.smugmug.com/services/oauth/1.0a/authorize");
         accessTokenUrl  = QLatin1String("https://api.smugmug.com/services/oauth/1.0a/getAccessToken");
         
-        apikey          = QLatin1String("66NGWpNDWmnsW6qZKLp6hNMTDZ9C24pN");
-        clientSecret    = QLatin1String("GbtsCvH3GMGnQ6Lf4XmGXwMQs2pm5SpSvVJdPsQDpHMRbsPQSWqzhxXKRRXhMwP5");
-//         apikey          = QString::fromLatin1("P3GR322MB4rf3dZRxDZNFv8cbK6sLPdV");
-//         clientSecret    = QString::fromLatin1("trJrZT3pHQRpZB8Z3LMGCL39g9q7nWJPBzZTQSWhzCnmTmtqqW5xxXdBn6fVhM3p");
+//         apikey          = QLatin1String("66NGWpNDWmnsW6qZKLp6hNMTDZ9C24pN");
+//         clientSecret    = QLatin1String("GbtsCvH3GMGnQ6Lf4XmGXwMQs2pm5SpSvVJdPsQDpHMRbsPQSWqzhxXKRRXhMwP5");
+        apikey          = QString::fromLatin1("P3GR322MB4rf3dZRxDZNFv8cbK6sLPdV");
+        clientSecret    = QString::fromLatin1("trJrZT3pHQRpZB8Z3LMGCL39g9q7nWJPBzZTQSWhzCnmTmtqqW5xxXdBn6fVhM3p");
         iface           = 0;
         netMngr         = 0;
         reply           = 0;
@@ -119,6 +120,7 @@ public:
 
     QString                userAgent;
     QString                apiURL;
+    QString                currentUserUrl;
     QString                requestTokenUrl;
     QString                authUrl;
     QString                accessTokenUrl;
@@ -300,10 +302,6 @@ void SmugTalker::cancel()
             emit signalBusy(true);
             emit signalLoginProgress(1, 4, i18n("Logging in to SmugMug service..."));
             
-            d->user.nickName = nickName;
-            d->user.userUri  = QString::fromLatin1("api/v2/user/%1").arg(d->user.nickName);
-//             d->user.userUri  = QString::fromLatin1("api/v2!authuser");
-            
             // Build authentication url
             O1SmugMug::AuthorizationUrlBuilder builder;
             builder.setAccess(O1SmugMug::AccessFull);
@@ -323,22 +321,17 @@ void SmugTalker::cancel()
         
         void SmugTalker::getLoginedUser()
         {            
-            QUrl url(d->apiURL.arg(d->user.userUri));
-            
-            QUrlQuery q;
-            q.addQueryItem(QString::fromLatin1("APIKey"), d->apikey);
-            q.addQueryItem(QString::fromLatin1("_filter"), QLatin1String("Name,NickName,ResponseLevel"));
-            q.addQueryItem(QString::fromLatin1("_filteruri"), QLatin1String("Node,Folder"));
-            
-            url.setQuery(q);
+            QUrl url(d->currentUserUrl);
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url = " << url.url();
+            
+            QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
             
             QNetworkRequest netRequest(url);
             netRequest.setRawHeader("Accept", "application/json");
             netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
             netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
             
-            d->reply = d->netMngr->get(netRequest);
+            d->reply = d->requestor->get(netRequest, reqParams);
             
             d->state = Private::SMUG_LOGIN;
             d->buffer.resize(0);
@@ -411,37 +404,36 @@ void SmugTalker::cancel()
             d->buffer.resize(0);
         }
 
-void SmugTalker::listAlbums(const QString& nickName)
-{
-    if (d->reply)
-    {
-        d->reply->abort();
-        d->reply = 0;
-    }
+        void SmugTalker::listAlbums(const QString& nickName)
+        {
+            if (d->reply)
+            {
+                d->reply->abort();
+                d->reply = 0;
+            }
 
-    emit signalBusy(true);
+            emit signalBusy(true);
 
-    QUrl url(d->apiURL.arg(QString::fromLatin1("%1!albums").arg(d->user.userUri)));
-//     QUrl url(d->apiURL.arg(QString::fromLatin1("%1!albumlist").arg(d->user.folderUri)));
-    
-    QUrlQuery q;
-    q.addQueryItem(QString::fromLatin1("APIKey"), d->apikey);
-    q.addQueryItem(QString::fromLatin1("_filter"), QLatin1String("Name,Title,Description,Keywords,PasswordHint,AlbumKey,ImageCount,CanShare,NodeID"));
-    q.addQueryItem(QString::fromLatin1("_filteruri"), QLatin1String(""));
-    
-    url.setQuery(q);
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url = " << url.url();
+            QUrl url(d->apiURL.arg(QString::fromLatin1("%1!albums").arg(d->user.userUri)));
+            
+            QUrlQuery q;
+            q.addQueryItem(QString::fromLatin1("APIKey"), d->apikey);
+            q.addQueryItem(QString::fromLatin1("_filter"), QLatin1String("Name,Title,Description,Keywords,PasswordHint,AlbumKey,ImageCount,CanShare,NodeID"));
+            q.addQueryItem(QString::fromLatin1("_filteruri"), QLatin1String(""));
+            
+            url.setQuery(q);
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url = " << url.url();
 
-    QNetworkRequest netRequest(url);
-    netRequest.setRawHeader("Accept", "application/json");
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
+            QNetworkRequest netRequest(url);
+            netRequest.setRawHeader("Accept", "application/json");
+            netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
+            netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    d->reply = d->netMngr->get(netRequest);
+            d->reply = d->netMngr->get(netRequest);
 
-    d->state = Private::SMUG_LISTALBUMS;
-    d->buffer.resize(0);
-}
+            d->state = Private::SMUG_LISTALBUMS;
+            d->buffer.resize(0);
+        }
 
 void SmugTalker::listPhotos(const qint64 albumID,
                             const QString& albumKey,
@@ -483,31 +475,36 @@ void SmugTalker::listPhotos(const qint64 albumID,
     d->buffer.resize(0);
 }
 
-void SmugTalker::listAlbumTmpl()
-{
-    if (d->reply)
-    {
-        d->reply->abort();
-        d->reply = 0;
-    }
+        void SmugTalker::listAlbumTmpl()
+        {
+            if (d->reply)
+            {
+                d->reply->abort();
+                d->reply = 0;
+            }
 
-    emit signalBusy(true);
+            emit signalBusy(true);
 
-    QUrl url(d->apiURL);
-    QUrlQuery q;
-    q.addQueryItem(QString::fromLatin1("method"),    QString::fromLatin1("smugmug.albumtemplates.get"));
-    q.addQueryItem(QString::fromLatin1("SessionID"), d->sessionID);
-    url.setQuery(q);
+//             QUrl url(d->apiURL.arg(QString::fromLatin1("%1!albumtemplates").arg(d->user.userUri)));
+            QUrl url(d->apiURL.arg(QLatin1String("api/v2/folder/user/thanhdinh!albumlist")));
+            
+            QUrlQuery q;
+            q.addQueryItem(QLatin1String("APIKey"), d->apikey);
+//             q.addQueryItem(QLatin1String("_filter"))
+            
+            url.setQuery(q);
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "listAlbumTmpl url " << url.url();
+            
+            QNetworkRequest netRequest(url);
+            netRequest.setRawHeader("Accept", "application/json");
+            netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
+            netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
 
-    QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
+            d->reply = d->netMngr->get(netRequest);
 
-    d->reply = d->netMngr->get(netRequest);
-
-    d->state = Private::SMUG_LISTALBUMTEMPLATES;
-    d->buffer.resize(0);
-}
+            d->state = Private::SMUG_LISTALBUMTEMPLATES;
+            d->buffer.resize(0);
+        }
 
 void SmugTalker::listCategories()
 {
@@ -562,59 +559,81 @@ void SmugTalker::listSubCategories(qint64 categoryID)
     d->buffer.resize(0);
 }
 
-void SmugTalker::createAlbum(const SmugAlbum& album)
-{
-    if (d->reply)
-    {
-        d->reply->abort();
-        d->reply = 0;
-    }
+        void SmugTalker::createAlbum(const SmugAlbum& album)
+        {
+            if (d->reply)
+            {
+                d->reply->abort();
+                d->reply = 0;
+            }
 
-    emit signalBusy(true);
+            emit signalBusy(true);
+                       
+//             QUrl url(d->apiURL.arg(QString::fromLatin1("%1!albums").arg(d->user.folderUri)));
+            QUrl url(d->apiURL.arg(d->user.folderUri));
+            
+            QUrlQuery q;
+//             q.addQueryItem(QLatin1String("APIKey"), QLatinString())
+//             q.addQueryItem(QString::fromLatin1("Title"),      album.title);
+//             q.addQueryItem(QString::fromLatin1("CategoryID"), QString::number(album.categoryID));
+// 
+//             if (album.subCategoryID > 0)
+//                 q.addQueryItem(QString::fromLatin1("SubCategoryID"), QString::number(album.subCategoryID));
+// 
+//             if (!album.description.isEmpty())
+//                 q.addQueryItem(QString::fromLatin1("Description"),   album.description);
+// 
+//             if (album.tmplID > 0)
+//             {
+//                 // template will also define privacy settings
+//                 q.addQueryItem(QString::fromLatin1("AlbumTemplateID"), QString::number(album.tmplID));
+//             }
+//             else
+//             {
+//                 if (!album.password.isEmpty())
+//                     q.addQueryItem(QString::fromLatin1("Password"), album.password);
+// 
+//                 if (!album.passwordHint.isEmpty())
+//                     q.addQueryItem(QString::fromLatin1("PasswordHint"), album.passwordHint);
+// 
+//                 if (album.isPublic)
+//                     q.addQueryItem(QString::fromLatin1("Privacy"), QString::fromLatin1("Public"));
+//                 else
+//                     q.addQueryItem(QString::fromLatin1("Public"), QString::fromLatin1("Private"));
+//             }
+// 
+//             url.setQuery(q);
+            
+            QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
+//             reqParams << O0RequestParameter("Title", album.title.toUtf8());
+//             reqParams << O0RequestParameter("Description", album.description.toUtf8());
+//             if (album.isPublic)
+//                 reqParams << O0RequestParameter("Privacy", "Public");
+//             else
+//                 reqParams << O0RequestParameter("Privacy", "Private");
+//             QByteArray data = O1::createQueryParameters(reqParams);
+            QByteArray data;
+            data += "{\"NiceName\": \"";
+            data += album.title.toUtf8();
+            data += "\", \"Title\": \"";
+            data += album.title.toUtf8();
+            data += "\", \"Privacy\": \"Public\"}";
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(data);
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url to post " << url.url();
+            
+            QNetworkRequest netRequest(url);
+            netRequest.setRawHeader("Accept", "application/json");
+            netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
+            netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
+            
+            d->reply = d->requestor->post(netRequest, reqParams, data);
+//             d->reply = d->netMngr->post(netRequest, postData);
 
-    QUrl url(d->apiURL);
-    QUrlQuery q;
-    q.addQueryItem(QString::fromLatin1("method"),     QString::fromLatin1("smugmug.albums.create"));
-    q.addQueryItem(QString::fromLatin1("SessionID"),  d->sessionID);
-    q.addQueryItem(QString::fromLatin1("Title"),      album.title);
-    q.addQueryItem(QString::fromLatin1("CategoryID"), QString::number(album.categoryID));
+//             d->reply = d->netMngr->get(netRequest);
 
-    if (album.subCategoryID > 0)
-        q.addQueryItem(QString::fromLatin1("SubCategoryID"), QString::number(album.subCategoryID));
-
-    if (!album.description.isEmpty())
-        q.addQueryItem(QString::fromLatin1("Description"),   album.description);
-
-    if (album.tmplID > 0)
-    {
-        // template will also define privacy settings
-        q.addQueryItem(QString::fromLatin1("AlbumTemplateID"), QString::number(album.tmplID));
-    }
-    else
-    {
-        if (!album.password.isEmpty())
-            q.addQueryItem(QString::fromLatin1("Password"), album.password);
-
-        if (!album.passwordHint.isEmpty())
-            q.addQueryItem(QString::fromLatin1("PasswordHint"), album.passwordHint);
-
-        if (album.isPublic)
-            q.addQueryItem(QString::fromLatin1("Public"), QString::fromLatin1("1"));
-        else
-            q.addQueryItem(QString::fromLatin1("Public"), QString::fromLatin1("0"));
-    }
-
-    url.setQuery(q);
-
-    QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-    netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
-
-    d->reply = d->netMngr->get(netRequest);
-
-    d->state = Private::SMUG_CREATEALBUM;
-    d->buffer.resize(0);
-}
+            d->state = Private::SMUG_CREATEALBUM;
+            d->buffer.resize(0);
+        }
 
 bool SmugTalker::addPhoto(const  QString& imgPath,
                           qint64 albumID,
@@ -727,6 +746,7 @@ QString SmugTalker::errorToText(int errCode, const QString& errMsg) const
 //TODO: Ported to O2 here
         void SmugTalker::slotFinished(QNetworkReply* reply)
         {
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error code : " << reply->error() << "error text " << reply->errorString();
             if (reply != d->reply)
             {
                 return;
@@ -807,40 +827,42 @@ QString SmugTalker::errorToText(int errCode, const QString& errMsg) const
             reply->deleteLater();
         }
 
-void SmugTalker::parseResponseLogin(const QByteArray& data)
-{
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseReponseLogin";
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-    
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data " << doc;
-    
-    emit signalLoginProgress(3);
-    
-    if (err.error != QJsonParseError::NoError)
-    {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "failed to parse to json";
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "errCode " << err.error;
-        emit signalLoginDone(err.error, errorToText(err.error, err.errorString()));
-        emit signalBusy(false);
-        return;
-    }
-    
-    QJsonObject userObject  = doc[QLatin1String("Response")][QLatin1String("User")].toObject();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json object " << userObject; 
-    
-    d->user.displayName     = userObject[QLatin1String("Name")].toString();
-    
-    QJsonObject Uris        = userObject[QLatin1String("Uris")].toObject();
-    d->user.nodeUri         = QJsonValue(Uris[QLatin1String("Node")])[QLatin1String("Uri")].toString();
-    d->user.folderUri       = QJsonValue(Uris[QLatin1String("Folder")])[QLatin1String("Uri")].toString();       
-    
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data parse : " << d->user.displayName << "+ " << d->user.nodeUri;
-    
-    emit signalLoginProgress(4);
-    emit signalBusy(false);
-    emit signalLoginDone(0, QString(""));
-}
+        void SmugTalker::parseResponseLogin(const QByteArray& data)
+        {
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseReponseLogin";
+            QJsonParseError err;
+            QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+            
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data " << doc;
+            
+            emit signalLoginProgress(3);
+            
+            if (err.error != QJsonParseError::NoError)
+            {
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "failed to parse to json";
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "errCode " << err.error;
+                emit signalLoginDone(err.error, errorToText(err.error, err.errorString()));
+                emit signalBusy(false);
+                return;
+            }
+            
+            QJsonObject userObject  = doc[QLatin1String("Response")][QLatin1String("User")].toObject();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json object " << userObject; 
+            
+            d->user.displayName     = userObject[QLatin1String("Name")].toString();
+            d->user.nickName        = userObject[QLatin1String("NickName")].toString();
+            d->user.userUri         = userObject[QLatin1String("Uri")].toString();
+            
+            QJsonObject Uris        = userObject[QLatin1String("Uris")].toObject();
+            d->user.nodeUri         = QJsonValue(Uris[QLatin1String("Node")])[QLatin1String("Uri")].toString();
+            d->user.folderUri       = QJsonValue(Uris[QLatin1String("Folder")])[QLatin1String("Uri")].toString();       
+            
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data parse : " << d->user.displayName << "+ " << d->user.nodeUri;
+            
+            emit signalLoginProgress(4);
+            emit signalBusy(false);
+            emit signalLoginDone(0, QString(""));
+        }
 
 void SmugTalker::parseResponseLogout(const QByteArray& data)
 {
@@ -941,181 +963,119 @@ void SmugTalker::parseResponseAddPhoto(const QByteArray& data)
     emit signalAddPhotoDone(errCode, errorToText(errCode, errMsg));
 }
 
-void SmugTalker::parseResponseCreateAlbum(const QByteArray& data)
-{
-    int errCode = -1;
-    QString errMsg;
-    QDomDocument doc(QString::fromLatin1("createalbum"));
-
-    if (!doc.setContent(data))
-        return;
-
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Create Album response:" << endl << data;
-
-    int newAlbumID = -1;
-    QString newAlbumKey;
-    QDomElement e  = doc.documentElement();
-
-    for (QDomNode node = e.firstChild(); !node.isNull(); node = node.nextSibling())
+    void SmugTalker::parseResponseCreateAlbum(const QByteArray& data)
     {
-        if (!node.isElement())
-            continue;
-
-        e = node.toElement();
-
-        if (e.tagName() == QString::fromLatin1("Album"))
-        {
-            newAlbumID  = e.attribute(QString::fromLatin1("id")).toLongLong();
-            newAlbumKey = e.attribute(QString::fromLatin1("Key"));
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "AlbumID: " << newAlbumID;
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Key: "     << newAlbumKey;
-            errCode = 0;
-        }
-        else if (e.tagName() == QString::fromLatin1("err"))
-        {
-            errCode = e.attribute(QString::fromLatin1("code")).toInt();
-            errMsg  = e.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
-        }
-    }
-
-    emit signalBusy(false);
-    emit signalCreateAlbumDone(errCode, errorToText(errCode, errMsg),
-                               newAlbumID, newAlbumKey);
-}
-
-void SmugTalker::parseResponseListAlbums(const QByteArray& data)
-{
-//     int errCode = -1;
-//     QString errMsg;
-//     QDomDocument doc(QString::fromLatin1("albums.get"));
+//         int errCode = -1;
+//         QString errMsg;
+//         QDomDocument doc(QString::fromLatin1("createalbum"));
 // 
-//     if (!doc.setContent(data))
-//         return;
+//         if (!doc.setContent(data))
+//             return;
 // 
-//     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Albums response:" << endl << data;
+//         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse Create Album response:" << endl << data;
 // 
-//     QList <SmugAlbum> albumsList;
-//     QDomElement e = doc.documentElement();
+//         int newAlbumID = -1;
+//         QString newAlbumKey;
+//         QDomElement e  = doc.documentElement();
 // 
-//     for (QDomNode node = e.firstChild(); !node.isNull(); node = node.nextSibling())
-//     {
-//         if (!node.isElement())
-//             continue;
-// 
-//         e = node.toElement();
-// 
-//         if (e.tagName() == QString::fromLatin1("Albums"))
+//         for (QDomNode node = e.firstChild(); !node.isNull(); node = node.nextSibling())
 //         {
-//             for (QDomNode nodeA = e.firstChild(); !nodeA.isNull(); nodeA = nodeA.nextSibling())
+//             if (!node.isElement())
+//                 continue;
+// 
+//             e = node.toElement();
+// 
+//             if (e.tagName() == QString::fromLatin1("Album"))
 //             {
-//                 if (!nodeA.isElement())
-//                     continue;
-// 
-//                 e = nodeA.toElement();
-// 
-//                 if (e.tagName() == QString::fromLatin1("Album"))
-//                 {
-//                     SmugAlbum album;
-//                     album.id           = e.attribute(QString::fromLatin1("id")).toLongLong();
-//                     album.key          = e.attribute(QString::fromLatin1("Key"));
-//                     album.title        = htmlToText(e.attribute(QString::fromLatin1("Title")));
-//                     album.description  = htmlToText(e.attribute(QString::fromLatin1("Description")));
-//                     album.keywords     = htmlToText(e.attribute(QString::fromLatin1("Keywords")));
-//                     album.isPublic     = e.attribute(QString::fromLatin1("Public")) == QString::fromLatin1("1");
-//                     album.password     = htmlToText(e.attribute(QString::fromLatin1("Password")));
-//                     album.passwordHint = htmlToText(e.attribute(QString::fromLatin1("PasswordHint")));
-//                     album.imageCount   = e.attribute(QString::fromLatin1("ImageCount")).toInt();
-// 
-//                     for (QDomNode nodeC = e.firstChild(); !nodeC.isNull(); nodeC = node.nextSibling())
-//                     {
-//                         if (!nodeC.isElement())
-//                             continue;
-// 
-//                         e = nodeC.toElement();
-// 
-//                         if (e.tagName() == QString::fromLatin1("Category"))
-//                         {
-//                             album.categoryID = e.attribute(QString::fromLatin1("id")).toLongLong();
-//                             album.category   = htmlToText(e.attribute(QString::fromLatin1("Name")));
-//                         }
-//                         else if (e.tagName() == QString::fromLatin1("SubCategory"))
-//                         {
-//                             album.subCategoryID = e.attribute(QString::fromLatin1("id")).toLongLong();
-//                             album.subCategory   = htmlToText(e.attribute(QString::fromLatin1("Name")));
-//                         }
-//                     }
-//                     albumsList.append(album);
-//                 }
+//                 newAlbumID  = e.attribute(QString::fromLatin1("id")).toLongLong();
+//                 newAlbumKey = e.attribute(QString::fromLatin1("Key"));
+//                 qCDebug(DIGIKAM_WEBSERVICES_LOG) << "AlbumID: " << newAlbumID;
+//                 qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Key: "     << newAlbumKey;
+//                 errCode = 0;
 //             }
-// 
-//             errCode = 0;
+//             else if (e.tagName() == QString::fromLatin1("err"))
+//             {
+//                 errCode = e.attribute(QString::fromLatin1("code")).toInt();
+//                 errMsg  = e.attribute(QString::fromLatin1("msg"));
+//                 qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
+//             }
 //         }
-//         else if (e.tagName() == QString::fromLatin1("err"))
-//         {
-//             errCode = e.attribute(QString::fromLatin1("code")).toInt();
-//             errMsg  = e.attribute(QString::fromLatin1("msg"));
-//             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
-//         }
-//     }
 // 
-//     if (errCode == 15)  // 15: empty list
-//         errCode = 0;
-    
-
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
-    
-    if(err.error != QJsonParseError::NoError)
-    {
-        emit signalBusy(false);
-        emit signalListAlbumsDone(0,i18n("Failed to list albums"), QList<SmugAlbum>());
-        return;
+//         emit signalBusy(false);
+//         emit signalCreateAlbumDone(errCode, errorToText(errCode, errMsg),
+//                                 newAlbumID, newAlbumKey);
+        
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseCreateAlbum";
+        
+        QJsonParseError err;
+        QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+        
+        if(err.error != QJsonParseError::NoError)
+        {
+            emit signalBusy(false);
+            emit signalCreateAlbumDone(err.error, err.errorString(),0,0);
+            return;
+        }
+        
+        QJsonObject jsonObject = doc[QLatin1String("Response")].toObject();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data : " << doc; 
     }
-    
-    QJsonObject jsonObject = doc[QLatin1String("Response")].toObject();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseReponseListAlbum : " << jsonObject;
 
-    QList<SmugAlbum> albumList;
-    
-    QJsonArray jsonArray = jsonObject[QLatin1String("Album")].toArray();
-    
-    foreach (const QJsonValue& value, jsonArray)
-    {
-        QJsonObject obj = value.toObject();
-        
-        SmugAlbum album;
-        
-        album.nodeID        = obj[QLatin1String("NodeID")].toString();
-        album.name          = obj[QLatin1String("Name")].toString();
-        album.key           = obj[QLatin1String("AlbumKey")].toString();
-        album.title         = obj[QLatin1String("Title")].toString();
-        album.description   = obj[QLatin1String("Description")].toString();
-        album.keywords      = obj[QLatin1String("Keywords")].toString();
-        album.canShare      = obj[QLatin1String("CanShare")].toBool();
-        album.passwordHint  = obj[QLatin1String("PasswordHint")].toString();
-        album.imageCount    = obj[QLatin1String("ImageCount")].toInt();
-        
-        albumList.append(album);
-        
-        QStringList albumParams;
-        albumParams << album.nodeID 
-                    << album.name 
-                    << album.key          
-                    << album.title        
-                    << album.description   
-                    << album.keywords     
-                    << QString::number(album.canShare)
-                    << album.passwordHint  
-                    << QString::number(album.imageCount); 
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "album " << albumParams.join(",");
-    }
-    
-    std::sort(albumList.begin(), albumList.end(), SmugAlbum::lessThan);
+        void SmugTalker::parseResponseListAlbums(const QByteArray& data)
+        {
+            QJsonParseError err;
+            QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+            
+            if(err.error != QJsonParseError::NoError)
+            {
+                emit signalBusy(false);
+                emit signalListAlbumsDone(err.error,i18n("Failed to list albums"), QList<SmugAlbum>());
+                return;
+            }
+            
+            QJsonObject jsonObject = doc[QLatin1String("Response")].toObject();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseReponseListAlbum : " << jsonObject;
 
-    emit signalBusy(false);
-    emit signalListAlbumsDone(err.error, errorToText(err.error, err.errorString()), albumList);
-}
+            QList<SmugAlbum> albumList;
+            
+            QJsonArray jsonArray = jsonObject[QLatin1String("Album")].toArray();
+            
+            foreach (const QJsonValue& value, jsonArray)
+            {
+                QJsonObject obj = value.toObject();
+                
+                SmugAlbum album;
+                
+                album.nodeID        = obj[QLatin1String("NodeID")].toString();
+                album.name          = obj[QLatin1String("Name")].toString();
+                album.key           = obj[QLatin1String("AlbumKey")].toString();
+                album.title         = obj[QLatin1String("Title")].toString();
+                album.description   = obj[QLatin1String("Description")].toString();
+                album.keywords      = obj[QLatin1String("Keywords")].toString();
+                album.canShare      = obj[QLatin1String("CanShare")].toBool();
+                album.passwordHint  = obj[QLatin1String("PasswordHint")].toString();
+                album.imageCount    = obj[QLatin1String("ImageCount")].toInt();
+                
+                albumList.append(album);
+                
+                QStringList albumParams;
+                albumParams << album.nodeID 
+                            << album.name 
+                            << album.key          
+                            << album.title        
+                            << album.description   
+                            << album.keywords     
+                            << QString::number(album.canShare)
+                            << album.passwordHint  
+                            << QString::number(album.imageCount); 
+                qCDebug(DIGIKAM_WEBSERVICES_LOG) << "album " << albumParams.join(",");
+            }
+            
+            std::sort(albumList.begin(), albumList.end(), SmugAlbum::lessThan);
+
+            emit signalBusy(false);
+            emit signalListAlbumsDone(err.error, errorToText(err.error, err.errorString()), albumList);
+        }
 
 void SmugTalker::parseResponseListPhotos(const QByteArray& data)
 {
@@ -1211,64 +1171,80 @@ void SmugTalker::parseResponseListPhotos(const QByteArray& data)
     emit signalListPhotosDone(errCode, errorToText(errCode, errMsg), photosList);
 }
 
-void SmugTalker::parseResponseListAlbumTmpl(const QByteArray& data)
-{
-    int errCode = -1;
-    QString errMsg;
-    QDomDocument doc(QString::fromLatin1("albumtemplates.get"));
-
-    if (!doc.setContent(data))
-        return;
-
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse AlbumTemplates response:" << endl << data;
-
-    QList<SmugAlbumTmpl> albumTList;
-    QDomElement e = doc.documentElement();
-
-    for (QDomNode node = e.firstChild(); !node.isNull(); node = node.nextSibling())
-    {
-        if (!node.isElement())
-            continue;
-
-        e = node.toElement();
-
-        if (e.tagName() == QString::fromLatin1("AlbumTemplates"))
+        void SmugTalker::parseResponseListAlbumTmpl(const QByteArray& data)
         {
-            for (QDomNode nodeT = e.firstChild(); !nodeT.isNull(); nodeT = nodeT.nextSibling())
+//             int errCode = -1;
+//             QString errMsg;
+//             QDomDocument doc(QString::fromLatin1("albumtemplates.get"));
+// 
+//             if (!doc.setContent(data))
+//                 return;
+// 
+//             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Parse AlbumTemplates response:" << endl << data;
+// 
+//             QList<SmugAlbumTmpl> albumTList;
+//             QDomElement e = doc.documentElement();
+// 
+//             for (QDomNode node = e.firstChild(); !node.isNull(); node = node.nextSibling())
+//             {
+//                 if (!node.isElement())
+//                     continue;
+// 
+//                 e = node.toElement();
+// 
+//                 if (e.tagName() == QString::fromLatin1("AlbumTemplates"))
+//                 {
+//                     for (QDomNode nodeT = e.firstChild(); !nodeT.isNull(); nodeT = nodeT.nextSibling())
+//                     {
+//                         if (!nodeT.isElement())
+//                             continue;
+// 
+//                         QDomElement e = nodeT.toElement();
+// 
+//                         if (e.tagName() == QString::fromLatin1("AlbumTemplate"))
+//                         {
+//                             SmugAlbumTmpl tmpl;
+//                             tmpl.id           = e.attribute(QString::fromLatin1("id")).toLongLong();
+//                             tmpl.name         = htmlToText(e.attribute(QString::fromLatin1("AlbumTemplateName")));
+//                             tmpl.isPublic     = e.attribute(QString::fromLatin1("Public")) == QString::fromLatin1("1");
+//                             tmpl.password     = htmlToText(e.attribute(QString::fromLatin1("Password")));
+//                             tmpl.passwordHint = htmlToText(e.attribute(QString::fromLatin1("PasswordHint")));
+//                             albumTList.append(tmpl);
+//                         }
+//                     }
+// 
+//                     errCode = 0;
+//                 }
+//                 else if (e.tagName() == QString::fromLatin1("err"))
+//                 {
+//                     errCode = e.attribute(QString::fromLatin1("code")).toInt();
+//                     errMsg  = e.attribute(QString::fromLatin1("msg"));
+//                     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
+//                 }
+//             }
+// 
+//             if (errCode == 15)  // 15: empty list
+//                 errCode = 0;
+// 
+//             emit signalBusy(false);
+//             emit signalListAlbumTmplDone(errCode, errorToText(errCode, errMsg), albumTList);
+            
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "ParseResponseListAlbumTmpl";
+            
+            QJsonParseError err;
+            QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+            
+            if(err.error != QJsonParseError::NoError)
             {
-                if (!nodeT.isElement())
-                    continue;
-
-                QDomElement e = nodeT.toElement();
-
-                if (e.tagName() == QString::fromLatin1("AlbumTemplate"))
-                {
-                    SmugAlbumTmpl tmpl;
-                    tmpl.id           = e.attribute(QString::fromLatin1("id")).toLongLong();
-                    tmpl.name         = htmlToText(e.attribute(QString::fromLatin1("AlbumTemplateName")));
-                    tmpl.isPublic     = e.attribute(QString::fromLatin1("Public")) == QString::fromLatin1("1");
-                    tmpl.password     = htmlToText(e.attribute(QString::fromLatin1("Password")));
-                    tmpl.passwordHint = htmlToText(e.attribute(QString::fromLatin1("PasswordHint")));
-                    albumTList.append(tmpl);
-                }
+                emit signalBusy(false);                
+                emit signalListAlbumTmplDone(err.error,i18n("Failed to list album template"), QList<SmugAlbumTmpl>());
+                return;
             }
-
-            errCode = 0;
+            
+            QJsonObject jsonObject = doc[QLatin1String("Response")].toObject();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << doc;
+            
         }
-        else if (e.tagName() == QString::fromLatin1("err"))
-        {
-            errCode = e.attribute(QString::fromLatin1("code")).toInt();
-            errMsg  = e.attribute(QString::fromLatin1("msg"));
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Error:" << errCode << errMsg;
-        }
-    }
-
-    if (errCode == 15)  // 15: empty list
-        errCode = 0;
-
-    emit signalBusy(false);
-    emit signalListAlbumTmplDone(errCode, errorToText(errCode, errMsg), albumTList);
-}
 
 void SmugTalker::parseResponseListCategories(const QByteArray& data)
 {

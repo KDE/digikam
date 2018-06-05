@@ -157,7 +157,6 @@ QByteArray O1::getRequestBase(const QList<O0RequestParameter> &oauthParams, cons
 
 QByteArray O1::sign(const QList<O0RequestParameter> &oauthParams, const QList<O0RequestParameter> &otherParams, const QUrl &url, QNetworkAccessManager::Operation op, const QString &consumerSecret, const QString &tokenSecret) {
     QByteArray baseString = getRequestBase(oauthParams, otherParams, url, op);
-    qWarning() << QString(baseString);
     QByteArray secret = QUrl::toPercentEncoding(consumerSecret) + "&" + QUrl::toPercentEncoding(tokenSecret);
 #if QT_VERSION >= 0x050100
     return QMessageAuthenticationCode::hash(baseString, secret, QCryptographicHash::Sha1).toBase64();

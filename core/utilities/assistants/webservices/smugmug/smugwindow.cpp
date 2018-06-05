@@ -656,6 +656,7 @@ void SmugWindow::slotUserChangeRequest(bool anonymous)
     if (d->talker->loggedIn())
         d->talker->logout();
 
+/*
     if (anonymous)
     {
         authenticate();
@@ -673,6 +674,9 @@ void SmugWindow::slotUserChangeRequest(bool anonymous)
             authenticate(d->email, d->password);
         }
     }
+*/
+
+    d->talker->link();
 }
 
 void SmugWindow::slotReloadAlbumsRequest()
@@ -693,7 +697,7 @@ void SmugWindow::slotNewAlbumRequest()
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot New Album Request";
 
     // get list of album templates from SmugMug to fill in dialog
-    d->talker->listAlbumTmpl();
+//     d->talker->listAlbumTmpl();
 
     if (d->albumDlg->exec() == QDialog::Accepted)
     {
