@@ -157,6 +157,7 @@ public:
 
     qint64  id;
     QString name;
+    QString uri;
 
     bool    isPublic;
     QString password;

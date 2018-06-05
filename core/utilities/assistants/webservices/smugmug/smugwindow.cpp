@@ -552,7 +552,8 @@ void SmugWindow::slotListAlbumTmplDone(int errCode, const QString &errMsg,
     d->currentTmplID = d->albumDlg->templateCombo()->itemData(d->albumDlg->templateCombo()->currentIndex()).toLongLong();
 
     // now fill in categories
-    d->talker->listCategories();
+    //TODO: (Trung) categories now are deprecated???
+//     d->talker->listCategories();
 }
 
 void SmugWindow::slotListCategoriesDone(int errCode,
@@ -697,7 +698,7 @@ void SmugWindow::slotNewAlbumRequest()
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot New Album Request";
 
     // get list of album templates from SmugMug to fill in dialog
-//     d->talker->listAlbumTmpl();
+    d->talker->listAlbumTmpl();
 
     if (d->albumDlg->exec() == QDialog::Accepted)
     {

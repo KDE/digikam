@@ -90,7 +90,11 @@ public:
                      const QString& caption);
 
     void    getPhoto(const QString& imgPath);
-
+    
+    QString firstLetterToUpperCase(const QString& word);
+    
+    QString createUrlName(const QString& name)
+;
 Q_SIGNALS:
 
     void signalBusy(bool val);
