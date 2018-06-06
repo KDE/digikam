@@ -534,6 +534,7 @@ void DigikamApp::setupActions()
     QAction* const sortByImageSizeAction   = d->imageSortAction->addAction(i18n("By Image Size"));
     QAction* const sortByAspectRatioAction = d->imageSortAction->addAction(i18n("By Aspect Ratio"));
     QAction* const sortBySimilarityAction  = d->imageSortAction->addAction(i18n("By Similarity"));
+    QAction* const sortByManualOrderAction = d->imageSortAction->addAction(i18n("By Manual"));
 
     // activate the sort by similarity if the fuzzy search sidebar is active. Deactivate at start.
     sortBySimilarityAction->setEnabled(false);
@@ -547,6 +548,7 @@ void DigikamApp::setupActions()
     connect(sortByImageSizeAction,   SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByAspectRatioAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortBySimilarityAction,  SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByManualOrderAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
     imageSortMapper->setMapping(sortByNameAction,        (int)ImageSortSettings::SortByFileName);
     imageSortMapper->setMapping(sortByPathAction,        (int)ImageSortSettings::SortByFilePath);
@@ -556,6 +558,7 @@ void DigikamApp::setupActions()
     imageSortMapper->setMapping(sortByImageSizeAction,   (int)ImageSortSettings::SortByImageSize);
     imageSortMapper->setMapping(sortByAspectRatioAction, (int)ImageSortSettings::SortByAspectRatio);
     imageSortMapper->setMapping(sortBySimilarityAction,  (int)ImageSortSettings::SortBySimilarity);
+    imageSortMapper->setMapping(sortByManualOrderAction, (int)ImageSortSettings::SortByManualOrder);
 
     // -----------------------------------------------------------
 

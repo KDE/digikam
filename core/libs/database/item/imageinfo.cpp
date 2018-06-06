@@ -213,6 +213,7 @@ ImageInfoData::ImageInfoData()
     pickLabelCached        = false;
     colorLabelCached       = false;
     ratingCached           = false;
+    manualOrderCached      = false;
     categoryCached         = false;
     formatCached           = false;
     creationDateCached     = false;
@@ -653,6 +654,18 @@ int ImageInfo::rating() const
 
     QVariantList values = CoreDbAccess().db()->getImageInformation(m_data->id, DatabaseFields::Rating);
     STORE_IN_CACHE_AND_RETURN(rating, values.first().toLongLong())
+}
+
+int ImageInfo::manualOrder() const
+{
+    if (!m_data)
+    {
+        return 0;
+    }
+    // RETURN_IF_CACHED(manualOrder)
+
+    QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::ManualOrder);
+    STORE_IN_CACHE_AND_RETURN(manualOrder, values.first().toLongLong())
 }
 
 QString ImageInfo::format() const

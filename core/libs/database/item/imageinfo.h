@@ -213,6 +213,11 @@ public:
     int rating() const;
 
     /**
+     * Returns the manual sort order
+     */
+    int manualOrder() const;
+
+    /**
      * Returns the category of the item: Image, Audio, Video
      */
     DatabaseItem::Category category() const;

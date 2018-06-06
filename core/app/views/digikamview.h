@@ -171,6 +171,7 @@ public Q_SLOTS:
     void slotSlideShowRecursive();
     void slotSlideShowManualFromCurrent();
     void slotSlideShowManualFrom(const ImageInfo& info);
+    void slotManualSort();
 
     // Album action slots
     void slotRefresh();

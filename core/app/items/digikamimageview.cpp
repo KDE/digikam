@@ -214,22 +214,63 @@ ImageInfoList DigikamImageView::selectedImageInfosCurrentFirst(bool grouping) co
 
 void DigikamImageView::dragDropSort(const ImageInfo& pick, const QList<ImageInfo>& infos)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "---lyj--- drag drop sort slot in digikam imageview";
     ImageInfoList info_list = this->allImageInfos(false);
-    int order_ = 0;
+    int order_ = 1;
+    bool flag = false;
     for(auto iinfo: info_list)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << iinfo.name();
-        iinfo.setManualOrder(order_++);
+        if(iinfo.name() == infos[0].name())
+        {
+            break;
+        }
+        if(iinfo.name() == pick.name())
+        {
+            flag = true;
+            break;
+        }
+    }
+    ImageInfo back_info;
+    //flag==false means image in infos is in the front of pick before manually sort 
+    if(!flag)
+    {
+        for(auto iinfo: info_list)
+        {
+            if(iinfo.name() == infos[0].name())
+            {
+                back_info = iinfo;
+                continue;
+            }
+            else if(iinfo.name() == pick.name())
+            {
+                iinfo.setManualOrder(order_++);
+                back_info.setManualOrder(order_++);
+                continue;
+            }
+            iinfo.setManualOrder(order_++);
+        }
+    }
+    //flag==true means image in pick is in the front of infos before manually sort 
+    else
+    {
+        int order_reserved = 0;
+        for(auto iinfo: info_list)
+        {
+            if(iinfo.name() == pick.name())
+            {
+                iinfo.setManualOrder(order_++);
+                order_reserved = order_++;
+                continue;
+            }
+            else if(iinfo.name() == infos[0].name())
+            {
+                iinfo.setManualOrder(order_reserved);
+                continue;
+            }
+            iinfo.setManualOrder(order_++);
+        }
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "---lyj--- picked image";
-    qCDebug(DIGIKAM_GENERAL_LOG) << pick.name();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "---lyj--- infos image";
-    for(auto iinfo: infos)
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << iinfo.name();
-    }
+    emit signalManualSort();
 
  }
 
