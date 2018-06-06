@@ -916,16 +916,14 @@ int ImageFilterModel::compareInfosCategories(const ImageInfo& left, const ImageI
 static inline QString fastNumberToString(int id)
 {
     const int size = sizeof(int) * 2;
-    char c[size+1];
-    c[size]        = '\0';
-    char* p        = c;
     int number     = id;
+    char c[size + 1];
+    c[size] = '\0';
 
     for (int i = 0 ; i < size ; ++i)
     {
-        *p = 'a' + (number & 0xF);
+        c[i] = 'a' + (number & 0xF);
         number >>= 4;
-        ++p;
     }
 
     return QString::fromLatin1(c);
