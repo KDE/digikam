@@ -545,7 +545,6 @@ void DigikamImageView::rename()
 
         newNamesList = dlg->newNames();
         delete dlg;
-        setFocus();
 
         if (!newNamesList.isEmpty())
         {
@@ -554,7 +553,6 @@ void DigikamImageView::rename()
 
             urls = dlg->failedUrls();
             delete dlg;
-            setFocus();
         }
     }
     while (!urls.isEmpty() && !newNamesList.isEmpty());
@@ -574,7 +572,7 @@ void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 
 void DigikamImageView::slotFullscreen(const QList<QModelIndex>& indexes)
 {
-   QList<ImageInfo> infos = imageInfos(indexes);
+   QList<ImageInfo> infos = imageInfos(indexes, ApplicationSettings::Slideshow);
 
    if (infos.isEmpty())
    {
