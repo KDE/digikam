@@ -180,12 +180,16 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
 
     d->albumDlg  = new SmugNewAlbumDlg(this);
 
-    connect(d->albumDlg->categoryCombo(), SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotCategorySelectionChanged(int)) );
+    /** 
+     * Categories are deprecated
+     * 
+     * connect(d->albumDlg->categoryCombo(), SIGNAL(currentIndexChanged(int)),
+     *        this, SLOT(slotCategorySelectionChanged(int)) );
 
-    connect(d->albumDlg->templateCombo(), SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotTemplateSelectionChanged(int)) );
-
+     * connect(d->albumDlg->templateCombo(), SIGNAL(currentIndexChanged(int)),
+     *        this, SLOT(slotTemplateSelectionChanged(int)) );
+     */
+    
     // ------------------------------------------------------------------------
 
     d->talker = new SmugTalker(d->iface, this);
@@ -716,9 +720,13 @@ void SmugWindow::slotNewAlbumRequest()
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling New Album method";
         d->currentTmplID = d->albumDlg->templateCombo()->itemData(
                         d->albumDlg->templateCombo()->currentIndex()).toLongLong();
-        d->currentCategoryID = d->albumDlg->categoryCombo()->itemData(
-                        d->albumDlg->categoryCombo()->currentIndex()).toLongLong();
-
+        /** 
+         * Categories are deprecated
+         * 
+         * d->currentCategoryID = d->albumDlg->categoryCombo()->itemData(
+         *                d->albumDlg->categoryCombo()->currentIndex()).toLongLong();
+         */
+        
         SmugAlbum newAlbum;
         d->albumDlg->getAlbumProperties(newAlbum);
         d->talker->createAlbum(newAlbum);
