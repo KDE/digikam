@@ -101,7 +101,7 @@ public:
 
     bool    isPublic;
     QString password;
-    bool canShare;
+    bool    canShare;
     QString passwordHint;
 
     int     imageCount;

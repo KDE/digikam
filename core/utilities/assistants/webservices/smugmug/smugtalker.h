@@ -66,9 +66,7 @@ public:
             void    link();
             void    unlink();
             void    removeUserName(const QString& userName);
-            void    login(const QString& email = QString(),
-                          const QString& password = QString());
-            void    loginWithNickName(const QString& nickName);
+            void    login();
             void    getLoginedUser();
             void    logout();
 

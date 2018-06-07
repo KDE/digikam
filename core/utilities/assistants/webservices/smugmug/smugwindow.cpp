@@ -165,12 +165,16 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
 
     // ------------------------------------------------------------------------
 
-    if(nickName.isEmpty())
-    {
-        d->loginDlg  = new WSLoginDialog(this,
-                                         i18n("<qt>Enter the <b>email address</b> and <b>password</b> for your "
-                                          "<a href=\"http://www.smugmug.com\">SmugMug</a> account</qt>"));
-    }
+    /**
+     * This is deprecated because we know use O2 to login
+     * 
+     * if(nickName.isEmpty())
+     * {
+     *     d->loginDlg  = new WSLoginDialog(this,
+     *                                      i18n("<qt>Enter the <b>email address</b> and <b>password</b> for your "
+     *                                       "<a href=\"http://www.smugmug.com\">SmugMug</a> account</qt>"));
+     * }
+     */
     
     // ------------------------------------------------------------------------
 
@@ -229,37 +233,39 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Calling Login method";
     buttonStateChange(d->talker->loggedIn());
     
-    if(!nickName.isEmpty())
-    {
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "login with nickname";
-        authenticateWithNickName(nickName);
-    }
-    else
-    {
-        if (d->import)
-        {
-            // if no e-mail, switch to anonymous login
-            if (d->anonymousImport || d->email.isEmpty())
-            {
-                d->anonymousImport = true;
-                authenticate();
-            }
-            else
-            {
-                authenticate(d->email, d->password);
-            }
-            
-            d->widget->setAnonymous(d->anonymousImport);
-        }
-        else
-        {
-            // export cannot login anonymously: pop-up login window`
-            if (d->email.isEmpty())
-                slotUserChangeRequest(false);
-            else
-                authenticate(d->email, d->password);
-        }
-    }
+    authenticate();
+    
+//     if(!nickName.isEmpty())
+//     {
+//         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "login with nickname";
+//         authenticateWithNickName(nickName);
+//     }
+//     else
+//     {
+//         if (d->import)
+//         {
+//             // if no e-mail, switch to anonymous login
+//             if (d->anonymousImport || d->email.isEmpty())
+//             {
+//                 d->anonymousImport = true;
+//                 authenticate();
+//             }
+//             else
+//             {
+//                 authenticate(d->email, d->password);
+//             }
+//             
+//             d->widget->setAnonymous(d->anonymousImport);
+//         }
+//         else
+//         {
+//             // export cannot login anonymously: pop-up login window`
+//             if (d->email.isEmpty())
+//                 slotUserChangeRequest(false);
+//             else
+//                 authenticate(d->email, d->password);
+//         }
+//     }
 }
 
 SmugWindow::~SmugWindow()
@@ -328,20 +334,12 @@ void SmugWindow::reactivate()
     show();
 }
 
-void SmugWindow::authenticate(const QString& email, const QString& password)
+void SmugWindow::authenticate()
 {
     setUiInProgressState(true);
     d->widget->progressBar()->setFormat(QString());
     
-    d->talker->login(email, password); 
-}
-
-void SmugWindow::authenticateWithNickName(const QString& nickName)
-{
-    setUiInProgressState(true);
-    d->widget->progressBar()->setFormat(QString());
-    
-    d->talker->loginWithNickName(nickName);
+    d->talker->login();
 }
 
 void SmugWindow::readSettings()
@@ -503,7 +501,7 @@ void SmugWindow::slotListPhotosDone(int errCode, const QString &errMsg,
 
     for (int i = 0; i < photosList.size(); ++i)
     {
-        d->transferQueue.append(QUrl::fromLocalFile(photosList.at(i).originalURL));
+        d->transferQueue.append(photosList.at(i).originalURL);
     }
 
     if (d->transferQueue.isEmpty())
@@ -908,6 +906,8 @@ void SmugWindow::slotGetPhotoDone(int errCode,
 {
     QString imgPath = d->widget->getDestinationPath() + QLatin1Char('/')
                       + d->transferQueue.first().fileName();
+                      
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << imgPath;
 
     if (errCode == 0)
     {

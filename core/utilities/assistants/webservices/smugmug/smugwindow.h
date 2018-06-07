@@ -122,9 +122,7 @@ private:
     void readSettings();
     void writeSettings();
 
-    void authenticate(const QString& email = QString(),
-                      const QString& password = QString());
-    void authenticateWithNickName(const QString& nickName);
+    void authenticate();
 
     void buttonStateChange(bool state);
     void setUiInProgressState(bool inProgress);
