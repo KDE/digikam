@@ -296,9 +296,13 @@ void SmugWindow::slotDialogFinished()
 {
     slotCancelClicked();
 
-    if (d->talker->loggedIn())
-        d->talker->logout();
-
+    /**
+     * We should not logout without user consent
+     * 
+     * if (d->talker->loggedIn())
+     *    d->talker->logout();
+     */
+    
     writeSettings();
     d->widget->imagesList()->listView()->clear();
 }
@@ -669,8 +673,12 @@ void SmugWindow::slotUserChangeRequest(bool anonymous)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request";
 
-    if (d->talker->loggedIn())
-        d->talker->logout();
+    // Unlink user account and wait active until really logged out
+    d->talker->logout();
+    while(d->talker->loggedIn());
+    
+    // Re-login
+    authenticate();
 
 /*
     if (anonymous)
@@ -691,8 +699,6 @@ void SmugWindow::slotUserChangeRequest(bool anonymous)
         }
     }
 */
-
-    d->talker->link();
 }
 
 void SmugWindow::slotReloadAlbumsRequest()

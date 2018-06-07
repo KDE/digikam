@@ -65,7 +65,7 @@ public:
     
     void    link();
     void    unlink();
-    void    removeUserName(const QString& userName);
+    void    removeUserAccount(const QString& userName);
     void    login();
     void    getLoginedUser();
     void    logout();
@@ -131,7 +131,7 @@ private:
     QString htmlToText(const QString& htmlText) const;
     QString errorToText(int errCode, const QString& errMsg) const;
     void parseResponseLogin(const QByteArray& data);
-    void parseResponseLogout(const QByteArray& data);
+//     void parseResponseLogout(const QByteArray& data);
     void parseResponseAddPhoto(const QByteArray& data);
     void parseResponseCreateAlbum(const QByteArray& data);
     void parseResponseListAlbums(const QByteArray& data);

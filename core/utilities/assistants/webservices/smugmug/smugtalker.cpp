@@ -194,18 +194,19 @@ SmugTalker::SmugTalker(DInfoInterface* const iface, QWidget* const parent)
 
 SmugTalker::~SmugTalker()
 {
-    if (loggedIn())
-    {
-        logout();
-
-        while (d->reply && d->reply->isRunning())
-        {
-            qApp->processEvents();
-        }
-    }
-    
-    // Just for test
-    unlink();
+    /**
+     * We shouldn't logout without user's consent
+     * 
+     * if (loggedIn())
+     * {
+     *    logout();
+     *
+     *    while (d->reply && d->reply->isRunning())
+     *    {
+     *        qApp->processEvents();
+     *    }
+     * }
+     */
 
     if (d->reply)
         d->reply->abort();
@@ -224,11 +225,9 @@ void SmugTalker::unlink()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Smug ";
     d->o1->unlink();
-    
-    removeUserName(d->user.displayName);
 }
 
-void SmugTalker::removeUserName(const QString& userName)
+void SmugTalker::removeUserAccount(const QString& userName)
 {
 //             if (userName.startsWith(d->serviceName))
 //             {
@@ -255,6 +254,16 @@ void SmugTalker::slotLinkingSucceeded()
     if (!d->o1->linked())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Smug ok";
+        
+        // Remove user account
+        removeUserAccount(d->user.nickName);
+        
+        // Clear user field
+        d->user.clear();
+        
+        // Set state to SMUG_LOGOUT
+        d->state = Private::SMUG_LOGOUT;
+        
         emit signalBusy(false);
         return;
     }
@@ -367,31 +376,18 @@ void SmugTalker::getLoginedUser()
     d->buffer.resize(0);
 }
 
-        void SmugTalker::logout()
-        {
-            if (d->reply)
-            {
-                d->reply->abort();
-                d->reply = 0;
-            }
+void SmugTalker::logout()
+{
+    if (d->reply)
+    {
+        d->reply->abort();
+        d->reply = 0;
+    }
 
-            emit signalBusy(true);
-
-            QUrl url(d->apiURL);
-            QUrlQuery q;
-            q.addQueryItem(QString::fromLatin1("method"),    QString::fromLatin1("smugmug.logout"));
-            q.addQueryItem(QString::fromLatin1("SessionID"), d->sessionID);
-            url.setQuery(q);
-
-            QNetworkRequest netRequest(url);
-            netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-            netRequest.setHeader(QNetworkRequest::UserAgentHeader,   d->userAgent);
-
-            d->reply = d->netMngr->get(netRequest);
-
-            d->state = Private::SMUG_LOGOUT;
-            d->buffer.resize(0);
-        }
+    emit signalBusy(true);
+    
+    unlink();
+}
 
 void SmugTalker::listAlbums(const QString& nickName)
 {
@@ -730,9 +726,6 @@ void SmugTalker::slotFinished(QNetworkReply* reply)
         case (Private::SMUG_LOGIN):
             parseResponseLogin(d->buffer);
             break;
-        case (Private::SMUG_LOGOUT):
-            parseResponseLogout(d->buffer);
-            break;
         case (Private::SMUG_LISTALBUMS):
             parseResponseListAlbums(d->buffer);
             break;
@@ -801,6 +794,9 @@ void SmugTalker::parseResponseLogin(const QByteArray& data)
     emit signalLoginDone(0, QString(""));
 }
 
+/**
+ * Not necessary anymore
+ * 
 void SmugTalker::parseResponseLogout(const QByteArray& data)
 {
     int errCode = -1;
@@ -840,6 +836,7 @@ void SmugTalker::parseResponseLogout(const QByteArray& data)
 
     emit signalBusy(false);
 }
+*/
 
 void SmugTalker::parseResponseAddPhoto(const QByteArray& data)
 {
