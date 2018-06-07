@@ -217,11 +217,14 @@ SmugWindow::SmugWindow(DInfoInterface* const iface,
     connect(d->talker, SIGNAL(signalListAlbumTmplDone(int,QString,QList<SmugAlbumTmpl>)),
             this, SLOT(slotListAlbumTmplDone(int,QString,QList<SmugAlbumTmpl>)));
 
-    connect(d->talker, SIGNAL(signalListCategoriesDone(int,QString,QList<SmugCategory>)),
-            this, SLOT(slotListCategoriesDone(int,QString,QList<SmugCategory>)));
+    /** 
+     * Categories deprecated in API v2
+     *   connect(d->talker, SIGNAL(signalListCategoriesDone(int,QString,QList<SmugCategory>)),
+     *           this, SLOT(slotListCategoriesDone(int,QString,QList<SmugCategory>)));
 
-    connect(d->talker, SIGNAL(signalListSubCategoriesDone(int,QString,QList<SmugCategory>)),
-            this, SLOT(slotListSubCategoriesDone(int,QString,QList<SmugCategory>)));
+     *   connect(d->talker, SIGNAL(signalListSubCategoriesDone(int,QString,QList<SmugCategory>)),
+     *           this, SLOT(slotListSubCategoriesDone(int,QString,QList<SmugCategory>)));
+     */
 
     connect(d->widget->progressBar(), SIGNAL(signalProgressCanceled()),
             this, SLOT(slotStopAndCloseProgressBar()));
@@ -550,10 +553,15 @@ void SmugWindow::slotListAlbumTmplDone(int errCode, const QString &errMsg,
     d->currentTmplID = d->albumDlg->templateCombo()->itemData(d->albumDlg->templateCombo()->currentIndex()).toLongLong();
 
     // now fill in categories
-    //TODO: (Trung) categories now are deprecated???
-//     d->talker->listCategories();
+    /**
+     * Categories now are deprecated in API v2
+     * d->talker->listCategories();
+     */
 }
 
+/**
+ * Categories now are deprecated in API v2
+ * 
 void SmugWindow::slotListCategoriesDone(int errCode,
                                         const QString& errMsg,
                                         const QList <SmugCategory>& categoriesList)
@@ -603,6 +611,7 @@ void SmugWindow::slotListSubCategoriesDone(int errCode,
             categoriesList.at(i).id);
     }
 }
+*/
 
 void SmugWindow::slotTemplateSelectionChanged(int index)
 {
@@ -615,6 +624,9 @@ void SmugWindow::slotTemplateSelectionChanged(int index)
     d->albumDlg->privateGroupBox()->setEnabled(d->currentTmplID == 0);
 }
 
+/**
+ * Categories now are deprecated in API v2
+ * 
 void SmugWindow::slotCategorySelectionChanged(int index)
 {
     if (index < 0)
@@ -624,6 +636,7 @@ void SmugWindow::slotCategorySelectionChanged(int index)
     d->currentCategoryID = d->albumDlg->categoryCombo()->itemData(index).toLongLong();
     d->talker->listSubCategories(d->currentCategoryID);
 }
+*/
 
 void SmugWindow::buttonStateChange(bool state)
 {

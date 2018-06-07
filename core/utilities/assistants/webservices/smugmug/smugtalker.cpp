@@ -73,11 +73,13 @@ public:
         SMUG_LISTALBUMS,
         SMUG_LISTPHOTOS,
         SMUG_LISTALBUMTEMPLATES,
-        SMUG_LISTCATEGORIES,
-        SMUG_LISTSUBCATEGORIES,
         SMUG_CREATEALBUM,
         SMUG_ADDPHOTO,
         SMUG_GETPHOTO
+        /*
+         * S MUG_LISTCATEGORIES,
+         * SMUG_LISTSUBCATEGORIES,
+         */
     };
 
 public:
@@ -307,7 +309,6 @@ QString SmugTalker::createUrlName(const QString& name)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url name : " << n;
     
     return n;
-    
 }
 
 void SmugTalker::cancel()
@@ -473,6 +474,9 @@ void SmugTalker::listAlbumTmpl()
     d->buffer.resize(0);
 }
 
+/** 
+ * Categories deprecated in API v2
+ * 
 void SmugTalker::listCategories()
 {
     if (d->reply)
@@ -525,6 +529,7 @@ void SmugTalker::listSubCategories(qint64 categoryID)
     d->state = Private::SMUG_LISTSUBCATEGORIES;
     d->buffer.resize(0);
 }
+*/
 
 void SmugTalker::createAlbum(const SmugAlbum& album)
 {
@@ -737,12 +742,14 @@ void SmugTalker::slotFinished(QNetworkReply* reply)
         case (Private::SMUG_LISTALBUMTEMPLATES):
             parseResponseListAlbumTmpl(d->buffer);
             break;
-        case (Private::SMUG_LISTCATEGORIES):
-            parseResponseListCategories(d->buffer);
-            break;
-        case (Private::SMUG_LISTSUBCATEGORIES):
-            parseResponseListSubCategories(d->buffer);
-            break;
+        /*
+            case (Private::SMUG_LISTCATEGORIES):
+                parseResponseListCategories(d->buffer);
+                break;
+            case (Private::SMUG_LISTSUBCATEGORIES):
+                parseResponseListSubCategories(d->buffer);
+                break;
+        */
         case (Private::SMUG_CREATEALBUM):
             parseResponseCreateAlbum(d->buffer);
             break;
@@ -1040,6 +1047,9 @@ void SmugTalker::parseResponseListAlbumTmpl(const QByteArray& data)
     emit signalListAlbumTmplDone(0, errorToText(0, QString("")), albumTmplList);
 }
 
+/**
+ * Categories are deprecated in API v2
+ * 
 void SmugTalker::parseResponseListCategories(const QByteArray& data)
 {
     int errCode = -1;
@@ -1151,6 +1161,7 @@ void SmugTalker::parseResponseListSubCategories(const QByteArray& data)
     emit signalBusy(false);
     emit signalListSubCategoriesDone(errCode, errorToText(errCode, errMsg), categoriesList);
 }
+*/
 
 QString SmugTalker::htmlToText(const QString& htmlText) const
 {

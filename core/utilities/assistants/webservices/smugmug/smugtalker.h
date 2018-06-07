@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008-2009 by Luka Renko <lure at kubuntu dot org>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,13 +63,12 @@ public:
     bool    loggedIn() const;
     void    cancel();
     
-            //TODO: Port to O2
-            void    link();
-            void    unlink();
-            void    removeUserName(const QString& userName);
-            void    login();
-            void    getLoginedUser();
-            void    logout();
+    void    link();
+    void    unlink();
+    void    removeUserName(const QString& userName);
+    void    login();
+    void    getLoginedUser();
+    void    logout();
 
     
     void    listAlbums(const QString& nickName = QString());
@@ -77,8 +77,11 @@ public:
                        const QString& albumPassword = QString(),
                        const QString& sitePassword = QString());
     void    listAlbumTmpl();
-    void    listCategories();
-    void    listSubCategories(qint64 categoryID);
+    /**
+     * Categories are deprecated in API v2
+     *   void    listCategories();
+     *   void    listSubCategories(qint64 categoryID);
+     */
 
     void    createAlbum(const SmugAlbum& album);
 
@@ -114,10 +117,14 @@ Q_SIGNALS:
                               const QList <SmugPhoto>& photosList);
     void signalListAlbumTmplDone(int errCode, const QString& errMsg,
                                  const QList <SmugAlbumTmpl>& albumTList);
-    void signalListCategoriesDone(int errCode, const QString& errMsg,
-                                  const QList <SmugCategory>& categoriesList);
-    void signalListSubCategoriesDone(int errCode, const QString& errMsg,
-                                     const QList <SmugCategory>& categoriesList);
+    /**
+     * Categories deprecated in API v2
+     * 
+     *   void signalListCategoriesDone(int errCode, const QString& errMsg,
+     *                               const QList <SmugCategory>& categoriesList);
+     *   void signalListSubCategoriesDone(int errCode, const QString& errMsg,
+     *                                   const QList <SmugCategory>& categoriesList);
+     */
 
 private:
 
@@ -130,16 +137,19 @@ private:
     void parseResponseListAlbums(const QByteArray& data);
     void parseResponseListPhotos(const QByteArray& data);
     void parseResponseListAlbumTmpl(const QByteArray& data);
-    void parseResponseListCategories(const QByteArray& data);
-    void parseResponseListSubCategories(const QByteArray& data);
+    /**
+     * Categories deprecated in API v2
+     * 
+     *   void parseResponseListCategories(const QByteArray& data);
+     *   void parseResponseListSubCategories(const QByteArray& data);
+     */
 
 private Q_SLOTS:
-            //TODO: Port to O2
-            void slotFinished(QNetworkReply* reply);
-            void slotLinkingFailed();
-            void slotLinkingSucceeded();
-            void slotOpenBrowser(const QUrl& url);
-            void slotCloseBrowser();
+    void slotFinished(QNetworkReply* reply);
+    void slotLinkingFailed();
+    void slotLinkingSucceeded();
+    void slotOpenBrowser(const QUrl& url);
+    void slotCloseBrowser();
 
 private:
 
