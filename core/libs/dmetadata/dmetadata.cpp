@@ -194,7 +194,7 @@ int DMetadata::getMSecsInfo() const
     ok      = mSecTimeStamp("Exif.Photo.SubSecTimeOriginal", ms);
     if (ok) return ms;
 
-    ok = mSecTimeStamp("Exif.Photo.SubSecTimeDigitized", ms);
+    ok      = mSecTimeStamp("Exif.Photo.SubSecTimeDigitized", ms);
     if (ok) return ms;
 
     return 0;

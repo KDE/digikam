@@ -239,4 +239,6 @@ BUGFIXES:
 209 ==> 390541 - Tooltip background cannot be changed.
 210 ==> 391521 - "Tool-tip" box difficult to read due to default color scheme.
 211 ==> 377849 - Albums disappear when the network is interrupted.
-212 ==> 
+212 ==> 394988 - PgDown and PgUp hardcoded in preview mode.
+213 ==> 366312 - Efficient photo tagging workflow got lost in transition from 4.x to 5.
+214 ==> 
