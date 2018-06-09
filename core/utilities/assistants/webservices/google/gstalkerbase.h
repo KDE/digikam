@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2015      by Shourya Singh Gupta <shouryasgupta at gmail dot com>
  * Copyright (C) 2015-2018 by Caulier Gilles <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,28 +56,16 @@ public:
     void        link();
     void        unlink();
     void        doOAuth();
-    void        getAccessToken();
-    void        getAccessTokenFromRefreshToken(const QString& msg);
-    bool        authenticated()                                               const;
-    QString     getValue(const QString&, const QString&)                      const;
-    QStringList getParams(const QString&, const QStringList&, const QString&) const;
-    QString     getToken(const QString&, const QString&, const QString&)      const;
-    int         getTokenEnd(const QString&, int)                              const;
-
+    bool        authenticated() const;
+    
 Q_SIGNALS:
 
     void signalBusy(bool val);
-    void signalAccessTokenFailed(int errCode, const QString& errMsg);
-    void signalAccessTokenObtained();
-    void signalTextBoxEmpty();
-    void signalRefreshTokenObtained(const QString& msg);
     void signalLinkingSucceeded();
+    void signalAccessTokenObtained();
 
 private Q_SLOTS:
 
-    void slotAuthFinished(QNetworkReply* reply);
-    void slotAccept();
-    void slotReject();
     void slotLinkingSucceeded();
     void slotLinkingFailed();
     void slotOpenBrowser(const QUrl&);
@@ -92,11 +81,6 @@ protected:
 
     QNetworkReply* m_reply;
     QString        m_serviceName;
-
-private:
-
-    void parseResponseAccessToken(const QByteArray& data);
-    void parseResponseRefreshToken(const QByteArray& data);
 
 private:
 

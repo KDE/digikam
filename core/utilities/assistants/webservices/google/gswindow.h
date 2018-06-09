@@ -90,7 +90,6 @@ private Q_SLOTS:
     void slotTextBoxEmpty();
     void slotAccessTokenFailed(int errCode,const QString& errMsg);
     void slotAccessTokenObtained();
-    void slotRefreshTokenObtained(const QString& msg);
     void slotSetUserName(const QString& msg);
     void slotListAlbumsDone(int,const QString&,const QList <GSFolder>&);
     void slotListPhotosDoneForDownload(int errCode, const QString& errMsg, const QList <GSPhoto>& photosList);

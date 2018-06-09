@@ -89,7 +89,6 @@ public:
     QString                       toolName;
     GoogleService                 service;
     QString                       tmp;
-    QString                       refreshToken;
 
     GSWidget*                     widget;
     GSNewAlbumDlg*                albumDlg;
@@ -165,9 +164,6 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->talker,SIGNAL(signalAccessTokenObtained()),
                     this,SLOT(slotAccessTokenObtained()));
 
-            connect(d->talker,SIGNAL(signalRefreshTokenObtained(QString)),
-                    this,SLOT(slotRefreshTokenObtained(QString)));
-
             connect(d->talker,SIGNAL(signalSetUserName(QString)),
                     this,SLOT(slotSetUserName(QString)));
 
@@ -183,14 +179,7 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             readSettings();
             buttonStateChange(false);
 
-            if (d->refreshToken.isEmpty())
-            {
-                d->talker->doOAuth();
-            }
-            else
-            {
-                d->talker->getAccessTokenFromRefreshToken(d->refreshToken);
-            }
+            d->talker->doOAuth();
 
             break;
 
@@ -231,9 +220,6 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->gphotoTalker, SIGNAL(signalAccessTokenObtained()),
                     this, SLOT(slotAccessTokenObtained()));
 
-            connect(d->gphotoTalker, SIGNAL(signalRefreshTokenObtained(QString)),
-                    this, SLOT(slotRefreshTokenObtained(QString)));
-
             connect(d->gphotoTalker, SIGNAL(signalListAlbumsDone(int,QString,QList<GSFolder>)),
                     this, SLOT(slotListAlbumsDone(int,QString,QList<GSFolder>)));
 
@@ -249,15 +235,8 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             readSettings();
             buttonStateChange(false);
 
-            if (d->refreshToken.isEmpty())
-            {
-                d->gphotoTalker->doOAuth();
-            }
-            else
-            {
-                d->gphotoTalker->getAccessTokenFromRefreshToken(d->refreshToken);
-            }
-
+            d->gphotoTalker->doOAuth();
+            
             break;
     }
 
@@ -314,7 +293,6 @@ void GSWindow::readSettings()
     }
 
     d->currentAlbumId = grp.readEntry("Current Album",QString());
-    d->refreshToken  = grp.readEntry("refresh_token");
 
     if (grp.readEntry("Resize", false))
     {
@@ -370,7 +348,6 @@ void GSWindow::writeSettings()
             break;
     }
 
-    grp.writeEntry("refresh_token", d->refreshToken);
     grp.writeEntry("Current Album", d->currentAlbumId);
     grp.writeEntry("Resize",        d->widget->getResizeCheckBox()->isChecked());
     grp.writeEntry("Maximum Width", d->widget->getDimensionSpB()->value());
@@ -1245,22 +1222,6 @@ void GSWindow::slotAccessTokenObtained()
     }
 }
 
-void GSWindow::slotRefreshTokenObtained(const QString& msg)
-{
-    switch (d->service)
-    {
-        case GoogleService::GDrive:
-            d->refreshToken = msg;
-            d->talker->listFolders();
-            break;
-        case GoogleService::GPhotoImport:
-        case GoogleService::GPhotoExport:
-            d->refreshToken = msg;
-            d->gphotoTalker->listAlbums();
-            break;
-    }
-}
-
 void GSWindow::slotCreateFolderDone(int code, const QString& msg, const QString& albumId)
 {
     switch (d->service)
@@ -1305,38 +1266,6 @@ void GSWindow::slotTransferCancel()
 
 void GSWindow::slotUserChangeRequest()
 {
-    /*
-    QUrl url(QString::fromLatin1("https://accounts.google.com/logout"));
-    QDesktopServices::openUrl(url);
-
-    QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
-                     i18nc("@title:window", "Warning"),
-                     i18n("After you have been logged out in the browser, "
-                          "click \"Continue\" to authenticate for another account"),
-                     QMessageBox::Yes | QMessageBox::No);
-
-    (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
-    (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
-
-    if (warn->exec() == QMessageBox::Yes)
-    {
-        d->refreshToken = QString::fromLatin1("");
-
-        switch (d->service)
-        {
-            case GoogleService::GDrive:
-                d->talker->doOAuth();
-                break;
-            case GoogleService::GPhotoImport:
-            case GoogleService::GPhotoExport:
-                d->gphotoTalker->doOAuth();
-                break;
-        }
-    }
-    
-    delete warn;
-     */
-    
     /**
      * We do not force user to logout
      * We simply unlink user account and direct use to login page to login new account

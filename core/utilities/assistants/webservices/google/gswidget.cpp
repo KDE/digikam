@@ -88,6 +88,7 @@ GSWidget::GSWidget(QWidget* const parent,
             getOptionsBox()->hide();
             imagesList()->hide();
             m_LeafBox->hide();
+            getSizeBox()->hide(); // (Trung) Hide this option temporary, until factorization 
             break;
         case GoogleService::GDrive:
             getUploadBox()->hide();
