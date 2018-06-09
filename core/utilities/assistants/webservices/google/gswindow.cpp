@@ -715,8 +715,8 @@ void GSWindow::slotStartTransfer()
                 }
             }
 
-//             googlePhotoTransferHandler();
-//             return;
+            googlePhotoTransferHandler();
+            return;
     }
 
     typedef QPair<QUrl, GSPhoto> Pair;
@@ -964,7 +964,18 @@ void GSWindow::downloadNextPhoto()
 void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteArray& photoData)
 {
     GSPhoto item = d->transferQueue.first().second;
-    QUrl tmpUrl  = QUrl::fromLocalFile(QString(d->tmp + item.title));
+    
+    /**
+     * (Trung)
+     * Google Photo API now does not support title for image, so we use creation time for image name instead
+     */
+    QString itemName(item.title);
+    if(item.title.isEmpty())
+    {
+        itemName = QString::fromLatin1("image-%1").arg(item.creationTime);
+    }
+    
+    QUrl tmpUrl  = QUrl::fromLocalFile(QString(d->tmp + itemName));
 
     if (item.mimeType == QString::fromLatin1("video/mpeg4"))
     {
@@ -980,6 +991,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
         if (!imgFile.open(QIODevice::WriteOnly))
         {
             errText = imgFile.errorString();
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error write";
         }
         else if (imgFile.write(photoData) != photoData.size())
         {
@@ -1053,9 +1065,11 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
         
         delete warn;
     }
-
-    QUrl newUrl = QUrl::fromLocalFile(QString(d->widget->getDestinationPath() + tmpUrl.fileName()));
-
+    
+    QUrl newUrl = QUrl::fromLocalFile(QString::fromLatin1("%1/%2").arg(d->widget->getDestinationPath())
+                                                                  .arg(tmpUrl.fileName()));
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "location " << newUrl.url();
+    
     QFileInfo targetInfo(newUrl.toLocalFile());
 
     if (targetInfo.exists())
@@ -1291,6 +1305,7 @@ void GSWindow::slotTransferCancel()
 
 void GSWindow::slotUserChangeRequest()
 {
+    /*
     QUrl url(QString::fromLatin1("https://accounts.google.com/logout"));
     QDesktopServices::openUrl(url);
 
@@ -1320,6 +1335,29 @@ void GSWindow::slotUserChangeRequest()
     }
     
     delete warn;
+     */
+    
+    /**
+     * We do not force user to logout
+     * We simply unlink user account and direct use to login page to login new account
+     * (In the future, we may not unlink() user, but let them change account and 
+     * choose which one they want to use)
+     * After unlink(), waiting actively until O2 completely unlink() account, before doOAuth() again
+     */
+    switch (d->service)
+    {
+        case GoogleService::GDrive:
+            d->talker->unlink();
+            while(d->talker->authenticated());
+            d->talker->doOAuth();
+            break;
+        case GoogleService::GPhotoImport:
+        case GoogleService::GPhotoExport:
+            d->gphotoTalker->unlink();
+            while(d->gphotoTalker->authenticated());
+            d->gphotoTalker->doOAuth();
+            break;
+    }
 }
 
 void GSWindow::buttonStateChange(bool state)

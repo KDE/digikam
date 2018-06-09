@@ -9,6 +9,7 @@
  * Copyright (C) 2007-2008 by Vardhman Jain <vardhman at gmail dot com>
  * Copyright (C) 2008-2018 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Luka Renko <lure at kubuntu dot org>
+ * Copyright (C) 2018      by Thanh Trung Dinh <dinhthanhtrung1996 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -198,27 +199,20 @@ void GPTalker::listPhotos(const QString& albumId, const QString& imgmax)
         m_reply = 0;
     }
 
-    QUrl url(QString::fromLatin1("https://picasaweb.google.com/data/feed/api/user/default/albumid/") + albumId);
-
-    QUrlQuery q(url);
-    q.addQueryItem(QString::fromLatin1("thumbsize"), QString::fromLatin1("200"));
-
-    if (!imgmax.isNull())
-    {
-        q.addQueryItem(QString::fromLatin1("imgmax"), imgmax);
-    }
-
-    url.setQuery(q);
+    QUrl url(d->apiUrl.arg("mediaItems:search"));
 
     QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
-
-    if (!m_accessToken.isEmpty())
-    {
-        netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
-    }
-
-    m_reply = d->netMngr->get(netRequest);
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toUtf8());
+    
+    QByteArray data;
+    data += "{\"pageSize\": \"100\",";
+    data += "\"albumId\":\"";
+    data += albumId.toUtf8();
+    data += "\"}";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "data to list photos : " << QString(data);
+    
+    m_reply = d->netMngr->post(netRequest, data);
 
     d->state = Private::GP_LISTPHOTOS;
     m_buffer.resize(0);
@@ -325,66 +319,6 @@ bool GPTalker::addPhoto(const QString& photoPath,
             meta.save(path);
         }
     }
-
-    // Create the Body in atom-xml
-
-//     QDomDocument docMeta;
-//     QDomProcessingInstruction instr = docMeta.createProcessingInstruction(QString::fromLatin1("xml"), QString::fromLatin1("version='1.0' encoding='UTF-8'"));
-//     docMeta.appendChild(instr);
-//     QDomElement entryElem           = docMeta.createElement(QString::fromLatin1("entry"));
-//     docMeta.appendChild(entryElem);
-//     entryElem.setAttribute(QString::fromLatin1("xmlns"), QString::fromLatin1("http://www.w3.org/2005/Atom"));
-//     QDomElement titleElem           = docMeta.createElement(QString::fromLatin1("title"));
-//     entryElem.appendChild(titleElem);
-//     QDomText titleText              = docMeta.createTextNode(QFileInfo(path).fileName()); // NOTE: Do not use info.title as arg here to set titleText because we change the format of image as .jpg before uploading.
-//     titleElem.appendChild(titleText);
-//     QDomElement summaryElem         = docMeta.createElement(QString::fromLatin1("summary"));
-//     entryElem.appendChild(summaryElem);
-//     QDomText summaryText            = docMeta.createTextNode(info.description);
-//     summaryElem.appendChild(summaryText);
-//     QDomElement categoryElem        = docMeta.createElement(QString::fromLatin1("category"));
-//     entryElem.appendChild(categoryElem);
-//     categoryElem.setAttribute(
-//         QString::fromLatin1("scheme"),
-//         QString::fromLatin1("http://schemas.google.com/g/2005#kind"));
-//     categoryElem.setAttribute(
-//         QString::fromLatin1("term"),
-//         QString::fromLatin1("http://schemas.google.com/photos/2007#photo"));
-//     QDomElement mediaGroupElem      = docMeta.createElementNS(
-//         QString::fromLatin1("http://search.yahoo.com/mrss/"),
-//         QString::fromLatin1("media:group"));
-//     entryElem.appendChild(mediaGroupElem);
-//     QDomElement mediaKeywordsElem   = docMeta.createElementNS(
-//         QString::fromLatin1("http://search.yahoo.com/mrss/"),
-//         QString::fromLatin1("media:keywords"));
-//     mediaGroupElem.appendChild(mediaKeywordsElem);
-//     QDomText mediaKeywordsText      = docMeta.createTextNode(info.tags.join(QString::fromLatin1(",")));
-//     mediaKeywordsElem.appendChild(mediaKeywordsText);
-// 
-//     if (!info.gpsLat.isEmpty() && !info.gpsLon.isEmpty())
-//     {
-//         QDomElement whereElem = docMeta.createElementNS(
-//             QString::fromLatin1("http://www.georss.org/georss"),
-//             QString::fromLatin1("georss:where"));
-//         entryElem.appendChild(whereElem);
-//         QDomElement pointElem = docMeta.createElementNS(
-//             QString::fromLatin1("http://www.opengis.net/gml"),
-//             QString::fromLatin1("gml:Point"));
-//         whereElem.appendChild(pointElem);
-//         QDomElement gpsElem   = docMeta.createElementNS(
-//             QString::fromLatin1("http://www.opengis.net/gml"),
-//             QString::fromLatin1("gml:pos"));
-//         pointElem.appendChild(gpsElem);
-//         QDomText gpsVal       = docMeta.createTextNode(info.gpsLat + QLatin1Char(' ') + info.gpsLon);
-//         gpsElem.appendChild(gpsVal);
-//     }
-// 
-//     form.addPair(QString::fromLatin1("descr"), docMeta.toString(), QString::fromLatin1("application/atom+xml"));
-
-//     if (!form.addFile(QString::fromLatin1("photo"), path))
-//         return false;
-// 
-//     form.finish();
     
     // Create the body for temporary upload
     QFile imageFile(path);
@@ -397,7 +331,6 @@ bool GPTalker::addPhoto(const QString& photoPath,
     
     QString imageName = QUrl::fromLocalFile(path).fileName().toLatin1();
     
-//     qCDebug(DIGIKAM_WEBSERVICES_LOG) << data;
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
     netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
@@ -555,6 +488,8 @@ void GPTalker::getPhoto(const QString& imgPath)
     emit signalBusy(true);
 
     QUrl url(imgPath);
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "link to get photo " << url.url();
+    
     m_reply = d->netMngr->get(QNetworkRequest(url));
 
     d->state = Private::GP_GETPHOTO;
@@ -707,6 +642,8 @@ void GPTalker::slotFinished(QNetworkReply* reply)
             parseResponseUploadPhoto(m_buffer);
             break;
         case (Private::GP_GETPHOTO):
+            
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(m_buffer);
             // all we get is data of the image
             emit signalGetPhotoDone(1, QString(), m_buffer);
             break;
@@ -831,135 +768,178 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
 
 void GPTalker::parseResponseListPhotos(const QByteArray& data)
 {
-    QDomDocument doc(QString::fromLatin1("feed"));
+//     QDomDocument doc(QString::fromLatin1("feed"));
+// 
+//     if ( !doc.setContent( data ) )
+//     {
+//         emit signalListPhotosDone(0, i18n("Failed to fetch photo-set list"), QList<GSPhoto>());
+//         return;
+//     }
+// 
+//     QDomElement docElem = doc.documentElement();
+//     QDomNode node       = docElem.firstChild();
+// 
+//     QList<GSPhoto> photoList;
+// 
+//     while (!node.isNull())
+//     {
+//         if (node.isElement() && node.nodeName() == QString::fromLatin1("entry"))
+//         {
+//             QDomNode details     = node.firstChild();
+//             QDomNode detailsNode = details;
+//             GSPhoto fps;
+// 
+//             while (!detailsNode.isNull())
+//             {
+//                 if (detailsNode.isElement())
+//                 {
+//                     QDomElement detailsElem = detailsNode.toElement();
+// 
+//                     if (detailsNode.nodeName() == QString::fromLatin1("gphoto:id"))
+//                     {
+//                         fps.id = detailsElem.text();
+//                     }
+// 
+//                     if (detailsNode.nodeName() == QString::fromLatin1("title"))
+//                     {
+//                         //fps.title = detailsElem.text();
+//                     }
+// 
+//                     if (detailsNode.nodeName() == QString::fromLatin1("summary"))
+//                     {
+//                         fps.description = detailsElem.text();
+//                     }
+// 
+//                     if (detailsNode.nodeName() == QString::fromLatin1("gphoto:access"))
+//                     {
+//                         fps.access = detailsElem.text();
+//                     }
+// 
+//                     if (detailsNode.nodeName() == QString::fromLatin1("link") &&
+//                         detailsElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("edit-media"))
+//                     {
+//                         fps.editUrl = QUrl(detailsElem.attribute(QString::fromLatin1("href")));
+//                     }
+// 
+//                     if (detailsNode.nodeName() == QString::fromLatin1("georss:where"))
+//                     {
+//                         QDomNode geoPointNode = detailsElem.namedItem(QString::fromLatin1("gml:Point"));
+// 
+//                         if (!geoPointNode.isNull() && geoPointNode.isElement())
+//                         {
+//                             QDomNode geoPosNode = geoPointNode.toElement().namedItem(
+//                                 QString::fromLatin1("gml:pos"));
+// 
+//                             if (!geoPosNode.isNull() && geoPosNode.isElement())
+//                             {
+//                                 QStringList value = geoPosNode.toElement().text().split(QLatin1Char(' '));
+// 
+//                                 if (value.size() == 2)
+//                                 {
+//                                     fps.gpsLat = value[0];
+//                                     fps.gpsLon = value[1];
+//                                 }
+//                             }
+//                         }
+//                     }
+// 
+//                     if (detailsNode.nodeName() == QString::fromLatin1("media:group"))
+//                     {
+//                         QDomNode thumbNode = detailsElem.namedItem(QString::fromLatin1("media:thumbnail"));
+// 
+//                         if (!thumbNode.isNull() && thumbNode.isElement())
+//                         {
+//                             fps.thumbURL = QUrl(thumbNode.toElement().attribute(
+//                                 QString::fromLatin1("url"), QString::fromLatin1("")));
+//                         }
+// 
+//                         QDomNode keywordNode = detailsElem.namedItem(QString::fromLatin1("media:keywords"));
+// 
+//                         if (!keywordNode.isNull() && keywordNode.isElement())
+//                         {
+//                             fps.tags = keywordNode.toElement().text().split(QLatin1Char(','));
+//                         }
+// 
+//                         QDomNodeList contentsList = detailsElem.elementsByTagName(QString::fromLatin1("media:content"));
+// 
+//                         for (int i = 0; i < contentsList.size(); ++i)
+//                         {
+//                             QDomElement contentElem = contentsList.at(i).toElement();
+// 
+//                             if (!contentElem.isNull())
+//                             {
+//                                 if ((contentElem.attribute(QString::fromLatin1("medium")) == QString::fromLatin1("image")) &&
+//                                     fps.originalURL.isEmpty())
+//                                 {
+//                                     fps.originalURL = QUrl(contentElem.attribute(QString::fromLatin1("url")));
+//                                     fps.title       = fps.originalURL.fileName();
+//                                     fps.mimeType    = contentElem.attribute(QString::fromLatin1("type"));
+//                                 }
+// 
+//                                 if ((contentElem.attribute(QString::fromLatin1("medium")) == QString::fromLatin1("video")) &&
+//                                     (contentElem.attribute(QString::fromLatin1("type")) == QString::fromLatin1("video/mpeg4")))
+//                                 {
+//                                     fps.originalURL = QUrl(contentElem.attribute(QString::fromLatin1("url")));
+//                                     fps.title       = fps.originalURL.fileName();
+//                                     fps.mimeType    = contentElem.attribute(QString::fromLatin1("type"));
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 }
+// 
+//                 detailsNode = detailsNode.nextSibling();
+//             }
+// 
+//             photoList.append(fps);
+//         }
+// 
+//         node = node.nextSibling();
+//     }
+// 
+//     emit signalListPhotosDone(1, QString::fromLatin1(""), photoList);
 
-    if ( !doc.setContent( data ) )
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseListPhotos";
+    
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    
+    if(err.error != QJsonParseError::NoError)
     {
+        emit signalBusy(false);
         emit signalListPhotosDone(0, i18n("Failed to fetch photo-set list"), QList<GSPhoto>());
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << "error code: " << err.error << ", msg: " << err.errorString();
         return;
     }
-
-    QDomElement docElem = doc.documentElement();
-    QDomNode node       = docElem.firstChild();
-
+    
+    QJsonArray jsonArray = doc[QLatin1String("mediaItems")].toArray();
     QList<GSPhoto> photoList;
-
-    while (!node.isNull())
+    
+    foreach(const QJsonValue& value, jsonArray)
     {
-        if (node.isElement() && node.nodeName() == QString::fromLatin1("entry"))
-        {
-            QDomNode details     = node.firstChild();
-            QDomNode detailsNode = details;
-            GSPhoto fps;
-
-            while (!detailsNode.isNull())
-            {
-                if (detailsNode.isElement())
-                {
-                    QDomElement detailsElem = detailsNode.toElement();
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("gphoto:id"))
-                    {
-                        fps.id = detailsElem.text();
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("title"))
-                    {
-                        //fps.title = detailsElem.text();
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("summary"))
-                    {
-                        fps.description = detailsElem.text();
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("gphoto:access"))
-                    {
-                        fps.access = detailsElem.text();
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("link") &&
-                        detailsElem.attribute(QString::fromLatin1("rel")) == QString::fromLatin1("edit-media"))
-                    {
-                        fps.editUrl = QUrl(detailsElem.attribute(QString::fromLatin1("href")));
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("georss:where"))
-                    {
-                        QDomNode geoPointNode = detailsElem.namedItem(QString::fromLatin1("gml:Point"));
-
-                        if (!geoPointNode.isNull() && geoPointNode.isElement())
-                        {
-                            QDomNode geoPosNode = geoPointNode.toElement().namedItem(
-                                QString::fromLatin1("gml:pos"));
-
-                            if (!geoPosNode.isNull() && geoPosNode.isElement())
-                            {
-                                QStringList value = geoPosNode.toElement().text().split(QLatin1Char(' '));
-
-                                if (value.size() == 2)
-                                {
-                                    fps.gpsLat = value[0];
-                                    fps.gpsLon = value[1];
-                                }
-                            }
-                        }
-                    }
-
-                    if (detailsNode.nodeName() == QString::fromLatin1("media:group"))
-                    {
-                        QDomNode thumbNode = detailsElem.namedItem(QString::fromLatin1("media:thumbnail"));
-
-                        if (!thumbNode.isNull() && thumbNode.isElement())
-                        {
-                            fps.thumbURL = QUrl(thumbNode.toElement().attribute(
-                                QString::fromLatin1("url"), QString::fromLatin1("")));
-                        }
-
-                        QDomNode keywordNode = detailsElem.namedItem(QString::fromLatin1("media:keywords"));
-
-                        if (!keywordNode.isNull() && keywordNode.isElement())
-                        {
-                            fps.tags = keywordNode.toElement().text().split(QLatin1Char(','));
-                        }
-
-                        QDomNodeList contentsList = detailsElem.elementsByTagName(QString::fromLatin1("media:content"));
-
-                        for (int i = 0; i < contentsList.size(); ++i)
-                        {
-                            QDomElement contentElem = contentsList.at(i).toElement();
-
-                            if (!contentElem.isNull())
-                            {
-                                if ((contentElem.attribute(QString::fromLatin1("medium")) == QString::fromLatin1("image")) &&
-                                    fps.originalURL.isEmpty())
-                                {
-                                    fps.originalURL = QUrl(contentElem.attribute(QString::fromLatin1("url")));
-                                    fps.title       = fps.originalURL.fileName();
-                                    fps.mimeType    = contentElem.attribute(QString::fromLatin1("type"));
-                                }
-
-                                if ((contentElem.attribute(QString::fromLatin1("medium")) == QString::fromLatin1("video")) &&
-                                    (contentElem.attribute(QString::fromLatin1("type")) == QString::fromLatin1("video/mpeg4")))
-                                {
-                                    fps.originalURL = QUrl(contentElem.attribute(QString::fromLatin1("url")));
-                                    fps.title       = fps.originalURL.fileName();
-                                    fps.mimeType    = contentElem.attribute(QString::fromLatin1("type"));
-                                }
-                            }
-                        }
-                    }
-                }
-
-                detailsNode = detailsNode.nextSibling();
-            }
-
-            photoList.append(fps);
-        }
-
-        node = node.nextSibling();
+        QJsonObject obj = value.toObject();
+        
+        GSPhoto photo;
+        
+        photo.baseUrl       = obj[QLatin1String("baseUrl")].toString();
+        photo.description   = obj[QLatin1String("description")].toString();
+        photo.id            = obj[QLatin1String("id")].toString();
+        photo.mimeType      = obj[QLatin1String("mimeType")].toString();
+        photo.location      = obj[QLatin1String("Location")].toString(); // Not yet available in v1 but will be in the future 
+        
+        QJsonObject metadata = obj[QLatin1String("mediaMetadata")].toObject();
+        
+        photo.creationTime  = metadata[QLatin1String("creationTime")].toString();
+        photo.width         = metadata[QLatin1String("width")].toString();
+        photo.height        = metadata[QLatin1String("height")].toString();
+        
+        photo.originalURL   = QUrl(photo.baseUrl + QString::fromLatin1("=w%1-h%2").arg(photo.width)
+                                                                                  .arg(photo.height));
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << photo.originalURL.url();
+        
+        photoList.append(photo);
     }
-
+    
     emit signalListPhotosDone(1, QString::fromLatin1(""), photoList);
 }
 

@@ -298,7 +298,7 @@ bool GSTalkerBase::authenticated() const
 //             }
             
             // for test
-            unlink();
+//             unlink();
             
             int sessionExpires = d->o2->expires();
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "current time " << QDateTime::currentMSecsSinceEpoch() / 1000;
@@ -311,7 +311,7 @@ bool GSTalkerBase::authenticated() const
             {
                 link();
             }
-            else if(sessionExpires == QDateTime::currentMSecsSinceEpoch() / 1000)
+            else if(sessionExpires <= QDateTime::currentMSecsSinceEpoch() / 1000)
             {
                 d->o2->refresh();
             }
