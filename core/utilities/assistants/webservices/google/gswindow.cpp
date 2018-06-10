@@ -675,11 +675,14 @@ void GSWindow::slotStartTransfer()
             }
 
             /**
-             * (Trung) At that time, we comment this, since we don't sync image to update
-             * 
-            googlePhotoTransferHandler();
-            return;
-            */
+             * (Trung) At that time, googlePhotoTransferHandler is only used for GPhotoImport, 
+             * since we don't sync image to update in GPhotoExport
+             */
+            if(d->service == GoogleService::GPhotoImport)
+            {
+                googlePhotoTransferHandler();
+                return;
+            }
     }
 
     typedef QPair<QUrl, GSPhoto> Pair;

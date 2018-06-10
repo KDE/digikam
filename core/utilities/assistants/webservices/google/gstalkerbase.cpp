@@ -215,19 +215,15 @@ void GSTalkerBase::doOAuth()
     /**
     * If user has not logined yet (sessionExpires == 0), link
     * If access token has expired yet, refresh
-    * Otherwise, provoke slotLinkingSucceeded
+    * TODO: Otherwise, provoke slotLinkingSucceeded
     */
     if(sessionExpires == 0)
     {
         link();
     }
-    else if(sessionExpires <= QDateTime::currentMSecsSinceEpoch() / 1000)
+    else
     {
         d->o2->refresh();
-    }
-    else 
-    {
-        emit signalLinkingSucceeded();
     }
 }
 

@@ -623,7 +623,7 @@ void GPTalker::slotFinished(QNetworkReply* reply)
         }
 
         reply->deleteLater();
-        return;
+        //return;
     }
 
     m_buffer.append(reply->readAll());
@@ -842,7 +842,7 @@ void GPTalker::parseResponseCreateAlbum(const QByteArray& data)
     }
     
     QString albumId = doc[QLatin1String("id")].toString();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "album Id " << albumId;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "album Id " << doc;
         
     emit signalCreateAlbumDone(1, QString::fromLatin1(""), albumId);
 }
@@ -879,7 +879,7 @@ void GPTalker::parseResponseGetLoggedInUser(const QByteArray& data)
 //TODO: Parse and return photoID
 void GPTalker::parseResponseUploadPhoto(const QByteArray& data)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseAddPhoto";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseUploadPhoto";
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "response " << QString(data);
     
 }
