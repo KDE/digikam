@@ -80,6 +80,7 @@ public:
     {
         GP_LOGOUT     = -1,
         GP_LISTALBUMS = 0,
+        GP_GETUSER,
         GP_LISTPHOTOS,
         GP_ADDPHOTO,
         GP_UPDATEPHOTO,
@@ -95,6 +96,8 @@ public:
         state           = GP_LOGOUT;
         netMngr         = 0;
         
+        userInfoUrl     = QLatin1String("https://www.googleapis.com/plus/v1/people/me");
+        
         apiVersion      = QLatin1String("v1");   
         apiUrl          = QString::fromLatin1("https://photoslibrary.googleapis.com/%1/%2").arg(apiVersion);
         
@@ -103,14 +106,12 @@ public:
     }
 
 public:
+    
+    QString                userInfoUrl;
 
     QString                apiUrl;
     QString                apiVersion;
     
-    QString                loginName;
-    QString                username;
-    QString                password;
-    QString                userEmailId;
     State                  state;
     
     QString                albumIdToUpload;
@@ -122,10 +123,10 @@ public:
 
 GPTalker::GPTalker(QWidget* const parent)
 : GSTalkerBase(parent, 
-               (QStringList() << QLatin1String("https://www.googleapis.com/auth/photoslibrary")
+               (QStringList() << QLatin1String("https://www.googleapis.com/auth/plus.login")
+                              << QLatin1String("https://www.googleapis.com/auth/photoslibrary")
                               << QLatin1String(" https://www.googleapis.com/auth/photoslibrary.sharing")
-                              << QLatin1String("https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata"))
-               .join(" "), 
+                              << QLatin1String("https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata")), 
                QLatin1String("GooglePhotos")),
       d(new Private)
 {
@@ -170,24 +171,52 @@ void GPTalker::listAlbums()
         m_reply->abort();
         m_reply = 0;
     }
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list albums";
 
     QUrl url(d->apiUrl.arg("albums"));
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url for list albums " << url;
+    
+    QNetworkRequest netRequest(url);
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
+
+    m_reply = d->netMngr->get(netRequest);
+
+    d->state = Private::GP_LISTALBUMS;
+    m_buffer.resize(0);
+    emit signalBusy(true);
+}
+
+/**
+ * We get user profile from Google Plus API 
+ * This is a temporary solution until Google Photo support API for user profile
+ */
+void GPTalker::getLoggedInUser()
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getLoggedInUser";
+    
+    if (m_reply)
+    {
+        m_reply->abort();
+        m_reply = 0;
+    }
+    
+    QUrl url(d->userInfoUrl);
     
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url for list albums " << url;
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "m_accessToken " << m_accessToken;
     
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
-
-    if (!m_accessToken.isEmpty())
-    {
-        netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
-    } 
-
+    netRequest.setRawHeader("Authorization", m_bearerAccessToken.toLatin1());
+    
     m_reply = d->netMngr->get(netRequest);
-
-    d->state = Private::GP_LISTALBUMS;
+    
+    d->state = Private::GP_GETUSER;
     m_buffer.resize(0);
+    
     emit signalBusy(true);
 }
 
@@ -217,11 +246,6 @@ void GPTalker::listPhotos(const QString& albumId, const QString& imgmax)
     d->state = Private::GP_LISTPHOTOS;
     m_buffer.resize(0);
     emit signalBusy(true);
-}
-
-QString GPTalker::token() const
-{
-    return m_accessToken;
 }
 
 void GPTalker::createAlbum(const GSFolder& album)
@@ -496,21 +520,6 @@ void GPTalker::getPhoto(const QString& imgPath)
     m_buffer.resize(0);
 }
 
-QString GPTalker::getUserName() const
-{
-    return d->username;
-}
-
-QString GPTalker::getUserEmailId() const
-{
-    return d->userEmailId;
-}
-
-QString GPTalker::getLoginName() const
-{
-    return d->loginName;
-}
-
 void GPTalker::cancel()
 {
     if (m_reply)
@@ -622,6 +631,9 @@ void GPTalker::slotFinished(QNetworkReply* reply)
     switch (d->state)
     {
         case (Private::GP_LOGOUT):
+            break;
+        case (Private::GP_GETUSER):
+            parseResponseGetLoggedInUser(m_buffer);
             break;
         case (Private::GP_CREATEALBUM):
             parseResponseCreateAlbum(m_buffer);
@@ -738,7 +750,7 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
     }
     
     QJsonArray jsonArray = doc[QLatin1String("albums")].toArray();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json array " << jsonArray;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json array " << doc;
     
     
     QList<GSFolder> albumList;
@@ -762,7 +774,7 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
         albumList.append(album);
     }
     
-    std::sort(albumList.begin(), albumList.end(), gphotoLessThan);
+    std::sort(albumList.begin(), albumList.end(), gphotoLessThan);    
     emit signalListAlbumsDone(1, QString::fromLatin1(""), albumList);    
 }
 
@@ -842,6 +854,26 @@ void GPTalker::parseResponseAddPhoto(const QByteArray& data)
 
     d->uploadTokenList << QString(data);
     emit signalAddPhotoDone(1, QLatin1String(""), QLatin1String(""));  
+}
+
+void GPTalker::parseResponseGetLoggedInUser(const QByteArray& data)
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseGetLoggedInUser";
+    
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    
+    if(err.error != QJsonParseError::NoError)
+    {
+        emit signalBusy(false);
+        return;
+    }
+        
+    QString userName(doc[QLatin1String("displayName")].toString());
+    
+    emit signalSetUserName(userName);
+    
+    listAlbums();
 }
 
 //TODO: Parse and return photoID

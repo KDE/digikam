@@ -155,12 +155,6 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->talker,SIGNAL(signalBusy(bool)),
                     this,SLOT(slotBusy(bool)));
 
-            connect(d->talker,SIGNAL(signalTextBoxEmpty()),
-                    this,SLOT(slotTextBoxEmpty()));
-
-            connect(d->talker,SIGNAL(signalAccessTokenFailed(int,QString)),
-                    this,SLOT(slotAccessTokenFailed(int,QString)));
-
             connect(d->talker,SIGNAL(signalAccessTokenObtained()),
                     this,SLOT(slotAccessTokenObtained()));
 
@@ -210,13 +204,10 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 
             connect(d->gphotoTalker, SIGNAL(signalBusy(bool)),
                     this, SLOT(slotBusy(bool)));
-
-            connect(d->gphotoTalker, SIGNAL(signalTextBoxEmpty()),
-                    this, SLOT(slotTextBoxEmpty()));
-
-            connect(d->gphotoTalker, SIGNAL(signalAccessTokenFailed(int,QString)),
-                    this, SLOT(slotAccessTokenFailed(int,QString)));
-
+            
+            connect(d->gphotoTalker,SIGNAL(signalSetUserName(QString)),
+                    this,SLOT(slotSetUserName(QString)));
+            
             connect(d->gphotoTalker, SIGNAL(signalAccessTokenObtained()),
                     this, SLOT(slotAccessTokenObtained()));
 
@@ -518,7 +509,6 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
             }
 
             d->widget->getAlbumsCoB()->clear();
-            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "slotListAlbumsDone1:" << list.size();
 
             for (int i=0;i<list.size();i++)
             {
@@ -545,7 +535,6 @@ void GSWindow::slotListAlbumsDone(int code,const QString& errMsg ,const QList <G
                 return;
             }
 
-            d->widget->updateLabels(d->gphotoTalker->getLoginName(), d->gphotoTalker->getUserName());
             d->widget->getAlbumsCoB()->clear();
 
             for (int i = 0; i < list.size(); ++i)
@@ -611,15 +600,6 @@ void GSWindow::googlePhotoTransferHandler()
                 d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString());
             break;
     }
-}
-
-void GSWindow::slotTextBoxEmpty()
-{
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "in slotTextBoxEmpty";
-    QMessageBox::critical(this, i18nc("@title:window", "Error"),
-                          i18n("The textbox is empty, please enter the code from the browser in the textbox. "
-                               "To complete the authentication click \"Change Account\", "
-                               "or \"Start Upload\" to authenticate again."));
 }
 
 void GSWindow::slotStartTransfer()
@@ -1198,16 +1178,6 @@ void GSWindow::slotReloadAlbumsRequest()
             break;
     }
 }
-
-void GSWindow::slotAccessTokenFailed(int errCode,const QString& errMsg)
-{
-    QMessageBox::critical(this, i18nc("@title:window", "Error"),
-                          i18nc("%1 is the error string, %2 is the error code",
-                                "An authentication error occurred: %1 (%2)",
-                                errMsg, errCode));
-    return;
-}
-
 void GSWindow::slotAccessTokenObtained()
 {
     switch (d->service)
@@ -1217,7 +1187,7 @@ void GSWindow::slotAccessTokenObtained()
             break;
         case GoogleService::GPhotoImport:
         case GoogleService::GPhotoExport:
-            d->gphotoTalker->listAlbums();
+            d->gphotoTalker->getLoggedInUser();
             break;
     }
 }

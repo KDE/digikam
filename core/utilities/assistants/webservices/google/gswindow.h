@@ -87,8 +87,6 @@ private Q_SLOTS:
     //void slotChangeProgressBar();
 
     void slotBusy(bool);
-    void slotTextBoxEmpty();
-    void slotAccessTokenFailed(int errCode,const QString& errMsg);
     void slotAccessTokenObtained();
     void slotSetUserName(const QString& msg);
     void slotListAlbumsDone(int,const QString&,const QList <GSFolder>&);

@@ -48,7 +48,7 @@ class GSTalkerBase : public QObject
 
 public:
 
-    explicit GSTalkerBase(QWidget* const parent, const QString& scope, const QString& serviceName);
+    explicit GSTalkerBase(QWidget* const parent, const QStringList& scope, const QString& serviceName);
     ~GSTalkerBase();
 
 public:
@@ -69,10 +69,14 @@ private Q_SLOTS:
     void slotLinkingSucceeded();
     void slotLinkingFailed();
     void slotOpenBrowser(const QUrl&);
+    
+private:
+    
+    void parseResponseGetLoggedInUser(const QByteArray& data);
 
 protected:
 
-    QString        m_scope;
+    QStringList    m_scope;
     QString        m_accessToken;
     QString        m_refreshToken;
 

@@ -45,6 +45,9 @@
 #include <QDesktopServices>
 #include <QUrlQuery>
 #include <QSettings>
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
 
 // KDE includes
 
@@ -71,20 +74,19 @@ public:
 
     explicit Private()
     {
-        parent       = 0;
-        netMngr      = 0;
-        
-        apikey       = QString::fromLatin1("258540448336-hgdegpohibcjasvk1p595fpvjor15pbc.apps.googleusercontent.com");
-        clientSecret = QString::fromLatin1("iiIKTNM4ggBXiTdquAzbs2xw");     
+        parent          = 0;
+                
+        apikey          = QString::fromLatin1("258540448336-hgdegpohibcjasvk1p595fpvjor15pbc.apps.googleusercontent.com");
+        clientSecret    = QString::fromLatin1("iiIKTNM4ggBXiTdquAzbs2xw");     
         /* Old api key and secret below only work for gdrive, not gphoto
          * Switch to new api key and secret above
          * apikey       = QString::fromLatin1("735222197981-mrcgtaqf05914buqjkts7mk79blsquas.apps.googleusercontent.com");
          * clientSecret = QString::fromLatin1("4MJOS0u1-_AUEKJ0ObA-j22U");
          */
         
-        authUrl      = QLatin1String("https://accounts.google.com/o/oauth2/auth");
-        tokenUrl     = QLatin1String("https://accounts.google.com/o/oauth2/token");
-        refreshUrl   = QLatin1String("https://accounts.google.com/o/oauth2/token");
+        authUrl         = QLatin1String("https://accounts.google.com/o/oauth2/auth");
+        tokenUrl        = QLatin1String("https://accounts.google.com/o/oauth2/token");
+        refreshUrl      = QLatin1String("https://accounts.google.com/o/oauth2/token");
     }
 
     QWidget*               parent;
@@ -96,22 +98,17 @@ public:
     QString                apikey;
     QString                clientSecret;
 
-    QNetworkAccessManager* netMngr;
     O2*                    o2;
     QSettings*             settings;
 };
 
-GSTalkerBase::GSTalkerBase(QWidget* const parent, const QString & scope, const QString& serviceName)
+GSTalkerBase::GSTalkerBase(QWidget* const parent, const QStringList & scope, const QString& serviceName)
     : d(new Private)
 {
     m_reply         = 0;
     m_scope         = scope;
     m_serviceName   = serviceName;
     d->parent       = parent;
-    d->netMngr      = new QNetworkAccessManager(this);
-
-    connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(slotFinished(QNetworkReply*)));
     
     //Ported to O2
     d->o2 = new O2(this);
@@ -124,7 +121,7 @@ GSTalkerBase::GSTalkerBase(QWidget* const parent, const QString & scope, const Q
     d->o2->setRefreshTokenUrl(d->refreshUrl);
     d->o2->setLocalPort(8000);
     d->o2->setGrantFlow(O2::GrantFlow::GrantFlowAuthorizationCode);
-    d->o2->setScope(m_scope);
+    d->o2->setScope(m_scope.join(" "));
     
     // OAuth configuration saved to between dk sessions
     d->settings                  = WSToolUtils::getOauthSettings(this);

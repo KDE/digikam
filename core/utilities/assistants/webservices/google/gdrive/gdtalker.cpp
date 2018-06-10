@@ -104,7 +104,7 @@ public:
 };
 
 GDTalker::GDTalker(QWidget* const parent)
-    : GSTalkerBase(parent, QString::fromLatin1("https://www.googleapis.com/auth/drive"), QLatin1String("GoogleDrive")), 
+    : GSTalkerBase(parent, QStringList(QLatin1String("https://www.googleapis.com/auth/drive")), QLatin1String("GoogleDrive")), 
       d(new Private)
 {
     d->netMngr = new QNetworkAccessManager(this);
@@ -123,13 +123,9 @@ GDTalker::~GDTalker()
  */
 void GDTalker::getUserName()
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getUserName with access_token: " << m_accessToken;
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "getUserName";
     
     QUrl url(d->apiUrl.arg("about"));
-    QUrlQuery urlQuery;
-    urlQuery.addQueryItem(QString::fromLatin1("scope"),        m_scope);
-    urlQuery.addQueryItem(QString::fromLatin1("access_token"), m_accessToken);
-    url.setQuery(urlQuery);
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
