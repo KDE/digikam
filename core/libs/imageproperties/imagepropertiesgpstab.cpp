@@ -383,7 +383,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
 
     if (list.count() == 1)
     {
-        const GPSImageInfo info                     = list.first();
+        const GPSImageInfo info           = list.first();
         const GeoCoordinates& coordinates = info.coordinates;
 
         if (!coordinates.hasAltitude())
