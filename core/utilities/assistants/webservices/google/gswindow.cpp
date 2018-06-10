@@ -595,9 +595,11 @@ void GSWindow::googlePhotoTransferHandler()
             // list photos of the album, then start upload with add/update items
             connect(d->gphotoTalker, SIGNAL(signalListPhotosDone(int,QString,QList<GSPhoto>)),
                     this, SLOT(slotListPhotosDoneForUpload(int,QString,QList<GSPhoto>)));
+            
 
             d->gphotoTalker->listPhotos(
                 d->widget->getAlbumsCoB()->itemData(d->widget->getAlbumsCoB()->currentIndex()).toString());
+             
             break;
     }
 }
@@ -672,8 +674,12 @@ void GSWindow::slotStartTransfer()
                 }
             }
 
+            /**
+             * (Trung) At that time, we comment this, since we don't sync image to update
+             * 
             googlePhotoTransferHandler();
             return;
+            */
     }
 
     typedef QPair<QUrl, GSPhoto> Pair;
