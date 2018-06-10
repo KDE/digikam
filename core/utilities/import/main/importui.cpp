@@ -90,7 +90,6 @@
 #include "capturedlg.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
-#include "collectionscanner.h"
 #include "componentsinfo.h"
 #include "dlogoaction.h"
 #include "coredbdownloadhistory.h"
@@ -2403,19 +2402,14 @@ void ImportUI::autoRotateItems()
         return;
     }
 
-    qlonglong         id;
-    ImageInfoList     list;
-    CollectionScanner scanner;
+    ImageInfoList list;
+
+    foreach (const QString& downloadPath, d->autoRotateItemsList)
+    {
+        list << ImageInfo::fromLocalFile(downloadPath);
+    }
 
     ScanController::instance()->suspendCollectionScan();
-
-    foreach (const QString& downloadUrl, d->autoRotateItemsList)
-    {
-        //TODO: Needs test for Gphoto items.
-        // make ImageInfo up to date
-        id = scanner.scanFile(downloadUrl, CollectionScanner::NormalScan);
-        list << ImageInfo(id);
-    }
 
     FileActionMngr::instance()->transform(list, MetaEngineRotation::NoTransformation);
 
