@@ -179,7 +179,7 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* const parent, AlbumModel
     d->albumModificationHelper = albumModificationHelper;
     d->toolTip                 = new AlbumViewToolTip(this);
     d->findDuplAction          = new QAction(QIcon::fromTheme(QLatin1String("tools-wizard")),  i18n("Find Duplicates..."), this);
-    d->scanFacesAction         = new QAction(QIcon::fromTheme(QLatin1String("list-add-user")), i18n("Scan for faces..."),  this);
+    d->scanFacesAction         = new QAction(QIcon::fromTheme(QLatin1String("list-add-user")), i18n("Scan for Faces"),     this);
     d->rebuildThumbsAction     = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")),  i18n("Refresh"),            this);
 
     connect(d->findDuplAction, SIGNAL(triggered()),
