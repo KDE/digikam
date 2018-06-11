@@ -173,7 +173,8 @@ public:
 
 AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* const parent, AlbumModel* const model,
                                                AlbumModificationHelper* const albumModificationHelper)
-    : AlbumTreeView(parent), d(new Private)
+    : AlbumTreeView(parent),
+      d(new Private)
 {
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
