@@ -90,6 +90,7 @@
 #include "capturedlg.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
+#include "collectionscanner.h"
 #include "componentsinfo.h"
 #include "dlogoaction.h"
 #include "coredbdownloadhistory.h"
@@ -2086,14 +2087,14 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         if (downloadName.isEmpty())
         {
             downloadUrl = downloadUrl.adjusted(QUrl::StripTrailingSlash);
-            downloadUrl.setPath(downloadUrl.path() + QLatin1Char('/') + (settings.file));
+            downloadUrl.setPath(downloadUrl.path() + QLatin1Char('/') + settings.file);
         }
         else
         {
             // when using custom renaming (e.g. by date, see bug 179902)
             // make sure that we create unique names
             downloadUrl = downloadUrl.adjusted(QUrl::StripTrailingSlash);
-            downloadUrl.setPath(downloadUrl.path() + QLatin1Char('/') + (downloadName));
+            downloadUrl.setPath(downloadUrl.path() + QLatin1Char('/') + downloadName);
             QString suggestedPath = downloadUrl.toLocalFile();
 
             if (usedDownloadPaths.contains(suggestedPath))
@@ -2185,7 +2186,7 @@ bool ImportUI::createSubAlbum(QUrl& downloadUrl, const QString& subalbum, const 
     }
 
     downloadUrl = downloadUrl.adjusted(QUrl::StripTrailingSlash);
-    downloadUrl.setPath(downloadUrl.path() + QLatin1Char('/') + (subalbum));
+    downloadUrl.setPath(downloadUrl.path() + QLatin1Char('/') + subalbum);
     return true;
 }
 
@@ -2403,17 +2404,16 @@ void ImportUI::autoRotateItems()
     }
 
     ImageInfoList list;
+    CollectionScanner scanner;
 
-    foreach (const QString& downloadPath, d->autoRotateItemsList)
+    foreach(const QString& downloadPath, d->autoRotateItemsList)
     {
-        list << ImageInfo::fromLocalFile(downloadPath);
+        qlonglong id = scanner.scanFile(downloadPath,
+                                        CollectionScanner::ModifiedScan);
+        list << ImageInfo(id);
     }
 
-    ScanController::instance()->suspendCollectionScan();
-
     FileActionMngr::instance()->transform(list, MetaEngineRotation::NoTransformation);
-
-    ScanController::instance()->resumeCollectionScan();
 
     d->autoRotateItemsList.clear();
 }
@@ -2423,7 +2423,7 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
 {
     QUrl url(parentURL);
     url = url.adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + QLatin1Char('/') + (sub));
+    url.setPath(url.path() + QLatin1Char('/') + sub);
 
     // first stat to see if the album exists
     QFileInfo info(url.toLocalFile());
@@ -2456,10 +2456,10 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
     // Create the album, with any parent albums required for the structure
     QUrl albumUrl(parentURL);
 
-    foreach (const QString& folder, sub.split(QLatin1Char('/'), QString::SkipEmptyParts))
+    foreach(const QString& folder, sub.split(QLatin1Char('/'), QString::SkipEmptyParts))
     {
         albumUrl = albumUrl.adjusted(QUrl::StripTrailingSlash);
-        albumUrl.setPath(albumUrl.path() + QLatin1Char('/') + (folder));
+        albumUrl.setPath(albumUrl.path() + QLatin1Char('/') + folder);
 
         PAlbum* album = AlbumManager::instance()->findPAlbum(albumUrl);
 
