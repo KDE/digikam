@@ -92,9 +92,9 @@ public:
 
     void    getPhoto(const QString& imgPath);
     
-    QString firstLetterToUpperCase(const QString& word);
+    QString createAlbumName(const QString& word);
     
-    QString createUrlName(const QString& name)
+    QString createAlbumUrl(const QString& name)
 ;
 Q_SIGNALS:
 

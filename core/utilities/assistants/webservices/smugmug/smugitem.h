@@ -81,6 +81,7 @@ public:
         tmplID        = -1;
         isPublic      = true;
         imageCount    = 0;
+        canShare      = true;
     }
 
 public:

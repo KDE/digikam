@@ -289,12 +289,21 @@ SmugUser SmugTalker::getUser() const
     return d->user;
 }
 
-QString SmugTalker::firstLetterToUpperCase(const QString& word)
+/**
+ * (Trung)
+ * There are some characters not valid for album title (e.g "_")
+ * and for url (e.g "-") that are not mentioned on the API page, 
+ * so if found, that has to be treated here
+ */
+QString SmugTalker::createAlbumName(const QString& word)
 {
     QString w(word);
     
     // First we remove space at beginning and end
     w = w.trimmed();
+    
+    // We replace all character "_" with space
+    w = w.replace(QLatin1Char('_'), QLatin1Char(' '));
     
     // Then we replace first letter with its uppercase
     w.replace(0, 1, w[0].toUpper());
@@ -304,13 +313,13 @@ QString SmugTalker::firstLetterToUpperCase(const QString& word)
     return w;
 }
 
-QString SmugTalker::createUrlName(const QString& name)
+QString SmugTalker::createAlbumUrl(const QString& name)
 {
     QString n(name);
     
-    // First we upper first letter
-    n = firstLetterToUpperCase(n);
-    
+    // First we create a valid name
+    n = createAlbumName(n);
+        
     // Then we replace space with "-"
     QStringList words = n.split(" ");
     n = words.join("-");
@@ -537,7 +546,7 @@ void SmugTalker::createAlbum(const SmugAlbum& album)
 
     emit signalBusy(true);
                 
-    QUrl url(d->apiURL.arg(QString::fromLatin1("%1/!albums").arg(d->user.folderUri)));
+    QUrl url(d->apiURL.arg(QString::fromLatin1("%1!albums").arg(d->user.folderUri)));
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url to post " << url.url();
     
     QList<O0RequestParameter> reqParams = QList<O0RequestParameter>();
@@ -548,9 +557,9 @@ void SmugTalker::createAlbum(const SmugAlbum& album)
         */
     QByteArray data;
     data += "{\"Name\": \"";
-    data += firstLetterToUpperCase(album.title).toUtf8();
+    data += createAlbumName(album.title).toUtf8();
     data += "\",\"UrlName\":\"";
-    data += createUrlName(album.title).toUtf8();
+    data += createAlbumUrl(album.title).toUtf8();
     data += "\",\"Privacy\":\"Public\"}";
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(data);
     

@@ -87,6 +87,9 @@ public:
         authUrl         = QLatin1String("https://accounts.google.com/o/oauth2/auth");
         tokenUrl        = QLatin1String("https://accounts.google.com/o/oauth2/token");
         refreshUrl      = QLatin1String("https://accounts.google.com/o/oauth2/token");
+        
+        o2              = 0;
+        settings        = 0;
     }
 
     QWidget*               parent;
