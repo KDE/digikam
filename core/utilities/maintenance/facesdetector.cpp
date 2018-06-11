@@ -100,18 +100,18 @@ public:
     {
     }
 
-    bool                benchmark;
+    bool                 benchmark;
 
-    int                 total;
+    int                  total;
 
-    AlbumPointerList<>  albumTodoList;
-    ImageInfoJob        albumListing;
-    FacePipeline        pipeline;
-    QMap<Album*,double> relativeProgressValue;
-    double              progressValue;
-    double              currentProgressChunk;
-    int                 currentScheduled;
-    int                 currentFinished;
+    AlbumPointerList<>   albumTodoList;
+    ImageInfoJob         albumListing;
+    FacePipeline         pipeline;
+    QMap<Album*, double> relativeProgressValue;
+    double               progressValue;
+    double               currentProgressChunk;
+    int                  currentScheduled;
+    int                  currentFinished;
 };
 
 FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* const parent)
@@ -256,7 +256,7 @@ void FacesDetector::slotStart()
     bool hasPAlbums = false;
     bool hasTAlbums = false;
 
-    foreach (Album* const album, d->albumTodoList)
+    foreach(Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {
@@ -287,7 +287,7 @@ void FacesDetector::slotStart()
 
     // first, we use the relativeProgressValue map to store absolute counts
 
-    foreach (Album* const album, d->albumTodoList)
+    foreach(Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {
@@ -305,7 +305,7 @@ void FacesDetector::slotStart()
 
     d->total = 0;
 
-    foreach (double count, d->relativeProgressValue)
+    foreach(double count, d->relativeProgressValue)
     {
         d->total += (int)count;
     }
@@ -315,7 +315,7 @@ void FacesDetector::slotStart()
 
     // third, break absolute to relative values
 
-    for (QMap<Album*,double>::iterator it = d->relativeProgressValue.begin(); it != d->relativeProgressValue.end(); ++it)
+    for (QMap<Album*, double>::iterator it = d->relativeProgressValue.begin() ; it != d->relativeProgressValue.end() ; ++it)
     {
         it.value() /= double(d->total);
     }
