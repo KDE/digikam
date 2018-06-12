@@ -36,12 +36,13 @@
 
 #include "digikam_debug.h"
 #include "albummanager.h"
+#include "facescansettings.h"
+#include "applicationsettings.h"
 #include "contextmenuhelper.h"
 #include "itemviewtooltip.h"
 #include "tooltipfiller.h"
 #include "thumbsgenerator.h"
 #include "newitemsfinder.h"
-#include "facescandialog.h"
 #include "facesdetector.h"
 
 namespace Digikam
@@ -226,12 +227,13 @@ void AlbumSelectionTreeView::slotScanForFaces()
         return;
     }
 
-    FaceScanDialog dialog;
-    FaceScanSettings settings       = dialog.settings();
+    FaceScanSettings settings;
 
+    settings.accuracy               = ApplicationSettings::instance()->getFaceDetectionAccuracy();
+    settings.recognizeAlgorithm     = RecognitionDatabase::RecognizeAlgorithm::LBP;
+    settings.task                   = FaceScanSettings::DetectAndRecognize;
     settings.alreadyScannedHandling = FaceScanSettings::Rescan;
     settings.albums                 = QList<Album*>() << album;
-    settings.task                   = FaceScanSettings::DetectAndRecognize;
 
     FacesDetector* const tool = new FacesDetector(settings);
     tool->start();
