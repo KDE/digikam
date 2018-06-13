@@ -105,6 +105,7 @@ public:
     int                  total;
 
     AlbumPointerList<>   albumTodoList;
+    ImageInfoList        infoTodoList;
     ImageInfoJob         albumListing;
     FacePipeline         pipeline;
     QMap<Album*, double> relativeProgressValue;
@@ -229,13 +230,18 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
 
-    if (settings.albums.isEmpty() || settings.task == FaceScanSettings::RetrainAll)
+    if ((settings.albums.isEmpty() && settings.infos.isEmpty()) ||
+         settings.task == FaceScanSettings::RetrainAll)
     {
         d->albumTodoList = AlbumManager::instance()->allPAlbums();
     }
-    else
+    else if (!settings.albums.isEmpty())
     {
         d->albumTodoList = settings.albums;
+    }
+    else
+    {
+        d->infoTodoList  = settings.infos;
     }
 }
 
@@ -249,6 +255,21 @@ void FacesDetector::slotStart()
     MaintenanceTool::slotStart();
 
     setThumbnail(QIcon::fromTheme(QLatin1String("edit-image-face-show")).pixmap(22));
+
+    if (d->albumTodoList.isEmpty())
+    {
+        if (d->infoTodoList.isEmpty())
+        {
+            return slotDone();
+        }
+
+        d->total = d->infoTodoList.count();
+        setTotalItems(d->total);
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << d->total;
+        return slotItemsInfo(d->infoTodoList);
+    }
+
     setUsesBusyIndicator(true);
 
     // get total count, cached by AlbumManager
@@ -328,6 +349,11 @@ void FacesDetector::slotStart()
 
 void FacesDetector::slotContinueAlbumListing()
 {
+    if (!d->infoTodoList.isEmpty())
+    {
+        return slotDone();
+    }
+
     qCDebug(DIGIKAM_GENERAL_LOG) << d->albumListing.isRunning() << !d->pipeline.hasFinished();
 
     // we get here by the finished signal from both, and want both to have finished to continue
