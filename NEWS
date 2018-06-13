@@ -16,7 +16,7 @@ Database     : New video metadata parser based on ffmpeg to populate database.
 Search       : Add video support to find files based on properties registered on database.
 
 General      : Add QWebEngine support.
-General      : Update internal Libraw to last 0.18.11.
+General      : Update internal Libraw to last 0.18.12.
 General      : Fix all Krazy static analyzer reports.
 
 Tags         : Add possibility to merge tags by drag & drop.
@@ -242,4 +242,5 @@ BUGFIXES:
 212 ==> 394988 - PgDown and PgUp hardcoded in preview mode.
 213 ==> 366312 - Efficient photo tagging workflow got lost in transition from 4.x to 5.
 214 ==> 395093 - Being able to export a list of paths from a selection of thumbnails.
-215 ==> 
+215 ==> 395144 - When zooming in preview, face tags show on wrong places.
+216 ==> 

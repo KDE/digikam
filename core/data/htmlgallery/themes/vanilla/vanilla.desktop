@@ -51,6 +51,7 @@ Name[sv]=Wojciech Jarosz
 Name[tr]=Wojciech Jarosz
 Name[uk]=Wojciech Jarosz
 Name[x-test]=xxWojciech Jaroszxx
+Name[zh_CN]=Wojciech Jarosz
 Url=mailto:wjarosz@ucsd.edu
 
 [X-HTMLGallery Parameter author]
@@ -95,6 +96,7 @@ Name[pt]=E-Mail do Autor
 Name[sv]=Upphovsmannens e-postadress
 Name[uk]=Адреса ел. пошти автора
 Name[x-test]=xxAuthor Emailxx
+Name[zh_CN]=作者邮箱
 Type=string
 Default=
 
@@ -242,6 +244,7 @@ Name[pt]=Margem das miniaturas
 Name[sv]=Miniatyrbildsmarginal
 Name[uk]=Поле мініатюр
 Name[x-test]=xxThumbnail marginxx
+Name[zh_CN]=缩略图边框
 Type=int
 Default=25
 

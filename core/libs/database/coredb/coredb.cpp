@@ -4861,9 +4861,8 @@ void CoreDB::clearMetadataFromImage(qlonglong imageID)
 {
     DatabaseFields::Set fields;
 
-    d->db->execSql(QString::fromUtf8("DELETE FROM ImageInformation WHERE imageid=?;"),
-                   imageID);
-    fields |= DatabaseFields::ImageInformationAll;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Clean up the image information, the "
+                                     "file will be scanned again";
 
     d->db->execSql(QString::fromUtf8("DELETE FROM ImagePositions WHERE imageid=?;"),
                    imageID);
@@ -4883,10 +4882,6 @@ void CoreDB::clearMetadataFromImage(qlonglong imageID)
     d->db->execSql(QString::fromUtf8("DELETE FROM VideoMetadata WHERE imageid=?;"),
                    imageID);
     fields |= DatabaseFields::VideoMetadataAll;
-
-    d->db->execSql(QString::fromUtf8("DELETE FROM ImageHistory WHERE imageid=?;"),
-                   imageID);
-    fields |= DatabaseFields::ImageHistoryInfoAll;
 
     d->db->recordChangeset(ImageChangeset(imageID, fields));
 
