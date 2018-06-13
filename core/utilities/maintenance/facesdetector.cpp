@@ -92,27 +92,17 @@ public:
 
     explicit Private() :
         benchmark(false),
-        total(0),
-        progressValue(0),
-        currentProgressChunk(0),
-        currentScheduled(0),
-        currentFinished(0)
+        useImageInfos(false)
     {
     }
 
     bool                 benchmark;
-
-    int                  total;
+    bool                 useImageInfos;
 
     AlbumPointerList<>   albumTodoList;
     ImageInfoList        infoTodoList;
     ImageInfoJob         albumListing;
     FacePipeline         pipeline;
-    QMap<Album*, double> relativeProgressValue;
-    double               progressValue;
-    double               currentProgressChunk;
-    int                  currentScheduled;
-    int                  currentFinished;
 };
 
 FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* const parent)
@@ -242,6 +232,7 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
     else
     {
         d->infoTodoList  = settings.infos;
+        d->useImageInfos = true;
     }
 }
 
@@ -256,17 +247,17 @@ void FacesDetector::slotStart()
 
     setThumbnail(QIcon::fromTheme(QLatin1String("edit-image-face-show")).pixmap(22));
 
-    if (d->albumTodoList.isEmpty())
+    if (d->useImageInfos)
     {
         if (d->infoTodoList.isEmpty())
         {
             return slotDone();
         }
 
-        d->total = d->infoTodoList.count();
-        setTotalItems(d->total);
+        int total = d->infoTodoList.count();
+        setTotalItems(total);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << d->total;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << total;
         return slotItemsInfo(d->infoTodoList);
     }
 
@@ -308,48 +299,50 @@ void FacesDetector::slotStart()
 
     // first, we use the relativeProgressValue map to store absolute counts
 
+    QMap<Album*, double> relativeProgressValue;
+
     foreach(Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {
-            d->relativeProgressValue[album] = palbumCounts.value(album->id());
+            relativeProgressValue[album] = palbumCounts.value(album->id());
         }
         else
         {
             // this is possibly broken of course because we do not know if images have multiple tags,
             // but there's no better solution without expensive operation
-            d->relativeProgressValue[album] = talbumCounts.value(album->id());
+            relativeProgressValue[album] = talbumCounts.value(album->id());
         }
     }
 
     // second, calculate (approximate) overall sum
 
-    d->total = 0;
+    int total = 0;
 
-    foreach(double count, d->relativeProgressValue)
+    foreach(double count, relativeProgressValue)
     {
-        d->total += (int)count;
+        total += (int)count;
     }
 
-    d->total = qMax(1, d->total);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << d->total;
+    total = qMax(1, total);
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << total;
 
     // third, break absolute to relative values
 
-    for (QMap<Album*, double>::iterator it = d->relativeProgressValue.begin() ; it != d->relativeProgressValue.end() ; ++it)
+    for (QMap<Album*, double>::iterator it = relativeProgressValue.begin() ; it != relativeProgressValue.end() ; ++it)
     {
-        it.value() /= double(d->total);
+        it.value() /= double(total);
     }
 
     setUsesBusyIndicator(false);
-    setTotalItems(d->total);
+    setTotalItems(total);
 
     slotContinueAlbumListing();
 }
 
 void FacesDetector::slotContinueAlbumListing()
 {
-    if (!d->infoTodoList.isEmpty())
+    if (d->useImageInfos)
     {
         return slotDone();
     }
