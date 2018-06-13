@@ -324,7 +324,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
 
         if (m_matchingCond == OrCondition)
         {
-            for (it = m_includeTagFilter.begin(); it != m_includeTagFilter.end(); ++it)
+            for (it = m_includeTagFilter.begin() ; it != m_includeTagFilter.end() ; ++it)
             {
                 if (tagIds.contains(*it))
                 {
@@ -355,7 +355,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
             }
         }
 
-        for (it = m_excludeTagFilter.begin(); it != m_excludeTagFilter.end(); ++it)
+        for (it = m_excludeTagFilter.begin() ; it != m_excludeTagFilter.end() ; ++it)
         {
             if (tagIds.contains(*it))
             {
@@ -444,7 +444,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
             rating = 0;
         }
 
-        if(m_isUnratedExcluded && rating == 0)
+        if (m_isUnratedExcluded && rating == 0)
         {
             match = false;
         }
@@ -586,16 +586,16 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
 
     //-- Filter by geolocation ----------------------------------------------------
 
-    if (m_geolocationCondition!=GeolocationNoFilter)
+    if (m_geolocationCondition != GeolocationNoFilter)
     {
-        if (m_geolocationCondition==GeolocationNoCoordinates)
+        if (m_geolocationCondition == GeolocationNoCoordinates)
         {
             if (info.hasCoordinates())
             {
                 match = false;
             }
         }
-        else if (m_geolocationCondition==GeolocationHasCoordinates)
+        else if (m_geolocationCondition == GeolocationHasCoordinates)
         {
             if (!info.hasCoordinates())
             {
@@ -696,15 +696,15 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
             int pixelSize = size.height()*size.width();
             QString text  = m_textFilterSettings.text;
 
-            if(text.contains(QRegExp(QLatin1String("^>\\d{1,15}$"))) && pixelSize > (text.remove(0,1)).toInt())
+            if (text.contains(QRegExp(QLatin1String("^>\\d{1,15}$"))) && pixelSize > (text.remove(0, 1)).toInt())
             {
                 textMatch = true;
             }
-            else if(text.contains(QRegExp(QLatin1String("^<\\d{1,15}$"))) && pixelSize < (text.remove(0,1)).toInt())
+            else if (text.contains(QRegExp(QLatin1String("^<\\d{1,15}$"))) && pixelSize < (text.remove(0, 1)).toInt())
             {
                 textMatch = true;
             }
-            else if(text.contains(QRegExp(QLatin1String("^\\d+$"))) && pixelSize == text.toInt())
+            else if (text.contains(QRegExp(QLatin1String("^\\d+$"))) && pixelSize == text.toInt())
             {
                 textMatch = true;
             }
@@ -726,7 +726,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
         const QUrl url = info.fileUrl();
 
         for (QHash<QString, QList<QUrl>>::const_iterator it = m_urlWhitelists.constBegin();
-             it!=m_urlWhitelists.constEnd(); ++it)
+             it != m_urlWhitelists.constEnd() ; ++it)
         {
             match = it->contains(url);
 
@@ -742,7 +742,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
         const qlonglong id = info.id();
 
         for (QHash<QString, QList<qlonglong> >::const_iterator it = m_idWhitelists.constBegin();
-             it!=m_idWhitelists.constEnd(); ++it)
+             it != m_idWhitelists.constEnd() ; ++it)
         {
             match = it->contains(id);
 
@@ -785,7 +785,7 @@ bool VersionImageFilterSettings::matches(const ImageInfo& info) const
     const qlonglong id = info.id();
 
     for (QHash<QString, QList<qlonglong> >::const_iterator it = m_exceptionLists.constBegin();
-         it != m_exceptionLists.constEnd(); ++it)
+         it != m_exceptionLists.constEnd() ; ++it)
     {
         if (it->contains(id))
         {
@@ -799,7 +799,7 @@ bool VersionImageFilterSettings::matches(const ImageInfo& info) const
     if (!tagIds.contains(m_includeTagFilter))
     {
         for (QList<int>::const_iterator it = m_excludeTagFilter.begin();
-             it != m_excludeTagFilter.end(); ++it)
+             it != m_excludeTagFilter.end() ; ++it)
         {
             if (tagIds.contains(*it))
             {
@@ -909,6 +909,7 @@ bool GroupImageFilterSettings::matches(const ImageInfo& info) const
     {
         return m_openGroups.contains(info.groupImage().id());
     }
+
     return true;
 }
 

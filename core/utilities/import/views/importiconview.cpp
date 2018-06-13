@@ -142,7 +142,7 @@ CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& fi
 {
     QUrl url = QUrl::fromLocalFile(folder);
     url      = url.adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + QLatin1Char('/') + (file));
+    url.setPath(url.path() + QLatin1Char('/') + file);
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
 
     if (indexForCamItemInfo.isValid())
@@ -157,7 +157,7 @@ CamItemInfo& ImportIconView::camItemInfoRef(const QString& folder, const QString
 {
     QUrl url = QUrl::fromLocalFile(folder);
     url      = url.adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + QLatin1Char('/') + (file));
+    url.setPath(url.path() + QLatin1Char('/') + file);
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
     QModelIndex mappedIndex         = importFilterModel()->mapToSource(indexForCamItemInfo);
 

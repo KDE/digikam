@@ -41,12 +41,13 @@
 namespace Digikam
 {
 
-ImageSortFilterModel::ImageSortFilterModel(QObject* parent)
-    : DCategorizedSortFilterProxyModel(parent), m_chainedModel(0)
+ImageSortFilterModel::ImageSortFilterModel(QObject* const parent)
+    : DCategorizedSortFilterProxyModel(parent),
+      m_chainedModel(0)
 {
 }
 
-void ImageSortFilterModel::setSourceImageModel(ImageModel* source)
+void ImageSortFilterModel::setSourceImageModel(ImageModel* const source)
 {
     if (m_chainedModel)
     {
@@ -58,7 +59,7 @@ void ImageSortFilterModel::setSourceImageModel(ImageModel* source)
     }
 }
 
-void ImageSortFilterModel::setSourceFilterModel(ImageSortFilterModel* source)
+void ImageSortFilterModel::setSourceFilterModel(ImageSortFilterModel* const source)
 {
     if (source)
     {
@@ -74,12 +75,12 @@ void ImageSortFilterModel::setSourceFilterModel(ImageSortFilterModel* source)
     setSourceModel(source);
 }
 
-void ImageSortFilterModel::setDirectSourceImageModel(ImageModel* model)
+void ImageSortFilterModel::setDirectSourceImageModel(ImageModel* const model)
 {
     setSourceModel(model);
 }
 
-void ImageSortFilterModel::setSourceModel(QAbstractItemModel* model)
+void ImageSortFilterModel::setSourceModel(QAbstractItemModel* const model)
 {
     // made it protected, only setSourceImageModel is public
     DCategorizedSortFilterProxyModel::setSourceModel(model);
@@ -138,6 +139,7 @@ QModelIndex ImageSortFilterModel::mapFromDirectSourceToSourceImageModel(const QM
     {
         return m_chainedModel->mapToSourceImageModel(sourceModel_index);
     }
+
     return sourceModel_index;
 }
 
@@ -146,20 +148,24 @@ QModelIndex ImageSortFilterModel::mapFromDirectSourceToSourceImageModel(const QM
 QList<QModelIndex> ImageSortFilterModel::mapListToSource(const QList<QModelIndex>& indexes) const
 {
     QList<QModelIndex> sourceIndexes;
+
     foreach(const QModelIndex& index, indexes)
     {
         sourceIndexes << mapToSourceImageModel(index);
     }
+
     return sourceIndexes;
 }
 
 QList<QModelIndex> ImageSortFilterModel::mapListFromSource(const QList<QModelIndex>& sourceIndexes) const
 {
     QList<QModelIndex> indexes;
+
     foreach(const QModelIndex& index, sourceIndexes)
     {
         indexes << mapFromSourceImageModel(index);
     }
+
     return indexes;
 }
 
@@ -220,7 +226,7 @@ QList<ImageInfo> ImageSortFilterModel::imageInfosSorted() const
     const int         size  = rowCount();
     ImageModel* const model = sourceImageModel();
 
-    for (int i=0; i<size; ++i)
+    for (int i = 0 ; i < size ; ++i)
     {
         infos << model->imageInfo(mapToSourceImageModel(index(i, 0)));
     }
@@ -230,14 +236,14 @@ QList<ImageInfo> ImageSortFilterModel::imageInfosSorted() const
 
 // --------------------------------------------------------------------------------------------
 
-ImageFilterModel::ImageFilterModel(QObject* parent)
+ImageFilterModel::ImageFilterModel(QObject* const parent)
     : ImageSortFilterModel(parent),
       d_ptr(new ImageFilterModelPrivate)
 {
     d_ptr->init(this);
 }
 
-ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate& dd, QObject* parent)
+ImageFilterModel::ImageFilterModel(ImageFilterModelPrivate& dd, QObject* const parent)
     : ImageSortFilterModel(parent),
       d_ptr(&dd)
 {
@@ -250,15 +256,17 @@ ImageFilterModel::~ImageFilterModel()
     delete d;
 }
 
-void ImageFilterModel::setDirectSourceImageModel(ImageModel* sourceModel)
+void ImageFilterModel::setDirectSourceImageModel(ImageModel* const sourceModel)
 {
     Q_D(ImageFilterModel);
 
     if (d->imageModel)
     {
         d->imageModel->unsetPreprocessor(d);
+
         disconnect(d->imageModel, SIGNAL(modelReset()),
                    this, SLOT(slotModelReset()));
+
         slotModelReset();
     }
 
@@ -593,7 +601,7 @@ void ImageFilterModel::slotRowsInserted(const QModelIndex& /*parent*/, int start
 {
     QList<ImageInfo> infos;
 
-    for (int i=start; i<=end; ++i)
+    for (int i = start ; i <= end ; ++i)
     {
         infos << imageInfo(index(i, 0));
     }
@@ -605,7 +613,7 @@ void ImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, i
 {
     QList<ImageInfo> infos;
 
-    for (int i=start; i<=end; ++i)
+    for (int i = start ; i <= end; ++i)
     {
         infos << imageInfo(index(i, 0));
     }
@@ -615,14 +623,14 @@ void ImageFilterModel::slotRowsAboutToBeRemoved(const QModelIndex& /*parent*/, i
 
 // -------------- Threaded preparation & filtering --------------
 
-void ImageFilterModel::addPrepareHook(ImageFilterModelPrepareHook* hook)
+void ImageFilterModel::addPrepareHook(ImageFilterModelPrepareHook* const hook)
 {
     Q_D(ImageFilterModel);
     QMutexLocker lock(&d->mutex);
     d->prepareHooks << hook;
 }
 
-void ImageFilterModel::removePrepareHook(ImageFilterModelPrepareHook* hook)
+void ImageFilterModel::removePrepareHook(ImageFilterModelPrepareHook* const hook)
 {
     Q_D(ImageFilterModel);
     QMutexLocker lock(&d->mutex);
@@ -640,6 +648,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
     // get thread-local copy
     bool needPrepareTags, needPrepareComments, needPrepareGroups;
     QList<ImageFilterModelPrepareHook*> prepareHooks;
+
     {
         QMutexLocker lock(&d->mutex);
         needPrepareTags     = d->needPrepareTags;
@@ -683,7 +692,7 @@ void ImageFilterModelPreparer::process(ImageFilterModelTodoPackage package)
         infoList.loadGroupImageIds();
     }
 
-    foreach(ImageFilterModelPrepareHook* hook, prepareHooks)
+    foreach(ImageFilterModelPrepareHook* const hook, prepareHooks)
     {
         hook->prepare(package.infos);
     }
@@ -705,6 +714,7 @@ void ImageFilterModelFilterer::process(ImageFilterModelTodoPackage package)
     GroupImageFilterSettings   localGroupFilter;
     bool                       hasOneMatch;
     bool                       hasOneMatchForText;
+
     {
         QMutexLocker lock(&d->mutex);
         localFilter        = d->filterCopy;
@@ -837,7 +847,7 @@ int ImageFilterModel::compareCategories(const QModelIndex& left, const QModelInd
     const ImageInfo& rightInfo = d->imageModel->imageInfoRef(right);
 
     // Check grouping
-    qlonglong leftGroupImageId = leftInfo.groupImageId();
+    qlonglong leftGroupImageId  = leftInfo.groupImageId();
     qlonglong rightGroupImageId = rightInfo.groupImageId();
 
     return compareInfosCategories(leftGroupImageId  == -1 ? leftInfo  : ImageInfo(leftGroupImageId),
@@ -868,7 +878,7 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
     }
 
     // Check grouping
-    qlonglong leftGroupImageId = leftInfo.groupImageId();
+    qlonglong leftGroupImageId  = leftInfo.groupImageId();
     qlonglong rightGroupImageId = rightInfo.groupImageId();
 
     // Either no grouping (-1), or same group image, or same image
@@ -884,6 +894,7 @@ bool ImageFilterModel::subSortLessThan(const QModelIndex& left, const QModelInde
     {
         return false;
     }
+
     if (rightGroupImageId == leftInfo.id())
     {
         return true;
@@ -905,16 +916,14 @@ int ImageFilterModel::compareInfosCategories(const ImageInfo& left, const ImageI
 static inline QString fastNumberToString(int id)
 {
     const int size = sizeof(int) * 2;
-    char c[size+1];
-    c[size]    = '\0';
-    char* p    = c;
-    int number = id;
+    int number     = id;
+    char c[size + 1];
+    c[size] = '\0';
 
-    for (int i=0; i<size; ++i)
+    for (int i = 0 ; i < size ; ++i)
     {
-        *p = 'a' + (number & 0xF);
+        c[i] = 'a' + (number & 0xF);
         number >>= 4;
-        ++p;
     }
 
     return QString::fromLatin1(c);
@@ -1045,7 +1054,7 @@ void ImageFilterModel::slotImageChange(const ImageChangeset& changeset)
 
 // -------------------------------------------------------------------------------------------------------
 
-NoDuplicatesImageFilterModel::NoDuplicatesImageFilterModel(QObject* parent)
+NoDuplicatesImageFilterModel::NoDuplicatesImageFilterModel(QObject* const parent)
     : ImageSortFilterModel(parent)
 {
 }
@@ -1066,10 +1075,12 @@ bool NoDuplicatesImageFilterModel::filterAcceptsRow(int source_row, const QModel
         return true;
     }
 
-    if (sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(index)) == sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(previousIndex)))
+    if (sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(index)) ==
+        sourceImageModel()->imageId(mapFromDirectSourceToSourceImageModel(previousIndex)))
     {
         return false;
     }
+
     return true;
 }
 

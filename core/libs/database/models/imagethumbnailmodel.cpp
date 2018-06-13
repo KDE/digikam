@@ -38,12 +38,12 @@
 namespace Digikam
 {
 
-class ImageThumbnailModel::ImageThumbnailModelPriv
+class ImageThumbnailModel::Private
 {
 public:
 
-    ImageThumbnailModelPriv() :
-        thread(0),
+    explicit Private()
+      : thread(0),
         preloadThread(0),
         thumbSize(0),
         lastGlobalThumbSize(0),
@@ -74,8 +74,9 @@ public:
     }
 };
 
-ImageThumbnailModel::ImageThumbnailModel(QObject* parent)
-    : ImageModel(parent), d(new ImageThumbnailModelPriv)
+ImageThumbnailModel::ImageThumbnailModel(QObject* const parent)
+    : ImageModel(parent),
+      d(new Private)
 {
     setKeepsFilePathCache(true);
 }
@@ -86,7 +87,7 @@ ImageThumbnailModel::~ImageThumbnailModel()
     delete d;
 }
 
-void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread* thread)
+void ImageThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread* const thread)
 {
     d->thread = thread;
 
@@ -138,6 +139,7 @@ void ImageThumbnailModel::setPreloadThumbnails(bool preload)
     {
         delete d->preloadThread;
         d->preloadThread = 0;
+
         disconnect(this, SIGNAL(allRefreshingFinished()),
                    this, SLOT(preloadAllThumbnails()));
     }
@@ -156,10 +158,12 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
     }
 
     QList<ThumbnailIdentifier> ids;
+
     foreach(const QModelIndex& index, indexesToPrepare)
     {
         ids << imageInfoRef(index).thumbnailIdentifier();
     }
+
     d->thread->findGroup(ids, thumbSize.size());
 }
 
@@ -171,10 +175,12 @@ void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
     }
 
     QList<ThumbnailIdentifier> ids;
+
     foreach(const ImageInfo& info, infos)
     {
         ids << info.thumbnailIdentifier();
     }
+
     d->preloadThread->pregenerateGroup(ids, d->preloadThumbnailSize());
 }
 
@@ -186,10 +192,12 @@ void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& indexesToP
     }
 
     QList<ThumbnailIdentifier> ids;
+
     foreach(const QModelIndex& index, indexesToPreload)
     {
         ids << imageInfoRef(index).thumbnailIdentifier();
     }
+
     d->preloadThread->stopAllTasks();
     d->preloadThread->pregenerateGroup(ids, d->preloadThumbnailSize());
 }
@@ -294,6 +302,7 @@ void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingD
     // In case of multiple occurrence, we currently do not know which thumbnail is this. Signal change on all.
     QModelIndexList indexes;
     ThumbnailIdentifier thumbId = loadingDescription.thumbnailIdentifier();
+
     if (thumbId.filePath.isEmpty())
     {
         indexes = indexesForImageId(thumbId.id);
@@ -302,6 +311,7 @@ void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingD
     {
         indexes = indexesForPath(thumbId.filePath);
     }
+
     foreach(const QModelIndex& index, indexes)
     {
         if (thumb.isNull())

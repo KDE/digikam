@@ -60,12 +60,12 @@ class DIGIKAM_DATABASE_EXPORT ImageSortFilterModel : public DCategorizedSortFilt
 
 public:
 
-    explicit ImageSortFilterModel(QObject* parent = 0);
+    explicit ImageSortFilterModel(QObject* const parent = 0);
 
-    void        setSourceImageModel(ImageModel* model);
+    void        setSourceImageModel(ImageModel* const model);
     ImageModel* sourceImageModel() const;
 
-    void                  setSourceFilterModel(ImageSortFilterModel* model);
+    void                  setSourceFilterModel(ImageSortFilterModel* const model);
     ImageSortFilterModel* sourceFilterModel() const;
 
     QModelIndex mapToSourceImageModel(const QModelIndex& index) const;
@@ -97,10 +97,10 @@ public:
 protected:
 
     /// Reimplement if needed. Called only when model shall be set as (direct) sourceModel.
-    virtual void setDirectSourceImageModel(ImageModel* model);
+    virtual void setDirectSourceImageModel(ImageModel* const model);
 
     // made protected
-    virtual void setSourceModel(QAbstractItemModel* model);
+    virtual void setSourceModel(QAbstractItemModel* const model);
 
 protected:
 
@@ -134,12 +134,12 @@ public:
 
 public:
 
-    explicit ImageFilterModel(QObject* parent = 0);
+    explicit ImageFilterModel(QObject* const parent = 0);
     ~ImageFilterModel();
 
     /** Add a hook to get added images for preparation tasks before they are added in the model */
-    void addPrepareHook(ImageFilterModelPrepareHook* hook);
-    void removePrepareHook(ImageFilterModelPrepareHook* hook);
+    void addPrepareHook(ImageFilterModelPrepareHook* const hook);
+    void removePrepareHook(ImageFilterModelPrepareHook* const hook);
 
     /** Returns a set of DatabaseFields suggested to set as watch flags on the source ImageModel.
      *  The contained flags will be those that this model can sort or filter by. */
@@ -237,9 +237,9 @@ protected:
 
 protected:
 
-    ImageFilterModel(ImageFilterModelPrivate& dd, QObject* parent);
+    ImageFilterModel(ImageFilterModelPrivate& dd, QObject* const parent);
 
-    virtual void setDirectSourceImageModel(ImageModel* model);
+    virtual void setDirectSourceImageModel(ImageModel* const model);
 
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 
@@ -285,7 +285,7 @@ class DIGIKAM_DATABASE_EXPORT NoDuplicatesImageFilterModel : public ImageSortFil
 
 public:
 
-    explicit NoDuplicatesImageFilterModel(QObject* parent = 0);
+    explicit NoDuplicatesImageFilterModel(QObject* const parent = 0);
 
 protected:
 

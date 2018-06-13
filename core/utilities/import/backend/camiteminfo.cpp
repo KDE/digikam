@@ -74,31 +74,29 @@ bool CamItemInfo::isNull() const
 QUrl CamItemInfo::url() const
 {
     QUrl url = QUrl::fromLocalFile(folder);
-    url = url.adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + QLatin1Char('/') + (name));
+    url      = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + QLatin1Char('/') + name);
 
     return url;
 }
 
 bool CamItemInfo::operator==(const CamItemInfo& info) const
 {
-    bool b1  = size             == info.size;
-    bool b2  = width            == info.width;
-    bool b3  = height           == info.height;
-    bool b4  = readPermissions  == info.readPermissions;
-    bool b5  = writePermissions == info.writePermissions;
-    bool b6  = name             == info.name;
-    bool b7  = folder           == info.folder;
-    bool b8  = mime             == info.mime;
-    bool b9  = ctime            == info.ctime;
-    bool b10 = photoInfo        == info.photoInfo;
-    bool b11 = id               == info.id;
-    bool b12 = rating           == info.rating;
-    bool b13 = pickLabel        == info.pickLabel;
-    bool b14 = colorLabel       == info.colorLabel;
-    bool b15 = tagIds           == info.tagIds;
-
-    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10 && b11 && b12 && b13 && b14 && b15;
+    return (size             == info.size)             &&
+           (width            == info.width)            &&
+           (height           == info.height)           &&
+           (readPermissions  == info.readPermissions)  &&
+           (writePermissions == info.writePermissions) &&
+           (name             == info.name)             &&
+           (folder           == info.folder)           &&
+           (mime             == info.mime)             &&
+           (ctime            == info.ctime)            &&
+           (photoInfo        == info.photoInfo)        &&
+           (id               == info.id)               &&
+           (rating           == info.rating)           &&
+           (pickLabel        == info.pickLabel)        &&
+           (colorLabel       == info.colorLabel)       &&
+           (tagIds           == info.tagIds);
 }
 
 bool CamItemInfo::operator!=(const CamItemInfo& info) const

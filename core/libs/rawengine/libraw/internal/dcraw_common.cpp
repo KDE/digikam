@@ -9849,7 +9849,11 @@ void CLASS parse_exif (int base)
 
 #ifdef LIBRAW_LIBRARY_BUILD
     INT64 savepos = ftell(ifp);
-    if(len > 8 && savepos + len > fsize*2) continue;
+    if (len > 8 && savepos + len > fsize * 2)
+    {
+        fseek(ifp, save, SEEK_SET); // Recover tiff-read position!!
+        continue;
+    }
     if(callbacks.exif_cb)
       {
         callbacks.exif_cb(callbacks.exifparser_data,tag,type,len,order,ifp);
@@ -10199,7 +10203,11 @@ void CLASS parse_kodak_ifd (int base)
   while (entries--) {
     tiff_get (base, &tag, &type, &len, &save);
     INT64 savepos = ftell(ifp);
-    if(len > 8 && len + savepos > 2*fsize) continue;
+    if (len > 8 && savepos + len > fsize * 2)
+    {
+        fseek(ifp, save, SEEK_SET); // Recover tiff-read position!!
+        continue;
+    }
     if(callbacks.exif_cb)
       {
         callbacks.exif_cb(callbacks.exifparser_data,tag | 0x20000,type,len,order,ifp);
@@ -10334,7 +10342,11 @@ int CLASS parse_tiff_ifd (int base)
     tiff_get (base, &tag, &type, &len, &save);
 #ifdef LIBRAW_LIBRARY_BUILD
     INT64 savepos = ftell(ifp);
-    if(len > 8 && len + savepos > fsize*2) continue; // skip tag pointing out of 2xfile
+    if (len > 8 && savepos + len > fsize * 2)
+    {
+        fseek(ifp, save, SEEK_SET); // Recover tiff-read position!!
+        continue;
+    }
     if(callbacks.exif_cb)
       {
         callbacks.exif_cb(callbacks.exifparser_data,tag|(pana_raw?0x30000:0),type,len,order,ifp);
@@ -12395,6 +12407,8 @@ void CLASS parse_qt (int end)
   while (ftell(ifp)+7 < end) {
     save = ftell(ifp);
     if ((size = get4()) < 8) return;
+    if ((int)size < 0) return; // 2+GB is too much
+    if (save + size < save) return; // 32bit overflow
     fread (tag, 4, 1, ifp);
     if (!memcmp(tag,"moov",4) ||
 	!memcmp(tag,"udta",4) ||
@@ -14397,7 +14411,10 @@ void CLASS identify()
 #endif
 	switch (tiff_bps = i*8 / (width * height)) {
 	case  8: load_raw = &CLASS eight_bit_load_raw;  break;
-	case 10: load_raw = &CLASS nokia_load_raw;
+	case 10: load_raw = &CLASS nokia_load_raw; break;
+#ifdef LIBRAW_LIBRARY_BUILD
+        case 0:  throw LIBRAW_EXCEPTION_IO_CORRUPT; break;
+#endif
 	}
 	raw_height = height + (top_margin = i / (width * tiff_bps/8) - height);
 	mask[0][3] = 1;

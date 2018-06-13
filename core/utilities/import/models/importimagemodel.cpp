@@ -245,7 +245,7 @@ QList<QModelIndex> ImportImageModel::indexesForCamItemId(qlonglong id) const
 
     QHash<qlonglong, int>::const_iterator it;
 
-    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
+    for (it = d->idHash.constFind(id) ; it != d->idHash.constEnd() && it.key() == id ; ++it)
     {
        indexes << createIndex(it.value(), 0);
     }
@@ -263,7 +263,7 @@ int ImportImageModel::numberOfIndexesForCamItemId(qlonglong id) const
     int count = 0;
     QHash<qlonglong,int>::const_iterator it;
 
-    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
+    for (it = d->idHash.constFind(id) ; it != d->idHash.constEnd() && it.key() == id ; ++it)
     {
         ++count;
     }
@@ -319,7 +319,7 @@ QModelIndex ImportImageModel::indexForUrl(const QUrl& fileUrl) const
     {
         const int size = d->infos.size();
 
-        for (int i = 0; i < size; i++)
+        for (int i = 0 ; i < size ; ++i)
         {
             if (d->infos.at(i).url() == fileUrl)
             {
@@ -342,7 +342,7 @@ QList<QModelIndex> ImportImageModel::indexesForUrl(const QUrl& fileUrl) const
         QList<QModelIndex> indexes;
         const int          size = d->infos.size();
 
-        for (int i = 0; i < size; i++)
+        for (int i = 0 ; i < size ; ++i)
         {
             if (d->infos.at(i).url() == fileUrl)
             {
@@ -492,7 +492,7 @@ QList<CamItemInfo> ImportImageModel::uniqueCamItemInfos() const
     QList<CamItemInfo> uniqueInfos;
     const int          size = d->infos.size();
 
-    for (int i = 0; i < size; i++)
+    for (int i = 0 ; i < size ; ++i)
     {
         const CamItemInfo& info = d->infos.at(i);
 
@@ -564,8 +564,8 @@ void ImportImageModel::slotFileDeleted(const QString& folder, const QString& fil
     Q_UNUSED(status)
 
     QUrl url = QUrl::fromLocalFile(folder);
-    url = url.adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + QLatin1Char('/') + (file));
+    url      = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + QLatin1Char('/') + file);
     CamItemInfo info = camItemInfo(url);
     removeCamItemInfo(info);
 }
@@ -626,7 +626,7 @@ void ImportImageModel::publiciseInfos(const CamItemInfoList& infos)
     beginInsertRows(QModelIndex(), firstNewIndex, lastNewIndex);
     d->infos << infos;
 
-    for (int i = firstNewIndex; i <= lastNewIndex; ++i)
+    for (int i = firstNewIndex ; i <= lastNewIndex ; ++i)
     {
         CamItemInfo& info = d->infos[i];
 
@@ -700,7 +700,7 @@ static bool pairsContain(const List& list, T value)
     typename List::const_iterator end   = list.end();
     int n                               = int(end - begin);
 
-    while(n > 0)
+    while (n > 0)
     {
         int half   = n >> 1;
         middle = begin + half;
@@ -712,7 +712,7 @@ static bool pairsContain(const List& list, T value)
         else if (middle->second < value)
         {
             begin = middle + 1;
-            n     -= half + 1;
+            n    -= half   + 1;
         }
         else
         {
@@ -822,7 +822,7 @@ void ImportImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
         // update idHash - which points to indexes of d->infos
         QHash<qlonglong, int>::iterator it;
 
-        for (it = d->idHash.begin(); it != d->idHash.end(); )
+        for (it = d->idHash.begin() ; it != d->idHash.end() ; )
         {
             if (it.value() >= begin)
             {
@@ -858,7 +858,7 @@ void ImportImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
     {
         QHash<QString, qlonglong>::iterator it;
 
-        for (it = d->fileUrlHash.begin(); it!= d->fileUrlHash.end(); )
+        for (it = d->fileUrlHash.begin() ; it!= d->fileUrlHash.end() ; )
         {
             if (pairsContain(toRemove, it.value()))
             {
@@ -886,7 +886,7 @@ void ImportImageModelIncrementalUpdater::aboutToBeRemovedInModel(const IntPairLi
 
 void ImportImageModelIncrementalUpdater::appendInfos(const QList<CamItemInfo>& infos)
 {
-    for (int i = 0; i < infos.size(); i++)
+    for (int i = 0 ; i < infos.size() ; ++i)
     {
         const CamItemInfo& info = infos.at(i);
         bool found              = false;
@@ -928,7 +928,7 @@ QList<QPair<int, int> > ImportImageModelIncrementalUpdater::toContiguousPairs(co
 
     QPair<int, int> pair(indices.first(), indices.first());
 
-    for (int i=1; i < indices.size(); i++)
+    for (int i = 1 ; i < indices.size() ; ++i)
     {
         const int &index = indices.at(i);
 
@@ -969,7 +969,7 @@ QList<QPair<int, int> > ImportImageModelIncrementalUpdater::oldIndexes()
             // update idHash - which points to indexes of d->infos, and these change now!
             QHash<qlonglong, int>::iterator it;
 
-            for (it = oldIds.begin(); it != oldIds.end(); )
+            for (it = oldIds.begin() ; it != oldIds.end() ; )
             {
                 if (it.value() >= begin)
                 {

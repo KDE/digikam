@@ -49,13 +49,13 @@ public:
      *  Adjust the thumbnail size to your needs.
      *  Note that setKeepsFilePathCache is enabled per default.
      */
-    explicit ImageThumbnailModel(QObject* parent);
+    explicit ImageThumbnailModel(QObject* const parent);
     ~ImageThumbnailModel();
 
     /** Enable thumbnail loading and set the thread that shall be used.
      *  The thumbnail size of this thread will be adjusted.
      */
-    void setThumbnailLoadThread(ThumbnailLoadThread* thread);
+    void setThumbnailLoadThread(ThumbnailLoadThread* const thread);
     ThumbnailLoadThread* thumbnailLoadThread() const;
 
     /// Set the thumbnail size to use
@@ -131,8 +131,8 @@ protected Q_SLOTS:
 
 private:
 
-    class ImageThumbnailModelPriv;
-    ImageThumbnailModelPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
