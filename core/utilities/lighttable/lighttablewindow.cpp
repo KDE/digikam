@@ -84,6 +84,7 @@
 #include "advprintwizard.h"
 #include "dmediaserverdlg.h"
 #include "dbwindow.h"
+#include "odwindow.h"
 #include "fbwindow.h"
 #include "flickrwindow.h"
 #include "gswindow.h"
@@ -1946,6 +1947,13 @@ void LightTableWindow::slotExportTool()
         w->exec();
         delete w;
     }
+    else if (tool == m_exportDropboxAction)
+    {
+        QPointer<ODWindow> w = new ODWindow(new DBInfoIface(this, d->thumbView->allUrls(),
+                                   ApplicationSettings::ImportExport), this);
+        w->exec();
+        delete w;
+    }
     else if (tool == m_exportFacebookAction)
     {
         QPointer<FbWindow> w = new FbWindow(new DBInfoIface(this, d->thumbView->allUrls(),
@@ -2021,7 +2029,7 @@ void LightTableWindow::slotExportTool()
 #ifdef HAVE_MEDIAWIKI
     else if (tool == m_exportMediawikiAction)
     {
-        QPointer<MediaWikiWindow> w = new MediaWikiWindow(new DBInfoIface(this, d->thumbView->allUrls(), 
+        QPointer<MediaWikiWindow> w = new MediaWikiWindow(new DBInfoIface(this, d->thumbView->allUrls(),
                                           ApplicationSettings::ImportExport), this);
         w->exec();
         delete w;

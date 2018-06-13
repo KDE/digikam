@@ -27,7 +27,7 @@ if(KF5KIO_FOUND)
     )
 
 endif()
-                      
+
 # OAuth2 library ---------------------------------------------------
 
 # The o2 library does not adhere to the flags we use
@@ -116,6 +116,15 @@ set(libwsdropbox_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbnewalbumdlg.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbtalker.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwidget.cpp
                       ${CMAKE_CURRENT_SOURCE_DIR}/dropbox/dbwindow.cpp
+)
+
+# OneDrive tool --------------------------------------------------------------
+
+set(libwsonedrive_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odnewalbumdlg.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odmpform.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odtalker.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odwidget.cpp
+                      ${CMAKE_CURRENT_SOURCE_DIR}/onedrive/odwindow.cpp
 )
 
 # SmugMug tool -------------------------------------------------------------
@@ -227,7 +236,7 @@ if(KF5KIO_FOUND)
     )
 
 endif()
-    
+
 # ------------------------------------------------------------------------------
 
 add_library(webservices_src OBJECT ${libwebservices_SRCS}
@@ -235,6 +244,7 @@ add_library(webservices_src OBJECT ${libwebservices_SRCS}
                                    ${libwsflickr_SRCS}
                                    ${libwsimgur_SRCS}
                                    ${libwsdropbox_SRCS}
+                                   ${libwsonedrive_SRCS}
                                    ${libwssmugmug_SRCS}
                                    ${libwsimageshack_SRCS}
                                    ${libwsfacebook_SRCS}

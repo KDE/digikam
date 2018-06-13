@@ -3,7 +3,7 @@
 
 // Common constants
 const char O2_ENCRYPTION_KEY[] = "12345678";
-const char O2_CALLBACK_URL[] = "http://127.0.0.1:%1/";
+const char O2_CALLBACK_URL[] = "http://localhost:%1/login/authorized";
 const char O2_MIME_TYPE_XFORM[] = "application/x-www-form-urlencoded";
 const char O2_MIME_TYPE_JSON[] = "application/json";
 

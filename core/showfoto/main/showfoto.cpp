@@ -102,6 +102,7 @@
 #include "dmediaservermngr.h"
 #include "dmediaserverdlg.h"
 #include "dbwindow.h"
+#include "odwindow.h"
 #include "fbwindow.h"
 #include "flickrwindow.h"
 #include "gswindow.h"
@@ -1493,6 +1494,12 @@ void ShowFoto::slotExportTool()
     if (tool == m_exportDropboxAction)
     {
         QPointer<DBWindow> w = new DBWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
+        w->exec();
+        delete w;
+    }
+    else if (tool == m_exportOnedriveAction)
+    {
+        QPointer<ODWindow> w = new ODWindow(new DMetaInfoIface(this, d->thumbBar->urls()), this);
         w->exec();
         delete w;
     }

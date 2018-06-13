@@ -190,18 +190,20 @@ void O2::link() {
                     return;
                 }
             }
-            
+
             // Save redirect URI, as we have to reuse it when requesting the access token
             redirectUri_ = localhostPolicy_.arg(replyServer_->serverPort());
         }
-        
+
         // Assemble intial authentication URL
         QList<QPair<QString, QString> > parameters;
         parameters.append(qMakePair(QString(O2_OAUTH2_RESPONSE_TYPE),
                                     (grantFlow_ == GrantFlowAuthorizationCode)? QString(O2_OAUTH2_GRANT_TYPE_CODE): QString(O2_OAUTH2_GRANT_TYPE_TOKEN)));
         parameters.append(qMakePair(QString(O2_OAUTH2_CLIENT_ID), clientId_));
-        if ( !redirectUri_.isEmpty() )
+        if ( !redirectUri_.isEmpty() ){
             parameters.append(qMakePair(QString(O2_OAUTH2_REDIRECT_URI), redirectUri_));
+            qDebug() << "redirectURI" << redirectUri_;
+        }
         if ( !scope_.isEmpty() )
             parameters.append(qMakePair(QString(O2_OAUTH2_SCOPE), scope_.replace( " ", "+" )));
         if ( !apiKey_.isEmpty() )
@@ -214,6 +216,7 @@ void O2::link() {
         addQueryParametersToUrl(url, parameters);
         qDebug() << "O2::link: Emit openBrowser" << url.toString();
         Q_EMIT openBrowser(url);
+        qDebug() << "Heloo";
     } else if (grantFlow_ == GrantFlowResourceOwnerPasswordCredentials) {
         QList<O0RequestParameter> parameters;
         parameters.append(O0RequestParameter(O2_OAUTH2_CLIENT_ID, clientId_.toUtf8()));
@@ -447,7 +450,7 @@ void O2::refresh() {
 
 void O2::onRefreshFinished() {
     QNetworkReply *refreshReply = qobject_cast<QNetworkReply *>(sender());
-    
+
     if (refreshReply->error() == QNetworkReply::NoError) {
         QByteArray reply = refreshReply->readAll();
         QVariantMap tokens = parseTokenResponse(reply);
