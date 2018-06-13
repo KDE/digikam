@@ -297,21 +297,21 @@ void FacesDetector::slotStart()
         QApplication::restoreOverrideCursor();
     }
 
-    // first, we use the relativeProgressValue map to store absolute counts
+    // first, we use the progressValueMap map to store absolute counts
 
-    QMap<Album*, double> relativeProgressValue;
+    QMap<Album*, int> progressValueMap;
 
     foreach(Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {
-            relativeProgressValue[album] = palbumCounts.value(album->id());
+            progressValueMap[album] = palbumCounts.value(album->id());
         }
         else
         {
             // this is possibly broken of course because we do not know if images have multiple tags,
             // but there's no better solution without expensive operation
-            relativeProgressValue[album] = talbumCounts.value(album->id());
+            progressValueMap[album] = talbumCounts.value(album->id());
         }
     }
 
@@ -319,20 +319,13 @@ void FacesDetector::slotStart()
 
     int total = 0;
 
-    foreach(double count, relativeProgressValue)
+    foreach(int count, progressValueMap)
     {
-        total += (int)count;
+        total += count;
     }
 
     total = qMax(1, total);
     qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << total;
-
-    // third, break absolute to relative values
-
-    for (QMap<Album*, double>::iterator it = relativeProgressValue.begin() ; it != relativeProgressValue.end() ; ++it)
-    {
-        it.value() /= double(total);
-    }
 
     setUsesBusyIndicator(false);
     setTotalItems(total);
