@@ -249,22 +249,19 @@ void FacesDetector::slotStart()
 
     if (d->useImageInfos)
     {
-        if (d->infoTodoList.isEmpty())
-        {
-            return slotDone();
-        }
-
         int total = d->infoTodoList.count();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << total;
+
         setTotalItems(total);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << total;
         return slotItemsInfo(d->infoTodoList);
     }
 
     setUsesBusyIndicator(true);
 
     // get total count, cached by AlbumManager
-    QMap<int, int> palbumCounts, talbumCounts;
+    QMap<int, int> palbumCounts;
+    QMap<int, int> talbumCounts;
     bool hasPAlbums = false;
     bool hasTAlbums = false;
 
