@@ -216,7 +216,6 @@ void O2::link() {
         addQueryParametersToUrl(url, parameters);
         qDebug() << "O2::link: Emit openBrowser" << url.toString();
         Q_EMIT openBrowser(url);
-        qDebug() << "Heloo";
     } else if (grantFlow_ == GrantFlowResourceOwnerPasswordCredentials) {
         QList<O0RequestParameter> parameters;
         parameters.append(O0RequestParameter(O2_OAUTH2_CLIENT_ID, clientId_.toUtf8()));

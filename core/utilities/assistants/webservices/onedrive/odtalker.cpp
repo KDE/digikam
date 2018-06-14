@@ -15,6 +15,8 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QUrlQuery>
+#include <QWebEngineView>
 
 // Local includes
 
@@ -46,19 +48,20 @@ public:
 
     explicit Private()
     {
-        clientId   = QLatin1String("8bd716b2-7b89-4475-8449-8edc1e808cc6");
-        clientSecret   = QLatin1String("rxcfCE31{@}kemIKCMH145?");
-        scope = QLatin1String("files.readwrite");
+        clientId   = QLatin1String("83de95b7-0f35-4abf-bac1-7729ced74c01");
+        clientSecret   = QLatin1String("tgjV796:)yezuRWMZSZ45+!");
+        scope = QLatin1String("User.Read Files.ReadWrite");
 
-        authUrl  = QLatin1String("https://login.microsoftonline.com/common/oauth2/v2.0/authorize");
-        tokenUrl = QLatin1String("https://login.microsoftonline.com/common/oauth2/v2.0/token");
-        redirectUrl = QLatin1String("http://localhost:5000/login/authorized");
+        authUrl  = QLatin1String("https://login.live.com/oauth20_authorize.srf");
+        tokenUrl = QLatin1String("https://login.live.com/oauth20_token.srf");
+        redirectUrl = QLatin1String("https://login.live.com/oauth20_desktop.srf");
 
-        state    = OD_USERNAME;
-        settings = 0;
-        netMngr  = 0;
-        reply    = 0;
-        o2       = 0;
+        state       = OD_USERNAME;
+        settings    = 0;
+        netMngr     = 0;
+        reply       = 0;
+        o2          = 0;
+        accessToken = "";
     }
 
 public:
@@ -69,6 +72,7 @@ public:
     QString                tokenUrl;
     QString                scope;
     QString                redirectUrl;
+    QString                accessToken;
 
     QWidget*               parent;
     QNetworkAccessManager* netMngr;
@@ -84,6 +88,8 @@ public:
     DMetadata              meta;
 
     O2*                    o2;
+
+    QMap<QString,QString> urlParametersMap;
 };
 ODTalker::ODTalker(QWidget* const parent)
     : d(new Private)
@@ -112,7 +118,7 @@ ODTalker::ODTalker(QWidget* const parent)
     connect(d->o2, SIGNAL(linkingFailed()),
             this, SLOT(slotLinkingFailed()));
 
-    connect(d->o2, SIGNAL(linkingSucceeded()),
+    connect(this, SIGNAL(oneDriveLinkingSucceeded()),
             this, SLOT(slotLinkingSucceeded()));
 
     connect(d->o2, SIGNAL(openBrowser(QUrl)),
@@ -129,11 +135,26 @@ ODTalker::~ODTalker()
 void ODTalker::link()
 {
     emit signalBusy(true);
-    d->o2->link();
+    QUrl url(d->authUrl);
+    QUrlQuery query(url);
+    query.addQueryItem(QLatin1String("client_id"), d->clientId);
+    query.addQueryItem(QLatin1String("scope"), d->scope);
+    query.addQueryItem(QLatin1String("redirect_uri"), d->redirectUrl);
+    query.addQueryItem(QLatin1String("response_type"), "token");
+    url.setQuery(query);
+
+    QWebEngineView *view = new QWebEngineView(d->parent);
+    view->setWindowFlags(Qt::Dialog);
+    view->load(url);
+    view->show();
+
+    connect(view, SIGNAL(urlChanged(QUrl)), this, SLOT(slotOpenBrowser(QUrl)));
 }
 void ODTalker::unLink()
 {
-    d->o2->unlink();
+    d->accessToken = "";
+    Q_EMIT oneDriveLinkingSucceeded();
+    //d->o2->unlink();
 }
 
 void ODTalker::slotLinkingFailed()
@@ -143,20 +164,44 @@ void ODTalker::slotLinkingFailed()
 }
 void ODTalker::slotLinkingSucceeded()
 {
-    if (!d->o2->linked())
+    /*if (!d->o2->linked())
     {
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "UNLINK to Onedrive ok";
         emit signalBusy(false);
         return;
-    }
+    }*/
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Onedrive ok";
     emit signalLinkingSucceeded();
 }
 void ODTalker::slotOpenBrowser(const QUrl& url)
 {
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Open Browser...";
-    QDesktopServices::openUrl(url);
+    d->urlParametersMap = ParseUrlParameters(url.toString());
+    d->accessToken = d->urlParametersMap.value("access_token");
+    if(d->accessToken != ""){
+      Q_EMIT oneDriveLinkingSucceeded();
+    }
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Recieved URL from webview in link function: " << url ;
+}
+QMap<QString,QString> ODTalker::ParseUrlParameters(const QString &url)
+{
+  QMap<QString,QString> ret;
+  if(url.indexOf('?')==-1)
+  {
+      return ret;
+  }
+
+  QString tmp = url.right(url.length()-url.indexOf('?')-1);
+  tmp = tmp.right(tmp.length() - tmp.indexOf('#')-1);
+  QStringList paramlist = tmp.split('&');
+
+  for(int i=0;i<paramlist.count();i++)
+  {
+      QStringList paramarg = paramlist.at(i).split('=');
+      ret.insert(paramarg.at(0),paramarg.at(1));
+  }
+
+  return ret;
 }
 bool ODTalker::authenticated()
 {
@@ -177,11 +222,11 @@ void ODTalker::createFolder(const QString& path)
     //path also has name of new folder so send path parameter accordingly
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "createFolder:" << path;
 
-    QUrl url(QLatin1String("https://api.dropboxapi.com/2/files/create_folder_v2"));
+    QUrl url(QLatin1String("https://graph.microsoft.com/v1.0/me/drive/root/children"));
 
     QNetworkRequest netRequest(url);
-    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String(O2_MIME_TYPE_JSON));
-    netRequest.setRawHeader("Authorization", QString::fromLatin1("Bearer %1").arg(d->o2->token()).toUtf8());
+    netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
+    netRequest.setRawHeader("Authorization", QString::fromLatin1("bearer %1").arg(d->accessToken).toUtf8());
 
     QByteArray postData = QString::fromUtf8("{\"path\": \"%1\"}").arg(path).toUtf8();
 
@@ -196,11 +241,11 @@ void ODTalker::getUserName()
     QUrl url(QLatin1String("https://graph.microsoft.com/v1.0/me"));
 
     QNetworkRequest netRequest(url);
-    netRequest.setRawHeader("Authorization", QString::fromLatin1("bearer %1").arg(d->o2->token()).toUtf8());
+    netRequest.setRawHeader("Authorization", QString::fromLatin1("bearer %1").arg(d->accessToken).toUtf8());
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
 
     d->reply = d->netMngr->get(netRequest);
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "AFter Request Usar ";
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "AFter Request Usar " << d->reply;
     d->state = Private::OD_USERNAME;
     d->buffer.resize(0);
     emit signalBusy(true);
@@ -214,7 +259,7 @@ void ODTalker::listFolders(const QString& path)
     QUrl url(QLatin1String("https://graph.microsoft.com/v1.0/me/drive/root/children"));;
 
     QNetworkRequest netRequest(url);
-    netRequest.setRawHeader("Authorization", QString::fromLatin1("bearer %1").arg(d->o2->token()).toUtf8());
+    netRequest.setRawHeader("Authorization", QString::fromLatin1("bearer %1").arg(d->accessToken).toUtf8());
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
 
     d->reply = d->netMngr->get(netRequest);
@@ -272,7 +317,7 @@ bool ODTalker::addPhoto(const QString& imgPath, const QString& uploadFolder, boo
 
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/octet-stream"));
-    netRequest.setRawHeader("Authorization", QString::fromLatin1("bearer {%1}").arg(d->o2->token()).toUtf8());
+    netRequest.setRawHeader("Authorization", QString::fromLatin1("bearer {%1}").arg(d->accessToken).toUtf8());
 
     d->reply = d->netMngr->put(netRequest, form.formData());
 

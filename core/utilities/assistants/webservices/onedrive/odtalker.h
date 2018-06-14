@@ -62,6 +62,8 @@ public:
     bool addPhoto(const QString& imgPath, const QString& uploadFolder, bool rescale, int maxDim, int imageQuality);
     void listFolders(const QString& path = QString());
     void createFolder(const QString& path);
+    void setAccessToken(const QString& token);
+    QMap<QString,QString> ParseUrlParameters(const QString& url);
 
 Q_SIGNALS:
 
@@ -75,6 +77,7 @@ Q_SIGNALS:
     void signalCreateFolderSucceeded();
     void signalAddPhotoFailed(const QString& msg);
     void signalAddPhotoSucceeded();
+    void oneDriveLinkingSucceeded();
 
 private Q_SLOTS:
 
