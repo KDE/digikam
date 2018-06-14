@@ -120,7 +120,7 @@ public:
     Album*                 currAlbum;
 };
 
-ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode, Album* currAlbum)
+ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode, Album* const currAlbum)
     : GraphicsDImgView(parent),
       d(new Private())
 {
