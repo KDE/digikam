@@ -221,6 +221,7 @@ public Q_SLOTS:
     void slotIconView();
     void slotImageEdit();
     void slotImageFindSimilar();
+    void slotImageScanForFaces();
     void slotImageExifOrientation(int orientation);
     void slotImageRename();
     void slotImageDelete();
@@ -317,6 +318,8 @@ private Q_SLOTS:
     void slotSetupMetadataFilters(int);
 
     void slotAlbumRefreshComplete();
+
+    void slotRefreshImagePreview();
 
     void slotShowContextMenu(QContextMenuEvent* event,
                              const QList<QAction*>& extraGroupingActions = QList<QAction*>());

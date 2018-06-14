@@ -225,39 +225,39 @@ private:
 private:
 
     /// --- Tags filter ---
-    bool                             m_untaggedFilter;
-    QList<int>                       m_includeTagFilter;
-    QList<int>                       m_excludeTagFilter;
-    MatchingCondition                m_matchingCond;
-    QList<int>                       m_colorLabelTagFilter;
-    QList<int>                       m_pickLabelTagFilter;
+    bool                              m_untaggedFilter;
+    QList<int>                        m_includeTagFilter;
+    QList<int>                        m_excludeTagFilter;
+    MatchingCondition                 m_matchingCond;
+    QList<int>                        m_colorLabelTagFilter;
+    QList<int>                        m_pickLabelTagFilter;
 
     /// --- Rating filter ---
-    int                              m_ratingFilter;
-    RatingCondition                  m_ratingCond;
-    bool                             m_isUnratedExcluded;
+    int                               m_ratingFilter;
+    RatingCondition                   m_ratingCond;
+    bool                              m_isUnratedExcluded;
 
     /// --- Date filter ---
-    QMap<QDateTime, bool>            m_dayFilter;
+    QMap<QDateTime, bool>             m_dayFilter;
 
     /// --- Text filter ---
-    SearchTextFilterSettings         m_textFilterSettings;
+    SearchTextFilterSettings          m_textFilterSettings;
 
     /// Helpers for text search: Set these if you want to search album or tag names with text search
-    QHash<int, QString>              m_tagNameHash;
-    QHash<int, QString>              m_albumNameHash;
+    QHash<int, QString>               m_tagNameHash;
+    QHash<int, QString>               m_albumNameHash;
 
     /// --- Mime filter ---
-    MimeFilter::TypeMimeFilter       m_mimeTypeFilter;
+    MimeFilter::TypeMimeFilter        m_mimeTypeFilter;
 
     /// --- Geolocation filter
-    GeolocationCondition             m_geolocationCondition;
+    GeolocationCondition              m_geolocationCondition;
 
     /// --- URL whitelist filter
     QHash<QString,QList<QUrl>>        m_urlWhitelists;
 
     /// --- ID whitelist filter
-    QHash<QString,QList<qlonglong> > m_idWhitelists;
+    QHash<QString, QList<qlonglong> > m_idWhitelists;
 };
 
 // ---------------------------------------------------------------------------------------
@@ -298,10 +298,10 @@ public:
 
 protected:
 
-    QList<int>                       m_excludeTagFilter;
-    int                              m_includeTagFilter;
-    int                              m_exceptionTagFilter;
-    QHash<QString,QList<qlonglong> > m_exceptionLists;
+    QList<int>                        m_excludeTagFilter;
+    int                               m_includeTagFilter;
+    int                               m_exceptionTagFilter;
+    QHash<QString, QList<qlonglong> > m_exceptionLists;
 };
 
 // ---------------------------------------------------------------------------------------

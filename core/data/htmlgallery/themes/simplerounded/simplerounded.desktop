@@ -64,6 +64,7 @@ Name[sv]=Franz Dietrich
 Name[tr]=Franz Dietrich
 Name[uk]=Franz Dietrich
 Name[x-test]=xxFranz Dietrichxx
+Name[zh_CN]=Franz Dietrich
 Url=mailto:enaut.w@googlemail.com
 
 [X-HTMLGallery Parameter titlebar]
@@ -142,6 +143,7 @@ Name[sv]=Hemsidans namn
 Name[tr]=Ana Sayfanın Adı
 Name[uk]=Назва домашньої сторінки
 Name[x-test]=xxName of the Homepagexx
+Name[zh_CN]=主页名称
 Type=string
 Default=
 Default[de]=

@@ -120,10 +120,8 @@ Q_SIGNALS:
 
     void signalNextItem();
     void signalPrevItem();
-    //FIXME: void signalEditItem();
     void signalViewModeChanged();
     void signalEscapePreview();
-    //FIXME: void signalSlideShow();
     void signalZoomFactorChanged(double);
 
     //FIXME: void signalGotoAlbumAndItem(const CamItemInfo&);

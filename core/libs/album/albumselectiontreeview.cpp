@@ -36,11 +36,14 @@
 
 #include "digikam_debug.h"
 #include "albummanager.h"
+#include "facescansettings.h"
+#include "applicationsettings.h"
 #include "contextmenuhelper.h"
 #include "itemviewtooltip.h"
 #include "tooltipfiller.h"
 #include "thumbsgenerator.h"
 #include "newitemsfinder.h"
+#include "facesdetector.h"
 
 namespace Digikam
 {
@@ -82,6 +85,7 @@ public:
         renameAction(0),
         resetIconAction(0),
         findDuplAction(0),
+        scanFacesAction(0),
         rebuildThumbsAction(0),
         contextMenuElement(0)
     {
@@ -95,6 +99,7 @@ public:
     QAction*                                  renameAction;
     QAction*                                  resetIconAction;
     QAction*                                  findDuplAction;
+    QAction*                                  scanFacesAction;
     QAction*                                  rebuildThumbsAction;
 
     class AlbumSelectionTreeViewContextMenuElement;
@@ -145,6 +150,8 @@ public:
         // --------------------------------------------------------
         cmh.addAction(d->findDuplAction);
         d->albumModificationHelper->bindAlbum(d->findDuplAction, album);
+        cmh.addAction(d->scanFacesAction);
+        d->albumModificationHelper->bindAlbum(d->scanFacesAction, album);
         cmh.addAction(d->rebuildThumbsAction);
         d->albumModificationHelper->bindAlbum(d->rebuildThumbsAction, album);
         cmh.addImportMenu();
@@ -167,16 +174,21 @@ public:
 
 AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* const parent, AlbumModel* const model,
                                                AlbumModificationHelper* const albumModificationHelper)
-    : AlbumTreeView(parent), d(new Private)
+    : AlbumTreeView(parent),
+      d(new Private)
 {
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
     d->toolTip                 = new AlbumViewToolTip(this);
-    d->findDuplAction          = new QAction(QIcon::fromTheme(QLatin1String("tools-wizard")), i18n("Find Duplicates..."), this);
-    d->rebuildThumbsAction     = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Refresh"),            this);
+    d->findDuplAction          = new QAction(QIcon::fromTheme(QLatin1String("tools-wizard")),  i18n("Find Duplicates..."), this);
+    d->scanFacesAction         = new QAction(QIcon::fromTheme(QLatin1String("list-add-user")), i18n("Scan for Faces"),     this);
+    d->rebuildThumbsAction     = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")),  i18n("Refresh"),            this);
 
-    connect(d->findDuplAction,      SIGNAL(triggered()),
+    connect(d->findDuplAction, SIGNAL(triggered()),
             this, SLOT(slotFindDuplicates()));
+
+    connect(d->scanFacesAction, SIGNAL(triggered()),
+            this, SLOT(slotScanForFaces()));
 
     connect(d->rebuildThumbsAction, SIGNAL(triggered()),
             this, SLOT(slotRebuildThumbs()));
@@ -206,6 +218,27 @@ void AlbumSelectionTreeView::slotFindDuplicates()
     emit signalFindDuplicates(d->albumModificationHelper->boundAlbum(sender()));
 }
 
+void AlbumSelectionTreeView::slotScanForFaces()
+{
+    PAlbum* const album = d->albumModificationHelper->boundAlbum(sender());
+
+    if (!album)
+    {
+        return;
+    }
+
+    FaceScanSettings settings;
+
+    settings.accuracy               = ApplicationSettings::instance()->getFaceDetectionAccuracy();
+    settings.recognizeAlgorithm     = RecognitionDatabase::RecognizeAlgorithm::LBP;
+    settings.task                   = FaceScanSettings::DetectAndRecognize;
+    settings.alreadyScannedHandling = FaceScanSettings::Rescan;
+    settings.albums                 = QList<Album*>() << album;
+
+    FacesDetector* const tool = new FacesDetector(settings);
+    tool->start();
+}
+
 void AlbumSelectionTreeView::slotRebuildThumbs()
 {
     PAlbum* const album = d->albumModificationHelper->boundAlbum(sender());
@@ -223,7 +256,6 @@ void AlbumSelectionTreeView::slotRebuildThumbs()
     {
         NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan,
                                                         QStringList() << static_cast<PAlbum*>(album)->folderPath());
-
         tool->start();
     }
 }
@@ -248,7 +280,7 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent* event)
     if (!helpEvent)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Unable to determine the correct type of the event. "
-                 << "This should not happen.";
+                                     << "This should not happen.";
         return false;
     }
 

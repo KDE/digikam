@@ -530,9 +530,6 @@ FaceItem* FaceGroup::Private::createItem(const FaceTagsIface& face)
     item->setOriginalRect(face.region().toRect());
     item->setVisible(false);
 
-    q->connect(view, SIGNAL(viewportRectChanged(QRectF)),
-               item, SLOT(setViewportRect(QRectF)));
-
     return item;
 }
 

@@ -554,7 +554,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
         if (dt.isNull()) // fall back to file system info
         {
-            ImageScanner::creationDateFromFilesystem(fi);
+            dt = ImageScanner::creationDateFromFilesystem(fi);
         }
 
         info.name             = fi.fileName();
