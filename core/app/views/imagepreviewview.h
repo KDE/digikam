@@ -74,14 +74,9 @@ Q_SIGNALS:
     void signalNextItem();
     void signalPrevItem();
     void signalDeleteItem();
-    void signalEditItem();
     void signalPreviewLoaded(bool success);
     void signalEscapePreview();
     void signalSlideShowCurrent();
-    void signalSlideShow();
-    void signalInsert2LightTable();
-    void signalInsert2QueueMgr();
-    void signalFindSimilar();
     void signalAddToExistingQueue(int);
 
     void signalGotoAlbumAndItem(const ImageInfo&);

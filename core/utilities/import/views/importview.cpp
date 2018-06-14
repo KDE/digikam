@@ -222,9 +222,6 @@ void ImportView::setupConnections()
     connect(d->stackedView, SIGNAL(signalPrevItem()),
             this, SLOT(slotPrevItem()));
 
-    //connect(d->stackedView, SIGNAL(signalEditItem()),
-            //this, SLOT(slotImageEdit()));
-
     connect(d->stackedView, SIGNAL(signalViewModeChanged()),
             this, SLOT(slotViewModeChanged()));
 

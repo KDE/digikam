@@ -97,7 +97,6 @@ Q_SIGNALS:
     void signalLeftSlideShowCurrent();
     void signalRightSlideShowCurrent();
 
-    void signalSlideShow();
     void signalDeleteItem(const ImageInfo&);
     void signalEditItem(const ImageInfo&);
     void signalToggleOnSyncPreview(bool);

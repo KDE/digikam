@@ -186,32 +186,17 @@ StackedView::StackedView(QWidget* const parent)
     connect(d->imagePreviewView, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
 
-    connect(d->imagePreviewView, SIGNAL(signalEditItem()),
-            this, SIGNAL(signalEditItem()));
-
     connect(d->imagePreviewView, SIGNAL(signalDeleteItem()),
             this, SIGNAL(signalDeleteItem()));
 
     connect(d->imagePreviewView, SIGNAL(signalEscapePreview()),
             this, SIGNAL(signalEscapePreview()));
 
-    connect(d->imagePreviewView, SIGNAL(signalSlideShow()),
-            this, SIGNAL(signalSlideShow()));
-
     connect(d->imagePreviewView, SIGNAL(signalSlideShowCurrent()),
             this, SIGNAL(signalSlideShowCurrent()));
 
     connect(d->imagePreviewView->layout(), SIGNAL(zoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
-
-    connect(d->imagePreviewView, SIGNAL(signalInsert2LightTable()),
-            this, SIGNAL(signalInsert2LightTable()));
-
-    connect(d->imagePreviewView, SIGNAL(signalInsert2QueueMgr()),
-            this, SIGNAL(signalInsert2QueueMgr()));
-
-    connect(d->imagePreviewView, SIGNAL(signalFindSimilar()),
-            this, SIGNAL(signalFindSimilar()));
 
     connect(d->imagePreviewView, SIGNAL(signalAddToExistingQueue(int)),
             this, SIGNAL(signalAddToExistingQueue(int)));

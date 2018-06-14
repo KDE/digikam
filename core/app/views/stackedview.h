@@ -131,16 +131,11 @@ Q_SIGNALS:
 
     void signalNextItem();
     void signalPrevItem();
-    void signalEditItem();
     void signalDeleteItem();
     void signalViewModeChanged();
     void signalEscapePreview();
-    void signalSlideShow();
     void signalSlideShowCurrent();
     void signalZoomFactorChanged(double);
-    void signalInsert2LightTable();
-    void signalInsert2QueueMgr();
-    void signalFindSimilar();
     void signalPopupTagsView();
     void signalAddToExistingQueue(int);
 
