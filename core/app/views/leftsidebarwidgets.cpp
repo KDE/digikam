@@ -1263,12 +1263,12 @@ void FuzzySearchSideBarWidget::newDuplicatesSearch(PAlbum* album)
     d->fuzzySearchView->newDuplicatesSearch(album);
 }
 
-void FuzzySearchSideBarWidget::newDuplicatesSearch(QList<PAlbum*> albums)
+void FuzzySearchSideBarWidget::newDuplicatesSearch(const QList<PAlbum*>& albums)
 {
     d->fuzzySearchView->newDuplicatesSearch(albums);
 }
 
-void FuzzySearchSideBarWidget::newDuplicatesSearch(QList<TAlbum*> albums)
+void FuzzySearchSideBarWidget::newDuplicatesSearch(const QList<TAlbum*>& albums)
 {
     d->fuzzySearchView->newDuplicatesSearch(albums);
 }

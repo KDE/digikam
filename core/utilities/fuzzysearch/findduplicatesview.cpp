@@ -519,7 +519,7 @@ void FindDuplicatesView::slotSetSelectedAlbum(PAlbum* album)
     slotCheckForValidSettings();
 }
 
-void FindDuplicatesView::slotSetSelectedAlbums(QList<PAlbum*> albums)
+void FindDuplicatesView::slotSetSelectedAlbums(const QList<PAlbum*>& albums)
 {
     // @ODD : Why is singleton set to true? resetAlbumsAndTags already clears the selection.
     resetAlbumsAndTags();
@@ -533,7 +533,7 @@ void FindDuplicatesView::slotSetSelectedAlbums(QList<PAlbum*> albums)
     slotCheckForValidSettings();
 }
 
-void FindDuplicatesView::slotSetSelectedAlbums(QList<TAlbum*> albums)
+void FindDuplicatesView::slotSetSelectedAlbums(const QList<TAlbum*>& albums)
 {
     resetAlbumsAndTags();
 

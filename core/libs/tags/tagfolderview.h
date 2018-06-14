@@ -77,7 +77,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalFindDuplicates(QList<TAlbum*>);
+    void signalFindDuplicates(const QList<TAlbum*>& albums);
 
 protected:
 
