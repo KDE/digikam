@@ -53,6 +53,8 @@
 #include "dmessagebox.h"
 #include "dzoombar.h"
 #include "dtrashitemmodel.h"
+#include "facescansettings.h"
+#include "facesdetector.h"
 #include "fileactionmngr.h"
 #include "fileactionprogress.h"
 #include "filtersidebarwidget.h"
@@ -1758,6 +1760,20 @@ void DigikamView::slotImageFindSimilar()
     }
 }
 
+void DigikamView::slotImageScanForFaces()
+{
+    FaceScanSettings settings;
+
+    settings.accuracy               = ApplicationSettings::instance()->getFaceDetectionAccuracy();
+    settings.recognizeAlgorithm     = RecognitionDatabase::RecognizeAlgorithm::LBP;
+    settings.task                   = FaceScanSettings::DetectAndRecognize;
+    settings.alreadyScannedHandling = FaceScanSettings::Rescan;
+    settings.infos                  = selectedInfoList(ApplicationSettings::Tools);
+
+    FacesDetector* const tool = new FacesDetector(settings);
+    tool->start();
+}
+
 void DigikamView::slotEditor()
 {
     const ImageInfoList imageInfoList = selectedInfoList(ApplicationSettings::Tools);
@@ -2602,6 +2618,7 @@ void DigikamView::slotShowContextMenuOnInfo(QContextMenuEvent* event, const Imag
 
     // --------------------------------------------------------
 
+    cmHelper.addAction(QLatin1String("image_scan_for_faces"));
     cmHelper.addAction(QLatin1String("image_find_similar"));
     cmHelper.addStandardActionLightTable();
     cmHelper.addQueueManagerMenu();
