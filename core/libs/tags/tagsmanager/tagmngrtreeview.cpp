@@ -45,6 +45,7 @@ class TagMngrTreeView::Private
 {
 
 public:
+
     explicit Private()
     {
         tagMngr = 0;
@@ -85,7 +86,7 @@ void TagMngrTreeView::contextMenuEvent(QContextMenuEvent* event)
      */
     if (items.isEmpty())
     {
-        QModelIndex root = this->model()->index(0, 0);
+        QModelIndex root = model()->index(0, 0);
         items.append(static_cast<TAlbum*>(albumForIndex(root)));
     }
 
@@ -107,7 +108,7 @@ void TagMngrTreeView::setAlbumFilterModel(TagsManagerFilterModel* const filtered
     albumFilterModel()->setSourceFilterModel(m_tfilteredModel);
 }
 
-void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> albums)
+void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, const QList<TAlbum*>& albums)
 {
     bool isRoot = false;
 
@@ -194,8 +195,8 @@ void TagMngrTreeView::slotExpandSelected()
 
 void TagMngrTreeView::slotExpandTree()
 {
-    QModelIndex root                 = this->model()->index(0, 0);
-    QItemSelectionModel* const model = this->selectionModel();
+    QModelIndex root                 = model()->index(0, 0);
+    QItemSelectionModel* const model = selectionModel();
     QModelIndexList selected         = model->selectedIndexes();
 
     QQueue<QModelIndex> greyNodes;
@@ -206,19 +207,19 @@ void TagMngrTreeView::slotExpandTree()
     {
         QModelIndex current = greyNodes.dequeue();
 
-        if (!(current.isValid()))
+        if (!current.isValid())
         {
             continue;
         }
 
-        if (this->isExpanded(current))
+        if (isExpanded(current))
         {
             int it            = 0;
             QModelIndex child = current.child(it++, 0);
 
             while (child.isValid())
             {
-                if (this->isExpanded(child))
+                if (isExpanded(child))
                 {
                     greyNodes.enqueue(child);
                 }
