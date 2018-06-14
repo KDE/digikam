@@ -28,12 +28,11 @@
 // Local includes
 
 #include "album.h"
+#include "imageinfo.h"
 #include "recognitiondatabase.h"
 
 namespace Digikam
 {
-
-class Album;
 
 class FaceScanSettings
 {
@@ -76,6 +75,9 @@ public:
 
     // albums to scan
     AlbumList                               albums;
+
+    // image infos to scan
+    ImageInfoList                           infos;
 
     ScanTask                                task;
 

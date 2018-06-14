@@ -436,6 +436,12 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->imageScanForFacesAction = new QAction(QIcon::fromTheme(QLatin1String("list-add-user")), i18n("Scan for Faces"), this);
+    connect(d->imageScanForFacesAction, SIGNAL(triggered()), d->view, SLOT(slotImageScanForFaces()));
+    ac->addAction(QLatin1String("image_scan_for_faces"), d->imageScanForFacesAction);
+
+    // -----------------------------------------------------------
+
     d->imageFindSimilarAction = new QAction(QIcon::fromTheme(QLatin1String("tools-wizard")), i18n("Find Similar..."), this);
     d->imageFindSimilarAction->setWhatsThis(i18n("Find similar images using selected item as reference."));
     connect(d->imageFindSimilarAction, SIGNAL(triggered()), d->view, SLOT(slotImageFindSimilar()));
@@ -1073,6 +1079,7 @@ void DigikamApp::initGui()
     d->imagePreviewAction->setEnabled(false);
     d->imageLightTableAction->setEnabled(false);
     d->imageAddLightTableAction->setEnabled(false);
+    d->imageScanForFacesAction->setEnabled(false);
     d->imageFindSimilarAction->setEnabled(false);
     d->imageRenameAction->setEnabled(false);
     d->imageDeleteAction->setEnabled(false);

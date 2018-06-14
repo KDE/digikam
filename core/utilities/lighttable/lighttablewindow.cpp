@@ -439,9 +439,6 @@ void LightTableWindow::setupConnections()
     connect(d->previewView, SIGNAL(signalDeleteItem(ImageInfo)),
             this, SLOT(slotDeleteItem(ImageInfo)));
 
-    connect(d->previewView, SIGNAL(signalSlideShow()),
-            this, SLOT(slotSlideShowAll()));
-
     connect(d->previewView, SIGNAL(signalLeftSlideShowCurrent()),
             this, SLOT(slotLeftSlideShowManualFromCurrent()));
 

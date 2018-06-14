@@ -92,26 +92,17 @@ public:
 
     explicit Private() :
         benchmark(false),
-        total(0),
-        progressValue(0),
-        currentProgressChunk(0),
-        currentScheduled(0),
-        currentFinished(0)
+        useImageInfos(false)
     {
     }
 
     bool                 benchmark;
-
-    int                  total;
+    bool                 useImageInfos;
 
     AlbumPointerList<>   albumTodoList;
+    ImageInfoList        infoTodoList;
     ImageInfoJob         albumListing;
     FacePipeline         pipeline;
-    QMap<Album*, double> relativeProgressValue;
-    double               progressValue;
-    double               currentProgressChunk;
-    int                  currentScheduled;
-    int                  currentFinished;
 };
 
 FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* const parent)
@@ -229,13 +220,19 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));
 
-    if (settings.albums.isEmpty() || settings.task == FaceScanSettings::RetrainAll)
+    if ((settings.albums.isEmpty() && settings.infos.isEmpty()) ||
+         settings.task == FaceScanSettings::RetrainAll)
     {
         d->albumTodoList = AlbumManager::instance()->allPAlbums();
     }
-    else
+    else if (!settings.albums.isEmpty())
     {
         d->albumTodoList = settings.albums;
+    }
+    else
+    {
+        d->infoTodoList  = settings.infos;
+        d->useImageInfos = true;
     }
 }
 
@@ -249,10 +246,22 @@ void FacesDetector::slotStart()
     MaintenanceTool::slotStart();
 
     setThumbnail(QIcon::fromTheme(QLatin1String("edit-image-face-show")).pixmap(22));
+
+    if (d->useImageInfos)
+    {
+        int total = d->infoTodoList.count();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << total;
+
+        setTotalItems(total);
+
+        return slotItemsInfo(d->infoTodoList);
+    }
+
     setUsesBusyIndicator(true);
 
     // get total count, cached by AlbumManager
-    QMap<int, int> palbumCounts, talbumCounts;
+    QMap<int, int> palbumCounts;
+    QMap<int, int> talbumCounts;
     bool hasPAlbums = false;
     bool hasTAlbums = false;
 
@@ -285,49 +294,49 @@ void FacesDetector::slotStart()
         QApplication::restoreOverrideCursor();
     }
 
-    // first, we use the relativeProgressValue map to store absolute counts
+    // first, we use the progressValueMap map to store absolute counts
+
+    QMap<Album*, int> progressValueMap;
 
     foreach(Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {
-            d->relativeProgressValue[album] = palbumCounts.value(album->id());
+            progressValueMap[album] = palbumCounts.value(album->id());
         }
         else
         {
             // this is possibly broken of course because we do not know if images have multiple tags,
             // but there's no better solution without expensive operation
-            d->relativeProgressValue[album] = talbumCounts.value(album->id());
+            progressValueMap[album] = talbumCounts.value(album->id());
         }
     }
 
     // second, calculate (approximate) overall sum
 
-    d->total = 0;
+    int total = 0;
 
-    foreach(double count, d->relativeProgressValue)
+    foreach(int count, progressValueMap)
     {
-        d->total += (int)count;
+        total += count;
     }
 
-    d->total = qMax(1, d->total);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << d->total;
-
-    // third, break absolute to relative values
-
-    for (QMap<Album*, double>::iterator it = d->relativeProgressValue.begin() ; it != d->relativeProgressValue.end() ; ++it)
-    {
-        it.value() /= double(d->total);
-    }
+    total = qMax(1, total);
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << total;
 
     setUsesBusyIndicator(false);
-    setTotalItems(d->total);
+    setTotalItems(total);
 
     slotContinueAlbumListing();
 }
 
 void FacesDetector::slotContinueAlbumListing()
 {
+    if (d->useImageInfos)
+    {
+        return slotDone();
+    }
+
     qCDebug(DIGIKAM_GENERAL_LOG) << d->albumListing.isRunning() << !d->pipeline.hasFinished();
 
     // we get here by the finished signal from both, and want both to have finished to continue

@@ -56,7 +56,7 @@ public:
 
 public:
 
-    explicit ImagePreviewView(QWidget* const parent, Mode mode=IconViewPreview, Album* currAlbum = 0);
+    explicit ImagePreviewView(QWidget* const parent, Mode mode=IconViewPreview, Album* const currAlbum = 0);
     ~ImagePreviewView();
 
     void setImageInfo(const ImageInfo& info     = ImageInfo(),
@@ -74,14 +74,9 @@ Q_SIGNALS:
     void signalNextItem();
     void signalPrevItem();
     void signalDeleteItem();
-    void signalEditItem();
     void signalPreviewLoaded(bool success);
     void signalEscapePreview();
     void signalSlideShowCurrent();
-    void signalSlideShow();
-    void signalInsert2LightTable();
-    void signalInsert2QueueMgr();
-    void signalFindSimilar();
     void signalAddToExistingQueue(int);
 
     void signalGotoAlbumAndItem(const ImageInfo&);
