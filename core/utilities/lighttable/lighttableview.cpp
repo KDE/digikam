@@ -111,9 +111,6 @@ LightTableView::LightTableView(QWidget* const parent)
     connect(d->leftPreview, SIGNAL(contentsMoving(int,int)),
             this, SLOT(slotLeftContentsMoved(int,int)));
 
-    connect(d->leftPreview, SIGNAL(signalSlideShow()),
-            this, SIGNAL(signalSlideShow()));
-
     connect(d->leftPreview, SIGNAL(signalSlideShowCurrent()),
             this, SIGNAL(signalLeftSlideShowCurrent()));
 
@@ -142,9 +139,6 @@ LightTableView::LightTableView(QWidget* const parent)
 
     connect(d->rightPreview, SIGNAL(signalDroppedItems(ImageInfoList)),
             this, SIGNAL(signalRightDroppedItems(ImageInfoList)));
-
-    connect(d->rightPreview, SIGNAL(signalSlideShow()),
-            this, SIGNAL(signalSlideShow()));
 
     connect(d->rightPreview, SIGNAL(signalSlideShowCurrent()),
             this, SIGNAL(signalRightSlideShowCurrent()));
