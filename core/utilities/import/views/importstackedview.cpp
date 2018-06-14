@@ -146,9 +146,6 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     connect(d->importPreviewView, SIGNAL(signalPrevItem()),
             this, SIGNAL(signalPrevItem()));
 
-    //connect(d->importPreviewView, SIGNAL(signalEditItem()),
-            //this, SIGNAL(signalEditItem()));
-
     //FIXME: connect(d->importPreviewView, SIGNAL(signalDeleteItem()),
             //this, SIGNAL(signalDeleteItem()));
 
@@ -167,15 +164,6 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
 
     connect(d->importPreviewView->layout(), SIGNAL(zoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
-
-    //FIXME: connect(d->importPreviewView, SIGNAL(signalInsert2LightTable()),
-            //this, SIGNAL(signalInsert2LightTable()));
-
-    //FIXME: connect(d->importPreviewView, SIGNAL(signalInsert2QueueMgr()),
-            //this, SIGNAL(signalInsert2QueueMgr()));
-
-    //FIXME: connect(d->importPreviewView, SIGNAL(signalFindSimilar()),
-            //this, SIGNAL(signalFindSimilar()));
 
     //FIXME: connect(d->importPreviewView, SIGNAL(signalAddToExistingQueue(int)),
             //this, SIGNAL(signalAddToExistingQueue(int)));

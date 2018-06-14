@@ -16,7 +16,8 @@ Qt5::Concurrent         X       >= 5.6.0     http://code.qt.io/cgit/qt/qtbase.gi
 Qt5::PrintSupport       X       >= 5.6.0     http://code.qt.io/cgit/qt/qtbase.git/
 Qt5::Svg                X       >= 5.6.0     http://code.qt.io/cgit/qt/qtsvg.git/
 Qt5::XmlPatterns        X       >= 5.6.0     http://code.qt.io/cgit/qt/qtxmlpatterns.git/
-Qt5::WebKitWidgets      X       >= 5.6.0     http://code.qt.io/cgit/qt/qtwebkit.git/
+Qt5::WebKitWidgets      X       >= 5.6.0     http://code.qt.io/cgit/qt/qtwebkit.git/            To render web contents                                  Still the default while transitional stage.
+Qt5::WebView           opt      >= 5.6.0     http://code.qt.io/cgit/qt/qtwebview.git/           To render web contents (ENABLE_QWEBENGINE=on).          To replace QWebKitWidgets. Must be the default in the future.
 Qt5::X11Extras         opt      >= 5.6.0     http://code.qt.io/cgit/qt/qtx11extras.git/         For color management support under Linux.
 Qt5::DBus              opt      >= 5.6.0     http://code.qt.io/cgit/qt/qtbase.git/              Optional: only for Linux Desktop.
 Qt5::OpenGL            opt      >= 5.6.0     http://code.qt.io/cgit/qt/qtbase.git/              For Presentation tool.

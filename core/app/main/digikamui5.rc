@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="602" name="digikam" translationDomain="digikam" >
+<gui version="603" name="digikam" translationDomain="digikam" >
 
  <MenuBar>
 
@@ -55,6 +55,7 @@
      <Action name="image_add_to_lighttable" />
      <Action name="image_add_to_current_queue" />
      <Action name="image_add_to_new_queue" />
+     <Action name="image_scan_for_faces" />
      <Action name="image_find_similar" />
    <Separator />
      <Action name="image_write_metadata" />

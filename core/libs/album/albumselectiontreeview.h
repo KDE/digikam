@@ -72,6 +72,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotFindDuplicates();
+    void slotScanForFaces();
     void slotRebuildThumbs();
 
 private:

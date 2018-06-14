@@ -120,7 +120,7 @@ public:
     Album*                 currAlbum;
 };
 
-ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode, Album* currAlbum)
+ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode, Album* const currAlbum)
     : GraphicsDImgView(parent),
       d(new Private())
 {
@@ -353,6 +353,7 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
 
     // --------------------------------------------------------
 
+    cmHelper.addAction(QLatin1String("image_scan_for_faces"));
     cmHelper.addAction(QLatin1String("image_find_similar"));
 
     if (d->mode == IconViewPreview)
