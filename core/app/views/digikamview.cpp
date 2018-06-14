@@ -1756,7 +1756,19 @@ void DigikamView::slotImageScanForFaces()
     settings.infos                  = selectedInfoList(ApplicationSettings::Tools);
 
     FacesDetector* const tool = new FacesDetector(settings);
+
+    connect(tool, SIGNAL(signalComplete()),
+            this, SLOT(slotRefreshImagePreview()));
+
     tool->start();
+}
+
+void DigikamView::slotRefreshImagePreview()
+{
+    if (viewMode() == StackedView::PreviewImageMode)
+    {
+        d->stackedview->imagePreviewView()->reload();
+    }
 }
 
 void DigikamView::slotEditor()

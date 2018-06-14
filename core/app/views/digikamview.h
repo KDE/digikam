@@ -319,6 +319,8 @@ private Q_SLOTS:
 
     void slotAlbumRefreshComplete();
 
+    void slotRefreshImagePreview();
+
     void slotShowContextMenu(QContextMenuEvent* event,
                              const QList<QAction*>& extraGroupingActions = QList<QAction*>());
 
