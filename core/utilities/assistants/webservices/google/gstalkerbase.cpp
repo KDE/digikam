@@ -196,6 +196,7 @@ void GSTalkerBase::slotLinkingFailed()
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to " << m_serviceName << " fail";
     
     emit signalBusy(false);
+    emit signalAuthenticationRefused();
 }
 
 void GSTalkerBase::slotOpenBrowser(const QUrl& url)

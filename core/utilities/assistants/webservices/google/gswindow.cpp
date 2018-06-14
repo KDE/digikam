@@ -157,6 +157,9 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 
             connect(d->talker,SIGNAL(signalAccessTokenObtained()),
                     this,SLOT(slotAccessTokenObtained()));
+            
+            connect(d->talker, SIGNAL(signalAuthenticationRefused()),
+                    this,SLOT(slotAuthenticationRefused()));
 
             connect(d->talker,SIGNAL(signalSetUserName(QString)),
                     this,SLOT(slotSetUserName(QString)));
@@ -210,6 +213,9 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             
             connect(d->gphotoTalker, SIGNAL(signalAccessTokenObtained()),
                     this, SLOT(slotAccessTokenObtained()));
+            
+            connect(d->gphotoTalker, SIGNAL(signalAuthenticationRefused()),
+                    this,SLOT(slotAuthenticationRefused()));
 
             connect(d->gphotoTalker, SIGNAL(signalListAlbumsDone(int,QString,QList<GSFolder>)),
                     this, SLOT(slotListAlbumsDone(int,QString,QList<GSFolder>)));
@@ -1199,6 +1205,13 @@ void GSWindow::slotAccessTokenObtained()
             d->gphotoTalker->getLoggedInUser();
             break;
     }
+}
+
+void GSWindow::slotAuthenticationRefused()
+{
+//     QMessageBox::critical(this, i18nc("@title:window", "Error"),
+//                           i18n("An authentication error occurred: account failed to link"));
+    return;
 }
 
 void GSWindow::slotCreateFolderDone(int code, const QString& msg, const QString& albumId)

@@ -63,6 +63,7 @@ Q_SIGNALS:
     void signalBusy(bool val);
     void signalLinkingSucceeded();
     void signalAccessTokenObtained();
+    void signalAuthenticationRefused();
 
 private Q_SLOTS:
 

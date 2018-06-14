@@ -88,6 +88,7 @@ private Q_SLOTS:
 
     void slotBusy(bool);
     void slotAccessTokenObtained();
+    void slotAuthenticationRefused();
     void slotSetUserName(const QString& msg);
     void slotListAlbumsDone(int,const QString&,const QList <GSFolder>&);
     void slotListPhotosDoneForDownload(int errCode, const QString& errMsg, const QList <GSPhoto>& photosList);
