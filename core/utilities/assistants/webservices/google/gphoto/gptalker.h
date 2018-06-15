@@ -86,7 +86,8 @@ Q_SIGNALS:
     void signalListAlbumsDone(int, const QString&, const QList <GSFolder>&);
     void signalListPhotosDone(int, const QString&, const QList <GSPhoto>&);
     void signalCreateAlbumDone(int, const QString&, const QString&);
-    void signalAddPhotoDone(int, const QString&, const QString&);
+    void signalAddPhotoDone(int, const QString&);
+    void signalUploadPhotoDone(int, const QString&, const QStringList&);
     void signalGetPhotoDone(int errCode, const QString& errMsg,
                             const QByteArray& photoData);
     void signalReadyToUpload();

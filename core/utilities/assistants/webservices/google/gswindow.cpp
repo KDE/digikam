@@ -100,7 +100,8 @@ public:
     QString                       currentAlbumId;
 
     QList< QPair<QUrl, GSPhoto> > transferQueue;
-
+    QList< QPair<QUrl, GSPhoto> > uploadQueue;
+    
     DInfoInterface*               iface;
     DMetadata                     meta;
 };
@@ -170,8 +171,8 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->talker,SIGNAL(signalCreateFolderDone(int,QString)),
                     this,SLOT(slotCreateFolderDone(int,QString)));
 
-            connect(d->talker,SIGNAL(signalAddPhotoDone(int,QString,QString)),
-                    this,SLOT(slotAddPhotoDone(int,QString,QString)));
+            connect(d->talker,SIGNAL(signalAddPhotoDone(int,QString)),
+                    this,SLOT(slotAddPhotoDone(int,QString)));
 
             readSettings();
             buttonStateChange(false);
@@ -223,8 +224,11 @@ GSWindow::GSWindow(DInfoInterface* const iface,
             connect(d->gphotoTalker, SIGNAL(signalCreateAlbumDone(int,QString,QString)),
                     this, SLOT(slotCreateFolderDone(int,QString,QString)));
 
-            connect(d->gphotoTalker, SIGNAL(signalAddPhotoDone(int,QString,QString)),
-                    this, SLOT(slotAddPhotoDone(int,QString,QString)));
+            connect(d->gphotoTalker, SIGNAL(signalAddPhotoDone(int,QString)),
+                    this, SLOT(slotAddPhotoDone(int,QString)));
+            
+            connect(d->gphotoTalker, SIGNAL(signalUploadPhotoDone(int,QString,QStringList)),
+                    this, SLOT(slotUploadPhotoDone(int,QString,QStringList)));
 
             connect(d->gphotoTalker, SIGNAL(signalGetPhotoDone(int,QString,QByteArray)),
                     this, SLOT(slotGetPhotoDone(int,QString,QByteArray)));
@@ -911,7 +915,7 @@ void GSWindow::uploadNextPhoto()
 
     if (!res)
     {
-        slotAddPhotoDone(0, QString::fromLatin1(""), QString::fromLatin1("-1"));
+        slotAddPhotoDone(0, QString::fromLatin1(""));
         return;
     }
 }
@@ -1092,7 +1096,7 @@ void GSWindow::slotGetPhotoDone(int errCode, const QString& errMsg, const QByteA
     downloadNextPhoto();
 }
 
-void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& photoId)
+void GSWindow::slotAddPhotoDone(int err, const QString& msg)
 {
     if (err == 0)
     {
@@ -1125,20 +1129,12 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
     else
     {
         /**
-         * (Trung) google photo now don't get id immediately after addPhoto()
+         * (Trung) Take first item out of transferQueue and append to uploadQueue, 
+         * in order to use it again to write id in slotUploadPhotoDone
          */
-        QUrl fileUrl = d->transferQueue.first().first;
-
-        if (d->meta.supportXmp()                       &&
-            d->meta.canWriteXmp(fileUrl.toLocalFile()) &&
-            d->meta.load(fileUrl.toLocalFile())        
-//             && !photoId.isEmpty()
-           )
-        {
-//             d->meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", photoId);
-            d->meta.save(fileUrl.toLocalFile());
-        }
-
+        QPair<QUrl, GSPhoto> item = d->transferQueue.first();
+        d->uploadQueue.append(item);
+        
         // Remove photo uploaded from the list
         d->widget->imagesList()->removeItemByUrl(d->transferQueue.first().first);
         d->transferQueue.removeFirst();
@@ -1147,6 +1143,44 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg, const QString& phot
         d->widget->progressBar()->setMaximum(d->imagesTotal);
         d->widget->progressBar()->setValue(d->imagesCount);
         uploadNextPhoto();
+    }
+}
+
+void GSWindow::slotUploadPhotoDone(int err, const QString& msg, const QStringList& listPhotoId)
+{
+    if (err == 0)
+    {
+        QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
+                                                     i18n("Warning"),
+                                                     i18n("Failed to finish uploading photo to %1.\n%2\nNo image uploaded to your account.", d->toolName,msg),
+                                                     QMessageBox::Yes);
+        
+        (warn->button(QMessageBox::Yes))->setText(i18n("OK"));
+        
+        d->uploadQueue.clear();
+        d->widget->progressBar()->hide();
+        
+        delete warn;
+    }
+    else
+    {
+        foreach(const QString& photoId, listPhotoId)
+        {
+            QPair<QUrl, GSPhoto> item = d->uploadQueue.takeFirst();
+            
+            QUrl fileUrl = item.first;
+            
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "photoID: " << photoId;
+            
+            if (d->meta.supportXmp()                       &&
+                d->meta.canWriteXmp(fileUrl.toLocalFile()) &&
+                d->meta.load(fileUrl.toLocalFile())        
+                && !photoId.isEmpty())
+            {
+                d->meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", photoId);
+                d->meta.save(fileUrl.toLocalFile());
+            }
+        }        
     }
 }
 

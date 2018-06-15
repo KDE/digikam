@@ -94,7 +94,8 @@ private Q_SLOTS:
     void slotListPhotosDoneForDownload(int errCode, const QString& errMsg, const QList <GSPhoto>& photosList);
     void slotListPhotosDoneForUpload(int errCode, const QString& errMsg, const QList <GSPhoto>& photosList);
     void slotCreateFolderDone(int,const QString& msg, const QString& = QStringLiteral("-1"));
-    void slotAddPhotoDone(int,const QString& msg, const QString&);
+    void slotAddPhotoDone(int,const QString& msg);
+    void slotUploadPhotoDone(int, const QString& msg, const QStringList&);
     void slotGetPhotoDone(int errCode, const QString& errMsg, const QByteArray& photoData);
     void slotTransferCancel();
 

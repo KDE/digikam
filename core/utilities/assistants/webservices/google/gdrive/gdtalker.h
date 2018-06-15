@@ -65,7 +65,7 @@ Q_SIGNALS:
 
     void signalListAlbumsDone(int, const QString&, const QList <GSFolder>&);
     void signalCreateFolderDone(int,const QString& msg);
-    void signalAddPhotoDone(int,const QString& msg, const QString&);
+    void signalAddPhotoDone(int,const QString& msg);
     void signalSetUserName(const QString& msg);
 
 private Q_SLOTS:

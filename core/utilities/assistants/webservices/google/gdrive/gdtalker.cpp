@@ -445,11 +445,12 @@ void GDTalker::parseResponseAddPhoto(const QByteArray& data)
 
     if (!success)
     {
-        emit signalAddPhotoDone(0, i18n("Failed to upload photo"), QString::fromLatin1("-1"));
+        emit signalAddPhotoDone(0, i18n("Failed to upload photo"));
     }
     else
     {
-        emit signalAddPhotoDone(1, QString(), photoId);
+        emit signalAddPhotoDone(1, QString());
+//         emit signalUploadPhotoDone(1, QString(), photoId);
     }
 }
 

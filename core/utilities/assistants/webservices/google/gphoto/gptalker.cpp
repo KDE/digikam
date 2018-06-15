@@ -614,7 +614,7 @@ void GPTalker::slotFinished(QNetworkReply* reply)
     {
         if (d->state == Private::GP_ADDPHOTO)
         {
-            emit signalAddPhotoDone(reply->error(), reply->errorString(), QString::fromLatin1("-1"));
+            emit signalAddPhotoDone(reply->error(), reply->errorString());
         }
         else
         {
@@ -623,7 +623,7 @@ void GPTalker::slotFinished(QNetworkReply* reply)
         }
 
         reply->deleteLater();
-        //return;
+        return;
     }
 
     m_buffer.append(reply->readAll());
@@ -648,7 +648,7 @@ void GPTalker::slotFinished(QNetworkReply* reply)
             parseResponseAddPhoto(m_buffer);
             break;
         case (Private::GP_UPDATEPHOTO):
-            emit signalAddPhotoDone(1, QString::fromLatin1(""), QString::fromLatin1(""));
+            emit signalAddPhotoDone(1, QString::fromLatin1(""));
             break;
         case (Private::GP_UPLOADPHOTO):
             parseResponseUploadPhoto(m_buffer);
@@ -853,7 +853,7 @@ void GPTalker::parseResponseAddPhoto(const QByteArray& data)
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "response " << QString(data);
 
     d->uploadTokenList << QString(data);
-    emit signalAddPhotoDone(1, QLatin1String(""), QLatin1String(""));  
+    emit signalAddPhotoDone(1, QLatin1String(""));  
 }
 
 void GPTalker::parseResponseGetLoggedInUser(const QByteArray& data)
@@ -880,7 +880,35 @@ void GPTalker::parseResponseGetLoggedInUser(const QByteArray& data)
 void GPTalker::parseResponseUploadPhoto(const QByteArray& data)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseUploadPhoto";
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "response " << QString(data);
+    
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "doc " << doc;
+    
+    if(err.error != QJsonParseError::NoError)
+    {
+        emit signalBusy(false);
+        emit signalUploadPhotoDone(0, err.errorString(), QStringList());
+        return;
+    }
+    
+    QJsonArray jsonArray = doc[QLatin1String("newMediaItemResults")].toArray();
+    
+    QStringList listPhotoId;
+    
+    foreach(const QJsonValue& value, jsonArray)
+    {
+        QJsonObject obj = value.toObject();
+        
+        QJsonObject mediaItem = obj[QLatin1String("mediaItem")].toObject();
+        listPhotoId << mediaItem[QLatin1String("id")].toString();
+    }
+    
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list photo Id " << listPhotoId.join(", ");
+    
+    emit signalBusy(false);
+    emit signalUploadPhotoDone(1, QLatin1String(""), listPhotoId);
     
 }
 
