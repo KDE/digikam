@@ -123,10 +123,10 @@ public:
 
 GPTalker::GPTalker(QWidget* const parent)
 : GSTalkerBase(parent, 
-               (QStringList() << QLatin1String("https://www.googleapis.com/auth/plus.login")
-                              << QLatin1String("https://www.googleapis.com/auth/photoslibrary")
-                              << QLatin1String(" https://www.googleapis.com/auth/photoslibrary.sharing")
-                              << QLatin1String("https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata")), 
+               (QStringList() << QLatin1String("https://www.googleapis.com/auth/plus.login") // to get user login (temporary until gphoto supports it officially)
+                              << QLatin1String("https://www.googleapis.com/auth/photoslibrary") // to add and download photo in the library
+                              << QLatin1String("https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata") // to download photo created by digiKam on GPhoto
+                              << QLatin1String(" https://www.googleapis.com/auth/photoslibrary.sharing")), // for shared albums 
                QLatin1String("GooglePhotos")),
       d(new Private)
 {
@@ -623,7 +623,7 @@ void GPTalker::slotFinished(QNetworkReply* reply)
         }
 
         reply->deleteLater();
-        return;
+//         return;
     }
 
     m_buffer.append(reply->readAll());

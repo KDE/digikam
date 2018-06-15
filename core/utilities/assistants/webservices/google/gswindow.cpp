@@ -1135,8 +1135,7 @@ void GSWindow::slotAddPhotoDone(int err, const QString& msg)
         QPair<QUrl, GSPhoto> item = d->transferQueue.first();
         d->uploadQueue.append(item);
         
-        // Remove photo uploaded from the list
-        d->widget->imagesList()->removeItemByUrl(d->transferQueue.first().first);
+        // Remove photo uploaded from the transfer queue
         d->transferQueue.removeFirst();
         d->imagesCount++;
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "In slotAddPhotoSucceeded" << d->imagesCount;
@@ -1166,7 +1165,9 @@ void GSWindow::slotUploadPhotoDone(int err, const QString& msg, const QStringLis
     {
         foreach(const QString& photoId, listPhotoId)
         {
+            // Remove image from upload list and from UI
             QPair<QUrl, GSPhoto> item = d->uploadQueue.takeFirst();
+            d->widget->imagesList()->removeItemByUrl(item.first);
             
             QUrl fileUrl = item.first;
             

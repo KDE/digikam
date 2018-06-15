@@ -5,9 +5,8 @@ TODO:
  ++ Port to O2:
     - updatePhoto(...) when Google Photo API supports that functionality (not yet in v1)
     - Prevent limit of API for uploading (mediaItems:batchCreate) : 50 items by default
-    - Verify if album 'isWriteable' before uploading
     
-    !!!!! Upload now only works with albums created by digiKam
+    !!!!! Upload now only works with albums created by digiKam -> it's normal
     !!!!! Downloaded images won't be updated into digiKam database 
     
     
