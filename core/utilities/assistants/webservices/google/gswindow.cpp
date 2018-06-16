@@ -1246,6 +1246,13 @@ void GSWindow::slotAuthenticationRefused()
 {
 //     QMessageBox::critical(this, i18nc("@title:window", "Error"),
 //                           i18n("An authentication error occurred: account failed to link"));
+    
+    // Clear list albums
+    d->widget->getAlbumsCoB()->clear();
+    
+    // Clear user name
+    d->widget->updateLabels(QString(""));
+    
     return;
 }
 
@@ -1293,27 +1300,41 @@ void GSWindow::slotTransferCancel()
 
 void GSWindow::slotUserChangeRequest()
 {
-    /**
-     * We do not force user to logout
-     * We simply unlink user account and direct use to login page to login new account
-     * (In the future, we may not unlink() user, but let them change account and 
-     * choose which one they want to use)
-     * After unlink(), waiting actively until O2 completely unlink() account, before doOAuth() again
-     */
-    switch (d->service)
+    QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
+                                                    i18n("Warning"),
+                                                    i18n("You will be logged out of your account, "
+                                                    "click \"Continue\" to authenticate for another account"),
+                                                    QMessageBox::Yes | QMessageBox::No);
+    
+    (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
+    (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
+    
+    if (warn->exec() == QMessageBox::Yes)
     {
-        case GoogleService::GDrive:
-            d->talker->unlink();
-            while(d->talker->authenticated());
-            d->talker->doOAuth();
-            break;
-        case GoogleService::GPhotoImport:
-        case GoogleService::GPhotoExport:
-            d->gphotoTalker->unlink();
-            while(d->gphotoTalker->authenticated());
-            d->gphotoTalker->doOAuth();
-            break;
+        /**
+            * We do not force user to logout from their account
+            * We simply unlink user account and direct use to login page to login new account
+            * (In the future, we may not unlink() user, but let them change account and 
+            * choose which one they want to use)
+            * After unlink(), waiting actively until O2 completely unlink() account, before doOAuth() again
+            */
+        switch (d->service)
+        {
+            case GoogleService::GDrive:
+                d->talker->unlink();
+                while(d->talker->authenticated());
+                d->talker->doOAuth();
+                break;
+            case GoogleService::GPhotoImport:
+            case GoogleService::GPhotoExport:
+                d->gphotoTalker->unlink();
+                while(d->gphotoTalker->authenticated());
+                d->gphotoTalker->doOAuth();
+                break;
+        }
     }
+    
+    delete warn;
 }
 
 void GSWindow::buttonStateChange(bool state)

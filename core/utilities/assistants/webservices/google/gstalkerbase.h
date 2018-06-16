@@ -79,7 +79,6 @@ protected:
 
     QStringList    m_scope;
     QString        m_accessToken;
-    QString        m_refreshToken;
 
     QString        m_bearerAccessToken;
     QByteArray     m_buffer;

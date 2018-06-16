@@ -171,6 +171,9 @@ void GSTalkerBase::unlink()
     d->settings->beginGroup(m_serviceName);
     d->settings->remove("");
     d->settings->endGroup();
+    
+    m_bearerAccessToken.clear();
+    m_accessToken.clear();
 }
 
 void GSTalkerBase::slotLinkingSucceeded()
@@ -185,7 +188,6 @@ void GSTalkerBase::slotLinkingSucceeded()
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to " << m_serviceName << " ok";
     
     m_accessToken = d->o2->token();
-    m_refreshToken = d->o2->refreshToken();
     m_bearerAccessToken = QString::fromLatin1("Bearer ") + m_accessToken;
     
     emit signalAccessTokenObtained();
