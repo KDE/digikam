@@ -89,6 +89,7 @@ public:
         netMngr        = 0;
         rootid         = QString::fromLatin1("root");
         rootfoldername = QString::fromLatin1("GoogleDrive Root");
+        listPhotoId    = QStringList();
     }
 
 public:
@@ -99,6 +100,7 @@ public:
     QString                rootfoldername;
     QString                username;
     State                  state;
+    QStringList            listPhotoId;
 
     QNetworkAccessManager* netMngr;
 };
@@ -111,6 +113,9 @@ GDTalker::GDTalker(QWidget* const parent)
 
     connect(d->netMngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
+    
+    connect(this, SIGNAL(signalReadyToUpload()),
+            this, SLOT(slotUploadPhoto()));
 }
 
 GDTalker::~GDTalker()
@@ -335,6 +340,12 @@ void GDTalker::slotFinished(QNetworkReply* reply)
     reply->deleteLater();
 }
 
+void GDTalker::slotUploadPhoto()
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << d->listPhotoId.join(", ");
+    emit signalUploadPhotoDone(1, QString(), d->listPhotoId);
+}
+
 void GDTalker::parseResponseUserName(const QByteArray& data)
 {
     QJsonParseError err;
@@ -449,8 +460,8 @@ void GDTalker::parseResponseAddPhoto(const QByteArray& data)
     }
     else
     {
+        d->listPhotoId << photoId;
         emit signalAddPhotoDone(1, QString());
-//         emit signalUploadPhotoDone(1, QString(), photoId);
     }
 }
 

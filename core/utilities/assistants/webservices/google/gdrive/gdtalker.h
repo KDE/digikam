@@ -65,13 +65,16 @@ Q_SIGNALS:
 
     void signalListAlbumsDone(int, const QString&, const QList <GSFolder>&);
     void signalCreateFolderDone(int,const QString& msg);
-    void signalAddPhotoDone(int,const QString& msg);
     void signalSetUserName(const QString& msg);
+    void signalAddPhotoDone(int,const QString& msg);
+    void signalReadyToUpload();
+    void signalUploadPhotoDone(int, const QString&, const QStringList&);
 
 private Q_SLOTS:
 
     void slotFinished(QNetworkReply* reply);
-
+    void slotUploadPhoto();
+    
 private:
 
     void parseResponseListFolders(const QByteArray& data);

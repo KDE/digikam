@@ -173,6 +173,9 @@ GSWindow::GSWindow(DInfoInterface* const iface,
 
             connect(d->talker,SIGNAL(signalAddPhotoDone(int,QString)),
                     this,SLOT(slotAddPhotoDone(int,QString)));
+            
+            connect(d->talker, SIGNAL(signalUploadPhotoDone(int,QString,QStringList)),
+                    this, SLOT(slotUploadPhotoDone(int,QString,QStringList)));
 
             readSettings();
             buttonStateChange(false);
@@ -744,10 +747,18 @@ void GSWindow::uploadNextPhoto()
         //d->widget->progressBar()->hide();
         d->widget->progressBar()->progressCompleted();
         
-        // Now all raw photos have been added, prepare to upload on user account 
+        /**
+         * Now all raw photos have been added, 
+         * for GPhoto: prepare to upload on user account
+         * for GDrive: get listPhotoId to write metadata and finish upload
+         */ 
         if(d->service == GoogleService::GPhotoExport)
         {
             emit d->gphotoTalker->signalReadyToUpload();
+        }
+        else
+        {
+            emit d->talker->signalReadyToUpload();
         }
         
         return;
