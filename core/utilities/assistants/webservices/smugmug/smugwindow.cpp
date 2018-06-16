@@ -672,13 +672,27 @@ void SmugWindow::slotBusy(bool val)
 void SmugWindow::slotUserChangeRequest(bool anonymous)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request";
-
-    // Unlink user account and wait active until really logged out
-    d->talker->logout();
-    while(d->talker->loggedIn());
     
-    // Re-login
-    authenticate();
+    QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
+                                                 i18n("Warning"),
+                                                 i18n("You will be logged out of your account, "
+                                                 "click \"Continue\" to authenticate for another account"),
+                                                 QMessageBox::Yes | QMessageBox::No);
+    
+    (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
+    (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
+    
+    if (warn->exec() == QMessageBox::Yes)
+    {
+        // Unlink user account and wait active until really logged out
+        d->talker->logout();
+        while(d->talker->loggedIn());
+        
+        // Re-login
+        authenticate();
+    }
+    
+    delete warn;
 
 /*
     if (anonymous)
