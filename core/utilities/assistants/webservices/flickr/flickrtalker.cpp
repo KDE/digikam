@@ -795,7 +795,7 @@ void FlickrTalker::parseResponseMaxSize(const QByteArray& data)
                 {
                     e = details.toElement();
 
-                    if (details.nodeName() == QLatin1String("photos"))
+                    if (details.nodeName() == QLatin1String("videos"))
                     {
                         QDomAttr a = e.attributeNode(QLatin1String("maxupload"));
                         d->maxSize = a.value();
