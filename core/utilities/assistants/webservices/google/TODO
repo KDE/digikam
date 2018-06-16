@@ -7,12 +7,12 @@ TODO:
     - Prevent limit of API for uploading (mediaItems:batchCreate) : 50 items by default
     
     !!!!! Upload now only works with albums created by digiKam -> it's normal
-    !!!!! Downloaded images won't be updated into digiKam database 
-    
+    !!!!! Downloaded images won't show in digiKam view
     
     
     
  ++ Factorization: 
+    - Option to choose which images to import
     - Option to choose size for image downloaded (by GPhoto Import)
     - Like in Flickr 
         -> Button Change Account only add new user accounts
