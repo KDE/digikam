@@ -106,6 +106,9 @@ public:
         loginInProgress = false;
         sessionExpires  = 0;
         netMngr         = 0;
+
+        o2              = 0;
+        settings        = 0;
     }
 
     QDialog*               dialog;
@@ -294,7 +297,7 @@ void FbTalker::authenticate(bool imposed)
     // If user does not login yet (sessionExpires == 0), access token is expired or imposed to login, doOAuth
     // Otherwise, skip authentication by sending signalLinkingSucceeded
     if(d->sessionExpires == 0 || 
-       d->sessionExpires == QDateTime::currentMSecsSinceEpoch() / 1000)
+       d->sessionExpires >= QDateTime::currentMSecsSinceEpoch() / 1000)
     {
         doOAuth();
     }
@@ -398,6 +401,7 @@ void FbTalker::logout()
     emit signalBusy(false);
 }
 
+
 //TODO: Ported to O2
 //----------------------------------------------------------------------------------------------------
 void FbTalker::listAlbums(long long userID)
@@ -490,6 +494,7 @@ void FbTalker::createAlbum(const FbAlbum& album)
     
     QUrl url(QUrl(d->apiURL.arg(d->user.id)
                             .arg("albums")));
+//     url.setQuery(params);
     
     QNetworkRequest netRequest(url);
     netRequest.setHeader(QNetworkRequest::ContentTypeHeader, 
@@ -629,7 +634,7 @@ void FbTalker::slotFinished(QNetworkReply* reply)
                                   i18n("Error"), reply->errorString());
         }
         
-        qCDebug(DIGIKAM_WEBSERVICES_LOG) << reply->error();
+        qCDebug(DIGIKAM_WEBSERVICES_LOG) << reply->error() << " text :"<< QString(reply->readAll());
 
         reply->deleteLater();
         return;
