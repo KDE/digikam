@@ -676,7 +676,7 @@ void SmugWindow::slotUserChangeRequest(bool anonymous)
     QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
                                                  i18n("Warning"),
                                                  i18n("You will be logged out of your account, "
-                                                 "click \"Continue\" to authenticate for another account"),
+                                                 "click \"Continue\" to authenticate for another account."),
                                                  QMessageBox::Yes | QMessageBox::No);
     
     (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));

@@ -476,41 +476,36 @@ void FbWindow::slotBusy(bool val)
 void FbWindow::slotUserLogout()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot User Logout";
+
+    // Logout and wait until it's done
+    d->talker->logout();
+        
+    QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
+                                                    i18n("Warning"),
+                                                    i18n("You will be logged out of your account. If you have logged out of facebook,"
+                                                    "click \"Continue\" to authenticate for another account."),
+                                                    QMessageBox::Yes | QMessageBox::No);
+
+    (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
+    (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
     
-    if (d->talker->loggedIn())
+    if (warn->exec() == QMessageBox::Yes)
     {
-        d->talker->logout();
-        QPointer<QMessageBox> warn = new QMessageBox(QMessageBox::Warning,
-                                                     i18n("Warning"),
-                                                     i18n("After you have been logged out in the browser, "
-                                                     "click \"Continue\" to authenticate for another account"),
-                                                     QMessageBox::Yes | QMessageBox::No);
+        //unlink and wait until it has really finished
+        d->talker->unlink();
+        while(d->talker->loggedIn());
         
-        (warn->button(QMessageBox::Yes))->setText(i18n("Continue"));
-        (warn->button(QMessageBox::No))->setText(i18n("Cancel"));
-        
-        if (warn->exec() == QMessageBox::Yes)
-        {
-            /* 
-             * Access token and session expire now handled in fbtalker.cpp by O2
-             */
-//             d->accessToken.clear();
-//             d->sessionExpires = 0;
-            delete warn;
-        }
-        else
-        {
-            delete warn;
-            return;
-        }
+        // Relogin
+        authenticate(true);
     }
+    
+    delete warn;    
 }
 
 void FbWindow::slotUserChangeRequest()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Slot Change User Request";
     slotUserLogout();
-    authenticate(true);
 }
 
 void FbWindow::slotReloadAlbumsRequest(long long userID)
