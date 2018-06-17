@@ -77,7 +77,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalFindDuplicates(QList<TAlbum*>);
+    void signalFindDuplicates(const QList<TAlbum*>& albums);
 
 protected:
 
@@ -124,7 +124,7 @@ protected:
      * @param cmh       - helper object to create context menu
      * @param albums    - vector of selected albums to be used on menu actions
      */
-    virtual void setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > albums);
+    virtual void setContexMenuItems(ContextMenuHelper& cmh, const QList<TAlbum*>& albums);
 
 private Q_SLOTS:
 

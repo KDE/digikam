@@ -137,6 +137,7 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
 
     cmh.addExportMenu();
     cmh.addSeparator();
+
     if (d->showDeleteFaceTagsAction)
     {
         cmh.addActionDeleteFaceTag(tagModificationHelper(), tag);
@@ -152,6 +153,7 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
             cmh.addActionTagToFaceTag(tagModificationHelper(), tag);
         }
     }
+
     cmh.addActionEditTag(tagModificationHelper(), tag);
 
     connect(&cmh, SIGNAL(signalAddNewTagFromABCMenu(QString)),
@@ -186,11 +188,11 @@ void TagFolderView::slotExpandNode()
         expand(index);
     }
 
-    while(!greyNodes.isEmpty())
+    while (!greyNodes.isEmpty())
     {
         QModelIndex current = greyNodes.dequeue();
 
-        if(!(current.isValid()))
+        if (!current.isValid())
         {
             continue;
         }
@@ -198,7 +200,7 @@ void TagFolderView::slotExpandNode()
         int it            = 0;
         QModelIndex child = current.child(it++, 0);
 
-        while(child.isValid())
+        while (child.isValid())
         {
             expand(child);
             greyNodes.enqueue(child);
@@ -221,11 +223,11 @@ void TagFolderView::slotCollapseNode()
         collapse(index);
     }
 
-    while(!greyNodes.isEmpty())
+    while (!greyNodes.isEmpty())
     {
         QModelIndex current = greyNodes.dequeue();
 
-        if(!(current.isValid()))
+        if (!current.isValid())
         {
             continue;
         }
@@ -233,7 +235,7 @@ void TagFolderView::slotCollapseNode()
         int it            = 0;
         QModelIndex child = current.child(it++, 0);
 
-        while(child.isValid())
+        while (child.isValid())
         {
             collapse(child);
             greyNodes.enqueue(child);
@@ -269,10 +271,9 @@ void TagFolderView::handleCustomContextMenuAction(QAction* action, AlbumPointer<
     }
 }
 
-void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > albums)
+void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, const QList<TAlbum*>& albums)
 {
-
-    if(albums.size() == 1)
+    if (albums.size() == 1)
     {
         addCustomContextMenuActions(cmh, albums.first());
         return;
@@ -295,6 +296,7 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > 
     cmh.addSeparator();
     cmh.addExportMenu();
     cmh.addSeparator();
+
     if (d->showDeleteFaceTagsAction)
     {
         cmh.addActionDeleteFaceTags(tagModificationHelper(), albums);
@@ -303,7 +305,7 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > 
     {
         cmh.addActionDeleteTags(tagModificationHelper(), albums);
         // If one of the selected tags is no face tag, add the action to mark them as face tags.
-        foreach (TAlbum* const tag, albums)
+        foreach(TAlbum* const tag, albums)
         {
             if (!FaceTags::isPerson(tag->id()))
             {

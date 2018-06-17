@@ -169,15 +169,15 @@ void AdvancedMetadataTab::slotAddNewNamespace()
 
     // Setting some default parameters;
 
-    if (d->metadataType->currentData().toString() == QLatin1String(DM_TAG_CONTAINER))
+    if (d->metadataType->currentData().toString() == QString::fromUtf8(DM_TAG_CONTAINER))
     {
         entry.nsType = NamespaceEntry::TAGS;
     }
-    else if (d->metadataType->currentData().toString() == QLatin1String(DM_RATING_CONTAINER))
+    else if (d->metadataType->currentData().toString() == QString::fromUtf8(DM_RATING_CONTAINER))
     {
         entry.nsType = NamespaceEntry::RATING;
     }
-    else if (d->metadataType->currentData().toString() == QLatin1String(DM_COMMENT_CONTAINER))
+    else if (d->metadataType->currentData().toString() == QString::fromUtf8(DM_COMMENT_CONTAINER))
     {
         entry.nsType = NamespaceEntry::COMMENT;
     }
@@ -226,16 +226,16 @@ void AdvancedMetadataTab::slotEditNamespace()
 
 void AdvancedMetadataTab::applySettings()
 {
-    QList<QLatin1String> keys = d->container.mappingKeys();
-    int index                 = 0;
+    QList<QString> keys = d->container.mappingKeys();
+    int index           = 0;
 
-    foreach(const QLatin1String& str, keys)
+    foreach(const QString& str, keys)
     {
         d->container.getReadMapping(str).clear();
         saveModelData(d->models.at(index++), d->container.getReadMapping(str));
     }
 
-    foreach(const QLatin1String& str, keys)
+    foreach(const QString& str, keys)
     {
         d->container.getWriteMapping(str).clear();
         saveModelData(d->models.at(index++), d->container.getWriteMapping(str));
@@ -442,21 +442,21 @@ QList<NamespaceEntry>& AdvancedMetadataTab::getCurrentContainer()
 
     if (currentIndex >= d->metadataTypeSize)
     {
-        return d->container.getWriteMapping(QLatin1String(d->metadataType->currentData().toByteArray()));
+        return d->container.getWriteMapping(QString::fromUtf8(d->metadataType->currentData().toByteArray()));
     }
     else
     {
-        return d->container.getReadMapping(QLatin1String(d->metadataType->currentData().toByteArray()));
+        return d->container.getReadMapping(QString::fromUtf8(d->metadataType->currentData().toByteArray()));
     }
 }
 
 void AdvancedMetadataTab::setModels()
 {
-    QList<QLatin1String> keys = d->container.mappingKeys();
+    QList<QString> keys = d->container.mappingKeys();
 
-    foreach(const QLatin1String& str, keys)
+    foreach(const QString& str, keys)
     {
-        d->metadataType->addItem(i18n(str.data()), str);
+        d->metadataType->addItem(str, str);
     }
 
     d->metadataTypeSize = keys.size();
@@ -468,12 +468,12 @@ void AdvancedMetadataTab::setModels()
 
     int index = 0;
 
-    foreach(const QLatin1String& str, keys)
+    foreach(const QString& str, keys)
     {
         setModelData(d->models.at(index++), d->container.getReadMapping(str));
     }
 
-    foreach(const QLatin1String& str, keys)
+    foreach(const QString& str, keys)
     {
         setModelData(d->models.at(index++), d->container.getWriteMapping(str));
     }
