@@ -273,13 +273,13 @@ void DMetadataSettingsContainer::defaultTagValues()
     tagNs8.subspace         = NamespaceEntry::EXIF;
 
     getReadMapping(QString::fromUtf8(DM_TAG_CONTAINER)) << tagNs1
-                                                       << tagNs2
-                                                       << tagNs3
-                                                       << tagNs4
-                                                       << tagNs5
-                                                       << tagNs6
-                                                       << tagNs7
-                                                       << tagNs8;
+                                                        << tagNs2
+                                                        << tagNs3
+                                                        << tagNs4
+                                                        << tagNs5
+                                                        << tagNs6
+                                                        << tagNs7
+                                                        << tagNs8;
 
     d->writeMappings[QString::fromUtf8(DM_TAG_CONTAINER)] = QList<NamespaceEntry>(getReadMapping(QString::fromUtf8(DM_TAG_CONTAINER)));
 }
