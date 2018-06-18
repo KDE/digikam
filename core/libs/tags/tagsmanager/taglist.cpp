@@ -112,14 +112,14 @@ void TagList::saveSettings()
     QList<ListItem*> currentItems = d->tagListModel->allItems();
     group.writeEntry(QLatin1String("Size"), currentItems.count()-1);
 
-    for (int it = 1; it < currentItems.size(); it++)
+    for (int it = 1 ; it < currentItems.size() ; ++it)
     {
         QList<int> ids = currentItems.at(it)->getTagIds();
         QString saveData;
 
-        for (int jt = 0; jt < ids.size(); jt++)
+        for (int jt = 0 ; jt < ids.size() ; ++jt)
         {
-            saveData.append(QString::number(ids.at(jt)) + QLatin1String(" "));
+            saveData.append(QString::number(ids.at(jt)) + QLatin1Char(' '));
         }
 
         group.writeEntry(QString::fromUtf8("item%1").arg(it-1), saveData);
@@ -144,11 +144,11 @@ void TagList::restoreSettings()
         return;
     }
 
-    for(int it = 0; it < size; it++)
+    for (int it = 0 ; it < size ; ++it)
     {
         QString data = group.readEntry(QString::fromUtf8("item%1").arg(it), "");
 
-        if(data.isEmpty())
+        if (data.isEmpty())
             continue;
 
         QStringList ids = data.split(QLatin1String(" "), QString::SkipEmptyParts);
@@ -159,7 +159,7 @@ void TagList::restoreSettings()
         {
             TAlbum* const item = AlbumManager::instance()->findTAlbum(tagId.toInt());
 
-            if(item)
+            if (item)
             {
                 itemData << item->id();
             }
