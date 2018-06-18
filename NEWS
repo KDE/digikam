@@ -245,4 +245,5 @@ BUGFIXES:
 215 ==> 395144 - When zooming in preview, face tags show on wrong places.
 216 ==> 275671 - Scan single image for faces.
 217 ==> 263347 - Print wizard ignores selected paper size, reverts to A4.
-218 ==> 
+218 ==> 395579 - Only one tag being exported to flickr.
+219 ==> 
