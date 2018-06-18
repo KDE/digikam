@@ -98,7 +98,7 @@ public:
         clientSecret    = QLatin1String("5b0b5cd096e110cd4f4c72f517e2c544");
         apikey          = QLatin1String("400589753481372");
         
-        scope           = QLatin1String("user_photos,publish_pages,manage_pages"); //publish_to_groups,user_friends not neccessary?
+        scope           = QLatin1String("user_photos,publish_pages,manage_pages"); //publish_to_groups,user_friends not necessary?
         
         dialog          = 0;
         parent          = 0;

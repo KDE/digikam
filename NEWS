@@ -245,3 +245,6 @@ BUGFIXES:
 215 ==> 395144 - When zooming in preview, face tags show on wrong places.
 216 ==> 275671 - Scan single image for faces.
 217 ==> 395199 - Uploading large video files to flickr fails.
+218 ==> 348274 - "Change Account" immediately opens web page in browser, before I click Continue
+219 ==>
+

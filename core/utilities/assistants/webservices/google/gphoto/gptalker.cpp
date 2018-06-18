@@ -675,7 +675,7 @@ void GPTalker::slotUploadPhoto()
     QUrl url(d->apiUrl.arg("mediaItems:batchCreate"));
     
     QByteArray data;
-    data += "{";
+    data += '{';
     if(d->albumIdToUpload != QLatin1String("-1"))
     {
         data += "\"albumId\": \"";
@@ -692,32 +692,27 @@ void GPTalker::slotUploadPhoto()
     while(!d->uploadTokenList.isEmpty())
     {
         const QString& uploadToken = d->uploadTokenList.takeFirst(); 
-        data += "{";
-        data += "\"description\": \"\",";
+        data += "{\"description\": \"\",";
         data += "\"simpleMediaItem\": {";
         data += "\"uploadToken\": \"";
         data += uploadToken;
-        data += "\"";
-        data += "}";
-        data += "}";
+        data += "\"}}";
         if(d->uploadTokenList.length() > 0)
         {
-            data += ",";
+            data += ',';
         }
     }
     if(d->previousImageId == QLatin1String("-1"))
     {
-        data += "]";
+        data += ']';
     }
     else
     {
-        data += "],";
-        data += "\"albumPosition\": {";
+        data += "],\"albumPosition\": {";
         data += "\"position\": \"AFTER_MEDIA_ITEM\",";
         data += "\"relativeMediaItemId\": \"";
         data += d->previousImageId.toLatin1();
-        data += "\"";
-        data += "}\r\n";
+        data += "\"}\r\n";
     }
     data += "}\r\n";
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << QString(data);

@@ -321,8 +321,8 @@ QString SmugTalker::createAlbumUrl(const QString& name)
     n = createAlbumName(n);
         
     // Then we replace space with "-"
-    QStringList words = n.split(" ");
-    n = words.join("-");
+    QStringList words = n.split(QLatin1Char(' '));
+    n = words.join(QLatin1Char('-'));
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "url name : " << n;
     
