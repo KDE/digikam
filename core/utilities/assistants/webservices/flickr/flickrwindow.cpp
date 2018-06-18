@@ -513,7 +513,7 @@ void FlickrWindow::slotRemoveAccount()
  */
 QString FlickrWindow::guessSensibleSetName(const QList<QUrl>& urlList) const
 {
-    QMap<QString,int> nrFolderOccurences;
+    QMap<QString, int> nrFolderOccurences;
 
     // Extract last component of directory
     foreach(const QUrl& url, urlList)
@@ -531,7 +531,7 @@ QString FlickrWindow::guessSensibleSetName(const QList<QUrl>& urlList) const
     int totalCount = 0;
     QString name;
 
-    for (QMap<QString,int>::const_iterator it = nrFolderOccurences.constBegin();
+    for (QMap<QString, int>::const_iterator it = nrFolderOccurences.constBegin();
          it != nrFolderOccurences.constEnd() ; ++it)
     {
         totalCount += it.value();
@@ -656,7 +656,7 @@ void FlickrWindow::slotUser1()
 
     d->uploadQueue.clear();
 
-    for (int i = 0; i < d->imglst->listView()->topLevelItemCount(); ++i)
+    for (int i = 0 ; i < d->imglst->listView()->topLevelItemCount() ; ++i)
     {
         FlickrListViewItem* const lvItem = dynamic_cast<FlickrListViewItem*>(d->imglst->listView()->topLevelItem(i));
 
@@ -782,14 +782,14 @@ void FlickrWindow::slotAddPhotoNext()
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Max allowed file size is:"
                                      << d->talker->getMaxAllowedFileSize().toLongLong()
-                                     << " File Size is" << info.size;
+                                     << "File Size is" << info.size;
 
     bool res = d->talker->addPhoto(pathComments.first.toLocalFile(), //the file path
-                                  info,
-                                  d->originalCheckBox->isChecked(),
-                                  d->resizeCheckBox->isChecked(),
-                                  d->dimensionSpinBox->value(),
-                                  d->imageQualitySpinBox->value());
+                                   info,
+                                   d->originalCheckBox->isChecked(),
+                                   d->resizeCheckBox->isChecked(),
+                                   d->dimensionSpinBox->value(),
+                                   d->imageQualitySpinBox->value());
 
     if (!res)
     {
