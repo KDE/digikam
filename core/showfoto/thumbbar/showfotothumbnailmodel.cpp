@@ -140,7 +140,7 @@ QVariant ShowfotoThumbnailModel::data(const QModelIndex& index, int role) const
         QPixmap   pixmap;
         ShowfotoItemInfo info = showfotoItemInfo(index);
         QString url           = info.url.toDisplayString();
-        QString path          = info.folder + QLatin1String("/") + info.name;
+        QString path          = info.folder + QLatin1Char('/') + info.name;
 
         if (info.isNull() || url.isEmpty())
         {
@@ -237,7 +237,7 @@ void ShowfotoThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadi
 
 bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QImage& thumbnail) const
 {
-    QString path = itemInfo.folder + QLatin1String("/") + itemInfo.name;
+    QString path = itemInfo.folder + QLatin1Char('/') + itemInfo.name;
 
     // Try to get preview from Exif data (good quality). Can work with Raw files
 
@@ -281,14 +281,14 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
 
     QFileInfo fi(path);
 
-    if (thumbnail.load(itemInfo.folder + QLatin1String("/") + fi.baseName() + QLatin1String(".thm")))        // Lowercase
+    if (thumbnail.load(itemInfo.folder + QLatin1Char('/') + fi.baseName() + QLatin1String(".thm")))        // Lowercase
     {
         if (!thumbnail.isNull())
         {
             return true;
         }
     }
-    else if (thumbnail.load(itemInfo.folder + QLatin1String("/") + fi.baseName() + QLatin1String(".THM")))   // Uppercase
+    else if (thumbnail.load(itemInfo.folder + QLatin1Char('/') + fi.baseName() + QLatin1String(".THM")))   // Uppercase
     {
         if (!thumbnail.isNull())
         {

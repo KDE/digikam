@@ -1158,7 +1158,7 @@ void AdvPrintPhotoPage::initPhotoSizes(const QSizeF& pageSize)
 
     foreach(const QString& fn, list)
     {
-        parseTemplateFile(dir.absolutePath() + QLatin1String("/") + fn, pageSize);
+        parseTemplateFile(dir.absolutePath() + QLatin1Char('/') + fn, pageSize);
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "photosizes count() ="

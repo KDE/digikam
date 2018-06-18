@@ -90,7 +90,7 @@ bool DTrash::deleteImage(const QString& imageToDelete)
 
     QString destinationInTrash = collection + QLatin1Char('/') + TRASH_FOLDER +
                                  QLatin1Char('/') + FILES_FOLDER + QLatin1Char('/') +
-                                 baseNameForMovingIntoTrash + QLatin1String(".") +
+                                 baseNameForMovingIntoTrash + QLatin1Char('.') +
                                  imageFileInfo.completeSuffix();
 
     if (!imageFile.rename(destinationInTrash))

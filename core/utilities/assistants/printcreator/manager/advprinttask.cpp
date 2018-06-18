@@ -271,10 +271,10 @@ QStringList AdvPrintTask::printPhotosToFile()
 
         QString ext      = d->settings->format();
         QString name     = QLatin1String("output");
-        QString filename = dir  + QLatin1String("/")  +
-                           name + QLatin1String("_")  +
+        QString filename = dir  + QLatin1Char('/')  +
+                           name + QLatin1Char('_')  +
                            QString::number(pageCount) +
-                           QLatin1String(".") + ext;
+                           QLatin1Char('.') + ext;
 
         if (QFile::exists(filename) &&
             d->settings->conflictRule != FileSaveConflictBox::OVERWRITE)
