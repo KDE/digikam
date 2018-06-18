@@ -83,7 +83,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void signalFindDuplicates(PAlbum*);
+    void signalFindDuplicates(PAlbum* album);
 
 private:
 
@@ -130,7 +130,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void signalFindDuplicates(QList<TAlbum*> albums);
+    void signalFindDuplicates(const QList<TAlbum*>& albums);
 
 public:
 
@@ -321,8 +321,8 @@ public:
     const QString getCaption();
 
     void newDuplicatesSearch(PAlbum* album);
-    void newDuplicatesSearch(QList<PAlbum*> albums);
-    void newDuplicatesSearch(QList<TAlbum*> albums);
+    void newDuplicatesSearch(const QList<PAlbum*>& albums);
+    void newDuplicatesSearch(const QList<TAlbum*>& albums);
     void newSimilarSearch(const ImageInfo& imageInfo);
 
 Q_SIGNALS:
@@ -412,7 +412,7 @@ Q_SIGNALS:
 
     void requestFaceMode(bool on);
 
-    void signalFindDuplicates(QList<TAlbum*>);
+    void signalFindDuplicates(const QList<TAlbum*>& albums);
 
 private:
 

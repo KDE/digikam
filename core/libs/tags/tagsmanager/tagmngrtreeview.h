@@ -66,7 +66,7 @@ protected:
      *                             basic actions
      * @param albums             - List of currently selected albums
      */
-    virtual void setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> albums);
+    virtual void setContexMenuItems(ContextMenuHelper& cmh, const QList<TAlbum*>& albums);
 
     /**
      * @brief contextMenuEvent   - Reimplement contextMenuEvent from AbstractAlbumTree

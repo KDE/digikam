@@ -69,9 +69,9 @@ public:
     void setActive(bool val);
     void setImageInfo(const ImageInfo& info);
 
-    void newDuplicatesSearch(PAlbum* const);
-    void newDuplicatesSearch(QList<PAlbum*> const);
-    void newDuplicatesSearch(QList<TAlbum*> const);
+    void newDuplicatesSearch(PAlbum* const album);
+    void newDuplicatesSearch(const QList<PAlbum*>& albums);
+    void newDuplicatesSearch(const QList<TAlbum*>& albums);
 
     virtual void setConfigGroup(const KConfigGroup& group);
     void doLoadState();
