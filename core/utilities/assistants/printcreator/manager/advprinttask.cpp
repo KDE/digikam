@@ -271,8 +271,8 @@ QStringList AdvPrintTask::printPhotosToFile()
 
         QString ext      = d->settings->format();
         QString name     = QLatin1String("output");
-        QString filename = dir  + QLatin1Char('/')  +
-                           name + QLatin1Char('_')  +
+        QString filename = dir  + QLatin1Char('/')    +
+                           name + QLatin1Char('_')    +
                            QString::number(pageCount) +
                            QLatin1Char('.') + ext;
 
