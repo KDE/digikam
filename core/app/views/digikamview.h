@@ -205,7 +205,7 @@ public Q_SLOTS:
     // Search action slots
     void slotNewKeywordSearch();
     void slotNewAdvancedSearch();
-    void slotNewDuplicatesSearch(PAlbum* album);
+    void slotNewDuplicatesSearch(PAlbum* album = 0);
     void slotNewDuplicatesSearch(const QList<PAlbum*>& albums);
     void slotNewDuplicatesSearch(const QList<TAlbum*>& albums);
 
