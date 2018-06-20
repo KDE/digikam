@@ -305,7 +305,7 @@ void TagModificationHelper::slotTagDelete()
     slotTagDelete(boundTag(sender()));
 }
 
-void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
+void TagModificationHelper::slotMultipleTagDel(QList<TAlbum*>& tags)
 {
     QString tagWithChildrens;
     QString tagWithoutImages;
@@ -333,17 +333,17 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
         }
 
         if (children)
-            tagWithChildrens.append(tag->title() + QLatin1String(" "));
+            tagWithChildrens.append(tag->title() + QLatin1Char(' '));
 
         QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(tag->id());
 
         if (!assignedItems.isEmpty())
         {
-            tagWithImages.append(tag->title() + QLatin1String(" "));
+            tagWithImages.append(tag->title() + QLatin1Char(' '));
         }
         else
         {
-            tagWithoutImages.append(tag->title() + QLatin1String(" "));
+            tagWithoutImages.append(tag->title() + QLatin1Char(' '));
         }
 
         /**

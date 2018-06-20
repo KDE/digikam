@@ -56,7 +56,7 @@ namespace Digikam
 
 int CoreDbSchemaUpdater::schemaVersion()
 {
-    return 9;
+    return 10;
 }
 
 int CoreDbSchemaUpdater::filterSettingsVersion()
@@ -679,6 +679,9 @@ bool CoreDbSchemaUpdater::updateToVersion(int targetVersion)
         case 9:
             // Digikam for database version 8 can work with version 9, now using COLLATE utf8_general_ci for MySQL.
             return performUpdateToVersion(QLatin1String("UpdateSchemaFromV7ToV9"), 9, 5);
+        case 10:
+            // Digikam for database version 9 can work with version 10, remove ImageHaarMatrix table and add manualOrder column.
+            return performUpdateToVersion(QLatin1String("UpdateSchemaFromV9ToV10"), 10, 5);
         default:
             qCDebug(DIGIKAM_COREDB_LOG) << "Core database: unsupported update to version" << targetVersion;
             return false;
