@@ -246,5 +246,6 @@ BUGFIXES:
 216 ==> 275671 - Scan single image for faces.
 217 ==> 395199 - Uploading large video files to flickr fails.
 218 ==> 348274 - "Change Account" immediately opens web page in browser, before I click Continue
-219 ==>
-
+219 ==> 263347 - Print wizard ignores selected paper size, reverts to A4.
+220 ==> 395579 - Only one tag being exported to flickr.
+221 ==> 
