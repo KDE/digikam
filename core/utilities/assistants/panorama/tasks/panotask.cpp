@@ -33,7 +33,7 @@ PanoTask::PanoTask(PanoAction action, const QString& workDirPath)
     : action(action),
       isAbortedFlag(false),
       successFlag(false),
-      tmpDir(QUrl::fromLocalFile(workDirPath + QLatin1String("/")))
+      tmpDir(QUrl::fromLocalFile(workDirPath + QLatin1Char('/')))
 {
 }
 

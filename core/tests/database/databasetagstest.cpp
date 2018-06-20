@@ -72,7 +72,7 @@ DatabaseTagsTest::~DatabaseTagsTest()
 void DatabaseTagsTest::initTestCase()
 {
     tempSuffix = QLatin1String("databasetagstest-") + QTime::currentTime().toString();
-    dbPath     = QDir::temp().absolutePath() + QLatin1String("/") + tempSuffix;
+    dbPath     = QDir::temp().absolutePath() + QLatin1Char('/') + tempSuffix;
 
     if (QDir::temp().exists(tempSuffix))
     {

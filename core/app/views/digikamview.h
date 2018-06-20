@@ -184,7 +184,7 @@ public Q_SLOTS:
     void slotAlbumHistoryForward(int steps=1);
     void slotAlbumWriteMetadata();
     void slotAlbumReadMetadata();
-    void slotAlbumSelected(QList<Album*> albums);
+    void slotAlbumSelected(const QList<Album*>& albums);
 
     void slotGotoAlbumAndItem(const ImageInfo& imageInfo);
     void slotGotoDateAndItem(const ImageInfo& imageInfo);
@@ -205,9 +205,9 @@ public Q_SLOTS:
     // Search action slots
     void slotNewKeywordSearch();
     void slotNewAdvancedSearch();
-    void slotNewDuplicatesSearch(PAlbum* album=0);
-    void slotNewDuplicatesSearch(QList<PAlbum*> albums);
-    void slotNewDuplicatesSearch(QList<TAlbum*> albums);
+    void slotNewDuplicatesSearch(PAlbum* album = 0);
+    void slotNewDuplicatesSearch(const QList<PAlbum*>& albums);
+    void slotNewDuplicatesSearch(const QList<TAlbum*>& albums);
 
     // Image action slots
     void slotImageLightTable();

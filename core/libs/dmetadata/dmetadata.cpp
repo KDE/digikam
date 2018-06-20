@@ -269,7 +269,7 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer& settin
     bool iptcSupported = hasIptc();
     bool exivSupported = hasExif();
 
-    for (NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)))
+    for (NamespaceEntry entry : settings.getReadMapping(QString::fromUtf8(DM_COMMENT_CONTAINER)))
     {
         if (entry.isDisabled)
             continue;
@@ -370,10 +370,10 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
     }
 
     QString defaultComment        = comments.value(QLatin1String("x-default")).caption;
-    QList<NamespaceEntry> toWrite = settings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER));
+    QList<NamespaceEntry> toWrite = settings.getReadMapping(QString::fromUtf8(DM_COMMENT_CONTAINER));
 
     if (!settings.unifyReadWrite())
-        toWrite = settings.getWriteMapping(QLatin1String(DM_COMMENT_CONTAINER));
+        toWrite = settings.getWriteMapping(QString::fromUtf8(DM_COMMENT_CONTAINER));
 
     for (NamespaceEntry entry : toWrite)
     {
@@ -672,7 +672,7 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
     bool iptcSupported = hasIptc();
     bool exivSupported = hasExif();
 
-    for (NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_RATING_CONTAINER)))
+    for (NamespaceEntry entry : settings.getReadMapping(QString::fromUtf8(DM_RATING_CONTAINER)))
     {
         if (entry.isDisabled)
             continue;
@@ -829,10 +829,10 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
 
     qCDebug(DIGIKAM_METAENGINE_LOG) << getFilePath() << " ==> Rating:" << rating;
 
-    QList<NamespaceEntry> toWrite = settings.getReadMapping(QLatin1String(DM_RATING_CONTAINER));
+    QList<NamespaceEntry> toWrite = settings.getReadMapping(QString::fromUtf8(DM_RATING_CONTAINER));
 
     if (!settings.unifyReadWrite())
-        toWrite = settings.getWriteMapping(QLatin1String(DM_RATING_CONTAINER));
+        toWrite = settings.getWriteMapping(QString::fromUtf8(DM_RATING_CONTAINER));
 
     for (NamespaceEntry entry : toWrite)
     {
@@ -1242,7 +1242,7 @@ VideoInfoContainer DMetadata::getVideoInformation() const
 bool DMetadata::getImageTagsPath(QStringList& tagsPath,
                                  const DMetadataSettingsContainer& settings) const
 {
-    for (NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_TAG_CONTAINER)))
+    for (NamespaceEntry entry : settings.getReadMapping(QString::fromUtf8(DM_TAG_CONTAINER)))
     {
         if (entry.isDisabled)
             continue;
@@ -1363,10 +1363,10 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
 
     // Set the new Tags path list. This is set, not add-to like setXmpKeywords.
     // Unlike the other keyword fields, we do not need to merge existing entries.
-    QList<NamespaceEntry> toWrite = settings.getReadMapping(QLatin1String(DM_TAG_CONTAINER));
+    QList<NamespaceEntry> toWrite = settings.getReadMapping(QString::fromUtf8(DM_TAG_CONTAINER));
 
     if (!settings.unifyReadWrite())
-        toWrite = settings.getWriteMapping(QLatin1String(DM_TAG_CONTAINER));
+        toWrite = settings.getWriteMapping(QString::fromUtf8(DM_TAG_CONTAINER));
 
     for (NamespaceEntry entry : toWrite)
     {
