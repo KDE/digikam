@@ -125,6 +125,7 @@
                     modificationDate DATETIME,
                     fileSize INTEGER,
                     uniqueHash TEXT,
+                    manualOrder INTEGER,
                     UNIQUE (album, name));
                 </statement>
                 <statement mode="plain">CREATE TABLE ImageInformation
@@ -387,6 +388,11 @@
 
             <dbaction name="getItemURLsInAlbumNoItemSorting">
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID;</statement>
+            </dbaction>
+
+            <dbaction name="changeImages" mode="transaction">
+                 <statement mode="query">INSERT OR IGNORE INTO Images ( id, :fieldList ) VALUES ( :id, :valueList );</statement>
+                 <statement mode="query">UPDATE Images SET :fieldValueList WHERE id=:id;</statement>
             </dbaction>
 
             <dbaction name="changeImageInformation" mode="transaction">
@@ -1133,6 +1139,7 @@
                     modificationDate DATETIME(3),
                     fileSize BIGINT,
                     uniqueHash VARCHAR(128),
+                    manualOrder INTEGER,
                     CONSTRAINT Images_Albums FOREIGN KEY (album) REFERENCES Albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
                     UNIQUE (album, name(255)))
                     ENGINE InnoDB;
@@ -1414,6 +1421,10 @@
 
             <dbaction name="getItemURLsInAlbumNoItemSorting">
                 <statement mode="query">SELECT Albums.relativePath, Images.name FROM Images INNER JOIN Albums ON Albums.id=Images.album WHERE Albums.id=:albumID;</statement>
+            </dbaction>
+
+            <dbaction name="changeImages">
+                <statement mode="query">INSERT INTO Images ( id, :fieldList ) VALUES ( :id, :valueList ) ON DUPLICATE KEY UPDATE :fieldValueList;</statement>
             </dbaction>
 
             <dbaction name="changeImageInformation">
