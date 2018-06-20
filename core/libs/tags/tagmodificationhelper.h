@@ -119,7 +119,7 @@ public Q_SLOTS:
      *
      * @param tags tags to be deleted, without root tag
      */
-    void slotMultipleTagDel(QList<TAlbum* >& tags);
+    void slotMultipleTagDel(QList<TAlbum*>& tags);
 
     /**
      * must use bindMultipleTags and a QAction
@@ -145,7 +145,7 @@ public Q_SLOTS:
      *
      * @param tags face tags to be deleted.
      */
-    void slotMultipleFaceTagDel(QList<TAlbum* >& tags);
+    void slotMultipleFaceTagDel(QList<TAlbum*>& tags);
 
     /**
      * must use bindMultipleTags and a QAction
@@ -169,7 +169,7 @@ public Q_SLOTS:
      *
      * @param tags the tags to mark.
      */
-    void slotMultipleTagsToFaceTags(QList<TAlbum* >& tags);
+    void slotMultipleTagsToFaceTags(QList<TAlbum*>& tags);
 
     /**
      * must use bindMultipleTags and a QAction

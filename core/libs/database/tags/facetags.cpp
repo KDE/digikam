@@ -262,7 +262,7 @@ QMap<QString, QString> FaceTags::identityAttributes(int tagId)
     }
 
     QString faceEngineName = TagsCache::instance()->propertyValue(tagId, TagPropertyName::person());
-    QString tagName   = TagsCache::instance()->tagName(tagId);
+    QString tagName        = TagsCache::instance()->tagName(tagId);
 
     if (tagName != faceEngineName)
     {
@@ -388,7 +388,7 @@ int FaceTags::personParentTag()
     if (!personTags.isEmpty())
     {
         // we find the most toplevel parent tag of a person tag
-        QMultiMap<int,int> tiers;
+        QMultiMap<int, int> tiers;
 
         foreach(int tagId, personTags)
         {
@@ -399,6 +399,7 @@ int FaceTags::personParentTag()
 
         // as a pretty weak criterion, take the largest id which usually corresponds to the latest tag creation.
         std::sort(mosttoplevelTags.begin(), mosttoplevelTags.end());
+
         return TagsCache::instance()->parentTag(mosttoplevelTags.last());
     }
 
@@ -440,7 +441,7 @@ int FaceTags::unconfirmedPersonTagId()
                                         i18nc("The list of recognized faces from the collections but not confirmed", "Unconfirmed"),
                                         personParentTag()));
     TagProperties props(unknownPersonTagId);
-    props.setProperty(TagPropertyName::person(),        QString()); // no name associated
+    props.setProperty(TagPropertyName::person(),            QString()); // no name associated
     props.setProperty(TagPropertyName::unconfirmedPerson(), QString()); // special property
 
     return unknownPersonTagId;

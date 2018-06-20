@@ -616,7 +616,7 @@ void FuzzySearchView::newDuplicatesSearch(PAlbum* const album)
     d->tabWidget->setCurrentIndex(Private::DUPLICATES);
 }
 
-void FuzzySearchView::newDuplicatesSearch(QList<PAlbum*> const albums)
+void FuzzySearchView::newDuplicatesSearch(const QList<PAlbum*>& albums)
 {
     if (!albums.isEmpty())
     {
@@ -626,7 +626,7 @@ void FuzzySearchView::newDuplicatesSearch(QList<PAlbum*> const albums)
     d->tabWidget->setCurrentIndex(Private::DUPLICATES);
 }
 
-void FuzzySearchView::newDuplicatesSearch(QList<TAlbum*> const albums)
+void FuzzySearchView::newDuplicatesSearch(const QList<TAlbum*>& albums)
 {
     if (!albums.isEmpty())
     {

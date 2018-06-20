@@ -1024,13 +1024,13 @@ void DigikamView::slotNewDuplicatesSearch(PAlbum* album)
     d->fuzzySearchSideBar->newDuplicatesSearch(album);
 }
 
-void DigikamView::slotNewDuplicatesSearch(QList<PAlbum*> albums)
+void DigikamView::slotNewDuplicatesSearch(const QList<PAlbum*>& albums)
 {
     slotLeftSideBarActivate(d->fuzzySearchSideBar);
     d->fuzzySearchSideBar->newDuplicatesSearch(albums);
 }
 
-void DigikamView::slotNewDuplicatesSearch(QList<TAlbum*> albums)
+void DigikamView::slotNewDuplicatesSearch(const QList<TAlbum*>& albums)
 {
     slotLeftSideBarActivate(d->fuzzySearchSideBar);
     d->fuzzySearchSideBar->newDuplicatesSearch(albums);
@@ -1096,7 +1096,7 @@ void DigikamView::getBackwardHistory(QStringList& titles)
 {
     d->albumHistory->getBackwardHistory(titles);
 
-    for (int i = 0; i < titles.size(); ++i)
+    for (int i = 0 ; i < titles.size() ; ++i)
     {
         titles[i] = d->userPresentableAlbumTitle(titles.at(i));
     }
@@ -1106,7 +1106,7 @@ void DigikamView::getForwardHistory(QStringList& titles)
 {
     d->albumHistory->getForwardHistory(titles);
 
-    for (int i = 0; i < titles.size(); ++i)
+    for (int i = 0 ; i < titles.size() ; ++i)
     {
         titles[i] = d->userPresentableAlbumTitle(titles.at(i));
     }
@@ -1198,7 +1198,7 @@ void DigikamView::slotSelectAlbum(const QUrl& url)
     d->albumFolderSideBar->setCurrentAlbum(album);
 }
 
-void DigikamView::slotAlbumSelected(QList<Album*> albums)
+void DigikamView::slotAlbumSelected(const QList<Album*>& albums)
 {
     emit signalNoCurrentItem();
     emit signalAlbumSelected(0);

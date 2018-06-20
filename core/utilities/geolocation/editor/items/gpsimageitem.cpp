@@ -737,7 +737,8 @@ QString GPSImageItem::saveChanges()
             }
             else
             {
-                success = meta->setGPSInfo(static_cast<const double* const>(0), p.latitude, p.longitude);
+                success = meta->setGPSInfo(const_cast<double*>(static_cast<double*>(0)),
+                                           p.latitude, p.longitude);
             }
 
             // write all other GPS information here too

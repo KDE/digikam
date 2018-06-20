@@ -175,13 +175,13 @@ public:
     bool unifyReadWrite() const;
     void setUnifyReadWrite(bool b);
 
-    void addMapping(const QLatin1String& key);
+    void addMapping(const QString& key);
 
-    QList<NamespaceEntry>& getReadMapping(const QLatin1String& key) const;
+    QList<NamespaceEntry>& getReadMapping(const QString& key) const;
 
-    QList<NamespaceEntry>& getWriteMapping(const QLatin1String& key) const;
+    QList<NamespaceEntry>& getWriteMapping(const QString& key) const;
 
-    QList<QLatin1String> mappingKeys() const;
+    QList<QString> mappingKeys() const;
 
 private:
 

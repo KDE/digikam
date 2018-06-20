@@ -685,7 +685,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const QUrl& fileUrl, 
 {
     SolidVolumeInfo volume;
     // v.path is specified to have a trailing slash. path needs one as well.
-    QString path    = fileUrl.toLocalFile() + QLatin1String("/");
+    QString path    = fileUrl.toLocalFile() + QLatin1Char('/');
     int volumeMatch = 0;
 
     //FIXME: Network shares! Here we get only the volume of the mount path...

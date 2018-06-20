@@ -318,7 +318,7 @@ void DBWindow::uploadNextPhoto()
     }
 
     QString imgPath = d->transferQueue.first().toLocalFile();
-    QString temp = d->currentAlbumName + QLatin1String("/");
+    QString temp = d->currentAlbumName + QLatin1Char('/');
 
     bool res = d->talker->addPhoto(imgPath,
                                    temp,
