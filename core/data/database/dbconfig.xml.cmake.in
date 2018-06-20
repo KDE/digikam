@@ -986,6 +986,7 @@
                         UPDATE Tags SET icon=null      WHERE icon=OLD.id;
                     END;
                 </statement>
+                <statement mode="plain">ALTER TABLE Images ADD manualOrder INTEGER;</statement>
             </dbaction>
 
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">
@@ -2534,6 +2535,7 @@
 
             <dbaction name="UpdateSchemaFromV9ToV10" mode="transaction">
                 <statement mode="plain">DROP TABLE IF EXISTS ImageHaarMatrix;</statement>
+                <statement mode="plain">ALTER TABLE Images ADD manualOrder INTEGER;</statement>
             </dbaction>
 
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">
