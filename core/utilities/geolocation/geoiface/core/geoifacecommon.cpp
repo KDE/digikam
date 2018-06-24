@@ -62,30 +62,30 @@ public:
     {
         QStringList markerColors;
         markerColors
-            << QLatin1String( "00ff00" )
-            << QLatin1String( "00ffff" )
-            << QLatin1String( "ff0000" )
-            << QLatin1String( "ff7f00" )
-            << QLatin1String( "ffff00" );
+            << QLatin1String("00ff00")
+            << QLatin1String("00ffff")
+            << QLatin1String("ff0000")
+            << QLatin1String("ff7f00")
+            << QLatin1String("ffff00");
 
         QStringList stateNames;
         stateNames
-            << QLatin1String( "" )
-            << QLatin1String( "-selected" )
-            << QLatin1String( "-someselected" );
+            << QLatin1String("")
+            << QLatin1String("-selected")
+            << QLatin1String("-someselected");
 
         for (QStringList::const_iterator it = markerColors.constBegin() ; it != markerColors.constEnd() ; ++it)
         {
             for (QStringList::const_iterator sit = stateNames.constBegin() ; sit != stateNames.constEnd() ; ++sit)
             {
                 const QString pixmapName  = *it + *sit;
-                const QUrl markerUrl      = GeoIfaceGlobalObject::instance()->locateDataFile(QString::fromLatin1( "marker-%1.png").arg(pixmapName));
+                const QUrl markerUrl      = GeoIfaceGlobalObject::instance()->locateDataFile(QString::fromLatin1("marker-%1.png").arg(pixmapName));
                 markerPixmaps[pixmapName] = QPixmap(markerUrl.toLocalFile());
             }
         }
 
-        const QUrl markerIconUrl                            = GeoIfaceGlobalObject::instance()->locateDataFile(QLatin1String( "marker-icon-16x16.png" ));
-        markerPixmaps[QLatin1String( "marker-icon-16x16" )] = QPixmap(markerIconUrl.toLocalFile());
+        const QUrl markerIconUrl                          = GeoIfaceGlobalObject::instance()->locateDataFile(QLatin1String("marker-icon-16x16.png"));
+        markerPixmaps[QLatin1String("marker-icon-16x16")] = QPixmap(markerIconUrl.toLocalFile());
     }
 
 public:
@@ -129,8 +129,9 @@ QPixmap GeoIfaceGlobalObject::getStandardMarkerPixmap()
 
 QUrl GeoIfaceGlobalObject::locateDataFile(const QString& filename)
 {
-    const QUrl dataFile = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/geoiface/") + filename));
-    qCDebug(DIGIKAM_GEOIFACE_LOG) << "located data: " << dataFile;
+    const QUrl dataFile = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                                     QLatin1String("digikam/geoiface/") + filename));
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << "located data:" << dataFile;
     return dataFile;
 }
 
@@ -182,7 +183,7 @@ bool GeoIfaceHelperParseXYStringToPoint(const QString& xyString, QPoint* const p
     if (valid)
     {
         pointStrings = myXYString.mid(1, myXYString.length()-2).split(QLatin1Char(','));
-        valid        = ( pointStrings.size() == 2 );
+        valid        = (pointStrings.size() == 2);
     }
 
     if (valid)
@@ -225,7 +226,7 @@ bool GeoIfaceHelperParseBoundsString(const QString& boundsString,
     const QString myBoundsString = boundsString.trimmed();
 
     // check for minimum length
-    bool valid                   =  myBoundsString.size() >= 13;
+    bool valid                   = (myBoundsString.size() >= 13);
     valid                       &= myBoundsString.startsWith(QLatin1Char('(')) && myBoundsString.endsWith(QLatin1Char(')'));
 
     if (valid)
@@ -322,23 +323,23 @@ bool GeoIfaceGlobalObject::getInternalWidgetFromPool(const MapBackend* const map
     {
         const GeoIfaceInternalWidgetInfo& info = d->internalMapWidgetsPool.at(i);
 
-        if (info.backendName!=requestingBackendName)
+        if (info.backendName != requestingBackendName)
         {
             continue;
         }
 
-        if ((info.state.testFlag(GeoIfaceInternalWidgetInfo::InternalWidgetReleased)&&(bestReleasedWidget<0)))
+        if ((info.state.testFlag(GeoIfaceInternalWidgetInfo::InternalWidgetReleased)&&(bestReleasedWidget < 0)))
         {
             bestReleasedWidget = i;
             break;
         }
 
-        if ((info.state.testFlag(GeoIfaceInternalWidgetInfo::InternalWidgetUndocked)&&(bestUndockedWidget<0)))
+        if ((info.state.testFlag(GeoIfaceInternalWidgetInfo::InternalWidgetUndocked)&&(bestUndockedWidget < 0)))
         {
             bestUndockedWidget = i;
         }
 
-        if ((info.state.testFlag(GeoIfaceInternalWidgetInfo::InternalWidgetStillDocked)&&(bestDockedWidget<0)))
+        if ((info.state.testFlag(GeoIfaceInternalWidgetInfo::InternalWidgetStillDocked)&&(bestDockedWidget < 0)))
         {
             bestDockedWidget = i;
         }
@@ -414,8 +415,8 @@ void GeoIfaceGlobalObject::clearWidgetPool()
 void GeoIface_assert(const char* const condition, const char* const filename, const int lineNumber)
 {
     const QString debugString = QString::fromLatin1("ASSERT: %1 - %2:%3")
-        .arg(QLatin1String( condition ))
-        .arg(QLatin1String( filename ))
+        .arg(QLatin1String(condition))
+        .arg(QLatin1String(filename))
         .arg(lineNumber);
 
     qCDebug(DIGIKAM_GEOIFACE_LOG) << debugString;
