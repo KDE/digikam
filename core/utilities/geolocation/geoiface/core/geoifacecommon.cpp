@@ -300,7 +300,7 @@ void GeoIfaceGlobalObject::removeMyInternalWidgetFromPool(const MapBackend* cons
 {
     for (int i = 0 ; i < d->internalMapWidgetsPool.count() ; ++i)
     {
-        if (d->internalMapWidgetsPool.at(i).currentOwner == static_cast<const QObject* const>(mapBackend))
+        if (d->internalMapWidgetsPool.at(i).currentOwner.data() == mapBackend)
         {
             d->internalMapWidgetsPool.takeAt(i);
             break;
