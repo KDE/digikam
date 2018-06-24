@@ -248,4 +248,5 @@ BUGFIXES:
 218 ==> 348274 - "Change Account" immediately opens web page in browser, before I click Continue
 219 ==> 263347 - Print wizard ignores selected paper size, reverts to A4.
 220 ==> 395579 - Only one tag being exported to flickr.
-221 ==> 
+221 ==> 395790 - Rename with nested tags breaks due to | bar character.
+222 ==> 

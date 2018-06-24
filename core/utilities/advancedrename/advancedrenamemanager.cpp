@@ -32,6 +32,7 @@
 #include <QList>
 #include <QMap>
 #include <QFileInfo>
+#include <QStorageInfo>
 
 // Local includes
 
@@ -468,8 +469,17 @@ int AdvancedRenameManager::indexOfFileGroup(const QString& filename)
 QString AdvancedRenameManager::newName(const QString& filename) const
 {
     // For the Windows file system, we need to replace unsupported characters.
+    QStorageInfo info(QFileInfo(filename).path());
+
     QString newName = d->renamedFiles.value(filename, filename);
-    newName.replace(QLatin1Char(':'), QLatin1Char('-'));
+    QString sysType = QString::fromLatin1(info.fileSystemType()).toUpper();
+
+    if (sysType.contains(QLatin1String("FAT")) ||
+        sysType.contains(QLatin1String("NTFS")))
+    {
+        QRegExp regexp(QLatin1String("[?*<> ,\\+:=/\";|]"));
+        newName.replace(regexp, QLatin1String("_"));
+    }
 
     return newName;
 }
