@@ -420,7 +420,6 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
         return;
     }
 
-    d->currentImageInfo = ImageInfo();
     d->currentImageInfo = imageInfoCurrent;
 
     // Note: Addition is asynchronous, indexes not yet available
