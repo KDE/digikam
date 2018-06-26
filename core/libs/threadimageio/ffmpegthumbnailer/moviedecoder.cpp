@@ -49,8 +49,14 @@ void MovieDecoder::initialize(const QString& filename)
     d->lastWidth  = -1;
     d->lastHeight = -1;
     d->lastPixfmt = AV_PIX_FMT_NONE;
+
+#if LIBAVFORMAT_VERSION_MAJOR < 58
     av_register_all();
+#endif
+
+#if LIBAVCODEC_VERSION_MAJOR < 58
     avcodec_register_all();
+#endif
 
     if (avformat_open_input(&d->pFormatContext,
                             filename.toUtf8().data(), NULL, NULL) != 0)
