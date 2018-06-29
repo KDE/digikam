@@ -249,4 +249,5 @@ BUGFIXES:
 219 ==> 263347 - Print wizard ignores selected paper size, reverts to A4.
 220 ==> 395579 - Only one tag being exported to flickr.
 221 ==> 395790 - Rename with nested tags breaks due to | bar character.
-222 ==> 
+222 ==> 395875 - ImageEditor window is blank when opened a second time.
+223 ==> 

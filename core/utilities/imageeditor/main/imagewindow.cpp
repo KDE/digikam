@@ -167,21 +167,11 @@ void ImageWindow::closeEvent(QCloseEvent* e)
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroupName());
-    saveMainWindowSettings(group);
-    saveSettings();
-
     d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->saveState();
-
-    if (!testAttribute(Qt::WA_DeleteOnClose))
-    {
-        hide();
-        e->ignore();
-        return;
-    }
+    saveSettings();
 
     DXmlGuiWindow::closeEvent(e);
-    e->accept();
 }
 
 void ImageWindow::showEvent(QShowEvent*)

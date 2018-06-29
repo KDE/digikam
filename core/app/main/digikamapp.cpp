@@ -147,7 +147,7 @@ DigikamApp::DigikamApp()
     }
 
     AlbumManager::instance()->startScan();
-    
+
     // Setting the initial menu options after all tools have been loaded
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
     d->view->slotAlbumSelected(albumList);
@@ -333,7 +333,7 @@ void DigikamApp::show()
     }
 
     // Start the Media Server if necessary
-    
+
     DMediaServerMngr::instance()->loadAtStartup();
 }
 
@@ -368,7 +368,6 @@ void DigikamApp::closeEvent(QCloseEvent* e)
         MetadataHubMngr::instance()->requestShutDown();
 
     DXmlGuiWindow::closeEvent(e);
-    e->accept();
 }
 
 bool DigikamApp::queryClose()
