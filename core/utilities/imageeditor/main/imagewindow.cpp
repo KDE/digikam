@@ -173,6 +173,13 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->saveState();
 
+    if (!testAttribute(Qt::WA_DeleteOnClose))
+    {
+        hide();
+        e->ignore();
+        return;
+    }
+
     DXmlGuiWindow::closeEvent(e);
     e->accept();
 }
