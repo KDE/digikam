@@ -25,9 +25,12 @@
 
 // Qt includes
 
-#include <QPixmap>
-#include <QPersistentModelIndex>
+#include <QIcon>
 #include <QTimer>
+#include <QPixmap>
+#include <QMimeType>
+#include <QMimeDatabase>
+#include <QPersistentModelIndex>
 
 // KDE includes
 
@@ -127,6 +130,16 @@ QVariant DTrashItemModel::data(const QModelIndex& index, int role) const
 
         if (pixmapForItem(thumbPath, pix))
         {
+            if (pix.isNull())
+            {
+                QMimeType mimeType = QMimeDatabase().mimeTypeForFile(item.trashPath);
+
+                if (mimeType.isValid())
+                {
+                    pix = QIcon::fromTheme(mimeType.genericIconName()).pixmap(128);
+                }
+            }
+
             return pix;
         }
         else
