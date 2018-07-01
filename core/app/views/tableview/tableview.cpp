@@ -636,6 +636,7 @@ void TableView::rename()
             QPointer<AdvancedRenameProcessDialog> dlg = new AdvancedRenameProcessDialog(newNamesList, this);
             dlg->exec();
 
+            s->tableViewModel->scheduleResort();
             urls = dlg->failedUrls();
             delete dlg;
         }
