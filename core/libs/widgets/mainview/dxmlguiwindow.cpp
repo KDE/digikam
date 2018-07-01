@@ -223,7 +223,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
 #ifdef HAVE_KSANE
     m_ksaneAction              = 0;
 #endif
-    
+
     installEventFilter(this);
 }
 
@@ -244,10 +244,18 @@ QString DXmlGuiWindow::configGroupName() const
 
 void DXmlGuiWindow::closeEvent(QCloseEvent* e)
 {
-    if(fullScreenIsActive())
+    if (fullScreenIsActive())
         slotToggleFullScreen(false);
 
+    if (!testAttribute(Qt::WA_DeleteOnClose))
+    {
+        setVisible(false);
+        e->ignore();
+        return;
+    }
+
     KXmlGuiWindow::closeEvent(e);
+    e->accept();
 }
 
 void DXmlGuiWindow::setFullScreenOptions(int options)

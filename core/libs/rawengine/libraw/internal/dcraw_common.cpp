@@ -62,9 +62,14 @@ static size_t local_strnlen(const char *s, size_t n)
 #ifdef LIBRAW_LIBRARY_BUILD
 static int stread(char *buf, size_t len, LibRaw_abstract_datastream *fp)
 {
- int r = fp->read(buf,len,1);
- buf[len-1] = 0;
- return r;
+  if(len>0)
+  {
+    int r = fp->read(buf, len, 1);
+    buf[len - 1] = 0;
+    return r;
+  }
+  else
+    return 0;
 }
 #define stmread(buf,maxlen,fp) stread(buf,MIN(maxlen,sizeof(buf)),fp)
 #endif
@@ -11943,7 +11948,7 @@ void CLASS parse_ciff (int offset, int length, int depth)
         FORC4
         {
           ushort q = get2();
-          cam_mul[c ^ (c >> 1)] = q? 1024.0 / get2() : 1024;
+          cam_mul[c ^ (c >> 1)] = 1024.0/ MAX(1,q);
         }
 	if (!wbi) cam_mul[0] = -1;	/* use my auto white balance */
       } else if (!cam_mul[0]) {

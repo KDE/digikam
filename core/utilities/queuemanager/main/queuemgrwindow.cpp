@@ -163,8 +163,8 @@ void QueueMgrWindow::closeEvent(QCloseEvent* e)
     }
 
     writeSettings();
+
     DXmlGuiWindow::closeEvent(e);
-    e->accept();
 }
 
 void QueueMgrWindow::setupUserArea()
