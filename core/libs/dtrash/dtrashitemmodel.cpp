@@ -257,7 +257,9 @@ void DTrashItemModel::removeItems(const QModelIndexList& indexes)
             continue;
 
         const DTrashItemInfo& item = d->data[index.row()];
+
         d->failedThumbnails.removeAll(item.collectionPath);
+        d->failedThumbnails.removeAll(item.trashPath);
 
         beginRemoveRows(QModelIndex(), index.row(), index.row());
         removeRow(index.row());
