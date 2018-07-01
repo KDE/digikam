@@ -964,11 +964,9 @@ void ImportUI::refreshFreeSpace()
 
 void ImportUI::closeEvent(QCloseEvent* e)
 {
-    DXmlGuiWindow::closeEvent(e);
-
     if (dialogClosed())
     {
-        e->accept();
+        DXmlGuiWindow::closeEvent(e);
     }
     else
     {

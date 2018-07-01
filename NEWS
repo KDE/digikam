@@ -16,7 +16,7 @@ Database     : New video metadata parser based on ffmpeg to populate database.
 Search       : Add video support to find files based on properties registered on database.
 
 General      : Add QWebEngine support.
-General      : Update internal Libraw to last 0.18.12.
+General      : Update internal Libraw to last 0.18.13.
 General      : Fix all Krazy static analyzer reports.
 
 Tags         : Add possibility to merge tags by drag & drop.
@@ -248,4 +248,6 @@ BUGFIXES:
 218 ==> 348274 - "Change Account" immediately opens web page in browser, before I click Continue
 219 ==> 263347 - Print wizard ignores selected paper size, reverts to A4.
 220 ==> 395579 - Only one tag being exported to flickr.
-221 ==> 
+221 ==> 395790 - Rename with nested tags breaks due to | bar character.
+222 ==> 395875 - ImageEditor window is blank when opened a second time.
+223 ==> 

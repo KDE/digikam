@@ -208,7 +208,9 @@ bool DMetadata::loadUsingFFmpeg(const QString& filePath)
 
     qCDebug(DIGIKAM_METAENGINE_LOG) << "Parse metadada with FFMpeg:" << filePath;
 
+#if LIBAVFORMAT_VERSION_MAJOR < 58
     av_register_all();
+#endif
 
     AVFormatContext* fmt_ctx = avformat_alloc_context();
     int ret                  = avformat_open_input(&fmt_ctx, filePath.toUtf8().data(), NULL, NULL);
