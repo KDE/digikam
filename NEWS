@@ -250,4 +250,5 @@ BUGFIXES:
 220 ==> 395579 - Only one tag being exported to flickr.
 221 ==> 395790 - Rename with nested tags breaks due to | bar character.
 222 ==> 395875 - ImageEditor window is blank when opened a second time.
-223 ==> 
+223 ==> 385822 - [Suggested feature] Re-use thumbnails from the database for the items in Trash.
+224 ==> 

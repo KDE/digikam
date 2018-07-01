@@ -37,7 +37,6 @@
 
 #include "digikam_debug.h"
 #include "thumbnailsize.h"
-#include "thumbnailloadthread.h"
 #include "iojobsmanager.h"
 
 namespace Digikam
@@ -61,9 +60,13 @@ public:
 
     int                  thumbSize;
     int                  sortColumn;
+
     Qt::SortOrder        sortOrder;
+
     IOJobsThread*        itemsLoadingThread;
     ThumbnailLoadThread* thumbnailThread;
+
+    QList<QString>       failedThumbnails;
     DTrashItemInfoList   data;
 };
 
@@ -73,9 +76,10 @@ DTrashItemModel::DTrashItemModel(QObject* const parent)
 {
     qRegisterMetaType<DTrashItemInfo>("DTrashItemInfo");
     d->thumbnailThread = new ThumbnailLoadThread;
+    d->thumbnailThread->setSendSurrogatePixmap(false);
 
     connect(d->thumbnailThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
-            this, SLOT(refreshThumbnails()));
+            this, SLOT(refreshThumbnails(LoadingDescription,QPixmap)));
 }
 
 DTrashItemModel::~DTrashItemModel()
@@ -110,8 +114,18 @@ QVariant DTrashItemModel::data(const QModelIndex& index, int role) const
     if (role == Qt::DecorationRole && index.column() == 0)
     {
         QPixmap pix;
+        QString thumbPath;
 
-        if (pixmapForItem(item.trashPath, pix))
+        if (!d->failedThumbnails.contains(item.collectionPath))
+        {
+            thumbPath = item.collectionPath;
+        }
+        else
+        {
+            thumbPath = item.trashPath;
+        }
+
+        if (pixmapForItem(thumbPath, pix))
         {
             return pix;
         }
@@ -229,6 +243,9 @@ void DTrashItemModel::removeItems(const QModelIndexList& indexes)
         if (!index.isValid())
             continue;
 
+        const DTrashItemInfo& item = d->data[index.row()];
+        d->failedThumbnails.removeAll(item.collectionPath);
+
         beginRemoveRows(QModelIndex(), index.row(), index.row());
         removeRow(index.row());
         d->data.removeAt(index.row());
@@ -248,8 +265,16 @@ void DTrashItemModel::refreshLayout()
     layoutChanged();
 }
 
-void DTrashItemModel::refreshThumbnails()
+void DTrashItemModel::refreshThumbnails(const LoadingDescription& desc, const QPixmap& pix)
 {
+    if (pix.isNull())
+    {
+        if (!d->failedThumbnails.contains(desc.filePath))
+        {
+            d->failedThumbnails << desc.filePath;
+        }
+    }
+
     const QModelIndex topLeft     = index(0, 0);
     const QModelIndex bottomRight = index(rowCount(QModelIndex())-1, 0);
     dataChanged(topLeft, bottomRight);
@@ -257,6 +282,7 @@ void DTrashItemModel::refreshThumbnails()
 
 void DTrashItemModel::clearCurrentData()
 {
+    d->failedThumbnails.clear();
     beginResetModel();
     d->data.clear();
     endResetModel();
