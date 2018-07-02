@@ -107,9 +107,7 @@ private Q_SLOTS:
     void slotsixteenBitsImageToggled(bool);
     void slotUnclipColorActivated(int);
     void slotNoiseReductionChanged(int);
-    void slotCACorrectionToggled(bool);
     void slotExposureCorrectionToggled(bool);
-    void slotAutoCAToggled(bool);
     void slotInputColorSpaceChanged(int);
     void slotOutputColorSpaceChanged(int);
     void slotRAWQualityChanged(int);

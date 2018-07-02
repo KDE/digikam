@@ -56,10 +56,6 @@ DRawDecoderSettings::DRawDecoderSettings()
     NRType                     = NONR;
     NRThreshold                = 0;
 
-    enableCACorrection         = false;
-    caMultiplier[0]            = 0.0;
-    caMultiplier[1]            = 0.0;
-
     inputProfile               = QString();
     outputProfile              = QString();
 
@@ -71,9 +67,6 @@ DRawDecoderSettings::DRawDecoderSettings()
 
     dcbIterations              = -1;
     dcbEnhanceFl               = false;
-    eeciRefine                 = false;
-    esMedPasses                = 0;
-    NRChroThreshold            = 0;
     expoCorrection             = false;
     expoCorrectionShift        = 1.0;
     expoCorrectionHighlight    = 0.0;
@@ -105,9 +98,6 @@ DRawDecoderSettings& DRawDecoderSettings::operator=(const DRawDecoderSettings& o
     whitePoint              = o.whitePoint;
     NRType                  = o.NRType;
     NRThreshold             = o.NRThreshold;
-    enableCACorrection      = o.enableCACorrection;
-    caMultiplier[0]         = o.caMultiplier[0];
-    caMultiplier[1]         = o.caMultiplier[1];
     medianFilterPasses      = o.medianFilterPasses;
     inputProfile            = o.inputProfile;
     outputProfile           = o.outputProfile;
@@ -118,9 +108,6 @@ DRawDecoderSettings& DRawDecoderSettings::operator=(const DRawDecoderSettings& o
 
     dcbIterations           = o.dcbIterations;
     dcbEnhanceFl            = o.dcbEnhanceFl;
-    eeciRefine              = o.eeciRefine;
-    esMedPasses             = o.esMedPasses;
-    NRChroThreshold         = o.NRChroThreshold;
     expoCorrection          = o.expoCorrection;
     expoCorrectionShift     = o.expoCorrectionShift;
     expoCorrectionHighlight = o.expoCorrectionHighlight;
@@ -150,9 +137,6 @@ bool DRawDecoderSettings::operator==(const DRawDecoderSettings& o) const
         && whitePoint              == o.whitePoint
         && NRType                  == o.NRType
         && NRThreshold             == o.NRThreshold
-        && enableCACorrection      == o.enableCACorrection
-        && caMultiplier[0]         == o.caMultiplier[0]
-        && caMultiplier[1]         == o.caMultiplier[1]
         && medianFilterPasses      == o.medianFilterPasses
         && inputProfile            == o.inputProfile
         && outputProfile           == o.outputProfile
@@ -163,9 +147,6 @@ bool DRawDecoderSettings::operator==(const DRawDecoderSettings& o) const
 
         && dcbIterations           == o.dcbIterations
         && dcbEnhanceFl            == o.dcbEnhanceFl
-        && eeciRefine              == o.eeciRefine
-        && esMedPasses             == o.esMedPasses
-        && NRChroThreshold         == o.NRChroThreshold
         && expoCorrection          == o.expoCorrection
         && expoCorrectionShift     == o.expoCorrectionShift
         && expoCorrectionHighlight == o.expoCorrectionHighlight
@@ -199,10 +180,6 @@ void DRawDecoderSettings::optimizeTimeLoading()
     NRType                  = NONR;
     NRThreshold             = 0;
 
-    enableCACorrection      = false;
-    caMultiplier[0]         = 0.0;
-    caMultiplier[1]         = 0.0;
-
     inputProfile            = QString();
     outputProfile           = QString();
 
@@ -214,9 +191,6 @@ void DRawDecoderSettings::optimizeTimeLoading()
 
     dcbIterations           = -1;
     dcbEnhanceFl            = false;
-    eeciRefine              = false;
-    esMedPasses             = 0;
-    NRChroThreshold         = 0;
     expoCorrection          = false;
     expoCorrectionShift     = 1.0;
     expoCorrectionHighlight = 0.0;
@@ -245,9 +219,6 @@ QDebug operator<<(QDebug dbg, const DRawDecoderSettings& s)
     dbg.nospace() << "-- whitePoint:              " << s.whitePoint              << endl;
     dbg.nospace() << "-- NoiseReductionType:      " << s.NRType                  << endl;
     dbg.nospace() << "-- NoiseReductionThreshold: " << s.NRThreshold             << endl;
-    dbg.nospace() << "-- enableCACorrection:      " << s.enableCACorrection      << endl;
-    dbg.nospace() << "-- caMultiplier:            " << s.caMultiplier[0]
-                  << ", "                           << s.caMultiplier[1]         << endl;
     dbg.nospace() << "-- medianFilterPasses:      " << s.medianFilterPasses      << endl;
     dbg.nospace() << "-- inputProfile:            " << s.inputProfile            << endl;
     dbg.nospace() << "-- outputProfile:           " << s.outputProfile           << endl;
@@ -258,9 +229,6 @@ QDebug operator<<(QDebug dbg, const DRawDecoderSettings& s)
 
     dbg.nospace() << "-- dcbIterations:           " << s.dcbIterations           << endl;
     dbg.nospace() << "-- dcbEnhanceFl:            " << s.dcbEnhanceFl            << endl;
-    dbg.nospace() << "-- eeciRefine:              " << s.eeciRefine              << endl;
-    dbg.nospace() << "-- esMedPasses:             " << s.esMedPasses             << endl;
-    dbg.nospace() << "-- NRChrominanceThreshold:  " << s.NRChroThreshold         << endl;
     dbg.nospace() << "-- expoCorrection:          " << s.expoCorrection          << endl;
     dbg.nospace() << "-- expoCorrectionShift:     " << s.expoCorrectionShift     << endl;
     dbg.nospace() << "-- expoCorrectionHighlight: " << s.expoCorrectionHighlight << endl;
