@@ -34,9 +34,6 @@
 #define OPTIONMEDIANFILTERPASSESENTRY                  "Median Filter Passes"       // krazy:exclude=spelling
 #define OPTIONNOISEREDUCTIONTYPEENTRY                  "Noise Reduction Type"
 #define OPTIONNOISEREDUCTIONTHRESHOLDENTRY             "Noise Reduction Threshold"
-#define OPTIONUSECACORRECTIONENTRY                     "EnableCACorrection"
-#define OPTIONCAREDMULTIPLIERENTRY                     "caRedMultiplier"
-#define OPTIONCABLUEMULTIPLIERENTRY                    "caBlueMultiplier"
 #define OPTIONAUTOBRIGHTNESSENTRY                      "AutoBrightness"
 #define OPTIONDECODINGQUALITYENTRY                     "Decoding Quality"
 #define OPTIONINPUTCOLORSPACEENTRY                     "Input Color Space"
@@ -53,9 +50,6 @@
 
 #define OPTIONDCBITERATIONSENTRY                       "Dcb Iterations"
 #define OPTIONDCBENHANCEFLENTRY                        "Dcb Enhance Filter"
-#define OPTIONEECIREFINEENTRY                          "Eeci Refine"
-#define OPTIONESMEDPASSESENTRY                         "Es Median Filter Passes"
-#define OPTIONNRCHROMINANCETHRESHOLDENTRY              "Noise Reduction Chrominance Threshold"
 #define OPTIONEXPOCORRECTIONENTRY                      "Expo Correction"
 #define OPTIONEXPOCORRECTIONSHIFTENTRY                 "Expo Correction Shift"
 #define OPTIONEXPOCORRECTIONHIGHLIGHTENTRY             "Expo Correction Highlight"
@@ -117,15 +111,7 @@ public:
         RAWQualityLabel                = 0;
         noiseReductionComboBox         = 0;
         NRSpinBox1                     = 0;
-        NRSpinBox2                     = 0;
         NRLabel1                       = 0;
-        NRLabel2                       = 0;
-        enableCACorrectionBox          = 0;
-        autoCACorrectionBox            = 0;
-        caRedMultSpinBox               = 0;
-        caBlueMultSpinBox              = 0;
-        caRedMultLabel                 = 0;
-        caBlueMultLabel                = 0;
         unclipColorComboBox            = 0;
         reconstructLabel               = 0;
         reconstructSpinBox             = 0;
@@ -182,9 +168,6 @@ public:
     QLabel*          brightnessLabel;
     QLabel*          RAWQualityLabel;
     QLabel*          NRLabel1;
-    QLabel*          NRLabel2;
-    QLabel*          caRedMultLabel;
-    QLabel*          caBlueMultLabel;
     QLabel*          unclipColorLabel;
     QLabel*          reconstructLabel;
     QLabel*          inputColorSpaceLabel;
@@ -200,8 +183,6 @@ public:
     QCheckBox*       autoBrightnessBox;
     QCheckBox*       fourColorCheckBox;
     QCheckBox*       dontStretchPixelsCheckBox;
-    QCheckBox*       enableCACorrectionBox;
-    QCheckBox*       autoCACorrectionBox;
     QCheckBox*       fixColorsHighlightsBox;
     QCheckBox*       refineInterpolationBox;
     QCheckBox*       expoCorrectionBox;
@@ -221,12 +202,9 @@ public:
     DIntNumInput*    blackPointSpinBox;
     DIntNumInput*    whitePointSpinBox;
     DIntNumInput*    NRSpinBox1;
-    DIntNumInput*    NRSpinBox2;
     DIntNumInput*    medianFilterPassesSpinBox;
 
     DDoubleNumInput* customWhiteBalanceGreenSpinBox;
-    DDoubleNumInput* caRedMultSpinBox;
-    DDoubleNumInput* caBlueMultSpinBox;
     DDoubleNumInput* brightnessSpinBox;
     DDoubleNumInput* expoCorrectionShiftSpinBox;
     DDoubleNumInput* expoCorrectionHighlightSpinBox;
@@ -310,23 +288,16 @@ void DRawDecoderWidget::setup(int advSettings)
     d->RAWQualityComboBox = new DComboBox(d->demosaicingSettings);
 
     // Original Raw engine demosaicing methods
-    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::BILINEAR, i18nc("@item:inlistbox Quality", "Bilinear"));
-    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::VNG,      i18nc("@item:inlistbox Quality", "VNG"));
-    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::PPG,      i18nc("@item:inlistbox Quality", "PPG"));
-    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::AHD,      i18nc("@item:inlistbox Quality", "AHD"));
+    d->RAWQualityComboBox->insertItem(0, i18nc("@item:inlistbox Quality", "Bilinear"), QVariant(DRawDecoderSettings::BILINEAR));
+    d->RAWQualityComboBox->insertItem(1, i18nc("@item:inlistbox Quality", "VNG"),      QVariant(DRawDecoderSettings::VNG));
+    d->RAWQualityComboBox->insertItem(2, i18nc("@item:inlistbox Quality", "PPG"),      QVariant(DRawDecoderSettings::PPG));
+    d->RAWQualityComboBox->insertItem(3, i18nc("@item:inlistbox Quality", "AHD"),      QVariant(DRawDecoderSettings::AHD));
+    d->RAWQualityComboBox->insertItem(4, i18nc("@item:inlistbox Quality", "DCB"),      QVariant(DRawDecoderSettings::DCB));
+    d->RAWQualityComboBox->insertItem(5, i18nc("@item:inlistbox Quality", "DHT"),      QVariant(DRawDecoderSettings::DHT));
+    d->RAWQualityComboBox->insertItem(6, i18nc("@item:inlistbox Quality", "AAHD"),     QVariant(DRawDecoderSettings::AAHD));
 
-    // Extended demosaicing method from GPL2 pack
-    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::DCB,      i18nc("@item:inlistbox Quality", "DCB"));
-    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::PL_AHD,   i18nc("@item:inlistbox Quality", "AHD v2"));
-    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::AFD,      i18nc("@item:inlistbox Quality", "AFD"));
-    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::VCD,      i18nc("@item:inlistbox Quality", "VCD"));
-    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::VCD_AHD,  i18nc("@item:inlistbox Quality", "VCD & AHD"));
-    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::LMMSE,    i18nc("@item:inlistbox Quality", "LMMSE"));
-    // Extended demosaicing method from GPL3 pack
-    d->RAWQualityComboBox->insertItem(DRawDecoderSettings::AMAZE,    i18nc("@item:inlistbox Quality", "AMaZE"));
-
-    d->RAWQualityComboBox->setDefaultIndex(DRawDecoderSettings::BILINEAR);
-    d->RAWQualityComboBox->setCurrentIndex(DRawDecoderSettings::BILINEAR);
+    d->RAWQualityComboBox->setDefaultIndex(0);
+    d->RAWQualityComboBox->setCurrentIndex(0);
     d->RAWQualityComboBox->setWhatsThis(xi18nc("@info:whatsthis", "<title>Quality (interpolation)</title>"
                                 "<para>Select here the demosaicing method to use when decoding RAW "
                                 "images. A demosaicing algorithm is a digital image process used to "
@@ -336,8 +307,6 @@ void DRawDecoderWidget::setup(int advSettings)
                                 "interpolation or color reconstruction, another common spelling is "
                                 "demosaicing. The following methods are available for demosaicing "
                                 "RAW images:</para>"
-
-                                // Original Raw engine demosaicing methods
 
                                 "<para><list><item><emphasis strong='true'>Bilinear</emphasis>: use "
                                 "high-speed but low-quality bilinear interpolation (default - for "
@@ -360,34 +329,15 @@ void DRawDecoderWidget::setup(int advSettings)
                                 "direction of interpolation so as to maximize a homogeneity metric, "
                                 "thus typically minimizing color artifacts.</item>"
 
-                                // Extended demosaicing method
-
                                 "<item><emphasis strong='true'>DCB</emphasis>: DCB interpolation from "
                                 "linuxphoto.org project.</item>"
 
-                                "<item><emphasis strong='true'>AHD v2</emphasis>: modified AHD "
-                                "interpolation using Variance of Color Differences method.</item>"
+                                "<item><emphasis strong='true'>DHT</emphasis>: DHT interpolation."
+                                "See https://www.libraw.org/node/2306 for details.</item>"
 
-                                "<item><emphasis strong='true'>AFD</emphasis>: Adaptive Filtered "
-                                "Demosaicing interpolation through 5 pass median filter from PerfectRaw "
-                                "project.</item>"
-
-                                "<item><emphasis strong='true'>VCD</emphasis>: Variance of Color "
-                                "Differences interpolation.</item>"
-
-                                "<item><emphasis strong='true'>VCD & AHD</emphasis>: Mixed demosaicing "
-                                "between VCD and AHD.</item>"
-
-                                "<item><emphasis strong='true'>LMMSE</emphasis>: color demosaicing via "
-                                "directional linear minimum mean-square error estimation interpolation "
-                                "from PerfectRaw.</item>"
-
-                                "<item><emphasis strong='true'>AMaZE</emphasis>: Aliasing Minimization "
-                                "interpolation and Zipper Elimination to apply color aberration removal "
-                                "from RawTherapee project.</item></list></para>"
-
-                                "<para>Note: some methods can be unavailable if RAW decoder have been built "
-                                "without extension packs.</para>"));
+                                "<item><emphasis strong='true'>AAHD</emphasis>: modified AHD "
+                                "interpolation.</item>"
+                                "</list></para>"));
 
     demosaicingLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1);
     demosaicingLayout->addWidget(d->RAWQualityComboBox, line, 1, 1, 2);
@@ -607,8 +557,6 @@ void DRawDecoderWidget::setup(int advSettings)
     d->noiseReductionComboBox->insertItem(DRawDecoderSettings::NONR,       i18nc("@item:inlistbox Noise Reduction", "None"));
     d->noiseReductionComboBox->insertItem(DRawDecoderSettings::WAVELETSNR, i18nc("@item:inlistbox Noise Reduction", "Wavelets"));
     d->noiseReductionComboBox->insertItem(DRawDecoderSettings::FBDDNR,     i18nc("@item:inlistbox Noise Reduction", "FBDD"));
-    d->noiseReductionComboBox->insertItem(DRawDecoderSettings::LINENR,     i18nc("@item:inlistbox Noise Reduction", "CFA Line Denoise"));
-    d->noiseReductionComboBox->insertItem(DRawDecoderSettings::IMPULSENR,  i18nc("@item:inlistbox Noise Reduction", "Impulse Denoise"));
     d->noiseReductionComboBox->setDefaultIndex(DRawDecoderSettings::NONR);
     d->noiseReductionComboBox->setWhatsThis(xi18nc("@info:whatsthis", "<title>Noise Reduction</title>"
                                 "<para>Select here the noise reduction method to apply during RAW "
@@ -620,65 +568,18 @@ void DRawDecoderWidget::setup(int advSettings)
                                 "applied after interpolation.</item>"
                                 "<item><emphasis strong='true'>FBDD</emphasis>: Fake Before "
                                 "Demosaicing Denoising noise reduction. It is applied before "
-                                "interpolation.</item>"
-                                "<item><emphasis strong='true'>CFA Line Denoise</emphasis>: Banding "
-                                "noise suppression. It is applied after interpolation.</item>"
-                                "<item><emphasis strong='true'>Impulse Denoise</emphasis>: Impulse "
-                                "noise suppression. It is applied after interpolation.</item></list></para>"));
+                                "interpolation.</item></list></para>"));
 
     d->NRSpinBox1 = new DIntNumInput(d->correctionsSettings);
     d->NRSpinBox1->setRange(100, 1000, 1);
     d->NRSpinBox1->setDefaultValue(100);
     d->NRLabel1   = new QLabel(d->correctionsSettings);
 
-    d->NRSpinBox2 = new DIntNumInput(d->correctionsSettings);
-    d->NRSpinBox2->setRange(100, 1000, 1);
-    d->NRSpinBox2->setDefaultValue(100);
-    d->NRLabel2   = new QLabel(d->correctionsSettings);
-
-    d->enableCACorrectionBox = new QCheckBox(i18nc("@option:check", "Enable Chromatic Aberration correction"), d->correctionsSettings);
-    d->enableCACorrectionBox->setWhatsThis(xi18nc("@info:whatsthis", "<title>Enable Chromatic "
-                                "Aberration correction</title>"
-                                "<para>Enlarge the raw red-green and blue-yellow axis by the given "
-                                "factors (automatic by default).</para>"));
-
-    d->autoCACorrectionBox = new QCheckBox(i18nc("@option:check", "Automatic color axis adjustments"), d->correctionsSettings);
-    d->autoCACorrectionBox->setWhatsThis(xi18nc("@info:whatsthis", "<title>Automatic Chromatic "
-                                "Aberration correction</title>"
-                                "<para>If this option is turned on, it will try to shift image "
-                                "channels slightly and evaluate Chromatic Aberration change. Note "
-                                "that if you shot blue-red pattern, the method may fail. In this "
-                                "case, disable this option and tune manually color factors.</para>"));
-
-    d->caRedMultLabel   = new QLabel(i18nc("@label:slider", "Red-Green:"), d->correctionsSettings);
-    d->caRedMultSpinBox = new DDoubleNumInput(d->correctionsSettings);
-    d->caRedMultSpinBox->setDecimals(1);
-    d->caRedMultSpinBox->setRange(-4.0, 4.0, 0.1);
-    d->caRedMultSpinBox->setDefaultValue(0.0);
-    d->caRedMultSpinBox->setWhatsThis(xi18nc("@info:whatsthis", "<title>Red-Green multiplier</title>"
-                                "<para>Set here the amount of correction on red-green axis</para>"));
-
-    d->caBlueMultLabel   = new QLabel(i18nc("@label:slider", "Blue-Yellow:"), d->correctionsSettings);
-    d->caBlueMultSpinBox = new DDoubleNumInput(d->correctionsSettings);
-    d->caBlueMultSpinBox->setDecimals(1);
-    d->caBlueMultSpinBox->setRange(-4.0, 4.0, 0.1);
-    d->caBlueMultSpinBox->setDefaultValue(0.0);
-    d->caBlueMultSpinBox->setWhatsThis(xi18nc("@info:whatsthis", "<title>Blue-Yellow multiplier</title>"
-                                "<para>Set here the amount of correction on blue-yellow axis</para>"));
-
     correctionsLayout->addWidget(d->noiseReductionLabel,    0, 0, 1, 1);
     correctionsLayout->addWidget(d->noiseReductionComboBox, 0, 1, 1, 2);
     correctionsLayout->addWidget(d->NRLabel1,               1, 0, 1, 1);
     correctionsLayout->addWidget(d->NRSpinBox1,             1, 1, 1, 2);
-    correctionsLayout->addWidget(d->NRLabel2,               2, 0, 1, 1);
-    correctionsLayout->addWidget(d->NRSpinBox2,             2, 1, 1, 2);
-    correctionsLayout->addWidget(d->enableCACorrectionBox,  3, 0, 1, 3);
-    correctionsLayout->addWidget(d->autoCACorrectionBox,    4, 0, 1, 3);
-    correctionsLayout->addWidget(d->caRedMultLabel,         5, 0, 1, 1);
-    correctionsLayout->addWidget(d->caRedMultSpinBox,       5, 1, 1, 2);
-    correctionsLayout->addWidget(d->caBlueMultLabel,        6, 0, 1, 1);
-    correctionsLayout->addWidget(d->caBlueMultSpinBox,      6, 1, 1, 2);
-    correctionsLayout->setRowStretch(7, 10);
+    correctionsLayout->setRowStretch(2, 10);
     correctionsLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     correctionsLayout->setSpacing(spacing);
 
@@ -773,12 +674,6 @@ void DRawDecoderWidget::setup(int advSettings)
     connect(d->noiseReductionComboBox, static_cast<void (DComboBox::*)(int)>(&DComboBox::activated),
             this, &DRawDecoderWidget::slotNoiseReductionChanged);
 
-    connect(d->enableCACorrectionBox, &QCheckBox::toggled,
-            this, &DRawDecoderWidget::slotCACorrectionToggled);
-
-    connect(d->autoCACorrectionBox, &QCheckBox::toggled,
-            this, &DRawDecoderWidget::slotAutoCAToggled);
-
     connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
             d->blackPointSpinBox, SLOT(setEnabled(bool)));
 
@@ -862,19 +757,10 @@ void DRawDecoderWidget::setup(int advSettings)
     connect(d->NRSpinBox1, &DIntNumInput::valueChanged,
             this, &DRawDecoderWidget::signalSettingsChanged);
 
-    connect(d->NRSpinBox2, &DIntNumInput::valueChanged,
-            this, &DRawDecoderWidget::signalSettingsChanged);
-
     connect(d->medianFilterPassesSpinBox, &DIntNumInput::valueChanged,
             this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->customWhiteBalanceGreenSpinBox, &DDoubleNumInput::valueChanged,
-            this, &DRawDecoderWidget::signalSettingsChanged);
-
-    connect(d->caRedMultSpinBox, &DDoubleNumInput::valueChanged,
-            this, &DRawDecoderWidget::signalSettingsChanged);
-
-    connect(d->caBlueMultSpinBox, &DDoubleNumInput::valueChanged,
             this, &DRawDecoderWidget::signalSettingsChanged);
 
     connect(d->brightnessSpinBox, &DDoubleNumInput::valueChanged,
@@ -961,8 +847,6 @@ void DRawDecoderWidget::slotNoiseReductionChanged(int item)
 {
     d->NRSpinBox1->setEnabled(true);
     d->NRLabel1->setEnabled(true);
-    d->NRSpinBox2->setEnabled(true);
-    d->NRLabel2->setEnabled(true);
     d->NRLabel1->setText(i18nc("@label", "Threshold:"));
     d->NRSpinBox1->setWhatsThis(xi18nc("@info:whatsthis", "<title>Threshold</title>"
                                 "<para>Set here the noise reduction threshold value to use.</para>"));
@@ -971,54 +855,15 @@ void DRawDecoderWidget::slotNoiseReductionChanged(int item)
     {
         case DRawDecoderSettings::WAVELETSNR:
         case DRawDecoderSettings::FBDDNR:
-        case DRawDecoderSettings::LINENR:
-            d->NRSpinBox2->setVisible(false);
-            d->NRLabel2->setVisible(false);
-            break;
-
-        case DRawDecoderSettings::IMPULSENR:
-            d->NRLabel1->setText(i18nc("@label", "Luminance:"));
-            d->NRSpinBox1->setWhatsThis(xi18nc("@info:whatsthis", "<title>Luminance</title>"
-                                "<para>Amount of Luminance impulse noise reduction.</para>"));
-            d->NRLabel2->setText(i18nc("@label", "Chrominance:"));
-            d->NRSpinBox2->setWhatsThis(xi18nc("@info:whatsthis", "<title>Chrominance</title>"
-                                "<para>Amount of Chrominance impulse noise reduction.</para>"));
-            d->NRSpinBox2->setVisible(true);
-            d->NRLabel2->setVisible(true);
+            // NOTE : no ops
             break;
 
         default:
             d->NRSpinBox1->setEnabled(false);
             d->NRLabel1->setEnabled(false);
-            d->NRSpinBox2->setEnabled(false);
-            d->NRLabel2->setEnabled(false);
-            d->NRSpinBox2->setVisible(false);
-            d->NRLabel2->setVisible(false);
             break;
     }
 
-    emit signalSettingsChanged();
-}
-
-void DRawDecoderWidget::slotCACorrectionToggled(bool b)
-{
-    d->autoCACorrectionBox->setEnabled(b);
-    slotAutoCAToggled(d->autoCACorrectionBox->isChecked());
-}
-
-void DRawDecoderWidget::slotAutoCAToggled(bool b)
-{
-    if (b)
-    {
-        d->caRedMultSpinBox->setValue(0.0);
-        d->caBlueMultSpinBox->setValue(0.0);
-    }
-
-    bool mult = (!b) && (d->autoCACorrectionBox->isEnabled());
-    d->caRedMultSpinBox->setEnabled(mult);
-    d->caBlueMultSpinBox->setEnabled(mult);
-    d->caRedMultLabel->setEnabled(mult);
-    d->caBlueMultLabel->setEnabled(mult);
     emit signalSettingsChanged();
 }
 
@@ -1058,21 +903,9 @@ void DRawDecoderWidget::slotRAWQualityChanged(int quality)
     switch (quality)
     {
         case DRawDecoderSettings::DCB:
-        case DRawDecoderSettings::VCD_AHD:
-            // These options can be only avaialble if Libraw use GPL2 pack.
             d->medianFilterPassesLabel->setEnabled(true);
             d->medianFilterPassesSpinBox->setEnabled(true);
             d->refineInterpolationBox->setEnabled(true);
-            break;
-
-        case DRawDecoderSettings::PL_AHD:
-        case DRawDecoderSettings::AFD:
-        case DRawDecoderSettings::VCD:
-        case DRawDecoderSettings::LMMSE:
-        case DRawDecoderSettings::AMAZE:
-            d->medianFilterPassesLabel->setEnabled(false);
-            d->medianFilterPassesSpinBox->setEnabled(false);
-            d->refineInterpolationBox->setEnabled(false);
             break;
 
         default: // BILINEAR, VNG, PPG, AHD
@@ -1150,19 +983,18 @@ void DRawDecoderWidget::setSettings(const DRawDecoderSettings& settings)
     d->whitePointSpinBox->setEnabled(settings.enableWhitePoint);
     d->whitePointSpinBox->setValue(settings.whitePoint);
 
-    int q = settings.RAWQuality;
+    int q = d->RAWQualityComboBox->combo()->findData(settings.RAWQuality);
+
+    if (q == -1)
+        q = 0;      // Fail back to bilinear
 
     d->RAWQualityComboBox->setCurrentIndex(q);
 
-    switch(q)
+    switch (q)
     {
         case DRawDecoderSettings::DCB:
             d->medianFilterPassesSpinBox->setValue(settings.dcbIterations);
             d->refineInterpolationBox->setChecked(settings.dcbEnhanceFl);
-            break;
-        case DRawDecoderSettings::VCD_AHD:
-            d->medianFilterPassesSpinBox->setValue(settings.eeciRefine);
-            d->refineInterpolationBox->setChecked(settings.eeciRefine);
             break;
         default:
             d->medianFilterPassesSpinBox->setValue(settings.medianFilterPasses);
@@ -1180,13 +1012,6 @@ void DRawDecoderWidget::setSettings(const DRawDecoderSettings& settings)
     d->noiseReductionComboBox->setCurrentIndex(settings.NRType);
     slotNoiseReductionChanged(settings.NRType);
     d->NRSpinBox1->setValue(settings.NRThreshold);
-    d->NRSpinBox2->setValue(settings.NRChroThreshold);
-
-    d->enableCACorrectionBox->setChecked(settings.enableCACorrection);
-    d->caRedMultSpinBox->setValue(settings.caMultiplier[0]);
-    d->caBlueMultSpinBox->setValue(settings.caMultiplier[1]);
-    d->autoCACorrectionBox->setChecked((settings.caMultiplier[0] == 0.0) && (settings.caMultiplier[1] == 0.0));
-    slotCACorrectionToggled(settings.enableCACorrection);
 
     d->expoCorrectionBox->setChecked(settings.expoCorrection);
     slotExposureCorrectionToggled(settings.expoCorrection);
@@ -1247,17 +1072,13 @@ DRawDecoderSettings DRawDecoderWidget::settings() const
     prm.enableWhitePoint     = d->whitePointCheckBox->isChecked();
     prm.whitePoint           = d->whitePointSpinBox->value();
 
-    prm.RAWQuality           = (DRawDecoderSettings::DecodingQuality)d->RAWQualityComboBox->currentIndex();
+    prm.RAWQuality           = (DRawDecoderSettings::DecodingQuality)d->RAWQualityComboBox->combo()->currentData().toInt();
 
     switch(prm.RAWQuality)
     {
         case DRawDecoderSettings::DCB:
             prm.dcbIterations      = d->medianFilterPassesSpinBox->value();
             prm.dcbEnhanceFl       = d->refineInterpolationBox->isChecked();
-            break;
-        case DRawDecoderSettings::VCD_AHD:
-            prm.esMedPasses        = d->medianFilterPassesSpinBox->value();
-            prm.eeciRefine         = d->refineInterpolationBox->isChecked();
             break;
         default:
             prm.medianFilterPasses = d->medianFilterPassesSpinBox->value();
@@ -1271,28 +1092,14 @@ DRawDecoderSettings DRawDecoderWidget::settings() const
         case DRawDecoderSettings::NONR:
         {
             prm.NRThreshold     = 0;
-            prm.NRChroThreshold = 0;
             break;
         }
-        case DRawDecoderSettings::WAVELETSNR:
-        case DRawDecoderSettings::FBDDNR:
-        case DRawDecoderSettings::LINENR:
+        default:    // WAVELETSNR and FBDDNR
         {
             prm.NRThreshold     = d->NRSpinBox1->value();
-            prm.NRChroThreshold = 0;
-            break;
-        }
-        default:    // IMPULSENR
-        {
-            prm.NRThreshold     = d->NRSpinBox1->value();
-            prm.NRChroThreshold = d->NRSpinBox2->value();
             break;
         }
     }
-
-    prm.enableCACorrection      = d->enableCACorrectionBox->isChecked();
-    prm.caMultiplier[0]         = d->caRedMultSpinBox->value();
-    prm.caMultiplier[1]         = d->caBlueMultSpinBox->value();
 
     prm.expoCorrection          = d->expoCorrectionBox->isChecked();
     prm.expoCorrectionShift     = d->shiftExpoFromEvToLinear(d->expoCorrectionShiftSpinBox->value());
@@ -1343,9 +1150,6 @@ void DRawDecoderWidget::readSettings(DRawDecoderSettings& prm, KConfigGroup& gro
     prm.whitePoint              = group.readEntry(OPTIONWHITEPOINTENTRY,                                              defaultPrm.whitePoint);
     prm.medianFilterPasses      = group.readEntry(OPTIONMEDIANFILTERPASSESENTRY,                                      defaultPrm.medianFilterPasses);
     prm.NRThreshold             = group.readEntry(OPTIONNOISEREDUCTIONTHRESHOLDENTRY,                                 defaultPrm.NRThreshold);
-    prm.enableCACorrection      = group.readEntry(OPTIONUSECACORRECTIONENTRY,                                         defaultPrm.enableCACorrection);
-    prm.caMultiplier[0]         = group.readEntry(OPTIONCAREDMULTIPLIERENTRY,                                         defaultPrm.caMultiplier[0]);
-    prm.caMultiplier[1]         = group.readEntry(OPTIONCABLUEMULTIPLIERENTRY,                                        defaultPrm.caMultiplier[1]);
     prm.RAWQuality              = (DRawDecoderSettings::DecodingQuality)group.readEntry(OPTIONDECODINGQUALITYENTRY,   (int)defaultPrm.RAWQuality);
     prm.outputColorSpace        = (DRawDecoderSettings::OutputColorSpace)group.readEntry(OPTIONOUTPUTCOLORSPACEENTRY, (int)defaultPrm.outputColorSpace);
     prm.autoBrightness          = group.readEntry(OPTIONAUTOBRIGHTNESSENTRY,                                          defaultPrm.autoBrightness);
@@ -1354,9 +1158,6 @@ void DRawDecoderWidget::readSettings(DRawDecoderSettings& prm, KConfigGroup& gro
 
     prm.dcbIterations           = group.readEntry(OPTIONDCBITERATIONSENTRY,                                           defaultPrm.dcbIterations);
     prm.dcbEnhanceFl            = group.readEntry(OPTIONDCBENHANCEFLENTRY,                                            defaultPrm.dcbEnhanceFl);
-    prm.eeciRefine              = group.readEntry(OPTIONEECIREFINEENTRY,                                              defaultPrm.eeciRefine);
-    prm.esMedPasses             = group.readEntry(OPTIONESMEDPASSESENTRY,                                             defaultPrm.esMedPasses);
-    prm.NRChroThreshold         = group.readEntry(OPTIONNRCHROMINANCETHRESHOLDENTRY,                                  defaultPrm.NRChroThreshold);
     prm.expoCorrection          = group.readEntry(OPTIONEXPOCORRECTIONENTRY,                                          defaultPrm.expoCorrection);
     prm.expoCorrectionShift     = group.readEntry(OPTIONEXPOCORRECTIONSHIFTENTRY,                                     defaultPrm.expoCorrectionShift);
     prm.expoCorrectionHighlight = group.readEntry(OPTIONEXPOCORRECTIONHIGHLIGHTENTRY,                                 defaultPrm.expoCorrectionHighlight);
@@ -1380,9 +1181,6 @@ void DRawDecoderWidget::writeSettings(const DRawDecoderSettings& prm, KConfigGro
     group.writeEntry(OPTIONWHITEPOINTENTRY,              prm.whitePoint);
     group.writeEntry(OPTIONMEDIANFILTERPASSESENTRY,      prm.medianFilterPasses);
     group.writeEntry(OPTIONNOISEREDUCTIONTHRESHOLDENTRY, prm.NRThreshold);
-    group.writeEntry(OPTIONUSECACORRECTIONENTRY,         prm.enableCACorrection);
-    group.writeEntry(OPTIONCAREDMULTIPLIERENTRY,         prm.caMultiplier[0]);
-    group.writeEntry(OPTIONCABLUEMULTIPLIERENTRY,        prm.caMultiplier[1]);
     group.writeEntry(OPTIONDECODINGQUALITYENTRY,         (int)prm.RAWQuality);
     group.writeEntry(OPTIONOUTPUTCOLORSPACEENTRY,        (int)prm.outputColorSpace);
     group.writeEntry(OPTIONAUTOBRIGHTNESSENTRY,          prm.autoBrightness);
@@ -1391,9 +1189,6 @@ void DRawDecoderWidget::writeSettings(const DRawDecoderSettings& prm, KConfigGro
 
     group.writeEntry(OPTIONDCBITERATIONSENTRY,           prm.dcbIterations);
     group.writeEntry(OPTIONDCBENHANCEFLENTRY,            prm.dcbEnhanceFl);
-    group.writeEntry(OPTIONEECIREFINEENTRY,              prm.eeciRefine);
-    group.writeEntry(OPTIONESMEDPASSESENTRY,             prm.esMedPasses);
-    group.writeEntry(OPTIONNRCHROMINANCETHRESHOLDENTRY,  prm.NRChroThreshold);
     group.writeEntry(OPTIONEXPOCORRECTIONENTRY,          prm.expoCorrection);
     group.writeEntry(OPTIONEXPOCORRECTIONSHIFTENTRY,     prm.expoCorrectionShift);
     group.writeEntry(OPTIONEXPOCORRECTIONHIGHLIGHTENTRY, prm.expoCorrectionHighlight);

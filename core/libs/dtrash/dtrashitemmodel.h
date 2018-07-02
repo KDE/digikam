@@ -123,8 +123,10 @@ public Q_SLOTS:
 
     /**
      * @brief refreshes the thumbnails
+     * @param desc: loading description from thumbnail load thread
+     * @param pix: pixmap from thumbnail load thread
      */
-    void refreshThumbnails();
+    void refreshThumbnails(const LoadingDescription& desc, const QPixmap& pix);
 
 Q_SIGNALS:
 

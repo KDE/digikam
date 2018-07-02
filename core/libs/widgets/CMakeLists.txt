@@ -56,7 +56,6 @@ set(libfilestools_SRCS
     files/dfileselector.cpp
     files/dbinarysearch.cpp
     files/dbinaryiface.cpp
-    files/drawdecoderwidget.cpp
 )
 
 set(libmainview_SRCS

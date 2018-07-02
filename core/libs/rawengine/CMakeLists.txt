@@ -17,6 +17,7 @@ set(librawengine_SRCS
     drawdecoder.cpp
     drawdecoder_p.cpp
     drawdecodersettings.cpp
+    drawdecoderwidget.cpp
     rawinfo.cpp
 )
 
@@ -24,6 +25,10 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}/libraw/libraw
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+
+    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 add_library(rawengine_srcs OBJECT ${librawengine_SRCS})

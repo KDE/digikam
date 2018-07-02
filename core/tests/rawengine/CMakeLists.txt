@@ -67,6 +67,7 @@ LIBRAW_BUILD_SAMPLES(4channels.cpp)
 LIBRAW_BUILD_SAMPLES(unprocessed_raw.cpp)
 LIBRAW_BUILD_SAMPLES(raw-identify.cpp)
 LIBRAW_BUILD_SAMPLES(multirender_test.cpp)
+LIBRAW_BUILD_SAMPLES(openbayer_sample.cpp)
 LIBRAW_BUILD_SAMPLES(postprocessing_benchmark.cpp)
 
 # C sample files which must be compiled only if LCMS v2 is detected, to prevent broken compilation
