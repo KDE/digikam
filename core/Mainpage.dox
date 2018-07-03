@@ -1,7 +1,5 @@
-/** @mainpage
- *
- * Main Doxygen page for digikam.
- *
- * digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.
- *
+/** \mainpage digiKam API reference page.
+    \author (c) 2001-2018 digiKam team
+    \brief digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.
+    \image html logo-digikam.png
  */
