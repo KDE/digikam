@@ -638,7 +638,7 @@ EXCLUDE_SYMLINKS       = NO
 # against the file with absolute path, so to exclude all test directories
 # for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       = */3rdparty/* */tests/*
+EXCLUDE_PATTERNS       = */project/* */build/* */tests/* */o2/* */upnpsdk/* */cimg/* */libstatgrab/* */libjpeg/* */libpgf/* */libraw/* */dngwriter/extra/* */opencv3-face/* */dnnface/* 
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
