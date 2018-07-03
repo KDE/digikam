@@ -12,10 +12,8 @@ if (MINGW)
 
     ExternalProject_Add(ext_lensfun
 
-        URL file://${EXTERNALS_DOWNLOAD_DIR}/lensfun-0.3.2.tar.gz
-        URL_MD5 247e59a0812ec451f6cd0d20b3379cb5
-
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/lensfun-regex-mxe.patch
+        URL file://${EXTERNALS_DOWNLOAD_DIR}/lensfun-0.3.95.tar.gz
+        URL_MD5 21107eaf72303706256481fef2dc8013
 
         CONFIGURE_COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../../../bootstrap.mxe <SOURCE_DIR>/. &&
                           <SOURCE_DIR>/bootstrap.mxe ${MXE_BUILDROOT} RelWithDebInfo ${GLOBAL_PROFILE}
@@ -33,7 +31,7 @@ if (MINGW)
     ExternalProject_Add_step(ext_lensfun before_download
 
         # Note : under MXE, curl is not compiled with https support. We cannot use the tarball as under Linux/MacOS.
-        COMMAND wget -N http://downloads.sourceforge.net/project/lensfun/0.3.2/lensfun-0.3.2.tar.gz -O ${EXTERNALS_DOWNLOAD_DIR}/lensfun-0.3.2.tar.gz
+        COMMAND wget -N http://downloads.sourceforge.net/project/lensfun/0.3.95/lensfun-0.3.95.tar.gz -O ${EXTERNALS_DOWNLOAD_DIR}/lensfun-0.3.95.tar.gz
         DEPENDERS download
     )
 
@@ -43,8 +41,8 @@ else()
 
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        URL http://downloads.sourceforge.net/project/lensfun/0.3.2/lensfun-0.3.2.tar.gz
-        URL_MD5 247e59a0812ec451f6cd0d20b3379cb5
+        URL http://downloads.sourceforge.net/project/lensfun/0.3.95/lensfun-0.3.95.tar.gz
+        URL_MD5 21107eaf72303706256481fef2dc8013
 
         INSTALL_DIR ${EXTPREFIX_lensfun}
 
