@@ -61,7 +61,6 @@ bool ShowFoto::setup(bool iccSetupPage)
     return true;
 }
 
-
 void ShowFoto::readSettings()
 {
     d->settings        = ShowfotoSettings::instance();

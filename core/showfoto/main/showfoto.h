@@ -54,11 +54,6 @@ public:
 private:
 
     bool queryClose();
-    
-    void toggleActions(bool val);
-    void addServicesMenu();
-
-    void toggleNavigation(int index);
 
     bool save();
     bool saveAs();
@@ -105,7 +100,6 @@ private Q_SLOTS:
     void slotLoadingFinished(const QString& filename, bool success);
     void slotSavingStarted(const QString& filename);
 
-    void slotContextMenu();
     void slotRevert();
 
     void slotAddedDropedItems(QDropEvent*);
@@ -116,7 +110,7 @@ Q_SIGNALS:
     void signalOpenFolder(const QUrl&);
     void signalOpenFile(const QList<QUrl>& urls);
     void signalInfoList(ShowfotoItemInfoList&);
-    
+
 // -- Internal setup methods implemented in showfoto_config.cpp ----------------------------------------
 
 public Q_SLOTS:
@@ -143,12 +137,20 @@ private:
     void setupConnections();
     void setupUserArea();
 
+    void toggleActions(bool val);
+    void toggleNavigation(int index);
+    void addServicesMenu();
+
+private Q_SLOTS:
+
+    void slotContextMenu();
+
 // -- Extra tool methods implemented in showfoto_tools.cpp ----------------------------------------
 
 private Q_SLOTS:
 
     void slotEditMetadata();
-    void slotEditGeolocation();    
+    void slotEditGeolocation();
     void slotFilePrint();
     void slotPrintCreator();
     void slotPresentation();

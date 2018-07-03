@@ -26,7 +26,7 @@
 
 namespace ShowFoto
 {
-    
+
 void ShowFoto::setupActions()
 {
     Digikam::ThemeManager::instance()->setThemeMenuAction(new QMenu(i18n("&Themes"), this));
@@ -158,6 +158,61 @@ void ShowFoto::setupUserArea()
     d->thumbBar->installOverlays();
 
     setCentralWidget(widget);
+}
+
+void ShowFoto::slotContextMenu()
+{
+    if (m_contextMenu)
+    {
+        m_contextMenu->addSeparator();
+        addServicesMenu();
+        m_contextMenu->exec(QCursor::pos());
+    }
+}
+
+void ShowFoto::addServicesMenu()
+{
+    addServicesMenuForUrl(d->thumbBar->currentUrl());
+}
+
+void ShowFoto::toggleNavigation(int index)
+{
+    if (!m_actionEnabledState)
+    {
+        return;
+    }
+
+    if (d->itemsNb == 0 || d->itemsNb == 1)
+    {
+        m_backwardAction->setEnabled(false);
+        m_forwardAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
+    }
+    else
+    {
+        m_backwardAction->setEnabled(true);
+        m_forwardAction->setEnabled(true);
+        m_firstAction->setEnabled(true);
+        m_lastAction->setEnabled(true);
+    }
+
+    if (index == 1)
+    {
+        m_backwardAction->setEnabled(false);
+        m_firstAction->setEnabled(false);
+    }
+
+    if (index == d->itemsNb)
+    {
+        m_forwardAction->setEnabled(false);
+        m_lastAction->setEnabled(false);
+    }
+}
+
+void ShowFoto::toggleActions(bool val)
+{
+    toggleStandardActions(val);
 }
 
 } // namespace ShowFoto
