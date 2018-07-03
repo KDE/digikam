@@ -28,9 +28,37 @@
 
 // Qt includes
 
+#include <QCursor>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QList>
+#include <QPointer>
+#include <QProgressBar>
+#include <QVBoxLayout>
+#include <QLineEdit>
+#include <QStandardPaths>
+#include <QStyle>
+#include <QKeySequence>
+#include <QMenu>
+#include <QMenuBar>
+#include <QMimeDatabase>
+#include <QMessageBox>
+#include <QApplication>
+#include <QMimeType>
+#include <QTemporaryFile>
 #include <QSplitter>
 #include <QAction>
 #include <QUrl>
+
+// KDE includes
+
+#include <kactioncollection.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
@@ -39,10 +67,85 @@
 #include "showfotothumbnailbar.h"
 #include "dsplashscreen.h"
 #include "imagepropertiessidebar.h"
-#include "showfotodelegate.h"
-#include "showfotosettings.h"
 #include "showfotodragdrophandler.h"
 #include "thumbnailloadthread.h"
+#include "drawdecoder.h"
+#include "digikam_globals.h"
+#include "digikam_debug.h"
+#include "canvas.h"
+#include "editorcore.h"
+#include "dmetadata.h"
+#include "editorstackview.h"
+#include "dfileoperations.h"
+#include "iccsettingscontainer.h"
+#include "imagedialog.h"
+#include "iofilesettings.h"
+#include "loadingcache.h"
+#include "loadingcacheinterface.h"
+#include "metadatasettings.h"
+#include "metadataedit.h"
+#include "presentationmngr.h"
+#include "savingcontext.h"
+#include "showfotosetup.h"
+#include "showfotosetupmisc.h"
+#include "setupicc.h"
+#include "slideshow.h"
+#include "statusprogressbar.h"
+#include "thememanager.h"
+#include "thumbnailsize.h"
+#include "dnotificationwrapper.h"
+#include "showfotodelegate.h"
+#include "showfotothumbnailmodel.h"
+#include "showfotocategorizedview.h"
+#include "showfotosettings.h"
+#include "dmetainfoiface.h"
+#include "dexpanderbox.h"
+#include "dfiledialog.h"
+#include "calwizard.h"
+#include "expoblendingmanager.h"
+#include "mailwizard.h"
+#include "advprintwizard.h"
+#include "dmediaservermngr.h"
+#include "dmediaserverdlg.h"
+#include "dbwindow.h"
+#include "fbwindow.h"
+#include "flickrwindow.h"
+#include "gswindow.h"
+#include "imageshackwindow.h"
+#include "imgurwindow.h"
+#include "piwigowindow.h"
+#include "rajcewindow.h"
+#include "smugwindow.h"
+#include "yfwindow.h"
+
+#ifdef HAVE_MEDIAWIKI
+#   include "mediawikiwindow.h"
+#endif
+
+#ifdef HAVE_VKONTAKTE
+#   include "vkwindow.h"
+#endif
+
+#ifdef HAVE_KIO
+#   include "ftexportwindow.h"
+#   include "ftimportwindow.h"
+#endif
+
+#ifdef HAVE_MARBLE
+#   include "geolocationedit.h"
+#endif
+
+#ifdef HAVE_HTMLGALLERY
+#   include "htmlwizard.h"
+#endif
+
+#ifdef HAVE_PANORAMA
+#   include "panomanager.h"
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
+#endif
 
 namespace ShowFoto
 {

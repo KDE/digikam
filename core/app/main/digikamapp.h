@@ -181,6 +181,8 @@ private Q_SLOTS:
     void slotDatabaseMigration();
     void slotEditMetadata();
     void slotEditGeolocation();
+    void slotPresentation();
+    void slotPrintCreator();
 
 // -- Configure methods implemented in digikamapp_config.cpp ----------------------------------------
 
@@ -204,10 +206,8 @@ private Q_SLOTS:
     void slotPanorama();
     void slotVideoSlideshow();
     void slotSendByMail();
-    void slotPrintCreator();
     void slotHtmlGallery();
     void slotCalendar();
-    void slotPresentation();
     void slotMediaServer();
     void slotExportTool();
 
