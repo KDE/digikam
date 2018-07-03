@@ -29,6 +29,7 @@
 
 #include <QWidget>
 #include <QComboBox>
+#include <QVariant>
 
 // Local includes
 
@@ -56,7 +57,7 @@ public:
     QComboBox* combo() const;
 
     void addItem(const QString& t, int index = -1);
-    void insertItem(int index, const QString& t);
+    void insertItem(int index, const QString& t, const QVariant& data = QVariant());
 
 Q_SIGNALS:
 

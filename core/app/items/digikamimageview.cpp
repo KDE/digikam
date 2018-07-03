@@ -551,6 +551,7 @@ void DigikamImageView::rename()
             QPointer<AdvancedRenameProcessDialog> dlg = new AdvancedRenameProcessDialog(newNamesList, this);
             dlg->exec();
 
+            imageFilterModel()->invalidate();
             urls = dlg->failedUrls();
             delete dlg;
         }

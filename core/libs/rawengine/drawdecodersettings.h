@@ -63,37 +63,19 @@ public:
      *  AHD:      use Adaptive Homogeneity-Directed interpolation.
      *            This method selects the direction of interpolation so as to
      *            maximize a homogeneity metric, thus typically minimizing color artifacts.
-     *
-     * NOTE: from GPL2 demosaic pack.
-     *
      *  DCB:      DCB interpolation (see http://www.linuxphoto.org/html/dcb.html for details)
-     *  PL_AHD:   modified AHD interpolation (see http://sites.google.com/site/demosaicalgorithms/modified-dcraw
-     *            for details).
-     *  AFD:      demosaicing through 5 pass median filter from PerfectRaw project.
-     *  VCD:      VCD interpolation.
-     *  VCD_AHD:  mixed demosaicing between VCD and AHD.
-     *  LMMSE:    LMMSE interpolation from PerfectRaw.
-     *
-     * NOTE: from GPL3 demosaic pack.
-     *
-     *  AMAZE:    AMaZE interpolation and color aberration removal from RawTherapee project.
+     *  DHT:      DHT interpolation.
+     *  AAHD:     Enhanced Adaptative AHD interpolation.
      */
     enum DecodingQuality
     {
-        // from original dcraw demosaic
         BILINEAR = 0,
         VNG      = 1,
         PPG      = 2,
         AHD      = 3,
-        // Extended demosaicing method from GPL2 demosaic pack
         DCB      = 4,
-        PL_AHD   = 5,
-        AFD      = 6,
-        VCD      = 7,
-        VCD_AHD  = 8,
-        LMMSE    = 9,
-        // Extended demosaicing methods from GPL3 demosaic pack
-        AMAZE    = 10
+        DHT      = 11,
+        AAHD     = 12
     };
 
     /** White balances alternatives
@@ -116,16 +98,12 @@ public:
      *  NONR:       No noise reduction.
      *  WAVELETSNR: wavelets correction to erase noise while preserving real detail. It's applied after interpolation.
      *  FBDDNR:     Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation.
-     *  LINENR:     CFA Line Denoise. It's applied after interpolation.
-     *  IMPULSENR:  Impulse Denoise. It's applied after interpolation.
      */
     enum NoiseReduction
     {
         NONR = 0,
         WAVELETSNR,
-        FBDDNR,
-        LINENR,
-        IMPULSENR
+        FBDDNR
     };
 
     /** Input color profile used to decoded image
@@ -247,17 +225,6 @@ public:
      */
     int NRThreshold;
 
-    /** Turn on chromatic aberrations correction
-     */
-    bool enableCACorrection;
-
-    /** Magnification factor for Red and Blue layers
-     *  - caMultiplier[0] = amount of correction on red-green axis.
-     *  - caMultiplier[1] = amount of correction on blue-yellow axis.
-     *  - Both values set to 0.0 = automatic CA correction.
-     */
-    double caMultiplier[2];
-
     /** Brightness of output image.
      */
     double brightness;
@@ -317,23 +284,6 @@ public:
     /** Turn on the DCB interpolation with enhance interpolated colors.
      */
     bool dcbEnhanceFl;
-
-    /// For VCD_AHD interpolation.
-
-    /** Turn on the EECI refine for VCD Demosaicing.
-     */
-    bool eeciRefine;
-
-    /** Use edge-sensitive median filtering for artifact supression after VCD demosaicing.
-     * 0   : disable (default)
-     * 1-10 : median filter passes.
-     */
-    int esMedPasses;
-
-    /** For IMPULSENR Noise reduction. Set the amount of Chrominance impulse denoise.
-        Null value disable NR. Range is between 100 and 1000.
-     */
-    int NRChroThreshold;
 
     /** Turn on the Exposure Correction before interpolation.
      */

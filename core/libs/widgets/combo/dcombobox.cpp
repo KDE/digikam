@@ -102,9 +102,9 @@ void DComboBox::addItem(const QString& t, int index)
     d->combo->addItem(t, index);
 }
 
-void DComboBox::insertItem(int index, const QString& t)
+void DComboBox::insertItem(int index, const QString& t, const QVariant& data)
 {
-    d->combo->insertItem(index, t);
+    d->combo->insertItem(index, t, data);
 }
 
 int DComboBox::currentIndex() const

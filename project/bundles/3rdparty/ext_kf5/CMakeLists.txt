@@ -192,7 +192,7 @@ function(InstallKF5Component
 
 endfunction()
 
-set(KD_VERSION 5.45)
+set(KD_VERSION 5.47)
 
 if(APPLE)
     set(MacosThreadWeaverPatch threadweaver-macports.patch)

@@ -51,29 +51,9 @@ public:
 
     virtual void show();
 
-public Q_SLOTS:
-
-    void slotSetup();
-    void slotSetupICC();
-
 private:
 
-    bool setup(bool iccSetupPage=false);
-
     bool queryClose();
-
-    void setupActions();
-    void setupConnections();
-    void setupUserArea();
-
-    void readSettings();
-    void saveSettings();
-    void applySettings();
-
-    void toggleActions(bool val);
-    void addServicesMenu();
-
-    void toggleNavigation(int index);
 
     bool save();
     bool saveAs();
@@ -89,8 +69,6 @@ private:
     void saveAsIsComplete();
     void saveVersionIsComplete();
 
-    void slideShow(Digikam::SlideShowSettings& settings);
-
     void openFolder(const QUrl& url);
     void openUrls(const QList<QUrl>& urls);
 
@@ -103,7 +81,6 @@ private Q_SLOTS:
     void slotBackward();
     void slotLast();
     void slotFirst();
-    void slotFilePrint();
     void slotFileWithDefaultApplication();
     void slotOpenWith(QAction* action=0);
     void slotShowfotoItemInfoActivated(const ShowfotoItemInfo& info);
@@ -123,29 +100,9 @@ private Q_SLOTS:
     void slotLoadingFinished(const QString& filename, bool success);
     void slotSavingStarted(const QString& filename);
 
-    void slotContextMenu();
     void slotRevert();
-    void slotSetupMetadataFilters(int);
 
     void slotAddedDropedItems(QDropEvent*);
-
-    void slotImportFromScanner();
-    void slotImportedImagefromScanner(const QUrl& url);
-
-    void slotEditMetadata();
-    void slotEditGeolocation();
-    void slotHtmlGallery();
-    void slotCalendar();
-    void slotPresentation();
-    void slotExpoBlending();
-    void slotPanorama();
-    void slotVideoSlideshow();
-    void slotSendByMail();
-    void slotPrintCreator();
-    void slotMediaServer();
-
-    void slotExportTool();
-    void slotImportTool();
 
 Q_SIGNALS:
 
@@ -153,6 +110,77 @@ Q_SIGNALS:
     void signalOpenFolder(const QUrl&);
     void signalOpenFile(const QList<QUrl>& urls);
     void signalInfoList(ShowfotoItemInfoList&);
+
+// -- Internal setup methods implemented in showfoto_config.cpp ----------------------------------------
+
+public Q_SLOTS:
+
+    void slotSetup();
+    void slotSetupICC();
+
+private:
+
+    bool setup(bool iccSetupPage=false);
+    void applySettings();
+    void readSettings();
+    void saveSettings();
+
+private Q_SLOTS:
+
+    void slotSetupMetadataFilters(int);
+
+// -- Internal setup methods implemented in showfoto_setup.cpp ----------------------------------------
+
+private:
+
+    void setupActions();
+    void setupConnections();
+    void setupUserArea();
+
+    void toggleActions(bool val);
+    void toggleNavigation(int index);
+    void addServicesMenu();
+
+private Q_SLOTS:
+
+    void slotContextMenu();
+
+// -- Extra tool methods implemented in showfoto_tools.cpp ----------------------------------------
+
+private Q_SLOTS:
+
+    void slotEditMetadata();
+    void slotEditGeolocation();
+    void slotFilePrint();
+    void slotPrintCreator();
+    void slotPresentation();
+
+private:
+
+    void slideShow(Digikam::SlideShowSettings& settings);
+
+// -- Export tools methods implemented in showfoto_export.cpp -------------------------------------
+
+private Q_SLOTS:
+
+    void slotHtmlGallery();
+    void slotCalendar();
+    void slotExpoBlending();
+    void slotPanorama();
+    void slotVideoSlideshow();
+    void slotSendByMail();
+    void slotMediaServer();
+    void slotExportTool();
+
+// -- Import tools methods implemented in showfoto_import.cpp -------------------------------------
+
+private Q_SLOTS:
+
+    void slotImportFromScanner();
+    void slotImportedImagefromScanner(const QUrl& url);
+    void slotImportTool();
+
+// -- Internal private container --------------------------------------------------------------------
 
 private:
 

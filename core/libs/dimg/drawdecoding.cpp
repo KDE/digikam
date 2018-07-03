@@ -125,9 +125,6 @@ void DRawDecoderSettingsWriter::write()
     AddParameterIfNotDefault(medianFilterPasses);
     AddParameterIfNotDefaultEnumWithValue(noiseReductionType,              NRType);
     AddParameterIfNotDefaultWithValue(noiseReductionThreshold,             NRThreshold);
-    AddParameterIfNotDefaultWithValue(enableChromaticAberrationCorrection, enableCACorrection);
-    AddParameterIfNotDefaultWithValue(redChromaticAberrationMultiplier,    caMultiplier[0]);
-    AddParameterIfNotDefaultWithValue(blueChromaticAberrationMultiplier,   caMultiplier[1]);
     AddParameterIfNotDefault(brightness);
 
     AddParameter(enableBlackPoint);
@@ -173,9 +170,6 @@ void DRawDecoderSettingsWriter::write()
 
     AddParameterIfNotDefault(dcbIterations);
     AddParameterIfNotDefault(dcbEnhanceFl);
-    AddParameterIfNotDefault(eeciRefine);
-    AddParameterIfNotDefault(esMedPasses);
-    AddParameterIfNotDefaultWithValue(noiseReductionChrominanceThreshold, NRChroThreshold);
     AddParameterIfNotDefault(expoCorrection);
     AddParameterIfNotDefaultWithValue(exposureCorrectionShift,            expoCorrectionShift);
     AddParameterIfNotDefaultWithValue(exposureCorrectionHighlight,        expoCorrectionHighlight);
@@ -250,9 +244,6 @@ void DRawDecoderSettingsReader::read()
     ReadParameter(medianFilterPasses);
     ReadParameterEnumWithValue(noiseReductionType,              NRType);
     ReadParameterWithValue(noiseReductionThreshold,             NRThreshold);
-    ReadParameterWithValue(enableChromaticAberrationCorrection, enableCACorrection);
-    ReadParameterWithValue(redChromaticAberrationMultiplier,    caMultiplier[0]);
-    ReadParameterWithValue(blueChromaticAberrationMultiplier,   caMultiplier[1]);
     ReadParameter(brightness);
 
     ReadParameter(enableBlackPoint);
@@ -301,9 +292,6 @@ void DRawDecoderSettingsReader::read()
 
     ReadParameter(dcbIterations);
     ReadParameter(dcbEnhanceFl);
-    ReadParameter(eeciRefine);
-    ReadParameter(esMedPasses);
-    ReadParameterWithValue(noiseReductionChrominanceThreshold, NRChroThreshold);
     ReadParameter(expoCorrection);
     ReadParameterWithValue(exposureCorrectionShift,     expoCorrectionShift);
     ReadParameterWithValue(exposureCorrectionHighlight, expoCorrectionHighlight);
@@ -476,18 +464,6 @@ void DRawDecoding::decodingSettingsToXml(const DRawDecoderSettings& prm, QDomEle
     data.setAttribute(QString::fromLatin1("value"), prm.NRThreshold);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("enablecacorrection"));
-    data.setAttribute(QString::fromLatin1("value"), prm.enableCACorrection);
-    elm.appendChild(data);
-
-    data = doc.createElement(QString::fromLatin1("redchromaticaberrationmultiplier"));
-    data.setAttribute(QString::fromLatin1("value"), prm.caMultiplier[0]);
-    elm.appendChild(data);
-
-    data = doc.createElement(QString::fromLatin1("bluechromaticaberrationmultiplier"));
-    data.setAttribute(QString::fromLatin1("value"), prm.caMultiplier[1]);
-    elm.appendChild(data);
-
     data = doc.createElement(QString::fromLatin1("medianfilterpasses"));
     data.setAttribute(QString::fromLatin1("value"), prm.medianFilterPasses);
     elm.appendChild(data);
@@ -526,18 +502,6 @@ void DRawDecoding::decodingSettingsToXml(const DRawDecoderSettings& prm, QDomEle
 
     data = doc.createElement(QString::fromLatin1("dcbenhancefl"));
     data.setAttribute(QString::fromLatin1("value"), prm.dcbEnhanceFl);
-    elm.appendChild(data);
-
-    data = doc.createElement(QString::fromLatin1("eecirefine"));
-    data.setAttribute(QString::fromLatin1("value"), prm.eeciRefine);
-    elm.appendChild(data);
-
-    data = doc.createElement(QString::fromLatin1("esmedpasses"));
-    data.setAttribute(QString::fromLatin1("value"), prm.esMedPasses);
-    elm.appendChild(data);
-
-    data = doc.createElement(QString::fromLatin1("nrchrominancethreshold"));
-    data.setAttribute(QString::fromLatin1("value"), prm.NRChroThreshold);
     elm.appendChild(data);
 
     data = doc.createElement(QString::fromLatin1("expocorrection"));
@@ -649,18 +613,6 @@ void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, DRawDecoderSe
         {
             prm.NRThreshold = val.toInt(&ok);
         }
-        else if (key == QLatin1String("enablecacorrection"))
-        {
-            prm.enableCACorrection = (bool)val.toInt(&ok);
-        }
-        else if (key == QLatin1String("redchromaticaberrationmultiplier"))
-        {
-            prm.caMultiplier[0] = val.toDouble(&ok);
-        }
-        else if (key == QLatin1String("bluechromaticaberrationmultiplier"))
-        {
-            prm.caMultiplier[1] = val.toDouble(&ok);
-        }
         else if (key == QLatin1String("medianfilterpasses"))
         {
             prm.medianFilterPasses = val.toInt(&ok);
@@ -700,18 +652,6 @@ void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, DRawDecoderSe
         else if (key == QLatin1String("dcbenhancefl"))
         {
             prm.dcbEnhanceFl = (bool)val.toInt(&ok);
-        }
-        else if (key == QLatin1String("eecirefine"))
-        {
-            prm.eeciRefine = (bool)val.toInt(&ok);
-        }
-        else if (key == QLatin1String("esmedpasses"))
-        {
-            prm.esMedPasses = val.toInt(&ok);
-        }
-        else if (key == QLatin1String("nrchrominancethreshold"))
-        {
-            prm.NRChroThreshold = val.toInt(&ok);
         }
         else if (key == QLatin1String("expocorrection"))
         {
