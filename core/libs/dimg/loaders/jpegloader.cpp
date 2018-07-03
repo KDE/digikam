@@ -61,7 +61,7 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-    qCDebug(DIGIKAM_DIMG_LOG_JPEG) << buffer;
+    qCWarning(DIGIKAM_DIMG_LOG_JPEG) << buffer;
 
     longjmp(myerr->setjmp_buffer, 1);
 }
