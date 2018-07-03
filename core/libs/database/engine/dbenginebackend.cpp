@@ -1246,7 +1246,7 @@ BdEngineBackend::QueryState BdEngineBackend::execUpsertDBAction(const DbEngineAc
                                                                 const QVariant& id,
                                                                 const QStringList fieldNames,
                                                                 const QList<QVariant>& values)
-{qCDebug(DIGIKAM_DBENGINE_LOG) << "---lyj--- exec upsert dbaction";
+{
     QMap<QString, QVariant> parameters;
     QMap<QString, QVariant> fieldValueMap;
 

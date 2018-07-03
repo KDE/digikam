@@ -1850,9 +1850,10 @@ void CoreDB::changeImageInformation(qlonglong imageId, const QVariantList& infos
 }
 
 void CoreDB::changeImages(qlonglong imageId, const QVariantList& infos,
-                                     DatabaseFields::Images fields)
+                          DatabaseFields::Images fields)
 {
-    qCDebug(DIGIKAM_DATABASE_LOG) << "---lyj--- change images " << imageId;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDB::changeImages" << imageId;
+
     if (fields == DatabaseFields::ImagesNone)
     {
         return;
