@@ -662,6 +662,7 @@ int ImageInfo::manualOrder() const
     {
         return 0;
     }
+
     // RETURN_IF_CACHED(manualOrder)
 
     QVariantList values = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::ManualOrder);
@@ -1663,7 +1664,6 @@ void ImageInfo::setRating(int value)
 
 void ImageInfo::setManualOrder(int value)
 {
-    // return ;
     if (!m_data)
     {
         return;
@@ -1672,7 +1672,7 @@ void ImageInfo::setManualOrder(int value)
     CoreDbAccess().db()->changeImages(m_data->id, QVariantList() << value, DatabaseFields::ManualOrder);
 
     // ImageInfoWriteLocker lock;
-    // m_data->manualOrder  = value;
+    // m_data->manualOrder       = value;
     // m_data->manualOrderCached = true;
 }
 

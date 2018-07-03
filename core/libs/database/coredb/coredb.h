@@ -813,7 +813,7 @@ public:
      * The parameters are as for the method above.
      */
     void changeImages(qlonglong imageID, const QVariantList& infos,
-                                DatabaseFields::Images fields = DatabaseFields::ImagesAll);
+                      DatabaseFields::Images fields = DatabaseFields::ImagesAll);
 
     /**
      * Read image information. Parameters as above.

@@ -191,7 +191,7 @@ static DropAction groupAction(const QDropEvent* const, QWidget* const view)
     QMenu popMenu(view);
     QAction* const groupAction = addGroupAction(&popMenu);
     popMenu.addSeparator();
-    QAction* const sortAction = addSortAction(&popMenu);
+    QAction* const sortAction  = addSortAction(&popMenu);
     popMenu.addSeparator();
     addCancelAction(&popMenu);
 
@@ -458,8 +458,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         if (action == SortAction)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "---lyj--- sort action";
-            if(droppedOnInfo.isNull())
+            if (droppedOnInfo.isNull())
             {
                 return false;
             }
