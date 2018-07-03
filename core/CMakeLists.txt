@@ -644,7 +644,7 @@ endif()
 if(Doxygen_FOUND)
 
     set(API_DIR    ${CMAKE_BINARY_DIR}/api)
-    set(SOURCE_DIR ${CMAKE_SOURCE_DIR})
+    set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/core)
     set(DOXYFILE   ${CMAKE_BINARY_DIR}/Doxyfile)
     set(WARNFILE   ${CMAKE_BINARY_DIR}/doxygen-warn.log)
 
