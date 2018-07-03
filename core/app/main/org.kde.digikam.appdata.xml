@@ -72,7 +72,7 @@
     <p xml:lang="it">digiKam è un'applicazione per la gestione avanzata delle fotografie digitali, che permette di importare e organizzare le proprie foto in pochi clic. Le foto sono organizzate in album, i quali possono essere ordinati per data, per disposizione delle cartelle o per raccolte personalizzate.</p>
     <p xml:lang="ko">digiKam은 디지털 사진을 가져오고 관리하는 고급 디지털 사진 관리 프로그램입니다. 사진은 시간순, 폴더별 등 다양한 방법으로 정리할 수 있습니다.</p>
     <p xml:lang="nl">digiKam is een geavanceerde toepassing voor beheer van digitale foto's, die importeren en organiseren van digitale foto's een "fluitje van een cent" maakt. De foto's zijn georganiseerd in albums die chronologisch, op indeling van mappen of op eigen verzamelingen gesorteerd kunnen zijn.</p>
-    <p xml:lang="nn">digiKam er eit avansert fotohandsamingsprogram som gjer det kjapt og enkelt å importera og organisera digitale bilete. Bileta vert ordna i album, som kan sorterast kronologisk, etter mappestruktur eller eigendefinerte samlingar.</p>
+    <p xml:lang="nn">digiKam er eit avansert fotohandsamingsprogram som gjer det kjapt og enkelt å importera og organisera digitale bilete. Bileta vert ordna i album som kan sorterast kronologisk, etter mappestruktur eller i eigendefinerte samlingar.</p>
     <p xml:lang="pl">digiKam jest zaawansowanym programem do zarządzania cyfrowymi zdjęciami, który czyni importowanie i zarządzanie cyfrowymi zdjęciami "drobnostką". Zdjęcia są urządzone w albumy, które można przechowywać chronologicznie, według układu katalogów lub według własnych zbiorów.</p>
     <p xml:lang="pt">O digiKam é uma aplicação de gestão de fotografias digitais, o que torna a importação e a organização de fotografias digitais extremamente simples. As fotos são organizadas em álbuns, os quais podem ser ordenados de forma cronológica, por disposição das pastas ou com colecções personalizadas.</p>
     <p xml:lang="pt-BR">DigiKam é um aplicativo para gerenciamento de fotos digitais avançado, que torna muito fácil a importação e organização das suas fotos digitais. As fotos são organizadas em álbuns e ordenadas de forma cronológica, por layout de pastas ou por coleções personalizadas.</p>
@@ -174,6 +174,7 @@
       <li xml:lang="gl">Almacenamento mediante SQLite ou MySQL para o contido dos álbums e os seus metadatos con ferramentas de busca avanzadas.</li>
       <li xml:lang="it">Memorizzazione del contenuto degli album e dei suoi metadati fornita da SQLite o Mysql, con strumenti di ricerca avanzati</li>
       <li xml:lang="nl">Op SQLite of Mysql gebaseerde opslag voor de inhoud van albums en zijn metagegevens met geavanceerde zoekhulpmiddellen</li>
+      <li xml:lang="nn">SQLite- eller MySQL-basert lagring for album og metadata, med avanserte søkjeverktøy</li>
       <li xml:lang="pl">Przechowalnia dla albumów i ich metadanych z zaawansowanymi narzędziami wyszukiwania jest napędzana SQLite lub Mysql</li>
       <li xml:lang="pt">Armazenamento baseado em SQLite ou MySQL para o conteúdo dos álbuns e os seus meta-dados com ferramentas de pesquisa avançadas</li>
       <li xml:lang="sl">Shramba SQLite ali Mysql za albume in metapodatke ter napredna iskalna orodja</li>
@@ -246,6 +247,7 @@
       <li xml:lang="gl">Compatíbel con imaxes en máis de 900 formatos en cru (RAW).</li>
       <li xml:lang="it">Supporto per più di 900 immagini in formato RAW</li>
       <li xml:lang="nl">Ondersteuning voor 900 RAW-format afbeeldingen</li>
+      <li xml:lang="nn">Støtte for meir enn 900 råbiletformat</li>
       <li xml:lang="pl">Obsługa dla więcej niż 900 postaci zdjęć RAW</li>
       <li xml:lang="pt">Suporte para mais de 900 formatos de imagens RAW</li>
       <li xml:lang="sl">Podpora več kot 900 vrstam surovih slik (RAW)</li>
@@ -266,6 +268,7 @@
       <li xml:lang="gl">Táboa de luz para comparar fotos unha ao lado da outra.</li>
       <li xml:lang="it">Tavolo luminoso per confrontare le foto fianco a fianco</li>
       <li xml:lang="nl">Lichttafel om foto's naast elkaar te vergelijken</li>
+      <li xml:lang="nn">Lysbord for å samanlikna bilete ved sidan av kvarandre</li>
       <li xml:lang="pl">Podświetlarka do porównywania zdjęć jedno obok drugiego</li>
       <li xml:lang="pt">Mesa de Luz para comparar as fotografias lado-a-lado</li>
       <li xml:lang="sl">Osvetlitvena miza za primerjavo fotografij</li>
@@ -284,6 +287,7 @@
       <li xml:lang="gl">Funcionalidades estendidas usando ferramentas adicionais.</li>
       <li xml:lang="it">Funzionalità estese tramite strumenti aggiuntivi</li>
       <li xml:lang="nl">Uitgebreide mogelijkheden met extra hulpmiddelen</li>
+      <li xml:lang="nn">Programtillegg som gjev ekstrafunksjonar</li>
       <li xml:lang="pl">Rozszerzone funkcje używające dodatkowych narzędzi</li>
       <li xml:lang="pt">Funcionalidades estendidas com ferramentas extra</li>
       <li xml:lang="sl">Razširjene zmožnosti preko dodatnih orodij</li>
@@ -303,6 +307,7 @@
       <li xml:lang="gl">Permite compartir imaxes usando HTML ou publicándoas en servizos web remotos.</li>
       <li xml:lang="it">Condivisione delle foto tramite HTML o loro pubblicazione nei servizi web remoti</li>
       <li xml:lang="nl">Uw foto's delen met HTML of ze publiceren op websites op afstand</li>
+      <li xml:lang="nn">Del bileta med HTML eller publiser dei ulike nett-tenester</li>
       <li xml:lang="pl">Udostępnianie zdjęć przy użyciu HTML lub publikowanie ich poprzez usługi sieciowe</li>
       <li xml:lang="pt">Partilhar as suas fotos por HTML ou publicá-las em serviços Web remotos</li>
       <li xml:lang="sl">Delite vaše fotografije s pomočjo HTML-ja ali pa jih objavite na oddaljenih storitvah</li>
@@ -322,6 +327,7 @@
       <li xml:lang="gl">Inclúe un editor de imaxes con ferramentas avanzadas para arranxar fotos rapidamente.</li>
       <li xml:lang="it">Editor delle immagini con strumenti avanzati inclusi per la correzione rapida delle foto</li>
       <li xml:lang="nl">Bewerker van afbeeldingen met geavanceerde hulpmiddelen om foto's snel te repareren</li>
+      <li xml:lang="nn">Innebygd biletredigering med avanserte verktøy for forbetra bileta</li>
       <li xml:lang="pl">Dołączony edytor obrazów o zaawansowanych narzedziach do szybkiego poprawiania zdjęć</li>
       <li xml:lang="pt">Editor de imagens que inclui ferramentas avançadas para corrigir rapidamente as fotografias</li>
       <li xml:lang="sl">Vgrajen urejevalnik slik z naprednimi orodji za hitre popravke fotografij</li>
