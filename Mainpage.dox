@@ -2,4 +2,19 @@
     \author (c) 2001-2018 digiKam team
     \brief digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.
     \image html logo-digikam.png
- */
+
+| SOURCE TREE-VIEW                                            | DETAILS                                                                 |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------- |
+| ├── build                                                   | Directory to store compiled files and binary targets                    |
+| ├── bootstrap.sh                                            | Configuration script to compile under Linux                             |
+| ├── cmake                                                   | Directory to store extra Cmake scripts                                  |
+| │   └── templates                                           | Template files patched at compation time by Cmake                       |
+| ├── CMakeLists.txt                                          | Main Cmake script including lead compilation rules for the project      |
+| ├── extra                                                   | Directory to extra libraries                                            |
+| ├── HACKING                                                 | Coding style and debuging instructions                                  |
+| ├── Mainpage.dox                                            | API documentation main page based on Doxygen                            |
+| ├── project                                                 | Extra files for the project                                             |
+| ├── README                                                  | First start helper documentation                                        |
+| ├── core                                                    | All source code must be hosted in this directory                        |
+
+*/
