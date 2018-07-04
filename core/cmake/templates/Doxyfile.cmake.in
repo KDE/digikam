@@ -616,7 +616,7 @@ EXCLUDE                =
 # directories that are symbolic links (a Unix filesystem feature) are excluded
 # from the input.
 
-EXCLUDE_SYMLINKS       = NO
+EXCLUDE_SYMLINKS       = YES
 
 # If the value of the INPUT tag contains directories, you can use the
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude
@@ -624,7 +624,7 @@ EXCLUDE_SYMLINKS       = NO
 # against the file with absolute path, so to exclude all test directories
 # for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       = */project/* */build/* */extra/* */tests/* */o2/* */upnpsdk/* */cimg/* */libstatgrab/* */libjpeg/* */libpgf/* */libraw/* */dngwriter/extra/* */opencv3-face/* */dnnface/*
+EXCLUDE_PATTERNS       = */project/* */build/* */extra/* */tests/* */o2/* */upnpsdk/* */cimg/* */libstatgrab/* */libjpeg/* */libpgf/* */libraw/* */opencv3-face/* */dnnface/*
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -632,7 +632,7 @@ EXCLUDE_PATTERNS       = */project/* */build/* */extra/* */tests/* */o2/* */upnp
 # wildcard * is used, a substring. Examples: ANamespace, AClass,
 # AClass::ANamespace, ANamespace::*Test
 
-EXCLUDE_SYMBOLS        =
+EXCLUDE_SYMBOLS        = cimg_library, cimg, dlib, Platinum, Eigen, lapack, cv, Marble, KIO, mediawiki, clix, Ui, Vkontakte, std, Solid
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or
 # directories that contain example code fragments that are included (see
