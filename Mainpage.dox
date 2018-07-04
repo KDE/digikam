@@ -22,13 +22,13 @@
 |│   │   ├── utils                                            |                                                                         |
 |│   │   └── views                                            |                                                                         |
 |│   │       └── tableview                                    |                                                                         |
-|│   ├── cmake                                                |                                                                         |
-|│   │   ├── modules                                          |                                                                         |
-|│   │   └── templates                                        |                                                                         |
-|│   ├── data                                                 |                                                                         |
-|│   │   ├── about                                            |                                                                         |
-|│   │   ├── colorschemes                                     |                                                                         |
-|│   │   ├── database                                         |                                                                         |
+|│   ├── cmake                                                | Extra Cmake scripts will be hosted here                                 |
+|│   │   ├── modules                                          | Cmake scripts to find extra dependencies                                |
+|│   │   └── templates                                        | Cmake template files used at configuration time                         |
+|│   ├── data                                                 | Data files will be hosted here                                          |
+|│   │   ├── about                                            | Welcome page files (HTML + CSS)                                         |
+|│   │   ├── colorschemes                                     | GUI Color scheme files                                                  |
+|│   │   ├── database                                         | Database XML configuration files                                        |
 |│   │   ├── facesengine                                      |                                                                         |
 |│   │   ├── filters                                          |                                                                         |
 |│   │   ├── geolocation                                      |                                                                         |
