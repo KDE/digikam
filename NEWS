@@ -278,4 +278,5 @@ BUGFIXES:
 224 ==> 382174 - Not creating thumbnails and not editing (F4) files created for Samsung panorama jpgs [patch].
 225 ==> 376124 - Some Photos are not previewed.
 226 ==> 386188 - Preview Does Not Display Some JPGs Editor Crashes Program.
-227 ==> 
+227 ==> 394906 - Toggling "use file metadata" for input will make Digikam forget all imported photos.
+228 ==> 
