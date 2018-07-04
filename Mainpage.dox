@@ -5,16 +5,226 @@
 
 | SOURCE TREE-VIEW                                            | DETAILS                                                                 |
 | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
-| ├── build                                                   | Directory to store compiled files and binary targets                    |
-| ├── bootstrap.sh                                            | Configuration script to compile under Linux                             |
-| ├── cmake                                                   | Directory to store extra Cmake scripts                                  |
-| │   └── templates                                           | Template files patched at compation time by Cmake                       |
-| ├── CMakeLists.txt                                          | Main Cmake script including lead compilation rules for the project      |
-| ├── extra                                                   | Directory to extra libraries                                            |
-| ├── HACKING                                                 | Coding style and debuging instructions                                  |
-| ├── Mainpage.dox                                            | API documentation main page based on Doxygen                            |
-| ├── project                                                 | Extra files for the project                                             |
-| ├── README                                                  | First start helper documentation                                        |
-| ├── core                                                    | All source code must be hosted in this directory                        |
+|├── bootstrap.sh                                             | Configuration script to compile under Linux                             |
+|├── CMakeLists.txt                                           | Main Cmake script including lead compilation rules for the project      |
+|├── HACKING                                                  | Coding style and debuging instructions                                  |
+|├── Mainpage.dox                                             | API documentation main page based on Doxygen                            |
+|├── README.md                                                | First start helper documentation                                        |
+|├── build                                                    | Directory to store compiled files and binary targets                    |
+|├── core                                                     | All source code must be hosted in this directory                        |
+|│   ├── app                                                  |                                                                         |
+|│   │   ├── date                                             |                                                                         |
+|│   │   ├── dragdrop                                         |                                                                         |
+|│   │   ├── filters                                          |                                                                         |
+|│   │   ├── items                                            |                                                                         |
+|│   │   │   └── overlays                                     |                                                                         |
+|│   │   ├── main                                             |                                                                         |
+|│   │   ├── utils                                            |                                                                         |
+|│   │   └── views                                            |                                                                         |
+|│   │       └── tableview                                    |                                                                         |
+|│   ├── cmake                                                |                                                                         |
+|│   │   ├── modules                                          |                                                                         |
+|│   │   └── templates                                        |                                                                         |
+|│   ├── data                                                 |                                                                         |
+|│   │   ├── about                                            |                                                                         |
+|│   │   ├── colorschemes                                     |                                                                         |
+|│   │   ├── database                                         |                                                                         |
+|│   │   ├── facesengine                                      |                                                                         |
+|│   │   ├── filters                                          |                                                                         |
+|│   │   ├── geolocation                                      |                                                                         |
+|│   │   ├── hotplug                                          |                                                                         |
+|│   │   ├── htmlgallery                                      |                                                                         |
+|│   │   ├── icons                                            |                                                                         |
+|│   │   ├── metadata                                         |                                                                         |
+|│   │   ├── pics                                             |                                                                         |
+|│   │   ├── printcreator                                     |                                                                         |
+|│   │   ├── profiles                                         |                                                                         |
+|│   │   └── scripts                                          |                                                                         |
+|│   ├── libs                                                 |                                                                         |
+|│   │   ├── album                                            |                                                                         |
+|│   │   ├── database                                         |                                                                         |
+|│   │   │   ├── collection                                   |                                                                         |
+|│   │   │   ├── coredb                                       |                                                                         |
+|│   │   │   ├── dbjobs                                       |                                                                         |
+|│   │   │   ├── engine                                       |                                                                         |
+|│   │   │   ├── haar                                         |                                                                         |
+|│   │   │   ├── imagehistory                                 |                                                                         |
+|│   │   │   ├── imgqsort                                     |                                                                         |
+|│   │   │   ├── item                                         |                                                                         |
+|│   │   │   ├── models                                       |                                                                         |
+|│   │   │   ├── server                                       |                                                                         |
+|│   │   │   ├── similaritydb                                 |                                                                         |
+|│   │   │   ├── tags                                         |                                                                         |
+|│   │   │   ├── thumbsdb                                     |                                                                         |
+|│   │   │   └── utils                                        |                                                                         |
+|│   │   ├── dialogs                                          |                                                                         |
+|│   │   ├── dimg                                             |                                                                         |
+|│   │   │   ├── filters                                      |                                                                         |
+|│   │   │   │   ├── auto                                     |                                                                         |
+|│   │   │   │   ├── bcg                                      |                                                                         |
+|│   │   │   │   ├── bw                                       |                                                                         |
+|│   │   │   │   ├── cb                                       |                                                                         |
+|│   │   │   │   ├── curves                                   |                                                                         |
+|│   │   │   │   ├── decorate                                 |                                                                         |
+|│   │   │   │   ├── film                                     |                                                                         |
+|│   │   │   │   ├── fx                                       |                                                                         |
+|│   │   │   │   ├── greycstoration                           |                                                                         |
+|│   │   │   │   ├── hsl                                      |                                                                         |
+|│   │   │   │   ├── icc                                      |                                                                         |
+|│   │   │   │   ├── lc                                       |                                                                         |
+|│   │   │   │   ├── lens                                     |                                                                         |
+|│   │   │   │   ├── levels                                   |                                                                         |
+|│   │   │   │   ├── nr                                       |                                                                         |
+|│   │   │   │   ├── redeye                                   |                                                                         |
+|│   │   │   │   ├── sharp                                    |                                                                         |
+|│   │   │   │   ├── transform                                |                                                                         |
+|│   │   │   │   └── wb                                       |                                                                         |
+|│   │   │   ├── imagehistory                                 |                                                                         |
+|│   │   │   └── loaders                                      |                                                                         |
+|│   │   ├── dmetadata                                        |                                                                         |
+|│   │   ├── dngwriter                                        |                                                                         |
+|│   │   │   └── extra                                        |                                                                         |
+|│   │   ├── dtrash                                           |                                                                         |
+|│   │   ├── facesengine                                      |                                                                         |
+|│   │   │   ├── alignment-congealing                         |                                                                         |
+|│   │   │   ├── alignment-flandmark                          |                                                                         |
+|│   │   │   ├── detection                                    |                                                                         |
+|│   │   │   ├── dnnface                                      |                                                                         |
+|│   │   │   ├── facedb                                       |                                                                         |
+|│   │   │   ├── opencv3-face                                 |                                                                         |
+|│   │   │   ├── preprocessing-tantriggs                      |                                                                         |
+|│   │   │   ├── recognition-dlib-dnn                         |                                                                         |
+|│   │   │   ├── recognition-opencv-eigenfaces                |                                                                         |
+|│   │   │   ├── recognition-opencv-fisherfaces               |                                                                         |
+|│   │   │   ├── recognition-opencv-lbph                      |                                                                         |
+|│   │   │   └── shape-predictor                              |                                                                         |
+|│   │   ├── fileactionmanager                                |                                                                         |
+|│   │   ├── filters                                          |                                                                         |
+|│   │   ├── imageproperties                                  |                                                                         |
+|│   │   ├── iojobs                                           |                                                                         |
+|│   │   ├── jpegutils                                        |                                                                         |
+|│   │   │   └── libjpeg                                      |                                                                         |
+|│   │   ├── kmemoryinfo                                      |                                                                         |
+|│   │   ├── models                                           |                                                                         |
+|│   │   ├── notificationmanager                              |                                                                         |
+|│   │   ├── pgfutils                                         |                                                                         |
+|│   │   ├── progressmanager                                  |                                                                         |
+|│   │   ├── rawengine                                        |                                                                         |
+|│   │   ├── settings                                         |                                                                         |
+|│   │   ├── tags                                             |                                                                         |
+|│   │   │   └── tagsmanager                                  |                                                                         |
+|│   │   │       └── models                                   |                                                                         |
+|│   │   ├── template                                         |                                                                         |
+|│   │   ├── threadimageio                                    |                                                                         |
+|│   │   │   └── ffmpegthumbnailer                            |                                                                         |
+|│   │   ├── threads                                          |                                                                         |
+|│   │   ├── transitionmngr                                   |                                                                         |
+|│   │   ├── versionmanager                                   |                                                                         |
+|│   │   └── widgets                                          |                                                                         |
+|│   │       ├── colors                                       |                                                                         |
+|│   │       ├── combo                                        |                                                                         |
+|│   │       ├── common                                       |                                                                         |
+|│   │       ├── files                                        |                                                                         |
+|│   │       ├── fonts                                        |                                                                         |
+|│   │       ├── graphicsview                                 |                                                                         |
+|│   │       ├── iccprofiles                                  |                                                                         |
+|│   │       ├── imagehistory                                 |                                                                         |
+|│   │       ├── itemview                                     |                                                                         |
+|│   │       ├── layout                                       |                                                                         |
+|│   │       ├── mainview                                     |                                                                         |
+|│   │       ├── metadata                                     |                                                                         |
+|│   │       └── range                                        |                                                                         |
+|│   ├── showfoto                                             |                                                                         |
+|│   │   ├── main                                             |                                                                         |
+|│   │   ├── setup                                            |                                                                         |
+|│   │   └── thumbbar                                         |                                                                         |
+|│   ├── tests                                                |                                                                         |
+|│   └── utilities                                            |                                                                         |
+|│       ├── advancedrename                                   |                                                                         |
+|│       ├── assistants                                       |                                                                         |
+|│       │   ├── calendar                                     |                                                                         |
+|│       │   ├── common                                       |                                                                         |
+|│       │   ├── expoblending                                 |                                                                         |
+|│       │   ├── firstrun                                     |                                                                         |
+|│       │   ├── htmlgallery                                  |                                                                         |
+|│       │   ├── panorama                                     |                                                                         |
+|│       │   ├── printcreator                                 |                                                                         |
+|│       │   ├── sendbymail                                   |                                                                         |
+|│       │   ├── videoslideshow                               |                                                                         |
+|│       │   └── webservices                                  |                                                                         |
+|│       │       ├── common                                   |                                                                         |
+|│       │       ├── dropbox                                  |                                                                         |
+|│       │       ├── facebook                                 |                                                                         |
+|│       │       ├── filetransfer                             |                                                                         |
+|│       │       ├── flickr                                   |                                                                         |
+|│       │       ├── google                                   |                                                                         |
+|│       │       ├── imageshack                               |                                                                         |
+|│       │       ├── imgur                                    |                                                                         |
+|│       │       ├── mediawiki                                |                                                                         |
+|│       │       ├── piwigo                                   |                                                                         |
+|│       │       ├── rajce                                    |                                                                         |
+|│       │       ├── smugmug                                  |                                                                         |
+|│       │       ├── vkontakte                                |                                                                         |
+|│       │       └── yandexfotki                              |                                                                         |
+|│       ├── extrasupport                                     |                                                                         |
+|│       ├── facemanagement                                   |                                                                         |
+|│       ├── fuzzysearch                                      |                                                                         |
+|│       ├── geolocation                                      |                                                                         |
+|│       │   ├── editor                                       |                                                                         |
+|│       │   ├── geoiface                                     |                                                                         |
+|│       │   ├── geomapwrapper                                |                                                                         |
+|│       │   └── mapsearches                                  |                                                                         |
+|│       ├── imageeditor                                      |                                                                         |
+|│       │   ├── core                                         |                                                                         |
+|│       │   ├── dialogs                                      |                                                                         |
+|│       │   ├── editor                                       |                                                                         |
+|│       │   ├── main                                         |                                                                         |
+|│       │   ├── printiface                                   |                                                                         |
+|│       │   ├── rawimport                                    |                                                                         |
+|│       │   ├── tools                                        |                                                                         |
+|│       │   └── widgets                                      |                                                                         |
+|│       ├── import                                           |                                                                         |
+|│       │   ├── backend                                      |                                                                         |
+|│       │   ├── dialogs                                      |                                                                         |
+|│       │   ├── dscanner                                     |                                                                         |
+|│       │   ├── items                                        |                                                                         |
+|│       │   ├── main                                         |                                                                         |
+|│       │   ├── models                                       |                                                                         |
+|│       │   ├── views                                        |                                                                         |
+|│       │   └── widgets                                      |                                                                         |
+|│       ├── lighttable                                       |                                                                         |
+|│       ├── maintenance                                      |                                                                         |
+|│       ├── mediaserver                                      |                                                                         |
+|│       │   └── upnpsdk                                      |                                                                         |
+|│       ├── metadataedit                                     |                                                                         |
+|│       ├── presentation                                     |                                                                         |
+|│       ├── queuemanager                                     |                                                                         |
+|│       │   ├── main                                         |                                                                         |
+|│       │   ├── manager                                      |                                                                         |
+|│       │   ├── tools                                        |                                                                         |
+|│       │   └── views                                        |                                                                         |
+|│       ├── searchwindow                                     |                                                                         |
+|│       ├── setup                                            |                                                                         |
+|│       │   ├── album                                        |                                                                         |
+|│       │   ├── camera                                       |                                                                         |
+|│       │   ├── collections                                  |                                                                         |
+|│       │   ├── editor                                       |                                                                         |
+|│       │   └── metadata                                     |                                                                         |
+|│       └── slideshow                                        |                                                                         |
+|├── doc                                                      | Handbooks                                                               |
+|│   ├── digikam                                              | digiKam manual                                                          |
+|│   ├── project                                              | Extra files for the documentation                                       |
+|│   └── showfoto                                             | Showfoto manual                                                         |
+|├── extra                                                    | Optional extra libraries to compile advanced features                   |
+|└── project                                                  | Extra project parts                                                     |
+|    ├── bundles                                              | Bundles build scripts                                                   |
+|    │   ├── 3rdparty                                         | External components required to build bundles                           |
+|    │   ├── appimage                                         | Linux AppImage                                                          |
+|    │   ├── macports                                         | MacOs package                                                           |
+|    │   └── mxe                                              | Windows installer                                                       |
+|    ├── documents                                            | Project documentations                                                  |
+|    ├── release                                              | Release scripts                                                         |
+|    ├── reports                                              | Static analyzers report scripts                                         |
+|    └── scripts                                              | 3rdparty scripts                                                        |
 
 */
