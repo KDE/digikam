@@ -284,4 +284,5 @@ BUGFIXES:
 229 ==> 377433 - Crash on opening settings.
 230 ==> 390286 - Please update version of lensfun.
 231 ==> 386649 - Crash on opening RAW file from OnePlus One.
-232 ==> 
+232 ==> 172836 - No menu item for lensfun.
+233 ==> 
