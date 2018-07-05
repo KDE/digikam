@@ -294,5 +294,6 @@ BUGFIXES:
 239 ==> 137281 - Cannot convert nef into raw.
 240 ==> 230763 - Exif ISO data missing when converting Olympus ORF.
 241 ==> 137278 - 16-bit/channel workspace when working with RAW conversions.
-242 ==> 
+242 ==> 133004 - Canon CRW portrait preview upside-down.
+243 ==> 
 
