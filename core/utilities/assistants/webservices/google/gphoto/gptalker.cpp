@@ -744,7 +744,8 @@ void GPTalker::parseResponseListAlbums(const QByteArray& data)
         return;
     }
     
-    QJsonArray jsonArray = doc[QLatin1String("albums")].toArray();
+    QJsonObject jsonObject  = doc.object();
+    QJsonArray jsonArray    = jsonObject[QLatin1String("albums")].toArray();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json array " << doc;
     
     
@@ -788,7 +789,8 @@ void GPTalker::parseResponseListPhotos(const QByteArray& data)
         return;
     }
     
-    QJsonArray jsonArray = doc[QLatin1String("mediaItems")].toArray();
+    QJsonObject jsonObject  = doc.object();
+    QJsonArray jsonArray    = jsonObject[QLatin1String("mediaItems")].toArray();
     QList<GSPhoto> photoList;
     
     foreach(const QJsonValue& value, jsonArray)
@@ -836,7 +838,8 @@ void GPTalker::parseResponseCreateAlbum(const QByteArray& data)
         return;
     }
     
-    QString albumId = doc[QLatin1String("id")].toString();
+    QJsonObject jsonObject  = doc.object();
+    QString albumId         = jsonObject[QLatin1String("id")].toString();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "album Id " << doc;
         
     emit signalCreateAlbumDone(1, QString::fromLatin1(""), albumId);
@@ -863,8 +866,9 @@ void GPTalker::parseResponseGetLoggedInUser(const QByteArray& data)
         emit signalBusy(false);
         return;
     }
-        
-    QString userName(doc[QLatin1String("displayName")].toString());
+    
+    QJsonObject jsonObject = doc.object();
+    QString userName       = jsonObject[QLatin1String("displayName")].toString();
     
     emit signalSetUserName(userName);
     
@@ -888,7 +892,8 @@ void GPTalker::parseResponseUploadPhoto(const QByteArray& data)
         return;
     }
     
-    QJsonArray jsonArray = doc[QLatin1String("newMediaItemResults")].toArray();
+    QJsonObject jsonObject  = doc.object();
+    QJsonArray jsonArray    = jsonObject[QLatin1String("newMediaItemResults")].toArray();
     
     QStringList listPhotoId;
     

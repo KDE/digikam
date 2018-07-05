@@ -785,7 +785,9 @@ void SmugTalker::parseResponseLogin(const QByteArray& data)
         return;
     }
     
-    QJsonObject userObject  = doc[QLatin1String("Response")][QLatin1String("User")].toObject();
+    QJsonObject jsonObject  = doc.object();
+    QJsonObject response    = jsonObject[QLatin1String("Response")].toObject();
+    QJsonObject userObject  = response[QLatin1String("User")].toObject();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json object " << userObject; 
     
     d->user.displayName     = userObject[QLatin1String("Name")].toString();
@@ -793,8 +795,11 @@ void SmugTalker::parseResponseLogin(const QByteArray& data)
     d->user.userUri         = userObject[QLatin1String("Uri")].toString();
     
     QJsonObject Uris        = userObject[QLatin1String("Uris")].toObject();
-    d->user.nodeUri         = QJsonValue(Uris[QLatin1String("Node")])[QLatin1String("Uri")].toString();
-    d->user.folderUri       = QJsonValue(Uris[QLatin1String("Folder")])[QLatin1String("Uri")].toString();       
+    QJsonObject node        = Uris[QLatin1String("Node")].toObject();
+    QJsonObject folder      = Uris[QLatin1String("Folder")].toObject();
+    
+    d->user.nodeUri         = node[QLatin1String("Uri")].toString();
+    d->user.folderUri       = folder[QLatin1String("Uri")].toString();       
     
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data parse : " << d->user.displayName << "+ " << d->user.nodeUri;
     
@@ -900,10 +905,12 @@ void SmugTalker::parseResponseCreateAlbum(const QByteArray& data)
         return;
     }
     
-    QJsonObject jsonObject = doc[QLatin1String("Response")][QLatin1String("Album")].toObject();
-    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data : " << doc; 
+    QJsonObject jsonObject  = doc.object();
+    QJsonObject response    = jsonObject[QLatin1String("Response")].toObject();
+    QJsonObject album       = response[QLatin1String("Album")].toObject();
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "json data : " << jsonObject; 
     
-    QString newAlbumKey    = jsonObject[QLatin1String("AlbumKey")].toString();
+    QString newAlbumKey     = album[QLatin1String("AlbumKey")].toString();
 
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "newAlbumKey " << newAlbumKey;
     
@@ -923,12 +930,12 @@ void SmugTalker::parseResponseListAlbums(const QByteArray& data)
         return;
     }
     
-    QJsonObject jsonObject = doc[QLatin1String("Response")].toObject();
+    QJsonObject jsonObject  = doc.object();
+    QJsonObject response    = jsonObject[QLatin1String("Response")].toObject();
+    QJsonArray jsonArray    = response[QLatin1String("Album")].toArray();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "parseResponseListAlbum : " << jsonObject;
 
     QList<SmugAlbum> albumList;
-    
-    QJsonArray jsonArray = jsonObject[QLatin1String("Album")].toArray();
     
     foreach (const QJsonValue& value, jsonArray)
     {
@@ -981,7 +988,9 @@ void SmugTalker::parseResponseListPhotos(const QByteArray& data)
         return;
     }
     
-    QJsonArray jsonArray = doc[QLatin1String("Response")][QLatin1String("AlbumImage")].toArray();
+    QJsonObject jsonObject  = doc.object();
+    QJsonObject response    = jsonObject[QLatin1String("Response")].toObject();
+    QJsonArray jsonArray    = response[QLatin1String("AlbumImage")].toArray();
     
     QList<SmugPhoto> photosList;
     
@@ -1024,7 +1033,9 @@ void SmugTalker::parseResponseListAlbumTmpl(const QByteArray& data)
         return;
     }
     
-    QJsonArray jsonArray = doc[QLatin1String("Response")][QLatin1String("AlbumTemplate")].toArray();
+    QJsonObject jsonObject  = doc.object();
+    QJsonObject response    = jsonObject[QLatin1String("Response")].toObject();
+    QJsonArray jsonArray    = response[QLatin1String("AlbumTemplate")].toArray();
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "listAlbumTmpl = " << jsonArray;
     
     QList<SmugAlbumTmpl> albumTmplList;
