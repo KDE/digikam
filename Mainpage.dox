@@ -15,7 +15,7 @@
 |│   ├── app                                                  | Lead application component                                              |
 |│   │   ├── date                                             | All date relevant views                                                 |
 |│   │   ├── dragdrop                                         | Drag and drop helper classes                                            |
-|│   │   ├── filters                                          | Icon-view item filter widgets                                           |
+|│   │   ├── filters                                          | Tags filter widgets                                                     |
 |│   │   ├── items                                            | Icon-view item widgets                                                  |
 |│   │   │   └── overlays                                     | Icon-view item overlays                                                 |
 |│   │   ├── main                                             | Main digiKam application                                                |
@@ -41,50 +41,50 @@
 |│   │   ├── profiles                                         |                                                                         |
 |│   │   └── scripts                                          |                                                                         |
 |│   ├── libs                                                 | digiKam core sub-components (few are shared with Showfoto)              |
-|│   │   ├── album                                            |                                                                         |
-|│   │   ├── database                                         |                                                                         |
-|│   │   │   ├── collection                                   |                                                                         |
-|│   │   │   ├── coredb                                       |                                                                         |
-|│   │   │   ├── dbjobs                                       |                                                                         |
-|│   │   │   ├── engine                                       |                                                                         |
-|│   │   │   ├── haar                                         |                                                                         |
-|│   │   │   ├── imagehistory                                 |                                                                         |
-|│   │   │   ├── imgqsort                                     |                                                                         |
-|│   │   │   ├── item                                         |                                                                         |
-|│   │   │   ├── models                                       |                                                                         |
-|│   │   │   ├── server                                       |                                                                         |
-|│   │   │   ├── similaritydb                                 |                                                                         |
-|│   │   │   ├── tags                                         |                                                                         |
-|│   │   │   ├── thumbsdb                                     |                                                                         |
-|│   │   │   └── utils                                        |                                                                         |
-|│   │   ├── dialogs                                          |                                                                         |
-|│   │   ├── dimg                                             |                                                                         |
-|│   │   │   ├── filters                                      |                                                                         |
-|│   │   │   │   ├── auto                                     |                                                                         |
-|│   │   │   │   ├── bcg                                      |                                                                         |
-|│   │   │   │   ├── bw                                       |                                                                         |
-|│   │   │   │   ├── cb                                       |                                                                         |
-|│   │   │   │   ├── curves                                   |                                                                         |
-|│   │   │   │   ├── decorate                                 |                                                                         |
-|│   │   │   │   ├── film                                     |                                                                         |
-|│   │   │   │   ├── fx                                       |                                                                         |
-|│   │   │   │   ├── greycstoration                           |                                                                         |
-|│   │   │   │   ├── hsl                                      |                                                                         |
-|│   │   │   │   ├── icc                                      |                                                                         |
-|│   │   │   │   ├── lc                                       |                                                                         |
-|│   │   │   │   ├── lens                                     |                                                                         |
-|│   │   │   │   ├── levels                                   |                                                                         |
-|│   │   │   │   ├── nr                                       |                                                                         |
-|│   │   │   │   ├── redeye                                   |                                                                         |
-|│   │   │   │   ├── sharp                                    |                                                                         |
-|│   │   │   │   ├── transform                                |                                                                         |
-|│   │   │   │   └── wb                                       |                                                                         |
-|│   │   │   ├── imagehistory                                 |                                                                         |
-|│   │   │   └── loaders                                      |                                                                         |
-|│   │   ├── dmetadata                                        |                                                                         |
-|│   │   ├── dngwriter                                        |                                                                         |
-|│   │   │   └── extra                                        |                                                                         |
-|│   │   ├── dtrash                                           |                                                                         |
+|│   │   ├── album                                            | All classes use to manage digiKam albums operations and properties      |
+|│   │   ├── database                                         | All low level database interface is here                                |
+|│   │   │   ├── collection                                   | All classes relevant of collections management                          |
+|│   │   │   ├── coredb                                       | The core database interface used to host all image properties           |
+|│   │   │   ├── dbjobs                                       | All database multi-threaded jobs                                        |
+|│   │   │   ├── engine                                       | The low level database engine classes                                   |
+|│   │   │   ├── haar                                         | The similarity low level algorithms to compute image finger-prints      |
+|│   │   │   ├── imagehistory                                 | The image history classes for the database                              |
+|│   │   │   ├── imgqsort                                     | The image quality sort algorithms                                       |
+|│   │   │   ├── item                                         | The database item classes                                               |
+|│   │   │   ├── models                                       | The databse model classes                                               |
+|│   │   │   ├── server                                       | The Mysql internal server                                               |
+|│   │   │   ├── similaritydb                                 | The similarity database                                                 |
+|│   │   │   ├── tags                                         | The database tags management classes                                    |
+|│   │   │   ├── thumbsdb                                     | The thumbnails database                                                 |
+|│   │   │   └── utils                                        | Miscs tools and widgets used with database                              |
+|│   │   ├── dialogs                                          | Common dialogs                                                          |
+|│   │   ├── dimg                                             | The Qt digiKam image data container support ICC and 16 bits color depth |
+|│   │   │   ├── filters                                      | All image filters will be hosted here. All support 16 bits color depth  |
+|│   │   │   │   ├── auto                                     | Auto colors correction filters                                          |
+|│   │   │   │   ├── bcg                                      | Brightness-Contrast-Gamma filter                                        |
+|│   │   │   │   ├── bw                                       | Black and White image converter, including infrared filter              |
+|│   │   │   │   ├── cb                                       | Colors balance filter                                                   |
+|│   │   │   │   ├── curves                                   | Colors curves filter                                                    |
+|│   │   │   │   ├── decorate                                 | Decorate filters                                                        |
+|│   │   │   │   ├── film                                     | Analog film emulation filters                                           |
+|│   │   │   │   ├── fx                                       | Special effect filters                                                  |
+|│   │   │   │   ├── greycstoration                           | Cimg based restoration filter                                           |
+|│   │   │   │   ├── hsl                                      | Hue-Saturation-Lightness filter                                         |
+|│   │   │   │   ├── icc                                      | Icc color profile filters                                               |
+|│   │   │   │   ├── lc                                       | Local contrast filter (pseudo HDR)                                      |
+|│   │   │   │   ├── lens                                     | Lens corrections filters, including Qt Lensfun interface                |
+|│   │   │   │   ├── levels                                   | Color levels filter                                                     |
+|│   │   │   │   ├── nr                                       | Wavelets noise reduction filter                                         |
+|│   │   │   │   ├── redeye                                   | Red-eyes parser and fixer                                               |
+|│   │   │   │   ├── sharp                                    | Image sharp filter, including Unsharped-mask and Refocus                |
+|│   │   │   │   ├── transform                                | All image transformation filters                                        |
+|│   │   │   │   └── wb                                       | White balance filter                                                    |
+|│   │   │   ├── imagehistory                                 | Image history interface for image container                             |
+|│   │   │   └── loaders                                      | All DImg image loaders are here                                         |
+|│   │   ├── dmetadata                                        | The metadata wrapper based on Exiv2 for image and FFMpeg for video      |
+|│   │   ├── dngwriter                                        | Qt classes to convert RAW files to DNG format                           |
+|│   │   │   └── extra                                        | DNG and XMP sdks from Adobe                                             |
+|│   │   ├── dtrash                                           | digiKam trash manager full independant of desktop trash                 |
 |│   │   ├── facesengine                                      | Face detection and recognition engine + Faces database implementations  |
 |│   │   │   ├── alignment-congealing                         | Face alignment based on congealing method                               |
 |│   │   │   ├── alignment-flandmark                          | Face alignment based on flandmark method                                |
@@ -98,19 +98,19 @@
 |│   │   │   ├── recognition-opencv-fisherfaces               | Fisher faces recognition module                                         |
 |│   │   │   ├── recognition-opencv-lbph                      | LBPH bases faces recognition module                                     |
 |│   │   │   └── shape-predictor                              | Shape predictor algorithms                                              |
-|│   │   ├── fileactionmanager                                |                                                                         |
-|│   │   ├── filters                                          |                                                                         |
-|│   │   ├── imageproperties                                  |                                                                         |
-|│   │   ├── iojobs                                           |                                                                         |
+|│   │   ├── fileactionmanager                                | Classes to connect database and metadata actions to file operations     |
+|│   │   ├── filters                                          | Widgets to filter items by metadata properties                          |
+|│   │   ├── imageproperties                                  | All widgets used in right side-bar from all main views                  |
+|│   │   ├── iojobs                                           | Multithreaded jobs manager used with files operations                   |
 |│   │   ├── jpegutils                                        | Utilities to process JPEG files                                         |
 |│   │   │   └── libjpeg                                      | JPEG loss-less transform private implementations from libjpeg           |
-|│   │   ├── kmemoryinfo                                      |                                                                         |
-|│   │   ├── models                                           |                                                                         |
-|│   │   ├── notificationmanager                              |                                                                         |
-|│   │   ├── pgfutils                                         |                                                                         |
-|│   │   ├── progressmanager                                  |                                                                         |
-|│   │   ├── rawengine                                        |                                                                         |
-|│   │   ├── settings                                         |                                                                         |
+|│   │   ├── kmemoryinfo                                      | Qt backend to analyze system memory information                         |
+|│   │   ├── models                                           | Qt models used with item views                                          |
+|│   │   ├── notificationmanager                              | Multi-desktop notifications wrapper                                     |
+|│   │   ├── pgfutils                                         | Qt Classes to work with PGF image format                                |
+|│   │   ├── progressmanager                                  | Multi-level operations progress widget                                  |
+|│   │   ├── rawengine                                        | Qt classes to work with libraw decoder                                  |
+|│   │   ├── settings                                         | digiKam settings manager                                                |
 |│   │   ├── tags                                             | Classes to play with tags                                               |
 |│   │   │   └── tagsmanager                                  | Tags manager view                                                       |
 |│   │   ├── template                                         | Metadata template support                                               |
@@ -210,7 +210,7 @@
 |│       │   ├── editor                                       |                                                                         |
 |│       │   └── metadata                                     |                                                                         |
 |│       └── slideshow                                        |                                                                         |
-|├── doc                                                      | Handbooks                                                               |
+|├── doc                                                      | Handbooks directory                                                     |
 |│   ├── digikam                                              | digiKam manual                                                          |
 |│   ├── project                                              | Extra files for the documentation                                       |
 |│   └── showfoto                                             | Showfoto manual                                                         |
@@ -224,6 +224,6 @@
 |    ├── documents                                            | Project documentations                                                  |
 |    ├── release                                              | Release scripts                                                         |
 |    ├── reports                                              | Static analyzers report scripts                                         |
-|    └── scripts                                              | 3rdparty source code manageent scripts                                  |
+|    └── scripts                                              | 3rdparty source code management scripts                                 |
 
 */
