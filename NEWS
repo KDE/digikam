@@ -288,4 +288,5 @@ BUGFIXES:
 233 ==> 319462 - Crash while applying lensfun distortion correction a second time.
 234 ==> 380844 - Demosaicing choosing VCD & AHD then update.
 235 ==> 380843 - Demosaicing.
-236 ==> 
+236 ==> 301219 - digiKam crash.
+237 ==> 
