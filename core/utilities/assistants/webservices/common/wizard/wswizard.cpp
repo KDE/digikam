@@ -43,6 +43,7 @@
 #include "dwizardpage.h"
 #include "digikam_debug.h"
 #include "wsintropage.h"
+#include "wsauthenticationpage.h"
 #include "wsalbumspage.h"
 #include "wsimagespage.h"
 #include "wssettingspage.h"
@@ -58,6 +59,7 @@ public:
     explicit Private()
       : iface(0),
         introPage(0),
+        authPage(0),
         albumsPage(0),
         imagesPage(0),
         settingsPage(0),
@@ -66,13 +68,14 @@ public:
     {
     }
 
-    DInfoInterface*   iface;
-    WSIntroPage*      introPage;
-    WSAlbumsPage*     albumsPage;
-    WSImagesPage*     imagesPage;
-    WSSettingsPage*   settingsPage;
-    WSFinalPage*      finalPage;
-    WSSettings*       settings;
+    DInfoInterface*             iface;
+    WSIntroPage*                introPage;
+    WSAuthenticationWizard*     authPage;
+    WSAlbumsPage*               albumsPage;
+    WSImagesPage*               imagesPage;
+    WSSettingsPage*             settingsPage;
+    WSFinalPage*                finalPage;
+    WSSettings*                 settings;
 };
 
 WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
@@ -90,6 +93,7 @@ WSWizard::WSWizard(QWidget* const parent, DInfoInterface* const iface)
     d->settings->readSettings(group);
 
     d->introPage         = new WSIntroPage(this,    i18n("Welcome to Web Services Tool"));
+    d->authPage          = new WSAuthenticationWizard(this, i18n("Authentication dialog"));
     d->albumsPage        = new WSAlbumsPage(this,   i18n("Albums Selection"));
     d->imagesPage        = new WSImagesPage(this,   i18n("Images List"));
     d->settingsPage      = new WSSettingsPage(this, i18n("Web Service Settings"));
@@ -130,17 +134,18 @@ bool WSWizard::validateCurrentPage()
 
 int WSWizard::nextId() const
 {
-    if (d->settings->selMode == WSSettings::ALBUMS)
-    {
-        if (currentPage() == d->introPage)
+    if (currentPage() == d->authPage)
+    {        
+        if (d->settings->selMode == WSSettings::ALBUMS)
+        {
             return d->albumsPage->id();
-    }
-    else
-    {
-        if (currentPage() == d->introPage)
+        }
+        else
+        {
             return d->imagesPage->id();
+        }
     }
-
+    
     return DWizardDlg::nextId();
 }
 

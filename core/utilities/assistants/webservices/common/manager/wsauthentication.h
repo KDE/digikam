@@ -29,6 +29,7 @@
 #include <QString>
 #include <QUrl>
 #include <QWidget>
+#include <QMap>
 
 // Local includes
 
@@ -62,6 +63,7 @@ Q_SIGNALS:
     
     void signalOpenBrowser(const QUrl&);
     void signalCloseBrowser();
+    void signalResponseTokenReceived(const QMap<QString, QString>&);
     
 private:
     

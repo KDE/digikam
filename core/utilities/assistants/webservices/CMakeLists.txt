@@ -14,6 +14,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::XmlPatterns,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::WebEngineWidgets,INTERFACE_INCLUDE_DIRECTORIES>
 
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
@@ -83,11 +84,13 @@ set(libwebservices_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/common/wscomboboxdelegate.cp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wstooldialog.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wslogindialog.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wssettings.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/manager/wsauthentication.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsalbumspage.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsfinalpage.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsimagespage.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsintropage.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wssettingspage.cpp
+                        ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wsauthenticationpage.cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/common/wizard/wswizard.cpp
 )
 

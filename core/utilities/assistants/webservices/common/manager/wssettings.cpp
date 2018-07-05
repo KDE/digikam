@@ -109,7 +109,10 @@ QMap<WSSettings::WebService, QString> WSSettings::webServiceNames()
     services[FLICKR]    = i18nc("Web Service: FLICKR",    "Flickr");
     services[DROPBOX]   = i18nc("Web Service: DROPBOX",   "Dropbox");
     services[IMGUR]     = i18nc("Web Service: IMGUR",     "Imgur");
-
+    services[FACEBOOK]  = i18nc("Web Service: FACEBOOK",  "Facebook");
+    services[SMUGMUG]   = i18nc("Web Service: SMUGMUG",   "Smugmug");
+    services[GDRIVE]    = i18nc("Web Service: GDRIVE",    "Google Drive");
+    
     return services;
 }
 

@@ -56,6 +56,7 @@ public:
     void link();
     void unLink();
     bool authenticated();
+    void reauthenticate();
     void getUserName();
     void cancel();
     void listFolders(const QString& path = QString());

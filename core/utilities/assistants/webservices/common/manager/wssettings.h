@@ -53,7 +53,10 @@ public:
     {
         FLICKR = 0,
         DROPBOX,
-        IMGUR
+        IMGUR,
+        FACEBOOK,
+        SMUGMUG,
+        GDRIVE
     };
 
     enum ImageFormat

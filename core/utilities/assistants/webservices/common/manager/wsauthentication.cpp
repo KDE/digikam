@@ -92,6 +92,8 @@ void WSAuthentication::createTalker(WSSettings::WebService ws, const QString& se
         case WSSettings::WebService::FACEBOOK:
             qCDebug(DIGIKAM_WEBSERVICES_LOG) << "create FbTalker";
             d->fbtalker = new FbTalker(d->parent);
+            connect(this, SIGNAL(signalResponseTokenReceived(const QMap<QString, QString>&)),
+                    d->fbtalker, SLOT(slotResponseTokenReceived(const QMap<QString, QString>&)));
             connect(d->fbtalker, SIGNAL(signalOpenBrowser(const QUrl&)),
                     this, SIGNAL(signalOpenBrowser(const QUrl&)));
             connect(d->fbtalker, SIGNAL(signalCloseBrowser()),
@@ -114,7 +116,7 @@ void WSAuthentication::reauthenticate()
             //d->fltalker->reauthenticate();
             break;
         case WSSettings::WebService::DROPBOX:
-            d->dbtalker->reauthenticate();
+            //d->dbtalker->reauthenticate();
             break;
         case WSSettings::WebService::IMGUR:
             //d->igtalker->reauthenticate();

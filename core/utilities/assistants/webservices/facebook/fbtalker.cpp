@@ -165,8 +165,10 @@ FbTalker::FbTalker(QWidget* const parent)
     d->o2->setRequestUrl(d->authUrl);
     d->o2->setTokenUrl(d->tokenUrl);
     d->o2->setRefreshTokenUrl(d->tokenUrl);
-    d->o2->setLocalPort(8000);
-    d->o2->setGrantFlow(O2::GrantFlow::GrantFlowAuthorizationCode);
+    d->o2->setLocalhostPolicy(QLatin1String("https://www.facebook.com/connect/login_success.html"));
+    d->o2->setUseExternalWebInterceptor(true);
+    //d->o2->setLocalPort(8000);
+    d->o2->setGrantFlow(O2::GrantFlow::GrantFlowImplicit);
     d->o2->setScope(d->scope);
     
     d->settings                  = WSToolUtils::getOauthSettings(this);
@@ -182,6 +184,8 @@ FbTalker::FbTalker(QWidget* const parent)
             this, SLOT(slotLinkingSucceeded()));
     connect(d->o2, SIGNAL(openBrowser(QUrl)),
             this, SLOT(slotOpenBrowser(QUrl)));
+    connect(d->o2, SIGNAL(closeBrowser()),
+            this, SLOT(slotCloseBrowser()));
 }
 
 FbTalker::~FbTalker()
@@ -206,6 +210,17 @@ void FbTalker::unlink()
 {
     emit signalBusy(true);
     d->o2->unlink();
+}
+
+void FbTalker::reauthenticate()
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "reauthenticate";
+    d->o2->unlink();
+    
+    // Wait until user account is unlinked completely
+    while(loggedIn());
+    
+    d->o2->link();
 }
 
 void FbTalker::removeUserAccount(const QString& account)
@@ -243,10 +258,22 @@ void FbTalker::slotLinkingSucceeded()
     getLoggedInUser();
 }
 
+void FbTalker::slotResponseTokenReceived(const QMap<QString, QString>& rep)
+{
+    d->o2->onVerificationReceived(rep);
+}
+
 void FbTalker::slotOpenBrowser(const QUrl& url)
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Open Browser...";
-    QDesktopServices::openUrl(url);
+    emit signalOpenBrowser(url);
+    //QDesktopServices::openUrl(url);
+}
+
+void FbTalker::slotCloseBrowser()
+{
+    qCDebug(DIGIKAM_WEBSERVICES_LOG) << "Close Browser...";
+    emit signalCloseBrowser();
 }
 
 bool FbTalker::loggedIn() const

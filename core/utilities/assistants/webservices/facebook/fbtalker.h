@@ -34,6 +34,7 @@
 #include <QUrl>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
+#include <QMap>
 
 // Local includes
 
@@ -66,6 +67,7 @@ public:
     bool    loggedIn() const;
     void    cancel();
     void    authenticate(bool imposed);
+    void    reauthenticate();
     void    logout();
     void    link();
     void    unlink();
@@ -88,6 +90,8 @@ Q_SIGNALS:
     void    signalCreateAlbumDone(int errCode, const QString& errMsg, const QString &newAlbumID);
     void    signalListAlbumsDone(int errCode, const QString& errMsg, const QList <FbAlbum>& albumsList);
     void    signalLinkingSucceeded();
+    void    signalOpenBrowser(const QUrl& url);
+    void    signalCloseBrowser();
 
 private:
 
@@ -108,10 +112,11 @@ private Q_SLOTS:
     void    slotFinished(QNetworkReply* reply);
     void    slotAccept();
     void    slotReject();
+    void    slotResponseTokenReceived(const QMap<QString, QString>& rep);
     void    slotLinkingFailed();
     void    slotLinkingSucceeded();
     void    slotOpenBrowser(const QUrl& url);
-//     void    slotCloseBrowser();
+    void    slotCloseBrowser();
 
 private:
 

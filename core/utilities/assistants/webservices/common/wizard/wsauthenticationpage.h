@@ -32,10 +32,13 @@
 #include <QByteArray>
 #include <QString>
 #include <QUrl>
+#include <QMap>
 
 #ifdef HAVE_QWEBENGINE
 #   include <QWebEngineView>
 #   include <QWebEnginePage>
+#   include <QWebEngineProfile>
+#   include <QWebEngineCookieStore>
 #else
 #   include <QWebView>
 #endif
@@ -57,11 +60,13 @@ class WSAuthenticationPage : public QWebEnginePage
 
 public:
 
-    explicit WSAuthenticationPage(QObject* const parent, QString callbackUrl);
+    explicit WSAuthenticationPage(QObject* const parent, QWebEngineProfile* profile, QString callbackUrl);
     virtual ~WSAuthenticationPage();
 
     bool acceptNavigationRequest(const QUrl&, QWebEnginePage::NavigationType, bool);
 
+    void setCallbackUrl(const QString& url);
+    
 Q_SIGNALS:
 
     void callbackCatched(const QString&);
@@ -89,6 +94,10 @@ public:
     
     bool authenticationComplete() const;
     
+private:
+    
+    QMap<QString, QString> parseResponseToken(const QString& rep);
+
 Q_SIGNALS:
     
     void signalAuthenticationComplete();
@@ -121,7 +130,11 @@ public:
     
     void initializePage();
     bool validatePage();
+
+public Q_SLOTS:
     
+    void slotAuthenticationComplete();
+
 private:
     
     class Private;

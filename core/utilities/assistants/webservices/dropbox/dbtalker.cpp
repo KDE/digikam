@@ -163,6 +163,16 @@ void DBTalker::unLink()
     d->settings->endGroup();
 }
 
+void DBTalker::reauthenticate()
+{
+    d->o2->unlink();
+    
+    // Wait until user account is unlinked completely
+    while(authenticated());
+    
+    d->o2->link();
+}
+
 void DBTalker::slotLinkingFailed()
 {
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "LINK to Dropbox fail";
