@@ -283,5 +283,7 @@ BUGFIXES:
 228 ==> 388391 - Windows x64 installer crashes at 60%.
 229 ==> 377433 - Crash on opening settings.
 230 ==> 390286 - Please update version of lensfun.
-231 ==> 
-
+231 ==> 386649 - Crash on opening RAW file from OnePlus One.
+232 ==> 172836 - No menu item for lensfun.
+233 ==> 319462 - Crash while applying lensfun distortion correction a second time.
+234 ==> 
