@@ -65,20 +65,30 @@ LensFunIface::LensFunIface()
 {
     d->lfDb          = lf_db_new();
 
+    // Lensfun host XML files in a dedicated sub-directory.
     QString lensPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                               QLatin1String("lensfun"),
                                               QStandardPaths::LocateDirectory);
 
-    qCDebug(DIGIKAM_DIMG_LOG) << "Root lens database dir: " << lensPath;
+    QDir lensDir;
 
-    // For older Lensfun versions.
-    QDir lensDir(lensPath, QLatin1String("*.xml"));
+    // In first try to use last Lensfun version data dir.
+    lensDir = QDir(lensPath + QLatin1String("/version_2"), QLatin1String("*.xml"));
 
     if (lensDir.entryList().isEmpty())
     {
-        // More Lensfun recent versions use a sub-directory to host XML files.
+        // Fail-back to revision 1.
+
         lensDir = QDir(lensPath + QLatin1String("/version_1"), QLatin1String("*.xml"));
+
+        if (lensDir.entryList().isEmpty())
+        {
+           // Fail-back to revision 0 which host XML data in root data directory.
+           lensDir = QDir(lensPath, QLatin1String("*.xml"));
+        }
     }
+
+    qCDebug(DIGIKAM_DIMG_LOG) << "Using root lens database dir: " << lensPath;
 
     foreach(const QString& lens, lensDir.entryList())
     {

@@ -40,7 +40,7 @@ ORIG_WD="`pwd`"
 
 echo -e "---------- Update Linux CentOS 6\n"
 
-yum install epel-release
+yum -y install epel-release
 
 if [[ "$(arch)" = "x86_64" ]] ; then
 
