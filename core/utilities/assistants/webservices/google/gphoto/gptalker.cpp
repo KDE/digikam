@@ -64,6 +64,8 @@
 #include "previewloadthread.h"
 #include "dmetadata.h"
 
+#define NB_MAX_ITEM_UPLOAD 50
+
 namespace Digikam
 {
 
@@ -666,6 +668,11 @@ void GPTalker::slotFinished(QNetworkReply* reply)
 
 void GPTalker::slotUploadPhoto()
 {
+    /* Keep track of number of items will be uploaded, because
+     * Google Photo API upload maximum NB_MAX_ITEM_UPLOAD items in at a time 
+     */ 
+    int nbItemsUpload = 0;
+    
     if(m_reply)
     {
         m_reply->abort();
@@ -689,7 +696,7 @@ void GPTalker::slotUploadPhoto()
         qCDebug(DIGIKAM_WEBSERVICES_LOG) << "token list is empty";
     }
     
-    while(!d->uploadTokenList.isEmpty())
+    while(!d->uploadTokenList.isEmpty() && nbItemsUpload < NB_MAX_ITEM_UPLOAD)
     {
         const QString& uploadToken = d->uploadTokenList.takeFirst(); 
         data += "{\"description\": \"\",";
@@ -701,6 +708,8 @@ void GPTalker::slotUploadPhoto()
         {
             data += ',';
         }
+        
+        nbItemsUpload ++;
     }
     if(d->previousImageId == QLatin1String("-1"))
     {
@@ -904,6 +913,8 @@ void GPTalker::parseResponseUploadPhoto(const QByteArray& data)
         QJsonObject mediaItem = obj[QLatin1String("mediaItem")].toObject();
         listPhotoId << mediaItem[QLatin1String("id")].toString();
     }
+    
+    d->previousImageId = listPhotoId.last();
     
     qCDebug(DIGIKAM_WEBSERVICES_LOG) << "list photo Id " << listPhotoId.join(", ");
     

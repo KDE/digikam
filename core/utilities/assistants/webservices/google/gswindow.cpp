@@ -1192,7 +1192,13 @@ void GSWindow::slotUploadPhotoDone(int err, const QString& msg, const QStringLis
                 d->meta.setXmpTagString("Xmp.digiKam.picasawebGPhotoId", photoId);
                 d->meta.save(fileUrl.toLocalFile());
             }
-        }        
+        }
+        
+        if(!d->widget->imagesList()->imageUrls().isEmpty())
+        {
+            qCDebug(DIGIKAM_WEBSERVICES_LOG) << "continue to upload";
+            emit d->gphotoTalker->signalReadyToUpload();
+        }
     }
 }
 
