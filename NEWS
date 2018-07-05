@@ -279,4 +279,6 @@ BUGFIXES:
 225 ==> 376124 - Some Photos are not previewed.
 226 ==> 386188 - Preview Does Not Display Some JPGs Editor Crashes Program.
 227 ==> 394906 - Toggling "use file metadata" for input will make Digikam forget all imported photos.
-228 ==> 
+228 ==> 388391 - Windows x64 installer crashes at 60%.
+229 ==> 
+
