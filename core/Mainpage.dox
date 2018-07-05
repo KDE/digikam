@@ -139,17 +139,17 @@
 |│   │   └── thumbbar                                         | Showfoto thumb-bar views                                                |
 |│   ├── tests                                                | Unit tests                                                              |
 |│   └── utilities                                            | digiKam utilities and advanced tools (few are shared with showfoto)     |
-|│       ├── advancedrename                                   |                                                                         |
-|│       ├── assistants                                       |                                                                         |
-|│       │   ├── calendar                                     |                                                                         |
-|│       │   ├── common                                       |                                                                         |
-|│       │   ├── expoblending                                 |                                                                         |
-|│       │   ├── firstrun                                     |                                                                         |
-|│       │   ├── htmlgallery                                  |                                                                         |
-|│       │   ├── panorama                                     |                                                                         |
-|│       │   ├── printcreator                                 |                                                                         |
-|│       │   ├── sendbymail                                   |                                                                         |
-|│       │   ├── videoslideshow                               |                                                                         |
+|│       ├── advancedrename                                   | Advance rename tool                                                     |
+|│       ├── assistants                                       | All tools based on assistants dialog are hosted here                    |
+|│       │   ├── calendar                                     | Tool to export items as calendar                                        |
+|│       │   ├── common                                       | Common classes used by assistants                                       |
+|│       │   ├── expoblending                                 | Tool to merge items together to create HDR images                       |
+|│       │   ├── firstrun                                     | First-run assistant to configure lead digiKam settings                  |
+|│       │   ├── htmlgallery                                  | Tool to create html gallery from items                                  |
+|│       │   ├── panorama                                     | Tool to create panorama from items                                      |
+|│       │   ├── printcreator                                 | Tool to print items                                                     |
+|│       │   ├── sendbymail                                   | Tool to export items by e-mail                                          |
+|│       │   ├── videoslideshow                               | Tool to create video slideshow from items                               |
 |│       │   └── webservices                                  |                                                                         |
 |│       │       ├── common                                   |                                                                         |
 |│       │       ├── dropbox                                  |                                                                         |
