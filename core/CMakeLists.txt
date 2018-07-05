@@ -647,7 +647,7 @@ if(Doxygen_FOUND)
     message(STATUS " ==> Graphviz Dot is found:     ${DOXYGEN_DOT_FOUND}")
 
     set(API_DIR     ${CMAKE_BINARY_DIR}/api)
-    set(SOURCE_DIR  ${CMAKE_SOURCE_DIR}/core)
+    set(SOURCE_DIR  ${CMAKE_SOURCE_DIR}/)           # on root of source dir else export to doc web site will not be named as "digiKam"
     set(DOXYFILE    ${CMAKE_BINARY_DIR}/Doxyfile)
     set(WARNFILE    ${CMAKE_BINARY_DIR}/doxygen-warn.log)
     set(IMAGES_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/digikam")

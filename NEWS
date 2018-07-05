@@ -15,6 +15,7 @@ Database     : Similarity database has been moved to a dedicated file to not blo
 Database     : New video metadata parser based on ffmpeg to populate database.
 Search       : Add video support to find files based on properties registered on database.
 
+General      : All bundles use last Lenfun 0.3.95 to process automatic lens correction.
 General      : Add QWebEngine support.
 General      : Fix all Krazy static analyzer reports.
 General      : Update internal Libraw to last 0.19.0.
@@ -278,4 +279,9 @@ BUGFIXES:
 224 ==> 382174 - Not creating thumbnails and not editing (F4) files created for Samsung panorama jpgs [patch].
 225 ==> 376124 - Some Photos are not previewed.
 226 ==> 386188 - Preview Does Not Display Some JPGs Editor Crashes Program.
-227 ==> 
+227 ==> 394906 - Toggling "use file metadata" for input will make Digikam forget all imported photos.
+228 ==> 388391 - Windows x64 installer crashes at 60%.
+229 ==> 377433 - Crash on opening settings.
+230 ==> 390286 - Please update version of lensfun.
+231 ==> 
+

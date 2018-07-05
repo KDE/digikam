@@ -3107,9 +3107,12 @@ void CoreDB::addBoundValuePlaceholders(QString& query, int count)
 int CoreDB::findInDownloadHistory(const QString& identifier, const QString& name, qlonglong fileSize, const QDateTime& date)
 {
     QList<QVariant> values;
+    QVariantList boundValues;
+    boundValues << identifier << name << fileSize << date.addSecs(-2) << date.addSecs(2);
+
     d->db->execSql(QString::fromUtf8("SELECT id FROM DownloadHistory WHERE "
-                                     "identifier=? AND filename=? AND filesize=? AND filedate=?;"),
-                   identifier, name, fileSize, date, &values);
+                                     "identifier=? AND filename=? AND filesize=? AND (filedate>? AND filedate<?);"),
+                   boundValues, &values);
 
     if (values.isEmpty())
     {
