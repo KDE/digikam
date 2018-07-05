@@ -10,8 +10,8 @@ SET(EXTPREFIX_qt "${EXTPREFIX}")
 
 ExternalProject_Add(ext_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://download.qt.io/official_releases/qt/5.9/5.9.5/single/qt-everywhere-opensource-src-5.9.5.tar.xz
-    URL_MD5 0e6eaa2d118f9854345c2debb12e8536
+    URL https://download.qt.io/official_releases/qt/5.9/5.9.6/single/qt-everywhere-opensource-src-5.9.6.tar.xz
+    URL_MD5 a427428c65f35909ef6ae865b8ee0da6
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
                   -prefix ${EXTPREFIX_qt}
                   -opensource

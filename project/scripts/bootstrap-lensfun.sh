@@ -21,17 +21,17 @@ fi
 
 cd build
 
-export MarbleOptions='-DBUILD_STATIC=OFF \
-                      -DBUILD_LENSTOOL=OFF \
-                      -DBUILD_FOR_SSE=OFF \
-                      -DBUILD_FOR_SSE2=OFF \
-                      -DBUILD_DOC=OFF \
-                      -DINSTALL_HELPER_SCRIPTS=OFF \
-                      -DBUILD_TESTS=OFF'
+export Options='-DBUILD_STATIC=OFF \
+                -DBUILD_LENSTOOL=OFF \
+                -DBUILD_FOR_SSE=OFF \
+                -DBUILD_FOR_SSE2=OFF \
+                -DBUILD_DOC=OFF \
+                -DINSTALL_HELPER_SCRIPTS=OFF \
+                -DBUILD_TESTS=OFF'
 
 cmake -G "$MAKEFILES_TYPE" . \
       -DCMAKE_INSTALL_PREFIX=/usr \
       -Wno-dev \
-      $MarbleOptions \
+      $Options \
       ..
 
