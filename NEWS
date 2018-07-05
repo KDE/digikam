@@ -292,5 +292,5 @@ BUGFIXES:
 237 ==> 216013 - try to open extras/ batch raw converter was followed by a crash.
 238 ==> 102045 - RAW conversion in digikam fails to convert or generate preview.
 239 ==> 137281 - Cannot convert nef into raw.
-240 ==> 
+240 ==> 230763 - Exif ISO data missing when converting Olympus ORF.
 
