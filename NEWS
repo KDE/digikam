@@ -290,4 +290,6 @@ BUGFIXES:
 235 ==> 380843 - Demosaicing.
 236 ==> 301219 - digiKam crash.
 237 ==> 216013 - try to open extras/ batch raw converter was followed by a crash.
-238 ==> 
+238 ==> 102045 - RAW conversion in digikam fails to convert or generate preview.
+239 ==> 
+
