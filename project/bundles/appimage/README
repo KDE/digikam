@@ -75,9 +75,9 @@ REQUIREMENTS
   at run-time under other Linux distributions.
 
 - Create a fresh CentOS 6 environment in a Virtual Machine:
-  Install from CentOS-6.8-x86_64-bin-DVD1.iso
+  Install from CentOS-6.8-x86_64-bin-DVD1.iso (from Pasteur institue mirror for ex: http://ftp.pasteur.fr/mirrors/CentOS/6.10/isos/)
   yum install git
-  git clone git://anongit.kde.org/digikam-software-compilation.git DK
+  git clone git://anongit.kde.org/digikam.git DK
   cd DK/project/appimage/
 
 - You must set the digiKam git tags to checkout right source code in bundle.

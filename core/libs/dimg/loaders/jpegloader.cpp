@@ -170,9 +170,13 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             file = f;
         }
 
-        void setParameter(const QSize& s, int c)
+        void setSize(const QSize& s)
         {
             size = s;
+        }
+
+        void setColorModel(int c)
+        {
             cmod = c;
         }
 
@@ -321,7 +325,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             break;
     }
 
-    cleanupData->setParameter(originalSize, colorModel);
+    cleanupData->setColorModel(colorModel);
 
     // -------------------------------------------------------------------
     // Load image data.
@@ -423,6 +427,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         }
 
         dest = new_failureTolerant(w, h, 4);
+        cleanupData->setSize(QSize(w, h));
         cleanupData->setDest(dest);
 
         if (!dest)
