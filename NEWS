@@ -281,5 +281,6 @@ BUGFIXES:
 227 ==> 394906 - Toggling "use file metadata" for input will make Digikam forget all imported photos.
 228 ==> 388391 - Windows x64 installer crashes at 60%.
 229 ==> 377433 - Crash on opening settings.
-230 ==> 
+230 ==> 390286 - Please update version of lensfun.
+231 ==> 
 
