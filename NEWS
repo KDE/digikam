@@ -289,4 +289,5 @@ BUGFIXES:
 234 ==> 380844 - Demosaicing choosing VCD & AHD then update.
 235 ==> 380843 - Demosaicing.
 236 ==> 301219 - digiKam crash.
-237 ==> 
+237 ==> 216013 - try to open extras/ batch raw converter was followed by a crash.
+238 ==> 
