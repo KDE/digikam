@@ -30,16 +30,16 @@
 |│   │   ├── colorschemes                                     | GUI Color scheme files                                                  |
 |│   │   ├── database                                         | Database XML configuration files                                        |
 |│   │   ├── facesengine                                      | Face detection and recognition data files                               |
-|│   │   ├── filters                                          |                                                                         |
-|│   │   ├── geolocation                                      |                                                                         |
-|│   │   ├── hotplug                                          |                                                                         |
-|│   │   ├── htmlgallery                                      |                                                                         |
-|│   │   ├── icons                                            |                                                                         |
-|│   │   ├── metadata                                         |                                                                         |
-|│   │   ├── pics                                             |                                                                         |
-|│   │   ├── printcreator                                     |                                                                         |
-|│   │   ├── profiles                                         |                                                                         |
-|│   │   └── scripts                                          |                                                                         |
+|│   │   ├── filters                                          | Image filters data files                                                |
+|│   │   ├── geolocation                                      | Geolocation tool data files                                             |
+|│   │   ├── hotplug                                          | Hotplug Linux integration files                                         |
+|│   │   ├── htmlgallery                                      | HTML gallery tool data files                                            |
+|│   │   ├── icons                                            | Application icons                                                       |
+|│   │   ├── metadata                                         | Metadata tool data files                                                |
+|│   │   ├── pics                                             | Application pictures                                                    |
+|│   │   ├── printcreator                                     | Print Creator tool data files                                           |
+|│   │   ├── profiles                                         | Basis open source ICC color profiles                                    |
+|│   │   └── scripts                                          | Miscs maintenance scripts                                               |
 |│   ├── libs                                                 | digiKam core sub-components (few are shared with Showfoto)              |
 |│   │   ├── album                                            | All classes use to manage digiKam albums operations and properties      |
 |│   │   ├── database                                         | All low level database interface is here                                |
@@ -173,43 +173,43 @@
 |│       │   ├── geoiface                                     |                                                                         |
 |│       │   ├── geomapwrapper                                |                                                                         |
 |│       │   └── mapsearches                                  |                                                                         |
-|│       ├── imageeditor                                      |                                                                         |
-|│       │   ├── core                                         |                                                                         |
-|│       │   ├── dialogs                                      |                                                                         |
-|│       │   ├── editor                                       |                                                                         |
-|│       │   ├── main                                         |                                                                         |
-|│       │   ├── printiface                                   |                                                                         |
-|│       │   ├── rawimport                                    |                                                                         |
-|│       │   ├── tools                                        |                                                                         |
-|│       │   └── widgets                                      |                                                                         |
-|│       ├── import                                           |                                                                         |
-|│       │   ├── backend                                      |                                                                         |
-|│       │   ├── dialogs                                      |                                                                         |
-|│       │   ├── dscanner                                     |                                                                         |
-|│       │   ├── items                                        |                                                                         |
-|│       │   ├── main                                         |                                                                         |
-|│       │   ├── models                                       |                                                                         |
-|│       │   ├── views                                        |                                                                         |
-|│       │   └── widgets                                      |                                                                         |
-|│       ├── lighttable                                       |                                                                         |
-|│       ├── maintenance                                      |                                                                         |
-|│       ├── mediaserver                                      |                                                                         |
-|│       │   └── upnpsdk                                      |                                                                         |
-|│       ├── metadataedit                                     |                                                                         |
-|│       ├── presentation                                     |                                                                         |
-|│       ├── queuemanager                                     |                                                                         |
-|│       │   ├── main                                         |                                                                         |
-|│       │   ├── manager                                      |                                                                         |
-|│       │   ├── tools                                        |                                                                         |
-|│       │   └── views                                        |                                                                         |
-|│       ├── searchwindow                                     |                                                                         |
-|│       ├── setup                                            |                                                                         |
-|│       │   ├── album                                        |                                                                         |
-|│       │   ├── camera                                       |                                                                         |
-|│       │   ├── collections                                  |                                                                         |
-|│       │   ├── editor                                       |                                                                         |
-|│       │   └── metadata                                     |                                                                         |
-|│       └── slideshow                                        |                                                                         |
+|│       ├── imageeditor                                      | The famous digiKam image editor, a lots of classes shared with Showfoto |
+|│       │   ├── core                                         | Core implementation including canvas and tools interface                |
+|│       │   ├── dialogs                                      | Image editor dialogs                                                    |
+|│       │   ├── editor                                       | The core image editors classes                                          |
+|│       │   ├── main                                         | The main digiKam image editor view, not shared with Showfoto            |
+|│       │   ├── printiface                                   | The print interface                                                     |
+|│       │   ├── rawimport                                    | The Raw import tool                                                     |
+|│       │   ├── tools                                        | All Image editor tools                                                  |
+|│       │   └── widgets                                      | All common widgets                                                      |
+|│       ├── import                                           | The import tools, including USB MAss Storage, Gphoto2, and Sane support |
+|│       │   ├── backend                                      | Camera backends                                                         |
+|│       │   ├── dialogs                                      | Import tools dialogs                                                    |
+|│       │   ├── dscanner                                     | Digital scanners import tool                                            |
+|│       │   ├── items                                        | Import item classes                                                     |
+|│       │   ├── main                                         | Import tool main view                                                   |
+|│       │   ├── models                                       | Import model classes                                                    |
+|│       │   ├── views                                        | Import view classes                                                     |
+|│       │   └── widgets                                      | Import common widgets                                                   |
+|│       ├── lighttable                                       | The Light-table tool to compare images side by side                     |
+|│       ├── maintenance                                      | The digiKam tool to maintain the database contents                      |
+|│       ├── mediaserver                                      | The DLNA/UPNP sharing tool                                              |
+|│       │   └── upnpsdk                                      | Internal Upnp SDK based on Neptune and Platinum frameworks              |
+|│       ├── metadataedit                                     | The metadata editor tool                                                |
+|│       ├── presentation                                     | The presentation tool with OpenGL effects                               |
+|│       ├── queuemanager                                     | The famous Batch Queue Manager tool                                     |
+|│       │   ├── main                                         | The main BQM view                                                       |
+|│       │   ├── manager                                      | The multi-core manager to run tools in background                       |
+|│       │   ├── tools                                        | All BQM tools classed by functions                                      |
+|│       │   └── views                                        | The BQM internal views                                                  |
+|│       ├── searchwindow                                     | The powerfull advanced search tool                                      |
+|│       ├── setup                                            | All digiKam setup panel, with few ones shared with Showfoto             |
+|│       │   ├── album                                        | Album configuration views                                               |
+|│       │   ├── camera                                       | Camera configuration views                                              |
+|│       │   ├── collections                                  | Collection configuration views                                          |
+|│       │   ├── editor                                       | Image Editor configuration views                                        |
+|│       │   └── metadata                                     | Metadata configuration views                                            |
+|│       └── slideshow                                        | The simple slideshow tool                                               |
 |├── doc                                                      | Handbooks directory                                                     |
 |│   ├── digikam                                              | digiKam manual                                                          |
 |│   ├── project                                              | Extra files for the documentation                                       |
