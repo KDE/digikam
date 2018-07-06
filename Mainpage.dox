@@ -263,7 +263,7 @@ fine-grained control by using one or more logging categories listed below.
 
 You can set the environment variable \b QT_LOGGING_RULES. Rules are divided by semicolons.
 
-E.g. you can start digiKam like this on the commandline:
+E.g. you can start digiKam like this on the commandline with thumbnails and core database messages disabled:
 
 \code
     export QT_LOGGING_RULES='digikam.thumbsdb=false:digikam.coredb=false'
