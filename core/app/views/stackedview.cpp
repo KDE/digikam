@@ -122,7 +122,7 @@ StackedView::StackedView(QWidget* const parent)
 {
     d->imageIconView    = new DigikamImageView(this);
     d->imagePreviewView = new ImagePreviewView(this);
-    d->thumbBarDock     = new ThumbBarDock();
+    d->thumbBarDock     = new ThumbBarDock(d->imagePreviewView);
     d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModelsFiltered(d->imageIconView->imageModel(), d->imageIconView->imageFilterModel());
     d->thumbBar->installOverlays();
