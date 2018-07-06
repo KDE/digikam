@@ -334,7 +334,23 @@ The full list of mandatory (X) and optional (opt) external dependencies required
 | libgphoto2           |  opt     | >= 2.5      | http://www.gphoto.org                             | Digital camera drivers support. Need libusb-1          |                                                                                       |
 | libgomp              |  opt     | >= 5.0      | https://gcc.gnu.org/onlinedocs/libgomp            | OpenMP support for RawEngine                           |                                                                                       |
 
-\section Downloading Source code
+\section getsourcecode Get Source Code
+
+\subsection softcomponents Software Components
+
+digiKam project use a single git repository to host whole source code base. The project page is given below:
+
+https://phabricator.kde.org/source/digikam/
+
+Even if code base can be compiled as well, more features can be enabled if extra components are downloaded and compiled at the same time.
+The project pages of these extra components are given below:
+
+ - \b libksane         : https://phabricator.kde.org/source/libksane/
+ - \b libmediawiki     : https://phabricator.kde.org/source/libmediawiki/
+ - \b libkvkontatke    : https://projects.kde.org/projects/extragear/libs/libkvkontatke
+ - \b digiKam handbook : https://phabricator.kde.org/source/digikam-doc/
+
+\subsection downloadcomponents Downloading Software Components
 
 To download all needed git repositories, you can execute download script like this:
 
@@ -342,14 +358,107 @@ To download all needed git repositories, you can execute download script like th
     perl ./download-repos
 \endcode
 
-Important: by default only components required for packaging are downloaded. To populate whole developers
+Important: by default only digiKam handbook is downloaded with code base for packaging purpose. To populate also all extra 
 components, set \b $GITSLAVE environnement variable before to run \b download-repos script, like this:
 
 \code
     export GITSLAVE=.gitslave.devel
 \endcode
 
-\section debugtraces Debug Traces
+\section develenv Development Envirronnement
+
+If you are a developer with push access to the git repositories, it is strongly recommended
+to use the "kde:" prefix and let git use the read-only mirrors for pulling.
+
+If you did not clone this repository from "kde:", do it again:
+
+\code
+    git config --global url.git://anongit.kde.org/.insteadof kde:
+    git config --global url.ssh://git@git.kde.org/.pushinsteadof kde:
+    git clone kde:digikam
+\endcode
+
+See below an example of \b .gitconfig file working with a developer account :
+
+\code
+[url "git://anongit.kde.org/"]
+        insteadof = kde://
+
+[url "git@git.kde.org:"]
+        pushinsteadof = kde://
+
+[url "ssh://git@git.kde.org/"]
+        pushinsteadof = kde://
+
+[alias]
+        up = pull --rebase -v --stat
+        ci = commit -a -v
+[core]
+        editor = mcedit
+
+[user]
+        name = my name
+        email = my email
+
+[push]
+        default = tracking
+
+[color]
+        # turn on color
+        diff = auto
+        status = auto
+        branch = auto
+        interactive = auto
+        ui = auto
+
+[color "branch"]
+        current = green bold
+        local = green
+        remote = red bold
+
+[color "diff"]
+        meta = yellow bold
+        frag = magenta bold
+        old = red bold
+        new = green bold
+
+[color "status"]
+        added = green bold
+        changed = yellow bold
+        untracked = red
+
+[color "sh"]
+        branch = yellow
+        [color "sh"]
+\endcode
+
+\section cmakeoptions Cmake Configuration Options
+
+To configure the project with CMake, use dedicated "bootstrap" script for your platform where all available configuration
+options are present with default values.
+
+There are two configuration sections : the top level and the core.
+
+\subsection topleveloptions Top Level Configuration
+
+ - Packaging options:
+
+  - \b -DDIGIKAMSC_COMPILE_DIGIKAM=ON          : Build digiKam core.
+  - \b -DDIGIKAMSC_CHECKOUT_PO=ON              : Extract application translation files from remote repositories.
+  - \b -DDIGIKAMSC_CHECKOUT_DOC=ON             : Extract documentation translation files from remote repositories.
+  - \b -DDIGIKAMSC_COMPILE_DOC=ON              : Build handbook i18n files. It require to checkout documentation translations files before from remote repositories.
+  - \b -DDIGIKAMSC_COMPILE_PO=ON               : Build GUI i18n files. It require to checkout application translations files before from remote repositories.
+
+ - Developers only options:
+
+  - \b -DBUILD_TESTING=ON                      : Build tests code.
+  - \b -DDIGIKAMSC_COMPILE_LIBKSANE=OFF        : Force to use local libksane instead version installed on your computer.
+  - \b -DDIGIKAMSC_COMPILE_LIBMEDIAWIKI=OFF    : Force to use local libmediawiki instead version installed on your computer.
+  - \b -DDIGIKAMSC_COMPILE_LIBKVKONTAKE=OFF    : Force to use local libkvkontakte instead version installed on your computer.
+
+\subsection coreoptions Core Configuration
+
+\section debugtraces Debug Traces At Run-Time
 
 digiKam uses categorized logging at run-time. By default, all debug messages are printed on the console. To disable output, you can either
 fine-grained control by using one or more logging categories listed below.
@@ -365,11 +474,11 @@ E.g. you can start digiKam like this on the commandline with thumbnails and core
     digikam
 \endcode
 
-\subsection Logging Categories in digiKam
+\subsection digiKamloggincat Logging Categories in digiKam
 
 All loggin categories are listed in \ref digikam_debug.cpp source code.
 
-\subsection Further reading
+\subsection moreaboutloggincat Further Reading
 
  For more details see the Qt framework documentation about loggin categories available at this url:
  https://doc.qt.io/qt-5/qloggingcategory.html#details
