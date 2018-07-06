@@ -9,9 +9,9 @@
 #
 
 if [[ "$(arch)" = "x86_64" ]] ; then
-    env LD_PRELOAD="/usr/lib64/libfreetype.so"
+    export LD_PRELOAD=$LD_PRELOAD:/usr/lib64/libfreetype.so
 else
-    env LD_PRELOAD="/usr/lib/libfreetype.so"
+    export LD_PRELOAD=$LD_PRELOAD:/usr/lib/libfreetype.so
 fi
 
 echo "-- digiKam AppImage Bundle"
