@@ -286,4 +286,14 @@ BUGFIXES:
 231 ==> 386649 - Crash on opening RAW file from OnePlus One.
 232 ==> 172836 - No menu item for lensfun.
 233 ==> 319462 - Crash while applying lensfun distortion correction a second time.
-234 ==> 
+234 ==> 380844 - Demosaicing choosing VCD & AHD then update.
+235 ==> 380843 - Demosaicing.
+236 ==> 301219 - digiKam crash.
+237 ==> 216013 - try to open extras/ batch raw converter was followed by a crash.
+238 ==> 102045 - RAW conversion in digikam fails to convert or generate preview.
+239 ==> 137281 - Cannot convert nef into raw.
+240 ==> 230763 - Exif ISO data missing when converting Olympus ORF.
+241 ==> 137278 - 16-bit/channel workspace when working with RAW conversions.
+242 ==> 133004 - Canon CRW portrait preview upside-down.
+243 ==> 
+
