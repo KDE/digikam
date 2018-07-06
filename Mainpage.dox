@@ -1,15 +1,75 @@
 /** \mainpage digiKam API reference page.
-    \author (c) 2001-2018 digiKam team
+    \author (c) 2001-2018 digiKam team.
     \brief digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.
     \image html logo-digikam.png
 
+\section sourcedir Source Code Directories
+
+   digiKam is split into a number of components, each ones located to a dedicated directory.
+   The main namespace is Digikam for the digiKam application and all sub components. A second one is Showfoto for the stand alone version of image editor.
+
+   See below the complete list of directories used by the project:
+
+AUTHORS
+bootstrap.linux
+bootstrap.local
+bootstrap.macports
+bootstrap.mxe
+build/
+ChangeLog
+CMakeLists.txt
+COPYING
+COPYING-CMAKE-SCRIPTS
+COPYING.LIB
+core/
+DEPENDENCIES
+doc/
+download-repos
+extra/
+gits
+gitup
+HACKING
+INSTALL
+Mainpage.dox
+Messages.sh
+NEWS
+project/
+README.DEVEL
+README.LOCAL
+README.MACOS
+README.md
+README.WINDOWS
+TODO
+
+
 | SOURCE TREE-VIEW                                            | DETAILS                                                                 |
 | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
-|├── bootstrap.sh                                             | Configuration script to compile under Linux                             |
+|├── AUTHORS                                                  | List of developers and contributors to the project                      |
+|├── bootstrap.linux                                          | Configuration script to compile under Linux                             |
+|├── bootstrap.local                                          | Configuration script to compile a local version under Linux             |
+|├── bootstrap.macports                                       | Configuration script to compile under MacOS with Macports               |
+|├── bootstrap.mxe                                            | Configuration script to cross-compile for Windows under Linux with MXE  |
+|├── build                                                    | Temporary directory created by bootstrap script to host compiled files  |
+|├── ChangeLog                                                | Complete list of source code changes since the project origin           |
 |├── CMakeLists.txt                                           | Main Cmake script including lead compilation rules for the project      |
+|├── COPYING                                                  | Main project license                                                    |
+|├── COPYING-CMAKE-SCRIPTS                                    | Cmake files license                                                     |
+|├── COPYING.LIB                                              | Internal shared libraries license                                       |
+|├── DEPENDENCIES                                             | Complete list of external project dependencies                          |
+|├── download-repos                                           | Script to download all source code including extra repositories         |
+|├── gits                                                     | Script to perform git in reccursive mode over multiple repositories     |
+|├── gitup                                                    | Script to perform git pull --rebase in reccursive mode                  |
 |├── HACKING                                                  | Coding style and debuging instructions                                  |
+|├── INSTALL                                                  | Project install notice                                                  |
 |├── Mainpage.dox                                             | API documentation main page based on Doxygen                            |
+|├── Messages.sh                                              | Script to extract strings for translators                               |
+|├── NEWS                                                     | Notice to resume all main project changes done at release time          |
+|├── README.DEVEL                                             | Read me file for developers                                             |
+|├── README.LOCAL                                             | Read me for bootstrap.local script                                      |
 |├── README.md                                                | First start helper documentation                                        |
+|├── README.MACOS                                             | Read me for MacOs support                                               |
+|├── README.WINDOWS                                           | Read me for Windows support                                             |
+|├── TODO                                                     | List of project pending tasks                                           |
 |├── build                                                    | Directory to store compiled files and binary targets                    |
 |├── core                                                     | All source code are hosted in this directory                            |
 |│   ├── app                                                  | Lead application component                                              |
