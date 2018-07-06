@@ -123,36 +123,28 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
 
     QStringList rawTiffBasedSupported, rawTiffBasedNotSupported;
 
-    // Raw files supported by Exiv2 0.21
-    rawTiffBasedSupported << QString::fromLatin1("dng")
+    // Raw files supported by Exiv2 0.26
+    rawTiffBasedSupported << QString::fromLatin1("cr2")
+                          << QString::fromLatin1("crw")
+                          << QString::fromLatin1("dng")
                           << QString::fromLatin1("nef")
                           << QString::fromLatin1("pef")
                           << QString::fromLatin1("orf")
                           << QString::fromLatin1("srw");
 
-    if (Exiv2::testVersion(0,23,0))
-    {
-        rawTiffBasedSupported << QString::fromLatin1("cr2");
-    }
-
-    // Raw files not supported by Exiv2 0.21
+    // Raw files not supported by Exiv2 0.26
     rawTiffBasedNotSupported << QString::fromLatin1("3fr")
                              << QString::fromLatin1("arw")
-                             << QString::fromLatin1("crw")
                              << QString::fromLatin1("dcr")
                              << QString::fromLatin1("erf")
                              << QString::fromLatin1("k25")
                              << QString::fromLatin1("kdc")
                              << QString::fromLatin1("mos")
+                             << QString::fromLatin1("raf")
                              << QString::fromLatin1("raw")
                              << QString::fromLatin1("sr2")
                              << QString::fromLatin1("srf")
                              << QString::fromLatin1("rw2");
-
-    if (!Exiv2::testVersion(0,23,0))
-    {
-        rawTiffBasedNotSupported << QString::fromLatin1("cr2");
-    }
 
     QString ext = finfo.suffix().toLower();
 
