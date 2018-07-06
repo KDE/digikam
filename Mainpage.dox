@@ -1,15 +1,43 @@
 /** \mainpage digiKam API reference page.
-    \author (c) 2001-2018 digiKam team
+    \author (c) 2001-2018 digiKam team.
     \brief digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.
     \image html logo-digikam.png
 
+\section sourcedirs Source Code Directories
+
+   digiKam is split into a number of components, each ones located to a dedicated directory.
+   The main namespace is Digikam for the digiKam application and all sub components. A second one is Showfoto for the stand alone version of image editor.
+
+   See below the complete list of directories used by the project:
+
 | SOURCE TREE-VIEW                                            | DETAILS                                                                 |
 | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
-|├── bootstrap.sh                                             | Configuration script to compile under Linux                             |
+|├── AUTHORS                                                  | List of developers and contributors to the project                      |
+|├── bootstrap.linux                                          | Configuration script to compile under Linux                             |
+|├── bootstrap.local                                          | Configuration script to compile a local version under Linux             |
+|├── bootstrap.macports                                       | Configuration script to compile under MacOS with Macports               |
+|├── bootstrap.mxe                                            | Configuration script to cross-compile for Windows under Linux with MXE  |
+|├── build                                                    | Temporary directory created by bootstrap script to host compiled files  |
+|├── ChangeLog                                                | Complete list of source code changes since the project origin           |
 |├── CMakeLists.txt                                           | Main Cmake script including lead compilation rules for the project      |
+|├── COPYING                                                  | Main project license                                                    |
+|├── COPYING-CMAKE-SCRIPTS                                    | Cmake files license                                                     |
+|├── COPYING.LIB                                              | Internal shared libraries license                                       |
+|├── DEPENDENCIES                                             | Complete list of external project dependencies                          |
+|├── download-repos                                           | Script to download all source code including extra repositories         |
+|├── gits                                                     | Script to perform git in reccursive mode over multiple repositories     |
+|├── gitup                                                    | Script to perform git pull --rebase in reccursive mode                  |
 |├── HACKING                                                  | Coding style and debuging instructions                                  |
+|├── INSTALL                                                  | Project install notice                                                  |
 |├── Mainpage.dox                                             | API documentation main page based on Doxygen                            |
+|├── Messages.sh                                              | Script to extract strings for translators                               |
+|├── NEWS                                                     | Notice to resume all main project changes done at release time          |
+|├── README.DEVEL                                             | Read me file for developers                                             |
+|├── README.LOCAL                                             | Read me for bootstrap.local script                                      |
 |├── README.md                                                | First start helper documentation                                        |
+|├── README.MACOS                                             | Read me for MacOs support                                               |
+|├── README.WINDOWS                                           | Read me for Windows support                                             |
+|├── TODO                                                     | List of project pending tasks                                           |
 |├── build                                                    | Directory to store compiled files and binary targets                    |
 |├── core                                                     | All source code are hosted in this directory                            |
 |│   ├── app                                                  | Lead application component                                              |
@@ -150,29 +178,29 @@
 |│       │   ├── printcreator                                 | Tool to print items                                                     |
 |│       │   ├── sendbymail                                   | Tool to export items by e-mail                                          |
 |│       │   ├── videoslideshow                               | Tool to create video slideshow from items                               |
-|│       │   └── webservices                                  |                                                                         |
-|│       │       ├── common                                   |                                                                         |
-|│       │       ├── dropbox                                  |                                                                         |
-|│       │       ├── facebook                                 |                                                                         |
-|│       │       ├── filetransfer                             |                                                                         |
-|│       │       ├── flickr                                   |                                                                         |
-|│       │       ├── google                                   |                                                                         |
-|│       │       ├── imageshack                               |                                                                         |
-|│       │       ├── imgur                                    |                                                                         |
-|│       │       ├── mediawiki                                |                                                                         |
-|│       │       ├── piwigo                                   |                                                                         |
-|│       │       ├── rajce                                    |                                                                         |
-|│       │       ├── smugmug                                  |                                                                         |
-|│       │       ├── vkontakte                                |                                                                         |
-|│       │       └── yandexfotki                              |                                                                         |
-|│       ├── extrasupport                                     |                                                                         |
-|│       ├── facemanagement                                   |                                                                         |
-|│       ├── fuzzysearch                                      |                                                                         |
-|│       ├── geolocation                                      |                                                                         |
-|│       │   ├── editor                                       |                                                                         |
-|│       │   ├── geoiface                                     |                                                                         |
-|│       │   ├── geomapwrapper                                |                                                                         |
-|│       │   └── mapsearches                                  |                                                                         |
+|│       │   └── webservices                                  | All tools to import and export items to remote web-services             |
+|│       │       ├── common                                   | Common classes used by web-services tools                               |
+|│       │       ├── dropbox                                  | Tool to export items with Dropbox                                       |
+|│       │       ├── facebook                                 | Tool to export items with Facebook                                      |
+|│       │       ├── filetransfer                             | Tool to export items with a remote computer                             |
+|│       │       ├── flickr                                   | Tool to export items with Flickr                                        |
+|│       │       ├── google                                   | Tool to export items with Google                                        |
+|│       │       ├── imageshack                               | Tool to export items with ImageShack                                    |
+|│       │       ├── imgur                                    | Tool to export items with ImgUr                                         |
+|│       │       ├── mediawiki                                | Tool to export items with Mediawiki                                     |
+|│       │       ├── piwigo                                   | Tool to export items with Piwigo                                        |
+|│       │       ├── rajce                                    | Tool to export items with Rajce                                         |
+|│       │       ├── smugmug                                  | Tool to export items with Smugmug                                       |
+|│       │       ├── vkontakte                                | Tool to export items with Vkontakte                                     |
+|│       │       └── yandexfotki                              | Tool to export items with Yandexfotki                                   |
+|│       ├── extrasupport                                     | Extra desktop features support as Baloo search engine                   |
+|│       ├── facemanagement                                   | Face management classes and tools                                       |
+|│       ├── fuzzysearch                                      | Similarity search tools                                                 |
+|│       ├── geolocation                                      | All geo-location tools are located here                                 |
+|│       │   ├── editor                                       | Tool to edit items geo-location                                         |
+|│       │   ├── geoiface                                     | All shared classes used by geo-location tools                           |
+|│       │   ├── geomapwrapper                                | Legacy helper classes for geo-location support                          |
+|│       │   └── mapsearches                                  | Tool to perform map searches                                            |
 |│       ├── imageeditor                                      | The famous digiKam image editor, a lots of classes shared with Showfoto |
 |│       │   ├── core                                         | Core implementation including canvas and tools interface                |
 |│       │   ├── dialogs                                      | Image editor dialogs                                                    |
@@ -225,5 +253,125 @@
 |    ├── release                                              | Release scripts                                                         |
 |    ├── reports                                              | Static analyzers report scripts                                         |
 |    └── scripts                                              | 3rdparty source code management scripts                                 |
+
+\section externaldeps External Dependencies
+
+\subsection depscheckout Dependencies To Checkout All Source Code
+
+ - Perl       <http://www.perl.org>
+ - Git        <http://git-scm.com>
+
+\subsection depstrans Dependencies To Process Translations Files (optional)
+
+ - Ruby       <http://www.ruby-lang.org>             (to extract translations files from remote repositories)
+ - Subversion <https://subversion.apache.org/>       (to extract translations files from remote repositories)
+ - Gettext    <https://www.gnu.org/software/gettext> (including Msgfmt to compile po files to mo files)
+
+
+\subsection depscomplink Dependencies To Compile And Link Source Code
+
+The full list of mandatory (X) and optional (opt) external dependencies required to compile and link digiKam source code is listed below.
+
+| Dependency           | Status   | Version     | Project URL                                       | Remarks                                                | TODO                                                                                  |
+|----------------------|----------|-------------|---------------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------------------------------|
+| CMake                |   X      | >= 3.0.0    | http://www.cmake.org                              | > 3.1.0 hightly recommended                            |                                                                                       |
+| ECM                  |   X      | >= 1.7.0    | https://cgit.kde.org/extra-cmake-modules.git/     |                                                        |                                                                                       |
+| Qt5::Core            |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Gui             |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Widgets         |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Network         |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Sql             |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | Including Qt5::Sqlite and Qt5::Mysql plugins           |                                                                                       |
+| Qt5::Xml             |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Concurrent      |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::PrintSupport    |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
+| Qt5::Svg             |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtsvg.git/              |                                                        |                                                                                       |
+| Qt5::XmlPatterns     |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtxmlpatterns.git/      |                                                        |                                                                                       |
+| Qt5::WebKitWidgets   |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtwebkit.git/           | To render web contents                                 | Still the default while transitional stage                                            |
+| Qt5::WebView         |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtwebview.git/          | To render web contents (ENABLE_QWEBENGINE=on)          | To replace QWebKitWidgets. Must be the default in the future                          |
+| Qt5::X11Extras       |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtx11extras.git/        | For color management support under Linux               |                                                                                       |
+| Qt5::DBus            |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | Optional: only for Linux Desktop                       |                                                                                       |
+| Qt5::OpenGL          |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | For Presentation tool                                  |                                                                                       |
+| Qt5::Test            |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | To compile test codes (BUILD_TESTING=on)               |                                                                                       |
+| KF5::Config          |   X      | >= 5.5.0    | https://cgit.kde.org/kconfig.git/about/           |                                                        |                                                                                       |
+| KF5::XmlGui          |   X      | >= 5.5.0    | https://cgit.kde.org/kxmlgui.git/about/           |                                                        |                                                                                       |
+| KF5::I18n            |   X      | >= 5.5.0    | https://cgit.kde.org/ki18n.git/about/             |                                                        |                                                                                       |
+| KF5::WindowSystem    |   X      | >= 5.5.0    | https://cgit.kde.org/kwindowsystem.git/about/     |                                                        |                                                                                       |
+| KF5::Service         |   X      | >= 5.5.0    | https://cgit.kde.org/kservice.git/about/          | TODO: make optional for Linux desktop (DFileOperations)|                                                                                       |
+| KF5::Solid           |   X      | >= 5.5.0    | https://cgit.kde.org/solid.git/about/             |                                                        |                                                                                       |
+| KF5::CoreAddons      |   X      | >= 5.5.0    | https://cgit.kde.org/kcoreaddons.git/about/       | Needs for KAboutData                                   |                                                                                       |
+| KF5::NotifyConfig    |  opt     | >= 5.5.0    | https://cgit.kde.org/knotifyconfig.git/about/     | For Linux desktop application notify configuration     |                                                                                       |
+| KF5::Notifications   |  opt     | >= 5.5.0    | https://cgit.kde.org/knotifications.git/about/    | For Linux desktop notifications integrations           |                                                                                       |
+| KF5::ThreadWeaver    |  opt     | >= 5.5.0    | https://cgit.kde.org/threadweaver.git/about/      | For panorama tool                                      |                                                                                       |
+| KF5::IconThemes      |  opt     | >= 5.5.0    | https://cgit.kde.org/kiconthemes.git/about/       | Optional: only for Linux Desktop (KIconDialog)         |                                                                                       |
+| KF5::FileMetaData    |  opt     | >= 5.5.0    | https://cgit.kde.org/kfilemetadata.git/about/     | KDE files indexer (ENABLE_KFILEMETADATASUPPORT=on)     | Still experimental, disabled by default. Implementation from KDE side very unstable   |
+| KF5::AkonadiContact  |  opt     | >= 17.12.1  | https://cgit.kde.org/akonadi-contacts.git/about/  | KDE Mail contacts (ENABLE_AKONADICONTACTSUPPORT=on)    | Still experimental, disabled by default. Need testing                                 |
+| KF5::CalendarCore    |  opt     | >= 17.12.1  | https://cgit.kde.org/kcalcore.git/about/          | For calendar tool to setup ical special events         |                                                                                       |
+| KF5::KIO             |  opt     | >= 5.5.0    | https://cgit.kde.org/kio.git/about/               | Optional: only for Linux Desktop                       |                                                                                       |
+| libopencv            |   X      | >= 3.1      | http://opencv.willowgarage.com                    | Both versions supported using a cmake flag             |                                                                                       |
+| libpthread           |   X      | >= 2.0.0    | http://www.gnu.org/software/hurd/libpthread.html  | For DNG converter                                      |                                                                                       |
+| libtiff              |   X      | >= 4.0      | http://www.remotesensing.org/libtiff              | For DImg image loader                                  |                                                                                       |
+| libpng               |   X      | >= 1.6      | http://www.libpng.org/pub/png/libpng.html         | For DImg image loader                                  |                                                                                       |
+| libjpeg              |   X      | >= 6b       | http://www.ijg.org                                | jpeglib >= 8.0 hightly recommended for RawEngine       |                                                                                       |
+| libboost             |   X      | >= 1.55.0   | http://www.boost.org/doc/libs                     | For Versionning support                                |                                                                                       |
+| liblcms              |   X      | >= 2.x      | http://www.littlecms.com                          | For Color Management support                           |                                                                                       |
+| libexpat             |   X      | >= 2.1.0    | http://expat.sourceforge.net                      | For DNG converter                                      |                                                                                       |
+| libexiv2             |   X      | >= 0.26     | http://www.exiv2.org                              | Metadata low level management. 0.24 deprecated         |                                                                                       |
+| libxml2              |  opt     | >= 2.7.0    | http://xmlsoft.org                                | For HtmlGallery tool                                   |                                                                                       |
+| libxslt              |  opt     | >= 1.1.0    | http://xmlsoft.org/XSLT                           | For HtmlGallery tool                                   |                                                                                       |
+| libqtav              |  opt     | >= 1.12.0   | http://www.qtav.org                               | To play video and audio (ENABLE_MEDIAPLAYER=on)        |                                                                                       |
+| libffmpeg            |  opt     | >= 3.3.x    | http://www.ffmpeg.org                             | To play video and audio (ENABLE_MEDIAPLAYER=on)        | libavformat, libavutil, libavcodec used to extract video metadata                     |
+| Flex                 |  opt     | >= 2.5.0    | http://flex.sourceforge.net                       | For Panorama tool                                      |                                                                                       |
+| Bison                |  opt     | >= 2.5.0    | http://www.gnu.org/software/bison/bison.html      | For Panorama tool                                      |                                                                                       |
+| libmesa              |  opt     | >= 11.0     | http://www.mesa3d.org                             | For Presentation tools (Linux only)                    |                                                                                       |
+| libmediawiki         |  opt     | >= 5.5.0    | https://cgit.kde.org/libmediawiki.git/about/      | For MediaWiki tool (DIGIKAMSC_COMPILE_LIBMEDIAWIKI=on) |                                                                                       |
+| libkvkontakte        |  opt     | >= 4.70.0   | https://cgit.kde.org/libkvkontatke.git/about/     | For Vkontakte tool (DIGIKAMSC_COMPILE_LIBKVKONTAKTE=on)|                                                                                       |
+| libksane             |  opt     | >= 5.0.0    | https://cgit.kde.org/libksane.git/about/          | Digital scanner (DIGIKAMSC_COMPILE_LIBKSANE=on)        |                                                                                       |
+| libjpasper           |  opt     | >= 1.900.1  | http://www.ece.uvic.ca/~mdadams/jasper            | For JPEG-2000 support                                  |                                                                                       |
+| libmarble            |  opt     | >= 0.21.80  | https://cgit.kde.org/marble.git/about/            | For geolocation support                                |                                                                                       |
+| libeigen3            |  opt     | >= 3.2      | http://eigen.tuxfamily.org                        | For Refocus tool                                       | See if Clapack from OpenCV can be used instead                                        |
+| liblensfun           |  opt     | >= 0.2.8    | http://lensfun.sourceforge.net                    | For LensCorrection tool                                |                                                                                       |
+| liblqr-1             |  opt     | >= 0.4.2    | http://liblqr.wikidot.com                         | For Liquid rescale tool                                |                                                                                       |
+| libgphoto2           |  opt     | >= 2.5      | http://www.gphoto.org                             | Digital camera drivers support. Need libusb-1          |                                                                                       |
+| libgomp              |  opt     | >= 5.0      | https://gcc.gnu.org/onlinedocs/libgomp            | OpenMP support for RawEngine                           |                                                                                       |
+
+\section Downloading Source code
+
+To download all needed git repositories, you can execute download script like this:
+
+\code
+    perl ./download-repos
+\endcode
+
+Important: by default only components required for packaging are downloaded. To populate whole developers
+components, set \b $GITSLAVE environnement variable before to run \b download-repos script, like this:
+
+\code
+    export GITSLAVE=.gitslave.devel
+\endcode
+
+\section debugtraces Debug Traces
+
+digiKam uses categorized logging at run-time. By default, all debug messages are printed on the console. To disable output, you can either
+fine-grained control by using one or more logging categories listed below.
+
+\subsection Enable Logging Using an Environment Variable
+
+You can set the environment variable \b QT_LOGGING_RULES. Rules are divided by semicolons.
+
+E.g. you can start digiKam like this on the commandline with thumbnails and core database messages disabled:
+
+\code
+    export QT_LOGGING_RULES='digikam.thumbsdb=false:digikam.coredb=false'
+    digikam
+\endcode
+
+\subsection Logging Categories in digiKam
+
+All loggin categories are listed in \ref digikam_debug.cpp source code.
+
+\subsection Further reading
+
+ For more details see the Qt framework documentation about loggin categories available at this url:
+ https://doc.qt.io/qt-5/qloggingcategory.html#details
 
 */
