@@ -254,7 +254,21 @@
 |    ├── reports                                              | Static analyzers report scripts                                         |
 |    └── scripts                                              | 3rdparty source code management scripts                                 |
 
-\section dependencies External Dependencies
+\section externaldeps External Dependencies
+
+\subsection depscheckout Dependencies To Checkout All Source Code
+
+ - Perl       <http://www.perl.org>
+ - Git        <http://git-scm.com>
+
+\subsection depstrans Dependencies To Process Translations Files (optional)
+
+ - Ruby       <http://www.ruby-lang.org>             (to extract translations files from remote repositories)
+ - Subversion <https://subversion.apache.org/>       (to extract translations files from remote repositories)
+ - Gettext    <https://www.gnu.org/software/gettext> (including Msgfmt to compile po files to mo files)
+
+
+\subsection depscomplink Dependencies To Compile And Link Source Code
 
 The full list of mandatory (X) and optional (opt) external dependencies required to compile and link digiKam source code is listed below.
 
@@ -262,7 +276,6 @@ The full list of mandatory (X) and optional (opt) external dependencies required
 |----------------------|----------|-------------|---------------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------------------------------|
 | CMake                |   X      | >= 3.0.0    | http://www.cmake.org                              | > 3.1.0 hightly recommended                            |                                                                                       |
 | ECM                  |   X      | >= 1.7.0    | https://cgit.kde.org/extra-cmake-modules.git/     |                                                        |                                                                                       |
-|----------------------|----------|-------------|---------------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------------------------------|
 | Qt5::Core            |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
 | Qt5::Gui             |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
 | Qt5::Widgets         |   X      | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             |                                                        |                                                                                       |
@@ -279,7 +292,6 @@ The full list of mandatory (X) and optional (opt) external dependencies required
 | Qt5::DBus            |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | Optional: only for Linux Desktop                       |                                                                                       |
 | Qt5::OpenGL          |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | For Presentation tool                                  |                                                                                       |
 | Qt5::Test            |  opt     | >= 5.6.0    | http://code.qt.io/cgit/qt/qtbase.git/             | To compile test codes (BUILD_TESTING=on)               |                                                                                       |
-|----------------------|----------|-------------|---------------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------------------------------|
 | KF5::Config          |   X      | >= 5.5.0    | https://cgit.kde.org/kconfig.git/about/           |                                                        |                                                                                       |
 | KF5::XmlGui          |   X      | >= 5.5.0    | https://cgit.kde.org/kxmlgui.git/about/           |                                                        |                                                                                       |
 | KF5::I18n            |   X      | >= 5.5.0    | https://cgit.kde.org/ki18n.git/about/             |                                                        |                                                                                       |
@@ -295,7 +307,6 @@ The full list of mandatory (X) and optional (opt) external dependencies required
 | KF5::AkonadiContact  |  opt     | >= 17.12.1  | https://cgit.kde.org/akonadi-contacts.git/about/  | KDE Mail contacts (ENABLE_AKONADICONTACTSUPPORT=on)    | Still experimental, disabled by default. Need testing                                 |
 | KF5::CalendarCore    |  opt     | >= 17.12.1  | https://cgit.kde.org/kcalcore.git/about/          | For calendar tool to setup ical special events         |                                                                                       |
 | KF5::KIO             |  opt     | >= 5.5.0    | https://cgit.kde.org/kio.git/about/               | Optional: only for Linux Desktop                       |                                                                                       |
-|----------------------|----------|-------------|---------------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------------------------------|
 | libopencv            |   X      | >= 3.1      | http://opencv.willowgarage.com                    | Both versions supported using a cmake flag             |                                                                                       |
 | libpthread           |   X      | >= 2.0.0    | http://www.gnu.org/software/hurd/libpthread.html  | For DNG converter                                      |                                                                                       |
 | libtiff              |   X      | >= 4.0      | http://www.remotesensing.org/libtiff              | For DImg image loader                                  |                                                                                       |
@@ -323,9 +334,24 @@ The full list of mandatory (X) and optional (opt) external dependencies required
 | libgphoto2           |  opt     | >= 2.5      | http://www.gphoto.org                             | Digital camera drivers support. Need libusb-1          |                                                                                       |
 | libgomp              |  opt     | >= 5.0      | https://gcc.gnu.org/onlinedocs/libgomp            | OpenMP support for RawEngine                           |                                                                                       |
 
+\section Downloading Source code
+
+To download all needed git repositories, you can execute download script like this:
+
+\code
+    perl ./download-repos
+\endcode
+
+Important: by default only components required for packaging are downloaded. To populate whole developers
+components, set \b $GITSLAVE environnement variable before to run \b download-repos script, like this:
+
+\code
+    export GITSLAVE=.gitslave.devel
+\endcode
+
 \section debugtraces Debug Traces
 
-digiKam uses categorized logging. By default, all debug messages are printed on the console. To disable output, you can either
+digiKam uses categorized logging at run-time. By default, all debug messages are printed on the console. To disable output, you can either
 fine-grained control by using one or more logging categories listed below.
 
 \subsection Enable Logging Using an Environment Variable
