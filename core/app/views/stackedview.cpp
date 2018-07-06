@@ -130,23 +130,23 @@ StackedView::StackedView(QWidget* const parent)
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName(QLatin1String("mainwindow_thumbbar"));
 
-    d->welcomePageView = new WelcomePageView(this);
-    d->tableView       = new TableView(d->imageIconView->getSelectionModel(),
-                                       d->imageIconView->imageFilterModel(),
-                                       this);
+    d->welcomePageView  = new WelcomePageView(this);
+    d->tableView        = new TableView(d->imageIconView->getSelectionModel(),
+                                        d->imageIconView->imageFilterModel(),
+                                        this);
     d->tableView->setObjectName(QLatin1String("mainwindow_tableview"));
 
-    d->trashView       = new TrashView(this);
+    d->trashView        = new TrashView(this);
 
 #ifdef HAVE_MARBLE
-    d->mapWidgetView   = new MapWidgetView(d->imageIconView->getSelectionModel(),
-                                           d->imageIconView->imageFilterModel(), this,
-                                           MapWidgetView::ApplicationDigikam);
+    d->mapWidgetView    = new MapWidgetView(d->imageIconView->getSelectionModel(),
+                                            d->imageIconView->imageFilterModel(), this,
+                                            MapWidgetView::ApplicationDigikam);
     d->mapWidgetView->setObjectName(QLatin1String("mainwindow_mapwidgetview"));
 #endif // HAVE_MARBLE
 
 #ifdef HAVE_MEDIAPLAYER
-    d->mediaPlayerView = new MediaPlayerView(this);
+    d->mediaPlayerView  = new MediaPlayerView(this);
 #endif //HAVE_MEDIAPLAYER
 
     insertWidget(IconViewMode,     d->imageIconView);
