@@ -94,7 +94,6 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     d->thumbBar          = new ImportThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModelsFiltered(d->importIconView->importImageModel(),
                                    d->importIconView->importFilterModel());
-
     d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName(QLatin1String("import_thumbbar"));
@@ -284,7 +283,8 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
     }
     else
     {
-        if (identifyCategoryforMime(info.mime) == QLatin1String("audio") || identifyCategoryforMime(info.mime) == QLatin1String("video"))
+        if (identifyCategoryforMime(info.mime) == QLatin1String("audio") ||
+            identifyCategoryforMime(info.mime) == QLatin1String("video"))
         {
             // Stop image viewer
             if (viewMode() == PreviewImageMode)
