@@ -117,6 +117,7 @@ public:
         menu->addSeparator();
         menu->addAction(autoSearchAction);
         menu->exec(e->globalPos());
+        delete menu;
     }
 
     bool autoSearchEnabled() const
