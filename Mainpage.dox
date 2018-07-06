@@ -3,7 +3,7 @@
     \brief digiKam is an advanced open-source digital photo management application that runs on Linux, Windows, and MacOS.
     \image html logo-digikam.png
 
-\section sourcedir Source Code Directories
+\section sourcedirs Source Code Directories
 
    digiKam is split into a number of components, each ones located to a dedicated directory.
    The main namespace is Digikam for the digiKam application and all sub components. A second one is Showfoto for the stand alone version of image editor.
@@ -253,5 +253,30 @@
 |    ├── release                                              | Release scripts                                                         |
 |    ├── reports                                              | Static analyzers report scripts                                         |
 |    └── scripts                                              | 3rdparty source code management scripts                                 |
+
+\section debugtraces Debug Traces
+
+digiKam uses categorized logging. By default, all debug messages are printed on the console. To disable output, you can either
+fine-grained control by using one or more logging categories listed below.
+
+\subsection Enable Logging Using an Environment Variable
+
+You can set the environment variable \b QT_LOGGING_RULES. Rules are divided by semicolons.
+
+E.g. you can start digiKam like this on the commandline:
+
+\code
+    export QT_LOGGING_RULES='digikam.thumbsdb=false:digikam.coredb=false'
+    digikam
+\endcode
+
+\subsection Logging Categories in digiKam
+
+All loggin categories are listed in \ref digikam_debug.cpp source code.
+
+\subsection Further reading
+
+ For more details see the Qt framework documentation about loggin categories available at this url:
+ https://doc.qt.io/qt-5/qloggingcategory.html#details
 
 */
