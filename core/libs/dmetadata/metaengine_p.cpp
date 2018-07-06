@@ -138,6 +138,7 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
     // Raw files not supported by Exiv2 0.21
     rawTiffBasedNotSupported << QString::fromLatin1("3fr")
                              << QString::fromLatin1("arw")
+                             << QString::fromLatin1("crw")
                              << QString::fromLatin1("dcr")
                              << QString::fromLatin1("erf")
                              << QString::fromLatin1("k25")
