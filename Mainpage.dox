@@ -10,38 +10,6 @@
 
    See below the complete list of directories used by the project:
 
-AUTHORS
-bootstrap.linux
-bootstrap.local
-bootstrap.macports
-bootstrap.mxe
-build/
-ChangeLog
-CMakeLists.txt
-COPYING
-COPYING-CMAKE-SCRIPTS
-COPYING.LIB
-core/
-DEPENDENCIES
-doc/
-download-repos
-extra/
-gits
-gitup
-HACKING
-INSTALL
-Mainpage.dox
-Messages.sh
-NEWS
-project/
-README.DEVEL
-README.LOCAL
-README.MACOS
-README.md
-README.WINDOWS
-TODO
-
-
 | SOURCE TREE-VIEW                                            | DETAILS                                                                 |
 | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
 |├── AUTHORS                                                  | List of developers and contributors to the project                      |
