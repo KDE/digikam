@@ -295,5 +295,5 @@ BUGFIXES:
 240 ==> 230763 - Exif ISO data missing when converting Olympus ORF.
 241 ==> 137278 - 16-bit/channel workspace when working with RAW conversions.
 242 ==> 133004 - Canon CRW portrait preview upside-down.
-243 ==> 
-
+243 ==> 221345 - Do not process search immediately when enter text to query.
+244 ==> 
