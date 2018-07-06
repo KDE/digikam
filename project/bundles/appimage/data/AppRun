@@ -8,10 +8,10 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-if [ -f "/usr/lib/libfreetype.so" ]; then
-    LD_PRELOAD="/usr/lib/libfreetype.so"
-elif [ -f "/usr/lib64/libfreetype.so" ]; then
-    LD_PRELOAD="/usr/lib64/libfreetype.so"
+if [[ "$(arch)" = "x86_64" ]] ; then
+    env LD_PRELOAD="/usr/lib64/libfreetype.so"
+else
+    env LD_PRELOAD="/usr/lib/libfreetype.so"
 fi
 
 echo "-- digiKam AppImage Bundle"
