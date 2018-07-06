@@ -386,7 +386,6 @@ SearchWindow* SearchTabHeader::searchWindow() const
 
 void SearchTabHeader::selectedSearchChanged(Album* a)
 {
-
     SAlbum* album = dynamic_cast<SAlbum*>(a);
 
     // Signal from SearchFolderView that a search has been selected.
