@@ -427,7 +427,7 @@ bool MetaEngine::save(const QString& imageFilePath, bool setVersion) const
         qCDebug(DIGIKAM_METAENGINE_LOG) << "Will write Metadata to file" << finfo.absoluteFilePath();
         writtenToFile = d->saveToFile(finfo);
 
-        if (writeToFile)
+        if (writtenToFile)
         {
             qCDebug(DIGIKAM_METAENGINE_LOG) << "Metadata for file" << finfo.fileName() << "written to file.";
         }
