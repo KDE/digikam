@@ -178,29 +178,29 @@
 |│       │   ├── printcreator                                 | Tool to print items                                                     |
 |│       │   ├── sendbymail                                   | Tool to export items by e-mail                                          |
 |│       │   ├── videoslideshow                               | Tool to create video slideshow from items                               |
-|│       │   └── webservices                                  |                                                                         |
-|│       │       ├── common                                   |                                                                         |
-|│       │       ├── dropbox                                  |                                                                         |
-|│       │       ├── facebook                                 |                                                                         |
-|│       │       ├── filetransfer                             |                                                                         |
-|│       │       ├── flickr                                   |                                                                         |
-|│       │       ├── google                                   |                                                                         |
-|│       │       ├── imageshack                               |                                                                         |
-|│       │       ├── imgur                                    |                                                                         |
-|│       │       ├── mediawiki                                |                                                                         |
-|│       │       ├── piwigo                                   |                                                                         |
-|│       │       ├── rajce                                    |                                                                         |
-|│       │       ├── smugmug                                  |                                                                         |
-|│       │       ├── vkontakte                                |                                                                         |
-|│       │       └── yandexfotki                              |                                                                         |
-|│       ├── extrasupport                                     |                                                                         |
-|│       ├── facemanagement                                   |                                                                         |
-|│       ├── fuzzysearch                                      |                                                                         |
-|│       ├── geolocation                                      |                                                                         |
-|│       │   ├── editor                                       |                                                                         |
-|│       │   ├── geoiface                                     |                                                                         |
-|│       │   ├── geomapwrapper                                |                                                                         |
-|│       │   └── mapsearches                                  |                                                                         |
+|│       │   └── webservices                                  | All tools to import and export items to remote web-services             |
+|│       │       ├── common                                   | Common classes used by web-services tools                               |
+|│       │       ├── dropbox                                  | Tool to export items with Dropbox                                       |
+|│       │       ├── facebook                                 | Tool to export items with Facebook                                      |
+|│       │       ├── filetransfer                             | Tool to export items with a remote computer                             |
+|│       │       ├── flickr                                   | Tool to export items with Flickr                                        |
+|│       │       ├── google                                   | Tool to export items with Google                                        |
+|│       │       ├── imageshack                               | Tool to export items with ImageShack                                    |
+|│       │       ├── imgur                                    | Tool to export items with ImgUr                                         |
+|│       │       ├── mediawiki                                | Tool to export items with Mediawiki                                     |
+|│       │       ├── piwigo                                   | Tool to export items with Piwigo                                        |
+|│       │       ├── rajce                                    | Tool to export items with Rajce                                         |
+|│       │       ├── smugmug                                  | Tool to export items with Smugmug                                       |
+|│       │       ├── vkontakte                                | Tool to export items with Vkontakte                                     |
+|│       │       └── yandexfotki                              | Tool to export items with Yandexfotki                                   |
+|│       ├── extrasupport                                     | Extra desktop features support as Baloo search engine                   |
+|│       ├── facemanagement                                   | Face management classes and tools                                       |
+|│       ├── fuzzysearch                                      | Similarity search tools                                                 |
+|│       ├── geolocation                                      | All geo-location tools are located here                                 |
+|│       │   ├── editor                                       | Tool to edit items geo-location                                         |
+|│       │   ├── geoiface                                     | All shared classes used by geo-location tools                           |
+|│       │   ├── geomapwrapper                                | Legacy helper classes for geo-location support                          |
+|│       │   └── mapsearches                                  | Tool to perform map searches                                            |
 |│       ├── imageeditor                                      | The famous digiKam image editor, a lots of classes shared with Showfoto |
 |│       │   ├── core                                         | Core implementation including canvas and tools interface                |
 |│       │   ├── dialogs                                      | Image editor dialogs                                                    |
