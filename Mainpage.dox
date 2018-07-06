@@ -345,10 +345,10 @@ https://phabricator.kde.org/source/digikam/
 Even if code base can be compiled as well, more features can be enabled if extra components are downloaded and compiled at the same time.
 The project pages of these extra components are given below:
 
- - \b libksane         : https://phabricator.kde.org/source/libksane/
- - \b libmediawiki     : https://phabricator.kde.org/source/libmediawiki/
- - \b libkvkontatke    : https://projects.kde.org/projects/extragear/libs/libkvkontatke
- - \b digiKam handbook : https://phabricator.kde.org/source/digikam-doc/
+ - \b libksane            : https://phabricator.kde.org/source/libksane/
+ - \b libmediawiki        : https://phabricator.kde.org/source/libmediawiki/
+ - \b libkvkontatke       : https://projects.kde.org/projects/extragear/libs/libkvkontatke
+ - \b digiKam \b handbook : https://phabricator.kde.org/source/digikam-doc/
 
 \subsection downloadcomponents Downloading Software Components
 
@@ -443,20 +443,80 @@ There are two configuration sections : the top level and the core.
 
  - Packaging options:
 
-  - \b -DDIGIKAMSC_COMPILE_DIGIKAM=ON          : Build digiKam core.
-  - \b -DDIGIKAMSC_CHECKOUT_PO=ON              : Extract application translation files from remote repositories.
-  - \b -DDIGIKAMSC_CHECKOUT_DOC=ON             : Extract documentation translation files from remote repositories.
-  - \b -DDIGIKAMSC_COMPILE_DOC=ON              : Build handbook i18n files. It require to checkout documentation translations files before from remote repositories.
-  - \b -DDIGIKAMSC_COMPILE_PO=ON               : Build GUI i18n files. It require to checkout application translations files before from remote repositories.
+  - \b DIGIKAMSC_COMPILE_DIGIKAM             : Build digiKam core (default=ON).
+  - \b DIGIKAMSC_CHECKOUT_PO                 : Extract application translation files from remote repositories (default=ON).
+  - \b DIGIKAMSC_CHECKOUT_DOC                : Extract documentation translation files from remote repositories (default=ON).
+  - \b DIGIKAMSC_COMPILE_DOC                 : Build handbook i18n files. It require to checkout documentation translations files before from remote repositories (default=ON).
+  - \b DIGIKAMSC_COMPILE_PO                  : Build GUI i18n files. It require to checkout application translations files before from remote repositories (default=ON).
 
  - Developers only options:
 
-  - \b -DBUILD_TESTING=ON                      : Build tests code.
-  - \b -DDIGIKAMSC_COMPILE_LIBKSANE=OFF        : Force to use local libksane instead version installed on your computer.
-  - \b -DDIGIKAMSC_COMPILE_LIBMEDIAWIKI=OFF    : Force to use local libmediawiki instead version installed on your computer.
-  - \b -DDIGIKAMSC_COMPILE_LIBKVKONTAKE=OFF    : Force to use local libkvkontakte instead version installed on your computer.
+  - \b BUILD_TESTING=ON                      : Build tests code (default=ON).
+  - \b DIGIKAMSC_COMPILE_LIBKSANE=OFF        : Force to use local libksane instead version installed on your computer (default=OFF).
+  - \b DIGIKAMSC_COMPILE_LIBMEDIAWIKI=OFF    : Force to use local libmediawiki instead version installed on your computer (default=OFF).
+  - \b DIGIKAMSC_COMPILE_LIBKVKONTAKE=OFF    : Force to use local libkvkontakte instead version installed on your computer (default=OFF).
 
 \subsection coreoptions Core Configuration
+
+ - Extra feature support options:
+
+  - \b ENABLE_KFILEMETADATASUPPORT           : Build digiKam with KDE files indexer support (default=OFF).
+  - \b ENABLE_AKONADICONTACTSUPPORT          : Build digiKam with KDE Mail Contacts support (default=OFF).
+  - \b ENABLE_MEDIAPLAYER                    : Build digiKam with Media Player support (default=OFF).
+  - \b ENABLE_DBUS                           : Build digiKam with DBUS support (default=ON).
+  - \b ENABLE_APPSTYLES                      : Build digiKam with support for changing the widget application style (default=OFF).
+  - \b ENABLE_QWEBENGINE                     : Build digiKam with QWebEngine instead of QWebKit (default=OFF).
+
+ - Experimental support options
+
+  - \b ENABLE_MYSQLSUPPORT                   : Build digiKam with MySQL dabatase support (default=ON).
+  - \b ENABLE_INTERNALMYSQL                  : Build digiKam with internal MySQL server executable (default=ON).
+
+ - Developers only options:
+
+  - \b ENABLE_DIGIKAM_MODELTEST              : Enable ModelTest on some models for debugging (default=OFF).
+
+\section setuplocaldev Setup Local Compilation and Run-Time
+
+This section describes how to install digiKam from the git repository, while keeping a system-wide digiKam install.
+
+This procedure is based on the configure script \b boostrap.local
+
+ 1. Set the root directory for your git install in boostrap.local (DIGIKAM_INSTALL_PREFIX variable)
+ 2. If you want a clean build directory, set CLEANROOT to 1
+ 3. Type the following command in your terminal:
+
+\code
+   $ ./boostrap.local  # or "./bootstrap.local --eclipse" if you intend to use Eclipse
+   $ cd build
+   $ make
+   $ make install
+   $ KDESYCOCA="/your/root/directory/var/tmp/kde-$USER/ksycoca5" kbuildsycoca5
+\endcode
+   
+To run digikam, use the following commands:
+
+\code
+   $ export KDESYCOCA=/your/root/directory/var/tmp/kde-$USER/ksycoca5
+   $ export QT_PLUGIN_PATH=/your/root/directory/lib64/plugins:/your/root/directory/lib/plugins:$QT_PLUGIN_PATH
+   $ export XDG_DATA_DIRS=/your/root/directory/share:$XDG_DATA_DIRS
+   $ /your/root/directory/bin/digikam
+\endcode
+
+The same applies for all binaries in /your/root/directory/bin/
+
+If your shell is bash, you can edit your \b .bashrc file (in $HOME) and add the follwing alias:
+
+\code
+ DIGIKAMROOT="/your/root/directory"
+ alias digikam-dev="KDESYCOCA=\$DIGIKAMROOT/var/tmp/kde-$USER/ksycoca5 XDG_DATA_DIRS=\$DIGIKAMROOT/share:\$XDG_DATA_DIRS QT_PLUGIN_PATH=\$DIGIKAMROOT/lib64/plugins:\$DIGIKAMROOT/lib/plugins:\$QT_PLUGIN_PATH \$DIGIKAMROOT/bin/digikam"
+\endcode
+
+then you can start your newly installed digikam with
+
+\code
+ $ digikam-dev
+\endcode
 
 \section debugtraces Debug Traces At Run-Time
 
