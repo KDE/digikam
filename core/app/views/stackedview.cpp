@@ -122,7 +122,7 @@ StackedView::StackedView(QWidget* const parent)
 {
     d->imageIconView    = new DigikamImageView(this);
     d->imagePreviewView = new ImagePreviewView(this);
-    d->thumbBarDock     = new ThumbBarDock(d->imagePreviewView);
+    d->thumbBarDock     = new ThumbBarDock();
     d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModelsFiltered(d->imageIconView->imageModel(),
                                    d->imageIconView->imageFilterModel());
@@ -244,7 +244,7 @@ void StackedView::setDockArea(QMainWindow* dockArea)
 {
     // Attach the thumbbar dock to the given dock area and place it initially on top.
     d->dockArea = dockArea;
-    //d->thumbBarDock->setParent(d->dockArea);
+    d->thumbBarDock->setParent(d->dockArea);
     d->dockArea->addDockWidget(Qt::TopDockWidgetArea, d->thumbBarDock);
     d->thumbBarDock->setFloating(false);
 }
