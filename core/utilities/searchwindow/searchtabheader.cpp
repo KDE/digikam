@@ -103,19 +103,19 @@ public:
         }
     }
 
-    void contextMenuEvent(QContextMenuEvent *e)
+    void contextMenuEvent(QContextMenuEvent* e)
     {
-        QAction* const autoSearchAction = new QAction(i18nc("@action:inmenu",
-                                                      "Autostart Search"), this);
-        autoSearchAction->setCheckable(true);
-        autoSearchAction->setChecked(m_autoSearch);
+        QAction* const action = new QAction(i18nc("@action:inmenu",
+                                                  "Autostart Search"), this);
+        action->setCheckable(true);
+        action->setChecked(m_autoSearch);
 
-        connect(autoSearchAction, &QAction::triggered,
+        connect(action, &QAction::triggered,
                 this, &KeywordLineEdit::toggleAutoSearch);
 
         QMenu* const menu = createStandardContextMenu();
         menu->addSeparator();
-        menu->addAction(autoSearchAction);
+        menu->addAction(action);
         menu->exec(e->globalPos());
         delete menu;
     }
