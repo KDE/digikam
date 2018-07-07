@@ -243,7 +243,7 @@ void StackedView::setDockArea(QMainWindow* dockArea)
 {
     // Attach the thumbbar dock to the given dock area and place it initially on top.
     d->dockArea = dockArea;
-    d->thumbBarDock->setParent(d->dockArea);
+    //d->thumbBarDock->setParent(d->dockArea);
     d->dockArea->addDockWidget(Qt::TopDockWidgetArea, d->thumbBarDock);
     d->thumbBarDock->setFloating(false);
 }
