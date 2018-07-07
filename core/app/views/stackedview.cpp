@@ -129,6 +129,7 @@ StackedView::StackedView(QWidget* const parent)
     d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName(QLatin1String("mainwindow_thumbbar"));
+    d->thumbBarDock->setWindowTitle(i18n("DigiKam Thumbnail Dock"));
 
     d->welcomePageView  = new WelcomePageView(this);
     d->tableView        = new TableView(d->imageIconView->getSelectionModel(),

@@ -132,6 +132,7 @@ void ShowFoto::setupUserArea()
 
     d->thumbBarDock = new Digikam::ThumbBarDock(viewContainer, Qt::Tool);
     d->thumbBarDock->setObjectName(QLatin1String("editor_thumbbar"));
+    d->thumbBarDock->setWindowTitle(i18n("ShowFoto Thumbnail Dock"));
     d->thumbBarDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea  | Qt::BottomDockWidgetArea);
     d->thumbBar     = new ShowfotoThumbnailBar(d->thumbBarDock);
 
