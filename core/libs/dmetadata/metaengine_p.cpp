@@ -148,7 +148,7 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
 
     QString ext = finfo.suffix().toLower();
 
-    if (!writeRawFiles && (rawTiffBasedSupported.contains(ext) || rawTiffBasedNotSupported.contains(ext)) )
+    if (rawTiffBasedNotSupported.contains(ext) || (!writeRawFiles && rawTiffBasedSupported.contains(ext)))
     {
         qCDebug(DIGIKAM_METAENGINE_LOG) << finfo.fileName()
                                         << "is a TIFF based RAW file, "
