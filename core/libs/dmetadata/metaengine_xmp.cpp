@@ -214,7 +214,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
             {
                 if (!invertSelection)
                 {
-                    if (xmpKeysFilter.contains(key.section(QLatin1String("."), 1, 1)))
+                    if (xmpKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
                     {
                         if (it == metaDataMap.constEnd())
                         {
@@ -231,7 +231,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
                 }
                 else
                 {
-                    if (!xmpKeysFilter.contains(key.section(QLatin1String("."), 1, 1)))
+                    if (!xmpKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
                     {
                         if (it == metaDataMap.constEnd())
                         {
@@ -1028,8 +1028,8 @@ bool MetaEngine::registerXmpNameSpace(const QString& uri, const QString& prefix)
     {
         QString ns = uri;
 
-        if (!uri.endsWith(QLatin1String("/")))
-            ns.append(QLatin1String("/"));
+        if (!uri.endsWith(QLatin1Char('/')))
+            ns.append(QLatin1Char('/'));
 
         Exiv2::XmpProperties::registerNs(ns.toLatin1().constData(), prefix.toLatin1().constData());
         return true;
@@ -1061,8 +1061,8 @@ bool MetaEngine::unregisterXmpNameSpace(const QString& uri)
     {
         QString ns = uri;
 
-        if (!uri.endsWith(QLatin1String("/")))
-            ns.append(QLatin1String("/"));
+        if (!uri.endsWith(QLatin1Char('/')))
+            ns.append(QLatin1Char('/'));
 
         Exiv2::XmpProperties::unregisterNs(ns.toLatin1().constData());
         return true;

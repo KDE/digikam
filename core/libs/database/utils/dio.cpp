@@ -67,7 +67,7 @@ SidecarFinder::SidecarFinder(const QList<QUrl>& files)
 
         foreach(QString suffix, MetadataSettings::instance()->settings().sidecarExtensions)
         {
-            suffix = QLatin1String(".") + suffix;
+            suffix = QLatin1Char('.') + suffix;
             QString sidecarName = url.toLocalFile() + suffix;
 
             if (QFileInfo::exists(sidecarName) && !localFiles.contains(QUrl::fromLocalFile(sidecarName)))

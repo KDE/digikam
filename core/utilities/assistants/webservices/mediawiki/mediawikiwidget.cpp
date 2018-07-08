@@ -885,7 +885,7 @@ void MediaWikiWidget::slotRestoreExtension()
 
         if (QString::compare(currentExtension, originalExtension, Qt::CaseInsensitive) != 0)
         {
-            imageTitle.append(QLatin1String(".")).append(originalExtension);
+            imageTitle.append(QLatin1Char('.')).append(originalExtension);
             d->titleEdit->setText(imageTitle);
         }
 

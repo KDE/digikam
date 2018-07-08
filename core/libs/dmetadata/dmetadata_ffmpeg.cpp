@@ -116,11 +116,11 @@ QString s_setXmpTagStringFromEntry(DMetadata* const meta,
 
 QStringList s_keywordsSeparation(const QString& data)
 {
-    QStringList keywords = data.split(QLatin1String("/"));
+    QStringList keywords = data.split(QLatin1Char('/'));
 
     if (keywords.isEmpty())
     {
-        keywords = data.split(QLatin1String(","));
+        keywords = data.split(QLatin1Char(','));
 
         if (keywords.isEmpty())
         {

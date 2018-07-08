@@ -58,7 +58,7 @@ void TemplateListItem::setTemplate(const Template& t)
     if (!m_template.isNull())
     {
         setText(0, m_template.templateTitle());
-        setText(1, m_template.authors().join(QLatin1String(";")));
+        setText(1, m_template.authors().join(QLatin1Char(';')));
     }
 }
 

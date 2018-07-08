@@ -208,12 +208,12 @@ MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifK
             {
                 if (!invertSelection)
                 {
-                    if (exifKeysFilter.contains(key.section(QLatin1String("."), 1, 1)))
+                    if (exifKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
                         metaDataMap.insert(key, tagValue);
                 }
                 else
                 {
-                    if (!exifKeysFilter.contains(key.section(QLatin1String("."), 1, 1)))
+                    if (!exifKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
                         metaDataMap.insert(key, tagValue);
                 }
             }
