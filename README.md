@@ -3,7 +3,9 @@
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/285/badge.svg)](https://scan.coverity.com/projects/digikam)
 [![Phabricator Build Status](https://build.kde.org/job/Extragear%20digikam%20kf5-qt5%20SUSEQt5.9/badge/icon)](https://build.kde.org/job/Extragear%20digikam%20kf5-qt5%20SUSEQt5.9/)
 
-If you are reading this on Github, be aware that this is just a mirror. Our real code repository [is located here](https://phabricator.kde.org/source/digikam/) 
+If you are reading this on Github, be aware that this is just a mirror. Our real code repository [is located here](https://phabricator.kde.org/source/digikam/)
+
+Developers, if you want to contrib, see the online [API documentation here](https://www.digikam.org/api)
 
 # About
 
@@ -91,26 +93,13 @@ Extra Bugzilla servers for shared libs used by digiKam :
 * [Exiv2 library](http://dev.exiv2.org/projects/exiv2/issues)
 * [QtAV library](https://github.com/wang-bin/QtAV/issues)
 
-# Dependencies
+# External Dependencies
 
-See [DEPENDENCIES](DEPENDENCIES) file for details.
+See the [online Dependencies list](https://www.digikam.org/api/index.html#externaldeps) for details.
 
-CMake compilation options to custom digiKam:
+# Cmake Configuration
 
-* Use CMake `-DENABLE_KFILEMETADATASUPPORT=on`  flag to compile digiKam with KDE files indexer support                                 (disabled by default - experimental).
-* Use CMake `-DENABLE_AKONADICONTACTSUPPORT=on` flag to compile digiKam with KDE Mail Contacts support                                 (disabled by default - experimental).
-* Use CMake `-DENABLE_DBUS=off`                 flag to compile digiKam without DBus support                                           (enabled by default - for Linux desktop only).
-* Use CMake `-DENABLE_MEDIAPLAYER=on`           flag to compile digiKam with QtAV support                                              (disabled by default but hight recomend to support video files).
-* Use Cmake `-DENABLE_APPSTYLES=on`             flag to compile digiKam with widget application style support                          (disabled by default).
-
-Mysql support options (experimental):
-
-* Use CMake `-DENABLE_MYSQLSUPPORT=on`          flag to compile digiKam with MysSql support                                            (disabled by default).
-* Use CMake `-DENABLE_INTERNALMYSQL=on`         flag to compile digiKam with internal MySQL server                                     (disabled by default).
-
-Debug options:
-
-* Use CMake `-DBUILD_TESTING=on`                flag to compile digiKam source code unit tests                                         (disabled by default - for developpers only).
+See the [online Configuration rules](https://www.digikam.org/api/index.html#cmakeoptions) for details.
 
 # Installation
 
