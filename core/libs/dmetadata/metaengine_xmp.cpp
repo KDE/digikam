@@ -1028,8 +1028,8 @@ bool MetaEngine::registerXmpNameSpace(const QString& uri, const QString& prefix)
     {
         QString ns = uri;
 
-        if (!uri.endsWith(QLatin1String("/")))
-            ns.append(QLatin1String("/"));
+        if (!uri.endsWith(QLatin1Char('/')))
+            ns.append(QLatin1Char('/'));
 
         Exiv2::XmpProperties::registerNs(ns.toLatin1().constData(), prefix.toLatin1().constData());
         return true;
@@ -1061,8 +1061,8 @@ bool MetaEngine::unregisterXmpNameSpace(const QString& uri)
     {
         QString ns = uri;
 
-        if (!uri.endsWith(QLatin1String("/")))
-            ns.append(QLatin1String("/"));
+        if (!uri.endsWith(QLatin1Char('/')))
+            ns.append(QLatin1Char('/'));
 
         Exiv2::XmpProperties::unregisterNs(ns.toLatin1().constData());
         return true;

@@ -394,7 +394,7 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy) const
 
     if (slashPolicy == IncludeLeadingSlash)
     {
-        path.prepend(QLatin1String("/"));
+        path.prepend(QLatin1Char('/'));
     }
 
     return path;

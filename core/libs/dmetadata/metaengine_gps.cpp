@@ -238,8 +238,8 @@ bool MetaEngine::getGPSAltitude(double* const altitude) const
 
             if (!altXmp.isEmpty())
             {
-                num = altXmp.section(QLatin1String("/"), 0, 0).toDouble();
-                den = altXmp.section(QLatin1String("/"), 1, 1).toDouble();
+                num = altXmp.section(QLatin1Char('/'), 0, 0).toDouble();
+                den = altXmp.section(QLatin1Char('/'), 1, 1).toDouble();
 
                 if (den == 0)
                     return false;

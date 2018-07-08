@@ -1392,8 +1392,8 @@ void AdvPrintPhotoPage::parseTemplateFile(const QString& fn, const QSizeF& pageS
 
                             if (it != end)
                             {
-                                p->m_label = KDesktopFile(dir.absolutePath() + 
-                                             QLatin1String("/") + *it).readName();
+                                p->m_label = KDesktopFile(dir.absolutePath() +
+                                             QLatin1Char('/') + *it).readName();
                             }
                             else
                             {

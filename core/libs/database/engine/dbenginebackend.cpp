@@ -198,7 +198,7 @@ QSqlDatabase BdEngineBackendPrivate::createDatabaseConnection()
             connectOptions += QLatin1Char(';');
         }
 
-        connectOptions += toAdd.join(QLatin1String(";"));
+        connectOptions += toAdd.join(QLatin1Char(';'));
     }
 
     db.setDatabaseName(parameters.databaseNameCore);
