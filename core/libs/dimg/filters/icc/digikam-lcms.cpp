@@ -279,11 +279,11 @@ QString dkCmsTakeProductName(cmsHPROFILE hProfile)
         {
             mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigProfileDescriptionTag) );
             cmsMLUgetASCII(mlu, "en", "US", Name, 1024);
-            return QString::fromLatin1(Name);
+            return QLatin1String(Name);
         }
         else
         {
-            return QString::fromLatin1("{no name}");
+            return QLatin1String("{no name}");
         }
     }
 
@@ -296,7 +296,7 @@ QString dkCmsTakeProductName(cmsHPROFILE hProfile)
         sprintf(Name, "%s - %s", Model, Manufacturer);
     }
 
-    return QString::fromLatin1(Name);
+    return QLatin1String(Name);
 }
 
 QString dkCmsTakeProductDesc(cmsHPROFILE hProfile)
@@ -318,7 +318,7 @@ QString dkCmsTakeProductDesc(cmsHPROFILE hProfile)
         return dkCmsTakeProductName(hProfile);
     }
 
-    return QString::fromLatin1(Name);
+    return QLatin1String(Name);
 }
 
 QString dkCmsTakeProductInfo(cmsHPROFILE hProfile)
@@ -376,7 +376,7 @@ QString dkCmsTakeProductInfo(cmsHPROFILE hProfile)
 
 #undef K007
 
-    return QString::fromLatin1(Info);
+    return QLatin1String(Info);
 }
 
 QString dkCmsTakeManufacturer(cmsHPROFILE hProfile)
@@ -384,7 +384,7 @@ QString dkCmsTakeManufacturer(cmsHPROFILE hProfile)
     char buffer[1024];
     buffer[0] = '\0';
     cmsGetProfileInfoASCII(hProfile, cmsInfoManufacturer, "en", "US", buffer, 1024);
-    return QString::fromLatin1(buffer);
+    return QLatin1String(buffer);
 }
 
 LCMSBOOL dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
@@ -408,7 +408,7 @@ QString dkCmsTakeModel(cmsHPROFILE hProfile)
         return QString();
 
     cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
-    return QString::fromLatin1(buffer);
+    return QLatin1String(buffer);
 }
 
 QString dkCmsTakeCopyright(cmsHPROFILE hProfile)
@@ -421,7 +421,7 @@ QString dkCmsTakeCopyright(cmsHPROFILE hProfile)
         return QString();
 
     cmsMLUgetASCII(mlu, "en", "US", buffer, 1024);
-    return QString::fromLatin1(buffer);
+    return QLatin1String(buffer);
 }
 
 DWORD dkCmsTakeHeaderFlags(cmsHPROFILE hProfile)

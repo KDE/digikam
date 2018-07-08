@@ -128,7 +128,7 @@ bool MetaEngine::getGPSLatitudeNumber(double* const latitude) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get GPS tag using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot get GPS tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -212,7 +212,7 @@ bool MetaEngine::getGPSLongitudeNumber(double* const longitude) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get GPS tag using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot get GPS tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -238,15 +238,15 @@ bool MetaEngine::getGPSAltitude(double* const altitude) const
 
             if (!altXmp.isEmpty())
             {
-                num = altXmp.section(QString::fromLatin1("/"), 0, 0).toDouble();
-                den = altXmp.section(QString::fromLatin1("/"), 1, 1).toDouble();
+                num = altXmp.section(QLatin1String("/"), 0, 0).toDouble();
+                den = altXmp.section(QLatin1String("/"), 1, 1).toDouble();
 
                 if (den == 0)
                     return false;
 
                 *altitude = num/den;
 
-                if (altRefXmp == QString::fromLatin1("1"))
+                if (altRefXmp == QLatin1String("1"))
                     *altitude *= -1.0;
 
                 return true;
@@ -287,7 +287,7 @@ bool MetaEngine::getGPSAltitude(double* const altitude) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get GPS tag using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot get GPS tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -334,15 +334,15 @@ bool MetaEngine::initializeGPSInfo()
         d->exifMetadata()["Exif.GPSInfo.GPSMapDatum"] = "WGS-84";
 
 #ifdef _XMP_SUPPORT_
-        setXmpTagString("Xmp.exif.GPSVersionID", QString::fromLatin1("2.0.0.0"));
-        setXmpTagString("Xmp.exif.GPSMapDatum",  QString::fromLatin1("WGS-84"));
+        setXmpTagString("Xmp.exif.GPSVersionID", QLatin1String("2.0.0.0"));
+        setXmpTagString("Xmp.exif.GPSMapDatum",  QLatin1String("WGS-84"));
 #endif // _XMP_SUPPORT_
 
         return true;
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot initialize GPS data using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot initialize GPS data using Exiv2 "), e);
     }
     catch(...)
     {
@@ -391,8 +391,8 @@ bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude,
             d->exifMetadata()["Exif.GPSInfo.GPSAltitude"] = scratchBuf;
 
 #ifdef _XMP_SUPPORT_
-            setXmpTagString("Xmp.exif.GPSAltitudeRef", ((*altitude) >= 0) ? QString::fromLatin1("0") : QString::fromLatin1("1"));
-            setXmpTagString("Xmp.exif.GPSAltitude",    QString::fromLatin1(scratchBuf));
+            setXmpTagString("Xmp.exif.GPSAltitudeRef", ((*altitude) >= 0) ? QLatin1String("0") : QLatin1String("1"));
+            setXmpTagString("Xmp.exif.GPSAltitude",    QLatin1String(scratchBuf));
 #endif // _XMP_SUPPORT_
         }
 
@@ -428,7 +428,7 @@ bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude,
          * because the reference is included in Xmp.exif.GPSLatitude.
          * Is there a historic reason for writing it anyway?
          */
-        setXmpTagString("Xmp.exif.GPSLatitudeRef", (latitude < 0) ? QString::fromLatin1("S") : QString::fromLatin1("N"));
+        setXmpTagString("Xmp.exif.GPSLatitudeRef", (latitude < 0) ? QLatin1String("S") : QLatin1String("N"));
         setXmpTagString("Xmp.exif.GPSLatitude",    convertToGPSCoordinateString(true, latitude));
 #endif // _XMP_SUPPORT_
 
@@ -463,7 +463,7 @@ bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude,
          * because the reference is included in Xmp.exif.GPSLongitude.
          * Is there a historic reason for writing it anyway?
          */
-        setXmpTagString("Xmp.exif.GPSLongitudeRef", (longitude < 0) ? QString::fromLatin1("W") : QString::fromLatin1("E"));
+        setXmpTagString("Xmp.exif.GPSLongitudeRef", (longitude < 0) ? QLatin1String("W") : QLatin1String("E"));
         setXmpTagString("Xmp.exif.GPSLongitude",    convertToGPSCoordinateString(false, longitude));
 #endif // _XMP_SUPPORT_
 
@@ -471,7 +471,7 @@ bool MetaEngine::setGPSInfo(const double* const altitude, const double latitude,
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Exif GPS tag using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot set Exif GPS tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -505,7 +505,7 @@ bool MetaEngine::removeGPSInfo()
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
 
-            if (key.section(QString::fromLatin1("."), 1, 1) == QString::fromLatin1("GPSInfo"))
+            if (key.section(QLatin1String("."), 1, 1) == QLatin1String("GPSInfo"))
                 gpsTagsKeys.append(key);
         }
 
@@ -557,7 +557,7 @@ bool MetaEngine::removeGPSInfo()
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot remove Exif GPS tag using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot remove Exif GPS tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -719,7 +719,7 @@ QString MetaEngine::convertToGPSCoordinateString(const long int numeratorDegrees
         denominatorSeconds == 1)
     {
         // use form DDD,MM,SSk
-        coordinate = QString::fromLatin1("%1,%2,%3%4");
+        coordinate = QLatin1String("%1,%2,%3%4");
         coordinate = coordinate.arg(numeratorDegrees).arg(numeratorMinutes).arg(numeratorSeconds).arg(directionReference);
     }
     else if (denominatorDegrees == 1   &&
@@ -727,12 +727,12 @@ QString MetaEngine::convertToGPSCoordinateString(const long int numeratorDegrees
              denominatorSeconds == 1)
     {
         // use form DDD,MM.mmk
-        coordinate             = QString::fromLatin1("%1,%2%3");
+        coordinate             = QLatin1String("%1,%2%3");
         double minutes         = (double)numeratorMinutes / (double)denominatorMinutes;
         minutes               += (double)numeratorSeconds / 60.0;
         QString minutesString =  QString::number(minutes, 'f', 8);
 
-        while (minutesString.endsWith(QString::fromLatin1("0")) && !minutesString.endsWith(QString::fromLatin1(".0")))
+        while (minutesString.endsWith(QLatin1String("0")) && !minutesString.endsWith(QLatin1String(".0")))
         {
             minutesString.chop(1);
         }
@@ -749,7 +749,7 @@ QString MetaEngine::convertToGPSCoordinateString(const long int numeratorDegrees
     else
     {
         // use form DDD,MM.mmk
-        coordinate             = QString::fromLatin1("%1,%2%3");
+        coordinate             = QLatin1String("%1,%2%3");
         double degrees         = (double)numeratorDegrees / (double)denominatorDegrees;
         double wholeDegrees    = trunc(degrees);
         double minutes         = (double)numeratorMinutes / (double)denominatorMinutes;
@@ -757,7 +757,7 @@ QString MetaEngine::convertToGPSCoordinateString(const long int numeratorDegrees
         minutes               += ((double)numeratorSeconds / (double)denominatorSeconds) / 60.0;
         QString minutesString  = QString::number(minutes, 'f', 8);
 
-        while (minutesString.endsWith(QString::fromLatin1("0")) && !minutesString.endsWith(QString::fromLatin1(".0")))
+        while (minutesString.endsWith(QLatin1String("0")) && !minutesString.endsWith(QLatin1String(".0")))
         {
             minutesString.chop(1);
         }
@@ -802,7 +802,7 @@ QString MetaEngine::convertToGPSCoordinateString(const bool isLatitude, double c
     double minutes = coordinate * 60.0;
 
     // use form DDD,MM.mmk
-    coordinateString = QString::fromLatin1("%1,%2%3");
+    coordinateString = QLatin1String("%1,%2%3");
     coordinateString = coordinateString.arg(degrees);
     coordinateString = coordinateString.arg(minutes, 0, 'f', 8).arg(directionReference);
 
@@ -820,7 +820,7 @@ bool MetaEngine::convertFromGPSCoordinateString(const QString& gpsString,
 
     *directionReference = gpsString.at(gpsString.length() - 1).toUpper().toLatin1();
     QString coordinate  = gpsString.left(gpsString.length() - 1);
-    QStringList parts   = coordinate.split(QString::fromLatin1(","));
+    QStringList parts   = coordinate.split(QLatin1String(","));
 
     if (parts.size() == 2)
     {
@@ -865,7 +865,7 @@ bool MetaEngine::convertFromGPSCoordinateString(const QString& gpsString, double
 
     char directionReference = gpsString.at(gpsString.length() - 1).toUpper().toLatin1();
     QString coordinate      = gpsString.left(gpsString.length() - 1);
-    QStringList parts       = coordinate.split(QString::fromLatin1(","));
+    QStringList parts       = coordinate.split(QLatin1String(","));
 
     if (parts.size() == 2)
     {
@@ -906,7 +906,7 @@ bool MetaEngine::convertToUserPresentableNumbers(const QString& gpsString,
 
     *directionReference = gpsString.at(gpsString.length() - 1).toUpper().toLatin1();
     QString coordinate  = gpsString.left(gpsString.length() - 1);
-    QStringList parts   = coordinate.split(QString::fromLatin1(","));
+    QStringList parts   = coordinate.split(QLatin1String(","));
 
     if (parts.size() == 2)
     {

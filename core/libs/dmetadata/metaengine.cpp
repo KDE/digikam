@@ -83,11 +83,11 @@ bool MetaEngine::initializeExiv2()
     if (!Exiv2::XmpParser::initialize())
         return false;
 
-    registerXmpNameSpace(QString::fromLatin1("http://ns.adobe.com/lightroom/1.0/"),  QString::fromLatin1("lr"));
-    registerXmpNameSpace(QString::fromLatin1("http://www.digikam.org/ns/kipi/1.0/"), QString::fromLatin1("kipi"));
-    registerXmpNameSpace(QString::fromLatin1("http://ns.microsoft.com/photo/1.2/"),  QString::fromLatin1("MP"));
-    registerXmpNameSpace(QString::fromLatin1("http://ns.acdsee.com/iptc/1.0/"),      QString::fromLatin1("acdsee"));
-    registerXmpNameSpace(QString::fromLatin1("http://www.video"),                    QString::fromLatin1("video"));
+    registerXmpNameSpace(QLatin1String("http://ns.adobe.com/lightroom/1.0/"),  QLatin1String("lr"));
+    registerXmpNameSpace(QLatin1String("http://www.digikam.org/ns/kipi/1.0/"), QLatin1String("kipi"));
+    registerXmpNameSpace(QLatin1String("http://ns.microsoft.com/photo/1.2/"),  QLatin1String("MP"));
+    registerXmpNameSpace(QLatin1String("http://ns.acdsee.com/iptc/1.0/"),      QLatin1String("acdsee"));
+    registerXmpNameSpace(QLatin1String("http://www.video"),                    QLatin1String("video"));
 
 #endif // _XMP_SUPPORT_
 
@@ -99,11 +99,11 @@ bool MetaEngine::cleanupExiv2()
     // Fix memory leak if Exiv2 support XMP.
 #ifdef _XMP_SUPPORT_
 
-    unregisterXmpNameSpace(QString::fromLatin1("http://ns.adobe.com/lightroom/1.0/"));
-    unregisterXmpNameSpace(QString::fromLatin1("http://www.digikam.org/ns/kipi/1.0/"));
-    unregisterXmpNameSpace(QString::fromLatin1("http://ns.microsoft.com/photo/1.2/"));
-    unregisterXmpNameSpace(QString::fromLatin1("http://ns.acdsee.com/iptc/1.0/"));
-    unregisterXmpNameSpace(QString::fromLatin1("http://www.video"));
+    unregisterXmpNameSpace(QLatin1String("http://ns.adobe.com/lightroom/1.0/"));
+    unregisterXmpNameSpace(QLatin1String("http://www.digikam.org/ns/kipi/1.0/"));
+    unregisterXmpNameSpace(QLatin1String("http://ns.microsoft.com/photo/1.2/"));
+    unregisterXmpNameSpace(QLatin1String("http://ns.acdsee.com/iptc/1.0/"));
+    unregisterXmpNameSpace(QLatin1String("http://www.video"));
 
     Exiv2::XmpParser::terminate();
 
@@ -123,27 +123,27 @@ bool MetaEngine::supportXmp()
 
 bool MetaEngine::supportMetadataWritting(const QString& typeMime)
 {
-    if (typeMime == QString::fromLatin1("image/jpeg"))
+    if (typeMime == QLatin1String("image/jpeg"))
     {
         return true;
     }
-    else if (typeMime == QString::fromLatin1("image/tiff"))
+    else if (typeMime == QLatin1String("image/tiff"))
     {
         return true;
     }
-    else if (typeMime == QString::fromLatin1("image/png"))
+    else if (typeMime == QLatin1String("image/png"))
     {
         return true;
     }
-    else if (typeMime == QString::fromLatin1("image/jp2"))
+    else if (typeMime == QLatin1String("image/jp2"))
     {
         return true;
     }
-    else if (typeMime == QString::fromLatin1("image/x-raw"))
+    else if (typeMime == QLatin1String("image/x-raw"))
     {
         return false;
     }
-    else if (typeMime == QString::fromLatin1("image/pgf"))
+    else if (typeMime == QLatin1String("image/pgf"))
     {
         return true;
     }
@@ -156,7 +156,7 @@ QString MetaEngine::Exiv2Version()
     // Since 0.14.0 release, we can extract run-time version of Exiv2.
     // else we return make version.
 
-    return QString::fromLatin1(Exiv2::version());
+    return QLatin1String(Exiv2::version());
 }
 
 QString MetaEngine::sidecarFilePathForFile(const QString& path)
@@ -165,7 +165,7 @@ QString MetaEngine::sidecarFilePathForFile(const QString& path)
 
     if (!path.isEmpty())
     {
-        ret = path + QString::fromLatin1(".xmp");
+        ret = path + QLatin1String(".xmp");
     }
 
     return ret;
@@ -229,7 +229,7 @@ bool MetaEngine::loadFromData(const QByteArray& imgData)
         // Size and mimetype ---------------------------------
 
         d->pixelSize = QSize(image->pixelWidth(), image->pixelHeight());
-        d->mimeType  = QString::fromLatin1(image->mimeType().c_str());
+        d->mimeType  = QLatin1String(image->mimeType().c_str());
 
         // Image comments ---------------------------------
 
@@ -255,7 +255,7 @@ bool MetaEngine::loadFromData(const QByteArray& imgData)
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot load metadata using Exiv2 "), e);
     }
     catch(...)
     {
@@ -286,7 +286,7 @@ bool MetaEngine::load(const QString& filePath)
         // Size and mimetype ---------------------------------
 
         d->pixelSize = QSize(image->pixelWidth(), image->pixelHeight());
-        d->mimeType  = QString::fromLatin1(image->mimeType().c_str());
+        d->mimeType  = QLatin1String(image->mimeType().c_str());
 
         // Image comments ---------------------------------
 
@@ -311,7 +311,7 @@ bool MetaEngine::load(const QString& filePath)
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata from file "), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot load metadata from file "), e);
     }
     catch(...)
     {
@@ -342,7 +342,7 @@ bool MetaEngine::load(const QString& filePath)
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot load XMP sidecar"), e);
+        d->printExiv2ExceptionError(QLatin1String("Cannot load XMP sidecar"), e);
     }
     catch(...)
     {
