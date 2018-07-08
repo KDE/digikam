@@ -43,7 +43,7 @@ bool MetaEngine::setImageProgramId(const QString& program, const QString& versio
     try
     {
         QString software(program);
-        software.append(QLatin1String("-"));
+        software.append(QLatin1Char('-'));
         software.append(version);
 
         // Set program info into Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).

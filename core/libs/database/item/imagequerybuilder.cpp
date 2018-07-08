@@ -1076,7 +1076,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
         if(readerString.contains(QRegExp(QLatin1String("^\\d+:\\d+$"))))
         {
-            QStringList ratioNum = readerString.split(QLatin1String(":"), QString::SkipEmptyParts);
+            QStringList ratioNum = readerString.split(QLatin1Char(':'), QString::SkipEmptyParts);
             int num              = ratioNum.at(0).toInt();
             int denominator = ratioNum.at(1).toInt();
             query                = QString::fromUtf8("abs((ImageInformation.width/CAST(ImageInformation.height as REAL)) - ?)  < 0.1");
@@ -1128,9 +1128,9 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             {
                  *boundValues << value;
 
-                 if (value.contains(QLatin1String(":")))
+                 if (value.contains(QLatin1Char(':')))
                  {
-                     QStringList ratioNum = value.split(QLatin1String(":"), QString::SkipEmptyParts);
+                     QStringList ratioNum = value.split(QLatin1Char(':'), QString::SkipEmptyParts);
                      int num              = ratioNum.at(0).toInt();
                      int denominator      = ratioNum.at(1).toInt();
                      ratioValues << (double)num/denominator;
@@ -1155,9 +1155,9 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             QString value = reader.value();
             *boundValues << value;
 
-            if (value.contains(QLatin1String(":")))
+            if (value.contains(QLatin1Char(':')))
             {
-                QStringList ratioNum = value.split(QLatin1String(":"), QString::SkipEmptyParts);
+                QStringList ratioNum = value.split(QLatin1Char(':'), QString::SkipEmptyParts);
                 int num              = ratioNum.at(0).toInt();
                 int denominator      = ratioNum.at(1).toInt();
                 *boundValues << (double)num/denominator;

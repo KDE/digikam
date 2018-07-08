@@ -239,8 +239,8 @@ void PanoLastPage::initializePage()
     QString first = d->mngr->itemsList().first().fileName();
     QString last  = d->mngr->itemsList().last().fileName();
     QString file  = QString::fromLatin1("%1-%2")
-        .arg(first.left(first.lastIndexOf(QChar::fromLatin1('.'))))
-        .arg(last.left(last.lastIndexOf(QChar::fromLatin1('.'))));
+        .arg(first.left(first.lastIndexOf(QLatin1Char('.'))))
+        .arg(last.left(last.lastIndexOf(QLatin1Char('.'))));
     d->fileTemplateQLineEdit->setText(file);
 
     checkFiles();

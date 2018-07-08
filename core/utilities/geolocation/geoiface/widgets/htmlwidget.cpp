@@ -198,7 +198,7 @@ void HTMLWidget::mouseMoveEvent(QMouseEvent *e)
 
         d->intermediateSelectionScreenPoint = QPoint(e->x(), e->y());
 
-        qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1String(" ")
+        qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1Char(' ')
                                       << d->intermediateSelectionScreenPoint;
 
         qreal lonWest, latNorth, lonEast, latSouth;

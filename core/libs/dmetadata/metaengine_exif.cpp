@@ -200,7 +200,7 @@ MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifK
                 tagValue = QString::fromLocal8Bit(os.str().c_str());
             }
 
-            tagValue.replace(QLatin1String("\n"), QLatin1String(" "));
+            tagValue.replace(QLatin1Char('\n'), QLatin1String(" "));
 
             // We apply a filter to get only the Exif tags that we need.
 
@@ -661,7 +661,7 @@ QString MetaEngine::createExifUserStringFromValue(const char* exifTagName, const
         QString tagValue = QString::fromLocal8Bit(os.str().c_str());
 
         if (escapeCR)
-            tagValue.replace(QLatin1String("\n"), QLatin1String(" "));
+            tagValue.replace(QLatin1Char('\n'), QLatin1String(" "));
 
         return tagValue;
     }
@@ -805,7 +805,7 @@ QVariant MetaEngine::getExifTagVariant(const char* exifTagName, bool rationalAsL
                     QString tagValue = QString::fromLocal8Bit(os.str().c_str());
 
                     if (stringEscapeCR)
-                        tagValue.replace(QLatin1String("\n"), QLatin1String(" "));
+                        tagValue.replace(QLatin1Char('\n'), QLatin1String(" "));
 
                     return QVariant(tagValue);
                 }
@@ -853,7 +853,7 @@ QString MetaEngine::getExifTagString(const char* exifTagName, bool escapeCR) con
             }
 
             if (escapeCR)
-                tagValue.replace(QLatin1String("\n"), QLatin1String(" "));
+                tagValue.replace(QLatin1Char('\n'), QLatin1String(" "));
 
             return tagValue;
         }

@@ -83,7 +83,7 @@ QString CommandTask::getCommandLine()
 {
     if (process.isNull())
         return QString();
-    return (process->program() + QChar::fromLatin1(' ') + process->arguments().join(QChar::fromLatin1(' ')));
+    return (process->program() + QLatin1Char(' ') + process->arguments().join(QLatin1Char(' ')));
 }
 
 QString CommandTask::getProcessError()
@@ -94,13 +94,14 @@ QString CommandTask::getProcessError()
         return QString();
     return (i18n("<b>Cannot run <i>%1</i>:</b><p>%2</p>",
                  getProgram(),
-                 output.toHtmlEscaped().replace(QLatin1String("\n"), QLatin1String("<br />"))));
+                 output.toHtmlEscaped().replace(QLatin1Char('\n'), QLatin1String("<br />"))));
 }
 
 void CommandTask::printDebug(const QString& binaryName)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "command line: " << getCommandLine();
-    qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "output:" << endl << qPrintable(QLatin1String(" >>\t") + output.replace(QLatin1String("\n"), QLatin1String("\n >>\t")));
+    qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "output:" << endl << qPrintable(QLatin1String(" >>\t") +
+                                                                       output.replace(QLatin1Char('\n'), QLatin1String("\n >>\t")));
 }
 
 } // namespace Digikam

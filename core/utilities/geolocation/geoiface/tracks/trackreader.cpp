@@ -85,8 +85,8 @@ QDateTime TrackReader::ParseTime(QString timeString)
 
     // does the string contain a timezone offset?
     int timeZoneOffsetSeconds       = 0;
-    const int timeZonePlusPosition  = timeString.lastIndexOf(QLatin1String("+"));
-    const int timeZoneMinusPosition = timeString.lastIndexOf(QLatin1String("-"));
+    const int timeZonePlusPosition  = timeString.lastIndexOf(QLatin1Char('+'));
+    const int timeZoneMinusPosition = timeString.lastIndexOf(QLatin1Char('-'));
 
     if ( (timeZonePlusPosition == timeZoneSignPosition) || (timeZoneMinusPosition == timeZoneSignPosition) )
     {
@@ -95,7 +95,7 @@ QDateTime TrackReader::ParseTime(QString timeString)
         // cut off the last digits:
         const QString timeZoneString = timeString.right(6);
         timeString.chop(6);
-        timeString                  += QChar::fromLatin1('Z');
+        timeString                  += QLatin1Char('Z');
 
         // determine the time zone offset:
         bool okayHour                = false;

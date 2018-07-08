@@ -772,7 +772,7 @@ void MediaWikiWidget::loadImageInfo(const QUrl& url)
         }
         else
         {
-            currentCategories.append(keywar.at(i)).append(QLatin1String("\n"));
+            currentCategories.append(keywar.at(i)).append(QLatin1Char('\n'));
         }
     }
 

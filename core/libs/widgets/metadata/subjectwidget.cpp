@@ -370,13 +370,13 @@ void SubjectWidget::slotRefChanged()
 QString SubjectWidget::buildSubject() const
 {
     QString subject = m_iprEdit->text();
-    subject.append(QLatin1String(":"));
+    subject.append(QLatin1Char(':'));
     subject.append(m_refEdit->text());
-    subject.append(QLatin1String(":"));
+    subject.append(QLatin1Char(':'));
     subject.append(m_nameEdit->text());
-    subject.append(QLatin1String(":"));
+    subject.append(QLatin1Char(':'));
     subject.append(m_matterEdit->text());
-    subject.append(QLatin1String(":"));
+    subject.append(QLatin1Char(':'));
     subject.append(m_detailEdit->text());
     return subject;
 }
@@ -413,11 +413,11 @@ void SubjectWidget::slotSubjectSelectionChanged()
     if (!d->subjectsBox->selectedItems().isEmpty())
     {
         QString subject = d->subjectsBox->selectedItems()[0]->text();
-        m_iprEdit->setText(subject.section(QLatin1String(":"), 0, 0));
-        m_refEdit->setText(subject.section(QLatin1String(":"), 1, 1));
-        m_nameEdit->setText(subject.section(QLatin1String(":"), 2, 2));
-        m_matterEdit->setText(subject.section(QLatin1String(":"), 3, 3));
-        m_detailEdit->setText(subject.section(QLatin1String(":"), 4, 4));
+        m_iprEdit->setText(subject.section(QLatin1Char(':'), 0, 0));
+        m_refEdit->setText(subject.section(QLatin1Char(':'), 1, 1));
+        m_nameEdit->setText(subject.section(QLatin1Char(':'), 2, 2));
+        m_matterEdit->setText(subject.section(QLatin1Char(':'), 3, 3));
+        m_detailEdit->setText(subject.section(QLatin1Char(':'), 4, 4));
         d->delSubjectButton->setEnabled(true);
         d->repSubjectButton->setEnabled(true);
     }

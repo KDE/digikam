@@ -49,7 +49,7 @@ QString ApplicationSettings::getImageFileFilter() const
         wildcards << QLatin1String("*.") + suffix;
     }
 
-    return wildcards.join(QLatin1String(" "));
+    return wildcards.join(QLatin1Char(' '));
 }
 
 QString ApplicationSettings::getMovieFileFilter() const
@@ -63,7 +63,7 @@ QString ApplicationSettings::getMovieFileFilter() const
         wildcards << QLatin1String("*.") + suffix;
     }
 
-    return wildcards.join(QLatin1String(" "));
+    return wildcards.join(QLatin1Char(' '));
 }
 
 QString ApplicationSettings::getAudioFileFilter() const
@@ -77,7 +77,7 @@ QString ApplicationSettings::getAudioFileFilter() const
         wildcards << QLatin1String("*.") + suffix;
     }
 
-    return wildcards.join(QLatin1String(" "));
+    return wildcards.join(QLatin1Char(' '));
 }
 
 QString ApplicationSettings::getRawFileFilter() const
@@ -106,7 +106,7 @@ QString ApplicationSettings::getRawFileFilter() const
         wildcards << QLatin1String("*.") + suffix;
     }
 
-    return wildcards.join(QLatin1String(" "));
+    return wildcards.join(QLatin1Char(' '));
 }
 
 QString ApplicationSettings::getAllFileFilter() const
@@ -130,7 +130,7 @@ QString ApplicationSettings::getAllFileFilter() const
         wildcards << QLatin1String("*.") + suffix;
     }
 
-    return wildcards.join(QLatin1String(" "));
+    return wildcards.join(QLatin1Char(' '));
 }
 
 } // namespace Digikam

@@ -348,7 +348,7 @@ void MetadataWidget::slotCopy2Clipboard()
                     textmetadata.append(lvItem2->text(0));
                     textmetadata.append(QLatin1String(" : "));
                     textmetadata.append(lvItem2->text(1));
-                    textmetadata.append(QLatin1String("\n"));
+                    textmetadata.append(QLatin1Char('\n'));
                 }
 
                 ++j;
