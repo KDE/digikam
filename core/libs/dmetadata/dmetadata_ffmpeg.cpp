@@ -124,7 +124,7 @@ QStringList s_keywordsSeparation(const QString& data)
 
         if (keywords.isEmpty())
         {
-            keywords = data.split(QLatin1String(" "));
+            keywords = data.split(QLatin1Char(' '));
         }
     }
 

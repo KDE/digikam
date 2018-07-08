@@ -315,7 +315,7 @@ void ExpoBlendingDlg::slotPreviewButtonClicked()
                                      qApp->activeWindow(),
                                      qApp->applicationName(),
                                      i18nc("@title:window", "Enfuse Processing Messages"),
-                                     d->output.split(QLatin1String("\n")));
+                                     d->output.split(QLatin1Char('\n')));
 }
 
 void ExpoBlendingDlg::loadItems(const QList<QUrl>& urls)

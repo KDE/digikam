@@ -586,14 +586,14 @@ void WBSettings::saveAsSettings()
     {
         QTextStream stream(&file);
         stream << QLatin1String("# White Color Balance Configuration File V2\n");
-        stream << d->temperatureInput->value()  << QLatin1String("\n");
-        stream << d->darkInput->value()         << QLatin1String("\n");
-        stream << d->blackInput->value()        << QLatin1String("\n");
-        stream << d->mainExposureInput->value() << QLatin1String("\n");
-        stream << d->fineExposureInput->value() << QLatin1String("\n");
-        stream << d->gammaInput->value()        << QLatin1String("\n");
-        stream << d->saturationInput->value()   << QLatin1String("\n");
-        stream << d->greenInput->value()        << QLatin1String("\n");
+        stream << d->temperatureInput->value()  << QLatin1Char('\n');
+        stream << d->darkInput->value()         << QLatin1Char('\n');
+        stream << d->blackInput->value()        << QLatin1Char('\n');
+        stream << d->mainExposureInput->value() << QLatin1Char('\n');
+        stream << d->fineExposureInput->value() << QLatin1Char('\n');
+        stream << d->gammaInput->value()        << QLatin1Char('\n');
+        stream << d->saturationInput->value()   << QLatin1Char('\n');
+        stream << d->greenInput->value()        << QLatin1Char('\n');
     }
     else
     {

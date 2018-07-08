@@ -783,7 +783,7 @@ void ImagePropertiesTab::setVideoVideoCodec(const QString& str)
 void ImagePropertiesTab::setTags(const QStringList& tagPaths, const QStringList& tagNames)
 {
     Q_UNUSED(tagNames);
-    d->labelTags->setAdjustedText(shortenedTagPaths(tagPaths).join(QLatin1String("\n")));
+    d->labelTags->setAdjustedText(shortenedTagPaths(tagPaths).join(QLatin1Char('\n')));
 }
 
 typedef QPair<QString, QVariant> PathValuePair;

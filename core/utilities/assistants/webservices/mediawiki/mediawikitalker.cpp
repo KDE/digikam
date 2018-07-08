@@ -229,7 +229,7 @@ QString MediaWikiTalker::buildWikiText(const QMap<QString, QString>& info) const
 
     if (!info[QLatin1String("genText")].isEmpty())
     {
-        text.append(info[QLatin1String("genText")]).append(QLatin1String("\n"));
+        text.append(info[QLatin1String("genText")]).append(QLatin1Char('\n'));
     }
 
     if (!info[QLatin1String("license")].isEmpty())
@@ -242,7 +242,7 @@ QString MediaWikiTalker::buildWikiText(const QMap<QString, QString>& info) const
 
     if (!info[QLatin1String("categories")].isEmpty())
     {
-        categories = info[QLatin1String("categories")].split(QLatin1String("\n"), QString::SkipEmptyParts);
+        categories = info[QLatin1String("categories")].split(QLatin1Char('\n'), QString::SkipEmptyParts);
 
         for (int i = 0; i < categories.size(); i++)
         {
@@ -252,7 +252,7 @@ QString MediaWikiTalker::buildWikiText(const QMap<QString, QString>& info) const
 
     if (!info[QLatin1String("genCategories")].isEmpty())
     {
-        categories = info[QLatin1String("genCategories")].split(QLatin1String("\n"), QString::SkipEmptyParts);
+        categories = info[QLatin1String("genCategories")].split(QLatin1Char('\n'), QString::SkipEmptyParts);
 
         for (int i = 0; i < categories.size(); i++)
         {

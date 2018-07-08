@@ -303,7 +303,7 @@ void PageItem::dump(int indent)
 
     for (int i = 0; i < indent; ++i)
     {
-        prefix.append(QLatin1String(" "));
+        prefix.append(QLatin1Char(' '));
     }
 
     const QString name = (mPageWidgetItem ? mPageWidgetItem->name() : QLatin1String("root"));
