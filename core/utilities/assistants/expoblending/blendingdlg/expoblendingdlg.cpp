@@ -623,14 +623,14 @@ void ExpoBlendingDlg::setRejectButtonMode(QDialogButtonBox::StandardButton butto
     if (button == QDialogButtonBox::Close)
     {
         d->buttonBox->button(QDialogButtonBox::Close)->setText(i18n("Close"));
-        d->buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QString::fromLatin1("window-close")));
+        d->buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
         d->buttonBox->button(QDialogButtonBox::Close)->setToolTip(i18n("Close window"));
         d->propagateReject = true;
     }
     else if (button == QDialogButtonBox::Cancel)
     {
         d->buttonBox->button(QDialogButtonBox::Close)->setText(i18n("Cancel"));
-        d->buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QString::fromLatin1("dialog-cancel")));
+        d->buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QLatin1String("dialog-cancel")));
         d->buttonBox->button(QDialogButtonBox::Close)->setToolTip(i18n("Cancel current operation"));
         d->propagateReject = false;
     }

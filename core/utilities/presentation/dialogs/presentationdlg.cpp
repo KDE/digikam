@@ -79,14 +79,14 @@ PresentationDlg::PresentationDlg(QWidget* const parent, PresentationContainer* c
     : QDialog(parent),
       d(new Private)
 {
-    setObjectName(QString::fromLatin1("Presentation Settings"));
+    setObjectName(QLatin1String("Presentation Settings"));
     setWindowTitle(i18n("Presentation"));
 
     d->sharedData = sharedData;
 
     d->buttonBox   = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->startButton = new QPushButton(i18nc("@action:button", "&Start"), this);
-    d->startButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-playback-start")));
+    d->startButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
     d->startButton->setText(i18n("Start Presentation"));
     d->startButton->setDefault(true);
     d->buttonBox->addButton(d->startButton, QDialogButtonBox::ActionRole);
@@ -99,24 +99,24 @@ PresentationDlg::PresentationDlg(QWidget* const parent, PresentationContainer* c
 
     d->sharedData->mainPage = new PresentationMainPage(this, d->sharedData);
     d->tab->addTab(d->sharedData->mainPage,
-                   QIcon::fromTheme(QString::fromLatin1("view-presentation")),
+                   QIcon::fromTheme(QLatin1String("view-presentation")),
                    i18n("Main Settings"));
 
     d->sharedData->captionPage = new PresentationCaptionPage(this, d->sharedData);
     d->tab->addTab(d->sharedData->captionPage,
-                   QIcon::fromTheme(QString::fromLatin1("draw-freehand")),
+                   QIcon::fromTheme(QLatin1String("draw-freehand")),
                    i18nc("captions for the slideshow", "Caption"));
 
 #ifdef HAVE_MEDIAPLAYER
     d->sharedData->soundtrackPage = new PresentationAudioPage(this, d->sharedData);
     d->tab->addTab(d->sharedData->soundtrackPage,
-                   QIcon::fromTheme(QString::fromLatin1("speaker")),
+                   QIcon::fromTheme(QLatin1String("speaker")),
                    i18n("Soundtrack"));
 #endif
 
     d->sharedData->advancedPage = new PresentationAdvPage(this, d->sharedData);
     d->tab->addTab(d->sharedData->advancedPage,
-                   QIcon::fromTheme(QString::fromLatin1("configure")),
+                   QIcon::fromTheme(QLatin1String("configure")),
                    i18n("Advanced"));
 
     QVBoxLayout* const mainLayout = new QVBoxLayout(this);
@@ -198,7 +198,7 @@ void PresentationDlg::readSettings()
 
     if (d->sharedData->soundtrackRememberPlaylist)
     {
-        QString groupName(objectName() + QString::fromLatin1(" Soundtrack "));
+        QString groupName(objectName() + QLatin1String(" Soundtrack "));
         KConfigGroup soundGrp = config.group(groupName);
 
         // load and check playlist files, if valid, add to tracklist widget
@@ -285,7 +285,7 @@ void PresentationDlg::saveSettings()
     // of older track entries
     if (d->sharedData->soundtrackRememberPlaylist && d->sharedData->soundtrackPlayListNeedsUpdate)
     {
-        QString groupName(objectName() + QString::fromLatin1(" Soundtrack "));
+        QString groupName(objectName() + QLatin1String(" Soundtrack "));
         KConfigGroup soundGrp = config.group(groupName);
         soundGrp.writeEntry("Tracks", d->sharedData->soundtrackUrls);
     }
