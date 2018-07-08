@@ -31,7 +31,7 @@ namespace Digikam
 
 bool CPFindBinary::parseHeader(const QString& output)
 {
-    QStringList lines    = output.split(QChar::fromLatin1('\n'));
+    QStringList lines    = output.split(QLatin1Char('\n'));
     m_developmentVersion = false;
 
     foreach(const QString& line, lines)

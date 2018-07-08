@@ -83,7 +83,7 @@ QString CommandTask::getCommandLine()
 {
     if (process.isNull())
         return QString();
-    return (process->program() + QChar::fromLatin1(' ') + process->arguments().join(QChar::fromLatin1(' ')));
+    return (process->program() + QLatin1Char(' ') + process->arguments().join(QLatin1Char(' ')));
 }
 
 QString CommandTask::getProcessError()
@@ -100,7 +100,8 @@ QString CommandTask::getProcessError()
 void CommandTask::printDebug(const QString& binaryName)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "command line: " << getCommandLine();
-    qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "output:" << endl << qPrintable(QLatin1String(" >>\t") + output.replace(QLatin1String("\n"), QLatin1String("\n >>\t")));
+    qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "output:" << endl << qPrintable(QLatin1String(" >>\t") +
+                                                                       output.replace(QLatin1Char('\n'), QLatin1String("\n >>\t")));
 }
 
 } // namespace Digikam

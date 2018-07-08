@@ -47,15 +47,15 @@ QString EnfuseSettings::asCommentString() const
     QString ret;
 
     ret.append(hardMask ? i18n("Hardmask: enabled") : i18n("Hardmask: disabled"));
-    ret.append(QChar::fromLatin1('\n'));
+    ret.append(QLatin1Char('\n'));
     ret.append(ciecam02 ? i18n("CIECAM02: enabled") : i18n("CIECAM02: disabled"));
-    ret.append(QChar::fromLatin1('\n'));
+    ret.append(QLatin1Char('\n'));
     ret.append(autoLevels ? i18n("Levels: auto") : i18n("Levels: %1", QString::number(levels)));
-    ret.append(QChar::fromLatin1('\n'));
+    ret.append(QLatin1Char('\n'));
     ret.append(i18n("Exposure: %1",   QString::number(exposure)));
-    ret.append(QChar::fromLatin1('\n'));
+    ret.append(QLatin1Char('\n'));
     ret.append(i18n("Saturation: %1", QString::number(saturation)));
-    ret.append(QChar::fromLatin1('\n'));
+    ret.append(QLatin1Char('\n'));
     ret.append(i18n("Contrast: %1",   QString::number(contrast)));
 
     return ret;
