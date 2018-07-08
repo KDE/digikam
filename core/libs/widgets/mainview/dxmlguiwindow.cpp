@@ -1045,7 +1045,7 @@ void DXmlGuiWindow::createExportActions()
 
     m_exportFacebookAction = new QAction(i18n("Export to &Facebook..."), this);
     m_exportFacebookAction->setIcon(QIcon::fromTheme(QLatin1String("facebook")));
-    actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
+    //actionCollection()->addAction(QLatin1String("export_facebook"), m_exportFacebookAction);
     actionCollection()->setDefaultShortcut(m_exportFacebookAction, Qt::ALT + Qt::SHIFT + Qt::Key_F);
 
     connect(m_exportFacebookAction, SIGNAL(triggered(bool)),
