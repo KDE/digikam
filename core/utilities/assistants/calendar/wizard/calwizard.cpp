@@ -208,9 +208,9 @@ void CalWizard::slotPageSelected(int curr)
 
         if (d->months.isEmpty())
         {
-            d->wPrintLabel->setText(QString::fromLatin1("<qt>") +
+            d->wPrintLabel->setText(QLatin1String("<qt>") +
                                   i18n("No valid images selected for months<br/>"
-                                       "Click Back to select images") + QString::fromLatin1("</qt>"));
+                                       "Click Back to select images") + QLatin1String("</qt>"));
             d->wFinishPage->setComplete(false);
         }
         else
@@ -223,17 +223,17 @@ void CalWizard::slotPageSelected(int curr)
                  CalSystem().year(QDate::currentDate()) == year) ||
                  CalSystem().year(QDate::currentDate()) > year)
             {
-                extra = QString::fromLatin1("<br/><br/><b>") +
+                extra = QLatin1String("<br/><br/><b>") +
                         i18n("Please note that you are making a "
                              "calendar for<br/>the current year or a year in the "
-                             "past.") + QString::fromLatin1("</b>");
+                             "past.") + QLatin1String("</b>");
             }
 
             QString year_locale = QLocale().toString(date, QLatin1String("yyyy"));
 
             d->wPrintLabel->setText(i18n("Click Next to start Printing<br/><br/>"
                                        "Following months will be printed for year %1:<br/>", year_locale)
-                                    + printList.join(QString::fromLatin1(" - ")) + extra);
+                                    + printList.join(QLatin1String(" - ")) + extra);
             d->wPrintLabel->setTextFormat(Qt::RichText);
 
             d->wFinishPage->setComplete(true);
@@ -297,7 +297,7 @@ void CalWizard::print()
     d->calProgressUI.totalProgress->setMaximum(d->months.count());
     d->calProgressUI.totalProgress->setValue(0);
     d->calProgressUI.totalProgress->progressScheduled(i18n("Create calendar"), false, true);
-    d->calProgressUI.totalProgress->progressThumbnailChanged(QIcon::fromTheme(QString::fromLatin1("view-calendar")).pixmap(22, 22));
+    d->calProgressUI.totalProgress->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("view-calendar")).pixmap(22, 22));
 
     if (d->printThread)
     {
