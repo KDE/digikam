@@ -248,7 +248,7 @@ void TagsReadWriteTest::testTagReadAlternativeNameSpace()
              << tagNs3;
 
     toWrite   = tagSet1;
-    toWrite   = toWrite.replaceInStrings(QLatin1String("/"), QLatin1Char('|'));
+    toWrite   = toWrite.replaceInStrings(QLatin1String("/"), QLatin1String("|"));
 
     dmeta.setXmpTagStringSeq("Xmp.lr.HierarchicalSubject", toWrite);
 
