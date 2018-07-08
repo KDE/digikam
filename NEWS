@@ -297,4 +297,5 @@ BUGFIXES:
 242 ==> 133004 - Canon CRW portrait preview upside-down.
 243 ==> 221345 - Do not process search immediately when enter text to query.
 244 ==> 396234 - Add a feature which allow to switch latitude and longitude.
-245 ==> 
+245 ==> 396283 - Missing images in album preview.
+246 ==> 
