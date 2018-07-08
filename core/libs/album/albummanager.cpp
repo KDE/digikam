@@ -2220,7 +2220,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
         return 0;
     }
 
-    if (name.contains(QLatin1String("/")))
+    if (name.contains(QLatin1Char('/')))
     {
         errMsg = i18n("Album name cannot contain '/'.");
         return 0;
@@ -2310,7 +2310,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         return false;
     }
 
-    if (newName.contains(QLatin1String("/")))
+    if (newName.contains(QLatin1Char('/')))
     {
         errMsg = i18n("Album name cannot contain '/'");
         return false;
@@ -2435,7 +2435,7 @@ TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
         return 0;
     }
 
-    if (name.contains(QLatin1String("/")))
+    if (name.contains(QLatin1Char('/')))
     {
         errMsg = i18n("Tag name cannot contain '/'");
         return 0;
@@ -2573,7 +2573,7 @@ bool AlbumManager::renameTAlbum(TAlbum* album, const QString& name,
         return false;
     }
 
-    if (name.contains(QLatin1String("/")))
+    if (name.contains(QLatin1Char('/')))
     {
         errMsg = i18n("Tag name cannot contain '/'");
         return false;

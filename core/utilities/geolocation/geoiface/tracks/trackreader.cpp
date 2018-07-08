@@ -273,7 +273,7 @@ bool TrackReader::startElement(const QString& namespaceURI, const QString& local
 
 void TrackReader::rebuildElementPath()
 {
-    d->currentElementPath = d->currentElements.join(QLatin1String("/"));
+    d->currentElementPath = d->currentElements.join(QLatin1Char('/'));
 }
 
 TrackReader::TrackReadResult TrackReader::loadTrackFile(const QUrl& url)

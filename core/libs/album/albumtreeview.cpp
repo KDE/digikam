@@ -753,7 +753,7 @@ void AbstractAlbumTreeView::doLoadState()
     const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry), QStringList());
     //qCDebug(DIGIKAM_GENERAL_LOG) << "selection: " << selection;
 
-    foreach (const QString& key, selection)
+    foreach(const QString& key, selection)
     {
         bool validId;
         const int id = key.toInt(&validId);
@@ -772,9 +772,11 @@ void AbstractAlbumTreeView::doLoadState()
     if (expansion.isEmpty())
     {
         QList<AlbumRootInfo> roots = CoreDbAccess().db()->getAlbumRoots();
-        foreach(AlbumRootInfo info, roots)
+
+        foreach(const AlbumRootInfo& info, roots)
         {
-            int albumId = CoreDbAccess().db()->getAlbumForPath(info.id,QLatin1String("/"),false);
+            int albumId = CoreDbAccess().db()->getAlbumForPath(info.id, QLatin1String("/"), false);
+
             if (albumId != -1)
             {
                 d->statesByAlbumId[albumId].expanded = true;
@@ -783,7 +785,7 @@ void AbstractAlbumTreeView::doLoadState()
     }
     else
     {
-        foreach (const QString& key, expansion)
+        foreach(const QString& key, expansion)
         {
             bool validId;
             const int id = key.toInt(&validId);

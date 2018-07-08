@@ -181,7 +181,7 @@ void ImageExtendedProperties::setFakeListProperty(const QString& property, const
     }
     else
     {
-        CoreDbAccess().db()->setImageProperty(m_id, property, value.join(QLatin1String(";")));
+        CoreDbAccess().db()->setImageProperty(m_id, property, value.join(QLatin1Char(';')));
     }
 }
 
