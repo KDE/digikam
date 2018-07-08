@@ -611,7 +611,7 @@ int MetaEngine::Private::getXMPTagsListFromPrefix(const QString& pf, MetaEngine:
 
         for (QList<const Exiv2::XmpPropertyInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
         {
-            while ( (*it) && !QLatin1String((*it)->name_).isNull() )
+            while ( (*it) && !QString::fromLatin1((*it)->name_).isNull() )
             {
                 QString     key = QLatin1String( Exiv2::XmpKey( pf.toLatin1().data(), (*it)->name_ ).key().c_str() );
                 QStringList values;
