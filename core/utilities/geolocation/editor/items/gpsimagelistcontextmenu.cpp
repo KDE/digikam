@@ -219,17 +219,20 @@ bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
 
         // "paste" is only available if there is geo data in the clipboard
         // and at least one photo is selected:
-        bool pasteAvailable = (nSelected >= 1);
+        bool pasteAvailable     = (nSelected >= 1);
+        bool pasteSwapAvailable = true;
 
         if (pasteAvailable)
         {
             QClipboard* const clipboard = QApplication::clipboard();
             const QMimeData* mimedata   = clipboard->mimeData();
-            pasteAvailable              = mimedata->hasFormat(QString::fromLatin1("application/gpx+xml")) || mimedata->hasText();
+            bool hasXmlFormat           = mimedata->hasFormat(QString::fromLatin1("application/gpx+xml"));
+            pasteAvailable              = hasXmlFormat || mimedata->hasText();
+            pasteSwapAvailable          = !hasXmlFormat && mimedata->hasText();
         }
 
         d->actionPaste->setEnabled(pasteAvailable);
-        d->actionPasteSwap->setEnabled(pasteAvailable);
+        d->actionPasteSwap->setEnabled(pasteSwapAvailable);
 
         // construct the context-menu:
         QMenu* const menu = new QMenu(d->imagesList);
