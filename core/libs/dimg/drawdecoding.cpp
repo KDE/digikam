@@ -384,136 +384,136 @@ void DRawDecoding::decodingSettingsToXml(const DRawDecoderSettings& prm, QDomEle
     QDomDocument doc = elm.ownerDocument();
     QDomElement  data;
 
-    data = doc.createElement(QString::fromLatin1("autobrightness"));
-    data.setAttribute(QString::fromLatin1("value"), prm.autoBrightness);
+    data = doc.createElement(QLatin1String("autobrightness"));
+    data.setAttribute(QLatin1String("value"), prm.autoBrightness);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("fixcolorshighlights"));
-    data.setAttribute(QString::fromLatin1("value"), prm.fixColorsHighlights);
+    data = doc.createElement(QLatin1String("fixcolorshighlights"));
+    data.setAttribute(QLatin1String("value"), prm.fixColorsHighlights);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("sixteenbitsimage"));
-    data.setAttribute(QString::fromLatin1("value"), prm.sixteenBitsImage);
+    data = doc.createElement(QLatin1String("sixteenbitsimage"));
+    data.setAttribute(QLatin1String("value"), prm.sixteenBitsImage);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("brightness"));
-    data.setAttribute(QString::fromLatin1("value"), prm.brightness);
+    data = doc.createElement(QLatin1String("brightness"));
+    data.setAttribute(QLatin1String("value"), prm.brightness);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("rawquality"));
-    data.setAttribute(QString::fromLatin1("value"), prm.RAWQuality);
+    data = doc.createElement(QLatin1String("rawquality"));
+    data.setAttribute(QLatin1String("value"), prm.RAWQuality);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("inputcolorspace"));
-    data.setAttribute(QString::fromLatin1("value"), prm.inputColorSpace);
+    data = doc.createElement(QLatin1String("inputcolorspace"));
+    data.setAttribute(QLatin1String("value"), prm.inputColorSpace);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("outputcolorspace"));
-    data.setAttribute(QString::fromLatin1("value"), prm.outputColorSpace);
+    data = doc.createElement(QLatin1String("outputcolorspace"));
+    data.setAttribute(QLatin1String("value"), prm.outputColorSpace);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("rgbinterpolate4colors"));
-    data.setAttribute(QString::fromLatin1("value"), prm.RGBInterpolate4Colors);
+    data = doc.createElement(QLatin1String("rgbinterpolate4colors"));
+    data.setAttribute(QLatin1String("value"), prm.RGBInterpolate4Colors);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("dontstretchpixels"));
-    data.setAttribute(QString::fromLatin1("value"), prm.DontStretchPixels);
+    data = doc.createElement(QLatin1String("dontstretchpixels"));
+    data.setAttribute(QLatin1String("value"), prm.DontStretchPixels);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("unclipcolors"));
-    data.setAttribute(QString::fromLatin1("value"), prm.unclipColors);
+    data = doc.createElement(QLatin1String("unclipcolors"));
+    data.setAttribute(QLatin1String("value"), prm.unclipColors);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("whitebalance"));
-    data.setAttribute(QString::fromLatin1("value"), prm.whiteBalance);
+    data = doc.createElement(QLatin1String("whitebalance"));
+    data.setAttribute(QLatin1String("value"), prm.whiteBalance);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("customwhitebalance"));
-    data.setAttribute(QString::fromLatin1("value"), prm.customWhiteBalance);
+    data = doc.createElement(QLatin1String("customwhitebalance"));
+    data.setAttribute(QLatin1String("value"), prm.customWhiteBalance);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("customwhitebalancegreen"));
-    data.setAttribute(QString::fromLatin1("value"), prm.customWhiteBalanceGreen);
+    data = doc.createElement(QLatin1String("customwhitebalancegreen"));
+    data.setAttribute(QLatin1String("value"), prm.customWhiteBalanceGreen);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("halfsizecolorimage"));
-    data.setAttribute(QString::fromLatin1("value"), prm.halfSizeColorImage);
+    data = doc.createElement(QLatin1String("halfsizecolorimage"));
+    data.setAttribute(QLatin1String("value"), prm.halfSizeColorImage);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("enableblackpoint"));
-    data.setAttribute(QString::fromLatin1("value"), prm.enableBlackPoint);
+    data = doc.createElement(QLatin1String("enableblackpoint"));
+    data.setAttribute(QLatin1String("value"), prm.enableBlackPoint);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("blackpoint"));
-    data.setAttribute(QString::fromLatin1("value"), prm.blackPoint);
+    data = doc.createElement(QLatin1String("blackpoint"));
+    data.setAttribute(QLatin1String("value"), prm.blackPoint);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("enablewhitepoint"));
-    data.setAttribute(QString::fromLatin1("value"), prm.enableWhitePoint);
+    data = doc.createElement(QLatin1String("enablewhitepoint"));
+    data.setAttribute(QLatin1String("value"), prm.enableWhitePoint);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("whitepoint"));
-    data.setAttribute(QString::fromLatin1("value"), prm.whitePoint);
+    data = doc.createElement(QLatin1String("whitepoint"));
+    data.setAttribute(QLatin1String("value"), prm.whitePoint);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("noisereductiontype"));
-    data.setAttribute(QString::fromLatin1("value"), prm.NRType);
+    data = doc.createElement(QLatin1String("noisereductiontype"));
+    data.setAttribute(QLatin1String("value"), prm.NRType);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("noisereductionthreshold"));
-    data.setAttribute(QString::fromLatin1("value"), prm.NRThreshold);
+    data = doc.createElement(QLatin1String("noisereductionthreshold"));
+    data.setAttribute(QLatin1String("value"), prm.NRThreshold);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("medianfilterpasses"));
-    data.setAttribute(QString::fromLatin1("value"), prm.medianFilterPasses);
+    data = doc.createElement(QLatin1String("medianfilterpasses"));
+    data.setAttribute(QLatin1String("value"), prm.medianFilterPasses);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("inputprofile"));
-    data.setAttribute(QString::fromLatin1("value"), prm.inputProfile);
+    data = doc.createElement(QLatin1String("inputprofile"));
+    data.setAttribute(QLatin1String("value"), prm.inputProfile);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("outputprofile"));
-    data.setAttribute(QString::fromLatin1("value"), prm.outputProfile);
+    data = doc.createElement(QLatin1String("outputprofile"));
+    data.setAttribute(QLatin1String("value"), prm.outputProfile);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("deadpixelmap"));
-    data.setAttribute(QString::fromLatin1("value"), prm.deadPixelMap);
+    data = doc.createElement(QLatin1String("deadpixelmap"));
+    data.setAttribute(QLatin1String("value"), prm.deadPixelMap);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("whitebalanceareax"));
-    data.setAttribute(QString::fromLatin1("value"), prm.whiteBalanceArea.x());
+    data = doc.createElement(QLatin1String("whitebalanceareax"));
+    data.setAttribute(QLatin1String("value"), prm.whiteBalanceArea.x());
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("whitebalanceareay"));
-    data.setAttribute(QString::fromLatin1("value"), prm.whiteBalanceArea.y());
+    data = doc.createElement(QLatin1String("whitebalanceareay"));
+    data.setAttribute(QLatin1String("value"), prm.whiteBalanceArea.y());
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("whitebalanceareawidth"));
-    data.setAttribute(QString::fromLatin1("value"), prm.whiteBalanceArea.width());
+    data = doc.createElement(QLatin1String("whitebalanceareawidth"));
+    data.setAttribute(QLatin1String("value"), prm.whiteBalanceArea.width());
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("whitebalanceareaheight"));
-    data.setAttribute(QString::fromLatin1("value"), prm.whiteBalanceArea.height());
+    data = doc.createElement(QLatin1String("whitebalanceareaheight"));
+    data.setAttribute(QLatin1String("value"), prm.whiteBalanceArea.height());
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("dcbiterations"));
-    data.setAttribute(QString::fromLatin1("value"), prm.dcbIterations);
+    data = doc.createElement(QLatin1String("dcbiterations"));
+    data.setAttribute(QLatin1String("value"), prm.dcbIterations);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("dcbenhancefl"));
-    data.setAttribute(QString::fromLatin1("value"), prm.dcbEnhanceFl);
+    data = doc.createElement(QLatin1String("dcbenhancefl"));
+    data.setAttribute(QLatin1String("value"), prm.dcbEnhanceFl);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("expocorrection"));
-    data.setAttribute(QString::fromLatin1("value"), prm.expoCorrection);
+    data = doc.createElement(QLatin1String("expocorrection"));
+    data.setAttribute(QLatin1String("value"), prm.expoCorrection);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("expocorrectionshift"));
-    data.setAttribute(QString::fromLatin1("value"), prm.expoCorrectionShift);
+    data = doc.createElement(QLatin1String("expocorrectionshift"));
+    data.setAttribute(QLatin1String("value"), prm.expoCorrectionShift);
     elm.appendChild(data);
 
-    data = doc.createElement(QString::fromLatin1("expocorrectionhighlight"));
-    data.setAttribute(QString::fromLatin1("value"), prm.expoCorrectionHighlight);
+    data = doc.createElement(QLatin1String("expocorrectionhighlight"));
+    data.setAttribute(QLatin1String("value"), prm.expoCorrectionHighlight);
     elm.appendChild(data);
 }
 
@@ -531,7 +531,7 @@ void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, DRawDecoderSe
         }
 
         QString key        = echild.tagName();
-        QString val        = echild.attribute(QString::fromLatin1("value"));
+        QString val        = echild.attribute(QLatin1String("value"));
 
         if (key == QLatin1String("autobrightness"))
         {

@@ -80,7 +80,7 @@ PresentationAudioListItem::PresentationAudioListItem(QListWidget* const parent, 
       d(new Private)
 {
     d->url = url;
-    setIcon(QIcon::fromTheme(QString::fromLatin1("audio-x-generic")).pixmap(48, QIcon::Disabled));
+    setIcon(QIcon::fromTheme(QLatin1String("audio-x-generic")).pixmap(48, QIcon::Disabled));
 
     d->totalTime   = QTime(0, 0, 0);
     d->mediaObject = new AVPlayer(this);

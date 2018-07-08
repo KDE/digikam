@@ -1,5 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2ea05eb58..ff927d98c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -134,9 +134,9 @@ else()
+             WebKitWidgets
+     )
+ 
+-   if ( NOT Qt5WebKitWidgets_FOUND )
++#   if ( NOT Qt5WebKitWidgets_FOUND )
+      set ( MARBLE_NO_WEBKITWIDGETS TRUE )
+-   endif()
++#   endif()
+ endif()
+ 
+ if (BUILD_WITH_DBUS)
 diff --git a/src/lib/marble/MarbleDirs.cpp b/src/lib/marble/MarbleDirs.cpp
-index dc48da5..4b31397 100644
+index 61bc4b67c..365f0aeae 100644
 --- a/src/lib/marble/MarbleDirs.cpp
 +++ b/src/lib/marble/MarbleDirs.cpp
 @@ -121,6 +121,9 @@ QStringList MarbleDirs::pluginEntryList( const QString& relativePath, QDir::Filt

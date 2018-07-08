@@ -356,7 +356,7 @@ void HTMLWidget::setSelectionRectangle(const GeoCoordinates::Pair& searchCoordin
 {
     if (!searchCoordinates.first.hasCoordinates())
     {
-        runScript(QString::fromLatin1("kgeomapRemoveSelectionRectangle();"));
+        runScript(QLatin1String("kgeomapRemoveSelectionRectangle();"));
         return;
     }
 

@@ -191,7 +191,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->slider         = new QSlider(Qt::Horizontal, hbox);
     d->slider->setRange(0, 0);
     d->tlabel         = new QLabel(hbox);
-    d->tlabel->setText(QString::fromLatin1("00:00:00 / 00:00:00"));
+    d->tlabel->setText(QLatin1String("00:00:00 / 00:00:00"));
     hbox->setStretchFactor(d->slider, 10);
 
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
@@ -427,8 +427,8 @@ void MediaPlayerView::slotPositionChanged(qint64 position)
     }
 
     d->tlabel->setText(QString::fromLatin1("%1 / %2")
-                       .arg(QTime(0, 0, 0).addMSecs(position).toString(QString::fromLatin1("HH:mm:ss")))
-                       .arg(QTime(0, 0, 0).addMSecs(d->slider->maximum()).toString(QString::fromLatin1("HH:mm:ss"))));
+                       .arg(QTime(0, 0, 0).addMSecs(position).toString(QLatin1String("HH:mm:ss")))
+                       .arg(QTime(0, 0, 0).addMSecs(d->slider->maximum()).toString(QLatin1String("HH:mm:ss"))));
 }
 
 void MediaPlayerView::slotDurationChanged(qint64 duration)

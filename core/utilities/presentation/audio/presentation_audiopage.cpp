@@ -108,13 +108,13 @@ PresentationAudioPage::PresentationAudioPage(QWidget* const parent, Presentation
 
     // --------------------------------------------------------
 
-    m_SoundFilesButtonUp->setIcon(QIcon::fromTheme(QString::fromLatin1("go-up")));
-    m_SoundFilesButtonDown->setIcon(QIcon::fromTheme(QString::fromLatin1("go-down")));
-    m_SoundFilesButtonAdd->setIcon(QIcon::fromTheme(QString::fromLatin1("list-add")));
-    m_SoundFilesButtonDelete->setIcon(QIcon::fromTheme(QString::fromLatin1("list-remove")));
-    m_SoundFilesButtonLoad->setIcon(QIcon::fromTheme(QString::fromLatin1("document-open")));
-    m_SoundFilesButtonSave->setIcon(QIcon::fromTheme(QString::fromLatin1("document-save")));
-    m_SoundFilesButtonReset->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-clear")));
+    m_SoundFilesButtonUp->setIcon(QIcon::fromTheme(QLatin1String("go-up")));
+    m_SoundFilesButtonDown->setIcon(QIcon::fromTheme(QLatin1String("go-down")));
+    m_SoundFilesButtonAdd->setIcon(QIcon::fromTheme(QLatin1String("list-add")));
+    m_SoundFilesButtonDelete->setIcon(QIcon::fromTheme(QLatin1String("list-remove")));
+    m_SoundFilesButtonLoad->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
+    m_SoundFilesButtonSave->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
+    m_SoundFilesButtonReset->setIcon(QIcon::fromTheme(QLatin1String("edit-clear")));
 
     m_SoundFilesButtonUp->setText(QString());
     m_SoundFilesButtonDown->setText(QString());
@@ -299,7 +299,7 @@ void PresentationAudioPage::compareTimes()
     }
     else
     {
-        m_statusBarLabel->setText(QString::fromLatin1(""));
+        m_statusBarLabel->setText(QLatin1String(""));
 
         QPalette paletteStatusBar = m_statusBarLabel->palette();
         paletteStatusBar.setColor(QPalette::WindowText, Qt::red);

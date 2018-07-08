@@ -398,7 +398,7 @@ void RGTagModel::addDataInTree(TreeBranch* currentBranch,
         bool newDataAdded = false;
 
         //this spacer is not an address element
-        if (currentBranch->spacerChildren[i]->data.indexOf(QString::fromLatin1("{")) != 0)
+        if (currentBranch->spacerChildren[i]->data.indexOf(QLatin1String("{")) != 0)
         {
             d->auxTagList.append(currentBranch->spacerChildren[i]->data);
             d->auxTagTypeList.append(TypeSpacer);
@@ -425,7 +425,7 @@ void RGTagModel::addDataInTree(TreeBranch* currentBranch,
 
                     if ((currentBranch->type != TypeSpacer) ||
                         ((currentBranch->type == TypeSpacer) &&
-                         (currentBranch->data.indexOf(QString::fromLatin1("{")) != 0)) ||
+                         (currentBranch->data.indexOf(QLatin1String("{")) != 0)) ||
                          (d->auxIndexList.isEmpty()))
                     {
                         auxIndex = addNewTag(currentIndex, elementsData[j]);

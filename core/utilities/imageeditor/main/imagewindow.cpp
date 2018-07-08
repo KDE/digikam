@@ -266,6 +266,7 @@ void ImageWindow::setupUserArea()
     // The thumb bar is placed in a detachable/dockable widget.
     d->thumbBarDock     = new ThumbBarDock(d->viewContainer, Qt::Tool);
     d->thumbBarDock->setObjectName(QLatin1String("editor_thumbbar"));
+    d->thumbBarDock->setWindowTitle(i18n("Image Editor Thumbnail Dock"));
 
     d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModels(d->imageInfoModel, d->imageFilterModel);

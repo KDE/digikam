@@ -82,7 +82,7 @@ MetaEnginePreviews::MetaEnginePreviews(const QString& filePath)
     }
     catch( Exiv2::Error& e )
     {
-        MetaEngine::Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
+        MetaEngine::Private::printExiv2ExceptionError(QLatin1String("Cannot load metadata using Exiv2 "), e);
     }
     catch(...)
     {
@@ -100,7 +100,7 @@ MetaEnginePreviews::MetaEnginePreviews(const QByteArray& imgData)
     }
     catch( Exiv2::Error& e )
     {
-        MetaEngine::Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
+        MetaEngine::Private::printExiv2ExceptionError(QLatin1String("Cannot load metadata using Exiv2 "), e);
     }
     catch(...)
     {
@@ -129,7 +129,7 @@ QSize MetaEnginePreviews::originalSize() const
 QString MetaEnginePreviews::originalMimeType() const
 {
     if (d->image.get())
-        return QString::fromLatin1(d->image->mimeType().c_str());
+        return QLatin1String(d->image->mimeType().c_str());
 
     return QString();
 }
@@ -164,14 +164,14 @@ QString MetaEnginePreviews::mimeType(int index)
 {
     if (index < 0 || index >= size()) return QString();
 
-    return QString::fromLatin1(d->properties[index].mimeType_.c_str());
+    return QLatin1String(d->properties[index].mimeType_.c_str());
 }
 
 QString MetaEnginePreviews::fileExtension(int index)
 {
     if (index < 0 || index >= size()) return QString();
 
-    return QString::fromLatin1(d->properties[index].extension_.c_str());
+    return QLatin1String(d->properties[index].extension_.c_str());
 }
 
 QByteArray MetaEnginePreviews::data(int index)
@@ -188,7 +188,7 @@ QByteArray MetaEnginePreviews::data(int index)
     }
     catch( Exiv2::Error& e )
     {
-        MetaEngine::Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
+        MetaEngine::Private::printExiv2ExceptionError(QLatin1String("Cannot load metadata using Exiv2 "), e);
         return QByteArray();
     }
     catch(...)
