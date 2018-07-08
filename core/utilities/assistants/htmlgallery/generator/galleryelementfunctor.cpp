@@ -119,7 +119,7 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
             return;
         }
 
-        imageFormat = QString::fromLatin1(QImageReader::imageFormat(&imageFile));
+        imageFormat = QLatin1String(QImageReader::imageFormat(&imageFile));
 
         if (imageFormat.isEmpty())
         {
