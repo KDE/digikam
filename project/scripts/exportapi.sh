@@ -27,15 +27,13 @@ cp -r $API_DIR/* $WEBSITE_DIR/static/api/
 # Add new report contents in dev branch
 
 git add $WEBSITE_DIR/static/api/*
-git commit . -m"update API documentation."
+git commit . -m"update API documentation"
 git push
 
 # update master branch
 
 git checkout master
-git merge dev -m"Update API documentation.
-See https://www.digikam.org/api for details.
-CCMAIL: digikam-bugs-null@kde.org"
+git merge dev -m"Update API documentation"
 git push
 
 echo "API documentation published to https://www.digikam.org/api"
