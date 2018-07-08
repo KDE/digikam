@@ -64,6 +64,7 @@ public:
         bookmarkOwner(0),
         actionCopy(0),
         actionPaste(0),
+        actionPasteSwap(0),
         actionRemoveCoordinates(0),
         actionRemoveAltitude(0),
         actionRemoveUncertainty(0),
@@ -84,6 +85,7 @@ public:
 
     QAction*                 actionCopy;
     QAction*                 actionPaste;
+    QAction*                 actionPasteSwap;
     QAction*                 actionRemoveCoordinates;
     QAction*                 actionRemoveAltitude;
     QAction*                 actionRemoveUncertainty;
@@ -110,6 +112,8 @@ GPSImageListContextMenu::GPSImageListContextMenu(GPSImageList* const imagesList,
     d->actionCopy->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-copy")));
     d->actionPaste                  = new QAction(i18n("Paste coordinates"),               this);
     d->actionPaste->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-paste")));
+    d->actionPasteSwap              = new QAction(i18n("Paste coordinates swapped"),       this);
+    d->actionPasteSwap->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-paste")));
     d->actionRemoveCoordinates      = new QAction(i18n("Remove coordinates"),              this);
     d->actionRemoveAltitude         = new QAction(i18n("Remove altitude"),                 this);
     d->actionRemoveUncertainty      = new QAction(i18n("Remove uncertainty"),              this);
@@ -121,6 +125,9 @@ GPSImageListContextMenu::GPSImageListContextMenu(GPSImageList* const imagesList,
 
     connect(d->actionPaste, SIGNAL(triggered()),
             this, SLOT(pasteActionTriggered()));
+
+    connect(d->actionPasteSwap, SIGNAL(triggered()),
+            this, SLOT(pasteSwapActionTriggered()));
 
     connect(d->actionRemoveCoordinates, SIGNAL(triggered()),
             this, SLOT(slotRemoveCoordinates()));
@@ -222,11 +229,13 @@ bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
         }
 
         d->actionPaste->setEnabled(pasteAvailable);
+        d->actionPasteSwap->setEnabled(pasteAvailable);
 
         // construct the context-menu:
         QMenu* const menu = new QMenu(d->imagesList);
         menu->addAction(d->actionCopy);
         menu->addAction(d->actionPaste);
+        menu->addAction(d->actionPasteSwap);
         menu->addSeparator();
         menu->addAction(d->actionRemoveCoordinates);
         menu->addAction(d->actionRemoveAltitude);
@@ -307,7 +316,12 @@ void GPSImageListContextMenu::copyActionTriggered()
     coordinatesToClipboard(gpsInfo.getCoordinates(), itemUrl, QString());
 }
 
-void GPSImageListContextMenu::pasteActionTriggered()
+void GPSImageListContextMenu::pasteSwapActionTriggered()
+{
+    pasteActionTriggered(true);
+}
+
+void GPSImageListContextMenu::pasteActionTriggered(bool swap)
 {
     // extract the coordinates from the clipboard:
     QClipboard* const clipboard = QApplication::clipboard();
@@ -463,10 +477,9 @@ void GPSImageListContextMenu::pasteActionTriggered()
 
                 if (okay)
                 {
-                    if (ptLatitude >= -180.0 && ptLatitude <= 180.0 &&
-                        ptLongitude >= -90.0 && ptLongitude <= 90.0)
+                    if (swap)
                     {
-                        std::swap(ptLatitude, ptLongitude);
+                        std::swap(ptLongitude, ptLatitude);
                     }
 
                     GeoCoordinates coordinates(ptLatitude, ptLongitude);
