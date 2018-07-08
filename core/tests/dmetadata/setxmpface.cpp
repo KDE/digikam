@@ -37,7 +37,7 @@ bool setFaceTags(DMetadata& meta, const char* xmpTagName, const QMap<QString,QRe
 {
         meta.setXmpTagString(xmpTagName, QString(), DMetadata::XmpTagType(1));
 
-        QString qxmpTagName    = QLatin1String(xmpTagName);
+        QString qxmpTagName(QString::fromLatin1(xmpTagName));
         QString nameTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Name");
         QString typeTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Type");
         QString areaTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Area");
@@ -86,9 +86,9 @@ bool setFaceTags(DMetadata& meta, const char* xmpTagName, const QMap<QString,QRe
     return true;
 }
 
-void removeFaceTags(DMetadata& meta,const char* xmpTagName)
+void removeFaceTags(DMetadata& meta, const char* xmpTagName)
 {
-    QString qxmpTagName    = QLatin1String(xmpTagName);
+    QString qxmpTagName(QString::fromLatin1(xmpTagName));
     QString regionTagKey   = qxmpTagName + QLatin1String("[%1]");
     QString nameTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Name");
     QString typeTagKey     = qxmpTagName + QLatin1String("[%1]/mwg-rs:Type");
@@ -128,7 +128,7 @@ int main (int argc, char **argv)
         return -1;
     }
 
-    QString filePath = QLatin1String(argv[2]);
+    QString filePath(QString::fromLatin1(argv[2]));
 
     DMetadata::initializeExiv2();
     DMetadata meta;
@@ -159,7 +159,7 @@ int main (int argc, char **argv)
 
     const QString bag = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
 
-    QString op = QLatin1String(argv[1]);
+    QString op(QString::fromLatin1(argv[1]));
 
     if (op == QLatin1String("add"))
         setFaceTags(meta, bag.toLatin1().constData(), faces);
