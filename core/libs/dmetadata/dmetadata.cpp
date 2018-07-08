@@ -2243,7 +2243,7 @@ QString DMetadata::getLensDescription() const
 
         if (!lens.isEmpty())
         {
-            lens.append(QLatin1String(" "));
+            lens.append(QLatin1Char(' '));
         }
 
         lens.append(getXmpTagString("Xmp.MicrosoftPhoto.LensModel"));
@@ -3012,7 +3012,7 @@ QString DMetadata::valueToString(const QVariant& value, MetadataInfo::Field fiel
         case MetadataInfo::IptcCoreCreator:
         case MetadataInfo::IptcCoreScene:
         case MetadataInfo::IptcCoreSubjectCode:
-            return value.toStringList().join(QLatin1String(" "));
+            return value.toStringList().join(QLatin1Char(' '));
 
             // Text
         case MetadataInfo::Comment:

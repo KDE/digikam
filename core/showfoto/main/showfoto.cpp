@@ -691,7 +691,7 @@ void ShowFoto::openFolder(const QUrl& url)
     QStringList mimeTypes = supportedImageMimeTypes(QIODevice::ReadOnly, filter);
 
     QString patterns = filter.toLower();
-    patterns.append (QLatin1String(" "));
+    patterns.append (QLatin1Char(' '));
     patterns.append (filter.toUpper());
 
     qCDebug(DIGIKAM_SHOWFOTO_LOG) << "patterns=" << patterns;

@@ -233,7 +233,7 @@ bool PTOType::createFile(const QString& filepath)
         out << " Vx" << image.vignettingOffsetX;
         out << " Vy" << image.vignettingOffsetY;
         out << " Vm" << image.vignettingMode;
-        out << image.unmatchedParameters.join(QLatin1String(" "));
+        out << image.unmatchedParameters.join(QLatin1Char(' '));
         out << " n\"" << image.fileName << "\"";
         out << endl;
     }
