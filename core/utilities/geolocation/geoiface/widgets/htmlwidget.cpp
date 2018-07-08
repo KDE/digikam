@@ -114,7 +114,7 @@ void HTMLWidget::slotHTMLCompleted(bool ok)
 
 void HTMLWidget::mousePressEvent(QMouseEvent* e)
 {
-    slotScanForJSMessages(QString::fromLatin1("(event)"));
+    slotScanForJSMessages(QLatin1String("(event)"));
     QWebView::mousePressEvent(e);
 }
 
@@ -173,8 +173,7 @@ void HTMLWidget::mouseReleaseEvent(QMouseEvent* e)
 
             const GeoCoordinates::Pair selectionCoordinates(
                     GeoCoordinates(latNorth, lonWest),
-                    GeoCoordinates(latSouth, lonEast)
-                );
+                    GeoCoordinates(latSouth, lonEast));
 
             d->firstSelectionPoint.clear();
             d->intermediateSelectionPoint.clear();
@@ -183,7 +182,7 @@ void HTMLWidget::mouseReleaseEvent(QMouseEvent* e)
         }
     }
 
-    slotScanForJSMessages(QString::fromLatin1("(event)"));
+    slotScanForJSMessages(QLatin1String("(event)"));
     QWebView::mouseReleaseEvent(e);
 }
 

@@ -95,7 +95,7 @@ bool setExifXmpTagDataVariant(DMetadata* const meta, const char* const exifTagNa
                     break;
                 }
 
-                success = meta->setXmpTagString(xmpTagName, dateTime.toString(QString::fromLatin1("yyyy:MM:dd hh:mm:ss")));
+                success = meta->setXmpTagString(xmpTagName, dateTime.toString(QLatin1String("yyyy:MM:dd hh:mm:ss")));
                 break;
             }
 
@@ -479,14 +479,14 @@ QVariant GPSImageItem::data(const int column, const int role) const
 
                 for (int j = 0 ; j < m_tagList[i].count() ; ++j)
                 {
-                    myTag.append(QString::fromLatin1("/") + m_tagList[i].at(j).tagName);
+                    myTag.append(QLatin1Char('/') + m_tagList[i].at(j).tagName);
 
                     if (j == 0)
                         myTag.remove(0, 1);
                 }
 
                 if (!myTagsList.isEmpty())
-                    myTagsList.append(QString::fromLatin1(", "));
+                    myTagsList.append(QLatin1String(", "));
 
                 myTagsList.append(myTag);
             }
@@ -747,7 +747,7 @@ QString GPSImageItem::saveChanges()
                 success = setExifXmpTagDataVariant(meta.data(),
                                                    "Exif.GPSInfo.GPSSpeedRef",
                                                    "Xmp.exif.GPSSpeedRef",
-                                                   QVariant(QString::fromLatin1("K")));
+                                                   QVariant(QLatin1String("K")));
 
                 if (success)
                 {
@@ -817,7 +817,7 @@ QString GPSImageItem::saveChanges()
 
                 for (int j = 0 ; j < currentTagList.count() ; ++j)
                 {
-                    tag.append(QString::fromLatin1("/") + currentTagList[j].tagName);
+                    tag.append(QLatin1Char('/') + currentTagList[j].tagName);
                 }
 
                 tag.remove(0, 1);

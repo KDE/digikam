@@ -106,7 +106,7 @@ PanoLastPage::PanoLastPage(PanoManager* const mngr, QWizard* const dlg)
     QLabel* const fileTemplateLabel = new QLabel(i18nc("@label:textbox", "File name template:"), d->saveSettingsGroupBox);
     formatVBox->addWidget(fileTemplateLabel);
 
-    d->fileTemplateQLineEdit  = new QLineEdit(QString::fromLatin1("panorama"), d->saveSettingsGroupBox);
+    d->fileTemplateQLineEdit  = new QLineEdit(QLatin1String("panorama"), d->saveSettingsGroupBox);
     d->fileTemplateQLineEdit->setToolTip(i18nc("@info:tooltip", "Name of the panorama file (without its extension)."));
     d->fileTemplateQLineEdit->setWhatsThis(i18nc("@info:whatsthis", "<b>File name template</b>: Set here the base name of the files that "
                                                 "will be saved. For example, if your template is <i>panorama</i> and if "
@@ -180,9 +180,9 @@ QString PanoLastPage::panoFileName(const QString& fileTemplate) const
     {
         default:
         case JPEG:
-            return fileTemplate + QString::fromLatin1(".jpg");
+            return fileTemplate + QLatin1String(".jpg");
         case TIFF:
-            return fileTemplate + QString::fromLatin1(".tif");
+            return fileTemplate + QLatin1String(".tif");
     }
 }
 
@@ -190,7 +190,7 @@ void PanoLastPage::checkFiles()
 {
     QString dir = d->mngr->preProcessedMap().begin().key().toString(QUrl::RemoveFilename);
     QUrl panoUrl(dir + panoFileName(d->fileTemplateQLineEdit->text()));
-    QUrl ptoUrl(dir + d->fileTemplateQLineEdit->text() + QString::fromLatin1(".pto"));
+    QUrl ptoUrl(dir + d->fileTemplateQLineEdit->text() + QLatin1String(".pto"));
     QFile panoFile(panoUrl.toString(QUrl::PreferLocalFile));
     QFile ptoFile(ptoUrl.toString(QUrl::PreferLocalFile));
 
