@@ -440,12 +440,13 @@ void GPSImageListContextMenu::pasteActionTriggered()
 
             if ((parts.size() == 3) || (parts.size() == 2))
             {
-                bool okay            = true;
-                double    ptLatitude = 0.0;
-                double    ptAltitude = 0.0;
-                bool haveAltitude    = false;
+                bool   okay         = true;
+                double ptLongitude  = 0.0;
+                double ptLatitude   = 0.0;
+                double ptAltitude   = 0.0;
+                bool   haveAltitude = false;
 
-                const double ptLongitude = parts[0].toDouble(&okay);
+                ptLongitude = parts[0].toDouble(&okay);
 
                 if (okay)
                 {
@@ -462,6 +463,12 @@ void GPSImageListContextMenu::pasteActionTriggered()
 
                 if (okay)
                 {
+                    if (ptLatitude >= -180.0 && ptLatitude <= 180.0 &&
+                        ptLongitude >= -90.0 && ptLongitude <= 90.0)
+                    {
+                        std::swap(ptLatitude, ptLongitude);
+                    }
+
                     GeoCoordinates coordinates(ptLatitude, ptLongitude);
 
                     if (haveAltitude)
