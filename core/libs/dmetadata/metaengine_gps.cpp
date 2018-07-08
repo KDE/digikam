@@ -505,7 +505,7 @@ bool MetaEngine::removeGPSInfo()
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
 
-            if (key.section(QLatin1String("."), 1, 1) == QLatin1String("GPSInfo"))
+            if (key.section(QLatin1Char('.'), 1, 1) == QLatin1String("GPSInfo"))
                 gpsTagsKeys.append(key);
         }
 

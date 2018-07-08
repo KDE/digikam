@@ -214,7 +214,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
             {
                 if (!invertSelection)
                 {
-                    if (xmpKeysFilter.contains(key.section(QLatin1String("."), 1, 1)))
+                    if (xmpKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
                     {
                         if (it == metaDataMap.constEnd())
                         {
@@ -231,7 +231,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
                 }
                 else
                 {
-                    if (!xmpKeysFilter.contains(key.section(QLatin1String("."), 1, 1)))
+                    if (!xmpKeysFilter.contains(key.section(QLatin1Char('.'), 1, 1)))
                     {
                         if (it == metaDataMap.constEnd())
                         {
