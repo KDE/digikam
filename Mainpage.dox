@@ -258,14 +258,14 @@
 
 \subsection depscheckout Dependencies To Checkout All Source Code
 
- - Perl       <http://www.perl.org>
- - Git        <http://git-scm.com>
+ - Perl       http://www.perl.org
+ - Git        http://git-scm.com
 
 \subsection depstrans Dependencies To Process Translations Files (optional)
 
- - Ruby       <http://www.ruby-lang.org>             (to extract translations files from remote repositories)
- - Subversion <https://subversion.apache.org/>       (to extract translations files from remote repositories)
- - Gettext    <https://www.gnu.org/software/gettext> (including Msgfmt to compile po files to mo files)
+ - Ruby       http://www.ruby-lang.org             (to extract translations files from remote repositories)
+ - Subversion https://subversion.apache.org/       (to extract translations files from remote repositories)
+ - Gettext    https://www.gnu.org/software/gettext (including Msgfmt to compile po files to mo files)
 
 
 \subsection depscomplink Dependencies To Compile And Link Source Code
@@ -493,7 +493,7 @@ This procedure is based on the configure script \b boostrap.local
    $ make install
    $ KDESYCOCA="/your/root/directory/var/tmp/kde-$USER/ksycoca5" kbuildsycoca5
 \endcode
-   
+
 To run digikam, use the following commands:
 
 \code
@@ -515,13 +515,16 @@ If your shell is bash, you can edit your \b .bashrc file (in $HOME) and add the 
 then you can start your newly installed digikam with
 
 \code
- $ digikam-dev
+    $ digikam-dev
 \endcode
 
 \section debugtraces Debug Traces At Run-Time
 
 digiKam uses categorized logging at run-time. By default, all debug messages are printed on the console. To disable output, you can either
 fine-grained control by using one or more logging categories listed below.
+
+Note: under Windows, to catch all debug messages you need to install an extra Microsoft application named DebugView available at this url:
+http://technet.microsoft.com/en-us/sysinternals/bb896647.aspx
 
 \subsection Enable Logging Using an Environment Variable
 
@@ -542,5 +545,140 @@ All loggin categories are listed in \ref digikam_debug.cpp source code.
 
  For more details see the Qt framework documentation about loggin categories available at this url:
  https://doc.qt.io/qt-5/qloggingcategory.html#details
+
+\section cmakecompilrules Cmake compilation rules
+
+\subsection Introduction
+
+The whole project is written mostly in C++/Qt and the Cmake framework is used to compile under Linux, MacOs, and Windows.
+The Cmake rules have been configured to reduce the linking overhead and improve CPU utilization with modular design.
+
+Independent Cmake configuration is presents in following folders:
+
+ - root source dir
+ - core
+ - extra
+ - doc
+
+The Cmake rules for the core component will link the following executable:
+
+ - digikam
+ - showfoto
+ - digikam database server - if compilation is enabled in cmake files
+ - various test executables - if testing is enabled
+
+Each of them depend on various sources which must be compiled before.
+A complete description of source code direction is given to the sourcedirs section.
+
+\subsection CMake Implementation Details
+
+ Include Directories
+
+Local include directories are all managed by this snippet of code:
+
+\code
+    set(DK_INCLUDES_ALL "")
+    HEADER_DIRECTORIES(DK_LOCAL_INCLUDES_RAW)
+\endcode
+
+The libjpeg- folders are all included, so we need to delete them all and include the correct one only:
+
+\code
+    # This macro will set all paths which do not containt libjpeg-
+    # We will add later the directory we need
+
+    FOREACH(var ${DK_LOCAL_INCLUDES_RAW})
+        STRING(REGEX MATCH "libjpeg-" item ${var})
+        IF(item STREQUAL "")
+            LIST(APPEND DK_LOCAL_INCLUDES ${var})
+        ENDIF(item)
+    ENDFOREACH(var)
+
+    set(DK_LOCAL_INCLUDES ${DK_LOCAL_INCLUDES}
+                          libs/jpegutils/${DIGIKAM_LIBJPEG_DIR})
+
+    include_directories(${DK_LOCAL_INCLUDES})
+\endcode
+
+There is no need for manual intervention to add new includes, even if you add a new folder, just keep in mind to use:
+
+\code
+    #include "tagmngrlistitem.h"
+\endcode
+
+instead of :
+
+\code
+    #include "models/tagmngrlistitem.h"
+\endcode
+
+Shared Libraries
+
+To avoid linking overhead and make a better use of sources there are some dynamic libs as these one:
+
+ - digikamcore : core components used by almost all executables as digiKam and Showfoto.
+ - digikamdatabase : database components, also used together with digikamcore but only for digiKam
+
+Please add sources to digikam core or digikam database only if they don't depend on any big component
+from digikam main executable. These two shared libs must be kept small because they link in a lot of places
+
+\subsubsection Static Libraries
+
+Currently cmake configuration features a lots of shared libraries as:
+
+ - metadataedit
+ - geolocationedit
+ - libraw
+ - digikamfaceengine
+
+This libraries are linked in digikam main executable and some tests.
+
+Avoid making static libraries if possible, and use OBJECT libraries instead.
+Only make STATIC libraries which does not depend on other digikam code.
+Also make sure you put the PRIVATE parameter when setting the target_link_libraries.
+
+\code
+    target_link_libraries(digikamcore
+                          PRIVATE
+                          Qt5::Core
+                          Qt5::Gui
+                          Qt5::Widgets
+    )
+\endcode
+
+
+\subsubsection Object Libraries
+
+While static libraries are still collection of objects, CMake offer a better approach by
+allowing to specify an OBJECT library:
+
+\code
+    set(libslideshow_SRCS
+        slidetoolbar.cpp
+        slideosd.cpp
+        slideproperties.cpp
+        slideimage.cpp
+        slideerror.cpp
+        slideend.cpp
+        slideshow.cpp
+        slidehelp.cpp
+        slideshowsettings.cpp
+    )
+
+    add_library(slideshow_src OBJECT ${libslideshow_SRCS})
+\endcode
+
+OBJECT library is a cmake internal implementation feature and allow to easily manage sources.
+Here is an example of how to make a shared lib using OBJECT libraries:
+
+\endcode
+    add_library(digikamcore
+                SHARED
+                $<TARGET_OBJECTS:slideshow_src> # the lib we made few lines above
+                $<TARGET_OBJECTS:digikamdatabasecore_src>
+                $<TARGET_OBJECTS:dimg_src>
+                ....
+    )
+\endcode
 
 */
