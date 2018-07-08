@@ -29,7 +29,7 @@
  */
 
 /**
- * @mainpage axTLS API
+ * axTLS API
  *
  * @image html axolotl.jpg
  *
